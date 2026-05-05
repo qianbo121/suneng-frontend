@@ -1,0 +1,103 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: corp-site-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: corporate_site
+      POSTGRES_USER: corporate
+      POSTGRES_PASSWORD: corporate
+    ports:
+      - '5432:5432'
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U corporate -d corporate_site']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+
+  backend:
+    build:
+      context: ./backend
+    container_name: corp-site-backend
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    env_file:
+      - ./backend/.env.example
+    environment:
+      NODE_ENV: production
+      PORT: 3001
+      DATABASE_URL: postgresql://corporate:corporate@postgres:5432/corporate_site?schema=public
+      APP_URL: http://localhost
+      FRONTEND_URL: http://localhost
+      ADMIN_URL: http://localhost
+      ALLOWED_ORIGINS: http://localhost,http://127.0.0.1
+      UPLOAD_ROOT: uploads
+    command: sh -c "npx prisma migrate deploy && node dist/src/main.js"
+    expose:
+      - '3001'
+    volumes:
+      - uploads-data:/app/uploads
+
+  frontend:
+    build:
+      context: ./frontend
+      args:
+        NEXT_PUBLIC_APP_NAME: Manufacturing Corporate Site
+        NEXT_PUBLIC_DEFAULT_LOCALE: zh
+        NEXT_PUBLIC_API_URL: /api
+        NEXT_PUBLIC_API_BASE_URL: /api
+        NEXT_PUBLIC_SITE_URL: http://localhost
+        API_BASE_URL_INTERNAL: http://backend:3001/api
+    container_name: corp-site-frontend
+    restart: unless-stopped
+    depends_on:
+      - backend
+    env_file:
+      - ./frontend/.env.example
+    environment:
+      NODE_ENV: production
+      NEXT_PUBLIC_API_URL: /api
+      NEXT_PUBLIC_API_BASE_URL: /api
+      NEXT_PUBLIC_SITE_URL: http://localhost
+      API_BASE_URL_INTERNAL: http://backend:3001/api
+    expose:
+      - '3000'
+
+  admin:
+    build:
+      context: ./admin
+      args:
+        VITE_APP_BASE_PATH: /admin/
+        VITE_APP_NAME: Corporate Admin
+        VITE_API_BASE_URL: /api
+    container_name: corp-site-admin
+    restart: unless-stopped
+    depends_on:
+      - backend
+    expose:
+      - '80'
+
+  nginx:
+    image: nginx:1.27-alpine
+    container_name: corp-site-nginx
+    restart: unless-stopped
+    depends_on:
+      - frontend
+      - backend
+      - admin
+    ports:
+      - '80:80'
+      - '443:443'
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - uploads-data:/var/www/uploads:ro
+      - ./deploy/certbot:/etc/letsencrypt
+      - ./deploy/www:/var/www/certbot
+
+volumes:
+  postgres-data:
+  uploads-data:

@@ -1,0 +1,20 @@
+{
+  "name": "manufacturing-corporate-site",
+  "private": true,
+  "version": "0.1.0",
+  "packageManager": "pnpm@9.15.4",
+  "scripts": {
+    "dev:frontend": "pnpm --dir frontend dev",
+    "dev:backend": "pnpm --dir backend start:dev",
+    "dev:admin": "pnpm --dir admin dev",
+    "build:frontend": "pnpm --dir frontend build",
+    "build:backend": "pnpm --dir backend build",
+    "build:admin": "pnpm --dir admin build",
+    "lint:frontend": "pnpm --dir frontend lint",
+    "lint:backend": "pnpm --dir backend lint",
+    "lint:admin": "pnpm --dir admin lint",
+    "format": "pnpm --dir frontend format && pnpm --dir backend format && pnpm --dir admin format",
+    "docker:up": "docker compose up --build",
+    "docker:down": "docker compose down"
+  }
+}

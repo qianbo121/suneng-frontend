@@ -1,0 +1,102 @@
+import { DEFAULT_DESCRIPTION, DEFAULT_TITLE } from '@/lib/seo/config';
+
+export const HOME_SEO = {
+  title: DEFAULT_TITLE,
+  description: DEFAULT_DESCRIPTION,
+  keywords: ['工业炉', '热处理炉', '工业炉厂家', '热处理设备厂家', '非标工业炉定制', '苏能工业炉'],
+};
+
+export const PRODUCT_COLLECTION_SEO = {
+  title: '产品中心｜工业热处理设备与非标工业炉定制',
+  description:
+    '苏能工业炉产品中心展示台车式热处理炉、箱式炉、井式炉、罩式炉、网带炉、辊底炉、推杆炉、转底炉等工业热处理设备，支持按工艺需求非标定制。',
+  keywords: ['工业炉产品', '热处理炉产品', '台车炉', '箱式炉', '井式炉', '罩式炉', '网带炉', '辊底炉', '推杆炉', '转底炉'],
+};
+
+export const PRODUCT_DETAIL_SEO: Record<
+  string,
+  {
+    title: string;
+    description: string;
+    keywords: string[];
+    alternateName: string[];
+    descriptionExtended?: string;
+  }
+> = {
+  'trolley-furnace': {
+    title: '台车式热处理炉｜大型工件退火回火正火淬火设备',
+    description:
+      '台车式热处理炉适用于大型铸件、锻件、模具、轴类及结构件的退火、回火、正火、淬火等热处理工艺，可根据炉膛尺寸、承重、温度范围和工艺要求非标定制。',
+    keywords: ['台车式热处理炉', '台车炉', '大型台车炉', '台车式电阻炉', '退火炉', '回火炉', '正火炉', '淬火炉'],
+    alternateName: ['台车炉', '台车式电阻炉', '大型台车炉', 'Trolley Type Heat Treatment Furnace'],
+    descriptionExtended: '台车式热处理炉，适用退火、回火、正火、淬火，适用大型铸件、锻件、模具、轴类及结构件，支持非标定制，江苏苏能工业炉有限公司制造',
+  },
+  'box-furnace': {
+    title: '箱式热处理炉｜中小型金属零件热处理设备',
+    description: '箱式热处理炉适用于中小型金属零件、模具、工装件等的退火、回火、正火、淬火及预热工艺，适合多品种、小批量热处理生产。',
+    keywords: ['箱式热处理炉', '箱式炉', '箱式电阻炉', '中小型热处理炉', '模具热处理炉'],
+    alternateName: ['箱式炉', '箱式电阻炉', 'Box Furnace', 'Chamber Furnace'],
+    descriptionExtended: '箱式热处理炉，适用退火、回火、正火、淬火及预热，适用中小型金属零件、模具、工装件，支持非标定制，江苏苏能工业炉有限公司制造',
+  },
+  'pit-furnace': {
+    title: '井式热处理炉｜轴类杆类工件立式热处理设备',
+    description: '井式热处理炉适用于轴类、杆类、长筒类及竖直装炉工件的退火、回火、正火、淬火等热处理工艺，可根据工件长度和工艺要求定制。',
+    keywords: ['井式热处理炉', '井式炉', '井式电阻炉', '轴类热处理炉', '立式热处理炉'],
+    alternateName: ['井式炉', '井式电阻炉', 'Pit Furnace'],
+    descriptionExtended: '井式热处理炉，适用退火、回火、正火、淬火，适用轴类、杆类、长筒类及竖直装炉工件，支持非标定制，江苏苏能工业炉有限公司制造',
+  },
+  'bell-furnace': {
+    title: '罩式热处理炉｜卷材线材退火与气氛保护热处理设备',
+    description: '罩式热处理炉适用于卷材、线材、盘卷及金属构件的退火、保温和气氛保护热处理，可根据装炉方式、炉罩结构和工艺要求配置。',
+    keywords: ['罩式热处理炉', '罩式炉', '罩式退火炉', '气氛保护炉', '卷材退火炉'],
+    alternateName: ['罩式炉', '罩式退火炉', 'Bell Furnace'],
+    descriptionExtended: '罩式热处理炉，适用退火、保温和气氛保护热处理，适用卷材、线材、盘卷及金属构件，支持非标定制，江苏苏能工业炉有限公司制造',
+  },
+  'mesh-belt-furnace': {
+    title: '网带式热处理炉｜小型零件连续式热处理生产线',
+    description: '网带式热处理炉适用于标准件、五金件、冲压件和小型机械零件的连续式淬火、回火、退火、正火等热处理生产。',
+    keywords: ['网带式热处理炉', '网带炉', '网带式连续炉', '标准件热处理炉', '五金件热处理炉'],
+    alternateName: ['网带炉', '网带式连续热处理炉', 'Mesh Belt Furnace'],
+    descriptionExtended: '网带式热处理炉，适用连续式淬火、回火、退火、正火，适用标准件、五金件、冲压件和小型机械零件，支持非标定制，江苏苏能工业炉有限公司制造',
+  },
+  'roller-hearth-furnace': {
+    title: '辊底式热处理炉｜板材棒材管材连续热处理设备',
+    description: '辊底式热处理炉适用于板材、棒材、管材、锻件及较重工件的连续式热处理，可根据输送方式、工艺节拍和温度要求定制。',
+    keywords: ['辊底式热处理炉', '辊底炉', '辊底式连续炉', '板材热处理炉', '管材热处理炉'],
+    alternateName: ['辊底炉', '辊底式连续炉', 'Roller Hearth Furnace'],
+    descriptionExtended: '辊底式热处理炉，适用连续式热处理，适用板材、棒材、管材、锻件及较重工件，支持非标定制，江苏苏能工业炉有限公司制造',
+  },
+  'pusher-furnace': {
+    title: '推杆式热处理炉｜托盘料筐连续式热处理设备',
+    description: '推杆式热处理炉适用于托盘或料筐承载工件的连续式退火、正火、淬火加热、回火等热处理工艺，适合稳定节拍的批量生产。',
+    keywords: ['推杆式热处理炉', '推杆炉', '推杆式连续炉', '连续式热处理炉', '批量热处理设备'],
+    alternateName: ['推杆炉', '推杆式连续炉', 'Pusher Furnace'],
+    descriptionExtended: '推杆式热处理炉，适用连续式退火、正火、淬火加热、回火，适用托盘或料筐承载工件，支持非标定制，江苏苏能工业炉有限公司制造',
+  },
+  'rotary-hearth-furnace': {
+    title: '转底式热处理炉｜环形炉底连续加热与热处理设备',
+    description: '转底式热处理炉通过炉底旋转实现工件连续加热，适用于锻造加热、热处理加热及节拍式生产场景，可根据工件规格和装出料方式定制。',
+    keywords: ['转底式热处理炉', '转底炉', '环形转底炉', '旋转炉底炉', '锻造加热炉'],
+    alternateName: ['转底炉', '环形转底炉', 'Rotary Hearth Furnace'],
+    descriptionExtended: '转底式热处理炉，适用锻造加热、热处理加热及节拍式生产，适用按工件规格和装出料方式定制的生产场景，支持非标定制，江苏苏能工业炉有限公司制造',
+  },
+};
+
+export const ABOUT_SEO = {
+  title: '关于苏能工业炉｜工业炉与热处理设备制造企业',
+  description: '了解江苏苏能工业炉有限公司，企业专注工业炉、热处理炉及非标热处理设备制造，为工业热处理生产提供设备设计、制造和服务支持。',
+  keywords: ['苏能工业炉', '江苏苏能工业炉有限公司', '工业炉厂家', '热处理设备厂家'],
+};
+
+export const CONTACT_SEO = {
+  title: '联系我们｜工业炉与热处理设备方案咨询',
+  description:
+    '联系江苏苏能工业炉有限公司，咨询台车炉、箱式炉、井式炉、罩式炉、网带炉、辊底炉、推杆炉、转底炉等工业热处理设备定制方案。',
+  keywords: ['工业炉咨询', '热处理炉报价', '工业炉厂家联系方式', '苏能工业炉联系方式'],
+};
+
+export const NEWS_SEO = {
+  title: '新闻中心｜工业炉与热处理设备行业资讯',
+  description: '苏能工业炉新闻中心提供工业炉、热处理炉、热处理工艺、设备选型和企业动态等相关内容。',
+  keywords: ['工业炉资讯', '热处理炉资讯', '热处理工艺', '工业炉选型', '苏能工业炉新闻'],
+};

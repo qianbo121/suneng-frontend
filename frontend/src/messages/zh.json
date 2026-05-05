@@ -1,0 +1,36 @@
+{
+  "common": {
+    "siteName": "制造业企业官网",
+    "sectionEyebrow": "Global Layout",
+    "placeholderTitle": "全局布局与基础组件已建立",
+    "placeholderDescription": "当前阶段重点完成 Header、Footer、浮动工具栏、内页 Banner、404 页面与国际化骨架，后续栏目页将在此基础上逐步高保真还原。"
+  },
+  "buttons": {
+    "backHome": "返回首页",
+    "learnMore": "了解更多",
+    "contactUs": "联系我们"
+  },
+  "navigation": {
+    "home": "首页",
+    "about": "关于我们",
+    "products": "产品中心",
+    "strength": "实力展示",
+    "service": "服务支持",
+    "partner": "合作伙伴",
+    "news": "新闻中心",
+    "contact": "联系我们"
+  },
+  "header": {
+    "language": "语言切换"
+  },
+  "footer": {
+    "navigation": "快速导航",
+    "products": "产品分类",
+    "contact": "联系信息",
+    "qrcode": "官方二维码"
+  },
+  "notFound": {
+    "title": "页面未找到",
+    "description": "当前访问的页面尚未在本阶段的 mock 样板中创建，请返回首页继续浏览。"
+  }
+}

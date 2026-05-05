@@ -1,0 +1,36 @@
+{
+  "common": {
+    "siteName": "Manufacturing Corporate Website",
+    "sectionEyebrow": "Global Layout",
+    "placeholderTitle": "Global layout and core UI are ready",
+    "placeholderDescription": "This stage focuses on the header, footer, floating toolbar, inner-page banner, 404 page and i18n foundation. High-fidelity page reconstruction will continue on top of this shell."
+  },
+  "buttons": {
+    "backHome": "Back to Home",
+    "learnMore": "Learn More",
+    "contactUs": "Contact Us"
+  },
+  "navigation": {
+    "home": "Home",
+    "about": "About",
+    "products": "Products",
+    "strength": "Strength",
+    "service": "Service",
+    "partner": "Partners",
+    "news": "News",
+    "contact": "Contact"
+  },
+  "header": {
+    "language": "Language"
+  },
+  "footer": {
+    "navigation": "Navigation",
+    "products": "Products",
+    "contact": "Contact",
+    "qrcode": "QR Code"
+  },
+  "notFound": {
+    "title": "Page Not Found",
+    "description": "The page you are looking for has not been built in the current mock stage yet."
+  }
+}

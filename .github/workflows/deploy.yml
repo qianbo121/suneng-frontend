@@ -1,0 +1,74 @@
+name: Build And Deploy
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Build Applications
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - name: Install dependencies
+        run: pnpm install --no-frozen-lockfile
+
+      - name: Generate Prisma client
+        run: pnpm --dir backend prisma:generate
+
+      - name: Build backend
+        run: pnpm --dir backend build
+
+      - name: Build frontend
+        env:
+          NEXT_PUBLIC_APP_NAME: Manufacturing Corporate Site
+          NEXT_PUBLIC_DEFAULT_LOCALE: zh
+          NEXT_PUBLIC_SITE_URL: https://example.com
+          NEXT_PUBLIC_API_URL: /api
+          NEXT_PUBLIC_API_BASE_URL: /api
+          API_BASE_URL_INTERNAL: http://backend:3001/api
+        run: pnpm --dir frontend build
+
+      - name: Build admin
+        env:
+          VITE_APP_NAME: Corporate Admin
+          VITE_API_BASE_URL: /api
+          VITE_APP_BASE_PATH: /admin/
+        run: pnpm --dir admin build
+
+  deploy:
+    name: Deploy To Server
+    runs-on: ubuntu-latest
+    needs: build
+    if: github.ref == 'refs/heads/main' && secrets.DEPLOY_HOST != '' && secrets.DEPLOY_USERNAME != '' && secrets.DEPLOY_KEY != '' && secrets.DEPLOY_PATH != ''
+
+    steps:
+      - name: SSH Deploy
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.DEPLOY_HOST }}
+          username: ${{ secrets.DEPLOY_USERNAME }}
+          key: ${{ secrets.DEPLOY_KEY }}
+          script: |
+            set -e
+            cd ${{ secrets.DEPLOY_PATH }}
+            git fetch --all
+            git checkout main
+            git pull origin main
+            docker compose down
+            docker compose up -d --build

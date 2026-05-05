@@ -1,0 +1,130 @@
+@import 'swiper/css';
+@import 'swiper/css/effect-fade';
+@import 'swiper/css/navigation';
+@import 'swiper/css/pagination';
+@import '@/styles/theme.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+  scroll-behavior: smooth;
+  background: #fff;
+  overscroll-behavior-y: none;
+}
+
+html,
+body {
+  min-height: 100%;
+  overscroll-behavior-y: none;
+}
+
+body {
+  margin: 0;
+  background: #fff;
+  color: var(--color-neutral-900);
+  font-family:
+    'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+  text-rendering: optimizeLegibility;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+button,
+input,
+textarea {
+  font: inherit;
+}
+
+::selection {
+  background: rgba(0, 75, 151, 0.16);
+}
+
+@keyframes partner-marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.partner-marquee-track {
+  animation: partner-marquee 48s linear infinite;
+}
+
+.hot-products .swiper {
+  /* Prevent the Swiper track from expanding the page width on desktop. */
+  overflow: clip;
+}
+
+.news-article h1,
+.news-article h2,
+.news-article h3,
+.news-article h4,
+.news-article h5,
+.news-article h6 {
+  margin: 2em 0 1em;
+  color: #202020;
+  font-weight: 600;
+  line-height: 1.45;
+}
+
+.news-article h2 {
+  font-size: 18px;
+}
+
+.news-article h3 {
+  font-size: 17px;
+}
+
+.news-article p,
+.news-article ul,
+.news-article ol,
+.news-article blockquote,
+.news-article table {
+  margin: 1.15em 0;
+  color: #555555;
+  font-size: 16px;
+  line-height: 2.05;
+}
+
+.news-article ul,
+.news-article ol {
+  padding-left: 1.2rem;
+}
+
+.news-article a {
+  color: var(--color-primary);
+}
+
+.news-article img {
+  width: 100%;
+  height: auto;
+  margin: 1.25rem 0;
+}
+
+.news-article table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.news-article th,
+.news-article td {
+  border: 1px solid rgba(0, 75, 151, 0.12);
+  padding: 0.75rem 0.9rem;
+  text-align: left;
+}

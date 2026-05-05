@@ -1,0 +1,496 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum PublishStatus {
+  draft
+  published
+  offline
+}
+
+enum AdminRole {
+  super_admin
+  editor
+}
+
+enum CertificateCategory {
+  honor
+  qualification
+  patent
+}
+
+enum CultureValueType {
+  mission
+  vision
+  value
+}
+
+enum ContactMessageStatus {
+  new
+  processing
+  resolved
+  spam
+}
+
+enum CustomRequirementStatus {
+  pending
+  followed
+}
+
+model Banner {
+  id             Int           @id @default(autoincrement())
+  sectionKey     String?       @db.VarChar(100)
+  titleZh        String        @db.VarChar(255)
+  titleEn        String?       @db.VarChar(255)
+  subtitleZh     String?       @db.VarChar(500)
+  subtitleEn     String?       @db.VarChar(500)
+  imageUrl       String        @db.VarChar(500)
+  mobileImageUrl String?       @db.VarChar(500)
+  linkUrl        String?       @db.VarChar(500)
+  isActive       Boolean       @default(true)
+  sortOrder      Int           @default(0)
+  status         PublishStatus @default(published)
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+
+  @@index([sectionKey, sortOrder])
+  @@index([status, sortOrder])
+}
+
+model ProductCategory {
+  id               Int           @id @default(autoincrement())
+  nameZh           String        @db.VarChar(120)
+  nameEn           String?       @db.VarChar(120)
+  descriptionZh    String?       @db.Text
+  descriptionEn    String?       @db.Text
+  coverImage       String?       @db.VarChar(500)
+  iconImage        String?       @db.VarChar(500)
+  slug             String        @unique @db.VarChar(150)
+  sortOrder        Int           @default(0)
+  status           PublishStatus @default(published)
+  seoTitleZh       String?       @db.VarChar(255)
+  seoTitleEn       String?       @db.VarChar(255)
+  seoDescriptionZh String?       @db.Text
+  seoDescriptionEn String?       @db.Text
+  seoKeywordsZh    String?       @db.VarChar(500)
+  seoKeywordsEn    String?       @db.VarChar(500)
+  ogImage          String?       @db.VarChar(500)
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @updatedAt
+  products         Product[]
+
+  @@index([status, sortOrder])
+  @@index([sortOrder])
+}
+
+model Product {
+  id               Int             @id @default(autoincrement())
+  categoryId       Int
+  nameZh           String          @db.VarChar(180)
+  nameEn           String?         @db.VarChar(180)
+  model            String?         @db.VarChar(120)
+  summaryZh        String?         @db.Text
+  summaryEn        String?         @db.Text
+  descriptionZh    String?         @db.Text
+  descriptionEn    String?         @db.Text
+  specsJson        Json?
+  featuresJson     Json?
+  imagesJson       Json?
+  isHot            Boolean         @default(false)
+  slug             String          @unique @db.VarChar(180)
+  sortOrder        Int             @default(0)
+  status           PublishStatus   @default(draft)
+  seoTitleZh       String?         @db.VarChar(255)
+  seoTitleEn       String?         @db.VarChar(255)
+  seoDescriptionZh String?         @db.Text
+  seoDescriptionEn String?         @db.Text
+  seoKeywordsZh    String?         @db.VarChar(500)
+  seoKeywordsEn    String?         @db.VarChar(500)
+  ogImage          String?         @db.VarChar(500)
+  createdAt        DateTime        @default(now())
+  updatedAt        DateTime        @updatedAt
+  category         ProductCategory @relation(fields: [categoryId], references: [id], onDelete: Restrict)
+  deliveries       Delivery[]
+
+  @@index([categoryId])
+  @@index([status, sortOrder])
+  @@index([isHot, status])
+  @@index([nameZh])
+}
+
+model NewsCategory {
+  id               Int           @id @default(autoincrement())
+  nameZh           String        @db.VarChar(120)
+  nameEn           String?       @db.VarChar(120)
+  slug             String        @unique @db.VarChar(120)
+  sortOrder        Int           @default(0)
+  status           PublishStatus @default(published)
+  seoTitleZh       String?       @db.VarChar(255)
+  seoTitleEn       String?       @db.VarChar(255)
+  seoDescriptionZh String?       @db.Text
+  seoDescriptionEn String?       @db.Text
+  seoKeywordsZh    String?       @db.VarChar(500)
+  seoKeywordsEn    String?       @db.VarChar(500)
+  ogImage          String?       @db.VarChar(500)
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @updatedAt
+  newsItems        News[]
+
+  @@index([status, sortOrder])
+}
+
+model News {
+  id               Int             @id @default(autoincrement())
+  categoryId       Int
+  titleZh          String          @db.VarChar(255)
+  titleEn          String?         @db.VarChar(255)
+  summaryZh        String?         @db.Text
+  summaryEn        String?         @db.Text
+  contentZh        String?         @db.Text
+  contentEn        String?         @db.Text
+  coverImage       String?         @db.VarChar(500)
+  publishDate      DateTime        @default(now())
+  viewCount        Int             @default(0)
+  slug             String          @unique @db.VarChar(180)
+  isPublished      Boolean         @default(false)
+  sortOrder        Int             @default(0)
+  status           PublishStatus   @default(draft)
+  seoTitleZh       String?         @db.VarChar(255)
+  seoTitleEn       String?         @db.VarChar(255)
+  seoDescriptionZh String?         @db.Text
+  seoDescriptionEn String?         @db.Text
+  seoKeywordsZh    String?         @db.VarChar(500)
+  seoKeywordsEn    String?         @db.VarChar(500)
+  ogImage          String?         @db.VarChar(500)
+  createdAt        DateTime        @default(now())
+  updatedAt        DateTime        @updatedAt
+  category         NewsCategory    @relation(fields: [categoryId], references: [id], onDelete: Restrict)
+
+  @@index([categoryId, publishDate])
+  @@index([status, publishDate])
+  @@index([isPublished, publishDate])
+  @@index([sortOrder])
+}
+
+model Partner {
+  id         Int           @id @default(autoincrement())
+  name       String        @db.VarChar(180)
+  logoUrl    String        @db.VarChar(500)
+  website    String?       @db.VarChar(500)
+  sortOrder  Int           @default(0)
+  status     PublishStatus @default(published)
+  createdAt  DateTime      @default(now())
+  updatedAt  DateTime      @updatedAt
+
+  @@index([status, sortOrder])
+  @@index([name])
+}
+
+model Delivery {
+  id               Int             @id @default(autoincrement())
+  productId        Int?
+  titleZh          String          @db.VarChar(255)
+  titleEn          String?         @db.VarChar(255)
+  descriptionZh    String?         @db.Text
+  descriptionEn    String?         @db.Text
+  imagesJson       Json?
+  deliveryDate     DateTime?
+  slug             String          @unique @db.VarChar(180)
+  sortOrder        Int             @default(0)
+  status           PublishStatus   @default(draft)
+  seoTitleZh       String?         @db.VarChar(255)
+  seoTitleEn       String?         @db.VarChar(255)
+  seoDescriptionZh String?         @db.Text
+  seoDescriptionEn String?         @db.Text
+  seoKeywordsZh    String?         @db.VarChar(500)
+  seoKeywordsEn    String?         @db.VarChar(500)
+  ogImage          String?         @db.VarChar(500)
+  createdAt        DateTime        @default(now())
+  updatedAt        DateTime        @updatedAt
+  product          Product?        @relation(fields: [productId], references: [id], onDelete: SetNull)
+
+  @@index([productId])
+  @@index([status, sortOrder])
+  @@index([deliveryDate])
+}
+
+model Certificate {
+  id               Int                 @id @default(autoincrement())
+  strengthCategoryId Int?
+  nameZh           String              @db.VarChar(255)
+  nameEn           String?             @db.VarChar(255)
+  imageUrl         String              @db.VarChar(500)
+  category         CertificateCategory
+  sortOrder        Int                 @default(0)
+  status           PublishStatus       @default(published)
+  seoTitleZh       String?             @db.VarChar(255)
+  seoTitleEn       String?             @db.VarChar(255)
+  seoDescriptionZh String?             @db.Text
+  seoDescriptionEn String?             @db.Text
+  seoKeywordsZh    String?             @db.VarChar(500)
+  seoKeywordsEn    String?             @db.VarChar(500)
+  ogImage          String?             @db.VarChar(500)
+  createdAt        DateTime            @default(now())
+  updatedAt        DateTime            @updatedAt
+  strengthCategory StrengthCategory?   @relation(fields: [strengthCategoryId], references: [id], onDelete: SetNull)
+
+  @@index([strengthCategoryId])
+  @@index([category, sortOrder])
+  @@index([status, sortOrder])
+}
+
+model ContactMessage {
+  id         Int                  @id @default(autoincrement())
+  name       String               @db.VarChar(120)
+  email      String?              @db.VarChar(180)
+  phone      String?              @db.VarChar(50)
+  company    String?              @db.VarChar(180)
+  message    String               @db.Text
+  isRead     Boolean              @default(false)
+  status     ContactMessageStatus @default(new)
+  handlerId  Int?
+  createdAt  DateTime             @default(now())
+  updatedAt  DateTime             @updatedAt
+  handler    AdminUser?           @relation(fields: [handlerId], references: [id], onDelete: SetNull)
+
+  @@index([status, isRead])
+  @@index([handlerId])
+  @@index([createdAt])
+}
+
+model CustomRequirement {
+  id          Int                     @id @default(autoincrement())
+  name        String?                 @db.VarChar(120)
+  phone       String                  @db.VarChar(50)
+  company     String?                 @db.VarChar(180)
+  industry    String?                 @db.VarChar(180)
+  process     String?                 @db.VarChar(180)
+  temperature String?                 @db.VarChar(120)
+  requirement String?                 @db.Text
+  status      CustomRequirementStatus @default(pending)
+  createdAt   DateTime                @default(now())
+  updatedAt   DateTime                @updatedAt
+
+  @@index([status, createdAt])
+  @@index([phone])
+  @@index([createdAt])
+}
+
+model CompanyInfo {
+  id         Int      @id @default(autoincrement())
+  key        String   @unique @db.VarChar(120)
+  valueZh    String?  @db.Text
+  valueEn    String?  @db.Text
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
+model AboutSection {
+  id               Int           @id @default(autoincrement())
+  sectionKey       String        @unique @db.VarChar(120)
+  titleZh          String        @db.VarChar(255)
+  titleEn          String?       @db.VarChar(255)
+  contentZh        String?       @db.Text
+  contentEn        String?       @db.Text
+  imageUrl         String?       @db.VarChar(500)
+  sortOrder        Int           @default(0)
+  status           PublishStatus @default(published)
+  seoTitleZh       String?       @db.VarChar(255)
+  seoTitleEn       String?       @db.VarChar(255)
+  seoDescriptionZh String?       @db.Text
+  seoDescriptionEn String?       @db.Text
+  seoKeywordsZh    String?       @db.VarChar(500)
+  seoKeywordsEn    String?       @db.VarChar(500)
+  ogImage          String?       @db.VarChar(500)
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @updatedAt
+
+  @@index([status, sortOrder])
+}
+
+model TimelineEvent {
+  id               Int           @id @default(autoincrement())
+  year             Int
+  titleZh          String        @db.VarChar(255)
+  titleEn          String?       @db.VarChar(255)
+  contentZh        String?       @db.Text
+  contentEn        String?       @db.Text
+  sortOrder        Int           @default(0)
+  status           PublishStatus @default(published)
+  seoTitleZh       String?       @db.VarChar(255)
+  seoTitleEn       String?       @db.VarChar(255)
+  seoDescriptionZh String?       @db.Text
+  seoDescriptionEn String?       @db.Text
+  seoKeywordsZh    String?       @db.VarChar(500)
+  seoKeywordsEn    String?       @db.VarChar(500)
+  ogImage          String?       @db.VarChar(500)
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @updatedAt
+
+  @@index([year, sortOrder])
+  @@index([status, sortOrder])
+}
+
+model ChairmanMessage {
+  id               Int           @id @default(autoincrement())
+  singletonKey     String        @unique @default("default") @db.VarChar(50)
+  titleZh          String        @db.VarChar(255)
+  titleEn          String?       @db.VarChar(255)
+  contentZh        String?       @db.Text
+  contentEn        String?       @db.Text
+  imageUrl         String?       @db.VarChar(500)
+  status           PublishStatus @default(published)
+  seoTitleZh       String?       @db.VarChar(255)
+  seoTitleEn       String?       @db.VarChar(255)
+  seoDescriptionZh String?       @db.Text
+  seoDescriptionEn String?       @db.Text
+  seoKeywordsZh    String?       @db.VarChar(500)
+  seoKeywordsEn    String?       @db.VarChar(500)
+  ogImage          String?       @db.VarChar(500)
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @updatedAt
+
+  @@index([status])
+}
+
+model CultureValue {
+  id         Int              @id @default(autoincrement())
+  type       CultureValueType
+  titleZh    String           @db.VarChar(255)
+  titleEn    String?          @db.VarChar(255)
+  contentZh  String?          @db.Text
+  contentEn  String?          @db.Text
+  icon       String?          @db.VarChar(500)
+  sortOrder  Int              @default(0)
+  status     PublishStatus    @default(published)
+  createdAt  DateTime         @default(now())
+  updatedAt  DateTime         @updatedAt
+
+  @@index([type, sortOrder])
+  @@index([status, sortOrder])
+}
+
+model StrengthCategory {
+  id               Int           @id @default(autoincrement())
+  nameZh           String        @db.VarChar(120)
+  nameEn           String?       @db.VarChar(120)
+  slug             String        @unique @db.VarChar(150)
+  sortOrder        Int           @default(0)
+  status           PublishStatus @default(published)
+  seoTitleZh       String?       @db.VarChar(255)
+  seoTitleEn       String?       @db.VarChar(255)
+  seoDescriptionZh String?       @db.Text
+  seoDescriptionEn String?       @db.Text
+  seoKeywordsZh    String?       @db.VarChar(500)
+  seoKeywordsEn    String?       @db.VarChar(500)
+  ogImage          String?       @db.VarChar(500)
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @updatedAt
+  items            StrengthItem[]
+  certificates     Certificate[]
+
+  @@index([status, sortOrder])
+}
+
+model StrengthItem {
+  id               Int              @id @default(autoincrement())
+  categoryId       Int
+  titleZh          String           @db.VarChar(255)
+  titleEn          String?          @db.VarChar(255)
+  summaryZh        String?          @db.Text
+  summaryEn        String?          @db.Text
+  contentZh        String?          @db.Text
+  contentEn        String?          @db.Text
+  imageUrl         String?          @db.VarChar(500)
+  imagesJson       Json?
+  sortOrder        Int              @default(0)
+  status           PublishStatus    @default(published)
+  seoTitleZh       String?          @db.VarChar(255)
+  seoTitleEn       String?          @db.VarChar(255)
+  seoDescriptionZh String?          @db.Text
+  seoDescriptionEn String?          @db.Text
+  seoKeywordsZh    String?          @db.VarChar(500)
+  seoKeywordsEn    String?          @db.VarChar(500)
+  ogImage          String?          @db.VarChar(500)
+  createdAt        DateTime         @default(now())
+  updatedAt        DateTime         @updatedAt
+  category         StrengthCategory @relation(fields: [categoryId], references: [id], onDelete: Restrict)
+
+  @@index([categoryId, sortOrder])
+  @@index([status, sortOrder])
+}
+
+model ServiceSection {
+  id               Int           @id @default(autoincrement())
+  sectionKey       String        @unique @db.VarChar(120)
+  titleZh          String        @db.VarChar(255)
+  titleEn          String?       @db.VarChar(255)
+  contentZh        String?       @db.Text
+  contentEn        String?       @db.Text
+  imageUrl         String?       @db.VarChar(500)
+  sortOrder        Int           @default(0)
+  status           PublishStatus @default(published)
+  seoTitleZh       String?       @db.VarChar(255)
+  seoTitleEn       String?       @db.VarChar(255)
+  seoDescriptionZh String?       @db.Text
+  seoDescriptionEn String?       @db.Text
+  seoKeywordsZh    String?       @db.VarChar(500)
+  seoKeywordsEn    String?       @db.VarChar(500)
+  ogImage          String?       @db.VarChar(500)
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @updatedAt
+
+  @@index([status, sortOrder])
+}
+
+model SalesOutlet {
+  id         Int           @id @default(autoincrement())
+  regionZh   String        @db.VarChar(120)
+  regionEn   String?       @db.VarChar(120)
+  cityZh     String        @db.VarChar(120)
+  cityEn     String?       @db.VarChar(120)
+  addressZh  String        @db.Text
+  addressEn  String?       @db.Text
+  phone      String?       @db.VarChar(50)
+  lat        Float?
+  lng        Float?
+  sortOrder  Int           @default(0)
+  status     PublishStatus @default(published)
+  createdAt  DateTime      @default(now())
+  updatedAt  DateTime      @updatedAt
+
+  @@index([regionZh, cityZh])
+  @@index([status, sortOrder])
+}
+
+model SeoMeta {
+  id            Int      @id @default(autoincrement())
+  pageKey       String   @unique @db.VarChar(180)
+  titleZh       String?  @db.VarChar(255)
+  titleEn       String?  @db.VarChar(255)
+  descriptionZh String?  @db.Text
+  descriptionEn String?  @db.Text
+  keywordsZh    String?  @db.VarChar(500)
+  keywordsEn    String?  @db.VarChar(500)
+  ogImage       String?  @db.VarChar(500)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model AdminUser {
+  id              Int              @id @default(autoincrement())
+  username        String           @unique @db.VarChar(80)
+  passwordHash    String           @db.VarChar(255)
+  role            AdminRole        @default(editor)
+  isActive        Boolean          @default(true)
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+  contactMessages ContactMessage[]
+
+  @@index([role, isActive])
+}

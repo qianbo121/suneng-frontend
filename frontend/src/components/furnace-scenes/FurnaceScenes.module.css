@@ -1,0 +1,690 @@
+.sceneRoot {
+  position: relative;
+  display: grid;
+  place-items: center;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  border-radius: inherit;
+  isolation: isolate;
+  contain: layout paint;
+  background: linear-gradient(180deg, #0f1e33 0%, #0b1526 100%);
+}
+
+.sceneRoot::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.03), transparent 22%),
+    radial-gradient(circle at 50% 42%, rgba(255, 176, 77, 0.08), transparent 34%);
+}
+
+.scene {
+  display: block;
+  height: 100%;
+  width: 100%;
+  position: relative;
+  z-index: 1;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+.scene text {
+  fill: #eaf3f8;
+  font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  font-size: 26px;
+}
+
+.bogieCart,
+.bogieLoad,
+.doorLift,
+.meshProducts,
+.zone,
+.heaterPulse,
+.pitLidGroup,
+.pitLoadGroup,
+.pitFlow,
+.boxDoor,
+.boxTray,
+.boxHeatPath,
+.pushTrays,
+.pushRod,
+.pushHead,
+.pushHeater,
+.bellCover,
+.bellLoad,
+.bellHeater,
+.bellHeatPath,
+.temperDoor,
+.temperTray,
+.temperHeatPath,
+.temperLoad,
+.temperFan,
+.rollerTrays,
+.rollerTray,
+.rollerHeater,
+.roller,
+.rotaryDisc,
+.rotaryHeatPath {
+  transition: transform 900ms ease, opacity 600ms ease, filter 600ms ease;
+  will-change: transform, opacity, filter;
+}
+
+.heatPath,
+.pitFlow,
+.boxHeatPath,
+.bellHeatPath,
+.temperHeatPath,
+.rotaryHeatPath {
+  opacity: 0.08;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.zone {
+  opacity: 0.18;
+}
+
+.heaterPulse {
+  opacity: 0.5;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.roller,
+.temperFan,
+.rotaryDisc {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.beltFlow {
+  animation: beltFlow 1.4s linear infinite;
+}
+
+.delay1 {
+  animation-delay: 0.18s;
+}
+
+.delay2 {
+  animation-delay: 0.36s;
+}
+
+.delay3 {
+  animation-delay: 0.54s;
+}
+
+.delay4 {
+  animation-delay: 0.72s;
+}
+
+.bogieScene .doorLift {
+  transform: translateY(-36px);
+}
+
+.bogieScene .bogieCart {
+  transform: translateX(0);
+}
+
+.bogieScene[data-mode="flow"] .bogieCart {
+  animation: bogieFlowCart 7.2s ease-in-out infinite;
+}
+
+.bogieScene[data-mode="flow"] .doorLift {
+  animation: bogieFlowDoor 7.2s ease-in-out infinite;
+}
+
+.bogieScene[data-mode="flow"] .heatPath {
+  stroke-dasharray: 26 20;
+  animation: bogieFlowHeat 7.2s linear infinite;
+}
+
+.bogieScene[data-mode="flow"] .bogieLoad {
+  animation: bogieFlowLoad 7.2s ease-in-out infinite;
+}
+
+.meshScene .meshProducts {
+  transform: translateX(0);
+}
+
+.meshScene[data-mode="flow"] .meshProducts {
+  animation: meshFullFlow 7s linear infinite;
+}
+
+.meshScene[data-mode="flow"] .heaterPulse {
+  opacity: 1;
+  animation: heaterPulse 1.8s ease-in-out infinite;
+}
+
+.pitScene .pitLidGroup {
+  transform: translateY(-46px);
+}
+
+.pitScene .pitLoadGroup {
+  transform: translateY(-50px);
+}
+
+.pitScene[data-mode="flow"] .pitLidGroup {
+  animation: pitFullLid 7.2s ease-in-out infinite;
+}
+
+.pitScene[data-mode="flow"] .pitLoadGroup {
+  animation: pitFullLoad 7.2s ease-in-out infinite;
+}
+
+.pitScene[data-mode="flow"] .pitFlow {
+  stroke-dasharray: 28 22;
+  animation: pitFullHeat 7.2s linear infinite;
+}
+
+.boxScene .boxDoor {
+  transform: translateX(-78px);
+}
+
+.boxScene .boxTray {
+  transform: translateX(0);
+}
+
+.boxScene[data-mode="flow"] .boxDoor {
+  animation: boxFullDoor 7s ease-in-out infinite;
+}
+
+.boxScene[data-mode="flow"] .boxTray {
+  animation: boxFullTray 7s ease-in-out infinite;
+}
+
+.boxScene[data-mode="flow"] .boxHeatPath {
+  stroke-dasharray: 28 18;
+  animation: boxFullHeat 7s linear infinite;
+}
+
+.pusherScene .pushTrays {
+  transform: translateX(0);
+}
+
+.pusherScene .pushRod,
+.pusherScene .pushHead {
+  transform: translateX(0);
+}
+
+.pusherScene[data-mode="flow"] .pushTrays {
+  animation: pusherFullFlow 7s ease-in-out infinite;
+}
+
+.pusherScene[data-mode="flow"] .pushRod,
+.pusherScene[data-mode="flow"] .pushHead {
+  animation: rodFullFlow 7s ease-in-out infinite;
+}
+
+.pusherScene[data-mode="flow"] .pushHeater {
+  opacity: 1;
+  animation: heaterPulse 1.8s ease-in-out infinite;
+}
+
+.bellScene .bellCover {
+  transform: translateY(-200px);
+}
+
+.bellScene .bellHeater,
+.bellScene .bellHeatPath {
+  opacity: 0.05;
+}
+
+.bellScene[data-mode="flow"] .bellCover {
+  animation: bellFullCover 7.2s ease-in-out infinite;
+}
+
+.bellScene[data-mode="flow"] .bellHeater,
+.bellScene[data-mode="flow"] .bellHeatPath {
+  stroke-dasharray: 28 18;
+  animation: bellFullHeat 7.2s linear infinite;
+}
+
+.bellScene[data-mode="flow"] .bellLoad {
+  animation: bellFullLoad 7.2s ease-in-out infinite;
+}
+
+.temperingScene .temperDoor {
+  transform: translateX(-78px);
+}
+
+.temperingScene .temperTray {
+  transform: translateX(0);
+}
+
+.temperingScene .temperHeatPath {
+  opacity: 0.08;
+}
+
+.temperingScene .temperFan {
+  transform: translate(438px, 290px);
+}
+
+.temperingScene[data-mode="flow"] .temperDoor {
+  animation: boxFullDoor 7s ease-in-out infinite;
+}
+
+.temperingScene[data-mode="flow"] .temperTray {
+  animation: boxFullTray 7s ease-in-out infinite;
+}
+
+.temperingScene[data-mode="flow"] .temperHeatPath {
+  stroke-dasharray: 28 18;
+  animation: boxFullHeat 7s linear infinite;
+}
+
+.temperingScene[data-mode="flow"] .temperFan {
+  animation: fanSpin 2s linear infinite;
+}
+
+.rollerScene .rollerHeater {
+  opacity: 0.5;
+}
+
+.rollerScene .rollerTray {
+  transform: translate3d(0, 0, 0);
+  transition: opacity 600ms ease, filter 600ms ease;
+}
+
+.rollerScene[data-mode="flow"] .rollerTray {
+  animation: rollerTrayFlow 5.5s linear infinite;
+}
+
+.rollerScene[data-mode="flow"] .roller {
+  animation: rollerSpin 1.6s linear infinite;
+}
+
+.rollerScene[data-mode="flow"] .rollerHeater {
+  opacity: 1;
+  animation: heaterPulse 1.8s ease-in-out infinite;
+}
+
+.rotaryScene[data-mode="flow"] .rotaryDisc {
+  animation: rotaryDiscSpin 13s linear infinite;
+}
+
+.rotaryScene[data-mode="flow"] .rotaryHeatPath {
+  stroke-dasharray: 28 18;
+  animation: rotaryHeatFlow 4.2s linear infinite;
+}
+
+@keyframes beltFlow {
+  from {
+    stroke-dashoffset: 0;
+  }
+
+  to {
+    stroke-dashoffset: -40;
+  }
+}
+
+@keyframes heaterPulse {
+  0%,
+  100% {
+    opacity: 0.62;
+    transform: scaleY(1);
+  }
+
+  50% {
+    opacity: 1;
+    transform: scaleY(1.08);
+  }
+}
+
+@keyframes bogieFlowCart {
+  0%,
+  12% {
+    transform: translateX(0);
+  }
+
+  34%,
+  62% {
+    transform: translateX(254px);
+  }
+
+  84%,
+  100% {
+    transform: translateX(0);
+  }
+}
+
+@keyframes bogieFlowDoor {
+  0%,
+  12%,
+  84%,
+  100% {
+    transform: translateY(-36px);
+  }
+
+  34%,
+  62% {
+    transform: translateY(0);
+  }
+}
+
+@keyframes bogieFlowHeat {
+  0%,
+  24%,
+  74%,
+  100% {
+    opacity: 0.05;
+  }
+
+  34%,
+  62% {
+    opacity: 0.78;
+  }
+
+  from {
+    stroke-dashoffset: 0;
+  }
+
+  to {
+    stroke-dashoffset: -92;
+  }
+}
+
+@keyframes bogieFlowLoad {
+  0%,
+  24%,
+  74%,
+  100% {
+    filter: none;
+  }
+
+  34%,
+  62% {
+    filter: saturate(1.16) brightness(1.08) drop-shadow(0 0 10px rgba(255, 184, 92, 0.45));
+  }
+}
+
+@keyframes meshFullFlow {
+  0% {
+    transform: translateX(-120px);
+  }
+
+  100% {
+    transform: translateX(502px);
+  }
+}
+
+@keyframes pitFullLid {
+  0%,
+  14% {
+    transform: translateY(-46px);
+  }
+
+  34%,
+  60% {
+    transform: translateY(0);
+  }
+
+  84%,
+  100% {
+    transform: translateY(-46px);
+  }
+}
+
+@keyframes pitFullLoad {
+  0%,
+  14% {
+    transform: translateY(-50px);
+  }
+
+  28% {
+    transform: translateY(36px);
+  }
+
+  44%,
+  60% {
+    transform: translateY(52px);
+  }
+
+  84%,
+  100% {
+    transform: translateY(-50px);
+  }
+}
+
+@keyframes pitFullHeat {
+  0%,
+  28%,
+  72%,
+  100% {
+    opacity: 0.05;
+  }
+
+  40%,
+  60% {
+    opacity: 0.82;
+  }
+
+  from {
+    stroke-dashoffset: 0;
+  }
+
+  to {
+    stroke-dashoffset: -92;
+  }
+}
+
+@keyframes boxFullDoor {
+  0%,
+  16%,
+  82%,
+  100% {
+    transform: translateX(-78px);
+  }
+
+  42%,
+  66% {
+    transform: translateX(0);
+  }
+}
+
+@keyframes boxFullTray {
+  0%,
+  16% {
+    transform: translateX(0);
+  }
+
+  34% {
+    transform: translateX(196px);
+  }
+
+  42%,
+  66% {
+    transform: translateX(210px);
+  }
+
+  82%,
+  100% {
+    transform: translateX(0);
+  }
+}
+
+@keyframes boxFullHeat {
+  0%,
+  30%,
+  72%,
+  100% {
+    opacity: 0.06;
+  }
+
+  44%,
+  66% {
+    opacity: 0.8;
+  }
+
+  from {
+    stroke-dashoffset: 0;
+  }
+
+  to {
+    stroke-dashoffset: -92;
+  }
+}
+
+@keyframes pusherFullFlow {
+  0%,
+  12% {
+    transform: translateX(0);
+  }
+
+  30% {
+    transform: translateX(128px);
+  }
+
+  56% {
+    transform: translateX(252px);
+  }
+
+  82%,
+  100% {
+    transform: translateX(432px);
+  }
+}
+
+@keyframes rodFullFlow {
+  0%,
+  12% {
+    transform: translateX(0);
+  }
+
+  30% {
+    transform: translateX(96px);
+  }
+
+  56%,
+  100% {
+    transform: translateX(0);
+  }
+}
+
+@keyframes bellFullCover {
+  0%,
+  12% {
+    transform: translateY(-200px);
+  }
+
+  34%,
+  62% {
+    transform: translateY(0);
+  }
+
+  84%,
+  100% {
+    transform: translateY(-200px);
+  }
+}
+
+@keyframes bellFullHeat {
+  0%,
+  24%,
+  74%,
+  100% {
+    opacity: 0.05;
+  }
+
+  34%,
+  62% {
+    opacity: 0.82;
+  }
+
+  from {
+    stroke-dashoffset: 0;
+  }
+
+  to {
+    stroke-dashoffset: -92;
+  }
+}
+
+@keyframes bellFullLoad {
+  0%,
+  24%,
+  74%,
+  100% {
+    filter: none;
+  }
+
+  34%,
+  62% {
+    filter: saturate(1.16) brightness(1.08) drop-shadow(0 0 10px rgba(255, 184, 92, 0.45));
+  }
+}
+
+@keyframes fanSpin {
+  from {
+    transform: translate(438px, 290px) rotate(0deg);
+  }
+
+  to {
+    transform: translate(438px, 290px) rotate(360deg);
+  }
+}
+
+@keyframes rollerSpin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes rotaryDiscSpin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes rollerTrayFlow {
+  0% {
+    transform: translate3d(-170px, 0, 0);
+  }
+
+  100% {
+    transform: translate3d(470px, 0, 0);
+  }
+}
+
+@keyframes rotaryHeatFlow {
+  0%,
+  100% {
+    opacity: 0.08;
+    stroke-dashoffset: 0;
+  }
+
+  50% {
+    opacity: 0.78;
+    stroke-dashoffset: -92;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bogieScene *,
+  .meshScene *,
+  .pitScene *,
+  .boxScene *,
+  .rollerScene *,
+  .bellScene *,
+  .temperingScene *,
+  .rotaryScene *,
+  .moreScene * {
+    animation: none !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .scene {
+    transform: translateZ(0) scale(1.01);
+  }
+}

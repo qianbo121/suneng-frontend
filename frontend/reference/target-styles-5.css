@@ -1,0 +1,133 @@
+.s_title {
+    text-align: left
+}
+
+.s_button1 {
+    background-color: #bd0d00;
+    color: #fff;
+    font-size: 14px;
+    border-top-left-radius: 25px;
+    border-top-right-radius: 25px;
+    border-bottom-left-radius: 25px;
+    border-bottom-right-radius: 25px
+}
+
+.s_button1:hover {
+    background-color: #f90
+}
+
+.page_a.current {
+    color: #fff;
+    background-color: #bd0d00
+}
+
+.page_a.current:hover {
+    background-color: #f90;
+    color: #fff
+}
+
+@font-face {
+    font-family: cf28fdc3-7a57-4726-a54f-cd53c6e37ecb;
+    src: url(https://omo-oss-file.thefastfile.com/portal-saas/new2022022115461527871/cms/file/cf28fdc3-7a57-4726-a54f-cd53c6e37ecb.ttf) format("truetype");
+    font-alias:bb3815}
+
+@font-face {
+    font-family: "144c5a47-1ea4-4f90-9a1d-5df889b6f307";
+    src: url(https://omo-oss-file1.thefastfile.com/portal-saas/new2022091615193243509/cms/file/144c5a47-1ea4-4f90-9a1d-5df889b6f307.ttf) format("truetype");
+    font-alias:fontawesome-webfont}
+
+@font-face {
+    font-family: e86ed99a-5b19-4bec-ac23-6dfe7c784e4a;
+    src: url(https://omo-oss-file1.thefastfile.com/portal-saas/new2022091615193243509/cms/file/e86ed99a-5b19-4bec-ac23-6dfe7c784e4a.otf) format("opentype");
+    font-alias:FontAwesome}
+
+@font-face {
+    font-family: "84c96d2b-aec6-4a37-8def-59d83015b598";
+    src: url(https://omo-oss-file1.thefastfile.com/portal-saas/new2022091615193243509/cms/file/84c96d2b-aec6-4a37-8def-59d83015b598.otf) format("opentype");
+    font-alias:Gilroy-ExtraBold}
+
+@font-face {
+    font-family: fe987cbe-4152-4e84-b708-7bdd5fdaeb9f;
+    src: url(https://omo-oss-file1.thefastfile.com/portal-saas/new2022091615193243509/cms/file/fe987cbe-4152-4e84-b708-7bdd5fdaeb9f.otf) format("opentype");
+    font-alias:Gilroy-Light}
+
+article,div,li,p,span {
+    word-wrap: break-word!important;
+    word-break: normal!important
+}
+
+@-webkit-keyframes roateOne {
+    from {
+        transform: rotate(0)
+    }
+
+    to {
+        transform: rotate(360deg)
+    }
+}
+
+@-webkit-keyframes scaleAnimate {
+    from {
+        -webkit-transform: scale(1);
+        opacity: .5
+    }
+
+    to {
+        -webkit-transform: scale(2);
+        opacity: 0
+    }
+}
+
+.fancybox__container {
+    z-index: 99999!important
+}
+
+#c_grid-1669347455167>.p_gridbox>.p_gridCell {
+    height: 100%;
+    display: flex;
+    align-items: center
+}
+
+#c_grid-1669347455167>.p_gridbox {
+    height: 100%
+}
+
+.e_bannerA-2 .p_img {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    overflow: hidden
+}
+
+.e_bannerA-2 .p_summary {
+    text-align: left
+}
+
+.e_bannerA-2 .p_img:before {
+    content: '';
+    background: rgba(0,0,0,.35);
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    top: 0;
+    display: block;
+    z-index: 2;
+    width: 100%
+}
+
+@media only screen and (max-width: 768px) {
+    .e_bannerA-2 .p_img:before {
+        width:100%
+    }
+
+    .e_bannerA-2 .p_btitle {
+        font-size: 24px!important;
+        text-align: center!important
+    }
+
+    .e_bannerA-2 .p_subtitle {
+        font-size: 14px!important;
+        text-align: center!important
+    }
+}
