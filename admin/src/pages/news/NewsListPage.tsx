@@ -231,15 +231,16 @@ export function NewsListPage() {
 
   const handleSave = async () => {
     const values = await form.validateFields();
+    const categoryId = values.categoryId || defaultCategoryId;
 
-    if (!values.categoryId) {
+    if (!categoryId) {
       message.error('请先确保后台存在新闻分类');
       return;
     }
 
     setSubmitting(true);
     try {
-      const payload = buildPayload(values);
+      const payload = buildPayload({ ...values, categoryId });
 
       if (editingRecord) {
         const result = await updateNews(editingRecord.id, payload);

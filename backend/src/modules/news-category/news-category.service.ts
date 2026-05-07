@@ -12,7 +12,9 @@ import { PrismaService } from '@/prisma/prisma.service';
 export class NewsCategoryService {
   constructor(private readonly prisma: PrismaService) {}
 
-  getPublicList() {
+  async getPublicList() {
+    await this.ensureDefaultCategories();
+
     return this.prisma.newsCategory.findMany({
       where: { status: PublishStatus.published },
       orderBy: [{ sortOrder: 'asc' }, { id: 'asc' }],
@@ -20,6 +22,8 @@ export class NewsCategoryService {
   }
 
   async getAdminList(query: NewsCategoryListQueryDto) {
+    await this.ensureDefaultCategories();
+
     const { page, pageSize, skip, take, orderBy } = buildAdminListQuery(query);
     const where: Prisma.NewsCategoryWhereInput = {
       status: query.status,
@@ -81,6 +85,31 @@ export class NewsCategoryService {
   async remove(id: number) {
     await this.findOne(id);
     return this.prisma.newsCategory.delete({ where: { id } });
+  }
+
+  private async ensureDefaultCategories() {
+    const count = await this.prisma.newsCategory.count();
+    if (count > 0) return;
+
+    await this.prisma.newsCategory.createMany({
+      data: [
+        {
+          slug: 'company-news',
+          nameZh: '公司新闻',
+          nameEn: 'Company News',
+          sortOrder: 10,
+          status: PublishStatus.published,
+        },
+        {
+          slug: 'industry-news',
+          nameZh: '行业新闻',
+          nameEn: 'Industry News',
+          sortOrder: 20,
+          status: PublishStatus.published,
+        },
+      ],
+      skipDuplicates: true,
+    });
   }
 
   private async ensureUniqueSlug(source: string, fallback: string, excludeId?: number) {
