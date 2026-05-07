@@ -8,11 +8,14 @@ type GetNewsListOptions = {
 };
 
 export function getNewsCategories() {
-  return safeApiGet<NewsCategoryApiItem[]>('/v1/news/categories');
+  return safeApiGet<NewsCategoryApiItem[]>('/v1/news/categories', {
+    cache: 'no-store',
+  });
 }
 
 export function getNewsList(options: GetNewsListOptions = {}) {
   return safeApiGet<PaginatedNewsApiData>('/v1/news', {
+    cache: 'no-store',
     searchParams: {
       categoryId: options.categoryId,
       page: options.page ?? 1,
