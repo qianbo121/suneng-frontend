@@ -7,7 +7,11 @@ type LoosePayload<T> = {
   [K in keyof T]: T[K] extends string ? string | undefined : T[K];
 };
 
-export type NewsPayload = LoosePayload<Omit<NewsFormValues, 'publishDate' | 'status'>> & {
+export type NewsPayload = Omit<
+  LoosePayload<Omit<NewsFormValues, 'publishDate' | 'status'>>,
+  'categoryId'
+> & {
+  categoryId?: number;
   publishDate?: string;
   isPublished: boolean;
 };

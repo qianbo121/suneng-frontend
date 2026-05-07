@@ -142,8 +142,9 @@ export class NewsService {
 
   async update(id: number, dto: UpdateNewsDto) {
     const record = await this.findOne(id);
+    const { categoryId: requestedCategoryId, ...newsData } = dto;
     const categoryId =
-      dto.categoryId !== undefined ? await this.resolveCategoryId(dto.categoryId) : undefined;
+      requestedCategoryId !== undefined ? await this.resolveCategoryId(requestedCategoryId) : undefined;
     const slug =
       dto.slug || dto.titleEn || dto.titleZh
         ? await this.ensureUniqueSlug(
@@ -156,7 +157,7 @@ export class NewsService {
     return this.prisma.news.update({
       where: { id },
       data: {
-        ...dto,
+        ...newsData,
         ...(categoryId !== undefined ? { categoryId } : {}),
         ...(slug ? { slug } : {}),
         ...(dto.publishDate ? { publishDate: new Date(dto.publishDate) } : {}),
@@ -174,12 +175,18 @@ export class NewsService {
     return this.prisma.news.delete({ where: { id } });
   }
 
-  private async resolveCategoryId(categoryId: number) {
-    const category = await this.prisma.newsCategory.findUnique({ where: { id: categoryId } });
-    if (category) return category.id;
+  private async resolveCategoryId(categoryId?: number) {
+    if (categoryId) {
+      const category = await this.prisma.newsCategory.findUnique({ where: { id: categoryId } });
+      if (category) return category.id;
+    }
 
     const defaultCategoryId = await this.newsCategoryService.getDefaultCategoryId();
-    return defaultCategoryId ?? categoryId;
+    if (!defaultCategoryId) {
+      throw new Error('Default news category is missing');
+    }
+
+    return defaultCategoryId;
   }
 
   private async ensureUniqueSlug(source: string, fallback: string, excludeId?: number) {

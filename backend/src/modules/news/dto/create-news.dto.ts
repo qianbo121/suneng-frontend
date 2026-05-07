@@ -3,10 +3,11 @@ import { Type } from 'class-transformer';
 import { IsBoolean, IsDateString, IsInt, IsOptional, IsString, MaxLength } from 'class-validator';
 
 export class CreateNewsDto {
-  @ApiProperty()
+  @ApiPropertyOptional()
+  @IsOptional()
   @Type(() => Number)
   @IsInt()
-  categoryId!: number;
+  categoryId?: number;
 
   @ApiProperty()
   @IsString()

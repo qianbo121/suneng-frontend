@@ -19,7 +19,6 @@ import useSWR from 'swr';
 import logoImage from '@/assets/sn-logo-header-cropped.png';
 import { ImageUploader } from '@/components/media/ImageUploader';
 import { usePageTitle } from '@/hooks/usePageTitle';
-import { getAllNewsCategories } from '@/services/news-categories';
 import {
   createNews,
   deleteNews,
@@ -36,7 +35,6 @@ type SimpleNewsFormValues = {
   coverImage: string;
   contentZh: string;
   publishDate: Dayjs | null;
-  categoryId: number | null;
   status: PublishStatus;
 };
 
@@ -70,16 +68,12 @@ function formatPublishDate(value?: string | null) {
   return value ? dayjs(value).format('YYYY-MM-DD  HH:mm') : '-';
 }
 
-function resolveInitialValues(
-  record: NewsEntity | null,
-  fallbackCategoryId: number | null,
-): SimpleNewsFormValues {
+function resolveInitialValues(record: NewsEntity | null): SimpleNewsFormValues {
   return {
     titleZh: record?.titleZh || '',
     coverImage: record?.coverImage || '',
     contentZh: stripHtml(record?.contentZh || record?.summaryZh),
     publishDate: record?.publishDate ? dayjs(record.publishDate) : dayjs(),
-    categoryId: record?.categoryId || fallbackCategoryId,
     status: record?.status || 'published',
   };
 }
@@ -92,7 +86,6 @@ function buildPayload(values: SimpleNewsFormValues) {
     titleZh: values.titleZh.trim(),
     titleEn: undefined,
     slug: undefined,
-    categoryId: Number(values.categoryId),
     coverImage: values.coverImage || undefined,
     summaryZh: summary || undefined,
     summaryEn: undefined,
@@ -188,8 +181,6 @@ export function NewsListPage() {
   const [loadingDetail, setLoadingDetail] = useState(false);
   const [submitting, setSubmitting] = useState(false);
 
-  const { data: categories = [] } = useSWR('news-categories-all', getAllNewsCategories);
-  const defaultCategoryId = categories[0]?.id ?? null;
   const { data, isLoading, mutate } = useSWR(['simple-news', page, appliedKeyword], () =>
     getNewsList({
       page,
@@ -208,7 +199,7 @@ export function NewsListPage() {
 
   const openCreateModal = () => {
     setEditingRecord(null);
-    form.setFieldsValue(resolveInitialValues(null, defaultCategoryId));
+    form.setFieldsValue(resolveInitialValues(null));
     setModalOpen(true);
   };
 
@@ -217,7 +208,7 @@ export function NewsListPage() {
     try {
       const detail = await getNewsDetail(record.id);
       setEditingRecord(detail);
-      form.setFieldsValue(resolveInitialValues(detail, defaultCategoryId));
+      form.setFieldsValue(resolveInitialValues(detail));
       setModalOpen(true);
     } finally {
       setLoadingDetail(false);
@@ -231,16 +222,10 @@ export function NewsListPage() {
 
   const handleSave = async () => {
     const values = await form.validateFields();
-    const categoryId = values.categoryId || defaultCategoryId;
-
-    if (!categoryId) {
-      message.error('请先确保后台存在新闻分类');
-      return;
-    }
 
     setSubmitting(true);
     try {
-      const payload = buildPayload({ ...values, categoryId });
+      const payload = buildPayload(values);
 
       if (editingRecord) {
         const result = await updateNews(editingRecord.id, payload);
@@ -414,9 +399,6 @@ export function NewsListPage() {
           <CloseOutlined />
         </button>
         <Form<SimpleNewsFormValues> form={form} layout="vertical" requiredMark={false}>
-          <Form.Item name="categoryId" hidden>
-            <Input />
-          </Form.Item>
           <Form.Item name="status" hidden>
             <Input />
           </Form.Item>
