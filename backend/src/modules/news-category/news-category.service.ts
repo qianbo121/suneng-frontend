@@ -87,6 +87,17 @@ export class NewsCategoryService {
     return this.prisma.newsCategory.delete({ where: { id } });
   }
 
+  async getDefaultCategoryId() {
+    await this.ensureDefaultCategories();
+
+    const category = await this.prisma.newsCategory.findFirst({
+      orderBy: [{ sortOrder: 'asc' }, { id: 'asc' }],
+      select: { id: true },
+    });
+
+    return category?.id ?? null;
+  }
+
   private async ensureDefaultCategories() {
     const count = await this.prisma.newsCategory.count();
     if (count > 0) return;

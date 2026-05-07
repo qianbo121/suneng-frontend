@@ -22,6 +22,10 @@ export function extractApiErrorMessage(error: unknown) {
       return responseMessage;
     }
 
+    if (Array.isArray(responseMessage) && responseMessage.length) {
+      return responseMessage.filter(Boolean).join('；');
+    }
+
     return error.message || '请求失败';
   }
 

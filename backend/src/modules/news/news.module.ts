@@ -2,8 +2,10 @@ import { Module } from '@nestjs/common';
 
 import { NewsController } from '@/modules/news/news.controller';
 import { NewsService } from '@/modules/news/news.service';
+import { NewsCategoryModule } from '@/modules/news-category/news-category.module';
 
 @Module({
+  imports: [NewsCategoryModule],
   controllers: [NewsController],
   providers: [NewsService],
 })
