@@ -11,6 +11,9 @@ const HeroBanner = dynamic(() => import('@/components/home/HeroBanner').then((mo
 const ProductCenterSection = dynamic(() =>
   import('@/components/home/ProductCenterSection').then((module) => ({ default: module.ProductCenterSection })),
 );
+const HeatTreatmentLines = dynamic(() =>
+  import('@/components/home/HeatTreatmentLines').then((module) => ({ default: module.HeatTreatmentLines })),
+);
 const HotProducts = dynamic(() => import('@/components/home/HotProducts').then((module) => ({ default: module.HotProducts })));
 const NewsSection = dynamic(() => import('@/components/home/NewsSection').then((module) => ({ default: module.NewsSection })));
 
@@ -48,6 +51,7 @@ export default async function LocaleHomePage({ params }: LocaleHomePageProps) {
     <div className="pb-0">
       <JsonLd id={`homepage-jsonld-${currentLocale}`} data={getHomePageJsonLd(`/${currentLocale}`)} />
       <HeroBanner locale={currentLocale} items={homeData.heroBanners} partners={homeData.partners} />
+      <HeatTreatmentLines locale={currentLocale} />
       <ProductCenterSection locale={currentLocale} />
       <HotProducts locale={currentLocale} items={homeData.hotProducts} />
       <NewsSection locale={currentLocale} items={homeData.news} />

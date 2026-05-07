@@ -20,7 +20,7 @@ function formatDate(input: string) {
 
 function NewsHeader({ locale }: { locale: Locale }) {
   return (
-    <div className="mb-3.5 border-b border-black/10 pb-[18px] xl:mb-[22px]">
+    <div className="mb-8 lg:mb-10">
       <div className="relative">
         <SectionTitle
           eyebrow="news center"

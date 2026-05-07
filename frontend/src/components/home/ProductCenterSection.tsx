@@ -30,7 +30,7 @@ const productCenterCards: ProductCenterCard[] = [
 
 export function ProductCenterSection({ locale }: ProductCenterSectionProps) {
   return (
-    <section className="overflow-hidden bg-white pb-14 pt-8 lg:pb-18 lg:pt-10">
+    <section className="overflow-hidden bg-white pb-14 pt-5 lg:pb-18 lg:pt-5">
       <div className="mx-auto w-full max-w-[1440px] px-4 md:px-5 lg:px-5 xl:px-4">
         <div className="border-l border-t border-[#ebebeb]">
           <div className="grid grid-cols-2 lg:grid-cols-4">
@@ -41,7 +41,7 @@ export function ProductCenterSection({ locale }: ProductCenterSectionProps) {
               className="group flex min-h-[248px] flex-col border-b border-r border-[#ebebeb] bg-white px-6 py-6 transition-colors duration-300 hover:bg-[#fcfcfc] lg:min-h-[292px] lg:px-8 lg:py-8"
             >
               <p className="text-[11px] font-medium uppercase tracking-[0.16em] text-[#9aa0a6]">
-                TIANTENG HEAVY MACHINERY
+                {item.en}
               </p>
               <h3 className="mt-3 text-[18px] font-medium leading-[1.5] text-[#1f1f1f] lg:text-[19px]">
                 {locale === 'en' ? item.en : item.zh}

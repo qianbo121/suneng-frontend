@@ -37,6 +37,7 @@ const processStepIcons = [
   '/images/products/detail-icons/icon_step_04.png',
   '/images/products/detail-icons/icon_step_05.png',
 ];
+const PRODUCTION_LINE_SLUGS = new Set(['roller-mesh-belt-line', 'copper-wire-annealing-line', 'annealing-solution-line']);
 
 export const revalidate = 3600;
 
@@ -123,6 +124,8 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
 
   const detail = product.detail || getFallbackDetail(product, currentLocale);
   const gallery = product.gallery.length ? product.gallery : [product.image];
+  const isProductionLine = PRODUCTION_LINE_SLUGS.has(product.slug);
+  const visibleReasons = isProductionLine ? detail.reasons.slice(0, 5) : detail.reasons;
   const specRows = detail.customSpecs.map((item) => ({
     ...item,
     key: item.key === '温度使用温度' ? '使用温度' : item.key,
@@ -163,7 +166,7 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
       <div className="mx-auto mt-7 max-w-[1440px] px-6 pb-[48px]">
         {/* A. Hero 区：主图 480x360；信息列顶部内缩，与右侧卡片标题水平对齐。 */}
         <section className="flex flex-col gap-8 lg:flex-row lg:items-start lg:gap-6">
-          <ProductDetailGallery images={gallery} title={detail.title} />
+          <ProductDetailGallery images={gallery} title={detail.title} fillMode={isProductionLine ? 'cover-left' : 'contain'} />
 
           <div className="min-w-0 flex-1 lg:pt-6">
             <p className="mb-3 text-[14px] font-normal uppercase leading-none text-[#e60012]">{detail.series}</p>
@@ -212,7 +215,7 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
             为什么选择非标定制
           </h2>
           <div className="mt-5 grid gap-3 md:grid-cols-2 xl:grid-cols-5">
-            {detail.reasons.map((item) => (
+            {visibleReasons.map((item) => (
               <article key={item.title} className="rounded-lg border border-[#e0e3e8] bg-white px-3 py-4 transition-all duration-200 hover:-translate-y-[2px] hover:border-[#e60012]">
                 <h3 className="mb-2 text-[16px] font-semibold leading-[1.4] text-[#1a1d23]">{item.title}</h3>
                 <p className="max-w-[15em] text-[13px] font-normal leading-[1.7] text-[#6b7280]">{item.text}</p>
@@ -245,30 +248,32 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
           </div>
         </section>
 
-        {/* E. 典型配置示例：纵向图文卡片，图片 16:10，参数列表红色 bullet。 */}
-        <section className="mt-[56px]">
-          <SectionTitle>典型配置示例</SectionTitle>
-          <div className="mt-[24px] grid gap-[20px] lg:grid-cols-3">
-            {detail.configurations.map((item) => (
-              <article key={item.title} className="flex flex-col overflow-hidden rounded-[8px] border border-[#eef0f3] bg-white transition-all duration-200 hover:-translate-y-[2px] hover:shadow-[0_4px_16px_rgba(0,0,0,0.08)]">
-                <div className="relative aspect-[16/10] w-full bg-[#f4f6f9]">
-                  <Image src={item.image} alt={item.title} fill className="object-cover" sizes="(min-width: 1024px) 33vw, 100vw" />
-                </div>
-                <div className="p-[20px]">
-                  <h3 className="mb-[14px] text-[17px] font-semibold leading-[1.35] text-[#1a1d23]">{item.title}</h3>
-                  <ul className="text-[13px] leading-[1.9] text-[#4a5160]">
-                    {item.specs.map((spec) => (
-                      <li key={spec} className="flex gap-[6px]">
-                        <span className="mt-[11px] h-[4px] w-[4px] shrink-0 rounded-full bg-[#e60012]" />
-                        <span>{spec}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </article>
-            ))}
-          </div>
-        </section>
+        {!isProductionLine ? (
+          /* E. 典型配置示例：纵向图文卡片，生产线详情页不展示该模块。 */
+          <section className="mt-[56px]">
+            <SectionTitle>典型配置示例</SectionTitle>
+            <div className="mt-[24px] grid gap-[20px] lg:grid-cols-3">
+              {detail.configurations.map((item) => (
+                <article key={item.title} className="flex flex-col overflow-hidden rounded-[8px] border border-[#eef0f3] bg-white transition-all duration-200 hover:-translate-y-[2px] hover:shadow-[0_4px_16px_rgba(0,0,0,0.08)]">
+                  <div className="relative aspect-[16/10] w-full bg-[#f4f6f9]">
+                    <Image src={item.image} alt={item.title} fill className="object-cover" sizes="(min-width: 1024px) 33vw, 100vw" />
+                  </div>
+                  <div className="p-[20px]">
+                    <h3 className="mb-[14px] text-[17px] font-semibold leading-[1.35] text-[#1a1d23]">{item.title}</h3>
+                    <ul className="text-[13px] leading-[1.9] text-[#4a5160]">
+                      {item.specs.map((spec) => (
+                        <li key={spec} className="flex gap-[6px]">
+                          <span className="mt-[11px] h-[4px] w-[4px] shrink-0 rounded-full bg-[#e60012]" />
+                          <span>{spec}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </article>
+              ))}
+            </div>
+          </section>
+        ) : null}
 
         {/* F. 非标定制流程：五列步骤卡，使用设计稿源文件 icon。 */}
         <section className="mt-[56px]">

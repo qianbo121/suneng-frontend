@@ -54,7 +54,7 @@ export default async function ProductsPage({ params }: ProductsPageProps) {
         subtitle={
           currentLocale === 'en'
             ? 'Focus on large industrial furnace products for diverse heat treatment needs'
-            : '聚焦八大型产品，满足多场景热处理设备需求'
+            : '聚焦核心产品，满足多场景热处理设备需求'
         }
         backgroundImage={PRODUCT_HERO_IMAGE}
         variant="about"
@@ -67,7 +67,7 @@ export default async function ProductsPage({ params }: ProductsPageProps) {
         </div>
       </div>
 
-      {/* Product Grid: 8 个炉型，图片与首页产品中心保持一致。 */}
+      {/* Product Grid: 产品入口统一来自静态产品分类，新增产品会自动进入列表。 */}
       <section className="mx-auto max-w-[1440px] px-[52px] pb-[72px] pt-[44px] max-md:px-6 max-md:py-10">
         <div className="grid gap-[26px] sm:grid-cols-2 lg:grid-cols-4">
           {PRODUCT_CENTER_CATEGORIES.map((item) => (

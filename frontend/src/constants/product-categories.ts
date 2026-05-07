@@ -12,6 +12,42 @@ export type ProductCategoryDefinition = {
 
 export const PRODUCT_CENTER_CATEGORIES: ProductCategoryDefinition[] = [
   {
+    id: 9,
+    key: 'roller-mesh-belt-line',
+    slug: 'roller-mesh-belt-line',
+    name: { zh: '托辊型网带式电阻炉生产线', en: 'Roller Mesh Belt Heat Treatment Line' },
+    image: '/images/products/roller-mesh-belt-line/gallery/line-01.png',
+    model: 'SN-LINE-MESH',
+    showcaseDescription: {
+      zh: '适用于中小型工件连续退火、回火、正火等工艺，适合批量化连续生产。',
+      en: 'Continuous roller-supported mesh belt line for batch heat treatment of small and medium workpieces.',
+    },
+  },
+  {
+    id: 10,
+    key: 'copper-wire-annealing-line',
+    slug: 'copper-wire-annealing-line',
+    name: { zh: '铜丝自动化退火生产线', en: 'Copper Wire Automatic Annealing Line' },
+    image: '/images/products/copper-wire-annealing-line/gallery/line-01.png',
+    model: 'SN-LINE-COPPER',
+    showcaseDescription: {
+      zh: '面向铜丝连续退火处理，集放线、加热、冷却、收线于一体。',
+      en: 'Automatic production line for continuous copper wire annealing and winding processes.',
+    },
+  },
+  {
+    id: 11,
+    key: 'annealing-solution-line',
+    slug: 'annealing-solution-line',
+    name: { zh: '退火固溶生产线', en: 'Annealing and Solution Treatment Line' },
+    image: '/images/products/annealing-solution-line/gallery/line-01.png',
+    model: 'SN-LINE-SOLUTION',
+    showcaseDescription: {
+      zh: '适用于金属材料退火、固溶等热处理工艺，温区控制精准、升温稳定。',
+      en: 'Continuous line for annealing and solution treatment of metal strip and related materials.',
+    },
+  },
+  {
     id: 1,
     key: 'box-furnace',
     slug: 'box-furnace',

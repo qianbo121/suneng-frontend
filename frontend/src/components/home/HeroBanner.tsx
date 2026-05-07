@@ -23,17 +23,17 @@ const heroStats = [
 const heroDescription =
   '专注工业炉装备设计制造与热工系统定制化解决方案，为各行业提供稳定、高效、可靠的高温处理与热能优化支持';
 const heroPartnerLogos = [
-  { name: 'ENFI', image: '/images/partner/logos/enfi.png', imageClass: 'max-h-[100px] max-w-[206px]' },
-  { name: 'CUEC', image: '/images/partner/logos/cuec.png', imageClass: 'max-h-[100px] max-w-[206px]' },
-  { name: 'NHI', image: '/images/partner/logos/nhi.png', imageClass: 'max-h-[100px] max-w-[206px]' },
+  { name: 'ENFI', image: '/images/partner/logos/enfi.png', imageClass: 'max-h-[106px] max-w-[226px]' },
+  { name: 'CUEC', image: '/images/partner/logos/cuec.png', imageClass: 'max-h-[106px] max-w-[226px]' },
+  { name: 'NHI', image: '/images/partner/logos/nhi.png', imageClass: 'max-h-[106px] max-w-[226px]' },
   {
     name: 'TSINGSHAN',
     image: '/images/partner/logos/tsingshan.png',
-    imageClass: 'max-h-[78px] max-w-[200px]',
+    imageClass: 'max-h-[86px] max-w-[220px]',
   },
-  { name: 'Enric', image: '/images/partner/logos/enric.png', imageClass: 'max-h-[100px] max-w-[206px]' },
-  { name: 'TG', image: '/images/partner/logos/tg.png', imageClass: 'max-h-[100px] max-w-[206px]' },
-  { name: 'LIUHE', image: '/images/partner/logos/liuhe.png', imageClass: 'max-h-[100px] max-w-[206px]' },
+  { name: 'Enric', image: '/images/partner/logos/enric.png', imageClass: 'max-h-[106px] max-w-[226px]' },
+  { name: 'TG', image: '/images/partner/logos/tg.png', imageClass: 'max-h-[106px] max-w-[226px]' },
+  { name: 'LIUHE', image: '/images/partner/logos/liuhe.png', imageClass: 'max-h-[106px] max-w-[226px]' },
 ] as const;
 
 function AnimatedNumber({ value, duration = 1500 }: { value: number; duration?: number }) {
@@ -161,7 +161,7 @@ export function HeroBanner({ locale, items, partners }: HeroBannerProps) {
         initial={{ y: 16, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.72, ease: heroMotionEase, delay: 0.52 }}
-        className="relative z-30 mx-auto -mt-[64px] w-[calc(100%-32px)] max-w-[1320px] overflow-hidden rounded-[22px] bg-white shadow-[0_22px_50px_rgba(15,23,42,0.14)] md:-mt-[78px]"
+        className="relative z-30 mx-auto -mt-[64px] w-[calc(100%-32px)] max-w-[1295px] overflow-hidden rounded-[22px] bg-white shadow-[0_22px_50px_rgba(15,23,42,0.14)] md:-mt-[78px]"
       >
         <div className="flex min-h-[106px] items-center overflow-x-auto px-[8px] py-0 md:overflow-visible md:px-[24px]">
           <div className="flex min-w-[152px] shrink-0 items-center border-r border-[#dedede] pr-[16px]">
@@ -183,7 +183,7 @@ export function HeroBanner({ locale, items, partners }: HeroBannerProps) {
               {marqueeLogos.map((partner, index) => (
                 <div
                   key={`${partner.name}-${index}`}
-                  className="relative flex h-[106px] w-[216px] shrink-0 items-center justify-center overflow-hidden px-0 after:absolute after:right-0 after:top-1/2 after:h-[76px] after:w-px after:-translate-y-1/2 after:bg-[#dedede]"
+                  className="relative flex h-[106px] w-[238px] shrink-0 items-center justify-center overflow-hidden px-0 after:absolute after:right-0 after:top-1/2 after:h-[76px] after:w-px after:-translate-y-1/2 after:bg-[#dedede]"
                 >
                   <Image
                     src={partner.image}

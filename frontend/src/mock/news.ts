@@ -10,7 +10,7 @@ export const homeNews: NewsItem[] = [
     },
     coverImage: '/images/home/hero-industrial-furnace-banner-hd.png',
     publishDate: '2026-04-17',
-    href: '/news',
+    href: '/news/large-trolley-furnace-delivery',
   },
   {
     id: 2,
@@ -21,7 +21,7 @@ export const homeNews: NewsItem[] = [
     },
     coverImage: '/images/home/hero-industrial-furnace-test.png',
     publishDate: '2026-04-14',
-    href: '/news',
+    href: '/news/industry-technology-exchange',
   },
   {
     id: 3,
@@ -32,7 +32,7 @@ export const homeNews: NewsItem[] = [
     },
     coverImage: '/images/home/product-center/mesh-belt-furnace-real.png',
     publishDate: '2026-04-11',
-    href: '/news',
+    href: '/news/intelligent-control-system-upgrade',
   },
   {
     id: 4,
@@ -43,7 +43,7 @@ export const homeNews: NewsItem[] = [
     },
     coverImage: '/images/home/product-center/rotary-hearth-furnace-real.png',
     publishDate: '2026-04-08',
-    href: '/news',
+    href: '/news/equipment-upgrade-production-stability',
   },
   {
     id: 5,
@@ -54,7 +54,7 @@ export const homeNews: NewsItem[] = [
     },
     coverImage: '/images/home/product-center/pit-furnace-real.png',
     publishDate: '2026-04-05',
-    href: '/news',
+    href: '/news/international-heat-treatment-expo',
   },
   {
     id: 6,
@@ -65,6 +65,6 @@ export const homeNews: NewsItem[] = [
     },
     coverImage: '/images/home/product-center/trolley-furnace-real.png',
     publishDate: '2026-04-01',
-    href: '/news',
+    href: '/news/industrial-furnace-maintenance-sharing',
   },
 ];

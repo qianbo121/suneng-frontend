@@ -51,6 +51,9 @@ export type BaiduCambrianInput = {
 };
 
 const PRODUCT_SCHEMA_ORDER = [
+  'roller-mesh-belt-line',
+  'copper-wire-annealing-line',
+  'annealing-solution-line',
   'trolley-furnace',
   'box-furnace',
   'pit-furnace',
@@ -143,6 +146,9 @@ export function getOrganizationJsonLd() {
       '辊底炉',
       '推杆炉',
       '转底炉',
+      '热处理生产线',
+      '退火生产线',
+      '连续式热处理生产线',
       '退火（Annealing）',
       '回火（Tempering）',
       '正火（Normalizing）',
@@ -209,7 +215,7 @@ export function getProductCollectionJsonLd(path = '/products') {
       url: pageUrl,
       name: '产品中心｜工业热处理设备与非标工业炉定制',
       description:
-        '苏能工业炉产品中心展示台车式热处理炉、箱式炉、井式炉、罩式炉、网带炉、辊底炉、推杆炉、转底炉等工业热处理设备，支持按工艺需求非标定制。',
+        '苏能工业炉产品中心展示台车式热处理炉、箱式炉、井式炉、罩式炉、网带炉、辊底炉、推杆炉、转底炉及热处理生产线等工业热处理设备，支持按工艺需求非标定制。',
       isPartOf: { '@id': `${SITE_URL}/#website` },
       about: { '@id': `${SITE_URL}/#organization` },
       mainEntity: { '@id': itemListId },

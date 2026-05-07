@@ -55,7 +55,7 @@ function mapNews(items: Array<{ id: number; titleZh: string; titleEn?: string | 
     summary: localized(item.summaryZh, item.summaryEn, newsFallback[index]?.summary),
     coverImage: toAssetUrl(item.coverImage) || newsFallback[index]?.coverImage || NEWS_FALLBACK_IMAGE,
     publishDate: item.publishDate,
-    href: '/news',
+    href: `/news/${item.slug}`,
   }));
 }
 
