@@ -1,4 +1,4 @@
-FROM node:20-alpine AS builder
+FROM node:22-alpine AS builder
 
 WORKDIR /app
 
@@ -9,11 +9,11 @@ ENV VITE_APP_BASE_PATH=${VITE_APP_BASE_PATH}
 ENV VITE_APP_NAME=${VITE_APP_NAME}
 ENV VITE_API_BASE_URL=${VITE_API_BASE_URL}
 
-RUN corepack enable
+RUN corepack enable && corepack prepare pnpm@latest --activate
 
-COPY package.json ./
+COPY package.json pnpm-lock.yaml ./
 
-RUN pnpm install --no-frozen-lockfile
+RUN pnpm install --frozen-lockfile --config.dangerously-allow-all-builds=true
 
 COPY . .
 
