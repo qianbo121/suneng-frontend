@@ -13,6 +13,7 @@ coverage
 公司logo
 project-handover
 .env
+.env.production
 .env.local
 .env.development.local
 .env.test.local
