@@ -109,13 +109,10 @@ http {
     }
 
     location ^~ /_next/static/ {
-      proxy_pass http://frontend_upstream/_next/static/;
-      proxy_http_version 1.1;
+      alias /var/www/_next/static/;
+      access_log off;
       expires 30d;
       add_header Cache-Control "public, max-age=2592000, immutable";
-      proxy_set_header Host $host;
-      proxy_set_header X-Forwarded-Proto https;
-      proxy_set_header X-Forwarded-Host $host;
     }
 
     location / {

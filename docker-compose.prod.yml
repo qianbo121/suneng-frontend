@@ -80,6 +80,8 @@ services:
       API_BASE_URL_INTERNAL: http://backend:3001/api
     expose:
       - '3000'
+    volumes:
+      - frontend_static:/app/.next/static
     healthcheck:
       test:
         [
@@ -137,6 +139,10 @@ services:
       - envsubst '$$DOMAIN $$ADMIN_DOMAIN' < /etc/nginx/nginx.conf.template > /etc/nginx/nginx.conf && nginx -g 'daemon off;'
     volumes:
       - ./nginx.prod.conf.template:/etc/nginx/nginx.conf.template:ro
+      - frontend_static:/var/www/_next/static:ro
       - /data/uploads:/var/www/uploads:ro
       - /etc/nginx/certs:/etc/nginx/certs:ro
       - ./deploy/www:/var/www/certbot
+
+volumes:
+  frontend_static:
