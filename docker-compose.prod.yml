@@ -1,0 +1,142 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: corp-site-postgres
+    restart: always
+    mem_limit: 512m
+    environment:
+      POSTGRES_DB: corporate_site
+      POSTGRES_USER: corporate
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U corporate -d corporate_site']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+    volumes:
+      - /data/postgres:/var/lib/postgresql/data
+
+  backend:
+    build:
+      context: ./backend
+    container_name: corp-site-backend
+    restart: always
+    mem_limit: 512m
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      NODE_ENV: production
+      PORT: 3001
+      DATABASE_URL: postgresql://corporate:${DB_PASSWORD}@postgres:5432/corporate_site?schema=public
+      JWT_SECRET: ${JWT_SECRET}
+      JWT_EXPIRES_IN: ${JWT_EXPIRES_IN:-7d}
+      APP_URL: https://${DOMAIN}
+      FRONTEND_URL: https://${DOMAIN}
+      ADMIN_URL: https://${ADMIN_DOMAIN}
+      ALLOWED_ORIGINS: https://${DOMAIN},https://${ADMIN_DOMAIN}
+      UPLOAD_ROOT: uploads
+      UPLOAD_MAX_FILE_SIZE_MB: ${UPLOAD_MAX_FILE_SIZE_MB:-10}
+      ADMIN_LOGIN_MAX_ATTEMPTS: ${ADMIN_LOGIN_MAX_ATTEMPTS:-5}
+      ADMIN_LOGIN_LOCK_MINUTES: ${ADMIN_LOGIN_LOCK_MINUTES:-15}
+    command: node dist/src/main.js
+    expose:
+      - '3001'
+    healthcheck:
+      test:
+        [
+          'CMD-SHELL',
+          "node -e \"require('http').get('http://127.0.0.1:3001/api/health', r => process.exit(r.statusCode === 200 ? 0 : 1)).on('error', () => process.exit(1))\"",
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 30s
+    volumes:
+      - /data/uploads:/app/uploads
+
+  frontend:
+    build:
+      context: ./frontend
+      args:
+        NEXT_PUBLIC_APP_NAME: Manufacturing Corporate Site
+        NEXT_PUBLIC_DEFAULT_LOCALE: zh
+        NEXT_PUBLIC_API_URL: /api
+        NEXT_PUBLIC_API_BASE_URL: /api
+        NEXT_PUBLIC_SITE_URL: https://${DOMAIN}
+        API_BASE_URL_INTERNAL: http://backend:3001/api
+    container_name: corp-site-frontend
+    restart: always
+    mem_limit: 512m
+    depends_on:
+      backend:
+        condition: service_healthy
+    environment:
+      NODE_ENV: production
+      NEXT_PUBLIC_API_URL: /api
+      NEXT_PUBLIC_API_BASE_URL: /api
+      NEXT_PUBLIC_SITE_URL: https://${DOMAIN}
+      API_BASE_URL_INTERNAL: http://backend:3001/api
+    expose:
+      - '3000'
+    healthcheck:
+      test:
+        [
+          'CMD-SHELL',
+          "node -e \"require('http').get('http://127.0.0.1:3000', r => process.exit(r.statusCode < 500 ? 0 : 1)).on('error', () => process.exit(1))\"",
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 30s
+
+  admin:
+    build:
+      context: ./admin
+      args:
+        VITE_APP_BASE_PATH: /
+        VITE_APP_NAME: Corporate Admin
+        VITE_API_BASE_URL: /api
+    container_name: corp-site-admin
+    restart: always
+    mem_limit: 256m
+    depends_on:
+      backend:
+        condition: service_healthy
+    expose:
+      - '80'
+    healthcheck:
+      test: ['CMD-SHELL', 'wget -q -O /dev/null http://127.0.0.1/ || exit 1']
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 20s
+
+  nginx:
+    image: nginx:1.27-alpine
+    container_name: corp-site-nginx
+    restart: always
+    mem_limit: 128m
+    depends_on:
+      backend:
+        condition: service_healthy
+      frontend:
+        condition: service_healthy
+      admin:
+        condition: service_healthy
+    environment:
+      DOMAIN: ${DOMAIN}
+      ADMIN_DOMAIN: ${ADMIN_DOMAIN}
+    ports:
+      - '80:80'
+      - '443:443'
+    command:
+      - /bin/sh
+      - -c
+      - envsubst '$$DOMAIN $$ADMIN_DOMAIN' < /etc/nginx/nginx.conf.template > /etc/nginx/nginx.conf && nginx -g 'daemon off;'
+    volumes:
+      - ./nginx.prod.conf.template:/etc/nginx/nginx.conf.template:ro
+      - /data/uploads:/var/www/uploads:ro
+      - /etc/nginx/certs:/etc/nginx/certs:ro
+      - ./deploy/www:/var/www/certbot
