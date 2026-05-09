@@ -66,10 +66,10 @@ export function AdminLayout() {
         className="admin-sider"
       >
         <div className="admin-logo">
-          <div className="admin-logo-mark">TT</div>
+          <div className="admin-logo-mark">SN</div>
           {!collapsed ? (
             <div>
-              <p className="admin-logo-title">Tianteng Admin</p>
+              <p className="admin-logo-title">Suneng Admin</p>
               <p className="admin-logo-subtitle">企业官网管理系统</p>
             </div>
           ) : null}

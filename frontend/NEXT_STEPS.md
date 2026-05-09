@@ -6,7 +6,7 @@
 2. 在 `tailwind.config.ts` 中补齐了对标所需的 Header / Hero / Footer 相关 design tokens，供后续还原复用。
 3. 完成了品牌名称替换的基础工作：
    - 更新了 `src/app/layout.tsx` 中的站点标题品牌名
-   - 更新了 `src/mock/` 中 Header / Banner 运行时会读取到的品牌名，页面上不再出现“天腾”
+   - 更新了 `src/mock/` 中 Header / Banner 运行时会读取到的品牌名，页面上不再出现旧品牌名
 4. 完成了 Header 的 1:1 结构级还原首版：
    - 改成对标的三段式结构：logo / 一级导航+二级菜单 / 单按钮语言切换
    - 去掉了当前项目原有的 logo 旁双行文字展示
@@ -57,4 +57,3 @@
 
 - 把主内容顶部间距从旧的 `78px / 88px` 体系切到新的 Header 高度体系
 - 先确保首屏不会被 Header 压住，再继续做 Hero 还原
-

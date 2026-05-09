@@ -34,7 +34,7 @@
 - color: rgb(51, 51, 51)
 - line-height: 90px
 
-## 4. Hero 标题 h2.hTwo（"——天腾重机—"）
+## 4. Hero 标题 h2.hTwo（"——苏能重机—"）
 - width: 892.555px
 - height: 32px
 - padding: 0
@@ -94,7 +94,7 @@
 - font-family: liciumfont2022-regular  /* 图标字体 */
 - font-size: 14px
 
-## 附录. Hero 装饰字 div.yx_TitImg（"TIANTENG"）
+## 附录. Hero 装饰字 div.yx_TitImg（"SUNENG"）
 - width: 892.555px
 - height: 126px
 - font-family: Impact
@@ -112,7 +112,7 @@
 ## ⚠️ 给 Codex 的重要提醒
 
 ### 1. 字号层级反直觉
-- h2 主标题"——天腾重机—"是 **32px**（小字装饰）
+- h2 主标题"——苏能重机—"是 **32px**（小字装饰）
 - p.yx_Summary 大口号"用心对待客户..."是 **44px 粗体**（真正最显眼的字）
 - **不要按"h2 大、p 小"的常规思路做**，必须按实际尺寸还原
 

@@ -25,7 +25,7 @@
 | --- | --- | --- | --- | --- |
 | `font-family-zh-ui` | `"PingFang SC", PingFangSC-Semibold/Regular` | Header 导航、Hero h2、CTA 中文 | `reference/target-computed-styles.md:31-35,42-46,71-74,143-147` | 中文主字体栈已明确 |
 | `font-family-system` | `-apple-system, system-ui, Segoe UI, Roboto, Helvetica Neue, Arial, sans-serif` | Hero 大口号 `p.yx_Summary`、Footer 容器继承 | `reference/target-computed-styles.md:55-59,83-85` | 非 PingFang |
-| `font-family-display-en` | `Impact` | Hero 装饰字 `TIANTENG` | `reference/target-computed-styles.md:97-101,143-145`; `reference/target-styles-2.css:2909-2923` | 英文装饰字 |
+| `font-family-display-en` | `Impact` | Hero 装饰字 `SUNENG` | `reference/target-computed-styles.md:97-101,143-145`; `reference/target-styles-2.css:2909-2923` | 英文装饰字 |
 | `font-family-icon` | `yx_icon` | CTA 箭头等图标 | `reference/target-computed-styles.md:146`; `reference/target-styles-4.css:26-35` | 图标字体 |
 | `font-family-icon-alt` | `liciumfont2022-regular` | Header 语言/壳层图标体系 | `reference/target-computed-styles.md:94-96,146`; `reference/target-styles-2.css:151-158,370-375,785-788` | 需人工确认具体加载方式 |
 | `font-nav-desktop` | `17px / 700 / 90px` | Header 一级导航链接 | `reference/target-computed-styles.md:25-35,119-122`; `reference/target-styles-2.css:1279-1284` | 默认规则 18px，但 1440 以下桌面实际改成 17px |

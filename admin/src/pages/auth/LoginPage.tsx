@@ -42,7 +42,7 @@ export function LoginPage() {
     <div className="admin-auth-shell">
       <div className="admin-auth-panel">
         <div className="admin-auth-intro">
-          <p className="admin-auth-eyebrow">TIANTENG ADMIN</p>
+          <p className="admin-auth-eyebrow">SUNENG ADMIN</p>
           <h1>企业官网后台管理系统</h1>
           <p>
             统一接入内容管理、站点配置、留言处理与管理员权限控制。本阶段完成登录、路由、

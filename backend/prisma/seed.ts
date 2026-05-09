@@ -448,9 +448,9 @@ async function seedAboutContent() {
       titleZh: '公司简介',
       titleEn: 'Company Profile',
       contentZh:
-        '腾腾装备致力于地下工程装备、矿山施工装备与专用底盘产品的研发、制造与服务，围绕客户项目场景提供成套化产品方案。公司持续建设制造体系、技术体系与服务体系，以稳定交付和长期维护能力支撑工程客户。',
+        '苏能工业炉致力于地下工程装备、矿山施工装备与专用底盘产品的研发、制造与服务，围绕客户项目场景提供成套化产品方案。公司持续建设制造体系、技术体系与服务体系，以稳定交付和长期维护能力支撑工程客户。',
       contentEn:
-        'Tianteng Equipment focuses on the R&D, manufacturing and service of underground engineering equipment, mining machinery and special chassis products, delivering integrated equipment solutions for project-based scenarios.',
+        'Suneng Industrial Furnace focuses on the R&D, manufacturing and service of underground engineering equipment, mining machinery and special chassis products, delivering integrated equipment solutions for project-based scenarios.',
       imageUrl: 'https://placehold.co/1200x800/004B97/ffffff',
       sortOrder: 10,
       status: PublishStatus.published,
@@ -460,9 +460,9 @@ async function seedAboutContent() {
       titleZh: '公司简介',
       titleEn: 'Company Profile',
       contentZh:
-        '腾腾装备致力于地下工程装备、矿山施工装备与专用底盘产品的研发、制造与服务，围绕客户项目场景提供成套化产品方案。公司持续建设制造体系、技术体系与服务体系，以稳定交付和长期维护能力支撑工程客户。',
+        '苏能工业炉致力于地下工程装备、矿山施工装备与专用底盘产品的研发、制造与服务，围绕客户项目场景提供成套化产品方案。公司持续建设制造体系、技术体系与服务体系，以稳定交付和长期维护能力支撑工程客户。',
       contentEn:
-        'Tianteng Equipment focuses on the R&D, manufacturing and service of underground engineering equipment, mining machinery and special chassis products, delivering integrated equipment solutions for project-based scenarios.',
+        'Suneng Industrial Furnace focuses on the R&D, manufacturing and service of underground engineering equipment, mining machinery and special chassis products, delivering integrated equipment solutions for project-based scenarios.',
       imageUrl: 'https://placehold.co/1200x800/004B97/ffffff',
       sortOrder: 10,
       status: PublishStatus.published,
@@ -537,8 +537,8 @@ async function seedAboutContent() {
         year: 2011,
         titleZh: '公司成立',
         titleEn: 'Company Founded',
-        contentZh: '腾腾装备在湖北正式成立，进入地下工程装备领域。',
-        contentEn: 'Tianteng Equipment was founded in Hubei and entered the underground equipment sector.',
+        contentZh: '苏能工业炉在湖北正式成立，进入地下工程装备领域。',
+        contentEn: 'Suneng Industrial Furnace was founded in Hubei and entered the underground equipment sector.',
         sortOrder: 10,
         status: PublishStatus.published,
       },

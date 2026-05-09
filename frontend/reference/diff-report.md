@@ -14,7 +14,7 @@
 | Hero 标题层级 | `h2` 仅 `32px`；`p.yx_Summary` 才是 `44px` 主口号 | 当前主标题 `34px -> 68px`，副标题仅 `14px -> 18px` | `reference/target-computed-styles.md:37-60,114-117`; `reference/target-styles-2.css:2944-2950,3107-3115` | `src/components/home/HeroBanner.tsx:65-76` | P0 |
 | Hero 主口号字号 | `44px / 700 / 44px` | `68px / 600` | `reference/target-computed-styles.md:49-60`; `reference/target-styles-2.css:3107-3115` | `src/components/home/HeroBanner.tsx:66-72` | P0 |
 | Hero CTA 主样式 | 透明胶囊；`border: 2px solid rgba(255,255,255,0.33)`；`radius: 45px`；无底色 | 实心红色 `rounded-sm` 按钮 | `reference/target-computed-styles.md:62-74,123-127`; `reference/target-styles-2.css:2991-3003` | `src/components/home/HeroBanner.tsx:77-83` | P0 |
-| Hero 装饰字 | 存在 `Impact` 字体的 `TIANTENG` 大装饰字 | 缺失 | `reference/target-computed-styles.md:97-101,143-145`; `reference/target-styles-2.css:2909-2937` | `src/components/home/HeroBanner.tsx:58-85` | P0 |
+| Hero 装饰字 | 存在 `Impact` 字体的 `SUNENG` 大装饰字 | 缺失 | `reference/target-computed-styles.md:97-101,143-145`; `reference/target-styles-2.css:2909-2937` | `src/components/home/HeroBanner.tsx:58-85` | P0 |
 | Footer 背景色 | `rgb(82 82 82)` | `#5d5d5d` | `reference/target-styles-2.css:1357-1365` | `src/components/layout/Footer.tsx:46` | P0 |
 | Footer 热线字号/字体 | `30px`，自定义字体 `"84c96d2b-aec6-4a37-8def-59d83015b598"` | `28px / 600` 默认字体栈 | `reference/target-styles-2.css:1773-1780`; `reference/target-styles-5.css:44-47` | `src/components/layout/Footer.tsx:58`; `src/app/globals.css:20-27` | P0 |
 | Footer 一级导航 | `18px` 白字 | `text-sm` / `text-white/78` | `reference/target-styles-2.css:1455-1460` | `src/components/layout/Footer.tsx:82-101` | P0 |
