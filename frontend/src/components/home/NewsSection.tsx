@@ -131,7 +131,7 @@ export function NewsSection({ locale, items }: NewsSectionProps) {
               <FeaturedNewsCard locale={locale} item={featured} />
             </div>
 
-            <div className="grid gap-4 md:grid-cols-3 xl:flex xl:h-full xl:min-h-full xl:grid-cols-none xl:flex-col xl:gap-3">
+            <div className="grid gap-4 md:grid-cols-3 xl:flex xl:h-full xl:min-h-full xl:grid-cols-none xl:flex-col xl:gap-3 xl:py-3">
               {secondary.map((item) => (
                 <SecondaryNewsCard key={item.id} locale={locale} item={item} />
               ))}
