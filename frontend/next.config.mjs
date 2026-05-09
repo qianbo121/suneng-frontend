@@ -13,6 +13,7 @@ const nextConfig = {
   output: 'standalone',
   outputFileTracingRoot: path.join(__dirname, '..'),
   images: {
+    unoptimized: true,
     dangerouslyAllowSVG: true,
     contentDispositionType: 'inline',
     contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
