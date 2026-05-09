@@ -24,12 +24,19 @@ const nextConfig = {
         hostname: 'omo-oss-image.thefastimg.com',
       },
       {
+        protocol: 'https',
+        hostname: 'www.jssngyl.cn',
+        pathname: '/uploads/**',
+      },
+      {
         protocol: 'http',
         hostname: 'localhost',
+        pathname: '/uploads/**',
       },
       {
         protocol: 'http',
         hostname: '127.0.0.1',
+        pathname: '/uploads/**',
       },
     ],
   },
