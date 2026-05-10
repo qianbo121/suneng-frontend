@@ -6,8 +6,12 @@ coverage
 .turbo
 .vite
 *.log
+*.sql
+*.tar.gz
+package-lock.json
 .capture
 .git-backups-standalone
+uploads_export
 设计稿
 图片素材
 公司logo
