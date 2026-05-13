@@ -4,7 +4,6 @@ import {
   BING_SITE_VERIFICATION,
   BAIDU_SITE_VERIFICATION,
   DEFAULT_DESCRIPTION,
-  DEFAULT_KEYWORDS,
   DEFAULT_OG_IMAGE,
   DEFAULT_TITLE,
   SITE_360_VERIFICATION,
@@ -12,6 +11,7 @@ import {
   SITE_URL,
   SOGOU_SITE_VERIFICATION,
 } from '@/lib/seo/config';
+import { buildKeywords } from '@/lib/seo/keywords';
 
 const ABSOLUTE_URL_PATTERN = /^https?:\/\//i;
 
@@ -64,6 +64,7 @@ type BuildMetadataOptions = {
   description: string;
   path: string;
   keywords?: string[];
+  pageKey?: string;
   image?: string;
   type?: 'website' | 'article';
   publishedTime?: string;
@@ -116,7 +117,7 @@ export function buildMetadata(options: BuildMetadataOptions): Metadata {
       absolute: title,
     },
     description,
-    keywords: options.keywords?.length ? options.keywords : DEFAULT_KEYWORDS,
+    keywords: buildKeywords(options.pageKey, options.keywords),
     metadataBase: new URL(SITE_URL),
     alternates: {
       canonical,

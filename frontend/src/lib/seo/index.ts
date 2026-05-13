@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 
 import { siteSettings } from '@/mock/siteSettings';
+import { buildKeywords, normalizeKeywords } from '@/lib/seo/keywords';
 import { Locale } from '@/types/site';
 
 type BuildSeoMetadataOptions = {
@@ -9,7 +10,7 @@ type BuildSeoMetadataOptions = {
   pageKey?: string;
   title: string;
   description?: string;
-  keywords?: string;
+  keywords?: string | string[];
   image?: string;
   type?: 'website' | 'article';
   noIndex?: boolean;
@@ -61,20 +62,11 @@ export function buildImageAlt(locale: Locale, primary?: string | null, fallback?
   return fallback || getSiteName(locale);
 }
 
-function normalizeKeywords(value?: string | null) {
-  const raw = compactText(value);
-  if (!raw) return undefined;
-
-  return raw
-    .split(/[，,]/)
-    .map((item) => item.trim())
-    .filter(Boolean);
-}
-
 export async function buildSeoMetadata(options: BuildSeoMetadataOptions): Promise<Metadata> {
   const title = options.title;
   const description = compactText(options.description || options.title).slice(0, 160);
-  const keywords = normalizeKeywords(options.keywords || '');
+  const pageKey = options.pageKey?.replace(/^strength-category-.+$/, 'strength');
+  const keywords = buildKeywords(pageKey, normalizeKeywords(options.keywords));
   const image = options.image || undefined;
   const fullTitle = `${title} | ${getSiteName(options.locale)}`;
   const canonical = buildLocalizedUrl(options.locale, options.path);
