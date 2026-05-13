@@ -57,6 +57,22 @@ http {
       root /var/www/certbot;
     }
 
+    location = /product/showproduct.php {
+      return 301 https://$host/zh/products;
+    }
+
+    location = /product/product.php {
+      return 301 https://$host/zh/products;
+    }
+
+    location = /news/shownews.php {
+      return 301 https://$host/zh/news;
+    }
+
+    location = /news/news.php {
+      return 301 https://$host/zh/news;
+    }
+
     location / {
       return 301 https://$host$request_uri;
     }
@@ -75,6 +91,22 @@ http {
 
     location ^~ /api/admin/ {
       return 403;
+    }
+
+    location = /product/showproduct.php {
+      return 301 /zh/products;
+    }
+
+    location = /product/product.php {
+      return 301 /zh/products;
+    }
+
+    location = /news/shownews.php {
+      return 301 /zh/news;
+    }
+
+    location = /news/news.php {
+      return 301 /zh/news;
     }
 
     location = /api/v1/news {
