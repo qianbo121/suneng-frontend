@@ -6,6 +6,8 @@
     "dev": "NEXT_DIST_DIR=.next-dev next dev",
     "build": "next build",
     "start": "next start",
+    "seo:submit": "node scripts/submit-search-engines.mjs",
+    "seo:submit:dry": "node scripts/submit-search-engines.mjs --dry-run",
     "lint": "next lint",
     "format": "prettier --write ."
   },
