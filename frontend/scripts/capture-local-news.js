@@ -136,6 +136,11 @@ class WsClient {
     for (let i = 0; i < payload.length; i += 1) masked[i] = payload[i] ^ mask[i % 4];
     this.socket.write(Buffer.concat([Buffer.from(header), mask, masked]));
   }
+
+  close() {
+    this.socket?.end();
+    this.socket?.destroy();
+  }
 }
 
 async function main() {
@@ -164,6 +169,7 @@ async function main() {
   fs.mkdirSync(path.dirname(outFile), { recursive: true });
   fs.writeFileSync(outFile, Buffer.from(data, 'base64'));
   console.log(outFile);
+  client.close();
 }
 
 main().catch((error) => {
