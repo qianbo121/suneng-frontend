@@ -70,6 +70,10 @@ export async function createStrengthMetadata(locale: Locale, categorySlug?: stri
     pageKey: currentCategory && categorySlug ? `strength-category-${currentCategory.slug}` : 'strength',
     title,
     description,
+    keywords:
+      locale === 'en'
+        ? ['company strength', 'industrial furnace equipment', 'certificates', 'production capability']
+        : ['企业实力', '工业炉生产设备', '热处理设备资质', '工业炉荣誉证书', title],
     image: STRENGTH_BANNER_IMAGE,
   });
 }

@@ -3,6 +3,9 @@ import Image from 'next/image';
 
 import { Breadcrumb } from '@/components/layout/Breadcrumb';
 import { PageBanner } from '@/components/layout/PageBanner';
+import { buildMetadata } from '@/lib/seo/metadata';
+import { SERVICE_SEO } from '@/lib/seo/page-data';
+import { Locale } from '@/types/site';
 
 type ServicePageProps = {
   params: Promise<{
@@ -52,16 +55,23 @@ const serviceSections = [
   },
 ];
 
-export async function generateMetadata(): Promise<Metadata> {
-  return {
-    title: '售后服务 - 江苏苏能工业炉有限公司',
-    description: '江苏苏能工业炉售后服务体系，覆盖质保、响应、巡检、培训与全周期技术支持。',
-    openGraph: {
-      title: '售后服务 - 江苏苏能工业炉有限公司',
-      description: '以匠心筑品质，以服务赢信赖。',
-      images: [heroImage],
+export async function generateMetadata({ params }: ServicePageProps): Promise<Metadata> {
+  const { locale } = await params;
+  const currentLocale = (locale === 'en' ? 'en' : 'zh') as Locale;
+
+  return buildMetadata({
+    title: SERVICE_SEO.title,
+    description: SERVICE_SEO.description,
+    path: `/${currentLocale}/service`,
+    pageKey: 'service',
+    keywords: SERVICE_SEO.keywords,
+    image: heroImage,
+    alternateLocales: {
+      'zh-CN': '/zh/service',
+      'en-US': '/en/service',
+      'x-default': '/zh/service',
     },
-  };
+  });
 }
 
 export default async function ServicePage({ params }: ServicePageProps) {

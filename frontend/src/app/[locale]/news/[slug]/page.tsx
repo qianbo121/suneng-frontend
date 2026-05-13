@@ -45,11 +45,16 @@ export async function generateMetadata({ params }: NewsDetailPageProps) {
       : article.summaryZh || article.summaryEn || article.contentZh || article.contentEn || '';
   const description = rawDescription.replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim().slice(0, 120) || title;
   const image = resolveNewsImage(article, { preferFallback: FALLBACK_NEWS_SLUGS.has(slug) });
+  const keywords = currentLocale === 'en'
+    ? article.seoKeywordsEn || article.seoKeywordsZh || ''
+    : article.seoKeywordsZh || article.seoKeywordsEn || '';
 
   return buildMetadata({
     title,
     description,
     path: `/${currentLocale}/news/${slug}`,
+    pageKey: 'news-detail',
+    keywords: keywords ? keywords.split(/[，,、;；\n\r]+/) : undefined,
     image,
     type: 'article',
     publishedTime: article.publishDate,

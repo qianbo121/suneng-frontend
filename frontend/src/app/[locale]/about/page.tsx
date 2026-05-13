@@ -23,6 +23,7 @@ export async function generateMetadata({ params }: AboutPageProps) {
     title: ABOUT_SEO.title,
     description: ABOUT_SEO.description,
     path: `/${currentLocale}/about`,
+    pageKey: 'about',
     keywords: ABOUT_SEO.keywords,
     image: '/images/about/about_img_hero_factory_01.png',
     alternateLocales: {

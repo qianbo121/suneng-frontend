@@ -34,6 +34,7 @@ export async function generateMetadata({ params }: NewsPageProps) {
     title: NEWS_SEO.title,
     description: NEWS_SEO.description,
     path: `/${currentLocale}/news`,
+    pageKey: 'news',
     keywords: NEWS_SEO.keywords,
     image: NEWS_LIST_HERO_IMAGE,
     alternateLocales: {

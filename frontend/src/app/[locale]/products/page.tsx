@@ -29,6 +29,7 @@ export async function generateMetadata({ params }: ProductsPageProps): Promise<M
     title: PRODUCT_COLLECTION_SEO.title,
     description: PRODUCT_COLLECTION_SEO.description,
     path: `/${currentLocale}/products`,
+    pageKey: 'products',
     keywords: PRODUCT_COLLECTION_SEO.keywords,
     image: PRODUCT_HERO_IMAGE,
     alternateLocales: {

@@ -45,6 +45,7 @@ export async function generateMetadata({ params }: ContactPageProps): Promise<Me
     title: CONTACT_SEO.title,
     description: CONTACT_SEO.description,
     path: `/${currentLocale}/contact`,
+    pageKey: 'contact',
     keywords: CONTACT_SEO.keywords,
     image: contactHero,
     alternateLocales: {

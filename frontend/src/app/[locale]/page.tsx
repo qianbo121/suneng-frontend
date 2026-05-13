@@ -33,6 +33,7 @@ export async function generateMetadata({ params }: LocaleHomePageProps) {
     title: HOME_SEO.title,
     description: HOME_SEO.description,
     path: `/${currentLocale}`,
+    pageKey: 'home',
     keywords: HOME_SEO.keywords,
     alternateLocales: {
       'zh-CN': '/zh',

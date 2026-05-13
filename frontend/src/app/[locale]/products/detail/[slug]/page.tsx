@@ -65,6 +65,7 @@ export async function generateMetadata({ params }: ProductDetailPageProps): Prom
     title,
     description,
     path: `/${currentLocale}/products/detail/${slug}`,
+    pageKey: 'product-detail',
     keywords: seo?.keywords,
     image: product.image,
     other: seo?.descriptionExtended ? { 'description-extended': seo.descriptionExtended } : undefined,

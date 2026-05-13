@@ -2,6 +2,7 @@ import { PageBanner } from '@/components/layout/PageBanner';
 import { Breadcrumb } from '@/components/layout/Breadcrumb';
 import { CooperationFieldItem, CorePartnerLogoItem, PartnerLogoGrid } from '@/components/partner/PartnerLogoGrid';
 import { buildSeoMetadata } from '@/lib/seo';
+import { PARTNER_SEO } from '@/lib/seo/page-data';
 import { Locale } from '@/types/site';
 
 type PartnerPageProps = {
@@ -150,11 +151,11 @@ export async function generateMetadata({ params }: PartnerPageProps) {
     locale: currentLocale,
     path: '/partner',
     pageKey: 'partner',
-    title: currentLocale === 'en' ? 'Partners' : '合作伙伴',
-    description:
-      currentLocale === 'en'
-        ? 'Work with leading industrial partners to build intelligent furnace solutions.'
-        : '携手行业领先企业，共筑智能工业炉解决方案。',
+    title: currentLocale === 'en' ? 'Partners' : PARTNER_SEO.title,
+    description: currentLocale === 'en'
+      ? 'Work with leading industrial partners to build intelligent furnace and heat treatment equipment solutions.'
+      : PARTNER_SEO.description,
+    keywords: PARTNER_SEO.keywords,
     image: '/images/partner/partner-hero.png',
   });
 }
