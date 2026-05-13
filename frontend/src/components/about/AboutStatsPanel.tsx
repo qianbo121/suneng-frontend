@@ -44,7 +44,7 @@ export function AboutStatsPanel({
 }: AboutStatsPanelProps) {
   return (
     <div data-about-stats={dataAboutStats ? true : undefined} className={cn('relative overflow-hidden bg-black', className)}>
-      <Image src={backgroundImage} alt="" fill className="object-cover" />
+      <Image src={backgroundImage} alt="" fill className="object-cover" sizes="100vw" />
       <div className={cn('absolute inset-0', overlayClassName)} />
       <div className="relative z-10 grid divide-y divide-white/20 md:grid-cols-4 md:divide-y-0">
         {items.map((item, index) => (

@@ -63,7 +63,7 @@ export function ContactInfoGrid({ locale, info }: ContactInfoGridProps) {
             {locale === 'en' ? 'Factory & Office Location' : '工厂与办公位置'}
           </h2>
           <div className="relative mt-6 aspect-[16/8] overflow-hidden bg-[#eef2f6]">
-            <Image src={info.mapImage} alt={locale === 'en' ? 'Company map' : '公司地图'} fill className="object-cover" />
+            <Image src={info.mapImage} alt={locale === 'en' ? 'Company map' : '公司地图'} fill className="object-cover" sizes="(min-width: 1024px) 800px, 100vw" />
           </div>
         </div>
 
@@ -75,7 +75,7 @@ export function ContactInfoGrid({ locale, info }: ContactInfoGridProps) {
             {locale === 'en' ? 'QR Code' : '官方二维码'}
           </p>
           <div className="relative mt-5 aspect-square overflow-hidden bg-white p-4">
-            <Image src={info.qrCodeImage} alt={locale === 'en' ? 'QR code' : '二维码'} fill className="object-cover p-4" />
+            <Image src={info.qrCodeImage} alt={locale === 'en' ? 'QR code' : '二维码'} fill className="object-cover p-4" sizes="232px" />
           </div>
           <p className="mt-5 text-sm leading-7 text-white/74">
             {locale === 'en'
@@ -87,4 +87,3 @@ export function ContactInfoGrid({ locale, info }: ContactInfoGridProps) {
     </section>
   );
 }
-

@@ -86,6 +86,7 @@ export function DeliveryGallery({ locale, items }: DeliveryGalleryProps) {
                         alt={buildImageAlt(locale, item.title, item.description)}
                         fill
                         className="object-cover transition duration-500 group-hover:scale-105"
+                        sizes={wide ? '(min-width: 1280px) 560px, (min-width: 768px) 50vw, 100vw' : '(min-width: 1280px) 360px, (min-width: 768px) 50vw, 100vw'}
                       />
                     </div>
                     <div className="px-6 py-6">

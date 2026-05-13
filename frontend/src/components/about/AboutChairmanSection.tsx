@@ -46,6 +46,7 @@ export function AboutChairmanSection({
             alt={title || (locale === 'en' ? 'Chairman portrait' : '董事长照片')}
             fill
             className="object-cover"
+            sizes="(min-width: 1024px) 360px, 100vw"
           />
         </div>
         <div className="px-8 py-9 lg:px-12 lg:py-12">

@@ -137,8 +137,8 @@ export default async function NewsDetailPage({ params }: NewsDetailPageProps) {
               width={1672}
               height={941}
               priority
-              quality={100}
-              unoptimized
+              quality={85}
+              sizes="(min-width: 1200px) 1060px, 100vw"
               className="h-auto w-full"
             />
           </div>

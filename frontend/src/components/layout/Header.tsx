@@ -52,9 +52,8 @@ export function Header({ locale }: HeaderProps) {
             <Image
               src={HEADER_LOGO_SRC}
               alt={HEADER_LOGO_ALT}
-              width={1374}
-              height={240}
-              priority
+              width={229}
+              height={40}
               className="h-[40px] w-auto max-w-none object-contain object-left object-center"
             />
           </Link>
@@ -76,9 +75,8 @@ export function Header({ locale }: HeaderProps) {
                   <Image
                     src={HEADER_LOGO_SRC}
                     alt={HEADER_LOGO_ALT}
-                    width={1374}
-                    height={240}
-                    priority
+                    width={275}
+                    height={48}
                     className="h-[48px] w-auto max-w-none object-contain object-left object-center"
                   />
                 </Link>
@@ -170,9 +168,8 @@ export function Header({ locale }: HeaderProps) {
                 <Image
                   src={HEADER_LOGO_SRC}
                   alt={HEADER_LOGO_ALT}
-                  width={1374}
-                  height={240}
-                  priority
+                  width={229}
+                  height={40}
                   className="h-[40px] w-auto max-w-none object-contain object-left object-center"
                 />
               </Link>

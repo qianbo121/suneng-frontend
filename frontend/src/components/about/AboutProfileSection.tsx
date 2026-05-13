@@ -177,6 +177,7 @@ export function AboutProfileSection({
               alt={title || (locale === 'en' ? 'Company profile image' : '公司简介配图')}
               fill
               className="object-cover"
+              sizes="(min-width: 1024px) 50vw, 100vw"
             />
           </div>
         </div>
@@ -217,7 +218,7 @@ export function AboutProfileSection({
               return (
                 <article key={item.title.zh} className="overflow-hidden rounded-lg bg-white shadow-[0_10px_28px_rgba(15,23,42,0.08)]">
                   <div className="relative h-[220px]">
-                    <Image src={item.image} alt={item.title[locale]} fill className="object-cover" />
+                    <Image src={item.image} alt={item.title[locale]} fill className="object-cover" sizes="(min-width: 1024px) 33vw, 100vw" />
                   </div>
                   <div className="px-6 py-7">
                     <div>

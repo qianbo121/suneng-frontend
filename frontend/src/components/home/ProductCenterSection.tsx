@@ -53,6 +53,7 @@ export function ProductCenterSection({ locale }: ProductCenterSectionProps) {
                     alt={locale === 'en' ? item.en : item.zh}
                     fill
                     className="scale-[1.3] object-contain transition-transform duration-500 ease-out group-hover:scale-[1.38]"
+                    sizes="(min-width: 1024px) 248px, 45vw"
                   />
                 </div>
               </div>

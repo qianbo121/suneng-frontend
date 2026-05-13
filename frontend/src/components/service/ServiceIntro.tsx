@@ -21,7 +21,7 @@ export function ServiceIntro({ locale, title, content, image }: ServiceIntroProp
           <p className="mt-6 text-[15px] leading-8 text-neutral-700 lg:text-base">{content}</p>
         </div>
         <div className="relative min-h-[320px] bg-[#e8edf3] lg:min-h-[500px]">
-          <Image src={image} alt={title} fill className="object-cover" />
+          <Image src={image} alt={title} fill className="object-cover" sizes="(min-width: 1024px) 50vw, 100vw" />
         </div>
       </div>
     </section>

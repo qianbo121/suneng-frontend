@@ -177,6 +177,7 @@ function ProductArtwork({ item, locale }: { item: FurnaceProductCard; locale: Lo
       alt={item.name[locale]}
       fill
       className="scale-[1.16] object-contain px-2 py-1.5 transition duration-300 ease-out group-hover:-translate-y-1 group-hover:scale-[1.2] group-hover:brightness-[1.04] lg:px-2 lg:py-1"
+      sizes="(min-width: 1024px) 25vw, 50vw"
     />
   );
 }

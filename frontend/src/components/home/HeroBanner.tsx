@@ -97,7 +97,7 @@ export function HeroBanner({ locale, items, partners }: HeroBannerProps) {
             priority
             sizes="100vw"
             className="object-cover object-center"
-            quality={100}
+            quality={85}
             style={{ filter: 'brightness(0.58) contrast(1.08) saturate(0.86)' }}
           />
         </div>
@@ -193,7 +193,6 @@ export function HeroBanner({ locale, items, partners }: HeroBannerProps) {
                     height={210}
                     className={`${partner.imageClass} h-auto w-auto object-contain`}
                     sizes="236px"
-                    priority={index < 2}
                   />
                 </div>
               ))}

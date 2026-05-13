@@ -59,6 +59,7 @@ function FeaturedNewsCard({ locale, item }: { locale: Locale; item: NewsItem }) 
           alt={item.title[locale]}
           fill
           className="object-cover transition-transform duration-500 ease-out group-hover:scale-[1.03]"
+          sizes="(min-width: 1280px) 660px, 100vw"
         />
         <div className="absolute inset-x-0 bottom-0 bg-[rgba(0,0,0,0.6)] px-6 py-4">
           <p className="text-[12px] font-normal leading-none tracking-[0.02em] text-white/75">
@@ -86,6 +87,7 @@ function SecondaryNewsCard({ locale, item }: { locale: Locale; item: NewsItem })
             alt={item.title[locale]}
             fill
             className="object-cover transition-transform duration-500 ease-out group-hover:scale-[1.03]"
+            sizes="200px"
           />
         </div>
       </div>

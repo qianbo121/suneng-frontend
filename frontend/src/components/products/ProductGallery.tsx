@@ -32,7 +32,7 @@ export function ProductGallery({ images, alt }: ProductGalleryProps) {
           {images.map((image, index) => (
             <SwiperSlide key={`${image}-${index}`}>
               <div className="relative h-full w-full">
-                <Image src={image} alt={buildImageAlt('zh', `${alt} ${index + 1}`, alt)} fill className="object-cover" />
+                <Image src={image} alt={buildImageAlt('zh', `${alt} ${index + 1}`, alt)} fill className="object-cover" sizes="(min-width: 1024px) 640px, 100vw" />
               </div>
             </SwiperSlide>
           ))}
@@ -68,7 +68,7 @@ export function ProductGallery({ images, alt }: ProductGalleryProps) {
         {images.map((image, index) => (
           <SwiperSlide key={`${image}-thumb-${index}`}>
             <div className="relative aspect-[4/3] cursor-pointer overflow-hidden border border-[#e6eaf0] bg-[#f5f7fa]">
-              <Image src={image} alt={buildImageAlt('zh', `${alt} thumbnail ${index + 1}`, alt)} fill className="object-cover" />
+              <Image src={image} alt={buildImageAlt('zh', `${alt} thumbnail ${index + 1}`, alt)} fill className="object-cover" sizes="160px" />
             </div>
           </SwiperSlide>
         ))}

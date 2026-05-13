@@ -40,7 +40,7 @@ export function ProductShowcase({ locale, items }: ProductShowcaseProps) {
                 >
                   <div className={reversed ? 'order-2 lg:order-1' : ''}>
                     <div className="relative min-h-[320px] bg-[#dce5ef] sm:min-h-[360px] lg:min-h-[470px]">
-                      <Image src={item.image} alt={item.name[locale]} fill className="object-cover" />
+                      <Image src={item.image} alt={item.name[locale]} fill className="object-cover" sizes="(min-width: 1024px) 50vw, 100vw" />
                     </div>
                   </div>
                   <div
