@@ -17,8 +17,8 @@ export const companyIntro: CompanyIntroContent = {
   buttonHref: '/about',
   stats: [
     { id: 1, value: 2006, suffix: '年', label: { zh: '公司成立', en: 'Founded' } },
-    { id: 2, value: 5000, suffix: '万元', label: { zh: '注册资本', en: 'Registered Capital' } },
-    { id: 3, value: 50, suffix: '+', label: { zh: '专利数', en: 'Patents' } },
-    { id: 4, value: 150, suffix: '+', label: { zh: '公司员工', en: 'Staff' } },
+    { id: 2, value: 5080, suffix: '万元', label: { zh: '注册资本', en: 'Registered Capital' } },
+    { id: 3, value: 150, suffix: '+人', label: { zh: '公司员工', en: 'Staff' } },
+    { id: 4, value: 14700, suffix: '㎡', label: { zh: '厂房面积', en: 'Factory Area' } },
   ],
 };

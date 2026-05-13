@@ -132,6 +132,7 @@ export function getOrganizationJsonLd() {
     url: `${SITE_URL}/`,
     logo: SITE_LOGO_IMAGE ? absoluteUrl(SITE_LOGO_IMAGE) : undefined,
     telephone: COMPANY_PHONE,
+    foundingDate: '2006',
     description: DEFAULT_DESCRIPTION,
     knowsAbout: [
       '工业炉',

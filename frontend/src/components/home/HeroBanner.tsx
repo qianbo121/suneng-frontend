@@ -17,7 +17,7 @@ const heroMotionEase: [number, number, number, number] = [0.22, 1, 0.36, 1];
 const heroStats = [
   { value: 2006, unit: '年', label: '公司成立' },
   { value: 5080, unit: '万元', label: '注册资本' },
-  { value: 150, unit: '+', label: '公司员工' },
+  { value: 150, unit: '+人', label: '公司员工' },
   { value: 14700, unit: '㎡', label: '厂房面积' },
 ] as const;
 const heroDescription =
@@ -37,7 +37,7 @@ const heroPartnerLogos = [
 ] as const;
 
 function AnimatedNumber({ value, duration = 1500 }: { value: number; duration?: number }) {
-  const [displayValue, setDisplayValue] = useState(0);
+  const [displayValue, setDisplayValue] = useState(value);
 
   useEffect(() => {
     let frameId = 0;
@@ -55,6 +55,7 @@ function AnimatedNumber({ value, duration = 1500 }: { value: number; duration?: 
       }
     };
 
+    setDisplayValue(0);
     frameId = window.requestAnimationFrame(tick);
 
     return () => {
