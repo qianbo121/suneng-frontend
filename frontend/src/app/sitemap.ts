@@ -46,8 +46,19 @@ function collectStaticRoutes(): MetadataRoute.Sitemap {
   }> = [
     { path: '/', changeFrequency: 'weekly', priority: 1 },
     { path: '/products', changeFrequency: 'weekly', priority: 0.9 },
+    { path: '/service', changeFrequency: 'monthly', priority: 0.75 },
     { path: '/news', changeFrequency: 'weekly', priority: 0.7 },
     { path: '/about', changeFrequency: 'monthly', priority: 0.6 },
+    { path: '/about/organization', changeFrequency: 'monthly', priority: 0.55 },
+    { path: '/about/chairman', changeFrequency: 'monthly', priority: 0.55 },
+    { path: '/about/profile', changeFrequency: 'monthly', priority: 0.55 },
+    { path: '/about/timeline', changeFrequency: 'monthly', priority: 0.55 },
+    { path: '/about/culture', changeFrequency: 'monthly', priority: 0.55 },
+    { path: '/partner', changeFrequency: 'monthly', priority: 0.65 },
+    { path: '/strength', changeFrequency: 'monthly', priority: 0.65 },
+    { path: '/strength/honors', changeFrequency: 'monthly', priority: 0.55 },
+    { path: '/strength/certificates', changeFrequency: 'monthly', priority: 0.55 },
+    { path: '/strength/equipment', changeFrequency: 'monthly', priority: 0.55 },
     { path: '/contact', changeFrequency: 'monthly', priority: 0.7 },
   ];
 
