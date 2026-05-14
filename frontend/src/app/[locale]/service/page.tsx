@@ -130,7 +130,7 @@ export default async function ServicePage({ params }: ServicePageProps) {
 
           <section className="mt-11 flex items-center gap-6 rounded-md border border-[#d9dee7] bg-white px-6 py-5 lg:px-8">
             <div className="relative h-[86px] w-[86px] shrink-0 overflow-hidden rounded-full bg-[#feecef]">
-              <Image src={phoneIcon} alt="售后服务联系电话" fill sizes="86px" className="object-cover" />
+              <Image src={phoneIcon} alt="" fill sizes="86px" className="object-cover" />
             </div>
             <div className="text-[#071a3d]">
               <h3 className="text-[20px] font-normal leading-[1.45] text-[var(--color-accent)]">售后服务热线方式</h3>

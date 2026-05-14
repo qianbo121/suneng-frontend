@@ -7,15 +7,20 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import type { Swiper as SwiperType } from 'swiper';
 import { HiArrowLongLeft, HiArrowLongRight } from 'react-icons/hi2';
 
-import { buildImageAlt } from '@/lib/seo';
+import { buildProductImageAlt } from '@/lib/seo';
+import { Locale } from '@/types/site';
 
 type ProductGalleryProps = {
+  locale: Locale;
   images: string[];
   alt: string;
+  imageDescriptions?: string[];
 };
 
-export function ProductGallery({ images, alt }: ProductGalleryProps) {
+export function ProductGallery({ locale, images, alt, imageDescriptions = [] }: ProductGalleryProps) {
   const [thumbsSwiper, setThumbsSwiper] = useState<SwiperType | null>(null);
+  const imageLabel = (index: number) => imageDescriptions[index] || (locale === 'en' ? `product image ${index + 1}` : `产品图 ${index + 1}`);
+  const thumbnailLabel = (index: number) => locale === 'en' ? `thumbnail ${index + 1}` : `缩略图 ${index + 1}`;
 
   return (
     <div className="product-gallery">
@@ -32,7 +37,7 @@ export function ProductGallery({ images, alt }: ProductGalleryProps) {
           {images.map((image, index) => (
             <SwiperSlide key={`${image}-${index}`}>
               <div className="relative h-full w-full">
-                <Image src={image} alt={buildImageAlt('zh', `${alt} ${index + 1}`, alt)} fill className="object-cover" sizes="(min-width: 1024px) 640px, 100vw" />
+                <Image src={image} alt={buildProductImageAlt(locale, alt, imageLabel(index))} fill className="object-cover" sizes="(min-width: 1024px) 640px, 100vw" />
               </div>
             </SwiperSlide>
           ))}
@@ -68,7 +73,7 @@ export function ProductGallery({ images, alt }: ProductGalleryProps) {
         {images.map((image, index) => (
           <SwiperSlide key={`${image}-thumb-${index}`}>
             <div className="relative aspect-[4/3] cursor-pointer overflow-hidden border border-[#e6eaf0] bg-[#f5f7fa]">
-              <Image src={image} alt={buildImageAlt('zh', `${alt} thumbnail ${index + 1}`, alt)} fill className="object-cover" sizes="160px" />
+              <Image src={image} alt={buildProductImageAlt(locale, alt, thumbnailLabel(index))} fill className="object-cover" sizes="160px" />
             </div>
           </SwiperSlide>
         ))}

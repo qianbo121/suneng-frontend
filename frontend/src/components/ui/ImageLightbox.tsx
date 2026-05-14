@@ -6,6 +6,7 @@ import { HiChevronLeft, HiChevronRight, HiOutlineXMark } from 'react-icons/hi2';
 
 type ImageLightboxProps = {
   images: string[];
+  imageAlts?: string[];
   isOpen: boolean;
   initialIndex?: number;
   onClose: () => void;
@@ -13,6 +14,7 @@ type ImageLightboxProps = {
 
 export function ImageLightbox({
   images,
+  imageAlts = [],
   isOpen,
   initialIndex = 0,
   onClose,
@@ -82,7 +84,7 @@ export function ImageLightbox({
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={images[index]}
-                alt={`Preview ${index + 1}`}
+                alt={imageAlts[index] || `Preview ${index + 1}`}
                 className="max-h-[80vh] w-full rounded-[22px] object-contain"
               />
             </motion.div>

@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { FaWeixin } from 'react-icons/fa';
 import { HiChevronUp, HiOutlinePhone } from 'react-icons/hi2';
 
+import { buildBrandImageAlt, joinImageAlt } from '@/lib/seo';
 import { Locale } from '@/types/site';
 
 type FloatToolbarProps = {
@@ -28,6 +29,10 @@ export function FloatToolbar({ locale = 'zh' }: FloatToolbarProps) {
   const currentLocale = (locale === 'en' ? 'en' : 'zh') as Locale;
   const items = toolbarCopy[currentLocale];
   const [wechatOpen, setWechatOpen] = useState(false);
+  const wechatQrAlt = joinImageAlt(currentLocale, [
+    buildBrandImageAlt(currentLocale, 'short'),
+    currentLocale === 'en' ? 'WeChat QR code' : '微信二维码',
+  ]);
 
   const handleBackToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -145,7 +150,7 @@ export function FloatToolbar({ locale = 'zh' }: FloatToolbarProps) {
             <div className="mx-auto flex h-[180px] w-[180px] items-center justify-center rounded bg-white">
               <Image
                 src="/images/footer/wechat-qr.png"
-                alt={currentLocale === 'en' ? 'WeChat QR Code' : '微信二维码'}
+                alt={wechatQrAlt}
                 width={180}
                 height={180}
                 className="h-full w-full object-contain"

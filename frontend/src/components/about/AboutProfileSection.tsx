@@ -2,6 +2,7 @@ import Image from 'next/image';
 
 import { AboutStatsPanel, AboutStatsPanelItem } from '@/components/about/AboutStatsPanel';
 import { EmptyState } from '@/components/ui/EmptyState';
+import { buildBrandImageAlt, joinImageAlt } from '@/lib/seo';
 
 type AboutProfileSectionProps = {
   locale: 'zh' | 'en';
@@ -174,7 +175,10 @@ export function AboutProfileSection({
           <div className="relative min-h-[300px] overflow-hidden rounded-md bg-[#e8edf3] lg:min-h-[456px]">
             <Image
               src={image || '/images/about/about_img_company_building_01.png'}
-              alt={title || (locale === 'en' ? 'Company profile image' : '公司简介配图')}
+              alt={joinImageAlt(locale, [
+                buildBrandImageAlt(locale, 'full'),
+                locale === 'en' ? 'factory and office building exterior' : '厂区与办公楼外观',
+              ])}
               fill
               className="object-cover"
               sizes="(min-width: 1024px) 50vw, 100vw"
@@ -218,7 +222,13 @@ export function AboutProfileSection({
               return (
                 <article key={item.title.zh} className="overflow-hidden rounded-lg bg-white shadow-[0_10px_28px_rgba(15,23,42,0.08)]">
                   <div className="relative h-[220px]">
-                    <Image src={item.image} alt={item.title[locale]} fill className="object-cover" sizes="(min-width: 1024px) 33vw, 100vw" />
+                    <Image
+                      src={item.image}
+                      alt={joinImageAlt(locale, [item.title[locale], item.text[locale], buildBrandImageAlt(locale, 'short')])}
+                      fill
+                      className="object-cover"
+                      sizes="(min-width: 1024px) 33vw, 100vw"
+                    />
                   </div>
                   <div className="px-6 py-7">
                     <div>

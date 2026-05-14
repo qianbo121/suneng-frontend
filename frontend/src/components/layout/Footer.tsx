@@ -2,6 +2,9 @@ import type { CSSProperties, ReactNode } from 'react';
 import Image from 'next/image';
 import { HiCheckCircle, HiEnvelope, HiMapPin, HiPhone } from 'react-icons/hi2';
 
+import { buildBrandImageAlt, joinImageAlt } from '@/lib/seo';
+import { Locale } from '@/types/site';
+
 type FooterProps = {
   locale: string;
 };
@@ -117,7 +120,7 @@ function ContactIcon({ children }: { children: ReactNode }) {
   );
 }
 
-function BrandBlock({ copy }: { copy: (typeof footerCopy)['zh'] | (typeof footerCopy)['en'] }) {
+function BrandBlock({ copy, locale }: { copy: (typeof footerCopy)['zh'] | (typeof footerCopy)['en']; locale: Locale }) {
   const { desktop } = FOOTER_TOKENS;
 
   return (
@@ -133,7 +136,7 @@ function BrandBlock({ copy }: { copy: (typeof footerCopy)['zh'] | (typeof footer
       >
         <Image
           src="/images/brand/sn-logo-white-transparent.png"
-          alt="苏能工业炉"
+          alt={buildBrandImageAlt(locale, 'short')}
           width={desktop.logoWidth * 2}
           height={desktop.logoHeight * 2}
           priority={false}
@@ -152,7 +155,7 @@ function BrandBlock({ copy }: { copy: (typeof footerCopy)['zh'] | (typeof footer
   );
 }
 
-function QrBlock({ copy }: { copy: (typeof footerCopy)['zh'] | (typeof footerCopy)['en'] }) {
+function QrBlock({ copy, locale }: { copy: (typeof footerCopy)['zh'] | (typeof footerCopy)['en']; locale: Locale }) {
   const { desktop } = FOOTER_TOKENS;
 
   return (
@@ -171,7 +174,7 @@ function QrBlock({ copy }: { copy: (typeof footerCopy)['zh'] | (typeof footerCop
             >
               <Image
                 src={qr.src}
-                alt={qr.label}
+                alt={joinImageAlt(locale, [buildBrandImageAlt(locale, 'short'), qr.label])}
                 width={desktop.qrSize}
                 height={desktop.qrSize}
                 className="h-full w-full object-contain"
@@ -225,7 +228,7 @@ function ContactBlock({ copy }: { copy: (typeof footerCopy)['zh'] | (typeof foot
 
 export function Footer({ locale }: FooterProps) {
   const { colors, desktop } = FOOTER_TOKENS;
-  const currentLocale = locale === 'en' ? 'en' : 'zh';
+  const currentLocale = (locale === 'en' ? 'en' : 'zh') as Locale;
   const copy = footerCopy[currentLocale];
 
   return (
@@ -255,7 +258,7 @@ export function Footer({ locale }: FooterProps) {
             '--footer-grid-gap': px(desktop.gridGap),
           })}
         >
-          <BrandBlock copy={copy} />
+          <BrandBlock copy={copy} locale={currentLocale} />
           <div className="relative py-8 lg:ml-[10px] lg:flex lg:self-stretch lg:px-[58px] lg:py-0">
             {/* 模块分割线：桌面端隔开公司介绍 / 联系我们 / 联系方式。 */}
             <span
@@ -269,7 +272,7 @@ export function Footer({ locale }: FooterProps) {
               style={{ backgroundColor: colors.divider }}
             />
             <div className="w-full lg:flex lg:translate-x-[20px] lg:items-center">
-              <QrBlock copy={copy} />
+              <QrBlock copy={copy} locale={currentLocale} />
             </div>
           </div>
           <div className="lg:pl-[14px]">

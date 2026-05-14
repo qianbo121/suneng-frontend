@@ -7,6 +7,7 @@ import { motion } from 'framer-motion';
 import { HomeSectionFallback } from '@/components/home/HomeSectionFallback';
 import { SectionTitle } from '@/components/common/SectionTitle';
 import { cn } from '@/lib/utils';
+import { buildProductImageAlt } from '@/lib/seo';
 import { ProductShowcaseItem } from '@/types/home';
 import { Locale } from '@/types/site';
 
@@ -40,7 +41,13 @@ export function ProductShowcase({ locale, items }: ProductShowcaseProps) {
                 >
                   <div className={reversed ? 'order-2 lg:order-1' : ''}>
                     <div className="relative min-h-[320px] bg-[#dce5ef] sm:min-h-[360px] lg:min-h-[470px]">
-                      <Image src={item.image} alt={item.name[locale]} fill className="object-cover" sizes="(min-width: 1024px) 50vw, 100vw" />
+                      <Image
+                        src={item.image}
+                        alt={buildProductImageAlt(locale, item.name[locale], item.description[locale])}
+                        fill
+                        className="object-cover"
+                        sizes="(min-width: 1024px) 50vw, 100vw"
+                      />
                     </div>
                   </div>
                   <div

@@ -188,7 +188,7 @@ export function HeroBanner({ locale, items, partners }: HeroBannerProps) {
                 >
                   <Image
                     src={partner.image}
-                    alt={partner.name}
+                    alt={`${partner.name} logo`}
                     width={420}
                     height={210}
                     className={`${partner.imageClass} h-auto w-auto object-contain`}

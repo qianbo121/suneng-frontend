@@ -3,6 +3,7 @@ import Link from 'next/link';
 
 import { HomeSectionFallback } from '@/components/home/HomeSectionFallback';
 import { SectionTitle } from '@/components/common/SectionTitle';
+import { buildProductImageAlt } from '@/lib/seo';
 import { ProductCategoryItem } from '@/types/home';
 import { Locale } from '@/types/site';
 
@@ -30,7 +31,7 @@ export function ProductGrid({ locale, items }: ProductGridProps) {
               <div className="relative aspect-[4/3] overflow-hidden bg-[#f5f6f8]">
                 <Image
                   src={item.image}
-                  alt={item.name[locale]}
+                  alt={buildProductImageAlt(locale, item.name[locale], locale === 'en' ? 'product series equipment image' : '产品系列设备图')}
                   fill
                   className="object-cover transition duration-500 group-hover:scale-105"
                   sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw"

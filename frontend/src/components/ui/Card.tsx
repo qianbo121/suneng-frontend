@@ -17,7 +17,7 @@ export function Card({
   title,
   description,
   image,
-  imageAlt = 'Card image',
+  imageAlt = '',
   orientation = 'vertical',
   footer,
   children,

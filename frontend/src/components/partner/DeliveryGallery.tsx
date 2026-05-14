@@ -5,7 +5,7 @@ import Image from 'next/image';
 import { useState } from 'react';
 
 import { EmptyState } from '@/components/ui/EmptyState';
-import { buildImageAlt } from '@/lib/seo';
+import { buildImageAlt, buildIndexedImageAlt } from '@/lib/seo';
 import { DeliveryGalleryCard } from '@/types/service-support';
 import { Locale } from '@/types/site';
 
@@ -41,6 +41,7 @@ function formatDate(date?: string | null, locale: Locale = 'zh') {
 export function DeliveryGallery({ locale, items }: DeliveryGalleryProps) {
   const [lightboxState, setLightboxState] = useState<{
     images: string[];
+    imageAlts: string[];
     index: number;
   } | null>(null);
 
@@ -71,19 +72,21 @@ export function DeliveryGallery({ locale, items }: DeliveryGalleryProps) {
         <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
           {items.map((item, index) => {
             const wide = index % 5 === 0;
+            const imageAlt = buildImageAlt(locale, item.title, item.description);
+            const imageAlts = item.images.map((_, galleryIndex) => buildIndexedImageAlt(locale, imageAlt, galleryIndex));
 
             return (
               <article key={item.id} className={wide ? 'xl:col-span-2' : ''}>
                 <button
                   type="button"
-                  onClick={() => setLightboxState({ images: item.images, index: 0 })}
+                  onClick={() => setLightboxState({ images: item.images, imageAlts, index: 0 })}
                   className="group h-full w-full overflow-hidden border border-[#e8ebf0] bg-white text-left transition hover:-translate-y-1 hover:shadow-[0_16px_34px_rgba(14,33,60,0.08)]"
                 >
                   <div className={wide ? 'grid lg:grid-cols-[1.08fr_0.92fr]' : ''}>
                     <div className="relative aspect-[16/11] overflow-hidden bg-[#edf2f7]">
                       <Image
                         src={item.image}
-                        alt={buildImageAlt(locale, item.title, item.description)}
+                        alt={imageAlt}
                         fill
                         className="object-cover transition duration-500 group-hover:scale-105"
                         sizes={wide ? '(min-width: 1280px) 560px, (min-width: 768px) 50vw, 100vw' : '(min-width: 1280px) 360px, (min-width: 768px) 50vw, 100vw'}
@@ -115,6 +118,7 @@ export function DeliveryGallery({ locale, items }: DeliveryGalleryProps) {
 
       <ImageLightbox
         images={lightboxState?.images ?? []}
+        imageAlts={lightboxState?.imageAlts ?? []}
         isOpen={Boolean(lightboxState)}
         initialIndex={lightboxState?.index ?? 0}
         onClose={() => setLightboxState(null)}

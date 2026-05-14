@@ -6,6 +6,7 @@ import { JsonLd } from '@/components/JsonLd';
 import { Breadcrumb } from '@/components/layout/Breadcrumb';
 import { PageBanner } from '@/components/layout/PageBanner';
 import { PRODUCT_CENTER_CATEGORIES } from '@/constants/product-categories';
+import { buildProductImageAlt } from '@/lib/seo';
 import { getProductCollectionJsonLd } from '@/lib/seo/jsonld';
 import { buildMetadata } from '@/lib/seo/metadata';
 import { PRODUCT_COLLECTION_SEO } from '@/lib/seo/page-data';
@@ -80,7 +81,7 @@ export default async function ProductsPage({ params }: ProductsPageProps) {
               <div className="relative flex h-[204px] items-center justify-center">
                 <Image
                   src={item.image}
-                  alt={`${item.name[currentLocale]}产品图`}
+                  alt={buildProductImageAlt(currentLocale, item.name[currentLocale], item.showcaseDescription[currentLocale])}
                   fill
                   className="object-contain transition-transform duration-500 group-hover:scale-[1.04]"
                   sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw"

@@ -3,6 +3,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 
+import { buildProductImageAlt } from '@/lib/seo';
 import { Locale } from '@/types/site';
 
 type ProductCenterSectionProps = {
@@ -13,19 +14,23 @@ type ProductCenterCard = {
   id: number;
   en: string;
   zh: string;
+  feature: {
+    zh: string;
+    en: string;
+  };
   image: string;
   slug: string;
 };
 
 const productCenterCards: ProductCenterCard[] = [
-  { id: 1, en: 'BOX FURNACE', zh: '箱式炉', image: '/images/home/product-center/box-furnace-real.png', slug: 'box-furnace' },
-  { id: 2, en: 'TROLLEY FURNACE', zh: '台车炉', image: '/images/home/product-center/trolley-furnace-real.png', slug: 'trolley-furnace' },
-  { id: 3, en: 'PIT FURNACE', zh: '井式炉', image: '/images/home/product-center/pit-furnace-real.png', slug: 'pit-furnace' },
-  { id: 4, en: 'BELL FURNACE', zh: '罩式炉', image: '/images/home/product-center/bell-furnace-real.png', slug: 'bell-furnace' },
-  { id: 5, en: 'PUSHER FURNACE', zh: '推杆炉', image: '/images/home/product-center/pusher-furnace-real.png', slug: 'pusher-furnace' },
-  { id: 6, en: 'MESH BELT FURNACE', zh: '网带炉', image: '/images/home/product-center/mesh-belt-furnace-real.png', slug: 'mesh-belt-furnace' },
-  { id: 7, en: 'ROLLER HEARTH FURNACE', zh: '辊底炉', image: '/images/home/product-center/roller-hearth-furnace-real.png', slug: 'roller-hearth-furnace' },
-  { id: 8, en: 'ROTARY HEARTH FURNACE', zh: '转底炉', image: '/images/home/product-center/rotary-hearth-furnace-real.png', slug: 'rotary-hearth-furnace' },
+  { id: 1, en: 'BOX FURNACE', zh: '箱式炉', feature: { zh: '中小型零件退火淬火非标定制', en: 'custom annealing and quenching for small and medium workpieces' }, image: '/images/home/product-center/box-furnace-real.png', slug: 'box-furnace' },
+  { id: 2, en: 'TROLLEY FURNACE', zh: '台车炉', feature: { zh: '大型工件与模具热处理承载设备', en: 'large workpiece and die heat treatment equipment' }, image: '/images/home/product-center/trolley-furnace-real.png', slug: 'trolley-furnace' },
+  { id: 3, en: 'PIT FURNACE', zh: '井式炉', feature: { zh: '轴类杆类工件垂直均匀加热', en: 'vertical uniform heating for shaft and rod workpieces' }, image: '/images/home/product-center/pit-furnace-real.png', slug: 'pit-furnace' },
+  { id: 4, en: 'BELL FURNACE', zh: '罩式炉', feature: { zh: '保护气氛与批量工件整体热处理', en: 'protective atmosphere heat treatment for batch workpieces' }, image: '/images/home/product-center/bell-furnace-real.png', slug: 'bell-furnace' },
+  { id: 5, en: 'PUSHER FURNACE', zh: '推杆炉', feature: { zh: '料盘节拍推进连续热处理', en: 'continuous heat treatment with paced tray pushing' }, image: '/images/home/product-center/pusher-furnace-real.png', slug: 'pusher-furnace' },
+  { id: 6, en: 'MESH BELT FURNACE', zh: '网带炉', feature: { zh: '小件零件连续退火回火生产', en: 'continuous annealing and tempering for small parts' }, image: '/images/home/product-center/mesh-belt-furnace-real.png', slug: 'mesh-belt-furnace' },
+  { id: 7, en: 'ROLLER HEARTH FURNACE', zh: '辊底炉', feature: { zh: '板材棒材连续输送热处理', en: 'continuous roller conveying heat treatment for plates and bars' }, image: '/images/home/product-center/roller-hearth-furnace-real.png', slug: 'roller-hearth-furnace' },
+  { id: 8, en: 'ROTARY HEARTH FURNACE', zh: '转底炉', feature: { zh: '环形炉底节拍式均匀加热', en: 'rhythmic uniform heating on a rotary hearth' }, image: '/images/home/product-center/rotary-hearth-furnace-real.png', slug: 'rotary-hearth-furnace' },
 ];
 
 export function ProductCenterSection({ locale }: ProductCenterSectionProps) {
@@ -50,7 +55,7 @@ export function ProductCenterSection({ locale }: ProductCenterSectionProps) {
                 <div className="relative h-[118px] w-full max-w-[228px] lg:h-[146px] lg:max-w-[248px]">
                   <Image
                     src={item.image}
-                    alt={locale === 'en' ? item.en : item.zh}
+                    alt={buildProductImageAlt(locale, locale === 'en' ? item.en : item.zh, item.feature[locale])}
                     fill
                     className="scale-[1.3] object-contain transition-transform duration-500 ease-out group-hover:scale-[1.38]"
                     sizes="(min-width: 1024px) 248px, 45vw"

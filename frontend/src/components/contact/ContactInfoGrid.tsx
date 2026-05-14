@@ -2,6 +2,7 @@ import Image from 'next/image';
 import { HiEnvelope, HiMapPin, HiPhone, HiQrCode } from 'react-icons/hi2';
 import { RiPrinterLine } from 'react-icons/ri';
 
+import { buildBrandImageAlt, joinImageAlt } from '@/lib/seo';
 import { ContactInfoContent } from '@/types/contact';
 import { Locale } from '@/types/site';
 
@@ -13,6 +14,14 @@ type ContactInfoGridProps = {
 const ICON_CLASS = 'text-[22px] text-brand-primary';
 
 export function ContactInfoGrid({ locale, info }: ContactInfoGridProps) {
+  const mapAlt = joinImageAlt(locale, [
+    buildBrandImageAlt(locale, 'full'),
+    locale === 'en' ? 'factory and office location map' : '工厂与办公位置地图',
+  ]);
+  const qrAlt = joinImageAlt(locale, [
+    buildBrandImageAlt(locale, 'short'),
+    locale === 'en' ? 'official WeChat QR code' : '企业微信二维码',
+  ]);
   const cards = [
     {
       key: 'address',
@@ -63,7 +72,7 @@ export function ContactInfoGrid({ locale, info }: ContactInfoGridProps) {
             {locale === 'en' ? 'Factory & Office Location' : '工厂与办公位置'}
           </h2>
           <div className="relative mt-6 aspect-[16/8] overflow-hidden bg-[#eef2f6]">
-            <Image src={info.mapImage} alt={locale === 'en' ? 'Company map' : '公司地图'} fill className="object-cover" sizes="(min-width: 1024px) 800px, 100vw" />
+            <Image src={info.mapImage} alt={mapAlt} fill className="object-cover" sizes="(min-width: 1024px) 800px, 100vw" />
           </div>
         </div>
 
@@ -75,7 +84,7 @@ export function ContactInfoGrid({ locale, info }: ContactInfoGridProps) {
             {locale === 'en' ? 'QR Code' : '官方二维码'}
           </p>
           <div className="relative mt-5 aspect-square overflow-hidden bg-white p-4">
-            <Image src={info.qrCodeImage} alt={locale === 'en' ? 'QR code' : '二维码'} fill className="object-cover p-4" sizes="232px" />
+            <Image src={info.qrCodeImage} alt={qrAlt} fill className="object-cover p-4" sizes="232px" />
           </div>
           <p className="mt-5 text-sm leading-7 text-white/74">
             {locale === 'en'

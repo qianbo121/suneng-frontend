@@ -17,6 +17,7 @@ import { Breadcrumb } from '@/components/layout/Breadcrumb';
 import { ProductDetailGallery } from '@/components/products/ProductDetailGallery';
 import { ProductLeadForm, ProductQuoteScrollButton } from '@/components/products/ProductLeadForm';
 import { getStaticProductBySlug, STATIC_PRODUCTS, StaticProduct, StaticProductDetail } from '@/constants/static-products';
+import { buildProductImageAlt } from '@/lib/seo';
 import { getProductDetailJsonLd } from '@/lib/seo/jsonld';
 import { buildMetadata } from '@/lib/seo/metadata';
 import { PRODUCT_DETAIL_SEO } from '@/lib/seo/page-data';
@@ -167,7 +168,13 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
       <div className="mx-auto mt-7 max-w-[1440px] px-6 pb-[48px]">
         {/* A. Hero 区：主图 480x360；信息列顶部内缩，与右侧卡片标题水平对齐。 */}
         <section className="flex flex-col gap-8 lg:flex-row lg:items-start lg:gap-6">
-          <ProductDetailGallery images={gallery} title={detail.title} fillMode={isProductionLine ? 'cover-left' : 'contain'} />
+          <ProductDetailGallery
+            locale={currentLocale}
+            images={gallery}
+            title={detail.title}
+            summary={detail.summary}
+            fillMode={isProductionLine ? 'cover-left' : 'contain'}
+          />
 
           <div className="min-w-0 flex-1 lg:pt-6">
             <p className="mb-3 text-[14px] font-normal uppercase leading-none text-[#e60012]">{detail.series}</p>
@@ -257,7 +264,13 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
               {detail.configurations.map((item) => (
                 <article key={item.title} className="flex flex-col overflow-hidden rounded-[8px] border border-[#eef0f3] bg-white transition-all duration-200 hover:-translate-y-[2px] hover:shadow-[0_4px_16px_rgba(0,0,0,0.08)]">
                   <div className="relative aspect-[16/10] w-full bg-[#f4f6f9]">
-                    <Image src={item.image} alt={item.title} fill className="object-cover" sizes="(min-width: 1024px) 33vw, 100vw" />
+                    <Image
+                      src={item.image}
+                      alt={buildProductImageAlt(currentLocale, item.title, currentLocale === 'en' ? 'typical configuration example' : '典型配置示例')}
+                      fill
+                      className="object-cover"
+                      sizes="(min-width: 1024px) 33vw, 100vw"
+                    />
                   </div>
                   <div className="p-[20px]">
                     <h3 className="mb-[14px] text-[17px] font-semibold leading-[1.35] text-[#1a1d23]">{item.title}</h3>
@@ -285,7 +298,7 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
                 <div className="relative h-[55px] w-[55px] shrink-0">
                   <Image
                     src={processStepIcons[index] || processStepIcons[0]}
-                    alt=""
+                    alt={item.title}
                     fill
                     className="object-contain"
                     sizes="55px"

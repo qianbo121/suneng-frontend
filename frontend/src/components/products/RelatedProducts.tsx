@@ -2,6 +2,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 import { EmptyState } from '@/components/ui/EmptyState';
+import { buildProductImageAlt } from '@/lib/seo';
 import { ProductListCardItem } from '@/types/product';
 import { Locale } from '@/types/site';
 
@@ -44,7 +45,7 @@ export function RelatedProducts({ locale, items }: RelatedProductsProps) {
             <div className="relative aspect-[16/11] overflow-hidden bg-[#f3f5f8]">
               <Image
                 src={item.image}
-                alt={item.name[locale]}
+                alt={buildProductImageAlt(locale, item.name[locale], locale === 'en' ? 'recommended equipment' : '推荐设备')}
                 fill
                 className="object-cover transition duration-500 group-hover:scale-105"
                 sizes="(min-width: 1280px) 360px, (min-width: 640px) 50vw, 100vw"

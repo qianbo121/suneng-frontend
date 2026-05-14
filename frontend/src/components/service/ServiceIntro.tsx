@@ -1,5 +1,7 @@
 import Image from 'next/image';
 
+import { buildBrandImageAlt, joinImageAlt } from '@/lib/seo';
+
 type ServiceIntroProps = {
   locale: 'zh' | 'en';
   title: string;
@@ -21,7 +23,13 @@ export function ServiceIntro({ locale, title, content, image }: ServiceIntroProp
           <p className="mt-6 text-[15px] leading-8 text-neutral-700 lg:text-base">{content}</p>
         </div>
         <div className="relative min-h-[320px] bg-[#e8edf3] lg:min-h-[500px]">
-          <Image src={image} alt={title} fill className="object-cover" sizes="(min-width: 1024px) 50vw, 100vw" />
+          <Image
+            src={image}
+            alt={joinImageAlt(locale, [title, locale === 'en' ? 'after-sales service and technical support' : '售后服务与技术支持', buildBrandImageAlt(locale, 'short')])}
+            fill
+            className="object-cover"
+            sizes="(min-width: 1024px) 50vw, 100vw"
+          />
         </div>
       </div>
     </section>

@@ -31,6 +31,10 @@ function SectionHeading({ children }: { children: string }) {
   );
 }
 
+function partnerLogoAlt(name: string) {
+  return `${name.replace(/\s+/g, '')} logo`;
+}
+
 export function PartnerLogoGrid({ locale, coreItems, moreItems, fieldItems }: PartnerLogoGridProps) {
   return (
     <section className="bg-white">
@@ -45,7 +49,7 @@ export function PartnerLogoGrid({ locale, coreItems, moreItems, fieldItems }: Pa
             <div className="flex h-full min-h-[268px] w-full items-center justify-center bg-white">
               <Image
                 src={item.logoUrl}
-                alt={item.name}
+                alt={partnerLogoAlt(item.name)}
                 width={900}
                 height={360}
                 className="mx-auto max-h-full max-w-full object-contain"

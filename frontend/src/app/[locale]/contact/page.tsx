@@ -92,7 +92,7 @@ export default async function ContactPage({ params }: ContactPageProps) {
               {contactItems.map((item) => (
                 <div key={item.label} className="grid grid-cols-[70px_minmax(0,1fr)] items-center gap-[10px] py-5 first:pt-0 last:pb-0">
                   <div className="relative h-[70px] w-[70px] shrink-0 overflow-hidden rounded-full">
-                    <Image src={item.icon} alt={item.label} fill sizes="70px" className="object-cover" />
+                    <Image src={item.icon} alt="" fill sizes="70px" className="object-cover" />
                   </div>
                   <div className="flex min-w-0 flex-wrap items-baseline gap-x-0 gap-y-2 text-[18px] leading-[1.5] lg:text-[21px]">
                     <span className="shrink-0 font-normal text-[#333333]">{item.label}：</span>

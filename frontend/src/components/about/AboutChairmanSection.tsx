@@ -1,6 +1,7 @@
 import Image from 'next/image';
 
 import { EmptyState } from '@/components/ui/EmptyState';
+import { buildBrandImageAlt, joinImageAlt } from '@/lib/seo';
 
 type AboutChairmanSectionProps = {
   locale: 'zh' | 'en';
@@ -43,7 +44,10 @@ export function AboutChairmanSection({
         <div className="relative min-h-[360px] bg-[#e7ecf3] lg:min-h-[540px]">
           <Image
             src={image}
-            alt={title || (locale === 'en' ? 'Chairman portrait' : '董事长照片')}
+            alt={joinImageAlt(locale, [
+              buildBrandImageAlt(locale, 'full'),
+              locale === 'en' ? 'chairman message portrait' : '董事长致辞照片',
+            ])}
             fill
             className="object-cover"
             sizes="(min-width: 1024px) 360px, 100vw"

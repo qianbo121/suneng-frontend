@@ -1,5 +1,6 @@
 import Image from 'next/image';
 
+import { buildBrandImageAlt, joinImageAlt } from '@/lib/seo';
 import { ServiceAdvantageCard } from '@/types/service-support';
 import { Locale } from '@/types/site';
 
@@ -26,7 +27,13 @@ export function ServiceAdvantages({ locale, items }: ServiceAdvantagesProps) {
             className="overflow-hidden border border-[#e8ebf0] bg-white transition hover:-translate-y-1 hover:shadow-[0_16px_34px_rgba(14,33,60,0.08)]"
           >
             <div className="relative aspect-[16/10] bg-[#edf2f7]">
-              <Image src={item.image} alt={item.title} fill className="object-cover" sizes="(min-width: 1280px) 360px, (min-width: 768px) 50vw, 100vw" />
+              <Image
+                src={item.image}
+                alt={joinImageAlt(locale, [item.title, item.content, buildBrandImageAlt(locale, 'short')])}
+                fill
+                className="object-cover"
+                sizes="(min-width: 1280px) 360px, (min-width: 768px) 50vw, 100vw"
+              />
             </div>
             <div className="px-6 py-6">
               <h3 className="text-[22px] font-semibold text-[#202020]">{item.title}</h3>

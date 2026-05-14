@@ -5,7 +5,7 @@ import Image from 'next/image';
 import { useState } from 'react';
 
 import { EmptyState } from '@/components/ui/EmptyState';
-import { buildImageAlt } from '@/lib/seo';
+import { buildImageAlt, buildIndexedImageAlt } from '@/lib/seo';
 import { StrengthDisplayCard, StrengthDisplayMode } from '@/types/strength';
 import { Locale } from '@/types/site';
 
@@ -27,6 +27,7 @@ export function StrengthGalleryGrid({
 }: StrengthGalleryGridProps) {
   const [lightboxState, setLightboxState] = useState<{
     images: string[];
+    imageAlts: string[];
     index: number;
   } | null>(null);
 
@@ -50,6 +51,8 @@ export function StrengthGalleryGrid({
       <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
         {items.map((item, index) => {
           const wide = !isCertificateMode && index % 5 === 0;
+          const imageAlt = buildImageAlt(locale, item.title, item.summary);
+          const imageAlts = item.gallery.map((_, galleryIndex) => buildIndexedImageAlt(locale, imageAlt, galleryIndex));
 
           return (
             <article
@@ -58,14 +61,14 @@ export function StrengthGalleryGrid({
             >
               <button
                 type="button"
-                onClick={() => setLightboxState({ images: item.gallery, index: 0 })}
+                onClick={() => setLightboxState({ images: item.gallery, imageAlts, index: 0 })}
                 className="group h-full w-full overflow-hidden border border-[#e8ebf0] bg-white text-left transition hover:-translate-y-1 hover:shadow-[0_16px_34px_rgba(14,33,60,0.08)]"
               >
                 <div className={wide ? 'grid lg:grid-cols-[1.1fr_0.9fr]' : ''}>
                   <div className="relative aspect-[16/11] overflow-hidden bg-[#f3f5f8]">
                     <Image
                       src={item.image}
-                      alt={buildImageAlt(locale, item.title, item.summary)}
+                      alt={imageAlt}
                       fill
                       className="object-cover transition duration-500 group-hover:scale-105"
                       sizes={wide ? '(min-width: 1280px) 560px, (min-width: 768px) 50vw, 100vw' : '(min-width: 1280px) 360px, (min-width: 768px) 50vw, 100vw'}
@@ -100,6 +103,7 @@ export function StrengthGalleryGrid({
 
       <ImageLightbox
         images={lightboxState?.images ?? []}
+        imageAlts={lightboxState?.imageAlts ?? []}
         isOpen={Boolean(lightboxState)}
         initialIndex={lightboxState?.index ?? 0}
         onClose={() => setLightboxState(null)}

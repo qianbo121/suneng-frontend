@@ -7,6 +7,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { useEffect, useMemo, useState } from 'react';
 import { HiBars3BottomRight, HiChevronRight, HiOutlineXMark } from 'react-icons/hi2';
 
+import { buildBrandImageAlt } from '@/lib/seo';
 import { getLocalizedNavigation } from '@/mock/navigation';
 import { Locale } from '@/types/site';
 
@@ -15,7 +16,6 @@ type HeaderProps = {
 };
 
 const HEADER_LOGO_SRC = '/images/brand/sn-logo-header-cropped.png';
-const HEADER_LOGO_ALT = '江苏苏能工业炉有限公司';
 
 function buildLocaleHref(locale: string, href: string) {
   return href === '/' ? `/${locale}` : `/${locale}${href}`;
@@ -39,6 +39,7 @@ export function Header({ locale }: HeaderProps) {
   const currentLocale = (locale === 'en' ? 'en' : 'zh') as Locale;
   const navItems = useMemo(() => getLocalizedNavigation(currentLocale), [currentLocale]);
   const localeLabel = { zh: '中文', en: 'EN' } as const;
+  const logoAlt = buildBrandImageAlt(currentLocale, 'full');
 
   useEffect(() => {
     setMobileOpen(false);
@@ -48,10 +49,10 @@ export function Header({ locale }: HeaderProps) {
     <>
       <header className="relative z-[9999] min-h-[78px] bg-transparent bp-tablet-min:min-h-header-h">
         <div className="fixed inset-x-0 top-0 z-[9999] flex h-[78px] items-center justify-between bg-white px-3 bp-tablet-min:hidden">
-          <Link href={`/${locale}`} className="ml-2 flex h-[72px] w-auto items-center" aria-label={HEADER_LOGO_ALT}>
+          <Link href={`/${locale}`} className="ml-2 flex h-[72px] w-auto items-center" aria-label={logoAlt}>
             <Image
               src={HEADER_LOGO_SRC}
-              alt={HEADER_LOGO_ALT}
+              alt={logoAlt}
               width={229}
               height={40}
               className="h-[40px] w-auto max-w-none object-contain object-left object-center"
@@ -71,10 +72,10 @@ export function Header({ locale }: HeaderProps) {
           <div className="flex w-full items-center justify-between pl-12 pr-10 bp-desktop-wide-max:pl-10 bp-desktop-wide-max:pr-8 bp-tablet-max:px-4">
             <div className="shrink-0 self-center">
               <div className="w-auto">
-                <Link href={`/${locale}`} className="flex h-[78px] w-auto items-center justify-start" aria-label={HEADER_LOGO_ALT}>
+                <Link href={`/${locale}`} className="flex h-[78px] w-auto items-center justify-start" aria-label={logoAlt}>
                   <Image
                     src={HEADER_LOGO_SRC}
-                    alt={HEADER_LOGO_ALT}
+                    alt={logoAlt}
                     width={275}
                     height={48}
                     className="h-[48px] w-auto max-w-none object-contain object-left object-center"
@@ -164,10 +165,10 @@ export function Header({ locale }: HeaderProps) {
             exit={{ opacity: 0 }}
           >
             <div className="flex h-[78px] items-center justify-between border-b border-black/5 px-4">
-              <Link href={`/${locale}`} className="ml-2 flex h-[72px] w-auto items-center" aria-label={HEADER_LOGO_ALT}>
+              <Link href={`/${locale}`} className="ml-2 flex h-[72px] w-auto items-center" aria-label={logoAlt}>
                 <Image
                   src={HEADER_LOGO_SRC}
-                  alt={HEADER_LOGO_ALT}
+                  alt={logoAlt}
                   width={229}
                   height={40}
                   className="h-[40px] w-auto max-w-none object-contain object-left object-center"
