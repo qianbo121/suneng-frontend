@@ -70,7 +70,6 @@ export default async function AboutPage({ params }: AboutPageProps) {
         locale={currentLocale}
         title={localizeAboutText(currentLocale, profile, 'title', pageCopy.title)}
         content={localizeAboutText(currentLocale, profile, 'content')}
-        image={profile?.imageUrl || profile?.ogImage || '/images/about/about_img_company_building_01.png'}
       />
     </AboutShell>
   );

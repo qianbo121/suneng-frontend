@@ -8,7 +8,6 @@ type AboutProfileSectionProps = {
   locale: 'zh' | 'en';
   title: string;
   content: string;
-  image: string;
 };
 
 function splitParagraphs(content: string) {
@@ -149,7 +148,6 @@ export function AboutProfileSection({
   locale,
   title,
   content,
-  image,
 }: AboutProfileSectionProps) {
   const paragraphs = splitParagraphs(content);
   const displayParagraphs = paragraphs.length ? paragraphs : [...profileFallbackParagraphs[locale]];
@@ -170,24 +168,10 @@ export function AboutProfileSection({
   return (
     <section className="bg-white">
       <div className="px-6 lg:px-0">
-        <div className="grid items-start gap-12 lg:grid-cols-[1fr_0.98fr] lg:gap-[72px]">
-          <div className="space-y-[22px] text-[15px] font-normal leading-[2] text-[#333333] lg:text-[16px]">
-            {displayParagraphs.map((item, index) => (
-              <p key={`${item}-${index}`}>{item}</p>
-            ))}
-          </div>
-          <div className="relative min-h-[300px] overflow-hidden rounded-md bg-[#e8edf3] lg:min-h-[456px]">
-            <Image
-              src={image || '/images/about/about_img_company_building_01.png'}
-              alt={joinImageAlt(locale, [
-                buildBrandImageAlt(locale, 'full'),
-                locale === 'en' ? 'factory and office building exterior' : '厂区与办公楼外观',
-              ])}
-              fill
-              className="object-cover"
-              sizes="(min-width: 1024px) 50vw, 100vw"
-            />
-          </div>
+        <div className="mx-auto max-w-4xl space-y-[22px] text-[15px] font-normal leading-[2] text-[#333333] lg:text-[16px]">
+          {displayParagraphs.map((item, index) => (
+            <p key={`${item}-${index}`}>{item}</p>
+          ))}
         </div>
 
         <AboutStatsPanel
