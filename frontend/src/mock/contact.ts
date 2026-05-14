@@ -5,14 +5,14 @@ export const homeContactBar: ContactBarContent = {
     zh: '咨询热线',
     en: 'Hotline',
   },
-  hotline: '+86 0719-888-8888',
+  hotline: '+86 139 1444 2520',
   addressLabel: {
     zh: '公司地址',
     en: 'Address',
   },
   address: {
-    zh: '湖北省十堰市某某工业园装备制造基地 88 号',
-    en: 'No. 88, Equipment Manufacturing Base, Industrial Park, Shiyan, Hubei',
+    zh: '江苏省泰州市姜堰区张甸镇工业集中区',
+    en: 'Zhangdian Industrial Concentration Zone, Jiangyan District, Taizhou, Jiangsu',
   },
   buttonLabel: {
     zh: '立即咨询',

@@ -12,12 +12,12 @@ export const homeBanners: HeroBannerItem[] = [
     id: 1,
     eyebrow: 'SUNENG',
     title: {
-      zh: '地下矿山成套装备制造专家',
-      en: 'Integrated Underground Mining Equipment Expert',
+      zh: '工业加热与热处理装备制造专家',
+      en: 'Industrial Heating and Heat Treatment Equipment Specialist',
     },
     subtitle: {
-      zh: '以稳健制造、持续研发和工程化交付能力，为矿山客户提供可靠装备解决方案。',
-      en: 'Delivering reliable solutions for mining customers through stable manufacturing and engineering execution.',
+      zh: '专注电阻式与燃气式工业炉研发制造，为客户提供单机设备、配套件与整线交钥匙工程。',
+      en: 'Focused on electric-resistance and gas-fired industrial furnaces, supporting stand-alone equipment, components and turnkey lines.',
     },
     ctaLabel: {
       zh: '查看产品中心',
@@ -30,12 +30,12 @@ export const homeBanners: HeroBannerItem[] = [
     id: 2,
     eyebrow: 'SUNENG',
     title: {
-      zh: '聚焦机械装备与现场工况适配',
-      en: 'Focused on Heavy Machinery and Site Adaptation',
+      zh: '覆盖热处理、锻造加热与工业固化',
+      en: 'Covering Heat Treatment, Forging Heating and Industrial Curing',
     },
     subtitle: {
-      zh: '围绕矿山施工场景，构建装药、撬毛、破碎与湿喷等多系列产品矩阵。',
-      en: 'Building a multi-series portfolio for charging, scaling, crushing and wet spraying scenarios.',
+      zh: '构建周期式、连续式、真空与可控气氛、专用工艺炉等完整产品体系。',
+      en: 'A complete portfolio across batch, continuous, vacuum, controlled-atmosphere and dedicated process furnaces.',
     },
     ctaLabel: {
       zh: '了解企业实力',
@@ -52,8 +52,8 @@ export const homeBanners: HeroBannerItem[] = [
       en: 'Professional Service for Long-Term Operations',
     },
     subtitle: {
-      zh: '从方案咨询到交付保障，建立覆盖售前、售中、售后的全流程支持体系。',
-      en: 'Providing end-to-end support from consultation to delivery and after-sales operations.',
+      zh: '从工艺方案、设计制造到安装调试和售后维护，提供全流程工业炉技术支持。',
+      en: 'Providing full-process furnace support from process planning, design and manufacturing to commissioning and after-sales service.',
     },
     ctaLabel: {
       zh: '立即联系我们',
