@@ -2,7 +2,7 @@ FROM node:22-alpine AS deps
 
 WORKDIR /app
 
-RUN corepack enable && corepack prepare pnpm@latest --activate
+RUN corepack enable && corepack prepare pnpm@latest --activate && pnpm config set registry https://registry.npmmirror.com
 
 COPY package.json pnpm-lock.yaml ./
 
@@ -27,7 +27,7 @@ ENV NEXT_PUBLIC_API_BASE_URL=${NEXT_PUBLIC_API_BASE_URL}
 ENV NEXT_PUBLIC_SITE_URL=${NEXT_PUBLIC_SITE_URL}
 ENV API_BASE_URL_INTERNAL=${API_BASE_URL_INTERNAL}
 
-RUN corepack enable && corepack prepare pnpm@latest --activate
+RUN corepack enable && corepack prepare pnpm@latest --activate && pnpm config set registry https://registry.npmmirror.com
 
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
