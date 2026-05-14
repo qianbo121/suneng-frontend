@@ -19,7 +19,7 @@ export const siteSettings: SiteSettings = {
     zh: '湖北省十堰市某某工业园装备制造基地 88 号',
     en: 'No. 88, Equipment Manufacturing Base, Industrial Park, Shiyan, Hubei',
   },
-  icp: '鄂ICP备00000000号-1',
+  icp: '苏ICP备20020318号-1',
   copyright: {
     zh: 'Copyright © 2026 制造业企业官网样板 保留所有权利',
     en: 'Copyright © 2026 Manufacturing Corporate Website Demo. All rights reserved.',

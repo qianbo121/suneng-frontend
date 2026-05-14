@@ -40,6 +40,9 @@ function varStyle(vars: Record<string, string | number>) {
   return vars as CSSProperties;
 }
 
+const MIIT_BEIAN_URL = 'https://beian.miit.gov.cn/';
+const POLICE_BEIAN_URL = 'http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=32120402001014';
+
 const footerCopy = {
   zh: {
     contactUs: '联系我们',
@@ -51,7 +54,8 @@ const footerCopy = {
     email: 'sales@sunengfurnace.com',
     phone: '+86 0519-8888-8888',
     copyright: 'Copyright © 2025 江苏苏能工业炉有限公司 版权所有',
-    icp: '苏ICP备18002201号-1',
+    icp: '苏ICP备20020318号-1',
+    policeBeian: '苏公网安备32120402001014号',
   },
   en: {
     contactUs: 'Contact Us',
@@ -63,7 +67,8 @@ const footerCopy = {
     email: 'sales@sunengfurnace.com',
     phone: '+86 0519-8888-8888',
     copyright: 'Copyright © 2025 Jiangsu Suneng Industrial Furnace Co., Ltd. All rights reserved.',
-    icp: '苏ICP备18002201号-1',
+    icp: '苏ICP备20020318号-1',
+    policeBeian: '苏公网安备32120402001014号',
   },
 } as const;
 
@@ -285,7 +290,23 @@ export function Footer({ locale }: FooterProps) {
         >
           <span>{copy.copyright}</span>
           <span aria-hidden="true" className="hidden h-[14px] w-px scale-x-50 bg-[var(--footer-divider-color)] md:block" />
-          <span>{copy.icp}</span>
+          <a
+            href={MIIT_BEIAN_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="transition-colors hover:text-white"
+          >
+            {copy.icp}
+          </a>
+          <span aria-hidden="true" className="hidden h-[14px] w-px scale-x-50 bg-[var(--footer-divider-color)] md:block" />
+          <a
+            href={POLICE_BEIAN_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="transition-colors hover:text-white"
+          >
+            {copy.policeBeian}
+          </a>
         </div>
       </div>
 
