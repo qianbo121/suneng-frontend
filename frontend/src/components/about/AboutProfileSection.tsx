@@ -168,7 +168,7 @@ export function AboutProfileSection({
   return (
     <section className="bg-white">
       <div className="px-6 lg:px-0">
-        <div className="mx-auto max-w-4xl space-y-[22px] text-[15px] font-normal leading-[2] text-[#333333] lg:text-[16px]">
+        <div className="space-y-[22px] text-[15px] font-normal leading-[2] text-[#333333] lg:text-[16px]">
           {displayParagraphs.map((item, index) => (
             <p key={`${item}-${index}`}>{item}</p>
           ))}
