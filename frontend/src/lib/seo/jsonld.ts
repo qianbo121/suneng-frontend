@@ -3,7 +3,6 @@ import {
   ALTERNATE_NAMES,
   BAIDU_APP_ID,
   COMPANY_NAME,
-  COMPANY_PHONE,
   DEFAULT_DESCRIPTION,
   SHORT_NAME,
   SITE_LOGO_IMAGE,
@@ -65,6 +64,8 @@ const PRODUCT_SCHEMA_ORDER = [
 ];
 
 const productBySlug = new Map(STATIC_PRODUCTS.map((product) => [product.slug, product]));
+const LOCAL_BUSINESS_URL = 'https://www.jssngyl.cn/';
+const LOCAL_BUSINESS_ID = `${LOCAL_BUSINESS_URL}#organization`;
 
 function productUrl(slug: string, path?: string) {
   return absoluteUrl(path || `/products/detail/${slug}`);
@@ -124,15 +125,51 @@ function absoluteImages(image?: string | string[]) {
 export function getOrganizationJsonLd() {
   return cleanObject({
     '@context': 'https://schema.org',
-    '@type': 'Organization',
-    '@id': `${SITE_URL}/#organization`,
+    '@type': 'LocalBusiness',
+    '@id': LOCAL_BUSINESS_ID,
     name: COMPANY_NAME,
     legalName: COMPANY_NAME,
-    alternateName: ALTERNATE_NAMES,
-    url: `${SITE_URL}/`,
+    alternateName: ['Jiangsu Suneng Industrial Furnace Co., Ltd.', ...ALTERNATE_NAMES],
+    url: LOCAL_BUSINESS_URL,
     logo: SITE_LOGO_IMAGE ? absoluteUrl(SITE_LOGO_IMAGE) : undefined,
-    telephone: COMPANY_PHONE,
+    telephone: '+86-139-1444-2520',
+    email: '997518512@qq.com',
     foundingDate: '2006',
+    numberOfEmployees: {
+      '@type': 'QuantitativeValue',
+      minValue: 150,
+    },
+    address: {
+      '@type': 'PostalAddress',
+      streetAddress: '张甸蔡官工业区',
+      addressLocality: '姜堰区',
+      addressRegion: '江苏省泰州市',
+      addressCountry: 'CN',
+      postalCode: '225500',
+    },
+    geo: {
+      '@type': 'GeoCoordinates',
+      latitude: 32.44,
+      longitude: 120.03,
+    },
+    openingHoursSpecification: [
+      {
+        '@type': 'OpeningHoursSpecification',
+        dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
+        opens: '07:30',
+        closes: '18:00',
+      },
+    ],
+    areaServed: [
+      {
+        '@type': 'Place',
+        name: 'Worldwide',
+      },
+      {
+        '@type': 'Place',
+        name: '全球',
+      },
+    ],
     description: DEFAULT_DESCRIPTION,
     knowsAbout: [
       '工业炉',
@@ -169,7 +206,7 @@ export function getWebsiteJsonLd() {
     name: SITE_NAME,
     alternateName: `${SHORT_NAME}官网`,
     inLanguage: 'zh-CN',
-    publisher: { '@id': `${SITE_URL}/#organization` },
+    publisher: { '@id': LOCAL_BUSINESS_ID },
   });
 }
 
@@ -184,8 +221,8 @@ export function getHomePageJsonLd(path = '/') {
     name: '江苏苏能工业炉有限公司｜工业炉与热处理设备厂家',
     description: DEFAULT_DESCRIPTION,
     isPartOf: { '@id': `${SITE_URL}/#website` },
-    about: { '@id': `${SITE_URL}/#organization` },
-    mainEntity: { '@id': `${SITE_URL}/#organization` },
+    about: { '@id': LOCAL_BUSINESS_ID },
+    mainEntity: { '@id': LOCAL_BUSINESS_ID },
     inLanguage: 'zh-CN',
   });
 }
@@ -218,7 +255,7 @@ export function getProductCollectionJsonLd(path = '/products') {
       description:
         '苏能工业炉产品中心展示台车式热处理炉、箱式炉、井式炉、罩式炉、网带炉、辊底炉、推杆炉、转底炉及热处理生产线等工业热处理设备，支持按工艺需求非标定制。',
       isPartOf: { '@id': `${SITE_URL}/#website` },
-      about: { '@id': `${SITE_URL}/#organization` },
+      about: { '@id': LOCAL_BUSINESS_ID },
       mainEntity: { '@id': itemListId },
       inLanguage: 'zh-CN',
     },
@@ -271,8 +308,8 @@ export function getProductDetailJsonLd(product: ProductDetailJsonLdInput) {
       image: images,
       description: product.description,
       category: '工业热处理设备',
-      brand: { '@id': `${SITE_URL}/#organization` },
-      manufacturer: { '@id': `${SITE_URL}/#organization` },
+      brand: { '@id': LOCAL_BUSINESS_ID },
+      manufacturer: { '@id': LOCAL_BUSINESS_ID },
       keywords: product.keywords,
       additionalProperty,
       offers: {
@@ -285,7 +322,7 @@ export function getProductDetailJsonLd(product: ProductDetailJsonLdInput) {
           '@type': 'PriceSpecification',
           description: '非标定制设备，价格根据炉膛尺寸、温度范围、承重、加热方式、控温系统及工艺要求核算',
         },
-        seller: { '@id': `${SITE_URL}/#organization` },
+        seller: { '@id': LOCAL_BUSINESS_ID },
       },
       mainEntityOfPage: { '@id': webpageId(pageUrl) },
     },
@@ -321,8 +358,8 @@ export function getArticleJsonLd(article: ArticleJsonLdInput) {
     image: article.image ? absoluteUrl(article.image) : undefined,
     datePublished: article.datePublished,
     dateModified,
-    author: { '@id': `${SITE_URL}/#organization` },
-    publisher: { '@id': `${SITE_URL}/#organization` },
+    author: { '@id': LOCAL_BUSINESS_ID },
+    publisher: { '@id': LOCAL_BUSINESS_ID },
     mainEntityOfPage: pageUrl,
     inLanguage: 'zh-CN',
   });
@@ -341,8 +378,8 @@ export function getContactPageJsonLd(path = '/contact') {
       description:
         '联系江苏苏能工业炉有限公司，咨询台车炉、箱式炉、井式炉、罩式炉、网带炉、辊底炉、推杆炉、转底炉等工业热处理设备定制方案。',
       isPartOf: { '@id': `${SITE_URL}/#website` },
-      about: { '@id': `${SITE_URL}/#organization` },
-      mainEntity: { '@id': `${SITE_URL}/#organization` },
+      about: { '@id': LOCAL_BUSINESS_ID },
+      mainEntity: { '@id': LOCAL_BUSINESS_ID },
       inLanguage: 'zh-CN',
     },
     getBreadcrumbJsonLd([
