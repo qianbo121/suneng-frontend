@@ -134,7 +134,7 @@ export default async function ServicePage({ params }: ServicePageProps) {
             </div>
             <div className="text-[#071a3d]">
               <h3 className="text-[20px] font-normal leading-[1.45] text-[var(--color-accent)]">售后服务热线方式</h3>
-              <p className="mt-2 text-[18px] font-normal leading-[1.6]">联系人：唐荔　电话：13914442520</p>
+              <p className="mt-2 text-[18px] font-normal leading-[1.6]">联系人：唐荔　电话：+86-139-1444-2520</p>
             </div>
           </section>
         </article>

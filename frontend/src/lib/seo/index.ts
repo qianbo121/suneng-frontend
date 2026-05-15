@@ -22,7 +22,7 @@ const LOCALE_OG_MAP: Record<Locale, string> = {
 };
 
 const SITE_LOGO_PATH = '/images/brand/sn-logo-header.png';
-const FALLBACK_SITE_URL = 'https://www.sunengfurnace.com';
+const FALLBACK_SITE_URL = 'https://www.jssngyl.cn';
 const ALT_SEPARATOR: Record<Locale, string> = {
   zh: '｜',
   en: ' | ',

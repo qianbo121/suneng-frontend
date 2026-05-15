@@ -20,17 +20,17 @@ const contactHero = '/images/contact/contact-hero.png';
 const contactItems = [
   {
     label: '联系电话',
-    value: '13914442520',
+    value: '+86-139-1444-2520',
     icon: '/images/contact/icon-phone.png',
   },
   {
     label: '企业邮箱',
-    value: 'sales@suneng-furnace.com',
+    value: '997518512@qq.com',
     icon: '/images/contact/icon-email.png',
   },
   {
     label: '公司地址',
-    value: '江苏省泰州市姜堰区张甸镇工业集中区',
+    value: '江苏省泰州市姜堰区张甸蔡官工业区',
     icon: '/images/contact/icon-location.png',
   },
 ];

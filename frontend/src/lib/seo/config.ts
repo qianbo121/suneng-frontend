@@ -3,7 +3,7 @@ import path from 'node:path';
 
 export { DEFAULT_KEYWORDS } from '@/lib/seo/keyword-data';
 
-const FALLBACK_SITE_URL = 'https://www.sunengfurnace.com';
+const FALLBACK_SITE_URL = 'https://www.jssngyl.cn';
 
 function normalizeSiteUrl(value?: string) {
   const cleaned = value?.trim().replace(/\/+$/, '');
