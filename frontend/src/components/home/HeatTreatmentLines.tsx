@@ -19,19 +19,19 @@ const heatTreatmentLines: HeatTreatmentLineCard[] = [
   {
     title: { zh: '托辊型网带式电阻炉生产线', en: 'Roller Mesh Belt Heat Treatment Line' },
     desc: { zh: '连续退火回火，托辊输送平稳控温均匀', en: 'continuous annealing and tempering with stable roller conveying' },
-    image: '/images/products/roller-mesh-belt-line/gallery/line-01.png',
+    image: '/images/products/roller-mesh-belt-line/gallery/line-01.jpg',
     slug: 'roller-mesh-belt-line',
   },
   {
     title: { zh: '铜丝自动化退火生产线', en: 'Copper Wire Automatic Annealing Line' },
     desc: { zh: '铜丝连续退火，放收线一体自动化生产', en: 'continuous copper wire annealing with automated pay-off and take-up' },
-    image: '/images/products/copper-wire-annealing-line/gallery/line-01.png',
+    image: '/images/products/copper-wire-annealing-line/gallery/line-01.jpg',
     slug: 'copper-wire-annealing-line',
   },
   {
     title: { zh: '退火固溶生产线', en: 'Annealing and Solution Treatment Line' },
     desc: { zh: '退火固溶温控精准，提升材料组织均匀性', en: 'precise annealing and solution temperature control for uniform material structure' },
-    image: '/images/products/annealing-solution-line/gallery/line-01.png',
+    image: '/images/products/annealing-solution-line/gallery/line-01.jpg',
     slug: 'annealing-solution-line',
   },
 ];
@@ -57,6 +57,7 @@ function LineCard({
         src={item.image}
         alt={buildProductImageAlt(locale, item.title[locale], item.desc[locale])}
         fill
+        priority
         className="object-cover transition-transform duration-500 ease-out group-hover:scale-[1.04]"
         sizes={featured ? '(min-width: 1024px) 52vw, 100vw' : '(min-width: 1024px) 38vw, 100vw'}
       />

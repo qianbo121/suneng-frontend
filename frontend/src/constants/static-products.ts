@@ -192,7 +192,7 @@ const imagesBySlug: Record<string, { gallery: string[]; configs: string[] }> = {
   },
   'roller-mesh-belt-line': {
     gallery: [
-      '/images/products/roller-mesh-belt-line/gallery/line-01.png',
+      '/images/products/roller-mesh-belt-line/gallery/line-01.jpg',
       '/images/products/roller-mesh-belt-line/gallery/line-02.png',
     ],
     configs: [
@@ -202,7 +202,7 @@ const imagesBySlug: Record<string, { gallery: string[]; configs: string[] }> = {
   },
   'copper-wire-annealing-line': {
     gallery: [
-      '/images/products/copper-wire-annealing-line/gallery/line-01.png',
+      '/images/products/copper-wire-annealing-line/gallery/line-01.jpg',
       '/images/products/copper-wire-annealing-line/gallery/line-02.png',
     ],
     configs: [
@@ -212,7 +212,7 @@ const imagesBySlug: Record<string, { gallery: string[]; configs: string[] }> = {
   },
   'annealing-solution-line': {
     gallery: [
-      '/images/products/annealing-solution-line/gallery/line-01.png',
+      '/images/products/annealing-solution-line/gallery/line-01.jpg',
       '/images/products/annealing-solution-line/gallery/line-02.png',
     ],
     configs: [
