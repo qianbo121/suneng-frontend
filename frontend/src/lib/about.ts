@@ -20,14 +20,6 @@ const ABOUT_PAGE_COPY: Record<
       en: 'A clear introduction to the company profile, positioning and manufacturing capability.',
     },
   },
-  organization: {
-    title: { zh: '组织架构', en: 'Organization' },
-    englishTitle: 'Organization',
-    subtitle: {
-      zh: '清晰呈现企业管理架构与业务协同关系，支撑研发、制造、服务一体化运行。',
-      en: 'A clear view of management structure and cross-functional collaboration.',
-    },
-  },
   chairman: {
     title: { zh: '董事长致辞', en: 'Chairman Message' },
     englishTitle: 'Chairman Message',
@@ -70,10 +62,6 @@ export function getAboutSidebarItems(locale: Locale): SidebarItem[] {
       label: locale === 'en' ? 'Company Profile' : '公司简介',
       href: `/${locale}/about`,
       matchHrefs: [`/${locale}/about/profile`],
-    },
-    {
-      label: locale === 'en' ? 'Organization' : '组织架构',
-      href: `/${locale}/about/organization`,
     },
   ];
 }
@@ -121,7 +109,6 @@ function resolveMetadataSource(pageKey: AboutPageKey, data: AboutApiData | null)
 
   switch (pageKey) {
     case 'profile':
-    case 'organization':
       return getProfileSection(data);
     case 'chairman':
       return getChairmanMessage(data);
@@ -153,14 +140,12 @@ export async function createAboutPageMetadata(
   const image = getAboutBannerImage(pageKey, null);
   const pathMap: Record<AboutPageKey, string> = {
     profile: '/about/profile',
-    organization: '/about/organization',
     chairman: '/about/chairman',
     culture: '/about/culture',
     timeline: '/about/timeline',
   };
   const seoPageKeyMap: Record<AboutPageKey, string> = {
     profile: 'about-profile',
-    organization: 'about-organization',
     chairman: 'about-chairman',
     culture: 'about-culture',
     timeline: 'about-timeline',

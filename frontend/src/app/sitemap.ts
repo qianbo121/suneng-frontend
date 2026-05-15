@@ -49,7 +49,6 @@ function collectStaticRoutes(): MetadataRoute.Sitemap {
     { path: '/service', changeFrequency: 'monthly', priority: 0.75 },
     { path: '/news', changeFrequency: 'weekly', priority: 0.7 },
     { path: '/about', changeFrequency: 'monthly', priority: 0.6 },
-    { path: '/about/organization', changeFrequency: 'monthly', priority: 0.55 },
     { path: '/about/chairman', changeFrequency: 'monthly', priority: 0.55 },
     { path: '/about/profile', changeFrequency: 'monthly', priority: 0.55 },
     { path: '/about/timeline', changeFrequency: 'monthly', priority: 0.55 },

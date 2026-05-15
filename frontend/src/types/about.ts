@@ -70,4 +70,4 @@ export type AboutApiData = {
   culture: CultureValueApiItem[];
 };
 
-export type AboutPageKey = 'profile' | 'organization' | 'chairman' | 'culture' | 'timeline';
+export type AboutPageKey = 'profile' | 'chairman' | 'culture' | 'timeline';

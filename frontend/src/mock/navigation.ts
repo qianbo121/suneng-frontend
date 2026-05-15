@@ -17,10 +17,6 @@ export const navigationItems: NavigationItem[] = [
     key: 'about',
     href: '/about',
     label: { zh: '关于我们', en: 'About' },
-    children: [
-      { key: 'company', href: '/about', label: { zh: '公司简介', en: 'Company Profile' } },
-      { key: 'organization', href: '/about/organization', label: { zh: '组织架构', en: 'Organization' } },
-    ],
   },
   {
     key: 'products',
