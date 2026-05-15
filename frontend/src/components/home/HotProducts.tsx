@@ -203,10 +203,10 @@ export function HotProducts({ locale }: HotProductsProps) {
               <Link
                 key={item.id}
                 href={`/${locale}/products/detail/${item.slug}`}
-                className="group flex h-[258px] flex-col overflow-hidden rounded-[2px] border border-[#dbe4ec] bg-[#f8fbfd] transition-[transform,background-color,border-color,box-shadow] duration-300 hover:-translate-y-[4px] hover:border-[#c9d6e3] hover:bg-white hover:shadow-[0_14px_28px_rgba(18,47,84,0.08)] lg:h-[344px]"
+                className="group flex h-[250px] flex-col overflow-hidden rounded-[2px] border border-[#dbe4ec] bg-[#f8fbfd] transition-[transform,background-color,border-color,box-shadow] duration-300 hover:-translate-y-[4px] hover:border-[#c9d6e3] hover:bg-white hover:shadow-[0_14px_28px_rgba(18,47,84,0.08)] sm:h-[292px] lg:h-[344px]"
               >
                 <div
-                  className={`relative h-[176px] overflow-hidden lg:h-[230px] ${
+                  className={`relative h-[172px] shrink-0 overflow-hidden sm:h-[194px] lg:h-[230px] ${
                     isAnimatedCard ? 'bg-[#0d1625]' : 'bg-[#eef3f7]'
                   }`}
                 >
@@ -228,7 +228,7 @@ export function HotProducts({ locale }: HotProductsProps) {
                     {item.name[locale]}
                   </h3>
                   {description ? (
-                    <p className="mt-2 line-clamp-2 min-h-[36px] text-[12px] leading-[1.5] text-[#7f8b98] lg:min-h-[40px] lg:text-[13px]">
+                    <p className="mt-2 hidden line-clamp-2 min-h-[36px] text-[12px] leading-[1.5] text-[#7f8b98] sm:block lg:min-h-[40px] lg:text-[13px]">
                       {description}
                     </p>
                   ) : null}

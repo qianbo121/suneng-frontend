@@ -58,6 +58,7 @@ function FeaturedNewsCard({ locale, item }: { locale: Locale; item: NewsItem }) 
           src={item.coverImage}
           alt={item.title[locale]}
           fill
+          loading="eager"
           className="object-cover transition-transform duration-500 ease-out group-hover:scale-[1.03]"
           sizes="(min-width: 1280px) 660px, 100vw"
         />
@@ -78,27 +79,28 @@ function SecondaryNewsCard({ locale, item }: { locale: Locale; item: NewsItem })
   return (
     <Link
       href={`/${locale}${item.href}`}
-      className="group flex h-[156px] min-h-0 items-stretch rounded-[12px] border border-black/10 bg-white p-4 shadow-[0_2px_12px_rgba(0,0,0,0.06)] transition-all duration-300 hover:bg-[#fafafa] hover:shadow-[0_8px_24px_rgba(0,0,0,0.08)] xl:h-auto xl:flex-1"
+      className="group flex h-auto min-h-0 flex-col rounded-[12px] border border-black/10 bg-white p-4 shadow-[0_2px_12px_rgba(0,0,0,0.06)] transition-all duration-300 hover:bg-[#fafafa] hover:shadow-[0_8px_24px_rgba(0,0,0,0.08)] xl:h-auto xl:flex-1 xl:flex-row xl:items-stretch"
     >
-      <div className="relative w-[200px] shrink-0 overflow-hidden rounded-[2px]">
+      <div className="relative w-full shrink-0 overflow-hidden rounded-[2px] xl:w-[200px]">
         <div className="relative aspect-[16/10] overflow-hidden">
           <Image
             src={item.coverImage}
             alt={item.title[locale]}
             fill
+            loading="eager"
             className="object-cover transition-transform duration-500 ease-out group-hover:scale-[1.03]"
             sizes="200px"
           />
         </div>
       </div>
-      <div className="ml-4 flex min-w-0 flex-1 flex-col justify-start py-1">
+      <div className="mt-3 flex min-w-0 flex-1 flex-col justify-start py-1 xl:ml-4 xl:mt-0">
         <p className="text-[12px] font-normal leading-none tracking-[0.02em] text-[#9AA0A6]">
           {formatDate(item.publishDate)}
         </p>
         <h4 className="mt-2 line-clamp-2 text-[18px] font-semibold leading-[1.55] text-[#333333]">
           {item.title[locale]}
         </h4>
-        <p className="mt-2 pr-2 line-clamp-2 overflow-hidden text-[14px] font-normal leading-[1.86] text-[#666666]">
+        <p className="mt-2 line-clamp-2 overflow-hidden text-[14px] font-normal leading-[1.86] text-[#666666] xl:pr-2">
           {item.summary[locale]}
         </p>
       </div>

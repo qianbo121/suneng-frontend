@@ -146,6 +146,8 @@ class WsClient {
 async function main() {
   const outFile = process.argv[2];
   if (!outFile) throw new Error('Missing output file');
+  const viewportWidth = Number(process.argv[3] || 0);
+  const viewportHeight = Number(process.argv[4] || 0);
 
   const tabs = await httpGetJson('http://127.0.0.1:9222/json/list');
   const page = tabs.find((tab) => tab.type === 'page' && /127\.0\.0\.1:3000\/zh/.test(tab.url));
@@ -155,10 +157,90 @@ async function main() {
   await client.connect();
   await client.send('Page.enable');
   await client.send('Runtime.enable');
+  if (viewportWidth > 0 && viewportHeight > 0) {
+    await client.send('Emulation.setDeviceMetricsOverride', {
+      width: viewportWidth,
+      height: viewportHeight,
+      deviceScaleFactor: viewportWidth < 768 ? 2 : 1,
+      mobile: viewportWidth < 768,
+    });
+  }
   await client.send('Page.bringToFront');
   await client.send('Page.reload', { ignoreCache: true });
 
-  await new Promise((resolve) => setTimeout(resolve, 2200));
+  await new Promise((resolve) => setTimeout(resolve, 3000));
+  await client.send('Runtime.evaluate', {
+    expression: `
+      new Promise((resolve) => {
+        const step = Math.max(window.innerHeight * 0.75, 360);
+        const max = Math.max(
+          document.body.scrollHeight,
+          document.documentElement.scrollHeight,
+        ) - window.innerHeight;
+        let y = 0;
+
+        function next() {
+          y = Math.min(y + step, max);
+          window.scrollTo(0, y);
+          if (y >= max) {
+            window.setTimeout(() => {
+              window.scrollTo(0, 0);
+              window.setTimeout(resolve, 1200);
+            }, 600);
+            return;
+          }
+          window.setTimeout(next, 420);
+        }
+
+        next();
+      })
+    `,
+    awaitPromise: true,
+  });
+  await client.send('Runtime.evaluate', {
+    expression: `
+      Promise.race([
+        Promise.all(
+          Array.from(document.images)
+            .filter((image) => image.currentSrc || image.src)
+            .map((image) => {
+              if (image.complete && image.naturalWidth > 0) {
+                return Promise.resolve();
+              }
+
+              return new Promise((resolve) => {
+                image.addEventListener('load', resolve, { once: true });
+                image.addEventListener('error', resolve, { once: true });
+              }).then(() => {
+                if (image.decode) {
+                  return image.decode().catch(() => undefined);
+                }
+                return undefined;
+              });
+            }),
+        ),
+        new Promise((resolve) => window.setTimeout(resolve, 12000)),
+      ])
+    `,
+    awaitPromise: true,
+  });
+  if (process.env.CAPTURE_DEBUG_IMAGES === '1') {
+    const imageDebug = await client.send('Runtime.evaluate', {
+      expression: `
+        Array.from(document.images).map((image) => ({
+          alt: image.alt,
+          src: image.currentSrc || image.src,
+          complete: image.complete,
+          naturalWidth: image.naturalWidth,
+          naturalHeight: image.naturalHeight,
+          clientWidth: image.clientWidth,
+          clientHeight: image.clientHeight,
+        }))
+      `,
+      returnByValue: true,
+    });
+    console.log(JSON.stringify(imageDebug.result?.value || [], null, 2));
+  }
 
   const { data } = await client.send('Page.captureScreenshot', {
     format: 'png',
@@ -169,6 +251,9 @@ async function main() {
   fs.mkdirSync(path.dirname(outFile), { recursive: true });
   fs.writeFileSync(outFile, Buffer.from(data, 'base64'));
   console.log(outFile);
+  if (viewportWidth > 0 && viewportHeight > 0) {
+    await client.send('Emulation.clearDeviceMetricsOverride');
+  }
   client.close();
 }
 

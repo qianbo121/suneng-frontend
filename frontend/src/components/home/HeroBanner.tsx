@@ -88,7 +88,7 @@ export function HeroBanner({ locale, items, partners }: HeroBannerProps) {
 
   return (
     <section className="hero-banner relative bg-white">
-      <div className="hero-banner-slide relative h-[560px] overflow-hidden bg-black md:h-[540px] lg:h-[526px]">
+      <div className="hero-banner-slide relative h-[660px] overflow-hidden bg-black md:h-[540px] lg:h-[526px]">
         <div className="absolute inset-0 z-0">
           <Image
             src="/images/home/banner-factory-building.png"
@@ -134,7 +134,7 @@ export function HeroBanner({ locale, items, partners }: HeroBannerProps) {
             initial={{ y: 18, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ duration: 0.7, ease: heroMotionEase, delay: 0.34 }}
-            className="mx-auto mt-[36px] grid w-full max-w-[1120px] grid-cols-2 gap-y-7 md:grid-cols-4 md:gap-y-0"
+            className="mx-auto mt-[32px] grid w-full max-w-[1120px] grid-cols-2 gap-y-5 md:mt-[36px] md:grid-cols-4 md:gap-y-0"
           >
             {heroStats.map((item) => (
               <div
