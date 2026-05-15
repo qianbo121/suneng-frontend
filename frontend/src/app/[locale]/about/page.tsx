@@ -1,10 +1,20 @@
+import type { Metadata } from 'next';
+
 import { JsonLd } from '@/components/JsonLd';
 import { AboutProfileSection } from '@/components/about/AboutProfileSection';
 import { AboutShell } from '@/components/about/AboutShell';
-import { getAboutBannerImage, getAboutPageCopy, getAboutPageSource, getProfileSection, localizeAboutText } from '@/lib/about';
+import { ABOUT_ZH_SEO, AboutZhContent } from '@/components/about/AboutZhContent';
+import {
+  getAboutBannerImage,
+  getAboutPageCopy,
+  getAboutPageSource,
+  getProfileSection,
+  localizeAboutText,
+} from '@/lib/about';
 import { getBreadcrumbJsonLd } from '@/lib/seo/jsonld';
-import { buildMetadata } from '@/lib/seo/metadata';
+import { absoluteUrl, buildMetadata } from '@/lib/seo/metadata';
 import { ABOUT_SEO } from '@/lib/seo/page-data';
+import { SITE_NAME } from '@/lib/seo/config';
 import { Locale } from '@/types/site';
 
 type AboutPageProps = {
@@ -15,9 +25,49 @@ type AboutPageProps = {
 
 export const revalidate = 3600;
 
-export async function generateMetadata({ params }: AboutPageProps) {
+export async function generateMetadata({ params }: AboutPageProps): Promise<Metadata> {
   const { locale } = await params;
   const currentLocale = (locale === 'en' ? 'en' : 'zh') as Locale;
+
+  if (currentLocale === 'zh') {
+    const canonical = absoluteUrl('/zh/about');
+    const image = absoluteUrl('/images/about/about_img_hero_factory_01.png');
+
+    return {
+      title: {
+        absolute: ABOUT_ZH_SEO.title,
+      },
+      description: ABOUT_ZH_SEO.description,
+      keywords: ABOUT_ZH_SEO.keywords,
+      alternates: {
+        canonical,
+        languages: {
+          'zh-CN': absoluteUrl('/zh/about'),
+          'en-US': absoluteUrl('/en/about'),
+          'x-default': absoluteUrl('/zh/about'),
+        },
+      },
+      openGraph: {
+        title: ABOUT_ZH_SEO.ogTitle,
+        description: ABOUT_ZH_SEO.ogDescription,
+        type: 'website',
+        url: canonical,
+        siteName: SITE_NAME,
+        locale: 'zh_CN',
+        images: [{ url: image }],
+      },
+      twitter: {
+        card: 'summary_large_image',
+        title: ABOUT_ZH_SEO.ogTitle,
+        description: ABOUT_ZH_SEO.ogDescription,
+        images: [image],
+      },
+      robots: {
+        index: true,
+        follow: true,
+      },
+    };
+  }
 
   return buildMetadata({
     title: ABOUT_SEO.title,
@@ -37,6 +87,11 @@ export async function generateMetadata({ params }: AboutPageProps) {
 export default async function AboutPage({ params }: AboutPageProps) {
   const { locale } = await params;
   const currentLocale = (locale === 'en' ? 'en' : 'zh') as Locale;
+
+  if (currentLocale === 'zh') {
+    return <AboutZhContent />;
+  }
+
   const { data, error, sidebarItems, sidebarTitle } = await getAboutPageSource(currentLocale);
   const pageCopy = getAboutPageCopy('profile', currentLocale);
   const profile = getProfileSection(data);
