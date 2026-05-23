@@ -20,8 +20,8 @@ const heroStats = [
   { value: 150, unit: '+人', label: '公司员工' },
   { value: 14700, unit: '㎡', label: '厂房面积' },
 ] as const;
-const heroDescription =
-  '专注工业炉装备设计制造与热工系统定制化解决方案，为各行业提供稳定、高效、可靠的高温处理与热能优化支持';
+const heroDescription = '工业炉单机、配套件与整线交钥匙工程一体化解决方案商';
+const heroCredentials = '国家高新技术企业 · 国家级科技型企业';
 const heroPartnerLogos = [
   { name: 'ENFI', image: '/images/partner/logos/enfi.png', imageClass: 'max-h-[106px] max-w-[226px]' },
   { name: 'CUEC', image: '/images/partner/logos/cuec.png', imageClass: 'max-h-[106px] max-w-[226px]' },
@@ -104,7 +104,7 @@ export function HeroBanner({ locale, items, partners }: HeroBannerProps) {
         <div className="absolute inset-0 z-[1] bg-[linear-gradient(180deg,rgba(0,0,0,0.58),rgba(0,0,0,0.68)_48%,rgba(0,0,0,0.72))]" />
         <div className="absolute inset-0 z-[2] bg-black/18" />
 
-        <div className="relative z-20 mx-auto flex h-full w-full max-w-[1440px] flex-col items-center px-6 pt-[82px] text-center text-white md:pt-[90px] lg:pt-[96px]">
+        <div className="relative z-20 mx-auto flex h-full w-full max-w-[1440px] flex-col items-center px-6 pt-[72px] text-center text-white md:pt-[80px] lg:pt-[86px]">
           <motion.p
             initial={{ y: 18, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
@@ -121,14 +121,21 @@ export function HeroBanner({ locale, items, partners }: HeroBannerProps) {
           >
             {displayTitle}
           </motion.h1>
-          <motion.p
+          <motion.div
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ duration: 0.68, ease: heroMotionEase, delay: 0.26 }}
-            className="mx-auto mt-[18px] max-w-[1040px] text-[15px] font-normal leading-[1.75] text-white/82 md:text-[17px]"
+            className="mx-auto mt-[18px] max-w-[1040px] text-center"
           >
-            {displaySubtitle}
-          </motion.p>
+            <p className="text-[15px] font-normal leading-[1.75] text-white/82 md:text-[17px]">
+              {displaySubtitle}
+            </p>
+            {locale === 'zh' && (
+              <p className="mt-[10px] text-[12px] font-normal leading-[1.6] text-white/70 md:text-[14px]">
+                {heroCredentials}
+              </p>
+            )}
+          </motion.div>
 
           <motion.div
             initial={{ y: 18, opacity: 0 }}
