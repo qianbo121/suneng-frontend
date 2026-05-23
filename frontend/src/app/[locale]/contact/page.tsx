@@ -4,8 +4,9 @@ import Image from 'next/image';
 import { JsonLd } from '@/components/JsonLd';
 import { Breadcrumb } from '@/components/layout/Breadcrumb';
 import { PageBanner } from '@/components/layout/PageBanner';
+import { SITE_NAME } from '@/lib/seo/config';
 import { getContactPageJsonLd } from '@/lib/seo/jsonld';
-import { buildMetadata } from '@/lib/seo/metadata';
+import { absoluteUrl, buildMetadata } from '@/lib/seo/metadata';
 import { CONTACT_SEO } from '@/lib/seo/page-data';
 import { Locale } from '@/types/site';
 
@@ -40,6 +41,46 @@ export const revalidate = 3600;
 export async function generateMetadata({ params }: ContactPageProps): Promise<Metadata> {
   const { locale } = await params;
   const currentLocale = (locale === 'en' ? 'en' : 'zh') as Locale;
+
+  if (currentLocale === 'zh') {
+    const canonical = absoluteUrl('/zh/contact');
+    const image = absoluteUrl(contactHero);
+
+    return {
+      title: {
+        absolute: CONTACT_SEO.title,
+      },
+      description: CONTACT_SEO.description,
+      keywords: CONTACT_SEO.keywords,
+      alternates: {
+        canonical,
+        languages: {
+          'zh-CN': absoluteUrl('/zh/contact'),
+          'en-US': absoluteUrl('/en/contact'),
+          'x-default': absoluteUrl('/zh/contact'),
+        },
+      },
+      openGraph: {
+        title: CONTACT_SEO.ogTitle,
+        description: CONTACT_SEO.ogDescription,
+        type: 'website',
+        url: canonical,
+        siteName: SITE_NAME,
+        locale: 'zh_CN',
+        images: [{ url: image }],
+      },
+      twitter: {
+        card: 'summary_large_image',
+        title: CONTACT_SEO.ogTitle,
+        description: CONTACT_SEO.ogDescription,
+        images: [image],
+      },
+      robots: {
+        index: true,
+        follow: true,
+      },
+    };
+  }
 
   return buildMetadata({
     title: CONTACT_SEO.title,
