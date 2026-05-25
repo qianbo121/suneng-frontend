@@ -43,6 +43,18 @@ const nextConfig = {
       },
     ],
   },
+  async redirects() {
+    return [
+      { source: '/zh/about/profile', destination: '/zh/about', permanent: true },
+      { source: '/zh/about/chairman', destination: '/zh/about', permanent: true },
+      { source: '/zh/about/timeline', destination: '/zh/about', permanent: true },
+      { source: '/zh/about/culture', destination: '/zh/about', permanent: true },
+      { source: '/en/about/profile', destination: '/en/about', permanent: true },
+      { source: '/en/about/chairman', destination: '/en/about', permanent: true },
+      { source: '/en/about/timeline', destination: '/en/about', permanent: true },
+      { source: '/en/about/culture', destination: '/en/about', permanent: true },
+    ];
+  },
 };
 
 export default withNextIntl(nextConfig);

@@ -61,7 +61,6 @@ export function getAboutSidebarItems(locale: Locale): SidebarItem[] {
     {
       label: locale === 'en' ? 'Company Profile' : '公司简介',
       href: `/${locale}/about`,
-      matchHrefs: [`/${locale}/about/profile`],
     },
   ];
 }
