@@ -76,7 +76,7 @@ export type StaticProduct = {
 
 const sellingPoints = ['定制化设计', '工艺稳定', '节能高效', '安全可靠'];
 
-const ctaHighlights = ['源头工厂价格实惠', '20年行业信誉沉淀', '24小时快速响应'];
+const ctaHighlights = ['源头工厂直供', '成立于 2006 年', '8 小时响应 / 24 小时答复'];
 
 const leadBullets = ['免费方案定制', '按工艺需求精准匹配', '专业方案团队', '全流程跟踪售后保障'];
 

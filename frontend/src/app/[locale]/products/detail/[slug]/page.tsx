@@ -86,7 +86,7 @@ function getFallbackDetail(product: StaticProduct, locale: Locale): StaticProduc
     summary: product.summary[locale],
     sellingPoints: product.features.map((item) => item.title).slice(0, 4),
     quickTags: product.features.map((item) => item.title).slice(0, 4),
-    ctaHighlights: ['源头工厂价格实惠', '20年行业经验沉淀', '24小时快速响应'],
+    ctaHighlights: ['源头工厂直供', '成立于 2006 年', '8 小时响应 / 24 小时答复'],
     reasons: product.features.map((item) => ({ title: item.title, text: item.text })).slice(0, 4),
     customSpecs: product.specs,
     configurations: product.gallery.slice(0, 3).map((image, index) => ({

@@ -95,20 +95,20 @@ const morePartners = [
 const cooperationFields: CooperationFieldItem[] = [
   {
     id: 1,
-    title: '工贸类合金炉领域',
-    description: '涵盖有色、黑色金属冶炼、退火、热处理工业炉等',
+    title: '工贸类金属热处理领域',
+    description: '涵盖有色金属与合金钢的退火、固溶、调质、回火等热处理工业炉应用',
     iconUrl: '/images/partner/fields/trade-alloy.png',
   },
   {
     id: 2,
     title: '重工机械与装备制造',
-    description: '覆盖冶金、船舶制造、轨道交通等工业设备',
+    description: '覆盖船舶制造、轨道交通、工程机械、重工装备制造等行业的热处理装备需求',
     iconUrl: '/images/partner/fields/heavy-equipment.png',
   },
   {
     id: 3,
-    title: '不锈钢冶炼与精炼炉',
-    description: '涵盖不锈钢冶炼、精炼、镍及合金熔炼等工业炉',
+    title: '不锈钢与有色金属热处理',
+    description: '涵盖不锈钢连续退火、固溶、光亮退火、有色金属退火等工业炉设备及生产线',
     iconUrl: '/images/partner/fields/stainless-smelting.png',
   },
   {
