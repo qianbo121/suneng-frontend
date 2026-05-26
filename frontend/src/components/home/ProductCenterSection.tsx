@@ -57,6 +57,7 @@ export function ProductCenterSection({ locale }: ProductCenterSectionProps) {
                     src={item.image}
                     alt={buildProductImageAlt(locale, locale === 'en' ? item.en : item.zh, item.feature[locale])}
                     fill
+                    unoptimized
                     className="scale-[1.3] object-contain transition-transform duration-500 ease-out group-hover:scale-[1.38]"
                     sizes="(min-width: 1024px) 248px, 45vw"
                   />
