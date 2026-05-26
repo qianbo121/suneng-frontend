@@ -21,11 +21,12 @@ const heroStats = [
   { value: 14700, unit: '㎡', label: '厂房面积' },
 ] as const;
 const heroDescription = '工业炉单机、配套件与整线交钥匙工程一体化解决方案商';
-const heroCredentials = '国家高新技术企业 · 国家级科技型企业';
+const heroCredentials = '国家高新技术企业';
 const heroPartnerLogos = [
   { name: 'ENFI', image: '/images/partner/logos/enfi.png', imageClass: 'max-h-[106px] max-w-[226px]' },
   { name: 'CUEC', image: '/images/partner/logos/cuec.png', imageClass: 'max-h-[106px] max-w-[226px]' },
   { name: 'NHI', image: '/images/partner/logos/nhi.png', imageClass: 'max-h-[106px] max-w-[226px]' },
+  { name: 'CNGC', image: '/images/partner/logos/cngc.png', imageClass: 'max-h-[106px] max-w-[226px]' },
   {
     name: 'TSINGSHAN',
     image: '/images/partner/logos/tsingshan.png',
@@ -33,6 +34,7 @@ const heroPartnerLogos = [
   },
   { name: 'Enric', image: '/images/partner/logos/enric.png', imageClass: 'max-h-[106px] max-w-[226px]' },
   { name: 'TG', image: '/images/partner/logos/tg.png', imageClass: 'max-h-[106px] max-w-[226px]' },
+  { name: 'CASC', image: '/images/partner/logos/casc.png', imageClass: 'max-h-[106px] max-w-[226px]' },
   { name: 'LIUHE', image: '/images/partner/logos/liuhe.png', imageClass: 'max-h-[106px] max-w-[226px]' },
 ] as const;
 
@@ -95,6 +97,7 @@ export function HeroBanner({ locale, items, partners }: HeroBannerProps) {
             alt=""
             fill
             priority
+            unoptimized
             sizes="100vw"
             className="object-cover object-center"
             quality={85}
@@ -198,6 +201,7 @@ export function HeroBanner({ locale, items, partners }: HeroBannerProps) {
                     alt={`${partner.name} logo`}
                     width={420}
                     height={210}
+                    unoptimized
                     className={`${partner.imageClass} h-auto w-auto object-contain`}
                     sizes="236px"
                   />
