@@ -58,6 +58,7 @@ function LineCard({
         alt={buildProductImageAlt(locale, item.title[locale], item.desc[locale])}
         fill
         priority
+        unoptimized
         className="object-cover transition-transform duration-500 ease-out group-hover:scale-[1.04]"
         sizes={featured ? '(min-width: 1024px) 52vw, 100vw' : '(min-width: 1024px) 38vw, 100vw'}
       />

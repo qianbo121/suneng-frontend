@@ -59,6 +59,7 @@ function FeaturedNewsCard({ locale, item }: { locale: Locale; item: NewsItem }) 
           alt={item.title[locale]}
           fill
           loading="eager"
+          unoptimized
           className="object-cover transition-transform duration-500 ease-out group-hover:scale-[1.03]"
           sizes="(min-width: 1280px) 660px, 100vw"
         />
@@ -88,6 +89,7 @@ function SecondaryNewsCard({ locale, item }: { locale: Locale; item: NewsItem })
             alt={item.title[locale]}
             fill
             loading="eager"
+            unoptimized
             className="object-cover transition-transform duration-500 ease-out group-hover:scale-[1.03]"
             sizes="200px"
           />
