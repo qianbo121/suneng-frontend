@@ -81,7 +81,14 @@ const faqJsonLd = {
   ],
 };
 
-const businessItems = [
+const businessItems: Array<{
+  title: string;
+  text: string;
+  link?: {
+    href: string;
+    label: string;
+  };
+}> = [
   {
     title: '工业炉与热处理装备制造',
     text: '覆盖周期式炉、连续式炉、真空与可控气氛炉、专用工艺炉、锻造加热炉、工业窑炉六大类装备,全炉型谱系一站式供应。',
@@ -93,6 +100,10 @@ const businessItems = [
   {
     title: '工业炉大修与技改服务',
     text: '不限自产、不限品牌、含进口炉,覆盖全炉型谱系的整炉大修、节能改造、控制系统升级、耐材翻新、加热元件更换、搬迁重装、复产复线,同步承接 TUS(温度均匀性)/ SAT(系统准确度)测试与整改。',
+    link: {
+      href: '/zh/service/furnace-renovation-overhaul',
+      label: '工业炉节能改造与热处理炉大修服务',
+    },
   },
   {
     title: '配套件供应',
@@ -344,6 +355,14 @@ export function AboutZhContent() {
                   {index + 1}. {item.title}
                 </h3>
                 <p className="mt-3 text-[15px] leading-[1.85] text-[#364152]">{item.text}</p>
+                {item.link ? (
+                  <a
+                    href={item.link.href}
+                    className="mt-4 inline-flex text-[15px] font-semibold text-[var(--color-accent)] underline-offset-4 hover:underline"
+                  >
+                    {item.link.label}
+                  </a>
+                ) : null}
               </li>
             ))}
           </ol>

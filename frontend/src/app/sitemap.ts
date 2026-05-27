@@ -69,6 +69,25 @@ function collectStaticRoutes(): MetadataRoute.Sitemap {
     }
   }
 
+  const zhOnlyStaticPaths: Array<{
+    path: string;
+    changeFrequency: SitemapEntry['changeFrequency'];
+    priority: number;
+  }> = [
+    { path: '/service/furnace-renovation-overhaul', changeFrequency: 'monthly', priority: 0.72 },
+    { path: '/case/anonymous-tsingshan-1250-renovation', changeFrequency: 'monthly', priority: 0.68 },
+  ];
+
+  for (const item of zhOnlyStaticPaths) {
+    routes.push(
+      route(localizedPath('zh', item.path), {
+        lastModified: new Date(),
+        changeFrequency: item.changeFrequency,
+        priority: item.priority,
+      }),
+    );
+  }
+
   return routes;
 }
 
