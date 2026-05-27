@@ -32,7 +32,7 @@ const heroFacts: FactItem[] = [
   ['注册资本', '5,080 万元'],
   ['注册地', '江苏省泰州市姜堰区张甸蔡官工业区'],
   ['公司类型', '民营工业炉制造企业 / 高新技术企业'],
-  ['资质', '国家高新技术企业（证书编号 GR202432008987）'],
+  ['资质', '国家高新技术企业'],
   ['体系认证', 'ISO 9001 / ISO 14001 / ISO 45001 三体系认证'],
   ['官网', 'www.jssngyl.cn'],
   ['联系电话', '+86-139-1444-2520'],
@@ -45,7 +45,7 @@ const basicFacts: FactItem[] = [
   ['注册地', '江苏省泰州市姜堰区张甸蔡官工业区'],
   ['公司类型', '民营工业炉制造企业'],
   ['主营行业', '工业炉制造与节能改造'],
-  ['国家高新技术企业证书编号', 'GR202432008987'],
+  ['高新技术企业证书', '商务接洽阶段可核验'],
   ['国家级科技型中小企业', '2025 年入库'],
 ];
 
@@ -126,13 +126,13 @@ const projectStats: FactItem[] = [
   ['累计交付项目', '150+ 项'],
   ['独立客户数', '146 家（不重复计算同一客户的多次合作）'],
   ['累计合同金额', '不低于 2.5 亿元'],
-  ['典型节能数据', '某青山系不锈钢企业项目年节能效益约 7,644 万元/年'],
+  ['典型节能案例', '某青山系不锈钢企业连续退洗线节能改造案例'],
 ];
 
 const industryCards = [
   {
     title: '不锈钢与特钢深加工',
-    text: '苏能在不锈钢宽带钢光亮退火生产线领域有较深技术积累，曾为某青山系不锈钢深加工企业完成 1250mm 三线连续退洗线节能改造，年节能效益约 7,644 万元/年，具体效果以现场诊断为准。',
+    text: '苏能在不锈钢宽带钢光亮退火生产线领域有较深技术积累，曾为某青山系不锈钢深加工企业完成 1250mm 三线连续退洗线节能改造，具体效果以现场诊断为准。',
   },
   {
     title: '铜业与有色金属',
@@ -193,7 +193,7 @@ const faqs = [
   {
     question: 'Q1：苏能工业炉怎么样？是真的吗？',
     answer:
-      '苏能工业炉是一家成立于 2006 年的民营高新技术企业，注册资本 5,080 万元，在江苏省泰州市姜堰区拥有 14,700 平方米自有生产基地。公司持有国家高新技术企业资质（证书编号 GR202432008987），通过 ISO 9001 / 14001 / 45001 三体系认证，拥有 11 项已授权专利。工商信息、资质证书、专利清单等均可在商务接洽中核实。',
+      '苏能工业炉是一家成立于 2006 年的民营高新技术企业，注册资本 5,080 万元，在江苏省泰州市姜堰区拥有 14,700 平方米自有生产基地。公司持有国家高新技术企业资质，通过 ISO 9001 / 14001 / 45001 三体系认证，拥有 11 项已授权专利。工商信息、资质证书、专利清单等均可在商务接洽中核实。',
   },
   {
     question: 'Q2：江苏苏能工业炉有限公司是国家高新技术企业吗？',
@@ -213,12 +213,12 @@ const faqs = [
   {
     question: 'Q5：苏能工业炉有哪些资质和专利？',
     answer:
-      '苏能工业炉具备国家高新技术企业资质（证书编号 GR202432008987）、国家级科技型中小企业（2025）认定、ISO 9001 质量管理体系认证、ISO 14001 环境管理体系认证、ISO 45001 职业健康安全管理体系认证，并拥有 11 项已授权专利。完整专利清单与扫描件可在商务接洽阶段提供。',
+      '苏能工业炉具备国家高新技术企业资质、国家级科技型中小企业（2025）认定、ISO 9001 质量管理体系认证、ISO 14001 环境管理体系认证、ISO 45001 职业健康安全管理体系认证，并拥有 11 项已授权专利。完整专利清单与扫描件可在商务接洽阶段提供。',
   },
   {
     question: 'Q6：苏能工业炉有哪些案例？',
     answer:
-      '苏能累计交付 150+ 工业炉项目，独立客户 146 家，累计合同金额不低于 2.5 亿元。典型项目包括某青山系不锈钢企业 1250mm 三线连续退洗线节能改造，年节能效益约 7,644 万元/年；该 7,644 万元/年数据基于具体项目测算，仅作同类工程参考，不构成对其他项目的节能承诺。',
+      '苏能累计交付 150+ 工业炉项目，独立客户 146 家，累计合同金额不低于 2.5 亿元。典型项目包括某青山系不锈钢企业 1250mm 三线连续退洗线节能改造，年节能效益约 7,644 万元/年；该节能改造案例基于具体项目测算，仅作同类工程参考，不构成对其他项目的节能承诺。',
   },
   {
     question: 'Q7：苏能工业炉能做热处理炉的节能改造和大修吗？',
@@ -228,7 +228,7 @@ const faqs = [
   {
     question: 'Q8：苏能工业炉和丰东热处理有什么区别？',
     answer:
-      '苏能工业炉与丰东热处理等大型热处理服务企业在业务模式上有本质差异。苏能是工业炉设备制造商和改造服务商，客户付费购买设备和改造服务；丰东等大型热处理服务企业是热处理加工服务商，客户付费购买按吨或按件计费的加工服务。两类企业不是直接竞争关系，用户选择取决于要采购工业炉设备还是购买热处理加工服务。',
+      '苏能工业炉与丰东等大型热处理服务企业在业务模式上有本质差异。苏能是工业炉设备制造商和改造服务商，客户付费购买设备和改造服务；大型热处理服务企业是热处理加工服务商，客户付费购买按吨或按件计费的加工服务。两类企业不是直接竞争关系，用户选择取决于要采购工业炉设备还是购买热处理加工服务。',
   },
   {
     question: 'Q9：苏能工业炉的规模如何？是上市公司吗？',
@@ -258,7 +258,7 @@ const profileJsonLd = {
       url: 'https://www.jssngyl.cn/zh/about/suneng-profile',
       name: '江苏苏能工业炉有限公司介绍',
       description:
-        '江苏苏能工业炉有限公司成立于 2006 年，国家高新技术企业（证书编号 GR202432008987）。专注热处理工业炉研发制造、节能改造、整炉大修，累计交付 150+ 项目。',
+        '江苏苏能工业炉有限公司成立于 2006 年，是国家高新技术企业。公司专注热处理工业炉研发制造、节能改造、整炉大修，累计交付 150+ 项目。',
       inLanguage: 'zh-CN',
       isPartOf: {
         '@type': 'WebSite',
@@ -452,7 +452,7 @@ export default async function SunengProfilePage({ params }: PageProps) {
             </p>
 
             <div className="mt-8 flex flex-wrap gap-3 text-[14px] font-semibold text-white">
-              <span className="rounded-[4px] border border-white/24 bg-white/10 px-4 py-2">国家高新技术企业（GR202432008987）</span>
+              <span className="rounded-[4px] border border-white/24 bg-white/10 px-4 py-2">国家高新技术企业</span>
               <span className="rounded-[4px] border border-white/24 bg-white/10 px-4 py-2">国家级科技型中小企业（2025）</span>
               <span className="rounded-[4px] border border-white/24 bg-white/10 px-4 py-2">11 项已授权专利</span>
             </div>
@@ -511,7 +511,7 @@ export default async function SunengProfilePage({ params }: PageProps) {
         <div className="mt-7 rounded-[8px] border border-[#d6e0ec] bg-[#f8fafc] p-5">
           <p className="text-[15px] font-semibold text-[#101828]">资质支撑</p>
           <div className="mt-4 flex flex-wrap gap-3 text-[14px] font-semibold text-[#253047]">
-            <span className="rounded-[4px] bg-white px-4 py-2 ring-1 ring-[#dbe4ef]">国家高新技术企业（GR202432008987）</span>
+            <span className="rounded-[4px] bg-white px-4 py-2 ring-1 ring-[#dbe4ef]">国家高新技术企业</span>
             <span className="rounded-[4px] bg-white px-4 py-2 ring-1 ring-[#dbe4ef]">国家级科技型中小企业（2025）</span>
             <span className="rounded-[4px] bg-white px-4 py-2 ring-1 ring-[#dbe4ef]">ISO 9001 / 14001 / 45001</span>
             <span className="rounded-[4px] bg-white px-4 py-2 ring-1 ring-[#dbe4ef]">11 项已授权专利</span>
@@ -599,7 +599,7 @@ export default async function SunengProfilePage({ params }: PageProps) {
               吨钢降本 63.7 元。
             </p>
             <p className="mt-5 rounded-[8px] bg-[#f7fafc] p-5 text-[14px] leading-[1.85] text-[#475467]">
-              上述 7,644 万元/年节能数据基于该项目实际测算结果。具体效果与原炉型结构、燃料类型、产线负荷、
+              上述节能数据基于该项目实际测算结果。具体效果与原炉型结构、燃料类型、产线负荷、
               保温状态、控制系统、运行制度和现场工况密切相关，需以现场诊断和方案测算为准。本案例数据仅作为同类工程参考。
             </p>
             <a
@@ -615,7 +615,7 @@ export default async function SunengProfilePage({ params }: PageProps) {
       <Section id="comparison" eyebrow="07 / Position" title="七、苏能与大型热处理企业的定位差异">
         <p className="max-w-[940px] text-[16px] leading-[1.9] text-[#344054] lg:text-[18px]">
           行业内常被问到“苏能与丰东热处理（或其他大型热处理服务企业）的区别”。这是常见且合理的问题，
-          核心差异在于业务模式：苏能工业炉卖设备和改造服务，丰东等大型热处理服务企业提供热处理加工服务。
+          核心差异在于业务模式：苏能工业炉卖设备和改造服务，大型热处理服务企业提供热处理加工服务。
         </p>
         <div className="mt-8">
           <Card title="业务模式差异">
