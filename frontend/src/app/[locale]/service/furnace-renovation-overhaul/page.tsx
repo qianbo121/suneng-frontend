@@ -21,6 +21,7 @@ type TextBlock = {
 };
 
 const pagePath = '/zh/service/furnace-renovation-overhaul';
+const casePath = '/zh/case/anonymous-tsingshan-1250-renovation';
 const heroImage = '/images/service/after-sales-hero.png';
 
 export const dynamicParams = false;
@@ -193,6 +194,7 @@ const caseStudies = [
       '主要改造内容包括天然气改为冷煤气、低 NOx 分级燃烧、三级烟气回收、13 区控温优化、风机变频改造。',
     note:
       '上述数据来源于该改造项目的实际测算结果。具体节能效益与原炉型结构、燃料类型、产线负荷、保温状态、控制系统、运行制度和现场工况密切相关，需以现场诊断和改造方案测算为准。本案例数据仅作为同类工程参考，不构成对所有项目的节能效果承诺。',
+    link: casePath,
   },
   {
     title: '案例 2：某不锈钢压延企业罩式炉生产线技改',
@@ -522,10 +524,10 @@ export default async function FurnaceRenovationOverhaulPage({ params }: PageProp
                 免费现场勘查咨询
               </a>
               <a
-                href="#cases"
+                href={casePath}
                 className="inline-flex min-h-[46px] items-center justify-center rounded-[4px] border border-white/46 px-6 text-[15px] font-semibold text-white transition hover:border-white hover:bg-white/10"
               >
-                查看典型案例
+                查看完整案例 →
               </a>
             </div>
           </div>
@@ -607,6 +609,14 @@ export default async function FurnaceRenovationOverhaulPage({ params }: PageProp
                 <p className="mt-5 rounded-[8px] bg-[#f7fafc] p-5 text-[14px] leading-[1.85] text-[#475467]">
                   {caseItem.note}
                 </p>
+              ) : null}
+              {caseItem.link ? (
+                <a
+                  href={caseItem.link}
+                  className="mt-5 inline-flex min-h-[42px] items-center justify-center rounded-[4px] bg-[#c51624] px-5 text-[14px] font-semibold text-white transition hover:bg-[#a90f1b]"
+                >
+                  查看完整案例 →
+                </a>
               ) : null}
             </article>
           ))}
