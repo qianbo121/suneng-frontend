@@ -1,5 +1,11 @@
 import { notFound } from 'next/navigation';
 
+import {
+  SUNENG_ISO_CERTIFICATES,
+  SUNENG_PATENT_CERTIFICATES,
+  SUNENG_QUALIFICATION_CERTIFICATES,
+} from '@/constants/certificates';
+import { CertificateGallerySections } from '@/components/strength/CertificateGallerySections';
 import { createStrengthMetadata, getStrengthPageData } from '@/lib/strength';
 import { StrengthGalleryGrid } from '@/components/strength/StrengthGalleryGrid';
 import { StrengthPaginationNav } from '@/components/strength/StrengthPaginationNav';
@@ -44,6 +50,8 @@ export default async function StrengthCategoryPage({
     notFound();
   }
 
+  const showCertificateGallery = currentLocale === 'zh' && currentCategory.slug === 'honors';
+
   return (
     <StrengthShell
       locale={locale}
@@ -66,8 +74,17 @@ export default async function StrengthCategoryPage({
         </div>
       ) : null}
       <div className="space-y-8">
-        <StrengthGalleryGrid locale={currentLocale} items={cards} displayMode={displayMode} />
-        {total > pageSize ? (
+        {showCertificateGallery ? (
+          <CertificateGallerySections
+            locale={currentLocale}
+            qualifications={SUNENG_QUALIFICATION_CERTIFICATES}
+            isoCertificates={SUNENG_ISO_CERTIFICATES}
+            patents={SUNENG_PATENT_CERTIFICATES}
+          />
+        ) : (
+          <StrengthGalleryGrid locale={currentLocale} items={cards} displayMode={displayMode} />
+        )}
+        {!showCertificateGallery && total > pageSize ? (
           <div className="flex justify-center">
             <StrengthPaginationNav page={resultPage} pageSize={pageSize} total={total} />
           </div>

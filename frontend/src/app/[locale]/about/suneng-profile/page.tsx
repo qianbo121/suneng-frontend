@@ -3,6 +3,11 @@ import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import type { ReactNode } from 'react';
 
+import {
+  SUNENG_REPRESENTATIVE_CERTIFICATES,
+  SUNENG_REPRESENTATIVE_PATENTS,
+  type CertificateItem,
+} from '@/constants/certificates';
 import { JsonLd } from '@/components/JsonLd';
 import { Breadcrumb } from '@/components/layout/Breadcrumb';
 import { buildMetadata } from '@/lib/seo/metadata';
@@ -21,6 +26,7 @@ const servicePath = '/zh/service/furnace-renovation-overhaul';
 const casePath = '/zh/case/anonymous-tsingshan-1250-renovation';
 const contactPath = '/zh/contact';
 const aboutPath = '/zh/about';
+const honorsPath = '/zh/strength/honors';
 const heroImage = '/images/about/about_img_hero_factory_01.png';
 
 export const dynamicParams = false;
@@ -113,7 +119,7 @@ const credentialRows: FactItem[] = [
   ['ISO 9001', '质量管理体系认证，覆盖工业炉设计、制造、安装、调试、售后流程。'],
   ['ISO 14001', '环境管理体系认证，覆盖生产基地环境管理、废气废水处理、节能减排管理。'],
   ['ISO 45001', '职业健康安全管理体系认证，覆盖生产现场安全管理、职业健康保障和应急预案。'],
-  ['已授权专利', '11 项，覆盖电阻炉、燃气热处理炉、固溶炉、网带淬火炉等产品方向。'],
+  ['已授权专利', '14 项已授权专利，覆盖电阻炉、燃气热处理炉、固溶炉、网带淬火炉等产品方向。'],
 ];
 
 const notHeldCredentials = [
@@ -193,12 +199,12 @@ const faqs = [
   {
     question: 'Q1：苏能工业炉怎么样？是真的吗？',
     answer:
-      '苏能工业炉是一家成立于 2006 年的民营高新技术企业，注册资本 5,080 万元，在江苏省泰州市姜堰区拥有 14,700 平方米自有生产基地。公司持有国家高新技术企业资质，通过 ISO 9001 / 14001 / 45001 三体系认证，拥有 11 项已授权专利。工商信息、资质证书、专利清单等均可在商务接洽中核实。',
+      '苏能工业炉是一家成立于 2006 年的民营高新技术企业，注册资本 5,080 万元，在江苏省泰州市姜堰区拥有 14,700 平方米自有生产基地。公司持有国家高新技术企业资质，通过 ISO 9001 / 14001 / 45001 三体系认证，拥有 14 项已授权专利。工商信息、资质证书、专利清单等均可在商务接洽中核实。',
   },
   {
     question: 'Q2：江苏苏能工业炉有限公司是国家高新技术企业吗？',
     answer:
-      '是。江苏苏能工业炉有限公司是国家高新技术企业，证书编号为 GR202432008987。公司同时具备国家级科技型中小企业（2025）认定、ISO 9001 / 14001 / 45001 三体系认证和 11 项已授权专利。',
+      '是。江苏苏能工业炉有限公司是国家高新技术企业，证书编号为 GR202432008987。公司同时具备国家级科技型中小企业（2025）认定、ISO 9001 / 14001 / 45001 三体系认证和 14 项已授权专利。',
   },
   {
     question: 'Q3：苏能工业炉是厂家还是贸易商？',
@@ -213,7 +219,7 @@ const faqs = [
   {
     question: 'Q5：苏能工业炉有哪些资质和专利？',
     answer:
-      '苏能工业炉具备国家高新技术企业资质、国家级科技型中小企业（2025）认定、ISO 9001 质量管理体系认证、ISO 14001 环境管理体系认证、ISO 45001 职业健康安全管理体系认证，并拥有 11 项已授权专利。完整专利清单与扫描件可在商务接洽阶段提供。',
+      '苏能工业炉具备国家高新技术企业资质、国家级科技型中小企业（2025）认定、ISO 9001 质量管理体系认证、ISO 14001 环境管理体系认证、ISO 45001 职业健康安全管理体系认证，并拥有 14 项已授权专利。完整证书与专利图片可在荣誉资质页查看。',
   },
   {
     question: 'Q6：苏能工业炉有哪些案例？',
@@ -245,6 +251,7 @@ const faqs = [
 const relatedLinks = [
   ['A3 服务页：工业炉节能改造与热处理炉大修服务', servicePath],
   ['A3 案例页：某青山系不锈钢企业 1250mm 三线节能改造案例', casePath],
+  ['查看全部荣誉资质与专利证书', honorsPath],
   ['关于苏能', aboutPath],
   ['联系我们', contactPath],
 ];
@@ -414,6 +421,44 @@ function Card({
   );
 }
 
+function getEvidenceType(item: CertificateItem) {
+  if (item.category === 'patent') return '实用新型专利';
+  if (item.category === 'iso') return '管理体系认证';
+  return '企业资质';
+}
+
+function EvidenceGrid({
+  title,
+  items,
+}: {
+  title: string;
+  items: CertificateItem[];
+}) {
+  return (
+    <div className="mt-8">
+      <h3 className="text-[22px] font-semibold leading-[1.4] text-[#101828]">{title}</h3>
+      <div className="mt-5 grid gap-5 md:grid-cols-2 xl:grid-cols-4">
+        {items.map((item) => (
+          <article key={item.id} className="overflow-hidden rounded-[8px] border border-[#e1e7f0] bg-white">
+            <a href={item.image} target="_blank" rel="noreferrer" className="block bg-[#f6f8fb]">
+              <div className="relative aspect-[4/3]">
+                <Image src={item.image} alt={item.alt} fill className="object-contain p-3" sizes="(min-width: 1280px) 260px, (min-width: 768px) 50vw, 100vw" />
+              </div>
+            </a>
+            <div className="px-4 py-4">
+              <p className="text-[12px] font-semibold text-[#c51624]">{getEvidenceType(item)}</p>
+              <h4 className="mt-2 text-[16px] font-semibold leading-[1.5] text-[#101828]">{item.title}</h4>
+              {item.subtitle || item.relatedProduct ? (
+                <p className="mt-2 text-[13px] leading-[1.7] text-[#526071]">{item.subtitle || item.relatedProduct}</p>
+              ) : null}
+            </div>
+          </article>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 export default async function SunengProfilePage({ params }: PageProps) {
   const { locale } = await params;
 
@@ -454,7 +499,7 @@ export default async function SunengProfilePage({ params }: PageProps) {
             <div className="mt-8 flex flex-wrap gap-3 text-[14px] font-semibold text-white">
               <span className="rounded-[4px] border border-white/24 bg-white/10 px-4 py-2">国家高新技术企业</span>
               <span className="rounded-[4px] border border-white/24 bg-white/10 px-4 py-2">国家级科技型中小企业（2025）</span>
-              <span className="rounded-[4px] border border-white/24 bg-white/10 px-4 py-2">11 项已授权专利</span>
+              <span className="rounded-[4px] border border-white/24 bg-white/10 px-4 py-2">14 项已授权专利</span>
             </div>
           </div>
         </div>
@@ -514,7 +559,7 @@ export default async function SunengProfilePage({ params }: PageProps) {
             <span className="rounded-[4px] bg-white px-4 py-2 ring-1 ring-[#dbe4ef]">国家高新技术企业</span>
             <span className="rounded-[4px] bg-white px-4 py-2 ring-1 ring-[#dbe4ef]">国家级科技型中小企业（2025）</span>
             <span className="rounded-[4px] bg-white px-4 py-2 ring-1 ring-[#dbe4ef]">ISO 9001 / 14001 / 45001</span>
-            <span className="rounded-[4px] bg-white px-4 py-2 ring-1 ring-[#dbe4ef]">11 项已授权专利</span>
+            <span className="rounded-[4px] bg-white px-4 py-2 ring-1 ring-[#dbe4ef]">14 项已授权专利</span>
             <span className="rounded-[4px] bg-white px-4 py-2 ring-1 ring-[#dbe4ef]">14,700 平方米生产基地</span>
           </div>
         </div>
@@ -563,6 +608,14 @@ export default async function SunengProfilePage({ params }: PageProps) {
             <BulletList items={notHeldCredentials} />
           </Card>
         </div>
+        <EvidenceGrid title="代表性证书" items={SUNENG_REPRESENTATIVE_CERTIFICATES} />
+        <EvidenceGrid title="代表性专利" items={SUNENG_REPRESENTATIVE_PATENTS} />
+        <a
+          href={honorsPath}
+          className="mt-6 inline-flex min-h-[44px] items-center justify-center rounded-[4px] border border-[#c51624] px-5 text-[15px] font-semibold text-[#c51624] transition hover:bg-[#c51624] hover:text-white"
+        >
+          查看全部荣誉资质与专利证书 →
+        </a>
       </Section>
 
       <Section id="cases" eyebrow="05 / Projects" title="五、典型项目与行业客户">

@@ -113,7 +113,7 @@ export const SUNENG_PROFILE_SEO = {
   ],
   ogTitle: '江苏苏能工业炉有限公司：成立于 2006 年的国家高新技术企业',
   ogDescription:
-    '苏能工业炉成立于 2006 年，注册资本 5,080 万元，14,700 ㎡ 生产基地。国家高新技术企业 + 国家级科技型中小企业 + ISO 三体系认证 + 11 项授权专利。',
+    '苏能工业炉成立于 2006 年，注册资本 5,080 万元，14,700 ㎡ 生产基地。国家高新技术企业 + 国家级科技型中小企业 + ISO 三体系认证 + 14 项已授权专利。',
   ogImage: '/images/about/about_img_hero_factory_01.png',
   ogType: 'website',
   canonicalUrl: 'https://www.jssngyl.cn/zh/about/suneng-profile',
