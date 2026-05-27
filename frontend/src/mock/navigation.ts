@@ -16,7 +16,7 @@ export const navigationItems: NavigationItem[] = [
   {
     key: 'about',
     href: '/about',
-    label: { zh: '关于我们', en: 'About' },
+    label: { zh: '关于苏能', en: 'About' },
   },
   {
     key: 'products',
@@ -46,15 +46,56 @@ export const navigationItems: NavigationItem[] = [
   },
 ];
 
+const zhOnlyNavigationChildren: Partial<Record<string, NonNullable<NavigationItem['children']>>> = {
+  about: [
+    {
+      key: 'about-company',
+      href: '/about',
+      label: { zh: '公司简介', en: 'Company Profile' },
+    },
+    {
+      key: 'about-suneng-profile',
+      href: '/about/suneng-profile',
+      label: { zh: '苏能工业炉介绍', en: 'Suneng Profile' },
+    },
+    {
+      key: 'about-honors',
+      href: '/strength/honors',
+      label: { zh: '荣誉资质', en: 'Honors' },
+    },
+  ],
+  service: [
+    {
+      key: 'service-after-sales',
+      href: '/service',
+      label: { zh: '售后服务', en: 'After-sales Service' },
+    },
+    {
+      key: 'service-furnace-renovation-overhaul',
+      href: '/service/furnace-renovation-overhaul',
+      label: { zh: '工业炉节能改造与大修服务', en: 'Furnace Renovation and Overhaul' },
+    },
+  ],
+};
+
 export function getLocalizedText(locale: Locale, text: { zh: string; en: string }) {
   return text[locale];
+}
+
+function getNavigationChildren(locale: Locale, item: NavigationItem) {
+  if (locale !== 'zh') return item.children;
+
+  const zhChildren = zhOnlyNavigationChildren[item.key] ?? [];
+  if (!zhChildren.length) return item.children;
+
+  return [...(item.children ?? []), ...zhChildren];
 }
 
 export function getLocalizedNavigation(locale: Locale) {
   return navigationItems.map((item) => ({
     ...item,
     labelText: getLocalizedText(locale, item.label),
-    children: item.children?.map((child) => ({
+    children: getNavigationChildren(locale, item)?.map((child) => ({
       ...child,
       labelText: getLocalizedText(locale, child.label),
     })),
@@ -64,11 +105,11 @@ export function getLocalizedNavigation(locale: Locale) {
 export function getRouteLabelMap(locale: Locale) {
   const map = new Map<string, string>();
 
-  navigationItems.forEach((item) => {
-    map.set(item.href, getLocalizedText(locale, item.label));
+  getLocalizedNavigation(locale).forEach((item) => {
+    map.set(item.href, item.labelText);
     item.children?.forEach((child) => {
       if (!map.has(child.href)) {
-        map.set(child.href, getLocalizedText(locale, child.label));
+        map.set(child.href, child.labelText);
       }
     });
   });
