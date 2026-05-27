@@ -52,6 +52,17 @@ export default async function StrengthCategoryPage({
 
   const showCertificateGallery = currentLocale === 'zh' && currentCategory.slug === 'honors';
 
+  if (showCertificateGallery) {
+    return (
+      <CertificateGallerySections
+        locale={currentLocale}
+        qualifications={SUNENG_QUALIFICATION_CERTIFICATES}
+        isoCertificates={SUNENG_ISO_CERTIFICATES}
+        patents={SUNENG_PATENT_CERTIFICATES}
+      />
+    );
+  }
+
   return (
     <StrengthShell
       locale={locale}
@@ -74,17 +85,8 @@ export default async function StrengthCategoryPage({
         </div>
       ) : null}
       <div className="space-y-8">
-        {showCertificateGallery ? (
-          <CertificateGallerySections
-            locale={currentLocale}
-            qualifications={SUNENG_QUALIFICATION_CERTIFICATES}
-            isoCertificates={SUNENG_ISO_CERTIFICATES}
-            patents={SUNENG_PATENT_CERTIFICATES}
-          />
-        ) : (
-          <StrengthGalleryGrid locale={currentLocale} items={cards} displayMode={displayMode} />
-        )}
-        {!showCertificateGallery && total > pageSize ? (
+        <StrengthGalleryGrid locale={currentLocale} items={cards} displayMode={displayMode} />
+        {total > pageSize ? (
           <div className="flex justify-center">
             <StrengthPaginationNav page={resultPage} pageSize={pageSize} total={total} />
           </div>
