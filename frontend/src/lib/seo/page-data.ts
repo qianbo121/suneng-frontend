@@ -100,6 +100,25 @@ export const ABOUT_SEO = {
   keywords: ['苏能工业炉', '江苏苏能工业炉有限公司', '苏能资质', '苏能案例', '工业炉制造企业'],
 };
 
+export const SUNENG_PROFILE_SEO = {
+  title: '江苏苏能工业炉有限公司介绍：主营产品、资质专利、案例与服务范围_苏能工业炉',
+  description:
+    '江苏苏能工业炉有限公司成立于 2006 年，是国家高新技术企业。专注热处理工业炉研发制造，提供工业炉装备、节能改造和大修服务。累计交付 150+ 项目，覆盖钢铁、汽车零部件、能源装备等行业。',
+  keywords: [
+    '苏能工业炉',
+    '江苏苏能工业炉有限公司',
+    '苏能工业炉介绍',
+    '苏能工业炉资质',
+    '苏能工业炉案例',
+  ],
+  ogTitle: '江苏苏能工业炉有限公司：成立于 2006 年的国家高新技术企业',
+  ogDescription:
+    '苏能工业炉成立于 2006 年，注册资本 5,080 万元，14,700 ㎡ 生产基地。国家高新技术企业 + 国家级科技型中小企业 + ISO 三体系认证 + 11 项授权专利。',
+  ogImage: '/images/about/about_img_hero_factory_01.png',
+  ogType: 'website',
+  canonicalUrl: 'https://www.jssngyl.cn/zh/about/suneng-profile',
+};
+
 export const CONTACT_SEO = {
   title: '联系我们｜江苏苏能工业炉联系方式',
   description:

@@ -74,6 +74,7 @@ function collectStaticRoutes(): MetadataRoute.Sitemap {
     changeFrequency: SitemapEntry['changeFrequency'];
     priority: number;
   }> = [
+    { path: '/about/suneng-profile', changeFrequency: 'monthly', priority: 0.66 },
     { path: '/service/furnace-renovation-overhaul', changeFrequency: 'monthly', priority: 0.72 },
     { path: '/case/anonymous-tsingshan-1250-renovation', changeFrequency: 'monthly', priority: 0.68 },
   ];
