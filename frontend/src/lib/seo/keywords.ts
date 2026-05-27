@@ -32,5 +32,5 @@ export function mergeKeywords(...groups: Array<string[] | undefined>) {
 export function buildKeywords(pageKey?: string, keywords?: string | string[] | null) {
   const pageKeywords = pageKey ? PAGE_KEYWORDS[pageKey] : undefined;
 
-  return mergeKeywords(normalizeKeywords(keywords), pageKeywords, DEFAULT_KEYWORDS);
+  return mergeKeywords(normalizeKeywords(keywords), pageKeywords, DEFAULT_KEYWORDS).slice(0, 8);
 }

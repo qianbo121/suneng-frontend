@@ -174,7 +174,7 @@ export default async function PartnerPage({ params }: PartnerPageProps) {
         subtitle={
           currentLocale === 'en'
             ? 'Work with leading industrial enterprises to build intelligent furnace solutions'
-            : '携手行业领先企业，共筑智能工业炉解决方案'
+            : '携手典型行业客户，共筑智能工业炉解决方案'
         }
         backgroundImage="/images/partner/partner-hero.png"
         variant="about"

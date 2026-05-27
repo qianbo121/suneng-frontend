@@ -253,7 +253,7 @@ export function getProductCollectionJsonLd(path = '/products') {
       url: pageUrl,
       name: '产品中心｜工业热处理设备与非标工业炉定制',
       description:
-        '苏能工业炉产品中心展示台车式热处理炉、箱式炉、井式炉、罩式炉、网带炉、辊底炉、推杆炉、转底炉及热处理生产线等工业热处理设备，支持按工艺需求非标定制。',
+        '苏能工业炉产品中心展示周期式、连续式热处理炉及热处理生产线等工业热处理设备，支持按工艺需求非标定制。',
       isPartOf: { '@id': `${SITE_URL}/#website` },
       about: { '@id': LOCAL_BUSINESS_ID },
       mainEntity: { '@id': itemListId },
@@ -374,9 +374,9 @@ export function getContactPageJsonLd(path = '/contact') {
       '@type': 'ContactPage',
       '@id': webpageId(pageUrl),
       url: pageUrl,
-      name: '联系我们｜工业炉与热处理设备方案咨询',
+      name: '联系我们｜江苏苏能工业炉联系方式',
       description:
-        '联系江苏苏能工业炉有限公司，咨询台车炉、箱式炉、井式炉、罩式炉、网带炉、辊底炉、推杆炉、转底炉等工业热处理设备定制方案。',
+        '联系江苏苏能工业炉有限公司，咨询工业炉设备、热处理炉、节能改造与大修服务。地址：江苏省泰州市姜堰区张甸蔡官工业区，电话/微信：+86-139-1444-2520。',
       isPartOf: { '@id': `${SITE_URL}/#website` },
       about: { '@id': LOCAL_BUSINESS_ID },
       mainEntity: { '@id': LOCAL_BUSINESS_ID },
