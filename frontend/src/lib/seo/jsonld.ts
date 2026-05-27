@@ -171,6 +171,25 @@ export function getOrganizationJsonLd() {
       },
     ],
     description: DEFAULT_DESCRIPTION,
+    hasCredential: [
+      {
+        '@type': 'EducationalOccupationalCredential',
+        name: '国家高新技术企业',
+        identifier: 'GR202432008987',
+      },
+      {
+        '@type': 'EducationalOccupationalCredential',
+        name: 'ISO 9001 质量管理体系认证',
+      },
+      {
+        '@type': 'EducationalOccupationalCredential',
+        name: 'ISO 14001 环境管理体系认证',
+      },
+      {
+        '@type': 'EducationalOccupationalCredential',
+        name: 'ISO 45001 职业健康安全管理体系认证',
+      },
+    ],
     knowsAbout: [
       '工业炉',
       '热处理炉',
