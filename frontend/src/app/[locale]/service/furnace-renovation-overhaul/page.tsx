@@ -302,7 +302,7 @@ const faqs = [
   {
     question: 'Q8：改造后控温精度能做到多少？',
     answer:
-      '控温精度取决于加热元件配置、控制系统、热电偶布置与数量、炉膛结构。常见范围包括一般工业炉 ±5℃ 至 ±10℃，高精度热处理炉 ±3℃ 至 ±5℃，实验或精密工艺 ±1℃ 至 ±3℃，具体精度以工艺要求和最终技术方案为准。',
+      '控温精度取决于加热元件配置、控制系统、热电偶布置与数量、炉膛结构。常见范围包括一般工业炉 ±5℃ 至 ±10℃，精密热处理工艺场景 ±3℃ 至 ±5℃，实验或特殊精密工艺 ±1℃ 至 ±3℃，具体精度以工艺要求和最终技术方案为准。',
   },
   {
     question: 'Q9：工业炉节能改造有哪些风险？',
@@ -335,7 +335,7 @@ const advantages = [
   },
   {
     title: '5. 完整的资质与质量体系',
-    text: '苏能为国家高新技术企业（证书编号 GR202432008987），具备 ISO 9001、ISO 14001、ISO 45001 三体系认证，并拥有 11 项已授权实用新型专利。',
+    text: '苏能为国家高新技术企业（证书编号 GR202432008987），同时具备国家级科技型中小企业（2025）认定、ISO 9001、ISO 14001、ISO 45001 三体系认证，并拥有 11 项已授权实用新型专利。',
   },
   {
     title: '6. 注册资本与生产基地支撑',
@@ -377,11 +377,18 @@ const serviceJsonLd = {
       postalCode: '225536',
       addressCountry: 'CN',
     },
-    hasCredential: {
-      '@type': 'EducationalOccupationalCredential',
-      name: '国家高新技术企业',
-      identifier: 'GR202432008987',
-    },
+    hasCredential: [
+      {
+        '@type': 'EducationalOccupationalCredential',
+        name: '国家高新技术企业',
+        identifier: 'GR202432008987',
+      },
+      {
+        '@type': 'EducationalOccupationalCredential',
+        name: '国家级科技型中小企业',
+        credentialCategory: '国家级科技型中小企业（2025）',
+      },
+    ],
   },
   serviceType: ['工业炉节能改造', '热处理炉大修', '控制系统升级', '炉衬翻新', '烟气余热回收', '燃烧系统改造'],
   areaServed: {
@@ -513,6 +520,7 @@ export default async function FurnaceRenovationOverhaulPage({ params }: PageProp
 
             <div className="mt-8 flex flex-wrap gap-3 text-[14px] font-semibold text-white">
               <span className="rounded-[4px] border border-white/24 bg-white/10 px-4 py-2">国家高新技术企业（证书编号 GR202432008987）</span>
+              <span className="rounded-[4px] border border-white/24 bg-white/10 px-4 py-2">国家级科技型中小企业（2025）</span>
               <span className="rounded-[4px] border border-white/24 bg-white/10 px-4 py-2">ISO 9001 / 14001 / 45001 三体系认证</span>
             </div>
 
