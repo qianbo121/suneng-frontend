@@ -69,7 +69,6 @@ export async function generateMetadata({ params }: ProductDetailPageProps): Prom
     pageKey: 'product-detail',
     keywords: seo?.keywords,
     image: product.image,
-    other: seo?.descriptionExtended ? { 'description-extended': seo.descriptionExtended } : undefined,
     alternateLocales: {
       'zh-CN': `/zh/products/detail/${slug}`,
       'en-US': `/en/products/detail/${slug}`,

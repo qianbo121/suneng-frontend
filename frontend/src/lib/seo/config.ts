@@ -40,7 +40,7 @@ export const COMPANY_PHONE = '+86-13914442520';
 export const DEFAULT_TITLE = '江苏苏能工业炉有限公司｜工业炉与热处理设备厂家';
 
 export const DEFAULT_DESCRIPTION =
-  '江苏苏能工业炉有限公司专注工业炉、热处理炉及非标热处理设备制造，提供台车式热处理炉、箱式炉、井式炉、罩式炉、网带炉、辊底炉、推杆炉、转底炉及热处理生产线等设备定制服务。';
+  '江苏苏能工业炉有限公司专注工业炉、热处理炉及非标热处理设备制造，提供主要炉型、热处理生产线、节能改造与售后服务支持。';
 
 export const SITE_LOGO_IMAGE = firstExistingPublicPath([
   '/images/brand/sn-logo-full.png',
