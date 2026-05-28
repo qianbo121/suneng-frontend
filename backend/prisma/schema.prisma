@@ -160,6 +160,7 @@ model News {
   isPublished      Boolean         @default(false)
   sortOrder        Int             @default(0)
   status           PublishStatus   @default(draft)
+  baiduSubmittedAt DateTime?
   seoTitleZh       String?         @db.VarChar(255)
   seoTitleEn       String?         @db.VarChar(255)
   seoDescriptionZh String?         @db.Text
