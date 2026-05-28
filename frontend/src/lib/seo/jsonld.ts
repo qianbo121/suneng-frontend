@@ -66,13 +66,33 @@ const PRODUCT_SCHEMA_ORDER = [
 const productBySlug = new Map(STATIC_PRODUCTS.map((product) => [product.slug, product]));
 const LOCAL_BUSINESS_URL = 'https://www.jssngyl.cn/';
 const LOCAL_BUSINESS_ID = `${LOCAL_BUSINESS_URL}#organization`;
+const PRODUCT_JSON_LD_DESCRIPTIONS: Partial<Record<string, string>> = {
+  'roller-mesh-belt-line':
+    '托辊型网带式电阻炉生产线适用于小型零件、紧固件、标准件和批量连续热处理件的淬火、回火、正火、退火等工艺，网带宽度、运行速度、加热区长度和冷却方式等参数以最终技术方案为准。',
+  'copper-wire-annealing-line':
+    '铜丝自动化退火生产线适用于铜丝、铜线和有色金属线材的连续退火、软化处理及按项目评估的光亮退火，线径范围、运行速度、温区长度和气氛保护等参数以最终技术方案为准。',
+  'annealing-solution-line':
+    '退火固溶生产线适用于不锈钢带材、有色金属带材和连续退火或固溶材料的退火、固溶及连续热处理，带宽、厚度、运行速度、冷却段和张力控制等参数以最终技术方案为准。',
+  'trolley-furnace':
+    '台车式热处理炉适用于大型铸件、锻件、焊接件、模具、结构件等中大型工件的退火、回火、正火、时效、去应力处理等工艺，具体参数以最终技术方案为准。',
+  'box-furnace':
+    '箱式炉适用于中小型零件、模具件、试制件和小批量工件的退火、回火、正火、淬火前加热、时效及去应力处理，炉膛尺寸、装炉量、最高温度和加热方式等参数以最终技术方案为准。',
+  'pit-furnace':
+    '井式炉适用于轴类、杆类、套筒类、长轴件和竖向装炉工件的淬火、回火、退火、时效及去应力处理，井深、直径、吊装方式、装炉重量和温度均匀性等参数以最终技术方案为准。',
+  'bell-furnace':
+    '罩式炉适用于卷材、小型零件、批量装框零件和需要罩式加热的工件的退火、回火及按项目评估的保护气氛热处理，炉罩尺寸、密封结构、气氛条件和冷却方式等参数以最终技术方案为准。',
+  'pusher-furnace':
+    '推杆炉适用于批量连续热处理工件、棒材、坯料和结构件的连续加热、正火、退火及淬火前加热，推料机构、料盘料框、节拍、温区数量和出料方式等参数以最终技术方案为准。',
+  'mesh-belt-furnace':
+    '网带炉适用于紧固件、小型零件、冲压件、标准件和批量连续热处理件的淬火、回火、退火及正火，网带宽度、运行速度、加热区、冷却方式和气氛需求等参数以最终技术方案为准。',
+  'roller-hearth-furnace':
+    '辊底炉适用于板材、管材、棒材和中大型连续热处理工件的退火、正火、回火及按项目评估的固溶处理，辊道材质、工件重量、运行速度、温区控制和炉膛密封等参数以最终技术方案为准。',
+  'rotary-hearth-furnace':
+    '转底炉适用于环形布料、模具、锻件和小中型批量工件的加热、退火、正火、回火及时效处理，炉底直径、旋转机构、装料方式、工件重量和进出料节拍等参数以最终技术方案为准。',
+};
 
 function productUrl(slug: string, path?: string) {
   return absoluteUrl(path || `/products/detail/${slug}`);
-}
-
-function productId(slug: string, path?: string) {
-  return `${productUrl(slug, path)}#product`;
 }
 
 function webpageId(url: string) {
@@ -307,82 +327,27 @@ export function getProductCollectionJsonLd(path = '/products') {
 
 export function getProductDetailJsonLd(product: ProductDetailJsonLdInput) {
   const pageUrl = productUrl(product.slug, product.path);
-  const productSchemaId = productId(product.slug, product.path);
   const images = absoluteImages(product.image);
-  const additionalProperty = product.additionalProperties?.map((property) => ({
-    '@type': 'PropertyValue',
-    name: property.name,
-    value: property.value,
-    unitText: property.unitText,
-  }));
-
-  if (product.slug === 'trolley-furnace') {
-    return cleanObject([
-      {
-        '@context': 'https://schema.org',
-        '@type': 'Product',
-        name: '台车式热处理炉',
-        description:
-          '台车式热处理炉适用于大型铸件、锻件、焊接件、模具、结构件等中大型工件的退火、回火、正火、时效、去应力处理等工艺，具体参数以最终技术方案为准。',
-        brand: {
-          '@type': 'Brand',
-          name: SHORT_NAME,
-        },
-        manufacturer: {
-          '@type': 'Organization',
-          name: COMPANY_NAME,
-          url: LOCAL_BUSINESS_URL,
-        },
-        category: '工业炉 / 热处理炉',
-        url: pageUrl,
-        image: images,
-      },
-      {
-        '@context': 'https://schema.org',
-        '@type': 'WebPage',
-        '@id': webpageId(pageUrl),
-        url: pageUrl,
-        name: product.name,
-        description: product.description,
-        isPartOf: { '@id': `${SITE_URL}/#website` },
-        inLanguage: 'zh-CN',
-      },
-      getBreadcrumbJsonLd([
-        { name: '首页', url: '/' },
-        { name: '产品中心', url: product.path?.split('/detail/')[0] || '/products' },
-        { name: product.name, url: product.path || `/products/detail/${product.slug}` },
-      ]),
-    ]);
-  }
+  const description = PRODUCT_JSON_LD_DESCRIPTIONS[product.slug] || product.description;
 
   return cleanObject([
     {
       '@context': 'https://schema.org',
-      '@type': 'ProductModel',
-      '@id': productSchemaId,
-      name: product.name,
-      alternateName: product.alternateName,
+      '@type': 'Product',
+      name: product.slug === 'trolley-furnace' ? '台车式热处理炉' : product.name,
+      description,
+      brand: {
+        '@type': 'Brand',
+        name: SHORT_NAME,
+      },
+      manufacturer: {
+        '@type': 'Organization',
+        name: COMPANY_NAME,
+        url: LOCAL_BUSINESS_URL,
+      },
+      category: '工业炉 / 热处理炉',
       url: pageUrl,
       image: images,
-      description: product.description,
-      category: '工业热处理设备',
-      brand: { '@id': LOCAL_BUSINESS_ID },
-      manufacturer: { '@id': LOCAL_BUSINESS_ID },
-      keywords: product.keywords,
-      additionalProperty,
-      offers: {
-        '@type': 'Offer',
-        url: pageUrl,
-        availability: 'https://schema.org/InStock',
-        priceCurrency: 'CNY',
-        businessFunction: 'https://schema.org/Sell',
-        priceSpecification: {
-          '@type': 'PriceSpecification',
-          description: '非标定制设备，价格根据炉膛尺寸、温度范围、承重、加热方式、控温系统及工艺要求核算',
-        },
-        seller: { '@id': LOCAL_BUSINESS_ID },
-      },
-      mainEntityOfPage: { '@id': webpageId(pageUrl) },
     },
     {
       '@context': 'https://schema.org',
@@ -392,8 +357,6 @@ export function getProductDetailJsonLd(product: ProductDetailJsonLdInput) {
       name: product.name,
       description: product.description,
       isPartOf: { '@id': `${SITE_URL}/#website` },
-      about: { '@id': productSchemaId },
-      mainEntity: { '@id': productSchemaId },
       inLanguage: 'zh-CN',
     },
     getBreadcrumbJsonLd([
