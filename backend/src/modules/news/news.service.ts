@@ -1,20 +1,33 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { Prisma, PublishStatus } from '@prisma/client';
 
 import { buildAdminListQuery } from '@/common/utils/admin-query';
 import { buildPagination } from '@/common/utils/pagination';
 import { slugifyText } from '@/common/utils/slug';
+import { BaiduSubmitService } from '@/modules/news/baidu-submit.service';
 import { CreateNewsDto } from '@/modules/news/dto/create-news.dto';
 import { NewsListQueryDto } from '@/modules/news/dto/news-list-query.dto';
 import { UpdateNewsDto } from '@/modules/news/dto/update-news.dto';
 import { NewsCategoryService } from '@/modules/news-category/news-category.service';
 import { PrismaService } from '@/prisma/prisma.service';
 
+type NewsPublishState = {
+  id: number;
+  status: PublishStatus;
+  isPublished: boolean;
+  slug: string;
+  baiduSubmittedAt: Date | null;
+};
+
 @Injectable()
 export class NewsService {
+  private readonly logger = new Logger(NewsService.name);
+  private readonly baiduSubmittingNewsIds = new Set<number>();
+
   constructor(
     private readonly prisma: PrismaService,
     private readonly newsCategoryService: NewsCategoryService,
+    private readonly baiduSubmitService: BaiduSubmitService,
   ) {}
 
   async getPublicList(query: NewsListQueryDto) {
@@ -144,7 +157,9 @@ export class NewsService {
     const record = await this.findOne(id);
     const { categoryId: requestedCategoryId, ...newsData } = dto;
     const categoryId =
-      requestedCategoryId !== undefined ? await this.resolveCategoryId(requestedCategoryId) : undefined;
+      requestedCategoryId !== undefined
+        ? await this.resolveCategoryId(requestedCategoryId)
+        : undefined;
     const slug =
       dto.slug || dto.titleEn || dto.titleZh
         ? await this.ensureUniqueSlug(
@@ -166,8 +181,19 @@ export class NewsService {
   }
 
   async updateStatus(id: number, status: PublishStatus) {
-    await this.findOne(id);
-    return this.prisma.news.update({ where: { id }, data: { status } });
+    const before = await this.prisma.news.findUnique({ where: { id } });
+    if (!before) throw new NotFoundException('News not found');
+
+    const after = await this.prisma.news.update({
+      where: { id },
+      data: { status, isPublished: status === PublishStatus.published },
+    });
+
+    if (this.shouldSubmitToBaidu(before, after)) {
+      void this.submitPublishedNewsToBaidu(after);
+    }
+
+    return after;
   }
 
   async remove(id: number) {
@@ -203,5 +229,59 @@ export class NewsService {
     }
 
     return candidate;
+  }
+
+  private shouldSubmitToBaidu(before: NewsPublishState, after: NewsPublishState) {
+    return (
+      !this.isPubliclyVisible(before) &&
+      this.isPubliclyVisible(after) &&
+      Boolean(after.slug) &&
+      !after.baiduSubmittedAt
+    );
+  }
+
+  private isPubliclyVisible(news: NewsPublishState) {
+    return news.status === PublishStatus.published && news.isPublished;
+  }
+
+  private async submitPublishedNewsToBaidu(news: NewsPublishState) {
+    if (this.baiduSubmittingNewsIds.has(news.id)) return;
+
+    this.baiduSubmittingNewsIds.add(news.id);
+    try {
+      const latest = await this.prisma.news.findUnique({
+        where: { id: news.id },
+        select: {
+          id: true,
+          status: true,
+          isPublished: true,
+          slug: true,
+          baiduSubmittedAt: true,
+        },
+      });
+
+      if (!latest || !this.isPubliclyVisible(latest) || !latest.slug || latest.baiduSubmittedAt) {
+        return;
+      }
+
+      const url = this.baiduSubmitService.buildNewsUrl(latest.slug);
+      const submitted = await this.baiduSubmitService.submitUrl(url);
+      if (!submitted) return;
+
+      await this.prisma.news.updateMany({
+        where: { id: latest.id, baiduSubmittedAt: null },
+        data: { baiduSubmittedAt: new Date() },
+      });
+    } catch (error) {
+      this.logger.error(
+        `Baidu auto submit failed for news ${news.id}: ${this.getErrorMessage(error)}`,
+      );
+    } finally {
+      this.baiduSubmittingNewsIds.delete(news.id);
+    }
+  }
+
+  private getErrorMessage(error: unknown) {
+    return error instanceof Error ? error.message : String(error);
   }
 }
