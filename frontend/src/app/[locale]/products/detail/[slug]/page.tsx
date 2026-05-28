@@ -134,6 +134,10 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
   }));
   const specColumnSize = Math.ceil(specRows.length / 2);
   const specColumns = [specRows.slice(0, specColumnSize), specRows.slice(specColumnSize)];
+  const geoSectionTitle =
+    product.slug === 'trolley-furnace'
+      ? '台车炉选型与工艺适配'
+      : `${detail.title.replace('（非标定制）', '')}选型与工艺适配`;
 
   return (
     <main className="bg-white text-[#202020]">
@@ -266,7 +270,7 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
 
         {detail.geoSections?.length ? (
           <section className="mt-[56px]">
-            <SectionTitle>台车炉选型与工艺适配</SectionTitle>
+            <SectionTitle>{geoSectionTitle}</SectionTitle>
             <div className="mt-[24px] grid gap-4 lg:grid-cols-3">
               {detail.geoSections.map((section) => (
                 <article key={section.title} className="rounded-[8px] border border-[#eef0f3] bg-white p-5">
