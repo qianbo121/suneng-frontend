@@ -35,6 +35,9 @@ services:
       APP_URL: https://${DOMAIN}
       FRONTEND_URL: https://${DOMAIN}
       ADMIN_URL: https://${ADMIN_DOMAIN}
+      PUBLIC_SITE_URL: ${PUBLIC_SITE_URL}
+      BAIDU_SITE: ${BAIDU_SITE}
+      BAIDU_TOKEN: ${BAIDU_TOKEN}
       ALLOWED_ORIGINS: https://${DOMAIN},https://${ADMIN_DOMAIN}
       UPLOAD_ROOT: uploads
       UPLOAD_MAX_FILE_SIZE_MB: ${UPLOAD_MAX_FILE_SIZE_MB:-10}
