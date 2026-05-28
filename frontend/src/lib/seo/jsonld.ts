@@ -316,6 +316,45 @@ export function getProductDetailJsonLd(product: ProductDetailJsonLdInput) {
     unitText: property.unitText,
   }));
 
+  if (product.slug === 'trolley-furnace') {
+    return cleanObject([
+      {
+        '@context': 'https://schema.org',
+        '@type': 'Product',
+        name: '台车式热处理炉',
+        description:
+          '台车式热处理炉适用于大型铸件、锻件、焊接件、模具、结构件等中大型工件的退火、回火、正火、时效、去应力处理等工艺，具体参数以最终技术方案为准。',
+        brand: {
+          '@type': 'Brand',
+          name: SHORT_NAME,
+        },
+        manufacturer: {
+          '@type': 'Organization',
+          name: COMPANY_NAME,
+          url: LOCAL_BUSINESS_URL,
+        },
+        category: '工业炉 / 热处理炉',
+        url: pageUrl,
+        image: images,
+      },
+      {
+        '@context': 'https://schema.org',
+        '@type': 'WebPage',
+        '@id': webpageId(pageUrl),
+        url: pageUrl,
+        name: product.name,
+        description: product.description,
+        isPartOf: { '@id': `${SITE_URL}/#website` },
+        inLanguage: 'zh-CN',
+      },
+      getBreadcrumbJsonLd([
+        { name: '首页', url: '/' },
+        { name: '产品中心', url: product.path?.split('/detail/')[0] || '/products' },
+        { name: product.name, url: product.path || `/products/detail/${product.slug}` },
+      ]),
+    ]);
+  }
+
   return cleanObject([
     {
       '@context': 'https://schema.org',
