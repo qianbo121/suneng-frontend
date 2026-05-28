@@ -56,7 +56,7 @@ const zhOnlyNavigationChildren: Partial<Record<string, NonNullable<NavigationIte
     {
       key: 'about-suneng-profile',
       href: '/about/suneng-profile',
-      label: { zh: '苏能工业炉介绍', en: 'Suneng Profile' },
+      label: { zh: '苏能实力', en: 'Suneng Profile' },
     },
     {
       key: 'about-honors',
