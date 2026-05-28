@@ -28,6 +28,23 @@ export type StaticProductProcessStep = {
   text: string;
 };
 
+export type StaticProductGeoSection = {
+  title: string;
+  text?: string;
+  items?: string[];
+};
+
+export type StaticProductFaqItem = {
+  question: string;
+  answer: string;
+};
+
+export type StaticProductRelatedLink = {
+  title: string;
+  description: string;
+  href: string;
+};
+
 export type StaticProductDetail = {
   series: string;
   title: string;
@@ -43,6 +60,10 @@ export type StaticProductDetail = {
   processes: string[];
   industries: string[];
   leadBullets: string[];
+  parameterNote?: string;
+  geoSections?: StaticProductGeoSection[];
+  faq?: StaticProductFaqItem[];
+  relatedLinks?: StaticProductRelatedLink[];
 };
 
 export type StaticProduct = {
@@ -265,7 +286,7 @@ const productDetails: Record<string, StaticProductDetail> = {
     title: '台车式热处理炉（非标定制）',
     breadcrumbSeries: '台车炉系列',
     summary:
-      '台车式热处理炉适用于大型铸件、锻件、模具、轴类工件及大型结构件的退火、回火、正火、淬火等热处理工艺。设备采用固定炉体与移动台车结构，便于大型工件装卸和整体加热处理。炉膛尺寸、台车承重、加热方式、炉门结构、控温系统及温度均匀性可根据工件尺寸、装炉量和工艺要求进行非标定制，适用于机械制造、模具制造、能源装备、重工装备、航空航天等领域。',
+      '台车式热处理炉适用于大型铸件、锻件、模具、轴类工件及大型结构件的退火、回火、正火、淬火等热处理工艺。设备采用固定炉体与移动台车结构，便于大型工件装卸和整体加热处理。炉膛尺寸、台车承重、加热方式、炉门结构、控温系统及温度均匀性可根据工件尺寸、装炉量和工艺要求进行非标定制，适用于机械制造、模具制造、高端装备制造、能源装备、轨道交通、汽车零部件等领域。',
     sellingPoints,
     quickTags: sellingPoints,
     ctaHighlights,
@@ -291,7 +312,7 @@ const productDetails: Record<string, StaticProductDetail> = {
     configurations: [
       { title: '大型模具台车炉', image: imagesBySlug['trolley-furnace'].configs[0], specs: ['工作温度：≤1250℃', '有效尺寸：按模具尺寸和装炉方式定制', '加热功率：800kW~1500kW', '适用行业：模具热处理、大型结构件热处理'] },
       { title: '中高温台车炉', image: imagesBySlug['trolley-furnace'].configs[1], specs: ['工作温度：≤1100℃', '有效尺寸：按工件尺寸定制', '加热功率：300kW~800kW', '适用行业：五金零件、机械零部件、锻件热处理'] },
-      { title: '高温合金台车炉', image: imagesBySlug['trolley-furnace'].configs[2], specs: ['工作温度：≤1350℃', '有效尺寸：按高温合金工件尺寸定制', '加热功率：1200kW~3000kW', '适用行业：航空航天、能源装备、高温合金热处理'] },
+      { title: '高温合金台车炉', image: imagesBySlug['trolley-furnace'].configs[2], specs: ['工作温度：≤1350℃', '有效尺寸：按高温合金工件尺寸定制', '加热功率：1200kW~3000kW', '适用行业：高端装备制造、能源装备、高温合金热处理'] },
     ],
     processSteps: [
       { title: '需求沟通', text: '了解工件尺寸、装炉重量、热处理工艺、温度范围、产能节拍和现场条件。' },
@@ -301,8 +322,80 @@ const productDetails: Record<string, StaticProductDetail> = {
       { title: '交付安装', text: '完成运输、安装、现场调试、操作培训和后续服务跟踪。' },
     ],
     processes: ['退火', '回火', '正火', '淬火', '固溶', '时效', '去应力处理等'],
-    industries: ['汽车零部件', '机械加工', '模具制造', '轨道交通', '航空航天', '能源装备', '重工装备', '科研院所'],
+    industries: ['汽车零部件', '机械加工', '模具制造', '轨道交通', '高端装备制造', '能源装备', '重工装备', '科研院所'],
     leadBullets,
+    parameterNote:
+      '以上参数为常见配置范围，具体需结合工件尺寸、装炉量、工艺温度、温度均匀性要求、加热方式、生产节拍和现场条件确定，最终以双方确认的技术方案为准。',
+    geoSections: [
+      {
+        title: '适用工件',
+        text:
+          '台车炉适合处理大型铸件、锻件、焊接件、模具、结构件、机加工件等中大型工件，常用于单件重量较大、批量不固定、需要整炉装卸的热处理场景。具体炉膛尺寸、台车承载、炉门结构和装炉方式，应结合工件尺寸、重量和工艺节拍确定。',
+      },
+      {
+        title: '典型工艺',
+        text:
+          '台车式热处理炉常用于退火、回火、正火、淬火前加热、时效、去应力处理等工艺。对于不同材质和不同工艺温度，需要分别确认炉衬结构、加热方式、控温分区、风机循环和温度均匀性要求。',
+      },
+      {
+        title: '选型关注点',
+        items: [
+          '工件最大尺寸和单炉装炉量',
+          '最高工作温度和常用工艺温度',
+          '升温时间和保温时间',
+          '温度均匀性要求',
+          '台车承载和轨道基础',
+          '炉门密封和炉衬结构',
+          '电加热或燃气加热方式',
+          '控制系统和数据记录要求',
+          '是否需要后续节能改造或大修服务',
+        ],
+      },
+    ],
+    faq: [
+      {
+        question: '台车炉适合哪些工件？',
+        answer:
+          '台车炉适合大型铸件、锻件、焊接件、模具、结构件等中大型工件，尤其适合单件较重、需要整炉装卸或不适合连续输送的热处理场景。具体炉膛尺寸和台车承载需要结合工件尺寸、重量、装炉方式和工艺要求确定。',
+      },
+      {
+        question: '台车炉和箱式炉有什么区别？',
+        answer:
+          '台车炉通常带有可移动台车，适合较重或体积较大的工件装卸；箱式炉结构更紧凑，适合中小型工件或小批量热处理。两者都可以做非标设计，选择时要看工件尺寸、装炉量、搬运方式和生产节拍。',
+      },
+      {
+        question: '台车式热处理炉的炉膛尺寸可以定制吗？',
+        answer:
+          '可以。台车炉通常属于非标定制设备，炉膛尺寸、台车承载、炉门形式、加热方式、控温分区和控制系统都需要根据工件和工艺要求确定。最终参数应以双方确认的技术方案为准。',
+      },
+      {
+        question: '台车炉如何判断功率和装炉量？',
+        answer:
+          '功率和装炉量需要结合工件材质、重量、炉膛尺寸、目标温度、升温时间、保温时间、炉衬结构和加热方式综合计算，不能只按炉膛体积简单判断。对于非标项目，建议由工业炉厂家根据工艺条件进行核算。',
+      },
+      {
+        question: '老旧台车炉可以做节能改造吗？',
+        answer:
+          '可以评估。苏能可对自制设备及部分非苏能品牌台车炉提供评估，进口炉或资料不完整的设备需结合设备资料、控制系统、备件条件和现场状态综合判断。老旧台车炉常见改造方向包括炉衬翻新、炉门密封修复、加热系统更换、控制系统升级、风机或燃烧系统优化等。是否值得改造，需要结合炉体状态、使用年限、能耗数据、生产负荷和停产窗口判断。',
+      },
+    ],
+    relatedLinks: [
+      {
+        title: '工业炉节能改造与热处理炉大修服务',
+        description: '了解老旧台车炉、热处理炉的炉衬、密封、加热和控制系统评估思路。',
+        href: '/zh/service/furnace-renovation-overhaul',
+      },
+      {
+        title: '苏能实力',
+        description: '查看苏能工业炉的企业基础、制造能力与资质边界说明。',
+        href: '/zh/about/suneng-profile',
+      },
+      {
+        title: '荣誉资质',
+        description: '查看已公开展示的证书、资质与专利文件图库。',
+        href: '/zh/strength/honors',
+      },
+    ],
   },
   'pit-furnace': {
     series: '井式炉系列',
@@ -335,7 +428,7 @@ const productDetails: Record<string, StaticProductDetail> = {
     configurations: [
       { title: '小型实验井式炉', image: imagesBySlug['pit-furnace'].configs[0], specs: ['工作温度：≤1100℃', '有效尺寸：按实验样件尺寸定制', '加热功率：50kW~300kW', '适用行业：科研、实验、试制'] },
       { title: '中型生产井式炉', image: imagesBySlug['pit-furnace'].configs[1], specs: ['工作温度：≤1200℃', '有效尺寸：按轴类、杆类工件尺寸定制', '加热功率：200kW~800kW', '适用行业：模具、五金、机械加工'] },
-      { title: '大型工业井式炉', image: imagesBySlug['pit-furnace'].configs[2], specs: ['工作温度：≤1250℃', '有效尺寸：按大型长轴、筒类或杆类工件定制', '加热功率：500kW~1200kW', '适用行业：大型零件、轨道交通、能源装备、航空航天'] },
+      { title: '大型工业井式炉', image: imagesBySlug['pit-furnace'].configs[2], specs: ['工作温度：≤1250℃', '有效尺寸：按大型长轴、筒类或杆类工件定制', '加热功率：500kW~1200kW', '适用行业：大型零件、轨道交通、能源装备、重工装备'] },
     ],
     processSteps: defaultProcessSteps,
     processes: ['正火', '退火', '淬火', '回火', '固溶', '渗氮', '去应力处理'],

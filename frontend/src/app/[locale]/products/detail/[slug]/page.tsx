@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import Image from 'next/image';
+import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import {
   HiBeaker,
@@ -18,7 +19,7 @@ import { ProductDetailGallery } from '@/components/products/ProductDetailGallery
 import { ProductLeadForm, ProductQuoteScrollButton } from '@/components/products/ProductLeadForm';
 import { getStaticProductBySlug, STATIC_PRODUCTS, StaticProduct, StaticProductDetail } from '@/constants/static-products';
 import { buildProductImageAlt } from '@/lib/seo';
-import { getProductDetailJsonLd } from '@/lib/seo/jsonld';
+import { getFaqJsonLd, getProductDetailJsonLd } from '@/lib/seo/jsonld';
 import { buildMetadata } from '@/lib/seo/metadata';
 import { PRODUCT_DETAIL_SEO } from '@/lib/seo/page-data';
 import { Locale } from '@/types/site';
@@ -149,6 +150,9 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
           additionalProperties: specRows.map((item) => ({ name: item.key, value: item.value })),
         })}
       />
+      {detail.faq?.length ? (
+        <JsonLd id={`product-faq-jsonld-${product.slug}`} data={getFaqJsonLd(detail.faq)} />
+      ) : null}
 
       <div className="border-b border-[#edf0f4] bg-white">
         <div className="mx-auto flex min-h-[58px] max-w-[1440px] items-center px-8">
@@ -253,7 +257,38 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
               ))}
             </div>
           </div>
+          {detail.parameterNote ? (
+            <p className="mt-4 rounded-[6px] border border-[#eef0f3] bg-[#f7f8fa] px-4 py-3 text-[13px] leading-[1.8] text-[#5f6673]">
+              {detail.parameterNote}
+            </p>
+          ) : null}
         </section>
+
+        {detail.geoSections?.length ? (
+          <section className="mt-[56px]">
+            <SectionTitle>台车炉选型与工艺适配</SectionTitle>
+            <div className="mt-[24px] grid gap-4 lg:grid-cols-3">
+              {detail.geoSections.map((section) => (
+                <article key={section.title} className="rounded-[8px] border border-[#eef0f3] bg-white p-5">
+                  <h3 className="mb-3 text-[17px] font-semibold leading-[1.4] text-[#1a1d23]">{section.title}</h3>
+                  {section.text ? (
+                    <p className="text-[14px] leading-[1.85] text-[#4a5160]">{section.text}</p>
+                  ) : null}
+                  {section.items?.length ? (
+                    <ul className="grid gap-2 text-[14px] leading-[1.7] text-[#4a5160]">
+                      {section.items.map((item) => (
+                        <li key={item} className="flex gap-2">
+                          <span className="mt-[10px] h-[4px] w-[4px] shrink-0 rounded-full bg-[#e60012]" />
+                          <span>{item}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  ) : null}
+                </article>
+              ))}
+            </div>
+          </section>
+        ) : null}
 
         {!isProductionLine ? (
           /* E. 典型配置示例：纵向图文卡片，生产线详情页不展示该模块。 */
@@ -342,6 +377,38 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
             </div>
           </div>
         </section>
+
+        {detail.faq?.length ? (
+          <section className="mt-[56px]">
+            <SectionTitle>常见问题</SectionTitle>
+            <div className="mt-[24px] grid gap-4">
+              {detail.faq.map((item) => (
+                <article key={item.question} className="rounded-[8px] border border-[#eef0f3] bg-white p-5">
+                  <h3 className="text-[17px] font-semibold leading-[1.45] text-[#1a1d23]">{item.question}</h3>
+                  <p className="mt-3 text-[14px] leading-[1.85] text-[#4a5160]">{item.answer}</p>
+                </article>
+              ))}
+            </div>
+          </section>
+        ) : null}
+
+        {detail.relatedLinks?.length ? (
+          <section className="mt-[56px]">
+            <SectionTitle>相关页面</SectionTitle>
+            <div className="mt-[24px] grid gap-4 md:grid-cols-3">
+              {detail.relatedLinks.map((item) => (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className="rounded-[8px] border border-[#eef0f3] bg-white p-5 transition-all duration-200 hover:-translate-y-[2px] hover:border-[#e60012]"
+                >
+                  <h3 className="text-[16px] font-semibold leading-[1.4] text-[#1a1d23]">{item.title}</h3>
+                  <p className="mt-2 text-[13px] leading-[1.75] text-[#6b7280]">{item.description}</p>
+                </Link>
+              ))}
+            </div>
+          </section>
+        ) : null}
 
         {/* H. 提交需求表单：仅联系电话必填，提交反馈由客户端组件处理。 */}
         <ProductLeadForm leadBullets={detail.leadBullets} />
