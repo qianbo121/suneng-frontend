@@ -51,16 +51,16 @@ function FeaturedNewsCard({ locale, item }: { locale: Locale; item: NewsItem }) 
   return (
     <Link
       href={`/${locale}${item.href}`}
-      className="group relative flex h-full min-h-[360px] overflow-hidden rounded-[12px] border border-black/10 bg-white shadow-[0_2px_12px_rgba(0,0,0,0.06)] transition-shadow duration-300 hover:shadow-[0_8px_24px_rgba(0,0,0,0.08)] xl:min-h-0"
+      className="group block overflow-hidden rounded-[12px] border border-black/10 bg-white shadow-[0_2px_12px_rgba(0,0,0,0.06)] transition-shadow duration-300 hover:shadow-[0_8px_24px_rgba(0,0,0,0.08)]"
     >
-      <div className="relative h-full w-full overflow-hidden">
+      <div className="relative aspect-[16/9] w-full overflow-hidden bg-[#f5f6f8]">
         <Image
           src={item.coverImage}
           alt={item.title[locale]}
           fill
           loading="eager"
           unoptimized
-          className="object-cover transition-transform duration-500 ease-out group-hover:scale-[1.03]"
+          className="object-contain transition-transform duration-500 ease-out group-hover:scale-[1.03]"
           sizes="(min-width: 1280px) 660px, 100vw"
         />
         <div className="absolute inset-x-0 bottom-0 bg-[rgba(0,0,0,0.6)] px-6 py-4">
@@ -80,29 +80,29 @@ function SecondaryNewsCard({ locale, item }: { locale: Locale; item: NewsItem })
   return (
     <Link
       href={`/${locale}${item.href}`}
-      className="group flex h-auto min-h-0 flex-col rounded-[12px] border border-black/10 bg-white p-4 shadow-[0_2px_12px_rgba(0,0,0,0.06)] transition-all duration-300 hover:bg-[#fafafa] hover:shadow-[0_8px_24px_rgba(0,0,0,0.08)] xl:h-auto xl:flex-1 xl:flex-row xl:items-stretch"
+      className="group flex h-auto min-h-0 flex-col rounded-[12px] border border-black/10 bg-white p-4 shadow-[0_2px_12px_rgba(0,0,0,0.06)] transition-all duration-300 hover:bg-[#fafafa] hover:shadow-[0_8px_24px_rgba(0,0,0,0.08)] xl:h-auto xl:min-h-0 xl:flex-1 xl:basis-0 xl:flex-row xl:items-stretch xl:overflow-hidden"
     >
-      <div className="relative w-full shrink-0 overflow-hidden rounded-[2px] xl:w-[200px]">
-        <div className="relative aspect-[16/10] overflow-hidden">
+      <div className="relative w-full shrink-0 overflow-hidden rounded-[2px] bg-[#f5f6f8] xl:w-[200px]">
+        <div className="relative aspect-[16/9] overflow-hidden">
           <Image
             src={item.coverImage}
             alt={item.title[locale]}
             fill
             loading="eager"
             unoptimized
-            className="object-cover transition-transform duration-500 ease-out group-hover:scale-[1.03]"
+            className="object-contain transition-transform duration-500 ease-out group-hover:scale-[1.03]"
             sizes="200px"
           />
         </div>
       </div>
-      <div className="mt-3 flex min-w-0 flex-1 flex-col justify-start py-1 xl:ml-4 xl:mt-0">
+      <div className="mt-3 flex min-w-0 flex-1 flex-col justify-start py-1 xl:ml-4 xl:mt-0 xl:overflow-hidden">
         <p className="text-[12px] font-normal leading-none tracking-[0.02em] text-[#9AA0A6]">
           {formatDate(item.publishDate)}
         </p>
         <h4 className="mt-2 line-clamp-2 text-[18px] font-semibold leading-[1.55] text-[#333333]">
           {item.title[locale]}
         </h4>
-        <p className="mt-2 line-clamp-2 overflow-hidden text-[14px] font-normal leading-[1.86] text-[#666666] xl:pr-2">
+        <p className="mt-2 line-clamp-2 overflow-hidden text-[14px] font-normal leading-[1.86] text-[#666666] xl:line-clamp-1 xl:pr-2">
           {item.summary[locale]}
         </p>
       </div>
@@ -133,11 +133,11 @@ export function NewsSection({ locale, items }: NewsSectionProps) {
           <NewsHeader locale={locale} />
 
           <div className="grid items-stretch gap-6 xl:grid-cols-[minmax(0,1.42fr)_minmax(0,1fr)]">
-            <div className="min-w-0 xl:h-full">
+            <div className="min-w-0">
               <FeaturedNewsCard locale={locale} item={featured} />
             </div>
 
-            <div className="grid gap-4 md:grid-cols-3 xl:flex xl:h-full xl:min-h-full xl:grid-cols-none xl:flex-col xl:gap-3 xl:py-3">
+            <div className="grid gap-4 md:grid-cols-3 xl:flex xl:h-full xl:min-h-0 xl:grid-cols-none xl:flex-col xl:gap-3">
               {secondary.map((item) => (
                 <SecondaryNewsCard key={item.id} locale={locale} item={item} />
               ))}
