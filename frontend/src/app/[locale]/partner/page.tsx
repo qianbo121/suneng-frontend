@@ -1,6 +1,12 @@
+import { JsonLd } from '@/components/JsonLd';
 import { PageBanner } from '@/components/layout/PageBanner';
 import { Breadcrumb } from '@/components/layout/Breadcrumb';
-import { CooperationFieldItem, CorePartnerLogoItem, PartnerLogoGrid } from '@/components/partner/PartnerLogoGrid';
+import {
+  CooperationFieldItem,
+  CorePartnerLogoItem,
+  PartnerLogoGrid,
+  RelatedPartnerLinkItem,
+} from '@/components/partner/PartnerLogoGrid';
 import { buildSeoMetadata } from '@/lib/seo';
 import { PARTNER_SEO } from '@/lib/seo/page-data';
 import { Locale } from '@/types/site';
@@ -31,26 +37,16 @@ const corePartners: CorePartnerLogoItem[] = [
   },
   {
     id: 4,
-    name: '中国兵器工业集团\n江山重工研究院有限公司',
-    logoUrl: '/images/partner/logos/cngc.png',
-  },
-  {
-    id: 5,
     name: '中集安瑞环科技股份\n有限公司',
     logoUrl: '/images/partner/logos/enric.png',
   },
   {
-    id: 6,
+    id: 5,
     name: '江苏天工工具新材料\n股份有限公司',
     logoUrl: '/images/partner/logos/tg.png',
   },
   {
-    id: 7,
-    name: '天津航天长征火箭\n制造有限公司',
-    logoUrl: '/images/partner/logos/casc.png',
-  },
-  {
-    id: 8,
+    id: 6,
     name: '六和轻合金（苏州）\n有限公司',
     logoUrl: '/images/partner/logos/liuhe.png',
   },
@@ -90,58 +86,128 @@ const morePartners = [
   '中集安瑞环科技股份有限公司',
   '六和轻合金（苏州）有限公司',
   '中国联合工程有限公司',
+  '中国兵器工业集团江山重工研究院有限公司',
+  '天津航天长征火箭制造有限公司',
 ];
 
 const cooperationFields: CooperationFieldItem[] = [
   {
     id: 1,
-    title: '工贸类金属热处理领域',
-    description: '涵盖有色金属与合金钢的退火、固溶、调质、回火等热处理工业炉应用',
-    iconUrl: '/images/partner/fields/trade-alloy.png',
+    title: '不锈钢与有色金属热处理',
+    description:
+      '涵盖不锈钢连续退火、固溶、光亮退火，以及铜、铝等有色金属的退火处理，应用于不锈钢深加工、有色金属带材、线材等场景。',
+    iconUrl: '/images/partner/fields/stainless-smelting.png',
+    furnaceTypes: '退火固溶生产线、光亮退火炉、网带炉',
+    links: [
+      { label: '退火固溶生产线', href: '/zh/products/detail/annealing-solution-line' },
+      { label: '网带炉', href: '/zh/products/detail/mesh-belt-furnace' },
+      { label: '工业炉节能改造案例参考', href: '/zh/case/anonymous-tsingshan-1250-renovation' },
+    ],
   },
   {
     id: 2,
     title: '重工机械与装备制造',
-    description: '覆盖船舶制造、轨道交通、工程机械、重工装备制造等行业的热处理装备需求',
+    description:
+      '覆盖船舶制造、轨道交通、工程机械、重工装备等行业的大型零部件热处理装备需求，常用于大型铸件、锻件、结构件的退火、回火、正火、去应力处理。',
     iconUrl: '/images/partner/fields/heavy-equipment.png',
+    furnaceTypes: '台车炉、井式炉、辊底炉',
+    links: [
+      { label: '台车炉', href: '/zh/products/detail/trolley-furnace' },
+      { label: '井式炉', href: '/zh/products/detail/pit-furnace' },
+      { label: '辊底炉', href: '/zh/products/detail/roller-hearth-furnace' },
+    ],
   },
   {
     id: 3,
-    title: '不锈钢与有色金属热处理',
-    description: '涵盖不锈钢连续退火、固溶、光亮退火、有色金属退火等工业炉设备及生产线',
-    iconUrl: '/images/partner/fields/stainless-smelting.png',
+    title: '汽车零部件',
+    description:
+      '服务汽车零部件企业的热处理需求，涵盖齿轮、轴承、紧固件、高强钢零件的退火、回火、淬火、渗碳等工艺。',
+    iconUrl: '/images/partner/fields/auto-parts.png',
+    furnaceTypes: '网带炉、推杆炉、箱式炉',
+    links: [
+      { label: '网带炉', href: '/zh/products/detail/mesh-belt-furnace' },
+      { label: '推杆炉', href: '/zh/products/detail/pusher-furnace' },
+      { label: '箱式炉', href: '/zh/products/detail/box-furnace' },
+    ],
   },
   {
     id: 4,
-    title: '管阀部件与流体装备',
-    description: '应用于阀门、管件、法兰等流体设备热处理',
-    iconUrl: '/images/partner/fields/fluid-equipment.png',
+    title: '能源装备与新能源',
+    description:
+      '服务石化设备、压力容器、油气管材、风电零部件，以及能源装备与新能源相关制造场景的热处理装备需求。',
+    iconUrl: '/images/partner/fields/new-energy-storage.png',
+    furnaceTypes: '台车炉、辊底炉、网带炉',
+    links: [
+      { label: '台车炉', href: '/zh/products/detail/trolley-furnace' },
+      { label: '辊底炉', href: '/zh/products/detail/roller-hearth-furnace' },
+    ],
   },
   {
     id: 5,
-    title: '新能源与储能装备',
-    description: '服务新能源电池、储能设备及电池材料等企业',
-    iconUrl: '/images/partner/fields/new-energy-storage.png',
+    title: '管阀部件与流体装备',
+    description: '应用于阀门、管件、法兰等流体设备零部件的热处理，常见去应力、退火、调质等工艺。',
+    iconUrl: '/images/partner/fields/fluid-equipment.png',
+    furnaceTypes: '台车炉、井式炉、箱式炉',
+    links: [
+      { label: '台车炉', href: '/zh/products/detail/trolley-furnace' },
+      { label: '井式炉', href: '/zh/products/detail/pit-furnace' },
+    ],
   },
   {
     id: 6,
-    title: '汽车零部件',
-    description: '服务汽车零部件企业，涵盖高强钢热处理工艺',
-    iconUrl: '/images/partner/fields/auto-parts.png',
-  },
-  {
-    id: 7,
     title: '铸造、热处理与金属加工',
-    description: '服务铸造、热处理及金属加工行业精密生产',
+    description: '服务铸造、热处理加工及金属精密加工企业，涵盖多种材质和工艺的热处理装备需求。',
     iconUrl: '/images/partner/fields/metal-processing.png',
-  },
-  {
-    id: 8,
-    title: '机器人与智能制造',
-    description: '服务机器人核心部件及智能制造装备企业',
-    iconUrl: '/images/partner/fields/robot-intelligent.png',
+    furnaceTypes: '箱式炉、罩式炉、台车炉',
+    links: [
+      { label: '箱式炉', href: '/zh/products/detail/box-furnace' },
+      { label: '罩式炉', href: '/zh/products/detail/bell-furnace' },
+    ],
   },
 ];
+
+const relatedLinks: RelatedPartnerLinkItem[] = [
+  {
+    title: '工业炉节能改造与热处理炉大修服务',
+    href: '/zh/service/furnace-renovation-overhaul',
+    description: '了解在役工业炉节能改造、整炉大修、控制系统升级和耐材翻新服务范围。',
+  },
+  {
+    title: '某青山系不锈钢企业 1250mm 三线节能改造案例',
+    href: '/zh/case/anonymous-tsingshan-1250-renovation',
+    description: '查看不锈钢连续退洗线节能改造案例，作为同类工业炉改造项目参考。',
+  },
+  {
+    title: '江苏苏能工业炉有限公司介绍',
+    href: '/zh/about/suneng-profile',
+    description: '了解苏能工业炉的主营产品、资质专利、项目数据与业务边界。',
+  },
+  {
+    title: '荣誉资质',
+    href: '/zh/strength/honors',
+    description: '查看企业资质、体系认证与 14 项已授权专利证书资料。',
+  },
+];
+
+const partnerCollectionJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'CollectionPage',
+  name: '合作关系与行业应用 - 苏能工业炉',
+  description:
+    '苏能工业炉服务的多行业工业炉项目与应用场景，涵盖不锈钢与有色金属、重工机械与装备制造、汽车零部件、能源装备、管阀部件、金属热处理加工等领域。',
+  url: 'https://www.jssngyl.cn/zh/partner',
+  isPartOf: {
+    '@type': 'WebSite',
+    name: '江苏苏能工业炉有限公司',
+    url: 'https://www.jssngyl.cn',
+  },
+  about: [
+    { '@type': 'Thing', name: '不锈钢与有色金属热处理' },
+    { '@type': 'Thing', name: '重工机械与装备制造' },
+    { '@type': 'Thing', name: '汽车零部件热处理' },
+    { '@type': 'Thing', name: '能源装备制造场景' },
+  ],
+};
 
 export async function generateMetadata({ params }: PartnerPageProps) {
   const { locale } = await params;
@@ -152,9 +218,10 @@ export async function generateMetadata({ params }: PartnerPageProps) {
     path: '/partner',
     pageKey: 'partner',
     title: currentLocale === 'en' ? 'Partners' : PARTNER_SEO.title,
-    description: currentLocale === 'en'
-      ? 'Work with leading industrial partners to build intelligent furnace and heat treatment equipment solutions.'
-      : PARTNER_SEO.description,
+    description:
+      currentLocale === 'en'
+        ? 'Industrial furnace cooperation and application scenarios across manufacturing sectors.'
+        : PARTNER_SEO.description,
     keywords: PARTNER_SEO.keywords,
     image: '/images/partner/partner-hero.png',
   });
@@ -163,18 +230,21 @@ export async function generateMetadata({ params }: PartnerPageProps) {
 export default async function PartnerPage({ params }: PartnerPageProps) {
   const { locale } = await params;
   const currentLocale = (locale === 'en' ? 'en' : 'zh') as Locale;
-  const title = currentLocale === 'en' ? 'Partners' : '合作伙伴';
+  const title = currentLocale === 'en' ? 'Partners' : '合作关系与行业应用';
 
   return (
     <div className="bg-white pb-10 lg:pb-0">
+      {currentLocale === 'zh' ? (
+        <JsonLd id="partner-collection-jsonld" data={partnerCollectionJsonLd} />
+      ) : null}
       <PageBanner
         locale={locale}
         title={title}
         englishTitle="Partners"
         subtitle={
           currentLocale === 'en'
-            ? 'Work with leading industrial enterprises to build intelligent furnace solutions'
-            : '携手典型行业客户，共筑智能工业炉解决方案'
+            ? 'Industrial furnace cooperation and application scenarios across manufacturing sectors'
+            : '服务多行业工业炉项目，覆盖装备制造、不锈钢、有色金属、汽车零部件、能源装备等应用场景。'
         }
         backgroundImage="/images/partner/partner-hero.png"
         variant="about"
@@ -192,6 +262,7 @@ export default async function PartnerPage({ params }: PartnerPageProps) {
           coreItems={corePartners}
           moreItems={morePartners}
           fieldItems={cooperationFields}
+          relatedLinks={relatedLinks}
         />
       </main>
     </div>
