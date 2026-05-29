@@ -113,25 +113,23 @@ export function PartnerLogoGrid({
       </div>
 
       <div className="mt-12 lg:mt-14">
-        <SectionHeading description="以下为苏能工业炉在装备制造、工程项目协作等领域的部分合作单位。">
+        <SectionHeading description="以下为苏能工业炉在装备制造、工程项目协作及工业炉设备应用中的部分合作单位。不同单位的合作形式并不完全相同，具体以项目资料和可披露信息为准。">
           {locale === 'en' ? 'Selected Cooperation Units' : '部分合作单位'}
         </SectionHeading>
 
-        <div className="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-3 lg:gap-7">
+        <div className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6">
           {coreItems.map((item) => (
             <div
               key={item.id}
-              className="flex min-h-[240px] items-center justify-center rounded-lg border border-[#dcdfe6] bg-white p-4 text-center shadow-sm transition-shadow duration-200 hover:shadow-md"
+              className="flex h-[104px] items-center justify-center rounded-[8px] border border-slate-100 bg-white px-4 py-5 text-center shadow-sm transition duration-200 hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-md"
             >
-              <div className="flex h-full min-h-[208px] w-full items-center justify-center bg-white">
-                <Image
-                  src={item.logoUrl}
-                  alt={partnerLogoAlt(item.name)}
-                  width={900}
-                  height={360}
-                  className="mx-auto max-h-full max-w-full object-contain"
-                />
-              </div>
+              <Image
+                src={item.logoUrl}
+                alt={partnerLogoAlt(item.name)}
+                width={360}
+                height={160}
+                className="mx-auto max-h-[52px] max-w-[160px] object-contain"
+              />
             </div>
           ))}
         </div>
