@@ -152,7 +152,7 @@ export function CertificateGallerySections({
             tone="light"
             className="text-[13px]"
             items={[
-              { label: '实力展示', href: `/${locale}/strength` },
+              { label: '关于苏能', href: `/${locale}/about` },
               { label: '荣誉资质' },
             ]}
           />

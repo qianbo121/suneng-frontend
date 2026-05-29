@@ -1,4 +1,5 @@
 import { JsonLd } from '@/components/JsonLd';
+import { Breadcrumb } from '@/components/layout/Breadcrumb';
 import { SITE_LOGO_IMAGE, SITE_URL } from '@/lib/seo/config';
 import { absoluteUrl } from '@/lib/seo/metadata';
 
@@ -287,6 +288,15 @@ export function AboutZhContent() {
     <>
       <header className="border-b border-[#e5e8ef] bg-[#f6f8fb]">
         <div className="mx-auto max-w-[1660px] px-6 py-12 lg:px-[86px] lg:py-16">
+          <Breadcrumb
+            locale="zh"
+            tone="dark"
+            className="mb-8 text-[13px]"
+            items={[
+              { label: '关于苏能', href: '/zh/about' },
+              { label: '公司简介' },
+            ]}
+          />
           <p className="text-[13px] font-semibold uppercase tracking-[0.24em] text-[var(--color-accent)]">
             About Suneng
           </p>

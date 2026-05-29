@@ -477,10 +477,13 @@ export default async function SunengProfilePage({ params }: PageProps) {
         <div className="relative mx-auto max-w-[1180px] px-5 py-14 lg:px-8 lg:py-20">
           <Breadcrumb
             locale="zh"
-            currentLabel="江苏苏能工业炉有限公司介绍"
+            currentLabel="苏能实力"
             tone="light"
             className="text-[13px]"
-            items={[{ label: '关于我们', href: aboutPath }]}
+            items={[
+              { label: '关于苏能', href: aboutPath },
+              { label: '苏能实力' },
+            ]}
           />
 
           <div className="mt-10 max-w-[940px]">
