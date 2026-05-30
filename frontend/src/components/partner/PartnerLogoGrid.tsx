@@ -113,23 +113,23 @@ export function PartnerLogoGrid({
       </div>
 
       <div className="mt-12 lg:mt-14">
-        <SectionHeading description="以下为苏能工业炉在装备制造、工程项目协作等领域的部分合作单位。">
+        <SectionHeading description="以下为苏能工业炉在装备制造、工程项目协作及工业炉设备应用中的部分合作单位。">
           {locale === 'en' ? 'Selected Cooperation Units' : '部分合作单位'}
         </SectionHeading>
 
-        <div className="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-3 lg:gap-7">
+        <div className="mt-10 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6 lg:gap-5">
           {coreItems.map((item) => (
             <div
               key={item.id}
-              className="flex min-h-[240px] items-center justify-center rounded-lg border border-[#dcdfe6] bg-white p-4 text-center shadow-sm transition-shadow duration-200 hover:shadow-md"
+              className="flex h-[150px] items-center justify-center rounded-lg border border-[#dcdfe6] bg-white px-4 py-5 text-center shadow-sm transition-shadow duration-200 hover:shadow-md"
             >
-              <div className="flex h-full min-h-[208px] w-full items-center justify-center bg-white">
+              <div className="flex h-full w-full items-center justify-center bg-white">
                 <Image
                   src={item.logoUrl}
                   alt={partnerLogoAlt(item.name)}
                   width={900}
                   height={360}
-                  className="mx-auto max-h-full max-w-full object-contain"
+                  className="mx-auto max-h-[92px] max-w-[190px] object-contain"
                 />
               </div>
             </div>
@@ -151,9 +151,6 @@ export function PartnerLogoGrid({
             </div>
           ))}
         </div>
-        <p className="mt-6 rounded-[6px] bg-[#f8fafc] px-5 py-4 text-[14px] leading-[1.8] text-[#667085] ring-1 ring-[#e1e7f0]">
-          以上合作单位名单表示历史项目合作、设备供货或相关业务往来，排名不分先后，不代表相关单位公开推荐或认可。
-        </p>
       </div>
 
       <div className="mt-14 lg:mt-16">
@@ -227,9 +224,6 @@ export function PartnerLogoGrid({
 
       <div className="mt-12 rounded-[8px] border border-[#e1e7f0] bg-[#f8fafc] p-6 text-[14px] leading-[1.9] text-[#667085] lg:p-7">
         <p>
-          本页面所列合作单位与行业客户，仅表示历史项目合作、设备供货或相关业务往来，不代表相关单位公开推荐或认可。
-        </p>
-        <p className="mt-3">
           苏能工业炉为通用工业热处理装备制造商，不持有 AMS
           2750、Nadcap、CQI-9、军工产品资质或航空航天特殊工艺认证。涉及上述特殊工艺认证要求的项目，建议选择具备相应资质的供应商。
         </p>
