@@ -10,6 +10,9 @@ const sitemapLocales: Locale[] = ['zh'];
 
 type SitemapEntry = MetadataRoute.Sitemap[number];
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 function localizedPath(locale: Locale, path: string) {
   if (path === '/') return `/${locale}`;
   return `/${locale}${path.startsWith('/') ? path : `/${path}`}`;
@@ -106,7 +109,7 @@ function collectProductRoutes(): MetadataRoute.Sitemap {
 }
 
 async function collectNewsRoutes(): Promise<MetadataRoute.Sitemap> {
-  const newsResult = await getNewsList({ page: 1, pageSize: 200 });
+  const newsResult = await getNewsList({ page: 1, pageSize: 200, timeoutMs: 10000 });
 
   if (newsResult.error) {
     return [];
