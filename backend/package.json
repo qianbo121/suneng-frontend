@@ -11,7 +11,8 @@
     "lint": "eslint \"{src,test}/**/*.ts\" --fix",
     "prisma:generate": "prisma generate",
     "prisma:migrate:dev": "prisma migrate dev",
-    "prisma:seed": "prisma db seed"
+    "prisma:seed": "prisma db seed",
+    "baidu:backfill-news": "ts-node --project tsconfig.json scripts/backfill-baidu-news-submit.ts"
   },
   "prisma": {
     "seed": "ts-node --project tsconfig.json prisma/seed.ts"

@@ -6,7 +6,7 @@ import { getNewsList } from '@/lib/api/news';
 import { STATIC_PRODUCTS } from '@/constants/static-products';
 import { Locale } from '@/types/site';
 
-const locales: Locale[] = ['zh', 'en'];
+const sitemapLocales: Locale[] = ['zh'];
 
 type SitemapEntry = MetadataRoute.Sitemap[number];
 
@@ -57,7 +57,7 @@ function collectStaticRoutes(): MetadataRoute.Sitemap {
     { path: '/contact', changeFrequency: 'monthly', priority: 0.7 },
   ];
 
-  for (const locale of locales) {
+  for (const locale of sitemapLocales) {
     for (const item of staticPaths) {
       routes.push(
         route(localizedPath(locale, item.path), {
@@ -93,7 +93,7 @@ function collectStaticRoutes(): MetadataRoute.Sitemap {
 }
 
 function collectProductRoutes(): MetadataRoute.Sitemap {
-  return locales.flatMap((locale) =>
+  return sitemapLocales.flatMap((locale) =>
     STATIC_PRODUCTS.map((product) =>
       route(localizedPath(locale, `/products/detail/${product.slug}`), {
         lastModified: new Date(),
@@ -107,17 +107,25 @@ function collectProductRoutes(): MetadataRoute.Sitemap {
 
 async function collectNewsRoutes(): Promise<MetadataRoute.Sitemap> {
   const newsResult = await getNewsList({ page: 1, pageSize: 200 });
-  const items = newsResult.data?.items ?? [];
 
-  return locales.flatMap((locale) =>
-    items.map((article) =>
-      route(localizedPath(locale, `/news/${article.slug}`), {
-        lastModified: safeLastModified(article.publishDate),
-        changeFrequency: 'monthly',
-        priority: 0.6,
-        images: article.coverImage && publicPathExists(article.coverImage) ? [absoluteUrl(article.coverImage)] : undefined,
-      }),
-    ),
+  if (newsResult.error) {
+    return [];
+  }
+
+  const items = (newsResult.data?.items ?? []).filter((article) => {
+    const status = 'status' in article ? article.status : undefined;
+    const isPublished = 'isPublished' in article ? article.isPublished : undefined;
+
+    return article.slug && status === 'published' && isPublished === true;
+  });
+
+  return items.map((article) =>
+    route(localizedPath('zh', `/news/${article.slug}`), {
+      lastModified: safeLastModified(article.publishDate),
+      changeFrequency: 'monthly',
+      priority: 0.6,
+      images: article.coverImage && publicPathExists(article.coverImage) ? [absoluteUrl(article.coverImage)] : undefined,
+    }),
   );
 }
 
