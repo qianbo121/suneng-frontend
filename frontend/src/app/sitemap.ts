@@ -109,7 +109,7 @@ function collectProductRoutes(): MetadataRoute.Sitemap {
 }
 
 async function collectNewsRoutes(): Promise<MetadataRoute.Sitemap> {
-  const newsResult = await getNewsList({ page: 1, pageSize: 200, timeoutMs: 10000 });
+  const newsResult = await getNewsList({ page: 1, pageSize: 100, timeoutMs: 10000 });
 
   if (newsResult.error) {
     return [];
