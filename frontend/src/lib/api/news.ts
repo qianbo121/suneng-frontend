@@ -5,6 +5,7 @@ type GetNewsListOptions = {
   categoryId?: number;
   page?: number;
   pageSize?: number;
+  timeoutMs?: number;
 };
 
 export function getNewsCategories() {
@@ -21,6 +22,7 @@ export function getNewsList(options: GetNewsListOptions = {}) {
       page: options.page ?? 1,
       pageSize: options.pageSize ?? 10,
     },
+    timeoutMs: options.timeoutMs,
   });
 }
 
