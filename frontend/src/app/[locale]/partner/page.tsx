@@ -42,18 +42,13 @@ const corePartners: CorePartnerLogoItem[] = [
   },
   {
     id: 5,
-    name: '江苏天工工具新材料\n股份有限公司',
-    logoUrl: '/images/partner/logos/tg.png',
+    name: '中国兵器工业集团江山重工\n研究院有限公司',
+    logoUrl: '/images/partner/logos/cngc.png',
   },
   {
     id: 6,
-    name: '六和轻合金（苏州）\n有限公司',
-    logoUrl: '/images/partner/logos/liuhe.png',
-  },
-  {
-    id: 7,
-    name: '某青山系不锈钢\n企业',
-    logoUrl: '/images/partner/logos/tsingshan.png',
+    name: '天津航天长征火箭\n制造有限公司',
+    logoUrl: '/images/partner/logos/casc.png',
   },
 ];
 
