@@ -42,13 +42,13 @@ const corePartners: CorePartnerLogoItem[] = [
   },
   {
     id: 5,
-    name: '江苏天工工具新材料\n股份有限公司',
-    logoUrl: '/images/partner/logos/tg.png',
+    name: '中国兵器工业集团江山重工\n研究院有限公司',
+    logoUrl: '/images/partner/logos/cngc.png',
   },
   {
     id: 6,
-    name: '六和轻合金（苏州）\n有限公司',
-    logoUrl: '/images/partner/logos/liuhe.png',
+    name: '天津航天长征火箭\n制造有限公司',
+    logoUrl: '/images/partner/logos/casc.png',
   },
 ];
 
@@ -132,9 +132,9 @@ const cooperationFields: CooperationFieldItem[] = [
   },
   {
     id: 4,
-    title: '能源装备与新能源',
+    title: '能源装备与相关制造场景',
     description:
-      '服务石化设备、压力容器、油气管材、风电零部件，以及能源装备与新能源相关制造场景的热处理装备需求。',
+      '服务石化设备、压力容器、油气管材、风电零部件等能源装备及相关制造场景的热处理装备需求。',
     iconUrl: '/images/partner/fields/new-energy-storage.png',
     furnaceTypes: '台车炉、辊底炉、网带炉',
     links: [
