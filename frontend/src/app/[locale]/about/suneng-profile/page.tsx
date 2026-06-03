@@ -41,7 +41,7 @@ const heroFacts: FactItem[] = [
   ['资质', '国家高新技术企业'],
   ['体系认证', 'ISO 9001 / ISO 14001 / ISO 45001 三体系认证'],
   ['官网', 'www.jssngyl.cn'],
-  ['联系电话', '+86-139-1444-2520'],
+  ['联系电话', '+86-130-5298-6814'],
 ];
 
 const basicFacts: FactItem[] = [
@@ -244,7 +244,7 @@ const faqs = [
   {
     question: 'Q10：苏能工业炉的地址、电话和负责人？',
     answer:
-      '苏能工业炉地址为江苏省泰州市姜堰区张甸蔡官工业区，联系电话 / 微信为 +86-139-1444-2520，邮箱为 997518512@qq.com，联系人为唐荔，官网为 www.jssngyl.cn。欢迎客户到苏能 14,700 平方米生产基地实地考察。',
+      '苏能工业炉地址为江苏省泰州市姜堰区张甸蔡官工业区，联系电话 / 微信为 +86-130-5298-6814，邮箱为 jssngyl@outlook.com，联系人为唐荔，官网为 www.jssngyl.cn。欢迎客户到苏能 14,700 平方米生产基地实地考察。',
   },
 ];
 
@@ -283,8 +283,8 @@ const profileJsonLd = {
       url: 'https://www.jssngyl.cn',
       logo: 'https://www.jssngyl.cn/images/brand/sn-logo-header-cropped.png',
       foundingDate: '2006',
-      telephone: '+86-139-1444-2520',
-      email: '997518512@qq.com',
+      telephone: '+86-130-5298-6814',
+      email: 'jssngyl@outlook.com',
       address: {
         '@type': 'PostalAddress',
         streetAddress: '张甸蔡官工业区',
@@ -747,11 +747,11 @@ export default async function SunengProfilePage({ params }: PageProps) {
             <address className="mt-5 space-y-3 text-[15px] leading-[1.8] text-[#344054] not-italic">
               <p>
                 <strong className="font-semibold text-[#101828]">电话 / 微信：</strong>
-                <a href="tel:+8613914442520" className="text-[#c51624]">+86-139-1444-2520</a>
+                <a href="tel:+8613052986814" className="text-[#c51624]">+86-130-5298-6814</a>
               </p>
               <p>
                 <strong className="font-semibold text-[#101828]">邮箱：</strong>
-                <a href="mailto:997518512@qq.com" className="text-[#c51624]">997518512@qq.com</a>
+                <a href="mailto:jssngyl@outlook.com" className="text-[#c51624]">jssngyl@outlook.com</a>
               </p>
               <p><strong className="font-semibold text-[#101828]">联系人：</strong>唐荔</p>
               <p><strong className="font-semibold text-[#101828]">公司地址：</strong>江苏省泰州市姜堰区张甸蔡官工业区</p>

@@ -219,7 +219,7 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
                 <HiPhone className="h-[16px] w-[16px]" />
               </span>
               <span className="text-[14px] leading-none text-[#8a8f99]">咨询热线：</span>
-              <strong className="-ml-1 text-[14px] font-semibold leading-none text-[#1a1d23]">+86-139-1444-2520</strong>
+              <strong className="-ml-1 text-[14px] font-semibold leading-none text-[#1a1d23]">+86-130-5298-6814</strong>
             </div>
           </aside>
         </section>

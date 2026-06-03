@@ -34,7 +34,7 @@ const serviceSections = [
   {
     title: '三、响应速度：高效出击，不负所托',
     paragraphs: [
-      '故障咨询：客户服务热线 +86-139-1444-2520，专业技术团队接听后协助初步诊断问题。',
+      '故障咨询：客户服务热线 +86-130-5298-6814，专业技术团队接听后协助初步诊断问题。',
       '现场服务：客户服务热线 8 小时内响应，技术服务团队 24 小时内答复处理方案；现场上门服务依据合同约定、设备状态、现场工况和服务距离安排。',
       '故障处理：按问题影响等级与合同约定的服务条款响应。具体处理方案、停产损失补偿等事宜，以合同条款为准。',
     ],
@@ -134,7 +134,7 @@ export default async function ServicePage({ params }: ServicePageProps) {
             </div>
             <div className="text-[#071a3d]">
               <h3 className="text-[20px] font-normal leading-[1.45] text-[var(--color-accent)]">售后服务热线方式</h3>
-              <p className="mt-2 text-[18px] font-normal leading-[1.6]">联系人：唐荔　电话：+86-139-1444-2520</p>
+              <p className="mt-2 text-[18px] font-normal leading-[1.6]">联系人：唐荔　电话：+86-130-5298-6814</p>
             </div>
           </section>
         </article>

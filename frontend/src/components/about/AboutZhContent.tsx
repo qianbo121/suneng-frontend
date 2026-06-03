@@ -596,18 +596,18 @@ export function AboutZhContent() {
               <p className="text-[14px] font-semibold text-[#667085]">联系电话</p>
               <a
                 className="mt-2 block text-[18px] font-semibold text-[#111827]"
-                href="tel:+8613914442520"
+                href="tel:+8613052986814"
               >
-                +86-139-1444-2520
+                +86-130-5298-6814
               </a>
             </div>
             <div className="rounded-[8px] border border-[#e1e7f0] bg-[#fbfcfe] p-5">
               <p className="text-[14px] font-semibold text-[#667085]">邮箱</p>
               <a
                 className="mt-2 block break-words text-[18px] font-semibold text-[#111827]"
-                href="mailto:997518512@qq.com"
+                href="mailto:jssngyl@outlook.com"
               >
-                997518512@qq.com
+                jssngyl@outlook.com
               </a>
             </div>
             <div className="rounded-[8px] border border-[#e1e7f0] bg-[#fbfcfe] p-5">
