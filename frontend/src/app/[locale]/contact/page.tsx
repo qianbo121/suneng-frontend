@@ -21,12 +21,12 @@ const contactHero = '/images/contact/contact-hero.png';
 const contactItems = [
   {
     label: '联系电话',
-    value: '+86-139-1444-2520',
+    value: '+86-130-5298-6814',
     icon: '/images/contact/icon-phone.png',
   },
   {
     label: '企业邮箱',
-    value: '997518512@qq.com',
+    value: 'jssngyl@outlook.com',
     icon: '/images/contact/icon-email.png',
   },
   {

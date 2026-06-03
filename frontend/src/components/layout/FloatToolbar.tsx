@@ -15,12 +15,12 @@ type FloatToolbarProps = {
 const toolbarCopy = {
   zh: [
     { key: 'wechat', label: '微信联系', type: 'wechat' as const },
-    { key: 'phone', label: '电话联系', href: 'tel:13914442520', icon: HiOutlinePhone, type: 'link' as const },
+    { key: 'phone', label: '电话联系', href: 'tel:13052986814', icon: HiOutlinePhone, type: 'link' as const },
     { key: 'top', label: '返回顶部', href: '#top', icon: HiChevronUp, type: 'top' as const },
   ],
   en: [
     { key: 'wechat', label: 'WeChat', type: 'wechat' as const },
-    { key: 'phone', label: 'Call', href: 'tel:13914442520', icon: HiOutlinePhone, type: 'link' as const },
+    { key: 'phone', label: 'Call', href: 'tel:13052986814', icon: HiOutlinePhone, type: 'link' as const },
     { key: 'top', label: 'Top', href: '#top', icon: HiChevronUp, type: 'top' as const },
   ],
 } as const;

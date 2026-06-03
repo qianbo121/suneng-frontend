@@ -457,19 +457,19 @@ async function seedBanners() {
 
 async function seedCompanyInfo() {
   const entries = [
-    { key: 'site_phone', valueZh: '+86-139-1444-2520', valueEn: '+86-139-1444-2520' },
+    { key: 'site_phone', valueZh: '+86-130-5298-6814', valueEn: '+86-130-5298-6814' },
     { key: 'site_address', valueZh: '江苏省泰州市姜堰区张甸蔡官工业区', valueEn: 'Caiguan Industrial Park, Zhangdian Town, Jiangyan District, Taizhou, Jiangsu, China' },
-    { key: 'site_email', valueZh: '997518512@qq.com', valueEn: '997518512@qq.com' },
+    { key: 'site_email', valueZh: 'jssngyl@outlook.com', valueEn: 'jssngyl@outlook.com' },
     { key: 'site_fax', valueZh: '', valueEn: '' },
-    { key: 'salesPhone', valueZh: '+86-139-1444-2520', valueEn: '+86-139-1444-2520' },
-    { key: 'topPhone', valueZh: '+86-139-1444-2520', valueEn: '+86-139-1444-2520' },
-    { key: 'hotline', valueZh: '+86-139-1444-2520', valueEn: '+86-139-1444-2520' },
+    { key: 'salesPhone', valueZh: '+86-130-5298-6814', valueEn: '+86-130-5298-6814' },
+    { key: 'topPhone', valueZh: '+86-130-5298-6814', valueEn: '+86-130-5298-6814' },
+    { key: 'hotline', valueZh: '+86-130-5298-6814', valueEn: '+86-130-5298-6814' },
     { key: 'companyAddress', valueZh: '江苏省泰州市姜堰区张甸蔡官工业区', valueEn: 'Caiguan Industrial Park, Zhangdian Town, Jiangyan District, Taizhou, Jiangsu, China' },
     { key: 'foundedYear', valueZh: '2006', valueEn: '2006' },
     { key: 'registeredCapital', valueZh: '5080', valueEn: '5080' },
     { key: 'patentCount', valueZh: '29', valueEn: '29' },
     { key: 'employeeCount', valueZh: '150', valueEn: '150' },
-    { key: 'wechatQr', valueZh: 'https://placehold.co/220x220/004B97/ffffff', valueEn: 'https://placehold.co/220x220/004B97/ffffff' },
+    { key: 'wechatQr', valueZh: '/images/footer/wechat-qr.png', valueEn: '/images/footer/wechat-qr.png' },
   ];
 
   for (const entry of entries) {
@@ -779,7 +779,7 @@ async function seedServiceSupport() {
         cityEn: 'Taizhou',
         addressZh: '江苏省泰州市姜堰区张甸蔡官工业区',
         addressEn: 'Caiguan Industrial Park, Zhangdian Town, Jiangyan District, Taizhou, Jiangsu',
-        phone: '+86-139-1444-2520',
+        phone: '+86-130-5298-6814',
         lat: 32.44,
         lng: 120.03,
         sortOrder: 10,
@@ -792,7 +792,7 @@ async function seedServiceSupport() {
         cityEn: 'Jiangsu',
         addressZh: '江苏地区售后服务按项目和合同约定安排',
         addressEn: 'Service in Jiangsu is arranged according to project and contract terms.',
-        phone: '+86-139-1444-2520',
+        phone: '+86-130-5298-6814',
         lat: 32.0603,
         lng: 118.7969,
         sortOrder: 20,
@@ -805,7 +805,7 @@ async function seedServiceSupport() {
         cityEn: 'Chengdu',
         addressZh: '西南地区服务按项目和合同约定安排',
         addressEn: 'Service in Southwest China is arranged according to project and contract terms.',
-        phone: '+86-139-1444-2520',
+        phone: '+86-130-5298-6814',
         lat: 30.5728,
         lng: 104.0668,
         sortOrder: 30,

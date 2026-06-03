@@ -26,8 +26,8 @@ const FOOTER_TOKENS = {
     gridGap: 48,
     logoWidth: 203,
     logoHeight: 114,
-    qrSize: 104,
-    qrGap: 28,
+    qrSize: 144,
+    qrGap: 24,
     titleFontSize: 20,
     titleUnderlineWidth: 52,
     titleUnderlineHeight: 3,
@@ -54,8 +54,8 @@ const footerCopy = {
     address: '江苏省泰州市姜堰区张甸蔡官工业区',
     wechat: '微信二维码',
     douyin: '抖音二维码',
-    email: '997518512@qq.com',
-    phone: '+86-139-1444-2520',
+    email: 'jssngyl@outlook.com',
+    phone: '+86-130-5298-6814',
     copyright: 'Copyright © 2025 江苏苏能工业炉有限公司 版权所有',
     icp: '苏ICP备20020318号-1',
     policeBeian: '苏公网安备32120402001014号',
@@ -67,8 +67,8 @@ const footerCopy = {
     address: 'Caiguan Industrial Park, Zhangdian Town, Jiangyan District, Taizhou, Jiangsu Province, China',
     wechat: 'WeChat QR',
     douyin: 'Douyin QR',
-    email: '997518512@qq.com',
-    phone: '+86-139-1444-2520',
+    email: 'jssngyl@outlook.com',
+    phone: '+86-130-5298-6814',
     copyright: 'Copyright © 2025 Jiangsu Suneng Industrial Furnace Co., Ltd. All rights reserved.',
     icp: '苏ICP备20020318号-1',
     policeBeian: '苏公网安备32120402001014号',
@@ -177,7 +177,7 @@ function QrBlock({ copy, locale }: { copy: (typeof footerCopy)['zh'] | (typeof f
                 alt={joinImageAlt(locale, [buildBrandImageAlt(locale, 'short'), qr.label])}
                 width={desktop.qrSize}
                 height={desktop.qrSize}
-                className="h-full w-full object-contain"
+                className="h-full w-full object-contain [image-rendering:pixelated]"
               />
             </div>
             <p className={`${FOOTER_TOKENS.fontClass} mt-[10px] whitespace-nowrap text-[13px] leading-[1.5] text-[var(--footer-text-color)]`}>

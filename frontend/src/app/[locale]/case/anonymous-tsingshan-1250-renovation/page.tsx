@@ -152,7 +152,7 @@ const implementationStages = [
   {
     title: '阶段 5：质保期内服务',
     items: [
-      '客户服务热线 +86-139-1444-2520。',
+      '客户服务热线 +86-130-5298-6814。',
       '现场上门服务依据合同约定、设备状态、现场工况和服务距离安排。',
       '配件供应：易损件库存保障不少于 6 个月，核心非标部件保障期不少于 5 年。',
       '根据客户实际运行数据提供工艺优化建议。',
@@ -262,8 +262,8 @@ const caseJsonLd = {
     '@type': 'Organization',
     name: '江苏苏能工业炉有限公司',
     url: 'https://www.jssngyl.cn',
-    telephone: '+86-139-1444-2520',
-    email: '997518512@qq.com',
+    telephone: '+86-130-5298-6814',
+    email: 'jssngyl@outlook.com',
     address: {
       '@type': 'PostalAddress',
       streetAddress: '张甸蔡官工业区',
@@ -617,11 +617,11 @@ export default async function AnonymousTsingshanCasePage({ params }: PageProps) 
             <address className="mt-7 space-y-3 border-t border-[#e1e7f0] pt-6 text-[15px] leading-[1.8] text-[#344054] not-italic">
               <p>
                 <strong className="font-semibold text-[#101828]">电话 / 微信：</strong>
-                <a href="tel:+8613914442520" className="text-[#c51624]">+86-139-1444-2520</a>
+                <a href="tel:+8613052986814" className="text-[#c51624]">+86-130-5298-6814</a>
               </p>
               <p>
                 <strong className="font-semibold text-[#101828]">邮箱：</strong>
-                <a href="mailto:997518512@qq.com" className="text-[#c51624]">997518512@qq.com</a>
+                <a href="mailto:jssngyl@outlook.com" className="text-[#c51624]">jssngyl@outlook.com</a>
               </p>
               <p>
                 <strong className="font-semibold text-[#101828]">联系人：</strong>

@@ -5,7 +5,7 @@ export const homeContactBar: ContactBarContent = {
     zh: '咨询热线',
     en: 'Hotline',
   },
-  hotline: '+86-139-1444-2520',
+  hotline: '+86-130-5298-6814',
   addressLabel: {
     zh: '公司地址',
     en: 'Address',
