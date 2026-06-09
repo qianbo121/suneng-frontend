@@ -231,6 +231,26 @@ export default async function PartnerPage({ params }: PartnerPageProps) {
   const { locale } = await params;
   const currentLocale = (locale === 'en' ? 'en' : 'zh') as Locale;
   const title = currentLocale === 'en' ? 'Partners' : '合作关系与行业应用';
+  const localizePath = (rawPath: string) => {
+    if (!rawPath.startsWith('/')) {
+      return rawPath;
+    }
+    const normalized = rawPath.replace(/^\/(zh|en)\//, '/');
+    return `/${currentLocale}${normalized}`;
+  };
+
+  const localizedFieldItems = cooperationFields.map((field) => ({
+    ...field,
+    links: field.links.map((link) => ({
+      ...link,
+      href: localizePath(link.href),
+    })),
+  }));
+
+  const localizedRelatedLinks = relatedLinks.map((item) => ({
+    ...item,
+    href: localizePath(item.href),
+  }));
 
   return (
     <div className="bg-white pb-10 lg:pb-0">
@@ -261,8 +281,8 @@ export default async function PartnerPage({ params }: PartnerPageProps) {
           locale={currentLocale}
           coreItems={corePartners}
           moreItems={morePartners}
-          fieldItems={cooperationFields}
-          relatedLinks={relatedLinks}
+          fieldItems={localizedFieldItems}
+          relatedLinks={localizedRelatedLinks}
         />
       </main>
     </div>

@@ -30,7 +30,7 @@ export default function LocaleHomeLoading() {
       <div className="bg-[#162434] py-16 lg:py-20">
         <div className="mx-auto max-w-content px-4 lg:px-6">
           <Skeleton className="mx-auto h-10 w-40 bg-white/10" />
-          <Skeleton className="mx-auto mt-4 h-12 w-[440px] bg-white/10" />
+          <Skeleton className="mx-auto mt-4 h-12 w-full max-w-[440px] bg-white/10" />
           <div className="mt-12 grid gap-5 md:grid-cols-2 xl:grid-cols-4">
             {Array.from({ length: 4 }).map((_, index) => (
               <Skeleton key={index} className="h-[120px] bg-white/10" />

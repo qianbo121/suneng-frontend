@@ -680,7 +680,8 @@ export default async function SunengProfilePage({ params }: PageProps) {
             </div>
           </Card>
         </div>
-        <div className="mt-7 overflow-x-auto rounded-[8px] border border-[#dfe6f0]">
+        <p className="mt-5 text-[13px] leading-[1.7] text-[#667085] md:hidden">左右滑动查看完整表格</p>
+        <div className="mt-3 overflow-x-auto rounded-[8px] border border-[#dfe6f0] [-webkit-overflow-scrolling:touch] md:mt-7">
           <table className="min-w-[760px] w-full border-collapse bg-white text-left">
             <caption className="bg-[#f8fafc] px-5 py-4 text-left text-[15px] font-semibold text-[#172033]">
               客户如何选择

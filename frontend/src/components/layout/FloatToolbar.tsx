@@ -40,7 +40,7 @@ export function FloatToolbar({ locale = 'zh' }: FloatToolbarProps) {
 
   return (
     <>
-      <div className="fixed bottom-8 right-6 z-40 hidden flex-col xl:flex">
+      <div className="fixed bottom-8 right-6 z-40 hidden flex-col transition-opacity duration-200 [body.mobile-nav-open_&]:hidden xl:flex">
         {items.map((item, index) => {
           const sharedClassName =
             index === items.length - 1
@@ -96,7 +96,7 @@ export function FloatToolbar({ locale = 'zh' }: FloatToolbarProps) {
         })}
       </div>
 
-      <div className="fixed inset-x-0 bottom-0 z-40 grid grid-cols-3 border-t border-black/10 bg-white/98 backdrop-blur xl:hidden">
+      <div className="fixed inset-x-0 bottom-0 z-40 grid grid-cols-3 border-t border-black/10 bg-white/98 pb-[env(safe-area-inset-bottom)] backdrop-blur transition-opacity duration-200 [body.mobile-nav-open_&]:hidden xl:hidden">
         {items.map((item) => {
           if (item.type === 'top') {
             const TopIcon = item.icon;
@@ -159,6 +159,7 @@ export function FloatToolbar({ locale = 'zh' }: FloatToolbarProps) {
             <button
               type="button"
               onClick={() => setWechatOpen(false)}
+              aria-label={currentLocale === 'en' ? 'Close QR code modal' : '关闭二维码弹窗'}
               className="mt-5 h-[38px] min-w-[120px] rounded-[4px] bg-[var(--color-accent)] px-6 text-[14px] text-white"
             >
               {currentLocale === 'en' ? 'Close' : '关闭'}

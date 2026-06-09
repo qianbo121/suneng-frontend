@@ -21,6 +21,20 @@ function buildLocaleHref(locale: string, href: string) {
   return href === '/' ? `/${locale}` : `/${locale}${href}`;
 }
 
+function buildLocaleSwitchPath(pathname: string, nextLocale: 'zh' | 'en', currentLocale: 'zh' | 'en') {
+  if (pathname === `/${currentLocale}` || pathname === `/${currentLocale}/`) {
+    return `/${nextLocale}`;
+  }
+
+  if (!pathname.startsWith(`/${currentLocale}/`)) {
+    return pathname === '/' ? `/${nextLocale}` : `/${nextLocale}${pathname}`;
+  }
+
+  const [, , ...parts] = pathname.split('/');
+  const tail = parts.join('/');
+  return `/${nextLocale}${tail ? `/${tail}` : ''}`;
+}
+
 function isActiveNavItem(pathname: string, href: string) {
   if (pathname === href) {
     return true;
@@ -38,12 +52,24 @@ export function Header({ locale }: HeaderProps) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const currentLocale = (locale === 'en' ? 'en' : 'zh') as Locale;
   const navItems = useMemo(() => getLocalizedNavigation(currentLocale), [currentLocale]);
+  const switchLocale = currentLocale === 'zh' ? 'en' : 'zh';
+  const switchLocalePath = buildLocaleSwitchPath(pathname, switchLocale, currentLocale);
   const localeLabel = { zh: '中文', en: 'EN' } as const;
   const logoAlt = buildBrandImageAlt(currentLocale, 'full');
 
   useEffect(() => {
     setMobileOpen(false);
   }, [pathname]);
+
+  useEffect(() => {
+    document.body.classList.toggle('mobile-nav-open', mobileOpen);
+    document.body.classList.toggle('overflow-hidden', mobileOpen);
+
+    return () => {
+      document.body.classList.remove('mobile-nav-open');
+      document.body.classList.remove('overflow-hidden');
+    };
+  }, [mobileOpen]);
 
   return (
     <>
@@ -55,7 +81,9 @@ export function Header({ locale }: HeaderProps) {
               alt={logoAlt}
               width={229}
               height={40}
-              className="h-[40px] w-auto max-w-none object-contain object-left object-center"
+              priority
+              className="max-w-none object-contain object-left object-center"
+              style={{ width: 'auto', height: '40px' }}
             />
           </Link>
           <button
@@ -78,7 +106,9 @@ export function Header({ locale }: HeaderProps) {
                     alt={logoAlt}
                     width={275}
                     height={48}
-                    className="h-[48px] w-auto max-w-none object-contain object-left object-center"
+                    priority
+                    className="max-w-none object-contain object-left object-center"
+                    style={{ width: 'auto', height: '48px' }}
                   />
                 </Link>
               </div>
@@ -147,6 +177,15 @@ export function Header({ locale }: HeaderProps) {
                         </li>
                       );
                     })}
+
+                    <li className="p_level1Item group relative h-header-h list-none border-none">
+                      <Link
+                        href={switchLocalePath}
+                        className="relative z-[2] flex h-header-h items-center whitespace-nowrap px-[16px] text-center text-[15px] font-medium tracking-[0.01em] text-text-secondary transition-colors duration-300 bp-desktop-wide-max:px-[14px] bp-tablet-max:px-[10px] bp-tablet-max:text-[14px] hover:text-[#202020]"
+                      >
+                        <span>{localeLabel[switchLocale]}</span>
+                      </Link>
+                    </li>
                   </ul>
                 </div>
               </div>
@@ -171,7 +210,9 @@ export function Header({ locale }: HeaderProps) {
                   alt={logoAlt}
                   width={229}
                   height={40}
-                  className="h-[40px] w-auto max-w-none object-contain object-left object-center"
+                  priority
+                  className="max-w-none object-contain object-left object-center"
+                  style={{ width: 'auto', height: '40px' }}
                 />
               </Link>
               <button
@@ -226,12 +267,26 @@ export function Header({ locale }: HeaderProps) {
                       </li>
                     );
                   })}
+
+                  <li className="p_level1Item list-none border-b border-black/5">
+                    <Link
+                      href={switchLocalePath}
+                      className="flex min-h-[50px] items-center justify-between py-1 text-[14px] font-semibold leading-[50px] text-text-secondary"
+                    >
+                      <span>{localeLabel[switchLocale]}</span>
+                    </Link>
+                  </li>
                 </ul>
               </div>
 
               <div className="mt-6 border-t border-black/5 pt-6">
-                <div className="inline-flex min-w-[120px] items-center justify-center bg-bg-language px-4 py-3 text-button font-semibold text-text-inverse">
-                  {localeLabel[currentLocale]}
+                <div className="inline-flex min-w-[120px] items-center justify-center">
+                  <Link
+                    href={switchLocalePath}
+                    className="inline-flex min-w-[120px] items-center justify-center bg-bg-language px-4 py-3 text-button font-semibold text-text-inverse"
+                  >
+                    {localeLabel[switchLocale]}
+                  </Link>
                 </div>
               </div>
             </div>
