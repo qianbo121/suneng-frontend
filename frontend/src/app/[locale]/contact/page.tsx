@@ -130,17 +130,32 @@ export default async function ContactPage({ params }: ContactPageProps) {
             <div className="mt-6 h-[3px] w-[52px] bg-[var(--color-accent)]" />
 
             <div className="mt-8 divide-y divide-[#dfe3ea]">
-              {contactItems.map((item) => (
-                <div key={item.label} className="grid grid-cols-[70px_minmax(0,1fr)] items-center gap-[10px] py-5 first:pt-0 last:pb-0">
-                  <div className="relative h-[70px] w-[70px] shrink-0 overflow-hidden rounded-full">
-                    <Image src={item.icon} alt="" fill sizes="70px" className="object-cover" />
+              {contactItems.map((item) => {
+                const isPhone = item.label === '联系电话';
+                const isEmail = item.label === '企业邮箱';
+                const contactHref = isPhone ? `tel:${item.value.replace(/\\s+/g, '')}` : isEmail ? `mailto:${item.value}` : null;
+
+                return (
+                  <div
+                    key={item.label}
+                    className="grid grid-cols-[70px_minmax(0,1fr)] items-center gap-[10px] py-5 first:pt-0 last:pb-0"
+                  >
+                    <div className="relative h-[70px] w-[70px] shrink-0 overflow-hidden rounded-full">
+                      <Image src={item.icon} alt="" fill sizes="70px" className="object-cover" />
+                    </div>
+                    <div className="flex min-w-0 flex-wrap items-baseline gap-x-0 gap-y-2 text-[18px] leading-[1.5] lg:text-[21px]">
+                      <span className="shrink-0 font-normal text-[#333333]">{item.label}：</span>
+                      {contactHref ? (
+                        <a href={contactHref} className="break-words font-normal text-[#333333] hover:text-[#c51624]">
+                          {item.value}
+                        </a>
+                      ) : (
+                        <span className="break-words font-normal text-[#333333]">{item.value}</span>
+                      )}
+                    </div>
                   </div>
-                  <div className="flex min-w-0 flex-wrap items-baseline gap-x-0 gap-y-2 text-[18px] leading-[1.5] lg:text-[21px]">
-                    <span className="shrink-0 font-normal text-[#333333]">{item.label}：</span>
-                    <span className="break-words font-normal text-[#333333]">{item.value}</span>
-                  </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
 

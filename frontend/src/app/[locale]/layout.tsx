@@ -30,9 +30,9 @@ export default async function LocaleLayout({ children, params }: LocaleLayoutPro
 
   return (
     <NextIntlClientProvider locale={locale} messages={messages}>
-      <div className="min-h-screen bg-white text-neutral-900">
+      <div className="min-h-screen bg-white pb-[72px] text-neutral-900 xl:pb-0">
         <Header locale={locale} />
-        <main className="min-h-[calc(100vh-520px)] bg-white pb-[88px] xl:pb-0">
+        <main className="min-h-[calc(100vh-520px)] bg-white pb-[96px] xl:pb-0">
           {children}
         </main>
         <Footer locale={locale} />

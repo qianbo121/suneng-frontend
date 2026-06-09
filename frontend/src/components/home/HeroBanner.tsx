@@ -13,6 +13,11 @@ type HeroBannerProps = {
   partners: PartnerLogoItem[];
 };
 
+type HeroPartnerLogo = {
+  name: string;
+  image: string;
+};
+
 const heroMotionEase: [number, number, number, number] = [0.22, 1, 0.36, 1];
 const heroStats = [
   { value: 2006, unit: '年', label: '公司成立' },
@@ -22,20 +27,58 @@ const heroStats = [
 ] as const;
 const heroDescription = '工业炉单机、配套件与整线交钥匙工程一体化解决方案商';
 const heroCredentials = '国家高新技术企业';
-const heroPartnerLogos = [
-  { name: 'ENFI', image: '/images/partner/logos/enfi.png', imageClass: 'max-h-[106px] max-w-[226px]' },
-  { name: 'CUEC', image: '/images/partner/logos/cuec.png', imageClass: 'max-h-[106px] max-w-[226px]' },
-  { name: 'NHI', image: '/images/partner/logos/nhi.png', imageClass: 'max-h-[106px] max-w-[226px]' },
-  { name: 'CNGC', image: '/images/partner/logos/cngc.png', imageClass: 'max-h-[106px] max-w-[226px]' },
+const heroPartnerLogoBasePath = '/images/partner/logos/home-marquee-normalized';
+const heroPartnerMarqueeCardClass =
+  'relative flex h-[96px] w-[228px] shrink-0 items-center justify-center overflow-hidden rounded-[13px] border border-[#e6ebf2] bg-white px-[10px] py-[10px] transition-all duration-250 hover:-translate-y-[3px] hover:scale-[1.01] hover:border-[#d5deee] hover:bg-[#fbfdff] hover:shadow-[0_12px_32px_rgba(15,23,42,0.16)] md:h-[100px] md:w-[246px] md:rounded-[15px]';
+const heroPartnerMarqueeImageFrameClass =
+  'flex h-[70px] w-[187px] items-center justify-center md:h-[76px] md:w-[203px]';
+const heroPartnerMarqueeImageClass =
+  'h-full w-full object-contain';
+const heroPartnerMarqueeTrackClass =
+  'flex w-max items-center gap-x-[12px] py-[4px] md:gap-x-[16px] animate-marquee will-change-transform group-hover:[animation-play-state:paused]';
+const heroPartnerMarqueeTrackDuration = '72s';
+const heroPartnerLogos: HeroPartnerLogo[] = [
   {
-    name: 'TSINGSHAN',
-    image: '/images/partner/logos/tsingshan.png',
-    imageClass: 'max-h-[86px] max-w-[220px]',
+    name: '内蒙古北方重工业集团有限公司',
+    image: `${heroPartnerLogoBasePath}/beifang-heavy.png`,
   },
-  { name: 'Enric', image: '/images/partner/logos/enric.png', imageClass: 'max-h-[106px] max-w-[226px]' },
-  { name: 'TG', image: '/images/partner/logos/tg.png', imageClass: 'max-h-[106px] max-w-[226px]' },
-  { name: 'CASC', image: '/images/partner/logos/casc.png', imageClass: 'max-h-[106px] max-w-[226px]' },
-  { name: 'LIUHE', image: '/images/partner/logos/liuhe.png', imageClass: 'max-h-[106px] max-w-[226px]' },
+  {
+    name: '中国恩菲工程技术有限公司',
+    image: `${heroPartnerLogoBasePath}/enfi.png`,
+  },
+  {
+    name: '中国联合工程有限公司',
+    image: `${heroPartnerLogoBasePath}/cuec.png`,
+  },
+  {
+    name: '中集安瑞环科技股份有限公司',
+    image: `${heroPartnerLogoBasePath}/cimctank.png`,
+  },
+  {
+    name: '江苏天工科技股份有限公司',
+    image: `${heroPartnerLogoBasePath}/tiangong-tech.png`,
+  },
+  {
+    name: '中集氢能源科技（南通）有限公司',
+    image: `${heroPartnerLogoBasePath}/cimc-hydrogen.png`,
+  },
+  {
+    name: '福建青拓实业股份有限公司',
+    image: `${heroPartnerLogoBasePath}/tsingtuo.png`,
+  },
+  {
+    name: '海隆石油钻具（无锡）有限公司',
+    image: `${heroPartnerLogoBasePath}/hilong.png`,
+  },
+  {
+    name: '吉林省致远新能源氢能科技有限公司',
+    image: `${heroPartnerLogoBasePath}/zhiyuan.png`,
+  },
+  {
+    name: '南通中集能源装备有限公司',
+    image: `${heroPartnerLogoBasePath}/cimc-energy.png`,
+  },
+  { name: '六和轻合金（苏州）有限公司', image: `${heroPartnerLogoBasePath}/liuhe.png` },
 ] as const;
 
 function AnimatedNumber({ value, duration = 1500 }: { value: number; duration?: number }) {
@@ -172,11 +215,11 @@ export function HeroBanner({ locale, items, partners }: HeroBannerProps) {
         initial={{ y: 16, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.72, ease: heroMotionEase, delay: 0.52 }}
-        className="relative z-30 mx-auto -mt-[64px] w-[calc(100%-32px)] max-w-[1295px] overflow-hidden rounded-[22px] bg-white shadow-[0_22px_50px_rgba(15,23,42,0.14)] md:-mt-[78px]"
+        className="relative z-30 mx-auto -mt-[60px] w-[calc(100%-28px)] max-w-[1295px] overflow-hidden rounded-[18px] border border-[#ebedf1] bg-white shadow-[0_20px_46px_rgba(15,23,42,0.11)] md:-mt-[74px] md:w-[calc(100%-40px)]"
       >
-        <div className="flex min-h-[106px] items-center overflow-x-auto px-[8px] py-0 md:overflow-visible md:px-[24px]">
-          <div className="flex min-w-[152px] shrink-0 items-center border-r border-[#dedede] pr-[16px]">
-            <span className="mr-[18px] h-[76px] w-[3px] rounded-full bg-[#E30613]" />
+        <div className="flex min-h-[112px] items-center overflow-x-auto px-[14px] py-[12px] md:overflow-visible md:px-[24px]">
+          <div className="flex min-w-[156px] shrink-0 items-center border-r border-[#e2e8f3] pr-[15px]">
+            <span className="mr-[16px] h-[70px] w-[3px] rounded-full bg-[#E30613]" />
             <span>
               <span className="block text-[18px] font-semibold leading-none tracking-[0.06em] text-[#202020]">
                 合作伙伴
@@ -188,23 +231,25 @@ export function HeroBanner({ locale, items, partners }: HeroBannerProps) {
           </div>
           <div className="group relative min-w-0 flex-1 overflow-hidden">
             <div
-              className="flex w-max items-center animate-marquee group-hover:[animation-play-state:paused]"
-              style={{ animationDuration: '34s' }}
+              className={heroPartnerMarqueeTrackClass}
+              style={{ animationDuration: heroPartnerMarqueeTrackDuration }}
             >
               {marqueeLogos.map((partner, index) => (
                 <div
                   key={`${partner.name}-${index}`}
-                  className="relative flex h-[106px] w-[238px] shrink-0 items-center justify-center overflow-hidden px-0 after:absolute after:right-0 after:top-1/2 after:h-[76px] after:w-px after:-translate-y-1/2 after:bg-[#dedede]"
+                  className={heroPartnerMarqueeCardClass}
                 >
-                  <Image
-                    src={partner.image}
-                    alt={`${partner.name} logo`}
-                    width={420}
-                    height={210}
-                    unoptimized
-                    className={`${partner.imageClass} h-auto w-auto object-contain`}
-                    sizes="236px"
-                  />
+                  <div className={heroPartnerMarqueeImageFrameClass}>
+                    <Image
+                      src={partner.image}
+                      alt={`${partner.name} logo`}
+                      width={960}
+                      height={360}
+                      unoptimized
+                      className={heroPartnerMarqueeImageClass}
+                      sizes="203px"
+                    />
+                  </div>
                 </div>
               ))}
             </div>
