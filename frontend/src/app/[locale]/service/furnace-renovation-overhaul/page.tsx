@@ -5,6 +5,7 @@ import type { ReactNode } from 'react';
 
 import { JsonLd } from '@/components/JsonLd';
 import { Breadcrumb } from '@/components/layout/Breadcrumb';
+import { getFaqJsonLd } from '@/lib/seo/jsonld';
 import { buildMetadata } from '@/lib/seo/metadata';
 import { FURNACE_RENOVATION_OVERHAUL_SEO } from '@/lib/seo/page-data';
 
@@ -23,18 +24,24 @@ type TextBlock = {
 const pagePath = '/zh/service/furnace-renovation-overhaul';
 const casePath = '/zh/case/anonymous-tsingshan-1250-renovation';
 const heroImage = '/images/service/after-sales-hero.png';
+const trolleyFurnacePath = '/zh/products/detail/trolley-furnace';
+const meshBeltFurnacePath = '/zh/products/detail/mesh-belt-furnace';
+const quoteParamsPath = '/zh/articles/gongye-lu-baojia-canshu';
+const decisionPath = '/zh/articles/laojiu-rechuli-lu-daxiu-haishi-maixin';
+const continuousLinePath = '/zh/solutions/continuous-heat-treatment-line';
+const contactPath = '/zh/contact';
 
 export const dynamicParams = false;
 
 const serviceScope = [
   {
-    title: '节能改造',
-    eyebrow: 'A3 cluster 核心',
+    title: '工业炉节能改造',
+    eyebrow: '主关键词服务',
     items: [
-      '燃烧系统改造：电改气、气改电、燃料结构升级，如天然气改冷煤气、转炉煤气等钢厂副产气。',
+      '围绕老旧工业炉能耗高、升温慢、温度不稳、炉衬老化、燃烧效率低等问题做系统诊断。',
+      '燃烧系统升级：根据能源条件评估烧嘴、阀组、空燃比控制、燃料结构等改造方向。',
       '烟气余热回收：可根据项目工况配置钢带预热、助燃空气预热、蒸汽利用等配套方案。',
-      '控温系统升级：从传统继电器控制升级为 PLC 或 DCS 控制系统。',
-      '自动化改造：变频器、二级控制带燃烧空燃比自寻优查表式模型。',
+      '控制系统改造：从传统继电器控制升级为 PLC 或 DCS 控制系统，优化温控与数据记录。',
     ],
   },
   {
@@ -57,14 +64,79 @@ const serviceScope = [
       '复产复线：根据新生产工艺需求调整炉型参数。',
     ],
   },
+];
+
+const preRenovationMaterials = [
   {
-    title: 'TUS / SAT 测试与整改',
-    eyebrow: '温度与控制系统验证',
-    items: [
-      'TUS（温度均匀性测试）：按相关行业标准对工业炉有效工作区进行温度均匀性测试。',
-      'SAT（系统准确度测试）：测试温度控制系统的整体精度。',
-      '提供测试报告，针对不达标项目给出整改方案。',
-    ],
+    label: '炉型',
+    text: '台车炉、箱式炉、井式炉、网带炉、辊底炉等。',
+  },
+  {
+    label: '设备照片',
+    text: '炉体、炉门、炉衬、燃烧系统、电控柜等关键部位照片。',
+  },
+  {
+    label: '炉膛尺寸',
+    text: '长、宽、高或有效工作区尺寸，含装料方式和通道尺寸。',
+  },
+  {
+    label: '最高温度',
+    text: '设计温度和实际使用温度，最好附常用工艺温区。',
+  },
+  {
+    label: '工件信息',
+    text: '材质、尺寸、重量、装炉量、装夹方式和批次节拍。',
+  },
+  {
+    label: '工艺要求',
+    text: '升温、保温、降温曲线，温度均匀性和气氛要求。',
+  },
+  {
+    label: '当前问题',
+    text: '能耗高、温度不稳、升温慢、炉衬损坏、炉门漏热、燃烧效率低等。',
+  },
+  {
+    label: '能源类型',
+    text: '电、天然气、液化气、柴油或钢厂副产气等。',
+  },
+  {
+    label: '现场条件',
+    text: '车间空间、停产周期、吊装条件、供电供气条件和安全限制。',
+  },
+];
+
+const renovationDecisionRows = [
+  {
+    situation: '炉体结构完好，只是炉衬老化',
+    suggestion: '优先考虑炉衬翻新与保温优化',
+  },
+  {
+    situation: '温控系统落后，但炉体和加热系统可继续使用',
+    suggestion: '优先考虑控制系统升级',
+  },
+  {
+    situation: '燃气消耗高，燃烧不充分',
+    suggestion: '优先考虑燃烧系统和空燃比控制改造',
+  },
+  {
+    situation: '炉门漏热、台车缝隙大、密封效果差',
+    suggestion: '优先做炉门密封、台车密封和局部结构优化',
+  },
+  {
+    situation: '炉体变形严重，存在安全风险',
+    suggestion: '不建议简单改造，应评估大修或重新采购',
+  },
+  {
+    situation: '改造费用接近新炉成本',
+    suggestion: '重新采购新炉可能更合理',
+  },
+  {
+    situation: '工艺需求变化很大，原炉型不再适配',
+    suggestion: '重新设计整炉方案',
+  },
+  {
+    situation: '缺少图纸、运行记录和关键部件资料',
+    suggestion: '先做现场勘查和设备状态评估',
   },
 ];
 
@@ -101,7 +173,7 @@ const evaluationSteps: TextBlock[] = [
     items: [
       '技术方案，含 CAD 图纸、PID 控制图、设备清单。',
       '改造工程量与施工计划。',
-      '预期节能效果与投资回报测算。',
+      '节能潜力与投资回收周期初步测算。',
       '改造期间停产周期估算。',
     ],
   },
@@ -111,7 +183,7 @@ const evaluationSteps: TextBlock[] = [
       '技术方案细节。',
       '商务条款，包括费用、付款方式、质保期。',
       '改造施工排程。',
-      'F.A.T 工厂验收试验标准。',
+      '根据项目类型确定工厂验收、现场验收或联动调试验收标准。',
     ],
   },
 ];
@@ -129,9 +201,9 @@ const renovationPlans = [
     ],
     effects: [
       '在合适的工况条件下，吨钢能耗成本具备显著下降空间。',
-      'NOx 排放可达标 GB 28665-2012 等相关行业标准。',
+      '可按相关排放要求进行方案设计，具体执行标准、测试条件和验收方式需结合项目所在地要求和合同约定确定。',
       '在部分连续生产线项目中，设备稳定性和月作业率具备提升空间，具体以改造范围和现场工况为准。',
-      '单线年节能效益在合适工况下可达千万元级。',
+      '节能收益需结合原燃料成本、产线负荷、运行制度和改造范围单独测算。',
     ],
   },
   {
@@ -145,9 +217,9 @@ const renovationPlans = [
       '可对接客户 MES / SCADA 系统，按客户实际系统接口确定。',
     ],
     effects: [
-      '控温精度可从 ±10℃ 提升到 ±3-5℃，视加热元件配置。',
-      '工艺曲线可重复性提升，废品率下降。',
-      '远程监控与故障预警能力提升。',
+      '控温稳定性和工艺曲线重复性具备提升空间，具体指标视加热元件配置与炉膛结构确定。',
+      '工艺曲线可重复性和废品率改善空间，需结合原设备状态和工艺纪律评估。',
+      '远程监控与故障预警能力可按控制系统配置进行完善。',
     ],
   },
   {
@@ -160,8 +232,8 @@ const renovationPlans = [
       '加热元件位置与功率重新匹配。',
     ],
     effects: [
-      '炉壁外表面温度可下降 20-40℃。',
-      '吨产品能耗可下降 5-15%，视原始保温状态。',
+      '炉壁外表面温度和散热损失具备改善空间。',
+      '吨产品能耗是否下降、下降幅度多少，需结合原始保温状态和实际生产负荷测算。',
     ],
   },
   {
@@ -175,9 +247,42 @@ const renovationPlans = [
       '操作培训：覆盖操作规范、日常维护、应急处理。',
     ],
     effects: [
-      '复产时间通常 3-6 周，视设备状态和工艺复杂度。',
-      '性能可恢复或接近原设计指标。',
+      '常见项目可能需要 3-6 周，具体以设备状态、改造范围、现场条件和停产窗口为准。',
+      '性能恢复目标需结合设备状态、工艺要求和最终验收标准确认。',
     ],
+  },
+];
+
+const relatedLinks = [
+  {
+    title: '工业炉报价参数清单',
+    href: quoteParamsPath,
+    text: '查看工业炉询价前建议提供的炉型、尺寸、温度、装炉量、工艺和现场条件。',
+  },
+  {
+    title: '老旧工业炉该修还是换？',
+    href: decisionPath,
+    text: '旧炉项目可先判断适合大修、局部改造还是重新采购。',
+  },
+  {
+    title: '台车炉改造适配',
+    href: trolleyFurnacePath,
+    text: '了解台车式热处理炉的炉膛尺寸、承重、温度范围和大件热处理适用场景。',
+  },
+  {
+    title: '网带炉改造适配',
+    href: meshBeltFurnacePath,
+    text: '了解网带式热处理炉在标准件、小型零件和连续热处理生产中的工艺特点。',
+  },
+  {
+    title: '连续热处理生产线解决方案',
+    href: continuousLinePath,
+    text: '连续线改造、大修或产线评估项目可先查看系统级方案入口。',
+  },
+  {
+    title: '联系我们',
+    href: contactPath,
+    text: '提交旧炉照片、参数和当前问题，进入联系页或表单沟通。',
   },
 ];
 
@@ -193,7 +298,7 @@ const caseStudies = [
     content:
       '主要改造内容包括天然气改为冷煤气、低 NOx 分级燃烧、三级烟气回收、13 区控温优化、风机变频改造。',
     note:
-      '上述数据来源于该改造项目的实际测算结果。具体节能效益与原炉型结构、燃料类型、产线负荷、保温状态、控制系统、运行制度和现场工况密切相关，需以现场诊断和改造方案测算为准。本案例数据仅作为同类工程参考，不构成对所有项目的节能效果承诺。',
+      '该数据仅适用于该项目特定测算条件，不代表所有工业炉节能改造项目均可达到同等效果。其他项目需结合现场诊断和方案测算单独评估。',
     link: casePath,
   },
   {
@@ -221,8 +326,8 @@ const guaranteeStages = [
     title: '1. 方案设计阶段',
     items: [
       '改造方案经苏能技术团队内部评审与客户技术评审双重确认。',
-      '关键技术参数写入合同附件，包括节能率、控温精度、温度均匀性。',
-      '提供 F.A.T 工厂验收试验标准与方法。',
+      '如双方确认可量化指标，可在合同附件中明确控温精度、温度均匀性、能耗统计口径或其他验收指标。',
+      '根据项目类型确定工厂验收、现场验收或联动调试验收标准。',
     ],
   },
   {
@@ -239,7 +344,7 @@ const guaranteeStages = [
     items: [
       '空载升温曲线测试。',
       '按合同约定的工艺要求进行工艺曲线验证。',
-      'TUS（温度均匀性测试）与 SAT（系统准确度测试）。',
+      '按项目约定执行温控、机械传动、安全保护和联动调试检查。',
       '性能测试报告作为验收依据。',
     ],
   },
@@ -247,8 +352,7 @@ const guaranteeStages = [
     title: '4. 质保与售后',
     items: [
       '质保期 1 年，自验收合格之日起，具体以合同为准。',
-      '易损件库存保障不少于 6 个月。',
-      '非标设备配件保障期不少于 5 年，核心部件可协商延长。',
+      '易损件和非标配件保障方式按设备类型、合同约定和备件供应条件确定。',
       '客户服务热线 +86-130-5298-6814。',
       '现场上门服务依据合同约定、设备状态、现场工况和服务距离安排。',
     ],
@@ -258,68 +362,64 @@ const guaranteeStages = [
 const faqs = [
   {
     question: 'Q1：工业炉节能改造能省多少？',
-    answer: (
-      <>
-        <p>
-          不同项目节能空间差异较大，需结合炉型结构、燃料类型、保温状态、控制系统和运行制度测算。炉衬翻新与保温优化、控温系统升级、烟气余热回收、燃料结构调整，都会对应不同的节能空间。
-        </p>
-        <p>
-          苏能改造过的某青山系不锈钢企业 1250mm 三线，年节能效益达 7,644 万元/年（吨钢降本 63.7 元）。具体效果与原炉型结构、燃料类型、产线负荷、保温状态、控制系统、运行制度和现场工况密切相关，需以现场诊断和方案测算为准。该案例数据仅作为同类工程参考，不构成对所有项目的节能效果承诺。
-        </p>
-      </>
-    ),
+    answer:
+      '工业炉节能效果与原炉型结构、炉衬状态、燃料类型、燃烧系统、控制系统、生产节拍和运行制度有关，不能直接套用固定比例。苏能通常会先收集设备参数、能耗数据和现场照片，再判断节能潜力，必要时进行现场勘查和方案测算。',
   },
   {
     question: 'Q2：工业炉节能改造需要停产多久？',
     answer:
-      '通常分两种情况：部分外围系统升级可在生产间隙进行，停产时间 1-7 天；整炉大修叠加节能改造通常 30-90 天，复杂的跨工艺改造可能需要 4-6 个月。苏能会在方案设计阶段给出明确的停产周期估算，并与客户协商最佳改造窗口。',
+      '停产周期取决于改造范围。如果只是局部炉衬修复、控制系统升级，周期相对较短；如果涉及整炉大修、燃烧系统改造、机械传动检修或搬迁复产，周期会更长。具体停产窗口需结合设备状态、施工条件和生产计划评估。',
   },
   {
     question: 'Q3：热处理炉大修费用怎么算？',
     answer:
-      '费用主要由设备制造费、耐材费、施工费、运输辅料、TUS/SAT 测试等构成。具体费用与改造范围、设备规格、耐材选型、现场工况密切相关，需以现场勘查和最终方案为准。',
+      '热处理炉大修费用主要受炉型、炉膛尺寸、温度等级、炉衬损坏程度、加热系统、控制系统、机械传动和现场施工条件影响。苏能通常会根据设备照片、图纸、当前故障和改造目标，先判断大修范围，再输出技术方案和报价。',
   },
   {
     question: 'Q4：老旧热处理炉是大修还是直接买新的？',
     answer:
-      '需要综合评估设备主体结构、工艺需求、改造投入、新购费用、现场空间与搬迁条件。主体结构完整、工艺需求基本不变、现场空间受限时，可优先评估大修；设备超过设计寿命、主体腐蚀严重或工艺需求大幅变化时，可同步评估新购方案。',
+      '如果炉体结构完整、基础可靠，只是炉衬老化、温控落后或局部系统效率低，可以优先考虑大修或局部改造。如果炉体变形严重、安全风险高、工艺需求变化很大，或改造费用接近新炉成本，则应评估重新采购新炉。最终应结合炉体状态、工艺要求、停产窗口和预算综合判断。',
   },
   {
     question: 'Q5：苏能能改造其他厂家或进口的工业炉吗？',
     answer:
-      '可以评估。苏能改造服务可对苏能自制设备及部分非苏能品牌工业炉提供大修、技改、搬迁复产和节能改造评估。进口炉需结合设备资料、控制系统、备件条件和现场状态综合判断。具体设备品牌与改造方案可在现场勘查阶段进一步沟通确认。',
+      '苏能可对部分非苏能品牌工业炉提供评估、检修、大修、控制系统升级和节能改造建议。但是否适合改造，需要结合原设备图纸、备件条件、控制系统、现场状态和安全要求判断。进口设备还需确认关键部件和接口资料是否完整。',
   },
   {
     question: 'Q6：改造验收看哪些指标？',
     answer:
-      '主要指标包括温度精度、温度均匀性、控制精度、设计产能、实际产能、月作业率、吨产品能耗、单位产能能耗、NOx / SO2 / 颗粒物排放、试运行稳定性与报警次数。具体验收标准由合同约定，参考相关行业标准。',
+      '工业炉改造验收通常关注升温能力、温度稳定性、温度均匀性、控制系统运行状态、安全保护、机械传动、炉门密封和工艺曲线执行情况。若项目涉及节能目标，还需结合双方确认的能耗统计口径和测试条件进行验证。',
   },
   {
     question: 'Q7：工业炉改造前需要准备哪些资料？',
     answer:
-      '建议准备原工业炉设计图纸、技术参数表、最近 6-12 个月历史能耗数据、实际产能与生产节拍数据、工艺要求、现场布局图、当前问题清单。如果原始资料不齐全，苏能可在现场勘查阶段补全所需数据。',
+      '建议准备炉型、炉膛尺寸、最高温度、工件材质与重量、装炉量、工艺曲线、能源类型、当前问题、现场照片和历史能耗数据。资料不完整也可以先沟通，苏能可根据现有信息做初步判断，再决定是否需要现场勘查。',
   },
   {
     question: 'Q8：改造后控温精度能做到多少？',
     answer:
-      '控温精度取决于加热元件配置、控制系统、热电偶布置与数量、炉膛结构。常见范围包括一般工业炉 ±5℃ 至 ±10℃，精密热处理工艺场景 ±3℃ 至 ±5℃，实验或特殊精密工艺 ±1℃ 至 ±3℃，具体精度以工艺要求和最终技术方案为准。',
+      '控温精度与炉型结构、加热元件、热电偶布置、控制系统、炉膛尺寸和工艺要求有关，不能脱离设备状态直接承诺。苏能可根据项目要求配置 PLC、温控仪、记录仪和多区控温方案，具体指标应在技术方案和合同中明确。',
   },
   {
     question: 'Q9：工业炉节能改造有哪些风险？',
     answer:
-      '主要风险包括方案设计风险、施工风险、技术风险、运行风险。苏能通过现场勘查、能耗建模、F.A.T 测试、现场调试和操作培训降低风险。苏能成立于 2006 年，积累了改造项目经验，对各类风险有成熟的应对方案。',
+      '主要风险包括原炉体状态判断不足、停产时间超出预期、节能效果不及预期、旧系统与新系统接口不匹配、现场施工条件受限等。改造前应充分评估炉体、炉衬、燃烧系统、控制系统和生产节拍，避免只做局部更换而忽略整体匹配。',
   },
   {
     question: 'Q10：江苏地区有售后服务网点吗？',
     answer:
-      '苏能总部位于江苏泰州，江苏全境均为售后服务密集覆盖区域。华东其他地区，包括上海、浙江、安徽、山东，也是苏能售后服务的高密度覆盖区。',
+      '苏能位于江苏，具备对江苏及华东区域工业炉项目提供现场勘查、安装调试、维修和技术支持的便利条件。具体服务方式、响应时间和现场安排，需要根据设备位置、故障情况、合同约定和工程排期确定。',
   },
 ];
 
+const faqJsonLd = getFaqJsonLd(faqs);
+const faqColumnSize = Math.ceil(faqs.length / 2);
+const faqColumns = [faqs.slice(0, faqColumnSize), faqs.slice(faqColumnSize)];
+
 const advantages = [
   {
-    title: '1. 成立于 2006 年，150+ 项目积累',
-    text: '苏能成立于 2006 年，专注热处理工业炉研发制造，累计交付 150+ 工业炉项目。客户覆盖钢铁、装备制造、汽车零部件、能源装备等多个行业。',
+    title: '1. 成立于 2006 年，累计 150+ 工业炉项目经验',
+    text: '苏能成立于 2006 年，专注热处理工业炉研发制造，已形成累计 150+ 工业炉项目经验。客户覆盖钢铁、装备制造、汽车零部件、能源装备等多个行业。',
   },
   {
     title: '2. 自制设备 + 部分非苏能品牌工业炉评估改造',
@@ -339,7 +439,7 @@ const advantages = [
   },
   {
     title: '6. 注册资本与生产基地支撑',
-    text: '苏能拥有 5,080 万元注册资本、14,700 ㎡ 现代化生产基地、150+ 专业团队，具备整线交付的工程能力。',
+    text: '苏能拥有 5,080 万元注册资本、14,700 ㎡ 现代化生产基地，并以累计 150+ 工业炉项目经验支撑设备制造、改造评估与现场服务。',
   },
 ];
 
@@ -362,7 +462,7 @@ const serviceJsonLd = {
   name: '工业炉节能改造与热处理炉大修服务',
   alternateName: ['工业炉技改服务', '热处理炉改造服务', '工业炉节能改造'],
   description:
-    '苏能工业炉提供工业炉节能改造、热处理炉大修、控制系统升级、炉衬翻新、烟气余热回收等服务。可对苏能自制设备及部分非苏能品牌工业炉提供评估改造。',
+    '苏能工业炉提供工业炉节能改造、热处理炉大修、炉衬翻新、燃烧系统升级、控制系统升级、搬迁复产评估等服务。',
   provider: {
     '@type': 'Organization',
     name: '江苏苏能工业炉有限公司',
@@ -390,7 +490,7 @@ const serviceJsonLd = {
       },
     ],
   },
-  serviceType: ['工业炉节能改造', '热处理炉大修', '控制系统升级', '炉衬翻新', '烟气余热回收', '燃烧系统改造'],
+  serviceType: ['工业炉节能改造', '热处理炉大修', '炉衬翻新', '燃烧系统升级', '控制系统改造', '搬迁复产评估'],
   areaServed: {
     '@type': 'Country',
     name: '中国',
@@ -446,7 +546,7 @@ function Section({
   return (
     <section id={id} className="border-t border-[#e2e8f0] py-12 scroll-mt-24 lg:py-16">
       <div className="mx-auto max-w-[1180px] px-5 lg:px-8">
-        <p className="text-[12px] font-semibold uppercase tracking-[0.26em] text-[#c51624]">{eyebrow}</p>
+        <p className="text-[13px] font-semibold text-[#c51624]">{eyebrow}</p>
         <h2 className="mt-3 text-[26px] font-semibold leading-[1.28] text-[#101828] lg:text-[38px]">{title}</h2>
         <div className="mt-8">{children}</div>
       </div>
@@ -507,15 +607,15 @@ export default async function FurnaceRenovationOverhaulPage({ params }: PageProp
           />
 
           <div className="mt-10 max-w-[930px]">
-            <p className="text-[13px] font-semibold uppercase tracking-[0.28em] text-white/64">Renovation & Overhaul</p>
+            <p className="text-[13px] font-semibold text-white/64 lg:text-[14px]">工业炉节能改造 / 热处理炉大修</p>
             <h1 className="mt-4 text-[36px] font-semibold leading-[1.16] tracking-[0.01em] lg:text-[58px]">
               工业炉节能改造与热处理炉大修服务
             </h1>
-            <p className="mt-5 text-[18px] font-semibold leading-[1.7] text-white/92 lg:text-[24px]">
-              自制设备 + 部分非苏能品牌工业炉评估改造
+            <p className="mt-5 max-w-[900px] text-[18px] font-semibold leading-[1.72] text-white/92 lg:text-[24px]">
+              针对老旧工业炉能耗高、升温慢、温度不稳、炉衬老化、燃烧效率低、控制系统落后等问题，苏能可提供炉体检查、炉衬翻新、燃烧系统升级、控制系统改造与整炉大修方案。
             </p>
             <p className="mt-7 max-w-[860px] text-[16px] leading-[1.95] text-white/78 lg:text-[18px]">
-              苏能工业炉成立于 2006 年，专注热处理工业炉研发制造，累计交付 150+ 工业炉项目。我们提供工业炉节能改造、整炉大修、控制系统升级、炉衬翻新、烟气余热回收等服务，覆盖钢铁、装备制造、汽车零部件、能源装备等多个行业。
+              该页面作为苏能“工业炉节能改造”的主落地页，重点说明改造评估、资料准备、炉衬与燃烧系统升级、控制系统改造和热处理炉大修的服务边界。
             </p>
 
             <div className="mt-8 flex flex-wrap gap-3 text-[14px] font-semibold text-white">
@@ -529,24 +629,24 @@ export default async function FurnaceRenovationOverhaulPage({ params }: PageProp
                 href="#contact"
                 className="inline-flex min-h-[46px] items-center justify-center rounded-[4px] bg-[#c51624] px-6 text-[15px] font-semibold text-white transition hover:bg-[#a90f1b]"
               >
-                免费现场勘查咨询
+                提交设备参数，获取改造建议
               </a>
               <a
-                href={casePath}
+                href="#materials"
                 className="inline-flex min-h-[46px] items-center justify-center rounded-[4px] border border-white/46 px-6 text-[15px] font-semibold text-white transition hover:border-white hover:bg-white/10"
               >
-                查看完整案例 →
+                查看改造前资料清单
               </a>
             </div>
           </div>
         </div>
       </section>
 
-      <Section id="scope" eyebrow="Scope" title="一、服务范围">
+      <Section id="scope" eyebrow="服务范围" title="一、服务范围">
         <p className="max-w-[920px] text-[16px] leading-[1.9] text-[#344054] lg:text-[18px]">
-          苏能工业炉改造与大修服务覆盖工业炉全生命周期，围绕节能改造、整炉大修、复产搬迁、温度与控制系统验证四类需求展开。
+          苏能工业炉改造与大修服务覆盖工业炉全生命周期，围绕工业炉节能改造、整炉大修、复产搬迁三类主线需求展开。
         </p>
-        <div className="mt-8 grid gap-5 lg:grid-cols-2">
+        <div className="mt-8 grid gap-5 lg:grid-cols-3">
           {serviceScope.map((group) => (
             <article key={group.title} className="rounded-[8px] border border-[#e1e7f0] bg-[#fbfcfe] p-6">
               <p className="text-[12px] font-semibold uppercase tracking-[0.2em] text-[#c51624]">{group.eyebrow}</p>
@@ -561,7 +661,60 @@ export default async function FurnaceRenovationOverhaulPage({ params }: PageProp
         </div>
       </Section>
 
-      <Section id="process" eyebrow="Process" title="二、改造前评估流程">
+      <Section id="materials" eyebrow="资料清单" title="二、改造前资料清单">
+        <p className="max-w-[940px] text-[16px] leading-[1.9] text-[#344054] lg:text-[18px]">
+          提交以下资料后，苏能可更快判断工业炉节能改造方向、是否需要整炉大修，以及是否适合做炉衬翻新、燃烧系统升级或控制系统改造。
+        </p>
+        <div className="mt-8 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+          {preRenovationMaterials.map((item) => (
+            <article key={item.label} className="rounded-[8px] border border-[#e1e7f0] bg-[#fbfcfe] p-5">
+              <h3 className="text-[17px] font-semibold leading-[1.4] text-[#101828]">{item.label}</h3>
+              <p className="mt-3 text-[15px] leading-[1.8] text-[#475467]">{item.text}</p>
+            </article>
+          ))}
+        </div>
+        <p className="mt-7 rounded-[8px] border border-[#d6e0ec] bg-[#f8fafc] p-5 text-[15px] leading-[1.9] text-[#344054]">
+          资料不完整也可以先咨询。若缺少图纸、历史能耗或工艺曲线，苏能可在现场勘查阶段补充测量和记录，再判断改造可行性与停产窗口。
+        </p>
+      </Section>
+
+      <Section id="daxiu-or-new" eyebrow="改造决策" title="三、老旧热处理炉是大修好，还是直接买新的？">
+        <p className="max-w-[940px] text-[16px] leading-[1.9] text-[#344054] lg:text-[18px]">
+          老旧工业炉不一定都适合改造。判断时应综合炉体结构、安全状态、工艺变化、改造费用、停产周期和后续使用年限，避免为了节省初期投入而带来更高的运行风险。
+        </p>
+
+        <div className="mt-8 grid gap-4 md:hidden">
+          {renovationDecisionRows.map((row) => (
+            <article key={row.situation} className="rounded-[8px] border border-[#e1e7f0] bg-white p-5">
+              <p className="text-[13px] font-semibold text-[#667085]">情况</p>
+              <h3 className="mt-2 text-[17px] font-semibold leading-[1.5] text-[#101828]">{row.situation}</h3>
+              <p className="mt-4 text-[13px] font-semibold text-[#667085]">建议</p>
+              <p className="mt-2 text-[15px] leading-[1.8] text-[#344054]">{row.suggestion}</p>
+            </article>
+          ))}
+        </div>
+
+        <div className="mt-8 hidden overflow-hidden rounded-[8px] border border-[#dfe6f0] md:block">
+          <table className="w-full border-collapse bg-white text-left">
+            <thead className="bg-[#f8fafc]">
+              <tr>
+                <th className="w-1/2 border-b border-[#dfe6f0] px-5 py-4 text-[15px] font-semibold text-[#101828]">情况</th>
+                <th className="border-b border-[#dfe6f0] px-5 py-4 text-[15px] font-semibold text-[#101828]">建议</th>
+              </tr>
+            </thead>
+            <tbody>
+              {renovationDecisionRows.map((row) => (
+                <tr key={row.situation} className="border-b border-[#edf1f6] last:border-b-0">
+                  <td className="px-5 py-4 text-[15px] leading-[1.8] text-[#344054]">{row.situation}</td>
+                  <td className="px-5 py-4 text-[15px] leading-[1.8] text-[#253047]">{row.suggestion}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </Section>
+
+      <Section id="process" eyebrow="评估流程" title="四、改造前评估流程">
         <p className="max-w-[940px] text-[16px] leading-[1.9] text-[#344054] lg:text-[18px]">
           工业炉节能改造效果与原炉型结构、燃料类型、产线负荷、保温状态、控制系统、运行制度和现场工况密切相关。苏能提供 5 步系统化评估。
         </p>
@@ -579,11 +732,11 @@ export default async function FurnaceRenovationOverhaulPage({ params }: PageProp
           ))}
         </div>
         <p className="mt-7 rounded-[8px] bg-[#fff7ed] p-5 text-[15px] leading-[1.9] text-[#7c2d12]">
-          完整评估周期通常为 7-15 个工作日，视现场复杂度和工艺要求而定。具体节能效果与改造方案、原炉状态、现场工况密切相关，需以现场诊断和方案测算为准。
+          常见评估周期约为 7-15 个工作日，具体以资料完整度、现场复杂度和工艺要求为准。具体节能效果与改造方案、原炉状态、现场工况密切相关，需以现场诊断和方案测算为准。
         </p>
       </Section>
 
-      <Section id="solutions" eyebrow="Solutions" title="三、典型改造方案">
+      <Section id="solutions" eyebrow="改造方案" title="五、典型改造方案">
         <div className="grid gap-6">
           {renovationPlans.map((plan) => (
             <article key={plan.title} className="rounded-[8px] border border-[#e1e7f0] bg-[#fbfcfe] p-6 lg:p-7">
@@ -602,9 +755,34 @@ export default async function FurnaceRenovationOverhaulPage({ params }: PageProp
             </article>
           ))}
         </div>
+        <div className="mt-8 rounded-[8px] border border-[#d6e0ec] bg-[#f8fafc] p-6">
+          <h3 className="text-[21px] font-semibold leading-[1.35] text-[#101828]">相关设备与延伸阅读</h3>
+          <p className="mt-3 text-[15px] leading-[1.9] text-[#344054]">
+            工业炉节能改造通常需要结合炉型结构判断。以下链接使用官网现有页面，避免新增重复落地页与本页抢占关键词。
+          </p>
+          <div className="mt-5 grid gap-4 md:grid-cols-2">
+            {relatedLinks.map((item) => (
+              <a
+                key={item.href}
+                href={item.href}
+                className="rounded-[8px] border border-[#e1e7f0] bg-white p-5 transition hover:border-[#c51624] hover:shadow-[0_10px_24px_rgba(15,35,75,0.06)]"
+              >
+                <span className="text-[16px] font-semibold leading-[1.5] text-[#c51624]">{item.title}</span>
+                <span className="mt-2 block text-[14px] leading-[1.8] text-[#475467]">{item.text}</span>
+              </a>
+            ))}
+          </div>
+          <div className="mt-5 rounded-[8px] bg-white p-5 text-[14px] leading-[1.8] text-[#667085]">
+            本文已在
+            <a href="#daxiu-or-new" className="font-semibold text-[#c51624] underline underline-offset-4">
+              “老旧热处理炉是大修好，还是直接买新的？”
+            </a>
+            模块中提供基础判断。如需进一步评估，可提交设备照片、炉型、炉膛尺寸、工件信息和当前问题，由苏能技术人员做初步判断。
+          </div>
+        </div>
       </Section>
 
-      <Section id="cases" eyebrow="Cases" title="四、典型案例">
+      <Section id="cases" eyebrow="典型案例" title="六、典型案例">
         <div className="grid gap-6">
           {caseStudies.map((caseItem) => (
             <article key={caseItem.title} className="rounded-[8px] border border-[#e1e7f0] bg-white p-6 shadow-[0_10px_24px_rgba(15,35,75,0.04)] lg:p-7">
@@ -612,12 +790,12 @@ export default async function FurnaceRenovationOverhaulPage({ params }: PageProp
               <div className="mt-5">
                 <FactList items={caseItem.facts} />
               </div>
-              <p className="mt-5 text-[15px] leading-[1.9] text-[#344054]">{caseItem.content}</p>
               {caseItem.note ? (
-                <p className="mt-5 rounded-[8px] bg-[#f7fafc] p-5 text-[14px] leading-[1.85] text-[#475467]">
+                <p className="mt-4 rounded-[8px] border border-[#fed7aa] bg-[#fff7ed] p-4 text-[14px] leading-[1.85] text-[#7c2d12]">
                   {caseItem.note}
                 </p>
               ) : null}
+              <p className="mt-5 text-[15px] leading-[1.9] text-[#344054]">{caseItem.content}</p>
               {caseItem.link ? (
                 <a
                   href={caseItem.link}
@@ -634,7 +812,7 @@ export default async function FurnaceRenovationOverhaulPage({ params }: PageProp
         </p>
       </Section>
 
-      <Section id="guarantee" eyebrow="Guarantee" title="五、改造效果保障">
+      <Section id="guarantee" eyebrow="效果保障" title="七、改造效果保障">
         <div className="grid gap-5 lg:grid-cols-2">
           {guaranteeStages.map((stage) => (
             <article key={stage.title} className="rounded-[8px] border border-[#e1e7f0] bg-[#fbfcfe] p-6">
@@ -643,35 +821,63 @@ export default async function FurnaceRenovationOverhaulPage({ params }: PageProp
             </article>
           ))}
         </div>
+        <div className="mt-6 rounded-[8px] border border-[#d6e0ec] bg-white p-6">
+          <h3 className="text-[20px] font-semibold leading-[1.4] text-[#101828]">温度与控制系统验证能力</h3>
+          <p className="mt-3 text-[15px] leading-[1.9] text-[#344054]">
+            如项目需要，苏能可配合进行 TUS（温度均匀性测试）、SAT（系统准确度测试）或相关温控记录检查。该能力作为改造验收与整改判断的辅助环节，具体测试标准和执行方式以项目要求、现场条件和合同约定为准。
+          </p>
+        </div>
         <p className="mt-7 rounded-[8px] bg-[#f7fafc] p-5 text-[15px] leading-[1.9] text-[#344054]">
           实际服务内容依据合同约定、设备状态、现场工况和服务距离提供维修、备件与技术支持，具体响应时效与服务标准以合同条款为准。
         </p>
       </Section>
 
-      <Section id="faq" eyebrow="FAQ" title="六、改造服务常见问题">
-        <div className="grid gap-3" itemScope itemType="https://schema.org/FAQPage">
-          {faqs.map((faq) => (
-            <details
-              key={faq.question}
-              className="rounded-[8px] border border-[#dfe6f0] bg-white px-5 py-4"
-              itemScope
-              itemProp="mainEntity"
-              itemType="https://schema.org/Question"
-            >
-              <summary className="cursor-pointer text-[16px] font-semibold leading-[1.6] text-[#101828]" itemProp="name">
-                {faq.question}
-              </summary>
-              <div className="mt-4 space-y-3 border-t border-[#edf1f6] pt-4" itemScope itemProp="acceptedAnswer" itemType="https://schema.org/Answer">
-                <div className="text-[15px] leading-[1.9] text-[#344054]" itemProp="text">
-                  {faq.answer}
-                </div>
-              </div>
-            </details>
+      <Section id="faq" eyebrow="常见问题" title="八、改造服务常见问题">
+        <div className="grid gap-3 md:grid-cols-2 md:items-start md:gap-5" itemScope itemType="https://schema.org/FAQPage">
+          {faqColumns.map((column, columnIndex) => (
+            <div key={`faq-column-${columnIndex}`} className="space-y-3">
+              {column.map((faq, index) => {
+                const faqIndex = columnIndex * faqColumnSize + index;
+
+                return (
+                  <details
+                    key={faq.question}
+                    className="group rounded-[8px] border border-[#dfe6f0] bg-white px-5 py-4 shadow-[0_10px_24px_rgba(15,35,75,0.03)] [&>summary::-webkit-details-marker]:hidden"
+                    itemScope
+                    itemProp="mainEntity"
+                    itemType="https://schema.org/Question"
+                    open={faqIndex === 0}
+                  >
+                    <summary className="flex cursor-pointer list-none items-start justify-between gap-4 text-[16px] font-semibold leading-[1.6] text-[#101828]" itemProp="name">
+                      <span>{faq.question}</span>
+                      <span
+                        aria-hidden="true"
+                        className="relative mt-1 flex h-6 w-6 shrink-0 items-center justify-center rounded-full border border-[#dfe6f0] group-open:hidden"
+                      >
+                        <span className="absolute h-[2px] w-3 rounded-full bg-[#c51624]" />
+                        <span className="absolute h-3 w-[2px] rounded-full bg-[#c51624]" />
+                      </span>
+                      <span
+                        aria-hidden="true"
+                        className="relative mt-1 hidden h-6 w-6 shrink-0 items-center justify-center rounded-full border border-[#dfe6f0] group-open:flex"
+                      >
+                        <span className="absolute h-[2px] w-3 rounded-full bg-[#c51624]" />
+                      </span>
+                    </summary>
+                    <div className="mt-4 space-y-3 border-t border-[#edf1f6] pt-4" itemScope itemProp="acceptedAnswer" itemType="https://schema.org/Answer">
+                      <div className="text-[15px] leading-[1.9] text-[#344054]" itemProp="text">
+                        {faq.answer}
+                      </div>
+                    </div>
+                  </details>
+                );
+              })}
+            </div>
           ))}
         </div>
       </Section>
 
-      <Section id="advantages" eyebrow="Advantages" title="七、为什么选择苏能改造服务">
+      <Section id="advantages" eyebrow="选择苏能" title="九、为什么选择苏能改造服务">
         <div className="grid gap-5 lg:grid-cols-2">
           {advantages.map((advantage) => (
             <article key={advantage.title} className="rounded-[8px] border border-[#e1e7f0] bg-[#fbfcfe] p-6">
@@ -685,12 +891,15 @@ export default async function FurnaceRenovationOverhaulPage({ params }: PageProp
         </p>
       </Section>
 
-      <Section id="contact" eyebrow="Contact" title="八、立即获取改造方案">
-        <div className="grid gap-8 lg:grid-cols-[0.95fr_1.05fr]">
+      <Section id="contact" eyebrow="十、获取改造建议" title="不确定老旧工业炉还能不能改？">
+        <p className="max-w-[940px] text-[16px] leading-[1.9] text-[#344054] lg:text-[18px]">
+          把炉型、炉膛尺寸、最高温度、工件信息、当前问题和现场照片发给苏能，技术人员可先做初步判断，帮助你评估适合大修、局部改造还是重新采购。
+        </p>
+        <div className="mt-8 grid gap-8 lg:grid-cols-[0.95fr_1.05fr]">
           <div className="rounded-[8px] border border-[#e1e7f0] bg-[#fbfcfe] p-6 lg:p-7">
-            <h3 className="text-[22px] font-semibold leading-[1.35] text-[#101828]">现场勘查咨询</h3>
+            <h3 className="text-[22px] font-semibold leading-[1.35] text-[#101828]">电话 / 微信咨询</h3>
             <p className="mt-4 text-[15px] leading-[1.9] text-[#344054]">
-              苏能工程师可赴现场实地勘查，结合您的实际工况给出改造方案与初步报价。
+              如资料暂时不完整，可以先通过电话或邮件说明炉型、现有问题和停产窗口，再决定是否需要进一步现场勘查。
             </p>
             <address className="mt-6 space-y-3 text-[15px] leading-[1.8] text-[#344054] not-italic">
               <p>
@@ -710,13 +919,27 @@ export default async function FurnaceRenovationOverhaulPage({ params }: PageProp
                 江苏省泰州市姜堰区张甸蔡官工业区
               </p>
             </address>
+            <div className="mt-7 flex flex-wrap gap-3">
+              <a
+                href="#contact-form"
+                className="inline-flex min-h-[44px] items-center justify-center rounded-[4px] bg-[#c51624] px-5 text-[14px] font-semibold text-white transition hover:bg-[#a90f1b]"
+              >
+                提交参数获取建议
+              </a>
+              <a
+                href="tel:+8613052986814"
+                className="inline-flex min-h-[44px] items-center justify-center rounded-[4px] border border-[#c51624] px-5 text-[14px] font-semibold text-[#c51624] transition hover:bg-[#fff5f5]"
+              >
+                联系苏能工业炉
+              </a>
+            </div>
             <div className="mt-8 border-t border-[#e1e7f0] pt-5 text-[14px] leading-[1.8] text-[#667085]">
               <p>技术审核：苏能工业炉工程技术团队</p>
-              <p>最后更新：2026-05-26</p>
+              <p>最后更新：2026-06-12</p>
             </div>
           </div>
 
-          <form className="rounded-[8px] border border-[#e1e7f0] bg-white p-6 shadow-[0_10px_24px_rgba(15,35,75,0.04)] lg:p-7">
+          <form id="contact-form" className="scroll-mt-24 rounded-[8px] border border-[#e1e7f0] bg-white p-6 shadow-[0_10px_24px_rgba(15,35,75,0.04)] lg:p-7">
             <h3 className="text-[22px] font-semibold leading-[1.35] text-[#101828]">在线咨询表单</h3>
             <div className="mt-6 grid gap-4 sm:grid-cols-2">
               {formFields.map((field, index) => {
@@ -749,13 +972,14 @@ export default async function FurnaceRenovationOverhaulPage({ params }: PageProp
               type="button"
               className="mt-5 inline-flex min-h-[46px] items-center justify-center rounded-[4px] bg-[#c51624] px-6 text-[15px] font-semibold text-white transition hover:bg-[#a90f1b]"
             >
-              提交需求
+              提交参数获取建议
             </button>
           </form>
         </div>
       </Section>
 
       <JsonLd id="furnace-renovation-overhaul-service-jsonld" data={serviceJsonLd} />
+      <JsonLd id="furnace-renovation-overhaul-faq-jsonld" data={faqJsonLd} />
     </div>
   );
 }

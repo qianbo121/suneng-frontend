@@ -23,8 +23,8 @@ function NewsHeader({ locale }: { locale: Locale }) {
     <div className="mb-8 lg:mb-10">
       <div className="relative">
         <SectionTitle
-          eyebrow="news center"
-          title={locale === 'en' ? 'News Center' : '新闻中心'}
+          eyebrow={locale === 'en' ? 'resources' : '资料中心'}
+          title={locale === 'en' ? 'Resources' : '资料中心'}
           align="center"
         />
 

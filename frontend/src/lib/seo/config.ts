@@ -35,7 +35,7 @@ export const SHORT_NAME = '苏能工业炉';
 
 export const ALTERNATE_NAMES = ['苏能工业炉', '江苏苏能工业炉', 'Suneng Industrial Furnace'];
 
-export const COMPANY_PHONE = '+86-13052986814';
+export const COMPANY_PHONE = '+86-130-5298-6814';
 
 export const DEFAULT_TITLE = '江苏苏能工业炉有限公司｜工业炉与热处理设备厂家';
 

@@ -6,6 +6,13 @@ import { submitCustomRequirement } from '@/lib/api/custom-requirements';
 
 type ProductLeadFormProps = {
   leadBullets: string[];
+  title?: string;
+  description?: string;
+  submitLabel?: string;
+  contactHref?: string;
+  contactLabel?: string;
+  phone?: string;
+  email?: string;
 };
 
 function LeadTextInput({
@@ -42,26 +49,54 @@ function LeadTextInput({
   );
 }
 
-export function ProductQuoteScrollButton() {
+type ProductQuoteScrollButtonProps = {
+  label?: string;
+  className?: string;
+  updateHash?: boolean;
+  variant?: 'hero' | 'card';
+};
+
+export function ProductQuoteScrollButton({
+  label = '获取报价方案',
+  className = 'flex h-11 w-full items-center justify-center rounded-md bg-[#e60012] text-[15px] font-medium text-white transition hover:bg-[#c8000f]',
+  updateHash = false,
+  variant = 'card',
+}: ProductQuoteScrollButtonProps) {
   const handleClick = () => {
-    document.getElementById('product-lead-form')?.scrollIntoView({
+    const target = document.getElementById('product-lead-form');
+
+    target?.scrollIntoView({
       behavior: 'smooth',
       block: 'center',
     });
+
+    if (target && updateHash) {
+      window.history.replaceState(null, '', '#product-lead-form');
+    }
   };
 
   return (
     <button
       type="button"
       onClick={handleClick}
-      className="flex h-11 w-full items-center justify-center rounded-md bg-[#e60012] text-[15px] font-medium text-white transition hover:bg-[#c8000f]"
+      data-product-scroll-variant={variant}
+      className={className}
     >
-      获取报价方案
+      {label}
     </button>
   );
 }
 
-export function ProductLeadForm({ leadBullets }: ProductLeadFormProps) {
+export function ProductLeadForm({
+  leadBullets,
+  title = '提交您的非标需求',
+  description = '填写以下信息，我们的工程师将尽快与您联系，为您提供匹配炉型的解决方案。',
+  submitLabel = '提交需求',
+  contactHref,
+  contactLabel = '联系苏能工业炉',
+  phone,
+  email,
+}: ProductLeadFormProps) {
   const formRef = useRef<HTMLFormElement>(null);
   const [toast, setToast] = useState('');
   const [showSuccess, setShowSuccess] = useState(false);
@@ -114,8 +149,8 @@ export function ProductLeadForm({ leadBullets }: ProductLeadFormProps) {
     <>
       <section id="product-lead-form" className="mt-[56px] grid overflow-hidden rounded-[8px] border border-[#eef0f3] bg-white lg:grid-cols-[260px_minmax(0,1fr)]">
         <div className="flex flex-col bg-[#2c3445] px-[22px] py-[24px] text-white">
-          <h2 className="mb-[10px] text-[20px] font-semibold leading-[1.35]">提交您的非标需求</h2>
-          <p className="mb-[18px] text-[13px] leading-[1.7] text-white/75">填写以下信息，我们的工程师将尽快与您联系，为您提供匹配炉型的解决方案。</p>
+          <h2 className="mb-[10px] text-[20px] font-semibold leading-[1.35]">{title}</h2>
+          <p className="mb-[18px] text-[13px] leading-[1.7] text-white/75">{description}</p>
           <ul className="space-y-[10px]">
             {leadBullets.map((item) => (
               <li key={item} className="flex items-center gap-[10px] text-[13px] font-normal leading-[1.5] text-white/90">
@@ -128,6 +163,17 @@ export function ProductLeadForm({ leadBullets }: ProductLeadFormProps) {
               </li>
             ))}
           </ul>
+          {phone || email || contactHref ? (
+            <div className="mt-5 space-y-2 border-t border-white/15 pt-4 text-[13px] leading-[1.7] text-white/82">
+              {phone ? <p>电话 / 微信：{phone}</p> : null}
+              {email ? <p>邮箱：{email}</p> : null}
+              {contactHref ? (
+                <a href={contactHref} className="inline-flex text-white underline decoration-white/40 underline-offset-4 hover:decoration-white">
+                  {contactLabel}
+                </a>
+              ) : null}
+            </div>
+          ) : null}
         </div>
         <form ref={formRef} className="p-[22px]">
           <div className="grid gap-x-[20px] gap-y-[14px] md:grid-cols-3">
@@ -155,7 +201,7 @@ export function ProductLeadForm({ leadBullets }: ProductLeadFormProps) {
                 disabled={isSubmitting}
                 onClick={handleSubmit}
               >
-                {isSubmitting ? '提交中...' : '提交需求'}
+                {isSubmitting ? '提交中...' : submitLabel}
               </button>
             </div>
           </div>

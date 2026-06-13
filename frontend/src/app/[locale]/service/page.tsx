@@ -86,11 +86,11 @@ export default async function ServicePage({ params }: ServicePageProps) {
         englishTitle="After-sales Service"
         subtitle="从方案设计到现场应用的全周期技术服务"
         backgroundImage={heroImage}
-        variant="about"
+        variant="compact"
       />
 
       <div className="border-b border-[#e5e5e5] bg-white">
-        <div className="mx-auto flex min-h-[54px] max-w-[1660px] items-center px-6 lg:px-[86px]">
+        <div className="mx-auto flex min-h-[42px] max-w-[1660px] items-center px-6 lg:px-[86px]">
           <Breadcrumb
             locale={locale}
             currentLabel={title}

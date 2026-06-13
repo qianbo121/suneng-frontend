@@ -11,17 +11,16 @@ type ProductDetailGalleryProps = {
   locale: Locale;
   images: string[];
   title: string;
-  summary?: string;
   fillMode?: 'contain' | 'cover-left';
 };
 
-export function ProductDetailGallery({ locale, images, title, summary, fillMode = 'contain' }: ProductDetailGalleryProps) {
+export function ProductDetailGallery({ locale, images, title, fillMode = 'contain' }: ProductDetailGalleryProps) {
   const safeImages = images.length ? images : ['/images/products/trolley-furnace/gallery/trolley-01.png'];
   const [activeIndex, setActiveIndex] = useState(0);
   const activeImage = safeImages[activeIndex] || safeImages[0];
   const mainImageClassName = fillMode === 'cover-left' ? 'object-cover object-left' : 'object-contain';
   const activeDescriptor = activeIndex === 0
-    ? summary || (locale === 'en' ? 'main product image' : '产品主图')
+    ? (locale === 'en' ? 'main product image' : '产品主图')
     : locale === 'en'
       ? `product image ${activeIndex + 1}`
       : `产品图 ${activeIndex + 1}`;
@@ -76,7 +75,7 @@ export function ProductDetailGallery({ locale, images, title, summary, fillMode 
               >
                 <Image
                   src={image}
-                  alt={buildProductImageAlt(locale, title, locale === 'en' ? `thumbnail ${index + 1}` : `缩略图 ${index + 1}`)}
+                  alt={locale === 'en' ? `Product thumbnail ${index + 1}` : `产品缩略图 ${index + 1}`}
                   fill
                   className="object-contain"
                   sizes="48px"
