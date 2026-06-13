@@ -115,7 +115,7 @@ export function HeatTreatmentLines({ locale }: HeatTreatmentLinesProps) {
             <Link
               href={`/${locale}/products/detail/${mainLine.slug}`}
               aria-label={mainLine.title[locale]}
-              className="group relative block min-h-[280px] overflow-hidden rounded-[4px] bg-[#eef2f7] md:min-h-[390px] lg:min-h-[520px]"
+              className="group relative block min-h-[280px] overflow-hidden rounded-[4px] bg-[#eef2f7] md:min-h-[390px] lg:min-h-[460px] xl:min-h-[480px]"
             >
               <Image
                 src={mainLine.image}
