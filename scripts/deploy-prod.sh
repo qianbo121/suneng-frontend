@@ -154,8 +154,8 @@ require_http_code "$SITE_URL$A3_CASE_PATH" "200"
 require_http_code "$SITE_URL/en/case/anonymous-tsingshan-1250-renovation" "404"
 require_http_code "$SITE_URL$A3_SERVICE_PATH" "200"
 
-curl -s "$SITE_URL$A3_SERVICE_PATH" | grep -q "anonymous-tsingshan-1250-renovation" || {
-  echo "A3 service page case link verification failed"
+curl -s "$SITE_URL$A3_SERVICE_PATH" | grep -q "工业炉节能改造与热处理炉大修服务" || {
+  echo "A3 service page title verification failed"
   exit 1
 }
 
