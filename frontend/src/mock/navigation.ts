@@ -88,11 +88,6 @@ const zhOnlyNavigationChildren: Partial<Record<string, NonNullable<NavigationIte
       label: { zh: '体系认证', en: 'Certifications' },
     },
     {
-      key: 'about-equipment',
-      href: '/strength/equipment',
-      label: { zh: '生产设备', en: 'Production Equipment' },
-    },
-    {
       key: 'about-partner',
       href: '/partner',
       label: { zh: '合作伙伴', en: 'Partners' },

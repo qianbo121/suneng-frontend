@@ -66,10 +66,10 @@ export function HeatTreatmentLines({ locale }: HeatTreatmentLinesProps) {
   const quoteHref = locale === 'zh' ? '/zh/articles/gongye-lu-baojia-canshu' : '/en/contact';
 
   return (
-    <section className="border-y border-[#e7ebf1] bg-[#f6f8fb] py-10 lg:py-14">
+    <section className="border-y border-[#e7ebf1] bg-[#f6f8fb] py-4">
       <div className="mx-auto w-full max-w-[1480px] px-4 md:px-6 lg:px-8">
         <div className="overflow-hidden rounded-[6px] border border-[#dfe5ee] bg-white shadow-[0_22px_60px_rgba(15,23,42,0.08)]">
-          <div className="grid gap-8 p-5 md:p-8 lg:grid-cols-2 lg:gap-12 lg:p-11">
+          <div className="grid gap-8 p-5 md:p-7 lg:grid-cols-2 lg:gap-10 lg:p-9">
             <div className="flex flex-col justify-center">
               <div className="flex items-center gap-3 text-[14px] font-semibold text-[#e60012]">
                 <span className="h-6 w-[4px] bg-[#e60012]" aria-hidden="true" />
@@ -115,7 +115,7 @@ export function HeatTreatmentLines({ locale }: HeatTreatmentLinesProps) {
             <Link
               href={`/${locale}/products/detail/${mainLine.slug}`}
               aria-label={mainLine.title[locale]}
-              className="group relative block min-h-[280px] overflow-hidden rounded-[4px] bg-[#eef2f7] md:min-h-[390px] lg:min-h-[460px] xl:min-h-[480px]"
+              className="group relative block h-[280px] overflow-hidden rounded-[4px] bg-[#eef2f7] md:h-[360px] lg:h-[390px] xl:h-[410px]"
             >
               <Image
                 src={mainLine.image}

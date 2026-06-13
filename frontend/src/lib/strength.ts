@@ -10,7 +10,6 @@ const fallbackCategories: StrengthCategoryApiItem[] = [
   { id: 1, nameZh: '技术团队', nameEn: 'Technical Team', slug: 'technical-team' },
   { id: 2, nameZh: '荣誉资质', nameEn: 'Honors', slug: 'honors' },
   { id: 3, nameZh: '资质证书', nameEn: 'Certificates', slug: 'certificates' },
-  { id: 4, nameZh: '生产设备', nameEn: 'Production Equipment', slug: 'equipment' },
 ];
 
 function localize(locale: Locale, zh?: string | null, en?: string | null, fallback = '') {
