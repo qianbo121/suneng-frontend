@@ -40,6 +40,8 @@ const processStepIcons = [
   '/images/products/detail-icons/icon_step_05.png',
 ];
 const PRODUCTION_LINE_SLUGS = new Set(['roller-mesh-belt-line', 'copper-wire-annealing-line', 'annealing-solution-line']);
+const quoteParamsPath = '/zh/articles/gongye-lu-baojia-canshu';
+const repairOrReplacePath = '/zh/articles/laojiu-rechuli-lu-daxiu-haishi-maixin';
 
 export const revalidate = 3600;
 
@@ -137,7 +139,32 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
   const geoSectionTitle =
     product.slug === 'trolley-furnace'
       ? '台车炉选型与工艺适配'
-      : `${detail.title.replace('（非标定制）', '')}选型与工艺适配`;
+      : product.slug === 'box-furnace'
+      ? '箱式炉选型与工艺适配'
+      : product.slug === 'mesh-belt-furnace'
+        ? '网带炉选型与工艺适配'
+      : product.slug === 'pit-furnace'
+        ? '井式炉选型与工艺适配'
+      : product.slug === 'bell-furnace'
+        ? '罩式炉选型与工艺适配'
+      : product.slug === 'roller-hearth-furnace'
+        ? '辊底炉选型与工艺适配'
+      : product.slug === 'pusher-furnace'
+        ? '推杆炉选型与工艺适配'
+      : product.slug === 'rotary-hearth-furnace'
+        ? '转底炉选型与工艺适配'
+      : product.slug === 'roller-mesh-belt-line'
+        ? '托辊型网带生产线选型与工艺适配'
+      : product.slug === 'copper-wire-annealing-line'
+        ? '铜丝退火线选型与工艺适配'
+      : product.slug === 'annealing-solution-line'
+        ? '退火固溶生产线选型与工艺适配'
+        : `${detail.title.replace('（非标定制）', '')}选型与工艺适配`;
+  const shouldCenterLeadFormScroll = detail.heroCtas?.some((item) => item.href === '#product-lead-form') || false;
+  const showChinesePathLinks = currentLocale === 'zh';
+  const scopedRelatedLinks = (detail.relatedLinks ?? [])
+    .filter((item) => item.href.includes('/products/detail/'))
+    .slice(0, 2);
 
   return (
     <main className="bg-white text-[#202020]">
@@ -179,13 +206,12 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
             locale={currentLocale}
             images={gallery}
             title={detail.title}
-            summary={detail.summary}
             fillMode={isProductionLine ? 'cover-left' : 'contain'}
           />
 
           <div className="min-w-0 flex-1 lg:pt-6">
             <p className="mb-3 text-[14px] font-normal uppercase leading-none text-[#e60012]">{detail.series}</p>
-            <h1 className="mb-4 mt-[10px] whitespace-nowrap text-[28px] font-semibold leading-[1.3] tracking-[-0.01em] text-[#111111] max-xl:text-[26px]">
+            <h1 className="mb-4 mt-[10px] text-[28px] font-semibold leading-[1.3] tracking-[-0.01em] text-[#111111] max-xl:text-[26px]">
               {detail.title}
             </h1>
             <p className="mb-0 mt-[10px] max-w-[520px] text-[14px] leading-[1.8] text-[#4a5160]">{detail.summary}</p>
@@ -196,6 +222,33 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
                 </span>
               ))}
             </div>
+            {detail.heroCtas?.length ? (
+              <div className="mt-6 flex flex-wrap gap-3">
+                {detail.heroCtas.map((item, index) =>
+                  item.href === '#product-lead-form' ? (
+                    <ProductQuoteScrollButton
+                      key={item.href}
+                      label={item.title}
+                      updateHash
+                      variant="hero"
+                      className="inline-flex min-h-[44px] items-center justify-center rounded-[4px] bg-[#e60012] px-5 text-[14px] font-semibold text-white transition hover:bg-[#c8000f]"
+                    />
+                  ) : (
+                    <a
+                      key={item.href}
+                      href={item.href}
+                      className={
+                        index === 0
+                          ? 'inline-flex min-h-[44px] items-center justify-center rounded-[4px] bg-[#e60012] px-5 text-[14px] font-semibold text-white transition hover:bg-[#c8000f]'
+                          : 'inline-flex min-h-[44px] items-center justify-center rounded-[4px] border border-[#d9e0ea] bg-white px-5 text-[14px] font-semibold text-[#1a1d23] transition hover:border-[#e60012] hover:text-[#e60012]'
+                      }
+                    >
+                      {item.title}
+                    </a>
+                  ),
+                )}
+              </div>
+            ) : null}
           </div>
 
           {/* B. 右侧快速询价方案卡片：高度与主图一致，内部内容纵向均分。 */}
@@ -224,6 +277,20 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
           </aside>
         </section>
 
+        {detail.workpieceCards?.length ? (
+          <section className="mt-14">
+            <SectionTitle>{detail.workpieceTitle || '台车炉适合哪些工件？'}</SectionTitle>
+            <div className="mt-[24px] grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+              {detail.workpieceCards.map((item) => (
+                <article key={item.title} className="rounded-[8px] border border-[#eef0f3] bg-white p-5">
+                  <h3 className="text-[17px] font-semibold leading-[1.4] text-[#1a1d23]">{item.title}</h3>
+                  <p className="mt-3 text-[14px] leading-[1.75] text-[#5f6673]">{item.text}</p>
+                </article>
+              ))}
+            </div>
+          </section>
+        ) : null}
+
         {/* C. 为什么选择非标定制：桌面五列轻灰卡片，收紧卡片留白。 */}
         <section className="mt-14">
           <h2 className="mb-5 border-l-4 border-[#e60012] pl-3 text-[22px] font-semibold leading-[1.35] text-[#111827]">
@@ -239,9 +306,23 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
           </div>
         </section>
 
+        {detail.processCards?.length ? (
+          <section className="mt-[56px]">
+            <SectionTitle>{detail.processCardsTitle || '台车炉可覆盖哪些热处理工艺？'}</SectionTitle>
+            <div className="mt-[24px] grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+              {detail.processCards.map((item) => (
+                <article key={item.title} className="rounded-[8px] border border-[#eef0f3] bg-[#fbfcfe] p-5">
+                  <h3 className="text-[18px] font-semibold leading-[1.4] text-[#1a1d23]">{item.title}</h3>
+                  <p className="mt-3 text-[14px] leading-[1.8] text-[#4a5160]">{item.text}</p>
+                </article>
+              ))}
+            </div>
+          </section>
+        ) : null}
+
         {/* D. 核心定制参数表格：双列参数表，标签列 140px，统一行高和边框。 */}
         <section className="mt-[56px]">
-          <SectionTitle>核心定制参数</SectionTitle>
+          <SectionTitle>{detail.parameterTitle || '核心定制参数'}</SectionTitle>
           <div className="mt-[24px] overflow-hidden rounded-[8px] border border-[#eef0f3] bg-white">
             <div className="grid md:grid-cols-2">
               {specColumns.map((column, columnIndex) => (
@@ -266,7 +347,105 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
               {detail.parameterNote}
             </p>
           ) : null}
+          {detail.parameterLink ? (
+            <Link
+              href={detail.parameterLink.href}
+              className="mt-4 inline-flex min-h-[42px] items-center justify-center rounded-[4px] border border-[#e60012] px-5 text-[14px] font-semibold text-[#e60012] transition hover:bg-[#fff1f2]"
+            >
+              {detail.parameterLink.title}
+            </Link>
+          ) : null}
+          {showChinesePathLinks ? (
+            <div className="mt-5 rounded-[8px] border border-[#dfe6f0] bg-[#fbfcfe] p-5">
+              <h3 className="text-[18px] font-semibold leading-[1.4] text-[#111827]">报价与新旧设备判断</h3>
+              <p className="mt-2 text-[14px] leading-[1.8] text-[#5f6673]">
+                若正在比较新炉定制、旧炉改造或整炉大修，可先按参数清单整理资料，再判断老旧工业炉该修还是换。
+              </p>
+              <div className="mt-4 flex flex-wrap gap-3">
+                <Link
+                  href={quoteParamsPath}
+                  className="inline-flex min-h-[40px] items-center justify-center rounded-[4px] bg-[#e60012] px-4 text-[13px] font-semibold text-white transition hover:bg-[#c8000f]"
+                >
+                  查看工业炉报价需要哪些参数
+                </Link>
+                <Link
+                  href={repairOrReplacePath}
+                  className="inline-flex min-h-[40px] items-center justify-center rounded-[4px] border border-[#d9e0ea] bg-white px-4 text-[13px] font-semibold text-[#1a1d23] transition hover:border-[#e60012] hover:text-[#e60012]"
+                >
+                  老旧工业炉该修还是换？
+                </Link>
+              </div>
+            </div>
+          ) : null}
         </section>
+
+        {detail.structureComponents?.length ? (
+          <section className="mt-[56px]">
+            <SectionTitle>{detail.structureTitle || '台车炉主要结构组成'}</SectionTitle>
+            <div className="mt-[24px] grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+              {detail.structureComponents.map((item) => (
+                <article key={item.title} className="rounded-[8px] border border-[#eef0f3] bg-white p-5">
+                  <h3 className="text-[18px] font-semibold leading-[1.4] text-[#1a1d23]">{item.title}</h3>
+                  <p className="mt-3 text-[14px] leading-[1.8] text-[#4a5160]">{item.text}</p>
+                </article>
+              ))}
+            </div>
+          </section>
+        ) : null}
+
+        {detail.priceFactors?.length ? (
+          <section className="mt-[56px]">
+            <SectionTitle>{detail.priceFactorsTitle || '台车炉价格受哪些因素影响？'}</SectionTitle>
+            <p className="mt-4 max-w-[900px] text-[14px] leading-[1.85] text-[#5f6673]">
+              {detail.priceFactorsIntro || '台车炉通常为非标定制设备，不能脱离参数直接给出固定价格。以下因素会明显影响炉体结构、材料配置、控制系统和交付范围。'}
+            </p>
+            <div className="mt-[22px] grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
+              {detail.priceFactors.map((item) => (
+                <div key={item} className="rounded-[8px] border border-[#eef0f3] bg-[#fbfcfe] px-4 py-3 text-[14px] font-semibold leading-[1.65] text-[#1a1d23]">
+                  {item}
+                </div>
+              ))}
+            </div>
+          </section>
+        ) : null}
+
+        {detail.comparisonRows?.length ? (
+          <section className="mt-[56px]">
+            <SectionTitle>{detail.comparisonTitle || '台车炉和箱式炉怎么选？'}</SectionTitle>
+            <div className="mt-[24px] overflow-x-auto rounded-[8px] border border-[#eef0f3] bg-white">
+              <table className={`${detail.comparisonHeaders?.length === 3 ? 'min-w-[720px]' : 'w-full'} border-collapse text-left`}>
+                <thead className="bg-[#f7f8fa]">
+                  <tr>
+                    {(detail.comparisonHeaders || ['台车炉适合', '箱式炉适合']).map((header) => (
+                      <th key={header} className="border-b border-[#eef0f3] px-5 py-4 text-[15px] font-semibold text-[#1a1d23]">
+                        {header}
+                      </th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {detail.comparisonRows.map((row) => {
+                    const cells = detail.comparisonHeaders?.length === 3
+                      ? [row.left, row.middle, row.right]
+                      : detail.comparisonHeaders?.length === 2
+                        ? [row.left, row.right || row.box || row.middle]
+                        : [row.trolley || row.left, row.box || row.right || row.middle];
+
+                    return (
+                      <tr key={cells.join('-')} className="border-b border-[#eef0f3] last:border-b-0">
+                        {cells.map((cell, index) => (
+                          <td key={`${cell}-${index}`} className="px-5 py-4 text-[14px] leading-[1.8] text-[#4a5160]">
+                            {cell}
+                          </td>
+                        ))}
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+          </section>
+        ) : null}
 
         {detail.geoSections?.length ? (
           <section className="mt-[56px]">
@@ -329,14 +508,14 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
 
         {/* F. 非标定制流程：五列步骤卡，使用设计稿源文件 icon。 */}
         <section className="mt-[56px]">
-          <SectionTitle>非标定制流程</SectionTitle>
+          <SectionTitle>{detail.processStepsTitle || '非标定制流程'}</SectionTitle>
           <div className="relative mt-[24px] grid gap-[16px] md:grid-cols-5">
             {detail.processSteps.map((item, index) => (
               <article key={item.title} className="relative flex items-center gap-3 rounded-[8px] border border-[#eef0f3] bg-white p-[18px]">
                 <div className="relative h-[55px] w-[55px] shrink-0">
                   <Image
                     src={processStepIcons[index] || processStepIcons[0]}
-                    alt={item.title}
+                    alt=""
                     fill
                     className="object-contain"
                     sizes="55px"
@@ -352,35 +531,66 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
         </section>
 
         {/* G. 适用工艺 / 适用行业：左侧红色标签，右侧内容固定 40px 高度。 */}
-        <section className="mt-[56px]">
-          <SectionTitle>适用工艺 / 适用行业</SectionTitle>
-          <div className="mt-[24px] space-y-[12px]">
-            <div className="flex items-center gap-[12px]">
-              <div className="flex h-[40px] w-[88px] shrink-0 items-center justify-center rounded-[4px] bg-[#e60012] text-[14px] font-medium text-white">适用工艺</div>
-              <div className="flex flex-1 flex-wrap gap-[12px]">
-                {detail.processes.map((item) => (
-                  <span key={item} className="flex h-[40px] items-center justify-center rounded-[4px] border border-[#e0e3e8] bg-white px-4 text-[14px] font-normal text-[#4a5160] transition-colors hover:border-[#e60012] hover:text-[#e60012]">
-                    {item}
-                  </span>
-                ))}
-              </div>
+        {detail.industryCards?.length ? (
+          <section className="mt-[56px]">
+            <SectionTitle>典型应用行业</SectionTitle>
+            <div className="mt-[24px] grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+              {detail.industryCards.map((item) => (
+                <article key={item.title} className="rounded-[8px] border border-[#eef0f3] bg-white p-5">
+                  <h3 className="text-[17px] font-semibold leading-[1.4] text-[#1a1d23]">{item.title}</h3>
+                  <p className="mt-3 text-[14px] leading-[1.75] text-[#5f6673]">{item.text}</p>
+                </article>
+              ))}
             </div>
-            <div className="flex items-center gap-[12px]">
-              <div className="flex h-[40px] w-[88px] shrink-0 items-center justify-center rounded-[4px] bg-[#e60012] text-[14px] font-medium text-white">适用行业</div>
-              <div className="flex flex-1 flex-wrap gap-[12px]">
-                {detail.industries.map((item, index) => {
-                  const Icon = industryIcons[index % industryIcons.length];
-                  return (
-                    <span key={item} className="flex h-[40px] items-center justify-center gap-[6px] rounded-[4px] border border-[#e0e3e8] bg-white px-4 text-[14px] font-normal text-[#4a5160] transition-colors hover:border-[#e60012] hover:text-[#e60012]">
-                      <Icon className="h-[16px] w-[16px]" />
+          </section>
+        ) : (
+          <section className="mt-[56px]">
+            <SectionTitle>适用工艺 / 适用行业</SectionTitle>
+            <div className="mt-[24px] space-y-[12px]">
+              <div className="flex items-center gap-[12px]">
+                <div className="flex h-[40px] w-[88px] shrink-0 items-center justify-center rounded-[4px] bg-[#e60012] text-[14px] font-medium text-white">适用工艺</div>
+                <div className="flex flex-1 flex-wrap gap-[12px]">
+                  {detail.processes.map((item) => (
+                    <span key={item} className="flex h-[40px] items-center justify-center rounded-[4px] border border-[#e0e3e8] bg-white px-4 text-[14px] font-normal text-[#4a5160] transition-colors hover:border-[#e60012] hover:text-[#e60012]">
                       {item}
                     </span>
-                  );
-                })}
+                  ))}
+                </div>
+              </div>
+              <div className="flex items-center gap-[12px]">
+                <div className="flex h-[40px] w-[88px] shrink-0 items-center justify-center rounded-[4px] bg-[#e60012] text-[14px] font-medium text-white">适用行业</div>
+                <div className="flex flex-1 flex-wrap gap-[12px]">
+                  {detail.industries.map((item, index) => {
+                    const Icon = industryIcons[index % industryIcons.length];
+                    return (
+                      <span key={item} className="flex h-[40px] items-center justify-center gap-[6px] rounded-[4px] border border-[#e0e3e8] bg-white px-4 text-[14px] font-normal text-[#4a5160] transition-colors hover:border-[#e60012] hover:text-[#e60012]">
+                        <Icon className="h-[16px] w-[16px]" />
+                        {item}
+                      </span>
+                    );
+                  })}
+                </div>
               </div>
             </div>
-          </div>
-        </section>
+          </section>
+        )}
+
+        {detail.scenarioCards?.length ? (
+          <section className="mt-[56px]">
+            <SectionTitle>案例 / 项目经验</SectionTitle>
+            <p className="mt-4 max-w-[900px] text-[14px] leading-[1.85] text-[#5f6673]">
+              {detail.scenarioIntro || '当前页面不虚构客户案例。以下仅作为台车炉常见应用场景说明，具体项目可在商务沟通中结合授权资料进一步确认。'}
+            </p>
+            <div className="mt-[24px] grid gap-4 md:grid-cols-3">
+              {detail.scenarioCards.map((item) => (
+                <article key={item.title} className="rounded-[8px] border border-[#eef0f3] bg-[#fbfcfe] p-5">
+                  <h3 className="text-[17px] font-semibold leading-[1.4] text-[#1a1d23]">{item.title}</h3>
+                  <p className="mt-3 text-[14px] leading-[1.8] text-[#4a5160]">{item.text}</p>
+                </article>
+              ))}
+            </div>
+          </section>
+        ) : null}
 
         {detail.faq?.length ? (
           <section className="mt-[56px]">
@@ -396,11 +606,11 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
           </section>
         ) : null}
 
-        {detail.relatedLinks?.length ? (
+        {scopedRelatedLinks.length ? (
           <section className="mt-[56px]">
             <SectionTitle>相关页面</SectionTitle>
             <div className="mt-[24px] grid gap-4 md:grid-cols-3">
-              {detail.relatedLinks.map((item) => (
+              {scopedRelatedLinks.map((item) => (
                 <Link
                   key={item.href}
                   href={item.href}
@@ -415,7 +625,17 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
         ) : null}
 
         {/* H. 提交需求表单：仅联系电话必填，提交反馈由客户端组件处理。 */}
-        <ProductLeadForm leadBullets={detail.leadBullets} />
+        <ProductLeadForm
+          leadBullets={detail.leadBullets}
+          title={detail.leadForm?.title}
+          description={detail.leadForm?.description}
+          submitLabel={detail.leadForm?.submitLabel}
+          contactHref={detail.leadForm?.contactHref}
+          contactLabel={detail.leadForm?.contactLabel}
+          phone={detail.leadForm?.phone}
+          email={detail.leadForm?.email}
+        />
+        {shouldCenterLeadFormScroll ? <div aria-hidden="true" className="h-[50vh]" /> : null}
       </div>
     </main>
   );

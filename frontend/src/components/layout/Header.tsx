@@ -16,12 +16,17 @@ type HeaderProps = {
 };
 
 const HEADER_LOGO_SRC = '/images/brand/sn-logo-header-cropped.png';
+const ZH_ONLY_ROUTE_PREFIXES = ['/zh/solutions/', '/zh/articles/'];
 
 function buildLocaleHref(locale: string, href: string) {
   return href === '/' ? `/${locale}` : `/${locale}${href}`;
 }
 
 function buildLocaleSwitchPath(pathname: string, nextLocale: 'zh' | 'en', currentLocale: 'zh' | 'en') {
+  if (currentLocale === 'zh' && nextLocale === 'en' && ZH_ONLY_ROUTE_PREFIXES.some((prefix) => pathname.startsWith(prefix))) {
+    return '/en';
+  }
+
   if (pathname === `/${currentLocale}` || pathname === `/${currentLocale}/`) {
     return `/${nextLocale}`;
   }
@@ -121,7 +126,8 @@ export function Header({ locale }: HeaderProps) {
                   <ul className="p_level1Box flex items-center justify-end gap-0">
                     {navItems.map((item) => {
                       const href = buildLocaleHref(locale, item.href);
-                      const isActive = isActiveNavItem(pathname, href);
+                      const childHrefs = item.children?.map((child) => buildLocaleHref(locale, child.href)) ?? [];
+                      const isActive = isActiveNavItem(pathname, href) || childHrefs.some((childHref) => isActiveNavItem(pathname, childHref));
                       const isContactItem = item.key === 'contact';
 
                       return (
@@ -230,7 +236,8 @@ export function Header({ locale }: HeaderProps) {
                 <ul className="p_level1Box flex flex-col">
                   {navItems.map((item) => {
                     const href = buildLocaleHref(locale, item.href);
-                    const isActive = isActiveNavItem(pathname, href);
+                    const childHrefs = item.children?.map((child) => buildLocaleHref(locale, child.href)) ?? [];
+                    const isActive = isActiveNavItem(pathname, href) || childHrefs.some((childHref) => isActiveNavItem(pathname, childHref));
 
                     return (
                       <li key={item.key} className="p_level1Item list-none border-b border-black/5">

@@ -48,7 +48,6 @@ export default async function ProductsPage({ params }: ProductsPageProps) {
   return (
     <main className="bg-white text-[#202020]">
       <JsonLd id={`product-collection-jsonld-${currentLocale}`} data={getProductCollectionJsonLd(`/${currentLocale}/products`)} />
-      {/* Hero: 复用合作伙伴/关于我们同款 banner 规范，保证背景尺寸、蒙版和标题颜色一致。 */}
       <PageBanner
         locale={locale}
         title={currentLocale === 'en' ? 'Product Center' : '产品中心'}
@@ -59,18 +58,34 @@ export default async function ProductsPage({ params }: ProductsPageProps) {
             : '聚焦核心产品，满足多场景热处理设备需求'
         }
         backgroundImage={PRODUCT_HERO_IMAGE}
-        variant="about"
+        variant="compact"
       />
 
-      {/* Breadcrumb: 复用关于我们同款容器和 Breadcrumb 组件。 */}
       <div className="border-b border-[#e5e5e5] bg-white">
-        <div className="mx-auto flex min-h-[54px] max-w-[1660px] items-center px-6 lg:px-[86px]">
+        <div className="mx-auto flex min-h-[42px] max-w-[1660px] items-center px-6 lg:px-[86px]">
           <Breadcrumb locale={locale} currentLabel={currentLocale === 'en' ? 'Product Center' : '产品中心'} tone="dark" className="text-[13px]" />
         </div>
       </div>
 
       {/* Product Grid: 产品入口统一来自静态产品分类，新增产品会自动进入列表。 */}
       <section className="mx-auto max-w-[1440px] px-[52px] pb-[72px] pt-[44px] max-md:px-6 max-md:py-10">
+        {currentLocale === 'zh' ? (
+          <Link
+            href="/zh/solutions/continuous-heat-treatment-line"
+            className="mb-8 grid gap-5 rounded-[8px] border border-[#e1e7f0] bg-[#f8fafc] p-6 transition hover:border-[#e60012] md:grid-cols-[1fr_auto] md:items-center"
+          >
+            <div>
+              <p className="text-[14px] font-semibold text-[#e60012]">系统级解决方案</p>
+              <h2 className="mt-2 text-[24px] font-semibold leading-[1.35] text-[#202020]">连续热处理生产线解决方案</h2>
+              <p className="mt-3 max-w-[760px] text-[15px] leading-[1.85] text-[#555f6d]">
+                面向连续退火、固溶、正火、回火、淬火加热、清洗、冷却和控制系统等产线级需求，先查看系统组成、选型参数和交付边界。
+              </p>
+            </div>
+            <span className="inline-flex min-h-[42px] items-center justify-center rounded-[4px] bg-[#e60012] px-5 text-[14px] font-semibold text-white">
+              查看产线方案
+            </span>
+          </Link>
+        ) : null}
         <div className="grid gap-[26px] sm:grid-cols-2 lg:grid-cols-4">
           {PRODUCT_CENTER_CATEGORIES.map((item) => (
             <Link

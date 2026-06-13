@@ -11,17 +11,26 @@ export const CONTACT_FORM_INITIAL_VALUES: ContactFormValues = {
   message: '',
 };
 
-export function validateContactForm(locale: Locale, values: ContactFormValues): ContactFormErrors {
+type ValidateContactFormOptions = {
+  requireEmail?: boolean;
+};
+
+export function validateContactForm(
+  locale: Locale,
+  values: ContactFormValues,
+  options: ValidateContactFormOptions = {},
+): ContactFormErrors {
   const errors: ContactFormErrors = {};
   const isEnglish = locale === 'en';
+  const requireEmail = options.requireEmail ?? true;
 
   if (!values.name.trim()) {
     errors.name = isEnglish ? 'Please enter your name.' : '请输入姓名。';
   }
 
-  if (!values.email.trim()) {
+  if (requireEmail && !values.email.trim()) {
     errors.email = isEnglish ? 'Please enter your email.' : '请输入邮箱。';
-  } else if (!EMAIL_PATTERN.test(values.email.trim())) {
+  } else if (values.email.trim() && !EMAIL_PATTERN.test(values.email.trim())) {
     errors.email = isEnglish ? 'Please enter a valid email address.' : '请输入正确的邮箱格式。';
   }
 
@@ -37,4 +46,3 @@ export function validateContactForm(locale: Locale, values: ContactFormValues): 
 
   return errors;
 }
-

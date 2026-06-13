@@ -10,7 +10,7 @@ type PageBannerProps = {
   locale?: string;
   backgroundImage?: string;
   className?: string;
-  variant?: 'default' | 'about';
+  variant?: 'default' | 'about' | 'compact';
 };
 
 export function PageBanner({
@@ -22,6 +22,40 @@ export function PageBanner({
   className,
   variant = 'default',
 }: PageBannerProps) {
+  if (variant === 'compact') {
+    return (
+      <section className={cn('relative w-full', className)}>
+        <div className="relative h-[190px] overflow-hidden bg-[#0f2238] text-white lg:h-[285px]">
+          <Image
+            src={backgroundImage}
+            alt=""
+            fill
+            priority
+            sizes="100vw"
+            className="object-cover object-center"
+          />
+          <div className="absolute inset-0 bg-black/58" />
+          <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(2,14,31,0.86)_0%,rgba(2,14,31,0.58)_46%,rgba(2,14,31,0.22)_100%)]" />
+          <div className="relative mx-auto flex h-full max-w-[1660px] items-center px-6 lg:px-[86px]">
+            <div className="max-w-[780px] text-left">
+              <p className="text-[12px] font-semibold uppercase tracking-[0.28em] text-[#e60012] lg:text-[13px]">
+                {englishTitle}
+              </p>
+              <h1 className="mt-4 text-[34px] font-semibold leading-[1.16] tracking-[0.01em] lg:text-[48px]">
+                {title}
+              </h1>
+              {subtitle ? (
+                <p className="mt-4 max-w-[720px] text-[15px] font-normal leading-[1.75] text-white/84 lg:text-[18px]">
+                  {subtitle}
+                </p>
+              ) : null}
+            </div>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
   if (variant === 'about') {
     return (
       <section className={cn('relative w-full', className)}>

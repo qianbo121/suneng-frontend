@@ -5,18 +5,18 @@ export const NEWS_LIST_HERO_IMAGE = '/images/news/news-hero.png';
 export const NEWS_FALLBACK_IMAGE = '/images/news/news-delivery.png';
 
 export const NEWS_LABEL = {
-  zh: '新闻中心',
-  en: 'News Center',
+  zh: '资料中心',
+  en: 'Resources',
 } as const;
 
 export const NEWS_DETAIL_LABEL = {
-  zh: '新闻详情',
-  en: 'News Detail',
+  zh: '资料详情',
+  en: 'Resource Detail',
 } as const;
 
 export const NEWS_SUBTITLE = {
-  zh: '了解苏能工业炉最新动态与企业资讯',
-  en: 'Learn about Suneng updates and corporate information',
+  zh: '查看工业炉选型、报价参数、改造大修与企业资讯',
+  en: 'Explore furnace selection guides, quote parameters, retrofit resources and company updates',
 } as const;
 
 export const FALLBACK_NEWS_ITEMS: NewsListCardItem[] = [

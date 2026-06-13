@@ -94,7 +94,7 @@ export default async function NewsPage({ params, searchParams }: NewsPageProps) 
         englishTitle={NEWS_LABEL.en}
         subtitle={subtitle}
         backgroundImage={NEWS_LIST_HERO_IMAGE}
-        variant="about"
+        variant="compact"
       />
 
       <NewsBreadcrumbBar locale={locale} currentLabel={title} />

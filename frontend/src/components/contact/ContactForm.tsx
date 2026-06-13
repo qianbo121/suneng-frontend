@@ -11,9 +11,10 @@ import { cn } from '@/lib/utils';
 
 type ContactFormProps = {
   locale: Locale;
+  requireEmail?: boolean;
 };
 
-export function ContactForm({ locale }: ContactFormProps) {
+export function ContactForm({ locale, requireEmail = true }: ContactFormProps) {
   const [values, setValues] = useState<ContactFormValues>(CONTACT_FORM_INITIAL_VALUES);
   const [errors, setErrors] = useState<ContactFormErrors>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -40,7 +41,7 @@ export function ContactForm({ locale }: ContactFormProps) {
           : '提交失败，请稍后重试。',
       fields: {
         name: locale === 'en' ? 'Name *' : '姓名 *',
-        email: locale === 'en' ? 'Email *' : '邮箱 *',
+        email: requireEmail ? (locale === 'en' ? 'Email *' : '邮箱 *') : locale === 'en' ? 'Email' : '邮箱',
         phone: locale === 'en' ? 'Phone *' : '电话 *',
         company: locale === 'en' ? 'Company' : '公司名称',
         message: locale === 'en' ? 'Message *' : '留言内容 *',
@@ -56,7 +57,7 @@ export function ContactForm({ locale }: ContactFormProps) {
             : '请描述您的需求、意向机型或项目情况。',
       },
     }),
-    [locale],
+    [locale, requireEmail],
   );
 
   const handleChange =
@@ -85,7 +86,7 @@ export function ContactForm({ locale }: ContactFormProps) {
     setSuccessMessage('');
     setErrorMessage('');
 
-    const nextErrors = validateContactForm(locale, values);
+    const nextErrors = validateContactForm(locale, values, { requireEmail });
     setErrors(nextErrors);
 
     if (Object.keys(nextErrors).length > 0) {
