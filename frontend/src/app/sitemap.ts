@@ -56,7 +56,6 @@ function collectStaticRoutes(): MetadataRoute.Sitemap {
     { path: '/strength', changeFrequency: 'monthly', priority: 0.65 },
     { path: '/strength/honors', changeFrequency: 'monthly', priority: 0.55 },
     { path: '/strength/certificates', changeFrequency: 'monthly', priority: 0.55 },
-    { path: '/strength/equipment', changeFrequency: 'monthly', priority: 0.55 },
     { path: '/contact', changeFrequency: 'monthly', priority: 0.7 },
   ];
 
