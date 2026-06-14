@@ -878,6 +878,16 @@ async function seedSeoMeta() {
 }
 
 async function main() {
+  // This seed is destructive (deleteMany on banners/culture/timeline/strength/
+  // certificates/partners/services/sales-outlets). Refuse to run it against a
+  // production database unless explicitly overridden.
+  if (process.env.NODE_ENV === 'production' && process.env.ALLOW_DESTRUCTIVE_SEED !== '1') {
+    throw new Error(
+      'Refusing to run the destructive seed with NODE_ENV=production. ' +
+        'Set ALLOW_DESTRUCTIVE_SEED=1 to override intentionally.',
+    );
+  }
+
   await seedAdminUser();
   await disableLegacySeedContent();
   await seedBanners();
