@@ -12,19 +12,27 @@ fi
 git pull origin main
 
 docker compose --env-file "$ENV_FILE" -f "$COMPOSE_FILE" build --no-cache
+
+# Back up the DB + uploads BEFORE applying migrations, so a bad migration or a
+# failed deploy is recoverable (backup.sh writes to /data/backup, keeps 7 days).
+bash backup.sh
+
 docker compose --env-file "$ENV_FILE" -f "$COMPOSE_FILE" run --rm backend npx prisma migrate deploy
 docker compose --env-file "$ENV_FILE" -f "$COMPOSE_FILE" up -d
 
+# The app containers were recreated and got new bridge IPs; nginx uses static
+# upstreams with no resolver, so reload it to re-resolve them and avoid the
+# stale-upstream-IP 502 failure mode.
+docker compose --env-file "$ENV_FILE" -f "$COMPOSE_FILE" exec -T nginx nginx -s reload
+
 sleep 30
 
-if ! curl -f http://localhost >/dev/null 2>&1; then
-  echo "Health check failed: http://localhost"
-  docker compose --env-file "$ENV_FILE" -f "$COMPOSE_FILE" logs --tail=50
-  exit 1
-fi
-
-if ! curl -f http://localhost/api/v1/news >/dev/null 2>&1; then
-  echo "Health check failed: http://localhost/api/v1/news"
+# Health-check the REAL backend health route inside the container. The previous
+# `curl -f http://localhost` was a false positive: nginx 301-redirects :80 to
+# HTTPS and `curl -f` (without -L) exits 0 on a 3xx even when the app is down.
+if ! docker compose --env-file "$ENV_FILE" -f "$COMPOSE_FILE" exec -T backend \
+  node -e "require('http').get('http://127.0.0.1:3001/api/health', (r) => process.exit(r.statusCode === 200 ? 0 : 1)).on('error', () => process.exit(1))"; then
+  echo "Health check failed: backend /api/health"
   docker compose --env-file "$ENV_FILE" -f "$COMPOSE_FILE" logs --tail=50
   exit 1
 fi
