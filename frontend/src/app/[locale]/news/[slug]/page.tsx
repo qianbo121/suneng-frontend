@@ -5,6 +5,7 @@ import { HiCalendarDays } from 'react-icons/hi2';
 import { JsonLd } from '@/components/JsonLd';
 import { NewsBreadcrumbBar } from '@/components/news/NewsBreadcrumbBar';
 import { NewsArticleContent } from '@/components/news/NewsArticleContent';
+import { NewsViewPing } from '@/components/news/NewsViewPing';
 import {
   FALLBACK_NEWS_DETAIL,
   FALLBACK_NEWS_SLUGS,
@@ -89,6 +90,7 @@ export default async function NewsDetailPage({ params }: NewsDetailPageProps) {
 
   return (
     <div className="bg-[#f7f7f7]">
+      <NewsViewPing newsId={apiArticle?.id} />
       <JsonLd
         id={`news-detail-jsonld-${slug}`}
         data={[

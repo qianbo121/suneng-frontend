@@ -57,14 +57,18 @@ export class NewsService {
       include: { category: true },
     });
     if (!record) throw new NotFoundException('News not found');
+    return record;
+  }
 
-    const updated = await this.prisma.news.update({
-      where: { id: record.id },
+  // View counting is decoupled from the (cacheable) detail read and driven by a
+  // client-side ping, so caching the detail page does not suppress it. The
+  // controller enforces per-viewer/day idempotency via cookie; increment:1 is
+  // atomic at the row level. updateMany avoids throwing for stale/unpublished ids.
+  async registerView(id: number): Promise<void> {
+    await this.prisma.news.updateMany({
+      where: { id, status: PublishStatus.published, isPublished: true },
       data: { viewCount: { increment: 1 } },
-      include: { category: true },
     });
-
-    return updated;
   }
 
   async getPrevNext(id: number) {
@@ -139,27 +143,29 @@ export class NewsService {
   }
 
   async create(dto: CreateNewsDto) {
-    const slug = await this.ensureUniqueSlug(dto.slug || dto.titleEn || dto.titleZh, 'news');
     const categoryId = await this.resolveCategoryId(dto.categoryId);
+    const slugSource = dto.slug || dto.titleEn || dto.titleZh;
 
-    return this.prisma.news.create({
-      data: {
-        ...dto,
-        // Defense in depth: sanitize admin-authored HTML on write so a
-        // stored payload cannot rely solely on the frontend sanitizer.
-        ...(typeof dto.contentZh === 'string'
-          ? { contentZh: DOMPurify.sanitize(dto.contentZh) }
-          : {}),
-        ...(typeof dto.contentEn === 'string'
-          ? { contentEn: DOMPurify.sanitize(dto.contentEn) }
-          : {}),
-        categoryId,
-        slug,
-        isPublished: dto.isPublished ?? false,
-        publishDate: dto.publishDate ? new Date(dto.publishDate) : undefined,
-        sortOrder: dto.sortOrder ?? 0,
-      },
-    });
+    return this.persistWithUniqueSlug(slugSource, 'news', undefined, (slug) =>
+      this.prisma.news.create({
+        data: {
+          ...dto,
+          // Defense in depth: sanitize admin-authored HTML on write so a
+          // stored payload cannot rely solely on the frontend sanitizer.
+          ...(typeof dto.contentZh === 'string'
+            ? { contentZh: DOMPurify.sanitize(dto.contentZh) }
+            : {}),
+          ...(typeof dto.contentEn === 'string'
+            ? { contentEn: DOMPurify.sanitize(dto.contentEn) }
+            : {}),
+          categoryId,
+          slug,
+          isPublished: dto.isPublished ?? false,
+          publishDate: dto.publishDate ? new Date(dto.publishDate) : undefined,
+          sortOrder: dto.sortOrder ?? 0,
+        },
+      }),
+    );
   }
 
   async update(id: number, dto: UpdateNewsDto) {
@@ -169,30 +175,27 @@ export class NewsService {
       requestedCategoryId !== undefined
         ? await this.resolveCategoryId(requestedCategoryId)
         : undefined;
-    const slug =
-      dto.slug || dto.titleEn || dto.titleZh
-        ? await this.ensureUniqueSlug(
-            dto.slug || dto.titleEn || dto.titleZh || record.slug,
-            'news',
-            id,
-          )
-        : undefined;
 
-    return this.prisma.news.update({
-      where: { id },
-      data: {
-        ...newsData,
-        ...(typeof newsData.contentZh === 'string'
-          ? { contentZh: DOMPurify.sanitize(newsData.contentZh) }
-          : {}),
-        ...(typeof newsData.contentEn === 'string'
-          ? { contentEn: DOMPurify.sanitize(newsData.contentEn) }
-          : {}),
-        ...(categoryId !== undefined ? { categoryId } : {}),
-        ...(slug ? { slug } : {}),
-        ...(dto.publishDate ? { publishDate: new Date(dto.publishDate) } : {}),
-      },
-    });
+    const baseData = {
+      ...newsData,
+      ...(typeof newsData.contentZh === 'string'
+        ? { contentZh: DOMPurify.sanitize(newsData.contentZh) }
+        : {}),
+      ...(typeof newsData.contentEn === 'string'
+        ? { contentEn: DOMPurify.sanitize(newsData.contentEn) }
+        : {}),
+      ...(categoryId !== undefined ? { categoryId } : {}),
+      ...(dto.publishDate ? { publishDate: new Date(dto.publishDate) } : {}),
+    };
+
+    const slugSource = dto.slug || dto.titleEn || dto.titleZh;
+    if (!slugSource) {
+      return this.prisma.news.update({ where: { id }, data: baseData });
+    }
+
+    return this.persistWithUniqueSlug(slugSource || record.slug, 'news', id, (slug) =>
+      this.prisma.news.update({ where: { id }, data: { ...baseData, slug } }),
+    );
   }
 
   async updateStatus(id: number, status: PublishStatus) {
@@ -228,6 +231,42 @@ export class NewsService {
     }
 
     return defaultCategoryId;
+  }
+
+  // Race-safe write: ensureUniqueSlug picks a candidate, but a concurrent write
+  // can take it between the check and the insert (TOCTOU). Catch the unique
+  // violation and retry with a fresh slug instead of returning a 500.
+  private async persistWithUniqueSlug<T>(
+    source: string,
+    fallback: string,
+    excludeId: number | undefined,
+    write: (slug: string) => Promise<T>,
+  ): Promise<T> {
+    let candidate = await this.ensureUniqueSlug(source, fallback, excludeId);
+    for (let attempt = 0; attempt < 5; attempt += 1) {
+      try {
+        return await write(candidate);
+      } catch (error) {
+        if (this.isSlugConflict(error) && attempt < 4) {
+          candidate = await this.ensureUniqueSlug(
+            `${candidate}-${attempt + 1}`,
+            fallback,
+            excludeId,
+          );
+          continue;
+        }
+        throw error;
+      }
+    }
+    throw new Error('Unable to allocate a unique slug');
+  }
+
+  private isSlugConflict(error: unknown): boolean {
+    if (!(error instanceof Prisma.PrismaClientKnownRequestError) || error.code !== 'P2002') {
+      return false;
+    }
+    const target = error.meta?.target;
+    return Array.isArray(target) ? target.includes('slug') : String(target ?? '').includes('slug');
   }
 
   private async ensureUniqueSlug(source: string, fallback: string, excludeId?: number) {
