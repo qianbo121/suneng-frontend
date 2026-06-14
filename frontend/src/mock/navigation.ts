@@ -1,3 +1,4 @@
+import { isZhOnlyPath } from '@/lib/i18n/zh-only';
 import { PRODUCT_CENTER_CATEGORIES } from '@/constants/product-categories';
 import { Locale, NavigationItem } from '@/types/site';
 
@@ -132,7 +133,11 @@ export function getLocalizedText(locale: Locale, text: { zh: string; en: string 
 }
 
 function getNavigationChildren(locale: Locale, item: NavigationItem) {
-  if (locale !== 'zh') return item.children;
+  if (locale !== 'zh') {
+    // Drop base children whose target only exists in Chinese — linking to them
+    // on /en produces a hard 404 (e.g. solutions/continuous-heat-treatment-line).
+    return item.children?.filter((child) => !isZhOnlyPath(child.href));
+  }
 
   const zhChildren = zhOnlyNavigationChildren[item.key] ?? [];
   if (!zhChildren.length) return item.children;
