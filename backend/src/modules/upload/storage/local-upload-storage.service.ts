@@ -3,7 +3,7 @@ import { ConfigService } from '@nestjs/config';
 import { promises as fs } from 'node:fs';
 import * as path from 'node:path';
 import { randomUUID } from 'node:crypto';
-import sharp = require('sharp');
+import sharp from 'sharp';
 
 import { UploadStorage } from '@/modules/upload/storage/upload-storage.interface';
 
@@ -38,7 +38,9 @@ export class LocalUploadStorageService implements UploadStorage {
     return Promise.all(files.map((file) => this.save(file)));
   }
 
-  private async processImage(file: Express.Multer.File): Promise<{ buffer: Buffer; extension: string }> {
+  private async processImage(
+    file: Express.Multer.File,
+  ): Promise<{ buffer: Buffer; extension: string }> {
     if (!COMPRESSIBLE_IMAGE_MIME_TYPES.has(file.mimetype)) {
       const extension = path.extname(file.originalname).toLowerCase() || '';
       return {
