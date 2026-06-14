@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
 import { CustomRequirementStatus, Prisma } from '@prisma/client';
 
 import { buildPagination } from '@/common/utils/pagination';
@@ -11,11 +11,21 @@ function normalizeEmpty(value?: string) {
   return trimmed || undefined;
 }
 
+type CustomRequirementSpamState = {
+  lastSubmittedAt: number;
+  count: number;
+  windowStartAt: number;
+};
+
 @Injectable()
 export class CustomRequirementService {
+  private readonly spamMap = new Map<string, CustomRequirementSpamState>();
+
   constructor(private readonly prisma: PrismaService) {}
 
-  createPublic(dto: CreateCustomRequirementDto) {
+  createPublic(dto: CreateCustomRequirementDto, clientKey: string) {
+    this.ensureNotSpam(clientKey);
+
     return this.prisma.customRequirement.create({
       data: {
         name: normalizeEmpty(dto.name),
@@ -72,5 +82,40 @@ export class CustomRequirementService {
       where: { id },
       data: { status: CustomRequirementStatus.followed },
     });
+  }
+
+  private ensureNotSpam(clientKey: string) {
+    const now = Date.now();
+    const current = this.spamMap.get(clientKey);
+
+    if (!current) {
+      this.spamMap.set(clientKey, {
+        lastSubmittedAt: now,
+        count: 1,
+        windowStartAt: now,
+      });
+      return;
+    }
+
+    if (now - current.lastSubmittedAt < 30_000) {
+      throw new HttpException(
+        'Please do not submit repeatedly in a short time',
+        HttpStatus.TOO_MANY_REQUESTS,
+      );
+    }
+
+    if (now - current.windowStartAt > 10 * 60_000) {
+      current.count = 0;
+      current.windowStartAt = now;
+    }
+
+    current.count += 1;
+    current.lastSubmittedAt = now;
+
+    if (current.count > 5) {
+      throw new HttpException('Submission frequency is too high', HttpStatus.TOO_MANY_REQUESTS);
+    }
+
+    this.spamMap.set(clientKey, current);
   }
 }

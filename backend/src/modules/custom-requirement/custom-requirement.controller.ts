@@ -1,5 +1,16 @@
-import { Body, Controller, Get, Param, ParseIntPipe, Patch, Post, Query } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  ParseIntPipe,
+  Patch,
+  Post,
+  Query,
+  Req,
+} from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { Request } from 'express';
 
 import { Public } from '@/common/decorators/public.decorator';
 import { CreateCustomRequirementDto } from '@/modules/custom-requirement/dto/create-custom-requirement.dto';
@@ -14,8 +25,9 @@ export class CustomRequirementController {
   @Post('v1/custom-requirements')
   @Public()
   @ApiOperation({ summary: 'Submit custom furnace requirement' })
-  createPublic(@Body() dto: CreateCustomRequirementDto) {
-    return this.service.createPublic(dto);
+  createPublic(@Body() dto: CreateCustomRequirementDto, @Req() request: Request) {
+    const clientKey = request.ip || dto.phone || dto.name || dto.company || 'anonymous';
+    return this.service.createPublic(dto, clientKey);
   }
 
   @Get('admin/custom-requirements')
