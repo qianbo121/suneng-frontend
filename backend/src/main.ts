@@ -9,7 +9,6 @@ import { join } from 'node:path';
 import { AppModule } from '@/app.module';
 import { HttpExceptionFilter } from '@/common/filters/http-exception.filter';
 import { TransformResponseInterceptor } from '@/common/interceptors/transform-response.interceptor';
-import { PrismaService } from '@/prisma/prisma.service';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
@@ -101,7 +100,9 @@ async function bootstrap() {
   }
 
   const port = configService.get<number>('port') ?? 3001;
-  await app.get(PrismaService).enableShutdownHooks(app);
+  // Enable Nest's lifecycle shutdown hooks so SIGTERM/SIGINT trigger
+  // onModuleDestroy (PrismaService.$disconnect) for a graceful shutdown.
+  app.enableShutdownHooks();
   await app.listen(port);
 }
 
