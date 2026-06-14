@@ -34,7 +34,7 @@ export function CustomRequirementPage() {
   const [filters, setFilters] = useState(DEFAULT_FILTERS);
   const [page, setPage] = useState(1);
 
-  const { data, isLoading, mutate } = useSWR(['custom-requirements', page, filters], () =>
+  const { data, isLoading, error, mutate } = useSWR(['custom-requirements', page, filters], () =>
     getCustomRequirementList({
       page,
       pageSize: 10,
@@ -167,6 +167,20 @@ export function CustomRequirementPage() {
           loading={isLoading}
           columns={columns}
           dataSource={data?.items || []}
+          locale={
+            error && !isLoading
+              ? {
+                  emptyText: (
+                    <Space direction="vertical" size={8}>
+                      <span>需求数据加载失败</span>
+                      <Button size="small" onClick={() => void mutate()}>
+                        重试
+                      </Button>
+                    </Space>
+                  ),
+                }
+              : undefined
+          }
           scroll={{ x: 1640 }}
           pagination={{
             current: data?.page || page,
