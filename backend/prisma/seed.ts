@@ -26,6 +26,25 @@ async function seedAdminUser() {
       isActive: true,
     },
   });
+
+  // Editor account: content-only role, used to verify RBAC role separation
+  // (can manage content, must get 403 on admin/users).
+  const editorPasswordHash = await hash('editor123456', 10);
+
+  await prisma.adminUser.upsert({
+    where: { username: 'editor' },
+    update: {
+      passwordHash: editorPasswordHash,
+      role: AdminRole.editor,
+      isActive: true,
+    },
+    create: {
+      username: 'editor',
+      passwordHash: editorPasswordHash,
+      role: AdminRole.editor,
+      isActive: true,
+    },
+  });
 }
 
 async function disableLegacySeedContent() {
@@ -873,7 +892,7 @@ async function main() {
   await seedSeoMeta();
 
   console.warn(
-    '[seed] Default admin account created/updated: admin / admin123456. Please change this password immediately after first login.',
+    '[seed] Default accounts created/updated: admin / admin123456 (super_admin), editor / editor123456 (editor). Change these passwords immediately after first login.',
   );
 }
 
