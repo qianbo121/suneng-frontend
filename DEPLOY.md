@@ -99,10 +99,32 @@ cd /opt/suneng-official-site
 部署脚本会执行：
 
 1. `git pull origin main`
-2. 重新构建镜像
-3. 执行 Prisma 数据库迁移
-4. 启动容器
-5. 检查首页和新闻公开接口
+2. 重新构建镜像（`build --no-cache`）
+3. **部署前备份**（`backup.sh`：DB + uploads → `/data/backup`，可回滚）
+4. 执行 Prisma 数据库迁移（`prisma migrate deploy`）
+5. 启动容器（`up -d`，不做整停 `down`）
+6. **`nginx -s reload`**：应用容器重建后会换 bridge IP，nginx 用静态 upstream 且无 resolver，不 reload 会因缓存旧 IP 出现 502
+7. 健康检查：容器内探测后端 `/api/health` 是否返回 200（失败则中止并打印日志）
+
+> 改了 `nginx.prod.conf.template` 后，先校验语法再上生产——语法错会让 reload 失败 / nginx 起不来：
+>
+> ```bash
+> docker run --rm -v "$PWD/nginx.prod.conf.template:/etc/nginx/nginx.conf:ro" nginx:1.27-alpine nginx -t
+> ```
+
+### 4.1 回滚
+
+镜像在服务器本地构建、无独立 tag，回滚 = 切回上一个正常提交后重新部署：
+
+```bash
+cd /opt/suneng-official-site
+git log --oneline -10                 # 找上一个正常提交
+git checkout <last-good-commit>       # 切回（建议平时给稳定版打 tag）
+docker compose --env-file .env.production -f docker-compose.prod.yml up -d --build
+docker compose --env-file .env.production -f docker-compose.prod.yml exec -T nginx nginx -s reload
+```
+
+> Prisma 没有自动 down 迁移：若被回滚的版本含破坏性 schema 变更，必须先用该次部署**前**生成的 `/data/backup/db-*.sql.gz` 恢复数据库（见第 5 节），否则旧代码会对新 schema 报错。
 
 ## 5. 备份与恢复
 
