@@ -181,7 +181,7 @@ export function NewsListPage() {
   const [loadingDetail, setLoadingDetail] = useState(false);
   const [submitting, setSubmitting] = useState(false);
 
-  const { data, isLoading, mutate } = useSWR(['simple-news', page, appliedKeyword], () =>
+  const { data, isLoading, error, mutate } = useSWR(['simple-news', page, appliedKeyword], () =>
     getNewsList({
       page,
       pageSize: PAGE_SIZE,
@@ -338,7 +338,21 @@ export function NewsListPage() {
                   </td>
                 </tr>
               ))}
-              {!items.length && !isLoading ? (
+              {!items.length && !isLoading && error ? (
+                <tr>
+                  <td colSpan={4} className="simple-news-empty">
+                    新闻数据加载失败
+                    <Button
+                      size="small"
+                      onClick={() => void mutate()}
+                      style={{ marginInlineStart: 12 }}
+                    >
+                      重试
+                    </Button>
+                  </td>
+                </tr>
+              ) : null}
+              {!items.length && !isLoading && !error ? (
                 <tr>
                   <td colSpan={4} className="simple-news-empty">
                     暂无新闻数据
