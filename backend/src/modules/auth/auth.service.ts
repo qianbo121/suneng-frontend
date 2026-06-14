@@ -29,27 +29,31 @@ export class AuthService {
     this.lockMinutes = configService.get<number>('adminLoginLockMinutes') ?? 15;
   }
 
-  async login(loginDto: LoginDto) {
+  async login(loginDto: LoginDto, clientIp?: string) {
     const username = loginDto.username.trim();
-    this.ensureNotLocked(username);
+    // Lock on (client IP + username), not username alone: otherwise an attacker
+    // can lock a victim out of their own account by failing logins from another
+    // IP (account-lockout DoS). trust-proxy=1 makes request.ip the real client.
+    const lockKey = `${clientIp ?? 'unknown'}:${username}`;
+    this.ensureNotLocked(lockKey);
 
     const user = await this.prismaService.adminUser.findUnique({
       where: { username },
     });
 
     if (!user || !user.isActive) {
-      this.markFailure(username);
+      this.markFailure(lockKey);
       throw new UnauthorizedException('Invalid username or password');
     }
 
     const isPasswordValid = await compare(loginDto.password, user.passwordHash);
 
     if (!isPasswordValid) {
-      this.markFailure(username);
+      this.markFailure(lockKey);
       throw new UnauthorizedException('Invalid username or password');
     }
 
-    this.attempts.delete(username);
+    this.attempts.delete(lockKey);
 
     return {
       token: await this.jwtService.signAsync({
@@ -100,8 +104,8 @@ export class AuthService {
     };
   }
 
-  private ensureNotLocked(username: string) {
-    const current = this.attempts.get(username);
+  private ensureNotLocked(key: string) {
+    const current = this.attempts.get(key);
 
     if (current?.lockedUntil && current.lockedUntil > Date.now()) {
       throw new HttpException(
@@ -111,12 +115,12 @@ export class AuthService {
     }
 
     if (current?.lockedUntil && current.lockedUntil <= Date.now()) {
-      this.attempts.delete(username);
+      this.attempts.delete(key);
     }
   }
 
-  private markFailure(username: string) {
-    const current = this.attempts.get(username) ?? { count: 0 };
+  private markFailure(key: string) {
+    const current = this.attempts.get(key) ?? { count: 0 };
     current.count += 1;
 
     if (current.count >= this.maxAttempts) {
@@ -124,7 +128,7 @@ export class AuthService {
       current.count = 0;
     }
 
-    this.attempts.set(username, current);
+    this.attempts.set(key, current);
   }
 
   private toSafeUser(user: AdminUser): AuthenticatedUser {
