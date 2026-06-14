@@ -1,5 +1,6 @@
 import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { Prisma, PublishStatus } from '@prisma/client';
+import DOMPurify from 'isomorphic-dompurify';
 
 import { buildAdminListQuery } from '@/common/utils/admin-query';
 import { buildPagination } from '@/common/utils/pagination';
@@ -144,6 +145,14 @@ export class NewsService {
     return this.prisma.news.create({
       data: {
         ...dto,
+        // Defense in depth: sanitize admin-authored HTML on write so a
+        // stored payload cannot rely solely on the frontend sanitizer.
+        ...(typeof dto.contentZh === 'string'
+          ? { contentZh: DOMPurify.sanitize(dto.contentZh) }
+          : {}),
+        ...(typeof dto.contentEn === 'string'
+          ? { contentEn: DOMPurify.sanitize(dto.contentEn) }
+          : {}),
         categoryId,
         slug,
         isPublished: dto.isPublished ?? false,
@@ -173,6 +182,12 @@ export class NewsService {
       where: { id },
       data: {
         ...newsData,
+        ...(typeof newsData.contentZh === 'string'
+          ? { contentZh: DOMPurify.sanitize(newsData.contentZh) }
+          : {}),
+        ...(typeof newsData.contentEn === 'string'
+          ? { contentEn: DOMPurify.sanitize(newsData.contentEn) }
+          : {}),
         ...(categoryId !== undefined ? { categoryId } : {}),
         ...(slug ? { slug } : {}),
         ...(dto.publishDate ? { publishDate: new Date(dto.publishDate) } : {}),
