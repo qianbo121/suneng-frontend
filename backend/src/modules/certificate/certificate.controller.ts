@@ -10,6 +10,8 @@ import {
   Query,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { AdminRole } from '@prisma/client';
+import { Roles } from '@/common/decorators/roles.decorator';
 
 import { Public } from '@/common/decorators/public.decorator';
 import { UpdatePublishStatusDto } from '@/common/dto/update-publish-status.dto';
@@ -20,6 +22,7 @@ import { UpdateCertificateDto } from '@/modules/certificate/dto/update-certifica
 import { CertificateService } from '@/modules/certificate/certificate.service';
 
 @ApiTags('Certificate')
+@Roles(AdminRole.super_admin, AdminRole.editor)
 @Controller()
 export class CertificateController {
   constructor(private readonly service: CertificateService) {}

@@ -27,8 +27,11 @@ export class RolesGuard implements CanActivate {
       context.getClass(),
     ]);
 
+    // Default-deny: a non-public route that declares no @Roles is treated as a
+    // misconfiguration and rejected, so new admin routes fail closed until an
+    // explicit @Roles is added.
     if (!roles || roles.length === 0) {
-      return true;
+      throw new ForbiddenException('This route requires an explicit role grant');
     }
 
     const request = context.switchToHttp().getRequest<{ user?: AuthenticatedUser }>();

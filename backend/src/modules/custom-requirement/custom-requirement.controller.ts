@@ -10,6 +10,8 @@ import {
   Req,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { AdminRole } from '@prisma/client';
+import { Roles } from '@/common/decorators/roles.decorator';
 import { Request } from 'express';
 
 import { Public } from '@/common/decorators/public.decorator';
@@ -18,6 +20,7 @@ import { CustomRequirementListQueryDto } from '@/modules/custom-requirement/dto/
 import { CustomRequirementService } from '@/modules/custom-requirement/custom-requirement.service';
 
 @ApiTags('Custom Requirement')
+@Roles(AdminRole.super_admin, AdminRole.editor)
 @Controller()
 export class CustomRequirementController {
   constructor(private readonly service: CustomRequirementService) {}

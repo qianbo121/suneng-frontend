@@ -10,6 +10,8 @@ import {
   Query,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { AdminRole } from '@prisma/client';
+import { Roles } from '@/common/decorators/roles.decorator';
 
 import { Public } from '@/common/decorators/public.decorator';
 import { CreateSeoDto } from '@/modules/seo/dto/create-seo.dto';
@@ -19,6 +21,7 @@ import { UpdateSeoDto } from '@/modules/seo/dto/update-seo.dto';
 import { SeoService } from '@/modules/seo/seo.service';
 
 @ApiTags('SEO')
+@Roles(AdminRole.super_admin, AdminRole.editor)
 @Controller()
 export class SeoController {
   constructor(private readonly seoService: SeoService) {}

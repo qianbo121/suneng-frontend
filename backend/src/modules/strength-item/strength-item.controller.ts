@@ -10,6 +10,8 @@ import {
   Query,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { AdminRole } from '@prisma/client';
+import { Roles } from '@/common/decorators/roles.decorator';
 
 import { Public } from '@/common/decorators/public.decorator';
 import { UpdatePublishStatusDto } from '@/common/dto/update-publish-status.dto';
@@ -19,6 +21,7 @@ import { UpdateStrengthItemDto } from '@/modules/strength-item/dto/update-streng
 import { StrengthItemService } from '@/modules/strength-item/strength-item.service';
 
 @ApiTags('Strength Item')
+@Roles(AdminRole.super_admin, AdminRole.editor)
 @Controller()
 export class StrengthItemController {
   constructor(private readonly service: StrengthItemService) {}

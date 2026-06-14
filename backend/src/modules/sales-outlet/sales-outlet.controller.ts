@@ -10,6 +10,8 @@ import {
   Query,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { AdminRole } from '@prisma/client';
+import { Roles } from '@/common/decorators/roles.decorator';
 
 import { Public } from '@/common/decorators/public.decorator';
 import { UpdatePublishStatusDto } from '@/common/dto/update-publish-status.dto';
@@ -19,6 +21,7 @@ import { UpdateSalesOutletDto } from '@/modules/sales-outlet/dto/update-sales-ou
 import { SalesOutletService } from '@/modules/sales-outlet/sales-outlet.service';
 
 @ApiTags('Sales Outlet')
+@Roles(AdminRole.super_admin, AdminRole.editor)
 @Controller()
 export class SalesOutletController {
   constructor(private readonly service: SalesOutletService) {}

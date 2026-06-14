@@ -7,6 +7,8 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiBody, ApiConsumes, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { AdminRole } from '@prisma/client';
+import { Roles } from '@/common/decorators/roles.decorator';
 import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
 import { memoryStorage } from 'multer';
 
@@ -42,6 +44,7 @@ const fileFilter = (
 
 @ApiTags('Admin Upload')
 @ApiBearerAuth()
+@Roles(AdminRole.super_admin, AdminRole.editor)
 @Controller('admin/upload')
 export class UploadController {
   constructor(private readonly uploadService: UploadService) {}
