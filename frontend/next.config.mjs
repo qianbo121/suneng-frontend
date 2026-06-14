@@ -10,6 +10,10 @@ const distDir = process.env.NEXT_DIST_DIR || (process.env.NODE_ENV === 'developm
 const nextConfig = {
   reactStrictMode: true,
   distDir,
+  // isomorphic-dompurify pulls in jsdom for server-side sanitization; keep it
+  // external so webpack does not bundle jsdom (which then fails to resolve its
+  // own CSS resources during the server build).
+  serverExternalPackages: ['isomorphic-dompurify'],
   output: 'standalone',
   outputFileTracingRoot: path.join(__dirname, '..'),
   images: {
