@@ -10,8 +10,9 @@ const sitemapLocales: Locale[] = ['zh'];
 
 type SitemapEntry = MetadataRoute.Sitemap[number];
 
-export const dynamic = 'force-dynamic';
-export const revalidate = 0;
+// Regenerate hourly; the underlying news fetch is itself cached (revalidate),
+// so this no longer refetches 100 news items on every request.
+export const revalidate = 3600;
 
 function localizedPath(locale: Locale, path: string) {
   if (path === '/') return `/${locale}`;
@@ -34,13 +35,10 @@ function route(url: string, options: Omit<SitemapEntry, 'url'>): SitemapEntry {
 }
 
 function collectStaticRoutes(): MetadataRoute.Sitemap {
-  const routes: MetadataRoute.Sitemap = [
-    route('/', {
-      lastModified: new Date(),
-      changeFrequency: 'weekly',
-      priority: 1,
-    }),
-  ];
+  // The bare root '/' 307-redirects to '/zh', so listing it alongside '/zh'
+  // is a redirect-source duplicate that search engines drop. '/zh' (emitted by
+  // the staticPaths loop below from path '/') is the canonical home.
+  const routes: MetadataRoute.Sitemap = [];
 
   const staticPaths: Array<{
     path: string;
