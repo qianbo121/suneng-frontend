@@ -1,16 +1,4 @@
-import {
-  BoldOutlined,
-  CalendarOutlined,
-  CloseOutlined,
-  ItalicOutlined,
-  LinkOutlined,
-  OrderedListOutlined,
-  PictureOutlined,
-  PlusOutlined,
-  SearchOutlined,
-  UnderlineOutlined,
-  UnorderedListOutlined,
-} from '@ant-design/icons';
+import { CalendarOutlined, CloseOutlined, PlusOutlined, SearchOutlined } from '@ant-design/icons';
 import { App, Button, DatePicker, Form, Image, Input, Modal, Popconfirm, Space } from 'antd';
 import dayjs, { Dayjs } from 'dayjs';
 import { useMemo, useState } from 'react';
@@ -127,43 +115,6 @@ function CoverImageField() {
       >
         <ImageUploader buttonText="更换图片" />
       </Form.Item>
-    </div>
-  );
-}
-
-function EditorToolbar() {
-  const icons = [
-    <BoldOutlined key="bold" />,
-    <ItalicOutlined key="italic" />,
-    <UnderlineOutlined key="underline" />,
-    <span key="quote" className="simple-news-editor-glyph">
-      “
-    </span>,
-    <UnorderedListOutlined key="ul" />,
-    <OrderedListOutlined key="ol" />,
-    <span key="left" className="simple-news-editor-glyph">
-      ≡
-    </span>,
-    <span key="center" className="simple-news-editor-glyph">
-      ≣
-    </span>,
-    <span key="right" className="simple-news-editor-glyph">
-      ≡
-    </span>,
-    <LinkOutlined key="link" />,
-    <PictureOutlined key="image" />,
-    <span key="fullscreen" className="simple-news-editor-glyph">
-      ⛶
-    </span>,
-  ];
-
-  return (
-    <div className="simple-news-editor-toolbar" aria-hidden="true">
-      {icons.map((icon, index) => (
-        <span className="simple-news-editor-tool" key={index}>
-          {icon}
-        </span>
-      ))}
     </div>
   );
 }
@@ -437,7 +388,6 @@ export function NewsListPage() {
             className="simple-news-required"
           >
             <div className="simple-news-editor-shell">
-              <EditorToolbar />
               <Input.TextArea
                 autoSize={false}
                 className="simple-news-editor-textarea"
