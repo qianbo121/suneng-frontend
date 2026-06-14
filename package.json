@@ -13,6 +13,8 @@
     "lint:frontend": "pnpm --dir frontend lint",
     "lint:backend": "pnpm --dir backend lint",
     "lint:admin": "pnpm --dir admin lint",
+    "lint": "pnpm -r lint",
+    "test": "pnpm -r test",
     "format": "pnpm --dir frontend format && pnpm --dir backend format && pnpm --dir admin format",
     "docker:up": "docker compose up --build",
     "docker:down": "docker compose down"
