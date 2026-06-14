@@ -61,27 +61,31 @@ async function bootstrap() {
   );
   app.useGlobalFilters(new HttpExceptionFilter());
 
-  const swaggerConfig = new DocumentBuilder()
-    .setTitle('Corporate Site API')
-    .setDescription('Manufacturing corporate website API base modules and admin endpoints.')
-    .setVersion('0.1.0')
-    .addBearerAuth(
-      {
-        type: 'http',
-        scheme: 'bearer',
-        bearerFormat: 'JWT',
-      },
-      'bearer',
-    )
-    .build();
+  // Swagger is a development aid only. Never expose it (nor pay for the
+  // controller scan in createDocument) in production.
+  if (configService.get<string>('nodeEnv') !== 'production') {
+    const swaggerConfig = new DocumentBuilder()
+      .setTitle('Corporate Site API')
+      .setDescription('Manufacturing corporate website API base modules and admin endpoints.')
+      .setVersion('0.1.0')
+      .addBearerAuth(
+        {
+          type: 'http',
+          scheme: 'bearer',
+          bearerFormat: 'JWT',
+        },
+        'bearer',
+      )
+      .build();
 
-  const document = SwaggerModule.createDocument(app, swaggerConfig);
-  SwaggerModule.setup('api/docs', app, document, {
-    swaggerOptions: {
-      persistAuthorization: true,
-      docExpansion: 'list',
-    },
-  });
+    const document = SwaggerModule.createDocument(app, swaggerConfig);
+    SwaggerModule.setup('api/docs', app, document, {
+      swaggerOptions: {
+        persistAuthorization: true,
+        docExpansion: 'list',
+      },
+    });
+  }
 
   const port = configService.get<number>('port') ?? 3001;
   await app.get(PrismaService).enableShutdownHooks(app);
