@@ -83,7 +83,7 @@ export function CopyQuoteChecklistButton({ text }: CopyQuoteChecklistButtonProps
         onClick={handleCopy}
         className="inline-flex min-h-[42px] items-center justify-center rounded-[4px] bg-[#c51624] px-5 text-[14px] font-semibold text-white transition hover:bg-[#a90f1b]"
       >
-        复制报价资料清单
+        复制报价资料清单（可直接发送给苏能）
       </button>
       {message ? (
         <p className="mt-3 rounded-[6px] border border-white/16 bg-white/10 px-4 py-3 text-[14px] leading-[1.7] text-white/88">

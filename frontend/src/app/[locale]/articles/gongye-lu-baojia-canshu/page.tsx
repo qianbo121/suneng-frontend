@@ -408,7 +408,7 @@ export default async function IndustrialFurnaceQuoteParamsPage({ params }: PageP
                 href="#quote-template"
                 className="inline-flex min-h-[46px] items-center justify-center rounded-[4px] bg-[#c51624] px-6 text-[15px] font-semibold text-white transition hover:bg-[#a90f1b]"
               >
-                提交参数获取报价建议
+                提交参数，获取苏能工程师方案判断
               </a>
               <a
                 href="#param-table"
@@ -525,9 +525,60 @@ export default async function IndustrialFurnaceQuoteParamsPage({ params }: PageP
             <p className="mt-4 text-[15px] leading-[1.9] text-[#344054]">
               如果暂时无法确定炉型，可以先提供工件信息、热处理工艺、产能需求和现场照片。苏能会先判断大致方案方向，再提示需要补充哪些关键参数。
             </p>
+            <p className="mt-4 text-[15px] leading-[1.9] text-[#344054]">
+              苏能将基于您提供的参数，结合工件尺寸、工艺温度与产能节拍，对工业炉选型与热处理方案进行初步判断。
+            </p>
+            <div className="mt-5 rounded-[8px] border border-[#dfe6f0] bg-white p-5">
+              <p className="text-[15px] font-semibold text-[#101828]">判断范围包括：</p>
+              <BulletList
+                items={['单台工业炉方案', '多炉组合方案', '连续热处理生产线方案', '或旧炉改造方案']}
+              />
+            </div>
             <div className="mt-6 rounded-[8px] border border-[#fed7aa] bg-[#fff7ed] p-5 text-[14px] leading-[1.85] text-[#7c2d12]">
               报价范围仅用于前期沟通，正式报价应以双方确认后的技术方案、配置清单、交付边界和合同条款为准。
             </div>
+          </div>
+        </div>
+
+        <div className="mt-8 rounded-[8px] border border-[#dfe6f0] bg-white p-6 shadow-[0_10px_24px_rgba(15,35,75,0.04)] lg:p-7">
+          <h3 className="text-[22px] font-semibold leading-[1.35] text-[#101828]">提交方式</h3>
+          <div className="mt-5 grid gap-4 lg:grid-cols-3">
+            <article className="rounded-[8px] border border-[#e1e7f0] bg-[#fbfcfe] p-5">
+              <span className="text-[13px] font-semibold text-[#c51624]">01</span>
+              <h4 className="mt-2 text-[18px] font-semibold leading-[1.4] text-[#101828]">点击“提交需求”</h4>
+              <p className="mt-3 text-[15px] leading-[1.8] text-[#475467]">
+                系统将自动把您的参数发送至苏能工程技术团队。
+              </p>
+              <a
+                href="#quote-contact-form"
+                className="mt-4 inline-flex min-h-[40px] items-center justify-center rounded-[4px] bg-[#c51624] px-5 text-[14px] font-semibold text-white transition hover:bg-[#a90f1b]"
+              >
+                提交需求
+              </a>
+            </article>
+            <article className="rounded-[8px] border border-[#e1e7f0] bg-[#fbfcfe] p-5 lg:col-span-2">
+              <span className="text-[13px] font-semibold text-[#c51624]">02</span>
+              <h4 className="mt-2 text-[18px] font-semibold leading-[1.4] text-[#101828]">
+                技术人员将在 24 小时内进行初步方案判断并回复
+              </h4>
+              <div className="mt-3 grid gap-x-5 md:grid-cols-2">
+                <BulletList
+                  items={[
+                    '炉型选型建议',
+                    '加热系统方向（电 / 燃气）',
+                    '工艺适配判断',
+                    '初步方案范围说明',
+                  ]}
+                />
+              </div>
+            </article>
+          </div>
+          <div className="mt-5 rounded-[8px] border border-[#e1e7f0] bg-[#fbfcfe] p-5">
+            <p className="text-[15px] font-semibold text-[#101828]">也可以通过以下方式直接联系：</p>
+            <address className="mt-3 flex flex-wrap gap-x-8 gap-y-2 text-[15px] leading-[1.8] text-[#344054] not-italic">
+              <span>电话 / 微信：+86-130-5298-6814</span>
+              <span>邮箱：jssngyl@outlook.com</span>
+            </address>
           </div>
         </div>
       </Section>
@@ -628,7 +679,7 @@ export default async function IndustrialFurnaceQuoteParamsPage({ params }: PageP
               href="#quote-contact-form"
               className="inline-flex min-h-[46px] items-center justify-center rounded-[4px] bg-[#c51624] px-6 text-[15px] font-semibold text-white transition hover:bg-[#a90f1b]"
             >
-              提交报价参数
+              提交参数，获取苏能工程师方案判断
             </a>
             <a
               href={contactPath}
