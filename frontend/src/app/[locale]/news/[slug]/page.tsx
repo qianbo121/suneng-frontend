@@ -36,10 +36,17 @@ export const revalidate = 600;
 export async function generateMetadata({ params }: NewsDetailPageProps) {
   const { locale, slug } = await params;
   const currentLocale = (locale === 'en' ? 'en' : 'zh') as Locale;
-  const { article: apiArticle } = await getNewsDetailPageData(slug);
+  const { article: apiArticle, error } = await getNewsDetailPageData(slug);
   const article = apiArticle || (FALLBACK_NEWS_SLUGS.has(slug) ? FALLBACK_NEWS_DETAIL : null);
 
   if (!article) {
+    // Distinguish a genuinely-missing article (404) from an upstream API outage:
+    // on error, throw so error.tsx renders per-request instead of caching a 404
+    // for the whole revalidate window (an outage would otherwise 404 a real
+    // article until the cache expires).
+    if (error) {
+      throw new Error(`Failed to load news article "${slug}": ${error}`);
+    }
     notFound();
   }
 
@@ -75,10 +82,17 @@ export async function generateMetadata({ params }: NewsDetailPageProps) {
 export default async function NewsDetailPage({ params }: NewsDetailPageProps) {
   const { locale, slug } = await params;
   const currentLocale = (locale === 'en' ? 'en' : 'zh') as Locale;
-  const { article: apiArticle } = await getNewsDetailPageData(slug);
+  const { article: apiArticle, error } = await getNewsDetailPageData(slug);
   const article = apiArticle || (FALLBACK_NEWS_SLUGS.has(slug) ? FALLBACK_NEWS_DETAIL : null);
 
   if (!article) {
+    // Distinguish a genuinely-missing article (404) from an upstream API outage:
+    // on error, throw so error.tsx renders per-request instead of caching a 404
+    // for the whole revalidate window (an outage would otherwise 404 a real
+    // article until the cache expires).
+    if (error) {
+      throw new Error(`Failed to load news article "${slug}": ${error}`);
+    }
     notFound();
   }
 
