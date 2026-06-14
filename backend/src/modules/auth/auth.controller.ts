@@ -1,6 +1,7 @@
-import { Body, Controller, Get, Patch, Post } from '@nestjs/common';
+import { Body, Controller, Get, Patch, Post, Req } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { AdminRole } from '@prisma/client';
+import type { Request } from 'express';
 
 import { CurrentUser } from '@/common/decorators/current-user.decorator';
 import { Public } from '@/common/decorators/public.decorator';
@@ -18,8 +19,8 @@ export class AuthController {
   @Post('login')
   @Public()
   @ApiOperation({ summary: 'Admin login with username and password' })
-  login(@Body() loginDto: LoginDto) {
-    return this.authService.login(loginDto);
+  login(@Body() loginDto: LoginDto, @Req() request: Request) {
+    return this.authService.login(loginDto, request.ip);
   }
 
   @Get('profile')
