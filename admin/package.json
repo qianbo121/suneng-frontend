@@ -9,6 +9,7 @@
     "preview": "vite preview --host 0.0.0.0 --port 3002",
     "lint": "eslint . --ext ts,tsx",
     "lint:fix": "eslint . --ext ts,tsx --fix",
+    "test": "echo \"(admin has no automated tests yet)\"",
     "format": "prettier --write ."
   },
   "dependencies": {
