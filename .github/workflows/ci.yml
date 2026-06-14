@@ -1,7 +1,8 @@
-# Quality gate: lint + typecheck + build for all three packages.
-# NOTE: this gate proves COMPILE/LINT correctness only. The security and
-# behavioral batches (swagger/sanitizer/upload/RBAC/i18n/ISR/viewcount/CMS)
-# are NOT covered here — each requires its own runtime acceptance script.
+# Quality gate: lint + typecheck + unit tests + build for all three packages.
+# Unit tests cover the security-critical units (RolesGuard default-deny, upload
+# magic-byte validation, rich-text sanitizer). Behavioral/e2e coverage (full
+# RBAC routes, ISR, viewcount idempotency) is still validated by the per-batch
+# runtime acceptance scripts, not here.
 name: CI Quality Gate
 
 on:
@@ -12,7 +13,7 @@ on:
 
 jobs:
   frontend:
-    name: Frontend (lint + build)
+    name: Frontend (lint + test + build)
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -24,6 +25,8 @@ jobs:
         run: pnpm install --frozen-lockfile
       - name: Lint
         run: pnpm --dir frontend lint
+      - name: Test
+        run: pnpm --dir frontend test
       - name: Build (also type-checks via next build)
         env:
           NEXT_PUBLIC_APP_NAME: Manufacturing Corporate Site
@@ -35,7 +38,7 @@ jobs:
         run: pnpm --dir frontend build
 
   backend:
-    name: Backend (lint + typecheck + build)
+    name: Backend (lint + typecheck + test + build)
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -51,6 +54,8 @@ jobs:
         run: pnpm --dir backend lint
       - name: Typecheck
         run: pnpm --dir backend exec tsc --noEmit -p tsconfig.json
+      - name: Test
+        run: pnpm --dir backend test
       - name: Build
         run: pnpm --dir backend build
 
