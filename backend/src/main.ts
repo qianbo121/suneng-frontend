@@ -13,6 +13,11 @@ import { PrismaService } from '@/prisma/prisma.service';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
+  // Behind nginx: trust exactly one proxy hop so request.ip is the real client
+  // IP (from X-Forwarded-For) rather than nginx's address. Use the numeric hop
+  // count, NOT `true` — `true` would trust the client-controlled leftmost XFF
+  // entry and make IP-keyed rate limiting spoofable.
+  app.set('trust proxy', 1);
   const configService = app.get(ConfigService);
   const reflector = app.get(Reflector);
   const uploadRoot = configService.get<string>('uploadRoot') ?? 'uploads';
