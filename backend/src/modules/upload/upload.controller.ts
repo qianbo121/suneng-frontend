@@ -15,12 +15,15 @@ import { UploadService } from '@/modules/upload/upload.service';
 
 const MAX_FILE_SIZE = Number(process.env.UPLOAD_MAX_FILE_SIZE_MB ?? 10) * 1024 * 1024;
 
+// SVG is intentionally excluded: it carries no magic bytes (so server-side
+// type detection cannot vouch for it) and can embed scripts. The client
+// mimetype below is only a first filter; real content type is verified by
+// magic bytes in LocalUploadStorageService.
 const ALLOWED_MIME_TYPES = [
   'image/jpeg',
   'image/png',
   'image/gif',
   'image/webp',
-  'image/svg+xml',
   'application/pdf',
 ];
 

@@ -28,6 +28,14 @@ async function bootstrap() {
   app.setGlobalPrefix('api');
   app.useStaticAssets(join(process.cwd(), uploadRoot), {
     prefix: `/${uploadRoot}/`,
+    setHeaders: (res, filePath) => {
+      // Never render svg/pdf inline (stored-XSS vector); force download.
+      // Raster images stay inline so <img> rendering is unaffected.
+      if (/\.(svg|pdf)$/i.test(filePath)) {
+        res.setHeader('Content-Disposition', 'attachment');
+        res.setHeader('X-Content-Type-Options', 'nosniff');
+      }
+    },
   });
   app.enableCors({
     origin: (origin, callback) => {
