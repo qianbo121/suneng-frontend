@@ -29,6 +29,10 @@ type NewsDetailPageProps = {
   }>;
 };
 
+// ISR: render on demand for unknown slugs, then cache. View counting is
+// decoupled (NewsViewPing), so caching the HTML does not suppress counts.
+export const revalidate = 600;
+
 export async function generateMetadata({ params }: NewsDetailPageProps) {
   const { locale, slug } = await params;
   const currentLocale = (locale === 'en' ? 'en' : 'zh') as Locale;
