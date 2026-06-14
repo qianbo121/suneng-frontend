@@ -212,6 +212,17 @@ http {
       proxy_set_header X-Forwarded-Proto $scheme;
     }
 
+    # Force svg/pdf to download (never render inline) so a stored file cannot
+    # execute script in the user's origin. Regex locations are matched before
+    # the /uploads/ prefix, so raster images below stay inline as before.
+    location ~* ^/uploads/(?<upload_asset>.+\.(?:svg|pdf))$ {
+      alias /var/www/uploads/$upload_asset;
+      add_header Content-Disposition "attachment" always;
+      add_header X-Content-Type-Options "nosniff" always;
+      access_log off;
+      expires 30d;
+    }
+
     location /uploads/ {
       alias /var/www/uploads/;
       access_log off;
@@ -263,6 +274,17 @@ http {
 
     location /api/ {
       return 403;
+    }
+
+    # Force svg/pdf to download (never render inline) so a stored file cannot
+    # execute script in the user's origin. Regex locations are matched before
+    # the /uploads/ prefix, so raster images below stay inline as before.
+    location ~* ^/uploads/(?<upload_asset>.+\.(?:svg|pdf))$ {
+      alias /var/www/uploads/$upload_asset;
+      add_header Content-Disposition "attachment" always;
+      add_header X-Content-Type-Options "nosniff" always;
+      access_log off;
+      expires 30d;
     }
 
     location /uploads/ {
