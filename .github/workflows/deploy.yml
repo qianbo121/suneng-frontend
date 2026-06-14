@@ -67,6 +67,10 @@ jobs:
             cd ${{ secrets.DEPLOY_PATH }}
             git fetch --all
             git checkout main
-            git pull origin main
-            docker compose down
-            docker compose up -d --build
+            # Delegate to deploy.sh (the canonical prod pipeline): it pulls main,
+            # builds against docker-compose.prod.yml with --env-file .env.production,
+            # runs `prisma migrate deploy`, brings the stack up WITHOUT a full-outage
+            # `down`, and health-checks. It aborts if .env.production is missing, so a
+            # box without real prod secrets fails fast instead of booting with
+            # JWT_SECRET=change-me (which the configuration guard now rejects).
+            bash deploy.sh
