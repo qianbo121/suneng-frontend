@@ -1,8 +1,10 @@
 import { Body, Controller, Get, Patch, Post } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { AdminRole } from '@prisma/client';
 
 import { CurrentUser } from '@/common/decorators/current-user.decorator';
 import { Public } from '@/common/decorators/public.decorator';
+import { Roles } from '@/common/decorators/roles.decorator';
 import { ChangePasswordDto } from '@/modules/auth/dto/change-password.dto';
 import { LoginDto } from '@/modules/auth/dto/login.dto';
 import { AuthenticatedUser } from '@/modules/auth/interfaces/authenticated-user.interface';
@@ -21,6 +23,7 @@ export class AuthController {
   }
 
   @Get('profile')
+  @Roles(AdminRole.super_admin, AdminRole.editor)
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Get current admin profile' })
   getProfile(@CurrentUser() user: AuthenticatedUser) {
@@ -28,6 +31,7 @@ export class AuthController {
   }
 
   @Patch('password')
+  @Roles(AdminRole.super_admin, AdminRole.editor)
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Change current admin password' })
   changePassword(@CurrentUser() user: AuthenticatedUser, @Body() dto: ChangePasswordDto) {
