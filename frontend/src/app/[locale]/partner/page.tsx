@@ -7,6 +7,7 @@ import {
   PartnerLogoGrid,
   RelatedPartnerLinkItem,
 } from '@/components/partner/PartnerLogoGrid';
+import { localizeOrHideHref } from '@/lib/i18n/zh-only';
 import { buildSeoMetadata } from '@/lib/seo';
 import { PARTNER_SEO } from '@/lib/seo/page-data';
 import { Locale } from '@/types/site';
@@ -231,26 +232,20 @@ export default async function PartnerPage({ params }: PartnerPageProps) {
   const { locale } = await params;
   const currentLocale = (locale === 'en' ? 'en' : 'zh') as Locale;
   const title = currentLocale === 'en' ? 'Partners' : '合作关系与行业应用';
-  const localizePath = (rawPath: string) => {
-    if (!rawPath.startsWith('/')) {
-      return rawPath;
-    }
-    const normalized = rawPath.replace(/^\/(zh|en)\//, '/');
-    return `/${currentLocale}${normalized}`;
-  };
-
+  // Localize internal links to the current locale; drop links whose target is
+  // Chinese-only when rendering English (rewriting them to /en/* would 404).
   const localizedFieldItems = cooperationFields.map((field) => ({
     ...field,
-    links: field.links.map((link) => ({
-      ...link,
-      href: localizePath(link.href),
-    })),
+    links: field.links.flatMap((link) => {
+      const href = localizeOrHideHref(link.href, currentLocale);
+      return href ? [{ ...link, href }] : [];
+    }),
   }));
 
-  const localizedRelatedLinks = relatedLinks.map((item) => ({
-    ...item,
-    href: localizePath(item.href),
-  }));
+  const localizedRelatedLinks = relatedLinks.flatMap((item) => {
+    const href = localizeOrHideHref(item.href, currentLocale);
+    return href ? [{ ...item, href }] : [];
+  });
 
   return (
     <div className="bg-white pb-10 lg:pb-0">
