@@ -9,7 +9,23 @@ if [ ! -f "$ENV_FILE" ]; then
   exit 1
 fi
 
-git pull origin main
+pull_latest() {
+  local attempt=1
+  local max_attempts=3
+
+  until git pull --ff-only origin main; do
+    if [ "$attempt" -ge "$max_attempts" ]; then
+      echo "git pull failed after $attempt attempts."
+      return 1
+    fi
+
+    echo "git pull failed; retrying in 10 seconds ($attempt/$max_attempts)..."
+    attempt=$((attempt + 1))
+    sleep 10
+  done
+}
+
+pull_latest
 
 docker compose --env-file "$ENV_FILE" -f "$COMPOSE_FILE" build --no-cache
 
