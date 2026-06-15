@@ -18,15 +18,33 @@
 - JWT strategy 同时支持 cookie 和 Bearer，过渡期兼容旧会话。
 - 增加 CSRF 防护策略，避免 cookie 认证引入跨站请求风险。
 
+## 当前执行状态
+
+- 2026-06-15 已完成阶段 1 与阶段 2 的主体代码：
+  - 后端登录设置 `admin_session` HttpOnly cookie。
+  - JWT strategy 支持从 `admin_session` cookie 读取 token，并保留 Bearer token 兼容路径。
+  - 后端新增 `/admin/auth/logout` 清理 cookie。
+  - admin axios 开启 `withCredentials: true`。
+  - admin 前端停止写入 `corp_admin_token`，并在清理会话时删除旧版本遗留 token。
+  - admin 初始化登录态改为调用 `/admin/auth/profile`，不再依赖 localStorage token。
+  - 对 cookie 认证的 `/api/admin/*` 非 GET 请求增加 Origin/Referer 校验，降低 CSRF 风险。
+
+仍需线上同域环境验收：
+
+- 登录后浏览器只出现 `HttpOnly` 的 `admin_session` cookie，不再出现可读 JWT。
+- 刷新后台页面后登录态保持正常。
+- 修改密码、退出登录、401 失效跳转正常。
+- 跨站 POST 在无合法 Origin/Referer 时被拒绝。
+
 ## 建议拆分
 
 ### 阶段 1：兼容读取 cookie
 
-1. 后端登录成功后同时返回 user，并设置 `admin_session` HttpOnly cookie。
+1. 后端登录成功后返回 user，并设置 `admin_session` HttpOnly cookie。
 2. JWT strategy 从 cookie 或 Bearer 中读取 token。
 3. admin axios 开启 `withCredentials: true`。
-4. 保留 Authorization 兼容旧版本。
-5. 增加后端单元测试：cookie token、Bearer token、无 token。
+4. 保留 Bearer 兼容旧版本 API 调用。
+5. 增加后端单元测试：cookie token、Bearer token、cookie 优先级和 cookie 属性。
 
 ### 阶段 2：前端停止存 token
 
@@ -53,4 +71,4 @@
 
 ## 不在本批次直接切换的原因
 
-该迁移涉及认证协议和跨域 cookie 行为，必须在 staging 或线上同域环境验证。当前批次先新增 admin 最小测试与 CSP Report-Only，避免把部署脚本、测试、CSP、认证协议全部混入同一个风险面。
+该迁移涉及认证协议和跨域 cookie 行为，已通过本地单元测试、lint 和 build 验证；仍必须在 staging 或线上同域环境完成浏览器级验收后再合并生产。
