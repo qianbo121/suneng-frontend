@@ -9,7 +9,7 @@ ENV VITE_APP_BASE_PATH=${VITE_APP_BASE_PATH}
 ENV VITE_APP_NAME=${VITE_APP_NAME}
 ENV VITE_API_BASE_URL=${VITE_API_BASE_URL}
 
-RUN corepack enable && corepack prepare pnpm@9.15.4 --activate
+RUN npm install -g pnpm@9.15.4 --registry=https://registry.npmmirror.com
 
 COPY package.json pnpm-lock.yaml ./
 
