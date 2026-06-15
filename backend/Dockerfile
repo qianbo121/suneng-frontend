@@ -2,7 +2,7 @@ FROM node:22-alpine AS deps
 
 WORKDIR /app
 
-RUN corepack enable && corepack prepare pnpm@9.15.4 --activate
+RUN npm install -g pnpm@9.15.4 --registry=https://registry.npmmirror.com
 
 COPY package.json pnpm-lock.yaml ./
 
@@ -14,7 +14,7 @@ WORKDIR /app
 
 ENV NODE_ENV=production
 
-RUN corepack enable && corepack prepare pnpm@9.15.4 --activate
+RUN npm install -g pnpm@9.15.4 --registry=https://registry.npmmirror.com
 
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
@@ -28,8 +28,6 @@ WORKDIR /app
 
 ENV NODE_ENV=production
 ENV PORT=3001
-
-RUN corepack enable
 
 COPY --from=builder /app/package.json ./package.json
 COPY --from=builder /app/node_modules ./node_modules
