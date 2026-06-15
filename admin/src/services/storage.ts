@@ -8,16 +8,6 @@ function isBrowser() {
   return typeof window !== 'undefined';
 }
 
-export function getStoredToken() {
-  if (!isBrowser()) return null;
-  return window.localStorage.getItem(TOKEN_KEY);
-}
-
-export function setStoredToken(token: string) {
-  if (!isBrowser()) return;
-  window.localStorage.setItem(TOKEN_KEY, token);
-}
-
 export function getStoredUser() {
   if (!isBrowser()) return null;
 
@@ -38,6 +28,7 @@ export function setStoredUser(user: AdminUser) {
 
 export function clearAuthSession() {
   if (!isBrowser()) return;
+  // Remove legacy bearer token storage left by pre-cookie admin builds.
   window.localStorage.removeItem(TOKEN_KEY);
   window.localStorage.removeItem(USER_KEY);
 }

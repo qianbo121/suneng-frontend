@@ -30,3 +30,18 @@ export async function changeOwnPassword(payload: ChangePasswordPayload) {
   );
   return unwrapResponse(response);
 }
+
+export async function logoutFromServer() {
+  const response = await http.post<ApiResponse<{ success: boolean }>>(
+    '/admin/auth/logout',
+    {},
+    {
+      meta: {
+        skipGlobalLoading: true,
+        silentError: true,
+      },
+    },
+  );
+
+  return unwrapResponse(response);
+}

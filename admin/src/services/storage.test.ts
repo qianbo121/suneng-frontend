@@ -3,9 +3,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import {
   clearAuthSession,
   emitUnauthorizedEvent,
-  getStoredToken,
   getStoredUser,
-  setStoredToken,
   setStoredUser,
   subscribeUnauthorizedEvent,
 } from '@/services/storage';
@@ -53,16 +51,15 @@ describe('admin auth storage', () => {
     vi.unstubAllGlobals();
   });
 
-  it('stores and clears the admin token and user', () => {
-    setStoredToken('token-123');
+  it('stores and clears the admin user and removes legacy tokens', () => {
+    window.localStorage.setItem('corp_admin_token', 'legacy-token');
     setStoredUser(adminUser);
 
-    expect(getStoredToken()).toBe('token-123');
     expect(getStoredUser()).toEqual(adminUser);
 
     clearAuthSession();
 
-    expect(getStoredToken()).toBeNull();
+    expect(window.localStorage.getItem('corp_admin_token')).toBeNull();
     expect(getStoredUser()).toBeNull();
   });
 

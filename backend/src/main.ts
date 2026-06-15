@@ -5,10 +5,28 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { ClassSerializerInterceptor } from '@nestjs/common';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { join } from 'node:path';
+import type { NextFunction, Request, Response } from 'express';
 
 import { AppModule } from '@/app.module';
 import { HttpExceptionFilter } from '@/common/filters/http-exception.filter';
 import { TransformResponseInterceptor } from '@/common/interceptors/transform-response.interceptor';
+import { ADMIN_SESSION_COOKIE, readCookie } from '@/modules/auth/auth.cookies';
+
+function originFromReferer(referer: string | undefined) {
+  if (!referer) return undefined;
+
+  try {
+    return new URL(referer).origin;
+  } catch {
+    return undefined;
+  }
+}
+
+function hasBearerAuth(request: Request) {
+  return (
+    typeof request.headers.authorization === 'string' && request.headers.authorization.length > 0
+  );
+}
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
@@ -30,6 +48,40 @@ async function bootstrap() {
   ].filter(Boolean);
 
   app.setGlobalPrefix('api');
+  app.use((request: Request, response: Response, next: NextFunction) => {
+    const method = request.method.toUpperCase();
+    const isAdminWrite =
+      request.path.startsWith('/api/admin/') && !['GET', 'HEAD', 'OPTIONS'].includes(method);
+
+    if (!isAdminWrite) {
+      next();
+      return;
+    }
+
+    const usesCookieAuth = Boolean(readCookie(request.headers.cookie, ADMIN_SESSION_COOKIE));
+
+    if (!usesCookieAuth || hasBearerAuth(request)) {
+      next();
+      return;
+    }
+
+    const requestOrigin =
+      request.headers.origin ?? originFromReferer(request.headers.referer as string | undefined);
+
+    if (requestOrigin && allowedOrigins.includes(requestOrigin)) {
+      next();
+      return;
+    }
+
+    response.status(403).json({
+      code: 403,
+      data: {
+        path: request.originalUrl,
+        timestamp: new Date().toISOString(),
+      },
+      message: 'CSRF validation failed',
+    });
+  });
   app.useStaticAssets(join(process.cwd(), uploadRoot), {
     prefix: `/${uploadRoot}/`,
     setHeaders: (res, filePath) => {
