@@ -1,3 +1,5 @@
+import DOMPurify from 'isomorphic-dompurify';
+
 function escapeHtml(value: string) {
   return value
     .replaceAll('&', '&amp;')
@@ -7,20 +9,16 @@ function escapeHtml(value: string) {
     .replaceAll("'", '&#39;');
 }
 
-function stripDangerousBlocks(html: string) {
-  return html
-    .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
-    .replace(/<style\b[^<]*(?:(?!<\/style>)<[^<]*)*<\/style>/gi, '')
-    .replace(/<iframe\b[^<]*(?:(?!<\/iframe>)<[^<]*)*<\/iframe>/gi, '')
-    .replace(/<object\b[^<]*(?:(?!<\/object>)<[^<]*)*<\/object>/gi, '')
-    .replace(/<embed\b[^>]*>/gi, '')
-    .replace(/<form\b[^<]*(?:(?!<\/form>)<[^<]*)*<\/form>/gi, '')
-    .replace(/<input\b[^>]*>/gi, '')
-    .replace(/<textarea\b[^<]*(?:(?!<\/textarea>)<[^<]*)*<\/textarea>/gi, '')
-    .replace(/<select\b[^<]*(?:(?!<\/select>)<[^<]*)*<\/select>/gi, '')
-    .replace(/<button\b[^<]*(?:(?!<\/button>)<[^<]*)*<\/button>/gi, '');
-}
-
+/**
+ * Sanitize admin-authored rich text before it is rendered via
+ * dangerouslySetInnerHTML (NewsArticleContent). Plain text (no markup) is
+ * paragraph-wrapped with full escaping; HTML goes through DOMPurify's
+ * audited allow-list, which strips scripts, event handlers and
+ * javascript:/data: URLs while preserving normal formatting markup.
+ *
+ * Uses isomorphic-dompurify so it works both in the browser and during
+ * Next.js server rendering (the news detail page is a server component).
+ */
 export function sanitizeRichTextHtml(value?: string | null) {
   if (!value) return '';
 
@@ -36,9 +34,5 @@ export function sanitizeRichTextHtml(value?: string | null) {
     return paragraphs.join('');
   }
 
-  return stripDangerousBlocks(value)
-    .replace(/\son[a-z]+\s*=\s*("[^"]*"|'[^']*'|[^\s>]+)/gi, '')
-    .replace(/(href|src)\s*=\s*("|')\s*javascript:[^"']*(\2)/gi, '$1="#"')
-    .replace(/(href|src)\s*=\s*javascript:[^\s>]+/gi, '$1="#"');
+  return DOMPurify.sanitize(value);
 }
-

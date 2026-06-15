@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 
+import { getAboutContent } from '@/lib/api/about';
 import { buildSeoMetadata } from '@/lib/seo';
 import { AboutApiData, AboutPageKey, AboutSectionApiItem, ChairmanMessageApiItem, CultureValueApiItem } from '@/types/about';
 import { Locale, SidebarItem } from '@/types/site';
@@ -161,9 +162,18 @@ export async function createAboutPageMetadata(
 }
 
 export async function getAboutPageSource(locale: Locale) {
+  const { data, error } = await getAboutContent();
+  // CMS success and non-empty -> use CMS; on error or an empty published set ->
+  // fall back to the static page structure (the page renders pageCopy when
+  // data is null). Never return a blank page.
+  const hasContent = Boolean(
+    data &&
+      (data.sections?.length || data.timeline?.length || data.culture?.length || data.chairman),
+  );
+
   return {
-    data: null,
-    error: null,
+    data: hasContent ? data : null,
+    error: error ?? null,
     sidebarTitle: locale === 'en' ? 'About Us' : '关于我们',
     sidebarItems: getAboutSidebarItems(locale),
   };

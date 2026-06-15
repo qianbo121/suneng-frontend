@@ -10,6 +10,8 @@ import {
   Query,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { AdminRole } from '@prisma/client';
+import { Roles } from '@/common/decorators/roles.decorator';
 
 import { UpdatePublishStatusDto } from '@/common/dto/update-publish-status.dto';
 import { CreateProductDto } from '@/modules/product/dto/create-product.dto';
@@ -18,6 +20,7 @@ import { UpdateProductDto } from '@/modules/product/dto/update-product.dto';
 import { ProductService } from '@/modules/product/product.service';
 
 @ApiTags('Product')
+@Roles(AdminRole.super_admin, AdminRole.editor)
 @Controller()
 export class ProductController {
   constructor(private readonly service: ProductService) {}

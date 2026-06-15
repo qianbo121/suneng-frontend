@@ -2,6 +2,7 @@ import { CanActivate, ExecutionContext, ForbiddenException, Injectable } from '@
 import { Reflector } from '@nestjs/core';
 import { AdminRole } from '@prisma/client';
 
+import { IS_PUBLIC_KEY } from '@/common/decorators/public.decorator';
 import { ROLES_KEY } from '@/common/decorators/roles.decorator';
 import { AuthenticatedUser } from '@/modules/auth/interfaces/authenticated-user.interface';
 
@@ -10,13 +11,27 @@ export class RolesGuard implements CanActivate {
   constructor(private readonly reflector: Reflector) {}
 
   canActivate(context: ExecutionContext): boolean {
+    // Honor @Public so public routes are never gated by role checks. This is a
+    // precondition for default-deny: without it, flipping the default below
+    // would 403 every @Public route that shares a controller with admin routes.
+    const isPublic = this.reflector.getAllAndOverride<boolean>(IS_PUBLIC_KEY, [
+      context.getHandler(),
+      context.getClass(),
+    ]);
+    if (isPublic) {
+      return true;
+    }
+
     const roles = this.reflector.getAllAndOverride<AdminRole[]>(ROLES_KEY, [
       context.getHandler(),
       context.getClass(),
     ]);
 
+    // Default-deny: a non-public route that declares no @Roles is treated as a
+    // misconfiguration and rejected, so new admin routes fail closed until an
+    // explicit @Roles is added.
     if (!roles || roles.length === 0) {
-      return true;
+      throw new ForbiddenException('This route requires an explicit role grant');
     }
 
     const request = context.switchToHttp().getRequest<{ user?: AuthenticatedUser }>();

@@ -8,15 +8,19 @@ type GetNewsListOptions = {
   timeoutMs?: number;
 };
 
+// Read paths use ISR (next.revalidate) instead of cache:'no-store' so the Next
+// Data Cache is not defeated. View counting is decoupled (see NewsViewPing), so
+// caching the detail read no longer suppresses view counts.
+
 export function getNewsCategories() {
   return safeApiGet<NewsCategoryApiItem[]>('/v1/news/categories', {
-    cache: 'no-store',
+    revalidate: 3600,
   });
 }
 
 export function getNewsList(options: GetNewsListOptions = {}) {
   return safeApiGet<PaginatedNewsApiData>('/v1/news', {
-    cache: 'no-store',
+    revalidate: 300,
     searchParams: {
       categoryId: options.categoryId,
       page: options.page ?? 1,
@@ -35,12 +39,12 @@ export function getLatestNews() {
 
 export function getNewsDetail(slug: string) {
   return safeApiGet<NewsApiItem>(`/v1/news/${slug}`, {
-    cache: 'no-store',
+    revalidate: 600,
   });
 }
 
 export function getNewsPrevNext(id: number) {
   return safeApiGet<NewsPrevNextApiData>(`/v1/news/${id}/prev-next`, {
-    cache: 'no-store',
+    revalidate: 600,
   });
 }

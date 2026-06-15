@@ -2,6 +2,8 @@ import type { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
+
+import { localizeOrHideHref } from '@/lib/i18n/zh-only';
 import {
   HiBeaker,
   HiBuildingOffice2,
@@ -162,9 +164,27 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
         : `${detail.title.replace('（非标定制）', '')}选型与工艺适配`;
   const shouldCenterLeadFormScroll = detail.heroCtas?.some((item) => item.href === '#product-lead-form') || false;
   const showChinesePathLinks = currentLocale === 'zh';
+  // Localize internal links to the current locale; drop links whose target is
+  // Chinese-only when rendering English (avoids /en 404s and /zh cross-locale
+  // bounces). In-page anchors (#...) are left untouched.
+  const localizedHeroCtas = (detail.heroCtas ?? []).flatMap((item) => {
+    if (item.href.startsWith('#')) return [item];
+    const href = localizeOrHideHref(item.href, currentLocale);
+    return href ? [{ ...item, href }] : [];
+  });
+  const parameterLinkHref = detail.parameterLink
+    ? localizeOrHideHref(detail.parameterLink.href, currentLocale)
+    : null;
+  const leadFormContactHref = detail.leadForm?.contactHref
+    ? (localizeOrHideHref(detail.leadForm.contactHref, currentLocale) ?? detail.leadForm.contactHref)
+    : undefined;
   const scopedRelatedLinks = (detail.relatedLinks ?? [])
     .filter((item) => item.href.includes('/products/detail/'))
-    .slice(0, 2);
+    .slice(0, 2)
+    .flatMap((item) => {
+      const href = localizeOrHideHref(item.href, currentLocale);
+      return href ? [{ ...item, href }] : [];
+    });
 
   return (
     <main className="bg-white text-[#202020]">
@@ -222,9 +242,9 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
                 </span>
               ))}
             </div>
-            {detail.heroCtas?.length ? (
+            {localizedHeroCtas.length ? (
               <div className="mt-6 flex flex-wrap gap-3">
-                {detail.heroCtas.map((item, index) =>
+                {localizedHeroCtas.map((item, index) =>
                   item.href === '#product-lead-form' ? (
                     <ProductQuoteScrollButton
                       key={item.href}
@@ -347,9 +367,9 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
               {detail.parameterNote}
             </p>
           ) : null}
-          {detail.parameterLink ? (
+          {detail.parameterLink && parameterLinkHref ? (
             <Link
-              href={detail.parameterLink.href}
+              href={parameterLinkHref}
               className="mt-4 inline-flex min-h-[42px] items-center justify-center rounded-[4px] border border-[#e60012] px-5 text-[14px] font-semibold text-[#e60012] transition hover:bg-[#fff1f2]"
             >
               {detail.parameterLink.title}
@@ -630,7 +650,7 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
           title={detail.leadForm?.title}
           description={detail.leadForm?.description}
           submitLabel={detail.leadForm?.submitLabel}
-          contactHref={detail.leadForm?.contactHref}
+          contactHref={leadFormContactHref}
           contactLabel={detail.leadForm?.contactLabel}
           phone={detail.leadForm?.phone}
           email={detail.leadForm?.email}
