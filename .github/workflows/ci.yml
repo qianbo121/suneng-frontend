@@ -1,0 +1,82 @@
+# Quality gate: lint + typecheck + unit tests + build for all three packages.
+# Unit tests cover the security-critical units (RolesGuard default-deny, upload
+# magic-byte validation, rich-text sanitizer). Behavioral/e2e coverage (full
+# RBAC routes, ISR, viewcount idempotency) is still validated by the per-batch
+# runtime acceptance scripts, not here.
+name: CI Quality Gate
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+jobs:
+  frontend:
+    name: Frontend (lint + test + build)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - uses: pnpm/action-setup@v4
+      - name: Install
+        run: pnpm install --frozen-lockfile
+      - name: Lint
+        run: pnpm --dir frontend lint
+      - name: Test
+        run: pnpm --dir frontend test
+      - name: Build (also type-checks via next build)
+        env:
+          NEXT_PUBLIC_APP_NAME: Manufacturing Corporate Site
+          NEXT_PUBLIC_DEFAULT_LOCALE: zh
+          NEXT_PUBLIC_SITE_URL: https://example.com
+          NEXT_PUBLIC_API_URL: /api
+          NEXT_PUBLIC_API_BASE_URL: /api
+          API_BASE_URL_INTERNAL: http://backend:3001/api
+        run: pnpm --dir frontend build
+
+  backend:
+    name: Backend (lint + typecheck + test + build)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - uses: pnpm/action-setup@v4
+      - name: Install
+        run: pnpm install --frozen-lockfile
+      - name: Generate Prisma client
+        run: pnpm --dir backend prisma:generate
+      - name: Lint
+        run: pnpm --dir backend lint
+      - name: Typecheck
+        run: pnpm --dir backend exec tsc --noEmit -p tsconfig.json
+      - name: Test
+        run: pnpm --dir backend test
+      - name: Build
+        run: pnpm --dir backend build
+
+  admin:
+    name: Admin (lint + build)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - uses: pnpm/action-setup@v4
+      - name: Install
+        run: pnpm install --frozen-lockfile
+      - name: Lint
+        run: pnpm --dir admin lint
+      # admin build is `tsc -b && vite build`, so the build step also type-checks
+      # (project-references mode; plain `tsc --noEmit` throws TS6310 here).
+      - name: Build
+        env:
+          VITE_APP_NAME: Corporate Admin
+          VITE_API_BASE_URL: /api
+          VITE_APP_BASE_PATH: /admin/
+        run: pnpm --dir admin build

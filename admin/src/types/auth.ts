@@ -15,7 +15,6 @@ export type LoginPayload = {
 };
 
 export type LoginResponse = {
-  token: string;
   user: AdminUser;
 };
 
@@ -40,7 +39,6 @@ export type ChangePasswordPayload = {
 
 export type AuthContextValue = {
   user: AdminUser | null;
-  token: string | null;
   isAuthenticated: boolean;
   isInitializing: boolean;
   login: (payload: LoginPayload) => Promise<LoginResponse>;

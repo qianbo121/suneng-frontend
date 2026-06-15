@@ -10,6 +10,8 @@ import {
   Query,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { AdminRole } from '@prisma/client';
+import { Roles } from '@/common/decorators/roles.decorator';
 
 import { UpdatePublishStatusDto } from '@/common/dto/update-publish-status.dto';
 import { AboutService } from '@/modules/about/about.service';
@@ -28,6 +30,7 @@ import { UpdateTimelineEventDto } from '@/modules/about/dto/update-timeline-even
 
 @ApiTags('About Admin')
 @ApiBearerAuth('bearer')
+@Roles(AdminRole.super_admin, AdminRole.editor)
 @Controller('admin/about')
 export class AboutAdminController {
   constructor(private readonly aboutService: AboutService) {}

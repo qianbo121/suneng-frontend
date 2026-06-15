@@ -34,7 +34,7 @@ export function CustomRequirementPage() {
   const [filters, setFilters] = useState(DEFAULT_FILTERS);
   const [page, setPage] = useState(1);
 
-  const { data, isLoading, mutate } = useSWR(['custom-requirements', page, filters], () =>
+  const { data, isLoading, error, mutate } = useSWR(['custom-requirements', page, filters], () =>
     getCustomRequirementList({
       page,
       pageSize: 10,
@@ -51,12 +51,37 @@ export function CustomRequirementPage() {
         width: 180,
         render: (value?: string) => (value ? new Date(value).toLocaleString('zh-CN') : '-'),
       },
-      { title: '姓名', dataIndex: 'name', width: 120, render: (value?: string | null) => value || '-' },
+      {
+        title: '姓名',
+        dataIndex: 'name',
+        width: 120,
+        render: (value?: string | null) => value || '-',
+      },
       { title: '联系电话', dataIndex: 'phone', width: 150 },
-      { title: '公司名称', dataIndex: 'company', width: 180, render: (value?: string | null) => value || '-' },
-      { title: '所属行业', dataIndex: 'industry', width: 150, render: (value?: string | null) => value || '-' },
-      { title: '设备工艺', dataIndex: 'process', width: 150, render: (value?: string | null) => value || '-' },
-      { title: '使用温度', dataIndex: 'temperature', width: 130, render: (value?: string | null) => value || '-' },
+      {
+        title: '公司名称',
+        dataIndex: 'company',
+        width: 180,
+        render: (value?: string | null) => value || '-',
+      },
+      {
+        title: '所属行业',
+        dataIndex: 'industry',
+        width: 150,
+        render: (value?: string | null) => value || '-',
+      },
+      {
+        title: '设备工艺',
+        dataIndex: 'process',
+        width: 150,
+        render: (value?: string | null) => value || '-',
+      },
+      {
+        title: '使用温度',
+        dataIndex: 'temperature',
+        width: 130,
+        render: (value?: string | null) => value || '-',
+      },
       {
         title: '设备需求',
         dataIndex: 'requirement',
@@ -142,6 +167,20 @@ export function CustomRequirementPage() {
           loading={isLoading}
           columns={columns}
           dataSource={data?.items || []}
+          locale={
+            error && !isLoading
+              ? {
+                  emptyText: (
+                    <Space direction="vertical" size={8}>
+                      <span>需求数据加载失败</span>
+                      <Button size="small" onClick={() => void mutate()}>
+                        重试
+                      </Button>
+                    </Space>
+                  ),
+                }
+              : undefined
+          }
           scroll={{ x: 1640 }}
           pagination={{
             current: data?.page || page,

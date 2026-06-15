@@ -1,7 +1,15 @@
+# Cap container logs so json-file logging cannot fill the host disk.
+x-logging: &default-logging
+  driver: json-file
+  options:
+    max-size: '10m'
+    max-file: '3'
+
 services:
   postgres:
     image: postgres:16-alpine
     container_name: corp-site-postgres
+    logging: *default-logging
     restart: always
     mem_limit: 512m
     environment:
@@ -21,6 +29,7 @@ services:
     build:
       context: ./backend
     container_name: corp-site-backend
+    logging: *default-logging
     restart: always
     mem_limit: 512m
     depends_on:
@@ -70,6 +79,7 @@ services:
         NEXT_PUBLIC_SITE_URL: https://${DOMAIN}
         API_BASE_URL_INTERNAL: http://backend:3001/api
     container_name: corp-site-frontend
+    logging: *default-logging
     restart: always
     mem_limit: 512m
     depends_on:
@@ -104,6 +114,7 @@ services:
         VITE_APP_NAME: Corporate Admin
         VITE_API_BASE_URL: /api
     container_name: corp-site-admin
+    logging: *default-logging
     restart: always
     mem_limit: 256m
     depends_on:
@@ -121,6 +132,7 @@ services:
   nginx:
     image: nginx:1.27-alpine
     container_name: corp-site-nginx
+    logging: *default-logging
     restart: always
     mem_limit: 128m
     depends_on:

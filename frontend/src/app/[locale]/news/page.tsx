@@ -24,8 +24,6 @@ type NewsPageProps = {
   }>;
 };
 
-export const dynamic = 'force-dynamic';
-
 export async function generateMetadata({ params }: NewsPageProps) {
   const { locale } = await params;
   const currentLocale = (locale === 'en' ? 'en' : 'zh') as Locale;

@@ -12,6 +12,7 @@ package-lock.json
 .capture
 .git-backups-standalone
 uploads_export
+uploads/
 设计稿
 图片素材
 公司logo

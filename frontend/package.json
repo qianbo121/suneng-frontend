@@ -8,12 +8,14 @@
     "start": "next start",
     "seo:submit": "node scripts/submit-search-engines.mjs",
     "seo:submit:dry": "node scripts/submit-search-engines.mjs --dry-run",
-    "lint": "next lint",
+    "lint": "eslint . --ext ts,tsx",
+    "test": "vitest run",
     "format": "prettier --write ."
   },
   "dependencies": {
     "clsx": "^2.1.1",
     "framer-motion": "^11.11.17",
+    "isomorphic-dompurify": "^3.17.0",
     "next": "^15.0.0",
     "next-intl": "^4.0.0",
     "react": "^18.3.1",
@@ -31,6 +33,7 @@
     "postcss": "^8.4.49",
     "prettier": "^3.4.2",
     "tailwindcss": "^3.4.16",
-    "typescript": "^5.7.2"
+    "typescript": "^5.7.2",
+    "vitest": "^3.2.6"
   }
 }

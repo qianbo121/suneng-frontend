@@ -10,6 +10,8 @@ import {
   Query,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { AdminRole } from '@prisma/client';
+import { Roles } from '@/common/decorators/roles.decorator';
 
 import { Public } from '@/common/decorators/public.decorator';
 import { UpdatePublishStatusDto } from '@/common/dto/update-publish-status.dto';
@@ -19,6 +21,7 @@ import { UpdateStrengthCategoryDto } from '@/modules/strength-category/dto/updat
 import { StrengthCategoryService } from '@/modules/strength-category/strength-category.service';
 
 @ApiTags('Strength Category')
+@Roles(AdminRole.super_admin, AdminRole.editor)
 @Controller()
 export class StrengthCategoryController {
   constructor(private readonly service: StrengthCategoryService) {}

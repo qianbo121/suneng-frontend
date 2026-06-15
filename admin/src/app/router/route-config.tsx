@@ -1,7 +1,4 @@
-import {
-  FileProtectOutlined,
-  FileTextOutlined,
-} from '@ant-design/icons';
+import { FileProtectOutlined, FileTextOutlined } from '@ant-design/icons';
 import { ReactNode } from 'react';
 
 import { AdminRole } from '@/types/auth';

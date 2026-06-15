@@ -24,10 +24,21 @@ jobs:
         uses: pnpm/action-setup@v4
 
       - name: Install dependencies
-        run: pnpm install --no-frozen-lockfile
+        run: pnpm install --frozen-lockfile
 
       - name: Generate Prisma client
         run: pnpm --dir backend prisma:generate
+
+      # Gate the deploy on the same quality bar as CI: the deploy job below
+      # `needs: build`, so a lint/type/test failure blocks the deploy.
+      - name: Lint (all packages)
+        run: pnpm -r lint
+
+      - name: Typecheck (backend)
+        run: pnpm --dir backend exec tsc --noEmit -p tsconfig.json
+
+      - name: Test (all packages)
+        run: pnpm -r test
 
       - name: Build backend
         run: pnpm --dir backend build
@@ -67,6 +78,10 @@ jobs:
             cd ${{ secrets.DEPLOY_PATH }}
             git fetch --all
             git checkout main
-            git pull origin main
-            docker compose down
-            docker compose up -d --build
+            # Delegate to deploy.sh (the canonical prod pipeline): it pulls main,
+            # builds against docker-compose.prod.yml with --env-file .env.production,
+            # runs `prisma migrate deploy`, brings the stack up WITHOUT a full-outage
+            # `down`, and health-checks. It aborts if .env.production is missing, so a
+            # box without real prod secrets fails fast instead of booting with
+            # JWT_SECRET=change-me (which the configuration guard now rejects).
+            bash deploy.sh

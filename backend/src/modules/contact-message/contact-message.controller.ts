@@ -11,6 +11,8 @@ import {
   Req,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { AdminRole } from '@prisma/client';
+import { Roles } from '@/common/decorators/roles.decorator';
 import { Request } from 'express';
 
 import { Public } from '@/common/decorators/public.decorator';
@@ -20,6 +22,7 @@ import { UpdateContactMessageStatusDto } from '@/modules/contact-message/dto/upd
 import { ContactMessageService } from '@/modules/contact-message/contact-message.service';
 
 @ApiTags('Contact Message')
+@Roles(AdminRole.super_admin, AdminRole.editor)
 @Controller()
 export class ContactMessageController {
   constructor(private readonly service: ContactMessageService) {}

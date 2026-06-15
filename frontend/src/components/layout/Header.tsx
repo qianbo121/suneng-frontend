@@ -7,6 +7,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { useEffect, useMemo, useState } from 'react';
 import { HiBars3BottomRight, HiChevronRight, HiOutlineXMark } from 'react-icons/hi2';
 
+import { isZhOnlyPath } from '@/lib/i18n/zh-only';
 import { buildBrandImageAlt } from '@/lib/seo';
 import { getLocalizedNavigation } from '@/mock/navigation';
 import { Locale } from '@/types/site';
@@ -16,14 +17,15 @@ type HeaderProps = {
 };
 
 const HEADER_LOGO_SRC = '/images/brand/sn-logo-header-cropped.png';
-const ZH_ONLY_ROUTE_PREFIXES = ['/zh/solutions/', '/zh/articles/'];
 
 function buildLocaleHref(locale: string, href: string) {
   return href === '/' ? `/${locale}` : `/${locale}${href}`;
 }
 
 function buildLocaleSwitchPath(pathname: string, nextLocale: 'zh' | 'en', currentLocale: 'zh' | 'en') {
-  if (currentLocale === 'zh' && nextLocale === 'en' && ZH_ONLY_ROUTE_PREFIXES.some((prefix) => pathname.startsWith(prefix))) {
+  // Switching to English from a Chinese-only page (no /en counterpart) lands on
+  // the English home instead of a 404. Covers all 8 zh-only pages.
+  if (currentLocale === 'zh' && nextLocale === 'en' && isZhOnlyPath(pathname)) {
     return '/en';
   }
 
