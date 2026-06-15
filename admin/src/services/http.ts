@@ -1,13 +1,14 @@
 import axios, { AxiosError, AxiosResponse } from 'axios';
 import { notification } from 'antd';
 
-import { emitUnauthorizedEvent, getStoredToken, clearAuthSession } from '@/services/storage';
+import { emitUnauthorizedEvent, clearAuthSession } from '@/services/storage';
 import { startGlobalLoading, stopGlobalLoading } from '@/services/loading';
 import { ApiResponse } from '@/types/http';
 
 export const http = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL,
   timeout: 15000,
+  withCredentials: true,
 });
 
 function isAuthLoginRequest(url?: string) {
@@ -47,13 +48,6 @@ http.interceptors.request.use(
     if (!config.meta?.skipGlobalLoading) {
       startGlobalLoading();
       config._loadingTracked = true;
-    }
-
-    const token = getStoredToken();
-
-    if (token && !config.meta?.skipAuth) {
-      config.headers = config.headers || {};
-      config.headers.Authorization = `Bearer ${token}`;
     }
 
     return config;
