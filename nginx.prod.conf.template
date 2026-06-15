@@ -155,10 +155,10 @@ http {
     add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
     add_header X-Frame-Options "SAMEORIGIN" always;
     add_header X-Content-Type-Options "nosniff" always;
-    # Report-only first: collect CSP violations without breaking Next.js runtime
-    # scripts/styles. Tighten this policy and move to Content-Security-Policy
-    # after production observation.
-    add_header Content-Security-Policy-Report-Only "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https://www.jssngyl.cn https://admin.jssngyl.cn; object-src 'none'; base-uri 'self'; frame-ancestors 'self'; form-action 'self'; upgrade-insecure-requests" always;
+    # Enforce a conservative baseline while allowing the current Next.js runtime
+    # script/style requirements. Tighten unsafe-inline/unsafe-eval after report
+    # telemetry confirms the runtime no longer needs them.
+    add_header Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https://www.jssngyl.cn https://admin.jssngyl.cn; object-src 'none'; base-uri 'self'; frame-ancestors 'self'; form-action 'self'; upgrade-insecure-requests" always;
 
     # 组织架构子页面已并入公司简介，301 重定向
     location = /zh/about/organization {
@@ -266,10 +266,10 @@ http {
     add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
     add_header X-Frame-Options "SAMEORIGIN" always;
     add_header X-Content-Type-Options "nosniff" always;
-    # Report-only first: collect CSP violations without breaking the admin
-    # bundle. Tighten this policy and move to Content-Security-Policy after
-    # production observation.
-    add_header Content-Security-Policy-Report-Only "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https://www.jssngyl.cn https://admin.jssngyl.cn; object-src 'none'; base-uri 'self'; frame-ancestors 'self'; form-action 'self'; upgrade-insecure-requests" always;
+    # Enforce a conservative baseline while allowing the current Vite bundle
+    # script/style requirements. Tighten unsafe-inline/unsafe-eval after report
+    # telemetry confirms the runtime no longer needs them.
+    add_header Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https://www.jssngyl.cn https://admin.jssngyl.cn; object-src 'none'; base-uri 'self'; frame-ancestors 'self'; form-action 'self'; upgrade-insecure-requests" always;
 
     location ^~ /api/admin/ {
       proxy_pass http://backend_upstream;
