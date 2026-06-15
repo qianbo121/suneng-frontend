@@ -10,6 +10,11 @@ if [ ! -f "$ENV_FILE" ]; then
 fi
 
 pull_latest() {
+  if [ "${DEPLOY_SKIP_PULL:-0}" = "1" ]; then
+    echo "Skipping git pull because DEPLOY_SKIP_PULL=1."
+    return 0
+  fi
+
   local attempt=1
   local max_attempts=3
 
