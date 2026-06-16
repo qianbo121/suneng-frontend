@@ -97,9 +97,9 @@ export function ContactForm({ locale, requireEmail = true }: ContactFormProps) {
 
     const result = await safeSubmitContactMessage({
       name: values.name.trim(),
-      email: values.email.trim(),
-      phone: values.phone.trim(),
-      company: values.company.trim(),
+      email: values.email.trim() || undefined,
+      phone: values.phone.trim() || undefined,
+      company: values.company.trim() || undefined,
       message: values.message.trim(),
     });
 

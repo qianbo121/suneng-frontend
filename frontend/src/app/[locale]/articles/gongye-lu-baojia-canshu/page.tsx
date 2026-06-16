@@ -7,7 +7,7 @@ import { JsonLd } from '@/components/JsonLd';
 import { ContactForm } from '@/components/contact/ContactForm';
 import { Breadcrumb } from '@/components/layout/Breadcrumb';
 import { getStaticProductBySlug } from '@/constants/static-products';
-import { getFaqJsonLd } from '@/lib/seo/jsonld';
+import { getBreadcrumbJsonLd, getFaqJsonLd } from '@/lib/seo/jsonld';
 import { buildMetadata } from '@/lib/seo/metadata';
 import { INDUSTRIAL_FURNACE_QUOTE_PARAMS_SEO } from '@/lib/seo/page-data';
 import { Locale } from '@/types/site';
@@ -35,6 +35,7 @@ type RelatedLink = {
 
 const pagePath = '/zh/articles/gongye-lu-baojia-canshu';
 const heroImage = '/images/service/after-sales-hero.png';
+const servicePath = '/zh/service';
 const decisionPath = '/zh/articles/laojiu-rechuli-lu-daxiu-haishi-maixin';
 const jiangsuManufacturerPath = '/zh/solutions/jiangsu-gongye-lu-changjia';
 const contactPath = '/zh/contact';
@@ -262,6 +263,11 @@ const faqs = [
 ];
 
 const faqJsonLd = getFaqJsonLd(faqs);
+const breadcrumbJsonLd = getBreadcrumbJsonLd([
+  { name: '首页', url: '/zh' },
+  { name: '服务支持', url: servicePath },
+  { name: '工业炉报价需要哪些参数', url: pagePath },
+]);
 const faqColumnSize = Math.ceil(faqs.length / 2);
 const faqColumns = [faqs.slice(0, faqColumnSize), faqs.slice(faqColumnSize)];
 
@@ -383,7 +389,7 @@ export default async function IndustrialFurnaceQuoteParamsPage({ params }: PageP
             tone="light"
             currentLabel="工业炉报价需要哪些参数？"
             className="text-[13px]"
-            items={[{ label: '资料清单' }]}
+            items={[{ label: '服务支持', href: servicePath }]}
           />
 
           <div className="mt-10 max-w-[930px]">
@@ -694,6 +700,7 @@ export default async function IndustrialFurnaceQuoteParamsPage({ params }: PageP
         </div>
       </section>
 
+      <JsonLd id="industrial-furnace-quote-params-breadcrumb-jsonld" data={breadcrumbJsonLd} />
       <JsonLd id="industrial-furnace-quote-params-faq-jsonld" data={faqJsonLd} />
     </main>
   );
