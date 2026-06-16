@@ -4,11 +4,27 @@ import { useState } from 'react';
 
 type CopyQuoteChecklistButtonProps = {
   text: string;
+  label?: string;
+  className?: string;
+  wrapperClassName?: string;
+  messageClassName?: string;
 };
 
 const successMessage = '报价资料清单已复制，可发送给苏能技术人员。';
+const defaultLabel = '复制报价资料清单（可直接发送给苏能）';
+const defaultWrapperClassName = 'mt-5';
+const defaultButtonClassName =
+  'inline-flex min-h-[42px] items-center justify-center rounded-[4px] bg-[#c51624] px-5 text-[14px] font-semibold text-white transition hover:bg-[#a90f1b]';
+const defaultMessageClassName =
+  'mt-3 block rounded-[6px] border border-white/16 bg-white/10 px-4 py-3 text-[14px] leading-[1.7] text-white/88';
 
-export function CopyQuoteChecklistButton({ text }: CopyQuoteChecklistButtonProps) {
+export function CopyQuoteChecklistButton({
+  text,
+  label = defaultLabel,
+  className,
+  wrapperClassName = defaultWrapperClassName,
+  messageClassName = defaultMessageClassName,
+}: CopyQuoteChecklistButtonProps) {
   const [message, setMessage] = useState('');
 
   const copyWithFallback = async () => {
@@ -77,16 +93,12 @@ export function CopyQuoteChecklistButton({ text }: CopyQuoteChecklistButtonProps
   };
 
   return (
-    <div className="mt-5">
-      <button
-        type="button"
-        onClick={handleCopy}
-        className="inline-flex min-h-[42px] items-center justify-center rounded-[4px] bg-[#c51624] px-5 text-[14px] font-semibold text-white transition hover:bg-[#a90f1b]"
-      >
-        复制报价资料清单（可直接发送给苏能）
+    <div className={wrapperClassName}>
+      <button type="button" onClick={handleCopy} className={className ?? defaultButtonClassName}>
+        {label}
       </button>
       {message ? (
-        <p className="mt-3 rounded-[6px] border border-white/16 bg-white/10 px-4 py-3 text-[14px] leading-[1.7] text-white/88">
+        <p className={messageClassName} aria-live="polite">
           {message}
         </p>
       ) : null}

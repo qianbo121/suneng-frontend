@@ -51,8 +51,11 @@
 ## 部署
 
 - [x] 三端 Dockerfile
-- [x] `docker-compose.yml`
-- [x] `nginx.conf`
+- [x] `docker-compose.yml`（本地验证）
+- [x] `docker-compose.prod.yml`
+- [x] `nginx.conf`（本地验证）
+- [x] `nginx.prod.conf.template`
+- [x] `deploy.sh` 生产发布脚本
 - [x] GitHub Actions 基础流程
 - [ ] 生产域名已解析
 - [ ] SSL 证书已签发并启用
