@@ -1,5 +1,5 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { AdminRole, Prisma } from '@prisma/client';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import { AdminRole, AdminUser, Prisma } from '@prisma/client';
 import { hash } from 'bcryptjs';
 
 import { buildPagination } from '@/common/utils/pagination';
@@ -69,8 +69,9 @@ export class AdminUserService {
     });
   }
 
-  async update(id: number, updateDto: UpdateAdminUserDto) {
-    await this.ensureExists(id);
+  async update(id: number, updateDto: UpdateAdminUserDto, actorId: number) {
+    const user = await this.ensureExists(id);
+    await this.ensureActiveSuperAdminRemains(user, updateDto, actorId);
 
     return this.prismaService.adminUser.update({
       where: { id },
@@ -95,8 +96,9 @@ export class AdminUserService {
     });
   }
 
-  async toggle(id: number) {
+  async toggle(id: number, actorId: number) {
     const user = await this.ensureExists(id);
+    await this.ensureActiveSuperAdminRemains(user, { isActive: !user.isActive }, actorId);
 
     return this.prismaService.adminUser.update({
       where: { id },
@@ -117,5 +119,36 @@ export class AdminUserService {
     }
 
     return user;
+  }
+
+  private async ensureActiveSuperAdminRemains(
+    user: AdminUser,
+    updateDto: Pick<UpdateAdminUserDto, 'role' | 'isActive'>,
+    actorId: number,
+  ) {
+    const nextRole = updateDto.role ?? user.role;
+    const nextIsActive = updateDto.isActive ?? user.isActive;
+    const removesActiveSuperAdmin =
+      user.role === AdminRole.super_admin &&
+      user.isActive &&
+      (nextRole !== AdminRole.super_admin || !nextIsActive);
+
+    if (!removesActiveSuperAdmin) return;
+
+    if (user.id === actorId) {
+      throw new BadRequestException('不能停用或降级当前登录的超级管理员账号');
+    }
+
+    const remainingActiveSuperAdmins = await this.prismaService.adminUser.count({
+      where: {
+        role: AdminRole.super_admin,
+        isActive: true,
+        NOT: { id: user.id },
+      },
+    });
+
+    if (remainingActiveSuperAdmins < 1) {
+      throw new BadRequestException('至少需要保留一个启用状态的超级管理员');
+    }
   }
 }

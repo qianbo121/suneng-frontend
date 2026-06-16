@@ -1,5 +1,16 @@
 import { CalendarOutlined, CloseOutlined, PlusOutlined, SearchOutlined } from '@ant-design/icons';
-import { App, Button, DatePicker, Form, Image, Input, Modal, Popconfirm, Space } from 'antd';
+import {
+  App,
+  Button,
+  DatePicker,
+  Form,
+  Image,
+  Input,
+  Modal,
+  Popconfirm,
+  Select,
+  Space,
+} from 'antd';
 import dayjs, { Dayjs } from 'dayjs';
 import { useMemo, useState } from 'react';
 import useSWR from 'swr';
@@ -27,6 +38,41 @@ type SimpleNewsFormValues = {
 };
 
 const PAGE_SIZE = 5;
+
+const STATUS_OPTIONS: { label: string; value: PublishStatus }[] = [
+  { label: '已发布', value: 'published' },
+  { label: '草稿', value: 'draft' },
+  { label: '已下线', value: 'offline' },
+];
+
+function getVisiblePages(current: number, total: number) {
+  if (total <= 7) {
+    return Array.from({ length: total }, (_, index) => index + 1);
+  }
+
+  const pageSet = new Set([1, total, current, current - 1, current + 1]);
+
+  if (current <= 4) {
+    [2, 3, 4, 5].forEach((item) => pageSet.add(item));
+  }
+
+  if (current >= total - 3) {
+    [total - 4, total - 3, total - 2, total - 1].forEach((item) => pageSet.add(item));
+  }
+
+  const pages = Array.from(pageSet)
+    .filter((item) => item >= 1 && item <= total)
+    .sort((a, b) => a - b);
+
+  return pages.reduce<Array<number | string>>((result, item, index) => {
+    const previous = pages[index - 1];
+    if (previous && item - previous > 1) {
+      result.push(`ellipsis-${previous}-${item}`);
+    }
+    result.push(item);
+    return result;
+  }, []);
+}
 
 function stripHtml(value?: string | null) {
   if (!value) return '';
@@ -146,6 +192,7 @@ export function NewsListPage() {
     () => Math.max(1, Math.ceil((data?.total || 0) / PAGE_SIZE)),
     [data?.total],
   );
+  const visiblePages = useMemo(() => getVisiblePages(page, pageCount), [page, pageCount]);
   const items = data?.items || [];
 
   const openCreateModal = () => {
@@ -322,16 +369,22 @@ export function NewsListPage() {
           >
             ‹
           </Button>
-          {Array.from({ length: Math.min(pageCount, 2) }, (_, index) => index + 1).map((item) => (
-            <Button
-              key={item}
-              size="small"
-              type={page === item ? 'primary' : 'default'}
-              onClick={() => setPage(item)}
-            >
-              {item}
-            </Button>
-          ))}
+          {visiblePages.map((item) =>
+            typeof item === 'number' ? (
+              <Button
+                key={item}
+                size="small"
+                type={page === item ? 'primary' : 'default'}
+                onClick={() => setPage(item)}
+              >
+                {item}
+              </Button>
+            ) : (
+              <span key={item} className="simple-news-pagination-ellipsis">
+                ...
+              </span>
+            ),
+          )}
           <Button
             size="small"
             disabled={page >= pageCount}
@@ -364,10 +417,6 @@ export function NewsListPage() {
           <CloseOutlined />
         </button>
         <Form<SimpleNewsFormValues> form={form} layout="vertical" requiredMark={false}>
-          <Form.Item name="status" hidden>
-            <Input />
-          </Form.Item>
-
           <Form.Item
             label="标题"
             name="titleZh"
@@ -375,6 +424,15 @@ export function NewsListPage() {
             className="simple-news-required"
           >
             <Input placeholder="请输入新闻标题" />
+          </Form.Item>
+
+          <Form.Item
+            label="发布状态"
+            name="status"
+            rules={[{ required: true, message: '请选择发布状态' }]}
+            className="simple-news-required"
+          >
+            <Select options={STATUS_OPTIONS} />
           </Form.Item>
 
           <Form.Item label="封面图" required className="simple-news-required">

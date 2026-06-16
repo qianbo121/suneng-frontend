@@ -17,5 +17,10 @@ export type ContactFormValues = {
 
 export type ContactFormErrors = Partial<Record<keyof ContactFormValues, string>>;
 
-export type ContactMessagePayload = ContactFormValues;
-
+export type ContactMessagePayload = {
+  name: string;
+  email?: string;
+  phone?: string;
+  company?: string;
+  message: string;
+};
