@@ -504,6 +504,15 @@ body {
   background: #e60012;
 }
 
+.simple-news-pagination-ellipsis {
+  display: inline-flex;
+  min-width: 26px;
+  align-items: center;
+  justify-content: center;
+  color: #7a8491;
+  font-size: 13px;
+}
+
 .simple-news-modal .ant-modal-content {
   padding: 34px 32px 38px;
   border-radius: 8px;
