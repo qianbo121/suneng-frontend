@@ -62,7 +62,7 @@ vim .env.production
 ./deploy.sh
 ```
 
-`deploy.sh` 会执行生产构建、部署前备份、Prisma 迁移、滚动启动、nginx reload 和后端健康检查。不要用本地 `docker compose up -d --build` 作为生产发布流程。
+`deploy.sh` 会执行生产镜像构建（默认保留 Docker layer cache）、部署前备份、Prisma 迁移、滚动启动、nginx reload 和后端健康检查。不要用本地 `docker compose up -d --build` 作为生产发布流程。
 
 生产默认访问地址：
 

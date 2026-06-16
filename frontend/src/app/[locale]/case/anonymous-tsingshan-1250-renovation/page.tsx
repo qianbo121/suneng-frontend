@@ -3,10 +3,12 @@ import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import type { ReactNode } from 'react';
 
+import { ContactForm } from '@/components/contact/ContactForm';
 import { JsonLd } from '@/components/JsonLd';
 import { Breadcrumb } from '@/components/layout/Breadcrumb';
 import { buildMetadata } from '@/lib/seo/metadata';
 import { TSINGSHAN_1250_CASE_SEO } from '@/lib/seo/page-data';
+import type { Locale } from '@/types/site';
 
 type PageProps = {
   params: Promise<{
@@ -242,8 +244,6 @@ const consultationItems = [
   '多行业经验：覆盖不锈钢、钢铁、汽车零部件、能源装备等多个行业的工业炉改造经验。',
 ];
 
-const formFields = ['姓名', '联系电话', '公司名称', '所属行业', '当前工业炉类型与规格', '预期改造目标', '改造预算范围', '需求描述'];
-
 const caseJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'Article',
@@ -390,6 +390,8 @@ export default async function AnonymousTsingshanCasePage({ params }: PageProps) 
     notFound();
   }
 
+  const currentLocale = locale as Locale;
+
   return (
     <div className="bg-white text-[#101828]">
       <section className="relative overflow-hidden bg-[#101828] text-white">
@@ -438,13 +440,13 @@ export default async function AnonymousTsingshanCasePage({ params }: PageProps) 
                 href="#contact"
                 className="inline-flex min-h-[46px] items-center justify-center rounded-[4px] bg-[#c51624] px-6 text-[15px] font-semibold text-white transition hover:bg-[#a90f1b]"
               >
-                联系苏能咨询改造
+                获取报价方案
               </a>
               <a
                 href={servicePath}
                 className="inline-flex min-h-[46px] items-center justify-center rounded-[4px] border border-white/46 px-6 text-[15px] font-semibold text-white transition hover:border-white hover:bg-white/10"
               >
-                查看 A3 服务页 →
+                查看相关解决方案
               </a>
             </div>
           </div>
@@ -642,41 +644,16 @@ export default async function AnonymousTsingshanCasePage({ params }: PageProps) 
             </div>
           </div>
 
-          <form className="rounded-[8px] border border-[#e1e7f0] bg-white p-6 shadow-[0_10px_24px_rgba(15,35,75,0.04)] lg:p-7">
-            <h3 className="text-[22px] font-semibold leading-[1.35] text-[#101828]">在线咨询</h3>
-            <div className="mt-6 grid gap-4 sm:grid-cols-2">
-              {formFields.map((field, index) => {
-                const isTextarea = field === '需求描述';
-                const required = field === '联系电话';
-                return (
-                  <label key={field} className={isTextarea ? 'sm:col-span-2' : undefined}>
-                    <span className="text-[14px] font-semibold text-[#344054]">
-                      {required ? '*' : ''}
-                      {field}
-                    </span>
-                    {isTextarea ? (
-                      <textarea
-                        name={`field-${index}`}
-                        rows={4}
-                        className="mt-2 w-full rounded-[6px] border border-[#d0d7e2] px-3 py-2 text-[15px] outline-none transition focus:border-[#c51624]"
-                      />
-                    ) : (
-                      <input
-                        name={`field-${index}`}
-                        className="mt-2 h-11 w-full rounded-[6px] border border-[#d0d7e2] px-3 text-[15px] outline-none transition focus:border-[#c51624]"
-                      />
-                    )}
-                  </label>
-                );
-              })}
-            </div>
-            <button
-              type="button"
-              className="mt-6 inline-flex min-h-[46px] items-center justify-center rounded-[4px] bg-[#c51624] px-6 text-[15px] font-semibold text-white transition hover:bg-[#a90f1b]"
-            >
-              提交咨询
-            </button>
-          </form>
+          <div className="overflow-hidden rounded-[8px]">
+            <ContactForm
+              locale={currentLocale}
+              requireEmail={false}
+              title="提交类似项目需求"
+              description="把工件、工艺、产能和现场条件发给苏能，技术人员可先判断适合的炉型方向与方案边界。"
+              messagePlaceholder="请填写工件材质、尺寸、温度、工艺、产能、现场条件等信息。"
+              submitLabel="提交需求"
+            />
+          </div>
         </div>
       </Section>
 

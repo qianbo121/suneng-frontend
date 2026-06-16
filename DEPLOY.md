@@ -99,12 +99,12 @@ cd /opt/suneng-official-site
 部署脚本会执行：
 
 1. `git pull origin main`
-2. 重新构建镜像（`build --no-cache`）
+2. 重新构建镜像（`docker compose build`，保留 Docker layer cache；源码变更仍会触发对应 `COPY . .` 之后的构建层重跑）
 3. **部署前备份**（`backup.sh`：DB + uploads → `/data/backup`，可回滚）
 4. 执行 Prisma 数据库迁移（`prisma migrate deploy`）
 5. 启动容器（`up -d`，不做整停 `down`）
 6. **`nginx -s reload`**：应用容器重建后会换 bridge IP，nginx 用静态 upstream 且无 resolver，不 reload 会因缓存旧 IP 出现 502
-7. 健康检查：容器内探测后端 `/api/health` 是否返回 200（失败则中止并打印日志）
+7. 健康检查：轮询容器内后端 `/api/health` 是否返回 200（失败则中止并打印日志）
 
 > 改了 `nginx.prod.conf.template` 后，先校验语法再上生产——语法错会让 reload 失败 / nginx 起不来：
 >
@@ -112,7 +112,31 @@ cd /opt/suneng-official-site
 > docker run --rm -v "$PWD/nginx.prod.conf.template:/etc/nginx/nginx.conf:ro" nginx:1.27-alpine nginx -t
 > ```
 
-### 4.1 回滚
+### 4.1 构建缓存与部署耗时
+
+`deploy.sh` 默认使用：
+
+```bash
+docker compose --env-file .env.production -f docker-compose.prod.yml build
+```
+
+不要在日常部署中加 `--no-cache`。三个应用的 Dockerfile 都按缓存分层组织：先复制 `package.json` 和 `pnpm-lock.yaml` 安装依赖，再复制源码并执行构建。保留 Docker layer cache 后：
+
+- 只改页面、文案、样式时，依赖安装层应直接命中缓存。
+- 源码变化仍会让 `COPY . .` 之后的构建层失效并重新编译，不会部署旧代码。
+- backend / admin 没有源码或依赖变化时，大部分构建层应缓存命中。
+
+只有在怀疑 Docker 构建缓存损坏、基础镜像层异常、或依赖安装层需要彻底重建时，才手动执行一次无缓存构建：
+
+```bash
+docker compose --env-file .env.production -f docker-compose.prod.yml build --no-cache
+docker compose --env-file .env.production -f docker-compose.prod.yml up -d
+docker compose --env-file .env.production -f docker-compose.prod.yml exec -T nginx nginx -s reload
+```
+
+GitHub Actions 仍会先执行 lint、typecheck、test 和三端 build 作为质量门禁；服务器侧 build 是生产镜像构建，不再默认清空缓存。
+
+### 4.2 回滚
 
 镜像在服务器本地构建、无独立 tag，回滚 = 切回上一个正常提交后重新部署：
 

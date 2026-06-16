@@ -23,7 +23,7 @@ function NewsHeader({ locale }: { locale: Locale }) {
     <div className="mb-8 lg:mb-10">
       <div className="relative">
         <SectionTitle
-          eyebrow={locale === 'en' ? 'resources' : '资料中心'}
+          eyebrow="resources"
           title={locale === 'en' ? 'Resources' : '资料中心'}
           align="center"
         />
@@ -116,7 +116,7 @@ export function NewsSection({ locale, items }: NewsSectionProps) {
 
   if (!featured) {
     return (
-      <section className="overflow-hidden bg-white py-14 lg:py-18">
+      <section className="overflow-hidden bg-white py-8">
         <div className="mx-auto w-full max-w-[1440px] px-4 md:px-5 lg:px-5 xl:px-4">
           <NewsHeader locale={locale} />
           <HomeSectionFallback locale={locale} type="empty" />
@@ -126,7 +126,7 @@ export function NewsSection({ locale, items }: NewsSectionProps) {
   }
 
   return (
-    <section className="overflow-hidden bg-white pb-14 pt-8 lg:pb-18 lg:pt-10">
+    <section className="overflow-hidden bg-white py-8">
       <div className="mx-auto w-full max-w-[1440px] px-4 md:px-5 lg:px-5 xl:px-4">
         {/* News center module: title area + left featured card + right list cards */}
         <div className="px-0 py-0">

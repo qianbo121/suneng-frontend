@@ -16,12 +16,18 @@ cd /opt/suneng-official-site
 `deploy.sh` 会按固定顺序执行：
 
 1. `git pull --ff-only origin main`，CI 远程包部署时通过 `DEPLOY_SKIP_PULL=1` 跳过。
-2. `docker compose --env-file .env.production -f docker-compose.prod.yml build --no-cache`。
+2. `docker compose --env-file .env.production -f docker-compose.prod.yml build`，保留 Docker layer cache；源码变更仍会触发对应构建层重跑。
 3. 调用 `backup.sh` 做部署前备份。
 4. 执行 `prisma migrate deploy`。
 5. `up -d` 启动或重建容器，不执行整站 `down`。
 6. 对 nginx 执行 `nginx -s reload`，避免容器 IP 变化后 upstream 缓存导致 502。
-7. 在 backend 容器内检查 `/api/health`。
+7. 轮询 backend 容器内 `/api/health`。
+
+### 构建缓存约定
+
+日常部署保留 Docker layer cache。不要默认使用 `--no-cache`，否则 frontend / backend / admin 会在服务器上重新安装依赖并全量编译，显著拉长部署时间。
+
+源码变更不会因为保留缓存而丢失：各应用 Dockerfile 在安装依赖后会 `COPY . .`，源文件变化会触发后续构建层重新执行。只有在怀疑缓存损坏、基础镜像层异常或需要彻底重装依赖时，才手动执行一次 `docker compose ... build --no-cache`。
 
 ## 2. 生产环境变量
 

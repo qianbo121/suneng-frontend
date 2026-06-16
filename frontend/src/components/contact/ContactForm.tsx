@@ -15,6 +15,7 @@ type ContactFormProps = {
   title?: string;
   description?: string;
   messagePlaceholder?: string;
+  submitLabel?: string;
 };
 
 export function ContactForm({
@@ -23,6 +24,7 @@ export function ContactForm({
   title,
   description,
   messagePlaceholder,
+  submitLabel,
 }: ContactFormProps) {
   const [values, setValues] = useState<ContactFormValues>(CONTACT_FORM_INITIAL_VALUES);
   const [errors, setErrors] = useState<ContactFormErrors>({});
@@ -46,7 +48,7 @@ export function ContactForm({
         eyebrow: locale === 'en' ? 'Online Message' : '在线留言',
         title: title || defaultTitle,
         description: description || defaultDescription,
-        submit: locale === 'en' ? 'Submit Message' : '提交留言',
+        submit: submitLabel || (locale === 'en' ? 'Submit Message' : '提交留言'),
         submitting: locale === 'en' ? 'Submitting...' : '提交中...',
         success:
           locale === 'en'
@@ -72,7 +74,7 @@ export function ContactForm({
         },
       };
     },
-    [locale, requireEmail, title, description, messagePlaceholder],
+    [locale, requireEmail, title, description, messagePlaceholder, submitLabel],
   );
 
   const handleChange =

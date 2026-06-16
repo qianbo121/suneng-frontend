@@ -8,9 +8,6 @@ import { HOME_SEO } from '@/lib/seo/page-data';
 import { Locale } from '@/types/site';
 
 const HeroBanner = dynamic(() => import('@/components/home/HeroBanner').then((module) => ({ default: module.HeroBanner })));
-const ProductCenterSection = dynamic(() =>
-  import('@/components/home/ProductCenterSection').then((module) => ({ default: module.ProductCenterSection })),
-);
 const HeatTreatmentLines = dynamic(() =>
   import('@/components/home/HeatTreatmentLines').then((module) => ({ default: module.HeatTreatmentLines })),
 );
@@ -49,11 +46,10 @@ export default async function LocaleHomePage({ params }: LocaleHomePageProps) {
   const homeData = await getHomePageData();
 
   return (
-    <div className="pb-0">
+    <div className="bg-white pb-0">
       <JsonLd id={`homepage-jsonld-${currentLocale}`} data={getHomePageJsonLd(`/${currentLocale}`)} />
       <HeroBanner locale={currentLocale} items={homeData.heroBanners} partners={homeData.partners} />
       <HeatTreatmentLines locale={currentLocale} />
-      <ProductCenterSection locale={currentLocale} />
       <HotProducts locale={currentLocale} items={homeData.hotProducts} />
       <NewsSection locale={currentLocale} items={homeData.news} />
     </div>

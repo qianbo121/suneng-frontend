@@ -105,6 +105,8 @@ export default async function NewsDetailPage({ params }: NewsDetailPageProps) {
   const html = normalizeNewsHtml(currentLocale, article);
   const newsLabel = NEWS_LABEL[currentLocale];
   const detailLabel = NEWS_DETAIL_LABEL[currentLocale];
+  const quoteContactHref = '/zh/articles/gongye-lu-baojia-canshu#quote-contact-form';
+  const contactHref = '/zh/contact';
 
   return (
     <div className="bg-[#f7f7f7]">
@@ -166,6 +168,31 @@ export default async function NewsDetailPage({ params }: NewsDetailPageProps) {
           <div className="mx-auto mt-[46px] max-w-[1060px]">
             <NewsArticleContent html={html} />
           </div>
+
+          {currentLocale === 'zh' ? (
+            <div className="mx-auto mt-[48px] max-w-[1060px] rounded-[8px] border border-[#e1e7f0] bg-[#fbfcfe] p-6 lg:flex lg:items-center lg:justify-between lg:gap-8">
+              <div>
+                <h2 className="text-[22px] font-semibold leading-[1.35] text-[#101828]">需要工业炉报价或方案判断？</h2>
+                <p className="mt-3 text-[15px] leading-[1.8] text-[#475467]">
+                  可先提交工件、温度、工艺和产能信息，由苏能工程师做初步判断。
+                </p>
+              </div>
+              <div className="mt-5 flex flex-col gap-3 sm:flex-row lg:mt-0 lg:shrink-0">
+                <a
+                  href={quoteContactHref}
+                  className="inline-flex min-h-[46px] items-center justify-center rounded-[4px] bg-[#c51624] px-6 text-[15px] font-semibold text-white transition hover:bg-[#a90f1b]"
+                >
+                  获取报价方案
+                </a>
+                <a
+                  href={contactHref}
+                  className="inline-flex min-h-[46px] items-center justify-center rounded-[4px] border border-[#c51624] px-6 text-[15px] font-semibold text-[#c51624] transition hover:bg-[#fff5f5]"
+                >
+                  联系苏能工程师
+                </a>
+              </div>
+            </div>
+          ) : null}
         </article>
       </main>
     </div>

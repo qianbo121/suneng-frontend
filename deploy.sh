@@ -32,7 +32,9 @@ pull_latest() {
 
 pull_latest
 
-docker compose --env-file "$ENV_FILE" -f "$COMPOSE_FILE" build --no-cache
+export DOCKER_BUILDKIT="${DOCKER_BUILDKIT:-1}"
+
+docker compose --env-file "$ENV_FILE" -f "$COMPOSE_FILE" build
 
 # Back up the DB + uploads BEFORE applying migrations, so a bad migration or a
 # failed deploy is recoverable (backup.sh writes to /data/backup, keeps 7 days).
@@ -46,13 +48,25 @@ docker compose --env-file "$ENV_FILE" -f "$COMPOSE_FILE" up -d
 # stale-upstream-IP 502 failure mode.
 docker compose --env-file "$ENV_FILE" -f "$COMPOSE_FILE" exec -T nginx nginx -s reload
 
-sleep 30
-
 # Health-check the REAL backend health route inside the container. The previous
 # `curl -f http://localhost` was a false positive: nginx 301-redirects :80 to
 # HTTPS and `curl -f` (without -L) exits 0 on a 3xx even when the app is down.
-if ! docker compose --env-file "$ENV_FILE" -f "$COMPOSE_FILE" exec -T backend \
-  node -e "require('http').get('http://127.0.0.1:3001/api/health', (r) => process.exit(r.statusCode === 200 ? 0 : 1)).on('error', () => process.exit(1))"; then
+echo "Waiting for backend /api/health..."
+backend_healthy=0
+for attempt in {1..30}; do
+  if docker compose --env-file "$ENV_FILE" -f "$COMPOSE_FILE" exec -T backend \
+    node -e "require('http').get('http://127.0.0.1:3001/api/health', (r) => process.exit(r.statusCode === 200 ? 0 : 1)).on('error', () => process.exit(1))"; then
+    echo "Backend health check passed."
+    backend_healthy=1
+    break
+  fi
+
+  if [ "$attempt" -lt 30 ]; then
+    sleep 2
+  fi
+done
+
+if [ "$backend_healthy" -ne 1 ]; then
   echo "Health check failed: backend /api/health"
   docker compose --env-file "$ENV_FILE" -f "$COMPOSE_FILE" logs --tail=50
   exit 1

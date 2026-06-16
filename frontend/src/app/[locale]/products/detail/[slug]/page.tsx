@@ -162,7 +162,6 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
       : product.slug === 'annealing-solution-line'
         ? '退火固溶生产线选型与工艺适配'
         : `${detail.title.replace('（非标定制）', '')}选型与工艺适配`;
-  const shouldCenterLeadFormScroll = detail.heroCtas?.some((item) => item.href === '#product-lead-form') || false;
   const showChinesePathLinks = currentLocale === 'zh';
   // Localize internal links to the current locale; drop links whose target is
   // Chinese-only when rendering English (avoids /en 404s and /zh cross-locale
@@ -219,7 +218,7 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
         </div>
       </div>
 
-      <div className="mx-auto mt-7 max-w-[1440px] px-6 pb-[48px]">
+      <div className="mx-auto mt-7 max-w-[1440px] px-6 pb-10">
         {/* A. Hero 区：主图 480x360；信息列顶部内缩，与右侧卡片标题水平对齐。 */}
         <section className="flex flex-col gap-8 lg:flex-row lg:items-start lg:gap-6">
           <ProductDetailGallery
@@ -251,7 +250,7 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
                       label={item.title}
                       updateHash
                       variant="hero"
-                      className="inline-flex min-h-[44px] items-center justify-center rounded-[4px] bg-[#e60012] px-5 text-[14px] font-semibold text-white transition hover:bg-[#c8000f]"
+                      className="inline-flex min-h-[44px] items-center justify-center rounded-[4px] bg-[#c51624] px-5 text-[14px] font-semibold text-white transition hover:bg-[#a90f1b]"
                     />
                   ) : (
                     <a
@@ -259,8 +258,8 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
                       href={item.href}
                       className={
                         index === 0
-                          ? 'inline-flex min-h-[44px] items-center justify-center rounded-[4px] bg-[#e60012] px-5 text-[14px] font-semibold text-white transition hover:bg-[#c8000f]'
-                          : 'inline-flex min-h-[44px] items-center justify-center rounded-[4px] border border-[#d9e0ea] bg-white px-5 text-[14px] font-semibold text-[#1a1d23] transition hover:border-[#e60012] hover:text-[#e60012]'
+                          ? 'inline-flex min-h-[44px] items-center justify-center rounded-[4px] bg-[#c51624] px-5 text-[14px] font-semibold text-white transition hover:bg-[#a90f1b]'
+                          : 'inline-flex min-h-[44px] items-center justify-center rounded-[4px] border border-[#c51624] bg-white px-5 text-[14px] font-semibold text-[#c51624] transition hover:bg-[#fff5f5]'
                       }
                     >
                       {item.title}
@@ -271,10 +270,10 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
             ) : null}
           </div>
 
-          {/* B. 右侧快速询价方案卡片：高度与主图一致，内部内容纵向均分。 */}
+          {/* B. 右侧报价咨询卡片：高度与主图一致，内部内容纵向均分。 */}
           <aside className="flex h-auto w-[320px] shrink-0 flex-col justify-between gap-6 rounded-[8px] border border-[#eef0f3] bg-white p-[24px] shadow-[0_2px_12px_rgba(0,0,0,0.04)] lg:h-[360px] lg:gap-0">
             <div>
-              <h2 className="text-[18px] font-semibold leading-none text-[#111111]">快速询价方案</h2>
+              <h2 className="text-[18px] font-semibold leading-none text-[#111111]">报价方案咨询</h2>
               <ul className="mt-7 flex flex-col gap-[25px]">
                 {detail.ctaHighlights.map((item) => (
                   <li key={item} className="flex items-center gap-[10px] text-[14px] leading-[12px] text-[#6b7280]">
@@ -286,7 +285,7 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
                 ))}
               </ul>
             </div>
-            <ProductQuoteScrollButton />
+            <ProductQuoteScrollButton className="flex h-11 w-full items-center justify-center rounded-[4px] border border-[#c51624] bg-white text-[15px] font-medium text-[#c51624] transition hover:bg-[#fff5f5]" />
             <div className="flex items-center gap-[10px]">
               <span className="flex h-[32px] w-[32px] shrink-0 items-center justify-center rounded-full bg-[#fff1f2] text-[#e60012]">
                 <HiPhone className="h-[16px] w-[16px]" />
@@ -298,9 +297,9 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
         </section>
 
         {detail.workpieceCards?.length ? (
-          <section className="mt-14">
+          <section className="mt-12">
             <SectionTitle>{detail.workpieceTitle || '台车炉适合哪些工件？'}</SectionTitle>
-            <div className="mt-[24px] grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            <div className="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
               {detail.workpieceCards.map((item) => (
                 <article key={item.title} className="rounded-[8px] border border-[#eef0f3] bg-white p-5">
                   <h3 className="text-[17px] font-semibold leading-[1.4] text-[#1a1d23]">{item.title}</h3>
@@ -312,7 +311,7 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
         ) : null}
 
         {/* C. 为什么选择非标定制：桌面五列轻灰卡片，收紧卡片留白。 */}
-        <section className="mt-14">
+        <section className="mt-12">
           <h2 className="mb-5 border-l-4 border-[#e60012] pl-3 text-[22px] font-semibold leading-[1.35] text-[#111827]">
             为什么选择非标定制
           </h2>
@@ -327,9 +326,9 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
         </section>
 
         {detail.processCards?.length ? (
-          <section className="mt-[56px]">
+          <section className="mt-12">
             <SectionTitle>{detail.processCardsTitle || '台车炉可覆盖哪些热处理工艺？'}</SectionTitle>
-            <div className="mt-[24px] grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+            <div className="mt-5 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
               {detail.processCards.map((item) => (
                 <article key={item.title} className="rounded-[8px] border border-[#eef0f3] bg-[#fbfcfe] p-5">
                   <h3 className="text-[18px] font-semibold leading-[1.4] text-[#1a1d23]">{item.title}</h3>
@@ -341,9 +340,9 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
         ) : null}
 
         {/* D. 核心定制参数表格：双列参数表，标签列 140px，统一行高和边框。 */}
-        <section className="mt-[56px]">
+        <section className="mt-12">
           <SectionTitle>{detail.parameterTitle || '核心定制参数'}</SectionTitle>
-          <div className="mt-[24px] overflow-hidden rounded-[8px] border border-[#eef0f3] bg-white">
+          <div className="mt-5 overflow-hidden rounded-[8px] border border-[#eef0f3] bg-white">
             <div className="grid md:grid-cols-2">
               {specColumns.map((column, columnIndex) => (
                 <div key={columnIndex} className={columnIndex === 1 ? 'border-l border-[#eef0f3]' : ''}>
@@ -370,7 +369,7 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
           {detail.parameterLink && parameterLinkHref ? (
             <Link
               href={parameterLinkHref}
-              className="mt-4 inline-flex min-h-[42px] items-center justify-center rounded-[4px] border border-[#e60012] px-5 text-[14px] font-semibold text-[#e60012] transition hover:bg-[#fff1f2]"
+              className="mt-4 inline-flex min-h-[42px] items-center justify-center rounded-[4px] border border-[#c51624] px-5 text-[14px] font-semibold text-[#c51624] transition hover:bg-[#fff5f5]"
             >
               {detail.parameterLink.title}
             </Link>
@@ -384,9 +383,9 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
               <div className="mt-4 flex flex-wrap gap-3">
                 <Link
                   href={quoteParamsPath}
-                  className="inline-flex min-h-[40px] items-center justify-center rounded-[4px] bg-[#e60012] px-4 text-[13px] font-semibold text-white transition hover:bg-[#c8000f]"
+                  className="inline-flex min-h-[40px] items-center justify-center rounded-[4px] border border-[#c51624] bg-white px-4 text-[13px] font-semibold text-[#c51624] transition hover:bg-[#fff5f5]"
                 >
-                  查看工业炉报价需要哪些参数
+                  查看报价需要哪些参数
                 </Link>
                 <Link
                   href={repairOrReplacePath}
@@ -400,9 +399,9 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
         </section>
 
         {detail.structureComponents?.length ? (
-          <section className="mt-[56px]">
+          <section className="mt-12">
             <SectionTitle>{detail.structureTitle || '台车炉主要结构组成'}</SectionTitle>
-            <div className="mt-[24px] grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+            <div className="mt-5 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
               {detail.structureComponents.map((item) => (
                 <article key={item.title} className="rounded-[8px] border border-[#eef0f3] bg-white p-5">
                   <h3 className="text-[18px] font-semibold leading-[1.4] text-[#1a1d23]">{item.title}</h3>
@@ -414,7 +413,7 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
         ) : null}
 
         {detail.priceFactors?.length ? (
-          <section className="mt-[56px]">
+          <section className="mt-12">
             <SectionTitle>{detail.priceFactorsTitle || '台车炉价格受哪些因素影响？'}</SectionTitle>
             <p className="mt-4 max-w-[900px] text-[14px] leading-[1.85] text-[#5f6673]">
               {detail.priceFactorsIntro || '台车炉通常为非标定制设备，不能脱离参数直接给出固定价格。以下因素会明显影响炉体结构、材料配置、控制系统和交付范围。'}
@@ -430,9 +429,9 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
         ) : null}
 
         {detail.comparisonRows?.length ? (
-          <section className="mt-[56px]">
+          <section className="mt-12">
             <SectionTitle>{detail.comparisonTitle || '台车炉和箱式炉怎么选？'}</SectionTitle>
-            <div className="mt-[24px] overflow-x-auto rounded-[8px] border border-[#eef0f3] bg-white">
+            <div className="mt-5 overflow-x-auto rounded-[8px] border border-[#eef0f3] bg-white">
               <table className={`${detail.comparisonHeaders?.length === 3 ? 'min-w-[720px]' : 'w-full'} border-collapse text-left`}>
                 <thead className="bg-[#f7f8fa]">
                   <tr>
@@ -468,9 +467,9 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
         ) : null}
 
         {detail.geoSections?.length ? (
-          <section className="mt-[56px]">
+          <section className="mt-12">
             <SectionTitle>{geoSectionTitle}</SectionTitle>
-            <div className="mt-[24px] grid gap-4 lg:grid-cols-3">
+            <div className="mt-5 grid gap-4 lg:grid-cols-3">
               {detail.geoSections.map((section) => (
                 <article key={section.title} className="rounded-[8px] border border-[#eef0f3] bg-white p-5">
                   <h3 className="mb-3 text-[17px] font-semibold leading-[1.4] text-[#1a1d23]">{section.title}</h3>
@@ -495,9 +494,9 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
 
         {!isProductionLine ? (
           /* E. 典型配置示例：纵向图文卡片，生产线详情页不展示该模块。 */
-          <section className="mt-[56px]">
+          <section className="mt-12">
             <SectionTitle>典型配置示例</SectionTitle>
-            <div className="mt-[24px] grid gap-[20px] lg:grid-cols-3">
+            <div className="mt-5 grid gap-[20px] lg:grid-cols-3">
               {detail.configurations.map((item) => (
                 <article key={item.title} className="flex flex-col overflow-hidden rounded-[8px] border border-[#eef0f3] bg-white transition-all duration-200 hover:-translate-y-[2px] hover:shadow-[0_4px_16px_rgba(0,0,0,0.08)]">
                   <div className="relative aspect-[16/10] w-full bg-[#f4f6f9]">
@@ -527,9 +526,9 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
         ) : null}
 
         {/* F. 非标定制流程：五列步骤卡，使用设计稿源文件 icon。 */}
-        <section className="mt-[56px]">
+        <section className="mt-12">
           <SectionTitle>{detail.processStepsTitle || '非标定制流程'}</SectionTitle>
-          <div className="relative mt-[24px] grid gap-[16px] md:grid-cols-5">
+          <div className="relative mt-5 grid gap-[16px] md:grid-cols-5">
             {detail.processSteps.map((item, index) => (
               <article key={item.title} className="relative flex items-center gap-3 rounded-[8px] border border-[#eef0f3] bg-white p-[18px]">
                 <div className="relative h-[55px] w-[55px] shrink-0">
@@ -552,9 +551,9 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
 
         {/* G. 适用工艺 / 适用行业：左侧红色标签，右侧内容固定 40px 高度。 */}
         {detail.industryCards?.length ? (
-          <section className="mt-[56px]">
+          <section className="mt-12">
             <SectionTitle>典型应用行业</SectionTitle>
-            <div className="mt-[24px] grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            <div className="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
               {detail.industryCards.map((item) => (
                 <article key={item.title} className="rounded-[8px] border border-[#eef0f3] bg-white p-5">
                   <h3 className="text-[17px] font-semibold leading-[1.4] text-[#1a1d23]">{item.title}</h3>
@@ -564,9 +563,9 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
             </div>
           </section>
         ) : (
-          <section className="mt-[56px]">
+          <section className="mt-12">
             <SectionTitle>适用工艺 / 适用行业</SectionTitle>
-            <div className="mt-[24px] space-y-[12px]">
+            <div className="mt-5 space-y-[12px]">
               <div className="flex items-center gap-[12px]">
                 <div className="flex h-[40px] w-[88px] shrink-0 items-center justify-center rounded-[4px] bg-[#e60012] text-[14px] font-medium text-white">适用工艺</div>
                 <div className="flex flex-1 flex-wrap gap-[12px]">
@@ -596,12 +595,12 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
         )}
 
         {detail.scenarioCards?.length ? (
-          <section className="mt-[56px]">
+          <section className="mt-12">
             <SectionTitle>案例 / 项目经验</SectionTitle>
             <p className="mt-4 max-w-[900px] text-[14px] leading-[1.85] text-[#5f6673]">
               {detail.scenarioIntro || '当前页面不虚构客户案例。以下仅作为台车炉常见应用场景说明，具体项目可在商务沟通中结合授权资料进一步确认。'}
             </p>
-            <div className="mt-[24px] grid gap-4 md:grid-cols-3">
+            <div className="mt-5 grid gap-4 md:grid-cols-3">
               {detail.scenarioCards.map((item) => (
                 <article key={item.title} className="rounded-[8px] border border-[#eef0f3] bg-[#fbfcfe] p-5">
                   <h3 className="text-[17px] font-semibold leading-[1.4] text-[#1a1d23]">{item.title}</h3>
@@ -613,9 +612,9 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
         ) : null}
 
         {detail.faq?.length ? (
-          <section className="mt-[56px]">
+          <section className="mt-12">
             <SectionTitle>常见问题</SectionTitle>
-            <div className="mt-[24px] grid gap-4">
+            <div className="mt-5 grid gap-4">
               {detail.faq.map((item) => (
                 <article key={item.question} className="rounded-[8px] border border-[#eef0f3] bg-white p-5">
                   <h3 className="text-[17px] font-semibold leading-[1.45] text-[#1a1d23]">{item.question}</h3>
@@ -627,9 +626,9 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
         ) : null}
 
         {scopedRelatedLinks.length ? (
-          <section className="mt-[56px]">
+          <section className="mt-12">
             <SectionTitle>相关页面</SectionTitle>
-            <div className="mt-[24px] grid gap-4 md:grid-cols-3">
+            <div className="mt-5 grid gap-4 md:grid-cols-3">
               {scopedRelatedLinks.map((item) => (
                 <Link
                   key={item.href}
@@ -655,7 +654,6 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
           phone={detail.leadForm?.phone}
           email={detail.leadForm?.email}
         />
-        {shouldCenterLeadFormScroll ? <div aria-hidden="true" className="h-[50vh]" /> : null}
       </div>
     </main>
   );
