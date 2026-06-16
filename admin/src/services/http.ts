@@ -75,12 +75,13 @@ http.interceptors.response.use(
 
     const status = error.response?.status;
     const message = extractApiErrorMessage(error);
+    const silentError = Boolean(config?.meta?.silentError);
 
     if (status === 401 && !isAuthLoginRequest(config?.url)) {
       clearAuthSession();
-      emitUnauthorizedEvent();
 
-      if (!config?.meta?.silentError) {
+      if (!silentError) {
+        emitUnauthorizedEvent();
         notification.error({
           message: '登录状态已失效',
           description: '请重新登录后台系统。',
@@ -90,7 +91,7 @@ http.interceptors.response.use(
       return Promise.reject(error);
     }
 
-    if (!config?.meta?.silentError) {
+    if (!silentError) {
       notification.error({
         message: '请求失败',
         description: message,
