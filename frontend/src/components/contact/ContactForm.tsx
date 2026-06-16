@@ -12,9 +12,18 @@ import { cn } from '@/lib/utils';
 type ContactFormProps = {
   locale: Locale;
   requireEmail?: boolean;
+  title?: string;
+  description?: string;
+  messagePlaceholder?: string;
 };
 
-export function ContactForm({ locale, requireEmail = true }: ContactFormProps) {
+export function ContactForm({
+  locale,
+  requireEmail = true,
+  title,
+  description,
+  messagePlaceholder,
+}: ContactFormProps) {
   const [values, setValues] = useState<ContactFormValues>(CONTACT_FORM_INITIAL_VALUES);
   const [errors, setErrors] = useState<ContactFormErrors>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -22,42 +31,48 @@ export function ContactForm({ locale, requireEmail = true }: ContactFormProps) {
   const [errorMessage, setErrorMessage] = useState('');
 
   const copy = useMemo(
-    () => ({
-      eyebrow: locale === 'en' ? 'Online Message' : '在线留言',
-      title: locale === 'en' ? 'Leave Your Message' : '提交您的需求',
-      description:
+    () => {
+      const defaultTitle = locale === 'en' ? 'Leave Your Message' : '提交您的需求';
+      const defaultDescription =
         locale === 'en'
           ? 'Tell us about your project, service request or cooperation plan. Our team will contact you as soon as possible.'
-          : '欢迎提交项目需求、售后问题或合作意向，我们会尽快安排专人与您联系。',
-      submit: locale === 'en' ? 'Submit Message' : '提交留言',
-      submitting: locale === 'en' ? 'Submitting...' : '提交中...',
-      success:
+          : '欢迎提交项目需求、售后问题或合作意向，我们会尽快安排专人与您联系。';
+      const defaultMessagePlaceholder =
         locale === 'en'
-          ? 'Your message has been submitted successfully. We will contact you soon.'
-          : '留言提交成功，我们会尽快与您联系。',
-      failure:
-        locale === 'en'
-          ? 'Submission failed. Please try again later.'
-          : '提交失败，请稍后重试。',
-      fields: {
-        name: locale === 'en' ? 'Name *' : '姓名 *',
-        email: requireEmail ? (locale === 'en' ? 'Email *' : '邮箱 *') : locale === 'en' ? 'Email' : '邮箱',
-        phone: locale === 'en' ? 'Phone *' : '电话 *',
-        company: locale === 'en' ? 'Company' : '公司名称',
-        message: locale === 'en' ? 'Message *' : '留言内容 *',
-      },
-      placeholders: {
-        name: locale === 'en' ? 'Please enter your name' : '请输入姓名',
-        email: locale === 'en' ? 'Please enter your email' : '请输入邮箱',
-        phone: locale === 'en' ? 'Please enter your phone number' : '请输入联系电话',
-        company: locale === 'en' ? 'Please enter your company name' : '请输入公司名称',
-        message:
+          ? 'Please describe your needs, model preferences or project information.'
+          : '请描述您的需求、意向机型或项目情况。';
+
+      return {
+        eyebrow: locale === 'en' ? 'Online Message' : '在线留言',
+        title: title || defaultTitle,
+        description: description || defaultDescription,
+        submit: locale === 'en' ? 'Submit Message' : '提交留言',
+        submitting: locale === 'en' ? 'Submitting...' : '提交中...',
+        success:
           locale === 'en'
-            ? 'Please describe your needs, model preferences or project information.'
-            : '请描述您的需求、意向机型或项目情况。',
-      },
-    }),
-    [locale, requireEmail],
+            ? 'Your message has been submitted successfully. We will contact you soon.'
+            : '留言提交成功，我们会尽快与您联系。',
+        failure:
+          locale === 'en'
+            ? 'Submission failed. Please try again later.'
+            : '提交失败，请稍后重试。',
+        fields: {
+          name: locale === 'en' ? 'Name *' : '姓名 *',
+          email: requireEmail ? (locale === 'en' ? 'Email *' : '邮箱 *') : locale === 'en' ? 'Email' : '邮箱',
+          phone: locale === 'en' ? 'Phone *' : '电话 *',
+          company: locale === 'en' ? 'Company' : '公司名称',
+          message: locale === 'en' ? 'Message *' : '留言内容 *',
+        },
+        placeholders: {
+          name: locale === 'en' ? 'Please enter your name' : '请输入姓名',
+          email: locale === 'en' ? 'Please enter your email' : '请输入邮箱',
+          phone: locale === 'en' ? 'Please enter your phone number' : '请输入联系电话',
+          company: locale === 'en' ? 'Please enter your company name' : '请输入公司名称',
+          message: messagePlaceholder || defaultMessagePlaceholder,
+        },
+      };
+    },
+    [locale, requireEmail, title, description, messagePlaceholder],
   );
 
   const handleChange =

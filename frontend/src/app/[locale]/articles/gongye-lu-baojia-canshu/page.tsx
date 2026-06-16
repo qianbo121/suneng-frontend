@@ -176,7 +176,8 @@ const quoteTemplateItems = [
   '当前问题描述：',
   '是否有照片或图纸：',
 ];
-const quoteTemplateText = quoteTemplateItems.map((item) => `- ${item}`).join('\n');
+const quoteTemplateIntro = '以下为工业炉报价参数清单，请填写后通过官网表单、电话/微信或邮箱发送给苏能。';
+const quoteTemplateText = [quoteTemplateIntro, '', ...quoteTemplateItems.map((item) => `- ${item}`)].join('\n');
 
 const quoteSteps = [
   {
@@ -342,12 +343,11 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   });
 }
 
-function Section({ id, eyebrow, title, children }: SectionProps) {
+function Section({ id, title, children }: SectionProps) {
   return (
     <section id={id} className="border-t border-[#e2e8f0] py-12 scroll-mt-24 lg:py-16">
       <div className="mx-auto max-w-[1180px] px-5 lg:px-8">
-        <p className="text-[13px] font-semibold text-[#c51624]">{eyebrow}</p>
-        <h2 className="mt-3 text-[26px] font-semibold leading-[1.28] text-[#101828] lg:text-[38px]">{title}</h2>
+        <h2 className="text-[26px] font-semibold leading-[1.28] text-[#101828] lg:text-[38px]">{title}</h2>
         <div className="mt-8">{children}</div>
       </div>
     </section>
@@ -393,12 +393,14 @@ export default async function IndustrialFurnaceQuoteParamsPage({ params }: PageP
           />
 
           <div className="mt-10 max-w-[930px]">
-            <p className="text-[13px] font-semibold text-white/64 lg:text-[14px]">工业炉报价资料清单</p>
-            <h1 className="mt-4 text-[36px] font-semibold leading-[1.16] tracking-[0.01em] lg:text-[58px]">
+            <h1 className="text-[36px] font-semibold leading-[1.16] tracking-[0.01em] lg:text-[58px]">
               工业炉报价需要哪些参数？
             </h1>
             <p className="mt-5 max-w-[900px] text-[18px] font-semibold leading-[1.72] text-white/92 lg:text-[24px]">
               工业炉属于非标设备，报价不能只看炉型名称。炉膛尺寸、最高温度、工件重量、装炉量、工艺曲线、能源类型、控制要求和现场条件，都会影响方案设计和最终价格。
+            </p>
+            <p className="mt-4 max-w-[860px] text-[14px] leading-[1.85] text-white/70 lg:text-[16px]">
+              填写或复制下方报价参数清单后，可通过表单、电话/微信或邮箱提交给苏能。工程技术人员会根据工件、温度、工艺、产能和现场条件，先判断炉型方向、配置边界和报价范围。
             </p>
 
             <div className="mt-8 flex flex-wrap gap-3 text-[14px] font-semibold text-white">
@@ -409,19 +411,20 @@ export default async function IndustrialFurnaceQuoteParamsPage({ params }: PageP
               ))}
             </div>
 
-            <div className="mt-9 flex flex-wrap gap-4">
+            <div className="mt-9 flex flex-col gap-4 sm:flex-row sm:flex-wrap">
               <a
-                href="#quote-template"
-                className="inline-flex min-h-[46px] items-center justify-center rounded-[4px] bg-[#c51624] px-6 text-[15px] font-semibold text-white transition hover:bg-[#a90f1b]"
+                href="#quote-contact-form"
+                className="inline-flex min-h-[46px] w-full items-center justify-center rounded-[4px] bg-[#c51624] px-6 text-[15px] font-semibold text-white transition hover:bg-[#a90f1b] sm:w-auto"
               >
-                提交参数，获取苏能工程师方案判断
+                提交报价需求
               </a>
-              <a
-                href="#param-table"
-                className="inline-flex min-h-[46px] items-center justify-center rounded-[4px] border border-white/46 px-6 text-[15px] font-semibold text-white transition hover:border-white hover:bg-white/10"
-              >
-                查看报价资料清单
-              </a>
+              <CopyQuoteChecklistButton
+                text={quoteTemplateText}
+                label="复制参数清单"
+                wrapperClassName="contents"
+                className="inline-flex min-h-[46px] w-full items-center justify-center rounded-[4px] border border-white/46 px-6 text-[15px] font-semibold text-white transition hover:border-white hover:bg-white/10 sm:w-auto"
+                messageClassName="mt-1 block w-full flex-none rounded-[6px] border border-white/16 bg-white/10 px-4 py-3 text-[14px] leading-[1.7] text-white/82"
+              />
             </div>
           </div>
         </div>
@@ -517,7 +520,7 @@ export default async function IndustrialFurnaceQuoteParamsPage({ params }: PageP
         </div>
       </Section>
 
-      <Section id="quote-template" eyebrow="提交格式" title="六、客户可以先按这个格式提交需求">
+      <Section id="quote-template" eyebrow="提交闭环" title="六、如何把报价需求提交给苏能？">
         <div className="grid gap-8 lg:grid-cols-[1.05fr_0.95fr]">
           <div className="rounded-[8px] border border-[#dfe6f0] bg-[#101828] p-6 text-white lg:p-7">
             <p className="text-[16px] font-semibold">请复制以下格式提交给苏能：</p>
@@ -547,45 +550,53 @@ export default async function IndustrialFurnaceQuoteParamsPage({ params }: PageP
         </div>
 
         <div className="mt-8 rounded-[8px] border border-[#dfe6f0] bg-white p-6 shadow-[0_10px_24px_rgba(15,35,75,0.04)] lg:p-7">
-          <h3 className="text-[22px] font-semibold leading-[1.35] text-[#101828]">提交方式</h3>
-          <div className="mt-5 grid gap-4 lg:grid-cols-3">
+          <div className="grid gap-4 lg:grid-cols-3">
             <article className="rounded-[8px] border border-[#e1e7f0] bg-[#fbfcfe] p-5">
-              <span className="text-[13px] font-semibold text-[#c51624]">01</span>
-              <h4 className="mt-2 text-[18px] font-semibold leading-[1.4] text-[#101828]">点击“提交需求”</h4>
+              <span className="flex h-10 w-10 items-center justify-center rounded-full bg-[#c51624] text-[15px] font-semibold text-white">
+                1
+              </span>
+              <h3 className="mt-4 text-[20px] font-semibold leading-[1.4] text-[#101828]">复制参数清单</h3>
               <p className="mt-3 text-[15px] leading-[1.8] text-[#475467]">
-                系统将自动把您的参数发送至苏能工程技术团队。
+                把设备类型、工件、温度、工艺、产能、现场条件整理好。
+              </p>
+            </article>
+            <article className="rounded-[8px] border border-[#e1e7f0] bg-[#fbfcfe] p-5">
+              <span className="flex h-10 w-10 items-center justify-center rounded-full bg-[#c51624] text-[15px] font-semibold text-white">
+                2
+              </span>
+              <h3 className="mt-4 text-[20px] font-semibold leading-[1.4] text-[#101828]">发送给苏能</h3>
+              <p className="mt-3 text-[15px] leading-[1.8] text-[#475467]">
+                可通过在线表单、电话/微信
+                <a href="tel:+8613052986814" className="mx-1 font-semibold text-[#c51624] underline underline-offset-4">
+                  +86-130-5298-6814
+                </a>
+                ，或邮箱
+                <a href="mailto:jssngyl@outlook.com" className="mx-1 font-semibold text-[#c51624] underline underline-offset-4">
+                  jssngyl@outlook.com
+                </a>
+                提交。
               </p>
               <a
                 href="#quote-contact-form"
                 className="mt-4 inline-flex min-h-[40px] items-center justify-center rounded-[4px] bg-[#c51624] px-5 text-[14px] font-semibold text-white transition hover:bg-[#a90f1b]"
               >
-                提交需求
+                在线表单
               </a>
             </article>
-            <article className="rounded-[8px] border border-[#e1e7f0] bg-[#fbfcfe] p-5 lg:col-span-2">
-              <span className="text-[13px] font-semibold text-[#c51624]">02</span>
-              <h4 className="mt-2 text-[18px] font-semibold leading-[1.4] text-[#101828]">
-                技术人员将在 24 小时内进行初步方案判断并回复
-              </h4>
-              <div className="mt-3 grid gap-x-5 md:grid-cols-2">
-                <BulletList
-                  items={[
-                    '炉型选型建议',
-                    '加热系统方向（电 / 燃气）',
-                    '工艺适配判断',
-                    '初步方案范围说明',
-                  ]}
-                />
-              </div>
+            <article className="rounded-[8px] border border-[#e1e7f0] bg-[#fbfcfe] p-5">
+              <span className="flex h-10 w-10 items-center justify-center rounded-full bg-[#c51624] text-[15px] font-semibold text-white">
+                3
+              </span>
+              <h3 className="mt-4 text-[20px] font-semibold leading-[1.4] text-[#101828]">工程师初步判断</h3>
+              <p className="mt-3 text-[15px] leading-[1.8] text-[#475467]">
+                苏能根据参数判断炉型方向、工艺适配、配置边界和报价范围。
+              </p>
+              <BulletList items={['炉型选型建议', '加热系统方向（电 / 燃气）', '工艺适配判断', '初步方案范围说明']} />
             </article>
           </div>
-          <div className="mt-5 rounded-[8px] border border-[#e1e7f0] bg-[#fbfcfe] p-5">
-            <p className="text-[15px] font-semibold text-[#101828]">也可以通过以下方式直接联系：</p>
-            <address className="mt-3 flex flex-wrap gap-x-8 gap-y-2 text-[15px] leading-[1.8] text-[#344054] not-italic">
-              <span>电话 / 微信：+86-130-5298-6814</span>
-              <span>邮箱：jssngyl@outlook.com</span>
-            </address>
-          </div>
+          <p className="mt-5 rounded-[8px] border border-[#e1e7f0] bg-[#fbfcfe] p-5 text-[15px] leading-[1.85] text-[#344054]">
+            通常 1 个工作日内进行初步判断；具体回复时间以项目复杂度和资料完整度为准。
+          </p>
         </div>
       </Section>
 
@@ -668,24 +679,19 @@ export default async function IndustrialFurnaceQuoteParamsPage({ params }: PageP
       <section id="contact" className="border-t border-[#e2e8f0] bg-[#101828] py-12 text-white lg:py-16">
         <div className="mx-auto grid max-w-[1180px] gap-8 px-5 lg:grid-cols-[1fr_auto] lg:items-center lg:px-8">
           <div>
-            <p className="text-[13px] font-semibold text-white/58">获取报价建议</p>
-            <h2 className="mt-3 text-[28px] font-semibold leading-[1.28] lg:text-[42px]">
+            <h2 className="text-[28px] font-semibold leading-[1.28] lg:text-[42px]">
               准备询价？先把这些参数发给苏能
             </h2>
             <p className="mt-5 max-w-[820px] text-[16px] leading-[1.95] text-white/78 lg:text-[18px]">
-              如果暂时无法确定炉型，也可以先发送工件信息、工艺要求、产能需求和现场照片。苏能技术人员可先判断适合新炉定制、旧炉改造还是大修升级。
+              如果暂时无法确定炉型，也可以先通过下方表单提交工件信息、工艺要求、产能需求和现场照片。苏能技术人员可先判断适合新炉定制、旧炉改造还是大修升级。
             </p>
-            <address className="mt-6 flex flex-wrap gap-x-8 gap-y-3 text-[15px] leading-[1.8] text-white/82 not-italic">
-              <span>电话 / 微信：+86-130-5298-6814</span>
-              <span>邮箱：jssngyl@outlook.com</span>
-            </address>
           </div>
           <div className="flex flex-wrap gap-4 lg:justify-end">
             <a
               href="#quote-contact-form"
               className="inline-flex min-h-[46px] items-center justify-center rounded-[4px] bg-[#c51624] px-6 text-[15px] font-semibold text-white transition hover:bg-[#a90f1b]"
             >
-              提交参数，获取苏能工程师方案判断
+              提交报价需求
             </a>
             <a
               href={contactPath}
@@ -696,7 +702,13 @@ export default async function IndustrialFurnaceQuoteParamsPage({ params }: PageP
           </div>
         </div>
         <div id="quote-contact-form" className="mx-auto mt-10 max-w-[1180px] scroll-mt-24 px-5 lg:px-8">
-          <ContactForm locale={currentLocale} requireEmail={false} />
+          <ContactForm
+            locale={currentLocale}
+            requireEmail={false}
+            title="提交工业炉报价需求"
+            description="请尽量填写工件材质、尺寸、温度、热处理工艺、产能需求和现场条件。资料不完整也可以先提交，苏能工程师会提示需要补充的关键参数。"
+            messagePlaceholder="请填写工件材质、尺寸、温度、工艺、产能、现场条件等信息。"
+          />
         </div>
       </section>
 
