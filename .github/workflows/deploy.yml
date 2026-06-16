@@ -72,6 +72,7 @@ jobs:
 
       - name: Pack source bundle
         run: |
+          archive="$RUNNER_TEMP/deploy-source.tgz"
           tar \
             --exclude='.git' \
             --exclude='deploy-source.tgz' \
@@ -89,8 +90,9 @@ jobs:
             --exclude='frontend/.captures' \
             --exclude='admin/dist' \
             --exclude='backend/dist' \
-            -czf deploy-source.tgz \
+            -czf "$archive" \
             .
+          cp "$archive" deploy-source.tgz
 
       - name: Upload source bundle
         uses: appleboy/scp-action@v0.1.7
