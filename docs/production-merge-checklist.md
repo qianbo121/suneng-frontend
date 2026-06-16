@@ -5,13 +5,13 @@
 ## 必须通过
 
 - [ ] GitHub branch protection 已启用，至少要求 PR review 与 CI 通过。
-- [ ] 服务器 `/opt/website/.env.production` 存在。
+- [ ] 服务器 `$DEPLOY_PATH/.env.production` 存在（以 GitHub Secret `DEPLOY_PATH` 或实际生产目录为准）。
 - [ ] `DB_PASSWORD`、`JWT_SECRET`、`DOMAIN`、`ADMIN_DOMAIN` 不是占位值。
 - [ ] `docker compose --env-file .env.production -f docker-compose.prod.yml exec -T nginx nginx -t` 通过。
 - [ ] 每日备份 cron 存在：
 
 ```cron
-0 2 * * * cd /opt/website && ./backup.sh >> /var/log/suneng-backup.log 2>&1
+0 2 * * * cd <DEPLOY_PATH> && ./backup.sh >> /var/log/suneng-backup.log 2>&1
 ```
 
 - [ ] 合并前至少有一份可用备份：
@@ -19,6 +19,8 @@
 ```bash
 ls -lh /data/backup
 ```
+
+新备份文件按秒级时间戳命名，例如 `db-YYYYMMDD-HHMMSS.sql.gz` 与 `uploads-YYYYMMDD-HHMMSS.tar.gz`，避免同一天多次部署覆盖。
 
 - [ ] 容器健康：
 

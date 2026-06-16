@@ -120,11 +120,6 @@ const zhOnlyNavigationChildren: Partial<Record<string, NonNullable<NavigationIte
       href: '/articles/laojiu-rechuli-lu-daxiu-haishi-maixin',
       label: { zh: '老旧工业炉该修还是换', en: 'Repair or Replace Old Furnace' },
     },
-    {
-      key: 'service-contact',
-      href: '/contact',
-      label: { zh: '联系我们', en: 'Contact Us' },
-    },
   ],
 };
 

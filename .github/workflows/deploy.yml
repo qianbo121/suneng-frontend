@@ -57,7 +57,7 @@ jobs:
         env:
           VITE_APP_NAME: Corporate Admin
           VITE_API_BASE_URL: /api
-          VITE_APP_BASE_PATH: /admin/
+          VITE_APP_BASE_PATH: /
         run: pnpm --dir admin build
 
   deploy:

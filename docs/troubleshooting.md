@@ -112,12 +112,14 @@ NEXT_PUBLIC_API_URL=/api
 API_BASE_URL_INTERNAL=http://backend:3001/api
 ```
 
-## 8. `/admin/` 刷新 404
+## 8. 后台刷新 404
 
 检查项：
 
-- 管理端构建时 `VITE_APP_BASE_PATH=/admin/`
-- Nginx `/admin/` 反代配置是否存在
+- 生产后台是否通过 `ADMIN_DOMAIN` 根路径访问：`https://${ADMIN_DOMAIN}/`
+- 生产管理端构建时应为 `VITE_APP_BASE_PATH=/`
+- 本地 Docker 栈才使用 `/admin/` 子路径，对应 `docker-compose.yml` 与 `nginx.conf`
+- 如果是本地 `/admin/` 刷新 404，检查 Nginx `/admin/` 反代配置是否存在
 
 ## 9. 数据已更新但前台未立即变化
 
