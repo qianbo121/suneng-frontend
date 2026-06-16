@@ -73,30 +73,24 @@ jobs:
       - name: Pack source bundle
         run: |
           tar \
+            --exclude='.git' \
+            --exclude='deploy-source.tgz' \
             --exclude='admin/node_modules' \
             --exclude='backend/node_modules' \
             --exclude='frontend/node_modules' \
             --exclude='.env' \
-            --exclude='.env.*' \
+            --exclude='.env.local' \
+            --exclude='.env.production' \
             --exclude='*/.env' \
-            --exclude='*/.env.*' \
+            --exclude='*/.env.local' \
+            --exclude='*/.env.production' \
             --exclude='frontend/.next*' \
             --exclude='frontend/.capture' \
             --exclude='frontend/.captures' \
             --exclude='admin/dist' \
             --exclude='backend/dist' \
             -czf deploy-source.tgz \
-            admin \
-            backend \
-            frontend \
-            deploy \
-            backup.sh \
-            deploy.sh \
-            docker-compose.prod.yml \
-            nginx.prod.conf.template \
-            package.json \
-            pnpm-lock.yaml \
-            pnpm-workspace.yaml
+            .
 
       - name: Upload source bundle
         uses: appleboy/scp-action@v0.1.7
