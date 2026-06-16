@@ -135,21 +135,21 @@ cd /opt/suneng-official-site
 ./backup.sh
 ```
 
-备份文件：
+备份文件按秒级时间戳命名，避免同一天多次部署互相覆盖：
 
-- 数据库：`/data/backup/db-YYYYMMDD.sql.gz`
-- 上传文件：`/data/backup/uploads-YYYYMMDD.tar.gz`
+- 数据库：`/data/backup/db-YYYYMMDD-HHMMSS.sql.gz`
+- 上传文件：`/data/backup/uploads-YYYYMMDD-HHMMSS.tar.gz`
 
 恢复数据库示例：
 
 ```bash
-gunzip -c /data/backup/db-YYYYMMDD.sql.gz | docker compose --env-file .env.production -f docker-compose.prod.yml exec -T postgres psql -U corporate -d corporate_site
+gunzip -c /data/backup/db-YYYYMMDD-HHMMSS.sql.gz | docker compose --env-file .env.production -f docker-compose.prod.yml exec -T postgres psql -U corporate -d corporate_site
 ```
 
 恢复上传文件示例：
 
 ```bash
-sudo tar -xzf /data/backup/uploads-YYYYMMDD.tar.gz -C /data
+sudo tar -xzf /data/backup/uploads-YYYYMMDD-HHMMSS.tar.gz -C /data
 ```
 
 建议加入每日定时备份：
