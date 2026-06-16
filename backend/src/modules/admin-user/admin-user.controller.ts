@@ -2,12 +2,14 @@ import { Body, Controller, Get, Param, ParseIntPipe, Patch, Post, Query } from '
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { AdminRole } from '@prisma/client';
 
+import { CurrentUser } from '@/common/decorators/current-user.decorator';
 import { Roles } from '@/common/decorators/roles.decorator';
 import { AdminUserListQueryDto } from '@/modules/admin-user/dto/admin-user-list-query.dto';
 import { CreateAdminUserDto } from '@/modules/admin-user/dto/create-admin-user.dto';
 import { UpdateAdminUserPasswordDto } from '@/modules/admin-user/dto/update-admin-user-password.dto';
 import { UpdateAdminUserDto } from '@/modules/admin-user/dto/update-admin-user.dto';
 import { AdminUserService } from '@/modules/admin-user/admin-user.service';
+import { AuthenticatedUser } from '@/modules/auth/interfaces/authenticated-user.interface';
 
 @ApiTags('Admin Users')
 @ApiBearerAuth()
@@ -30,8 +32,12 @@ export class AdminUserController {
 
   @Patch(':id')
   @ApiOperation({ summary: 'Update an admin user' })
-  update(@Param('id', ParseIntPipe) id: number, @Body() updateDto: UpdateAdminUserDto) {
-    return this.adminUserService.update(id, updateDto);
+  update(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() updateDto: UpdateAdminUserDto,
+    @CurrentUser() currentUser: AuthenticatedUser,
+  ) {
+    return this.adminUserService.update(id, updateDto, currentUser.id);
   }
 
   @Patch(':id/password')
@@ -42,7 +48,7 @@ export class AdminUserController {
 
   @Patch(':id/toggle')
   @ApiOperation({ summary: 'Toggle admin user active status' })
-  toggle(@Param('id', ParseIntPipe) id: number) {
-    return this.adminUserService.toggle(id);
+  toggle(@Param('id', ParseIntPipe) id: number, @CurrentUser() currentUser: AuthenticatedUser) {
+    return this.adminUserService.toggle(id, currentUser.id);
   }
 }

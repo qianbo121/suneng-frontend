@@ -11,6 +11,11 @@ import { AuthContextValue, AdminUser, LoginPayload } from '@/types/auth';
 
 export const AuthContext = createContext<AuthContextValue | null>(null);
 
+function getLoginUrl() {
+  const baseUrl = import.meta.env.BASE_URL || '/';
+  return `${baseUrl.endsWith('/') ? baseUrl : `${baseUrl}/`}login`;
+}
+
 export function AuthProvider({ children }: PropsWithChildren) {
   const [user, setUser] = useState<AdminUser | null>(() => getStoredUser());
   const [isInitializing, setIsInitializing] = useState(true);
@@ -58,7 +63,7 @@ export function AuthProvider({ children }: PropsWithChildren) {
   useEffect(() => {
     const unsubscribe = subscribeUnauthorizedEvent(() => {
       clearLocalAuth();
-      window.location.replace('/login');
+      window.location.replace(getLoginUrl());
     });
 
     return unsubscribe;

@@ -30,6 +30,7 @@ type LinkCard = {
 
 const pagePath = '/zh/articles/laojiu-rechuli-lu-daxiu-haishi-maixin';
 const heroImage = '/images/service/after-sales-hero.png';
+const servicePath = '/zh/service';
 const quoteParamsPath = '/zh/articles/gongye-lu-baojia-canshu';
 const renovationServicePath = '/zh/service/furnace-renovation-overhaul';
 const productsPath = '/zh/products';
@@ -223,6 +224,7 @@ const pageJsonLd = cleanObject([
   },
   getBreadcrumbJsonLd([
     { name: '首页', url: '/zh' },
+    { name: '服务支持', url: servicePath },
     { name: '老旧热处理炉是大修还是买新的', url: pagePath },
   ]),
 ]);
@@ -294,7 +296,13 @@ export default async function OldHeatTreatmentFurnaceDecisionPage({ params }: Pa
           <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(7,18,36,0.95)_0%,rgba(12,38,74,0.84)_58%,rgba(12,38,74,0.48)_100%)]" />
         </div>
         <div className="relative mx-auto max-w-[1180px] px-5 py-14 lg:px-8 lg:py-20">
-          <Breadcrumb locale="zh" tone="light" currentLabel="老旧热处理炉是大修还是买新的" className="text-[13px]" items={[{ label: '决策指南' }]} />
+          <Breadcrumb
+            locale="zh"
+            tone="light"
+            currentLabel="老旧热处理炉是大修还是买新的"
+            className="text-[13px]"
+            items={[{ label: '服务支持', href: servicePath }]}
+          />
           <div className="mt-10 max-w-[980px]">
             <p className="text-[13px] font-semibold text-white/64 lg:text-[14px]">老旧炉修还是换决策页</p>
             <h1 className="mt-4 text-[34px] font-semibold leading-[1.16] tracking-[0.01em] lg:text-[56px]">

@@ -441,7 +441,7 @@ export default async function JiangsuIndustrialFurnaceManufacturerPage({ params 
             tone="light"
             currentLabel="江苏工业炉厂家"
             className="text-[13px]"
-            items={[{ label: '江苏工业炉厂家' }]}
+            items={[{ label: '解决方案' }]}
           />
 
           <div className="mt-10 max-w-[980px]">

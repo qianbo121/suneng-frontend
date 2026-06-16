@@ -497,7 +497,7 @@ export default async function HeatTreatmentFurnaceManufacturerPage({ params }: P
             tone="light"
             currentLabel="热处理炉厂家"
             className="text-[13px]"
-            items={[{ label: '热处理炉厂家' }]}
+            items={[{ label: '解决方案' }]}
           />
 
           <div className="mt-10 max-w-[980px]">
