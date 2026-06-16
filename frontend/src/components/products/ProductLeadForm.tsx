@@ -58,7 +58,7 @@ type ProductQuoteScrollButtonProps = {
 
 export function ProductQuoteScrollButton({
   label = '获取报价方案',
-  className = 'flex h-11 w-full items-center justify-center rounded-md bg-[#e60012] text-[15px] font-medium text-white transition hover:bg-[#c8000f]',
+  className = 'flex h-11 w-full items-center justify-center rounded-[4px] bg-[#c51624] text-[15px] font-medium text-white transition hover:bg-[#a90f1b]',
   updateHash = false,
   variant = 'card',
 }: ProductQuoteScrollButtonProps) {
@@ -67,7 +67,7 @@ export function ProductQuoteScrollButton({
 
     target?.scrollIntoView({
       behavior: 'smooth',
-      block: 'center',
+      block: 'start',
     });
 
     if (target && updateHash) {
@@ -147,8 +147,8 @@ export function ProductLeadForm({
 
   return (
     <>
-      <section id="product-lead-form" className="mt-[56px] grid overflow-hidden rounded-[8px] border border-[#eef0f3] bg-white lg:grid-cols-[260px_minmax(0,1fr)]">
-        <div className="flex flex-col bg-[#2c3445] px-[22px] py-[24px] text-white">
+      <section id="product-lead-form" className="mt-[48px] grid scroll-mt-24 overflow-hidden rounded-[8px] border border-[#eef0f3] bg-white lg:grid-cols-[300px_minmax(0,1fr)] xl:grid-cols-[320px_minmax(0,1fr)]">
+        <div className="flex flex-col bg-[#2c3445] px-[24px] py-[26px] text-white lg:px-[28px] lg:py-[30px]">
           <h2 className="mb-[10px] text-[20px] font-semibold leading-[1.35]">{title}</h2>
           <p className="mb-[18px] text-[13px] leading-[1.7] text-white/75">{description}</p>
           <ul className="space-y-[10px]">
@@ -175,8 +175,8 @@ export function ProductLeadForm({
             </div>
           ) : null}
         </div>
-        <form ref={formRef} className="p-[22px]">
-          <div className="grid gap-x-[20px] gap-y-[14px] md:grid-cols-3">
+        <form ref={formRef} className="flex items-center p-[24px] lg:p-[28px]">
+          <div className="grid w-full gap-x-[22px] gap-y-[18px] md:grid-cols-3">
             <LeadTextInput label="姓名" name="name" placeholder="请输入您的姓名" />
             <LeadTextInput
               label="联系电话"
@@ -193,10 +193,10 @@ export function ProductLeadForm({
             <LeadTextInput label="设备工艺" name="process" placeholder="请输入设备工艺，如退火、回火、正火等.." />
             <LeadTextInput label="使用温度" name="temperature" placeholder="请输入温度，高温、低温℃" />
             <LeadTextInput className="md:col-span-3" label="设备需求" name="requirement" placeholder="请填写工艺、产能、材料、设备等详细需求..." />
-            <div className="flex items-center justify-between md:col-span-3">
+            <div className="flex flex-col items-stretch gap-4 pt-1 sm:flex-row sm:items-center sm:justify-between md:col-span-3">
               <p className="text-[13px] text-[#98a1ad]">提交即表示同意《隐私政策》</p>
               <button
-                className="h-[44px] w-[200px] rounded-[4px] bg-[#e60012] text-[15px] font-medium text-white transition hover:bg-[#c8000f] disabled:cursor-not-allowed disabled:opacity-60"
+                className="h-[44px] w-full rounded-[4px] bg-[#e60012] text-[15px] font-medium text-white transition hover:bg-[#c8000f] disabled:cursor-not-allowed disabled:opacity-60 sm:w-[220px] sm:shrink-0"
                 type="button"
                 disabled={isSubmitting}
                 onClick={handleSubmit}

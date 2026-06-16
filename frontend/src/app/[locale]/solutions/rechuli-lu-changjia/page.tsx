@@ -519,16 +519,16 @@ export default async function HeatTreatmentFurnaceManufacturerPage({ params }: P
 
             <div className="mt-9 flex flex-wrap gap-4">
               <a
-                href={contactPath}
+                href={`${quoteParamsPath}#quote-contact-form`}
                 className="inline-flex min-h-[46px] items-center justify-center rounded-[4px] bg-[#c51624] px-6 text-[15px] font-semibold text-white transition hover:bg-[#a90f1b]"
               >
-                提交参数获取方案
+                获取报价方案
               </a>
               <a
-                href={productsPath}
+                href={quoteParamsPath}
                 className="inline-flex min-h-[46px] items-center justify-center rounded-[4px] border border-white/46 px-6 text-[15px] font-semibold text-white transition hover:border-white hover:bg-white/10"
               >
-                查看产品中心
+                查看报价需要哪些参数
               </a>
             </div>
           </div>
@@ -573,9 +573,9 @@ export default async function HeatTreatmentFurnaceManufacturerPage({ params }: P
             </p>
             <a
               href={quoteParamsPath}
-              className="mt-6 inline-flex min-h-[44px] items-center justify-center rounded-[4px] bg-[#c51624] px-5 text-[14px] font-semibold text-white transition hover:bg-[#a90f1b]"
+              className="mt-6 inline-flex min-h-[44px] items-center justify-center rounded-[4px] border border-[#c51624] px-5 text-[14px] font-semibold text-[#c51624] transition hover:bg-[#fff5f5]"
             >
-              不知道怎么整理参数？查看《工业炉报价需要哪些参数》
+              查看报价需要哪些参数
             </a>
           </div>
           <div className="grid gap-3 sm:grid-cols-2">
@@ -786,13 +786,13 @@ export default async function HeatTreatmentFurnaceManufacturerPage({ params }: P
           </div>
           <div className="flex flex-wrap gap-4 lg:justify-end">
             <a
-              href={contactPath}
+              href={`${quoteParamsPath}#quote-contact-form`}
               className="inline-flex min-h-[46px] items-center justify-center rounded-[4px] bg-[#c51624] px-6 text-[15px] font-semibold text-white transition hover:bg-[#a90f1b]"
             >
-              提交参数获取方案
+              获取报价方案
             </a>
             <a
-              href="tel:+8613052986814"
+              href={contactPath}
               className="inline-flex min-h-[46px] items-center justify-center rounded-[4px] border border-white/46 px-6 text-[15px] font-semibold text-white transition hover:border-white hover:bg-white/10"
             >
               联系苏能工业炉

@@ -307,12 +307,12 @@ const productDetails: Record<string, StaticProductDetail> = {
     ctaHighlights: ['成立于 2006 年', '14700㎡生产基地', '非标箱式炉定制'],
     heroCtas: [
       {
-        title: '提交参数获取方案',
+        title: '获取报价方案',
         description: '滚动到询价表单，提交箱式炉参数。',
         href: '#product-lead-form',
       },
       {
-        title: '查看报价参数清单',
+        title: '查看报价需要哪些参数',
         description: '了解工业炉报价前建议准备的资料。',
         href: '/zh/articles/gongye-lu-baojia-canshu',
       },
@@ -377,8 +377,8 @@ const productDetails: Record<string, StaticProductDetail> = {
     leadBullets: ['按工件尺寸判断炉膛', '按温度等级匹配炉衬与加热元件', '按装炉量设计承载结构', '按现场条件明确交付边界'],
     parameterTitle: '箱式炉定制需要确认哪些参数？',
     parameterLink: {
-      title: '不知道怎么整理参数？查看《工业炉报价需要哪些参数》',
-      description: '查看报价资料清单页。',
+      title: '查看报价需要哪些参数',
+      description: '查看报价参数说明页。',
       href: '/zh/articles/gongye-lu-baojia-canshu',
     },
     parameterNote:
@@ -439,7 +439,7 @@ const productDetails: Record<string, StaticProductDetail> = {
       title: '需要定制箱式炉？',
       description:
         '把工件尺寸、单件重量、装炉量、最高温度、热处理工艺、温度均匀性要求和现场条件发给苏能，技术人员可先判断炉膛尺寸、温度等级、加热元件和控制系统方案。',
-      submitLabel: '提交参数获取方案',
+      submitLabel: '提交需求',
       contactHref: '/zh/contact',
       contactLabel: '联系苏能工业炉',
       phone: '+86-130-5298-6814',
@@ -457,12 +457,12 @@ const productDetails: Record<string, StaticProductDetail> = {
     ctaHighlights: ['成立于 2006 年', '14700㎡生产基地', '非标台车炉定制'],
     heroCtas: [
       {
-        title: '提交参数获取方案',
+        title: '获取报价方案',
         description: '滚动到询价表单，提交台车炉参数。',
         href: '#product-lead-form',
       },
       {
-        title: '查看报价参数清单',
+        title: '查看报价需要哪些参数',
         description: '了解工业炉报价前建议准备的资料。',
         href: '/zh/articles/gongye-lu-baojia-canshu',
       },
@@ -526,8 +526,8 @@ const productDetails: Record<string, StaticProductDetail> = {
     leadBullets: ['按工件尺寸判断炉膛', '按装炉重量设计台车', '按工艺曲线匹配加热与控制', '按现场条件明确交付边界'],
     parameterTitle: '台车炉定制需要确认哪些参数？',
     parameterLink: {
-      title: '不知道怎么整理参数？查看《工业炉报价需要哪些参数》',
-      description: '查看报价资料清单页。',
+      title: '查看报价需要哪些参数',
+      description: '查看报价参数说明页。',
       href: '/zh/articles/gongye-lu-baojia-canshu',
     },
     parameterNote:
@@ -657,7 +657,7 @@ const productDetails: Record<string, StaticProductDetail> = {
       title: '需要定制台车炉？',
       description:
         '把工件尺寸、单件重量、装炉量、最高温度、热处理工艺、台车承重和现场条件发给苏能，技术人员可先判断炉膛尺寸、加热方式和台车结构方案。',
-      submitLabel: '提交参数获取方案',
+      submitLabel: '提交需求',
       contactHref: '/zh/contact',
       contactLabel: '联系苏能工业炉',
       phone: '+86-130-5298-6814',
@@ -675,12 +675,12 @@ const productDetails: Record<string, StaticProductDetail> = {
     ctaHighlights: ['成立于 2006 年', '14700㎡生产基地', '非标井式炉定制'],
     heroCtas: [
       {
-        title: '提交参数获取方案',
+        title: '获取报价方案',
         description: '滚动到询价表单，提交井式炉参数。',
         href: '#product-lead-form',
       },
       {
-        title: '查看报价参数清单',
+        title: '查看报价需要哪些参数',
         description: '了解工业炉报价前建议准备的资料。',
         href: '/zh/articles/gongye-lu-baojia-canshu',
       },
@@ -723,8 +723,8 @@ const productDetails: Record<string, StaticProductDetail> = {
     leadBullets: ['按工件长度判断有效深度', '按直径和吊具确认有效工作区', '按吊装方式确定炉盖结构', '按工艺要求配置控制系统'],
     parameterTitle: '井式炉定制需要确认哪些参数？',
     parameterLink: {
-      title: '不知道怎么整理参数？查看《工业炉报价需要哪些参数》',
-      description: '查看报价资料清单页。',
+      title: '查看报价需要哪些参数',
+      description: '查看报价参数说明页。',
       href: '/zh/articles/gongye-lu-baojia-canshu',
     },
     comparisonTitle: '井式炉、箱式炉、台车炉怎么选？',
@@ -740,7 +740,7 @@ const productDetails: Record<string, StaticProductDetail> = {
       title: '需要定制井式炉？',
       description:
         '把工件长度、直径、单件重量、装炉量、最高温度、热处理工艺、吊装方式和现场条件发给苏能，技术人员可先判断井式炉有效直径、有效深度、炉盖结构和控制系统方案。',
-      submitLabel: '提交参数获取方案',
+      submitLabel: '提交需求',
       contactHref: '/zh/contact',
       contactLabel: '联系苏能工业炉',
       phone: '+86-130-5298-6814',
@@ -758,12 +758,12 @@ const productDetails: Record<string, StaticProductDetail> = {
     ctaHighlights: ['成立于 2006 年', '14700㎡生产基地', '响应时间按项目约定'],
     heroCtas: [
       {
-        title: '提交参数获取方案',
+        title: '获取报价方案',
         description: '滚动到询价表单，提交罩式炉参数。',
         href: '#product-lead-form',
       },
       {
-        title: '查看报价参数清单',
+        title: '查看报价需要哪些参数',
         description: '了解工业炉报价前建议准备的资料。',
         href: '/zh/articles/gongye-lu-baojia-canshu',
       },
@@ -805,8 +805,8 @@ const productDetails: Record<string, StaticProductDetail> = {
     leadBullets: ['按工件形态判断炉罩结构', '按装炉量确认炉台承载', '按气氛要求评估密封方式', '按现场条件明确交付边界'],
     parameterTitle: '罩式炉定制需要确认哪些参数？',
     parameterLink: {
-      title: '不知道怎么整理参数？查看《工业炉报价需要哪些参数》',
-      description: '查看报价资料清单页。',
+      title: '查看报价需要哪些参数',
+      description: '查看报价参数说明页。',
       href: '/zh/articles/gongye-lu-baojia-canshu',
     },
     comparisonTitle: '罩式炉、箱式炉、井式炉怎么选？',
@@ -822,7 +822,7 @@ const productDetails: Record<string, StaticProductDetail> = {
       title: '需要定制罩式炉？',
       description:
         '把工件形态、装炉量、炉罩尺寸、炉台尺寸、最高温度、热处理工艺、气氛要求和现场条件发给苏能，技术人员可先判断罩式炉结构、密封方式、气氛系统和控制方案。',
-      submitLabel: '提交参数获取方案',
+      submitLabel: '提交需求',
       contactHref: '/zh/contact',
       contactLabel: '联系苏能工业炉',
       phone: '+86-130-5298-6814',
@@ -840,12 +840,12 @@ const productDetails: Record<string, StaticProductDetail> = {
     ctaHighlights: ['成立于 2006 年', '14700㎡生产基地', '非标推杆炉定制'],
     heroCtas: [
       {
-        title: '提交参数获取方案',
+        title: '获取报价方案',
         description: '滚动到询价表单，提交推杆炉参数。',
         href: '#product-lead-form',
       },
       {
-        title: '查看报价参数清单',
+        title: '查看报价需要哪些参数',
         description: '了解工业炉报价前建议准备的资料。',
         href: '/zh/articles/gongye-lu-baojia-canshu',
       },
@@ -890,8 +890,8 @@ const productDetails: Record<string, StaticProductDetail> = {
     leadBullets: ['按工件形态判断承载方式', '按产能节拍核算推料节拍', '按温区要求配置控制系统', '按上下游条件明确整线边界'],
     parameterTitle: '推杆炉定制需要确认哪些参数？',
     parameterLink: {
-      title: '不知道怎么整理参数？查看《工业炉报价需要哪些参数》',
-      description: '查看报价资料清单页。',
+      title: '查看报价需要哪些参数',
+      description: '查看报价参数说明页。',
       href: '/zh/articles/gongye-lu-baojia-canshu',
     },
     comparisonTitle: '推杆炉、辊底炉、网带炉怎么选？',
@@ -907,7 +907,7 @@ const productDetails: Record<string, StaticProductDetail> = {
       title: '需要定制推杆炉？',
       description:
         '把工件材质、尺寸、重量、产能节拍、最高温度、热处理工艺、推料方式、上下料条件和现场空间发给苏能，技术人员可先判断推杆炉结构、温区配置、推料机构和控制方案。',
-      submitLabel: '提交参数获取方案',
+      submitLabel: '提交需求',
       contactHref: '/zh/contact',
       contactLabel: '联系苏能工业炉',
       phone: '+86-130-5298-6814',
@@ -925,12 +925,12 @@ const productDetails: Record<string, StaticProductDetail> = {
     ctaHighlights: ['成立于 2006 年', '14700㎡生产基地', '非标网带炉定制'],
     heroCtas: [
       {
-        title: '提交参数获取方案',
+        title: '获取报价方案',
         description: '滚动到询价表单，提交网带炉参数。',
         href: '#product-lead-form',
       },
       {
-        title: '查看报价参数清单',
+        title: '查看报价需要哪些参数',
         description: '了解工业炉报价前建议准备的资料。',
         href: '/zh/articles/gongye-lu-baojia-canshu',
       },
@@ -999,8 +999,8 @@ const productDetails: Record<string, StaticProductDetail> = {
     leadBullets: ['按产能节拍判断炉膛长度', '按工件尺寸匹配网带宽度', '按工艺曲线配置温区和冷却', '按现场条件明确整线边界'],
     parameterTitle: '网带炉定制需要确认哪些参数？',
     parameterLink: {
-      title: '不知道怎么整理参数？查看《工业炉报价需要哪些参数》',
-      description: '查看报价资料清单页。',
+      title: '查看报价需要哪些参数',
+      description: '查看报价参数说明页。',
       href: '/zh/articles/gongye-lu-baojia-canshu',
     },
     parameterNote:
@@ -1064,7 +1064,7 @@ const productDetails: Record<string, StaticProductDetail> = {
       title: '需要定制网带炉？',
       description:
         '把工件材质、尺寸、单件重量、每小时产能、最高温度、热处理工艺、网带宽度、气氛要求和现场条件发给苏能，技术人员可先判断网带炉结构、温区配置、输送速度和控制方案。',
-      submitLabel: '提交参数获取方案',
+      submitLabel: '提交需求',
       contactHref: '/zh/contact',
       contactLabel: '联系苏能工业炉',
       phone: '+86-130-5298-6814',
@@ -1082,12 +1082,12 @@ const productDetails: Record<string, StaticProductDetail> = {
     ctaHighlights: ['成立于 2006 年', '14700㎡生产基地', '非标辊底炉定制'],
     heroCtas: [
       {
-        title: '提交参数获取方案',
+        title: '获取报价方案',
         description: '滚动到询价表单，提交辊底炉参数。',
         href: '#product-lead-form',
       },
       {
-        title: '查看报价参数清单',
+        title: '查看报价需要哪些参数',
         description: '了解工业炉报价前建议准备的资料。',
         href: '/zh/articles/gongye-lu-baojia-canshu',
       },
@@ -1132,8 +1132,8 @@ const productDetails: Record<string, StaticProductDetail> = {
     leadBullets: ['按工件形态判断辊道结构', '按产能节拍核算炉膛长度', '按温区要求配置控制系统', '按上下游条件明确整线边界'],
     parameterTitle: '辊底炉定制需要确认哪些参数？',
     parameterLink: {
-      title: '不知道怎么整理参数？查看《工业炉报价需要哪些参数》',
-      description: '查看报价资料清单页。',
+      title: '查看报价需要哪些参数',
+      description: '查看报价参数说明页。',
       href: '/zh/articles/gongye-lu-baojia-canshu',
     },
     comparisonTitle: '辊底炉、网带炉、台车炉怎么选？',
@@ -1149,7 +1149,7 @@ const productDetails: Record<string, StaticProductDetail> = {
       title: '需要定制辊底炉？',
       description:
         '把工件材质、尺寸、重量、产能节拍、最高温度、热处理工艺、辊道承载方式、上下料条件和现场空间发给苏能，技术人员可先判断辊底炉结构、温区配置、输送系统和控制方案。',
-      submitLabel: '提交参数获取方案',
+      submitLabel: '提交需求',
       contactHref: '/zh/contact',
       contactLabel: '联系苏能工业炉',
       phone: '+86-130-5298-6814',
@@ -1167,12 +1167,12 @@ const productDetails: Record<string, StaticProductDetail> = {
     ctaHighlights: ['成立于 2006 年', '14700㎡生产基地', '非标转底炉定制'],
     heroCtas: [
       {
-        title: '提交参数获取方案',
+        title: '获取报价方案',
         description: '滚动到询价表单，提交转底炉参数。',
         href: '#product-lead-form',
       },
       {
-        title: '查看报价参数清单',
+        title: '查看报价需要哪些参数',
         description: '了解工业炉报价前建议准备的资料。',
         href: '/zh/articles/gongye-lu-baojia-canshu',
       },
@@ -1217,8 +1217,8 @@ const productDetails: Record<string, StaticProductDetail> = {
     leadBullets: ['初步方案沟通', '按工艺需求评估炉型', '按参数确认配置边界', '按合同约定提供售后支持'],
     parameterTitle: '转底炉定制需要确认哪些参数？',
     parameterLink: {
-      title: '不知道怎么整理参数？查看《工业炉报价需要哪些参数》',
-      description: '查看报价资料清单页。',
+      title: '查看报价需要哪些参数',
+      description: '查看报价参数说明页。',
       href: '/zh/articles/gongye-lu-baojia-canshu',
     },
     comparisonTitle: '转底炉、推杆炉、台车炉怎么选？',
@@ -1234,7 +1234,7 @@ const productDetails: Record<string, StaticProductDetail> = {
       title: '需要定制转底炉？',
       description:
         '把工件材质、尺寸、单件重量、产能节拍、炉底直径、最高温度、热处理工艺、进出料方式和现场空间发给苏能，技术人员可先判断转底炉结构、温区配置、炉底旋转机构和控制方案。',
-      submitLabel: '提交参数获取方案',
+      submitLabel: '提交需求',
       contactHref: '/zh/contact',
       contactLabel: '联系苏能工业炉',
       phone: '+86-130-5298-6814',
@@ -1252,12 +1252,12 @@ const productDetails: Record<string, StaticProductDetail> = {
     ctaHighlights: ['成立于 2006 年', '14700㎡生产基地', '非标网带生产线定制'],
     heroCtas: [
       {
-        title: '提交参数获取方案',
+        title: '获取报价方案',
         description: '滚动到询价表单，提交托辊型网带炉参数。',
         href: '#product-lead-form',
       },
       {
-        title: '查看报价参数清单',
+        title: '查看报价需要哪些参数',
         description: '了解工业炉报价前建议准备的资料。',
         href: '/zh/articles/gongye-lu-baojia-canshu',
       },
@@ -1304,8 +1304,8 @@ const productDetails: Record<string, StaticProductDetail> = {
     leadBullets: ['初步方案沟通', '按工艺需求评估炉型', '按参数确认配置边界', '按合同约定提供售后支持'],
     parameterTitle: '托辊型网带炉定制需要确认哪些参数？',
     parameterLink: {
-      title: '不知道怎么整理参数？查看《工业炉报价需要哪些参数》',
-      description: '查看报价资料清单页。',
+      title: '查看报价需要哪些参数',
+      description: '查看报价参数说明页。',
       href: '/zh/articles/gongye-lu-baojia-canshu',
     },
     comparisonTitle: '托辊型网带炉、普通网带炉、辊底炉怎么选？',
@@ -1321,7 +1321,7 @@ const productDetails: Record<string, StaticProductDetail> = {
       title: '需要定制托辊型网带式电阻炉生产线？',
       description:
         '把工件材质、尺寸、单件重量、铺料厚度、每小时产能、网带宽度、热处理工艺、冷却方式、上下料方式和现场条件发给苏能，技术人员可先判断网带宽度、托辊结构、炉膛长度、温区配置和控制方案。',
-      submitLabel: '提交参数获取方案',
+      submitLabel: '提交需求',
       contactHref: '/zh/contact',
       contactLabel: '联系苏能工业炉',
       phone: '+86-130-5298-6814',
@@ -1339,12 +1339,12 @@ const productDetails: Record<string, StaticProductDetail> = {
     ctaHighlights: ['成立于 2006 年', '14700㎡生产基地', '非标铜丝退火线定制'],
     heroCtas: [
       {
-        title: '提交参数获取方案',
+        title: '获取报价方案',
         description: '滚动到询价表单，提交铜丝退火线参数。',
         href: '#product-lead-form',
       },
       {
-        title: '查看报价参数清单',
+        title: '查看报价需要哪些参数',
         description: '了解工业炉报价前建议准备的资料。',
         href: '/zh/articles/gongye-lu-baojia-canshu',
       },
@@ -1389,8 +1389,8 @@ const productDetails: Record<string, StaticProductDetail> = {
     leadBullets: ['初步方案沟通', '按工艺需求评估配置', '按参数确认配置边界', '按合同约定提供售后支持'],
     parameterTitle: '铜丝自动化退火生产线定制需要确认哪些参数？',
     parameterLink: {
-      title: '不知道怎么整理参数？查看《工业炉报价需要哪些参数》',
-      description: '查看报价资料清单页。',
+      title: '查看报价需要哪些参数',
+      description: '查看报价参数说明页。',
       href: '/zh/articles/gongye-lu-baojia-canshu',
     },
     comparisonTitle: '铜丝退火线、网带炉、退火固溶生产线怎么选？',
@@ -1406,7 +1406,7 @@ const productDetails: Record<string, StaticProductDetail> = {
       title: '需要定制铜丝自动化退火生产线？',
       description:
         '把线材材质、线径范围、运行速度、退火温度、产能要求、放线收线方式、张力控制、保护气氛和现场条件发给苏能，技术人员可先判断炉体长度、加热分区、冷却方式、收放线系统和控制方案。',
-      submitLabel: '提交参数获取方案',
+      submitLabel: '提交需求',
       contactHref: '/zh/contact',
       contactLabel: '联系苏能工业炉',
       phone: '+86-130-5298-6814',
@@ -1464,8 +1464,8 @@ const productDetails: Record<string, StaticProductDetail> = {
     leadBullets: ['初步方案沟通', '按材料规格与退火固溶工艺评估配置', '按参数确认配置边界', '按合同约定提供售后支持'],
     parameterTitle: '退火固溶生产线定制需要确认哪些参数？',
     parameterLink: {
-      title: '查看工业炉报价需要哪些参数',
-      description: '整理报价资料清单，便于技术人员判断方案边界。',
+      title: '查看报价需要哪些参数',
+      description: '整理报价参数说明，便于技术人员判断方案边界。',
       href: '/zh/articles/gongye-lu-baojia-canshu',
     },
     comparisonTitle: '退火固溶生产线、铜丝退火线、网带炉怎么选？',
@@ -1481,7 +1481,7 @@ const productDetails: Record<string, StaticProductDetail> = {
       title: '需要定制退火固溶生产线？',
       description:
         '把材料牌号、带材宽度、厚度范围、最大卷重、退火或固溶温度、运行速度、冷却方式、表面质量要求、张力控制和现场布局发给苏能，技术人员可先判断炉膛长度、温区配置、冷却段、收放卷系统和控制方案。',
-      submitLabel: '提交参数获取方案',
+      submitLabel: '提交需求',
       contactHref: '/zh/contact',
       contactLabel: '联系苏能工业炉',
       phone: '+86-130-5298-6814',

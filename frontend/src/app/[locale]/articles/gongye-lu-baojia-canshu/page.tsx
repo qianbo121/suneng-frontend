@@ -416,7 +416,7 @@ export default async function IndustrialFurnaceQuoteParamsPage({ params }: PageP
                 href="#quote-contact-form"
                 className="inline-flex min-h-[46px] w-full items-center justify-center rounded-[4px] bg-[#c51624] px-6 text-[15px] font-semibold text-white transition hover:bg-[#a90f1b] sm:w-auto"
               >
-                提交报价需求
+                获取报价方案
               </a>
               <CopyQuoteChecklistButton
                 text={quoteTemplateText}
@@ -691,7 +691,7 @@ export default async function IndustrialFurnaceQuoteParamsPage({ params }: PageP
               href="#quote-contact-form"
               className="inline-flex min-h-[46px] items-center justify-center rounded-[4px] bg-[#c51624] px-6 text-[15px] font-semibold text-white transition hover:bg-[#a90f1b]"
             >
-              提交报价需求
+              获取报价方案
             </a>
             <a
               href={contactPath}
@@ -708,6 +708,7 @@ export default async function IndustrialFurnaceQuoteParamsPage({ params }: PageP
             title="提交工业炉报价需求"
             description="请尽量填写工件材质、尺寸、温度、热处理工艺、产能需求和现场条件。资料不完整也可以先提交，苏能工程师会提示需要补充的关键参数。"
             messagePlaceholder="请填写工件材质、尺寸、温度、工艺、产能、现场条件等信息。"
+            submitLabel="提交报价需求"
           />
         </div>
       </section>

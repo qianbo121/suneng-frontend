@@ -185,7 +185,7 @@ function ProductArtwork({ item, locale }: { item: FurnaceProductCard; locale: Lo
 
 export function HotProducts({ locale }: HotProductsProps) {
   return (
-    <section className="hot-products overflow-hidden bg-[#f5f7fa] pb-6 pt-8 lg:pb-9 lg:pt-10">
+    <section className="hot-products overflow-hidden bg-white py-8">
       <div className="mx-auto w-full max-w-[1440px] px-4 md:px-5 lg:px-5 xl:px-4">
         <SectionTitle
           eyebrow="furnace showcase"

@@ -10,8 +10,8 @@ type CopyQuoteChecklistButtonProps = {
   messageClassName?: string;
 };
 
-const successMessage = '报价资料清单已复制，可发送给苏能技术人员。';
-const defaultLabel = '复制报价资料清单（可直接发送给苏能）';
+const successMessage = '参数清单已复制，可发送给苏能技术人员。';
+const defaultLabel = '复制参数清单';
 const defaultWrapperClassName = 'mt-5';
 const defaultButtonClassName =
   'inline-flex min-h-[42px] items-center justify-center rounded-[4px] bg-[#c51624] px-5 text-[14px] font-semibold text-white transition hover:bg-[#a90f1b]';
