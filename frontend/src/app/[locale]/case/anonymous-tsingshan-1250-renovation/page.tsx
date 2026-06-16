@@ -17,6 +17,7 @@ type PageProps = {
 type FactItem = [string, ReactNode];
 
 const pagePath = '/zh/case/anonymous-tsingshan-1250-renovation';
+const aboutPath = '/zh/about';
 const servicePath = '/zh/service/furnace-renovation-overhaul';
 const heroImage = '/images/service/after-sales-hero.png';
 
@@ -404,8 +405,8 @@ export default async function AnonymousTsingshanCasePage({ params }: PageProps) 
             tone="light"
             className="text-[13px]"
             items={[
-              { label: '工业炉节能改造与热处理炉大修服务', href: servicePath },
-              { label: '案例详情' },
+              { label: '关于苏能', href: aboutPath },
+              { label: '项目案例' },
             ]}
           />
 

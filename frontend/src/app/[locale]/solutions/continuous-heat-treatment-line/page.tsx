@@ -44,6 +44,7 @@ const heroImage = '/images/products/annealing-solution-line/gallery/line-01.jpg'
 const quoteParamsPath = '/zh/articles/gongye-lu-baojia-canshu';
 const renovationServicePath = '/zh/service/furnace-renovation-overhaul';
 const manufacturerPath = '/zh/solutions/rechuli-lu-changjia';
+const productsPath = '/zh/products';
 const contactPath = '/zh/contact';
 const casePath = '/zh/case/anonymous-tsingshan-1250-renovation';
 const annealingSolutionLinePath = '/zh/products/detail/annealing-solution-line';
@@ -300,6 +301,7 @@ const pageJsonLd = cleanObject([
   },
   getBreadcrumbJsonLd([
     { name: '首页', url: '/zh' },
+    { name: '产品中心', url: productsPath },
     { name: '连续热处理生产线解决方案', url: pagePath },
   ]),
 ]);
@@ -362,7 +364,7 @@ export default async function ContinuousHeatTreatmentLinePage({ params }: PagePr
             tone="light"
             currentLabel="连续热处理生产线解决方案"
             className="text-[13px]"
-            items={[{ label: '解决方案' }]}
+            items={[{ label: '产品中心', href: productsPath }]}
           />
           <div className="mt-10 max-w-[980px]">
             <p className="text-[13px] font-semibold text-white/64 lg:text-[14px]">系统级热处理生产线方案</p>
