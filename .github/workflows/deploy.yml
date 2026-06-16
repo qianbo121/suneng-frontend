@@ -113,6 +113,7 @@ jobs:
           host: ${{ secrets.DEPLOY_HOST }}
           username: ${{ secrets.DEPLOY_USERNAME }}
           key: ${{ secrets.DEPLOY_KEY }}
+          command_timeout: 30m
           script: |
             set -euo pipefail
             cd ${{ secrets.DEPLOY_PATH }}
