@@ -18,23 +18,94 @@ type ContactPageProps = {
 
 const contactHero = '/images/contact/contact-hero.png';
 
-const contactItems = [
-  {
-    label: '联系电话',
-    value: '+86-130-5298-6814',
-    icon: '/images/contact/icon-phone.png',
+const contactSeoCopy = {
+  zh: CONTACT_SEO,
+  en: {
+    title: 'Contact Us | Jiangsu Suneng Industrial Furnace Co., Ltd.',
+    description:
+      'Contact Jiangsu Suneng Industrial Furnace Co., Ltd. for industrial furnace equipment, heat treatment furnaces, energy-saving retrofit and overhaul service. Phone / WeChat: +86-130-5298-6814.',
+    keywords: [
+      'Suneng Industrial Furnace contact',
+      'industrial furnace manufacturer phone',
+      'industrial furnace inquiry',
+      'heat treatment furnace supplier',
+    ],
+    ogTitle: 'Contact Jiangsu Suneng Industrial Furnace | Phone, Address and Inquiry',
+    ogDescription:
+      'Contact Suneng Industrial Furnace for industrial furnace equipment, heat treatment furnaces, energy-saving retrofit and overhaul service.',
   },
-  {
-    label: '企业邮箱',
-    value: 'jssngyl@outlook.com',
-    icon: '/images/contact/icon-email.png',
+} satisfies Record<Locale, {
+  title: string;
+  description: string;
+  keywords: string[];
+  ogTitle: string;
+  ogDescription: string;
+}>;
+
+const contactPageCopy = {
+  zh: {
+    title: '联系我们',
+    englishTitle: 'Contact Us',
+    subtitle: '专注工业炉研发制造与系统集成解决方案',
+    heading: '联系方式',
+    company: '江苏苏能工业炉有限公司',
+    separator: '：',
+    items: [
+      {
+        label: '联系电话',
+        value: '+86-130-5298-6814',
+        icon: '/images/contact/icon-phone.png',
+      },
+      {
+        label: '企业邮箱',
+        value: 'jssngyl@outlook.com',
+        icon: '/images/contact/icon-email.png',
+      },
+      {
+        label: '公司地址',
+        value: '江苏省泰州市姜堰区张甸蔡官工业区',
+        icon: '/images/contact/icon-location.png',
+      },
+    ],
   },
-  {
-    label: '公司地址',
-    value: '江苏省泰州市姜堰区张甸蔡官工业区',
-    icon: '/images/contact/icon-location.png',
+  en: {
+    title: 'Contact Us',
+    englishTitle: 'CONTACT US',
+    subtitle: 'Industrial furnace engineering, manufacturing and system integration support',
+    heading: 'Contact Information',
+    company: 'Jiangsu Suneng Industrial Furnace Co., Ltd.',
+    separator: ': ',
+    items: [
+      {
+        label: 'Phone',
+        value: '+86-130-5298-6814',
+        icon: '/images/contact/icon-phone.png',
+      },
+      {
+        label: 'Email',
+        value: 'jssngyl@outlook.com',
+        icon: '/images/contact/icon-email.png',
+      },
+      {
+        label: 'Address',
+        value: 'Cai Guan Industrial Zone, Zhangdian, Jiangyan District, Taizhou, Jiangsu',
+        icon: '/images/contact/icon-location.png',
+      },
+    ],
   },
-];
+} satisfies Record<Locale, {
+  title: string;
+  englishTitle: string;
+  subtitle: string;
+  heading: string;
+  company: string;
+  separator: string;
+  items: {
+    label: string;
+    value: string;
+    icon: string;
+  }[];
+}>;
 
 export const revalidate = 3600;
 
@@ -42,6 +113,7 @@ export async function generateMetadata({ params }: ContactPageProps): Promise<Me
   const { locale } = await params;
   const currentLocale = (locale === 'en' ? 'en' : 'zh') as Locale;
   const openGraphLocale = currentLocale === 'en' ? 'en_US' : 'zh_CN';
+  const seo = contactSeoCopy[currentLocale];
 
   if (currentLocale === 'zh') {
     const canonical = absoluteUrl('/zh/contact');
@@ -84,11 +156,11 @@ export async function generateMetadata({ params }: ContactPageProps): Promise<Me
   }
 
   return buildMetadata({
-    title: CONTACT_SEO.title,
-    description: CONTACT_SEO.description,
+    title: seo.title,
+    description: seo.description,
     path: `/${currentLocale}/contact`,
     pageKey: 'contact',
-    keywords: CONTACT_SEO.keywords,
+    keywords: seo.keywords,
     image: contactHero,
     alternateLocales: {
       'zh-CN': '/zh/contact',
@@ -100,22 +172,24 @@ export async function generateMetadata({ params }: ContactPageProps): Promise<Me
 
 export default async function ContactPage({ params }: ContactPageProps) {
   const { locale } = await params;
+  const currentLocale = (locale === 'en' ? 'en' : 'zh') as Locale;
+  const copy = contactPageCopy[currentLocale];
 
   return (
     <div className="bg-[#f5f7fa]">
-      <JsonLd id={`contact-jsonld-${locale}`} data={getContactPageJsonLd(`/${locale}/contact`)} />
+      <JsonLd id={`contact-jsonld-${locale}`} data={getContactPageJsonLd(`/${locale}/contact`, currentLocale)} />
       <PageBanner
         locale={locale}
-        title="联系我们"
-        englishTitle="Contact Us"
-        subtitle="专注工业炉研发制造与系统集成解决方案"
+        title={copy.title}
+        englishTitle={copy.englishTitle}
+        subtitle={copy.subtitle}
         backgroundImage={contactHero}
         variant="about"
       />
 
       <div className="border-b border-[#e5e5e5] bg-white">
         <div className="mx-auto flex min-h-[54px] max-w-[1660px] items-center px-6 lg:px-[86px]">
-          <Breadcrumb locale={locale} currentLabel="联系我们" tone="dark" className="text-[13px]" />
+          <Breadcrumb locale={locale} currentLabel={copy.title} tone="dark" className="text-[13px]" />
         </div>
       </div>
 
@@ -123,17 +197,17 @@ export default async function ContactPage({ params }: ContactPageProps) {
         <section className="relative overflow-hidden rounded-[8px] bg-white px-6 py-8 shadow-[0_18px_54px_rgba(12,34,69,0.08)] md:px-10 lg:min-h-[455px] lg:px-[52px] lg:py-[55px]">
           <div className="relative z-10 max-w-[640px]">
             <h2 className="text-[32px] font-semibold leading-none tracking-[0.02em] text-[#111111] lg:text-[42px]">
-              联系方式
+              {copy.heading}
             </h2>
             <p className="mt-6 text-[20px] font-normal leading-none text-[var(--color-accent)] lg:text-[25px]">
-              江苏苏能工业炉有限公司
+              {copy.company}
             </p>
             <div className="mt-6 h-[3px] w-[52px] bg-[var(--color-accent)]" />
 
             <div className="mt-8 divide-y divide-[#dfe3ea]">
-              {contactItems.map((item) => {
-                const isPhone = item.label === '联系电话';
-                const isEmail = item.label === '企业邮箱';
+              {copy.items.map((item) => {
+                const isPhone = item.label === '联系电话' || item.label === 'Phone';
+                const isEmail = item.label === '企业邮箱' || item.label === 'Email';
                 const contactHref = isPhone ? `tel:${item.value.replace(/\\s+/g, '')}` : isEmail ? `mailto:${item.value}` : null;
 
                 return (
@@ -145,7 +219,7 @@ export default async function ContactPage({ params }: ContactPageProps) {
                       <Image src={item.icon} alt="" fill sizes="70px" className="object-cover" />
                     </div>
                     <div className="flex min-w-0 flex-wrap items-baseline gap-x-0 gap-y-2 text-[18px] leading-[1.5] lg:text-[21px]">
-                      <span className="shrink-0 font-normal text-[#333333]">{item.label}：</span>
+                      <span className="shrink-0 font-normal text-[#333333]">{item.label}{copy.separator}</span>
                       {contactHref ? (
                         <a href={contactHref} className="break-words font-normal text-[#333333] hover:text-[#c51624]">
                           {item.value}

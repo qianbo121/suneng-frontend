@@ -3,8 +3,10 @@
 import { useEffect, useState } from 'react';
 
 import { ProductLeadForm } from '@/components/products/ProductLeadForm';
+import { Locale } from '@/types/site';
 
 type QuoteModalButtonProps = {
+  locale?: Locale;
   label?: string;
   className?: string;
   title?: string;
@@ -12,15 +14,42 @@ type QuoteModalButtonProps = {
   submitLabel?: string;
 };
 
-const defaultDescription = '请尽量填写工件材质、尺寸、温度、热处理工艺、产能需求和现场条件。';
+const quoteModalCopy = {
+  zh: {
+    label: '获取报价方案',
+    title: '提交工业炉报价需求',
+    description: '请尽量填写工件材质、尺寸、温度、热处理工艺、产能需求和现场条件。',
+    submitLabel: '提交报价需求',
+    closeLabel: '关闭报价需求弹窗',
+  },
+  en: {
+    label: 'Get a Quote',
+    title: 'Submit an Industrial Furnace Requirement',
+    description: 'Share your workpiece material, dimensions, operating temperature, heat treatment process, throughput and site conditions.',
+    submitLabel: 'Submit Requirement',
+    closeLabel: 'Close quote request dialog',
+  },
+} satisfies Record<Locale, {
+  label: string;
+  title: string;
+  description: string;
+  submitLabel: string;
+  closeLabel: string;
+}>;
 
 export function QuoteModalButton({
-  label = '获取报价方案',
+  locale = 'zh',
+  label,
   className,
-  title = '提交工业炉报价需求',
-  description = defaultDescription,
-  submitLabel = '提交报价需求',
+  title,
+  description,
+  submitLabel,
 }: QuoteModalButtonProps) {
+  const copy = quoteModalCopy[locale];
+  const resolvedLabel = label ?? copy.label;
+  const resolvedTitle = title ?? copy.title;
+  const resolvedDescription = description ?? copy.description;
+  const resolvedSubmitLabel = submitLabel ?? copy.submitLabel;
   const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
@@ -47,7 +76,7 @@ export function QuoteModalButton({
         onClick={() => setIsOpen(true)}
         className={className}
       >
-        {label}
+        {resolvedLabel}
       </button>
 
       {isOpen ? (
@@ -55,7 +84,7 @@ export function QuoteModalButton({
           className="fixed inset-0 z-[120] flex items-center justify-center bg-[#101828]/72 px-4 py-6 backdrop-blur-sm"
           role="dialog"
           aria-modal="true"
-          aria-label={title}
+          aria-label={resolvedTitle}
           onClick={() => setIsOpen(false)}
         >
           <div
@@ -66,16 +95,17 @@ export function QuoteModalButton({
               type="button"
               onClick={() => setIsOpen(false)}
               className="absolute right-4 top-4 z-10 flex h-9 w-9 items-center justify-center rounded-[4px] border border-[#dce3eb] bg-white text-[22px] leading-none text-[#364152] transition hover:border-[#c51624] hover:text-[#c51624]"
-              aria-label="关闭报价需求弹窗"
+              aria-label={copy.closeLabel}
             >
               ×
             </button>
             <div className="p-4 sm:p-5 lg:p-6">
               <ProductLeadForm
+                locale={locale}
                 anchorId="quote-modal-form"
-                title={title}
-                description={description}
-                submitLabel={submitLabel}
+                title={resolvedTitle}
+                description={resolvedDescription}
+                submitLabel={resolvedSubmitLabel}
               />
             </div>
           </div>

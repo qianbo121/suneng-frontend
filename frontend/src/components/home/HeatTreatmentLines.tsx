@@ -107,19 +107,10 @@ export function HeatTreatmentLines({ locale }: HeatTreatmentLinesProps) {
                 >
                   {locale === 'en' ? 'View line solutions' : '查看连续热处理生产线方案'}
                 </Link>
-                {locale === 'zh' ? (
-                  <QuoteModalButton
-                    label="获取报价方案"
-                    className="inline-flex min-h-[52px] items-center justify-center rounded-[3px] border border-[#c8d0dc] bg-white px-8 text-[15px] font-semibold text-[#101828] transition hover:border-[#98a2b3] hover:bg-[#f8fafc] sm:whitespace-nowrap"
-                  />
-                ) : (
-                  <Link
-                    href="/en/contact"
-                    className="inline-flex min-h-[52px] items-center justify-center rounded-[3px] border border-[#c8d0dc] bg-white px-8 text-[15px] font-semibold text-[#101828] transition hover:border-[#98a2b3] hover:bg-[#f8fafc] sm:whitespace-nowrap"
-                  >
-                    Submit line parameters
-                  </Link>
-                )}
+                <QuoteModalButton
+                  locale={locale}
+                  className="inline-flex min-h-[52px] items-center justify-center rounded-[3px] border border-[#c8d0dc] bg-white px-8 text-[15px] font-semibold text-[#101828] transition hover:border-[#98a2b3] hover:bg-[#f8fafc] sm:whitespace-nowrap"
+                />
               </div>
 
               <div className="mt-9 grid grid-cols-2 border-t border-[#d8dee8] pt-7 sm:grid-cols-4">
