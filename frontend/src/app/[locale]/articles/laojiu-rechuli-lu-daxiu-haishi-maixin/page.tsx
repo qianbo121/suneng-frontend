@@ -5,6 +5,7 @@ import type { ReactNode } from 'react';
 
 import { JsonLd } from '@/components/JsonLd';
 import { Breadcrumb } from '@/components/layout/Breadcrumb';
+import { QuoteModalButton } from '@/components/lead/QuoteModalButton';
 import { cleanObject, getBreadcrumbJsonLd, getFaqJsonLd } from '@/lib/seo/jsonld';
 import { buildMetadata } from '@/lib/seo/metadata';
 import { OLD_HEAT_TREATMENT_FURNACE_REPAIR_OR_REPLACE_SEO } from '@/lib/seo/page-data';
@@ -319,12 +320,10 @@ export default async function OldHeatTreatmentFurnaceDecisionPage({ params }: Pa
               ))}
             </div>
             <div className="mt-9 flex flex-wrap gap-4">
-              <a
-                href={`${quoteParamsPath}#quote-contact-form`}
+              <QuoteModalButton
+                label="获取报价方案"
                 className="inline-flex min-h-[46px] items-center justify-center rounded-[4px] bg-[#c51624] px-6 text-[15px] font-semibold text-white transition hover:bg-[#a90f1b]"
-              >
-                获取报价方案
-              </a>
+              />
               <a
                 href={contactPath}
                 className="inline-flex min-h-[46px] items-center justify-center rounded-[4px] border border-white/46 px-6 text-[15px] font-semibold text-white transition hover:border-white hover:bg-white/10"
@@ -479,9 +478,10 @@ export default async function OldHeatTreatmentFurnaceDecisionPage({ params }: Pa
             </address>
           </div>
           <div className="flex flex-wrap gap-4 lg:justify-end">
-            <a href={`${quoteParamsPath}#quote-contact-form`} className="inline-flex min-h-[46px] items-center justify-center rounded-[4px] bg-[#c51624] px-6 text-[15px] font-semibold text-white transition hover:bg-[#a90f1b]">
-              获取报价方案
-            </a>
+            <QuoteModalButton
+              label="获取报价方案"
+              className="inline-flex min-h-[46px] items-center justify-center rounded-[4px] bg-[#c51624] px-6 text-[15px] font-semibold text-white transition hover:bg-[#a90f1b]"
+            />
             <a href={contactPath} className="inline-flex min-h-[46px] items-center justify-center rounded-[4px] border border-white/46 px-6 text-[15px] font-semibold text-white transition hover:border-white hover:bg-white/10">
               联系苏能工程师
             </a>

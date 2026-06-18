@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 
+import { QuoteModalButton } from '@/components/lead/QuoteModalButton';
 import { buildProductImageAlt } from '@/lib/seo';
 import { Locale } from '@/types/site';
 
@@ -83,7 +84,6 @@ const featureItems: FeatureItem[] = [
 export function HeatTreatmentLines({ locale }: HeatTreatmentLinesProps) {
   const [mainLine] = heatTreatmentLines;
   const systemHref = locale === 'zh' ? '/zh/solutions/continuous-heat-treatment-line' : '/en/products';
-  const quoteHref = locale === 'zh' ? '/zh/articles/gongye-lu-baojia-canshu#quote-contact-form' : '/en/contact';
 
   return (
     <section className="bg-white py-8">
@@ -107,12 +107,19 @@ export function HeatTreatmentLines({ locale }: HeatTreatmentLinesProps) {
                 >
                   {locale === 'en' ? 'View line solutions' : '查看连续热处理生产线方案'}
                 </Link>
-                <Link
-                  href={quoteHref}
-                  className="inline-flex min-h-[52px] items-center justify-center rounded-[3px] border border-[#c8d0dc] bg-white px-8 text-[15px] font-semibold text-[#101828] transition hover:border-[#98a2b3] hover:bg-[#f8fafc] sm:whitespace-nowrap"
-                >
-                  {locale === 'en' ? 'Submit line parameters' : '获取报价方案'}
-                </Link>
+                {locale === 'zh' ? (
+                  <QuoteModalButton
+                    label="获取报价方案"
+                    className="inline-flex min-h-[52px] items-center justify-center rounded-[3px] border border-[#c8d0dc] bg-white px-8 text-[15px] font-semibold text-[#101828] transition hover:border-[#98a2b3] hover:bg-[#f8fafc] sm:whitespace-nowrap"
+                  />
+                ) : (
+                  <Link
+                    href="/en/contact"
+                    className="inline-flex min-h-[52px] items-center justify-center rounded-[3px] border border-[#c8d0dc] bg-white px-8 text-[15px] font-semibold text-[#101828] transition hover:border-[#98a2b3] hover:bg-[#f8fafc] sm:whitespace-nowrap"
+                  >
+                    Submit line parameters
+                  </Link>
+                )}
               </div>
 
               <div className="mt-9 grid grid-cols-2 border-t border-[#d8dee8] pt-7 sm:grid-cols-4">

@@ -180,7 +180,7 @@ const relatedLinks: RelatedPartnerLinkItem[] = [
   },
   {
     title: '江苏苏能工业炉有限公司介绍',
-    href: '/zh/about/suneng-profile',
+    href: '/zh/about',
     description: '了解苏能工业炉的主营产品、资质专利、项目数据与业务边界。',
   },
   {

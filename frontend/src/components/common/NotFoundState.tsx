@@ -18,13 +18,13 @@ export function NotFoundState({ locale }: NotFoundStateProps) {
       ? {
           title: 'Page Not Found',
           description:
-            'The page you are looking for has not been built in the current mock stage yet.',
+            'Sorry, the page you are looking for does not exist or has been moved. You can return home, or continue browsing products and resources.',
           action: 'Back to Home',
           badge: '404 ERROR',
         }
       : {
           title: '页面未找到',
-          description: '当前访问的页面尚未在本阶段的 mock 样板中创建，请返回首页继续浏览。',
+          description: '抱歉，您访问的页面不存在或已调整。您可以返回首页，或前往产品中心、资料中心继续浏览。',
           action: '返回首页',
           badge: '404 页面',
         };

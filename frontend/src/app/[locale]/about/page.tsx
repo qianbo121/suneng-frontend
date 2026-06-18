@@ -28,6 +28,7 @@ export const revalidate = 3600;
 export async function generateMetadata({ params }: AboutPageProps): Promise<Metadata> {
   const { locale } = await params;
   const currentLocale = (locale === 'en' ? 'en' : 'zh') as Locale;
+  const openGraphLocale = currentLocale === 'en' ? 'en_US' : 'zh_CN';
 
   if (currentLocale === 'zh') {
     const canonical = absoluteUrl('/zh/about');
@@ -53,7 +54,7 @@ export async function generateMetadata({ params }: AboutPageProps): Promise<Meta
         type: 'website',
         url: canonical,
         siteName: SITE_NAME,
-        locale: 'zh_CN',
+        locale: openGraphLocale,
         images: [{ url: image }],
       },
       twitter: {

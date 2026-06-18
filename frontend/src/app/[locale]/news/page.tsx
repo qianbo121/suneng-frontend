@@ -1,5 +1,6 @@
 import { JsonLd } from '@/components/JsonLd';
 import { PageBanner } from '@/components/layout/PageBanner';
+import { QuoteModalButton } from '@/components/lead/QuoteModalButton';
 import { NewsBreadcrumbBar } from '@/components/news/NewsBreadcrumbBar';
 import { NewsListCards } from '@/components/news/NewsListCards';
 import {
@@ -66,7 +67,6 @@ export default async function NewsPage({ params, searchParams }: NewsPageProps) 
   const total = list?.total ?? FALLBACK_NEWS_ITEMS.length;
   const title = NEWS_LABEL[currentLocale];
   const subtitle = NEWS_SUBTITLE[currentLocale];
-  const quoteContactHref = '/zh/articles/gongye-lu-baojia-canshu#quote-contact-form';
   const contactHref = '/zh/contact';
   const newsJsonLd = cleanObject([
     getBreadcrumbJsonLd([
@@ -117,12 +117,10 @@ export default async function NewsPage({ params, searchParams }: NewsPageProps) 
                 </p>
               </div>
               <div className="mt-5 flex flex-col gap-3 sm:flex-row lg:mt-0 lg:shrink-0">
-                <a
-                  href={quoteContactHref}
+                <QuoteModalButton
+                  label="获取报价方案"
                   className="inline-flex min-h-[46px] items-center justify-center rounded-[4px] bg-[#c51624] px-6 text-[15px] font-semibold text-white transition hover:bg-[#a90f1b]"
-                >
-                  获取报价方案
-                </a>
+                />
                 <a
                   href={contactHref}
                   className="inline-flex min-h-[46px] items-center justify-center rounded-[4px] border border-[#c51624] px-6 text-[15px] font-semibold text-[#c51624] transition hover:bg-[#fff5f5]"
