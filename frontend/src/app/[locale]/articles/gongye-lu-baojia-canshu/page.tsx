@@ -4,13 +4,12 @@ import { notFound } from 'next/navigation';
 import type { ReactNode } from 'react';
 
 import { JsonLd } from '@/components/JsonLd';
-import { ContactForm } from '@/components/contact/ContactForm';
 import { Breadcrumb } from '@/components/layout/Breadcrumb';
+import { ProductLeadForm } from '@/components/products/ProductLeadForm';
 import { getStaticProductBySlug } from '@/constants/static-products';
 import { getBreadcrumbJsonLd, getFaqJsonLd } from '@/lib/seo/jsonld';
 import { buildMetadata } from '@/lib/seo/metadata';
 import { INDUSTRIAL_FURNACE_QUOTE_PARAMS_SEO } from '@/lib/seo/page-data';
-import { Locale } from '@/types/site';
 
 import { CopyQuoteChecklistButton } from './CopyQuoteChecklistButton';
 
@@ -369,7 +368,6 @@ function BulletList({ items }: { items: string[] }) {
 
 export default async function IndustrialFurnaceQuoteParamsPage({ params }: PageProps) {
   const { locale } = await params;
-  const currentLocale = 'zh' as Locale;
 
   if (locale !== 'zh') {
     notFound();
@@ -701,13 +699,11 @@ export default async function IndustrialFurnaceQuoteParamsPage({ params }: PageP
             </a>
           </div>
         </div>
-        <div id="quote-contact-form" className="mx-auto mt-10 max-w-[1180px] scroll-mt-24 px-5 lg:px-8">
-          <ContactForm
-            locale={currentLocale}
-            requireEmail={false}
+        <div className="mx-auto mt-10 max-w-[1180px] px-5 lg:px-8">
+          <ProductLeadForm
+            anchorId="quote-contact-form"
             title="提交工业炉报价需求"
             description="请尽量填写工件材质、尺寸、温度、热处理工艺、产能需求和现场条件。资料不完整也可以先提交，苏能工程师会提示需要补充的关键参数。"
-            messagePlaceholder="请填写工件材质、尺寸、温度、工艺、产能、现场条件等信息。"
             submitLabel="提交报价需求"
           />
         </div>

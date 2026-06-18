@@ -218,7 +218,7 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
         </div>
       </div>
 
-      <div className="mx-auto mt-7 max-w-[1440px] px-6 pb-10">
+      <div className="mx-auto -mb-16 mt-7 max-w-[1440px] px-6 pb-6 xl:mb-0">
         {/* A. Hero 区：主图 480x360；信息列顶部内缩，与右侧卡片标题水平对齐。 */}
         <section className="flex flex-col gap-8 lg:flex-row lg:items-start lg:gap-6">
           <ProductDetailGallery
