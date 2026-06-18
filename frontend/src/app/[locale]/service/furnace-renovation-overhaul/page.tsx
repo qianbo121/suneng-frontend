@@ -3,13 +3,12 @@ import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import type { ReactNode } from 'react';
 
-import { ContactForm } from '@/components/contact/ContactForm';
 import { JsonLd } from '@/components/JsonLd';
 import { Breadcrumb } from '@/components/layout/Breadcrumb';
+import { ProductLeadForm } from '@/components/products/ProductLeadForm';
 import { getFaqJsonLd } from '@/lib/seo/jsonld';
 import { buildMetadata } from '@/lib/seo/metadata';
 import { FURNACE_RENOVATION_OVERHAUL_SEO } from '@/lib/seo/page-data';
-import type { Locale } from '@/types/site';
 
 type PageProps = {
   params: Promise<{
@@ -577,8 +576,6 @@ export default async function FurnaceRenovationOverhaulPage({ params }: PageProp
     notFound();
   }
 
-  const currentLocale = locale as Locale;
-
   return (
     <div className="bg-white text-[#101828]">
       <section className="relative overflow-hidden bg-[#101828] text-white">
@@ -931,13 +928,11 @@ export default async function FurnaceRenovationOverhaulPage({ params }: PageProp
             </div>
           </div>
 
-          <div id="contact-form" className="scroll-mt-24 overflow-hidden rounded-[8px]">
-            <ContactForm
-              locale={currentLocale}
-              requireEmail={false}
+          <div className="overflow-hidden rounded-[8px]">
+            <ProductLeadForm
+              anchorId="contact-form"
               title="提交旧炉参数，获取改造建议"
               description="把旧炉现状、炉型、问题、工艺温度和现场条件发给苏能，技术人员可先判断适合大修、局部改造还是整炉更新。"
-              messagePlaceholder="请填写旧炉炉型、当前问题、工艺温度、现场条件等信息。"
               submitLabel="提交需求"
             />
           </div>

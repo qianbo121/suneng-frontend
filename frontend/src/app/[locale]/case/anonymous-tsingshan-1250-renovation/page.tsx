@@ -3,12 +3,11 @@ import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import type { ReactNode } from 'react';
 
-import { ContactForm } from '@/components/contact/ContactForm';
 import { JsonLd } from '@/components/JsonLd';
 import { Breadcrumb } from '@/components/layout/Breadcrumb';
+import { ProductLeadForm } from '@/components/products/ProductLeadForm';
 import { buildMetadata } from '@/lib/seo/metadata';
 import { TSINGSHAN_1250_CASE_SEO } from '@/lib/seo/page-data';
-import type { Locale } from '@/types/site';
 
 type PageProps = {
   params: Promise<{
@@ -390,8 +389,6 @@ export default async function AnonymousTsingshanCasePage({ params }: PageProps) 
     notFound();
   }
 
-  const currentLocale = locale as Locale;
-
   return (
     <div className="bg-white text-[#101828]">
       <section className="relative overflow-hidden bg-[#101828] text-white">
@@ -611,7 +608,7 @@ export default async function AnonymousTsingshanCasePage({ params }: PageProps) 
         </div>
       </Section>
 
-      <Section id="contact" eyebrow="Contact" title="八、咨询同类改造方案">
+      <Section id="case-contact-section" eyebrow="Contact" title="八、咨询同类改造方案">
         <div className="grid gap-8 lg:grid-cols-[0.95fr_1.05fr]">
           <div className="rounded-[8px] border border-[#e1e7f0] bg-[#fbfcfe] p-6 lg:p-7">
             <h3 className="text-[22px] font-semibold leading-[1.35] text-[#101828]">苏能可以提供</h3>
@@ -645,12 +642,10 @@ export default async function AnonymousTsingshanCasePage({ params }: PageProps) 
           </div>
 
           <div className="overflow-hidden rounded-[8px]">
-            <ContactForm
-              locale={currentLocale}
-              requireEmail={false}
+            <ProductLeadForm
+              anchorId="contact"
               title="提交类似项目需求"
               description="把工件、工艺、产能和现场条件发给苏能，技术人员可先判断适合的炉型方向与方案边界。"
-              messagePlaceholder="请填写工件材质、尺寸、温度、工艺、产能、现场条件等信息。"
               submitLabel="提交需求"
             />
           </div>

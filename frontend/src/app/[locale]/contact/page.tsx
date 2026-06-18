@@ -101,7 +101,7 @@ export default async function ContactPage({ params }: ContactPageProps) {
   const { locale } = await params;
 
   return (
-    <div className="bg-[#f5f7fa] pb-8 lg:pb-10">
+    <div className="bg-[#f5f7fa]">
       <JsonLd id={`contact-jsonld-${locale}`} data={getContactPageJsonLd(`/${locale}/contact`)} />
       <PageBanner
         locale={locale}
@@ -118,7 +118,7 @@ export default async function ContactPage({ params }: ContactPageProps) {
         </div>
       </div>
 
-      <main className="mx-auto max-w-[1660px] px-6 py-8 lg:px-[86px] lg:py-[48px]">
+      <main className="mx-auto max-w-[1660px] px-6 pb-8 pt-8 lg:px-[86px] lg:pb-10 lg:pt-[48px]">
         <section className="relative overflow-hidden rounded-[8px] bg-white px-6 py-8 shadow-[0_18px_54px_rgba(12,34,69,0.08)] md:px-10 lg:min-h-[455px] lg:px-[52px] lg:py-[55px]">
           <div className="relative z-10 max-w-[640px]">
             <h2 className="text-[32px] font-semibold leading-none tracking-[0.02em] text-[#111111] lg:text-[42px]">

@@ -1,4 +1,8 @@
+import Image from 'next/image';
+import Link from 'next/link';
+
 import { JsonLd } from '@/components/JsonLd';
+import { AboutQuoteModal } from '@/components/about/AboutQuoteModal';
 import { Breadcrumb } from '@/components/layout/Breadcrumb';
 import { SITE_LOGO_IMAGE, SITE_URL } from '@/lib/seo/config';
 import { absoluteUrl } from '@/lib/seo/metadata';
@@ -19,6 +23,66 @@ const sectionClass = 'border-t border-[#e5e8ef] py-10 first:border-t-0 lg:py-14'
 const h2Class = 'text-[26px] font-semibold leading-[1.3] text-[#111827] lg:text-[34px]';
 const h3Class = 'mt-8 text-[20px] font-semibold leading-[1.4] text-[#172033] lg:text-[24px]';
 const paragraphClass = 'mt-5 text-[16px] leading-[1.95] text-[#364152] lg:text-[17px]';
+
+const heroChips = [
+  '江苏泰州',
+  '成立2006',
+  '14700㎡生产基地',
+  '国家高新技术企业',
+  '非标工业炉定制',
+  '改造与大修',
+];
+
+const statItems = [
+  ['2006', '公司成立'],
+  ['14700㎡', '生产基地'],
+  ['5080万', '注册资本'],
+  ['150+', '员工'],
+  ['国家高新', '技术企业'],
+];
+
+const aboutPhotos = [
+  {
+    src: '/images/about/about-office-interior.png',
+    alt: '苏能工业炉研发设计办公区',
+    caption: '办公与研发',
+    className: 'lg:col-span-2 lg:row-span-2',
+    imageClassName: 'aspect-[16/10] lg:min-h-0 lg:flex-1 lg:aspect-auto',
+    sizes: '(min-width: 1024px) 50vw, 100vw',
+  },
+  {
+    src: '/images/about/about-production-line.jpg',
+    alt: '苏能连续热处理生产线制造车间',
+    caption: '连续生产线制造',
+    className: '',
+    imageClassName: 'aspect-[4/3]',
+    sizes: '(min-width: 1024px) 25vw, 100vw',
+  },
+  {
+    src: '/images/about/about-furnace-fabrication.png',
+    alt: '苏能热处理工业炉炉体制造现场',
+    caption: '炉体制造现场',
+    className: '',
+    imageClassName: 'aspect-[4/3]',
+    sizes: '(min-width: 1024px) 25vw, 100vw',
+  },
+  {
+    src: '/images/about/about-furnace-delivery.jpg',
+    alt: '苏能大型工业炉成套设备发货交付现场',
+    caption: '设备发货交付',
+    className: 'lg:col-span-2',
+    imageClassName: 'aspect-[4/3] lg:min-h-0 lg:flex-1 lg:aspect-auto',
+    sizes: '(min-width: 1024px) 50vw, 100vw',
+  },
+  {
+    src: '/images/about/about-staff-dormitory.png',
+    alt: '苏能工业炉生产基地员工宿舍',
+    caption: '员工生活',
+    className: 'lg:hidden',
+    imageClassName: 'aspect-[4/3]',
+    sizes: '100vw',
+  },
+];
 
 const organizationJsonLd = {
   '@context': 'https://schema.org',
@@ -283,11 +347,44 @@ function LabeledList({ items }: { items: string[][] }) {
   );
 }
 
+function PhotoCard({
+  src,
+  alt,
+  caption,
+  className = '',
+  imageClassName = 'aspect-[4/3]',
+  sizes = '100vw',
+}: {
+  src: string;
+  alt: string;
+  caption: string;
+  className?: string;
+  imageClassName?: string;
+  sizes?: string;
+}) {
+  return (
+    <figure className={`group flex flex-col overflow-hidden rounded-[8px] border border-[#e1e7f0] bg-white ${className}`}>
+      <div className={`relative overflow-hidden bg-[#edf1f6] ${imageClassName}`}>
+        <Image
+          src={src}
+          alt={alt}
+          fill
+          sizes={sizes}
+          className="object-cover transition duration-300 group-hover:scale-[1.02]"
+        />
+      </div>
+      <figcaption className="flex min-h-[52px] items-center border-t border-[#eef2f7] px-4 py-3 text-[15px] font-semibold leading-[1.35] text-[#172033]">
+        {caption}
+      </figcaption>
+    </figure>
+  );
+}
+
 export function AboutZhContent() {
   return (
     <>
-      <header className="border-b border-[#e5e8ef] bg-[#f6f8fb]">
-        <div className="mx-auto max-w-[1660px] px-6 py-12 lg:px-[86px] lg:py-16">
+      <header className="border-b border-[#e5e8ef] bg-white">
+        <div className="mx-auto max-w-[1660px] px-6 pt-8 lg:px-[86px] lg:pt-10">
           <Breadcrumb
             locale="zh"
             tone="dark"
@@ -297,23 +394,97 @@ export function AboutZhContent() {
               { label: '公司简介' },
             ]}
           />
-          <p className="text-[13px] font-semibold uppercase tracking-[0.24em] text-[var(--color-accent)]">
-            About Suneng
-          </p>
-          <h1 className="mt-4 text-[36px] font-semibold leading-[1.16] text-[#111827] lg:text-[56px]">
-            关于苏能工业炉
-          </h1>
-          <p className="mt-6 max-w-[980px] text-[18px] leading-[1.9] text-[#344054] lg:text-[20px]">
-            苏能工业炉是一家专注<strong>工业炉单机、配套件与整线交钥匙工程</strong>的
-            <strong>国家高新技术企业</strong>,深耕
-            <strong>工业加热与热处理装备</strong>的设计、制造与系统集成,业务覆盖
-            <strong>电阻式与燃气式工业炉</strong>的主要产品体系,为客户提供从工艺方案到整线落地的
-            <strong>一体化解决方案</strong>。
-          </p>
+          <div className="grid overflow-hidden rounded-[8px] border border-[#e1e7f0] bg-[#101828] shadow-[0_24px_70px_rgba(16,24,40,0.14)] lg:grid-cols-[0.98fr_1.02fr]">
+            <div className="relative z-10 px-6 py-8 text-white md:px-9 md:py-10 lg:px-12 lg:py-14">
+              <p className="text-[13px] font-semibold uppercase tracking-[0.24em] text-white/60">
+                About Suneng
+              </p>
+              <h1 className="mt-4 text-[36px] font-semibold leading-[1.16] lg:text-[56px]">
+                关于苏能工业炉
+              </h1>
+              <p className="mt-6 max-w-[760px] text-[17px] leading-[1.9] text-white/82 lg:text-[19px]">
+                苏能工业炉是一家专注<strong>工业炉单机、配套件与整线交钥匙工程</strong>的
+                <strong>国家高新技术企业</strong>,深耕
+                <strong>工业加热与热处理装备</strong>的设计、制造与系统集成,业务覆盖
+                <strong>电阻式与燃气式工业炉</strong>的主要产品体系,为客户提供从工艺方案到整线落地的
+                <strong>一体化解决方案</strong>。
+              </p>
+              <div className="mt-6 flex flex-wrap gap-2">
+                {heroChips.map((item) => (
+                  <span
+                    key={item}
+                    className="rounded-[4px] border border-white/16 bg-white/8 px-3 py-2 text-[13px] font-semibold leading-none text-white/82"
+                  >
+                    {item}
+                  </span>
+                ))}
+              </div>
+              <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+                <AboutQuoteModal
+                  className="inline-flex min-h-[44px] items-center justify-center rounded-[4px] bg-[#c51624] px-5 text-[15px] font-semibold text-white transition hover:bg-[#a90f1b]"
+                />
+                <Link
+                  href="/zh/products"
+                  className="inline-flex min-h-[44px] items-center justify-center rounded-[4px] border border-white/36 px-5 text-[15px] font-semibold text-white transition hover:bg-white/10"
+                >
+                  查看产品中心
+                </Link>
+              </div>
+            </div>
+            <div className="relative min-h-[300px] lg:min-h-[540px]">
+              <Image
+                src="/images/about/about-factory-aerial.png"
+                alt="苏能工业炉江苏泰州生产基地航拍外景"
+                fill
+                priority
+                sizes="(min-width: 1024px) 50vw, 100vw"
+                className="object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#101828]/70 via-transparent to-transparent lg:bg-gradient-to-r lg:from-[#101828]/26 lg:to-transparent" />
+              <div className="absolute bottom-5 left-5 right-5 rounded-[8px] border border-[rgba(255,255,255,0.28)] bg-[rgba(16,24,40,0.9)] px-4 py-3 text-[13px] font-medium leading-[1.7] text-white shadow-[0_12px_32px_rgba(16,24,40,0.28)] backdrop-blur">
+                江苏泰州生产基地，覆盖非标工业炉单机、整线与改造服务的制造交付场景。
+              </div>
+            </div>
+          </div>
         </div>
       </header>
 
       <div className="mx-auto max-w-[1660px] px-6 lg:px-[86px]">
+        <section className="py-8 lg:py-10" aria-label="苏能工业炉真实数据">
+          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
+            {statItems.map(([value, label]) => (
+              <div key={label} className="rounded-[8px] border border-[#e1e7f0] bg-white p-5">
+                <p className="text-[30px] font-semibold leading-none text-[#c51624] lg:text-[36px]">{value}</p>
+                <p className="mt-3 text-[14px] font-semibold text-[#364152]">{label}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <section className="border-t border-[#e5e8ef] py-10 lg:py-14" aria-labelledby="real-factory">
+          <div className="grid gap-6 lg:grid-cols-[0.72fr_1.28fr] lg:items-end">
+            <div>
+              <p className="text-[13px] font-semibold uppercase tracking-[0.22em] text-[#c51624]">
+                Manufacturing Site
+              </p>
+              <h2 id="real-factory" className={`${h2Class} mt-3`}>
+                真实生产基地与制造现场
+              </h2>
+              <p className="mt-4 text-[16px] leading-[1.85] text-[#4a5568]">
+                页面图片来自苏能生产基地、制造车间、办公研发区与设备交付现场，用于呈现工业炉制造的真实环境和交付链条。
+              </p>
+            </div>
+            <div className="rounded-[8px] border border-[#e1e7f0] bg-[#fbfcfe] p-5 text-[14px] leading-[1.85] text-[#364152]">
+              从厂区、产线、炉体制造到发货交付，苏能围绕非标工业炉的结构设计、工艺匹配、装配制造和现场服务组织项目。
+            </div>
+          </div>
+          <div className="mt-7 grid gap-4 lg:grid-cols-4 lg:auto-rows-[280px]">
+            {aboutPhotos.map((photo) => (
+              <PhotoCard key={photo.src} {...photo} />
+            ))}
+          </div>
+        </section>
+
         <section className={sectionClass} aria-labelledby="about-overview">
           <h2 id="about-overview" className={h2Class}>
             企业概况
@@ -592,35 +763,46 @@ export function AboutZhContent() {
           <h2 id="contact" className={h2Class}>
             联系我们
           </h2>
-          <address className="mt-7 grid gap-4 not-italic lg:grid-cols-3">
-            <div className="rounded-[8px] border border-[#e1e7f0] bg-[#fbfcfe] p-5">
-              <p className="text-[14px] font-semibold text-[#667085]">联系电话</p>
-              <a
-                className="mt-2 block text-[18px] font-semibold text-[#111827]"
-                href="tel:+8613052986814"
-              >
-                +86-130-5298-6814
-              </a>
+          <div className="mt-7 overflow-hidden rounded-[8px] border border-[#e1e7f0] bg-[#101828]">
+            <div className="grid gap-0 lg:grid-cols-[1.05fr_0.95fr]">
+              <div className="p-6 text-white md:p-8">
+                <p className="text-[18px] font-semibold leading-[1.6]">
+                  将工件、温度、工艺、产能和现场条件提交给苏能，技术人员可先做炉型方向和配置边界判断。
+                </p>
+                <div className="mt-6 flex flex-col gap-3 sm:flex-row">
+                  <AboutQuoteModal
+                    className="inline-flex min-h-[44px] items-center justify-center rounded-[4px] bg-[#c51624] px-5 text-[15px] font-semibold text-white transition hover:bg-[#a90f1b]"
+                  />
+                  <Link
+                    href="/zh/contact"
+                    className="inline-flex min-h-[44px] items-center justify-center rounded-[4px] border border-white/36 px-5 text-[15px] font-semibold text-white transition hover:bg-white/10"
+                  >
+                    联系苏能工业炉
+                  </Link>
+                </div>
+              </div>
+              <address className="grid gap-0 border-t border-white/10 bg-white/5 not-italic lg:border-l lg:border-t-0">
+                <div className="border-b border-white/10 p-6 md:p-8">
+                  <p className="text-[14px] font-semibold text-white/56">电话 / 微信</p>
+                  <a
+                    className="mt-2 block text-[20px] font-semibold text-white"
+                    href="tel:+8613052986814"
+                  >
+                    +86-130-5298-6814
+                  </a>
+                </div>
+                <div className="p-6 md:p-8">
+                  <p className="text-[14px] font-semibold text-white/56">邮箱</p>
+                  <a
+                    className="mt-2 block break-words text-[20px] font-semibold text-white"
+                    href="mailto:jssngyl@outlook.com"
+                  >
+                    jssngyl@outlook.com
+                  </a>
+                </div>
+              </address>
             </div>
-            <div className="rounded-[8px] border border-[#e1e7f0] bg-[#fbfcfe] p-5">
-              <p className="text-[14px] font-semibold text-[#667085]">邮箱</p>
-              <a
-                className="mt-2 block break-words text-[18px] font-semibold text-[#111827]"
-                href="mailto:jssngyl@outlook.com"
-              >
-                jssngyl@outlook.com
-              </a>
-            </div>
-            <div className="rounded-[8px] border border-[#e1e7f0] bg-[#fbfcfe] p-5">
-              <p className="text-[14px] font-semibold text-[#667085]">在线咨询表单入口</p>
-              <a
-                className="mt-3 inline-flex min-h-[44px] items-center justify-center rounded-[6px] bg-[var(--color-accent)] px-5 text-[15px] font-semibold text-white transition hover:bg-[#c40010]"
-                href={absoluteUrl('/zh/contact')}
-              >
-                前往联系我们
-              </a>
-            </div>
-          </address>
+          </div>
         </section>
       </div>
 
