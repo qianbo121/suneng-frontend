@@ -247,7 +247,8 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
                   item.href === '#product-lead-form' ? (
                     <ProductQuoteScrollButton
                       key={item.href}
-                      label={item.title}
+                      locale={currentLocale}
+                      label={currentLocale === 'en' ? undefined : item.title}
                       updateHash
                       variant="hero"
                       className="inline-flex min-h-[44px] items-center justify-center rounded-[4px] bg-[#c51624] px-5 text-[14px] font-semibold text-white transition hover:bg-[#a90f1b]"
@@ -285,7 +286,10 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
                 ))}
               </ul>
             </div>
-            <ProductQuoteScrollButton className="flex h-11 w-full items-center justify-center rounded-[4px] border border-[#c51624] bg-white text-[15px] font-medium text-[#c51624] transition hover:bg-[#fff5f5]" />
+            <ProductQuoteScrollButton
+              locale={currentLocale}
+              className="flex h-11 w-full items-center justify-center rounded-[4px] border border-[#c51624] bg-white text-[15px] font-medium text-[#c51624] transition hover:bg-[#fff5f5]"
+            />
             <div className="flex items-center gap-[10px]">
               <span className="flex h-[32px] w-[32px] shrink-0 items-center justify-center rounded-full bg-[#fff1f2] text-[#e60012]">
                 <HiPhone className="h-[16px] w-[16px]" />
@@ -645,12 +649,13 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
 
         {/* H. 提交需求表单：仅联系电话必填，提交反馈由客户端组件处理。 */}
         <ProductLeadForm
-          leadBullets={detail.leadBullets}
-          title={detail.leadForm?.title}
-          description={detail.leadForm?.description}
-          submitLabel={detail.leadForm?.submitLabel}
+          locale={currentLocale}
+          leadBullets={currentLocale === 'zh' ? detail.leadBullets : undefined}
+          title={currentLocale === 'zh' ? detail.leadForm?.title : undefined}
+          description={currentLocale === 'zh' ? detail.leadForm?.description : undefined}
+          submitLabel={currentLocale === 'zh' ? detail.leadForm?.submitLabel : undefined}
           contactHref={leadFormContactHref}
-          contactLabel={detail.leadForm?.contactLabel}
+          contactLabel={currentLocale === 'zh' ? detail.leadForm?.contactLabel : undefined}
           phone={detail.leadForm?.phone}
           email={detail.leadForm?.email}
         />
