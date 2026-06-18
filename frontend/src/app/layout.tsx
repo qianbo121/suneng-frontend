@@ -2,9 +2,7 @@ import type { Metadata } from 'next';
 import { ReactNode } from 'react';
 
 import '@/app/globals.css';
-import { JsonLd } from '@/components/JsonLd';
 import { DEFAULT_DESCRIPTION, DEFAULT_KEYWORDS, DEFAULT_OG_IMAGE, DEFAULT_TITLE, SITE_NAME, SITE_URL } from '@/lib/seo/config';
-import { getOrganizationJsonLd, getWebsiteJsonLd } from '@/lib/seo/jsonld';
 import { getVerificationMetadata } from '@/lib/seo/metadata';
 
 export const metadata: Metadata = {
@@ -17,7 +15,6 @@ export const metadata: Metadata = {
   keywords: DEFAULT_KEYWORDS,
   openGraph: {
     siteName: SITE_NAME,
-    locale: 'zh_CN',
     type: 'website',
     ...(DEFAULT_OG_IMAGE ? { images: [{ url: DEFAULT_OG_IMAGE }] } : {}),
   },
@@ -46,13 +43,5 @@ type RootLayoutProps = {
 };
 
 export default function RootLayout({ children }: RootLayoutProps) {
-  return (
-    <html lang="zh-CN" suppressHydrationWarning>
-      <body>
-        {children}
-        <JsonLd id="organization-jsonld" data={getOrganizationJsonLd()} />
-        <JsonLd id="website-jsonld" data={getWebsiteJsonLd()} />
-      </body>
-    </html>
-  );
+  return children;
 }

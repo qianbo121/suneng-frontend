@@ -7,7 +7,6 @@ import type { Locale } from '@/types/site';
  * entries in app/sitemap.ts.
  */
 export const ZH_ONLY_PATHS = new Set<string>([
-  '/about/suneng-profile',
   '/service/furnace-renovation-overhaul',
   '/articles/gongye-lu-baojia-canshu',
   '/articles/laojiu-rechuli-lu-daxiu-haishi-maixin',

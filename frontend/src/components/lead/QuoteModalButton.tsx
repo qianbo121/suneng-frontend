@@ -4,11 +4,23 @@ import { useEffect, useState } from 'react';
 
 import { ProductLeadForm } from '@/components/products/ProductLeadForm';
 
-type AboutQuoteModalProps = {
+type QuoteModalButtonProps = {
+  label?: string;
   className?: string;
+  title?: string;
+  description?: string;
+  submitLabel?: string;
 };
 
-export function AboutQuoteModal({ className }: AboutQuoteModalProps) {
+const defaultDescription = '请尽量填写工件材质、尺寸、温度、热处理工艺、产能需求和现场条件。';
+
+export function QuoteModalButton({
+  label = '获取报价方案',
+  className,
+  title = '提交工业炉报价需求',
+  description = defaultDescription,
+  submitLabel = '提交报价需求',
+}: QuoteModalButtonProps) {
   const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
@@ -35,7 +47,7 @@ export function AboutQuoteModal({ className }: AboutQuoteModalProps) {
         onClick={() => setIsOpen(true)}
         className={className}
       >
-        获取报价方案
+        {label}
       </button>
 
       {isOpen ? (
@@ -43,7 +55,7 @@ export function AboutQuoteModal({ className }: AboutQuoteModalProps) {
           className="fixed inset-0 z-[120] flex items-center justify-center bg-[#101828]/72 px-4 py-6 backdrop-blur-sm"
           role="dialog"
           aria-modal="true"
-          aria-label="提交工业炉报价需求"
+          aria-label={title}
           onClick={() => setIsOpen(false)}
         >
           <div
@@ -60,10 +72,10 @@ export function AboutQuoteModal({ className }: AboutQuoteModalProps) {
             </button>
             <div className="p-4 sm:p-5 lg:p-6">
               <ProductLeadForm
-                anchorId="about-quote-form"
-                title="提交工业炉报价需求"
-                description="请尽量填写工件材质、尺寸、温度、热处理工艺、产能需求和现场条件。"
-                submitLabel="提交报价需求"
+                anchorId="quote-modal-form"
+                title={title}
+                description={description}
+                submitLabel={submitLabel}
               />
             </div>
           </div>

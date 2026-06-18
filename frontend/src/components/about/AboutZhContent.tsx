@@ -2,7 +2,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 import { JsonLd } from '@/components/JsonLd';
-import { AboutQuoteModal } from '@/components/about/AboutQuoteModal';
+import { QuoteModalButton } from '@/components/lead/QuoteModalButton';
 import { Breadcrumb } from '@/components/layout/Breadcrumb';
 import { SITE_LOGO_IMAGE, SITE_URL } from '@/lib/seo/config';
 import { absoluteUrl } from '@/lib/seo/metadata';
@@ -43,7 +43,7 @@ const statItems = [
 
 const aboutPhotos = [
   {
-    src: '/images/about/about-office-interior.png',
+    src: '/images/about/about-office-interior.jpg',
     alt: '苏能工业炉研发设计办公区',
     caption: '办公与研发',
     className: 'lg:col-span-2 lg:row-span-2',
@@ -59,7 +59,7 @@ const aboutPhotos = [
     sizes: '(min-width: 1024px) 25vw, 100vw',
   },
   {
-    src: '/images/about/about-furnace-fabrication.png',
+    src: '/images/about/about-furnace-fabrication.jpg',
     alt: '苏能热处理工业炉炉体制造现场',
     caption: '炉体制造现场',
     className: '',
@@ -75,7 +75,7 @@ const aboutPhotos = [
     sizes: '(min-width: 1024px) 50vw, 100vw',
   },
   {
-    src: '/images/about/about-staff-dormitory.png',
+    src: '/images/about/about-staff-dormitory.jpg',
     alt: '苏能工业炉生产基地员工宿舍',
     caption: '员工生活',
     className: 'lg:hidden',
@@ -420,7 +420,7 @@ export function AboutZhContent() {
                 ))}
               </div>
               <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-                <AboutQuoteModal
+                <QuoteModalButton
                   className="inline-flex min-h-[44px] items-center justify-center rounded-[4px] bg-[#c51624] px-5 text-[15px] font-semibold text-white transition hover:bg-[#a90f1b]"
                 />
                 <Link
@@ -433,7 +433,7 @@ export function AboutZhContent() {
             </div>
             <div className="relative min-h-[300px] lg:min-h-[540px]">
               <Image
-                src="/images/about/about-factory-aerial.png"
+                src="/images/about/about-factory-aerial.jpg"
                 alt="苏能工业炉江苏泰州生产基地航拍外景"
                 fill
                 priority
@@ -770,7 +770,7 @@ export function AboutZhContent() {
                   将工件、温度、工艺、产能和现场条件提交给苏能，技术人员可先做炉型方向和配置边界判断。
                 </p>
                 <div className="mt-6 flex flex-col gap-3 sm:flex-row">
-                  <AboutQuoteModal
+                  <QuoteModalButton
                     className="inline-flex min-h-[44px] items-center justify-center rounded-[4px] bg-[#c51624] px-5 text-[15px] font-semibold text-white transition hover:bg-[#a90f1b]"
                   />
                   <Link

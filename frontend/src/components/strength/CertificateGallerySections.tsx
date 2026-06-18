@@ -215,7 +215,7 @@ export function CertificateGallerySections({
             </h2>
             <div className="mt-6 grid gap-3 md:grid-cols-2">
               <Link
-                href={`/${locale}/about/suneng-profile`}
+                href={`/${locale}/about`}
                 className="inline-flex min-h-[46px] items-center justify-between rounded-[4px] bg-[#c51624] px-5 text-[15px] font-semibold text-white transition hover:bg-[#a90f1b]"
               >
                 <span>了解苏能工业炉资质、产品与服务范围</span>
