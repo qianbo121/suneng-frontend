@@ -9,6 +9,7 @@ import { Footer } from '@/components/layout/Footer';
 import { Header } from '@/components/layout/Header';
 import { routing } from '@/i18n/routing';
 import { getOrganizationJsonLd, getWebsiteJsonLd } from '@/lib/seo/jsonld';
+import type { Locale } from '@/types/site';
 
 type LocaleLayoutProps = {
   children: ReactNode;
@@ -29,6 +30,7 @@ export default async function LocaleLayout({ children, params }: LocaleLayoutPro
   }
 
   const messages = await getMessages({ locale });
+  const currentLocale = locale as Locale;
   const htmlLang = locale === 'en' ? 'en' : 'zh-CN';
 
   return (
@@ -44,8 +46,8 @@ export default async function LocaleLayout({ children, params }: LocaleLayoutPro
             <FloatToolbar locale={locale} />
           </div>
         </NextIntlClientProvider>
-        <JsonLd id="organization-jsonld" data={getOrganizationJsonLd()} />
-        <JsonLd id="website-jsonld" data={getWebsiteJsonLd()} />
+        <JsonLd id="organization-jsonld" data={getOrganizationJsonLd(currentLocale)} />
+        <JsonLd id="website-jsonld" data={getWebsiteJsonLd(currentLocale)} />
       </body>
     </html>
   );

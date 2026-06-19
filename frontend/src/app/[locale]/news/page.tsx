@@ -25,16 +25,36 @@ type NewsPageProps = {
   }>;
 };
 
+const newsSeoCopy = {
+  zh: NEWS_SEO,
+  en: {
+    title: 'Resources | Furnace Selection, Quote Parameters & Heat-Treatment Notes — Suneng',
+    description:
+      'Furnace selection guides, quote-parameter checklists, retrofit resources and company updates from Suneng Industrial Furnace.',
+    keywords: [
+      'industrial furnace resources',
+      'furnace selection',
+      'heat treatment quote parameters',
+      'furnace retrofit',
+    ],
+  },
+} satisfies Record<Locale, {
+  title: string;
+  description: string;
+  keywords: string[];
+}>;
+
 export async function generateMetadata({ params }: NewsPageProps) {
   const { locale } = await params;
   const currentLocale = (locale === 'en' ? 'en' : 'zh') as Locale;
+  const seo = newsSeoCopy[currentLocale];
 
   return buildMetadata({
-    title: NEWS_SEO.title,
-    description: NEWS_SEO.description,
+    title: seo.title,
+    description: seo.description,
     path: `/${currentLocale}/news`,
     pageKey: 'news',
-    keywords: NEWS_SEO.keywords,
+    keywords: seo.keywords,
     image: NEWS_LIST_HERO_IMAGE,
     alternateLocales: {
       'zh-CN': '/zh/news',
@@ -70,7 +90,7 @@ export default async function NewsPage({ params, searchParams }: NewsPageProps) 
   const contactHref = '/zh/contact';
   const newsJsonLd = cleanObject([
     getBreadcrumbJsonLd([
-      { name: '首页', url: `/${currentLocale}` },
+      { name: currentLocale === 'en' ? 'Home' : '首页', url: `/${currentLocale}` },
       { name: title, url: `/${currentLocale}/news` },
     ]),
     {

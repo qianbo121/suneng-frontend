@@ -10,6 +10,7 @@ import {
   SITE_URL,
 } from '@/lib/seo/config';
 import { absoluteUrl } from '@/lib/seo/metadata';
+import type { Locale } from '@/types/site';
 
 export type ProductDetailJsonLdInput = {
   slug: string;
@@ -66,6 +67,10 @@ const PRODUCT_SCHEMA_ORDER = [
 const productBySlug = new Map(STATIC_PRODUCTS.map((product) => [product.slug, product]));
 const LOCAL_BUSINESS_URL = 'https://www.jssngyl.cn/';
 const LOCAL_BUSINESS_ID = `${LOCAL_BUSINESS_URL}#organization`;
+const HOME_PAGE_EN_DESCRIPTION =
+  'Jiangsu Suneng Industrial Furnace (founded 2006, Taizhou, Jiangsu) custom-engineers heat-treatment furnaces — box, bogie-hearth, pit, mesh-belt, roller-hearth and pusher furnaces, continuous heat-treatment lines, plus furnace energy-saving retrofit and overhaul.';
+const PRODUCT_COLLECTION_EN_DESCRIPTION =
+  "Browse Suneng's heat-treatment furnaces and custom industrial furnaces: box, bogie-hearth, pit, bell-type, mesh-belt, roller-hearth, pusher and rotary-hearth furnaces, plus continuous heat-treatment lines.";
 const PRODUCT_JSON_LD_DESCRIPTIONS: Partial<Record<string, string>> = {
   'roller-mesh-belt-line':
     '托辊型网带式电阻炉生产线适用于小型零件、紧固件、标准件和批量连续热处理件的淬火、回火、正火、退火等工艺，网带宽度、运行速度、加热区长度和冷却方式等参数以最终技术方案为准。',
@@ -97,6 +102,14 @@ function productUrl(slug: string, path?: string) {
 
 function webpageId(url: string) {
   return `${url}#webpage`;
+}
+
+function isEnglishLocale(locale: Locale) {
+  return locale === 'en';
+}
+
+function schemaLanguage(locale: Locale) {
+  return isEnglishLocale(locale) ? 'en-US' : 'zh-CN';
 }
 
 export function cleanObject<T>(value: T): T {
@@ -142,14 +155,17 @@ function absoluteImages(image?: string | string[]) {
   return resolved.length ? resolved : undefined;
 }
 
-export function getOrganizationJsonLd() {
+export function getOrganizationJsonLd(locale: Locale = 'zh') {
+  const isEnglish = isEnglishLocale(locale);
+  const englishCompanyName = 'Jiangsu Suneng Industrial Furnace Co., Ltd.';
+
   return cleanObject({
     '@context': 'https://schema.org',
     '@type': 'LocalBusiness',
     '@id': LOCAL_BUSINESS_ID,
-    name: COMPANY_NAME,
-    legalName: COMPANY_NAME,
-    alternateName: ['Jiangsu Suneng Industrial Furnace Co., Ltd.', ...ALTERNATE_NAMES],
+    name: isEnglish ? englishCompanyName : COMPANY_NAME,
+    legalName: isEnglish ? englishCompanyName : COMPANY_NAME,
+    alternateName: isEnglish ? [COMPANY_NAME, ...ALTERNATE_NAMES] : [englishCompanyName, ...ALTERNATE_NAMES],
     url: LOCAL_BUSINESS_URL,
     logo: SITE_LOGO_IMAGE ? absoluteUrl(SITE_LOGO_IMAGE) : undefined,
     telephone: '+86-130-5298-6814',
@@ -161,9 +177,9 @@ export function getOrganizationJsonLd() {
     },
     address: {
       '@type': 'PostalAddress',
-      streetAddress: '张甸蔡官工业区',
-      addressLocality: '姜堰区',
-      addressRegion: '江苏省泰州市',
+      streetAddress: isEnglish ? 'Cai Guan Industrial Zone, Zhangdian, Jiangyan District' : '张甸蔡官工业区',
+      addressLocality: isEnglish ? 'Taizhou' : '姜堰区',
+      addressRegion: isEnglish ? 'Jiangsu' : '江苏省泰州市',
       addressCountry: 'CN',
       postalCode: '225500',
     },
@@ -185,71 +201,106 @@ export function getOrganizationJsonLd() {
         '@type': 'Place',
         name: 'Worldwide',
       },
-      {
-        '@type': 'Place',
-        name: '全球',
-      },
+      ...(isEnglish
+        ? []
+        : [
+            {
+              '@type': 'Place',
+              name: '全球',
+            },
+          ]),
     ],
-    description: DEFAULT_DESCRIPTION,
+    description: isEnglish
+      ? 'Jiangsu Suneng Industrial Furnace, founded 2006 in Taizhou, Jiangsu, is a National High-Tech Enterprise specializing in custom heat-treatment furnace design and manufacturing, with a 14,700 m² production base.'
+      : DEFAULT_DESCRIPTION,
     hasCredential: [
       {
         '@type': 'EducationalOccupationalCredential',
-        name: '国家高新技术企业',
+        name: isEnglish ? 'National High-Tech Enterprise' : '国家高新技术企业',
         identifier: 'GR202432008987',
       },
       {
         '@type': 'EducationalOccupationalCredential',
-        name: 'ISO 9001 质量管理体系认证',
+        name: isEnglish ? 'ISO 9001 Quality Management System certification' : 'ISO 9001 质量管理体系认证',
       },
       {
         '@type': 'EducationalOccupationalCredential',
-        name: 'ISO 14001 环境管理体系认证',
+        name: isEnglish ? 'ISO 14001 Environmental Management System certification' : 'ISO 14001 环境管理体系认证',
       },
       {
         '@type': 'EducationalOccupationalCredential',
-        name: 'ISO 45001 职业健康安全管理体系认证',
+        name: isEnglish
+          ? 'ISO 45001 Occupational Health and Safety Management System certification'
+          : 'ISO 45001 职业健康安全管理体系认证',
       },
     ],
-    knowsAbout: [
-      '工业炉',
-      '热处理炉',
-      '工业电炉',
-      '热处理设备',
-      '台车炉',
-      '箱式炉',
-      '井式炉',
-      '罩式炉',
-      '网带炉',
-      '辊底炉',
-      '推杆炉',
-      '转底炉',
-      '热处理生产线',
-      '退火生产线',
-      '连续式热处理生产线',
-      '退火（Annealing）',
-      '回火（Tempering）',
-      '正火（Normalizing）',
-      '淬火（Quenching）',
-      '非标工业炉定制',
-      '非标热处理设备',
-    ],
+    knowsAbout: isEnglish
+      ? [
+          'industrial furnace',
+          'heat treatment furnace',
+          'industrial electric furnace',
+          'heat-treatment equipment',
+          'bogie-hearth furnace',
+          'box furnace',
+          'pit furnace',
+          'bell furnace',
+          'mesh-belt furnace',
+          'roller-hearth furnace',
+          'pusher furnace',
+          'rotary-hearth furnace',
+          'heat-treatment line',
+          'annealing line',
+          'continuous heat-treatment line',
+          'annealing',
+          'tempering',
+          'normalizing',
+          'quenching',
+          'custom industrial furnace',
+          'custom heat-treatment equipment',
+        ]
+      : [
+          '工业炉',
+          '热处理炉',
+          '工业电炉',
+          '热处理设备',
+          '台车炉',
+          '箱式炉',
+          '井式炉',
+          '罩式炉',
+          '网带炉',
+          '辊底炉',
+          '推杆炉',
+          '转底炉',
+          '热处理生产线',
+          '退火生产线',
+          '连续式热处理生产线',
+          '退火（Annealing）',
+          '回火（Tempering）',
+          '正火（Normalizing）',
+          '淬火（Quenching）',
+          '非标工业炉定制',
+          '非标热处理设备',
+        ],
   });
 }
 
-export function getWebsiteJsonLd() {
+export function getWebsiteJsonLd(locale: Locale = 'zh') {
+  const isEnglish = isEnglishLocale(locale);
+
   return cleanObject({
     '@context': 'https://schema.org',
     '@type': 'WebSite',
     '@id': `${SITE_URL}/#website`,
     url: `${SITE_URL}/`,
-    name: SITE_NAME,
-    alternateName: `${SHORT_NAME}官网`,
-    inLanguage: 'zh-CN',
+    name: isEnglish ? 'Jiangsu Suneng Industrial Furnace Co., Ltd.' : SITE_NAME,
+    alternateName: isEnglish ? 'Suneng Industrial Furnace' : `${SHORT_NAME}官网`,
+    inLanguage: schemaLanguage(locale),
     publisher: { '@id': LOCAL_BUSINESS_ID },
   });
 }
 
-export function getHomePageJsonLd(path = '/') {
+export function getHomePageJsonLd(path = '/', locale: Locale = 'zh') {
+  const isEnglish = isEnglishLocale(locale);
   const pageUrl = absoluteUrl(path);
 
   return cleanObject({
@@ -257,12 +308,14 @@ export function getHomePageJsonLd(path = '/') {
     '@type': 'WebPage',
     '@id': webpageId(pageUrl),
     url: pageUrl,
-    name: '江苏苏能工业炉有限公司｜工业炉与热处理设备厂家',
-    description: DEFAULT_DESCRIPTION,
+    name: isEnglish
+      ? 'Jiangsu Suneng Industrial Furnace Co., Ltd. | Industrial Furnace & Heat-Treatment Equipment Manufacturer'
+      : '江苏苏能工业炉有限公司｜工业炉与热处理设备厂家',
+    description: isEnglish ? HOME_PAGE_EN_DESCRIPTION : DEFAULT_DESCRIPTION,
     isPartOf: { '@id': `${SITE_URL}/#website` },
     about: { '@id': LOCAL_BUSINESS_ID },
     mainEntity: { '@id': LOCAL_BUSINESS_ID },
-    inLanguage: 'zh-CN',
+    inLanguage: schemaLanguage(locale),
   });
 }
 
@@ -279,7 +332,8 @@ export function getBreadcrumbJsonLd(items: Array<{ name: string; url: string }>)
   });
 }
 
-export function getProductCollectionJsonLd(path = '/products') {
+export function getProductCollectionJsonLd(path = '/products', locale: Locale = 'zh') {
+  const isEnglish = isEnglishLocale(locale);
   const pageUrl = absoluteUrl(path);
   const products = PRODUCT_SCHEMA_ORDER.map((slug) => productBySlug.get(slug)).filter(Boolean);
   const itemListId = `${pageUrl}#itemlist`;
@@ -290,13 +344,16 @@ export function getProductCollectionJsonLd(path = '/products') {
       '@type': 'CollectionPage',
       '@id': webpageId(pageUrl),
       url: pageUrl,
-      name: '产品中心｜工业热处理设备与非标工业炉定制',
-      description:
-        '苏能工业炉产品中心展示周期式、连续式热处理炉及热处理生产线等工业热处理设备，支持按工艺需求非标定制。',
+      name: isEnglish
+        ? 'Product Center | Heat-Treatment Equipment & Custom Industrial Furnaces'
+        : '产品中心｜工业热处理设备与非标工业炉定制',
+      description: isEnglish
+        ? PRODUCT_COLLECTION_EN_DESCRIPTION
+        : '苏能工业炉产品中心展示周期式、连续式热处理炉及热处理生产线等工业热处理设备，支持按工艺需求非标定制。',
       isPartOf: { '@id': `${SITE_URL}/#website` },
       about: { '@id': LOCAL_BUSINESS_ID },
       mainEntity: { '@id': itemListId },
-      inLanguage: 'zh-CN',
+      inLanguage: schemaLanguage(locale),
     },
     {
       '@context': 'https://schema.org',
@@ -308,44 +365,45 @@ export function getProductCollectionJsonLd(path = '/products') {
         return {
           '@type': 'ListItem',
           position: index + 1,
-          name: product!.name.zh,
+          name: product!.name[locale],
           url,
           item: {
             '@type': 'ProductModel',
-            name: product!.name.zh,
+            name: product!.name[locale],
             url,
           },
         };
       }),
     },
     getBreadcrumbJsonLd([
-      { name: '首页', url: '/' },
-      { name: '产品中心', url: path },
+      { name: isEnglish ? 'Home' : '首页', url: isEnglish ? '/en' : '/' },
+      { name: isEnglish ? 'Product Center' : '产品中心', url: path },
     ]),
   ]);
 }
 
-export function getProductDetailJsonLd(product: ProductDetailJsonLdInput) {
+export function getProductDetailJsonLd(product: ProductDetailJsonLdInput, locale: Locale = 'zh') {
+  const isEnglish = isEnglishLocale(locale);
   const pageUrl = productUrl(product.slug, product.path);
   const images = absoluteImages(product.image);
-  const description = PRODUCT_JSON_LD_DESCRIPTIONS[product.slug] || product.description;
+  const description = isEnglish ? product.description : PRODUCT_JSON_LD_DESCRIPTIONS[product.slug] || product.description;
 
   return cleanObject([
     {
       '@context': 'https://schema.org',
       '@type': 'Product',
-      name: product.slug === 'trolley-furnace' ? '台车式热处理炉' : product.name,
+      name: !isEnglish && product.slug === 'trolley-furnace' ? '台车式热处理炉' : product.name,
       description,
       brand: {
         '@type': 'Brand',
-        name: SHORT_NAME,
+        name: isEnglish ? 'Suneng Industrial Furnace' : SHORT_NAME,
       },
       manufacturer: {
         '@type': 'Organization',
-        name: COMPANY_NAME,
+        name: isEnglish ? 'Jiangsu Suneng Industrial Furnace Co., Ltd.' : COMPANY_NAME,
         url: LOCAL_BUSINESS_URL,
       },
-      category: '工业炉 / 热处理炉',
+      category: isEnglish ? 'Industrial Furnace / Heat-Treatment Furnace' : '工业炉 / 热处理炉',
       url: pageUrl,
       image: images,
     },
@@ -357,17 +415,17 @@ export function getProductDetailJsonLd(product: ProductDetailJsonLdInput) {
       name: product.name,
       description: product.description,
       isPartOf: { '@id': `${SITE_URL}/#website` },
-      inLanguage: 'zh-CN',
+      inLanguage: schemaLanguage(locale),
     },
     getBreadcrumbJsonLd([
-      { name: '首页', url: '/' },
-      { name: '产品中心', url: product.path?.split('/detail/')[0] || '/products' },
+      { name: isEnglish ? 'Home' : '首页', url: isEnglish ? '/en' : '/' },
+      { name: isEnglish ? 'Product Center' : '产品中心', url: product.path?.split('/detail/')[0] || '/products' },
       { name: product.name, url: product.path || `/products/detail/${product.slug}` },
     ]),
   ]);
 }
 
-export function getArticleJsonLd(article: ArticleJsonLdInput) {
+export function getArticleJsonLd(article: ArticleJsonLdInput, locale: Locale = 'zh') {
   const pageUrl = absoluteUrl(article.path || `/news/${article.slug}`);
   const dateModified = article.dateModified || article.datePublished;
 
@@ -382,7 +440,7 @@ export function getArticleJsonLd(article: ArticleJsonLdInput) {
     author: { '@id': LOCAL_BUSINESS_ID },
     publisher: { '@id': LOCAL_BUSINESS_ID },
     mainEntityOfPage: pageUrl,
-    inLanguage: 'zh-CN',
+    inLanguage: schemaLanguage(locale),
   });
 }
 

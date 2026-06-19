@@ -175,7 +175,7 @@ const commonIndustries: StaticProductIndustry[] = [
   { title: '科研院所', text: '实验与工艺验证' },
 ];
 
-const imagesBySlug: Record<string, { gallery: string[]; configs: string[] }> = {
+export const imagesBySlug: Record<string, { gallery: string[]; configs: string[] }> = {
   'box-furnace': {
     gallery: [
       '/images/products/box-furnace/gallery/box-01.png',

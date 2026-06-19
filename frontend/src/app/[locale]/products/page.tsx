@@ -20,18 +20,40 @@ type ProductsPageProps = {
 
 const PRODUCT_HERO_IMAGE = '/images/products/product-list-hero.png';
 
+const productSeoCopy = {
+  zh: PRODUCT_COLLECTION_SEO,
+  en: {
+    title: 'Product Center | Heat-Treatment Furnaces & Custom Industrial Furnaces — Suneng',
+    description:
+      "Browse Suneng's heat-treatment furnaces and custom industrial furnaces: box, bogie-hearth, pit, bell-type, mesh-belt, roller-hearth, pusher and rotary-hearth furnaces, plus continuous heat-treatment lines.",
+    keywords: [
+      'heat treatment furnace',
+      'industrial furnace',
+      'box furnace',
+      'bogie-hearth furnace',
+      'mesh-belt furnace',
+      'continuous heat-treatment line',
+    ],
+  },
+} satisfies Record<Locale, {
+  title: string;
+  description: string;
+  keywords: string[];
+}>;
+
 export const revalidate = 3600;
 
 export async function generateMetadata({ params }: ProductsPageProps): Promise<Metadata> {
   const { locale } = await params;
   const currentLocale = (locale === 'en' ? 'en' : 'zh') as Locale;
+  const seo = productSeoCopy[currentLocale];
 
   return buildMetadata({
-    title: PRODUCT_COLLECTION_SEO.title,
-    description: PRODUCT_COLLECTION_SEO.description,
+    title: seo.title,
+    description: seo.description,
     path: `/${currentLocale}/products`,
     pageKey: 'products',
-    keywords: PRODUCT_COLLECTION_SEO.keywords,
+    keywords: seo.keywords,
     image: PRODUCT_HERO_IMAGE,
     alternateLocales: {
       'zh-CN': '/zh/products',
@@ -47,7 +69,10 @@ export default async function ProductsPage({ params }: ProductsPageProps) {
 
   return (
     <main className="bg-white text-[#202020]">
-      <JsonLd id={`product-collection-jsonld-${currentLocale}`} data={getProductCollectionJsonLd(`/${currentLocale}/products`)} />
+      <JsonLd
+        id={`product-collection-jsonld-${currentLocale}`}
+        data={getProductCollectionJsonLd(`/${currentLocale}/products`, currentLocale)}
+      />
       <PageBanner
         locale={locale}
         title={currentLocale === 'en' ? 'Product Center' : '产品中心'}
