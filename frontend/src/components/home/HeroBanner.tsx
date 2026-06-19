@@ -154,6 +154,10 @@ export function HeroBanner({ locale, items, partners }: HeroBannerProps) {
   const displayTitle = locale === 'zh' ? '江苏苏能工业炉有限公司' : banner.title[locale];
   const displaySubtitle = locale === 'zh' ? heroDescription : banner.subtitle[locale];
   const marqueeLogos = [...heroPartnerLogos, ...heroPartnerLogos];
+  const heroPartnerPanelClass = [
+    'relative z-30 mx-auto w-[calc(100%-28px)] max-w-[1295px] overflow-hidden rounded-[18px] border border-[#ebedf1] bg-white shadow-[0_20px_46px_rgba(15,23,42,0.11)] md:w-[calc(100%-40px)]',
+    locale === 'en' ? '-mt-[28px] md:-mt-[40px]' : '-mt-[60px] md:-mt-[74px]',
+  ].join(' ');
 
   return (
     <section className="hero-banner relative bg-white">
@@ -253,7 +257,7 @@ export function HeroBanner({ locale, items, partners }: HeroBannerProps) {
         initial={{ y: 16, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.72, ease: heroMotionEase, delay: 0.52 }}
-        className="relative z-30 mx-auto -mt-[60px] w-[calc(100%-28px)] max-w-[1295px] overflow-hidden rounded-[18px] border border-[#ebedf1] bg-white shadow-[0_20px_46px_rgba(15,23,42,0.11)] md:-mt-[74px] md:w-[calc(100%-40px)]"
+        className={heroPartnerPanelClass}
       >
         <div className="flex min-h-[112px] items-center overflow-x-auto px-[14px] py-[12px] md:overflow-visible md:px-[24px]">
           <div className="flex min-w-[156px] shrink-0 items-center border-r border-[#e2e8f3] pr-[15px]">
