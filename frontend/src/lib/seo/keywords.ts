@@ -1,4 +1,4 @@
-import { DEFAULT_KEYWORDS, PAGE_KEYWORDS } from '@/lib/seo/keyword-data';
+import { DEFAULT_KEYWORDS, EN_DEFAULT_KEYWORDS, EN_PAGE_KEYWORDS, PAGE_KEYWORDS } from '@/lib/seo/keyword-data';
 
 const KEYWORD_SPLIT_PATTERN = /[，,、;；\n\r]+/;
 
@@ -29,8 +29,11 @@ export function mergeKeywords(...groups: Array<string[] | undefined>) {
   return merged;
 }
 
-export function buildKeywords(pageKey?: string, keywords?: string | string[] | null) {
-  const pageKeywords = pageKey ? PAGE_KEYWORDS[pageKey] : undefined;
+type KeywordLocale = 'zh' | 'en';
 
-  return mergeKeywords(normalizeKeywords(keywords), pageKeywords, DEFAULT_KEYWORDS).slice(0, 8);
+export function buildKeywords(pageKey?: string, keywords?: string | string[] | null, locale: KeywordLocale = 'zh') {
+  const pageKeywords = pageKey ? (locale === 'en' ? EN_PAGE_KEYWORDS[pageKey] : PAGE_KEYWORDS[pageKey]) : undefined;
+  const defaultKeywords = locale === 'en' ? EN_DEFAULT_KEYWORDS : DEFAULT_KEYWORDS;
+
+  return mergeKeywords(normalizeKeywords(keywords), pageKeywords, defaultKeywords).slice(0, 8);
 }

@@ -53,11 +53,22 @@ export function absoluteUrl(path = '/') {
   return `${SITE_URL}${cleanPath.replace(/\/+$/, '')}${query ? `?${query}` : ''}${hash ? `#${hash}` : ''}`;
 }
 
-export function buildPageTitle(title?: string) {
+function resolveMetadataLocale(locale: string | undefined, path: string): 'zh' | 'en' {
+  const normalizedLocale = locale?.trim();
+  const pathLocale = path.trim().match(/^\/?(zh|en)(?:\/|$)/)?.[1];
+
+  return normalizedLocale?.toLowerCase().startsWith('en') || pathLocale === 'en' ? 'en' : 'zh';
+}
+
+export function buildPageTitle(title?: string, locale: 'zh' | 'en' = 'zh') {
   const cleaned = title?.trim();
 
   if (!cleaned || cleaned === DEFAULT_TITLE) {
     return DEFAULT_TITLE;
+  }
+
+  if (locale === 'en') {
+    return /suneng/i.test(cleaned) ? cleaned : `${cleaned} | Suneng Industrial Furnace`;
   }
 
   return `${cleaned}｜苏能工业炉`;
@@ -105,7 +116,8 @@ function resolveOpenGraphLocale(locale: string | undefined, path: string) {
 }
 
 export function buildMetadata(options: BuildMetadataOptions): Metadata {
-  const title = buildPageTitle(options.title);
+  const metadataLocale = resolveMetadataLocale(options.locale, options.path);
+  const title = buildPageTitle(options.title, metadataLocale);
   const description = buildDescription(options.description);
   const canonical = absoluteUrl(options.path);
   const image = buildImageMetadata(options.image);
@@ -136,7 +148,7 @@ export function buildMetadata(options: BuildMetadataOptions): Metadata {
       absolute: title,
     },
     description,
-    keywords: buildKeywords(options.pageKey, options.keywords),
+    keywords: buildKeywords(options.pageKey, options.keywords, metadataLocale),
     metadataBase: new URL(SITE_URL),
     alternates: {
       canonical,
