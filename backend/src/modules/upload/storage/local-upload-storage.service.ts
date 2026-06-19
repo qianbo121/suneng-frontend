@@ -24,21 +24,33 @@ const ALLOWED_CONTENT_TYPES = new Set([
   'image/webp',
   'application/pdf',
 ]);
+const EXTENSION_BY_CONTENT_TYPE = new Map([
+  ['image/jpeg', '.jpg'],
+  ['image/png', '.png'],
+  ['image/gif', '.gif'],
+  ['image/webp', '.webp'],
+  ['application/pdf', '.pdf'],
+]);
 const MAX_IMAGE_WIDTH = 1200;
 const WEBP_QUALITY = 80;
+
+type DetectedUploadType = {
+  mime: string;
+  extension: string;
+};
 
 @Injectable()
 export class LocalUploadStorageService implements UploadStorage {
   constructor(private readonly configService: ConfigService) {}
 
   async save(file: Express.Multer.File): Promise<string> {
-    await this.assertAllowedContentType(file);
+    const detectedType = await this.assertAllowedContentType(file);
     const now = new Date();
     const year = String(now.getFullYear());
     const month = String(now.getMonth() + 1).padStart(2, '0');
     const uploadRoot = this.configService.get<string>('uploadRoot') ?? 'uploads';
     const dirPath = path.join(process.cwd(), uploadRoot, year, month);
-    const processedFile = await this.processImage(file);
+    const processedFile = await this.processImage(file, detectedType);
     const fileName = `${Date.now()}-${randomUUID()}${processedFile.extension}`;
     const filePath = path.join(dirPath, fileName);
 
@@ -58,21 +70,31 @@ export class LocalUploadStorageService implements UploadStorage {
   // Verify the real content type from magic bytes; the client-supplied
   // mimetype is forgeable. Runs on the full in-memory buffer (memoryStorage),
   // so it is reliable here (unlike multer's fileFilter).
-  private async assertAllowedContentType(file: Express.Multer.File): Promise<void> {
+  private async assertAllowedContentType(file: Express.Multer.File): Promise<DetectedUploadType> {
     const detected = await fromBuffer(file.buffer);
     if (!detected || !ALLOWED_CONTENT_TYPES.has(detected.mime)) {
       throw new BadRequestException('File content does not match an allowed type');
     }
+
+    const extension = EXTENSION_BY_CONTENT_TYPE.get(detected.mime);
+    if (!extension) {
+      throw new BadRequestException('File content does not match an allowed type');
+    }
+
+    return {
+      mime: detected.mime,
+      extension,
+    };
   }
 
   private async processImage(
     file: Express.Multer.File,
+    detectedType: DetectedUploadType,
   ): Promise<{ buffer: Buffer; extension: string }> {
-    if (!COMPRESSIBLE_IMAGE_MIME_TYPES.has(file.mimetype)) {
-      const extension = path.extname(file.originalname).toLowerCase() || '';
+    if (!COMPRESSIBLE_IMAGE_MIME_TYPES.has(detectedType.mime)) {
       return {
         buffer: file.buffer,
-        extension,
+        extension: detectedType.extension,
       };
     }
 
