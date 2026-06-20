@@ -5,6 +5,7 @@ import type { ReactNode } from 'react';
 
 import { JsonLd } from '@/components/JsonLd';
 import { Breadcrumb } from '@/components/layout/Breadcrumb';
+import { QuoteModalButton } from '@/components/lead/QuoteModalButton';
 import { getStaticProductBySlug } from '@/constants/static-products';
 import { cleanObject, getBreadcrumbJsonLd, getFaqJsonLd } from '@/lib/seo/jsonld';
 import { buildMetadata } from '@/lib/seo/metadata';
@@ -462,17 +463,15 @@ export default async function JiangsuIndustrialFurnaceManufacturerPage({ params 
             </div>
 
             <div className="mt-9 flex flex-wrap gap-4">
-              <a
-                href={contactPath}
+              <QuoteModalButton
+                label="获取报价方案"
                 className="inline-flex min-h-[46px] items-center justify-center rounded-[4px] bg-[#c51624] px-6 text-[15px] font-semibold text-white transition hover:bg-[#a90f1b]"
-              >
-                提交参数获取方案
-              </a>
+              />
               <a
-                href={productsPath}
+                href={quoteParamsPath}
                 className="inline-flex min-h-[46px] items-center justify-center rounded-[4px] border border-white/46 px-6 text-[15px] font-semibold text-white transition hover:border-white hover:bg-white/10"
               >
-                查看产品中心
+                查看报价需要哪些参数
               </a>
             </div>
           </div>
@@ -517,9 +516,9 @@ export default async function JiangsuIndustrialFurnaceManufacturerPage({ params 
             </p>
             <a
               href={quoteParamsPath}
-              className="mt-6 inline-flex min-h-[44px] items-center justify-center rounded-[4px] bg-[#c51624] px-5 text-[14px] font-semibold text-white transition hover:bg-[#a90f1b]"
+              className="mt-6 inline-flex min-h-[44px] items-center justify-center rounded-[4px] border border-[#c51624] px-5 text-[14px] font-semibold text-[#c51624] transition hover:bg-[#fff5f5]"
             >
-              查看《工业炉报价需要哪些参数》
+              查看报价需要哪些参数
             </a>
           </div>
           <div className="grid gap-3 sm:grid-cols-2">
@@ -711,18 +710,16 @@ export default async function JiangsuIndustrialFurnaceManufacturerPage({ params 
             </p>
             <address className="mt-6 flex flex-wrap gap-x-8 gap-y-3 text-[15px] leading-[1.8] text-white/82 not-italic">
               <span>电话 / 微信：+86-130-5298-6814</span>
-              <span>邮箱：jssngyl@outlook.com</span>
+              <span>邮箱：997518512@qq.com</span>
             </address>
           </div>
           <div className="flex flex-wrap gap-4 lg:justify-end">
+            <QuoteModalButton
+              label="获取报价方案"
+              className="inline-flex min-h-[46px] items-center justify-center rounded-[4px] bg-[#c51624] px-6 text-[15px] font-semibold text-white transition hover:bg-[#a90f1b]"
+            />
             <a
               href={contactPath}
-              className="inline-flex min-h-[46px] items-center justify-center rounded-[4px] bg-[#c51624] px-6 text-[15px] font-semibold text-white transition hover:bg-[#a90f1b]"
-            >
-              提交参数获取方案
-            </a>
-            <a
-              href="tel:+8613052986814"
               className="inline-flex min-h-[46px] items-center justify-center rounded-[4px] border border-white/46 px-6 text-[15px] font-semibold text-white transition hover:border-white hover:bg-white/10"
             >
               联系苏能工业炉

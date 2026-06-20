@@ -54,7 +54,8 @@ const footerCopy = {
     address: '江苏省泰州市姜堰区张甸蔡官工业区',
     wechat: '微信二维码',
     douyin: '抖音二维码',
-    email: 'jssngyl@outlook.com',
+    followUs: '关注我们，了解更多产品与解决方案',
+    email: '997518512@qq.com',
     phone: '+86-130-5298-6814',
     copyright: 'Copyright © 2025 江苏苏能工业炉有限公司 版权所有',
     icp: '苏ICP备20020318号-1',
@@ -67,7 +68,8 @@ const footerCopy = {
     address: 'Caiguan Industrial Park, Zhangdian Town, Jiangyan District, Taizhou, Jiangsu Province, China',
     wechat: 'WeChat QR',
     douyin: 'Douyin QR',
-    email: 'jssngyl@outlook.com',
+    followUs: 'Follow us for more products and solutions.',
+    email: '997518512@qq.com',
     phone: '+86-130-5298-6814',
     copyright: 'Copyright © 2025 Jiangsu Suneng Industrial Furnace Co., Ltd. All rights reserved.',
     icp: '苏ICP备20020318号-1',
@@ -187,7 +189,7 @@ function QrBlock({ copy, locale }: { copy: (typeof footerCopy)['zh'] | (typeof f
         ))}
       </div>
       <p className={`${FOOTER_TOKENS.fontClass} mt-[20px] text-[14px] leading-[1.5] text-[var(--footer-muted-color)]`}>
-        关注我们，了解更多产品与解决方案
+        {copy.followUs}
       </p>
     </div>
   );

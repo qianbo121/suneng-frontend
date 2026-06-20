@@ -3,10 +3,13 @@ import { hasLocale, NextIntlClientProvider } from 'next-intl';
 import { getMessages } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 
+import { JsonLd } from '@/components/JsonLd';
 import { FloatToolbar } from '@/components/layout/FloatToolbar';
 import { Footer } from '@/components/layout/Footer';
 import { Header } from '@/components/layout/Header';
 import { routing } from '@/i18n/routing';
+import { getOrganizationJsonLd, getWebsiteJsonLd } from '@/lib/seo/jsonld';
+import type { Locale } from '@/types/site';
 
 type LocaleLayoutProps = {
   children: ReactNode;
@@ -27,17 +30,25 @@ export default async function LocaleLayout({ children, params }: LocaleLayoutPro
   }
 
   const messages = await getMessages({ locale });
+  const currentLocale = locale as Locale;
+  const htmlLang = locale === 'en' ? 'en' : 'zh-CN';
 
   return (
-    <NextIntlClientProvider locale={locale} messages={messages}>
-      <div className="min-h-screen bg-white pb-[72px] text-neutral-900 xl:pb-0">
-        <Header locale={locale} />
-        <main className="min-h-[calc(100vh-520px)] bg-white pb-[96px] xl:pb-0">
-          {children}
-        </main>
-        <Footer locale={locale} />
-        <FloatToolbar locale={locale} />
-      </div>
-    </NextIntlClientProvider>
+    <html lang={htmlLang} suppressHydrationWarning>
+      <body>
+        <NextIntlClientProvider locale={locale} messages={messages}>
+          <div className="min-h-screen bg-white pb-[72px] text-neutral-900 xl:pb-0">
+            <Header locale={locale} />
+            <main className="min-h-[calc(100vh-520px)] bg-white">
+              {children}
+            </main>
+            <Footer locale={locale} />
+            <FloatToolbar locale={locale} />
+          </div>
+        </NextIntlClientProvider>
+        <JsonLd id="organization-jsonld" data={getOrganizationJsonLd(currentLocale)} />
+        <JsonLd id="website-jsonld" data={getWebsiteJsonLd(currentLocale)} />
+      </body>
+    </html>
   );
 }

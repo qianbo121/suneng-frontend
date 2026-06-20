@@ -6,7 +6,9 @@ import { getNewsList } from '@/lib/api/news';
 import { STATIC_PRODUCTS } from '@/constants/static-products';
 import { Locale } from '@/types/site';
 
-const sitemapLocales: Locale[] = ['zh'];
+const sitemapLocales: Locale[] = ['zh', 'en'];
+const zhOnlyLocales: Locale[] = ['zh'];
+const englishStaticPaths = new Set(['/', '/products', '/service', '/news', '/about', '/contact']);
 
 type SitemapEntry = MetadataRoute.Sitemap[number];
 
@@ -17,6 +19,19 @@ export const revalidate = 3600;
 function localizedPath(locale: Locale, path: string) {
   if (path === '/') return `/${locale}`;
   return `/${locale}${path.startsWith('/') ? path : `/${path}`}`;
+}
+
+function languageCode(locale: Locale) {
+  return locale === 'en' ? 'en-US' : 'zh-CN';
+}
+
+function routeAlternates(path: string, locales: Locale[]) {
+  return {
+    languages: {
+      ...Object.fromEntries(locales.map((locale) => [languageCode(locale), absoluteUrl(localizedPath(locale, path))])),
+      'x-default': absoluteUrl(localizedPath('zh', path)),
+    },
+  };
 }
 
 function safeLastModified(value?: string | Date) {
@@ -57,13 +72,15 @@ function collectStaticRoutes(): MetadataRoute.Sitemap {
     { path: '/contact', changeFrequency: 'monthly', priority: 0.7 },
   ];
 
-  for (const locale of sitemapLocales) {
-    for (const item of staticPaths) {
+  for (const item of staticPaths) {
+    const locales = englishStaticPaths.has(item.path) ? sitemapLocales : zhOnlyLocales;
+    for (const locale of locales) {
       routes.push(
         route(localizedPath(locale, item.path), {
           lastModified: new Date(),
           changeFrequency: item.changeFrequency,
           priority: item.priority,
+          alternates: routeAlternates(item.path, locales),
         }),
       );
     }
@@ -74,7 +91,6 @@ function collectStaticRoutes(): MetadataRoute.Sitemap {
     changeFrequency: SitemapEntry['changeFrequency'];
     priority: number;
   }> = [
-    { path: '/about/suneng-profile', changeFrequency: 'monthly', priority: 0.66 },
     { path: '/service/furnace-renovation-overhaul', changeFrequency: 'monthly', priority: 0.72 },
     { path: '/articles/gongye-lu-baojia-canshu', changeFrequency: 'monthly', priority: 0.64 },
     { path: '/articles/laojiu-rechuli-lu-daxiu-haishi-maixin', changeFrequency: 'monthly', priority: 0.64 },
@@ -90,6 +106,7 @@ function collectStaticRoutes(): MetadataRoute.Sitemap {
         lastModified: new Date(),
         changeFrequency: item.changeFrequency,
         priority: item.priority,
+        alternates: routeAlternates(item.path, zhOnlyLocales),
       }),
     );
   }
@@ -105,6 +122,7 @@ function collectProductRoutes(): MetadataRoute.Sitemap {
         changeFrequency: 'monthly',
         priority: 0.8,
         images: publicPathExists(product.image) ? [absoluteUrl(product.image)] : undefined,
+        alternates: routeAlternates(`/products/detail/${product.slug}`, sitemapLocales),
       }),
     ),
   );
@@ -130,6 +148,7 @@ async function collectNewsRoutes(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: 'monthly',
       priority: 0.6,
       images: article.coverImage && publicPathExists(article.coverImage) ? [absoluteUrl(article.coverImage)] : undefined,
+      alternates: routeAlternates(`/news/${article.slug}`, zhOnlyLocales),
     }),
   );
 }

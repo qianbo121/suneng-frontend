@@ -20,10 +20,34 @@ type HeroPartnerLogo = {
 
 const heroMotionEase: [number, number, number, number] = [0.22, 1, 0.36, 1];
 const heroStats = [
-  { value: 2006, unit: '年', label: '公司成立' },
-  { value: 5080, unit: '万元', label: '注册资本' },
-  { value: 150, unit: '+人', label: '公司员工' },
-  { value: 14700, unit: '㎡', label: '厂房面积' },
+  {
+    key: 'founded',
+    value: 2006,
+    valueText: { zh: '', en: '' },
+    unit: { zh: '年', en: '' },
+    label: { zh: '公司成立', en: 'Founded' },
+  },
+  {
+    key: 'registered-capital',
+    value: 5080,
+    valueText: { zh: '', en: 'CNY 50.8M' },
+    unit: { zh: '万元', en: '' },
+    label: { zh: '注册资本', en: 'Registered Capital' },
+  },
+  {
+    key: 'employees',
+    value: 150,
+    valueText: { zh: '', en: '' },
+    unit: { zh: '+人', en: '+' },
+    label: { zh: '公司员工', en: 'Employees' },
+  },
+  {
+    key: 'facility-area',
+    value: 14700,
+    valueText: { zh: '', en: '' },
+    unit: { zh: '㎡', en: 'm²' },
+    label: { zh: '厂房面积', en: 'Facility Area' },
+  },
 ] as const;
 const heroDescription = '工业炉单机、配套件与整线交钥匙工程一体化解决方案商';
 const heroCredentials = '国家高新技术企业';
@@ -130,6 +154,10 @@ export function HeroBanner({ locale, items, partners }: HeroBannerProps) {
   const displayTitle = locale === 'zh' ? '江苏苏能工业炉有限公司' : banner.title[locale];
   const displaySubtitle = locale === 'zh' ? heroDescription : banner.subtitle[locale];
   const marqueeLogos = [...heroPartnerLogos, ...heroPartnerLogos];
+  const heroPartnerPanelClass = [
+    'relative z-30 mx-auto w-[calc(100%-28px)] max-w-[1295px] overflow-hidden rounded-[18px] border border-[#ebedf1] bg-white shadow-[0_20px_46px_rgba(15,23,42,0.11)] md:w-[calc(100%-40px)]',
+    locale === 'en' ? '-mt-[28px] md:-mt-[40px]' : '-mt-[60px] md:-mt-[74px]',
+  ].join(' ');
 
   return (
     <section className="hero-banner relative bg-white">
@@ -189,24 +217,38 @@ export function HeroBanner({ locale, items, partners }: HeroBannerProps) {
             transition={{ duration: 0.7, ease: heroMotionEase, delay: 0.34 }}
             className="mx-auto mt-[32px] grid w-full max-w-[1120px] grid-cols-2 gap-y-5 md:mt-[36px] md:grid-cols-4 md:gap-y-0"
           >
-            {heroStats.map((item) => (
-              <div
-                key={item.label}
-                className="relative flex min-h-[92px] flex-col items-center justify-center px-0 md:min-h-[118px]"
-              >
-                <div className="flex items-start justify-center gap-[5px] leading-none">
-                  <span className="inline-flex justify-end text-[54px] font-bold leading-none tracking-tight text-[#E30613] md:text-[72px] lg:text-[78px]">
-                    <AnimatedNumber value={item.value} />
-                  </span>
-                  <span className="mt-[13px] inline-block min-w-[34px] text-left text-[22px] font-normal leading-none text-white/58 md:mt-[15px] md:text-[25px]">
-                    {item.unit}
+            {heroStats.map((item) => {
+              const statValueText = item.valueText[locale];
+              const statUnit = item.unit[locale];
+              const statLabel = item.label[locale];
+
+              return (
+                <div
+                  key={item.key}
+                  className="relative flex min-h-[92px] flex-col items-center justify-center px-0 md:min-h-[118px]"
+                >
+                  <div className="flex items-start justify-center gap-[5px] leading-none">
+                    <span
+                      className={
+                        statValueText
+                          ? 'inline-flex justify-end whitespace-nowrap text-[26px] font-bold leading-none tracking-tight text-[#E30613] md:text-[42px] lg:text-[46px]'
+                          : 'inline-flex justify-end text-[54px] font-bold leading-none tracking-tight text-[#E30613] md:text-[72px] lg:text-[78px]'
+                      }
+                    >
+                      {statValueText || <AnimatedNumber value={item.value} />}
+                    </span>
+                    {statUnit ? (
+                      <span className="mt-[13px] inline-block min-w-[34px] text-left text-[22px] font-normal leading-none text-white/58 md:mt-[15px] md:text-[25px]">
+                        {statUnit}
+                      </span>
+                    ) : null}
+                  </div>
+                  <span className="mt-[10px] text-[15px] font-normal leading-[1.5] tracking-[0.04em] text-white/58">
+                    {statLabel}
                   </span>
                 </div>
-                <span className="mt-[10px] text-[15px] font-normal leading-[1.5] tracking-[0.04em] text-white/58">
-                  {item.label}
-                </span>
-              </div>
-            ))}
+              );
+            })}
           </motion.div>
         </div>
       </div>
@@ -215,18 +257,20 @@ export function HeroBanner({ locale, items, partners }: HeroBannerProps) {
         initial={{ y: 16, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.72, ease: heroMotionEase, delay: 0.52 }}
-        className="relative z-30 mx-auto -mt-[60px] w-[calc(100%-28px)] max-w-[1295px] overflow-hidden rounded-[18px] border border-[#ebedf1] bg-white shadow-[0_20px_46px_rgba(15,23,42,0.11)] md:-mt-[74px] md:w-[calc(100%-40px)]"
+        className={heroPartnerPanelClass}
       >
         <div className="flex min-h-[112px] items-center overflow-x-auto px-[14px] py-[12px] md:overflow-visible md:px-[24px]">
           <div className="flex min-w-[156px] shrink-0 items-center border-r border-[#e2e8f3] pr-[15px]">
             <span className="mr-[16px] h-[70px] w-[3px] rounded-full bg-[#E30613]" />
             <span>
               <span className="block text-[18px] font-semibold leading-none tracking-[0.06em] text-[#202020]">
-                合作伙伴
+                {locale === 'en' ? 'Partners' : '合作伙伴'}
               </span>
-              <span className="mt-[8px] block text-[11px] font-medium uppercase leading-none tracking-[0.18em] text-[#9b9b9b]">
-                Partners
-              </span>
+              {locale === 'zh' ? (
+                <span className="mt-[8px] block text-[11px] font-medium uppercase leading-none tracking-[0.18em] text-[#9b9b9b]">
+                  Partners
+                </span>
+              ) : null}
             </span>
           </div>
           <div className="group relative min-w-0 flex-1 overflow-hidden">

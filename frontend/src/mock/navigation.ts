@@ -1,36 +1,5 @@
 import { isZhOnlyPath } from '@/lib/i18n/zh-only';
-import { PRODUCT_CENTER_CATEGORIES } from '@/constants/product-categories';
 import { Locale, NavigationItem } from '@/types/site';
-
-const productNavigationOrder = [
-  'trolley-furnace',
-  'box-furnace',
-  'pit-furnace',
-  'bell-furnace',
-  'mesh-belt-furnace',
-  'roller-hearth-furnace',
-  'pusher-furnace',
-  'rotary-hearth-furnace',
-  'roller-mesh-belt-line',
-  'copper-wire-annealing-line',
-  'annealing-solution-line',
-];
-
-export const productCenterNavigationItems: NonNullable<NavigationItem['children']> = [
-  ...productNavigationOrder
-    .map((slug) => PRODUCT_CENTER_CATEGORIES.find((item) => item.slug === slug))
-    .filter((item): item is (typeof PRODUCT_CENTER_CATEGORIES)[number] => Boolean(item))
-    .map((item) => ({
-      key: item.key,
-      href: `/products/detail/${item.slug}`,
-      label: item.name,
-    })),
-  {
-    key: 'products-continuous-heat-treatment-line',
-    href: '/solutions/continuous-heat-treatment-line',
-    label: { zh: '连续热处理生产线方案', en: 'Continuous Heat Treatment Line' },
-  },
-];
 
 export const navigationItems: NavigationItem[] = [
   {
@@ -42,7 +11,6 @@ export const navigationItems: NavigationItem[] = [
     key: 'products',
     href: '/products',
     label: { zh: '产品中心', en: 'Products' },
-    children: productCenterNavigationItems,
   },
   {
     key: 'service',
@@ -72,11 +40,6 @@ const zhOnlyNavigationChildren: Partial<Record<string, NonNullable<NavigationIte
       key: 'about-company',
       href: '/about',
       label: { zh: '公司简介', en: 'Company Profile' },
-    },
-    {
-      key: 'about-suneng-profile',
-      href: '/about/suneng-profile',
-      label: { zh: '苏能实力', en: 'Suneng Profile' },
     },
     {
       key: 'about-honors',
