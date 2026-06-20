@@ -795,9 +795,9 @@ export function AboutZhContent() {
                   <p className="text-[14px] font-semibold text-white/56">邮箱</p>
                   <a
                     className="mt-2 block break-words text-[20px] font-semibold text-white"
-                    href="mailto:jssngyl@outlook.com"
+                    href="mailto:997518512@qq.com"
                   >
-                    jssngyl@outlook.com
+                    997518512@qq.com
                   </a>
                 </div>
               </address>

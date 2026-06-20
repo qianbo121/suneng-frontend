@@ -478,7 +478,7 @@ async function seedCompanyInfo() {
   const entries = [
     { key: 'site_phone', valueZh: '+86-130-5298-6814', valueEn: '+86-130-5298-6814' },
     { key: 'site_address', valueZh: '江苏省泰州市姜堰区张甸蔡官工业区', valueEn: 'Caiguan Industrial Park, Zhangdian Town, Jiangyan District, Taizhou, Jiangsu, China' },
-    { key: 'site_email', valueZh: 'jssngyl@outlook.com', valueEn: 'jssngyl@outlook.com' },
+    { key: 'site_email', valueZh: '997518512@qq.com', valueEn: '997518512@qq.com' },
     { key: 'site_fax', valueZh: '', valueEn: '' },
     { key: 'salesPhone', valueZh: '+86-130-5298-6814', valueEn: '+86-130-5298-6814' },
     { key: 'topPhone', valueZh: '+86-130-5298-6814', valueEn: '+86-130-5298-6814' },

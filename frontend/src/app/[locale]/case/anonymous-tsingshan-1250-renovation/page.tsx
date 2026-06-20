@@ -263,7 +263,7 @@ const caseJsonLd = {
     name: '江苏苏能工业炉有限公司',
     url: 'https://www.jssngyl.cn',
     telephone: '+86-130-5298-6814',
-    email: 'jssngyl@outlook.com',
+    email: '997518512@qq.com',
     address: {
       '@type': 'PostalAddress',
       streetAddress: '张甸蔡官工业区',
@@ -621,7 +621,7 @@ export default async function AnonymousTsingshanCasePage({ params }: PageProps) 
               </p>
               <p>
                 <strong className="font-semibold text-[#101828]">邮箱：</strong>
-                <a href="mailto:jssngyl@outlook.com" className="text-[#c51624]">jssngyl@outlook.com</a>
+                <a href="mailto:997518512@qq.com" className="text-[#c51624]">997518512@qq.com</a>
               </p>
               <p>
                 <strong className="font-semibold text-[#101828]">联系人：</strong>

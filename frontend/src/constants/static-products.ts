@@ -443,7 +443,7 @@ const productDetails: Record<string, StaticProductDetail> = {
       contactHref: '/zh/contact',
       contactLabel: '联系苏能工业炉',
       phone: '+86-130-5298-6814',
-      email: 'jssngyl@outlook.com',
+      email: '997518512@qq.com',
     },
   },
   'trolley-furnace': {
@@ -661,7 +661,7 @@ const productDetails: Record<string, StaticProductDetail> = {
       contactHref: '/zh/contact',
       contactLabel: '联系苏能工业炉',
       phone: '+86-130-5298-6814',
-      email: 'jssngyl@outlook.com',
+      email: '997518512@qq.com',
     },
   },
   'pit-furnace': {
@@ -744,7 +744,7 @@ const productDetails: Record<string, StaticProductDetail> = {
       contactHref: '/zh/contact',
       contactLabel: '联系苏能工业炉',
       phone: '+86-130-5298-6814',
-      email: 'jssngyl@outlook.com',
+      email: '997518512@qq.com',
     },
   },
   'bell-furnace': {
@@ -826,7 +826,7 @@ const productDetails: Record<string, StaticProductDetail> = {
       contactHref: '/zh/contact',
       contactLabel: '联系苏能工业炉',
       phone: '+86-130-5298-6814',
-      email: 'jssngyl@outlook.com',
+      email: '997518512@qq.com',
     },
   },
   'pusher-furnace': {
@@ -911,7 +911,7 @@ const productDetails: Record<string, StaticProductDetail> = {
       contactHref: '/zh/contact',
       contactLabel: '联系苏能工业炉',
       phone: '+86-130-5298-6814',
-      email: 'jssngyl@outlook.com',
+      email: '997518512@qq.com',
     },
   },
   'mesh-belt-furnace': {
@@ -1068,7 +1068,7 @@ const productDetails: Record<string, StaticProductDetail> = {
       contactHref: '/zh/contact',
       contactLabel: '联系苏能工业炉',
       phone: '+86-130-5298-6814',
-      email: 'jssngyl@outlook.com',
+      email: '997518512@qq.com',
     },
   },
   'roller-hearth-furnace': {
@@ -1153,7 +1153,7 @@ const productDetails: Record<string, StaticProductDetail> = {
       contactHref: '/zh/contact',
       contactLabel: '联系苏能工业炉',
       phone: '+86-130-5298-6814',
-      email: 'jssngyl@outlook.com',
+      email: '997518512@qq.com',
     },
   },
   'rotary-hearth-furnace': {
@@ -1238,7 +1238,7 @@ const productDetails: Record<string, StaticProductDetail> = {
       contactHref: '/zh/contact',
       contactLabel: '联系苏能工业炉',
       phone: '+86-130-5298-6814',
-      email: 'jssngyl@outlook.com',
+      email: '997518512@qq.com',
     },
   },
   'roller-mesh-belt-line': {
@@ -1325,7 +1325,7 @@ const productDetails: Record<string, StaticProductDetail> = {
       contactHref: '/zh/contact',
       contactLabel: '联系苏能工业炉',
       phone: '+86-130-5298-6814',
-      email: 'jssngyl@outlook.com',
+      email: '997518512@qq.com',
     },
   },
   'copper-wire-annealing-line': {
@@ -1410,7 +1410,7 @@ const productDetails: Record<string, StaticProductDetail> = {
       contactHref: '/zh/contact',
       contactLabel: '联系苏能工业炉',
       phone: '+86-130-5298-6814',
-      email: 'jssngyl@outlook.com',
+      email: '997518512@qq.com',
     },
   },
   'annealing-solution-line': {
@@ -1485,7 +1485,7 @@ const productDetails: Record<string, StaticProductDetail> = {
       contactHref: '/zh/contact',
       contactLabel: '联系苏能工业炉',
       phone: '+86-130-5298-6814',
-      email: 'jssngyl@outlook.com',
+      email: '997518512@qq.com',
     },
   },
 };

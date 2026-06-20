@@ -562,7 +562,7 @@ export default async function ContinuousHeatTreatmentLinePage({ params }: PagePr
             </p>
             <address className="mt-6 flex flex-wrap gap-x-8 gap-y-3 text-[15px] leading-[1.8] text-white/82 not-italic">
               <span>电话 / 微信：+86-130-5298-6814</span>
-              <span>邮箱：jssngyl@outlook.com</span>
+              <span>邮箱：997518512@qq.com</span>
             </address>
           </div>
           <div className="flex flex-wrap gap-4 lg:justify-end">

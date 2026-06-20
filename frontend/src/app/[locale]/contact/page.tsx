@@ -58,7 +58,7 @@ const contactPageCopy = {
       },
       {
         label: '企业邮箱',
-        value: 'jssngyl@outlook.com',
+        value: '997518512@qq.com',
         icon: '/images/contact/icon-email.png',
       },
       {
@@ -83,7 +83,7 @@ const contactPageCopy = {
       },
       {
         label: 'Email',
-        value: 'jssngyl@outlook.com',
+        value: '997518512@qq.com',
         icon: '/images/contact/icon-email.png',
       },
       {

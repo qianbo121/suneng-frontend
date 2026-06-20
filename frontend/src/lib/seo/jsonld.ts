@@ -169,7 +169,7 @@ export function getOrganizationJsonLd(locale: Locale = 'zh') {
     url: LOCAL_BUSINESS_URL,
     logo: SITE_LOGO_IMAGE ? absoluteUrl(SITE_LOGO_IMAGE) : undefined,
     telephone: '+86-130-5298-6814',
-    email: 'jssngyl@outlook.com',
+    email: '997518512@qq.com',
     foundingDate: '2006',
     numberOfEmployees: {
       '@type': 'QuantitativeValue',
