@@ -10,11 +10,11 @@ export const siteSettings: SiteSettings = {
     en: 'Jiangsu Suneng Industrial Furnace Co., Ltd.',
   },
   topPhone: '+86-130-5298-6814',
-  topEmail: 'jssngyl@outlook.com',
+  topEmail: '997518512@qq.com',
   salesPhone: '+86-130-5298-6814',
   afterSalesPhone: '+86-130-5298-6814',
   whatsapp: '+86-130-5298-6814',
-  email: 'jssngyl@outlook.com',
+  email: '997518512@qq.com',
   address: {
     zh: '江苏省泰州市姜堰区张甸蔡官工业区',
     en: 'Caiguan Industrial Park, Zhangdian Town, Jiangyan District, Taizhou, Jiangsu Province, China',
@@ -45,8 +45,8 @@ export const siteSettings: SiteSettings = {
     {
       key: 'email',
       label: { zh: '企业邮箱', en: 'Email' },
-      value: 'jssngyl@outlook.com',
-      href: 'mailto:jssngyl@outlook.com',
+      value: '997518512@qq.com',
+      href: 'mailto:997518512@qq.com',
     },
     {
       key: 'afterSales',

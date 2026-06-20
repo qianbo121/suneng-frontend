@@ -569,8 +569,8 @@ export default async function IndustrialFurnaceQuoteParamsPage({ params }: PageP
                   +86-130-5298-6814
                 </a>
                 ，或邮箱
-                <a href="mailto:jssngyl@outlook.com" className="mx-1 font-semibold text-[#c51624] underline underline-offset-4">
-                  jssngyl@outlook.com
+                <a href="mailto:997518512@qq.com" className="mx-1 font-semibold text-[#c51624] underline underline-offset-4">
+                  997518512@qq.com
                 </a>
                 提交。
               </p>
