@@ -1,26 +1,20 @@
 import { cache } from 'react';
 
-import { companyIntro as companyIntroFallback } from '@/mock/company';
-import { homeContactBar as contactBarFallback } from '@/mock/contact';
 import { homeNews as newsFallback } from '@/mock/news';
 import { partnerLogos as partnerFallback } from '@/mock/partners';
 import {
   hotProducts as hotProductsFallback,
   productCategories as categoryFallback,
-  productShowcases as showcaseFallback,
 } from '@/mock/products';
 import { homeBanners as bannerFallback } from '@/mock/banners';
 import { getLatestNews } from '@/lib/api/news';
 import { toAssetUrl } from '@/lib/api/client';
 import {
-  CompanyIntroContent,
-  ContactBarContent,
   HeroBannerItem,
   HotProductItem,
   NewsItem,
   PartnerLogoItem,
   ProductCategoryItem,
-  ProductShowcaseItem,
 } from '@/types/home';
 import { LocalizedText } from '@/types/site';
 
@@ -30,11 +24,8 @@ export type HomePageData = {
   heroBanners: HeroBannerItem[];
   productCategories: ProductCategoryItem[];
   hotProducts: HotProductItem[];
-  productShowcases: ProductShowcaseItem[];
-  companyIntro: CompanyIntroContent;
   partners: PartnerLogoItem[];
   news: NewsItem[];
-  contactBar: ContactBarContent;
   fallbackSections: string[];
 };
 
@@ -70,11 +61,8 @@ export const getHomePageData = cache(async (): Promise<HomePageData> => {
     heroBanners: bannerFallback,
     productCategories: categoryFallback,
     hotProducts: hotProductsFallback,
-    productShowcases: showcaseFallback,
-    companyIntro: companyIntroFallback,
     partners: partnerFallback,
     news: mapNews(newsResult.data?.items ?? null),
-    contactBar: contactBarFallback,
     fallbackSections,
   };
 });

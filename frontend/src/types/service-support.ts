@@ -59,12 +59,3 @@ export type ServiceAdvantageCard = {
   content: string;
   image: string;
 };
-
-export type DeliveryGalleryCard = {
-  id: number;
-  title: string;
-  description: string;
-  image: string;
-  images: string[];
-  date?: string | null;
-};

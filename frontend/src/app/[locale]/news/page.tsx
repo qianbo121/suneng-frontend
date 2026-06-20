@@ -1,5 +1,6 @@
 import { JsonLd } from '@/components/JsonLd';
 import { PageBanner } from '@/components/layout/PageBanner';
+import { QuoteModalButton } from '@/components/lead/QuoteModalButton';
 import { NewsBreadcrumbBar } from '@/components/news/NewsBreadcrumbBar';
 import { NewsListCards } from '@/components/news/NewsListCards';
 import {
@@ -24,16 +25,36 @@ type NewsPageProps = {
   }>;
 };
 
+const newsSeoCopy = {
+  zh: NEWS_SEO,
+  en: {
+    title: 'Resources | Furnace Selection, Quote Parameters & Heat-Treatment Notes — Suneng',
+    description:
+      'Furnace selection guides, quote-parameter checklists, retrofit resources and company updates from Suneng Industrial Furnace.',
+    keywords: [
+      'industrial furnace resources',
+      'furnace selection',
+      'heat treatment quote parameters',
+      'furnace retrofit',
+    ],
+  },
+} satisfies Record<Locale, {
+  title: string;
+  description: string;
+  keywords: string[];
+}>;
+
 export async function generateMetadata({ params }: NewsPageProps) {
   const { locale } = await params;
   const currentLocale = (locale === 'en' ? 'en' : 'zh') as Locale;
+  const seo = newsSeoCopy[currentLocale];
 
   return buildMetadata({
-    title: NEWS_SEO.title,
-    description: NEWS_SEO.description,
+    title: seo.title,
+    description: seo.description,
     path: `/${currentLocale}/news`,
     pageKey: 'news',
-    keywords: NEWS_SEO.keywords,
+    keywords: seo.keywords,
     image: NEWS_LIST_HERO_IMAGE,
     alternateLocales: {
       'zh-CN': '/zh/news',
@@ -66,9 +87,10 @@ export default async function NewsPage({ params, searchParams }: NewsPageProps) 
   const total = list?.total ?? FALLBACK_NEWS_ITEMS.length;
   const title = NEWS_LABEL[currentLocale];
   const subtitle = NEWS_SUBTITLE[currentLocale];
+  const contactHref = '/zh/contact';
   const newsJsonLd = cleanObject([
     getBreadcrumbJsonLd([
-      { name: '首页', url: `/${currentLocale}` },
+      { name: currentLocale === 'en' ? 'Home' : '首页', url: `/${currentLocale}` },
       { name: title, url: `/${currentLocale}/news` },
     ]),
     {
@@ -106,6 +128,28 @@ export default async function NewsPage({ params, searchParams }: NewsPageProps) 
             total={total}
             pageSize={NEWS_PAGE_SIZE}
           />
+          {currentLocale === 'zh' ? (
+            <div className="mt-10 rounded-[8px] border border-[#e1e7f0] bg-white p-6 shadow-[0_10px_24px_rgba(15,35,75,0.04)] lg:flex lg:items-center lg:justify-between lg:gap-8">
+              <div>
+                <h2 className="text-[22px] font-semibold leading-[1.35] text-[#101828]">需要工业炉报价或方案判断？</h2>
+                <p className="mt-3 text-[15px] leading-[1.8] text-[#475467]">
+                  可先提交工件、温度、工艺和产能信息，由苏能工程师做初步判断。
+                </p>
+              </div>
+              <div className="mt-5 flex flex-col gap-3 sm:flex-row lg:mt-0 lg:shrink-0">
+                <QuoteModalButton
+                  label="获取报价方案"
+                  className="inline-flex min-h-[46px] items-center justify-center rounded-[4px] bg-[#c51624] px-6 text-[15px] font-semibold text-white transition hover:bg-[#a90f1b]"
+                />
+                <a
+                  href={contactHref}
+                  className="inline-flex min-h-[46px] items-center justify-center rounded-[4px] border border-[#c51624] px-6 text-[15px] font-semibold text-[#c51624] transition hover:bg-[#fff5f5]"
+                >
+                  联系苏能工程师
+                </a>
+              </div>
+            </div>
+          ) : null}
         </div>
       </main>
     </div>

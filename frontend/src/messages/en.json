@@ -31,6 +31,6 @@
   },
   "notFound": {
     "title": "Page Not Found",
-    "description": "The page you are looking for has not been built in the current mock stage yet."
+    "description": "Sorry, the page you are looking for does not exist or has been moved. You can return home, or continue browsing products and resources."
   }
 }

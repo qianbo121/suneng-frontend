@@ -5,6 +5,7 @@ import type { ReactNode } from 'react';
 
 import { JsonLd } from '@/components/JsonLd';
 import { Breadcrumb } from '@/components/layout/Breadcrumb';
+import { ProductLeadForm } from '@/components/products/ProductLeadForm';
 import { getFaqJsonLd } from '@/lib/seo/jsonld';
 import { buildMetadata } from '@/lib/seo/metadata';
 import { FURNACE_RENOVATION_OVERHAUL_SEO } from '@/lib/seo/page-data';
@@ -255,7 +256,7 @@ const renovationPlans = [
 
 const relatedLinks = [
   {
-    title: '工业炉报价参数清单',
+    title: '查看报价需要哪些参数',
     href: quoteParamsPath,
     text: '查看工业炉询价前建议提供的炉型、尺寸、温度、装炉量、工艺和现场条件。',
   },
@@ -280,9 +281,9 @@ const relatedLinks = [
     text: '连续线改造、大修或产线评估项目可先查看系统级方案入口。',
   },
   {
-    title: '联系我们',
+    title: '联系苏能工业炉',
     href: contactPath,
-    text: '提交旧炉照片、参数和当前问题，进入联系页或表单沟通。',
+    text: '整理旧炉照片、参数和当前问题，进入人工联系页沟通。',
   },
 ];
 
@@ -443,18 +444,6 @@ const advantages = [
   },
 ];
 
-const formFields = [
-  '姓名',
-  '联系电话',
-  '公司名称',
-  '所属行业',
-  '当前工业炉类型与规格',
-  '预期改造内容',
-  '改造预算范围',
-  '改造时间窗口',
-  '需求描述',
-];
-
 const serviceJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'Service',
@@ -468,7 +457,7 @@ const serviceJsonLd = {
     name: '江苏苏能工业炉有限公司',
     url: 'https://www.jssngyl.cn',
     telephone: '+86-130-5298-6814',
-    email: 'jssngyl@outlook.com',
+    email: '997518512@qq.com',
     address: {
       '@type': 'PostalAddress',
       streetAddress: '张甸蔡官工业区',
@@ -626,16 +615,16 @@ export default async function FurnaceRenovationOverhaulPage({ params }: PageProp
 
             <div className="mt-9 flex flex-wrap gap-4">
               <a
-                href="#contact"
+                href="#contact-form"
                 className="inline-flex min-h-[46px] items-center justify-center rounded-[4px] bg-[#c51624] px-6 text-[15px] font-semibold text-white transition hover:bg-[#a90f1b]"
               >
-                提交设备参数，获取改造建议
+                获取报价方案
               </a>
               <a
-                href="#materials"
+                href={quoteParamsPath}
                 className="inline-flex min-h-[46px] items-center justify-center rounded-[4px] border border-white/46 px-6 text-[15px] font-semibold text-white transition hover:border-white hover:bg-white/10"
               >
-                查看改造前资料清单
+                查看报价需要哪些参数
               </a>
             </div>
           </div>
@@ -891,7 +880,7 @@ export default async function FurnaceRenovationOverhaulPage({ params }: PageProp
         </p>
       </Section>
 
-      <Section id="contact" eyebrow="十、获取改造建议" title="不确定老旧工业炉还能不能改？">
+      <Section id="contact" eyebrow="十、改造咨询" title="不确定老旧工业炉还能不能改？">
         <p className="max-w-[940px] text-[16px] leading-[1.9] text-[#344054] lg:text-[18px]">
           把炉型、炉膛尺寸、最高温度、工件信息、当前问题和现场照片发给苏能，技术人员可先做初步判断，帮助你评估适合大修、局部改造还是重新采购。
         </p>
@@ -908,7 +897,7 @@ export default async function FurnaceRenovationOverhaulPage({ params }: PageProp
               </p>
               <p>
                 <strong className="font-semibold text-[#101828]">邮箱：</strong>
-                <a href="mailto:jssngyl@outlook.com" className="text-[#c51624]">jssngyl@outlook.com</a>
+                <a href="mailto:997518512@qq.com" className="text-[#c51624]">997518512@qq.com</a>
               </p>
               <p>
                 <strong className="font-semibold text-[#101828]">联系人：</strong>
@@ -922,12 +911,12 @@ export default async function FurnaceRenovationOverhaulPage({ params }: PageProp
             <div className="mt-7 flex flex-wrap gap-3">
               <a
                 href="#contact-form"
-                className="inline-flex min-h-[44px] items-center justify-center rounded-[4px] bg-[#c51624] px-5 text-[14px] font-semibold text-white transition hover:bg-[#a90f1b]"
+                className="inline-flex min-h-[44px] items-center justify-center rounded-[4px] border border-[#c51624] px-5 text-[14px] font-semibold text-[#c51624] transition hover:bg-[#fff5f5]"
               >
-                提交参数获取建议
+                获取报价方案
               </a>
               <a
-                href="tel:+8613052986814"
+                href={contactPath}
                 className="inline-flex min-h-[44px] items-center justify-center rounded-[4px] border border-[#c51624] px-5 text-[14px] font-semibold text-[#c51624] transition hover:bg-[#fff5f5]"
               >
                 联系苏能工业炉
@@ -939,42 +928,14 @@ export default async function FurnaceRenovationOverhaulPage({ params }: PageProp
             </div>
           </div>
 
-          <form id="contact-form" className="scroll-mt-24 rounded-[8px] border border-[#e1e7f0] bg-white p-6 shadow-[0_10px_24px_rgba(15,35,75,0.04)] lg:p-7">
-            <h3 className="text-[22px] font-semibold leading-[1.35] text-[#101828]">在线咨询表单</h3>
-            <div className="mt-6 grid gap-4 sm:grid-cols-2">
-              {formFields.map((field, index) => {
-                const isTextarea = field === '需求描述';
-                const required = field === '联系电话';
-                return (
-                  <label key={field} className={isTextarea ? 'sm:col-span-2' : undefined}>
-                    <span className="text-[14px] font-semibold text-[#344054]">
-                      {required ? '*' : ''}
-                      {field}
-                    </span>
-                    {isTextarea ? (
-                      <textarea
-                        name={`field-${index}`}
-                        rows={4}
-                        className="mt-2 w-full rounded-[6px] border border-[#d0d7e2] px-3 py-2 text-[15px] outline-none transition focus:border-[#c51624]"
-                      />
-                    ) : (
-                      <input
-                        name={`field-${index}`}
-                        className="mt-2 h-11 w-full rounded-[6px] border border-[#d0d7e2] px-3 text-[15px] outline-none transition focus:border-[#c51624]"
-                      />
-                    )}
-                  </label>
-                );
-              })}
-            </div>
-            <p className="mt-5 text-[13px] leading-[1.7] text-[#667085]">提交即表示同意《隐私政策》。</p>
-            <button
-              type="button"
-              className="mt-5 inline-flex min-h-[46px] items-center justify-center rounded-[4px] bg-[#c51624] px-6 text-[15px] font-semibold text-white transition hover:bg-[#a90f1b]"
-            >
-              提交参数获取建议
-            </button>
-          </form>
+          <div className="overflow-hidden rounded-[8px]">
+            <ProductLeadForm
+              anchorId="contact-form"
+              title="提交旧炉参数，获取改造建议"
+              description="把旧炉现状、炉型、问题、工艺温度和现场条件发给苏能，技术人员可先判断适合大修、局部改造还是整炉更新。"
+              submitLabel="提交需求"
+            />
+          </div>
         </div>
       </Section>
 

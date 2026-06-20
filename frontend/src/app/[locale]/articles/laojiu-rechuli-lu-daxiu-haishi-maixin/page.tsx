@@ -5,6 +5,7 @@ import type { ReactNode } from 'react';
 
 import { JsonLd } from '@/components/JsonLd';
 import { Breadcrumb } from '@/components/layout/Breadcrumb';
+import { QuoteModalButton } from '@/components/lead/QuoteModalButton';
 import { cleanObject, getBreadcrumbJsonLd, getFaqJsonLd } from '@/lib/seo/jsonld';
 import { buildMetadata } from '@/lib/seo/metadata';
 import { OLD_HEAT_TREATMENT_FURNACE_REPAIR_OR_REPLACE_SEO } from '@/lib/seo/page-data';
@@ -161,7 +162,7 @@ const relatedLinks = [
     text: '返回工业炉产品页，按炉型继续查看参数和适用场景。',
   },
   {
-    title: '联系我们',
+    title: '联系苏能工程师',
     href: contactPath,
     text: '提交设备情况，获取大修、局部改造或换新的初步建议。',
   },
@@ -319,17 +320,15 @@ export default async function OldHeatTreatmentFurnaceDecisionPage({ params }: Pa
               ))}
             </div>
             <div className="mt-9 flex flex-wrap gap-4">
+              <QuoteModalButton
+                label="获取报价方案"
+                className="inline-flex min-h-[46px] items-center justify-center rounded-[4px] bg-[#c51624] px-6 text-[15px] font-semibold text-white transition hover:bg-[#a90f1b]"
+              />
               <a
                 href={contactPath}
-                className="inline-flex min-h-[46px] items-center justify-center rounded-[4px] bg-[#c51624] px-6 text-[15px] font-semibold text-white transition hover:bg-[#a90f1b]"
-              >
-                提交设备信息，判断是否该大修或换新
-              </a>
-              <a
-                href={renovationServicePath}
                 className="inline-flex min-h-[46px] items-center justify-center rounded-[4px] border border-white/46 px-6 text-[15px] font-semibold text-white transition hover:border-white hover:bg-white/10"
               >
-                查看工业炉改造服务
+                联系苏能工程师
               </a>
             </div>
           </div>
@@ -382,7 +381,7 @@ export default async function OldHeatTreatmentFurnaceDecisionPage({ params }: Pa
           href={quoteParamsPath}
           className="mt-6 inline-flex min-h-[44px] items-center justify-center rounded-[4px] bg-[#c51624] px-5 text-[14px] font-semibold text-white transition hover:bg-[#a90f1b]"
         >
-          查看工业炉报价参数
+          查看报价需要哪些参数
         </a>
       </Section>
 
@@ -395,7 +394,7 @@ export default async function OldHeatTreatmentFurnaceDecisionPage({ params }: Pa
           ))}
         </div>
         <p className="mt-6 text-[15px] leading-[1.9] text-[#344054]">
-          资料不完整也可以先沟通；更完整的报价资料清单可查看
+          资料不完整也可以先沟通；更完整的报价参数说明可查看
           <a href={quoteParamsPath} className="font-semibold text-[#c51624] underline underline-offset-4">
             《工业炉报价需要哪些参数》
           </a>
@@ -475,15 +474,16 @@ export default async function OldHeatTreatmentFurnaceDecisionPage({ params }: Pa
             </p>
             <address className="mt-6 flex flex-wrap gap-x-8 gap-y-3 text-[15px] leading-[1.8] text-white/82 not-italic">
               <span>电话 / 微信：+86-130-5298-6814</span>
-              <span>邮箱：jssngyl@outlook.com</span>
+              <span>邮箱：997518512@qq.com</span>
             </address>
           </div>
           <div className="flex flex-wrap gap-4 lg:justify-end">
-            <a href={contactPath} className="inline-flex min-h-[46px] items-center justify-center rounded-[4px] bg-[#c51624] px-6 text-[15px] font-semibold text-white transition hover:bg-[#a90f1b]">
-              提交设备情况获取建议
-            </a>
-            <a href={productsPath} className="inline-flex min-h-[46px] items-center justify-center rounded-[4px] border border-white/46 px-6 text-[15px] font-semibold text-white transition hover:border-white hover:bg-white/10">
-              返回工业炉产品页
+            <QuoteModalButton
+              label="获取报价方案"
+              className="inline-flex min-h-[46px] items-center justify-center rounded-[4px] bg-[#c51624] px-6 text-[15px] font-semibold text-white transition hover:bg-[#a90f1b]"
+            />
+            <a href={contactPath} className="inline-flex min-h-[46px] items-center justify-center rounded-[4px] border border-white/46 px-6 text-[15px] font-semibold text-white transition hover:border-white hover:bg-white/10">
+              联系苏能工程师
             </a>
           </div>
         </div>

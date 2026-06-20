@@ -23,11 +23,31 @@ type AboutPageProps = {
   }>;
 };
 
+const aboutSeoCopy = {
+  zh: ABOUT_SEO,
+  en: {
+    title: 'About Suneng Industrial Furnace | Jiangsu Heat-Treatment Furnace Manufacturer',
+    description:
+      'Jiangsu Suneng Industrial Furnace — founded 2006 in Taizhou, Jiangsu, a National High-Tech Enterprise specializing in heat-treatment furnace design and manufacturing, with a 14,700 m² production base.',
+    keywords: [
+      'Suneng Industrial Furnace',
+      'Jiangsu furnace manufacturer',
+      'heat-treatment furnace manufacturer',
+      'custom industrial furnace',
+    ],
+  },
+} satisfies Record<Locale, {
+  title: string;
+  description: string;
+  keywords: string[];
+}>;
+
 export const revalidate = 3600;
 
 export async function generateMetadata({ params }: AboutPageProps): Promise<Metadata> {
   const { locale } = await params;
   const currentLocale = (locale === 'en' ? 'en' : 'zh') as Locale;
+  const openGraphLocale = currentLocale === 'en' ? 'en_US' : 'zh_CN';
 
   if (currentLocale === 'zh') {
     const canonical = absoluteUrl('/zh/about');
@@ -53,7 +73,7 @@ export async function generateMetadata({ params }: AboutPageProps): Promise<Meta
         type: 'website',
         url: canonical,
         siteName: SITE_NAME,
-        locale: 'zh_CN',
+        locale: openGraphLocale,
         images: [{ url: image }],
       },
       twitter: {
@@ -69,12 +89,14 @@ export async function generateMetadata({ params }: AboutPageProps): Promise<Meta
     };
   }
 
+  const seo = aboutSeoCopy.en;
+
   return buildMetadata({
-    title: ABOUT_SEO.title,
-    description: ABOUT_SEO.description,
+    title: seo.title,
+    description: seo.description,
     path: `/${currentLocale}/about`,
     pageKey: 'about',
-    keywords: ABOUT_SEO.keywords,
+    keywords: seo.keywords,
     image: '/images/about/about_img_hero_factory_01.png',
     alternateLocales: {
       'zh-CN': '/zh/about',
@@ -110,8 +132,8 @@ export default async function AboutPage({ params }: AboutPageProps) {
       <JsonLd
         id={`about-breadcrumb-jsonld-${currentLocale}`}
         data={getBreadcrumbJsonLd([
-          { name: '首页', url: `/${currentLocale}` },
-          { name: '关于我们', url: `/${currentLocale}/about` },
+          { name: currentLocale === 'en' ? 'Home' : '首页', url: `/${currentLocale}` },
+          { name: currentLocale === 'en' ? 'About' : '关于我们', url: `/${currentLocale}/about` },
         ])}
       />
       {error ? (
