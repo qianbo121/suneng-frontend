@@ -7,6 +7,7 @@ import { JsonLd } from '@/components/JsonLd';
 import { FloatToolbar } from '@/components/layout/FloatToolbar';
 import { Footer } from '@/components/layout/Footer';
 import { Header } from '@/components/layout/Header';
+import { BaiduAnalytics } from '@/components/seo/BaiduAnalytics';
 import { routing } from '@/i18n/routing';
 import { getOrganizationJsonLd, getWebsiteJsonLd } from '@/lib/seo/jsonld';
 import type { Locale } from '@/types/site';
@@ -48,6 +49,7 @@ export default async function LocaleLayout({ children, params }: LocaleLayoutPro
         </NextIntlClientProvider>
         <JsonLd id="organization-jsonld" data={getOrganizationJsonLd(currentLocale)} />
         <JsonLd id="website-jsonld" data={getWebsiteJsonLd(currentLocale)} />
+        <BaiduAnalytics />
       </body>
     </html>
   );
