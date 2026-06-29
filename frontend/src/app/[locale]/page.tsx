@@ -72,7 +72,7 @@ export default async function LocaleHomePage({ params }: LocaleHomePageProps) {
     <div className="bg-white pb-0">
       <JsonLd id={`homepage-jsonld-${currentLocale}`} data={getHomePageJsonLd(`/${currentLocale}`, currentLocale)} />
       <HeroBanner locale={currentLocale} items={homeData.heroBanners} partners={homeData.partners} />
-      <HeatTreatmentLines locale={currentLocale} />
+      <HeatTreatmentLines locale={currentLocale} categories={homeData.productCategories} />
       <HotProducts locale={currentLocale} items={homeData.hotProducts} />
       <NewsSection locale={currentLocale} items={homeData.news} />
     </div>

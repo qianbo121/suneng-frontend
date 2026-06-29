@@ -3,10 +3,12 @@ import Link from 'next/link';
 
 import { QuoteModalButton } from '@/components/lead/QuoteModalButton';
 import { buildProductImageAlt } from '@/lib/seo';
+import { ProductCategoryItem } from '@/types/home';
 import { Locale } from '@/types/site';
 
 type HeatTreatmentLinesProps = {
   locale: Locale;
+  categories: ProductCategoryItem[];
 };
 
 type HeatTreatmentLineCard = {
@@ -81,9 +83,28 @@ const featureItems: FeatureItem[] = [
   },
 ];
 
-export function HeatTreatmentLines({ locale }: HeatTreatmentLinesProps) {
+export function buildProductCenterCards(categories: ProductCategoryItem[]) {
+  if (!categories.length) return singleFurnaceCards;
+
+  const cmsBySlug = new Map(categories.map((item) => [item.slug, item]));
+  return singleFurnaceCards.map((item) => {
+    const cmsItem = cmsBySlug.get(item.slug);
+    if (!cmsItem) return item;
+
+    return {
+      ...item,
+      id: cmsItem.id,
+      en: cmsItem.name.en || item.en,
+      zh: cmsItem.name.zh || item.zh,
+      image: cmsItem.image || item.image,
+    };
+  });
+}
+
+export function HeatTreatmentLines({ locale, categories }: HeatTreatmentLinesProps) {
   const [mainLine] = heatTreatmentLines;
   const systemHref = locale === 'zh' ? '/zh/solutions/continuous-heat-treatment-line' : '/en/products';
+  const productCenterCards = buildProductCenterCards(categories);
 
   return (
     <section className="bg-white py-8">
@@ -203,9 +224,9 @@ export function HeatTreatmentLines({ locale }: HeatTreatmentLinesProps) {
 
           <div className="mt-6 lg:mt-7">
             <div className="grid grid-cols-2 border-l border-t border-[#ebebeb] lg:grid-cols-4">
-              {singleFurnaceCards.map((item) => (
+              {productCenterCards.map((item) => (
                 <Link
-                  key={item.id}
+                  key={item.slug}
                   href={`/${locale}/products/detail/${item.slug}`}
                   className="group flex min-h-[210px] flex-col border-b border-r border-[#ebebeb] bg-white px-5 py-5 transition-colors duration-300 hover:bg-[#fcfcfc] lg:min-h-[238px] lg:px-6 lg:py-6"
                 >
