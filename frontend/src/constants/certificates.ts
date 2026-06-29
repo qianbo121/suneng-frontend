@@ -247,16 +247,3 @@ export const SUNENG_PATENT_CERTIFICATES: CertificateItem[] = [
     sortOrder: 14,
   },
 ];
-
-export const SUNENG_ALL_CERTIFICATES: CertificateItem[] = [
-  ...SUNENG_QUALIFICATION_CERTIFICATES,
-  ...SUNENG_ISO_CERTIFICATES,
-  ...SUNENG_PATENT_CERTIFICATES,
-];
-
-export const SUNENG_REPRESENTATIVE_CERTIFICATES: CertificateItem[] = [
-  SUNENG_QUALIFICATION_CERTIFICATES[1],
-  ...SUNENG_ISO_CERTIFICATES,
-].filter(Boolean);
-
-export const SUNENG_REPRESENTATIVE_PATENTS: CertificateItem[] = SUNENG_PATENT_CERTIFICATES.slice(0, 5);

@@ -1,7 +1,7 @@
 import { existsSync } from 'node:fs';
 import path from 'node:path';
 
-export { DEFAULT_KEYWORDS } from '@/lib/seo/keyword-data';
+export { DEFAULT_KEYWORDS } from '@/lib/seo/keywords';
 
 const FALLBACK_SITE_URL = 'https://www.jssngyl.cn';
 

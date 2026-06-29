@@ -49,20 +49,6 @@ export class ProductService {
     return record;
   }
 
-  async getRelated(id: number) {
-    const current = await this.prisma.product.findUnique({ where: { id } });
-    if (!current) throw new NotFoundException('Product not found');
-    return this.prisma.product.findMany({
-      where: {
-        categoryId: current.categoryId,
-        status: PublishStatus.published,
-        NOT: { id: current.id },
-      },
-      take: 6,
-      orderBy: [{ sortOrder: 'asc' }, { id: 'desc' }],
-    });
-  }
-
   async getAdminList(query: ProductListQueryDto) {
     const { page, pageSize, skip, take, orderBy } = buildAdminListQuery(query);
     const where: Prisma.ProductWhereInput = {

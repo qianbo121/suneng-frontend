@@ -21,7 +21,6 @@ const LOCALE_OG_MAP: Record<Locale, string> = {
   en: 'en_US',
 };
 
-const SITE_LOGO_PATH = '/images/brand/sn-logo-header.png';
 const FALLBACK_SITE_URL = 'https://www.jssngyl.cn';
 const ALT_SEPARATOR: Record<Locale, string> = {
   zh: '｜',
@@ -166,81 +165,5 @@ export async function buildSeoMetadata(options: BuildSeoMetadataOptions): Promis
           index: true,
           follow: true,
         },
-  };
-}
-
-export function buildOrganizationJsonLd(
-  locale: Locale,
-  options?: { phone?: string; email?: string; address?: string; logo?: string },
-) {
-  return {
-    '@context': 'https://schema.org',
-    '@type': 'Organization',
-    name: siteSettings.companyName[locale],
-    alternateName: getSiteName(locale),
-    url: buildLocalizedUrl(locale, '/'),
-    logo: options?.logo || `${getSiteUrl()}${SITE_LOGO_PATH}`,
-    contactPoint: [
-      {
-        '@type': 'ContactPoint',
-        telephone: options?.phone || siteSettings.topPhone,
-        contactType: 'sales',
-        email: options?.email || siteSettings.email,
-        areaServed: 'CN',
-        availableLanguage: ['zh-CN', 'en-US'],
-      },
-    ],
-    address: {
-      '@type': 'PostalAddress',
-      streetAddress: options?.address || siteSettings.address[locale],
-      addressCountry: 'CN',
-    },
-  };
-}
-
-export function buildProductJsonLd(
-  locale: Locale,
-  options: { name: string; description: string; image: string[]; sku?: string; category?: string },
-) {
-  return {
-    '@context': 'https://schema.org',
-    '@type': 'Product',
-    name: options.name,
-    description: compactText(options.description),
-    image: options.image,
-    sku: options.sku,
-    category: options.category,
-    brand: {
-      '@type': 'Brand',
-      name: getSiteName(locale),
-    },
-  };
-}
-
-export function buildArticleJsonLd(
-  locale: Locale,
-  options: { headline: string; description: string; image?: string; datePublished?: string; authorName?: string; url: string },
-) {
-  return {
-    '@context': 'https://schema.org',
-    '@type': 'Article',
-    headline: options.headline,
-    description: compactText(options.description),
-    image: options.image ? [options.image] : undefined,
-    datePublished: options.datePublished,
-    dateModified: options.datePublished,
-    author: {
-      '@type': 'Organization',
-      name: options.authorName || getSiteName(locale),
-    },
-    publisher: {
-      '@type': 'Organization',
-      name: getSiteName(locale),
-      logo: {
-        '@type': 'ImageObject',
-        url: `${getSiteUrl()}${SITE_LOGO_PATH}`,
-      },
-    },
-    mainEntityOfPage: options.url,
   };
 }

@@ -151,10 +151,7 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
   const gallery = product.gallery.length ? product.gallery : [product.image];
   const isProductionLine = PRODUCTION_LINE_SLUGS.has(product.slug);
   const visibleReasons = isProductionLine ? detail.reasons.slice(0, 5) : detail.reasons;
-  const specRows = detail.customSpecs.map((item) => ({
-    ...item,
-    key: item.key === '温度使用温度' ? '使用温度' : item.key,
-  }));
+  const specRows = detail.customSpecs;
   const specColumnSize = Math.ceil(specRows.length / 2);
   const specColumns = [specRows.slice(0, specColumnSize), specRows.slice(specColumnSize)];
   const geoSectionTitle =
