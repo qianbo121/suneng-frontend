@@ -1,7 +1,13 @@
 import clsx from 'clsx';
 
+import type { Locale } from '@/types/site';
+
 export function cn(...inputs: Array<string | false | null | undefined>) {
   return clsx(inputs);
+}
+
+export function localizeText(locale: Locale, zh?: string | null, en?: string | null, fallback = '') {
+  return locale === 'en' ? en || zh || fallback : zh || en || fallback;
 }
 
 export function swapLocaleInPath(pathname: string, locale: string) {

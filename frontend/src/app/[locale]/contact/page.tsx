@@ -8,6 +8,7 @@ import { SITE_NAME } from '@/lib/seo/config';
 import { getContactPageJsonLd } from '@/lib/seo/jsonld';
 import { absoluteUrl, buildMetadata } from '@/lib/seo/metadata';
 import { CONTACT_SEO } from '@/lib/seo/page-data';
+import { siteSettings } from '@/mock/siteSettings';
 import { Locale } from '@/types/site';
 
 type ContactPageProps = {
@@ -53,12 +54,12 @@ const contactPageCopy = {
     items: [
       {
         label: '联系电话',
-        value: '+86-130-5298-6814',
+        value: siteSettings.salesPhone,
         icon: '/images/contact/icon-phone.png',
       },
       {
         label: '企业邮箱',
-        value: '997518512@qq.com',
+        value: siteSettings.email,
         icon: '/images/contact/icon-email.png',
       },
       {
@@ -78,12 +79,12 @@ const contactPageCopy = {
     items: [
       {
         label: 'Phone',
-        value: '+86-130-5298-6814',
+        value: siteSettings.salesPhone,
         icon: '/images/contact/icon-phone.png',
       },
       {
         label: 'Email',
-        value: '997518512@qq.com',
+        value: siteSettings.email,
         icon: '/images/contact/icon-email.png',
       },
       {

@@ -1,26 +1,21 @@
-import { HttpException, HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { ContactMessageStatus, Prisma } from '@prisma/client';
 
 import { buildPagination } from '@/common/utils/pagination';
+import { ensureNotSpam, SpamThrottleState } from '@/common/utils/spam-throttle';
 import { ContactMessageListQueryDto } from '@/modules/contact-message/dto/contact-message-list-query.dto';
 import { CreateContactMessageDto } from '@/modules/contact-message/dto/create-contact-message.dto';
 import { UpdateContactMessageStatusDto } from '@/modules/contact-message/dto/update-contact-message-status.dto';
 import { PrismaService } from '@/prisma/prisma.service';
 
-type ContactSpamState = {
-  lastSubmittedAt: number;
-  count: number;
-  windowStartAt: number;
-};
-
 @Injectable()
 export class ContactMessageService {
-  private readonly spamMap = new Map<string, ContactSpamState>();
+  private readonly spamMap = new Map<string, SpamThrottleState>();
 
   constructor(private readonly prisma: PrismaService) {}
 
   async createPublic(dto: CreateContactMessageDto, clientKey: string) {
-    this.ensureNotSpam(clientKey);
+    ensureNotSpam(clientKey, this.spamMap);
 
     return this.prisma.contactMessage.create({
       data: {
@@ -104,40 +99,5 @@ export class ContactMessageService {
 
   async getUnreadCount() {
     return this.prisma.contactMessage.count({ where: { isRead: false } });
-  }
-
-  private ensureNotSpam(clientKey: string) {
-    const now = Date.now();
-    const current = this.spamMap.get(clientKey);
-
-    if (!current) {
-      this.spamMap.set(clientKey, {
-        lastSubmittedAt: now,
-        count: 1,
-        windowStartAt: now,
-      });
-      return;
-    }
-
-    if (now - current.lastSubmittedAt < 30_000) {
-      throw new HttpException(
-        'Please do not submit repeatedly in a short time',
-        HttpStatus.TOO_MANY_REQUESTS,
-      );
-    }
-
-    if (now - current.windowStartAt > 10 * 60_000) {
-      current.count = 0;
-      current.windowStartAt = now;
-    }
-
-    current.count += 1;
-    current.lastSubmittedAt = now;
-
-    if (current.count > 5) {
-      throw new HttpException('Submission frequency is too high', HttpStatus.TOO_MANY_REQUESTS);
-    }
-
-    this.spamMap.set(clientKey, current);
   }
 }

@@ -3,6 +3,7 @@ import Image from 'next/image';
 import { HiCheckCircle, HiEnvelope, HiMapPin, HiPhone } from 'react-icons/hi2';
 
 import { buildBrandImageAlt, joinImageAlt } from '@/lib/seo';
+import { siteSettings } from '@/mock/siteSettings';
 import { Locale } from '@/types/site';
 
 type FooterProps = {
@@ -55,8 +56,8 @@ const footerCopy = {
     wechat: '微信二维码',
     douyin: '抖音二维码',
     followUs: '关注我们，了解更多产品与解决方案',
-    email: '997518512@qq.com',
-    phone: '+86-130-5298-6814',
+    email: siteSettings.email,
+    phone: siteSettings.salesPhone,
     copyright: 'Copyright © 2025 江苏苏能工业炉有限公司 版权所有',
     icp: '苏ICP备20020318号-1',
     policeBeian: '苏公网安备32120402001014号',
@@ -69,8 +70,8 @@ const footerCopy = {
     wechat: 'WeChat QR',
     douyin: 'Douyin QR',
     followUs: 'Follow us for more products and solutions.',
-    email: '997518512@qq.com',
-    phone: '+86-130-5298-6814',
+    email: siteSettings.email,
+    phone: siteSettings.salesPhone,
     copyright: 'Copyright © 2025 Jiangsu Suneng Industrial Furnace Co., Ltd. All rights reserved.',
     icp: '苏ICP备20020318号-1',
     policeBeian: '苏公网安备32120402001014号',

@@ -1,4 +1,5 @@
 import { PRODUCT_CENTER_CATEGORIES } from '@/constants/product-categories';
+import { siteSettings } from '@/mock/siteSettings';
 import { ProductSpecRow } from '@/types/product';
 
 export type StaticProductFeature = {
@@ -441,8 +442,8 @@ const productDetails: Record<string, StaticProductDetail> = {
       submitLabel: '提交需求',
       contactHref: '/zh/contact',
       contactLabel: '联系苏能工业炉',
-      phone: '+86-130-5298-6814',
-      email: '997518512@qq.com',
+      phone: siteSettings.salesPhone,
+      email: siteSettings.email,
     },
   },
   'trolley-furnace': {
@@ -659,8 +660,8 @@ const productDetails: Record<string, StaticProductDetail> = {
       submitLabel: '提交需求',
       contactHref: '/zh/contact',
       contactLabel: '联系苏能工业炉',
-      phone: '+86-130-5298-6814',
-      email: '997518512@qq.com',
+      phone: siteSettings.salesPhone,
+      email: siteSettings.email,
     },
   },
   'pit-furnace': {
@@ -742,8 +743,8 @@ const productDetails: Record<string, StaticProductDetail> = {
       submitLabel: '提交需求',
       contactHref: '/zh/contact',
       contactLabel: '联系苏能工业炉',
-      phone: '+86-130-5298-6814',
-      email: '997518512@qq.com',
+      phone: siteSettings.salesPhone,
+      email: siteSettings.email,
     },
   },
   'bell-furnace': {
@@ -824,8 +825,8 @@ const productDetails: Record<string, StaticProductDetail> = {
       submitLabel: '提交需求',
       contactHref: '/zh/contact',
       contactLabel: '联系苏能工业炉',
-      phone: '+86-130-5298-6814',
-      email: '997518512@qq.com',
+      phone: siteSettings.salesPhone,
+      email: siteSettings.email,
     },
   },
   'pusher-furnace': {
@@ -909,8 +910,8 @@ const productDetails: Record<string, StaticProductDetail> = {
       submitLabel: '提交需求',
       contactHref: '/zh/contact',
       contactLabel: '联系苏能工业炉',
-      phone: '+86-130-5298-6814',
-      email: '997518512@qq.com',
+      phone: siteSettings.salesPhone,
+      email: siteSettings.email,
     },
   },
   'mesh-belt-furnace': {
@@ -1066,8 +1067,8 @@ const productDetails: Record<string, StaticProductDetail> = {
       submitLabel: '提交需求',
       contactHref: '/zh/contact',
       contactLabel: '联系苏能工业炉',
-      phone: '+86-130-5298-6814',
-      email: '997518512@qq.com',
+      phone: siteSettings.salesPhone,
+      email: siteSettings.email,
     },
   },
   'roller-hearth-furnace': {
@@ -1151,8 +1152,8 @@ const productDetails: Record<string, StaticProductDetail> = {
       submitLabel: '提交需求',
       contactHref: '/zh/contact',
       contactLabel: '联系苏能工业炉',
-      phone: '+86-130-5298-6814',
-      email: '997518512@qq.com',
+      phone: siteSettings.salesPhone,
+      email: siteSettings.email,
     },
   },
   'rotary-hearth-furnace': {
@@ -1236,8 +1237,8 @@ const productDetails: Record<string, StaticProductDetail> = {
       submitLabel: '提交需求',
       contactHref: '/zh/contact',
       contactLabel: '联系苏能工业炉',
-      phone: '+86-130-5298-6814',
-      email: '997518512@qq.com',
+      phone: siteSettings.salesPhone,
+      email: siteSettings.email,
     },
   },
   'roller-mesh-belt-line': {
@@ -1323,8 +1324,8 @@ const productDetails: Record<string, StaticProductDetail> = {
       submitLabel: '提交需求',
       contactHref: '/zh/contact',
       contactLabel: '联系苏能工业炉',
-      phone: '+86-130-5298-6814',
-      email: '997518512@qq.com',
+      phone: siteSettings.salesPhone,
+      email: siteSettings.email,
     },
   },
   'copper-wire-annealing-line': {
@@ -1408,8 +1409,8 @@ const productDetails: Record<string, StaticProductDetail> = {
       submitLabel: '提交需求',
       contactHref: '/zh/contact',
       contactLabel: '联系苏能工业炉',
-      phone: '+86-130-5298-6814',
-      email: '997518512@qq.com',
+      phone: siteSettings.salesPhone,
+      email: siteSettings.email,
     },
   },
   'annealing-solution-line': {
@@ -1483,8 +1484,8 @@ const productDetails: Record<string, StaticProductDetail> = {
       submitLabel: '提交需求',
       contactHref: '/zh/contact',
       contactLabel: '联系苏能工业炉',
-      phone: '+86-130-5298-6814',
-      email: '997518512@qq.com',
+      phone: siteSettings.salesPhone,
+      email: siteSettings.email,
     },
   },
 };
