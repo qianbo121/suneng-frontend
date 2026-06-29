@@ -1,27 +1,19 @@
 import type { Metadata } from 'next';
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
-import type { ReactNode } from 'react';
 
+import { GeoContactCta, GeoFaqGrid, GeoHeroTags, GeoSection as Section } from '@/components/geo-pages/GeoPageBlocks';
 import { JsonLd } from '@/components/JsonLd';
 import { Breadcrumb } from '@/components/layout/Breadcrumb';
 import { QuoteModalButton } from '@/components/lead/QuoteModalButton';
-import { cleanObject, getBreadcrumbJsonLd, getFaqJsonLd } from '@/lib/seo/jsonld';
+import { cleanObject, getBreadcrumbJsonLd, getFaqJsonLd, getWebPageJsonLd } from '@/lib/seo/jsonld';
 import { buildMetadata } from '@/lib/seo/metadata';
 import { OLD_HEAT_TREATMENT_FURNACE_REPAIR_OR_REPLACE_SEO } from '@/lib/seo/page-data';
-import { siteSettings } from '@/mock/siteSettings';
 
 type PageProps = {
   params: Promise<{
     locale: string;
   }>;
-};
-
-type SectionProps = {
-  id: string;
-  eyebrow: string;
-  title: string;
-  children: ReactNode;
 };
 
 type LinkCard = {
@@ -215,15 +207,11 @@ const faqs = [
 const faqJsonLd = getFaqJsonLd(faqs);
 
 const pageJsonLd = cleanObject([
-  {
-    '@context': 'https://schema.org',
-    '@type': 'WebPage',
-    '@id': 'https://www.jssngyl.cn/zh/articles/laojiu-rechuli-lu-daxiu-haishi-maixin#webpage',
-    url: 'https://www.jssngyl.cn/zh/articles/laojiu-rechuli-lu-daxiu-haishi-maixin',
+  getWebPageJsonLd({
+    path: pagePath,
     name: '老旧热处理炉是大修好，还是直接买新的？',
     description: OLD_HEAT_TREATMENT_FURNACE_REPAIR_OR_REPLACE_SEO.description,
-    inLanguage: 'zh-CN',
-  },
+  }),
   getBreadcrumbJsonLd([
     { name: '首页', url: '/zh' },
     { name: '服务支持', url: servicePath },
@@ -257,18 +245,6 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       'x-default': pagePath,
     },
   });
-}
-
-function Section({ id, eyebrow, title, children }: SectionProps) {
-  return (
-    <section id={id} className="scroll-mt-24 border-t border-[#e2e8f0] py-12 lg:py-16">
-      <div className="mx-auto max-w-[1180px] px-5 lg:px-8">
-        <p className="text-[13px] font-semibold text-[#c51624]">{eyebrow}</p>
-        <h2 className="mt-3 text-[26px] font-semibold leading-[1.28] text-[#101828] lg:text-[38px]">{title}</h2>
-        <div className="mt-8">{children}</div>
-      </div>
-    </section>
-  );
 }
 
 function CardGrid({ items }: { items: string[] }) {
@@ -313,13 +289,7 @@ export default async function OldHeatTreatmentFurnaceDecisionPage({ params }: Pa
             <p className="mt-5 max-w-[920px] text-[18px] font-semibold leading-[1.72] text-white/92 lg:text-[23px]">
               老旧热处理炉不一定都要换新，也不一定都适合继续大修。判断时应结合炉体结构、安全状态、炉衬损坏程度、控制系统、加热系统、能耗水平、工艺变化、停产周期和改造费用综合评估。
             </p>
-            <div className="mt-8 flex flex-wrap gap-3 text-[14px] font-semibold text-white">
-              {heroTags.map((tag) => (
-                <span key={tag} className="rounded-[4px] border border-white/24 bg-white/10 px-4 py-2">
-                  {tag}
-                </span>
-              ))}
-            </div>
+            <GeoHeroTags tags={heroTags} />
             <div className="mt-9 flex flex-wrap gap-4">
               <QuoteModalButton
                 label="获取报价方案"
@@ -429,27 +399,7 @@ export default async function OldHeatTreatmentFurnaceDecisionPage({ params }: Pa
       </Section>
 
       <Section id="faq" eyebrow="常见问题" title="九、老旧热处理炉决策常见问题">
-        <div className="grid gap-3 md:grid-cols-2 md:items-start md:gap-5" itemScope itemType="https://schema.org/FAQPage">
-          {faqs.map((faq) => (
-            <details
-              key={faq.question}
-              className="group rounded-[8px] border border-[#dfe6f0] bg-white px-5 py-4 shadow-[0_10px_24px_rgba(15,35,75,0.03)] [&>summary::-webkit-details-marker]:hidden"
-              itemScope
-              itemProp="mainEntity"
-              itemType="https://schema.org/Question"
-              open
-            >
-              <summary className="flex cursor-pointer list-none items-start justify-between gap-4 text-[16px] font-semibold leading-[1.6] text-[#101828]" itemProp="name">
-                <span>{faq.question}</span>
-              </summary>
-              <div className="mt-4 border-t border-[#edf1f6] pt-4" itemScope itemProp="acceptedAnswer" itemType="https://schema.org/Answer">
-                <div className="text-[15px] leading-[1.9] text-[#344054]" itemProp="text">
-                  {faq.answer}
-                </div>
-              </div>
-            </details>
-          ))}
-        </div>
+        <GeoFaqGrid items={faqs} />
       </Section>
 
       <Section id="related" eyebrow="下一步" title="十、相关页面与回流入口">
@@ -463,32 +413,13 @@ export default async function OldHeatTreatmentFurnaceDecisionPage({ params }: Pa
         </div>
       </Section>
 
-      <section id="contact" className="border-t border-[#e2e8f0] bg-[#101828] py-12 text-white lg:py-16">
-        <div className="mx-auto grid max-w-[1180px] gap-8 px-5 lg:grid-cols-[1fr_auto] lg:items-center lg:px-8">
-          <div>
-            <p className="text-[13px] font-semibold text-white/58">获取判断建议</p>
-            <h2 className="mt-3 text-[28px] font-semibold leading-[1.28] lg:text-[42px]">
-              不确定老旧热处理炉该修还是该换？
-            </h2>
-            <p className="mt-5 max-w-[820px] text-[16px] leading-[1.95] text-white/78 lg:text-[18px]">
-              把设备照片、炉型、炉膛尺寸、最高温度、工件信息、当前问题、能耗情况和停产窗口发给苏能，技术人员可先做初步判断，帮助你评估适合大修、局部改造还是重新采购。
-            </p>
-            <address className="mt-6 flex flex-wrap gap-x-8 gap-y-3 text-[15px] leading-[1.8] text-white/82 not-italic">
-              <span>电话 / 微信：{siteSettings.salesPhone}</span>
-              <span>邮箱：{siteSettings.email}</span>
-            </address>
-          </div>
-          <div className="flex flex-wrap gap-4 lg:justify-end">
-            <QuoteModalButton
-              label="获取报价方案"
-              className="inline-flex min-h-[46px] items-center justify-center rounded-[4px] bg-[#c51624] px-6 text-[15px] font-semibold text-white transition hover:bg-[#a90f1b]"
-            />
-            <a href={contactPath} className="inline-flex min-h-[46px] items-center justify-center rounded-[4px] border border-white/46 px-6 text-[15px] font-semibold text-white transition hover:border-white hover:bg-white/10">
-              联系苏能工程师
-            </a>
-          </div>
-        </div>
-      </section>
+      <GeoContactCta
+        eyebrow="获取判断建议"
+        title="不确定老旧热处理炉该修还是该换？"
+        description="把设备照片、炉型、炉膛尺寸、最高温度、工件信息、当前问题、能耗情况和停产窗口发给苏能，技术人员可先做初步判断，帮助你评估适合大修、局部改造还是重新采购。"
+        secondaryHref={contactPath}
+        secondaryLabel="联系苏能工程师"
+      />
 
       <JsonLd id="old-heat-treatment-furnace-decision-page-jsonld" data={pageJsonLd} />
       <JsonLd id="old-heat-treatment-furnace-decision-faq-jsonld" data={faqJsonLd} />

@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 
 import { getAboutContent } from '@/lib/api/about';
-import { buildSeoMetadata } from '@/lib/seo';
+import { buildMetadata } from '@/lib/seo/metadata';
 import { localizeText } from '@/lib/utils';
 import { AboutApiData, AboutPageKey, AboutSectionApiItem, ChairmanMessageApiItem, CultureValueApiItem } from '@/types/about';
 import { Locale, SidebarItem } from '@/types/site';
@@ -144,13 +144,23 @@ export async function createAboutPageMetadata(
     timeline: 'about-timeline',
   };
 
-  return buildSeoMetadata({
-    locale,
-    path: pathOverride || pathMap[pageKey],
-    pageKey: seoPageKeyMap[pageKey],
+  const rawPath = pathOverride || pathMap[pageKey];
+  const path = rawPath.startsWith('/') ? rawPath : `/${rawPath}`;
+  const unlocalizedPath = path.replace(/^\/(?:zh|en)(?=\/|$)/, '') || '/';
+  const localizedPath = `/${locale}${unlocalizedPath === '/' ? '' : unlocalizedPath}`;
+
+  return buildMetadata({
     title,
     description,
+    path: localizedPath,
+    pageKey: seoPageKeyMap[pageKey],
+    locale,
     image,
+    alternateLocales: {
+      'zh-CN': `/zh${unlocalizedPath === '/' ? '' : unlocalizedPath}`,
+      'en-US': `/en${unlocalizedPath === '/' ? '' : unlocalizedPath}`,
+      'x-default': `/zh${unlocalizedPath === '/' ? '' : unlocalizedPath}`,
+    },
   });
 }
 

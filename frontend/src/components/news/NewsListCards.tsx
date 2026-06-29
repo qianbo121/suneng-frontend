@@ -1,8 +1,9 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import { HiChevronLeft, HiChevronRight, HiClock } from 'react-icons/hi2';
+import { HiClock } from 'react-icons/hi2';
 
 import { EmptyState } from '@/components/ui/EmptyState';
+import { Pagination } from '@/components/ui/Pagination';
 import { formatNewsDisplayDate } from '@/lib/news';
 import { cn } from '@/lib/utils';
 import { NewsListCardItem } from '@/types/news';
@@ -59,63 +60,9 @@ function NewsListItem({
   );
 }
 
-function NewsPagination({
-  locale,
-  page,
-  total,
-  pageSize,
-}: Required<Pick<NewsListCardsProps, 'locale' | 'page' | 'total' | 'pageSize'>>) {
-  const pageCount = Math.max(1, Math.ceil(total / pageSize));
-  const pages = Array.from({ length: Math.min(pageCount, 5) }, (_, index) => index + 1);
-
-  if (pageCount <= 1) return null;
-
-  return (
-    <div className="mt-[24px] flex items-center justify-center gap-[14px]">
-      <Link
-        href={`/${locale}/news?page=${Math.max(1, page - 1)}`}
-        aria-disabled={page <= 1}
-        className={cn(
-          'flex h-[38px] w-[38px] items-center justify-center rounded-[4px] border border-[#d8d8d8] bg-white text-[#777] transition',
-          page <= 1
-            ? 'pointer-events-none opacity-45'
-            : 'hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]',
-        )}
-      >
-        <HiChevronLeft className="h-5 w-5" />
-      </Link>
-      {pages.map((item) => (
-        <Link
-          key={item}
-          href={`/${locale}/news?page=${item}`}
-          className={cn(
-            'flex h-[38px] min-w-[38px] items-center justify-center rounded-[4px] border px-3 text-[16px] transition',
-            page === item
-              ? 'border-[var(--color-accent)] bg-[var(--color-accent)] text-white'
-              : 'border-[#d8d8d8] bg-white text-[#333] hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]',
-          )}
-        >
-          {item}
-        </Link>
-      ))}
-      <Link
-        href={`/${locale}/news?page=${Math.min(pageCount, page + 1)}`}
-        aria-disabled={page >= pageCount}
-        className={cn(
-          'flex h-[38px] w-[38px] items-center justify-center rounded-[4px] border border-[#d8d8d8] bg-white text-[#777] transition',
-          page >= pageCount
-            ? 'pointer-events-none opacity-45'
-            : 'hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]',
-        )}
-      >
-        <HiChevronRight className="h-5 w-5" />
-      </Link>
-    </div>
-  );
-}
-
 export function NewsListCards({ locale, items, page = 1, total = items.length, pageSize = 6 }: NewsListCardsProps) {
   const normalized = items.slice(0, pageSize);
+  const pageCount = Math.max(1, Math.ceil(total / pageSize));
 
   if (normalized.length === 0) {
     return (
@@ -137,7 +84,11 @@ export function NewsListCards({ locale, items, page = 1, total = items.length, p
           <NewsListItem key={item.id} locale={locale} item={item} last={index === normalized.length - 1} />
         ))}
       </div>
-      <NewsPagination locale={locale} page={page} total={total} pageSize={pageSize} />
+      {pageCount > 1 ? (
+        <div className="mt-[24px] flex justify-center">
+          <Pagination page={page} total={total} pageSize={pageSize} baseHref={`/${locale}/news`} />
+        </div>
+      ) : null}
     </section>
   );
 }

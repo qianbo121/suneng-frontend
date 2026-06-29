@@ -4,7 +4,8 @@ import type { Metadata } from 'next';
 import { NEWS_FALLBACK_IMAGE, NEWS_LABEL } from '@/constants/news';
 import { getNewsDetail, getNewsList, getNewsPrevNext } from '@/lib/api/news';
 import { toAssetUrl } from '@/lib/api/client';
-import { buildSeoMetadata, buildLocalizedUrl } from '@/lib/seo';
+import { compactText } from '@/lib/seo';
+import { absoluteUrl, buildMetadata } from '@/lib/seo/metadata';
 import { sanitizeRichTextHtml } from '@/lib/sanitize';
 import { localizeText } from '@/lib/utils';
 import { NewsApiItem, NewsListCardItem } from '@/types/news';
@@ -76,14 +77,19 @@ export async function createNewsListMetadata(locale: Locale): Promise<Metadata> 
       ? 'Latest company and industry updates.'
       : '聚焦公司动态与行业资讯，展示企业新闻内容。';
 
-  return buildSeoMetadata({
-    locale,
-    path: '/news',
-    pageKey: 'news',
+  return buildMetadata({
     title,
     description,
+    path: `/${locale}/news`,
+    pageKey: 'news',
     keywords: '',
+    locale,
     image: NEWS_FALLBACK_IMAGE,
+    alternateLocales: {
+      'zh-CN': '/zh/news',
+      'en-US': '/en/news',
+      'x-default': '/zh/news',
+    },
   });
 }
 
@@ -104,15 +110,20 @@ export async function createNewsDetailMetadata(locale: Locale, slug: string): Pr
     : '';
   const image = item ? getNewsCoverImage(item) : NEWS_FALLBACK_IMAGE;
 
-  return buildSeoMetadata({
-    locale,
-    path: `/news/${slug}`,
-    pageKey: `news-detail-${slug}`,
+  return buildMetadata({
     title,
-    description,
+    description: compactText(description || title).slice(0, 160),
+    path: `/${locale}/news/${slug}`,
+    pageKey: `news-detail-${slug}`,
     keywords: item ? localizeText(locale, item.seoKeywordsZh, item.seoKeywordsEn) : '',
+    locale,
     image,
     type: 'article',
+    alternateLocales: {
+      'zh-CN': `/zh/news/${slug}`,
+      'en-US': `/en/news/${slug}`,
+      'x-default': `/zh/news/${slug}`,
+    },
   });
 }
 
@@ -151,5 +162,5 @@ export const getNewsDetailPageData = cache(async (slug: string) => {
 });
 
 export function getNewsCanonicalUrl(locale: Locale, slug: string) {
-  return buildLocalizedUrl(locale, `/news/${slug}`);
+  return absoluteUrl(`/${locale}/news/${slug}`);
 }

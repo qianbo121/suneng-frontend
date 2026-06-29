@@ -8,5 +8,6 @@ import { PrismaModule } from '@/prisma/prisma.module';
   imports: [PrismaModule],
   controllers: [CustomRequirementController],
   providers: [CustomRequirementService],
+  exports: [CustomRequirementService],
 })
 export class CustomRequirementModule {}

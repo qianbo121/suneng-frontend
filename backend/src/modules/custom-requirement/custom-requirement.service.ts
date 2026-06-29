@@ -78,4 +78,10 @@ export class CustomRequirementService {
       data: { status: CustomRequirementStatus.followed },
     });
   }
+
+  getPendingCount() {
+    return this.prisma.customRequirement.count({
+      where: { status: CustomRequirementStatus.pending },
+    });
+  }
 }

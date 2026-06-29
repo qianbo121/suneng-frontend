@@ -1,8 +1,8 @@
 import type { Metadata } from 'next';
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
-import type { ReactNode } from 'react';
 
+import { GeoBulletList as BulletList, GeoFaqGrid, GeoSection as Section } from '@/components/geo-pages/GeoPageBlocks';
 import { JsonLd } from '@/components/JsonLd';
 import { Breadcrumb } from '@/components/layout/Breadcrumb';
 import { ProductLeadForm } from '@/components/products/ProductLeadForm';
@@ -18,13 +18,6 @@ type PageProps = {
   params: Promise<{
     locale: string;
   }>;
-};
-
-type SectionProps = {
-  id: string;
-  eyebrow: string;
-  title: string;
-  children: ReactNode;
 };
 
 type RelatedLink = {
@@ -269,8 +262,6 @@ const breadcrumbJsonLd = getBreadcrumbJsonLd([
   { name: '服务支持', url: servicePath },
   { name: '工业炉报价需要哪些参数', url: pagePath },
 ]);
-const faqColumnSize = Math.ceil(faqs.length / 2);
-const faqColumns = [faqs.slice(0, faqColumnSize), faqs.slice(faqColumnSize)];
 
 const relatedLinks = [
   getStaticProductBySlug('trolley-furnace') && {
@@ -341,30 +332,6 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       'x-default': pagePath,
     },
   });
-}
-
-function Section({ id, title, children }: SectionProps) {
-  return (
-    <section id={id} className="border-t border-[#e2e8f0] py-12 scroll-mt-24 lg:py-16">
-      <div className="mx-auto max-w-[1180px] px-5 lg:px-8">
-        <h2 className="text-[26px] font-semibold leading-[1.28] text-[#101828] lg:text-[38px]">{title}</h2>
-        <div className="mt-8">{children}</div>
-      </div>
-    </section>
-  );
-}
-
-function BulletList({ items }: { items: string[] }) {
-  return (
-    <ul className="mt-4 space-y-2 text-[15px] leading-[1.8] text-[#3f4a5f] lg:text-[16px]">
-      {items.map((item) => (
-        <li key={item} className="flex gap-3">
-          <span className="mt-[0.74em] h-1.5 w-1.5 shrink-0 rounded-full bg-[#c51624]" />
-          <span>{item}</span>
-        </li>
-      ))}
-    </ul>
-  );
 }
 
 export default async function IndustrialFurnaceQuoteParamsPage({ params }: PageProps) {
@@ -616,48 +583,7 @@ export default async function IndustrialFurnaceQuoteParamsPage({ params }: PageP
       </Section>
 
       <Section id="faq" eyebrow="常见问题" title="八、工业炉报价常见问题">
-        <div className="grid gap-3 md:grid-cols-2 md:items-start md:gap-5" itemScope itemType="https://schema.org/FAQPage">
-          {faqColumns.map((column, columnIndex) => (
-            <div key={`faq-column-${columnIndex}`} className="space-y-3">
-              {column.map((faq, index) => {
-                const faqIndex = columnIndex * faqColumnSize + index;
-
-                return (
-                  <details
-                    key={faq.question}
-                    className="group rounded-[8px] border border-[#dfe6f0] bg-white px-5 py-4 shadow-[0_10px_24px_rgba(15,35,75,0.03)] [&>summary::-webkit-details-marker]:hidden"
-                    itemScope
-                    itemProp="mainEntity"
-                    itemType="https://schema.org/Question"
-                    open={faqIndex === 0}
-                  >
-                    <summary className="flex cursor-pointer list-none items-start justify-between gap-4 text-[16px] font-semibold leading-[1.6] text-[#101828]" itemProp="name">
-                      <span>{faq.question}</span>
-                      <span
-                        aria-hidden="true"
-                        className="relative mt-1 flex h-6 w-6 shrink-0 items-center justify-center rounded-full border border-[#dfe6f0] group-open:hidden"
-                      >
-                        <span className="absolute h-[2px] w-3 rounded-full bg-[#c51624]" />
-                        <span className="absolute h-3 w-[2px] rounded-full bg-[#c51624]" />
-                      </span>
-                      <span
-                        aria-hidden="true"
-                        className="relative mt-1 hidden h-6 w-6 shrink-0 items-center justify-center rounded-full border border-[#dfe6f0] group-open:flex"
-                      >
-                        <span className="absolute h-[2px] w-3 rounded-full bg-[#c51624]" />
-                      </span>
-                    </summary>
-                    <div className="mt-4 border-t border-[#edf1f6] pt-4" itemScope itemProp="acceptedAnswer" itemType="https://schema.org/Answer">
-                      <div className="text-[15px] leading-[1.9] text-[#344054]" itemProp="text">
-                        {faq.answer}
-                      </div>
-                    </div>
-                  </details>
-                );
-              })}
-            </div>
-          ))}
-        </div>
+        <GeoFaqGrid items={faqs} openMode="first" />
       </Section>
 
       <Section id="related" eyebrow="相关页面" title="九、相关页面与延伸阅读">

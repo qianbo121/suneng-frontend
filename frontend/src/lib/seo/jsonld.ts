@@ -320,6 +320,35 @@ export function getHomePageJsonLd(path = '/', locale: Locale = 'zh') {
   });
 }
 
+export function getWebPageJsonLd({
+  path,
+  name,
+  description,
+  locale = 'zh',
+  mainEntityId,
+}: {
+  path: string;
+  name: string;
+  description?: string;
+  locale?: Locale;
+  mainEntityId?: string;
+}) {
+  const pageUrl = absoluteUrl(path);
+
+  return cleanObject({
+    '@context': 'https://schema.org',
+    '@type': 'WebPage',
+    '@id': webpageId(pageUrl),
+    url: pageUrl,
+    name,
+    description,
+    isPartOf: { '@id': `${SITE_URL}/#website` },
+    about: { '@id': LOCAL_BUSINESS_ID },
+    mainEntity: mainEntityId ? { '@id': mainEntityId } : undefined,
+    inLanguage: schemaLanguage(locale),
+  });
+}
+
 export function getBreadcrumbJsonLd(items: Array<{ name: string; url: string }>) {
   return cleanObject({
     '@context': 'https://schema.org',
