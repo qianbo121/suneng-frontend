@@ -1,7 +1,7 @@
 import { isZhOnlyPath } from '@/lib/i18n/zh-only';
 import { Locale, NavigationItem } from '@/types/site';
 
-export const navigationItems: NavigationItem[] = [
+const navigationItems: NavigationItem[] = [
   {
     key: 'home',
     href: '/',
@@ -86,7 +86,7 @@ const zhOnlyNavigationChildren: Partial<Record<string, NonNullable<NavigationIte
   ],
 };
 
-export function getLocalizedText(locale: Locale, text: { zh: string; en: string }) {
+function getLocalizedText(locale: Locale, text: { zh: string; en: string }) {
   return text[locale];
 }
 

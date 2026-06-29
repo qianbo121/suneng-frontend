@@ -185,74 +185,42 @@ export class AboutService {
     return this.prisma.chairmanMessage.update({ where: { id }, data: dto });
   }
 
-  updateSectionStatus(id: number, status: PublishStatus) {
-    return this.updateAboutSectionStatus(id, status);
-  }
-
-  updateTimelineStatus(id: number, status: PublishStatus) {
-    return this.updateTimelineEventStatus(id, status);
-  }
-
-  updateCultureStatus(id: number, status: PublishStatus) {
-    return this.updateCultureValueStatus(id, status);
-  }
-
-  updateChairmanStatus(id: number, status: PublishStatus) {
-    return this.updateChairmanMessageStatus(id, status);
-  }
-
-  removeSection(id: number) {
-    return this.removeAboutSection(id);
-  }
-
-  removeTimeline(id: number) {
-    return this.removeTimelineEvent(id);
-  }
-
-  removeCulture(id: number) {
-    return this.removeCultureValue(id);
-  }
-
-  removeChairman(id: number) {
-    return this.removeChairmanMessage(id);
-  }
-
-  private async updateAboutSectionStatus(id: number, status: PublishStatus) {
+  async updateSectionStatus(id: number, status: PublishStatus) {
     await this.findSection(id);
     return this.prisma.aboutSection.update({ where: { id }, data: { status } });
   }
 
-  private async updateTimelineEventStatus(id: number, status: PublishStatus) {
+  async updateTimelineStatus(id: number, status: PublishStatus) {
     await this.findTimeline(id);
     return this.prisma.timelineEvent.update({ where: { id }, data: { status } });
   }
 
-  private async updateCultureValueStatus(id: number, status: PublishStatus) {
+  async updateCultureStatus(id: number, status: PublishStatus) {
     await this.findCulture(id);
     return this.prisma.cultureValue.update({ where: { id }, data: { status } });
   }
 
-  private async updateChairmanMessageStatus(id: number, status: PublishStatus) {
+  async updateChairmanStatus(id: number, status: PublishStatus) {
     await this.findChairman(id);
     return this.prisma.chairmanMessage.update({ where: { id }, data: { status } });
   }
 
-  private async removeAboutSection(id: number) {
+  async removeSection(id: number) {
     await this.findSection(id);
     return this.prisma.aboutSection.delete({ where: { id } });
   }
 
-  private async removeTimelineEvent(id: number) {
+  async removeTimeline(id: number) {
     await this.findTimeline(id);
     return this.prisma.timelineEvent.delete({ where: { id } });
   }
 
-  private async removeCultureValue(id: number) {
+  async removeCulture(id: number) {
     await this.findCulture(id);
     return this.prisma.cultureValue.delete({ where: { id } });
   }
 
-  private async removeChairmanMessage(id: number) {
+  async removeChairman(id: number) {
     await this.findChairman(id);
     return this.prisma.chairmanMessage.delete({ where: { id } });
   }

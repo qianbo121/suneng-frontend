@@ -16,7 +16,7 @@ type ApiMutationOptions<TBody> = {
   headers?: Record<string, string>;
 };
 
-export class ApiRequestError extends Error {
+class ApiRequestError extends Error {
   status?: number;
 
   constructor(message: string, status?: number) {
@@ -80,7 +80,7 @@ function buildApiUrl(path: string, searchParams?: ApiRequestOptions['searchParam
   return url.toString();
 }
 
-export function getApiOrigin() {
+function getApiOrigin() {
   const baseUrl = getApiBaseUrl();
   if (!baseUrl) return '';
   const siteOrigin = getSiteOrigin();
@@ -194,7 +194,7 @@ async function apiRequest<T>(
   return unwrapEnvelope((payload ?? null) as ApiEnvelope<T> | T);
 }
 
-export async function apiGet<T>(path: string, options: ApiRequestOptions = {}) {
+async function apiGet<T>(path: string, options: ApiRequestOptions = {}) {
   return apiRequest<T>('GET', path, options);
 }
 
@@ -208,24 +208,6 @@ export async function apiPost<T, TBody = Record<string, unknown>>(
 export async function safeApiGet<T>(path: string, options: ApiRequestOptions = {}) {
   try {
     const data = await apiGet<T>(path, options);
-    return {
-      data,
-      error: null,
-    };
-  } catch (error) {
-    return {
-      data: null as T | null,
-      error: error instanceof Error ? error.message : 'Unknown request error',
-    };
-  }
-}
-
-export async function safeApiPost<T, TBody = Record<string, unknown>>(
-  path: string,
-  options: ApiMutationOptions<TBody> & Pick<ApiRequestOptions, 'cache'> = {},
-) {
-  try {
-    const data = await apiPost<T, TBody>(path, options);
     return {
       data,
       error: null,

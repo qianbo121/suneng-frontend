@@ -144,5 +144,3 @@ export const PRODUCT_CENTER_CATEGORIES: ProductCategoryDefinition[] = [
     },
   },
 ];
-
-export const PRODUCT_CENTER_CATEGORY_NAMES_ZH = PRODUCT_CENTER_CATEGORIES.map((item) => item.name.zh);

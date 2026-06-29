@@ -17,7 +17,7 @@ type ProductDetailGalleryProps = {
 export function ProductDetailGallery({ locale, images, title, fillMode = 'contain' }: ProductDetailGalleryProps) {
   const safeImages = images.length ? images : ['/images/products/trolley-furnace/gallery/trolley-01.png'];
   const [activeIndex, setActiveIndex] = useState(0);
-  const activeImage = safeImages[activeIndex] || safeImages[0];
+  const activeImage = safeImages[activeIndex];
   const mainImageClassName = fillMode === 'cover-left' ? 'object-cover object-left' : 'object-contain';
   const activeDescriptor = activeIndex === 0
     ? (locale === 'en' ? 'main product image' : '产品主图')

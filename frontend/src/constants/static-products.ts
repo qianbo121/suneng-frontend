@@ -1,6 +1,5 @@
 import { PRODUCT_CENTER_CATEGORIES } from '@/constants/product-categories';
-import { ProductListCardItem, ProductSpecRow } from '@/types/product';
-import { Locale, SidebarItem } from '@/types/site';
+import { ProductSpecRow } from '@/types/product';
 
 export type StaticProductFeature = {
   title: string;
@@ -2442,27 +2441,4 @@ export const STATIC_PRODUCTS: StaticProduct[] = PRODUCT_CENTER_CATEGORIES.map((c
 
 export function getStaticProductBySlug(slug: string) {
   return STATIC_PRODUCTS.find((product) => product.slug === slug) || null;
-}
-
-export function getStaticProductCards(locale: Locale, products = STATIC_PRODUCTS): ProductListCardItem[] {
-  return products.map((product) => ({
-    id: product.id,
-    slug: product.slug,
-    model: product.model,
-    name: product.name,
-    summary: product.summary,
-    image: product.image,
-  }));
-}
-
-export function getStaticProductSidebarItems(locale: Locale): SidebarItem[] {
-  return STATIC_PRODUCTS.map((product) => ({
-    label: product.name[locale],
-    href: `/${locale}/products/detail/${product.slug}`,
-    matchHrefs: [`/${locale}/products/detail/${product.slug}`],
-  }));
-}
-
-export function getRelatedStaticProducts(slug: string, locale: Locale) {
-  return getStaticProductCards(locale, STATIC_PRODUCTS.filter((product) => product.slug !== slug).slice(0, 4));
 }
