@@ -6,12 +6,9 @@ import { getNewsDetail, getNewsList, getNewsPrevNext } from '@/lib/api/news';
 import { toAssetUrl } from '@/lib/api/client';
 import { buildSeoMetadata, buildLocalizedUrl } from '@/lib/seo';
 import { sanitizeRichTextHtml } from '@/lib/sanitize';
+import { localizeText } from '@/lib/utils';
 import { NewsApiItem, NewsListCardItem } from '@/types/news';
 import { Locale } from '@/types/site';
-
-function localize(locale: Locale, zh?: string | null, en?: string | null, fallback = '') {
-  return locale === 'en' ? en || zh || fallback : zh || en || fallback;
-}
 
 export function formatNewsDisplayDate(value?: string | null) {
   if (!value) return '';
@@ -68,7 +65,7 @@ export function mapNewsCard(locale: Locale, item: NewsApiItem): NewsListCardItem
 }
 
 export function normalizeNewsHtml(locale: Locale, item: NewsApiItem) {
-  const content = localize(locale, item.contentZh, item.contentEn);
+  const content = localizeText(locale, item.contentZh, item.contentEn);
   return sanitizeRichTextHtml(content);
 }
 
@@ -93,16 +90,16 @@ export async function createNewsListMetadata(locale: Locale): Promise<Metadata> 
 export async function createNewsDetailMetadata(locale: Locale, slug: string): Promise<Metadata> {
   const { article: item } = await getNewsDetailPageData(slug);
   const title = item
-    ? localize(locale, item.seoTitleZh, item.seoTitleEn, localize(locale, item.titleZh, item.titleEn))
+    ? localizeText(locale, item.seoTitleZh, item.seoTitleEn, localizeText(locale, item.titleZh, item.titleEn))
     : locale === 'en'
       ? 'News Detail'
       : '新闻详情';
   const description = item
-    ? localize(
+    ? localizeText(
         locale,
         item.seoDescriptionZh,
         item.seoDescriptionEn,
-        localize(locale, item.summaryZh, item.summaryEn, localize(locale, item.contentZh, item.contentEn)),
+        localizeText(locale, item.summaryZh, item.summaryEn, localizeText(locale, item.contentZh, item.contentEn)),
       )
     : '';
   const image = item ? getNewsCoverImage(item) : NEWS_FALLBACK_IMAGE;
@@ -113,7 +110,7 @@ export async function createNewsDetailMetadata(locale: Locale, slug: string): Pr
     pageKey: `news-detail-${slug}`,
     title,
     description,
-    keywords: item ? localize(locale, item.seoKeywordsZh, item.seoKeywordsEn) : '',
+    keywords: item ? localizeText(locale, item.seoKeywordsZh, item.seoKeywordsEn) : '',
     image,
     type: 'article',
   });

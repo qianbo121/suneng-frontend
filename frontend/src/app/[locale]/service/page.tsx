@@ -5,6 +5,7 @@ import { Breadcrumb } from '@/components/layout/Breadcrumb';
 import { PageBanner } from '@/components/layout/PageBanner';
 import { buildMetadata } from '@/lib/seo/metadata';
 import { SERVICE_SEO } from '@/lib/seo/page-data';
+import { siteSettings } from '@/mock/siteSettings';
 import { Locale } from '@/types/site';
 
 type ServicePageProps = {
@@ -46,7 +47,7 @@ const servicePageCopy = {
     intro:
       '江苏苏能工业炉有限公司始终将产品品质与客户服务置于核心地位，以严苛标准保障质量，以高效响应兑现承诺，竭诚为工业热处理生产提供安全可靠的设备支持。',
     hotlineTitle: '售后服务热线方式',
-    hotlineContact: '联系人：唐荔　电话：+86-130-5298-6814',
+    hotlineContact: `联系人：唐荔　电话：${siteSettings.salesPhone}`,
     sections: [
       {
         title: '一、品质基石：源自匠心，始终如一',
@@ -65,7 +66,7 @@ const servicePageCopy = {
       {
         title: '三、响应速度：高效出击，不负所托',
         paragraphs: [
-          '故障咨询：客户服务热线 +86-130-5298-6814，专业技术团队接听后协助初步诊断问题。',
+          `故障咨询：客户服务热线 ${siteSettings.salesPhone}，专业技术团队接听后协助初步诊断问题。`,
           '现场服务：客户服务热线 8 小时内响应，技术服务团队 24 小时内答复处理方案；现场上门服务依据合同约定、设备状态、现场工况和服务距离安排。',
           '故障处理：按问题影响等级与合同约定的服务条款响应。具体处理方案、停产损失补偿等事宜，以合同条款为准。',
         ],
@@ -95,7 +96,7 @@ const servicePageCopy = {
     intro:
       'Jiangsu Suneng Industrial Furnace Co., Ltd. puts product quality and customer service at the center of every industrial furnace project. With strict standards and responsive support, we help industrial heat treatment operations run with reliable equipment backup.',
     hotlineTitle: 'After-sales service hotline',
-    hotlineContact: 'Contact: Tang Li  Phone: +86-130-5298-6814',
+    hotlineContact: `Contact: Tang Li  Phone: ${siteSettings.salesPhone}`,
     sections: [
       {
         title: '1. Quality Foundation: consistent standards from manufacturing to delivery',
@@ -114,7 +115,7 @@ const servicePageCopy = {
       {
         title: '3. Response Speed: fast diagnosis and practical follow-up',
         paragraphs: [
-          'Fault consultation: call the customer service hotline at +86-130-5298-6814. Our technical team will assist with preliminary diagnosis after receiving the request.',
+          `Fault consultation: call the customer service hotline at ${siteSettings.salesPhone}. Our technical team will assist with preliminary diagnosis after receiving the request.`,
           'On-site service: the hotline responds within 8 hours, and the technical service team replies with a handling plan within 24 hours. On-site visits are arranged according to the contract, equipment status, site conditions and service distance.',
           'Fault handling: response is based on the impact level of the issue and the service terms agreed in the contract. Specific handling plans and any production-loss matters are subject to the contract terms.',
         ],

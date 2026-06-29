@@ -9,6 +9,7 @@ import { QuoteModalButton } from '@/components/lead/QuoteModalButton';
 import { cleanObject, getBreadcrumbJsonLd, getFaqJsonLd } from '@/lib/seo/jsonld';
 import { buildMetadata } from '@/lib/seo/metadata';
 import { CONTINUOUS_HEAT_TREATMENT_LINE_SEO } from '@/lib/seo/page-data';
+import { siteSettings } from '@/mock/siteSettings';
 
 type PageProps = {
   params: Promise<{
@@ -561,8 +562,8 @@ export default async function ContinuousHeatTreatmentLinePage({ params }: PagePr
               把工件材质、尺寸、单件重量、产能节拍、热处理工艺、最高温度、冷却方式、输送方式、自动化要求和现场条件发给苏能，技术人员可先判断适合的产线结构、炉型组合、温区配置和交付边界。
             </p>
             <address className="mt-6 flex flex-wrap gap-x-8 gap-y-3 text-[15px] leading-[1.8] text-white/82 not-italic">
-              <span>电话 / 微信：+86-130-5298-6814</span>
-              <span>邮箱：997518512@qq.com</span>
+              <span>电话 / 微信：{siteSettings.salesPhone}</span>
+              <span>邮箱：{siteSettings.email}</span>
             </address>
           </div>
           <div className="flex flex-wrap gap-4 lg:justify-end">

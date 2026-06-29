@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 
 import { buildSeoMetadata } from '@/lib/seo';
+import { localizeText } from '@/lib/utils';
 import { StrengthCategoryApiItem, StrengthDisplayCard, StrengthDisplayMode } from '@/types/strength';
 import { Locale, SidebarItem } from '@/types/site';
 
@@ -11,10 +12,6 @@ const fallbackCategories: StrengthCategoryApiItem[] = [
   { id: 2, nameZh: '荣誉资质', nameEn: 'Honors', slug: 'honors' },
   { id: 3, nameZh: '资质证书', nameEn: 'Certificates', slug: 'certificates' },
 ];
-
-function localize(locale: Locale, zh?: string | null, en?: string | null, fallback = '') {
-  return locale === 'en' ? en || zh || fallback : zh || en || fallback;
-}
 
 function normalizedSlug(slug?: string | null) {
   return (slug || '').toLowerCase();
@@ -40,7 +37,7 @@ function getDisplayMode(category: StrengthCategoryApiItem): StrengthDisplayMode 
 
 export function getStrengthSidebarItems(locale: Locale, categories: StrengthCategoryApiItem[]): SidebarItem[] {
   return categories.map((item, index) => ({
-    label: localize(locale, item.nameZh, item.nameEn, fallbackCategories[index]?.nameZh || ''),
+    label: localizeText(locale, item.nameZh, item.nameEn, fallbackCategories[index]?.nameZh || ''),
     href: index === 0 ? `/${locale}/strength` : `/${locale}/strength/${item.slug}`,
     matchHrefs: index === 0 ? [`/${locale}/strength/${item.slug}`] : undefined,
   }));
@@ -54,7 +51,7 @@ export function getStrengthCategoryBySlug(categories: StrengthCategoryApiItem[],
 export async function createStrengthMetadata(locale: Locale, categorySlug?: string): Promise<Metadata> {
   const currentCategory = getStrengthCategoryBySlug(fallbackCategories, categorySlug);
   const title = currentCategory
-    ? localize(locale, currentCategory.nameZh, currentCategory.nameEn)
+    ? localizeText(locale, currentCategory.nameZh, currentCategory.nameEn)
     : locale === 'en'
       ? 'Strength'
       : '实力展示';

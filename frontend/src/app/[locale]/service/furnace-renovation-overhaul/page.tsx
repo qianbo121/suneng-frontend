@@ -9,6 +9,7 @@ import { ProductLeadForm } from '@/components/products/ProductLeadForm';
 import { getFaqJsonLd } from '@/lib/seo/jsonld';
 import { buildMetadata } from '@/lib/seo/metadata';
 import { FURNACE_RENOVATION_OVERHAUL_SEO } from '@/lib/seo/page-data';
+import { siteSettings } from '@/mock/siteSettings';
 
 type PageProps = {
   params: Promise<{
@@ -354,7 +355,7 @@ const guaranteeStages = [
     items: [
       '质保期 1 年，自验收合格之日起，具体以合同为准。',
       '易损件和非标配件保障方式按设备类型、合同约定和备件供应条件确定。',
-      '客户服务热线 +86-130-5298-6814。',
+      `客户服务热线 ${siteSettings.salesPhone}。`,
       '现场上门服务依据合同约定、设备状态、现场工况和服务距离安排。',
     ],
   },
@@ -456,8 +457,8 @@ const serviceJsonLd = {
     '@type': 'Organization',
     name: '江苏苏能工业炉有限公司',
     url: 'https://www.jssngyl.cn',
-    telephone: '+86-130-5298-6814',
-    email: '997518512@qq.com',
+    telephone: siteSettings.salesPhone,
+    email: siteSettings.email,
     address: {
       '@type': 'PostalAddress',
       streetAddress: '张甸蔡官工业区',
@@ -893,11 +894,11 @@ export default async function FurnaceRenovationOverhaulPage({ params }: PageProp
             <address className="mt-6 space-y-3 text-[15px] leading-[1.8] text-[#344054] not-italic">
               <p>
                 <strong className="font-semibold text-[#101828]">电话 / 微信：</strong>
-                <a href="tel:+8613052986814" className="text-[#c51624]">+86-130-5298-6814</a>
+                <a href="tel:+8613052986814" className="text-[#c51624]">{siteSettings.salesPhone}</a>
               </p>
               <p>
                 <strong className="font-semibold text-[#101828]">邮箱：</strong>
-                <a href="mailto:997518512@qq.com" className="text-[#c51624]">997518512@qq.com</a>
+                <a href={`mailto:${siteSettings.email}`} className="text-[#c51624]">{siteSettings.email}</a>
               </p>
               <p>
                 <strong className="font-semibold text-[#101828]">联系人：</strong>

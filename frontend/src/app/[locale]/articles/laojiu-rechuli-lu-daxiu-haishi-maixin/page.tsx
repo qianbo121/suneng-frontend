@@ -9,6 +9,7 @@ import { QuoteModalButton } from '@/components/lead/QuoteModalButton';
 import { cleanObject, getBreadcrumbJsonLd, getFaqJsonLd } from '@/lib/seo/jsonld';
 import { buildMetadata } from '@/lib/seo/metadata';
 import { OLD_HEAT_TREATMENT_FURNACE_REPAIR_OR_REPLACE_SEO } from '@/lib/seo/page-data';
+import { siteSettings } from '@/mock/siteSettings';
 
 type PageProps = {
   params: Promise<{
@@ -473,8 +474,8 @@ export default async function OldHeatTreatmentFurnaceDecisionPage({ params }: Pa
               把设备照片、炉型、炉膛尺寸、最高温度、工件信息、当前问题、能耗情况和停产窗口发给苏能，技术人员可先做初步判断，帮助你评估适合大修、局部改造还是重新采购。
             </p>
             <address className="mt-6 flex flex-wrap gap-x-8 gap-y-3 text-[15px] leading-[1.8] text-white/82 not-italic">
-              <span>电话 / 微信：+86-130-5298-6814</span>
-              <span>邮箱：997518512@qq.com</span>
+              <span>电话 / 微信：{siteSettings.salesPhone}</span>
+              <span>邮箱：{siteSettings.email}</span>
             </address>
           </div>
           <div className="flex flex-wrap gap-4 lg:justify-end">

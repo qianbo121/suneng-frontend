@@ -10,6 +10,7 @@ import { getStaticProductBySlug } from '@/constants/static-products';
 import { cleanObject, getBreadcrumbJsonLd, getFaqJsonLd } from '@/lib/seo/jsonld';
 import { buildMetadata } from '@/lib/seo/metadata';
 import { JIANGSU_INDUSTRIAL_FURNACE_MANUFACTURER_SEO } from '@/lib/seo/page-data';
+import { siteSettings } from '@/mock/siteSettings';
 
 type PageProps = {
   params: Promise<{
@@ -709,8 +710,8 @@ export default async function JiangsuIndustrialFurnaceManufacturerPage({ params 
               把工件材质、尺寸、装炉量、最高温度、热处理工艺、现场位置和项目类型发给苏能，技术人员可先判断适合的炉型方向，并给出初步方案建议。
             </p>
             <address className="mt-6 flex flex-wrap gap-x-8 gap-y-3 text-[15px] leading-[1.8] text-white/82 not-italic">
-              <span>电话 / 微信：+86-130-5298-6814</span>
-              <span>邮箱：997518512@qq.com</span>
+              <span>电话 / 微信：{siteSettings.salesPhone}</span>
+              <span>邮箱：{siteSettings.email}</span>
             </address>
           </div>
           <div className="flex flex-wrap gap-4 lg:justify-end">

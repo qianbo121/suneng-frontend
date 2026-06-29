@@ -10,6 +10,7 @@ import {
   SITE_URL,
 } from '@/lib/seo/config';
 import { absoluteUrl } from '@/lib/seo/metadata';
+import { siteSettings } from '@/mock/siteSettings';
 import type { Locale } from '@/types/site';
 
 export type ProductDetailJsonLdInput = {
@@ -168,8 +169,8 @@ export function getOrganizationJsonLd(locale: Locale = 'zh') {
     alternateName: isEnglish ? [COMPANY_NAME, ...ALTERNATE_NAMES] : [englishCompanyName, ...ALTERNATE_NAMES],
     url: LOCAL_BUSINESS_URL,
     logo: SITE_LOGO_IMAGE ? absoluteUrl(SITE_LOGO_IMAGE) : undefined,
-    telephone: '+86-130-5298-6814',
-    email: '997518512@qq.com',
+    telephone: siteSettings.salesPhone,
+    email: siteSettings.email,
     foundingDate: '2006',
     numberOfEmployees: {
       '@type': 'QuantitativeValue',

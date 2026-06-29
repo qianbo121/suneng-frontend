@@ -10,6 +10,7 @@ import { getStaticProductBySlug } from '@/constants/static-products';
 import { getBreadcrumbJsonLd, getFaqJsonLd } from '@/lib/seo/jsonld';
 import { buildMetadata } from '@/lib/seo/metadata';
 import { INDUSTRIAL_FURNACE_QUOTE_PARAMS_SEO } from '@/lib/seo/page-data';
+import { siteSettings } from '@/mock/siteSettings';
 
 import { CopyQuoteChecklistButton } from './CopyQuoteChecklistButton';
 
@@ -566,11 +567,11 @@ export default async function IndustrialFurnaceQuoteParamsPage({ params }: PageP
               <p className="mt-3 text-[15px] leading-[1.8] text-[#475467]">
                 可通过在线表单、电话/微信
                 <a href="tel:+8613052986814" className="mx-1 font-semibold text-[#c51624] underline underline-offset-4">
-                  +86-130-5298-6814
+                  {siteSettings.salesPhone}
                 </a>
                 ，或邮箱
-                <a href="mailto:997518512@qq.com" className="mx-1 font-semibold text-[#c51624] underline underline-offset-4">
-                  997518512@qq.com
+                <a href={`mailto:${siteSettings.email}`} className="mx-1 font-semibold text-[#c51624] underline underline-offset-4">
+                  {siteSettings.email}
                 </a>
                 提交。
               </p>

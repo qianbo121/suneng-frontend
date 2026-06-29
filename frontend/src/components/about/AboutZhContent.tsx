@@ -6,6 +6,7 @@ import { QuoteModalButton } from '@/components/lead/QuoteModalButton';
 import { Breadcrumb } from '@/components/layout/Breadcrumb';
 import { SITE_LOGO_IMAGE, SITE_URL } from '@/lib/seo/config';
 import { absoluteUrl } from '@/lib/seo/metadata';
+import { siteSettings } from '@/mock/siteSettings';
 
 export const ABOUT_ZH_SEO = {
   title:
@@ -788,16 +789,16 @@ export function AboutZhContent() {
                     className="mt-2 block text-[20px] font-semibold text-white"
                     href="tel:+8613052986814"
                   >
-                    +86-130-5298-6814
+                    {siteSettings.salesPhone}
                   </a>
                 </div>
                 <div className="p-6 md:p-8">
                   <p className="text-[14px] font-semibold text-white/56">邮箱</p>
                   <a
                     className="mt-2 block break-words text-[20px] font-semibold text-white"
-                    href="mailto:997518512@qq.com"
+                    href={`mailto:${siteSettings.email}`}
                   >
-                    997518512@qq.com
+                    {siteSettings.email}
                   </a>
                 </div>
               </address>

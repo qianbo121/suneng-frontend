@@ -25,6 +25,7 @@ import { buildProductImageAlt } from '@/lib/seo';
 import { getFaqJsonLd, getProductDetailJsonLd } from '@/lib/seo/jsonld';
 import { buildMetadata } from '@/lib/seo/metadata';
 import { PRODUCT_DETAIL_SEO } from '@/lib/seo/page-data';
+import { siteSettings } from '@/mock/siteSettings';
 import { Locale } from '@/types/site';
 
 type ProductDetailPageProps = {
@@ -43,6 +44,19 @@ const processStepIcons = [
   '/images/products/detail-icons/icon_step_05.png',
 ];
 const PRODUCTION_LINE_SLUGS = new Set(['roller-mesh-belt-line', 'copper-wire-annealing-line', 'annealing-solution-line']);
+const GEO_SECTION_TITLE_BY_SLUG: Record<string, string> = {
+  'trolley-furnace': '台车炉选型与工艺适配',
+  'box-furnace': '箱式炉选型与工艺适配',
+  'mesh-belt-furnace': '网带炉选型与工艺适配',
+  'pit-furnace': '井式炉选型与工艺适配',
+  'bell-furnace': '罩式炉选型与工艺适配',
+  'roller-hearth-furnace': '辊底炉选型与工艺适配',
+  'pusher-furnace': '推杆炉选型与工艺适配',
+  'rotary-hearth-furnace': '转底炉选型与工艺适配',
+  'roller-mesh-belt-line': '托辊型网带生产线选型与工艺适配',
+  'copper-wire-annealing-line': '铜丝退火线选型与工艺适配',
+  'annealing-solution-line': '退火固溶生产线选型与工艺适配',
+};
 const quoteParamsPath = '/zh/articles/gongye-lu-baojia-canshu';
 const repairOrReplacePath = '/zh/articles/laojiu-rechuli-lu-daxiu-haishi-maixin';
 
@@ -157,29 +171,7 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
   const geoSectionTitle =
     currentLocale === 'en'
       ? `${detail.title} — Selection & Process Fit`
-      : product.slug === 'trolley-furnace'
-        ? '台车炉选型与工艺适配'
-        : product.slug === 'box-furnace'
-          ? '箱式炉选型与工艺适配'
-        : product.slug === 'mesh-belt-furnace'
-          ? '网带炉选型与工艺适配'
-        : product.slug === 'pit-furnace'
-          ? '井式炉选型与工艺适配'
-        : product.slug === 'bell-furnace'
-          ? '罩式炉选型与工艺适配'
-        : product.slug === 'roller-hearth-furnace'
-          ? '辊底炉选型与工艺适配'
-        : product.slug === 'pusher-furnace'
-          ? '推杆炉选型与工艺适配'
-        : product.slug === 'rotary-hearth-furnace'
-          ? '转底炉选型与工艺适配'
-        : product.slug === 'roller-mesh-belt-line'
-          ? '托辊型网带生产线选型与工艺适配'
-        : product.slug === 'copper-wire-annealing-line'
-          ? '铜丝退火线选型与工艺适配'
-        : product.slug === 'annealing-solution-line'
-          ? '退火固溶生产线选型与工艺适配'
-          : `${detail.title.replace('（非标定制）', '')}选型与工艺适配`;
+      : GEO_SECTION_TITLE_BY_SLUG[product.slug] ?? `${detail.title.replace('（非标定制）', '')}选型与工艺适配`;
   const showChinesePathLinks = currentLocale === 'zh';
   // Localize internal links to the current locale; drop links whose target is
   // Chinese-only when rendering English (avoids /en 404s and /zh cross-locale
@@ -317,7 +309,7 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
               <span className="text-[14px] leading-none text-[#8a8f99]">
                 {currentLocale === 'en' ? 'Hotline:' : '咨询热线：'}
               </span>
-              <strong className="-ml-1 text-[14px] font-semibold leading-none text-[#1a1d23]">+86-130-5298-6814</strong>
+              <strong className="-ml-1 text-[14px] font-semibold leading-none text-[#1a1d23]">{siteSettings.salesPhone}</strong>
             </div>
           </aside>
         </section>
