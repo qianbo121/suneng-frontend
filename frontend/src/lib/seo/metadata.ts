@@ -82,7 +82,7 @@ type BuildMetadataOptions = {
   title: string;
   description: string;
   path: string;
-  keywords?: string[];
+  keywords?: string | string[];
   pageKey?: string;
   image?: string;
   type?: 'website' | 'article';

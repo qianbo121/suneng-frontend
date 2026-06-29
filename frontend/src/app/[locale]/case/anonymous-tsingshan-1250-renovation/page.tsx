@@ -3,6 +3,11 @@ import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import type { ReactNode } from 'react';
 
+import {
+  GeoBulletList as BulletList,
+  GeoFactList,
+  GeoSection as Section,
+} from '@/components/geo-pages/GeoPageBlocks';
 import { JsonLd } from '@/components/JsonLd';
 import { Breadcrumb } from '@/components/layout/Breadcrumb';
 import { ProductLeadForm } from '@/components/products/ProductLeadForm';
@@ -327,54 +332,6 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   });
 }
 
-function Section({
-  id,
-  eyebrow,
-  title,
-  children,
-}: {
-  id: string;
-  eyebrow: string;
-  title: string;
-  children: ReactNode;
-}) {
-  return (
-    <section id={id} className="border-t border-[#e2e8f0] py-12 scroll-mt-24 lg:py-16">
-      <div className="mx-auto max-w-[1180px] px-5 lg:px-8">
-        <p className="text-[12px] font-semibold uppercase tracking-[0.26em] text-[#c51624]">{eyebrow}</p>
-        <h2 className="mt-3 text-[26px] font-semibold leading-[1.28] text-[#101828] lg:text-[38px]">{title}</h2>
-        <div className="mt-8">{children}</div>
-      </div>
-    </section>
-  );
-}
-
-function BulletList({ items }: { items: ReactNode[] }) {
-  return (
-    <ul className="mt-4 space-y-2 text-[15px] leading-[1.8] text-[#3f4a5f] lg:text-[16px]">
-      {items.map((item, index) => (
-        <li key={index} className="flex gap-3">
-          <span className="mt-[0.74em] h-1.5 w-1.5 shrink-0 rounded-full bg-[#c51624]" />
-          <span>{item}</span>
-        </li>
-      ))}
-    </ul>
-  );
-}
-
-function FactList({ items }: { items: FactItem[] }) {
-  return (
-    <dl className="grid gap-3">
-      {items.map(([label, value]) => (
-        <div key={label} className="grid gap-1 border-b border-[#e7edf5] pb-3 last:border-b-0 sm:grid-cols-[150px_1fr]">
-          <dt className="text-[13px] font-semibold text-[#667085]">{label}</dt>
-          <dd className="text-[15px] leading-[1.75] text-[#253047]">{value}</dd>
-        </div>
-      ))}
-    </dl>
-  );
-}
-
 function NumberBadge({ children }: { children: ReactNode }) {
   return (
     <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-[#c51624] text-[18px] font-semibold text-white">
@@ -486,7 +443,7 @@ export default async function AnonymousTsingshanCasePage({ params }: PageProps) 
           <article className="rounded-[8px] border border-[#e1e7f0] bg-white p-6 shadow-[0_10px_24px_rgba(15,35,75,0.04)]">
             <h3 className="text-[22px] font-semibold leading-[1.35] text-[#101828]">原产线基础参数</h3>
             <div className="mt-5">
-              <FactList items={originalParameters} />
+              <GeoFactList items={originalParameters} labelWidth="150px" />
             </div>
           </article>
 
@@ -548,7 +505,7 @@ export default async function AnonymousTsingshanCasePage({ params }: PageProps) 
         <div className="mt-7 rounded-[8px] border border-[#e1e7f0] bg-white p-6 shadow-[0_10px_24px_rgba(15,35,75,0.04)]">
           <h3 className="text-[22px] font-semibold leading-[1.35] text-[#101828]">数据拆解</h3>
           <div className="mt-5">
-            <FactList items={effectRows} />
+            <GeoFactList items={effectRows} labelWidth="150px" />
           </div>
         </div>
 

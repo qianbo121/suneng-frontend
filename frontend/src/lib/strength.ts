@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 
-import { buildSeoMetadata } from '@/lib/seo';
+import { buildMetadata } from '@/lib/seo/metadata';
 import { localizeText } from '@/lib/utils';
 import { StrengthCategoryApiItem, StrengthDisplayCard, StrengthDisplayMode } from '@/types/strength';
 import { Locale, SidebarItem } from '@/types/site';
@@ -60,17 +60,24 @@ export async function createStrengthMetadata(locale: Locale, categorySlug?: stri
       ? 'Explore the company strength, honors and equipment capability.'
       : '展示企业实力、荣誉资质与生产设备能力。';
 
-  return buildSeoMetadata({
-    locale,
-    path: currentCategory && categorySlug ? `/strength/${currentCategory.slug}` : '/strength',
-    pageKey: currentCategory && categorySlug ? `strength-category-${currentCategory.slug}` : 'strength',
+  const path = currentCategory && categorySlug ? `/strength/${currentCategory.slug}` : '/strength';
+
+  return buildMetadata({
     title,
     description,
+    path: `/${locale}${path}`,
+    pageKey: 'strength',
     keywords:
       locale === 'en'
         ? ['company strength', 'industrial furnace equipment', 'certificates', 'production capability']
         : ['企业实力', '工业炉生产设备', '热处理设备资质', '工业炉荣誉证书', title],
+    locale,
     image: STRENGTH_BANNER_IMAGE,
+    alternateLocales: {
+      'zh-CN': `/zh${path}`,
+      'en-US': `/en${path}`,
+      'x-default': `/zh${path}`,
+    },
   });
 }
 

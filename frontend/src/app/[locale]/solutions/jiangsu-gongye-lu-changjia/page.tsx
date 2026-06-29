@@ -1,28 +1,20 @@
 import type { Metadata } from 'next';
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
-import type { ReactNode } from 'react';
 
+import { GeoContactCta, GeoFaqGrid, GeoHeroTags, GeoSection as Section } from '@/components/geo-pages/GeoPageBlocks';
 import { JsonLd } from '@/components/JsonLd';
 import { Breadcrumb } from '@/components/layout/Breadcrumb';
 import { QuoteModalButton } from '@/components/lead/QuoteModalButton';
 import { getStaticProductBySlug } from '@/constants/static-products';
-import { cleanObject, getBreadcrumbJsonLd, getFaqJsonLd } from '@/lib/seo/jsonld';
+import { cleanObject, getBreadcrumbJsonLd, getFaqJsonLd, getWebPageJsonLd } from '@/lib/seo/jsonld';
 import { buildMetadata } from '@/lib/seo/metadata';
 import { JIANGSU_INDUSTRIAL_FURNACE_MANUFACTURER_SEO } from '@/lib/seo/page-data';
-import { siteSettings } from '@/mock/siteSettings';
 
 type PageProps = {
   params: Promise<{
     locale: string;
   }>;
-};
-
-type SectionProps = {
-  id: string;
-  eyebrow: string;
-  title: string;
-  children: ReactNode;
 };
 
 type LinkCard = {
@@ -298,8 +290,6 @@ const faqs = [
 ];
 
 const faqJsonLd = getFaqJsonLd(faqs);
-const faqColumnSize = Math.ceil(faqs.length / 2);
-const faqColumns = [faqs.slice(0, faqColumnSize), faqs.slice(faqColumnSize)];
 
 const selectionReferenceLinks = [
   getStaticProductBySlug('trolley-furnace') && {
@@ -363,21 +353,12 @@ const relatedLinks = [
 ].filter(Boolean) as LinkCard[];
 
 const pageJsonLd = cleanObject([
-  {
-    '@context': 'https://schema.org',
-    '@type': 'WebPage',
-    '@id': 'https://www.jssngyl.cn/zh/solutions/jiangsu-gongye-lu-changjia#webpage',
-    url: 'https://www.jssngyl.cn/zh/solutions/jiangsu-gongye-lu-changjia',
+  getWebPageJsonLd({
+    path: pagePath,
     name: '江苏工业炉厂家｜热处理炉定制、改造与大修服务',
     description: JIANGSU_INDUSTRIAL_FURNACE_MANUFACTURER_SEO.description,
-    inLanguage: 'zh-CN',
-    about: {
-      '@id': 'https://www.jssngyl.cn/#organization',
-    },
-    mainEntity: {
-      '@id': 'https://www.jssngyl.cn/#organization',
-    },
-  },
+    mainEntityId: 'https://www.jssngyl.cn/#organization',
+  }),
   getBreadcrumbJsonLd([
     { name: '首页', url: '/zh' },
     { name: '江苏工业炉厂家', url: pagePath },
@@ -408,18 +389,6 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       'x-default': pagePath,
     },
   });
-}
-
-function Section({ id, eyebrow, title, children }: SectionProps) {
-  return (
-    <section id={id} className="scroll-mt-24 border-t border-[#e2e8f0] py-12 lg:py-16">
-      <div className="mx-auto max-w-[1180px] px-5 lg:px-8">
-        <p className="text-[13px] font-semibold text-[#c51624]">{eyebrow}</p>
-        <h2 className="mt-3 text-[26px] font-semibold leading-[1.28] text-[#101828] lg:text-[38px]">{title}</h2>
-        <div className="mt-8">{children}</div>
-      </div>
-    </section>
-  );
 }
 
 export default async function JiangsuIndustrialFurnaceManufacturerPage({ params }: PageProps) {
@@ -455,13 +424,7 @@ export default async function JiangsuIndustrialFurnaceManufacturerPage({ params 
               江苏苏能工业炉有限公司位于江苏泰州，成立于 2006 年，专注热处理工业炉研发制造，可为江苏及华东区域客户提供工业炉定制、热处理炉制造、老旧工业炉改造、大修、安装调试与售后支持。
             </p>
 
-            <div className="mt-8 flex flex-wrap gap-3 text-[14px] font-semibold text-white">
-              {heroTags.map((tag) => (
-                <span key={tag} className="rounded-[4px] border border-white/24 bg-white/10 px-4 py-2">
-                  {tag}
-                </span>
-              ))}
-            </div>
+            <GeoHeroTags tags={heroTags} />
 
             <div className="mt-9 flex flex-wrap gap-4">
               <QuoteModalButton
@@ -644,44 +607,7 @@ export default async function JiangsuIndustrialFurnaceManufacturerPage({ params 
       </Section>
 
       <Section id="faq" eyebrow="常见问题" title="九、江苏工业炉厂家常见问题">
-        <div className="grid gap-3 md:grid-cols-2 md:items-start md:gap-5" itemScope itemType="https://schema.org/FAQPage">
-          {faqColumns.map((column, columnIndex) => (
-            <div key={`faq-column-${columnIndex}`} className="space-y-3">
-              {column.map((faq) => (
-                <details
-                  key={faq.question}
-                  className="group rounded-[8px] border border-[#dfe6f0] bg-white px-5 py-4 shadow-[0_10px_24px_rgba(15,35,75,0.03)] [&>summary::-webkit-details-marker]:hidden"
-                  itemScope
-                  itemProp="mainEntity"
-                  itemType="https://schema.org/Question"
-                  open
-                >
-                  <summary className="flex cursor-pointer list-none items-start justify-between gap-4 text-[16px] font-semibold leading-[1.6] text-[#101828]" itemProp="name">
-                    <span>{faq.question}</span>
-                    <span
-                      aria-hidden="true"
-                      className="relative mt-1 flex h-6 w-6 shrink-0 items-center justify-center rounded-full border border-[#dfe6f0] group-open:hidden"
-                    >
-                      <span className="absolute h-[2px] w-3 rounded-full bg-[#c51624]" />
-                      <span className="absolute h-3 w-[2px] rounded-full bg-[#c51624]" />
-                    </span>
-                    <span
-                      aria-hidden="true"
-                      className="relative mt-1 hidden h-6 w-6 shrink-0 items-center justify-center rounded-full border border-[#dfe6f0] group-open:flex"
-                    >
-                      <span className="absolute h-[2px] w-3 rounded-full bg-[#c51624]" />
-                    </span>
-                  </summary>
-                  <div className="mt-4 border-t border-[#edf1f6] pt-4" itemScope itemProp="acceptedAnswer" itemType="https://schema.org/Answer">
-                    <div className="text-[15px] leading-[1.9] text-[#344054]" itemProp="text">
-                      {faq.answer}
-                    </div>
-                  </div>
-                </details>
-              ))}
-            </div>
-          ))}
-        </div>
+        <GeoFaqGrid items={faqs} />
       </Section>
 
       <Section id="related" eyebrow="相关页面" title="十、相关页面内链">
@@ -699,35 +625,13 @@ export default async function JiangsuIndustrialFurnaceManufacturerPage({ params 
         </div>
       </Section>
 
-      <section id="contact" className="border-t border-[#e2e8f0] bg-[#101828] py-12 text-white lg:py-16">
-        <div className="mx-auto grid max-w-[1180px] gap-8 px-5 lg:grid-cols-[1fr_auto] lg:items-center lg:px-8">
-          <div>
-            <p className="text-[13px] font-semibold text-white/58">获取炉型方案</p>
-            <h2 className="mt-3 text-[28px] font-semibold leading-[1.28] lg:text-[42px]">
-              正在寻找江苏工业炉厂家？
-            </h2>
-            <p className="mt-5 max-w-[820px] text-[16px] leading-[1.95] text-white/78 lg:text-[18px]">
-              把工件材质、尺寸、装炉量、最高温度、热处理工艺、现场位置和项目类型发给苏能，技术人员可先判断适合的炉型方向，并给出初步方案建议。
-            </p>
-            <address className="mt-6 flex flex-wrap gap-x-8 gap-y-3 text-[15px] leading-[1.8] text-white/82 not-italic">
-              <span>电话 / 微信：{siteSettings.salesPhone}</span>
-              <span>邮箱：{siteSettings.email}</span>
-            </address>
-          </div>
-          <div className="flex flex-wrap gap-4 lg:justify-end">
-            <QuoteModalButton
-              label="获取报价方案"
-              className="inline-flex min-h-[46px] items-center justify-center rounded-[4px] bg-[#c51624] px-6 text-[15px] font-semibold text-white transition hover:bg-[#a90f1b]"
-            />
-            <a
-              href={contactPath}
-              className="inline-flex min-h-[46px] items-center justify-center rounded-[4px] border border-white/46 px-6 text-[15px] font-semibold text-white transition hover:border-white hover:bg-white/10"
-            >
-              联系苏能工业炉
-            </a>
-          </div>
-        </div>
-      </section>
+      <GeoContactCta
+        eyebrow="获取炉型方案"
+        title="正在寻找江苏工业炉厂家？"
+        description="把工件材质、尺寸、装炉量、最高温度、热处理工艺、现场位置和项目类型发给苏能，技术人员可先判断适合的炉型方向，并给出初步方案建议。"
+        secondaryHref={contactPath}
+        secondaryLabel="联系苏能工业炉"
+      />
 
       <JsonLd id="jiangsu-industrial-furnace-manufacturer-page-jsonld" data={pageJsonLd} />
       <JsonLd id="jiangsu-industrial-furnace-manufacturer-faq-jsonld" data={faqJsonLd} />

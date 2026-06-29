@@ -8,7 +8,7 @@ import {
   RelatedPartnerLinkItem,
 } from '@/components/partner/PartnerLogoGrid';
 import { localizeOrHideHref } from '@/lib/i18n/zh-only';
-import { buildSeoMetadata } from '@/lib/seo';
+import { buildMetadata } from '@/lib/seo/metadata';
 import { PARTNER_SEO } from '@/lib/seo/page-data';
 import { Locale } from '@/types/site';
 
@@ -214,17 +214,22 @@ export async function generateMetadata({ params }: PartnerPageProps) {
   const { locale } = await params;
   const currentLocale = (locale === 'en' ? 'en' : 'zh') as Locale;
 
-  return buildSeoMetadata({
-    locale: currentLocale,
-    path: '/partner',
-    pageKey: 'partner',
+  return buildMetadata({
     title: currentLocale === 'en' ? 'Partners' : PARTNER_SEO.title,
     description:
       currentLocale === 'en'
         ? 'Industrial furnace cooperation and application scenarios across manufacturing sectors.'
         : PARTNER_SEO.description,
+    path: `/${currentLocale}/partner`,
+    pageKey: 'partner',
     keywords: PARTNER_SEO.keywords,
+    locale: currentLocale,
     image: '/images/partner/partner-hero.png',
+    alternateLocales: {
+      'zh-CN': '/zh/partner',
+      'en-US': '/en/partner',
+      'x-default': '/zh/partner',
+    },
   });
 }
 
