@@ -1,9 +1,9 @@
 {
   "common": {
-    "siteName": "Manufacturing Corporate Website",
-    "sectionEyebrow": "Global Layout",
-    "placeholderTitle": "Global layout and core UI are ready",
-    "placeholderDescription": "This stage focuses on the header, footer, floating toolbar, inner-page banner, 404 page and i18n foundation. High-fidelity page reconstruction will continue on top of this shell."
+    "siteName": "Jiangsu Suneng Industrial Furnace Co., Ltd.",
+    "sectionEyebrow": "Suneng Industrial Furnace",
+    "placeholderTitle": "Industrial Furnace and Heat-Treatment Equipment Solutions",
+    "placeholderDescription": "Jiangsu Suneng Industrial Furnace focuses on industrial furnaces, heat-treatment furnaces and custom equipment, covering solution design, manufacturing, installation, commissioning and after-sales service."
   },
   "buttons": {
     "backHome": "Back to Home",

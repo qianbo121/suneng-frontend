@@ -13,6 +13,7 @@ import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { AdminRole } from '@prisma/client';
 import { Roles } from '@/common/decorators/roles.decorator';
 
+import { Public } from '@/common/decorators/public.decorator';
 import { UpdatePublishStatusDto } from '@/common/dto/update-publish-status.dto';
 import { CreateProductCategoryDto } from '@/modules/product-category/dto/create-product-category.dto';
 import { ProductCategoryListQueryDto } from '@/modules/product-category/dto/product-category-list-query.dto';
@@ -24,6 +25,13 @@ import { ProductCategoryService } from '@/modules/product-category/product-categ
 @Controller()
 export class ProductCategoryController {
   constructor(private readonly service: ProductCategoryService) {}
+
+  @Get('v1/product-categories')
+  @Public()
+  @ApiOperation({ summary: 'Get published product categories' })
+  getPublicList() {
+    return this.service.getPublicList();
+  }
 
   @Get('admin/product-categories')
   @ApiBearerAuth('bearer')

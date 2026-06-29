@@ -30,7 +30,7 @@ type FurnaceProductCard = {
   name: HotProductItem['name'];
   model: string;
   image: string;
-  kind: FurnaceKind;
+  kind?: FurnaceKind;
 };
 
 type FurnaceDescriptionKey = FurnaceKind;
@@ -183,7 +183,27 @@ function ProductArtwork({ item, locale }: { item: FurnaceProductCard; locale: Lo
   );
 }
 
-export function HotProducts({ locale }: HotProductsProps) {
+export function buildHomeFurnaceProducts(items: HotProductItem[]) {
+  if (!items.length) return furnaceProducts;
+
+  const cmsBySlug = new Map(items.map((item) => [item.slug, item]));
+  return furnaceProducts.map((item) => {
+    const cmsItem = cmsBySlug.get(item.slug);
+    if (!cmsItem) return item;
+
+    return {
+      ...item,
+      id: cmsItem.id,
+      name: cmsItem.name,
+      model: cmsItem.model || item.model,
+      image: cmsItem.image || item.image,
+    };
+  });
+}
+
+export function HotProducts({ locale, items }: HotProductsProps) {
+  const displayProducts = buildHomeFurnaceProducts(items);
+
   return (
     <section className="hot-products overflow-hidden bg-white py-8">
       <div className="mx-auto w-full max-w-[1440px] px-4 md:px-5 lg:px-5 xl:px-4">
@@ -195,13 +215,13 @@ export function HotProducts({ locale }: HotProductsProps) {
 
         <div className="mt-8 lg:mt-10">
           <div className="grid grid-cols-2 gap-2.5 lg:grid-cols-4 lg:gap-3.5">
-            {furnaceProducts.map((item) => {
-              const isAnimatedCard = animatedKinds.includes(item.kind);
-              const description = furnaceDescriptions[item.kind][locale];
+            {displayProducts.map((item) => {
+              const isAnimatedCard = item.kind ? animatedKinds.includes(item.kind) : false;
+              const description = item.kind ? furnaceDescriptions[item.kind][locale] : '';
 
               return (
               <Link
-                key={item.id}
+                key={item.slug}
                 href={`/${locale}/products/detail/${item.slug}`}
                 className="group flex h-[250px] flex-col overflow-hidden rounded-[2px] border border-[#dbe4ec] bg-[#f8fbfd] transition-[transform,background-color,border-color,box-shadow] duration-300 hover:-translate-y-[4px] hover:border-[#c9d6e3] hover:bg-white hover:shadow-[0_14px_28px_rgba(18,47,84,0.08)] sm:h-[292px] lg:h-[344px]"
               >

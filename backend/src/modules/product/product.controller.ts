@@ -13,6 +13,7 @@ import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { AdminRole } from '@prisma/client';
 import { Roles } from '@/common/decorators/roles.decorator';
 
+import { Public } from '@/common/decorators/public.decorator';
 import { UpdatePublishStatusDto } from '@/common/dto/update-publish-status.dto';
 import { CreateProductDto } from '@/modules/product/dto/create-product.dto';
 import { ProductListQueryDto } from '@/modules/product/dto/product-list-query.dto';
@@ -24,6 +25,27 @@ import { ProductService } from '@/modules/product/product.service';
 @Controller()
 export class ProductController {
   constructor(private readonly service: ProductService) {}
+
+  @Get('v1/products')
+  @Public()
+  @ApiOperation({ summary: 'Get published product list' })
+  getPublicList(@Query() query: ProductListQueryDto) {
+    return this.service.getPublicList(query);
+  }
+
+  @Get('v1/products/hot')
+  @Public()
+  @ApiOperation({ summary: 'Get published hot products' })
+  getHotList() {
+    return this.service.getHotList();
+  }
+
+  @Get('v1/products/:slug')
+  @Public()
+  @ApiOperation({ summary: 'Get published product detail' })
+  getPublicDetail(@Param('slug') slug: string) {
+    return this.service.getPublicDetail(slug);
+  }
 
   @Get('admin/products')
   @ApiBearerAuth('bearer')
