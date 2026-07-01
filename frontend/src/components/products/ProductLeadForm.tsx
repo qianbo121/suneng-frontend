@@ -3,6 +3,7 @@
 import { type FormEvent, useState } from 'react';
 
 import { submitCustomRequirement } from '@/lib/api/custom-requirements';
+import { trackLeadEvent } from '@/lib/api/lead-events';
 import { Locale } from '@/types/site';
 
 type ProductLeadFormProps = {
@@ -192,6 +193,8 @@ export function ProductQuoteScrollButton({
   const buttonLabel = label ?? copy.quoteButtonLabel;
 
   const handleClick = () => {
+    trackLeadEvent('quote_cta_click');
+
     const target = document.getElementById(anchorId);
 
     target?.scrollIntoView({
@@ -274,6 +277,7 @@ export function ProductLeadForm({
         temperature: getFormValue(formData, 'temperature') || undefined,
         requirement: getFormValue(formData, 'requirement') || undefined,
       });
+      trackLeadEvent('form_submit');
       form.reset();
       setShowSuccess(true);
     } catch {

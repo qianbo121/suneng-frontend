@@ -1,7 +1,10 @@
+'use client';
+
 import type { CSSProperties, ReactNode } from 'react';
 import Image from 'next/image';
 import { HiCheckCircle, HiEnvelope, HiMapPin, HiPhone } from 'react-icons/hi2';
 
+import { trackLeadEvent } from '@/lib/api/lead-events';
 import { buildBrandImageAlt, joinImageAlt } from '@/lib/seo';
 import { siteSettings } from '@/mock/siteSettings';
 import { Locale } from '@/types/site';
@@ -201,6 +204,7 @@ function ContactBlock({ copy }: { copy: (typeof footerCopy)['zh'] | (typeof foot
     <div className="flex h-full flex-col items-center justify-center gap-[28px] lg:items-start">
       <a
         href={`mailto:${copy.email}`}
+        onClick={() => trackLeadEvent('email_click')}
         className={`${FOOTER_TOKENS.fontClass} flex items-center gap-[14px] whitespace-nowrap text-[16px] font-normal leading-[1.5] text-[var(--footer-text-color)] transition-colors hover:text-white`}
       >
         <ContactIcon>
@@ -211,6 +215,7 @@ function ContactBlock({ copy }: { copy: (typeof footerCopy)['zh'] | (typeof foot
 
       <a
         href={`tel:${copy.phone.replace(/\s+/g, '')}`}
+        onClick={() => trackLeadEvent('phone_click')}
         className={`${FOOTER_TOKENS.fontClass} flex items-center gap-[14px] whitespace-nowrap text-[16px] font-normal leading-[1.5] text-[var(--footer-text-color)] transition-colors hover:text-white`}
       >
         <ContactIcon>

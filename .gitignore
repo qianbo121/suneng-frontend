@@ -7,6 +7,7 @@ coverage
 .vite
 *.log
 *.sql
+!backend/prisma/migrations/**/*.sql
 *.tar.gz
 package-lock.json
 .capture

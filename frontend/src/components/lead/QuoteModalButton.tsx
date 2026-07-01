@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 
 import { ProductLeadForm } from '@/components/products/ProductLeadForm';
+import { trackLeadEvent } from '@/lib/api/lead-events';
 import { Locale } from '@/types/site';
 
 type QuoteModalButtonProps = {
@@ -52,6 +53,11 @@ export function QuoteModalButton({
   const resolvedSubmitLabel = submitLabel ?? copy.submitLabel;
   const [isOpen, setIsOpen] = useState(false);
 
+  const openModal = () => {
+    trackLeadEvent('quote_cta_click');
+    setIsOpen(true);
+  };
+
   useEffect(() => {
     if (!isOpen) return;
 
@@ -73,7 +79,7 @@ export function QuoteModalButton({
     <>
       <button
         type="button"
-        onClick={() => setIsOpen(true)}
+        onClick={openModal}
         className={className}
       >
         {resolvedLabel}

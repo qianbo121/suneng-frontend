@@ -18,6 +18,7 @@ import { AboutModule } from '@/modules/about/about.module';
 import { ContactMessageModule } from '@/modules/contact-message/contact-message.module';
 import { CustomRequirementModule } from '@/modules/custom-requirement/custom-requirement.module';
 import { DashboardModule } from '@/modules/dashboard/dashboard.module';
+import { LeadEventModule } from '@/modules/lead-event/lead-event.module';
 import { PrismaModule } from '@/prisma/prisma.module';
 import configuration from '@/config/configuration';
 
@@ -40,6 +41,7 @@ import configuration from '@/config/configuration';
     AboutModule,
     ContactMessageModule,
     CustomRequirementModule,
+    LeadEventModule,
     DashboardModule,
   ],
   controllers: [AppController],

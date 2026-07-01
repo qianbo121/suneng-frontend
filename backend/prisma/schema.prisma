@@ -282,6 +282,31 @@ model CustomRequirement {
   @@index([createdAt])
 }
 
+model WebsiteLeadEvent {
+  id            Int      @id @default(autoincrement())
+  eventType     String   @db.VarChar(40)
+  pageTitle     String?  @db.VarChar(255)
+  pagePath      String?  @db.VarChar(500)
+  pageType      String?  @db.VarChar(80)
+  productTag    String?  @db.VarChar(120)
+  sourceType    String?  @db.VarChar(120)
+  searchKeyword String?  @db.VarChar(255)
+  province      String?  @db.VarChar(120)
+  city          String?  @db.VarChar(120)
+  deviceType    String?  @db.VarChar(40)
+  landingPage   String?  @db.VarChar(500)
+  previousPage  String?  @db.VarChar(500)
+  sessionId     String?  @db.VarChar(120)
+  visitorId     String?  @db.VarChar(120)
+  ipMasked      String?  @db.VarChar(80)
+  userAgent     String?  @db.VarChar(500)
+  createdAt     DateTime @default(now())
+
+  @@index([eventType, createdAt])
+  @@index([createdAt])
+  @@index([pagePath])
+}
+
 model CompanyInfo {
   id         Int      @id @default(autoincrement())
   key        String   @unique @db.VarChar(120)
