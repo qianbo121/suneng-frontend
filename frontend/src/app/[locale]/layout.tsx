@@ -40,11 +40,13 @@ export default async function LocaleLayout({ children, params }: LocaleLayoutPro
         <NextIntlClientProvider locale={locale} messages={messages}>
           <div className="min-h-screen bg-white pb-[72px] text-neutral-900 xl:pb-0">
             <Header locale={locale} />
-            <main className="min-h-[calc(100vh-520px)] bg-white">
-              {children}
-            </main>
-            <Footer locale={locale} />
-            <FloatToolbar locale={locale} />
+            <div id="site-page-content">
+              <main className="min-h-[calc(100vh-520px)] bg-white">
+                {children}
+              </main>
+              <Footer locale={locale} />
+              <FloatToolbar locale={locale} />
+            </div>
           </div>
         </NextIntlClientProvider>
         <JsonLd id="organization-jsonld" data={getOrganizationJsonLd(currentLocale)} />

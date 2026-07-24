@@ -287,3 +287,37 @@ export const TSINGSHAN_1250_CASE_SEO = {
   publishedTime: '2026-05-27T10:00:00+08:00',
   modifiedTime: '2026-05-27T10:00:00+08:00',
 };
+
+export const JINING_SUPPORT_ROLLER_CASE_SEO = {
+  title: '济宁支重轮热处理生产线案例｜连续加热、自动淬火与回火冷却',
+  description:
+    '苏能工业炉为济宁市五创机械有限公司提供支重轮热处理生产线方案，覆盖连续加热、自动淬火、回火、喷淋冷却和全线控制，适用于工程机械重载零部件热处理项目参考。',
+  keywords: [
+    '济宁支重轮热处理生产线',
+    '支重轮热处理生产线',
+    '工程机械零部件热处理线',
+    '支重轮淬火回火生产线',
+    '连续热处理生产线案例',
+  ],
+  ogImage: '/images/products/roller-mesh-belt-line/gallery/line-01.jpg',
+  canonicalUrl: 'https://www.jssngyl.cn/zh/case/jining-support-roller-heat-treatment-line',
+  publishedTime: '2026-07-24T20:30:00+08:00',
+  modifiedTime: '2026-07-24T20:30:00+08:00',
+};
+
+export const HENAN_ANNEALING_SOLUTION_CASE_SEO = {
+  title: '河南连续退火固溶生产线案例｜不锈钢退洗线退火固溶段设备',
+  description:
+    '苏能工业炉为河南金誉邦实业有限公司连续退洗线提供退火固溶段设备项目经验，覆盖高温退火固溶、分段冷却、挤干烘干、燃烧控制和工程接口配合。',
+  keywords: [
+    '河南连续退火固溶生产线',
+    '退火固溶段设备',
+    '不锈钢连续退洗线',
+    '不锈钢带材连续退火',
+    '连续热处理生产线案例',
+  ],
+  ogImage: '/images/products/annealing-solution-line/gallery/line-01.jpg',
+  canonicalUrl: 'https://www.jssngyl.cn/zh/case/henan-annealing-solution-line',
+  publishedTime: '2026-07-24T20:30:00+08:00',
+  modifiedTime: '2026-07-24T20:30:00+08:00',
+};

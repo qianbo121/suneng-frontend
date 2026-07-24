@@ -14,6 +14,8 @@ export const ZH_ONLY_PATHS = new Set<string>([
   '/solutions/jiangsu-gongye-lu-changjia',
   '/solutions/continuous-heat-treatment-line',
   '/case/anonymous-tsingshan-1250-renovation',
+  '/case/jining-support-roller-heat-treatment-line',
+  '/case/henan-annealing-solution-line',
 ]);
 
 function stripLocale(path: string): string {

@@ -1,5 +1,6 @@
 import type { CSSProperties, ReactNode } from 'react';
 
+import { GeoFaqGridClient } from '@/components/geo-pages/GeoFaqGridClient';
 import { QuoteModalButton } from '@/components/lead/QuoteModalButton';
 import { cn } from '@/lib/utils';
 import { siteSettings } from '@/mock/siteSettings';
@@ -92,42 +93,7 @@ export function GeoFaqGrid({
   items: GeoFaqItem[];
   openMode?: 'all' | 'first';
 }) {
-  return (
-    <div className="grid gap-3 md:grid-cols-2 md:items-start md:gap-5" itemScope itemType="https://schema.org/FAQPage">
-      {items.map((faq, index) => (
-        <details
-          key={faq.question}
-          className="group rounded-[8px] border border-[#dfe6f0] bg-white px-5 py-4 shadow-[0_10px_24px_rgba(15,35,75,0.03)] [&>summary::-webkit-details-marker]:hidden"
-          itemScope
-          itemProp="mainEntity"
-          itemType="https://schema.org/Question"
-          open={openMode === 'all' || index === 0}
-        >
-          <summary className="flex cursor-pointer list-none items-start justify-between gap-4 text-[16px] font-semibold leading-[1.6] text-[#101828]" itemProp="name">
-            <span>{faq.question}</span>
-            <span
-              aria-hidden="true"
-              className="relative mt-1 flex h-6 w-6 shrink-0 items-center justify-center rounded-full border border-[#dfe6f0] group-open:hidden"
-            >
-              <span className="absolute h-[2px] w-3 rounded-full bg-[#c51624]" />
-              <span className="absolute h-3 w-[2px] rounded-full bg-[#c51624]" />
-            </span>
-            <span
-              aria-hidden="true"
-              className="relative mt-1 hidden h-6 w-6 shrink-0 items-center justify-center rounded-full border border-[#dfe6f0] group-open:flex"
-            >
-              <span className="absolute h-[2px] w-3 rounded-full bg-[#c51624]" />
-            </span>
-          </summary>
-          <div className="mt-4 border-t border-[#edf1f6] pt-4" itemScope itemProp="acceptedAnswer" itemType="https://schema.org/Answer">
-            <div className="text-[15px] leading-[1.9] text-[#344054]" itemProp="text">
-              {faq.answer}
-            </div>
-          </div>
-        </details>
-      ))}
-    </div>
-  );
+  return <GeoFaqGridClient items={items} openMode={openMode} />;
 }
 
 export function GeoContactCta({

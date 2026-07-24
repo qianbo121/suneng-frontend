@@ -98,6 +98,8 @@ function collectStaticRoutes(): MetadataRoute.Sitemap {
     { path: '/solutions/jiangsu-gongye-lu-changjia', changeFrequency: 'monthly', priority: 0.76 },
     { path: '/solutions/continuous-heat-treatment-line', changeFrequency: 'monthly', priority: 0.86 },
     { path: '/case/anonymous-tsingshan-1250-renovation', changeFrequency: 'monthly', priority: 0.68 },
+    { path: '/case/jining-support-roller-heat-treatment-line', changeFrequency: 'monthly', priority: 0.72 },
+    { path: '/case/henan-annealing-solution-line', changeFrequency: 'monthly', priority: 0.72 },
   ];
 
   for (const item of zhOnlyStaticPaths) {

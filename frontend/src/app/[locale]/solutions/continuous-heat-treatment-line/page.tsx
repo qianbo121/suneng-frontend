@@ -41,6 +41,8 @@ const manufacturerPath = '/zh/solutions/rechuli-lu-changjia';
 const productsPath = '/zh/products';
 const contactPath = '/zh/contact';
 const casePath = '/zh/case/anonymous-tsingshan-1250-renovation';
+const jiningSupportRollerCasePath = '/zh/case/jining-support-roller-heat-treatment-line';
+const henanAnnealingSolutionCasePath = '/zh/case/henan-annealing-solution-line';
 const annealingSolutionLinePath = '/zh/products/detail/annealing-solution-line';
 const copperWireAnnealingLinePath = '/zh/products/detail/copper-wire-annealing-line';
 const rollerMeshBeltLinePath = '/zh/products/detail/roller-mesh-belt-line';
@@ -170,6 +172,11 @@ const experienceCards: ExperienceCard[] = [
     href: casePath,
   },
   {
+    title: '河南连续退洗线退火固溶段设备',
+    text: '客户授权公开案例，覆盖不锈钢带材连续退火、固溶、分段冷却、挤干烘干及工程接口配合。',
+    href: henanAnnealingSolutionCasePath,
+  },
+  {
     title: '托辊网带正火回火生产线',
     text: '苏能具备托辊网带式正火炉、快速冷却装置、回火炉及工控系统组合方案经验，可根据工件节拍、网带宽度、温区和冷却方式评估生产线配置。',
   },
@@ -180,6 +187,7 @@ const experienceCards: ExperienceCard[] = [
   {
     title: '支重轮热处理生产线',
     text: '苏能具备支重轮加热、自动淬火、回火、冷却及温控系统组合方案经验，可根据支重轮规格、节拍、硬度要求和冷却方式评估产线结构。',
+    href: jiningSupportRollerCasePath,
   },
   {
     title: '铜丝自动化退火生产线',

@@ -1,6 +1,6 @@
 'use client';
 
-import { type FormEvent, useState } from 'react';
+import { type FormEvent, type Ref, useId, useRef, useState } from 'react';
 
 import { submitCustomRequirement } from '@/lib/api/custom-requirements';
 import { trackLeadEvent } from '@/lib/api/lead-events';
@@ -37,7 +37,11 @@ const leadFormCopy = {
       temperature: { label: '使用温度', placeholder: '请输入温度，高温、低温℃' },
       requirement: { label: '设备需求', placeholder: '请输入工件材质、尺寸/单重、每小时产能..' },
     },
-    privacy: '提交即表示同意《隐私政策》',
+    privacy: {
+      summary: '提交即表示您已阅读并同意《隐私说明》',
+      notice:
+        '您提交的姓名、联系电话、公司与项目需求仅用于回复询盘、评估设备方案及后续沟通。如需查询、更正或删除已提交信息，请联系 997518512@qq.com。请勿提交与项目无关的敏感个人信息。',
+    },
     submitting: '提交中...',
     requiredContact: '请输入联系方式！',
     submitFailed: '提交失败，请稍后再试',
@@ -62,7 +66,11 @@ const leadFormCopy = {
       temperature: { label: 'Operating Temperature', placeholder: 'Enter the required temperature range' },
       requirement: { label: 'Equipment Requirements', placeholder: 'Enter workpiece material, dimensions / unit weight, hourly throughput...' },
     },
-    privacy: 'By submitting, you agree to the Privacy Policy.',
+    privacy: {
+      summary: 'By submitting, you confirm that you have read the Privacy Notice.',
+      notice:
+        'The name, contact details, company information and project requirements you provide are used only to respond to your inquiry, evaluate a furnace solution and continue project communication. To request access, correction or deletion, contact 997518512@qq.com. Do not submit unrelated sensitive personal information.',
+    },
     submitting: 'Submitting...',
     requiredContact: 'Please enter your contact information.',
     submitFailed: 'Submission failed. Please try again later.',
@@ -82,7 +90,10 @@ const leadFormCopy = {
     label: string;
     placeholder: string;
   }>;
-  privacy: string;
+  privacy: {
+    summary: string;
+    notice: string;
+  };
   submitting: string;
   requiredContact: string;
   submitFailed: string;
@@ -99,6 +110,9 @@ function LeadTextInput({
   required = false,
   invalid = false,
   onInput,
+  inputRef,
+  errorId,
+  errorMessage,
   className = '',
 }: {
   label: string;
@@ -107,6 +121,9 @@ function LeadTextInput({
   required?: boolean;
   invalid?: boolean;
   onInput?: () => void;
+  inputRef?: Ref<HTMLInputElement>;
+  errorId?: string;
+  errorMessage?: string;
   className?: string;
 }) {
   return (
@@ -120,14 +137,23 @@ function LeadTextInput({
         ) : null}
       </span>
       <input
+        ref={inputRef}
         name={name}
+        required={required}
         onInput={onInput}
         aria-invalid={invalid || undefined}
+        aria-describedby={invalid && errorId ? errorId : undefined}
+        aria-errormessage={invalid && errorId ? errorId : undefined}
         className={`mt-2 h-[40px] w-full rounded-[4px] border bg-white px-3 text-[14px] font-normal text-[#1a1d23] outline-none transition placeholder:text-[#b0b5bd] focus:border-[#c51624] focus:shadow-[0_0_0_3px_rgba(197,22,36,0.08)] ${
           invalid ? 'border-[#c51624] shadow-[0_0_0_3px_rgba(197,22,36,0.08)]' : 'border-[#e0e3e8]'
         }`}
         placeholder={placeholder}
       />
+      {invalid && errorId && errorMessage ? (
+        <span id={errorId} role="alert" className="mt-2 block text-[13px] leading-[1.5] text-[#c51624]">
+          {errorMessage}
+        </span>
+      ) : null}
     </label>
   );
 }
@@ -237,9 +263,14 @@ export function ProductLeadForm({
   const resolvedDescription = description ?? copy.defaultDescription;
   const resolvedSubmitLabel = submitLabel ?? copy.defaultSubmitLabel;
   const resolvedContactLabel = contactLabel ?? copy.contactLabel;
+  const formIdPrefix = useId();
+  const contactErrorId = `${formIdPrefix}-contact-error`;
+  const privacyNoticeId = `${formIdPrefix}-privacy-notice`;
+  const phoneInputRef = useRef<HTMLInputElement>(null);
   const [toast, setToast] = useState('');
   const [showSuccess, setShowSuccess] = useState(false);
   const [invalidContact, setInvalidContact] = useState(false);
+  const [showPrivacyNotice, setShowPrivacyNotice] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const hasLeadSidebar = Boolean(leadBullets?.length);
 
@@ -261,6 +292,7 @@ export function ProductLeadForm({
     if (!contact) {
       setInvalidContact(true);
       showToast(copy.requiredContact);
+      phoneInputRef.current?.focus();
       return;
     }
 
@@ -343,6 +375,9 @@ export function ProductLeadForm({
                 placeholder={copy.fields.phone.placeholder}
                 required
                 invalid={invalidContact}
+                inputRef={phoneInputRef}
+                errorId={contactErrorId}
+                errorMessage={copy.requiredContact}
                 onInput={() => {
                   if (invalidContact) setInvalidContact(false);
                 }}
@@ -353,7 +388,25 @@ export function ProductLeadForm({
               <LeadTextInput label={copy.fields.temperature.label} name="temperature" placeholder={copy.fields.temperature.placeholder} />
               <LeadTextarea className="md:col-span-3" label={copy.fields.requirement.label} name="requirement" placeholder={copy.fields.requirement.placeholder} />
               <div className="flex flex-col items-stretch gap-4 pt-1 sm:flex-row sm:items-center sm:justify-between md:col-span-3">
-                <p className="text-[13px] text-[#98a1ad]">{copy.privacy}</p>
+                <div className="max-w-[620px] text-[13px] leading-[1.7] text-[#667085]">
+                  <button
+                    type="button"
+                    aria-controls={privacyNoticeId}
+                    aria-expanded={showPrivacyNotice}
+                    className="text-left font-medium text-[#667085] underline decoration-[#98a1ad] underline-offset-4 hover:text-[#c51624] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#c51624]"
+                    onClick={() => setShowPrivacyNotice((current) => !current)}
+                  >
+                    {copy.privacy.summary}
+                  </button>
+                  {showPrivacyNotice ? (
+                    <p
+                      id={privacyNoticeId}
+                      className="mt-2 rounded-[4px] border border-[#e0e6ee] bg-[#f8fafc] p-3 text-[#667085]"
+                    >
+                      {copy.privacy.notice}
+                    </p>
+                  ) : null}
+                </div>
                 <button
                   className="h-[44px] w-full rounded-[4px] bg-[#c51624] text-[15px] font-medium text-white transition hover:bg-[#a90f1b] disabled:cursor-not-allowed disabled:opacity-60 sm:w-[220px] sm:shrink-0"
                   type="submit"
@@ -368,7 +421,10 @@ export function ProductLeadForm({
       </section>
 
       {toast ? (
-        <div className="fixed left-1/2 top-1/2 z-[120] -translate-x-1/2 -translate-y-1/2 rounded-[4px] bg-[#1f2937] px-6 py-3 text-[15px] text-white shadow-[0_12px_30px_rgba(0,0,0,0.18)]">
+        <div
+          role="alert"
+          className="fixed left-1/2 top-1/2 z-[120] -translate-x-1/2 -translate-y-1/2 rounded-[4px] bg-[#1f2937] px-6 py-3 text-[15px] text-white shadow-[0_12px_30px_rgba(0,0,0,0.18)]"
+        >
           {toast}
         </div>
       ) : null}
