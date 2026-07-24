@@ -1,7 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { Request } from 'express';
 
-import { CreateLeadEventDto, LEAD_EVENT_TYPES } from '@/modules/lead-event/dto/create-lead-event.dto';
+import {
+  CreateLeadEventDto,
+  LEAD_EVENT_TYPES,
+} from '@/modules/lead-event/dto/create-lead-event.dto';
 import { LeadEventListQueryDto } from '@/modules/lead-event/dto/lead-event-list-query.dto';
 import { PrismaService } from '@/prisma/prisma.service';
 
@@ -11,7 +14,9 @@ function clean(value?: string | null, maxLength = 255) {
 }
 
 function maskedIp(request: Request) {
-  const raw = String(request.ip || request.headers['x-forwarded-for'] || '').split(',')[0].trim();
+  const raw = String(request.ip || request.headers['x-forwarded-for'] || '')
+    .split(',')[0]
+    .trim();
   if (!raw) return null;
   const ipv4 = raw.match(/(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})/);
   if (ipv4) return `${ipv4[1]}.${ipv4[2]}.xxx.xxx`;
@@ -62,7 +67,10 @@ export class LeadEventService {
     const now = new Date();
     const end = normalizeDate(query.endDate, now);
     end.setHours(23, 59, 59, 999);
-    const start = normalizeDate(query.startDate, new Date(end.getTime() - 29 * 24 * 60 * 60 * 1000));
+    const start = normalizeDate(
+      query.startDate,
+      new Date(end.getTime() - 29 * 24 * 60 * 60 * 1000),
+    );
     start.setHours(0, 0, 0, 0);
     const page = Math.max(1, query.page || 1);
     const pageSize = Math.min(Math.max(1, query.pageSize || 500), 1000);
