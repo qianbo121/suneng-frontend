@@ -149,9 +149,10 @@ services:
     command:
       - /bin/sh
       - -c
-      - envsubst '$$DOMAIN $$ADMIN_DOMAIN' < /etc/nginx/nginx.conf.template > /etc/nginx/nginx.conf && nginx -g 'daemon off;'
+      - umask 027 && envsubst '$$DOMAIN $$ADMIN_DOMAIN' < /etc/nginx/nginx.conf.template > /etc/nginx/nginx.conf && exec nginx -g 'daemon off;'
     volumes:
       - ./nginx.prod.conf.template:/etc/nginx/nginx.conf.template:ro
+      - /data/nginx-logs:/var/log/nginx
       - /data/uploads:/var/www/uploads:ro
       - /etc/nginx/certs:/etc/nginx/certs:ro
       - ./deploy/www:/var/www/certbot

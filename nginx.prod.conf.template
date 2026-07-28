@@ -1,5 +1,8 @@
 worker_processes auto;
 
+error_log /var/log/nginx/error.log warn;
+error_log stderr warn;
+
 events {
   worker_connections 1024;
 }
@@ -7,6 +10,51 @@ events {
 http {
   include /etc/nginx/mime.types;
   default_type application/octet-stream;
+
+  log_format analytics_json escape=json
+    '{"time":"$time_iso8601",'
+    '"request_id":"$request_id",'
+    '"host":"$host",'
+    '"server_name":"$server_name",'
+    '"remote_addr":"$remote_addr",'
+    '"method":"$request_method",'
+    '"uri":"$uri",'
+    '"protocol":"$server_protocol",'
+    '"status":$status,'
+    '"request_length":$request_length,'
+    '"body_bytes_sent":$body_bytes_sent,'
+    '"request_time":$request_time,'
+    '"upstream_status":"$upstream_status",'
+    '"upstream_response_time":"$upstream_response_time",'
+    '"cache_status":"$upstream_cache_status",'
+    '"crawler_family":"$crawler_family",'
+    '"lead_event":"$lead_event",'
+    '"referer":"$http_referer",'
+    '"user_agent":"$http_user_agent"}';
+
+  map $http_user_agent $crawler_family {
+    default "";
+    ~*OAI-SearchBot "openai_oai_searchbot";
+    ~*ChatGPT-User "openai_chatgpt_user";
+    ~*GPTBot "openai_gptbot";
+    ~*ClaudeBot "anthropic_claudebot";
+    ~*PerplexityBot "perplexity_bot";
+    ~*Bytespider "bytedance_bytespider";
+    ~*Baiduspider "baidu_spider";
+    ~*Sogou "sogou_spider";
+    ~*360Spider "360_spider";
+    ~*YisouSpider "yisou_spider";
+    ~*Googlebot "googlebot";
+    ~*bingbot "bingbot";
+  }
+
+  map "$request_method:$uri" $lead_event {
+    default "";
+    ~^POST:/api/v1/custom-requirements/?$ "custom_requirement_submit";
+    ~^POST:/api/v1/lead-events/?$ "lead_event_ingest";
+  }
+
+  access_log /var/log/nginx/other.access.json analytics_json;
 
   sendfile on;
   tcp_nopush on;
@@ -52,6 +100,7 @@ http {
   server {
     listen 80;
     server_name jssngyl.cn ${DOMAIN};
+    access_log /var/log/nginx/redirect.access.json analytics_json;
 
     # 组织架构子页面已并入公司简介，301 重定向
     location = /zh/about/organization {
@@ -94,6 +143,7 @@ http {
   server {
     listen 80;
     server_name ${ADMIN_DOMAIN};
+    access_log /var/log/nginx/admin.access.json analytics_json;
 
     location /.well-known/acme-challenge/ {
       root /var/www/certbot;
@@ -107,6 +157,7 @@ http {
   server {
     listen 443 ssl http2;
     server_name jssngyl.cn;
+    access_log /var/log/nginx/redirect.access.json analytics_json;
 
     ssl_certificate /etc/nginx/certs/fullchain.pem;
     ssl_certificate_key /etc/nginx/certs/privkey.pem;
@@ -148,6 +199,7 @@ http {
   server {
     listen 443 ssl http2;
     server_name ${DOMAIN};
+    access_log /var/log/nginx/www.access.json analytics_json;
 
     ssl_certificate /etc/nginx/certs/fullchain.pem;
     ssl_certificate_key /etc/nginx/certs/privkey.pem;
@@ -266,6 +318,7 @@ http {
   server {
     listen 443 ssl http2;
     server_name ${ADMIN_DOMAIN};
+    access_log /var/log/nginx/admin.access.json analytics_json;
 
     ssl_certificate /etc/nginx/certs/fullchain.pem;
     ssl_certificate_key /etc/nginx/certs/privkey.pem;

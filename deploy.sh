@@ -34,6 +34,14 @@ pull_latest
 
 export DOCKER_BUILDKIT="${DOCKER_BUILDKIT:-1}"
 
+if ! command -v logrotate >/dev/null 2>&1; then
+  echo "Missing logrotate; install it before deploying."
+  exit 1
+fi
+
+install -d -m 0755 /data/nginx-logs
+install -m 0644 ops/logrotate/corp-site-nginx /etc/logrotate.d/corp-site-nginx
+
 docker compose --env-file "$ENV_FILE" -f "$COMPOSE_FILE" build
 
 # Back up the DB + uploads BEFORE applying migrations, so a bad migration or a
