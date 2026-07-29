@@ -381,6 +381,10 @@ export const productDetailEn: Partial<Record<string, ProductDetailEnOverride>> =
     ],
     scenarioCards: [
       {
+        title: 'Authorized Project: Chamber Electric Annealing Furnaces for Copper-Alloy Wire',
+        text: 'One copper-processing project used four furnace bodies, each rated at about 200 kW, with a 700°C rated temperature, an operating range of about 550–700°C, an effective charge envelope of about Φ1710 × 1600 mm, and PLC control.',
+      },
+      {
         title: 'Tempering of Small to Medium Mechanical Parts',
         text: 'Set the chamber, heating, and control configuration around tempering temperature, charge weight, soak time, and recording requirements.',
       },
@@ -398,7 +402,7 @@ export const productDetailEn: Partial<Record<string, ProductDetailEnOverride>> =
       },
     ],
     scenarioIntro:
-      'This page does not fabricate customer cases. The following serves only to illustrate common box furnace applications; specifics for a given project can be further confirmed during commercial discussions based on authorized materials.',
+      'The following combines parameters from an authorized, anonymized chamber-furnace project with common applications. Project figures apply only to the corresponding workpiece, loading method, and process conditions; they are not fixed specifications for the entire series.',
     faq: [
       {
         question: 'Q1: What workpieces are box (chamber) furnaces suited to?',
@@ -883,6 +887,15 @@ export const productDetailEn: Partial<Record<string, ProductDetailEnOverride>> =
     ],
     scenarioCards: [
       {
+        title:
+          'Authorized Project: Bogie-Hearth Spheroidizing Annealing Furnace for Bearing-Steel Wire',
+        text: 'One wire-processing project used a 10 × 3 × 2.2 m bogie-hearth spheroidizing annealing furnace; temperature, charge weight, and the process curve are determined for the corresponding wire specification.',
+      },
+      {
+        title: 'Authorized Project: Extra-Large Gas-Fired Bogie-Hearth Annealing Furnace Retrofit',
+        text: 'One heavy-workpiece project had a chamber of about 13 × 7.4 × 4.3 m, a 700°C rated temperature, 14 gas burners, and combustion-air preheating to about 250–300°C. These project figures are not generalized into a fixed energy-saving rate.',
+      },
+      {
         title: 'Annealing of large castings and forgings',
         text: 'Chamber, bogie, and refractory-lining configuration are set around workpiece dimensions, single-piece weight, soak time, and cooling method.',
       },
@@ -895,6 +908,8 @@ export const productDetailEn: Partial<Record<string, ProductDetailEnOverride>> =
         text: 'Heating and control systems are configured based on die dimensions, charge weight, temperature uniformity, and recording requirements.',
       },
     ],
+    scenarioIntro:
+      'The following combines parameters from authorized, anonymized bogie-hearth furnace projects with common applications. Dimensions, temperatures, and combustion configurations apply only to the stated projects; each new project is engineered to its workpiece and site conditions.',
     faq: [
       {
         question: 'Q1: What workpieces are bogie-hearth furnaces suited to?',
@@ -2500,6 +2515,10 @@ export const productDetailEn: Partial<Record<string, ProductDetailEnOverride>> =
     ],
     scenarioCards: [
       {
+        title: 'Authorized Project: REWF-45-9 Muffle-Type Protective-Atmosphere Mesh-Belt Furnace',
+        text: 'The project used a belt assembly measuring about 2100 × 200 × 50 mm, with an effective working width of about 180 mm, a 950°C rated temperature, throughput of about 60 kg/h, and belt speed of about 10–114 mm/min.',
+      },
+      {
         title: 'Continuous Tempering of Standard Parts',
         text: 'Temperature zones and control configuration are determined around tempering temperature, load thickness, mesh-belt speed and recording requirements.',
       },
@@ -2517,7 +2536,7 @@ export const productDetailEn: Partial<Record<string, ProductDetailEnOverride>> =
       },
     ],
     scenarioIntro:
-      'This page does not fabricate customer cases. The following serves only to illustrate common mesh-belt furnace applications; specific projects can be further confirmed during commercial discussions based on authorized materials.',
+      'The following combines parameters from an authorized, anonymized mesh-belt furnace project with common applications. Throughput, speed, and dimensions apply only to the corresponding workpiece, loading method, and process conditions; they are not fixed model guarantees.',
     faq: [
       {
         question: 'Q1: What kinds of workpieces are mesh-belt furnaces suited to?',

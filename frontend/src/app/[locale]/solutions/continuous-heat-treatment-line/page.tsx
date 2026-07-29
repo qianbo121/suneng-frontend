@@ -28,6 +28,7 @@ type TextCard = {
 };
 
 type ExperienceCard = {
+  factId: string;
   title: string;
   text: string;
   href?: string;
@@ -167,31 +168,57 @@ const customParams = [
 
 const experienceCards: ExperienceCard[] = [
   {
-    title: '不锈钢退洗线退火炉 / 退火固溶段设备',
-    text: '苏能具备不锈钢连续退火、固溶段、退洗线退火炉相关项目经验，可根据带材规格、温度制度、冷却边界和自动化要求进行方案评估。',
+    factId: 'SN-CASE-P0-008',
+    title: '3 条 1250 mm 连续退洗线节能改造',
+    text: '项目采用冷煤气替代天然气、双交叉限幅控制、低 NOx 烧嘴、余热回收和控制系统升级；具体测算公式与阶段周期已在脱敏案例页公开。',
     href: casePath,
   },
   {
-    title: '河南连续退洗线退火固溶段设备',
-    text: '客户授权公开案例，覆盖不锈钢带材连续退火、固溶、分段冷却、挤干烘干及工程接口配合。',
+    factId: 'SN-CASE-P0-006',
+    title: '850 mm 连续退火钝化线退火固溶段',
+    text: '项目退火温度约 1050–1150℃，炉温最高可至 1300℃，退火炉主体长度约 130 m；带速与 TV 值按材料规格计算。',
     href: henanAnnealingSolutionCasePath,
   },
   {
-    title: '托辊网带正火回火生产线',
-    text: '苏能具备托辊网带式正火炉、快速冷却装置、回火炉及工控系统组合方案经验，可根据工件节拍、网带宽度、温区和冷却方式评估生产线配置。',
+    factId: 'SN-CASE-P0-002',
+    title: '托辊网带正火回火连续线',
+    text: '项目资料记录有效宽度 800–1000 mm、正火温度约 950℃、回火温度约 650℃，采用多区 PID 控温和变频调速网带。',
   },
   {
-    title: '网带式淬火 / 渗碳气氛热处理生产线',
-    text: '苏能具备网带式连续加热、淬火冷却、提升出料、气氛控制和生产线控制系统相关方案经验。涉及渗碳或特殊气氛时，应根据工艺和安全条件单独评估。',
+    factId: 'SN-CASE-P0-003',
+    title: 'RCWT 托辊网带淬火回火线',
+    text: '不同项目配置的有效宽度约 800–850 mm、淬火炉额定温度 950℃、回火炉 650℃；资料分别记录网带速度 30–300 mm/min 与 30–250 mm/min。',
   },
   {
-    title: '支重轮热处理生产线',
-    text: '苏能具备支重轮加热、自动淬火、回火、冷却及温控系统组合方案经验，可根据支重轮规格、节拍、硬度要求和冷却方式评估产线结构。',
+    factId: 'SN-CASE-P0-004',
+    title: 'RCWT-75/45-9/6 可控气氛网带线',
+    text: '项目淬火炉工作尺寸约 400 × 3200 mm，回火炉约 400 × 5600 mm，额定温度 950℃，生产能力约 150 kg/h，网带速度约 30–250 mm/min。',
+  },
+  {
+    factId: 'SN-CASE-P0-005',
+    title: '网带式渗碳气氛热处理生产线',
+    text: '项目有效加热区约 9300 × 1000 × 100 mm，最高工作温度 950℃，加热功率约 300 kW；具体产量只按对应工件与节拍核算。',
+  },
+  {
+    factId: 'SN-CASE-P0-009',
+    title: '热轧退火酸洗项目退火炉',
+    text: '项目资料包含 850 mm 与 1250 mm 两种规格，炉体由预热段和 4 个加热段组成，燃烧区约 8 区控制；材料工艺温度记录覆盖 700–1200℃，出口冷却至约 80℃以下。',
+  },
+  {
+    factId: 'SN-CASE-P0-010',
+    title: '低氮燃气加热炉生产线',
+    text: '项目共 2 台炉，有效尺寸约 2.5 × 1.6 × 0.8 m，最高温度 950℃；每台配置 4 套 250 kW 低氮烧嘴，换热后助燃空气约 200–300℃。',
+  },
+  {
+    factId: 'SN-CASE-P0-011',
+    title: '750 t/d 不锈钢连续退火双带炉',
+    text: '项目带钢宽度约 485–610 mm、厚度约 2.0–5.5 mm、工艺速度约 26.6 m/min，炉子段约 110 m；参数只对应本项目双带无张力退火方案。',
+  },
+  {
+    factId: 'SN-CASE-P0-001',
+    title: 'PC200–PC400 支重轮热处理生产线',
+    text: '项目加热炉额定温度 950℃、有效加热区约 6400 × 300 × 300 mm，资料设计处理能力约 500 kg/h。',
     href: jiningSupportRollerCasePath,
-  },
-  {
-    title: '铜丝自动化退火生产线',
-    text: '苏能具备铜丝、铜线类连续退火生产线页面和方案能力，重点围绕线径、运行速度、张力控制、保护气氛和收放线系统进行方案配置。',
   },
 ];
 
@@ -466,6 +493,7 @@ export default async function ContinuousHeatTreatmentLinePage({ params }: PagePr
         <div className="grid gap-5 lg:grid-cols-3">
           {experienceCards.map((item) => (
             <article key={item.title} className="rounded-[8px] border border-[#e1e7f0] bg-[#fbfcfe] p-6">
+              <p className="text-[12px] font-semibold tracking-[0.08em] text-[#c51624]">{item.factId}</p>
               <h3 className="text-[20px] font-semibold leading-[1.4] text-[#101828]">{item.title}</h3>
               <p className="mt-3 text-[15px] leading-[1.85] text-[#475467]">{item.text}</p>
               {item.href ? (
@@ -477,7 +505,7 @@ export default async function ContinuousHeatTreatmentLinePage({ params }: PagePr
                 </a>
               ) : (
                 <p className="mt-5 rounded-[8px] border border-[#dfe6f0] bg-white p-4 text-[14px] leading-[1.75] text-[#667085]">
-                  暂无公开详情页，可在商务沟通中结合授权资料进一步说明。
+                  以上为已授权脱敏项目参数；新项目仍按工件、工艺、产能和现场条件重新设计。
                 </p>
               )}
             </article>

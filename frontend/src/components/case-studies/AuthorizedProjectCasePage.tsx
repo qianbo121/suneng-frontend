@@ -32,6 +32,8 @@ export type AuthorizedProjectCasePageData = {
   heroImageNote: string;
   heroTags: string[];
   facts: Array<[string, string]>;
+  verifiedParameters?: Array<[string, string]>;
+  verifiedParametersIntro?: string;
   disclosure: string;
   background: string;
   demand: string;
@@ -130,6 +132,30 @@ export function AuthorizedProjectCasePage({ data }: { data: AuthorizedProjectCas
             <p className="mt-4 text-[15px] leading-[1.9] text-[#344054]">{data.demand}</p>
           </article>
         </div>
+        {data.verifiedParameters?.length ? (
+          <article className="mt-6 rounded-[8px] border border-[#d6e0ec] bg-[#f8fafc] p-6 lg:p-7">
+            <h3 className="text-[21px] font-semibold leading-[1.4] text-[#101828]">
+              经授权项目参数
+            </h3>
+            <p className="mt-3 text-[14px] leading-[1.85] text-[#667085]">
+              {data.verifiedParametersIntro ||
+                '以下为该项目资料中的具体参数，仅用于说明对应项目的工程边界，不等同于其他工件或新项目的固定配置与性能承诺。'}
+            </p>
+            <dl className="mt-5 grid overflow-hidden rounded-[8px] border border-[#dfe6f0] bg-white md:grid-cols-2">
+              {data.verifiedParameters.map(([label, value]) => (
+                <div
+                  key={label}
+                  className="grid grid-cols-[128px_minmax(0,1fr)] border-b border-[#edf1f6] last:border-b-0 md:odd:border-r"
+                >
+                  <dt className="bg-[#f5f7fa] px-4 py-4 text-[14px] font-semibold leading-[1.7] text-[#344054]">
+                    {label}
+                  </dt>
+                  <dd className="px-4 py-4 text-[14px] leading-[1.8] text-[#475467]">{value}</dd>
+                </div>
+              ))}
+            </dl>
+          </article>
+        ) : null}
       </Section>
 
       <Section id="challenges" eyebrow="Engineering Challenges" title="二、这类项目难在哪里">

@@ -271,7 +271,7 @@ export const CONTINUOUS_HEAT_TREATMENT_LINE_SEO = {
 export const TSINGSHAN_1250_CASE_SEO = {
   title: '某不锈钢深加工企业连续退洗线节能改造案例_苏能工业炉',
   description:
-    '某不锈钢深加工企业连续退洗线节能改造案例，介绍燃料结构适配、多级烟气余热回收、控温系统升级、分阶段实施与节能收益核算方法。',
+    '某不锈钢深加工企业 3 条 1250mm 连续退洗线节能改造案例；项目测算口径为 63.7 元/吨 × 120 万吨/年 = 7,644 万元/年，具体结果仅适用于对应燃料价格、负荷、运行制度与改造边界。',
   keywords: [
     '热处理炉节能改造案例',
     '连续退洗线改造',
@@ -280,7 +280,7 @@ export const TSINGSHAN_1250_CASE_SEO = {
   ],
   ogTitle: '不锈钢连续退洗线节能改造案例',
   ogDescription:
-    '苏能工业炉不锈钢连续退洗线节能改造案例，覆盖燃料结构适配、多级烟气余热回收、控温系统升级、分阶段施工和节能收益核算边界。',
+    '苏能工业炉 3 条 1250mm 连续退洗线节能改造案例，公开项目测算公式、阶段周期、燃烧系统升级与排放验收边界。',
   ogImage: '/images/service/after-sales-hero.png',
   ogType: 'article',
   canonicalUrl: 'https://www.jssngyl.cn/zh/case/anonymous-tsingshan-1250-renovation',
@@ -291,7 +291,7 @@ export const TSINGSHAN_1250_CASE_SEO = {
 export const JINING_SUPPORT_ROLLER_CASE_SEO = {
   title: '济宁支重轮热处理生产线案例｜连续加热、自动淬火与回火冷却',
   description:
-    '苏能工业炉为济宁市五创机械有限公司提供支重轮热处理生产线方案，覆盖连续加热、自动淬火、回火、喷淋冷却和全线控制，适用于工程机械重载零部件热处理项目参考。',
+    '苏能工业炉为济宁市五创机械有限公司提供 PC200 至 PC400 支重轮热处理生产线方案，加热炉额定温度 950℃、有效加热区约 6400×300×300mm，资料设计处理能力约 500kg/h。',
   keywords: [
     '济宁支重轮热处理生产线',
     '支重轮热处理生产线',
@@ -302,13 +302,13 @@ export const JINING_SUPPORT_ROLLER_CASE_SEO = {
   ogImage: '/images/products/roller-mesh-belt-line/gallery/line-01.jpg',
   canonicalUrl: 'https://www.jssngyl.cn/zh/case/jining-support-roller-heat-treatment-line',
   publishedTime: '2026-07-24T20:30:00+08:00',
-  modifiedTime: '2026-07-24T20:30:00+08:00',
+  modifiedTime: '2026-07-29T18:30:00+08:00',
 };
 
 export const HENAN_ANNEALING_SOLUTION_CASE_SEO = {
   title: '河南连续退火固溶生产线案例｜不锈钢退洗线退火固溶段设备',
   description:
-    '苏能工业炉为河南金誉邦实业有限公司连续退洗线提供退火固溶段设备项目经验，覆盖高温退火固溶、分段冷却、挤干烘干、燃烧控制和工程接口配合。',
+    '苏能工业炉为河南金誉邦实业有限公司 850mm 热轧不锈钢连续退火钝化线提供退火固溶段设备；退火温度约 1050–1150℃、炉温最高 1300℃、炉体主体约 130m。',
   keywords: [
     '河南连续退火固溶生产线',
     '退火固溶段设备',
@@ -319,5 +319,5 @@ export const HENAN_ANNEALING_SOLUTION_CASE_SEO = {
   ogImage: '/images/products/annealing-solution-line/gallery/line-01.jpg',
   canonicalUrl: 'https://www.jssngyl.cn/zh/case/henan-annealing-solution-line',
   publishedTime: '2026-07-24T20:30:00+08:00',
-  modifiedTime: '2026-07-24T20:30:00+08:00',
+  modifiedTime: '2026-07-29T18:30:00+08:00',
 };
