@@ -2,7 +2,13 @@ import type { Metadata } from 'next';
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
 
-import { GeoContactCta, GeoFaqGrid, GeoHeroTags, GeoSection as Section } from '@/components/geo-pages/GeoPageBlocks';
+import {
+  GeoContactCta,
+  GeoFaqGrid,
+  GeoHeroTags,
+  GeoReviewNote,
+  GeoSection as Section,
+} from '@/components/geo-pages/GeoPageBlocks';
 import { JsonLd } from '@/components/JsonLd';
 import { Breadcrumb } from '@/components/layout/Breadcrumb';
 import { QuoteModalButton } from '@/components/lead/QuoteModalButton';
@@ -320,6 +326,8 @@ const pageJsonLd = cleanObject([
     path: pagePath,
     name: '连续热处理生产线解决方案',
     description: CONTINUOUS_HEAT_TREATMENT_LINE_SEO.description,
+    dateModified: CONTINUOUS_HEAT_TREATMENT_LINE_SEO.modifiedTime,
+    reviewedByTechnicalEngineer: true,
   }),
   getBreadcrumbJsonLd([
     { name: '首页', url: '/zh' },
@@ -347,6 +355,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     keywords: CONTINUOUS_HEAT_TREATMENT_LINE_SEO.keywords,
     image: CONTINUOUS_HEAT_TREATMENT_LINE_SEO.ogImage,
     type: 'website',
+    modifiedTime: CONTINUOUS_HEAT_TREATMENT_LINE_SEO.modifiedTime,
     alternateLocales: {
       'zh-CN': pagePath,
       'x-default': pagePath,
@@ -400,6 +409,11 @@ export default async function ContinuousHeatTreatmentLinePage({ params }: PagePr
           </div>
         </div>
       </section>
+
+      <GeoReviewNote
+        modifiedDate={CONTINUOUS_HEAT_TREATMENT_LINE_SEO.modifiedTime}
+        sourceNote="苏能 GEO 事实台账中 10 项已授权脱敏项目参数与对应案例资料"
+      />
 
       <Section id="why" eyebrow="系统逻辑" title="一、为什么连续热处理生产线不是“多台炉子简单组合”？">
         <p className="max-w-[960px] text-[16px] leading-[1.9] text-[#344054] lg:text-[18px]">

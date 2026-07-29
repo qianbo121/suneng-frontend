@@ -16,6 +16,7 @@ import {
 } from 'react-icons/hi2';
 
 import { JsonLd } from '@/components/JsonLd';
+import { GeoReviewNote } from '@/components/geo-pages/GeoPageBlocks';
 import { Breadcrumb } from '@/components/layout/Breadcrumb';
 import { ProductDetailGallery } from '@/components/products/ProductDetailGallery';
 import { ProductLeadForm, ProductQuoteScrollButton } from '@/components/products/ProductLeadForm';
@@ -59,6 +60,19 @@ const GEO_SECTION_TITLE_BY_SLUG: Record<string, string> = {
 };
 const quoteParamsPath = '/zh/articles/gongye-lu-baojia-canshu';
 const repairOrReplacePath = '/zh/articles/laojiu-rechuli-lu-daxiu-haishi-maixin';
+const P3_REVIEW_DATE = '2026-07-29';
+const trolleyFitBoundaries = {
+  suitable: [
+    '大型铸件、锻件、模具、焊接结构件等需要整炉装卸的周期式热处理工件',
+    '需要行车吊装、台车承载，且现场具备轨道、基础和台车行程条件的项目',
+    '退火、回火、正火、去应力、时效及按项目核算的淬火加热场景',
+  ],
+  unsuitable: [
+    '工件规格稳定、产量连续且更适合网带、辊底、推杆等连续输送的项目',
+    '超长轴杆件更适合竖直装炉，或炉膛利用率明显偏低的项目',
+    '现场无法满足轨道、基础、吊装、安全距离或燃气排烟条件的项目',
+  ],
+};
 
 export const revalidate = 3600;
 
@@ -106,6 +120,7 @@ export async function generateMetadata({ params }: ProductDetailPageProps): Prom
     pageKey: 'product-detail',
     keywords,
     image: product.image,
+    modifiedTime: currentLocale === 'zh' && slug === 'trolley-furnace' ? P3_REVIEW_DATE : undefined,
     alternateLocales: {
       'zh-CN': `/zh/products/detail/${slug}`,
       'en-US': `/en/products/detail/${slug}`,
@@ -194,6 +209,7 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
       const href = localizeOrHideHref(item.href, currentLocale);
       return href ? [{ ...item, href }] : [];
     });
+  const isP3TrolleyPage = currentLocale === 'zh' && product.slug === 'trolley-furnace';
 
   return (
     <main className="bg-white text-[#202020]">
@@ -208,6 +224,8 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
           image: gallery,
           keywords: currentLocale === 'en' ? undefined : PRODUCT_DETAIL_SEO[product.slug]?.keywords,
           additionalProperties: specRows.map((item) => ({ name: item.key, value: item.value })),
+          dateModified: isP3TrolleyPage ? P3_REVIEW_DATE : undefined,
+          reviewedByTechnicalEngineer: isP3TrolleyPage,
         }, currentLocale)}
       />
       {detail.faq?.length ? (
@@ -314,6 +332,15 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
           </aside>
         </section>
 
+        {isP3TrolleyPage ? (
+          <div className="mt-8 overflow-hidden rounded-[8px] border border-[#e2e8f0]">
+            <GeoReviewNote
+              modifiedDate={P3_REVIEW_DATE}
+              sourceNote="苏能 GEO 事实台账中已授权台车炉项目参数（SN-CASE-P1-013、SN-CASE-P1-014）"
+            />
+          </div>
+        ) : null}
+
         {detail.workpieceCards?.length ? (
           <section className="mt-12">
             <SectionTitle>
@@ -326,6 +353,39 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
                   <p className="mt-3 text-[14px] leading-[1.75] text-[#5f6673]">{item.text}</p>
                 </article>
               ))}
+            </div>
+          </section>
+        ) : null}
+
+        {isP3TrolleyPage ? (
+          <section className="mt-12">
+            <SectionTitle>台车炉的适用与不适用条件</SectionTitle>
+            <div className="mt-5 grid gap-5 lg:grid-cols-2">
+              <article className="rounded-[8px] border border-[#d6e0ec] bg-[#f8fafc] p-6">
+                <h3 className="text-[19px] font-semibold leading-[1.4] text-[#101828]">适用条件</h3>
+                <ul className="mt-4 space-y-3 text-[14px] leading-[1.8] text-[#475467]">
+                  {trolleyFitBoundaries.suitable.map((item) => (
+                    <li key={item} className="flex gap-3">
+                      <span className="mt-[0.72em] h-1.5 w-1.5 shrink-0 rounded-full bg-[#c51624]" />
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
+              </article>
+              <article className="rounded-[8px] border border-[#f3d7d9] bg-[#fff8f8] p-6">
+                <h3 className="text-[19px] font-semibold leading-[1.4] text-[#101828]">不宜直接选用的条件</h3>
+                <ul className="mt-4 space-y-3 text-[14px] leading-[1.8] text-[#475467]">
+                  {trolleyFitBoundaries.unsuitable.map((item) => (
+                    <li key={item} className="flex gap-3">
+                      <span className="mt-[0.72em] h-1.5 w-1.5 shrink-0 rounded-full bg-[#c51624]" />
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
+                <p className="mt-5 border-t border-[#f0dfe1] pt-4 text-[14px] leading-[1.8] text-[#667085]">
+                  出现上述情况时，应比较井式炉、网带炉、辊底炉、推杆炉或其他产线方案，不应只按“台车炉”名称询价。
+                </p>
+              </article>
             </div>
           </section>
         ) : null}

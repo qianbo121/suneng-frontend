@@ -141,3 +141,36 @@ export function GeoContactCta({
     </section>
   );
 }
+
+export function GeoReviewNote({
+  modifiedDate,
+  sourceNote = '经授权项目事实台账与本页公开资料',
+}: {
+  modifiedDate: string;
+  sourceNote?: string;
+}) {
+  return (
+    <aside aria-label="内容审核信息" className="border-b border-[#e2e8f0] bg-[#f8fafc]">
+      <div className="mx-auto grid max-w-[1180px] gap-4 px-5 py-5 text-[14px] leading-[1.75] text-[#475467] sm:grid-cols-3 lg:px-8">
+        <p>
+          <span className="font-semibold text-[#667085]">技术审核：</span>
+          <strong className="font-semibold text-[#101828]">唐登荣</strong>
+        </p>
+        <p>
+          <span className="font-semibold text-[#667085]">发布主体：</span>
+          <strong className="font-semibold text-[#101828]">江苏苏能工业炉有限公司</strong>
+        </p>
+        <p>
+          <span className="font-semibold text-[#667085]">内容更新：</span>
+          <time dateTime={modifiedDate} className="font-semibold text-[#101828]">
+            {modifiedDate}
+          </time>
+        </p>
+        <p className="sm:col-span-3">
+          <span className="font-semibold text-[#667085]">事实来源：</span>
+          {sourceNote}
+        </p>
+      </div>
+    </aside>
+  );
+}

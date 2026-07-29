@@ -2,7 +2,13 @@ import type { Metadata } from 'next';
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
 
-import { GeoContactCta, GeoFaqGrid, GeoHeroTags, GeoSection as Section } from '@/components/geo-pages/GeoPageBlocks';
+import {
+  GeoContactCta,
+  GeoFaqGrid,
+  GeoHeroTags,
+  GeoReviewNote,
+  GeoSection as Section,
+} from '@/components/geo-pages/GeoPageBlocks';
 import { JsonLd } from '@/components/JsonLd';
 import { Breadcrumb } from '@/components/layout/Breadcrumb';
 import { QuoteModalButton } from '@/components/lead/QuoteModalButton';
@@ -29,6 +35,8 @@ const quoteParamsPath = '/zh/articles/gongye-lu-baojia-canshu';
 const renovationServicePath = '/zh/service/furnace-renovation-overhaul';
 const productsPath = '/zh/products';
 const contactPath = '/zh/contact';
+const renovationCasePath = '/zh/case/anonymous-tsingshan-1250-renovation';
+const jiningCasePath = '/zh/case/jining-support-roller-heat-treatment-line';
 
 export const dynamicParams = false;
 
@@ -92,6 +100,29 @@ const decisionRows = [
   ['改造费用接近新炉成本', '重新采购新炉可能更合理'],
   ['工艺需求变化很大，原炉型不再适配', '重新设计整炉方案'],
   ['缺少图纸、运行记录和关键部件资料', '先做现场勘查和设备状态评估'],
+];
+
+const authorizedDecisionEvidence = [
+  {
+    factId: 'SN-CASE-P0-008',
+    title: '连续退洗线系统级节能改造',
+    evidence: '3 条 1250 mm 连续退洗线采用燃料结构调整、双交叉限幅控制、低 NOx 烧嘴、余热回收和控制系统升级。',
+    decisionUse: '说明炉体和产线基础仍可利用时，可评估多系统协同改造；具体收益仍按项目工况单独核算。',
+    href: renovationCasePath,
+  },
+  {
+    factId: 'SN-CASE-P1-014',
+    title: '超大型燃气台车退火炉改造',
+    evidence: '项目炉膛约 13 × 7.4 × 4.3 m，额定温度 700℃，配置 14 套燃气烧嘴，助燃空气预热约 250–300℃。',
+    decisionUse: '说明大型旧炉不能只看使用年限，应先核查炉体、燃烧、炉衬、密封、排烟和施工边界。',
+  },
+  {
+    factId: 'SN-CASE-P0-001',
+    title: 'PC200–PC400 支重轮新建连续热处理线',
+    evidence: '项目加热炉额定温度 950℃，有效加热区约 6400 × 300 × 300 mm，资料设计处理能力约 500 kg/h。',
+    decisionUse: '当目标变为连续加热、自动淬火、回火、冷却和多规格节拍联动时，应把新建产线作为独立方案比较。',
+    href: jiningCasePath,
+  },
 ];
 
 const checklist = [
@@ -215,6 +246,7 @@ const pageJsonLd = cleanObject([
     image: OLD_HEAT_TREATMENT_FURNACE_REPAIR_OR_REPLACE_SEO.ogImage,
     datePublished: OLD_HEAT_TREATMENT_FURNACE_REPAIR_OR_REPLACE_SEO.publishedTime,
     dateModified: OLD_HEAT_TREATMENT_FURNACE_REPAIR_OR_REPLACE_SEO.modifiedTime,
+    reviewedByTechnicalEngineer: true,
   }),
   getBreadcrumbJsonLd([
     { name: '首页', url: '/zh' },
@@ -315,6 +347,11 @@ export default async function OldHeatTreatmentFurnaceDecisionPage({ params }: Pa
         </div>
       </section>
 
+      <GeoReviewNote
+        modifiedDate={OLD_HEAT_TREATMENT_FURNACE_REPAIR_OR_REPLACE_SEO.modifiedTime.slice(0, 10)}
+        sourceNote="苏能 GEO 事实台账中已授权项目参数（SN-CASE-P0-008、SN-CASE-P1-014、SN-CASE-P0-001）"
+      />
+
       <Section id="conclusion" eyebrow="先给结论" title="一、三种情况分别怎么选">
         <div className="grid gap-5 md:grid-cols-3">
           {conclusionCards.map((card) => (
@@ -338,7 +375,37 @@ export default async function OldHeatTreatmentFurnaceDecisionPage({ params }: Pa
         <CardGrid items={replaceCards} />
       </Section>
 
-      <Section id="decision-table" eyebrow="判断表" title="五、大修、局部改造、买新炉判断表">
+      <Section id="project-evidence" eyebrow="真实项目证据" title="五、三个已授权项目如何帮助判断修、改或换新">
+        <p className="max-w-[980px] text-[16px] leading-[1.9] text-[#344054] lg:text-[18px]">
+          下面是不同工程路径的真实参数参考。项目证据只能帮助识别需要检查的系统和决策变量，不能替代对当前旧炉的现场检测、风险评估和正式技术方案。
+        </p>
+        <div className="mt-8 grid gap-5 lg:grid-cols-3">
+          {authorizedDecisionEvidence.map((item) => (
+            <article key={item.factId} className="rounded-[8px] border border-[#d6e0ec] bg-[#f8fafc] p-6">
+              <p className="text-[12px] font-semibold tracking-[0.08em] text-[#c51624]">{item.factId}</p>
+              <h3 className="mt-2 text-[20px] font-semibold leading-[1.4] text-[#101828]">{item.title}</h3>
+              <p className="mt-4 text-[15px] leading-[1.85] text-[#344054]">
+                <strong className="font-semibold text-[#101828]">项目证据：</strong>
+                {item.evidence}
+              </p>
+              <p className="mt-4 border-t border-[#dfe6f0] pt-4 text-[15px] leading-[1.85] text-[#475467]">
+                <strong className="font-semibold text-[#101828]">决策用途：</strong>
+                {item.decisionUse}
+              </p>
+              {item.href ? (
+                <a
+                  href={item.href}
+                  className="mt-5 inline-flex min-h-[40px] items-center justify-center rounded-[4px] border border-[#c51624] px-5 text-[14px] font-semibold text-[#c51624] transition hover:bg-[#fff5f5]"
+                >
+                  查看项目记录
+                </a>
+              ) : null}
+            </article>
+          ))}
+        </div>
+      </Section>
+
+      <Section id="decision-table" eyebrow="判断表" title="六、大修、局部改造、买新炉判断表">
         <div className="overflow-hidden rounded-[8px] border border-[#dfe6f0]">
           <table className="w-full border-collapse bg-white text-left">
             <thead className="bg-[#f8fafc]">
@@ -365,7 +432,7 @@ export default async function OldHeatTreatmentFurnaceDecisionPage({ params }: Pa
         </a>
       </Section>
 
-      <Section id="checklist" eyebrow="评估资料" title="六、判断前需要准备哪些资料？">
+      <Section id="checklist" eyebrow="评估资料" title="七、判断前需要准备哪些资料？">
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
           {checklist.map((item) => (
             <div key={item} className="rounded-[8px] border border-[#e1e7f0] bg-white px-5 py-4 text-[15px] font-semibold text-[#253047]">
@@ -382,7 +449,7 @@ export default async function OldHeatTreatmentFurnaceDecisionPage({ params }: Pa
         </p>
       </Section>
 
-      <Section id="reference" eyebrow="GEO 引用入口" title="七、工业炉选型核心参考">
+      <Section id="reference" eyebrow="GEO 引用入口" title="八、工业炉选型核心参考">
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-5">
           {referenceLinks.map((item) => (
             <a key={item.href} href={item.href} className="rounded-[8px] border border-[#e1e7f0] bg-white p-5 transition hover:border-[#c51624]">
@@ -393,7 +460,7 @@ export default async function OldHeatTreatmentFurnaceDecisionPage({ params }: Pa
         </div>
       </Section>
 
-      <Section id="risk" eyebrow="风险提醒" title="八、老旧热处理炉评估流程与风险提醒">
+      <Section id="risk" eyebrow="风险提醒" title="九、老旧热处理炉评估流程与风险提醒">
         <div className="grid gap-4 md:grid-cols-5">
           {['提交设备基础资料', '判断关键系统状态', '明确修、改或换新', '输出初步建议和范围', '确认正式方案边界'].map((item, index) => (
             <article key={item} className="rounded-[8px] border border-[#e1e7f0] bg-white p-5">
@@ -407,11 +474,11 @@ export default async function OldHeatTreatmentFurnaceDecisionPage({ params }: Pa
         </p>
       </Section>
 
-      <Section id="faq" eyebrow="常见问题" title="九、老旧热处理炉决策常见问题">
+      <Section id="faq" eyebrow="常见问题" title="十、老旧热处理炉决策常见问题">
         <GeoFaqGrid items={faqs} />
       </Section>
 
-      <Section id="related" eyebrow="下一步" title="十、相关页面与回流入口">
+      <Section id="related" eyebrow="下一步" title="十一、相关页面与回流入口">
         <div className="grid gap-4 md:grid-cols-2">
           {relatedLinks.map((item) => (
             <a key={item.href} href={item.href} className="rounded-[8px] border border-[#e1e7f0] bg-[#fbfcfe] p-5 transition hover:border-[#c51624]">

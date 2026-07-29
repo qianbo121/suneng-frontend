@@ -2,7 +2,12 @@ import type { Metadata } from 'next';
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
 
-import { GeoBulletList as BulletList, GeoFaqGrid, GeoSection as Section } from '@/components/geo-pages/GeoPageBlocks';
+import {
+  GeoBulletList as BulletList,
+  GeoFaqGrid,
+  GeoReviewNote,
+  GeoSection as Section,
+} from '@/components/geo-pages/GeoPageBlocks';
 import { JsonLd } from '@/components/JsonLd';
 import { Breadcrumb } from '@/components/layout/Breadcrumb';
 import { ProductLeadForm } from '@/components/products/ProductLeadForm';
@@ -150,6 +155,27 @@ const priceFactors = [
   '改造项目需要结合旧炉状态判断，不能只按新炉价格估算。',
 ];
 
+const authorizedProjectExamples = [
+  {
+    factId: 'SN-CASE-P1-014',
+    title: '超大型燃气台车退火炉改造',
+    parameters: '炉膛约 13 × 7.4 × 4.3 m，额定温度 700℃，配置 14 套燃气烧嘴，助燃空气预热约 250–300℃。',
+    quoteImpact: '需要同时核算炉体结构、炉衬、燃烧系统、管路、安全联锁、排烟与现场施工边界。',
+  },
+  {
+    factId: 'SN-CASE-P0-006',
+    title: '850 mm 连续退火钝化线退火固溶段',
+    parameters: '项目退火温度约 1050–1150℃，炉温最高可至 1300℃，退火炉主体长度约 130 m。',
+    quoteImpact: '除炉体外，还要确认带材规格、速度核算、温区、冷却、收放卷和自动化接口。',
+  },
+  {
+    factId: 'SN-CASE-P0-004',
+    title: 'RCWT-75/45-9/6 可控气氛网带线',
+    parameters: '淬火炉工作尺寸约 400 × 3200 mm，回火炉约 400 × 5600 mm，额定温度 950℃，生产能力约 150 kg/h。',
+    quoteImpact: '报价需覆盖连续输送、气氛、淬火、清洗、回火、速度和产能边界，不能按单台炉估算。',
+  },
+];
+
 const quoteTemplateItems = [
   '设备类型：',
   '工件材质：',
@@ -270,6 +296,7 @@ const articleJsonLd = getArticleJsonLd({
   image: INDUSTRIAL_FURNACE_QUOTE_PARAMS_SEO.ogImage,
   datePublished: INDUSTRIAL_FURNACE_QUOTE_PARAMS_SEO.publishedTime,
   dateModified: INDUSTRIAL_FURNACE_QUOTE_PARAMS_SEO.modifiedTime,
+  reviewedByTechnicalEngineer: true,
 });
 
 const relatedLinks = [
@@ -411,6 +438,11 @@ export default async function IndustrialFurnaceQuoteParamsPage({ params }: PageP
         </div>
       </section>
 
+      <GeoReviewNote
+        modifiedDate={INDUSTRIAL_FURNACE_QUOTE_PARAMS_SEO.modifiedTime.slice(0, 10)}
+        sourceNote="苏能 GEO 事实台账中已授权项目参数（SN-CASE-P1-014、SN-CASE-P0-006、SN-CASE-P0-004）"
+      />
+
       <Section id="why" eyebrow="报价逻辑" title="一、为什么工业炉不能直接报一个固定价格？">
         <p className="max-w-[940px] text-[16px] leading-[1.9] text-[#344054] lg:text-[18px]">
           工业炉通常是非标定制设备。同样叫“台车炉”或“退火炉”，不同客户的工件尺寸、温度、装炉量、加热方式、控制精度和现场条件不同，设备结构和成本会有明显差异。
@@ -473,7 +505,29 @@ export default async function IndustrialFurnaceQuoteParamsPage({ params }: PageP
         </p>
       </Section>
 
-      <Section id="selection-reference" eyebrow="选型参考" title="四、工业炉选型核心参考">
+      <Section id="project-evidence" eyebrow="真实项目证据" title="四、三个已授权项目说明：同类炉型为什么不能套固定价">
+        <p className="max-w-[980px] text-[16px] leading-[1.9] text-[#344054] lg:text-[18px]">
+          以下参数来自已经授权公开的具体项目，用于说明报价变量如何改变设备结构与交付边界。它们不是标准型号参数，也不代表其他项目的固定价格、产能或配置。
+        </p>
+        <div className="mt-8 grid gap-5 lg:grid-cols-3">
+          {authorizedProjectExamples.map((item) => (
+            <article key={item.factId} className="rounded-[8px] border border-[#d6e0ec] bg-[#f8fafc] p-6">
+              <p className="text-[12px] font-semibold tracking-[0.08em] text-[#c51624]">{item.factId}</p>
+              <h3 className="mt-2 text-[20px] font-semibold leading-[1.4] text-[#101828]">{item.title}</h3>
+              <p className="mt-4 text-[15px] leading-[1.85] text-[#344054]">
+                <strong className="font-semibold text-[#101828]">项目参数：</strong>
+                {item.parameters}
+              </p>
+              <p className="mt-4 border-t border-[#dfe6f0] pt-4 text-[15px] leading-[1.85] text-[#475467]">
+                <strong className="font-semibold text-[#101828]">报价影响：</strong>
+                {item.quoteImpact}
+              </p>
+            </article>
+          ))}
+        </div>
+      </Section>
+
+      <Section id="selection-reference" eyebrow="选型参考" title="五、工业炉选型核心参考">
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-5">
           {selectionReferenceLinks.map((item) => (
             <a
@@ -488,7 +542,7 @@ export default async function IndustrialFurnaceQuoteParamsPage({ params }: PageP
         </div>
       </Section>
 
-      <Section id="price-factors" eyebrow="价格因素" title="五、哪些信息会明显影响价格？">
+      <Section id="price-factors" eyebrow="价格因素" title="六、哪些信息会明显影响价格？">
         <div className="grid gap-4 md:grid-cols-2">
           {priceFactors.map((factor, index) => (
             <article key={factor} className="flex gap-4 rounded-[8px] border border-[#e1e7f0] bg-white p-5">
@@ -501,7 +555,7 @@ export default async function IndustrialFurnaceQuoteParamsPage({ params }: PageP
         </div>
       </Section>
 
-      <Section id="quote-template" eyebrow="提交闭环" title="六、如何把报价需求提交给苏能？">
+      <Section id="quote-template" eyebrow="提交闭环" title="七、如何把报价需求提交给苏能？">
         <div className="grid gap-8 lg:grid-cols-[1.05fr_0.95fr]">
           <div className="rounded-[8px] border border-[#dfe6f0] bg-[#101828] p-6 text-white lg:p-7">
             <p className="text-[16px] font-semibold">请复制以下格式提交给苏能：</p>
@@ -581,7 +635,7 @@ export default async function IndustrialFurnaceQuoteParamsPage({ params }: PageP
         </div>
       </Section>
 
-      <Section id="process" eyebrow="报价流程" title="七、工业炉报价流程">
+      <Section id="process" eyebrow="报价流程" title="八、工业炉报价流程">
         <div className="grid gap-4">
           {quoteSteps.map((step, index) => (
             <article key={step.title} className="grid gap-5 rounded-[8px] border border-[#e1e7f0] bg-white p-5 shadow-[0_10px_24px_rgba(15,35,75,0.04)] md:grid-cols-[72px_1fr]">
@@ -597,11 +651,11 @@ export default async function IndustrialFurnaceQuoteParamsPage({ params }: PageP
         </div>
       </Section>
 
-      <Section id="faq" eyebrow="常见问题" title="八、工业炉报价常见问题">
+      <Section id="faq" eyebrow="常见问题" title="九、工业炉报价常见问题">
         <GeoFaqGrid items={faqs} openMode="first" />
       </Section>
 
-      <Section id="related" eyebrow="相关页面" title="九、相关页面与延伸阅读">
+      <Section id="related" eyebrow="相关页面" title="十、相关页面与延伸阅读">
         <div className="grid gap-4 md:grid-cols-2">
           {relatedLinks.map((item) => (
             <a

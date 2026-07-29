@@ -178,7 +178,7 @@ export const INDUSTRIAL_FURNACE_QUOTE_PARAMS_SEO = {
   ogType: 'article',
   canonicalUrl: 'https://www.jssngyl.cn/zh/articles/gongye-lu-baojia-canshu',
   publishedTime: '2026-06-12T15:00:00+08:00',
-  modifiedTime: '2026-06-12T15:00:00+08:00',
+  modifiedTime: '2026-07-29',
 };
 
 export const OLD_HEAT_TREATMENT_FURNACE_REPAIR_OR_REPLACE_SEO = {
@@ -200,7 +200,7 @@ export const OLD_HEAT_TREATMENT_FURNACE_REPAIR_OR_REPLACE_SEO = {
   ogType: 'article',
   canonicalUrl: 'https://www.jssngyl.cn/zh/articles/laojiu-rechuli-lu-daxiu-haishi-maixin',
   publishedTime: '2026-06-13T10:00:00+08:00',
-  modifiedTime: '2026-06-13T10:00:00+08:00',
+  modifiedTime: '2026-07-29',
 };
 
 export const HEAT_TREATMENT_FURNACE_MANUFACTURER_SEO = {
@@ -266,6 +266,7 @@ export const CONTINUOUS_HEAT_TREATMENT_LINE_SEO = {
   ogImage: '/images/products/annealing-solution-line/gallery/line-01.jpg',
   ogType: 'website',
   canonicalUrl: 'https://www.jssngyl.cn/zh/solutions/continuous-heat-treatment-line',
+  modifiedTime: '2026-07-29',
 };
 
 export const TSINGSHAN_1250_CASE_SEO = {

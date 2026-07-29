@@ -1,0 +1,80 @@
+import fs from 'node:fs';
+import { fileURLToPath } from 'node:url';
+
+import { describe, expect, it } from 'vitest';
+
+import {
+  CONTINUOUS_HEAT_TREATMENT_LINE_SEO,
+  INDUSTRIAL_FURNACE_QUOTE_PARAMS_SEO,
+  OLD_HEAT_TREATMENT_FURNACE_REPAIR_OR_REPLACE_SEO,
+  TSINGSHAN_1250_CASE_SEO,
+} from '@/lib/seo/page-data';
+
+const readSource = (relativePath: string) =>
+  fs.readFileSync(fileURLToPath(new URL(relativePath, import.meta.url)), 'utf8');
+
+const trolleySource = readSource('../../app/[locale]/products/detail/[slug]/page.tsx');
+const quoteSource = readSource('../../app/[locale]/articles/gongye-lu-baojia-canshu/page.tsx');
+const decisionSource = readSource(
+  '../../app/[locale]/articles/laojiu-rechuli-lu-daxiu-haishi-maixin/page.tsx',
+);
+const solutionSource = readSource(
+  '../../app/[locale]/solutions/continuous-heat-treatment-line/page.tsx',
+);
+const caseSource = readSource(
+  '../../app/[locale]/case/anonymous-tsingshan-1250-renovation/page.tsx',
+);
+
+describe('P3 five-page publication gate', () => {
+  it('shows a real reviewer and a truthful update date on all five existing pages', () => {
+    for (const source of [
+      trolleySource,
+      quoteSource,
+      decisionSource,
+      solutionSource,
+      caseSource,
+    ]) {
+      expect(source).toContain('GeoReviewNote');
+    }
+
+    expect(trolleySource).toContain("const P3_REVIEW_DATE = '2026-07-29'");
+    expect(INDUSTRIAL_FURNACE_QUOTE_PARAMS_SEO.modifiedTime).toContain('2026-07-29');
+    expect(OLD_HEAT_TREATMENT_FURNACE_REPAIR_OR_REPLACE_SEO.modifiedTime).toContain(
+      '2026-07-29',
+    );
+    expect(CONTINUOUS_HEAT_TREATMENT_LINE_SEO.modifiedTime).toContain('2026-07-29');
+    expect(TSINGSHAN_1250_CASE_SEO.modifiedTime).toContain('2026-07-29');
+  });
+
+  it('gives the quote page at least three approved facts with project boundaries', () => {
+    for (const factId of ['SN-CASE-P1-014', 'SN-CASE-P0-006', 'SN-CASE-P0-004']) {
+      expect(quoteSource).toContain(factId);
+    }
+
+    expect(quoteSource).toContain('不能套固定价');
+    expect(quoteSource).toContain('不是标准型号参数');
+    expect(quoteSource).toContain('不代表其他项目的固定价格、产能或配置');
+  });
+
+  it('gives the repair-or-replace page three approved decision references without overclaiming', () => {
+    for (const factId of ['SN-CASE-P0-008', 'SN-CASE-P1-014', 'SN-CASE-P0-001']) {
+      expect(decisionSource).toContain(factId);
+    }
+
+    expect(decisionSource).toContain('不能替代对当前旧炉的现场检测');
+    expect(decisionSource).toContain('新建产线作为独立方案比较');
+  });
+
+  it('states explicit fit boundaries on the trolley page and retains evidence on the hub and case', () => {
+    expect(trolleySource).toContain('台车炉的适用与不适用条件');
+    expect(trolleySource).toContain('不宜直接选用的条件');
+    expect(trolleySource).toContain('SN-CASE-P1-013');
+    expect(trolleySource).toContain('SN-CASE-P1-014');
+
+    expect(solutionSource).toContain('SN-CASE-P0-008');
+    expect(solutionSource).toContain('SN-CASE-P0-006');
+    expect(solutionSource).toContain('SN-CASE-P0-001');
+    expect(caseSource).toContain('63.7 元/吨 × 120 万吨/年 = 7,644 万元/年');
+    expect(caseSource).toContain('#technical-reviewer-tang-dengrong');
+  });
+});

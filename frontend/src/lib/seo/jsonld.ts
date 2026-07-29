@@ -26,6 +26,8 @@ export type ProductDetailJsonLdInput = {
     value: string;
     unitText?: string;
   }>;
+  dateModified?: string;
+  reviewedByTechnicalEngineer?: boolean;
 };
 
 export type ArticleJsonLdInput = {
@@ -36,6 +38,7 @@ export type ArticleJsonLdInput = {
   image?: string;
   datePublished: string;
   dateModified?: string;
+  reviewedByTechnicalEngineer?: boolean;
 };
 
 export type FaqJsonLdItem = {
@@ -68,6 +71,7 @@ const PRODUCT_SCHEMA_ORDER = [
 const productBySlug = new Map(STATIC_PRODUCTS.map((product) => [product.slug, product]));
 const LOCAL_BUSINESS_URL = 'https://www.jssngyl.cn/';
 const LOCAL_BUSINESS_ID = `${LOCAL_BUSINESS_URL}#organization`;
+const TECHNICAL_REVIEWER_ID = `${LOCAL_BUSINESS_URL}#technical-reviewer-tang-dengrong`;
 const HOME_PAGE_EN_DESCRIPTION =
   'Jiangsu Suneng Industrial Furnace (founded 2006, Taizhou, Jiangsu) custom-engineers heat-treatment furnaces — box, bogie-hearth, pit, mesh-belt, roller-hearth and pusher furnaces, continuous heat-treatment lines, plus furnace energy-saving retrofit and overhaul.';
 const PRODUCT_COLLECTION_EN_DESCRIPTION =
@@ -111,6 +115,15 @@ function isEnglishLocale(locale: Locale) {
 
 function schemaLanguage(locale: Locale) {
   return isEnglishLocale(locale) ? 'en-US' : 'zh-CN';
+}
+
+export function getTechnicalReviewerJsonLd() {
+  return {
+    '@type': 'Person',
+    '@id': TECHNICAL_REVIEWER_ID,
+    name: '唐登荣',
+    worksFor: { '@id': LOCAL_BUSINESS_ID },
+  };
 }
 
 export function cleanObject<T>(value: T): T {
@@ -326,12 +339,16 @@ export function getWebPageJsonLd({
   description,
   locale = 'zh',
   mainEntityId,
+  dateModified,
+  reviewedByTechnicalEngineer = false,
 }: {
   path: string;
   name: string;
   description?: string;
   locale?: Locale;
   mainEntityId?: string;
+  dateModified?: string;
+  reviewedByTechnicalEngineer?: boolean;
 }) {
   const pageUrl = absoluteUrl(path);
 
@@ -345,6 +362,8 @@ export function getWebPageJsonLd({
     isPartOf: { '@id': `${SITE_URL}/#website` },
     about: { '@id': LOCAL_BUSINESS_ID },
     mainEntity: mainEntityId ? { '@id': mainEntityId } : undefined,
+    dateModified,
+    reviewedBy: reviewedByTechnicalEngineer ? getTechnicalReviewerJsonLd() : undefined,
     inLanguage: schemaLanguage(locale),
   });
 }
@@ -445,6 +464,8 @@ export function getProductDetailJsonLd(product: ProductDetailJsonLdInput, locale
       name: product.name,
       description: product.description,
       isPartOf: { '@id': `${SITE_URL}/#website` },
+      dateModified: product.dateModified,
+      reviewedBy: product.reviewedByTechnicalEngineer ? getTechnicalReviewerJsonLd() : undefined,
       inLanguage: schemaLanguage(locale),
     },
     getBreadcrumbJsonLd([
@@ -468,6 +489,7 @@ export function getArticleJsonLd(article: ArticleJsonLdInput, locale: Locale = '
     datePublished: article.datePublished,
     dateModified,
     author: { '@id': LOCAL_BUSINESS_ID },
+    reviewedBy: article.reviewedByTechnicalEngineer ? getTechnicalReviewerJsonLd() : undefined,
     publisher: { '@id': LOCAL_BUSINESS_ID },
     mainEntityOfPage: pageUrl,
     inLanguage: schemaLanguage(locale),
