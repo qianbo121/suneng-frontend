@@ -269,23 +269,23 @@ export const CONTINUOUS_HEAT_TREATMENT_LINE_SEO = {
 };
 
 export const TSINGSHAN_1250_CASE_SEO = {
-  title: '某青山系不锈钢企业 1250mm 三线连续退洗线节能改造案例_苏能工业炉',
+  title: '某不锈钢深加工企业连续退洗线节能改造案例_苏能工业炉',
   description:
-    '某青山系不锈钢深加工企业 1250mm 三线连续退洗线节能改造案例，年节能效益约 7,644 万元/年；数据仅作同类工程参考，实际效果以现场工况为准。',
+    '某不锈钢深加工企业连续退洗线节能改造案例，介绍燃料结构适配、多级烟气余热回收、控温系统升级、分阶段实施与节能收益核算方法。',
   keywords: [
     '热处理炉节能改造案例',
-    '1250mm 退洗线改造',
+    '连续退洗线改造',
     '不锈钢退火生产线改造',
     '工业炉节能改造案例',
   ],
-  ogTitle: '1250mm 不锈钢退洗线节能改造案例：年节能效益约 7,644 万元',
+  ogTitle: '不锈钢连续退洗线节能改造案例',
   ogDescription:
-    '苏能工业炉 1250mm 不锈钢三线连续退洗线节能改造案例。通过燃料结构升级、三级烟气回收、控温系统优化等技术路径降低吨钢能耗。具体节能效益与现场工况密切相关。',
-  ogImage: '/images/case/tsingshan-1250-cover.jpg',
+    '苏能工业炉不锈钢连续退洗线节能改造案例，覆盖燃料结构适配、多级烟气余热回收、控温系统升级、分阶段施工和节能收益核算边界。',
+  ogImage: '/images/service/after-sales-hero.png',
   ogType: 'article',
   canonicalUrl: 'https://www.jssngyl.cn/zh/case/anonymous-tsingshan-1250-renovation',
   publishedTime: '2026-05-27T10:00:00+08:00',
-  modifiedTime: '2026-05-27T10:00:00+08:00',
+  modifiedTime: '2026-07-29T15:30:00+08:00',
 };
 
 export const JINING_SUPPORT_ROLLER_CASE_SEO = {

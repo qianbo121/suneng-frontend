@@ -254,7 +254,7 @@ const industryCards = [
 
 const caseCards: CaseCard[] = [
   {
-    title: '某青山系不锈钢企业 1250mm 三线连续退洗线节能改造',
+    title: '某不锈钢深加工企业连续退洗线节能改造',
     industry: '不锈钢深加工',
     furnaceType: '连续退洗线 / 热处理生产线',
     process: '连续退火、酸洗配套',

@@ -57,7 +57,7 @@ const zhOnlyNavigationChildren: Partial<Record<string, NonNullable<NavigationIte
       label: { zh: '合作伙伴', en: 'Partners' },
     },
     {
-      key: 'about-case-tsingshan-1250-renovation',
+      key: 'about-case-industrial-furnace-renovation',
       href: '/case/anonymous-tsingshan-1250-renovation',
       label: { zh: '项目案例', en: 'Project Case' },
     },

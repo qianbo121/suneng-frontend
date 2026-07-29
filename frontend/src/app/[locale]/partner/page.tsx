@@ -174,7 +174,7 @@ const relatedLinks: RelatedPartnerLinkItem[] = [
     description: '了解在役工业炉节能改造、整炉大修、控制系统升级和耐材翻新服务范围。',
   },
   {
-    title: '某青山系不锈钢企业 1250mm 三线节能改造案例',
+    title: '某不锈钢深加工企业连续退洗线节能改造案例',
     href: '/zh/case/anonymous-tsingshan-1250-renovation',
     description: '查看不锈钢连续退洗线节能改造案例，作为同类工业炉改造项目参考。',
   },
