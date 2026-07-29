@@ -121,7 +121,7 @@ export function getTechnicalReviewerJsonLd() {
   return {
     '@type': 'Person',
     '@id': TECHNICAL_REVIEWER_ID,
-    name: '唐登荣',
+    name: '唐工',
     worksFor: { '@id': LOCAL_BUSINESS_ID },
   };
 }

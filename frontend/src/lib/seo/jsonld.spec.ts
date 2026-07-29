@@ -69,7 +69,7 @@ describe('SEO JSON-LD entities', () => {
       reviewedBy: {
         '@type': 'Person',
         '@id': 'https://www.jssngyl.cn/#technical-reviewer-tang-dengrong',
-        name: '唐登荣',
+        name: '唐工',
         worksFor: { '@id': 'https://www.jssngyl.cn/#organization' },
       },
     });
@@ -80,7 +80,7 @@ describe('SEO JSON-LD entities', () => {
           dateModified: '2026-07-29',
           reviewedBy: expect.objectContaining({
             '@type': 'Person',
-            name: '唐登荣',
+            name: '唐工',
           }),
         }),
       ]),
