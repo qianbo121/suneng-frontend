@@ -23,6 +23,21 @@
 - 青山案例：已通过排除参数拦截，未进入本批；
 - 百度主动推送：生产与本地均未配置 `BAIDU_PUSH_TOKEN`，本批未执行，不能记为已提交。
 
+## 技术发现批次：中文首页与 11 个产品详情页
+
+触发原因：
+
+- 生产日志显示 ClaudeBot、GPTBot、OAI-SearchBot 与 Bytespider 对深层核心页覆盖不足；
+- 中文首页新增 5 个现有权威页的标准 HTML 入口；
+- 11 个产品详情页补齐 Product、WebPage 与 Organization 的结构化实体连接，以及现有参数的 `PropertyValue` 输出。
+
+执行记录（2026-07-29）：
+
+- IndexNow：中文首页与 11 个产品详情页共 12 个 URL 已提交，接口返回 `HTTP 200`；
+- 青山案例：未作为显式 URL 加入本批；
+- 百度主动推送：仍未配置 `BAIDU_PUSH_TOKEN`，本批未执行；
+- 提交只代表 IndexNow 接口收到通知，实际抓取与覆盖变化继续以 nginx 日志为准。
+
 ## 第二批：证据补齐后单独提交
 
 - `https://www.jssngyl.cn/zh/case/anonymous-tsingshan-1250-renovation`
