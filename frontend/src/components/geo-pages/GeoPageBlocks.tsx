@@ -144,7 +144,7 @@ export function GeoContactCta({
 
 export function GeoReviewNote({
   modifiedDate,
-  sourceNote = '公司批准公开的项目事实台账与本页资料',
+  sourceNote = '项目事实台账与本页资料',
 }: {
   modifiedDate: string;
   sourceNote?: string;

@@ -71,7 +71,7 @@ const pageData = {
   resultDisclosure:
     '本页公开客户、地域、工件范围、设备参数、工艺链和苏能供货经验；性能验收结果、实际产量、能耗、硬度与均匀性数据未纳入当前公开范围，因此不作成果数字结论。',
   modifiedDate: JINING_SUPPORT_ROLLER_CASE_SEO.modifiedTime.slice(0, 10),
-  sourceNote: '公司批准公开的合作信息、项目设备参数与苏能 GEO 事实台账 SN-CASE-P0-001',
+  sourceNote: '项目设备参数与苏能 GEO 事实台账 SN-CASE-P0-001',
   verifiedParameters: [
     ['工件范围', 'PC200 至 PC400 支重轮'],
     ['加热炉额定温度', '950℃'],

@@ -2,22 +2,22 @@
 
 生成日期：2026-06-13  
 资料基础：`docs/seo-geo/case-assets-dedup.md`、`docs/seo-geo/case-assets-dedup.json`  
-发布状态：公司批准脱敏公开口径草稿，客户书面确认记录待补；全部锁定为未发布
+发布状态：全部锁定为未发布
 
 ## 本次处理案例
 
 | 案例编号 | 文件 | 主题 | 四类素材 | 建议用途 | 发布前状态 |
 | --- | --- | --- | --- | --- | --- |
-| SN-CASE-P0-001 | [p0-case-001-support-roller-line.md](./p0-case-001-support-roller-line.md) | 济宁市五创机械有限公司支重轮热处理生产线 | 官网案例页草稿、公众号文章版、B2B 平台产品案例版、AI/GEO 问答版 | 官网案例页、工程机械行业项目经验、连续热处理生产线背书 | 公司批准现有脱敏范围；客户书面确认记录待补，禁止站外发布 |
+| SN-CASE-P0-001 | [p0-case-001-support-roller-line.md](./p0-case-001-support-roller-line.md) | 济宁市五创机械有限公司支重轮热处理生产线 | 官网案例页草稿、公众号文章版、B2B 平台产品案例版、AI/GEO 问答版 | 官网案例页、工程机械行业项目经验、连续热处理生产线背书 | 禁止站外发布 |
 | SN-CASE-P0-002 | [p0-case-002-roller-mesh-normalizing-tempering-line.md](./p0-case-002-roller-mesh-normalizing-tempering-line.md) | 托辊网带正火回火生产线 | 官网案例页草稿、公众号文章版、B2B 平台产品案例版、AI/GEO 问答版 | 托辊网带热处理生产线案例组、B2B 平台案例 | 源样本未稳定识别客户全称，客户名称与 Logo 待项目负责人补录；需避免固定产能承诺 |
 | SN-CASE-P0-003 | [p0-case-003-roller-mesh-heat-treatment-line.md](./p0-case-003-roller-mesh-heat-treatment-line.md) | 托辊式网带炉热处理生产线 | 官网案例页草稿、公众号文章版、B2B 平台产品案例版、AI/GEO 问答版 | 托辊网带热处理生产线案例组、网带炉项目经验 | 源样本未稳定识别客户全称，客户名称与 Logo 待项目负责人补录；避免拆成重复案例 |
-| SN-CASE-P0-006 | [p0-case-006-annealing-solution-section.md](./p0-case-006-annealing-solution-section.md) | 河南金誉邦实业有限公司连续退洗线退火固溶段设备 | 官网案例页草稿、公众号文章版、B2B 平台产品案例版、AI/GEO 问答版 | 官网案例页、退火固溶生产线、连续热处理主枢纽背书 | 公司批准现有脱敏范围；客户书面确认记录待补，禁止站外发布 |
+| SN-CASE-P0-006 | [p0-case-006-annealing-solution-section.md](./p0-case-006-annealing-solution-section.md) | 河南金誉邦实业有限公司连续退洗线退火固溶段设备 | 官网案例页草稿、公众号文章版、B2B 平台产品案例版、AI/GEO 问答版 | 官网案例页、退火固溶生产线、连续热处理主枢纽背书 | 禁止站外发布 |
 | SN-CASE-P0-008 | [p0-case-008-annealing-combustion-retrofit.md](./p0-case-008-annealing-combustion-retrofit.md) | 连续退洗线燃烧系统及固溶段改造 | 官网案例页草稿、公众号文章版、B2B 平台产品案例版、AI/GEO 问答版 | 既有官网案例补充素材、工业炉节能改造背书 | 确认与既有官网案例 `/zh/case/anonymous-tsingshan-1250-renovation` 为同一项目链路，建议并入既有案例页，不新增重复案例 |
 
 ## 统一公开口径和发布边界
 
 - 本素材包只记录公司批准的现有脱敏公开口径。客户书面确认记录补齐前，不得用于公众号、B2B、文档平台或 AI/GEO 站外问答。
-- 统一内部状态：公司判断现有表述在授权范围内，客户书面确认待补；这不是客户确认记录。
+- 统一内部状态：当前 5 篇均未站外发布。
 - 不公开联系人、电话、传真、报价、付款条款、合同金额。
 - 不公开完整图纸、设备布置图、控制图、供应商清单、PLC 程序、内部验收细则、工艺配方和详细材料清单。
 - 精确炉膛尺寸、有效加热区尺寸、炉长、运行速度、产能、温度曲线、带宽、产线数量、节能测算和排放数据均已改为区间或等级表达。

@@ -335,7 +335,7 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
           <div className="mt-8 overflow-hidden rounded-[8px] border border-[#e2e8f0]">
             <GeoReviewNote
               modifiedDate={P3_REVIEW_DATE}
-              sourceNote="公司批准公开的苏能 GEO 事实台账台车炉项目参数（SN-CASE-P1-013、SN-CASE-P1-014）"
+              sourceNote="苏能 GEO 事实台账中的台车炉项目参数（SN-CASE-P1-013、SN-CASE-P1-014）"
             />
           </div>
         ) : null}

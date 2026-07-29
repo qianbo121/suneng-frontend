@@ -348,7 +348,7 @@ export default async function OldHeatTreatmentFurnaceDecisionPage({ params }: Pa
 
       <GeoReviewNote
         modifiedDate={OLD_HEAT_TREATMENT_FURNACE_REPAIR_OR_REPLACE_SEO.modifiedTime.slice(0, 10)}
-        sourceNote="公司批准公开的苏能 GEO 事实台账项目参数（SN-CASE-P0-008、SN-CASE-P1-014、SN-CASE-P0-001）"
+        sourceNote="苏能 GEO 事实台账中的项目参数（SN-CASE-P0-008、SN-CASE-P1-014、SN-CASE-P0-001）"
       />
 
       <Section id="conclusion" eyebrow="先给结论" title="一、三种情况分别怎么选">

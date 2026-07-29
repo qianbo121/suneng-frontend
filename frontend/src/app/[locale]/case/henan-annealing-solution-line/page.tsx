@@ -71,7 +71,7 @@ const pageData = {
   resultDisclosure:
     '本页公开客户、地域、产线规格、温度、炉体长度、工艺链和苏能供货经验；实际能耗、产量、成材率、表面质量与验收结果未纳入当前公开范围，因此不作成果数字结论。',
   modifiedDate: HENAN_ANNEALING_SOLUTION_CASE_SEO.modifiedTime.slice(0, 10),
-  sourceNote: '公司批准公开的合作信息、项目设备参数与苏能 GEO 事实台账 SN-CASE-P0-006',
+  sourceNote: '项目设备参数与苏能 GEO 事实台账 SN-CASE-P0-006',
   verifiedParameters: [
     ['产线规格', '850 mm 热轧不锈钢连续退火钝化线'],
     ['退火温度', '约 1050–1150℃'],
