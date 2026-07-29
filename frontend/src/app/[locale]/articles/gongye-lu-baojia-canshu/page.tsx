@@ -296,7 +296,6 @@ const articleJsonLd = getArticleJsonLd({
   image: INDUSTRIAL_FURNACE_QUOTE_PARAMS_SEO.ogImage,
   datePublished: INDUSTRIAL_FURNACE_QUOTE_PARAMS_SEO.publishedTime,
   dateModified: INDUSTRIAL_FURNACE_QUOTE_PARAMS_SEO.modifiedTime,
-  reviewedByTechnicalEngineer: true,
 });
 
 const relatedLinks = [
@@ -440,7 +439,7 @@ export default async function IndustrialFurnaceQuoteParamsPage({ params }: PageP
 
       <GeoReviewNote
         modifiedDate={INDUSTRIAL_FURNACE_QUOTE_PARAMS_SEO.modifiedTime.slice(0, 10)}
-        sourceNote="苏能 GEO 事实台账中已授权项目参数（SN-CASE-P1-014、SN-CASE-P0-006、SN-CASE-P0-004）"
+        sourceNote="公司批准公开的苏能 GEO 事实台账项目参数（SN-CASE-P1-014、SN-CASE-P0-006、SN-CASE-P0-004）"
       />
 
       <Section id="why" eyebrow="报价逻辑" title="一、为什么工业炉不能直接报一个固定价格？">

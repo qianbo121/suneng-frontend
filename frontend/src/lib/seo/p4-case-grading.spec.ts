@@ -24,7 +24,8 @@ describe('P4 case publication grades', () => {
     for (const source of [jiningSource, henanSource]) {
       expect(source).toContain("caseClassification: 'B 级项目经验记录'");
       expect(source).toContain('不作成果数字结论');
-      expect(source).toContain('reviewedByTechnicalEngineer: true');
+      expect(source).not.toContain('reviewedByTechnicalEngineer: true');
+      expect(source).not.toContain('本案例已获得客户授权公开合作信息');
     }
 
     expect(jiningSource).toContain('性能验收结果');
@@ -37,7 +38,7 @@ describe('P4 case publication grades', () => {
     expect(measuredCaseSource).not.toContain('A 级结果案例');
   });
 
-  it('renders case classification, result disclosure and reviewer information visibly', () => {
+  it('renders case classification, result disclosure and publication review information visibly', () => {
     expect(sharedCaseSource).toContain('案例分级');
     expect(sharedCaseSource).toContain('data.caseClassification');
     expect(sharedCaseSource).toContain('data.resultDisclosure');

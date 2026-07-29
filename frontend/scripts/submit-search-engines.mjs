@@ -1,4 +1,4 @@
-const FALLBACK_SITE_URL = 'https://www.sunengfurnace.com';
+const FALLBACK_SITE_URL = 'https://www.jssngyl.cn';
 
 function normalizeSiteUrl(value) {
   const cleaned = value?.trim().replace(/\/+$/, '');
@@ -12,6 +12,11 @@ function readArg(name) {
   return match ? match.slice(prefix.length) : '';
 }
 
+function readArgs(name) {
+  const prefix = `${name}=`;
+  return process.argv.filter((arg) => arg.startsWith(prefix)).map((arg) => arg.slice(prefix.length));
+}
+
 function getEnv(name) {
   return process.env[name]?.trim() || '';
 }
@@ -19,6 +24,30 @@ function getEnv(name) {
 function extractUrlsFromSitemap(xml) {
   const matches = [...xml.matchAll(/<loc>(.*?)<\/loc>/g)];
   return matches.map((match) => match[1].trim()).filter(Boolean);
+}
+
+function normalizeSubmissionUrl(value, siteUrl) {
+  const url = new URL(value, `${siteUrl}/`);
+  if (url.origin !== new URL(siteUrl).origin) {
+    throw new Error(`Submission URL must use ${new URL(siteUrl).origin}: ${url.href}`);
+  }
+  url.hash = '';
+  return url.href.replace(/\/$/, '');
+}
+
+function selectSubmissionUrls(siteUrl, sitemapUrls) {
+  const requested = readArgs('--url');
+  const excluded = new Set(readArgs('--exclude').map((url) => normalizeSubmissionUrl(url, siteUrl)));
+  const candidates = requested.length ? requested : sitemapUrls;
+  const selected = candidates
+    .map((url) => normalizeSubmissionUrl(url, siteUrl))
+    .filter((url) => !excluded.has(url));
+
+  return {
+    urls: [...new Set(selected)],
+    requested: requested.length,
+    excluded: [...excluded],
+  };
 }
 
 async function loadSitemapUrls(siteUrl) {
@@ -44,8 +73,11 @@ async function loadSitemapUrls(siteUrl) {
 }
 
 async function submitIndexNow(siteUrl, urls, dryRun) {
-  const key = getEnv('INDEXNOW_KEY');
-  const keyLocation = getEnv('INDEXNOW_KEY_LOCATION') || `${siteUrl}/${key}.txt`;
+  const key = readArg('--indexnow-key') || getEnv('INDEXNOW_KEY');
+  const keyLocation =
+    readArg('--indexnow-key-location') ||
+    getEnv('INDEXNOW_KEY_LOCATION') ||
+    `${siteUrl}/${key}.txt`;
 
   if (!key) {
     return { skipped: true, reason: 'INDEXNOW_KEY is not set' };
@@ -125,10 +157,20 @@ function printResult(name, result) {
 async function main() {
   const siteUrl = normalizeSiteUrl(readArg('--site') || getEnv('NEXT_PUBLIC_SITE_URL'));
   const dryRun = process.argv.includes('--dry-run');
-  const urls = await loadSitemapUrls(siteUrl);
+  const sitemapUrls = await loadSitemapUrls(siteUrl);
+  const selection = selectSubmissionUrls(siteUrl, sitemapUrls);
+  const urls = selection.urls;
+
+  if (!urls.length) {
+    throw new Error('No URLs remain after applying --url and --exclude filters');
+  }
 
   console.log(`Site: ${siteUrl}`);
-  console.log(`URLs: ${urls.length}`);
+  console.log(`Sitemap URLs: ${sitemapUrls.length}`);
+  console.log(`Selected URLs: ${urls.length}`);
+  if (selection.requested) console.log(`Explicit URLs: ${selection.requested}`);
+  if (selection.excluded.length) console.log(`Excluded URLs: ${selection.excluded.length}`);
+  for (const url of urls) console.log(`- ${url}`);
 
   printResult('IndexNow', await submitIndexNow(siteUrl, urls, dryRun));
   printResult('Baidu', await submitBaidu(siteUrl, urls, dryRun));

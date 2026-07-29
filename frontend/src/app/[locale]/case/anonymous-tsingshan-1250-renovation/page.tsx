@@ -273,14 +273,6 @@ const caseJsonLd = {
     name: '苏能工业炉工程技术团队',
     url: 'https://www.jssngyl.cn',
   },
-  reviewedBy: {
-    '@type': 'Person',
-    '@id': 'https://www.jssngyl.cn/#technical-reviewer-tang-dengrong',
-    name: '唐登荣',
-    worksFor: {
-      '@id': 'https://www.jssngyl.cn/#organization',
-    },
-  },
   publisher: {
     '@type': 'Organization',
     name: '江苏苏能工业炉有限公司',
@@ -427,7 +419,7 @@ export default async function AnonymousTsingshanCasePage({ params }: PageProps) 
 
       <GeoReviewNote
         modifiedDate={TSINGSHAN_1250_CASE_SEO.modifiedTime.slice(0, 10)}
-        sourceNote="已授权项目规格、阶段周期、测算公式、环保验收口径及苏能 GEO 事实台账"
+        sourceNote="公司批准公开的项目规格、阶段周期、测算公式、环保验收口径及苏能 GEO 事实台账"
       />
 
       <Section id="background" eyebrow="Background" title="一、客户与项目背景">

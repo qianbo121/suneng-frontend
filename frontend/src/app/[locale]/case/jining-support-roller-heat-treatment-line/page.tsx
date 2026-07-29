@@ -54,7 +54,7 @@ const faqs = [
 
 const pageData = {
   breadcrumbLabel: '济宁支重轮热处理生产线案例',
-  eyebrow: 'Authorized Project Case · Jining',
+  eyebrow: 'Project Case · Jining',
   title: '济宁市五创机械有限公司支重轮热处理生产线项目经验',
   subtitle: '连续加热、自动淬火、回火与喷淋冷却协同，而不是单台加热炉的简单组合',
   heroImage,
@@ -65,13 +65,13 @@ const pageData = {
     ['客户', '济宁市五创机械有限公司'],
     ['项目地域', '山东省济宁市'],
     ['项目类型', '多规格工程机械支重轮连续热处理生产线'],
-    ['公开等级', '客户授权公开合作信息'],
+    ['公开口径', '公司批准的项目经验公开口径'],
   ],
   caseClassification: 'B 级项目经验记录',
   resultDisclosure:
     '本页公开客户、地域、工件范围、设备参数、工艺链和苏能供货经验；性能验收结果、实际产量、能耗、硬度与均匀性数据未纳入当前公开范围，因此不作成果数字结论。',
   modifiedDate: JINING_SUPPORT_ROLLER_CASE_SEO.modifiedTime.slice(0, 10),
-  sourceNote: '已授权客户合作信息、项目设备参数与苏能 GEO 事实台账 SN-CASE-P0-001',
+  sourceNote: '公司批准公开的合作信息、项目设备参数与苏能 GEO 事实台账 SN-CASE-P0-001',
   verifiedParameters: [
     ['工件范围', 'PC200 至 PC400 支重轮'],
     ['加热炉额定温度', '950℃'],
@@ -79,7 +79,7 @@ const pageData = {
     ['资料设计处理能力', '约 500 kg/h；仅对应本项目工件规格、装料方式与运行节拍'],
   ],
   disclosure:
-    '本案例已获得客户授权公开合作信息。页面公开的设备参数与处理能力只对应本项目工件、装料方式和运行节拍，不作为其他项目的固定配置或产能承诺；联系人、报价、合同条款、完整图纸、控制图、供应商清单和 PLC 程序不公开。',
+    '页面公开的设备参数与处理能力只对应本项目工件、装料方式和运行节拍，不作为其他项目的固定配置或产能承诺；联系人、报价、合同条款、完整图纸、控制图、供应商清单和 PLC 程序不公开。',
   background:
     '支重轮是工程机械底盘系统中的关键零部件，常见于挖掘机、履带式工程机械和重载行走机构。与普通单炉热处理相比，这类工件更关注连续输送、自动淬火、回火衔接和多规格适配。',
   demand:
@@ -157,7 +157,6 @@ const pageData = {
       image: heroImage,
       datePublished: JINING_SUPPORT_ROLLER_CASE_SEO.publishedTime,
       dateModified: JINING_SUPPORT_ROLLER_CASE_SEO.modifiedTime,
-      reviewedByTechnicalEngineer: true,
     }),
     getBreadcrumbJsonLd([
       { name: '首页', url: '/zh' },

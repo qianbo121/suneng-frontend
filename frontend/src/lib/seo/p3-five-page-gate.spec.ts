@@ -26,7 +26,7 @@ const caseSource = readSource(
 );
 
 describe('P3 five-page publication gate', () => {
-  it('shows a real reviewer and a truthful update date on all five existing pages', () => {
+  it('shows publication review and truthful update dates without claiming an unperformed person review', () => {
     for (const source of [
       trolleySource,
       quoteSource,
@@ -35,7 +35,10 @@ describe('P3 five-page publication gate', () => {
       caseSource,
     ]) {
       expect(source).toContain('GeoReviewNote');
+      expect(source).not.toContain('reviewedByTechnicalEngineer: true');
     }
+    expect(trolleySource).not.toContain('reviewedByTechnicalEngineer: isP3TrolleyPage');
+    expect(caseSource).not.toContain('#technical-reviewer-tang-dengrong');
 
     expect(trolleySource).toContain("const P3_REVIEW_DATE = '2026-07-29'");
     expect(INDUSTRIAL_FURNACE_QUOTE_PARAMS_SEO.modifiedTime).toContain('2026-07-29');
@@ -75,6 +78,5 @@ describe('P3 five-page publication gate', () => {
     expect(solutionSource).toContain('SN-CASE-P0-006');
     expect(solutionSource).toContain('SN-CASE-P0-001');
     expect(caseSource).toContain('63.7 元/吨 × 120 万吨/年 = 7,644 万元/年');
-    expect(caseSource).toContain('#technical-reviewer-tang-dengrong');
   });
 });

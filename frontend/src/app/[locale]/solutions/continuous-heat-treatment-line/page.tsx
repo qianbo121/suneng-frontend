@@ -327,7 +327,6 @@ const pageJsonLd = cleanObject([
     name: '连续热处理生产线解决方案',
     description: CONTINUOUS_HEAT_TREATMENT_LINE_SEO.description,
     dateModified: CONTINUOUS_HEAT_TREATMENT_LINE_SEO.modifiedTime,
-    reviewedByTechnicalEngineer: true,
   }),
   getBreadcrumbJsonLd([
     { name: '首页', url: '/zh' },
@@ -412,7 +411,7 @@ export default async function ContinuousHeatTreatmentLinePage({ params }: PagePr
 
       <GeoReviewNote
         modifiedDate={CONTINUOUS_HEAT_TREATMENT_LINE_SEO.modifiedTime}
-        sourceNote="苏能 GEO 事实台账中 10 项已授权脱敏项目参数与对应案例资料"
+        sourceNote="公司批准公开的苏能 GEO 事实台账中 10 项脱敏项目参数与对应案例资料"
       />
 
       <Section id="why" eyebrow="系统逻辑" title="一、为什么连续热处理生产线不是“多台炉子简单组合”？">

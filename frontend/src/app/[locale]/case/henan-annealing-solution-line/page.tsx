@@ -54,7 +54,7 @@ const faqs = [
 
 const pageData = {
   breadcrumbLabel: '河南连续退火固溶生产线案例',
-  eyebrow: 'Authorized Project Case · Henan',
+  eyebrow: 'Project Case · Henan',
   title: '河南金誉邦实业有限公司连续退洗线退火固溶段设备项目经验',
   subtitle: '围绕带材温度路径、分段冷却、连续运行与工程接口配置系统工艺段',
   heroImage,
@@ -65,13 +65,13 @@ const pageData = {
     ['客户', '河南金誉邦实业有限公司'],
     ['项目地域', '河南省'],
     ['项目类型', '热轧不锈钢连续退洗线退火固溶段设备'],
-    ['公开等级', '客户授权公开合作信息'],
+    ['公开口径', '公司批准的项目经验公开口径'],
   ],
   caseClassification: 'B 级项目经验记录',
   resultDisclosure:
     '本页公开客户、地域、产线规格、温度、炉体长度、工艺链和苏能供货经验；实际能耗、产量、成材率、表面质量与验收结果未纳入当前公开范围，因此不作成果数字结论。',
   modifiedDate: HENAN_ANNEALING_SOLUTION_CASE_SEO.modifiedTime.slice(0, 10),
-  sourceNote: '已授权客户合作信息、项目设备参数与苏能 GEO 事实台账 SN-CASE-P0-006',
+  sourceNote: '公司批准公开的合作信息、项目设备参数与苏能 GEO 事实台账 SN-CASE-P0-006',
   verifiedParameters: [
     ['产线规格', '850 mm 热轧不锈钢连续退火钝化线'],
     ['退火温度', '约 1050–1150℃'],
@@ -80,7 +80,7 @@ const pageData = {
     ['速度核算', '带速与 TV 值按材料规格、厚度和工艺制度计算'],
   ],
   disclosure:
-    '本案例已获得客户授权公开合作信息。页面公开的温度、长度和速度核算口径只对应本项目资料，不作为其他材料或新项目的固定配置；钢种明细、完整技术协议、布置图、材料清单、报价和合同边界不公开。',
+    '页面公开的温度、长度和速度核算口径只对应本项目资料，不作为其他材料或新项目的固定配置；钢种明细、完整技术协议、布置图、材料清单、报价和合同边界不公开。',
   background:
     '不锈钢连续退洗线通常涉及开卷、退火、固溶、冷却、酸洗、清洗和收卷。退火固溶段会影响材料组织、表面状态和后续酸洗条件，并需要与整线单位协调设备接口和现场联动。',
   demand:
@@ -158,7 +158,6 @@ const pageData = {
       image: heroImage,
       datePublished: HENAN_ANNEALING_SOLUTION_CASE_SEO.publishedTime,
       dateModified: HENAN_ANNEALING_SOLUTION_CASE_SEO.modifiedTime,
-      reviewedByTechnicalEngineer: true,
     }),
     getBreadcrumbJsonLd([
       { name: '首页', url: '/zh' },
