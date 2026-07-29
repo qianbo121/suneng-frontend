@@ -359,8 +359,8 @@ const guaranteeStages = [
   {
     title: '4. 质保与售后',
     items: [
-      '质保期 1 年，自验收合格之日起，具体以合同为准。',
-      '易损件和非标配件保障方式按设备类型、合同约定和备件供应条件确定。',
+      '整机质保期通常为最终验收合格后 12 个月，或设备发货后 18 个月，以先到者为准；具体起算时间、适用范围及分项期限以合同为准。',
+      '设计、制造、材料和安装质量造成的故障通常纳入合同质保；加热元件、密封件、热电偶等正常易损耗件及违规操作、擅自改造、超载超温等情形通常不在通用质保范围内。',
       `客户服务热线 ${siteSettings.salesPhone}。`,
       '现场上门服务依据合同约定、设备状态、现场工况和服务距离安排。',
     ],
@@ -425,7 +425,7 @@ const faqJsonLd = getFaqJsonLd(faqs);
 const advantages = [
   {
     title: '1. 成立于 2006 年，累计 150+ 工业炉项目经验',
-    text: '苏能成立于 2006 年，专注热处理工业炉研发制造，已形成累计 150+ 工业炉项目经验。客户覆盖钢铁、装备制造、汽车零部件、能源装备等多个行业。',
+    text: '截至 2026 年 7 月，依据内部合同项目台账统计，苏能累计参与 150+ 工业炉新建与改造项目；同一客户同一项目合并统计，备件、单项维修及重复记录不重复计入。',
   },
   {
     title: '2. 自制设备 + 部分非苏能品牌工业炉评估改造',
@@ -441,11 +441,11 @@ const advantages = [
   },
   {
     title: '5. 完整的资质与质量体系',
-    text: '苏能为国家高新技术企业（证书编号 GR202432008987），同时具备国家级科技型中小企业（2025）认定、ISO 9001、ISO 14001、ISO 45001 三体系认证，并拥有 14 项已授权专利。',
+    text: '苏能为国家高新技术企业（证书编号 GR202432008987），ISO 9001 质量管理体系认证证书编号 03824Q60289R3S、有效至 2027 年 1 月 11 日，并拥有 14 项已授权专利和江苏省三星级上云企业记录。',
   },
   {
     title: '6. 注册资本与生产基地支撑',
-    text: '苏能拥有 5,080 万元注册资本、14,700 ㎡ 现代化生产基地，并以累计 150+ 工业炉项目经验支撑设备制造、改造评估与现场服务。',
+    text: '苏能注册资本 5,080 万元，公司自报生产基地占地面积约 14,700 ㎡；专业团队覆盖方案设计、机械制造、电气控制、安装调试与售后服务。',
   },
 ];
 
@@ -459,30 +459,9 @@ const serviceJsonLd = {
     '苏能工业炉提供工业炉节能改造、热处理炉大修、炉衬翻新、燃烧系统升级、控制系统升级、搬迁复产评估等服务。',
   provider: {
     '@type': 'Organization',
+    '@id': 'https://www.jssngyl.cn/#organization',
     name: '江苏苏能工业炉有限公司',
     url: 'https://www.jssngyl.cn',
-    telephone: siteSettings.salesPhone,
-    email: siteSettings.email,
-    address: {
-      '@type': 'PostalAddress',
-      streetAddress: '张甸蔡官工业区',
-      addressLocality: '姜堰区',
-      addressRegion: '江苏省泰州市',
-      postalCode: '225536',
-      addressCountry: 'CN',
-    },
-    hasCredential: [
-      {
-        '@type': 'EducationalOccupationalCredential',
-        name: '国家高新技术企业',
-        identifier: 'GR202432008987',
-      },
-      {
-        '@type': 'EducationalOccupationalCredential',
-        name: '国家级科技型中小企业',
-        credentialCategory: '国家级科技型中小企业（2025）',
-      },
-    ],
   },
   serviceType: ['工业炉节能改造', '热处理炉大修', '炉衬翻新', '燃烧系统升级', '控制系统改造', '搬迁复产评估'],
   areaServed: {
@@ -566,8 +545,8 @@ export default async function FurnaceRenovationOverhaulPage({ params }: PageProp
 
             <div className="mt-8 flex flex-wrap gap-3 text-[14px] font-semibold text-white">
               <span className="rounded-[4px] border border-white/24 bg-white/10 px-4 py-2">国家高新技术企业（证书编号 GR202432008987）</span>
-              <span className="rounded-[4px] border border-white/24 bg-white/10 px-4 py-2">国家级科技型中小企业（2025）</span>
-              <span className="rounded-[4px] border border-white/24 bg-white/10 px-4 py-2">ISO 9001 / 14001 / 45001 三体系认证</span>
+              <span className="rounded-[4px] border border-white/24 bg-white/10 px-4 py-2">ISO 9001（03824Q60289R3S）</span>
+              <span className="rounded-[4px] border border-white/24 bg-white/10 px-4 py-2">14 项已授权专利</span>
             </div>
 
             <div className="mt-9 flex flex-wrap gap-4">
@@ -770,7 +749,7 @@ export default async function FurnaceRenovationOverhaulPage({ params }: PageProp
         <div className="mt-6 rounded-[8px] border border-[#d6e0ec] bg-white p-6">
           <h3 className="text-[20px] font-semibold leading-[1.4] text-[#101828]">温度与控制系统验证能力</h3>
           <p className="mt-3 text-[15px] leading-[1.9] text-[#344054]">
-            如项目需要，苏能可配合进行 TUS（温度均匀性测试）、SAT（系统准确度测试）或相关温控记录检查。该能力作为改造验收与整改判断的辅助环节，具体测试标准和执行方式以项目要求、现场条件和合同约定为准。
+            可按合同及项目要求实施设备出厂检查、现场冷/热态调试、有效加热区温度均匀性测试和温控系统校验；涉及 AMS2750、CQI-9 或第三方认证时，可配合有资质机构完成测试及整改。上述为服务能力边界，不代表任何具体项目已经完成 TUS、SAT 或第三方验收。
           </p>
         </div>
         <p className="mt-7 rounded-[8px] bg-[#f7fafc] p-5 text-[15px] leading-[1.9] text-[#344054]">

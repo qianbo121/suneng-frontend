@@ -184,10 +184,11 @@ export function getOrganizationJsonLd(locale: Locale = 'zh') {
     logo: SITE_LOGO_IMAGE ? absoluteUrl(SITE_LOGO_IMAGE) : undefined,
     telephone: siteSettings.salesPhone,
     email: siteSettings.email,
-    foundingDate: '2006',
-    numberOfEmployees: {
-      '@type': 'QuantitativeValue',
-      minValue: 150,
+    foundingDate: '2006-12-22',
+    identifier: {
+      '@type': 'PropertyValue',
+      propertyID: isEnglish ? 'Unified Social Credit Code' : '统一社会信用代码',
+      value: '91321204796529654Q',
     },
     address: {
       '@type': 'PostalAddress',
@@ -195,21 +196,7 @@ export function getOrganizationJsonLd(locale: Locale = 'zh') {
       addressLocality: isEnglish ? 'Taizhou' : '姜堰区',
       addressRegion: isEnglish ? 'Jiangsu' : '江苏省泰州市',
       addressCountry: 'CN',
-      postalCode: '225500',
     },
-    geo: {
-      '@type': 'GeoCoordinates',
-      latitude: 32.44,
-      longitude: 120.03,
-    },
-    openingHoursSpecification: [
-      {
-        '@type': 'OpeningHoursSpecification',
-        dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
-        opens: '07:30',
-        closes: '18:00',
-      },
-    ],
     areaServed: [
       {
         '@type': 'Place',
@@ -225,7 +212,7 @@ export function getOrganizationJsonLd(locale: Locale = 'zh') {
           ]),
     ],
     description: isEnglish
-      ? 'Jiangsu Suneng Industrial Furnace, founded 2006 in Taizhou, Jiangsu, is a National High-Tech Enterprise specializing in custom heat-treatment furnace design and manufacturing, with a 14,700 m² production base.'
+      ? 'Jiangsu Suneng Industrial Furnace, founded on December 22, 2006 in Taizhou, Jiangsu, is a National High-Tech Enterprise specializing in custom heat-treatment furnace design and manufacturing.'
       : DEFAULT_DESCRIPTION,
     hasCredential: [
       {
@@ -236,16 +223,7 @@ export function getOrganizationJsonLd(locale: Locale = 'zh') {
       {
         '@type': 'EducationalOccupationalCredential',
         name: isEnglish ? 'ISO 9001 Quality Management System certification' : 'ISO 9001 质量管理体系认证',
-      },
-      {
-        '@type': 'EducationalOccupationalCredential',
-        name: isEnglish ? 'ISO 14001 Environmental Management System certification' : 'ISO 14001 环境管理体系认证',
-      },
-      {
-        '@type': 'EducationalOccupationalCredential',
-        name: isEnglish
-          ? 'ISO 45001 Occupational Health and Safety Management System certification'
-          : 'ISO 45001 职业健康安全管理体系认证',
+        identifier: '03824Q60289R3S',
       },
     ],
     knowsAbout: isEnglish

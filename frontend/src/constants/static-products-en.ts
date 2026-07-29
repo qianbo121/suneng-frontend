@@ -31,7 +31,7 @@ export const productDetailEn: Partial<Record<string, ProductDetailEnOverride>> =
     ],
     ctaHighlights: [
       'Founded in 2006',
-      '14,700 m² manufacturing base',
+      'company-reported approx. 14,700 m² production site',
       'Custom-engineered box furnaces',
     ],
     heroCtas: [
@@ -536,7 +536,7 @@ export const productDetailEn: Partial<Record<string, ProductDetailEnOverride>> =
     ],
     ctaHighlights: [
       'Founded in 2006',
-      '14,700 m² manufacturing base',
+      'company-reported approx. 14,700 m² production site',
       'Custom-engineered bogie-hearth furnaces',
     ],
     heroCtas: [
@@ -1022,7 +1022,7 @@ export const productDetailEn: Partial<Record<string, ProductDetailEnOverride>> =
     ],
     ctaHighlights: [
       'Founded in 2006',
-      '14,700 m² manufacturing base',
+      'company-reported approx. 14,700 m² production site',
       'Custom-engineered pit furnaces',
     ],
     heroCtas: [
@@ -1392,7 +1392,7 @@ export const productDetailEn: Partial<Record<string, ProductDetailEnOverride>> =
     ],
     ctaHighlights: [
       'Founded in 2006',
-      '14,700 m² manufacturing base',
+      'company-reported approx. 14,700 m² production site',
       'Response time agreed per project',
     ],
     heroCtas: [
@@ -1756,7 +1756,7 @@ export const productDetailEn: Partial<Record<string, ProductDetailEnOverride>> =
     ],
     ctaHighlights: [
       'Founded in 2006',
-      '14,700 m² manufacturing base',
+      'company-reported approx. 14,700 m² production site',
       'Custom-engineered pusher furnaces',
     ],
     heroCtas: [
@@ -2137,7 +2137,7 @@ export const productDetailEn: Partial<Record<string, ProductDetailEnOverride>> =
     ],
     ctaHighlights: [
       'Founded in 2006',
-      '14,700 m² manufacturing base',
+      'company-reported approx. 14,700 m² production site',
       'Custom-engineered mesh-belt furnaces',
     ],
     heroCtas: [
@@ -2669,7 +2669,7 @@ export const productDetailEn: Partial<Record<string, ProductDetailEnOverride>> =
     ],
     ctaHighlights: [
       'Founded in 2006',
-      '14,700 m² manufacturing base',
+      'company-reported approx. 14,700 m² production site',
       'Custom-engineered roller-hearth furnaces',
     ],
     heroCtas: [
@@ -3053,7 +3053,7 @@ export const productDetailEn: Partial<Record<string, ProductDetailEnOverride>> =
     ],
     ctaHighlights: [
       'Founded in 2006',
-      '14,700 m² manufacturing base',
+      'company-reported approx. 14,700 m² production site',
       'Custom-engineered rotary-hearth furnaces',
     ],
     heroCtas: [
@@ -3439,7 +3439,7 @@ export const productDetailEn: Partial<Record<string, ProductDetailEnOverride>> =
     ],
     ctaHighlights: [
       'Founded in 2006',
-      '14,700 m² manufacturing base',
+      'company-reported approx. 14,700 m² production site',
       'Custom-engineered mesh-belt lines',
     ],
     heroCtas: [
@@ -3839,7 +3839,7 @@ export const productDetailEn: Partial<Record<string, ProductDetailEnOverride>> =
     ],
     ctaHighlights: [
       'Founded in 2006',
-      '14,700 m² manufacturing base',
+      'company-reported approx. 14,700 m² production site',
       'Custom-engineered copper wire annealing lines',
     ],
     heroCtas: [
@@ -4232,7 +4232,7 @@ export const productDetailEn: Partial<Record<string, ProductDetailEnOverride>> =
     ],
     ctaHighlights: [
       'Founded in 2006',
-      '14,700 m² manufacturing base',
+      'company-reported approx. 14,700 m² production site',
       'Custom-engineered production lines',
     ],
     reasons: [

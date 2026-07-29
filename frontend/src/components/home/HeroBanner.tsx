@@ -32,18 +32,18 @@ const heroStats = [
     label: { zh: '注册资本', en: 'Registered Capital' },
   },
   {
-    key: 'employees',
+    key: 'projects',
     value: 150,
     valueText: { zh: '', en: '' },
-    unit: { zh: '+人', en: '+' },
-    label: { zh: '公司员工', en: 'Employees' },
+    unit: { zh: '+项', en: '+' },
+    label: { zh: '工业炉新建与改造项目', en: 'New-build & Retrofit Projects' },
   },
   {
     key: 'facility-area',
     value: 14700,
     valueText: { zh: '', en: '' },
     unit: { zh: '㎡', en: 'm²' },
-    label: { zh: '厂房面积', en: 'Facility Area' },
+    label: { zh: '生产基地占地（公司自报）', en: 'Production Site (Company-reported)' },
   },
 ] as const;
 const heroTitle = {

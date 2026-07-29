@@ -44,7 +44,7 @@ const casePath = '/zh/case/anonymous-tsingshan-1250-renovation';
 
 export const dynamicParams = false;
 
-const heroTags = ['江苏泰州生产基地', '成立于 2006 年', '14700㎡生产基地', '国家高新技术企业', '热处理炉定制', '工业炉改造与大修'];
+const heroTags = ['江苏泰州生产基地', '成立于 2006 年', '公司自报约14700㎡生产基地', '国家高新技术企业', '热处理炉定制', '工业炉改造与大修'];
 
 const serviceCards = [
   {

@@ -28,11 +28,22 @@ describe('SEO JSON-LD entities', () => {
   });
 
   it('keeps one canonical business identity with the real sales phone', () => {
-    expect(getOrganizationJsonLd('zh')).toMatchObject({
+    const organization = getOrganizationJsonLd('zh');
+
+    expect(organization).toMatchObject({
       '@type': 'LocalBusiness',
       '@id': 'https://www.jssngyl.cn/#organization',
       telephone: '+86-130-5298-6814',
+      foundingDate: '2006-12-22',
+      identifier: {
+        '@type': 'PropertyValue',
+        propertyID: '统一社会信用代码',
+        value: '91321204796529654Q',
+      },
     });
+    expect(organization).not.toHaveProperty('numberOfEmployees');
+    expect(JSON.stringify(organization)).not.toContain('ISO 14001');
+    expect(JSON.stringify(organization)).not.toContain('ISO 45001');
   });
 
   it('adds the real technical reviewer only to content explicitly marked as reviewed', () => {

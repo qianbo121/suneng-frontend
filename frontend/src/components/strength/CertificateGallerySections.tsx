@@ -125,9 +125,9 @@ export function CertificateGallerySections({
   const selectedIndex = selectedItem ? allItems.findIndex((item) => item.id === selectedItem.id) : 0;
   const stats = [
     ['国家高新技术企业', '2024 年认定'],
-    ['ISO 三体系认证', `${isoCertificates.length} 张体系证书`],
+    ['ISO 9001', '证书 03824Q60289R3S'],
     [`${patents.length} 项已授权专利`, `${patents.length} 张专利证书`],
-    [`${allItems.length} 张证书资料`, '公开展示图片'],
+    [`${allItems.length} 张证书资料`, '当前核实并公开展示'],
   ];
 
   return (
@@ -166,7 +166,7 @@ export function CertificateGallerySections({
               企业资质、体系认证与 14 项已授权专利证书
             </p>
             <p className="mt-7 max-w-[860px] text-[16px] leading-[1.95] text-white/78 lg:text-[18px]">
-              苏能工业炉通过国家高新技术企业认定，建立 ISO 9001 / ISO 14001 / ISO 45001 管理体系，并持有 14 项已授权专利。以下证书用于展示企业资质、管理体系和技术成果。
+              苏能工业炉通过国家高新技术企业认定，ISO 9001 质量管理体系认证有效至 2027 年 1 月 11 日，并持有 14 项已授权专利。以下仅展示当前已经核实的企业资质、管理体系和技术成果。
             </p>
           </div>
         </div>
@@ -188,14 +188,14 @@ export function CertificateGallerySections({
       <main className="mx-auto max-w-[1180px] px-5 lg:px-8">
         <CertificateSection
           title="企业资质"
-          description="包括营业执照、国家高新技术企业证书、安全生产标准化、信用公示及相关企业资质材料。"
+          description="包括营业执照与国家高新技术企业证书；其他资质在证书正文、有效期和当前状态复核完成后再恢复展示。"
           items={qualifications}
           onPreview={setSelectedItem}
         />
 
         <CertificateSection
           title="管理体系认证"
-          description="包括 ISO 9001 质量管理体系、ISO 14001 环境管理体系与 ISO 45001 职业健康安全管理体系认证。"
+          description="当前公开 ISO 9001 质量管理体系认证，证书编号 03824Q60289R3S，有效至 2027 年 1 月 11 日。"
           items={isoCertificates}
           onPreview={setSelectedItem}
         />

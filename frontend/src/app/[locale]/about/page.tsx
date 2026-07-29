@@ -28,7 +28,7 @@ const aboutSeoCopy = {
   en: {
     title: 'About Suneng Industrial Furnace | Jiangsu Heat-Treatment Furnace Manufacturer',
     description:
-      'Jiangsu Suneng Industrial Furnace — founded 2006 in Taizhou, Jiangsu, a National High-Tech Enterprise specializing in heat-treatment furnace design and manufacturing, with a 14,700 m² production base.',
+      'Jiangsu Suneng Industrial Furnace — founded 2006 in Taizhou, Jiangsu, a National High-Tech Enterprise specializing in heat-treatment furnace design and manufacturing. The company reports an approximately 14,700 m² production site.',
     keywords: [
       'Suneng Industrial Furnace',
       'Jiangsu furnace manufacturer',

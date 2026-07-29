@@ -53,7 +53,7 @@ const POLICE_BEIAN_URL = 'http://www.beian.gov.cn/portal/registerSystemInfo?reco
 const footerCopy = {
   zh: {
     contactUs: '联系我们',
-    founded: '成立于 2006 年，厂房面积 14700 ㎡',
+    founded: '成立于 2006 年；公司自报生产基地占地约 14700 ㎡',
     brandIntro: '专注热处理工业炉研发制造，提供设计、制造、安装与售后服务。',
     address: '江苏省泰州市姜堰区张甸蔡官工业区',
     wechat: '微信二维码',
@@ -67,7 +67,7 @@ const footerCopy = {
   },
   en: {
     contactUs: 'Contact Us',
-    founded: 'Founded in 2006, 14,700 ㎡ facility',
+    founded: 'Founded in 2006; company-reported approx. 14,700 ㎡ site',
     brandIntro: 'Focused on industrial furnace R&D, manufacturing, installation and after-sales service.',
     address: 'Caiguan Industrial Park, Zhangdian Town, Jiangyan District, Taizhou, Jiangsu Province, China',
     wechat: 'WeChat QR',

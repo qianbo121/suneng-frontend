@@ -46,7 +46,7 @@ export const dynamicParams = false;
 
 const heroTags = [
   '成立于 2006 年',
-  '14700㎡生产基地',
+  '公司自报约14700㎡生产基地',
   '国家高新技术企业',
   'ISO 9001 / 14001 / 45001',
   '非标工业炉定制',

@@ -82,7 +82,11 @@ describe('high-risk case fact governance', () => {
 
   it('allows a bounded summary on the hub but prevents unrelated-page duplication', () => {
     expect(solutionSource).toContain('3 条 1250 mm');
-    expect(solutionSource).toContain('具体测算公式与阶段周期已在脱敏案例页公开');
+    expect(solutionSource).toContain('冷煤气总设计量 17150 Nm³/h');
+    expect(solutionSource).toContain('以上只对应本项目燃料与设备边界');
+    expect(solutionSource).not.toContain('7,644 万元');
+    expect(solutionSource).not.toContain('63.7 元/吨');
+    expect(solutionSource).not.toContain('120 万吨/年');
 
     for (const source of unrelatedPublicSources) {
       expect(source).not.toContain('7,644 万元');
