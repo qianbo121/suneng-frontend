@@ -434,6 +434,7 @@ export function getProductCollectionJsonLd(path = '/products', locale: Locale = 
 export function getProductDetailJsonLd(product: ProductDetailJsonLdInput, locale: Locale = 'zh') {
   const isEnglish = isEnglishLocale(locale);
   const pageUrl = productUrl(product.slug, product.path);
+  const productId = `${pageUrl}#product`;
   const images = absoluteImages(product.image);
   const description = isEnglish ? product.description : PRODUCT_JSON_LD_DESCRIPTIONS[product.slug] || product.description;
 
@@ -441,20 +442,25 @@ export function getProductDetailJsonLd(product: ProductDetailJsonLdInput, locale
     {
       '@context': 'https://schema.org',
       '@type': 'Product',
+      '@id': productId,
       name: !isEnglish && product.slug === 'trolley-furnace' ? '台车式热处理炉' : product.name,
+      alternateName: product.alternateName,
       description,
+      keywords: product.keywords,
       brand: {
         '@type': 'Brand',
         name: isEnglish ? 'Suneng Industrial Furnace' : SHORT_NAME,
       },
-      manufacturer: {
-        '@type': 'Organization',
-        name: isEnglish ? 'Jiangsu Suneng Industrial Furnace Co., Ltd.' : COMPANY_NAME,
-        url: LOCAL_BUSINESS_URL,
-      },
+      manufacturer: { '@id': LOCAL_BUSINESS_ID },
       category: isEnglish ? 'Industrial Furnace / Heat-Treatment Furnace' : '工业炉 / 热处理炉',
       url: pageUrl,
       image: images,
+      additionalProperty: product.additionalProperties?.map((item) => ({
+        '@type': 'PropertyValue',
+        name: item.name,
+        value: item.value,
+        unitText: item.unitText,
+      })),
     },
     {
       '@context': 'https://schema.org',
@@ -464,6 +470,8 @@ export function getProductDetailJsonLd(product: ProductDetailJsonLdInput, locale
       name: product.name,
       description: product.description,
       isPartOf: { '@id': `${SITE_URL}/#website` },
+      about: { '@id': LOCAL_BUSINESS_ID },
+      mainEntity: { '@id': productId },
       dateModified: product.dateModified,
       reviewedBy: product.reviewedByTechnicalEngineer ? getTechnicalReviewerJsonLd() : undefined,
       inLanguage: schemaLanguage(locale),

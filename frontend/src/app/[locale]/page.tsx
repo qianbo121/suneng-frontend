@@ -1,6 +1,7 @@
 import dynamic from 'next/dynamic';
 
 import { JsonLd } from '@/components/JsonLd';
+import { GeoDecisionHub } from '@/components/home/GeoDecisionHub';
 import { getHomePageData } from '@/lib/home';
 import { getHomePageJsonLd } from '@/lib/seo/jsonld';
 import { buildMetadata } from '@/lib/seo/metadata';
@@ -74,6 +75,7 @@ export default async function LocaleHomePage({ params }: LocaleHomePageProps) {
       <HeroBanner locale={currentLocale} />
       <HeatTreatmentLines locale={currentLocale} categories={[]} />
       <HotProducts locale={currentLocale} items={[]} />
+      <GeoDecisionHub locale={currentLocale} />
       <NewsSection locale={currentLocale} items={homeData.news} />
     </div>
   );

@@ -75,4 +75,51 @@ describe('SEO JSON-LD entities', () => {
       ]),
     );
   });
+
+  it('connects product facts to one crawlable Product entity', () => {
+    const graph = getProductDetailJsonLd({
+      slug: 'trolley-furnace',
+      path: '/zh/products/detail/trolley-furnace',
+      name: '台车炉',
+      alternateName: ['台车式热处理炉'],
+      description: '台车炉说明',
+      keywords: ['台车炉', '台车式热处理炉'],
+      additionalProperties: [
+        { name: '额定温度', value: '按工艺要求确认' },
+        { name: '台车承重', value: '按工件与装炉量核算', unitText: 't' },
+      ],
+    });
+
+    const productId = 'https://www.jssngyl.cn/zh/products/detail/trolley-furnace#product';
+
+    expect(graph).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          '@type': 'Product',
+          '@id': productId,
+          alternateName: ['台车式热处理炉'],
+          keywords: ['台车炉', '台车式热处理炉'],
+          manufacturer: { '@id': 'https://www.jssngyl.cn/#organization' },
+          additionalProperty: [
+            {
+              '@type': 'PropertyValue',
+              name: '额定温度',
+              value: '按工艺要求确认',
+            },
+            {
+              '@type': 'PropertyValue',
+              name: '台车承重',
+              value: '按工件与装炉量核算',
+              unitText: 't',
+            },
+          ],
+        }),
+        expect.objectContaining({
+          '@type': 'WebPage',
+          mainEntity: { '@id': productId },
+          about: { '@id': 'https://www.jssngyl.cn/#organization' },
+        }),
+      ]),
+    );
+  });
 });
