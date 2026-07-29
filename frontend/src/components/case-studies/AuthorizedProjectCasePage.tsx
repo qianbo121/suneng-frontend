@@ -5,6 +5,7 @@ import {
   GeoContactCta,
   GeoFaqGrid,
   GeoHeroTags,
+  GeoReviewNote,
   GeoSection as Section,
   type GeoFaqItem,
 } from '@/components/geo-pages/GeoPageBlocks';
@@ -32,6 +33,10 @@ export type AuthorizedProjectCasePageData = {
   heroImageNote: string;
   heroTags: string[];
   facts: Array<[string, string]>;
+  caseClassification: string;
+  resultDisclosure: string;
+  modifiedDate: string;
+  sourceNote: string;
   verifiedParameters?: Array<[string, string]>;
   verifiedParametersIntro?: string;
   disclosure: string;
@@ -119,7 +124,16 @@ export function AuthorizedProjectCasePage({ data }: { data: AuthorizedProjectCas
         </div>
       </section>
 
+      <GeoReviewNote modifiedDate={data.modifiedDate} sourceNote={data.sourceNote} />
+
       <Section id="overview" eyebrow="Project Context" title="一、项目背景与真实需求">
+        <article className="mb-6 rounded-[8px] border border-[#d6e0ec] bg-[#f8fafc] p-6">
+          <p className="text-[13px] font-semibold text-[#c51624]">案例分级</p>
+          <h3 className="mt-2 text-[21px] font-semibold leading-[1.4] text-[#101828]">
+            {data.caseClassification}
+          </h3>
+          <p className="mt-3 text-[15px] leading-[1.9] text-[#475467]">{data.resultDisclosure}</p>
+        </article>
         <div className="grid gap-6 lg:grid-cols-2">
           <article className="rounded-[8px] border border-[#e1e7f0] bg-[#fbfcfe] p-6">
             <h3 className="text-[21px] font-semibold leading-[1.4] text-[#101828]">

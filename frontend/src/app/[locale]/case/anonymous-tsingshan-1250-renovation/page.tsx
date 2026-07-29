@@ -32,6 +32,7 @@ const heroImage = '/images/service/after-sales-hero.png';
 export const dynamicParams = false;
 
 const heroFacts: FactItem[] = [
+  ['案例类型', '项目测算型结果案例（非客户财务审计结果）'],
   ['项目类型', '工业炉节能改造'],
   ['改造对象', '不锈钢连续退洗线'],
   [
