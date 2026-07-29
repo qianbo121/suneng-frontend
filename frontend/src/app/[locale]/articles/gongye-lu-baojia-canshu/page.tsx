@@ -7,7 +7,7 @@ import { JsonLd } from '@/components/JsonLd';
 import { Breadcrumb } from '@/components/layout/Breadcrumb';
 import { ProductLeadForm } from '@/components/products/ProductLeadForm';
 import { getStaticProductBySlug } from '@/constants/static-products';
-import { getBreadcrumbJsonLd, getFaqJsonLd } from '@/lib/seo/jsonld';
+import { getArticleJsonLd, getBreadcrumbJsonLd, getFaqJsonLd } from '@/lib/seo/jsonld';
 import { buildMetadata } from '@/lib/seo/metadata';
 import { INDUSTRIAL_FURNACE_QUOTE_PARAMS_SEO } from '@/lib/seo/page-data';
 import { siteSettings } from '@/mock/siteSettings';
@@ -262,6 +262,15 @@ const breadcrumbJsonLd = getBreadcrumbJsonLd([
   { name: '服务支持', url: servicePath },
   { name: '工业炉报价需要哪些参数', url: pagePath },
 ]);
+const articleJsonLd = getArticleJsonLd({
+  slug: 'gongye-lu-baojia-canshu',
+  path: pagePath,
+  headline: INDUSTRIAL_FURNACE_QUOTE_PARAMS_SEO.title,
+  description: INDUSTRIAL_FURNACE_QUOTE_PARAMS_SEO.description,
+  image: INDUSTRIAL_FURNACE_QUOTE_PARAMS_SEO.ogImage,
+  datePublished: INDUSTRIAL_FURNACE_QUOTE_PARAMS_SEO.publishedTime,
+  dateModified: INDUSTRIAL_FURNACE_QUOTE_PARAMS_SEO.modifiedTime,
+});
 
 const relatedLinks = [
   getStaticProductBySlug('trolley-furnace') && {
@@ -359,6 +368,12 @@ export default async function IndustrialFurnaceQuoteParamsPage({ params }: PageP
           />
 
           <div className="mt-10 max-w-[930px]">
+            <p className="mb-4 text-[13px] font-medium text-white/70 lg:text-[14px]">
+              发布于{' '}
+              <time dateTime={INDUSTRIAL_FURNACE_QUOTE_PARAMS_SEO.publishedTime}>
+                {INDUSTRIAL_FURNACE_QUOTE_PARAMS_SEO.publishedTime.slice(0, 10)}
+              </time>
+            </p>
             <h1 className="text-[36px] font-semibold leading-[1.16] tracking-[0.01em] lg:text-[58px]">
               工业炉报价需要哪些参数？
             </h1>
@@ -636,6 +651,7 @@ export default async function IndustrialFurnaceQuoteParamsPage({ params }: PageP
         </div>
       </section>
 
+      <JsonLd id="industrial-furnace-quote-params-article-jsonld" data={articleJsonLd} />
       <JsonLd id="industrial-furnace-quote-params-breadcrumb-jsonld" data={breadcrumbJsonLd} />
       <JsonLd id="industrial-furnace-quote-params-faq-jsonld" data={faqJsonLd} />
     </main>

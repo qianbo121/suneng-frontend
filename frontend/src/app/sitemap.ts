@@ -4,6 +4,13 @@ import { publicPathExists } from '@/lib/seo/config';
 import { absoluteUrl } from '@/lib/seo/metadata';
 import { getNewsList } from '@/lib/api/news';
 import { STATIC_PRODUCTS } from '@/constants/static-products';
+import {
+  HENAN_ANNEALING_SOLUTION_CASE_SEO,
+  INDUSTRIAL_FURNACE_QUOTE_PARAMS_SEO,
+  JINING_SUPPORT_ROLLER_CASE_SEO,
+  OLD_HEAT_TREATMENT_FURNACE_REPAIR_OR_REPLACE_SEO,
+  TSINGSHAN_1250_CASE_SEO,
+} from '@/lib/seo/page-data';
 import { Locale } from '@/types/site';
 
 const sitemapLocales: Locale[] = ['zh', 'en'];
@@ -35,11 +42,13 @@ function routeAlternates(path: string, locales: Locale[]) {
 }
 
 function safeLastModified(value?: string | Date) {
-  const date = value ? new Date(value) : new Date();
+  if (!value) return undefined;
+
+  const date = new Date(value);
   const now = new Date();
 
-  if (Number.isNaN(date.getTime())) return now;
-  return date > now ? now : date;
+  if (Number.isNaN(date.getTime()) || date > now) return undefined;
+  return date;
 }
 
 function route(url: string, options: Omit<SitemapEntry, 'url'>): SitemapEntry {
@@ -77,7 +86,6 @@ function collectStaticRoutes(): MetadataRoute.Sitemap {
     for (const locale of locales) {
       routes.push(
         route(localizedPath(locale, item.path), {
-          lastModified: new Date(),
           changeFrequency: item.changeFrequency,
           priority: item.priority,
           alternates: routeAlternates(item.path, locales),
@@ -90,22 +98,48 @@ function collectStaticRoutes(): MetadataRoute.Sitemap {
     path: string;
     changeFrequency: SitemapEntry['changeFrequency'];
     priority: number;
+    lastModified?: string;
   }> = [
     { path: '/service/furnace-renovation-overhaul', changeFrequency: 'monthly', priority: 0.72 },
-    { path: '/articles/gongye-lu-baojia-canshu', changeFrequency: 'monthly', priority: 0.64 },
-    { path: '/articles/laojiu-rechuli-lu-daxiu-haishi-maixin', changeFrequency: 'monthly', priority: 0.64 },
+    {
+      path: '/articles/gongye-lu-baojia-canshu',
+      changeFrequency: 'monthly',
+      priority: 0.64,
+      lastModified: INDUSTRIAL_FURNACE_QUOTE_PARAMS_SEO.modifiedTime,
+    },
+    {
+      path: '/articles/laojiu-rechuli-lu-daxiu-haishi-maixin',
+      changeFrequency: 'monthly',
+      priority: 0.64,
+      lastModified: OLD_HEAT_TREATMENT_FURNACE_REPAIR_OR_REPLACE_SEO.modifiedTime,
+    },
     { path: '/solutions/rechuli-lu-changjia', changeFrequency: 'monthly', priority: 0.78 },
     { path: '/solutions/jiangsu-gongye-lu-changjia', changeFrequency: 'monthly', priority: 0.76 },
     { path: '/solutions/continuous-heat-treatment-line', changeFrequency: 'monthly', priority: 0.86 },
-    { path: '/case/anonymous-tsingshan-1250-renovation', changeFrequency: 'monthly', priority: 0.68 },
-    { path: '/case/jining-support-roller-heat-treatment-line', changeFrequency: 'monthly', priority: 0.72 },
-    { path: '/case/henan-annealing-solution-line', changeFrequency: 'monthly', priority: 0.72 },
+    {
+      path: '/case/anonymous-tsingshan-1250-renovation',
+      changeFrequency: 'monthly',
+      priority: 0.68,
+      lastModified: TSINGSHAN_1250_CASE_SEO.modifiedTime,
+    },
+    {
+      path: '/case/jining-support-roller-heat-treatment-line',
+      changeFrequency: 'monthly',
+      priority: 0.72,
+      lastModified: JINING_SUPPORT_ROLLER_CASE_SEO.modifiedTime,
+    },
+    {
+      path: '/case/henan-annealing-solution-line',
+      changeFrequency: 'monthly',
+      priority: 0.72,
+      lastModified: HENAN_ANNEALING_SOLUTION_CASE_SEO.modifiedTime,
+    },
   ];
 
   for (const item of zhOnlyStaticPaths) {
     routes.push(
       route(localizedPath('zh', item.path), {
-        lastModified: new Date(),
+        ...(item.lastModified ? { lastModified: new Date(item.lastModified) } : {}),
         changeFrequency: item.changeFrequency,
         priority: item.priority,
         alternates: routeAlternates(item.path, zhOnlyLocales),
@@ -120,7 +154,6 @@ function collectProductRoutes(): MetadataRoute.Sitemap {
   return sitemapLocales.flatMap((locale) =>
     STATIC_PRODUCTS.map((product) =>
       route(localizedPath(locale, `/products/detail/${product.slug}`), {
-        lastModified: new Date(),
         changeFrequency: 'monthly',
         priority: 0.8,
         images: publicPathExists(product.image) ? [absoluteUrl(product.image)] : undefined,

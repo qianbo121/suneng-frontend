@@ -6,7 +6,7 @@ import { GeoContactCta, GeoFaqGrid, GeoHeroTags, GeoSection as Section } from '@
 import { JsonLd } from '@/components/JsonLd';
 import { Breadcrumb } from '@/components/layout/Breadcrumb';
 import { QuoteModalButton } from '@/components/lead/QuoteModalButton';
-import { cleanObject, getBreadcrumbJsonLd, getFaqJsonLd, getWebPageJsonLd } from '@/lib/seo/jsonld';
+import { cleanObject, getArticleJsonLd, getBreadcrumbJsonLd, getFaqJsonLd } from '@/lib/seo/jsonld';
 import { buildMetadata } from '@/lib/seo/metadata';
 import { OLD_HEAT_TREATMENT_FURNACE_REPAIR_OR_REPLACE_SEO } from '@/lib/seo/page-data';
 
@@ -207,10 +207,14 @@ const faqs = [
 const faqJsonLd = getFaqJsonLd(faqs);
 
 const pageJsonLd = cleanObject([
-  getWebPageJsonLd({
+  getArticleJsonLd({
+    slug: 'laojiu-rechuli-lu-daxiu-haishi-maixin',
     path: pagePath,
-    name: '老旧热处理炉是大修好，还是直接买新的？',
+    headline: OLD_HEAT_TREATMENT_FURNACE_REPAIR_OR_REPLACE_SEO.title,
     description: OLD_HEAT_TREATMENT_FURNACE_REPAIR_OR_REPLACE_SEO.description,
+    image: OLD_HEAT_TREATMENT_FURNACE_REPAIR_OR_REPLACE_SEO.ogImage,
+    datePublished: OLD_HEAT_TREATMENT_FURNACE_REPAIR_OR_REPLACE_SEO.publishedTime,
+    dateModified: OLD_HEAT_TREATMENT_FURNACE_REPAIR_OR_REPLACE_SEO.modifiedTime,
   }),
   getBreadcrumbJsonLd([
     { name: '首页', url: '/zh' },
@@ -282,7 +286,12 @@ export default async function OldHeatTreatmentFurnaceDecisionPage({ params }: Pa
             items={[{ label: '服务支持', href: servicePath }]}
           />
           <div className="mt-10 max-w-[980px]">
-            <p className="text-[13px] font-semibold text-white/64 lg:text-[14px]">老旧炉修还是换决策页</p>
+            <p className="text-[13px] font-medium text-white/70 lg:text-[14px]">
+              发布于{' '}
+              <time dateTime={OLD_HEAT_TREATMENT_FURNACE_REPAIR_OR_REPLACE_SEO.publishedTime}>
+                {OLD_HEAT_TREATMENT_FURNACE_REPAIR_OR_REPLACE_SEO.publishedTime.slice(0, 10)}
+              </time>
+            </p>
             <h1 className="mt-4 text-[34px] font-semibold leading-[1.16] tracking-[0.01em] lg:text-[56px]">
               老旧热处理炉是大修好，还是直接买新的？
             </h1>

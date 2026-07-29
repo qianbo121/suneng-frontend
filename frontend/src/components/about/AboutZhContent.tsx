@@ -4,7 +4,6 @@ import Link from 'next/link';
 import { JsonLd } from '@/components/JsonLd';
 import { QuoteModalButton } from '@/components/lead/QuoteModalButton';
 import { Breadcrumb } from '@/components/layout/Breadcrumb';
-import { SITE_LOGO_IMAGE, SITE_URL } from '@/lib/seo/config';
 import { absoluteUrl } from '@/lib/seo/metadata';
 import { siteSettings } from '@/mock/siteSettings';
 
@@ -84,36 +83,6 @@ const aboutPhotos = [
     sizes: '100vw',
   },
 ];
-
-const organizationJsonLd = {
-  '@context': 'https://schema.org',
-  '@type': 'Organization',
-  name: '苏能工业炉',
-  alternateName: ['苏能工业炉装备', '苏能'],
-  url: SITE_URL,
-  logo: SITE_LOGO_IMAGE
-    ? absoluteUrl(SITE_LOGO_IMAGE)
-    : absoluteUrl('/images/brand/sn-logo-header.png'),
-  description:
-    '苏能工业炉专业从事电阻式与燃气式工业炉、热处理炉、可控气氛炉、锻造加热炉及工业窑炉的设计、制造与系统集成。',
-  knowsAbout: [
-    '工业炉',
-    '热处理炉',
-    '可控气氛炉',
-    '井式炉',
-    '台车炉',
-    '网带炉',
-    '推杆炉',
-    '辊底炉',
-    '多用炉',
-    '光亮退火炉',
-    '锻造加热炉',
-    '工业窑炉',
-    '渗碳淬火生产线',
-    '工业炉大修',
-  ],
-  areaServed: 'CN',
-};
 
 const faqJsonLd = {
   '@context': 'https://schema.org',
@@ -807,7 +776,6 @@ export function AboutZhContent() {
         </section>
       </div>
 
-      <JsonLd id="about-zh-organization-jsonld" data={organizationJsonLd} />
       <JsonLd id="about-zh-faq-jsonld" data={faqJsonLd} />
     </>
   );

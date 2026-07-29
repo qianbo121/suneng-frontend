@@ -39,8 +39,8 @@ export const siteSettings: SiteSettings = {
     {
       key: 'whatsapp',
       label: { zh: 'WhatsApp', en: 'WhatsApp' },
-      value: '+86 186 8888 0000',
-      href: 'https://wa.me/8618688880000',
+      value: '+86 130 5298 6814',
+      href: 'https://wa.me/8613052986814',
     },
     {
       key: 'email',
