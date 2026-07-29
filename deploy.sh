@@ -39,6 +39,18 @@ if ! command -v logrotate >/dev/null 2>&1; then
   exit 1
 fi
 
+if ! grep -Fq 'server_name factory.jssngyl.cn;' nginx.prod.conf.template; then
+  echo "Refusing deployment: nginx.prod.conf.template is missing the smart-factory route."
+  exit 1
+fi
+
+for required_container in furnace-web furnace-api; do
+  if ! docker inspect "$required_container" >/dev/null 2>&1; then
+    echo "Refusing deployment: required smart-factory container $required_container is missing."
+    exit 1
+  fi
+done
+
 install -d -m 0755 /data/nginx-logs
 install -m 0644 ops/logrotate/corp-site-nginx /etc/logrotate.d/corp-site-nginx
 
@@ -54,6 +66,7 @@ docker compose --env-file "$ENV_FILE" -f "$COMPOSE_FILE" up -d
 # The app containers were recreated and got new bridge IPs; nginx uses static
 # upstreams with no resolver, so reload it to re-resolve them and avoid the
 # stale-upstream-IP 502 failure mode.
+docker compose --env-file "$ENV_FILE" -f "$COMPOSE_FILE" exec -T nginx nginx -t
 docker compose --env-file "$ENV_FILE" -f "$COMPOSE_FILE" exec -T nginx nginx -s reload
 
 # Health-check the REAL backend health route inside the container. The previous
@@ -77,6 +90,28 @@ done
 if [ "$backend_healthy" -ne 1 ]; then
   echo "Health check failed: backend /api/health"
   docker compose --env-file "$ENV_FILE" -f "$COMPOSE_FILE" logs --tail=50
+  exit 1
+fi
+
+echo "Waiting for smart-factory routes..."
+factory_healthy=0
+for attempt in {1..15}; do
+  factory_web_status="$(curl -sS -o /dev/null -w '%{http_code}' https://factory.jssngyl.cn/h5/login || true)"
+  factory_api_status="$(curl -sS -o /dev/null -w '%{http_code}' https://factory.jssngyl.cn/api/accounts || true)"
+
+  if [ "$factory_web_status" = "200" ] && [ "$factory_api_status" = "401" ]; then
+    echo "Smart-factory route checks passed."
+    factory_healthy=1
+    break
+  fi
+
+  if [ "$attempt" -lt 15 ]; then
+    sleep 2
+  fi
+done
+
+if [ "$factory_healthy" -ne 1 ]; then
+  echo "Health check failed: smart-factory routes (web=$factory_web_status api=$factory_api_status)"
   exit 1
 fi
 
