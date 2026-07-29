@@ -17,6 +17,12 @@
 5. `https://www.jssngyl.cn/zh/case/jining-support-roller-heat-treatment-line`
 6. `https://www.jssngyl.cn/zh/case/henan-annealing-solution-line`
 
+执行记录（2026-07-29）：
+
+- IndexNow：上述 6 个 URL 已提交，接口返回 `HTTP 202`；
+- 青山案例：已通过排除参数拦截，未进入本批；
+- 百度主动推送：生产与本地均未配置 `BAIDU_PUSH_TOKEN`，本批未执行，不能记为已提交。
+
 ## 第二批：证据补齐后单独提交
 
 - `https://www.jssngyl.cn/zh/case/anonymous-tsingshan-1250-renovation`
