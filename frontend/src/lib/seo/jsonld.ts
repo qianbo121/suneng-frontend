@@ -71,7 +71,7 @@ const PRODUCT_SCHEMA_ORDER = [
 const productBySlug = new Map(STATIC_PRODUCTS.map((product) => [product.slug, product]));
 const LOCAL_BUSINESS_URL = 'https://www.jssngyl.cn/';
 const LOCAL_BUSINESS_ID = `${LOCAL_BUSINESS_URL}#organization`;
-const TECHNICAL_REVIEWER_ID = `${LOCAL_BUSINESS_URL}#technical-reviewer-tang-dengrong`;
+const TECHNICAL_REVIEWER_ID = `${LOCAL_BUSINESS_URL}#technical-reviewer-tang`;
 const HOME_PAGE_EN_DESCRIPTION =
   'Jiangsu Suneng Industrial Furnace (founded 2006, Taizhou, Jiangsu) custom-engineers heat-treatment furnaces — box, bogie-hearth, pit, mesh-belt, roller-hearth and pusher furnaces, continuous heat-treatment lines, plus furnace energy-saving retrofit and overhaul.';
 const PRODUCT_COLLECTION_EN_DESCRIPTION =

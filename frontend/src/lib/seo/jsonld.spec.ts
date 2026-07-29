@@ -68,11 +68,14 @@ describe('SEO JSON-LD entities', () => {
     expect(article).toMatchObject({
       reviewedBy: {
         '@type': 'Person',
-        '@id': 'https://www.jssngyl.cn/#technical-reviewer-tang-dengrong',
+        '@id': 'https://www.jssngyl.cn/#technical-reviewer-tang',
         name: '唐工',
         worksFor: { '@id': 'https://www.jssngyl.cn/#organization' },
       },
     });
+    const formerFullName = ['唐', '登', '荣'].join('');
+    expect(JSON.stringify(article)).not.toContain(formerFullName);
+    expect(JSON.stringify(product)).not.toContain(formerFullName);
     expect(product).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
