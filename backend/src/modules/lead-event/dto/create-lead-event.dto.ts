@@ -51,6 +51,12 @@ export class CreateLeadEventDto {
   @ApiPropertyOptional()
   @IsOptional()
   @IsString()
+  @MaxLength(120)
+  sourceDetail?: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
   @MaxLength(255)
   searchKeyword?: string;
 
@@ -71,6 +77,30 @@ export class CreateLeadEventDto {
   @IsString()
   @MaxLength(500)
   previousPage?: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
+  @MaxLength(120)
+  utmSource?: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
+  @MaxLength(120)
+  utmMedium?: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
+  @MaxLength(255)
+  utmCampaign?: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
+  @MaxLength(120)
+  discoverySource?: string;
 
   @ApiPropertyOptional()
   @IsOptional()

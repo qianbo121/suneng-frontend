@@ -36,6 +36,10 @@ const leadFormCopy = {
       process: { label: '设备工艺', placeholder: '请输入设备工艺，如退火、回火、正火等..' },
       temperature: { label: '使用温度', placeholder: '请输入温度，高温、低温℃' },
       requirement: { label: '设备需求', placeholder: '请输入工件材质、尺寸/单重、每小时产能..' },
+      discoverySource: {
+        label: '您从哪里了解到苏能？（选填）',
+        options: ['AI 助手', '搜索引擎', '微信公众号 / 短视频', '客户 / 朋友推荐', '展会 / 行业平台', '其他'],
+      },
     },
     privacy: {
       summary: '提交即表示您已阅读并同意《隐私说明》',
@@ -65,6 +69,10 @@ const leadFormCopy = {
       process: { label: 'Heat-Treatment Process', placeholder: 'e.g. annealing, tempering, normalizing...' },
       temperature: { label: 'Operating Temperature', placeholder: 'Enter the required temperature range' },
       requirement: { label: 'Equipment Requirements', placeholder: 'Enter workpiece material, dimensions / unit weight, hourly throughput...' },
+      discoverySource: {
+        label: 'How did you hear about Suneng? (Optional)',
+        options: ['AI assistant', 'Search engine', 'WeChat / short video', 'Customer / friend referral', 'Exhibition / industry platform', 'Other'],
+      },
     },
     privacy: {
       summary: 'By submitting, you confirm that you have read the Privacy Notice.',
@@ -89,7 +97,12 @@ const leadFormCopy = {
   fields: Record<'name' | 'phone' | 'company' | 'industry' | 'process' | 'temperature' | 'requirement', {
     label: string;
     placeholder: string;
-  }>;
+  }> & {
+    discoverySource: {
+      label: string;
+      options: string[];
+    };
+  };
   privacy: {
     summary: string;
     notice: string;
@@ -194,6 +207,38 @@ function LeadTextarea({
         }`}
         placeholder={placeholder}
       />
+    </label>
+  );
+}
+
+function LeadSelect({
+  label,
+  name,
+  options,
+  locale,
+  className = '',
+}: {
+  label: string;
+  name: string;
+  options: string[];
+  locale: Locale;
+  className?: string;
+}) {
+  return (
+    <label className={`block ${className}`}>
+      <span className="text-[13px] font-normal leading-none text-[#4a5160]">{label}</span>
+      <select
+        name={name}
+        defaultValue=""
+        className="mt-2 h-[40px] w-full rounded-[4px] border border-[#e0e3e8] bg-white px-3 text-[14px] font-normal text-[#1a1d23] outline-none transition focus:border-[#c51624] focus:shadow-[0_0_0_3px_rgba(197,22,36,0.08)]"
+      >
+        <option value="">{locale === 'zh' ? '请选择' : 'Select an option'}</option>
+        {options.map((option) => (
+          <option key={option} value={option}>
+            {option}
+          </option>
+        ))}
+      </select>
     </label>
   );
 }
@@ -309,7 +354,9 @@ export function ProductLeadForm({
         temperature: getFormValue(formData, 'temperature') || undefined,
         requirement: getFormValue(formData, 'requirement') || undefined,
       });
-      trackLeadEvent('form_submit');
+      trackLeadEvent('form_submit', {
+        discoverySource: getFormValue(formData, 'discoverySource') || undefined,
+      });
       form.reset();
       setShowSuccess(true);
     } catch {
@@ -386,6 +433,13 @@ export function ProductLeadForm({
               <LeadTextInput label={copy.fields.industry.label} name="industry" placeholder={copy.fields.industry.placeholder} />
               <LeadTextInput label={copy.fields.process.label} name="process" placeholder={copy.fields.process.placeholder} />
               <LeadTextInput label={copy.fields.temperature.label} name="temperature" placeholder={copy.fields.temperature.placeholder} />
+              <LeadSelect
+                className="md:col-span-3"
+                label={copy.fields.discoverySource.label}
+                name="discoverySource"
+                options={copy.fields.discoverySource.options}
+                locale={locale}
+              />
               <LeadTextarea className="md:col-span-3" label={copy.fields.requirement.label} name="requirement" placeholder={copy.fields.requirement.placeholder} />
               <div className="flex flex-col items-stretch gap-4 pt-1 sm:flex-row sm:items-center sm:justify-between md:col-span-3">
                 <div className="max-w-[620px] text-[13px] leading-[1.7] text-[#667085]">

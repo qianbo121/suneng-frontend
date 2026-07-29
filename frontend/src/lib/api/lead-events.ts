@@ -1,4 +1,5 @@
 import { apiPost } from '@/lib/api/client';
+import { classifyTrafficSource } from '@/lib/analytics/traffic-source';
 
 export type LeadEventType =
   | 'phone_click'
@@ -17,37 +18,69 @@ type LeadEventPayload = {
   pageType?: string;
   productTag?: string;
   sourceType?: string;
+  sourceDetail?: string;
   searchKeyword?: string;
   deviceType?: string;
   landingPage?: string;
   previousPage?: string;
+  utmSource?: string;
+  utmMedium?: string;
+  utmCampaign?: string;
+  discoverySource?: string;
   sessionId?: string;
   visitorId?: string;
 };
 
-function getStoredId(key: string) {
+function getStoredId(key: string, storage: Storage) {
   try {
-    const current = window.localStorage.getItem(key);
+    const current = storage.getItem(key);
     if (current) return current;
     const next =
       typeof crypto !== 'undefined' && 'randomUUID' in crypto
         ? crypto.randomUUID()
         : `${Date.now()}-${Math.random().toString(16).slice(2)}`;
-    window.localStorage.setItem(key, next);
+    storage.setItem(key, next);
     return next;
   } catch {
     return undefined;
   }
 }
 
+function sanitizedLandingPath(path: string) {
+  const [pathname, query = ''] = path.split('?', 2);
+  const source = new URLSearchParams(query);
+  const retained = new URLSearchParams();
+  for (const key of ['utm_source', 'utm_medium', 'utm_campaign']) {
+    const value = source.get(key)?.trim();
+    if (value) retained.set(key, value);
+  }
+  const retainedQuery = retained.toString();
+  return retainedQuery ? `${pathname}?${retainedQuery}` : pathname;
+}
+
 function getLandingPage(path: string) {
+  const safePath = sanitizedLandingPath(path);
   try {
     const current = window.sessionStorage.getItem('suneng_landing_page');
     if (current) return current;
-    window.sessionStorage.setItem('suneng_landing_page', path);
-    return path;
+    window.sessionStorage.setItem('suneng_landing_page', safePath);
+    return safePath;
   } catch {
-    return path;
+    return safePath;
+  }
+}
+
+function campaignParams(path: string) {
+  try {
+    const query = path.includes('?') ? path.slice(path.indexOf('?')) : '';
+    const params = new URLSearchParams(query);
+    return {
+      utmSource: params.get('utm_source')?.trim() || undefined,
+      utmMedium: params.get('utm_medium')?.trim() || undefined,
+      utmCampaign: params.get('utm_campaign')?.trim() || undefined,
+    };
+  } catch {
+    return {};
   }
 }
 
@@ -83,18 +116,23 @@ function productTag(path: string, title: string) {
 function currentPayload(eventType: LeadEventType, extra: Partial<LeadEventPayload> = {}) {
   const path = `${window.location.pathname}${window.location.search}`;
   const title = document.title || undefined;
+  const landingPage = getLandingPage(path);
+  const campaign = campaignParams(landingPage);
+  const trafficSource = classifyTrafficSource(document.referrer, campaign.utmSource);
   return {
     eventType,
     pageTitle: title,
     pagePath: path,
     pageType: pageType(path),
     productTag: productTag(path, title || ''),
-    sourceType: document.referrer ? '外部链接' : '直接访问',
+    sourceType: trafficSource.sourceType,
+    sourceDetail: trafficSource.sourceDetail,
     deviceType: window.matchMedia('(max-width: 767px)').matches ? '移动端' : 'PC',
-    landingPage: getLandingPage(path),
+    landingPage,
     previousPage: document.referrer || undefined,
-    sessionId: getStoredId('suneng_session_id'),
-    visitorId: getStoredId('suneng_visitor_id'),
+    ...campaign,
+    sessionId: getStoredId('suneng_session_id', window.sessionStorage),
+    visitorId: getStoredId('suneng_visitor_id', window.localStorage),
     ...extra,
   };
 }
