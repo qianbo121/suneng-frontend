@@ -419,7 +419,7 @@ export default async function AnonymousTsingshanCasePage({ params }: PageProps) 
 
       <GeoReviewNote
         modifiedDate={TSINGSHAN_1250_CASE_SEO.modifiedTime.slice(0, 10)}
-        sourceNote="项目规格、阶段周期、测算公式、环保验收口径及苏能 GEO 事实台账"
+        sourceNote="公司批准公开的项目规格、阶段周期、测算公式、环保验收口径"
       />
 
       <Section id="background" eyebrow="Background" title="一、客户与项目背景">
