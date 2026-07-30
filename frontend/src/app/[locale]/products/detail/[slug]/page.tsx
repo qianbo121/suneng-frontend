@@ -61,7 +61,6 @@ const GEO_SECTION_TITLE_BY_SLUG: Record<string, string> = {
 const quoteParamsPath = '/zh/articles/gongye-lu-baojia-canshu';
 const repairOrReplacePath = '/zh/articles/laojiu-rechuli-lu-daxiu-haishi-maixin';
 const P3_REVIEW_DATE = '2026-07-29';
-const PRODUCT_CONTENT_REVIEW_DATE = '2026-07-30';
 const trolleyFitBoundaries = {
   suitable: [
     '大型铸件、锻件、模具、焊接结构件等需要整炉装卸的周期式热处理工件',
@@ -121,7 +120,7 @@ export async function generateMetadata({ params }: ProductDetailPageProps): Prom
     pageKey: 'product-detail',
     keywords,
     image: product.image,
-    modifiedTime: currentLocale === 'zh' ? PRODUCT_CONTENT_REVIEW_DATE : undefined,
+    modifiedTime: currentLocale === 'zh' ? seo?.modifiedTime : undefined,
     alternateLocales: {
       'zh-CN': `/zh/products/detail/${slug}`,
       'en-US': `/en/products/detail/${slug}`,
@@ -225,7 +224,7 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
           image: gallery,
           keywords: currentLocale === 'en' ? undefined : PRODUCT_DETAIL_SEO[product.slug]?.keywords,
           additionalProperties: specRows.map((item) => ({ name: item.key, value: item.value })),
-          dateModified: currentLocale === 'zh' ? PRODUCT_CONTENT_REVIEW_DATE : undefined,
+          dateModified: currentLocale === 'zh' ? PRODUCT_DETAIL_SEO[product.slug]?.modifiedTime : undefined,
         }, currentLocale)}
       />
       {detail.faq?.length ? (

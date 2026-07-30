@@ -10,8 +10,8 @@ vi.mock('@/lib/api/news', () => ({
 import buildSitemap from '@/app/sitemap';
 import {
   CONTINUOUS_HEAT_TREATMENT_LINE_SEO,
-  FURNACE_RENOVATION_OVERHAUL_SEO,
   INDUSTRIAL_FURNACE_QUOTE_PARAMS_SEO,
+  PRODUCT_DETAIL_SEO,
 } from '@/lib/seo/page-data';
 
 const DEEP_CRAWL_TARGETS = [
@@ -42,10 +42,12 @@ describe('sitemap freshness signals', () => {
     const entries = await buildSitemap();
     const byUrl = new Map(entries.map((entry) => [entry.url, entry]));
 
-    expect(byUrl.get('https://www.jssngyl.cn/zh')?.lastModified).toBeUndefined();
+    expect(byUrl.get('https://www.jssngyl.cn/zh')?.lastModified).toEqual(
+      new Date('2026-07-30'),
+    );
     expect(
       byUrl.get('https://www.jssngyl.cn/zh/service/furnace-renovation-overhaul')?.lastModified,
-    ).toEqual(new Date(FURNACE_RENOVATION_OVERHAUL_SEO.modifiedTime));
+    ).toBeUndefined();
     expect(
       byUrl.get('https://www.jssngyl.cn/zh/articles/gongye-lu-baojia-canshu')?.lastModified,
     ).toEqual(new Date(INDUSTRIAL_FURNACE_QUOTE_PARAMS_SEO.modifiedTime));
@@ -54,7 +56,50 @@ describe('sitemap freshness signals', () => {
     ).toEqual(new Date(CONTINUOUS_HEAT_TREATMENT_LINE_SEO.modifiedTime));
     expect(
       byUrl.get('https://www.jssngyl.cn/zh/products/detail/trolley-furnace')?.lastModified,
-    ).toEqual(new Date('2026-07-30'));
+    ).toEqual(new Date(PRODUCT_DETAIL_SEO['trolley-furnace'].modifiedTime!));
+    expect(
+      byUrl.get('https://www.jssngyl.cn/zh/products/detail/box-furnace')?.lastModified,
+    ).toBeUndefined();
+
+    const july30Urls = entries
+      .filter(
+        (entry) =>
+          entry.lastModified &&
+          new Date(entry.lastModified).toISOString().startsWith('2026-07-30'),
+      )
+      .map((entry) => entry.url);
+    expect(july30Urls).toEqual(['https://www.jssngyl.cn/zh']);
+  });
+
+  it('fails when one shared hard-coded date covers 3 or more pages', async () => {
+    const entries = await buildSitemap();
+    const pageSpecificUrls = new Set([
+      'https://www.jssngyl.cn/zh',
+      'https://www.jssngyl.cn/zh/articles/gongye-lu-baojia-canshu',
+      'https://www.jssngyl.cn/zh/articles/laojiu-rechuli-lu-daxiu-haishi-maixin',
+      'https://www.jssngyl.cn/zh/solutions/continuous-heat-treatment-line',
+      'https://www.jssngyl.cn/zh/case/anonymous-tsingshan-1250-renovation',
+      'https://www.jssngyl.cn/zh/case/jining-support-roller-heat-treatment-line',
+      'https://www.jssngyl.cn/zh/case/henan-annealing-solution-line',
+      'https://www.jssngyl.cn/zh/products/detail/trolley-furnace',
+    ]);
+    const sharedDates = new Map<string, string[]>();
+
+    for (const entry of entries) {
+      if (
+        !entry.lastModified ||
+        pageSpecificUrls.has(entry.url) ||
+        entry.url.includes('/zh/news/')
+      ) {
+        continue;
+      }
+
+      const timestamp = new Date(entry.lastModified).toISOString();
+      sharedDates.set(timestamp, [...(sharedDates.get(timestamp) ?? []), entry.url]);
+    }
+
+    const regressions = [...sharedDates.entries()].filter(([, urls]) => urls.length >= 3);
+    expect(regressions).toEqual([]);
   });
 
   it('keeps all 20 deep-crawl targets in the sitemap', async () => {

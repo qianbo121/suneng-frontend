@@ -20,6 +20,7 @@ export const PRODUCT_DETAIL_SEO: Record<
     description: string;
     keywords: string[];
     alternateName: string[];
+    modifiedTime?: string;
   }
 > = {
   'trolley-furnace': {
@@ -28,6 +29,7 @@ export const PRODUCT_DETAIL_SEO: Record<
       '江苏苏能工业炉提供台车炉、台车式热处理炉、台车式电阻炉等非标工业炉定制服务，适用于大型工件、铸件、焊接件、模具、结构件的退火、回火、正火、淬火加热等热处理工艺。',
     keywords: ['台车炉', '台车式炉', '台车式工业炉', '台车式热处理炉', '台车式电阻炉', '台车炉厂家', '台车炉定制', '台车炉价格'],
     alternateName: ['台车式炉', '台车式工业炉', '台车式热处理炉', '台车式电阻炉', 'Trolley Type Heat Treatment Furnace'],
+    modifiedTime: '2026-07-29',
   },
   'box-furnace': {
     title: '箱式炉厂家｜箱式热处理炉、箱式电阻炉定制',
@@ -155,7 +157,6 @@ export const FURNACE_RENOVATION_OVERHAUL_SEO = {
   ogImage: '/images/service/after-sales-hero.png',
   ogType: 'website',
   canonicalUrl: 'https://www.jssngyl.cn/zh/service/furnace-renovation-overhaul',
-  modifiedTime: '2026-07-30',
 };
 
 export const INDUSTRIAL_FURNACE_QUOTE_PARAMS_SEO = {
@@ -224,7 +225,6 @@ export const HEAT_TREATMENT_FURNACE_MANUFACTURER_SEO = {
   ogImage: '/images/about/about_img_hero_factory_01.png',
   ogType: 'website',
   canonicalUrl: 'https://www.jssngyl.cn/zh/solutions/rechuli-lu-changjia',
-  modifiedTime: '2026-07-30',
 };
 
 export const JIANGSU_INDUSTRIAL_FURNACE_MANUFACTURER_SEO = {
@@ -246,7 +246,6 @@ export const JIANGSU_INDUSTRIAL_FURNACE_MANUFACTURER_SEO = {
   ogImage: '/images/about/about_img_hero_factory_01.png',
   ogType: 'website',
   canonicalUrl: 'https://www.jssngyl.cn/zh/solutions/jiangsu-gongye-lu-changjia',
-  modifiedTime: '2026-07-30',
 };
 
 export const CONTINUOUS_HEAT_TREATMENT_LINE_SEO = {
@@ -269,7 +268,7 @@ export const CONTINUOUS_HEAT_TREATMENT_LINE_SEO = {
   ogImage: '/images/products/annealing-solution-line/gallery/line-01.jpg',
   ogType: 'website',
   canonicalUrl: 'https://www.jssngyl.cn/zh/solutions/continuous-heat-treatment-line',
-  modifiedTime: '2026-07-30',
+  modifiedTime: '2026-07-29',
 };
 
 export const TSINGSHAN_1250_CASE_SEO = {

@@ -485,7 +485,6 @@ const servicePageJsonLd = getWebPageJsonLd({
   name: '工业炉节能改造与热处理炉大修服务',
   description: FURNACE_RENOVATION_OVERHAUL_SEO.description,
   mainEntityId: serviceJsonLd['@id'],
-  dateModified: FURNACE_RENOVATION_OVERHAUL_SEO.modifiedTime,
 });
 
 export async function generateStaticParams() {
