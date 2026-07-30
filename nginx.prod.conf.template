@@ -28,6 +28,7 @@ http {
     '"upstream_response_time":"$upstream_response_time",'
     '"cache_status":"$upstream_cache_status",'
     '"crawler_family":"$crawler_family",'
+    '"monitoring_probe":"$monitoring_probe",'
     '"lead_event":"$lead_event",'
     '"referer":"$http_referer",'
     '"user_agent":"$http_user_agent"}';
@@ -37,7 +38,10 @@ http {
     ~*OAI-SearchBot "openai_oai_searchbot";
     ~*ChatGPT-User "openai_chatgpt_user";
     ~*GPTBot "openai_gptbot";
+    ~*Claude-SearchBot "anthropic_claude_searchbot";
+    ~*Claude-User "anthropic_claude_user";
     ~*ClaudeBot "anthropic_claudebot";
+    ~*Perplexity-User "perplexity_user";
     ~*PerplexityBot "perplexity_bot";
     ~*Bytespider "bytedance_bytespider";
     ~*Baiduspider "baidu_spider";
@@ -46,6 +50,11 @@ http {
     ~*YisouSpider "yisou_spider";
     ~*Googlebot "googlebot";
     ~*bingbot "bingbot";
+  }
+
+  map $http_x_suneng_monitoring_probe $monitoring_probe {
+    default "";
+    ~*^crawler-verification$ "crawler_verification";
   }
 
   map "$request_method:$uri" $lead_event {
