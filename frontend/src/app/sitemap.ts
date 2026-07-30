@@ -6,6 +6,7 @@ import { getNewsList } from '@/lib/api/news';
 import { STATIC_PRODUCTS } from '@/constants/static-products';
 import {
   HENAN_ANNEALING_SOLUTION_CASE_SEO,
+  FURNACE_RENOVATION_OVERHAUL_SEO,
   INDUSTRIAL_FURNACE_QUOTE_PARAMS_SEO,
   JINING_SUPPORT_ROLLER_CASE_SEO,
   OLD_HEAT_TREATMENT_FURNACE_REPAIR_OR_REPLACE_SEO,
@@ -114,7 +115,12 @@ function collectStaticRoutes(): MetadataRoute.Sitemap {
     priority: number;
     lastModified?: string;
   }> = [
-    { path: '/service/furnace-renovation-overhaul', changeFrequency: 'monthly', priority: 0.72 },
+    {
+      path: '/service/furnace-renovation-overhaul',
+      changeFrequency: 'monthly',
+      priority: 0.72,
+      lastModified: FURNACE_RENOVATION_OVERHAUL_SEO.modifiedTime,
+    },
     {
       path: '/articles/gongye-lu-baojia-canshu',
       changeFrequency: 'monthly',

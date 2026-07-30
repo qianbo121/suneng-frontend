@@ -18,6 +18,9 @@ const quoteSource = readSource('../../app/[locale]/articles/gongye-lu-baojia-can
 const decisionSource = readSource(
   '../../app/[locale]/articles/laojiu-rechuli-lu-daxiu-haishi-maixin/page.tsx',
 );
+const renovationServiceSource = readSource(
+  '../../app/[locale]/service/furnace-renovation-overhaul/page.tsx',
+);
 const solutionSource = readSource(
   '../../app/[locale]/solutions/continuous-heat-treatment-line/page.tsx',
 );
@@ -41,9 +44,9 @@ describe('P3 five-page publication gate', () => {
     expect(caseSource).not.toContain('#technical-reviewer-tang');
 
     expect(trolleySource).toContain("const P3_REVIEW_DATE = '2026-07-29'");
-    expect(INDUSTRIAL_FURNACE_QUOTE_PARAMS_SEO.modifiedTime).toContain('2026-07-29');
+    expect(INDUSTRIAL_FURNACE_QUOTE_PARAMS_SEO.modifiedTime).toContain('2026-07-30');
     expect(OLD_HEAT_TREATMENT_FURNACE_REPAIR_OR_REPLACE_SEO.modifiedTime).toContain(
-      '2026-07-29',
+      '2026-07-30',
     );
     expect(CONTINUOUS_HEAT_TREATMENT_LINE_SEO.modifiedTime).toContain('2026-07-29');
     expect(TSINGSHAN_1250_CASE_SEO.modifiedTime).toContain('2026-07-29');
@@ -60,12 +63,28 @@ describe('P3 five-page publication gate', () => {
   });
 
   it('gives the repair-or-replace page three approved decision references without overclaiming', () => {
-    for (const factId of ['SN-CASE-P0-008', 'SN-CASE-P1-014', 'SN-CASE-P0-001']) {
+    for (const factId of ['SN-CASE-P1-013', 'SN-CASE-P1-014', 'SN-CASE-P0-001']) {
       expect(decisionSource).toContain(factId);
     }
 
     expect(decisionSource).toContain('不能替代对当前旧炉的现场检测');
     expect(decisionSource).toContain('新建产线作为独立方案比较');
+    expect(decisionSource).not.toContain('3 条 1250 mm');
+  });
+
+  it('keeps direct answers for the highest-value non-brand renovation questions', () => {
+    for (const question of [
+      '工业炉节能改造厂家怎么选？',
+      '工业炉改造验收看哪些指标？',
+      '热处理炉改造前要准备哪些资料？',
+    ]) {
+      expect(renovationServiceSource).toContain(question);
+    }
+
+    expect(decisionSource).toContain('热处理炉大修厂家怎么选？');
+    expect(quoteSource).toContain('工业炉节能改造报价通常包括哪些？');
+    expect(quoteSource).toContain('Q8：热处理炉节能改造多少钱？');
+    expect(quoteSource).toContain('不能把一个数字当成正式报价');
   });
 
   it('states explicit fit boundaries on the trolley page and retains evidence on the hub and case', () => {

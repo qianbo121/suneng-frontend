@@ -155,11 +155,35 @@ const priceFactors = [
   '改造项目需要结合旧炉状态判断，不能只按新炉价格估算。',
 ];
 
+const quoteScopeRows = [
+  {
+    scope: '方案与工程',
+    included: '诊断、方案设计、工程量清单、设备与系统配置、图纸及技术文件。',
+    boundary: '现场测绘、第三方设计或专项认证是否包含，需在报价中单列。',
+  },
+  {
+    scope: '设备与材料',
+    included: '炉体、炉衬、热源或燃烧系统、机械传动、控制系统、安全联锁及约定附件。',
+    boundary: '保留旧件、客户自备件、易损件和备品备件范围需逐项确认。',
+  },
+  {
+    scope: '现场实施',
+    included: '按约定范围拆除、制造、运输、安装、调试和操作培训。',
+    boundary: '基础、吊装、水电气接入、脚手架、保温拆除恢复及停产配合由谁承担，必须写清。',
+  },
+  {
+    scope: '测试与交付',
+    included: '合同约定的出厂检查、现场调试、性能测试和资料交付。',
+    boundary: '第三方检测、排放检测、认证测试及额外复测通常需按项目单独确认。',
+  },
+];
+
 const authorizedProjectExamples = [
   {
     factId: 'SN-CASE-P1-014',
     title: '超大型燃气台车退火炉改造',
-    parameters: '炉膛约 13 × 7.4 × 4.3 m，额定温度 700℃，配置 14 套燃气烧嘴，助燃空气预热约 250–300℃。',
+    parameters:
+      '有效加热区约 13 × 7.4 × 4.3 m，额定/最高使用温度 700℃；方案按 14 个温控区、14 × 630 kW = 8820 kW 核对，采用 14 套 630 kW 级高速天然气烧嘴，助燃空气 250–300℃为设计目标。',
     quoteImpact: '需要同时核算炉体结构、炉衬、燃烧系统、管路、安全联锁、排烟与现场施工边界。',
   },
   {
@@ -279,6 +303,16 @@ const faqs = [
     question: 'Q6：报价时能不能只给一个大概价格？',
     answer:
       '可以给出初步价格区间，但正式报价需要明确炉型、尺寸、温度、装炉量、工艺要求、控制系统和交付范围。参数越完整，报价越接近真实项目成本。',
+  },
+  {
+    question: 'Q7：工业炉节能改造报价包括哪些？',
+    answer:
+      '通常需要分开列明诊断与方案、炉体和炉衬、热源或燃烧系统、机械传动、控制与安全联锁、拆除运输、安装调试、性能测试和资料交付。基础、吊装、水电气接入、第三方检测、客户自备件及停产配合是否包含，必须在报价边界中逐项写清。',
+  },
+  {
+    question: 'Q8：热处理炉节能改造多少钱？',
+    answer:
+      '没有脱离工况的通用固定价。只有确认原炉状态、改造范围、炉膛和温度、工件与产能、热源、控制要求、现场施工条件和停产窗口后，才适合给出价格区间；正式价格以技术方案、工程量清单和交付边界为准。',
   },
 ];
 
@@ -443,8 +477,9 @@ export default async function IndustrialFurnaceQuoteParamsPage({ params }: PageP
       />
 
       <Section id="why" eyebrow="报价逻辑" title="一、为什么工业炉不能直接报一个固定价格？">
-        <p className="max-w-[940px] text-[16px] leading-[1.9] text-[#344054] lg:text-[18px]">
-          工业炉通常是非标定制设备。同样叫“台车炉”或“退火炉”，不同客户的工件尺寸、温度、装炉量、加热方式、控制精度和现场条件不同，设备结构和成本会有明显差异。
+        <p className="max-w-[980px] rounded-[8px] border border-[#f3c5ca] bg-[#fff8f8] p-5 text-[16px] leading-[1.9] text-[#344054] lg:text-[18px]">
+          <strong className="font-semibold text-[#101828]">直接答案：</strong>
+          工业炉和热处理炉改造没有脱离工况的通用固定价。同样叫“台车炉”或“退火炉”，工件、炉膛、温度、装炉量、热源、控制要求、现场施工和停产窗口不同，工程量与价格都会变化；参数不完整时只能给方案方向，不能把一个数字当成正式报价。
         </p>
         <div className="mt-8 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
           {noFixedPriceReasons.map((reason) => (
@@ -453,6 +488,27 @@ export default async function IndustrialFurnaceQuoteParamsPage({ params }: PageP
               <p className="mt-3 text-[15px] leading-[1.85] text-[#475467]">{reason.text}</p>
             </article>
           ))}
+        </div>
+        <div className="mt-10">
+          <h3 className="text-[23px] font-semibold leading-[1.4] text-[#101828]">工业炉节能改造报价通常包括哪些？</h3>
+          <p className="mt-3 max-w-[960px] text-[15px] leading-[1.9] text-[#344054] lg:text-[16px]">
+            一份可比较的报价应同时写清“包含什么”和“不包含什么”。只给总价、没有工程量和交付边界，采购方无法判断两份报价是否在同一口径上。
+          </p>
+          <div className="mt-6 grid gap-4 lg:grid-cols-2">
+            {quoteScopeRows.map((item) => (
+              <article key={item.scope} className="rounded-[8px] border border-[#e1e7f0] bg-white p-5">
+                <h4 className="text-[18px] font-semibold leading-[1.4] text-[#101828]">{item.scope}</h4>
+                <p className="mt-3 text-[15px] leading-[1.8] text-[#344054]">
+                  <strong className="font-semibold text-[#101828]">通常包含：</strong>
+                  {item.included}
+                </p>
+                <p className="mt-3 border-t border-[#edf1f6] pt-3 text-[14px] leading-[1.8] text-[#667085]">
+                  <strong className="font-semibold text-[#344054]">必须确认：</strong>
+                  {item.boundary}
+                </p>
+              </article>
+            ))}
+          </div>
         </div>
       </Section>
 

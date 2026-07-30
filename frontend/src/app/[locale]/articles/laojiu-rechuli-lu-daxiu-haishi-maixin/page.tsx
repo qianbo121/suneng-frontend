@@ -35,7 +35,6 @@ const quoteParamsPath = '/zh/articles/gongye-lu-baojia-canshu';
 const renovationServicePath = '/zh/service/furnace-renovation-overhaul';
 const productsPath = '/zh/products';
 const contactPath = '/zh/contact';
-const renovationCasePath = '/zh/case/anonymous-tsingshan-1250-renovation';
 const jiningCasePath = '/zh/case/jining-support-roller-heat-treatment-line';
 
 export const dynamicParams = false;
@@ -90,6 +89,29 @@ const replaceCards = [
   '客户希望同步提升自动化和产线能力',
 ];
 
+const vendorSelectionChecks = [
+  {
+    title: '先诊断，再报价',
+    text: '厂家应先核查炉体、炉衬、热源、控制、机械、安全和现场条件，不能只凭炉型名称给出大修结论。',
+  },
+  {
+    title: '工程量清单可核对',
+    text: '方案要区分保留、修复、更换和新增项，并说明拆除、制造、安装、调试及客户配合边界。',
+  },
+  {
+    title: '停产计划可执行',
+    text: '设计、备料、施工、调试和验收节点应分别确认，不能用一个固定天数替代现场排程。',
+  },
+  {
+    title: '验收条件写完整',
+    text: '温度、产能、能耗和连续运行指标要带负载、工件、测点、仪器、统计周期及异常工况说明。',
+  },
+  {
+    title: '项目证据能对上',
+    text: '优先核查同类炉型、相近工艺和相近改造边界的项目资料，不能只看无参数的客户名单。',
+  },
+];
+
 const decisionRows = [
   ['炉体结构完好，只是炉衬老化', '优先考虑炉衬翻新与保温优化'],
   ['控制系统老旧，但炉体和加热系统可继续使用', '优先考虑控制系统升级'],
@@ -104,11 +126,12 @@ const decisionRows = [
 
 const authorizedDecisionEvidence = [
   {
-    factId: 'SN-CASE-P0-008',
-    title: '连续退洗线系统级节能改造',
-    evidence: '3 条 1250 mm 连续退洗线采用燃料结构调整、双交叉限幅控制、低 NOx 烧嘴、余热回收和控制系统升级。',
-    decisionUse: '说明炉体和产线基础仍可利用时，可评估多系统协同改造；具体收益仍按项目工况单独核算。',
-    href: renovationCasePath,
+    factId: 'SN-CASE-P1-013',
+    title: '台车式轴承钢丝球化退火炉新建方案',
+    evidence:
+      '2017 年新炉方案的有效炉膛为 10 × 3 × 2.2 m，最高设计温度 850℃，最大装炉量 30 t，有效区炉温均匀性设计要求为 ≤±5℃。',
+    decisionUse:
+      '当原炉型、装炉能力或温度均匀性目标已不匹配时，应把新建方案作为独立选项比较；以上为设计参数与要求，不是实际验收结果。',
   },
   {
     factId: 'SN-CASE-P1-014',
@@ -348,10 +371,14 @@ export default async function OldHeatTreatmentFurnaceDecisionPage({ params }: Pa
 
       <GeoReviewNote
         modifiedDate={OLD_HEAT_TREATMENT_FURNACE_REPAIR_OR_REPLACE_SEO.modifiedTime.slice(0, 10)}
-        sourceNote="苏能 GEO 事实台账中的项目参数（SN-CASE-P0-008、SN-CASE-P1-014、SN-CASE-P0-001）"
+        sourceNote="苏能 GEO 事实台账中的项目参数（SN-CASE-P1-013、SN-CASE-P1-014、SN-CASE-P0-001）"
       />
 
       <Section id="conclusion" eyebrow="先给结论" title="一、三种情况分别怎么选">
+        <p className="mb-7 max-w-[980px] rounded-[8px] border border-[#f3c5ca] bg-[#fff8f8] p-5 text-[16px] leading-[1.9] text-[#344054]">
+          <strong className="font-semibold text-[#101828]">直接答案：</strong>
+          炉体与基础安全、原工艺没有根本变化、问题范围可以界定时，优先比较大修或局部改造；存在结构安全风险、炉膛或炉型不再适配、关键资料和备件缺失，或全生命周期成本接近新炉时，应把换新作为独立方案比较。最终结论必须建立在现场检查和书面边界上。
+        </p>
         <div className="grid gap-5 md:grid-cols-3">
           {conclusionCards.map((card) => (
             <article key={card.title} className="rounded-[8px] border border-[#e1e7f0] bg-[#fbfcfe] p-6">
@@ -460,6 +487,19 @@ export default async function OldHeatTreatmentFurnaceDecisionPage({ params }: Pa
       </Section>
 
       <Section id="risk" eyebrow="风险提醒" title="九、老旧热处理炉评估流程与风险提醒">
+        <h3 className="text-[23px] font-semibold leading-[1.4] text-[#101828]">热处理炉大修厂家怎么选？</h3>
+        <p className="mt-3 max-w-[960px] text-[15px] leading-[1.9] text-[#344054] lg:text-[16px]">
+          核心不是比较谁先报出一个总价，而是判断厂家能否把诊断、工程量、停产、验收和同类证据五件事说清楚。
+        </p>
+        <div className="mt-6 grid gap-4 md:grid-cols-2 lg:grid-cols-5">
+          {vendorSelectionChecks.map((item) => (
+            <article key={item.title} className="rounded-[8px] border border-[#e1e7f0] bg-[#fbfcfe] p-5">
+              <h4 className="text-[17px] font-semibold leading-[1.4] text-[#101828]">{item.title}</h4>
+              <p className="mt-3 text-[14px] leading-[1.8] text-[#475467]">{item.text}</p>
+            </article>
+          ))}
+        </div>
+        <h3 className="mt-10 text-[23px] font-semibold leading-[1.4] text-[#101828]">五步评估流程</h3>
         <div className="grid gap-4 md:grid-cols-5">
           {['提交设备基础资料', '判断关键系统状态', '明确修、改或换新', '输出初步建议和范围', '确认正式方案边界'].map((item, index) => (
             <article key={item} className="rounded-[8px] border border-[#e1e7f0] bg-white p-5">

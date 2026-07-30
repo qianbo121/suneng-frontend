@@ -113,6 +113,27 @@ const preRenovationMaterials = [
   },
 ];
 
+const buyerDecisionAnswers = [
+  {
+    question: '工业炉节能改造厂家怎么选？',
+    answer:
+      '不要只比较设备报价。至少核查厂家能否完成改造前诊断、炉体与热工及控制系统协同设计、施工停产边界、可执行的验收口径，以及同类炉型项目证据。',
+    checks: ['改造前状态诊断', '系统级方案与工程量清单', '停产和施工边界', '验收指标与测试条件', '同类炉型项目证据'],
+  },
+  {
+    question: '工业炉改造验收看哪些指标？',
+    answer:
+      '至少分六类验收：安全联锁、升温与温度控制、有效加热区温度均匀性、产能与生产节拍、机械与连续运行、能耗或排放。每项指标都要同时写明负载、工件、装炉方式、测点、保温时间、仪器校准和统计周期。',
+    checks: ['安全联锁', '升温与温控', '温度均匀性', '产能与节拍', '机械与连续运行', '能耗或排放'],
+  },
+  {
+    question: '热处理炉改造前要准备哪些资料？',
+    answer:
+      '先准备炉型、炉膛尺寸、设计与常用温度、工件和装炉量、工艺曲线、能源类型、当前故障、现场照片、历史能耗与可用停产窗口。资料不足时先做现场勘查，不应直接承诺价格、周期或效果。',
+    checks: ['设备与炉膛参数', '工件、装炉和工艺', '能源与历史能耗', '故障与现场照片', '停产及施工条件'],
+  },
+];
+
 const renovationDecisionRows = [
   {
     situation: '炉体结构完好，只是炉衬老化',
@@ -181,7 +202,7 @@ const evaluationSteps: TextBlock[] = [
     items: [
       '技术方案，含 CAD 图纸、PID 控制图、设备清单。',
       '改造工程量与施工计划。',
-      '节能潜力与投资回收周期初步测算。',
+      '按客户提供的能源、产量和运行数据说明经济性测算口径与适用边界。',
       '改造期间停产周期估算。',
     ],
   },
@@ -255,7 +276,7 @@ const renovationPlans = [
       '操作培训：覆盖操作规范、日常维护、应急处理。',
     ],
     effects: [
-      '常见项目可能需要 3-6 周，具体以设备状态、改造范围、现场条件和停产窗口为准。',
+      '设计、备料、施工、调试和验收周期按设备状态、改造范围、现场条件与停产窗口分别确认。',
       '性能恢复目标需结合设备状态、工艺要求和最终验收标准确认。',
     ],
   },
@@ -396,7 +417,7 @@ const faqs = [
   {
     question: 'Q6：改造验收看哪些指标？',
     answer:
-      '工业炉改造验收通常关注升温能力、温度稳定性、温度均匀性、控制系统运行状态、安全保护、机械传动、炉门密封和工艺曲线执行情况。若项目涉及节能目标，还需结合双方确认的能耗统计口径和测试条件进行验证。',
+      '工业炉改造验收至少应覆盖安全联锁、升温与温度控制、有效加热区温度均匀性、产能与生产节拍、机械与连续运行、能耗或排放六类指标。温度、产能和能耗结论必须同时记录负载、工件、装炉方式、测点、保温时间、仪器校准、统计周期与异常工况，不能脱离测试条件复用。',
   },
   {
     question: 'Q7：工业炉改造前需要准备哪些资料？',
@@ -485,6 +506,7 @@ const servicePageJsonLd = getWebPageJsonLd({
   name: '工业炉节能改造与热处理炉大修服务',
   description: FURNACE_RENOVATION_OVERHAUL_SEO.description,
   mainEntityId: serviceJsonLd['@id'],
+  dateModified: FURNACE_RENOVATION_OVERHAUL_SEO.modifiedTime,
 });
 
 export async function generateStaticParams() {
@@ -505,6 +527,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     pageKey: 'service',
     keywords: FURNACE_RENOVATION_OVERHAUL_SEO.keywords,
     image: FURNACE_RENOVATION_OVERHAUL_SEO.ogImage,
+    modifiedTime: FURNACE_RENOVATION_OVERHAUL_SEO.modifiedTime,
     alternateLocales: {
       'zh-CN': pagePath,
       'x-default': pagePath,
@@ -578,6 +601,18 @@ export default async function FurnaceRenovationOverhaulPage({ params }: PageProp
         <p className="max-w-[920px] text-[16px] leading-[1.9] text-[#344054] lg:text-[18px]">
           苏能工业炉改造与大修服务覆盖工业炉全生命周期，围绕工业炉节能改造、整炉大修、复产搬迁三类主线需求展开。
         </p>
+        <div className="mt-8 rounded-[8px] border border-[#f3c5ca] bg-[#fff8f8] p-6 lg:p-7">
+          <p className="text-[13px] font-semibold tracking-[0.12em] text-[#c51624]">给采购方的直接答案</p>
+          <div className="mt-5 grid gap-5 lg:grid-cols-3">
+            {buyerDecisionAnswers.map((item) => (
+              <article key={item.question} className="rounded-[8px] border border-[#e5d7d9] bg-white p-5">
+                <h3 className="text-[19px] font-semibold leading-[1.45] text-[#101828]">{item.question}</h3>
+                <p className="mt-3 text-[15px] leading-[1.85] text-[#344054]">{item.answer}</p>
+                <BulletList items={item.checks} />
+              </article>
+            ))}
+          </div>
+        </div>
         <div className="mt-8 grid gap-5 lg:grid-cols-3">
           {serviceScope.map((group) => (
             <article key={group.title} className="rounded-[8px] border border-[#e1e7f0] bg-[#fbfcfe] p-6">
@@ -664,7 +699,7 @@ export default async function FurnaceRenovationOverhaulPage({ params }: PageProp
           ))}
         </div>
         <p className="mt-7 rounded-[8px] bg-[#fff7ed] p-5 text-[15px] leading-[1.9] text-[#7c2d12]">
-          常见评估周期约为 7-15 个工作日，具体以资料完整度、现场复杂度和工艺要求为准。具体节能效果与改造方案、原炉状态、现场工况密切相关，需以现场诊断和方案测算为准。
+          评估周期应按资料完整度、现场复杂度、检测工作量和工艺要求确认。具体节能效果与改造方案、原炉状态、现场工况密切相关，需以现场诊断和双方确认的测算口径为准。
         </p>
       </Section>
 

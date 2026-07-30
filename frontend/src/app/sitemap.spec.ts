@@ -10,6 +10,7 @@ vi.mock('@/lib/api/news', () => ({
 import buildSitemap from '@/app/sitemap';
 import {
   CONTINUOUS_HEAT_TREATMENT_LINE_SEO,
+  FURNACE_RENOVATION_OVERHAUL_SEO,
   INDUSTRIAL_FURNACE_QUOTE_PARAMS_SEO,
   PRODUCT_DETAIL_SEO,
 } from '@/lib/seo/page-data';
@@ -47,7 +48,7 @@ describe('sitemap freshness signals', () => {
     );
     expect(
       byUrl.get('https://www.jssngyl.cn/zh/service/furnace-renovation-overhaul')?.lastModified,
-    ).toBeUndefined();
+    ).toEqual(new Date(FURNACE_RENOVATION_OVERHAUL_SEO.modifiedTime));
     expect(
       byUrl.get('https://www.jssngyl.cn/zh/articles/gongye-lu-baojia-canshu')?.lastModified,
     ).toEqual(new Date(INDUSTRIAL_FURNACE_QUOTE_PARAMS_SEO.modifiedTime));
@@ -68,7 +69,12 @@ describe('sitemap freshness signals', () => {
           new Date(entry.lastModified).toISOString().startsWith('2026-07-30'),
       )
       .map((entry) => entry.url);
-    expect(july30Urls).toEqual(['https://www.jssngyl.cn/zh']);
+    expect(july30Urls).toEqual([
+      'https://www.jssngyl.cn/zh',
+      'https://www.jssngyl.cn/zh/service/furnace-renovation-overhaul',
+      'https://www.jssngyl.cn/zh/articles/gongye-lu-baojia-canshu',
+      'https://www.jssngyl.cn/zh/articles/laojiu-rechuli-lu-daxiu-haishi-maixin',
+    ]);
   });
 
   it('fails when one shared hard-coded date covers 3 or more pages', async () => {
