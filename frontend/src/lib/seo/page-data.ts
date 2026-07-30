@@ -155,6 +155,7 @@ export const FURNACE_RENOVATION_OVERHAUL_SEO = {
   ogImage: '/images/service/after-sales-hero.png',
   ogType: 'website',
   canonicalUrl: 'https://www.jssngyl.cn/zh/service/furnace-renovation-overhaul',
+  modifiedTime: '2026-07-30',
 };
 
 export const INDUSTRIAL_FURNACE_QUOTE_PARAMS_SEO = {
@@ -223,6 +224,7 @@ export const HEAT_TREATMENT_FURNACE_MANUFACTURER_SEO = {
   ogImage: '/images/about/about_img_hero_factory_01.png',
   ogType: 'website',
   canonicalUrl: 'https://www.jssngyl.cn/zh/solutions/rechuli-lu-changjia',
+  modifiedTime: '2026-07-30',
 };
 
 export const JIANGSU_INDUSTRIAL_FURNACE_MANUFACTURER_SEO = {
@@ -244,6 +246,7 @@ export const JIANGSU_INDUSTRIAL_FURNACE_MANUFACTURER_SEO = {
   ogImage: '/images/about/about_img_hero_factory_01.png',
   ogType: 'website',
   canonicalUrl: 'https://www.jssngyl.cn/zh/solutions/jiangsu-gongye-lu-changjia',
+  modifiedTime: '2026-07-30',
 };
 
 export const CONTINUOUS_HEAT_TREATMENT_LINE_SEO = {
@@ -266,7 +269,7 @@ export const CONTINUOUS_HEAT_TREATMENT_LINE_SEO = {
   ogImage: '/images/products/annealing-solution-line/gallery/line-01.jpg',
   ogType: 'website',
   canonicalUrl: 'https://www.jssngyl.cn/zh/solutions/continuous-heat-treatment-line',
-  modifiedTime: '2026-07-29',
+  modifiedTime: '2026-07-30',
 };
 
 export const TSINGSHAN_1250_CASE_SEO = {

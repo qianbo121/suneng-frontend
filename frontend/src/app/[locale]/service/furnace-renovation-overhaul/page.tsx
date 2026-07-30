@@ -12,7 +12,7 @@ import {
 import { JsonLd } from '@/components/JsonLd';
 import { Breadcrumb } from '@/components/layout/Breadcrumb';
 import { ProductLeadForm } from '@/components/products/ProductLeadForm';
-import { getFaqJsonLd } from '@/lib/seo/jsonld';
+import { getFaqJsonLd, getWebPageJsonLd } from '@/lib/seo/jsonld';
 import { buildMetadata } from '@/lib/seo/metadata';
 import { FURNACE_RENOVATION_OVERHAUL_SEO } from '@/lib/seo/page-data';
 import { siteSettings } from '@/mock/siteSettings';
@@ -480,6 +480,14 @@ const serviceJsonLd = {
   },
 };
 
+const servicePageJsonLd = getWebPageJsonLd({
+  path: pagePath,
+  name: '工业炉节能改造与热处理炉大修服务',
+  description: FURNACE_RENOVATION_OVERHAUL_SEO.description,
+  mainEntityId: serviceJsonLd['@id'],
+  dateModified: FURNACE_RENOVATION_OVERHAUL_SEO.modifiedTime,
+});
+
 export async function generateStaticParams() {
   return [{ locale: 'zh' }];
 }
@@ -835,6 +843,7 @@ export default async function FurnaceRenovationOverhaulPage({ params }: PageProp
       </Section>
 
       <JsonLd id="furnace-renovation-overhaul-service-jsonld" data={serviceJsonLd} />
+      <JsonLd id="furnace-renovation-overhaul-page-jsonld" data={servicePageJsonLd} />
       <JsonLd id="furnace-renovation-overhaul-faq-jsonld" data={faqJsonLd} />
     </div>
   );

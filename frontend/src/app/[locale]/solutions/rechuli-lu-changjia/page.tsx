@@ -414,6 +414,7 @@ const pageJsonLd = cleanObject([
     name: '热处理炉厂家｜工业炉定制与热处理设备制造',
     description: HEAT_TREATMENT_FURNACE_MANUFACTURER_SEO.description,
     mainEntityId: 'https://www.jssngyl.cn/#organization',
+    dateModified: HEAT_TREATMENT_FURNACE_MANUFACTURER_SEO.modifiedTime,
   }),
   getBreadcrumbJsonLd([
     { name: '首页', url: '/zh' },

@@ -9,6 +9,11 @@ type GeoDecisionLink = {
   href: string;
 };
 
+type GeoEvidenceLink = {
+  title: string;
+  href: string;
+};
+
 export const GEO_DECISION_LINKS: GeoDecisionLink[] = [
   {
     eyebrow: '报价准备',
@@ -39,6 +44,25 @@ export const GEO_DECISION_LINKS: GeoDecisionLink[] = [
     title: '连续退洗线节能改造案例',
     description: '查看项目规格、阶段周期、测算公式、适用边界与环保验收口径。',
     href: '/zh/case/anonymous-tsingshan-1250-renovation',
+  },
+];
+
+export const GEO_EVIDENCE_LINKS: GeoEvidenceLink[] = [
+  {
+    title: '支重轮热处理生产线案例',
+    href: '/zh/case/jining-support-roller-heat-treatment-line',
+  },
+  {
+    title: '连续退火固溶生产线案例',
+    href: '/zh/case/henan-annealing-solution-line',
+  },
+  {
+    title: '热处理炉厂家能力说明',
+    href: '/zh/solutions/rechuli-lu-changjia',
+  },
+  {
+    title: '江苏工业炉项目服务',
+    href: '/zh/solutions/jiangsu-gongye-lu-changjia',
   },
 ];
 
@@ -89,6 +113,22 @@ export function GeoDecisionHub({ locale }: { locale: Locale }) {
             </Link>
           ))}
         </div>
+
+        <nav
+          aria-label="更多项目案例与厂家能力"
+          className="mt-5 flex flex-wrap items-center gap-x-5 gap-y-3 rounded-[6px] border border-[#dce3ec] bg-white px-5 py-4"
+        >
+          <span className="text-[13px] font-semibold text-[#344054]">更多项目证据：</span>
+          {GEO_EVIDENCE_LINKS.map((item) => (
+            <Link
+              key={item.href}
+              href={item.href}
+              className="text-[13px] leading-6 text-[#667085] underline-offset-4 transition hover:text-[#c51624] hover:underline"
+            >
+              {item.title}
+            </Link>
+          ))}
+        </nav>
       </div>
     </section>
   );

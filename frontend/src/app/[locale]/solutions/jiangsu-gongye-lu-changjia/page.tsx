@@ -358,6 +358,7 @@ const pageJsonLd = cleanObject([
     name: '江苏工业炉厂家｜热处理炉定制、改造与大修服务',
     description: JIANGSU_INDUSTRIAL_FURNACE_MANUFACTURER_SEO.description,
     mainEntityId: 'https://www.jssngyl.cn/#organization',
+    dateModified: JIANGSU_INDUSTRIAL_FURNACE_MANUFACTURER_SEO.modifiedTime,
   }),
   getBreadcrumbJsonLd([
     { name: '首页', url: '/zh' },

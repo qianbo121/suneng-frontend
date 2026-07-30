@@ -45,7 +45,7 @@ describe('P3 five-page publication gate', () => {
     expect(OLD_HEAT_TREATMENT_FURNACE_REPAIR_OR_REPLACE_SEO.modifiedTime).toContain(
       '2026-07-29',
     );
-    expect(CONTINUOUS_HEAT_TREATMENT_LINE_SEO.modifiedTime).toContain('2026-07-29');
+    expect(CONTINUOUS_HEAT_TREATMENT_LINE_SEO.modifiedTime).toContain('2026-07-30');
     expect(TSINGSHAN_1250_CASE_SEO.modifiedTime).toContain('2026-07-29');
   });
 

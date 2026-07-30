@@ -6,9 +6,13 @@ import { getNewsList } from '@/lib/api/news';
 import { STATIC_PRODUCTS } from '@/constants/static-products';
 import {
   HENAN_ANNEALING_SOLUTION_CASE_SEO,
+  HEAT_TREATMENT_FURNACE_MANUFACTURER_SEO,
   INDUSTRIAL_FURNACE_QUOTE_PARAMS_SEO,
+  JIANGSU_INDUSTRIAL_FURNACE_MANUFACTURER_SEO,
   JINING_SUPPORT_ROLLER_CASE_SEO,
   OLD_HEAT_TREATMENT_FURNACE_REPAIR_OR_REPLACE_SEO,
+  CONTINUOUS_HEAT_TREATMENT_LINE_SEO,
+  FURNACE_RENOVATION_OVERHAUL_SEO,
   TSINGSHAN_1250_CASE_SEO,
 } from '@/lib/seo/page-data';
 import { Locale } from '@/types/site';
@@ -16,6 +20,7 @@ import { Locale } from '@/types/site';
 const sitemapLocales: Locale[] = ['zh', 'en'];
 const zhOnlyLocales: Locale[] = ['zh'];
 const englishStaticPaths = new Set(['/', '/products', '/service', '/news', '/about', '/contact']);
+const PRODUCT_CONTENT_MODIFIED_TIME = '2026-07-30';
 
 type SitemapEntry = MetadataRoute.Sitemap[number];
 
@@ -100,7 +105,12 @@ function collectStaticRoutes(): MetadataRoute.Sitemap {
     priority: number;
     lastModified?: string;
   }> = [
-    { path: '/service/furnace-renovation-overhaul', changeFrequency: 'monthly', priority: 0.72 },
+    {
+      path: '/service/furnace-renovation-overhaul',
+      changeFrequency: 'monthly',
+      priority: 0.72,
+      lastModified: FURNACE_RENOVATION_OVERHAUL_SEO.modifiedTime,
+    },
     {
       path: '/articles/gongye-lu-baojia-canshu',
       changeFrequency: 'monthly',
@@ -113,9 +123,24 @@ function collectStaticRoutes(): MetadataRoute.Sitemap {
       priority: 0.64,
       lastModified: OLD_HEAT_TREATMENT_FURNACE_REPAIR_OR_REPLACE_SEO.modifiedTime,
     },
-    { path: '/solutions/rechuli-lu-changjia', changeFrequency: 'monthly', priority: 0.78 },
-    { path: '/solutions/jiangsu-gongye-lu-changjia', changeFrequency: 'monthly', priority: 0.76 },
-    { path: '/solutions/continuous-heat-treatment-line', changeFrequency: 'monthly', priority: 0.86 },
+    {
+      path: '/solutions/rechuli-lu-changjia',
+      changeFrequency: 'monthly',
+      priority: 0.78,
+      lastModified: HEAT_TREATMENT_FURNACE_MANUFACTURER_SEO.modifiedTime,
+    },
+    {
+      path: '/solutions/jiangsu-gongye-lu-changjia',
+      changeFrequency: 'monthly',
+      priority: 0.76,
+      lastModified: JIANGSU_INDUSTRIAL_FURNACE_MANUFACTURER_SEO.modifiedTime,
+    },
+    {
+      path: '/solutions/continuous-heat-treatment-line',
+      changeFrequency: 'monthly',
+      priority: 0.86,
+      lastModified: CONTINUOUS_HEAT_TREATMENT_LINE_SEO.modifiedTime,
+    },
     {
       path: '/case/anonymous-tsingshan-1250-renovation',
       changeFrequency: 'monthly',
@@ -154,6 +179,7 @@ function collectProductRoutes(): MetadataRoute.Sitemap {
   return sitemapLocales.flatMap((locale) =>
     STATIC_PRODUCTS.map((product) =>
       route(localizedPath(locale, `/products/detail/${product.slug}`), {
+        lastModified: new Date(PRODUCT_CONTENT_MODIFIED_TIME),
         changeFrequency: 'monthly',
         priority: 0.8,
         images: publicPathExists(product.image) ? [absoluteUrl(product.image)] : undefined,
