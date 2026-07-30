@@ -6,11 +6,13 @@ import { getNewsList } from '@/lib/api/news';
 import { STATIC_PRODUCTS } from '@/constants/static-products';
 import {
   HENAN_ANNEALING_SOLUTION_CASE_SEO,
+  FURNACE_RENOVATION_RISK_CYCLE_GUIDE_SEO,
   FURNACE_RENOVATION_OVERHAUL_SEO,
   INDUSTRIAL_FURNACE_QUOTE_PARAMS_SEO,
   JINING_SUPPORT_ROLLER_CASE_SEO,
   OLD_HEAT_TREATMENT_FURNACE_REPAIR_OR_REPLACE_SEO,
   PRODUCT_DETAIL_SEO,
+  TEMPERATURE_UNIFORMITY_REMEDIATION_SEO,
   CONTINUOUS_HEAT_TREATMENT_LINE_SEO,
   TSINGSHAN_1250_CASE_SEO,
 } from '@/lib/seo/page-data';
@@ -132,6 +134,18 @@ function collectStaticRoutes(): MetadataRoute.Sitemap {
       changeFrequency: 'monthly',
       priority: 0.64,
       lastModified: OLD_HEAT_TREATMENT_FURNACE_REPAIR_OR_REPLACE_SEO.modifiedTime,
+    },
+    {
+      path: '/solutions/rechuli-lu-wendu-bujun-zhenggai',
+      changeFrequency: 'monthly',
+      priority: 0.7,
+      lastModified: TEMPERATURE_UNIFORMITY_REMEDIATION_SEO.modifiedTime,
+    },
+    {
+      path: '/solutions/rechuli-lu-gaizao-fengxian-zhouqi',
+      changeFrequency: 'monthly',
+      priority: 0.7,
+      lastModified: FURNACE_RENOVATION_RISK_CYCLE_GUIDE_SEO.modifiedTime,
     },
     { path: '/solutions/rechuli-lu-changjia', changeFrequency: 'monthly', priority: 0.78 },
     { path: '/solutions/jiangsu-gongye-lu-changjia', changeFrequency: 'monthly', priority: 0.76 },

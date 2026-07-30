@@ -206,6 +206,46 @@ export const OLD_HEAT_TREATMENT_FURNACE_REPAIR_OR_REPLACE_SEO = {
   modifiedTime: '2026-07-30',
 };
 
+export const TEMPERATURE_UNIFORMITY_REMEDIATION_SEO = {
+  title: '热处理炉温度不均怎么整改？测温、气流、密封、装炉与验收口径',
+  description:
+    '热处理炉温度不均不能只调温控参数。本文说明测试条件、测温校准、加热分区、循环风与导流、炉门密封、炉衬、装炉方式和负载复测。',
+  keywords: [
+    '热处理炉温度不均怎么整改',
+    '工业炉改造后温度还是不均',
+    '热处理炉温度均匀性',
+    '工业炉温度均匀性验收',
+    '热处理炉温度不均改造厂家',
+    '工业炉改造验收',
+  ],
+  ogTitle: '热处理炉温度不均整改指南｜诊断、改造与验收',
+  ogDescription:
+    '从测温校准、加热分区、循环风、密封炉衬到装炉工艺，建立热处理炉温度不均的诊断与复测闭环。',
+  ogImage: '/images/service/after-sales-hero.png',
+  publishedTime: '2026-07-30T23:58:04+08:00',
+  modifiedTime: '2026-07-31T00:01:55+08:00',
+};
+
+export const FURNACE_RENOVATION_RISK_CYCLE_GUIDE_SEO = {
+  title: '热处理炉改造有哪些风险？停产周期、施工切换与验收失败预防',
+  description:
+    '热处理炉改造风险来自原炉状态、范围、旧新接口、隐蔽工程、停产窗口和验收口径。本文说明周期拆分、预制切换、回退、负载验证和责任边界。',
+  keywords: [
+    '热处理炉节能改造有哪些风险',
+    '老旧热处理炉改造失败的原因',
+    '热处理炉改造会影响生产吗',
+    '热处理炉节能改造停产多久',
+    '热处理炉改造周期一般多久',
+    '工业炉改造风险',
+  ],
+  ogTitle: '热处理炉改造风险与周期指南｜停产、切换和验收',
+  ogDescription:
+    '把老炉诊断、隐蔽工程、停产窗口、预制切换、调试验收和责任边界写进一套可执行文件。',
+  ogImage: '/images/service/after-sales-hero.png',
+  publishedTime: '2026-07-30T23:58:53+08:00',
+  modifiedTime: '2026-07-31T00:01:56+08:00',
+};
+
 export const HEAT_TREATMENT_FURNACE_MANUFACTURER_SEO = {
   title: '热处理炉厂家｜工业炉定制、非标热处理炉设计制造',
   description:

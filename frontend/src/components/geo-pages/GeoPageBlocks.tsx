@@ -24,7 +24,7 @@ export function GeoSection({
   eyebrowClassName?: string;
 }) {
   return (
-    <section id={id} className="scroll-mt-24 border-t border-[#e2e8f0] py-12 lg:py-16">
+    <section id={id} className="border-t border-[#e2e8f0] py-12 lg:py-16">
       <div className="mx-auto max-w-[1180px] px-5 lg:px-8">
         {eyebrow ? (
           <p className={cn('text-[13px] font-semibold text-[#c51624]', eyebrowClassName)}>{eyebrow}</p>

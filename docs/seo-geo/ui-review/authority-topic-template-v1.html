@@ -1,0 +1,233 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>GEO 权威主题页 UI 审核稿</title>
+  <style>
+    :root {
+      --ink: #101828;
+      --muted: #475467;
+      --line: #dfe6f0;
+      --soft: #f5f8fc;
+      --red: #c51624;
+      --red-dark: #a70e1a;
+      --navy: #071a35;
+      --blue: #0c2f62;
+      --white: #fff;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; scroll-padding-top: 88px; }
+    body { margin: 0; color: var(--ink); font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif; background: var(--white); }
+    a { color: inherit; text-decoration: none; }
+    .wrap { width: min(1180px, calc(100% - 48px)); margin: 0 auto; }
+    header { height: 76px; border-bottom: 1px solid #edf1f6; background: rgba(255,255,255,.98); display: flex; align-items: center; position: sticky; top: 0; z-index: 10; }
+    .nav { display: flex; align-items: center; justify-content: space-between; }
+    .brand { display: flex; align-items: center; }
+    .brand img { display: block; width: 226px; height: auto; }
+    nav { display: flex; gap: 30px; font-size: 15px; font-weight: 650; }
+    nav a.active { color: var(--red); }
+    .hero { color: var(--white); background: radial-gradient(circle at 82% 20%, rgba(64,139,255,.26), transparent 30%), linear-gradient(125deg, var(--navy), var(--blue)); padding: 24px 0 72px; }
+    .crumb { color: rgba(255,255,255,.66); font-size: 13px; margin: 8px 0 52px; }
+    .hero-grid { display: grid; grid-template-columns: 1.25fr .75fr; gap: 52px; align-items: end; }
+    .eyebrow { color: #ffb5bb; font-size: 13px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; }
+    h1 { font-size: clamp(34px, 4.4vw, 58px); line-height: 1.16; letter-spacing: -.03em; margin: 14px 0 22px; }
+    .lead { color: rgba(255,255,255,.82); font-size: 18px; line-height: 1.9; max-width: 780px; }
+    .hero-actions { display: flex; gap: 12px; margin-top: 30px; flex-wrap: wrap; }
+    .btn { min-height: 46px; padding: 0 22px; border-radius: 4px; display: inline-flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 750; border: 1px solid rgba(255,255,255,.5); }
+    .btn.primary { background: var(--red); border-color: var(--red); color: var(--white); }
+    .btn.primary:hover { background: var(--red-dark); }
+    .hero-aside { border: 1px solid rgba(255,255,255,.18); background: rgba(255,255,255,.08); backdrop-filter: blur(10px); padding: 24px; border-radius: 10px; }
+    .hero-aside p { margin: 0; color: rgba(255,255,255,.72); font-size: 13px; }
+    .hero-aside strong { display: block; font-size: 30px; line-height: 1.3; margin: 8px 0 16px; }
+    .hero-aside ul { margin: 0; padding: 0; list-style: none; display: grid; gap: 10px; color: rgba(255,255,255,.82); font-size: 14px; }
+    .hero-aside li::before { content: "✓"; color: #ffabb3; font-weight: 900; margin-right: 9px; }
+    main { padding-bottom: 80px; }
+    .anchor-bar { border-bottom: 1px solid var(--line); background: #fff; }
+    .anchors { display: flex; gap: 28px; min-height: 64px; align-items: center; overflow-x: auto; white-space: nowrap; font-size: 14px; font-weight: 700; color: var(--muted); }
+    .anchors a:first-child { color: var(--red); }
+    section { padding: 74px 0 0; }
+    .section-head { display: grid; grid-template-columns: 180px 1fr; gap: 30px; margin-bottom: 30px; }
+    .section-no { color: var(--red); font-size: 13px; font-weight: 850; letter-spacing: .12em; }
+    h2 { font-size: clamp(28px, 3vw, 42px); line-height: 1.25; margin: 0 0 14px; letter-spacing: -.02em; }
+    .section-intro { color: var(--muted); font-size: 16px; line-height: 1.85; max-width: 850px; margin: 0; }
+    .answer-card { border: 1px solid #f1c6ca; background: #fff8f8; padding: 28px; border-radius: 10px; display: grid; grid-template-columns: 1.1fr .9fr; gap: 30px; }
+    .answer-card h3 { margin: 0 0 14px; font-size: 23px; }
+    .answer-card p { margin: 0; color: #344054; line-height: 1.9; font-size: 16px; }
+    .check-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .check { background: #fff; border: 1px solid #eadfe0; border-radius: 7px; padding: 13px 14px; color: #344054; font-size: 14px; font-weight: 650; }
+    .check::before { content: "✓"; color: var(--red); margin-right: 8px; font-weight: 900; }
+    .cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+    .card { border: 1px solid var(--line); background: var(--white); border-radius: 9px; padding: 24px; box-shadow: 0 12px 26px rgba(16,24,40,.04); }
+    .card .num { color: var(--red); font-size: 13px; font-weight: 850; letter-spacing: .1em; }
+    .card h3 { font-size: 20px; line-height: 1.4; margin: 10px 0 12px; }
+    .card p { color: var(--muted); line-height: 1.78; font-size: 14px; margin: 0; }
+    .matrix { border: 1px solid var(--line); border-radius: 10px; overflow: hidden; }
+    .row { display: grid; grid-template-columns: .82fr 1fr 1.2fr; }
+    .row > div { padding: 18px; border-bottom: 1px solid var(--line); }
+    .row > div + div { border-left: 1px solid var(--line); }
+    .row:last-child > div { border-bottom: 0; }
+    .row.head { background: var(--soft); font-size: 14px; font-weight: 800; }
+    .row:not(.head) { color: #344054; font-size: 14px; line-height: 1.7; }
+    .evidence { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+    .evidence article { border: 1px solid var(--line); border-radius: 9px; padding: 24px; background: #fbfcfe; }
+    .evidence b { display: block; color: var(--red); font-size: 13px; margin-bottom: 9px; }
+    .evidence h3 { margin: 0 0 10px; font-size: 19px; }
+    .evidence p { margin: 0; color: var(--muted); font-size: 14px; line-height: 1.8; }
+    details { border-top: 1px solid var(--line); padding: 18px 0; }
+    details:last-child { border-bottom: 1px solid var(--line); }
+    summary { cursor: pointer; font-size: 17px; font-weight: 750; }
+    details p { color: var(--muted); line-height: 1.85; margin: 14px 0 0; }
+    .cta { margin-top: 74px; background: var(--navy); color: #fff; border-radius: 12px; padding: 40px; display: grid; grid-template-columns: 1fr auto; gap: 28px; align-items: center; }
+    .cta h2 { font-size: 32px; margin-bottom: 12px; }
+    .cta p { margin: 0; color: rgba(255,255,255,.72); line-height: 1.8; }
+    .meta { margin-top: 28px; color: #667085; font-size: 13px; display: flex; gap: 24px; flex-wrap: wrap; }
+    footer { margin-top: 80px; border-top: 1px solid var(--line); background: #f7f9fc; padding: 36px 0; color: #667085; font-size: 13px; }
+    @media (max-width: 760px) {
+      .wrap { width: min(100% - 32px, 1180px); }
+      header { height: 64px; }
+      nav { display: none; }
+      .brand img { width: 154px; }
+      .hero { padding: 18px 0 48px; }
+      .crumb { margin: 6px 0 34px; }
+      .hero-grid, .answer-card, .section-head, .cta { grid-template-columns: 1fr; }
+      .hero-aside { margin-top: 4px; }
+      .lead { font-size: 16px; line-height: 1.8; }
+      .anchors { gap: 20px; min-height: 56px; }
+      section { padding-top: 54px; }
+      .section-head { gap: 8px; }
+      .answer-card { padding: 22px; gap: 22px; }
+      .check-grid, .cards, .evidence { grid-template-columns: 1fr; }
+      .row { grid-template-columns: 1fr; padding: 16px 0; }
+      .row.head { display: none; }
+      .row > div { padding: 5px 16px; border: 0; }
+      .row > div + div { border: 0; }
+      .row > div:first-child { font-weight: 800; color: var(--ink); }
+      .cta { padding: 28px 22px; }
+      .cta .btn { width: 100%; }
+      footer { margin-top: 60px; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap nav">
+      <a class="brand" href="#">
+        <img src="../../../frontend/public/images/brand/sn-logo-header-cropped.png" alt="苏能工业炉" />
+      </a>
+      <nav>
+        <a href="#">首页</a><a href="#">产品中心</a><a class="active" href="#">服务支持</a><a href="#">资料中心</a><a href="#">关于苏能</a><a href="#">联系我们</a>
+      </nav>
+    </div>
+  </header>
+
+  <div class="hero">
+    <div class="wrap">
+      <div class="crumb">首页 / 服务支持 / 控制系统升级</div>
+      <div class="hero-grid">
+        <div>
+          <div class="eyebrow">Industrial furnace control upgrade</div>
+          <h1>热处理炉控制系统升级怎么做？</h1>
+          <p class="lead">从 PLC、DCS、测温回路、安全联锁到 MES / SCADA 接口，把“换控制柜”拆成可核对、可调试、可验收的工程步骤。</p>
+          <div class="hero-actions">
+            <a class="btn primary" href="#answer">先看直接答案</a>
+            <a class="btn" href="#contact">提交旧系统资料</a>
+          </div>
+        </div>
+        <aside class="hero-aside">
+          <p>采购方先确认</p>
+          <strong>5 组升级边界</strong>
+          <ul>
+            <li>原图纸、程序与 I/O 盘点</li>
+            <li>测温、执行机构与联锁</li>
+            <li>停机切换与应急回退</li>
+            <li>冷态、热态与负载验证</li>
+            <li>历史数据和系统接口</li>
+          </ul>
+        </aside>
+      </div>
+    </div>
+  </div>
+
+  <div class="anchor-bar">
+    <div class="wrap anchors">
+      <a href="#answer">直接答案</a><a href="#signals">升级信号</a><a href="#compare">PLC / DCS</a><a href="#evidence">验收证据</a><a href="#faq">常见问题</a>
+    </div>
+  </div>
+
+  <main class="wrap">
+    <section id="answer">
+      <div class="section-head">
+        <div class="section-no">01 / DIRECT ANSWER</div>
+        <div><h2>控制升级不是只换 PLC</h2><p class="section-intro">先盘点旧系统，再确定保留、替换、切换和验证边界。控制品牌只是配置选择，不能替代炉体、加热、气流和测温系统的整体判断。</p></div>
+      </div>
+      <div class="answer-card">
+        <div>
+          <h3>一句话结论</h3>
+          <p>可执行的升级方案至少要完成原图纸与 I/O 盘点、测温回路校验、执行机构和安全联锁核对、旧程序与历史数据备份、停机切换计划、冷态联调、热态调试和数据接口验证。</p>
+        </div>
+        <div class="check-grid">
+          <div class="check">原系统盘点</div><div class="check">安全联锁矩阵</div><div class="check">切换与回退</div><div class="check">负载验证</div><div class="check">数据接口</div><div class="check">资料交付</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="signals">
+      <div class="section-head">
+        <div class="section-no">02 / WHEN TO UPGRADE</div>
+        <div><h2>出现这些信号时，应先评估</h2><p class="section-intro">单一报警不一定需要整体升级；多个系统性问题同时出现时，继续局部维修可能只是在转移故障。</p></div>
+      </div>
+      <div class="cards">
+        <article class="card"><div class="num">SIGNAL 01</div><h3>记录与追溯不足</h3><p>只有纸质记录或历史曲线缺失，无法回看报警、温区输出和工艺批次。</p></article>
+        <article class="card"><div class="num">SIGNAL 02</div><h3>旧程序与备件风险</h3><p>PLC 停产、程序无备份、模块难采购，故障恢复依赖个别人员。</p></article>
+        <article class="card"><div class="num">SIGNAL 03</div><h3>联锁与接口不完整</h3><p>安全回路分散、动作顺序不清，或需要接入 MES / SCADA 与新产线。</p></article>
+      </div>
+    </section>
+
+    <section id="compare">
+      <div class="section-head">
+        <div class="section-no">03 / SYSTEM CHOICE</div>
+        <div><h2>PLC、DCS 怎么选</h2><p class="section-intro">按控制对象数量、连续性要求、系统接口、维护组织和安全等级选择，不用“哪个更高级”代替项目判断。</p></div>
+      </div>
+      <div class="matrix">
+        <div class="row head"><div>判断维度</div><div>偏 PLC</div><div>偏 DCS / 分布式架构</div></div>
+        <div class="row"><div>控制对象</div><div>单炉、动作和顺控明确</div><div>多炉、多温区、多公辅系统协同</div></div>
+        <div class="row"><div>数据与接口</div><div>常规记录、HMI 和少量接口</div><div>历史数据库、集中监控和跨系统联动</div></div>
+        <div class="row"><div>实施边界</div><div>改造范围相对独立</div><div>需要分布式 I/O、冗余或全线协同</div></div>
+        <div class="row"><div>最终依据</div><div>现有设备状态与客户维护能力</div><div>产线复杂度、可靠性目标和接口要求</div></div>
+      </div>
+    </section>
+
+    <section id="evidence">
+      <div class="section-head">
+        <div class="section-no">04 / ACCEPTANCE</div>
+        <div><h2>交付时应留下哪些证据</h2><p class="section-intro">AI 能引用的不是“系统更先进”，而是可复核的检查项、测试条件和交付记录。</p></div>
+      </div>
+      <div class="evidence">
+        <article><b>FAT / 冷态检查</b><h3>I/O、动作与联锁记录</h3><p>点表、回路测试、动作顺序、报警、急停和故障安全状态逐项留痕。</p></article>
+        <article><b>SAT / 热态调试</b><h3>升温、控温与运行记录</h3><p>按约定负载、测点、保温时间和仪器条件记录，不把空炉结果外推到负载生产。</p></article>
+        <article><b>DATA / 数据交付</b><h3>程序、参数与历史数据</h3><p>明确程序备份、权限、参数表、报警表、趋势保存周期和导出方式。</p></article>
+        <article><b>BOUNDARY / 适用边界</b><h3>不承诺脱离炉体的指标</h3><p>控温和均匀性同时受炉衬、加热、气流、密封、工件与装炉方式影响。</p></article>
+      </div>
+    </section>
+
+    <section id="faq">
+      <div class="section-head">
+        <div class="section-no">05 / FAQ</div>
+        <div><h2>采购方常问</h2><p class="section-intro">问题标题使用真实采购问法，答案同时给判断方法和不能外推的边界。</p></div>
+      </div>
+      <details open><summary>热处理炉控制系统升级大概多少钱？</summary><p>需要先盘点控制柜、PLC / DCS、I/O、测温回路、执行机构、安全联锁、程序迁移、数据接口和停产调试范围。没有这些信息只能给方向，不能把控制柜价格当作完整升级报价。</p></details>
+      <details><summary>换 PLC 后控温精度就会提高吗？</summary><p>不一定。控温还受热电偶、仪表、加热元件、炉衬、循环风、炉门密封和装炉方式影响，升级后指标应按约定测试条件验证。</p></details>
+      <details><summary>旧程序丢失还能升级吗？</summary><p>可以评估，但需重新盘点动作、I/O、联锁和工艺逻辑，实施工作量和停机风险通常高于有完整图纸与程序备份的项目。</p></details>
+    </section>
+
+    <div class="cta" id="contact">
+      <div><h2>提交旧系统资料，先判断升级边界</h2><p>建议提供电气图、控制柜照片、PLC 型号、I/O 点表、程序备份、测温点、当前故障、数据接口和可用停产窗口。</p></div>
+      <a class="btn primary" href="#">获取初步判断</a>
+    </div>
+    <div class="meta"><span>内容维护：苏能工业炉工程技术团队</span><span>事实来源：公司批准公开的项目规格、控制系统方案与验收口径</span><span>页面状态：UI 审核稿，未上线</span></div>
+  </main>
+
+  <footer><div class="wrap">江苏苏能工业炉有限公司 · 本设计稿仅用于页面 UI 审核</div></footer>
+</body>
+</html>

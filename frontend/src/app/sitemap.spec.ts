@@ -10,14 +10,18 @@ vi.mock('@/lib/api/news', () => ({
 import buildSitemap from '@/app/sitemap';
 import {
   CONTINUOUS_HEAT_TREATMENT_LINE_SEO,
+  FURNACE_RENOVATION_RISK_CYCLE_GUIDE_SEO,
   FURNACE_RENOVATION_OVERHAUL_SEO,
   INDUSTRIAL_FURNACE_QUOTE_PARAMS_SEO,
   PRODUCT_DETAIL_SEO,
+  TEMPERATURE_UNIFORMITY_REMEDIATION_SEO,
 } from '@/lib/seo/page-data';
 
 const DEEP_CRAWL_TARGETS = [
   '/zh/articles/gongye-lu-baojia-canshu',
   '/zh/articles/laojiu-rechuli-lu-daxiu-haishi-maixin',
+  '/zh/solutions/rechuli-lu-gaizao-fengxian-zhouqi',
+  '/zh/solutions/rechuli-lu-wendu-bujun-zhenggai',
   '/zh/case/anonymous-tsingshan-1250-renovation',
   '/zh/case/henan-annealing-solution-line',
   '/zh/case/jining-support-roller-heat-treatment-line',
@@ -59,6 +63,14 @@ describe('sitemap freshness signals', () => {
       byUrl.get('https://www.jssngyl.cn/zh/products/detail/trolley-furnace')?.lastModified,
     ).toEqual(new Date(PRODUCT_DETAIL_SEO['trolley-furnace'].modifiedTime!));
     expect(
+      byUrl.get('https://www.jssngyl.cn/zh/solutions/rechuli-lu-wendu-bujun-zhenggai')
+        ?.lastModified,
+    ).toEqual(new Date(TEMPERATURE_UNIFORMITY_REMEDIATION_SEO.modifiedTime));
+    expect(
+      byUrl.get('https://www.jssngyl.cn/zh/solutions/rechuli-lu-gaizao-fengxian-zhouqi')
+        ?.lastModified,
+    ).toEqual(new Date(FURNACE_RENOVATION_RISK_CYCLE_GUIDE_SEO.modifiedTime));
+    expect(
       byUrl.get('https://www.jssngyl.cn/zh/products/detail/box-furnace')?.lastModified,
     ).toBeUndefined();
 
@@ -66,7 +78,12 @@ describe('sitemap freshness signals', () => {
       .filter(
         (entry) =>
           entry.lastModified &&
-          new Date(entry.lastModified).toISOString().startsWith('2026-07-30'),
+          new Intl.DateTimeFormat('en-CA', {
+            timeZone: 'Asia/Shanghai',
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
+          }).format(new Date(entry.lastModified)) === '2026-07-30',
       )
       .map((entry) => entry.url);
     expect(july30Urls).toEqual([
@@ -108,11 +125,11 @@ describe('sitemap freshness signals', () => {
     expect(regressions).toEqual([]);
   });
 
-  it('keeps all 20 deep-crawl targets in the sitemap', async () => {
+  it('keeps all authority and deep-crawl targets in the sitemap', async () => {
     const entries = await buildSitemap();
     const urls = new Set(entries.map((entry) => entry.url));
 
-    expect(DEEP_CRAWL_TARGETS).toHaveLength(20);
+    expect(DEEP_CRAWL_TARGETS).toHaveLength(22);
     for (const path of DEEP_CRAWL_TARGETS) {
       expect(urls.has(`https://www.jssngyl.cn${path}`), path).toBe(true);
     }

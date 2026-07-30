@@ -36,6 +36,8 @@ const trolleyFurnacePath = '/zh/products/detail/trolley-furnace';
 const meshBeltFurnacePath = '/zh/products/detail/mesh-belt-furnace';
 const quoteParamsPath = '/zh/articles/gongye-lu-baojia-canshu';
 const decisionPath = '/zh/articles/laojiu-rechuli-lu-daxiu-haishi-maixin';
+const temperatureRemediationPath = '/zh/solutions/rechuli-lu-wendu-bujun-zhenggai';
+const renovationRiskPath = '/zh/solutions/rechuli-lu-gaizao-fengxian-zhouqi';
 const continuousLinePath = '/zh/solutions/continuous-heat-treatment-line';
 const contactPath = '/zh/contact';
 
@@ -292,6 +294,16 @@ const relatedLinks = [
     title: '老旧工业炉该修还是换？',
     href: decisionPath,
     text: '旧炉项目可先判断适合大修、局部改造还是重新采购。',
+  },
+  {
+    title: '温度不均整改与验收',
+    href: temperatureRemediationPath,
+    text: '按测温、加热分区、循环风、密封炉衬、装炉方式和负载验证排查温度偏差。',
+  },
+  {
+    title: '改造风险、周期与生产影响',
+    href: renovationRiskPath,
+    text: '拆分原炉诊断、隐蔽工程、停产切换、回退方案和负载验收，提前关闭改造风险。',
   },
   {
     title: '台车炉改造适配',

@@ -36,6 +36,8 @@ const renovationServicePath = '/zh/service/furnace-renovation-overhaul';
 const productsPath = '/zh/products';
 const contactPath = '/zh/contact';
 const jiningCasePath = '/zh/case/jining-support-roller-heat-treatment-line';
+const temperatureRemediationPath = '/zh/solutions/rechuli-lu-wendu-bujun-zhenggai';
+const renovationRiskPath = '/zh/solutions/rechuli-lu-gaizao-fengxian-zhouqi';
 
 export const dynamicParams = false;
 
@@ -202,6 +204,16 @@ const relatedLinks = [
     title: '工业炉节能改造与热处理炉大修服务',
     href: renovationServicePath,
     text: '如果已经确定需要改造、大修或炉衬翻新，可查看服务落地页。',
+  },
+  {
+    title: '温度不均整改与验收',
+    href: temperatureRemediationPath,
+    text: '旧炉温度偏差项目可先按测量、热源、气流、密封和装炉条件判断原因。',
+  },
+  {
+    title: '改造风险、周期与生产影响',
+    href: renovationRiskPath,
+    text: '决定改造前，先拆分停产窗口、隐蔽工程、切换回退和验收条件。',
   },
   {
     title: '产品中心',

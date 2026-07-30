@@ -42,6 +42,8 @@ const meshBeltFurnacePath = '/zh/products/detail/mesh-belt-furnace';
 const boxFurnacePath = '/zh/products/detail/box-furnace';
 const pitFurnacePath = '/zh/products/detail/pit-furnace';
 const continuousLinePath = '/zh/solutions/continuous-heat-treatment-line';
+const temperatureRemediationPath = '/zh/solutions/rechuli-lu-wendu-bujun-zhenggai';
+const renovationRiskPath = '/zh/solutions/rechuli-lu-gaizao-fengxian-zhouqi';
 
 export const dynamicParams = false;
 
@@ -357,6 +359,16 @@ const relatedLinks = [
     title: '老旧工业炉该修还是换？',
     href: decisionPath,
     text: '如果是旧炉项目，先判断适合大修、局部改造还是重新采购。',
+  },
+  {
+    title: '热处理炉温度不均怎么整改？',
+    href: temperatureRemediationPath,
+    text: '报价前先确认温度偏差的测试条件、排查路径与验收证据。',
+  },
+  {
+    title: '热处理炉改造风险与停产周期',
+    href: renovationRiskPath,
+    text: '把未知工程量、旧新接口、停产切换和负载验收纳入报价边界。',
   },
   {
     title: '连续热处理生产线解决方案',
