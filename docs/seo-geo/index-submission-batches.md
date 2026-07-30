@@ -1,6 +1,6 @@
 # GEO 页面索引提交批次
 
-更新时间：2026-07-29
+更新时间：2026-07-30
 
 ## 执行原则
 
@@ -61,6 +61,55 @@
 - 青山案例：通过 `--exclude` 再次拦截，未进入提交列表；
 - 百度主动推送：生产环境未配置 `BAIDU_PUSH_TOKEN`，本批未执行；
 - D+1、D+3、D+7 继续通过 nginx 日志验证，不把接口接收等同于抓取或引用。
+
+## 百度主动推送补充批次
+
+执行日期：2026-07-30
+
+站点完成百度搜索资源平台文件验证后，使用平台提供的 API 准入密钥补交深度抓取批次。
+
+执行过程：
+
+- 首次整批提交 19 个 URL，百度返回 `over quota`，该次未计为成功；
+- 随后按优先级拆成两批，每批 5 个 URL；
+- 第一批返回 `{"remain":5,"success":5}`；
+- 第二批返回 `{"remain":0,"success":5}`；
+- 当日共成功提交 10 个 URL，额度用完；
+- 青山案例继续排除，没有进入任何百度主动推送请求。
+
+第一批：当前仍未被目标爬虫命中的 5 页
+
+1. `https://www.jssngyl.cn/zh/service/furnace-renovation-overhaul`
+2. `https://www.jssngyl.cn/zh/solutions/rechuli-lu-changjia`
+3. `https://www.jssngyl.cn/zh/solutions/jiangsu-gongye-lu-changjia`
+4. `https://www.jssngyl.cn/zh/case/jining-support-roller-heat-treatment-line`
+5. `https://www.jssngyl.cn/zh/case/henan-annealing-solution-line`
+
+第二批：高价值决策与产品页
+
+1. `https://www.jssngyl.cn/zh/articles/gongye-lu-baojia-canshu`
+2. `https://www.jssngyl.cn/zh/articles/laojiu-rechuli-lu-daxiu-haishi-maixin`
+3. `https://www.jssngyl.cn/zh/solutions/continuous-heat-treatment-line`
+4. `https://www.jssngyl.cn/zh/products/detail/trolley-furnace`
+5. `https://www.jssngyl.cn/zh/products/detail/annealing-solution-line`
+
+待下一次额度恢复后提交的 9 页：
+
+1. `https://www.jssngyl.cn/zh/products/detail/bell-furnace`
+2. `https://www.jssngyl.cn/zh/products/detail/box-furnace`
+3. `https://www.jssngyl.cn/zh/products/detail/copper-wire-annealing-line`
+4. `https://www.jssngyl.cn/zh/products/detail/mesh-belt-furnace`
+5. `https://www.jssngyl.cn/zh/products/detail/pit-furnace`
+6. `https://www.jssngyl.cn/zh/products/detail/pusher-furnace`
+7. `https://www.jssngyl.cn/zh/products/detail/roller-hearth-furnace`
+8. `https://www.jssngyl.cn/zh/products/detail/roller-mesh-belt-line`
+9. `https://www.jssngyl.cn/zh/products/detail/rotary-hearth-furnace`
+
+同日 18:26（北京时间）日志复核：
+
+- 百度爬虫仍只访问首页与中文首页；
+- 上述 10 个提交页尚未出现新的 `Baiduspider` 请求；
+- 当前应继续观察，不把 API 成功响应写成“已抓取”。
 
 ## P5
 
