@@ -36,6 +36,12 @@
 `/zh/case/anonymous-tsingshan-1250-renovation`
 继续按既定证据门和 slug 隐私决策单独处理，不进入本轮主动催抓。
 
+执行结果：
+
+- IndexNow 返回 `HTTP 200`；
+- 百度主动推送因未配置 `BAIDU_PUSH_TOKEN` 跳过；
+- 接口返回只代表变更通知被接收，实际抓取仍以 nginx 日志为准。
+
 ## 回验节奏
 
 - D+1：检查搜索及 AI 爬虫是否开始访问深层 URL；
