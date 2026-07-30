@@ -49,6 +49,33 @@
 - D+7：输出 22 个核心页覆盖率变化，并区分搜索爬虫、AI 系统爬虫和 AI 引流；
 - 不用“已提交”替代“已抓取”，不用“已抓取”替代“已引用”。
 
+## 提交后 T+0 快照
+
+快照时间：2026-07-30 14:39（北京时间）。统计窗口仍为 2026-07-24 至 2026-07-30。
+
+- 已扫描 6 个 Nginx 日志文件，排除 6 条验证探针；
+- 22 个核心页中，搜索或 AI 系统爬虫已覆盖 16 页，覆盖率 72.73%；
+- AI 系统爬虫累计 115 次请求，核心页仍覆盖 2/22（9.09%）；
+- 搜索爬虫累计 2,242 次请求，核心页覆盖 16/22（72.73%）；
+- 用户触发取页累计 2 次，核心页覆盖 1/22（4.55%）。
+
+当前仍未被目标爬虫命中的 6 页：
+
+1. `/zh/service/furnace-renovation-overhaul`
+2. `/zh/solutions/rechuli-lu-changjia`
+3. `/zh/solutions/jiangsu-gongye-lu-changjia`
+4. `/zh/case/anonymous-tsingshan-1250-renovation`
+5. `/zh/case/jining-support-roller-heat-treatment-line`
+6. `/zh/case/henan-annealing-solution-line`
+
+决策：
+
+- T+0 只记录方向，不因 AI 深抓尚未发生而修改或删除页面；
+- 前 3 页及济宁、河南案例继续进入 D+1 / D+3 观察；
+- 青山案例继续保留证据门，不做主动催抓；
+- 百度统计 accessToken 已恢复，但它不等于百度搜索资源平台的 URL 推送 Token；
+- 百度搜索资源平台当前未登录，本轮尚未执行百度主动推送，不能记为已提交。
+
 ## 同日复核与纠正
 
 - 2026-07-30 只保留中文首页的 `lastmod`：首页当天新增了两个案例和两个厂家能力页的标准 HTML 入口；
