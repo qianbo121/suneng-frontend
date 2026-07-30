@@ -44,6 +44,12 @@ if ! grep -Fq 'server_name factory.jssngyl.cn;' nginx.prod.conf.template; then
   exit 1
 fi
 
+work_scan_rule_count="$(grep -Fc 'location ^~ /h5/work-scan/' nginx.prod.conf.template || true)"
+if [ "$work_scan_rule_count" -ne 3 ]; then
+  echo "Refusing deployment: expected 3 legacy work-scan redirect rules, found $work_scan_rule_count."
+  exit 1
+fi
+
 for required_container in furnace-web furnace-api; do
   if ! docker inspect "$required_container" >/dev/null 2>&1; then
     echo "Refusing deployment: required smart-factory container $required_container is missing."
@@ -63,11 +69,20 @@ bash backup.sh
 docker compose --env-file "$ENV_FILE" -f "$COMPOSE_FILE" run --rm backend npx prisma migrate deploy
 docker compose --env-file "$ENV_FILE" -f "$COMPOSE_FILE" up -d
 
-# The app containers were recreated and got new bridge IPs; nginx uses static
-# upstreams with no resolver, so reload it to re-resolve them and avoid the
-# stale-upstream-IP 502 failure mode.
-docker compose --env-file "$ENV_FILE" -f "$COMPOSE_FILE" exec -T nginx nginx -t
-docker compose --env-file "$ENV_FILE" -f "$COMPOSE_FILE" exec -T nginx nginx -s reload
+# A bind-mounted template does not regenerate /etc/nginx/nginx.conf by itself.
+# Render with the exact same substitution list used by the container command,
+# test the candidate before replacing the active file, then reload gracefully.
+docker compose --env-file "$ENV_FILE" -f "$COMPOSE_FILE" exec -T \
+  -e 'NGINX_SUBST_VARS=$DOMAIN $ADMIN_DOMAIN' nginx sh -lc '
+    set -eu
+    candidate=/tmp/nginx.conf.deploy
+    envsubst "$NGINX_SUBST_VARS" < /etc/nginx/nginx.conf.template > "$candidate"
+    nginx -t -c "$candidate"
+    cp "$candidate" /etc/nginx/nginx.conf
+    nginx -t
+    nginx -s reload
+    cmp -s "$candidate" /etc/nginx/nginx.conf
+  '
 
 # Health-check the REAL backend health route inside the container. The previous
 # `curl -f http://localhost` was a false positive: nginx 301-redirects :80 to
@@ -114,5 +129,28 @@ if [ "$factory_healthy" -ne 1 ]; then
   echo "Health check failed: smart-factory routes (web=$factory_web_status api=$factory_api_status)"
   exit 1
 fi
+
+echo "Checking public domains and legacy work-scan redirects..."
+www_status="$(curl -sS -o /dev/null -w '%{http_code}' https://www.jssngyl.cn/zh || true)"
+admin_status="$(curl -sS -o /dev/null -w '%{http_code}' https://admin.jssngyl.cn/login || true)"
+root_status="$(curl -sS -o /dev/null -w '%{http_code}' https://jssngyl.cn/zh || true)"
+
+if [ "$www_status" != "200" ] || [ "$admin_status" != "200" ] || [ "$root_status" != "301" ]; then
+  echo "Health check failed: public domains (www=$www_status admin=$admin_status root=$root_status)"
+  exit 1
+fi
+
+work_scan_path="/h5/work-scan/deploy-health"
+expected_work_scan_target="https://factory.jssngyl.cn${work_scan_path}"
+for source in \
+  "https://www.jssngyl.cn${work_scan_path}" \
+  "https://jssngyl.cn${work_scan_path}" \
+  "http://www.jssngyl.cn${work_scan_path}"; do
+  response="$(curl -sS -o /dev/null -w '%{http_code} %{redirect_url}' "$source" || true)"
+  if [ "$response" != "302 $expected_work_scan_target" ]; then
+    echo "Health check failed: legacy work-scan redirect ($source -> $response)"
+    exit 1
+  fi
+done
 
 echo "Deployment completed."
