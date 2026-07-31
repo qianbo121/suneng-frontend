@@ -689,7 +689,7 @@ export default async function FurnaceRenovationOverhaulPage({ params }: PageProp
         </div>
       </section>
 
-      <Section id="scope" eyebrow="服务范围" title="一、服务范围">
+      <Section id="scope" title="一、服务范围">
         <p className="max-w-[920px] text-[16px] leading-[1.9] text-[#344054] lg:text-[18px]">
           苏能工业炉改造与大修服务覆盖工业炉全生命周期，围绕工业炉节能改造、整炉大修、复产搬迁三类主线需求展开。
         </p>
@@ -720,7 +720,7 @@ export default async function FurnaceRenovationOverhaulPage({ params }: PageProp
         </div>
       </Section>
 
-      <Section id="materials" eyebrow="资料清单" title="二、改造前资料清单">
+      <Section id="materials" title="二、改造前资料清单">
         <p className="max-w-[940px] text-[16px] leading-[1.9] text-[#344054] lg:text-[18px]">
           提交以下资料后，苏能可更快判断工业炉节能改造方向、是否需要整炉大修，以及是否适合做炉衬翻新、燃烧系统升级或控制系统改造。
         </p>
@@ -737,7 +737,7 @@ export default async function FurnaceRenovationOverhaulPage({ params }: PageProp
         </p>
       </Section>
 
-      <Section id="daxiu-or-new" eyebrow="改造决策" title="三、老旧热处理炉是大修好，还是直接买新的？">
+      <Section id="daxiu-or-new" title="三、老旧热处理炉是大修好，还是直接买新的？">
         <p className="max-w-[940px] text-[16px] leading-[1.9] text-[#344054] lg:text-[18px]">
           老旧工业炉不一定都适合改造。判断时应综合炉体结构、安全状态、工艺变化、改造费用、停产周期和后续使用年限，避免为了节省初期投入而带来更高的运行风险。
         </p>
@@ -773,7 +773,7 @@ export default async function FurnaceRenovationOverhaulPage({ params }: PageProp
         </div>
       </Section>
 
-      <Section id="process" eyebrow="评估流程" title="四、改造前评估流程">
+      <Section id="process" title="四、改造前评估流程">
         <p className="max-w-[940px] text-[16px] leading-[1.9] text-[#344054] lg:text-[18px]">
           工业炉节能改造效果与原炉型结构、燃料类型、产线负荷、保温状态、控制系统、运行制度和现场工况密切相关。苏能提供 5 步系统化评估。
         </p>
@@ -795,7 +795,7 @@ export default async function FurnaceRenovationOverhaulPage({ params }: PageProp
         </p>
       </Section>
 
-      <Section id="solutions" eyebrow="改造方案" title="五、典型改造方案">
+      <Section id="solutions" title="五、典型改造方案">
         <div className="grid gap-6">
           {renovationPlans.map((plan) => (
             <article key={plan.title} className="rounded-[8px] border border-[#e1e7f0] bg-[#fbfcfe] p-6 lg:p-7">
@@ -841,7 +841,7 @@ export default async function FurnaceRenovationOverhaulPage({ params }: PageProp
         </div>
       </Section>
 
-      <Section id="cases" eyebrow="典型案例" title="六、典型案例">
+      <Section id="cases" title="六、典型案例">
         <div className="grid gap-6">
           {caseStudies.map((caseItem) => (
             <article key={caseItem.title} className="rounded-[8px] border border-[#e1e7f0] bg-white p-6 shadow-[0_10px_24px_rgba(15,35,75,0.04)] lg:p-7">
@@ -871,7 +871,7 @@ export default async function FurnaceRenovationOverhaulPage({ params }: PageProp
         </p>
       </Section>
 
-      <Section id="guarantee" eyebrow="效果保障" title="七、改造效果保障">
+      <Section id="guarantee" title="七、改造效果保障">
         <div className="grid gap-5 lg:grid-cols-2">
           {guaranteeStages.map((stage) => (
             <article key={stage.title} className="rounded-[8px] border border-[#e1e7f0] bg-[#fbfcfe] p-6">
@@ -891,11 +891,11 @@ export default async function FurnaceRenovationOverhaulPage({ params }: PageProp
         </p>
       </Section>
 
-      <Section id="faq" eyebrow="常见问题" title="八、改造服务常见问题">
+      <Section id="faq" title="八、改造服务常见问题">
         <GeoFaqGrid items={faqs} openMode="first" />
       </Section>
 
-      <Section id="advantages" eyebrow="选择苏能" title="九、为什么选择苏能改造服务">
+      <Section id="advantages" title="九、为什么选择苏能改造服务">
         <div className="grid gap-5 lg:grid-cols-2">
           {advantages.map((advantage) => (
             <article key={advantage.title} className="rounded-[8px] border border-[#e1e7f0] bg-[#fbfcfe] p-6">
@@ -909,7 +909,7 @@ export default async function FurnaceRenovationOverhaulPage({ params }: PageProp
         </p>
       </Section>
 
-      <Section id="contact" eyebrow="十、改造咨询" title="不确定老旧工业炉还能不能改？">
+      <Section id="contact" title="不确定老旧工业炉还能不能改？">
         <p className="max-w-[940px] text-[16px] leading-[1.9] text-[#344054] lg:text-[18px]">
           把炉型、炉膛尺寸、最高温度、工件信息、当前问题和现场照片发给苏能，技术人员可先做初步判断，帮助你评估适合大修、局部改造还是重新采购。
         </p>
