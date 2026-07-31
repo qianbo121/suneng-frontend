@@ -11,8 +11,10 @@ import buildSitemap from '@/app/sitemap';
 import {
   ABOUT_SEO,
   CONTINUOUS_HEAT_TREATMENT_LINE_SEO,
+  FURNACE_CONTROL_SYSTEM_UPGRADE_SEO,
   FURNACE_ENERGY_CONVERSION_HEAT_RECOVERY_SEO,
   FURNACE_LINING_RENOVATION_GUIDE_SEO,
+  FURNACE_RESTART_RELOCATION_REMANUFACTURING_SEO,
   FURNACE_RENOVATION_RISK_CYCLE_GUIDE_SEO,
   FURNACE_RENOVATION_OVERHAUL_SEO,
   INDUSTRIAL_FURNACE_QUOTE_PARAMS_SEO,
@@ -25,7 +27,9 @@ const DEEP_CRAWL_TARGETS = [
   '/zh/articles/laojiu-rechuli-lu-daxiu-haishi-maixin',
   '/zh/solutions/rechuli-lu-gaizao-fengxian-zhouqi',
   '/zh/solutions/rechuli-lu-dian-gai-ran-yure-huishou',
+  '/zh/solutions/rechuli-lu-kongzhi-xitong-shengji',
   '/zh/solutions/rechuli-lu-luchen-fanxin',
+  '/zh/solutions/rechuli-lu-tingchan-chongqi-banqian-fuchan',
   '/zh/solutions/rechuli-lu-wendu-bujun-zhenggai',
   '/zh/case/anonymous-tsingshan-1250-renovation',
   '/zh/case/henan-annealing-solution-line',
@@ -52,9 +56,7 @@ describe('sitemap freshness signals', () => {
     const entries = await buildSitemap();
     const byUrl = new Map(entries.map((entry) => [entry.url, entry]));
 
-    expect(byUrl.get('https://www.jssngyl.cn/zh')?.lastModified).toEqual(
-      new Date('2026-07-30'),
-    );
+    expect(byUrl.get('https://www.jssngyl.cn/zh')?.lastModified).toEqual(new Date('2026-07-30'));
     expect(
       byUrl.get('https://www.jssngyl.cn/zh/service/furnace-renovation-overhaul')?.lastModified,
     ).toEqual(new Date(FURNACE_RENOVATION_OVERHAUL_SEO.modifiedTime));
@@ -76,13 +78,20 @@ describe('sitemap freshness signals', () => {
         ?.lastModified,
     ).toEqual(new Date(FURNACE_RENOVATION_RISK_CYCLE_GUIDE_SEO.modifiedTime));
     expect(
-      byUrl.get('https://www.jssngyl.cn/zh/solutions/rechuli-lu-luchen-fanxin')
-        ?.lastModified,
+      byUrl.get('https://www.jssngyl.cn/zh/solutions/rechuli-lu-luchen-fanxin')?.lastModified,
     ).toEqual(new Date(FURNACE_LINING_RENOVATION_GUIDE_SEO.modifiedTime));
     expect(
       byUrl.get('https://www.jssngyl.cn/zh/solutions/rechuli-lu-dian-gai-ran-yure-huishou')
         ?.lastModified,
     ).toEqual(new Date(FURNACE_ENERGY_CONVERSION_HEAT_RECOVERY_SEO.modifiedTime));
+    expect(
+      byUrl.get('https://www.jssngyl.cn/zh/solutions/rechuli-lu-kongzhi-xitong-shengji')
+        ?.lastModified,
+    ).toEqual(new Date(FURNACE_CONTROL_SYSTEM_UPGRADE_SEO.modifiedTime));
+    expect(
+      byUrl.get('https://www.jssngyl.cn/zh/solutions/rechuli-lu-tingchan-chongqi-banqian-fuchan')
+        ?.lastModified,
+    ).toEqual(new Date(FURNACE_RESTART_RELOCATION_REMANUFACTURING_SEO.modifiedTime));
     expect(byUrl.get('https://www.jssngyl.cn/zh/about')?.lastModified).toEqual(
       new Date(ABOUT_SEO.modifiedTime),
     );
@@ -105,6 +114,7 @@ describe('sitemap freshness signals', () => {
     expect(july30Urls).toEqual([
       'https://www.jssngyl.cn/zh',
       'https://www.jssngyl.cn/zh/about',
+      'https://www.jssngyl.cn/zh/articles/laojiu-rechuli-lu-daxiu-haishi-maixin',
     ]);
   });
 
@@ -143,7 +153,7 @@ describe('sitemap freshness signals', () => {
     const entries = await buildSitemap();
     const urls = new Set(entries.map((entry) => entry.url));
 
-    expect(DEEP_CRAWL_TARGETS).toHaveLength(24);
+    expect(DEEP_CRAWL_TARGETS).toHaveLength(26);
     for (const path of DEEP_CRAWL_TARGETS) {
       expect(urls.has(`https://www.jssngyl.cn${path}`), path).toBe(true);
     }

@@ -46,6 +46,8 @@ const temperatureRemediationPath = '/zh/solutions/rechuli-lu-wendu-bujun-zhengga
 const renovationRiskPath = '/zh/solutions/rechuli-lu-gaizao-fengxian-zhouqi';
 const furnaceLiningRenovationPath = '/zh/solutions/rechuli-lu-luchen-fanxin';
 const energyConversionPath = '/zh/solutions/rechuli-lu-dian-gai-ran-yure-huishou';
+const controlSystemUpgradePath = '/zh/solutions/rechuli-lu-kongzhi-xitong-shengji';
+const restartRelocationPath = '/zh/solutions/rechuli-lu-tingchan-chongqi-banqian-fuchan';
 
 export const dynamicParams = false;
 
@@ -386,6 +388,16 @@ const relatedLinks = [
     title: '能源改造与余热回收如何立项',
     href: energyConversionPath,
     text: '报价前统一能源基线、公辅条件、安全排放、利用端和停产实施边界。',
+  },
+  {
+    title: '控制系统升级报价前核对什么',
+    href: controlSystemUpgradePath,
+    text: '先拆分 I/O、柜体、仪表、执行机构、安全联锁、数据接口和停产切换范围。',
+  },
+  {
+    title: '停产炉重启与搬迁复产',
+    href: restartRelocationPath,
+    text: '报价前确认停机原因、资料恢复、检查整改、重新安装、空载与负载验收边界。',
   },
   {
     title: '连续热处理生产线解决方案',

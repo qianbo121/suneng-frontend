@@ -8,7 +8,9 @@ import {
   ABOUT_SEO,
   HENAN_ANNEALING_SOLUTION_CASE_SEO,
   FURNACE_ENERGY_CONVERSION_HEAT_RECOVERY_SEO,
+  FURNACE_CONTROL_SYSTEM_UPGRADE_SEO,
   FURNACE_LINING_RENOVATION_GUIDE_SEO,
+  FURNACE_RESTART_RELOCATION_REMANUFACTURING_SEO,
   FURNACE_RENOVATION_RISK_CYCLE_GUIDE_SEO,
   FURNACE_RENOVATION_OVERHAUL_SEO,
   INDUSTRIAL_FURNACE_QUOTE_PARAMS_SEO,
@@ -44,7 +46,9 @@ function languageCode(locale: Locale) {
 function routeAlternates(path: string, locales: Locale[]) {
   return {
     languages: {
-      ...Object.fromEntries(locales.map((locale) => [languageCode(locale), absoluteUrl(localizedPath(locale, path))])),
+      ...Object.fromEntries(
+        locales.map((locale) => [languageCode(locale), absoluteUrl(localizedPath(locale, path))]),
+      ),
       'x-default': absoluteUrl(localizedPath('zh', path)),
     },
   };
@@ -168,6 +172,18 @@ function collectStaticRoutes(): MetadataRoute.Sitemap {
       priority: 0.7,
       lastModified: FURNACE_ENERGY_CONVERSION_HEAT_RECOVERY_SEO.modifiedTime,
     },
+    {
+      path: '/solutions/rechuli-lu-kongzhi-xitong-shengji',
+      changeFrequency: 'monthly',
+      priority: 0.7,
+      lastModified: FURNACE_CONTROL_SYSTEM_UPGRADE_SEO.modifiedTime,
+    },
+    {
+      path: '/solutions/rechuli-lu-tingchan-chongqi-banqian-fuchan',
+      changeFrequency: 'monthly',
+      priority: 0.7,
+      lastModified: FURNACE_RESTART_RELOCATION_REMANUFACTURING_SEO.modifiedTime,
+    },
     { path: '/solutions/rechuli-lu-changjia', changeFrequency: 'monthly', priority: 0.78 },
     { path: '/solutions/jiangsu-gongye-lu-changjia', changeFrequency: 'monthly', priority: 0.76 },
     {
@@ -245,7 +261,10 @@ async function collectNewsRoutes(): Promise<MetadataRoute.Sitemap> {
       lastModified: safeLastModified(article.publishDate),
       changeFrequency: 'monthly',
       priority: 0.6,
-      images: article.coverImage && publicPathExists(article.coverImage) ? [absoluteUrl(article.coverImage)] : undefined,
+      images:
+        article.coverImage && publicPathExists(article.coverImage)
+          ? [absoluteUrl(article.coverImage)]
+          : undefined,
       alternates: routeAlternates(`/news/${article.slug}`, zhOnlyLocales),
     }),
   );

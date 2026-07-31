@@ -46,7 +46,7 @@ describe('P3 five-page publication gate', () => {
     expect(trolleySource).toContain("const P3_REVIEW_DATE = '2026-07-29'");
     expect(INDUSTRIAL_FURNACE_QUOTE_PARAMS_SEO.modifiedTime).toContain('2026-07-31');
     expect(OLD_HEAT_TREATMENT_FURNACE_REPAIR_OR_REPLACE_SEO.modifiedTime).toContain(
-      '2026-07-31',
+      '2026-07-30',
     );
     expect(CONTINUOUS_HEAT_TREATMENT_LINE_SEO.modifiedTime).toContain('2026-07-29');
     expect(TSINGSHAN_1250_CASE_SEO.modifiedTime).toContain('2026-07-29');

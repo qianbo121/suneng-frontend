@@ -40,6 +40,8 @@ const temperatureRemediationPath = '/zh/solutions/rechuli-lu-wendu-bujun-zhengga
 const renovationRiskPath = '/zh/solutions/rechuli-lu-gaizao-fengxian-zhouqi';
 const furnaceLiningRenovationPath = '/zh/solutions/rechuli-lu-luchen-fanxin';
 const energyConversionPath = '/zh/solutions/rechuli-lu-dian-gai-ran-yure-huishou';
+const controlSystemUpgradePath = '/zh/solutions/rechuli-lu-kongzhi-xitong-shengji';
+const restartRelocationPath = '/zh/solutions/rechuli-lu-tingchan-chongqi-banqian-fuchan';
 const continuousLinePath = '/zh/solutions/continuous-heat-treatment-line';
 const contactPath = '/zh/contact';
 
@@ -259,9 +261,10 @@ const renovationPlans = [
   },
   {
     title: '方案 B：热处理炉控制系统升级',
-    scenario: '适用使用 10 年以上、采用传统继电器或老式 PLC 控制的工业炉。',
+    scenario:
+      '适用控制器停产、备件难找、图纸程序缺失、报警与数据记录不足，或需要对接上位系统的工业炉。',
     details: [
-      '主控系统升级为西门子 S7-1500 系列 PLC 或同等级别 DCS。',
+      '按 I/O 数量、控制对象、联锁复杂度、数据接口和维护能力选择 PLC、DCS 或其他架构，不预设固定品牌型号。',
       '触摸屏人机界面实时显示炉温、工艺曲线、报警信息。',
       '温度记录从模拟纸质记录升级为数字化数据追溯。',
       '报警系统覆盖温度超限、加热元件断丝、热电偶故障等智能诊断。',
@@ -275,7 +278,8 @@ const renovationPlans = [
   },
   {
     title: '方案 C：炉衬翻新与保温优化',
-    scenario: '适用使用 5-10 年、炉衬出现剥落、裂缝、保温效果下降的工业炉。',
+    scenario:
+      '适用炉衬出现剥落、裂缝、局部漏热、冷面异常或保温效果下降，且需结合锚固与钢结构状态判断的工业炉。',
     details: [
       '旧炉衬拆除与基础修复。',
       '新耐材选型：陶瓷纤维模块、浇注料、砖砌结构按温度等级和工艺要求配置。',
@@ -289,7 +293,8 @@ const renovationPlans = [
   },
   {
     title: '方案 D：复产 / 搬迁后炉子恢复',
-    scenario: '适用停产 1 年以上的工业炉重启，或工厂搬迁后炉子重新投产。',
+    scenario:
+      '适用长期停产、停机原因不清、关键资料或备件缺失的工业炉重启，以及搬迁后重新安装投产。',
     details: [
       '炉体全面检查：耐材、加热元件、密封、传动机构。',
       '电气系统检查：控制柜、热电偶、变频器、传感器。',
@@ -334,6 +339,16 @@ const relatedLinks = [
     title: '电改燃、燃改电与余热回收',
     href: energyConversionPath,
     text: '先建立同工况能源基线，再核对炉体、公辅、安全、排放和完整改造成本。',
+  },
+  {
+    title: '控制系统升级与验收',
+    href: controlSystemUpgradePath,
+    text: '从图纸、I/O、测量回路、执行机构、安全联锁和数据接口判断保留、局部升级或更换架构。',
+  },
+  {
+    title: '停产重启、搬迁与再制造',
+    href: restartRelocationPath,
+    text: '区分能启动、能安全试运行和能稳定负载生产，按冷态、空载与负载三个阶段形成复产证据。',
   },
   {
     title: '台车炉改造适配',

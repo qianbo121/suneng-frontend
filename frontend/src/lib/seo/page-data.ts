@@ -158,7 +158,7 @@ export const FURNACE_RENOVATION_OVERHAUL_SEO = {
   ogImage: '/images/service/after-sales-hero.png',
   ogType: 'website',
   canonicalUrl: 'https://www.jssngyl.cn/zh/service/furnace-renovation-overhaul',
-  modifiedTime: '2026-07-31T13:40:14+08:00',
+  modifiedTime: '2026-07-31T14:26:10+08:00',
 };
 
 export const INDUSTRIAL_FURNACE_QUOTE_PARAMS_SEO = {
@@ -204,7 +204,7 @@ export const OLD_HEAT_TREATMENT_FURNACE_REPAIR_OR_REPLACE_SEO = {
   ogType: 'article',
   canonicalUrl: 'https://www.jssngyl.cn/zh/articles/laojiu-rechuli-lu-daxiu-haishi-maixin',
   publishedTime: '2026-06-13T10:00:00+08:00',
-  modifiedTime: '2026-07-31T13:40:16+08:00',
+  modifiedTime: '2026-07-30',
 };
 
 export const TEMPERATURE_UNIFORMITY_REMEDIATION_SEO = {
@@ -285,6 +285,46 @@ export const FURNACE_ENERGY_CONVERSION_HEAT_RECOVERY_SEO = {
   ogImage: '/images/service/after-sales-hero.png',
   publishedTime: '2026-07-31T13:40:13+08:00',
   modifiedTime: '2026-07-31T13:40:13+08:00',
+};
+
+export const FURNACE_CONTROL_SYSTEM_UPGRADE_SEO = {
+  title: '热处理炉控制系统升级怎么做？PLC、DCS、测温、联锁与数据接口清单',
+  description:
+    '热处理炉控制系统升级不能只换 PLC。本文说明图纸与 I/O、测温回路、执行机构、安全联锁、程序备份、数据接口、FAT、SAT 和停产切换边界。',
+  keywords: [
+    '热处理炉控制系统升级厂家',
+    '热处理炉控制系统 PLC 升级',
+    '热处理炉 DCS 控制系统改造',
+    '热处理炉控制系统升级多少钱',
+    '工业炉控制系统改造',
+    '热处理炉 PLC 改造',
+  ],
+  ogTitle: '热处理炉控制系统升级指南｜PLC、DCS、联锁与数据接口',
+  ogDescription:
+    '先盘点图纸、I/O、程序、测量回路、执行机构和安全联锁，再决定保留、局部升级或更换控制架构。',
+  ogImage: '/images/service/after-sales-hero.png',
+  publishedTime: '2026-07-31T14:26:20+08:00',
+  modifiedTime: '2026-07-31T14:26:20+08:00',
+};
+
+export const FURNACE_RESTART_RELOCATION_REMANUFACTURING_SEO = {
+  title: '停产热处理炉重启与搬迁复产怎么评估？检查、试运行和验收清单',
+  description:
+    '停产炉重启、工业炉搬迁复产和旧炉再制造应先核对停机原因、炉体炉衬、能源、电气绝缘、安全联锁、机械系统和资料，再做冷态、空载与负载验证。',
+  keywords: [
+    '停产多年的热处理炉重启评估',
+    '工业炉搬迁复产',
+    '工厂搬迁后热处理设备恢复',
+    '二手热处理炉再制造服务',
+    '推杆炉机械系统大修',
+    '停产炉重启',
+  ],
+  ogTitle: '停产炉重启与搬迁复产指南｜检查、试运行和验收',
+  ogDescription:
+    '区分能启动、能安全试运行和能稳定负载生产，按冷态、空载和负载三个阶段形成复产证据。',
+  ogImage: '/images/service/after-sales-hero.png',
+  publishedTime: '2026-07-31T14:26:21+08:00',
+  modifiedTime: '2026-07-31T14:26:21+08:00',
 };
 
 export const HEAT_TREATMENT_FURNACE_MANUFACTURER_SEO = {

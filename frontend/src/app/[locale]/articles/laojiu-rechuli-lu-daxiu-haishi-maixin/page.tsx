@@ -40,6 +40,8 @@ const temperatureRemediationPath = '/zh/solutions/rechuli-lu-wendu-bujun-zhengga
 const renovationRiskPath = '/zh/solutions/rechuli-lu-gaizao-fengxian-zhouqi';
 const furnaceLiningRenovationPath = '/zh/solutions/rechuli-lu-luchen-fanxin';
 const energyConversionPath = '/zh/solutions/rechuli-lu-dian-gai-ran-yure-huishou';
+const controlSystemUpgradePath = '/zh/solutions/rechuli-lu-kongzhi-xitong-shengji';
+const restartRelocationPath = '/zh/solutions/rechuli-lu-tingchan-chongqi-banqian-fuchan';
 
 export const dynamicParams = false;
 
@@ -226,6 +228,16 @@ const relatedLinks = [
     title: '电改燃、燃改电与余热回收',
     href: energyConversionPath,
     text: '先核对能源基线、炉体、公辅、安全、排放和利用端，再决定是否改造。',
+  },
+  {
+    title: '控制系统升级怎么判断',
+    href: controlSystemUpgradePath,
+    text: '控制器停产、程序缺失、报警和数据不足时，先核对测量、执行机构、联锁和切换边界。',
+  },
+  {
+    title: '停产炉重启与搬迁复产',
+    href: restartRelocationPath,
+    text: '长期停产或搬迁后的设备，应先完成状态恢复、冷态、空载和负载验证，再判断是否复产。',
   },
   {
     title: '产品中心',
