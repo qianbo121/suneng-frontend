@@ -32,7 +32,7 @@ const heroImage = '/images/service/after-sales-hero.png';
 export const dynamicParams = false;
 
 const heroFacts: FactItem[] = [
-  ['案例类型', '项目测算型结果案例（非客户财务审计结果）'],
+  ['案例类型', '在役连续退洗线节能改造案例'],
   ['项目类型', '工业炉节能改造'],
   ['改造对象', '不锈钢连续退洗线'],
   [
@@ -133,7 +133,7 @@ const implementationStages = [
       '收集具有代表性的历史能耗、产量和工艺质量数据。',
       '基于现场数据建立能耗诊断模型，量化各能耗环节占比。',
       '输出三大模块的完整技术方案、CAD 图纸、PID 控制图和设备清单。',
-      '本项目方案设计阶段为 30–45 个工作日；其他项目按规模、资料完整度和勘查范围另行确认。',
+      '方案设计与现场实施按合同约定分阶段推进，具体排程由资料完整度、供货边界和现场条件共同确定。',
     ],
   },
   {
@@ -143,7 +143,7 @@ const implementationStages = [
       '关键工序按 ISO 9001:2015 质量管理体系执行，质检记录可追溯。',
       '主要部件出厂前完成单机调试。',
       '邀请客户技术代表参与 F.A.T 工厂验收试验。',
-      '本项目设备制造阶段为 4–6 个月；其他项目受供货边界、材料交期和验收安排影响，以双方确认的排程为准。',
+      '设备制造、配套和进场节点按合同里程碑执行，材料交期与验收安排纳入项目排程。',
     ],
   },
   {
@@ -153,7 +153,7 @@ const implementationStages = [
       '苏能工程师现场指导耐材拆除、新设备安装、电气接线。',
       '按单机试运行、联动调试、工艺曲线测试的顺序推进。',
       '对客户操作团队开展操作规范、日常维护、应急处理培训。',
-      '本项目每条线现场安装与调试为 30–60 天；其他项目按停产窗口、工程量、交叉施工条件和验收计划确定。',
+      '三条线分线实施，每条线完成制作、安装、冷调试和烘炉后进入热调试准备；具体实施时间由买方结合现场情况安排。',
     ],
   },
   {
@@ -177,17 +177,16 @@ const implementationStages = [
 ];
 
 const effectRows: FactItem[] = [
-  ['项目测算公式', '63.7 元/吨 × 120 万吨/年 = 7,644 万元/年'],
-  ['吨钢降本', '项目测算值为 63.7 元/吨'],
-  ['测算分母', '项目采用 120 万吨/年的有效产量口径'],
-  ['年节能效益', '按上述项目口径测算约 7,644 万元/年'],
-  ['核算边界', '以上为该项目测算结果，只适用于对应燃料价格、负荷、运行制度、有效产量和改造范围，不代表客户财务审计结果，也不作为其他项目的收益承诺。'],
+  ['经济性评估', '围绕燃料结构调整、系统效率、运行制度和全生命周期成本进行项目核算。'],
+  ['对比口径', '改造前后采用可比工况、统一计量边界和完整统计周期。'],
+  ['证据要求', '能源计量、产线运行、维护与停产记录共同形成可追溯依据。'],
+  ['结论边界', '未经运行数据复核的方案测算，不作为客户实际经营结果或其他项目的节能承诺。'],
 ];
 
 const otherEffects = [
   {
     title: '排放验收边界',
-    text: '该项目验收结论为满足 GB 28665-2012 及项目所在地环保要求。该结论只对应项目检测工况、测点、标准版本和验收文件；新项目仍须按所在地现行要求设计并以有资质第三方检测或正式验收报告为准。',
+    text: '排放验收应对应项目所在地现行标准、检测工况、测点和氧含量折算口径，并以有资质第三方检测或正式验收报告为准。',
   },
   {
     title: '控温精度评估',
@@ -206,7 +205,7 @@ const otherEffects = [
 const dataFactors = [
   '原炉型结构与设计能耗水平',
   '原燃料类型与燃料结构升级空间',
-  '产线实际负荷与年产量水平',
+  '产线实际负荷与有效运行时间',
   '原保温状态与控制系统精度',
   '客户内部副产气资源与价格条件',
   '改造方案的设计深度与施工质量',
@@ -265,9 +264,9 @@ const caseJsonLd = {
   headline: '某不锈钢深加工企业连续退洗线节能改造案例',
   alternativeHeadline: ['不锈钢连续退洗线节能改造案例', '热处理炉节能改造案例'],
   description:
-    '苏能工业炉为某不锈钢深加工企业 3 条 1250mm 连续退洗线实施节能改造；项目测算口径为 63.7 元/吨 × 120 万吨/年 = 7,644 万元/年，并公开适用边界、阶段周期和排放验收口径。',
+    '苏能工业炉为某不锈钢深加工企业 3 条 1250mm 连续退洗线实施节能改造，公开燃烧系统升级、分线实施、运行核验与排放验收边界。',
   datePublished: '2026-05-27T10:00:00+08:00',
-  dateModified: '2026-07-29T15:30:00+08:00',
+  dateModified: '2026-07-31T17:13:36+08:00',
   author: {
     '@type': 'Organization',
     name: '苏能工业炉工程技术团队',
@@ -507,17 +506,17 @@ export default async function AnonymousTsingshanCasePage({ params }: PageProps) 
         </div>
       </Section>
 
-      <Section id="results" eyebrow="Results" title="五、改造后效果与数据拆解">
+      <Section id="results" eyebrow="Verification" title="五、改造评估与核验边界">
         <div className="rounded-[8px] border border-[#c51624]/20 bg-[#fff7f7] p-6">
-          <p className="text-[13px] font-semibold uppercase tracking-[0.2em] text-[#c51624]">Core Result</p>
-          <h3 className="mt-3 text-[30px] font-semibold leading-[1.25] text-[#101828] lg:text-[44px]">节能收益需按项目工况核算</h3>
+          <p className="text-[13px] font-semibold uppercase tracking-[0.2em] text-[#c51624]">Evidence Boundary</p>
+          <h3 className="mt-3 text-[30px] font-semibold leading-[1.25] text-[#101828] lg:text-[44px]">经济性结论需以可比运行记录复核</h3>
           <p className="mt-4 max-w-[900px] text-[15px] leading-[1.9] text-[#344054]">
-            精确收益数据必须建立在可比工况、完整原始台账和明确计算边界上；对外引用还应具备相应的项目授权与可核验依据。
+            项目评估应统一工况、计量边界和统计周期，并以可追溯的运行记录形成验证结论。
           </p>
         </div>
 
         <div className="mt-7 rounded-[8px] border border-[#e1e7f0] bg-white p-6 shadow-[0_10px_24px_rgba(15,35,75,0.04)]">
-          <h3 className="text-[22px] font-semibold leading-[1.35] text-[#101828]">数据拆解</h3>
+          <h3 className="text-[22px] font-semibold leading-[1.35] text-[#101828]">核验要点</h3>
           <div className="mt-5">
             <GeoFactList items={effectRows} labelWidth="150px" />
           </div>
@@ -535,7 +534,7 @@ export default async function AnonymousTsingshanCasePage({ params }: PageProps) 
         <article className="mt-7 rounded-[8px] border border-[#d6e0ec] bg-[#f8fafc] p-6">
           <h3 className="text-[22px] font-semibold leading-[1.35] text-[#101828]">数据使用说明</h3>
           <p className="mt-4 text-[15px] leading-[1.9] text-[#344054]">
-            本页已按授权口径披露项目测算中的年节能效益、吨钢降本与有效产量分母。上述数字是项目测算值，不等同于客户实际经营数据或财务审计结果，也不构成对其他项目的效果承诺。
+            本页公开项目改造范围、系统方案和验收方法。经济性结论需以改造前后同工况、同边界、完整统计周期的运行记录复核，未经验证的方案测算不作为对外结果。
           </p>
           <BulletList items={dataFactors} />
           <p className="mt-5 text-[15px] leading-[1.9] text-[#344054]">

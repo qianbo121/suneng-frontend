@@ -32,9 +32,10 @@ describe('P4 case publication grades', () => {
     expect(henanSource).toContain('实际能耗、产量、成材率、表面质量与验收结果');
   });
 
-  it('keeps the high-risk case explicitly measurement-based instead of overstating a full A grade', () => {
-    expect(measuredCaseSource).toContain('项目测算型结果案例');
-    expect(measuredCaseSource).toContain('非客户财务审计结果');
+  it('keeps the high-risk case as a bounded retrofit record without unverified result claims', () => {
+    expect(measuredCaseSource).toContain('在役连续退洗线节能改造案例');
+    expect(measuredCaseSource).toContain('经济性结论需以可比运行记录复核');
+    expect(measuredCaseSource).not.toContain('项目测算型结果案例');
     expect(measuredCaseSource).not.toContain('A 级结果案例');
   });
 

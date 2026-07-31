@@ -31,14 +31,10 @@ const unrelatedPublicSources = [
   readSource('../../app/[locale]/solutions/jiangsu-gongye-lu-changjia/page.tsx'),
 ];
 
-const approvedClaims = [
-  '3 条 1250 mm',
+const internalOnlyClaims = [
   '63.7 元/吨',
   '120 万吨/年',
   '7,644 万元/年',
-  '30–45 个工作日',
-  '4–6 个月',
-  '30–60 天',
   'GB 28665-2012',
 ];
 
@@ -49,7 +45,7 @@ const allowedLegacyRouteFiles = [
 ];
 
 describe('high-risk case fact governance', () => {
-  it('publishes the approved project facts in indexable metadata with project boundaries', () => {
+  it('publishes only source-confirmed project scope in indexable metadata', () => {
     const metadata = [
       TSINGSHAN_1250_CASE_SEO.title,
       TSINGSHAN_1250_CASE_SEO.description,
@@ -58,24 +54,28 @@ describe('high-risk case fact governance', () => {
     ].join('\n');
 
     expect(metadata).toContain('3 条 1250mm');
-    expect(metadata).toContain('63.7 元/吨');
-    expect(metadata).toContain('120 万吨/年');
-    expect(metadata).toContain('7,644 万元/年');
-    expect(metadata).toContain('仅适用于');
+    expect(metadata).toContain('运行核验方法');
+    for (const claim of internalOnlyClaims) {
+      expect(metadata).not.toContain(claim);
+    }
     expect(metadata).not.toContain('青山');
     expect(metadata.toLowerCase()).not.toContain('tsingshan');
-    expect(TSINGSHAN_1250_CASE_SEO.modifiedTime).toContain('2026-07-29');
+    expect(TSINGSHAN_1250_CASE_SEO.modifiedTime).toContain('2026-07-31');
   });
 
-  it('keeps every approved value on the case page with an explicit non-generalization rule', () => {
-    for (const claim of approvedClaims) {
-      expect(caseSource).toContain(claim);
-    }
+  it('keeps unverified economic and emissions outcomes off the public case page', () => {
+    expect(caseSource).toContain('3 条 1250 mm');
+    expect(caseSource).toContain('经济性结论需以可比运行记录复核');
+    expect(caseSource).toContain('未经验证的方案测算不作为对外结果');
+    expect(caseSource).toContain('以有资质第三方检测或正式验收报告为准');
 
-    expect(caseSource).toContain('63.7 元/吨 × 120 万吨/年 = 7,644 万元/年');
-    expect(caseSource).toContain('不代表客户财务审计结果');
-    expect(caseSource).toContain('不作为其他项目的收益承诺');
-    expect(caseSource).toContain('新项目仍须按所在地现行要求设计');
+    for (const claim of internalOnlyClaims) {
+      expect(caseSource).not.toContain(claim);
+    }
+    expect(caseSource).not.toContain('项目测算型结果案例');
+    expect(caseSource).not.toContain('30–45 个工作日');
+    expect(caseSource).not.toContain('4–6 个月');
+    expect(caseSource).not.toContain('30–60 天');
     expect(caseSource).not.toContain('技术准确、公司允许、客户允许');
     expect(caseSource).not.toContain('三道审核');
   });

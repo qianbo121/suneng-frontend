@@ -49,7 +49,7 @@ describe('P3 five-page publication gate', () => {
       '2026-07-30',
     );
     expect(CONTINUOUS_HEAT_TREATMENT_LINE_SEO.modifiedTime).toContain('2026-07-29');
-    expect(TSINGSHAN_1250_CASE_SEO.modifiedTime).toContain('2026-07-29');
+    expect(TSINGSHAN_1250_CASE_SEO.modifiedTime).toContain('2026-07-31');
   });
 
   it('gives the quote page at least three approved facts with project boundaries', () => {
@@ -106,6 +106,7 @@ describe('P3 five-page publication gate', () => {
     expect(solutionSource).toContain('SN-CASE-P0-008');
     expect(solutionSource).toContain('SN-CASE-P0-006');
     expect(solutionSource).toContain('SN-CASE-P0-001');
-    expect(caseSource).toContain('63.7 元/吨 × 120 万吨/年 = 7,644 万元/年');
+    expect(caseSource).toContain('经济性结论需以可比运行记录复核');
+    expect(caseSource).not.toContain('7,644 万元/年');
   });
 });

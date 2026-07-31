@@ -396,7 +396,7 @@ export const CONTINUOUS_HEAT_TREATMENT_LINE_SEO = {
 export const TSINGSHAN_1250_CASE_SEO = {
   title: '某不锈钢深加工企业连续退洗线节能改造案例_苏能工业炉',
   description:
-    '某不锈钢深加工企业 3 条 1250mm 连续退洗线节能改造案例；项目测算口径为 63.7 元/吨 × 120 万吨/年 = 7,644 万元/年，具体结果仅适用于对应燃料价格、负荷、运行制度与改造边界。',
+    '某不锈钢深加工企业 3 条 1250mm 连续退洗线节能改造案例，公开燃烧系统升级、分线实施、运行核验方法与排放验收边界。',
   keywords: [
     '热处理炉节能改造案例',
     '连续退洗线改造',
@@ -405,12 +405,12 @@ export const TSINGSHAN_1250_CASE_SEO = {
   ],
   ogTitle: '不锈钢连续退洗线节能改造案例',
   ogDescription:
-    '苏能工业炉 3 条 1250mm 连续退洗线节能改造案例，公开项目测算公式、阶段周期、燃烧系统升级与排放验收边界。',
+    '苏能工业炉 3 条 1250mm 连续退洗线节能改造案例，公开燃烧系统升级、分线实施、运行核验方法与排放验收边界。',
   ogImage: '/images/service/after-sales-hero.png',
   ogType: 'article',
   canonicalUrl: 'https://www.jssngyl.cn/zh/case/anonymous-tsingshan-1250-renovation',
   publishedTime: '2026-05-27T10:00:00+08:00',
-  modifiedTime: '2026-07-29T15:30:00+08:00',
+  modifiedTime: '2026-07-31T17:13:36+08:00',
 };
 
 export const JINING_SUPPORT_ROLLER_CASE_SEO = {
