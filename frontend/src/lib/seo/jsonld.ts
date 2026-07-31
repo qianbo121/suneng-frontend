@@ -39,7 +39,10 @@ export type ArticleJsonLdInput = {
   datePublished: string;
   dateModified?: string;
   reviewedByTechnicalEngineer?: boolean;
+  reviewerName?: TechnicalReviewerName;
 };
+
+export type TechnicalReviewerName = '唐工' | '王工';
 
 export type FaqJsonLdItem = {
   question: string;
@@ -71,7 +74,10 @@ const PRODUCT_SCHEMA_ORDER = [
 const productBySlug = new Map(STATIC_PRODUCTS.map((product) => [product.slug, product]));
 const LOCAL_BUSINESS_URL = 'https://www.jssngyl.cn/';
 const LOCAL_BUSINESS_ID = `${LOCAL_BUSINESS_URL}#organization`;
-const TECHNICAL_REVIEWER_ID = `${LOCAL_BUSINESS_URL}#technical-reviewer-tang`;
+const TECHNICAL_REVIEWER_IDS: Record<TechnicalReviewerName, string> = {
+  唐工: `${LOCAL_BUSINESS_URL}#technical-reviewer-tang`,
+  王工: `${LOCAL_BUSINESS_URL}#technical-reviewer-wang`,
+};
 const HOME_PAGE_EN_DESCRIPTION =
   'Jiangsu Suneng Industrial Furnace (founded 2006, Taizhou, Jiangsu) custom-engineers heat-treatment furnaces — box, bogie-hearth, pit, mesh-belt, roller-hearth and pusher furnaces, continuous heat-treatment lines, plus furnace energy-saving retrofit and overhaul.';
 const PRODUCT_COLLECTION_EN_DESCRIPTION =
@@ -117,11 +123,11 @@ function schemaLanguage(locale: Locale) {
   return isEnglishLocale(locale) ? 'en-US' : 'zh-CN';
 }
 
-export function getTechnicalReviewerJsonLd() {
+export function getTechnicalReviewerJsonLd(name: TechnicalReviewerName = '唐工') {
   return {
     '@type': 'Person',
-    '@id': TECHNICAL_REVIEWER_ID,
-    name: '唐工',
+    '@id': TECHNICAL_REVIEWER_IDS[name],
+    name,
     worksFor: { '@id': LOCAL_BUSINESS_ID },
   };
 }
@@ -475,7 +481,11 @@ export function getArticleJsonLd(article: ArticleJsonLdInput, locale: Locale = '
     datePublished: article.datePublished,
     dateModified,
     author: { '@id': LOCAL_BUSINESS_ID },
-    reviewedBy: article.reviewedByTechnicalEngineer ? getTechnicalReviewerJsonLd() : undefined,
+    reviewedBy: article.reviewerName
+      ? getTechnicalReviewerJsonLd(article.reviewerName)
+      : article.reviewedByTechnicalEngineer
+        ? getTechnicalReviewerJsonLd()
+        : undefined,
     publisher: { '@id': LOCAL_BUSINESS_ID },
     mainEntityOfPage: pageUrl,
     inLanguage: schemaLanguage(locale),

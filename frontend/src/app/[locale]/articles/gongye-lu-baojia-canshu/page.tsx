@@ -44,6 +44,8 @@ const pitFurnacePath = '/zh/products/detail/pit-furnace';
 const continuousLinePath = '/zh/solutions/continuous-heat-treatment-line';
 const temperatureRemediationPath = '/zh/solutions/rechuli-lu-wendu-bujun-zhenggai';
 const renovationRiskPath = '/zh/solutions/rechuli-lu-gaizao-fengxian-zhouqi';
+const furnaceLiningRenovationPath = '/zh/solutions/rechuli-lu-luchen-fanxin';
+const energyConversionPath = '/zh/solutions/rechuli-lu-dian-gai-ran-yure-huishou';
 
 export const dynamicParams = false;
 
@@ -316,6 +318,11 @@ const faqs = [
     answer:
       '没有脱离工况的通用固定价。只有确认原炉状态、改造范围、炉膛和温度、工件与产能、热源、控制要求、现场施工条件和停产窗口后，才适合给出价格区间；正式价格以技术方案、工程量清单和交付边界为准。',
   },
+  {
+    question: 'Q9：老旧工业炉改造预算怎么估算？',
+    answer:
+      '先把诊断与设计、拆除清运、炉体炉衬、加热或燃烧系统、机械传动、控制与安全联锁、安装调试、性能测试、第三方工作和停产配合分别列项。原炉隐蔽损伤和现场条件不清时，应保留待检查项，不能用一个固定总价掩盖未知工程量。',
+  },
 ];
 
 const faqJsonLd = getFaqJsonLd(faqs);
@@ -369,6 +376,16 @@ const relatedLinks = [
     title: '热处理炉改造风险与停产周期',
     href: renovationRiskPath,
     text: '把未知工程量、旧新接口、停产切换和负载验收纳入报价边界。',
+  },
+  {
+    title: '炉衬翻新报价前核对什么',
+    href: furnaceLiningRenovationPath,
+    text: '核对旧衬损坏、冷面钢板、锚固体系、材料接口、烘炉和验收资料。',
+  },
+  {
+    title: '能源改造与余热回收如何立项',
+    href: energyConversionPath,
+    text: '报价前统一能源基线、公辅条件、安全排放、利用端和停产实施边界。',
   },
   {
     title: '连续热处理生产线解决方案',

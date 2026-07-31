@@ -48,6 +48,7 @@ export type GeoAuthorityGuideProps = {
   relatedLinks: GeoAuthorityLink[];
   sourceNote: string;
   modifiedDate: string;
+  reviewerName?: string;
 };
 
 export function GeoAuthorityGuidePage({
@@ -80,6 +81,7 @@ export function GeoAuthorityGuidePage({
   relatedLinks,
   sourceNote,
   modifiedDate,
+  reviewerName,
 }: GeoAuthorityGuideProps) {
   return (
     <main className="bg-white">
@@ -120,17 +122,17 @@ export function GeoAuthorityGuidePage({
 
       <nav aria-label="页面目录" className="border-b border-[#e2e8f0] bg-white">
         <div className="mx-auto flex max-w-[1180px] gap-6 overflow-x-auto px-5 py-5 text-[14px] font-semibold text-[#475467] lg:px-8">
-          <a className="shrink-0 text-[#c51624]" href="#answer">直接答案</a>
-          <a className="shrink-0" href="#signals">判断信号</a>
-          <a className="shrink-0" href="#compare">对比与决策</a>
-          <a className="shrink-0" href="#evidence">验收证据</a>
-          <a className="shrink-0" href="#faq">常见问题</a>
-          <a className="shrink-0" href="#contact">咨询参数</a>
+          <a className="flex min-h-11 shrink-0 items-center text-[#c51624]" href="#answer">直接答案</a>
+          <a className="flex min-h-11 shrink-0 items-center" href="#signals">判断信号</a>
+          <a className="flex min-h-11 shrink-0 items-center" href="#compare">对比与决策</a>
+          <a className="flex min-h-11 shrink-0 items-center" href="#evidence">验收证据</a>
+          <a className="flex min-h-11 shrink-0 items-center" href="#faq">常见问题</a>
+          <a className="flex min-h-11 shrink-0 items-center" href="#contact">咨询参数</a>
         </div>
       </nav>
 
       <GeoSection id="answer" eyebrow="01 / DIRECT ANSWER" title={directTitle}>
-        <p className="mb-7 max-w-[900px] text-[16px] leading-[1.9] text-[#475467]">{directIntro}</p>
+        <p className="mx-auto mb-7 max-w-[900px] text-center text-[16px] leading-[1.9] text-[#475467]">{directIntro}</p>
         <div className="grid gap-6 rounded-[10px] border border-[#f1c6ca] bg-[#fff8f8] p-6 lg:grid-cols-[1.08fr_0.92fr] lg:p-7">
           <div>
             <h3 className="text-[22px] font-semibold text-[#101828]">一句话结论</h3>
@@ -147,7 +149,7 @@ export function GeoAuthorityGuidePage({
       </GeoSection>
 
       <GeoSection id="signals" eyebrow="02 / JUDGEMENT SIGNALS" title={signalsTitle}>
-        <p className="max-w-[900px] text-[16px] leading-[1.9] text-[#475467]">{signalsIntro}</p>
+        <p className="mx-auto max-w-[900px] text-center text-[16px] leading-[1.9] text-[#475467]">{signalsIntro}</p>
         <div className="mt-7 grid gap-5 lg:grid-cols-3">
           {signals.map((item) => (
             <article key={item.label} className="rounded-[9px] border border-[#dfe6f0] bg-white p-6 shadow-[0_12px_26px_rgba(16,24,40,0.04)]">
@@ -160,7 +162,7 @@ export function GeoAuthorityGuidePage({
       </GeoSection>
 
       <GeoSection id="compare" eyebrow="03 / DECISION MATRIX" title={compareTitle}>
-        <p className="max-w-[900px] text-[16px] leading-[1.9] text-[#475467]">{compareIntro}</p>
+        <p className="mx-auto max-w-[900px] text-center text-[16px] leading-[1.9] text-[#475467]">{compareIntro}</p>
         <div className="mt-7 overflow-x-auto rounded-[9px] border border-[#dfe6f0]">
           <table className="w-full min-w-[760px] border-collapse text-left">
             <thead className="bg-[#f4f7fb] text-[13px] font-semibold text-[#344054]">
@@ -178,7 +180,7 @@ export function GeoAuthorityGuidePage({
       </GeoSection>
 
       <GeoSection id="evidence" eyebrow="04 / ACCEPTANCE EVIDENCE" title={evidenceTitle}>
-        <p className="max-w-[900px] text-[16px] leading-[1.9] text-[#475467]">{evidenceIntro}</p>
+        <p className="mx-auto max-w-[900px] text-center text-[16px] leading-[1.9] text-[#475467]">{evidenceIntro}</p>
         <div className="mt-7 grid gap-5 md:grid-cols-2">
           {evidence.map((item) => (
             <article key={item.label} className="rounded-[9px] border border-[#dfe6f0] bg-[#fbfcfe] p-6">
@@ -222,7 +224,7 @@ export function GeoAuthorityGuidePage({
         </div>
       </section>
 
-      <GeoReviewNote modifiedDate={modifiedDate} sourceNote={sourceNote} />
+      <GeoReviewNote modifiedDate={modifiedDate} sourceNote={sourceNote} reviewerName={reviewerName} />
     </main>
   );
 }

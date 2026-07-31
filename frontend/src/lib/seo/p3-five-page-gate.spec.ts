@@ -44,9 +44,9 @@ describe('P3 five-page publication gate', () => {
     expect(caseSource).not.toContain('#technical-reviewer-tang');
 
     expect(trolleySource).toContain("const P3_REVIEW_DATE = '2026-07-29'");
-    expect(INDUSTRIAL_FURNACE_QUOTE_PARAMS_SEO.modifiedTime).toContain('2026-07-30');
+    expect(INDUSTRIAL_FURNACE_QUOTE_PARAMS_SEO.modifiedTime).toContain('2026-07-31');
     expect(OLD_HEAT_TREATMENT_FURNACE_REPAIR_OR_REPLACE_SEO.modifiedTime).toContain(
-      '2026-07-30',
+      '2026-07-31',
     );
     expect(CONTINUOUS_HEAT_TREATMENT_LINE_SEO.modifiedTime).toContain('2026-07-29');
     expect(TSINGSHAN_1250_CASE_SEO.modifiedTime).toContain('2026-07-29');
@@ -77,6 +77,15 @@ describe('P3 five-page publication gate', () => {
       '工业炉节能改造厂家怎么选？',
       '工业炉改造验收看哪些指标？',
       '热处理炉改造前要准备哪些资料？',
+      '热处理炉控制系统升级厂家怎么选？',
+      '工业炉耗电量高怎么改造？',
+      '热处理炉改造周期一般多久？',
+      '热处理炉节能改造能省多少电？',
+      '江苏有没有做工业炉节能改造比较靠谱的厂家？',
+      '停产多年的热处理炉重启评估要查什么？',
+      '工业炉改造后温度还是不均怎么办？',
+      '热处理炉改造会影响生产吗？',
+      '热处理炉技改投资回报测算需要哪些输入？',
     ]) {
       expect(renovationServiceSource).toContain(question);
     }
@@ -84,6 +93,7 @@ describe('P3 five-page publication gate', () => {
     expect(decisionSource).toContain('热处理炉大修厂家怎么选？');
     expect(quoteSource).toContain('工业炉节能改造报价通常包括哪些？');
     expect(quoteSource).toContain('Q8：热处理炉节能改造多少钱？');
+    expect(quoteSource).toContain('Q9：老旧工业炉改造预算怎么估算？');
     expect(quoteSource).toContain('不能把一个数字当成正式报价');
   });
 

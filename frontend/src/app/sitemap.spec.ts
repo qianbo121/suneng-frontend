@@ -9,7 +9,10 @@ vi.mock('@/lib/api/news', () => ({
 
 import buildSitemap from '@/app/sitemap';
 import {
+  ABOUT_SEO,
   CONTINUOUS_HEAT_TREATMENT_LINE_SEO,
+  FURNACE_ENERGY_CONVERSION_HEAT_RECOVERY_SEO,
+  FURNACE_LINING_RENOVATION_GUIDE_SEO,
   FURNACE_RENOVATION_RISK_CYCLE_GUIDE_SEO,
   FURNACE_RENOVATION_OVERHAUL_SEO,
   INDUSTRIAL_FURNACE_QUOTE_PARAMS_SEO,
@@ -21,6 +24,8 @@ const DEEP_CRAWL_TARGETS = [
   '/zh/articles/gongye-lu-baojia-canshu',
   '/zh/articles/laojiu-rechuli-lu-daxiu-haishi-maixin',
   '/zh/solutions/rechuli-lu-gaizao-fengxian-zhouqi',
+  '/zh/solutions/rechuli-lu-dian-gai-ran-yure-huishou',
+  '/zh/solutions/rechuli-lu-luchen-fanxin',
   '/zh/solutions/rechuli-lu-wendu-bujun-zhenggai',
   '/zh/case/anonymous-tsingshan-1250-renovation',
   '/zh/case/henan-annealing-solution-line',
@@ -71,6 +76,17 @@ describe('sitemap freshness signals', () => {
         ?.lastModified,
     ).toEqual(new Date(FURNACE_RENOVATION_RISK_CYCLE_GUIDE_SEO.modifiedTime));
     expect(
+      byUrl.get('https://www.jssngyl.cn/zh/solutions/rechuli-lu-luchen-fanxin')
+        ?.lastModified,
+    ).toEqual(new Date(FURNACE_LINING_RENOVATION_GUIDE_SEO.modifiedTime));
+    expect(
+      byUrl.get('https://www.jssngyl.cn/zh/solutions/rechuli-lu-dian-gai-ran-yure-huishou')
+        ?.lastModified,
+    ).toEqual(new Date(FURNACE_ENERGY_CONVERSION_HEAT_RECOVERY_SEO.modifiedTime));
+    expect(byUrl.get('https://www.jssngyl.cn/zh/about')?.lastModified).toEqual(
+      new Date(ABOUT_SEO.modifiedTime),
+    );
+    expect(
       byUrl.get('https://www.jssngyl.cn/zh/products/detail/box-furnace')?.lastModified,
     ).toBeUndefined();
 
@@ -88,9 +104,7 @@ describe('sitemap freshness signals', () => {
       .map((entry) => entry.url);
     expect(july30Urls).toEqual([
       'https://www.jssngyl.cn/zh',
-      'https://www.jssngyl.cn/zh/service/furnace-renovation-overhaul',
-      'https://www.jssngyl.cn/zh/articles/gongye-lu-baojia-canshu',
-      'https://www.jssngyl.cn/zh/articles/laojiu-rechuli-lu-daxiu-haishi-maixin',
+      'https://www.jssngyl.cn/zh/about',
     ]);
   });
 
@@ -129,7 +143,7 @@ describe('sitemap freshness signals', () => {
     const entries = await buildSitemap();
     const urls = new Set(entries.map((entry) => entry.url));
 
-    expect(DEEP_CRAWL_TARGETS).toHaveLength(22);
+    expect(DEEP_CRAWL_TARGETS).toHaveLength(24);
     for (const path of DEEP_CRAWL_TARGETS) {
       expect(urls.has(`https://www.jssngyl.cn${path}`), path).toBe(true);
     }

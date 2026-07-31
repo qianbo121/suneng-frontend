@@ -5,7 +5,10 @@ import { absoluteUrl } from '@/lib/seo/metadata';
 import { getNewsList } from '@/lib/api/news';
 import { STATIC_PRODUCTS } from '@/constants/static-products';
 import {
+  ABOUT_SEO,
   HENAN_ANNEALING_SOLUTION_CASE_SEO,
+  FURNACE_ENERGY_CONVERSION_HEAT_RECOVERY_SEO,
+  FURNACE_LINING_RENOVATION_GUIDE_SEO,
   FURNACE_RENOVATION_RISK_CYCLE_GUIDE_SEO,
   FURNACE_RENOVATION_OVERHAUL_SEO,
   INDUSTRIAL_FURNACE_QUOTE_PARAMS_SEO,
@@ -87,7 +90,13 @@ function collectStaticRoutes(): MetadataRoute.Sitemap {
     { path: '/products', changeFrequency: 'weekly', priority: 0.9 },
     { path: '/service', changeFrequency: 'monthly', priority: 0.75 },
     { path: '/news', changeFrequency: 'weekly', priority: 0.7 },
-    { path: '/about', changeFrequency: 'monthly', priority: 0.6 },
+    {
+      path: '/about',
+      changeFrequency: 'monthly',
+      priority: 0.6,
+      lastModified: ABOUT_SEO.modifiedTime,
+      lastModifiedLocales: ['zh'],
+    },
     { path: '/partner', changeFrequency: 'monthly', priority: 0.65 },
     { path: '/strength', changeFrequency: 'monthly', priority: 0.65 },
     { path: '/strength/honors', changeFrequency: 'monthly', priority: 0.55 },
@@ -146,6 +155,18 @@ function collectStaticRoutes(): MetadataRoute.Sitemap {
       changeFrequency: 'monthly',
       priority: 0.7,
       lastModified: FURNACE_RENOVATION_RISK_CYCLE_GUIDE_SEO.modifiedTime,
+    },
+    {
+      path: '/solutions/rechuli-lu-luchen-fanxin',
+      changeFrequency: 'monthly',
+      priority: 0.7,
+      lastModified: FURNACE_LINING_RENOVATION_GUIDE_SEO.modifiedTime,
+    },
+    {
+      path: '/solutions/rechuli-lu-dian-gai-ran-yure-huishou',
+      changeFrequency: 'monthly',
+      priority: 0.7,
+      lastModified: FURNACE_ENERGY_CONVERSION_HEAT_RECOVERY_SEO.modifiedTime,
     },
     { path: '/solutions/rechuli-lu-changjia', changeFrequency: 'monthly', priority: 0.78 },
     { path: '/solutions/jiangsu-gongye-lu-changjia', changeFrequency: 'monthly', priority: 0.76 },

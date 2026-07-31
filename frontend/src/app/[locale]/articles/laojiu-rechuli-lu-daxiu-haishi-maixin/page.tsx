@@ -38,6 +38,8 @@ const contactPath = '/zh/contact';
 const jiningCasePath = '/zh/case/jining-support-roller-heat-treatment-line';
 const temperatureRemediationPath = '/zh/solutions/rechuli-lu-wendu-bujun-zhenggai';
 const renovationRiskPath = '/zh/solutions/rechuli-lu-gaizao-fengxian-zhouqi';
+const furnaceLiningRenovationPath = '/zh/solutions/rechuli-lu-luchen-fanxin';
+const energyConversionPath = '/zh/solutions/rechuli-lu-dian-gai-ran-yure-huishou';
 
 export const dynamicParams = false;
 
@@ -214,6 +216,16 @@ const relatedLinks = [
     title: '改造风险、周期与生产影响',
     href: renovationRiskPath,
     text: '决定改造前，先拆分停产窗口、隐蔽工程、切换回退和验收条件。',
+  },
+  {
+    title: '炉衬局部修还是整体翻新',
+    href: furnaceLiningRenovationPath,
+    text: '通过冷面、锚固、失效原因和工况变化判断修复范围，不只看热面损坏面积。',
+  },
+  {
+    title: '电改燃、燃改电与余热回收',
+    href: energyConversionPath,
+    text: '先核对能源基线、炉体、公辅、安全、排放和利用端，再决定是否改造。',
   },
   {
     title: '产品中心',

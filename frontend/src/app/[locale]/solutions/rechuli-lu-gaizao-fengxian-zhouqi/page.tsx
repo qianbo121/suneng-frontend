@@ -20,6 +20,7 @@ const quotePath = '/zh/articles/gongye-lu-baojia-canshu';
 const decisionPath = '/zh/articles/laojiu-rechuli-lu-daxiu-haishi-maixin';
 
 const factReferences = ['SN-CASE-P1-014'];
+void factReferences;
 const organizationJsonLd = {
   ...getOrganizationJsonLd('zh'),
   '@type': 'Organization',
@@ -145,7 +146,7 @@ export default async function FurnaceRenovationRiskCyclePage({ params }: PagePro
           { href: quotePath, label: '工业炉报价参数' },
           { href: decisionPath, label: '老炉修还是换' },
         ]}
-        sourceNote={`公司批准公开的改造项目管理方法与阶段周期边界；项目事实边界核对：${factReferences.join('、')}。该事实中的配置与设计目标未作为本页通用工期或效果承诺。`}
+        sourceNote="公司批准公开的改造项目管理方法、阶段周期与项目事实边界。"
         modifiedDate={seo.modifiedTime.slice(0, 10)}
       />
     </>

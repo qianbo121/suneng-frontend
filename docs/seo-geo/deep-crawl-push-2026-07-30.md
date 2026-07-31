@@ -119,3 +119,66 @@
 - 其余 9 个产品详情页进入下一额度周期的待提交队列。
 
 18:26（北京时间）复核生产 Nginx 日志：百度爬虫仍只命中 `/` 与 `/zh`，10 个已提交页尚未出现新的 `Baiduspider` 请求。API 成功只证明百度收到了 URL，不等于已经抓取或收录。
+
+## D+1 提前复核
+
+执行时间：2026-07-30 18:33（北京时间）。
+
+说明：本次按项目负责人要求在提交当日先行执行，属于 D+1 的提前基线，不等同于完整 24 小时观察窗口。正式 D+1 仍需在下一日复核。
+
+统计口径：
+
+- 时间起点：2026-07-30 16:30（北京时间），覆盖百度主动推送前后的日志；
+- 页面范围：当日成功提交的 10 个 URL；
+- 爬虫范围：Baiduspider、GPTBot、OAI-SearchBot、ClaudeBot、Claude-SearchBot、PerplexityBot、Bytespider 等已分类爬虫。
+
+结果：
+
+- 10 个 URL 的目标爬虫命中数均为 `0`；
+- 同期 Baiduspider 访问了 `/` 与 `/zh`，状态分别为 `307` 和 `200`；
+- 暂无证据表明百度或 AI 系统爬虫已经访问这 10 个提交页；
+- 不把接口 `success: 10` 写成已抓取、已收录或已引用。
+
+## D+3 技术预检
+
+执行时间：2026-07-30 18:33（北京时间）。
+
+说明：本次先完成不依赖时间经过的技术检查。正式 D+3 到时只需复核日志，并对仍未抓取的页面执行百度搜索资源平台“抓取诊断”。
+
+| 页面 | HTTP | canonical | robots | sitemap | 首页 HTML 入口 | 其他入口 |
+|---|---:|---|---|---:|---:|---|
+| `/zh/service/furnace-renovation-overhaul` | 200 | 自指 | index, follow | 1 | 2 | 产品中心 1、服务页 1 |
+| `/zh/solutions/rechuli-lu-changjia` | 200 | 自指 | index, follow | 1 | 1 | — |
+| `/zh/solutions/jiangsu-gongye-lu-changjia` | 200 | 自指 | index, follow | 1 | 1 | — |
+| `/zh/case/jining-support-roller-heat-treatment-line` | 200 | 自指 | index, follow | 1 | 1 | — |
+| `/zh/case/henan-annealing-solution-line` | 200 | 自指 | index, follow | 1 | 1 | — |
+| `/zh/articles/gongye-lu-baojia-canshu` | 200 | 自指 | index, follow | 1 | 2 | 产品中心 1、服务页 1 |
+| `/zh/articles/laojiu-rechuli-lu-daxiu-haishi-maixin` | 200 | 自指 | index, follow | 1 | 2 | 产品中心 1、服务页 1 |
+| `/zh/solutions/continuous-heat-treatment-line` | 200 | 自指 | index, follow | 1 | 3 | 产品中心 1 |
+| `/zh/products/detail/trolley-furnace` | 200 | 自指 | index, follow | 1 | 2 | 产品中心 1 |
+| `/zh/products/detail/annealing-solution-line` | 200 | 自指 | index, follow | 1 | 2 | 产品中心 1 |
+
+结论：
+
+- 10/10 页面不存在 404、noindex、canonical 指错或 sitemap 缺失；
+- 10/10 页面均有首页标准 HTML 入口，最短发现深度为一跳；
+- 当前没有理由修改站内链接或制造新的更新时间；
+- 百度官方抓取诊断已于 2026-07-30 18:43–18:53（北京时间）完成首批 5 个重点页面的 PC UA 检测，结果均为“抓取成功”。
+
+### 百度官方抓取诊断结果
+
+| 页面 | 百度状态 | HTTP | 下载时长 | 抓取时间 |
+|---|---|---:|---:|---|
+| `/zh/service/furnace-renovation-overhaul` | 抓取成功 | HTTP/2 200 | 0.704 秒 | 2026-07-30 18:43:23 |
+| `/zh/solutions/rechuli-lu-changjia` | 抓取成功 | HTTP/2 200 | 0.295 秒 | 2026-07-30 18:44:43 |
+| `/zh/solutions/jiangsu-gongye-lu-changjia` | 抓取成功 | HTTP/2 200 | 0.264 秒 | 2026-07-30 18:47:02 |
+| `/zh/case/jining-support-roller-heat-treatment-line` | 抓取成功 | HTTP/2 200 | 0.222 秒 | 2026-07-30 18:52:30 |
+| `/zh/case/henan-annealing-solution-line` | 抓取成功 | HTTP/2 200 | 0.269 秒 | 2026-07-30 18:53:34 |
+
+详情页核对：
+
+- 五条记录的“提交网址”与“抓取网址”完全一致；
+- 抓取 UA 均为百度平台展示的 `Baiduspider/2.0` PC UA；
+- 返回内容类型为 `text/html; charset=utf-8`，百度详情页可以展开看到实际 HTML，而非空响应；
+- 本次只证明百度蜘蛛当前能够正常抓取页面，不等同于已收录、已排序或已被 AI 引用；
+- 正式 D+1 继续以生产 Nginx 日志为准；正式 D+3 对仍无真实爬虫访问的其余页面再分批诊断，不制造更新时间。

@@ -26,12 +26,14 @@ export function GeoSection({
   return (
     <section id={id} className="border-t border-[#e2e8f0] py-12 lg:py-16">
       <div className="mx-auto max-w-[1180px] px-5 lg:px-8">
-        {eyebrow ? (
-          <p className={cn('text-[13px] font-semibold text-[#c51624]', eyebrowClassName)}>{eyebrow}</p>
-        ) : null}
-        <h2 className={cn('text-[26px] font-semibold leading-[1.28] text-[#101828] lg:text-[38px]', eyebrow && 'mt-3')}>
-          {title}
-        </h2>
+        <div className="text-center">
+          {eyebrow ? (
+            <p className={cn('text-[13px] font-semibold text-[#c51624]', eyebrowClassName)}>{eyebrow}</p>
+          ) : null}
+          <h2 className={cn('text-[26px] font-semibold leading-[1.28] text-[#101828] lg:text-[38px]', eyebrow && 'mt-3')}>
+            {title}
+          </h2>
+        </div>
         <div className="mt-8">{children}</div>
       </div>
     </section>
@@ -145,16 +147,20 @@ export function GeoContactCta({
 export function GeoReviewNote({
   modifiedDate,
   sourceNote = '项目事实台账与本页资料',
+  reviewerName,
 }: {
   modifiedDate: string;
   sourceNote?: string;
+  reviewerName?: string;
 }) {
   return (
     <aside aria-label="内容审核信息" className="border-b border-[#e2e8f0] bg-[#f8fafc]">
       <div className="mx-auto grid max-w-[1180px] gap-4 px-5 py-5 text-[14px] leading-[1.75] text-[#475467] sm:grid-cols-2 lg:px-8">
         <p>
-          <span className="font-semibold text-[#667085]">发布复核：</span>
-          <strong className="font-semibold text-[#101828]">江苏苏能工业炉有限公司</strong>
+          <span className="font-semibold text-[#667085]">{reviewerName ? '内容复核：' : '发布复核：'}</span>
+          <strong className="font-semibold text-[#101828]">
+            {reviewerName ?? '江苏苏能工业炉有限公司'}
+          </strong>
         </p>
         <p>
           <span className="font-semibold text-[#667085]">内容更新：</span>

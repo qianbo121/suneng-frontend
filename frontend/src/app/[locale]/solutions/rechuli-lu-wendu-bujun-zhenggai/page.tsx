@@ -20,6 +20,7 @@ const quotePath = '/zh/articles/gongye-lu-baojia-canshu';
 const decisionPath = '/zh/articles/laojiu-rechuli-lu-daxiu-haishi-maixin';
 
 const factReferences = ['SN-CASE-P1-013'];
+void factReferences;
 const organizationJsonLd = {
   ...getOrganizationJsonLd('zh'),
   '@type': 'Organization',
@@ -140,7 +141,7 @@ export default async function TemperatureUniformityRemediationPage({ params }: P
           { href: quotePath, label: '工业炉报价参数' },
           { href: decisionPath, label: '老炉修还是换' },
         ]}
-        sourceNote={`公司批准公开的温度诊断方法与验收边界；项目事实边界核对：${factReferences.join('、')}。该事实的均匀性设计要求未作为本页通用承诺。`}
+        sourceNote="公司批准公开的温度诊断方法、项目事实边界与验收口径。"
         modifiedDate={seo.modifiedTime.slice(0, 10)}
       />
     </>

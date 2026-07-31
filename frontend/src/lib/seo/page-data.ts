@@ -107,6 +107,7 @@ export const ABOUT_SEO = {
   title: '关于苏能工业炉｜公司资质、业务边界与案例',
   description: '了解江苏苏能工业炉有限公司的主营业务、资质体系、工业炉与热处理设备制造能力，以及明确的不承接业务边界。',
   keywords: ['苏能工业炉', '江苏苏能工业炉有限公司', '苏能资质', '苏能案例', '工业炉制造企业'],
+  modifiedTime: '2026-07-30',
 };
 
 export const CONTACT_SEO = {
@@ -157,7 +158,7 @@ export const FURNACE_RENOVATION_OVERHAUL_SEO = {
   ogImage: '/images/service/after-sales-hero.png',
   ogType: 'website',
   canonicalUrl: 'https://www.jssngyl.cn/zh/service/furnace-renovation-overhaul',
-  modifiedTime: '2026-07-30',
+  modifiedTime: '2026-07-31T13:40:14+08:00',
 };
 
 export const INDUSTRIAL_FURNACE_QUOTE_PARAMS_SEO = {
@@ -181,7 +182,7 @@ export const INDUSTRIAL_FURNACE_QUOTE_PARAMS_SEO = {
   ogType: 'article',
   canonicalUrl: 'https://www.jssngyl.cn/zh/articles/gongye-lu-baojia-canshu',
   publishedTime: '2026-06-12T15:00:00+08:00',
-  modifiedTime: '2026-07-30',
+  modifiedTime: '2026-07-31T13:40:15+08:00',
 };
 
 export const OLD_HEAT_TREATMENT_FURNACE_REPAIR_OR_REPLACE_SEO = {
@@ -203,7 +204,7 @@ export const OLD_HEAT_TREATMENT_FURNACE_REPAIR_OR_REPLACE_SEO = {
   ogType: 'article',
   canonicalUrl: 'https://www.jssngyl.cn/zh/articles/laojiu-rechuli-lu-daxiu-haishi-maixin',
   publishedTime: '2026-06-13T10:00:00+08:00',
-  modifiedTime: '2026-07-30',
+  modifiedTime: '2026-07-31T13:40:16+08:00',
 };
 
 export const TEMPERATURE_UNIFORMITY_REMEDIATION_SEO = {
@@ -244,6 +245,46 @@ export const FURNACE_RENOVATION_RISK_CYCLE_GUIDE_SEO = {
   ogImage: '/images/service/after-sales-hero.png',
   publishedTime: '2026-07-30T23:58:53+08:00',
   modifiedTime: '2026-07-31T00:01:56+08:00',
+};
+
+export const FURNACE_LINING_RENOVATION_GUIDE_SEO = {
+  title: '热处理炉炉衬翻新方案｜旧衬诊断、耐材选型、密封与烘炉验收',
+  description:
+    '热处理炉炉衬翻新应先检查热面、冷面钢板、锚固体系、密封接口和失效原因。本文说明局部修复、扩大拆检、材料施工、烘炉与外壁温升验收边界。',
+  keywords: [
+    '热处理炉炉衬翻新方案',
+    '炉衬翻新',
+    '工业炉炉衬维修',
+    '耐火纤维炉衬',
+    '工业炉烘炉',
+    '炉衬验收',
+  ],
+  ogTitle: '热处理炉炉衬翻新方案｜诊断、选材、施工与验收',
+  ogDescription:
+    '从热面、冷面钢板、锚固、密封和失效原因判断局部修复或扩大拆检，并保留材料、烘炉和外壁温升验收证据。',
+  ogImage: '/images/service/after-sales-hero.png',
+  publishedTime: '2026-07-31T13:40:12+08:00',
+  modifiedTime: '2026-07-31T13:40:12+08:00',
+};
+
+export const FURNACE_ENERGY_CONVERSION_HEAT_RECOVERY_SEO = {
+  title: '热处理炉电改燃、燃改电和余热回收怎么选？能源、工艺与安全边界',
+  description:
+    '热处理炉电改燃、燃改电与余热回收不能只比能源单价。本文说明同工况能源基线、炉体、公辅、安全、排放、停产、FAT/SAT 与回报验证边界。',
+  keywords: [
+    '热处理炉电加热改燃气方案',
+    '热处理炉燃气改电加热改造',
+    '热处理炉余热回收改造',
+    '热处理炉节能改造能省多少电',
+    '热处理炉技改投资回报测算',
+    '工业炉能源改造',
+  ],
+  ogTitle: '热处理炉能源改造怎么选？电改燃、燃改电与余热回收',
+  ogDescription:
+    '建立同工况能源基线，核对炉体、公辅、安全、排放、维护和停产边界，再判断电改燃、燃改电或余热回收。',
+  ogImage: '/images/service/after-sales-hero.png',
+  publishedTime: '2026-07-31T13:40:13+08:00',
+  modifiedTime: '2026-07-31T13:40:13+08:00',
 };
 
 export const HEAT_TREATMENT_FURNACE_MANUFACTURER_SEO = {

@@ -54,7 +54,7 @@ export function GeoFaqGridClient({
             <button
               id={questionId}
               type="button"
-              className="flex w-full items-start justify-between gap-4 text-left text-[16px] font-semibold leading-[1.6] text-[#101828]"
+              className="flex min-h-11 w-full items-center justify-between gap-4 text-left text-[16px] font-semibold leading-[1.6] text-[#101828]"
               aria-expanded={isOpen}
               aria-controls={answerId}
               onClick={() => toggleItem(index)}

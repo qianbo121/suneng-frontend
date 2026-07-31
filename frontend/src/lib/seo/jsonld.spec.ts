@@ -29,6 +29,7 @@ describe('SEO JSON-LD entities', () => {
 
   it('keeps one canonical business identity with the real sales phone', () => {
     const organization = getOrganizationJsonLd('zh');
+    const serialized = JSON.stringify(organization);
 
     expect(organization).toMatchObject({
       '@type': 'LocalBusiness',
@@ -42,8 +43,12 @@ describe('SEO JSON-LD entities', () => {
       },
     });
     expect(organization).not.toHaveProperty('numberOfEmployees');
-    expect(JSON.stringify(organization)).not.toContain('ISO 14001');
-    expect(JSON.stringify(organization)).not.toContain('ISO 45001');
+    expect(serialized).not.toContain('ISO 14001');
+    expect(serialized).not.toContain('ISO 45001');
+    expect(serialized).not.toContain('姜堰市苏能工业炉有限公司');
+    expect(serialized).not.toContain('jssngyl.com');
+    expect(serialized).not.toContain('13952644646');
+    expect(serialized).not.toContain('88540315');
   });
 
   it('adds the real technical reviewer only to content explicitly marked as reviewed', () => {
@@ -88,6 +93,27 @@ describe('SEO JSON-LD entities', () => {
         }),
       ]),
     );
+  });
+
+  it('supports the explicitly confirmed Wang reviewer on authority content', () => {
+    const article = getArticleJsonLd({
+      slug: 'authority-sample',
+      path: '/zh/solutions/authority-sample',
+      headline: '权威主题页',
+      description: '权威主题页说明',
+      datePublished: '2026-07-31T13:40:12+08:00',
+      dateModified: '2026-07-31T13:40:12+08:00',
+      reviewerName: '王工',
+    });
+
+    expect(article).toMatchObject({
+      reviewedBy: {
+        '@type': 'Person',
+        '@id': 'https://www.jssngyl.cn/#technical-reviewer-wang',
+        name: '王工',
+        worksFor: { '@id': 'https://www.jssngyl.cn/#organization' },
+      },
+    });
   });
 
   it('connects product facts to one crawlable Product entity', () => {
