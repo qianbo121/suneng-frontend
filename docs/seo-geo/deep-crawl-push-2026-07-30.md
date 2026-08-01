@@ -249,6 +249,83 @@
 - 站内发现、抓取权限和页面可用性均无需紧急修复；
 - 不重复提交 IndexNow，不为催抓修改正文或 `lastmod`；
 - 2026-08-01 执行新 6 页正式 D+1 家族级复核，2026-08-03 执行 D+3 复核；
-- D+3 若 Bytespider 仍为 0/6，再评估字节生态外部发现入口，不先用站内重复链接或伪更新解决。
+- D+3 若 Bytespider 仍为 0/6，只记录家族级结果并评估字节生态外部发现入口，不先用站内重复链接或伪更新解决；该结果不得自动触发头条号或文档平台发布，站外动作仍须通过 P6 的脱敏、事实边界、账号认证、渠道归属和终审门。
 
 监测系统同步升级：生产版本 `e32b729` 已把 GPTBot、OAI-SearchBot 和 Bytespider 拆成主指标，零覆盖家族固定显示，并将 `robots.txt` / sitemap 请求与内容页抓取分开。
+
+## 正式 D+1：百度主动推送 10 个固定 URL 逐页复核
+
+执行时间：2026-08-01 02:30（北京时间）。
+
+统计口径：
+
+- 时间窗口：2026-07-30 16:30 至 2026-08-01 02:30（北京时间）；
+- 数据来源：生产持久化日志 `/data/nginx-logs/www.access.json.2.gz`、`www.access.json.1`、`www.access.json`；
+- 页面集合固定为 2026-07-30 百度 API 返回 `success: 10` 的 10 个 URL，不中途更换分母；
+- 搜索爬虫包括 Baiduspider、Googlebot、Bingbot、YisouSpider、360Spider、Sogou；
+- AI 系统爬虫包括 GPTBot、OAI-SearchBot、ClaudeBot、Claude-SearchBot、PerplexityBot、Bytespider；
+- `ChatGPT-User`、`Claude-User`、`Perplexity-User` 归为用户触发取页，不并入 AI 系统爬虫；
+- 已排除 2026-07-30 18:43–18:53 的 5 条百度官方抓取诊断；同时按 `monitoring_probe` 排除人工验证探针，本窗口内这 10 页没有命中该探针标记；
+- 时间均为北京时间；UA 在表内保留爬虫名称与版本，全部命中 HTTP 状态均为 `200`。
+
+### 家族汇总
+
+| 爬虫家族 | 请求数 | 覆盖页数 | 结论 |
+|---|---:|---:|---|
+| Baiduspider | 0 | 0/10 | 排除官方抓取诊断后，尚无自然访问 |
+| GPTBot/1.4 | 11 | 9/10 | 模型改进抓取；不等于 ChatGPT 搜索引用 |
+| OAI-SearchBot | 0 | 0/10 | ChatGPT 搜索链路尚无内容页访问 |
+| ClaudeBot | 0 | 0/10 | 本固定集合尚无访问 |
+| Claude-SearchBot | 0 | 0/10 | 本固定集合尚无访问 |
+| PerplexityBot | 0 | 0/10 | 本固定集合尚无访问 |
+| Bytespider | 3 | 1/10 | 仅命中连续热处理生产线页；不等于豆包已引用 |
+| YisouSpider | 16 | 6/10 | 搜索爬虫自然访问 |
+| 360Spider | 5 | 1/10 | 搜索爬虫自然访问 |
+| Bingbot/2.0 | 3 | 2/10 | 搜索爬虫自然访问 |
+| Googlebot/2.1 | 2 | 2/10 | 搜索爬虫自然访问 |
+| Sogou | 0 | 0/10 | 本固定集合尚无访问 |
+
+覆盖率：
+
+- 搜索爬虫覆盖：`9/10`（90%）；
+- 其中 Baiduspider 自然覆盖：`0/10`（0%）；
+- AI 系统爬虫覆盖：`9/10`（90%），其中 9 页均由 GPTBot 覆盖，Bytespider 额外覆盖其中 1 页；
+- 搜索或 AI 系统爬虫合并覆盖：`10/10`（100%）；
+- 用户触发取页覆盖：`0/10`（0%）。
+
+### 逐页真实访问
+
+| 页面 | 命中时间 | UA | HTTP | 次数 |
+|---|---|---|---:|---:|
+| `/zh/service/furnace-renovation-overhaul` | 07-30 23:45:50；07-31 00:53:49 | `YisouSpider`；`YisouSpider/5.0` iPhone | 200 | 2 |
+| 同上 | 07-31 15:31:51 | `GPTBot/1.4` | 200 | 1 |
+| `/zh/solutions/rechuli-lu-changjia` | 07-31 15:31:52 | `GPTBot/1.4` | 200 | 1 |
+| `/zh/solutions/jiangsu-gongye-lu-changjia` | 07-31 15:31:30 | `GPTBot/1.4` | 200 | 1 |
+| 同上 | 08-01 01:56:11；01:56:34 | `bingbot/2.0`（Chrome/116、Chrome/136） | 200 | 2 |
+| `/zh/case/jining-support-roller-heat-treatment-line` | 07-31 15:31:28 | `GPTBot/1.4` | 200 | 1 |
+| 同上 | 07-31 21:48:08 | `Googlebot/2.1` Mobile | 200 | 1 |
+| `/zh/case/henan-annealing-solution-line` | 07-31 15:31:51 | `GPTBot/1.4` | 200 | 1 |
+| 同上 | 07-31 23:03:08 | `Googlebot/2.1` Mobile | 200 | 1 |
+| `/zh/articles/gongye-lu-baojia-canshu` | 07-31 00:53:48 | `YisouSpider/5.0` iPhone | 200 | 1 |
+| 同上 | 07-31 15:31:23；16:34:34 | `GPTBot/1.4` | 200 | 2 |
+| `/zh/articles/laojiu-rechuli-lu-daxiu-haishi-maixin` | 07-30 23:45:50；07-31 00:53:49 | `YisouSpider`；`YisouSpider/5.0` iPhone | 200 | 2 |
+| 同上 | 07-31 15:31:33；16:34:49 | `GPTBot/1.4` | 200 | 2 |
+| `/zh/solutions/continuous-heat-treatment-line` | 07-30 21:04:17、21:04:20、21:04:22、21:04:30；07-31 06:29:27 | `360Spider` | 200 | 5 |
+| 同上 | 07-30 21:30:23；07-31 16:34:33、16:44:30 | `Bytespider` | 200 | 3 |
+| 同上 | 07-30 22:15:17、22:19:06、23:01:01；07-31 00:53:47 | `YisouSpider`；`YisouSpider/5.0` iPhone | 200 | 4 |
+| 同上 | 07-31 15:31:48 | `GPTBot/1.4` | 200 | 1 |
+| `/zh/products/detail/trolley-furnace` | 07-30 22:19:29、23:01:04；07-31 00:53:48 | `YisouSpider`；`YisouSpider/5.0` iPhone | 200 | 3 |
+| 同上 | 07-31 16:20:43 | `bingbot/2.0` Chrome/116 | 200 | 1 |
+| 同上 | 07-31 16:34:46 | `GPTBot/1.4` | 200 | 1 |
+| `/zh/products/detail/annealing-solution-line` | 07-30 22:15:17、22:19:06、23:01:04；07-31 00:53:48 | `YisouSpider`；`YisouSpider/5.0` iPhone | 200 | 4 |
+
+### 未抓取页面与判断
+
+- 按“搜索或 AI 系统爬虫至少一个家族真实访问”计算，仍未抓取页面为 `0/10`；
+- 按搜索爬虫单独计算，`/zh/solutions/rechuli-lu-changjia` 尚无搜索爬虫访问，但已有 GPTBot 真实访问；
+- 按 AI 系统爬虫单独计算，`/zh/products/detail/annealing-solution-line` 尚无 AI 系统爬虫访问，但已有 YisouSpider 真实访问；
+- 按 Baiduspider 单独计算，10 页在排除官方诊断后均未出现自然访问；因此百度 `success: 10` 仍只能表述为“接口接收”，不能表述为百度已自然抓取或收录；
+- 40 条纳入统计的目标爬虫请求全部返回 200，未见 3xx、4xx 或 5xx；
+- 本轮不修改前端页面、不制造 `lastmod`、不重复提交索引，继续按 D+3 / D+7 固定集合观察。
+
+青山案例提醒：`F01–F06` 的原始底稿、技术口径和证据记录仍待继续处理；其中 `F02–F04` 仍待唐工确认经济测算口径，`F06` 仍待第三方检测或正式验收报告。资料完成前不做青山案例主动索引提交。
