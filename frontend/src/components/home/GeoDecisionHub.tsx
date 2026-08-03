@@ -72,7 +72,7 @@ export function GeoDecisionHub({ locale }: { locale: Locale }) {
   return (
     <section aria-labelledby="geo-decision-hub-title" className="bg-[#f5f7fa] py-10 md:py-12">
       <div className="mx-auto w-full max-w-[1440px] px-4 md:px-6 lg:px-8">
-        <div className="flex flex-col gap-4 border-b border-[#dce3ec] pb-7 lg:flex-row lg:items-end lg:justify-between">
+        <div className="flex flex-col gap-4 border-b border-[#dce3ec] pb-7 xl:flex-row xl:items-end xl:justify-between">
           <div>
             <p className="text-[12px] font-semibold uppercase tracking-[0.2em] text-[#d7172f]">
               Procurement answers
@@ -84,7 +84,7 @@ export function GeoDecisionHub({ locale }: { locale: Locale }) {
               采购决策与项目证据
             </h2>
           </div>
-          <p className="max-w-[620px] text-[15px] leading-[1.85] text-[#667085] lg:text-right">
+          <p className="text-[15px] leading-[1.85] text-[#667085] md:whitespace-nowrap xl:text-right">
             从报价参数、改造边界、整线方案到项目测算，先用现有技术资料完成判断，再提交具体工况。
           </p>
         </div>
