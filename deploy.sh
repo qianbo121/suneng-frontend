@@ -44,9 +44,24 @@ if ! grep -Fq 'server_name factory.jssngyl.cn;' nginx.prod.conf.template; then
   exit 1
 fi
 
+# The production host also serves the separately deployed Chengwen app through
+# this shared Nginx container. Refuse a full-site deploy if the checked-in
+# template would silently remove that route.
+if docker inspect chengwen-web >/dev/null 2>&1 \
+  && ! grep -Fq 'server_name chengwen.jssngyl.cn;' nginx.prod.conf.template; then
+  echo "Refusing deployment: nginx.prod.conf.template is missing the active Chengwen route."
+  exit 1
+fi
+
 work_scan_rule_count="$(grep -Fc 'location ^~ /h5/work-scan/' nginx.prod.conf.template || true)"
 if [ "$work_scan_rule_count" -ne 3 ]; then
   echo "Refusing deployment: expected 3 legacy work-scan redirect rules, found $work_scan_rule_count."
+  exit 1
+fi
+
+root_redirect_rule_count="$(grep -Fc 'return 308 https://$DOMAIN/zh;' nginx.prod.conf.template || true)"
+if [ "$root_redirect_rule_count" -ne 1 ]; then
+  echo "Refusing deployment: expected exactly one permanent www root redirect, found $root_redirect_rule_count."
   exit 1
 fi
 
@@ -69,14 +84,24 @@ bash backup.sh
 docker compose --env-file "$ENV_FILE" -f "$COMPOSE_FILE" run --rm backend npx prisma migrate deploy
 docker compose --env-file "$ENV_FILE" -f "$COMPOSE_FILE" up -d
 
-# A bind-mounted template does not regenerate /etc/nginx/nginx.conf by itself.
+# A bind-mounted single file can keep pointing at the pre-pull inode after Git
+# replaces the host file. Copy the checked-in template into the running
+# container explicitly, then render from that deployment copy. This guarantees
+# the candidate is built from the bytes just audited above.
+nginx_container_id="$(docker compose --env-file "$ENV_FILE" -f "$COMPOSE_FILE" ps -q nginx)"
+if [ -z "$nginx_container_id" ]; then
+  echo "Refusing deployment: nginx container is not running."
+  exit 1
+fi
+docker cp nginx.prod.conf.template "$nginx_container_id:/tmp/nginx.conf.template.deploy"
+
 # Render with the exact same substitution list used by the container command,
 # test the candidate before replacing the active file, then reload gracefully.
 docker compose --env-file "$ENV_FILE" -f "$COMPOSE_FILE" exec -T \
   -e 'NGINX_SUBST_VARS=$DOMAIN $ADMIN_DOMAIN' nginx sh -lc '
     set -eu
     candidate=/tmp/nginx.conf.deploy
-    envsubst "$NGINX_SUBST_VARS" < /etc/nginx/nginx.conf.template > "$candidate"
+    envsubst "$NGINX_SUBST_VARS" < /tmp/nginx.conf.template.deploy > "$candidate"
     nginx -t -c "$candidate"
     cp "$candidate" /etc/nginx/nginx.conf
     nginx -t
