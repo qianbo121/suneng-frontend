@@ -35,15 +35,15 @@ const heroStats = [
     key: 'projects',
     value: 150,
     valueText: { zh: '', en: '' },
-    unit: { zh: '+项', en: '+' },
-    label: { zh: '工业炉新建与改造项目', en: 'New-build & Retrofit Projects' },
+    unit: { zh: '+人', en: '+' },
+    label: { zh: '在职人数', en: 'Employees' },
   },
   {
     key: 'facility-area',
     value: 14700,
     valueText: { zh: '', en: '' },
     unit: { zh: '㎡', en: 'm²' },
-    label: { zh: '生产基地占地（公司自报）', en: 'Production Site (Company-reported)' },
+    label: { zh: '车间占地', en: 'Production Site (Company-reported)' },
   },
 ] as const;
 const heroTitle = {
