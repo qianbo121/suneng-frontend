@@ -16,14 +16,14 @@ jobs:
     name: Frontend (lint + test + build)
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           # lastmod governance compares committed content with its parent.
           fetch-depth: 2
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         with:
           node-version: 22.23.1
-      - uses: pnpm/action-setup@v4
+      - uses: pnpm/action-setup@v6
       - name: Install
         run: pnpm install --frozen-lockfile
       - name: Secret guard
@@ -68,11 +68,11 @@ jobs:
     name: Backend (lint + typecheck + test + build)
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
         with:
           node-version: 22.23.1
-      - uses: pnpm/action-setup@v4
+      - uses: pnpm/action-setup@v6
       - name: Install
         run: pnpm install --frozen-lockfile
       - name: Generate Prisma client
@@ -90,11 +90,11 @@ jobs:
     name: Admin (lint + test + build)
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
         with:
           node-version: 22.23.1
-      - uses: pnpm/action-setup@v4
+      - uses: pnpm/action-setup@v6
       - name: Install
         run: pnpm install --frozen-lockfile
       - name: Lint
