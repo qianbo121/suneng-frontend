@@ -20,6 +20,7 @@ export const PRODUCT_DETAIL_SEO: Record<
     description: string;
     keywords: string[];
     alternateName: string[];
+    modifiedTime?: string;
   }
 > = {
   'trolley-furnace': {
@@ -28,6 +29,7 @@ export const PRODUCT_DETAIL_SEO: Record<
       '江苏苏能工业炉提供台车炉、台车式热处理炉、台车式电阻炉等非标工业炉定制服务，适用于大型工件、铸件、焊接件、模具、结构件的退火、回火、正火、淬火加热等热处理工艺。',
     keywords: ['台车炉', '台车式炉', '台车式工业炉', '台车式热处理炉', '台车式电阻炉', '台车炉厂家', '台车炉定制', '台车炉价格'],
     alternateName: ['台车式炉', '台车式工业炉', '台车式热处理炉', '台车式电阻炉', 'Trolley Type Heat Treatment Furnace'],
+    modifiedTime: '2026-07-29',
   },
   'box-furnace': {
     title: '箱式炉厂家｜箱式热处理炉、箱式电阻炉定制',
@@ -105,6 +107,7 @@ export const ABOUT_SEO = {
   title: '关于苏能工业炉｜公司资质、业务边界与案例',
   description: '了解江苏苏能工业炉有限公司的主营业务、资质体系、工业炉与热处理设备制造能力，以及明确的不承接业务边界。',
   keywords: ['苏能工业炉', '江苏苏能工业炉有限公司', '苏能资质', '苏能案例', '工业炉制造企业'],
+  modifiedTime: '2026-07-30',
 };
 
 export const CONTACT_SEO = {
@@ -155,6 +158,7 @@ export const FURNACE_RENOVATION_OVERHAUL_SEO = {
   ogImage: '/images/service/after-sales-hero.png',
   ogType: 'website',
   canonicalUrl: 'https://www.jssngyl.cn/zh/service/furnace-renovation-overhaul',
+  modifiedTime: '2026-07-31T14:26:10+08:00',
 };
 
 export const INDUSTRIAL_FURNACE_QUOTE_PARAMS_SEO = {
@@ -178,7 +182,7 @@ export const INDUSTRIAL_FURNACE_QUOTE_PARAMS_SEO = {
   ogType: 'article',
   canonicalUrl: 'https://www.jssngyl.cn/zh/articles/gongye-lu-baojia-canshu',
   publishedTime: '2026-06-12T15:00:00+08:00',
-  modifiedTime: '2026-06-12T15:00:00+08:00',
+  modifiedTime: '2026-07-31T13:40:15+08:00',
 };
 
 export const OLD_HEAT_TREATMENT_FURNACE_REPAIR_OR_REPLACE_SEO = {
@@ -200,7 +204,127 @@ export const OLD_HEAT_TREATMENT_FURNACE_REPAIR_OR_REPLACE_SEO = {
   ogType: 'article',
   canonicalUrl: 'https://www.jssngyl.cn/zh/articles/laojiu-rechuli-lu-daxiu-haishi-maixin',
   publishedTime: '2026-06-13T10:00:00+08:00',
-  modifiedTime: '2026-06-13T10:00:00+08:00',
+  modifiedTime: '2026-07-30',
+};
+
+export const TEMPERATURE_UNIFORMITY_REMEDIATION_SEO = {
+  title: '热处理炉温度不均怎么整改？测温、气流、密封、装炉与验收口径',
+  description:
+    '热处理炉温度不均不能只调温控参数。本文说明测试条件、测温校准、加热分区、循环风与导流、炉门密封、炉衬、装炉方式和负载复测。',
+  keywords: [
+    '热处理炉温度不均怎么整改',
+    '工业炉改造后温度还是不均',
+    '热处理炉温度均匀性',
+    '工业炉温度均匀性验收',
+    '热处理炉温度不均改造厂家',
+    '工业炉改造验收',
+  ],
+  ogTitle: '热处理炉温度不均整改指南｜诊断、改造与验收',
+  ogDescription:
+    '从测温校准、加热分区、循环风、密封炉衬到装炉工艺，建立热处理炉温度不均的诊断与复测闭环。',
+  ogImage: '/images/service/after-sales-hero.png',
+  publishedTime: '2026-07-30T23:58:04+08:00',
+  modifiedTime: '2026-07-31T00:01:55+08:00',
+};
+
+export const FURNACE_RENOVATION_RISK_CYCLE_GUIDE_SEO = {
+  title: '热处理炉改造有哪些风险？停产周期、施工切换与验收失败预防',
+  description:
+    '热处理炉改造风险来自原炉状态、范围、旧新接口、隐蔽工程、停产窗口和验收口径。本文说明周期拆分、预制切换、回退、负载验证和责任边界。',
+  keywords: [
+    '热处理炉节能改造有哪些风险',
+    '老旧热处理炉改造失败的原因',
+    '热处理炉改造会影响生产吗',
+    '热处理炉节能改造停产多久',
+    '热处理炉改造周期一般多久',
+    '工业炉改造风险',
+  ],
+  ogTitle: '热处理炉改造风险与周期指南｜停产、切换和验收',
+  ogDescription:
+    '把老炉诊断、隐蔽工程、停产窗口、预制切换、调试验收和责任边界写进一套可执行文件。',
+  ogImage: '/images/service/after-sales-hero.png',
+  publishedTime: '2026-07-30T23:58:53+08:00',
+  modifiedTime: '2026-07-31T00:01:56+08:00',
+};
+
+export const FURNACE_LINING_RENOVATION_GUIDE_SEO = {
+  title: '热处理炉炉衬翻新方案｜旧衬诊断、耐材选型、密封与烘炉验收',
+  description:
+    '热处理炉炉衬翻新应先检查热面、冷面钢板、锚固体系、密封接口和失效原因。本文说明局部修复、扩大拆检、材料施工、烘炉与外壁温升验收边界。',
+  keywords: [
+    '热处理炉炉衬翻新方案',
+    '炉衬翻新',
+    '工业炉炉衬维修',
+    '耐火纤维炉衬',
+    '工业炉烘炉',
+    '炉衬验收',
+  ],
+  ogTitle: '热处理炉炉衬翻新方案｜诊断、选材、施工与验收',
+  ogDescription:
+    '从热面、冷面钢板、锚固、密封和失效原因判断局部修复或扩大拆检，并保留材料、烘炉和外壁温升验收证据。',
+  ogImage: '/images/service/after-sales-hero.png',
+  publishedTime: '2026-07-31T13:40:12+08:00',
+  modifiedTime: '2026-07-31T13:40:12+08:00',
+};
+
+export const FURNACE_ENERGY_CONVERSION_HEAT_RECOVERY_SEO = {
+  title: '热处理炉电改燃、燃改电和余热回收怎么选？能源、工艺与安全边界',
+  description:
+    '热处理炉电改燃、燃改电与余热回收不能只比能源单价。本文说明同工况能源基线、炉体、公辅、安全、排放、停产、FAT/SAT 与回报验证边界。',
+  keywords: [
+    '热处理炉电加热改燃气方案',
+    '热处理炉燃气改电加热改造',
+    '热处理炉余热回收改造',
+    '热处理炉节能改造能省多少电',
+    '热处理炉技改投资回报测算',
+    '工业炉能源改造',
+  ],
+  ogTitle: '热处理炉能源改造怎么选？电改燃、燃改电与余热回收',
+  ogDescription:
+    '建立同工况能源基线，核对炉体、公辅、安全、排放、维护和停产边界，再判断电改燃、燃改电或余热回收。',
+  ogImage: '/images/service/after-sales-hero.png',
+  publishedTime: '2026-07-31T13:40:13+08:00',
+  modifiedTime: '2026-07-31T13:40:13+08:00',
+};
+
+export const FURNACE_CONTROL_SYSTEM_UPGRADE_SEO = {
+  title: '热处理炉控制系统升级怎么做？PLC、DCS、测温、联锁与数据接口清单',
+  description:
+    '热处理炉控制系统升级不能只换 PLC。本文说明图纸与 I/O、测温回路、执行机构、安全联锁、程序备份、数据接口、FAT、SAT 和停产切换边界。',
+  keywords: [
+    '热处理炉控制系统升级厂家',
+    '热处理炉控制系统 PLC 升级',
+    '热处理炉 DCS 控制系统改造',
+    '热处理炉控制系统升级多少钱',
+    '工业炉控制系统改造',
+    '热处理炉 PLC 改造',
+  ],
+  ogTitle: '热处理炉控制系统升级指南｜PLC、DCS、联锁与数据接口',
+  ogDescription:
+    '先盘点图纸、I/O、程序、测量回路、执行机构和安全联锁，再决定保留、局部升级或更换控制架构。',
+  ogImage: '/images/service/after-sales-hero.png',
+  publishedTime: '2026-07-31T14:26:20+08:00',
+  modifiedTime: '2026-07-31T14:26:20+08:00',
+};
+
+export const FURNACE_RESTART_RELOCATION_REMANUFACTURING_SEO = {
+  title: '停产热处理炉重启与搬迁复产怎么评估？检查、试运行和验收清单',
+  description:
+    '停产炉重启、工业炉搬迁复产和旧炉再制造应先核对停机原因、炉体炉衬、能源、电气绝缘、安全联锁、机械系统和资料，再做冷态、空载与负载验证。',
+  keywords: [
+    '停产多年的热处理炉重启评估',
+    '工业炉搬迁复产',
+    '工厂搬迁后热处理设备恢复',
+    '二手热处理炉再制造服务',
+    '推杆炉机械系统大修',
+    '停产炉重启',
+  ],
+  ogTitle: '停产炉重启与搬迁复产指南｜检查、试运行和验收',
+  ogDescription:
+    '区分能启动、能安全试运行和能稳定负载生产，按冷态、空载和负载三个阶段形成复产证据。',
+  ogImage: '/images/service/after-sales-hero.png',
+  publishedTime: '2026-07-31T14:26:21+08:00',
+  modifiedTime: '2026-07-31T14:26:21+08:00',
 };
 
 export const HEAT_TREATMENT_FURNACE_MANUFACTURER_SEO = {
@@ -266,24 +390,59 @@ export const CONTINUOUS_HEAT_TREATMENT_LINE_SEO = {
   ogImage: '/images/products/annealing-solution-line/gallery/line-01.jpg',
   ogType: 'website',
   canonicalUrl: 'https://www.jssngyl.cn/zh/solutions/continuous-heat-treatment-line',
+  modifiedTime: '2026-07-29',
 };
 
 export const TSINGSHAN_1250_CASE_SEO = {
-  title: '某青山系不锈钢企业 1250mm 三线连续退洗线节能改造案例_苏能工业炉',
+  title: '某不锈钢深加工企业连续退洗线节能改造案例_苏能工业炉',
   description:
-    '某青山系不锈钢深加工企业 1250mm 三线连续退洗线节能改造案例，年节能效益约 7,644 万元/年；数据仅作同类工程参考，实际效果以现场工况为准。',
+    '某不锈钢深加工企业 3 条 1250mm 连续退洗线节能改造案例，公开燃烧系统升级、分线实施、运行核验方法与排放验收边界。',
   keywords: [
     '热处理炉节能改造案例',
-    '1250mm 退洗线改造',
+    '连续退洗线改造',
     '不锈钢退火生产线改造',
     '工业炉节能改造案例',
   ],
-  ogTitle: '1250mm 不锈钢退洗线节能改造案例：年节能效益约 7,644 万元',
+  ogTitle: '不锈钢连续退洗线节能改造案例',
   ogDescription:
-    '苏能工业炉 1250mm 不锈钢三线连续退洗线节能改造案例。通过燃料结构升级、三级烟气回收、控温系统优化等技术路径降低吨钢能耗。具体节能效益与现场工况密切相关。',
-  ogImage: '/images/case/tsingshan-1250-cover.jpg',
+    '苏能工业炉 3 条 1250mm 连续退洗线节能改造案例，公开燃烧系统升级、分线实施、运行核验方法与排放验收边界。',
+  ogImage: '/images/service/after-sales-hero.png',
   ogType: 'article',
   canonicalUrl: 'https://www.jssngyl.cn/zh/case/anonymous-tsingshan-1250-renovation',
   publishedTime: '2026-05-27T10:00:00+08:00',
-  modifiedTime: '2026-05-27T10:00:00+08:00',
+  modifiedTime: '2026-07-31T17:13:36+08:00',
+};
+
+export const JINING_SUPPORT_ROLLER_CASE_SEO = {
+  title: '济宁支重轮热处理生产线案例｜连续加热、自动淬火与回火冷却',
+  description:
+    '苏能工业炉为济宁市五创机械有限公司提供 PC200 至 PC400 支重轮热处理生产线方案，加热炉额定温度 950℃、有效加热区约 6400×300×300mm，资料设计处理能力约 500kg/h。',
+  keywords: [
+    '济宁支重轮热处理生产线',
+    '支重轮热处理生产线',
+    '工程机械零部件热处理线',
+    '支重轮淬火回火生产线',
+    '连续热处理生产线案例',
+  ],
+  ogImage: '/images/products/roller-mesh-belt-line/gallery/line-01.jpg',
+  canonicalUrl: 'https://www.jssngyl.cn/zh/case/jining-support-roller-heat-treatment-line',
+  publishedTime: '2026-07-24T20:30:00+08:00',
+  modifiedTime: '2026-07-29T18:30:00+08:00',
+};
+
+export const HENAN_ANNEALING_SOLUTION_CASE_SEO = {
+  title: '河南连续退火固溶生产线案例｜不锈钢退洗线退火固溶段设备',
+  description:
+    '苏能工业炉为河南金誉邦实业有限公司 850mm 热轧不锈钢连续退火钝化线提供退火固溶段设备；退火温度约 1050–1150℃、炉温最高 1300℃、炉体主体约 130m。',
+  keywords: [
+    '河南连续退火固溶生产线',
+    '退火固溶段设备',
+    '不锈钢连续退洗线',
+    '不锈钢带材连续退火',
+    '连续热处理生产线案例',
+  ],
+  ogImage: '/images/products/annealing-solution-line/gallery/line-01.jpg',
+  canonicalUrl: 'https://www.jssngyl.cn/zh/case/henan-annealing-solution-line',
+  publishedTime: '2026-07-24T20:30:00+08:00',
+  modifiedTime: '2026-07-29T18:30:00+08:00',
 };

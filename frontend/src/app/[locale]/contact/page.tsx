@@ -8,6 +8,8 @@ import { SITE_NAME } from '@/lib/seo/config';
 import { getContactPageJsonLd } from '@/lib/seo/jsonld';
 import { absoluteUrl, buildMetadata } from '@/lib/seo/metadata';
 import { CONTACT_SEO } from '@/lib/seo/page-data';
+import { ENGLISH_STATIC_PAGE_METADATA } from '@/lib/seo/static-page-metadata-en';
+import { siteSettings } from '@/mock/siteSettings';
 import { Locale } from '@/types/site';
 
 type ContactPageProps = {
@@ -21,9 +23,7 @@ const contactHero = '/images/contact/contact-hero.png';
 const contactSeoCopy = {
   zh: CONTACT_SEO,
   en: {
-    title: 'Contact Us | Jiangsu Suneng Industrial Furnace Co., Ltd.',
-    description:
-      'Contact Jiangsu Suneng Industrial Furnace Co., Ltd. for industrial furnace equipment, heat treatment furnaces, energy-saving retrofit and overhaul service. Phone / WeChat: +86-130-5298-6814.',
+    ...ENGLISH_STATIC_PAGE_METADATA.contact,
     keywords: [
       'Suneng Industrial Furnace contact',
       'industrial furnace manufacturer phone',
@@ -53,12 +53,12 @@ const contactPageCopy = {
     items: [
       {
         label: '联系电话',
-        value: '+86-130-5298-6814',
+        value: siteSettings.salesPhone,
         icon: '/images/contact/icon-phone.png',
       },
       {
         label: '企业邮箱',
-        value: '997518512@qq.com',
+        value: siteSettings.email,
         icon: '/images/contact/icon-email.png',
       },
       {
@@ -78,12 +78,12 @@ const contactPageCopy = {
     items: [
       {
         label: 'Phone',
-        value: '+86-130-5298-6814',
+        value: siteSettings.salesPhone,
         icon: '/images/contact/icon-phone.png',
       },
       {
         label: 'Email',
-        value: '997518512@qq.com',
+        value: siteSettings.email,
         icon: '/images/contact/icon-email.png',
       },
       {

@@ -2,6 +2,7 @@ import { NotFoundState } from '@/components/common/NotFoundState';
 import { FloatToolbar } from '@/components/layout/FloatToolbar';
 import { Footer } from '@/components/layout/Footer';
 import { Header } from '@/components/layout/Header';
+import { BaiduAnalytics } from '@/components/seo/BaiduAnalytics';
 
 export default function RootNotFoundPage() {
   return (
@@ -15,6 +16,7 @@ export default function RootNotFoundPage() {
           <Footer locale="zh" />
           <FloatToolbar locale="zh" />
         </div>
+        <BaiduAnalytics />
       </body>
     </html>
   );

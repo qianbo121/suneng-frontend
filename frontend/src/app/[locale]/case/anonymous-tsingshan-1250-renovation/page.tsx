@@ -3,11 +3,18 @@ import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import type { ReactNode } from 'react';
 
+import {
+  GeoBulletList as BulletList,
+  GeoFactList,
+  GeoReviewNote,
+  GeoSection as Section,
+} from '@/components/geo-pages/GeoPageBlocks';
 import { JsonLd } from '@/components/JsonLd';
 import { Breadcrumb } from '@/components/layout/Breadcrumb';
 import { ProductLeadForm } from '@/components/products/ProductLeadForm';
 import { buildMetadata } from '@/lib/seo/metadata';
 import { TSINGSHAN_1250_CASE_SEO } from '@/lib/seo/page-data';
+import { siteSettings } from '@/mock/siteSettings';
 
 type PageProps = {
   params: Promise<{
@@ -25,8 +32,9 @@ const heroImage = '/images/service/after-sales-hero.png';
 export const dynamicParams = false;
 
 const heroFacts: FactItem[] = [
-  ['项目类型', '工业炉节能改造（A3 cluster 核心案例）'],
-  ['改造规模', '3 条 1250mm 连续退洗线'],
+  ['案例类型', '在役连续退洗线节能改造案例'],
+  ['项目类型', '工业炉节能改造'],
+  ['改造对象', '不锈钢连续退洗线'],
   [
     '合作模式',
     '苏能作为节能改造的核心技术与设备供应方，与客户技术团队联合完成方案设计、设备制造、现场安装、调试与验收。',
@@ -36,7 +44,7 @@ const heroFacts: FactItem[] = [
 
 const projectGoals = [
   '降低吨钢综合能耗成本',
-  '达标 GB 28665-2012《轧钢工业大气污染物排放标准》',
+  '按项目所在地排放要求设计并约定检测验收口径',
   '提升设备稳定性',
   '建立可数字化追溯的工艺控制体系',
 ];
@@ -44,13 +52,16 @@ const projectGoals = [
 const matchingPoints = [
   '苏能在不锈钢宽带钢光亮退火生产线领域有较深的技术积累。',
   '多项已授权专利覆盖电阻炉、燃气热处理炉、固溶炉、网带淬火炉等产品方向。',
-  '具备从单机到整线交付的工程能力，拥有 5,080 万元注册资本与 14,700 ㎡ 生产基地。',
+  '具备从单机到整线交付的工程能力，注册资本 5,080 万元；公司自报生产基地占地面积约 14,700 ㎡。',
   '与中国五矿恩菲等工程总承包公司有协作经验，对总包项目流程熟悉。',
 ];
 
 const originalParameters: FactItem[] = [
-  ['产线规格', '1250mm × 3 条'],
+  ['产线规模', '3 条 1250 mm 不锈钢连续退洗线'],
   ['工艺类型', '连续退火 + 酸洗（退洗一体）'],
+  ['项目工艺速度', '约 40–45 m/min'],
+  ['项目钢卷重量', '最大 28 t'],
+  ['退火工艺段', '约 105 m'],
   ['燃料', '天然气'],
   ['控制系统', '传统继电器 + 老式 PLC 混合'],
   ['烟气余热利用', '仅助燃空气预热（单级）'],
@@ -66,8 +77,8 @@ const bottlenecks = [
     text: '原有烟气回收仅做单级助燃空气预热，烟气出炉温度仍偏高。通过多级回收，可将钢带预热、空气预热和蒸汽利用组合起来进一步利用烟气余热。',
   },
   {
-    title: '瓶颈 3：控温精度与排放达标',
-    text: '老式控制系统温度均匀性偏差较大，同时燃烧系统不具备低 NOx 分级燃烧能力，需围绕 GB 28665-2012《轧钢工业大气污染物排放标准》及所在地环保要求进行系统升级。',
+    title: '瓶颈 3：控温精度与排放验收',
+    text: '老式控制系统温度均匀性存在改善空间，同时原燃烧系统需按项目所在地排放要求评估升级。具体适用标准、限值、测试条件与验收方式应在项目方案和合同中确认。',
   },
   {
     title: '瓶颈 4：风机变频空间',
@@ -83,63 +94,66 @@ const solutionModules = [
       '燃料切换：以冷煤气为主、转炉煤气为辅，利用客户内部已有但未充分使用的副产气资源。',
       '低 NOx 分级燃烧烧嘴：替换原燃烧器，降低 NOx 生成。',
       '空燃比双交叉限幅控制：通过高精度燃烧控制策略，保障不同负荷下的燃烧效率稳定。',
-      'NOx 排放：按项目验收检测结果满足 GB 28665-2012《轧钢工业大气污染物排放标准》及项目所在地环保要求。',
+      'NOx 排放：按项目所在地排放要求进行方案设计；是否达标以有资质第三方检测或正式验收报告为准。',
     ],
   },
   {
-    title: '模块 B：三级烟气余热回收',
-    intro: '由单级助燃空气预热升级为钢带预热、助燃空气预热、蒸汽利用的三级递进式回收。',
+    title: '模块 B：多级烟气余热回收',
+    intro: '按烟气温度梯度评估钢带预热、助燃空气预热和工艺余热利用，具体级数、温度与接口按项目热平衡确定。',
     items: [
-      '第 1 级：利用高温段烟气对入炉钢带预热，降低退火加热段负荷。',
-      '第 2 级：利用中温段烟气对助燃空气预热，提升燃烧效率。',
-      '第 3 级：利用低温段烟气通过烟气余热回收配套系统产生工艺蒸汽，供应至客户酸洗工序。',
-      '该路径形成“烟气余热 → 酸洗用蒸汽”的能源闭环。',
+      '高温段可评估用于入炉钢带预热，降低退火加热段负荷。',
+      '中温段可评估用于助燃空气预热，改善燃烧系统的热利用。',
+      '低温段可结合客户工艺需求评估蒸汽或其他余热利用接口。',
+      '最终回收级数和利用路径以热平衡计算、设备边界与安全评审为准。',
     ],
   },
   {
     title: '模块 C：控温系统升级 + 风机变频',
-    intro: '将控制系统升级为西门子 S7-1500 系列 PLC + ET200SP 分布式 I/O，并按工况负荷动态调整风机运行状态。',
+    intro: '按现有控制系统、测温点和接口条件评估 PLC、分布式 I/O 与风机变频升级，并按工况负荷动态调整运行状态。',
     items: [
-      '控温分区：从 13 区控温优化为多加热室多控温区精细化分区。',
+      '控温分区：依据炉膛结构、测温点和工艺曲线评估精细化分区。',
       'HMI 人机界面：实时显示炉温、工艺曲线、报警信息。',
-      '数据追溯：所有工艺参数数字化记录，支持历史曲线查询与导出。',
+      '数据追溯：按控制系统配置记录工艺参数，支持历史曲线查询与导出。',
       '客户系统对接：根据客户实际 MES / SCADA 系统接口完成对接。',
     ],
   },
 ];
 
 const lineDeployment = [
-  '产线 1：燃料切换 + 低 NOx 燃烧 + 三级烟气回收 + 13 区控温优化 + 风机变频',
-  '产线 2：同产线 1 的改造模块组合',
-  '产线 3：同产线 1 的改造模块组合',
+  '燃烧系统：燃料结构评估、低 NOx 燃烧方案与空燃比控制优化。',
+  '余热系统：按烟气温度梯度评估钢带预热、助燃空气预热和工艺余热利用。',
+  '控制系统：按既有设备状态评估控温分区、PLC、分布式 I/O 与风机变频改造。',
 ];
 
 const implementationStages = [
   {
-    title: '阶段 1：现场勘查与方案设计（约 30-45 个工作日）',
+    title: '阶段 1：现场勘查与方案设计',
     items: [
-      '现场勘查 3 条产线的实际工况、燃烧系统、控温系统、烟气路径、机械传动等。',
-      '收集最近 12 个月历史能耗数据、产量数据和工艺质量数据。',
+      '现场勘查产线实际工况、燃烧系统、控温系统、烟气路径、机械传动等。',
+      '收集具有代表性的历史能耗、产量和工艺质量数据。',
       '基于现场数据建立能耗诊断模型，量化各能耗环节占比。',
       '输出三大模块的完整技术方案、CAD 图纸、PID 控制图和设备清单。',
+      '方案设计与现场实施按合同约定分阶段推进，具体排程由资料完整度、供货边界和现场条件共同确定。',
     ],
   },
   {
-    title: '阶段 2：设备制造（约 4-6 个月）',
+    title: '阶段 2：设备制造',
     items: [
-      '烧嘴、控制柜、变频柜、烟气余热回收配套设备等核心设备在苏能 14,700 ㎡ 生产基地制造。',
+      '烧嘴、控制柜、变频柜、烟气余热回收配套设备等在苏能生产基地完成制造或配套；公司自报基地占地面积约 14,700 ㎡。',
       '关键工序按 ISO 9001:2015 质量管理体系执行，质检记录可追溯。',
       '主要部件出厂前完成单机调试。',
       '邀请客户技术代表参与 F.A.T 工厂验收试验。',
+      '设备制造、配套和进场节点按合同里程碑执行，材料交期与验收安排纳入项目排程。',
     ],
   },
   {
-    title: '阶段 3：现场安装与调试（每条线约 30-60 天）',
+    title: '阶段 3：现场安装与调试',
     items: [
-      '按合同约定的停产窗口分线施工，避免 3 条线同时停产。',
+      '按合同约定的停产窗口分线施工，降低集中停产对客户生产的影响。',
       '苏能工程师现场指导耐材拆除、新设备安装、电气接线。',
       '按单机试运行、联动调试、工艺曲线测试的顺序推进。',
       '对客户操作团队开展操作规范、日常维护、应急处理培训。',
+      '三条线分线实施，每条线完成制作、安装、冷调试和烘炉后进入热调试准备；具体实施时间由买方结合现场情况安排。',
     ],
   },
   {
@@ -148,50 +162,50 @@ const implementationStages = [
       '空载升温曲线测试。',
       '按合同约定的工艺要求进行工艺曲线验证。',
       '开展 TUS 温度均匀性测试与 SAT 系统准确度测试。',
-      '完成 NOx 排放检测与节能效益核算，节能效益按改造前后 6 个月对比。',
+      '按合同约定完成排放检测与节能效益核算；比较周期和数据边界由双方确认。',
     ],
   },
   {
     title: '阶段 5：质保期内服务',
     items: [
-      '客户服务热线 +86-130-5298-6814。',
+      `客户服务热线 ${siteSettings.salesPhone}。`,
       '现场上门服务依据合同约定、设备状态、现场工况和服务距离安排。',
-      '配件供应：易损件库存保障不少于 6 个月，核心非标部件保障期不少于 5 年。',
+      '配件供应范围、库存安排与非标部件保障周期按合同约定执行。',
       '根据客户实际运行数据提供工艺优化建议。',
     ],
   },
 ];
 
 const effectRows: FactItem[] = [
-  ['年节能效益', '约 7,644 万元/年（3 条线合计）'],
-  ['拆解公式', '7,644 万元/年 = 63.7 元/吨 × 120 万吨/年'],
-  ['吨钢降本构成', '燃料结构升级为主要贡献项，三级烟气回收、控温精度提升与风机变频共同形成补充贡献。'],
-  ['年产量说明', '120 万吨为该项目年度节能效益测算的基础参数，不构成对客户实际产能、产能利用率或经营数据的披露。'],
+  ['经济性评估', '围绕燃料结构调整、系统效率、运行制度和全生命周期成本进行项目核算。'],
+  ['对比口径', '改造前后采用可比工况、统一计量边界和完整统计周期。'],
+  ['证据要求', '能源计量、产线运行、维护与停产记录共同形成可追溯依据。'],
+  ['结论边界', '未经运行数据复核的方案测算，不作为客户实际经营结果或其他项目的节能承诺。'],
 ];
 
 const otherEffects = [
   {
-    title: 'NOx 排放达标',
-    text: '改造后 NOx 排放按项目验收检测结果满足 GB 28665-2012《轧钢工业大气污染物排放标准》及项目所在地环保要求。具体排放数据以第三方检测或验收报告为准。',
+    title: '排放验收边界',
+    text: '排放验收应对应项目所在地现行标准、检测工况、测点和氧含量折算口径，并以有资质第三方检测或正式验收报告为准。',
   },
   {
-    title: '控温精度提升',
-    text: '控温精度从改造前到改造后有显著改善，工艺曲线可重复性提升。具体精度数值受加热元件配置、热电偶布置、控制系统调试质量等因素影响。',
+    title: '控温精度评估',
+    text: '控温系统升级可将温度稳定性和工艺曲线重复性作为验收指标。是否改善及改善幅度受炉膛结构、热电偶布置和调试质量影响，应以双方约定的测试结果为准。',
   },
   {
-    title: '运行稳定性改善',
-    text: '设备稳定性和运行连续性较改造前有所改善。具体运行数据受客户生产计划、维护制度和产线负荷影响，本页不单独披露具体数值。',
+    title: '运行稳定性评估',
+    text: '设备稳定性和运行连续性应通过运行记录、故障记录与双方约定的统计周期复核，本页不脱离这些证据作改善结论。',
   },
   {
-    title: '数字化追溯能力',
-    text: '所有工艺参数实现数字化记录与历史曲线查询，为客户后续质量追溯、工艺优化、ESG 报告提供数据基础。',
+    title: '数字化追溯配置',
+    text: '可按控制系统配置记录炉温、工艺曲线与报警信息，并结合客户的数据治理要求确定查询、导出和追溯范围。',
   },
 ];
 
 const dataFactors = [
   '原炉型结构与设计能耗水平',
   '原燃料类型与燃料结构升级空间',
-  '产线实际负荷与年产量水平',
+  '产线实际负荷与有效运行时间',
   '原保温状态与控制系统精度',
   '客户内部副产气资源与价格条件',
   '改造方案的设计深度与施工质量',
@@ -207,33 +221,33 @@ const technicalDetails = [
     ],
   },
   {
-    title: '技术细节 2：三级烟气回收的能量分布',
+    title: '技术细节 2：多级烟气回收的能量分布',
     paragraphs: [
       '炉膛出口烟气先用于钢带预热，再用于空气预热，最后通过烟气余热回收配套系统回收低温段热量。每一级回收都对应不同换热设备设计，包括高温辐射换热结构、管式或板式换热器和蒸汽利用接口。',
-      '三级回收的目标不是单点追求极限温降，而是在工艺稳定、检修可达和安全边界内，把原先排走的热量转化为可用能源。',
+      '多级回收的目标不是单点追求极限温降，而是在工艺稳定、检修可达和安全边界内，把原先排走的热量转化为可用能源。具体级数与利用顺序须由项目热平衡确定。',
     ],
   },
   {
     title: '技术细节 3：控制系统升级的关键设计',
     paragraphs: [
       '控制系统升级后，多控温区精细化分区、主控 PLC、分布式 I/O、HMI 触摸屏、历史数据库和报警分级共同构成新的过程控制基础。',
-      '所有工艺参数按高频采样并存储，支持历史曲线导出；在客户授权后，苏能售后团队可通过远程接口辅助诊断。',
+      '工艺参数的采样频率、保存周期、历史曲线导出与远程诊断权限，应按控制系统配置、客户数据治理要求和合同边界确定。',
     ],
   },
   {
     title: '技术细节 4：分阶段施工的工程组织',
     paragraphs: [
-      '3 条产线同时改造对客户产能影响过大，因此采用分线分阶段实施。每个阶段客户保留部分产线持续生产，将产能损失控制在合理范围。',
+      '多条产线同时改造可能影响客户产能，因此可采用分线分阶段实施。每个阶段保留部分产线持续生产，具体停产窗口和产能安排由双方结合现场计划确认。',
       '这种组织方式需要苏能与客户工程团队、生产团队、质量团队紧密协同，提前确认停产窗口、物资到场节奏和调试验收节点。',
     ],
   },
 ];
 
 const feedbackItems = [
-  '能耗成本下降符合方案测算预期。',
-  'NOx 排放按验收检测结果满足相关国家标准。',
-  '控制系统运行稳定性较改造前有所提升。',
-  '工艺曲线数字化记录便于质量追溯与 ESG 报告编制。',
+  '能耗改善情况需以双方确认的核算边界和运行数据复核。',
+  '排放结果需以有资质第三方检测或正式验收报告为准。',
+  '控制系统稳定性改善需以运行记录、故障记录和双方约定的验收指标复核。',
+  '工艺曲线可按控制系统配置进行数字化记录，具体数据用途由客户管理制度确定。',
 ];
 
 const consultationItems = [
@@ -247,12 +261,12 @@ const caseJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'Article',
   '@id': 'https://www.jssngyl.cn/zh/case/anonymous-tsingshan-1250-renovation',
-  headline: '某青山系不锈钢企业 1250mm 三线连续退洗线节能改造案例',
-  alternativeHeadline: ['1250mm 不锈钢退洗线节能改造案例', '热处理炉节能改造案例：年节能约 7,644 万元', '三线连续退洗线节能技改案例'],
+  headline: '某不锈钢深加工企业连续退洗线节能改造案例',
+  alternativeHeadline: ['不锈钢连续退洗线节能改造案例', '热处理炉节能改造案例'],
   description:
-    '苏能工业炉为某青山系不锈钢深加工企业完成 1250mm 连续退洗线节能改造，通过燃烧系统、控温系统、烟气余热回收三大模块升级，实现年节能效益约 7,644 万元/年。',
+    '苏能工业炉为某不锈钢深加工企业 3 条 1250mm 连续退洗线实施节能改造，公开燃烧系统升级、分线实施、运行核验与排放验收边界。',
   datePublished: '2026-05-27T10:00:00+08:00',
-  dateModified: '2026-05-27T10:00:00+08:00',
+  dateModified: '2026-07-31T17:13:36+08:00',
   author: {
     '@type': 'Organization',
     name: '苏能工业炉工程技术团队',
@@ -262,8 +276,8 @@ const caseJsonLd = {
     '@type': 'Organization',
     name: '江苏苏能工业炉有限公司',
     url: 'https://www.jssngyl.cn',
-    telephone: '+86-130-5298-6814',
-    email: '997518512@qq.com',
+    telephone: siteSettings.salesPhone,
+    email: siteSettings.email,
     address: {
       '@type': 'PostalAddress',
       streetAddress: '张甸蔡官工业区',
@@ -326,57 +340,9 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   });
 }
 
-function Section({
-  id,
-  eyebrow,
-  title,
-  children,
-}: {
-  id: string;
-  eyebrow: string;
-  title: string;
-  children: ReactNode;
-}) {
-  return (
-    <section id={id} className="border-t border-[#e2e8f0] py-12 scroll-mt-24 lg:py-16">
-      <div className="mx-auto max-w-[1180px] px-5 lg:px-8">
-        <p className="text-[12px] font-semibold uppercase tracking-[0.26em] text-[#c51624]">{eyebrow}</p>
-        <h2 className="mt-3 text-[26px] font-semibold leading-[1.28] text-[#101828] lg:text-[38px]">{title}</h2>
-        <div className="mt-8">{children}</div>
-      </div>
-    </section>
-  );
-}
-
-function BulletList({ items }: { items: ReactNode[] }) {
-  return (
-    <ul className="mt-4 space-y-2 text-[15px] leading-[1.8] text-[#3f4a5f] lg:text-[16px]">
-      {items.map((item, index) => (
-        <li key={index} className="flex gap-3">
-          <span className="mt-[0.74em] h-1.5 w-1.5 shrink-0 rounded-full bg-[#c51624]" />
-          <span>{item}</span>
-        </li>
-      ))}
-    </ul>
-  );
-}
-
-function FactList({ items }: { items: FactItem[] }) {
-  return (
-    <dl className="grid gap-3">
-      {items.map(([label, value]) => (
-        <div key={label} className="grid gap-1 border-b border-[#e7edf5] pb-3 last:border-b-0 sm:grid-cols-[150px_1fr]">
-          <dt className="text-[13px] font-semibold text-[#667085]">{label}</dt>
-          <dd className="text-[15px] leading-[1.75] text-[#253047]">{value}</dd>
-        </div>
-      ))}
-    </dl>
-  );
-}
-
 function NumberBadge({ children }: { children: ReactNode }) {
   return (
-    <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-[#c51624] text-[18px] font-semibold text-white">
+    <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full cta-primary text-[18px] font-semibold text-white">
       {children}
     </span>
   );
@@ -400,7 +366,7 @@ export default async function AnonymousTsingshanCasePage({ params }: PageProps) 
         <div className="relative mx-auto max-w-[1180px] px-5 py-14 lg:px-8 lg:py-20">
           <Breadcrumb
             locale="zh"
-            currentLabel="1250mm 三线连续退洗线节能改造案例"
+            currentLabel="连续退洗线节能改造案例"
             tone="light"
             className="text-[13px]"
             items={[
@@ -410,12 +376,12 @@ export default async function AnonymousTsingshanCasePage({ params }: PageProps) 
           />
 
           <div className="mt-10 max-w-[980px]">
-            <p className="text-[13px] font-semibold uppercase tracking-[0.28em] text-white/64">A3 Case Study</p>
+            <p className="text-[13px] font-semibold uppercase tracking-[0.28em] text-white/64">Case Study</p>
             <h1 className="mt-4 text-[34px] font-semibold leading-[1.18] tracking-[0.01em] lg:text-[56px]">
-              某青山系不锈钢企业 1250mm 三线连续退洗线节能改造案例
+              某不锈钢深加工企业连续退洗线节能改造案例
             </h1>
             <p className="mt-5 text-[18px] font-semibold leading-[1.7] text-white/92 lg:text-[24px]">
-              燃料结构升级 + 三级烟气余热回收 + 控温系统优化
+              燃料结构升级 + 多级烟气余热回收 + 控温系统优化
             </p>
 
             <div className="mt-8 grid gap-4 rounded-[8px] border border-white/18 bg-white/10 p-5 backdrop-blur md:grid-cols-2">
@@ -429,13 +395,13 @@ export default async function AnonymousTsingshanCasePage({ params }: PageProps) 
 
             <p className="mt-7 max-w-[940px] rounded-[8px] bg-white/10 p-5 text-[15px] leading-[1.9] text-white/78">
               <strong className="font-semibold text-white">数据声明：</strong>
-              本案例所列数据均基于该项目实际测算结果。具体节能效益与原炉型结构、燃料类型、产线负荷、保温状态、控制系统、运行制度和现场工况密切相关，需以现场诊断和改造方案测算为准。本案例数据仅作为同类工程参考，不构成对其他项目的节能效果承诺。如项目涉及压力容器或特种设备要求，应由具备相应资质的单位提供或配合实施。
+              本页公开参数与测算数据均对应这一具体项目，并已按当前公开口径获得授权。数字用于说明项目事实，不代表其他项目的固定配置、产能、周期、收益或排放承诺。
             </p>
 
             <div className="mt-9 flex flex-wrap gap-4">
               <a
                 href="#contact"
-                className="inline-flex min-h-[46px] items-center justify-center rounded-[4px] bg-[#c51624] px-6 text-[15px] font-semibold text-white transition hover:bg-[#a90f1b]"
+                className="inline-flex min-h-[46px] items-center justify-center rounded-[4px] cta-primary px-6 text-[15px] font-semibold text-white transition"
               >
                 获取报价方案
               </a>
@@ -450,22 +416,27 @@ export default async function AnonymousTsingshanCasePage({ params }: PageProps) 
         </div>
       </section>
 
+      <GeoReviewNote
+        modifiedDate={TSINGSHAN_1250_CASE_SEO.modifiedTime.slice(0, 10)}
+        sourceNote="公司批准公开的项目规格、阶段周期、测算公式、环保验收口径"
+      />
+
       <Section id="background" eyebrow="Background" title="一、客户与项目背景">
         <div className="grid gap-7 lg:grid-cols-[0.98fr_1.02fr]">
           <article className="rounded-[8px] border border-[#e1e7f0] bg-[#fbfcfe] p-6">
-            <h3 className="text-[22px] font-semibold leading-[1.35] text-[#101828]">客户简述（C2 脱敏）</h3>
+            <h3 className="text-[22px] font-semibold leading-[1.35] text-[#101828]">客户简述（已脱敏）</h3>
             <p className="mt-4 text-[15px] leading-[1.9] text-[#344054]">
-              该客户为青山系不锈钢深加工企业，主营 200/300 系不锈钢宽带钢冷轧、退火、酸洗、精整加工。
+              该客户为不锈钢深加工企业，业务涉及不锈钢带钢的冷轧、退火、酸洗与精整加工。
             </p>
             <p className="mt-4 text-[15px] leading-[1.9] text-[#344054]">
-              考虑客户商业信息保护，本案例对客户主体、合同金额、具体年份、合作周期、客户内部产能等敏感信息进行脱敏处理。
+              考虑客户商业信息保护，本案例对客户主体、合同金额和未纳入公开范围的原始资料进行脱敏处理；本页公开的项目规格、阶段周期与测算口径保留项目级适用边界。
             </p>
           </article>
 
           <article className="rounded-[8px] border border-[#e1e7f0] bg-white p-6 shadow-[0_10px_24px_rgba(15,35,75,0.04)]">
             <h3 className="text-[22px] font-semibold leading-[1.35] text-[#101828]">项目契机</h3>
             <p className="mt-4 text-[15px] leading-[1.9] text-[#344054]">
-              随着行业能耗指标日益收紧，以及钢厂副产气资源的成本优势凸显，客户启动三条 1250mm 连续退洗线的整体节能改造项目。
+              随着行业能耗指标日益收紧，以及钢厂副产气资源的成本优势凸显，客户启动连续退洗线整体节能改造项目。
             </p>
             <BulletList items={projectGoals} />
           </article>
@@ -485,7 +456,7 @@ export default async function AnonymousTsingshanCasePage({ params }: PageProps) 
           <article className="rounded-[8px] border border-[#e1e7f0] bg-white p-6 shadow-[0_10px_24px_rgba(15,35,75,0.04)]">
             <h3 className="text-[22px] font-semibold leading-[1.35] text-[#101828]">原产线基础参数</h3>
             <div className="mt-5">
-              <FactList items={originalParameters} />
+              <GeoFactList items={originalParameters} labelWidth="150px" />
             </div>
           </article>
 
@@ -515,9 +486,9 @@ export default async function AnonymousTsingshanCasePage({ params }: PageProps) 
         </div>
 
         <article className="mt-7 rounded-[8px] border border-[#d6e0ec] bg-[#f8fafc] p-6">
-          <h3 className="text-[20px] font-semibold text-[#101828]">改造范围全景图（3 条产线一致部署）</h3>
+          <h3 className="text-[20px] font-semibold text-[#101828]">改造范围全景图</h3>
           <BulletList items={lineDeployment} />
-          <p className="mt-5 text-[15px] leading-[1.9] text-[#344054]">3 条线分阶段实施，避免一次性停产对客户产能造成过大影响。</p>
+          <p className="mt-5 text-[15px] leading-[1.9] text-[#344054]">多产线项目可按停产窗口分阶段实施，具体组织方式以双方确认的施工与生产计划为准。</p>
         </article>
       </Section>
 
@@ -535,19 +506,19 @@ export default async function AnonymousTsingshanCasePage({ params }: PageProps) 
         </div>
       </Section>
 
-      <Section id="results" eyebrow="Results" title="五、改造后效果与数据拆解">
-        <div className="rounded-[8px] border border-[#c51624]/20 bg-[#fff7f7] p-6">
-          <p className="text-[13px] font-semibold uppercase tracking-[0.2em] text-[#c51624]">Core Result</p>
-          <h3 className="mt-3 text-[30px] font-semibold leading-[1.25] text-[#101828] lg:text-[44px]">年节能效益约 7,644 万元/年</h3>
+      <Section id="results" eyebrow="Verification" title="五、改造评估与核验边界">
+        <div className="rounded-[8px] cta-secondary/20 bg-[#fff7f7] p-6">
+          <p className="text-[13px] font-semibold uppercase tracking-[0.2em]">Evidence Boundary</p>
+          <h3 className="mt-3 text-[30px] font-semibold leading-[1.25] text-[#101828] lg:text-[44px]">经济性结论需以可比运行记录复核</h3>
           <p className="mt-4 max-w-[900px] text-[15px] leading-[1.9] text-[#344054]">
-            数据来源为改造完成后 6 个月与改造前 6 个月的能耗与产量数据对比测算。
+            项目评估应统一工况、计量边界和统计周期，并以可追溯的运行记录形成验证结论。
           </p>
         </div>
 
         <div className="mt-7 rounded-[8px] border border-[#e1e7f0] bg-white p-6 shadow-[0_10px_24px_rgba(15,35,75,0.04)]">
-          <h3 className="text-[22px] font-semibold leading-[1.35] text-[#101828]">数据拆解</h3>
+          <h3 className="text-[22px] font-semibold leading-[1.35] text-[#101828]">核验要点</h3>
           <div className="mt-5">
-            <FactList items={effectRows} />
+            <GeoFactList items={effectRows} labelWidth="150px" />
           </div>
         </div>
 
@@ -563,7 +534,7 @@ export default async function AnonymousTsingshanCasePage({ params }: PageProps) 
         <article className="mt-7 rounded-[8px] border border-[#d6e0ec] bg-[#f8fafc] p-6">
           <h3 className="text-[22px] font-semibold leading-[1.35] text-[#101828]">数据使用说明</h3>
           <p className="mt-4 text-[15px] leading-[1.9] text-[#344054]">
-            本案例所列年节能效益 7,644 万元/年、吨钢降本 63.7 元/吨、年产量 120 万吨等数据，均基于该具体项目的实际测算结果。
+            本页公开项目改造范围、系统方案和验收方法。经济性结论需以改造前后同工况、同边界、完整统计周期的运行记录复核，未经验证的方案测算不作为对外结果。
           </p>
           <BulletList items={dataFactors} />
           <p className="mt-5 text-[15px] leading-[1.9] text-[#344054]">
@@ -594,7 +565,7 @@ export default async function AnonymousTsingshanCasePage({ params }: PageProps) 
           <article className="rounded-[8px] border border-[#e1e7f0] bg-[#fbfcfe] p-6">
             <h3 className="text-[22px] font-semibold leading-[1.35] text-[#101828]">项目交付后的客户使用情况</h3>
             <p className="mt-4 text-[15px] leading-[1.9] text-[#344054]">
-              改造项目验收后，3 条产线进入正式运行阶段。客户对改造效果的反馈主要集中在以下几个方面：
+              改造项目进入运行阶段后，可围绕以下维度持续复核。客户反馈与验收结论须有可核验记录并完成授权后再作公开引用：
             </p>
             <BulletList items={feedbackItems} />
           </article>
@@ -617,11 +588,11 @@ export default async function AnonymousTsingshanCasePage({ params }: PageProps) 
             <address className="mt-7 space-y-3 border-t border-[#e1e7f0] pt-6 text-[15px] leading-[1.8] text-[#344054] not-italic">
               <p>
                 <strong className="font-semibold text-[#101828]">电话 / 微信：</strong>
-                <a href="tel:+8613052986814" className="text-[#c51624]">+86-130-5298-6814</a>
+                <a href="tel:+8613052986814" className="text-[#c51624]">{siteSettings.salesPhone}</a>
               </p>
               <p>
                 <strong className="font-semibold text-[#101828]">邮箱：</strong>
-                <a href="mailto:997518512@qq.com" className="text-[#c51624]">997518512@qq.com</a>
+                <a href={`mailto:${siteSettings.email}`} className="text-[#c51624]">{siteSettings.email}</a>
               </p>
               <p>
                 <strong className="font-semibold text-[#101828]">联系人：</strong>
@@ -634,10 +605,10 @@ export default async function AnonymousTsingshanCasePage({ params }: PageProps) 
             </address>
 
             <div className="mt-7 border-t border-[#e1e7f0] pt-5 text-[14px] leading-[1.8] text-[#667085]">
-              <p>相关页面：<a href={servicePath} className="font-semibold text-[#c51624]">工业炉节能改造与热处理炉大修服务</a></p>
-              <p>技术审核：苏能工业炉工程技术团队</p>
+              <p>相关页面：<a href={servicePath} className="font-semibold">工业炉节能改造与热处理炉大修服务</a></p>
+              <p>内容维护：苏能工业炉工程技术团队</p>
               <p>发布日期：2026-05-27</p>
-              <p>最后更新：2026-05-27</p>
+              <p>最后更新：2026-07-29</p>
             </div>
           </div>
 
@@ -652,7 +623,7 @@ export default async function AnonymousTsingshanCasePage({ params }: PageProps) 
         </div>
       </Section>
 
-      <JsonLd id="tsingshan-1250-case-jsonld" data={caseJsonLd} />
+      <JsonLd id="industrial-furnace-renovation-case-jsonld" data={caseJsonLd} />
     </div>
   );
 }

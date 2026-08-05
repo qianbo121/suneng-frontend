@@ -1,4 +1,4 @@
-FROM node:22-alpine AS builder
+FROM node:22.23.1-alpine AS builder
 
 WORKDIR /app
 
@@ -9,22 +9,26 @@ ENV VITE_APP_BASE_PATH=${VITE_APP_BASE_PATH}
 ENV VITE_APP_NAME=${VITE_APP_NAME}
 ENV VITE_API_BASE_URL=${VITE_API_BASE_URL}
 
-RUN npm install -g pnpm@9.15.4 --registry=https://registry.npmmirror.com
+RUN npm install -g pnpm@9.15.4 --registry=https://registry.npmmirror.com \
+    && pnpm config set registry https://registry.npmmirror.com
 
-COPY package.json pnpm-lock.yaml ./
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
+COPY frontend/package.json ./frontend/package.json
+COPY backend/package.json ./backend/package.json
+COPY admin/package.json ./admin/package.json
 
 RUN pnpm install --frozen-lockfile --config.dangerously-allow-all-builds=true
 
 COPY . .
 
-RUN pnpm build
+RUN pnpm --dir admin build
 
 FROM nginx:1.27-alpine AS runner
 
 ENV NODE_ENV=production
 
-COPY nginx.conf /etc/nginx/conf.d/default.conf
-COPY --from=builder /app/dist /usr/share/nginx/html
+COPY admin/nginx.conf /etc/nginx/conf.d/default.conf
+COPY --from=builder /app/admin/dist /usr/share/nginx/html
 
 EXPOSE 80
 

@@ -4,13 +4,10 @@ import { motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
 
-import { HeroBannerItem, PartnerLogoItem } from '@/types/home';
 import { Locale } from '@/types/site';
 
 type HeroBannerProps = {
   locale: Locale;
-  items: HeroBannerItem[];
-  partners: PartnerLogoItem[];
 };
 
 type HeroPartnerLogo = {
@@ -35,21 +32,28 @@ const heroStats = [
     label: { zh: '注册资本', en: 'Registered Capital' },
   },
   {
-    key: 'employees',
+    key: 'projects',
     value: 150,
     valueText: { zh: '', en: '' },
     unit: { zh: '+人', en: '+' },
-    label: { zh: '公司员工', en: 'Employees' },
+    label: { zh: '在职人数', en: 'Employees' },
   },
   {
     key: 'facility-area',
     value: 14700,
     valueText: { zh: '', en: '' },
     unit: { zh: '㎡', en: 'm²' },
-    label: { zh: '厂房面积', en: 'Facility Area' },
+    label: { zh: '车间占地', en: 'Production Site (Company-reported)' },
   },
 ] as const;
-const heroDescription = '工业炉单机、配套件与整线交钥匙工程一体化解决方案商';
+const heroTitle = {
+  zh: '江苏苏能工业炉有限公司',
+  en: 'Jiangsu Suneng Industrial Furnace Co., Ltd.',
+} as const;
+const heroDescription = {
+  zh: '工业炉单机、配套件与整线交钥匙工程一体化解决方案商',
+  en: 'Integrated industrial furnace equipment, components and turnkey heat-treatment line solutions.',
+} as const;
 const heroCredentials = '国家高新技术企业';
 const heroPartnerLogoBasePath = '/images/partner/logos/home-marquee-normalized';
 const heroPartnerMarqueeCardClass =
@@ -142,17 +146,10 @@ function AnimatedNumber({ value, duration = 1500 }: { value: number; duration?: 
   );
 }
 
-export function HeroBanner({ locale, items, partners }: HeroBannerProps) {
-  const banner = items[0];
-  void partners;
-
-  if (!banner) {
-    return null;
-  }
-
+export function HeroBanner({ locale }: HeroBannerProps) {
   const displayEyebrow = 'JIANGSU SUNENG INDUSTRIAL FURNACE CO LTD';
-  const displayTitle = locale === 'zh' ? '江苏苏能工业炉有限公司' : banner.title[locale];
-  const displaySubtitle = locale === 'zh' ? heroDescription : banner.subtitle[locale];
+  const displayTitle = heroTitle[locale];
+  const displaySubtitle = heroDescription[locale];
   const marqueeLogos = [...heroPartnerLogos, ...heroPartnerLogos];
   const heroPartnerPanelClass = [
     'relative z-30 mx-auto w-[calc(100%-28px)] max-w-[1295px] overflow-hidden rounded-[18px] border border-[#ebedf1] bg-white shadow-[0_20px_46px_rgba(15,23,42,0.11)] md:w-[calc(100%-40px)]',
@@ -164,11 +161,10 @@ export function HeroBanner({ locale, items, partners }: HeroBannerProps) {
       <div className="hero-banner-slide relative h-[660px] overflow-hidden bg-black md:h-[540px] lg:h-[526px]">
         <div className="absolute inset-0 z-0">
           <Image
-            src="/images/home/banner-factory-building.png"
+            src="/images/home/banner-factory-building-20260804.webp"
             alt=""
             fill
             priority
-            unoptimized
             sizes="100vw"
             className="object-cover object-center"
             quality={85}

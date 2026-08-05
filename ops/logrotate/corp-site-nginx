@@ -1,0 +1,13 @@
+/data/nginx-logs/*.json /data/nginx-logs/error.log {
+    daily
+    rotate 90
+    compress
+    delaycompress
+    missingok
+    notifempty
+    create 0640 root root
+    sharedscripts
+    postrotate
+        /usr/bin/docker exec corp-site-nginx nginx -s reopen >/dev/null 2>&1 || true
+    endscript
+}

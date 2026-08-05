@@ -45,11 +45,11 @@ export class CreateProductDto {
   @IsString()
   descriptionEn?: string;
 
-  @ApiPropertyOptional({ type: 'object' })
+  @ApiPropertyOptional({ type: 'object', additionalProperties: true })
   @IsOptional()
   specsJson?: Record<string, unknown>;
 
-  @ApiPropertyOptional({ type: 'object' })
+  @ApiPropertyOptional({ type: 'object', additionalProperties: true })
   @IsOptional()
   featuresJson?: Record<string, unknown> | string[] | Record<string, unknown>[];
 

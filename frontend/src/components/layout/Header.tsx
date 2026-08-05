@@ -3,8 +3,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { AnimatePresence, motion } from 'framer-motion';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { HiBars3BottomRight, HiChevronRight, HiOutlineXMark } from 'react-icons/hi2';
 
 import { isZhOnlyPath } from '@/lib/i18n/zh-only';
@@ -17,6 +16,18 @@ type HeaderProps = {
 };
 
 const HEADER_LOGO_SRC = '/images/brand/sn-logo-header-cropped.png';
+const MOBILE_NAV_COPY = {
+  zh: {
+    open: '打开导航',
+    close: '关闭导航',
+    dialog: '移动导航',
+  },
+  en: {
+    open: 'Open navigation',
+    close: 'Close navigation',
+    dialog: 'Mobile navigation',
+  },
+} satisfies Record<Locale, { open: string; close: string; dialog: string }>;
 
 function buildLocaleHref(locale: string, href: string) {
   return href === '/' ? `/${locale}` : `/${locale}${href}`;
@@ -24,7 +35,7 @@ function buildLocaleHref(locale: string, href: string) {
 
 function buildLocaleSwitchPath(pathname: string, nextLocale: 'zh' | 'en', currentLocale: 'zh' | 'en') {
   // Switching to English from a Chinese-only page (no /en counterpart) lands on
-  // the English home instead of a 404. Covers all 8 zh-only pages.
+  // the English home instead of a 404. The source of truth is ZH_ONLY_PATHS.
   if (currentLocale === 'zh' && nextLocale === 'en' && isZhOnlyPath(pathname)) {
     return '/en';
   }
@@ -57,30 +68,103 @@ function isActiveNavItem(pathname: string, href: string) {
 export function Header({ locale }: HeaderProps) {
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const backgroundHeaderRef = useRef<HTMLElement>(null);
+  const mobilePanelRef = useRef<HTMLDivElement>(null);
+  const openButtonRef = useRef<HTMLButtonElement>(null);
+  const closeButtonRef = useRef<HTMLButtonElement>(null);
+  const previouslyFocusedRef = useRef<HTMLElement | null>(null);
   const currentLocale = (locale === 'en' ? 'en' : 'zh') as Locale;
   const navItems = useMemo(() => getLocalizedNavigation(currentLocale), [currentLocale]);
   const switchLocale = currentLocale === 'zh' ? 'en' : 'zh';
   const switchLocalePath = buildLocaleSwitchPath(pathname, switchLocale, currentLocale);
   const localeLabel = { zh: '中文', en: 'EN' } as const;
   const logoAlt = buildBrandImageAlt(currentLocale, 'full');
+  const mobileNavCopy = MOBILE_NAV_COPY[currentLocale];
 
   useEffect(() => {
     setMobileOpen(false);
   }, [pathname]);
 
   useEffect(() => {
-    document.body.classList.toggle('mobile-nav-open', mobileOpen);
-    document.body.classList.toggle('overflow-hidden', mobileOpen);
+    if (!mobileOpen) return;
+
+    const panel = mobilePanelRef.current;
+    const backgroundElements = [
+      backgroundHeaderRef.current,
+      document.getElementById('site-page-content'),
+    ].filter((element): element is HTMLElement => Boolean(element));
+    const previousAttributes = backgroundElements.map((element) => ({
+      element,
+      hadInert: element.hasAttribute('inert'),
+      ariaHidden: element.getAttribute('aria-hidden'),
+    }));
+
+    closeButtonRef.current?.focus();
+    backgroundElements.forEach((element) => {
+      element.setAttribute('inert', '');
+      element.setAttribute('aria-hidden', 'true');
+    });
+    document.body.classList.add('mobile-nav-open', 'overflow-hidden');
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setMobileOpen(false);
+        return;
+      }
+
+      if (event.key !== 'Tab' || !panel) return;
+
+      const focusableElements = Array.from(
+        panel.querySelectorAll<HTMLElement>(
+          'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])',
+        ),
+      ).filter((element) => element.getAttribute('aria-hidden') !== 'true');
+
+      if (focusableElements.length === 0) {
+        event.preventDefault();
+        panel.focus();
+        return;
+      }
+
+      const firstElement = focusableElements[0];
+      const lastElement = focusableElements[focusableElements.length - 1];
+      const activeElement = document.activeElement;
+
+      if (event.shiftKey && (activeElement === firstElement || !panel.contains(activeElement))) {
+        event.preventDefault();
+        lastElement.focus();
+      } else if (!event.shiftKey && (activeElement === lastElement || !panel.contains(activeElement))) {
+        event.preventDefault();
+        firstElement.focus();
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
 
     return () => {
+      document.removeEventListener('keydown', handleKeyDown);
       document.body.classList.remove('mobile-nav-open');
       document.body.classList.remove('overflow-hidden');
+      previousAttributes.forEach(({ element, hadInert, ariaHidden }) => {
+        if (!hadInert) element.removeAttribute('inert');
+        if (ariaHidden === null) {
+          element.removeAttribute('aria-hidden');
+        } else {
+          element.setAttribute('aria-hidden', ariaHidden);
+        }
+      });
+      if (previouslyFocusedRef.current && document.contains(previouslyFocusedRef.current)) {
+        previouslyFocusedRef.current.focus();
+      }
     };
   }, [mobileOpen]);
 
   return (
     <>
-      <header className="relative z-[9999] min-h-[78px] bg-transparent bp-tablet-min:min-h-header-h">
+      <header
+        ref={backgroundHeaderRef}
+        className="relative z-[9999] min-h-[78px] bg-transparent bp-tablet-min:min-h-header-h"
+      >
         <div className="fixed inset-x-0 top-0 z-[9999] flex h-[78px] items-center justify-between bg-white px-3 bp-tablet-min:hidden">
           <Link href={`/${locale}`} className="ml-2 flex h-[72px] w-auto items-center" aria-label={logoAlt}>
             <Image
@@ -94,10 +178,16 @@ export function Header({ locale }: HeaderProps) {
             />
           </Link>
           <button
+            ref={openButtonRef}
             type="button"
-            onClick={() => setMobileOpen(true)}
+            onClick={() => {
+              previouslyFocusedRef.current = openButtonRef.current;
+              setMobileOpen(true);
+            }}
             className="flex h-[60px] w-[50px] items-center justify-center text-text-secondary"
-            aria-label="Open navigation"
+            aria-label={mobileNavCopy.open}
+            aria-expanded={mobileOpen}
+            aria-controls="mobile-navigation-dialog"
           >
             <HiBars3BottomRight className="h-8 w-8" />
           </button>
@@ -203,14 +293,16 @@ export function Header({ locale }: HeaderProps) {
         </div>
       </header>
 
-      <AnimatePresence>
-        {mobileOpen ? (
-          <motion.div
-            className="fixed inset-0 z-[10000] overflow-y-auto bg-white bp-tablet-min:hidden"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-          >
+      {mobileOpen ? (
+        <div
+          ref={mobilePanelRef}
+          id="mobile-navigation-dialog"
+          className="fixed inset-0 z-[10000] overflow-y-auto bg-white bp-tablet-min:hidden"
+          role="dialog"
+          aria-modal="true"
+          aria-label={mobileNavCopy.dialog}
+          tabIndex={-1}
+        >
             <div className="flex h-[78px] items-center justify-between border-b border-black/5 px-4">
               <Link href={`/${locale}`} className="ml-2 flex h-[72px] w-auto items-center" aria-label={logoAlt}>
                 <Image
@@ -224,10 +316,11 @@ export function Header({ locale }: HeaderProps) {
                 />
               </Link>
               <button
+                ref={closeButtonRef}
                 type="button"
                 onClick={() => setMobileOpen(false)}
                 className="flex h-[60px] w-[50px] items-center justify-center text-brand-primary"
-                aria-label="Close navigation"
+                aria-label={mobileNavCopy.close}
               >
                 <HiOutlineXMark className="h-8 w-8" />
               </button>
@@ -299,9 +392,8 @@ export function Header({ locale }: HeaderProps) {
                 </div>
               </div>
             </div>
-          </motion.div>
-        ) : null}
-      </AnimatePresence>
+        </div>
+      ) : null}
     </>
   );
 }

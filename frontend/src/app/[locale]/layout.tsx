@@ -7,6 +7,7 @@ import { JsonLd } from '@/components/JsonLd';
 import { FloatToolbar } from '@/components/layout/FloatToolbar';
 import { Footer } from '@/components/layout/Footer';
 import { Header } from '@/components/layout/Header';
+import { BaiduAnalytics } from '@/components/seo/BaiduAnalytics';
 import { routing } from '@/i18n/routing';
 import { getOrganizationJsonLd, getWebsiteJsonLd } from '@/lib/seo/jsonld';
 import type { Locale } from '@/types/site';
@@ -39,15 +40,18 @@ export default async function LocaleLayout({ children, params }: LocaleLayoutPro
         <NextIntlClientProvider locale={locale} messages={messages}>
           <div className="min-h-screen bg-white pb-[72px] text-neutral-900 xl:pb-0">
             <Header locale={locale} />
-            <main className="min-h-[calc(100vh-520px)] bg-white">
-              {children}
-            </main>
-            <Footer locale={locale} />
-            <FloatToolbar locale={locale} />
+            <div id="site-page-content">
+              <main className="min-h-[calc(100vh-520px)] bg-white">
+                {children}
+              </main>
+              <Footer locale={locale} />
+              <FloatToolbar locale={locale} />
+            </div>
           </div>
         </NextIntlClientProvider>
         <JsonLd id="organization-jsonld" data={getOrganizationJsonLd(currentLocale)} />
         <JsonLd id="website-jsonld" data={getWebsiteJsonLd(currentLocale)} />
+        <BaiduAnalytics />
       </body>
     </html>
   );

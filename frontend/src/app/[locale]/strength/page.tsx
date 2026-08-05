@@ -1,4 +1,5 @@
 import { createStrengthMetadata, getStrengthPageData } from '@/lib/strength';
+import { permanentRedirect } from 'next/navigation';
 import { StrengthGalleryGrid } from '@/components/strength/StrengthGalleryGrid';
 import { StrengthPaginationNav } from '@/components/strength/StrengthPaginationNav';
 import { StrengthShell } from '@/components/strength/StrengthShell';
@@ -26,6 +27,10 @@ export default async function StrengthPage({ params, searchParams }: StrengthPag
   const { locale } = await params;
   const { page } = await searchParams;
   const currentLocale = (locale === 'en' ? 'en' : 'zh') as Locale;
+
+  if (currentLocale === 'zh') {
+    permanentRedirect('/zh/strength/honors');
+  }
   const currentPage = Number(page || 1) > 0 ? Number(page || 1) : 1;
   const { currentCategory, cards, page: resultPage, pageSize, total, error, sidebarItems, displayMode } =
     await getStrengthPageData(currentLocale, {

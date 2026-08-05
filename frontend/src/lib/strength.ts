@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 
-import { buildSeoMetadata } from '@/lib/seo';
+import { buildMetadata } from '@/lib/seo/metadata';
+import { localizeText } from '@/lib/utils';
 import { StrengthCategoryApiItem, StrengthDisplayCard, StrengthDisplayMode } from '@/types/strength';
 import { Locale, SidebarItem } from '@/types/site';
 
@@ -11,10 +12,6 @@ const fallbackCategories: StrengthCategoryApiItem[] = [
   { id: 2, nameZh: '荣誉资质', nameEn: 'Honors', slug: 'honors' },
   { id: 3, nameZh: '资质证书', nameEn: 'Certificates', slug: 'certificates' },
 ];
-
-function localize(locale: Locale, zh?: string | null, en?: string | null, fallback = '') {
-  return locale === 'en' ? en || zh || fallback : zh || en || fallback;
-}
 
 function normalizedSlug(slug?: string | null) {
   return (slug || '').toLowerCase();
@@ -40,7 +37,7 @@ function getDisplayMode(category: StrengthCategoryApiItem): StrengthDisplayMode 
 
 export function getStrengthSidebarItems(locale: Locale, categories: StrengthCategoryApiItem[]): SidebarItem[] {
   return categories.map((item, index) => ({
-    label: localize(locale, item.nameZh, item.nameEn, fallbackCategories[index]?.nameZh || ''),
+    label: localizeText(locale, item.nameZh, item.nameEn, fallbackCategories[index]?.nameZh || ''),
     href: index === 0 ? `/${locale}/strength` : `/${locale}/strength/${item.slug}`,
     matchHrefs: index === 0 ? [`/${locale}/strength/${item.slug}`] : undefined,
   }));
@@ -54,7 +51,7 @@ export function getStrengthCategoryBySlug(categories: StrengthCategoryApiItem[],
 export async function createStrengthMetadata(locale: Locale, categorySlug?: string): Promise<Metadata> {
   const currentCategory = getStrengthCategoryBySlug(fallbackCategories, categorySlug);
   const title = currentCategory
-    ? localize(locale, currentCategory.nameZh, currentCategory.nameEn)
+    ? localizeText(locale, currentCategory.nameZh, currentCategory.nameEn)
     : locale === 'en'
       ? 'Strength'
       : '实力展示';
@@ -63,17 +60,24 @@ export async function createStrengthMetadata(locale: Locale, categorySlug?: stri
       ? 'Explore the company strength, honors and equipment capability.'
       : '展示企业实力、荣誉资质与生产设备能力。';
 
-  return buildSeoMetadata({
-    locale,
-    path: currentCategory && categorySlug ? `/strength/${currentCategory.slug}` : '/strength',
-    pageKey: currentCategory && categorySlug ? `strength-category-${currentCategory.slug}` : 'strength',
+  const path = currentCategory && categorySlug ? `/strength/${currentCategory.slug}` : '/strength';
+
+  return buildMetadata({
     title,
     description,
+    path: `/${locale}${path}`,
+    pageKey: 'strength',
     keywords:
       locale === 'en'
         ? ['company strength', 'industrial furnace equipment', 'certificates', 'production capability']
         : ['企业实力', '工业炉生产设备', '热处理设备资质', '工业炉荣誉证书', title],
+    locale,
     image: STRENGTH_BANNER_IMAGE,
+    alternateLocales: {
+      'zh-CN': `/zh${path}`,
+      'en-US': `/en${path}`,
+      'x-default': `/zh${path}`,
+    },
   });
 }
 

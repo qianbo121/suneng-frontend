@@ -1,5 +1,7 @@
 # 江苏苏能工业炉官网部署文档
 
+> 本机唯一允许的部署源为 `/Users/qianbo/Desktop/Coding/官网-GEO-P0`。历史工作区 `/Users/qianbo/Desktop/Coding/官网+GEO` 已标记为禁止部署；不得从该目录运行部署脚本或制作生产包。
+
 ## 1. 服务器初始化
 
 目标服务器：阿里云 ECS，Ubuntu 24.04。
@@ -23,8 +25,8 @@
 1. 克隆代码：
 
 ```bash
-git clone <your-repository-url> /opt/suneng-official-site
-cd /opt/suneng-official-site
+git clone <your-repository-url> /opt/website
+cd /opt/website
 ```
 
 2. 创建生产环境变量：
@@ -86,19 +88,19 @@ sudo chmod 600 /etc/nginx/certs/privkey.pem
 证书续期建议加入 crontab：
 
 ```bash
-0 3 * * * certbot renew --quiet && cp /etc/letsencrypt/live/your-main-domain.com/fullchain.pem /etc/nginx/certs/fullchain.pem && cp /etc/letsencrypt/live/your-main-domain.com/privkey.pem /etc/nginx/certs/privkey.pem && docker compose --env-file /opt/suneng-official-site/.env.production -f /opt/suneng-official-site/docker-compose.prod.yml restart nginx
+0 3 * * * certbot renew --quiet && cp /etc/letsencrypt/live/your-main-domain.com/fullchain.pem /etc/nginx/certs/fullchain.pem && cp /etc/letsencrypt/live/your-main-domain.com/privkey.pem /etc/nginx/certs/privkey.pem && docker compose --env-file /opt/website/.env.production -f /opt/website/docker-compose.prod.yml restart nginx
 ```
 
 ## 4. 日常更新流程
 
 ```bash
-cd /opt/suneng-official-site
+cd /opt/website
 ./deploy.sh
 ```
 
 部署脚本会执行：
 
-1. `git pull origin main`
+1. 校验当前分支必须为 `main`、工作区必须干净，再执行 `git pull --ff-only origin main`
 2. 重新构建镜像（`docker compose build`，保留 Docker layer cache；源码变更仍会触发对应 `COPY . .` 之后的构建层重跑）
 3. **部署前备份**（`backup.sh`：DB + uploads → `/data/backup`，可回滚）
 4. 执行 Prisma 数据库迁移（`prisma migrate deploy`）
@@ -141,7 +143,7 @@ GitHub Actions 仍会先执行 lint、typecheck、test 和三端 build 作为质
 镜像在服务器本地构建、无独立 tag，回滚 = 切回上一个正常提交后重新部署：
 
 ```bash
-cd /opt/suneng-official-site
+cd /opt/website
 git log --oneline -10                 # 找上一个正常提交
 git checkout <last-good-commit>       # 切回（建议平时给稳定版打 tag）
 docker compose --env-file .env.production -f docker-compose.prod.yml up -d --build
@@ -155,7 +157,7 @@ docker compose --env-file .env.production -f docker-compose.prod.yml exec -T ngi
 手动备份：
 
 ```bash
-cd /opt/suneng-official-site
+cd /opt/website
 ./backup.sh
 ```
 
@@ -179,7 +181,7 @@ sudo tar -xzf /data/backup/uploads-YYYYMMDD-HHMMSS.tar.gz -C /data
 建议加入每日定时备份：
 
 ```bash
-0 2 * * * cd /opt/suneng-official-site && ./backup.sh >> /var/log/suneng-backup.log 2>&1
+0 2 * * * cd /opt/website && ./backup.sh >> /var/log/suneng-backup.log 2>&1
 ```
 
 ## 6. 常见故障排查

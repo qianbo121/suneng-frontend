@@ -1,8 +1,12 @@
+'use client';
+
 import type { CSSProperties, ReactNode } from 'react';
 import Image from 'next/image';
 import { HiCheckCircle, HiEnvelope, HiMapPin, HiPhone } from 'react-icons/hi2';
 
+import { trackLeadEvent } from '@/lib/api/lead-events';
 import { buildBrandImageAlt, joinImageAlt } from '@/lib/seo';
+import { siteSettings } from '@/mock/siteSettings';
 import { Locale } from '@/types/site';
 
 type FooterProps = {
@@ -49,28 +53,28 @@ const POLICE_BEIAN_URL = 'http://www.beian.gov.cn/portal/registerSystemInfo?reco
 const footerCopy = {
   zh: {
     contactUs: '联系我们',
-    founded: '成立于 2006 年，厂房面积 14700 ㎡',
+    founded: '成立于 2006 年；公司自报生产基地占地约 14700 ㎡',
     brandIntro: '专注热处理工业炉研发制造，提供设计、制造、安装与售后服务。',
     address: '江苏省泰州市姜堰区张甸蔡官工业区',
     wechat: '微信二维码',
     douyin: '抖音二维码',
     followUs: '关注我们，了解更多产品与解决方案',
-    email: '997518512@qq.com',
-    phone: '+86-130-5298-6814',
+    email: siteSettings.email,
+    phone: siteSettings.salesPhone,
     copyright: 'Copyright © 2025 江苏苏能工业炉有限公司 版权所有',
     icp: '苏ICP备20020318号-1',
     policeBeian: '苏公网安备32120402001014号',
   },
   en: {
     contactUs: 'Contact Us',
-    founded: 'Founded in 2006, 14,700 ㎡ facility',
+    founded: 'Founded in 2006; company-reported approx. 14,700 ㎡ site',
     brandIntro: 'Focused on industrial furnace R&D, manufacturing, installation and after-sales service.',
     address: 'Caiguan Industrial Park, Zhangdian Town, Jiangyan District, Taizhou, Jiangsu Province, China',
     wechat: 'WeChat QR',
     douyin: 'Douyin QR',
     followUs: 'Follow us for more products and solutions.',
-    email: '997518512@qq.com',
-    phone: '+86-130-5298-6814',
+    email: siteSettings.email,
+    phone: siteSettings.salesPhone,
     copyright: 'Copyright © 2025 Jiangsu Suneng Industrial Furnace Co., Ltd. All rights reserved.',
     icp: '苏ICP备20020318号-1',
     policeBeian: '苏公网安备32120402001014号',
@@ -200,6 +204,7 @@ function ContactBlock({ copy }: { copy: (typeof footerCopy)['zh'] | (typeof foot
     <div className="flex h-full flex-col items-center justify-center gap-[28px] lg:items-start">
       <a
         href={`mailto:${copy.email}`}
+        onClick={() => trackLeadEvent('email_click')}
         className={`${FOOTER_TOKENS.fontClass} flex items-center gap-[14px] whitespace-nowrap text-[16px] font-normal leading-[1.5] text-[var(--footer-text-color)] transition-colors hover:text-white`}
       >
         <ContactIcon>
@@ -210,6 +215,7 @@ function ContactBlock({ copy }: { copy: (typeof footerCopy)['zh'] | (typeof foot
 
       <a
         href={`tel:${copy.phone.replace(/\s+/g, '')}`}
+        onClick={() => trackLeadEvent('phone_click')}
         className={`${FOOTER_TOKENS.fontClass} flex items-center gap-[14px] whitespace-nowrap text-[16px] font-normal leading-[1.5] text-[var(--footer-text-color)] transition-colors hover:text-white`}
       >
         <ContactIcon>

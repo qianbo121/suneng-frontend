@@ -52,16 +52,16 @@ const stats: AboutStatsPanelItem[] = [
     icon: '/images/about/profile-icons-stat-source/stat-capital.png',
   },
   {
-    key: 'employees',
-    label: { zh: '员工人数', en: 'Employees' },
+    key: 'projects',
+    label: { zh: '工业炉新建与改造项目', en: 'New-build & Retrofit Projects' },
     value: { zh: '150+', en: '150+' },
-    unit: { zh: '名员工', en: 'Staff' },
+    unit: { zh: '项', en: 'Projects' },
     icon: '/images/about/profile-icons-stat-source/stat-employees.png',
   },
   {
     key: 'area',
-    label: { zh: '厂区面积', en: 'Factory Area' },
-    value: { zh: '14700', en: '14700' },
+    label: { zh: '生产基地占地（公司自报）', en: 'Production Site (Company-reported)' },
+    value: { zh: '约14700', en: 'Approx. 14700' },
     unit: { zh: '㎡', en: 'm²' },
     icon: '/images/about/profile-icons-stat-source/stat-area.png',
   },
@@ -93,7 +93,7 @@ const advantages = [
 const strengthCards = [
   {
     title: { zh: '现代化厂房', en: 'Modern Factory' },
-    text: { zh: '占地14700㎡，拥有标准化厂房与办公楼，生产环境整洁规范，设备先进齐全。', en: 'Standardized workshop and office space with advanced equipment.' },
+    text: { zh: '公司自报生产基地占地面积约14700㎡，用于工业炉方案设计、制造、装配与交付。', en: 'The company reports an approximately 14,700 m² production site for industrial-furnace design, manufacturing, assembly and delivery.' },
     image: '/images/about/about_img_company_building_01.png',
     icon: '/images/about/profile-icons-transparent/strength-factory.png',
   },

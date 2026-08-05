@@ -1,8 +1,8 @@
 import { LockOutlined, SaveOutlined } from '@ant-design/icons';
 import { App, Button, Card, Form, Input, Space } from 'antd';
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 
+import { useAdminNavigate } from '@/app/router/navigation';
 import { useAuth } from '@/hooks/use-auth';
 import { usePageTitle } from '@/hooks/usePageTitle';
 import { changeOwnPassword } from '@/services/auth';
@@ -16,7 +16,7 @@ type FormValues = {
 export function ChangePasswordPage() {
   usePageTitle('修改密码');
 
-  const navigate = useNavigate();
+  const navigate = useAdminNavigate();
   const { message } = App.useApp();
   const { logout } = useAuth();
   const [form] = Form.useForm<FormValues>();

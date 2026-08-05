@@ -29,6 +29,7 @@ export default () => ({
   publicSiteUrl: process.env.PUBLIC_SITE_URL ?? 'https://www.jssngyl.cn',
   baiduSite: process.env.BAIDU_SITE,
   baiduToken: process.env.BAIDU_TOKEN,
+  feishuInquiryWebhookUrl: process.env.FEISHU_INQUIRY_WEBHOOK_URL,
   allowedOrigins: getRequiredProductionEnv('ALLOWED_ORIGINS') ?? '',
   uploadRoot: process.env.UPLOAD_ROOT ?? 'uploads',
   uploadMaxFileSizeMb: Number(process.env.UPLOAD_MAX_FILE_SIZE_MB ?? 10),

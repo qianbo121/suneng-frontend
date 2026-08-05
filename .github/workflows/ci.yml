@@ -17,16 +17,43 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          # lastmod governance compares committed content with its parent.
+          fetch-depth: 2
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22.23.1
       - uses: pnpm/action-setup@v4
       - name: Install
         run: pnpm install --frozen-lockfile
+      - name: Secret guard
+        run: pnpm check:secrets
+      - name: Dependency audit
+        run: pnpm audit --audit-level high
       - name: Lint
         run: pnpm --dir frontend lint
       - name: Test
         run: pnpm --dir frontend test
+      - name: Install deterministic CJK font
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends fonts-noto-cjk
+          fc-cache -f
+      - name: Visual regression
+        env:
+          CI: true
+          VISUAL_PROJECT: linux-chrome
+        run: pnpm --dir frontend test:visual
+      - name: Upload visual failure artifacts
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: visual-regression-failure-${{ github.run_attempt }}
+          path: |
+            frontend/test-results/visual-artifacts
+            frontend/test-results/visual-report
+          if-no-files-found: ignore
+          retention-days: 7
       - name: Build (also type-checks via next build)
         env:
           NEXT_PUBLIC_APP_NAME: Manufacturing Corporate Site
@@ -44,7 +71,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22.23.1
       - uses: pnpm/action-setup@v4
       - name: Install
         run: pnpm install --frozen-lockfile
@@ -60,18 +87,20 @@ jobs:
         run: pnpm --dir backend build
 
   admin:
-    name: Admin (lint + build)
+    name: Admin (lint + test + build)
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22.23.1
       - uses: pnpm/action-setup@v4
       - name: Install
         run: pnpm install --frozen-lockfile
       - name: Lint
         run: pnpm --dir admin lint
+      - name: Test
+        run: pnpm --dir admin test
       # admin build is `tsc -b && vite build`, so the build step also type-checks
       # (project-references mode; plain `tsc --noEmit` throws TS6310 here).
       - name: Build

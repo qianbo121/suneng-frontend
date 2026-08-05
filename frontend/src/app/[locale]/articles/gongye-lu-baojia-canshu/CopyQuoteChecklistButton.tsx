@@ -14,7 +14,7 @@ const successMessage = '参数清单已复制，可发送给苏能技术人员�
 const defaultLabel = '复制参数清单';
 const defaultWrapperClassName = 'mt-5';
 const defaultButtonClassName =
-  'inline-flex min-h-[42px] items-center justify-center rounded-[4px] bg-[#c51624] px-5 text-[14px] font-semibold text-white transition hover:bg-[#a90f1b]';
+  'inline-flex min-h-[42px] items-center justify-center rounded-[4px] cta-primary px-5 text-[14px] font-semibold text-white transition';
 const defaultMessageClassName =
   'mt-3 block rounded-[6px] border border-white/16 bg-white/10 px-4 py-3 text-[14px] leading-[1.7] text-white/88';
 

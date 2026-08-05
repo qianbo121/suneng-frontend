@@ -1,6 +1,5 @@
 import {
   AdminRole,
-  CertificateCategory,
   CultureValueType,
   PrismaClient,
   PublishStatus,
@@ -399,29 +398,6 @@ async function seedNewsCategoriesAndNews() {
   }
 }
 
-async function seedStrengthCategories() {
-  const categories = [
-    { slug: 'technical-team', nameZh: '技术团队', nameEn: 'Technical Team', sortOrder: 10 },
-    { slug: 'honors', nameZh: '荣誉资质', nameEn: 'Honors', sortOrder: 20 },
-    { slug: 'certificates', nameZh: '资质证书', nameEn: 'Certificates', sortOrder: 30 },
-    { slug: 'equipment', nameZh: '生产设备', nameEn: 'Production Equipment', sortOrder: 40 },
-  ];
-
-  for (const category of categories) {
-    await prisma.strengthCategory.upsert({
-      where: { slug: category.slug },
-      update: {
-        ...category,
-        status: PublishStatus.published,
-      },
-      create: {
-        ...category,
-        status: PublishStatus.published,
-      },
-    });
-  }
-}
-
 async function seedBanners() {
   await prisma.banner.deleteMany({
     where: {
@@ -472,32 +448,6 @@ async function seedBanners() {
       },
     ],
   });
-}
-
-async function seedCompanyInfo() {
-  const entries = [
-    { key: 'site_phone', valueZh: '+86-130-5298-6814', valueEn: '+86-130-5298-6814' },
-    { key: 'site_address', valueZh: '江苏省泰州市姜堰区张甸蔡官工业区', valueEn: 'Caiguan Industrial Park, Zhangdian Town, Jiangyan District, Taizhou, Jiangsu, China' },
-    { key: 'site_email', valueZh: '997518512@qq.com', valueEn: '997518512@qq.com' },
-    { key: 'site_fax', valueZh: '', valueEn: '' },
-    { key: 'salesPhone', valueZh: '+86-130-5298-6814', valueEn: '+86-130-5298-6814' },
-    { key: 'topPhone', valueZh: '+86-130-5298-6814', valueEn: '+86-130-5298-6814' },
-    { key: 'hotline', valueZh: '+86-130-5298-6814', valueEn: '+86-130-5298-6814' },
-    { key: 'companyAddress', valueZh: '江苏省泰州市姜堰区张甸蔡官工业区', valueEn: 'Caiguan Industrial Park, Zhangdian Town, Jiangyan District, Taizhou, Jiangsu, China' },
-    { key: 'foundedYear', valueZh: '2006', valueEn: '2006' },
-    { key: 'registeredCapital', valueZh: '5080', valueEn: '5080' },
-    { key: 'patentCount', valueZh: '29', valueEn: '29' },
-    { key: 'employeeCount', valueZh: '150', valueEn: '150' },
-    { key: 'wechatQr', valueZh: '/images/footer/wechat-qr.png', valueEn: '/images/footer/wechat-qr.png' },
-  ];
-
-  for (const entry of entries) {
-    await prisma.companyInfo.upsert({
-      where: { key: entry.key },
-      update: entry,
-      create: entry,
-    });
-  }
 }
 
 async function seedAboutContent() {
@@ -623,77 +573,7 @@ async function seedAboutContent() {
   });
 }
 
-async function seedStrengthContent() {
-  const categories = await prisma.strengthCategory.findMany();
-  const categoryMap = new Map(categories.map((item) => [item.slug, item.id]));
-
-  await prisma.strengthItem.deleteMany();
-  await prisma.strengthItem.createMany({
-    data: [
-      {
-        categoryId: categoryMap.get('technical-team')!,
-        titleZh: '核心研发技术团队',
-        titleEn: 'Core Engineering Team',
-        summaryZh: '覆盖炉体结构、热工系统、电控与工艺方案。',
-        summaryEn: 'Covering furnace structure, thermal systems, electrical control and process solutions.',
-        contentZh: '技术团队长期围绕工业炉装备与热处理工艺需求，持续优化炉体结构、控温系统和设备维护便利性。',
-        contentEn: 'The engineering team continuously improves furnace structure, temperature control and maintainability for heat-treatment applications.',
-        imageUrl: 'https://placehold.co/900x700/004B97/ffffff',
-        imagesJson: ['https://placehold.co/1200x900/004B97/ffffff', 'https://placehold.co/1200x900/0B3768/ffffff'],
-        sortOrder: 10,
-        status: PublishStatus.published,
-      },
-      {
-        categoryId: categoryMap.get('equipment')!,
-        titleZh: '现代化生产设备',
-        titleEn: 'Modern Production Equipment',
-        summaryZh: '覆盖焊接、装配、检测等关键制造环节。',
-        summaryEn: 'Covering key manufacturing processes including welding, assembly and inspection.',
-        contentZh: '生产设备配置围绕稳定交付和品质控制展开，支撑多类型产品制造。',
-        contentEn: 'Production equipment is configured around stable delivery and quality control.',
-        imageUrl: 'https://placehold.co/900x700/123F74/ffffff',
-        imagesJson: ['https://placehold.co/1200x900/123F74/ffffff', 'https://placehold.co/1200x900/0D2D57/ffffff'],
-        sortOrder: 20,
-        status: PublishStatus.published,
-      },
-    ],
-  });
-
-  await prisma.certificate.deleteMany();
-  await prisma.certificate.createMany({
-    data: [
-      {
-        strengthCategoryId: categoryMap.get('honors') || null,
-        nameZh: '企业荣誉示例',
-        nameEn: 'Honor Sample',
-        imageUrl: 'https://placehold.co/900x1200/004B97/ffffff',
-        category: CertificateCategory.honor,
-        sortOrder: 10,
-        status: PublishStatus.published,
-      },
-      {
-        strengthCategoryId: categoryMap.get('certificates') || null,
-        nameZh: '资质证书示例',
-        nameEn: 'Qualification Sample',
-        imageUrl: 'https://placehold.co/900x1200/0B3768/ffffff',
-        category: CertificateCategory.qualification,
-        sortOrder: 20,
-        status: PublishStatus.published,
-      },
-      {
-        strengthCategoryId: categoryMap.get('certificates') || null,
-        nameZh: '专利证书示例',
-        nameEn: 'Patent Sample',
-        imageUrl: 'https://placehold.co/900x1200/E60012/ffffff',
-        category: CertificateCategory.patent,
-        sortOrder: 30,
-        status: PublishStatus.published,
-      },
-    ],
-  });
-}
-
-async function seedPartnersAndDeliveries() {
+async function seedPartners() {
   await prisma.partner.deleteMany();
   await prisma.partner.createMany({
     data: Array.from({ length: 8 }).map((_, index) => ({
@@ -704,182 +584,11 @@ async function seedPartnersAndDeliveries() {
       status: PublishStatus.published,
     })),
   });
-
-  const deliveries = [
-    {
-      slug: 'delivery-case-1',
-      titleZh: '交车现场示例一',
-      titleEn: 'Delivery Case One',
-      descriptionZh: '用于前台合作伙伴页面与后台交车现场管理联调。',
-      descriptionEn: 'Seeded delivery case for the partner page and admin testing.',
-      deliveryDate: new Date('2026-02-12T09:00:00.000Z'),
-      sortOrder: 10,
-    },
-    {
-      slug: 'delivery-case-2',
-      titleZh: '交车现场示例二',
-      titleEn: 'Delivery Case Two',
-      descriptionZh: '用于展示多图交付案例模块。',
-      descriptionEn: 'Used to display multi-image delivery cases.',
-      deliveryDate: new Date('2026-01-16T09:00:00.000Z'),
-      sortOrder: 20,
-    },
-  ];
-
-  for (const item of deliveries) {
-    await prisma.delivery.upsert({
-      where: { slug: item.slug },
-      update: {
-        ...item,
-        imagesJson: [
-          'https://placehold.co/1200x900/004B97/ffffff',
-          'https://placehold.co/1200x900/0B3768/ffffff',
-          'https://placehold.co/1200x900/123F74/ffffff',
-        ],
-        status: PublishStatus.published,
-      },
-      create: {
-        ...item,
-        imagesJson: [
-          'https://placehold.co/1200x900/004B97/ffffff',
-          'https://placehold.co/1200x900/0B3768/ffffff',
-          'https://placehold.co/1200x900/123F74/ffffff',
-        ],
-        status: PublishStatus.published,
-      },
-    });
-  }
-}
-
-async function seedServiceSupport() {
-  await prisma.serviceSection.deleteMany();
-  await prisma.serviceSection.createMany({
-    data: [
-      {
-        sectionKey: 'after-sales',
-        titleZh: '售后服务',
-        titleEn: 'After-sales Service',
-        contentZh: '建立标准化售后响应流程，覆盖安装指导、巡检保养与故障处理。',
-        contentEn: 'Standardized after-sales response covering installation guidance, inspection and troubleshooting.',
-        imageUrl: 'https://placehold.co/1200x800/004B97/ffffff',
-        sortOrder: 10,
-        status: PublishStatus.published,
-      },
-      {
-        sectionKey: 'advantages',
-        titleZh: '服务优势',
-        titleEn: 'Service Advantages',
-        contentZh: '依托区域网点与服务机制，缩短响应链路，提升项目保障能力。',
-        contentEn: 'Regional outlets and service processes reduce response time and improve project assurance.',
-        imageUrl: 'https://placehold.co/1200x800/0B3768/ffffff',
-        sortOrder: 20,
-        status: PublishStatus.published,
-      },
-      {
-        sectionKey: 'consultation',
-        titleZh: '在线咨询',
-        titleEn: 'Online Consultation',
-        contentZh: '提供产品选型、项目配置与商务咨询的快速入口。',
-        contentEn: 'A quick channel for product selection, project configuration and commercial consultation.',
-        imageUrl: 'https://placehold.co/1200x800/123F74/ffffff',
-        sortOrder: 30,
-        status: PublishStatus.published,
-      },
-    ],
-  });
-
-  await prisma.salesOutlet.deleteMany();
-  await prisma.salesOutlet.createMany({
-    data: [
-      {
-        regionZh: '华东',
-        regionEn: 'East China',
-        cityZh: '泰州',
-        cityEn: 'Taizhou',
-        addressZh: '江苏省泰州市姜堰区张甸蔡官工业区',
-        addressEn: 'Caiguan Industrial Park, Zhangdian Town, Jiangyan District, Taizhou, Jiangsu',
-        phone: '+86-130-5298-6814',
-        lat: 32.44,
-        lng: 120.03,
-        sortOrder: 10,
-        status: PublishStatus.published,
-      },
-      {
-        regionZh: '华东',
-        regionEn: 'East China',
-        cityZh: '江苏',
-        cityEn: 'Jiangsu',
-        addressZh: '江苏地区售后服务按项目和合同约定安排',
-        addressEn: 'Service in Jiangsu is arranged according to project and contract terms.',
-        phone: '+86-130-5298-6814',
-        lat: 32.0603,
-        lng: 118.7969,
-        sortOrder: 20,
-        status: PublishStatus.published,
-      },
-      {
-        regionZh: '西南',
-        regionEn: 'Southwest China',
-        cityZh: '成都',
-        cityEn: 'Chengdu',
-        addressZh: '西南地区服务按项目和合同约定安排',
-        addressEn: 'Service in Southwest China is arranged according to project and contract terms.',
-        phone: '+86-130-5298-6814',
-        lat: 30.5728,
-        lng: 104.0668,
-        sortOrder: 30,
-        status: PublishStatus.published,
-      },
-    ],
-  });
-}
-
-async function seedSeoMeta() {
-  const entries = [
-    {
-      pageKey: 'home',
-      titleZh: '江苏苏能工业炉有限公司｜工业炉与热处理设备厂家',
-      titleEn: 'Jiangsu Suneng Industrial Furnace | Industrial Furnace Manufacturer',
-      descriptionZh: '江苏苏能工业炉有限公司专注工业炉、热处理炉及非标热处理设备制造，提供设备定制、节能改造与售后服务支持。',
-      descriptionEn: 'Jiangsu Suneng Industrial Furnace manufactures industrial furnaces, heat treatment furnaces and customized thermal-processing equipment.',
-      keywordsZh: '江苏苏能工业炉,工业炉,热处理炉,工业炉厂家,热处理设备',
-      keywordsEn: 'Suneng Industrial Furnace,industrial furnace,heat treatment furnace,furnace manufacturer',
-      ogImage: 'https://placehold.co/1200x630/004B97/ffffff',
-    },
-    {
-      pageKey: 'products',
-      titleZh: '产品中心',
-      titleEn: 'Product Center',
-      descriptionZh: '查看苏能工业炉主要炉型、热处理生产线及非标定制参数信息。',
-      descriptionEn: 'Browse Suneng furnace types, heat treatment lines and customization information.',
-      keywordsZh: '工业炉产品,热处理炉,热处理生产线,非标工业炉',
-      keywordsEn: 'industrial furnace products,heat treatment furnace,heat treatment line',
-      ogImage: 'https://placehold.co/1200x630/0B3768/ffffff',
-    },
-    {
-      pageKey: 'news',
-      titleZh: '新闻中心',
-      titleEn: 'News Center',
-      descriptionZh: '查看公司新闻与行业新闻。',
-      descriptionEn: 'Read company and industry news.',
-      keywordsZh: '新闻中心,公司新闻,行业新闻',
-      keywordsEn: 'news,company news,industry news',
-      ogImage: 'https://placehold.co/1200x630/123F74/ffffff',
-    },
-  ];
-
-  for (const entry of entries) {
-    await prisma.seoMeta.upsert({
-      where: { pageKey: entry.pageKey },
-      update: entry,
-      create: entry,
-    });
-  }
 }
 
 async function main() {
-  // This seed is destructive (deleteMany on banners/culture/timeline/strength/
-  // certificates/partners/services/sales-outlets). Refuse to run it against a
+  // This seed is destructive (deleteMany on banners/culture/timeline/partners).
+  // Refuse to run it against a
   // production database unless explicitly overridden.
   if (process.env.NODE_ENV === 'production' && process.env.ALLOW_DESTRUCTIVE_SEED !== '1') {
     throw new Error(
@@ -893,13 +602,8 @@ async function main() {
   await seedBanners();
   await seedProductCategoriesAndProducts();
   await seedNewsCategoriesAndNews();
-  await seedStrengthCategories();
-  await seedCompanyInfo();
   await seedAboutContent();
-  await seedStrengthContent();
-  await seedPartnersAndDeliveries();
-  await seedServiceSupport();
-  await seedSeoMeta();
+  await seedPartners();
 
   console.warn(
     '[seed] Default accounts created/updated: admin / admin123456 (super_admin), editor / editor123456 (editor). Change these passwords immediately after first login.',

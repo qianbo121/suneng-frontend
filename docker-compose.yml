@@ -19,7 +19,10 @@ services:
 
   backend:
     build:
-      context: ./backend
+      context: .
+      dockerfile: backend/Dockerfile
+    labels:
+      org.opencontainers.image.revision: ${DEPLOY_COMMIT:-development}
     container_name: corp-site-backend
     restart: unless-stopped
     depends_on:
@@ -36,7 +39,7 @@ services:
       ADMIN_URL: http://localhost
       ALLOWED_ORIGINS: http://localhost,http://127.0.0.1
       UPLOAD_ROOT: uploads
-    command: sh -c "npx prisma migrate deploy && node dist/src/main.js"
+    command: sh -c "./backend/node_modules/.bin/prisma migrate deploy --schema backend/prisma/schema.prisma && node backend/dist/src/main.js"
     expose:
       - '3001'
     volumes:
@@ -44,7 +47,8 @@ services:
 
   frontend:
     build:
-      context: ./frontend
+      context: .
+      dockerfile: frontend/Dockerfile
       args:
         NEXT_PUBLIC_APP_NAME: Manufacturing Corporate Site
         NEXT_PUBLIC_DEFAULT_LOCALE: zh
@@ -52,6 +56,8 @@ services:
         NEXT_PUBLIC_API_BASE_URL: /api
         NEXT_PUBLIC_SITE_URL: http://localhost
         API_BASE_URL_INTERNAL: http://backend:3001/api
+    labels:
+      org.opencontainers.image.revision: ${DEPLOY_COMMIT:-development}
     container_name: corp-site-frontend
     restart: unless-stopped
     depends_on:
@@ -69,11 +75,14 @@ services:
 
   admin:
     build:
-      context: ./admin
+      context: .
+      dockerfile: admin/Dockerfile
       args:
         VITE_APP_BASE_PATH: /admin/
         VITE_APP_NAME: Corporate Admin
         VITE_API_BASE_URL: /api
+    labels:
+      org.opencontainers.image.revision: ${DEPLOY_COMMIT:-development}
     container_name: corp-site-admin
     restart: unless-stopped
     depends_on:

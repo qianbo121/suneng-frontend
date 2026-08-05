@@ -9,31 +9,37 @@
     "seo:submit": "node scripts/submit-search-engines.mjs",
     "seo:submit:dry": "node scripts/submit-search-engines.mjs --dry-run",
     "lint": "eslint . --ext ts,tsx",
+    "typecheck": "tsc --noEmit",
     "test": "vitest run",
+    "test:visual": "bash scripts/run-visual-regression.sh",
+    "test:visual:update": "bash scripts/run-visual-regression.sh --update-snapshots",
     "format": "prettier --write ."
   },
   "dependencies": {
     "clsx": "^2.1.1",
     "framer-motion": "^11.11.17",
-    "isomorphic-dompurify": "^3.17.0",
-    "next": "^15.0.0",
-    "next-intl": "^4.0.0",
+    "isomorphic-dompurify": "^3.21.0",
+    "next": "15.5.22",
+    "next-intl": "^4.13.5",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "react-icons": "^5.4.0",
-    "swiper": "^11.2.1"
+    "react-icons": "^5.4.0"
   },
   "devDependencies": {
+    "@eslint/eslintrc": "^3.3.1",
+    "@eslint/js": "^9.39.5",
+    "@playwright/test": "^1.62.1",
+    "@vitejs/plugin-react": "^6.0.5",
     "@types/node": "^22.10.1",
     "@types/react": "^18.3.12",
     "@types/react-dom": "^18.3.1",
     "autoprefixer": "^10.4.20",
-    "eslint": "^8.57.1",
-    "eslint-config-next": "^15.0.0",
-    "postcss": "^8.4.49",
+    "eslint": "^9.39.5",
+    "eslint-config-next": "15.5.22",
+    "postcss": "^8.5.23",
     "prettier": "^3.4.2",
     "tailwindcss": "^3.4.16",
     "typescript": "^5.7.2",
-    "vitest": "^3.2.6"
+    "vitest": "^4.1.10"
   }
 }

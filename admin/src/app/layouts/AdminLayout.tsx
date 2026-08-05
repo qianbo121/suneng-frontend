@@ -5,8 +5,7 @@ import {
   UserOutlined,
 } from '@ant-design/icons';
 import { Avatar, Button, Dropdown, Layout, Menu, Space, Typography } from 'antd';
-import { useEffect, useMemo, useState } from 'react';
-import { Outlet, useLocation, useNavigate } from 'react-router-dom';
+import { ReactNode, useEffect, useMemo, useState } from 'react';
 
 import {
   AdminMenuRoute,
@@ -15,6 +14,7 @@ import {
   findAdminRoute,
   menuIconMap,
 } from '@/app/router/route-config';
+import { useAdminLocation, useAdminNavigate } from '@/app/router/navigation';
 import { useAuth } from '@/hooks/use-auth';
 
 const { Header, Sider, Content } = Layout;
@@ -32,9 +32,9 @@ function buildMenuItems(role?: 'super_admin' | 'editor') {
   }));
 }
 
-export function AdminLayout() {
-  const navigate = useNavigate();
-  const location = useLocation();
+export function AdminLayout({ children }: { children: ReactNode }) {
+  const navigate = useAdminNavigate();
+  const location = useAdminLocation();
   const { user, logout } = useAuth();
   const [collapsed, setCollapsed] = useState(false);
   const menuItems = useMemo(() => buildMenuItems(user?.role), [user?.role]);
@@ -148,9 +148,7 @@ export function AdminLayout() {
           </Dropdown>
         </Header>
 
-        <Content className="admin-content">
-          <Outlet />
-        </Content>
+        <Content className="admin-content">{children}</Content>
       </Layout>
     </Layout>
   );

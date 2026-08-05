@@ -37,38 +37,6 @@ export const SUNENG_QUALIFICATION_CERTIFICATES: CertificateItem[] = [
     alt: '江苏苏能工业炉有限公司国家高新技术企业证书，证书编号 GR202432008987',
     sortOrder: 2,
   },
-  {
-    id: 'qualification-jiangsu-private-technology-enterprise',
-    category: 'qualification',
-    title: '江苏省民营科技企业证书',
-    certificateNo: '苏民科企证字第 20230232112023083100033 号',
-    validUntil: '2026 年 8 月',
-    image: '/images/certificates/qualifications/qualification-jiangsu-private-technology-enterprise.jpg',
-    alt: '江苏苏能工业炉有限公司江苏省民营科技企业证书',
-    sortOrder: 3,
-  },
-  {
-    id: 'qualification-work-safety-standardization',
-    category: 'qualification',
-    title: '安全生产标准化证书',
-    subtitle: '安全生产标准化三级企业（机械）',
-    certificateNo: '苏AQB3212JXⅢ202200001',
-    validUntil: '2025 年 3 月',
-    image: '/images/certificates/qualifications/qualification-work-safety-standardization.jpg',
-    alt: '江苏苏能工业炉有限公司安全生产标准化证书',
-    sortOrder: 4,
-  },
-  {
-    id: 'qualification-contract-credit-aaa-2024',
-    category: 'qualification',
-    title: '守合同重信用企业公示证书',
-    subtitle: '2024 年度，信用等级 AAA',
-    certificateNo: '20253115',
-    validUntil: '2026 年 3 月 30 日',
-    image: '/images/certificates/qualifications/qualification-contract-credit-aaa-2024.jpg',
-    alt: '江苏苏能工业炉有限公司守合同重信用企业公示证书，2024 年度信用等级 AAA',
-    sortOrder: 5,
-  },
 ];
 
 export const SUNENG_ISO_CERTIFICATES: CertificateItem[] = [
@@ -82,26 +50,6 @@ export const SUNENG_ISO_CERTIFICATES: CertificateItem[] = [
     image: '/images/certificates/iso/iso-9001-quality-management.jpg',
     alt: '江苏苏能工业炉有限公司 ISO 9001 质量管理体系认证证书',
     sortOrder: 1,
-  },
-  {
-    id: 'iso-14001',
-    category: 'iso',
-    title: 'ISO 14001 环境管理体系认证',
-    subtitle: '适用于工业电阻炉、燃气炉的设计、制造',
-    validUntil: '2027 年 1 月 12 日',
-    image: '/images/certificates/iso/iso-14001-environment-management.png',
-    alt: '江苏苏能工业炉有限公司 ISO 14001 环境管理体系认证证书',
-    sortOrder: 2,
-  },
-  {
-    id: 'iso-45001',
-    category: 'iso',
-    title: 'ISO 45001 职业健康安全管理体系认证',
-    subtitle: '适用于工业电阻炉、燃气炉的设计、制造',
-    validUntil: '2033 年 1 月 11 日',
-    image: '/images/certificates/iso/iso-45001-occupational-health-safety.png',
-    alt: '江苏苏能工业炉有限公司 ISO 45001 职业健康安全管理体系认证证书',
-    sortOrder: 3,
   },
 ];
 
@@ -247,16 +195,3 @@ export const SUNENG_PATENT_CERTIFICATES: CertificateItem[] = [
     sortOrder: 14,
   },
 ];
-
-export const SUNENG_ALL_CERTIFICATES: CertificateItem[] = [
-  ...SUNENG_QUALIFICATION_CERTIFICATES,
-  ...SUNENG_ISO_CERTIFICATES,
-  ...SUNENG_PATENT_CERTIFICATES,
-];
-
-export const SUNENG_REPRESENTATIVE_CERTIFICATES: CertificateItem[] = [
-  SUNENG_QUALIFICATION_CERTIFICATES[1],
-  ...SUNENG_ISO_CERTIFICATES,
-].filter(Boolean);
-
-export const SUNENG_REPRESENTATIVE_PATENTS: CertificateItem[] = SUNENG_PATENT_CERTIFICATES.slice(0, 5);

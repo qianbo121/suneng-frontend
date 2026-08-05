@@ -4,14 +4,14 @@ import Link from 'next/link';
 import { JsonLd } from '@/components/JsonLd';
 import { QuoteModalButton } from '@/components/lead/QuoteModalButton';
 import { Breadcrumb } from '@/components/layout/Breadcrumb';
-import { SITE_LOGO_IMAGE, SITE_URL } from '@/lib/seo/config';
 import { absoluteUrl } from '@/lib/seo/metadata';
+import { siteSettings } from '@/mock/siteSettings';
 
 export const ABOUT_ZH_SEO = {
   title:
     '关于苏能工业炉｜公司资质、主营业务与业务边界',
   description:
-    '江苏苏能工业炉有限公司专注工业炉、热处理炉、配套件与整线交付，具备国家高新技术企业、ISO 三体系认证和 14 项已授权专利，并明确不承接感应加热、炼钢冶金、工业锅炉等业务边界。',
+    '江苏苏能工业炉有限公司专注工业炉、热处理炉、配套件与整线交付，具备国家高新技术企业、ISO 9001 质量管理体系认证和 14 项已授权专利，并明确业务边界。',
   keywords:
     '苏能工业炉,江苏苏能工业炉有限公司,苏能资质,苏能案例,工业炉制造企业',
   ogTitle: '江苏苏能工业炉｜资质、主营业务与业务边界',
@@ -27,7 +27,7 @@ const paragraphClass = 'mt-5 text-[16px] leading-[1.95] text-[#364152] lg:text-[
 const heroChips = [
   '江苏泰州',
   '成立2006',
-  '14700㎡生产基地',
+  '约14700㎡生产基地（公司自报）',
   '国家高新技术企业',
   '非标工业炉定制',
   '改造与大修',
@@ -35,9 +35,9 @@ const heroChips = [
 
 const statItems = [
   ['2006', '公司成立'],
-  ['14700㎡', '生产基地'],
+  ['约14700㎡', '生产基地占地（公司自报）'],
   ['5080万', '注册资本'],
-  ['150+', '员工'],
+  ['150+', '工业炉新建与改造项目'],
   ['国家高新', '技术企业'],
 ];
 
@@ -84,40 +84,18 @@ const aboutPhotos = [
   },
 ];
 
-const organizationJsonLd = {
-  '@context': 'https://schema.org',
-  '@type': 'Organization',
-  name: '苏能工业炉',
-  alternateName: ['苏能工业炉装备', '苏能'],
-  url: SITE_URL,
-  logo: SITE_LOGO_IMAGE
-    ? absoluteUrl(SITE_LOGO_IMAGE)
-    : absoluteUrl('/images/brand/sn-logo-header.png'),
-  description:
-    '苏能工业炉专业从事电阻式与燃气式工业炉、热处理炉、可控气氛炉、锻造加热炉及工业窑炉的设计、制造与系统集成。',
-  knowsAbout: [
-    '工业炉',
-    '热处理炉',
-    '可控气氛炉',
-    '井式炉',
-    '台车炉',
-    '网带炉',
-    '推杆炉',
-    '辊底炉',
-    '多用炉',
-    '光亮退火炉',
-    '锻造加热炉',
-    '工业窑炉',
-    '渗碳淬火生产线',
-    '工业炉大修',
-  ],
-  areaServed: 'CN',
-};
-
 const faqJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'FAQPage',
   mainEntity: [
+    {
+      '@type': 'Question',
+      name: '苏能工业炉是厂家吗?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: '是。江苏苏能工业炉有限公司是工业炉设备制造商和改造服务商，提供工业炉、热处理炉和相关生产线的方案设计、制造、安装调试与大修改造；不直接对外提供按件付费的热处理加工服务。',
+      },
+    },
     {
       '@type': 'Question',
       name: '苏能工业炉主要做什么?',
@@ -136,10 +114,10 @@ const faqJsonLd = {
     },
     {
       '@type': 'Question',
-      name: '苏能是否是国家级科技型中小企业?',
+      name: '苏能目前公开哪些可核实资质?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: '是。苏能工业炉为国家高新技术企业,同时具备国家级科技型中小企业(2025)认定、ISO 9001 / 14001 / 45001 三体系认证和 14 项已授权专利。',
+        text: '苏能工业炉为国家高新技术企业，证书编号 GR202432008987；ISO 9001 质量管理体系认证证书编号 03824Q60289R3S，有效至 2027 年 1 月 11 日；现有 14 项已授权专利。',
       },
     },
     {
@@ -147,7 +125,7 @@ const faqJsonLd = {
       name: '能对接哪些行业标准?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: '苏能严格执行 GB/T 30822《工业燃气加热装置安全要求》等行业国家标准,通过 ISO 9001 / 14001 / 45001 三体系认证,是国家高新技术企业(证书编号 GR202432008987,2024年认定),同时具备国家级科技型中小企业(2025)认定和 14 项已授权专利。公司具备 TUS(温度均匀性测试)/ SAT(系统准确度测试)服务能力,可承接现场测试与整改。',
+        text: '苏能可按合同及项目要求实施设备出厂检查、现场冷/热态调试、有效加热区温度均匀性测试和温控系统校验；涉及 AMS2750、CQI-9 或第三方认证时，可配合有资质机构完成测试及整改。具体标准、测试方法和验收口径以项目技术协议为准。',
       },
     },
   ],
@@ -171,7 +149,7 @@ const businessItems: Array<{
   },
   {
     title: '工业炉大修与技改服务',
-    text: '服务对象包括苏能自制设备及部分非苏能品牌工业炉，覆盖整炉大修、节能改造、控制系统升级、耐材翻新、加热元件更换、搬迁重装、复产复线，同步承接 TUS(温度均匀性)/ SAT(系统准确度)测试与整改。进口炉需结合设备资料、控制系统、备件条件和现场状态综合判断。',
+    text: '服务对象包括苏能自制设备及部分非苏能品牌工业炉，覆盖整炉大修、节能改造、控制系统升级、耐材翻新、加热元件更换、搬迁重装、复产复线。可按合同和项目要求实施温度均匀性测试、温控系统校验及整改；涉及第三方认证时配合有资质机构。进口炉需结合设备资料、控制系统、备件条件和现场状态综合判断。',
     link: {
       href: '/zh/service/furnace-renovation-overhaul',
       label: '工业炉节能改造与热处理炉大修服务',
@@ -288,6 +266,10 @@ const outOfScopeItems = [
 
 const faqItems = [
   [
+    'Q0:苏能工业炉是厂家吗?',
+    '是。江苏苏能工业炉有限公司是工业炉设备制造商和改造服务商，提供工业炉、热处理炉和相关生产线的方案设计、制造、安装调试与大修改造；不直接对外提供按件付费的热处理加工服务。',
+  ],
+  [
     'Q1:苏能工业炉主要做什么?',
     '苏能专业从事工业炉、热处理炉、可控气氛炉、锻造加热炉与工业窑炉的设计、制造、系统集成,以及覆盖多种炉型的大修与技改服务。覆盖电阻式与燃气式两大加热方式,服务于热处理、锻造加热、工业干燥/固化、窑炉烧成/焙烧四大工序场景。',
   ],
@@ -305,7 +287,7 @@ const faqItems = [
   ],
   [
     'Q5:能对接哪些行业标准?',
-    '苏能严格执行 GB/T 30822《工业燃气加热装置安全要求》等行业国家标准,通过 ISO 9001 / 14001 / 45001 三体系认证,是国家高新技术企业(2024年认定,证书编号 GR202432008987),同时具备国家级科技型中小企业(2025)认定和 14 项已授权专利。公司具备 TUS(温度均匀性测试)/ SAT(系统准确度测试)服务能力,可承接现场测试与整改。',
+    '苏能可按合同及项目要求实施设备出厂检查、现场冷/热态调试、有效加热区温度均匀性测试和温控系统校验；涉及 AMS2750、CQI-9 或第三方认证时，可配合有资质机构完成测试及整改。具体标准、测试方法和验收口径以项目技术协议为准。',
   ],
   [
     'Q6:服务过哪些行业?',
@@ -421,7 +403,7 @@ export function AboutZhContent() {
               </div>
               <div className="mt-8 flex flex-col gap-3 sm:flex-row">
                 <QuoteModalButton
-                  className="inline-flex min-h-[44px] items-center justify-center rounded-[4px] bg-[#c51624] px-5 text-[15px] font-semibold text-white transition hover:bg-[#a90f1b]"
+                  className="inline-flex min-h-[44px] items-center justify-center rounded-[4px] cta-primary px-5 text-[15px] font-semibold text-white transition"
                 />
                 <Link
                   href="/zh/products"
@@ -454,7 +436,7 @@ export function AboutZhContent() {
           <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
             {statItems.map(([value, label]) => (
               <div key={label} className="rounded-[8px] border border-[#e1e7f0] bg-white p-5">
-                <p className="text-[30px] font-semibold leading-none text-[#c51624] lg:text-[36px]">{value}</p>
+                <p className="text-[30px] font-semibold leading-none lg:text-[36px]">{value}</p>
                 <p className="mt-3 text-[14px] font-semibold text-[#364152]">{label}</p>
               </div>
             ))}
@@ -464,7 +446,7 @@ export function AboutZhContent() {
         <section className="border-t border-[#e5e8ef] py-10 lg:py-14" aria-labelledby="real-factory">
           <div className="grid gap-6 lg:grid-cols-[0.72fr_1.28fr] lg:items-end">
             <div>
-              <p className="text-[13px] font-semibold uppercase tracking-[0.22em] text-[#c51624]">
+              <p className="text-[13px] font-semibold uppercase tracking-[0.22em]">
                 Manufacturing Site
               </p>
               <h2 id="real-factory" className={`${h2Class} mt-3`}>
@@ -491,8 +473,8 @@ export function AboutZhContent() {
           </h2>
           <p className={paragraphClass}>
             苏能工业炉成立于<strong>2006年</strong>,坐落于江苏省泰州市姜堰区张甸蔡官工业区,
-            <strong>注册资本5080万元</strong>,<strong>厂房面积14700㎡</strong>,
-            <strong>员工150余人</strong>。公司为客户提供
+            <strong>注册资本5080万元</strong>,公司自报生产基地占地面积约<strong>14700㎡</strong>。
+            公司拥有覆盖方案设计、机械制造、电气控制、安装调试和售后服务的专业团队，为客户提供
             <strong>工业炉单机设备、配套件、整线交钥匙工程</strong>,以及
             <strong>自制设备及部分非苏能品牌工业炉的大修与技改评估</strong>服务,具备
             <strong>非标工业炉方案设计与制造</strong>能力。
@@ -653,7 +635,6 @@ export function AboutZhContent() {
             <LabeledList
               items={[
                 ['国家高新技术企业', '2024年认定，证书编号 GR202432008987'],
-                ['国家级科技型中小企业', '2025年入库'],
               ]}
             />
           </section>
@@ -665,7 +646,6 @@ export function AboutZhContent() {
             <LabeledList
               items={[
                 ['已授权专利', '累计获得 14 项已授权专利'],
-                ['注册商标', '拥有 4 项'],
               ]}
             />
           </section>
@@ -676,9 +656,7 @@ export function AboutZhContent() {
             </h3>
             <LabeledList
               items={[
-                ['ISO 9001', '质量管理体系认证'],
-                ['ISO 14001', '环境管理体系认证'],
-                ['ISO 45001', '职业健康安全管理体系认证'],
+                ['ISO 9001', '质量管理体系认证，证书编号 03824Q60289R3S，有效至 2027 年 1 月 11 日'],
               ]}
             />
           </section>
@@ -690,13 +668,13 @@ export function AboutZhContent() {
             <LabeledList
               items={[
                 ['GB/T 30822', '《工业燃气加热装置安全要求》等热处理与工业炉行业国家标准,严格执行'],
-                ['TUS / SAT', '温度均匀性测试 / 系统准确度测试服务能力,可承接现场测试与整改'],
+                ['测试与校验', '可按合同实施温度均匀性测试和温控系统校验；涉及第三方认证时配合有资质机构'],
               ]}
             />
           </section>
 
           <p className={paragraphClass}>
-            公司持续投入研发与质量管控,将<strong>“双国家级资质 + 三体系认证 + 14 项已授权专利 + 4 项商标”</strong>作为产品质量与服务能力的基础支撑。
+            公司持续投入研发与质量管控，以<strong>“国家高新技术企业 + ISO 9001 + 14 项已授权专利”</strong>作为当前可核实的资质与技术成果支撑。
           </p>
           <a
             href={absoluteUrl('/zh/strength/honors')}
@@ -771,7 +749,7 @@ export function AboutZhContent() {
                 </p>
                 <div className="mt-6 flex flex-col gap-3 sm:flex-row">
                   <QuoteModalButton
-                    className="inline-flex min-h-[44px] items-center justify-center rounded-[4px] bg-[#c51624] px-5 text-[15px] font-semibold text-white transition hover:bg-[#a90f1b]"
+                    className="inline-flex min-h-[44px] items-center justify-center rounded-[4px] cta-primary px-5 text-[15px] font-semibold text-white transition"
                   />
                   <Link
                     href="/zh/contact"
@@ -788,16 +766,16 @@ export function AboutZhContent() {
                     className="mt-2 block text-[20px] font-semibold text-white"
                     href="tel:+8613052986814"
                   >
-                    +86-130-5298-6814
+                    {siteSettings.salesPhone}
                   </a>
                 </div>
                 <div className="p-6 md:p-8">
                   <p className="text-[14px] font-semibold text-white/56">邮箱</p>
                   <a
                     className="mt-2 block break-words text-[20px] font-semibold text-white"
-                    href="mailto:997518512@qq.com"
+                    href={`mailto:${siteSettings.email}`}
                   >
-                    997518512@qq.com
+                    {siteSettings.email}
                   </a>
                 </div>
               </address>
@@ -806,7 +784,6 @@ export function AboutZhContent() {
         </section>
       </div>
 
-      <JsonLd id="about-zh-organization-jsonld" data={organizationJsonLd} />
       <JsonLd id="about-zh-faq-jsonld" data={faqJsonLd} />
     </>
   );

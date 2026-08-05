@@ -1,3 +1,5 @@
+import { notFound } from 'next/navigation';
+
 import { JsonLd } from '@/components/JsonLd';
 import { PageBanner } from '@/components/layout/PageBanner';
 import { Breadcrumb } from '@/components/layout/Breadcrumb';
@@ -8,7 +10,7 @@ import {
   RelatedPartnerLinkItem,
 } from '@/components/partner/PartnerLogoGrid';
 import { localizeOrHideHref } from '@/lib/i18n/zh-only';
-import { buildSeoMetadata } from '@/lib/seo';
+import { buildMetadata } from '@/lib/seo/metadata';
 import { PARTNER_SEO } from '@/lib/seo/page-data';
 import { Locale } from '@/types/site';
 
@@ -174,7 +176,7 @@ const relatedLinks: RelatedPartnerLinkItem[] = [
     description: '了解在役工业炉节能改造、整炉大修、控制系统升级和耐材翻新服务范围。',
   },
   {
-    title: '某青山系不锈钢企业 1250mm 三线节能改造案例',
+    title: '某不锈钢深加工企业连续退洗线节能改造案例',
     href: '/zh/case/anonymous-tsingshan-1250-renovation',
     description: '查看不锈钢连续退洗线节能改造案例，作为同类工业炉改造项目参考。',
   },
@@ -214,24 +216,36 @@ export async function generateMetadata({ params }: PartnerPageProps) {
   const { locale } = await params;
   const currentLocale = (locale === 'en' ? 'en' : 'zh') as Locale;
 
-  return buildSeoMetadata({
-    locale: currentLocale,
-    path: '/partner',
-    pageKey: 'partner',
+  const metadata = buildMetadata({
     title: currentLocale === 'en' ? 'Partners' : PARTNER_SEO.title,
     description:
       currentLocale === 'en'
         ? 'Industrial furnace cooperation and application scenarios across manufacturing sectors.'
         : PARTNER_SEO.description,
+    path: `/${currentLocale}/partner`,
+    pageKey: 'partner',
     keywords: PARTNER_SEO.keywords,
+    locale: currentLocale,
     image: '/images/partner/partner-hero.png',
+    alternateLocales: {
+      'zh-CN': '/zh/partner',
+      'x-default': '/zh/partner',
+    },
   });
+
+  return currentLocale === 'en'
+    ? { ...metadata, robots: { index: false, follow: false } }
+    : metadata;
 }
 
 export default async function PartnerPage({ params }: PartnerPageProps) {
   const { locale } = await params;
   const currentLocale = (locale === 'en' ? 'en' : 'zh') as Locale;
-  const title = currentLocale === 'en' ? 'Partners' : '合作关系与行业应用';
+
+  if (currentLocale === 'en') {
+    notFound();
+  }
+  const title = '合作关系与行业应用';
   // Localize internal links to the current locale; drop links whose target is
   // Chinese-only when rendering English (rewriting them to /en/* would 404).
   const localizedFieldItems = cooperationFields.map((field) => ({
@@ -249,18 +263,12 @@ export default async function PartnerPage({ params }: PartnerPageProps) {
 
   return (
     <div className="bg-white pb-10 lg:pb-0">
-      {currentLocale === 'zh' ? (
-        <JsonLd id="partner-collection-jsonld" data={partnerCollectionJsonLd} />
-      ) : null}
+      <JsonLd id="partner-collection-jsonld" data={partnerCollectionJsonLd} />
       <PageBanner
         locale={locale}
         title={title}
         englishTitle="Partners"
-        subtitle={
-          currentLocale === 'en'
-            ? 'Industrial furnace cooperation and application scenarios across manufacturing sectors'
-            : '服务多行业工业炉项目，覆盖装备制造、不锈钢、有色金属、汽车零部件、能源装备等应用场景。'
-        }
+        subtitle="服务多行业工业炉项目，覆盖装备制造、不锈钢、有色金属、汽车零部件、能源装备等应用场景。"
         backgroundImage="/images/partner/partner-hero.png"
         variant="about"
       />

@@ -1,10 +1,11 @@
 'use client';
 
 import Image from 'next/image';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { FaWeixin } from 'react-icons/fa';
 import { HiChevronUp, HiOutlinePhone } from 'react-icons/hi2';
 
+import { trackLeadEvent } from '@/lib/api/lead-events';
 import { buildBrandImageAlt, joinImageAlt } from '@/lib/seo';
 import { Locale } from '@/types/site';
 
@@ -38,6 +39,15 @@ export function FloatToolbar({ locale = 'zh' }: FloatToolbarProps) {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
+  const openWechat = () => {
+    trackLeadEvent('wechat_click');
+    setWechatOpen(true);
+  };
+
+  useEffect(() => {
+    if (wechatOpen) trackLeadEvent('wechat_qr_view');
+  }, [wechatOpen]);
+
   return (
     <>
       <div className="fixed bottom-8 right-6 z-40 hidden flex-col transition-opacity duration-200 [body.mobile-nav-open_&]:hidden xl:flex">
@@ -69,7 +79,7 @@ export function FloatToolbar({ locale = 'zh' }: FloatToolbarProps) {
               <button
                 key={item.key}
                 type="button"
-                onClick={() => setWechatOpen(true)}
+                onClick={openWechat}
                 aria-label={item.label}
                 title={item.label}
                 className={`${sharedClassName} ${index === 0 ? 'rounded-t-[10px]' : ''}`}
@@ -85,6 +95,9 @@ export function FloatToolbar({ locale = 'zh' }: FloatToolbarProps) {
             <a
               key={item.key}
               href={item.href}
+              onClick={() => {
+                if (item.key === 'phone') trackLeadEvent('phone_click');
+              }}
               aria-label={item.label}
               title={item.label}
               className={`${sharedClassName} ${index === 0 ? 'rounded-t-[10px]' : ''}`}
@@ -118,7 +131,7 @@ export function FloatToolbar({ locale = 'zh' }: FloatToolbarProps) {
               <button
                 key={item.key}
                 type="button"
-                onClick={() => setWechatOpen(true)}
+                onClick={openWechat}
                 className="flex min-h-[64px] flex-col items-center justify-center gap-1 text-[11px] text-neutral-700"
               >
                 <FaWeixin className="text-lg text-brand-accent" aria-hidden="true" />
@@ -132,6 +145,9 @@ export function FloatToolbar({ locale = 'zh' }: FloatToolbarProps) {
             <a
               key={item.key}
               href={item.href}
+              onClick={() => {
+                if (item.key === 'phone') trackLeadEvent('phone_click');
+              }}
               className="flex min-h-[64px] flex-col items-center justify-center gap-1 text-[11px] text-neutral-700"
             >
               <LinkIcon className="text-lg text-brand-accent" />

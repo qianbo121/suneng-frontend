@@ -1,5 +1,8 @@
 worker_processes auto;
 
+error_log /var/log/nginx/error.log warn;
+error_log stderr warn;
+
 events {
   worker_connections 1024;
 }
@@ -7,6 +10,60 @@ events {
 http {
   include /etc/nginx/mime.types;
   default_type application/octet-stream;
+
+  log_format analytics_json escape=json
+    '{"time":"$time_iso8601",'
+    '"request_id":"$request_id",'
+    '"host":"$host",'
+    '"server_name":"$server_name",'
+    '"remote_addr":"$remote_addr",'
+    '"method":"$request_method",'
+    '"uri":"$uri",'
+    '"protocol":"$server_protocol",'
+    '"status":$status,'
+    '"request_length":$request_length,'
+    '"body_bytes_sent":$body_bytes_sent,'
+    '"request_time":$request_time,'
+    '"upstream_status":"$upstream_status",'
+    '"upstream_response_time":"$upstream_response_time",'
+    '"cache_status":"$upstream_cache_status",'
+    '"crawler_family":"$crawler_family",'
+    '"monitoring_probe":"$monitoring_probe",'
+    '"lead_event":"$lead_event",'
+    '"referer":"$http_referer",'
+    '"user_agent":"$http_user_agent"}';
+
+  map $http_user_agent $crawler_family {
+    default "";
+    ~*OAI-SearchBot "openai_oai_searchbot";
+    ~*ChatGPT-User "openai_chatgpt_user";
+    ~*GPTBot "openai_gptbot";
+    ~*Claude-SearchBot "anthropic_claude_searchbot";
+    ~*Claude-User "anthropic_claude_user";
+    ~*ClaudeBot "anthropic_claudebot";
+    ~*Perplexity-User "perplexity_user";
+    ~*PerplexityBot "perplexity_bot";
+    ~*Bytespider "bytedance_bytespider";
+    ~*Baiduspider "baidu_spider";
+    ~*Sogou "sogou_spider";
+    ~*360Spider "360_spider";
+    ~*YisouSpider "yisou_spider";
+    ~*Googlebot "googlebot";
+    ~*bingbot "bingbot";
+  }
+
+  map $http_x_suneng_monitoring_probe $monitoring_probe {
+    default "";
+    ~*^crawler-verification$ "crawler_verification";
+  }
+
+  map "$request_method:$uri" $lead_event {
+    default "";
+    ~^POST:/api/v1/custom-requirements/?$ "custom_requirement_submit";
+    ~^POST:/api/v1/lead-events/?$ "lead_event_ingest";
+  }
+
+  access_log /var/log/nginx/other.access.json analytics_json;
 
   sendfile on;
   tcp_nopush on;
@@ -37,6 +94,10 @@ http {
     max_size=100m
     use_temp_path=off;
 
+  # Shared, multi-instance protection for the public inquiry endpoint. The
+  # application keeps a bounded in-process fallback as a second line of defense.
+  limit_req_zone $binary_remote_addr zone=inquiry_submit:10m rate=5r/m;
+
   upstream frontend_upstream {
     server frontend:3000;
   }
@@ -49,9 +110,66 @@ http {
     server admin:80;
   }
 
+  # 智能工厂系统：独立子域名，同源代理前端与 API。
+  server {
+    listen 80;
+    server_name factory.jssngyl.cn;
+    access_log /var/log/nginx/factory.access.json analytics_json;
+
+    location /.well-known/acme-challenge/ {
+      root /var/www/certbot;
+    }
+
+    location / {
+      return 301 https://$host$request_uri;
+    }
+  }
+
+  server {
+    listen 443 ssl;
+    http2 on;
+    server_name factory.jssngyl.cn;
+    access_log /var/log/nginx/factory.access.json analytics_json;
+
+    ssl_certificate /etc/nginx/certs/fullchain.pem;
+    ssl_certificate_key /etc/nginx/certs/privkey.pem;
+
+    client_max_body_size 100m;
+
+    add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
+    add_header X-Frame-Options "SAMEORIGIN" always;
+    add_header X-Content-Type-Options "nosniff" always;
+
+    location /api/ {
+      proxy_pass http://furnace-api:18080/;
+      proxy_http_version 1.1;
+      proxy_set_header Host $host;
+      proxy_set_header X-Real-IP $remote_addr;
+      proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+      proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
+    location / {
+      proxy_pass http://furnace-web:80;
+      proxy_http_version 1.1;
+      proxy_set_header Host $host;
+      proxy_set_header X-Real-IP $remote_addr;
+      proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+      proxy_set_header X-Forwarded-Proto $scheme;
+      proxy_set_header Upgrade $http_upgrade;
+      proxy_set_header Connection "upgrade";
+    }
+  }
+
   server {
     listen 80;
     server_name jssngyl.cn ${DOMAIN};
+    access_log /var/log/nginx/redirect.access.json analytics_json;
+
+    # 兼容旧版智能工厂工时二维码，保留令牌路径并切到正确子域名。
+    location ^~ /h5/work-scan/ {
+      return 302 https://factory.jssngyl.cn$request_uri;
+    }
 
     # 组织架构子页面已并入公司简介，301 重定向
     location = /zh/about/organization {
@@ -94,6 +212,7 @@ http {
   server {
     listen 80;
     server_name ${ADMIN_DOMAIN};
+    access_log /var/log/nginx/admin.access.json analytics_json;
 
     location /.well-known/acme-challenge/ {
       root /var/www/certbot;
@@ -105,11 +224,18 @@ http {
   }
 
   server {
-    listen 443 ssl http2;
+    listen 443 ssl;
+    http2 on;
     server_name jssngyl.cn;
+    access_log /var/log/nginx/redirect.access.json analytics_json;
 
     ssl_certificate /etc/nginx/certs/fullchain.pem;
     ssl_certificate_key /etc/nginx/certs/privkey.pem;
+
+    # 兼容旧版智能工厂工时二维码，保留令牌路径并切到正确子域名。
+    location ^~ /h5/work-scan/ {
+      return 302 https://factory.jssngyl.cn$request_uri;
+    }
 
     # 组织架构子页面已并入公司简介，301 重定向
     location = /zh/about/organization {
@@ -146,8 +272,10 @@ http {
   }
 
   server {
-    listen 443 ssl http2;
+    listen 443 ssl;
+    http2 on;
     server_name ${DOMAIN};
+    access_log /var/log/nginx/www.access.json analytics_json;
 
     ssl_certificate /etc/nginx/certs/fullchain.pem;
     ssl_certificate_key /etc/nginx/certs/privkey.pem;
@@ -159,6 +287,11 @@ http {
     # script/style requirements. Tighten unsafe-inline/unsafe-eval after report
     # telemetry confirms the runtime no longer needs them.
     add_header Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https://www.jssngyl.cn https://admin.jssngyl.cn; object-src 'none'; base-uri 'self'; frame-ancestors 'self'; form-action 'self'; upgrade-insecure-requests" always;
+
+    # 兼容旧版智能工厂工时二维码，保留令牌路径并切到正确子域名。
+    location ^~ /h5/work-scan/ {
+      return 302 https://factory.jssngyl.cn$request_uri;
+    }
 
     # 组织架构子页面已并入公司简介，301 重定向
     location = /zh/about/organization {
@@ -193,12 +326,40 @@ http {
       return 301 /zh;
     }
 
+    # Keep the public root deterministic for crawlers. Locale-prefixed URLs
+    # remain the canonical language entry points; English stays available at /en.
+    location = / {
+      return 308 https://$DOMAIN/zh;
+    }
+
     location = /api/v1/news {
       proxy_cache news_cache;
       proxy_cache_valid 200 5m;
       proxy_cache_key "$scheme$request_method$host$request_uri";
       add_header X-Cache-Status $upstream_cache_status always;
 
+      proxy_pass http://backend_upstream;
+      proxy_http_version 1.1;
+      proxy_set_header Host $host;
+      proxy_set_header X-Real-IP $remote_addr;
+      proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+      proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
+    location = /api/v1/custom-requirements {
+      limit_req zone=inquiry_submit burst=2 nodelay;
+      limit_req_status 429;
+      proxy_pass http://backend_upstream;
+      proxy_http_version 1.1;
+      proxy_set_header Host $host;
+      proxy_set_header X-Real-IP $remote_addr;
+      proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+      proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
+    location = /api/v1/custom-requirements/ {
+      limit_req zone=inquiry_submit burst=2 nodelay;
+      limit_req_status 429;
       proxy_pass http://backend_upstream;
       proxy_http_version 1.1;
       proxy_set_header Host $host;
@@ -249,6 +410,18 @@ http {
       add_header Cache-Control "public, max-age=2592000, immutable";
     }
 
+    location ^~ /images/ {
+      proxy_pass http://frontend_upstream;
+      proxy_http_version 1.1;
+      proxy_set_header Host $host;
+      proxy_set_header X-Forwarded-Host $host;
+      proxy_set_header X-Forwarded-Port 443;
+      proxy_set_header X-Forwarded-Proto $scheme;
+      access_log off;
+      expires 7d;
+      add_header Cache-Control "public, max-age=604800";
+    }
+
     location / {
       proxy_pass http://frontend_upstream;
       proxy_http_version 1.1;
@@ -264,8 +437,10 @@ http {
   }
 
   server {
-    listen 443 ssl http2;
+    listen 443 ssl;
+    http2 on;
     server_name ${ADMIN_DOMAIN};
+    access_log /var/log/nginx/admin.access.json analytics_json;
 
     ssl_certificate /etc/nginx/certs/fullchain.pem;
     ssl_certificate_key /etc/nginx/certs/privkey.pem;

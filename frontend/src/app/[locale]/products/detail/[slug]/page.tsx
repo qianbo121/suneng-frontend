@@ -16,6 +16,7 @@ import {
 } from 'react-icons/hi2';
 
 import { JsonLd } from '@/components/JsonLd';
+import { GeoReviewNote } from '@/components/geo-pages/GeoPageBlocks';
 import { Breadcrumb } from '@/components/layout/Breadcrumb';
 import { ProductDetailGallery } from '@/components/products/ProductDetailGallery';
 import { ProductLeadForm, ProductQuoteScrollButton } from '@/components/products/ProductLeadForm';
@@ -25,6 +26,8 @@ import { buildProductImageAlt } from '@/lib/seo';
 import { getFaqJsonLd, getProductDetailJsonLd } from '@/lib/seo/jsonld';
 import { buildMetadata } from '@/lib/seo/metadata';
 import { PRODUCT_DETAIL_SEO } from '@/lib/seo/page-data';
+import { getEnglishProductMetadata } from '@/lib/seo/product-metadata-en';
+import { siteSettings } from '@/mock/siteSettings';
 import { Locale } from '@/types/site';
 
 type ProductDetailPageProps = {
@@ -43,8 +46,34 @@ const processStepIcons = [
   '/images/products/detail-icons/icon_step_05.png',
 ];
 const PRODUCTION_LINE_SLUGS = new Set(['roller-mesh-belt-line', 'copper-wire-annealing-line', 'annealing-solution-line']);
+const GEO_SECTION_TITLE_BY_SLUG: Record<string, string> = {
+  'trolley-furnace': '台车炉选型与工艺适配',
+  'box-furnace': '箱式炉选型与工艺适配',
+  'mesh-belt-furnace': '网带炉选型与工艺适配',
+  'pit-furnace': '井式炉选型与工艺适配',
+  'bell-furnace': '罩式炉选型与工艺适配',
+  'roller-hearth-furnace': '辊底炉选型与工艺适配',
+  'pusher-furnace': '推杆炉选型与工艺适配',
+  'rotary-hearth-furnace': '转底炉选型与工艺适配',
+  'roller-mesh-belt-line': '托辊型网带生产线选型与工艺适配',
+  'copper-wire-annealing-line': '铜丝退火线选型与工艺适配',
+  'annealing-solution-line': '退火固溶生产线选型与工艺适配',
+};
 const quoteParamsPath = '/zh/articles/gongye-lu-baojia-canshu';
 const repairOrReplacePath = '/zh/articles/laojiu-rechuli-lu-daxiu-haishi-maixin';
+const P3_REVIEW_DATE = '2026-07-29';
+const trolleyFitBoundaries = {
+  suitable: [
+    '大型铸件、锻件、模具、焊接结构件等需要整炉装卸的周期式热处理工件',
+    '需要行车吊装、台车承载，且现场具备轨道、基础和台车行程条件的项目',
+    '退火、回火、正火、去应力、时效及按项目核算的淬火加热场景',
+  ],
+  unsuitable: [
+    '工件规格稳定、产量连续且更适合网带、辊底、推杆等连续输送的项目',
+    '超长轴杆件更适合竖直装炉，或炉膛利用率明显偏低的项目',
+    '现场无法满足轨道、基础、吊装、安全距离或燃气排烟条件的项目',
+  ],
+};
 
 export const revalidate = 3600;
 
@@ -66,13 +95,14 @@ export async function generateMetadata({ params }: ProductDetailPageProps): Prom
 
   const seo = PRODUCT_DETAIL_SEO[slug];
   const enDetail = getProductDetailEn(slug);
+  const enMetadata = getEnglishProductMetadata(slug);
   const title =
     currentLocale === 'en'
-      ? enDetail?.title || product.name.en
+      ? enMetadata?.title || enDetail?.title || product.name.en
       : seo?.title || product.detail?.title || product.name[currentLocale];
   const description =
     currentLocale === 'en'
-      ? enDetail?.summary || product.summary.en
+      ? enMetadata?.description || enDetail?.summary || product.summary.en
       : seo?.description || product.detail?.summary || product.summary[currentLocale];
   const keywords =
     currentLocale === 'en'
@@ -92,6 +122,7 @@ export async function generateMetadata({ params }: ProductDetailPageProps): Prom
     pageKey: 'product-detail',
     keywords,
     image: product.image,
+    modifiedTime: currentLocale === 'zh' ? seo?.modifiedTime : undefined,
     alternateLocales: {
       'zh-CN': `/zh/products/detail/${slug}`,
       'en-US': `/en/products/detail/${slug}`,
@@ -151,38 +182,13 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
   const gallery = product.gallery.length ? product.gallery : [product.image];
   const isProductionLine = PRODUCTION_LINE_SLUGS.has(product.slug);
   const visibleReasons = isProductionLine ? detail.reasons.slice(0, 5) : detail.reasons;
-  const specRows = detail.customSpecs.map((item) => ({
-    ...item,
-    key: item.key === '温度使用温度' ? '使用温度' : item.key,
-  }));
+  const specRows = detail.customSpecs;
   const specColumnSize = Math.ceil(specRows.length / 2);
   const specColumns = [specRows.slice(0, specColumnSize), specRows.slice(specColumnSize)];
   const geoSectionTitle =
     currentLocale === 'en'
       ? `${detail.title} — Selection & Process Fit`
-      : product.slug === 'trolley-furnace'
-        ? '台车炉选型与工艺适配'
-        : product.slug === 'box-furnace'
-          ? '箱式炉选型与工艺适配'
-        : product.slug === 'mesh-belt-furnace'
-          ? '网带炉选型与工艺适配'
-        : product.slug === 'pit-furnace'
-          ? '井式炉选型与工艺适配'
-        : product.slug === 'bell-furnace'
-          ? '罩式炉选型与工艺适配'
-        : product.slug === 'roller-hearth-furnace'
-          ? '辊底炉选型与工艺适配'
-        : product.slug === 'pusher-furnace'
-          ? '推杆炉选型与工艺适配'
-        : product.slug === 'rotary-hearth-furnace'
-          ? '转底炉选型与工艺适配'
-        : product.slug === 'roller-mesh-belt-line'
-          ? '托辊型网带生产线选型与工艺适配'
-        : product.slug === 'copper-wire-annealing-line'
-          ? '铜丝退火线选型与工艺适配'
-        : product.slug === 'annealing-solution-line'
-          ? '退火固溶生产线选型与工艺适配'
-          : `${detail.title.replace('（非标定制）', '')}选型与工艺适配`;
+      : GEO_SECTION_TITLE_BY_SLUG[product.slug] ?? `${detail.title.replace('（非标定制）', '')}选型与工艺适配`;
   const showChinesePathLinks = currentLocale === 'zh';
   // Localize internal links to the current locale; drop links whose target is
   // Chinese-only when rendering English (avoids /en 404s and /zh cross-locale
@@ -205,6 +211,7 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
       const href = localizeOrHideHref(item.href, currentLocale);
       return href ? [{ ...item, href }] : [];
     });
+  const isP3TrolleyPage = currentLocale === 'zh' && product.slug === 'trolley-furnace';
 
   return (
     <main className="bg-white text-[#202020]">
@@ -219,6 +226,7 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
           image: gallery,
           keywords: currentLocale === 'en' ? undefined : PRODUCT_DETAIL_SEO[product.slug]?.keywords,
           additionalProperties: specRows.map((item) => ({ name: item.key, value: item.value })),
+          dateModified: currentLocale === 'zh' ? PRODUCT_DETAIL_SEO[product.slug]?.modifiedTime : undefined,
         }, currentLocale)}
       />
       {detail.faq?.length ? (
@@ -272,7 +280,7 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
                       label={currentLocale === 'en' ? undefined : item.title}
                       updateHash
                       variant="hero"
-                      className="inline-flex min-h-[44px] items-center justify-center rounded-[4px] bg-[#c51624] px-5 text-[14px] font-semibold text-white transition hover:bg-[#a90f1b]"
+                      className="inline-flex min-h-[44px] items-center justify-center rounded-[4px] cta-primary px-5 text-[14px] font-semibold text-white transition"
                     />
                   ) : (
                     <a
@@ -280,8 +288,8 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
                       href={item.href}
                       className={
                         index === 0
-                          ? 'inline-flex min-h-[44px] items-center justify-center rounded-[4px] bg-[#c51624] px-5 text-[14px] font-semibold text-white transition hover:bg-[#a90f1b]'
-                          : 'inline-flex min-h-[44px] items-center justify-center rounded-[4px] border border-[#c51624] bg-white px-5 text-[14px] font-semibold text-[#c51624] transition hover:bg-[#fff5f5]'
+                          ? 'inline-flex min-h-[44px] items-center justify-center rounded-[4px] cta-primary px-5 text-[14px] font-semibold text-white transition'
+                          : 'inline-flex min-h-[44px] items-center justify-center rounded-[4px] cta-secondary bg-white px-5 text-[14px] font-semibold transition'
                       }
                     >
                       {item.title}
@@ -311,7 +319,7 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
             </div>
             <ProductQuoteScrollButton
               locale={currentLocale}
-              className="flex h-11 w-full items-center justify-center rounded-[4px] border border-[#c51624] bg-white text-[15px] font-medium text-[#c51624] transition hover:bg-[#fff5f5]"
+              className="flex h-11 w-full items-center justify-center rounded-[4px] cta-secondary bg-white text-[15px] font-medium transition"
             />
             <div className="flex items-center gap-[10px]">
               <span className="flex h-[32px] w-[32px] shrink-0 items-center justify-center rounded-full bg-[#fff1f2] text-[#e60012]">
@@ -320,10 +328,19 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
               <span className="text-[14px] leading-none text-[#8a8f99]">
                 {currentLocale === 'en' ? 'Hotline:' : '咨询热线：'}
               </span>
-              <strong className="-ml-1 text-[14px] font-semibold leading-none text-[#1a1d23]">+86-130-5298-6814</strong>
+              <strong className="-ml-1 text-[14px] font-semibold leading-none text-[#1a1d23]">{siteSettings.salesPhone}</strong>
             </div>
           </aside>
         </section>
+
+        {isP3TrolleyPage ? (
+          <div className="mt-8 overflow-hidden rounded-[8px] border border-[#e2e8f0]">
+            <GeoReviewNote
+              modifiedDate={P3_REVIEW_DATE}
+              sourceNote="苏能 GEO 事实台账中的台车炉项目参数（SN-CASE-P1-013、SN-CASE-P1-014）"
+            />
+          </div>
+        ) : null}
 
         {detail.workpieceCards?.length ? (
           <section className="mt-12">
@@ -337,6 +354,39 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
                   <p className="mt-3 text-[14px] leading-[1.75] text-[#5f6673]">{item.text}</p>
                 </article>
               ))}
+            </div>
+          </section>
+        ) : null}
+
+        {isP3TrolleyPage ? (
+          <section className="mt-12">
+            <SectionTitle>台车炉的适用与不适用条件</SectionTitle>
+            <div className="mt-5 grid gap-5 lg:grid-cols-2">
+              <article className="rounded-[8px] border border-[#d6e0ec] bg-[#f8fafc] p-6">
+                <h3 className="text-[19px] font-semibold leading-[1.4] text-[#101828]">适用条件</h3>
+                <ul className="mt-4 space-y-3 text-[14px] leading-[1.8] text-[#475467]">
+                  {trolleyFitBoundaries.suitable.map((item) => (
+                    <li key={item} className="flex gap-3">
+                      <span className="mt-[0.72em] h-1.5 w-1.5 shrink-0 rounded-full cta-primary" />
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
+              </article>
+              <article className="rounded-[8px] border border-[#f3d7d9] bg-[#fff8f8] p-6">
+                <h3 className="text-[19px] font-semibold leading-[1.4] text-[#101828]">不宜直接选用的条件</h3>
+                <ul className="mt-4 space-y-3 text-[14px] leading-[1.8] text-[#475467]">
+                  {trolleyFitBoundaries.unsuitable.map((item) => (
+                    <li key={item} className="flex gap-3">
+                      <span className="mt-[0.72em] h-1.5 w-1.5 shrink-0 rounded-full cta-primary" />
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
+                <p className="mt-5 border-t border-[#f0dfe1] pt-4 text-[14px] leading-[1.8] text-[#667085]">
+                  出现上述情况时，应比较井式炉、网带炉、辊底炉、推杆炉或其他产线方案，不应只按“台车炉”名称询价。
+                </p>
+              </article>
             </div>
           </section>
         ) : null}
@@ -402,7 +452,7 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
           {detail.parameterLink && parameterLinkHref ? (
             <Link
               href={parameterLinkHref}
-              className="mt-4 inline-flex min-h-[42px] items-center justify-center rounded-[4px] border border-[#c51624] px-5 text-[14px] font-semibold text-[#c51624] transition hover:bg-[#fff5f5]"
+              className="mt-4 inline-flex min-h-[42px] items-center justify-center rounded-[4px] cta-secondary px-5 text-[14px] font-semibold transition"
             >
               {detail.parameterLink.title}
             </Link>
@@ -416,7 +466,7 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
               <div className="mt-4 flex flex-wrap gap-3">
                 <Link
                   href={quoteParamsPath}
-                  className="inline-flex min-h-[40px] items-center justify-center rounded-[4px] border border-[#c51624] bg-white px-4 text-[13px] font-semibold text-[#c51624] transition hover:bg-[#fff5f5]"
+                  className="inline-flex min-h-[40px] items-center justify-center rounded-[4px] cta-secondary bg-white px-4 text-[13px] font-semibold transition"
                 >
                   查看报价需要哪些参数
                 </Link>

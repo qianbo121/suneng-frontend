@@ -1,3 +1,6 @@
+import type { Metadata } from 'next';
+import { notFound } from 'next/navigation';
+
 import { JsonLd } from '@/components/JsonLd';
 import { PageBanner } from '@/components/layout/PageBanner';
 import { QuoteModalButton } from '@/components/lead/QuoteModalButton';
@@ -11,6 +14,11 @@ import {
   NEWS_SUBTITLE,
 } from '@/constants/news';
 import { getNewsListPageData, mapNewsCard } from '@/lib/news';
+import {
+  getNewsListCanonicalPath,
+  getNewsListPageTitle,
+  normalizeNewsPage,
+} from '@/lib/news-pagination';
 import { cleanObject, getBreadcrumbJsonLd } from '@/lib/seo/jsonld';
 import { absoluteUrl, buildMetadata } from '@/lib/seo/metadata';
 import { NEWS_SEO } from '@/lib/seo/page-data';
@@ -44,37 +52,47 @@ const newsSeoCopy = {
   keywords: string[];
 }>;
 
-export async function generateMetadata({ params }: NewsPageProps) {
+export async function generateMetadata({ params, searchParams }: NewsPageProps) {
   const { locale } = await params;
+  const { page } = await searchParams;
   const currentLocale = (locale === 'en' ? 'en' : 'zh') as Locale;
+  const currentPage = normalizeNewsPage(page);
   const seo = newsSeoCopy[currentLocale];
+  const pageQuery = currentPage > 1 ? `?page=${currentPage}` : '';
+  const canonicalPath = getNewsListCanonicalPath(currentLocale, currentPage);
+  const title = getNewsListPageTitle(seo.title, currentLocale, currentPage);
 
-  return buildMetadata({
-    title: seo.title,
+  const metadata = buildMetadata({
+    title,
     description: seo.description,
-    path: `/${currentLocale}/news`,
+    path: canonicalPath,
     pageKey: 'news',
     keywords: seo.keywords,
     image: NEWS_LIST_HERO_IMAGE,
-    alternateLocales: {
-      'zh-CN': '/zh/news',
-      'en-US': '/en/news',
-      'x-default': '/zh/news',
-    },
+    alternateLocales: currentLocale === 'zh'
+      ? {
+          'zh-CN': `/zh/news${pageQuery}`,
+          'x-default': `/zh/news${pageQuery}`,
+        }
+      : undefined,
   });
-}
 
-function normalizePage(value?: string) {
-  const page = Number(value);
+  if (currentLocale === 'en') {
+    return { ...metadata, robots: { index: false, follow: false } } satisfies Metadata;
+  }
 
-  return Number.isFinite(page) && page > 0 ? Math.floor(page) : 1;
+  return metadata;
 }
 
 export default async function NewsPage({ params, searchParams }: NewsPageProps) {
   const { locale } = await params;
   const { page } = await searchParams;
   const currentLocale = (locale === 'en' ? 'en' : 'zh') as Locale;
-  const currentPage = normalizePage(page);
+  const currentPage = normalizeNewsPage(page);
+
+  if (currentLocale === 'en') {
+    notFound();
+  }
 
   const { list } = await getNewsListPageData(currentLocale, {
     page: currentPage,
@@ -83,14 +101,16 @@ export default async function NewsPage({ params, searchParams }: NewsPageProps) 
 
   const newsItems = list?.items?.length
     ? list.items.map((item) => mapNewsCard(currentLocale, item))
-    : FALLBACK_NEWS_ITEMS;
-  const total = list?.total ?? FALLBACK_NEWS_ITEMS.length;
+    : currentPage === 1
+      ? FALLBACK_NEWS_ITEMS
+      : [];
+  const total = list ? list.total : FALLBACK_NEWS_ITEMS.length;
   const title = NEWS_LABEL[currentLocale];
   const subtitle = NEWS_SUBTITLE[currentLocale];
   const contactHref = '/zh/contact';
   const newsJsonLd = cleanObject([
     getBreadcrumbJsonLd([
-      { name: currentLocale === 'en' ? 'Home' : '首页', url: `/${currentLocale}` },
+      { name: '首页', url: `/${currentLocale}` },
       { name: title, url: `/${currentLocale}/news` },
     ]),
     {
@@ -98,7 +118,7 @@ export default async function NewsPage({ params, searchParams }: NewsPageProps) 
       '@type': 'ItemList',
       itemListElement: newsItems.map((item, index) => ({
         '@type': 'ListItem',
-        position: index + 1,
+        position: (currentPage - 1) * NEWS_PAGE_SIZE + index + 1,
         name: item.title[currentLocale],
         url: absoluteUrl(`/${currentLocale}/news/${item.slug}`),
       })),
@@ -139,11 +159,11 @@ export default async function NewsPage({ params, searchParams }: NewsPageProps) 
               <div className="mt-5 flex flex-col gap-3 sm:flex-row lg:mt-0 lg:shrink-0">
                 <QuoteModalButton
                   label="获取报价方案"
-                  className="inline-flex min-h-[46px] items-center justify-center rounded-[4px] bg-[#c51624] px-6 text-[15px] font-semibold text-white transition hover:bg-[#a90f1b]"
+                  className="inline-flex min-h-[46px] items-center justify-center rounded-[4px] cta-primary px-6 text-[15px] font-semibold text-white transition"
                 />
                 <a
                   href={contactHref}
-                  className="inline-flex min-h-[46px] items-center justify-center rounded-[4px] border border-[#c51624] px-6 text-[15px] font-semibold text-[#c51624] transition hover:bg-[#fff5f5]"
+                  className="inline-flex min-h-[46px] items-center justify-center rounded-[4px] cta-secondary px-6 text-[15px] font-semibold transition"
                 >
                   联系苏能工程师
                 </a>

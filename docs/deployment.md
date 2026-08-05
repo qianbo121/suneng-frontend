@@ -2,20 +2,27 @@
 
 生产部署以根目录 [DEPLOY.md](../DEPLOY.md) 和 `deploy.sh` 为准。本文只保留入口说明，避免出现两套互相冲突的发布流程。
 
+## 0. 唯一部署源
+
+- 本机唯一允许作为官网部署源的工作区：`/Users/qianbo/Desktop/Coding/官网-GEO-P0`。
+- `/Users/qianbo/Desktop/Coding/官网+GEO` 是待分拣的历史工作区，禁止运行 `deploy.sh`、禁止打包部署、禁止用其构建结果覆盖生产。
+- 部署脚本会拒绝带有 `.DO_NOT_DEPLOY` 标记的工作区，并核对 9 个正式方案路由源码是否齐全。
+- 历史工作区的未提交内容只能按功能建立独立迁移分支，以当前正式施工区为基线逐项移植、测试和验收，禁止整树覆盖。
+
 ## 1. 生产部署入口
 
 生产服务器使用：
 
 ```bash
-cd /opt/suneng-official-site
+cd /opt/website
 ./deploy.sh
 ```
 
-实际服务器目录以 GitHub Secret `DEPLOY_PATH` 或运维约定为准；如果不是 `/opt/suneng-official-site`，请替换为真实路径。
+当前生产目录为 `/opt/website`，并应与 GitHub Secret `DEPLOY_PATH` 保持一致。
 
 `deploy.sh` 会按固定顺序执行：
 
-1. `git pull --ff-only origin main`，CI 远程包部署时通过 `DEPLOY_SKIP_PULL=1` 跳过。
+1. 校验部署分支必须为 `main` 且工作区干净，再执行 `git pull --ff-only origin main`。CI 远程包部署时通过 `DEPLOY_SKIP_PULL=1` 跳过，并必须携带与 GitHub SHA 一致的 `DEPLOY_COMMIT`。
 2. `docker compose --env-file .env.production -f docker-compose.prod.yml build`，保留 Docker layer cache；源码变更仍会触发对应构建层重跑。
 3. 调用 `backup.sh` 做部署前备份。
 4. 执行 `prisma migrate deploy`。

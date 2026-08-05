@@ -13,7 +13,15 @@ export const ZH_ONLY_PATHS = new Set<string>([
   '/solutions/rechuli-lu-changjia',
   '/solutions/jiangsu-gongye-lu-changjia',
   '/solutions/continuous-heat-treatment-line',
+  '/solutions/rechuli-lu-wendu-bujun-zhenggai',
+  '/solutions/rechuli-lu-gaizao-fengxian-zhouqi',
+  '/solutions/rechuli-lu-luchen-fanxin',
+  '/solutions/rechuli-lu-dian-gai-ran-yure-huishou',
+  '/solutions/rechuli-lu-kongzhi-xitong-shengji',
+  '/solutions/rechuli-lu-tingchan-chongqi-banqian-fuchan',
   '/case/anonymous-tsingshan-1250-renovation',
+  '/case/jining-support-roller-heat-treatment-line',
+  '/case/henan-annealing-solution-line',
 ]);
 
 function stripLocale(path: string): string {

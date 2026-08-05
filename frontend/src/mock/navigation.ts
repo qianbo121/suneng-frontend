@@ -1,7 +1,7 @@
 import { isZhOnlyPath } from '@/lib/i18n/zh-only';
 import { Locale, NavigationItem } from '@/types/site';
 
-export const navigationItems: NavigationItem[] = [
+const navigationItems: NavigationItem[] = [
   {
     key: 'home',
     href: '/',
@@ -48,7 +48,7 @@ const zhOnlyNavigationChildren: Partial<Record<string, NonNullable<NavigationIte
     },
     {
       key: 'about-certificates',
-      href: '/strength/certificates',
+      href: '/strength/honors#management-systems',
       label: { zh: '体系认证', en: 'Certifications' },
     },
     {
@@ -57,7 +57,7 @@ const zhOnlyNavigationChildren: Partial<Record<string, NonNullable<NavigationIte
       label: { zh: '合作伙伴', en: 'Partners' },
     },
     {
-      key: 'about-case-tsingshan-1250-renovation',
+      key: 'about-case-industrial-furnace-renovation',
       href: '/case/anonymous-tsingshan-1250-renovation',
       label: { zh: '项目案例', en: 'Project Case' },
     },
@@ -86,7 +86,7 @@ const zhOnlyNavigationChildren: Partial<Record<string, NonNullable<NavigationIte
   ],
 };
 
-export function getLocalizedText(locale: Locale, text: { zh: string; en: string }) {
+function getLocalizedText(locale: Locale, text: { zh: string; en: string }) {
   return text[locale];
 }
 
@@ -104,14 +104,16 @@ function getNavigationChildren(locale: Locale, item: NavigationItem) {
 }
 
 export function getLocalizedNavigation(locale: Locale) {
-  return navigationItems.map((item) => ({
-    ...item,
-    labelText: getLocalizedText(locale, item.label),
-    children: getNavigationChildren(locale, item)?.map((child) => ({
-      ...child,
-      labelText: getLocalizedText(locale, child.label),
-    })),
-  }));
+  return navigationItems
+    .filter((item) => locale === 'zh' || item.key !== 'resources')
+    .map((item) => ({
+      ...item,
+      labelText: getLocalizedText(locale, item.label),
+      children: getNavigationChildren(locale, item)?.map((child) => ({
+        ...child,
+        labelText: getLocalizedText(locale, child.label),
+      })),
+    }));
 }
 
 export function getRouteLabelMap(locale: Locale) {

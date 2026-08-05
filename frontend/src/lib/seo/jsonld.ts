@@ -10,6 +10,7 @@ import {
   SITE_URL,
 } from '@/lib/seo/config';
 import { absoluteUrl } from '@/lib/seo/metadata';
+import { siteSettings } from '@/mock/siteSettings';
 import type { Locale } from '@/types/site';
 
 export type ProductDetailJsonLdInput = {
@@ -25,6 +26,8 @@ export type ProductDetailJsonLdInput = {
     value: string;
     unitText?: string;
   }>;
+  dateModified?: string;
+  reviewedByTechnicalEngineer?: boolean;
 };
 
 export type ArticleJsonLdInput = {
@@ -35,7 +38,11 @@ export type ArticleJsonLdInput = {
   image?: string;
   datePublished: string;
   dateModified?: string;
+  reviewedByTechnicalEngineer?: boolean;
+  reviewerName?: TechnicalReviewerName;
 };
+
+export type TechnicalReviewerName = '唐工' | '王工';
 
 export type FaqJsonLdItem = {
   question: string;
@@ -67,6 +74,10 @@ const PRODUCT_SCHEMA_ORDER = [
 const productBySlug = new Map(STATIC_PRODUCTS.map((product) => [product.slug, product]));
 const LOCAL_BUSINESS_URL = 'https://www.jssngyl.cn/';
 const LOCAL_BUSINESS_ID = `${LOCAL_BUSINESS_URL}#organization`;
+const TECHNICAL_REVIEWER_IDS: Record<TechnicalReviewerName, string> = {
+  唐工: `${LOCAL_BUSINESS_URL}#technical-reviewer-tang`,
+  王工: `${LOCAL_BUSINESS_URL}#technical-reviewer-wang`,
+};
 const HOME_PAGE_EN_DESCRIPTION =
   'Jiangsu Suneng Industrial Furnace (founded 2006, Taizhou, Jiangsu) custom-engineers heat-treatment furnaces — box, bogie-hearth, pit, mesh-belt, roller-hearth and pusher furnaces, continuous heat-treatment lines, plus furnace energy-saving retrofit and overhaul.';
 const PRODUCT_COLLECTION_EN_DESCRIPTION =
@@ -110,6 +121,15 @@ function isEnglishLocale(locale: Locale) {
 
 function schemaLanguage(locale: Locale) {
   return isEnglishLocale(locale) ? 'en-US' : 'zh-CN';
+}
+
+export function getTechnicalReviewerJsonLd(name: TechnicalReviewerName = '唐工') {
+  return {
+    '@type': 'Person',
+    '@id': TECHNICAL_REVIEWER_IDS[name],
+    name,
+    worksFor: { '@id': LOCAL_BUSINESS_ID },
+  };
 }
 
 export function cleanObject<T>(value: T): T {
@@ -168,12 +188,13 @@ export function getOrganizationJsonLd(locale: Locale = 'zh') {
     alternateName: isEnglish ? [COMPANY_NAME, ...ALTERNATE_NAMES] : [englishCompanyName, ...ALTERNATE_NAMES],
     url: LOCAL_BUSINESS_URL,
     logo: SITE_LOGO_IMAGE ? absoluteUrl(SITE_LOGO_IMAGE) : undefined,
-    telephone: '+86-130-5298-6814',
-    email: '997518512@qq.com',
-    foundingDate: '2006',
-    numberOfEmployees: {
-      '@type': 'QuantitativeValue',
-      minValue: 150,
+    telephone: siteSettings.salesPhone,
+    email: siteSettings.email,
+    foundingDate: '2006-12-22',
+    identifier: {
+      '@type': 'PropertyValue',
+      propertyID: isEnglish ? 'Unified Social Credit Code' : '统一社会信用代码',
+      value: '91321204796529654Q',
     },
     address: {
       '@type': 'PostalAddress',
@@ -181,21 +202,7 @@ export function getOrganizationJsonLd(locale: Locale = 'zh') {
       addressLocality: isEnglish ? 'Taizhou' : '姜堰区',
       addressRegion: isEnglish ? 'Jiangsu' : '江苏省泰州市',
       addressCountry: 'CN',
-      postalCode: '225500',
     },
-    geo: {
-      '@type': 'GeoCoordinates',
-      latitude: 32.44,
-      longitude: 120.03,
-    },
-    openingHoursSpecification: [
-      {
-        '@type': 'OpeningHoursSpecification',
-        dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
-        opens: '07:30',
-        closes: '18:00',
-      },
-    ],
     areaServed: [
       {
         '@type': 'Place',
@@ -211,7 +218,7 @@ export function getOrganizationJsonLd(locale: Locale = 'zh') {
           ]),
     ],
     description: isEnglish
-      ? 'Jiangsu Suneng Industrial Furnace, founded 2006 in Taizhou, Jiangsu, is a National High-Tech Enterprise specializing in custom heat-treatment furnace design and manufacturing, with a 14,700 m² production base.'
+      ? 'Jiangsu Suneng Industrial Furnace, founded on December 22, 2006 in Taizhou, Jiangsu, is a National High-Tech Enterprise specializing in custom heat-treatment furnace design and manufacturing.'
       : DEFAULT_DESCRIPTION,
     hasCredential: [
       {
@@ -222,16 +229,7 @@ export function getOrganizationJsonLd(locale: Locale = 'zh') {
       {
         '@type': 'EducationalOccupationalCredential',
         name: isEnglish ? 'ISO 9001 Quality Management System certification' : 'ISO 9001 质量管理体系认证',
-      },
-      {
-        '@type': 'EducationalOccupationalCredential',
-        name: isEnglish ? 'ISO 14001 Environmental Management System certification' : 'ISO 14001 环境管理体系认证',
-      },
-      {
-        '@type': 'EducationalOccupationalCredential',
-        name: isEnglish
-          ? 'ISO 45001 Occupational Health and Safety Management System certification'
-          : 'ISO 45001 职业健康安全管理体系认证',
+        identifier: '03824Q60289R3S',
       },
     ],
     knowsAbout: isEnglish
@@ -319,6 +317,41 @@ export function getHomePageJsonLd(path = '/', locale: Locale = 'zh') {
   });
 }
 
+export function getWebPageJsonLd({
+  path,
+  name,
+  description,
+  locale = 'zh',
+  mainEntityId,
+  dateModified,
+  reviewedByTechnicalEngineer = false,
+}: {
+  path: string;
+  name: string;
+  description?: string;
+  locale?: Locale;
+  mainEntityId?: string;
+  dateModified?: string;
+  reviewedByTechnicalEngineer?: boolean;
+}) {
+  const pageUrl = absoluteUrl(path);
+
+  return cleanObject({
+    '@context': 'https://schema.org',
+    '@type': 'WebPage',
+    '@id': webpageId(pageUrl),
+    url: pageUrl,
+    name,
+    description,
+    isPartOf: { '@id': `${SITE_URL}/#website` },
+    about: { '@id': LOCAL_BUSINESS_ID },
+    mainEntity: mainEntityId ? { '@id': mainEntityId } : undefined,
+    dateModified,
+    reviewedBy: reviewedByTechnicalEngineer ? getTechnicalReviewerJsonLd() : undefined,
+    inLanguage: schemaLanguage(locale),
+  });
+}
+
 export function getBreadcrumbJsonLd(items: Array<{ name: string; url: string }>) {
   return cleanObject({
     '@context': 'https://schema.org',
@@ -385,6 +418,7 @@ export function getProductCollectionJsonLd(path = '/products', locale: Locale = 
 export function getProductDetailJsonLd(product: ProductDetailJsonLdInput, locale: Locale = 'zh') {
   const isEnglish = isEnglishLocale(locale);
   const pageUrl = productUrl(product.slug, product.path);
+  const productId = `${pageUrl}#product`;
   const images = absoluteImages(product.image);
   const description = isEnglish ? product.description : PRODUCT_JSON_LD_DESCRIPTIONS[product.slug] || product.description;
 
@@ -392,20 +426,25 @@ export function getProductDetailJsonLd(product: ProductDetailJsonLdInput, locale
     {
       '@context': 'https://schema.org',
       '@type': 'Product',
+      '@id': productId,
       name: !isEnglish && product.slug === 'trolley-furnace' ? '台车式热处理炉' : product.name,
+      alternateName: product.alternateName,
       description,
+      keywords: product.keywords,
       brand: {
         '@type': 'Brand',
         name: isEnglish ? 'Suneng Industrial Furnace' : SHORT_NAME,
       },
-      manufacturer: {
-        '@type': 'Organization',
-        name: isEnglish ? 'Jiangsu Suneng Industrial Furnace Co., Ltd.' : COMPANY_NAME,
-        url: LOCAL_BUSINESS_URL,
-      },
+      manufacturer: { '@id': LOCAL_BUSINESS_ID },
       category: isEnglish ? 'Industrial Furnace / Heat-Treatment Furnace' : '工业炉 / 热处理炉',
       url: pageUrl,
       image: images,
+      additionalProperty: product.additionalProperties?.map((item) => ({
+        '@type': 'PropertyValue',
+        name: item.name,
+        value: item.value,
+        unitText: item.unitText,
+      })),
     },
     {
       '@context': 'https://schema.org',
@@ -415,6 +454,10 @@ export function getProductDetailJsonLd(product: ProductDetailJsonLdInput, locale
       name: product.name,
       description: product.description,
       isPartOf: { '@id': `${SITE_URL}/#website` },
+      about: { '@id': LOCAL_BUSINESS_ID },
+      mainEntity: { '@id': productId },
+      dateModified: product.dateModified,
+      reviewedBy: product.reviewedByTechnicalEngineer ? getTechnicalReviewerJsonLd() : undefined,
       inLanguage: schemaLanguage(locale),
     },
     getBreadcrumbJsonLd([
@@ -438,6 +481,11 @@ export function getArticleJsonLd(article: ArticleJsonLdInput, locale: Locale = '
     datePublished: article.datePublished,
     dateModified,
     author: { '@id': LOCAL_BUSINESS_ID },
+    reviewedBy: article.reviewerName
+      ? getTechnicalReviewerJsonLd(article.reviewerName)
+      : article.reviewedByTechnicalEngineer
+        ? getTechnicalReviewerJsonLd()
+        : undefined,
     publisher: { '@id': LOCAL_BUSINESS_ID },
     mainEntityOfPage: pageUrl,
     inLanguage: schemaLanguage(locale),

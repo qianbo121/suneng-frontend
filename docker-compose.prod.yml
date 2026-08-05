@@ -27,7 +27,10 @@ services:
 
   backend:
     build:
-      context: ./backend
+      context: .
+      dockerfile: backend/Dockerfile
+    labels:
+      org.opencontainers.image.revision: ${DEPLOY_COMMIT:-unknown}
     container_name: corp-site-backend
     logging: *default-logging
     restart: always
@@ -47,6 +50,7 @@ services:
       PUBLIC_SITE_URL: ${PUBLIC_SITE_URL}
       BAIDU_SITE: ${BAIDU_SITE}
       BAIDU_TOKEN: ${BAIDU_TOKEN}
+      FEISHU_INQUIRY_WEBHOOK_URL: ${FEISHU_INQUIRY_WEBHOOK_URL:-}
       ALLOWED_ORIGINS: https://${DOMAIN},https://${ADMIN_DOMAIN}
       UPLOAD_ROOT: uploads
       UPLOAD_MAX_FILE_SIZE_MB: ${UPLOAD_MAX_FILE_SIZE_MB:-10}
@@ -70,7 +74,8 @@ services:
 
   frontend:
     build:
-      context: ./frontend
+      context: .
+      dockerfile: frontend/Dockerfile
       args:
         NEXT_PUBLIC_APP_NAME: Manufacturing Corporate Site
         NEXT_PUBLIC_DEFAULT_LOCALE: zh
@@ -78,6 +83,8 @@ services:
         NEXT_PUBLIC_API_BASE_URL: /api
         NEXT_PUBLIC_SITE_URL: https://${DOMAIN}
         API_BASE_URL_INTERNAL: http://backend:3001/api
+    labels:
+      org.opencontainers.image.revision: ${DEPLOY_COMMIT:-unknown}
     container_name: corp-site-frontend
     logging: *default-logging
     restart: always
@@ -106,11 +113,14 @@ services:
 
   admin:
     build:
-      context: ./admin
+      context: .
+      dockerfile: admin/Dockerfile
       args:
         VITE_APP_BASE_PATH: /
         VITE_APP_NAME: Corporate Admin
         VITE_API_BASE_URL: /api
+    labels:
+      org.opencontainers.image.revision: ${DEPLOY_COMMIT:-unknown}
     container_name: corp-site-admin
     logging: *default-logging
     restart: always
@@ -149,9 +159,10 @@ services:
     command:
       - /bin/sh
       - -c
-      - envsubst '$$DOMAIN $$ADMIN_DOMAIN' < /etc/nginx/nginx.conf.template > /etc/nginx/nginx.conf && nginx -g 'daemon off;'
+      - umask 027 && envsubst '$$DOMAIN $$ADMIN_DOMAIN' < /etc/nginx/nginx.conf.template > /etc/nginx/nginx.conf && exec nginx -g 'daemon off;'
     volumes:
       - ./nginx.prod.conf.template:/etc/nginx/nginx.conf.template:ro
+      - /data/nginx-logs:/var/log/nginx
       - /data/uploads:/var/www/uploads:ro
       - /etc/nginx/certs:/etc/nginx/certs:ro
       - ./deploy/www:/var/www/certbot

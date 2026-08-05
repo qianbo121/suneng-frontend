@@ -1,12 +1,18 @@
 import type { Metadata } from 'next';
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
-import type { ReactNode } from 'react';
 
+import {
+  GeoContactCta,
+  GeoFaqGrid,
+  GeoHeroTags,
+  GeoReviewNote,
+  GeoSection as Section,
+} from '@/components/geo-pages/GeoPageBlocks';
 import { JsonLd } from '@/components/JsonLd';
 import { Breadcrumb } from '@/components/layout/Breadcrumb';
 import { QuoteModalButton } from '@/components/lead/QuoteModalButton';
-import { cleanObject, getBreadcrumbJsonLd, getFaqJsonLd } from '@/lib/seo/jsonld';
+import { cleanObject, getBreadcrumbJsonLd, getFaqJsonLd, getWebPageJsonLd } from '@/lib/seo/jsonld';
 import { buildMetadata } from '@/lib/seo/metadata';
 import { CONTINUOUS_HEAT_TREATMENT_LINE_SEO } from '@/lib/seo/page-data';
 
@@ -14,13 +20,6 @@ type PageProps = {
   params: Promise<{
     locale: string;
   }>;
-};
-
-type SectionProps = {
-  id: string;
-  eyebrow: string;
-  title: string;
-  children: ReactNode;
 };
 
 type LinkCard = {
@@ -35,6 +34,7 @@ type TextCard = {
 };
 
 type ExperienceCard = {
+  factId: string;
   title: string;
   text: string;
   href?: string;
@@ -48,6 +48,8 @@ const manufacturerPath = '/zh/solutions/rechuli-lu-changjia';
 const productsPath = '/zh/products';
 const contactPath = '/zh/contact';
 const casePath = '/zh/case/anonymous-tsingshan-1250-renovation';
+const jiningSupportRollerCasePath = '/zh/case/jining-support-roller-heat-treatment-line';
+const henanAnnealingSolutionCasePath = '/zh/case/henan-annealing-solution-line';
 const annealingSolutionLinePath = '/zh/products/detail/annealing-solution-line';
 const copperWireAnnealingLinePath = '/zh/products/detail/copper-wire-annealing-line';
 const rollerMeshBeltLinePath = '/zh/products/detail/roller-mesh-belt-line';
@@ -172,25 +174,63 @@ const customParams = [
 
 const experienceCards: ExperienceCard[] = [
   {
-    title: '不锈钢退洗线退火炉 / 退火固溶段设备',
-    text: '苏能具备不锈钢连续退火、固溶段、退洗线退火炉相关项目经验，可根据带材规格、温度制度、冷却边界和自动化要求进行方案评估。',
+    factId: 'SN-CASE-P0-008',
+    title: '3 条 1250 mm 连续退洗线节能改造',
+    text: '项目由天然气改为冷煤气：方案按 8500/1450 kcal/Nm³ 热值复算，冷煤气总设计量 17150 Nm³/h、接口压力 20±3 kPa，并采用双交叉限幅控制。以上只对应本项目燃料与设备边界。',
     href: casePath,
   },
   {
-    title: '托辊网带正火回火生产线',
-    text: '苏能具备托辊网带式正火炉、快速冷却装置、回火炉及工控系统组合方案经验，可根据工件节拍、网带宽度、温区和冷却方式评估生产线配置。',
+    factId: 'SN-CASE-P0-007',
+    title: '1250 mm 连续退洗线退火固溶段',
+    text: '1250 mm 为名义规格及最大带宽，实际带宽 800–1250 mm、厚度 2.5–4.0 mm；额定工艺速度 40 m/min、最大 45 m/min，带钢温度约 1080–1180℃，加热/均热段约 105 m。',
+    href: casePath,
   },
   {
-    title: '网带式淬火 / 渗碳气氛热处理生产线',
-    text: '苏能具备网带式连续加热、淬火冷却、提升出料、气氛控制和生产线控制系统相关方案经验。涉及渗碳或特殊气氛时，应根据工艺和安全条件单独评估。',
+    factId: 'SN-CASE-P0-006',
+    title: '850 mm 连续退火钝化线退火固溶段',
+    text: '850 mm 为名义机组规格，实际带宽 480–750 mm、厚度 1.6–4.0 mm；带钢退火温度 1050–1150℃，炉体约 130 m，设计 TV 约 190 m·mm/min。',
+    href: henanAnnealingSolutionCasePath,
   },
   {
-    title: '支重轮热处理生产线',
-    text: '苏能具备支重轮加热、自动淬火、回火、冷却及温控系统组合方案经验，可根据支重轮规格、节拍、硬度要求和冷却方式评估产线结构。',
+    factId: 'SN-CASE-P0-002',
+    title: '托辊网带正火回火连续线',
+    text: '2017 方案为正火炉 800 mm、回火炉 1000 mm；2026 方案为正火炉 1000 mm、回火炉 1200 mm。额定温度分别为 950℃、650℃，多区 PID 与变频网带属于方案配置。',
   },
   {
-    title: '铜丝自动化退火生产线',
-    text: '苏能具备铜丝、铜线类连续退火生产线页面和方案能力，重点围绕线径、运行速度、张力控制、保护气氛和收放线系统进行方案配置。',
+    factId: 'SN-CASE-P0-003',
+    title: 'RCWT 托辊网带淬火回火线',
+    text: '2020 RCWT-360/220-9/6：宽度 850/1000 mm、速度 30–250 mm/min；2026 RCWT-250/200-9/6：宽度 800/1000 mm、速度 50–300 mm/min。950℃、650℃均为额定温度。',
+  },
+  {
+    factId: 'SN-CASE-P0-004',
+    title: 'RCWT-75/45-9/6 可控气氛网带线',
+    text: '淬火段有效尺寸 400×3200 mm，回火段 400×5600 mm，网带速度 30–250 mm/min；最大设计能力约 150 kg/h，按 0.4 m×0.25 m/min×60×25 kg/㎡计算。',
+  },
+  {
+    factId: 'SN-CASE-P0-005',
+    title: '网带式渗碳气氛热处理生产线',
+    text: '有效加热区 9300×1000×100 mm，炉段功率 300 kW，最高工作温度 950℃；典型设计能力约 5000 件/24 h，最大工况约 6000 件/24 h，均不是实际日产量。',
+  },
+  {
+    factId: 'SN-CASE-P0-009',
+    title: '热轧退火酸洗项目退火炉',
+    text: '2021 年 850 mm 与 2024 年 1250 mm 为两个 HAPL 项目；炉体采用预热段 + 4 个加热段、约 8 区控制。700–1200℃为工艺覆盖范围，低于 80℃为冷却/干燥出口项目考核目标。',
+  },
+  {
+    factId: 'SN-CASE-P0-010',
+    title: '低氮燃气加热炉生产线',
+    text: '同一生产线含 2 台炉，单台有效尺寸 2500×1600×800 mm；每台 4 套 250 kW 级低氮天然气烧嘴，燃烧装机能力约 1000 kW。助燃空气 200–300℃为设计预热目标，NOx 以现场检测为准。',
+  },
+  {
+    factId: 'SN-CASE-P0-011',
+    title: '750 t/d 不锈钢连续退火双带炉',
+    text: '750 t/d 为单台炉合同设计能力，代表条件为 J3A、2.3×600 mm、双带、26.6 m/min；炉体约 110 m，含水冷、挤干和干燥段后约 125.4 m，不代表实际日产量。',
+  },
+  {
+    factId: 'SN-CASE-P0-001',
+    title: 'PC200–PC400 支重轮热处理生产线',
+    text: '项目淬火炉额定温度 950℃、有效加热区 6400×300×300 mm，最大设计处理能力 500 kg/h，方案折算约 30 件/h；实际能力按工件和节拍确定。',
+    href: jiningSupportRollerCasePath,
   },
 ];
 
@@ -288,18 +328,12 @@ const relatedLinks: LinkCard[] = [
 ];
 
 const pageJsonLd = cleanObject([
-  {
-    '@context': 'https://schema.org',
-    '@type': 'WebPage',
-    '@id': 'https://www.jssngyl.cn/zh/solutions/continuous-heat-treatment-line#webpage',
-    url: 'https://www.jssngyl.cn/zh/solutions/continuous-heat-treatment-line',
+  getWebPageJsonLd({
+    path: pagePath,
     name: '连续热处理生产线解决方案',
     description: CONTINUOUS_HEAT_TREATMENT_LINE_SEO.description,
-    inLanguage: 'zh-CN',
-    about: {
-      '@id': 'https://www.jssngyl.cn/#organization',
-    },
-  },
+    dateModified: CONTINUOUS_HEAT_TREATMENT_LINE_SEO.modifiedTime,
+  }),
   getBreadcrumbJsonLd([
     { name: '首页', url: '/zh' },
     { name: '产品中心', url: productsPath },
@@ -326,23 +360,12 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     keywords: CONTINUOUS_HEAT_TREATMENT_LINE_SEO.keywords,
     image: CONTINUOUS_HEAT_TREATMENT_LINE_SEO.ogImage,
     type: 'website',
+    modifiedTime: CONTINUOUS_HEAT_TREATMENT_LINE_SEO.modifiedTime,
     alternateLocales: {
       'zh-CN': pagePath,
       'x-default': pagePath,
     },
   });
-}
-
-function Section({ id, eyebrow, title, children }: SectionProps) {
-  return (
-    <section id={id} className="scroll-mt-24 border-t border-[#e2e8f0] py-12 lg:py-16">
-      <div className="mx-auto max-w-[1180px] px-5 lg:px-8">
-        <p className="text-[13px] font-semibold text-[#c51624]">{eyebrow}</p>
-        <h2 className="mt-3 text-[26px] font-semibold leading-[1.28] text-[#101828] lg:text-[38px]">{title}</h2>
-        <div className="mt-8">{children}</div>
-      </div>
-    </section>
-  );
 }
 
 export default async function ContinuousHeatTreatmentLinePage({ params }: PageProps) {
@@ -375,17 +398,11 @@ export default async function ContinuousHeatTreatmentLinePage({ params }: PagePr
             <p className="mt-5 max-w-[920px] text-[18px] font-semibold leading-[1.72] text-white/92 lg:text-[23px]">
               苏能可根据工件材质、工件形态、热处理工艺、产能节拍、温度制度、冷却方式、自动化程度和现场条件，提供连续退火、固溶、正火、回火、淬火加热、清洗、冷却、上下料和控制系统等热处理生产线方案。
             </p>
-            <div className="mt-8 flex flex-wrap gap-3 text-[14px] font-semibold text-white">
-              {heroTags.map((tag) => (
-                <span key={tag} className="rounded-[4px] border border-white/24 bg-white/10 px-4 py-2">
-                  {tag}
-                </span>
-              ))}
-            </div>
+            <GeoHeroTags tags={heroTags} />
             <div className="mt-9 flex flex-wrap gap-4">
               <QuoteModalButton
                 label="获取报价方案"
-                className="inline-flex min-h-[46px] items-center justify-center rounded-[4px] bg-[#c51624] px-6 text-[15px] font-semibold text-white transition hover:bg-[#a90f1b]"
+                className="inline-flex min-h-[46px] items-center justify-center rounded-[4px] cta-primary px-6 text-[15px] font-semibold text-white transition"
               />
               <a
                 href={quoteParamsPath}
@@ -397,6 +414,11 @@ export default async function ContinuousHeatTreatmentLinePage({ params }: PagePr
           </div>
         </div>
       </section>
+
+      <GeoReviewNote
+        modifiedDate={CONTINUOUS_HEAT_TREATMENT_LINE_SEO.modifiedTime}
+        sourceNote="苏能 GEO 事实台账中的 10 项脱敏项目参数与对应案例资料"
+      />
 
       <Section id="why" eyebrow="系统逻辑" title="一、为什么连续热处理生产线不是“多台炉子简单组合”？">
         <p className="max-w-[960px] text-[16px] leading-[1.9] text-[#344054] lg:text-[18px]">
@@ -471,7 +493,7 @@ export default async function ContinuousHeatTreatmentLinePage({ params }: PagePr
             </p>
             <a
               href={quoteParamsPath}
-              className="mt-6 inline-flex min-h-[44px] items-center justify-center rounded-[4px] border border-[#c51624] px-5 text-[14px] font-semibold text-[#c51624] transition hover:bg-[#fff5f5]"
+              className="mt-6 inline-flex min-h-[44px] items-center justify-center rounded-[4px] cta-secondary px-5 text-[14px] font-semibold transition"
             >
               查看报价需要哪些参数
             </a>
@@ -490,18 +512,19 @@ export default async function ContinuousHeatTreatmentLinePage({ params }: PagePr
         <div className="grid gap-5 lg:grid-cols-3">
           {experienceCards.map((item) => (
             <article key={item.title} className="rounded-[8px] border border-[#e1e7f0] bg-[#fbfcfe] p-6">
+              <p className="text-[12px] font-semibold tracking-[0.08em]">{item.factId}</p>
               <h3 className="text-[20px] font-semibold leading-[1.4] text-[#101828]">{item.title}</h3>
               <p className="mt-3 text-[15px] leading-[1.85] text-[#475467]">{item.text}</p>
               {item.href ? (
                 <a
                   href={item.href}
-                  className="mt-5 inline-flex min-h-[40px] items-center justify-center rounded-[4px] bg-[#c51624] px-5 text-[14px] font-semibold text-white transition hover:bg-[#a90f1b]"
+                  className="mt-5 inline-flex min-h-[40px] items-center justify-center rounded-[4px] cta-primary px-5 text-[14px] font-semibold text-white transition"
                 >
                   查看案例详情
                 </a>
               ) : (
                 <p className="mt-5 rounded-[8px] border border-[#dfe6f0] bg-white p-4 text-[14px] leading-[1.75] text-[#667085]">
-                  暂无公开详情页，可在商务沟通中结合授权资料进一步说明。
+                  以上为已授权脱敏项目参数；新项目仍按工件、工艺、产能和现场条件重新设计。
                 </p>
               )}
             </article>
@@ -516,69 +539,27 @@ export default async function ContinuousHeatTreatmentLinePage({ params }: PagePr
       </Section>
 
       <Section id="faq" eyebrow="常见问题" title="八、连续热处理生产线常见问题">
-        <div className="grid gap-3 md:grid-cols-2 md:items-start md:gap-5" itemScope itemType="https://schema.org/FAQPage">
-          {faqs.map((faq) => (
-            <details
-              key={faq.question}
-              className="group rounded-[8px] border border-[#dfe6f0] bg-white px-5 py-4 shadow-[0_10px_24px_rgba(15,35,75,0.03)] [&>summary::-webkit-details-marker]:hidden"
-              itemScope
-              itemProp="mainEntity"
-              itemType="https://schema.org/Question"
-              open
-            >
-              <summary className="flex cursor-pointer list-none items-start justify-between gap-4 text-[16px] font-semibold leading-[1.6] text-[#101828]" itemProp="name">
-                <span>{faq.question}</span>
-              </summary>
-              <div className="mt-4 border-t border-[#edf1f6] pt-4" itemScope itemProp="acceptedAnswer" itemType="https://schema.org/Answer">
-                <div className="text-[15px] leading-[1.9] text-[#344054]" itemProp="text">
-                  {faq.answer}
-                </div>
-              </div>
-            </details>
-          ))}
-        </div>
+        <GeoFaqGrid items={faqs} />
       </Section>
 
       <Section id="related" eyebrow="相关页面" title="九、相关页面内链">
         <div className="grid gap-4 md:grid-cols-2">
           {relatedLinks.map((item) => (
             <a key={item.href} href={item.href} className="rounded-[8px] border border-[#e1e7f0] bg-[#fbfcfe] p-5 transition hover:border-[#c51624]">
-              <span className="text-[17px] font-semibold leading-[1.45] text-[#c51624]">{item.title}</span>
+              <span className="text-[17px] font-semibold leading-[1.45]">{item.title}</span>
               <span className="mt-2 block text-[14px] leading-[1.8] text-[#475467]">{item.text}</span>
             </a>
           ))}
         </div>
       </Section>
 
-      <section id="contact" className="border-t border-[#e2e8f0] bg-[#101828] py-12 text-white lg:py-16">
-        <div className="mx-auto grid max-w-[1180px] gap-8 px-5 lg:grid-cols-[1fr_auto] lg:items-center lg:px-8">
-          <div>
-            <p className="text-[13px] font-semibold text-white/58">获取产线方案</p>
-            <h2 className="mt-3 text-[28px] font-semibold leading-[1.28] lg:text-[42px]">
-              需要规划连续热处理生产线？
-            </h2>
-            <p className="mt-5 max-w-[820px] text-[16px] leading-[1.95] text-white/78 lg:text-[18px]">
-              把工件材质、尺寸、单件重量、产能节拍、热处理工艺、最高温度、冷却方式、输送方式、自动化要求和现场条件发给苏能，技术人员可先判断适合的产线结构、炉型组合、温区配置和交付边界。
-            </p>
-            <address className="mt-6 flex flex-wrap gap-x-8 gap-y-3 text-[15px] leading-[1.8] text-white/82 not-italic">
-              <span>电话 / 微信：+86-130-5298-6814</span>
-              <span>邮箱：997518512@qq.com</span>
-            </address>
-          </div>
-          <div className="flex flex-wrap gap-4 lg:justify-end">
-            <QuoteModalButton
-              label="获取报价方案"
-              className="inline-flex min-h-[46px] items-center justify-center rounded-[4px] bg-[#c51624] px-6 text-[15px] font-semibold text-white transition hover:bg-[#a90f1b]"
-            />
-            <a
-              href={contactPath}
-              className="inline-flex min-h-[46px] items-center justify-center rounded-[4px] border border-white/46 px-6 text-[15px] font-semibold text-white transition hover:border-white hover:bg-white/10"
-            >
-              联系苏能工业炉
-            </a>
-          </div>
-        </div>
-      </section>
+      <GeoContactCta
+        eyebrow="获取产线方案"
+        title="需要规划连续热处理生产线？"
+        description="把工件材质、尺寸、单件重量、产能节拍、热处理工艺、最高温度、冷却方式、输送方式、自动化要求和现场条件发给苏能，技术人员可先判断适合的产线结构、炉型组合、温区配置和交付边界。"
+        secondaryHref={contactPath}
+        secondaryLabel="联系苏能工业炉"
+      />
 
       <JsonLd id="continuous-heat-treatment-line-page-jsonld" data={pageJsonLd} />
       <JsonLd id="continuous-heat-treatment-line-faq-jsonld" data={faqJsonLd} />

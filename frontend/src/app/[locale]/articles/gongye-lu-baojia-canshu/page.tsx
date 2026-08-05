@@ -1,15 +1,21 @@
 import type { Metadata } from 'next';
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
-import type { ReactNode } from 'react';
 
+import {
+  GeoBulletList as BulletList,
+  GeoFaqGrid,
+  GeoReviewNote,
+  GeoSection as Section,
+} from '@/components/geo-pages/GeoPageBlocks';
 import { JsonLd } from '@/components/JsonLd';
 import { Breadcrumb } from '@/components/layout/Breadcrumb';
 import { ProductLeadForm } from '@/components/products/ProductLeadForm';
 import { getStaticProductBySlug } from '@/constants/static-products';
-import { getBreadcrumbJsonLd, getFaqJsonLd } from '@/lib/seo/jsonld';
+import { getArticleJsonLd, getBreadcrumbJsonLd, getFaqJsonLd } from '@/lib/seo/jsonld';
 import { buildMetadata } from '@/lib/seo/metadata';
 import { INDUSTRIAL_FURNACE_QUOTE_PARAMS_SEO } from '@/lib/seo/page-data';
+import { siteSettings } from '@/mock/siteSettings';
 
 import { CopyQuoteChecklistButton } from './CopyQuoteChecklistButton';
 
@@ -17,13 +23,6 @@ type PageProps = {
   params: Promise<{
     locale: string;
   }>;
-};
-
-type SectionProps = {
-  id: string;
-  eyebrow: string;
-  title: string;
-  children: ReactNode;
 };
 
 type RelatedLink = {
@@ -43,6 +42,12 @@ const meshBeltFurnacePath = '/zh/products/detail/mesh-belt-furnace';
 const boxFurnacePath = '/zh/products/detail/box-furnace';
 const pitFurnacePath = '/zh/products/detail/pit-furnace';
 const continuousLinePath = '/zh/solutions/continuous-heat-treatment-line';
+const temperatureRemediationPath = '/zh/solutions/rechuli-lu-wendu-bujun-zhenggai';
+const renovationRiskPath = '/zh/solutions/rechuli-lu-gaizao-fengxian-zhouqi';
+const furnaceLiningRenovationPath = '/zh/solutions/rechuli-lu-luchen-fanxin';
+const energyConversionPath = '/zh/solutions/rechuli-lu-dian-gai-ran-yure-huishou';
+const controlSystemUpgradePath = '/zh/solutions/rechuli-lu-kongzhi-xitong-shengji';
+const restartRelocationPath = '/zh/solutions/rechuli-lu-tingchan-chongqi-banqian-fuchan';
 
 export const dynamicParams = false;
 
@@ -156,6 +161,51 @@ const priceFactors = [
   '改造项目需要结合旧炉状态判断，不能只按新炉价格估算。',
 ];
 
+const quoteScopeRows = [
+  {
+    scope: '方案与工程',
+    included: '诊断、方案设计、工程量清单、设备与系统配置、图纸及技术文件。',
+    boundary: '现场测绘、第三方设计或专项认证是否包含，需在报价中单列。',
+  },
+  {
+    scope: '设备与材料',
+    included: '炉体、炉衬、热源或燃烧系统、机械传动、控制系统、安全联锁及约定附件。',
+    boundary: '保留旧件、客户自备件、易损件和备品备件范围需逐项确认。',
+  },
+  {
+    scope: '现场实施',
+    included: '按约定范围拆除、制造、运输、安装、调试和操作培训。',
+    boundary: '基础、吊装、水电气接入、脚手架、保温拆除恢复及停产配合由谁承担，必须写清。',
+  },
+  {
+    scope: '测试与交付',
+    included: '合同约定的出厂检查、现场调试、性能测试和资料交付。',
+    boundary: '第三方检测、排放检测、认证测试及额外复测通常需按项目单独确认。',
+  },
+];
+
+const authorizedProjectExamples = [
+  {
+    factId: 'SN-CASE-P1-014',
+    title: '超大型燃气台车退火炉改造',
+    parameters:
+      '有效加热区约 13 × 7.4 × 4.3 m，额定/最高使用温度 700℃；方案按 14 个温控区、14 × 630 kW = 8820 kW 核对，采用 14 套 630 kW 级高速天然气烧嘴，助燃空气 250–300℃为设计目标。',
+    quoteImpact: '需要同时核算炉体结构、炉衬、燃烧系统、管路、安全联锁、排烟与现场施工边界。',
+  },
+  {
+    factId: 'SN-CASE-P0-006',
+    title: '850 mm 连续退火钝化线退火固溶段',
+    parameters: '项目退火温度约 1050–1150℃，炉温最高可至 1300℃，退火炉主体长度约 130 m。',
+    quoteImpact: '除炉体外，还要确认带材规格、速度核算、温区、冷却、收放卷和自动化接口。',
+  },
+  {
+    factId: 'SN-CASE-P0-004',
+    title: 'RCWT-75/45-9/6 可控气氛网带线',
+    parameters: '淬火炉工作尺寸约 400 × 3200 mm，回火炉约 400 × 5600 mm，额定温度 950℃，生产能力约 150 kg/h。',
+    quoteImpact: '报价需覆盖连续输送、气氛、淬火、清洗、回火、速度和产能边界，不能按单台炉估算。',
+  },
+];
+
 const quoteTemplateItems = [
   '设备类型：',
   '工件材质：',
@@ -260,6 +310,21 @@ const faqs = [
     answer:
       '可以给出初步价格区间，但正式报价需要明确炉型、尺寸、温度、装炉量、工艺要求、控制系统和交付范围。参数越完整，报价越接近真实项目成本。',
   },
+  {
+    question: 'Q7：工业炉节能改造报价包括哪些？',
+    answer:
+      '通常需要分开列明诊断与方案、炉体和炉衬、热源或燃烧系统、机械传动、控制与安全联锁、拆除运输、安装调试、性能测试和资料交付。基础、吊装、水电气接入、第三方检测、客户自备件及停产配合是否包含，必须在报价边界中逐项写清。',
+  },
+  {
+    question: 'Q8：热处理炉节能改造多少钱？',
+    answer:
+      '没有脱离工况的通用固定价。只有确认原炉状态、改造范围、炉膛和温度、工件与产能、热源、控制要求、现场施工条件和停产窗口后，才适合给出价格区间；正式价格以技术方案、工程量清单和交付边界为准。',
+  },
+  {
+    question: 'Q9：老旧工业炉改造预算怎么估算？',
+    answer:
+      '先把诊断与设计、拆除清运、炉体炉衬、加热或燃烧系统、机械传动、控制与安全联锁、安装调试、性能测试、第三方工作和停产配合分别列项。原炉隐蔽损伤和现场条件不清时，应保留待检查项，不能用一个固定总价掩盖未知工程量。',
+  },
 ];
 
 const faqJsonLd = getFaqJsonLd(faqs);
@@ -268,8 +333,15 @@ const breadcrumbJsonLd = getBreadcrumbJsonLd([
   { name: '服务支持', url: servicePath },
   { name: '工业炉报价需要哪些参数', url: pagePath },
 ]);
-const faqColumnSize = Math.ceil(faqs.length / 2);
-const faqColumns = [faqs.slice(0, faqColumnSize), faqs.slice(faqColumnSize)];
+const articleJsonLd = getArticleJsonLd({
+  slug: 'gongye-lu-baojia-canshu',
+  path: pagePath,
+  headline: INDUSTRIAL_FURNACE_QUOTE_PARAMS_SEO.title,
+  description: INDUSTRIAL_FURNACE_QUOTE_PARAMS_SEO.description,
+  image: INDUSTRIAL_FURNACE_QUOTE_PARAMS_SEO.ogImage,
+  datePublished: INDUSTRIAL_FURNACE_QUOTE_PARAMS_SEO.publishedTime,
+  dateModified: INDUSTRIAL_FURNACE_QUOTE_PARAMS_SEO.modifiedTime,
+});
 
 const relatedLinks = [
   getStaticProductBySlug('trolley-furnace') && {
@@ -296,6 +368,36 @@ const relatedLinks = [
     title: '老旧工业炉该修还是换？',
     href: decisionPath,
     text: '如果是旧炉项目，先判断适合大修、局部改造还是重新采购。',
+  },
+  {
+    title: '热处理炉温度不均怎么整改？',
+    href: temperatureRemediationPath,
+    text: '报价前先确认温度偏差的测试条件、排查路径与验收证据。',
+  },
+  {
+    title: '热处理炉改造风险与停产周期',
+    href: renovationRiskPath,
+    text: '把未知工程量、旧新接口、停产切换和负载验收纳入报价边界。',
+  },
+  {
+    title: '炉衬翻新报价前核对什么',
+    href: furnaceLiningRenovationPath,
+    text: '核对旧衬损坏、冷面钢板、锚固体系、材料接口、烘炉和验收资料。',
+  },
+  {
+    title: '能源改造与余热回收如何立项',
+    href: energyConversionPath,
+    text: '报价前统一能源基线、公辅条件、安全排放、利用端和停产实施边界。',
+  },
+  {
+    title: '控制系统升级报价前核对什么',
+    href: controlSystemUpgradePath,
+    text: '先拆分 I/O、柜体、仪表、执行机构、安全联锁、数据接口和停产切换范围。',
+  },
+  {
+    title: '停产炉重启与搬迁复产',
+    href: restartRelocationPath,
+    text: '报价前确认停机原因、资料恢复、检查整改、重新安装、空载与负载验收边界。',
   },
   {
     title: '连续热处理生产线解决方案',
@@ -342,30 +444,6 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   });
 }
 
-function Section({ id, title, children }: SectionProps) {
-  return (
-    <section id={id} className="border-t border-[#e2e8f0] py-12 scroll-mt-24 lg:py-16">
-      <div className="mx-auto max-w-[1180px] px-5 lg:px-8">
-        <h2 className="text-[26px] font-semibold leading-[1.28] text-[#101828] lg:text-[38px]">{title}</h2>
-        <div className="mt-8">{children}</div>
-      </div>
-    </section>
-  );
-}
-
-function BulletList({ items }: { items: string[] }) {
-  return (
-    <ul className="mt-4 space-y-2 text-[15px] leading-[1.8] text-[#3f4a5f] lg:text-[16px]">
-      {items.map((item) => (
-        <li key={item} className="flex gap-3">
-          <span className="mt-[0.74em] h-1.5 w-1.5 shrink-0 rounded-full bg-[#c51624]" />
-          <span>{item}</span>
-        </li>
-      ))}
-    </ul>
-  );
-}
-
 export default async function IndustrialFurnaceQuoteParamsPage({ params }: PageProps) {
   const { locale } = await params;
 
@@ -391,6 +469,12 @@ export default async function IndustrialFurnaceQuoteParamsPage({ params }: PageP
           />
 
           <div className="mt-10 max-w-[930px]">
+            <p className="mb-4 text-[13px] font-medium text-white/70 lg:text-[14px]">
+              发布于{' '}
+              <time dateTime={INDUSTRIAL_FURNACE_QUOTE_PARAMS_SEO.publishedTime}>
+                {INDUSTRIAL_FURNACE_QUOTE_PARAMS_SEO.publishedTime.slice(0, 10)}
+              </time>
+            </p>
             <h1 className="text-[36px] font-semibold leading-[1.16] tracking-[0.01em] lg:text-[58px]">
               工业炉报价需要哪些参数？
             </h1>
@@ -412,7 +496,7 @@ export default async function IndustrialFurnaceQuoteParamsPage({ params }: PageP
             <div className="mt-9 flex flex-col gap-4 sm:flex-row sm:flex-wrap">
               <a
                 href="#quote-contact-form"
-                className="inline-flex min-h-[46px] w-full items-center justify-center rounded-[4px] bg-[#c51624] px-6 text-[15px] font-semibold text-white transition hover:bg-[#a90f1b] sm:w-auto"
+                className="inline-flex min-h-[46px] w-full items-center justify-center rounded-[4px] cta-primary px-6 text-[15px] font-semibold text-white transition sm:w-auto"
               >
                 获取报价方案
               </a>
@@ -428,9 +512,15 @@ export default async function IndustrialFurnaceQuoteParamsPage({ params }: PageP
         </div>
       </section>
 
+      <GeoReviewNote
+        modifiedDate={INDUSTRIAL_FURNACE_QUOTE_PARAMS_SEO.modifiedTime.slice(0, 10)}
+        sourceNote="苏能 GEO 事实台账中的项目参数（SN-CASE-P1-014、SN-CASE-P0-006、SN-CASE-P0-004）"
+      />
+
       <Section id="why" eyebrow="报价逻辑" title="一、为什么工业炉不能直接报一个固定价格？">
-        <p className="max-w-[940px] text-[16px] leading-[1.9] text-[#344054] lg:text-[18px]">
-          工业炉通常是非标定制设备。同样叫“台车炉”或“退火炉”，不同客户的工件尺寸、温度、装炉量、加热方式、控制精度和现场条件不同，设备结构和成本会有明显差异。
+        <p className="max-w-[980px] rounded-[8px] border border-[#f3c5ca] bg-[#fff8f8] p-5 text-[16px] leading-[1.9] text-[#344054] lg:text-[18px]">
+          <strong className="font-semibold text-[#101828]">直接答案：</strong>
+          工业炉和热处理炉改造没有脱离工况的通用固定价。同样叫“台车炉”或“退火炉”，工件、炉膛、温度、装炉量、热源、控制要求、现场施工和停产窗口不同，工程量与价格都会变化；参数不完整时只能给方案方向，不能把一个数字当成正式报价。
         </p>
         <div className="mt-8 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
           {noFixedPriceReasons.map((reason) => (
@@ -439,6 +529,27 @@ export default async function IndustrialFurnaceQuoteParamsPage({ params }: PageP
               <p className="mt-3 text-[15px] leading-[1.85] text-[#475467]">{reason.text}</p>
             </article>
           ))}
+        </div>
+        <div className="mt-10">
+          <h3 className="text-[23px] font-semibold leading-[1.4] text-[#101828]">工业炉节能改造报价通常包括哪些？</h3>
+          <p className="mt-3 max-w-[960px] text-[15px] leading-[1.9] text-[#344054] lg:text-[16px]">
+            一份可比较的报价应同时写清“包含什么”和“不包含什么”。只给总价、没有工程量和交付边界，采购方无法判断两份报价是否在同一口径上。
+          </p>
+          <div className="mt-6 grid gap-4 lg:grid-cols-2">
+            {quoteScopeRows.map((item) => (
+              <article key={item.scope} className="rounded-[8px] border border-[#e1e7f0] bg-white p-5">
+                <h4 className="text-[18px] font-semibold leading-[1.4] text-[#101828]">{item.scope}</h4>
+                <p className="mt-3 text-[15px] leading-[1.8] text-[#344054]">
+                  <strong className="font-semibold text-[#101828]">通常包含：</strong>
+                  {item.included}
+                </p>
+                <p className="mt-3 border-t border-[#edf1f6] pt-3 text-[14px] leading-[1.8] text-[#667085]">
+                  <strong className="font-semibold text-[#344054]">必须确认：</strong>
+                  {item.boundary}
+                </p>
+              </article>
+            ))}
+          </div>
         </div>
       </Section>
 
@@ -483,14 +594,36 @@ export default async function IndustrialFurnaceQuoteParamsPage({ params }: PageP
         </div>
         <p className="mt-6 rounded-[8px] border border-[#dfe6f0] bg-white p-5 text-[15px] leading-[1.85] text-[#344054]">
           如无法确定炉型，可先查看
-          <a href={jiangsuManufacturerPath} className="font-semibold text-[#c51624] underline underline-offset-4">
+          <a href={jiangsuManufacturerPath} className="font-semibold underline underline-offset-4">
             江苏工业炉厂家能力页
           </a>
           ，再结合工件、温度、产能和现场条件判断方案方向。
         </p>
       </Section>
 
-      <Section id="selection-reference" eyebrow="选型参考" title="四、工业炉选型核心参考">
+      <Section id="project-evidence" eyebrow="真实项目证据" title="四、三个已授权项目说明：同类炉型为什么不能套固定价">
+        <p className="max-w-[980px] text-[16px] leading-[1.9] text-[#344054] lg:text-[18px]">
+          以下参数来自已经授权公开的具体项目，用于说明报价变量如何改变设备结构与交付边界。它们不是标准型号参数，也不代表其他项目的固定价格、产能或配置。
+        </p>
+        <div className="mt-8 grid gap-5 lg:grid-cols-3">
+          {authorizedProjectExamples.map((item) => (
+            <article key={item.factId} className="rounded-[8px] border border-[#d6e0ec] bg-[#f8fafc] p-6">
+              <p className="text-[12px] font-semibold tracking-[0.08em]">{item.factId}</p>
+              <h3 className="mt-2 text-[20px] font-semibold leading-[1.4] text-[#101828]">{item.title}</h3>
+              <p className="mt-4 text-[15px] leading-[1.85] text-[#344054]">
+                <strong className="font-semibold text-[#101828]">项目参数：</strong>
+                {item.parameters}
+              </p>
+              <p className="mt-4 border-t border-[#dfe6f0] pt-4 text-[15px] leading-[1.85] text-[#475467]">
+                <strong className="font-semibold text-[#101828]">报价影响：</strong>
+                {item.quoteImpact}
+              </p>
+            </article>
+          ))}
+        </div>
+      </Section>
+
+      <Section id="selection-reference" eyebrow="选型参考" title="五、工业炉选型核心参考">
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-5">
           {selectionReferenceLinks.map((item) => (
             <a
@@ -498,18 +631,18 @@ export default async function IndustrialFurnaceQuoteParamsPage({ params }: PageP
               href={item.href}
               className="rounded-[8px] border border-[#e1e7f0] bg-white p-5 transition hover:border-[#c51624] hover:shadow-[0_10px_24px_rgba(15,35,75,0.06)]"
             >
-              <span className="text-[17px] font-semibold leading-[1.45] text-[#c51624]">{item.title}</span>
+              <span className="text-[17px] font-semibold leading-[1.45]">{item.title}</span>
               <span className="mt-2 block text-[14px] leading-[1.8] text-[#475467]">{item.text}</span>
             </a>
           ))}
         </div>
       </Section>
 
-      <Section id="price-factors" eyebrow="价格因素" title="五、哪些信息会明显影响价格？">
+      <Section id="price-factors" eyebrow="价格因素" title="六、哪些信息会明显影响价格？">
         <div className="grid gap-4 md:grid-cols-2">
           {priceFactors.map((factor, index) => (
             <article key={factor} className="flex gap-4 rounded-[8px] border border-[#e1e7f0] bg-white p-5">
-              <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#c51624] text-[15px] font-semibold text-white">
+              <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full cta-primary text-[15px] font-semibold text-white">
                 {index + 1}
               </span>
               <p className="text-[15px] leading-[1.85] text-[#344054] lg:text-[16px]">{factor}</p>
@@ -518,7 +651,7 @@ export default async function IndustrialFurnaceQuoteParamsPage({ params }: PageP
         </div>
       </Section>
 
-      <Section id="quote-template" eyebrow="提交闭环" title="六、如何把报价需求提交给苏能？">
+      <Section id="quote-template" eyebrow="提交闭环" title="七、如何把报价需求提交给苏能？">
         <div className="grid gap-8 lg:grid-cols-[1.05fr_0.95fr]">
           <div className="rounded-[8px] border border-[#dfe6f0] bg-[#101828] p-6 text-white lg:p-7">
             <p className="text-[16px] font-semibold">请复制以下格式提交给苏能：</p>
@@ -550,7 +683,7 @@ export default async function IndustrialFurnaceQuoteParamsPage({ params }: PageP
         <div className="mt-8 rounded-[8px] border border-[#dfe6f0] bg-white p-6 shadow-[0_10px_24px_rgba(15,35,75,0.04)] lg:p-7">
           <div className="grid gap-4 lg:grid-cols-3">
             <article className="rounded-[8px] border border-[#e1e7f0] bg-[#fbfcfe] p-5">
-              <span className="flex h-10 w-10 items-center justify-center rounded-full bg-[#c51624] text-[15px] font-semibold text-white">
+              <span className="flex h-10 w-10 items-center justify-center rounded-full cta-primary text-[15px] font-semibold text-white">
                 1
               </span>
               <h3 className="mt-4 text-[20px] font-semibold leading-[1.4] text-[#101828]">复制参数清单</h3>
@@ -559,30 +692,30 @@ export default async function IndustrialFurnaceQuoteParamsPage({ params }: PageP
               </p>
             </article>
             <article className="rounded-[8px] border border-[#e1e7f0] bg-[#fbfcfe] p-5">
-              <span className="flex h-10 w-10 items-center justify-center rounded-full bg-[#c51624] text-[15px] font-semibold text-white">
+              <span className="flex h-10 w-10 items-center justify-center rounded-full cta-primary text-[15px] font-semibold text-white">
                 2
               </span>
               <h3 className="mt-4 text-[20px] font-semibold leading-[1.4] text-[#101828]">发送给苏能</h3>
               <p className="mt-3 text-[15px] leading-[1.8] text-[#475467]">
                 可通过在线表单、电话/微信
-                <a href="tel:+8613052986814" className="mx-1 font-semibold text-[#c51624] underline underline-offset-4">
-                  +86-130-5298-6814
+                <a href="tel:+8613052986814" className="mx-1 font-semibold underline underline-offset-4">
+                  {siteSettings.salesPhone}
                 </a>
                 ，或邮箱
-                <a href="mailto:997518512@qq.com" className="mx-1 font-semibold text-[#c51624] underline underline-offset-4">
-                  997518512@qq.com
+                <a href={`mailto:${siteSettings.email}`} className="mx-1 font-semibold underline underline-offset-4">
+                  {siteSettings.email}
                 </a>
                 提交。
               </p>
               <a
                 href="#quote-contact-form"
-                className="mt-4 inline-flex min-h-[40px] items-center justify-center rounded-[4px] bg-[#c51624] px-5 text-[14px] font-semibold text-white transition hover:bg-[#a90f1b]"
+                className="mt-4 inline-flex min-h-[40px] items-center justify-center rounded-[4px] cta-primary px-5 text-[14px] font-semibold text-white transition"
               >
                 在线表单
               </a>
             </article>
             <article className="rounded-[8px] border border-[#e1e7f0] bg-[#fbfcfe] p-5">
-              <span className="flex h-10 w-10 items-center justify-center rounded-full bg-[#c51624] text-[15px] font-semibold text-white">
+              <span className="flex h-10 w-10 items-center justify-center rounded-full cta-primary text-[15px] font-semibold text-white">
                 3
               </span>
               <h3 className="mt-4 text-[20px] font-semibold leading-[1.4] text-[#101828]">工程师初步判断</h3>
@@ -598,11 +731,11 @@ export default async function IndustrialFurnaceQuoteParamsPage({ params }: PageP
         </div>
       </Section>
 
-      <Section id="process" eyebrow="报价流程" title="七、工业炉报价流程">
+      <Section id="process" eyebrow="报价流程" title="八、工业炉报价流程">
         <div className="grid gap-4">
           {quoteSteps.map((step, index) => (
             <article key={step.title} className="grid gap-5 rounded-[8px] border border-[#e1e7f0] bg-white p-5 shadow-[0_10px_24px_rgba(15,35,75,0.04)] md:grid-cols-[72px_1fr]">
-              <div className="flex h-14 w-14 items-center justify-center rounded-full bg-[#c51624] text-[20px] font-semibold text-white">
+              <div className="flex h-14 w-14 items-center justify-center rounded-full cta-primary text-[20px] font-semibold text-white">
                 {index + 1}
               </div>
               <div>
@@ -614,52 +747,11 @@ export default async function IndustrialFurnaceQuoteParamsPage({ params }: PageP
         </div>
       </Section>
 
-      <Section id="faq" eyebrow="常见问题" title="八、工业炉报价常见问题">
-        <div className="grid gap-3 md:grid-cols-2 md:items-start md:gap-5" itemScope itemType="https://schema.org/FAQPage">
-          {faqColumns.map((column, columnIndex) => (
-            <div key={`faq-column-${columnIndex}`} className="space-y-3">
-              {column.map((faq, index) => {
-                const faqIndex = columnIndex * faqColumnSize + index;
-
-                return (
-                  <details
-                    key={faq.question}
-                    className="group rounded-[8px] border border-[#dfe6f0] bg-white px-5 py-4 shadow-[0_10px_24px_rgba(15,35,75,0.03)] [&>summary::-webkit-details-marker]:hidden"
-                    itemScope
-                    itemProp="mainEntity"
-                    itemType="https://schema.org/Question"
-                    open={faqIndex === 0}
-                  >
-                    <summary className="flex cursor-pointer list-none items-start justify-between gap-4 text-[16px] font-semibold leading-[1.6] text-[#101828]" itemProp="name">
-                      <span>{faq.question}</span>
-                      <span
-                        aria-hidden="true"
-                        className="relative mt-1 flex h-6 w-6 shrink-0 items-center justify-center rounded-full border border-[#dfe6f0] group-open:hidden"
-                      >
-                        <span className="absolute h-[2px] w-3 rounded-full bg-[#c51624]" />
-                        <span className="absolute h-3 w-[2px] rounded-full bg-[#c51624]" />
-                      </span>
-                      <span
-                        aria-hidden="true"
-                        className="relative mt-1 hidden h-6 w-6 shrink-0 items-center justify-center rounded-full border border-[#dfe6f0] group-open:flex"
-                      >
-                        <span className="absolute h-[2px] w-3 rounded-full bg-[#c51624]" />
-                      </span>
-                    </summary>
-                    <div className="mt-4 border-t border-[#edf1f6] pt-4" itemScope itemProp="acceptedAnswer" itemType="https://schema.org/Answer">
-                      <div className="text-[15px] leading-[1.9] text-[#344054]" itemProp="text">
-                        {faq.answer}
-                      </div>
-                    </div>
-                  </details>
-                );
-              })}
-            </div>
-          ))}
-        </div>
+      <Section id="faq" eyebrow="常见问题" title="九、工业炉报价常见问题">
+        <GeoFaqGrid items={faqs} openMode="first" />
       </Section>
 
-      <Section id="related" eyebrow="相关页面" title="九、相关页面与延伸阅读">
+      <Section id="related" eyebrow="相关页面" title="十、相关页面与延伸阅读">
         <div className="grid gap-4 md:grid-cols-2">
           {relatedLinks.map((item) => (
             <a
@@ -667,7 +759,7 @@ export default async function IndustrialFurnaceQuoteParamsPage({ params }: PageP
               href={item.href}
               className="rounded-[8px] border border-[#e1e7f0] bg-[#fbfcfe] p-5 transition hover:border-[#c51624] hover:shadow-[0_10px_24px_rgba(15,35,75,0.06)]"
             >
-              <span className="text-[17px] font-semibold leading-[1.45] text-[#c51624]">{item.title}</span>
+              <span className="text-[17px] font-semibold leading-[1.45]">{item.title}</span>
               <span className="mt-2 block text-[14px] leading-[1.8] text-[#475467]">{item.text}</span>
             </a>
           ))}
@@ -687,7 +779,7 @@ export default async function IndustrialFurnaceQuoteParamsPage({ params }: PageP
           <div className="flex flex-wrap gap-4 lg:justify-end">
             <a
               href="#quote-contact-form"
-              className="inline-flex min-h-[46px] items-center justify-center rounded-[4px] bg-[#c51624] px-6 text-[15px] font-semibold text-white transition hover:bg-[#a90f1b]"
+              className="inline-flex min-h-[46px] items-center justify-center rounded-[4px] cta-primary px-6 text-[15px] font-semibold text-white transition"
             >
               获取报价方案
             </a>
@@ -709,6 +801,7 @@ export default async function IndustrialFurnaceQuoteParamsPage({ params }: PageP
         </div>
       </section>
 
+      <JsonLd id="industrial-furnace-quote-params-article-jsonld" data={articleJsonLd} />
       <JsonLd id="industrial-furnace-quote-params-breadcrumb-jsonld" data={breadcrumbJsonLd} />
       <JsonLd id="industrial-furnace-quote-params-faq-jsonld" data={faqJsonLd} />
     </main>

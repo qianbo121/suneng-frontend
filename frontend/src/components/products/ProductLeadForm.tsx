@@ -1,8 +1,9 @@
 'use client';
 
-import { type FormEvent, useState } from 'react';
+import { type FormEvent, type Ref, useId, useRef, useState } from 'react';
 
 import { submitCustomRequirement } from '@/lib/api/custom-requirements';
+import { trackLeadEvent } from '@/lib/api/lead-events';
 import { Locale } from '@/types/site';
 
 type ProductLeadFormProps = {
@@ -35,8 +36,16 @@ const leadFormCopy = {
       process: { label: '设备工艺', placeholder: '请输入设备工艺，如退火、回火、正火等..' },
       temperature: { label: '使用温度', placeholder: '请输入温度，高温、低温℃' },
       requirement: { label: '设备需求', placeholder: '请输入工件材质、尺寸/单重、每小时产能..' },
+      discoverySource: {
+        label: '您从哪里了解到苏能？（选填）',
+        options: ['AI 助手', '搜索引擎', '微信公众号 / 短视频', '客户 / 朋友推荐', '展会 / 行业平台', '其他'],
+      },
     },
-    privacy: '提交即表示同意《隐私政策》',
+    privacy: {
+      summary: '提交即表示您已阅读并同意《隐私说明》',
+      notice:
+        '您提交的姓名、联系电话、公司与项目需求仅用于回复询盘、评估设备方案及后续沟通。如需查询、更正或删除已提交信息，请联系 997518512@qq.com。请勿提交与项目无关的敏感个人信息。',
+    },
     submitting: '提交中...',
     requiredContact: '请输入联系方式！',
     submitFailed: '提交失败，请稍后再试',
@@ -60,8 +69,16 @@ const leadFormCopy = {
       process: { label: 'Heat-Treatment Process', placeholder: 'e.g. annealing, tempering, normalizing...' },
       temperature: { label: 'Operating Temperature', placeholder: 'Enter the required temperature range' },
       requirement: { label: 'Equipment Requirements', placeholder: 'Enter workpiece material, dimensions / unit weight, hourly throughput...' },
+      discoverySource: {
+        label: 'How did you hear about Suneng? (Optional)',
+        options: ['AI assistant', 'Search engine', 'WeChat / short video', 'Customer / friend referral', 'Exhibition / industry platform', 'Other'],
+      },
     },
-    privacy: 'By submitting, you agree to the Privacy Policy.',
+    privacy: {
+      summary: 'By submitting, you confirm that you have read the Privacy Notice.',
+      notice:
+        'The name, contact details, company information and project requirements you provide are used only to respond to your inquiry, evaluate a furnace solution and continue project communication. To request access, correction or deletion, contact 997518512@qq.com. Do not submit unrelated sensitive personal information.',
+    },
     submitting: 'Submitting...',
     requiredContact: 'Please enter your contact information.',
     submitFailed: 'Submission failed. Please try again later.',
@@ -80,8 +97,16 @@ const leadFormCopy = {
   fields: Record<'name' | 'phone' | 'company' | 'industry' | 'process' | 'temperature' | 'requirement', {
     label: string;
     placeholder: string;
-  }>;
-  privacy: string;
+  }> & {
+    discoverySource: {
+      label: string;
+      options: string[];
+    };
+  };
+  privacy: {
+    summary: string;
+    notice: string;
+  };
   submitting: string;
   requiredContact: string;
   submitFailed: string;
@@ -98,6 +123,9 @@ function LeadTextInput({
   required = false,
   invalid = false,
   onInput,
+  inputRef,
+  errorId,
+  errorMessage,
   className = '',
 }: {
   label: string;
@@ -106,6 +134,9 @@ function LeadTextInput({
   required?: boolean;
   invalid?: boolean;
   onInput?: () => void;
+  inputRef?: Ref<HTMLInputElement>;
+  errorId?: string;
+  errorMessage?: string;
   className?: string;
 }) {
   return (
@@ -113,20 +144,29 @@ function LeadTextInput({
       <span className="text-[13px] font-normal leading-none text-[#4a5160]">
         {label}
         {required ? (
-          <span className="ml-1 text-[#c51624]" aria-hidden="true">
+          <span className="ml-1" aria-hidden="true">
             *
           </span>
         ) : null}
       </span>
       <input
+        ref={inputRef}
         name={name}
+        required={required}
         onInput={onInput}
         aria-invalid={invalid || undefined}
+        aria-describedby={invalid && errorId ? errorId : undefined}
+        aria-errormessage={invalid && errorId ? errorId : undefined}
         className={`mt-2 h-[40px] w-full rounded-[4px] border bg-white px-3 text-[14px] font-normal text-[#1a1d23] outline-none transition placeholder:text-[#b0b5bd] focus:border-[#c51624] focus:shadow-[0_0_0_3px_rgba(197,22,36,0.08)] ${
           invalid ? 'border-[#c51624] shadow-[0_0_0_3px_rgba(197,22,36,0.08)]' : 'border-[#e0e3e8]'
         }`}
         placeholder={placeholder}
       />
+      {invalid && errorId && errorMessage ? (
+        <span id={errorId} role="alert" className="mt-2 block text-[13px] leading-[1.5]">
+          {errorMessage}
+        </span>
+      ) : null}
     </label>
   );
 }
@@ -153,7 +193,7 @@ function LeadTextarea({
       <span className="text-[13px] font-normal leading-none text-[#4a5160]">
         {label}
         {required ? (
-          <span className="ml-1 text-[#c51624]" aria-hidden="true">
+          <span className="ml-1" aria-hidden="true">
             *
           </span>
         ) : null}
@@ -171,6 +211,38 @@ function LeadTextarea({
   );
 }
 
+function LeadSelect({
+  label,
+  name,
+  options,
+  locale,
+  className = '',
+}: {
+  label: string;
+  name: string;
+  options: string[];
+  locale: Locale;
+  className?: string;
+}) {
+  return (
+    <label className={`block ${className}`}>
+      <span className="text-[13px] font-normal leading-none text-[#4a5160]">{label}</span>
+      <select
+        name={name}
+        defaultValue=""
+        className="mt-2 h-[40px] w-full rounded-[4px] border border-[#e0e3e8] bg-white px-3 text-[14px] font-normal text-[#1a1d23] outline-none transition focus:border-[#c51624] focus:shadow-[0_0_0_3px_rgba(197,22,36,0.08)]"
+      >
+        <option value="">{locale === 'zh' ? '请选择' : 'Select an option'}</option>
+        {options.map((option) => (
+          <option key={option} value={option}>
+            {option}
+          </option>
+        ))}
+      </select>
+    </label>
+  );
+}
+
 type ProductQuoteScrollButtonProps = {
   locale?: Locale;
   label?: string;
@@ -183,7 +255,7 @@ type ProductQuoteScrollButtonProps = {
 export function ProductQuoteScrollButton({
   locale = 'zh',
   label,
-  className = 'flex h-11 w-full items-center justify-center rounded-[4px] bg-[#c51624] text-[15px] font-medium text-white transition hover:bg-[#a90f1b]',
+  className = 'flex h-11 w-full items-center justify-center rounded-[4px] cta-primary text-[15px] font-medium text-white transition',
   updateHash = false,
   variant = 'card',
   anchorId = 'product-lead-form',
@@ -192,6 +264,8 @@ export function ProductQuoteScrollButton({
   const buttonLabel = label ?? copy.quoteButtonLabel;
 
   const handleClick = () => {
+    trackLeadEvent('quote_cta_click');
+
     const target = document.getElementById(anchorId);
 
     target?.scrollIntoView({
@@ -234,9 +308,14 @@ export function ProductLeadForm({
   const resolvedDescription = description ?? copy.defaultDescription;
   const resolvedSubmitLabel = submitLabel ?? copy.defaultSubmitLabel;
   const resolvedContactLabel = contactLabel ?? copy.contactLabel;
+  const formIdPrefix = useId();
+  const contactErrorId = `${formIdPrefix}-contact-error`;
+  const privacyNoticeId = `${formIdPrefix}-privacy-notice`;
+  const phoneInputRef = useRef<HTMLInputElement>(null);
   const [toast, setToast] = useState('');
   const [showSuccess, setShowSuccess] = useState(false);
   const [invalidContact, setInvalidContact] = useState(false);
+  const [showPrivacyNotice, setShowPrivacyNotice] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const hasLeadSidebar = Boolean(leadBullets?.length);
 
@@ -258,6 +337,7 @@ export function ProductLeadForm({
     if (!contact) {
       setInvalidContact(true);
       showToast(copy.requiredContact);
+      phoneInputRef.current?.focus();
       return;
     }
 
@@ -273,6 +353,9 @@ export function ProductLeadForm({
         process: getFormValue(formData, 'process') || undefined,
         temperature: getFormValue(formData, 'temperature') || undefined,
         requirement: getFormValue(formData, 'requirement') || undefined,
+      });
+      trackLeadEvent('form_submit', {
+        discoverySource: getFormValue(formData, 'discoverySource') || undefined,
       });
       form.reset();
       setShowSuccess(true);
@@ -298,7 +381,7 @@ export function ProductLeadForm({
             <ul className="space-y-[10px]">
               {leadBullets?.map((item) => (
                 <li key={item} className="flex items-center gap-[10px] text-[13px] font-normal leading-[1.5] text-white/90">
-                  <span className="flex h-[16px] w-[16px] shrink-0 items-center justify-center rounded-full border border-[#c51624] text-[#c51624]">
+                  <span className="flex h-[16px] w-[16px] shrink-0 items-center justify-center rounded-full cta-secondary">
                     <svg className="h-[10px] w-[10px]" viewBox="0 0 10 10" fill="none" aria-hidden="true">
                       <path d="M2 5.2 4.1 7.1 8 2.6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                     </svg>
@@ -325,7 +408,7 @@ export function ProductLeadForm({
           <div className="w-full">
             {!hasLeadSidebar ? (
               <div className="mb-6">
-                <p className="mb-2 text-[14px] font-semibold tracking-[0.18em] text-[#c51624]">{copy.onlineMessage}</p>
+                <p className="mb-2 text-[14px] font-semibold tracking-[0.18em]">{copy.onlineMessage}</p>
                 <h2 className="text-[28px] font-semibold leading-[1.28] text-[#101828] sm:text-[34px]">{resolvedTitle}</h2>
                 <p className="mt-4 max-w-[860px] text-[15px] leading-[1.85] text-[#667085]">{resolvedDescription}</p>
               </div>
@@ -339,6 +422,9 @@ export function ProductLeadForm({
                 placeholder={copy.fields.phone.placeholder}
                 required
                 invalid={invalidContact}
+                inputRef={phoneInputRef}
+                errorId={contactErrorId}
+                errorMessage={copy.requiredContact}
                 onInput={() => {
                   if (invalidContact) setInvalidContact(false);
                 }}
@@ -347,11 +433,36 @@ export function ProductLeadForm({
               <LeadTextInput label={copy.fields.industry.label} name="industry" placeholder={copy.fields.industry.placeholder} />
               <LeadTextInput label={copy.fields.process.label} name="process" placeholder={copy.fields.process.placeholder} />
               <LeadTextInput label={copy.fields.temperature.label} name="temperature" placeholder={copy.fields.temperature.placeholder} />
+              <LeadSelect
+                className="md:col-span-3"
+                label={copy.fields.discoverySource.label}
+                name="discoverySource"
+                options={copy.fields.discoverySource.options}
+                locale={locale}
+              />
               <LeadTextarea className="md:col-span-3" label={copy.fields.requirement.label} name="requirement" placeholder={copy.fields.requirement.placeholder} />
               <div className="flex flex-col items-stretch gap-4 pt-1 sm:flex-row sm:items-center sm:justify-between md:col-span-3">
-                <p className="text-[13px] text-[#98a1ad]">{copy.privacy}</p>
+                <div className="max-w-[620px] text-[13px] leading-[1.7] text-[#667085]">
+                  <button
+                    type="button"
+                    aria-controls={privacyNoticeId}
+                    aria-expanded={showPrivacyNotice}
+                    className="text-left font-medium text-[#667085] underline decoration-[#98a1ad] underline-offset-4 hover:text-[#c51624] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#c51624]"
+                    onClick={() => setShowPrivacyNotice((current) => !current)}
+                  >
+                    {copy.privacy.summary}
+                  </button>
+                  {showPrivacyNotice ? (
+                    <p
+                      id={privacyNoticeId}
+                      className="mt-2 rounded-[4px] border border-[#e0e6ee] bg-[#f8fafc] p-3 text-[#667085]"
+                    >
+                      {copy.privacy.notice}
+                    </p>
+                  ) : null}
+                </div>
                 <button
-                  className="h-[44px] w-full rounded-[4px] bg-[#c51624] text-[15px] font-medium text-white transition hover:bg-[#a90f1b] disabled:cursor-not-allowed disabled:opacity-60 sm:w-[220px] sm:shrink-0"
+                  className="h-[44px] w-full rounded-[4px] cta-primary text-[15px] font-medium text-white transition disabled:cursor-not-allowed disabled:opacity-60 sm:w-[220px] sm:shrink-0"
                   type="submit"
                   disabled={isSubmitting}
                 >
@@ -364,7 +475,10 @@ export function ProductLeadForm({
       </section>
 
       {toast ? (
-        <div className="fixed left-1/2 top-1/2 z-[120] -translate-x-1/2 -translate-y-1/2 rounded-[4px] bg-[#1f2937] px-6 py-3 text-[15px] text-white shadow-[0_12px_30px_rgba(0,0,0,0.18)]">
+        <div
+          role="alert"
+          className="fixed left-1/2 top-1/2 z-[120] -translate-x-1/2 -translate-y-1/2 rounded-[4px] bg-[#1f2937] px-6 py-3 text-[15px] text-white shadow-[0_12px_30px_rgba(0,0,0,0.18)]"
+        >
           {toast}
         </div>
       ) : null}
@@ -376,7 +490,7 @@ export function ProductLeadForm({
             <button
               type="button"
               onClick={() => setShowSuccess(false)}
-              className="mt-6 h-[40px] min-w-[120px] rounded-[4px] bg-[#c51624] px-6 text-[14px] font-medium text-white transition hover:bg-[#a90f1b]"
+              className="mt-6 h-[40px] min-w-[120px] rounded-[4px] cta-primary px-6 text-[14px] font-medium text-white transition"
             >
               {copy.successButton}
             </button>

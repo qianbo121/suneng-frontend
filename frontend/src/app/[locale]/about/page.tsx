@@ -15,6 +15,7 @@ import { getBreadcrumbJsonLd } from '@/lib/seo/jsonld';
 import { absoluteUrl, buildMetadata } from '@/lib/seo/metadata';
 import { ABOUT_SEO } from '@/lib/seo/page-data';
 import { SITE_NAME } from '@/lib/seo/config';
+import { ENGLISH_STATIC_PAGE_METADATA } from '@/lib/seo/static-page-metadata-en';
 import { Locale } from '@/types/site';
 
 type AboutPageProps = {
@@ -26,9 +27,7 @@ type AboutPageProps = {
 const aboutSeoCopy = {
   zh: ABOUT_SEO,
   en: {
-    title: 'About Suneng Industrial Furnace | Jiangsu Heat-Treatment Furnace Manufacturer',
-    description:
-      'Jiangsu Suneng Industrial Furnace — founded 2006 in Taizhou, Jiangsu, a National High-Tech Enterprise specializing in heat-treatment furnace design and manufacturing, with a 14,700 m² production base.',
+    ...ENGLISH_STATIC_PAGE_METADATA.about,
     keywords: [
       'Suneng Industrial Furnace',
       'Jiangsu furnace manufacturer',

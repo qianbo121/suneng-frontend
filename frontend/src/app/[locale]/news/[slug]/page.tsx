@@ -1,5 +1,6 @@
 import Image from 'next/image';
-import { notFound } from 'next/navigation';
+import Link from 'next/link';
+import { notFound, permanentRedirect } from 'next/navigation';
 import { HiCalendarDays } from 'react-icons/hi2';
 
 import { JsonLd } from '@/components/JsonLd';
@@ -19,8 +20,11 @@ import {
   normalizeNewsHtml,
   resolveNewsImage,
 } from '@/lib/news';
+import { getNewsContentModifiedTime } from '@/lib/news-dates';
 import { getArticleJsonLd, getBreadcrumbJsonLd } from '@/lib/seo/jsonld';
 import { buildMetadata } from '@/lib/seo/metadata';
+import { getCanonicalNewsSlug, hasPublishableEnglishNews } from '@/lib/news-routing';
+import { getNewsRelatedLinks } from '@/lib/news-related';
 import { Locale } from '@/types/site';
 
 type NewsDetailPageProps = {
@@ -37,8 +41,16 @@ export const revalidate = 600;
 export async function generateMetadata({ params }: NewsDetailPageProps) {
   const { locale, slug } = await params;
   const currentLocale = (locale === 'en' ? 'en' : 'zh') as Locale;
+  const canonicalSlug = getCanonicalNewsSlug(slug);
+
+  if (canonicalSlug !== slug) {
+    permanentRedirect(`/${currentLocale}/news/${canonicalSlug}`);
+  }
+
   const { article: apiArticle, error } = await getNewsDetailPageData(slug);
-  const article = apiArticle || (FALLBACK_NEWS_SLUGS.has(slug) ? FALLBACK_NEWS_DETAIL : null);
+  const article = apiArticle || (
+    currentLocale === 'zh' && FALLBACK_NEWS_SLUGS.has(slug) ? FALLBACK_NEWS_DETAIL : null
+  );
 
   if (!article) {
     // Distinguish a genuinely-missing article (404) from an upstream API outage:
@@ -48,6 +60,10 @@ export async function generateMetadata({ params }: NewsDetailPageProps) {
     if (error) {
       throw new Error(`Failed to load news article "${slug}": ${error}`);
     }
+    notFound();
+  }
+
+  if (currentLocale === 'en' && !hasPublishableEnglishNews(article)) {
     notFound();
   }
 
@@ -61,6 +77,7 @@ export async function generateMetadata({ params }: NewsDetailPageProps) {
   const keywords = currentLocale === 'en'
     ? article.seoKeywordsEn || article.seoKeywordsZh || ''
     : article.seoKeywordsZh || article.seoKeywordsEn || '';
+  const modifiedTime = getNewsContentModifiedTime(article);
 
   return buildMetadata({
     title,
@@ -72,20 +89,33 @@ export async function generateMetadata({ params }: NewsDetailPageProps) {
     image,
     type: 'article',
     publishedTime: article.publishDate,
-    modifiedTime: article.publishDate,
-    alternateLocales: {
-      'zh-CN': `/zh/news/${slug}`,
-      'en-US': `/en/news/${slug}`,
-      'x-default': `/zh/news/${slug}`,
-    },
+    modifiedTime,
+    alternateLocales: hasPublishableEnglishNews(article)
+      ? {
+          'zh-CN': `/zh/news/${slug}`,
+          'en-US': `/en/news/${slug}`,
+          'x-default': `/zh/news/${slug}`,
+        }
+      : {
+          'zh-CN': `/zh/news/${slug}`,
+          'x-default': `/zh/news/${slug}`,
+        },
   });
 }
 
 export default async function NewsDetailPage({ params }: NewsDetailPageProps) {
   const { locale, slug } = await params;
   const currentLocale = (locale === 'en' ? 'en' : 'zh') as Locale;
+  const canonicalSlug = getCanonicalNewsSlug(slug);
+
+  if (canonicalSlug !== slug) {
+    permanentRedirect(`/${currentLocale}/news/${canonicalSlug}`);
+  }
+
   const { article: apiArticle, error } = await getNewsDetailPageData(slug);
-  const article = apiArticle || (FALLBACK_NEWS_SLUGS.has(slug) ? FALLBACK_NEWS_DETAIL : null);
+  const article = apiArticle || (
+    currentLocale === 'zh' && FALLBACK_NEWS_SLUGS.has(slug) ? FALLBACK_NEWS_DETAIL : null
+  );
 
   if (!article) {
     // Distinguish a genuinely-missing article (404) from an upstream API outage:
@@ -95,6 +125,10 @@ export default async function NewsDetailPage({ params }: NewsDetailPageProps) {
     if (error) {
       throw new Error(`Failed to load news article "${slug}": ${error}`);
     }
+    notFound();
+  }
+
+  if (currentLocale === 'en' && !hasPublishableEnglishNews(article)) {
     notFound();
   }
 
@@ -108,6 +142,8 @@ export default async function NewsDetailPage({ params }: NewsDetailPageProps) {
   const newsLabel = NEWS_LABEL[currentLocale];
   const detailLabel = NEWS_DETAIL_LABEL[currentLocale];
   const contactHref = '/zh/contact';
+  const modifiedTime = getNewsContentModifiedTime(article);
+  const relatedLinks = currentLocale === 'zh' ? getNewsRelatedLinks(article) : [];
 
   return (
     <div className="bg-[#f7f7f7]">
@@ -122,7 +158,7 @@ export default async function NewsDetailPage({ params }: NewsDetailPageProps) {
             description: summary || title,
             image,
             datePublished: article.publishDate,
-            dateModified: article.publishDate,
+            dateModified: modifiedTime || article.publishDate,
           }, currentLocale),
           getBreadcrumbJsonLd([
             { name: currentLocale === 'en' ? 'Home' : '首页', url: `/${currentLocale}` },
@@ -170,6 +206,30 @@ export default async function NewsDetailPage({ params }: NewsDetailPageProps) {
             <NewsArticleContent html={html} />
           </div>
 
+          {relatedLinks.length ? (
+            <aside
+              aria-labelledby="news-related-links-title"
+              className="mx-auto mt-[48px] max-w-[1060px] border-t border-[#e4e7ec] pt-8"
+            >
+              <h2 id="news-related-links-title" className="text-[22px] font-semibold text-[#101828]">
+                相关产品、方案与项目证据
+              </h2>
+              <div className="mt-5 grid gap-4 md:grid-cols-2">
+                {relatedLinks.map((link) => (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    className="rounded-[6px] border border-[#dce3ec] bg-[#fbfcfe] p-5 transition hover:border-[#c51624] hover:bg-white"
+                  >
+                    <span className="text-[12px] font-semibold">{link.kind}</span>
+                    <h3 className="mt-2 text-[17px] font-semibold leading-[1.45] text-[#101828]">{link.title}</h3>
+                    <p className="mt-2 text-[14px] leading-[1.75] text-[#667085]">{link.description}</p>
+                  </Link>
+                ))}
+              </div>
+            </aside>
+          ) : null}
+
           {currentLocale === 'zh' ? (
             <div className="mx-auto mt-[48px] max-w-[1060px] rounded-[8px] border border-[#e1e7f0] bg-[#fbfcfe] p-6 lg:flex lg:items-center lg:justify-between lg:gap-8">
               <div>
@@ -181,11 +241,11 @@ export default async function NewsDetailPage({ params }: NewsDetailPageProps) {
               <div className="mt-5 flex flex-col gap-3 sm:flex-row lg:mt-0 lg:shrink-0">
                 <QuoteModalButton
                   label="获取报价方案"
-                  className="inline-flex min-h-[46px] items-center justify-center rounded-[4px] bg-[#c51624] px-6 text-[15px] font-semibold text-white transition hover:bg-[#a90f1b]"
+                  className="inline-flex min-h-[46px] items-center justify-center rounded-[4px] cta-primary px-6 text-[15px] font-semibold text-white transition"
                 />
                 <a
                   href={contactHref}
-                  className="inline-flex min-h-[46px] items-center justify-center rounded-[4px] border border-[#c51624] px-6 text-[15px] font-semibold text-[#c51624] transition hover:bg-[#fff5f5]"
+                  className="inline-flex min-h-[46px] items-center justify-center rounded-[4px] cta-secondary px-6 text-[15px] font-semibold transition"
                 >
                   联系苏能工程师
                 </a>

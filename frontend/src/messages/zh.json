@@ -1,9 +1,9 @@
 {
   "common": {
-    "siteName": "制造业企业官网",
-    "sectionEyebrow": "Global Layout",
-    "placeholderTitle": "全局布局与基础组件已建立",
-    "placeholderDescription": "当前阶段重点完成 Header、Footer、浮动工具栏、内页 Banner、404 页面与国际化骨架，后续栏目页将在此基础上逐步高保真还原。"
+    "siteName": "江苏苏能工业炉有限公司",
+    "sectionEyebrow": "Suneng Industrial Furnace",
+    "placeholderTitle": "工业炉与热处理设备解决方案",
+    "placeholderDescription": "江苏苏能工业炉专注工业炉、热处理炉及非标热处理设备制造，提供方案设计、设备制造、安装调试与售后服务。"
   },
   "buttons": {
     "backHome": "返回首页",

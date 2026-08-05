@@ -1,0 +1,359 @@
+# 20 个核心页深度抓取推进记录
+
+日期：2026-07-30
+
+## 生产基线
+
+统计窗口：2026-07-24 至 2026-07-30。
+统计对象：GPTBot、OAI-SearchBot、ClaudeBot、Claude-SearchBot、PerplexityBot、Bytespider。
+
+- 22 个核心页中，已出现 AI 系统爬虫请求：`/zh`、`/zh/products`；
+- 其余 20 个核心页在该窗口内未出现上述 AI 系统爬虫请求；
+- 爬虫访问只代表抓取，不等于被 AI 引用。
+
+## 技术核验
+
+20 个待抓页逐页核验结果：
+
+- HTTP 状态：20/20 返回 200；
+- canonical：20/20 指向自身正式 URL；
+- robots meta：20/20 允许索引；
+- sitemap：20/20 已存在；
+- 主流 AI User-Agent 模拟访问：OAI-SearchBot、GPTBot、Claude-SearchBot、ClaudeBot、PerplexityBot、Bytespider 均返回 200；
+- 当前瓶颈不是访问受阻，而是深层页面抓取优先级和发现信号不足。
+
+## 本轮处理
+
+1. 在 `robots.txt` 中明确允许 OpenAI、Anthropic、Perplexity 与字节系搜索/回答爬虫；
+2. 曾为产品、服务和方案页补充统一的 `2026-07-30` `lastmod` / `dateModified`，复核后判定该批量口径不能证明每个页面均发生了独立显著更新，已在同日纠正；
+3. 首页为两个项目案例和两个厂家能力页增加标准 HTML 直达链接，使低入链页面进入首页一跳范围；
+4. 新增回归测试，确保 20 个核心 URL 持续存在于 sitemap；
+5. 不创建任何新页面。
+
+## 提交边界
+
+本轮部署后显式提交 19 个 URL。青山案例
+`/zh/case/anonymous-tsingshan-1250-renovation`
+继续按既定证据门和 slug 隐私决策单独处理，不进入本轮主动催抓。
+
+执行结果：
+
+- IndexNow 返回 `HTTP 200`；
+- 百度主动推送因未配置 `BAIDU_PUSH_TOKEN` 跳过；
+- 接口返回只代表变更通知被接收，实际抓取仍以 nginx 日志为准。
+
+## 回验节奏
+
+- D+1：检查搜索及 AI 爬虫是否开始访问深层 URL；
+- D+3：复核 19 个提交页的抓取覆盖、状态码分布与重复抓取；
+- D+7：输出 22 个核心页覆盖率变化，并区分搜索爬虫、AI 系统爬虫和 AI 引流；
+- 不用“已提交”替代“已抓取”，不用“已抓取”替代“已引用”。
+
+## 提交后 T+0 快照
+
+快照时间：2026-07-30 14:39（北京时间）。统计窗口仍为 2026-07-24 至 2026-07-30。
+
+- 已扫描 6 个 Nginx 日志文件，排除 6 条验证探针；
+- 22 个核心页中，搜索或 AI 系统爬虫已覆盖 16 页，覆盖率 72.73%；
+- AI 系统爬虫累计 115 次请求，核心页仍覆盖 2/22（9.09%）；
+- 搜索爬虫累计 2,242 次请求，核心页覆盖 16/22（72.73%）；
+- 用户触发取页累计 2 次，核心页覆盖 1/22（4.55%）。
+
+当前仍未被目标爬虫命中的 6 页：
+
+1. `/zh/service/furnace-renovation-overhaul`
+2. `/zh/solutions/rechuli-lu-changjia`
+3. `/zh/solutions/jiangsu-gongye-lu-changjia`
+4. `/zh/case/anonymous-tsingshan-1250-renovation`
+5. `/zh/case/jining-support-roller-heat-treatment-line`
+6. `/zh/case/henan-annealing-solution-line`
+
+决策：
+
+- T+0 只记录方向，不因 AI 深抓尚未发生而修改或删除页面；
+- 前 3 页及济宁、河南案例继续进入 D+1 / D+3 观察；
+- 青山案例继续保留证据门，不做主动催抓；
+- 百度统计 accessToken 已恢复，但它不等于百度搜索资源平台的 URL 推送 Token；
+- 百度搜索资源平台当前未登录，本轮尚未执行百度主动推送，不能记为已提交。
+
+## 同日复核与纠正
+
+- 2026-07-30 只保留中文首页的 `lastmod`：首页当天新增了两个案例和两个厂家能力页的标准 HTML 入口；
+- 工业炉改造服务页、两个厂家能力页没有独立显著更新证据，不再输出 `2026-07-30`；
+- 连续热处理生产线页恢复到真实的 `2026-07-29`；
+- 产品详情页不再共享批量日期；只有具备页面级审核日期的台车炉页保留 `2026-07-29`；
+- 新增防回退测试：没有页面级日期来源时，同一个硬编码日期覆盖 3 个或更多页面将直接失败。
+
+## Nginx 配置事件记录
+
+事件时间：2026-07-30 12:33:27–12:35:07（北京时间，04:33:27–04:35:07 UTC），共 100 秒。
+
+原因：为让新增爬虫分类立即生效，手工生成运行配置时没有沿用容器启动命令的变量替换边界，`${DOMAIN}` 与 `${ADMIN_DOMAIN}` 留在了运行配置中。Nginx 语法检查通过，但域名匹配口径错误。
+
+影响：
+
+- `factory.jssngyl.cn` 和裸域 `jssngyl.cn` 的精确 `server_name` 仍然有效；
+- `www.jssngyl.cn` 与 `admin.jssngyl.cn` 在该窗口内会落入第一个 HTTPS 虚拟主机，即智能工厂；
+- 不是端口或进程级完全不可用，错误路由仍返回 HTTP 200，但属于对外功能中断；
+- 日志确认该窗口内有 3 个 `www.jssngyl.cn` 请求被错误记录到 `factory.access.json`，未发现后台域名实际请求。
+
+恢复：12:35:07 使用正确替换后的配置完成测试与平滑 reload；随后 `www=200`、裸域 `301→www`、`admin=200`、`factory=200` 全部复测通过。
+
+防回退：
+
+- 生产模板、容器挂载模板与当前 GEO 分支模板 SHA-256 均为 `a9f77458ddb5fcf9a6ab1d8ba937c2b3fded13755ac98431a35906cafa6b8124`；
+- 运行配置与容器按模板重新渲染的配置 SHA-256 均为 `3bd2de72354a2420954af214602aa8d1c42d310bf9ac7be21d6c58d839086ca3`；
+- 部署脚本现在会先验证 3 条旧工时二维码规则，再按容器的变量替换清单重新生成候选配置；候选配置通过 `nginx -t` 后才替换并平滑 reload；
+- 部署后自动复测官网、裸域、后台、智能工厂，以及 3 条旧工时二维码跳转。
+
+## 百度主动推送补充记录
+
+补充时间：2026-07-30。
+
+- 已完成 `https://www.jssngyl.cn` 的百度搜索资源平台文件验证；
+- API 整批提交 19 个 URL 时返回 `over quota`，未把该次记为成功；
+- 改为两批各 5 个 URL 后，百度分别返回 `success: 5, remain: 5` 和 `success: 5, remain: 0`；
+- 当日成功提交 10 个 URL，其中优先覆盖此前仍未被目标爬虫命中的 5 页；
+- 青山案例继续排除；
+- Sitemap 页面显示当日上限和余额均为 `0`，本日未提交 Sitemap；
+- 其余 9 个产品详情页进入下一额度周期的待提交队列。
+
+18:26（北京时间）复核生产 Nginx 日志：百度爬虫仍只命中 `/` 与 `/zh`，10 个已提交页尚未出现新的 `Baiduspider` 请求。API 成功只证明百度收到了 URL，不等于已经抓取或收录。
+
+## D+1 提前复核
+
+执行时间：2026-07-30 18:33（北京时间）。
+
+说明：本次按项目负责人要求在提交当日先行执行，属于 D+1 的提前基线，不等同于完整 24 小时观察窗口。正式 D+1 仍需在下一日复核。
+
+统计口径：
+
+- 时间起点：2026-07-30 16:30（北京时间），覆盖百度主动推送前后的日志；
+- 页面范围：当日成功提交的 10 个 URL；
+- 爬虫范围：Baiduspider、GPTBot、OAI-SearchBot、ClaudeBot、Claude-SearchBot、PerplexityBot、Bytespider 等已分类爬虫。
+
+结果：
+
+- 10 个 URL 的目标爬虫命中数均为 `0`；
+- 同期 Baiduspider 访问了 `/` 与 `/zh`，状态分别为 `307` 和 `200`；
+- 暂无证据表明百度或 AI 系统爬虫已经访问这 10 个提交页；
+- 不把接口 `success: 10` 写成已抓取、已收录或已引用。
+
+## D+3 技术预检
+
+执行时间：2026-07-30 18:33（北京时间）。
+
+说明：本次先完成不依赖时间经过的技术检查。正式 D+3 到时只需复核日志，并对仍未抓取的页面执行百度搜索资源平台“抓取诊断”。
+
+| 页面 | HTTP | canonical | robots | sitemap | 首页 HTML 入口 | 其他入口 |
+|---|---:|---|---|---:|---:|---|
+| `/zh/service/furnace-renovation-overhaul` | 200 | 自指 | index, follow | 1 | 2 | 产品中心 1、服务页 1 |
+| `/zh/solutions/rechuli-lu-changjia` | 200 | 自指 | index, follow | 1 | 1 | — |
+| `/zh/solutions/jiangsu-gongye-lu-changjia` | 200 | 自指 | index, follow | 1 | 1 | — |
+| `/zh/case/jining-support-roller-heat-treatment-line` | 200 | 自指 | index, follow | 1 | 1 | — |
+| `/zh/case/henan-annealing-solution-line` | 200 | 自指 | index, follow | 1 | 1 | — |
+| `/zh/articles/gongye-lu-baojia-canshu` | 200 | 自指 | index, follow | 1 | 2 | 产品中心 1、服务页 1 |
+| `/zh/articles/laojiu-rechuli-lu-daxiu-haishi-maixin` | 200 | 自指 | index, follow | 1 | 2 | 产品中心 1、服务页 1 |
+| `/zh/solutions/continuous-heat-treatment-line` | 200 | 自指 | index, follow | 1 | 3 | 产品中心 1 |
+| `/zh/products/detail/trolley-furnace` | 200 | 自指 | index, follow | 1 | 2 | 产品中心 1 |
+| `/zh/products/detail/annealing-solution-line` | 200 | 自指 | index, follow | 1 | 2 | 产品中心 1 |
+
+结论：
+
+- 10/10 页面不存在 404、noindex、canonical 指错或 sitemap 缺失；
+- 10/10 页面均有首页标准 HTML 入口，最短发现深度为一跳；
+- 当前没有理由修改站内链接或制造新的更新时间；
+- 百度官方抓取诊断已于 2026-07-30 18:43–18:53（北京时间）完成首批 5 个重点页面的 PC UA 检测，结果均为“抓取成功”。
+
+### 百度官方抓取诊断结果
+
+| 页面 | 百度状态 | HTTP | 下载时长 | 抓取时间 |
+|---|---|---:|---:|---|
+| `/zh/service/furnace-renovation-overhaul` | 抓取成功 | HTTP/2 200 | 0.704 秒 | 2026-07-30 18:43:23 |
+| `/zh/solutions/rechuli-lu-changjia` | 抓取成功 | HTTP/2 200 | 0.295 秒 | 2026-07-30 18:44:43 |
+| `/zh/solutions/jiangsu-gongye-lu-changjia` | 抓取成功 | HTTP/2 200 | 0.264 秒 | 2026-07-30 18:47:02 |
+| `/zh/case/jining-support-roller-heat-treatment-line` | 抓取成功 | HTTP/2 200 | 0.222 秒 | 2026-07-30 18:52:30 |
+| `/zh/case/henan-annealing-solution-line` | 抓取成功 | HTTP/2 200 | 0.269 秒 | 2026-07-30 18:53:34 |
+
+详情页核对：
+
+- 五条记录的“提交网址”与“抓取网址”完全一致；
+- 抓取 UA 均为百度平台展示的 `Baiduspider/2.0` PC UA；
+- 返回内容类型为 `text/html; charset=utf-8`，百度详情页可以展开看到实际 HTML，而非空响应；
+- 本次只证明百度蜘蛛当前能够正常抓取页面，不等同于已收录、已排序或已被 AI 引用；
+- 正式 D+1 继续以生产 Nginx 日志为准；正式 D+3 对仍无真实爬虫访问的其余页面再分批诊断，不制造更新时间。
+
+## 正式 D+1 Nginx 日志复核
+
+执行日期：2026-07-31。
+
+统计窗口：2026-07-30 至 2026-07-31。口径继续排除 6 条已登记验证探针，不把模拟 UA 验证记入自然抓取。
+
+- 扫描日志文件：7 个；
+- 已识别爬虫请求：1,177 次；
+- 原 22 个核心页中，搜索或 AI 系统爬虫覆盖：22/22；
+- AI 系统爬虫请求：310 次，核心页覆盖：20/22；
+- 搜索爬虫请求：863 次，核心页覆盖：22/22；
+- 用户触发取页：4 次，核心页覆盖：0/22。
+
+主要变化：
+
+- GPTBot：186 次请求、72 个不同页面，覆盖旧核心页 20/22；
+- Baiduspider：59 次请求，其中 57 次为成功响应，覆盖旧核心页 7/22；
+- 搜索爬虫核心页覆盖由 T+0 的 16/22 提升到 22/22；
+- AI 系统爬虫核心页覆盖由 T+0 的 2/22 提升到 20/22；
+- 工业炉改造服务页、两个厂家能力页、济宁案例和河南案例均已出现真实搜索爬虫访问；
+- 青山案例也出现了自然抓取，但仍不因此绕过事实证据门或主动提交。
+
+结论：
+
+- 深层页面发现和访问障碍已解除，原 22 页抓取推进目标在搜索爬虫侧达到 100%；
+- AI 系统侧尚有 2 页未覆盖，继续观察，不制造更新时间、不重复批量改页；
+- 本结果只证明爬虫访问，不等于收录、排序、品牌提及或 AI 引用；
+- 2026-07-31 新增上线的 6 个权威主题页将纳入下一版 28 页监测口径，单独记录上线后的自然抓取。
+
+### 28 页口径上线后复核
+
+执行时间：2026-07-31 16:33（北京时间）。
+
+- 智能工厂 GEO 监测已由 22 页升级到 28 页，新增 B/F/C/D/A/E 六个权威主题页；
+- B「温度不均整改与验收」：GPTBot 已抓取 1 次；
+- F「改造风险、周期与生产影响」：GPTBot 已抓取 1 次；
+- C「炉衬翻新」、D「电改燃 / 燃改电 / 余热回收」、A「控制系统升级」、E「停产重启 / 搬迁复产」：上线后当前尚未出现已识别爬虫请求；
+- C/D/A/E 已通过 IndexNow 通知，继续观察自然抓取，不重复制造更新时间。
+
+## 新增 6 页 D+0 家族级复核
+
+执行时间：2026-07-31 20:04（北京时间）。
+
+统计口径：生产 Nginx 日志的 2026-07-31 自然请求，排除已登记验证探针；原 22 页与新增 6 页分开计算。
+
+| 爬虫家族 | 原 22 页 | 新增 6 页 | 当前解读 |
+|---|---:|---:|---|
+| GPTBot | 21/22 | 6/6 | 模型改进抓取已覆盖全部新页 |
+| ClaudeBot | 0/22 | 6/6 | 已覆盖全部新页 |
+| OAI-SearchBot | 0/22 | 0/6 | 自然请求仅命中 `robots.txt`，属“仅入口探测” |
+| Bytespider | 4/22 | 0/6 | 当日仍在抓取官网内容，但尚未进入新 6 页 |
+| Claude-SearchBot / PerplexityBot | 0/22 | 0/6 | 当前窗口未见自然深抓 |
+
+发现链路复核：
+
+- 6/6 页面返回 HTTP 200；
+- 6/6 页面已进入正式 sitemap；
+- `robots.txt` 已明确允许 GPTBot、OAI-SearchBot、Bytespider、ClaudeBot、Claude-SearchBot 与 PerplexityBot；
+- 改造服务页、报价参数页、“修还是换”页均存在指向全部 6 页的标准 HTML 链接；
+- 公开搜索的精确标题与 URL 检索暂未稳定返回这 6 页；这是 D+0 可见性快照，不等同于全部搜索引擎已拒绝收录。
+
+决策：
+
+- 站内发现、抓取权限和页面可用性均无需紧急修复；
+- 不重复提交 IndexNow，不为催抓修改正文或 `lastmod`；
+- 2026-08-01 执行新 6 页正式 D+1 家族级复核，2026-08-03 执行 D+3 复核；
+- D+3 若 Bytespider 仍为 0/6，只记录家族级结果并评估字节生态外部发现入口，不先用站内重复链接或伪更新解决；该结果不得自动触发头条号或文档平台发布，站外动作仍须通过 P6 的脱敏、事实边界、账号认证、渠道归属和终审门。
+
+监测系统同步升级：生产版本 `e32b729` 已把 GPTBot、OAI-SearchBot 和 Bytespider 拆成主指标，零覆盖家族固定显示，并将 `robots.txt` / sitemap 请求与内容页抓取分开。
+
+## 正式 D+1：百度主动推送 10 个固定 URL 逐页复核
+
+执行时间：2026-08-01 02:30（北京时间）。
+
+统计口径：
+
+- 时间窗口：2026-07-30 16:30 至 2026-08-01 02:30（北京时间）；
+- 数据来源：生产持久化日志 `/data/nginx-logs/www.access.json.2.gz`、`www.access.json.1`、`www.access.json`；
+- 页面集合固定为 2026-07-30 百度 API 返回 `success: 10` 的 10 个 URL，不中途更换分母；
+- 搜索爬虫包括 Baiduspider、Googlebot、Bingbot、YisouSpider、360Spider、Sogou；
+- AI 系统爬虫包括 GPTBot、OAI-SearchBot、ClaudeBot、Claude-SearchBot、PerplexityBot、Bytespider；
+- `ChatGPT-User`、`Claude-User`、`Perplexity-User` 归为用户触发取页，不并入 AI 系统爬虫；
+- 已排除 2026-07-30 18:43–18:53 的 5 条百度官方抓取诊断；同时按 `monitoring_probe` 排除人工验证探针，本窗口内这 10 页没有命中该探针标记；
+- 时间均为北京时间；UA 在表内保留爬虫名称与版本，全部命中 HTTP 状态均为 `200`。
+
+### 家族汇总
+
+| 爬虫家族 | 请求数 | 覆盖页数 | 结论 |
+|---|---:|---:|---|
+| Baiduspider | 0 | 0/10 | 排除官方抓取诊断后，尚无自然访问 |
+| GPTBot/1.4 | 11 | 9/10 | 模型改进抓取；不等于 ChatGPT 搜索引用 |
+| OAI-SearchBot | 0 | 0/10 | ChatGPT 搜索链路尚无内容页访问 |
+| ClaudeBot | 0 | 0/10 | 本固定集合尚无访问 |
+| Claude-SearchBot | 0 | 0/10 | 本固定集合尚无访问 |
+| PerplexityBot | 0 | 0/10 | 本固定集合尚无访问 |
+| Bytespider | 3 | 1/10 | 仅命中连续热处理生产线页；不等于豆包已引用 |
+| YisouSpider | 16 | 6/10 | 搜索爬虫自然访问 |
+| 360Spider | 5 | 1/10 | 搜索爬虫自然访问 |
+| Bingbot/2.0 | 3 | 2/10 | 搜索爬虫自然访问 |
+| Googlebot/2.1 | 2 | 2/10 | 搜索爬虫自然访问 |
+| Sogou | 0 | 0/10 | 本固定集合尚无访问 |
+
+覆盖率：
+
+- 搜索爬虫覆盖：`9/10`（90%）；
+- 其中 Baiduspider 自然覆盖：`0/10`（0%）；
+- AI 系统爬虫覆盖：`9/10`（90%），其中 9 页均由 GPTBot 覆盖，Bytespider 额外覆盖其中 1 页；
+- 搜索或 AI 系统爬虫合并覆盖：`10/10`（100%）；
+- 用户触发取页覆盖：`0/10`（0%）。
+
+### 逐页真实访问
+
+| 页面 | 命中时间 | UA | HTTP | 次数 |
+|---|---|---|---:|---:|
+| `/zh/service/furnace-renovation-overhaul` | 07-30 23:45:50；07-31 00:53:49 | `YisouSpider`；`YisouSpider/5.0` iPhone | 200 | 2 |
+| 同上 | 07-31 15:31:51 | `GPTBot/1.4` | 200 | 1 |
+| `/zh/solutions/rechuli-lu-changjia` | 07-31 15:31:52 | `GPTBot/1.4` | 200 | 1 |
+| `/zh/solutions/jiangsu-gongye-lu-changjia` | 07-31 15:31:30 | `GPTBot/1.4` | 200 | 1 |
+| 同上 | 08-01 01:56:11；01:56:34 | `bingbot/2.0`（Chrome/116、Chrome/136） | 200 | 2 |
+| `/zh/case/jining-support-roller-heat-treatment-line` | 07-31 15:31:28 | `GPTBot/1.4` | 200 | 1 |
+| 同上 | 07-31 21:48:08 | `Googlebot/2.1` Mobile | 200 | 1 |
+| `/zh/case/henan-annealing-solution-line` | 07-31 15:31:51 | `GPTBot/1.4` | 200 | 1 |
+| 同上 | 07-31 23:03:08 | `Googlebot/2.1` Mobile | 200 | 1 |
+| `/zh/articles/gongye-lu-baojia-canshu` | 07-31 00:53:48 | `YisouSpider/5.0` iPhone | 200 | 1 |
+| 同上 | 07-31 15:31:23；16:34:34 | `GPTBot/1.4` | 200 | 2 |
+| `/zh/articles/laojiu-rechuli-lu-daxiu-haishi-maixin` | 07-30 23:45:50；07-31 00:53:49 | `YisouSpider`；`YisouSpider/5.0` iPhone | 200 | 2 |
+| 同上 | 07-31 15:31:33；16:34:49 | `GPTBot/1.4` | 200 | 2 |
+| `/zh/solutions/continuous-heat-treatment-line` | 07-30 21:04:17、21:04:20、21:04:22、21:04:30；07-31 06:29:27 | `360Spider` | 200 | 5 |
+| 同上 | 07-30 21:30:23；07-31 16:34:33、16:44:30 | `Bytespider` | 200 | 3 |
+| 同上 | 07-30 22:15:17、22:19:06、23:01:01；07-31 00:53:47 | `YisouSpider`；`YisouSpider/5.0` iPhone | 200 | 4 |
+| 同上 | 07-31 15:31:48 | `GPTBot/1.4` | 200 | 1 |
+| `/zh/products/detail/trolley-furnace` | 07-30 22:19:29、23:01:04；07-31 00:53:48 | `YisouSpider`；`YisouSpider/5.0` iPhone | 200 | 3 |
+| 同上 | 07-31 16:20:43 | `bingbot/2.0` Chrome/116 | 200 | 1 |
+| 同上 | 07-31 16:34:46 | `GPTBot/1.4` | 200 | 1 |
+| `/zh/products/detail/annealing-solution-line` | 07-30 22:15:17、22:19:06、23:01:04；07-31 00:53:48 | `YisouSpider`；`YisouSpider/5.0` iPhone | 200 | 4 |
+
+### 未抓取页面与判断
+
+- 按“搜索或 AI 系统爬虫至少一个家族真实访问”计算，仍未抓取页面为 `0/10`；
+- 按搜索爬虫单独计算，`/zh/solutions/rechuli-lu-changjia` 尚无搜索爬虫访问，但已有 GPTBot 真实访问；
+- 按 AI 系统爬虫单独计算，`/zh/products/detail/annealing-solution-line` 尚无 AI 系统爬虫访问，但已有 YisouSpider 真实访问；
+- 按 Baiduspider 单独计算，10 页在排除官方诊断后均未出现自然访问；因此百度 `success: 10` 仍只能表述为“接口接收”，不能表述为百度已自然抓取或收录；
+- 40 条纳入统计的目标爬虫请求全部返回 200，未见 3xx、4xx 或 5xx；
+- 本轮不修改前端页面、不制造 `lastmod`、不重复提交索引，继续按 D+3 / D+7 固定集合观察。
+
+青山案例提醒：`F01–F06` 的原始底稿、技术口径和证据记录仍待继续处理；其中 `F02–F04` 仍待唐工确认经济测算口径，`F06` 仍待第三方检测或正式验收报告。资料完成前不做青山案例主动索引提交。
+
+## 本轮 6 页正式 D+3 Nginx 日志复核
+
+执行时间：2026-08-04 08:27（北京时间，以生产服务器时钟为准）。本次是 2026-08-03 D+3 观察点的补执行，实际完成时间照实记录，不回填假时间。
+
+统计口径：
+
+- 固定分母为 2026-07-31 上线的 6 个权威主题页；
+- 时间窗口为 2026-07-31 00:00 至 2026-08-04 08:27（北京时间）；
+- 所有 Nginx 时间先转换为 `Asia/Shanghai` 再归日；
+- 排除 `monitoring_probe=crawler_verification` 和历史人工验证请求 ID，本窗口共排除 2 条验证探针；
+- 仅记录真实访问，不把 IndexNow、百度接口接收、抓取诊断或模拟 UA 写成自然抓取。
+
+| 爬虫家族 | 本轮 6 页覆盖 | 状态 | 最后一次全站访问（北京时间） |
+|---|---:|---|---|
+| Baiduspider | 6/6 | 已覆盖 | 2026-08-03 18:42:54 |
+| GPTBot | 6/6 | 已覆盖；训练抓取不等于 ChatGPT 搜索引用 | 2026-08-03 15:58:32 |
+| ClaudeBot | 6/6 | 已覆盖 | 2026-08-04 00:21:55 |
+| OAI-SearchBot | 0/6 | 全站已抓 22/22 旧基线页，但尚未进入本轮 6 页 | 2026-08-03 16:35:19 |
+| Bytespider | 0/6 | 全站仍在抓取，尚未进入本轮 6 页 | 2026-08-03 22:48:05 |
+| Claude-SearchBot | 0/6 | 未访问 | — |
+| PerplexityBot | 0/6 | 未访问 | — |
+| Sogou Spider | 0/6 | 仍集中在少量旧页面 | 2026-08-04 00:12:40 |
+| YisouSpider | 0/6 | 已抓旧基线 17/22，尚未进入本轮 6 页 | 2026-08-03 14:52:57 |
+| Googlebot | 0/6 | 尚未进入本轮 6 页 | 2026-08-03 23:28:22 |
+| Bingbot | 0/6 | 尚未进入本轮 6 页 | 2026-08-03 23:42:43 |
+
+逐页结果一致：6 页均由 Baiduspider、GPTBot、ClaudeBot 各真实访问 1 次，全部返回 200；OAI-SearchBot 与 Bytespider 仍为 0/6。因此 D+3 已完成，但“关键引用链路已覆盖”仍不成立。下一观察点保持为 2026-08-07 D+7，不制造更新时间、不重复提交、不自动启动站外分发。

@@ -1,7 +1,8 @@
 import type { Metadata } from 'next';
 
 import { getAboutContent } from '@/lib/api/about';
-import { buildSeoMetadata } from '@/lib/seo';
+import { buildMetadata } from '@/lib/seo/metadata';
+import { localizeText } from '@/lib/utils';
 import { AboutApiData, AboutPageKey, AboutSectionApiItem, ChairmanMessageApiItem, CultureValueApiItem } from '@/types/about';
 import { Locale, SidebarItem } from '@/types/site';
 
@@ -48,14 +49,6 @@ const ABOUT_PAGE_COPY: Record<
 };
 
 const PROFILE_SECTION_KEYS = ['company', 'company_intro', 'company-profile', 'profile', 'intro'];
-
-function localize(locale: Locale, zh?: string | null, en?: string | null, fallback = '') {
-  if (locale === 'en') {
-    return en || zh || fallback;
-  }
-
-  return zh || en || fallback;
-}
 
 export function getAboutSidebarItems(locale: Locale): SidebarItem[] {
   return [
@@ -129,13 +122,13 @@ export async function createAboutPageMetadata(
   const source = resolveMetadataSource(pageKey, null);
   const pageCopy = getAboutPageCopy(pageKey, locale);
   const title =
-    localize(locale, source?.seoTitleZh, source?.seoTitleEn, pageCopy.title) || pageCopy.title;
+    localizeText(locale, source?.seoTitleZh, source?.seoTitleEn, pageCopy.title) || pageCopy.title;
   const description =
-    localize(
+    localizeText(
       locale,
       source?.seoDescriptionZh,
       source?.seoDescriptionEn,
-      localize(locale, source?.contentZh, source?.contentEn, pageCopy.subtitle),
+      localizeText(locale, source?.contentZh, source?.contentEn, pageCopy.subtitle),
     ) || pageCopy.subtitle;
   const image = getAboutBannerImage(pageKey, null);
   const pathMap: Record<AboutPageKey, string> = {
@@ -151,13 +144,23 @@ export async function createAboutPageMetadata(
     timeline: 'about-timeline',
   };
 
-  return buildSeoMetadata({
-    locale,
-    path: pathOverride || pathMap[pageKey],
-    pageKey: seoPageKeyMap[pageKey],
+  const rawPath = pathOverride || pathMap[pageKey];
+  const path = rawPath.startsWith('/') ? rawPath : `/${rawPath}`;
+  const unlocalizedPath = path.replace(/^\/(?:zh|en)(?=\/|$)/, '') || '/';
+  const localizedPath = `/${locale}${unlocalizedPath === '/' ? '' : unlocalizedPath}`;
+
+  return buildMetadata({
     title,
     description,
+    path: localizedPath,
+    pageKey: seoPageKeyMap[pageKey],
+    locale,
     image,
+    alternateLocales: {
+      'zh-CN': `/zh${unlocalizedPath === '/' ? '' : unlocalizedPath}`,
+      'en-US': `/en${unlocalizedPath === '/' ? '' : unlocalizedPath}`,
+      'x-default': `/zh${unlocalizedPath === '/' ? '' : unlocalizedPath}`,
+    },
   });
 }
 
@@ -188,8 +191,8 @@ export function localizeAboutText(
   if (!item) return fallback;
 
   if (field === 'title') {
-    return localize(locale, item.titleZh, item.titleEn, fallback);
+    return localizeText(locale, item.titleZh, item.titleEn, fallback);
   }
 
-  return localize(locale, item.contentZh, item.contentEn, fallback);
+  return localizeText(locale, item.contentZh, item.contentEn, fallback);
 }

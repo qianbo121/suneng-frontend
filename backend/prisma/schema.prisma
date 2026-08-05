@@ -168,6 +168,7 @@ model News {
   seoKeywordsZh    String?         @db.VarChar(500)
   seoKeywordsEn    String?         @db.VarChar(500)
   ogImage          String?         @db.VarChar(500)
+  contentUpdatedAt DateTime?
   createdAt        DateTime        @default(now())
   updatedAt        DateTime        @updatedAt
   category         NewsCategory    @relation(fields: [categoryId], references: [id], onDelete: Restrict)
@@ -245,6 +246,8 @@ model Certificate {
   @@index([status, sortOrder])
 }
 
+// Legacy data-only table. Its unused API module was removed; keep the model so
+// existing production records are not destroyed by an unrelated migration.
 model ContactMessage {
   id         Int                  @id @default(autoincrement())
   name       String               @db.VarChar(120)
@@ -280,6 +283,37 @@ model CustomRequirement {
   @@index([status, createdAt])
   @@index([phone])
   @@index([createdAt])
+}
+
+model WebsiteLeadEvent {
+  id            Int      @id @default(autoincrement())
+  eventType     String   @db.VarChar(40)
+  pageTitle     String?  @db.VarChar(255)
+  pagePath      String?  @db.VarChar(500)
+  pageType      String?  @db.VarChar(80)
+  productTag    String?  @db.VarChar(120)
+  sourceType    String?  @db.VarChar(120)
+  sourceDetail  String?  @db.VarChar(120)
+  searchKeyword String?  @db.VarChar(255)
+  province      String?  @db.VarChar(120)
+  city          String?  @db.VarChar(120)
+  deviceType    String?  @db.VarChar(40)
+  landingPage   String?  @db.VarChar(500)
+  previousPage  String?  @db.VarChar(500)
+  utmSource     String?  @db.VarChar(120)
+  utmMedium     String?  @db.VarChar(120)
+  utmCampaign   String?  @db.VarChar(255)
+  discoverySource String? @db.VarChar(120)
+  sessionId     String?  @db.VarChar(120)
+  visitorId     String?  @db.VarChar(120)
+  ipMasked      String?  @db.VarChar(80)
+  userAgent     String?  @db.VarChar(500)
+  createdAt     DateTime @default(now())
+
+  @@index([eventType, createdAt])
+  @@index([sourceType, sourceDetail, createdAt])
+  @@index([createdAt])
+  @@index([pagePath])
 }
 
 model CompanyInfo {

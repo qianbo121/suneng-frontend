@@ -1,15 +1,44 @@
-@import 'swiper/css';
-@import 'swiper/css/effect-fade';
-@import 'swiper/css/navigation';
-@import 'swiper/css/pagination';
 @import '@/styles/theme.css';
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+@layer components {
+  .cta-primary {
+    background-color: #c51624;
+  }
+
+  .cta-primary:hover {
+    background-color: #a90f1b;
+  }
+
+  .cta-primary-strong {
+    background-color: #e60012;
+  }
+
+  .cta-primary-strong:hover {
+    background-color: #c51624;
+  }
+
+  .cta-secondary {
+    border: 1px solid #c51624;
+    color: #c51624;
+  }
+
+  .cta-secondary:hover {
+    background-color: #fff5f5;
+  }
+
+  .cta-secondary-fill-hover:hover {
+    background-color: #c51624;
+    color: #fff;
+  }
+}
+
 html {
   scroll-behavior: smooth;
+  scroll-padding-top: 88px;
   background: #fff;
   overscroll-behavior-y: none;
 }
@@ -24,8 +53,7 @@ body {
   margin: 0;
   background: #fff;
   color: var(--color-neutral-900);
-  font-family:
-    'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+  font-family: 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
   text-rendering: optimizeLegibility;
 }
 
@@ -64,11 +92,6 @@ textarea {
 
 .partner-marquee-track {
   animation: partner-marquee 48s linear infinite;
-}
-
-.hot-products .swiper {
-  /* Prevent the Swiper track from expanding the page width on desktop. */
-  overflow: clip;
 }
 
 .news-article h1,

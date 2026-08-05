@@ -1,6 +1,6 @@
 import { PRODUCT_CENTER_CATEGORIES } from '@/constants/product-categories';
-import { ProductListCardItem, ProductSpecRow } from '@/types/product';
-import { Locale, SidebarItem } from '@/types/site';
+import { siteSettings } from '@/mock/siteSettings';
+import { ProductSpecRow } from '@/types/product';
 
 export type StaticProductFeature = {
   title: string;
@@ -304,7 +304,7 @@ const productDetails: Record<string, StaticProductDetail> = {
       '箱式炉适用于中小型工件、模具、机械零件、试制件、小批量工件等周期式热处理场景。苏能可根据工件尺寸、单件重量、装炉量、最高温度、工艺曲线和现场条件，提供箱式热处理炉非标定制方案。',
     sellingPoints: ['中小型工件热处理', '炉膛尺寸定制', '温度等级可选', '箱式电阻炉定制'],
     quickTags: ['中小型工件热处理', '退火 / 回火 / 正火', '箱式电阻炉定制', '温度等级可选', '炉膛尺寸定制', 'PLC 控制系统'],
-    ctaHighlights: ['成立于 2006 年', '14700㎡生产基地', '非标箱式炉定制'],
+    ctaHighlights: ['成立于 2006 年', '公司自报约14700㎡生产基地', '非标箱式炉定制'],
     heroCtas: [
       {
         title: '获取报价方案',
@@ -428,13 +428,14 @@ const productDetails: Record<string, StaticProductDetail> = {
       { title: '能源装备', text: '可用于部分中小型装备零件、配套件的退火、回火或去应力处理。' },
     ],
     scenarioCards: [
+      { title: '项目方案配置：铜合金线材室式电加热退火炉', text: '一套系统配置 4 个炉室，额定温度 700℃、使用温度 550–700℃，每室 200 kW、系统含辅助设备总功率不超过约 860 kW；装料有效区 Φ1710×1600 mm，采用氮气保护、顶部循环风机、S7-1200 PLC 和每室 2 区 PID。' },
       { title: '中小型机械件回火', text: '围绕回火温度、装炉量、保温时间和记录要求确定炉膛、加热和控制配置。' },
       { title: '模具去应力处理', text: '重点确认模具尺寸、支撑方式、升降温曲线和温度均匀性要求。' },
       { title: '试制件热处理', text: '适合小批量材料验证或工艺摸索，需明确温度区间、记录方式和换产需求。' },
       { title: '小批量零件退火', text: '根据材质、装炉间距、退火温度和冷却方式评估炉膛尺寸与加热系统。' },
     ],
     scenarioIntro:
-      '当前页面不虚构客户案例。以下仅作为箱式炉常见应用场景说明，具体项目可在商务沟通中结合授权资料进一步确认。',
+      '以下包含经授权脱敏的室式炉项目参数和常见应用场景。项目参数只适用于对应工件、装料与工艺条件，不是全系列固定配置。',
     leadForm: {
       title: '需要定制箱式炉？',
       description:
@@ -442,8 +443,8 @@ const productDetails: Record<string, StaticProductDetail> = {
       submitLabel: '提交需求',
       contactHref: '/zh/contact',
       contactLabel: '联系苏能工业炉',
-      phone: '+86-130-5298-6814',
-      email: '997518512@qq.com',
+      phone: siteSettings.salesPhone,
+      email: siteSettings.email,
     },
   },
   'trolley-furnace': {
@@ -454,7 +455,7 @@ const productDetails: Record<string, StaticProductDetail> = {
       '台车炉适用于大型工件、铸件、焊接件、模具、结构件等周期式热处理场景。苏能可根据工件尺寸、单件重量、装炉量、最高温度、工艺曲线和现场条件，提供台车式热处理炉非标定制方案。',
     sellingPoints: ['大型工件热处理', '台车承重定制', '炉衬结构设计', '电阻 / 燃气可选'],
     quickTags: ['大型工件热处理', '退火 / 回火 / 正火', '台车承重定制', '炉衬结构设计', '电阻 / 燃气可选', 'PLC 控制系统'],
-    ctaHighlights: ['成立于 2006 年', '14700㎡生产基地', '非标台车炉定制'],
+    ctaHighlights: ['成立于 2006 年', '公司自报约14700㎡生产基地', '非标台车炉定制'],
     heroCtas: [
       {
         title: '获取报价方案',
@@ -570,10 +571,14 @@ const productDetails: Record<string, StaticProductDetail> = {
       { title: '热处理外协厂', text: '适合多品种、多批次工件处理，需综合炉膛利用率、装卸效率和工艺覆盖范围。' },
     ],
     scenarioCards: [
+      { title: '项目方案参数：轴承钢丝球化退火炉', text: '2017 新炉方案有效炉膛 10×3×2.2 m，最高设计温度 850℃，常用球化退火 790–810℃，最大装炉量 30 t（不含工装和垫铁），有效区炉温均匀性设计要求 ≤±5℃。典型 GCr15 曲线和组织指标不作为该项目验收实绩。' },
+      { title: '项目方案参数：超大型燃气台车退火炉改造', text: '有效加热区 13×7.4×4.3 m，额定/最高使用温度 700℃，由电阻加热改为天然气；方案按 14 区配置 14 套 630 kW 级高速天然气烧嘴，总装机 8820 kW。助燃空气 250–300℃为设计目标，不是实测值。' },
       { title: '大型铸锻件退火', text: '围绕工件尺寸、单件重量、保温时间和冷却方式确定炉膛、台车和炉衬配置。' },
       { title: '焊接结构件去应力', text: '重点确认升降温速率、工件支撑、炉门密封和现场吊装条件。' },
       { title: '模具与机械件回火', text: '根据模具尺寸、装炉量、温度均匀性和记录要求配置加热与控制系统。' },
     ],
+    scenarioIntro:
+      '以下包含经授权脱敏的台车炉项目参数和常见应用场景。尺寸、温度与燃烧配置只对应具体项目，新项目仍按工件与现场条件单独设计。',
     faq: [
       {
         question: 'Q1：台车炉适合哪些工件？',
@@ -660,8 +665,8 @@ const productDetails: Record<string, StaticProductDetail> = {
       submitLabel: '提交需求',
       contactHref: '/zh/contact',
       contactLabel: '联系苏能工业炉',
-      phone: '+86-130-5298-6814',
-      email: '997518512@qq.com',
+      phone: siteSettings.salesPhone,
+      email: siteSettings.email,
     },
   },
   'pit-furnace': {
@@ -672,7 +677,7 @@ const productDetails: Record<string, StaticProductDetail> = {
       '井式炉适用于轴类、杆件、长件、套筒件、竖直装炉工件等周期式热处理场景。苏能可根据工件长度、直径、单件重量、装炉量、最高温度、热处理工艺、吊装方式和现场条件，提供井式热处理炉非标定制方案。',
     sellingPoints: ['轴类长件热处理', '有效深度定制', '炉盖结构按项目确认', '电阻 / 燃气可选'],
     quickTags: ['轴类 / 杆件热处理', '回火 / 退火 / 淬火加热', '井式电阻炉定制', '有效深度定制', '气氛保护可评估', 'PLC 控制系统'],
-    ctaHighlights: ['成立于 2006 年', '14700㎡生产基地', '非标井式炉定制'],
+    ctaHighlights: ['成立于 2006 年', '公司自报约14700㎡生产基地', '非标井式炉定制'],
     heroCtas: [
       {
         title: '获取报价方案',
@@ -743,8 +748,8 @@ const productDetails: Record<string, StaticProductDetail> = {
       submitLabel: '提交需求',
       contactHref: '/zh/contact',
       contactLabel: '联系苏能工业炉',
-      phone: '+86-130-5298-6814',
-      email: '997518512@qq.com',
+      phone: siteSettings.salesPhone,
+      email: siteSettings.email,
     },
   },
   'bell-furnace': {
@@ -755,7 +760,7 @@ const productDetails: Record<string, StaticProductDetail> = {
       '罩式炉适用于卷材、线材、盘卷、小型零件、批量装框工件的退火、回火、保温及气氛保护热处理场景。苏能可根据工件形态、装炉量、炉罩尺寸、炉台尺寸、最高温度、气氛要求和现场条件，提供罩式热处理炉非标定制方案。',
     sellingPoints: ['气氛保护可评估', '炉罩尺寸定制', '炉台结构按项目确认', '罩式电阻炉定制'],
     quickTags: ['卷材 / 线材 / 盘卷', '退火 / 回火 / 保温', '气氛保护罩式炉', '炉罩尺寸定制', '炉台结构定制', 'PLC 控制系统'],
-    ctaHighlights: ['成立于 2006 年', '14700㎡生产基地', '响应时间按项目约定'],
+    ctaHighlights: ['成立于 2006 年', '公司自报约14700㎡生产基地', '响应时间按项目约定'],
     heroCtas: [
       {
         title: '获取报价方案',
@@ -825,8 +830,8 @@ const productDetails: Record<string, StaticProductDetail> = {
       submitLabel: '提交需求',
       contactHref: '/zh/contact',
       contactLabel: '联系苏能工业炉',
-      phone: '+86-130-5298-6814',
-      email: '997518512@qq.com',
+      phone: siteSettings.salesPhone,
+      email: siteSettings.email,
     },
   },
   'pusher-furnace': {
@@ -837,7 +842,7 @@ const productDetails: Record<string, StaticProductDetail> = {
       '推杆炉适用于批量稳定、节拍明确的工件连续退火、回火、正火、加热等热处理工艺。苏能可根据工件材质、尺寸、重量、产能节拍、最高温度、推料方式、上下料条件和现场空间，提供推杆式热处理炉非标定制方案。',
     sellingPoints: ['连续式热处理', '推料节拍定制', '温区配置按项目确认', '上下游联动可评估'],
     quickTags: ['连续式热处理', '推料方式定制', '料盘 / 料框承载', '多温区控温', '退火 / 回火 / 加热', 'PLC 控制系统'],
-    ctaHighlights: ['成立于 2006 年', '14700㎡生产基地', '非标推杆炉定制'],
+    ctaHighlights: ['成立于 2006 年', '公司自报约14700㎡生产基地', '非标推杆炉定制'],
     heroCtas: [
       {
         title: '获取报价方案',
@@ -910,8 +915,8 @@ const productDetails: Record<string, StaticProductDetail> = {
       submitLabel: '提交需求',
       contactHref: '/zh/contact',
       contactLabel: '联系苏能工业炉',
-      phone: '+86-130-5298-6814',
-      email: '997518512@qq.com',
+      phone: siteSettings.salesPhone,
+      email: siteSettings.email,
     },
   },
   'mesh-belt-furnace': {
@@ -922,7 +927,7 @@ const productDetails: Record<string, StaticProductDetail> = {
       '网带炉适用于标准件、小型零件、五金件、紧固件、金属件等连续式批量热处理场景。苏能可根据工件尺寸、材质、单件重量、产能节拍、最高温度、工艺曲线和现场条件，提供网带式热处理炉非标定制方案。',
     sellingPoints: ['连续式热处理', '网带宽度定制', '多温区控温', '上下料联动'],
     quickTags: ['连续式热处理', '标准件 / 小件批量处理', '网带宽度定制', '多温区控温', '退火 / 回火 / 淬火加热', 'PLC 控制系统'],
-    ctaHighlights: ['成立于 2006 年', '14700㎡生产基地', '非标网带炉定制'],
+    ctaHighlights: ['成立于 2006 年', '公司自报约14700㎡生产基地', '非标网带炉定制'],
     heroCtas: [
       {
         title: '获取报价方案',
@@ -1053,13 +1058,14 @@ const productDetails: Record<string, StaticProductDetail> = {
       { title: '热处理外协厂', text: '适合批量稳定、工艺路线清晰的小件连续加工，需综合工艺覆盖和换产效率。' },
     ],
     scenarioCards: [
+      { title: '项目方案参数：REWF-45-9 马弗式保护气氛网带炉', text: '额定功率 45 kW、额定/最高工作温度约 950℃；加热长度 2100 mm、名义网带宽 200 mm、有效工作宽 180 mm、装料高度 50 mm，网带速度 10–114 mm/min。最大设计能力约 60 kg/h，按 0.18×0.114×60×50=61.56 kg/h 计算，实际产量按工件、铺料和加热时间确定。' },
       { title: '标准件连续回火', text: '围绕回火温度、装料厚度、网带速度和记录要求确定温区与控制配置。' },
       { title: '小型金属件连续退火', text: '根据材质、退火温度、保温时间和冷却方式评估炉膛长度和产能节拍。' },
       { title: '不锈钢小件固溶处理', text: '可作为项目方向初步评估，需结合材料牌号、固溶温度、冷却速度和气氛条件确认。' },
       { title: '热处理外协厂连续生产线', text: '重点关注多品种换产、上下料衔接、维护窗口和后续扩展空间。' },
     ],
     scenarioIntro:
-      '当前页面不虚构客户案例。以下仅作为网带炉常见应用场景说明，具体项目可在商务沟通中结合授权资料进一步确认。',
+      '以下包含经授权脱敏的网带炉项目参数和常见应用场景。产量、速度与尺寸只对应具体工件、装料和工艺条件，不是固定型号承诺。',
     leadForm: {
       title: '需要定制网带炉？',
       description:
@@ -1067,8 +1073,8 @@ const productDetails: Record<string, StaticProductDetail> = {
       submitLabel: '提交需求',
       contactHref: '/zh/contact',
       contactLabel: '联系苏能工业炉',
-      phone: '+86-130-5298-6814',
-      email: '997518512@qq.com',
+      phone: siteSettings.salesPhone,
+      email: siteSettings.email,
     },
   },
   'roller-hearth-furnace': {
@@ -1079,7 +1085,7 @@ const productDetails: Record<string, StaticProductDetail> = {
       '辊底炉适用于板材、棒材、管材、规整工件和连续生产场景的退火、回火、固溶、正火等热处理工艺。苏能可根据工件材质、尺寸、重量、产能节拍、最高温度、辊道承载方式、上下料条件和现场空间，提供辊底式热处理炉非标定制方案。',
     sellingPoints: ['连续式热处理', '辊道输送定制', '温区配置按项目确认', '上下游联动可评估'],
     quickTags: ['板材 / 棒材 / 管材', '连续式热处理', '辊道宽度定制', '多温区控温', '退火 / 回火 / 固溶', 'PLC 控制系统'],
-    ctaHighlights: ['成立于 2006 年', '14700㎡生产基地', '非标辊底炉定制'],
+    ctaHighlights: ['成立于 2006 年', '公司自报约14700㎡生产基地', '非标辊底炉定制'],
     heroCtas: [
       {
         title: '获取报价方案',
@@ -1152,8 +1158,8 @@ const productDetails: Record<string, StaticProductDetail> = {
       submitLabel: '提交需求',
       contactHref: '/zh/contact',
       contactLabel: '联系苏能工业炉',
-      phone: '+86-130-5298-6814',
-      email: '997518512@qq.com',
+      phone: siteSettings.salesPhone,
+      email: siteSettings.email,
     },
   },
   'rotary-hearth-furnace': {
@@ -1164,7 +1170,7 @@ const productDetails: Record<string, StaticProductDetail> = {
       '转底炉适用于锻件、盘类工件、环形工件、模具、五金零件及节拍式连续加热、退火、正火、回火等工艺。苏能可根据工件材质、尺寸、重量、产能节拍、炉底直径、进出料方式和现场空间，提供转底式热处理炉非标定制方案。',
     sellingPoints: ['环形炉底连续加热', '节拍式生产', '炉底转速按项目确认', '上下料方式可评估'],
     quickTags: ['转底式热处理炉', '环形炉底连续加热', '退火 / 正火 / 回火', '炉底直径定制', '进出料节拍确认', 'PLC 控制系统'],
-    ctaHighlights: ['成立于 2006 年', '14700㎡生产基地', '非标转底炉定制'],
+    ctaHighlights: ['成立于 2006 年', '公司自报约14700㎡生产基地', '非标转底炉定制'],
     heroCtas: [
       {
         title: '获取报价方案',
@@ -1237,8 +1243,8 @@ const productDetails: Record<string, StaticProductDetail> = {
       submitLabel: '提交需求',
       contactHref: '/zh/contact',
       contactLabel: '联系苏能工业炉',
-      phone: '+86-130-5298-6814',
-      email: '997518512@qq.com',
+      phone: siteSettings.salesPhone,
+      email: siteSettings.email,
     },
   },
   'roller-mesh-belt-line': {
@@ -1249,7 +1255,7 @@ const productDetails: Record<string, StaticProductDetail> = {
       '托辊型网带式电阻炉生产线适用于标准件、五金件、轴承零件、冲压件、粉末冶金件和中小型工件的连续退火、回火、正火、固溶、预热及烘干等工艺。苏能可根据工件材质、尺寸、铺料厚度、产能节拍、网带宽度、托辊结构和现场条件，提供连续式热处理设备非标定制方案。',
     sellingPoints: ['连续式热处理', '托辊支撑网带', '多温区控温', '上下游联动可评估'],
     quickTags: ['托辊网带炉', '连续退火 / 回火 / 正火', '网带宽度定制', '托辊结构确认', '电阻加热', 'PLC 控制系统'],
-    ctaHighlights: ['成立于 2006 年', '14700㎡生产基地', '非标网带生产线定制'],
+    ctaHighlights: ['成立于 2006 年', '公司自报约14700㎡生产基地', '非标网带生产线定制'],
     heroCtas: [
       {
         title: '获取报价方案',
@@ -1324,8 +1330,8 @@ const productDetails: Record<string, StaticProductDetail> = {
       submitLabel: '提交需求',
       contactHref: '/zh/contact',
       contactLabel: '联系苏能工业炉',
-      phone: '+86-130-5298-6814',
-      email: '997518512@qq.com',
+      phone: siteSettings.salesPhone,
+      email: siteSettings.email,
     },
   },
   'copper-wire-annealing-line': {
@@ -1336,7 +1342,7 @@ const productDetails: Record<string, StaticProductDetail> = {
       '铜丝自动化退火生产线适用于铜丝、铜线、铜合金丝、镀锡铜丝等线材的连续退火、软化退火、光亮退火和去应力处理。苏能可根据线材材质、线径范围、退火温度、运行速度、张力控制、保护气氛和收放线方式，配置铜线材连续退火设备非标方案。',
     sellingPoints: ['铜线材连续退火', '张力控制按项目评估', '保护气氛可评估', '收放线方式定制'],
     quickTags: ['铜丝 / 铜线 / 铜合金丝', '连续退火 / 软化退火', '光亮退火可评估', '张力控制', '保护气氛', 'PLC 控制系统'],
-    ctaHighlights: ['成立于 2006 年', '14700㎡生产基地', '非标铜丝退火线定制'],
+    ctaHighlights: ['成立于 2006 年', '公司自报约14700㎡生产基地', '非标铜丝退火线定制'],
     heroCtas: [
       {
         title: '获取报价方案',
@@ -1409,8 +1415,8 @@ const productDetails: Record<string, StaticProductDetail> = {
       submitLabel: '提交需求',
       contactHref: '/zh/contact',
       contactLabel: '联系苏能工业炉',
-      phone: '+86-130-5298-6814',
-      email: '997518512@qq.com',
+      phone: siteSettings.salesPhone,
+      email: siteSettings.email,
     },
   },
   'annealing-solution-line': {
@@ -1421,7 +1427,7 @@ const productDetails: Record<string, StaticProductDetail> = {
       '退火固溶生产线聚焦金属带材、卷材连续热处理场景，适用于不锈钢带材、合金带材、有色金属带材、卷材的连续退火、固溶处理、光亮退火和去应力处理。设备可根据材料牌号、带宽厚度、卷重、运行速度、冷却方式和现场布局进行非标定制。',
     sellingPoints: ['金属带材连续热处理', '连续退火 / 固溶处理', '张力 / 纠偏配置', '冷却段按工艺评估'],
     quickTags: ['退火固溶生产线', '金属带材 / 卷材', '连续退火 / 固溶处理', '张力 / 纠偏配置', '冷却段按工艺评估', 'PLC 控制系统'],
-    ctaHighlights: ['成立于 2006 年', '14700㎡生产基地', '非标生产线定制'],
+    ctaHighlights: ['成立于 2006 年', '公司自报约14700㎡生产基地', '非标生产线定制'],
     reasons: [
       { title: '按材料规格评估方案', text: '根据材料牌号、带宽厚度、卷重、退火温度、固溶温度、保温时间和冷却速度要求，评估炉膛长度和工艺曲线。' },
       { title: '贴合连续产线需求', text: '根据产线节拍、开卷收卷方式、入口出口速度、张力控制和现场空间布局，评估整线系统配置。' },
@@ -1484,8 +1490,8 @@ const productDetails: Record<string, StaticProductDetail> = {
       submitLabel: '提交需求',
       contactHref: '/zh/contact',
       contactLabel: '联系苏能工业炉',
-      phone: '+86-130-5298-6814',
-      email: '997518512@qq.com',
+      phone: siteSettings.salesPhone,
+      email: siteSettings.email,
     },
   },
 };
@@ -2442,27 +2448,4 @@ export const STATIC_PRODUCTS: StaticProduct[] = PRODUCT_CENTER_CATEGORIES.map((c
 
 export function getStaticProductBySlug(slug: string) {
   return STATIC_PRODUCTS.find((product) => product.slug === slug) || null;
-}
-
-export function getStaticProductCards(locale: Locale, products = STATIC_PRODUCTS): ProductListCardItem[] {
-  return products.map((product) => ({
-    id: product.id,
-    slug: product.slug,
-    model: product.model,
-    name: product.name,
-    summary: product.summary,
-    image: product.image,
-  }));
-}
-
-export function getStaticProductSidebarItems(locale: Locale): SidebarItem[] {
-  return STATIC_PRODUCTS.map((product) => ({
-    label: product.name[locale],
-    href: `/${locale}/products/detail/${product.slug}`,
-    matchHrefs: [`/${locale}/products/detail/${product.slug}`],
-  }));
-}
-
-export function getRelatedStaticProducts(slug: string, locale: Locale) {
-  return getStaticProductCards(locale, STATIC_PRODUCTS.filter((product) => product.slug !== slug).slice(0, 4));
 }
