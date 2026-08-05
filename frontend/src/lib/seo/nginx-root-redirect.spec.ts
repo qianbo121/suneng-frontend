@@ -15,4 +15,11 @@ describe('public root redirect governance', () => {
 
     expect(matches).toHaveLength(1);
   });
+
+  it('preserves the independently deployed Chengwen route', () => {
+    expect(nginxTemplate.match(/server_name chengwen\.jssngyl\.cn;/g)).toHaveLength(2);
+    expect(nginxTemplate).toContain('upstream chengwen_upstream');
+    expect(nginxTemplate).toContain('server chengwen-web:8080;');
+    expect(nginxTemplate).toContain('proxy_pass http://chengwen_upstream;');
+  });
 });
