@@ -155,7 +155,40 @@ done
 install -d -m 0755 /data/nginx-logs
 install -m 0644 ops/logrotate/corp-site-nginx /etc/logrotate.d/corp-site-nginx
 
-docker compose --env-file "$ENV_FILE" -f "$COMPOSE_FILE" build
+if [ "${DEPLOY_SKIP_BUILD:-0}" = "1" ]; then
+  echo "Skipping image builds because no production image inputs changed."
+  for service in backend frontend admin; do
+    if [ -z "$(docker compose --env-file "$ENV_FILE" -f "$COMPOSE_FILE" images -q "$service")" ]; then
+      echo "Refusing build skip: no existing image found for service $service."
+      exit 75
+    fi
+  done
+else
+  # Preserve useful caches when capacity is healthy. Reclaim only unused data
+  # when needed, then fail before touching containers if the host still cannot
+  # safely hold old and candidate images at the same time.
+  min_free_gb="${DEPLOY_MIN_FREE_GB:-12}"
+  available_kb="$(df -Pk . | awk 'NR == 2 { print $4 }')"
+  required_kb="$((min_free_gb * 1024 * 1024))"
+  if [ "$available_kb" -lt "$required_kb" ]; then
+    docker builder prune -f >/dev/null
+    docker image prune -f >/dev/null
+    available_kb="$(df -Pk . | awk 'NR == 2 { print $4 }')"
+  fi
+
+  if [ "$available_kb" -lt "$required_kb" ]; then
+    echo "Refusing image build: at least ${min_free_gb}GB free disk is required."
+    df -h .
+    docker system df
+    exit 75
+  fi
+
+  # Build one service at a time. A single `docker compose build` lets BuildKit
+  # retain three expanded workspaces concurrently and can exhaust this host.
+  for service in backend frontend admin; do
+    docker compose --env-file "$ENV_FILE" -f "$COMPOSE_FILE" build "$service"
+  done
+fi
 
 # Back up the DB + uploads BEFORE applying migrations, so a bad migration or a
 # failed deploy is recoverable (backup.sh writes to /data/backup, keeps 7 days).

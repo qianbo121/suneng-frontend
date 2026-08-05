@@ -18,7 +18,7 @@ describe('production deployment concurrency', () => {
   it('locks before CI mutates the production working tree', () => {
     const lock = workflow.indexOf('exec 9>"$lock_file"');
     const extract = workflow.indexOf('tar -xzf deploy-source.tgz -C "$tmp_dir"');
-    const sync = workflow.indexOf('rsync -a --delete');
+    const sync = workflow.indexOf('rsync -a --no-owner --no-group --delete');
 
     expect(lock).toBeGreaterThan(-1);
     expect(extract).toBeGreaterThan(lock);
@@ -33,5 +33,20 @@ describe('production deployment concurrency', () => {
     );
     expect(deployScript).toContain('if [ "${DEPLOY_LOCK_HELD:-0}" != "1" ]');
     expect(deployScript).toContain('flock -w "${DEPLOY_LOCK_TIMEOUT_SECONDS:-1800}" 9');
+  });
+
+  it('preserves server ownership and forwards the image-build decision', () => {
+    expect(workflow).toContain('rsync -a --no-owner --no-group --delete');
+    expect(workflow).toContain('deploy_skip_build: ${{ steps.image_changes.outputs.skip_build }}');
+    expect(workflow).toContain(
+      'DEPLOY_SKIP_BUILD=${{ needs.build.outputs.deploy_skip_build }}',
+    );
+  });
+
+  it('fails image builds before deployment when disk is unsafe', () => {
+    expect(deployScript).toContain('DEPLOY_MIN_FREE_GB:-12');
+    expect(deployScript).toContain('Refusing image build: at least ${min_free_gb}GB');
+    expect(deployScript).toContain('for service in backend frontend admin');
+    expect(deployScript).toContain('build "$service"');
   });
 });
