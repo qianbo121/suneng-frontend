@@ -485,7 +485,7 @@ export default async function HeatTreatmentFurnaceManufacturerPage({ params }: P
             <div className="mt-9 flex flex-wrap gap-4">
               <QuoteModalButton
                 label="获取报价方案"
-                className="inline-flex min-h-[46px] items-center justify-center rounded-[4px] bg-[#c51624] px-6 text-[15px] font-semibold text-white transition hover:bg-[#a90f1b]"
+                className="inline-flex min-h-[46px] items-center justify-center rounded-[4px] cta-primary px-6 text-[15px] font-semibold text-white transition"
               />
               <a
                 href={quoteParamsPath}
@@ -511,7 +511,7 @@ export default async function HeatTreatmentFurnaceManufacturerPage({ params }: P
             >
               <h3 className="text-[20px] font-semibold leading-[1.35] text-[#101828]">{item.title}</h3>
               <p className="mt-3 text-[15px] leading-[1.8] text-[#475467]">{item.text}</p>
-              <span className="mt-5 inline-flex text-[14px] font-semibold text-[#c51624]">查看产品参数</span>
+              <span className="mt-5 inline-flex text-[14px] font-semibold">查看产品参数</span>
             </a>
           ))}
         </div>
@@ -536,7 +536,7 @@ export default async function HeatTreatmentFurnaceManufacturerPage({ params }: P
             </p>
             <a
               href={quoteParamsPath}
-              className="mt-6 inline-flex min-h-[44px] items-center justify-center rounded-[4px] border border-[#c51624] px-5 text-[14px] font-semibold text-[#c51624] transition hover:bg-[#fff5f5]"
+              className="mt-6 inline-flex min-h-[44px] items-center justify-center rounded-[4px] cta-secondary px-5 text-[14px] font-semibold transition"
             >
               查看报价需要哪些参数
             </a>
@@ -559,7 +559,7 @@ export default async function HeatTreatmentFurnaceManufacturerPage({ params }: P
               href={item.href}
               className="rounded-[8px] border border-[#e1e7f0] bg-white p-5 transition hover:border-[#c51624] hover:shadow-[0_10px_24px_rgba(15,35,75,0.06)]"
             >
-              <span className="text-[17px] font-semibold leading-[1.45] text-[#c51624]">{item.title}</span>
+              <span className="text-[17px] font-semibold leading-[1.45]">{item.title}</span>
               <span className="mt-2 block text-[14px] leading-[1.8] text-[#475467]">{item.text}</span>
             </a>
           ))}
@@ -600,7 +600,7 @@ export default async function HeatTreatmentFurnaceManufacturerPage({ params }: P
         <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
           {deliveryCapabilities.map((item, index) => (
             <article key={item.title} className="rounded-[8px] border border-[#e1e7f0] bg-[#fbfcfe] p-6">
-              <span className="flex h-9 w-9 items-center justify-center rounded-full bg-[#c51624] text-[15px] font-semibold text-white">
+              <span className="flex h-9 w-9 items-center justify-center rounded-full cta-primary text-[15px] font-semibold text-white">
                 {index + 1}
               </span>
               <h3 className="mt-5 text-[20px] font-semibold leading-[1.35] text-[#101828]">{item.title}</h3>
@@ -643,7 +643,7 @@ export default async function HeatTreatmentFurnaceManufacturerPage({ params }: P
               {item.href ? (
                 <a
                   href={item.href}
-                  className="mt-5 inline-flex min-h-[42px] items-center justify-center rounded-[4px] bg-[#c51624] px-5 text-[14px] font-semibold text-white transition hover:bg-[#a90f1b]"
+                  className="mt-5 inline-flex min-h-[42px] items-center justify-center rounded-[4px] cta-primary px-5 text-[14px] font-semibold text-white transition"
                 >
                   查看完整案例
                 </a>
@@ -664,7 +664,7 @@ export default async function HeatTreatmentFurnaceManufacturerPage({ params }: P
         <div className="grid gap-4">
           {customSteps.map((step, index) => (
             <article key={step.title} className="grid gap-5 rounded-[8px] border border-[#e1e7f0] bg-white p-5 shadow-[0_10px_24px_rgba(15,35,75,0.04)] md:grid-cols-[72px_1fr]">
-              <div className="flex h-14 w-14 items-center justify-center rounded-full bg-[#c51624] text-[20px] font-semibold text-white">
+              <div className="flex h-14 w-14 items-center justify-center rounded-full cta-primary text-[20px] font-semibold text-white">
                 {index + 1}
               </div>
               <div>
@@ -688,7 +688,7 @@ export default async function HeatTreatmentFurnaceManufacturerPage({ params }: P
               href={item.href}
               className="rounded-[8px] border border-[#e1e7f0] bg-[#fbfcfe] p-5 transition hover:border-[#c51624] hover:shadow-[0_10px_24px_rgba(15,35,75,0.06)]"
             >
-              <span className="text-[17px] font-semibold leading-[1.45] text-[#c51624]">{item.title}</span>
+              <span className="text-[17px] font-semibold leading-[1.45]">{item.title}</span>
               <span className="mt-2 block text-[14px] leading-[1.8] text-[#475467]">{item.text}</span>
             </a>
           ))}

@@ -403,7 +403,7 @@ export function AboutZhContent() {
               </div>
               <div className="mt-8 flex flex-col gap-3 sm:flex-row">
                 <QuoteModalButton
-                  className="inline-flex min-h-[44px] items-center justify-center rounded-[4px] bg-[#c51624] px-5 text-[15px] font-semibold text-white transition hover:bg-[#a90f1b]"
+                  className="inline-flex min-h-[44px] items-center justify-center rounded-[4px] cta-primary px-5 text-[15px] font-semibold text-white transition"
                 />
                 <Link
                   href="/zh/products"
@@ -436,7 +436,7 @@ export function AboutZhContent() {
           <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
             {statItems.map(([value, label]) => (
               <div key={label} className="rounded-[8px] border border-[#e1e7f0] bg-white p-5">
-                <p className="text-[30px] font-semibold leading-none text-[#c51624] lg:text-[36px]">{value}</p>
+                <p className="text-[30px] font-semibold leading-none lg:text-[36px]">{value}</p>
                 <p className="mt-3 text-[14px] font-semibold text-[#364152]">{label}</p>
               </div>
             ))}
@@ -446,7 +446,7 @@ export function AboutZhContent() {
         <section className="border-t border-[#e5e8ef] py-10 lg:py-14" aria-labelledby="real-factory">
           <div className="grid gap-6 lg:grid-cols-[0.72fr_1.28fr] lg:items-end">
             <div>
-              <p className="text-[13px] font-semibold uppercase tracking-[0.22em] text-[#c51624]">
+              <p className="text-[13px] font-semibold uppercase tracking-[0.22em]">
                 Manufacturing Site
               </p>
               <h2 id="real-factory" className={`${h2Class} mt-3`}>
@@ -749,7 +749,7 @@ export function AboutZhContent() {
                 </p>
                 <div className="mt-6 flex flex-col gap-3 sm:flex-row">
                   <QuoteModalButton
-                    className="inline-flex min-h-[44px] items-center justify-center rounded-[4px] bg-[#c51624] px-5 text-[15px] font-semibold text-white transition hover:bg-[#a90f1b]"
+                    className="inline-flex min-h-[44px] items-center justify-center rounded-[4px] cta-primary px-5 text-[15px] font-semibold text-white transition"
                   />
                   <Link
                     href="/zh/contact"

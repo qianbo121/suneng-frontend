@@ -161,11 +161,10 @@ export function HeroBanner({ locale }: HeroBannerProps) {
       <div className="hero-banner-slide relative h-[660px] overflow-hidden bg-black md:h-[540px] lg:h-[526px]">
         <div className="absolute inset-0 z-0">
           <Image
-            src="/images/home/banner-factory-building.png"
+            src="/images/home/banner-factory-building-20260804.webp"
             alt=""
             fill
             priority
-            unoptimized
             sizes="100vw"
             className="object-cover object-center"
             quality={85}

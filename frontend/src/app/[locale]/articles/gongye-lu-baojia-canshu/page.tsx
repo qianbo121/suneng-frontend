@@ -496,7 +496,7 @@ export default async function IndustrialFurnaceQuoteParamsPage({ params }: PageP
             <div className="mt-9 flex flex-col gap-4 sm:flex-row sm:flex-wrap">
               <a
                 href="#quote-contact-form"
-                className="inline-flex min-h-[46px] w-full items-center justify-center rounded-[4px] bg-[#c51624] px-6 text-[15px] font-semibold text-white transition hover:bg-[#a90f1b] sm:w-auto"
+                className="inline-flex min-h-[46px] w-full items-center justify-center rounded-[4px] cta-primary px-6 text-[15px] font-semibold text-white transition sm:w-auto"
               >
                 获取报价方案
               </a>
@@ -594,7 +594,7 @@ export default async function IndustrialFurnaceQuoteParamsPage({ params }: PageP
         </div>
         <p className="mt-6 rounded-[8px] border border-[#dfe6f0] bg-white p-5 text-[15px] leading-[1.85] text-[#344054]">
           如无法确定炉型，可先查看
-          <a href={jiangsuManufacturerPath} className="font-semibold text-[#c51624] underline underline-offset-4">
+          <a href={jiangsuManufacturerPath} className="font-semibold underline underline-offset-4">
             江苏工业炉厂家能力页
           </a>
           ，再结合工件、温度、产能和现场条件判断方案方向。
@@ -608,7 +608,7 @@ export default async function IndustrialFurnaceQuoteParamsPage({ params }: PageP
         <div className="mt-8 grid gap-5 lg:grid-cols-3">
           {authorizedProjectExamples.map((item) => (
             <article key={item.factId} className="rounded-[8px] border border-[#d6e0ec] bg-[#f8fafc] p-6">
-              <p className="text-[12px] font-semibold tracking-[0.08em] text-[#c51624]">{item.factId}</p>
+              <p className="text-[12px] font-semibold tracking-[0.08em]">{item.factId}</p>
               <h3 className="mt-2 text-[20px] font-semibold leading-[1.4] text-[#101828]">{item.title}</h3>
               <p className="mt-4 text-[15px] leading-[1.85] text-[#344054]">
                 <strong className="font-semibold text-[#101828]">项目参数：</strong>
@@ -631,7 +631,7 @@ export default async function IndustrialFurnaceQuoteParamsPage({ params }: PageP
               href={item.href}
               className="rounded-[8px] border border-[#e1e7f0] bg-white p-5 transition hover:border-[#c51624] hover:shadow-[0_10px_24px_rgba(15,35,75,0.06)]"
             >
-              <span className="text-[17px] font-semibold leading-[1.45] text-[#c51624]">{item.title}</span>
+              <span className="text-[17px] font-semibold leading-[1.45]">{item.title}</span>
               <span className="mt-2 block text-[14px] leading-[1.8] text-[#475467]">{item.text}</span>
             </a>
           ))}
@@ -642,7 +642,7 @@ export default async function IndustrialFurnaceQuoteParamsPage({ params }: PageP
         <div className="grid gap-4 md:grid-cols-2">
           {priceFactors.map((factor, index) => (
             <article key={factor} className="flex gap-4 rounded-[8px] border border-[#e1e7f0] bg-white p-5">
-              <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#c51624] text-[15px] font-semibold text-white">
+              <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full cta-primary text-[15px] font-semibold text-white">
                 {index + 1}
               </span>
               <p className="text-[15px] leading-[1.85] text-[#344054] lg:text-[16px]">{factor}</p>
@@ -683,7 +683,7 @@ export default async function IndustrialFurnaceQuoteParamsPage({ params }: PageP
         <div className="mt-8 rounded-[8px] border border-[#dfe6f0] bg-white p-6 shadow-[0_10px_24px_rgba(15,35,75,0.04)] lg:p-7">
           <div className="grid gap-4 lg:grid-cols-3">
             <article className="rounded-[8px] border border-[#e1e7f0] bg-[#fbfcfe] p-5">
-              <span className="flex h-10 w-10 items-center justify-center rounded-full bg-[#c51624] text-[15px] font-semibold text-white">
+              <span className="flex h-10 w-10 items-center justify-center rounded-full cta-primary text-[15px] font-semibold text-white">
                 1
               </span>
               <h3 className="mt-4 text-[20px] font-semibold leading-[1.4] text-[#101828]">复制参数清单</h3>
@@ -692,30 +692,30 @@ export default async function IndustrialFurnaceQuoteParamsPage({ params }: PageP
               </p>
             </article>
             <article className="rounded-[8px] border border-[#e1e7f0] bg-[#fbfcfe] p-5">
-              <span className="flex h-10 w-10 items-center justify-center rounded-full bg-[#c51624] text-[15px] font-semibold text-white">
+              <span className="flex h-10 w-10 items-center justify-center rounded-full cta-primary text-[15px] font-semibold text-white">
                 2
               </span>
               <h3 className="mt-4 text-[20px] font-semibold leading-[1.4] text-[#101828]">发送给苏能</h3>
               <p className="mt-3 text-[15px] leading-[1.8] text-[#475467]">
                 可通过在线表单、电话/微信
-                <a href="tel:+8613052986814" className="mx-1 font-semibold text-[#c51624] underline underline-offset-4">
+                <a href="tel:+8613052986814" className="mx-1 font-semibold underline underline-offset-4">
                   {siteSettings.salesPhone}
                 </a>
                 ，或邮箱
-                <a href={`mailto:${siteSettings.email}`} className="mx-1 font-semibold text-[#c51624] underline underline-offset-4">
+                <a href={`mailto:${siteSettings.email}`} className="mx-1 font-semibold underline underline-offset-4">
                   {siteSettings.email}
                 </a>
                 提交。
               </p>
               <a
                 href="#quote-contact-form"
-                className="mt-4 inline-flex min-h-[40px] items-center justify-center rounded-[4px] bg-[#c51624] px-5 text-[14px] font-semibold text-white transition hover:bg-[#a90f1b]"
+                className="mt-4 inline-flex min-h-[40px] items-center justify-center rounded-[4px] cta-primary px-5 text-[14px] font-semibold text-white transition"
               >
                 在线表单
               </a>
             </article>
             <article className="rounded-[8px] border border-[#e1e7f0] bg-[#fbfcfe] p-5">
-              <span className="flex h-10 w-10 items-center justify-center rounded-full bg-[#c51624] text-[15px] font-semibold text-white">
+              <span className="flex h-10 w-10 items-center justify-center rounded-full cta-primary text-[15px] font-semibold text-white">
                 3
               </span>
               <h3 className="mt-4 text-[20px] font-semibold leading-[1.4] text-[#101828]">工程师初步判断</h3>
@@ -735,7 +735,7 @@ export default async function IndustrialFurnaceQuoteParamsPage({ params }: PageP
         <div className="grid gap-4">
           {quoteSteps.map((step, index) => (
             <article key={step.title} className="grid gap-5 rounded-[8px] border border-[#e1e7f0] bg-white p-5 shadow-[0_10px_24px_rgba(15,35,75,0.04)] md:grid-cols-[72px_1fr]">
-              <div className="flex h-14 w-14 items-center justify-center rounded-full bg-[#c51624] text-[20px] font-semibold text-white">
+              <div className="flex h-14 w-14 items-center justify-center rounded-full cta-primary text-[20px] font-semibold text-white">
                 {index + 1}
               </div>
               <div>
@@ -759,7 +759,7 @@ export default async function IndustrialFurnaceQuoteParamsPage({ params }: PageP
               href={item.href}
               className="rounded-[8px] border border-[#e1e7f0] bg-[#fbfcfe] p-5 transition hover:border-[#c51624] hover:shadow-[0_10px_24px_rgba(15,35,75,0.06)]"
             >
-              <span className="text-[17px] font-semibold leading-[1.45] text-[#c51624]">{item.title}</span>
+              <span className="text-[17px] font-semibold leading-[1.45]">{item.title}</span>
               <span className="mt-2 block text-[14px] leading-[1.8] text-[#475467]">{item.text}</span>
             </a>
           ))}
@@ -779,7 +779,7 @@ export default async function IndustrialFurnaceQuoteParamsPage({ params }: PageP
           <div className="flex flex-wrap gap-4 lg:justify-end">
             <a
               href="#quote-contact-form"
-              className="inline-flex min-h-[46px] items-center justify-center rounded-[4px] bg-[#c51624] px-6 text-[15px] font-semibold text-white transition hover:bg-[#a90f1b]"
+              className="inline-flex min-h-[46px] items-center justify-center rounded-[4px] cta-primary px-6 text-[15px] font-semibold text-white transition"
             >
               获取报价方案
             </a>

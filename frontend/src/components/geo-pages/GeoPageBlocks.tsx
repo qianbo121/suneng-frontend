@@ -28,7 +28,7 @@ export function GeoSection({
       <div className="mx-auto max-w-[1180px] px-5 lg:px-8">
         <div className="text-center">
           {eyebrow ? (
-            <p className={cn('text-[13px] font-semibold text-[#c51624]', eyebrowClassName)}>{eyebrow}</p>
+            <p className={cn('text-[13px] font-semibold', eyebrowClassName)}>{eyebrow}</p>
           ) : null}
           <h2 className={cn('text-[26px] font-semibold leading-[1.28] text-[#101828] lg:text-[38px]', eyebrow && 'mt-3')}>
             {title}
@@ -57,7 +57,7 @@ export function GeoBulletList({ items }: { items: ReactNode[] }) {
     <ul className="mt-4 space-y-2 text-[15px] leading-[1.8] text-[#3f4a5f] lg:text-[16px]">
       {items.map((item, index) => (
         <li key={index} className="flex gap-3">
-          <span className="mt-[0.74em] h-1.5 w-1.5 shrink-0 rounded-full bg-[#c51624]" />
+          <span className="mt-[0.74em] h-1.5 w-1.5 shrink-0 rounded-full cta-primary" />
           <span>{item}</span>
         </li>
       ))}
@@ -130,7 +130,7 @@ export function GeoContactCta({
         <div className="flex flex-wrap gap-4 lg:justify-end">
           <QuoteModalButton
             label={primaryLabel}
-            className="inline-flex min-h-[46px] items-center justify-center rounded-[4px] bg-[#c51624] px-6 text-[15px] font-semibold text-white transition hover:bg-[#a90f1b]"
+            className="inline-flex min-h-[46px] items-center justify-center rounded-[4px] cta-primary px-6 text-[15px] font-semibold text-white transition"
           />
           <a
             href={secondaryHref}

@@ -10,6 +10,7 @@ import { buildProductImageAlt } from '@/lib/seo';
 import { getProductCollectionJsonLd } from '@/lib/seo/jsonld';
 import { buildMetadata } from '@/lib/seo/metadata';
 import { PRODUCT_COLLECTION_SEO } from '@/lib/seo/page-data';
+import { ENGLISH_STATIC_PAGE_METADATA } from '@/lib/seo/static-page-metadata-en';
 import { Locale } from '@/types/site';
 
 type ProductsPageProps = {
@@ -23,9 +24,7 @@ const PRODUCT_HERO_IMAGE = '/images/products/product-list-hero.png';
 const productSeoCopy = {
   zh: PRODUCT_COLLECTION_SEO,
   en: {
-    title: 'Product Center | Heat-Treatment Furnaces & Custom Industrial Furnaces — Suneng',
-    description:
-      "Browse Suneng's heat-treatment furnaces and custom industrial furnaces: box, bogie-hearth, pit, bell-type, mesh-belt, roller-hearth, pusher and rotary-hearth furnaces, plus continuous heat-treatment lines.",
+    ...ENGLISH_STATIC_PAGE_METADATA.products,
     keywords: [
       'heat treatment furnace',
       'industrial furnace',

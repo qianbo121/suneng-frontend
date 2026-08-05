@@ -1,4 +1,4 @@
-import { notFound } from 'next/navigation';
+import { notFound, permanentRedirect } from 'next/navigation';
 
 import {
   SUNENG_ISO_CERTIFICATES,
@@ -27,6 +27,10 @@ export const revalidate = 3600;
 export async function generateMetadata({ params }: StrengthCategoryPageProps) {
   const { locale, categorySlug } = await params;
   const currentLocale = (locale === 'en' ? 'en' : 'zh') as Locale;
+
+  if (currentLocale === 'zh' && categorySlug === 'certificates') {
+    permanentRedirect('/zh/strength/honors#management-systems');
+  }
 
   return createStrengthMetadata(currentLocale, categorySlug);
 }

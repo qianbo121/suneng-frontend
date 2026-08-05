@@ -3,6 +3,8 @@ import type { MetadataRoute } from 'next';
 import { publicPathExists } from '@/lib/seo/config';
 import { absoluteUrl } from '@/lib/seo/metadata';
 import { getNewsList } from '@/lib/api/news';
+import { getNewsContentModifiedTime } from '@/lib/news-dates';
+import { filterCanonicalNewsItems } from '@/lib/news-routing';
 import { STATIC_PRODUCTS } from '@/constants/static-products';
 import {
   ABOUT_SEO,
@@ -25,7 +27,7 @@ import { Locale } from '@/types/site';
 
 const sitemapLocales: Locale[] = ['zh', 'en'];
 const zhOnlyLocales: Locale[] = ['zh'];
-const englishStaticPaths = new Set(['/', '/products', '/service', '/news', '/about', '/contact']);
+const englishStaticPaths = new Set(['/', '/products', '/service', '/about', '/contact']);
 const HOME_CONTENT_MODIFIED_TIME = '2026-07-30';
 
 type SitemapEntry = MetadataRoute.Sitemap[number];
@@ -72,7 +74,7 @@ function route(url: string, options: Omit<SitemapEntry, 'url'>): SitemapEntry {
 }
 
 function collectStaticRoutes(): MetadataRoute.Sitemap {
-  // The bare root '/' 307-redirects to '/zh', so listing it alongside '/zh'
+  // The bare root '/' 308-redirects to '/zh', so listing it alongside '/zh'
   // is a redirect-source duplicate that search engines drop. '/zh' (emitted by
   // the staticPaths loop below from path '/') is the canonical home.
   const routes: MetadataRoute.Sitemap = [];
@@ -102,9 +104,7 @@ function collectStaticRoutes(): MetadataRoute.Sitemap {
       lastModifiedLocales: ['zh'],
     },
     { path: '/partner', changeFrequency: 'monthly', priority: 0.65 },
-    { path: '/strength', changeFrequency: 'monthly', priority: 0.65 },
     { path: '/strength/honors', changeFrequency: 'monthly', priority: 0.55 },
-    { path: '/strength/certificates', changeFrequency: 'monthly', priority: 0.55 },
     { path: '/contact', changeFrequency: 'monthly', priority: 0.7 },
   ];
 
@@ -249,7 +249,7 @@ async function collectNewsRoutes(): Promise<MetadataRoute.Sitemap> {
     return [];
   }
 
-  const items = (newsResult.data?.items ?? []).filter((article) => {
+  const items = filterCanonicalNewsItems(newsResult.data?.items ?? []).filter((article) => {
     const status = 'status' in article ? article.status : undefined;
     const isPublished = 'isPublished' in article ? article.isPublished : undefined;
 
@@ -258,7 +258,7 @@ async function collectNewsRoutes(): Promise<MetadataRoute.Sitemap> {
 
   return items.map((article) =>
     route(localizedPath('zh', `/news/${article.slug}`), {
-      lastModified: safeLastModified(article.publishDate),
+      lastModified: safeLastModified(getNewsContentModifiedTime(article)),
       changeFrequency: 'monthly',
       priority: 0.6,
       images:

@@ -48,7 +48,7 @@ const zhOnlyNavigationChildren: Partial<Record<string, NonNullable<NavigationIte
     },
     {
       key: 'about-certificates',
-      href: '/strength/certificates',
+      href: '/strength/honors#management-systems',
       label: { zh: '体系认证', en: 'Certifications' },
     },
     {
@@ -104,14 +104,16 @@ function getNavigationChildren(locale: Locale, item: NavigationItem) {
 }
 
 export function getLocalizedNavigation(locale: Locale) {
-  return navigationItems.map((item) => ({
-    ...item,
-    labelText: getLocalizedText(locale, item.label),
-    children: getNavigationChildren(locale, item)?.map((child) => ({
-      ...child,
-      labelText: getLocalizedText(locale, child.label),
-    })),
-  }));
+  return navigationItems
+    .filter((item) => locale === 'zh' || item.key !== 'resources')
+    .map((item) => ({
+      ...item,
+      labelText: getLocalizedText(locale, item.label),
+      children: getNavigationChildren(locale, item)?.map((child) => ({
+        ...child,
+        labelText: getLocalizedText(locale, child.label),
+      })),
+    }));
 }
 
 export function getRouteLabelMap(locale: Locale) {

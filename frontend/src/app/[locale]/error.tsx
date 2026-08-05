@@ -12,7 +12,6 @@ type LocaleErrorProps = {
 // crashed route — and, crucially, the failure is NOT cached as a 404.
 export default function LocaleError({ error, reset }: LocaleErrorProps) {
   useEffect(() => {
-    // eslint-disable-next-line no-console
     console.error(error);
   }, [error]);
 
@@ -27,7 +26,7 @@ export default function LocaleError({ error, reset }: LocaleErrorProps) {
       <button
         type="button"
         onClick={reset}
-        className="mt-6 inline-flex min-h-[42px] items-center justify-center rounded-[4px] bg-[#c51624] px-6 text-[14px] font-semibold text-white transition hover:bg-[#a90f1b]"
+        className="mt-6 inline-flex min-h-[42px] items-center justify-center rounded-[4px] cta-primary px-6 text-[14px] font-semibold text-white transition"
       >
         重试 · Retry
       </button>

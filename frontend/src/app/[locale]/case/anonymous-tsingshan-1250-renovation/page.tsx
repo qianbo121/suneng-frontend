@@ -342,7 +342,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
 function NumberBadge({ children }: { children: ReactNode }) {
   return (
-    <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-[#c51624] text-[18px] font-semibold text-white">
+    <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full cta-primary text-[18px] font-semibold text-white">
       {children}
     </span>
   );
@@ -401,7 +401,7 @@ export default async function AnonymousTsingshanCasePage({ params }: PageProps) 
             <div className="mt-9 flex flex-wrap gap-4">
               <a
                 href="#contact"
-                className="inline-flex min-h-[46px] items-center justify-center rounded-[4px] bg-[#c51624] px-6 text-[15px] font-semibold text-white transition hover:bg-[#a90f1b]"
+                className="inline-flex min-h-[46px] items-center justify-center rounded-[4px] cta-primary px-6 text-[15px] font-semibold text-white transition"
               >
                 获取报价方案
               </a>
@@ -507,8 +507,8 @@ export default async function AnonymousTsingshanCasePage({ params }: PageProps) 
       </Section>
 
       <Section id="results" eyebrow="Verification" title="五、改造评估与核验边界">
-        <div className="rounded-[8px] border border-[#c51624]/20 bg-[#fff7f7] p-6">
-          <p className="text-[13px] font-semibold uppercase tracking-[0.2em] text-[#c51624]">Evidence Boundary</p>
+        <div className="rounded-[8px] cta-secondary/20 bg-[#fff7f7] p-6">
+          <p className="text-[13px] font-semibold uppercase tracking-[0.2em]">Evidence Boundary</p>
           <h3 className="mt-3 text-[30px] font-semibold leading-[1.25] text-[#101828] lg:text-[44px]">经济性结论需以可比运行记录复核</h3>
           <p className="mt-4 max-w-[900px] text-[15px] leading-[1.9] text-[#344054]">
             项目评估应统一工况、计量边界和统计周期，并以可追溯的运行记录形成验证结论。
@@ -605,7 +605,7 @@ export default async function AnonymousTsingshanCasePage({ params }: PageProps) 
             </address>
 
             <div className="mt-7 border-t border-[#e1e7f0] pt-5 text-[14px] leading-[1.8] text-[#667085]">
-              <p>相关页面：<a href={servicePath} className="font-semibold text-[#c51624]">工业炉节能改造与热处理炉大修服务</a></p>
+              <p>相关页面：<a href={servicePath} className="font-semibold">工业炉节能改造与热处理炉大修服务</a></p>
               <p>内容维护：苏能工业炉工程技术团队</p>
               <p>发布日期：2026-05-27</p>
               <p>最后更新：2026-07-29</p>

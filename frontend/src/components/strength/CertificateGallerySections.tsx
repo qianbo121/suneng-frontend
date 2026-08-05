@@ -64,7 +64,7 @@ function CertificateCard({
         </div>
       </button>
       <div className="px-5 py-5">
-        <p className="text-[12px] font-semibold uppercase tracking-[0.22em] text-[#c51624]">
+        <p className="text-[12px] font-semibold uppercase tracking-[0.22em]">
           {getCategoryLabel(item)}
         </p>
         <h3 className="mt-3 text-[18px] font-semibold leading-[1.45] text-[#101828]">{item.title}</h3>
@@ -85,20 +85,22 @@ function CertificateCard({
 }
 
 function CertificateSection({
+  id,
   title,
   description,
   items,
   onPreview,
 }: {
+  id: string;
   title: string;
   description: string;
   items: CertificateItem[];
   onPreview: (item: CertificateItem) => void;
 }) {
   return (
-    <section className="border-t border-[#e5e8ef] py-12 first:border-t-0 lg:py-16">
+    <section id={id} className="scroll-mt-24 border-t border-[#e5e8ef] py-12 first:border-t-0 lg:py-16">
       <div className="max-w-[900px]">
-        <p className="text-[12px] font-semibold uppercase tracking-[0.26em] text-[#c51624]">Certificate Evidence</p>
+        <p className="text-[12px] font-semibold uppercase tracking-[0.26em]">Certificate Evidence</p>
         <h2 className="mt-3 text-[26px] font-semibold leading-[1.28] text-[#101828] lg:text-[38px]">{title}</h2>
         <p className="mt-4 text-[16px] leading-[1.9] text-[#526071] lg:text-[17px]">{description}</p>
       </div>
@@ -187,6 +189,7 @@ export function CertificateGallerySections({
 
       <main className="mx-auto max-w-[1180px] px-5 lg:px-8">
         <CertificateSection
+          id="company-qualifications"
           title="企业资质"
           description="包括营业执照与国家高新技术企业证书；其他资质在证书正文、有效期和当前状态复核完成后再恢复展示。"
           items={qualifications}
@@ -194,6 +197,7 @@ export function CertificateGallerySections({
         />
 
         <CertificateSection
+          id="management-systems"
           title="管理体系认证"
           description="当前公开 ISO 9001 质量管理体系认证，证书编号 03824Q60289R3S，有效至 2027 年 1 月 11 日。"
           items={isoCertificates}
@@ -201,6 +205,7 @@ export function CertificateGallerySections({
         />
 
         <CertificateSection
+          id="patents"
           title="专利证书"
           description="展示 14 项已授权专利证书，覆盖电阻炉、燃气热处理炉、网带式淬火炉、固溶热处理生产线、锻造炉等方向。"
           items={patents}
@@ -209,21 +214,21 @@ export function CertificateGallerySections({
 
         <section className="border-t border-[#e5e8ef] py-12 lg:py-16">
           <div className="rounded-[8px] border border-[#dbe4ef] bg-[#f8fafc] p-6 lg:p-8">
-            <p className="text-[12px] font-semibold uppercase tracking-[0.26em] text-[#c51624]">Related Pages</p>
+            <p className="text-[12px] font-semibold uppercase tracking-[0.26em]">Related Pages</p>
             <h2 className="mt-3 text-[24px] font-semibold leading-[1.35] text-[#101828] lg:text-[32px]">
               相关页面
             </h2>
             <div className="mt-6 grid gap-3 md:grid-cols-2">
               <Link
                 href={`/${locale}/about`}
-                className="inline-flex min-h-[46px] items-center justify-between rounded-[4px] bg-[#c51624] px-5 text-[15px] font-semibold text-white transition hover:bg-[#a90f1b]"
+                className="inline-flex min-h-[46px] items-center justify-between rounded-[4px] cta-primary px-5 text-[15px] font-semibold text-white transition"
               >
                 <span>了解苏能工业炉资质、产品与服务范围</span>
                 <HiArrowRight className="ml-3 h-5 w-5 shrink-0" />
               </Link>
               <Link
                 href={`/${locale}/service/furnace-renovation-overhaul`}
-                className="inline-flex min-h-[46px] items-center justify-between rounded-[4px] border border-[#c51624] bg-white px-5 text-[15px] font-semibold text-[#c51624] transition hover:bg-[#c51624] hover:text-white"
+                className="inline-flex min-h-[46px] items-center justify-between rounded-[4px] cta-secondary bg-white px-5 text-[15px] font-semibold transition cta-secondary-fill-hover"
               >
                 <span>工业炉节能改造与大修服务</span>
                 <HiArrowRight className="ml-3 h-5 w-5 shrink-0" />

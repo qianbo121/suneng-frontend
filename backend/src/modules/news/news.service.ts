@@ -10,6 +10,7 @@ import { CreateNewsDto } from '@/modules/news/dto/create-news.dto';
 import { NewsListQueryDto } from '@/modules/news/dto/news-list-query.dto';
 import { UpdateNewsDto } from '@/modules/news/dto/update-news.dto';
 import { NewsCategoryService } from '@/modules/news-category/news-category.service';
+import { changesNewsContent } from '@/modules/news/news-content-date';
 import { PrismaService } from '@/prisma/prisma.service';
 
 type NewsPublishState = {
@@ -186,6 +187,7 @@ export class NewsService {
         : {}),
       ...(categoryId !== undefined ? { categoryId } : {}),
       ...(dto.publishDate ? { publishDate: new Date(dto.publishDate) } : {}),
+      ...(changesNewsContent(dto) ? { contentUpdatedAt: new Date() } : {}),
     };
 
     const slugSource = dto.slug || dto.titleEn || dto.titleZh;

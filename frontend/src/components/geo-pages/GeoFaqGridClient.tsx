@@ -64,9 +64,9 @@ export function GeoFaqGridClient({
                 aria-hidden="true"
                 className="relative mt-1 flex h-6 w-6 shrink-0 items-center justify-center rounded-full border border-[#dfe6f0]"
               >
-                <span className="absolute h-[2px] w-3 rounded-full bg-[#c51624]" />
+                <span className="absolute h-[2px] w-3 rounded-full cta-primary" />
                 {!isOpen ? (
-                  <span className="absolute h-3 w-[2px] rounded-full bg-[#c51624]" />
+                  <span className="absolute h-3 w-[2px] rounded-full cta-primary" />
                 ) : null}
               </span>
             </button>

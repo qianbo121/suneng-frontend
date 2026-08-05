@@ -1,3 +1,5 @@
+import { notFound } from 'next/navigation';
+
 import { JsonLd } from '@/components/JsonLd';
 import { PageBanner } from '@/components/layout/PageBanner';
 import { Breadcrumb } from '@/components/layout/Breadcrumb';
@@ -214,7 +216,7 @@ export async function generateMetadata({ params }: PartnerPageProps) {
   const { locale } = await params;
   const currentLocale = (locale === 'en' ? 'en' : 'zh') as Locale;
 
-  return buildMetadata({
+  const metadata = buildMetadata({
     title: currentLocale === 'en' ? 'Partners' : PARTNER_SEO.title,
     description:
       currentLocale === 'en'
@@ -227,16 +229,23 @@ export async function generateMetadata({ params }: PartnerPageProps) {
     image: '/images/partner/partner-hero.png',
     alternateLocales: {
       'zh-CN': '/zh/partner',
-      'en-US': '/en/partner',
       'x-default': '/zh/partner',
     },
   });
+
+  return currentLocale === 'en'
+    ? { ...metadata, robots: { index: false, follow: false } }
+    : metadata;
 }
 
 export default async function PartnerPage({ params }: PartnerPageProps) {
   const { locale } = await params;
   const currentLocale = (locale === 'en' ? 'en' : 'zh') as Locale;
-  const title = currentLocale === 'en' ? 'Partners' : '合作关系与行业应用';
+
+  if (currentLocale === 'en') {
+    notFound();
+  }
+  const title = '合作关系与行业应用';
   // Localize internal links to the current locale; drop links whose target is
   // Chinese-only when rendering English (rewriting them to /en/* would 404).
   const localizedFieldItems = cooperationFields.map((field) => ({
@@ -254,18 +263,12 @@ export default async function PartnerPage({ params }: PartnerPageProps) {
 
   return (
     <div className="bg-white pb-10 lg:pb-0">
-      {currentLocale === 'zh' ? (
-        <JsonLd id="partner-collection-jsonld" data={partnerCollectionJsonLd} />
-      ) : null}
+      <JsonLd id="partner-collection-jsonld" data={partnerCollectionJsonLd} />
       <PageBanner
         locale={locale}
         title={title}
         englishTitle="Partners"
-        subtitle={
-          currentLocale === 'en'
-            ? 'Industrial furnace cooperation and application scenarios across manufacturing sectors'
-            : '服务多行业工业炉项目，覆盖装备制造、不锈钢、有色金属、汽车零部件、能源装备等应用场景。'
-        }
+        subtitle="服务多行业工业炉项目，覆盖装备制造、不锈钢、有色金属、汽车零部件、能源装备等应用场景。"
         backgroundImage="/images/partner/partner-hero.png"
         variant="about"
       />

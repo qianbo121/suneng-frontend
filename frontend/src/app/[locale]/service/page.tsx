@@ -5,6 +5,7 @@ import { Breadcrumb } from '@/components/layout/Breadcrumb';
 import { PageBanner } from '@/components/layout/PageBanner';
 import { buildMetadata } from '@/lib/seo/metadata';
 import { SERVICE_SEO } from '@/lib/seo/page-data';
+import { ENGLISH_STATIC_PAGE_METADATA } from '@/lib/seo/static-page-metadata-en';
 import { siteSettings } from '@/mock/siteSettings';
 import { Locale } from '@/types/site';
 
@@ -20,9 +21,7 @@ const phoneIcon = '/images/service/service-phone-icon.png';
 const serviceSeoCopy = {
   zh: SERVICE_SEO,
   en: {
-    title: 'After-sales Service | Industrial Furnace Installation and Maintenance Support',
-    description:
-      'Suneng Industrial Furnace provides after-sales service, installation and commissioning, maintenance, technical training, regular inspection and lifecycle support for industrial furnace and heat treatment equipment projects.',
+    ...ENGLISH_STATIC_PAGE_METADATA.service,
     keywords: [
       'industrial furnace after-sales service',
       'heat treatment furnace service',

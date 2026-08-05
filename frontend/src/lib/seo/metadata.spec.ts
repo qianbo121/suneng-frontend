@@ -27,7 +27,6 @@ describe('SEO metadata generation', () => {
     expect(metadata.alternates?.canonical).toBe('https://www.jssngyl.cn/zh/news');
     expect(metadata.alternates?.languages).toEqual({
       'zh-CN': 'https://www.jssngyl.cn/zh/news',
-      'en-US': 'https://www.jssngyl.cn/en/news',
       'x-default': 'https://www.jssngyl.cn/zh/news',
     });
     expect(metadata.openGraph).toMatchObject({
@@ -41,18 +40,12 @@ describe('SEO metadata generation', () => {
     });
   });
 
-  it('keeps strength category metadata on the shared strength keyword set', async () => {
+  it('keeps strength category metadata while omitting obsolete meta keywords', async () => {
     const metadata = await createStrengthMetadata('en', 'honors');
 
     expect(titleText(metadata)).toBe('Honors | Suneng Industrial Furnace');
     expect(metadata.alternates?.canonical).toBe('https://www.jssngyl.cn/en/strength/honors');
-    expect(metadata.keywords).toEqual(
-      expect.arrayContaining([
-        'company strength',
-        'industrial furnace manufacturing capability',
-        'heat-treatment furnace production equipment',
-      ]),
-    );
+    expect(metadata.keywords).toBeUndefined();
     expect(metadata.openGraph).toMatchObject({
       locale: 'en_US',
       url: 'https://www.jssngyl.cn/en/strength/honors',
@@ -71,7 +64,7 @@ describe('SEO metadata generation', () => {
     });
   });
 
-  it('accepts string keywords for migrated detail helpers', () => {
+  it('keeps article OpenGraph dates but does not emit meta keywords', () => {
     const metadata = buildMetadata({
       title: 'Article Detail',
       description: 'Article description',
@@ -84,12 +77,18 @@ describe('SEO metadata generation', () => {
       modifiedTime: '2026-06-29',
     });
 
-    expect(metadata.keywords).toEqual(expect.arrayContaining(['alpha', 'beta', '工业炉']));
+    expect(metadata.keywords).toBeUndefined();
     expect(metadata.openGraph).toMatchObject({
       type: 'article',
       publishedTime: '2026-06-29',
       modifiedTime: '2026-06-29',
     });
+  });
+
+  it('does not reintroduce meta keywords from the root layout', async () => {
+    const { metadata } = await import('@/app/layout');
+
+    expect(metadata.keywords).toBeUndefined();
   });
 
   it('keeps canonical URL helper on absolute localized URLs', () => {

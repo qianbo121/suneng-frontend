@@ -124,7 +124,7 @@ export function HeatTreatmentLines({ locale, categories }: HeatTreatmentLinesPro
               <div className="mt-8 flex flex-col gap-3 sm:flex-row">
                 <Link
                   href={systemHref}
-                  className="inline-flex min-h-[52px] items-center justify-center rounded-[3px] bg-[#e60012] px-8 text-[15px] font-semibold text-white transition hover:bg-[#c51624] sm:whitespace-nowrap"
+                  className="cta-primary-strong inline-flex min-h-[52px] items-center justify-center rounded-[3px] px-8 text-[15px] font-semibold text-white transition sm:whitespace-nowrap"
                 >
                   {locale === 'en' ? 'View line solutions' : '查看连续热处理生产线方案'}
                 </Link>

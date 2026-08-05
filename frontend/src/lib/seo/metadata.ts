@@ -11,7 +11,6 @@ import {
   SITE_URL,
   SOGOU_SITE_VERIFICATION,
 } from '@/lib/seo/config';
-import { buildKeywords } from '@/lib/seo/keywords';
 
 const ABSOLUTE_URL_PATTERN = /^https?:\/\//i;
 const OPEN_GRAPH_LOCALE_MAP: Record<string, string> = {
@@ -148,7 +147,6 @@ export function buildMetadata(options: BuildMetadataOptions): Metadata {
       absolute: title,
     },
     description,
-    keywords: buildKeywords(options.pageKey, options.keywords, metadataLocale),
     metadataBase: new URL(SITE_URL),
     alternates: {
       canonical,

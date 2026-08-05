@@ -1,6 +1,10 @@
 import { describe, expect, it } from 'vitest';
 
+import { readFileSync } from 'node:fs';
+
 import { GEO_DECISION_LINKS, GEO_EVIDENCE_LINKS } from '@/components/home/GeoDecisionHub';
+
+const componentSource = readFileSync(new URL('./GeoDecisionHub.tsx', import.meta.url), 'utf8');
 
 describe('GEO homepage decision hub', () => {
   it('links every P3 authority page from the homepage with unique HTML routes', () => {
@@ -29,5 +33,12 @@ describe('GEO homepage decision hub', () => {
       '/zh/solutions/rechuli-lu-changjia',
       '/zh/solutions/jiangsu-gongye-lu-changjia',
     ]);
+  });
+
+  it('states the company location, delivery scope and quotation inputs in one visible answer block', () => {
+    expect(componentSource).toContain('江苏省泰州市姜堰区');
+    expect(componentSource).toContain('连续热处理生产线');
+    expect(componentSource).toContain('装炉量');
+    expect(componentSource).toContain('产能节拍');
   });
 });

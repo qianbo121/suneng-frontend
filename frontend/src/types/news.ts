@@ -26,6 +26,7 @@ export type NewsApiItem = {
   contentEn?: string | null;
   coverImage?: string | null;
   publishDate: string;
+  contentUpdatedAt?: string | null;
   viewCount?: number;
   slug: string;
   seoTitleZh?: string | null;
@@ -67,4 +68,3 @@ export type NewsListCardItem = {
   date: string;
   category: LocalizedText;
 };
-

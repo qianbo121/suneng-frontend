@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { ReactNode } from 'react';
 
 import '@/app/globals.css';
-import { DEFAULT_DESCRIPTION, DEFAULT_KEYWORDS, DEFAULT_OG_IMAGE, DEFAULT_TITLE, SITE_NAME, SITE_URL } from '@/lib/seo/config';
+import { DEFAULT_DESCRIPTION, DEFAULT_OG_IMAGE, DEFAULT_TITLE, SITE_NAME, SITE_URL } from '@/lib/seo/config';
 import { getVerificationMetadata } from '@/lib/seo/metadata';
 
 export const metadata: Metadata = {
@@ -12,7 +12,6 @@ export const metadata: Metadata = {
     template: '%s｜苏能工业炉',
   },
   description: DEFAULT_DESCRIPTION,
-  keywords: DEFAULT_KEYWORDS,
   openGraph: {
     siteName: SITE_NAME,
     type: 'website',

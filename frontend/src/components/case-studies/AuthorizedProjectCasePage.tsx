@@ -128,7 +128,7 @@ export function AuthorizedProjectCasePage({ data }: { data: AuthorizedProjectCas
 
       <Section id="overview" eyebrow="Project Context" title="一、项目背景与真实需求">
         <article className="mb-6 rounded-[8px] border border-[#d6e0ec] bg-[#f8fafc] p-6">
-          <p className="text-[13px] font-semibold text-[#c51624]">案例分级</p>
+          <p className="text-[13px] font-semibold">案例分级</p>
           <h3 className="mt-2 text-[21px] font-semibold leading-[1.4] text-[#101828]">
             {data.caseClassification}
           </h3>
@@ -220,7 +220,7 @@ export function AuthorizedProjectCasePage({ data }: { data: AuthorizedProjectCas
               href={item.href}
               className="rounded-[8px] border border-[#e1e7f0] bg-white p-5 shadow-[0_10px_24px_rgba(15,35,75,0.04)] transition hover:-translate-y-0.5 hover:border-[#c51624]/35 hover:shadow-[0_14px_30px_rgba(15,35,75,0.08)]"
             >
-              <span className="text-[18px] font-semibold leading-[1.45] text-[#c51624]">
+              <span className="text-[18px] font-semibold leading-[1.45]">
                 {item.title}
               </span>
               <span className="mt-3 block text-[14px] leading-[1.8] text-[#475467]">

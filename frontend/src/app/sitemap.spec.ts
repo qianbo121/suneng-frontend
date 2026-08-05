@@ -2,7 +2,29 @@ import { describe, expect, it, vi } from 'vitest';
 
 vi.mock('@/lib/api/news', () => ({
   getNewsList: vi.fn(async () => ({
-    data: { items: [] },
+    data: {
+      items: [
+        {
+          id: 1,
+          categoryId: 1,
+          titleZh: '标准新闻',
+          slug: 'canonical-news',
+          publishDate: '2026-06-01T00:00:00.000Z',
+          contentUpdatedAt: '2026-07-01T00:00:00.000Z',
+          status: 'published',
+          isPublished: true,
+        },
+        {
+          id: 2,
+          categoryId: 1,
+          titleZh: '重复新闻',
+          slug: 'jiang-su-su-neng-gong-ye-lu-tui-huo-gu-rong-sheng-chan-xian-zhu-li-gang-cai-shen-jia-gong-1',
+          publishDate: '2026-06-02T00:00:00.000Z',
+          status: 'published',
+          isPublished: true,
+        },
+      ],
+    },
     error: null,
   })),
 }));
@@ -157,5 +179,22 @@ describe('sitemap freshness signals', () => {
     for (const path of DEEP_CRAWL_TARGETS) {
       expect(urls.has(`https://www.jssngyl.cn${path}`), path).toBe(true);
     }
+  });
+
+  it('removes leaked English and empty strength routes plus the duplicate news slug', async () => {
+    const entries = await buildSitemap();
+    const byUrl = new Map(entries.map((entry) => [entry.url, entry]));
+
+    expect(byUrl.has('https://www.jssngyl.cn/en/news')).toBe(false);
+    expect(byUrl.has('https://www.jssngyl.cn/zh/strength')).toBe(false);
+    expect(byUrl.has('https://www.jssngyl.cn/zh/strength/certificates')).toBe(false);
+    expect(
+      byUrl.has(
+        'https://www.jssngyl.cn/zh/news/jiang-su-su-neng-gong-ye-lu-tui-huo-gu-rong-sheng-chan-xian-zhu-li-gang-cai-shen-jia-gong-1',
+      ),
+    ).toBe(false);
+    expect(byUrl.get('https://www.jssngyl.cn/zh/news/canonical-news')?.lastModified).toEqual(
+      new Date('2026-07-01T00:00:00.000Z'),
+    );
   });
 });

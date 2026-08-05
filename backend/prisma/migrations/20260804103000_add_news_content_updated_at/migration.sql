@@ -1,0 +1,1 @@
+ALTER TABLE "News" ADD COLUMN "contentUpdatedAt" TIMESTAMP(3);

@@ -122,7 +122,7 @@ export function GeoAuthorityGuidePage({
 
       <nav aria-label="页面目录" className="border-b border-[#e2e8f0] bg-white">
         <div className="mx-auto flex max-w-[1180px] gap-6 overflow-x-auto px-5 py-5 text-[14px] font-semibold text-[#475467] lg:px-8">
-          <a className="flex min-h-11 shrink-0 items-center text-[#c51624]" href="#answer">直接答案</a>
+          <a className="flex min-h-11 shrink-0 items-center" href="#answer">直接答案</a>
           <a className="flex min-h-11 shrink-0 items-center" href="#signals">判断信号</a>
           <a className="flex min-h-11 shrink-0 items-center" href="#compare">对比与决策</a>
           <a className="flex min-h-11 shrink-0 items-center" href="#evidence">验收证据</a>
@@ -141,7 +141,7 @@ export function GeoAuthorityGuidePage({
           <div className="grid gap-3 sm:grid-cols-2">
             {directChecks.map((item) => (
               <div key={item} className="rounded-[7px] border border-[#eadfe0] bg-white px-4 py-3 text-[14px] font-semibold leading-[1.6] text-[#344054]">
-                <span className="mr-2 text-[#c51624]">✓</span>{item}
+                <span className="mr-2">✓</span>{item}
               </div>
             ))}
           </div>
@@ -153,7 +153,7 @@ export function GeoAuthorityGuidePage({
         <div className="mt-7 grid gap-5 lg:grid-cols-3">
           {signals.map((item) => (
             <article key={item.label} className="rounded-[9px] border border-[#dfe6f0] bg-white p-6 shadow-[0_12px_26px_rgba(16,24,40,0.04)]">
-              <p className="text-[12px] font-semibold text-[#c51624]">{item.label}</p>
+              <p className="text-[12px] font-semibold">{item.label}</p>
               <h3 className="mt-3 text-[20px] font-semibold text-[#101828]">{item.title}</h3>
               <p className="mt-3 text-[15px] leading-[1.8] text-[#475467]">{item.text}</p>
             </article>
@@ -184,7 +184,7 @@ export function GeoAuthorityGuidePage({
         <div className="mt-7 grid gap-5 md:grid-cols-2">
           {evidence.map((item) => (
             <article key={item.label} className="rounded-[9px] border border-[#dfe6f0] bg-[#fbfcfe] p-6">
-              <p className="text-[12px] font-semibold text-[#c51624]">{item.label}</p>
+              <p className="text-[12px] font-semibold">{item.label}</p>
               <h3 className="mt-3 text-[20px] font-semibold text-[#101828]">{item.title}</h3>
               <p className="mt-3 text-[15px] leading-[1.8] text-[#475467]">{item.text}</p>
             </article>
@@ -219,7 +219,7 @@ export function GeoAuthorityGuidePage({
           </div>
           <QuoteModalButton
             label="获取初步判断"
-            className="inline-flex min-h-[46px] items-center justify-center rounded-[4px] bg-[#c51624] px-6 text-[15px] font-semibold text-white transition hover:bg-[#a90f1b]"
+            className="inline-flex min-h-[46px] items-center justify-center rounded-[4px] cta-primary px-6 text-[15px] font-semibold text-white transition"
           />
         </div>
       </section>

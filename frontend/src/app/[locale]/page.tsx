@@ -6,6 +6,7 @@ import { getHomePageData } from '@/lib/home';
 import { getHomePageJsonLd } from '@/lib/seo/jsonld';
 import { buildMetadata } from '@/lib/seo/metadata';
 import { HOME_SEO } from '@/lib/seo/page-data';
+import { ENGLISH_STATIC_PAGE_METADATA } from '@/lib/seo/static-page-metadata-en';
 import { Locale } from '@/types/site';
 
 const HeroBanner = dynamic(() => import('@/components/home/HeroBanner').then((module) => ({ default: module.HeroBanner })));
@@ -24,9 +25,7 @@ type LocaleHomePageProps = {
 const homeSeoCopy = {
   zh: HOME_SEO,
   en: {
-    title: 'Suneng Industrial Furnace | Custom Heat-Treatment & Industrial Furnace Manufacturer',
-    description:
-      'Jiangsu Suneng Industrial Furnace (founded 2006, Taizhou, Jiangsu) custom-engineers heat-treatment furnaces — box, bogie-hearth, pit, mesh-belt, roller-hearth and pusher furnaces, continuous heat-treatment lines, plus furnace energy-saving retrofit and overhaul.',
+    ...ENGLISH_STATIC_PAGE_METADATA.home,
     keywords: [
       'industrial furnace',
       'heat treatment furnace',
@@ -76,7 +75,7 @@ export default async function LocaleHomePage({ params }: LocaleHomePageProps) {
       <HeatTreatmentLines locale={currentLocale} categories={[]} />
       <HotProducts locale={currentLocale} items={[]} />
       <GeoDecisionHub locale={currentLocale} />
-      <NewsSection locale={currentLocale} items={homeData.news} />
+      {currentLocale === 'zh' ? <NewsSection locale={currentLocale} items={homeData.news} /> : null}
     </div>
   );
 }

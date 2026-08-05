@@ -6,6 +6,7 @@ import { getNewsDetail, getNewsList, getNewsPrevNext } from '@/lib/api/news';
 import { toAssetUrl } from '@/lib/api/client';
 import { compactText } from '@/lib/seo';
 import { absoluteUrl, buildMetadata } from '@/lib/seo/metadata';
+import { filterCanonicalNewsItems, hasPublishableEnglishNews } from '@/lib/news-routing';
 import { sanitizeRichTextHtml } from '@/lib/sanitize';
 import { localizeText } from '@/lib/utils';
 import { NewsApiItem, NewsListCardItem } from '@/types/news';
@@ -77,7 +78,7 @@ export async function createNewsListMetadata(locale: Locale): Promise<Metadata> 
       ? 'Latest company and industry updates.'
       : '聚焦公司动态与行业资讯，展示企业新闻内容。';
 
-  return buildMetadata({
+  const metadata = buildMetadata({
     title,
     description,
     path: `/${locale}/news`,
@@ -87,10 +88,13 @@ export async function createNewsListMetadata(locale: Locale): Promise<Metadata> 
     image: NEWS_FALLBACK_IMAGE,
     alternateLocales: {
       'zh-CN': '/zh/news',
-      'en-US': '/en/news',
       'x-default': '/zh/news',
     },
   });
+
+  return locale === 'en'
+    ? { ...metadata, robots: { index: false, follow: false } }
+    : metadata;
 }
 
 export async function createNewsDetailMetadata(locale: Locale, slug: string): Promise<Metadata> {
@@ -132,17 +136,32 @@ export async function getNewsListPageData(
   options?: { page?: number; pageSize?: number },
 ) {
   const listResult = await getNewsList({
-    page: options?.page ?? 1,
-    pageSize: options?.pageSize ?? 10,
+    page: 1,
+    pageSize: 100,
   });
+  const page = Math.max(1, options?.page ?? 1);
+  const pageSize = Math.max(1, options?.pageSize ?? 10);
+  const canonicalItems = filterCanonicalNewsItems(listResult.data?.items ?? []);
+  const localizedItems = locale === 'en'
+    ? canonicalItems.filter(hasPublishableEnglishNews)
+    : canonicalItems;
+  const start = (page - 1) * pageSize;
+  const paginatedList = listResult.data
+    ? {
+        items: localizedItems.slice(start, start + pageSize),
+        total: localizedItems.length,
+        page,
+        pageSize,
+      }
+    : null;
   const bannerImage =
-    toAssetUrl(listResult.data?.items?.[0]?.coverImage || listResult.data?.items?.[0]?.ogImage) ||
+    toAssetUrl(localizedItems[0]?.coverImage || localizedItems[0]?.ogImage) ||
     NEWS_FALLBACK_IMAGE;
 
   return {
     categories: [],
     currentCategory: null,
-    list: listResult.data,
+    list: paginatedList,
     bannerImage,
     error: listResult.error,
     title: NEWS_LABEL[locale],

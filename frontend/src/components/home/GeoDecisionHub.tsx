@@ -89,6 +89,12 @@ export function GeoDecisionHub({ locale }: { locale: Locale }) {
           </p>
         </div>
 
+        <div className="mt-6 rounded-[6px] border border-[#dce3ec] bg-white px-5 py-5 text-[15px] leading-[1.9] text-[#475467] md:px-6">
+          <strong className="font-semibold text-[#101828]">江苏苏能工业炉有限公司</strong>
+          位于江苏省泰州市姜堰区，提供工业炉单机、配套件、连续热处理生产线、节能改造与售后服务。
+          初步询价请准备工件材质与尺寸、装炉量、工艺温度和曲线、能源、产能节拍及交付地点。
+        </div>
+
         <div className="mt-7 grid gap-4 md:grid-cols-2 xl:grid-cols-5">
           {GEO_DECISION_LINKS.map((item, index) => (
             <Link

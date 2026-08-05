@@ -144,7 +144,7 @@ function LeadTextInput({
       <span className="text-[13px] font-normal leading-none text-[#4a5160]">
         {label}
         {required ? (
-          <span className="ml-1 text-[#c51624]" aria-hidden="true">
+          <span className="ml-1" aria-hidden="true">
             *
           </span>
         ) : null}
@@ -163,7 +163,7 @@ function LeadTextInput({
         placeholder={placeholder}
       />
       {invalid && errorId && errorMessage ? (
-        <span id={errorId} role="alert" className="mt-2 block text-[13px] leading-[1.5] text-[#c51624]">
+        <span id={errorId} role="alert" className="mt-2 block text-[13px] leading-[1.5]">
           {errorMessage}
         </span>
       ) : null}
@@ -193,7 +193,7 @@ function LeadTextarea({
       <span className="text-[13px] font-normal leading-none text-[#4a5160]">
         {label}
         {required ? (
-          <span className="ml-1 text-[#c51624]" aria-hidden="true">
+          <span className="ml-1" aria-hidden="true">
             *
           </span>
         ) : null}
@@ -255,7 +255,7 @@ type ProductQuoteScrollButtonProps = {
 export function ProductQuoteScrollButton({
   locale = 'zh',
   label,
-  className = 'flex h-11 w-full items-center justify-center rounded-[4px] bg-[#c51624] text-[15px] font-medium text-white transition hover:bg-[#a90f1b]',
+  className = 'flex h-11 w-full items-center justify-center rounded-[4px] cta-primary text-[15px] font-medium text-white transition',
   updateHash = false,
   variant = 'card',
   anchorId = 'product-lead-form',
@@ -381,7 +381,7 @@ export function ProductLeadForm({
             <ul className="space-y-[10px]">
               {leadBullets?.map((item) => (
                 <li key={item} className="flex items-center gap-[10px] text-[13px] font-normal leading-[1.5] text-white/90">
-                  <span className="flex h-[16px] w-[16px] shrink-0 items-center justify-center rounded-full border border-[#c51624] text-[#c51624]">
+                  <span className="flex h-[16px] w-[16px] shrink-0 items-center justify-center rounded-full cta-secondary">
                     <svg className="h-[10px] w-[10px]" viewBox="0 0 10 10" fill="none" aria-hidden="true">
                       <path d="M2 5.2 4.1 7.1 8 2.6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                     </svg>
@@ -408,7 +408,7 @@ export function ProductLeadForm({
           <div className="w-full">
             {!hasLeadSidebar ? (
               <div className="mb-6">
-                <p className="mb-2 text-[14px] font-semibold tracking-[0.18em] text-[#c51624]">{copy.onlineMessage}</p>
+                <p className="mb-2 text-[14px] font-semibold tracking-[0.18em]">{copy.onlineMessage}</p>
                 <h2 className="text-[28px] font-semibold leading-[1.28] text-[#101828] sm:text-[34px]">{resolvedTitle}</h2>
                 <p className="mt-4 max-w-[860px] text-[15px] leading-[1.85] text-[#667085]">{resolvedDescription}</p>
               </div>
@@ -462,7 +462,7 @@ export function ProductLeadForm({
                   ) : null}
                 </div>
                 <button
-                  className="h-[44px] w-full rounded-[4px] bg-[#c51624] text-[15px] font-medium text-white transition hover:bg-[#a90f1b] disabled:cursor-not-allowed disabled:opacity-60 sm:w-[220px] sm:shrink-0"
+                  className="h-[44px] w-full rounded-[4px] cta-primary text-[15px] font-medium text-white transition disabled:cursor-not-allowed disabled:opacity-60 sm:w-[220px] sm:shrink-0"
                   type="submit"
                   disabled={isSubmitting}
                 >
@@ -490,7 +490,7 @@ export function ProductLeadForm({
             <button
               type="button"
               onClick={() => setShowSuccess(false)}
-              className="mt-6 h-[40px] min-w-[120px] rounded-[4px] bg-[#c51624] px-6 text-[14px] font-medium text-white transition hover:bg-[#a90f1b]"
+              className="mt-6 h-[40px] min-w-[120px] rounded-[4px] cta-primary px-6 text-[14px] font-medium text-white transition"
             >
               {copy.successButton}
             </button>

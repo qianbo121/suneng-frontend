@@ -674,7 +674,7 @@ export default async function FurnaceRenovationOverhaulPage({ params }: PageProp
             <div className="mt-9 flex flex-wrap gap-4">
               <a
                 href="#contact-form"
-                className="inline-flex min-h-[46px] items-center justify-center rounded-[4px] bg-[#c51624] px-6 text-[15px] font-semibold text-white transition hover:bg-[#a90f1b]"
+                className="inline-flex min-h-[46px] items-center justify-center rounded-[4px] cta-primary px-6 text-[15px] font-semibold text-white transition"
               >
                 获取报价方案
               </a>
@@ -694,7 +694,7 @@ export default async function FurnaceRenovationOverhaulPage({ params }: PageProp
           苏能工业炉改造与大修服务覆盖工业炉全生命周期，围绕工业炉节能改造、整炉大修、复产搬迁三类主线需求展开。
         </p>
         <div className="mt-8 rounded-[8px] border border-[#f3c5ca] bg-[#fff8f8] p-6 lg:p-7">
-          <p className="text-[13px] font-semibold tracking-[0.12em] text-[#c51624]">给采购方的直接答案</p>
+          <p className="text-[13px] font-semibold tracking-[0.12em]">给采购方的直接答案</p>
           <div className="mt-5 grid gap-5 lg:grid-cols-3">
             {buyerDecisionAnswers.map((item) => (
               <article key={item.question} className="rounded-[8px] border border-[#e5d7d9] bg-white p-5">
@@ -708,7 +708,7 @@ export default async function FurnaceRenovationOverhaulPage({ params }: PageProp
         <div className="mt-8 grid gap-5 lg:grid-cols-3">
           {serviceScope.map((group) => (
             <article key={group.title} className="rounded-[8px] border border-[#e1e7f0] bg-[#fbfcfe] p-6">
-              <p className="text-[12px] font-semibold uppercase tracking-[0.2em] text-[#c51624]">{group.eyebrow}</p>
+              <p className="text-[12px] font-semibold uppercase tracking-[0.2em]">{group.eyebrow}</p>
               <h3 className="mt-2 text-[21px] font-semibold leading-[1.36] text-[#101828]">{group.title}</h3>
               <BulletList items={group.items} />
             </article>
@@ -780,7 +780,7 @@ export default async function FurnaceRenovationOverhaulPage({ params }: PageProp
         <div className="mt-8 grid gap-4">
           {evaluationSteps.map((step, index) => (
             <article key={step.title} className="grid gap-5 rounded-[8px] border border-[#e1e7f0] bg-white p-5 shadow-[0_10px_24px_rgba(15,35,75,0.04)] md:grid-cols-[72px_1fr]">
-              <div className="flex h-14 w-14 items-center justify-center rounded-full bg-[#c51624] text-[20px] font-semibold text-white">
+              <div className="flex h-14 w-14 items-center justify-center rounded-full cta-primary text-[20px] font-semibold text-white">
                 {index + 1}
               </div>
               <div>
@@ -826,14 +826,14 @@ export default async function FurnaceRenovationOverhaulPage({ params }: PageProp
                 href={item.href}
                 className="rounded-[8px] border border-[#e1e7f0] bg-white p-5 transition hover:border-[#c51624] hover:shadow-[0_10px_24px_rgba(15,35,75,0.06)]"
               >
-                <span className="text-[16px] font-semibold leading-[1.5] text-[#c51624]">{item.title}</span>
+                <span className="text-[16px] font-semibold leading-[1.5]">{item.title}</span>
                 <span className="mt-2 block text-[14px] leading-[1.8] text-[#475467]">{item.text}</span>
               </a>
             ))}
           </div>
           <div className="mt-5 rounded-[8px] bg-white p-5 text-[14px] leading-[1.8] text-[#667085]">
             本文已在
-            <a href="#daxiu-or-new" className="font-semibold text-[#c51624] underline underline-offset-4">
+            <a href="#daxiu-or-new" className="font-semibold underline underline-offset-4">
               “老旧热处理炉是大修好，还是直接买新的？”
             </a>
             模块中提供基础判断。如需进一步评估，可提交设备照片、炉型、炉膛尺寸、工件信息和当前问题，由苏能技术人员做初步判断。
@@ -858,7 +858,7 @@ export default async function FurnaceRenovationOverhaulPage({ params }: PageProp
               {caseItem.link ? (
                 <a
                   href={caseItem.link}
-                  className="mt-5 inline-flex min-h-[42px] items-center justify-center rounded-[4px] bg-[#c51624] px-5 text-[14px] font-semibold text-white transition hover:bg-[#a90f1b]"
+                  className="mt-5 inline-flex min-h-[42px] items-center justify-center rounded-[4px] cta-primary px-5 text-[14px] font-semibold text-white transition"
                 >
                   查看完整案例 →
                 </a>
@@ -940,13 +940,13 @@ export default async function FurnaceRenovationOverhaulPage({ params }: PageProp
             <div className="mt-7 flex flex-wrap gap-3">
               <a
                 href="#contact-form"
-                className="inline-flex min-h-[44px] items-center justify-center rounded-[4px] border border-[#c51624] px-5 text-[14px] font-semibold text-[#c51624] transition hover:bg-[#fff5f5]"
+                className="inline-flex min-h-[44px] items-center justify-center rounded-[4px] cta-secondary px-5 text-[14px] font-semibold transition"
               >
                 获取报价方案
               </a>
               <a
                 href={contactPath}
-                className="inline-flex min-h-[44px] items-center justify-center rounded-[4px] border border-[#c51624] px-5 text-[14px] font-semibold text-[#c51624] transition hover:bg-[#fff5f5]"
+                className="inline-flex min-h-[44px] items-center justify-center rounded-[4px] cta-secondary px-5 text-[14px] font-semibold transition"
               >
                 联系苏能工业炉
               </a>

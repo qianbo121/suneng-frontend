@@ -26,6 +26,7 @@ import { buildProductImageAlt } from '@/lib/seo';
 import { getFaqJsonLd, getProductDetailJsonLd } from '@/lib/seo/jsonld';
 import { buildMetadata } from '@/lib/seo/metadata';
 import { PRODUCT_DETAIL_SEO } from '@/lib/seo/page-data';
+import { getEnglishProductMetadata } from '@/lib/seo/product-metadata-en';
 import { siteSettings } from '@/mock/siteSettings';
 import { Locale } from '@/types/site';
 
@@ -94,13 +95,14 @@ export async function generateMetadata({ params }: ProductDetailPageProps): Prom
 
   const seo = PRODUCT_DETAIL_SEO[slug];
   const enDetail = getProductDetailEn(slug);
+  const enMetadata = getEnglishProductMetadata(slug);
   const title =
     currentLocale === 'en'
-      ? enDetail?.title || product.name.en
+      ? enMetadata?.title || enDetail?.title || product.name.en
       : seo?.title || product.detail?.title || product.name[currentLocale];
   const description =
     currentLocale === 'en'
-      ? enDetail?.summary || product.summary.en
+      ? enMetadata?.description || enDetail?.summary || product.summary.en
       : seo?.description || product.detail?.summary || product.summary[currentLocale];
   const keywords =
     currentLocale === 'en'
@@ -278,7 +280,7 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
                       label={currentLocale === 'en' ? undefined : item.title}
                       updateHash
                       variant="hero"
-                      className="inline-flex min-h-[44px] items-center justify-center rounded-[4px] bg-[#c51624] px-5 text-[14px] font-semibold text-white transition hover:bg-[#a90f1b]"
+                      className="inline-flex min-h-[44px] items-center justify-center rounded-[4px] cta-primary px-5 text-[14px] font-semibold text-white transition"
                     />
                   ) : (
                     <a
@@ -286,8 +288,8 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
                       href={item.href}
                       className={
                         index === 0
-                          ? 'inline-flex min-h-[44px] items-center justify-center rounded-[4px] bg-[#c51624] px-5 text-[14px] font-semibold text-white transition hover:bg-[#a90f1b]'
-                          : 'inline-flex min-h-[44px] items-center justify-center rounded-[4px] border border-[#c51624] bg-white px-5 text-[14px] font-semibold text-[#c51624] transition hover:bg-[#fff5f5]'
+                          ? 'inline-flex min-h-[44px] items-center justify-center rounded-[4px] cta-primary px-5 text-[14px] font-semibold text-white transition'
+                          : 'inline-flex min-h-[44px] items-center justify-center rounded-[4px] cta-secondary bg-white px-5 text-[14px] font-semibold transition'
                       }
                     >
                       {item.title}
@@ -317,7 +319,7 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
             </div>
             <ProductQuoteScrollButton
               locale={currentLocale}
-              className="flex h-11 w-full items-center justify-center rounded-[4px] border border-[#c51624] bg-white text-[15px] font-medium text-[#c51624] transition hover:bg-[#fff5f5]"
+              className="flex h-11 w-full items-center justify-center rounded-[4px] cta-secondary bg-white text-[15px] font-medium transition"
             />
             <div className="flex items-center gap-[10px]">
               <span className="flex h-[32px] w-[32px] shrink-0 items-center justify-center rounded-full bg-[#fff1f2] text-[#e60012]">
@@ -365,7 +367,7 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
                 <ul className="mt-4 space-y-3 text-[14px] leading-[1.8] text-[#475467]">
                   {trolleyFitBoundaries.suitable.map((item) => (
                     <li key={item} className="flex gap-3">
-                      <span className="mt-[0.72em] h-1.5 w-1.5 shrink-0 rounded-full bg-[#c51624]" />
+                      <span className="mt-[0.72em] h-1.5 w-1.5 shrink-0 rounded-full cta-primary" />
                       <span>{item}</span>
                     </li>
                   ))}
@@ -376,7 +378,7 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
                 <ul className="mt-4 space-y-3 text-[14px] leading-[1.8] text-[#475467]">
                   {trolleyFitBoundaries.unsuitable.map((item) => (
                     <li key={item} className="flex gap-3">
-                      <span className="mt-[0.72em] h-1.5 w-1.5 shrink-0 rounded-full bg-[#c51624]" />
+                      <span className="mt-[0.72em] h-1.5 w-1.5 shrink-0 rounded-full cta-primary" />
                       <span>{item}</span>
                     </li>
                   ))}
@@ -450,7 +452,7 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
           {detail.parameterLink && parameterLinkHref ? (
             <Link
               href={parameterLinkHref}
-              className="mt-4 inline-flex min-h-[42px] items-center justify-center rounded-[4px] border border-[#c51624] px-5 text-[14px] font-semibold text-[#c51624] transition hover:bg-[#fff5f5]"
+              className="mt-4 inline-flex min-h-[42px] items-center justify-center rounded-[4px] cta-secondary px-5 text-[14px] font-semibold transition"
             >
               {detail.parameterLink.title}
             </Link>
@@ -464,7 +466,7 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
               <div className="mt-4 flex flex-wrap gap-3">
                 <Link
                   href={quoteParamsPath}
-                  className="inline-flex min-h-[40px] items-center justify-center rounded-[4px] border border-[#c51624] bg-white px-4 text-[13px] font-semibold text-[#c51624] transition hover:bg-[#fff5f5]"
+                  className="inline-flex min-h-[40px] items-center justify-center rounded-[4px] cta-secondary bg-white px-4 text-[13px] font-semibold transition"
                 >
                   查看报价需要哪些参数
                 </Link>
