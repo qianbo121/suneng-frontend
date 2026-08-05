@@ -46,13 +46,9 @@ jobs:
       - name: Test (all packages)
         run: pnpm -r test
 
-      - name: Install Playwright Chromium
-        run: pnpm --dir frontend exec playwright install --with-deps chromium
-
       - name: Visual regression
         env:
           CI: true
-          PLAYWRIGHT_BROWSER_CHANNEL: chromium
         run: pnpm --dir frontend test:visual
 
       - name: Build backend

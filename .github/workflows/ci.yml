@@ -31,12 +31,9 @@ jobs:
         run: pnpm --dir frontend lint
       - name: Test
         run: pnpm --dir frontend test
-      - name: Install Playwright Chromium
-        run: pnpm --dir frontend exec playwright install --with-deps chromium
       - name: Visual regression
         env:
           CI: true
-          PLAYWRIGHT_BROWSER_CHANNEL: chromium
         run: pnpm --dir frontend test:visual
       - name: Build (also type-checks via next build)
         env:
