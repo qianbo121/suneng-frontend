@@ -39,5 +39,5 @@ export default defineConfig({
         reuseExistingServer: !process.env.CI,
         timeout: 120_000,
       },
-  projects: [{ name: 'chrome' }],
+  projects: [{ name: process.env.VISUAL_PROJECT || 'chrome' }],
 });

@@ -52,6 +52,7 @@ jobs:
       - name: Visual regression
         env:
           CI: true
+          VISUAL_PROJECT: linux-chrome
         run: pnpm --dir frontend test:visual
 
       - name: Build backend
