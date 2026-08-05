@@ -217,6 +217,27 @@ if [ "$factory_healthy" -ne 1 ]; then
   exit 1
 fi
 
+echo "Waiting for Chengwen route..."
+chengwen_healthy=0
+for attempt in {1..15}; do
+  chengwen_login_status="$(curl -sS -o /dev/null -w '%{http_code}' https://chengwen.jssngyl.cn/login || true)"
+
+  if [ "$chengwen_login_status" = "200" ]; then
+    echo "Chengwen route check passed."
+    chengwen_healthy=1
+    break
+  fi
+
+  if [ "$attempt" -lt 15 ]; then
+    sleep 2
+  fi
+done
+
+if [ "$chengwen_healthy" -ne 1 ]; then
+  echo "Health check failed: Chengwen route (login=$chengwen_login_status)"
+  exit 1
+fi
+
 echo "Checking public domains and legacy work-scan redirects..."
 www_status="$(curl -sS -o /dev/null -w '%{http_code}' https://www.jssngyl.cn/zh || true)"
 admin_status="$(curl -sS -o /dev/null -w '%{http_code}' https://admin.jssngyl.cn/login || true)"
