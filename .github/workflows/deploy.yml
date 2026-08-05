@@ -10,6 +10,8 @@ jobs:
   build:
     name: Build Applications
     runs-on: ubuntu-latest
+    outputs:
+      deploy_skip_build: ${{ steps.image_changes.outputs.skip_build }}
 
     steps:
       - name: Checkout
@@ -17,6 +19,20 @@ jobs:
         with:
           # The frontend test suite reads HEAD^ for lastmod governance.
           fetch-depth: 2
+
+      - name: Detect production image changes
+        id: image_changes
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+        run: |
+          if [ "$EVENT_NAME" = "workflow_dispatch" ]; then
+            skip_build=0
+          elif scripts/requires-image-build.sh HEAD^ HEAD; then
+            skip_build=0
+          else
+            skip_build=1
+          fi
+          echo "skip_build=$skip_build" >> "$GITHUB_OUTPUT"
 
       - name: Setup Node.js
         uses: actions/setup-node@v7
@@ -156,7 +172,7 @@ jobs:
             tmp_dir="$(mktemp -d)"
             trap 'rm -rf "$tmp_dir"' EXIT
             tar -xzf deploy-source.tgz -C "$tmp_dir"
-            rsync -a --delete \
+            rsync -a --no-owner --no-group --delete \
               --exclude='.git/' \
               --exclude='.env' \
               --exclude='.env.production' \
@@ -170,4 +186,7 @@ jobs:
             # `down`, and health-checks. It aborts if .env.production is missing, so a
             # box without real prod secrets fails fast instead of booting with
             # JWT_SECRET=change-me (which the configuration guard now rejects).
-            DEPLOY_EXPECTED_COMMIT=${{ github.sha }} DEPLOY_SKIP_PULL=1 bash deploy.sh
+            DEPLOY_EXPECTED_COMMIT=${{ github.sha }} \
+              DEPLOY_SKIP_PULL=1 \
+              DEPLOY_SKIP_BUILD=${{ needs.build.outputs.deploy_skip_build }} \
+              bash deploy.sh

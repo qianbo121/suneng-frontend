@@ -11,6 +11,7 @@ const productionCompose = readFileSync(
   new URL('../../../../docker-compose.prod.yml', import.meta.url),
   'utf8',
 );
+const dockerIgnore = readFileSync(new URL('../../../../.dockerignore', import.meta.url), 'utf8');
 
 describe('production Docker dependency context', () => {
   it.each(dockerfiles)('%s provides Prisma schema before workspace install', (relativePath) => {
@@ -31,5 +32,13 @@ describe('production Docker dependency context', () => {
     expect(backendDockerfile).toContain(`CMD ["node", "${runtimeEntry}"]`);
     expect(productionCompose).toContain(`command: node ${runtimeEntry}`);
     expect(productionCompose).not.toContain('command: node dist/src/main.js');
+  });
+
+  it('keeps secrets and release-only files out of Docker build contexts', () => {
+    expect(dockerIgnore).toMatch(/^\.env\.\*$/m);
+    expect(dockerIgnore).toMatch(/^\*\*\/\.env\.\*$/m);
+    expect(dockerIgnore).toMatch(/^DEPLOY_COMMIT$/m);
+    expect(dockerIgnore).toMatch(/^\.github$/m);
+    expect(dockerIgnore).toMatch(/^\*\*\/\*\.spec\.ts$/m);
   });
 });
