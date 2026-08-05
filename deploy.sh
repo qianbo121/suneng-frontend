@@ -5,6 +5,25 @@ COMPOSE_FILE="docker-compose.prod.yml"
 ENV_FILE=".env.production"
 DEPLOY_BRANCH="${DEPLOY_BRANCH:-main}"
 RELEASE_MARKER="DEPLOY_COMMIT"
+DEPLOY_LOCK_FILE="${DEPLOY_LOCK_FILE:-/var/lock/corp-site-deploy.lock}"
+
+if ! command -v flock >/dev/null 2>&1; then
+  echo "Missing flock; install util-linux before deploying."
+  exit 1
+fi
+
+# CI takes this lock before unpacking/rsyncing the release so the working tree
+# cannot change underneath a running Docker build. Direct/manual invocations
+# take the same lock here.
+if [ "${DEPLOY_LOCK_HELD:-0}" != "1" ]; then
+  exec 9>"$DEPLOY_LOCK_FILE"
+  echo "Waiting for production deployment lock: $DEPLOY_LOCK_FILE"
+  if ! flock -w "${DEPLOY_LOCK_TIMEOUT_SECONDS:-1800}" 9; then
+    echo "Timed out waiting for the production deployment lock: $DEPLOY_LOCK_FILE"
+    exit 75
+  fi
+  export DEPLOY_LOCK_HELD=1
+fi
 
 if [ -f ".DO_NOT_DEPLOY" ]; then
   echo "Refusing deployment: this checkout is explicitly marked as a non-deployable worktree."
