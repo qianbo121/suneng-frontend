@@ -111,6 +111,11 @@ jobs:
             --exclude='frontend/.next*' \
             --exclude='frontend/.capture' \
             --exclude='frontend/.captures' \
+            --exclude='frontend/docs' \
+            --exclude='frontend/reference' \
+            --exclude='frontend/tests' \
+            --exclude='frontend/test-results' \
+            --exclude='docs' \
             --exclude='admin/dist' \
             --exclude='backend/dist' \
             -czf "$archive" \
@@ -144,6 +149,7 @@ jobs:
               --exclude='.env' \
               --exclude='.env.production' \
               --exclude='deploy-source.tgz' \
+              --exclude='backups/' \
               "$tmp_dir"/ ./
             rm -f deploy-source.tgz
             # Delegate to deploy.sh (the canonical prod pipeline): it builds
