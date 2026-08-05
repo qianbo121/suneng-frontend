@@ -1,10 +1,10 @@
-import { ReactNode, Suspense, lazy } from 'react';
-import { Navigate, createBrowserRouter } from 'react-router-dom';
+import { ReactNode, Suspense, lazy, useEffect } from 'react';
 
-import { GuestOnlyRoute } from '@/components/GuestOnlyRoute';
-import { ProtectedRoute } from '@/components/ProtectedRoute';
-import { RouteLoading } from '@/components/RouteLoading';
 import { AdminLayout } from '@/app/layouts/AdminLayout';
+import { AdminRouter, useAdminLocation, useAdminNavigate } from '@/app/router/navigation';
+import { resolveAdminRoute } from '@/app/router/route-resolution';
+import { RouteLoading } from '@/components/RouteLoading';
+import { useAuth } from '@/hooks/use-auth';
 
 const LoginPage = lazy(() =>
   import('@/pages/auth/LoginPage').then((module) => ({ default: module.LoginPage })),
@@ -23,65 +23,47 @@ const ChangePasswordPage = lazy(() =>
   })),
 );
 
-function withSuspense(element: ReactNode) {
+export { AdminRouter };
+
+function Redirect({ to, state }: { to: string; state?: unknown }) {
+  const navigate = useAdminNavigate();
+  useEffect(() => navigate(to, { replace: true, state }), [navigate, state, to]);
+  return <RouteLoading />;
+}
+
+function suspended(element: ReactNode) {
   return <Suspense fallback={<RouteLoading />}>{element}</Suspense>;
 }
 
-export const router = createBrowserRouter(
-  [
-    {
-      element: <GuestOnlyRoute />,
-      children: [
-        {
-          path: '/login',
-          element: withSuspense(<LoginPage />),
-        },
-      ],
-    },
-    {
-      element: <ProtectedRoute />,
-      children: [
-        {
-          path: '/',
-          element: <AdminLayout />,
-          children: [
-            {
-              index: true,
-              element: <Navigate to="/news" replace />,
-            },
-            {
-              path: 'news',
-              element: withSuspense(<NewsListPage />),
-            },
-            {
-              path: 'news/new',
-              element: <Navigate to="/news" replace />,
-            },
-            {
-              path: 'news/:id/edit',
-              element: <Navigate to="/news" replace />,
-            },
-            {
-              path: 'custom-requirements',
-              element: withSuspense(<CustomRequirementPage />),
-            },
-            {
-              path: 'profile/password',
-              element: withSuspense(<ChangePasswordPage />),
-            },
-          ],
-        },
-      ],
-    },
-    {
-      path: '*',
-      element: <Navigate to="/news" replace />,
-    },
-  ],
-  {
-    basename:
-      import.meta.env.BASE_URL && import.meta.env.BASE_URL !== '/'
-        ? import.meta.env.BASE_URL.replace(/\/$/, '')
-        : undefined,
-  },
-);
+export function AdminRoutes() {
+  const { isAuthenticated, isInitializing } = useAuth();
+  const location = useAdminLocation();
+  const decision = resolveAdminRoute({
+    pathname: location.pathname,
+    search: location.search,
+    isAuthenticated,
+    isInitializing,
+  });
+
+  if (decision.kind === 'loading') {
+    return <RouteLoading />;
+  }
+
+  if (decision.kind === 'redirect') {
+    return <Redirect to={decision.to} state={decision.state} />;
+  }
+
+  let page: ReactNode;
+  if (decision.page === 'login') {
+    return suspended(<LoginPage />);
+  }
+  if (decision.page === 'news') {
+    page = <NewsListPage />;
+  } else if (decision.page === 'custom-requirements') {
+    page = <CustomRequirementPage />;
+  } else {
+    page = <ChangePasswordPage />;
+  }
+
+  return <AdminLayout>{suspended(page)}</AdminLayout>;
+}

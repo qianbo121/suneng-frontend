@@ -68,4 +68,30 @@ describe('ensureNotSpam', () => {
       windowStartAt: now,
     });
   });
+
+  it('evicts expired clients so the in-memory fallback stays bounded', () => {
+    ensureNotSpam('expired-client', spamMap, {
+      now: () => now,
+      windowMs: 1_000,
+    });
+    now += 1_001;
+
+    ensureNotSpam('active-client', spamMap, {
+      now: () => now,
+      windowMs: 1_000,
+    });
+
+    expect(spamMap.has('expired-client')).toBe(false);
+    expect(spamMap.has('active-client')).toBe(true);
+  });
+
+  it('evicts the oldest client when the tracked-client cap is reached', () => {
+    ensureNotSpam('oldest', spamMap, { now: () => now, maxTrackedClients: 2 });
+    now += 1;
+    ensureNotSpam('newer', spamMap, { now: () => now, maxTrackedClients: 2 });
+    now += 1;
+    ensureNotSpam('newest', spamMap, { now: () => now, maxTrackedClients: 2 });
+
+    expect([...spamMap.keys()]).toEqual(['newer', 'newest']);
+  });
 });

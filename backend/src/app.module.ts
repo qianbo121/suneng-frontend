@@ -15,7 +15,6 @@ import { NewsCategoryModule } from '@/modules/news-category/news-category.module
 import { NewsModule } from '@/modules/news/news.module';
 import { PartnerModule } from '@/modules/partner/partner.module';
 import { AboutModule } from '@/modules/about/about.module';
-import { ContactMessageModule } from '@/modules/contact-message/contact-message.module';
 import { CustomRequirementModule } from '@/modules/custom-requirement/custom-requirement.module';
 import { DashboardModule } from '@/modules/dashboard/dashboard.module';
 import { LeadEventModule } from '@/modules/lead-event/lead-event.module';
@@ -39,7 +38,6 @@ import configuration from '@/config/configuration';
     NewsModule,
     PartnerModule,
     AboutModule,
-    ContactMessageModule,
     CustomRequirementModule,
     LeadEventModule,
     DashboardModule,

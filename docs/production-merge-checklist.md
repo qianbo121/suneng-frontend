@@ -1,10 +1,11 @@
 # Production Merge Checklist
 
-在 `chore/tech-debt-remediation` 合并 `main` 前执行。
+在 `geo/p0-p1-p2-20260729` 合并 `main` 前执行。`main` 的 push 会触发自动部署，禁止绕过本清单直推。
 
 ## 必须通过
 
 - [ ] GitHub branch protection 已启用，至少要求 PR review 与 CI 通过。
+- [ ] 公开仓库中的历史管理员密码哈希已在生产密码轮换后完成历史清理。
 - [ ] 服务器 `$DEPLOY_PATH/.env.production` 存在（以 GitHub Secret `DEPLOY_PATH` 或实际生产目录为准）。
 - [ ] `DB_PASSWORD`、`JWT_SECRET`、`DOMAIN`、`ADMIN_DOMAIN` 不是占位值。
 - [ ] `docker compose --env-file .env.production -f docker-compose.prod.yml exec -T nginx nginx -t` 通过。
@@ -27,6 +28,22 @@ ls -lh /data/backup
 ```bash
 docker compose --env-file .env.production -f docker-compose.prod.yml ps
 ```
+
+- [ ] `FEISHU_INQUIRY_WEBHOOK_URL` 已配置，并完成一条不含敏感测试内容的真实通知验收。
+- [ ] `pnpm test:visual` 的 15 张基线全部通过。
+- [ ] `prisma migrate deploy` 已执行，`News.contentUpdatedAt` 已存在。
+- [ ] 后台登录、退出、刷新、浏览器前进/后退和未知路由回退均通过。
+
+## 2026-08-05 发布前只读核验
+
+- 正式工作区：`geo/p0-p1-p2-20260729`，比 `origin/main` 领先 52 个提交；当前改动尚未提交。
+- 生产目录：`/opt/website`；`.env.production` 存在，必需变量和飞书询盘 Webhook 均已配置（未打印值）。
+- 生产容器：frontend、backend、admin、postgres 均 healthy；nginx running；`nginx -t` 通过。
+- 生产管理员：仅 `admin` 一个启用的 `super_admin`；密码尚待本轮轮换。
+- 最新备份：2026-08-05 02:00 的数据库与上传文件备份均存在；每日 02:00 cron 正常。
+- 生产磁盘：Docker 未使用构建缓存清理后由 90% 降至 56%，约 17 GB 可用；未删除运行镜像、容器、数据库或备份。
+- GitHub：本机 Git HTTPS 凭据可 dry-run push，但 `gh` token 已失效，branch protection 尚未验证。
+- 发布标记：生产目录当前没有 `DEPLOY_COMMIT`；本轮发布后必须由 CI 写入完整 40 位 commit。
 
 ## 2026-06-15 只读检查结果
 

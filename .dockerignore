@@ -1,0 +1,11 @@
+**/node_modules
+frontend/tests/visual/__screenshots__
+**/.next*
+**/dist
+.git
+.git-backups-standalone
+.DS_Store
+*.log
+*.sql
+!.dockerignore
+!backend/prisma/migrations/**/*.sql

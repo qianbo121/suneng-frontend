@@ -3,6 +3,14 @@ set -euo pipefail
 
 COMPOSE_FILE="docker-compose.prod.yml"
 ENV_FILE=".env.production"
+DEPLOY_BRANCH="${DEPLOY_BRANCH:-main}"
+RELEASE_MARKER="DEPLOY_COMMIT"
+
+if [ -f ".DO_NOT_DEPLOY" ]; then
+  echo "Refusing deployment: this checkout is explicitly marked as a non-deployable worktree."
+  cat .DO_NOT_DEPLOY
+  exit 64
+fi
 
 if [ ! -f "$ENV_FILE" ]; then
   echo "Missing $ENV_FILE. Copy .env.production.example and fill production values first."
@@ -15,10 +23,20 @@ pull_latest() {
     return 0
   fi
 
+  if [ "$(git branch --show-current)" != "$DEPLOY_BRANCH" ]; then
+    echo "Refusing deployment: expected branch $DEPLOY_BRANCH, current branch is $(git branch --show-current)."
+    exit 64
+  fi
+
+  if [ -n "$(git status --porcelain)" ]; then
+    echo 'Refusing deployment: the deployment checkout has uncommitted changes.'
+    exit 64
+  fi
+
   local attempt=1
   local max_attempts=3
 
-  until git pull --ff-only origin main; do
+  until git pull --ff-only origin "$DEPLOY_BRANCH"; do
     if [ "$attempt" -ge "$max_attempts" ]; then
       echo "git pull failed after $attempt attempts."
       return 1
@@ -31,6 +49,29 @@ pull_latest() {
 }
 
 pull_latest
+
+if [ "${DEPLOY_SKIP_PULL:-0}" = "1" ]; then
+  if [ ! -s "$RELEASE_MARKER" ]; then
+    echo "Refusing deployment: CI source bundle is missing $RELEASE_MARKER."
+    exit 64
+  fi
+  release_commit="$(tr -d '[:space:]' < "$RELEASE_MARKER")"
+else
+  release_commit="$(git rev-parse HEAD)"
+fi
+
+if [[ ! "$release_commit" =~ ^[0-9a-f]{40}$ ]]; then
+  echo "Refusing deployment: invalid release commit marker: $release_commit"
+  exit 64
+fi
+
+if [ -n "${DEPLOY_EXPECTED_COMMIT:-}" ] && [ "$release_commit" != "$DEPLOY_EXPECTED_COMMIT" ]; then
+  echo "Refusing deployment: release marker does not match DEPLOY_EXPECTED_COMMIT."
+  exit 64
+fi
+
+export DEPLOY_COMMIT="$release_commit"
+echo "Deploying release $DEPLOY_COMMIT from canonical branch $DEPLOY_BRANCH."
 
 export DOCKER_BUILDKIT="${DOCKER_BUILDKIT:-1}"
 
@@ -65,6 +106,26 @@ if [ "$root_redirect_rule_count" -ne 1 ]; then
   exit 1
 fi
 
+required_solution_pages=(
+  continuous-heat-treatment-line
+  jiangsu-gongye-lu-changjia
+  rechuli-lu-changjia
+  rechuli-lu-dian-gai-ran-yure-huishou
+  rechuli-lu-gaizao-fengxian-zhouqi
+  rechuli-lu-kongzhi-xitong-shengji
+  rechuli-lu-luchen-fanxin
+  rechuli-lu-tingchan-chongqi-banqian-fuchan
+  rechuli-lu-wendu-bujun-zhenggai
+)
+
+for solution_slug in "${required_solution_pages[@]}"; do
+  solution_page="frontend/src/app/[locale]/solutions/${solution_slug}/page.tsx"
+  if [ ! -f "$solution_page" ]; then
+    echo "Refusing deployment: required solution route is missing: $solution_page"
+    exit 64
+  fi
+done
+
 for required_container in furnace-web furnace-api; do
   if ! docker inspect "$required_container" >/dev/null 2>&1; then
     echo "Refusing deployment: required smart-factory container $required_container is missing."
@@ -81,7 +142,8 @@ docker compose --env-file "$ENV_FILE" -f "$COMPOSE_FILE" build
 # failed deploy is recoverable (backup.sh writes to /data/backup, keeps 7 days).
 bash backup.sh
 
-docker compose --env-file "$ENV_FILE" -f "$COMPOSE_FILE" run --rm backend npx prisma migrate deploy
+docker compose --env-file "$ENV_FILE" -f "$COMPOSE_FILE" run --rm backend \
+  ./backend/node_modules/.bin/prisma migrate deploy --schema backend/prisma/schema.prisma
 docker compose --env-file "$ENV_FILE" -f "$COMPOSE_FILE" up -d
 
 # A bind-mounted single file can keep pointing at the pre-pull inode after Git
@@ -178,4 +240,4 @@ for source in \
   fi
 done
 
-echo "Deployment completed."
+echo "Deployment completed: $DEPLOY_COMMIT"

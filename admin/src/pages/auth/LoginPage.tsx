@@ -1,8 +1,8 @@
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import { Alert, App, Button, Card, Form, Input, Typography } from 'antd';
 import { useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
 
+import { useAdminLocation, useAdminNavigate } from '@/app/router/navigation';
 import { useAuth } from '@/hooks/use-auth';
 import { usePageTitle } from '@/hooks/usePageTitle';
 import { LoginPayload } from '@/types/auth';
@@ -15,12 +15,12 @@ export function LoginPage() {
   usePageTitle('后台登录');
 
   const { message } = App.useApp();
-  const navigate = useNavigate();
-  const location = useLocation();
+  const navigate = useAdminNavigate();
+  const location = useAdminLocation();
   const { login } = useAuth();
   const [submitting, setSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
-  const redirectTo = (location.state as LocationState | null)?.from || '/dashboard';
+  const redirectTo = (location.state as LocationState | null)?.from || '/news';
 
   const handleFinish = async (values: LoginPayload) => {
     setSubmitting(true);

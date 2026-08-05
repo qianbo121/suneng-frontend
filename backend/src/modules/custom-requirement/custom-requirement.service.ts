@@ -1,10 +1,11 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { CustomRequirementStatus, Prisma } from '@prisma/client';
 
 import { buildPagination } from '@/common/utils/pagination';
 import { ensureNotSpam, SpamThrottleState } from '@/common/utils/spam-throttle';
 import { CreateCustomRequirementDto } from '@/modules/custom-requirement/dto/create-custom-requirement.dto';
 import { CustomRequirementListQueryDto } from '@/modules/custom-requirement/dto/custom-requirement-list-query.dto';
+import { InquiryNotificationService } from '@/modules/custom-requirement/inquiry-notification.service';
 import { PrismaService } from '@/prisma/prisma.service';
 
 function normalizeEmpty(value?: string) {
@@ -14,14 +15,18 @@ function normalizeEmpty(value?: string) {
 
 @Injectable()
 export class CustomRequirementService {
+  private readonly logger = new Logger(CustomRequirementService.name);
   private readonly spamMap = new Map<string, SpamThrottleState>();
 
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly inquiryNotification: InquiryNotificationService,
+  ) {}
 
-  createPublic(dto: CreateCustomRequirementDto, clientKey: string) {
+  async createPublic(dto: CreateCustomRequirementDto, clientKey: string) {
     ensureNotSpam(clientKey, this.spamMap);
 
-    return this.prisma.customRequirement.create({
+    const inquiry = await this.prisma.customRequirement.create({
       data: {
         name: normalizeEmpty(dto.name),
         phone: dto.phone.trim(),
@@ -33,6 +38,16 @@ export class CustomRequirementService {
         status: CustomRequirementStatus.pending,
       },
     });
+
+    try {
+      await this.inquiryNotification.notifyNewInquiry(inquiry);
+    } catch (error) {
+      this.logger.error(
+        error instanceof Error ? error.message : 'Feishu inquiry notification failed',
+      );
+    }
+
+    return inquiry;
   }
 
   async getAdminList(query: CustomRequirementListQueryDto) {

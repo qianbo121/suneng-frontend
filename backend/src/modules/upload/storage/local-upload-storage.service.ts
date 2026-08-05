@@ -3,14 +3,7 @@ import { ConfigService } from '@nestjs/config';
 import { promises as fs } from 'node:fs';
 import * as path from 'node:path';
 import { randomUUID } from 'node:crypto';
-import { fromBuffer } from 'file-type';
-// sharp is a CommonJS module whose export is the function itself. The default
-// import form (`import sharp from 'sharp'`) compiles to `sharp_1.default`,
-// which is undefined at runtime (no esModuleInterop here) and breaks image
-// processing. import-equals is the runtime-correct form for a callable CJS
-// export; the lint rule is disabled for this single line.
-// eslint-disable-next-line @typescript-eslint/no-require-imports
-import sharp = require('sharp');
+import sharp from 'sharp';
 
 import { UploadStorage } from '@/modules/upload/storage/upload-storage.interface';
 
@@ -38,6 +31,34 @@ type DetectedUploadType = {
   mime: string;
   extension: string;
 };
+
+function startsWith(buffer: Buffer, bytes: number[]): boolean {
+  return bytes.every((byte, index) => buffer[index] === byte);
+}
+
+function detectAllowedUploadType(buffer: Buffer): DetectedUploadType | undefined {
+  if (startsWith(buffer, [0xff, 0xd8, 0xff])) {
+    return { mime: 'image/jpeg', extension: '.jpg' };
+  }
+  if (startsWith(buffer, [0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a])) {
+    return { mime: 'image/png', extension: '.png' };
+  }
+  const gifHeader = buffer.subarray(0, 6).toString('ascii');
+  if (gifHeader === 'GIF87a' || gifHeader === 'GIF89a') {
+    return { mime: 'image/gif', extension: '.gif' };
+  }
+  if (
+    buffer.length >= 12 &&
+    buffer.subarray(0, 4).toString('ascii') === 'RIFF' &&
+    buffer.subarray(8, 12).toString('ascii') === 'WEBP'
+  ) {
+    return { mime: 'image/webp', extension: '.webp' };
+  }
+  if (buffer.subarray(0, 5).toString('ascii') === '%PDF-') {
+    return { mime: 'application/pdf', extension: '.pdf' };
+  }
+  return undefined;
+}
 
 @Injectable()
 export class LocalUploadStorageService implements UploadStorage {
@@ -71,7 +92,7 @@ export class LocalUploadStorageService implements UploadStorage {
   // mimetype is forgeable. Runs on the full in-memory buffer (memoryStorage),
   // so it is reliable here (unlike multer's fileFilter).
   private async assertAllowedContentType(file: Express.Multer.File): Promise<DetectedUploadType> {
-    const detected = await fromBuffer(file.buffer);
+    const detected = detectAllowedUploadType(file.buffer);
     if (!detected || !ALLOWED_CONTENT_TYPES.has(detected.mime)) {
       throw new BadRequestException('File content does not match an allowed type');
     }
