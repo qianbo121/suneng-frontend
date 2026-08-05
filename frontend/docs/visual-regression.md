@@ -20,3 +20,9 @@ Covered routes are `/zh`, `/zh/products`,
 
 Baselines live in `tests/visual/__screenshots__`; failure artifacts live in
 `test-results`. Canvas and video are masked to avoid dynamic-render noise.
+
+The default `chrome` project is the macOS development baseline. GitHub Actions
+uses a separate `linux-chrome` baseline and installs `fonts-noto-cjk` before
+capturing screenshots so Chinese text is deterministic and readable. CI never
+updates snapshots automatically; intentional baseline changes must be captured
+and inspected before they are committed.

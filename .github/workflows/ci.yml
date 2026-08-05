@@ -43,13 +43,17 @@ jobs:
         env:
           CI: true
           VISUAL_PROJECT: linux-chrome
-        run: pnpm --dir frontend test:visual:update
-      - name: Upload Linux visual baselines
+        run: pnpm --dir frontend test:visual
+      - name: Upload visual failure artifacts
+        if: failure()
         uses: actions/upload-artifact@v4
         with:
-          name: linux-visual-baselines
-          path: frontend/tests/visual/__screenshots__/**/linux-chrome/*.png
-          if-no-files-found: error
+          name: visual-regression-failure-${{ github.run_attempt }}
+          path: |
+            frontend/test-results/visual-artifacts
+            frontend/test-results/visual-report
+          if-no-files-found: ignore
+          retention-days: 7
       - name: Build (also type-checks via next build)
         env:
           NEXT_PUBLIC_APP_NAME: Manufacturing Corporate Site
