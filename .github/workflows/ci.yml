@@ -34,6 +34,11 @@ jobs:
         run: pnpm --dir frontend lint
       - name: Test
         run: pnpm --dir frontend test
+      - name: Install deterministic CJK font
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends fonts-noto-cjk
+          fc-cache -f
       - name: Visual regression
         env:
           CI: true
