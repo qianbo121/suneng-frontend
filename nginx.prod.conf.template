@@ -329,7 +329,7 @@ http {
     # Enforce a conservative baseline while allowing the current Next.js runtime
     # script/style requirements. Tighten unsafe-inline/unsafe-eval after report
     # telemetry confirms the runtime no longer needs them.
-    add_header Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https://www.jssngyl.cn https://admin.jssngyl.cn; object-src 'none'; base-uri 'self'; frame-ancestors 'self'; form-action 'self'; upgrade-insecure-requests" always;
+    add_header Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://hm.baidu.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https://www.jssngyl.cn https://admin.jssngyl.cn https://hm.baidu.com; object-src 'none'; base-uri 'self'; frame-ancestors 'self'; form-action 'self'; upgrade-insecure-requests" always;
 
     # 兼容旧版智能工厂工时二维码，保留令牌路径并切到正确子域名。
     location ^~ /h5/work-scan/ {
