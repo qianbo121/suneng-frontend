@@ -1,8 +1,10 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { usePathname } from 'next/navigation';
 import Script from 'next/script';
+
+import { isBaiduAnalyticsHostname } from '@/lib/analytics/baidu';
 
 const DEFAULT_BAIDU_TONGJI_ID = 'aecc3dcdd0269720537a44fc963eddbb';
 const BAIDU_TONGJI_ID = process.env.NEXT_PUBLIC_BAIDU_TONGJI_ID || DEFAULT_BAIDU_TONGJI_ID;
@@ -17,9 +19,14 @@ declare global {
 export function BaiduAnalytics() {
   const pathname = usePathname();
   const lastTrackedPath = useRef<string | null>(null);
+  const [runtimeAllowed, setRuntimeAllowed] = useState(false);
 
   useEffect(() => {
-    if (!BAIDU_TONGJI_ENABLED) {
+    setRuntimeAllowed(isBaiduAnalyticsHostname(window.location.hostname));
+  }, []);
+
+  useEffect(() => {
+    if (!BAIDU_TONGJI_ENABLED || !runtimeAllowed) {
       return;
     }
 
@@ -39,9 +46,9 @@ export function BaiduAnalytics() {
     lastTrackedPath.current = pathname;
     window._hmt = window._hmt || [];
     window._hmt.push(['_trackPageview', pathname]);
-  }, [pathname]);
+  }, [pathname, runtimeAllowed]);
 
-  if (!BAIDU_TONGJI_ENABLED) {
+  if (!BAIDU_TONGJI_ENABLED || !runtimeAllowed) {
     return null;
   }
 
