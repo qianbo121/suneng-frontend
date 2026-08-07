@@ -30,7 +30,7 @@ export function GeoSection({
           {eyebrow ? (
             <p className={cn('text-[13px] font-semibold', eyebrowClassName)}>{eyebrow}</p>
           ) : null}
-          <h2 className={cn('text-[26px] font-semibold leading-[1.28] text-[#101828] lg:text-[38px]', eyebrow && 'mt-3')}>
+          <h2 className={cn('text-[26px] font-semibold leading-[1.28] text-[#101828] lg:text-[38px] mt-3')}>
             {title}
           </h2>
         </div>
