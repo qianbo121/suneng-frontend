@@ -54,7 +54,22 @@ pnpm dev:admin
 
 ## 生产部署
 
-生产发布以根目录 `DEPLOY.md` 和 `deploy.sh` 为准：
+生产发布以根目录 `DEPLOY.md` 和 `deploy.sh` 为准，最简单一键发布是：
+
+```bash
+./scripts/release-one-click.sh
+```
+
+它会自动完成：
+
+- 校验当前在 `main`、工作区干净
+- `git push` 到 `origin main`
+- 自动触发 GitHub Actions 的 `Build And Deploy`
+- 无法触发时给出手工操作入口
+
+等你只要点完脚本，再到 Actions 看执行结果即可。
+
+如果你要纯手工，也可直接用：
 
 ```bash
 cp .env.production.example .env.production
