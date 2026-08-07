@@ -155,7 +155,6 @@ describe('ShujuServiceAuthGuard', () => {
   it('rejects tokens without iat when maxAge is enforced', async () => {
     const guard = new ShujuServiceAuthGuard(settings(), jwt);
     const missingIat = tokenWithOptions(jwt, { sub: 'shuju-engine', scope: 'news:read' }, {
-      expiresIn: undefined,
       noTimestamp: true,
     });
     await expect(guard.canActivate(context(missingIat))).rejects.toBeInstanceOf(
