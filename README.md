@@ -60,14 +60,19 @@ pnpm dev:admin
 ./scripts/release-one-click.sh
 ```
 
-它会自动完成：
+它会执行：
 
-- 校验当前在 `main`、工作区干净
-- `git push` 到 `origin main`
-- 自动触发 GitHub Actions 的 `Build And Deploy`
-- 无法触发时给出手工操作入口
+- 校验工作区干净
+- 运行后端最小门禁（`pnpm --dir backend test`）
+- 将当前改动推到一个独立发布分支
+  - 当你当前在 `main`，脚本会自动创建 `release/YYYYMMDD-HHMM` 分支
+  - 当你当前在功能分支，直接以当前分支名发布
+- 输出 `main` 到该分支的 PR 对比链接，供你在 GitHub 上发起合并
 
-等你只要点完脚本，再到 Actions 看执行结果即可。
+**本脚本不会触发部署。**
+
+请在 PR 通过三组 CI（Backend / Frontend / Admin）后合并，
+合并动作会触发 `Build And Deploy` 自动发布。
 
 如果你要纯手工，也可直接用：
 
