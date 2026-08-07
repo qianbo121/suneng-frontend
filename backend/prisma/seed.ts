@@ -1,50 +1,10 @@
 import {
-  AdminRole,
   CultureValueType,
   PrismaClient,
   PublishStatus,
 } from '@prisma/client';
-import { hash } from 'bcryptjs';
 
 const prisma = new PrismaClient();
-
-async function seedAdminUser() {
-  const passwordHash = await hash('admin123456', 10);
-
-  await prisma.adminUser.upsert({
-    where: { username: 'admin' },
-    update: {
-      passwordHash,
-      role: AdminRole.super_admin,
-      isActive: true,
-    },
-    create: {
-      username: 'admin',
-      passwordHash,
-      role: AdminRole.super_admin,
-      isActive: true,
-    },
-  });
-
-  // Editor account: content-only role, used to verify RBAC role separation
-  // (can manage content, must get 403 on admin/users).
-  const editorPasswordHash = await hash('editor123456', 10);
-
-  await prisma.adminUser.upsert({
-    where: { username: 'editor' },
-    update: {
-      passwordHash: editorPasswordHash,
-      role: AdminRole.editor,
-      isActive: true,
-    },
-    create: {
-      username: 'editor',
-      passwordHash: editorPasswordHash,
-      role: AdminRole.editor,
-      isActive: true,
-    },
-  });
-}
 
 async function disableLegacySeedContent() {
   // 旧站测试数据，不得作为苏能官网生产内容、GEO/RAG 资料源。
@@ -597,7 +557,6 @@ async function main() {
     );
   }
 
-  await seedAdminUser();
   await disableLegacySeedContent();
   await seedBanners();
   await seedProductCategoriesAndProducts();
@@ -605,8 +564,8 @@ async function main() {
   await seedAboutContent();
   await seedPartners();
 
-  console.warn(
-    '[seed] Default accounts created/updated: admin / admin123456 (super_admin), editor / editor123456 (editor). Change these passwords immediately after first login.',
+  console.info(
+    '[seed] Content seed completed. Administrator accounts were not created or modified.',
   );
 }
 

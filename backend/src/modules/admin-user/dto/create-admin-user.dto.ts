@@ -8,7 +8,7 @@ export class CreateAdminUserDto {
   @MaxLength(80)
   username!: string;
 
-  @ApiProperty({ example: 'editor123456' })
+  @ApiProperty({ example: 'a-unique-strong-password' })
   @IsString()
   @MinLength(6)
   @MaxLength(64)
