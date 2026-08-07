@@ -34,15 +34,16 @@
 
 标准后端 Jest 新增 `content seed administrator safety contract`：
 
-1. 内容 seed 不得引用 `adminUser`、`AdminRole`、管理员 seed 函数或 bcrypt；
-2. 生产 destructive-seed 门禁必须保持 fail-closed；
-3. 活动 seed、DTO、初始化文档和上线清单不得重新出现已知默认管理员凭据。
+1. 扫描 `backend/prisma/` 下全部可执行 seed 源文件，不得引用管理员模型、角色、密码哈希或 bcrypt，也不得通过大小写变化绕过；
+2. `prisma.config.ts` 必须继续指向已经复核的 `prisma/seed.ts` 入口；
+3. 生产 destructive-seed 门禁必须保持 fail-closed；
+4. 全仓活动源码、配置和文档不得重新出现已知默认管理员凭据。
 
 由于内容 seed 对管理员模型不存在任何代码路径，重复执行内容 seed 不能修改管理员密码、角色或启用状态。未来若把管理员写入路径加回 seed，标准测试会直接失败。
 
 ## 3. 验证结果
 
-- 后端 Jest：11 个测试套件、35 项测试全部通过。
+- 后端 Jest：11 个测试套件、36 项测试全部通过。
 - ESLint：通过。
 - TypeScript `tsc --noEmit`：通过。
 - Nest 后端构建：通过。
