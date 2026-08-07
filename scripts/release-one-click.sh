@@ -5,7 +5,6 @@ set -euo pipefail
 cd "$(dirname "$0")/.."
 
 APP_NAME="江苏苏能官网-成文"
-GITHUB_ACTIONS_URL="https://github.com/qianbo121/suneng-frontend/actions/workflows/deploy.yml"
 BASE_BRANCH="main"
 
 echo "🚀 $APP_NAME 一键发布"
