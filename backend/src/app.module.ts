@@ -18,6 +18,7 @@ import { AboutModule } from '@/modules/about/about.module';
 import { CustomRequirementModule } from '@/modules/custom-requirement/custom-requirement.module';
 import { DashboardModule } from '@/modules/dashboard/dashboard.module';
 import { LeadEventModule } from '@/modules/lead-event/lead-event.module';
+import { ShujuServiceModule } from '@/modules/shuju-service/shuju-service.module';
 import { PrismaModule } from '@/prisma/prisma.module';
 import configuration from '@/config/configuration';
 
@@ -41,6 +42,7 @@ import configuration from '@/config/configuration';
     CustomRequirementModule,
     LeadEventModule,
     DashboardModule,
+    ShujuServiceModule,
   ],
   controllers: [AppController],
   providers: [
