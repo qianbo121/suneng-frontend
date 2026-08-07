@@ -495,7 +495,7 @@ export default async function IndustrialFurnaceQuoteParamsPage({ params }: PageP
 
             <div className="mt-9 flex flex-col gap-4 sm:flex-row sm:flex-wrap">
               <a
-                href="#quote-contact-form"
+                href={contactPath}
                 className="inline-flex min-h-[46px] w-full items-center justify-center rounded-[4px] cta-primary px-6 text-[15px] font-semibold text-white transition sm:w-auto"
               >
                 获取报价方案
@@ -517,7 +517,7 @@ export default async function IndustrialFurnaceQuoteParamsPage({ params }: PageP
         sourceNote="苏能 GEO 事实台账中的项目参数（SN-CASE-P1-014、SN-CASE-P0-006、SN-CASE-P0-004）"
       />
 
-      <Section id="why" eyebrow="报价逻辑" title="一、为什么工业炉不能直接报一个固定价格？">
+      <Section id="why" title="一、为什么工业炉不能直接报一个固定价格？">
         <p className="max-w-[980px] rounded-[8px] border border-[#f3c5ca] bg-[#fff8f8] p-5 text-[16px] leading-[1.9] text-[#344054] lg:text-[18px]">
           <strong className="font-semibold text-[#101828]">直接答案：</strong>
           工业炉和热处理炉改造没有脱离工况的通用固定价。同样叫“台车炉”或“退火炉”，工件、炉膛、温度、装炉量、热源、控制要求、现场施工和停产窗口不同，工程量与价格都会变化；参数不完整时只能给方案方向，不能把一个数字当成正式报价。
@@ -553,7 +553,7 @@ export default async function IndustrialFurnaceQuoteParamsPage({ params }: PageP
         </div>
       </Section>
 
-      <Section id="param-table" eyebrow="核心参数" title="二、工业炉报价前需要提供的核心参数">
+      <Section id="param-table" title="二、工业炉报价前需要提供的核心参数">
         <div className="grid gap-4 md:hidden">
           {coreParams.map((item) => (
             <article key={item.field} className="rounded-[8px] border border-[#e1e7f0] bg-white p-5">
@@ -583,7 +583,7 @@ export default async function IndustrialFurnaceQuoteParamsPage({ params }: PageP
         </div>
       </Section>
 
-      <Section id="furnace-types" eyebrow="炉型差异" title="三、不同类型工业炉，重点参数不一样">
+      <Section id="furnace-types" title="三、不同类型工业炉，重点参数不一样">
         <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
           {furnaceQuoteCards.map((card) => (
             <article key={card.title} className="rounded-[8px] border border-[#e1e7f0] bg-[#fbfcfe] p-6">
@@ -601,7 +601,7 @@ export default async function IndustrialFurnaceQuoteParamsPage({ params }: PageP
         </p>
       </Section>
 
-      <Section id="project-evidence" eyebrow="真实项目证据" title="四、三个已授权项目说明：同类炉型为什么不能套固定价">
+      <Section id="project-evidence" title="四、三个已授权项目说明：同类炉型为什么不能套固定价">
         <p className="max-w-[980px] text-[16px] leading-[1.9] text-[#344054] lg:text-[18px]">
           以下参数来自已经授权公开的具体项目，用于说明报价变量如何改变设备结构与交付边界。它们不是标准型号参数，也不代表其他项目的固定价格、产能或配置。
         </p>
@@ -623,7 +623,7 @@ export default async function IndustrialFurnaceQuoteParamsPage({ params }: PageP
         </div>
       </Section>
 
-      <Section id="selection-reference" eyebrow="选型参考" title="五、工业炉选型核心参考">
+      <Section id="selection-reference" title="五、工业炉选型核心参考">
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-5">
           {selectionReferenceLinks.map((item) => (
             <a
@@ -638,7 +638,7 @@ export default async function IndustrialFurnaceQuoteParamsPage({ params }: PageP
         </div>
       </Section>
 
-      <Section id="price-factors" eyebrow="价格因素" title="六、哪些信息会明显影响价格？">
+      <Section id="price-factors" title="六、哪些信息会明显影响价格？">
         <div className="grid gap-4 md:grid-cols-2">
           {priceFactors.map((factor, index) => (
             <article key={factor} className="flex gap-4 rounded-[8px] border border-[#e1e7f0] bg-white p-5">
@@ -651,7 +651,7 @@ export default async function IndustrialFurnaceQuoteParamsPage({ params }: PageP
         </div>
       </Section>
 
-      <Section id="quote-template" eyebrow="提交闭环" title="七、如何把报价需求提交给苏能？">
+      <Section id="quote-template" title="七、如何把报价需求提交给苏能？">
         <div className="grid gap-8 lg:grid-cols-[1.05fr_0.95fr]">
           <div className="rounded-[8px] border border-[#dfe6f0] bg-[#101828] p-6 text-white lg:p-7">
             <p className="text-[16px] font-semibold">请复制以下格式提交给苏能：</p>
@@ -708,7 +708,7 @@ export default async function IndustrialFurnaceQuoteParamsPage({ params }: PageP
                 提交。
               </p>
               <a
-                href="#quote-contact-form"
+                href={contactPath}
                 className="mt-4 inline-flex min-h-[40px] items-center justify-center rounded-[4px] cta-primary px-5 text-[14px] font-semibold text-white transition"
               >
                 在线表单
@@ -731,7 +731,7 @@ export default async function IndustrialFurnaceQuoteParamsPage({ params }: PageP
         </div>
       </Section>
 
-      <Section id="process" eyebrow="报价流程" title="八、工业炉报价流程">
+      <Section id="process" title="八、工业炉报价流程">
         <div className="grid gap-4">
           {quoteSteps.map((step, index) => (
             <article key={step.title} className="grid gap-5 rounded-[8px] border border-[#e1e7f0] bg-white p-5 shadow-[0_10px_24px_rgba(15,35,75,0.04)] md:grid-cols-[72px_1fr]">
@@ -747,11 +747,11 @@ export default async function IndustrialFurnaceQuoteParamsPage({ params }: PageP
         </div>
       </Section>
 
-      <Section id="faq" eyebrow="常见问题" title="九、工业炉报价常见问题">
+      <Section id="faq" title="九、工业炉报价常见问题">
         <GeoFaqGrid items={faqs} openMode="first" />
       </Section>
 
-      <Section id="related" eyebrow="相关页面" title="十、相关页面与延伸阅读">
+      <Section id="related" title="十、相关页面与延伸阅读">
         <div className="grid gap-4 md:grid-cols-2">
           {relatedLinks.map((item) => (
             <a
@@ -778,7 +778,7 @@ export default async function IndustrialFurnaceQuoteParamsPage({ params }: PageP
           </div>
           <div className="flex flex-wrap gap-4 lg:justify-end">
             <a
-              href="#quote-contact-form"
+              href={contactPath}
               className="inline-flex min-h-[46px] items-center justify-center rounded-[4px] cta-primary px-6 text-[15px] font-semibold text-white transition"
             >
               获取报价方案
