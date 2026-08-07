@@ -1,0 +1,40 @@
+import { PublishStatus } from '@prisma/client';
+
+import { ShujuNewsReadService } from '@/modules/shuju-service/shuju-news-read.service';
+import { PrismaService } from '@/prisma/prisma.service';
+
+describe('ShujuNewsReadService', () => {
+  it('uses a projection-only list query and never exposes news body fields', async () => {
+    const findMany = jest.fn().mockResolvedValue([
+      {
+        id: 1,
+        titleZh: '测试新闻',
+        status: PublishStatus.draft,
+        publishDate: new Date('2026-08-07T00:00:00Z'),
+      },
+    ]);
+    const count = jest.fn().mockResolvedValue(1);
+    const prisma = {
+      news: { findMany, count },
+      $transaction: jest.fn((operations: Promise<unknown>[]) => Promise.all(operations)),
+    } as unknown as PrismaService;
+    const service = new ShujuNewsReadService(prisma);
+
+    const result = await service.list({
+      page: 1,
+      pageSize: 20,
+      keyword: '测试',
+      status: PublishStatus.draft,
+    });
+
+    expect(result.total).toBe(1);
+    expect(result.items).toHaveLength(1);
+    const query = findMany.mock.calls[0][0];
+    expect(query.select.contentZh).toBeUndefined();
+    expect(query.select.contentEn).toBeUndefined();
+    expect(query.select.baiduSubmittedAt).toBeUndefined();
+    expect(query.select.viewCount).toBeUndefined();
+    expect(query.where.status).toBe(PublishStatus.draft);
+    expect(query.where.OR).toHaveLength(3);
+  });
+});

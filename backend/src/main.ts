@@ -140,6 +140,15 @@ async function bootstrap() {
         },
         'bearer',
       )
+      .addBearerAuth(
+        {
+          type: 'http',
+          scheme: 'bearer',
+          bearerFormat: 'JWT',
+          description: 'Independent short-lived token for the Shuju read-only service.',
+        },
+        'shuju-service',
+      )
       .build();
 
     const document = SwaggerModule.createDocument(app, swaggerConfig);
