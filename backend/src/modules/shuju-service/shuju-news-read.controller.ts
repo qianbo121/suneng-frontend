@@ -42,4 +42,20 @@ export class ShujuNewsReadController {
     );
     return result;
   }
+
+  @Get('categories')
+  @ApiOperation({ summary: 'Read published official news categories for Shuju drafts' })
+  async categories(@Req() request: ServiceRequest) {
+    const items = await this.service.listCategories();
+    this.logger.log(
+      JSON.stringify({
+        event: 'shuju_service_news_categories',
+        subject: request.shujuService?.subject ?? 'unknown',
+        scope: request.shujuService?.scope ?? 'unknown',
+        requestId: request.shujuService?.jti ?? '',
+        returned: items.length,
+      }),
+    );
+    return { items };
+  }
 }

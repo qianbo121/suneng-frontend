@@ -13,12 +13,22 @@ export function validateShujuServiceConfiguration(
   enabled: boolean,
   serviceSecret: string,
   administratorSecret: string,
+  publishEnabled = false,
+  publishSecret = '',
 ): void {
   if (enabled && serviceSecret.length < 32) {
     throw new Error('SHUJU_SERVICE_JWT_SECRET must be at least 32 characters when enabled');
   }
   if (serviceSecret && serviceSecret === administratorSecret) {
     throw new Error('SHUJU_SERVICE_JWT_SECRET must not reuse JWT_SECRET');
+  }
+  if (publishEnabled && publishSecret.length < 32) {
+    throw new Error(
+      'SHUJU_NEWS_PUBLISH_JWT_SECRET must be at least 32 characters when publishing is enabled',
+    );
+  }
+  if (publishSecret && (publishSecret === administratorSecret || publishSecret === serviceSecret)) {
+    throw new Error('SHUJU_NEWS_PUBLISH_JWT_SECRET must use an independent trust domain');
   }
 }
 
@@ -38,12 +48,23 @@ const shujuServiceEnabled = parseStrictBoolean(
   process.env.SHUJU_SERVICE_ENABLED,
 );
 const shujuServiceJwtSecret = process.env.SHUJU_SERVICE_JWT_SECRET?.trim() ?? '';
+const shujuNewsPublishEnabled = parseStrictBoolean(
+  'SHUJU_NEWS_PUBLISH_ENABLED',
+  process.env.SHUJU_NEWS_PUBLISH_ENABLED,
+);
+const shujuNewsPublishJwtSecret = process.env.SHUJU_NEWS_PUBLISH_JWT_SECRET?.trim() ?? '';
 
 if (isProduction && jwtSecret === 'change-me') {
   throw new Error('JWT_SECRET must not use the default value in production');
 }
 
-validateShujuServiceConfiguration(shujuServiceEnabled, shujuServiceJwtSecret, jwtSecret);
+validateShujuServiceConfiguration(
+  shujuServiceEnabled,
+  shujuServiceJwtSecret,
+  jwtSecret,
+  shujuNewsPublishEnabled,
+  shujuNewsPublishJwtSecret,
+);
 
 export default () => ({
   nodeEnv,
@@ -68,4 +89,8 @@ export default () => ({
   shujuServiceIssuer: 'shuju-engine',
   shujuServiceAudience: 'corp-site-news-read',
   shujuServiceSubject: 'shuju-engine',
+  shujuNewsPublishEnabled,
+  shujuNewsPublishJwtSecret,
+  shujuNewsPublishAudience: 'corp-site-news-publish',
+  shujuNewsPublishSubject: 'shuju-engine',
 });

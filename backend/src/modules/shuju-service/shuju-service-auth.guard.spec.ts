@@ -123,6 +123,23 @@ describe('ShujuServiceAuthGuard', () => {
     ).rejects.toThrow();
   });
 
+  it('rejects the independent news-publish token on the read endpoint', async () => {
+    const guard = new ShujuServiceAuthGuard(settings(), jwt);
+    const publishToken = jwt.sign(
+      { sub: 'shuju-engine', scope: 'news:publish' },
+      {
+        secret: 'publish-secret-that-is-independent-and-long-enough',
+        algorithm: 'HS256',
+        issuer: 'shuju-engine',
+        audience: 'corp-site-news-publish',
+        expiresIn: '5m',
+      },
+    );
+    await expect(guard.canActivate(context(publishToken))).rejects.toBeInstanceOf(
+      UnauthorizedException,
+    );
+  });
+
   it('rejects admin-shaped claims even if signed with the service secret', async () => {
     const guard = new ShujuServiceAuthGuard(settings(), jwt);
     const adminShaped = token(jwt, {

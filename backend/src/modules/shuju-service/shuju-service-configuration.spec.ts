@@ -26,4 +26,20 @@ describe('Shuju service configuration', () => {
       ),
     ).not.toThrow();
   });
+
+  it('uses a third independent secret for publishing', () => {
+    const admin = 'administrator-secret-that-is-long-enough';
+    const read = 'read-secret-that-is-independent-and-long';
+    const write = 'write-secret-that-is-independent-and-long';
+    expect(() => validateShujuServiceConfiguration(true, read, admin, true, '')).toThrow(
+      'SHUJU_NEWS_PUBLISH_JWT_SECRET must be at least 32 characters',
+    );
+    expect(() => validateShujuServiceConfiguration(true, read, admin, true, read)).toThrow(
+      'must use an independent trust domain',
+    );
+    expect(() => validateShujuServiceConfiguration(true, read, admin, true, admin)).toThrow(
+      'must use an independent trust domain',
+    );
+    expect(() => validateShujuServiceConfiguration(true, read, admin, true, write)).not.toThrow();
+  });
 });
