@@ -7,17 +7,22 @@ import { ShujuNewsPublishAuthGuard } from '@/modules/shuju-service/shuju-news-pu
 import { ShujuNewsPublishController } from '@/modules/shuju-service/shuju-news-publish.controller';
 import { ShujuNewsPublishService } from '@/modules/shuju-service/shuju-news-publish.service';
 import { ShujuServiceAuthGuard } from '@/modules/shuju-service/shuju-service-auth.guard';
+import { ShujuInquiryReadAuthGuard } from '@/modules/shuju-service/shuju-inquiry-read-auth.guard';
+import { ShujuInquiryReadController } from '@/modules/shuju-service/shuju-inquiry-read.controller';
+import { ShujuInquiryReadService } from '@/modules/shuju-service/shuju-inquiry-read.service';
 import { BaiduSubmitService } from '@/modules/news/baidu-submit.service';
 import { UploadModule } from '@/modules/upload/upload.module';
 
 @Module({
   imports: [JwtModule.register({}), UploadModule],
-  controllers: [ShujuNewsReadController, ShujuNewsPublishController],
+  controllers: [ShujuNewsReadController, ShujuNewsPublishController, ShujuInquiryReadController],
   providers: [
     ShujuNewsReadService,
     ShujuServiceAuthGuard,
     ShujuNewsPublishAuthGuard,
     ShujuNewsPublishService,
+    ShujuInquiryReadAuthGuard,
+    ShujuInquiryReadService,
     BaiduSubmitService,
   ],
 })

@@ -9,12 +9,27 @@ export function parseStrictBoolean(name: string, rawValue: string | undefined): 
   return normalized === 'true';
 }
 
+export function parseNonNegativeInteger(name: string, rawValue: string | undefined): number {
+  const normalized = (rawValue ?? '0').trim();
+  if (!/^\d+$/.test(normalized)) {
+    throw new Error(`${name} must be a non-negative integer`);
+  }
+  const value = Number(normalized);
+  if (!Number.isSafeInteger(value)) {
+    throw new Error(`${name} must be a safe integer`);
+  }
+  return value;
+}
+
 export function validateShujuServiceConfiguration(
   enabled: boolean,
   serviceSecret: string,
   administratorSecret: string,
   publishEnabled = false,
   publishSecret = '',
+  inquiryEnabled = false,
+  inquirySecret = '',
+  inquiryMinId = 0,
 ): void {
   if (enabled && serviceSecret.length < 32) {
     throw new Error('SHUJU_SERVICE_JWT_SECRET must be at least 32 characters when enabled');
@@ -29,6 +44,24 @@ export function validateShujuServiceConfiguration(
   }
   if (publishSecret && (publishSecret === administratorSecret || publishSecret === serviceSecret)) {
     throw new Error('SHUJU_NEWS_PUBLISH_JWT_SECRET must use an independent trust domain');
+  }
+  if (inquiryEnabled && inquirySecret.length < 32) {
+    throw new Error(
+      'SHUJU_INQUIRY_READ_JWT_SECRET must be at least 32 characters when inquiry reading is enabled',
+    );
+  }
+  if (inquiryEnabled && (inquiryMinId <= 0 || inquiryMinId > 2_147_483_647)) {
+    throw new Error(
+      'SHUJU_INQUIRY_READ_MIN_ID must be between 1 and 2147483647 when inquiry reading is enabled',
+    );
+  }
+  if (
+    inquirySecret &&
+    [administratorSecret, serviceSecret, publishSecret].some(
+      (secret) => secret && inquirySecret === secret,
+    )
+  ) {
+    throw new Error('SHUJU_INQUIRY_READ_JWT_SECRET must use an independent trust domain');
   }
 }
 
@@ -53,6 +86,15 @@ const shujuNewsPublishEnabled = parseStrictBoolean(
   process.env.SHUJU_NEWS_PUBLISH_ENABLED,
 );
 const shujuNewsPublishJwtSecret = process.env.SHUJU_NEWS_PUBLISH_JWT_SECRET?.trim() ?? '';
+const shujuInquiryReadEnabled = parseStrictBoolean(
+  'SHUJU_INQUIRY_READ_ENABLED',
+  process.env.SHUJU_INQUIRY_READ_ENABLED,
+);
+const shujuInquiryReadJwtSecret = process.env.SHUJU_INQUIRY_READ_JWT_SECRET?.trim() ?? '';
+const shujuInquiryReadMinId = parseNonNegativeInteger(
+  'SHUJU_INQUIRY_READ_MIN_ID',
+  process.env.SHUJU_INQUIRY_READ_MIN_ID,
+);
 
 if (isProduction && jwtSecret === 'change-me') {
   throw new Error('JWT_SECRET must not use the default value in production');
@@ -64,6 +106,9 @@ validateShujuServiceConfiguration(
   jwtSecret,
   shujuNewsPublishEnabled,
   shujuNewsPublishJwtSecret,
+  shujuInquiryReadEnabled,
+  shujuInquiryReadJwtSecret,
+  shujuInquiryReadMinId,
 );
 
 export default () => ({
@@ -93,4 +138,9 @@ export default () => ({
   shujuNewsPublishJwtSecret,
   shujuNewsPublishAudience: 'corp-site-news-publish',
   shujuNewsPublishSubject: 'shuju-engine',
+  shujuInquiryReadEnabled,
+  shujuInquiryReadJwtSecret,
+  shujuInquiryReadMinId,
+  shujuInquiryReadAudience: 'corp-site-inquiries-read',
+  shujuInquiryReadSubject: 'shuju-engine',
 });
