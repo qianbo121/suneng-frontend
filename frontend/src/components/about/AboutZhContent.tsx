@@ -2,6 +2,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 import { JsonLd } from '@/components/JsonLd';
+import { AboutHeroVideo } from '@/components/about/AboutHeroVideo';
 import { QuoteModalButton } from '@/components/lead/QuoteModalButton';
 import { Breadcrumb } from '@/components/layout/Breadcrumb';
 import { absoluteUrl } from '@/lib/seo/metadata';
@@ -376,57 +377,46 @@ export function AboutZhContent() {
               { label: '公司简介' },
             ]}
           />
-          <div className="grid overflow-hidden rounded-[8px] border border-[#e1e7f0] bg-[#101828] shadow-[0_24px_70px_rgba(16,24,40,0.14)] lg:grid-cols-[0.98fr_1.02fr]">
-            <div className="relative z-10 px-6 py-8 text-white md:px-9 md:py-10 lg:px-12 lg:py-14">
-              <p className="text-[13px] font-semibold uppercase tracking-[0.24em] text-white/60">
-                About Suneng
-              </p>
-              <h1 className="mt-4 text-[36px] font-semibold leading-[1.16] lg:text-[56px]">
-                关于苏能工业炉
-              </h1>
-              <p className="mt-6 max-w-[760px] text-[17px] leading-[1.9] text-white/82 lg:text-[19px]">
-                苏能工业炉是一家专注<strong>工业炉单机、配套件与整线交钥匙工程</strong>的
-                <strong>国家高新技术企业</strong>,深耕
-                <strong>工业加热与热处理装备</strong>的设计、制造与系统集成,业务覆盖
-                <strong>电阻式与燃气式工业炉</strong>的主要产品体系,为客户提供从工艺方案到整线落地的
-                <strong>一体化解决方案</strong>。
-              </p>
-              <div className="mt-6 flex flex-wrap gap-2">
-                {heroChips.map((item) => (
-                  <span
-                    key={item}
-                    className="rounded-[4px] border border-white/16 bg-white/8 px-3 py-2 text-[13px] font-semibold leading-none text-white/82"
+          <div className="grid overflow-hidden rounded-[8px] border border-[#e1e7f0] bg-[#101828] shadow-[0_24px_70px_rgba(16,24,40,0.14)] lg:min-h-[540px] lg:grid-cols-[minmax(0,1fr)_303.75px] xl:min-h-[600px] xl:grid-cols-[minmax(0,1fr)_337.5px] 2xl:min-h-[640px] 2xl:grid-cols-[minmax(0,1fr)_360px]">
+            <div className="relative z-10 px-6 py-8 text-white md:px-9 md:py-10 lg:flex lg:items-center lg:px-12 lg:py-14 xl:px-14 2xl:px-16">
+              <div className="max-w-[980px]">
+                <p className="text-[13px] font-semibold uppercase tracking-[0.24em] text-white/60">
+                  About Suneng
+                </p>
+                <h1 className="mt-4 text-[36px] font-semibold leading-[1.16] lg:text-[56px]">
+                  关于苏能工业炉
+                </h1>
+                <p className="mt-6 text-[17px] leading-[1.9] text-white/82 lg:text-[19px]">
+                  苏能工业炉是一家专注<strong>工业炉单机、配套件与整线交钥匙工程</strong>的
+                  <strong>国家高新技术企业</strong>,深耕
+                  <strong>工业加热与热处理装备</strong>的设计、制造与系统集成,业务覆盖
+                  <strong>电阻式与燃气式工业炉</strong>的主要产品体系,为客户提供从工艺方案到整线落地的
+                  <strong>一体化解决方案</strong>。
+                </p>
+                <div className="mt-6 flex flex-wrap gap-2">
+                  {heroChips.map((item) => (
+                    <span
+                      key={item}
+                      className="rounded-[4px] border border-white/16 bg-white/8 px-3 py-2 text-[13px] font-semibold leading-none text-white/82"
+                    >
+                      {item}
+                    </span>
+                  ))}
+                </div>
+                <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+                  <QuoteModalButton
+                    className="inline-flex min-h-[44px] items-center justify-center rounded-[4px] cta-primary px-5 text-[15px] font-semibold text-white transition"
+                  />
+                  <Link
+                    href="/zh/products"
+                    className="inline-flex min-h-[44px] items-center justify-center rounded-[4px] border border-white/36 px-5 text-[15px] font-semibold text-white transition hover:bg-white/10"
                   >
-                    {item}
-                  </span>
-                ))}
-              </div>
-              <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-                <QuoteModalButton
-                  className="inline-flex min-h-[44px] items-center justify-center rounded-[4px] cta-primary px-5 text-[15px] font-semibold text-white transition"
-                />
-                <Link
-                  href="/zh/products"
-                  className="inline-flex min-h-[44px] items-center justify-center rounded-[4px] border border-white/36 px-5 text-[15px] font-semibold text-white transition hover:bg-white/10"
-                >
-                  查看产品中心
-                </Link>
+                    查看产品中心
+                  </Link>
+                </div>
               </div>
             </div>
-            <div className="relative min-h-[300px] lg:min-h-[540px]">
-              <Image
-                src="/images/about/about-factory-aerial.jpg"
-                alt="苏能工业炉江苏泰州生产基地航拍外景"
-                fill
-                priority
-                sizes="(min-width: 1024px) 50vw, 100vw"
-                className="object-cover"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#101828]/70 via-transparent to-transparent lg:bg-gradient-to-r lg:from-[#101828]/26 lg:to-transparent" />
-              <div className="absolute bottom-5 left-5 right-5 rounded-[8px] border border-[rgba(255,255,255,0.28)] bg-[rgba(16,24,40,0.9)] px-4 py-3 text-[13px] font-medium leading-[1.7] text-white shadow-[0_12px_32px_rgba(16,24,40,0.28)] backdrop-blur">
-                江苏泰州生产基地，覆盖非标工业炉单机、整线与改造服务的制造交付场景。
-              </div>
-            </div>
+            <AboutHeroVideo />
           </div>
         </div>
       </header>
