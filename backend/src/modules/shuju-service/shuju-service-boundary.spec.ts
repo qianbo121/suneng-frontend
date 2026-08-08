@@ -53,6 +53,29 @@ describe('Shuju service security boundary', () => {
     expect(service).toContain('Idempotency key was already used for another payload');
   });
 
+  it('exposes inquiry PII through an independent GET-only cutover service', () => {
+    const controller = read('backend/src/modules/shuju-service/shuju-inquiry-read.controller.ts');
+    const service = read('backend/src/modules/shuju-service/shuju-inquiry-read.service.ts');
+    const configuration = read('backend/src/config/configuration.ts');
+    const compose = read('docker-compose.prod.yml');
+
+    expect(controller).toContain("@Controller('svc/inquiries')");
+    expect(controller).toContain("@Get('head')");
+    expect(controller).toContain("@Get('read')");
+    expect(controller).not.toMatch(/@(Post|Patch|Put|Delete)\b/);
+    expect(service).toContain('id: { gt: effectiveAfterId }');
+    expect(service).not.toMatch(/customRequirement\.(create|update|delete|upsert)\b/);
+    expect(configuration).toContain(
+      'SHUJU_INQUIRY_READ_JWT_SECRET must use an independent trust domain',
+    );
+    expect(configuration).toContain(
+      'SHUJU_INQUIRY_READ_MIN_ID must be between 1 and 2147483647 when inquiry reading is enabled',
+    );
+    expect(configuration).toContain("shujuInquiryReadAudience: 'corp-site-inquiries-read'");
+    expect(compose).toContain('SHUJU_INQUIRY_READ_ENABLED: ${SHUJU_INQUIRY_READ_ENABLED:-false}');
+    expect(compose).toContain('SHUJU_INQUIRY_READ_MIN_ID: ${SHUJU_INQUIRY_READ_MIN_ID:-0}');
+  });
+
   it('blocks service routes on both production public hosts and local nginx', () => {
     const productionNginx = read('nginx.prod.conf.template');
     const localNginx = read('nginx.conf');
