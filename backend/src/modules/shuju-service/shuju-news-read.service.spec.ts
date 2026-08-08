@@ -16,6 +16,7 @@ describe('ShujuNewsReadService', () => {
     const count = jest.fn().mockResolvedValue(1);
     const prisma = {
       news: { findMany, count },
+      newsCategory: { findMany: jest.fn() },
       $transaction: jest.fn((operations: Promise<unknown>[]) => Promise.all(operations)),
     } as unknown as PrismaService;
     const service = new ShujuNewsReadService(prisma);
@@ -36,5 +37,23 @@ describe('ShujuNewsReadService', () => {
     expect(query.select.viewCount).toBeUndefined();
     expect(query.where.status).toBe(PublishStatus.draft);
     expect(query.where.OR).toHaveLength(3);
+  });
+
+  it('returns only published category identifiers and labels', async () => {
+    const findMany = jest.fn().mockResolvedValue([
+      { id: 1, nameZh: '公司新闻', slug: 'company-news' },
+      { id: 2, nameZh: '行业新闻', slug: 'industry-news' },
+    ]);
+    const prisma = {
+      newsCategory: { findMany },
+    } as unknown as PrismaService;
+    const service = new ShujuNewsReadService(prisma);
+
+    await expect(service.listCategories()).resolves.toHaveLength(2);
+    expect(findMany).toHaveBeenCalledWith({
+      where: { status: PublishStatus.published },
+      orderBy: [{ sortOrder: 'asc' }, { id: 'asc' }],
+      select: { id: true, nameZh: true, slug: true },
+    });
   });
 });

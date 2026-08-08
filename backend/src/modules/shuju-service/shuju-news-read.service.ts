@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Prisma } from '@prisma/client';
+import { Prisma, PublishStatus } from '@prisma/client';
 
 import { buildPagination } from '@/common/utils/pagination';
 import { ShujuNewsReadQueryDto } from '@/modules/shuju-service/dto/shuju-news-read-query.dto';
@@ -50,5 +50,13 @@ export class ShujuNewsReadService {
     ]);
 
     return { items, total, page, pageSize };
+  }
+
+  async listCategories() {
+    return this.prisma.newsCategory.findMany({
+      where: { status: PublishStatus.published },
+      orderBy: [{ sortOrder: 'asc' }, { id: 'asc' }],
+      select: { id: true, nameZh: true, slug: true },
+    });
   }
 }

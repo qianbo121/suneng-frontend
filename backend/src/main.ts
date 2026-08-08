@@ -149,6 +149,15 @@ async function bootstrap() {
         },
         'shuju-service',
       )
+      .addBearerAuth(
+        {
+          type: 'http',
+          scheme: 'bearer',
+          bearerFormat: 'JWT',
+          description: 'Independent short-lived token for Shuju news publishing only.',
+        },
+        'shuju-news-publish',
+      )
       .build();
 
     const document = SwaggerModule.createDocument(app, swaggerConfig);
