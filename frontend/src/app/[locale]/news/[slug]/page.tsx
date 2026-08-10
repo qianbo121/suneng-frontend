@@ -34,9 +34,11 @@ type NewsDetailPageProps = {
   }>;
 };
 
-// ISR: render on demand for unknown slugs, then cache. View counting is
-// decoupled (NewsViewPing), so caching the HTML does not suppress counts.
-export const revalidate = 600;
+// News can be taken offline by the isolated Shuju publishing service.  Detail
+// pages therefore render dynamically so an offline item cannot remain publicly
+// reachable through a stale full-route cache.
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
 
 export async function generateMetadata({ params }: NewsDetailPageProps) {
   const { locale, slug } = await params;
