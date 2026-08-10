@@ -1,5 +1,7 @@
 import type { NewsApiItem, NewsListCardItem } from '@/types/news';
 
+export { FALLBACK_NEWS_SLUGS } from '@/constants/news-fallback-slugs';
+
 export const NEWS_PAGE_SIZE = 6;
 export const NEWS_LIST_HERO_IMAGE = '/images/news/news-hero.png';
 export const NEWS_FALLBACK_IMAGE = '/images/news/news-delivery.png';
@@ -139,8 +141,3 @@ export const FALLBACK_NEWS_DETAIL: NewsApiItem = {
   coverImage: NEWS_FALLBACK_IMAGE,
   publishDate: FALLBACK_NEWS_ITEMS[0].date,
 };
-
-export const FALLBACK_NEWS_SLUGS = new Set([
-  'company-delivery-batch-1',
-  ...FALLBACK_NEWS_ITEMS.map((item) => item.slug),
-]);
