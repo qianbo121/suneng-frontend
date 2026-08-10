@@ -105,6 +105,7 @@ if ! grep -Fq 'server_name factory.jssngyl.cn;' nginx.prod.conf.template; then
 fi
 
 if ! grep -Fq 'server_name shuju.jssngyl.cn;' nginx.prod.conf.template \
+  || ! grep -Fq 'location = /api/internal' nginx.prod.conf.template \
   || ! grep -Fq 'location ^~ /api/internal/' nginx.prod.conf.template \
   || ! grep -Fq 'location = /api/ready' nginx.prod.conf.template; then
   echo "Refusing deployment: nginx.prod.conf.template is missing the protected Shuju route."

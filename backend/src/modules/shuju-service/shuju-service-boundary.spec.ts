@@ -103,6 +103,7 @@ describe('Shuju service security boundary', () => {
     expect(productionNginx).toContain('server shuju:18321 resolve;');
     expect(productionNginx).toContain('limit_req zone=shuju_login burst=3 nodelay;');
     expect(productionNginx).toContain('limit_req_status 429;');
+    expect(productionNginx).toMatch(/location = \/api\/internal \{\s*return 404;\s*\}/);
     expect(productionNginx).toMatch(/location \^~ \/api\/internal\/ \{\s*return 404;\s*\}/);
     expect(productionNginx).toMatch(/location = \/api\/ready \{\s*return 404;\s*\}/);
     expect(productionNginx).toContain('proxy_set_header X-Request-ID $request_id;');
