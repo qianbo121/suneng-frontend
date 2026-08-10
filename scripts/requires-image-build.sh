@@ -19,6 +19,7 @@ while IFS= read -r changed_path; do
     .dockerignore | \
     deploy.sh | \
     backup.sh | \
+    nginx.prod.conf.template | \
     ops/* | \
     docs/* | \
     scripts/requires-image-build.sh | \
