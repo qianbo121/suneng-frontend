@@ -115,9 +115,10 @@ describe('Shuju service security boundary', () => {
     expect(logrotate).toContain('/data/nginx-logs/*.log');
     expect(deploy).toContain('missing the protected Shuju route');
     expect(deploy).toContain('SHUJU_EXPECTED_PUBLIC_IP is missing');
+    expect(deploy).toContain('getent is required for Shuju DNS verification');
     expect(deploy).toContain('Shuju DNS does not match SHUJU_EXPECTED_PUBLIC_IP');
     expect(deploy).toContain('openssl x509 -in "$shuju_edge_cert" -noout -checkend 604800');
-    expect(deploy).toContain('DNS:$shuju_public_domain');
+    expect(deploy).toContain('grep -Fxq "DNS:$shuju_public_domain"');
     expect(deploy).toContain('shared edge certificate is not ready for Shuju');
   });
 });

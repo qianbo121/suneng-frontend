@@ -118,6 +118,10 @@ if [ -z "$shuju_expected_ip" ]; then
   echo "Refusing deployment: SHUJU_EXPECTED_PUBLIC_IP is missing."
   exit 1
 fi
+if ! command -v getent >/dev/null 2>&1; then
+  echo "Refusing deployment: getent is required for Shuju DNS verification."
+  exit 1
+fi
 shuju_resolved_ips="$(getent ahosts "$shuju_public_domain" | awk '{print $1}' | sort -u)"
 if ! grep -Fxq "$shuju_expected_ip" <<< "$shuju_resolved_ips"; then
   echo "Refusing deployment: Shuju DNS does not match SHUJU_EXPECTED_PUBLIC_IP."
@@ -129,8 +133,10 @@ if ! command -v openssl >/dev/null 2>&1 \
   echo "Refusing deployment: the shared edge certificate is not ready for Shuju."
   exit 1
 fi
-shuju_cert_text="$(openssl x509 -in "$shuju_edge_cert" -noout -text)"
-if [[ "$shuju_cert_text" != *"DNS:$shuju_public_domain"* ]]; then
+if ! openssl x509 -in "$shuju_edge_cert" -noout -ext subjectAltName \
+  | tr ',' '\n' \
+  | awk '{$1=$1};1' \
+  | grep -Fxq "DNS:$shuju_public_domain"; then
   echo "Refusing deployment: the shared edge certificate is not ready for Shuju."
   exit 1
 fi
