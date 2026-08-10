@@ -2,7 +2,9 @@ import createMiddleware from 'next-intl/middleware';
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
+import { FALLBACK_NEWS_SLUGS } from '@/constants/news-fallback-slugs';
 import { isLocalizedPublicPath, PUBLIC_PAGE_CACHE_CONTROL, routing } from '@/i18n/routing';
+import { getNewsRouteAvailability, getZhNewsSlug, newsNotFoundHtml } from '@/lib/news-route-guard';
 
 const intlMiddleware = createMiddleware(routing);
 const DUPLICATE_NEWS_PATH =
@@ -17,7 +19,7 @@ function permanentRedirect(request: NextRequest, pathname: string) {
   return NextResponse.redirect(target, 308);
 }
 
-export default function middleware(request: NextRequest) {
+export default async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const hasLocalePrefix = routing.locales.some(
     (locale) => pathname === `/${locale}` || pathname.startsWith(`/${locale}/`),
@@ -42,6 +44,24 @@ export default function middleware(request: NextRequest) {
   }
   if (pathname === DUPLICATE_NEWS_PATH) {
     return permanentRedirect(request, CANONICAL_NEWS_PATH);
+  }
+
+  const newsSlug = getZhNewsSlug(pathname);
+  if (newsSlug && !FALLBACK_NEWS_SLUGS.has(newsSlug)) {
+    const availability = await getNewsRouteAvailability(
+      pathname,
+      process.env.API_BASE_URL_INTERNAL || process.env.NEXT_PUBLIC_API_BASE_URL || '',
+    );
+    if (availability === 'missing') {
+      return new NextResponse(newsNotFoundHtml(), {
+        status: 404,
+        headers: {
+          'Cache-Control': 'no-store',
+          'Content-Type': 'text/html; charset=utf-8',
+          'X-Robots-Tag': 'noindex',
+        },
+      });
+    }
   }
 
   // Keep every public URL deterministic for crawlers. Locale negotiation on
