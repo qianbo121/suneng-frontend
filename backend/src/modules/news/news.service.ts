@@ -11,6 +11,7 @@ import { NewsListQueryDto } from '@/modules/news/dto/news-list-query.dto';
 import { UpdateNewsDto } from '@/modules/news/dto/update-news.dto';
 import { NewsCategoryService } from '@/modules/news-category/news-category.service';
 import { changesNewsContent } from '@/modules/news/news-content-date';
+import { assertNewsPublicationPolicy } from '@/modules/news/news-publication-policy';
 import { PrismaService } from '@/prisma/prisma.service';
 
 type NewsPublishState = {
@@ -190,6 +191,10 @@ export class NewsService {
       ...(changesNewsContent(dto) ? { contentUpdatedAt: new Date() } : {}),
     };
 
+    if (record.status === PublishStatus.published && (dto.isPublished ?? record.isPublished)) {
+      assertNewsPublicationPolicy({ ...record, ...baseData });
+    }
+
     const slugSource = dto.slug || dto.titleEn || dto.titleZh;
     if (!slugSource) {
       return this.prisma.news.update({ where: { id }, data: baseData });
@@ -203,6 +208,10 @@ export class NewsService {
   async updateStatus(id: number, status: PublishStatus) {
     const before = await this.prisma.news.findUnique({ where: { id } });
     if (!before) throw new NotFoundException('News not found');
+
+    if (status === PublishStatus.published) {
+      assertNewsPublicationPolicy(before);
+    }
 
     const after = await this.prisma.news.update({
       where: { id },
