@@ -111,6 +111,9 @@ describe('Shuju service security boundary', () => {
     expect(shujuSection).not.toContain('$proxy_add_x_forwarded_for');
     expect(productionNginx).toContain('error_log /var/log/nginx/shuju.error.log warn;');
     expect(productionNginx).toContain('add_header Content-Security-Policy');
+    expect(shujuSection).toContain("style-src-attr 'unsafe-inline'");
+    expect(shujuSection).toContain("script-src 'self'");
+    expect(shujuSection).not.toContain("script-src 'self' 'unsafe-inline'");
     expect(productionNginx).toContain('add_header Permissions-Policy');
     expect(productionNginx).toContain('add_header Cache-Control "no-store" always;');
     expect(logrotate).toContain('/data/nginx-logs/*.log');
