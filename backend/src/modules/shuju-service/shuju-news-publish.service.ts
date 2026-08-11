@@ -5,6 +5,7 @@ import { createHash } from 'node:crypto';
 import DOMPurify from 'isomorphic-dompurify';
 
 import { BaiduSubmitService } from '@/modules/news/baidu-submit.service';
+import { assertNewsPublicationPolicy } from '@/modules/news/news-publication-policy';
 import {
   ShujuNewsOfflineDto,
   ShujuNewsPublishDto,
@@ -74,6 +75,14 @@ export class ShujuNewsPublishService {
     if (!visibleText && !/<img\s/i.test(sanitizedContent)) {
       throw new ConflictException('Sanitized news content is empty');
     }
+    assertNewsPublicationPolicy({
+      titleZh: dto.titleZh,
+      summaryZh: dto.summaryZh,
+      contentZh: sanitizedContent,
+      seoTitleZh: dto.seoTitleZh,
+      seoDescriptionZh: dto.seoDescriptionZh,
+      seoKeywordsZh: dto.seoKeywordsZh,
+    });
     const canonical = {
       sourceDraftId: dto.sourceDraftId,
       sourceVersion: dto.sourceVersion,

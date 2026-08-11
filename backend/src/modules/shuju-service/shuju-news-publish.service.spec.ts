@@ -118,6 +118,20 @@ describe('ShujuNewsPublishService', () => {
     expect(prisma.$transaction).not.toHaveBeenCalled();
   });
 
+  it('rejects unverified certification claims before any database write', async () => {
+    const { service, prisma } = harness();
+    await expect(
+      service.publish(
+        {
+          ...dto(),
+          contentZh: '<p>通过 ISO 9001、ISO 14001、ISO 45001 三体系认证。</p>',
+        },
+        'redline-certification',
+      ),
+    ).rejects.toBeInstanceOf(ConflictException);
+    expect(prisma.$transaction).not.toHaveBeenCalled();
+  });
+
   it('reuses an already transferred image by content hash', async () => {
     const { service, prisma, upload } = harness();
     const file = {

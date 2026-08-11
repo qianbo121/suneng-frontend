@@ -18,6 +18,9 @@ const henanSource = readSource(
 const productSource = readSource('../../constants/static-products.ts');
 const aboutSource = readSource('../../components/about/AboutZhContent.tsx');
 const certificateSource = readSource('../../constants/certificates.ts');
+const manufacturerSolutionSource = readSource(
+  '../../app/[locale]/solutions/rechuli-lu-changjia/page.tsx',
+);
 
 describe('GEO fact publication boundaries', () => {
   it('publishes F07–F17 as project parameters without turning design values into actual results', () => {
@@ -50,5 +53,10 @@ describe('GEO fact publication boundaries', () => {
     expect(certificateSource).not.toContain("id: 'iso-45001'");
     expect(certificateSource).not.toContain("id: 'qualification-work-safety-standardization'");
     expect(certificateSource).not.toContain("id: 'qualification-contract-credit-aaa-2024'");
+    expect(manufacturerSolutionSource).not.toContain('ISO 14001');
+    expect(manufacturerSolutionSource).not.toContain('ISO 45001');
+    expect(manufacturerSolutionSource).not.toContain('ISO 9001 / 14001 / 45001');
+    expect(manufacturerSolutionSource).toContain('03824Q60289R3S');
+    expect(manufacturerSolutionSource).toContain('2027-01-11');
   });
 });
