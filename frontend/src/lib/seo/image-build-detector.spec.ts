@@ -45,6 +45,7 @@ function classifyChange(relativePath: string) {
 describe('production image change detector', () => {
   it.each([
     '.github/workflows/deploy.yml',
+    'nginx.prod.conf.template',
     'frontend/src/lib/seo/example.spec.ts',
     'docs/runbook.md',
   ])('reuses images for release-only change %s', (relativePath) => {

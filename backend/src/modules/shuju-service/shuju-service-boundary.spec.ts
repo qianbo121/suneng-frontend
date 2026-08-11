@@ -86,4 +86,43 @@ describe('Shuju service security boundary', () => {
     expect(productionBlocks).toHaveLength(2);
     expect(localNginx).toMatch(/location \^~ \/api\/svc\/ \{\s*return 404;\s*\}/);
   });
+
+  it('publishes Shuju only through the protected desktop edge route', () => {
+    const productionNginx = read('nginx.prod.conf.template');
+    const logrotate = read('ops/logrotate/corp-site-nginx');
+    const deploy = read('deploy.sh');
+    const shujuSection = productionNginx
+      .split('# 数炬引擎：桌面端工作台')[1]
+      .split('# 智能工厂系统')[0];
+
+    expect(productionNginx.match(/server_name shuju\.jssngyl\.cn;/g)).toHaveLength(2);
+    expect(productionNginx).toContain(
+      'limit_req_zone $binary_remote_addr zone=shuju_login:10m rate=5r/m;',
+    );
+    expect(productionNginx).toContain('resolver 127.0.0.11 valid=10s ipv6=off;');
+    expect(productionNginx).toContain('server shuju:18321 resolve;');
+    expect(productionNginx).toContain('limit_req zone=shuju_login burst=3 nodelay;');
+    expect(productionNginx).toContain('limit_req_status 429;');
+    expect(productionNginx).toMatch(/location = \/api\/internal \{\s*return 404;\s*\}/);
+    expect(productionNginx).toMatch(/location \^~ \/api\/internal\/ \{\s*return 404;\s*\}/);
+    expect(productionNginx).toMatch(/location = \/api\/ready \{\s*return 404;\s*\}/);
+    expect(productionNginx).toContain('proxy_set_header X-Request-ID $request_id;');
+    expect(shujuSection).toContain('proxy_set_header X-Forwarded-For $remote_addr;');
+    expect(shujuSection).not.toContain('$proxy_add_x_forwarded_for');
+    expect(productionNginx).toContain('error_log /var/log/nginx/shuju.error.log warn;');
+    expect(productionNginx).toContain('add_header Content-Security-Policy');
+    expect(shujuSection).toContain("style-src-attr 'unsafe-inline'");
+    expect(shujuSection).toContain("script-src 'self'");
+    expect(shujuSection).not.toContain("script-src 'self' 'unsafe-inline'");
+    expect(productionNginx).toContain('add_header Permissions-Policy');
+    expect(productionNginx).toContain('add_header Cache-Control "no-store" always;');
+    expect(logrotate).toContain('/data/nginx-logs/*.log');
+    expect(deploy).toContain('missing the protected Shuju route');
+    expect(deploy).toContain('SHUJU_EXPECTED_PUBLIC_IP is missing');
+    expect(deploy).toContain('getent is required for Shuju DNS verification');
+    expect(deploy).toContain('Shuju DNS does not match SHUJU_EXPECTED_PUBLIC_IP');
+    expect(deploy).toContain('openssl x509 -in "$shuju_edge_cert" -noout -checkend 604800');
+    expect(deploy).toContain('grep -Fxq "DNS:$shuju_public_domain"');
+    expect(deploy).toContain('shared edge certificate is not ready for Shuju');
+  });
 });

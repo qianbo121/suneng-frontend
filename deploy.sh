@@ -104,6 +104,44 @@ if ! grep -Fq 'server_name factory.jssngyl.cn;' nginx.prod.conf.template; then
   exit 1
 fi
 
+if ! grep -Fq 'server_name shuju.jssngyl.cn;' nginx.prod.conf.template \
+  || ! grep -Fq 'location = /api/internal' nginx.prod.conf.template \
+  || ! grep -Fq 'location ^~ /api/internal/' nginx.prod.conf.template \
+  || ! grep -Fq 'location = /api/ready' nginx.prod.conf.template; then
+  echo "Refusing deployment: nginx.prod.conf.template is missing the protected Shuju route."
+  exit 1
+fi
+
+shuju_public_domain="shuju.jssngyl.cn"
+shuju_edge_cert="/etc/nginx/certs/fullchain.pem"
+shuju_expected_ip="$(awk -F= '$1 == "SHUJU_EXPECTED_PUBLIC_IP" {sub(/^[^=]*=/, ""); print; exit}' "$ENV_FILE")"
+if [ -z "$shuju_expected_ip" ]; then
+  echo "Refusing deployment: SHUJU_EXPECTED_PUBLIC_IP is missing."
+  exit 1
+fi
+if ! command -v getent >/dev/null 2>&1; then
+  echo "Refusing deployment: getent is required for Shuju DNS verification."
+  exit 1
+fi
+shuju_resolved_ips="$(getent ahosts "$shuju_public_domain" | awk '{print $1}' | sort -u)"
+if ! grep -Fxq "$shuju_expected_ip" <<< "$shuju_resolved_ips"; then
+  echo "Refusing deployment: Shuju DNS does not match SHUJU_EXPECTED_PUBLIC_IP."
+  exit 1
+fi
+if ! command -v openssl >/dev/null 2>&1 \
+  || [ ! -r "$shuju_edge_cert" ] \
+  || ! openssl x509 -in "$shuju_edge_cert" -noout -checkend 604800 >/dev/null; then
+  echo "Refusing deployment: the shared edge certificate is not ready for Shuju."
+  exit 1
+fi
+if ! openssl x509 -in "$shuju_edge_cert" -noout -ext subjectAltName \
+  | tr ',' '\n' \
+  | awk '{$1=$1};1' \
+  | grep -Fxq "DNS:$shuju_public_domain"; then
+  echo "Refusing deployment: the shared edge certificate is not ready for Shuju."
+  exit 1
+fi
+
 # The production host also serves the separately deployed Chengwen app through
 # this shared Nginx container. Refuse a full-site deploy if the checked-in
 # template would silently remove that route.
