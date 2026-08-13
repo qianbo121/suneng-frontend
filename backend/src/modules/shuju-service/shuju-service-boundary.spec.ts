@@ -115,7 +115,9 @@ describe('Shuju service security boundary', () => {
     expect(shujuSection).toContain("script-src 'self'");
     expect(shujuSection).not.toContain("script-src 'self' 'unsafe-inline'");
     expect(productionNginx).toContain('add_header Permissions-Policy');
-    expect(productionNginx).toContain('add_header Cache-Control "no-store" always;');
+    expect(shujuSection).not.toContain('add_header Cache-Control "no-store" always;');
+    expect(productionNginx).toContain('gzip on;');
+    expect(productionNginx).toContain('gzip_proxied any;');
     expect(logrotate).toContain('/data/nginx-logs/*.log');
     expect(deploy).toContain('missing the protected Shuju route');
     expect(deploy).toContain('SHUJU_EXPECTED_PUBLIC_IP is missing');
