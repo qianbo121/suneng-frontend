@@ -1,6 +1,8 @@
-import { ConflictException } from '@nestjs/common';
+import { ConflictException, NotFoundException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { PublishStatus } from '@prisma/client';
+import { plainToInstance } from 'class-transformer';
+import { validate } from 'class-validator';
 
 import { ShujuNewsPublishDto } from '@/modules/shuju-service/dto/shuju-news-publish.dto';
 import { ShujuNewsPublishService } from '@/modules/shuju-service/shuju-news-publish.service';
@@ -11,8 +13,8 @@ jest.mock('isomorphic-dompurify', () => ({
   default: { sanitize: (value: string) => value },
 }));
 
-function dto(): ShujuNewsPublishDto {
-  return {
+function dto(categoryId: number | null = 2): ShujuNewsPublishDto {
+  const payload: ShujuNewsPublishDto = {
     sourceDraftId: 7,
     sourceVersion: 3,
     idempotencyKey: 'shuju-news:7:v3:publish',
@@ -20,9 +22,10 @@ function dto(): ShujuNewsPublishDto {
     summaryZh: '验收数据说明',
     contentZh: '<p>先核对工艺曲线，再核对装炉记录。</p>',
     coverImage: 'https://www.jssngyl.cn/uploads/2026/08/cover.webp',
-    categoryId: 2,
     slug: 'trolley-furnace-acceptance-data',
   };
+  if (categoryId !== null) payload.categoryId = categoryId;
+  return payload;
 }
 
 function harness(binding: { sourceVersion: number; newsId: number } | null = null) {
@@ -81,6 +84,14 @@ function harness(binding: { sourceVersion: number; newsId: number } | null = nul
 }
 
 describe('ShujuNewsPublishService', () => {
+  it('accepts an omitted category in the public request contract but still rejects an invalid one', async () => {
+    const withoutCategory = plainToInstance(ShujuNewsPublishDto, dto(null));
+    const invalidCategory = plainToInstance(ShujuNewsPublishDto, dto(0));
+
+    await expect(validate(withoutCategory)).resolves.toHaveLength(0);
+    await expect(validate(invalidCategory)).resolves.not.toHaveLength(0);
+  });
+
   it('creates one published news row and replays the same idempotency key', async () => {
     const { service, tx } = harness();
     const first = await service.publish(dto(), 'request-1');
@@ -99,6 +110,41 @@ describe('ShujuNewsPublishService', () => {
     const second = await service.publish(dto(), 'request-2');
     expect(second.replayed).toBe(true);
     expect(tx.news.create).toHaveBeenCalledTimes(1);
+  });
+
+  it('publishes without a user-selected category by choosing the first published category', async () => {
+    const { service, tx } = harness();
+    (tx.newsCategory.findFirst as jest.Mock).mockResolvedValue({ id: 8 });
+
+    await service.publish(dto(null), 'request-default-category');
+
+    expect(tx.newsCategory.findFirst).toHaveBeenCalledWith({
+      where: { status: PublishStatus.published },
+      orderBy: [{ sortOrder: 'asc' }, { id: 'asc' }],
+    });
+    expect(tx.news.create).toHaveBeenCalledWith(
+      expect.objectContaining({ data: expect.objectContaining({ categoryId: 8 }) }),
+    );
+  });
+
+  it('keeps a supplied published category for legacy clients', async () => {
+    const { service, tx } = harness();
+    await service.publish(dto(4), 'request-explicit-category');
+
+    expect(tx.newsCategory.findFirst).toHaveBeenCalledWith({
+      where: { id: 4, status: PublishStatus.published },
+      orderBy: undefined,
+    });
+  });
+
+  it('fails before writing news when no published category exists', async () => {
+    const { service, tx } = harness();
+    (tx.newsCategory.findFirst as jest.Mock).mockResolvedValue(null);
+
+    await expect(service.publish(dto(null), 'request-no-category')).rejects.toBeInstanceOf(
+      NotFoundException,
+    );
+    expect(tx.news.create).not.toHaveBeenCalled();
   });
 
   it('rejects stale source versions before updating an existing news item', async () => {
