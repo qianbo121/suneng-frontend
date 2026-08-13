@@ -58,10 +58,11 @@ export class ShujuNewsPublishDto {
   @IsDateString()
   publishDate?: string;
 
+  @IsOptional()
   @Type(() => Number)
   @IsInt()
   @Min(1)
-  categoryId!: number;
+  categoryId?: number;
 
   @IsOptional()
   @IsString()

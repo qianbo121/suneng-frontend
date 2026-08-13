@@ -323,9 +323,13 @@ export class ShujuNewsPublishService {
     });
   }
 
-  private async resolveCategory(tx: Prisma.TransactionClient, requested: number) {
+  private async resolveCategory(tx: Prisma.TransactionClient, requested?: number) {
     const category = await tx.newsCategory.findFirst({
-      where: { id: requested, status: PublishStatus.published },
+      where: {
+        ...(requested ? { id: requested } : {}),
+        status: PublishStatus.published,
+      },
+      orderBy: requested ? undefined : [{ sortOrder: 'asc' }, { id: 'asc' }],
     });
     if (!category) throw new NotFoundException('Published news category not found');
     return category.id;
