@@ -16,6 +16,7 @@
     "prisma:generate": "prisma generate",
     "prisma:migrate:dev": "prisma migrate dev",
     "prisma:seed": "prisma db seed",
+    "content:purge-legacy": "ts-node --project tsconfig.json scripts/purge-legacy-public-content.ts",
     "baidu:backfill-news": "ts-node --project tsconfig.json scripts/backfill-baidu-news-submit.ts"
   },
   "dependencies": {

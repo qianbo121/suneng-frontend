@@ -3,28 +3,22 @@ import {
   PrismaClient,
   PublishStatus,
 } from '@prisma/client';
+import {
+  isPlaceholderPartner,
+  LEGACY_BANNER_TITLES_EN,
+  LEGACY_BANNER_TITLES_ZH,
+  LEGACY_PRODUCT_CATEGORY_SLUGS,
+  LEGACY_PRODUCT_SLUGS,
+} from '../src/common/content-governance/legacy-public-content';
 
 const prisma = new PrismaClient();
 
 async function disableLegacySeedContent() {
   // 旧站测试数据，不得作为苏能官网生产内容、GEO/RAG 资料源。
-  const legacyCategorySlugs = [
-    'charging-truck-series',
-    'scaling-vehicle-series',
-    'crusher-series',
-    'mobile-crane',
-    '4t-chassis-series',
-    '8t-chassis-series',
-    'integrated-chassis-series',
-    'concrete-mixer-transport-series',
-    'underground-shotcrete-series',
-    'underground-masonry-multi-function-series',
-  ];
-  const legacyProductSlugs = legacyCategorySlugs.map((slug, index) => `${slug}-sample-${index + 1}`);
   const legacyNewsSlugs = ['industry-mining-equipment-update'];
 
   await prisma.product.updateMany({
-    where: { slug: { in: legacyProductSlugs } },
+    where: { slug: { in: LEGACY_PRODUCT_SLUGS } },
     data: {
       isHot: false,
       status: PublishStatus.offline,
@@ -32,7 +26,7 @@ async function disableLegacySeedContent() {
   });
 
   await prisma.productCategory.updateMany({
-    where: { slug: { in: legacyCategorySlugs } },
+    where: { slug: { in: [...LEGACY_PRODUCT_CATEGORY_SLUGS] } },
     data: { status: PublishStatus.offline },
   });
 
@@ -40,6 +34,19 @@ async function disableLegacySeedContent() {
     where: { slug: { in: legacyNewsSlugs } },
     data: {
       isPublished: false,
+      status: PublishStatus.offline,
+    },
+  });
+
+  await prisma.banner.updateMany({
+    where: {
+      OR: [
+        { titleZh: { in: [...LEGACY_BANNER_TITLES_ZH] } },
+        { titleEn: { in: [...LEGACY_BANNER_TITLES_EN] } },
+      ],
+    },
+    data: {
+      isActive: false,
       status: PublishStatus.offline,
     },
   });
@@ -395,10 +402,11 @@ async function seedBanners() {
       },
       {
         sectionKey: 'home-hero',
-        titleZh: '技术驱动交付，服务覆盖全国',
-        titleEn: 'Technology-driven Delivery with Nationwide Service',
-        subtitleZh: '从项目咨询、产品配置到售后响应，建立标准化服务链路。',
-        subtitleEn: 'From consultation and configuration to after-sales response, the service chain is standardized end to end.',
+        titleZh: '按项目条件组织交付与服务',
+        titleEn: 'Project-based Delivery and Service Support',
+        subtitleZh: '咨询、配置、交付与售后支持均以项目方案和合同约定为准。',
+        subtitleEn:
+          'Consultation, configuration, delivery and after-sales support follow the agreed project plan and contract.',
         imageUrl: 'https://placehold.co/1920x1080/123F74/ffffff',
         mobileImageUrl: 'https://placehold.co/900x1400/123F74/ffffff',
         linkUrl: '/service',
@@ -534,15 +542,19 @@ async function seedAboutContent() {
 }
 
 async function seedPartners() {
-  await prisma.partner.deleteMany();
-  await prisma.partner.createMany({
-    data: Array.from({ length: 8 }).map((_, index) => ({
-      name: `合作伙伴 ${index + 1}`,
-      logoUrl: `https://placehold.co/220x96/${index % 2 === 0 ? '004B97' : '0B3768'}/ffffff`,
-      website: `https://example-${index + 1}.com`,
-      sortOrder: (index + 1) * 10,
-      status: PublishStatus.published,
-    })),
+  const candidates = await prisma.partner.findMany({
+    where: {
+      OR: [{ name: { startsWith: '合作伙伴 ' } }, { website: { startsWith: 'https://example-' } }],
+    },
+    select: { id: true, name: true, website: true },
+  });
+  const placeholderIds = candidates
+    .filter((item) => isPlaceholderPartner(item.name, item.website))
+    .map((item) => item.id);
+
+  await prisma.partner.updateMany({
+    where: { id: { in: placeholderIds } },
+    data: { status: PublishStatus.offline },
   });
 }
 
