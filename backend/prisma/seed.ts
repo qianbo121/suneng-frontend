@@ -4,19 +4,20 @@ import {
   PublishStatus,
 } from '@prisma/client';
 import {
+  containsLegacyAboutContent,
   isPlaceholderPartner,
   LEGACY_BANNER_TITLES_EN,
   LEGACY_BANNER_TITLES_ZH,
+  LEGACY_NEWS_SLUGS,
   LEGACY_PRODUCT_CATEGORY_SLUGS,
   LEGACY_PRODUCT_SLUGS,
+  runGovernedContentSeed,
 } from '../src/common/content-governance/legacy-public-content';
 
 const prisma = new PrismaClient();
 
 async function disableLegacySeedContent() {
   // 旧站测试数据，不得作为苏能官网生产内容、GEO/RAG 资料源。
-  const legacyNewsSlugs = ['industry-mining-equipment-update'];
-
   await prisma.product.updateMany({
     where: { slug: { in: LEGACY_PRODUCT_SLUGS } },
     data: {
@@ -31,7 +32,7 @@ async function disableLegacySeedContent() {
   });
 
   await prisma.news.updateMany({
-    where: { slug: { in: legacyNewsSlugs } },
+    where: { slug: { in: [...LEGACY_NEWS_SLUGS] } },
     data: {
       isPublished: false,
       status: PublishStatus.offline,
@@ -50,6 +51,134 @@ async function disableLegacySeedContent() {
       status: PublishStatus.offline,
     },
   });
+
+  const partnerCandidates = await prisma.partner.findMany({
+    where: {
+      OR: [{ name: { startsWith: '合作伙伴 ' } }, { website: { startsWith: 'https://example-' } }],
+    },
+    select: { id: true, name: true, website: true },
+  });
+  const placeholderPartnerIds = partnerCandidates
+    .filter((item) => isPlaceholderPartner(item.name, item.website))
+    .map((item) => item.id);
+
+  await prisma.partner.updateMany({
+    where: { id: { in: placeholderPartnerIds } },
+    data: { status: PublishStatus.offline },
+  });
+
+  const publishedAboutSections = await prisma.aboutSection.findMany({
+    where: { status: PublishStatus.published },
+    select: {
+      id: true,
+      titleZh: true,
+      titleEn: true,
+      contentZh: true,
+      contentEn: true,
+      seoTitleZh: true,
+      seoTitleEn: true,
+      seoDescriptionZh: true,
+      seoDescriptionEn: true,
+    },
+  });
+  const legacyAboutSectionIds = publishedAboutSections
+    .filter((item) =>
+      containsLegacyAboutContent([
+        item.titleZh,
+        item.titleEn,
+        item.contentZh,
+        item.contentEn,
+        item.seoTitleZh,
+        item.seoTitleEn,
+        item.seoDescriptionZh,
+        item.seoDescriptionEn,
+      ]),
+    )
+    .map((item) => item.id);
+
+  await prisma.aboutSection.updateMany({
+    where: { id: { in: legacyAboutSectionIds } },
+    data: { status: PublishStatus.offline },
+  });
+}
+
+async function assertNoLegacyPublicContent() {
+  const [products, categories, news, banners, partnerCandidates, publishedAboutSections] =
+    await Promise.all([
+      prisma.product.count({
+        where: { slug: { in: LEGACY_PRODUCT_SLUGS }, status: PublishStatus.published },
+      }),
+      prisma.productCategory.count({
+        where: {
+          slug: { in: [...LEGACY_PRODUCT_CATEGORY_SLUGS] },
+          status: PublishStatus.published,
+        },
+      }),
+      prisma.news.count({
+        where: {
+          slug: { in: [...LEGACY_NEWS_SLUGS] },
+          OR: [{ status: PublishStatus.published }, { isPublished: true }],
+        },
+      }),
+      prisma.banner.count({
+        where: {
+          OR: [
+            { titleZh: { in: [...LEGACY_BANNER_TITLES_ZH] } },
+            { titleEn: { in: [...LEGACY_BANNER_TITLES_EN] } },
+          ],
+          AND: [{ OR: [{ status: PublishStatus.published }, { isActive: true }] }],
+        },
+      }),
+      prisma.partner.findMany({
+        where: {
+          status: PublishStatus.published,
+          OR: [
+            { name: { startsWith: '合作伙伴 ' } },
+            { website: { startsWith: 'https://example-' } },
+          ],
+        },
+        select: { name: true, website: true },
+      }),
+      prisma.aboutSection.findMany({
+        where: { status: PublishStatus.published },
+        select: {
+          titleZh: true,
+          titleEn: true,
+          contentZh: true,
+          contentEn: true,
+          seoTitleZh: true,
+          seoTitleEn: true,
+          seoDescriptionZh: true,
+          seoDescriptionEn: true,
+        },
+      }),
+    ]);
+
+  const partners = partnerCandidates.filter((item) =>
+    isPlaceholderPartner(item.name, item.website),
+  ).length;
+  const aboutSections = publishedAboutSections.filter((item) =>
+    containsLegacyAboutContent([
+      item.titleZh,
+      item.titleEn,
+      item.contentZh,
+      item.contentEn,
+      item.seoTitleZh,
+      item.seoTitleEn,
+      item.seoDescriptionZh,
+      item.seoDescriptionEn,
+    ]),
+  ).length;
+  const leaks = { products, categories, news, banners, partners, aboutSections };
+  const remaining = Object.entries(leaks).filter(([, count]) => count > 0);
+
+  if (remaining.length > 0) {
+    throw new Error(
+      `Legacy public content survived initialization: ${remaining
+        .map(([name, count]) => `${name}=${count}`)
+        .join(', ')}`,
+    );
+  }
 }
 
 async function seedProductCategoriesAndProducts() {
@@ -310,7 +439,7 @@ async function seedNewsCategoriesAndNews() {
       sortOrder: 20,
     },
     {
-      slug: 'industry-mining-equipment-update',
+      slug: 'industry-furnace-energy-saving-renovation',
       categorySlug: 'industry-news',
       titleZh: '工业炉行业资讯：热处理设备节能改造趋势',
       titleEn: 'Industry News: Energy-saving Renovation Trends for Heat Treatment Equipment',
@@ -559,7 +688,7 @@ async function seedPartners() {
 }
 
 async function main() {
-  // This seed is destructive (deleteMany on banners/culture/timeline/partners).
+  // This seed is destructive (deleteMany on banners/culture/timeline).
   // Refuse to run it against a
   // production database unless explicitly overridden.
   if (process.env.NODE_ENV === 'production' && process.env.ALLOW_DESTRUCTIVE_SEED !== '1') {
@@ -569,12 +698,17 @@ async function main() {
     );
   }
 
-  await disableLegacySeedContent();
-  await seedBanners();
-  await seedProductCategoriesAndProducts();
-  await seedNewsCategoriesAndNews();
-  await seedAboutContent();
-  await seedPartners();
+  await runGovernedContentSeed({
+    seedCurrentContent: async () => {
+      await seedBanners();
+      await seedProductCategoriesAndProducts();
+      await seedNewsCategoriesAndNews();
+      await seedAboutContent();
+      await seedPartners();
+    },
+    disableLegacyContent: disableLegacySeedContent,
+    assertNoLegacyPublicContent,
+  });
 
   console.info(
     '[seed] Content seed completed. Administrator accounts were not created or modified.',

@@ -15,6 +15,8 @@ export const LEGACY_PRODUCT_SLUGS = LEGACY_PRODUCT_CATEGORY_SLUGS.map(
   (slug, index) => `${slug}-sample-${index + 1}`,
 );
 
+export const LEGACY_NEWS_SLUGS = ['industry-mining-equipment-update'] as const;
+
 export const LEGACY_BANNER_TITLES_ZH = [
   '专注地下工程装备制造与解决方案',
   '制造业质感的矿山机械设备品牌官网',
@@ -52,4 +54,26 @@ export function isPlaceholderPartner(name: string, website?: string | null) {
   const websiteMatch = /^https:\/\/example-[1-8]\.com$/i.test(normalizedWebsite);
 
   return nameMatch && websiteMatch;
+}
+
+type GovernedSeedSteps = {
+  seedCurrentContent: () => Promise<void>;
+  disableLegacyContent: () => Promise<void>;
+  assertNoLegacyPublicContent: () => Promise<void>;
+};
+
+export async function runGovernedContentSeed(steps: GovernedSeedSteps) {
+  let seedFailure: unknown;
+
+  try {
+    await steps.seedCurrentContent();
+  } catch (error) {
+    seedFailure = error;
+  }
+
+  // 清理必须最后执行；即使前面的初始化失败，也不能遗留已公开的旧站内容。
+  await steps.disableLegacyContent();
+  await steps.assertNoLegacyPublicContent();
+
+  if (seedFailure) throw seedFailure;
 }
