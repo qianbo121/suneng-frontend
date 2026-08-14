@@ -3,28 +3,23 @@ import {
   PrismaClient,
   PublishStatus,
 } from '@prisma/client';
+import {
+  containsLegacyAboutContent,
+  isPlaceholderPartner,
+  LEGACY_BANNER_TITLES_EN,
+  LEGACY_BANNER_TITLES_ZH,
+  LEGACY_NEWS_SLUGS,
+  LEGACY_PRODUCT_CATEGORY_SLUGS,
+  LEGACY_PRODUCT_SLUGS,
+  runGovernedContentSeed,
+} from '../src/common/content-governance/legacy-public-content';
 
 const prisma = new PrismaClient();
 
 async function disableLegacySeedContent() {
   // 旧站测试数据，不得作为苏能官网生产内容、GEO/RAG 资料源。
-  const legacyCategorySlugs = [
-    'charging-truck-series',
-    'scaling-vehicle-series',
-    'crusher-series',
-    'mobile-crane',
-    '4t-chassis-series',
-    '8t-chassis-series',
-    'integrated-chassis-series',
-    'concrete-mixer-transport-series',
-    'underground-shotcrete-series',
-    'underground-masonry-multi-function-series',
-  ];
-  const legacyProductSlugs = legacyCategorySlugs.map((slug, index) => `${slug}-sample-${index + 1}`);
-  const legacyNewsSlugs = ['industry-mining-equipment-update'];
-
   await prisma.product.updateMany({
-    where: { slug: { in: legacyProductSlugs } },
+    where: { slug: { in: LEGACY_PRODUCT_SLUGS } },
     data: {
       isHot: false,
       status: PublishStatus.offline,
@@ -32,17 +27,158 @@ async function disableLegacySeedContent() {
   });
 
   await prisma.productCategory.updateMany({
-    where: { slug: { in: legacyCategorySlugs } },
+    where: { slug: { in: [...LEGACY_PRODUCT_CATEGORY_SLUGS] } },
     data: { status: PublishStatus.offline },
   });
 
   await prisma.news.updateMany({
-    where: { slug: { in: legacyNewsSlugs } },
+    where: { slug: { in: [...LEGACY_NEWS_SLUGS] } },
     data: {
       isPublished: false,
       status: PublishStatus.offline,
     },
   });
+
+  await prisma.banner.updateMany({
+    where: {
+      OR: [
+        { titleZh: { in: [...LEGACY_BANNER_TITLES_ZH] } },
+        { titleEn: { in: [...LEGACY_BANNER_TITLES_EN] } },
+      ],
+    },
+    data: {
+      isActive: false,
+      status: PublishStatus.offline,
+    },
+  });
+
+  const partnerCandidates = await prisma.partner.findMany({
+    where: {
+      OR: [{ name: { startsWith: '合作伙伴 ' } }, { website: { startsWith: 'https://example-' } }],
+    },
+    select: { id: true, name: true, website: true },
+  });
+  const placeholderPartnerIds = partnerCandidates
+    .filter((item) => isPlaceholderPartner(item.name, item.website))
+    .map((item) => item.id);
+
+  await prisma.partner.updateMany({
+    where: { id: { in: placeholderPartnerIds } },
+    data: { status: PublishStatus.offline },
+  });
+
+  const publishedAboutSections = await prisma.aboutSection.findMany({
+    where: { status: PublishStatus.published },
+    select: {
+      id: true,
+      titleZh: true,
+      titleEn: true,
+      contentZh: true,
+      contentEn: true,
+      seoTitleZh: true,
+      seoTitleEn: true,
+      seoDescriptionZh: true,
+      seoDescriptionEn: true,
+    },
+  });
+  const legacyAboutSectionIds = publishedAboutSections
+    .filter((item) =>
+      containsLegacyAboutContent([
+        item.titleZh,
+        item.titleEn,
+        item.contentZh,
+        item.contentEn,
+        item.seoTitleZh,
+        item.seoTitleEn,
+        item.seoDescriptionZh,
+        item.seoDescriptionEn,
+      ]),
+    )
+    .map((item) => item.id);
+
+  await prisma.aboutSection.updateMany({
+    where: { id: { in: legacyAboutSectionIds } },
+    data: { status: PublishStatus.offline },
+  });
+}
+
+async function assertNoLegacyPublicContent() {
+  const [products, categories, news, banners, partnerCandidates, publishedAboutSections] =
+    await Promise.all([
+      prisma.product.count({
+        where: { slug: { in: LEGACY_PRODUCT_SLUGS }, status: PublishStatus.published },
+      }),
+      prisma.productCategory.count({
+        where: {
+          slug: { in: [...LEGACY_PRODUCT_CATEGORY_SLUGS] },
+          status: PublishStatus.published,
+        },
+      }),
+      prisma.news.count({
+        where: {
+          slug: { in: [...LEGACY_NEWS_SLUGS] },
+          OR: [{ status: PublishStatus.published }, { isPublished: true }],
+        },
+      }),
+      prisma.banner.count({
+        where: {
+          OR: [
+            { titleZh: { in: [...LEGACY_BANNER_TITLES_ZH] } },
+            { titleEn: { in: [...LEGACY_BANNER_TITLES_EN] } },
+          ],
+          AND: [{ OR: [{ status: PublishStatus.published }, { isActive: true }] }],
+        },
+      }),
+      prisma.partner.findMany({
+        where: {
+          status: PublishStatus.published,
+          OR: [
+            { name: { startsWith: '合作伙伴 ' } },
+            { website: { startsWith: 'https://example-' } },
+          ],
+        },
+        select: { name: true, website: true },
+      }),
+      prisma.aboutSection.findMany({
+        where: { status: PublishStatus.published },
+        select: {
+          titleZh: true,
+          titleEn: true,
+          contentZh: true,
+          contentEn: true,
+          seoTitleZh: true,
+          seoTitleEn: true,
+          seoDescriptionZh: true,
+          seoDescriptionEn: true,
+        },
+      }),
+    ]);
+
+  const partners = partnerCandidates.filter((item) =>
+    isPlaceholderPartner(item.name, item.website),
+  ).length;
+  const aboutSections = publishedAboutSections.filter((item) =>
+    containsLegacyAboutContent([
+      item.titleZh,
+      item.titleEn,
+      item.contentZh,
+      item.contentEn,
+      item.seoTitleZh,
+      item.seoTitleEn,
+      item.seoDescriptionZh,
+      item.seoDescriptionEn,
+    ]),
+  ).length;
+  const leaks = { products, categories, news, banners, partners, aboutSections };
+  const remaining = Object.entries(leaks).filter(([, count]) => count > 0);
+
+  if (remaining.length > 0) {
+    throw new Error(
+      `Legacy public content survived initialization: ${remaining
+        .map(([name, count]) => `${name}=${count}`)
+        .join(', ')}`,
+    );
+  }
 }
 
 async function seedProductCategoriesAndProducts() {
@@ -303,7 +439,7 @@ async function seedNewsCategoriesAndNews() {
       sortOrder: 20,
     },
     {
-      slug: 'industry-mining-equipment-update',
+      slug: 'industry-furnace-energy-saving-renovation',
       categorySlug: 'industry-news',
       titleZh: '工业炉行业资讯：热处理设备节能改造趋势',
       titleEn: 'Industry News: Energy-saving Renovation Trends for Heat Treatment Equipment',
@@ -395,10 +531,11 @@ async function seedBanners() {
       },
       {
         sectionKey: 'home-hero',
-        titleZh: '技术驱动交付，服务覆盖全国',
-        titleEn: 'Technology-driven Delivery with Nationwide Service',
-        subtitleZh: '从项目咨询、产品配置到售后响应，建立标准化服务链路。',
-        subtitleEn: 'From consultation and configuration to after-sales response, the service chain is standardized end to end.',
+        titleZh: '按项目条件组织交付与服务',
+        titleEn: 'Project-based Delivery and Service Support',
+        subtitleZh: '咨询、配置、交付与售后支持均以项目方案和合同约定为准。',
+        subtitleEn:
+          'Consultation, configuration, delivery and after-sales support follow the agreed project plan and contract.',
         imageUrl: 'https://placehold.co/1920x1080/123F74/ffffff',
         mobileImageUrl: 'https://placehold.co/900x1400/123F74/ffffff',
         linkUrl: '/service',
@@ -534,20 +671,24 @@ async function seedAboutContent() {
 }
 
 async function seedPartners() {
-  await prisma.partner.deleteMany();
-  await prisma.partner.createMany({
-    data: Array.from({ length: 8 }).map((_, index) => ({
-      name: `合作伙伴 ${index + 1}`,
-      logoUrl: `https://placehold.co/220x96/${index % 2 === 0 ? '004B97' : '0B3768'}/ffffff`,
-      website: `https://example-${index + 1}.com`,
-      sortOrder: (index + 1) * 10,
-      status: PublishStatus.published,
-    })),
+  const candidates = await prisma.partner.findMany({
+    where: {
+      OR: [{ name: { startsWith: '合作伙伴 ' } }, { website: { startsWith: 'https://example-' } }],
+    },
+    select: { id: true, name: true, website: true },
+  });
+  const placeholderIds = candidates
+    .filter((item) => isPlaceholderPartner(item.name, item.website))
+    .map((item) => item.id);
+
+  await prisma.partner.updateMany({
+    where: { id: { in: placeholderIds } },
+    data: { status: PublishStatus.offline },
   });
 }
 
 async function main() {
-  // This seed is destructive (deleteMany on banners/culture/timeline/partners).
+  // This seed is destructive (deleteMany on banners/culture/timeline).
   // Refuse to run it against a
   // production database unless explicitly overridden.
   if (process.env.NODE_ENV === 'production' && process.env.ALLOW_DESTRUCTIVE_SEED !== '1') {
@@ -557,12 +698,17 @@ async function main() {
     );
   }
 
-  await disableLegacySeedContent();
-  await seedBanners();
-  await seedProductCategoriesAndProducts();
-  await seedNewsCategoriesAndNews();
-  await seedAboutContent();
-  await seedPartners();
+  await runGovernedContentSeed({
+    seedCurrentContent: async () => {
+      await seedBanners();
+      await seedProductCategoriesAndProducts();
+      await seedNewsCategoriesAndNews();
+      await seedAboutContent();
+      await seedPartners();
+    },
+    disableLegacyContent: disableLegacySeedContent,
+    assertNoLegacyPublicContent,
+  });
 
   console.info(
     '[seed] Content seed completed. Administrator accounts were not created or modified.',
