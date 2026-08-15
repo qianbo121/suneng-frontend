@@ -736,7 +736,7 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
           </section>
         ) : null}
 
-        {/* H. 提交需求表单：仅联系电话必填，提交反馈由客户端组件处理。 */}
+        {/* H. 两步项目工况表单：第一步校验项目概况与联系方式，第二步可跳过。 */}
         <ProductLeadForm
           locale={currentLocale}
           leadBullets={currentLocale === 'zh' ? detail.leadBullets : undefined}

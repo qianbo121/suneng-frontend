@@ -62,6 +62,8 @@ describe('Shuju service security boundary', () => {
     expect(controller).toContain("@Controller('svc/inquiries')");
     expect(controller).toContain("@Get('head')");
     expect(controller).toContain("@Get('read')");
+    expect(controller).toContain("response.setHeader('X-Shuju-First-Record-Id'");
+    expect(controller).toContain('@UseGuards(ShujuInquiryReadAuthGuard)');
     expect(controller).not.toMatch(/@(Post|Patch|Put|Delete)\b/);
     expect(service).toContain('id: { gt: effectiveAfterId }');
     expect(service).not.toMatch(/customRequirement\.(create|update|delete|upsert)\b/);

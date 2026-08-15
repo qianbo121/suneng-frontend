@@ -2,24 +2,42 @@ import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 
 type FeishuWebhookResponse = {
-  code?: number;
+  code?: unknown;
   msg?: string;
-  StatusCode?: number;
+  StatusCode?: unknown;
   StatusMessage?: string;
 };
+
+export type InquiryNotificationFailureKind = 'retryable_failure' | 'permanent_failure' | 'unknown';
+
+export class InquiryNotificationDeliveryError extends Error {
+  constructor(
+    message: string,
+    readonly kind: InquiryNotificationFailureKind,
+  ) {
+    super(message);
+    this.name = InquiryNotificationDeliveryError.name;
+  }
+}
 
 const INQUIRY_NOTIFICATION_TITLE = '官网新询盘';
 const MAX_SENDER_LENGTH = 300;
 const MAX_BODY_LENGTH = 4_000;
 
 type InquiryNotificationPayload = {
+  submissionId?: string | null;
+  projectType?: string | null;
+  projectLocation?: string | null;
   name?: string | null;
   phone?: string | null;
+  email?: string | null;
   company?: string | null;
   industry?: string | null;
   process?: string | null;
   temperature?: string | null;
   requirement?: string | null;
+  sourceType?: string | null;
+  sourceDetail?: string | null;
   createdAt?: Date | string | null;
 };
 
@@ -71,12 +89,19 @@ function formatReceivedAt(value?: Date | string | null) {
 
 function buildInquiryCard(inquiry: InquiryNotificationPayload) {
   const requirement = cleanBody(inquiry.requirement)?.slice(0, MAX_BODY_LENGTH);
+  const source = [cleanInline(inquiry.sourceType), cleanInline(inquiry.sourceDetail)]
+    .filter(Boolean)
+    .join(' / ');
   const fields = [
-    field('来源', '官网询盘'),
+    field('提交编号', inquiry.submissionId),
+    field('来源', source || '官网询盘'),
     field('收到时间', formatReceivedAt(inquiry.createdAt)),
+    field('项目类型', inquiry.projectType),
+    field('项目地点', inquiry.projectLocation),
     field('联系人', inquiry.name),
     field('公司', inquiry.company),
     field('联系电话', inquiry.phone),
+    field('联系邮箱', inquiry.email),
     field('所属行业', inquiry.industry),
     field('设备工艺', inquiry.process),
     field('使用温度', inquiry.temperature),
@@ -136,17 +161,62 @@ export class InquiryNotificationService {
         signal: AbortSignal.timeout(5_000),
       });
     } catch {
-      throw new Error('Feishu inquiry notification request failed');
+      throw new InquiryNotificationDeliveryError(
+        'Feishu inquiry notification outcome is unknown after a network error or timeout',
+        'unknown',
+      );
     }
 
     if (!response.ok) {
-      throw new Error(`Feishu inquiry notification returned HTTP ${response.status}`);
+      const kind =
+        response.status === 408 ||
+        response.status === 425 ||
+        response.status === 429 ||
+        response.status >= 500
+          ? 'retryable_failure'
+          : 'permanent_failure';
+      throw new InquiryNotificationDeliveryError(
+        `Feishu inquiry notification returned HTTP ${response.status}`,
+        kind,
+      );
     }
 
     const result = await this.parseResponse(response);
-    const responseCode = result?.code ?? result?.StatusCode;
-    if (responseCode !== undefined && responseCode !== 0) {
-      throw new Error(`Feishu inquiry notification returned error ${responseCode}`);
+    if (!result) {
+      throw new InquiryNotificationDeliveryError(
+        'Feishu inquiry notification returned an empty response; delivery outcome is unknown',
+        'unknown',
+      );
+    }
+    const hasCode = Object.prototype.hasOwnProperty.call(result, 'code');
+    const hasStatusCode = Object.prototype.hasOwnProperty.call(result, 'StatusCode');
+    if (!hasCode && !hasStatusCode) {
+      throw new InquiryNotificationDeliveryError(
+        'Feishu inquiry notification returned an unknown response format; delivery outcome is unknown',
+        'unknown',
+      );
+    }
+    const responseCodes = [
+      ...(hasCode ? [result.code] : []),
+      ...(hasStatusCode ? [result.StatusCode] : []),
+    ];
+    if (
+      responseCodes.some(
+        (value) => typeof value !== 'number' || !Number.isFinite(value) || !Number.isInteger(value),
+      ) ||
+      (responseCodes.length === 2 && responseCodes[0] !== responseCodes[1])
+    ) {
+      throw new InquiryNotificationDeliveryError(
+        'Feishu inquiry notification returned ambiguous result codes; delivery outcome is unknown',
+        'unknown',
+      );
+    }
+    const responseCode = responseCodes[0] as number;
+    if (responseCode !== 0) {
+      throw new InquiryNotificationDeliveryError(
+        `Feishu inquiry notification returned error ${responseCode}`,
+        'permanent_failure',
+      );
     }
 
     return true;
@@ -159,7 +229,10 @@ export class InquiryNotificationService {
     try {
       return JSON.parse(responseText) as FeishuWebhookResponse;
     } catch {
-      return undefined;
+      throw new InquiryNotificationDeliveryError(
+        'Feishu inquiry notification returned an unparseable response; delivery outcome is unknown',
+        'unknown',
+      );
     }
   }
 }

@@ -51,15 +51,20 @@ export class HttpExceptionFilter implements ExceptionFilter {
       message = 'Database request validation failed';
     }
 
+    // Query strings on protected admin routes can contain phone numbers,
+    // email addresses or customer requirement text. Never copy them into
+    // application logs or retained error payloads.
+    const safePath = request.path || request.url.split('?', 1)[0] || '/';
+
     if (status >= HttpStatus.INTERNAL_SERVER_ERROR) {
       const error = exception instanceof Error ? exception.stack : JSON.stringify(exception);
-      this.logger.error(`${request.method} ${request.url}`, error);
+      this.logger.error(`${request.method} ${safePath}`, error);
     }
 
     response.status(status).json({
       code: status,
       data: {
-        path: request.url,
+        path: safePath,
         timestamp: new Date().toISOString(),
       },
       message,
