@@ -104,9 +104,10 @@ cd /opt/website
 2. 重新构建镜像（`docker compose build`，保留 Docker layer cache；源码变更仍会触发对应 `COPY . .` 之后的构建层重跑）
 3. **部署前备份**（`backup.sh`：DB + uploads → `/data/backup`，可回滚）
 4. 执行 Prisma 数据库迁移（`prisma migrate deploy`）
-5. 启动容器（`up -d`，不做整停 `down`）
-6. **`nginx -s reload`**：应用容器重建后会换 bridge IP，nginx 用静态 upstream 且无 resolver，不 reload 会因缓存旧 IP 出现 502
-7. 健康检查：轮询容器内后端 `/api/health` 是否返回 200（失败则中止并打印日志）
+5. 分阶段启动 backend 和 admin，确认健康；旧 frontend 继续承接兼容的 V1 表单
+6. 校验并 reload Nginx，先让 V2 精确询盘路由生效
+7. 启动并确认新 frontend 健康，再次 reload Nginx 解析 frontend 的新 bridge IP
+8. 健康检查：核对官网、管理端、智能工厂、成文及历史跳转（失败则中止并打印日志）
 
 > 改了 `nginx.prod.conf.template` 后，先校验语法再上生产——语法错会让 reload 失败 / nginx 起不来：
 >
@@ -128,17 +129,34 @@ docker compose --env-file .env.production -f docker-compose.prod.yml build
 - 源码变化仍会让 `COPY . .` 之后的构建层失效并重新编译，不会部署旧代码。
 - backend / admin 没有源码或依赖变化时，大部分构建层应缓存命中。
 
-只有在怀疑 Docker 构建缓存损坏、基础镜像层异常、或依赖安装层需要彻底重建时，才手动执行一次无缓存构建：
+只有在怀疑 Docker 构建缓存损坏、基础镜像层异常、或依赖安装层需要彻底重建时，才通过同一个受控发布入口强制无缓存构建：
 
 ```bash
-docker compose --env-file .env.production -f docker-compose.prod.yml build --no-cache
-docker compose --env-file .env.production -f docker-compose.prod.yml up -d
-docker compose --env-file .env.production -f docker-compose.prod.yml exec -T nginx nginx -s reload
+DEPLOY_FORCE_NO_CACHE_BUILD=1 ./deploy.sh
 ```
+
+不要在构建后绕过发布脚本直接启动整套容器。无缓存只改变镜像构建方式，候选契约、数炬切换点、分阶段健康检查和两次 Nginx reload 仍必须全部经过 `deploy.sh`。
 
 GitHub Actions 仍会先执行 lint、typecheck、test 和三端 build 作为质量门禁；服务器侧 build 是生产镜像构建，不再默认清空缓存。
 
 ### 4.2 回滚
+
+#### 询盘契约 V2 上线后的强制边界
+
+一旦新版表单对外开放，客户可以只留下邮箱。旧版官网后台和旧版数炬只认识电话，无法完整呈现这类询盘。因此，从询盘契约 V2 上线开始，**禁止按下面的旧流程整体切回旧版 backend、admin 或数炬镜像**，也禁止用迁移前数据库覆盖迁移后产生的询盘。
+
+当前发布脚本会在数据库迁移前检查候选 backend 是否支持询盘契约 V2；生产编排的 backend 健康检查也要求 V2。旧镜像缺少这道能力，必须在替换服务前失败。不要绕过这两道门手工启动旧 backend。
+
+发布顺序固定为：**先升级数炬并完成切换点初始化，再发布官网 backend 和 admin，随后校验并重载包含 V2 询盘路由的 Nginx，最后发布 frontend 放开新版表单，并在 frontend 健康后再次 reload Nginx 解析其新地址**。官网发布脚本会通过同机内部网络核对数炬的消费契约、运行模式和切换点；任一不一致都会在官网备份和迁移前停止。脚本还会确认 backend 和 admin 健康，并保证 Nginx 新路由已经生效后才替换 frontend。不得为了赶进度跳过此检查或先发布新版表单。
+
+发生故障时只允许采用以下顺序：
+
+1. 保留当前数据库、新版 backend、新版 admin 和新版数炬，优先做前向修复；
+2. 如需立即停止新的邮箱询盘，只回退 frontend 到仍提交旧版电话表单的版本，不回退 backend、admin 和数炬；
+3. 用新版数炬从既定切换点完整重扫，并逐条对账官网提交编号、联系方式、飞书状态和数炬记录；
+4. 确认迁移后所有询盘都已导出并完成对账之前，不得恢复迁移前数据库。任何例外必须由负责人书面批准并保留操作记录。
+
+下面的整体回滚命令只适用于询盘契约 V2 上线前的旧版本，或完全不涉及 backend、admin、数炬和询盘数据库的历史场景；V2 上线后不得照抄执行。
 
 镜像在服务器本地构建、无独立 tag，回滚 = 切回上一个正常提交后重新部署：
 
@@ -151,6 +169,8 @@ docker compose --env-file .env.production -f docker-compose.prod.yml exec -T ngi
 ```
 
 > Prisma 没有自动 down 迁移：若被回滚的版本含破坏性 schema 变更，必须先用该次部署**前**生成的 `/data/backup/db-*.sql.gz` 恢复数据库（见第 5 节），否则旧代码会对新 schema 报错。
+>
+> 上述数据库恢复说明不适用于询盘契约 V2：直接恢复迁移前备份会删除部署后收到的询盘，必须先按本节完成导出和逐条对账。
 
 ## 5. 备份与恢复
 

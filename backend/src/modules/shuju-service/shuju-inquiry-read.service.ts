@@ -6,13 +6,39 @@ import { PrismaService } from '@/prisma/prisma.service';
 
 const inquiryProjection = {
   id: true,
+  submissionId: true,
+  projectType: true,
+  projectLocation: true,
   name: true,
   phone: true,
+  email: true,
   company: true,
   industry: true,
   process: true,
   temperature: true,
   requirement: true,
+  preferredContact: true,
+  locale: true,
+  pagePath: true,
+  pageTitle: true,
+  pageType: true,
+  productTag: true,
+  sourceType: true,
+  sourceDetail: true,
+  landingPage: true,
+  previousPage: true,
+  utmSource: true,
+  utmMedium: true,
+  utmCampaign: true,
+  discoverySource: true,
+  sessionId: true,
+  visitorId: true,
+  notificationStatus: true,
+  notificationAttemptCount: true,
+  notificationLastError: true,
+  notificationSentAt: true,
+  notificationNextAttemptAt: true,
+  notificationLeaseUntil: true,
   createdAt: true,
 } as const;
 
@@ -40,27 +66,22 @@ export class ShujuInquiryReadService {
     const minimumAfterId = this.minimumAfterId();
     const effectiveAfterId = Math.max(query.afterId, minimumAfterId);
     const limit = query.limit ?? 50;
-    const [rows, replayDescending] = await Promise.all([
-      this.prisma.customRequirement.findMany({
-        where: { id: { gt: effectiveAfterId } },
-        orderBy: { id: 'asc' },
-        take: limit + 1,
-        select: inquiryProjection,
-      }),
-      this.prisma.customRequirement.findMany({
-        where: { id: { gt: minimumAfterId, lte: effectiveAfterId } },
-        orderBy: { id: 'desc' },
-        take: 100,
-        select: inquiryProjection,
-      }),
-    ]);
+    const rows = await this.prisma.customRequirement.findMany({
+      where: { id: { gt: effectiveAfterId } },
+      orderBy: { id: 'asc' },
+      take: limit + 1,
+      select: inquiryProjection,
+    });
     const hasMore = rows.length > limit;
-    const items = rows.slice(0, limit);
+    const items = rows.slice(0, limit).map((row) => ({
+      ...row,
+      phone: row.phone.trim() || null,
+    }));
     return {
       items,
-      // PostgreSQL sequence IDs are allocated before commit. Replaying the latest 100 IDs lets
-      // the consumer recover a lower ID that commits after a higher ID has already advanced it.
-      replayItems: replayDescending.reverse(),
+      // Kept for wire compatibility. The consumer performs bounded full pagination from cutover,
+      // so embedding an ever-growing copy of historical inquiries here is no longer necessary.
+      replayItems: [],
       nextAfterId: items.at(-1)?.id ?? effectiveAfterId,
       hasMore,
       minimumAfterId,

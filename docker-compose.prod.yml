@@ -70,7 +70,7 @@ services:
       test:
         [
           'CMD-SHELL',
-          "node -e \"require('http').get('http://127.0.0.1:3001/api/health', r => process.exit(r.statusCode === 200 ? 0 : 1)).on('error', () => process.exit(1))\"",
+          'node backend/dist/src/inquiry-contract-gate.js health http://127.0.0.1:3001/api/health',
         ]
       interval: 10s
       timeout: 5s
@@ -138,7 +138,11 @@ services:
     expose:
       - '80'
     healthcheck:
-      test: ['CMD-SHELL', 'wget -q -O /dev/null http://127.0.0.1/ || exit 1']
+      test:
+        [
+          'CMD-SHELL',
+          'test "$(cat /usr/share/nginx/html/inquiry-contract-version.txt 2>/dev/null)" = "2" && wget -q -O /dev/null http://127.0.0.1/',
+        ]
       interval: 10s
       timeout: 5s
       retries: 12

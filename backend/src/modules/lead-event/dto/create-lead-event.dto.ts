@@ -9,6 +9,8 @@ export const LEAD_EVENT_TYPES = [
   'quote_cta_click',
   'email_click',
   'douyin_click',
+  'form_start',
+  'form_step_complete',
   'form_submit',
 ] as const;
 

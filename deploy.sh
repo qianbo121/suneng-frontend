@@ -193,7 +193,20 @@ done
 install -d -m 0755 /data/nginx-logs
 install -m 0644 ops/logrotate/corp-site-nginx /etc/logrotate.d/corp-site-nginx
 
+force_no_cache_build="${DEPLOY_FORCE_NO_CACHE_BUILD:-0}"
+case "$force_no_cache_build" in
+  0|1) ;;
+  *)
+    echo "Refusing deployment: DEPLOY_FORCE_NO_CACHE_BUILD must be 0 or 1."
+    exit 64
+    ;;
+esac
+
 if [ "${DEPLOY_SKIP_BUILD:-0}" = "1" ]; then
+  if [ "$force_no_cache_build" = "1" ]; then
+    echo "Refusing deployment: build skip and forced no-cache build cannot be combined."
+    exit 64
+  fi
   echo "Skipping image builds because no production image inputs changed."
   for service in backend frontend admin; do
     if [ -z "$(docker compose --env-file "$ENV_FILE" -f "$COMPOSE_FILE" images -q "$service")" ]; then
@@ -224,8 +237,60 @@ else
   # Build one service at a time. A single `docker compose build` lets BuildKit
   # retain three expanded workspaces concurrently and can exhaust this host.
   for service in backend frontend admin; do
-    docker compose --env-file "$ENV_FILE" -f "$COMPOSE_FILE" build "$service"
+    if [ "$force_no_cache_build" = "1" ]; then
+      docker compose --env-file "$ENV_FILE" -f "$COMPOSE_FILE" build --no-cache "$service"
+    else
+      docker compose --env-file "$ENV_FILE" -f "$COMPOSE_FILE" build "$service"
+    fi
   done
+fi
+
+# Email-only inquiries cannot be represented by the pre-V2 backend/admin pair.
+# Refuse to migrate or replace containers unless the candidate image proves it
+# contains the forward-only inquiry contract gate. An old image does not have
+# this executable and therefore fails before the database is touched.
+if ! docker compose --env-file "$ENV_FILE" -f "$COMPOSE_FILE" run --rm --no-deps backend \
+  node backend/dist/src/inquiry-contract-gate.js image; then
+  echo "Refusing deployment: backend image does not support inquiry contract V2."
+  exit 64
+fi
+if ! docker compose --env-file "$ENV_FILE" -f "$COMPOSE_FILE" run --rm --no-deps admin \
+  sh -c 'test "$(cat /usr/share/nginx/html/inquiry-contract-version.txt 2>/dev/null)" = "2"'; then
+  echo "Refusing deployment: admin image does not support inquiry contract V2."
+  exit 64
+fi
+
+# The consumer must be upgraded and its frozen cutover initialized before the
+# producer can accept email-only inquiries. Both systems use the same cutover
+# ID; a missing, disabled or mismatched Shuju readiness response fails closed.
+inquiry_read_enabled="$(awk -F= '$1=="SHUJU_INQUIRY_READ_ENABLED"{sub(/^[^=]*=/,""); print; exit}' "$ENV_FILE")"
+inquiry_cutover_id="$(awk -F= '$1=="SHUJU_INQUIRY_READ_MIN_ID"{sub(/^[^=]*=/,""); print; exit}' "$ENV_FILE")"
+case "$inquiry_cutover_id" in
+  ''|0|*[!0-9]*)
+    echo "Refusing deployment: SHUJU_INQUIRY_READ_MIN_ID must be a positive integer."
+    exit 64
+    ;;
+esac
+if [ "$inquiry_read_enabled" != "true" ]; then
+  echo "Refusing deployment: SHUJU_INQUIRY_READ_ENABLED must be true for inquiry contract V2."
+  exit 64
+fi
+if ! docker compose --env-file "$ENV_FILE" -f "$COMPOSE_FILE" run --rm --no-deps backend \
+  node backend/dist/src/inquiry-contract-gate.js shuju-health \
+    http://shuju:18321/api/ready "$inquiry_cutover_id"; then
+  echo "Refusing deployment: Shuju V2 consumer is not ready at the frozen inquiry cutover."
+  exit 64
+fi
+
+# The shared edge must already be running before any database migration. The
+# staged release below deliberately keeps this container alive while backend
+# and admin are replaced, reloads the audited V2 routes, and only then replaces
+# the public frontend.
+nginx_container_id="$(docker compose --env-file "$ENV_FILE" -f "$COMPOSE_FILE" ps -q nginx)"
+if [ -z "$nginx_container_id" ] \
+  || [ "$(docker inspect "$nginx_container_id" --format '{{.State.Running}}' 2>/dev/null || true)" != "true" ]; then
+  echo "Refusing deployment: nginx container is not running."
+  exit 1
 fi
 
 # Back up the DB + uploads BEFORE applying migrations, so a bad migration or a
@@ -234,17 +299,58 @@ bash backup.sh
 
 docker compose --env-file "$ENV_FILE" -f "$COMPOSE_FILE" run --rm backend \
   ./backend/node_modules/.bin/prisma migrate deploy --schema backend/prisma/schema.prisma
-docker compose --env-file "$ENV_FILE" -f "$COMPOSE_FILE" up -d
+docker compose --env-file "$ENV_FILE" -f "$COMPOSE_FILE" up -d backend admin
+
+# Keep the old frontend serving its V1-compatible form until the new backend
+# and admin are proven healthy. The new backend still accepts V1 submissions,
+# so this order does not create an inquiry-loss window.
+echo "Waiting for backend /api/health..."
+backend_healthy=0
+for attempt in {1..30}; do
+  if docker compose --env-file "$ENV_FILE" -f "$COMPOSE_FILE" exec -T backend \
+    node backend/dist/src/inquiry-contract-gate.js health \
+      http://127.0.0.1:3001/api/health; then
+    echo "Backend health check passed."
+    backend_healthy=1
+    break
+  fi
+
+  if [ "$attempt" -lt 30 ]; then
+    sleep 2
+  fi
+done
+
+if [ "$backend_healthy" -ne 1 ]; then
+  echo "Health check failed: backend /api/health"
+  docker compose --env-file "$ENV_FILE" -f "$COMPOSE_FILE" logs --tail=50 backend admin
+  exit 1
+fi
+
+echo "Waiting for admin inquiry contract..."
+admin_healthy=0
+for attempt in {1..30}; do
+  if docker compose --env-file "$ENV_FILE" -f "$COMPOSE_FILE" exec -T admin sh -c \
+    'test "$(cat /usr/share/nginx/html/inquiry-contract-version.txt 2>/dev/null)" = "2" && wget -q -O /dev/null http://127.0.0.1/'; then
+    echo "Admin health check passed."
+    admin_healthy=1
+    break
+  fi
+
+  if [ "$attempt" -lt 30 ]; then
+    sleep 2
+  fi
+done
+
+if [ "$admin_healthy" -ne 1 ]; then
+  echo "Health check failed: admin inquiry contract"
+  docker compose --env-file "$ENV_FILE" -f "$COMPOSE_FILE" logs --tail=50 backend admin
+  exit 1
+fi
 
 # A bind-mounted single file can keep pointing at the pre-pull inode after Git
 # replaces the host file. Copy the checked-in template into the running
 # container explicitly, then render from that deployment copy. This guarantees
 # the candidate is built from the bytes just audited above.
-nginx_container_id="$(docker compose --env-file "$ENV_FILE" -f "$COMPOSE_FILE" ps -q nginx)"
-if [ -z "$nginx_container_id" ]; then
-  echo "Refusing deployment: nginx container is not running."
-  exit 1
-fi
 docker cp nginx.prod.conf.template "$nginx_container_id:/tmp/nginx.conf.template.deploy"
 
 # Render with the exact same substitution list used by the container command,
@@ -261,16 +367,17 @@ docker compose --env-file "$ENV_FILE" -f "$COMPOSE_FILE" exec -T \
     cmp -s "$candidate" /etc/nginx/nginx.conf
   '
 
-# Health-check the REAL backend health route inside the container. The previous
-# `curl -f http://localhost` was a false positive: nginx 301-redirects :80 to
-# HTTPS and `curl -f` (without -L) exits 0 on a 3xx even when the app is down.
-echo "Waiting for backend /api/health..."
-backend_healthy=0
+# Only after Nginx has the exact V2 inquiry route may the public frontend start
+# sending V2 submissions. This preserves the documented producer rollout order.
+docker compose --env-file "$ENV_FILE" -f "$COMPOSE_FILE" up -d frontend
+
+echo "Waiting for frontend health..."
+frontend_healthy=0
 for attempt in {1..30}; do
-  if docker compose --env-file "$ENV_FILE" -f "$COMPOSE_FILE" exec -T backend \
-    node -e "require('http').get('http://127.0.0.1:3001/api/health', (r) => process.exit(r.statusCode === 200 ? 0 : 1)).on('error', () => process.exit(1))"; then
-    echo "Backend health check passed."
-    backend_healthy=1
+  if docker compose --env-file "$ENV_FILE" -f "$COMPOSE_FILE" exec -T frontend \
+    node -e "require('http').get('http://127.0.0.1:3000', r => process.exit(r.statusCode < 500 ? 0 : 1)).on('error', () => process.exit(1))"; then
+    echo "Frontend health check passed."
+    frontend_healthy=1
     break
   fi
 
@@ -279,11 +386,21 @@ for attempt in {1..30}; do
   fi
 done
 
-if [ "$backend_healthy" -ne 1 ]; then
-  echo "Health check failed: backend /api/health"
-  docker compose --env-file "$ENV_FILE" -f "$COMPOSE_FILE" logs --tail=50
+if [ "$frontend_healthy" -ne 1 ]; then
+  echo "Health check failed: frontend"
+  docker compose --env-file "$ENV_FILE" -f "$COMPOSE_FILE" logs --tail=50 frontend
   exit 1
 fi
+
+# The frontend container now has a new bridge IP. Reload the already-validated
+# config once more so Nginx resolves that final address instead of retaining the
+# old frontend upstream from the route-preload reload above.
+echo "Reloading Nginx after frontend replacement..."
+docker compose --env-file "$ENV_FILE" -f "$COMPOSE_FILE" exec -T nginx sh -lc '
+  set -eu
+  nginx -t
+  nginx -s reload
+'
 
 echo "Waiting for smart-factory routes..."
 factory_healthy=0

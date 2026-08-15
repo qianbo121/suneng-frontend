@@ -42,6 +42,21 @@ enum CustomRequirementStatus {
   followed
 }
 
+enum InquiryNotificationStatus {
+  pending
+  sending
+  sent
+  failed
+  unknown
+  legacy_unknown
+}
+
+enum InquiryNotificationAuditAction {
+  requeue_failed
+  confirm_unknown_delivered
+  confirm_unknown_not_delivered_and_requeue
+}
+
 model Banner {
   id             Int           @id @default(autoincrement())
   sectionKey     String?       @db.VarChar(100)
@@ -312,47 +327,101 @@ model ContactMessage {
 }
 
 model CustomRequirement {
-  id          Int                     @id @default(autoincrement())
-  name        String?                 @db.VarChar(120)
-  phone       String                  @db.VarChar(50)
-  company     String?                 @db.VarChar(180)
-  industry    String?                 @db.VarChar(180)
-  process     String?                 @db.VarChar(180)
-  temperature String?                 @db.VarChar(120)
-  requirement String?                 @db.Text
-  status      CustomRequirementStatus @default(pending)
-  createdAt   DateTime                @default(now())
-  updatedAt   DateTime                @updatedAt
+  id                        Int                        @id @default(autoincrement())
+  submissionId              String?                    @unique @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  clientIdempotencyKey      String?                    @unique @db.VarChar(120)
+  projectType               String?                    @db.VarChar(120)
+  projectLocation           String?                    @db.VarChar(180)
+  name                      String?                    @db.VarChar(120)
+  phone                     String                     @db.VarChar(50)
+  email                     String?                    @db.VarChar(254)
+  company                   String?                    @db.VarChar(180)
+  industry                  String?                    @db.VarChar(180)
+  process                   String?                    @db.VarChar(180)
+  temperature               String?                    @db.VarChar(120)
+  requirement               String?                    @db.Text
+  preferredContact          String?                    @db.VarChar(20)
+  locale                    String?                    @db.VarChar(10)
+  pagePath                  String?                    @db.VarChar(500)
+  pageTitle                 String?                    @db.VarChar(255)
+  pageType                  String?                    @db.VarChar(80)
+  productTag                String?                    @db.VarChar(120)
+  sourceType                String?                    @db.VarChar(120)
+  sourceDetail              String?                    @db.VarChar(120)
+  landingPage               String?                    @db.VarChar(500)
+  previousPage              String?                    @db.VarChar(500)
+  utmSource                 String?                    @db.VarChar(120)
+  utmMedium                 String?                    @db.VarChar(120)
+  utmCampaign               String?                    @db.VarChar(255)
+  discoverySource           String?                    @db.VarChar(120)
+  sessionId                 String?                    @db.VarChar(120)
+  visitorId                 String?                    @db.VarChar(120)
+  notificationStatus        InquiryNotificationStatus  @default(legacy_unknown)
+  notificationStateVersion  Int                        @default(0)
+  notificationAttemptCount  Int                        @default(0)
+  notificationLastError     String?                    @db.VarChar(500)
+  notificationSentAt        DateTime?
+  notificationNextAttemptAt DateTime?
+  notificationLeaseUntil    DateTime?
+  status                    CustomRequirementStatus    @default(pending)
+  createdAt                 DateTime                   @default(now())
+  updatedAt                 DateTime                   @updatedAt
+  formSubmitEvent           WebsiteLeadEvent?
+  notificationAudits        InquiryNotificationAudit[]
 
   @@index([status, createdAt])
   @@index([phone])
   @@index([createdAt])
+  @@index([notificationStatus, notificationNextAttemptAt], map: "CustomRequirement_notification_due_idx")
+}
+
+model InquiryNotificationAudit {
+  id                  Int                            @id @default(autoincrement())
+  customRequirementId Int
+  submissionId        String                         @db.Uuid
+  operatorAdminUserId Int
+  operatorUsername    String                         @db.VarChar(80)
+  operatorRole        AdminRole
+  action              InquiryNotificationAuditAction
+  previousStatus      InquiryNotificationStatus
+  nextStatus          InquiryNotificationStatus
+  previousError       String?                        @db.VarChar(500)
+  attemptCount        Int
+  note                String                         @db.VarChar(1000)
+  createdAt           DateTime                       @default(now())
+  customRequirement   CustomRequirement              @relation(fields: [customRequirementId], references: [id], onDelete: Restrict)
+
+  @@index([customRequirementId, createdAt], map: "InquiryNotificationAudit_requirement_created_idx")
+  @@index([submissionId, createdAt], map: "InquiryNotificationAudit_submission_created_idx")
+  @@index([operatorAdminUserId, createdAt], map: "InquiryNotificationAudit_operator_created_idx")
 }
 
 model WebsiteLeadEvent {
-  id              Int      @id @default(autoincrement())
-  eventType       String   @db.VarChar(40)
-  pageTitle       String?  @db.VarChar(255)
-  pagePath        String?  @db.VarChar(500)
-  pageType        String?  @db.VarChar(80)
-  productTag      String?  @db.VarChar(120)
-  sourceType      String?  @db.VarChar(120)
-  sourceDetail    String?  @db.VarChar(120)
-  searchKeyword   String?  @db.VarChar(255)
-  province        String?  @db.VarChar(120)
-  city            String?  @db.VarChar(120)
-  deviceType      String?  @db.VarChar(40)
-  landingPage     String?  @db.VarChar(500)
-  previousPage    String?  @db.VarChar(500)
-  utmSource       String?  @db.VarChar(120)
-  utmMedium       String?  @db.VarChar(120)
-  utmCampaign     String?  @db.VarChar(255)
-  discoverySource String?  @db.VarChar(120)
-  sessionId       String?  @db.VarChar(120)
-  visitorId       String?  @db.VarChar(120)
-  ipMasked        String?  @db.VarChar(80)
-  userAgent       String?  @db.VarChar(500)
-  createdAt       DateTime @default(now())
+  id                Int                @id @default(autoincrement())
+  submissionId      String?            @unique @db.Uuid
+  eventType         String             @db.VarChar(40)
+  pageTitle         String?            @db.VarChar(255)
+  pagePath          String?            @db.VarChar(500)
+  pageType          String?            @db.VarChar(80)
+  productTag        String?            @db.VarChar(120)
+  sourceType        String?            @db.VarChar(120)
+  sourceDetail      String?            @db.VarChar(120)
+  searchKeyword     String?            @db.VarChar(255)
+  province          String?            @db.VarChar(120)
+  city              String?            @db.VarChar(120)
+  deviceType        String?            @db.VarChar(40)
+  landingPage       String?            @db.VarChar(500)
+  previousPage      String?            @db.VarChar(500)
+  utmSource         String?            @db.VarChar(120)
+  utmMedium         String?            @db.VarChar(120)
+  utmCampaign       String?            @db.VarChar(255)
+  discoverySource   String?            @db.VarChar(120)
+  sessionId         String?            @db.VarChar(120)
+  visitorId         String?            @db.VarChar(120)
+  ipMasked          String?            @db.VarChar(80)
+  userAgent         String?            @db.VarChar(500)
+  createdAt         DateTime           @default(now())
+  customRequirement CustomRequirement? @relation(fields: [submissionId], references: [submissionId], onDelete: Restrict)
 
   @@index([eventType, createdAt])
   @@index([sourceType, sourceDetail, createdAt])

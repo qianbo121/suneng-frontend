@@ -16,7 +16,7 @@ type ApiMutationOptions<TBody> = {
   headers?: Record<string, string>;
 };
 
-class ApiRequestError extends Error {
+export class ApiRequestError extends Error {
   status?: number;
 
   constructor(message: string, status?: number) {
@@ -24,6 +24,10 @@ class ApiRequestError extends Error {
     this.name = 'ApiRequestError';
     this.status = status;
   }
+}
+
+export function isApiRequestErrorStatus(error: unknown, status: number) {
+  return error instanceof ApiRequestError && error.status === status;
 }
 
 function getApiBaseUrl() {
@@ -200,7 +204,7 @@ async function apiGet<T>(path: string, options: ApiRequestOptions = {}) {
 
 export async function apiPost<T, TBody = Record<string, unknown>>(
   path: string,
-  options: ApiMutationOptions<TBody> & Pick<ApiRequestOptions, 'cache'> = {},
+  options: ApiMutationOptions<TBody> & Pick<ApiRequestOptions, 'cache' | 'timeoutMs'> = {},
 ) {
   return apiRequest<T>('POST', path, options);
 }
