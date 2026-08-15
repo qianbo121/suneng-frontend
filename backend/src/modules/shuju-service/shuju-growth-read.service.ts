@@ -65,6 +65,7 @@ type FunnelRow = {
   stepCompletedVisitors: bigint;
   submissionVisitors: bigint;
 };
+type TrackingCoverageRow = { trackingStartAt: Date | string | null };
 
 function count(value: bigint | number | null | undefined) {
   return Number(value ?? 0);
@@ -95,8 +96,19 @@ export class ShujuGrowthReadService {
 
   async overview(query: ShujuGrowthReadQueryDto) {
     const { start, endExclusive, days } = dateRange(query);
+    const trackingCoverage = await this.prisma.$queryRaw<TrackingCoverageRow[]>(Prisma.sql`
+      SELECT MIN("createdAt") AS "trackingStartAt"
+      FROM "WebsiteLeadEvent"
+      WHERE "eventType" = 'page_view'
+    `);
+    const trackingStartValue = trackingCoverage[0]?.trackingStartAt;
+    const trackingStartAt = trackingStartValue ? new Date(trackingStartValue) : null;
+    const hasTrackingStart = Boolean(trackingStartAt && !Number.isNaN(trackingStartAt.getTime()));
+    const comparableStart = hasTrackingStart
+      ? new Date(Math.max(start.getTime(), trackingStartAt!.getTime()))
+      : endExclusive;
     const filters: Prisma.Sql[] = [
-      Prisma.sql`"createdAt" >= ${start}`,
+      Prisma.sql`"createdAt" >= ${comparableStart}`,
       Prisma.sql`"createdAt" < ${endExclusive}`,
     ];
     if (query.site && query.site !== 'all') {
@@ -232,17 +244,28 @@ export class ShujuGrowthReadService {
         ORDER BY day ASC, events DESC
       `),
         this.prisma.$queryRaw<FunnelRow[]>(Prisma.sql`
+        WITH scoped AS (
+          SELECT
+            *,
+            COALESCE(NULLIF("visitorId", ''), NULLIF("sessionId", ''), 'event:' || "id"::text) AS identity
+          FROM "WebsiteLeadEvent"
+          WHERE ${where}
+        ), page_cohort AS (
+          SELECT DISTINCT identity
+          FROM scoped
+          WHERE "eventType" = 'page_view'
+        )
         SELECT
-          COUNT(DISTINCT COALESCE(NULLIF("visitorId", ''), NULLIF("sessionId", ''), 'event:' || "id"::text)) FILTER (WHERE "eventType" = 'page_view')::bigint AS "pageVisitors",
+          (SELECT COUNT(*) FROM page_cohort)::bigint AS "pageVisitors",
           COUNT(*) FILTER (WHERE "eventType" = 'page_view')::bigint AS "pageViews",
-          COUNT(DISTINCT COALESCE(NULLIF("sessionId", ''), 'event:' || "id"::text)) FILTER (WHERE "eventType" = 'page_view')::bigint AS "visitSessions",
-          COUNT(DISTINCT COALESCE(NULLIF("sessionId", ''), 'event:' || "id"::text)) FILTER (WHERE "eventType" = 'engaged_session')::bigint AS "engagedSessions",
-          COUNT(DISTINCT COALESCE(NULLIF("visitorId", ''), NULLIF("sessionId", ''), 'event:' || "id"::text)) FILTER (WHERE "eventType" IN ('phone_click','wechat_click','wechat_qr_view','wechat_copy','quote_cta_click','email_click','douyin_click'))::bigint AS "highIntentVisitors",
-          COUNT(DISTINCT COALESCE(NULLIF("visitorId", ''), NULLIF("sessionId", ''), 'event:' || "id"::text)) FILTER (WHERE "eventType" = 'form_start')::bigint AS "formStartVisitors",
-          COUNT(DISTINCT COALESCE(NULLIF("visitorId", ''), NULLIF("sessionId", ''), 'event:' || "id"::text)) FILTER (WHERE "eventType" = 'form_step_complete')::bigint AS "stepCompletedVisitors",
-          COUNT(DISTINCT COALESCE(NULLIF("visitorId", ''), NULLIF("sessionId", ''), 'event:' || "id"::text)) FILTER (WHERE "eventType" = 'form_submit')::bigint AS "submissionVisitors"
-        FROM "WebsiteLeadEvent"
-        WHERE ${where}
+          COUNT(DISTINCT COALESCE(NULLIF("sessionId", ''), identity)) FILTER (WHERE "eventType" = 'page_view')::bigint AS "visitSessions",
+          COUNT(DISTINCT COALESCE(NULLIF("sessionId", ''), identity)) FILTER (WHERE "eventType" = 'engaged_session')::bigint AS "engagedSessions",
+          COUNT(DISTINCT identity) FILTER (WHERE "eventType" IN ('phone_click','wechat_click','wechat_qr_view','wechat_copy','quote_cta_click','email_click','douyin_click','form_start','form_step_complete','form_submit'))::bigint AS "highIntentVisitors",
+          COUNT(DISTINCT identity) FILTER (WHERE "eventType" IN ('form_start','form_step_complete','form_submit'))::bigint AS "formStartVisitors",
+          COUNT(DISTINCT identity) FILTER (WHERE "eventType" IN ('form_step_complete','form_submit'))::bigint AS "stepCompletedVisitors",
+          COUNT(DISTINCT identity) FILTER (WHERE "eventType" = 'form_submit')::bigint AS "submissionVisitors"
+        FROM scoped
+        WHERE identity IN (SELECT identity FROM page_cohort)
       `),
       ]);
 
@@ -259,6 +282,16 @@ export class ShujuGrowthReadService {
         },
       },
       generatedAt: new Date().toISOString(),
+      coverage: {
+        trackingStartAt: hasTrackingStart ? trackingStartAt!.toISOString() : null,
+        comparableStartAt: comparableStart.toISOString(),
+        fullRange: hasTrackingStart && trackingStartAt!.getTime() <= start.getTime(),
+        reason: !hasTrackingStart
+          ? 'page_view_not_started'
+          : trackingStartAt!.getTime() > start.getTime()
+            ? 'partial_tracking_window'
+            : null,
+      },
       funnel: {
         pageVisitors: count(funnelRows[0]?.pageVisitors),
         pageViews: count(funnelRows[0]?.pageViews),

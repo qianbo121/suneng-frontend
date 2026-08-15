@@ -7,6 +7,7 @@ describe('ShujuGrowthReadService', () => {
   it('returns aggregate website behavior without anonymous ids or inquiry content', async () => {
     const queryRaw = jest
       .fn()
+      .mockResolvedValueOnce([{ trackingStartAt: new Date('2026-08-14T16:00:00Z') }])
       .mockResolvedValueOnce([
         { eventType: 'page_view', eventCount: 12n, visitorCount: 8n, sessionCount: 9n },
         { eventType: 'form_submit', eventCount: 2n, visitorCount: 2n, sessionCount: 2n },
@@ -96,6 +97,13 @@ describe('ShujuGrowthReadService', () => {
     const result = await service.overview({ startDate: '2026-08-15', endDate: '2026-08-15' });
 
     expect(result.eventCounts.page_view).toEqual({ events: 12, visitors: 8, sessions: 9 });
+    expect(result.coverage).toEqual(
+      expect.objectContaining({
+        trackingStartAt: '2026-08-14T16:00:00.000Z',
+        fullRange: true,
+        reason: null,
+      }),
+    );
     expect(result.funnel).toEqual(
       expect.objectContaining({ pageVisitors: 8, engagedSessions: 5, highIntentVisitors: 2 }),
     );
@@ -124,5 +132,48 @@ describe('ShujuGrowthReadService', () => {
     await expect(
       service.overview({ startDate: '2025-01-01', endDate: '2026-08-15' }),
     ).rejects.toBeInstanceOf(BadRequestException);
+  });
+
+  it('returns an empty comparable window when page-view tracking has not started', async () => {
+    const queryRaw = jest
+      .fn()
+      .mockResolvedValueOnce([{ trackingStartAt: null }])
+      .mockResolvedValueOnce([])
+      .mockResolvedValueOnce([])
+      .mockResolvedValueOnce([])
+      .mockResolvedValueOnce([])
+      .mockResolvedValueOnce([])
+      .mockResolvedValueOnce([])
+      .mockResolvedValueOnce([])
+      .mockResolvedValueOnce([
+        {
+          pageVisitors: 0n,
+          pageViews: 0n,
+          visitSessions: 0n,
+          engagedSessions: 0n,
+          highIntentVisitors: 0n,
+          formStartVisitors: 0n,
+          stepCompletedVisitors: 0n,
+          submissionVisitors: 0n,
+        },
+      ]);
+    const service = new ShujuGrowthReadService({ $queryRaw: queryRaw } as unknown as PrismaService);
+
+    const result = await service.overview({ startDate: '2026-08-15', endDate: '2026-08-15' });
+
+    expect(result.coverage).toEqual(
+      expect.objectContaining({
+        trackingStartAt: null,
+        fullRange: false,
+        reason: 'page_view_not_started',
+      }),
+    );
+    expect(result.funnel).toEqual(
+      expect.objectContaining({
+        pageVisitors: 0,
+        highIntentVisitors: 0,
+        submissionVisitors: 0,
+      }),
+    );
   });
 });
