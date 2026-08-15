@@ -100,4 +100,54 @@ describe('Shuju service configuration', () => {
       'must be a non-negative integer',
     );
   });
+
+  it('uses another independent secret for privacy-safe growth aggregates', () => {
+    const admin = 'administrator-secret-that-is-long-enough';
+    const newsRead = 'read-secret-that-is-independent-and-long';
+    const newsWrite = 'write-secret-that-is-independent-and-long';
+    const inquiryRead = 'inquiry-secret-that-is-independent-and-long';
+    const growthRead = 'growth-secret-that-is-independent-and-long';
+    expect(() =>
+      validateShujuServiceConfiguration(
+        true,
+        newsRead,
+        admin,
+        false,
+        newsWrite,
+        true,
+        inquiryRead,
+        4,
+        true,
+        '',
+      ),
+    ).toThrow('SHUJU_GROWTH_READ_JWT_SECRET must be at least 32 characters');
+    expect(() =>
+      validateShujuServiceConfiguration(
+        true,
+        newsRead,
+        admin,
+        false,
+        newsWrite,
+        true,
+        inquiryRead,
+        4,
+        true,
+        inquiryRead,
+      ),
+    ).toThrow('must use an independent trust domain');
+    expect(() =>
+      validateShujuServiceConfiguration(
+        true,
+        newsRead,
+        admin,
+        false,
+        newsWrite,
+        true,
+        inquiryRead,
+        4,
+        true,
+        growthRead,
+      ),
+    ).not.toThrow();
+  });
 });

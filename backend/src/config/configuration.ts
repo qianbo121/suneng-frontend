@@ -30,6 +30,8 @@ export function validateShujuServiceConfiguration(
   inquiryEnabled = false,
   inquirySecret = '',
   inquiryMinId = 0,
+  growthEnabled = false,
+  growthSecret = '',
 ): void {
   if (enabled && serviceSecret.length < 32) {
     throw new Error('SHUJU_SERVICE_JWT_SECRET must be at least 32 characters when enabled');
@@ -63,6 +65,19 @@ export function validateShujuServiceConfiguration(
   ) {
     throw new Error('SHUJU_INQUIRY_READ_JWT_SECRET must use an independent trust domain');
   }
+  if (growthEnabled && growthSecret.length < 32) {
+    throw new Error(
+      'SHUJU_GROWTH_READ_JWT_SECRET must be at least 32 characters when growth reading is enabled',
+    );
+  }
+  if (
+    growthSecret &&
+    [administratorSecret, serviceSecret, publishSecret, inquirySecret].some(
+      (secret) => secret && growthSecret === secret,
+    )
+  ) {
+    throw new Error('SHUJU_GROWTH_READ_JWT_SECRET must use an independent trust domain');
+  }
 }
 
 function getRequiredProductionEnv(name: string) {
@@ -95,6 +110,11 @@ const shujuInquiryReadMinId = parseNonNegativeInteger(
   'SHUJU_INQUIRY_READ_MIN_ID',
   process.env.SHUJU_INQUIRY_READ_MIN_ID,
 );
+const shujuGrowthReadEnabled = parseStrictBoolean(
+  'SHUJU_GROWTH_READ_ENABLED',
+  process.env.SHUJU_GROWTH_READ_ENABLED,
+);
+const shujuGrowthReadJwtSecret = process.env.SHUJU_GROWTH_READ_JWT_SECRET?.trim() ?? '';
 
 if (isProduction && jwtSecret === 'change-me') {
   throw new Error('JWT_SECRET must not use the default value in production');
@@ -109,6 +129,8 @@ validateShujuServiceConfiguration(
   shujuInquiryReadEnabled,
   shujuInquiryReadJwtSecret,
   shujuInquiryReadMinId,
+  shujuGrowthReadEnabled,
+  shujuGrowthReadJwtSecret,
 );
 
 export default () => ({
@@ -143,4 +165,8 @@ export default () => ({
   shujuInquiryReadMinId,
   shujuInquiryReadAudience: 'corp-site-inquiries-read',
   shujuInquiryReadSubject: 'shuju-engine',
+  shujuGrowthReadEnabled,
+  shujuGrowthReadJwtSecret,
+  shujuGrowthReadAudience: 'corp-site-growth-read',
+  shujuGrowthReadSubject: 'shuju-engine',
 });

@@ -26,10 +26,17 @@ describe('traffic source classification', () => {
   });
 
   it('keeps non-AI referrers and direct visits separate', () => {
-    expect(classifyTrafficSource('https://www.baidu.com/s?wd=test')).toEqual({
+    expect(classifyTrafficSource('https://industry.example.com/article')).toEqual({
       sourceType: '外部链接',
-      sourceDetail: 'baidu.com',
+      sourceDetail: 'industry.example.com',
     });
     expect(classifyTrafficSource('')).toEqual({ sourceType: '直接访问' });
+  });
+
+  it('keeps natural search separate from other external websites', () => {
+    expect(classifyTrafficSource('https://www.baidu.com/s?wd=test')).toEqual({
+      sourceType: '自然搜索',
+      sourceDetail: '百度',
+    });
   });
 });

@@ -78,6 +78,26 @@ describe('Shuju service security boundary', () => {
     expect(compose).toContain('SHUJU_INQUIRY_READ_MIN_ID: ${SHUJU_INQUIRY_READ_MIN_ID:-0}');
   });
 
+  it('exposes only privacy-safe website growth aggregates through an independent GET route', () => {
+    const controller = read('backend/src/modules/shuju-service/shuju-growth-read.controller.ts');
+    const service = read('backend/src/modules/shuju-service/shuju-growth-read.service.ts');
+    const configuration = read('backend/src/config/configuration.ts');
+    const compose = read('docker-compose.prod.yml');
+
+    expect(controller).toContain("@Controller('svc/growth')");
+    expect(controller).toContain("@Get('overview')");
+    expect(controller).toContain('@UseGuards(ShujuGrowthReadAuthGuard)');
+    expect(controller).not.toMatch(/@(Post|Patch|Put|Delete)\b/);
+    expect(service).toContain('FROM "WebsiteLeadEvent"');
+    expect(service).not.toContain('"phone"');
+    expect(service).not.toContain('"email"');
+    expect(service).not.toContain('"requirement"');
+    expect(configuration).toContain(
+      'SHUJU_GROWTH_READ_JWT_SECRET must use an independent trust domain',
+    );
+    expect(compose).toContain('SHUJU_GROWTH_READ_ENABLED: ${SHUJU_GROWTH_READ_ENABLED:-false}');
+  });
+
   it('blocks service routes on both production public hosts and local nginx', () => {
     const productionNginx = read('nginx.prod.conf.template');
     const localNginx = read('nginx.conf');

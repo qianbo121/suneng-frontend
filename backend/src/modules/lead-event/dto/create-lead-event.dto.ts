@@ -2,6 +2,8 @@ import { ApiPropertyOptional } from '@nestjs/swagger';
 import { IsIn, IsOptional, IsString, MaxLength } from 'class-validator';
 
 export const LEAD_EVENT_TYPES = [
+  'page_view',
+  'engaged_session',
   'phone_click',
   'wechat_click',
   'wechat_qr_view',
