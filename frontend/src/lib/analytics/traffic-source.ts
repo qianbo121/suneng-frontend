@@ -1,7 +1,15 @@
 export type TrafficSource = {
-  sourceType: '直接访问' | '外部链接' | 'AI引流';
+  sourceType: '直接访问' | '自然搜索' | '外部链接' | 'AI引流';
   sourceDetail?: string;
 };
+
+const SEARCH_SOURCE_RULES: Array<{ label: string; domains: string[] }> = [
+  { label: '百度', domains: ['baidu.com'] },
+  { label: '必应', domains: ['bing.com'] },
+  { label: 'Google', domains: ['google.com', 'google.com.hk'] },
+  { label: '搜狗', domains: ['sogou.com'] },
+  { label: '360搜索', domains: ['so.com'] },
+];
 
 const AI_SOURCE_RULES: Array<{ label: string; domains: string[]; aliases: string[] }> = [
   {
@@ -73,7 +81,9 @@ function aiSourceFromAlias(value: string) {
   const normalized = value.trim().toLowerCase();
   if (!normalized) return undefined;
   return AI_SOURCE_RULES.find((rule) =>
-    rule.aliases.some((alias) => normalized === alias.toLowerCase() || normalized.includes(alias.toLowerCase())),
+    rule.aliases.some(
+      (alias) => normalized === alias.toLowerCase() || normalized.includes(alias.toLowerCase()),
+    ),
   )?.label;
 }
 
@@ -89,5 +99,11 @@ export function classifyTrafficSource(referrer: string, utmSource = ''): Traffic
   )?.label;
 
   if (aiFromReferrer) return { sourceType: 'AI引流', sourceDetail: aiFromReferrer };
+  const searchFromReferrer = SEARCH_SOURCE_RULES.find((rule) =>
+    rule.domains.some((domain) => matchesDomain(host, domain)),
+  )?.label;
+  if (searchFromReferrer) {
+    return { sourceType: '自然搜索', sourceDetail: searchFromReferrer };
+  }
   return { sourceType: '外部链接', sourceDetail: host };
 }

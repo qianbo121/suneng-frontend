@@ -14,7 +14,7 @@ describe('lead event frontend/backend contract', () => {
     );
 
     expect(frontendEventTypes).toEqual(
-      expect.arrayContaining(['form_start', 'form_step_complete']),
+      expect.arrayContaining(['page_view', 'engaged_session', 'form_start', 'form_step_complete']),
     );
     expect(
       frontendEventTypes.filter((eventType) => !LEAD_EVENT_TYPES.includes(eventType as never)),

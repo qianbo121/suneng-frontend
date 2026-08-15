@@ -2,6 +2,8 @@ import { apiPost } from '@/lib/api/client';
 import { classifyTrafficSource } from '@/lib/analytics/traffic-source';
 
 export type LeadEventType =
+  | 'page_view'
+  | 'engaged_session'
   | 'phone_click'
   | 'wechat_click'
   | 'wechat_qr_view'
@@ -55,6 +57,22 @@ type LeadEventPayload = LeadSourceSnapshot & {
   eventType: LeadEventType;
 };
 
+const HIGH_INTENT_EVENTS = new Set<LeadEventType>([
+  'phone_click',
+  'wechat_click',
+  'wechat_qr_view',
+  'wechat_copy',
+  'quote_cta_click',
+  'email_click',
+  'douyin_click',
+]);
+
+const ENGAGED_SESSION_KEY = 'suneng_engaged_session_recorded';
+const SESSION_PAGE_PATHS_KEY = 'suneng_session_page_paths';
+const SESSION_ID_KEY = 'suneng_session_id';
+const SESSION_LAST_SEEN_KEY = 'suneng_session_last_seen';
+const SESSION_TIMEOUT_MS = 30 * 60 * 1000;
+
 function boundedSourceValue(value: string | undefined, limit: number) {
   const normalized = value?.trim();
   return normalized ? normalized.slice(0, limit) : undefined;
@@ -84,6 +102,33 @@ function getStoredId(key: string, storage: Storage) {
   }
 }
 
+function newAnonymousId() {
+  return typeof crypto !== 'undefined' && 'randomUUID' in crypto
+    ? crypto.randomUUID()
+    : `${Date.now()}-${Math.random().toString(16).slice(2)}`;
+}
+
+function getSessionId(storage: Storage) {
+  try {
+    const now = Date.now();
+    const current = storage.getItem(SESSION_ID_KEY);
+    const lastSeen = Number(storage.getItem(SESSION_LAST_SEEN_KEY));
+    const expired =
+      Number.isFinite(lastSeen) && lastSeen > 0 && now - lastSeen > SESSION_TIMEOUT_MS;
+    if (!current || expired) {
+      const next = newAnonymousId();
+      storage.setItem(SESSION_ID_KEY, next);
+      storage.removeItem(ENGAGED_SESSION_KEY);
+      storage.removeItem(SESSION_PAGE_PATHS_KEY);
+      storage.removeItem('suneng_landing_page');
+    }
+    storage.setItem(SESSION_LAST_SEEN_KEY, String(now));
+    return storage.getItem(SESSION_ID_KEY) || undefined;
+  } catch {
+    return undefined;
+  }
+}
+
 export function sanitizeLeadPagePath(path: string) {
   const [pathWithoutHash = ''] = path.split('#', 1);
   const [pathname, query = ''] = pathWithoutHash.split('?', 2);
@@ -91,7 +136,8 @@ export function sanitizeLeadPagePath(path: string) {
   const retained = new URLSearchParams();
   for (const key of ['utm_source', 'utm_medium', 'utm_campaign']) {
     const value = source.get(key)?.trim();
-    const limit = key === 'utm_campaign' ? LEAD_SOURCE_LIMITS.utmCampaign : LEAD_SOURCE_LIMITS.utmSource;
+    const limit =
+      key === 'utm_campaign' ? LEAD_SOURCE_LIMITS.utmCampaign : LEAD_SOURCE_LIMITS.utmSource;
     if (value) retained.set(key, value.slice(0, limit));
   }
   const retainedQuery = retained.toString();
@@ -144,20 +190,23 @@ function campaignParams(path: string) {
 }
 
 function pageType(path: string) {
-  if (/\/(?:zh|en)\/products\//.test(path)) return '产品页';
-  if (/\/(?:zh|en)\/service\//.test(path)) return '服务页';
-  if (/\/(?:zh|en)\/articles\//.test(path)) return '资料文章';
+  if (/\/(?:zh|en)\/products\/detail\//.test(path)) return '产品页';
+  if (/\/(?:zh|en)\/(?:solutions|service)\//.test(path)) return '解决方案页';
+  if (/\/(?:zh|en)\/(?:articles|news)\//.test(path)) return '文章页';
   if (/\/(?:zh|en)\/case\//.test(path)) return '案例页';
   if (/\/(?:zh|en)\/contact/.test(path)) return '联系页';
   if (/\/(?:zh|en)\/about/.test(path)) return '关于页';
   if (/\/(?:zh|en)\/?$/.test(path)) return '首页';
-  return '其他';
+  return '其他页';
 }
 
 function productTag(path: string, title: string) {
   const text = `${path} ${title}`.toLowerCase();
   const rules: Array<[string, string[]]> = [
-    ['连续热处理生产线', ['continuous', 'heat-treatment-line', '生产线', '连续', '退火线', '热处理线']],
+    [
+      '连续热处理生产线',
+      ['continuous', 'heat-treatment-line', '生产线', '连续', '退火线', '热处理线'],
+    ],
     ['工业炉改造', ['renovation', 'overhaul', '改造', '大修', '维修', '节能']],
     ['报价参数', ['baojia', 'quote', 'price', 'canshu', '报价', '参数', '价格']],
     ['台车炉', ['trolley', '台车']],
@@ -169,12 +218,17 @@ function productTag(path: string, title: string) {
     ['辊底炉', ['roller', '辊底']],
     ['转底炉', ['rotary', '转底']],
   ];
-  return rules.find(([, keywords]) => keywords.some((keyword) => text.includes(keyword)))?.[0] ?? '其他';
+  return (
+    rules.find(([, keywords]) => keywords.some((keyword) => text.includes(keyword)))?.[0] ?? '其他'
+  );
 }
 
-export function buildLeadSourceSnapshot(extra: Partial<LeadSourceSnapshot> = {}): LeadSourceSnapshot {
+export function buildLeadSourceSnapshot(
+  extra: Partial<LeadSourceSnapshot> = {},
+): LeadSourceSnapshot {
   const path = `${window.location.pathname}${window.location.search}`;
   const title = document.title || undefined;
+  const sessionId = getSessionId(window.sessionStorage);
   const landingPage = getLandingPage(path);
   const campaign = campaignParams(landingPage);
   const trafficSource = classifyTrafficSource(document.referrer, campaign.utmSource);
@@ -189,7 +243,7 @@ export function buildLeadSourceSnapshot(extra: Partial<LeadSourceSnapshot> = {})
     landingPage,
     previousPage: sanitizeLeadReferrer(document.referrer),
     ...campaign,
-    sessionId: getStoredId('suneng_session_id', window.sessionStorage),
+    sessionId,
     visitorId: getStoredId('suneng_visitor_id', window.localStorage),
     ...extra,
   });
@@ -202,10 +256,43 @@ function currentPayload(eventType: LeadEventType, extra: Partial<LeadSourceSnaps
   };
 }
 
-export function trackLeadEvent(eventType: LeadEventType, extra?: Partial<LeadSourceSnapshot>) {
-  if (typeof window === 'undefined') return;
+function postLeadEvent(eventType: LeadEventType, extra?: Partial<LeadSourceSnapshot>) {
   void apiPost<unknown, LeadEventPayload>('/v1/lead-events', {
     body: currentPayload(eventType, extra),
     cache: 'no-store',
   }).catch(() => undefined);
+}
+
+export function markEngagedSession(extra?: Partial<LeadSourceSnapshot>) {
+  if (typeof window === 'undefined') return;
+  try {
+    if (window.sessionStorage.getItem(ENGAGED_SESSION_KEY) === '1') return;
+    window.sessionStorage.setItem(ENGAGED_SESSION_KEY, '1');
+  } catch {
+    return;
+  }
+  postLeadEvent('engaged_session', extra);
+}
+
+export function trackPageView() {
+  if (typeof window === 'undefined') return;
+  const safePath = sanitizeLeadPagePath(`${window.location.pathname}${window.location.search}`);
+  postLeadEvent('page_view');
+  try {
+    const stored = JSON.parse(window.sessionStorage.getItem(SESSION_PAGE_PATHS_KEY) || '[]');
+    const paths = Array.isArray(stored)
+      ? stored.filter((value): value is string => typeof value === 'string').slice(-20)
+      : [];
+    if (!paths.includes(safePath)) paths.push(safePath);
+    window.sessionStorage.setItem(SESSION_PAGE_PATHS_KEY, JSON.stringify(paths));
+    if (paths.length >= 2) markEngagedSession();
+  } catch {
+    // Page-view recording must never interrupt website use when storage is unavailable.
+  }
+}
+
+export function trackLeadEvent(eventType: LeadEventType, extra?: Partial<LeadSourceSnapshot>) {
+  if (typeof window === 'undefined') return;
+  postLeadEvent(eventType, extra);
+  if (HIGH_INTENT_EVENTS.has(eventType)) markEngagedSession(extra);
 }

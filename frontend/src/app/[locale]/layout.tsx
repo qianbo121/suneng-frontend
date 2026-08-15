@@ -4,6 +4,7 @@ import { getMessages } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 
 import { JsonLd } from '@/components/JsonLd';
+import { WebsiteReadingTracker } from '@/components/analytics/WebsiteReadingTracker';
 import { FloatToolbar } from '@/components/layout/FloatToolbar';
 import { Footer } from '@/components/layout/Footer';
 import { Header } from '@/components/layout/Header';
@@ -38,12 +39,11 @@ export default async function LocaleLayout({ children, params }: LocaleLayoutPro
     <html lang={htmlLang} suppressHydrationWarning>
       <body>
         <NextIntlClientProvider locale={locale} messages={messages}>
+          <WebsiteReadingTracker />
           <div className="min-h-screen bg-white pb-[72px] text-neutral-900 xl:pb-0">
             <Header locale={locale} />
             <div id="site-page-content">
-              <main className="min-h-[calc(100vh-520px)] bg-white">
-                {children}
-              </main>
+              <main className="min-h-[calc(100vh-520px)] bg-white">{children}</main>
               <Footer locale={locale} />
               <FloatToolbar locale={locale} />
             </div>

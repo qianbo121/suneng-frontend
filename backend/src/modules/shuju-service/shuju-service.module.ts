@@ -10,12 +10,20 @@ import { ShujuServiceAuthGuard } from '@/modules/shuju-service/shuju-service-aut
 import { ShujuInquiryReadAuthGuard } from '@/modules/shuju-service/shuju-inquiry-read-auth.guard';
 import { ShujuInquiryReadController } from '@/modules/shuju-service/shuju-inquiry-read.controller';
 import { ShujuInquiryReadService } from '@/modules/shuju-service/shuju-inquiry-read.service';
+import { ShujuGrowthReadAuthGuard } from '@/modules/shuju-service/shuju-growth-read-auth.guard';
+import { ShujuGrowthReadController } from '@/modules/shuju-service/shuju-growth-read.controller';
+import { ShujuGrowthReadService } from '@/modules/shuju-service/shuju-growth-read.service';
 import { BaiduSubmitService } from '@/modules/news/baidu-submit.service';
 import { UploadModule } from '@/modules/upload/upload.module';
 
 @Module({
   imports: [JwtModule.register({}), UploadModule],
-  controllers: [ShujuNewsReadController, ShujuNewsPublishController, ShujuInquiryReadController],
+  controllers: [
+    ShujuNewsReadController,
+    ShujuNewsPublishController,
+    ShujuInquiryReadController,
+    ShujuGrowthReadController,
+  ],
   providers: [
     ShujuNewsReadService,
     ShujuServiceAuthGuard,
@@ -23,6 +31,8 @@ import { UploadModule } from '@/modules/upload/upload.module';
     ShujuNewsPublishService,
     ShujuInquiryReadAuthGuard,
     ShujuInquiryReadService,
+    ShujuGrowthReadAuthGuard,
+    ShujuGrowthReadService,
     BaiduSubmitService,
   ],
 })
