@@ -86,6 +86,13 @@ const BOT_PATTERN =
 // 的 sourceSnapshot），所以必须放行 NULL，否则询盘提交会被整批过滤掉，
 // 漏斗最后一步永远是 0。
 const NOT_BOT = Prisma.sql`("userAgent" IS NULL OR "userAgent" !~* ${BOT_PATTERN})`;
+
+// 人类验证门（2026-08-18 实测定案）：埋点访客数被伪装成正常浏览器的自动化流量
+// 灌水 18 倍（对照百度统计 8-13 UV/天）。UA 过滤只能抓 14.6%。
+// 唯一可靠的判据是行为：human_signal 只在首次真实交互（isTrusted 的
+// pointermove/scroll/touchstart/keydown）时发出，伪装流量不会触发。
+// 所以"数人头"类统计一律只数发过 human_signal 的身份——功能保留，数字治病。
+const IDENTITY = Prisma.sql`COALESCE(NULLIF("visitorId", ''), NULLIF("sessionId", ''), 'event:' || "id"::text)`;
 const IS_BOT = Prisma.sql`"userAgent" ~* ${BOT_PATTERN}`;
 
 function count(value: bigint | number | null | undefined) {
@@ -117,17 +124,32 @@ export class ShujuGrowthReadService {
 
   async overview(query: ShujuGrowthReadQueryDto) {
     const { start, endExclusive, days } = dateRange(query);
-    const trackingCoverage = await this.prisma.$queryRaw<TrackingCoverageRow[]>(Prisma.sql`
+    const [trackingCoverage, verifiedCoverage] = await Promise.all([
+      this.prisma.$queryRaw<TrackingCoverageRow[]>(Prisma.sql`
       SELECT MIN("createdAt") AS "trackingStartAt"
       FROM "WebsiteLeadEvent"
       WHERE "eventType" = 'page_view' AND ${NOT_BOT}
-    `);
+    `),
+      this.prisma.$queryRaw<TrackingCoverageRow[]>(Prisma.sql`
+      SELECT MIN("createdAt") AS "trackingStartAt"
+      FROM "WebsiteLeadEvent"
+      WHERE "eventType" = 'human_signal'
+    `),
+    ]);
     const trackingStartValue = trackingCoverage[0]?.trackingStartAt;
     const trackingStartAt = trackingStartValue ? new Date(trackingStartValue) : null;
     const hasTrackingStart = Boolean(trackingStartAt && !Number.isNaN(trackingStartAt.getTime()));
-    const comparableStart = hasTrackingStart
-      ? new Date(Math.max(start.getTime(), trackingStartAt!.getTime()))
-      : endExclusive;
+    const verifiedStartValue = verifiedCoverage[0]?.trackingStartAt;
+    const verifiedStartAt = verifiedStartValue ? new Date(verifiedStartValue) : null;
+    const hasVerifiedStart = Boolean(verifiedStartAt && !Number.isNaN(verifiedStartAt.getTime()));
+    // 已验证口径的窗口从"埋点开始"和"验证信号开始"中较晚者起算——
+    // 信号上线前的日子没法追溯验证，画进趋势会显示成一排假零。
+    const comparableStart =
+      hasTrackingStart && hasVerifiedStart
+        ? new Date(
+            Math.max(start.getTime(), trackingStartAt!.getTime(), verifiedStartAt!.getTime()),
+          )
+        : endExclusive;
     const filters: Prisma.Sql[] = [
       Prisma.sql`"createdAt" >= ${comparableStart}`,
       Prisma.sql`"createdAt" < ${endExclusive}`,
@@ -155,9 +177,24 @@ export class ShujuGrowthReadService {
       }
     }
     // 机器人条件挂在共享 where 上，所有口径（漏斗、来源、页面、趋势）一次性对齐。
-    const where = Prisma.join([...filters, NOT_BOT], ' AND ');
+    // 人类验证门同样全局挂载：一个身份只有发过 human_signal 才被计入任何统计。
+    // 动作类事件（阅读/联系/填表）的发出者必然先产生过真实交互，所以不会误伤；
+    // 伪装流量一次页面即走、零交互，被这道门整体挡在所有口径之外。
+    const HUMAN_GATE = Prisma.sql`${IDENTITY} IN (
+      SELECT DISTINCT COALESCE(NULLIF(h."visitorId", ''), NULLIF(h."sessionId", ''), 'event:' || h."id"::text)
+      FROM "WebsiteLeadEvent" h
+      WHERE h."eventType" = 'human_signal'
+        AND h."createdAt" >= ${comparableStart} AND h."createdAt" < ${endExclusive}
+    )`;
+    const where = Prisma.join([...filters, NOT_BOT, HUMAN_GATE], ' AND ');
     // 同样的筛选条件，但只数被排除掉的那部分 —— 让"过滤了多少"看得见，而不是悄悄少掉。
     const botWhere = Prisma.join([...filters, IS_BOT], ' AND ');
+    // 未通过人类验证的访问量（非机器人UA、但没有真实交互）——展示层用来写
+    // "另有 N 次未验证访问未计入"，透明但不上主数。
+    const unverifiedWhere = Prisma.join(
+      [...filters, NOT_BOT, Prisma.sql`NOT (${HUMAN_GATE})`],
+      ' AND ',
+    );
     const [
       counts,
       daily,
@@ -169,6 +206,7 @@ export class ShujuGrowthReadService {
       funnelRows,
       botRows,
       pageFunnelRows,
+      unverifiedRows,
     ] = await Promise.all([
       this.prisma.$queryRaw<CountRow[]>(Prisma.sql`
         SELECT
@@ -335,6 +373,13 @@ export class ShujuGrowthReadService {
         ORDER BY "pageVisitors" DESC
         LIMIT 200
       `),
+      this.prisma.$queryRaw<BotRow[]>(Prisma.sql`
+        SELECT
+          COUNT(DISTINCT COALESCE(NULLIF("visitorId", ''), NULLIF("sessionId", ''), 'event:' || "id"::text)) FILTER (WHERE "eventType" = 'page_view')::bigint AS visitors,
+          COUNT(*) FILTER (WHERE "eventType" = 'page_view')::bigint AS events
+        FROM "WebsiteLeadEvent"
+        WHERE ${unverifiedWhere}
+      `),
     ]);
 
     return {
@@ -352,13 +397,27 @@ export class ShujuGrowthReadService {
       generatedAt: new Date().toISOString(),
       coverage: {
         trackingStartAt: hasTrackingStart ? trackingStartAt!.toISOString() : null,
+        verifiedStartAt: hasVerifiedStart ? verifiedStartAt!.toISOString() : null,
+        verified: hasVerifiedStart,
         comparableStartAt: comparableStart.toISOString(),
-        fullRange: hasTrackingStart && trackingStartAt!.getTime() <= start.getTime(),
+        fullRange:
+          hasTrackingStart &&
+          hasVerifiedStart &&
+          trackingStartAt!.getTime() <= start.getTime() &&
+          verifiedStartAt!.getTime() <= start.getTime(),
         reason: !hasTrackingStart
           ? 'page_view_not_started'
-          : trackingStartAt!.getTime() > start.getTime()
-            ? 'partial_tracking_window'
-            : null,
+          : !hasVerifiedStart
+            ? 'verification_not_started'
+            : Math.max(trackingStartAt!.getTime(), verifiedStartAt!.getTime()) > start.getTime()
+              ? 'partial_tracking_window'
+              : null,
+      },
+      // 未通过人类验证的访问（非机器人UA但零真实交互）。展示层写
+      // "另有N次未验证访问未计入"——透明，但不进任何主数。
+      unverified: {
+        visitors: count(unverifiedRows[0]?.visitors),
+        events: count(unverifiedRows[0]?.events),
       },
       botFiltered: {
         // 已从上面所有口径里排除的机器人访问量。展示它是为了让"过滤"这件事可见，

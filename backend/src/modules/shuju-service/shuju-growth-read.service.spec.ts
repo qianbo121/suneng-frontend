@@ -8,6 +8,7 @@ describe('ShujuGrowthReadService', () => {
     const queryRaw = jest
       .fn()
       .mockResolvedValueOnce([{ trackingStartAt: new Date('2026-08-14T16:00:00Z') }])
+      .mockResolvedValueOnce([{ trackingStartAt: new Date('2026-08-14T16:00:00Z') }])
       .mockResolvedValueOnce([
         { eventType: 'page_view', eventCount: 12n, visitorCount: 8n, sessionCount: 9n },
         { eventType: 'form_submit', eventCount: 2n, visitorCount: 2n, sessionCount: 2n },
@@ -102,7 +103,8 @@ describe('ShujuGrowthReadService', () => {
           stepCompletedVisitors: 4n,
           submissionVisitors: 2n,
         },
-      ]);
+      ])
+      .mockResolvedValueOnce([{ visitors: 9n, events: 12n }]);
     const service = new ShujuGrowthReadService({ $queryRaw: queryRaw } as unknown as PrismaService);
 
     const result = await service.overview({ startDate: '2026-08-15', endDate: '2026-08-15' });
@@ -149,6 +151,7 @@ describe('ShujuGrowthReadService', () => {
     const queryRaw = jest
       .fn()
       .mockResolvedValueOnce([{ trackingStartAt: null }])
+      .mockResolvedValueOnce([{ trackingStartAt: null }])
       .mockResolvedValueOnce([])
       .mockResolvedValueOnce([])
       .mockResolvedValueOnce([])
@@ -178,7 +181,8 @@ describe('ShujuGrowthReadService', () => {
           stepCompletedVisitors: 4n,
           submissionVisitors: 2n,
         },
-      ]);
+      ])
+      .mockResolvedValueOnce([{ visitors: 9n, events: 12n }]);
     const service = new ShujuGrowthReadService({ $queryRaw: queryRaw } as unknown as PrismaService);
 
     const result = await service.overview({ startDate: '2026-08-15', endDate: '2026-08-15' });
@@ -207,7 +211,9 @@ describe('ShujuGrowthReadService', () => {
 
     const statements = queryRaw.mock.calls.map(([sql]) => JSON.stringify(sql));
     // 每一条业务查询都必须带上排除条件，否则同一页上会出现两套访客口径
-    const business = statements.filter((sql) => sql.includes('WebsiteLeadEvent'));
+    const business = statements.filter(
+      (sql) => sql.includes('WebsiteLeadEvent') && !sql.includes('human_signal'),
+    );
     expect(business.length).toBeGreaterThan(1);
     for (const sql of business) {
       expect(sql).toContain('userAgent');
@@ -217,6 +223,23 @@ describe('ShujuGrowthReadService', () => {
     // 过滤了多少要能看见，不能悄悄少掉
     expect(result.botFiltered).toEqual(expect.objectContaining({ visitors: 0, events: 0 }));
     expect(result.botFiltered.pattern).toContain('spider');
+  });
+
+  it('counts only human-verified identities and reports the unverified remainder', async () => {
+    const queryRaw = jest.fn().mockResolvedValue([]);
+    const service = new ShujuGrowthReadService({ $queryRaw: queryRaw } as unknown as PrismaService);
+
+    const result = await service.overview({ startDate: '2026-08-15', endDate: '2026-08-17' });
+
+    const statements = queryRaw.mock.calls.map(([sql]) => JSON.stringify(sql));
+    // 主统计查询必须带人类验证门:身份必须发过 human_signal 才被计入。
+    // 2026-08-18 实测:伪装成浏览器的自动化流量占访客数 80%+,UA 过滤抓不到,
+    // 唯一可靠判据是"有没有真实交互"。
+    const gated = statements.filter((sql) => sql.includes("= 'human_signal'"));
+    expect(gated.length).toBeGreaterThan(3);
+    // 未验证访问必须单独回报,不能悄悄消失
+    expect(result.unverified).toEqual(expect.objectContaining({ visitors: 0, events: 0 }));
+    expect(result.coverage).toEqual(expect.objectContaining({ verified: false }));
   });
 
   it('keeps the per-page funnel monotonic so the drill-down can show conversion', async () => {
