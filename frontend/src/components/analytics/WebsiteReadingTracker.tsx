@@ -3,7 +3,7 @@
 import { usePathname } from 'next/navigation';
 import { useEffect } from 'react';
 
-import { markEngagedSession, trackPageView } from '@/lib/api/lead-events';
+import { installVisitorNatureTracking, markEngagedSession, trackPageView } from '@/lib/api/lead-events';
 
 const READING_SECONDS = 60;
 
@@ -15,6 +15,10 @@ function isPriorityPage(pathname: string) {
 
 export function WebsiteReadingTracker() {
   const pathname = usePathname();
+
+  useEffect(() => {
+    installVisitorNatureTracking();
+  }, []);
 
   useEffect(() => {
     trackPageView();

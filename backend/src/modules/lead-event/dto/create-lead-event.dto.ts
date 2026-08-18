@@ -14,6 +14,8 @@ export const LEAD_EVENT_TYPES = [
   'form_start',
   'form_step_complete',
   'form_submit',
+  'human_signal',
+  'automation_signal',
 ] as const;
 
 export type LeadEventType = (typeof LEAD_EVENT_TYPES)[number];
