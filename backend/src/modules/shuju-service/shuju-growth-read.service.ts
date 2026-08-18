@@ -67,6 +67,14 @@ type FunnelRow = {
 };
 type TrackingCoverageRow = { trackingStartAt: Date | string | null };
 type BotRow = { visitors: bigint; events: bigint };
+type PageFunnelRow = {
+  pagePath: string | null;
+  pageVisitors: bigint;
+  highIntentVisitors: bigint;
+  formStartVisitors: bigint;
+  stepCompletedVisitors: bigint;
+  submissionVisitors: bigint;
+};
 
 // 与数炬服务器日志侧 src/web_traffic.py 的 BOT_RE 逐字对齐。
 // 两条口径必须一致，否则同一个官网会算出两个"访客数"。
@@ -150,8 +158,9 @@ export class ShujuGrowthReadService {
     const where = Prisma.join([...filters, NOT_BOT], ' AND ');
     // 同样的筛选条件，但只数被排除掉的那部分 —— 让"过滤了多少"看得见，而不是悄悄少掉。
     const botWhere = Prisma.join([...filters, IS_BOT], ' AND ');
-    const [counts, daily, sources, sourceDetails, landings, pages, segments, funnelRows, botRows] =
-      await Promise.all([
+    const [
+      counts, daily, sources, sourceDetails, landings, pages, segments, funnelRows, botRows, pageFunnelRows,
+    ] = await Promise.all([
         this.prisma.$queryRaw<CountRow[]>(Prisma.sql`
         SELECT
           "eventType",
@@ -290,6 +299,33 @@ export class ShujuGrowthReadService {
         FROM "WebsiteLeadEvent"
         WHERE ${botWhere}
       `),
+        // 单页漏斗必须和全站漏斗同口径，否则页面表里"点击联系"（互斥事件）
+        // 会小于"开始填写"，前端只能判成不可比、拒绝算转化率。
+        // 两条保证：①每一步都是后续步骤的超集（累计）②全部限定在"看过这一页的人"里。
+        this.prisma.$queryRaw<PageFunnelRow[]>(Prisma.sql`
+        WITH scoped AS (
+          SELECT
+            "pagePath",
+            "eventType",
+            COALESCE(NULLIF("visitorId", ''), NULLIF("sessionId", ''), 'event:' || "id"::text) AS identity
+          FROM "WebsiteLeadEvent"
+          WHERE ${where} AND "pagePath" IS NOT NULL
+        ), cohort AS (
+          SELECT DISTINCT "pagePath", identity FROM scoped WHERE "eventType" = 'page_view'
+        )
+        SELECT
+          c."pagePath",
+          COUNT(DISTINCT c.identity)::bigint AS "pageVisitors",
+          COUNT(DISTINCT s.identity) FILTER (WHERE s."eventType" IN ('phone_click','wechat_click','wechat_qr_view','wechat_copy','quote_cta_click','email_click','douyin_click','form_start','form_step_complete','form_submit'))::bigint AS "highIntentVisitors",
+          COUNT(DISTINCT s.identity) FILTER (WHERE s."eventType" IN ('form_start','form_step_complete','form_submit'))::bigint AS "formStartVisitors",
+          COUNT(DISTINCT s.identity) FILTER (WHERE s."eventType" IN ('form_step_complete','form_submit'))::bigint AS "stepCompletedVisitors",
+          COUNT(DISTINCT s.identity) FILTER (WHERE s."eventType" = 'form_submit')::bigint AS "submissionVisitors"
+        FROM cohort c
+        LEFT JOIN scoped s ON s."pagePath" = c."pagePath" AND s.identity = c.identity
+        GROUP BY c."pagePath"
+        ORDER BY "pageVisitors" DESC
+        LIMIT 200
+      `),
       ]);
 
     return {
@@ -389,6 +425,16 @@ export class ShujuGrowthReadService {
         formStarts: count(row.formStarts),
         stepCompleted: count(row.stepCompleted),
         submissions: count(row.submissions),
+      })),
+      // 单页下钻专用（累计口径）。页面表那几列仍用 pages 里的互斥计数，
+      // 两者名字不同、含义不同，不要混用。
+      pageFunnels: pageFunnelRows.map((row) => ({
+        pagePath: row.pagePath,
+        pageVisitors: count(row.pageVisitors),
+        highIntentVisitors: count(row.highIntentVisitors),
+        formStartVisitors: count(row.formStartVisitors),
+        stepCompletedVisitors: count(row.stepCompletedVisitors),
+        submissionVisitors: count(row.submissionVisitors),
       })),
       segments: segments.map((row) => ({
         date: row.day,

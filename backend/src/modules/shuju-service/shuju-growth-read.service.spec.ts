@@ -92,7 +92,17 @@ describe('ShujuGrowthReadService', () => {
           submissionVisitors: 1n,
         },
       ])
-      .mockResolvedValueOnce([{ visitors: 4n, events: 5n }]);
+      .mockResolvedValueOnce([{ visitors: 4n, events: 5n }])
+      .mockResolvedValueOnce([
+        {
+          pagePath: '/zh/products/detail/trolley-furnace',
+          pageVisitors: 100n,
+          highIntentVisitors: 8n,
+          formStartVisitors: 6n,
+          stepCompletedVisitors: 4n,
+          submissionVisitors: 2n,
+        },
+      ]);
     const service = new ShujuGrowthReadService({ $queryRaw: queryRaw } as unknown as PrismaService);
 
     const result = await service.overview({ startDate: '2026-08-15', endDate: '2026-08-15' });
@@ -158,7 +168,17 @@ describe('ShujuGrowthReadService', () => {
           submissionVisitors: 0n,
         },
       ])
-      .mockResolvedValueOnce([{ visitors: 4n, events: 5n }]);
+      .mockResolvedValueOnce([{ visitors: 4n, events: 5n }])
+      .mockResolvedValueOnce([
+        {
+          pagePath: '/zh/products/detail/trolley-furnace',
+          pageVisitors: 100n,
+          highIntentVisitors: 8n,
+          formStartVisitors: 6n,
+          stepCompletedVisitors: 4n,
+          submissionVisitors: 2n,
+        },
+      ]);
     const service = new ShujuGrowthReadService({ $queryRaw: queryRaw } as unknown as PrismaService);
 
     const result = await service.overview({ startDate: '2026-08-15', endDate: '2026-08-15' });
@@ -199,5 +219,23 @@ describe('ShujuGrowthReadService', () => {
       expect.objectContaining({ visitors: 0, events: 0 }),
     );
     expect(result.botFiltered.pattern).toContain('spider');
+  });
+
+  it('keeps the per-page funnel monotonic so the drill-down can show conversion', async () => {
+    const queryRaw = jest.fn().mockResolvedValue([]);
+    const service = new ShujuGrowthReadService({ $queryRaw: queryRaw } as unknown as PrismaService);
+
+    await service.overview({ startDate: '2026-08-15', endDate: '2026-08-17' });
+
+    const pageFunnel = queryRaw.mock.calls
+      .map(([sql]) => JSON.stringify(sql))
+      .find((sql) => sql.includes('cohort'));
+    expect(pageFunnel).toBeDefined();
+    // 每一步都必须是后续步骤的超集，否则单页漏斗又会退回"不可比"
+    expect(pageFunnel).toContain('form_start');
+    expect(pageFunnel).toContain('form_step_complete');
+    expect(pageFunnel).toContain('form_submit');
+    // 必须限定在"看过这一页的人"里，否则第5步可能大于第1步
+    expect(pageFunnel).toContain('page_view');
   });
 });
