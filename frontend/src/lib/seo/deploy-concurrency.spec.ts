@@ -44,7 +44,15 @@ describe('production deployment concurrency', () => {
   });
 
   it('fails image builds before deployment when disk is unsafe', () => {
-    expect(deployScript).toContain('DEPLOY_MIN_FREE_GB:-12');
+    // 钉"必须有磁盘门 + 门槛在合理区间"，不钉具体数值——
+    // 2026-08-18 实测三镜像独占 2.48G + 构建峰值约1.5G = 实需约4G，
+    // 原值 12G 虚高3倍，反而逼人绕过流程手工部署（当天因此引发一次3分钟API抖动）。
+    // 下限 4G：低于实需就失去保护意义；上限 8G：再高就会在磁盘尚有余力时误拒。
+    const gate = deployScript.match(/DEPLOY_MIN_FREE_GB:-(\d+)/);
+    expect(gate).not.toBeNull();
+    const gateGb = Number(gate![1]);
+    expect(gateGb).toBeGreaterThanOrEqual(4);
+    expect(gateGb).toBeLessThanOrEqual(8);
     expect(deployScript).toContain('Refusing image build: at least ${min_free_gb}GB');
     expect(deployScript).toContain('for service in backend frontend admin');
     expect(deployScript).toContain('build "$service"');
