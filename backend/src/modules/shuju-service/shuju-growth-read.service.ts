@@ -66,6 +66,27 @@ type FunnelRow = {
   submissionVisitors: bigint;
 };
 type TrackingCoverageRow = { trackingStartAt: Date | string | null };
+type BotRow = { visitors: bigint; events: bigint };
+type PageFunnelRow = {
+  pagePath: string | null;
+  pageVisitors: bigint;
+  highIntentVisitors: bigint;
+  formStartVisitors: bigint;
+  stepCompletedVisitors: bigint;
+  submissionVisitors: bigint;
+};
+
+// 与数炬服务器日志侧 src/web_traffic.py 的 BOT_RE 逐字对齐。
+// 两条口径必须一致，否则同一个官网会算出两个"访客数"。
+const BOT_PATTERN =
+  'bot|spider|crawler|slurp|headlesschrome|python-requests|go-http-client|' +
+  'wget|curl/|scrapy|httpclient|uptimerobot|zgrab|masscan';
+
+// 注意：服务端写入的 form_submit 事件不带 userAgent（见 custom-requirement.service.ts
+// 的 sourceSnapshot），所以必须放行 NULL，否则询盘提交会被整批过滤掉，
+// 漏斗最后一步永远是 0。
+const NOT_BOT = Prisma.sql`("userAgent" IS NULL OR "userAgent" !~* ${BOT_PATTERN})`;
+const IS_BOT = Prisma.sql`"userAgent" ~* ${BOT_PATTERN}`;
 
 function count(value: bigint | number | null | undefined) {
   return Number(value ?? 0);
@@ -99,7 +120,7 @@ export class ShujuGrowthReadService {
     const trackingCoverage = await this.prisma.$queryRaw<TrackingCoverageRow[]>(Prisma.sql`
       SELECT MIN("createdAt") AS "trackingStartAt"
       FROM "WebsiteLeadEvent"
-      WHERE "eventType" = 'page_view'
+      WHERE "eventType" = 'page_view' AND ${NOT_BOT}
     `);
     const trackingStartValue = trackingCoverage[0]?.trackingStartAt;
     const trackingStartAt = trackingStartValue ? new Date(trackingStartValue) : null;
@@ -133,10 +154,23 @@ export class ShujuGrowthReadService {
         filters.push(Prisma.sql`"pageType" = ${query.pageType}`);
       }
     }
-    const where = Prisma.join(filters, ' AND ');
-    const [counts, daily, sources, sourceDetails, landings, pages, segments, funnelRows] =
-      await Promise.all([
-        this.prisma.$queryRaw<CountRow[]>(Prisma.sql`
+    // 机器人条件挂在共享 where 上，所有口径（漏斗、来源、页面、趋势）一次性对齐。
+    const where = Prisma.join([...filters, NOT_BOT], ' AND ');
+    // 同样的筛选条件，但只数被排除掉的那部分 —— 让"过滤了多少"看得见，而不是悄悄少掉。
+    const botWhere = Prisma.join([...filters, IS_BOT], ' AND ');
+    const [
+      counts,
+      daily,
+      sources,
+      sourceDetails,
+      landings,
+      pages,
+      segments,
+      funnelRows,
+      botRows,
+      pageFunnelRows,
+    ] = await Promise.all([
+      this.prisma.$queryRaw<CountRow[]>(Prisma.sql`
         SELECT
           "eventType",
           COUNT(*)::bigint AS "eventCount",
@@ -146,7 +180,7 @@ export class ShujuGrowthReadService {
         WHERE ${where}
         GROUP BY "eventType"
       `),
-        this.prisma.$queryRaw<DailyRow[]>(Prisma.sql`
+      this.prisma.$queryRaw<DailyRow[]>(Prisma.sql`
         SELECT
           TO_CHAR("createdAt" AT TIME ZONE 'Asia/Shanghai', 'YYYY-MM-DD') AS day,
           "eventType",
@@ -157,7 +191,7 @@ export class ShujuGrowthReadService {
         GROUP BY day, "eventType"
         ORDER BY day ASC
       `),
-        this.prisma.$queryRaw<SourceRow[]>(Prisma.sql`
+      this.prisma.$queryRaw<SourceRow[]>(Prisma.sql`
         SELECT
           "sourceType",
           NULL::text AS "sourceDetail",
@@ -173,7 +207,7 @@ export class ShujuGrowthReadService {
         GROUP BY "sourceType"
         ORDER BY "pageViews" DESC, visitors DESC
       `),
-        this.prisma.$queryRaw<SourceRow[]>(Prisma.sql`
+      this.prisma.$queryRaw<SourceRow[]>(Prisma.sql`
         SELECT
           "sourceType",
           "sourceDetail",
@@ -191,7 +225,7 @@ export class ShujuGrowthReadService {
         ORDER BY "pageViews" DESC, visitors DESC
         LIMIT 200
       `),
-        this.prisma.$queryRaw<LandingRow[]>(Prisma.sql`
+      this.prisma.$queryRaw<LandingRow[]>(Prisma.sql`
         SELECT
           "landingPage",
           COUNT(DISTINCT COALESCE(NULLIF("visitorId", ''), NULLIF("sessionId", ''), 'event:' || "id"::text)) FILTER (WHERE "eventType" = 'page_view')::bigint AS visitors,
@@ -204,7 +238,7 @@ export class ShujuGrowthReadService {
         ORDER BY sessions DESC, "pageViews" DESC
         LIMIT 100
       `),
-        this.prisma.$queryRaw<PageRow[]>(Prisma.sql`
+      this.prisma.$queryRaw<PageRow[]>(Prisma.sql`
         SELECT
           "pagePath",
           MAX("pageTitle") AS "pageTitle",
@@ -224,7 +258,7 @@ export class ShujuGrowthReadService {
         ORDER BY "pageViews" DESC, visitors DESC
         LIMIT 200
       `),
-        this.prisma.$queryRaw<SegmentRow[]>(Prisma.sql`
+      this.prisma.$queryRaw<SegmentRow[]>(Prisma.sql`
         SELECT
           TO_CHAR("createdAt" AT TIME ZONE 'Asia/Shanghai', 'YYYY-MM-DD') AS day,
           "eventType",
@@ -243,7 +277,7 @@ export class ShujuGrowthReadService {
         GROUP BY day, "eventType", "pagePath", "sourceType", "sourceDetail", "deviceType"
         ORDER BY day ASC, events DESC
       `),
-        this.prisma.$queryRaw<FunnelRow[]>(Prisma.sql`
+      this.prisma.$queryRaw<FunnelRow[]>(Prisma.sql`
         WITH scoped AS (
           SELECT
             *,
@@ -267,7 +301,41 @@ export class ShujuGrowthReadService {
         FROM scoped
         WHERE identity IN (SELECT identity FROM page_cohort)
       `),
-      ]);
+      this.prisma.$queryRaw<BotRow[]>(Prisma.sql`
+        SELECT
+          COUNT(DISTINCT COALESCE(NULLIF("visitorId", ''), NULLIF("sessionId", ''), 'event:' || "id"::text)) FILTER (WHERE "eventType" = 'page_view')::bigint AS visitors,
+          COUNT(*) FILTER (WHERE "eventType" = 'page_view')::bigint AS events
+        FROM "WebsiteLeadEvent"
+        WHERE ${botWhere}
+      `),
+      // 单页漏斗必须和全站漏斗同口径，否则页面表里"点击联系"（互斥事件）
+      // 会小于"开始填写"，前端只能判成不可比、拒绝算转化率。
+      // 两条保证：①每一步都是后续步骤的超集（累计）②全部限定在"看过这一页的人"里。
+      this.prisma.$queryRaw<PageFunnelRow[]>(Prisma.sql`
+        WITH scoped AS (
+          SELECT
+            "pagePath",
+            "eventType",
+            COALESCE(NULLIF("visitorId", ''), NULLIF("sessionId", ''), 'event:' || "id"::text) AS identity
+          FROM "WebsiteLeadEvent"
+          WHERE ${where} AND "pagePath" IS NOT NULL
+        ), cohort AS (
+          SELECT DISTINCT "pagePath", identity FROM scoped WHERE "eventType" = 'page_view'
+        )
+        SELECT
+          c."pagePath",
+          COUNT(DISTINCT c.identity)::bigint AS "pageVisitors",
+          COUNT(DISTINCT s.identity) FILTER (WHERE s."eventType" IN ('phone_click','wechat_click','wechat_qr_view','wechat_copy','quote_cta_click','email_click','douyin_click','form_start','form_step_complete','form_submit'))::bigint AS "highIntentVisitors",
+          COUNT(DISTINCT s.identity) FILTER (WHERE s."eventType" IN ('form_start','form_step_complete','form_submit'))::bigint AS "formStartVisitors",
+          COUNT(DISTINCT s.identity) FILTER (WHERE s."eventType" IN ('form_step_complete','form_submit'))::bigint AS "stepCompletedVisitors",
+          COUNT(DISTINCT s.identity) FILTER (WHERE s."eventType" = 'form_submit')::bigint AS "submissionVisitors"
+        FROM cohort c
+        LEFT JOIN scoped s ON s."pagePath" = c."pagePath" AND s.identity = c.identity
+        GROUP BY c."pagePath"
+        ORDER BY "pageVisitors" DESC
+        LIMIT 200
+      `),
+    ]);
 
     return {
       range: {
@@ -291,6 +359,14 @@ export class ShujuGrowthReadService {
           : trackingStartAt!.getTime() > start.getTime()
             ? 'partial_tracking_window'
             : null,
+      },
+      botFiltered: {
+        // 已从上面所有口径里排除的机器人访问量。展示它是为了让"过滤"这件事可见，
+        // 而不是让数字悄悄变小。判据只有 userAgent 特征，伪装成普通浏览器的
+        // 自动流量抓不到 —— 这一点必须在界面上说清楚，不能让人以为剩下的都是真人。
+        visitors: count(botRows[0]?.visitors),
+        events: count(botRows[0]?.events),
+        pattern: BOT_PATTERN,
       },
       funnel: {
         pageVisitors: count(funnelRows[0]?.pageVisitors),
@@ -358,6 +434,16 @@ export class ShujuGrowthReadService {
         formStarts: count(row.formStarts),
         stepCompleted: count(row.stepCompleted),
         submissions: count(row.submissions),
+      })),
+      // 单页下钻专用（累计口径）。页面表那几列仍用 pages 里的互斥计数，
+      // 两者名字不同、含义不同，不要混用。
+      pageFunnels: pageFunnelRows.map((row) => ({
+        pagePath: row.pagePath,
+        pageVisitors: count(row.pageVisitors),
+        highIntentVisitors: count(row.highIntentVisitors),
+        formStartVisitors: count(row.formStartVisitors),
+        stepCompletedVisitors: count(row.stepCompletedVisitors),
+        submissionVisitors: count(row.submissionVisitors),
       })),
       segments: segments.map((row) => ({
         date: row.day,
