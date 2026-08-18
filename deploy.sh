@@ -218,7 +218,13 @@ else
   # Preserve useful caches when capacity is healthy. Reclaim only unused data
   # when needed, then fail before touching containers if the host still cannot
   # safely hold old and candidate images at the same time.
-  min_free_gb="${DEPLOY_MIN_FREE_GB:-12}"
+  # 门槛按 2026-08-18 实测标定（原值 12 是未经测量的估值，虚高约 3 倍）：
+  #   三个新镜像独占合计 2.48G（backend 1.62 + frontend 0.84 + admin 0.02）
+  #   Next.js 预渲染中间产物峰值约 1.5G
+  #   实需约 4G，取 6G = 实需 + 50% 余量
+  # 虚高的门槛会在磁盘尚有余力时拒绝发布，逼人绕过流程手工部署——
+  # 那比磁盘不足更危险（今天实际发生过一次，绕过时漏传 env 导致 API 抖动3分钟）。
+  min_free_gb="${DEPLOY_MIN_FREE_GB:-6}"
   available_kb="$(df -Pk . | awk 'NR == 2 { print $4 }')"
   required_kb="$((min_free_gb * 1024 * 1024))"
   if [ "$available_kb" -lt "$required_kb" ]; then
