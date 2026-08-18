@@ -144,9 +144,12 @@ export class ShujuGrowthReadService {
     const hasVerifiedStart = Boolean(verifiedStartAt && !Number.isNaN(verifiedStartAt.getTime()));
     // 已验证口径的窗口从"埋点开始"和"验证信号开始"中较晚者起算——
     // 信号上线前的日子没法追溯验证，画进趋势会显示成一排假零。
-    const comparableStart = hasTrackingStart && hasVerifiedStart
-      ? new Date(Math.max(start.getTime(), trackingStartAt!.getTime(), verifiedStartAt!.getTime()))
-      : endExclusive;
+    const comparableStart =
+      hasTrackingStart && hasVerifiedStart
+        ? new Date(
+            Math.max(start.getTime(), trackingStartAt!.getTime(), verifiedStartAt!.getTime()),
+          )
+        : endExclusive;
     const filters: Prisma.Sql[] = [
       Prisma.sql`"createdAt" >= ${comparableStart}`,
       Prisma.sql`"createdAt" < ${endExclusive}`,
