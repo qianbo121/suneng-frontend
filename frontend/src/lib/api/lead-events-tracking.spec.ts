@@ -69,3 +69,67 @@ describe('website reading events', () => {
     now.mockRestore();
   });
 });
+
+describe('visitor nature signals', () => {
+  beforeEach(() => {
+    vi.mocked(apiPost).mockClear();
+    vi.stubGlobal('document', { title: '台车炉', referrer: '' });
+  });
+
+  function windowWithListeners(overrides: Record<string, unknown> = {}) {
+    const listeners = new Map<string, EventListener[]>();
+    vi.stubGlobal('window', {
+      location: { pathname: '/zh', search: '' },
+      sessionStorage: storageMock(),
+      localStorage: storageMock(),
+      matchMedia: () => ({ matches: false }),
+      addEventListener: (name: string, fn: EventListener) => {
+        listeners.set(name, [...(listeners.get(name) ?? []), fn]);
+      },
+      removeEventListener: (name: string, fn: EventListener) => {
+        listeners.set(name, (listeners.get(name) ?? []).filter((item) => item !== fn));
+      },
+      ...overrides,
+    });
+    return listeners;
+  }
+
+  it('marks an automated browser once and never listens for interaction', async () => {
+    vi.stubGlobal('navigator', { webdriver: true });
+    const listeners = windowWithListeners();
+    const { installVisitorNatureTracking } = await import('@/lib/api/lead-events');
+
+    installVisitorNatureTracking();
+    installVisitorNatureTracking();
+
+    expect(postedEventTypes().filter((type) => type === 'automation_signal')).toHaveLength(1);
+    expect(postedEventTypes()).not.toContain('human_signal');
+    expect([...listeners.values()].flat()).toHaveLength(0);
+  });
+
+  it('marks a human only on the first trusted interaction, once per session', async () => {
+    vi.stubGlobal('navigator', { webdriver: false });
+    const listeners = windowWithListeners();
+    const { installVisitorNatureTracking } = await import('@/lib/api/lead-events');
+
+    installVisitorNatureTracking();
+    expect(postedEventTypes()).toHaveLength(0);
+
+    const fire = (trusted: boolean) => {
+      for (const fn of [...(listeners.get('scroll') ?? [])]) {
+        fn({ isTrusted: trusted } as Event);
+      }
+    };
+    // 页面脚本合成的事件不算人
+    fire(false);
+    expect(postedEventTypes()).not.toContain('human_signal');
+    // 第一次真实交互记一次
+    fire(true);
+    expect(postedEventTypes().filter((type) => type === 'human_signal')).toHaveLength(1);
+    // 监听器已拆除，之后不再重复
+    expect([...listeners.values()].flat()).toHaveLength(0);
+    installVisitorNatureTracking();
+    fire(true);
+    expect(postedEventTypes().filter((type) => type === 'human_signal')).toHaveLength(1);
+  });
+});

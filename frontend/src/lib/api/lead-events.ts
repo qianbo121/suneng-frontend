@@ -13,7 +13,9 @@ export type LeadEventType =
   | 'douyin_click'
   | 'form_start'
   | 'form_step_complete'
-  | 'form_submit';
+  | 'form_submit'
+  | 'human_signal'
+  | 'automation_signal';
 
 export type LeadSourceSnapshot = {
   pageTitle?: string;
@@ -72,6 +74,11 @@ const SESSION_PAGE_PATHS_KEY = 'suneng_session_page_paths';
 const SESSION_ID_KEY = 'suneng_session_id';
 const SESSION_LAST_SEEN_KEY = 'suneng_session_last_seen';
 const SESSION_TIMEOUT_MS = 30 * 60 * 1000;
+// 访客性质信号：每个会话恰好发一条 human_signal 或 automation_signal。
+// 背景（2026-08-18 实测）：伪装成正常浏览器的自动化流量会执行 JS，UA 过滤抓不到；
+// 但它们要么带着 navigator.webdriver 标记，要么从不产生真实交互。这两个信号
+// 让新数据从采集起就可判定，不再事后猜。只采集，不改变任何现有事件的语义。
+const VISITOR_NATURE_KEY = 'suneng_visitor_nature_recorded';
 
 function boundedSourceValue(value: string | undefined, limit: number) {
   const normalized = value?.trim();
@@ -119,6 +126,7 @@ function getSessionId(storage: Storage) {
       const next = newAnonymousId();
       storage.setItem(SESSION_ID_KEY, next);
       storage.removeItem(ENGAGED_SESSION_KEY);
+      storage.removeItem(VISITOR_NATURE_KEY);
       storage.removeItem(SESSION_PAGE_PATHS_KEY);
       storage.removeItem('suneng_landing_page');
     }
@@ -272,6 +280,48 @@ export function markEngagedSession(extra?: Partial<LeadSourceSnapshot>) {
     return;
   }
   postLeadEvent('engaged_session', extra);
+}
+
+const NATURE_INTERACTION_EVENTS = ['pointermove', 'scroll', 'touchstart', 'keydown'] as const;
+
+export function installVisitorNatureTracking() {
+  if (typeof window === 'undefined') return;
+  try {
+    // 必须先立会话再设标记：postLeadEvent 内部会触发会话初始化/轮换，
+    // 轮换会清掉 VISITOR_NATURE_KEY——顺序反了信号就退化成"每次刷新一条"。
+    getSessionId(window.sessionStorage);
+    if (window.sessionStorage.getItem(VISITOR_NATURE_KEY) === '1') return;
+  } catch {
+    return;
+  }
+  // 自动化工具（Puppeteer/Selenium/无头浏览器）默认带 webdriver 标记，伪装 UA 藏不住它。
+  if (typeof navigator !== 'undefined' && navigator.webdriver === true) {
+    try {
+      window.sessionStorage.setItem(VISITOR_NATURE_KEY, '1');
+    } catch {
+      return;
+    }
+    postLeadEvent('automation_signal');
+    return;
+  }
+  const onFirstInteraction = (event: Event) => {
+    // 页面脚本合成的事件 isTrusted=false，不算人。
+    if (!event.isTrusted) return;
+    for (const name of NATURE_INTERACTION_EVENTS) {
+      window.removeEventListener(name, onFirstInteraction, true);
+    }
+    try {
+      getSessionId(window.sessionStorage);
+      if (window.sessionStorage.getItem(VISITOR_NATURE_KEY) === '1') return;
+      window.sessionStorage.setItem(VISITOR_NATURE_KEY, '1');
+    } catch {
+      return;
+    }
+    postLeadEvent('human_signal');
+  };
+  for (const name of NATURE_INTERACTION_EVENTS) {
+    window.addEventListener(name, onFirstInteraction, { capture: true, passive: true });
+  }
 }
 
 export function trackPageView() {
