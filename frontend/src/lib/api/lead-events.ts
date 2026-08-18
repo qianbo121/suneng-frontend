@@ -4,6 +4,10 @@ import { classifyTrafficSource } from '@/lib/analytics/traffic-source';
 export type LeadEventType =
   | 'page_view'
   | 'engaged_session'
+  | 'dwell_5s'
+  | 'dwell_20s'
+  | 'dwell_60s'
+  | 'dwell_180s'
   | 'phone_click'
   | 'wechat_click'
   | 'wechat_qr_view'
@@ -280,6 +284,65 @@ export function markEngagedSession(extra?: Partial<LeadSourceSnapshot>) {
     return;
   }
   postLeadEvent('engaged_session', extra);
+}
+
+// ===== 停留时长 =====
+// 计时从「进入官网」开始，跨页面累计，不是每进一个页面重新计。
+const DWELL_SECONDS_KEY = 'suneng_dwell_seconds';
+const DWELL_MILESTONE_KEY = 'suneng_dwell_milestone';
+
+// 累计专注满这么多秒就算「有实际阅读」。
+const ENGAGED_SECONDS = 20;
+
+// 里程碑写进事件名，不必给事件表加数字字段，还能直接吃 (eventType, createdAt) 索引。
+const DWELL_MILESTONES = [
+  { seconds: 5, event: 'dwell_5s' },
+  { seconds: 20, event: 'dwell_20s' },
+  { seconds: 60, event: 'dwell_60s' },
+  { seconds: 180, event: 'dwell_180s' },
+] as const satisfies ReadonlyArray<{ seconds: number; event: LeadEventType }>;
+
+function readDwellCounter(key: string) {
+  try {
+    const value = Number(window.sessionStorage.getItem(key));
+    return Number.isFinite(value) && value > 0 ? value : 0;
+  } catch {
+    return 0;
+  }
+}
+
+function writeDwellCounter(key: string, value: number) {
+  try {
+    window.sessionStorage.setItem(key, String(value));
+  } catch {
+    // sessionStorage 不可用时退化成「本次页面内计时」，不影响页面本身。
+  }
+}
+
+/** 每满一秒调一次。导出仅为可测，页面代码请用 startDwellTracking。 */
+export function tickDwell() {
+  // 只累计「页面可见且窗口有焦点」的秒数：无头浏览器默认拿不到焦点，
+  // 停留时长因此成为少数几个伪装成本很高的信号。
+  if (document.visibilityState !== 'visible' || !document.hasFocus()) return;
+
+  const activeSeconds = readDwellCounter(DWELL_SECONDS_KEY) + 1;
+  writeDwellCounter(DWELL_SECONDS_KEY, activeSeconds);
+
+  let nextMilestone = readDwellCounter(DWELL_MILESTONE_KEY);
+  while (nextMilestone < DWELL_MILESTONES.length && activeSeconds >= DWELL_MILESTONES[nextMilestone].seconds) {
+    postLeadEvent(DWELL_MILESTONES[nextMilestone].event);
+    nextMilestone += 1;
+    writeDwellCounter(DWELL_MILESTONE_KEY, nextMilestone);
+  }
+
+  if (activeSeconds >= ENGAGED_SECONDS) markEngagedSession();
+}
+
+/** 开始计时，返回停表函数。跨页面接着上次的秒数走。 */
+export function startDwellTracking() {
+  if (typeof window === 'undefined') return () => undefined;
+  const timer = window.setInterval(tickDwell, 1000);
+  return () => window.clearInterval(timer);
 }
 
 const NATURE_INTERACTION_EVENTS = ['pointermove', 'scroll', 'touchstart', 'keydown'] as const;

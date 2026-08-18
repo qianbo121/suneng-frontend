@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { apiPost } from '@/lib/api/client';
-import { markEngagedSession, trackLeadEvent, trackPageView } from '@/lib/api/lead-events';
+import { markEngagedSession, tickDwell, trackLeadEvent, trackPageView } from '@/lib/api/lead-events';
 
 vi.mock('@/lib/api/client', () => ({ apiPost: vi.fn(() => Promise.resolve({})) }));
 
@@ -131,5 +131,76 @@ describe('visitor nature signals', () => {
     installVisitorNatureTracking();
     fire(true);
     expect(postedEventTypes().filter((type) => type === 'human_signal')).toHaveLength(1);
+  });
+});
+
+describe('停留时长（进官网就计时，跨页面累计）', () => {
+  function focusOn(visible = true, focused = true) {
+    vi.stubGlobal('document', {
+      title: '台车炉',
+      referrer: '',
+      visibilityState: visible ? 'visible' : 'hidden',
+      hasFocus: () => focused,
+    });
+  }
+
+  beforeEach(() => {
+    vi.mocked(apiPost).mockClear();
+    vi.stubGlobal('window', {
+      location: { pathname: '/zh', search: '' },
+      sessionStorage: storageMock(),
+      localStorage: storageMock(),
+      matchMedia: () => ({ matches: false }),
+    });
+    focusOn();
+  });
+
+  function tick(seconds: number) {
+    for (let i = 0; i < seconds; i += 1) tickDwell();
+  }
+
+  it('首页也计时——不再只认产品详情等重点页', () => {
+    window.location.pathname = '/zh';
+    tick(5);
+    expect(postedEventTypes()).toContain('dwell_5s');
+  });
+
+  it('满 20 秒记一次「有实际阅读」，里程碑各只发一次', () => {
+    tick(25);
+    const types = postedEventTypes();
+    expect(types.filter((t) => t === 'dwell_5s')).toHaveLength(1);
+    expect(types.filter((t) => t === 'dwell_20s')).toHaveLength(1);
+    expect(types.filter((t) => t === 'engaged_session')).toHaveLength(1);
+    expect(types).not.toContain('dwell_60s');
+  });
+
+  it('窗口没有焦点就不累计——无头浏览器默认拿不到焦点', () => {
+    focusOn(true, false);
+    tick(30);
+    expect(postedEventTypes()).toHaveLength(0);
+  });
+
+  it('页面切到后台不累计', () => {
+    focusOn(false, true);
+    tick(30);
+    expect(postedEventTypes()).toHaveLength(0);
+  });
+
+  it('秒数跨页面接着走：第一页 15 秒 + 第二页 5 秒 = 满 20 秒', () => {
+    tick(15);
+    expect(postedEventTypes()).not.toContain('dwell_20s');
+    window.location.pathname = '/zh/news';
+    tick(5);
+    expect(postedEventTypes()).toContain('dwell_20s');
+  });
+
+  it('中途失焦不清零，重新聚焦接着算', () => {
+    tick(18);
+    focusOn(true, false);
+    tick(50);
+    focusOn(true, true);
+    tick(2);
+    expect(postedEventTypes()).toContain('dwell_20s');
+    expect(postedEventTypes()).not.toContain('dwell_60s');
   });
 });
