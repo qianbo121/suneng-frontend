@@ -215,9 +215,7 @@ describe('ShujuGrowthReadService', () => {
     // 服务端写的 form_submit 不带 userAgent，必须放行 NULL，否则询盘会被整批过滤掉
     expect(statements.some((sql) => sql.includes('IS NULL'))).toBe(true);
     // 过滤了多少要能看见，不能悄悄少掉
-    expect(result.botFiltered).toEqual(
-      expect.objectContaining({ visitors: 0, events: 0 }),
-    );
+    expect(result.botFiltered).toEqual(expect.objectContaining({ visitors: 0, events: 0 }));
     expect(result.botFiltered.pattern).toContain('spider');
   });
 

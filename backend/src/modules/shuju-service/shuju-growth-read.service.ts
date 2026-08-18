@@ -159,9 +159,18 @@ export class ShujuGrowthReadService {
     // 同样的筛选条件，但只数被排除掉的那部分 —— 让"过滤了多少"看得见，而不是悄悄少掉。
     const botWhere = Prisma.join([...filters, IS_BOT], ' AND ');
     const [
-      counts, daily, sources, sourceDetails, landings, pages, segments, funnelRows, botRows, pageFunnelRows,
+      counts,
+      daily,
+      sources,
+      sourceDetails,
+      landings,
+      pages,
+      segments,
+      funnelRows,
+      botRows,
+      pageFunnelRows,
     ] = await Promise.all([
-        this.prisma.$queryRaw<CountRow[]>(Prisma.sql`
+      this.prisma.$queryRaw<CountRow[]>(Prisma.sql`
         SELECT
           "eventType",
           COUNT(*)::bigint AS "eventCount",
@@ -171,7 +180,7 @@ export class ShujuGrowthReadService {
         WHERE ${where}
         GROUP BY "eventType"
       `),
-        this.prisma.$queryRaw<DailyRow[]>(Prisma.sql`
+      this.prisma.$queryRaw<DailyRow[]>(Prisma.sql`
         SELECT
           TO_CHAR("createdAt" AT TIME ZONE 'Asia/Shanghai', 'YYYY-MM-DD') AS day,
           "eventType",
@@ -182,7 +191,7 @@ export class ShujuGrowthReadService {
         GROUP BY day, "eventType"
         ORDER BY day ASC
       `),
-        this.prisma.$queryRaw<SourceRow[]>(Prisma.sql`
+      this.prisma.$queryRaw<SourceRow[]>(Prisma.sql`
         SELECT
           "sourceType",
           NULL::text AS "sourceDetail",
@@ -198,7 +207,7 @@ export class ShujuGrowthReadService {
         GROUP BY "sourceType"
         ORDER BY "pageViews" DESC, visitors DESC
       `),
-        this.prisma.$queryRaw<SourceRow[]>(Prisma.sql`
+      this.prisma.$queryRaw<SourceRow[]>(Prisma.sql`
         SELECT
           "sourceType",
           "sourceDetail",
@@ -216,7 +225,7 @@ export class ShujuGrowthReadService {
         ORDER BY "pageViews" DESC, visitors DESC
         LIMIT 200
       `),
-        this.prisma.$queryRaw<LandingRow[]>(Prisma.sql`
+      this.prisma.$queryRaw<LandingRow[]>(Prisma.sql`
         SELECT
           "landingPage",
           COUNT(DISTINCT COALESCE(NULLIF("visitorId", ''), NULLIF("sessionId", ''), 'event:' || "id"::text)) FILTER (WHERE "eventType" = 'page_view')::bigint AS visitors,
@@ -229,7 +238,7 @@ export class ShujuGrowthReadService {
         ORDER BY sessions DESC, "pageViews" DESC
         LIMIT 100
       `),
-        this.prisma.$queryRaw<PageRow[]>(Prisma.sql`
+      this.prisma.$queryRaw<PageRow[]>(Prisma.sql`
         SELECT
           "pagePath",
           MAX("pageTitle") AS "pageTitle",
@@ -249,7 +258,7 @@ export class ShujuGrowthReadService {
         ORDER BY "pageViews" DESC, visitors DESC
         LIMIT 200
       `),
-        this.prisma.$queryRaw<SegmentRow[]>(Prisma.sql`
+      this.prisma.$queryRaw<SegmentRow[]>(Prisma.sql`
         SELECT
           TO_CHAR("createdAt" AT TIME ZONE 'Asia/Shanghai', 'YYYY-MM-DD') AS day,
           "eventType",
@@ -268,7 +277,7 @@ export class ShujuGrowthReadService {
         GROUP BY day, "eventType", "pagePath", "sourceType", "sourceDetail", "deviceType"
         ORDER BY day ASC, events DESC
       `),
-        this.prisma.$queryRaw<FunnelRow[]>(Prisma.sql`
+      this.prisma.$queryRaw<FunnelRow[]>(Prisma.sql`
         WITH scoped AS (
           SELECT
             *,
@@ -292,17 +301,17 @@ export class ShujuGrowthReadService {
         FROM scoped
         WHERE identity IN (SELECT identity FROM page_cohort)
       `),
-        this.prisma.$queryRaw<BotRow[]>(Prisma.sql`
+      this.prisma.$queryRaw<BotRow[]>(Prisma.sql`
         SELECT
           COUNT(DISTINCT COALESCE(NULLIF("visitorId", ''), NULLIF("sessionId", ''), 'event:' || "id"::text)) FILTER (WHERE "eventType" = 'page_view')::bigint AS visitors,
           COUNT(*) FILTER (WHERE "eventType" = 'page_view')::bigint AS events
         FROM "WebsiteLeadEvent"
         WHERE ${botWhere}
       `),
-        // 单页漏斗必须和全站漏斗同口径，否则页面表里"点击联系"（互斥事件）
-        // 会小于"开始填写"，前端只能判成不可比、拒绝算转化率。
-        // 两条保证：①每一步都是后续步骤的超集（累计）②全部限定在"看过这一页的人"里。
-        this.prisma.$queryRaw<PageFunnelRow[]>(Prisma.sql`
+      // 单页漏斗必须和全站漏斗同口径，否则页面表里"点击联系"（互斥事件）
+      // 会小于"开始填写"，前端只能判成不可比、拒绝算转化率。
+      // 两条保证：①每一步都是后续步骤的超集（累计）②全部限定在"看过这一页的人"里。
+      this.prisma.$queryRaw<PageFunnelRow[]>(Prisma.sql`
         WITH scoped AS (
           SELECT
             "pagePath",
@@ -326,7 +335,7 @@ export class ShujuGrowthReadService {
         ORDER BY "pageVisitors" DESC
         LIMIT 200
       `),
-      ]);
+    ]);
 
     return {
       range: {
