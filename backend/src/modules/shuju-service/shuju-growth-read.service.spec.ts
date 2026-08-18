@@ -91,7 +91,8 @@ describe('ShujuGrowthReadService', () => {
           stepCompletedVisitors: 1n,
           submissionVisitors: 1n,
         },
-      ]);
+      ])
+      .mockResolvedValueOnce([{ visitors: 4n, events: 5n }]);
     const service = new ShujuGrowthReadService({ $queryRaw: queryRaw } as unknown as PrismaService);
 
     const result = await service.overview({ startDate: '2026-08-15', endDate: '2026-08-15' });
@@ -156,7 +157,8 @@ describe('ShujuGrowthReadService', () => {
           stepCompletedVisitors: 0n,
           submissionVisitors: 0n,
         },
-      ]);
+      ])
+      .mockResolvedValueOnce([{ visitors: 4n, events: 5n }]);
     const service = new ShujuGrowthReadService({ $queryRaw: queryRaw } as unknown as PrismaService);
 
     const result = await service.overview({ startDate: '2026-08-15', endDate: '2026-08-15' });
@@ -175,5 +177,27 @@ describe('ShujuGrowthReadService', () => {
         submissionVisitors: 0,
       }),
     );
+  });
+
+  it('excludes bot traffic from every metric and reports how much was excluded', async () => {
+    const queryRaw = jest.fn().mockResolvedValue([]);
+    const service = new ShujuGrowthReadService({ $queryRaw: queryRaw } as unknown as PrismaService);
+
+    const result = await service.overview({ startDate: '2026-08-15', endDate: '2026-08-17' });
+
+    const statements = queryRaw.mock.calls.map(([sql]) => JSON.stringify(sql));
+    // 每一条业务查询都必须带上排除条件，否则同一页上会出现两套访客口径
+    const business = statements.filter((sql) => sql.includes('WebsiteLeadEvent'));
+    expect(business.length).toBeGreaterThan(1);
+    for (const sql of business) {
+      expect(sql).toContain('userAgent');
+    }
+    // 服务端写的 form_submit 不带 userAgent，必须放行 NULL，否则询盘会被整批过滤掉
+    expect(statements.some((sql) => sql.includes('IS NULL'))).toBe(true);
+    // 过滤了多少要能看见，不能悄悄少掉
+    expect(result.botFiltered).toEqual(
+      expect.objectContaining({ visitors: 0, events: 0 }),
+    );
+    expect(result.botFiltered.pattern).toContain('spider');
   });
 });
