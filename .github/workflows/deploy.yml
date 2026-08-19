@@ -162,7 +162,11 @@ jobs:
           host: ${{ secrets.DEPLOY_HOST }}
           username: ${{ secrets.DEPLOY_USERNAME }}
           key: ${{ secrets.DEPLOY_KEY }}
-          command_timeout: 30m
+          # 2026-08-19 实测：整轮 31 分钟，卡在 30m 上限、构建都快收尾了才被掐。
+          # 其中约 20 分钟花在前端类型检查+lint 上（2 核机器）。
+          # 提到 50m 只是止血；真正该做的是把前端类型检查挪到 GitHub runner 上，
+          # 生产机只负责产出镜像——那是另一件事，别顺手在这里改掉一道门。
+          command_timeout: 50m
           script: |
             set -euo pipefail
             lock_file=/var/lock/corp-site-deploy.lock
