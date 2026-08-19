@@ -26,13 +26,33 @@ jobs:
         id: image_changes
         env:
           EVENT_NAME: ${{ github.event_name }}
+          GH_TOKEN: ${{ github.token }}
         run: |
+          set -euo pipefail
           if [ "$EVENT_NAME" = "workflow_dispatch" ]; then
-            skip_build=0
-          elif scripts/requires-image-build.sh HEAD^ HEAD; then
+            echo "手动触发：强制构建。"
             skip_build=0
           else
-            skip_build=1
+            # 基线取「上一次成功部署的提交」，不是 HEAD^。
+            # HEAD^ 的坑：上一次部署失败时那个提交从没被构建过，
+            # 而下一次推送只看最后一个提交，就会认定「不用构建」——改动凭空消失。
+            # 2026-08-19 实测：#48 的后端改动因部署超时未构建，#49 只改了工作流文件，
+            # 判定跳过构建，差点把 #48 弄丢。当时靠服务端「找不到镜像」的门禁才拦住，
+            # 但那道门只挡镜像缺失、不挡镜像陈旧——陈旧才是会静默发错版本的那种。
+            base="$(gh run list --workflow 'Build And Deploy' --branch main \
+              --status success --limit 1 --json headSha -q '.[0].headSha' 2>/dev/null || true)"
+            if [ -n "$base" ]; then
+              # checkout 用的是 fetch-depth: 2，基线提交多半不在本地，单独抓一个。
+              git fetch --depth=1 origin "$base" 2>/dev/null || true
+            fi
+            if [ -z "$base" ] || ! git rev-parse --verify "${base}^{commit}" >/dev/null 2>&1; then
+              echo "取不到上次成功部署的提交，保守起见强制构建。"
+              skip_build=0
+            elif scripts/requires-image-build.sh "$base" HEAD; then
+              skip_build=0
+            else
+              skip_build=1
+            fi
           fi
           echo "skip_build=$skip_build" >> "$GITHUB_OUTPUT"
 
