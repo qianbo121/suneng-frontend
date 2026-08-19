@@ -37,9 +37,27 @@ jobs:
       - name: Test
         run: pnpm --dir frontend test
       - name: Install deterministic CJK font
+        # runner 默认镜像 azure.archive.ubuntu.com 会整段无响应，apt 随后静默挂死：
+        # 2026-08-19 实测两次，一次卡 2 小时、一次卡 27 分钟，全程零输出。
+        # 改指官方源，每个 apt 调用单独套 timeout，再加步骤级超时兜底。
+        # 刻意不换字体来源——视觉回归的基准图是用这个包渲染的，换了会整片对不上。
+        timeout-minutes: 8
+        env:
+          DEBIAN_FRONTEND: noninteractive
         run: |
-          sudo apt-get update
-          sudo apt-get install -y --no-install-recommends fonts-noto-cjk
+          # 不靠 runner 默认 shell 带的 -e：那是隐含行为，改一下 shell 配置就悄悄失效，
+          # 安装失败会被 fc-cache 的成功退出码盖住（本地实测裸 bash 下退出 0）。
+          set -euo pipefail
+          sudo sed -i 's|http://azure.archive.ubuntu.com/ubuntu|http://archive.ubuntu.com/ubuntu|g' \
+            /etc/apt/sources.list /etc/apt/sources.list.d/*.sources 2>/dev/null || true
+          for i in 1 2 3; do
+            sudo timeout 120 apt-get update -qq && break
+            echo "apt-get update 第 $i 次失败，重试"
+            sleep 5
+          done
+          # 三次都失败也继续往下走：索引陈旧仍可能装得上，
+          # 真装不上会在下一条 install 上明确报错，不会被悄悄放过。
+          sudo timeout 180 apt-get install -y --no-install-recommends fonts-noto-cjk
           fc-cache -f
       - name: Visual regression
         env:
