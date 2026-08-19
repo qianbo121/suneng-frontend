@@ -220,7 +220,7 @@ export class ShujuGrowthReadService {
       `),
       this.prisma.$queryRaw<DailyRow[]>(Prisma.sql`
         SELECT
-          TO_CHAR("createdAt" AT TIME ZONE 'Asia/Shanghai', 'YYYY-MM-DD') AS day,
+          TO_CHAR("createdAt" AT TIME ZONE 'UTC' AT TIME ZONE 'Asia/Shanghai', 'YYYY-MM-DD') AS day,
           "eventType",
           COUNT(*)::bigint AS "eventCount",
           COUNT(DISTINCT COALESCE(NULLIF("visitorId", ''), NULLIF("sessionId", ''), 'event:' || "id"::text))::bigint AS "visitorCount"
@@ -298,7 +298,7 @@ export class ShujuGrowthReadService {
       `),
       this.prisma.$queryRaw<SegmentRow[]>(Prisma.sql`
         SELECT
-          TO_CHAR("createdAt" AT TIME ZONE 'Asia/Shanghai', 'YYYY-MM-DD') AS day,
+          TO_CHAR("createdAt" AT TIME ZONE 'UTC' AT TIME ZONE 'Asia/Shanghai', 'YYYY-MM-DD') AS day,
           "eventType",
           "pagePath",
           MAX("pageTitle") AS "pageTitle",
