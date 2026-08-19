@@ -13,6 +13,8 @@ function clean(value?: string | null, maxLength = 255) {
   return text ? text.slice(0, maxLength) : null;
 }
 
+import { resolveVisitorRegion } from '@/modules/lead-event/visitor-region';
+
 function maskedIp(request: Request) {
   const raw = String(request.ip || request.headers['x-forwarded-for'] || '')
     .split(',')[0]
@@ -38,12 +40,16 @@ export class LeadEventService {
   constructor(private readonly prisma: PrismaService) {}
 
   async createPublic(dto: CreateLeadEventDto, request: Request) {
+    // 地区由已脱敏的 IP 推出来，不额外采集任何东西；
+    // 库出问题只会得到 null，不会挡住这条埋点写入。
+    const ipMasked = maskedIp(request);
+    const region = resolveVisitorRegion(ipMasked);
     await this.prisma.$executeRaw`
       INSERT INTO "WebsiteLeadEvent" (
         "eventType", "pageTitle", "pagePath", "pageType", "productTag",
         "sourceType", "sourceDetail", "searchKeyword", "deviceType", "landingPage",
         "previousPage", "utmSource", "utmMedium", "utmCampaign", "discoverySource",
-        "sessionId", "visitorId", "ipMasked", "userAgent"
+        "sessionId", "visitorId", "ipMasked", "userAgent", "province", "city"
       ) VALUES (
         ${dto.eventType},
         ${clean(dto.pageTitle, 255)},
@@ -62,8 +68,10 @@ export class LeadEventService {
         ${clean(dto.discoverySource, 120)},
         ${clean(dto.sessionId, 120)},
         ${clean(dto.visitorId, 120)},
-        ${maskedIp(request)},
-        ${clean(headerText(request.headers['user-agent']), 500)}
+        ${ipMasked},
+        ${clean(headerText(request.headers['user-agent']), 500)},
+        ${region.province},
+        ${region.city}
       )
     `;
     return { ok: true };
