@@ -259,4 +259,26 @@ describe('ShujuGrowthReadService', () => {
     // 必须限定在"看过这一页的人"里，否则第5步可能大于第1步
     expect(pageFunnel).toContain('page_view');
   });
+
+  it('buckets days by real Shanghai time, not by misreading the UTC timestamp', async () => {
+    const queryRaw = jest.fn().mockResolvedValue([]);
+    const service = new ShujuGrowthReadService({ $queryRaw: queryRaw } as unknown as PrismaService);
+
+    await service.overview({ startDate: '2026-08-15', endDate: '2026-08-17' });
+
+    const statements = queryRaw.mock.calls.map(([sql]) => JSON.stringify(sql));
+    const dayQueries = statements.filter((sql) => sql.includes('AS day'));
+    expect(dayQueries.length).toBeGreaterThan(0);
+
+    // createdAt 是 timestamp without time zone,存的是 UTC。
+    // 直接写 AT TIME ZONE 'Asia/Shanghai' 会把它*当成*上海时间去解释,
+    // 结果反向偏移 16 小时——凌晨的访问被记到前一天下午。
+    // 必须先用 AT TIME ZONE 'UTC' 锚定,再转上海。
+    for (const sql of dayQueries) {
+      const shanghai = (sql.match(/AT TIME ZONE 'Asia\/Shanghai'/g) ?? []).length;
+      const anchored = (sql.match(/AT TIME ZONE 'UTC' AT TIME ZONE 'Asia\/Shanghai'/g) ?? []).length;
+      expect(shanghai).toBeGreaterThan(0);
+      expect(anchored).toBe(shanghai);
+    }
+  });
 });
