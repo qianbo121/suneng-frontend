@@ -129,6 +129,9 @@ importers:
       class-validator:
         specifier: ^0.14.1
         version: 0.14.4
+      ip2region:
+        specifier: ^2.3.0
+        version: 2.3.0(@types/node@22.19.17)
       isomorphic-dompurify:
         specifier: ^3.21.0
         version: 3.21.0
@@ -3307,7 +3310,7 @@ packages:
 
   glob@7.2.3:
     resolution: {integrity: sha512-nFR0zLpU2YCaRxwoCJvL6UvCH2JFyFVIvwTLsIf21AuHlMskA1hhTdk+LlYJtOlYt9v6dvszD2BGRqBL+iQK9Q==}
-    deprecated: Old versions of glob are not supported, and contain widely publicized security vulnerabilities, which have been fixed in the current version. Please update. Support for old versions may be purchased (at exorbitant rates) by contacting i@izs.me
+    deprecated: Glob versions prior to v9 are no longer supported
 
   globals@14.0.0:
     resolution: {integrity: sha512-oahGvuMGQlPw/ivIYBjVSrWAfWLBeku5tpPE2fOPLi+WHffIWbuh2tCjhyQhTBPMf5E9jDEH4FOmTYgYwbKwtQ==}
@@ -3423,6 +3426,11 @@ packages:
 
   intl-messageformat@11.2.1:
     resolution: {integrity: sha512-1gAVEUt3wEPvTqML4Fsw9klZV5j0vszQxayP/fi6gUroAc8AUHiNaisBKLWxybL1AdWq1mP07YV1q8v4N92ilQ==}
+
+  ip2region@2.3.0:
+    resolution: {integrity: sha512-zV5Xsadzrx9Ej6heoyhbXMsfGWWQ3C6bAIYStrHhw9kzLpGpVNlnAyRBxxPgxA1GNqr1Ti7oUxcWsMWNN3jZBg==}
+    peerDependencies:
+      '@types/node': '*'
 
   ipaddr.js@1.9.1:
     resolution: {integrity: sha512-0KI/607xoxSToH7GjN1FfSbLoU0+btTicjsQSWQlh/hZykN8KpmMf7uYwPW3R+akZ6R/w18ZlXSHBYXiYUPO3g==}
@@ -9206,6 +9214,10 @@ snapshots:
     dependencies:
       '@formatjs/fast-memoize': 3.1.2
       '@formatjs/icu-messageformat-parser': 3.5.4
+
+  ip2region@2.3.0(@types/node@22.19.17):
+    dependencies:
+      '@types/node': 22.19.17
 
   ipaddr.js@1.9.1: {}
 

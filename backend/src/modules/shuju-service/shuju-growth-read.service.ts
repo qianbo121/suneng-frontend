@@ -41,6 +41,14 @@ type LandingRow = {
   sessions: bigint;
   pageViews: bigint;
 };
+
+type RegionRow = {
+  province: string | null;
+  visitors: bigint;
+  sessions: bigint;
+  engagedVisitors: bigint;
+  highIntentVisitors: bigint;
+};
 type SegmentRow = {
   day: string;
   eventType: string;
@@ -211,6 +219,7 @@ export class ShujuGrowthReadService {
       sources,
       sourceDetails,
       landings,
+      regions,
       pages,
       segments,
       funnelRows,
@@ -285,6 +294,22 @@ export class ShujuGrowthReadService {
         GROUP BY "landingPage"
         ORDER BY sessions DESC, "pageViews" DESC
         LIMIT 100
+      `),
+      // 客户所在地：省级汇总。沿用同一个 where，
+      // 机器人过滤和真人验证门都在，口径和别的数字一致。
+      this.prisma.$queryRaw<RegionRow[]>(Prisma.sql`
+        SELECT
+          "province",
+          COUNT(DISTINCT COALESCE(NULLIF("visitorId", ''), NULLIF("sessionId", ''), 'event:' || "id"::text)) FILTER (WHERE "eventType" = 'page_view')::bigint AS visitors,
+          COUNT(DISTINCT COALESCE(NULLIF("sessionId", ''), 'event:' || "id"::text)) FILTER (WHERE "eventType" = 'page_view')::bigint AS sessions,
+          COUNT(DISTINCT COALESCE(NULLIF("visitorId", ''), NULLIF("sessionId", ''), 'event:' || "id"::text)) FILTER (WHERE "eventType" = 'engaged_session')::bigint AS "engagedVisitors",
+          COUNT(DISTINCT COALESCE(NULLIF("visitorId", ''), NULLIF("sessionId", ''), 'event:' || "id"::text)) FILTER (WHERE "eventType" IN ('phone_click','wechat_click','wechat_qr_view','wechat_copy','quote_cta_click','email_click','douyin_click','form_start','form_step_complete','form_submit'))::bigint AS "highIntentVisitors"
+        FROM "WebsiteLeadEvent"
+        WHERE ${where}
+          AND "province" IS NOT NULL
+        GROUP BY "province"
+        ORDER BY visitors DESC
+        LIMIT 40
       `),
       this.prisma.$queryRaw<PageRow[]>(Prisma.sql`
         SELECT
@@ -487,6 +512,13 @@ export class ShujuGrowthReadService {
         formStarts: count(row.formStarts),
         stepCompleted: count(row.stepCompleted),
         submissions: count(row.submissions),
+      })),
+      regions: regions.map((row) => ({
+        province: row.province,
+        visitors: count(row.visitors),
+        sessions: count(row.sessions),
+        engagedVisitors: count(row.engagedVisitors),
+        highIntentVisitors: count(row.highIntentVisitors),
       })),
       landings: landings.map((row) => ({
         pagePath: row.landingPage,
