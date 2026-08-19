@@ -9,6 +9,7 @@ describe('ShujuGrowthReadService', () => {
       .fn()
       .mockResolvedValueOnce([{ trackingStartAt: new Date('2026-08-14T16:00:00Z') }])
       .mockResolvedValueOnce([{ trackingStartAt: new Date('2026-08-14T16:00:00Z') }])
+      .mockResolvedValueOnce([{ trackingStartAt: new Date('2026-08-14T16:00:00Z') }])
       .mockResolvedValueOnce([
         { eventType: 'page_view', eventCount: 12n, visitorCount: 8n, sessionCount: 9n },
         { eventType: 'form_submit', eventCount: 2n, visitorCount: 2n, sessionCount: 2n },
@@ -152,6 +153,7 @@ describe('ShujuGrowthReadService', () => {
       .fn()
       .mockResolvedValueOnce([{ trackingStartAt: null }])
       .mockResolvedValueOnce([{ trackingStartAt: null }])
+      .mockResolvedValueOnce([{ trackingStartAt: null }])
       .mockResolvedValueOnce([])
       .mockResolvedValueOnce([])
       .mockResolvedValueOnce([])
@@ -281,5 +283,25 @@ describe('ShujuGrowthReadService', () => {
       expect(shanghai).toBeGreaterThan(0);
       expect(anchored).toBe(shanghai);
     }
+  });
+
+  it('reports when dwell tracking started, without shrinking the window for other metrics', async () => {
+    const queryRaw = jest.fn().mockResolvedValue([]);
+    const service = new ShujuGrowthReadService({ $queryRaw: queryRaw } as unknown as PrismaService);
+
+    const result = await service.overview({ startDate: '2026-08-15', endDate: '2026-08-17' });
+
+    const statements = queryRaw.mock.calls.map(([sql]) => JSON.stringify(sql));
+    const dwellCoverage = statements.filter(
+      (sql) => sql.includes('dwell_5s') && sql.includes('MIN'),
+    );
+    expect(dwellCoverage).toHaveLength(1);
+    // 四个刻度必须显式列举：LIKE 'dwell_%' 里的下划线是单字符通配符，会误匹配。
+    for (const event of ['dwell_5s', 'dwell_20s', 'dwell_60s', 'dwell_180s']) {
+      expect(dwellCoverage[0]).toContain(event);
+    }
+    expect(dwellCoverage[0]).not.toContain('LIKE');
+    // 起点要回报给界面，否则"上线前那些天没有数据"会被显示成真实的零
+    expect(result.coverage).toHaveProperty('dwellStartAt');
   });
 });
