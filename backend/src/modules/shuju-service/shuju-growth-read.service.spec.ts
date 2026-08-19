@@ -276,7 +276,8 @@ describe('ShujuGrowthReadService', () => {
     // 必须先用 AT TIME ZONE 'UTC' 锚定,再转上海。
     for (const sql of dayQueries) {
       const shanghai = (sql.match(/AT TIME ZONE 'Asia\/Shanghai'/g) ?? []).length;
-      const anchored = (sql.match(/AT TIME ZONE 'UTC' AT TIME ZONE 'Asia\/Shanghai'/g) ?? []).length;
+      const anchored = (sql.match(/AT TIME ZONE 'UTC' AT TIME ZONE 'Asia\/Shanghai'/g) ?? [])
+        .length;
       expect(shanghai).toBeGreaterThan(0);
       expect(anchored).toBe(shanghai);
     }
