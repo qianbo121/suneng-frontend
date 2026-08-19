@@ -15,6 +15,8 @@ jobs:
   frontend:
     name: Frontend (lint + test + build)
     runs-on: ubuntu-latest
+    # 实测约 7 分钟；2026-08-19 曾卡在装中文字体 2 小时。默认 6 小时太长，卡住会白烧机器时间。
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v7
         with:
@@ -67,6 +69,8 @@ jobs:
   backend:
     name: Backend (lint + typecheck + test + build)
     runs-on: ubuntu-latest
+    # 实测约 1-2 分钟。默认 6 小时太长，卡住会白烧机器时间。
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v7
       - uses: actions/setup-node@v7
@@ -89,6 +93,8 @@ jobs:
   admin:
     name: Admin (lint + test + build)
     runs-on: ubuntu-latest
+    # 实测约 5 分钟。默认 6 小时太长，卡住会白烧机器时间。
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v7
       - uses: actions/setup-node@v7

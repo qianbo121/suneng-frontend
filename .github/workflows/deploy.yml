@@ -10,6 +10,8 @@ jobs:
   build:
     name: Build Applications
     runs-on: ubuntu-latest
+    # 实测约 5 分钟。默认 6 小时太长，卡住会白烧机器时间。
+    timeout-minutes: 30
     outputs:
       deploy_skip_build: ${{ steps.image_changes.outputs.skip_build }}
 
@@ -100,6 +102,8 @@ jobs:
   deploy:
     name: Deploy To Server
     runs-on: ubuntu-latest
+    # 实测约 28 分钟，服务器上重建镜像。默认 6 小时太长，卡住会白烧机器时间。
+    timeout-minutes: 45
     needs: build
     if: github.ref == 'refs/heads/main'
     concurrency:
@@ -190,3 +194,34 @@ jobs:
               DEPLOY_SKIP_PULL=1 \
               DEPLOY_SKIP_BUILD=${{ needs.build.outputs.deploy_skip_build }} \
               bash deploy.sh
+
+  # 自动部署失败过四次没人察觉（main 领先生产多日才被发现）。
+  # 这个任务只在失败时跑，且缺 secret 就静默跳过——告警本身绝不能把部署搞挂。
+  notify-failure:
+    name: Notify Deploy Failure
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    needs: [build, deploy]
+    if: failure() && github.ref == 'refs/heads/main'
+    steps:
+      - name: Post to Feishu
+        env:
+          WEBHOOK: ${{ secrets.FEISHU_DEPLOY_WEBHOOK_URL }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          COMMIT: ${{ github.sha }}
+          ACTOR: ${{ github.actor }}
+        run: |
+          if [ -z "${WEBHOOK:-}" ]; then
+            echo "未配置 FEISHU_DEPLOY_WEBHOOK_URL，跳过告警（不影响部署结论）。"
+            exit 0
+          fi
+          # 「部署失败」四个字同时充当飞书自定义关键词，改文案时别把它删了。
+          payload=$(python3 -c 'import json,os; text="\n".join(["部署失败：官网 main 未能发布到生产。","提交 "+os.environ["COMMIT"],"触发 "+os.environ["ACTOR"],"详情 "+os.environ["RUN_URL"]]); print(json.dumps({"msg_type":"text","content":{"text":text}}))')
+          # 必须先清空响应文件：curl 连不上时不会写它，
+          # 残留的上一次成功响应会让失败日志显示 "success"（假绿）。
+          : > /tmp/feishu.out
+          code=$(curl -sS -o /tmp/feishu.out -w '%{http_code}' -m 15 \
+            -X POST -H 'Content-Type: application/json' -d "$payload" "$WEBHOOK") || code=000
+          echo "飞书返回 HTTP ${code}: $(head -c 200 /tmp/feishu.out 2>/dev/null)"
+          # 告警发不出去不改变部署结论——部署失败本身已由上游任务报出。
+          exit 0
