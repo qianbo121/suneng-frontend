@@ -3,15 +3,7 @@
 import { usePathname } from 'next/navigation';
 import { useEffect } from 'react';
 
-import { installVisitorNatureTracking, markEngagedSession, trackPageView } from '@/lib/api/lead-events';
-
-const READING_SECONDS = 60;
-
-function isPriorityPage(pathname: string) {
-  return /\/(?:zh|en)\/(?:products\/detail|solutions|service\/furnace-renovation-overhaul|case|articles)\//.test(
-    `${pathname}/`,
-  );
-}
+import { installVisitorNatureTracking, startDwellTracking, trackPageView } from '@/lib/api/lead-events';
 
 export function WebsiteReadingTracker() {
   const pathname = usePathname();
@@ -22,17 +14,8 @@ export function WebsiteReadingTracker() {
 
   useEffect(() => {
     trackPageView();
-    if (!isPriorityPage(pathname)) return;
-    let activeSeconds = 0;
-    const timer = window.setInterval(() => {
-      if (document.visibilityState !== 'visible' || !document.hasFocus()) return;
-      activeSeconds += 1;
-      if (activeSeconds >= READING_SECONDS) {
-        markEngagedSession();
-        window.clearInterval(timer);
-      }
-    }, 1000);
-    return () => window.clearInterval(timer);
+    // 计时器跨页面重启，但秒数存在 sessionStorage 里接着走——口径是「在官网待了多久」。
+    return startDwellTracking();
   }, [pathname]);
 
   return null;
