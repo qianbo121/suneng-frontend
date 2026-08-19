@@ -51,6 +51,7 @@ describe('ShujuGrowthReadService', () => {
           pageViews: 10n,
         },
       ])
+      .mockResolvedValueOnce([]) // regions（客户所在地）
       .mockResolvedValueOnce([
         {
           pagePath: '/zh/products/detail/trolley-furnace',
@@ -159,6 +160,7 @@ describe('ShujuGrowthReadService', () => {
       .mockResolvedValueOnce([])
       .mockResolvedValueOnce([])
       .mockResolvedValueOnce([])
+      .mockResolvedValueOnce([]) // regions（客户所在地）
       .mockResolvedValueOnce([])
       .mockResolvedValueOnce([])
       .mockResolvedValueOnce([
@@ -303,5 +305,23 @@ describe('ShujuGrowthReadService', () => {
     expect(dwellCoverage[0]).not.toContain('LIKE');
     // 起点要回报给界面，否则"上线前那些天没有数据"会被显示成真实的零
     expect(result.coverage).toHaveProperty('dwellStartAt');
+  });
+
+  it('reports customer regions with the same bot and human gates as every other metric', async () => {
+    const queryRaw = jest.fn().mockResolvedValue([]);
+    const service = new ShujuGrowthReadService({ $queryRaw: queryRaw } as unknown as PrismaService);
+
+    const result = await service.overview({ startDate: '2026-08-15', endDate: '2026-08-17' });
+
+    const statements = queryRaw.mock.calls.map(([sql]) => JSON.stringify(sql));
+    const regionQuery = statements.find((sql) => sql.includes('GROUP BY \\"province\\"'));
+    expect(regionQuery).toBeDefined();
+    // 地区口径必须和别的数字一致：机器人过滤 + 真人验证门都要在，
+    // 否则同一张看板上会出现两套访客口径。
+    expect(regionQuery).toContain('userAgent');
+    expect(regionQuery).toContain("= 'human_signal'");
+    // 没解析出地区的不能凑成一个"未知"省份混进排行
+    expect(regionQuery).toContain('IS NOT NULL');
+    expect(result).toHaveProperty('regions');
   });
 });
