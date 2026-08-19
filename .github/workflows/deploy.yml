@@ -102,8 +102,9 @@ jobs:
   deploy:
     name: Deploy To Server
     runs-on: ubuntu-latest
-    # 实测约 28 分钟，服务器上重建镜像。默认 6 小时太长，卡住会白烧机器时间。
-    timeout-minutes: 45
+    # 实测 31 分钟（服务器上重建镜像）。必须大于下面 ssh 的 command_timeout: 50m，
+    # 否则 job 先被杀，ssh 那道超时形同虚设。默认 6 小时太长，卡住会白烧机器时间。
+    timeout-minutes: 60
     needs: build
     if: github.ref == 'refs/heads/main'
     concurrency:
@@ -162,7 +163,11 @@ jobs:
           host: ${{ secrets.DEPLOY_HOST }}
           username: ${{ secrets.DEPLOY_USERNAME }}
           key: ${{ secrets.DEPLOY_KEY }}
-          command_timeout: 30m
+          # 2026-08-19 实测：整轮 31 分钟，卡在 30m 上限、构建都快收尾了才被掐。
+          # 其中约 20 分钟花在前端类型检查+lint 上（2 核机器）。
+          # 提到 50m 只是止血；真正该做的是把前端类型检查挪到 GitHub runner 上，
+          # 生产机只负责产出镜像——那是另一件事，别顺手在这里改掉一道门。
+          command_timeout: 50m
           script: |
             set -euo pipefail
             lock_file=/var/lock/corp-site-deploy.lock
