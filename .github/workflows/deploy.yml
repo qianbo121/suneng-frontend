@@ -102,8 +102,9 @@ jobs:
   deploy:
     name: Deploy To Server
     runs-on: ubuntu-latest
-    # 实测约 28 分钟，服务器上重建镜像。默认 6 小时太长，卡住会白烧机器时间。
-    timeout-minutes: 45
+    # 实测 31 分钟（服务器上重建镜像）。必须大于下面 ssh 的 command_timeout: 50m，
+    # 否则 job 先被杀，ssh 那道超时形同虚设。默认 6 小时太长，卡住会白烧机器时间。
+    timeout-minutes: 60
     needs: build
     if: github.ref == 'refs/heads/main'
     concurrency:
