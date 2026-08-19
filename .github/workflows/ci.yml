@@ -41,13 +41,19 @@ jobs:
         # 2026-08-19 实测两次，一次卡 2 小时、一次卡 27 分钟，全程零输出。
         # 改指官方源，每个 apt 调用单独套 timeout，再加步骤级超时兜底。
         # 刻意不换字体来源——视觉回归的基准图是用这个包渲染的，换了会整片对不上。
-        timeout-minutes: 8
+        timeout-minutes: 20
         env:
           DEBIAN_FRONTEND: noninteractive
         run: |
           # 不靠 runner 默认 shell 带的 -e：那是隐含行为，改一下 shell 配置就悄悄失效，
           # 安装失败会被 fc-cache 的成功退出码盖住（本地实测裸 bash 下退出 0）。
           set -euo pipefail
+          # noble runner 走 /etc/apt/apt-mirrors.txt 这个镜像列表，
+          # sources.list 里根本没有 azure 那个域名——只改 sources.list 是打空拳
+          # （2026-08-19 实测：改完仍从 azure 拉 61MB 字体包，卡到 timeout 退 124）。
+          if [ -f /etc/apt/apt-mirrors.txt ]; then
+            echo 'http://archive.ubuntu.com/ubuntu/' | sudo tee /etc/apt/apt-mirrors.txt >/dev/null
+          fi
           sudo sed -i 's|http://azure.archive.ubuntu.com/ubuntu|http://archive.ubuntu.com/ubuntu|g' \
             /etc/apt/sources.list /etc/apt/sources.list.d/*.sources 2>/dev/null || true
           for i in 1 2 3; do
@@ -57,7 +63,13 @@ jobs:
           done
           # 三次都失败也继续往下走：索引陈旧仍可能装得上，
           # 真装不上会在下一条 install 上明确报错，不会被悄悄放过。
-          sudo timeout 180 apt-get install -y --no-install-recommends fonts-noto-cjk
+          # 字体包 61MB，官方源可能不快；给足时间并重试，最后一次失败才算真失败。
+          for i in 1 2 3; do
+            sudo timeout 300 apt-get install -y --no-install-recommends fonts-noto-cjk && break
+            [ "$i" = 3 ] && { echo "字体安装三次均失败。"; exit 1; }
+            echo "apt-get install 第 $i 次失败，重试"
+            sleep 10
+          done
           fc-cache -f
       - name: Visual regression
         env:
