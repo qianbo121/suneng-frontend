@@ -124,7 +124,7 @@ export class ShujuGrowthReadService {
 
   async overview(query: ShujuGrowthReadQueryDto) {
     const { start, endExclusive, days } = dateRange(query);
-    const [trackingCoverage, verifiedCoverage] = await Promise.all([
+    const [trackingCoverage, verifiedCoverage, dwellCoverage] = await Promise.all([
       this.prisma.$queryRaw<TrackingCoverageRow[]>(Prisma.sql`
       SELECT MIN("createdAt") AS "trackingStartAt"
       FROM "WebsiteLeadEvent"
@@ -135,10 +135,20 @@ export class ShujuGrowthReadService {
       FROM "WebsiteLeadEvent"
       WHERE "eventType" = 'human_signal'
     `),
+      // 停留时长 2026-08-19 才上线，比埋点晚得多。
+      // 不显式列举而写 LIKE 'dwell_%' 会踩坑：LIKE 里的下划线是单字符通配符。
+      this.prisma.$queryRaw<TrackingCoverageRow[]>(Prisma.sql`
+      SELECT MIN("createdAt") AS "trackingStartAt"
+      FROM "WebsiteLeadEvent"
+      WHERE "eventType" IN ('dwell_5s', 'dwell_20s', 'dwell_60s', 'dwell_180s') AND ${NOT_BOT}
+    `),
     ]);
     const trackingStartValue = trackingCoverage[0]?.trackingStartAt;
     const trackingStartAt = trackingStartValue ? new Date(trackingStartValue) : null;
     const hasTrackingStart = Boolean(trackingStartAt && !Number.isNaN(trackingStartAt.getTime()));
+    const dwellStartValue = dwellCoverage[0]?.trackingStartAt;
+    const dwellStartAt = dwellStartValue ? new Date(dwellStartValue) : null;
+    const hasDwellStart = Boolean(dwellStartAt && !Number.isNaN(dwellStartAt.getTime()));
     const verifiedStartValue = verifiedCoverage[0]?.trackingStartAt;
     const verifiedStartAt = verifiedStartValue ? new Date(verifiedStartValue) : null;
     const hasVerifiedStart = Boolean(verifiedStartAt && !Number.isNaN(verifiedStartAt.getTime()));
@@ -398,6 +408,9 @@ export class ShujuGrowthReadService {
       coverage: {
         trackingStartAt: hasTrackingStart ? trackingStartAt!.toISOString() : null,
         verifiedStartAt: hasVerifiedStart ? verifiedStartAt!.toISOString() : null,
+        // 停留时长自己的起点。刻意不并进 comparableStart——它是子指标，
+        // 把整个窗口缩到它的上线日会让别的数字凭空变小。
+        dwellStartAt: hasDwellStart ? dwellStartAt!.toISOString() : null,
         verified: hasVerifiedStart,
         comparableStartAt: comparableStart.toISOString(),
         fullRange:
