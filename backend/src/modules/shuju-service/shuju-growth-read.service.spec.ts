@@ -3,110 +3,170 @@ import { BadRequestException } from '@nestjs/common';
 import { ShujuGrowthReadService } from '@/modules/shuju-service/shuju-growth-read.service';
 import { PrismaService } from '@/prisma/prisma.service';
 
+/**
+ * 按 SQL 内容路由返回值，而不是按调用次序。
+ *
+ * 原来用 mockResolvedValueOnce 链，**每加一个查询就要重排一次**——
+ * 2026-08-19 一天被这个坑了三次（新增停留覆盖、地区、退出页）。
+ * 现在按 SQL 特征匹配，加查询不再牵动已有测试。
+ */
+function routedQueryRaw(routes: Array<[string, unknown]>) {
+  return jest.fn((sql: unknown) => {
+    // 用 SQL 原文而不是 JSON.stringify——后者会把双引号转义成 \\"，
+    // 标记里得跟着写一堆反斜杠，极易写错（已踩）。
+    // 压平空白后匹配：认 SELECT 列表这段身份，别被 GROUP BY 里的同名列骗了。
+    const text = ((sql as { strings?: string[] }).strings || [])
+      .join('?')
+      .replace(/\s+/g, ' ')
+      .trim();
+    for (const [marker, value] of routes) {
+      if (text.includes(marker)) return Promise.resolve(value);
+    }
+    return Promise.resolve([]);
+  });
+}
+
 describe('ShujuGrowthReadService', () => {
   it('returns aggregate website behavior without anonymous ids or inquiry content', async () => {
-    const queryRaw = jest
-      .fn()
-      .mockResolvedValueOnce([{ trackingStartAt: new Date('2026-08-14T16:00:00Z') }])
-      .mockResolvedValueOnce([{ trackingStartAt: new Date('2026-08-14T16:00:00Z') }])
-      .mockResolvedValueOnce([{ trackingStartAt: new Date('2026-08-14T16:00:00Z') }])
-      .mockResolvedValueOnce([
-        { eventType: 'page_view', eventCount: 12n, visitorCount: 8n, sessionCount: 9n },
-        { eventType: 'form_submit', eventCount: 2n, visitorCount: 2n, sessionCount: 2n },
-      ])
-      .mockResolvedValueOnce([
-        { day: '2026-08-15', eventType: 'page_view', eventCount: 12n, visitorCount: 8n },
-      ])
-      .mockResolvedValueOnce([
-        {
-          sourceType: '外部链接',
-          sourceDetail: null,
-          visitors: 3n,
-          pageViews: 5n,
-          engagedVisitors: 2n,
-          highIntentVisitors: 1n,
-          formStarts: 1n,
-          stepCompleted: 1n,
-          submissions: 1n,
-        },
-      ])
-      .mockResolvedValueOnce([
-        {
-          sourceType: '外部链接',
-          sourceDetail: 'example.com',
-          visitors: 3n,
-          pageViews: 5n,
-          engagedVisitors: 2n,
-          highIntentVisitors: 1n,
-          formStarts: 1n,
-          stepCompleted: 1n,
-          submissions: 1n,
-        },
-      ])
-      .mockResolvedValueOnce([
-        {
-          landingPage: '/zh/products/detail/trolley-furnace',
-          visitors: 6n,
-          sessions: 7n,
-          pageViews: 10n,
-        },
-      ])
-      .mockResolvedValueOnce([]) // regions（客户所在地）
-      .mockResolvedValueOnce([
-        {
-          pagePath: '/zh/products/detail/trolley-furnace',
-          pageTitle: '台车炉',
-          pageType: '产品页',
-          productTag: '台车炉',
-          visitors: 6n,
-          pageViews: 10n,
-          engagedVisitors: 4n,
-          highIntentVisitors: 2n,
-          formStarts: 2n,
-          stepCompleted: 1n,
-          submissions: 1n,
-        },
-      ])
-      .mockResolvedValueOnce([
-        {
-          day: '2026-08-15',
-          eventType: 'page_view',
-          pagePath: '/zh/products/detail/trolley-furnace',
-          pageTitle: '台车炉',
-          pageType: '产品页',
-          productTag: '台车炉',
-          sourceType: '外部链接',
-          sourceDetail: 'example.com',
-          deviceType: 'PC',
-          events: 10n,
-          visitors: 6n,
-          sessions: 7n,
-        },
-      ])
-      .mockResolvedValueOnce([
-        {
-          pageVisitors: 8n,
-          pageViews: 12n,
-          visitSessions: 9n,
-          engagedSessions: 5n,
-          highIntentVisitors: 2n,
-          formStartVisitors: 2n,
-          stepCompletedVisitors: 1n,
-          submissionVisitors: 1n,
-        },
-      ])
-      .mockResolvedValueOnce([{ visitors: 4n, events: 5n }])
-      .mockResolvedValueOnce([
-        {
-          pagePath: '/zh/products/detail/trolley-furnace',
-          pageVisitors: 100n,
-          highIntentVisitors: 8n,
-          formStartVisitors: 6n,
-          stepCompletedVisitors: 4n,
-          submissionVisitors: 2n,
-        },
-      ])
-      .mockResolvedValueOnce([{ visitors: 9n, events: 12n }]);
+    const queryRaw = routedQueryRaw([
+      // 顺序 = 最具体优先。几个坑：
+      //  · 'human_signal' 不能用——真人验证门在每个查询的 where 里，到处都有
+      //  · 'MAX("pageTitle")' 页面表现和分段明细都有，分段明细要先用 deviceType 截住
+      //  · 'GROUP BY day, "eventType"' 是分段明细 GROUP BY 的前缀，日趋势必须排在它后面
+      ['MIN(', [{ trackingStartAt: new Date('2026-08-14T16:00:00Z') }]],
+      ['last_view', [{ pagePath: '/zh/contact', sessions: 3n }]],
+      [
+        'SELECT "province"',
+        [
+          {
+            province: '广东省',
+            visitors: 5n,
+            sessions: 6n,
+            engagedVisitors: 2n,
+            highIntentVisitors: 1n,
+          },
+        ],
+      ],
+      [
+        'SELECT "landingPage"',
+        [
+          {
+            landingPage: '/zh/products/detail/trolley-furnace',
+            visitors: 6n,
+            sessions: 7n,
+            pageViews: 10n,
+          },
+        ],
+      ],
+      [
+        'SELECT "sourceType", NULL::text',
+        [
+          {
+            sourceType: '外部链接',
+            sourceDetail: null,
+            visitors: 3n,
+            pageViews: 5n,
+            engagedVisitors: 2n,
+            highIntentVisitors: 1n,
+            formStarts: 1n,
+            stepCompleted: 1n,
+            submissions: 1n,
+          },
+        ],
+      ],
+      [
+        'SELECT "sourceType", "sourceDetail"',
+        [
+          {
+            sourceType: '外部链接',
+            sourceDetail: 'example.com',
+            visitors: 3n,
+            pageViews: 5n,
+            engagedVisitors: 2n,
+            highIntentVisitors: 1n,
+            formStarts: 1n,
+            stepCompleted: 1n,
+            submissions: 1n,
+          },
+        ],
+      ],
+      [
+        'WITH scoped AS ( SELECT *',
+        [
+          {
+            pageVisitors: 8n,
+            pageViews: 12n,
+            visitSessions: 9n,
+            engagedSessions: 5n,
+            highIntentVisitors: 2n,
+            formStartVisitors: 2n,
+            stepCompletedVisitors: 1n,
+            submissionVisitors: 1n,
+          },
+        ],
+      ],
+      [
+        'WITH scoped AS ( SELECT "pagePath"',
+        [
+          {
+            pagePath: '/zh/products/detail/trolley-furnace',
+            pageVisitors: 100n,
+            highIntentVisitors: 8n,
+            formStartVisitors: 6n,
+            stepCompletedVisitors: 4n,
+            submissionVisitors: 2n,
+          },
+        ],
+      ],
+      [
+        'AS day, "eventType", "pagePath"',
+        [
+          {
+            day: '2026-08-15',
+            eventType: 'page_view',
+            pagePath: '/zh/products/detail/trolley-furnace',
+            pageTitle: '台车炉',
+            pageType: '产品页',
+            productTag: '台车炉',
+            sourceType: '外部链接',
+            sourceDetail: 'example.com',
+            deviceType: 'PC',
+            events: 10n,
+            visitors: 6n,
+            sessions: 7n,
+          },
+        ],
+      ],
+      [
+        'SELECT "pagePath", MAX("pageTitle")',
+        [
+          {
+            pagePath: '/zh/products/detail/trolley-furnace',
+            pageTitle: '台车炉',
+            pageType: '产品页',
+            productTag: '台车炉',
+            visitors: 6n,
+            pageViews: 10n,
+            engagedVisitors: 4n,
+            highIntentVisitors: 2n,
+            formStarts: 1n,
+            stepCompleted: 1n,
+            submissions: 1n,
+          },
+        ],
+      ],
+      [
+        'GROUP BY day, "eventType"',
+        [{ day: '2026-08-15', eventType: 'page_view', eventCount: 12n, visitorCount: 8n }],
+      ],
+      [
+        'GROUP BY "eventType"',
+        [
+          { eventType: 'page_view', eventCount: 12n, visitorCount: 8n, sessionCount: 9n },
+          { eventType: 'form_submit', eventCount: 2n, visitorCount: 2n, sessionCount: 2n },
+        ],
+      ],
+    ]);
     const service = new ShujuGrowthReadService({ $queryRaw: queryRaw } as unknown as PrismaService);
 
     const result = await service.overview({ startDate: '2026-08-15', endDate: '2026-08-15' });
@@ -150,43 +210,8 @@ describe('ShujuGrowthReadService', () => {
   });
 
   it('returns an empty comparable window when page-view tracking has not started', async () => {
-    const queryRaw = jest
-      .fn()
-      .mockResolvedValueOnce([{ trackingStartAt: null }])
-      .mockResolvedValueOnce([{ trackingStartAt: null }])
-      .mockResolvedValueOnce([{ trackingStartAt: null }])
-      .mockResolvedValueOnce([])
-      .mockResolvedValueOnce([])
-      .mockResolvedValueOnce([])
-      .mockResolvedValueOnce([])
-      .mockResolvedValueOnce([])
-      .mockResolvedValueOnce([]) // regions（客户所在地）
-      .mockResolvedValueOnce([])
-      .mockResolvedValueOnce([])
-      .mockResolvedValueOnce([
-        {
-          pageVisitors: 0n,
-          pageViews: 0n,
-          visitSessions: 0n,
-          engagedSessions: 0n,
-          highIntentVisitors: 0n,
-          formStartVisitors: 0n,
-          stepCompletedVisitors: 0n,
-          submissionVisitors: 0n,
-        },
-      ])
-      .mockResolvedValueOnce([{ visitors: 4n, events: 5n }])
-      .mockResolvedValueOnce([
-        {
-          pagePath: '/zh/products/detail/trolley-furnace',
-          pageVisitors: 100n,
-          highIntentVisitors: 8n,
-          formStartVisitors: 6n,
-          stepCompletedVisitors: 4n,
-          submissionVisitors: 2n,
-        },
-      ])
-      .mockResolvedValueOnce([{ visitors: 9n, events: 12n }]);
+    // 埋点还没开始：覆盖查询返回 null，其余一律空
+    const queryRaw = routedQueryRaw([['MIN(', [{ trackingStartAt: null }]]]);
     const service = new ShujuGrowthReadService({ $queryRaw: queryRaw } as unknown as PrismaService);
 
     const result = await service.overview({ startDate: '2026-08-15', endDate: '2026-08-15' });
@@ -323,5 +348,26 @@ describe('ShujuGrowthReadService', () => {
     // 没解析出地区的不能凑成一个"未知"省份混进排行
     expect(regionQuery).toContain('IS NOT NULL');
     expect(result).toHaveProperty('regions');
+  });
+
+  it('derives exit pages from the last page view of each session, not a new event', async () => {
+    const queryRaw = jest.fn().mockResolvedValue([]);
+    const service = new ShujuGrowthReadService({ $queryRaw: queryRaw } as unknown as PrismaService);
+
+    const result = await service.overview({ startDate: '2026-08-15', endDate: '2026-08-17' });
+
+    const statements = queryRaw.mock.calls.map(([sql]) => JSON.stringify(sql));
+    const exitQuery = statements.find((sql) => sql.includes('last_view'));
+    expect(exitQuery).toBeDefined();
+    // 必须按时间倒序取每个会话的最后一条——写成正序就变成入口页了。
+    // 只断言"含有 DESC"抓不住：ORDER BY sessions DESC 也含 DESC（已踩）。
+    expect(exitQuery).toContain('ORDER BY session_key, \\"createdAt\\" DESC');
+    expect(exitQuery).not.toContain('ORDER BY session_key, \\"createdAt\\" ASC');
+    expect(exitQuery).toContain('DISTINCT ON');
+    expect(exitQuery).toContain("'page_view'");
+    // 口径要和别的数字一致：机器人过滤 + 真人验证门
+    expect(exitQuery).toContain('userAgent');
+    expect(exitQuery).toContain("= 'human_signal'");
+    expect(result).toHaveProperty('exits');
   });
 });

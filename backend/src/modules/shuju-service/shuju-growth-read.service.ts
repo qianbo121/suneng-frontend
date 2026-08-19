@@ -42,6 +42,11 @@ type LandingRow = {
   pageViews: bigint;
 };
 
+type ExitRow = {
+  pagePath: string | null;
+  sessions: bigint;
+};
+
 type RegionRow = {
   province: string | null;
   visitors: bigint;
@@ -220,6 +225,7 @@ export class ShujuGrowthReadService {
       sourceDetails,
       landings,
       regions,
+      exits,
       pages,
       segments,
       funnelRows,
@@ -310,6 +316,26 @@ export class ShujuGrowthReadService {
         GROUP BY "province"
         ORDER BY visitors DESC
         LIMIT 40
+      `),
+      // 退出页 = 一次访问里最后打开的那个页面。
+      // 不需要额外埋点：从已有的 page_view 按会话取最后一条即可，历史数据同样算得出。
+      // 只看过一页的访问，那一页既是入口也是出口——这是标准口径，不做特殊处理。
+      this.prisma.$queryRaw<ExitRow[]>(Prisma.sql`
+        WITH last_view AS (
+          SELECT DISTINCT ON (COALESCE(NULLIF("sessionId", ''), 'event:' || "id"::text))
+            COALESCE(NULLIF("sessionId", ''), 'event:' || "id"::text) AS session_key,
+            "pagePath"
+          FROM "WebsiteLeadEvent"
+          WHERE ${where}
+            AND "eventType" = 'page_view'
+            AND "pagePath" IS NOT NULL
+          ORDER BY session_key, "createdAt" DESC, "id" DESC
+        )
+        SELECT "pagePath", COUNT(*)::bigint AS sessions
+        FROM last_view
+        GROUP BY "pagePath"
+        ORDER BY sessions DESC
+        LIMIT 20
       `),
       this.prisma.$queryRaw<PageRow[]>(Prisma.sql`
         SELECT
@@ -519,6 +545,10 @@ export class ShujuGrowthReadService {
         sessions: count(row.sessions),
         engagedVisitors: count(row.engagedVisitors),
         highIntentVisitors: count(row.highIntentVisitors),
+      })),
+      exits: exits.map((row) => ({
+        pagePath: row.pagePath,
+        sessions: count(row.sessions),
       })),
       landings: landings.map((row) => ({
         pagePath: row.landingPage,
