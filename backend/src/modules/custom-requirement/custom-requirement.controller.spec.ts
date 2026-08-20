@@ -14,7 +14,10 @@ describe('CustomRequirementController notification operations', () => {
       createLegacyPublic,
       createPublic,
     } as unknown as CustomRequirementService);
-    const request = { ip: '127.0.0.1' } as Request;
+    const request = {
+      ip: '127.0.0.1',
+      get: jest.fn().mockReturnValue('Mozilla/5.0 Android Mobile'),
+    } as unknown as Request;
 
     await controller.createLegacyPublic({ phone: '13000000000' }, request);
     await controller.createPublic(
@@ -30,9 +33,15 @@ describe('CustomRequirementController notification operations', () => {
       request,
     );
 
-    expect(createLegacyPublic).toHaveBeenCalledWith({ phone: '13000000000' }, '127.0.0.1');
+    expect(createLegacyPublic).toHaveBeenCalledWith(
+      { phone: '13000000000' },
+      '127.0.0.1',
+      '127.0.0.1',
+      '移动端',
+    );
     expect(createPublic).toHaveBeenCalledWith(
-      expect.objectContaining({ projectType: '台车炉', locale: 'zh' }),
+      expect.objectContaining({ projectType: '台车炉', locale: 'zh', deviceType: '移动端' }),
+      '127.0.0.1',
       '127.0.0.1',
     );
     expect(

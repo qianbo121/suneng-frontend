@@ -15,7 +15,6 @@ export type LeadEventType =
   | 'email_click'
   | 'form_start'
   | 'form_step_complete'
-  | 'form_submit'
   | 'human_signal'
   | 'effective_interaction'
   | 'automation_signal';

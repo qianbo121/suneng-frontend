@@ -1,8 +1,5 @@
 import { apiPost, isApiRequestErrorStatus } from '@/lib/api/client';
-import {
-  sanitizeLeadSourceSnapshot,
-  type LeadSourceSnapshot,
-} from '@/lib/api/lead-events';
+import { sanitizeLeadSourceSnapshot, type LeadSourceSnapshot } from '@/lib/api/lead-events';
 import type { Locale } from '@/types/site';
 
 export type ProjectLeadValues = {
@@ -41,6 +38,7 @@ export type CustomRequirementPayload = {
   productTag?: string;
   sourceType?: string;
   sourceDetail?: string;
+  deviceType?: 'PC' | '移动端';
   landingPage?: string;
   previousPage?: string;
   utmSource?: string;
@@ -100,10 +98,7 @@ export function renewFormIdempotencyKey(reference: IdempotencyKeyRef) {
   return reference.current;
 }
 
-export function renewIdempotencyKeyAfterConflict(
-  error: unknown,
-  reference: IdempotencyKeyRef,
-) {
+export function renewIdempotencyKeyAfterConflict(error: unknown, reference: IdempotencyKeyRef) {
   if (!isApiRequestErrorStatus(error, 409)) return false;
   renewFormIdempotencyKey(reference);
   return true;
@@ -113,8 +108,17 @@ export function isValidEmail(value: string) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(clean(value));
 }
 
-export function validateLeadStepOne(values: ProjectLeadValues, locale: Locale): LeadValidationIssue | null {
-  for (const field of ['projectType', 'company', 'name', 'projectLocation', 'requirement'] as const) {
+export function validateLeadStepOne(
+  values: ProjectLeadValues,
+  locale: Locale,
+): LeadValidationIssue | null {
+  for (const field of [
+    'projectType',
+    'company',
+    'name',
+    'projectLocation',
+    'requirement',
+  ] as const) {
     if (!clean(values[field])) return { field, reason: 'required' };
   }
 
@@ -147,6 +151,7 @@ export function buildCustomRequirementPayload(
     productTag,
     sourceType,
     sourceDetail,
+    deviceType,
     landingPage,
     previousPage,
     utmSource,
@@ -178,6 +183,7 @@ export function buildCustomRequirementPayload(
     productTag,
     sourceType,
     sourceDetail,
+    deviceType: deviceType === 'PC' || deviceType === '移动端' ? deviceType : undefined,
     landingPage,
     previousPage,
     utmSource,

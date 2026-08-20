@@ -7,6 +7,7 @@ import {
 } from '@/modules/lead-event/dto/create-lead-event.dto';
 import { LeadEventListQueryDto } from '@/modules/lead-event/dto/lead-event-list-query.dto';
 import { PrismaService } from '@/prisma/prisma.service';
+import { ensureNotSpam, SpamThrottleState } from '@/common/utils/spam-throttle';
 
 function clean(value?: string | null, maxLength = 255) {
   const text = value?.trim();
@@ -45,9 +46,19 @@ function normalizeDate(value: string | undefined, fallback: Date) {
 
 @Injectable()
 export class LeadEventService {
+  private readonly eventThrottle = new Map<string, SpamThrottleState>();
+
   constructor(private readonly prisma: PrismaService) {}
 
   async createPublic(dto: CreateLeadEventDto, request: Request) {
+    // 行为事件会比询盘频繁，限流只拦明显的批量灌入；业务结果 form_submit
+    // 已从公开白名单移除，不能再由浏览器伪造。
+    ensureNotSpam(request.ip || 'anonymous', this.eventThrottle, {
+      minIntervalMs: 0,
+      windowMs: 60_000,
+      maxSubmissions: 240,
+      maxTrackedClients: 20_000,
+    });
     // 完整 IP 只在入库前的内存中用于本地地区解析，不写库也不外发。
     // 数据库仍只保留脱敏 IP。查库失败只会得到 null，不能挡住埋点。
     const rawIp = clientIp(request);

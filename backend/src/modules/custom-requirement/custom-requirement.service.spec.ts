@@ -23,6 +23,7 @@ describe('CustomRequirementService', () => {
     locale: 'zh' as const,
     pagePath: '/zh/contact',
     sourceType: 'organic_search',
+    deviceType: 'PC' as const,
     ...overrides,
   });
 
@@ -59,7 +60,6 @@ describe('CustomRequirementService', () => {
 
   const setup = () => {
     const createInquiry = jest.fn().mockResolvedValue({ id: 1 });
-    const createLegacyInquiry = jest.fn().mockResolvedValue({ id: 2 });
     const createEvent = jest.fn().mockResolvedValue({ id: 8 });
     const findUnique = jest.fn().mockResolvedValue(null);
     const transactionClient = {
@@ -68,7 +68,7 @@ describe('CustomRequirementService', () => {
     };
     const transaction = jest.fn((callback) => callback(transactionClient));
     const prisma = {
-      customRequirement: { findUnique, create: createLegacyInquiry },
+      customRequirement: { findUnique },
       $transaction: transaction,
     } as unknown as PrismaService;
     const processor = { kick: jest.fn() } as unknown as InquiryNotificationProcessor;
@@ -80,7 +80,6 @@ describe('CustomRequirementService', () => {
       findUnique,
       transaction,
       createInquiry,
-      createLegacyInquiry,
       createEvent,
     };
   };
@@ -121,12 +120,17 @@ describe('CustomRequirementService', () => {
 
   afterEach(() => jest.restoreAllMocks());
 
-  it('accepts the minimum legacy V1 payload and leaves form_submit to the old client', async () => {
-    const { service, processor, transaction, createLegacyInquiry, createEvent } = setup();
+  it('accepts the minimum legacy V1 payload and records form_submit on the server', async () => {
+    const { service, processor, transaction, createInquiry, createEvent } = setup();
 
-    const result = await service.createLegacyPublic({ phone: ' 13000000000 ' }, 'legacy-client');
+    const result = await service.createLegacyPublic(
+      { phone: ' 13000000000 ' },
+      'legacy-client',
+      '114.252.10.20',
+      'PC',
+    );
 
-    expect(createLegacyInquiry).toHaveBeenCalledWith({
+    expect(createInquiry).toHaveBeenCalledWith({
       data: expect.objectContaining({
         submissionId: expect.any(String),
         phone: '13000000000',
@@ -135,10 +139,18 @@ describe('CustomRequirementService', () => {
       }),
     });
     expect(result).toEqual({
-      submissionId: createLegacyInquiry.mock.calls[0][0].data.submissionId,
+      submissionId: createInquiry.mock.calls[0][0].data.submissionId,
     });
-    expect(transaction).not.toHaveBeenCalled();
-    expect(createEvent).not.toHaveBeenCalled();
+    expect(transaction).toHaveBeenCalledTimes(1);
+    expect(createEvent).toHaveBeenCalledWith({
+      data: expect.objectContaining({
+        submissionId: createInquiry.mock.calls[0][0].data.submissionId,
+        eventType: 'form_submit',
+        deviceType: 'PC',
+        province: expect.stringContaining('北京'),
+        regionSource: 'exact_ip',
+      }),
+    });
     expect(processor.kick).toHaveBeenCalledTimes(1);
   });
 
@@ -165,6 +177,7 @@ describe('CustomRequirementService', () => {
         pagePath: '/zh/contact',
         sourceType: 'organic_search',
         sourceDetail: 'google',
+        deviceType: 'PC',
         utmCampaign: 'summer-furnace',
       }),
     );

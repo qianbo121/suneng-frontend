@@ -44,4 +44,17 @@ describe('lead event region', () => {
     expect(values).toContain('ipv6');
     expect(values.join(' ')).not.toContain('240e:3a1');
   });
+
+  it('rate limits obvious bulk event injection without blocking normal browsing', async () => {
+    const executeRaw = jest.fn().mockResolvedValue(1);
+    const service = serviceWith(executeRaw);
+    const request = requestFrom('114.252.10.20');
+    for (let index = 0; index < 240; index += 1) {
+      await service.createPublic({ eventType: 'page_view' } as never, request);
+    }
+    await expect(
+      service.createPublic({ eventType: 'page_view' } as never, request),
+    ).rejects.toMatchObject({ status: 429 });
+    expect(executeRaw).toHaveBeenCalledTimes(240);
+  });
 });

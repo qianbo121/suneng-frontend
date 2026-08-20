@@ -13,6 +13,11 @@ import { ManageInquiryNotificationDto } from '@/modules/custom-requirement/dto/m
 import { CustomRequirementService } from '@/modules/custom-requirement/custom-requirement.service';
 import { AuthenticatedUser } from '@/modules/auth/interfaces/authenticated-user.interface';
 
+function requestDeviceType(request: Request): 'PC' | '移动端' {
+  const userAgent = request.get('user-agent') || '';
+  return /Android|iPhone|iPad|iPod|Mobile|Windows Phone/i.test(userAgent) ? '移动端' : 'PC';
+}
+
 @ApiTags('Custom Requirement')
 @Roles(AdminRole.super_admin, AdminRole.editor)
 @Controller()
@@ -24,7 +29,7 @@ export class CustomRequirementController {
   @ApiOperation({ summary: 'Submit legacy custom furnace requirement' })
   createLegacyPublic(@Body() dto: CreateLegacyCustomRequirementDto, @Req() request: Request) {
     const clientKey = request.ip || dto.phone || dto.name || dto.company || 'anonymous';
-    return this.service.createLegacyPublic(dto, clientKey);
+    return this.service.createLegacyPublic(dto, clientKey, request.ip, requestDeviceType(request));
   }
 
   @Post('v2/custom-requirements')
@@ -33,7 +38,11 @@ export class CustomRequirementController {
   createPublic(@Body() dto: CreateCustomRequirementDto, @Req() request: Request) {
     const clientKey =
       request.ip || dto.phone || dto.email || dto.name || dto.company || 'anonymous';
-    return this.service.createPublic(dto, clientKey);
+    return this.service.createPublic(
+      dto.deviceType ? dto : { ...dto, deviceType: requestDeviceType(request) },
+      clientKey,
+      request.ip,
+    );
   }
 
   @Post('admin/custom-requirements/search')

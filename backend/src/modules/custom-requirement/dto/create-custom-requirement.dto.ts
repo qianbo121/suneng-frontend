@@ -150,6 +150,12 @@ export class CreateCustomRequirementDto {
   @MaxLength(120)
   sourceDetail?: string;
 
+  @ApiPropertyOptional({ enum: ['PC', '移动端'] })
+  @normalizeOptionalSource(40)
+  @IsOptional()
+  @IsIn(['PC', '移动端'])
+  deviceType?: 'PC' | '移动端';
+
   @ApiPropertyOptional()
   @normalizeOptionalSource(500)
   @IsOptional()

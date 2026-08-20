@@ -19,5 +19,7 @@ describe('lead event frontend/backend contract', () => {
     expect(
       frontendEventTypes.filter((eventType) => !LEAD_EVENT_TYPES.includes(eventType as never)),
     ).toEqual([]);
+    expect(frontendEventTypes).not.toContain('form_submit');
+    expect(LEAD_EVENT_TYPES).not.toContain('form_submit' as never);
   });
 });

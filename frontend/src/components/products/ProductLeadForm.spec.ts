@@ -49,15 +49,21 @@ describe('ProductLeadForm step-one rules', () => {
   );
 
   it('accepts either phone or email for Chinese leads', () => {
-    expect(validateLeadStepOne(completeValues({ email: '', phone: '13800138000' }), 'zh')).toBeNull();
-    expect(validateLeadStepOne(completeValues({ email: 'buyer@factory.cn', phone: '' }), 'zh')).toBeNull();
+    expect(
+      validateLeadStepOne(completeValues({ email: '', phone: '13800138000' }), 'zh'),
+    ).toBeNull();
+    expect(
+      validateLeadStepOne(completeValues({ email: 'buyer@factory.cn', phone: '' }), 'zh'),
+    ).toBeNull();
     expect(validateLeadStepOne(completeValues({ email: '', phone: '' }), 'zh')).toMatchObject({
       reason: 'contact',
     });
   });
 
   it('requires a valid email for English leads while leaving phone optional', () => {
-    expect(validateLeadStepOne(completeValues({ email: '', phone: '+1 555 0100' }), 'en')).toMatchObject({
+    expect(
+      validateLeadStepOne(completeValues({ email: '', phone: '+1 555 0100' }), 'en'),
+    ).toMatchObject({
       field: 'email',
       reason: 'contact',
     });
@@ -78,6 +84,7 @@ describe('ProductLeadForm submission behavior', () => {
         productTag: '台车炉',
         sourceType: '外部链接',
         sourceDetail: 'google.com',
+        deviceType: 'PC',
         landingPage: '/en/products/trolley-furnace?utm_source=google',
         previousPage: 'https://www.google.com/',
         utmSource: 'google',
@@ -95,6 +102,7 @@ describe('ProductLeadForm submission behavior', () => {
       locale: 'en',
       pagePath: '/en/products/trolley-furnace?utm_source=google',
       utmSource: 'google',
+      deviceType: 'PC',
       sessionId: 'session-1',
       visitorId: 'visitor-1',
     });
@@ -150,8 +158,7 @@ describe('ProductLeadForm submission behavior', () => {
     expect(nextFormSession).not.toBe(firstAttempt);
     expect(getFormIdempotencyKey(reference)).toBe(nextFormSession);
     expect(
-      buildCustomRequirementPayload(completeValues(), 'en', source, nextFormSession)
-        .idempotencyKey,
+      buildCustomRequirementPayload(completeValues(), 'en', source, nextFormSession).idempotencyKey,
     ).not.toBe(firstPayload.idempotencyKey);
   });
 
@@ -196,18 +203,18 @@ describe('ProductLeadForm submission behavior', () => {
     const previousBaseUrl = process.env.API_BASE_URL_INTERNAL;
     process.env.API_BASE_URL_INTERNAL = 'https://api.example.test';
     const fetchMock = vi.fn().mockResolvedValue(
-        new Response(
-          JSON.stringify({
-            statusCode: 409,
-            message: 'Idempotency key was already used for a different inquiry payload',
-            error: 'Conflict',
-          }),
-          {
-            status: 409,
-            headers: { 'content-type': 'application/json' },
-          },
-        ),
-      );
+      new Response(
+        JSON.stringify({
+          statusCode: 409,
+          message: 'Idempotency key was already used for a different inquiry payload',
+          error: 'Conflict',
+        }),
+        {
+          status: 409,
+          headers: { 'content-type': 'application/json' },
+        },
+      ),
+    );
     vi.stubGlobal('fetch', fetchMock);
 
     try {
@@ -276,7 +283,9 @@ describe('ProductLeadForm submission behavior', () => {
     const firstStepIndex = source.indexOf("step === 1 ? 'grid' : 'hidden'");
 
     expect(source).toContain('开始填写后，我们会记录本次必要的页面与来源信息');
-    expect(source).toContain('When you start this form, we record the necessary page and source information');
+    expect(source).toContain(
+      'When you start this form, we record the necessary page and source information',
+    );
     expect(noticeIndex).toBeGreaterThan(-1);
     expect(noticeIndex).toBeLessThan(firstStepIndex);
     expect(source).toContain('aria-controls={privacyNoticeId}');
@@ -305,8 +314,16 @@ describe('ProductLeadForm submission behavior', () => {
 
   it('restores focus to the submit control or the first project field when it is hidden', () => {
     let activeElement: object | null = null;
-    const preferred = { focus: vi.fn(() => { activeElement = preferred; }) };
-    const fallback = { focus: vi.fn(() => { activeElement = fallback; }) };
+    const preferred = {
+      focus: vi.fn(() => {
+        activeElement = preferred;
+      }),
+    };
+    const fallback = {
+      focus: vi.fn(() => {
+        activeElement = fallback;
+      }),
+    };
 
     restoreSuccessDialogFocus(preferred, fallback, () => activeElement);
     expect(preferred.focus).toHaveBeenCalledOnce();

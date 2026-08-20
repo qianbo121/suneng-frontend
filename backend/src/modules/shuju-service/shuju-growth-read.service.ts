@@ -55,6 +55,10 @@ type RegionRow = {
   highIntentVisitors: bigint;
 };
 type RegionCoverageRow = { eligibleVisitors: bigint; resolvedVisitors: bigint };
+type DimensionCoverageRow = {
+  unknownDeviceSubmissions: bigint;
+  unknownRegionSubmissions: bigint;
+};
 type SegmentRow = {
   day: string;
   eventType: string;
@@ -81,6 +85,7 @@ type FunnelRow = {
 };
 type TrackingCoverageRow = { trackingStartAt: Date | string | null };
 type BotRow = { visitors: bigint; events: bigint };
+type QualityRow = { visitors: bigint; sessions: bigint; pageViews: bigint };
 type PageFunnelRow = {
   pagePath: string | null;
   pageVisitors: bigint;
@@ -105,6 +110,12 @@ const NOT_BOT = Prisma.sql`("userAgent" IS NULL OR "userAgent" !~* ${BOT_PATTERN
 // “真实滑动或点击”。两个信号都只是筛选条件，不宣称能证明绝对真人。
 const VISIT_IDENTITY = Prisma.sql`COALESCE(NULLIF("sessionId", ''), NULLIF("visitorId", ''), 'event:' || "id"::text)`;
 const IS_BOT = Prisma.sql`"userAgent" ~* ${BOT_PATTERN}`;
+// 2026-08-20 18:20:22（上海时间）合并并启用“20秒+交互”口径。
+// 覆盖起点必须是固定、可审计的发布时刻，不能由第一条达标结果反推。
+export const EFFECTIVE_VISIT_RULE_STARTED_AT = new Date('2026-08-20T10:20:22.000Z');
+// form_submit 是业务结果，只认与真实询盘 submissionId 关联的服务端记录。
+// 历史上公开埋点入口写入的同名事件必须从所有统计中排除。
+const VERIFIED_EVENT = Prisma.sql`("eventType" <> 'form_submit' OR "submissionId" IS NOT NULL)`;
 
 function count(value: bigint | number | null | undefined) {
   return Number(value ?? 0);
@@ -164,26 +175,11 @@ export class ShujuGrowthReadService {
 
   async overview(query: ShujuGrowthReadQueryDto) {
     const { start, endExclusive, days } = dateRange(query);
-    const [trackingCoverage, verifiedCoverage, dwellCoverage] = await Promise.all([
+    const [trackingCoverage, dwellCoverage] = await Promise.all([
       this.prisma.$queryRaw<TrackingCoverageRow[]>(Prisma.sql`
       SELECT MIN("createdAt") AS "trackingStartAt"
       FROM "WebsiteLeadEvent"
       WHERE "eventType" = 'page_view' AND ${NOT_BOT}
-    `),
-      this.prisma.$queryRaw<TrackingCoverageRow[]>(Prisma.sql`
-      SELECT MIN(qualified."qualifiedAt") AS "trackingStartAt"
-      FROM (
-        SELECT GREATEST(
-          MIN(q."createdAt") FILTER (WHERE q."eventType" = 'effective_interaction'),
-          MIN(q."createdAt") FILTER (WHERE q."eventType" = 'dwell_20s')
-        ) AS "qualifiedAt"
-        FROM "WebsiteLeadEvent" q
-        WHERE q."eventType" IN ('effective_interaction', 'dwell_20s')
-          AND (q."userAgent" IS NULL OR q."userAgent" !~* ${BOT_PATTERN})
-        GROUP BY COALESCE(NULLIF(q."sessionId", ''), NULLIF(q."visitorId", ''), 'event:' || q."id"::text)
-        HAVING COUNT(*) FILTER (WHERE q."eventType" = 'effective_interaction') > 0
-           AND COUNT(*) FILTER (WHERE q."eventType" = 'dwell_20s') > 0
-      ) qualified
     `),
       // 停留时长 2026-08-19 才上线，比埋点晚得多。
       // 不显式列举而写 LIKE 'dwell_%' 会踩坑：LIKE 里的下划线是单字符通配符。
@@ -196,65 +192,86 @@ export class ShujuGrowthReadService {
     const trackingStartValue = trackingCoverage[0]?.trackingStartAt;
     const trackingStartAt = trackingStartValue ? new Date(trackingStartValue) : null;
     const hasTrackingStart = Boolean(trackingStartAt && !Number.isNaN(trackingStartAt.getTime()));
+    const trackingAvailableInRange = Boolean(
+      hasTrackingStart && trackingStartAt!.getTime() < endExclusive.getTime(),
+    );
     const dwellStartValue = dwellCoverage[0]?.trackingStartAt;
     const dwellStartAt = dwellStartValue ? new Date(dwellStartValue) : null;
     const hasDwellStart = Boolean(dwellStartAt && !Number.isNaN(dwellStartAt.getTime()));
-    const verifiedStartValue = verifiedCoverage[0]?.trackingStartAt;
-    const verifiedStartAt = verifiedStartValue ? new Date(verifiedStartValue) : null;
-    const hasVerifiedStart = Boolean(verifiedStartAt && !Number.isNaN(verifiedStartAt.getTime()));
-    // 新口径的窗口从第一次真正同时满足两个条件的访问起算。
-    // 不能分别取全站第一次滑动和第一次20秒停留，因为它们可能来自两个不同会话。
-    // 旧的 human_signal 可能只是鼠标移动，不允许混进新口径。
-    const comparableStart =
-      hasTrackingStart && hasVerifiedStart
-        ? new Date(
-            Math.max(start.getTime(), trackingStartAt!.getTime(), verifiedStartAt!.getTime()),
-          )
-        : endExclusive;
+    const comparableStart = trackingAvailableInRange
+      ? new Date(Math.max(start.getTime(), trackingStartAt!.getTime()))
+      : endExclusive;
+    const qualityStart = new Date(
+      Math.max(start.getTime(), EFFECTIVE_VISIT_RULE_STARTED_AT.getTime()),
+    );
+    const qualityAvailable = qualityStart.getTime() < endExclusive.getTime();
     const filters: Prisma.Sql[] = [
-      Prisma.sql`"createdAt" >= ${comparableStart}`,
+      Prisma.sql`"createdAt" >= ${start}`,
       Prisma.sql`"createdAt" < ${endExclusive}`,
     ];
+    const deviceCoverageFilters: Prisma.Sql[] = [
+      Prisma.sql`"createdAt" >= ${start}`,
+      Prisma.sql`"createdAt" < ${endExclusive}`,
+    ];
+    const qualityFilters: Prisma.Sql[] = [
+      Prisma.sql`"createdAt" >= ${qualityStart}`,
+      Prisma.sql`"createdAt" < ${endExclusive}`,
+    ];
+    const addDimensionFilter = (filter: Prisma.Sql) => {
+      filters.push(filter);
+      qualityFilters.push(filter);
+      deviceCoverageFilters.push(filter);
+    };
     if (query.site && query.site !== 'all') {
-      filters.push(
+      addDimensionFilter(
         Prisma.sql`("pagePath" = ${`/${query.site}`} OR "pagePath" LIKE ${`/${query.site}/%`})`,
       );
     }
     if (query.device && query.device !== 'all') {
       filters.push(Prisma.sql`"deviceType" = ${query.device}`);
+      qualityFilters.push(Prisma.sql`"deviceType" = ${query.device}`);
     }
     if (query.sourceType && query.sourceType !== 'all') {
-      filters.push(Prisma.sql`"sourceType" = ${query.sourceType}`);
+      addDimensionFilter(Prisma.sql`"sourceType" = ${query.sourceType}`);
     }
     if (query.pageType && query.pageType !== 'all') {
       if (query.pageType === '解决方案页') {
-        filters.push(Prisma.sql`"pageType" IN ('解决方案页', '服务页')`);
+        addDimensionFilter(Prisma.sql`"pageType" IN ('解决方案页', '服务页')`);
       } else if (query.pageType === '文章页') {
-        filters.push(Prisma.sql`"pageType" IN ('文章页', '资料文章')`);
+        addDimensionFilter(Prisma.sql`"pageType" IN ('文章页', '资料文章')`);
       } else if (query.pageType === '其他页') {
-        filters.push(Prisma.sql`("pageType" IN ('其他页', '其他') OR "pageType" IS NULL)`);
+        addDimensionFilter(Prisma.sql`("pageType" IN ('其他页', '其他') OR "pageType" IS NULL)`);
       } else {
-        filters.push(Prisma.sql`"pageType" = ${query.pageType}`);
+        addDimensionFilter(Prisma.sql`"pageType" = ${query.pageType}`);
       }
     }
-    // 两道门全局挂在共享 where 上，漏斗、来源、页面、趋势使用同一口径。
+    // 有效访问只是一层质量标签，绝不能再作为所有事实查询的总开关。
     // 按 session_id 判定同一次访问：某个访客过去曾经有效，不代表他今天的每次短访都有效。
     const EFFECTIVE_VISIT_GATE = Prisma.sql`${VISIT_IDENTITY} IN (
       SELECT COALESCE(NULLIF(q."sessionId", ''), NULLIF(q."visitorId", ''), 'event:' || q."id"::text)
       FROM "WebsiteLeadEvent" q
       WHERE q."eventType" IN ('effective_interaction', 'dwell_20s')
-        AND q."createdAt" >= ${comparableStart} AND q."createdAt" < ${endExclusive}
+        AND q."createdAt" >= ${qualityStart} AND q."createdAt" < ${endExclusive}
+        AND (q."userAgent" IS NULL OR q."userAgent" !~* ${BOT_PATTERN})
       GROUP BY COALESCE(NULLIF(q."sessionId", ''), NULLIF(q."visitorId", ''), 'event:' || q."id"::text)
       HAVING COUNT(*) FILTER (WHERE q."eventType" = 'effective_interaction') > 0
          AND COUNT(*) FILTER (WHERE q."eventType" = 'dwell_20s') > 0
     )`;
-    const where = Prisma.join([...filters, NOT_BOT, EFFECTIVE_VISIT_GATE], ' AND ');
+    const where = Prisma.join([...filters, NOT_BOT, VERIFIED_EVENT], ' AND ');
+    const deviceCoverageWhere = Prisma.join(
+      [...deviceCoverageFilters, NOT_BOT, VERIFIED_EVENT],
+      ' AND ',
+    );
+    const effectiveWhere = Prisma.join(
+      [...qualityFilters, NOT_BOT, VERIFIED_EVENT, EFFECTIVE_VISIT_GATE],
+      ' AND ',
+    );
     // 同样的筛选条件，但只数被排除掉的那部分 —— 让"过滤了多少"看得见，而不是悄悄少掉。
-    const botWhere = Prisma.join([...filters, IS_BOT], ' AND ');
+    const botWhere = Prisma.join([...filters, IS_BOT, VERIFIED_EVENT], ' AND ');
     // 非已知机器人、但未满足“20 秒 + 滑动/点击”的访问单独回报，
     // 让界面能说清楚主数外还有多少访问，不静默丢数。
     const unverifiedWhere = Prisma.join(
-      [...filters, NOT_BOT, Prisma.sql`NOT (${EFFECTIVE_VISIT_GATE})`],
+      [...qualityFilters, NOT_BOT, VERIFIED_EVENT, Prisma.sql`NOT (${EFFECTIVE_VISIT_GATE})`],
       ' AND ',
     );
     const [
@@ -265,10 +282,12 @@ export class ShujuGrowthReadService {
       landings,
       regions,
       regionCoverageRows,
+      dimensionCoverageRows,
       exits,
       pages,
       segments,
       funnelRows,
+      qualityRows,
       botRows,
       pageFunnelRows,
       unverifiedRows,
@@ -341,8 +360,8 @@ export class ShujuGrowthReadService {
         ORDER BY sessions DESC, "pageViews" DESC
         LIMIT 100
       `),
-      // 客户所在地：省级汇总。沿用同一个 where，
-      // 机器人过滤和有效访问门都在，口径和别的数字一致。
+      // 客户所在地：省级汇总。沿用事实层 where，只排已知机器人，
+      // 不能再用“20秒+交互”过滤地区行为和真实提交。
       this.prisma.$queryRaw<RegionRow[]>(Prisma.sql`
         SELECT
           "province",
@@ -370,6 +389,23 @@ export class ShujuGrowthReadService {
             )::bigint AS "resolvedVisitors"
         FROM "WebsiteLeadEvent"
         WHERE ${where}
+      `),
+      this.prisma.$queryRaw<DimensionCoverageRow[]>(Prisma.sql`
+        SELECT
+          (
+            SELECT COUNT(DISTINCT "submissionId")::bigint
+            FROM "WebsiteLeadEvent"
+            WHERE ${deviceCoverageWhere}
+              AND "eventType" = 'form_submit'
+              AND "deviceType" IS NULL
+          ) AS "unknownDeviceSubmissions",
+          (
+            SELECT COUNT(DISTINCT "submissionId")::bigint
+            FROM "WebsiteLeadEvent"
+            WHERE ${where}
+              AND "eventType" = 'form_submit'
+              AND "province" IS NULL
+          ) AS "unknownRegionSubmissions"
       `),
       // 退出页 = 一次访问里最后打开的那个页面。
       // 不需要额外埋点：从已有的 page_view 按会话取最后一条即可，历史数据同样算得出。
@@ -454,6 +490,14 @@ export class ShujuGrowthReadService {
         FROM scoped
         WHERE identity IN (SELECT identity FROM page_cohort)
       `),
+      this.prisma.$queryRaw<QualityRow[]>(Prisma.sql`
+        SELECT
+          COUNT(DISTINCT COALESCE(NULLIF("visitorId", ''), NULLIF("sessionId", ''), 'event:' || "id"::text)) FILTER (WHERE "eventType" = 'page_view')::bigint AS visitors,
+          COUNT(DISTINCT COALESCE(NULLIF("sessionId", ''), 'event:' || "id"::text)) FILTER (WHERE "eventType" = 'page_view')::bigint AS sessions,
+          COUNT(*) FILTER (WHERE "eventType" = 'page_view')::bigint AS "pageViews"
+        FROM "WebsiteLeadEvent"
+        WHERE ${effectiveWhere}
+      `),
       this.prisma.$queryRaw<BotRow[]>(Prisma.sql`
         SELECT
           COUNT(DISTINCT COALESCE(NULLIF("visitorId", ''), NULLIF("sessionId", ''), 'event:' || "id"::text)) FILTER (WHERE "eventType" = 'page_view')::bigint AS visitors,
@@ -512,7 +556,8 @@ export class ShujuGrowthReadService {
       generatedAt: new Date().toISOString(),
       coverage: {
         trackingStartAt: hasTrackingStart ? trackingStartAt!.toISOString() : null,
-        verifiedStartAt: hasVerifiedStart ? verifiedStartAt!.toISOString() : null,
+        trackingAvailableInRange,
+        verifiedStartAt: EFFECTIVE_VISIT_RULE_STARTED_AT.toISOString(),
         // 停留时长自己的起点。刻意不并进 comparableStart——它是子指标，
         // 把整个窗口缩到它的上线日会让别的数字凭空变小。
         dwellStartAt: hasDwellStart ? dwellStartAt!.toISOString() : null,
@@ -523,26 +568,34 @@ export class ShujuGrowthReadService {
             ? count(regionCoverageRows[0]?.resolvedVisitors) /
               count(regionCoverageRows[0]?.eligibleVisitors)
             : null,
+          unknownSubmissions: count(dimensionCoverageRows[0]?.unknownRegionSubmissions),
         },
-        verified: hasVerifiedStart,
+        device: {
+          unknownSubmissions: count(dimensionCoverageRows[0]?.unknownDeviceSubmissions),
+        },
+        verified: qualityAvailable,
         comparableStartAt: comparableStart.toISOString(),
-        fullRange:
-          hasTrackingStart &&
-          hasVerifiedStart &&
-          trackingStartAt!.getTime() <= start.getTime() &&
-          verifiedStartAt!.getTime() <= start.getTime(),
+        qualityStartAt: qualityStart.toISOString(),
+        qualityFullRange: start.getTime() >= EFFECTIVE_VISIT_RULE_STARTED_AT.getTime(),
+        fullRange: trackingAvailableInRange && trackingStartAt!.getTime() <= start.getTime(),
         reason: !hasTrackingStart
           ? 'page_view_not_started'
-          : !hasVerifiedStart
-            ? 'verification_not_started'
-            : Math.max(trackingStartAt!.getTime(), verifiedStartAt!.getTime()) > start.getTime()
+          : !trackingAvailableInRange
+            ? 'tracking_not_started_in_range'
+            : trackingStartAt!.getTime() > start.getTime()
               ? 'partial_tracking_window'
               : null,
       },
-      // 未满足有效访问口径的其他访问。透明展示被排除的量，但不进主数。
+      quality: {
+        effectiveVisitors: qualityAvailable ? count(qualityRows[0]?.visitors) : null,
+        effectiveSessions: qualityAvailable ? count(qualityRows[0]?.sessions) : null,
+        effectivePageViews: qualityAvailable ? count(qualityRows[0]?.pageViews) : null,
+      },
+      // 未满足有效访问口径的其他访问。它与有效访问使用同一个固定质量窗口，
+      // 只做质量分组，不影响事实层的访问、页面、漏斗和提交。
       unverified: {
-        visitors: count(unverifiedRows[0]?.visitors),
-        events: count(unverifiedRows[0]?.events),
+        visitors: qualityAvailable ? count(unverifiedRows[0]?.visitors) : null,
+        events: qualityAvailable ? count(unverifiedRows[0]?.events) : null,
       },
       botFiltered: {
         // 已从上面所有口径里排除的机器人访问量。展示它是为了让"过滤"这件事可见，
