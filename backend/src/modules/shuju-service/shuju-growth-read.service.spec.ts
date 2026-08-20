@@ -53,7 +53,7 @@ describe('ShujuGrowthReadService', () => {
   it('returns aggregate website behavior without anonymous ids or inquiry content', async () => {
     const queryRaw = routedQueryRaw([
       // 顺序 = 最具体优先。几个坑：
-      //  · 'human_signal' 不能用——真人验证门在每个查询的 where 里，到处都有
+      //  · 'effective_interaction' 不能用——有效访问门在每个查询的 where 里，到处都有
       //  · 'MAX("pageTitle")' 页面表现和分段明细都有，分段明细要先用 deviceType 截住
       //  · 'GROUP BY day, "eventType"' 是分段明细 GROUP BY 的前缀，日趋势必须排在它后面
       ['MIN(', [{ trackingStartAt: new Date('2026-08-14T16:00:00Z') }]],
@@ -264,7 +264,7 @@ describe('ShujuGrowthReadService', () => {
     const statements = queryRaw.mock.calls.map(([sql]) => JSON.stringify(sql));
     // 每一条业务查询都必须带上排除条件，否则同一页上会出现两套访客口径
     const business = statements.filter(
-      (sql) => sql.includes('WebsiteLeadEvent') && !sql.includes('human_signal'),
+      (sql) => sql.includes('WebsiteLeadEvent') && !sql.includes('SELECT MIN'),
     );
     expect(business.length).toBeGreaterThan(1);
     for (const sql of business) {
@@ -277,19 +277,24 @@ describe('ShujuGrowthReadService', () => {
     expect(result.botFiltered.pattern).toContain('spider');
   });
 
-  it('counts only human-verified identities and reports the unverified remainder', async () => {
+  it('只统计同次访问内同时满足20秒且有滑动或点击的数据', async () => {
     const queryRaw = jest.fn().mockResolvedValue([]);
     const service = new ShujuGrowthReadService({ $queryRaw: queryRaw } as unknown as PrismaService);
 
     const result = await service.overview({ startDate: '2026-08-15', endDate: '2026-08-17' });
 
     const statements = queryRaw.mock.calls.map(([sql]) => JSON.stringify(sql));
-    // 主统计查询必须带人类验证门:身份必须发过 human_signal 才被计入。
-    // 2026-08-18 实测:伪装成浏览器的自动化流量占访客数 80%+,UA 过滤抓不到,
-    // 唯一可靠判据是"有没有真实交互"。
-    const gated = statements.filter((sql) => sql.includes("= 'human_signal'"));
+    // 旧 human_signal 可能只是鼠标移动，新口径不能再读它。
+    const gated = statements.filter(
+      (sql) => sql.includes("= 'effective_interaction'") && sql.includes("= 'dwell_20s'"),
+    );
     expect(gated.length).toBeGreaterThan(3);
-    // 未验证访问必须单独回报,不能悄悄消失
+    for (const sql of gated) {
+      expect(sql).toContain('sessionId');
+      expect(sql).toContain('HAVING COUNT');
+      expect(sql).not.toContain("= 'human_signal'");
+    }
+    // 未满足新口径的访问必须单独回报，不能悄悄消失。
     expect(result.unverified).toEqual(expect.objectContaining({ visitors: 0, events: 0 }));
     expect(result.coverage).toEqual(expect.objectContaining({ verified: false }));
   });
@@ -355,7 +360,43 @@ describe('ShujuGrowthReadService', () => {
     expect(result.coverage).toHaveProperty('dwellStartAt');
   });
 
-  it('reports customer regions with the same bot and human gates as every other metric', async () => {
+  it('从第一个同时满足20秒和交互条件的会话开始新口径', async () => {
+    const queryRaw = jest.fn((sql: unknown) => {
+      const text = ((sql as { strings?: string[] }).strings || []).join('?').replace(/\s+/g, ' ');
+      if (!text.includes('SELECT MIN')) return Promise.resolve([]);
+      if (text.includes("= 'page_view'")) {
+        return Promise.resolve([{ trackingStartAt: new Date('2026-08-18T00:00:00Z') }]);
+      }
+      if (text.includes('AS "qualifiedAt"')) {
+        return Promise.resolve([{ trackingStartAt: new Date('2026-08-20T00:00:00Z') }]);
+      }
+      if (text.includes("IN ('dwell_5s'")) {
+        return Promise.resolve([{ trackingStartAt: new Date('2026-08-19T00:00:00Z') }]);
+      }
+      return Promise.resolve([]);
+    });
+    const service = new ShujuGrowthReadService({ $queryRaw: queryRaw } as unknown as PrismaService);
+
+    const result = await service.overview({ startDate: '2026-08-18', endDate: '2026-08-21' });
+
+    expect(result.coverage).toEqual(
+      expect.objectContaining({
+        verified: true,
+        verifiedStartAt: '2026-08-20T00:00:00.000Z',
+        comparableStartAt: '2026-08-20T00:00:00.000Z',
+        fullRange: false,
+        reason: 'partial_tracking_window',
+      }),
+    );
+    const statements = queryRaw.mock.calls.map(([sql]) => JSON.stringify(sql));
+    const verifiedCoverage = statements.find((sql) => sql.includes('qualifiedAt'));
+    expect(verifiedCoverage).toContain('effective_interaction');
+    expect(verifiedCoverage).toContain('dwell_20s');
+    expect(verifiedCoverage).toContain('sessionId');
+    expect(verifiedCoverage).toContain('HAVING COUNT');
+  });
+
+  it('reports customer regions with the same bot and effective-visit gates as every other metric', async () => {
     const queryRaw = jest.fn().mockResolvedValue([]);
     const service = new ShujuGrowthReadService({ $queryRaw: queryRaw } as unknown as PrismaService);
 
@@ -364,10 +405,11 @@ describe('ShujuGrowthReadService', () => {
     const statements = queryRaw.mock.calls.map(([sql]) => JSON.stringify(sql));
     const regionQuery = statements.find((sql) => sql.includes('GROUP BY \\"province\\"'));
     expect(regionQuery).toBeDefined();
-    // 地区口径必须和别的数字一致：机器人过滤 + 真人验证门都要在，
+    // 地区口径必须和别的数字一致：机器人过滤 + 有效访问门都要在，
     // 否则同一张看板上会出现两套访客口径。
     expect(regionQuery).toContain('userAgent');
-    expect(regionQuery).toContain("= 'human_signal'");
+    expect(regionQuery).toContain("= 'effective_interaction'");
+    expect(regionQuery).toContain("= 'dwell_20s'");
     // 没解析出地区的不能凑成一个"未知"省份混进排行
     expect(regionQuery).toContain('IS NOT NULL');
     expect(regionQuery).toContain('regionSource');
@@ -392,9 +434,10 @@ describe('ShujuGrowthReadService', () => {
     expect(exitQuery).not.toContain('ORDER BY session_key, \\"createdAt\\" ASC');
     expect(exitQuery).toContain('DISTINCT ON');
     expect(exitQuery).toContain("'page_view'");
-    // 口径要和别的数字一致：机器人过滤 + 真人验证门
+    // 口径要和别的数字一致：机器人过滤 + 有效访问门
     expect(exitQuery).toContain('userAgent');
-    expect(exitQuery).toContain("= 'human_signal'");
+    expect(exitQuery).toContain("= 'effective_interaction'");
+    expect(exitQuery).toContain("= 'dwell_20s'");
     expect(result).toHaveProperty('exits');
   });
 });

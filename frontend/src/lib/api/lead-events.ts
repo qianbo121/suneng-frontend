@@ -17,6 +17,7 @@ export type LeadEventType =
   | 'form_step_complete'
   | 'form_submit'
   | 'human_signal'
+  | 'effective_interaction'
   | 'automation_signal';
 
 export type LeadSourceSnapshot = {
@@ -79,11 +80,13 @@ const DWELL_MILESTONE_KEY = 'suneng_dwell_milestone';
 let dwellMilestoneInFlight = false;
 let dwellRequestGeneration = 0;
 let engagedSessionInFlight = false;
-// 访客性质信号：每个会话恰好发一条 human_signal 或 automation_signal。
-// 背景（2026-08-18 实测）：伪装成正常浏览器的自动化流量会执行 JS，UA 过滤抓不到；
-// 但它们要么带着 navigator.webdriver 标记，要么从不产生真实交互。这两个信号
-// 让新数据从采集起就可判定，不再事后猜。只采集，不改变任何现有事件的语义。
-const VISITOR_NATURE_KEY = 'suneng_visitor_nature_recorded';
+// 有效交互信号：只记录真实滑动或点击。最终的“有效访问”还需要
+// 同一次访问累计前台停留 20 秒，由服务端合并两个事实判定。
+// 使用新键，避免旧版的 pointermove 信号被误当成新口径。
+const EFFECTIVE_INTERACTION_KEY = 'suneng_effective_interaction_recorded_v1';
+const AUTOMATION_SIGNAL_KEY = 'suneng_automation_signal_recorded_v1';
+let effectiveInteractionInFlight = false;
+let automationSignalInFlight = false;
 
 function boundedSourceValue(value: string | undefined, limit: number) {
   const normalized = value?.trim();
@@ -131,7 +134,8 @@ function getSessionId(storage: Storage) {
       const next = newAnonymousId();
       storage.setItem(SESSION_ID_KEY, next);
       storage.removeItem(ENGAGED_SESSION_KEY);
-      storage.removeItem(VISITOR_NATURE_KEY);
+      storage.removeItem(EFFECTIVE_INTERACTION_KEY);
+      storage.removeItem(AUTOMATION_SIGNAL_KEY);
       storage.removeItem(SESSION_PAGE_PATHS_KEY);
       storage.removeItem('suneng_landing_page');
       storage.removeItem(DWELL_SECONDS_KEY);
@@ -288,7 +292,8 @@ function postLeadEvent(eventType: LeadEventType, extra?: Partial<LeadSourceSnaps
 export function markEngagedSession(extra?: Partial<LeadSourceSnapshot>) {
   if (typeof window === 'undefined') return;
   try {
-    if (window.sessionStorage.getItem(ENGAGED_SESSION_KEY) === '1' || engagedSessionInFlight) return;
+    if (window.sessionStorage.getItem(ENGAGED_SESSION_KEY) === '1' || engagedSessionInFlight)
+      return;
   } catch {
     return;
   }
@@ -380,44 +385,74 @@ export function startDwellTracking() {
   return () => window.clearInterval(timer);
 }
 
-const NATURE_INTERACTION_EVENTS = ['pointermove', 'scroll', 'touchstart', 'keydown'] as const;
+const EFFECTIVE_INTERACTION_EVENTS = ['scroll', 'click'] as const;
 
 export function installVisitorNatureTracking() {
   if (typeof window === 'undefined') return;
   try {
-    // 必须先立会话再设标记：postLeadEvent 内部会触发会话初始化/轮换，
-    // 轮换会清掉 VISITOR_NATURE_KEY——顺序反了信号就退化成"每次刷新一条"。
+    // 必须先立会话再读标记：postLeadEvent 内部会触发会话初始化/轮换。
     getSessionId(window.sessionStorage);
-    if (window.sessionStorage.getItem(VISITOR_NATURE_KEY) === '1') return;
   } catch {
     return;
   }
-  // 自动化工具（Puppeteer/Selenium/无头浏览器）默认带 webdriver 标记，伪装 UA 藏不住它。
+  // 默认自动化浏览器单独标记，不安装有效交互监听。
   if (typeof navigator !== 'undefined' && navigator.webdriver === true) {
     try {
-      window.sessionStorage.setItem(VISITOR_NATURE_KEY, '1');
+      if (
+        window.sessionStorage.getItem(AUTOMATION_SIGNAL_KEY) === '1' ||
+        automationSignalInFlight
+      ) {
+        return;
+      }
     } catch {
       return;
     }
-    void postLeadEvent('automation_signal');
+    automationSignalInFlight = true;
+    const generation = dwellRequestGeneration;
+    void postLeadEvent('automation_signal').then((accepted) => {
+      automationSignalInFlight = false;
+      if (generation !== dwellRequestGeneration) return;
+      if (!accepted) return;
+      try {
+        window.sessionStorage.setItem(AUTOMATION_SIGNAL_KEY, '1');
+      } catch {
+        // 写标记失败可能多上报一次，服务端依然按会话去重。
+      }
+    });
     return;
   }
   const onFirstInteraction = (event: Event) => {
-    // 页面脚本合成的事件 isTrusted=false，不算人。
-    if (!event.isTrusted) return;
-    for (const name of NATURE_INTERACTION_EVENTS) {
-      window.removeEventListener(name, onFirstInteraction, true);
-    }
+    // 页面脚本合成的事件 isTrusted=false，不算有效交互。
+    if (!event.isTrusted || effectiveInteractionInFlight) return;
     try {
       getSessionId(window.sessionStorage);
-      if (window.sessionStorage.getItem(VISITOR_NATURE_KEY) === '1') return;
-      window.sessionStorage.setItem(VISITOR_NATURE_KEY, '1');
+      if (window.sessionStorage.getItem(EFFECTIVE_INTERACTION_KEY) === '1') return;
     } catch {
       return;
     }
-    void postLeadEvent('human_signal');
+    effectiveInteractionInFlight = true;
+    const generation = dwellRequestGeneration;
+    void postLeadEvent('effective_interaction').then((accepted) => {
+      effectiveInteractionInFlight = false;
+      if (generation !== dwellRequestGeneration) return;
+      if (!accepted) return; // 保留监听，下一次真实滑动/点击继续重试。
+      try {
+        window.sessionStorage.setItem(EFFECTIVE_INTERACTION_KEY, '1');
+      } catch {
+        // 写标记失败时不假装成已记录。
+        return;
+      }
+      for (const name of EFFECTIVE_INTERACTION_EVENTS) {
+        window.removeEventListener(name, onFirstInteraction, true);
+      }
+    });
   };
-  for (const name of NATURE_INTERACTION_EVENTS) {
+  try {
+    if (window.sessionStorage.getItem(EFFECTIVE_INTERACTION_KEY) === '1') return;
+  } catch {
+    return;
+  }
+  for (const name of EFFECTIVE_INTERACTION_EVENTS) {
     window.addEventListener(name, onFirstInteraction, { capture: true, passive: true });
   }
 }

@@ -101,12 +101,9 @@ const BOT_PATTERN =
 // 漏斗最后一步永远是 0。
 const NOT_BOT = Prisma.sql`("userAgent" IS NULL OR "userAgent" !~* ${BOT_PATTERN})`;
 
-// 人类验证门（2026-08-18 实测定案）：埋点访客数被伪装成正常浏览器的自动化流量
-// 灌水 18 倍（对照百度统计 8-13 UV/天）。UA 过滤只能抓 14.6%。
-// 唯一可靠的判据是行为：human_signal 只在首次真实交互（isTrusted 的
-// pointermove/scroll/touchstart/keydown）时发出，伪装流量不会触发。
-// 所以"数人头"类统计一律只数发过 human_signal 的身份——功能保留，数字治病。
-const IDENTITY = Prisma.sql`COALESCE(NULLIF("visitorId", ''), NULLIF("sessionId", ''), 'event:' || "id"::text)`;
+// 有效访问口径：同一次访问必须同时出现“前台累计停留 20 秒”和
+// “真实滑动或点击”。两个信号都只是筛选条件，不宣称能证明绝对真人。
+const VISIT_IDENTITY = Prisma.sql`COALESCE(NULLIF("sessionId", ''), NULLIF("visitorId", ''), 'event:' || "id"::text)`;
 const IS_BOT = Prisma.sql`"userAgent" ~* ${BOT_PATTERN}`;
 
 function count(value: bigint | number | null | undefined) {
@@ -174,9 +171,19 @@ export class ShujuGrowthReadService {
       WHERE "eventType" = 'page_view' AND ${NOT_BOT}
     `),
       this.prisma.$queryRaw<TrackingCoverageRow[]>(Prisma.sql`
-      SELECT MIN("createdAt") AS "trackingStartAt"
-      FROM "WebsiteLeadEvent"
-      WHERE "eventType" = 'human_signal'
+      SELECT MIN(qualified."qualifiedAt") AS "trackingStartAt"
+      FROM (
+        SELECT GREATEST(
+          MIN(q."createdAt") FILTER (WHERE q."eventType" = 'effective_interaction'),
+          MIN(q."createdAt") FILTER (WHERE q."eventType" = 'dwell_20s')
+        ) AS "qualifiedAt"
+        FROM "WebsiteLeadEvent" q
+        WHERE q."eventType" IN ('effective_interaction', 'dwell_20s')
+          AND (q."userAgent" IS NULL OR q."userAgent" !~* ${BOT_PATTERN})
+        GROUP BY COALESCE(NULLIF(q."sessionId", ''), NULLIF(q."visitorId", ''), 'event:' || q."id"::text)
+        HAVING COUNT(*) FILTER (WHERE q."eventType" = 'effective_interaction') > 0
+           AND COUNT(*) FILTER (WHERE q."eventType" = 'dwell_20s') > 0
+      ) qualified
     `),
       // 停留时长 2026-08-19 才上线，比埋点晚得多。
       // 不显式列举而写 LIKE 'dwell_%' 会踩坑：LIKE 里的下划线是单字符通配符。
@@ -195,8 +202,9 @@ export class ShujuGrowthReadService {
     const verifiedStartValue = verifiedCoverage[0]?.trackingStartAt;
     const verifiedStartAt = verifiedStartValue ? new Date(verifiedStartValue) : null;
     const hasVerifiedStart = Boolean(verifiedStartAt && !Number.isNaN(verifiedStartAt.getTime()));
-    // 已验证口径的窗口从"埋点开始"和"验证信号开始"中较晚者起算——
-    // 信号上线前的日子没法追溯验证，画进趋势会显示成一排假零。
+    // 新口径的窗口从第一次真正同时满足两个条件的访问起算。
+    // 不能分别取全站第一次滑动和第一次20秒停留，因为它们可能来自两个不同会话。
+    // 旧的 human_signal 可能只是鼠标移动，不允许混进新口径。
     const comparableStart =
       hasTrackingStart && hasVerifiedStart
         ? new Date(
@@ -229,23 +237,24 @@ export class ShujuGrowthReadService {
         filters.push(Prisma.sql`"pageType" = ${query.pageType}`);
       }
     }
-    // 机器人条件挂在共享 where 上，所有口径（漏斗、来源、页面、趋势）一次性对齐。
-    // 人类验证门同样全局挂载：一个身份只有发过 human_signal 才被计入任何统计。
-    // 动作类事件（阅读/联系/填表）的发出者必然先产生过真实交互，所以不会误伤；
-    // 伪装流量一次页面即走、零交互，被这道门整体挡在所有口径之外。
-    const HUMAN_GATE = Prisma.sql`${IDENTITY} IN (
-      SELECT DISTINCT COALESCE(NULLIF(h."visitorId", ''), NULLIF(h."sessionId", ''), 'event:' || h."id"::text)
-      FROM "WebsiteLeadEvent" h
-      WHERE h."eventType" = 'human_signal'
-        AND h."createdAt" >= ${comparableStart} AND h."createdAt" < ${endExclusive}
+    // 两道门全局挂在共享 where 上，漏斗、来源、页面、趋势使用同一口径。
+    // 按 session_id 判定同一次访问：某个访客过去曾经有效，不代表他今天的每次短访都有效。
+    const EFFECTIVE_VISIT_GATE = Prisma.sql`${VISIT_IDENTITY} IN (
+      SELECT COALESCE(NULLIF(q."sessionId", ''), NULLIF(q."visitorId", ''), 'event:' || q."id"::text)
+      FROM "WebsiteLeadEvent" q
+      WHERE q."eventType" IN ('effective_interaction', 'dwell_20s')
+        AND q."createdAt" >= ${comparableStart} AND q."createdAt" < ${endExclusive}
+      GROUP BY COALESCE(NULLIF(q."sessionId", ''), NULLIF(q."visitorId", ''), 'event:' || q."id"::text)
+      HAVING COUNT(*) FILTER (WHERE q."eventType" = 'effective_interaction') > 0
+         AND COUNT(*) FILTER (WHERE q."eventType" = 'dwell_20s') > 0
     )`;
-    const where = Prisma.join([...filters, NOT_BOT, HUMAN_GATE], ' AND ');
+    const where = Prisma.join([...filters, NOT_BOT, EFFECTIVE_VISIT_GATE], ' AND ');
     // 同样的筛选条件，但只数被排除掉的那部分 —— 让"过滤了多少"看得见，而不是悄悄少掉。
     const botWhere = Prisma.join([...filters, IS_BOT], ' AND ');
-    // 未通过人类验证的访问量（非机器人UA、但没有真实交互）——展示层用来写
-    // "另有 N 次未验证访问未计入"，透明但不上主数。
+    // 非已知机器人、但未满足“20 秒 + 滑动/点击”的访问单独回报，
+    // 让界面能说清楚主数外还有多少访问，不静默丢数。
     const unverifiedWhere = Prisma.join(
-      [...filters, NOT_BOT, Prisma.sql`NOT (${HUMAN_GATE})`],
+      [...filters, NOT_BOT, Prisma.sql`NOT (${EFFECTIVE_VISIT_GATE})`],
       ' AND ',
     );
     const [
@@ -333,7 +342,7 @@ export class ShujuGrowthReadService {
         LIMIT 100
       `),
       // 客户所在地：省级汇总。沿用同一个 where，
-      // 机器人过滤和真人验证门都在，口径和别的数字一致。
+      // 机器人过滤和有效访问门都在，口径和别的数字一致。
       this.prisma.$queryRaw<RegionRow[]>(Prisma.sql`
         SELECT
           "province",
@@ -530,8 +539,7 @@ export class ShujuGrowthReadService {
               ? 'partial_tracking_window'
               : null,
       },
-      // 未通过人类验证的访问（非机器人UA但零真实交互）。展示层写
-      // "另有N次未验证访问未计入"——透明，但不进任何主数。
+      // 未满足有效访问口径的其他访问。透明展示被排除的量，但不进主数。
       unverified: {
         visitors: count(unverifiedRows[0]?.visitors),
         events: count(unverifiedRows[0]?.events),
