@@ -1,7 +1,12 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { apiPost } from '@/lib/api/client';
-import { markEngagedSession, tickDwell, trackLeadEvent, trackPageView } from '@/lib/api/lead-events';
+import {
+  markEngagedSession,
+  tickDwell,
+  trackLeadEvent,
+  trackPageView,
+} from '@/lib/api/lead-events';
 
 vi.mock('@/lib/api/client', () => ({ apiPost: vi.fn(() => Promise.resolve({})) }));
 
@@ -70,7 +75,7 @@ describe('website reading events', () => {
   });
 });
 
-describe('visitor nature signals', () => {
+describe('有效交互信号', () => {
   beforeEach(() => {
     vi.mocked(apiPost).mockClear();
     vi.stubGlobal('document', { title: '台车炉', referrer: '' });
@@ -87,11 +92,18 @@ describe('visitor nature signals', () => {
         listeners.set(name, [...(listeners.get(name) ?? []), fn]);
       },
       removeEventListener: (name: string, fn: EventListener) => {
-        listeners.set(name, (listeners.get(name) ?? []).filter((item) => item !== fn));
+        listeners.set(
+          name,
+          (listeners.get(name) ?? []).filter((item) => item !== fn),
+        );
       },
       ...overrides,
     });
     return listeners;
+  }
+
+  async function settleRequests() {
+    for (let index = 0; index < 4; index += 1) await Promise.resolve();
   }
 
   it('marks an automated browser once and never listens for interaction', async () => {
@@ -101,13 +113,14 @@ describe('visitor nature signals', () => {
 
     installVisitorNatureTracking();
     installVisitorNatureTracking();
+    await settleRequests();
 
     expect(postedEventTypes().filter((type) => type === 'automation_signal')).toHaveLength(1);
-    expect(postedEventTypes()).not.toContain('human_signal');
+    expect(postedEventTypes()).not.toContain('effective_interaction');
     expect([...listeners.values()].flat()).toHaveLength(0);
   });
 
-  it('marks a human only on the first trusted interaction, once per session', async () => {
+  it('每次访问只记录第一次真实滑动或点击', async () => {
     vi.stubGlobal('navigator', { webdriver: false });
     const listeners = windowWithListeners();
     const { installVisitorNatureTracking } = await import('@/lib/api/lead-events');
@@ -115,22 +128,67 @@ describe('visitor nature signals', () => {
     installVisitorNatureTracking();
     expect(postedEventTypes()).toHaveLength(0);
 
-    const fire = (trusted: boolean) => {
-      for (const fn of [...(listeners.get('scroll') ?? [])]) {
+    const fire = (name: 'scroll' | 'click', trusted: boolean) => {
+      for (const fn of [...(listeners.get(name) ?? [])]) {
         fn({ isTrusted: trusted } as Event);
       }
     };
-    // 页面脚本合成的事件不算人
-    fire(false);
-    expect(postedEventTypes()).not.toContain('human_signal');
-    // 第一次真实交互记一次
-    fire(true);
-    expect(postedEventTypes().filter((type) => type === 'human_signal')).toHaveLength(1);
+    // 页面脚本合成的事件不算有效交互。
+    fire('scroll', false);
+    expect(postedEventTypes()).not.toContain('effective_interaction');
+    // 第一次真实滑动记一次。
+    fire('scroll', true);
+    expect(postedEventTypes().filter((type) => type === 'effective_interaction')).toHaveLength(1);
+    await settleRequests();
     // 监听器已拆除，之后不再重复
     expect([...listeners.values()].flat()).toHaveLength(0);
     installVisitorNatureTracking();
-    fire(true);
-    expect(postedEventTypes().filter((type) => type === 'human_signal')).toHaveLength(1);
+    fire('click', true);
+    expect(postedEventTypes().filter((type) => type === 'effective_interaction')).toHaveLength(1);
+  });
+
+  it('不把鼠标移动和键盘输入当成有效交互', async () => {
+    vi.stubGlobal('navigator', { webdriver: false });
+    const listeners = windowWithListeners();
+    const { installVisitorNatureTracking } = await import('@/lib/api/lead-events');
+
+    installVisitorNatureTracking();
+
+    expect(listeners.has('pointermove')).toBe(false);
+    expect(listeners.has('keydown')).toBe(false);
+    expect(listeners.has('scroll')).toBe(true);
+    expect(listeners.has('click')).toBe(true);
+  });
+
+  it('有效交互上报失败时保留监听，下一次操作继续重试', async () => {
+    vi.stubGlobal('navigator', { webdriver: false });
+    let failedOnce = false;
+    vi.mocked(apiPost).mockImplementation((_path, options) => {
+      const eventType = (options?.body as { eventType?: string } | undefined)?.eventType;
+      if (eventType === 'effective_interaction' && !failedOnce) {
+        failedOnce = true;
+        return Promise.reject(new Error('临时断网'));
+      }
+      return Promise.resolve({});
+    });
+    const listeners = windowWithListeners();
+    const { installVisitorNatureTracking } = await import('@/lib/api/lead-events');
+    installVisitorNatureTracking();
+
+    const fireScroll = () => {
+      for (const fn of [...(listeners.get('scroll') ?? [])]) {
+        fn({ isTrusted: true } as Event);
+      }
+    };
+    fireScroll();
+    await settleRequests();
+    expect(postedEventTypes().filter((type) => type === 'effective_interaction')).toHaveLength(1);
+    expect(listeners.get('scroll')).toHaveLength(1);
+
+    fireScroll();
+    await settleRequests();
+    expect(postedEventTypes().filter((type) => type === 'effective_interaction')).toHaveLength(2);
+    expect([...listeners.values()].flat()).toHaveLength(0);
   });
 });
 
