@@ -155,18 +155,20 @@ describe('停留时长（进官网就计时，跨页面累计）', () => {
     focusOn();
   });
 
-  function tick(seconds: number) {
+  async function tick(seconds: number) {
     for (let i = 0; i < seconds; i += 1) tickDwell();
+    // 里程碑只在服务端接收成功后确认，等待微任务队列排空。
+    for (let i = 0; i < 6; i += 1) await Promise.resolve();
   }
 
-  it('首页也计时——不再只认产品详情等重点页', () => {
+  it('首页也计时——不再只认产品详情等重点页', async () => {
     window.location.pathname = '/zh';
-    tick(5);
+    await tick(5);
     expect(postedEventTypes()).toContain('dwell_5s');
   });
 
-  it('满 20 秒记一次「有实际阅读」，里程碑各只发一次', () => {
-    tick(25);
+  it('满 20 秒记一次「有实际阅读」，里程碑各只发一次', async () => {
+    await tick(25);
     const types = postedEventTypes();
     expect(types.filter((t) => t === 'dwell_5s')).toHaveLength(1);
     expect(types.filter((t) => t === 'dwell_20s')).toHaveLength(1);
@@ -174,33 +176,84 @@ describe('停留时长（进官网就计时，跨页面累计）', () => {
     expect(types).not.toContain('dwell_60s');
   });
 
-  it('窗口没有焦点就不累计——无头浏览器默认拿不到焦点', () => {
+  it('窗口没有焦点就不累计——无头浏览器默认拿不到焦点', async () => {
     focusOn(true, false);
-    tick(30);
+    await tick(30);
     expect(postedEventTypes()).toHaveLength(0);
   });
 
-  it('页面切到后台不累计', () => {
+  it('页面切到后台不累计', async () => {
     focusOn(false, true);
-    tick(30);
+    await tick(30);
     expect(postedEventTypes()).toHaveLength(0);
   });
 
-  it('秒数跨页面接着走：第一页 15 秒 + 第二页 5 秒 = 满 20 秒', () => {
-    tick(15);
+  it('秒数跨页面接着走：第一页 15 秒 + 第二页 5 秒 = 满 20 秒', async () => {
+    await tick(15);
     expect(postedEventTypes()).not.toContain('dwell_20s');
     window.location.pathname = '/zh/news';
-    tick(5);
+    await tick(5);
     expect(postedEventTypes()).toContain('dwell_20s');
   });
 
-  it('中途失焦不清零，重新聚焦接着算', () => {
-    tick(18);
+  it('中途失焦不清零，重新聚焦接着算', async () => {
+    await tick(18);
     focusOn(true, false);
-    tick(50);
+    await tick(50);
     focusOn(true, true);
-    tick(2);
+    await tick(2);
     expect(postedEventTypes()).toContain('dwell_20s');
     expect(postedEventTypes()).not.toContain('dwell_60s');
+  });
+
+  it('会话过期后停留秒数从零重算，不继承上次阅读', async () => {
+    const now = vi.spyOn(Date, 'now').mockReturnValue(1_000);
+    trackPageView();
+    await tick(20);
+    expect(postedEventTypes()).toContain('dwell_20s');
+
+    now.mockReturnValue(30 * 60 * 1000 + 2_000);
+    trackPageView();
+    vi.mocked(apiPost).mockClear();
+    await tick(1);
+    expect(postedEventTypes()).not.toContain('dwell_5s');
+    await tick(4);
+    expect(postedEventTypes()).toContain('dwell_5s');
+    expect(postedEventTypes()).not.toContain('dwell_20s');
+    now.mockRestore();
+  });
+
+  it('里程碑上报失败时不跳过，下一秒重试同一刻度', async () => {
+    let failedOnce = false;
+    vi.mocked(apiPost).mockImplementation((_path, options) => {
+      const eventType = (options?.body as { eventType?: string } | undefined)?.eventType;
+      if (eventType === 'dwell_20s' && !failedOnce) {
+        failedOnce = true;
+        return Promise.reject(new Error('临时断网'));
+      }
+      return Promise.resolve({});
+    });
+
+    await tick(20);
+    expect(postedEventTypes().filter((type) => type === 'dwell_20s')).toHaveLength(1);
+    await tick(1);
+    expect(postedEventTypes().filter((type) => type === 'dwell_20s')).toHaveLength(2);
+  });
+
+  it('实际阅读上报失败时不写成功标记，下一秒会重试', async () => {
+    let failedOnce = false;
+    vi.mocked(apiPost).mockImplementation((_path, options) => {
+      const eventType = (options?.body as { eventType?: string } | undefined)?.eventType;
+      if (eventType === 'engaged_session' && !failedOnce) {
+        failedOnce = true;
+        return Promise.reject(new Error('临时断网'));
+      }
+      return Promise.resolve({});
+    });
+
+    await tick(20);
+    expect(postedEventTypes().filter((type) => type === 'engaged_session')).toHaveLength(1);
+    await tick(1);
+    expect(postedEventTypes().filter((type) => type === 'engaged_session')).toHaveLength(2);
   });
 });

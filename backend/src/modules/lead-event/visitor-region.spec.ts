@@ -1,24 +1,33 @@
-import { probeAddress, resolveVisitorRegion } from '@/modules/lead-event/visitor-region';
+import {
+  exactIpv4,
+  resolveStableMaskedRegion,
+  resolveVisitorRegion,
+} from '@/modules/lead-event/visitor-region';
 
 describe('visitor region', () => {
-  it('turns a masked ip into a probe address using only the stored two octets', () => {
-    // 后两段本来就没存过，这里不存在"还原真实 IP"
-    expect(probeAddress('114.252.xxx.xxx')).toBe('114.252.0.1');
-    expect(probeAddress('60.163.xxx.xxx')).toBe('60.163.0.1');
+  it('accepts an exact ipv4, including the ipv4-mapped form used by Node', () => {
+    expect(exactIpv4('114.252.10.20')).toBe('114.252.10.20');
+    expect(exactIpv4('::ffff:114.252.10.20')).toBe('114.252.10.20');
   });
 
-  it('refuses anything that is not a usable masked ipv4', () => {
-    for (const bad of [null, undefined, '', 'xxx.xxx.xxx.xxx', '999.1.xxx.xxx', 'abc']) {
-      expect(probeAddress(bad)).toBeNull();
+  it('refuses masked, malformed and out-of-range addresses as exact input', () => {
+    for (const bad of [null, undefined, '', '114.252.xxx.xxx', '999.1.1.1', 'abc']) {
+      expect(exactIpv4(bad)).toBeNull();
     }
   });
 
-  it('resolves real prefixes seen in production to a province', () => {
-    // 这几个网段 2026-08-19 都真实出现在生产库里
-    expect(resolveVisitorRegion('114.252.xxx.xxx').province).toContain('北京');
-    expect(resolveVisitorRegion('182.132.xxx.xxx').province).toContain('四川');
-    expect(resolveVisitorRegion('60.163.xxx.xxx').province).toContain('浙江');
-    expect(resolveVisitorRegion('183.159.xxx.xxx').city).toContain('杭州');
+  it('resolves the exact address used for the current request', () => {
+    expect(resolveVisitorRegion('114.252.10.20').province).toContain('北京');
+    expect(resolveVisitorRegion('183.159.10.20').city).toContain('杭州');
+  });
+
+  it('keeps cross-province mobile prefixes unknown instead of probing .0.1', () => {
+    expect(resolveStableMaskedRegion('223.104.xxx.xxx')).toEqual({ province: null, city: null });
+    expect(resolveStableMaskedRegion('117.136.xxx.xxx')).toEqual({ province: null, city: null });
+  });
+
+  it('allows a masked historical prefix only when the sampled /16 is province-stable', () => {
+    expect(resolveStableMaskedRegion('114.252.xxx.xxx').province).toContain('北京');
   });
 
   it('returns empty instead of throwing when the ip is unusable', () => {
@@ -28,7 +37,7 @@ describe('visitor region', () => {
 
   it('never reports the library placeholders as a real place', () => {
     // 内网/未分配网段会返回 "0" 或 "内网IP" 之类，写进库会变成假地区
-    const region = resolveVisitorRegion('10.0.xxx.xxx');
+    const region = resolveVisitorRegion('10.0.0.5');
     for (const value of [region.province, region.city]) {
       expect(value === null || !['0', '内网IP', '未分配或者内网IP', '-'].includes(value)).toBe(
         true,

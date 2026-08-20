@@ -16,6 +16,7 @@ const EXPECTED: [string, string][] = [
   ['sourceDetails', 'SourceRow'],
   ['landings', 'LandingRow'],
   ['regions', 'RegionRow'],
+  ['regionCoverageRows', 'RegionCoverageRow'],
   ['exits', 'ExitRow'],
   ['pages', 'PageRow'],
   ['segments', 'SegmentRow'],

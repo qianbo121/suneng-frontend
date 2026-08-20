@@ -13,16 +13,24 @@ function clean(value?: string | null, maxLength = 255) {
   return text ? text.slice(0, maxLength) : null;
 }
 
-import { resolveVisitorRegion } from '@/modules/lead-event/visitor-region';
+import { exactIpv4, resolveVisitorRegion } from '@/modules/lead-event/visitor-region';
 
-function maskedIp(request: Request) {
-  const raw = String(request.ip || request.headers['x-forwarded-for'] || '')
+function clientIp(request: Request) {
+  return String(request.ip || request.headers['x-forwarded-for'] || '')
     .split(',')[0]
     .trim();
+}
+
+function maskedIp(raw: string) {
   if (!raw) return null;
-  const ipv4 = raw.match(/(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})/);
-  if (ipv4) return `${ipv4[1]}.${ipv4[2]}.xxx.xxx`;
-  return raw.slice(0, 24);
+  const ipv4 = exactIpv4(raw);
+  if (ipv4) {
+    const [first, second] = ipv4.split('.');
+    return `${first}.${second}.xxx.xxx`;
+  }
+  // IPv6 不能靠截前 24 个字符冒充脱敏；当前不做 IPv6 地区解析，
+  // 只保留类型标记，避免把可识别的地址片段写进分析库。
+  return raw.includes(':') ? 'ipv6' : null;
 }
 
 function headerText(value: string | string[] | undefined) {
@@ -40,16 +48,18 @@ export class LeadEventService {
   constructor(private readonly prisma: PrismaService) {}
 
   async createPublic(dto: CreateLeadEventDto, request: Request) {
-    // 地区由已脱敏的 IP 推出来，不额外采集任何东西；
-    // 库出问题只会得到 null，不会挡住这条埋点写入。
-    const ipMasked = maskedIp(request);
-    const region = resolveVisitorRegion(ipMasked);
+    // 完整 IP 只在入库前的内存中用于本地地区解析，不写库也不外发。
+    // 数据库仍只保留脱敏 IP。查库失败只会得到 null，不能挡住埋点。
+    const rawIp = clientIp(request);
+    const ipMasked = maskedIp(rawIp);
+    const region = resolveVisitorRegion(rawIp);
+    const regionSource = region.province ? 'exact_ip' : null;
     await this.prisma.$executeRaw`
       INSERT INTO "WebsiteLeadEvent" (
         "eventType", "pageTitle", "pagePath", "pageType", "productTag",
         "sourceType", "sourceDetail", "searchKeyword", "deviceType", "landingPage",
         "previousPage", "utmSource", "utmMedium", "utmCampaign", "discoverySource",
-        "sessionId", "visitorId", "ipMasked", "userAgent", "province", "city"
+        "sessionId", "visitorId", "ipMasked", "userAgent", "province", "city", "regionSource"
       ) VALUES (
         ${dto.eventType},
         ${clean(dto.pageTitle, 255)},
@@ -71,7 +81,8 @@ export class LeadEventService {
         ${ipMasked},
         ${clean(headerText(request.headers['user-agent']), 500)},
         ${region.province},
-        ${region.city}
+        ${region.city},
+        ${regionSource}
       )
     `;
     return { ok: true };
