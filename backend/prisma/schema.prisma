@@ -409,6 +409,7 @@ model WebsiteLeadEvent {
   searchKeyword     String?            @db.VarChar(255)
   province          String?            @db.VarChar(120)
   city              String?            @db.VarChar(120)
+  regionSource      String?            @db.VarChar(40)
   deviceType        String?            @db.VarChar(40)
   landingPage       String?            @db.VarChar(500)
   previousPage      String?            @db.VarChar(500)

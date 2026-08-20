@@ -11,10 +11,8 @@ export type LeadEventType =
   | 'phone_click'
   | 'wechat_click'
   | 'wechat_qr_view'
-  | 'wechat_copy'
   | 'quote_cta_click'
   | 'email_click'
-  | 'douyin_click'
   | 'form_start'
   | 'form_step_complete'
   | 'form_submit'
@@ -67,10 +65,8 @@ const HIGH_INTENT_EVENTS = new Set<LeadEventType>([
   'phone_click',
   'wechat_click',
   'wechat_qr_view',
-  'wechat_copy',
   'quote_cta_click',
   'email_click',
-  'douyin_click',
 ]);
 
 const ENGAGED_SESSION_KEY = 'suneng_engaged_session_recorded';
@@ -78,6 +74,11 @@ const SESSION_PAGE_PATHS_KEY = 'suneng_session_page_paths';
 const SESSION_ID_KEY = 'suneng_session_id';
 const SESSION_LAST_SEEN_KEY = 'suneng_session_last_seen';
 const SESSION_TIMEOUT_MS = 30 * 60 * 1000;
+const DWELL_SECONDS_KEY = 'suneng_dwell_seconds';
+const DWELL_MILESTONE_KEY = 'suneng_dwell_milestone';
+let dwellMilestoneInFlight = false;
+let dwellRequestGeneration = 0;
+let engagedSessionInFlight = false;
 // 访客性质信号：每个会话恰好发一条 human_signal 或 automation_signal。
 // 背景（2026-08-18 实测）：伪装成正常浏览器的自动化流量会执行 JS，UA 过滤抓不到；
 // 但它们要么带着 navigator.webdriver 标记，要么从不产生真实交互。这两个信号
@@ -133,6 +134,12 @@ function getSessionId(storage: Storage) {
       storage.removeItem(VISITOR_NATURE_KEY);
       storage.removeItem(SESSION_PAGE_PATHS_KEY);
       storage.removeItem('suneng_landing_page');
+      storage.removeItem(DWELL_SECONDS_KEY);
+      storage.removeItem(DWELL_MILESTONE_KEY);
+      // 旧会话尚未返回的埋点不得在新会话里确认里程碑。
+      dwellRequestGeneration += 1;
+      dwellMilestoneInFlight = false;
+      engagedSessionInFlight = false;
     }
     storage.setItem(SESSION_LAST_SEEN_KEY, String(now));
     return storage.getItem(SESSION_ID_KEY) || undefined;
@@ -269,28 +276,38 @@ function currentPayload(eventType: LeadEventType, extra: Partial<LeadSourceSnaps
 }
 
 function postLeadEvent(eventType: LeadEventType, extra?: Partial<LeadSourceSnapshot>) {
-  void apiPost<unknown, LeadEventPayload>('/v1/lead-events', {
+  return apiPost<unknown, LeadEventPayload>('/v1/lead-events', {
     body: currentPayload(eventType, extra),
     cache: 'no-store',
-  }).catch(() => undefined);
+  }).then(
+    () => true,
+    () => false,
+  );
 }
 
 export function markEngagedSession(extra?: Partial<LeadSourceSnapshot>) {
   if (typeof window === 'undefined') return;
   try {
-    if (window.sessionStorage.getItem(ENGAGED_SESSION_KEY) === '1') return;
-    window.sessionStorage.setItem(ENGAGED_SESSION_KEY, '1');
+    if (window.sessionStorage.getItem(ENGAGED_SESSION_KEY) === '1' || engagedSessionInFlight) return;
   } catch {
     return;
   }
-  postLeadEvent('engaged_session', extra);
+  engagedSessionInFlight = true;
+  const generation = dwellRequestGeneration;
+  void postLeadEvent('engaged_session', extra).then((accepted) => {
+    if (generation !== dwellRequestGeneration) return;
+    engagedSessionInFlight = false;
+    if (!accepted) return;
+    try {
+      window.sessionStorage.setItem(ENGAGED_SESSION_KEY, '1');
+    } catch {
+      // 写标记失败只会导致以后再上报一次，宁可重复去重，也不能把失败冒充成已采集。
+    }
+  });
 }
 
 // ===== 停留时长 =====
 // 计时从「进入官网」开始，跨页面累计，不是每进一个页面重新计。
-const DWELL_SECONDS_KEY = 'suneng_dwell_seconds';
-const DWELL_MILESTONE_KEY = 'suneng_dwell_milestone';
-
 // 累计专注满这么多秒就算「有实际阅读」。
 const ENGAGED_SECONDS = 20;
 
@@ -325,17 +342,35 @@ export function tickDwell() {
   // 停留时长因此成为少数几个伪装成本很高的信号。
   if (document.visibilityState !== 'visible' || !document.hasFocus()) return;
 
+  // 先建立/轮换会话再加秒数。否则第一个里程碑组装请求时才建会话，
+  // 会把刚累计的停留数误当成上一个会话清掉。
+  getSessionId(window.sessionStorage);
+
   const activeSeconds = readDwellCounter(DWELL_SECONDS_KEY) + 1;
   writeDwellCounter(DWELL_SECONDS_KEY, activeSeconds);
 
-  let nextMilestone = readDwellCounter(DWELL_MILESTONE_KEY);
-  while (nextMilestone < DWELL_MILESTONES.length && activeSeconds >= DWELL_MILESTONES[nextMilestone].seconds) {
-    postLeadEvent(DWELL_MILESTONES[nextMilestone].event);
-    nextMilestone += 1;
-    writeDwellCounter(DWELL_MILESTONE_KEY, nextMilestone);
-  }
+  flushDwellMilestones();
 
   if (activeSeconds >= ENGAGED_SECONDS) markEngagedSession();
+}
+
+function flushDwellMilestones() {
+  if (dwellMilestoneInFlight) return;
+  const nextMilestone = readDwellCounter(DWELL_MILESTONE_KEY);
+  const milestone = DWELL_MILESTONES[nextMilestone];
+  if (!milestone || readDwellCounter(DWELL_SECONDS_KEY) < milestone.seconds) return;
+
+  dwellMilestoneInFlight = true;
+  const generation = dwellRequestGeneration;
+  void postLeadEvent(milestone.event).then((accepted) => {
+    // 请求期间如果已经换了会话，旧响应不能污染新会话。
+    if (generation !== dwellRequestGeneration) return;
+    dwellMilestoneInFlight = false;
+    if (!accepted) return; // 下一秒继续重试，不把上报失败冒充成已采集。
+    writeDwellCounter(DWELL_MILESTONE_KEY, nextMilestone + 1);
+    // 页面卡顿后可能一次跨过多个刻度，成功后顺序补齐，保证数学上单调。
+    flushDwellMilestones();
+  });
 }
 
 /** 开始计时，返回停表函数。跨页面接着上次的秒数走。 */
@@ -364,7 +399,7 @@ export function installVisitorNatureTracking() {
     } catch {
       return;
     }
-    postLeadEvent('automation_signal');
+    void postLeadEvent('automation_signal');
     return;
   }
   const onFirstInteraction = (event: Event) => {
@@ -380,7 +415,7 @@ export function installVisitorNatureTracking() {
     } catch {
       return;
     }
-    postLeadEvent('human_signal');
+    void postLeadEvent('human_signal');
   };
   for (const name of NATURE_INTERACTION_EVENTS) {
     window.addEventListener(name, onFirstInteraction, { capture: true, passive: true });
@@ -390,7 +425,7 @@ export function installVisitorNatureTracking() {
 export function trackPageView() {
   if (typeof window === 'undefined') return;
   const safePath = sanitizeLeadPagePath(`${window.location.pathname}${window.location.search}`);
-  postLeadEvent('page_view');
+  void postLeadEvent('page_view');
   try {
     const stored = JSON.parse(window.sessionStorage.getItem(SESSION_PAGE_PATHS_KEY) || '[]');
     const paths = Array.isArray(stored)
@@ -406,6 +441,6 @@ export function trackPageView() {
 
 export function trackLeadEvent(eventType: LeadEventType, extra?: Partial<LeadSourceSnapshot>) {
   if (typeof window === 'undefined') return;
-  postLeadEvent(eventType, extra);
+  void postLeadEvent(eventType, extra);
   if (HIGH_INTENT_EVENTS.has(eventType)) markEngagedSession(extra);
 }

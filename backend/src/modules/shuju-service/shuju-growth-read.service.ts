@@ -10,7 +10,7 @@ type CountRow = {
   visitorCount: bigint;
   sessionCount: bigint;
 };
-type DailyRow = { day: string; eventType: string; eventCount: bigint; visitorCount: bigint };
+export type DailyRow = { day: string; eventType: string; eventCount: bigint; visitorCount: bigint };
 type SourceRow = {
   sourceType: string | null;
   sourceDetail: string | null;
@@ -54,6 +54,7 @@ type RegionRow = {
   engagedVisitors: bigint;
   highIntentVisitors: bigint;
 };
+type RegionCoverageRow = { eligibleVisitors: bigint; resolvedVisitors: bigint };
 type SegmentRow = {
   day: string;
   eventType: string;
@@ -117,6 +118,35 @@ function normalizedPageType(value: string | null | undefined) {
   if (value === '资料文章') return '文章页';
   if (!value || value === '其他') return '其他页';
   return value;
+}
+
+function addUtcDay(day: string, amount: number) {
+  const date = new Date(`${day}T00:00:00Z`);
+  date.setUTCDate(date.getUTCDate() + amount);
+  return date.toISOString().slice(0, 10);
+}
+
+function shanghaiDay(date: Date) {
+  return new Date(date.getTime() + 8 * 60 * 60 * 1000).toISOString().slice(0, 10);
+}
+
+/** 趋势图必须保留真实的零访问日，不能让日期从横轴上消失。 */
+export function fillDailyPageViewGaps(rows: DailyRow[], startDay: string, endDay: string) {
+  if (startDay > endDay) return rows;
+  const existing = new Set(
+    rows.filter((row) => row.eventType === 'page_view').map((row) => row.day),
+  );
+  const filled = [...rows];
+  for (let day = startDay; day <= endDay; day = addUtcDay(day, 1)) {
+    if (!existing.has(day)) {
+      filled.push({ day, eventType: 'page_view', eventCount: 0n, visitorCount: 0n });
+    }
+  }
+  return filled.sort((left, right) =>
+    left.day === right.day
+      ? left.eventType.localeCompare(right.eventType)
+      : left.day.localeCompare(right.day),
+  );
 }
 
 function dateRange(query: ShujuGrowthReadQueryDto) {
@@ -225,6 +255,7 @@ export class ShujuGrowthReadService {
       sourceDetails,
       landings,
       regions,
+      regionCoverageRows,
       exits,
       pages,
       segments,
@@ -261,7 +292,7 @@ export class ShujuGrowthReadService {
           COUNT(DISTINCT COALESCE(NULLIF("visitorId", ''), NULLIF("sessionId", ''), 'event:' || "id"::text)) FILTER (WHERE "eventType" = 'page_view')::bigint AS visitors,
           COUNT(*) FILTER (WHERE "eventType" = 'page_view')::bigint AS "pageViews",
           COUNT(DISTINCT COALESCE(NULLIF("visitorId", ''), NULLIF("sessionId", ''), 'event:' || "id"::text)) FILTER (WHERE "eventType" = 'engaged_session')::bigint AS "engagedVisitors",
-          COUNT(DISTINCT COALESCE(NULLIF("visitorId", ''), NULLIF("sessionId", ''), 'event:' || "id"::text)) FILTER (WHERE "eventType" IN ('phone_click','wechat_click','wechat_qr_view','wechat_copy','quote_cta_click','email_click','douyin_click'))::bigint AS "highIntentVisitors",
+          COUNT(DISTINCT COALESCE(NULLIF("visitorId", ''), NULLIF("sessionId", ''), 'event:' || "id"::text)) FILTER (WHERE "eventType" IN ('phone_click','wechat_click','wechat_qr_view','quote_cta_click','email_click'))::bigint AS "highIntentVisitors",
           COUNT(DISTINCT COALESCE(NULLIF("visitorId", ''), NULLIF("sessionId", ''), 'event:' || "id"::text)) FILTER (WHERE "eventType" = 'form_start')::bigint AS "formStarts",
           COUNT(DISTINCT COALESCE(NULLIF("visitorId", ''), NULLIF("sessionId", ''), 'event:' || "id"::text)) FILTER (WHERE "eventType" = 'form_step_complete')::bigint AS "stepCompleted",
           COUNT(DISTINCT COALESCE(NULLIF("visitorId", ''), NULLIF("sessionId", ''), 'event:' || "id"::text)) FILTER (WHERE "eventType" = 'form_submit')::bigint AS submissions
@@ -277,7 +308,7 @@ export class ShujuGrowthReadService {
           COUNT(DISTINCT COALESCE(NULLIF("visitorId", ''), NULLIF("sessionId", ''), 'event:' || "id"::text)) FILTER (WHERE "eventType" = 'page_view')::bigint AS visitors,
           COUNT(*) FILTER (WHERE "eventType" = 'page_view')::bigint AS "pageViews",
           COUNT(DISTINCT COALESCE(NULLIF("visitorId", ''), NULLIF("sessionId", ''), 'event:' || "id"::text)) FILTER (WHERE "eventType" = 'engaged_session')::bigint AS "engagedVisitors",
-          COUNT(DISTINCT COALESCE(NULLIF("visitorId", ''), NULLIF("sessionId", ''), 'event:' || "id"::text)) FILTER (WHERE "eventType" IN ('phone_click','wechat_click','wechat_qr_view','wechat_copy','quote_cta_click','email_click','douyin_click'))::bigint AS "highIntentVisitors",
+          COUNT(DISTINCT COALESCE(NULLIF("visitorId", ''), NULLIF("sessionId", ''), 'event:' || "id"::text)) FILTER (WHERE "eventType" IN ('phone_click','wechat_click','wechat_qr_view','quote_cta_click','email_click'))::bigint AS "highIntentVisitors",
           COUNT(DISTINCT COALESCE(NULLIF("visitorId", ''), NULLIF("sessionId", ''), 'event:' || "id"::text)) FILTER (WHERE "eventType" = 'form_start')::bigint AS "formStarts",
           COUNT(DISTINCT COALESCE(NULLIF("visitorId", ''), NULLIF("sessionId", ''), 'event:' || "id"::text)) FILTER (WHERE "eventType" = 'form_step_complete')::bigint AS "stepCompleted",
           COUNT(DISTINCT COALESCE(NULLIF("visitorId", ''), NULLIF("sessionId", ''), 'event:' || "id"::text)) FILTER (WHERE "eventType" = 'form_submit')::bigint AS submissions
@@ -309,13 +340,27 @@ export class ShujuGrowthReadService {
           COUNT(DISTINCT COALESCE(NULLIF("visitorId", ''), NULLIF("sessionId", ''), 'event:' || "id"::text)) FILTER (WHERE "eventType" = 'page_view')::bigint AS visitors,
           COUNT(DISTINCT COALESCE(NULLIF("sessionId", ''), 'event:' || "id"::text)) FILTER (WHERE "eventType" = 'page_view')::bigint AS sessions,
           COUNT(DISTINCT COALESCE(NULLIF("visitorId", ''), NULLIF("sessionId", ''), 'event:' || "id"::text)) FILTER (WHERE "eventType" = 'engaged_session')::bigint AS "engagedVisitors",
-          COUNT(DISTINCT COALESCE(NULLIF("visitorId", ''), NULLIF("sessionId", ''), 'event:' || "id"::text)) FILTER (WHERE "eventType" IN ('phone_click','wechat_click','wechat_qr_view','wechat_copy','quote_cta_click','email_click','douyin_click','form_start','form_step_complete','form_submit'))::bigint AS "highIntentVisitors"
+          COUNT(DISTINCT COALESCE(NULLIF("visitorId", ''), NULLIF("sessionId", ''), 'event:' || "id"::text)) FILTER (WHERE "eventType" IN ('phone_click','wechat_click','wechat_qr_view','quote_cta_click','email_click','form_start','form_step_complete','form_submit'))::bigint AS "highIntentVisitors"
         FROM "WebsiteLeadEvent"
         WHERE ${where}
           AND "province" IS NOT NULL
+          AND "regionSource" IN ('exact_ip', 'stable_masked_prefix')
         GROUP BY "province"
         ORDER BY visitors DESC
         LIMIT 40
+      `),
+      this.prisma.$queryRaw<RegionCoverageRow[]>(Prisma.sql`
+        SELECT
+          COUNT(DISTINCT COALESCE(NULLIF("visitorId", ''), NULLIF("sessionId", ''), 'event:' || "id"::text))
+            FILTER (WHERE "eventType" = 'page_view')::bigint AS "eligibleVisitors",
+          COUNT(DISTINCT COALESCE(NULLIF("visitorId", ''), NULLIF("sessionId", ''), 'event:' || "id"::text))
+            FILTER (
+              WHERE "eventType" = 'page_view'
+                AND "province" IS NOT NULL
+                AND "regionSource" IN ('exact_ip', 'stable_masked_prefix')
+            )::bigint AS "resolvedVisitors"
+        FROM "WebsiteLeadEvent"
+        WHERE ${where}
       `),
       // 退出页 = 一次访问里最后打开的那个页面。
       // 不需要额外埋点：从已有的 page_view 按会话取最后一条即可，历史数据同样算得出。
@@ -346,7 +391,7 @@ export class ShujuGrowthReadService {
           COUNT(DISTINCT COALESCE(NULLIF("visitorId", ''), NULLIF("sessionId", ''), 'event:' || "id"::text)) FILTER (WHERE "eventType" = 'page_view')::bigint AS visitors,
           COUNT(*) FILTER (WHERE "eventType" = 'page_view')::bigint AS "pageViews",
           COUNT(DISTINCT COALESCE(NULLIF("visitorId", ''), NULLIF("sessionId", ''), 'event:' || "id"::text)) FILTER (WHERE "eventType" = 'engaged_session')::bigint AS "engagedVisitors",
-          COUNT(DISTINCT COALESCE(NULLIF("visitorId", ''), NULLIF("sessionId", ''), 'event:' || "id"::text)) FILTER (WHERE "eventType" IN ('phone_click','wechat_click','wechat_qr_view','wechat_copy','quote_cta_click','email_click','douyin_click'))::bigint AS "highIntentVisitors",
+          COUNT(DISTINCT COALESCE(NULLIF("visitorId", ''), NULLIF("sessionId", ''), 'event:' || "id"::text)) FILTER (WHERE "eventType" IN ('phone_click','wechat_click','wechat_qr_view','quote_cta_click','email_click'))::bigint AS "highIntentVisitors",
           COUNT(DISTINCT COALESCE(NULLIF("visitorId", ''), NULLIF("sessionId", ''), 'event:' || "id"::text)) FILTER (WHERE "eventType" = 'form_start')::bigint AS "formStarts",
           COUNT(DISTINCT COALESCE(NULLIF("visitorId", ''), NULLIF("sessionId", ''), 'event:' || "id"::text)) FILTER (WHERE "eventType" = 'form_step_complete')::bigint AS "stepCompleted",
           COUNT(DISTINCT COALESCE(NULLIF("visitorId", ''), NULLIF("sessionId", ''), 'event:' || "id"::text)) FILTER (WHERE "eventType" = 'form_submit')::bigint AS submissions
@@ -393,7 +438,7 @@ export class ShujuGrowthReadService {
           COUNT(*) FILTER (WHERE "eventType" = 'page_view')::bigint AS "pageViews",
           COUNT(DISTINCT COALESCE(NULLIF("sessionId", ''), identity)) FILTER (WHERE "eventType" = 'page_view')::bigint AS "visitSessions",
           COUNT(DISTINCT COALESCE(NULLIF("sessionId", ''), identity)) FILTER (WHERE "eventType" = 'engaged_session')::bigint AS "engagedSessions",
-          COUNT(DISTINCT identity) FILTER (WHERE "eventType" IN ('phone_click','wechat_click','wechat_qr_view','wechat_copy','quote_cta_click','email_click','douyin_click','form_start','form_step_complete','form_submit'))::bigint AS "highIntentVisitors",
+          COUNT(DISTINCT identity) FILTER (WHERE "eventType" IN ('phone_click','wechat_click','wechat_qr_view','quote_cta_click','email_click','form_start','form_step_complete','form_submit'))::bigint AS "highIntentVisitors",
           COUNT(DISTINCT identity) FILTER (WHERE "eventType" IN ('form_start','form_step_complete','form_submit'))::bigint AS "formStartVisitors",
           COUNT(DISTINCT identity) FILTER (WHERE "eventType" IN ('form_step_complete','form_submit'))::bigint AS "stepCompletedVisitors",
           COUNT(DISTINCT identity) FILTER (WHERE "eventType" = 'form_submit')::bigint AS "submissionVisitors"
@@ -424,7 +469,7 @@ export class ShujuGrowthReadService {
         SELECT
           c."pagePath",
           COUNT(DISTINCT c.identity)::bigint AS "pageVisitors",
-          COUNT(DISTINCT s.identity) FILTER (WHERE s."eventType" IN ('phone_click','wechat_click','wechat_qr_view','wechat_copy','quote_cta_click','email_click','douyin_click','form_start','form_step_complete','form_submit'))::bigint AS "highIntentVisitors",
+          COUNT(DISTINCT s.identity) FILTER (WHERE s."eventType" IN ('phone_click','wechat_click','wechat_qr_view','quote_cta_click','email_click','form_start','form_step_complete','form_submit'))::bigint AS "highIntentVisitors",
           COUNT(DISTINCT s.identity) FILTER (WHERE s."eventType" IN ('form_start','form_step_complete','form_submit'))::bigint AS "formStartVisitors",
           COUNT(DISTINCT s.identity) FILTER (WHERE s."eventType" IN ('form_step_complete','form_submit'))::bigint AS "stepCompletedVisitors",
           COUNT(DISTINCT s.identity) FILTER (WHERE s."eventType" = 'form_submit')::bigint AS "submissionVisitors"
@@ -462,6 +507,14 @@ export class ShujuGrowthReadService {
         // 停留时长自己的起点。刻意不并进 comparableStart——它是子指标，
         // 把整个窗口缩到它的上线日会让别的数字凭空变小。
         dwellStartAt: hasDwellStart ? dwellStartAt!.toISOString() : null,
+        region: {
+          eligibleVisitors: count(regionCoverageRows[0]?.eligibleVisitors),
+          resolvedVisitors: count(regionCoverageRows[0]?.resolvedVisitors),
+          rate: count(regionCoverageRows[0]?.eligibleVisitors)
+            ? count(regionCoverageRows[0]?.resolvedVisitors) /
+              count(regionCoverageRows[0]?.eligibleVisitors)
+            : null,
+        },
         verified: hasVerifiedStart,
         comparableStartAt: comparableStart.toISOString(),
         fullRange:
@@ -511,7 +564,11 @@ export class ShujuGrowthReadService {
           },
         ]),
       ),
-      daily: daily.map((row) => ({
+      daily: fillDailyPageViewGaps(
+        daily,
+        shanghaiDay(comparableStart),
+        query.endDate.slice(0, 10),
+      ).map((row) => ({
         date: row.day,
         eventType: row.eventType,
         events: count(row.eventCount),

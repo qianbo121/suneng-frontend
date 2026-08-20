@@ -18,7 +18,7 @@ describe('visitor region when the ip database misbehaves', () => {
       },
     }));
     const { resolveVisitorRegion } = await import('@/modules/lead-event/visitor-region');
-    expect(resolveVisitorRegion('114.252.xxx.xxx')).toEqual({ province: null, city: null });
+    expect(resolveVisitorRegion('114.252.10.20')).toEqual({ province: null, city: null });
   });
 
   it('returns empty instead of throwing when the database cannot be opened at all', async () => {
@@ -31,6 +31,6 @@ describe('visitor region when the ip database misbehaves', () => {
       },
     }));
     const { resolveVisitorRegion } = await import('@/modules/lead-event/visitor-region');
-    expect(resolveVisitorRegion('114.252.xxx.xxx')).toEqual({ province: null, city: null });
+    expect(resolveVisitorRegion('114.252.10.20')).toEqual({ province: null, city: null });
   });
 });

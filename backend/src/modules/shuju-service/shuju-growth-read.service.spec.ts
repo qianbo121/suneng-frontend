@@ -1,6 +1,9 @@
 import { BadRequestException } from '@nestjs/common';
 
-import { ShujuGrowthReadService } from '@/modules/shuju-service/shuju-growth-read.service';
+import {
+  fillDailyPageViewGaps,
+  ShujuGrowthReadService,
+} from '@/modules/shuju-service/shuju-growth-read.service';
 import { PrismaService } from '@/prisma/prisma.service';
 
 /**
@@ -27,6 +30,26 @@ function routedQueryRaw(routes: Array<[string, unknown]>) {
 }
 
 describe('ShujuGrowthReadService', () => {
+  it('fills calendar days with a real zero instead of dropping them from the trend', () => {
+    const result = fillDailyPageViewGaps(
+      [
+        { day: '2026-08-18', eventType: 'page_view', eventCount: 4n, visitorCount: 3n },
+        { day: '2026-08-20', eventType: 'dwell_20s', eventCount: 1n, visitorCount: 1n },
+      ],
+      '2026-08-18',
+      '2026-08-20',
+    );
+    expect(
+      result
+        .filter((row) => row.eventType === 'page_view')
+        .map((row) => [row.day, row.eventCount, row.visitorCount]),
+    ).toEqual([
+      ['2026-08-18', 4n, 3n],
+      ['2026-08-19', 0n, 0n],
+      ['2026-08-20', 0n, 0n],
+    ]);
+  });
+
   it('returns aggregate website behavior without anonymous ids or inquiry content', async () => {
     const queryRaw = routedQueryRaw([
       // 顺序 = 最具体优先。几个坑：
@@ -347,7 +370,11 @@ describe('ShujuGrowthReadService', () => {
     expect(regionQuery).toContain("= 'human_signal'");
     // 没解析出地区的不能凑成一个"未知"省份混进排行
     expect(regionQuery).toContain('IS NOT NULL');
+    expect(regionQuery).toContain('regionSource');
+    const coverageQuery = statements.find((sql) => sql.includes('eligibleVisitors'));
+    expect(coverageQuery).toContain('resolvedVisitors');
     expect(result).toHaveProperty('regions');
+    expect(result.coverage).toHaveProperty('region');
   });
 
   it('derives exit pages from the last page view of each session, not a new event', async () => {

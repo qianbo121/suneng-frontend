@@ -10,16 +10,18 @@ function serviceWith(executeRaw: jest.Mock) {
 }
 
 describe('lead event region', () => {
-  it('stores the province and city derived from the masked ip', async () => {
+  it('resolves from the exact request ip but stores only the masked ip', async () => {
     const executeRaw = jest.fn().mockResolvedValue(1);
     await serviceWith(executeRaw).createPublic(
       { eventType: 'page_view' } as never,
       requestFrom('114.252.10.20'),
     );
     const values: string[] = executeRaw.mock.calls[0].slice(1).map(String);
-    // 存的 IP 必须仍是脱敏的，地区是从它推出来的，不是另外采集的
+    // 完整 IP 只用于当次本地解析，不出现在入库参数中。
     expect(values).toContain('114.252.xxx.xxx');
+    expect(values).not.toContain('114.252.10.20');
     expect(values.some((value: string) => value.includes('北京'))).toBe(true);
+    expect(values).toContain('exact_ip');
   });
 
   it('still writes the event when the ip carries no usable region', async () => {
@@ -30,5 +32,16 @@ describe('lead event region', () => {
     );
     // 地区解析不出来不要紧，事件本身必须照常入库
     expect(executeRaw).toHaveBeenCalledTimes(1);
+  });
+
+  it('never stores an identifiable ipv6 fragment', async () => {
+    const executeRaw = jest.fn().mockResolvedValue(1);
+    await serviceWith(executeRaw).createPublic(
+      { eventType: 'page_view' } as never,
+      requestFrom('240e:3a1:53a0:1200:8c2d:31ff:fe42:7788'),
+    );
+    const values: string[] = executeRaw.mock.calls[0].slice(1).map(String);
+    expect(values).toContain('ipv6');
+    expect(values.join(' ')).not.toContain('240e:3a1');
   });
 });
