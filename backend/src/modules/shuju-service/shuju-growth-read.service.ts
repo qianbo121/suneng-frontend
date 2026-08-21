@@ -473,13 +473,9 @@ export class ShujuGrowthReadService {
             COALESCE(NULLIF("visitorId", ''), NULLIF("sessionId", ''), 'event:' || "id"::text) AS identity
           FROM "WebsiteLeadEvent"
           WHERE ${where}
-        ), page_cohort AS (
-          SELECT DISTINCT identity
-          FROM scoped
-          WHERE "eventType" = 'page_view'
         )
         SELECT
-          (SELECT COUNT(*) FROM page_cohort)::bigint AS "pageVisitors",
+          COUNT(DISTINCT identity) FILTER (WHERE "eventType" = 'page_view')::bigint AS "pageVisitors",
           COUNT(*) FILTER (WHERE "eventType" = 'page_view')::bigint AS "pageViews",
           COUNT(DISTINCT COALESCE(NULLIF("sessionId", ''), identity)) FILTER (WHERE "eventType" = 'page_view')::bigint AS "visitSessions",
           COUNT(DISTINCT COALESCE(NULLIF("sessionId", ''), identity)) FILTER (WHERE "eventType" = 'engaged_session')::bigint AS "engagedSessions",
@@ -488,7 +484,6 @@ export class ShujuGrowthReadService {
           COUNT(DISTINCT identity) FILTER (WHERE "eventType" IN ('form_step_complete','form_submit'))::bigint AS "stepCompletedVisitors",
           COUNT(DISTINCT identity) FILTER (WHERE "eventType" = 'form_submit')::bigint AS "submissionVisitors"
         FROM scoped
-        WHERE identity IN (SELECT identity FROM page_cohort)
       `),
       this.prisma.$queryRaw<QualityRow[]>(Prisma.sql`
         SELECT
@@ -505,9 +500,9 @@ export class ShujuGrowthReadService {
         FROM "WebsiteLeadEvent"
         WHERE ${botWhere}
       `),
-      // 单页漏斗必须和全站漏斗同口径，否则页面表里"点击联系"（互斥事件）
-      // 会小于"开始填写"，前端只能判成不可比、拒绝算转化率。
-      // 两条保证：①每一步都是后续步骤的超集（累计）②全部限定在"看过这一页的人"里。
+      // 单页漏斗的后四步使用累计口径。服务端提交是核心事实，
+      // 即使浏览器的 page_view 或访问标识丢失，也必须按它自带的 pagePath 进入提交步骤。
+      // 因此不再用 page_view cohort 删除其他事实；若第一步小于后续步骤，前端会显示数量并停止计算转化率。
       this.prisma.$queryRaw<PageFunnelRow[]>(Prisma.sql`
         WITH scoped AS (
           SELECT
@@ -516,19 +511,16 @@ export class ShujuGrowthReadService {
             COALESCE(NULLIF("visitorId", ''), NULLIF("sessionId", ''), 'event:' || "id"::text) AS identity
           FROM "WebsiteLeadEvent"
           WHERE ${where} AND "pagePath" IS NOT NULL
-        ), cohort AS (
-          SELECT DISTINCT "pagePath", identity FROM scoped WHERE "eventType" = 'page_view'
         )
         SELECT
-          c."pagePath",
-          COUNT(DISTINCT c.identity)::bigint AS "pageVisitors",
-          COUNT(DISTINCT s.identity) FILTER (WHERE s."eventType" IN ('phone_click','wechat_click','wechat_qr_view','quote_cta_click','email_click','form_start','form_step_complete','form_submit'))::bigint AS "highIntentVisitors",
-          COUNT(DISTINCT s.identity) FILTER (WHERE s."eventType" IN ('form_start','form_step_complete','form_submit'))::bigint AS "formStartVisitors",
-          COUNT(DISTINCT s.identity) FILTER (WHERE s."eventType" IN ('form_step_complete','form_submit'))::bigint AS "stepCompletedVisitors",
-          COUNT(DISTINCT s.identity) FILTER (WHERE s."eventType" = 'form_submit')::bigint AS "submissionVisitors"
-        FROM cohort c
-        LEFT JOIN scoped s ON s."pagePath" = c."pagePath" AND s.identity = c.identity
-        GROUP BY c."pagePath"
+          "pagePath",
+          COUNT(DISTINCT identity) FILTER (WHERE "eventType" = 'page_view')::bigint AS "pageVisitors",
+          COUNT(DISTINCT identity) FILTER (WHERE "eventType" IN ('phone_click','wechat_click','wechat_qr_view','quote_cta_click','email_click','form_start','form_step_complete','form_submit'))::bigint AS "highIntentVisitors",
+          COUNT(DISTINCT identity) FILTER (WHERE "eventType" IN ('form_start','form_step_complete','form_submit'))::bigint AS "formStartVisitors",
+          COUNT(DISTINCT identity) FILTER (WHERE "eventType" IN ('form_step_complete','form_submit'))::bigint AS "stepCompletedVisitors",
+          COUNT(DISTINCT identity) FILTER (WHERE "eventType" = 'form_submit')::bigint AS "submissionVisitors"
+        FROM scoped
+        GROUP BY "pagePath"
         ORDER BY "pageVisitors" DESC
         LIMIT 200
       `),

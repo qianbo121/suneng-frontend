@@ -332,6 +332,51 @@ describe('ShujuGrowthReadService', () => {
     }
   });
 
+  it('快速提交、无停留、无交互或访问标识丢失时仍保留服务端提交', async () => {
+    const queryRaw = routedQueryRaw([
+      ['MIN(', [{ trackingStartAt: new Date('2026-08-19T00:00:00Z') }]],
+      [
+        'AS "visitSessions"',
+        [
+          {
+            pageVisitors: 0n,
+            pageViews: 0n,
+            visitSessions: 0n,
+            engagedSessions: 0n,
+            highIntentVisitors: 1n,
+            formStartVisitors: 1n,
+            stepCompletedVisitors: 1n,
+            submissionVisitors: 1n,
+          },
+        ],
+      ],
+    ]);
+    const service = new ShujuGrowthReadService({ $queryRaw: queryRaw } as unknown as PrismaService);
+
+    const result = await service.overview({ startDate: '2026-08-20', endDate: '2026-08-21' });
+
+    expect(result.funnel).toEqual(
+      expect.objectContaining({
+        pageVisitors: 0,
+        highIntentVisitors: 1,
+        formStartVisitors: 1,
+        stepCompletedVisitors: 1,
+        submissionVisitors: 1,
+      }),
+    );
+    const funnelQuery = queryRaw.mock.calls
+      .map(([sql]) => JSON.stringify(sql))
+      .find((sql) => sql.includes('visitSessions'));
+    expect(funnelQuery).toBeDefined();
+    // 真实提交只认 submissionId，不要求先有 20 秒、交互或 page_view cohort。
+    expect(funnelQuery).toContain('submissionId');
+    expect(funnelQuery).not.toContain("= 'effective_interaction'");
+    expect(funnelQuery).not.toContain("= 'dwell_20s'");
+    expect(funnelQuery).not.toContain('WHERE identity IN');
+    // 访问标识不完整时使用事件自身标识，不丢整条事实。
+    expect(funnelQuery).toContain("'event:'");
+  });
+
   it('keeps the per-page funnel monotonic so the drill-down can show conversion', async () => {
     const queryRaw = jest.fn().mockResolvedValue([]);
     const service = new ShujuGrowthReadService({ $queryRaw: queryRaw } as unknown as PrismaService);
@@ -340,14 +385,15 @@ describe('ShujuGrowthReadService', () => {
 
     const pageFunnel = queryRaw.mock.calls
       .map(([sql]) => JSON.stringify(sql))
-      .find((sql) => sql.includes('cohort'));
+      .find((sql) => sql.includes('GROUP BY \\"pagePath\\"') && sql.includes('submissionVisitors'));
     expect(pageFunnel).toBeDefined();
     // 每一步都必须是后续步骤的超集，否则单页漏斗又会退回"不可比"
     expect(pageFunnel).toContain('form_start');
     expect(pageFunnel).toContain('form_step_complete');
     expect(pageFunnel).toContain('form_submit');
-    // 必须限定在"看过这一页的人"里，否则第5步可能大于第1步
+    // 提交事实不能再因 page_view 丢失而被 cohort 删除。
     expect(pageFunnel).toContain('page_view');
+    expect(pageFunnel).not.toContain('cohort');
   });
 
   it('buckets days by real Shanghai time, not by misreading the UTC timestamp', async () => {
