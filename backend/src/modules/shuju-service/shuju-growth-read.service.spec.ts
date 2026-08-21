@@ -161,7 +161,7 @@ describe('ShujuGrowthReadService', () => {
         ],
       ],
       [
-        'SELECT "pagePath", MAX("pageTitle")',
+        'SELECT s."pagePath", MAX(s."pageTitle")',
         [
           {
             pagePath: '/zh/products/detail/trolley-furnace',
@@ -399,6 +399,22 @@ describe('ShujuGrowthReadService', () => {
       expect(sql).toContain('baidu');
       expect(sql).toContain('bing');
     }
+  });
+
+  it('页面排行只把能连回同一页面访问的行为算作访客转化', async () => {
+    const queryRaw = jest.fn().mockResolvedValue([]);
+    const service = new ShujuGrowthReadService({ $queryRaw: queryRaw } as unknown as PrismaService);
+
+    await service.overview({ startDate: '2026-08-15', endDate: '2026-08-17' });
+
+    const pageQuery = queryRaw.mock.calls
+      .map(([sql]) => JSON.stringify(sql))
+      .find((sql) => sql.includes('page_visitors') && sql.includes('highIntentVisitors'));
+    expect(pageQuery).toBeDefined();
+    expect(pageQuery).toContain('v.identity IS NOT NULL');
+    expect(pageQuery).toContain('v.\\"pagePath\\" = s.\\"pagePath\\"');
+    // 中间步骤必须受页面访客分母约束；真实提交仍按 submissionId 保留，不能被页面访问缺失删除。
+    expect(pageQuery).toContain('submissionId');
   });
 
   it('keeps the per-page funnel monotonic so the drill-down can show conversion', async () => {
