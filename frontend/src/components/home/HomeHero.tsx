@@ -95,7 +95,7 @@ export default function HomeHero() {
 
           <p className={styles.description}>工业炉单机、配套件与整线交钥匙工程一体化解决方案商</p>
 
-          <p className={styles.certification}>国家高新技术企业</p>
+          <p className={styles.certification}>江苏泰州·国家高新技术企业</p>
         </div>
       </div>
 

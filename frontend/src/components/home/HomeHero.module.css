@@ -1,11 +1,12 @@
 .hero {
-  --panel-slant: 54px;
-  --panel-gap: 10px;
-  --panel-height: clamp(142px, 8.9vw, 172px);
+  --panel-slant: 46px;
+  --panel-gap: 9px;
+  --panel-height: clamp(100px, 6.3vw, 124px);
 
   position: relative;
-  height: clamp(650px, calc(100vh - 88px), 785px);
-  min-height: 650px;
+  height: clamp(590px, calc(100vh - 180px), 900px);
+  height: clamp(590px, calc(100svh - 180px), 900px);
+  min-height: 590px;
   overflow: hidden;
   isolation: isolate;
   background: #dce9f7;
@@ -14,7 +15,7 @@
 .heroImage {
   z-index: -2;
   object-fit: cover;
-  object-position: center bottom;
+  object-position: center center;
   filter: saturate(1.08) contrast(1.07) brightness(1.01);
 }
 
@@ -45,7 +46,7 @@
 
 .heroCopy {
   max-width: 940px;
-  padding-top: clamp(124px, 19vh, 185px);
+  padding-top: clamp(48px, 6.5vh, 72px);
   color: #fff;
 }
 
@@ -55,7 +56,7 @@
 
 .eyebrow {
   max-width: 800px;
-  margin: 0 0 18px;
+  margin: 0 0 14px;
   color: rgba(255, 255, 255, 0.94);
   font-size: clamp(13px, 0.82vw, 16px);
   font-weight: 500;
@@ -67,7 +68,7 @@
 .title {
   margin: 0;
   color: #fff;
-  font-size: clamp(50px, 3.55vw, 70px);
+  font-size: clamp(48px, 3.25vw, 64px);
   font-weight: 700;
   line-height: 1.14;
   letter-spacing: 0.025em;
@@ -83,9 +84,9 @@
 
 .description {
   max-width: 860px;
-  margin: 18px 0 0;
+  margin: 16px 0 0;
   color: rgba(255, 255, 255, 0.96);
-  font-size: clamp(20px, 1.35vw, 27px);
+  font-size: clamp(19px, 1.25vw, 25px);
   font-weight: 400;
   line-height: 1.55;
   text-shadow: 0 2px 16px rgba(0, 46, 112, 0.2);
@@ -97,7 +98,7 @@
 }
 
 .certification {
-  margin: 12px 0 0;
+  margin: 10px 0 0;
   color: rgba(255, 255, 255, 0.9);
   font-size: clamp(15px, 1vw, 18px);
   font-weight: 400;
@@ -107,7 +108,7 @@
 
 .stats {
   position: absolute;
-  bottom: clamp(56px, 9.25vh, 100px);
+  bottom: clamp(32px, 5vh, 52px);
   left: 50%;
   z-index: 2;
   display: flex;
@@ -120,10 +121,12 @@
 }
 
 .statCard {
+  --panel-rise: 0px;
+
   position: relative;
   flex: 1 1 0;
   min-width: 0;
-  height: var(--panel-height);
+  height: calc(var(--panel-height) + var(--panel-rise));
   overflow: hidden;
   clip-path: polygon(
     var(--panel-slant) 0,
@@ -142,11 +145,23 @@
   .stats {
     transform: translate(-50%, 12px);
   }
+
+  .statCard:nth-child(2) {
+    --panel-rise: 5px;
+  }
+
+  .statCard:nth-child(3) {
+    --panel-rise: 10px;
+  }
+
+  .statCard:nth-child(4) {
+    --panel-rise: 15px;
+  }
 }
 
 @media (min-width: 1025px) and (max-width: 1279px) {
   .stats {
-    bottom: calc(84px + env(safe-area-inset-bottom));
+    bottom: calc(40px + env(safe-area-inset-bottom));
   }
 }
 
@@ -175,7 +190,7 @@
   right: 0;
   left: var(--panel-slant);
   z-index: 2;
-  height: 5px;
+  height: 4px;
   background: linear-gradient(90deg, #2167ea 0%, #0759e6 100%);
   content: '';
 }
@@ -200,7 +215,7 @@
   align-items: flex-start;
   justify-content: center;
   height: 100%;
-  padding: 22px 28px 18px calc(var(--panel-slant) + 34px);
+  padding: 14px 24px 12px calc(var(--panel-slant) + 28px);
 }
 
 .statValue {
@@ -209,7 +224,7 @@
   min-width: 0;
   margin: 0;
   color: #0c47c7;
-  font-size: clamp(52px, 3.75vw, 74px);
+  font-size: clamp(46px, 3.2vw, 64px);
   font-weight: 700;
   line-height: 1;
   letter-spacing: -0.025em;
@@ -224,17 +239,17 @@
 }
 
 .statUnit {
-  margin-left: 9px;
+  margin-left: 8px;
   color: #151515;
-  font-size: clamp(20px, 1.42vw, 28px);
+  font-size: clamp(18px, 1.18vw, 24px);
   font-weight: 500;
   letter-spacing: 0;
 }
 
 .statLabel {
-  margin: 14px 0 0;
+  margin: 8px 0 0;
   color: #101010;
-  font-size: clamp(19px, 1.3vw, 26px);
+  font-size: clamp(17px, 1.08vw, 22px);
   font-weight: 500;
   line-height: 1.35;
   letter-spacing: 0.02em;
