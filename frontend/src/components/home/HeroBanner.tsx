@@ -1,10 +1,12 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { useEffect, useState } from 'react';
 import Image from 'next/image';
 
 import { Locale } from '@/types/site';
+
+import EnglishHomeHero from './EnglishHomeHero';
+import HomeHero from './HomeHero';
 
 type HeroBannerProps = {
   locale: Locale;
@@ -16,52 +18,12 @@ type HeroPartnerLogo = {
 };
 
 const heroMotionEase: [number, number, number, number] = [0.22, 1, 0.36, 1];
-const heroStats = [
-  {
-    key: 'founded',
-    value: 2006,
-    valueText: { zh: '', en: '' },
-    unit: { zh: '年', en: '' },
-    label: { zh: '公司成立', en: 'Founded' },
-  },
-  {
-    key: 'registered-capital',
-    value: 5080,
-    valueText: { zh: '', en: 'CNY 50.8M' },
-    unit: { zh: '万元', en: '' },
-    label: { zh: '注册资本', en: 'Registered Capital' },
-  },
-  {
-    key: 'projects',
-    value: 150,
-    valueText: { zh: '', en: '' },
-    unit: { zh: '+人', en: '+' },
-    label: { zh: '在职人数', en: 'Employees' },
-  },
-  {
-    key: 'facility-area',
-    value: 14700,
-    valueText: { zh: '', en: '' },
-    unit: { zh: '㎡', en: 'm²' },
-    label: { zh: '车间占地', en: 'Production Site (Company-reported)' },
-  },
-] as const;
-const heroTitle = {
-  zh: '江苏苏能工业炉有限公司',
-  en: 'Jiangsu Suneng Industrial Furnace Co., Ltd.',
-} as const;
-const heroDescription = {
-  zh: '工业炉单机、配套件与整线交钥匙工程一体化解决方案商',
-  en: 'Integrated industrial furnace equipment, components and turnkey heat-treatment line solutions.',
-} as const;
-const heroCredentials = '国家高新技术企业';
 const heroPartnerLogoBasePath = '/images/partner/logos/home-marquee-normalized';
 const heroPartnerMarqueeCardClass =
   'relative flex h-[96px] w-[228px] shrink-0 items-center justify-center overflow-hidden rounded-[13px] border border-[#e6ebf2] bg-white px-[10px] py-[10px] transition-all duration-250 hover:-translate-y-[3px] hover:scale-[1.01] hover:border-[#d5deee] hover:bg-[#fbfdff] hover:shadow-[0_12px_32px_rgba(15,23,42,0.16)] md:h-[100px] md:w-[246px] md:rounded-[15px]';
 const heroPartnerMarqueeImageFrameClass =
   'flex h-[70px] w-[187px] items-center justify-center md:h-[76px] md:w-[203px]';
-const heroPartnerMarqueeImageClass =
-  'h-full w-full object-contain';
+const heroPartnerMarqueeImageClass = 'h-full w-full object-contain';
 const heroPartnerMarqueeTrackClass =
   'flex w-max items-center gap-x-[12px] py-[4px] md:gap-x-[16px] animate-marquee will-change-transform group-hover:[animation-play-state:paused]';
 const heroPartnerMarqueeTrackDuration = '72s';
@@ -109,193 +71,66 @@ const heroPartnerLogos: HeroPartnerLogo[] = [
   { name: '六和轻合金（苏州）有限公司', image: `${heroPartnerLogoBasePath}/liuhe.png` },
 ] as const;
 
-function AnimatedNumber({ value, duration = 1500 }: { value: number; duration?: number }) {
-  const [displayValue, setDisplayValue] = useState(value);
-
-  useEffect(() => {
-    let frameId = 0;
-    let startTime: number | null = null;
-
-    const tick = (timestamp: number) => {
-      if (startTime === null) startTime = timestamp;
-      const elapsed = timestamp - startTime;
-      const progress = Math.min(elapsed / duration, 1);
-      const eased = 1 - Math.pow(1 - progress, 3);
-      setDisplayValue(Math.round(value * eased));
-
-      if (progress < 1) {
-        frameId = window.requestAnimationFrame(tick);
-      }
-    };
-
-    setDisplayValue(0);
-    frameId = window.requestAnimationFrame(tick);
-
-    return () => {
-      window.cancelAnimationFrame(frameId);
-    };
-  }, [duration, value]);
+function HeroPartners({ locale }: HeroBannerProps) {
+  const marqueeLogos = [...heroPartnerLogos, ...heroPartnerLogos];
+  const panelClass = [
+    'relative z-30 mx-auto w-[calc(100%-28px)] max-w-[1520px] overflow-hidden rounded-[18px] border border-[#ebedf1] bg-white shadow-[0_20px_46px_rgba(15,23,42,0.11)] md:w-[calc(100%-40px)] lg:w-[calc(100%-192px)]',
+    'mt-[28px]',
+  ].join(' ');
 
   return (
-    <span
-      className="inline-block text-right [font-variant-numeric:tabular-nums]"
-      style={{ minWidth: `${String(value).length}ch` }}
+    <motion.div
+      initial={{ y: 16, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      transition={{ duration: 0.72, ease: heroMotionEase, delay: 0.52 }}
+      className={panelClass}
     >
-      {displayValue}
-    </span>
+      <div className="flex min-h-[112px] items-center overflow-x-auto px-[14px] py-[12px] md:overflow-visible md:px-[24px]">
+        <div className="flex min-w-[156px] shrink-0 items-center border-r border-[#e2e8f3] pr-[15px]">
+          <span className="mr-[16px] h-[70px] w-[3px] rounded-full bg-[var(--color-interactive)]" />
+          <span>
+            <span className="block text-[18px] font-semibold leading-none tracking-[0.06em] text-[#202020]">
+              {locale === 'en' ? 'Partners' : '合作伙伴'}
+            </span>
+            {locale === 'zh' ? (
+              <span className="mt-[8px] block text-[11px] font-medium uppercase leading-none tracking-[0.18em] text-[#9b9b9b]">
+                Partners
+              </span>
+            ) : null}
+          </span>
+        </div>
+        <div className="group relative min-w-0 flex-1 overflow-hidden">
+          <div
+            className={heroPartnerMarqueeTrackClass}
+            style={{ animationDuration: heroPartnerMarqueeTrackDuration }}
+          >
+            {marqueeLogos.map((partner, index) => (
+              <div key={`${partner.name}-${index}`} className={heroPartnerMarqueeCardClass}>
+                <div className={heroPartnerMarqueeImageFrameClass}>
+                  <Image
+                    src={partner.image}
+                    alt={`${partner.name} logo`}
+                    width={960}
+                    height={360}
+                    unoptimized
+                    className={heroPartnerMarqueeImageClass}
+                    sizes="203px"
+                  />
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </motion.div>
   );
 }
 
 export function HeroBanner({ locale }: HeroBannerProps) {
-  const displayEyebrow = 'JIANGSU SUNENG INDUSTRIAL FURNACE CO LTD';
-  const displayTitle = heroTitle[locale];
-  const displaySubtitle = heroDescription[locale];
-  const marqueeLogos = [...heroPartnerLogos, ...heroPartnerLogos];
-  const heroPartnerPanelClass = [
-    'relative z-30 mx-auto w-[calc(100%-28px)] max-w-[1295px] overflow-hidden rounded-[18px] border border-[#ebedf1] bg-white shadow-[0_20px_46px_rgba(15,23,42,0.11)] md:w-[calc(100%-40px)]',
-    locale === 'en' ? '-mt-[28px] md:-mt-[40px]' : '-mt-[60px] md:-mt-[74px]',
-  ].join(' ');
-
   return (
     <section className="hero-banner relative bg-white">
-      <div className="hero-banner-slide relative h-[660px] overflow-hidden bg-black md:h-[540px] lg:h-[526px]">
-        <div className="absolute inset-0 z-0">
-          <Image
-            src="/images/home/banner-factory-building-20260804.webp"
-            alt=""
-            fill
-            priority
-            sizes="100vw"
-            className="object-cover object-center"
-            quality={85}
-            style={{ filter: 'brightness(0.58) contrast(1.08) saturate(0.86)' }}
-          />
-        </div>
-        <div className="absolute inset-0 z-[1] bg-[linear-gradient(180deg,rgba(0,0,0,0.58),rgba(0,0,0,0.68)_48%,rgba(0,0,0,0.72))]" />
-        <div className="absolute inset-0 z-[2] bg-black/18" />
-
-        <div className="relative z-20 mx-auto flex h-full w-full max-w-[1440px] flex-col items-center px-6 pt-[72px] text-center text-white md:pt-[80px] lg:pt-[86px]">
-          <motion.p
-            initial={{ y: 18, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ duration: 0.64, ease: heroMotionEase, delay: 0.08 }}
-            className="mb-[18px] text-[13px] font-medium uppercase leading-none tracking-[0.2em] text-white/82 md:text-[15px]"
-          >
-            {displayEyebrow}
-          </motion.p>
-          <motion.h1
-            initial={{ y: 26, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ duration: 0.72, ease: heroMotionEase, delay: 0.16 }}
-            className="text-[40px] font-bold leading-[1.12] tracking-[0.06em] text-white md:text-[58px] lg:text-[64px]"
-          >
-            {displayTitle}
-          </motion.h1>
-          <motion.div
-            initial={{ y: 20, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ duration: 0.68, ease: heroMotionEase, delay: 0.26 }}
-            className="mx-auto mt-[18px] max-w-[1040px] text-center"
-          >
-            <p className="text-[15px] font-normal leading-[1.75] text-white/82 md:text-[17px]">
-              {displaySubtitle}
-            </p>
-            {locale === 'zh' && (
-              <p className="mt-[10px] text-[12px] font-normal leading-[1.6] text-white/70 md:text-[14px]">
-                {heroCredentials}
-              </p>
-            )}
-          </motion.div>
-
-          <motion.div
-            initial={{ y: 18, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ duration: 0.7, ease: heroMotionEase, delay: 0.34 }}
-            className="mx-auto mt-[32px] grid w-full max-w-[1120px] grid-cols-2 gap-y-5 md:mt-[36px] md:grid-cols-4 md:gap-y-0"
-          >
-            {heroStats.map((item) => {
-              const statValueText = item.valueText[locale];
-              const statUnit = item.unit[locale];
-              const statLabel = item.label[locale];
-
-              return (
-                <div
-                  key={item.key}
-                  className="relative flex min-h-[92px] flex-col items-center justify-center px-0 md:min-h-[118px]"
-                >
-                  <div className="flex items-start justify-center gap-[5px] leading-none">
-                    <span
-                      className={
-                        statValueText
-                          ? 'inline-flex justify-end whitespace-nowrap text-[26px] font-bold leading-none tracking-tight text-[#E30613] md:text-[42px] lg:text-[46px]'
-                          : 'inline-flex justify-end text-[54px] font-bold leading-none tracking-tight text-[#E30613] md:text-[72px] lg:text-[78px]'
-                      }
-                    >
-                      {statValueText || <AnimatedNumber value={item.value} />}
-                    </span>
-                    {statUnit ? (
-                      <span className="mt-[13px] inline-block min-w-[34px] text-left text-[22px] font-normal leading-none text-white/58 md:mt-[15px] md:text-[25px]">
-                        {statUnit}
-                      </span>
-                    ) : null}
-                  </div>
-                  <span className="mt-[10px] text-[15px] font-normal leading-[1.5] tracking-[0.04em] text-white/58">
-                    {statLabel}
-                  </span>
-                </div>
-              );
-            })}
-          </motion.div>
-        </div>
-      </div>
-
-      <motion.div
-        initial={{ y: 16, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.72, ease: heroMotionEase, delay: 0.52 }}
-        className={heroPartnerPanelClass}
-      >
-        <div className="flex min-h-[112px] items-center overflow-x-auto px-[14px] py-[12px] md:overflow-visible md:px-[24px]">
-          <div className="flex min-w-[156px] shrink-0 items-center border-r border-[#e2e8f3] pr-[15px]">
-            <span className="mr-[16px] h-[70px] w-[3px] rounded-full bg-[#E30613]" />
-            <span>
-              <span className="block text-[18px] font-semibold leading-none tracking-[0.06em] text-[#202020]">
-                {locale === 'en' ? 'Partners' : '合作伙伴'}
-              </span>
-              {locale === 'zh' ? (
-                <span className="mt-[8px] block text-[11px] font-medium uppercase leading-none tracking-[0.18em] text-[#9b9b9b]">
-                  Partners
-                </span>
-              ) : null}
-            </span>
-          </div>
-          <div className="group relative min-w-0 flex-1 overflow-hidden">
-            <div
-              className={heroPartnerMarqueeTrackClass}
-              style={{ animationDuration: heroPartnerMarqueeTrackDuration }}
-            >
-              {marqueeLogos.map((partner, index) => (
-                <div
-                  key={`${partner.name}-${index}`}
-                  className={heroPartnerMarqueeCardClass}
-                >
-                  <div className={heroPartnerMarqueeImageFrameClass}>
-                    <Image
-                      src={partner.image}
-                      alt={`${partner.name} logo`}
-                      width={960}
-                      height={360}
-                      unoptimized
-                      className={heroPartnerMarqueeImageClass}
-                      sizes="203px"
-                    />
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </motion.div>
+      {locale === 'zh' ? <HomeHero /> : <EnglishHomeHero />}
+      <HeroPartners locale={locale} />
     </section>
   );
 }
