@@ -476,22 +476,33 @@ export class ShujuGrowthReadService {
         LIMIT 20
       `),
       this.prisma.$queryRaw<PageRow[]>(Prisma.sql`
+        WITH scoped AS (
+          SELECT *,
+            COALESCE(NULLIF("visitorId", ''), NULLIF("sessionId", ''), 'event:' || "id"::text) AS identity
+          FROM "WebsiteLeadEvent"
+          WHERE ${where}
+            AND "pagePath" IS NOT NULL
+        ), page_visitors AS (
+          SELECT DISTINCT "pagePath", identity
+          FROM scoped
+          WHERE "eventType" = 'page_view'
+        )
         SELECT
-          "pagePath",
-          MAX("pageTitle") AS "pageTitle",
-          MAX("pageType") AS "pageType",
-          MAX("productTag") AS "productTag",
-          COUNT(DISTINCT COALESCE(NULLIF("visitorId", ''), NULLIF("sessionId", ''), 'event:' || "id"::text)) FILTER (WHERE "eventType" = 'page_view')::bigint AS visitors,
-          COUNT(*) FILTER (WHERE "eventType" = 'page_view')::bigint AS "pageViews",
-          COUNT(DISTINCT COALESCE(NULLIF("visitorId", ''), NULLIF("sessionId", ''), 'event:' || "id"::text)) FILTER (WHERE "eventType" = 'engaged_session')::bigint AS "engagedVisitors",
-          COUNT(DISTINCT COALESCE(NULLIF("visitorId", ''), NULLIF("sessionId", ''), 'event:' || "id"::text)) FILTER (WHERE "eventType" IN ('phone_click','wechat_click','wechat_qr_view','quote_cta_click','email_click'))::bigint AS "highIntentVisitors",
-          COUNT(DISTINCT COALESCE(NULLIF("visitorId", ''), NULLIF("sessionId", ''), 'event:' || "id"::text)) FILTER (WHERE "eventType" = 'form_start')::bigint AS "formStarts",
-          COUNT(DISTINCT COALESCE(NULLIF("visitorId", ''), NULLIF("sessionId", ''), 'event:' || "id"::text)) FILTER (WHERE "eventType" = 'form_step_complete')::bigint AS "stepCompleted",
-          COUNT(DISTINCT COALESCE(NULLIF("visitorId", ''), NULLIF("sessionId", ''), 'event:' || "id"::text)) FILTER (WHERE "eventType" = 'form_submit')::bigint AS submissions
-        FROM "WebsiteLeadEvent"
-        WHERE ${where}
-          AND "pagePath" IS NOT NULL
-        GROUP BY "pagePath"
+          s."pagePath",
+          MAX(s."pageTitle") AS "pageTitle",
+          MAX(s."pageType") AS "pageType",
+          MAX(s."productTag") AS "productTag",
+          COUNT(DISTINCT s.identity) FILTER (WHERE s."eventType" = 'page_view')::bigint AS visitors,
+          COUNT(*) FILTER (WHERE s."eventType" = 'page_view')::bigint AS "pageViews",
+          COUNT(DISTINCT s.identity) FILTER (WHERE s."eventType" = 'engaged_session' AND v.identity IS NOT NULL)::bigint AS "engagedVisitors",
+          COUNT(DISTINCT s.identity) FILTER (WHERE s."eventType" IN ('phone_click','wechat_click','wechat_qr_view','quote_cta_click','email_click') AND v.identity IS NOT NULL)::bigint AS "highIntentVisitors",
+          COUNT(DISTINCT s.identity) FILTER (WHERE s."eventType" = 'form_start' AND v.identity IS NOT NULL)::bigint AS "formStarts",
+          COUNT(DISTINCT s.identity) FILTER (WHERE s."eventType" = 'form_step_complete' AND v.identity IS NOT NULL)::bigint AS "stepCompleted",
+          COUNT(DISTINCT s."submissionId") FILTER (WHERE s."eventType" = 'form_submit')::bigint AS submissions
+        FROM scoped s
+        LEFT JOIN page_visitors v
+          ON v."pagePath" = s."pagePath" AND v.identity = s.identity
+        GROUP BY s."pagePath"
         ORDER BY "pageViews" DESC, visitors DESC
         LIMIT 200
       `),
