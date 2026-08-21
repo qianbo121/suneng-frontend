@@ -31,7 +31,11 @@ describe('website reading events', () => {
   beforeEach(() => {
     vi.mocked(apiPost).mockClear();
     vi.stubGlobal('window', {
-      location: { pathname: '/zh/products/detail/trolley-furnace', search: '' },
+      location: {
+        pathname: '/zh/products/detail/trolley-furnace',
+        search: '',
+        hostname: 'www.jssngyl.cn',
+      },
       sessionStorage: storageMock(),
       localStorage: storageMock(),
       matchMedia: () => ({ matches: false }),
@@ -72,6 +76,28 @@ describe('website reading events', () => {
     expect(secondSession).toBeTruthy();
     expect(secondSession).not.toBe(firstSession);
     now.mockRestore();
+  });
+
+  it('keeps the first source for the whole visit across full-page navigation', () => {
+    vi.stubGlobal('document', {
+      title: '台车炉',
+      referrer: 'https://www.baidu.com/s?wd=台车炉',
+    });
+    trackPageView();
+    window.location.pathname = '/zh/contact';
+    vi.stubGlobal('document', {
+      title: '联系我们',
+      referrer: 'https://www.jssngyl.cn/zh/products/detail/trolley-furnace',
+    });
+    trackLeadEvent('phone_click');
+
+    const bodies = vi.mocked(apiPost).mock.calls.map(
+      (call) => (call[1] as { body?: { sourceType?: string; sourceDetail?: string } }).body,
+    );
+    expect(bodies[0]).toEqual(expect.objectContaining({ sourceType: '自然搜索', sourceDetail: '百度' }));
+    expect(bodies.at(-2)).toEqual(
+      expect.objectContaining({ sourceType: '自然搜索', sourceDetail: '百度' }),
+    );
   });
 });
 

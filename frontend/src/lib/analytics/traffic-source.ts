@@ -87,12 +87,21 @@ function aiSourceFromAlias(value: string) {
   )?.label;
 }
 
-export function classifyTrafficSource(referrer: string, utmSource = ''): TrafficSource {
+export function classifyTrafficSource(
+  referrer: string,
+  utmSource = '',
+  currentHost = '',
+): TrafficSource {
   const aiFromUtm = aiSourceFromAlias(utmSource);
   if (aiFromUtm) return { sourceType: 'AI引流', sourceDetail: aiFromUtm };
 
   const host = normalizedHost(referrer);
   if (!host) return { sourceType: '直接访问' };
+
+  // 同站跳转不是“外部网站推荐”。会话已有来源时由上层复用；
+  // 只有旧会话没有来源快照时才会走到这个兜底分支。
+  const ownHost = normalizedHost(`https://${currentHost}`);
+  if (ownHost && host === ownHost) return { sourceType: '直接访问' };
 
   const aiFromReferrer = AI_SOURCE_RULES.find((rule) =>
     rule.domains.some((domain) => matchesDomain(host, domain)),

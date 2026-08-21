@@ -73,6 +73,7 @@ const ENGAGED_SESSION_KEY = 'suneng_engaged_session_recorded';
 const SESSION_PAGE_PATHS_KEY = 'suneng_session_page_paths';
 const SESSION_ID_KEY = 'suneng_session_id';
 const SESSION_LAST_SEEN_KEY = 'suneng_session_last_seen';
+const SESSION_SOURCE_KEY = 'suneng_session_traffic_source';
 const SESSION_TIMEOUT_MS = 30 * 60 * 1000;
 const DWELL_SECONDS_KEY = 'suneng_dwell_seconds';
 const DWELL_MILESTONE_KEY = 'suneng_dwell_milestone';
@@ -136,6 +137,7 @@ function getSessionId(storage: Storage) {
       storage.removeItem(EFFECTIVE_INTERACTION_KEY);
       storage.removeItem(AUTOMATION_SIGNAL_KEY);
       storage.removeItem(SESSION_PAGE_PATHS_KEY);
+      storage.removeItem(SESSION_SOURCE_KEY);
       storage.removeItem('suneng_landing_page');
       storage.removeItem(DWELL_SECONDS_KEY);
       storage.removeItem(DWELL_MILESTONE_KEY);
@@ -148,6 +150,29 @@ function getSessionId(storage: Storage) {
     return storage.getItem(SESSION_ID_KEY) || undefined;
   } catch {
     return undefined;
+  }
+}
+
+function getSessionTrafficSource(
+  storage: Storage,
+  referrer: string,
+  utmSource: string | undefined,
+) {
+  try {
+    const stored = JSON.parse(storage.getItem(SESSION_SOURCE_KEY) || 'null') as
+      | ReturnType<typeof classifyTrafficSource>
+      | null;
+    if (
+      stored &&
+      ['直接访问', '自然搜索', '外部链接', 'AI引流'].includes(stored.sourceType)
+    ) {
+      return stored;
+    }
+    const source = classifyTrafficSource(referrer, utmSource, window.location.hostname);
+    storage.setItem(SESSION_SOURCE_KEY, JSON.stringify(source));
+    return source;
+  } catch {
+    return classifyTrafficSource(referrer, utmSource, window.location.hostname);
   }
 }
 
@@ -253,7 +278,13 @@ export function buildLeadSourceSnapshot(
   const sessionId = getSessionId(window.sessionStorage);
   const landingPage = getLandingPage(path);
   const campaign = campaignParams(landingPage);
-  const trafficSource = classifyTrafficSource(document.referrer, campaign.utmSource);
+  // 来源是一次访问的入口属性，不能每次点击都用 document.referrer
+  // 重算；否则用户在官网内跳转后，自家域名会被误算成外部推荐。
+  const trafficSource = getSessionTrafficSource(
+    window.sessionStorage,
+    document.referrer,
+    campaign.utmSource,
+  );
   return sanitizeLeadSourceSnapshot({
     pageTitle: title,
     pagePath: sanitizeLeadPagePath(path),
