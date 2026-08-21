@@ -1,8 +1,13 @@
 :root {
   --color-primary: #004b97;
-  --color-accent: #e60012;
   --color-primary-deep: #00356b;
   --color-primary-soft: #0f5fae;
+  --color-interactive: #0c47c7;
+  --color-interactive-strong: #0759e6;
+  --color-interactive-light: #73adff;
+  --color-action: #e60012;
+  --color-danger: #c51624;
+  --color-accent: var(--color-action);
   --color-neutral-900: #333333;
   --color-neutral-700: #666666;
   --color-neutral-500: #999999;
