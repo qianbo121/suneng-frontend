@@ -15,7 +15,6 @@ export const LEAD_EVENT_TYPES = [
   'email_click',
   'form_start',
   'form_step_complete',
-  'form_submit',
   'human_signal',
   'effective_interaction',
   'automation_signal',

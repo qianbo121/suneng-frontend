@@ -20,6 +20,7 @@ import { CustomRequirementListQueryDto } from '@/modules/custom-requirement/dto/
 import { ManageInquiryNotificationDto } from '@/modules/custom-requirement/dto/manage-inquiry-notification.dto';
 import { InquiryNotificationProcessor } from '@/modules/custom-requirement/inquiry-notification.processor';
 import { AuthenticatedUser } from '@/modules/auth/interfaces/authenticated-user.interface';
+import { resolveVisitorRegion } from '@/modules/lead-event/visitor-region';
 import { PrismaService } from '@/prisma/prisma.service';
 
 function normalizeEmpty(value?: string) {
@@ -166,7 +167,11 @@ function replayOrConflict(existing: ReplayInquiry, normalized: NormalizedInquiry
   return { submissionId: existing.submissionId };
 }
 
-function sourceSnapshot(normalized: NormalizedInquiry) {
+function sourceSnapshot(
+  normalized: NormalizedInquiry,
+  evidence: { deviceType?: string; rawIp?: string },
+) {
+  const region = resolveVisitorRegion(evidence.rawIp);
   return {
     pagePath: normalized.pagePath,
     pageTitle: normalized.pageTitle,
@@ -174,6 +179,7 @@ function sourceSnapshot(normalized: NormalizedInquiry) {
     productTag: normalized.productTag,
     sourceType: normalized.sourceType,
     sourceDetail: normalized.sourceDetail,
+    deviceType: evidence.deviceType,
     landingPage: normalized.landingPage,
     previousPage: normalized.previousPage,
     utmSource: normalized.utmSource,
@@ -182,6 +188,9 @@ function sourceSnapshot(normalized: NormalizedInquiry) {
     discoverySource: normalized.discoverySource,
     sessionId: normalized.sessionId,
     visitorId: normalized.visitorId,
+    province: region.province,
+    city: region.city,
+    regionSource: region.province ? 'exact_ip' : undefined,
   };
 }
 
@@ -225,34 +234,54 @@ export class CustomRequirementService {
     private readonly notificationProcessor: InquiryNotificationProcessor,
   ) {}
 
-  async createLegacyPublic(dto: CreateLegacyCustomRequirementDto, clientKey: string) {
+  async createLegacyPublic(
+    dto: CreateLegacyCustomRequirementDto,
+    clientKey: string,
+    rawIp?: string,
+    deviceType?: 'PC' | '移动端',
+  ) {
     ensureNotSpam(clientKey, this.spamMap);
     const submissionId = randomUUID();
-    await this.prisma.customRequirement.create({
-      data: {
-        submissionId,
-        name: normalizeEmpty(dto.name),
-        phone: dto.phone.trim(),
-        company: normalizeEmpty(dto.company),
-        industry: normalizeEmpty(dto.industry),
-        process: normalizeEmpty(dto.process),
-        temperature: normalizeEmpty(dto.temperature),
-        requirement: normalizeEmpty(dto.requirement),
-        notificationStatus: InquiryNotificationStatus.pending,
-        notificationNextAttemptAt: new Date(),
-        status: CustomRequirementStatus.pending,
-      },
+    const region = resolveVisitorRegion(rawIp);
+    await this.prisma.$transaction(async (transaction) => {
+      await transaction.customRequirement.create({
+        data: {
+          submissionId,
+          name: normalizeEmpty(dto.name),
+          phone: dto.phone.trim(),
+          company: normalizeEmpty(dto.company),
+          industry: normalizeEmpty(dto.industry),
+          process: normalizeEmpty(dto.process),
+          temperature: normalizeEmpty(dto.temperature),
+          requirement: normalizeEmpty(dto.requirement),
+          notificationStatus: InquiryNotificationStatus.pending,
+          notificationNextAttemptAt: new Date(),
+          status: CustomRequirementStatus.pending,
+        },
+      });
+      await transaction.websiteLeadEvent.create({
+        data: {
+          submissionId,
+          eventType: 'form_submit',
+          deviceType,
+          province: region.province,
+          city: region.city,
+          regionSource: region.province ? 'exact_ip' : undefined,
+        },
+      });
     });
-    // V1 pages already emit form_submit through /v1/lead-events after success.
-    // Do not create another event here or cached clients will double-count the submission.
     this.notificationProcessor.kick();
     return { submissionId };
   }
 
-  async createPublic(dto: CreateCustomRequirementDto, clientKey: string) {
+  async createPublic(dto: CreateCustomRequirementDto, clientKey: string, rawIp?: string) {
     const idempotencyKey = normalizeEmpty(dto.idempotencyKey);
     const normalized = normalizeInquiry(dto);
     const fingerprint = inquiryFingerprint(normalized);
+    const evidence = {
+      deviceType: normalizeOptionalSource(dto.deviceType, 40),
+      rawIp,
+    };
 
     if (idempotencyKey) {
       const existing = await this.prisma.customRequirement.findUnique({
@@ -271,7 +300,7 @@ export class CustomRequirementService {
         return inFlight.submission;
       }
 
-      const submission = this.createPublicOnce(normalized, clientKey, idempotencyKey);
+      const submission = this.createPublicOnce(normalized, clientKey, evidence, idempotencyKey);
       this.inFlightSubmissions.set(idempotencyKey, { fingerprint, submission });
       const clearInFlight = () => {
         if (this.inFlightSubmissions.get(idempotencyKey)?.submission === submission) {
@@ -282,17 +311,18 @@ export class CustomRequirementService {
       return submission;
     }
 
-    return this.createPublicOnce(normalized, clientKey);
+    return this.createPublicOnce(normalized, clientKey, evidence);
   }
 
   private async createPublicOnce(
     normalized: NormalizedInquiry,
     clientKey: string,
+    evidence: { deviceType?: string; rawIp?: string },
     idempotencyKey?: string,
   ) {
     ensureNotSpam(clientKey, this.spamMap);
     const submissionId = randomUUID();
-    const snapshot = sourceSnapshot(normalized);
+    const snapshot = sourceSnapshot(normalized, evidence);
 
     try {
       await this.prisma.$transaction(async (transaction) => {
