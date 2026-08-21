@@ -32,6 +32,11 @@ function AnimatedNumber({ value, duration = 1500 }: { value: number; duration?: 
   const [displayValue, setDisplayValue] = useState(value);
 
   useEffect(() => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      setDisplayValue(value);
+      return;
+    }
+
     let frameId = 0;
     let startTime: number | null = null;
 

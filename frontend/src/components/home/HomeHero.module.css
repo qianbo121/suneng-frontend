@@ -49,6 +49,10 @@
   color: #fff;
 }
 
+.englishCopy {
+  max-width: 1160px;
+}
+
 .eyebrow {
   max-width: 800px;
   margin: 0 0 18px;
@@ -70,6 +74,13 @@
   text-shadow: 0 3px 22px rgba(0, 50, 125, 0.22);
 }
 
+.englishTitle {
+  max-width: 1120px;
+  font-size: clamp(38px, 2.75vw, 52px);
+  letter-spacing: 0;
+  text-wrap: balance;
+}
+
 .description {
   max-width: 860px;
   margin: 18px 0 0;
@@ -78,6 +89,11 @@
   font-weight: 400;
   line-height: 1.55;
   text-shadow: 0 2px 16px rgba(0, 46, 112, 0.2);
+}
+
+.englishDescription {
+  max-width: 1000px;
+  font-size: clamp(18px, 1.12vw, 22px);
 }
 
 .certification {
@@ -104,12 +120,10 @@
 }
 
 .statCard {
-  --panel-rise: 0px;
-
   position: relative;
   flex: 1 1 0;
   min-width: 0;
-  height: calc(var(--panel-height) + var(--panel-rise));
+  height: var(--panel-height);
   overflow: hidden;
   clip-path: polygon(
     var(--panel-slant) 0,
@@ -128,17 +142,30 @@
   .stats {
     transform: translate(-50%, 12px);
   }
+}
 
-  .statCard:nth-child(2) {
-    --panel-rise: 6px;
+@media (min-width: 1025px) and (max-width: 1279px) {
+  .stats {
+    bottom: calc(84px + env(safe-area-inset-bottom));
   }
+}
 
-  .statCard:nth-child(3) {
-    --panel-rise: 13px;
+@media (min-width: 1280px) {
+  .stats {
+    right: 112px;
+    left: 64px;
+    width: auto;
+    max-width: 1744px;
+    transform: translateY(12px);
   }
+}
 
-  .statCard:nth-child(4) {
-    --panel-rise: 20px;
+@media (min-width: 1921px) {
+  .stats {
+    right: auto;
+    left: 50%;
+    width: 1744px;
+    transform: translate(-50%, 12px);
   }
 }
 
@@ -180,7 +207,7 @@
   display: flex;
   align-items: baseline;
   min-width: 0;
-  margin: 0 0 0 -0.08em;
+  margin: 0;
   color: #0c47c7;
   font-size: clamp(52px, 3.75vw, 74px);
   font-weight: 700;
@@ -190,19 +217,9 @@
   font-variant-numeric: tabular-nums;
 }
 
-@media (min-width: 1025px) {
-  .statCard:nth-child(3) .statValue {
-    margin-left: -0.29em;
-  }
-
-  .statCard:nth-child(4) .statValue {
-    margin-left: -0.39em;
-  }
-}
-
 .animatedNumber {
   display: inline-block;
-  text-align: right;
+  text-align: left;
   font-variant-numeric: tabular-nums;
 }
 
@@ -221,6 +238,10 @@
   font-weight: 500;
   line-height: 1.35;
   letter-spacing: 0.02em;
+}
+
+.englishStatLabel {
+  letter-spacing: 0;
 }
 
 @media (max-width: 1200px) {
@@ -259,13 +280,18 @@
     font-size: 44px;
   }
 
+  .englishTitle {
+    max-width: 780px;
+    font-size: 38px;
+  }
+
   .description {
     max-width: 720px;
     font-size: 19px;
   }
 
   .stats {
-    bottom: 28px;
+    bottom: calc(72px + env(safe-area-inset-bottom));
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 10px;
@@ -298,6 +324,11 @@
     margin-top: 10px;
     font-size: 16px;
   }
+
+  .englishStats .statLabel {
+    max-width: 150px;
+    line-height: 1.25;
+  }
 }
 
 /* 手机 */
@@ -328,13 +359,25 @@
   }
 
   .title {
-    font-size: 34px;
+    font-size: clamp(27px, 8.2vw, 32px);
     line-height: 1.2;
+    text-wrap: balance;
+  }
+
+  .englishTitle {
+    max-width: 350px;
+    font-size: clamp(27px, 7.8vw, 31px);
   }
 
   .description {
     margin-top: 16px;
     font-size: 16px;
+  }
+
+  .englishDescription {
+    max-width: 350px;
+    font-size: 15px;
+    line-height: 1.45;
   }
 
   .certification {
@@ -359,6 +402,10 @@
     font-size: 30px;
   }
 
+  .englishStats .statValue {
+    font-size: clamp(25px, 7.2vw, 29px);
+  }
+
   .statUnit {
     margin-left: 5px;
     font-size: 15px;
@@ -367,5 +414,10 @@
   .statLabel {
     margin-top: 8px;
     font-size: 14px;
+  }
+
+  .englishStats .statLabel {
+    max-width: 130px;
+    font-size: 13px;
   }
 }
