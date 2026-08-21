@@ -408,35 +408,62 @@ export class ShujuGrowthReadService {
         ORDER BY sessions DESC, "pageViews" DESC
         LIMIT 100
       `),
-      // 客户所在地：省级汇总。沿用事实层 where，只排已知机器人，
-      // 不能再用“20秒+交互”过滤地区行为和真实提交。
+      // 客户所在地：只统计当前筛选范围内停留达到 5 秒的访客。
+      // 5 秒是地区面板自己的展示分母，不替代全站访客、漏斗或真实提交口径。
+      // 每个访客只取当前范围内最近一次可靠地区，避免跨地区访问被重复计算。
       this.prisma.$queryRaw<RegionRow[]>(Prisma.sql`
+        WITH scoped AS (
+          SELECT *,
+            COALESCE(NULLIF("visitorId", ''), NULLIF("sessionId", ''), 'event:' || "id"::text) AS identity,
+            COALESCE(NULLIF("sessionId", ''), 'event:' || "id"::text) AS session_key
+          FROM "WebsiteLeadEvent"
+          WHERE ${where}
+        ), dwell_visitors AS (
+          SELECT DISTINCT identity
+          FROM scoped
+          WHERE "eventType" = 'dwell_5s'
+        ), resolved_visitors AS (
+          SELECT DISTINCT ON (s.identity)
+            s.identity,
+            s."province"
+          FROM scoped s
+          INNER JOIN dwell_visitors d ON d.identity = s.identity
+          WHERE s."province" IS NOT NULL
+            AND s."regionSource" IN ('exact_ip', 'stable_masked_prefix')
+          ORDER BY s.identity, s."createdAt" DESC, s."id" DESC
+        )
         SELECT
-          "province",
-          COUNT(DISTINCT COALESCE(NULLIF("visitorId", ''), NULLIF("sessionId", ''), 'event:' || "id"::text)) FILTER (WHERE "eventType" = 'page_view')::bigint AS visitors,
-          COUNT(DISTINCT COALESCE(NULLIF("sessionId", ''), 'event:' || "id"::text)) FILTER (WHERE "eventType" = 'page_view')::bigint AS sessions,
-          COUNT(DISTINCT COALESCE(NULLIF("visitorId", ''), NULLIF("sessionId", ''), 'event:' || "id"::text)) FILTER (WHERE "eventType" = 'engaged_session')::bigint AS "engagedVisitors",
-          COUNT(DISTINCT COALESCE(NULLIF("visitorId", ''), NULLIF("sessionId", ''), 'event:' || "id"::text)) FILTER (WHERE "eventType" IN ('phone_click','wechat_click','wechat_qr_view','quote_cta_click','email_click','form_start','form_step_complete','form_submit'))::bigint AS "highIntentVisitors"
-        FROM "WebsiteLeadEvent"
-        WHERE ${where}
-          AND "province" IS NOT NULL
-          AND "regionSource" IN ('exact_ip', 'stable_masked_prefix')
-        GROUP BY "province"
+          r."province",
+          COUNT(DISTINCT r.identity)::bigint AS visitors,
+          COUNT(DISTINCT s.session_key) FILTER (WHERE s."eventType" = 'dwell_5s')::bigint AS sessions,
+          COUNT(DISTINCT s.identity) FILTER (WHERE s."eventType" = 'engaged_session')::bigint AS "engagedVisitors",
+          COUNT(DISTINCT s.identity) FILTER (WHERE s."eventType" IN ('phone_click','wechat_click','wechat_qr_view','quote_cta_click','email_click','form_start','form_step_complete','form_submit'))::bigint AS "highIntentVisitors"
+        FROM resolved_visitors r
+        INNER JOIN scoped s ON s.identity = r.identity
+        GROUP BY r."province"
         ORDER BY visitors DESC
         LIMIT 40
       `),
       this.prisma.$queryRaw<RegionCoverageRow[]>(Prisma.sql`
+        WITH scoped AS (
+          SELECT *,
+            COALESCE(NULLIF("visitorId", ''), NULLIF("sessionId", ''), 'event:' || "id"::text) AS identity
+          FROM "WebsiteLeadEvent"
+          WHERE ${where}
+        ), dwell_visitors AS (
+          SELECT DISTINCT identity
+          FROM scoped
+          WHERE "eventType" = 'dwell_5s'
+        ), resolved_visitors AS (
+          SELECT DISTINCT d.identity
+          FROM dwell_visitors d
+          INNER JOIN scoped s ON s.identity = d.identity
+          WHERE s."province" IS NOT NULL
+            AND s."regionSource" IN ('exact_ip', 'stable_masked_prefix')
+        )
         SELECT
-          COUNT(DISTINCT COALESCE(NULLIF("visitorId", ''), NULLIF("sessionId", ''), 'event:' || "id"::text))
-            FILTER (WHERE "eventType" = 'page_view')::bigint AS "eligibleVisitors",
-          COUNT(DISTINCT COALESCE(NULLIF("visitorId", ''), NULLIF("sessionId", ''), 'event:' || "id"::text))
-            FILTER (
-              WHERE "eventType" = 'page_view'
-                AND "province" IS NOT NULL
-                AND "regionSource" IN ('exact_ip', 'stable_masked_prefix')
-            )::bigint AS "resolvedVisitors"
-        FROM "WebsiteLeadEvent"
-        WHERE ${where}
+          (SELECT COUNT(*)::bigint FROM dwell_visitors) AS "eligibleVisitors",
+          (SELECT COUNT(*)::bigint FROM resolved_visitors) AS "resolvedVisitors"
       `),
       this.prisma.$queryRaw<DimensionCoverageRow[]>(Prisma.sql`
         SELECT
@@ -613,6 +640,7 @@ export class ShujuGrowthReadService {
         // 把整个窗口缩到它的上线日会让别的数字凭空变小。
         dwellStartAt: hasDwellStart ? dwellStartAt!.toISOString() : null,
         region: {
+          cohort: 'dwell_5s',
           eligibleVisitors: count(regionCoverageRows[0]?.eligibleVisitors),
           resolvedVisitors: count(regionCoverageRows[0]?.resolvedVisitors),
           rate: count(regionCoverageRows[0]?.eligibleVisitors)

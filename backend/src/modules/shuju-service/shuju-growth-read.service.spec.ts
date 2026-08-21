@@ -59,7 +59,7 @@ describe('ShujuGrowthReadService', () => {
       ['MIN(', [{ trackingStartAt: new Date('2026-08-14T16:00:00Z') }]],
       ['last_view', [{ pagePath: '/zh/contact', sessions: 3n }]],
       [
-        'SELECT "province"',
+        'SELECT r."province"',
         [
           {
             province: '广东省',
@@ -511,27 +511,33 @@ describe('ShujuGrowthReadService', () => {
     expect(statements.some((sql) => sql.includes('2026-08-20T10:20:22.000Z'))).toBe(true);
   });
 
-  it('reports customer regions from non-bot facts without applying the quality gate', async () => {
+  it('reports customer regions from the dwell-5-second cohort without applying the 20-second quality gate', async () => {
     const queryRaw = jest.fn().mockResolvedValue([]);
     const service = new ShujuGrowthReadService({ $queryRaw: queryRaw } as unknown as PrismaService);
 
     const result = await service.overview({ startDate: '2026-08-15', endDate: '2026-08-17' });
 
     const statements = queryRaw.mock.calls.map(([sql]) => JSON.stringify(sql));
-    const regionQuery = statements.find((sql) => sql.includes('GROUP BY \\"province\\"'));
+    const regionQuery = statements.find((sql) => sql.includes('GROUP BY r.\\"province\\"'));
     expect(regionQuery).toBeDefined();
-    // 地区是事实维度：排机器人，但不能再被“20秒+交互”质量门过滤。
+    // 地区只统计停留 5 秒以上访客；仍不能套用“20秒+交互”的有效访问门。
     expect(regionQuery).toContain('userAgent');
+    expect(regionQuery).toContain('dwell_visitors');
+    expect(regionQuery).toContain("= 'dwell_5s'");
     expect(regionQuery).not.toContain("= 'effective_interaction'");
     expect(regionQuery).not.toContain("= 'dwell_20s'");
-    expect(regionQuery).toContain('submissionId');
+    // 每个访客只分配到一个最近的可靠地区，不能跨省重复计算。
+    expect(regionQuery).toContain('DISTINCT ON');
+    expect(regionQuery).toContain('ORDER BY s.identity');
     // 没解析出地区的不能凑成一个"未知"省份混进排行
     expect(regionQuery).toContain('IS NOT NULL');
     expect(regionQuery).toContain('regionSource');
     const coverageQuery = statements.find((sql) => sql.includes('eligibleVisitors'));
     expect(coverageQuery).toContain('resolvedVisitors');
+    expect(coverageQuery).toContain('dwell_visitors');
+    expect(coverageQuery).toContain("= 'dwell_5s'");
     expect(result).toHaveProperty('regions');
-    expect(result.coverage).toHaveProperty('region');
+    expect(result.coverage.region).toEqual(expect.objectContaining({ cohort: 'dwell_5s' }));
   });
 
   it('reports submissions with unknown device or region instead of presenting them as zero', async () => {
