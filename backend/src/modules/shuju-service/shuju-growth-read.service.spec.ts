@@ -82,7 +82,7 @@ describe('ShujuGrowthReadService', () => {
         ],
       ],
       [
-        'SELECT "sourceType", NULL::text',
+        'SELECT s.normalized_source_type AS "sourceType", NULL::text',
         [
           {
             sourceType: '外部链接',
@@ -98,7 +98,7 @@ describe('ShujuGrowthReadService', () => {
         ],
       ],
       [
-        'SELECT "sourceType", "sourceDetail"',
+        'SELECT s.normalized_source_type AS "sourceType", s.normalized_source_detail AS "sourceDetail"',
         [
           {
             sourceType: '外部链接',
@@ -114,7 +114,7 @@ describe('ShujuGrowthReadService', () => {
         ],
       ],
       [
-        'WITH scoped AS ( SELECT *',
+        'AS "visitSessions"',
         [
           {
             pageVisitors: 8n,
@@ -375,6 +375,30 @@ describe('ShujuGrowthReadService', () => {
     expect(funnelQuery).not.toContain('WHERE identity IN');
     // 访问标识不完整时使用事件自身标识，不丢整条事实。
     expect(funnelQuery).toContain("'event:'");
+  });
+
+  it('来源表只把能连回同来源访问的行为算作访客转化', async () => {
+    const queryRaw = jest.fn().mockResolvedValue([]);
+    const service = new ShujuGrowthReadService({ $queryRaw: queryRaw } as unknown as PrismaService);
+
+    await service.overview({ startDate: '2026-08-15', endDate: '2026-08-17' });
+
+    const sourceQueries = queryRaw.mock.calls
+      .map(([sql]) => JSON.stringify(sql))
+      .filter(
+        (sql) => sql.includes('normalized_source_type') && sql.includes('highIntentVisitors'),
+      );
+    expect(sourceQueries).toHaveLength(2);
+    for (const sql of sourceQueries) {
+      expect(sql).toContain('source_visitors');
+      expect(sql).toContain('v.identity IS NOT NULL');
+      // 真实提交是业务事实，即使访问标识丢失也要保留次数；
+      // 只是界面不得把它冒充成可计算转化率的访客人数。
+      expect(sql).toContain('submissionId');
+      expect(sql).toContain('jssngyl');
+      expect(sql).toContain('baidu');
+      expect(sql).toContain('bing');
+    }
   });
 
   it('keeps the per-page funnel monotonic so the drill-down can show conversion', async () => {

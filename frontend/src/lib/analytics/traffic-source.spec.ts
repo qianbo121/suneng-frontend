@@ -33,6 +33,12 @@ describe('traffic source classification', () => {
     expect(classifyTrafficSource('')).toEqual({ sourceType: '直接访问' });
   });
 
+  it('never treats the current website as an external referral', () => {
+    expect(classifyTrafficSource('https://www.jssngyl.cn/zh/about', '', 'jssngyl.cn')).toEqual({
+      sourceType: '直接访问',
+    });
+  });
+
   it('keeps natural search separate from other external websites', () => {
     expect(classifyTrafficSource('https://www.baidu.com/s?wd=test')).toEqual({
       sourceType: '自然搜索',

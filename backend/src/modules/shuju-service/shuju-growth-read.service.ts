@@ -117,6 +117,27 @@ export const EFFECTIVE_VISIT_RULE_STARTED_AT = new Date('2026-08-20T10:20:22.000
 // 历史上公开埋点入口写入的同名事件必须从所有统计中排除。
 const VERIFIED_EVENT = Prisma.sql`("eventType" <> 'form_submit' OR "submissionId" IS NOT NULL)`;
 
+// 历史事件曾把官网内部跳转和部分搜索引擎写成“外部链接”。
+// Raw 事实不覆盖，只在读取时统一归类，这样旧数据不会继续污染看板。
+const NORMALIZED_SOURCE_TYPE = Prisma.sql`CASE
+  WHEN LOWER(COALESCE("sourceDetail", '')) ~ '(^|\\.)jssngyl\\.cn$' THEN '无法识别'
+  WHEN LOWER(COALESCE("sourceDetail", '')) ~ '(^|\\.)(baidu\\.com|bing\\.com|google\\.com|google\\.com\\.hk|sogou\\.com|so\\.com)$' THEN '自然搜索'
+  WHEN LOWER(COALESCE("sourceDetail", '')) ~ '(^|\\.)(doubao\\.com|kimi\\.com|moonshot\\.cn|yuanbao\\.tencent\\.com|deepseek\\.com|tongyi\\.aliyun\\.com|qianwen\\.com|qwen\\.ai|metaso\\.cn|chatgpt\\.com|openai\\.com|perplexity\\.ai|yiyan\\.baidu\\.com|quark\\.cn)$' THEN 'AI引流'
+  WHEN COALESCE(NULLIF("sourceType", ''), '无法识别') = '外部链接'
+    AND NULLIF("sourceDetail", '') IS NULL THEN '无法识别'
+  ELSE COALESCE(NULLIF("sourceType", ''), '无法识别')
+END`;
+
+const NORMALIZED_SOURCE_DETAIL = Prisma.sql`CASE
+  WHEN LOWER(COALESCE("sourceDetail", '')) ~ '(^|\\.)jssngyl\\.cn$' THEN NULL
+  WHEN LOWER(COALESCE("sourceDetail", '')) ~ '(^|\\.)baidu\\.com$' THEN '百度'
+  WHEN LOWER(COALESCE("sourceDetail", '')) ~ '(^|\\.)bing\\.com$' THEN '必应'
+  WHEN LOWER(COALESCE("sourceDetail", '')) ~ '(^|\\.)(google\\.com|google\\.com\\.hk)$' THEN 'Google'
+  WHEN LOWER(COALESCE("sourceDetail", '')) ~ '(^|\\.)sogou\\.com$' THEN '搜狗'
+  WHEN LOWER(COALESCE("sourceDetail", '')) ~ '(^|\\.)so\\.com$' THEN '360搜索'
+  ELSE NULLIF("sourceDetail", '')
+END`;
+
 function count(value: bigint | number | null | undefined) {
   return Number(value ?? 0);
 }
@@ -232,7 +253,7 @@ export class ShujuGrowthReadService {
       qualityFilters.push(Prisma.sql`"deviceType" = ${query.device}`);
     }
     if (query.sourceType && query.sourceType !== 'all') {
-      addDimensionFilter(Prisma.sql`"sourceType" = ${query.sourceType}`);
+      addDimensionFilter(Prisma.sql`${NORMALIZED_SOURCE_TYPE} = ${query.sourceType}`);
     }
     if (query.pageType && query.pageType !== 'all') {
       if (query.pageType === '解决方案页') {
@@ -314,36 +335,63 @@ export class ShujuGrowthReadService {
         ORDER BY day ASC
       `),
       this.prisma.$queryRaw<SourceRow[]>(Prisma.sql`
+        WITH scoped AS (
+          SELECT *,
+            COALESCE(NULLIF("visitorId", ''), NULLIF("sessionId", ''), 'event:' || "id"::text) AS identity,
+            ${NORMALIZED_SOURCE_TYPE} AS normalized_source_type
+          FROM "WebsiteLeadEvent"
+          WHERE ${where}
+        ), source_visitors AS (
+          SELECT DISTINCT normalized_source_type, identity
+          FROM scoped
+          WHERE "eventType" = 'page_view'
+        )
         SELECT
-          "sourceType",
+          s.normalized_source_type AS "sourceType",
           NULL::text AS "sourceDetail",
-          COUNT(DISTINCT COALESCE(NULLIF("visitorId", ''), NULLIF("sessionId", ''), 'event:' || "id"::text)) FILTER (WHERE "eventType" = 'page_view')::bigint AS visitors,
-          COUNT(*) FILTER (WHERE "eventType" = 'page_view')::bigint AS "pageViews",
-          COUNT(DISTINCT COALESCE(NULLIF("visitorId", ''), NULLIF("sessionId", ''), 'event:' || "id"::text)) FILTER (WHERE "eventType" = 'engaged_session')::bigint AS "engagedVisitors",
-          COUNT(DISTINCT COALESCE(NULLIF("visitorId", ''), NULLIF("sessionId", ''), 'event:' || "id"::text)) FILTER (WHERE "eventType" IN ('phone_click','wechat_click','wechat_qr_view','quote_cta_click','email_click'))::bigint AS "highIntentVisitors",
-          COUNT(DISTINCT COALESCE(NULLIF("visitorId", ''), NULLIF("sessionId", ''), 'event:' || "id"::text)) FILTER (WHERE "eventType" = 'form_start')::bigint AS "formStarts",
-          COUNT(DISTINCT COALESCE(NULLIF("visitorId", ''), NULLIF("sessionId", ''), 'event:' || "id"::text)) FILTER (WHERE "eventType" = 'form_step_complete')::bigint AS "stepCompleted",
-          COUNT(DISTINCT COALESCE(NULLIF("visitorId", ''), NULLIF("sessionId", ''), 'event:' || "id"::text)) FILTER (WHERE "eventType" = 'form_submit')::bigint AS submissions
-        FROM "WebsiteLeadEvent"
-        WHERE ${where}
-        GROUP BY "sourceType"
+          COUNT(DISTINCT s.identity) FILTER (WHERE s."eventType" = 'page_view')::bigint AS visitors,
+          COUNT(*) FILTER (WHERE s."eventType" = 'page_view')::bigint AS "pageViews",
+          COUNT(DISTINCT s.identity) FILTER (WHERE s."eventType" = 'engaged_session' AND v.identity IS NOT NULL)::bigint AS "engagedVisitors",
+          COUNT(DISTINCT s.identity) FILTER (WHERE s."eventType" IN ('phone_click','wechat_click','wechat_qr_view','quote_cta_click','email_click') AND v.identity IS NOT NULL)::bigint AS "highIntentVisitors",
+          COUNT(DISTINCT s.identity) FILTER (WHERE s."eventType" = 'form_start' AND v.identity IS NOT NULL)::bigint AS "formStarts",
+          COUNT(DISTINCT s.identity) FILTER (WHERE s."eventType" = 'form_step_complete' AND v.identity IS NOT NULL)::bigint AS "stepCompleted",
+          COUNT(DISTINCT s."submissionId") FILTER (WHERE s."eventType" = 'form_submit')::bigint AS submissions
+        FROM scoped s
+        LEFT JOIN source_visitors v
+          ON v.normalized_source_type = s.normalized_source_type AND v.identity = s.identity
+        GROUP BY s.normalized_source_type
         ORDER BY "pageViews" DESC, visitors DESC
       `),
       this.prisma.$queryRaw<SourceRow[]>(Prisma.sql`
+        WITH scoped AS (
+          SELECT *,
+            COALESCE(NULLIF("visitorId", ''), NULLIF("sessionId", ''), 'event:' || "id"::text) AS identity,
+            ${NORMALIZED_SOURCE_TYPE} AS normalized_source_type,
+            ${NORMALIZED_SOURCE_DETAIL} AS normalized_source_detail
+          FROM "WebsiteLeadEvent"
+          WHERE ${where}
+        ), source_visitors AS (
+          SELECT DISTINCT normalized_source_type, normalized_source_detail, identity
+          FROM scoped
+          WHERE "eventType" = 'page_view'
+        )
         SELECT
-          "sourceType",
-          "sourceDetail",
-          COUNT(DISTINCT COALESCE(NULLIF("visitorId", ''), NULLIF("sessionId", ''), 'event:' || "id"::text)) FILTER (WHERE "eventType" = 'page_view')::bigint AS visitors,
-          COUNT(*) FILTER (WHERE "eventType" = 'page_view')::bigint AS "pageViews",
-          COUNT(DISTINCT COALESCE(NULLIF("visitorId", ''), NULLIF("sessionId", ''), 'event:' || "id"::text)) FILTER (WHERE "eventType" = 'engaged_session')::bigint AS "engagedVisitors",
-          COUNT(DISTINCT COALESCE(NULLIF("visitorId", ''), NULLIF("sessionId", ''), 'event:' || "id"::text)) FILTER (WHERE "eventType" IN ('phone_click','wechat_click','wechat_qr_view','quote_cta_click','email_click'))::bigint AS "highIntentVisitors",
-          COUNT(DISTINCT COALESCE(NULLIF("visitorId", ''), NULLIF("sessionId", ''), 'event:' || "id"::text)) FILTER (WHERE "eventType" = 'form_start')::bigint AS "formStarts",
-          COUNT(DISTINCT COALESCE(NULLIF("visitorId", ''), NULLIF("sessionId", ''), 'event:' || "id"::text)) FILTER (WHERE "eventType" = 'form_step_complete')::bigint AS "stepCompleted",
-          COUNT(DISTINCT COALESCE(NULLIF("visitorId", ''), NULLIF("sessionId", ''), 'event:' || "id"::text)) FILTER (WHERE "eventType" = 'form_submit')::bigint AS submissions
-        FROM "WebsiteLeadEvent"
-        WHERE ${where}
-          AND "sourceDetail" IS NOT NULL
-        GROUP BY "sourceType", "sourceDetail"
+          s.normalized_source_type AS "sourceType",
+          s.normalized_source_detail AS "sourceDetail",
+          COUNT(DISTINCT s.identity) FILTER (WHERE s."eventType" = 'page_view')::bigint AS visitors,
+          COUNT(*) FILTER (WHERE s."eventType" = 'page_view')::bigint AS "pageViews",
+          COUNT(DISTINCT s.identity) FILTER (WHERE s."eventType" = 'engaged_session' AND v.identity IS NOT NULL)::bigint AS "engagedVisitors",
+          COUNT(DISTINCT s.identity) FILTER (WHERE s."eventType" IN ('phone_click','wechat_click','wechat_qr_view','quote_cta_click','email_click') AND v.identity IS NOT NULL)::bigint AS "highIntentVisitors",
+          COUNT(DISTINCT s.identity) FILTER (WHERE s."eventType" = 'form_start' AND v.identity IS NOT NULL)::bigint AS "formStarts",
+          COUNT(DISTINCT s.identity) FILTER (WHERE s."eventType" = 'form_step_complete' AND v.identity IS NOT NULL)::bigint AS "stepCompleted",
+          COUNT(DISTINCT s."submissionId") FILTER (WHERE s."eventType" = 'form_submit')::bigint AS submissions
+        FROM scoped s
+        LEFT JOIN source_visitors v
+          ON v.normalized_source_type = s.normalized_source_type
+          AND v.normalized_source_detail IS NOT DISTINCT FROM s.normalized_source_detail
+          AND v.identity = s.identity
+        WHERE s.normalized_source_detail IS NOT NULL
+        GROUP BY s.normalized_source_type, s.normalized_source_detail
         ORDER BY "pageViews" DESC, visitors DESC
         LIMIT 200
       `),
