@@ -33,7 +33,11 @@ function buildLocaleHref(locale: string, href: string) {
   return href === '/' ? `/${locale}` : `/${locale}${href}`;
 }
 
-function buildLocaleSwitchPath(pathname: string, nextLocale: 'zh' | 'en', currentLocale: 'zh' | 'en') {
+function buildLocaleSwitchPath(
+  pathname: string,
+  nextLocale: 'zh' | 'en',
+  currentLocale: 'zh' | 'en',
+) {
   // Switching to English from a Chinese-only page (no /en counterpart) lands on
   // the English home instead of a 404. The source of truth is ZH_ONLY_PATHS.
   if (currentLocale === 'zh' && nextLocale === 'en' && isZhOnlyPath(pathname)) {
@@ -133,7 +137,10 @@ export function Header({ locale }: HeaderProps) {
       if (event.shiftKey && (activeElement === firstElement || !panel.contains(activeElement))) {
         event.preventDefault();
         lastElement.focus();
-      } else if (!event.shiftKey && (activeElement === lastElement || !panel.contains(activeElement))) {
+      } else if (
+        !event.shiftKey &&
+        (activeElement === lastElement || !panel.contains(activeElement))
+      ) {
         event.preventDefault();
         firstElement.focus();
       }
@@ -163,10 +170,14 @@ export function Header({ locale }: HeaderProps) {
     <>
       <header
         ref={backgroundHeaderRef}
-        className="relative z-[9999] min-h-[78px] bg-transparent bp-tablet-min:min-h-header-h"
+        className="site-header relative z-[9999] min-h-[78px] bg-transparent xl:min-h-header-h"
       >
-        <div className="fixed inset-x-0 top-0 z-[9999] flex h-[78px] items-center justify-between bg-white px-3 bp-tablet-min:hidden">
-          <Link href={`/${locale}`} className="ml-2 flex h-[72px] w-auto items-center" aria-label={logoAlt}>
+        <div className="fixed inset-x-0 top-0 z-[9999] flex h-[78px] items-center justify-between bg-white px-3 xl:hidden">
+          <Link
+            href={`/${locale}`}
+            className="ml-2 flex h-[72px] w-auto items-center"
+            aria-label={logoAlt}
+          >
             <Image
               src={HEADER_LOGO_SRC}
               alt={logoAlt}
@@ -174,7 +185,7 @@ export function Header({ locale }: HeaderProps) {
               height={40}
               priority
               className="max-w-none object-contain object-left object-center"
-              style={{ width: 'auto', height: '40px' }}
+              style={{ width: '229px', height: 'auto' }}
             />
           </Link>
           <button
@@ -184,20 +195,24 @@ export function Header({ locale }: HeaderProps) {
               previouslyFocusedRef.current = openButtonRef.current;
               setMobileOpen(true);
             }}
-            className="flex h-[60px] w-[50px] items-center justify-center text-text-secondary"
+            className="flex h-[60px] w-[50px] items-center justify-center text-text-secondary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary"
             aria-label={mobileNavCopy.open}
             aria-expanded={mobileOpen}
             aria-controls="mobile-navigation-dialog"
           >
-            <HiBars3BottomRight className="h-8 w-8" />
+            <HiBars3BottomRight className="h-8 w-8" aria-hidden="true" />
           </button>
         </div>
 
-        <div className="fixed inset-x-0 top-0 z-[9999] hidden h-header-h w-full items-center border-b border-black/6 bg-white shadow-[0_8px_26px_rgba(15,23,42,0.06)] bp-tablet-min:flex">
+        <div className="site-header__desktop-bar fixed inset-x-0 top-0 z-[9999] hidden h-header-h w-full items-center border-b border-black/6 bg-white shadow-[0_8px_26px_rgba(15,23,42,0.06)] xl:flex">
           <div className="flex w-full items-center justify-between pl-12 pr-10 bp-desktop-wide-max:pl-10 bp-desktop-wide-max:pr-8 bp-tablet-max:px-4">
             <div className="shrink-0 self-center">
               <div className="w-auto">
-                <Link href={`/${locale}`} className="flex h-[78px] w-auto items-center justify-start" aria-label={logoAlt}>
+                <Link
+                  href={`/${locale}`}
+                  className="site-header__desktop-logo-link flex h-[78px] w-auto items-center justify-start"
+                  aria-label={logoAlt}
+                >
                   <Image
                     src={HEADER_LOGO_SRC}
                     alt={logoAlt}
@@ -205,7 +220,7 @@ export function Header({ locale }: HeaderProps) {
                     height={48}
                     priority
                     className="max-w-none object-contain object-left object-center"
-                    style={{ width: 'auto', height: '48px' }}
+                    style={{ width: '275px', height: 'auto' }}
                   />
                 </Link>
               </div>
@@ -218,53 +233,75 @@ export function Header({ locale }: HeaderProps) {
                   <ul className="p_level1Box flex items-center justify-end gap-0">
                     {navItems.map((item) => {
                       const href = buildLocaleHref(locale, item.href);
-                      const childHrefs = item.children?.map((child) => buildLocaleHref(locale, child.href)) ?? [];
-                      const isActive = isActiveNavItem(pathname, href) || childHrefs.some((childHref) => isActiveNavItem(pathname, childHref));
+                      const childHrefs =
+                        item.children?.map((child) => buildLocaleHref(locale, child.href)) ?? [];
+                      const isActive =
+                        isActiveNavItem(pathname, href) ||
+                        childHrefs.some((childHref) => isActiveNavItem(pathname, childHref));
                       const isContactItem = item.key === 'contact';
 
                       return (
                         <li
                           key={item.key}
-                          className={`p_level1Item group relative h-header-h list-none border-none ${
-                            isContactItem ? '' : 'mr-[12px] bp-desktop-wide-max:mr-[8px] bp-tablet-max:mr-[4px]'
+                          className={`site-header__nav-item p_level1Item group relative h-header-h list-none border-none ${
+                            isContactItem
+                              ? ''
+                              : 'mr-[12px] bp-desktop-wide-max:mr-[8px] bp-tablet-max:mr-[4px]'
                           }`}
                         >
-                          <p
-                            className={`p_menu1Item relative h-header-h ${
-                              isActive
-                                ? ''
-                                : ''
-                            }`}
-                          >
+                          <p className={`site-header__nav-height p_menu1Item relative h-header-h ${isActive ? '' : ''}`}>
                             <Link
                               href={href}
-                              className={`relative z-[2] flex h-header-h items-center whitespace-nowrap px-[16px] text-center text-[15px] tracking-[0.01em] text-text-secondary transition-colors duration-300 bp-desktop-wide-max:px-[14px] bp-tablet-max:px-[10px] bp-tablet-max:text-[14px] ${
-                                isActive ? 'font-semibold text-[#202020]' : 'font-medium group-hover:text-[#202020]'
+                              className={`site-header__nav-link ${isContactItem ? 'site-header__contact-link' : ''} relative z-[2] flex items-center whitespace-nowrap text-center text-[15px] tracking-[0.01em] transition-colors duration-300 ${
+                                isContactItem
+                                  ? 'my-[18px] h-[46px] bg-[#c51624] px-[18px] font-semibold text-white hover:bg-[#a90f1b] focus-visible:bg-[#a90f1b] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#c51624]'
+                                  : `h-header-h px-[16px] text-text-secondary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-4px] focus-visible:outline-brand-primary bp-desktop-wide-max:px-[12px] ${
+                                      isActive
+                                        ? 'font-semibold text-[#202020]'
+                                        : 'font-medium group-hover:text-[#202020]'
+                                    }`
                               }`}
                             >
-                              <span className={`relative inline-flex items-center leading-none after:absolute after:-bottom-[31px] after:left-[4px] after:right-[4px] after:h-[1.5px] after:rounded-full after:bg-red-600/70 after:transition-transform after:duration-300 after:content-[''] ${
-                                isActive ? 'after:scale-x-100' : 'after:scale-x-0 group-hover:after:scale-x-100'
-                              }`}>
+                              <span
+                                className={`relative inline-flex items-center leading-none ${
+                                  isContactItem
+                                    ? ''
+                                    : `after:absolute after:-bottom-[31px] after:left-[4px] after:right-[4px] after:h-[1.5px] after:rounded-full after:bg-red-600/70 after:transition-transform after:duration-300 after:content-[''] ${
+                                        isActive
+                                          ? 'after:scale-x-100'
+                                          : 'after:scale-x-0 group-hover:after:scale-x-100'
+                                      }`
+                                }`}
+                              >
                                 {item.labelText}
                               </span>
                               {item.children?.length ? (
-                                <HiChevronRight className="ml-[2px] inline-block h-[14px] w-[14px] align-middle text-current bp-tablet-min:hidden" />
+                                <HiChevronRight
+                                  className="ml-[2px] inline-block h-[14px] w-[14px] align-middle text-current xl:hidden"
+                                  aria-hidden="true"
+                                />
                               ) : null}
                             </Link>
                           </p>
 
                           {item.children?.length ? (
-                            <ul className="p_level2Box absolute left-0 top-full z-[99] hidden min-w-[220px] overflow-hidden border border-[#dddddd] bg-white py-0 shadow-[0_10px_24px_rgba(0,0,0,0.08)] group-hover:block">
+                            <ul className="p_level2Box absolute left-0 top-full z-[99] hidden min-w-[220px] overflow-hidden border border-[#dddddd] bg-white py-0 shadow-[0_10px_24px_rgba(0,0,0,0.08)] group-hover:block group-focus-within:block">
                               {item.children.map((child) => (
-                                <li key={child.key} className="p_level2Item list-none border-b border-[#d5d5d5] last:border-b-0">
+                                <li
+                                  key={child.key}
+                                  className="p_level2Item list-none border-b border-[#d5d5d5] last:border-b-0"
+                                >
                                   <p className="p_menu2Item">
                                     <Link
                                       href={buildLocaleHref(locale, child.href)}
-                                      className="group/item flex items-center justify-between whitespace-nowrap px-5 py-3 text-left text-[15px] font-normal leading-[1.8] text-[#333333] transition-all duration-300 hover:bg-bg-language hover:text-text-inverse bp-tablet-max:text-[12px]"
+                                      className="group/item flex items-center justify-between whitespace-nowrap px-5 py-3 text-left text-[15px] font-normal leading-[1.8] text-[#333333] transition-colors duration-300 hover:bg-bg-language hover:text-text-inverse focus-visible:bg-bg-language focus-visible:text-text-inverse focus-visible:outline focus-visible:outline-2 focus-visible:outline-inset focus-visible:outline-brand-primary bp-tablet-max:text-[12px]"
                                     >
                                       <span>{child.labelText}</span>
                                       <span className="pc_ej ml-[10px] block h-5 w-[17px] text-transparent transition-colors group-hover/item:text-white/70">
-                                        <HiChevronRight className="h-5 w-[17px]" />
+                                        <HiChevronRight
+                                          className="h-5 w-[17px]"
+                                          aria-hidden="true"
+                                        />
                                       </span>
                                     </Link>
                                   </p>
@@ -276,10 +313,10 @@ export function Header({ locale }: HeaderProps) {
                       );
                     })}
 
-                    <li className="p_level1Item group relative h-header-h list-none border-none">
+                    <li className="site-header__nav-item p_level1Item group relative h-header-h list-none border-none">
                       <Link
                         href={switchLocalePath}
-                        className="relative z-[2] flex h-header-h items-center whitespace-nowrap px-[16px] text-center text-[15px] font-medium tracking-[0.01em] text-text-secondary transition-colors duration-300 bp-desktop-wide-max:px-[14px] bp-tablet-max:px-[10px] bp-tablet-max:text-[14px] hover:text-[#202020]"
+                        className="site-header__nav-link relative z-[2] flex h-header-h items-center whitespace-nowrap px-[16px] text-center text-[15px] font-medium tracking-[0.01em] text-text-secondary transition-colors duration-300 hover:text-[#202020] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-4px] focus-visible:outline-brand-primary bp-desktop-wide-max:px-[14px] bp-tablet-max:px-[10px] bp-tablet-max:text-[14px]"
                       >
                         <span>{localeLabel[switchLocale]}</span>
                       </Link>
@@ -288,7 +325,6 @@ export function Header({ locale }: HeaderProps) {
                 </div>
               </div>
             </div>
-
           </div>
         </div>
       </header>
@@ -297,101 +333,116 @@ export function Header({ locale }: HeaderProps) {
         <div
           ref={mobilePanelRef}
           id="mobile-navigation-dialog"
-          className="fixed inset-0 z-[10000] overflow-y-auto bg-white bp-tablet-min:hidden"
+          className="fixed inset-0 z-[10000] overflow-y-auto bg-white xl:hidden"
           role="dialog"
           aria-modal="true"
           aria-label={mobileNavCopy.dialog}
           tabIndex={-1}
         >
-            <div className="flex h-[78px] items-center justify-between border-b border-black/5 px-4">
-              <Link href={`/${locale}`} className="ml-2 flex h-[72px] w-auto items-center" aria-label={logoAlt}>
-                <Image
-                  src={HEADER_LOGO_SRC}
-                  alt={logoAlt}
-                  width={229}
-                  height={40}
-                  priority
-                  className="max-w-none object-contain object-left object-center"
-                  style={{ width: 'auto', height: '40px' }}
-                />
-              </Link>
-              <button
-                ref={closeButtonRef}
-                type="button"
-                onClick={() => setMobileOpen(false)}
-                className="flex h-[60px] w-[50px] items-center justify-center text-brand-primary"
-                aria-label={mobileNavCopy.close}
-              >
-                <HiOutlineXMark className="h-8 w-8" />
-              </button>
-            </div>
+          <div className="flex h-[78px] items-center justify-between border-b border-black/5 px-4">
+            <Link
+              href={`/${locale}`}
+              className="ml-2 flex h-[72px] w-auto items-center"
+              aria-label={logoAlt}
+            >
+              <Image
+                src={HEADER_LOGO_SRC}
+                alt={logoAlt}
+                width={229}
+                height={40}
+                priority
+                className="max-w-none object-contain object-left object-center"
+                style={{ width: '229px', height: 'auto' }}
+              />
+            </Link>
+            <button
+              ref={closeButtonRef}
+              type="button"
+              onClick={() => setMobileOpen(false)}
+              className="flex h-[60px] w-[50px] items-center justify-center text-brand-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary"
+              aria-label={mobileNavCopy.close}
+            >
+              <HiOutlineXMark className="h-8 w-8" aria-hidden="true" />
+            </button>
+          </div>
 
-            <div className="px-5 pb-10 pt-4">
-              <div className="p_navContent">
-                <ul className="p_level1Box flex flex-col">
-                  {navItems.map((item) => {
-                    const href = buildLocaleHref(locale, item.href);
-                    const childHrefs = item.children?.map((child) => buildLocaleHref(locale, child.href)) ?? [];
-                    const isActive = isActiveNavItem(pathname, href) || childHrefs.some((childHref) => isActiveNavItem(pathname, childHref));
+          <div className="px-5 pb-10 pt-4">
+            <div className="p_navContent">
+              <ul className="p_level1Box flex flex-col">
+                {navItems.map((item) => {
+                  const href = buildLocaleHref(locale, item.href);
+                  const childHrefs =
+                    item.children?.map((child) => buildLocaleHref(locale, child.href)) ?? [];
+                  const isActive =
+                    isActiveNavItem(pathname, href) ||
+                    childHrefs.some((childHref) => isActiveNavItem(pathname, childHref));
+                  const isContactItem = item.key === 'contact';
 
-                    return (
-                      <li key={item.key} className="p_level1Item list-none border-b border-black/5">
-                        <p className="p_menu1Item">
-                          <Link
-                            href={href}
-                            className={`flex min-h-[50px] items-center justify-between py-1 text-[14px] font-semibold leading-[50px] ${
-                              isActive ? 'text-brand-primary' : 'text-text-secondary'
-                            }`}
-                          >
-                            <span>{item.labelText}</span>
-                            {item.children?.length ? (
-                              <HiChevronRight className={`h-4 w-4 ${isActive ? 'text-brand-primary' : 'text-text-secondary'}`} />
-                            ) : null}
-                          </Link>
-                        </p>
+                  return (
+                    <li key={item.key} className="p_level1Item list-none border-b border-black/5">
+                      <p className="p_menu1Item">
+                        <Link
+                          href={href}
+                          className={`my-1 flex min-h-[50px] items-center justify-between px-3 py-1 text-[14px] font-semibold leading-[50px] focus-visible:outline focus-visible:outline-2 focus-visible:outline-brand-primary ${
+                            isContactItem
+                              ? 'bg-[#c51624] text-white'
+                              : isActive
+                                ? 'text-brand-primary'
+                                : 'text-text-secondary'
+                          }`}
+                        >
+                          <span>{item.labelText}</span>
+                          {item.children?.length ? (
+                            <HiChevronRight
+                              className={`h-4 w-4 ${isActive ? 'text-brand-primary' : 'text-text-secondary'}`}
+                              aria-hidden="true"
+                            />
+                          ) : null}
+                        </Link>
+                      </p>
 
-                        {item.children?.length ? (
-                          <ul className="p_level2Box pb-4 pl-5">
-                            {item.children.map((child) => (
-                              <li key={child.key} className="p_level2Item list-none">
-                                <p className="p_menu2Item">
-                                  <Link
-                                    href={buildLocaleHref(locale, child.href)}
-                                    className="block py-2 text-[14px] leading-[30px] text-[#666666]"
-                                  >
-                                    {child.labelText}
-                                  </Link>
-                                </p>
-                              </li>
-                            ))}
-                          </ul>
-                        ) : null}
-                      </li>
-                    );
-                  })}
+                      {item.children?.length ? (
+                        <ul className="p_level2Box pb-4 pl-5">
+                          {item.children.map((child) => (
+                            <li key={child.key} className="p_level2Item list-none">
+                              <p className="p_menu2Item">
+                                <Link
+                                  href={buildLocaleHref(locale, child.href)}
+                                  className="block py-2 text-[14px] leading-[30px] text-[#666666] focus-visible:outline focus-visible:outline-2 focus-visible:outline-brand-primary"
+                                >
+                                  {child.labelText}
+                                </Link>
+                              </p>
+                            </li>
+                          ))}
+                        </ul>
+                      ) : null}
+                    </li>
+                  );
+                })}
 
-                  <li className="p_level1Item list-none border-b border-black/5">
-                    <Link
-                      href={switchLocalePath}
-                      className="flex min-h-[50px] items-center justify-between py-1 text-[14px] font-semibold leading-[50px] text-text-secondary"
-                    >
-                      <span>{localeLabel[switchLocale]}</span>
-                    </Link>
-                  </li>
-                </ul>
-              </div>
-
-              <div className="mt-6 border-t border-black/5 pt-6">
-                <div className="inline-flex min-w-[120px] items-center justify-center">
+                <li className="p_level1Item list-none border-b border-black/5">
                   <Link
                     href={switchLocalePath}
-                    className="inline-flex min-w-[120px] items-center justify-center bg-bg-language px-4 py-3 text-button font-semibold text-text-inverse"
+                    className="flex min-h-[50px] items-center justify-between py-1 text-[14px] font-semibold leading-[50px] text-text-secondary focus-visible:outline focus-visible:outline-2 focus-visible:outline-brand-primary"
                   >
-                    {localeLabel[switchLocale]}
+                    <span>{localeLabel[switchLocale]}</span>
                   </Link>
-                </div>
+                </li>
+              </ul>
+            </div>
+
+            <div className="mt-6 border-t border-black/5 pt-6">
+              <div className="inline-flex min-w-[120px] items-center justify-center">
+                <Link
+                  href={switchLocalePath}
+                  className="inline-flex min-w-[120px] items-center justify-center bg-bg-language px-4 py-3 text-button font-semibold text-text-inverse"
+                >
+                  {localeLabel[switchLocale]}
+                </Link>
               </div>
             </div>
+          </div>
         </div>
       ) : null}
     </>

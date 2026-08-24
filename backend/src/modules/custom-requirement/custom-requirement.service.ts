@@ -94,13 +94,24 @@ const adminRequirementSelect = {
 } as const satisfies Prisma.CustomRequirementSelect;
 
 function normalizeInquiry(dto: CreateCustomRequirementDto) {
-  const phone = normalizeEmpty(dto.phone);
-  const email = normalizeEmpty(dto.email)?.toLowerCase();
+  const isHomepageMinimal = dto.formVariant === 'homepage_minimal';
+  const homepageContact = isHomepageMinimal ? normalizeEmpty(dto.contact) : undefined;
+  const homepageContactIsEmail = Boolean(
+    homepageContact && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(homepageContact),
+  );
+  const phone = isHomepageMinimal
+    ? homepageContactIsEmail
+      ? undefined
+      : homepageContact
+    : normalizeEmpty(dto.phone);
+  const email = (
+    isHomepageMinimal && homepageContactIsEmail ? homepageContact : normalizeEmpty(dto.email)
+  )?.toLowerCase();
 
   if (!phone && !email) {
     throw new BadRequestException('Phone or email is required');
   }
-  if (dto.locale === 'en' && !email) {
+  if (!isHomepageMinimal && dto.locale === 'en' && !email) {
     throw new BadRequestException('Email is required for English inquiries');
   }
   if (
@@ -112,11 +123,11 @@ function normalizeInquiry(dto: CreateCustomRequirementDto) {
 
   return {
     projectType: normalizeEmpty(dto.projectType),
-    projectLocation: normalizeEmpty(dto.projectLocation),
-    name: normalizeEmpty(dto.name),
+    projectLocation: isHomepageMinimal ? undefined : normalizeEmpty(dto.projectLocation),
+    name: isHomepageMinimal ? normalizeEmpty(dto.identity) : normalizeEmpty(dto.name),
     phone,
     email,
-    company: normalizeEmpty(dto.company),
+    company: isHomepageMinimal ? undefined : normalizeEmpty(dto.company),
     industry: normalizeEmpty(dto.industry),
     process: normalizeEmpty(dto.process),
     temperature: normalizeEmpty(dto.temperature),

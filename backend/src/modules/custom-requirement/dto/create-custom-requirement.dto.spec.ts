@@ -68,6 +68,40 @@ describe('CreateCustomRequirementDto', () => {
     },
   );
 
+  it('accepts the approved four-field homepage payload without hidden required fields', async () => {
+    const minimal = plainToInstance(CreateCustomRequirementDto, {
+      formVariant: 'homepage_minimal',
+      projectType: '现有设备改造或维修',
+      requirement: '现有炉温度不均，想先判断改造还是换新',
+      identity: '示例制造公司 / 王工',
+      contact: 'wechat_name-2026',
+      locale: 'zh',
+    });
+
+    await expect(validate(minimal)).resolves.toHaveLength(0);
+    expect(minimal.projectLocation).toBeUndefined();
+    expect(minimal.company).toBeUndefined();
+  });
+
+  it('requires all four visible homepage fields and accepts email as the single contact', async () => {
+    const minimal = (overrides: Record<string, unknown> = {}) =>
+      plainToInstance(CreateCustomRequirementDto, {
+        formVariant: 'homepage_minimal',
+        projectType: '单体工业炉新建',
+        requirement: '需要先确认设备方向',
+        identity: '王工',
+        contact: 'buyer@example.com',
+        locale: 'zh',
+        ...overrides,
+      });
+
+    await expect(validate(minimal())).resolves.toHaveLength(0);
+    for (const field of ['projectType', 'requirement', 'identity', 'contact'] as const) {
+      const errors = await validate(minimal({ [field]: '   ' }));
+      expect(errors.some((error) => error.property === field)).toBe(true);
+    }
+  });
+
   it('trims overlong optional source fields before validation instead of rejecting the inquiry', async () => {
     const transformed = plainToInstance(CreateCustomRequirementDto, {
       ...dto(),

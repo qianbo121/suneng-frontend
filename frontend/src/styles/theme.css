@@ -1,8 +1,13 @@
 :root {
   --color-primary: #004b97;
-  --color-accent: #e60012;
   --color-primary-deep: #00356b;
   --color-primary-soft: #0f5fae;
+  --color-interactive: #0c47c7;
+  --color-interactive-strong: #0759e6;
+  --color-interactive-light: #73adff;
+  --color-action: #e60012;
+  --color-danger: #c51624;
+  --color-accent: var(--color-action);
   --color-neutral-900: #333333;
   --color-neutral-700: #666666;
   --color-neutral-500: #999999;
@@ -19,4 +24,139 @@
   --radius-card: 28px;
   --shadow-card: 0 22px 60px rgba(15, 38, 75, 0.08);
   --shadow-header: 0 12px 36px rgba(12, 34, 69, 0.12);
+}
+
+/* 中文首页专用字阶与间距。通过首页标记生效，避免影响站内其他页面。 */
+body:has(.home-page-scope) {
+  --home-paper: #f2f6fb;
+  --home-surface: #ffffff;
+  --home-ink: #0c192a;
+  --home-copy: #516176;
+  --home-muted: #748298;
+  --home-line: #d8e2ef;
+  --home-blue: #0c4dcc;
+  --home-blue-strong: #0759e6;
+  --home-blue-soft: #eaf2ff;
+  --home-dark: #061527;
+  --home-dark-copy: #c7d4e6;
+
+  --home-font-hero-size: 40px;
+  --home-font-hero-line: 52px;
+  --home-font-section-size: 30px;
+  --home-font-section-line: 42px;
+  --home-font-feature-size: 24px;
+  --home-font-feature-line: 34px;
+  --home-font-card-size: 20px;
+  --home-font-card-line: 30px;
+  --home-font-body-size: 16px;
+  --home-font-body-line: 28px;
+  --home-font-secondary-size: 15px;
+  --home-font-secondary-line: 26px;
+  --home-font-action-size: 15px;
+  --home-font-action-line: 24px;
+  --home-font-label-size: 13px;
+  --home-font-label-line: 20px;
+  --home-font-eyebrow-size: 12px;
+  --home-font-eyebrow-line: 18px;
+  --home-font-stat-size: 48px;
+  --home-font-stat-line: 56px;
+
+  --home-section-space: 48px;
+  --home-heading-gap: 24px;
+  --home-card-padding: 24px;
+  --home-card-gap: 24px;
+  --home-content-gap: 24px;
+  --home-header-height: 78px;
+  --home-footer-main-pt: 24px;
+  --home-footer-main-pb: 24px;
+  --home-footer-grid-gap: 24px;
+  --home-footer-grid-columns: 300px minmax(300px, 1fr) 390px;
+  --home-footer-qr-size: 124px;
+}
+
+@media (max-width: 900px) {
+  body:has(.home-page-scope) {
+    --home-section-space: 40px;
+    --home-card-gap: 16px;
+  }
+
+  body:has(.home-page-scope) .site-footer__home-grid {
+    gap: 24px;
+  }
+
+  body:has(.home-page-scope) .site-footer__qr-column {
+    padding-block: 20px;
+  }
+
+  body:has(.home-page-scope) .site-footer__brand .footer-logo-container {
+    width: 180px !important;
+    height: 92px !important;
+  }
+}
+
+@media (max-width: 640px) {
+  body:has(.home-page-scope) {
+    --home-font-hero-size: 32px;
+    --home-font-hero-line: 44px;
+    --home-font-section-size: 28px;
+    --home-font-section-line: 38px;
+    --home-font-feature-size: 22px;
+    --home-font-feature-line: 32px;
+    --home-font-card-size: 18px;
+    --home-font-card-line: 28px;
+    --home-font-stat-size: 36px;
+    --home-font-stat-line: 44px;
+    --home-section-space: 32px;
+    --home-heading-gap: 20px;
+    --home-card-padding: 20px;
+    --home-card-gap: 16px;
+  }
+
+  body:has(.home-page-scope) .site-footer__home-grid {
+    gap: 20px;
+  }
+
+  body:has(.home-page-scope) .site-footer__qr-column {
+    padding-block: 16px;
+  }
+
+  body:has(.home-page-scope) .site-footer__contact {
+    gap: 16px;
+  }
+
+  body:has(.home-page-scope) .site-footer__brand .whitespace-nowrap,
+  body:has(.home-page-scope) .site-footer__contact > div {
+    white-space: normal;
+  }
+
+  body:has(.home-page-scope) .site-footer__contact > div {
+    width: 100%;
+    align-items: flex-start;
+  }
+}
+
+body:has(.home-page-scope) .site-header {
+  min-height: var(--home-header-height);
+}
+
+body:has(.home-page-scope) :is(.site-header__desktop-bar, .site-header__nav-item, .site-header__nav-height, .site-header__nav-link:not(.site-header__contact-link)) {
+  height: var(--home-header-height);
+}
+
+@media (min-width: 1280px) {
+  body:has(.home-page-scope) {
+    --home-header-height: 74px;
+  }
+
+  body:has(.home-page-scope) .site-header__desktop-logo-link {
+    height: var(--home-header-height);
+  }
+
+  body:has(.home-page-scope) .site-header__contact-link {
+    margin-block: 14px;
+  }
+
+  body:has(.home-page-scope) .site-header__nav-link:not(.site-header__contact-link) > span::after {
+    bottom: -28px;
+  }
 }

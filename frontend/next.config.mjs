@@ -22,7 +22,7 @@ const nextConfig = {
     contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
     formats: ['image/avif', 'image/webp'],
     minimumCacheTTL: 2592000,
-    deviceSizes: [360, 414, 640, 768, 1024, 1280, 1440, 1920],
+    deviceSizes: [360, 414, 640, 768, 1024, 1280, 1440, 1920, 2560, 2880, 3840],
     imageSizes: [48, 64, 96, 128, 160, 220, 320, 480, 640],
     qualities: [75, 85, 100],
     remotePatterns: [

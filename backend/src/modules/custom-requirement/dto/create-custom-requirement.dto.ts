@@ -20,6 +20,11 @@ function normalizeOptionalSource(maxLength: number) {
 }
 
 export class CreateCustomRequirementDto {
+  @ApiPropertyOptional({ enum: ['full', 'homepage_minimal'] })
+  @IsOptional()
+  @IsIn(['full', 'homepage_minimal'])
+  formVariant?: 'full' | 'homepage_minimal';
+
   @ApiPropertyOptional({ description: 'Stable key reused when the client retries this submission' })
   @IsOptional()
   @IsString()
@@ -35,21 +40,42 @@ export class CreateCustomRequirementDto {
   projectType!: string;
 
   @ApiProperty()
+  @ValidateIf((dto: CreateCustomRequirementDto) => dto.formVariant !== 'homepage_minimal')
   @IsString()
   @IsNotEmpty()
   @Matches(/\S/)
   @MaxLength(180)
-  projectLocation!: string;
+  projectLocation?: string;
 
   @ApiProperty()
+  @ValidateIf((dto: CreateCustomRequirementDto) => dto.formVariant !== 'homepage_minimal')
   @IsString()
   @IsNotEmpty()
   @Matches(/\S/)
   @MaxLength(120)
-  name!: string;
+  name?: string;
+
+  @ApiPropertyOptional({ description: 'Company or contact name from the four-field homepage form' })
+  @ValidateIf((dto: CreateCustomRequirementDto) => dto.formVariant === 'homepage_minimal')
+  @IsString()
+  @IsNotEmpty()
+  @Matches(/\S/)
+  @MaxLength(180)
+  identity?: string;
+
+  @ApiPropertyOptional({ description: 'One phone, WeChat ID or email from the homepage form' })
+  @ValidateIf((dto: CreateCustomRequirementDto) => dto.formVariant === 'homepage_minimal')
+  @IsString()
+  @IsNotEmpty()
+  @Matches(/^[\p{L}\p{N}+][\p{L}\p{N}\s@()+\-._/#*]{2,253}$/u)
+  @MaxLength(254)
+  contact?: string;
 
   @ApiPropertyOptional()
-  @ValidateIf((dto: CreateCustomRequirementDto) => !dto.email || dto.phone !== undefined)
+  @ValidateIf(
+    (dto: CreateCustomRequirementDto) =>
+      dto.formVariant !== 'homepage_minimal' && (!dto.email || dto.phone !== undefined),
+  )
   @IsString()
   @IsNotEmpty()
   @Matches(/^[\p{L}\p{N}+][\p{L}\p{N}\s()+\-._/#*]{2,49}$/u)
@@ -59,7 +85,8 @@ export class CreateCustomRequirementDto {
   @ApiPropertyOptional()
   @ValidateIf(
     (dto: CreateCustomRequirementDto) =>
-      dto.locale === 'en' || !dto.phone || dto.email !== undefined,
+      dto.formVariant !== 'homepage_minimal' &&
+      (dto.locale === 'en' || !dto.phone || dto.email !== undefined),
   )
   @IsString()
   @IsNotEmpty()
@@ -68,11 +95,12 @@ export class CreateCustomRequirementDto {
   email?: string;
 
   @ApiProperty()
+  @ValidateIf((dto: CreateCustomRequirementDto) => dto.formVariant !== 'homepage_minimal')
   @IsString()
   @IsNotEmpty()
   @Matches(/\S/)
   @MaxLength(180)
-  company!: string;
+  company?: string;
 
   @ApiPropertyOptional()
   @IsOptional()

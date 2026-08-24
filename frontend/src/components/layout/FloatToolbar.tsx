@@ -30,13 +30,21 @@ export function FloatToolbar({ locale = 'zh' }: FloatToolbarProps) {
   const currentLocale = (locale === 'en' ? 'en' : 'zh') as Locale;
   const items = toolbarCopy[currentLocale];
   const [wechatOpen, setWechatOpen] = useState(false);
+  const [mobileToolbarVisible, setMobileToolbarVisible] = useState(false);
   const wechatQrAlt = joinImageAlt(currentLocale, [
     buildBrandImageAlt(currentLocale, 'short'),
     currentLocale === 'en' ? 'WeChat QR code' : '微信二维码',
   ]);
 
   const handleBackToTop = () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    const root = document.documentElement;
+    const previousScrollBehavior = root.style.scrollBehavior;
+    root.style.scrollBehavior = 'auto';
+    root.scrollTop = 0;
+    document.body.scrollTop = 0;
+    window.setTimeout(() => {
+      root.style.scrollBehavior = previousScrollBehavior;
+    }, 0);
   };
 
   const openWechat = () => {
@@ -47,6 +55,21 @@ export function FloatToolbar({ locale = 'zh' }: FloatToolbarProps) {
   useEffect(() => {
     if (wechatOpen) trackLeadEvent('wechat_qr_view');
   }, [wechatOpen]);
+
+  useEffect(() => {
+    const homepageHero = document.querySelector<HTMLElement>('.hero-banner');
+    if (!homepageHero) {
+      setMobileToolbarVisible(true);
+      return;
+    }
+
+    const observer = new IntersectionObserver(([entry]) => {
+      setMobileToolbarVisible(!entry.isIntersecting);
+    });
+    observer.observe(homepageHero);
+
+    return () => observer.disconnect();
+  }, []);
 
   return (
     <>
@@ -109,7 +132,8 @@ export function FloatToolbar({ locale = 'zh' }: FloatToolbarProps) {
         })}
       </div>
 
-      <div className="fixed inset-x-0 bottom-0 z-40 grid grid-cols-3 border-t border-black/10 bg-white/98 pb-[env(safe-area-inset-bottom)] backdrop-blur transition-opacity duration-200 [body.mobile-nav-open_&]:hidden xl:hidden">
+      {mobileToolbarVisible ? (
+      <div className="fixed inset-x-0 bottom-0 z-40 grid grid-cols-3 border-t border-black/10 bg-white/98 pb-[env(safe-area-inset-bottom)] backdrop-blur [body.mobile-nav-open_&]:hidden xl:hidden">
         {items.map((item) => {
           if (item.type === 'top') {
             const TopIcon = item.icon;
@@ -156,6 +180,7 @@ export function FloatToolbar({ locale = 'zh' }: FloatToolbarProps) {
           );
         })}
       </div>
+      ) : null}
 
       {wechatOpen ? (
         <div className="fixed inset-0 z-[80] flex items-center justify-center bg-black/45 px-4">
@@ -176,7 +201,7 @@ export function FloatToolbar({ locale = 'zh' }: FloatToolbarProps) {
               type="button"
               onClick={() => setWechatOpen(false)}
               aria-label={currentLocale === 'en' ? 'Close QR code modal' : '关闭二维码弹窗'}
-              className="mt-5 h-[38px] min-w-[120px] rounded-[4px] bg-[var(--color-accent)] px-6 text-[14px] text-white"
+              className="mt-5 min-h-[44px] min-w-[120px] rounded-[4px] bg-[var(--color-accent)] px-6 text-[14px] text-white"
             >
               {currentLocale === 'en' ? 'Close' : '关闭'}
             </button>

@@ -15,10 +15,10 @@ type FooterProps = {
 
 const FOOTER_TOKENS = {
   colors: {
-    background: '#07090b',
+    background: '#061527',
     text: '#C9CED6',
     muted: '#9AA1AA',
-    red: 'var(--color-accent)',
+    brand: 'var(--color-interactive-light)',
     divider: 'rgba(156,163,175,0.42)',
   },
   fontClass: "font-['PingFang_SC','Microsoft_YaHei','SimHei',sans-serif]",
@@ -48,7 +48,8 @@ function varStyle(vars: Record<string, string | number>) {
 }
 
 const MIIT_BEIAN_URL = 'https://beian.miit.gov.cn/';
-const POLICE_BEIAN_URL = 'http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=32120402001014';
+const POLICE_BEIAN_URL =
+  'http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=32120402001014';
 
 const footerCopy = {
   zh: {
@@ -68,8 +69,10 @@ const footerCopy = {
   en: {
     contactUs: 'Contact Us',
     founded: 'Founded in 2006; company-reported approx. 14,700 ㎡ site',
-    brandIntro: 'Focused on industrial furnace R&D, manufacturing, installation and after-sales service.',
-    address: 'Caiguan Industrial Park, Zhangdian Town, Jiangyan District, Taizhou, Jiangsu Province, China',
+    brandIntro:
+      'Focused on industrial furnace R&D, manufacturing, installation and after-sales service.',
+    address:
+      'Caiguan Industrial Park, Zhangdian Town, Jiangyan District, Taizhou, Jiangsu Province, China',
     wechat: 'WeChat QR',
     douyin: 'Douyin QR',
     followUs: 'Follow us for more products and solutions.',
@@ -98,7 +101,7 @@ function SectionTitle({ children }: { children: ReactNode }) {
         style={{
           width: desktop.titleUnderlineWidth,
           height: desktop.titleUnderlineHeight,
-          backgroundColor: colors.red,
+          backgroundColor: colors.brand,
         }}
       />
     </div>
@@ -111,7 +114,9 @@ function InfoRow({ icon, children }: { icon: ReactNode; children: ReactNode }) {
       <span className="flex h-[18px] w-[18px] shrink-0 items-center justify-center text-[var(--footer-muted-color)]">
         {icon}
       </span>
-      <span className={`${FOOTER_TOKENS.fontClass} whitespace-nowrap text-[14px] leading-[1.5] text-[var(--footer-muted-color)]`}>
+      <span
+        className={`${FOOTER_TOKENS.fontClass} whitespace-nowrap text-[var(--home-font-secondary-size,14px)] leading-[var(--home-font-secondary-line,21px)] text-[var(--footer-muted-color)]`}
+      >
         {children}
       </span>
     </div>
@@ -120,17 +125,23 @@ function InfoRow({ icon, children }: { icon: ReactNode; children: ReactNode }) {
 
 function ContactIcon({ children }: { children: ReactNode }) {
   return (
-    <span className="flex h-[44px] w-[44px] shrink-0 items-center justify-center rounded-full border border-dashed border-[var(--footer-red-color)] text-[var(--footer-red-color)]">
+    <span className="flex h-[44px] w-[44px] shrink-0 items-center justify-center rounded-full border border-dashed border-[var(--footer-brand-color)] text-[var(--footer-brand-color)]">
       {children}
     </span>
   );
 }
 
-function BrandBlock({ copy, locale }: { copy: (typeof footerCopy)['zh'] | (typeof footerCopy)['en']; locale: Locale }) {
+function BrandBlock({
+  copy,
+  locale,
+}: {
+  copy: (typeof footerCopy)['zh'] | (typeof footerCopy)['en'];
+  locale: Locale;
+}) {
   const { desktop } = FOOTER_TOKENS;
 
   return (
-    <div className="flex flex-col items-center text-center lg:items-start lg:text-left">
+    <div className="site-footer__brand flex flex-col items-center text-center lg:items-start lg:text-left">
       <div
         className="footer-logo-container"
         style={varStyle({
@@ -150,7 +161,9 @@ function BrandBlock({ copy, locale }: { copy: (typeof footerCopy)['zh'] | (typeo
         />
       </div>
 
-      <p className={`${FOOTER_TOKENS.fontClass} mt-[14px] max-w-[340px] text-[15px] leading-[1.75] text-[var(--footer-muted-color)]`}>
+      <p
+        className={`${FOOTER_TOKENS.fontClass} mt-[14px] max-w-[340px] text-[var(--home-font-secondary-size,15px)] leading-[var(--home-font-secondary-line,26px)] text-[var(--footer-muted-color)]`}
+      >
         {copy.brandIntro}
       </p>
 
@@ -161,22 +174,34 @@ function BrandBlock({ copy, locale }: { copy: (typeof footerCopy)['zh'] | (typeo
   );
 }
 
-function QrBlock({ copy, locale }: { copy: (typeof footerCopy)['zh'] | (typeof footerCopy)['en']; locale: Locale }) {
+function QrBlock({
+  copy,
+  locale,
+}: {
+  copy: (typeof footerCopy)['zh'] | (typeof footerCopy)['en'];
+  locale: Locale;
+}) {
   const { desktop } = FOOTER_TOKENS;
 
   return (
-    <div className="flex flex-col items-center lg:items-start">
+    <div className="site-footer__qr flex flex-col items-center lg:items-start">
       <SectionTitle>{copy.contactUs}</SectionTitle>
 
-      <div className="mt-[28px] flex flex-wrap items-start justify-center lg:justify-start" style={{ gap: desktop.qrGap }}>
+      <div
+        className="mt-[28px] flex flex-wrap items-start justify-center lg:justify-start"
+        style={{ gap: `var(--home-card-gap, ${px(desktop.qrGap)})` }}
+      >
         {[
           { src: '/images/footer/wechat-qr.png', label: copy.wechat },
           { src: '/images/footer/douyin-qr.png', label: copy.douyin },
         ].map((qr) => (
           <div key={qr.label} className="group text-center">
             <div
-              className="flex items-center justify-center rounded-[4px] bg-white transition-transform duration-200 group-hover:scale-[1.08]"
-              style={{ width: desktop.qrSize, height: desktop.qrSize }}
+              className="flex items-center justify-center rounded-[4px] bg-white transition-transform duration-200 group-hover:scale-[1.04] motion-reduce:transform-none motion-reduce:transition-none"
+              style={{
+                width: `var(--home-footer-qr-size, ${px(desktop.qrSize)})`,
+                height: `var(--home-footer-qr-size, ${px(desktop.qrSize)})`,
+              }}
             >
               <Image
                 src={qr.src}
@@ -186,13 +211,17 @@ function QrBlock({ copy, locale }: { copy: (typeof footerCopy)['zh'] | (typeof f
                 className="h-full w-full object-contain [image-rendering:pixelated]"
               />
             </div>
-            <p className={`${FOOTER_TOKENS.fontClass} mt-[10px] whitespace-nowrap text-[13px] leading-[1.5] text-[var(--footer-text-color)]`}>
+            <p
+              className={`${FOOTER_TOKENS.fontClass} mt-[10px] whitespace-nowrap text-[var(--home-font-label-size,13px)] leading-[var(--home-font-label-line,20px)] text-[var(--footer-text-color)]`}
+            >
               {qr.label}
             </p>
           </div>
         ))}
       </div>
-      <p className={`${FOOTER_TOKENS.fontClass} mt-[20px] text-[14px] leading-[1.5] text-[var(--footer-muted-color)]`}>
+      <p
+        className={`${FOOTER_TOKENS.fontClass} mt-[16px] text-[var(--home-font-label-size,14px)] leading-[var(--home-font-label-line,21px)] text-[var(--footer-muted-color)]`}
+      >
         {copy.followUs}
       </p>
     </div>
@@ -201,11 +230,11 @@ function QrBlock({ copy, locale }: { copy: (typeof footerCopy)['zh'] | (typeof f
 
 function ContactBlock({ copy }: { copy: (typeof footerCopy)['zh'] | (typeof footerCopy)['en'] }) {
   return (
-    <div className="flex h-full flex-col items-center justify-center gap-[28px] lg:items-start">
+    <div className="site-footer__contact flex h-full flex-col items-center justify-center gap-[24px] lg:items-start">
       <a
         href={`mailto:${copy.email}`}
         onClick={() => trackLeadEvent('email_click')}
-        className={`${FOOTER_TOKENS.fontClass} flex items-center gap-[14px] whitespace-nowrap text-[16px] font-normal leading-[1.5] text-[var(--footer-text-color)] transition-colors hover:text-white`}
+        className={`${FOOTER_TOKENS.fontClass} flex min-h-[44px] items-center gap-[14px] whitespace-nowrap text-[var(--home-font-secondary-size,16px)] font-normal leading-[var(--home-font-secondary-line,24px)] text-[var(--footer-text-color)] transition-colors hover:text-white`}
       >
         <ContactIcon>
           <HiEnvelope className="h-[20px] w-[20px]" />
@@ -216,7 +245,7 @@ function ContactBlock({ copy }: { copy: (typeof footerCopy)['zh'] | (typeof foot
       <a
         href={`tel:${copy.phone.replace(/\s+/g, '')}`}
         onClick={() => trackLeadEvent('phone_click')}
-        className={`${FOOTER_TOKENS.fontClass} flex items-center gap-[14px] whitespace-nowrap text-[16px] font-normal leading-[1.5] text-[var(--footer-text-color)] transition-colors hover:text-white`}
+        className={`${FOOTER_TOKENS.fontClass} flex min-h-[44px] items-center gap-[14px] whitespace-nowrap text-[var(--home-font-secondary-size,16px)] font-normal leading-[var(--home-font-secondary-line,24px)] text-[var(--footer-text-color)] transition-colors hover:text-white`}
       >
         <ContactIcon>
           <HiPhone className="h-[20px] w-[20px]" />
@@ -224,7 +253,9 @@ function ContactBlock({ copy }: { copy: (typeof footerCopy)['zh'] | (typeof foot
         <span>{copy.phone}</span>
       </a>
 
-      <div className={`${FOOTER_TOKENS.fontClass} flex items-center gap-[14px] whitespace-nowrap text-[16px] font-normal leading-[1.5] text-[var(--footer-text-color)]`}>
+      <div
+        className={`${FOOTER_TOKENS.fontClass} flex min-h-[44px] items-center gap-[14px] whitespace-nowrap text-[var(--home-font-secondary-size,16px)] font-normal leading-[var(--home-font-secondary-line,24px)] text-[var(--footer-text-color)]`}
+      >
         <ContactIcon>
           <HiMapPin className="h-[22px] w-[22px]" />
         </ContactIcon>
@@ -246,12 +277,12 @@ export function Footer({ locale }: FooterProps) {
         backgroundColor: colors.background,
         '--footer-text-color': colors.text,
         '--footer-muted-color': colors.muted,
-        '--footer-red-color': colors.red,
+        '--footer-brand-color': colors.brand,
         '--footer-divider-color': colors.divider,
-        '--footer-main-pt': px(desktop.mainPaddingTop),
-        '--footer-main-pb': px(desktop.mainPaddingBottom),
+        '--footer-main-pt': `var(--home-footer-main-pt, ${px(desktop.mainPaddingTop)})`,
+        '--footer-main-pb': `var(--home-footer-main-pb, ${px(desktop.mainPaddingBottom)})`,
         backgroundImage:
-          'radial-gradient(circle at 92% 24%, rgba(230,0,18,0.16), transparent 18%), linear-gradient(135deg, rgba(255,255,255,0.05), transparent 34%), linear-gradient(180deg, #11161b 0%, #07090b 100%)',
+          'radial-gradient(circle at 92% 24%, rgba(7,89,230,0.2), transparent 20%), linear-gradient(135deg, rgba(255,255,255,0.05), transparent 34%), linear-gradient(180deg, #0b223b 0%, #061527 100%)',
       })}
     >
       {/* Footer 主体：品牌信息、二维码、联系方式三列，删除导航和产品列表。 */}
@@ -260,14 +291,14 @@ export function Footer({ locale }: FooterProps) {
         style={{ maxWidth: px(desktop.containerWidth) }}
       >
         <div
-          className="grid items-center gap-9 pb-[var(--footer-main-pb)] md:grid-cols-1 lg:grid-cols-[var(--footer-grid-columns)] lg:gap-[var(--footer-grid-gap)]"
+          className="site-footer__home-grid grid items-center gap-9 pb-[var(--footer-main-pb)] md:grid-cols-1 lg:grid-cols-[var(--footer-grid-columns)] lg:gap-[var(--footer-grid-gap)]"
           style={varStyle({
-            '--footer-grid-columns': desktop.gridColumns,
-            '--footer-grid-gap': px(desktop.gridGap),
+            '--footer-grid-columns': `var(--home-footer-grid-columns, ${desktop.gridColumns})`,
+            '--footer-grid-gap': `var(--home-footer-grid-gap, ${px(desktop.gridGap)})`,
           })}
         >
           <BrandBlock copy={copy} locale={currentLocale} />
-          <div className="relative py-8 lg:ml-[10px] lg:flex lg:self-stretch lg:px-[58px] lg:py-0">
+          <div className="site-footer__qr-column relative py-8 lg:ml-[10px] lg:flex lg:self-stretch lg:px-[58px] lg:py-0">
             {/* 模块分割线：桌面端隔开公司介绍 / 联系我们 / 联系方式。 */}
             <span
               aria-hidden="true"
@@ -290,9 +321,9 @@ export function Footer({ locale }: FooterProps) {
       </div>
 
       {/* 底部备案条：版权与备案独立放置，桌面左右对齐，移动端居中堆叠。 */}
-      <div className="relative before:absolute before:inset-x-0 before:top-0 before:h-px before:scale-y-50 before:bg-[var(--footer-divider-color)]">
+      <div className="site-footer__legal relative before:absolute before:inset-x-0 before:top-0 before:h-px before:scale-y-50 before:bg-[var(--footer-divider-color)]">
         <div
-          className={`${FOOTER_TOKENS.fontClass} mx-auto flex w-full flex-col items-center justify-center gap-2 px-6 text-[13px] leading-[1.5] text-[var(--footer-muted-color)] md:flex-row md:gap-[26px] lg:px-10`}
+          className={`${FOOTER_TOKENS.fontClass} mx-auto flex w-full flex-col items-center justify-center gap-2 px-6 text-[var(--home-font-label-size,13px)] leading-[var(--home-font-label-line,20px)] text-[var(--footer-muted-color)] md:flex-row md:gap-[26px] lg:px-10`}
           style={{
             maxWidth: px(desktop.containerWidth),
             paddingTop: desktop.bottomPaddingY,
@@ -300,7 +331,10 @@ export function Footer({ locale }: FooterProps) {
           }}
         >
           <span>{copy.copyright}</span>
-          <span aria-hidden="true" className="hidden h-[14px] w-px scale-x-50 bg-[var(--footer-divider-color)] md:block" />
+          <span
+            aria-hidden="true"
+            className="hidden h-[14px] w-px scale-x-50 bg-[var(--footer-divider-color)] md:block"
+          />
           <a
             href={MIIT_BEIAN_URL}
             target="_blank"
@@ -309,7 +343,10 @@ export function Footer({ locale }: FooterProps) {
           >
             {copy.icp}
           </a>
-          <span aria-hidden="true" className="hidden h-[14px] w-px scale-x-50 bg-[var(--footer-divider-color)] md:block" />
+          <span
+            aria-hidden="true"
+            className="hidden h-[14px] w-px scale-x-50 bg-[var(--footer-divider-color)] md:block"
+          />
           <a
             href={POLICE_BEIAN_URL}
             target="_blank"

@@ -81,19 +81,6 @@ textarea {
   background: rgba(0, 75, 151, 0.16);
 }
 
-@keyframes partner-marquee {
-  from {
-    transform: translateX(0);
-  }
-  to {
-    transform: translateX(-50%);
-  }
-}
-
-.partner-marquee-track {
-  animation: partner-marquee 48s linear infinite;
-}
-
 .news-article h1,
 .news-article h2,
 .news-article h3,

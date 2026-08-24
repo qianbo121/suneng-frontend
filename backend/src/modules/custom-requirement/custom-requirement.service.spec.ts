@@ -186,6 +186,42 @@ describe('CustomRequirementService', () => {
     expect(processor.kick).toHaveBeenCalledTimes(1);
   });
 
+  it('stores the four-field homepage form without inventing company or location values', async () => {
+    const { service, createInquiry, createEvent } = setup();
+
+    await service.createPublic(
+      createDto({
+        formVariant: 'homepage_minimal',
+        projectType: '现有设备改造或维修',
+        requirement: '炉温不均，想先判断改造还是换新',
+        identity: '示例制造公司 / 王工',
+        contact: 'buyer@example.com',
+        projectLocation: undefined,
+        name: undefined,
+        company: undefined,
+        phone: undefined,
+        email: undefined,
+        pagePath: '/zh',
+      }),
+      'homepage-client',
+    );
+
+    expect(createInquiry.mock.calls[0][0].data).toEqual(
+      expect.objectContaining({
+        projectType: '现有设备改造或维修',
+        projectLocation: undefined,
+        name: '示例制造公司 / 王工',
+        company: undefined,
+        phone: '',
+        email: 'buyer@example.com',
+        requirement: '炉温不均，想先判断改造还是换新',
+      }),
+    );
+    expect(createEvent.mock.calls[0][0].data).toEqual(
+      expect.objectContaining({ eventType: 'form_submit', pagePath: '/zh' }),
+    );
+  });
+
   it('returns an existing submission before spam throttling and creates no duplicate work', async () => {
     const { service, processor, findUnique, transaction } = setup();
     findUnique.mockResolvedValue(replayRecord());

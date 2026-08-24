@@ -37,7 +37,14 @@ export class CustomRequirementController {
   @ApiOperation({ summary: 'Submit custom furnace requirement with evidence chain' })
   createPublic(@Body() dto: CreateCustomRequirementDto, @Req() request: Request) {
     const clientKey =
-      request.ip || dto.phone || dto.email || dto.name || dto.company || 'anonymous';
+      request.ip ||
+      dto.contact ||
+      dto.phone ||
+      dto.email ||
+      dto.identity ||
+      dto.name ||
+      dto.company ||
+      'anonymous';
     return this.service.createPublic(
       dto.deviceType ? dto : { ...dto, deviceType: requestDeviceType(request) },
       clientKey,
