@@ -23,6 +23,7 @@ tsconfig.tsbuildinfo
 .turbo/
 .capture/
 .captures/
+.artifacts/
 reference/furnace-h5/
 
 # Logs

@@ -14,9 +14,11 @@ const config = [
   {
     ignores: [
       'next-env.d.ts',
-      '.next/**',
-      '.next-dev/**',
-      '.next-visual/**',
+      '.next*/**',
+      '.artifacts/**',
+      'coverage/**',
+      'playwright-report/**',
+      'test-results/**',
       'scripts/**/*.js',
     ],
   },
