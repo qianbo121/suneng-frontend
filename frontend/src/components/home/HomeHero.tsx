@@ -14,9 +14,9 @@ const companyStats = [
     label: '注册资本',
   },
   {
-    value: '1000+',
-    unit: '',
-    label: '新建与改造',
+    value: '150+',
+    unit: '人',
+    label: '在职人数',
   },
   {
     value: '14700',
