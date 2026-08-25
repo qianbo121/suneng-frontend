@@ -529,6 +529,13 @@
   font-variant-numeric: tabular-nums;
 }
 
+.chineseStatItem .statPrefix {
+  margin-right: 3px;
+  font-size: 0.48em;
+  font-weight: 650;
+  letter-spacing: 0;
+}
+
 .chineseStatItem .statUnit {
   margin-left: 6px;
   color: rgba(255, 255, 255, 0.94);

@@ -14,7 +14,7 @@ const taskPaths = [
     description: '工件、工艺和产量，整线按需配置',
     label: '查看整线方案',
     href: '/zh/solutions/continuous-heat-treatment-line',
-    image: '/images/home/scenario-01-heat-treatment-line.png',
+    image: '/images/home/scenario-01-heat-treatment-line-780.webp',
     imageAlt: '完整热处理生产线工程手绘图',
     imageWidth: 1653,
     imageHeight: 729,
@@ -24,9 +24,9 @@ const taskPaths = [
     id: 'furnace-selection',
     title: '我要选一台炉',
     description: '按工件、工艺温度和装炉量初选炉型',
-    label: '从工件开始挑',
-    href: '#selection-service',
-    image: '/images/home/scenario-02-furnace-selection.png',
+    label: '看炉型和适用工件',
+    href: '#product-types',
+    image: '/images/home/scenario-02-furnace-selection-780.webp',
     imageAlt: '井式炉、箱式炉与罩式炉工程手绘图',
     imageWidth: 1380,
     imageHeight: 693,
@@ -34,11 +34,11 @@ const taskPaths = [
   },
   {
     id: 'old-furnace-diagnosis',
-    title: '旧炉出问题',
-    description: '能耗高、温度不均等，修、改还是换',
+    title: '台车炉或旧炉出问题',
+    description: '能耗高、温度不均这类老毛病——维修、改造还是换新？',
     label: '判断大修还是买新',
     href: '/zh/articles/laojiu-rechuli-lu-daxiu-haishi-maixin',
-    image: '/images/home/scenario-03-old-furnace-diagnosis-20260825.png',
+    image: '/images/home/scenario-03-old-furnace-diagnosis-20260825-780.webp',
     imageAlt: '带炉门密封结构标注的旧台车式热处理炉工程手绘图',
     imageWidth: 1670,
     imageHeight: 941,
@@ -50,16 +50,16 @@ const workpieceCases = [
   {
     industry: '不锈钢深加工',
     workpiece: '不锈钢带材',
-    process: '连续退火、退洗线节能改造',
+    process: '连续退火、酸洗',
     image: '/images/about/about-furnace-fabrication.jpg',
     imageAlt: '苏能工厂内工业炉炉体制造现场',
-    imageNote: '相关设备制造｜工厂实拍',
+    imageNote: '炉体制造现场｜工厂实拍',
     title: '某不锈钢深加工企业连续退洗线改造',
     href: '/zh/case/anonymous-tsingshan-1250-renovation',
   },
   {
     industry: '工程机械零部件',
-    workpiece: 'PC200—PC400 支重轮',
+    workpiece: 'PC200~PC400 支重轮',
     process: '连续加热、自动淬火、回火冷却',
     image: '/images/about/about-production-line.jpg',
     imageAlt: '苏能工厂内连续式热处理设备总装现场',
@@ -69,7 +69,7 @@ const workpieceCases = [
   },
   {
     industry: '不锈钢带材加工',
-    workpiece: '480—750 mm 不锈钢带材',
+    workpiece: '480~750 mm 不锈钢带材',
     process: '连续退火、固溶、分段冷却',
     image: '/images/about/about-furnace-delivery.jpg',
     imageAlt: '苏能工业炉设备发运现场',
@@ -82,7 +82,7 @@ const workpieceCases = [
 const productTypes = [
   {
     name: '台车炉',
-    range: '大型铸锻件、模具、焊接结构件等周期式热处理',
+    range: '大型铸件、模具、焊接结构件等周期式热处理',
     image: '/images/home/product-center/trolley-furnace-real.jpg',
     href: '/zh/products/detail/trolley-furnace',
   },
@@ -112,7 +112,7 @@ const productTypes = [
   },
   {
     name: '推杆炉',
-    range: '批量稳定、节拍明确工件的连续热处理',
+    range: '批量稳定、节拍明确的工件连续热处理',
     image: '/images/home/product-center/pusher-furnace-real.jpg',
     href: '/zh/products/detail/pusher-furnace',
   },
@@ -192,7 +192,7 @@ export function HomepageV2() {
         <div className={styles.container}>
           <SectionHeading
             title="这些工件，我们有过项目经验"
-            description="按已公开项目口径展示行业、工件与工艺；图片均为苏能工厂制造或发运实拍，不冒充客户现场。"
+            description="行业、工件与工艺均来自已公开项目，图片为苏能工厂实拍。"
           />
           <div className={styles.workpieceLayout}>
             <figure className={styles.factoryLead}>
@@ -207,7 +207,7 @@ export function HomepageV2() {
               </div>
               <figcaption>
                 <span className={styles.eyebrow}>工厂实拍</span>
-                <strong>从设备制造现场看真实交付能力</strong>
+                <strong>从制造现场看交付能力</strong>
                 <p>炉体、输送与配套机构在厂内完成制造和总装。</p>
               </figcaption>
             </figure>
@@ -253,11 +253,11 @@ export function HomepageV2() {
         </div>
       </section>
 
-      <section id="selection-service" className={`${styles.section} ${styles.productSection}`}>
+      <section id="product-types" className={`${styles.section} ${styles.productSection}`}>
         <div className={styles.container}>
           <SectionHeading
             title="我们有哪些产品类型？"
-            description="这里仅说明产品类型与适用范围；具体炉膛、温度、装炉量和配置按项目参数确认。"
+            description="具体炉膛尺寸、温度和装炉量，按您的项目确认。"
           />
           <Link
             href="/zh/solutions/continuous-heat-treatment-line"
@@ -275,12 +275,11 @@ export function HomepageV2() {
             </figure>
             <div className={styles.productionLineBody}>
               <span className={styles.eyebrow}>热处理生产线</span>
-              <h3>按工件、工艺和产量组织整线</h3>
-              <p>适用于需要连续加热、冷却、清洗、输送、上下料与控制系统协同的项目。</p>
+              <h3>按工件、工艺和产量配置整线</h3>
+              <p>适用于需要连续加热、冷却、输送、上下料与控制系统协同的项目。</p>
               <ul className={styles.productionLineTags} aria-label="热处理生产线适用范围">
-                <li>带材与线材</li>
+                <li>带材</li>
                 <li>工程机械零部件</li>
-                <li>标准件与小型零件</li>
                 <li>连续退火、固溶、淬火与回火</li>
               </ul>
               <span className={styles.cardAction}>
@@ -296,7 +295,7 @@ export function HomepageV2() {
                 <figure className={styles.productCardMedia}>
                   <Image
                     src={item.image}
-                    alt={`${item.name}产品设备图`}
+                    alt={`${item.name}设备实拍`}
                     fill
                     sizes="(max-width: 640px) 50vw, (max-width: 900px) 33vw, 25vw"
                     className={styles.containImage}

@@ -9,7 +9,7 @@ const chineseNavigationItems: NavigationItem[] = [
   },
   {
     key: 'selection',
-    href: '/#selection-service',
+    href: '/#product-types',
     label: { zh: '选型与解决方案', en: 'Selection & Solutions' },
   },
   {

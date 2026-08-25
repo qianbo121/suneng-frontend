@@ -28,15 +28,15 @@ const emptyValues: HomepageRequirementValues = {
 
 const fieldLabels: Record<HomepageRequirementField, string> = {
   direction: '项目方向',
-  problem: '当前最主要的问题',
-  identity: '企业或联系人',
+  problem: '当前情况或主要问题',
+  identity: '公司或联系人',
   contact: '联系方式',
 };
 
 const initialResults = [
-  ['热处理线', '得到初步工程范围'],
+  ['热处理线', '拿到整线的初步配置和范围'],
   ['单台工业炉', '得到初步选型方向'],
-  ['现有炉', '判断维修、改造、换新或补资料'],
+  ['现有炉', '给出维修、改造还是换新的初步判断；资料不够会告诉您缺什么'],
 ] as const;
 
 export function HomepageLeadForm() {
@@ -93,7 +93,7 @@ export function HomepageLeadForm() {
       renewFormIdempotencyKey(idempotencyKeyRef);
     } catch (error) {
       if (renewIdempotencyKeyAfterConflict(error, idempotencyKeyRef)) {
-        setMessage('本次提交编号冲突，已为你刷新，请再提交一次。');
+        setMessage('刚才提交出了点小状况，您填的内容都在，请再点一次提交。');
       } else {
         setMessage('暂时没有提交成功，已保留填写内容，请稍后重试。');
       }
@@ -124,7 +124,7 @@ export function HomepageLeadForm() {
         <div className={styles.formIntro}>
           <h2 id="homepage-form-title">资料不全，也可以先开始</h2>
           <p>
-            项目方向不同，首次沟通的输出也不同。先提交四项基本信息，图纸和完整参数可以随后补充。
+            项目方向不同，第一次沟通我们能给您的东西也不同。先提交四项基本信息，图纸和完整参数可以随后补充。
           </p>
           <div className={styles.formPathList}>
             {initialResults.map(([title, result]) => (
@@ -135,7 +135,7 @@ export function HomepageLeadForm() {
             ))}
           </div>
           <p className={styles.formBoundary}>
-            初步范围或方向不是正式技术方案、最终报价或合同承诺；需要补资料或现场勘查时会明确说明。
+            初步判断不是正式技术方案、最终报价或合同承诺；需要补资料或现场勘查时会明确说明。
           </p>
         </div>
 
@@ -148,7 +148,7 @@ export function HomepageLeadForm() {
               <span className={styles.successEyebrow}>提交成功</span>
               <h3>项目情况已经收到</h3>
               <p>
-                我们会先按项目方向核对已提交信息，并给出可继续沟通的初步范围或方向。需要补资料或现场勘查时会明确说明。
+                我们会先按项目方向核对已提交信息，并给出可继续沟通的初步判断。需要补资料或现场勘查时会明确说明。
               </p>
             </div>
             <dl className={styles.successDetails}>
@@ -162,7 +162,11 @@ export function HomepageLeadForm() {
               </div>
               <div>
                 <dt>下一步</dt>
-                <dd>核对项目方向与资料完整度，准备初步范围或选型方向</dd>
+                <dd>核对项目方向与资料完整度，准备初步判断</dd>
+              </div>
+              <div>
+                <dt>可能需要补充</dt>
+                <dd>照片、图纸、工艺曲线、能耗或现场条件，按判断需要逐步提出</dd>
               </div>
             </dl>
             <button type="button" className={styles.secondaryButton} onClick={resetForm}>
@@ -172,7 +176,7 @@ export function HomepageLeadForm() {
         ) : (
           <form ref={formRef} className={styles.leadForm} onSubmit={handleSubmit} noValidate>
             <p className={styles.privacyNote}>
-              开始填写后，我们会记录必要的页面与来源信息，用于判断官网是否真正帮助了你。
+              开始填写后，我们会记录必要的页面与来源信息，仅用于更好地跟进您的需求。
             </p>
             {message ? (
               <p className={styles.formMessage} role="alert">
@@ -192,15 +196,15 @@ export function HomepageLeadForm() {
               >
                 <option value="">请选择项目方向</option>
                 <option value="新建热处理生产线">新建热处理生产线</option>
-                <option value="单体工业炉新建">单体工业炉新建</option>
+                <option value="单体工业炉新建">单台工业炉（选型或新建）</option>
                 <option value="现有工业炉维修、改造或换新判断">
-                  现有工业炉维修、改造或换新判断
+                  现有台车炉或工业炉：维修、改造或换新
                 </option>
-                <option value="售后、选型或其他">售后、选型或其他</option>
+                <option value="售后、选型或其他">售后或其他</option>
               </select>
               {invalidField === 'direction' ? (
                 <span id="direction-error" className={styles.fieldError} aria-live="polite">
-                  请填写有效的{fieldLabels.direction}。
+                  请选择项目方向。
                 </span>
               ) : null}
             </label>

@@ -973,14 +973,41 @@
     min-height: 280px;
   }
 
-  .factoryLead figcaption,
-  .workpieceCardBody,
-  .productionLineBody {
+  .factoryLead figcaption {
     padding: 20px;
   }
 
+  .workpieceCardMedia {
+    aspect-ratio: 2 / 1;
+  }
+
+  .workpieceCardBody,
+  .productionLineBody {
+    padding: 16px;
+  }
+
+  .workpieceCardBody dl {
+    margin-top: 10px;
+  }
+
+  .workpieceCardBody dl > div {
+    padding-block: 7px;
+  }
+
+  .workpieceCardBody .cardAction {
+    padding-top: 10px;
+  }
+
+  .productSection {
+    padding-block: 24px;
+  }
+
+  .productSection .sectionHeading {
+    margin-bottom: 16px;
+  }
+
   .productionLineMedia {
-    min-height: 260px;
+    min-height: 130px;
   }
 
   .productionLineBody h3 {
@@ -989,16 +1016,34 @@
   }
 
   .productionLineTags {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 6px;
+    margin-top: 14px !important;
+  }
+
+  .productionLineTags li {
+    padding: 5px 7px;
+    font-size: 12px;
+    line-height: 18px;
+  }
+
+  .productionLineBody .cardAction {
+    margin-top: 14px;
   }
 
   .productGrid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 12px;
+    gap: 10px;
+    margin-top: 16px;
   }
 
   .productCard {
-    padding: 12px;
+    padding: 10px;
+  }
+
+  .productCardMedia {
+    aspect-ratio: 16 / 10;
+    margin-bottom: 10px;
   }
 
   .productCard h3 {
@@ -1013,6 +1058,10 @@
 
   .productCard > p {
     line-height: 23px;
+  }
+
+  .productCardAction {
+    padding-top: 8px;
   }
 
   .bottomLeadBar {
