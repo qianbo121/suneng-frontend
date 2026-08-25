@@ -29,7 +29,7 @@ export default function HomeHero() {
   return (
     <section className={`${styles.hero} ${styles.chineseHero}`} aria-labelledby="hero-title">
       <Image
-        src="/images/home/suneng-factory-hero-preserved-v1.png"
+        src="/images/home/suneng-factory-hero-20260825.png"
         alt="江苏苏能工业炉有限公司厂区航拍"
         fill
         priority
