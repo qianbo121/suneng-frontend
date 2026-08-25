@@ -33,15 +33,10 @@ const fieldLabels: Record<HomepageRequirementField, string> = {
   contact: '联系方式',
 };
 
-const assessmentParts = [
-  '已知工况',
-  '初步结论',
-  '判断依据',
-  '主要风险',
-  '缺失资料',
-  '是否需要现场勘查',
-  '建议下一步',
-  '结论边界',
+const initialResults = [
+  ['热处理线', '得到初步工程范围'],
+  ['单台工业炉', '得到初步选型方向'],
+  ['现有炉', '判断维修、改造、换新或补资料'],
 ] as const;
 
 export function HomepageLeadForm() {
@@ -127,25 +122,21 @@ export function HomepageLeadForm() {
     >
       <div className={styles.formInner}>
         <div className={styles.formIntro}>
-          <h2 id="homepage-form-title">把四项情况告诉我们</h2>
-          <p>第一次提交不要求上传完整图纸，也不会替你预选方向。</p>
-          <div className={styles.formBenefits}>
-            <span>你将获得：一页初步判断</span>
-            <span>可能结论：继续评估改造、对比换新，或先补资料与现场勘查</span>
+          <h2 id="homepage-form-title">资料不全，也可以先开始</h2>
+          <p>
+            项目方向不同，首次沟通的输出也不同。先提交四项基本信息，图纸和完整参数可以随后补充。
+          </p>
+          <div className={styles.formPathList}>
+            {initialResults.map(([title, result]) => (
+              <div key={title}>
+                <strong>{title}</strong>
+                <span>{result}</span>
+              </div>
+            ))}
           </div>
           <p className={styles.formBoundary}>
-            初步判断不是正式技术方案、能源审计、最终报价或合同承诺；需要现场勘查时会明确说明。
+            初步范围或方向不是正式技术方案、最终报价或合同承诺；需要补资料或现场勘查时会明确说明。
           </p>
-          <details className={styles.assessmentDetails}>
-            <summary>查看一页判断包含的 8 项内容</summary>
-            <div className={styles.assessmentDetailGrid}>
-              {assessmentParts.map((item, index) => (
-                <span key={item}>
-                  {String(index + 1).padStart(2, '0')} · {item}
-                </span>
-              ))}
-            </div>
-          </details>
         </div>
 
         {submissionId ? (
@@ -157,7 +148,7 @@ export function HomepageLeadForm() {
               <span className={styles.successEyebrow}>提交成功</span>
               <h3>项目情况已经收到</h3>
               <p>
-                我们会先核对已提交信息，并准备一页初步判断。资料不足或需要现场勘查时，会在沟通中明确说明。
+                我们会先按项目方向核对已提交信息，并给出可继续沟通的初步范围或方向。需要补资料或现场勘查时会明确说明。
               </p>
             </div>
             <dl className={styles.successDetails}>
@@ -171,7 +162,7 @@ export function HomepageLeadForm() {
               </div>
               <div>
                 <dt>下一步</dt>
-                <dd>核对资料完整度，准备一页初步判断</dd>
+                <dd>核对项目方向与资料完整度，准备初步范围或选型方向</dd>
               </div>
             </dl>
             <button type="button" className={styles.secondaryButton} onClick={resetForm}>
@@ -202,8 +193,8 @@ export function HomepageLeadForm() {
                 <option value="">请选择项目方向</option>
                 <option value="新建热处理生产线">新建热处理生产线</option>
                 <option value="单体工业炉新建">单体工业炉新建</option>
-                <option value="现有台车炉或工业炉出问题，想先判断改造还是换新">
-                  现有台车炉或工业炉出问题，想先判断改造还是换新
+                <option value="现有工业炉维修、改造或换新判断">
+                  现有工业炉维修、改造或换新判断
                 </option>
                 <option value="售后、选型或其他">售后、选型或其他</option>
               </select>
@@ -220,7 +211,7 @@ export function HomepageLeadForm() {
                 name="problem"
                 value={values.problem}
                 onChange={(event) => updateValue('problem', event.target.value)}
-                placeholder="例如：现有炉温度不均，想先判断改造还是换新…"
+                placeholder="例如：工件、产量、工艺要求，或现有设备遇到的问题…"
                 autoComplete="off"
                 maxLength={8_000}
                 aria-describedby={invalidField === 'problem' ? 'problem-error' : undefined}
@@ -278,7 +269,7 @@ export function HomepageLeadForm() {
               {isSubmitting ? '正在提交…' : '提交项目情况'}
             </button>
             <p className={styles.formFootnote}>
-              图纸、工艺曲线、能耗和完整参数，可在提交后按判断需要逐步补充。
+              图纸、工艺曲线、能耗和完整参数，可在提交后按项目方向逐步补充。
             </p>
           </form>
         )}

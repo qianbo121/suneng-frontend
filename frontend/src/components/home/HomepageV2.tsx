@@ -1,13 +1,9 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import {
-  HiArrowRight,
-  HiOutlineCog6Tooth,
-  HiOutlineCursorArrowRays,
-  HiOutlineWrenchScrewdriver,
-} from 'react-icons/hi2';
+import { HiArrowRight, HiOutlineCursorArrowRays } from 'react-icons/hi2';
 
 import { HomepageLeadForm } from '@/components/home/HomepageLeadForm';
+import { siteSettings } from '@/mock/siteSettings';
 
 import styles from './HomepageV2.module.css';
 
@@ -38,7 +34,7 @@ const taskPaths = [
   },
   {
     id: 'old-furnace-diagnosis',
-    title: '台车炉或旧炉出问题',
+    title: '旧炉出问题',
     description: '能耗高、温度不均等，修、改还是换',
     label: '判断大修还是买新',
     href: '/zh/articles/laojiu-rechuli-lu-daxiu-haishi-maixin',
@@ -50,58 +46,87 @@ const taskPaths = [
   },
 ] as const;
 
-const engineeringSteps = [
-  ['01', '先定工艺要求', '材料、温度、气氛、产能与质量要求。'],
-  ['02', '再组织整线方案', '炉体、输送、控制、安全与辅助配置协同。'],
-  ['03', '按项目范围推进', '制造、安装、调试、验收与投产支持。'],
-] as const;
-
-const selectionConditions = [
-  ['01', '材料与工件', '材质、形态、尺寸与重量'],
-  ['02', '热处理工艺', '温度、气氛与均匀性'],
-  ['03', '装炉量与产能', '每炉装载、节拍与连续生产'],
-  ['04', '现场与配套', '能源、场地、装炉与自动化'],
-] as const;
-
-const assessmentOutcomes = [
-  ['A', '继续评估改造', '现有基础具备进一步判断条件'],
-  ['B', '对比整炉换新', '改造边界或长期成本需要比较'],
-  ['C', '先补资料或勘查', '现有条件不足以给出可靠答案'],
-] as const;
-
-const factoryEvidence = [
+const workpieceCases = [
   {
-    src: '/images/about/about-production-line.jpg',
-    alt: '苏能工厂内连续式热处理设备总装现场',
-    label: '连续式热处理设备总装｜工厂实拍',
-  },
-  {
-    src: '/images/about/about-furnace-fabrication.jpg',
-    alt: '苏能工厂内工业炉炉体制造现场',
-    label: '工业炉炉体制造｜工厂实拍',
-  },
-  {
-    src: '/images/about/about-furnace-delivery.jpg',
-    alt: '苏能工业炉设备发运现场',
-    label: '工业炉设备发运｜工厂实拍',
-  },
-] as const;
-
-const caseCards = [
-  {
-    tag: '改造项目',
+    industry: '不锈钢深加工',
+    workpiece: '不锈钢带材',
+    process: '连续退火、退洗线节能改造',
+    image: '/images/about/about-furnace-fabrication.jpg',
+    imageAlt: '苏能工厂内工业炉炉体制造现场',
+    imageNote: '相关设备制造｜工厂实拍',
     title: '某不锈钢深加工企业连续退洗线改造',
     href: '/zh/case/anonymous-tsingshan-1250-renovation',
   },
   {
-    tag: '生产线项目',
-    title: '支重轮热处理生产线',
+    industry: '工程机械零部件',
+    workpiece: 'PC200—PC400 支重轮',
+    process: '连续加热、自动淬火、回火冷却',
+    image: '/images/about/about-production-line.jpg',
+    imageAlt: '苏能工厂内连续式热处理设备总装现场',
+    imageNote: '连续设备总装｜工厂实拍',
+    title: '济宁支重轮热处理生产线',
     href: '/zh/case/jining-support-roller-heat-treatment-line',
   },
   {
-    tag: '生产线项目',
-    title: '连续退火固溶生产线',
+    industry: '不锈钢带材加工',
+    workpiece: '480—750 mm 不锈钢带材',
+    process: '连续退火、固溶、分段冷却',
+    image: '/images/about/about-furnace-delivery.jpg',
+    imageAlt: '苏能工业炉设备发运现场',
+    imageNote: '工业炉设备发运｜工厂实拍',
+    title: '河南连续退火固溶生产线',
     href: '/zh/case/henan-annealing-solution-line',
+  },
+] as const;
+
+const productTypes = [
+  {
+    name: '台车炉',
+    range: '大型铸锻件、模具、焊接结构件等周期式热处理',
+    image: '/images/home/product-center/trolley-furnace-real.jpg',
+    href: '/zh/products/detail/trolley-furnace',
+  },
+  {
+    name: '箱式炉',
+    range: '中小型零件、试制件与小批量工件热处理',
+    image: '/images/home/product-center/box-furnace-real.jpg',
+    href: '/zh/products/detail/box-furnace',
+  },
+  {
+    name: '井式炉',
+    range: '轴类、杆类、长件与竖向装炉工件热处理',
+    image: '/images/home/product-center/pit-furnace-real.jpg',
+    href: '/zh/products/detail/pit-furnace',
+  },
+  {
+    name: '罩式炉',
+    range: '卷材、线材及批量装框工件的整体热处理',
+    image: '/images/home/product-center/bell-furnace-real.jpg',
+    href: '/zh/products/detail/bell-furnace',
+  },
+  {
+    name: '网带炉',
+    range: '标准件、紧固件与小型零件的连续热处理',
+    image: '/images/home/product-center/mesh-belt-furnace-real.jpg',
+    href: '/zh/products/detail/mesh-belt-furnace',
+  },
+  {
+    name: '推杆炉',
+    range: '批量稳定、节拍明确工件的连续热处理',
+    image: '/images/home/product-center/pusher-furnace-real.jpg',
+    href: '/zh/products/detail/pusher-furnace',
+  },
+  {
+    name: '辊底炉',
+    range: '板材、棒材、管材等规整工件的连续热处理',
+    image: '/images/home/product-center/roller-hearth-furnace-real.jpg',
+    href: '/zh/products/detail/roller-hearth-furnace',
+  },
+  {
+    name: '转底炉',
+    range: '锻件、盘类件与环形工件的节拍式加热',
+    image: '/images/home/product-center/rotary-hearth-furnace-real.jpg',
+    href: '/zh/products/detail/rotary-hearth-furnace',
   },
 ] as const;
 
@@ -160,187 +185,141 @@ export function HomepageV2() {
         </div>
       </section>
 
-      <section className={`${styles.section} ${styles.softSection} ${styles.productSection}`}>
-        <div className={styles.container}>
-          <SectionHeading
-            title="热处理生产线整线交付，单台工业炉同样承接"
-            description="单台工业炉的新建、改造和维修同样承接。"
-          />
-          <div className={styles.productLayout}>
-            <article className={styles.productLead}>
-              <figure className={styles.productLeadMedia}>
-                <Image
-                  src="/images/home/production-line-evidence-crop-20260825.jpg"
-                  alt="苏能工厂内工业炉在制设备实拍"
-                  fill
-                  sizes="(max-width: 900px) 100vw, 34vw"
-                  className={styles.coverImage}
-                />
-                <figcaption>工业炉在制设备｜工厂实拍</figcaption>
-              </figure>
-              <div className={styles.productLeadBody}>
-                <span className={styles.eyebrow}>热处理生产线</span>
-                <h3>
-                  一条热处理线，<span className={styles.noWrap}>怎么</span>从方案做到投产
-                </h3>
-                <div className={styles.engineeringSteps}>
-                  {engineeringSteps.map(([number, title, description]) => (
-                    <div key={number}>
-                      <span>{number}</span>
-                      <div>
-                        <h4>{title}</h4>
-                        <p>{description}</p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-                <Link
-                  href="/zh/solutions/continuous-heat-treatment-line"
-                  className={styles.textLink}
-                >
-                  查看热处理生产线
-                  <HiArrowRight aria-hidden="true" />
-                </Link>
-              </div>
-            </article>
-
-            <div className={styles.productRouteStack}>
-              <article className={styles.productRouteCard}>
-                <figure className={styles.productRouteImage}>
-                  <Image
-                    src="/images/home/trolley-furnace-evidence-20260825.png"
-                    alt="台车式热处理炉"
-                    fill
-                    sizes="(max-width: 900px) 100vw, 28vw"
-                    className={styles.containImage}
-                  />
-                </figure>
-                <h3>台车式热处理炉</h3>
-                <p>用途、结构方向、选型信息与适用边界集中查看。</p>
-                <Link href="/zh/products/detail/trolley-furnace" className={styles.textLink}>
-                  进入台车炉产品页
-                  <HiArrowRight aria-hidden="true" />
-                </Link>
-              </article>
-              <article className={`${styles.productRouteCard} ${styles.serviceRouteCard}`}>
-                <HiOutlineWrenchScrewdriver className={styles.routeIcon} aria-hidden="true" />
-                <span className={styles.eyebrow}>单台炉服务</span>
-                <h3>新建、改造、维修</h3>
-                <p>井式炉、箱式炉、罩式炉等其他炉型，新建、改造、维修都接。</p>
-                <Link href="/zh/products" className={styles.textLink}>
-                  查看全部炉型
-                  <HiArrowRight aria-hidden="true" />
-                </Link>
-              </article>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section id="selection-service" className={`${styles.section} ${styles.decisionSection}`}>
-        <div className={styles.container}>
-          <SectionHeading
-            title="资料不全也可以先把方向判断清楚"
-            description="四类条件放在首页；完整方法和具体实施范围进入对应服务页面。"
-          />
-          <div className={styles.decisionGrid}>
-            <article className={styles.decisionPanel}>
-              <HiOutlineCog6Tooth className={styles.routeIcon} aria-hidden="true" />
-              <span className={styles.eyebrow}>从工况与现有问题判断</span>
-              <h3>先看四类条件，再谈炉型</h3>
-              <div className={styles.conditionGrid}>
-                {selectionConditions.map(([number, title, description]) => (
-                  <div key={number}>
-                    <span>{number}</span>
-                    <h4>{title}</h4>
-                    <p>{description}</p>
-                  </div>
-                ))}
-              </div>
-              <Link href="/zh/service/furnace-renovation-overhaul" className={styles.textLink}>
-                查看改造与工程服务
-                <HiArrowRight aria-hidden="true" />
-              </Link>
-            </article>
-
-            <article className={`${styles.decisionPanel} ${styles.assessmentPanel}`}>
-              <span className={styles.eyebrow}>一页初步判断</span>
-              <h3>提交后先获得可继续决策的一页</h3>
-              <p className={styles.assessmentIntro}>
-                把已知条件、判断依据、主要风险与建议下一步放在同一页。
-              </p>
-              <div className={styles.outcomeList}>
-                {assessmentOutcomes.map(([number, title, description]) => (
-                  <div key={number}>
-                    <span>{number}</span>
-                    <div>
-                      <h4>{title}</h4>
-                      <p>{description}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-              <p className={styles.panelFootnote}>
-                资料不足时不替你拍板；炉型在提交后补充，或由工程人员内部归类。
-              </p>
-            </article>
-          </div>
-        </div>
-      </section>
-
       <section
-        id="case-evidence"
-        className={`${styles.section} ${styles.softSection} ${styles.evidenceSection}`}
+        id="workpiece-experience"
+        className={`${styles.section} ${styles.softSection} ${styles.workpieceSection}`}
       >
         <div className={styles.container}>
           <SectionHeading
-            title="先看真实制造现场，再进入完整案例"
-            description="首页只展示可核验的实拍与正式案例，不使用空位，也不让其他设备案例冒充台车炉案例。"
+            title="这些工件，我们有过项目经验"
+            description="按已公开项目口径展示行业、工件与工艺；图片均为苏能工厂制造或发运实拍，不冒充客户现场。"
           />
-          <div className={styles.evidenceLayout}>
-            <figure className={`${styles.evidenceFigure} ${styles.evidenceFigureLead}`}>
-              <div className={styles.evidenceImage}>
+          <div className={styles.workpieceLayout}>
+            <figure className={styles.factoryLead}>
+              <div className={styles.factoryLeadImage}>
                 <Image
-                  src={factoryEvidence[0].src}
-                  alt={factoryEvidence[0].alt}
+                  src="/images/home/production-line-evidence-crop-20260825.jpg"
+                  alt="苏能工厂内在制热处理设备"
                   fill
-                  sizes="(max-width: 900px) 100vw, 66vw"
+                  sizes="(max-width: 900px) 100vw, 31vw"
                   className={styles.coverImage}
                 />
               </div>
-              <figcaption>{factoryEvidence[0].label}</figcaption>
+              <figcaption>
+                <span className={styles.eyebrow}>工厂实拍</span>
+                <strong>从设备制造现场看真实交付能力</strong>
+                <p>炉体、输送与配套机构在厂内完成制造和总装。</p>
+              </figcaption>
             </figure>
-            <div className={styles.evidenceSide}>
-              {factoryEvidence.slice(1).map((item) => (
-                <figure key={item.src} className={styles.evidenceFigure}>
-                  <div className={styles.evidenceImage}>
+
+            <div className={styles.workpieceCaseGrid}>
+              {workpieceCases.map((item) => (
+                <Link key={item.href} href={item.href} className={styles.workpieceCard}>
+                  <figure className={styles.workpieceCardMedia}>
                     <Image
-                      src={item.src}
-                      alt={item.alt}
+                      src={item.image}
+                      alt={item.imageAlt}
                       fill
-                      sizes="(max-width: 900px) 50vw, 28vw"
+                      sizes="(max-width: 640px) calc(100vw - 32px), (max-width: 900px) 50vw, 23vw"
                       className={styles.coverImage}
                     />
+                    <figcaption>{item.imageNote}</figcaption>
+                  </figure>
+                  <div className={styles.workpieceCardBody}>
+                    <h3>{item.title}</h3>
+                    <dl>
+                      <div>
+                        <dt>行业</dt>
+                        <dd>{item.industry}</dd>
+                      </div>
+                      <div>
+                        <dt>工件</dt>
+                        <dd>{item.workpiece}</dd>
+                      </div>
+                      <div>
+                        <dt>工艺</dt>
+                        <dd>{item.process}</dd>
+                      </div>
+                    </dl>
+                    <span className={styles.cardAction}>
+                      查看项目案例
+                      <HiArrowRight aria-hidden="true" />
+                    </span>
                   </div>
-                  <figcaption>{item.label}</figcaption>
-                </figure>
+                </Link>
               ))}
             </div>
           </div>
+        </div>
+      </section>
 
-          <nav className={styles.caseLinks} aria-label="项目案例入口">
-            {caseCards.map((item) => (
-              <Link key={item.href} href={item.href}>
-                <span>{item.tag}</span>
-                <strong>{item.title}</strong>
+      <section id="selection-service" className={`${styles.section} ${styles.productSection}`}>
+        <div className={styles.container}>
+          <SectionHeading
+            title="我们有哪些产品类型？"
+            description="这里仅说明产品类型与适用范围；具体炉膛、温度、装炉量和配置按项目参数确认。"
+          />
+          <Link
+            href="/zh/solutions/continuous-heat-treatment-line"
+            className={styles.productionLineLead}
+          >
+            <figure className={styles.productionLineMedia}>
+              <Image
+                src="/images/about/about-production-line.jpg"
+                alt="苏能工厂内连续式热处理设备总装现场"
+                fill
+                sizes="(max-width: 900px) 100vw, 48vw"
+                className={styles.coverImage}
+              />
+              <figcaption>连续式热处理设备总装｜工厂实拍</figcaption>
+            </figure>
+            <div className={styles.productionLineBody}>
+              <span className={styles.eyebrow}>热处理生产线</span>
+              <h3>按工件、工艺和产量组织整线</h3>
+              <p>适用于需要连续加热、冷却、清洗、输送、上下料与控制系统协同的项目。</p>
+              <ul className={styles.productionLineTags} aria-label="热处理生产线适用范围">
+                <li>带材与线材</li>
+                <li>工程机械零部件</li>
+                <li>标准件与小型零件</li>
+                <li>连续退火、固溶、淬火与回火</li>
+              </ul>
+              <span className={styles.cardAction}>
+                查看热处理生产线
                 <HiArrowRight aria-hidden="true" />
+              </span>
+            </div>
+          </Link>
+
+          <div className={styles.productGrid}>
+            {productTypes.map((item) => (
+              <Link key={item.href} href={item.href} className={styles.productCard}>
+                <figure className={styles.productCardMedia}>
+                  <Image
+                    src={item.image}
+                    alt={`${item.name}产品设备图`}
+                    fill
+                    sizes="(max-width: 640px) 50vw, (max-width: 900px) 33vw, 25vw"
+                    className={styles.containImage}
+                  />
+                </figure>
+                <h3>{item.name}</h3>
+                <p>{item.range}</p>
+                <span className={styles.productCardAction}>
+                  查看产品
+                  <HiArrowRight aria-hidden="true" />
+                </span>
               </Link>
             ))}
-          </nav>
+          </div>
         </div>
       </section>
 
       <HomepageLeadForm />
+
+      <nav className={styles.bottomLeadBar} aria-label="项目咨询">
+        <a href="#homepage-lead-form">提交项目情况</a>
+        <a href={`tel:${siteSettings.salesPhone.replace(/[^+\d]/g, '')}`}>电话咨询</a>
+      </nav>
     </div>
   );
 }
