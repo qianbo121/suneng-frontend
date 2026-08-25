@@ -41,11 +41,22 @@ export default function HomeHero() {
       <div className={styles.blueOverlay} aria-hidden="true" />
       <div className={styles.heroContainer}>
         <div className={styles.heroCopy}>
-          <p className={styles.eyebrow}>JIANGSU SUNENG INDUSTRIAL FURNACE CO LTD</p>
-          <h1 id="hero-title" className={styles.title}>
-            江苏苏能工业炉有限公司
+          <p className={styles.eyebrow}>江苏苏能工业炉有限公司</p>
+          <h1
+            id="hero-title"
+            className={styles.title}
+            aria-label="按工件和产量，交付整条热处理生产线"
+          >
+            {[
+              <span className={styles.titleLine} key="scope">
+                按工件和产量，
+              </span>,
+              <span className={styles.titleLine} key="delivery">
+                交付整条热处理生产线
+              </span>,
+            ]}
           </h1>
-          <p className={styles.description}>工业炉单机、配套件与整线交钥匙工程一体化解决方案商</p>
+          <p className={styles.description}>单台工业炉的新建、改造和维修，同样承接</p>
           <p className={styles.certification}>江苏泰州 · 国家高新技术企业</p>
         </div>
       </div>

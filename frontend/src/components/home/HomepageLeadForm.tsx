@@ -127,7 +127,6 @@ export function HomepageLeadForm() {
     >
       <div className={styles.formInner}>
         <div className={styles.formIntro}>
-          <span className={styles.sectionNumber}>05 · 提交项目情况</span>
           <h2 id="homepage-form-title">把四项情况告诉我们</h2>
           <p>第一次提交不要求上传完整图纸，也不会替你预选方向。</p>
           <div className={styles.formBenefits}>

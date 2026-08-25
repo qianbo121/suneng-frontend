@@ -1,6 +1,11 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import { HiArrowRight, HiOutlineCog6Tooth, HiOutlineWrenchScrewdriver } from 'react-icons/hi2';
+import {
+  HiArrowRight,
+  HiOutlineCog6Tooth,
+  HiOutlineCursorArrowRays,
+  HiOutlineWrenchScrewdriver,
+} from 'react-icons/hi2';
 
 import { HomepageLeadForm } from '@/components/home/HomepageLeadForm';
 
@@ -9,7 +14,6 @@ import styles from './HomepageV2.module.css';
 const taskPaths = [
   {
     id: 'heat-treatment-line',
-    number: '01',
     title: '我要上热处理线',
     description: '工件、工艺和产量，整线按需配置',
     label: '查看整线方案',
@@ -22,7 +26,6 @@ const taskPaths = [
   },
   {
     id: 'furnace-selection',
-    number: '02',
     title: '我要选一台炉',
     description: '按工件、工艺温度和装炉量初选炉型',
     label: '从工件开始挑',
@@ -35,21 +38,20 @@ const taskPaths = [
   },
   {
     id: 'old-furnace-diagnosis',
-    number: '03',
-    title: '旧炉出问题',
+    title: '台车炉或旧炉出问题',
     description: '能耗高、温度不均等，修、改还是换',
-    label: '判断大修还是更新',
+    label: '判断大修还是买新',
     href: '/zh/articles/laojiu-rechuli-lu-daxiu-haishi-maixin',
-    image: '/images/home/scenario-03-old-furnace-diagnosis.png',
-    imageAlt: '旧台车式热处理炉检修判断工程手绘图',
-    imageWidth: 1645,
-    imageHeight: 869,
+    image: '/images/home/scenario-03-old-furnace-diagnosis-20260825.png',
+    imageAlt: '带炉门密封结构标注的旧台车式热处理炉工程手绘图',
+    imageWidth: 1670,
+    imageHeight: 941,
     imageClassName: styles.taskImageDiagnosis,
   },
 ] as const;
 
 const engineeringSteps = [
-  ['01', '先明确工艺目标', '材料、温度、气氛、产能与质量要求。'],
+  ['01', '先定工艺要求', '材料、温度、气氛、产能与质量要求。'],
   ['02', '再组织整线方案', '炉体、输送、控制、安全与辅助配置协同。'],
   ['03', '按项目范围推进', '制造、安装、调试、验收与投产支持。'],
 ] as const;
@@ -103,19 +105,10 @@ const caseCards = [
   },
 ] as const;
 
-function SectionHeading({
-  number,
-  title,
-  description,
-}: {
-  number: string;
-  title: string;
-  description?: string;
-}) {
+function SectionHeading({ title, description }: { title: string; description?: string }) {
   return (
     <div className={styles.sectionHeading}>
       <div>
-        <span className={styles.sectionNumber}>{number}</span>
         <h2>{title}</h2>
       </div>
       {description ? <p>{description}</p> : null}
@@ -126,20 +119,21 @@ function SectionHeading({
 export function HomepageV2() {
   return (
     <div className={styles.page}>
-      <section id="task-paths" className={`${styles.section} ${styles.entrySection}`}>
+      <section id="task-paths" className={styles.section}>
         <div className={styles.container}>
           <div className={styles.entryHeading}>
             <div>
-              <span className={styles.sectionNumber}>01 · 先选自己的路</span>
               <h2>您是哪种情况？</h2>
             </div>
-            <p>选择最接近您的情况</p>
+            <p>
+              <HiOutlineCursorArrowRays className={styles.entryPromptIcon} aria-hidden="true" />
+              <span>选择最接近您的情况</span>
+            </p>
           </div>
           <div className={styles.taskGrid}>
             {taskPaths.map((item) => (
               <Link key={item.id} href={item.href} className={styles.taskCard}>
                 <div className={styles.taskCardHeader}>
-                  <span className={styles.cardNumber}>{item.number}</span>
                   <h3>{item.title}</h3>
                   <p>{item.description}</p>
                 </div>
@@ -169,25 +163,26 @@ export function HomepageV2() {
       <section className={`${styles.section} ${styles.softSection} ${styles.productSection}`}>
         <div className={styles.container}>
           <SectionHeading
-            number="02 · 产品与工程"
-            title="生产线是首页重点，单台炉同样承接"
-            description="单台工业炉的新建、改造和维修同样承接；详细工艺与交付步骤进入对应页面。"
+            title="热处理生产线整线交付，单台工业炉同样承接"
+            description="单台工业炉的新建、改造和维修同样承接。"
           />
           <div className={styles.productLayout}>
             <article className={styles.productLead}>
               <figure className={styles.productLeadMedia}>
                 <Image
-                  src="/images/about/about-production-line.jpg"
-                  alt="苏能工厂内在制热处理生产线"
+                  src="/images/home/production-line-evidence-crop-20260825.jpg"
+                  alt="苏能工厂内工业炉在制设备实拍"
                   fill
                   sizes="(max-width: 900px) 100vw, 34vw"
                   className={styles.coverImage}
                 />
-                <figcaption>连续式热处理设备总装｜工厂实拍</figcaption>
+                <figcaption>工业炉在制设备｜工厂实拍</figcaption>
               </figure>
               <div className={styles.productLeadBody}>
                 <span className={styles.eyebrow}>热处理生产线</span>
-                <h3>从工艺目标到稳定投产，组织完整工程链路</h3>
+                <h3>
+                  一条热处理线，<span className={styles.noWrap}>怎么</span>从方案做到投产
+                </h3>
                 <div className={styles.engineeringSteps}>
                   {engineeringSteps.map(([number, title, description]) => (
                     <div key={number}>
@@ -213,14 +208,13 @@ export function HomepageV2() {
               <article className={styles.productRouteCard}>
                 <figure className={styles.productRouteImage}>
                   <Image
-                    src="/images/home/product-center/trolley-furnace-real.jpg"
+                    src="/images/home/trolley-furnace-evidence-20260825.png"
                     alt="台车式热处理炉"
                     fill
                     sizes="(max-width: 900px) 100vw, 28vw"
                     className={styles.containImage}
                   />
                 </figure>
-                <span className={styles.eyebrow}>重点炉型</span>
                 <h3>台车式热处理炉</h3>
                 <p>用途、结构方向、选型信息与适用边界集中查看。</p>
                 <Link href="/zh/products/detail/trolley-furnace" className={styles.textLink}>
@@ -232,7 +226,7 @@ export function HomepageV2() {
                 <HiOutlineWrenchScrewdriver className={styles.routeIcon} aria-hidden="true" />
                 <span className={styles.eyebrow}>单台炉服务</span>
                 <h3>新建、改造、维修</h3>
-                <p>井式炉、箱式炉、罩式炉及其他工业炉，也按真实工况承接。</p>
+                <p>井式炉、箱式炉、罩式炉等其他炉型，新建、改造、维修都接。</p>
                 <Link href="/zh/products" className={styles.textLink}>
                   查看全部炉型
                   <HiArrowRight aria-hidden="true" />
@@ -246,7 +240,6 @@ export function HomepageV2() {
       <section id="selection-service" className={`${styles.section} ${styles.decisionSection}`}>
         <div className={styles.container}>
           <SectionHeading
-            number="03 · 先判断，再推进"
             title="资料不全也可以先把方向判断清楚"
             description="四类条件放在首页；完整方法和具体实施范围进入对应服务页面。"
           />
@@ -301,7 +294,6 @@ export function HomepageV2() {
       >
         <div className={styles.container}>
           <SectionHeading
-            number="04 · 工厂与项目证据"
             title="先看真实制造现场，再进入完整案例"
             description="首页只展示可核验的实拍与正式案例，不使用空位，也不让其他设备案例冒充台车炉案例。"
           />

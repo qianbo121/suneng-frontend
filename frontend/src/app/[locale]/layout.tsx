@@ -5,7 +5,6 @@ import { notFound } from 'next/navigation';
 
 import { JsonLd } from '@/components/JsonLd';
 import { WebsiteReadingTracker } from '@/components/analytics/WebsiteReadingTracker';
-import { FloatToolbar } from '@/components/layout/FloatToolbar';
 import { Footer } from '@/components/layout/Footer';
 import { Header } from '@/components/layout/Header';
 import { BaiduAnalytics } from '@/components/seo/BaiduAnalytics';
@@ -40,12 +39,11 @@ export default async function LocaleLayout({ children, params }: LocaleLayoutPro
       <body>
         <NextIntlClientProvider locale={locale} messages={messages}>
           <WebsiteReadingTracker />
-          <div className="min-h-screen bg-white pb-[72px] text-neutral-900 xl:pb-0">
+          <div className="min-h-screen bg-white text-neutral-900">
             <Header locale={locale} />
             <div id="site-page-content">
               <main className="min-h-[calc(100vh-520px)] bg-white">{children}</main>
               <Footer locale={locale} />
-              <FloatToolbar locale={locale} />
             </div>
           </div>
         </NextIntlClientProvider>
