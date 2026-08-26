@@ -2,8 +2,8 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { HiArrowRight, HiOutlineCursorArrowRays } from 'react-icons/hi2';
 
+import { HomepageBottomLeadBar } from '@/components/home/HomepageBottomLeadBar';
 import { HomepageLeadForm } from '@/components/home/HomepageLeadForm';
-import { siteSettings } from '@/mock/siteSettings';
 
 import styles from './HomepageV2.module.css';
 
@@ -144,7 +144,7 @@ function SectionHeading({ title, description }: { title: string; description?: s
 export function HomepageV2() {
   return (
     <div className={styles.page}>
-      <section id="task-paths" className={styles.section}>
+      <section id="task-paths" className={styles.section} data-sticky-contact-start>
         <div className={styles.container}>
           <div className={styles.entryHeading}>
             <div>
@@ -315,10 +315,7 @@ export function HomepageV2() {
 
       <HomepageLeadForm />
 
-      <nav className={styles.bottomLeadBar} aria-label="项目咨询">
-        <a href="#homepage-lead-form">提交项目情况</a>
-        <a href={`tel:${siteSettings.salesPhone.replace(/[^+\d]/g, '')}`}>电话咨询</a>
-      </nav>
+      <HomepageBottomLeadBar />
     </div>
   );
 }

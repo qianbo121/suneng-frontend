@@ -38,6 +38,7 @@ export type SiteSettings = {
   icp: string;
   copyright: LocalizedText;
   qrCodeAlt: LocalizedText;
+  wechatQrCode: string;
   footerProductCategories: LocalizedText[];
   toolbarItems: ToolbarItem[];
 };

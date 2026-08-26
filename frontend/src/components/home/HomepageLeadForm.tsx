@@ -16,6 +16,7 @@ import {
   validateHomepageRequirement,
 } from '@/lib/api/homepage-requirements';
 import { buildLeadSourceSnapshot, trackLeadEvent } from '@/lib/api/lead-events';
+import { markStickyEngineerConverted } from '@/components/home/sticky-engineer';
 
 import styles from './HomepageV2.module.css';
 
@@ -90,6 +91,7 @@ export function HomepageLeadForm() {
         ),
       );
       setSubmissionId(String(result.submissionId));
+      markStickyEngineerConverted();
       renewFormIdempotencyKey(idempotencyKeyRef);
     } catch (error) {
       if (renewIdempotencyKeyAfterConflict(error, idempotencyKeyRef)) {
@@ -119,6 +121,8 @@ export function HomepageLeadForm() {
       id="homepage-lead-form"
       className={styles.formSection}
       aria-labelledby="homepage-form-title"
+      data-contact-form
+      data-sticky-contact-stop
     >
       <div className={styles.formInner}>
         <div className={styles.formIntro}>

@@ -192,7 +192,7 @@ function QrBlock({
         style={{ gap: `var(--home-card-gap, ${px(desktop.qrGap)})` }}
       >
         {[
-          { src: '/images/footer/wechat-qr.png', label: copy.wechat },
+          { src: siteSettings.wechatQrCode, label: copy.wechat },
           { src: '/images/footer/douyin-qr.png', label: copy.douyin },
         ].map((qr) => (
           <div key={qr.label} className="group text-center">
