@@ -7,7 +7,7 @@ import { toAssetUrl } from '@/lib/api/client';
 import { compactText } from '@/lib/seo';
 import { absoluteUrl, buildMetadata } from '@/lib/seo/metadata';
 import { filterCanonicalNewsItems, hasPublishableEnglishNews } from '@/lib/news-routing';
-import { sanitizeRichTextHtml } from '@/lib/sanitize';
+import { richTextToPlainText, sanitizeRichTextHtml } from '@/lib/sanitize';
 import { localizeText } from '@/lib/utils';
 import { NewsApiItem, NewsListCardItem } from '@/types/news';
 import { Locale } from '@/types/site';
@@ -55,8 +55,8 @@ export function mapNewsCard(locale: Locale, item: NewsApiItem): NewsListCardItem
       en: item.titleEn || item.titleZh,
     },
     summary: {
-      zh: item.summaryZh || item.contentZh || '',
-      en: item.summaryEn || item.contentEn || item.summaryZh || item.contentZh || '',
+      zh: richTextToPlainText(item.summaryZh || item.contentZh),
+      en: richTextToPlainText(item.summaryEn || item.contentEn || item.summaryZh || item.contentZh),
     },
     date: item.publishDate,
     category: {

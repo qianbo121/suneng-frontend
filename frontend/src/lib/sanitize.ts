@@ -36,3 +36,14 @@ export function sanitizeRichTextHtml(value?: string | null) {
 
   return DOMPurify.sanitize(value);
 }
+
+export function richTextToPlainText(value?: string | null) {
+  if (!value) return '';
+
+  const spacedValue = value
+    .replace(/<br\s*\/?>/gi, ' ')
+    .replace(/<\/(?:article|blockquote|div|h[1-6]|li|ol|p|section|td|th|tr|ul)>/gi, ' ');
+  const sanitizedBody = DOMPurify.sanitize(spacedValue, { RETURN_DOM: true });
+
+  return (sanitizedBody.textContent || '').replace(/\s+/g, ' ').trim();
+}
