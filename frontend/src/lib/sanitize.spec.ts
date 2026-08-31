@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 
-import { sanitizeRichTextHtml } from './sanitize';
+import { richTextToPlainText, sanitizeRichTextHtml } from './sanitize';
 
 describe('sanitizeRichTextHtml', () => {
   it('strips <script> from HTML content', () => {
@@ -32,5 +32,26 @@ describe('sanitizeRichTextHtml', () => {
   it('returns an empty string for nullish input', () => {
     expect(sanitizeRichTextHtml('')).toBe('');
     expect(sanitizeRichTextHtml(null)).toBe('');
+  });
+});
+
+describe('richTextToPlainText', () => {
+  it('removes rich-text markup and preserves readable spacing', () => {
+    expect(
+      richTextToPlainText(
+        '<div><img src="/cover.webp" alt="cover"></div><div>第一段<br><br>第二段</div>',
+      ),
+    ).toBe('第一段 第二段');
+  });
+
+  it('decodes HTML entities and removes unsafe content', () => {
+    expect(richTextToPlainText('<script>alert(1)</script><p>A&nbsp;&amp;&nbsp;B</p>')).toBe(
+      'A & B',
+    );
+  });
+
+  it('returns an empty string for nullish input', () => {
+    expect(richTextToPlainText('')).toBe('');
+    expect(richTextToPlainText(null)).toBe('');
   });
 });
