@@ -751,7 +751,7 @@ export function AboutZhContent() {
               </div>
               <address className="grid gap-0 border-t border-white/10 bg-white/5 not-italic lg:border-l lg:border-t-0">
                 <div className="border-b border-white/10 p-6 md:p-8">
-                  <p className="text-[14px] font-semibold text-white/56">电话 / 微信</p>
+                  <p className="text-[14px] font-semibold text-white/60">电话 / 微信</p>
                   <a
                     className="mt-2 block text-[20px] font-semibold text-white"
                     href="tel:+8613052986814"
@@ -760,7 +760,7 @@ export function AboutZhContent() {
                   </a>
                 </div>
                 <div className="p-6 md:p-8">
-                  <p className="text-[14px] font-semibold text-white/56">邮箱</p>
+                  <p className="text-[14px] font-semibold text-white/60">邮箱</p>
                   <a
                     className="mt-2 block break-words text-[20px] font-semibold text-white"
                     href={`mailto:${siteSettings.email}`}
