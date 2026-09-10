@@ -277,7 +277,7 @@
     "fullName": "泰州英格伟精密机械有限公司",
     "shortName": "英格伟精密机械",
     "industry": "汽车零部件",
-    "provinceCode": null
+    "provinceCode": "320000"
   },
   {
     "id": "ledger-014",
@@ -375,7 +375,7 @@
     "fullName": "江苏天工科技股份有限公司",
     "shortName": "天工科技",
     "industry": "钛及钛合金材料",
-    "provinceCode": null
+    "provinceCode": "320000"
   },
   {
     "id": "ledger-052",
@@ -396,21 +396,21 @@
     "fullName": "豪顺北欧（杭州）科技有限公司",
     "shortName": "豪顺北欧",
     "industry": null,
-    "provinceCode": null
+    "provinceCode": "330000"
   },
   {
     "id": "ledger-057",
     "fullName": "扬州市管件厂有限公司",
     "shortName": "扬州市管件厂",
     "industry": "工业管件制造",
-    "provinceCode": null
+    "provinceCode": "320000"
   },
   {
     "id": "ledger-058",
     "fullName": "江苏天工工具新材料股份有限公司",
     "shortName": "天工工具新材料",
     "industry": "工具钢与模具钢材料",
-    "provinceCode": null
+    "provinceCode": "320000"
   },
   {
     "id": "ledger-060",
@@ -438,28 +438,28 @@
     "fullName": "东和管道科技（江苏）有限公司",
     "shortName": "东和管道",
     "industry": "不锈钢与合金管件",
-    "provinceCode": null
+    "provinceCode": "320000"
   },
   {
     "id": "ledger-080",
     "fullName": "上海万拓实业有限公司",
     "shortName": "上海万拓",
     "industry": "工业钢管与管件制造",
-    "provinceCode": null
+    "provinceCode": "310000"
   },
   {
     "id": "ledger-081",
     "fullName": "天津日进汽车系统有限公司",
     "shortName": "天津日进",
     "industry": "汽车零部件（轮毂轴承）",
-    "provinceCode": null
+    "provinceCode": "120000"
   },
   {
     "id": "ledger-082",
     "fullName": "江苏和诚制药设备制造有限公司",
     "shortName": "和诚制药设备",
     "industry": "制药与化工装备",
-    "provinceCode": null
+    "provinceCode": "320000"
   },
   {
     "id": "ledger-084",
@@ -487,7 +487,7 @@
     "fullName": "天津钢研海德科技有限公司",
     "shortName": "钢研海德",
     "industry": "特种合金材料",
-    "provinceCode": null
+    "provinceCode": "120000"
   },
   {
     "id": "ledger-094",
@@ -501,7 +501,7 @@
     "fullName": "江苏远扬管业股份有限公司",
     "shortName": "江苏远扬管业",
     "industry": "工业管道与管件",
-    "provinceCode": null
+    "provinceCode": "320000"
   },
   {
     "id": "ledger-096",
@@ -543,7 +543,7 @@
     "fullName": "江苏省金象传动设备股份有限公司",
     "shortName": "金象传动",
     "industry": "减速机与传动设备",
-    "provinceCode": null
+    "provinceCode": "320000"
   },
   {
     "id": "ledger-114",
@@ -556,7 +556,7 @@
     "id": "ledger-116",
     "fullName": "福安市青拓不锈钢表面处理有限公司",
     "shortName": "青拓不锈钢表面处理",
-    "industry": null,
+    "industry": "冶金",
     "provinceCode": "350000"
   },
   {
@@ -585,7 +585,7 @@
     "fullName": "宝丰县翔隆不锈钢有限公司",
     "shortName": "宝丰翔隆不锈钢",
     "industry": "不锈钢冶炼与加工",
-    "provinceCode": null
+    "provinceCode": "410000"
   },
   {
     "id": "ledger-124",

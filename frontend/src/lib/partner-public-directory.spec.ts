@@ -6,14 +6,15 @@ describe('reviewed public partner directory', () => {
   it('retains all 93 unique companies and verified province counts', () => {
     expect(partners).toHaveLength(93);
     expect(new Set(partners.map((partner) => partner.fullName)).size).toBe(93);
-    expect(partners.filter((partner) => partner.provinceCode === '320000')).toHaveLength(27);
-    expect(partners.filter((partner) => !partner.provinceCode)).toHaveLength(24);
+    expect(partners.filter((partner) => partner.provinceCode === '320000')).toHaveLength(35);
+    expect(partners.filter((partner) => !partner.provinceCode)).toHaveLength(11);
   });
   it('publishes supported industries while retaining companies with undisclosed industries', () => {
-    expect(partners.filter((partner) => partner.industry)).toHaveLength(75);
+    expect(partners.filter((partner) => partner.industry)).toHaveLength(76);
     expect(
       partners.find((partner) => partner.fullName === '广西百矿新材料技术有限公司')?.industry,
     ).toBe('汽车零部件（铝合金轮毂）');
+    expect(partners.find((partner) => partner.id === 'ledger-116')?.industry).toBe('冶金');
     expect(
       partners.find((partner) => partner.fullName === '无锡市宏翔特种钢管有限公司')?.industry,
     ).toBeNull();
