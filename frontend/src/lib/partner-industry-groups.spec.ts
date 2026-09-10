@@ -13,4 +13,16 @@ describe('public partner industry filters', () => {
   it('does not assign a category when the public industry is absent', () => {
     expect(partnerIndustryGroup(null)).toBeNull();
   });
+  it.each(['化工与电子材料', '废气治理材料', '材料科学研究'])(
+    'keeps the reviewed non-metal industry %s out of metal materials',
+    (industry) => {
+      expect(partnerIndustryGroup(industry)).toBe('其他行业');
+    },
+  );
+  it('recognizes machine tools and preserves reviewed metal material categories', () => {
+    expect(partnerIndustryGroup('数控机床制造')).toBe('机械与装备');
+    for (const industry of ['锯切工具与工具钢材料', '模具材料', '矿用耐磨材料', '冶金']) {
+      expect(partnerIndustryGroup(industry)).toBe('金属材料');
+    }
+  });
 });
