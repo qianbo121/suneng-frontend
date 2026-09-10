@@ -1,0 +1,653 @@
+[
+  {
+    "id": "partner-01",
+    "fullName": "中国恩菲工程技术有限公司",
+    "shortName": "中国恩菲 ENFI",
+    "industry": "工程设计与咨询",
+    "provinceCode": "110000"
+  },
+  {
+    "id": "partner-02",
+    "fullName": "中国联合工程有限公司",
+    "shortName": "中国联合 CUEC",
+    "industry": "工程设计与咨询",
+    "provinceCode": "330000"
+  },
+  {
+    "id": "partner-03",
+    "fullName": "内蒙古北方重工业集团有限公司",
+    "shortName": "北方重工",
+    "industry": "重型装备制造",
+    "provinceCode": "150000"
+  },
+  {
+    "id": "partner-04",
+    "fullName": "中集安瑞环科技股份有限公司",
+    "shortName": "中集安瑞环",
+    "industry": "能源装备制造",
+    "provinceCode": "320000"
+  },
+  {
+    "id": "partner-28",
+    "fullName": "南通中集能源装备有限公司",
+    "shortName": "南通中集能源",
+    "industry": "能源装备制造",
+    "provinceCode": "320000"
+  },
+  {
+    "id": "partner-38",
+    "fullName": "六和轻合金（苏州）有限公司",
+    "shortName": "六和轻合金",
+    "industry": "汽车零部件",
+    "provinceCode": "320000"
+  },
+  {
+    "id": "partner-07",
+    "fullName": "无锡市硕阳不锈钢有限公司",
+    "shortName": "硕阳不锈钢",
+    "industry": "钢铁与金属加工",
+    "provinceCode": "320000"
+  },
+  {
+    "id": "partner-05",
+    "fullName": "中国兵器工业集团江山重工研究院有限公司",
+    "shortName": "江山重工",
+    "industry": "特种装备制造",
+    "provinceCode": "420000"
+  },
+  {
+    "id": "partner-06",
+    "fullName": "天津航天长征火箭制造有限公司",
+    "shortName": "天津航天长征",
+    "industry": "航天装备制造",
+    "provinceCode": "120000"
+  },
+  {
+    "id": "partner-08",
+    "fullName": "桂林万川电炉输送设备有限公司",
+    "shortName": "桂林万川电炉输送设备",
+    "industry": "热工与输送装备",
+    "provinceCode": "450000"
+  },
+  {
+    "id": "partner-09",
+    "fullName": "河南江河机械有限责任公司",
+    "shortName": "河南江河机械",
+    "industry": "金属加工",
+    "provinceCode": "410000"
+  },
+  {
+    "id": "partner-10",
+    "fullName": "广州菲卓科技有限公司",
+    "shortName": "广州菲卓科技",
+    "industry": "技术研发",
+    "provinceCode": "440000"
+  },
+  {
+    "id": "partner-11",
+    "fullName": "连云港瑞天富压延有限公司",
+    "shortName": "连云港瑞天富压延",
+    "industry": "钢铁与金属加工",
+    "provinceCode": "320000"
+  },
+  {
+    "id": "partner-12",
+    "fullName": "上海明亨管件机械有限公司",
+    "shortName": "上海明亨管件机械",
+    "industry": "管件制造设备",
+    "provinceCode": "310000"
+  },
+  {
+    "id": "partner-13",
+    "fullName": "湖北三十五机械有限责任公司",
+    "shortName": "湖北三十五机械",
+    "industry": "机械与零部件",
+    "provinceCode": "420000"
+  },
+  {
+    "id": "partner-14",
+    "fullName": "宁波金球机电铸造有限公司",
+    "shortName": "宁波金球机电铸造",
+    "industry": "铸造与金属加工",
+    "provinceCode": "330000"
+  },
+  {
+    "id": "partner-15",
+    "fullName": "东台市远洋不锈钢制造有限公司",
+    "shortName": "东台远洋不锈钢",
+    "industry": "管道与流体装备",
+    "provinceCode": "320000"
+  },
+  {
+    "id": "partner-17",
+    "fullName": "德世博尔（江苏）机器人技术有限公司",
+    "shortName": "德世博尔机器人",
+    "industry": "机器人零部件",
+    "provinceCode": "320000"
+  },
+  {
+    "id": "partner-18",
+    "fullName": "东台市远洋船舶配件有限公司",
+    "shortName": "东台市远洋船舶配件",
+    "industry": "船舶配套",
+    "provinceCode": "320000"
+  },
+  {
+    "id": "partner-19",
+    "fullName": "大连华辉液压管件有限公司",
+    "shortName": "大连华辉液压管件",
+    "industry": "液压与流体装备",
+    "provinceCode": "210000"
+  },
+  {
+    "id": "partner-20",
+    "fullName": "无锡市宏翔特种钢管有限公司",
+    "shortName": "无锡市宏翔特种钢管",
+    "industry": null,
+    "provinceCode": "320000"
+  },
+  {
+    "id": "partner-23",
+    "fullName": "镇江建华轴承有限公司",
+    "shortName": "镇江建华轴承",
+    "industry": "轴承与传动",
+    "provinceCode": "320000"
+  },
+  {
+    "id": "partner-24",
+    "fullName": "苏州轻装智能制造科技有限公司",
+    "shortName": "苏州轻装智能制造科技",
+    "industry": "精密成形制造",
+    "provinceCode": "320000"
+  },
+  {
+    "id": "partner-25",
+    "fullName": "山东聚宁机械有限公司",
+    "shortName": "山东聚宁机械",
+    "industry": "工程机械配件",
+    "provinceCode": "370000"
+  },
+  {
+    "id": "partner-26",
+    "fullName": "东台中海高温合金科技有限公司",
+    "shortName": "东台中海高温合金科技",
+    "industry": "合金材料",
+    "provinceCode": "320000"
+  },
+  {
+    "id": "partner-27",
+    "fullName": "铜陵欣诺科新材料有限公司",
+    "shortName": "铜陵欣诺科新材料",
+    "industry": "化工与电子材料",
+    "provinceCode": "340000"
+  },
+  {
+    "id": "partner-29",
+    "fullName": "安徽毅霖翔烨科技有限公司",
+    "shortName": "安徽毅霖翔烨科技",
+    "industry": "钢铁与金属加工",
+    "provinceCode": "340000"
+  },
+  {
+    "id": "partner-30",
+    "fullName": "靖江泰通紧固件制造有限公司",
+    "shortName": "靖江泰通紧固件制造",
+    "industry": "紧固件制造",
+    "provinceCode": "320000"
+  },
+  {
+    "id": "partner-32",
+    "fullName": "宝应县新智宇机械有限公司",
+    "shortName": "宝应县新智宇机械",
+    "industry": null,
+    "provinceCode": "320000"
+  },
+  {
+    "id": "partner-33",
+    "fullName": "江苏兴洋管业股份有限公司",
+    "shortName": "江苏兴洋管业",
+    "industry": "管道与管配件",
+    "provinceCode": "320000"
+  },
+  {
+    "id": "partner-34",
+    "fullName": "仪昌节流装置制造（江苏）有限公司",
+    "shortName": "仪昌节流装置制造（江苏）",
+    "industry": "仪器仪表",
+    "provinceCode": "320000"
+  },
+  {
+    "id": "partner-36",
+    "fullName": "扬州华宇管件有限公司",
+    "shortName": "扬州华宇管件",
+    "industry": "管道与管配件",
+    "provinceCode": "320000"
+  },
+  {
+    "id": "ledger-000",
+    "fullName": "洛阳物泰轴承有限公司",
+    "shortName": "洛阳物泰",
+    "industry": null,
+    "provinceCode": null
+  },
+  {
+    "id": "ledger-001",
+    "fullName": "张家港海锐达模压装备有限公司",
+    "shortName": "海锐达模压装备",
+    "industry": null,
+    "provinceCode": "320000"
+  },
+  {
+    "id": "ledger-003",
+    "fullName": "宜兴市创天管业有限公司",
+    "shortName": "宜兴创天",
+    "industry": null,
+    "provinceCode": "320000"
+  },
+  {
+    "id": "ledger-004",
+    "fullName": "辽宁华荣重工机械有限公司",
+    "shortName": "辽宁华荣重工",
+    "industry": "压力容器与石化装备",
+    "provinceCode": "210000"
+  },
+  {
+    "id": "ledger-005",
+    "fullName": "贵州安大航空锻造有限责任公司",
+    "shortName": "贵州安大",
+    "industry": "航空锻件制造",
+    "provinceCode": "520000"
+  },
+  {
+    "id": "ledger-006",
+    "fullName": "固力发电气有限公司",
+    "shortName": "固力发电气",
+    "industry": "输配电设备与电力金具",
+    "provinceCode": "340000"
+  },
+  {
+    "id": "ledger-009",
+    "fullName": "扬州荣晟安阀门有限公司",
+    "shortName": "荣晟安阀门",
+    "industry": "工业阀门",
+    "provinceCode": "320000"
+  },
+  {
+    "id": "ledger-010",
+    "fullName": "泰州英格伟精密机械有限公司",
+    "shortName": "英格伟精密机械",
+    "industry": "汽车零部件",
+    "provinceCode": null
+  },
+  {
+    "id": "ledger-014",
+    "fullName": "宝鸡市博通机电设备有限公司",
+    "shortName": "宝鸡博通",
+    "industry": null,
+    "provinceCode": "610000"
+  },
+  {
+    "id": "ledger-016",
+    "fullName": "东台市瑞代不锈钢制品有限公司",
+    "shortName": "东台瑞代",
+    "industry": null,
+    "provinceCode": "320000"
+  },
+  {
+    "id": "ledger-018",
+    "fullName": "泰州市诚进机械配件加工部",
+    "shortName": "诚进机械",
+    "industry": null,
+    "provinceCode": null
+  },
+  {
+    "id": "ledger-022",
+    "fullName": "惠柏新材料科技（上海）股份有限公司",
+    "shortName": "惠柏新材",
+    "industry": "化工与电子材料",
+    "provinceCode": "310000"
+  },
+  {
+    "id": "ledger-025",
+    "fullName": "江油市重鑫特种金属材料有限公司",
+    "shortName": "江油重鑫",
+    "industry": "钢铁冶炼与压延加工",
+    "provinceCode": "510000"
+  },
+  {
+    "id": "ledger-030",
+    "fullName": "南通鹏飞铸造有限公司",
+    "shortName": "南通鹏飞铸造",
+    "industry": null,
+    "provinceCode": null
+  },
+  {
+    "id": "ledger-031",
+    "fullName": "浙江泰昌实业有限公司",
+    "shortName": "浙江泰昌",
+    "industry": "输配电设备与电力金具",
+    "provinceCode": "330000"
+  },
+  {
+    "id": "ledger-032",
+    "fullName": "中集氢能源科技（南通）有限公司",
+    "shortName": "中集氢能源",
+    "industry": "能源储运装备",
+    "provinceCode": "320000"
+  },
+  {
+    "id": "ledger-042",
+    "fullName": "浙江缙云韩立锯业有限公司",
+    "shortName": "缙云韩立锯业",
+    "industry": "锯切工具与工具钢材料",
+    "provinceCode": "330000"
+  },
+  {
+    "id": "ledger-044",
+    "fullName": "河南省科学院材料研究所",
+    "shortName": "河南省科学院材料所",
+    "industry": "材料科学研究",
+    "provinceCode": "410000"
+  },
+  {
+    "id": "ledger-046",
+    "fullName": "扬州汇鑫热处理有限公司",
+    "shortName": "扬州汇鑫热处理",
+    "industry": "金属热处理",
+    "provinceCode": "320000"
+  },
+  {
+    "id": "ledger-048",
+    "fullName": "宁夏长兴精密机械有限公司",
+    "shortName": "宁夏长兴",
+    "industry": "数控机床制造",
+    "provinceCode": "640000"
+  },
+  {
+    "id": "ledger-049",
+    "fullName": "盐城润奇管件有限公司",
+    "shortName": "润奇管件",
+    "industry": "液压管件与机械配件",
+    "provinceCode": null
+  },
+  {
+    "id": "ledger-050",
+    "fullName": "江苏天工科技股份有限公司",
+    "shortName": "天工科技",
+    "industry": "钛及钛合金材料",
+    "provinceCode": null
+  },
+  {
+    "id": "ledger-052",
+    "fullName": "张家口瑞泰机械有限责任公司",
+    "shortName": "张家口瑞泰",
+    "industry": "锻件与机械加工",
+    "provinceCode": null
+  },
+  {
+    "id": "ledger-053",
+    "fullName": "盐城市大丰华瑞精工机械有限公司",
+    "shortName": "大丰华瑞精工",
+    "industry": null,
+    "provinceCode": "320000"
+  },
+  {
+    "id": "ledger-054",
+    "fullName": "豪顺北欧（杭州）科技有限公司",
+    "shortName": "豪顺北欧",
+    "industry": null,
+    "provinceCode": null
+  },
+  {
+    "id": "ledger-057",
+    "fullName": "扬州市管件厂有限公司",
+    "shortName": "扬州市管件厂",
+    "industry": "工业管件制造",
+    "provinceCode": null
+  },
+  {
+    "id": "ledger-058",
+    "fullName": "江苏天工工具新材料股份有限公司",
+    "shortName": "天工工具新材料",
+    "industry": "工具钢与模具钢材料",
+    "provinceCode": null
+  },
+  {
+    "id": "ledger-060",
+    "fullName": "江苏天工爱和科技有限公司",
+    "shortName": "天工爱和",
+    "industry": "模具材料",
+    "provinceCode": null
+  },
+  {
+    "id": "ledger-066",
+    "fullName": "天津润德中天钢管有限公司",
+    "shortName": "润德中天钢管",
+    "industry": "无缝钢管制造",
+    "provinceCode": "120000"
+  },
+  {
+    "id": "ledger-070",
+    "fullName": "德州新景环境科技有限公司",
+    "shortName": "德州新景环境",
+    "industry": "废气治理材料",
+    "provinceCode": "370000"
+  },
+  {
+    "id": "ledger-073",
+    "fullName": "东和管道科技（江苏）有限公司",
+    "shortName": "东和管道",
+    "industry": "不锈钢与合金管件",
+    "provinceCode": null
+  },
+  {
+    "id": "ledger-080",
+    "fullName": "上海万拓实业有限公司",
+    "shortName": "上海万拓",
+    "industry": "工业钢管与管件制造",
+    "provinceCode": null
+  },
+  {
+    "id": "ledger-081",
+    "fullName": "天津日进汽车系统有限公司",
+    "shortName": "天津日进",
+    "industry": "汽车零部件（轮毂轴承）",
+    "provinceCode": null
+  },
+  {
+    "id": "ledger-082",
+    "fullName": "江苏和诚制药设备制造有限公司",
+    "shortName": "和诚制药设备",
+    "industry": "制药与化工装备",
+    "provinceCode": null
+  },
+  {
+    "id": "ledger-084",
+    "fullName": "河南鑫金汇不锈钢产业有限公司",
+    "shortName": "河南鑫金汇",
+    "industry": "不锈钢材料",
+    "provinceCode": "410000"
+  },
+  {
+    "id": "ledger-088",
+    "fullName": "天津亚世亚金属制品有限公司",
+    "shortName": "天津亚世亚",
+    "industry": "金属加工与热处理",
+    "provinceCode": "120000"
+  },
+  {
+    "id": "ledger-092",
+    "fullName": "烟台元铧钢管有限公司",
+    "shortName": "烟台元铧钢管",
+    "industry": "钢管与管材",
+    "provinceCode": "370000"
+  },
+  {
+    "id": "ledger-093",
+    "fullName": "天津钢研海德科技有限公司",
+    "shortName": "钢研海德",
+    "industry": "特种合金材料",
+    "provinceCode": null
+  },
+  {
+    "id": "ledger-094",
+    "fullName": "南京宇创石化设备有限公司",
+    "shortName": "南京宇创石化设备",
+    "industry": null,
+    "provinceCode": "320000"
+  },
+  {
+    "id": "ledger-095",
+    "fullName": "江苏远扬管业股份有限公司",
+    "shortName": "江苏远扬管业",
+    "industry": "工业管道与管件",
+    "provinceCode": null
+  },
+  {
+    "id": "ledger-096",
+    "fullName": "湖南华菱涟源钢铁有限公司",
+    "shortName": "华菱涟钢",
+    "industry": "钢铁冶炼",
+    "provinceCode": "430000"
+  },
+  {
+    "id": "ledger-099",
+    "fullName": "福建鼎信科技有限公司",
+    "shortName": "福建鼎信科技",
+    "industry": "不锈钢轧制与深加工",
+    "provinceCode": "350000"
+  },
+  {
+    "id": "ledger-101",
+    "fullName": "宜兴市恒力环保设备有限公司",
+    "shortName": "宜兴恒力环保",
+    "industry": null,
+    "provinceCode": null
+  },
+  {
+    "id": "ledger-102",
+    "fullName": "广西百矿新材料技术有限公司",
+    "shortName": "广西百矿新材",
+    "industry": "汽车零部件（铝合金轮毂）",
+    "provinceCode": "450000"
+  },
+  {
+    "id": "ledger-103",
+    "fullName": "钢诺新材料股份有限公司",
+    "shortName": "钢诺新材",
+    "industry": "矿用耐磨材料",
+    "provinceCode": "130000"
+  },
+  {
+    "id": "ledger-105",
+    "fullName": "江苏省金象传动设备股份有限公司",
+    "shortName": "金象传动",
+    "industry": "减速机与传动设备",
+    "provinceCode": null
+  },
+  {
+    "id": "ledger-114",
+    "fullName": "常州南鹏机械有限公司",
+    "shortName": "常州南鹏机械",
+    "industry": "精密减速机与传动设备",
+    "provinceCode": "320000"
+  },
+  {
+    "id": "ledger-116",
+    "fullName": "福安市青拓不锈钢表面处理有限公司",
+    "shortName": "青拓不锈钢表面处理",
+    "industry": null,
+    "provinceCode": "350000"
+  },
+  {
+    "id": "ledger-117",
+    "fullName": "句容市天工新材料科技有限公司",
+    "shortName": "句容天工新材",
+    "industry": "特种钢与合金材料",
+    "provinceCode": "320000"
+  },
+  {
+    "id": "ledger-118",
+    "fullName": "长春致远新能源装备股份有限公司",
+    "shortName": "长春致远新能源装备",
+    "industry": "天然气与氢能装备",
+    "provinceCode": "220000"
+  },
+  {
+    "id": "ledger-121",
+    "fullName": "石家庄安瑞科气体机械有限公司",
+    "shortName": "石家庄安瑞科",
+    "industry": "气体储运与氢能装备",
+    "provinceCode": "130000"
+  },
+  {
+    "id": "ledger-122",
+    "fullName": "宝丰县翔隆不锈钢有限公司",
+    "shortName": "宝丰翔隆不锈钢",
+    "industry": "不锈钢冶炼与加工",
+    "provinceCode": null
+  },
+  {
+    "id": "ledger-124",
+    "fullName": "宝鸡法士特齿轮有限责任公司",
+    "shortName": "宝鸡法士特",
+    "industry": "汽车传动零部件",
+    "provinceCode": "610000"
+  },
+  {
+    "id": "ledger-125",
+    "fullName": "西安标准热处理有限责任公司",
+    "shortName": "西安标准热处理",
+    "industry": "金属热处理",
+    "provinceCode": "610000"
+  },
+  {
+    "id": "ledger-126",
+    "fullName": "山东黑旋风锯业有限公司",
+    "shortName": "山东黑旋风锯业",
+    "industry": "锯片与锯切工具",
+    "provinceCode": "370000"
+  },
+  {
+    "id": "ledger-127",
+    "fullName": "湖北山江重工有限公司",
+    "shortName": "湖北山江重工",
+    "industry": "大型铸钢件制造",
+    "provinceCode": "420000"
+  },
+  {
+    "id": "ledger-128",
+    "fullName": "四川华都核设备制造有限公司",
+    "shortName": "四川华都核设备",
+    "industry": "核电设备制造",
+    "provinceCode": "510000"
+  },
+  {
+    "id": "kit-jiyang",
+    "fullName": "冀阳五二五泵业有限公司",
+    "shortName": "冀阳五二五泵业",
+    "industry": null,
+    "provinceCode": null
+  },
+  {
+    "id": "kit-chuangxin",
+    "fullName": "泰州市创鑫金属热处理有限公司",
+    "shortName": "创鑫金属热处理",
+    "industry": null,
+    "provinceCode": null
+  },
+  {
+    "id": "kit-hongxin",
+    "fullName": "安徽弘鑫金属复合材料科技有限公司",
+    "shortName": "安徽弘鑫",
+    "industry": null,
+    "provinceCode": null
+  },
+  {
+    "id": "kit-jiuou",
+    "fullName": "南通久鸥贸易有限公司",
+    "shortName": "南通久鸥",
+    "industry": null,
+    "provinceCode": null
+  }
+]
