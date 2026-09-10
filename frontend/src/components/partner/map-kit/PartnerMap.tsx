@@ -223,20 +223,21 @@ export default function PartnerMap({
         restoreVisibleFocus(returnFocusRef.current, provinceSelectRef.current);
       }
     }
-    function onPointerDown(event: PointerEvent) {
+    function onDocumentClick(event: MouseEvent) {
       const target = event.target;
       if (!(target instanceof Element)) return;
       const root = rootRef.current;
       const activeUi = target.closest('[data-suneng-map-trigger], .suneng-map-popup');
       if (root?.contains(target) && activeUi) return;
+      // Wait for the click so collapsing the mobile panel cannot move its target mid-gesture.
       // Outside clicks keep focus at the user's new destination.
       setSelected(null);
     }
     document.addEventListener('keydown', onKeyDown);
-    document.addEventListener('pointerdown', onPointerDown);
+    document.addEventListener('click', onDocumentClick);
     return () => {
       document.removeEventListener('keydown', onKeyDown);
-      document.removeEventListener('pointerdown', onPointerDown);
+      document.removeEventListener('click', onDocumentClick);
     };
   }, [selected]);
 
