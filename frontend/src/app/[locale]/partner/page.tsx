@@ -228,7 +228,7 @@ export default async function PartnerPage({ params }: PartnerPageProps) {
             <p>带上工件与工艺要求，一起讨论设备配置与供货范围。</p>
           </div>
           <div className={styles.contactActions}>
-            <Link className={styles.contactPrimary} href="/zh/inquiry">
+            <Link className={styles.contactPrimary} href="/zh/contact">
               沟通设备需求
               <svg
                 viewBox="0 0 20 20"
