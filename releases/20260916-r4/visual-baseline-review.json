@@ -1,0 +1,88 @@
+{
+  "sourceCommit": "851e1652",
+  "runId": 35044036187,
+  "pages": 5,
+  "viewports": [
+    1440,
+    1280,
+    390
+  ],
+  "review": "All 15 rendered Linux screenshots inspected. Differences correspond to the frozen R4 layout, removed case/guide navigation and compact sections. Existing video masks remain. Backend-free CI exercises the existing unavailable-news fallback; this is not live news acceptance. Five partner interaction tests already passed. Screenshot thresholds and tests unchanged.",
+  "baselines": [
+    {
+      "baseline": "frontend/tests/visual/__screenshots__/smoke-pages.spec.ts/linux-chrome/home-desktop-1440.png",
+      "priorSha256": "7a60a94fc8b8be9739e65b1d6394edc3f7f61998643f42e601aea8004ee5aea5",
+      "reviewedSha256": "ab1f5c3a73371e494b25073a92311da2bf9044e2a3d991706545481e5fc4eda9"
+    },
+    {
+      "baseline": "frontend/tests/visual/__screenshots__/smoke-pages.spec.ts/linux-chrome/home-laptop-1280.png",
+      "priorSha256": "81492d6d5a1f8e00821be692f660b17e47aa2068ffbda5651ebe2ce0360e848b",
+      "reviewedSha256": "ed7bde47930d8bb80cd20c78f4766802ed45179ebd1e279bb970cdbdf0508dcc"
+    },
+    {
+      "baseline": "frontend/tests/visual/__screenshots__/smoke-pages.spec.ts/linux-chrome/home-mobile-390.png",
+      "priorSha256": "23bb306f73afb3792358dbaf65f0bdc18cacbcfbd4256df0104771bd56798acc",
+      "reviewedSha256": "977e1fa24b6d983e1476b79b328db0d5cccc32cbc07a6d70e9ad5dd12f8fbc30"
+    },
+    {
+      "baseline": "frontend/tests/visual/__screenshots__/smoke-pages.spec.ts/linux-chrome/products-desktop-1440.png",
+      "priorSha256": "79c83f23918c52d9dbd37be774d17e3aa68464385fc440a90a0748d00c0ad463",
+      "reviewedSha256": "24d20076514125c315195afad83f0bec2818a4c1eca16cae7f84d55f6c8533a7"
+    },
+    {
+      "baseline": "frontend/tests/visual/__screenshots__/smoke-pages.spec.ts/linux-chrome/products-laptop-1280.png",
+      "priorSha256": "671cfc49760a588916edb44f04cac71611af65ec82db24cb5aa67475fd013f67",
+      "reviewedSha256": "61cfa47f3a8122938cd0a5c004048c75ef8e23d03d2635643f31408f88902273"
+    },
+    {
+      "baseline": "frontend/tests/visual/__screenshots__/smoke-pages.spec.ts/linux-chrome/products-mobile-390.png",
+      "priorSha256": "61a1236aa8030763757ef2687275ba0954492b27f8a18c382faee22ae89d44e6",
+      "reviewedSha256": "a1ca83ebe6b9f72d07d0f79adbcf5a1426d06d94c8db0931d2bc5b73208f9e93"
+    },
+    {
+      "baseline": "frontend/tests/visual/__screenshots__/smoke-pages.spec.ts/linux-chrome/trolley-furnace-desktop-1440.png",
+      "priorSha256": "09808e52a49549cf1f490055ad5293be78f9c446e3dd0fd4c5175ce0d6b266ed",
+      "reviewedSha256": "c9d6864cb87227692d8a5e096500d3cf0a25b829da378eaedeb69ed4897c4318"
+    },
+    {
+      "baseline": "frontend/tests/visual/__screenshots__/smoke-pages.spec.ts/linux-chrome/trolley-furnace-laptop-1280.png",
+      "priorSha256": "945f5ca25c27c15f59696ea6a7541f1236f33f261be051b0b89d3913998ed915",
+      "reviewedSha256": "05128bf111829010ef1c781debf547fada0f0e6dc57e44a99b9f42ec9aa20963"
+    },
+    {
+      "baseline": "frontend/tests/visual/__screenshots__/smoke-pages.spec.ts/linux-chrome/trolley-furnace-mobile-390.png",
+      "priorSha256": "2ca0e35133074892285dc704c699b3b67407a1aec8e3d97f418127692bb843f8",
+      "reviewedSha256": "329700aa091b9ccc2f643cdaf32692b870a5c362dc9f1b695f60bb6bdaa0230a"
+    },
+    {
+      "baseline": "frontend/tests/visual/__screenshots__/smoke-pages.spec.ts/linux-chrome/about-desktop-1440.png",
+      "priorSha256": "e3f08a4a10040930efd73ff1d3e019b6c2056961ab67b7187e7aa5fc3a3e4536",
+      "reviewedSha256": "d61475e6ec4988a7512e05e243d9d45588139c5a765dd7f2f583bfa41e2d0b1d"
+    },
+    {
+      "baseline": "frontend/tests/visual/__screenshots__/smoke-pages.spec.ts/linux-chrome/about-laptop-1280.png",
+      "priorSha256": "5111f8e0c1ff03de58e55d33843b843fbd826acd85ba97e4609ec74a7b9a59a3",
+      "reviewedSha256": "f7024527e49d615fb31d8dcb1571e847057c1a4386746bd1ede0c589b1a7116d"
+    },
+    {
+      "baseline": "frontend/tests/visual/__screenshots__/smoke-pages.spec.ts/linux-chrome/about-mobile-390.png",
+      "priorSha256": "a99686236086a876704722ed6632cabd6fcf9ed340281d21966a9311686f7f72",
+      "reviewedSha256": "04837a3371dbcb6761f00aae8a09bdf5ec42a341e25d02496244a9fbee65a8d3"
+    },
+    {
+      "baseline": "frontend/tests/visual/__screenshots__/smoke-pages.spec.ts/linux-chrome/contact-desktop-1440.png",
+      "priorSha256": "0afc8ea070cfa76952df3d8e0903f3a833abb79288fc50ea4208a5c702c4c1b4",
+      "reviewedSha256": "a5e343b8d5f487dc3a44eec86e62109c9d2b243137422e3dc73a72adc8d9e5c9"
+    },
+    {
+      "baseline": "frontend/tests/visual/__screenshots__/smoke-pages.spec.ts/linux-chrome/contact-laptop-1280.png",
+      "priorSha256": "3e8993a20935520714c196ace92560afc5295e29b1b6c8991f119d8babf51a3c",
+      "reviewedSha256": "4f69d023e470546e08ccba526dfe966ccbfd6ef2e101adb52917aa42c6e18d9b"
+    },
+    {
+      "baseline": "frontend/tests/visual/__screenshots__/smoke-pages.spec.ts/linux-chrome/contact-mobile-390.png",
+      "priorSha256": "4903f63c7005c73fe7a3fb73a7c39e0bb202dc8a5be15ab2f7172e7ef1df0f60",
+      "reviewedSha256": "ef30ce61efc4ce094b9ac2d78507e577c4a55247d936aca6be5654010774a58f"
+    }
+  ]
+}
