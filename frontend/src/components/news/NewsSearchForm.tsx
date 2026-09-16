@@ -73,8 +73,8 @@ export function NewsSearchForm({
       {topic !== 'all' && <input type="hidden" name="topic" value={topic} />}
       {furnace !== 'all' && <input type="hidden" name="furnace" value={furnace} />}
       {sort === 'updated' && <input type="hidden" name="sort" value={sort} />}
-      <button className="sr-only" type="submit" disabled={disabled}>
-        {locale === 'en' ? 'Search Resources' : '搜索资料'}
+      <button className={styles.searchButton} type="submit" disabled={disabled}>
+        {locale === 'en' ? 'Search' : '搜索'}
       </button>
     </form>
   );

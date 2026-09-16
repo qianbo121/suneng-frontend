@@ -103,8 +103,8 @@ export function Hero({
               className={styles.button}
               description="先发送照片和已知工况，技术人员再与您沟通需要补充的资料。"
             />
-            <a className={styles.secondaryButton} href="#scope">
-              查看服务范围
+            <a className={styles.secondaryButton} href={title.startsWith('连续') ? '#fit' : '#scope'}>
+              {title.startsWith('连续') ? '查看适用条件' : '查看服务范围'}
             </a>
           </div>
           {!tags && note && <p className={styles.note}>{note}</p>}
