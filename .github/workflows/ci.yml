@@ -35,6 +35,8 @@ jobs:
         run: |
           python3 scripts/test_deploy_preflight.py
           python3 ops/releases/test_frontend_release.py
+          python3 ops/releases/test_data_backup.py
+          python3 scripts/geo-migration/test_backup_rehearsal.py
       - name: Dependency audit
         run: pnpm audit --audit-level high
       - name: Lint
