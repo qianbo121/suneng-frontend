@@ -13,6 +13,7 @@ from pathlib import Path
 import re
 import shutil
 import subprocess
+import sys
 import time
 import uuid
 import xml.etree.ElementTree as ET
@@ -265,15 +266,41 @@ def main():
     parser.add_argument('--audit-root', type=Path, default=Path('/data/migration-rehearsals/release-ops'))
     parser.add_argument('--apply', action='store_true', help='Explicitly replace only the frontend')
     parser.add_argument('--kind', choices=['deploy', 'rollback'], default='deploy')
+    parser.add_argument('--failure-webhook-file', type=Path,
+                        help='Owner-only Feishu credential file; failure notices only on --apply')
     args = parser.parse_args()
     os.umask(0o077)
     manifest = validate_manifest(json.loads(args.manifest.read_text()))
+    webhook = None
+    if args.failure_webhook_file:
+        from deployment_notice import read_webhook
+        webhook = read_webhook(args.failure_webhook_file)
     with open('/var/lock/corp-site-deploy.lock', 'a') as lock:
         fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
         audit = args.audit_root / (datetime.datetime.now().strftime('%Y%m%d-%H%M%S-') + uuid.uuid4().hex[:8])
         audit.mkdir(parents=True)
         script = Path(__file__).with_name('check-frontend.cjs').read_text()
-        print(json.dumps(Release(args.live, audit, manifest, script).execute(args.apply, args.kind)))
+        release = Release(args.live, audit, manifest, script)
+        print(json.dumps(execute_with_notice(release, args.apply, args.kind, webhook)))
+
+
+def execute_with_notice(release, apply, kind, webhook=None):
+    try:
+        return release.execute(apply, kind)
+    except Exception:
+        if apply and webhook:
+            from deployment_notice import send
+            try:
+                receipt = send(webhook, kind=kind)
+            except Exception:
+                receipt = {'platformAccepted': False, 'humanReceiptVerified': False}
+                print('Deployment failed and its notification was not accepted.', file=sys.stderr)
+            # A notification or receipt-writing failure must not hide release failure.
+            try:
+                atomic_json(release.audit / 'failure-notification.json', receipt)
+            except OSError:
+                print('Could not persist notification receipt.', file=sys.stderr)
+        raise
 
 
 if __name__ == '__main__':
