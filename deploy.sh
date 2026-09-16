@@ -31,6 +31,16 @@ if [ -f ".DO_NOT_DEPLOY" ]; then
   exit 64
 fi
 
+# Image-based releases are not represented by this checkout's DEPLOY_COMMIT.
+# Fail before git pull, cleanup, migration or any container changes. Reconcile
+# the verified source and perform a reviewed handover before using this path.
+for protected_marker in verified-images.override.yml RELEASE_ARTIFACTS.json; do
+  if [ -e "$protected_marker" ] || [ -L "$protected_marker" ]; then
+    echo "Refusing deployment: $protected_marker protects an active verified image release. Complete a reviewed release handover first."
+    exit 64
+  fi
+done
+
 if [ ! -f "$ENV_FILE" ]; then
   echo "Missing $ENV_FILE. Copy .env.production.example and fill production values first."
   exit 1

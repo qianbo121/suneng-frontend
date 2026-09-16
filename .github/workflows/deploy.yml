@@ -70,6 +70,9 @@ jobs:
       - name: Secret guard
         run: pnpm check:secrets
 
+      - name: Deployment preflight regression checks
+        run: python3 scripts/test_deploy_preflight.py
+
       - name: Dependency audit
         run: pnpm audit --audit-level high
 
@@ -228,13 +231,50 @@ jobs:
             fi
             export DEPLOY_LOCK_HELD=1
             cd ${{ secrets.DEPLOY_PATH }}
+
+            # Check the existing release before unpacking or deleting anything.
+            # A verified image release needs an explicit source handover first;
+            # ordinary main pushes must never replace its pinned runtime.
+            for protected_marker in .DO_NOT_DEPLOY verified-images.override.yml RELEASE_ARTIFACTS.json; do
+              if [ -e "$protected_marker" ] || [ -L "$protected_marker" ]; then
+                echo "Refusing source sync: $protected_marker protects the active release. Complete a reviewed release handover first."
+                exit 64
+              fi
+            done
+            if [ ! -s .env.production ]; then
+              echo "Refusing source sync: .env.production is missing or empty."
+              exit 64
+            fi
+            # No automatic pruning here: refusal must leave the live release
+            # and rollback images intact. Check again after unpacking, reserving
+            # room for the incoming files as well as the 6 GiB build allowance.
+            required_kb=$((6 * 1024 * 1024))
+            available_kb="$(df -Pk . | awk 'NR == 2 { print $4 }')"
+            if [[ ! "$available_kb" =~ ^[0-9]+$ ]] || [ "$available_kb" -lt "$required_kb" ]; then
+              echo "Refusing source sync: at least 6 GiB free disk is required before staging."
+              exit 75
+            fi
             tmp_dir="$(mktemp -d)"
             trap 'rm -rf "$tmp_dir"' EXIT
             tar -xzf deploy-source.tgz -C "$tmp_dir"
+            incoming_kb="$(du -sk "$tmp_dir" | awk '{ print $1 }')"
+            available_kb="$(df -Pk . | awk 'NR == 2 { print $4 }')"
+            if [[ ! "$incoming_kb" =~ ^[0-9]+$ ]] || [[ ! "$available_kb" =~ ^[0-9]+$ ]]; then
+              echo "Refusing source sync: cannot determine staging size or free disk."
+              exit 75
+            fi
+            required_kb=$((required_kb + incoming_kb))
+            if [ "$available_kb" -lt "$required_kb" ]; then
+              echo "Refusing source sync: insufficient room for incoming files and the build allowance."
+              exit 75
+            fi
             rsync -a --no-owner --no-group --delete \
               --exclude='.git/' \
               --exclude='.env' \
               --exclude='.env.production' \
+              --exclude='.DO_NOT_DEPLOY' \
+              --exclude='verified-images.override.yml' \
+              --exclude='RELEASE_ARTIFACTS.json' \
               --exclude='deploy-source.tgz' \
               --exclude='backups/' \
               "$tmp_dir"/ ./
