@@ -1,4 +1,18 @@
 import { homeProductionLines, type HomeProductionLine } from './home-product-types';
+import { productCenterProductionLines } from './products-landing-data';
+
+// Chinese spotlights use the newer reviewed lines. Keep the English selection on
+// published English detail routes until those three new detail pages are localized.
+const featuredLineIds = [
+  'track-shoe-press-quench-line',
+  'forging-waste-heat-qt-line',
+  'fastener-quench-temper-line',
+];
+const featuredHomeLines = featuredLineIds.map((id) => {
+  const line = productCenterProductionLines.find((item) => item.id === id);
+  if (!line) throw new Error(`Missing featured homepage production line: ${id}`);
+  return { ...line, summary: line.process };
+});
 
 const lineCopy = [
   {
@@ -25,7 +39,7 @@ const lineCopy = [
 ] as const;
 
 export function getHomeProductionLines(locale: 'zh' | 'en'): readonly HomeProductionLine[] {
-  return locale === 'zh' ? homeProductionLines : homeProductionLines.map((line, index) => ({
+  return locale === 'zh' ? featuredHomeLines : homeProductionLines.map((line, index) => ({
     ...line, ...lineCopy[index], imageAlt: lineCopy[index].title,
     temperatureNote: 'Temperature depends on the material and process',
     href: line.href.replace('/zh/', '/en/'),

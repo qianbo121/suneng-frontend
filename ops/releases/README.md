@@ -31,3 +31,12 @@ python3 ops/releases/frontend_release.py --manifest /private/path/previous-compa
 该检查会比较全部数据表内容及附件校验值，并核对生产容器未改变。它仅证明本机备份可恢复，报告始终标注 `offsite_verified: false`；只有独立存储实际上传、下载和还原完成后，才能另行记录异地备份通过。备份清单含内部数据指纹，应与备份一起留在私有目录，不提交 Git。
 
 工具使用仓库中的 `scripts/geo-migration/backup_rehearsal.py`。安装时保留仓库目录关系；恢复目录已存在时拒绝重复覆盖，应先核查已有记录后创建新批次。
+
+
+### Unified application release
+
+`prepare-release.yml` builds both frontend and backend from the exact CI-passed main commit, outside production. It does not deploy automatically. Each component records its archive checksum and immutable image identity.
+
+`frontend_release.py` retains its frontend-only mode. An explicit `backend` manifest entry enables a two-component release using the same source commit. It checks both current versions, runs the backend aggregate as a read-only command without starting a second notification worker, and permits only the reviewed additive content-attribution index migration. PostgreSQL, uploads, admin, nginx container identity and unrelated applications remain protected. On a failed application switch both prior application images are restored; the additive index can safely remain. Customer data is never restored or reset by this operation. An interrupted or unsuccessful recovery leaves the deployment marker for manual reconciliation.
+
+The backend entry must contain `image`, `expectedCurrentImage`, and `archiveSha256`. A database backup and restore rehearsal must precede the apply step. Failure notification is optional until its independent destination is explicitly configured; an operator must supervise the release in that case.

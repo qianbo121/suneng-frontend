@@ -1,5 +1,5 @@
 {
-  "revision": "e0f080d4fd31b8d4",
+  "revision": "5a33da864aacc235",
   "approvedLineIds": [
     "track-shoe-press-quench-line",
     "forging-waste-heat-qt-line",
@@ -14,5 +14,5 @@
     "annealing-solution-line"
   ],
   "reviewKind": "engineering-view",
-  "evidence": "output/production-line-animations-20260914/十秒播放工程复核.md"
+  "evidence": "output/animation-chief-fix-20260916/independent-handoff-review.md"
 }

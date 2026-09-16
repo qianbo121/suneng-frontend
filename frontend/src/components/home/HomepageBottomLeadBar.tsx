@@ -115,7 +115,7 @@ export function HomepageBottomLeadBar({ locale = 'zh' }: { locale?: 'zh' | 'en' 
   useEffect(() => {
     const startTarget = document.querySelector('[data-sticky-contact-start]');
     const stopTargets = Array.from(
-      document.querySelectorAll('[data-contact-form], footer'),
+      document.querySelectorAll('[data-contact-form], [data-sticky-contact-pause], footer'),
     );
     const visibleStopTargets = new Set<Element>();
 

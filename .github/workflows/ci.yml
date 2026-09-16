@@ -109,6 +109,20 @@ jobs:
 
   backend:
     name: Backend (lint + typecheck + test + build)
+    services:
+      content-test-db:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: content_test
+          POSTGRES_PASSWORD: ephemeral_ci_fixture
+          POSTGRES_DB: content_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U content_test"
+          --health-interval 5s --health-timeout 5s --health-retries 12
+    env:
+      CONTENT_GROWTH_TEST_DATABASE_URL: postgresql://content_test:ephemeral_ci_fixture@127.0.0.1:5432/content_test
     runs-on: ubuntu-latest
     # 实测约 1-2 分钟。默认 6 小时太长，卡住会白烧机器时间。
     timeout-minutes: 15

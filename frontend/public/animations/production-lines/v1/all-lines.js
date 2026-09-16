@@ -781,6 +781,8 @@ function buildProductionLine(h, id) {
     }
     const hoist = group();
     tag(hoist, 'hoist');
+    // The hoist stays over its roof passages; only the receiving car travels sideways.
+    hoist.position.z = 4;
     box(3.42, 0.18, 0.9, 0, 6.87, 0, edge, hoist);
     box(0.66, 0.32, 0.72, 0, 7.1, 0, dark, hoist);
     const ropes = [];
@@ -788,7 +790,23 @@ function buildProductionLine(h, id) {
       const rope = moving(cylinder(0.018, 1, x, 0, 0, fastener));
       ropes.push({ rope, x });
     }
-    support(0.65, -6.3, 1.35, 2.2, h.fixed, false);
+    const transferCar = tag(group(), 'aging-transfer-car');
+    const transferDeck = tag(group(transferCar), 'aging-transfer-deck');
+    const receivingPlate = tag(box(1.95, 0.1, 1.2, 0, -0.05, 0, edge, transferDeck), 'aging-receiving-plate');
+    audit.supports.push(receivingPlate);
+    // Two side chassis run outside the tank. Cross-members remain above its rim.
+    for (const x of [-1.5, 1.5]) {
+      box(0.13, 0.12, 5.3, x, 0.1, 2, edge);
+      box(0.14, 0.2, 1.3, x, 0.45, 0, steel, transferCar);
+      for (const z of [-0.43, 0.43]) {
+        const wheel = cylinder(0.15, 0.12, x, 0.31, z, dark, transferCar);
+        wheel.rotation.z = Math.PI / 2;
+        box(0.1, 0.82, 0.12, x, 0.89, z, steel, transferCar);
+        box(0.055, 1.03, 0.065, x, -0.63, z, fastener, transferDeck);
+      }
+    }
+    for (const z of [-0.43, 0.43]) box(3.12, 0.12, 0.14, 0, -0.16, z, steel, transferDeck);
+    support(-0.65, -6.3, 1.35, 2.2, h.fixed, false);
     oven(-3.1, 2.6, { y: 1.35, height: 1.55, convection: true });
     const ageDoors = [];
     for (const z of [-1.73, -4.47]) {
@@ -804,12 +822,14 @@ function buildProductionLine(h, id) {
       [5.6, 4, 3.95],
       [6.35, 4, 0.4],
       [8, 4, 0.4],
-      [8.7, 4, 2.1],
-      [9, 4, 2.1],
-      [9.7, 0, 2.1],
-      [10, 0, 1.35],
-      [10.5, 0, 1.35],
-      [11.2, -3.1, 1.35],
+      [8.7, 4, 2.2],
+      [9.35, 4, 2.2],
+      [9.65, 4, 2.0],
+      [10, 4, 2.0],
+      [10.65, 0, 2.0],
+      [11, 0, 1.35],
+      [11.1, 0, 1.35],
+      [11.8, -3.1, 1.35],
       [13.8, -3.1, 1.35],
       [16, -5.95, 1.35],
     ];
@@ -823,19 +843,23 @@ function buildProductionLine(h, id) {
         doors.forEach(({ door, side }) => {
           door.position.x = side * THREE.MathUtils.lerp(1.85, 0.62, shut);
         });
-        const ageShut = interval(t, 11.25, 11.55) * (1 - interval(t, 13.45, 13.75));
+        const ageShut = interval(t, 11.85, 12.15) * (1 - interval(t, 13.45, 13.75));
         ageDoors.forEach((d) => {
           d.position.y = 1.7 * (1 - ageShut);
         });
-        // Handoff to the aging infeed occurs before the hooks lift away and the rack advances.
-        const attached = t <= 10;
-        const hoistZ = t <= 9.7 ? p.z : 0;
-        hoist.position.z = hoistZ;
+        // Receive above the bath, land the basket, release/lift the suspension, then traverse.
+        const attached = t <= 9.65;
+        const carZ = t < 9.35
+          ? 4 * interval(t, 8.8, 9.3)
+          : 4 * (1 - interval(t, 10, 10.65));
+        const deckY = THREE.MathUtils.lerp(2.0, 1.35, interval(t, 10.65, 11));
+        transferCar.position.z = carZ;
+        transferDeck.position.y = deckY;
         const bottom =
-          t <= 10 ? p.y + 0.62 : THREE.MathUtils.lerp(1.97, 6.5, interval(t, 10, 10.45));
+          attached ? p.y + 0.62 : THREE.MathUtils.lerp(2.62, 3.2, interval(t, 9.65, 9.95));
         ropes.forEach(({ rope }) => {
           rope.position.y = (6.85 + bottom) / 2;
-          rope.position.z = hoistZ;
+          rope.position.z = 4;
           rope.scale.y = 6.85 - bottom;
         });
         h.heat(0.25);
@@ -851,16 +875,23 @@ function buildProductionLine(h, id) {
                     ? 'immersed'
                     : t < 9
                       ? 'lift-drain'
-                      : t < 10.5
-                        ? 'handoff'
-                        : t < 11.25
-                          ? 'aging-load'
-                          : t < 13.8
-                            ? 'aging'
-                            : 'outfeed',
+                      : t < 9.65
+                        ? 'land-on-transfer-car'
+                        : t < 10
+                          ? 'release-suspension'
+                          : t < 11.1
+                            ? 'supported-transfer'
+                            : t < 11.85
+                              ? 'aging-load'
+                              : t < 13.8
+                                ? 'aging'
+                                : 'outfeed',
           quenching: t >= 6.35 && t <= 8,
-          moving: (t > 9 && t < 9.7) || (t > 10.5 && t < 11.2) || t > 13.8,
+          moving: (t > 10 && t < 10.65) || (t > 11.1 && t < 11.8) || t > 13.8,
           suspended: attached,
+          transferCarZ: carZ,
+          transferDeckY: deckY,
+          suspensionClear: bottom >= 3.19,
           doorOpen: shut < 0.01,
           bathLevel: bath.level,
         });

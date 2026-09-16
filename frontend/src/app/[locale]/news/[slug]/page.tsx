@@ -274,7 +274,7 @@ export default async function NewsDetailPage({ params }: NewsDetailPageProps) {
             </header>
           </section>
 
-          <div className={styles.bodyWrap}>
+          <div className={styles.bodyWrap} data-news-slug={slug}>
             <NewsArticleContent html={html} />
           </div>
 

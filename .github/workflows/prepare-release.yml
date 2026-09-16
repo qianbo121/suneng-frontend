@@ -1,0 +1,82 @@
+name: Prepare Unified Website Release
+on:
+  workflow_dispatch:
+    inputs:
+      source_commit:
+        description: Full current main commit after CI and review
+        required: true
+        type: string
+permissions:
+  contents: read
+  actions: read
+jobs:
+  candidate:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    strategy:
+      fail-fast: false
+      matrix:
+        component: [frontend, backend]
+    env:
+      COMPONENT: ${{ matrix.component }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 2
+      - name: Require exact reviewed main source
+        env:
+          SOURCE_COMMIT: ${{ inputs.source_commit }}
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          [[ "$SOURCE_COMMIT" =~ ^[0-9a-f]{40}$ ]]
+          test "$(git rev-parse HEAD)" = "$SOURCE_COMMIT"
+          passed="$(gh run list --workflow 'CI Quality Gate' --branch main --commit "$SOURCE_COMMIT" --event push --status success --limit 1 --json headSha --jq '.[0].headSha')"
+          test "$passed" = "$SOURCE_COMMIT"
+          grep -Fq 'TECHNICAL_CONTENT_PUBLISHED = false' frontend/src/lib/publication-scope.ts
+          test "$(df -Pk . | awk 'NR==2 {print $4}')" -ge 12582912
+          echo "SOURCE_COMMIT=$SOURCE_COMMIT" >> "$GITHUB_ENV"
+          echo "IMAGE_TAG=suneng-verified-$COMPONENT:$SOURCE_COMMIT" >> "$GITHUB_ENV"
+      - name: Build candidate outside production
+        run: |
+          set -euo pipefail
+          bash scripts/check-no-secrets.sh
+          docker build --platform linux/amd64 -f "$COMPONENT/Dockerfile" \
+            --build-arg NEXT_PUBLIC_SITE_URL=https://www.jssngyl.cn \
+            --build-arg NEXT_PUBLIC_API_URL=/api \
+            --build-arg NEXT_PUBLIC_API_BASE_URL=/api \
+            --build-arg API_BASE_URL_INTERNAL=http://backend:3001/api \
+            --label "org.opencontainers.image.revision=$SOURCE_COMMIT" \
+            --tag "$IMAGE_TAG" .
+      - name: Record immutable artifact identity
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/release-$COMPONENT"
+          docker save "$IMAGE_TAG" | gzip > "$RUNNER_TEMP/release-$COMPONENT/$COMPONENT.tar.gz"
+          docker image inspect "$IMAGE_TAG" > "$RUNNER_TEMP/release-$COMPONENT/image.json"
+          python3 - <<'PY'
+          import hashlib, json, os, pathlib
+          root = pathlib.Path(os.environ['RUNNER_TEMP']) / ('release-' + os.environ['COMPONENT'])
+          archive = root / (os.environ['COMPONENT'] + '.tar.gz')
+          digest = hashlib.sha256()
+          with archive.open('rb') as stream:
+              for block in iter(lambda: stream.read(8 * 1024 * 1024), b''):
+                  digest.update(block)
+          image = json.loads((root / 'image.json').read_text())[0]
+          receipt = {'schemaVersion': 1, 'component': os.environ['COMPONENT'], 'status': 'candidate-not-deployed',
+                     'sourceIdentity': 'git-commit', 'sourceCommit': os.environ['SOURCE_COMMIT'],
+                     'imageTag': os.environ['IMAGE_TAG'], 'buildImageId': image['Id'],
+                     'rootFsDiffIds': image['RootFS']['Layers'], 'imageBytes': image['Size'],
+                     'archiveBytes': archive.stat().st_size, 'archiveSha256': digest.hexdigest(),
+                     'publicationScope': 'news-products-services-company',
+                     'serverCanaryRequired': True, 'browserAcceptanceRequired': True}
+          (root / 'candidate.json').write_text(json.dumps(receipt, indent=2) + '\n')
+          (root / 'image.json').unlink()
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: release-${{ matrix.component }}-${{ inputs.source_commit }}
+          path: ${{ runner.temp }}/release-${{ matrix.component }}/
+          compression-level: 0
+          retention-days: 30

@@ -2,6 +2,7 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 
 import { ShujuGrowthReadQueryDto } from '@/modules/shuju-service/dto/shuju-growth-read-query.dto';
+import { readContentGrowth } from '@/modules/shuju-service/shuju-content-growth';
 import { PrismaService } from '@/prisma/prisma.service';
 
 type CountRow = {
@@ -619,7 +620,18 @@ export class ShujuGrowthReadService {
       `),
     ]);
 
+    const content = await readContentGrowth(this.prisma, {
+      start,
+      end: endExclusive,
+      where,
+      notBot: NOT_BOT,
+      verified: VERIFIED_EVENT,
+      sourceType: NORMALIZED_SOURCE_TYPE,
+      sourceDetail: NORMALIZED_SOURCE_DETAIL,
+    });
+
     return {
+      content,
       range: {
         startDate: query.startDate.slice(0, 10),
         endDate: query.endDate.slice(0, 10),

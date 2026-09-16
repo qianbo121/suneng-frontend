@@ -22,7 +22,7 @@ type SceneModule = {
 
 let sceneModule: Promise<SceneModule> | undefined;
 function loadScene() {
-  const source = '/animations/furnaces/v3/renderer.js?v=nitriding-sealed-flow-20260910-2';
+  const source = '/animations/furnaces/v3/renderer.js?v=moving-loads-fix-20260916';
   sceneModule ??= (import(/* webpackIgnore: true */ source) as Promise<SceneModule>).catch(
     (error) => {
       sceneModule = undefined;
