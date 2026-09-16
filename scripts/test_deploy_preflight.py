@@ -53,7 +53,7 @@ class DeploymentPreflightTest(unittest.TestCase):
             return result, (site / "staged").exists()
 
     def test_pinned_releases_and_hold_block_before_unpack(self):
-        for marker in ("verified-images.override.yml", "RELEASE_ARTIFACTS.json", ".DO_NOT_DEPLOY"):
+        for marker in ("verified-images.override.yml", "RELEASE_ARTIFACTS.json", ".DO_NOT_DEPLOY", "DEPLOYMENT_IN_PROGRESS.json"):
             with self.subTest(marker=marker):
                 result, staged = self.run_preflight(marker=marker)
                 self.assertEqual(result.returncode, 64, result.stderr)
@@ -100,14 +100,14 @@ class DeploymentPreflightTest(unittest.TestCase):
 
     def test_sync_excludes_release_markers(self):
         sync = SSH_BODY.split("rsync -a", 1)[1].split('"$tmp_dir"/ ./', 1)[0]
-        for marker in ("verified-images.override.yml", "RELEASE_ARTIFACTS.json", ".DO_NOT_DEPLOY"):
+        for marker in ("verified-images.override.yml", "RELEASE_ARTIFACTS.json", ".DO_NOT_DEPLOY", "DEPLOYMENT_IN_PROGRESS.json"):
             self.assertIn("--exclude='" + marker + "'", sync)
 
     def test_direct_deploy_blocks_pins_before_git_or_docker(self):
         # Execute only the real pre-pull guards, stopping before the function
         # definition. No git, Docker, production env or network is involved.
         guards = (ROOT / "deploy.sh").read_text().split("\npull_latest() {", 1)[0]
-        for marker in ("verified-images.override.yml", "RELEASE_ARTIFACTS.json"):
+        for marker in ("verified-images.override.yml", "RELEASE_ARTIFACTS.json", "DEPLOYMENT_IN_PROGRESS.json", ".DO_NOT_DEPLOY"):
             with self.subTest(marker=marker), tempfile.TemporaryDirectory() as tmp:
                 (Path(tmp) / marker).write_text("protected\n")
                 code = "flock() { return 0; }\n" + guards

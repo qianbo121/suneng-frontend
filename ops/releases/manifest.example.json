@@ -1,0 +1,9 @@
+{
+  "schemaVersion": 1,
+  "sourceIdentity": "git-commit",
+  "sourceCommit": "REPLACE_WITH_FULL_VERIFIED_COMMIT",
+  "archiveSha256": "REPLACE_WITH_VERIFIED_ARCHIVE_SHA256",
+  "image": "REPLACE_WITH_IMPORTED_SERVER_IMAGE_SHA256_ID",
+  "expectedCurrentImage": "REPLACE_WITH_CURRENT_SERVER_IMAGE_SHA256_ID",
+  "publicationScope": "news-products-services-company"
+}

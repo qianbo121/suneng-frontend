@@ -25,16 +25,15 @@ if [ "${DEPLOY_LOCK_HELD:-0}" != "1" ]; then
   export DEPLOY_LOCK_HELD=1
 fi
 
-if [ -f ".DO_NOT_DEPLOY" ]; then
-  echo "Refusing deployment: this checkout is explicitly marked as a non-deployable worktree."
-  cat .DO_NOT_DEPLOY
+if [ -e ".DO_NOT_DEPLOY" ] || [ -L ".DO_NOT_DEPLOY" ]; then
+  echo "Refusing deployment: .DO_NOT_DEPLOY marks this checkout as non-deployable."
   exit 64
 fi
 
 # Image-based releases are not represented by this checkout's DEPLOY_COMMIT.
 # Fail before git pull, cleanup, migration or any container changes. Reconcile
 # the verified source and perform a reviewed handover before using this path.
-for protected_marker in verified-images.override.yml RELEASE_ARTIFACTS.json; do
+for protected_marker in verified-images.override.yml RELEASE_ARTIFACTS.json DEPLOYMENT_IN_PROGRESS.json; do
   if [ -e "$protected_marker" ] || [ -L "$protected_marker" ]; then
     echo "Refusing deployment: $protected_marker protects an active verified image release. Complete a reviewed release handover first."
     exit 64
@@ -238,9 +237,7 @@ else
   available_kb="$(df -Pk . | awk 'NR == 2 { print $4 }')"
   required_kb="$((min_free_gb * 1024 * 1024))"
   if [ "$available_kb" -lt "$required_kb" ]; then
-    docker builder prune -f >/dev/null
-    docker image prune -f >/dev/null
-    available_kb="$(df -Pk . | awk 'NR == 2 { print $4 }')"
+    echo "Low disk space; no automatic pruning on this shared production host."
   fi
 
   if [ "$available_kb" -lt "$required_kb" ]; then
@@ -391,7 +388,7 @@ echo "Waiting for frontend health..."
 frontend_healthy=0
 for attempt in {1..30}; do
   if docker compose --env-file "$ENV_FILE" -f "$COMPOSE_FILE" exec -T frontend \
-    node -e "require('http').get('http://127.0.0.1:3000', r => process.exit(r.statusCode < 500 ? 0 : 1)).on('error', () => process.exit(1))"; then
+    node -e "require('http').get('http://127.0.0.1:3000/zh', r => process.exit(r.statusCode === 200 ? 0 : 1)).on('error', () => process.exit(1))"; then
     echo "Frontend health check passed."
     frontend_healthy=1
     break

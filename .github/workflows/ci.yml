@@ -32,7 +32,9 @@ jobs:
         run: pnpm check:secrets
 
       - name: Deployment preflight regression checks
-        run: python3 scripts/test_deploy_preflight.py
+        run: |
+          python3 scripts/test_deploy_preflight.py
+          python3 ops/releases/test_frontend_release.py
       - name: Dependency audit
         run: pnpm audit --audit-level high
       - name: Lint

@@ -1,9 +1,6 @@
 name: Build And Deploy
 
 on:
-  push:
-    branches:
-      - main
   workflow_dispatch:
 
 jobs:
@@ -67,6 +64,15 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Require deployment notification configuration
+        env:
+          WEBHOOK: ${{ secrets.FEISHU_DEPLOY_WEBHOOK_URL }}
+        run: |
+          if [ -z "$WEBHOOK" ]; then
+            echo "::error::部署通知未配置；不得开始生产发布。"
+            exit 64
+          fi
+
       - name: Secret guard
         run: pnpm check:secrets
 
@@ -125,6 +131,10 @@ jobs:
             sleep 10
           done
           fc-cache -f
+
+      - name: Install visual test browser
+        timeout-minutes: 10
+        run: pnpm --dir frontend exec playwright install --with-deps chromium
 
       - name: Visual regression
         env:
@@ -235,7 +245,7 @@ jobs:
             # Check the existing release before unpacking or deleting anything.
             # A verified image release needs an explicit source handover first;
             # ordinary main pushes must never replace its pinned runtime.
-            for protected_marker in .DO_NOT_DEPLOY verified-images.override.yml RELEASE_ARTIFACTS.json; do
+            for protected_marker in .DO_NOT_DEPLOY verified-images.override.yml RELEASE_ARTIFACTS.json DEPLOYMENT_IN_PROGRESS.json; do
               if [ -e "$protected_marker" ] || [ -L "$protected_marker" ]; then
                 echo "Refusing source sync: $protected_marker protects the active release. Complete a reviewed release handover first."
                 exit 64
@@ -275,6 +285,7 @@ jobs:
               --exclude='.DO_NOT_DEPLOY' \
               --exclude='verified-images.override.yml' \
               --exclude='RELEASE_ARTIFACTS.json' \
+              --exclude='DEPLOYMENT_IN_PROGRESS.json' \
               --exclude='deploy-source.tgz' \
               --exclude='backups/' \
               "$tmp_dir"/ ./
@@ -291,7 +302,7 @@ jobs:
               bash deploy.sh
 
   # 自动部署失败过四次没人察觉（main 领先生产多日才被发现）。
-  # 这个任务只在失败时跑，且缺 secret 就静默跳过——告警本身绝不能把部署搞挂。
+  # 缺配置或送达失败必须明确报错，不能将未送达写成成功。
   notify-failure:
     name: Notify Deploy Failure
     runs-on: ubuntu-latest
@@ -307,8 +318,8 @@ jobs:
           ACTOR: ${{ github.actor }}
         run: |
           if [ -z "${WEBHOOK:-}" ]; then
-            echo "未配置 FEISHU_DEPLOY_WEBHOOK_URL，跳过告警（不影响部署结论）。"
-            exit 0
+            echo "::error::部署失败且通知未配置；消息未发送。"
+            exit 1
           fi
           # 「部署失败」四个字同时充当飞书自定义关键词，改文案时别把它删了。
           payload=$(python3 -c 'import json,os; text="\n".join(["部署失败：官网 main 未能发布到生产。","提交 "+os.environ["COMMIT"],"触发 "+os.environ["ACTOR"],"详情 "+os.environ["RUN_URL"]]); print(json.dumps({"msg_type":"text","content":{"text":text}}))')
@@ -317,6 +328,16 @@ jobs:
           : > /tmp/feishu.out
           code=$(curl -sS -o /tmp/feishu.out -w '%{http_code}' -m 15 \
             -X POST -H 'Content-Type: application/json' -d "$payload" "$WEBHOOK") || code=000
-          echo "飞书返回 HTTP ${code}: $(head -c 200 /tmp/feishu.out 2>/dev/null)"
-          # 告警发不出去不改变部署结论——部署失败本身已由上游任务报出。
-          exit 0
+          if [ "$code" != "200" ]; then
+            echo "::error::部署失败通知未送达，HTTP $code。"
+            exit 1
+          fi
+          python3 - <<'PYCODE'
+          import json
+          with open('/tmp/feishu.out') as response:
+              payload = json.load(response)
+          code = payload.get('code', payload.get('StatusCode'))
+          if type(code) is not int or code != 0:
+              raise SystemExit('部署失败通知被接收平台拒绝；未记录为送达。')
+          print('部署失败通知已被平台接受；真人收件仍以验收记录为准。')
+          PYCODE
