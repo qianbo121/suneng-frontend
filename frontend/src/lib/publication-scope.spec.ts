@@ -19,6 +19,12 @@ describe('prelaunch content withdrawal', () => {
     }
     expect(isWithdrawnTechnicalPath('https://another.example/case/project')).toBe(false);
   });
+  it('closes percent-encoded spellings of withdrawn routes', () => {
+    for (const route of ['/zh/%73olutions/continuous-heat-treatment-line', '/zh/%61rticles/gongye-lu-baojia-canshu', '/zh/%63ase', '/en/%63ase/example', '/%73olutions'])
+      expect(isWithdrawnTechnicalPath(route)).toBe(true);
+    expect(isWithdrawnTechnicalPath('/zh/news/%E8%B5%84%E6%96%99')).toBe(false);
+    expect(isWithdrawnTechnicalPath('/zh/%70roducts')).toBe(false);
+  });
   it('keeps source drafts while exposing no Chinese or English case record', () => {
     const root = path.join(process.cwd(), 'content');
     expect(fs.readdirSync(path.join(root, 'cases')).some((file) => file.endsWith('.md'))).toBe(true);
