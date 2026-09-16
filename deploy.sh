@@ -25,16 +25,15 @@ if [ "${DEPLOY_LOCK_HELD:-0}" != "1" ]; then
   export DEPLOY_LOCK_HELD=1
 fi
 
-if [ -f ".DO_NOT_DEPLOY" ]; then
-  echo "Refusing deployment: this checkout is explicitly marked as a non-deployable worktree."
-  cat .DO_NOT_DEPLOY
+if [ -e ".DO_NOT_DEPLOY" ] || [ -L ".DO_NOT_DEPLOY" ]; then
+  echo "Refusing deployment: .DO_NOT_DEPLOY marks this checkout as non-deployable."
   exit 64
 fi
 
 # Image-based releases are not represented by this checkout's DEPLOY_COMMIT.
 # Fail before git pull, cleanup, migration or any container changes. Reconcile
 # the verified source and perform a reviewed handover before using this path.
-for protected_marker in verified-images.override.yml RELEASE_ARTIFACTS.json; do
+for protected_marker in verified-images.override.yml RELEASE_ARTIFACTS.json DEPLOYMENT_IN_PROGRESS.json; do
   if [ -e "$protected_marker" ] || [ -L "$protected_marker" ]; then
     echo "Refusing deployment: $protected_marker protects an active verified image release. Complete a reviewed release handover first."
     exit 64

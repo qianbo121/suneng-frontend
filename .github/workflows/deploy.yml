@@ -245,7 +245,7 @@ jobs:
             # Check the existing release before unpacking or deleting anything.
             # A verified image release needs an explicit source handover first;
             # ordinary main pushes must never replace its pinned runtime.
-            for protected_marker in .DO_NOT_DEPLOY verified-images.override.yml RELEASE_ARTIFACTS.json; do
+            for protected_marker in .DO_NOT_DEPLOY verified-images.override.yml RELEASE_ARTIFACTS.json DEPLOYMENT_IN_PROGRESS.json; do
               if [ -e "$protected_marker" ] || [ -L "$protected_marker" ]; then
                 echo "Refusing source sync: $protected_marker protects the active release. Complete a reviewed release handover first."
                 exit 64
@@ -285,6 +285,7 @@ jobs:
               --exclude='.DO_NOT_DEPLOY' \
               --exclude='verified-images.override.yml' \
               --exclude='RELEASE_ARTIFACTS.json' \
+              --exclude='DEPLOYMENT_IN_PROGRESS.json' \
               --exclude='deploy-source.tgz' \
               --exclude='backups/' \
               "$tmp_dir"/ ./
