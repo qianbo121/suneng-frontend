@@ -423,6 +423,8 @@
 .homeLineImage {
   position: relative;
   display: block;
+  box-sizing: content-box;
+  padding-bottom: 10px;
   overflow: hidden;
   border-radius: 7px 7px 0 0;
   aspect-ratio: 16 / 9;

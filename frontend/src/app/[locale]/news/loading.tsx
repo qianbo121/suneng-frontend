@@ -1,16 +1,22 @@
 import { getLocale } from 'next-intl/server';
+import { NewsDecisionCenter } from '@/components/news/NewsDecisionCenter';
+import { NEWS_PAGE_SIZE } from '@/constants/news';
 
 export default async function NewsLoading() {
   const locale = await getLocale();
   return (
-    <div
-      className="mx-auto min-h-[60vh] max-w-[1320px] px-5 py-12"
-      role="status"
-      aria-live="polite"
-    >
-      <p className="text-base text-slate-600">
-        {locale === 'en' ? 'Loading resources…' : '正在加载技术资料…'}
-      </p>
-    </div>
+    <NewsDecisionCenter
+      locale={locale === 'en' ? 'en' : 'zh'}
+      items={[]}
+      sourceItems={[]}
+      page={1}
+      total={0}
+      pageSize={NEWS_PAGE_SIZE}
+      query=""
+      topic="all"
+      furnace="all"
+      sort="recommended"
+      loading
+    />
   );
 }

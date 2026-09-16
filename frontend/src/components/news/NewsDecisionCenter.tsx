@@ -208,7 +208,11 @@ export function NewsDecisionCenter({
                 />
               )}
             </section>
-            <aside className={styles.sidebar} aria-label={t('资料工具与常见问题')}>
+            <aside
+              className={styles.sidebar}
+              aria-label={t('资料工具与常见问题')}
+              inert={loading || undefined}
+            >
               {visibleTools.length > 0 && <section
                 className={`${styles.sideModule} ${styles.toolsModule}`}
                 aria-labelledby="news-tools-title"

@@ -175,5 +175,66 @@ class ContractTest(unittest.TestCase):
             self.assertTrue(release.pending_path.exists())
 
 
+
+class UnifiedReleaseTest(unittest.TestCase):
+    def fixture(self, tmp):
+        release = ContractTest().fixture(tmp)
+        manifest = {**MANIFEST, 'backend': {'image': 'sha256:' + '9' * 64,
+                    'expectedCurrentImage': RECEIPT['images']['backend'], 'archiveSha256': '8' * 64}}
+        return r.Release(release.live, release.audit, manifest, 'fixture health script')
+
+    def test_backend_manifest_requires_exact_previous_version_and_shared_source(self):
+        for value in [{}, {'image':'backend:latest'}, {'image':NEW, 'expectedCurrentImage':OLD, 'archiveSha256':'bad'}]:
+            with self.assertRaises(ValueError): r.validate_manifest({**MANIFEST, 'backend':value})
+
+    def test_bundle_success_and_frontend_failure_restore_both_components(self):
+        for fails in [False, True]:
+            with self.subTest(fails=fails), tempfile.TemporaryDirectory() as tmp:
+                release = self.fixture(tmp)
+                state = dict(RECEIPT['images'])
+                def current(names):
+                    result = rows(state['frontend'])
+                    for row in result:
+                        name = row['Name'].removeprefix('/corp-site-')
+                        if name in state:
+                            row['Image'] = state[name]
+                            row['Id'] = name + state[name]
+                    return [row for row in result if row['Name'].removeprefix('/corp-site-') in names]
+                def command(args, **kwargs):
+                    if args[:3] == ['docker','image','inspect']:
+                        return json.dumps([{'Id':args[-1], 'Config':{'Labels':{'org.opencontainers.image.revision':MANIFEST['sourceCommit']}}}])
+                    return ''
+                def replace(override=None): state.update(RECEIPT['images'] if override else release.target)
+                def public(_):
+                    if fails and state['frontend']==NEW: raise RuntimeError('frontend fails')
+                    return []
+                with patch.object(r,'inspect',side_effect=current), patch.object(r,'run',side_effect=command), \
+                     patch.object(r,'wait_healthy'), patch.object(r,'probe',return_value=GOOD), \
+                     patch.object(r,'public_probe',side_effect=public), patch.object(r.subprocess,'run'), \
+                     patch.object(release,'backend_check',return_value={'passed':True}) as check, \
+                     patch.object(release,'replace_frontend',side_effect=replace):
+                    if fails:
+                        with self.assertRaises(RuntimeError): release.execute(True)
+                        self.assertEqual(state, RECEIPT['images'])
+                    else:
+                        self.assertTrue(release.execute(True)['applied'])
+                        self.assertEqual(state, release.target)
+                        self.assertIn(unittest.mock.call(migrate=True),check.call_args_list)
+                    self.assertEqual(state['admin'], RECEIPT['images']['admin'])
+                    self.assertFalse(release.pending_path.exists())
+
+    def test_backend_preflight_failure_does_not_switch_or_migrate(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            release=self.fixture(tmp)
+            def image(args,**kwargs):
+                return json.dumps([{'Id':args[-1], 'Config':{'Labels':{'org.opencontainers.image.revision':MANIFEST['sourceCommit']}}}])
+            with patch.object(r,'inspect',return_value=rows()), patch.object(r,'run',side_effect=image), \
+                 patch.object(release,'backend_check',side_effect=RuntimeError('invalid database history')) as check, \
+                 patch.object(release,'replace_frontend') as replace:
+                with self.assertRaises(RuntimeError): release.execute(True)
+                replace.assert_not_called()
+                check.assert_called_once_with()
+                self.assertFalse(release.pending_path.exists())
+
 if __name__ == '__main__':
     unittest.main(verbosity=2)

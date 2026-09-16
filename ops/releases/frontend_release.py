@@ -13,6 +13,7 @@ from pathlib import Path
 import re
 import shutil
 import subprocess
+import sys
 import time
 import uuid
 import xml.etree.ElementTree as ET
@@ -54,6 +55,12 @@ def validate_manifest(value):
             raise ValueError('A historical release requires the original frozen source hash')
     else:
         raise ValueError('Unknown source identity')
+    if 'backend' in value:
+        backend = value['backend']
+        if not isinstance(backend, dict) or set(backend) != {'image', 'expectedCurrentImage', 'archiveSha256'}:
+            raise ValueError('Backend release requires exact image, previous image and archive hash')
+        if value.get('sourceIdentity') != 'git-commit' or not all(IMAGE.fullmatch(backend[k]) for k in ['image', 'expectedCurrentImage']) or not DIGEST.fullmatch(backend['archiveSha256']):
+            raise ValueError('Backend must share the reviewed Git source and use immutable images')
     return value
 
 
@@ -138,6 +145,12 @@ class Release:
         self.override = audit / 'target.override.json'
         self.target = copy.deepcopy(self.receipt['images'])
         self.target['frontend'] = manifest['image']
+        self.components = ['frontend']
+        self.protected = list(PROTECTED)
+        if 'backend' in manifest:
+            self.target['backend'] = manifest['backend']['image']
+            self.components = ['backend', 'frontend']
+            self.protected.remove('backend')
 
     def compose(self, override=None):
         return ['docker', 'compose', '-p', 'website', '--project-directory', str(self.live),
@@ -149,10 +162,26 @@ class Release:
                                        for name, image in images.items()}})
 
     def replace_frontend(self, override=None):
-        run(self.compose(override) + ['up', '-d', '--no-deps', '--no-build', '--pull', 'never', 'frontend'], env=self.env)
-        wait_healthy('corp-site-frontend')
+        # The historical method name is kept for frontend-only callers and tests.
+        for service in self.components:
+            run(self.compose(override) + ['up', '-d', '--no-deps', '--no-build', '--pull', 'never', service], env=self.env)
+            wait_healthy('corp-site-' + service)
         run(['docker', 'exec', 'corp-site-nginx', 'nginx', '-t'])
         run(['docker', 'exec', 'corp-site-nginx', 'nginx', '-s', 'reload'])
+
+    def backend_check(self, migrate=False, running=False):
+        script = Path(__file__).with_name('check-backend.cjs').read_text()
+        if running:
+            command = ['docker', 'exec', 'corp-site-backend', 'node', '-e', script]
+        else:
+            # Run only a bounded read/check command. Never start the inquiry notification worker twice.
+            command = self.compose() + ['run', '--rm', '--no-deps', '--pull', 'never',
+                       '-e', 'RELEASE_APPLY_INDEX=' + ('1' if migrate else '0'),
+                       '--entrypoint', 'node', 'backend', '-e', script]
+        report = json.loads(run(command, env=self.env, timeout=180))
+        if report.get('passed') is not True:
+            raise RuntimeError('Backend aggregate or migration verification failed')
+        return report
 
     def execute(self, apply=False, kind='deploy'):
         if self.pending_path.exists() or self.pending_path.is_symlink():
@@ -163,7 +192,9 @@ class Release:
             raise RuntimeError('Two GiB working reserve required for an already imported image')
         before = inspect(PROTECTED + ['frontend'])
         assert_current(self.receipt, before, self.manifest['expectedCurrentImage'])
-        protected = signature([r for r in before if r['Name'] != '/corp-site-frontend'])
+        protected = signature([r for r in before if r['Name'].removeprefix('/corp-site-') in self.protected])
+        if 'backend' in self.manifest and self.receipt['images']['backend'] != self.manifest['backend']['expectedCurrentImage']:
+            raise RuntimeError('Backend changed since this release was prepared')
         image = json.loads(run(['docker', 'image', 'inspect', self.manifest['image']]))[0]
         if image['Id'] != self.manifest['image']:
             raise RuntimeError('Target did not resolve to the exact imported image')
@@ -171,7 +202,12 @@ class Release:
             if (image.get('Config', {}).get('Labels') or {}).get('org.opencontainers.image.revision') != self.manifest['sourceCommit']:
                 raise RuntimeError('Image was not built from the recorded source commit')
         self.write_override(self.override, self.target)
-        same = self.target['frontend'] == self.receipt['images']['frontend']
+        if 'backend' in self.manifest:
+            backend_image = json.loads(run(['docker', 'image', 'inspect', self.target['backend']]))[0]
+            if backend_image['Id'] != self.target['backend'] or (backend_image.get('Config', {}).get('Labels') or {}).get('org.opencontainers.image.revision') != self.manifest['sourceCommit']:
+                raise RuntimeError('Backend image was not built from the same reviewed source')
+            self.backend_check()
+        same = all(self.target[name] == self.receipt['images'][name] for name in self.components)
         canary = 'suneng-release-check-' + uuid.uuid4().hex[:12]
         if same:
             internal = probe('corp-site-frontend', self.script)
@@ -184,11 +220,11 @@ class Release:
             finally:
                 # This uniquely named canary is the only container cleanup permitted here.
                 subprocess.run(['docker', 'rm', '-f', canary], capture_output=True, timeout=30)
-        if signature(inspect(PROTECTED)) != protected:
+        if signature(inspect(self.protected)) != protected:
             raise RuntimeError('A protected production service changed during preflight')
         result = {'at': now(), 'passed': True, 'applied': False, 'kind': kind,
                   'image': self.target['frontend'], 'internalChecks': internal,
-                  'dataRestored': False, 'notificationsSent': False}
+                  'dataRestored': False, 'notificationsSent': False, 'components': self.components}
         if not apply or same:
             result['publicChecks'] = public_probe('https://www.jssngyl.cn')
             atomic_json(self.audit / 'preflight.json', result)
@@ -196,19 +232,23 @@ class Release:
         # Re-check the expected current version immediately before replacement.
         current = inspect(PROTECTED + ['frontend'])
         assert_current(self.receipt, current, self.manifest['expectedCurrentImage'])
-        if signature([row for row in current if row['Name'] != '/corp-site-frontend']) != protected:
+        if signature([row for row in current if row['Name'].removeprefix('/corp-site-') in self.protected]) != protected:
             raise RuntimeError('A protected production service changed before replacement')
         atomic_json(self.audit / 'previous-receipt.json', self.receipt)
         self.write_override(self.audit / 'previous.override.json', self.receipt['images'])
         atomic_json(self.pending_path, {'at': now(), 'auditDirectory': str(self.audit),
                                        'previousImages': self.receipt['images'], 'targetImages': self.target})
         try:
+            if 'backend' in self.manifest:
+                result['backendMigration'] = self.backend_check(migrate=True)
             self.replace_frontend()
+            if 'backend' in self.manifest:
+                result['backendVerification'] = self.backend_check(running=True)
             result['internalChecks'] = probe('corp-site-frontend', self.script)
             result['publicChecks'] = public_probe('https://www.jssngyl.cn')
-            if signature(inspect(PROTECTED)) != protected:
+            if signature(inspect(self.protected)) != protected:
                 raise RuntimeError('A protected production service changed')
-            if inspect(['frontend'])[0]['Image'] != self.target['frontend']:
+            if any(row['Image'] != self.target[row['Name'].removeprefix('/corp-site-')] for row in inspect(self.components)):
                 raise RuntimeError('Running frontend identity does not match target')
             receipt = copy.deepcopy(self.receipt)
             receipt.update({'images': self.target, 'sourceIdentity': 'component-release',
@@ -228,11 +268,11 @@ class Release:
             result.update({'passed': False, 'failureType': type(error).__name__})
             try:
                 self.replace_frontend(self.audit / 'previous.override.json')
-                if inspect(['frontend'])[0]['Image'] != self.receipt['images']['frontend']:
+                if any(row['Image'] != self.receipt['images'][row['Name'].removeprefix('/corp-site-')] for row in inspect(self.components)):
                     raise RuntimeError('Recovery did not restore the previous image')
                 probe('corp-site-frontend', self.script)
                 public_probe('https://www.jssngyl.cn')
-                if signature(inspect(PROTECTED)) != protected:
+                if signature(inspect(self.protected)) != protected:
                     raise RuntimeError('Protected services changed during recovery')
                 self.write_override(self.pins_path, self.receipt['images'])
                 atomic_json(self.receipt_path, self.receipt)
@@ -263,17 +303,43 @@ def main():
     parser.add_argument('--manifest', type=Path, required=True)
     parser.add_argument('--live', type=Path, default=Path('/opt/website'))
     parser.add_argument('--audit-root', type=Path, default=Path('/data/migration-rehearsals/release-ops'))
-    parser.add_argument('--apply', action='store_true', help='Explicitly replace only the frontend')
+    parser.add_argument('--apply', action='store_true', help='Replace the frontend and optional explicitly manifested backend')
     parser.add_argument('--kind', choices=['deploy', 'rollback'], default='deploy')
+    parser.add_argument('--failure-webhook-file', type=Path,
+                        help='Owner-only Feishu credential file; failure notices only on --apply')
     args = parser.parse_args()
     os.umask(0o077)
     manifest = validate_manifest(json.loads(args.manifest.read_text()))
+    webhook = None
+    if args.failure_webhook_file:
+        from deployment_notice import read_webhook
+        webhook = read_webhook(args.failure_webhook_file)
     with open('/var/lock/corp-site-deploy.lock', 'a') as lock:
         fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
         audit = args.audit_root / (datetime.datetime.now().strftime('%Y%m%d-%H%M%S-') + uuid.uuid4().hex[:8])
         audit.mkdir(parents=True)
         script = Path(__file__).with_name('check-frontend.cjs').read_text()
-        print(json.dumps(Release(args.live, audit, manifest, script).execute(args.apply, args.kind)))
+        release = Release(args.live, audit, manifest, script)
+        print(json.dumps(execute_with_notice(release, args.apply, args.kind, webhook)))
+
+
+def execute_with_notice(release, apply, kind, webhook=None):
+    try:
+        return release.execute(apply, kind)
+    except Exception:
+        if apply and webhook:
+            from deployment_notice import send
+            try:
+                receipt = send(webhook, kind=kind)
+            except Exception:
+                receipt = {'platformAccepted': False, 'humanReceiptVerified': False}
+                print('Deployment failed and its notification was not accepted.', file=sys.stderr)
+            # A notification or receipt-writing failure must not hide release failure.
+            try:
+                atomic_json(release.audit / 'failure-notification.json', receipt)
+            except OSError:
+                print('Could not persist notification receipt.', file=sys.stderr)
+        raise
 
 
 if __name__ == '__main__':

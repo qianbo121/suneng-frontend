@@ -455,6 +455,7 @@ model WebsiteLeadEvent {
   @@index([sourceType, sourceDetail, createdAt])
   @@index([createdAt])
   @@index([pagePath])
+  @@index([sessionId, createdAt])
 }
 
 model CompanyInfo {

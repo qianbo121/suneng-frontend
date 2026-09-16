@@ -154,6 +154,13 @@
   box-shadow: 0 10px 28px rgb(15 35 75 / 8%);
 }
 
+/* Keep the 30825 decision graphic readable without filling the desktop column. */
+.bodyWrap[data-news-slug='gb-t-30825-2026-heat-treatment-furnace-procurement'] :global(.news-article img) {
+  display: block;
+  max-width: 640px;
+  margin-inline: auto;
+}
+
 .bodyWrap :global(.news-article ul),
 .bodyWrap :global(.news-article ol) {
   padding-left: 1.35rem;

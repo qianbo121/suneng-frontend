@@ -524,7 +524,7 @@ function buildShovel(h){
  box(1.95,.15,.25,0,3.48,.28,edge,carriage);
  const forks=group(carriage);box(1.8,.2,.2,0,0,0,steel,forks);
  for(const x of [-.65,0,.65])box(.15,.16,4,x,0,-2,dark,forks);
- const load=box(2.4,.6,1.5,0,1.84,0,workMat);
+ const load=box(2.4,.6,1.5,0,1.84,0,workMat);load.userData.dynamic=true;
  return {update(q){const lift=interval(q,0,.15)-interval(q,.85,1),shift=3*(interval(q,.2,.45)-interval(q,.6,.85));carriage.position.z=3+shift;forks.position.y=1.46+.15*lift;load.position.set(0,1.84+.15*lift,shift);return {lift,shift};},inspect(s){return s.shift>.01&&s.lift<.99?['铲齿移出前未托起']:[];}};
 }
 function buildWalking(h){
@@ -534,7 +534,7 @@ function buildWalking(h){
  for(const x of [-1.15,0,1.15]){box(.16,.2,6,x,1.18,0,dark);for(const z of [-2.3,0,2.3])box(.12,.75,.18,x,.7,z,steel);}
  const beam=group();for(const x of [-.58,.58])box(.16,.2,5.9,x,1.03,0,edge,beam);
  for(const z of [-2,0,2]){box(1.5,.15,.2,0,.83,z,steel,beam);box(.16,.65,.18,0,.46,z,dark,beam);box(.8,.12,.6,0,.13,z,steel);}
- const loads=[];for(const z of [-1.8,-.5,.8,2.1])loads.push(box(2.65,.3,.42,0,1.43,z,workMat));
+ const loads=[];for(const z of [-1.8,-.5,.8,2.1]){const load=box(2.65,.3,.42,0,1.43,z,workMat);load.userData.dynamic=true;loads.push(load);}
  return {update(q){const lift=interval(q,0,.2)-interval(q,.5,.7),advance=interval(q,.2,.5),back=interval(q,.75,1);beam.position.set(0,.3*lift,-.6*(advance-back));loads.forEach((o,i)=>{o.position.y=1.43+Math.max(0,.3*lift-.15);o.position.z=[-1.8,-.5,.8,2.1][i]-.6*advance;});return {lift,advance,back};},inspect(s){return s.back>0&&s.lift>.001?['活动梁返回时未下降']:[];}};
 }
 function buildElevator(h){
