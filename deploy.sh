@@ -238,9 +238,7 @@ else
   available_kb="$(df -Pk . | awk 'NR == 2 { print $4 }')"
   required_kb="$((min_free_gb * 1024 * 1024))"
   if [ "$available_kb" -lt "$required_kb" ]; then
-    docker builder prune -f >/dev/null
-    docker image prune -f >/dev/null
-    available_kb="$(df -Pk . | awk 'NR == 2 { print $4 }')"
+    echo "Low disk space; no automatic pruning on this shared production host."
   fi
 
   if [ "$available_kb" -lt "$required_kb" ]; then
@@ -391,7 +389,7 @@ echo "Waiting for frontend health..."
 frontend_healthy=0
 for attempt in {1..30}; do
   if docker compose --env-file "$ENV_FILE" -f "$COMPOSE_FILE" exec -T frontend \
-    node -e "require('http').get('http://127.0.0.1:3000', r => process.exit(r.statusCode < 500 ? 0 : 1)).on('error', () => process.exit(1))"; then
+    node -e "require('http').get('http://127.0.0.1:3000/zh', r => process.exit(r.statusCode === 200 ? 0 : 1)).on('error', () => process.exit(1))"; then
     echo "Frontend health check passed."
     frontend_healthy=1
     break
