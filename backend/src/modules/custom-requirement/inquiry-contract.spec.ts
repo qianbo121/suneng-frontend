@@ -70,7 +70,7 @@ describe('inquiry release contract', () => {
   it('forbids whole-stack legacy rollback after email-only inquiries are enabled', () => {
     const runbook = readFileSync(resolve(repoRoot, 'DEPLOY.md'), 'utf8');
 
-    expect(runbook).toContain('禁止按下面的旧流程整体切回旧版 backend、admin 或数炬镜像');
+    expect(runbook).toContain('禁止整体切回旧版 backend、admin 或数炬镜像');
     expect(runbook).toContain('只回退 frontend');
     expect(runbook).toContain('完整重扫');
     expect(runbook).toContain('不得恢复迁移前数据库');
@@ -100,14 +100,15 @@ describe('inquiry release contract', () => {
     expect(deploy).not.toMatch(/compose[^\n]* up -d\s*$/m);
   });
 
-  it('keeps no-cache releases inside the same guarded deployment entrypoint', () => {
+  it('keeps the legacy build guarded while documenting immutable frontend releases', () => {
     const deploy = readFileSync(resolve(repoRoot, 'deploy.sh'), 'utf8');
     const runbook = readFileSync(resolve(repoRoot, 'DEPLOY.md'), 'utf8');
-    const cacheSection = runbook.split('### 4.1')[1]?.split('### 4.2')[0] ?? '';
 
     expect(deploy).toContain('DEPLOY_FORCE_NO_CACHE_BUILD:-0');
     expect(deploy).toContain('build --no-cache "$service"');
-    expect(runbook).toContain('DEPLOY_FORCE_NO_CACHE_BUILD=1 ./deploy.sh');
-    expect(cacheSection).not.toMatch(/docker compose[^\n]* up -d/);
+    expect(runbook).toContain('ops/releases/frontend_release.py');
+    expect(runbook).toContain('不得删除标记来恢复这个入口');
+    expect(runbook).not.toContain('DEPLOY_FORCE_NO_CACHE_BUILD=1 ./deploy.sh');
+    expect(runbook).not.toMatch(/docker compose[^\n]* up -d/);
   });
 });
