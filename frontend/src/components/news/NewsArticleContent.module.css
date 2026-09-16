@@ -1,0 +1,54 @@
+.content {
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 639px) {
+  .content :global(table.furnace-decision-table) {
+    display: block;
+    border: 0;
+    font-size: 16px;
+    line-height: 1.8;
+  }
+
+  .content :global(.furnace-decision-table thead) {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  .content :global(.furnace-decision-table tbody) {
+    display: grid;
+    gap: 16px;
+  }
+
+  .content :global(.furnace-decision-table tr) {
+    display: block;
+    padding: 16px;
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    background: var(--color-surface-muted);
+  }
+
+  .content :global(.furnace-decision-table td) {
+    display: block;
+    padding: 0;
+    border: 0;
+    text-align: left;
+  }
+
+  .content :global(.furnace-decision-table td + td) {
+    margin-top: 12px;
+  }
+
+  .content :global(.furnace-decision-table td::before) {
+    content: attr(data-label);
+    display: block;
+    margin-bottom: 4px;
+    color: var(--color-text-strong);
+    font-weight: 600;
+  }
+}

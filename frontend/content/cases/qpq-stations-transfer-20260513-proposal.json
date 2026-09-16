@@ -1,0 +1,63 @@
+{
+  "id": "qpq-stations-transfer-20260513-proposal",
+  "slug": "qpq-stations-transfer-20260513-proposal",
+  "title": "买一套QPQ设备，吊运和自动控制都包含吗？",
+  "summary": "苏能一份QPQ盐浴复合处理设备讨论稿列出预热炉、氮化炉、氧化炉、清洗槽和上油槽，并把工件转运起重机列为选配。评估这份供货范围时，应分别确认单台设备能做什么、工件怎样在工位间移动，以及现场哪些系统需要另外接入。",
+  "body": "qpq-stations-transfer-20260513-proposal.md",
+  "contentType": "proposal",
+  "publicationStatus": "draft",
+  "projectStatus": "proposal",
+  "workpiece": [
+    "待确定的金属零件"
+  ],
+  "materials": [],
+  "process": [
+    "盐浴复合处理"
+  ],
+  "equipment": [
+    "预热炉",
+    "盐浴氮化炉",
+    "盐浴氧化炉",
+    "清洗槽",
+    "上油槽"
+  ],
+  "need": [
+    "设备转运与控制接口"
+  ],
+  "tags": [
+    "方案参考",
+    "待确定的金属零件",
+    "设备转运与控制接口"
+  ],
+  "facts": [
+    {
+      "label": "拟主体设备",
+      "value": "5",
+      "unit": "台",
+      "condition": "讨论稿供货构成，非完整自动线的证明",
+      "attribute": "方案参数"
+    },
+    {
+      "label": "拟布置方式",
+      "value": "直线布置",
+      "unit": "",
+      "condition": "现场转运及维护空间另核",
+      "attribute": "方案参数"
+    },
+    {
+      "label": "转运设备范围",
+      "value": "起重机选配",
+      "unit": "",
+      "condition": "已有天车适配与范围需确认",
+      "attribute": "方案参数"
+    }
+  ],
+  "participation": "讨论稿拟提供五台主体设备，起重机选配，公用系统及工位接口待确认。",
+  "sourceSummary": "本文依据江苏苏能工业炉有限公司的历史方案资料整理，介绍拟定配置与供货条件；本文所引原件不构成设备已交付或验收通过的证明。",
+  "coverTitle": "QPQ设备方案：五台设备，怎样核对单机操作与工件转运？",
+  "relatedLinks": [],
+  "projectYear": 2026,
+  "sourceDate": "2026-05-13",
+  "listTitle": "买一套QPQ设备，吊运和自动控制都包含吗？",
+  "dateModified": "2026-09-12"
+}

@@ -1,11 +1,13 @@
 import type { NewsApiItem } from '@/types/news';
 
 export function getNewsContentModifiedTime(
-  item?: Pick<NewsApiItem, 'contentUpdatedAt' | 'publishDate'> | null,
+  item?: Pick<NewsApiItem, 'contentUpdatedAt' | 'publishDate' | 'englishContentUpdatedAt'> | null,
+  locale: 'zh' | 'en' = 'zh',
 ) {
   if (!item) return undefined;
 
-  const candidate = item.contentUpdatedAt || item.publishDate;
+  const candidate =
+    (locale === 'en' && item.englishContentUpdatedAt) || item.contentUpdatedAt || item.publishDate;
   const date = new Date(candidate);
 
   if (Number.isNaN(date.getTime()) || date > new Date()) return undefined;

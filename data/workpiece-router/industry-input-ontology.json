@@ -1,0 +1,355 @@
+{
+  "schemaVersion": "2.3.0",
+  "triStateValues": [
+    true,
+    false,
+    "unknown"
+  ],
+  "identityInputs": [
+    "workpieceId",
+    "routeId",
+    "processPurposeId"
+  ],
+  "independentAxes": {
+    "partForm": [
+      "discrete_part",
+      "plate",
+      "long_product",
+      "coil",
+      "strip",
+      "irregular_assembly"
+    ],
+    "loadingOrientation": [
+      "horizontal",
+      "vertical",
+      "flat",
+      "suspended"
+    ],
+    "presentationState": [
+      "coiled",
+      "uncoiled",
+      "stacked",
+      "single_piece",
+      "bulk_loaded"
+    ],
+    "atmosphereType": [
+      "air",
+      "inert",
+      "reducing",
+      "protective",
+      "controlled_carbon_potential",
+      "controlled_carbon_nitrogen_potential"
+    ],
+    "surfaceObjective": [
+      "normal",
+      "low_oxidation",
+      "bright",
+      "scale_controlled"
+    ]
+  },
+  "quenchAndCoolingInputs": {
+    "quenchRequired": {
+      "type": "tri_state"
+    },
+    "quenchMedium": {
+      "values": [
+        "water",
+        "oil",
+        "polymer",
+        "gas",
+        "air",
+        "other",
+        "unknown"
+      ]
+    },
+    "transferConstraint": {
+      "values": [
+        "rapid",
+        "bounded",
+        "no_special_constraint",
+        "unknown"
+      ]
+    },
+    "coolingRateRequirement": {
+      "values": [
+        "rapid",
+        "controlled",
+        "slow",
+        "process_defined",
+        "unknown"
+      ]
+    },
+    "agitationOrFlowRequirement": {
+      "values": [
+        "required",
+        "not_required",
+        "process_defined",
+        "unknown"
+      ]
+    },
+    "distortionConstraint": {
+      "values": [
+        "strict",
+        "controlled",
+        "standard",
+        "unknown"
+      ]
+    },
+    "integrationPreference": {
+      "values": [
+        "integrated",
+        "separate",
+        "no_preference",
+        "unknown"
+      ],
+      "evidenceRole": "preference_only"
+    }
+  },
+  "processStageInputs": {
+    "quench_temper": [
+      "austenitizing",
+      "transfer",
+      "quench",
+      "cleaning_if_required",
+      "tempering",
+      "final_cooling"
+    ],
+    "quench_temper_requiredForMatch": [
+      "austenitizing",
+      "transfer",
+      "quench",
+      "tempering",
+      "final_cooling"
+    ],
+    "solution_quench": [
+      "solution_heating",
+      "rapid_transfer",
+      "rapid_cooling"
+    ],
+    "solution_quench_requiredForMatch": [
+      "solution_heating",
+      "rapid_transfer",
+      "rapid_cooling"
+    ]
+  },
+  "operationInferenceInputs": {
+    "batchSize": [
+      "small",
+      "medium",
+      "large",
+      "unknown"
+    ],
+    "targetThroughput": [
+      "low",
+      "medium",
+      "high",
+      "unknown"
+    ],
+    "productMix": [
+      "stable",
+      "few_variants",
+      "high_mix",
+      "unknown"
+    ],
+    "changeoverFrequency": [
+      "rare",
+      "periodic",
+      "frequent",
+      "unknown"
+    ],
+    "cycleTimeExpectation": [
+      "flexible",
+      "regular",
+      "tight",
+      "unknown"
+    ],
+    "loadingContinuity": [
+      "discrete",
+      "intermittent",
+      "continuous",
+      "unknown"
+    ],
+    "operationPreference": {
+      "values": [
+        "batch",
+        "continuous",
+        "no_preference",
+        "unknown"
+      ],
+      "evidenceRole": "preference_only"
+    }
+  },
+  "serverDerivedEngineeringPredicates": [
+    "loadEnvelopeCompatible",
+    "loadCapacityCompatible",
+    "supportCompatible",
+    "handlingPathCompatible",
+    "geometryCompatible",
+    "straightnessOrDistortionCompatible",
+    "quenchTransferCompatible",
+    "processChainCompatible",
+    "largeOrHeavy",
+    "centerOfGravityCompatible",
+    "supportSpanCompatible"
+  ],
+  "forbiddenLegacyValues": [
+    "coil",
+    "strip",
+    "roller_supported",
+    "fixture_supported",
+    "bright",
+    "controlled_process_atmosphere",
+    "quench_system_integrated",
+    "rapid_cooling_integrated"
+  ],
+  "observableHandlingInputs": {
+    "loadMovement": [
+      "stationary",
+      "through_process",
+      "either",
+      "unknown"
+    ],
+    "loadingAccess": [
+      "crane_or_forklift",
+      "conveyor_feed",
+      "manual_or_basket",
+      "unknown"
+    ],
+    "baseSupportCondition": [
+      "broad_base",
+      "line_contact",
+      "distributed_small_parts",
+      "fixture_required",
+      "no_base_support",
+      "unknown"
+    ],
+    "continuousContactAllowed": {
+      "type": "tri_state"
+    },
+    "floorLoadingRequired": {
+      "type": "tri_state"
+    },
+    "suspensionAllowed": {
+      "type": "tri_state"
+    },
+    "stackingAllowed": {
+      "type": "tri_state"
+    },
+    "bulkLoadingSuitable": {
+      "type": "tri_state"
+    },
+    "evidenceRole": "customer_observable_conditions_only"
+  },
+  "serverDerivedMaterialHandling": {
+    "outputField": "supportMethod",
+    "values": [
+      "mobile_hearth",
+      "fixed_fixture",
+      "roller",
+      "mesh_belt",
+      "tray_or_basket",
+      "suspended",
+      "coil_stack"
+    ],
+    "directCustomerInputAllowed": false
+  },
+  "rawEngineeringInputs": {
+    "dimensionsMm": [
+      "length",
+      "width",
+      "height"
+    ],
+    "weightKg": "positive_number",
+    "centerOfGravityMm": [
+      "x",
+      "y",
+      "z"
+    ],
+    "supportSpanMm": "non_negative_number"
+  },
+  "operationDecisionTable": {
+    "decisionTableVersion": "operation-mode-table-2.3.0",
+    "requiredSignals": [
+      "batchSize",
+      "targetThroughput",
+      "productMix",
+      "changeoverFrequency",
+      "cycleTimeExpectation",
+      "loadingContinuity"
+    ],
+    "preferenceInput": "operationPreference",
+    "preferenceCanDecide": false,
+    "rows": [
+      {
+        "decision": "continuous",
+        "when": {
+          "batchSize": [
+            "medium",
+            "large"
+          ],
+          "targetThroughput": [
+            "high"
+          ],
+          "productMix": [
+            "stable",
+            "few_variants"
+          ],
+          "changeoverFrequency": [
+            "rare",
+            "periodic"
+          ],
+          "cycleTimeExpectation": [
+            "regular",
+            "tight"
+          ],
+          "loadingContinuity": [
+            "continuous"
+          ]
+        }
+      },
+      {
+        "decision": "batch",
+        "whenAny": {
+          "targetThroughput": [
+            "low"
+          ],
+          "productMix": [
+            "high_mix"
+          ],
+          "changeoverFrequency": [
+            "frequent"
+          ],
+          "cycleTimeExpectation": [
+            "flexible"
+          ],
+          "loadingContinuity": [
+            "discrete"
+          ]
+        },
+        "requiresLoadingContinuity": [
+          "discrete",
+          "intermittent"
+        ]
+      },
+      {
+        "decision": "engineering_review",
+        "when": "complete_but_no_consistent_row"
+      }
+    ]
+  },
+  "forbiddenClientInputs": [
+    "supportMethod",
+    "serverEngineeringPredicates",
+    "loadEnvelopeCompatible",
+    "loadCapacityCompatible",
+    "supportCompatible",
+    "handlingPathCompatible",
+    "geometryCompatible",
+    "straightnessOrDistortionCompatible",
+    "quenchTransferCompatible",
+    "processChainCompatible",
+    "largeOrHeavy",
+    "centerOfGravityCompatible",
+    "supportSpanCompatible"
+  ]
+}

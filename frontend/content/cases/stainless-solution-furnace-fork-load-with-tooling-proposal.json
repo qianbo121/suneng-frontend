@@ -1,0 +1,73 @@
+{
+  "id": "stainless-fork-load-basis-20161217-proposal",
+  "slug": "stainless-solution-furnace-fork-load-with-tooling-proposal",
+  "title": "8吨管件固溶炉，铲车承重要把料筐算进去吗？",
+  "listTitle": "8吨管件固溶炉，铲车承重要把料筐算进去吗？",
+  "listSummary": "苏能2016年不锈钢管件快速固溶炉方案，将炉内额定装载写为5～8t/炉、不含工装垫铁，同时写铲车一次最大承载量不少于8T，条件是均匀装载、含工装。",
+  "summary": "苏能2016年不锈钢管件快速固溶炉方案，将炉内额定装载写为5～8t/炉、不含工装垫铁，同时写铲车一次最大承载量不少于8T，条件是均匀装载、含工装。两处数字接近，计算口径却不同。确定每炉装多少工件时，需要把料筐和工装一起纳入转运重量，不能把炉内8t直接当成铲车可转运8t净工件的证明。",
+  "body": "stainless-solution-furnace-fork-load-with-tooling-proposal.md",
+  "contentType": "proposal",
+  "publicationStatus": "draft",
+  "projectStatus": "proposal",
+  "projectYear": 2016,
+  "sourceDate": "2016-12-17",
+  "workpiece": [
+    "不锈钢管件"
+  ],
+  "materials": [
+    "不锈钢"
+  ],
+  "process": [
+    "固溶"
+  ],
+  "equipment": [
+    "蓄热式燃气固溶炉"
+  ],
+  "need": [
+    "炉内装载与转运承载核对"
+  ],
+  "tags": [
+    "方案参考",
+    "不锈钢管件",
+    "炉内装载与转运承载核对"
+  ],
+  "facts": [
+    {
+      "label": "方案炉内额定装载",
+      "value": "5～8",
+      "unit": "t/炉",
+      "condition": "不含工装垫铁",
+      "attribute": "方案参数"
+    },
+    {
+      "label": "铲车承载原文下限",
+      "value": "不少于8",
+      "unit": "T",
+      "condition": "均匀装载、含工装；不是已确定8T上限",
+      "attribute": "方案参数"
+    },
+    {
+      "label": "拟出炉转运对象",
+      "value": "工件与料筐",
+      "unit": "",
+      "condition": "原文随工件出炉入水",
+      "attribute": "方案参数"
+    }
+  ],
+  "participation": "苏能历史方案包含固溶炉和轨道式铲车配置，工装垫铁列买方范围，水槽细项责任待确认。",
+  "sourceSummary": "江苏苏能工业炉有限公司历史技术方案资料整理。",
+  "coverTitle": "不锈钢管件固溶炉方案：炉内装载与铲车承载为什么要分别核对？",
+  "relatedLinks": [
+    {
+      "title": "准备询价参数与供货范围",
+      "href": "/zh/articles/gongye-lu-baojia-canshu"
+    }
+  ],
+  "cover": {
+    "src": "/images/case-covers/finalized-20260910/stainless-pipe-fitting.webp",
+    "alt": "不锈钢管件类别工件示意",
+    "caption": "不锈钢管件工件示意（人工智能生成，非客户实物）",
+    "fit": "contain"
+  },
+  "dateModified": "2026-09-12"
+}

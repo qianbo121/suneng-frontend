@@ -114,6 +114,11 @@ function resolveOpenGraphLocale(locale: string | undefined, path: string) {
   return pathLocale === 'en' ? 'en_US' : 'zh_CN';
 }
 
+export function getIndexingRobots() {
+  const enabled = process.env.SITE_NOINDEX !== 'true';
+  return { index: enabled, follow: enabled };
+}
+
 export function buildMetadata(options: BuildMetadataOptions): Metadata {
   const metadataLocale = resolveMetadataLocale(options.locale, options.path);
   const title = buildPageTitle(options.title, metadataLocale);
@@ -128,6 +133,7 @@ export function buildMetadata(options: BuildMetadataOptions): Metadata {
     siteName: SITE_NAME,
     locale: resolveOpenGraphLocale(options.locale, options.path),
     type,
+    ...(options.alternateLocales ? { alternateLocale: [...new Set(Object.keys(options.alternateLocales).filter((key) => key !== 'x-default').map((key) => OPEN_GRAPH_LOCALE_MAP[key]).filter((value) => value && value !== resolveOpenGraphLocale(options.locale, options.path)))] } : {}),
   };
 
   if (image) {
@@ -165,10 +171,7 @@ export function buildMetadata(options: BuildMetadataOptions): Metadata {
       description,
       ...(image ? { images: [image] } : {}),
     },
-    robots: {
-      index: true,
-      follow: true,
-    },
+    robots: getIndexingRobots(),
     ...(hasEntries(options.other) ? { other: options.other } : {}),
   };
 }

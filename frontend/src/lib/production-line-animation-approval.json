@@ -1,0 +1,18 @@
+{
+  "revision": "e0f080d4fd31b8d4",
+  "approvedLineIds": [
+    "track-shoe-press-quench-line",
+    "forging-waste-heat-qt-line",
+    "fastener-quench-temper-line",
+    "mesh-belt-carbonitriding-line",
+    "multi-furnace-quench-cell",
+    "aluminum-solution-aging-line",
+    "aluminum-forging-heating-line",
+    "cylinder-curing-line",
+    "roller-mesh-belt-line",
+    "copper-wire-annealing-line",
+    "annealing-solution-line"
+  ],
+  "reviewKind": "engineering-view",
+  "evidence": "output/production-line-animations-20260914/十秒播放工程复核.md"
+}

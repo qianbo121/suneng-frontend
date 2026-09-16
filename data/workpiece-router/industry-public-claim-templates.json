@@ -1,0 +1,9 @@
+{
+  "schemaVersion": "1.0.0",
+  "templateVersion": "workpiece-router-public-claims-2.2.0",
+  "templates": {
+    "conditional_preview": "如果符合以下工况，行业常见设备方向可考虑“{equipmentLabel}”：{conditionSummary}。仍需工程复核，不构成最终选型或苏能供货承诺。",
+    "matched_direction": "根据已确认的工件、工艺和工程兼容性条件，行业常见设备方向为“{equipmentLabel}”。仍需结合项目参数完成最终选型，不代表苏能已确认可提供。",
+    "engineering_review": "当前输入存在不兼容项或仍有关键工程条件待复核，暂不形成设备方向。请补充或复核：{reviewSummary}。"
+  }
+}

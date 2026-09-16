@@ -1,0 +1,127 @@
+.card {
+  min-width: 0;
+}
+.preview {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  overflow: hidden;
+  pointer-events: none;
+  animation: reveal 220ms ease-out;
+}
+.scene {
+  position: absolute;
+  inset: 3px 0 40px;
+}
+.scene canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.preview[data-ready='false'] {
+  opacity: 0;
+  animation: none;
+}
+.caption {
+  position: absolute;
+  left: 16px;
+  right: 12px;
+  bottom: 24px;
+  margin: 0;
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  color: #456377;
+  font-size: 11px;
+  line-height: 18px;
+}
+.caption strong {
+  color: #123c56;
+  font-size: 13px;
+  white-space: nowrap;
+}
+.note {
+  position: absolute;
+  left: 16px;
+  bottom: 8px;
+  color: #718797;
+  font-size: 9px;
+  line-height: 12px;
+}
+.playButton {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  min-height: 32px;
+  padding: 5px 10px;
+  border: 1px solid #c7d8e3;
+  border-radius: 5px;
+  background: #ffffffed;
+  color: #153f58;
+  font-size: 11px;
+  line-height: 20px;
+  font-weight: 600;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+.playButton svg {
+  width: 14px;
+  height: 14px;
+}
+.playButton:hover {
+  border-color: #527b93;
+  background: #fff;
+}
+.playButton:focus-visible {
+  outline: 3px solid #70b8ff;
+  outline-offset: -2px;
+}
+.card [data-current] [data-process-number] {
+  color: #062a42;
+  background: #f3b84f;
+  border-radius: 4px;
+  box-shadow: 0 0 0 4px #f3b84f;
+}
+.card [data-current] [data-process-label] {
+  color: #ffd58a;
+}
+@keyframes reveal {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@media (max-width: 639px) {
+  .playButton {
+    min-height: 36px;
+    top: 8px;
+    right: 8px;
+  }
+  .caption {
+    left: 12px;
+    gap: 6px;
+    font-size: 10px;
+    bottom: 22px;
+  }
+  .caption strong {
+    font-size: 12px;
+  }
+  .note {
+    left: 12px;
+    bottom: 6px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .preview {
+    animation: none;
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "id": "lab-furnace-measurement-range-202605-proposal",
+  "slug": "lab-furnace-measurement-range-202605-proposal",
+  "number": 116,
+  "title": "A 1400°C laboratory furnace: continuous operating temperature and measurement range",
+  "summary": "A Suneng discussion draft for a high-temperature laboratory chamber furnace proposes a maximum working temperature of 1400°C and a continuous working temperature of 1300°C, but lists thermocouples with a range of 0–1300°C. These figures do not automatically establish a verified high-temperature capability. Procurement should confirm that the complete measurement configuration matches the intended operating range, then assess the loading platform and actual specimens.",
+  "body": "lab-furnace-measurement-range-202605-proposal.md",
+  "sourceFingerprint": "5283b38b3ac2fd6c63e2d5e7ecb1382e0c13eebbe9c5c5aac61c161a9dcd32ff",
+  "translationStatus": "complete",
+  "translatedAt": "2026-09-12",
+  "coverAlt": "",
+  "coverCaption": ""
+}

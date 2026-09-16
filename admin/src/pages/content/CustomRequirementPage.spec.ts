@@ -23,6 +23,8 @@ describe('custom requirement follow-up columns', () => {
     expect(pageSource).toContain("dataIndex: 'submissionId'");
     expect(pageSource).toContain("dataIndex: 'projectType'");
     expect(pageSource).toContain("dataIndex: 'projectLocation'");
+    expect(pageSource).toContain("title: '电话 / 微信'");
+    expect(pageSource).toContain('const dialable = /^[+()\\d\\s-]{6,}$/.test(value)');
   });
 
   it('maps every persisted notification state to an operator-friendly label', () => {
@@ -97,5 +99,26 @@ describe('custom requirement follow-up columns', () => {
     expect(pageSource).toContain('targetId: record.id');
     expect(pageSource).toContain('auditRequestGuardRef.current.invalidate()');
     expect(pageSource).toContain('onCancel={closeAuditModal}');
+  });
+
+  it('renders the saved customer workpiece context inside the existing inquiry page', () => {
+    const pageSource = readFileSync(
+      new URL('./CustomRequirementPage.tsx', import.meta.url),
+      'utf8',
+    );
+    const serviceSource = readFileSync(
+      new URL('../../services/content.ts', import.meta.url),
+      'utf8',
+    );
+
+    expect(serviceSource).toContain('getCustomRequirementDetail');
+    expect(serviceSource).toContain('/admin/custom-requirements/${id}');
+    expect(pageSource).toContain('工件判断上下文');
+    expect(pageSource).toContain('客户填写的原始工况');
+    expect(pageSource).toContain('以上工况由客户自报，仅用于初步判断');
+    expect(pageSource).toContain('showExpandColumn: false');
+    expect(pageSource).not.toContain('internalCandidates');
+    expect(pageSource).not.toContain('statusReason');
+    expect(pageSource).not.toContain('ruleId');
   });
 });

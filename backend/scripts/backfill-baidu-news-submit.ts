@@ -1,5 +1,10 @@
 import { PrismaClient, PublishStatus } from '@prisma/client';
 
+import {
+  buildPublicNewsIdentifier,
+  NONCANONICAL_NEWS_SLUGS,
+} from '../src/modules/news/news-public-identifier';
+
 type BaiduSubmitResponse = {
   success?: number;
   remain?: number;
@@ -46,7 +51,7 @@ function publicSiteUrl() {
 }
 
 function buildNewsUrl(slug: string) {
-  return `${publicSiteUrl()}/zh/news/${encodeURIComponent(slug)}`;
+  return `${publicSiteUrl()}/zh/news/${encodeURIComponent(buildPublicNewsIdentifier(slug))}`;
 }
 
 function baiduEndpoint() {
@@ -112,7 +117,7 @@ async function main() {
       where: {
         status: PublishStatus.published,
         isPublished: true,
-        slug: { not: '' },
+        slug: { not: '', notIn: NONCANONICAL_NEWS_SLUGS },
         baiduSubmittedAt: null,
       },
       orderBy: [{ publishDate: 'desc' }, { id: 'desc' }],

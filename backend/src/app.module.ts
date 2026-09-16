@@ -19,6 +19,7 @@ import { CustomRequirementModule } from '@/modules/custom-requirement/custom-req
 import { DashboardModule } from '@/modules/dashboard/dashboard.module';
 import { LeadEventModule } from '@/modules/lead-event/lead-event.module';
 import { ShujuServiceModule } from '@/modules/shuju-service/shuju-service.module';
+import { WorkpieceRouterModule } from '@/modules/workpiece-router/workpiece-router.module';
 import { PrismaModule } from '@/prisma/prisma.module';
 import configuration from '@/config/configuration';
 
@@ -43,6 +44,7 @@ import configuration from '@/config/configuration';
     LeadEventModule,
     DashboardModule,
     ShujuServiceModule,
+    WorkpieceRouterModule,
   ],
   controllers: [AppController],
   providers: [

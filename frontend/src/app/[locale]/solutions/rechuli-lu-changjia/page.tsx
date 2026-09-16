@@ -1,3 +1,5 @@
+import { EnglishSolutionPage, englishSolutionMetadata } from '@/components/engineering/EnglishSolutionsPage';
+import { solutionAlternates } from '@/lib/english-solutions';
 import type { Metadata } from 'next';
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
@@ -263,20 +265,22 @@ const caseCards: CaseCard[] = [
     href: casePath,
   },
   {
-    title: '某不锈钢压延企业罩式炉生产线技改',
-    industry: '不锈钢压延',
-    furnaceType: '罩式炉生产线',
-    process: '保护气氛退火',
-    projectType: '气氛系统升级 + 控制系统改造',
-    scope: '围绕罩式炉炉罩、密封、气氛、温控和运行稳定性进行技改评估与设备配套。',
+    title: '济宁支重轮热处理生产线',
+    industry: '工程机械零部件',
+    furnaceType: '连续加热、淬火与回火设备',
+    process: '支重轮淬火、回火',
+    projectType: '方案记录',
+    scope: '整线方案、两路节拍与回火接口核对；不代表设备已交付或性能验收通过。',
+    href: '/zh/case/jining-support-roller-heat-treatment-line',
   },
   {
-    title: '某工程总包项目设备分包',
-    industry: '工程总包配套',
-    furnaceType: '不锈钢热处理装备',
-    process: '按总包项目技术要求执行',
-    projectType: '工业炉设备分包供应',
-    scope: '作为工业炉设备供应商或设备分包方，配合工程总包单位完成设备制造、安装调试与售后支持。',
+    title: '河南连续退火固溶生产线',
+    industry: '不锈钢带材',
+    furnaceType: '连续退火固溶段',
+    process: '带钢退火固溶',
+    projectType: '项目经验记录',
+    scope: '公开项目的带宽、温度及供货边界；实际能耗、产量、成材率、表面质量与验收结果不作成果数字结论。',
+    href: '/zh/case/henan-annealing-solution-line',
   },
 ];
 
@@ -422,11 +426,12 @@ const pageJsonLd = cleanObject([
 ]);
 
 export function generateStaticParams() {
-  return [{ locale: 'zh' }];
+  return [{ locale: 'zh' }, { locale: 'en' }];
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { locale } = await params;
+  if (locale === 'en') return englishSolutionMetadata('rechuli-lu-changjia');
 
   if (locale !== 'zh') {
     notFound();
@@ -440,15 +445,13 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     keywords: HEAT_TREATMENT_FURNACE_MANUFACTURER_SEO.keywords,
     image: HEAT_TREATMENT_FURNACE_MANUFACTURER_SEO.ogImage,
     type: 'website',
-    alternateLocales: {
-      'zh-CN': pagePath,
-      'x-default': pagePath,
-    },
+    alternateLocales: solutionAlternates('rechuli-lu-changjia'),
   });
 }
 
 export default async function HeatTreatmentFurnaceManufacturerPage({ params }: PageProps) {
   const { locale } = await params;
+  if (locale === 'en') return <EnglishSolutionPage slug="rechuli-lu-changjia" />;
 
   if (locale !== 'zh') {
     notFound();

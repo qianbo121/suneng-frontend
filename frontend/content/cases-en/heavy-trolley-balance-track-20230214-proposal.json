@@ -1,0 +1,13 @@
+{
+  "id": "heavy-trolley-balance-track-20230214-proposal",
+  "slug": "heavy-weldment-trolley-balance-wheel-rail-interfaces-proposal",
+  "number": 44,
+  "title": "What rails and foundations are needed for a 100-tonne weldment stress-relieving furnace?",
+  "summary": "Heavy-bogie loading checks extend from workpiece supports through wheels, rails and foundations. Jiangsu Suneng Industrial Furnace Co., Ltd.'s gas-furnace proposal dated 14 February 2023 is for post-weld stress relief of large weldments, with a 100 t load definition, wheel-pair equalising frames and QU80 rails. Equalisation is intended to accommodate uneven loading and fabrication/installation tolerances; it does not replace checks of actual supports, wheel loads and rail installation.",
+  "body": "heavy-trolley-balance-track-20230214-proposal.md",
+  "sourceFingerprint": "6010000b9614fa98cd4ce2c57e8b2a1917c8aa93651a875983c744587f1d391e",
+  "translationStatus": "complete",
+  "translatedAt": "2026-09-12",
+  "coverAlt": "Illustration of welded structures.",
+  "coverCaption": "Illustration of welded structures (AI-generated). Not an actual customer workpiece photograph."
+}

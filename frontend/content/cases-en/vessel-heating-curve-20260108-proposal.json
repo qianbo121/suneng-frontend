@@ -1,0 +1,13 @@
+{
+  "id": "vessel-heating-curve-20260108-proposal",
+  "slug": "vessel-heating-curve-20260108-proposal",
+  "number": 112,
+  "title": "For a vessel heated to a programmed curve, should temperature be measured in the furnace or inside the vessel?",
+  "summary": "Two Suneng proposals for the same project cover external heating of an impregnation vessel and internal heating of a baking vessel respectively. For equipment following programmed heating and cooling curves, procurement should confirm more than maximum temperature: where the curve is controlled, what load is used for testing and which curve version forms the agreed reference all matter.",
+  "body": "vessel-heating-curve-20260108-proposal.md",
+  "sourceFingerprint": "01b6ea48140fca1f7e16e1281995e8abd33afbc36c631ce3c6d4f2746f4b483a",
+  "translationStatus": "complete",
+  "translatedAt": "2026-09-12",
+  "coverAlt": "Illustration of a vertical impregnation vessel.",
+  "coverCaption": "Illustration of an impregnation vessel (AI-generated). Not an actual customer workpiece photograph. Does not show the complete baking-vessel installation or the two heating systems."
+}

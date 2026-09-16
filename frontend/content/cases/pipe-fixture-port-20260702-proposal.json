@@ -1,0 +1,65 @@
+{
+  "id": "pipe-fixture-port-20260702-proposal",
+  "slug": "pipe-fixture-port-20260702-proposal",
+  "title": "订管坯样件加热装置，要提供哪些接口尺寸？",
+  "summary": "苏能一份管坯样件加热装置方案，把侧壁管线孔、专用支架和分屋控制同时列入设计。对带外部连接的工件，能放进炉膛只是第一步；支撑后的轴线、管线经过的位置和装取路径也要对应，不能等炉体做好后再单独调整工装。",
+  "body": "pipe-fixture-port-20260702-proposal.md",
+  "contentType": "proposal",
+  "publicationStatus": "draft",
+  "projectStatus": "proposal",
+  "workpiece": [
+    "管坯样件"
+  ],
+  "materials": [],
+  "process": [
+    "加热保温"
+  ],
+  "equipment": [
+    "翻盖式电阻加热装置"
+  ],
+  "need": [
+    "工件支架与管线接口"
+  ],
+  "tags": [
+    "方案参考",
+    "管坯样件",
+    "工件支架与管线接口"
+  ],
+  "facts": [
+    {
+      "label": "方案工作空间",
+      "value": "700×600×1200",
+      "unit": "mm",
+      "condition": "方向为宽×高×长",
+      "attribute": "方案参数"
+    },
+    {
+      "label": "拟侧壁孔径",
+      "value": "Φ50",
+      "unit": "mm",
+      "condition": "管线通过及同轴接口",
+      "attribute": "方案参数"
+    },
+    {
+      "label": "拟孔中心标高",
+      "value": "1050±10",
+      "unit": "mm",
+      "condition": "相对于地面，按设备最终就位核对",
+      "attribute": "方案参数"
+    }
+  ],
+  "participation": "拟提供加热装置及专用支架、孔槽和控制，详细结构以签认图为准。",
+  "sourceSummary": "本文依据江苏苏能工业炉有限公司的历史方案资料整理，介绍拟定配置与供货条件；本文所引原件不构成设备已交付或验收通过的证明。",
+  "coverTitle": "翻盖加热装置方案：管线孔位置与工件支架为什么要一起定？",
+  "relatedLinks": [],
+  "projectYear": 2026,
+  "sourceDate": "2026-07-02",
+  "cover": {
+    "src": "/images/case-covers/remaining-20260910/plain-tube-blank.webp",
+    "alt": "管坯样件类别工件示意",
+    "caption": "管坯样件类别示意（人工智能生成，非客户实物，不表示实际规格或工艺结果）",
+    "fit": "contain"
+  },
+  "listTitle": "订管坯样件加热装置，要提供哪些接口尺寸？",
+  "dateModified": "2026-09-12"
+}

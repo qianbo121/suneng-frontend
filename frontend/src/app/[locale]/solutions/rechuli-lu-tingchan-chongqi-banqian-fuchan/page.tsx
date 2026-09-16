@@ -1,5 +1,8 @@
+import { EnglishSolutionPage, englishSolutionMetadata } from '@/components/engineering/EnglishSolutionsPage';
+import { solutionAlternates } from '@/lib/english-solutions';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
+import { setRequestLocale } from 'next-intl/server';
 
 import { GeoAuthorityGuidePage } from '@/components/geo-pages/GeoAuthorityGuidePage';
 import { JsonLd } from '@/components/JsonLd';
@@ -34,7 +37,7 @@ const faqs = [
   {
     question: '停产热处理炉可以直接通电或点火吗？',
     answer:
-      '不建议。应先还原停机原因并检查绝缘、炉衬、密封、能源管线、执行机构、安全联锁和机械状态，再按冷态、空载和负载顺序验证。',
+      '不建议。应先还原停机原因并检查绝缘、炉衬、密封、能源管线、执行机构、安全联锁和机械状态，再按设备文件与维修范围确定验证的前置条件、顺序和所需介质，不能默认所有炉型都能空炉升温。',
   },
   {
     question: '工业炉搬迁后，原来的工艺参数还能直接用吗？',
@@ -75,14 +78,18 @@ const jsonLd = [
 export const dynamicParams = false;
 
 export async function generateStaticParams() {
-  return [{ locale: 'zh' }];
+  return [{ locale: 'zh' }, { locale: 'en' }];
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  if ((await params).locale !== 'zh') notFound();
+  const { locale } = await params;
+  if (locale === 'en') return englishSolutionMetadata('rechuli-lu-tingchan-chongqi-banqian-fuchan');
+  if (locale !== 'zh') notFound();
+  setRequestLocale(locale);
   return buildMetadata({
     locale: 'zh',
     path: pagePath,
+    alternateLocales: solutionAlternates('rechuli-lu-tingchan-chongqi-banqian-fuchan'),
     title: seo.title,
     description: seo.description,
     keywords: seo.keywords,
@@ -94,7 +101,10 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 }
 
 export default async function FurnaceRestartRelocationPage({ params }: PageProps) {
-  if ((await params).locale !== 'zh') notFound();
+  const { locale } = await params;
+  if (locale === 'en') return <EnglishSolutionPage slug="rechuli-lu-tingchan-chongqi-banqian-fuchan" />;
+  if (locale !== 'zh') notFound();
+  setRequestLocale(locale);
 
   return (
     <>
@@ -103,7 +113,7 @@ export default async function FurnaceRestartRelocationPage({ params }: PageProps
         eyebrow="Furnace restart, relocation and remanufacturing"
         breadcrumbLabel="停产重启与搬迁复产"
         title="停产热处理炉重启与搬迁复产怎么评估？检查、试运行和验收清单"
-        intro="不能从“设备还能启动”直接跳到负载生产。应先还原停机原因和设备状态，再检查结构、炉衬、能源、电气、测温、联锁和机械系统，按冷态、空载和负载三个阶段形成复产证据。"
+        intro="不能从“设备还能启动”直接跳到负载生产。应先还原停机原因和设备状态，再检查结构、炉衬、能源、电气、测温、联锁和机械系统，按实际设备确定冷态、热态及负载验证的适用条件。"
         tags={[
           '停机原因与历史',
           '基础和钢结构',
@@ -124,7 +134,7 @@ export default async function FurnaceRestartRelocationPage({ params }: PageProps
         ]}
         directTitle="先证明设备安全可控，再谈负载复产"
         directIntro="原设计能力、旧验收记录和短时启动结果，都不能自动成为搬迁后或长期停产后的新验收结论。"
-        directAnswer="先查清停机原因、资料完整度和设备现状，完成结构、炉衬、能源、电气、测温、联锁与机械检查，再依次做冷态动作、空载升温和负载验证。每一步通过后才能进入下一步，具体检查范围和周期按项目确认。"
+        directAnswer="先查清停机原因、资料完整度和设备现状，完成结构、炉衬、能源、电气、测温、联锁与机械检查。复产验证方案应明确冷态、热态及负载检查各自的前置条件、所需介质和先后依赖；是否适合空载升温按设备文件与维修范围确定，满足本项试验条件后再执行。"
         directChecks={[
           '停机原因与历史',
           '基础和钢结构',
@@ -177,8 +187,8 @@ export default async function FurnaceRestartRelocationPage({ params }: PageProps
             '空载能转不等于负载下速度、定位和保护均符合要求',
           ],
         ]}
-        evidenceTitle="分三阶段形成复产证据"
-        evidenceIntro="每个阶段都要记录条件、结果、偏差和整改，避免用“已开机”替代完整复产验收。"
+        evidenceTitle="按适用项目形成复产证据"
+        evidenceIntro="下列分组用于整理证据，具体试验顺序、介质和代表负载按设备确定。各项记录条件、结果、偏差和整改，避免用“已开机”替代完整复产验收。"
         evidence={[
           {
             label: 'COLD / 冷态',
@@ -186,9 +196,9 @@ export default async function FurnaceRestartRelocationPage({ params }: PageProps
             text: '核对旋向、行程、限位、阀门、急停、报警、绝缘和失效安全动作，记录缺陷与整改。',
           },
           {
-            label: 'NO-LOAD / 空载',
-            title: '按批准条件升温试运行',
-            text: '依据炉衬材料和设备状态确认升温或烘炉要求，检查温区、循环、炉压、机械和异常报警。',
+            label: 'HOT / 热态',
+            title: '按适用条件升温试运行',
+            text: '依据炉衬材料、设备状态和工艺确认升温或烘炉条件、所需介质与保护要求；适合空载试验时才采用空载方式，并核对温区、循环、炉压、机械和报警。',
           },
           {
             label: 'LOAD / 负载',
@@ -215,6 +225,7 @@ export default async function FurnaceRestartRelocationPage({ params }: PageProps
           '目标工件与复产窗口',
         ]}
         relatedLinks={[
+          { href: '/zh/service/furnace-relocation-restart', label: '工业炉搬迁与复产服务' },
           { href: servicePath, label: '工业炉改造服务' },
           { href: quotePath, label: '工业炉报价参数' },
           { href: decisionPath, label: '老炉修还是换' },

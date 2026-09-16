@@ -1,0 +1,489 @@
+{
+  "pageId": "aluminum-forging-heating-line",
+  "variant": "aluminum",
+  "seo": {
+    "title": "铝合金锻造加热生产线｜坯料锻前加热与节拍衔接",
+    "description": "了解铝合金坯料锻前加热的炉组组成、装载与均热、出炉测温分流、锻机节拍协同、产能核算及询价参数。按合金、截面与允许入模时间确定设备方案。"
+  },
+  "sectionNavigation": [
+    {
+      "label": "适用工件",
+      "href": "#workpieces"
+    },
+    {
+      "label": "工艺与设备",
+      "href": "#process"
+    },
+    {
+      "label": "设备配置",
+      "href": "#configuration"
+    },
+    {
+      "label": "产能与现场",
+      "href": "#site-conditions"
+    },
+    {
+      "label": "交付验收",
+      "href": "#acceptance"
+    },
+    {
+      "label": "常见问题",
+      "href": "#faq"
+    }
+  ],
+  "images": {
+    "hero-line": {
+      "src": "/images/products/aluminum-forging-heating-line/remaining-batch-v1/01-hero-d36d78e18c18.png",
+      "width": 1672,
+      "height": 941,
+      "alt": "铝合金坯料锻前加热炉组、进出料辊道与测温交接配置",
+      "optimized": true
+    },
+    "process-whole-line": {
+      "src": "/images/products/aluminum-forging-heating-line/remaining-batch-v1/02-whole-line-9dbc1446f8d2.png",
+      "width": 2172,
+      "height": 724,
+      "alt": "铝合金锻前加热生产线完整侧面配置",
+      "optimized": true
+    },
+    "workpiece-billets": {
+      "src": "/images/products/aluminum-forging-heating-line/remaining-batch-v1/03-workpiece-6e487fd513e5.png",
+      "width": 1672,
+      "height": 941,
+      "alt": "铝合金方坯、圆坯与扁坯来料形态",
+      "optimized": true
+    },
+    "loading-billets": {
+      "src": "/images/products/aluminum-forging-heating-line/remaining-batch-v1/04-loading-377b9a848419.png",
+      "width": 1672,
+      "height": 941,
+      "alt": "方形铝坯在辊道上分隔装载并进入加热炉",
+      "optimized": true
+    },
+    "gallery-controls": {
+      "src": "/images/products/aluminum-forging-heating-line/remaining-batch-v1/05-detail-1-48c8bd34bc43.png",
+      "width": 1672,
+      "height": 941,
+      "alt": "铝合金锻前加热线控制柜与现场电缆接口",
+      "optimized": true
+    },
+    "gallery-convection": {
+      "src": "/images/products/aluminum-forging-heating-line/remaining-batch-v1/06-detail-2-09d9967120c6.png",
+      "width": 1672,
+      "height": 941,
+      "alt": "铝合金加热炉顶部循环风机及检修平台外观",
+      "optimized": true
+    },
+    "gallery-temperature-handoff": {
+      "src": "/images/products/aluminum-forging-heating-line/remaining-batch-v1/07-detail-3-06886511476e.png",
+      "width": 1672,
+      "height": 941,
+      "alt": "出炉铝坯的非接触测温与输送交接配置",
+      "optimized": true
+    },
+    "site-layout": {
+      "src": "/images/products/aluminum-forging-heating-line/remaining-batch-v1/08-site-layout-fbca8ac6a772.png",
+      "width": 1672,
+      "height": 941,
+      "alt": "铝合金锻前加热炉组与装料、检修和出料场地关系",
+      "optimized": true
+    }
+  },
+  "sourceRecord": {
+    "path": "frontend/src/lib/heat-treatment-lines-reviewed.json",
+    "record": "aluminum-forging-heating-line",
+    "review": "本批完成公开资料与页面工艺表述核对；代表设备图片为AI生成，未取得具体项目能力证明",
+    "engineeringNotes": "docs/heat-treatment-lines-final-batch-v1/pages/aluminum-forging-heating-line/engineering-review.md"
+  },
+  "sections": {
+    "overview": {
+      "title": "铝合金锻造加热生产线",
+      "subtitle": "把坯料加热与锻机节拍接起来",
+      "description": "面向铝合金坯料、棒料或预制件，将上料、分区加热、均热、出炉测温与转运配成机组。围绕合金牌号、坯料截面与入模时间，控制工件温度和连续供料节拍。",
+      "facts": [
+        {
+          "label": "典型来料",
+          "value": "铝合金圆坯、方坯或预制件"
+        },
+        {
+          "label": "工艺目标",
+          "value": "达到约定锻前温度窗口"
+        },
+        {
+          "label": "设备衔接",
+          "value": "加热、测温分流与锻机交接"
+        },
+        {
+          "label": "选型依据",
+          "value": "合金、截面、初温与节拍"
+        }
+      ],
+      "gallery": [
+        {
+          "id": "hero-line",
+          "label": "炉组外观",
+          "alt": "铝合金坯料锻前加热炉组、进出料辊道与测温交接配置",
+          "thumbnailAssetId": "hero-line",
+          "fullAssetId": "hero-line"
+        },
+        {
+          "id": "gallery-controls",
+          "label": "控制柜",
+          "alt": "铝合金锻前加热线控制柜与现场电缆接口",
+          "thumbnailAssetId": "gallery-controls",
+          "fullAssetId": "gallery-controls"
+        },
+        {
+          "id": "gallery-convection",
+          "label": "循环加热",
+          "alt": "铝合金加热炉顶部循环风机及检修平台外观",
+          "thumbnailAssetId": "gallery-convection",
+          "fullAssetId": "gallery-convection"
+        },
+        {
+          "id": "gallery-temperature-handoff",
+          "label": "测温交接",
+          "alt": "出炉铝坯的非接触测温与输送交接配置",
+          "thumbnailAssetId": "gallery-temperature-handoff",
+          "fullAssetId": "gallery-temperature-handoff"
+        }
+      ],
+      "actions": [
+        {
+          "label": "提交工况，获取选型建议",
+          "href": "#inquiry",
+          "style": "primary"
+        },
+        {
+          "label": "查看设备配置",
+          "href": "#configuration",
+          "style": "secondary"
+        }
+      ]
+    },
+    "workpieces": {
+      "title": "先看坯料，再确定装载与加热方式",
+      "subtitle": "合金、截面和摆放方式共同影响升温与均热。圆坯、方坯及异形预制件分别核对支承、防滚动、通道间距和换型条件。",
+      "cards": [
+        {
+          "id": "material",
+          "title": "合金与坯料形状",
+          "description": "提供合金牌号、来料状态、截面、长度与单件质量；图中圆坯和方坯仅说明来料形态，不代表共用同一装载方案。",
+          "imageAssetId": "workpiece-billets"
+        },
+        {
+          "id": "loading",
+          "title": "摆放与输送节距",
+          "description": "按坯料形状确定辊道、步进或料盘承载。核对受热面、支承接触、间距和防磕碰；圆坯另配防滚动或定位措施。",
+          "imageAssetId": "loading-billets"
+        }
+      ]
+    },
+    "process": {
+      "title": "从上料到入模前交接，看懂整线组成",
+      "subtitle": "本组图片展示辊道输送、分区对流加热与测温分流的代表配置。锻压机位于下游，其接口和供货分工单独列明。",
+      "imageAssetId": "process-whole-line",
+      "mode": "routes",
+      "stages": [],
+      "routes": [
+        {
+          "title": "坯料锻前加热与分流路线",
+          "steps": [
+            "批次识别与上料",
+            "分区升温",
+            "均热与工件温度核对",
+            "出炉测温与识别",
+            "合格坯料转运交接",
+            "进入锻压工序（下游）"
+          ],
+          "note": "未满足温度或允许停留条件的坯料进入约定分流位置，按合金与工艺判定；不能只调高炉温或自行回炉继续生产。"
+        }
+      ],
+      "note": "出炉温度与入模温度分别核对。采用红外测温时，校核材质、表面、发射率、测量波段及视场，并用代表坯料温度测试建立判定依据。图中封闭炉体不能证明内部温区数量或工件温差指标。"
+    },
+    "configuration": {
+      "title": "围绕温度窗口和供料节拍确定配置",
+      "subtitle": "先确定代表坯料和锻造制度，再匹配加热、输送、测温与异常分流。",
+      "table": {
+        "caption": "铝合金锻造加热生产线设备配置依据",
+        "columns": [
+          {
+            "key": "item",
+            "label": "配置项目"
+          },
+          {
+            "key": "basis",
+            "label": "设备与衔接要求"
+          }
+        ],
+        "rows": [
+          {
+            "item": "加热与均热",
+            "cells": [
+              "按合金、初温、截面和装载确定加热功率、循环方式、有效区与在炉时间；分区数量由计算与验证确定。"
+            ]
+          },
+          {
+            "item": "输送与定位",
+            "cells": [
+              "按坯料形状与节拍选择辊道、步进或料盘；检查支承、通道间距、防滚动和热态卡料处理。"
+            ]
+          },
+          {
+            "item": "出炉测温与分流",
+            "cells": [
+              "将测温结果与批次或工件识别关联；结合有效测量条件判断是否放行，异常坯料转入安全位置。"
+            ]
+          },
+          {
+            "item": "锻机短停与恢复",
+            "cells": [
+              "按允许在炉和出炉停留时间确定保温、降速、分流及复机首件核对，不能无限延长保温。"
+            ]
+          },
+          {
+            "item": "热源与其他路线",
+            "cells": [
+              "电阻/燃气加热按现场与产品要求选取；感应或组合方案另行比较芯表温差、耦合与换型，并明确配套方及交付范围。"
+            ]
+          },
+          {
+            "item": "控制与记录",
+            "cells": [
+              "记录批次、配方、温度、输送状态、停机和异常处置，建立与锻机允许接料信号的联锁。"
+            ]
+          }
+        ]
+      },
+      "notes": [
+        "页面不以加热原理比较代替设备交付能力；有效加热区、工件温差和控温精度分别约定。"
+      ],
+      "action": {
+        "label": "把已有参数发给工程师",
+        "href": "#inquiry"
+      },
+      "inputs": [
+        {
+          "title": "材料",
+          "description": "合金牌号、来料状态、表面和批次防混要求"
+        },
+        {
+          "title": "坯料",
+          "description": "圆/方/异形、最小/最大尺寸、重量、初温和摆放方式"
+        },
+        {
+          "title": "锻造窗口",
+          "description": "目标出炉温度、允许偏差、入模时间和模具/锻机要求"
+        },
+        {
+          "title": "加热方式",
+          "description": "对流/辐射、感应或组合；升温速度、截面温差与表面影响"
+        },
+        {
+          "title": "节拍",
+          "description": "件/min、换型、锻机波动、缓存、停机和复机"
+        },
+        {
+          "title": "测温",
+          "description": "红外/接触校核、发射率、测点、旋转/姿态和判定逻辑"
+        },
+        {
+          "title": "输送",
+          "description": "辊道/步进/机械手、夹持、热变形和防磕碰"
+        },
+        {
+          "title": "验收",
+          "description": "温度分布、出炉至入模、连续节拍、能耗和产品验证边界"
+        }
+      ]
+    },
+    "site-conditions": {
+      "title": "产能与现场条件，一起算清楚",
+      "imageAssetId": "site-layout",
+      "requirements": [
+        {
+          "title": "产量与规格组合",
+          "description": "提供代表坯料、并行通道、节距、换型和班次，核对加热与均热所需时间。"
+        },
+        {
+          "title": "能源与环境",
+          "description": "核对供电容量或燃气条件、排风和环境要求；按最终热源列接口。"
+        },
+        {
+          "title": "锻机与分流位置",
+          "description": "明确出炉至入模路径、允许时间、接料信号，以及停机时的坯料安全去向。"
+        },
+        {
+          "title": "场地与检修",
+          "description": "安排进料暂存、炉门和控制柜操作、检修通道与维护吊装空间。"
+        }
+      ],
+      "capacity": "连续输送的理论件产能（件/h）＝并行通道数 × 输送速度（m/min）÷ 节距（m）× 每节距件数 × 60。实际允许速度还受坯料加热与均热时间限制，并与锻机接料能力共同核算；合格产出另计有效生产时间、换型、短停与检验结果。",
+      "imageCaption": "炉前装料、炉侧检修与出炉交接共同安排；最终占地按实际设备与车间条件确定。"
+    },
+    "delivery-scope": {
+      "title": "明确炉组交付与锻机接口",
+      "subtitle": "加热、输送、测温分流和下游交接分别列出设备与责任。",
+      "imageAssetId": "process-whole-line",
+      "contentTitle": "按工序列清设备与配套",
+      "items": [
+        {
+          "label": "热工设备",
+          "value": "约定的加热炉、循环及保温系统，按确认热源和装载形式配置。"
+        },
+        {
+          "label": "输送与控制",
+          "value": "上料、辊道或其他输送、出炉测温、分流及控制记录，逐项列设备清单。"
+        },
+        {
+          "label": "下游与现场",
+          "value": "锻压机、机械手、基础、公用工程及安装配合按接口分工；图片不代表这些项目全部包含。"
+        }
+      ],
+      "note": "设备清单、供货范围与双方分工在技术方案中列明。"
+    },
+    "acceptance": {
+      "title": "交付到哪一步，验收就核对到哪一步",
+      "subtitle": "设备功能、工艺性能与产品验证分别约定条件。",
+      "columns": [
+        {
+          "id": "equipment",
+          "title": "设备功能",
+          "description": "核对输送、测温有效性、分流、联锁、报警，以及锻机停机与复机动作。"
+        },
+        {
+          "id": "process",
+          "title": "工艺性能",
+          "description": "在代表坯料与装载下验证多点或芯表温度、出炉至入模时间和持续供料节拍。"
+        },
+        {
+          "id": "product",
+          "title": "产品验证",
+          "description": "按适用锻件规范验证充型、表面、组织和性能；结合坯料、模具及锻造条件判定。"
+        }
+      ],
+      "productNote": "炉温记录不能替代工件温度测试；加热设备验收与最终锻件质量验证分别约定试验条件和责任。",
+      "stages": [
+        {
+          "id": "requirements",
+          "order": 1,
+          "label": "需求沟通"
+        },
+        {
+          "id": "design",
+          "order": 2,
+          "label": "方案设计"
+        },
+        {
+          "id": "manufacturing-inspection",
+          "order": 3,
+          "label": "制造检验"
+        },
+        {
+          "id": "installation-commissioning",
+          "order": 4,
+          "label": "安装联调"
+        },
+        {
+          "id": "acceptance-delivery",
+          "order": 5,
+          "label": "验收交付"
+        }
+      ],
+      "note": "设备验收与产品检验分别明确条件与责任；代表材料、装载、抽样和判定在协议中约定。"
+    },
+    "faq": {
+      "title": "采购与技术常见问题",
+      "subtitle": "先了解本工艺的选型、配套与现场衔接问题。",
+      "items": [
+        {
+          "id": "faq-1",
+          "question": "这条线与铝合金固溶时效线有什么区别？",
+          "answer": "本线在锻压前把坯料加热到允许锻造的温度窗口，并与锻机衔接；固溶时效线用于特定热处理强化制度，通常涉及固溶、淬火与时效。二者的工艺目标、转运和验收内容不同。",
+          "defaultOpen": true
+        },
+        {
+          "id": "faq-2",
+          "question": "电阻炉和感应加热怎么选？",
+          "answer": "先比较合金与规格组合、加热和均热时间、芯表温差、表面要求、换型及能源条件。感应与组合加热需另列系统和配套分工，本页图片展示的是炉内间接加热配置。",
+          "defaultOpen": false
+        },
+        {
+          "id": "faq-3",
+          "question": "红外测温能直接用于判定吗？",
+          "answer": "需先核对表面状态、发射率变化、仪器波段、视场和背景反射，并结合代表坯料温度试验验证。安装了红外仪表，不等于直接测得芯部温度或已经具备合格判定能力。",
+          "defaultOpen": false
+        },
+        {
+          "id": "faq-4",
+          "question": "锻机停机后炉内坯料怎么处理？",
+          "answer": "预先按合金、已在炉时间和停机时长确定保温、降速、分流及复机核对。是否回炉或重新使用由工艺判定，不能把反复加热当成通用恢复办法。",
+          "defaultOpen": false
+        },
+        {
+          "id": "faq-5",
+          "question": "产能为什么要看锻机的实际运行情况？",
+          "answer": "锻机能够稳定接收的合格坯料才形成有效产出。停机、换模和速度波动会反向影响在炉时间，应把加热、缓冲和锻压节拍共同核算。",
+          "defaultOpen": false
+        }
+      ],
+      "relatedGroups": [
+        {
+          "id": "related-lines",
+          "title": "相关生产线",
+          "links": [
+            {
+              "label": "铝合金固溶时效生产线",
+              "href": "/zh/products/detail/aluminum-solution-aging-line"
+            }
+          ]
+        },
+        {
+          "id": "technical",
+          "title": "选型资料",
+          "links": [
+            {
+              "label": "本线询价参数清单",
+              "href": "/downloads/heat-treatment-lines/aluminum-forging-heating-line.txt"
+            }
+          ]
+        }
+      ]
+    },
+    "inquiry": {
+      "title": "告诉我们坯料与锻机节拍，开始讨论方案",
+      "description": "已知信息先填，关键工况在方案沟通中补齐。",
+      "form": {
+        "id": "aluminum-forging-heating-line-inquiry",
+        "fields": [
+          {
+            "name": "workpiece_material",
+            "label": "合金与坯料规格",
+            "placeholder": "如：牌号、形状、截面与初温",
+            "required": false
+          },
+          {
+            "name": "target_performance",
+            "label": "锻造温度与节拍",
+            "placeholder": "如：允许温度窗口、入模时间",
+            "required": false
+          },
+          {
+            "name": "target_output",
+            "label": "目标产量",
+            "placeholder": "如：产量、生产班次与换型频率",
+            "required": false
+          },
+          {
+            "name": "contact_method",
+            "label": "联系方式",
+            "placeholder": "电话、微信或邮箱",
+            "required": true
+          }
+        ],
+        "submitLabel": "获取选型建议",
+        "helperText": "已知信息先填，不明确的项目可留空。"
+      }
+    }
+  }
+}

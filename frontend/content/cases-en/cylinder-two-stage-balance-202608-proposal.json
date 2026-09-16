@@ -1,0 +1,13 @@
+{
+  "id": "cylinder-two-stage-balance-202608-proposal",
+  "slug": "cylinder-two-stage-balance-202608-proposal",
+  "number": 140,
+  "title": "How should three ovens be balanced when cylinders require two curing stages?",
+  "summary": "An August 2026 Suneng proposal for wound cylinders assigns two furnaces to first-stage curing and one to second-stage curing. Assess the handover between the two stages before effective operating time, transfer and fixture traceability. The three furnaces do not process three independent streams of finished products.",
+  "body": "cylinder-two-stage-balance-202608-proposal.md",
+  "sourceFingerprint": "cb85c061811bd9e4a22ee855d889a45b4ac4ce1263138f0b217f9f3738314151",
+  "translationStatus": "complete",
+  "translatedAt": "2026-09-12",
+  "coverAlt": "Illustration of filament-wound gas cylinders.",
+  "coverCaption": "Illustration of filament-wound gas cylinders (AI-generated). Not an actual customer workpiece photograph. Does not establish actual specifications or process results."
+}

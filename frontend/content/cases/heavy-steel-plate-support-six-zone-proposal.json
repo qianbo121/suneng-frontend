@@ -1,0 +1,79 @@
+{
+  "id": "composite-plate-trolley-20210805-proposal",
+  "slug": "heavy-steel-plate-support-six-zone-proposal",
+  "title": "170吨厚钢板台车炉，承重垫块应该怎么放？",
+  "listTitle": "170吨厚钢板台车炉，承重垫块应该怎么放？",
+  "listSummary": "厚钢板台车炉的重载核对，要沿工件、垫块、承重柱到台车框架梁逐处确认载荷如何传递。",
+  "summary": "厚钢板台车炉的重载核对，要沿工件、垫块、承重柱到台车框架梁逐处确认载荷如何传递。江苏苏能工业炉有限公司2021年8月5日的方案，提出额定装炉量170t，并明确承重支柱着力于台车钢架梁；同日报价列设备承重座，却排除工件垫铁。设备支承与买方自备垫块需要在装载图上接起来，不能只凭170t或支点数量判断实际摆放是否适用。",
+  "body": "heavy-steel-plate-support-six-zone-proposal.md",
+  "contentType": "proposal",
+  "publicationStatus": "draft",
+  "projectStatus": "proposal",
+  "projectYear": 2021,
+  "sourceDate": "2021-08-05",
+  "workpiece": [
+    "厚钢板"
+  ],
+  "materials": [
+    "钢"
+  ],
+  "process": [
+    "热处理加热"
+  ],
+  "equipment": [
+    "台车式电阻炉"
+  ],
+  "need": [
+    "重载支承",
+    "工装接口"
+  ],
+  "tags": [
+    "方案参考",
+    "厚钢板",
+    "重载支承",
+    "工装接口"
+  ],
+  "facts": [
+    {
+      "label": "方案炉膛尺寸",
+      "value": "4500×3500×2300",
+      "unit": "mm",
+      "condition": "长×宽×高；炉膛空间不等于最大工件外形。",
+      "attribute": "方案参数"
+    },
+    {
+      "label": "方案额定装炉量",
+      "value": "170",
+      "unit": "t",
+      "condition": "工装计入、热态状态和载荷分布未明确；不作净工件量或局部支点承载能力。",
+      "attribute": "方案参数"
+    },
+    {
+      "label": "方案控温区数",
+      "value": "6",
+      "unit": "区",
+      "condition": "分区控制配置，不等于六个实际工件心部测温点或均匀性实测结果。",
+      "attribute": "方案参数"
+    }
+  ],
+  "participation": "方案拟由苏能承担厚钢板台车炉设计、制造、运输、安装和调试；工件垫块、炉体至控制柜动力接线、基础和施工不在历史报价范围内。",
+  "sourceSummary": "江苏苏能工业炉有限公司历史技术方案资料整理。",
+  "coverTitle": "厚钢板台车炉方案：工件载荷怎样传到台车框架梁？",
+  "cover": {
+    "src": "/images/case-covers/white-background-20260912/composite-plate-trolley-20210805-proposal-white.png",
+    "alt": "厚钢板类别示意，非客户工件实拍",
+    "caption": "工件类别示意图（人工智能生成）",
+    "fit": "contain"
+  },
+  "relatedLinks": [
+    {
+      "title": "了解台车炉的适用条件",
+      "href": "/zh/products/detail/trolley-furnace"
+    },
+    {
+      "title": "准备询价参数与供货范围",
+      "href": "/zh/articles/gongye-lu-baojia-canshu"
+    }
+  ],
+  "dateModified": "2026-09-12"
+}

@@ -1,0 +1,65 @@
+{
+  "id": "quench-bath-recovery-20161215-proposal",
+  "slug": "quench-bath-batch-load-liquid-cooling-recovery-cycle-proposal",
+  "title": "淬火槽一批1.5吨，两批之间要隔多久？",
+  "listTitle": "淬火槽一批1.5吨，两批之间要隔多久？",
+  "listSummary": "一次能处理多少工件，不足以单独确定连续淬火节拍。",
+  "summary": "一次能处理多少工件，不足以单独确定连续淬火节拍。苏能2016年这份淬火槽方案同时列出一次额定淬火量1.5t、淬火液温升和冷却时间，并配置搅拌及独立换热循环。采购需要把本炉输入的热量、液体状态和下一炉到来的间隔一起核对，不能只用1.5t安排连续生产。",
+  "body": "quench-bath-batch-load-liquid-cooling-recovery-cycle-proposal.md",
+  "contentType": "proposal",
+  "publicationStatus": "draft",
+  "projectStatus": "proposal",
+  "projectYear": 2016,
+  "sourceDate": "2016-12-15",
+  "workpiece": [
+    "热处理工件"
+  ],
+  "materials": [],
+  "process": [
+    "淬火"
+  ],
+  "equipment": [
+    "淬火槽"
+  ],
+  "need": [
+    "液温恢复与批次衔接"
+  ],
+  "tags": [
+    "方案参考",
+    "热处理工件",
+    "液温恢复与批次衔接"
+  ],
+  "facts": [
+    {
+      "label": "方案单次淬火量",
+      "value": "1.5",
+      "unit": "t",
+      "condition": "工件一次性额定淬火量，不是连续小时产量",
+      "attribute": "方案参数"
+    },
+    {
+      "label": "方案液温升",
+      "value": "≤18",
+      "unit": "℃",
+      "condition": "须与实际装载和液体条件对应",
+      "attribute": "方案参数"
+    },
+    {
+      "label": "方案液冷却时间",
+      "value": "≤2.5",
+      "unit": "h",
+      "condition": "起止液温、外部冷却水条件待确认",
+      "attribute": "方案参数"
+    }
+  ],
+  "participation": "苏能历史淬火槽方案列搅拌、循环换热和安装调试；外部基础由用户安排，完整冷却设施边界另核。",
+  "sourceSummary": "江苏苏能工业炉有限公司历史技术方案资料整理。",
+  "coverTitle": "淬火槽方案：一次1.5t，为什么还要核对下一炉液温恢复？",
+  "relatedLinks": [
+    {
+      "title": "准备询价参数与供货范围",
+      "href": "/zh/articles/gongye-lu-baojia-canshu"
+    }
+  ],
+  "dateModified": "2026-09-12"
+}

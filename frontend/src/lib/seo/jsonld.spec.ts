@@ -4,9 +4,30 @@ import {
   getArticleJsonLd,
   getOrganizationJsonLd,
   getProductDetailJsonLd,
+  getProductCollectionJsonLd,
 } from '@/lib/seo/jsonld';
 
 describe('SEO JSON-LD entities', () => {
+  it('describes all 23 Chinese products and only the 11 available English products', () => {
+    const chinese = getProductCollectionJsonLd('/zh/products', 'zh');
+    const english = getProductCollectionJsonLd('/en/products', 'en');
+    const items = (graph: typeof chinese) => graph.find((node) => node['@type'] === 'ItemList')?.itemListElement;
+    expect(items(chinese)).toHaveLength(23);
+    expect(items(english)).toHaveLength(11);
+    for (const slug of ['shovel-furnace', 'walking-beam-furnace', 'elevator-hearth-furnace', 'gas-nitriding-furnace']) {
+      expect(JSON.stringify(chinese)).toContain(`/zh/products/detail/${slug}`);
+      expect(JSON.stringify(english)).not.toContain(`/en/products/detail/${slug}`);
+    }
+    expect(JSON.stringify(chinese)).toContain('/zh/products/detail/aluminum-solution-aging-line');
+    expect(JSON.stringify(english)).not.toContain('/en/products/detail/aluminum-solution-aging-line');
+  });
+
+  it('uses the visible product description instead of a stale furnace-type override', () => {
+    const description = '退火与已淬火件回火分别设计工艺路线。';
+    const graph = getProductDetailJsonLd({ slug: 'roller-mesh-belt-line', name: '网带式退火回火生产线', description });
+    expect(graph.find((node) => node['@type'] === 'Product')).toMatchObject({ description });
+  });
+
   it('describes content pages as articles with truthful publication dates', () => {
     const article = getArticleJsonLd({
       slug: 'sample',
@@ -23,7 +44,8 @@ describe('SEO JSON-LD entities', () => {
       dateModified: '2026-06-12T15:00:00+08:00',
       author: { '@id': 'https://www.jssngyl.cn/#organization' },
       publisher: { '@id': 'https://www.jssngyl.cn/#organization' },
-      mainEntityOfPage: 'https://www.jssngyl.cn/zh/articles/sample',
+      '@id': 'https://www.jssngyl.cn/zh/articles/sample#article',
+      mainEntityOfPage: { '@type': 'WebPage', '@id': 'https://www.jssngyl.cn/zh/articles/sample#webpage', url: 'https://www.jssngyl.cn/zh/articles/sample' },
     });
   });
 

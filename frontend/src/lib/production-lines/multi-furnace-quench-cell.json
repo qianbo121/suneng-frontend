@@ -1,0 +1,503 @@
+{
+  "pageId": "multi-furnace-quench-cell",
+  "variant": "handling",
+  "seo": {
+    "title": "多炉共用操作机淬火单元｜炉组装卸与淬火转移",
+    "description": "多台加热炉共用操作机和淬火槽，适用于可按料盘组织的批次热处理。了解工件装载、炉群错峰、转移计时、共享槽配套和验收要点，提交炉组与载荷资料讨论方案。"
+  },
+  "sectionNavigation": [
+    {
+      "label": "适用工件",
+      "href": "#workpieces"
+    },
+    {
+      "label": "工艺与设备",
+      "href": "#process"
+    },
+    {
+      "label": "设备配置",
+      "href": "#configuration"
+    },
+    {
+      "label": "产能与现场",
+      "href": "#site-conditions"
+    },
+    {
+      "label": "交付验收",
+      "href": "#acceptance"
+    },
+    {
+      "label": "常见问题",
+      "href": "#faq"
+    }
+  ],
+  "images": {
+    "hero-line": {
+      "src": "/images/products/multi-furnace-quench-cell/remaining-batch-v1/01-hero-92504a57faa4.png",
+      "width": 1672,
+      "height": 941,
+      "alt": "三台独立前装料加热炉共用横移操作机和左端淬火槽",
+      "optimized": true
+    },
+    "process-whole-line": {
+      "src": "/images/products/multi-furnace-quench-cell/remaining-batch-v1/02-whole-line-040a63f867a3.png",
+      "width": 1672,
+      "height": 941,
+      "alt": "三台并列加热炉、轨道操作机与共用淬火槽的白底整组视图",
+      "optimized": true
+    },
+    "workpiece-steel-batch": {
+      "src": "/images/products/multi-furnace-quench-cell/remaining-batch-v1/03-workpiece-b8b7d97a4e7f.png",
+      "width": 1672,
+      "height": 941,
+      "alt": "轴类、环件与块状钢件的代表外形",
+      "optimized": true
+    },
+    "loading-fork-tray": {
+      "src": "/images/products/multi-furnace-quench-cell/remaining-batch-v1/04-loading-f0604123c9d1.png",
+      "width": 1672,
+      "height": 941,
+      "alt": "操作机双叉承托料盘并装载带限位支承的轴类工件",
+      "optimized": true
+    },
+    "gallery-furnace-door": {
+      "src": "/images/products/multi-furnace-quench-cell/remaining-batch-v1/05-detail-1-45d1427cb3c5.png",
+      "width": 1672,
+      "height": 941,
+      "alt": "前装料加热炉的升降炉门、装料口及炉内承载基准",
+      "optimized": true
+    },
+    "gallery-shared-manipulator": {
+      "src": "/images/products/multi-furnace-quench-cell/remaining-batch-v1/06-detail-2-e1aed0d29871.png",
+      "width": 1672,
+      "height": 941,
+      "alt": "共用轨道操作机的行走底座、升降立柱和双叉取料接口",
+      "optimized": true
+    },
+    "gallery-quench-station": {
+      "src": "/images/products/multi-furnace-quench-cell/remaining-batch-v1/07-detail-3-1c9cfadf5dd7.png",
+      "width": 1672,
+      "height": 941,
+      "alt": "共用淬火槽的槽盖、导向升降机构及侧部循环管路",
+      "optimized": true
+    },
+    "site-layout": {
+      "src": "/images/products/multi-furnace-quench-cell/remaining-batch-v1/08-site-layout-ddc765a9255d.png",
+      "width": 1672,
+      "height": 941,
+      "alt": "三炉共用操作机单元的公共轨道、淬火工位和外围隔离布置",
+      "optimized": true
+    }
+  },
+  "sourceRecord": {
+    "path": "frontend/src/lib/heat-treatment-lines-reviewed.json",
+    "record": "multi-furnace-quench-cell",
+    "review": "本批完成独立正文、8 张拟真实景素材及公开来源桌面核对；待按当前仓库三方对比接入",
+    "engineeringNotes": "docs/heat-treatment-lines-final-batch-v1/pages/multi-furnace-quench-cell/engineering-review.md"
+  },
+  "sections": {
+    "overview": {
+      "title": "多炉共用操作机淬火单元",
+      "subtitle": "多台炉分批加热，一台操作机按任务装卸与转移",
+      "description": "将独立加热炉、共用操作机与淬火槽组织成一个协同单元。先确认各炉的出料窗口，再核对操作机取放、横移和入槽循环，适合需要按批次灵活安排的热处理生产。炉数、槽数与设备能力由实际工况确定。",
+      "facts": [
+        {
+          "label": "典型载荷",
+          "value": "料盘承载的轴、环与块状件"
+        },
+        {
+          "label": "工艺目标",
+          "value": "按工艺窗口完成出炉与入槽"
+        },
+        {
+          "label": "设备组织",
+          "value": "独立炉位，共享转运与淬火"
+        },
+        {
+          "label": "配置依据",
+          "value": "载荷、时窗、路径与槽占用"
+        }
+      ],
+      "gallery": [
+        {
+          "id": "view-1",
+          "label": "完整单元",
+          "alt": "三台独立前装料加热炉共用横移操作机和左端淬火槽",
+          "thumbnailAssetId": "hero-line",
+          "fullAssetId": "hero-line"
+        },
+        {
+          "id": "view-2",
+          "label": "炉门与炉位",
+          "alt": "前装料加热炉的升降炉门、装料口及炉内承载基准",
+          "thumbnailAssetId": "gallery-furnace-door",
+          "fullAssetId": "gallery-furnace-door"
+        },
+        {
+          "id": "view-3",
+          "label": "共用操作机",
+          "alt": "共用轨道操作机的行走底座、升降立柱和双叉取料接口",
+          "thumbnailAssetId": "gallery-shared-manipulator",
+          "fullAssetId": "gallery-shared-manipulator"
+        },
+        {
+          "id": "view-4",
+          "label": "淬火工位",
+          "alt": "共用淬火槽的槽盖、导向升降机构及侧部循环管路",
+          "thumbnailAssetId": "gallery-quench-station",
+          "fullAssetId": "gallery-quench-station"
+        }
+      ],
+      "actions": [
+        {
+          "label": "提交工况，获取选型建议",
+          "href": "#inquiry",
+          "style": "primary"
+        },
+        {
+          "label": "查看设备配置",
+          "href": "#configuration",
+          "style": "secondary"
+        }
+      ]
+    },
+    "workpieces": {
+      "title": "先看料盘与批次，再判断能否共用操作机",
+      "subtitle": "工件能放进炉内，只是第一步。还要核对料盘支承、最大热载荷、重心及各炉出料时间窗，确认操作机能完成所有取放与转移动作。",
+      "cards": [
+        {
+          "id": "material",
+          "title": "工件与热处理要求",
+          "description": "轴类、环件、块状件可作为批次装载的讨论对象；牌号、截面、来料状态和目标性能决定加热与淬火条件。",
+          "imageAssetId": "workpiece-steel-batch"
+        },
+        {
+          "id": "loading",
+          "title": "料盘、支承与取料接口",
+          "description": "料盘与工装计入总质量；核对叉取间隙、支承位置、重心和热变形，轴类工件还需可靠限位。",
+          "imageAssetId": "loading-fork-tray"
+        }
+      ],
+      "note": "当出料窗口可以错峰、相同淬火介质及工作状态适用且转运资源有裕量时，可评估共享方案；要求同时出炉或介质互不兼容的批次需另行组织。"
+    },
+    "process": {
+      "title": "看懂炉组、操作机与淬火槽怎样配合",
+      "subtitle": "各炉独立完成加热，操作机按任务往返服务。设备组成图与批次流程分别说明，工件不需要依次通过每台加热炉。",
+      "imageAssetId": "process-whole-line",
+      "mode": "cell",
+      "stages": [],
+      "routes": [
+        {
+          "title": "一个批次从装炉到淬后交接",
+          "steps": [
+            "任务与炉位确认",
+            "料盘取放、装炉",
+            "加热与保温",
+            "出料请求、资源预留",
+            "开门取料、收叉转移",
+            "入槽并执行淬火",
+            "出槽与下游交接",
+            "记录与共享工位释放"
+          ],
+          "note": "转移计时的起止点及允许时间按材料和采用规范约定，覆盖所需开门、取料、横移与入槽动作。需回火的工件还应确认回火设备、淬后允许间隔与转运衔接。"
+        }
+      ],
+      "note": "各炉额定产能不能直接相加。加热结束、操作机可用和槽位就绪需协调；同时预先确定异常时的载荷保持、安全停位与恢复流程。",
+      "imageAlt": "三台并列前装料加热炉、公共轨道操作机及左端共用淬火槽的整体设备组合"
+    },
+    "configuration": {
+      "title": "把炉位、取料接口和共享资源配成一套",
+      "subtitle": "配置表先回答设备怎样衔接，再据此讨论炉数、负载与生产节拍。",
+      "table": {
+        "caption": "多炉共用操作机淬火单元设备配置依据",
+        "columns": [
+          {
+            "key": "item",
+            "label": "配置项目"
+          },
+          {
+            "key": "basis",
+            "label": "设备与衔接要求"
+          }
+        ],
+        "rows": [
+          {
+            "item": "独立加热炉位",
+            "cells": [
+              "按工件与工艺选择炉膛、热源、温控和炉门形式；统一或逐炉核对装料高度、门口净空及出料许可。"
+            ]
+          },
+          {
+            "item": "操作机与轨道",
+            "cells": [
+              "核对总载荷、重心、行程、升降与伸叉、定位和热防护；收叉到位后才允许沿公共路径转移。"
+            ]
+          },
+          {
+            "item": "料盘与工装",
+            "cells": [
+              "明确支承点、取放基准、插叉空间、耐热状态及热变形余量，防止滑移和取放干涉。"
+            ]
+          },
+          {
+            "item": "共用淬火槽",
+            "cells": [
+              "按介质适用性、入槽方式、批次热输入、循环换热和槽位占用校核；槽盖、升降与取放动作协调。"
+            ]
+          },
+          {
+            "item": "排程与联锁",
+            "cells": [
+              "协调炉门、叉位、位置、槽位、液位/温度等必要状态；按工艺优先级和出炉时窗预留资源。"
+            ]
+          },
+          {
+            "item": "人员防护与恢复",
+            "cells": [
+              "按风险评估配置隔离、门锁、检测及安全控制；定义断电保持、受控救援和复机条件。"
+            ]
+          }
+        ]
+      },
+      "notes": [
+        "增加炉位前，应重新核对操作机完整循环与淬火槽占用；控制器或变频器的品牌不能代替安全功能验证。"
+      ],
+      "action": {
+        "label": "把已有参数发给工程师",
+        "href": "#inquiry"
+      },
+      "inputs": [
+        {
+          "title": "炉群",
+          "description": "炉数、炉型、炉门位置、周期、出料时间窗和工艺优先级"
+        },
+        {
+          "title": "载荷",
+          "description": "料盘/工装、最大质量、重心、尺寸、温度与夹持点"
+        },
+        {
+          "title": "操作机",
+          "description": "行程、速度/加速度、定位、耐热、防护和手自动模式"
+        },
+        {
+          "title": "路径",
+          "description": "轨道、转弯/升降、干涉区、人员隔离和检修通道"
+        },
+        {
+          "title": "淬火资源",
+          "description": "槽数、介质、容量、入槽方式、搅拌/升降与换热"
+        },
+        {
+          "title": "调度",
+          "description": "任务优先级、冲突、超时、炉门占用和异常重排"
+        },
+        {
+          "title": "冗余",
+          "description": "操作机故障、断电、炉门故障、淬火槽不可用时的安全处置"
+        },
+        {
+          "title": "验收",
+          "description": "最不利任务组合、转移时间、防碰撞、连续运行和恢复"
+        }
+      ]
+    },
+    "site-conditions": {
+      "title": "产能要连同排程、槽温与检修空间一起算",
+      "imageAssetId": "site-layout",
+      "requirements": [
+        {
+          "title": "炉群任务与班次",
+          "description": "列出各炉加热周期、装出炉窗口、代表批重、换型与有效生产时间。"
+        },
+        {
+          "title": "转运循环与通道",
+          "description": "计入空行程、负载行程、伸收叉、开关门与升降；核对检修、吊装和异常停放位置。"
+        },
+        {
+          "title": "介质与冷却能力",
+          "description": "核对淬火介质、允许工作状态、搅拌循环、换热和连续批次热输入，避免只按槽容积判断。"
+        },
+        {
+          "title": "公用工程与人员隔离",
+          "description": "明确电力或其他热源、排风、循环冷却、基础及检修分工；人员通道与操作机运行区域协调。"
+        }
+      ],
+      "capacity": "以代表批次建立炉群排程：同时计入操作机占用、淬火槽占用、取放和转移时间，检查最不利任务组合与冲突恢复。合格产量还取决于换型、有效运行时间和产品合格率，不能用炉数乘以单炉额定产量替代。",
+      "imageCaption": "炉群、公共轨道与隔离空间的布置参考；施工尺寸由设备与现场条件确定。"
+    },
+    "delivery-scope": {
+      "title": "交付内容覆盖炉组，也要覆盖共享接口",
+      "subtitle": "新建单元与利用现有炉位的改造项目，接口核对范围不同。",
+      "imageAssetId": "process-whole-line",
+      "contentTitle": "逐项列清设备、工装与现场分工",
+      "items": [
+        {
+          "label": "主设备与工装",
+          "value": "加热炉位、操作机、轨道、淬火槽及升降机构、料盘与取放工装，列明数量和责任范围。"
+        },
+        {
+          "label": "控制与记录",
+          "value": "设备状态交接、排程、转移计时、必要工艺记录、报警与恢复逻辑，并明确旧设备接口。"
+        },
+        {
+          "label": "现场与下游",
+          "value": "基础、供电或其他热源、循环冷却、排风及后续回火/检验衔接，分别约定供货与施工分工。"
+        }
+      ],
+      "note": "设备清单、供货范围与双方分工在技术方案中列明。"
+    },
+    "acceptance": {
+      "title": "交付到哪一步，验收就核对到哪一步",
+      "subtitle": "设备功能、工艺性能与产品验证分别约定条件。",
+      "columns": [
+        {
+          "id": "equipment",
+          "title": "设备功能",
+          "description": "核对负载取放、定位和重复动作，验证炉门—操作机—槽位许可链、人员隔离与保持机构。"
+        },
+        {
+          "id": "process",
+          "title": "工艺性能",
+          "description": "按代表装载记录加热、转移与入槽过程，并用最不利炉群任务组合验证排程与冲突处理。"
+        },
+        {
+          "id": "product",
+          "title": "产品验证",
+          "description": "按材料与产品规范约定硬度、组织、变形等适用项目，明确取样位置、数量和判定规则。"
+        }
+      ],
+      "productNote": "故障与恢复测试按批准的受控方案先做无料或安全模拟；热负载验证须先落实隔离、保持与安全处置条件。",
+      "stages": [
+        {
+          "id": "requirements",
+          "order": 1,
+          "label": "需求沟通"
+        },
+        {
+          "id": "design",
+          "order": 2,
+          "label": "方案设计"
+        },
+        {
+          "id": "manufacturing-inspection",
+          "order": 3,
+          "label": "制造检验"
+        },
+        {
+          "id": "installation-commissioning",
+          "order": 4,
+          "label": "安装联调"
+        },
+        {
+          "id": "acceptance-delivery",
+          "order": 5,
+          "label": "验收交付"
+        }
+      ],
+      "note": "设备验收与产品检验分别明确条件与责任；代表材料、装载、抽样和判定在协议中约定。"
+    },
+    "faq": {
+      "title": "多炉共用操作机，采购与技术常问什么",
+      "subtitle": "围绕炉数、瓶颈、异常恢复与后续工序，先把关键条件说清楚。",
+      "items": [
+        {
+          "id": "faq-1",
+          "question": "几台炉可以共用一台操作机？",
+          "answer": "没有固定答案，取决于各炉周期、强制出料窗口、转移路径、淬火槽占用和恢复裕量，应通过排程模型与最不利组合验证。",
+          "defaultOpen": true
+        },
+        {
+          "id": "faq-2",
+          "question": "共用操作机会不会成为瓶颈？",
+          "answer": "会有风险。设计需要计算利用率、任务冲突与排队时间，并在必要时配置双机、旁路或工艺错峰。",
+          "defaultOpen": false
+        },
+        {
+          "id": "faq-3",
+          "question": "断电时高温工件怎么办？",
+          "answer": "先按风险评估约定失电保持与安全停位，再确认备用电源覆盖哪些动作、如何受控救援及复机。工件是否允许继续处理，需要按材料状态与工艺记录判定。",
+          "defaultOpen": false
+        },
+        {
+          "id": "faq-4",
+          "question": "如何防止撞炉门或撞工位？",
+          "answer": "结合位置检测、工位许可、区域隔离、机械限位和安全控制系统设计，并按受控方案验证失效状态。优先无料或安全模拟，不在人员暴露或高温载荷失控条件下直接制造故障。",
+          "defaultOpen": false
+        },
+        {
+          "id": "faq-5",
+          "question": "产能为什么不能按炉数相加？",
+          "answer": "因为操作机、路径和淬火槽是共享资源，任务可能排队；单元产能由最不利调度下的可完成循环决定。",
+          "defaultOpen": false
+        },
+        {
+          "id": "faq-6",
+          "question": "这套单元是否已经包含回火？",
+          "answer": "本页重点是加热炉群、共享操作机与淬火资源。工件需要回火时，应另外确认回火设备、淬后允许间隔与转运接口，并在供货清单中列明。",
+          "defaultOpen": false
+        }
+      ],
+      "relatedGroups": [
+        {
+          "id": "related-lines",
+          "title": "相关生产线",
+          "links": [
+            {
+              "label": "履带板压淬生产线",
+              "href": "/zh/products/detail/track-shoe-press-quench-line"
+            },
+            {
+              "label": "锻件余热调质生产线",
+              "href": "/zh/products/detail/forging-waste-heat-qt-line"
+            }
+          ]
+        },
+        {
+          "id": "technical",
+          "title": "选型资料",
+          "links": [
+            {
+              "label": "本线询价参数清单",
+              "href": "/downloads/heat-treatment-lines/multi-furnace-quench-cell.txt"
+            }
+          ]
+        }
+      ]
+    },
+    "inquiry": {
+      "title": "告诉我们炉组与载荷，开始讨论共享方案",
+      "description": "先发炉位、料盘与目标产量，已有布局或工艺资料可在后续沟通中补充。",
+      "form": {
+        "id": "multi-furnace-quench-cell-inquiry",
+        "fields": [
+          {
+            "name": "workpiece_material",
+            "label": "炉组与载荷",
+            "placeholder": "如：炉数、料盘尺寸与最大质量",
+            "required": false
+          },
+          {
+            "name": "target_performance",
+            "label": "工艺与转移要求",
+            "placeholder": "如：出炉窗口、转移时间与介质",
+            "required": false
+          },
+          {
+            "name": "target_output",
+            "label": "目标产量",
+            "placeholder": "如：产量、生产班次与换型频率",
+            "required": false
+          },
+          {
+            "name": "contact_method",
+            "label": "联系方式",
+            "placeholder": "电话、微信或邮箱",
+            "required": true
+          }
+        ],
+        "submitLabel": "获取选型建议",
+        "helperText": "已知信息先填，不明确的项目可留空。"
+      }
+    }
+  }
+}

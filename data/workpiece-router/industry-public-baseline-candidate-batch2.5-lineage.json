@@ -1,0 +1,60 @@
+{
+  "schemaVersion": "1.0.0",
+  "currentCandidateVersion": "industry-public-baseline-2026-08-batch2.5-candidate-v2",
+  "versions": [
+    {
+      "baselineVersion": "industry-public-baseline-2026-08-batch2.5-candidate-v1",
+      "status": "returned_for_revision",
+      "immutableArtifacts": [
+        {
+          "path": "data/workpiece-router/industry-public-baseline-candidate-batch2.5-candidate-v1.json",
+          "sha256": "sha256:501f1737e7dce0c954bfa511567e3f33f781c5ed3788bb90fa0ad24c8695714f"
+        },
+        {
+          "path": "docs/independent-site-v2/workpiece-router-batch2.5-candidate-v1-public-baseline-candidate.md",
+          "sha256": "sha256:ec89a964df62c69188b36eb3226ce8b108eba06fb49d2772411e7eb214e34595"
+        },
+        {
+          "path": "docs/independent-site-v2/workpiece-router-batch2.5-candidate-v1-public-rule-matrix.xlsx",
+          "sha256": "sha256:ab19e367ce08648b29e51ff00fefe47928da439dd14ccb905abc1055f4d9c6da"
+        },
+        {
+          "path": "docs/independent-site-v2/workpiece-router-batch2.5-candidate-v1-snapshot-hashes.json",
+          "sha256": "sha256:6b149b84f254135653a9e723c8d39932722bb3b4f99f7a31232bb388a0aac29b"
+        },
+        {
+          "path": "docs/independent-site-v2/workpiece-router-batch2.5-candidate-v1-regression-report.md",
+          "sha256": "sha256:f93e482eccbcf817cb5d2307a8959525e125245f64acde6d3bd400c070f76d0a"
+        },
+        {
+          "path": "docs/independent-site-v2/workpiece-router-batch2.5-candidate-v1-test-manifest.json",
+          "sha256": "sha256:b7c73fe0063492a7b97f6a83d849725e73981d8a5ea21aa2e7af3b2b8c0e759b"
+        },
+        {
+          "path": "docs/independent-site-v2/screenshots/workpiece-router-batch2.5-candidate-v1-production-zero-public-1440.png",
+          "sha256": "sha256:c16d00c027adf6e40790c6fdc3895c07cbefec0e151d609959e6a932a56fbdd4"
+        }
+      ],
+      "approvalRecord": null
+    },
+    {
+      "baselineVersion": "industry-public-baseline-2026-08-batch2.5-candidate-v2",
+      "status": "awaiting_responsible_owner_approval",
+      "immutableArtifacts": [
+        {
+          "path": "data/workpiece-router/industry-public-baseline-candidate-batch2.5-candidate-v2.json",
+          "sha256": "sha256:893a6f690f312776f9fb23445f06309d3d528960c7a8c5639f3540b4f517163c"
+        },
+        {
+          "path": "docs/independent-site-v2/workpiece-router-batch2.5-candidate-v2-public-baseline-candidate.md",
+          "sha256": "sha256:b62112a00c757b07a9628054c43c57927d00d82ef6b62875b67e818229029b46"
+        },
+        {
+          "path": "docs/independent-site-v2/workpiece-router-batch2.5.1-technical-snapshot.json",
+          "sha256": "sha256:73e2117dc1ed7ca35776dac72770c6461d87d039996b46821bfa3f4e9dc6e56d"
+        }
+      ],
+      "approvalRecord": null
+    }
+  ]
+}

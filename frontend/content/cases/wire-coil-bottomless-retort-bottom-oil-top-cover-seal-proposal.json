@@ -1,0 +1,77 @@
+{
+  "id": "coil-bottom-seal-20200515-proposal",
+  "slug": "wire-coil-bottomless-retort-bottom-oil-top-cover-seal-proposal",
+  "title": "无底马弗球化退火炉的油封和炉盖密封配置",
+  "listTitle": "无底马弗球化退火炉的油封和炉盖密封配置",
+  "listSummary": "无底马弗罐的密封不能只看炉盖是否压紧。",
+  "summary": "无底马弗罐的密封不能只看炉盖是否压紧。苏能这份用于轴承钢丝盘圆球化退火的方案，分别描述了罐底插入油封槽、炉口法兰与炉盖压紧两处结构，并给它们配置冷却条件。核对同类设备时，应逐处确认密封对象、冷却和异常信号，不能把一处到位或一个温度报警当作整罐已经通过密封验证。",
+  "body": "wire-coil-bottomless-retort-bottom-oil-top-cover-seal-proposal.md",
+  "contentType": "proposal",
+  "publicationStatus": "draft",
+  "projectStatus": "proposal",
+  "projectYear": 2020,
+  "sourceDate": "2020-05-15",
+  "workpiece": [
+    "轴承钢丝盘圆"
+  ],
+  "materials": [
+    "轴承钢"
+  ],
+  "process": [
+    "球化退火"
+  ],
+  "equipment": [
+    "井式无底马弗炉"
+  ],
+  "need": [
+    "罐体密封与冷却接口"
+  ],
+  "tags": [
+    "方案参考",
+    "轴承钢丝盘圆",
+    "罐体密封与冷却接口"
+  ],
+  "facts": [
+    {
+      "label": "罐底密封",
+      "value": "水冷油封槽",
+      "unit": "",
+      "condition": "与上盖密封分别核对，不代表已完成气密试验",
+      "attribute": "方案参数"
+    },
+    {
+      "label": "炉盖压紧",
+      "value": "手轮压紧",
+      "unit": "",
+      "condition": "配合盘根和水冷，不是自动到位即已气密",
+      "attribute": "方案参数"
+    },
+    {
+      "label": "导风筒内有效空间",
+      "value": "φ3450×3200",
+      "unit": "mm",
+      "condition": "不是马弗罐内膛，更不是所有工件均可占满",
+      "attribute": "方案参数"
+    }
+  ],
+  "participation": "苏能历史方案包含设备设计制造运输安装调试，外部气源管线、动力配线及基础按各自条款核对。",
+  "sourceSummary": "江苏苏能工业炉有限公司历史技术方案资料整理。",
+  "coverTitle": "盘圆无底马弗炉方案：罐底油封与炉盖压紧怎样分别核对？",
+  "relatedLinks": [
+    {
+      "title": "了解井式炉的适用条件",
+      "href": "/zh/products/detail/pit-furnace"
+    },
+    {
+      "title": "准备询价参数与供货范围",
+      "href": "/zh/articles/gongye-lu-baojia-canshu"
+    }
+  ],
+  "cover": {
+    "src": "/images/workpieces/reviewed-20260909/pipe-bar-wire/wire-rod-coil.webp",
+    "alt": "盘卷线材类别工件示意",
+    "caption": "盘卷线材工件示意（人工智能生成，非客户实物）",
+    "fit": "contain"
+  },
+  "dateModified": "2026-09-12"
+}

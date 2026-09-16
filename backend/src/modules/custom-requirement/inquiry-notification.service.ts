@@ -23,6 +23,7 @@ export class InquiryNotificationDeliveryError extends Error {
 const INQUIRY_NOTIFICATION_TITLE = '官网新询盘';
 const MAX_SENDER_LENGTH = 300;
 const MAX_BODY_LENGTH = 4_000;
+const TRUNCATED_BODY_NOTICE = '\n\n（内容较长，通知中已截断；请到后台查看完整询盘。）';
 
 type InquiryNotificationPayload = {
   submissionId?: string | null;
@@ -43,6 +44,20 @@ type InquiryNotificationPayload = {
 
 function cleanInline(value?: string | null) {
   return value?.replace(/\s+/g, ' ').trim();
+}
+
+function formatProjectType(value?: string | null) {
+  const projectType = cleanInline(value);
+  switch (projectType) {
+    case 'new':
+      return '新建项目';
+    case 'renovation':
+      return '改造项目';
+    case 'after-sales':
+      return '售后服务';
+    default:
+      return projectType;
+  }
 }
 
 function cleanBody(value?: string | null) {
@@ -88,7 +103,11 @@ function formatReceivedAt(value?: Date | string | null) {
 }
 
 function buildInquiryCard(inquiry: InquiryNotificationPayload) {
-  const requirement = cleanBody(inquiry.requirement)?.slice(0, MAX_BODY_LENGTH);
+  const fullRequirement = cleanBody(inquiry.requirement);
+  const requirement =
+    fullRequirement && fullRequirement.length > MAX_BODY_LENGTH
+      ? `${fullRequirement.slice(0, MAX_BODY_LENGTH - TRUNCATED_BODY_NOTICE.length)}${TRUNCATED_BODY_NOTICE}`
+      : fullRequirement;
   const source = [cleanInline(inquiry.sourceType), cleanInline(inquiry.sourceDetail)]
     .filter(Boolean)
     .join(' / ');
@@ -96,11 +115,11 @@ function buildInquiryCard(inquiry: InquiryNotificationPayload) {
     field('提交编号', inquiry.submissionId),
     field('来源', source || '官网询盘'),
     field('收到时间', formatReceivedAt(inquiry.createdAt)),
-    field('项目类型', inquiry.projectType),
+    field('项目类型', formatProjectType(inquiry.projectType)),
     field('项目地点', inquiry.projectLocation),
     field('联系人', inquiry.name),
     field('公司', inquiry.company),
-    field('联系电话', inquiry.phone),
+    field('电话 / 微信', inquiry.phone),
     field('联系邮箱', inquiry.email),
     field('所属行业', inquiry.industry),
     field('设备工艺', inquiry.process),

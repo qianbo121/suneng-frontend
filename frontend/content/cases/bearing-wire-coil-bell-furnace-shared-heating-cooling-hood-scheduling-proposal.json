@@ -1,0 +1,77 @@
+{
+  "id": "coil-shared-hood-20200427-proposal",
+  "slug": "bearing-wire-coil-bell-furnace-shared-heating-cooling-hood-scheduling-proposal",
+  "title": "盘圆罩式退火炉一罩两台，怎么排产？",
+  "listTitle": "盘圆罩式退火炉一罩两台，怎么排产？",
+  "listSummary": "两座炉台不能直接按两台完整加热炉计算产能。",
+  "summary": "两座炉台不能直接按两台完整加热炉计算产能。江苏苏能工业炉有限公司一份轴承钢丝盘圆罩式炉历史方案，配置1套加热罩、2套炉台及炉罐、1套冷却罩。核对排产时，需要分别列清加热罩和冷却罩被哪一批占用，再把装卸、气氛转换和吊运时间放入同一张安排表。",
+  "body": "bearing-wire-coil-bell-furnace-shared-heating-cooling-hood-scheduling-proposal.md",
+  "contentType": "proposal",
+  "publicationStatus": "draft",
+  "projectStatus": "proposal",
+  "projectYear": 2020,
+  "sourceDate": "2020-04-27",
+  "workpiece": [
+    "轴承钢丝盘圆"
+  ],
+  "materials": [
+    "轴承钢"
+  ],
+  "process": [
+    "球化退火"
+  ],
+  "equipment": [
+    "预抽真空罩式电阻炉"
+  ],
+  "need": [
+    "共享罩体与双炉台排产"
+  ],
+  "tags": [
+    "方案参考",
+    "轴承钢丝盘圆",
+    "共享罩体与双炉台排产"
+  ],
+  "facts": [
+    {
+      "label": "加热罩",
+      "value": "1",
+      "unit": "套",
+      "condition": "共享资源数量，不推断并行加热能力",
+      "attribute": "方案参数"
+    },
+    {
+      "label": "炉台及炉罐",
+      "value": "各2",
+      "unit": "套",
+      "condition": "不等于两台完整独立加热炉",
+      "attribute": "方案参数"
+    },
+    {
+      "label": "冷却罩",
+      "value": "1",
+      "unit": "套",
+      "condition": "需要与各批冷却占用时段匹配",
+      "attribute": "方案参数"
+    }
+  ],
+  "participation": "苏能方案拟提供一热罩、两炉台两炉罐及一冷罩，罩体占用与气氛转换共同影响排产，现场气源和基础配线按清单分别负责。",
+  "sourceSummary": "江苏苏能工业炉有限公司历史技术方案资料整理。",
+  "coverTitle": "盘圆罩式炉方案：一只加热罩与两座炉台怎样排产？",
+  "relatedLinks": [
+    {
+      "title": "了解罩式炉的适用条件",
+      "href": "/zh/products/detail/bell-furnace"
+    },
+    {
+      "title": "准备询价参数与供货范围",
+      "href": "/zh/articles/gongye-lu-baojia-canshu"
+    }
+  ],
+  "cover": {
+    "src": "/images/case-covers/white-background-20260912/tall-steel-wire-coil-white.png",
+    "alt": "高筒状钢丝盘卷类别工件示意",
+    "caption": "高筒状钢丝盘卷工件示意（人工智能生成，非客户实物；不表示实际尺寸、绕制或装炉方式）",
+    "fit": "contain"
+  },
+  "dateModified": "2026-09-12"
+}

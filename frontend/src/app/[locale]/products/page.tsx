@@ -5,8 +5,9 @@ import Link from 'next/link';
 import { JsonLd } from '@/components/JsonLd';
 import { Breadcrumb } from '@/components/layout/Breadcrumb';
 import { PageBanner } from '@/components/layout/PageBanner';
-import { PRODUCT_CENTER_CATEGORIES } from '@/constants/product-categories';
-import { buildProductImageAlt } from '@/lib/seo';
+import { ChineseProductsLanding } from '@/components/products/ChineseProductsLanding';
+import { FurnaceProductGrid } from '@/components/products/FurnaceProductGrid';
+import { heatTreatmentLines } from '@/components/home/HeatTreatmentLines';
 import { getProductCollectionJsonLd } from '@/lib/seo/jsonld';
 import { buildMetadata } from '@/lib/seo/metadata';
 import { PRODUCT_COLLECTION_SEO } from '@/lib/seo/page-data';
@@ -20,6 +21,7 @@ type ProductsPageProps = {
 };
 
 const PRODUCT_HERO_IMAGE = '/images/products/product-list-hero.png';
+const CHINESE_PRODUCT_HERO_IMAGE = '/images/home/heat-treatment-line-manufacturing-base-3840.webp';
 
 const productSeoCopy = {
   zh: PRODUCT_COLLECTION_SEO,
@@ -34,11 +36,14 @@ const productSeoCopy = {
       'continuous heat-treatment line',
     ],
   },
-} satisfies Record<Locale, {
-  title: string;
-  description: string;
-  keywords: string[];
-}>;
+} satisfies Record<
+  Locale,
+  {
+    title: string;
+    description: string;
+    keywords: string[];
+  }
+>;
 
 export const revalidate = 3600;
 
@@ -53,7 +58,7 @@ export async function generateMetadata({ params }: ProductsPageProps): Promise<M
     path: `/${currentLocale}/products`,
     pageKey: 'products',
     keywords: seo.keywords,
-    image: PRODUCT_HERO_IMAGE,
+    image: currentLocale === 'zh' ? CHINESE_PRODUCT_HERO_IMAGE : PRODUCT_HERO_IMAGE,
     alternateLocales: {
       'zh-CN': '/zh/products',
       'en-US': '/en/products',
@@ -66,76 +71,69 @@ export default async function ProductsPage({ params }: ProductsPageProps) {
   const { locale } = await params;
   const currentLocale = (locale === 'en' ? 'en' : 'zh') as Locale;
 
+  if (currentLocale === 'zh') {
+    return (
+      <main className="bg-white text-[#202020]">
+        <JsonLd
+          id="product-collection-jsonld-zh"
+          data={getProductCollectionJsonLd('/zh/products', 'zh')}
+        />
+        <ChineseProductsLanding />
+      </main>
+    );
+  }
+
   return (
-    <main className="bg-white text-[#202020]">
+    <div className="bg-white text-[#202020]">
       <JsonLd
         id={`product-collection-jsonld-${currentLocale}`}
         data={getProductCollectionJsonLd(`/${currentLocale}/products`, currentLocale)}
       />
       <PageBanner
         locale={locale}
-        title={currentLocale === 'en' ? 'Product Center' : '产品中心'}
+        title="Product Center"
         englishTitle="Product Center"
-        subtitle={
-          currentLocale === 'en'
-            ? 'Focus on large industrial furnace products for diverse heat treatment needs'
-            : '聚焦核心产品，满足多场景热处理设备需求'
-        }
+        subtitle="Custom batch furnaces and continuous heat-treatment lines, configured around your workpiece and process"
         backgroundImage={PRODUCT_HERO_IMAGE}
         variant="compact"
       />
 
       <div className="border-b border-[#e5e5e5] bg-white">
-        <div className="mx-auto flex min-h-[42px] max-w-[1660px] items-center px-6 lg:px-[86px]">
-          <Breadcrumb locale={locale} currentLabel={currentLocale === 'en' ? 'Product Center' : '产品中心'} tone="dark" className="text-[13px]" />
+        <div className="site-page-container flex min-h-[42px] items-center">
+          <Breadcrumb
+            locale={locale}
+            currentLabel="Product Center"
+            tone="dark"
+            className="text-[13px]"
+          />
         </div>
       </div>
 
-      {/* Product Grid: 产品入口统一来自静态产品分类，新增产品会自动进入列表。 */}
-      <section className="mx-auto max-w-[1440px] px-[52px] pb-[72px] pt-[44px] max-md:px-6 max-md:py-10">
-        {currentLocale === 'zh' ? (
-          <Link
-            href="/zh/solutions/continuous-heat-treatment-line"
-            className="mb-8 grid gap-5 rounded-[8px] border border-[#e1e7f0] bg-[#f8fafc] p-6 transition hover:border-[#e60012] md:grid-cols-[1fr_auto] md:items-center"
-          >
-            <div>
-              <p className="text-[14px] font-semibold text-[#e60012]">系统级解决方案</p>
-              <h2 className="mt-2 text-[24px] font-semibold leading-[1.35] text-[#202020]">连续热处理生产线解决方案</h2>
-              <p className="mt-3 max-w-[760px] text-[15px] leading-[1.85] text-[#555f6d]">
-                面向连续退火、固溶、正火、回火、淬火加热、清洗、冷却和控制系统等产线级需求，先查看系统组成、选型参数和交付边界。
-              </p>
-            </div>
-            <span className="inline-flex min-h-[42px] items-center justify-center rounded-[4px] bg-[#e60012] px-5 text-[14px] font-semibold text-white">
-              查看产线方案
-            </span>
-          </Link>
-        ) : null}
-        <div className="grid gap-[26px] sm:grid-cols-2 lg:grid-cols-4">
-          {PRODUCT_CENTER_CATEGORIES.map((item) => (
-            <Link
-              key={item.id}
-              href={`/${locale}/products/detail/${item.slug}`}
-              className="group flex min-h-[356px] flex-col overflow-hidden rounded-[6px] border border-[#e4e8ee] bg-white px-6 pb-8 pt-8 text-center transition-all duration-300 hover:-translate-y-1 hover:border-[#e60012] hover:shadow-[0_12px_28px_rgba(15,23,42,0.08)]"
-            >
-              <div className="relative flex h-[204px] items-center justify-center">
-                <Image
-                  src={item.image}
-                  alt={buildProductImageAlt(currentLocale, item.name[currentLocale], item.showcaseDescription[currentLocale])}
-                  fill
-                  className="object-contain transition-transform duration-500 group-hover:scale-[1.04]"
-                  sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw"
-                />
-              </div>
-              <h3 className="mt-8 text-[24px] font-medium leading-[1.35] text-[#202020]">
-                {item.name[currentLocale]}
-              </h3>
-              <p className="mx-auto mt-4 max-w-[190px] text-[15px] leading-[1.85] text-[#555f6d]">
-                {item.showcaseDescription[currentLocale]}
-              </p>
-            </Link>
-          ))}
+      <section id="continuous-lines" aria-labelledby="continuous-lines-title" className="site-section scroll-mt-28 bg-white">
+        <div className="site-page-container">
+          <h2 id="continuous-lines-title" className="text-3xl font-semibold leading-tight">Continuous Heat-Treatment Lines</h2>
+          <p className="mt-4 max-w-3xl text-base leading-7 text-[#526277]">Compare the workpiece, treatment route and conveying method. Heating, cooling, controls and equipment interfaces are defined for each project.</p>
+          <div className="mt-7 grid gap-6 lg:grid-cols-3">
+            {heatTreatmentLines.map((line) => (
+              <Link key={line.slug} href={`/en/products/detail/${line.slug}`} className="group overflow-hidden rounded-lg border border-[#dfe5ee] bg-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#0c4dcc]">
+                <div className="relative aspect-video overflow-hidden bg-[#eef2f7]">
+                  <Image src={line.image} alt={line.title.en} fill sizes="(min-width: 1024px) 420px, 100vw" className="object-cover" />
+                </div>
+                <div className="p-6">
+                  <h3 className="text-xl font-semibold leading-snug group-hover:text-[#0c4dcc]">{line.title.en}</h3>
+                  <p className="mt-3 text-sm leading-6 text-[#526277]">{line.desc.en}</p>
+                  <span className="mt-5 inline-block font-semibold text-[#0c4dcc]">View line details →</span>
+                </div>
+              </Link>
+            ))}
+          </div>
         </div>
       </section>
-    </main>
+      <section className="site-section bg-[#f7f8fa]">
+        <div className="site-page-container">
+          <FurnaceProductGrid locale={currentLocale} />
+        </div>
+      </section>
+    </div>
   );
 }

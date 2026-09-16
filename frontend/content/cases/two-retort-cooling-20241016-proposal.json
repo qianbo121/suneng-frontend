@@ -1,0 +1,62 @@
+{
+  "id": "two-retort-cooling-20241016-proposal",
+  "slug": "two-retort-cooling-20241016-proposal",
+  "title": "井式炉一炉两罐，什么条件下能减少主炉等待？",
+  "summary": "一罐占用主炉加热时，另一罐可安排允许在炉外完成的冷却、卸装和准备。判断一炉两罐能否减少等待，关键是上一罐重新具备进炉条件的时刻，能否赶上另一罐允许换出的时刻；共用吊具、气路、水路和准备工位的占用也要计入。江苏苏能工业炉有限公司2024年10月16日的一份井式真空电阻炉方案，采用一座主炉、两只真空炉罐和两个风冷桶，本文据此说明轮换条件的比较方法。",
+  "body": "two-retort-cooling-20241016-proposal.md",
+  "contentType": "proposal",
+  "publicationStatus": "draft",
+  "projectStatus": "proposal",
+  "workpiece": [
+    "金属工件"
+  ],
+  "materials": [],
+  "process": [
+    "气氛保护热处理"
+  ],
+  "equipment": [
+    "井式真空电阻炉"
+  ],
+  "need": [
+    "炉罐与冷却工位衔接"
+  ],
+  "tags": [
+    "方案参考",
+    "金属工件",
+    "炉罐与冷却工位衔接"
+  ],
+  "facts": [
+    {
+      "label": "方案主炉数量",
+      "value": "1",
+      "unit": "座",
+      "condition": "单一加热位置，实际轮换以装料和各阶段时间为准",
+      "attribute": "方案参数"
+    },
+    {
+      "label": "方案炉罐数量",
+      "value": "2",
+      "unit": "套",
+      "condition": "炉罐数量不代表同时加热能力",
+      "attribute": "方案参数"
+    },
+    {
+      "label": "方案工作尺寸",
+      "value": "Φ1000×1600",
+      "unit": "毫米",
+      "condition": "与导流筒、承重底座和完整工装核对，不作净工件尺寸",
+      "attribute": "方案参数"
+    }
+  ],
+  "participation": "方案拟提供一主炉、两炉罐、两风冷桶及真空、气氛和控制配套；轮换需衔接气氛保护、密封水冷和现场吊运。",
+  "sourceSummary": "本文依据江苏苏能工业炉有限公司的历史方案资料整理，介绍拟定配置与供货条件；本文所引原件不构成设备已交付或验收通过的证明。",
+  "coverTitle": "井式炉一炉两罐，什么条件下能减少主炉等待？",
+  "relatedLinks": [],
+  "projectYear": 2024,
+  "sourceDate": "2024-10-16",
+  "listTitle": "井式炉一炉两罐，什么条件下能减少主炉等待？",
+  "dateModified": "2026-09-15",
+  "datePublished": null,
+  "author": null,
+  "reviewer": null
+}

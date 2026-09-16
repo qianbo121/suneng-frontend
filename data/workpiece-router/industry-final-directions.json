@@ -1,0 +1,862 @@
+{
+  "version": "2026-09-10-v1.6",
+  "description": "首页工件模块的双工况最终数据。每种工件固定两项，展示文案仅保留工况名与设备族，适用边界继续完整保留。",
+  "sourceWorkbook": "江苏苏能-工件双工况-AI综合最终方案-v1.4-20260831.xlsx",
+  "directions": {
+    "large-welded-machine-frame": {
+      "displayWorkpieceName": "大型焊接机架",
+      "examples": [
+        {
+          "position": 1,
+          "condition": "焊后整体去应力",
+          "direction": "台车式热处理炉",
+          "adoption": "采用",
+          "boundary": "仅作行业常见方向候选；必须按材质牌号、执行标准或图纸、尺寸重量、产量节拍、装炉方式及冷却要求复核。"
+        },
+        {
+          "position": 2,
+          "condition": "粗加工后二次去应力",
+          "direction": "台车式热处理炉",
+          "adoption": "采用",
+          "boundary": "仅适用于尺寸稳定性要求高、且工艺文件明确安排粗加工后二次去应力的大型焊接机架。"
+        }
+      ]
+    },
+    "pressure-vessel-shell": {
+      "displayWorkpieceName": "压力容器与筒体",
+      "examples": [
+        {
+          "position": 1,
+          "condition": "整体焊后热处理",
+          "direction": "台车式热处理炉",
+          "adoption": "采用",
+          "boundary": "仅作行业常见方向候选；必须按材质牌号、执行标准或图纸、尺寸重量、产量节拍、装炉方式及冷却要求复核。"
+        },
+        {
+          "position": 2,
+          "condition": "成形后正火/正火+回火",
+          "direction": "台车式热处理炉",
+          "adoption": "采用",
+          "boundary": "仅在材料标准、产品标准或设计文件要求时成立，不得套用于所有压力容器筒体。"
+        }
+      ]
+    },
+    "structural-steel-component": {
+      "displayWorkpieceName": "钢结构构件",
+      "examples": [
+        {
+          "position": 1,
+          "condition": "焊后整体去应力",
+          "direction": "台车式热处理炉",
+          "adoption": "采用",
+          "boundary": "仅作行业常见方向候选；必须按材质牌号、执行标准或图纸、尺寸重量、产量节拍、装炉方式及冷却要求复核。"
+        },
+        {
+          "position": 2,
+          "condition": "粗加工后二次去应力",
+          "direction": "台车式热处理炉",
+          "adoption": "有条件采用",
+          "boundary": "仅适用于后续有精加工、且工艺文件明确安排粗加工后二次去应力的焊接钢结构构件；普通建筑钢结构不得套用。"
+        }
+      ]
+    },
+    "welded-assembly": {
+      "displayWorkpieceName": "焊接总成",
+      "examples": [
+        {
+          "position": 1,
+          "condition": "焊后整体去应力",
+          "direction": "台车式热处理炉",
+          "adoption": "采用",
+          "boundary": "仅作行业常见方向候选；必须按材质牌号、执行标准或图纸、尺寸重量、产量节拍、装炉方式及冷却要求复核。"
+        },
+        {
+          "position": 2,
+          "condition": "粗加工后二次去应力",
+          "direction": "台车式热处理炉",
+          "adoption": "采用",
+          "boundary": "仅适用于尺寸精度要求高、机加工余量大且工艺文件安排二次去应力的焊接总成。"
+        }
+      ]
+    },
+    "large-cylinder-shell": {
+      "displayWorkpieceName": "大型筒体",
+      "examples": [
+        {
+          "position": 1,
+          "condition": "整体焊后去应力",
+          "direction": "台车式热处理炉",
+          "adoption": "采用",
+          "boundary": "仅作行业常见方向候选；必须按材质牌号、执行标准或图纸、尺寸重量、产量节拍、装炉方式及冷却要求复核。"
+        },
+        {
+          "position": 2,
+          "condition": "热成形后正火/正火+回火",
+          "direction": "台车式热处理炉",
+          "adoption": "采用",
+          "boundary": "仅适用于热成形改变材料状态、且材料或产品标准要求恢复性能的大型筒体。"
+        }
+      ]
+    },
+    "welded-pipe-spool": {
+      "displayWorkpieceName": "管道焊接件",
+      "examples": [
+        {
+          "position": 1,
+          "condition": "预制管段整体焊后热处理",
+          "direction": "台车/箱式热处理炉",
+          "adoption": "采用",
+          "boundary": "仅作行业常见方向候选；必须按材质牌号、执行标准或图纸、尺寸重量、产量节拍、装炉方式及冷却要求复核。"
+        },
+        {
+          "position": 2,
+          "condition": "不锈钢管段整体固溶",
+          "direction": "台车/辊底式固溶炉",
+          "adoption": "有条件采用",
+          "boundary": "仅适用于牌号、焊接状态、尺寸和设计文件允许整体固溶处理的不锈钢管道焊接件。"
+        }
+      ]
+    },
+    "seamless-aluminum-gas-cylinder": {
+      "displayWorkpieceName": "无缝铝合金气瓶",
+      "examples": [
+        {
+          "position": 1,
+          "condition": "固溶+水淬",
+          "direction": "铝瓶固溶淬火线",
+          "adoption": "采用",
+          "boundary": "须按合金牌号、壁厚、允许淬火转移时间和气瓶产品标准确定。"
+        },
+        {
+          "position": 2,
+          "condition": "人工时效",
+          "direction": "强制循环时效炉",
+          "adoption": "采用",
+          "boundary": "仅适用于经固溶淬火并按产品标准要求人工时效的铝合金气瓶。"
+        }
+      ]
+    },
+    "seamless-steel-gas-cylinder": {
+      "displayWorkpieceName": "无缝钢制气瓶",
+      "examples": [
+        {
+          "position": 1,
+          "condition": "整体调质",
+          "direction": "气瓶调质热处理线",
+          "adoption": "采用",
+          "boundary": "仅适用于采用调质钢路线的无缝钢瓶，须按适用产品标准和钢种确认。"
+        },
+        {
+          "position": 2,
+          "condition": "整体正火/正火+回火",
+          "direction": "气瓶正火热处理线",
+          "adoption": "采用",
+          "boundary": "仅适用于采用正火钢路线的无缝钢瓶，不能与调质钢路线混用。"
+        }
+      ]
+    },
+    "welded-steel-gas-cylinder": {
+      "displayWorkpieceName": "焊接钢制气瓶",
+      "examples": [
+        {
+          "position": 1,
+          "condition": "焊后整体正火",
+          "direction": "焊接气瓶正火炉",
+          "adoption": "采用",
+          "boundary": "须按气瓶类型、钢种和适用产品标准确认是否要求正火。"
+        },
+        {
+          "position": 2,
+          "condition": "焊后整体去应力",
+          "direction": "焊接气瓶去应力炉",
+          "adoption": "采用",
+          "boundary": "仅在适用气瓶标准允许去应力路线时成立；炉型形式须按尺寸、产量和装载方式确定。"
+        }
+      ]
+    },
+    "large-forged-flange": {
+      "displayWorkpieceName": "大型法兰",
+      "examples": [
+        {
+          "position": 1,
+          "condition": "正火",
+          "direction": "台车式热处理炉",
+          "adoption": "采用",
+          "boundary": "仅作行业常见方向候选；必须按材质牌号、执行标准或图纸、尺寸重量、产量节拍、装炉方式及冷却要求复核。"
+        },
+        {
+          "position": 2,
+          "condition": "整体调质",
+          "direction": "台车式调质线",
+          "adoption": "采用",
+          "boundary": "仅适用于材料标准或图纸要求调质交货的大型锻制法兰，淬火介质和转移时间须按材料与截面复核。"
+        }
+      ]
+    },
+    "large-forged-shaft": {
+      "displayWorkpieceName": "大型轴类锻件",
+      "examples": [
+        {
+          "position": 1,
+          "condition": "正火+回火",
+          "direction": "台车式锻件热处理炉",
+          "adoption": "采用",
+          "boundary": "仅作行业常见方向候选；必须按材质牌号、执行标准或图纸、尺寸重量、产量节拍、装炉方式及冷却要求复核。"
+        },
+        {
+          "position": 2,
+          "condition": "扩氢退火",
+          "direction": "台车式锻件退火炉",
+          "adoption": "采用",
+          "boundary": "仅作行业常见方向候选；必须按材质牌号、执行标准或图纸、尺寸重量、产量节拍、装炉方式及冷却要求复核。"
+        }
+      ]
+    },
+    "large-gear-blank": {
+      "displayWorkpieceName": "大型齿轮坯",
+      "examples": [
+        {
+          "position": 1,
+          "condition": "齿前正火",
+          "direction": "台车式热处理炉",
+          "adoption": "采用",
+          "boundary": "仅作行业常见方向候选；必须按材质牌号、执行标准或图纸、尺寸重量、产量节拍、装炉方式及冷却要求复核。"
+        },
+        {
+          "position": 2,
+          "condition": "齿坯整体调质",
+          "direction": "台车式调质线",
+          "adoption": "采用",
+          "boundary": "仅适用于材料、图纸或齿轮性能要求明确规定齿坯整体调质的项目，须复核截面、装炉和淬火冷却条件。"
+        }
+      ]
+    },
+    "large-steel-casting": {
+      "displayWorkpieceName": "大型铸钢件",
+      "examples": [
+        {
+          "position": 1,
+          "condition": "退火",
+          "direction": "台车式热处理炉",
+          "adoption": "采用",
+          "boundary": "仅作行业常见方向候选；必须按材质牌号、执行标准或图纸、尺寸重量、产量节拍、装炉方式及冷却要求复核。"
+        },
+        {
+          "position": 2,
+          "condition": "正火+回火",
+          "direction": "台车式热处理炉",
+          "adoption": "采用",
+          "boundary": "仅作行业常见方向候选；必须按材质牌号、执行标准或图纸、尺寸重量、产量节拍、装炉方式及冷却要求复核。"
+        }
+      ]
+    },
+    "ductile-iron-casting": {
+      "displayWorkpieceName": "球墨铸铁件",
+      "examples": [
+        {
+          "position": 1,
+          "condition": "铁素体化退火",
+          "direction": "台车式热处理炉",
+          "adoption": "采用",
+          "boundary": "须按球铁牌号、目标基体组织、铸态组织和截面尺寸确认。"
+        },
+        {
+          "position": 2,
+          "condition": "正火",
+          "direction": "台车式热处理炉",
+          "adoption": "采用",
+          "boundary": "须按球铁牌号、目标基体组织、铸态组织和截面尺寸确认。"
+        }
+      ]
+    },
+    "large-die-block-forging": {
+      "displayWorkpieceName": "大型模具模块锻件",
+      "examples": [
+        {
+          "position": 1,
+          "condition": "退火",
+          "direction": "台车式锻件热处理炉",
+          "adoption": "采用",
+          "boundary": "仅作行业常见方向候选；必须按材质牌号、执行标准或图纸、尺寸重量、产量节拍、装炉方式及冷却要求复核。"
+        },
+        {
+          "position": 2,
+          "condition": "预硬化调质",
+          "direction": "台车式锻件调质线",
+          "adoption": "有条件采用",
+          "boundary": "仅适用于材料牌号、交货硬度和技术文件明确要求预硬化调质的模具钢模块，不得套用到所有大型模具锻件。"
+        }
+      ]
+    },
+    "long-shaft": {
+      "displayWorkpieceName": "长轴",
+      "examples": [
+        {
+          "position": 1,
+          "condition": "整体正火",
+          "direction": "井式/台车式热处理炉",
+          "adoption": "采用",
+          "boundary": "仅作行业常见方向候选；必须按材质牌号、执行标准或图纸、尺寸重量、产量节拍、装炉方式及冷却要求复核。"
+        },
+        {
+          "position": 2,
+          "condition": "整体调质",
+          "direction": "井式调质线",
+          "adoption": "采用",
+          "boundary": "仅作行业常见方向候选；必须按材质牌号、执行标准或图纸、尺寸重量、产量节拍、装炉方式及冷却要求复核。"
+        }
+      ]
+    },
+    "gear-shaft": {
+      "displayWorkpieceName": "齿轮轴",
+      "examples": [
+        {
+          "position": 1,
+          "condition": "渗碳淬火+低温回火",
+          "direction": "密封淬火炉配套线",
+          "adoption": "采用",
+          "boundary": "仅适用于材料和技术文件明确采用渗碳路线的工件；配可控气氛密封淬火炉，并按工艺配清洗、低温回火设备，复核装炉姿态、淬火和变形要求。"
+        },
+        {
+          "position": 2,
+          "condition": "整体调质",
+          "direction": "井式/台车式调质线",
+          "adoption": "采用",
+          "boundary": "仅适用于材料、图纸或力学性能要求明确规定整体调质的齿轮轴，炉型与装炉姿态须按长径比和变形要求复核。"
+        }
+      ]
+    },
+    "spline-shaft": {
+      "displayWorkpieceName": "花键轴",
+      "examples": [
+        {
+          "position": 1,
+          "condition": "渗碳淬火+低温回火",
+          "direction": "密封淬火炉配套线",
+          "adoption": "采用",
+          "boundary": "仅适用于材料和技术文件明确采用渗碳路线的工件；配可控气氛密封淬火炉，并按工艺配清洗、低温回火设备，复核装炉姿态、淬火和变形要求。"
+        },
+        {
+          "position": 2,
+          "condition": "整体调质",
+          "direction": "井式/台车式调质线",
+          "adoption": "采用",
+          "boundary": "仅适用于材料、图纸或力学性能要求明确规定整体调质的花键轴，炉型与装炉姿态须按长径比和变形要求复核。"
+        }
+      ]
+    },
+    "large-gear": {
+      "displayWorkpieceName": "大型齿轮",
+      "examples": [
+        {
+          "position": 1,
+          "condition": "深层渗碳淬火+回火",
+          "direction": "井式渗碳配套热处理线",
+          "adoption": "采用",
+          "boundary": "仅适用于材料和技术文件明确要求深层渗碳的齿轮；按有效硬化层和变形要求，配套淬火槽、转运和回火设备，复核装炉及冷却条件。"
+        },
+        {
+          "position": 2,
+          "condition": "齿前正火/退火",
+          "direction": "井式/台车式热处理炉",
+          "adoption": "采用",
+          "boundary": "仅作行业常见方向候选；必须按材质牌号、执行标准或图纸、尺寸重量、产量节拍、装炉方式及冷却要求复核。"
+        }
+      ]
+    },
+    "large-ring-gear": {
+      "displayWorkpieceName": "大型齿圈",
+      "examples": [
+        {
+          "position": 1,
+          "condition": "整体正火",
+          "direction": "井式/台车式热处理炉",
+          "adoption": "采用",
+          "boundary": "仅作行业常见方向候选；必须按材质牌号、执行标准或图纸、尺寸重量、产量节拍、装炉方式及冷却要求复核。"
+        },
+        {
+          "position": 2,
+          "condition": "整体调质",
+          "direction": "井式/台车式调质线",
+          "adoption": "采用",
+          "boundary": "仅作行业常见方向候选；必须按材质牌号、执行标准或图纸、尺寸重量、产量节拍、装炉方式及冷却要求复核。"
+        }
+      ]
+    },
+    "crankshaft": {
+      "displayWorkpieceName": "曲轴",
+      "examples": [
+        {
+          "position": 1,
+          "condition": "整体调质",
+          "direction": "井式调质线",
+          "adoption": "采用",
+          "boundary": "仅作行业常见方向候选；必须按材质牌号、执行标准或图纸、尺寸重量、产量节拍、装炉方式及冷却要求复核。"
+        },
+        {
+          "position": 2,
+          "condition": "整体正火/退火",
+          "direction": "井式/台车式热处理炉",
+          "adoption": "采用",
+          "boundary": "仅作行业常见方向候选；必须按材质牌号、执行标准或图纸、尺寸重量、产量节拍、装炉方式及冷却要求复核。"
+        }
+      ]
+    },
+    "track-roller": {
+      "displayWorkpieceName": "支重轮",
+      "examples": [
+        {
+          "position": 1,
+          "condition": "批量整体正火",
+          "direction": "辊底式连续正火炉",
+          "adoption": "采用",
+          "boundary": "仅作行业常见方向候选；必须按材质牌号、执行标准或图纸、尺寸重量、产量节拍、装炉方式及冷却要求复核。"
+        },
+        {
+          "position": 2,
+          "condition": "批量整体调质",
+          "direction": "辊底式连续调质线",
+          "adoption": "采用",
+          "boundary": "仅作行业常见方向候选；必须按材质牌号、执行标准或图纸、尺寸重量、产量节拍、装炉方式及冷却要求复核。"
+        }
+      ]
+    },
+    "carrier-roller": {
+      "displayWorkpieceName": "托链轮",
+      "examples": [
+        {
+          "position": 1,
+          "condition": "批量整体正火",
+          "direction": "辊底式连续正火炉",
+          "adoption": "采用",
+          "boundary": "仅作行业常见方向候选；必须按材质牌号、执行标准或图纸、尺寸重量、产量节拍、装炉方式及冷却要求复核。"
+        },
+        {
+          "position": 2,
+          "condition": "批量整体调质",
+          "direction": "辊底式连续调质线",
+          "adoption": "采用",
+          "boundary": "仅作行业常见方向候选；必须按材质牌号、执行标准或图纸、尺寸重量、产量节拍、装炉方式及冷却要求复核。"
+        }
+      ]
+    },
+    "idler-wheel": {
+      "displayWorkpieceName": "引导轮",
+      "examples": [
+        {
+          "position": 1,
+          "condition": "批量整体正火",
+          "direction": "辊底式连续正火炉",
+          "adoption": "采用",
+          "boundary": "仅作行业常见方向候选；必须按材质牌号、执行标准或图纸、尺寸重量、产量节拍、装炉方式及冷却要求复核。"
+        },
+        {
+          "position": 2,
+          "condition": "批量整体调质",
+          "direction": "辊底式连续调质线",
+          "adoption": "采用",
+          "boundary": "仅作行业常见方向候选；必须按材质牌号、执行标准或图纸、尺寸重量、产量节拍、装炉方式及冷却要求复核。"
+        }
+      ]
+    },
+    "drive-sprocket": {
+      "displayWorkpieceName": "驱动轮",
+      "examples": [
+        {
+          "position": 1,
+          "condition": "批量整体正火",
+          "direction": "辊底式连续正火炉",
+          "adoption": "采用",
+          "boundary": "仅作行业常见方向候选；必须按材质牌号、执行标准或图纸、尺寸重量、产量节拍、装炉方式及冷却要求复核。"
+        },
+        {
+          "position": 2,
+          "condition": "批量整体调质",
+          "direction": "辊底式连续调质线",
+          "adoption": "采用",
+          "boundary": "仅作行业常见方向候选；必须按材质牌号、执行标准或图纸、尺寸重量、产量节拍、装炉方式及冷却要求复核。"
+        }
+      ]
+    },
+    "track-link": {
+      "displayWorkpieceName": "履带链轨节",
+      "examples": [
+        {
+          "position": 1,
+          "condition": "链轨节整体调质",
+          "direction": "辊底/推杆式连续调质线",
+          "adoption": "有条件采用",
+          "boundary": "适用于材料和图纸采用整体调质路线的履带链轨节；淬火介质、装载和变形控制按具体规格确定。"
+        },
+        {
+          "position": 2,
+          "condition": "踏面/销孔感应淬火",
+          "direction": "感应淬火专机+回火炉",
+          "adoption": "有条件采用",
+          "boundary": "仅适用于图纸明确要求局部表面强化的链轨节；目标区域、硬化层和回火方式按产品图纸确定。"
+        }
+      ]
+    },
+    "engineering-wheel-hub": {
+      "displayWorkpieceName": "工程机械轮毂",
+      "examples": [
+        {
+          "position": 1,
+          "condition": "批量整体正火",
+          "direction": "辊底式连续正火炉",
+          "adoption": "采用",
+          "boundary": "仅作行业常见方向候选；必须按材质牌号、执行标准或图纸、尺寸重量、产量节拍、装炉方式及冷却要求复核。"
+        },
+        {
+          "position": 2,
+          "condition": "批量整体调质",
+          "direction": "辊底式连续调质线",
+          "adoption": "采用",
+          "boundary": "仅作行业常见方向候选；必须按材质牌号、执行标准或图纸、尺寸重量、产量节拍、装炉方式及冷却要求复核。"
+        }
+      ]
+    },
+    "medium-heavy-steel-plate": {
+      "displayWorkpieceName": "中厚钢板",
+      "examples": [
+        {
+          "position": 1,
+          "condition": "正火",
+          "direction": "辊底式板材正火炉",
+          "adoption": "采用",
+          "boundary": "仅作行业常见方向候选；必须按材质牌号、执行标准或图纸、尺寸重量、产量节拍、装炉方式及冷却要求复核。"
+        },
+        {
+          "position": 2,
+          "condition": "高强钢板调质",
+          "direction": "辊底式板材调质线",
+          "adoption": "有条件采用",
+          "boundary": "仅适用于材料标准或交货状态明确要求调质的高强中厚板；普通中厚板不得套用。"
+        }
+      ]
+    },
+    "wear-resistant-steel-plate": {
+      "displayWorkpieceName": "耐磨钢板",
+      "examples": [
+        {
+          "position": 1,
+          "condition": "板材淬火",
+          "direction": "辊底式板材淬火线",
+          "adoption": "采用",
+          "boundary": "须按钢种、板厚、目标硬度、板形和冷却强度确认。"
+        },
+        {
+          "position": 2,
+          "condition": "低温回火",
+          "direction": "辊底式板材回火炉",
+          "adoption": "采用",
+          "boundary": "仅适用于交货状态和材料制度要求淬火后回火的耐磨钢板。"
+        }
+      ]
+    },
+    "stainless-steel-plate": {
+      "displayWorkpieceName": "不锈钢板",
+      "examples": [
+        {
+          "position": 1,
+          "condition": "奥氏体/双相钢固溶",
+          "direction": "不锈钢板固溶线",
+          "adoption": "采用",
+          "boundary": "仅适用于牌号和技术文件要求固溶处理的奥氏体或双相不锈钢板；冷却介质须按牌号、板厚和耐蚀要求确定。"
+        },
+        {
+          "position": 2,
+          "condition": "马氏体钢调质",
+          "direction": "不锈钢板调质线",
+          "adoption": "有条件采用",
+          "boundary": "仅适用于材料牌号与技术文件明确要求淬火回火的马氏体不锈钢板；铁素体不锈钢通常采用退火，应另行判断。"
+        }
+      ]
+    },
+    "aluminum-alloy-plate": {
+      "displayWorkpieceName": "铝合金板",
+      "examples": [
+        {
+          "position": 1,
+          "condition": "固溶+水淬",
+          "direction": "铝板固溶淬火线",
+          "adoption": "采用",
+          "boundary": "须按合金牌号、板厚、允许转移时间和板形要求确定。"
+        },
+        {
+          "position": 2,
+          "condition": "人工时效",
+          "direction": "强制循环时效炉",
+          "adoption": "采用",
+          "boundary": "仅适用于材料制度要求人工时效的可热处理强化铝合金板。"
+        }
+      ]
+    },
+    "aluminum-coil": {
+      "displayWorkpieceName": "铝合金卷",
+      "examples": [
+        {
+          "position": 1,
+          "condition": "成卷退火",
+          "direction": "强制循环批量退火炉",
+          "adoption": "采用",
+          "boundary": "按合金、来料状态、卷径卷重、装卷方式、表面及除油要求，确定炉体结构、循环风和气氛配置。"
+        },
+        {
+          "position": 2,
+          "condition": "开卷固溶/再结晶",
+          "direction": "铝带连续热处理线",
+          "adoption": "采用",
+          "boundary": "须按合金体系确认是固溶处理还是再结晶处理，并按产品规格和产量确认连续线。"
+        }
+      ]
+    },
+    "carbon-steel-coil": {
+      "displayWorkpieceName": "碳钢卷",
+      "examples": [
+        {
+          "position": 1,
+          "condition": "成卷再结晶退火",
+          "direction": "全氢罩式退火炉",
+          "adoption": "采用",
+          "boundary": "仅作行业常见方向候选；必须按材质牌号、执行标准或图纸、尺寸重量、产量节拍、装炉方式及冷却要求复核。"
+        },
+        {
+          "position": 2,
+          "condition": "开卷连续退火",
+          "direction": "连续带钢退火线",
+          "adoption": "采用",
+          "boundary": "仅适用于产品规格、表面要求和产量适合开卷连续处理的项目。"
+        }
+      ]
+    },
+    "seamless-steel-pipe": {
+      "displayWorkpieceName": "无缝钢管",
+      "examples": [
+        {
+          "position": 1,
+          "condition": "整管正火",
+          "direction": "辊底式连续热处理炉",
+          "adoption": "采用",
+          "boundary": "仅作行业常见方向候选；必须按材质牌号、执行标准或图纸、尺寸重量、产量节拍、装炉方式及冷却要求复核。"
+        },
+        {
+          "position": 2,
+          "condition": "整管退火",
+          "direction": "辊底式连续热处理炉",
+          "adoption": "采用",
+          "boundary": "仅作行业常见方向候选；必须按材质牌号、执行标准或图纸、尺寸重量、产量节拍、装炉方式及冷却要求复核。"
+        }
+      ]
+    },
+    "welded-steel-pipe": {
+      "displayWorkpieceName": "焊接钢管",
+      "examples": [
+        {
+          "position": 1,
+          "condition": "整管正火",
+          "direction": "辊底式连续热处理炉",
+          "adoption": "采用",
+          "boundary": "仅作行业常见方向候选；必须按材质牌号、执行标准或图纸、尺寸重量、产量节拍、装炉方式及冷却要求复核。"
+        },
+        {
+          "position": 2,
+          "condition": "整管退火",
+          "direction": "辊底式连续热处理炉",
+          "adoption": "采用",
+          "boundary": "仅作行业常见方向候选；必须按材质牌号、执行标准或图纸、尺寸重量、产量节拍、装炉方式及冷却要求复核。"
+        }
+      ]
+    },
+    "round-steel-bar": {
+      "displayWorkpieceName": "圆钢 / 棒材",
+      "examples": [
+        {
+          "position": 1,
+          "condition": "整棒退火",
+          "direction": "辊底式连续热处理炉",
+          "adoption": "采用",
+          "boundary": "仅作行业常见方向候选；必须按材质牌号、执行标准或图纸、尺寸重量、产量节拍、装炉方式及冷却要求复核。"
+        },
+        {
+          "position": 2,
+          "condition": "整棒正火",
+          "direction": "辊底式连续热处理炉",
+          "adoption": "采用",
+          "boundary": "仅作行业常见方向候选；必须按材质牌号、执行标准或图纸、尺寸重量、产量节拍、装炉方式及冷却要求复核。"
+        }
+      ]
+    },
+    "structural-section-steel": {
+      "displayWorkpieceName": "需热处理型钢",
+      "examples": [
+        {
+          "position": 1,
+          "condition": "有要求时整体正火",
+          "direction": "辊底式连续正火炉",
+          "adoption": "有条件采用",
+          "boundary": "普通热轧态交货型钢不得套用；仅在材料、产品标准或图纸明确要求整体正火，且截面与长度适合辊道输送时采用。"
+        },
+        {
+          "position": 2,
+          "condition": "高强/合金型钢调质",
+          "direction": "辊底式连续调质线",
+          "adoption": "有条件采用",
+          "boundary": "仅适用于材料牌号、交货性能和技术文件明确要求整体调质，且截面、长度和变形要求与连续线兼容的高强或合金型钢。"
+        }
+      ]
+    },
+    "wire-rod-coil": {
+      "displayWorkpieceName": "盘条",
+      "examples": [
+        {
+          "position": 1,
+          "condition": "成卷球化退火",
+          "direction": "保护气氛罩式/井式炉",
+          "adoption": "采用",
+          "boundary": "仅作行业常见方向候选；必须按材质牌号、执行标准或图纸、尺寸重量、产量节拍、装炉方式及冷却要求复核。"
+        },
+        {
+          "position": 2,
+          "condition": "成卷软化/等温退火",
+          "direction": "保护气氛罩式/井式炉",
+          "adoption": "采用",
+          "boundary": "仅作行业常见方向候选；必须按材质牌号、执行标准或图纸、尺寸重量、产量节拍、装炉方式及冷却要求复核。"
+        }
+      ]
+    },
+    "steel-wire-coil": {
+      "displayWorkpieceName": "钢丝卷",
+      "examples": [
+        {
+          "position": 1,
+          "condition": "成卷球化退火",
+          "direction": "保护气氛罩式/井式炉",
+          "adoption": "采用",
+          "boundary": "仅作行业常见方向候选；必须按材质牌号、执行标准或图纸、尺寸重量、产量节拍、装炉方式及冷却要求复核。"
+        },
+        {
+          "position": 2,
+          "condition": "冷拔后再结晶退火",
+          "direction": "保护气氛罩式/井式炉",
+          "adoption": "采用",
+          "boundary": "仅作行业常见方向候选；必须按材质牌号、执行标准或图纸、尺寸重量、产量节拍、装炉方式及冷却要求复核。"
+        }
+      ]
+    },
+    "high-strength-bolts": {
+      "displayWorkpieceName": "高强度螺栓",
+      "examples": [
+        {
+          "position": 1,
+          "condition": "整体调质",
+          "direction": "网带式连续调质线",
+          "adoption": "采用",
+          "boundary": "须按材料牌号、性能等级、脱碳控制、装载密度、淬火介质和回火制度确认。"
+        },
+        {
+          "position": 2,
+          "condition": "电镀后去氢",
+          "direction": "低温去氢炉",
+          "adoption": "采用",
+          "boundary": "仅在材料强度、表面处理和适用标准判定存在氢脆风险并要求去氢时采用。"
+        }
+      ]
+    },
+    "hex-nuts": {
+      "displayWorkpieceName": "螺母",
+      "examples": [
+        {
+          "position": 1,
+          "condition": "整体调质",
+          "direction": "网带式连续调质线",
+          "adoption": "采用",
+          "boundary": "须按材料牌号、性能等级、脱碳控制、装载密度、淬火介质和回火制度确认。"
+        },
+        {
+          "position": 2,
+          "condition": "电镀后去氢",
+          "direction": "低温去氢炉",
+          "adoption": "采用",
+          "boundary": "仅适用于电镀工艺引入氢脆风险、且标准或客户规范要求去氢的钢制螺母。"
+        }
+      ]
+    },
+    "self-drilling-screws": {
+      "displayWorkpieceName": "自攻 / 自钻螺钉",
+      "examples": [
+        {
+          "position": 1,
+          "condition": "碳氮共渗+淬火回火",
+          "direction": "可控气氛网带式热处理线",
+          "adoption": "采用",
+          "boundary": "仅作行业常见方向候选；必须按材质牌号、执行标准或图纸、尺寸重量、产量节拍、装炉方式及冷却要求复核。"
+        },
+        {
+          "position": 2,
+          "condition": "渗碳+淬火回火",
+          "direction": "可控气氛网带式热处理线",
+          "adoption": "采用",
+          "boundary": "仅作行业常见方向候选；必须按材质牌号、执行标准或图纸、尺寸重量、产量节拍、装炉方式及冷却要求复核。"
+        }
+      ]
+    },
+    "steel-pins": {
+      "displayWorkpieceName": "销轴",
+      "examples": [
+        {
+          "position": 1,
+          "condition": "整体调质",
+          "direction": "连续调质线",
+          "adoption": "采用",
+          "boundary": "仅作行业常见方向候选；必须按材质牌号、执行标准或图纸、尺寸重量、产量节拍、装炉方式及冷却要求复核。"
+        },
+        {
+          "position": 2,
+          "condition": "渗碳淬火+低温回火",
+          "direction": "可控气氛连续渗碳线",
+          "adoption": "采用",
+          "boundary": "仅适用于图纸或标准明确要求渗碳的销轴；炉型须按尺寸、载荷和产量复核。"
+        }
+      ]
+    },
+    "chain-components": {
+      "displayWorkpieceName": "链条零件",
+      "examples": [
+        {
+          "position": 1,
+          "condition": "销轴/套筒渗碳",
+          "direction": "网带/铸链板式渗碳线",
+          "adoption": "采用",
+          "boundary": "仅作行业常见方向候选；必须按材质牌号、执行标准或图纸、尺寸重量、产量节拍、装炉方式及冷却要求复核。"
+        },
+        {
+          "position": 2,
+          "condition": "链板整体调质",
+          "direction": "网带/铸链板式调质线",
+          "adoption": "采用",
+          "boundary": "仅作行业常见方向候选；必须按材质牌号、执行标准或图纸、尺寸重量、产量节拍、装炉方式及冷却要求复核。"
+        }
+      ]
+    },
+    "small-coil-springs": {
+      "displayWorkpieceName": "小型螺旋弹簧",
+      "examples": [
+        {
+          "position": 1,
+          "condition": "冷卷后去应力回火",
+          "direction": "网带式连续回火炉",
+          "adoption": "采用",
+          "boundary": "仅作行业常见方向候选；必须按材质牌号、执行标准或图纸、尺寸重量、产量节拍、装炉方式及冷却要求复核。"
+        },
+        {
+          "position": 2,
+          "condition": "整体淬火+回火",
+          "direction": "网带式连续调质线",
+          "adoption": "采用",
+          "boundary": "仅适用于材料和制造路线要求淬火回火的小型弹簧；不能替代冷卷弹簧去应力路线。"
+        }
+      ]
+    }
+  }
+}

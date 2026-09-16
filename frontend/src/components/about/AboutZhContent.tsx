@@ -1,780 +1,431 @@
 import Image from 'next/image';
 import Link from 'next/link';
+import { HiArrowUpRight, HiChevronDoubleRight } from 'react-icons/hi2';
 
 import { JsonLd } from '@/components/JsonLd';
-import { AboutHeroVideo } from '@/components/about/AboutHeroVideo';
-import { QuoteModalButton } from '@/components/lead/QuoteModalButton';
-import { Breadcrumb } from '@/components/layout/Breadcrumb';
-import { absoluteUrl } from '@/lib/seo/metadata';
+import { AboutCompanyHero } from '@/components/about/AboutCompanyHero';
+import {
+  AboutAnchorNav,
+  AboutBoundaryList,
+  AboutCertificateGrid,
+  AboutFaq,
+} from '@/components/about/AboutPageInteractive';
+import { ABOUT_ANCHORS, ABOUT_BOUNDARIES, ABOUT_FAQS } from '@/components/about/about-page-data';
+import { WechatContactButton } from '@/components/lead/WechatContactButton';
+import { getButtonClass } from '@/components/ui/Button';
+import {
+  SUNENG_ISO_CERTIFICATES,
+  SUNENG_PATENT_CERTIFICATES,
+  SUNENG_QUALIFICATION_CERTIFICATES,
+} from '@/constants/certificates';
+import { getBreadcrumbJsonLd } from '@/lib/seo/jsonld';
 import { siteSettings } from '@/mock/siteSettings';
 
+import styles from './AboutZhContent.module.css';
+import homeToolStyles from '@/components/home/HeatTreatmentToolCenter.module.css';
+
 export const ABOUT_ZH_SEO = {
-  title:
-    '关于苏能工业炉｜公司资质、主营业务与业务边界',
+  title: '关于苏能工业炉｜公司简介、制造基地与企业资质',
   description:
-    '江苏苏能工业炉有限公司专注工业炉、热处理炉、配套件与整线交付，具备国家高新技术企业、ISO 9001 质量管理体系认证和 14 项已授权专利，并明确业务边界。',
-  keywords:
-    '苏能工业炉,江苏苏能工业炉有限公司,苏能资质,苏能案例,工业炉制造企业',
-  ogTitle: '江苏苏能工业炉｜资质、主营业务与业务边界',
+    '江苏苏能工业炉有限公司成立于2006年，生产基地位于江苏泰州，提供非标工业炉、热处理生产线及工业炉大修与改造服务。查看制造交付流程、企业资质、公开项目与承接范围，支持预约验厂。',
+  keywords: '苏能工业炉,江苏苏能工业炉有限公司,非标工业炉,热处理生产线,工业炉改造',
+  ogTitle: '关于苏能工业炉｜公司简介、制造基地与企业资质',
   ogDescription:
-    '了解江苏苏能工业炉有限公司的主营业务、资质体系、案例数据和不承接业务边界。',
+    '江苏苏能工业炉有限公司成立于2006年，生产基地位于江苏泰州，提供非标工业炉、热处理生产线及工业炉大修与改造服务。查看制造交付流程、企业资质、公开项目与承接范围，支持预约验厂。',
 } as const;
 
-const sectionClass = 'border-t border-[#e5e8ef] py-10 first:border-t-0 lg:py-14';
-const h2Class = 'text-[26px] font-semibold leading-[1.3] text-[#111827] lg:text-[34px]';
-const h3Class = 'mt-8 text-[20px] font-semibold leading-[1.4] text-[#172033] lg:text-[24px]';
-const paragraphClass = 'mt-5 text-[16px] leading-[1.95] text-[#364152] lg:text-[17px]';
-
-const heroChips = [
-  '江苏泰州',
-  '成立2006',
-  '约14700㎡生产基地（公司自报）',
-  '国家高新技术企业',
-  '非标工业炉定制',
-  '改造与大修',
-];
-
-const statItems = [
-  ['2006', '公司成立'],
-  ['约14700㎡', '生产基地占地（公司自报）'],
-  ['5080万', '注册资本'],
-  ['150+', '工业炉新建与改造项目'],
-  ['国家高新', '技术企业'],
-];
-
-const aboutPhotos = [
+const workflowItems = [
   {
-    src: '/images/about/about-office-interior.jpg',
-    alt: '苏能工业炉研发设计办公区',
-    caption: '办公与研发',
-    className: 'lg:col-span-2 lg:row-span-2',
-    imageClassName: 'aspect-[16/10] lg:min-h-0 lg:flex-1 lg:aspect-auto',
-    sizes: '(min-width: 1024px) 50vw, 100vw',
+    number: '01',
+    title: '需求与方案确认',
+    description: '核对工件、工艺、装料、产能和现场公用条件，把未确定项留在方案阶段处理。',
+    material: '需求清单、初步方案、技术协议',
+    image: '/images/about/about-requirement-office.jpg',
+    alt: '苏能工业炉方案设计与协同办公区',
   },
   {
-    src: '/images/about/about-production-line.jpg',
-    alt: '苏能连续热处理生产线制造车间',
-    caption: '连续生产线制造',
-    className: '',
-    imageClassName: 'aspect-[4/3]',
-    sizes: '(min-width: 1024px) 25vw, 100vw',
+    number: '02',
+    title: '炉体制作与装配',
+    description: '按已确认的结构和工艺条件推进炉体、炉衬、机械机构与关键部件制造。',
+    material: '制造进度、关键节点记录',
+    image: '/images/about/about-furnace-fabrication.jpg',
+    alt: '苏能工业炉炉体制作与装配车间',
   },
   {
-    src: '/images/about/about-furnace-fabrication.jpg',
-    alt: '苏能热处理工业炉炉体制造现场',
+    number: '03',
+    title: '整线集成与联调',
+    description: '将炉体、传动、加热、测温、控制和安全联锁纳入同一设备边界。',
+    material: '电气图纸、投料配置、联调记录',
+    image: '/images/about/about-production-line.jpg',
+    alt: '苏能工业炉生产线装配与配套集成现场',
+  },
+  {
+    number: '04',
+    title: '试炉检查与出厂',
+    description: '围绕制造节点、单机动作、安全联锁和资料齐套性完成出厂前核对。',
+    material: '检查记录、试运行记录',
+    image: '/images/about/about-process-inspection.jpg',
+    alt: '苏能工业炉操作人员进行过程检查与出厂准备',
+  },
+  {
+    number: '05',
+    title: '安装调试与验收',
+    description: '完成设备拆分、防护与发运，按合同范围配合现场安装、调试和验收。',
+    material: '装箱清单、使用文件、验收资料',
+    image: '/images/about/about-furnace-delivery.jpg',
+    alt: '苏能工业炉设备发运现场',
+  },
+] as const;
+
+const deliveryPhotos = [
+  {
+    caption: '需求与方案协同',
+    image: workflowItems[0].image,
+    alt: workflowItems[0].alt,
+  },
+  {
     caption: '炉体制造现场',
-    className: '',
-    imageClassName: 'aspect-[4/3]',
-    sizes: '(min-width: 1024px) 25vw, 100vw',
+    image: workflowItems[1].image,
+    alt: workflowItems[1].alt,
   },
   {
-    src: '/images/about/about-furnace-delivery.jpg',
-    alt: '苏能大型工业炉成套设备发货交付现场',
-    caption: '设备发货交付',
-    className: 'lg:col-span-2',
-    imageClassName: 'aspect-[4/3] lg:min-h-0 lg:flex-1 lg:aspect-auto',
-    sizes: '(min-width: 1024px) 50vw, 100vw',
+    caption: '整线装配现场',
+    image: workflowItems[2].image,
+    alt: workflowItems[2].alt,
   },
   {
-    src: '/images/about/about-staff-dormitory.jpg',
-    alt: '苏能工业炉生产基地员工宿舍',
-    caption: '员工生活',
-    className: 'lg:hidden',
-    imageClassName: 'aspect-[4/3]',
-    sizes: '100vw',
+    caption: '设备发运现场',
+    image: workflowItems[4].image,
+    alt: workflowItems[4].alt,
   },
-];
+] as const;
+
+const capabilityItems = [
+  {
+    title: '单机设备',
+    text: '台车炉、箱式炉、井式炉、网带炉、辊底炉、推杆炉等周期式或连续式工业炉。',
+  },
+  {
+    title: '设备成套',
+    text: '围绕加热、输送、淬火冷却、上下料和节拍联动组织成套设备。',
+  },
+  {
+    title: '配套系统',
+    text: '控制柜、加热元件、燃烧系统、测温、耐火保温、循环风机与冷却系统。',
+  },
+  {
+    title: '大修改造',
+    text: '面向自制设备及部分非苏能品牌工业炉，评估节能、控制、炉衬、搬迁和复产方案。',
+  },
+] as const;
+
+const highTechCertificate = SUNENG_QUALIFICATION_CERTIFICATES.find(
+  (item) => item.id === 'qualification-high-tech-enterprise',
+)!;
+const isoCertificate = SUNENG_ISO_CERTIFICATES.find((item) => item.id === 'iso-9001')!;
+const patentCertificate = SUNENG_PATENT_CERTIFICATES[0];
+const fullCertificateCount =
+  SUNENG_QUALIFICATION_CERTIFICATES.length +
+  SUNENG_ISO_CERTIFICATES.length +
+  SUNENG_PATENT_CERTIFICATES.length;
+
+const certificateCards = [
+  {
+    title: '国家高新技术企业',
+    summary: highTechCertificate.subtitle!,
+    detail: `证书编号：${highTechCertificate.certificateNo}`,
+    image: highTechCertificate.image,
+    alt: highTechCertificate.alt,
+    linkLabel: '查看证书',
+  },
+  {
+    title: 'ISO 9001 质量管理体系',
+    summary: '适用于工业电阻炉、燃气炉的设计与制造',
+    detail: `证书编号：${isoCertificate.certificateNo}`,
+    validUntil: isoCertificate.validUntil,
+    image: isoCertificate.image,
+    alt: isoCertificate.alt,
+    linkLabel: '查看证书',
+  },
+  {
+    title: `${SUNENG_PATENT_CERTIFICATES.length} 项授权专利`,
+    summary: '覆盖电阻炉、燃气热处理炉、固溶生产线等设备方向',
+    detail: '点击查看专利证书代表图',
+    image: patentCertificate.image,
+    alt: patentCertificate.alt,
+    linkLabel: '查看专利证书',
+  },
+] as const;
+
+
+
+const partnerLogos = [
+  {
+    name: '中国恩菲工程技术有限公司',
+    src: '/images/partners/homepage/01-enfi.png',
+    width: 316,
+    height: 160,
+  },
+  {
+    name: '中国联合工程有限公司',
+    src: '/images/partners/homepage/03-cuec.png',
+    width: 384,
+    height: 160,
+  },
+  {
+    name: '中集安瑞环科技股份有限公司',
+    src: '/images/partners/homepage/04-cimc-safeway.png',
+    width: 536,
+    height: 160,
+  },
+  {
+    name: '内蒙古北方重工业集团有限公司',
+    src: '/images/partners/homepage/06-nhi.png',
+    width: 368,
+    height: 160,
+  },
+  {
+    name: '江苏天工科技股份有限公司',
+    src: '/images/partners/homepage/07-tiangong-technology.png',
+    width: 482,
+    height: 160,
+  },
+  {
+    name: '六和轻合金（苏州）有限公司',
+    src: '/images/partners/homepage/11-liuhe-light-alloy.png',
+    width: 427,
+    height: 160,
+  },
+] as const;
 
 const faqJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'FAQPage',
-  mainEntity: [
-    {
-      '@type': 'Question',
-      name: '苏能工业炉是厂家吗?',
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: '是。江苏苏能工业炉有限公司是工业炉设备制造商和改造服务商，提供工业炉、热处理炉和相关生产线的方案设计、制造、安装调试与大修改造；不直接对外提供按件付费的热处理加工服务。',
-      },
+  mainEntity: ABOUT_FAQS.map((item) => ({
+    '@type': 'Question',
+    name: item.question,
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: item.answer,
     },
-    {
-      '@type': 'Question',
-      name: '苏能工业炉主要做什么?',
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: '苏能专业从事工业炉、热处理炉、可控气氛炉、锻造加热炉与工业窑炉的设计、制造、系统集成,以及覆盖多种炉型的大修与技改服务。',
-      },
-    },
-    {
-      '@type': 'Question',
-      name: '非苏能制造的工业炉可以找你们大修吗?',
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: '可以评估。苏能可对苏能自制设备及部分非苏能品牌工业炉提供大修、技改、搬迁复产和节能改造评估；进口炉需结合设备资料、控制系统、备件条件和现场状态综合判断。',
-      },
-    },
-    {
-      '@type': 'Question',
-      name: '苏能目前公开哪些可核实资质?',
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: '苏能工业炉为国家高新技术企业，证书编号 GR202432008987；ISO 9001 质量管理体系认证证书编号 03824Q60289R3S，有效至 2027 年 1 月 11 日；现有 14 项已授权专利。',
-      },
-    },
-    {
-      '@type': 'Question',
-      name: '能对接哪些行业标准?',
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: '苏能可按合同及项目要求实施设备出厂检查、现场冷/热态调试、有效加热区温度均匀性测试和温控系统校验；涉及 AMS2750、CQI-9 或第三方认证时，可配合有资质机构完成测试及整改。具体标准、测试方法和验收口径以项目技术协议为准。',
-      },
-    },
-  ],
+  })),
 };
-
-const businessItems: Array<{
-  title: string;
-  text: string;
-  link?: {
-    href: string;
-    label: string;
-  };
-}> = [
-  {
-    title: '工业炉与热处理装备制造',
-    text: '覆盖周期式炉、连续式炉、可控气氛/保护气氛炉、专用工艺炉、锻造加热炉、工业窑炉等装备类型。真空类特殊炉型可根据项目需求与技术条件单独评估。',
-  },
-  {
-    title: '整线交钥匙工程',
-    text: '提供紧固件/螺栓/弹簧/链条热处理生产线、渗碳淬火生产线、光亮退火生产线、锻造加热生产线等整线交付能力,覆盖从工艺设计、设备制造、配套件供应到现场安装、调试投产的全流程。苏能在大型项目中通常作为工业炉设备分包方，与中国五矿恩菲等工程总承包单位协作完成项目，不直接承接工程总承包业务。',
-  },
-  {
-    title: '工业炉大修与技改服务',
-    text: '服务对象包括苏能自制设备及部分非苏能品牌工业炉，覆盖整炉大修、节能改造、控制系统升级、耐材翻新、加热元件更换、搬迁重装、复产复线。可按合同和项目要求实施温度均匀性测试、温控系统校验及整改；涉及第三方认证时配合有资质机构。进口炉需结合设备资料、控制系统、备件条件和现场状态综合判断。',
-    link: {
-      href: '/zh/service/furnace-renovation-overhaul',
-      label: '工业炉节能改造与热处理炉大修服务',
-    },
-  },
-  {
-    title: '配套件供应',
-    text: 'PLC控制柜、DCS、温控系统、硅碳棒、硅钼棒、电阻带、辐射管、热电偶、耐火保温材料、装出料机构、淬火冷却系统、循环风机等关联部件。',
-  },
-];
-
-const productMatrix = [
-  {
-    title: '周期式工业炉',
-    items: [
-      '井式炉(含井式电阻炉、井式多用炉)',
-      '台车炉',
-      '车底炉',
-      '立式炉',
-      '箱式炉',
-      '罩式炉/钟罩炉',
-      '坑式炉',
-      '多用炉(含密封多用炉、密封箱式多用炉)',
-    ],
-  },
-  {
-    title: '连续式工业炉',
-    items: [
-      '推杆炉',
-      '辊底炉/辊棒炉/辊道炉',
-      '网带炉(含托辊网带炉)',
-      '链板炉/链式炉',
-      '步进炉/步进梁炉',
-      '转底炉',
-      '隧道炉',
-    ],
-  },
-  {
-    title: '可控气氛 / 保护气氛炉',
-    items: [
-      '可控气氛炉',
-      '保护气氛炉',
-      '氮基气氛炉',
-      '光亮退火炉',
-      '全氢退火炉',
-      '罩式退火炉',
-      '辐射管炉(按项目集成方案配置)',
-      '真空类特殊炉型按项目需求与技术条件评估',
-    ],
-  },
-];
-
-const processCapabilities = [
-  [
-    '退火族',
-    '退火、光亮退火、球化退火、去应力退火、等温退火、罩式退火、全氢退火(真空退火等特殊工艺可根据项目评估)',
-  ],
-  ['淬火族', '淬火、表面淬火、整体淬火、等温淬火、分级淬火、油淬、水淬、气淬(真空淬火等特殊工艺可根据项目评估)'],
-  ['回火族', '回火、低温回火、中温回火、高温回火(真空回火等特殊工艺可根据项目评估)'],
-  ['综合热处理', '正火、调质、固溶、时效(含人工时效)'],
-  ['渗碳族', '渗碳、气体渗碳、固体渗碳(低压渗碳工艺可根据项目需求与设备条件评估)'],
-  ['渗氮族', '渗氮、气体渗氮(离子/等离子渗氮、氮势可控渗氮等高端工艺可根据项目需求与设备条件评估)'],
-  ['共渗类', '碳氮共渗、氮碳共渗、软氮化'],
-  [
-    '其他工艺',
-    '渗硼、焊后热处理(PWHT)、消除应力处理、应力消除退火、烧结、钎焊、树脂固化与复合材料固化',
-  ],
-];
-
-const materialItems = [
-  '碳钢',
-  '合金钢',
-  '不锈钢',
-  '模具钢与工模具钢',
-  '铝合金',
-  '铜合金',
-  '钛合金/高温合金/粉末冶金件(按具体材料牌号与工艺需求评估)',
-];
-
-const industries = [
-  ['整机配套', '汽车零部件、工程机械零部件、矿山机械、农机件'],
-  ['通用机械件', '齿轮、轴承、紧固件、螺栓、标准件、五金件、链条、销轴、弹簧'],
-  ['模具与刀具', '模具、模具钢、刀具、工具'],
-  ['锻铸件', '锻件、铸件'],
-  ['承压设备', '压力容器、管道、焊管、油气管材、钻杆、油管'],
-  ['能源装备', '风电主轴、风电法兰、风电齿轮、新能源零部件、石化设备'],
-  ['金属型材', '板、带、线、管、棒(对接钢厂、有色金属带材厂、管材厂)'],
-];
-
-const directionItems = [
-  ['高端装备方向', '重大技术装备、高端装备制造、工业母机'],
-  ['绿色低碳方向', '碳达峰、碳中和、节能降碳、绿色制造、热处理节能改造'],
-  ['数字化方向', '智能制造、数字化车间、工业互联网'],
-  ['政策与行业方向', '公司关注并跟进国家在高端装备国产化、专精特新培育、节能降碳等方向的政策导向，以行业政策与客户需求驱动研发投入'],
-];
-
-const outOfScopeItems = [
-  ['感应加热全系', '感应炉、感应加热炉、中频炉、中频感应、感应淬火、中频淬火、高频淬火'],
-  ['炼钢冶金', '电弧炉、炼钢电弧炉、转炉、平炉、电渣炉、电渣重熔炉、矿热炉、高炉'],
-  [
-    '炼焦及化工热源',
-    '焦炉、焦化炉、干馏炉、裂解炉、化工裂解炉、气化炉、煤气化炉、化工反应炉、反应釜',
-  ],
-  ['建材窑炉中的不做项', '水泥窑、立窑、玻璃窑、玻璃熔窑、日用陶瓷与建材陶瓷烧成窑(注:工业陶瓷与特种陶瓷烧成窑属业务范围内)'],
-  ['工业锅炉', '锅炉、工业锅炉、蒸汽锅炉'],
-  ['铸造熔化', '冲天炉、化铁炉'],
-  ['焚烧设备', '焚烧炉、垃圾焚烧炉'],
-  ['民用产品', '厨房灶具、取暖炉、微波炉、家用烤箱、燃气壁挂炉、燃气热水器'],
-  ['燃烧器单件标', '燃烧器仅随整炉/整线配套供货'],
-  ['工程总承包业务', '苏能不承接工程总承包业务，在大型项目中通常作为工业炉设备分包方，与中国五矿恩菲等工程总承包单位协作完成项目。'],
-  ['热处理加工服务', '苏能是工业炉设备制造商和改造服务商，不直接对外提供按件付费的热处理加工服务。如客户需要热处理加工服务，可联系热处理服务行业的专业企业。'],
-  ['特殊工艺认证业务', '项目涉及 AMS 2750 / Nadcap / CQI-9 等航空、国防或汽车主机厂供应链特殊工艺认证要求时，认证资质匹配需在商务沟通阶段确认。'],
-];
-
-const faqItems = [
-  [
-    'Q0:苏能工业炉是厂家吗?',
-    '是。江苏苏能工业炉有限公司是工业炉设备制造商和改造服务商，提供工业炉、热处理炉和相关生产线的方案设计、制造、安装调试与大修改造；不直接对外提供按件付费的热处理加工服务。',
-  ],
-  [
-    'Q1:苏能工业炉主要做什么?',
-    '苏能专业从事工业炉、热处理炉、可控气氛炉、锻造加热炉与工业窑炉的设计、制造、系统集成,以及覆盖多种炉型的大修与技改服务。覆盖电阻式与燃气式两大加热方式,服务于热处理、锻造加热、工业干燥/固化、窑炉烧成/焙烧四大工序场景。',
-  ],
-  [
-    'Q2:你们做不做感应炉(感应加热设备)?',
-    '不做。感应加热全系(感应炉、中频炉、感应淬火等)不在我们的业务范围内。',
-  ],
-  [
-    'Q3:非苏能制造的工业炉,可以找你们大修吗?',
-    '可以。苏能大修与技改业务覆盖自制设备及部分非苏能品牌工业炉，涵盖周期式炉、连续式炉、可控气氛/保护气氛炉、专用工艺炉、锻造加热炉、工业窑炉等炉型。进口炉需结合设备资料、控制系统、备件条件和现场状态综合判断。',
-  ],
-  [
-    'Q4:你们能做整线交钥匙工程吗?',
-    '可以。具备紧固件/螺栓/弹簧/链条热处理生产线、渗碳淬火生产线、光亮退火生产线、锻造加热生产线等整线交付能力。',
-  ],
-  [
-    'Q5:能对接哪些行业标准?',
-    '苏能可按合同及项目要求实施设备出厂检查、现场冷/热态调试、有效加热区温度均匀性测试和温控系统校验；涉及 AMS2750、CQI-9 或第三方认证时，可配合有资质机构完成测试及整改。具体标准、测试方法和验收口径以项目技术协议为准。',
-  ],
-  [
-    'Q6:服务过哪些行业?',
-    '苏能服务于汽车零部件、工程机械、矿山机械、农机、紧固件、齿轮、轴承、模具、刀具、锻铸件、压力容器、油气管材、风电、新能源、有色金属深加工、钢材深加工等主流制造行业。同时对接钢厂、有色金属带材厂、管材厂等型材客户，承接板、带、线、管、棒材的热处理装备配套。',
-  ],
-  [
-    'Q7:能不能只买你们的配套件?',
-    '可以。供应工业炉控制系统、加热元件(硅碳棒/硅钼棒/电阻带/辐射管)、热电偶与测温系统、耐火保温材料、装出料机构、淬火冷却系统、循环风机等;但燃烧器仅随整炉/整线配套供货,不承接燃烧器单件标。',
-  ],
-];
-
-function TermList({ items }: { items: string[] }) {
-  return (
-    <ul className="mt-5 flex flex-wrap gap-2">
-      {items.map((item) => (
-        <li
-          key={item}
-          className="rounded-[6px] border border-[#dce3ee] bg-[#f8fafc] px-3 py-2 text-[14px] leading-[1.45] text-[#243044]"
-        >
-          {item}
-        </li>
-      ))}
-    </ul>
-  );
-}
-
-function LabeledList({ items }: { items: string[][] }) {
-  return (
-    <ul className="mt-6 grid gap-3">
-      {items.map(([label, text]) => (
-        <li
-          key={label}
-          className="rounded-[8px] border border-[#e1e7f0] bg-white px-4 py-4 text-[15px] leading-[1.85] text-[#364152]"
-        >
-          <strong className="font-semibold text-[#111827]">{label}:</strong> {text}
-        </li>
-      ))}
-    </ul>
-  );
-}
-
-function PhotoCard({
-  src,
-  alt,
-  caption,
-  className = '',
-  imageClassName = 'aspect-[4/3]',
-  sizes = '100vw',
-}: {
-  src: string;
-  alt: string;
-  caption: string;
-  className?: string;
-  imageClassName?: string;
-  sizes?: string;
-}) {
-  return (
-    <figure className={`group flex flex-col overflow-hidden rounded-[8px] border border-[#e1e7f0] bg-white ${className}`}>
-      <div className={`relative overflow-hidden bg-[#edf1f6] ${imageClassName}`}>
-        <Image
-          src={src}
-          alt={alt}
-          fill
-          sizes={sizes}
-          className="object-cover transition duration-300 group-hover:scale-[1.02]"
-        />
-      </div>
-      <figcaption className="flex min-h-[52px] items-center border-t border-[#eef2f7] px-4 py-3 text-[15px] font-semibold leading-[1.35] text-[#172033]">
-        {caption}
-      </figcaption>
-    </figure>
-  );
-}
 
 export function AboutZhContent() {
   return (
-    <>
-      <header className="border-b border-[#e5e8ef] bg-white">
-        <div className="mx-auto max-w-[1660px] px-6 pt-8 lg:px-[86px] lg:pt-10">
-          <Breadcrumb
-            locale="zh"
-            tone="dark"
-            className="mb-8 text-[13px]"
-            items={[
-              { label: '关于苏能', href: '/zh/about' },
-              { label: '公司简介' },
-            ]}
-          />
-          <div className="grid overflow-hidden rounded-[8px] border border-[#e1e7f0] bg-[#101828] shadow-[0_24px_70px_rgba(16,24,40,0.14)] lg:min-h-[540px] lg:grid-cols-[minmax(0,1fr)_303.75px] xl:min-h-[600px] xl:grid-cols-[minmax(0,1fr)_337.5px] 2xl:min-h-[640px] 2xl:grid-cols-[minmax(0,1fr)_360px]">
-            <div className="relative z-10 px-6 py-8 text-white md:px-9 md:py-10 lg:flex lg:items-center lg:px-12 lg:py-14 xl:px-14 2xl:px-16">
-              <div className="max-w-[980px]">
-                <p className="text-[13px] font-semibold uppercase tracking-[0.24em] text-white/60">
-                  About Suneng
-                </p>
-                <h1 className="mt-4 text-[36px] font-semibold leading-[1.16] lg:text-[56px]">
-                  关于苏能工业炉
-                </h1>
-                <p className="mt-6 text-[17px] leading-[1.9] text-white/82 lg:text-[19px]">
-                  苏能工业炉是一家专注<strong>工业炉单机、配套件与整线交钥匙工程</strong>的
-                  <strong>国家高新技术企业</strong>,深耕
-                  <strong>工业加热与热处理装备</strong>的设计、制造与系统集成,业务覆盖
-                  <strong>电阻式与燃气式工业炉</strong>的主要产品体系,为客户提供从工艺方案到整线落地的
-                  <strong>一体化解决方案</strong>。
-                </p>
-                <div className="mt-6 flex flex-wrap gap-2">
-                  {heroChips.map((item) => (
-                    <span
-                      key={item}
-                      className="rounded-[4px] border border-white/16 bg-white/8 px-3 py-2 text-[13px] font-semibold leading-none text-white/82"
-                    >
-                      {item}
-                    </span>
-                  ))}
-                </div>
-                <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-                  <QuoteModalButton
-                    className="inline-flex min-h-[44px] items-center justify-center rounded-[4px] cta-primary px-5 text-[15px] font-semibold text-white transition"
-                  />
-                  <Link
-                    href="/zh/products"
-                    className="inline-flex min-h-[44px] items-center justify-center rounded-[4px] border border-white/36 px-5 text-[15px] font-semibold text-white transition hover:bg-white/10"
-                  >
-                    查看产品中心
-                  </Link>
-                </div>
-              </div>
-            </div>
-            <AboutHeroVideo />
-          </div>
-        </div>
-      </header>
+    <div className={styles.page}>
+      <JsonLd
+        id="about-zh-page-jsonld"
+        data={[
+          getBreadcrumbJsonLd([
+            { name: '首页', url: '/zh' },
+            { name: '关于苏能', url: '/zh/about' },
+          ]),
+          faqJsonLd,
+        ]}
+      />
 
-      <div className="mx-auto max-w-[1660px] px-6 lg:px-[86px]">
-        <section className="py-8 lg:py-10" aria-label="苏能工业炉真实数据">
-          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
-            {statItems.map(([value, label]) => (
-              <div key={label} className="rounded-[8px] border border-[#e1e7f0] bg-white p-5">
-                <p className="text-[30px] font-semibold leading-none lg:text-[36px]">{value}</p>
-                <p className="mt-3 text-[14px] font-semibold text-[#364152]">{label}</p>
-              </div>
-            ))}
-          </div>
-        </section>
+      <AboutAnchorNav items={ABOUT_ANCHORS} />
 
-        <section className="border-t border-[#e5e8ef] py-10 lg:py-14" aria-labelledby="real-factory">
-          <div className="grid gap-6 lg:grid-cols-[0.72fr_1.28fr] lg:items-end">
-            <div>
-              <p className="text-[13px] font-semibold uppercase tracking-[0.22em]">
-                Manufacturing Site
-              </p>
-              <h2 id="real-factory" className={`${h2Class} mt-3`}>
-                真实生产基地与制造现场
-              </h2>
-              <p className="mt-4 text-[16px] leading-[1.85] text-[#4a5568]">
-                页面图片来自苏能生产基地、制造车间、办公研发区与设备交付现场，用于呈现工业炉制造的真实环境和交付链条。
-              </p>
-            </div>
-            <div className="rounded-[8px] border border-[#e1e7f0] bg-[#fbfcfe] p-5 text-[14px] leading-[1.85] text-[#364152]">
-              从厂区、产线、炉体制造到发货交付，苏能围绕非标工业炉的结构设计、工艺匹配、装配制造和现场服务组织项目。
-            </div>
-          </div>
-          <div className="mt-7 grid gap-4 lg:grid-cols-4 lg:auto-rows-[280px]">
-            {aboutPhotos.map((photo) => (
-              <PhotoCard key={photo.src} {...photo} />
-            ))}
-          </div>
-        </section>
-
-        <section className={sectionClass} aria-labelledby="about-overview">
-          <h2 id="about-overview" className={h2Class}>
-            企业概况
-          </h2>
-          <p className={paragraphClass}>
-            苏能工业炉成立于<strong>2006年</strong>,坐落于江苏省泰州市姜堰区张甸蔡官工业区,
-            <strong>注册资本5080万元</strong>,公司自报生产基地占地面积约<strong>14700㎡</strong>。
-            公司拥有覆盖方案设计、机械制造、电气控制、安装调试和售后服务的专业团队，为客户提供
-            <strong>工业炉单机设备、配套件、整线交钥匙工程</strong>,以及
-            <strong>自制设备及部分非苏能品牌工业炉的大修与技改评估</strong>服务,具备
-            <strong>非标工业炉方案设计与制造</strong>能力。
-          </p>
-          <p className={paragraphClass}>
-            苏能工业炉广泛服务于<strong>汽车零部件、工程机械</strong>
-            、矿山机械、农机、紧固件、齿轮、轴承、模具、刀具、锻铸件、压力容器、油气管材、
-            <strong>风电、新能源、有色金属深加工、钢材深加工</strong>等主流制造行业。
-            针对符合业务边界的细分场景，苏能可基于实际工艺与产能需求,提供从工艺方案设计到设备制造、安装调试、
-            <strong>整线落地的解决方案</strong>。
-          </p>
-        </section>
-
-        <section className={sectionClass} aria-labelledby="core-business">
-          <h2 id="core-business" className={h2Class}>
-            我们做什么:核心业务体系
-          </h2>
-          <p className={paragraphClass}>
-            苏能工业炉围绕<strong>“单机 + 配套 + 整线 + 服务”</strong>四层能力,为客户构建完整业务体系:
-          </p>
-          <ol className="mt-7 grid gap-4 lg:grid-cols-2">
-            {businessItems.map((item, index) => (
-              <li
-                key={item.title}
-                className="rounded-[8px] border border-[#e1e7f0] bg-[#fbfcfe] p-5"
-              >
-                <h3 className="text-[18px] font-semibold leading-[1.5] text-[#111827]">
-                  {index + 1}. {item.title}
-                </h3>
-                <p className="mt-3 text-[15px] leading-[1.85] text-[#364152]">{item.text}</p>
-                {item.link ? (
-                  <a
-                    href={item.link.href}
-                    className="mt-4 inline-flex text-[15px] font-semibold text-[var(--color-accent)] underline-offset-4 hover:underline"
-                  >
-                    {item.link.label}
-                  </a>
-                ) : null}
-              </li>
-            ))}
-          </ol>
-        </section>
-
-        <section className={sectionClass} aria-labelledby="product-matrix">
-          <h2 id="product-matrix" className={h2Class}>
-            炉型产品矩阵
-          </h2>
-          {productMatrix.map((group) => (
-            <section key={group.title} aria-labelledby={`matrix-${group.title}`}>
-              <h3 id={`matrix-${group.title}`} className={h3Class}>
-                {group.title}
-              </h3>
-              <TermList items={group.items} />
-            </section>
-          ))}
-
-          <section aria-labelledby="matrix-special">
-            <h3 id="matrix-special" className={h3Class}>
-              专用与工艺导向炉
-            </h3>
-            <LabeledList
-              items={[
-                [
-                  '干燥与烘干类',
-                  '干燥炉、烘干炉、工业烘箱、工业烤箱、鼓风干燥箱、热风循环烘箱、高温烘箱',
-                ],
-                [
-                  '固化类',
-                  '固化炉、复合材料固化炉、树脂固化炉、烤漆固化炉、油漆固化炉、涂层固化炉',
-                ],
-                [
-                  '专用工艺类',
-                  '烧结炉、钎焊炉、焊后热处理炉(PWHT)、盐浴炉、硝盐炉、硝盐等温炉、马弗炉、球化退火炉、高温电阻炉',
-                ],
-              ]}
-            />
-          </section>
-
-          <section aria-labelledby="matrix-forging">
-            <h3 id="matrix-forging" className={h3Class}>
-              锻造加热炉
-            </h3>
-            <p className={paragraphClass}>锻造加热炉、锻前加热炉,配套锻造加热生产线整线方案。</p>
-          </section>
-
-          <section aria-labelledby="matrix-kiln">
-            <h3 id="matrix-kiln" className={h3Class}>
-              工业窑炉
-            </h3>
-            <p className={paragraphClass}>
-              隧道窑、梭式窑、辊道窑、回转窑(用于工业陶瓷、特种陶瓷烧成、耐火材料烧成、粉体焙烧、特种材料烧成等工业场景,不涉及日用陶瓷与建材陶瓷烧成窑)。
-            </p>
-          </section>
-        </section>
-
-        <section className={sectionClass} aria-labelledby="process-capability">
-          <h2 id="process-capability" className={h2Class}>
-            热处理工艺能力
-          </h2>
-          <LabeledList items={processCapabilities} />
-        </section>
-
-        <section className={sectionClass} aria-labelledby="materials">
-          <h2 id="materials" className={h2Class}>
-            材料处理能力
-          </h2>
-          <TermList items={materialItems} />
-        </section>
-
-        <section className={sectionClass} aria-labelledby="industries">
-          <h2 id="industries" className={h2Class}>
-            服务行业与典型客户
-          </h2>
-          <p className="mt-4 text-[13px] leading-[1.7] text-[#667085] md:hidden">左右滑动查看完整表格</p>
-          <div className="mt-3 overflow-x-auto rounded-[8px] border border-[#dfe6f0] [-webkit-overflow-scrolling:touch] md:mt-7">
-            <table className="min-w-[760px] w-full border-collapse bg-white text-left">
-              <caption className="bg-[#f8fafc] px-5 py-4 text-left text-[15px] font-semibold text-[#172033]">
-                苏能工业炉服务行业与典型产品/客户
-              </caption>
-              <thead className="bg-[#172033] text-white">
-                <tr>
-                  <th scope="col" className="w-[220px] px-5 py-4 text-[15px] font-semibold">
-                    行业类别
-                  </th>
-                  <th scope="col" className="px-5 py-4 text-[15px] font-semibold">
-                    典型产品/客户
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {industries.map(([category, customer]) => (
-                  <tr key={category} className="border-t border-[#e5e8ef]">
-                    <th
-                      scope="row"
-                      className="px-5 py-4 align-top text-[15px] font-semibold text-[#172033]"
-                    >
-                      {category}
-                    </th>
-                    <td className="px-5 py-4 text-[15px] leading-[1.8] text-[#364152]">
-                      {customer}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </section>
-
-        <section className={sectionClass} aria-labelledby="standards">
-          <h2 id="standards" className={h2Class}>
-            资质与标准
-          </h2>
-
-          <section aria-labelledby="standards-national">
-            <h3 id="standards-national" className={h3Class}>
-              国家级资质认定
-            </h3>
-            <LabeledList
-              items={[
-                ['国家高新技术企业', '2024年认定，证书编号 GR202432008987'],
-              ]}
-            />
-          </section>
-
-          <section aria-labelledby="standards-ip">
-            <h3 id="standards-ip" className={h3Class}>
-              知识产权
-            </h3>
-            <LabeledList
-              items={[
-                ['已授权专利', '累计获得 14 项已授权专利'],
-              ]}
-            />
-          </section>
-
-          <section aria-labelledby="standards-iso">
-            <h3 id="standards-iso" className={h3Class}>
-              体系认证
-            </h3>
-            <LabeledList
-              items={[
-                ['ISO 9001', '质量管理体系认证，证书编号 03824Q60289R3S，有效至 2027 年 1 月 11 日'],
-              ]}
-            />
-          </section>
-
-          <section aria-labelledby="standards-industry">
-            <h3 id="standards-industry" className={h3Class}>
-              行业标准
-            </h3>
-            <LabeledList
-              items={[
-                ['GB/T 30822', '《工业燃气加热装置安全要求》等热处理与工业炉行业国家标准,严格执行'],
-                ['测试与校验', '可按合同实施温度均匀性测试和温控系统校验；涉及第三方认证时配合有资质机构'],
-              ]}
-            />
-          </section>
-
-          <p className={paragraphClass}>
-            公司持续投入研发与质量管控，以<strong>“国家高新技术企业 + ISO 9001 + 14 项已授权专利”</strong>作为当前可核实的资质与技术成果支撑。
-          </p>
-          <a
-            href={absoluteUrl('/zh/strength/honors')}
-            className="mt-4 inline-flex text-[15px] font-semibold text-[var(--color-accent)] underline-offset-4 hover:underline"
-          >
-            查看荣誉资质与专利证书 →
-          </a>
-        </section>
-
-        <section className={sectionClass} aria-labelledby="directions">
-          <h2 id="directions" className={h2Class}>
-            技术与产业方向
-          </h2>
-          <LabeledList items={directionItems} />
-        </section>
-
-        <section className={sectionClass} aria-labelledby="boundaries">
-          <h2 id="boundaries" className={h2Class}>
-            业务边界(我们不做什么)
-          </h2>
-          <LabeledList items={outOfScopeItems} />
-        </section>
-
-        <section
-          className={sectionClass}
-          aria-labelledby="faq"
-          itemScope
-          itemType="https://schema.org/FAQPage"
-        >
-          <h2 id="faq" className={h2Class}>
-            常见问题 FAQ
-          </h2>
-          <div className="mt-7 grid gap-3">
-            {faqItems.map(([question, answer]) => (
-              <details
-                key={question}
-                className="rounded-[8px] border border-[#dfe6f0] bg-white px-5 py-4"
-                itemScope
-                itemProp="mainEntity"
-                itemType="https://schema.org/Question"
-              >
-                <summary
-                  className="cursor-pointer text-[16px] font-semibold leading-[1.6] text-[#111827]"
-                  itemProp="name"
-                >
-                  {question}
-                </summary>
-                <div
-                  className="mt-4 border-t border-[#edf1f6] pt-4"
-                  itemScope
-                  itemProp="acceptedAnswer"
-                  itemType="https://schema.org/Answer"
-                >
-                  <p className="text-[15px] leading-[1.9] text-[#364152]" itemProp="text">
-                    {answer}
-                  </p>
-                </div>
-              </details>
-            ))}
-          </div>
-        </section>
-
-        <section className={`${sectionClass} pb-14 lg:pb-20`} aria-labelledby="contact">
-          <h2 id="contact" className={h2Class}>
-            联系我们
-          </h2>
-          <div className="mt-7 overflow-hidden rounded-[8px] border border-[#e1e7f0] bg-[#101828]">
-            <div className="grid gap-0 lg:grid-cols-[1.05fr_0.95fr]">
-              <div className="p-6 text-white md:p-8">
-                <p className="text-[18px] font-semibold leading-[1.6]">
-                  将工件、温度、工艺、产能和现场条件提交给苏能，技术人员可先做炉型方向和配置边界判断。
-                </p>
-                <div className="mt-6 flex flex-col gap-3 sm:flex-row">
-                  <QuoteModalButton
-                    className="inline-flex min-h-[44px] items-center justify-center rounded-[4px] cta-primary px-5 text-[15px] font-semibold text-white transition"
-                  />
-                  <Link
-                    href="/zh/contact"
-                    className="inline-flex min-h-[44px] items-center justify-center rounded-[4px] border border-white/36 px-5 text-[15px] font-semibold text-white transition hover:bg-white/10"
-                  >
-                    联系苏能工业炉
-                  </Link>
-                </div>
-              </div>
-              <address className="grid gap-0 border-t border-white/10 bg-white/5 not-italic lg:border-l lg:border-t-0">
-                <div className="border-b border-white/10 p-6 md:p-8">
-                  <p className="text-[14px] font-semibold text-white/60">电话 / 微信</p>
-                  <a
-                    className="mt-2 block text-[20px] font-semibold text-white"
-                    href="tel:+8613052986814"
-                  >
-                    {siteSettings.salesPhone}
-                  </a>
-                </div>
-                <div className="p-6 md:p-8">
-                  <p className="text-[14px] font-semibold text-white/60">邮箱</p>
-                  <a
-                    className="mt-2 block break-words text-[20px] font-semibold text-white"
-                    href={`mailto:${siteSettings.email}`}
-                  >
-                    {siteSettings.email}
-                  </a>
-                </div>
-              </address>
-            </div>
-          </div>
-        </section>
+      <AboutCompanyHero className={styles.sectionAnchor} />
+      <div className={styles.container}>
+        <p className={styles.visitStrip} data-company-facts>
+          <span>江苏苏能工业炉有限公司成立于 2006 年，注册资本 5080 万元，累计开展 1000+ 工业炉新建与改造项目；生产基地为公司自报约 14700㎡，位于{siteSettings.address.zh}。具体设备性能按项目工况确认。</span>
+        </p>
       </div>
 
-      <JsonLd id="about-zh-faq-jsonld" data={faqJsonLd} />
-    </>
+
+      <section
+        id="delivery"
+        className={`${styles.section} ${styles.sectionAnchor}`}
+        aria-labelledby="delivery-title"
+      >
+        <div className={styles.container}>
+          <div className={styles.sectionHeading}>
+            <div>
+              <h2 id="delivery-title">从需求确认到安装验收的 5 个环节</h2>
+              <p>项目按已确认的条件和节点资料往前推进，方便客户核对进度、接口和验收范围。</p>
+            </div>
+          </div>
+
+          <div className={styles.workflowGrid} data-about-layout="workflow">
+            {workflowItems.map((item) => (
+              <article key={item.number} className={styles.workflowCard}>
+                <div className={styles.workflowBody}>
+                  <div className={styles.stepHeader}>
+                    <span className={styles.stepNumber}>{item.number}</span>
+                    <span aria-hidden="true" />
+                  </div>
+                  <h3>{item.title}</h3>
+                  <p>{item.description}</p>
+                  <div className={styles.nodeMaterial}>
+                    <strong>交付资料</strong>
+                    <span>{item.material}</span>
+                  </div>
+                </div>
+              </article>
+            ))}
+          </div>
+
+          <div className={styles.deliveryPhotoGrid} data-about-layout="delivery-photos">
+            {deliveryPhotos.map((photo) => (
+              <figure key={photo.caption} className={styles.deliveryPhoto}>
+                <div>
+                  <Image
+                    src={photo.image}
+                    alt={photo.alt}
+                    fill
+                    loading="lazy"
+                    sizes="(max-width: 767px) calc((100vw - 56px) / 2), 282px"
+                  />
+                </div>
+                <figcaption>{photo.caption}</figcaption>
+              </figure>
+            ))}
+          </div>
+
+          <div className={styles.visitStrip}>
+            <span>泰州姜堰生产基地 · {siteSettings.address.zh}</span>
+          </div>
+        </div>
+      </section>
+
+      <section
+        id="scope"
+        className={`${styles.sectionMuted} ${styles.sectionAnchor}`}
+        aria-labelledby="scope-title"
+      >
+        <div className={styles.container}>
+          <div className={styles.sectionHeading}>
+            <div>
+              <h2 id="scope-title">我们做什么，也明确不做什么</h2>
+              <p>先按设备范围判断是否匹配，再结合具体工况确认方案和供货边界。</p>
+            </div>
+          </div>
+
+          <div className={styles.scopeGrid}>
+            <div className={styles.capabilityGrid} data-about-layout="capabilities">
+              {capabilityItems.map((item, index) => (
+                <article key={item.title} className={styles.capabilityCard}>
+                  <span className={styles.capabilityNumber}>
+                    {String(index + 1).padStart(2, '0')}
+                  </span>
+                  <div>
+                    <h3>{item.title}</h3>
+                    <p>{item.text}</p>
+                  </div>
+                </article>
+              ))}
+            </div>
+            <AboutBoundaryList items={ABOUT_BOUNDARIES} />
+          </div>
+        </div>
+      </section>
+
+      <section
+        id="qualifications"
+        className={`${styles.section} ${styles.sectionAnchor}`}
+        aria-labelledby="qualifications-title"
+      >
+        <div className={styles.container}>
+          <div className={styles.sectionHeading}>
+            <div>
+              <h2 id="qualifications-title">企业资质与授权专利</h2>
+              <p>集中展示当前可核验的企业资质、体系认证与已授权专利。</p>
+            </div>
+            <Link
+              href="/zh/strength/honors"
+              className={homeToolStyles.allArticlesLink}
+            >
+              查看全部
+              <HiChevronDoubleRight aria-hidden="true" />
+            </Link>
+          </div>
+
+          <AboutCertificateGrid cards={[...certificateCards]} />
+          <p className={styles.srOnly}>
+            完整资料共 {fullCertificateCount} 张，包含企业资质、质量管理体系证书和授权专利。
+          </p>
+        </div>
+      </section>
+
+      <section
+        id="projects"
+        className={`${styles.sectionMuted} ${styles.sectionAnchor}`}
+        aria-labelledby="projects-title"
+      >
+        <div className={styles.container}>
+          <h2 id="projects-title" className={styles.srOnly}>项目合作</h2>
+
+          <div className={styles.partnerStrip} aria-label="部分合作单位">
+            <div className={styles.partnerIntro}>
+              <strong>部分合作单位</strong>
+              <span>不同项目的合作形式和供货范围可能不同</span>
+            </div>
+            <ul
+              className={styles.partnerLogos}
+              data-about-layout="partner-logos"
+              aria-label="合作单位标志"
+            >
+              {partnerLogos.map((partner) => (
+                <li key={partner.src} className={styles.partnerLogo}>
+                  <Image
+                    src={partner.src}
+                    alt={partner.name}
+                    title={partner.name}
+                    width={partner.width}
+                    height={partner.height}
+                    loading="lazy"
+                    sizes="112px"
+                  />
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section
+        id="faq"
+        className={`${styles.faqSection} ${styles.sectionAnchor}`}
+        aria-labelledby="faq-title"
+      >
+        <div className={`${styles.container} ${styles.faqLayout}`}>
+          <div className={styles.sectionHeading}>
+            <div>
+              <h2 id="faq-title">您关心的，我们说清楚。</h2>
+              <p>厂家身份、承接范围与项目对接，从这几个问题开始了解。</p>
+            </div>
+          </div>
+
+          <AboutFaq items={ABOUT_FAQS} />
+
+          <div className={styles.faqContact}>
+            <p>
+              还有具体问题？<span>提供工况，让技术人员帮您初步核对。</span>
+            </p>
+            <div className={styles.faqContactAction}>
+              <WechatContactButton label="联系业务顾问" className={styles.faqContactButton} />
+              <HiArrowUpRight aria-hidden="true" />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className={styles.inquirySection} aria-labelledby="inquiry-title">
+        <div className={`${styles.container} ${styles.contactPanel}`}>
+          <div>
+            <h2 id="inquiry-title">发工况，获取初步方向与报价资料清单</h2>
+            <p className={styles.contactDescription}>
+              提交工件、材质、温度、工艺曲线、装料方式、产能节拍和现场条件，技术人员可先做方向与配置边界判断。
+            </p>
+          </div>
+          <WechatContactButton
+            label="提交工况资料"
+            className={`${getButtonClass('primary', 'lg')} ${styles.primaryButton}`}
+          />
+        </div>
+      </section>
+    </div>
   );
 }

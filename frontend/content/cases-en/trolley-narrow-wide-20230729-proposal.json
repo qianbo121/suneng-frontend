@@ -1,0 +1,13 @@
+{
+  "id": "trolley-narrow-wide-20230729-proposal",
+  "slug": "trolley-four-zone-spatial-layout-comparison-proposal",
+  "number": 55,
+  "title": "Both bogie-hearth furnace proposals specify four control zones: what differs in the configurations?",
+  "summary": "Two proposals specifying four temperature-control zones do not necessarily divide the heating space in the same way. In two bogie-hearth furnace documents from Jiangsu Suneng Industrial Furnace Co., Ltd., dated 29 July 2023, the heating-element sections respectively describe “four zones from front to rear” and “four zones across front, rear, left and right”. Buyers and process engineers should match those directions to the loading drawing and measurement locations before deciding what each zone covers.",
+  "body": "trolley-narrow-wide-20230729-proposal.md",
+  "sourceFingerprint": "c2ef60b64efaf08e725084973f81f6100c6592f15c8c541f1152ed94404549e0",
+  "translationStatus": "complete",
+  "translatedAt": "2026-09-12",
+  "coverAlt": "",
+  "coverCaption": ""
+}

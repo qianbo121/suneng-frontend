@@ -1,31 +1,42 @@
-import Image from 'next/image';
+import { getNewsSummary } from '@/lib/news-summary';
 import Link from 'next/link';
 import { notFound, permanentRedirect } from 'next/navigation';
 import { HiCalendarDays } from 'react-icons/hi2';
 
 import { JsonLd } from '@/components/JsonLd';
-import { QuoteModalButton } from '@/components/lead/QuoteModalButton';
 import { NewsBreadcrumbBar } from '@/components/news/NewsBreadcrumbBar';
 import { NewsArticleContent } from '@/components/news/NewsArticleContent';
+import { NewsContinueReading } from '@/components/news/NewsContinueReading';
 import { NewsViewPing } from '@/components/news/NewsViewPing';
 import {
   FALLBACK_NEWS_DETAIL,
+  FALLBACK_NEWS_ITEMS,
   FALLBACK_NEWS_SLUGS,
   NEWS_DETAIL_LABEL,
   NEWS_LABEL,
 } from '@/constants/news';
+import { getNewsList } from '@/lib/api/news';
+import { getNewsDecisionDisplayMeta } from '@/lib/news-decision-center';
+import { selectNewsContinueReadingItems } from '@/lib/news-continue-reading';
 import {
   formatNewsDisplayDate,
   getNewsDetailPageData,
+  mapNewsCard,
   normalizeNewsHtml,
   resolveNewsImage,
 } from '@/lib/news';
 import { getNewsContentModifiedTime } from '@/lib/news-dates';
 import { getArticleJsonLd, getBreadcrumbJsonLd } from '@/lib/seo/jsonld';
 import { buildMetadata } from '@/lib/seo/metadata';
-import { getCanonicalNewsSlug, hasPublishableEnglishNews } from '@/lib/news-routing';
+import {
+  getCanonicalNewsSlug,
+  getPublicNewsRedirectSlug,
+  hasPublishableEnglishNews,
+} from '@/lib/news-routing';
 import { getNewsRelatedLinks } from '@/lib/news-related';
 import { Locale } from '@/types/site';
+
+import styles from './NewsDetailPage.module.css';
 
 type NewsDetailPageProps = {
   params: Promise<{
@@ -43,16 +54,12 @@ export const revalidate = 0;
 export async function generateMetadata({ params }: NewsDetailPageProps) {
   const { locale, slug } = await params;
   const currentLocale = (locale === 'en' ? 'en' : 'zh') as Locale;
-  const canonicalSlug = getCanonicalNewsSlug(slug);
+  const lookupSlug = getCanonicalNewsSlug(slug);
 
-  if (canonicalSlug !== slug) {
-    permanentRedirect(`/${currentLocale}/news/${canonicalSlug}`);
-  }
-
-  const { article: apiArticle, error } = await getNewsDetailPageData(slug);
-  const article = apiArticle || (
-    currentLocale === 'zh' && FALLBACK_NEWS_SLUGS.has(slug) ? FALLBACK_NEWS_DETAIL : null
-  );
+  const { article: apiArticle, error } = await getNewsDetailPageData(lookupSlug);
+  const article =
+    apiArticle ||
+    (currentLocale === 'zh' && FALLBACK_NEWS_SLUGS.has(lookupSlug) ? FALLBACK_NEWS_DETAIL : null);
 
   if (!article) {
     // Distinguish a genuinely-missing article (404) from an upstream API outage:
@@ -65,21 +72,29 @@ export async function generateMetadata({ params }: NewsDetailPageProps) {
     notFound();
   }
 
+  const redirectSlug = getPublicNewsRedirectSlug(slug, article);
+  if (redirectSlug) {
+    permanentRedirect(`/${currentLocale}/news/${redirectSlug}`);
+  }
+
   if (currentLocale === 'en' && !hasPublishableEnglishNews(article)) {
     notFound();
   }
 
   const title = currentLocale === 'en' ? article.titleEn || article.titleZh : article.titleZh;
-  const rawDescription =
+  const summary = getNewsSummary(currentLocale, article, true);
+  // English summaries include material and acceptance limits; keep the complete
+  // sentence so metadata does not cut off a word or its qualifying condition.
+  const description = currentLocale === 'en' ? summary : summary.slice(0, 120);
+  const image = resolveNewsImage(article, {
+    preferFallback: FALLBACK_NEWS_SLUGS.has(slug),
+    locale: currentLocale,
+  });
+  const keywords =
     currentLocale === 'en'
-      ? article.summaryEn || article.summaryZh || article.contentEn || article.contentZh || ''
-      : article.summaryZh || article.summaryEn || article.contentZh || article.contentEn || '';
-  const description = rawDescription.replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim().slice(0, 120) || title;
-  const image = resolveNewsImage(article, { preferFallback: FALLBACK_NEWS_SLUGS.has(slug) });
-  const keywords = currentLocale === 'en'
-    ? article.seoKeywordsEn || article.seoKeywordsZh || ''
-    : article.seoKeywordsZh || article.seoKeywordsEn || '';
-  const modifiedTime = getNewsContentModifiedTime(article);
+      ? article.seoKeywordsEn || ''
+      : article.seoKeywordsZh || article.seoKeywordsEn || '';
+  const modifiedTime = getNewsContentModifiedTime(article, currentLocale);
 
   return buildMetadata({
     title,
@@ -92,32 +107,23 @@ export async function generateMetadata({ params }: NewsDetailPageProps) {
     type: 'article',
     publishedTime: article.publishDate,
     modifiedTime,
-    alternateLocales: hasPublishableEnglishNews(article)
-      ? {
-          'zh-CN': `/zh/news/${slug}`,
-          'en-US': `/en/news/${slug}`,
-          'x-default': `/zh/news/${slug}`,
-        }
-      : {
-          'zh-CN': `/zh/news/${slug}`,
-          'x-default': `/zh/news/${slug}`,
-        },
+    alternateLocales: {
+      'zh-CN': `/zh/news/${slug}`,
+      ...(hasPublishableEnglishNews(article) ? { 'en-US': `/en/news/${slug}` } : {}),
+      'x-default': `/zh/news/${slug}`,
+    },
   });
 }
 
 export default async function NewsDetailPage({ params }: NewsDetailPageProps) {
   const { locale, slug } = await params;
   const currentLocale = (locale === 'en' ? 'en' : 'zh') as Locale;
-  const canonicalSlug = getCanonicalNewsSlug(slug);
+  const lookupSlug = getCanonicalNewsSlug(slug);
 
-  if (canonicalSlug !== slug) {
-    permanentRedirect(`/${currentLocale}/news/${canonicalSlug}`);
-  }
-
-  const { article: apiArticle, error } = await getNewsDetailPageData(slug);
-  const article = apiArticle || (
-    currentLocale === 'zh' && FALLBACK_NEWS_SLUGS.has(slug) ? FALLBACK_NEWS_DETAIL : null
-  );
+  const { article: apiArticle, error } = await getNewsDetailPageData(lookupSlug);
+  const article =
+    apiArticle ||
+    (currentLocale === 'zh' && FALLBACK_NEWS_SLUGS.has(lookupSlug) ? FALLBACK_NEWS_DETAIL : null);
 
   if (!article) {
     // Distinguish a genuinely-missing article (404) from an upstream API outage:
@@ -130,22 +136,53 @@ export default async function NewsDetailPage({ params }: NewsDetailPageProps) {
     notFound();
   }
 
+  const redirectSlug = getPublicNewsRedirectSlug(slug, article);
+  if (redirectSlug) {
+    permanentRedirect(`/${currentLocale}/news/${redirectSlug}`);
+  }
+
   if (currentLocale === 'en' && !hasPublishableEnglishNews(article)) {
     notFound();
   }
 
   const title = currentLocale === 'en' ? article.titleEn || article.titleZh : article.titleZh;
-  const summary =
-    currentLocale === 'en'
-      ? article.summaryEn || article.summaryZh || ''
-      : article.summaryZh || article.summaryEn || '';
-  const image = resolveNewsImage(article, { preferFallback: FALLBACK_NEWS_SLUGS.has(slug) });
-  const html = normalizeNewsHtml(currentLocale, article);
+  const summary = getNewsSummary(currentLocale, article);
+  const image = resolveNewsImage(article, {
+    preferFallback: FALLBACK_NEWS_SLUGS.has(slug),
+    locale: currentLocale,
+  });
+  const html = normalizeNewsHtml(currentLocale, article, { coverImage: image });
   const newsLabel = NEWS_LABEL[currentLocale];
   const detailLabel = NEWS_DETAIL_LABEL[currentLocale];
-  const contactHref = '/zh/contact';
-  const modifiedTime = getNewsContentModifiedTime(article);
-  const relatedLinks = currentLocale === 'zh' ? getNewsRelatedLinks(article) : [];
+  const modifiedTime = getNewsContentModifiedTime(article, currentLocale);
+  const relatedLinks = getNewsRelatedLinks(article, currentLocale);
+  const decisionMeta = getNewsDecisionDisplayMeta(mapNewsCard('zh', article));
+  const detailTags =
+    currentLocale === 'zh'
+      ? [decisionMeta.furnaceLabel, decisionMeta.topicLabel]
+      : [article.category?.nameEn?.trim() || NEWS_LABEL.en];
+  const newsListResult = await getNewsList({ page: 1, pageSize: 12 });
+  const recommendationCandidates =
+    newsListResult.data?.items
+      .filter((item) => currentLocale === 'zh' || hasPublishableEnglishNews(item))
+      .map((item) => ({
+        id: item.id,
+        slug: item.slug,
+        title: currentLocale === 'en' ? item.titleEn?.trim() || item.titleZh : item.titleZh,
+        categoryId: item.categoryId,
+      })) ??
+    (!apiArticle && currentLocale === 'zh'
+      ? FALLBACK_NEWS_ITEMS.map((item) => ({
+          id: item.id,
+          slug: item.slug,
+          title: item.title.zh,
+          categoryId: FALLBACK_NEWS_DETAIL.categoryId,
+        }))
+      : []);
+  const continueReadingItems = selectNewsContinueReadingItems(
+    { id: article.id, slug: article.slug, categoryId: article.categoryId },
+    recommendationCandidates,
+  );
 
   return (
     <div className="bg-[#f7f7f7]">
@@ -153,15 +190,18 @@ export default async function NewsDetailPage({ params }: NewsDetailPageProps) {
       <JsonLd
         id={`news-detail-jsonld-${slug}`}
         data={[
-          getArticleJsonLd({
-            slug,
-            path: `/${currentLocale}/news/${slug}`,
-            headline: title,
-            description: summary || title,
-            image,
-            datePublished: article.publishDate,
-            dateModified: modifiedTime || article.publishDate,
-          }, currentLocale),
+          getArticleJsonLd(
+            {
+              slug,
+              path: `/${currentLocale}/news/${slug}`,
+              headline: title,
+              description: summary || title,
+              image,
+              datePublished: article.publishDate,
+              dateModified: modifiedTime || article.publishDate,
+            },
+            currentLocale,
+          ),
           getBreadcrumbJsonLd([
             { name: currentLocale === 'en' ? 'Home' : '首页', url: `/${currentLocale}` },
             { name: newsLabel, url: `/${currentLocale}/news` },
@@ -173,87 +213,97 @@ export default async function NewsDetailPage({ params }: NewsDetailPageProps) {
       <NewsBreadcrumbBar
         locale={locale}
         currentLabel={detailLabel}
-        items={[
-          { label: newsLabel, href: `/${locale}/news` },
-          { label: detailLabel },
-        ]}
+        items={[{ label: newsLabel, href: `/${locale}/news` }, { label: detailLabel }]}
       />
 
-      <main className="bg-[#f8f8f8] px-6 py-[38px] lg:py-[48px]">
-        <article className="mx-auto max-w-[1240px] rounded-[4px] border border-[#e3e3e3] bg-white px-6 py-[50px] shadow-[0_8px_28px_rgba(0,0,0,0.03)] md:px-[72px] lg:px-[86px] lg:py-[62px]">
-          <header className="text-center">
-            <h1 className="text-[28px] font-semibold leading-[1.45] text-[#202020] lg:text-[34px]">
-              {title}
-            </h1>
-            <div className="mt-[22px] flex items-center justify-center gap-2 text-[15px] text-[#888888]">
-              <HiCalendarDays className="h-[18px] w-[18px] text-[#8f969d]" />
-              <span>{formatNewsDisplayDate(article.publishDate)}</span>
-            </div>
-          </header>
+      <main className={styles.main}>
+        <article className={styles.article}>
+          <section className={styles.heroCard} aria-labelledby="news-detail-title">
+            <header className={styles.heroCopy}>
+              <h1 id="news-detail-title" className={styles.title}>
+                {title}
+              </h1>
+              {currentLocale === 'en' ? (
+                <div className={styles.englishMeta}>
+                  <p>Author: Jiangsu Suneng Industrial Furnace Engineering Team</p>
+                  <div className={styles.tags} aria-label="Categories">
+                    {detailTags.map((tag) => (
+                      <span key={tag} className={styles.tag}>
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                  <div className={styles.englishDates}>
+                    <span>
+                      Published:{' '}
+                      <time dateTime={article.publishDate}>
+                        {formatNewsDisplayDate(article.publishDate)}
+                      </time>
+                    </span>
+                    {article.englishSourceDate && (
+                      <span>
+                        {article.englishSourceDate.label}:{' '}
+                        <time dateTime={article.englishSourceDate.date}>
+                          {formatNewsDisplayDate(article.englishSourceDate.date)}
+                        </time>
+                      </span>
+                    )}
+                  </div>
+                </div>
+              ) : (
+                <div className={styles.englishMeta}>
+                  <p>作者：江苏苏能工业炉工程技术团队</p>
+                  <div className={styles.tags} aria-label="资料分类">
+                    {detailTags.map((tag) => (
+                      <span key={tag} className={styles.tag}>
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                  <div className={styles.englishDates}>
+                    <span className={styles.meta}>
+                      <HiCalendarDays className={styles.dateIcon} aria-hidden="true" />
+                      发布日期：
+                      <time dateTime={article.publishDate}>
+                        {formatNewsDisplayDate(article.publishDate)}
+                      </time>
+                    </span>
+                  </div>
+                </div>
+              )}
+            </header>
+          </section>
 
-          <div className="mx-auto mt-[40px] max-w-[1060px] overflow-hidden rounded-[2px] bg-[#f1f1f1]">
-            <Image
-              src={image}
-              alt={title}
-              width={1672}
-              height={941}
-              priority
-              quality={85}
-              sizes="(min-width: 1200px) 1060px, 100vw"
-              className="h-auto w-full"
-            />
-          </div>
-
-          <div className="mx-auto mt-[46px] max-w-[1060px]">
+          <div className={styles.bodyWrap}>
             <NewsArticleContent html={html} />
           </div>
 
-          {relatedLinks.length ? (
-            <aside
-              aria-labelledby="news-related-links-title"
-              className="mx-auto mt-[48px] max-w-[1060px] border-t border-[#e4e7ec] pt-8"
-            >
-              <h2 id="news-related-links-title" className="text-[22px] font-semibold text-[#101828]">
-                相关产品、方案与项目证据
-              </h2>
-              <div className="mt-5 grid gap-4 md:grid-cols-2">
-                {relatedLinks.map((link) => (
-                  <Link
-                    key={link.href}
-                    href={link.href}
-                    className="rounded-[6px] border border-[#dce3ec] bg-[#fbfcfe] p-5 transition hover:border-[#c51624] hover:bg-white"
-                  >
-                    <span className="text-[12px] font-semibold">{link.kind}</span>
-                    <h3 className="mt-2 text-[17px] font-semibold leading-[1.45] text-[#101828]">{link.title}</h3>
-                    <p className="mt-2 text-[14px] leading-[1.75] text-[#667085]">{link.description}</p>
-                  </Link>
-                ))}
-              </div>
-            </aside>
-          ) : null}
+          <div className={styles.supporting}>
+            <NewsContinueReading items={continueReadingItems} locale={currentLocale} />
 
-          {currentLocale === 'zh' ? (
-            <div className="mx-auto mt-[48px] max-w-[1060px] rounded-[8px] border border-[#e1e7f0] bg-[#fbfcfe] p-6 lg:flex lg:items-center lg:justify-between lg:gap-8">
-              <div>
-                <h2 className="text-[22px] font-semibold leading-[1.35] text-[#101828]">需要工业炉报价或方案判断？</h2>
-                <p className="mt-3 text-[15px] leading-[1.8] text-[#475467]">
-                  可先提交工件、温度、工艺和产能信息，由苏能工程师做初步判断。
+            {relatedLinks.length ? (
+              <aside aria-labelledby="news-related-links-title" className={styles.related}>
+                <h2 id="news-related-links-title" className={styles.relatedTitle}>
+                  {currentLocale === 'en' ? 'Related equipment and project guidance' : '相关产品、方案与项目证据'}
+                </h2>
+                <div className={styles.relatedGrid}>
+                  {relatedLinks.map((link) => (
+                    <Link key={link.href} href={link.href} className={styles.relatedLink}>
+                      <h3 className={styles.relatedLinkTitle}>{link.title}</h3>
+                      <p className={styles.relatedLinkDescription}>{link.description}</p>
+                    </Link>
+                  ))}
+                </div>
+                <p className={styles.relatedInquiry}>
+                  <Link href={currentLocale === 'en' ? '/en/contact' : '/zh/inquiry'}>
+                    {currentLocale === 'en'
+                      ? 'Discuss your project: send workpiece, process and site requirements'
+                      : '咨询本项目：提交工件、工艺和现场条件'}
+                  </Link>
                 </p>
-              </div>
-              <div className="mt-5 flex flex-col gap-3 sm:flex-row lg:mt-0 lg:shrink-0">
-                <QuoteModalButton
-                  label="获取报价方案"
-                  className="inline-flex min-h-[46px] items-center justify-center rounded-[4px] cta-primary px-6 text-[15px] font-semibold text-white transition"
-                />
-                <a
-                  href={contactHref}
-                  className="inline-flex min-h-[46px] items-center justify-center rounded-[4px] cta-secondary px-6 text-[15px] font-semibold transition"
-                >
-                  联系苏能工程师
-                </a>
-              </div>
-            </div>
-          ) : null}
+              </aside>
+            ) : null}
+          </div>
         </article>
       </main>
     </div>

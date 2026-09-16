@@ -8,7 +8,6 @@ import { Locale, SidebarItem } from '@/types/site';
 const STRENGTH_BANNER_IMAGE = '/images/about/about_img_hero_factory_01.png';
 
 const fallbackCategories: StrengthCategoryApiItem[] = [
-  { id: 1, nameZh: '技术团队', nameEn: 'Technical Team', slug: 'technical-team' },
   { id: 2, nameZh: '荣誉资质', nameEn: 'Honors', slug: 'honors' },
   { id: 3, nameZh: '资质证书', nameEn: 'Certificates', slug: 'certificates' },
 ];

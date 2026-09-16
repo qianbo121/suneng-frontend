@@ -1,5 +1,5 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
-import { IsIn, IsOptional, IsString, MaxLength } from 'class-validator';
+import { IsIn, IsObject, IsOptional, IsString, MaxLength } from 'class-validator';
 
 export const LEAD_EVENT_TYPES = [
   'page_view',
@@ -15,6 +15,14 @@ export const LEAD_EVENT_TYPES = [
   'email_click',
   'form_start',
   'form_step_complete',
+  'module_view',
+  'category_select',
+  'workpiece_select',
+  'purpose_select',
+  'search_match',
+  'search_nomatch',
+  'cta_click',
+  'form_success',
   'human_signal',
   'effective_interaction',
   'automation_signal',
@@ -121,4 +129,9 @@ export class CreateLeadEventDto {
   @IsString()
   @MaxLength(120)
   visitorId?: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsObject()
+  properties?: Record<string, unknown>;
 }

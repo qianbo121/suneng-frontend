@@ -28,6 +28,7 @@ export const siteSettings: SiteSettings = {
     zh: '江苏苏能工业炉官方二维码',
     en: 'Suneng Industrial Furnace official QR code',
   },
+  wechatQrCode: '/images/footer/wechat-qr.png',
   footerProductCategories: [
     { zh: '台车炉系列', en: 'Trolley Furnace Series' },
     { zh: '箱式炉系列', en: 'Box Furnace Series' },

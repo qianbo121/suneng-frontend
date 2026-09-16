@@ -1,0 +1,69 @@
+{
+  "id": "trolley-corrosion-exhaust-20240225-proposal",
+  "slug": "trolley-furnace-corrosion-material-exhaust-interfaces-proposal",
+  "title": "台车炉做防腐，厂家需要知道哪些工况？",
+  "listTitle": "台车炉做防腐，厂家需要知道哪些工况？",
+  "listSummary": "“防腐”不能只看设备名称。",
+  "summary": "“防腐”不能只看设备名称。江苏苏能工业炉有限公司2024年2月25日的台车炉方案，分别为加热元件、排废内管和外层管道列出不同材料，并用双层套管配合排废、补气和炉压控制。核对相似工况时，应先明确工件带入物、加热时的释放物和各部件接触的介质，再确认材料、排风及后续处理范围，不能由一种材料牌号推定整炉耐腐蚀能力。",
+  "body": "trolley-furnace-corrosion-material-exhaust-interfaces-proposal.md",
+  "contentType": "proposal",
+  "publicationStatus": "draft",
+  "projectStatus": "proposal",
+  "projectYear": 2024,
+  "sourceDate": "2024-02-25",
+  "workpiece": [
+    "中小型工件"
+  ],
+  "materials": [],
+  "process": [
+    "热处理加热"
+  ],
+  "equipment": [
+    "台车式电阻炉"
+  ],
+  "need": [
+    "耐腐蚀选材与排废配套"
+  ],
+  "tags": [
+    "方案参考",
+    "中小型工件",
+    "耐腐蚀选材与排废配套"
+  ],
+  "facts": [
+    {
+      "label": "方案加热元件材料",
+      "value": "Cr20Ni80",
+      "unit": "",
+      "condition": "历史配置，不证明对所有释放物耐蚀",
+      "attribute": "方案参数"
+    },
+    {
+      "label": "方案排废内管材料",
+      "value": "304",
+      "unit": "不锈钢",
+      "condition": "仅指排废内管，不扩为全部管路材质",
+      "attribute": "方案参数"
+    },
+    {
+      "label": "方案外层管道",
+      "value": "碳钢焊接管道",
+      "unit": "",
+      "condition": "夹层补气结构，内外接触条件分别核对",
+      "attribute": "方案参数"
+    }
+  ],
+  "participation": "历史方案拟配置镍铬加热元件、双层排废换热和炉压控制；具体介质适用及外接处理另行核对。",
+  "sourceSummary": "江苏苏能工业炉有限公司历史技术方案资料整理。",
+  "coverTitle": "台车炉防腐方案：加热元件、排废内管与补气通道怎样分别确认？",
+  "relatedLinks": [
+    {
+      "title": "了解台车炉的适用条件",
+      "href": "/zh/products/detail/trolley-furnace"
+    },
+    {
+      "title": "准备询价参数与供货范围",
+      "href": "/zh/articles/gongye-lu-baojia-canshu"
+    }
+  ],
+  "dateModified": "2026-09-12"
+}

@@ -22,6 +22,10 @@ import { InquiryNotificationProcessor } from '@/modules/custom-requirement/inqui
 import { AuthenticatedUser } from '@/modules/auth/interfaces/authenticated-user.interface';
 import { resolveVisitorRegion } from '@/modules/lead-event/visitor-region';
 import { PrismaService } from '@/prisma/prisma.service';
+import {
+  WorkpieceRouterService,
+  type ResolvedWorkpieceInquiryContext,
+} from '@/modules/workpiece-router/workpiece-router.service';
 
 function normalizeEmpty(value?: string) {
   const trimmed = value?.trim();
@@ -68,6 +72,15 @@ const idempotencyReplaySelect = {
   discoverySource: true,
   sessionId: true,
   visitorId: true,
+  workpieceSelection: {
+    select: {
+      categoryId: true,
+      workpieceId: true,
+      searchTerm: true,
+      processPurposeId: true,
+      rawConditionsJson: true,
+    },
+  },
 } as const;
 
 const adminRequirementSelect = {
@@ -93,14 +106,30 @@ const adminRequirementSelect = {
   updatedAt: true,
 } as const satisfies Prisma.CustomRequirementSelect;
 
+const adminRequirementDetailSelect = {
+  ...adminRequirementSelect,
+  workpieceSelection: true,
+} as const satisfies Prisma.CustomRequirementSelect;
+
 function normalizeInquiry(dto: CreateCustomRequirementDto) {
-  const phone = normalizeEmpty(dto.phone);
-  const email = normalizeEmpty(dto.email)?.toLowerCase();
+  const isHomepageMinimal = dto.formVariant === 'homepage_minimal';
+  const homepageContact = isHomepageMinimal ? normalizeEmpty(dto.contact) : undefined;
+  const homepageContactIsEmail = Boolean(
+    homepageContact && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(homepageContact),
+  );
+  const phone = isHomepageMinimal
+    ? homepageContactIsEmail
+      ? undefined
+      : homepageContact
+    : normalizeEmpty(dto.phone);
+  const email = (
+    isHomepageMinimal && homepageContactIsEmail ? homepageContact : normalizeEmpty(dto.email)
+  )?.toLowerCase();
 
   if (!phone && !email) {
     throw new BadRequestException('Phone or email is required');
   }
-  if (dto.locale === 'en' && !email) {
+  if (!isHomepageMinimal && dto.locale === 'en' && !email) {
     throw new BadRequestException('Email is required for English inquiries');
   }
   if (
@@ -113,10 +142,10 @@ function normalizeInquiry(dto: CreateCustomRequirementDto) {
   return {
     projectType: normalizeEmpty(dto.projectType),
     projectLocation: normalizeEmpty(dto.projectLocation),
-    name: normalizeEmpty(dto.name),
+    name: isHomepageMinimal ? normalizeEmpty(dto.identity) : normalizeEmpty(dto.name),
     phone,
     email,
-    company: normalizeEmpty(dto.company),
+    company: isHomepageMinimal ? undefined : normalizeEmpty(dto.company),
     industry: normalizeEmpty(dto.industry),
     process: normalizeEmpty(dto.process),
     temperature: normalizeEmpty(dto.temperature),
@@ -146,19 +175,54 @@ type ReplayInquiry = Prisma.CustomRequirementGetPayload<{
   select: typeof idempotencyReplaySelect;
 }>;
 
-function inquiryFingerprint(inquiry: NormalizedInquiry) {
-  return JSON.stringify(inquiry);
+type SelectionFingerprintInput = {
+  categoryId: string;
+  workpieceId?: string | null;
+  searchTerm?: string | null;
+  processPurposeId?: string | null;
+  rawConditionsJson: unknown;
+};
+
+function selectionFingerprint(selection?: SelectionFingerprintInput | null) {
+  if (!selection) return null;
+  return {
+    categoryId: selection.categoryId,
+    workpieceId: selection.workpieceId ?? null,
+    searchTerm: selection.searchTerm ?? null,
+    processPurposeId: selection.processPurposeId ?? null,
+    rawConditionsJson: selection.rawConditionsJson,
+  };
 }
 
-function isSameInquiry(existing: ReplayInquiry, normalized: NormalizedInquiry) {
-  return (Object.keys(normalized) as Array<keyof NormalizedInquiry>).every((key) => {
+function inquiryFingerprint(
+  inquiry: NormalizedInquiry,
+  workpieceSelection?: ResolvedWorkpieceInquiryContext,
+) {
+  return JSON.stringify({ inquiry, workpieceSelection: selectionFingerprint(workpieceSelection) });
+}
+
+function isSameInquiry(
+  existing: ReplayInquiry,
+  normalized: NormalizedInquiry,
+  workpieceSelection?: ResolvedWorkpieceInquiryContext,
+) {
+  const sameInquiry = (Object.keys(normalized) as Array<keyof NormalizedInquiry>).every((key) => {
     const existingValue = key === 'phone' && existing.phone === '' ? undefined : existing[key];
     return (existingValue ?? undefined) === normalized[key];
   });
+  return (
+    sameInquiry &&
+    JSON.stringify(selectionFingerprint(existing.workpieceSelection)) ===
+      JSON.stringify(selectionFingerprint(workpieceSelection))
+  );
 }
 
-function replayOrConflict(existing: ReplayInquiry, normalized: NormalizedInquiry) {
-  if (!isSameInquiry(existing, normalized)) {
+function replayOrConflict(
+  existing: ReplayInquiry,
+  normalized: NormalizedInquiry,
+  workpieceSelection?: ResolvedWorkpieceInquiryContext,
+) {
+  if (!isSameInquiry(existing, normalized, workpieceSelection)) {
     throw new ConflictException('Idempotency key was already used for a different inquiry payload');
   }
   if (!existing.submissionId) {
@@ -232,6 +296,7 @@ export class CustomRequirementService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly notificationProcessor: InquiryNotificationProcessor,
+    private readonly workpieceRouter: WorkpieceRouterService,
   ) {}
 
   async createLegacyPublic(
@@ -277,7 +342,20 @@ export class CustomRequirementService {
   async createPublic(dto: CreateCustomRequirementDto, clientKey: string, rawIp?: string) {
     const idempotencyKey = normalizeEmpty(dto.idempotencyKey);
     const normalized = normalizeInquiry(dto);
-    const fingerprint = inquiryFingerprint(normalized);
+    let workpieceSelection: ResolvedWorkpieceInquiryContext | undefined;
+    if (dto.workpieceContext) {
+      try {
+        workpieceSelection = this.workpieceRouter.resolveInquiryContext(dto.workpieceContext, {
+          sessionId: normalized.sessionId,
+          pagePath: normalized.pagePath,
+        });
+      } catch (error) {
+        throw new BadRequestException(
+          error instanceof Error ? error.message : 'Invalid workpiece selection context',
+        );
+      }
+    }
+    const fingerprint = inquiryFingerprint(normalized, workpieceSelection);
     const evidence = {
       deviceType: normalizeOptionalSource(dto.deviceType, 40),
       rawIp,
@@ -288,7 +366,7 @@ export class CustomRequirementService {
         where: { clientIdempotencyKey: idempotencyKey },
         select: idempotencyReplaySelect,
       });
-      if (existing) return replayOrConflict(existing, normalized);
+      if (existing) return replayOrConflict(existing, normalized, workpieceSelection);
 
       const inFlight = this.inFlightSubmissions.get(idempotencyKey);
       if (inFlight) {
@@ -300,7 +378,13 @@ export class CustomRequirementService {
         return inFlight.submission;
       }
 
-      const submission = this.createPublicOnce(normalized, clientKey, evidence, idempotencyKey);
+      const submission = this.createPublicOnce(
+        normalized,
+        workpieceSelection,
+        clientKey,
+        evidence,
+        idempotencyKey,
+      );
       this.inFlightSubmissions.set(idempotencyKey, { fingerprint, submission });
       const clearInFlight = () => {
         if (this.inFlightSubmissions.get(idempotencyKey)?.submission === submission) {
@@ -311,11 +395,12 @@ export class CustomRequirementService {
       return submission;
     }
 
-    return this.createPublicOnce(normalized, clientKey, evidence);
+    return this.createPublicOnce(normalized, workpieceSelection, clientKey, evidence);
   }
 
   private async createPublicOnce(
     normalized: NormalizedInquiry,
+    workpieceSelection: ResolvedWorkpieceInquiryContext | undefined,
     clientKey: string,
     evidence: { deviceType?: string; rawIp?: string },
     idempotencyKey?: string,
@@ -337,6 +422,13 @@ export class CustomRequirementService {
             notificationStatus: InquiryNotificationStatus.pending,
             notificationNextAttemptAt: new Date(),
             status: CustomRequirementStatus.pending,
+            ...(workpieceSelection
+              ? {
+                  workpieceSelection: {
+                    create: workpieceSelection,
+                  },
+                }
+              : {}),
           },
         });
 
@@ -354,7 +446,7 @@ export class CustomRequirementService {
           where: { clientIdempotencyKey: idempotencyKey },
           select: idempotencyReplaySelect,
         });
-        if (existing) return replayOrConflict(existing, normalized);
+        if (existing) return replayOrConflict(existing, normalized, workpieceSelection);
       }
       throw error;
     }
@@ -401,14 +493,24 @@ export class CustomRequirementService {
   async findOne(id: number) {
     const record = await this.prisma.customRequirement.findUnique({
       where: { id },
-      select: adminRequirementSelect,
+      select: adminRequirementDetailSelect,
     });
     if (!record) throw new NotFoundException('Custom requirement not found');
-    return record;
+    const { workpieceSelection, ...inquiry } = record;
+    return {
+      ...inquiry,
+      workpieceContext: workpieceSelection
+        ? this.workpieceRouter.describeStoredSelection(workpieceSelection)
+        : null,
+    };
   }
 
   async markFollowed(id: number) {
-    await this.findOne(id);
+    const existing = await this.prisma.customRequirement.findUnique({
+      where: { id },
+      select: { id: true },
+    });
+    if (!existing) throw new NotFoundException('Custom requirement not found');
     return this.prisma.customRequirement.update({
       where: { id },
       data: { status: CustomRequirementStatus.followed },

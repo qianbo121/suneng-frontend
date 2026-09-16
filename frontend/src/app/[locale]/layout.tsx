@@ -1,11 +1,10 @@
-import { ReactNode } from 'react';
+import { ReactNode, Suspense } from 'react';
 import { hasLocale, NextIntlClientProvider } from 'next-intl';
-import { getMessages } from 'next-intl/server';
+import { getMessages, setRequestLocale } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 
 import { JsonLd } from '@/components/JsonLd';
 import { WebsiteReadingTracker } from '@/components/analytics/WebsiteReadingTracker';
-import { FloatToolbar } from '@/components/layout/FloatToolbar';
 import { Footer } from '@/components/layout/Footer';
 import { Header } from '@/components/layout/Header';
 import { BaiduAnalytics } from '@/components/seo/BaiduAnalytics';
@@ -31,21 +30,21 @@ export default async function LocaleLayout({ children, params }: LocaleLayoutPro
     notFound();
   }
 
+  setRequestLocale(locale);
   const messages = await getMessages({ locale });
   const currentLocale = locale as Locale;
-  const htmlLang = locale === 'en' ? 'en' : 'zh-CN';
+  const htmlLang = locale === 'en' ? 'en-US' : 'zh-CN';
 
   return (
     <html lang={htmlLang} suppressHydrationWarning>
       <body>
         <NextIntlClientProvider locale={locale} messages={messages}>
           <WebsiteReadingTracker />
-          <div className="min-h-screen bg-white pb-[72px] text-neutral-900 xl:pb-0">
+          <div className="min-h-screen bg-white text-neutral-900">
             <Header locale={locale} />
             <div id="site-page-content">
-              <main className="min-h-[calc(100vh-520px)] bg-white">{children}</main>
+              <main className="min-h-[calc(100vh-520px)] bg-white"><Suspense fallback={null}>{children}</Suspense></main>
               <Footer locale={locale} />
-              <FloatToolbar locale={locale} />
             </div>
           </div>
         </NextIntlClientProvider>

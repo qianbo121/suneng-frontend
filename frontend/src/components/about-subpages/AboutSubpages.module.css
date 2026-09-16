@@ -1,0 +1,603 @@
+.page {
+  color: var(--color-text-strong);
+  background: white;
+  font-size: 16px;
+  line-height: 1.6;
+  --subpage-muted: #59677a;
+}
+.container {
+  width: var(--site-page-width);
+  margin-inline: auto;
+}
+.pageHeader {
+  padding: var(--site-section-inset) 0;
+  background: var(--color-surface-soft, #f5f7fa);
+}
+.plainHeader {
+  background: white;
+}
+.breadcrumbRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  font-size: 14px;
+}
+.headingRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 32px;
+  margin-top: var(--site-heading-gap);
+}
+.headingRow h1 {
+  margin: 0;
+  font-size: 44px;
+  line-height: 1.2;
+  font-weight: 700;
+}
+.headingRow p {
+  margin-top: 12px;
+  color: var(--subpage-muted);
+  font-size: 18px;
+}
+.textLink {
+  color: var(--color-primary);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 36px;
+  font-size: 14px;
+  white-space: nowrap;
+}
+.textLink:hover {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+.page :is(a, button, input):focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 4px;
+}
+.section {
+  padding: var(--site-section-inset) 0;
+  scroll-margin-top: 100px;
+}
+.section + .section {
+  border-top: 1px solid var(--color-border, #dfe5ec);
+}
+.section h2 {
+  margin: 0 0 24px;
+  font-size: 28px;
+  line-height: 1.35;
+  font-weight: 650;
+}
+.sectionTitle {
+  display: flex;
+  gap: 20px;
+  align-items: baseline;
+}
+.sectionTitle span {
+  font-size: 14px;
+  color: var(--subpage-muted);
+}
+.qualifications {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--site-grid-gap);
+}
+.qualificationImage {
+  height: 250px;
+  background: var(--color-surface-soft, #f5f7fa);
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.qualificationImage img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.qualification h3 {
+  font-size: 19px;
+  line-height: 1.5;
+  font-weight: 650;
+  margin-top: 18px;
+}
+.qualification p {
+  color: var(--subpage-muted);
+  margin-top: 6px;
+}
+.qualification .textLink {
+  margin-top: 8px;
+}
+.patents {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: 48px;
+}
+.patent {
+  display: grid;
+  grid-template-columns: 78px minmax(0, 1fr);
+  align-items: center;
+  gap: 28px;
+  min-height: 160px;
+  padding: 22px 0;
+  border-bottom: 1px solid var(--color-border, #dfe5ec);
+}
+.patent:nth-last-child(-n + 2) {
+  border-bottom: 0;
+}
+.patentImage {
+  display: block;
+  width: 78px;
+  height: 112px;
+}
+.patentImage img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.patent h3 {
+  margin: 0;
+  font-size: 18px;
+  line-height: 1.5;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+.patent p {
+  color: var(--subpage-muted);
+  margin-top: 8px;
+  font-size: 14px;
+}
+.patent .textLink {
+  margin-top: 2px;
+}
+.search {
+  display: flex;
+  align-items: center;
+  width: 330px;
+  flex-shrink: 0;
+  border: 1px solid var(--color-border, #dfe5ec);
+  border-radius: 6px;
+  background: white;
+}
+.search input {
+  width: 100%;
+  min-width: 0;
+  height: 46px;
+  padding: 0 14px;
+  background: transparent;
+  font-size: 16px;
+}
+.search button {
+  display: grid;
+  place-items: center;
+  width: 46px;
+  min-height: 46px;
+  flex-shrink: 0;
+  color: var(--color-primary);
+}
+.partnerList {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: 48px;
+}
+.partner {
+  display: grid;
+  grid-template-columns: 110px minmax(0, 1fr);
+  gap: 28px;
+  padding: 30px 0;
+  min-height: 205px;
+  border-bottom: 1px solid var(--color-border, #dfe5ec);
+}
+.partnerLogo {
+  width: 110px;
+  height: 95px;
+  display: grid;
+  place-items: center;
+  color: var(--color-primary);
+  font-size: 19px;
+  font-weight: 700;
+  text-align: center;
+}
+.partnerLogo img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.partner h2 {
+  font-size: 19px;
+  line-height: 1.5;
+  font-weight: 650;
+  overflow-wrap: anywhere;
+}
+.partner p {
+  margin-top: 16px;
+  color: var(--subpage-muted);
+  font-size: 16px;
+}
+.partner p span {
+  display: block;
+}
+.partner .textLink {
+  margin-top: 14px;
+}
+.listFooter {
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+  align-items: center;
+  padding: 28px 0 40px;
+  color: var(--subpage-muted);
+  font-size: 14px;
+}
+.pagination {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+.pagination a {
+  min-width: 44px;
+  min-height: 44px;
+  padding: 8px 12px;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--color-border, #dfe5ec);
+  border-radius: 4px;
+  color: var(--color-primary);
+}
+.pagination a[aria-current='page'] {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  color: white;
+}
+.empty {
+  padding: 80px 0;
+  text-align: center;
+}
+.empty h2 {
+  font-size: 24px;
+}
+.empty a {
+  margin-top: 18px;
+}
+.contactBody {
+  padding-bottom: 40px;
+}
+.contactPanel {
+  display: grid;
+  grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr);
+  grid-template-areas: 'phone wechat' 'email wechat';
+  padding: 44px 52px;
+  background: var(--color-surface-soft, #f5f7fa);
+  border-radius: 6px;
+  column-gap: 44px;
+}
+.phone {
+  grid-area: phone;
+  padding-bottom: 28px;
+}
+.phone h2 {
+  font-size: 22px;
+  font-weight: 600;
+  margin-bottom: 26px;
+}
+.contactLabel {
+  color: var(--subpage-muted);
+  font-size: 16px;
+  margin-bottom: 6px;
+}
+.phoneNumber {
+  display: inline-block;
+  font-size: 44px;
+  line-height: 1.25;
+  font-weight: 650;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-top: 20px;
+}
+.contactBody .actionButton {
+  min-height: 46px;
+  font-size: 15px;
+  gap: 8px;
+  box-shadow: none;
+}
+.wechat {
+  grid-area: wechat;
+  border-left: 1px solid var(--color-border, #dfe5ec);
+  padding-left: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+.wechat h2 {
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+.wechat img {
+  object-fit: contain;
+  width: 200px;
+  height: 200px;
+  background: white;
+  padding: 6px;
+}
+.wechat p {
+  color: var(--subpage-muted);
+  font-size: 14px;
+  margin-top: 14px;
+  text-align: center;
+}
+.email {
+  grid-area: email;
+  border-top: 1px solid var(--color-border, #dfe5ec);
+  padding-top: 24px;
+}
+.emailRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.emailLink {
+  font-size: 27px;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+.address {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: 28px;
+  align-items: center;
+  padding: 30px 0;
+  margin-block: 28px;
+  border-block: 1px solid var(--color-border, #dfe5ec);
+}
+.address h2 {
+  font-size: 22px;
+  font-weight: 600;
+}
+.address p {
+  font-size: 18px;
+}
+.address small {
+  display: block;
+  color: var(--subpage-muted);
+  font-size: 14px;
+  margin-top: 6px;
+}
+.address .actions {
+  margin: 0;
+}
+.message {
+  border: 1px solid var(--color-border, #dfe5ec);
+  border-radius: 6px;
+  overflow: clip;
+}
+.messageToggle {
+  display: flex;
+  width: 100%;
+  gap: 24px;
+  align-items: center;
+  text-align: left;
+  padding: 22px 28px;
+  background: var(--color-surface-soft, #f5f7fa);
+}
+.messageToggle strong {
+  font-size: 22px;
+  font-weight: 600;
+}
+.messageToggle span {
+  color: var(--subpage-muted);
+  font-size: 16px;
+}
+.messageToggle em {
+  margin-left: auto;
+  font-style: normal;
+  color: var(--color-primary);
+  white-space: nowrap;
+  font-size: 14px;
+}
+.feedback {
+  min-height: 24px;
+  color: var(--color-primary);
+  font-size: 14px;
+  margin-top: 8px;
+}
+@media (max-width: 1100px) {
+  .phoneNumber {
+    font-size: 38px;
+  }
+  .contactPanel {
+    padding: 32px;
+    gap: 28px;
+  }
+  .wechat {
+    padding-left: 28px;
+  }
+  .address {
+    grid-template-columns: auto minmax(0, 1fr);
+  }
+  .address .actions {
+    grid-column: 2;
+  }
+  .partner {
+    gap: 20px;
+    grid-template-columns: 100px minmax(0, 1fr);
+  }
+  .partnerLogo {
+    width: 100px;
+  }
+  .messageToggle {
+    flex-wrap: wrap;
+    gap: 12px 20px;
+  }
+}
+@media (max-width: 767px) {
+  .container {
+    width: var(--site-page-width);
+  }
+  .pageHeader {
+    padding: var(--site-section-inset) 0;
+  }
+  .breadcrumbRow {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .headingRow {
+    margin-top: var(--site-heading-gap);
+    display: block;
+  }
+  .headingRow h1 {
+    font-size: 34px;
+  }
+  .headingRow p {
+    font-size: 16px;
+  }
+  .section {
+    padding: var(--site-section-inset) 0;
+  }
+  .section h2 {
+    font-size: 26px;
+  }
+  .qualifications,
+  .patents,
+  .partnerList {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .qualifications {
+    gap: var(--site-grid-gap);
+  }
+  .qualificationImage {
+    height: 240px;
+  }
+  .patent {
+    gap: 20px;
+    min-height: 150px;
+  }
+  .patent:nth-last-child(2) {
+    border-bottom: 1px solid var(--color-border, #dfe5ec);
+  }
+  .search {
+    width: 100%;
+    margin-top: 22px;
+  }
+  .partner {
+    min-height: 175px;
+    grid-template-columns: 84px minmax(0, 1fr);
+    gap: 18px;
+    padding: 26px 0;
+  }
+  .partnerLogo {
+    width: 84px;
+    height: 75px;
+    font-size: 17px;
+  }
+  .partner h2 {
+    font-size: 18px;
+  }
+  .partner p {
+    margin-top: 10px;
+  }
+  .listFooter {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 18px;
+  }
+  .pagination {
+    gap: 6px;
+  }
+  .pagination a {
+    padding: 8px;
+  }
+  .contactPanel {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas: 'phone' 'wechat' 'email';
+    padding: 24px 20px;
+    gap: 24px;
+  }
+  .phone {
+    padding-bottom: 0;
+  }
+  .phone h2 {
+    font-size: 19px;
+    margin-bottom: 20px;
+  }
+  .phoneNumber {
+    font-size: clamp(28px, 8.4vw, 38px);
+  }
+  .actions {
+    gap: 10px;
+  }
+  .contactBody .actionButton {
+    padding-inline: 16px;
+  }
+  .wechat {
+    padding: 24px 0 0;
+    border-left: 0;
+    border-top: 1px solid var(--color-border, #dfe5ec);
+    align-items: flex-start;
+  }
+  .wechat p {
+    text-align: left;
+  }
+  .wechat h2 {
+    margin-bottom: 12px;
+  }
+  .email {
+    padding-top: 24px;
+  }
+  .emailLink {
+    font-size: 23px;
+  }
+  .address {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 14px;
+    padding-block: 24px;
+  }
+  .address .actions {
+    grid-column: auto;
+  }
+  .address p {
+    font-size: 16px;
+  }
+  .messageToggle {
+    padding: 20px;
+  }
+  .messageToggle strong {
+    font-size: 20px;
+  }
+  .messageToggle span {
+    flex-basis: 100%;
+    order: 2;
+  }
+}
+.copyControl {
+  position: relative;
+}
+.copyFeedback {
+  position: absolute;
+  top: calc(100% + 2px);
+  left: 0;
+  min-width: 100%;
+  width: max-content;
+  max-width: 200px;
+  font-size: 12px;
+  color: var(--color-primary);
+  z-index: 2;
+}
+.copyFeedback:not(:empty) {
+  background: white;
+  border: 1px solid var(--color-border, #dfe5ec);
+  padding: 4px 8px;
+  border-radius: 4px;
+}

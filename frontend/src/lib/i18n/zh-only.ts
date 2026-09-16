@@ -1,3 +1,5 @@
+import { isWithdrawnTechnicalPath } from '@/lib/publication-scope';
+import englishCaseSlugs from '@/lib/cases/english-slugs.json';
 import type { Locale } from '@/types/site';
 
 /**
@@ -7,21 +9,21 @@ import type { Locale } from '@/types/site';
  * entries in app/sitemap.ts.
  */
 export const ZH_ONLY_PATHS = new Set<string>([
+  '/products/detail/copper-wire-annealing-line/inquiry-checklist',
+  '/products/detail/track-shoe-press-quench-line',
+  '/products/detail/forging-waste-heat-qt-line',
+  '/products/detail/fastener-quench-temper-line',
+  '/products/detail/mesh-belt-carbonitriding-line',
+  '/products/detail/multi-furnace-quench-cell',
+  '/products/detail/aluminum-solution-aging-line',
+  '/products/detail/aluminum-forging-heating-line',
+  '/products/detail/cylinder-curing-line',
+  '/inquiry',
   '/service/furnace-renovation-overhaul',
+  '/service/installation-after-sales',
+  '/service/furnace-relocation-restart',
   '/articles/gongye-lu-baojia-canshu',
   '/articles/laojiu-rechuli-lu-daxiu-haishi-maixin',
-  '/solutions/rechuli-lu-changjia',
-  '/solutions/jiangsu-gongye-lu-changjia',
-  '/solutions/continuous-heat-treatment-line',
-  '/solutions/rechuli-lu-wendu-bujun-zhenggai',
-  '/solutions/rechuli-lu-gaizao-fengxian-zhouqi',
-  '/solutions/rechuli-lu-luchen-fanxin',
-  '/solutions/rechuli-lu-dian-gai-ran-yure-huishou',
-  '/solutions/rechuli-lu-kongzhi-xitong-shengji',
-  '/solutions/rechuli-lu-tingchan-chongqi-banqian-fuchan',
-  '/case/anonymous-tsingshan-1250-renovation',
-  '/case/jining-support-roller-heat-treatment-line',
-  '/case/henan-annealing-solution-line',
 ]);
 
 function stripLocale(path: string): string {
@@ -31,7 +33,10 @@ function stripLocale(path: string): string {
 
 /** True if the path (with or without a locale prefix) is a Chinese-only page. */
 export function isZhOnlyPath(path: string): boolean {
-  return ZH_ONLY_PATHS.has(stripLocale(path));
+  const pathname = stripLocale(path.split(/[?#]/, 1)[0]).replace(/\/+$/, '') || '/';
+  // This routing index lists completed English counterparts; the server also
+  // checks source publication and fingerprints before serving any English body.
+  return ZH_ONLY_PATHS.has(pathname) || (pathname.startsWith('/case/') && !englishCaseSlugs.includes(pathname.slice('/case/'.length)));
 }
 
 /**
@@ -45,8 +50,9 @@ export function localizeOrHideHref(rawPath: string, locale: Locale): string | nu
   if (!rawPath.startsWith('/')) {
     return rawPath;
   }
+  if (isWithdrawnTechnicalPath(rawPath)) return null;
   const normalized = stripLocale(rawPath);
-  if (locale === 'en' && ZH_ONLY_PATHS.has(normalized)) {
+  if (locale === 'en' && isZhOnlyPath(normalized)) {
     return null;
   }
   return normalized === '/' ? `/${locale}` : `/${locale}${normalized}`;

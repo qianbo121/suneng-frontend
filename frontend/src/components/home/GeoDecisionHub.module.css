@@ -1,0 +1,23 @@
+.section {
+  padding-block: var(--site-section-inset);
+  background: var(--home-paper, #f2f6fb);
+}
+.container { width: var(--site-wide-width); margin-inline: auto; }
+.container h2 { font-size: var(--home-section-title-size, 34px); line-height: 1.25; font-weight: 700; }
+.container .facts { max-width: 1020px; margin-top: 20px; color: #516176; font-size: 16px; line-height: 1.85; }
+.guides { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; margin-top: 24px; }
+.guide { padding: 20px; border: 1px solid #d8e2ef; border-radius: 10px; background: #fff; text-decoration: none; }
+.guide h3 { color: #0c192a; font-size: 19px; line-height: 1.6; font-weight: 650; }
+.guide h3 span, .evidence a { color: #0c4dcc; }
+.guide p { margin-top: 8px; color: #516176; font-size: 15px; line-height: 1.75; }
+.guide:hover { border-color: #0c4dcc; }
+.evidence { display: flex; flex-wrap: wrap; gap: 8px 24px; margin-top: 20px; font-size: 14px; line-height: 1.8; }
+.evidence a { display: inline-flex; min-height: 44px; align-items: center; text-decoration: underline; text-underline-offset: 4px; }
+.evidence strong { display: inline-flex; min-height: 44px; align-items: center; }
+.guide:focus-visible, .evidence a:focus-visible { outline: 2px solid #0c4dcc; outline-offset: 4px; }
+@media (max-width: 900px) { .guides { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 640px) {
+  .container { width: var(--site-wide-width); }
+  .guides { grid-template-columns: 1fr; }
+  .container h2 { font-size: 28px; }
+}

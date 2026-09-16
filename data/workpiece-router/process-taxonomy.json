@@ -1,0 +1,26 @@
+{
+  "schemaVersion": "1.0.0",
+  "policy": "UI process names must come from this atomic taxonomy and the active processVariant. logic-unit commonProcesses are overview copy only and must not overwrite a selected variant.",
+  "processes": [
+    { "id": "stress_relief_annealing", "label": "去应力退火" },
+    { "id": "post_weld_heat_treatment", "label": "焊后热处理" },
+    { "id": "solution_treatment", "label": "固溶处理" },
+    { "id": "quench_transfer", "label": "淬火转移" },
+    { "id": "artificial_aging", "label": "人工时效" },
+    { "id": "quenching", "label": "淬火" },
+    { "id": "tempering", "label": "回火" },
+    { "id": "normalizing", "label": "正火" },
+    { "id": "annealing", "label": "退火" },
+    { "id": "hydrogen_relief_annealing", "label": "扩氢退火" },
+    { "id": "ferritizing_annealing", "label": "铁素体化退火" },
+    { "id": "austempering", "label": "等温淬火" },
+    { "id": "carburizing", "label": "渗碳" },
+    { "id": "carbonitriding", "label": "碳氮共渗" },
+    { "id": "local_surface_hardening", "label": "表面或局部硬化" },
+    { "id": "coil_annealing", "label": "成卷退火" },
+    { "id": "continuous_annealing", "label": "连续退火" },
+    { "id": "local_weld_seam_treatment", "label": "在线局部焊缝热处理" },
+    { "id": "spheroidizing_annealing", "label": "球化退火" },
+    { "id": "recrystallization_annealing", "label": "再结晶退火" }
+  ]
+}

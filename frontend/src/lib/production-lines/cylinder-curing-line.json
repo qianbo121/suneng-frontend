@@ -1,0 +1,481 @@
+{
+  "pageId": "cylinder-curing-line",
+  "variant": "curing",
+  "seo": {
+    "title": "缠绕气瓶连续固化生产线",
+    "description": "缠绕气瓶连续固化生产线，围绕纤维与树脂体系、瓶体尺寸、内胆耐温和生产节拍，配置端部支承、输送旋转、分区热风、测温记录及冷却下料。了解设备组成、选型参数与交付验收。"
+  },
+  "sectionNavigation": [
+    {
+      "label": "适用工件",
+      "href": "#workpieces"
+    },
+    {
+      "label": "工艺与设备",
+      "href": "#process"
+    },
+    {
+      "label": "设备配置",
+      "href": "#configuration"
+    },
+    {
+      "label": "产能与现场",
+      "href": "#site-conditions"
+    },
+    {
+      "label": "交付验收",
+      "href": "#acceptance"
+    },
+    {
+      "label": "常见问题",
+      "href": "#faq"
+    }
+  ],
+  "images": {
+    "hero-line": {
+      "src": "/images/products/cylinder-curing-line/remaining-batch-v1/01-hero-185b14897c45.png",
+      "width": 1672,
+      "height": 941,
+      "alt": "缠绕气瓶连续热风固化线，包含端部支承送料、保温隧道与出料段",
+      "optimized": true
+    },
+    "process-whole-line": {
+      "src": "/images/products/cylinder-curing-line/remaining-batch-v1/02-whole-line-090ec472d41e.png",
+      "width": 2172,
+      "height": 724,
+      "alt": "白底完整缠绕气瓶固化线，展示送料托架、热风隧道、顶部风机与下料衔接",
+      "optimized": true
+    },
+    "workpiece-composite-cylinder": {
+      "src": "/images/products/cylinder-curing-line/remaining-batch-v1/03-workpiece-66cd19f7aa81.png",
+      "width": 1672,
+      "height": 941,
+      "alt": "两种长度的未装阀缠绕复合气瓶壳体，展示缠绕层与双端金属瓶口",
+      "optimized": true
+    },
+    "loading-end-supported": {
+      "src": "/images/products/cylinder-curing-line/remaining-batch-v1/04-loading-83bfe037ea72.png",
+      "width": 1672,
+      "height": 941,
+      "alt": "复合气瓶通过两端金属轴颈支承在输送托架上，瓶体与托架之间留有间隙",
+      "optimized": true
+    },
+    "gallery-hot-air-chamber": {
+      "src": "/images/products/cylinder-curing-line/remaining-batch-v1/05-detail-1-92cbccc4549d.png",
+      "width": 1672,
+      "height": 941,
+      "alt": "停机检查状态下的固化隧道入口与穿孔热风风道，瓶体由端部托架支承",
+      "optimized": true
+    },
+    "gallery-circulation-exhaust": {
+      "src": "/images/products/cylinder-curing-line/remaining-batch-v1/06-detail-2-109768686af9.png",
+      "width": 1672,
+      "height": 941,
+      "alt": "缠绕气瓶固化隧道顶部风机、风管连接和检修平台",
+      "optimized": true
+    },
+    "gallery-temperature-controls": {
+      "src": "/images/products/cylinder-curing-line/remaining-batch-v1/07-detail-3-537b09b5b331.png",
+      "width": 1672,
+      "height": 941,
+      "alt": "固化线旁的控制柜、测温接线和过程记录设备",
+      "optimized": true
+    },
+    "site-layout": {
+      "src": "/images/products/cylinder-curing-line/remaining-batch-v1/08-site-layout-6cc7f1b39ef4.png",
+      "width": 1672,
+      "height": 941,
+      "alt": "俯斜视角的连续固化线、端部支承暂存区与操作通道",
+      "optimized": true
+    }
+  },
+  "sourceRecord": {
+    "path": "frontend/src/lib/heat-treatment-lines-reviewed.json",
+    "record": "cylinder-curing-line",
+    "review": "2026-09-05 本页正文与8张AI生成配置素材已完成资料复核；拟接入稿，工程与实际项目参数分别确认。",
+    "engineeringNotes": "docs/heat-treatment-lines-final-batch-v1/pages/cylinder-curing-line/engineering-review.md"
+  },
+  "sections": {
+    "overview": {
+      "title": "缠绕气瓶连续固化生产线",
+      "subtitle": "从瓶体与树脂出发，匹配固化曲线和生产节拍。",
+      "description": "面向纤维缠绕复合气瓶，衔接缠绕后上料、分区热风固化与受控冷却。先确认树脂规定的工件温度—时间曲线，再配置端部支承、输送、旋转和记录系统；内胆耐温、复合层厚度与树脂放热共同影响方案。",
+      "facts": [
+        {
+          "label": "处理对象",
+          "value": "纤维缠绕复合气瓶或筒体"
+        },
+        {
+          "label": "工艺目标",
+          "value": "按树脂制度完成工件固化"
+        },
+        {
+          "label": "设备组织",
+          "value": "支承输送、循环热风与排风"
+        },
+        {
+          "label": "配置依据",
+          "value": "瓶体、树脂、温度曲线与节拍"
+        }
+      ],
+      "gallery": [
+        {
+          "id": "view-1",
+          "label": "整线",
+          "alt": "缠绕气瓶连续热风固化线，包含端部支承送料、保温隧道与出料段",
+          "thumbnailAssetId": "hero-line",
+          "fullAssetId": "hero-line"
+        },
+        {
+          "id": "view-2",
+          "label": "热风风道",
+          "alt": "停机检查状态下的固化隧道入口与穿孔热风风道，瓶体由端部托架支承",
+          "thumbnailAssetId": "gallery-hot-air-chamber",
+          "fullAssetId": "gallery-hot-air-chamber"
+        },
+        {
+          "id": "view-3",
+          "label": "循环排风",
+          "alt": "缠绕气瓶固化隧道顶部风机、风管连接和检修平台",
+          "thumbnailAssetId": "gallery-circulation-exhaust",
+          "fullAssetId": "gallery-circulation-exhaust"
+        },
+        {
+          "id": "view-4",
+          "label": "测温控制",
+          "alt": "固化线旁的控制柜、测温接线和过程记录设备",
+          "thumbnailAssetId": "gallery-temperature-controls",
+          "fullAssetId": "gallery-temperature-controls"
+        }
+      ],
+      "actions": [
+        {
+          "label": "提交工况，获取选型建议",
+          "href": "#inquiry",
+          "style": "primary"
+        },
+        {
+          "label": "查看设备配置",
+          "href": "#configuration",
+          "style": "secondary"
+        }
+      ]
+    },
+    "workpieces": {
+      "title": "先看瓶体和树脂，再确定支承与固化方式",
+      "subtitle": "同样的瓶体外形，内胆材料、树脂体系和缠绕层厚度不同，允许的升温、停留和支承条件也不同。",
+      "cards": [
+        {
+          "id": "material",
+          "title": "瓶体与树脂体系",
+          "description": "瓶体尺寸与重量、内胆结构及耐温、纤维与树脂牌号、缠绕层厚度和产品用途。图中双端瓶口结构为代表形态。",
+          "imageAssetId": "workpiece-composite-cylinder"
+        },
+        {
+          "id": "loading",
+          "title": "端部支承与旋转",
+          "description": "按瓶口或芯轴端部设计夹持与支承；湿态复合层避免直接承重、碾压或摩擦。是否旋转、转速与转运时是否持续旋转，由工艺确定。",
+          "imageAssetId": "loading-end-supported"
+        }
+      ],
+      "note": "炉内空气温度与瓶体、复合层温度分别测量；以代表装载验证工件曲线和允许变形。"
+    },
+    "process": {
+      "title": "从缠绕交接到下料，看懂整线组成",
+      "subtitle": "托架负责沿线输送，旋转机构负责瓶体转动；两种动作分别设定并协调。",
+      "imageAssetId": "process-whole-line",
+      "mode": "routes",
+      "stages": [],
+      "routes": [
+        {
+          "title": "连续热风固化参考路线",
+          "steps": [
+            "缠绕交接与产品识别",
+            "端部支承上料",
+            "预热或排挥（按需）",
+            "分区升温",
+            "保温固化",
+            "受控冷却",
+            "下料与后工序",
+            "固化记录归档"
+          ],
+          "note": "需要持续旋转的材料，应同时核对炉外等候、转运与炉内旋转；是否另设后固化按树脂制度确定。"
+        }
+      ],
+      "note": "分区温度、速度与段长按工件曲线配合，不以空气设定温度替代瓶体温度。树脂可能在停止加热后继续放热，停输送、停风与超温须分别制定处置。带气或带压固化不在本页代表配置内。",
+      "imageAlt": "白底完整缠绕气瓶固化线，展示送料托架、热风隧道、顶部风机与下料衔接"
+    },
+    "configuration": {
+      "title": "把输送、热风、测温与排风配到同一工况",
+      "subtitle": "先有材料和代表装载，再核算设备；相同外形并不代表可以直接换用同一配方。",
+      "table": {
+        "caption": "缠绕气瓶连续固化生产线设备配置依据",
+        "columns": [
+          {
+            "key": "item",
+            "label": "配置项目"
+          },
+          {
+            "key": "basis",
+            "label": "设备与衔接要求"
+          }
+        ],
+        "rows": [
+          {
+            "item": "输送与旋转",
+            "cells": [
+              "确认端部受力、装夹、产品节距、热膨胀和防滚脱；输送速度与旋转速度独立配置。"
+            ]
+          },
+          {
+            "item": "循环热风与分区",
+            "cells": [
+              "依据瓶体尺寸、复合层厚度、装载遮挡和工件曲线配置风道、循环风与有效区段。"
+            ]
+          },
+          {
+            "item": "测温与曲线记录",
+            "cells": [
+              "区分设备控制点、空间温度分布与代表瓶体测点；移动或旋转工件的测温连接另行设计。"
+            ]
+          },
+          {
+            "item": "排风与异常处置",
+            "cells": [
+              "依据树脂及清洗剂安全数据、挥发量、最大同时固化量与放热数据，核对补排风、监测和联锁。"
+            ]
+          },
+          {
+            "item": "产品追溯",
+            "cells": [
+              "将瓶号或批次与配方、固化曲线、异常和检验放行关联；明确与上游、下游系统接口。"
+            ]
+          }
+        ]
+      },
+      "notes": [
+        "连续式适合节拍和配方较稳定的生产；多树脂频繁切换、差异较大的固化曲线或上游供料波动，需要比较分批固化与暂存组织。"
+      ],
+      "action": {
+        "label": "把已有参数发给工程师",
+        "href": "#inquiry"
+      },
+      "inputs": [
+        {
+          "title": "产品",
+          "description": "瓶体结构、尺寸、重量、容积、内胆材质及耐温、层厚和用途；提供端部结构图。"
+        },
+        {
+          "title": "材料体系",
+          "description": "纤维、树脂、固化体系、安全数据表、挥发物与放热数据；必要的热分析和工件测温"
+        },
+        {
+          "title": "固化曲线",
+          "description": "工件升温速率、保温温度/时间、冷却速率和允许窗口"
+        },
+        {
+          "title": "上游时限",
+          "description": "缠绕完成至进炉的可操作时间、滴胶/排挥与暂存条件"
+        },
+        {
+          "title": "输送支撑",
+          "description": "瓶口或芯轴端部尺寸、允许受力、产品节距、旋转要求、热膨胀和转运方式。"
+        },
+        {
+          "title": "气流排风",
+          "description": "温度均匀、挥发物排放、补风、浓度监测与处理接口"
+        },
+        {
+          "title": "安全",
+          "description": "树脂及清洗剂危险性、放热、可燃挥发物和故障工况，确定相应防火防爆及联锁措施。"
+        },
+        {
+          "title": "质量追溯",
+          "description": "瓶号、配方、工件热电偶、固化曲线和产品检验关联"
+        }
+      ]
+    },
+    "site-conditions": {
+      "title": "产能与现场条件，一起算清楚",
+      "imageAssetId": "site-layout",
+      "requirements": [
+        {
+          "title": "目标产量与班次",
+          "description": "确认代表工件、有效生产时间、换型和各工序瓶颈。"
+        },
+        {
+          "title": "电力与热源",
+          "description": "确认热源、供电、接地、控制系统及必要的应急供能与通风条件。"
+        },
+        {
+          "title": "循环风与排风",
+          "description": "依据树脂安全数据、挥发物及放热条件，核对补排风和处理设施接口。"
+        },
+        {
+          "title": "缠绕与后工序",
+          "description": "确认进炉前可操作时间、暂存、上下料和下游检验衔接。"
+        }
+      ],
+      "capacity": "等节距、稳定输送时，理论通过量（件/h）＝并行通道数 × 输送速度（m/min）÷ 产品节距（m）× 60。该值须受工件升温、保温和冷却时间约束；有效保温按约定的瓶体测温条件判定。计划合格产量还须计入换型、停机、上游可操作时间、最大同时固化量、放热与排风能力以及后工序节拍。",
+      "imageCaption": "单条连续热风固化线的现场组织参考，设备尺寸及通道宽度按项目布置确定。"
+    },
+    "delivery-scope": {
+      "title": "明确主设备、上下游接口与交付内容",
+      "subtitle": "明确设备组成、配套系统与现场接口。",
+      "imageAssetId": "process-whole-line",
+      "contentTitle": "整线交付围绕四个系统展开",
+      "items": [
+        {
+          "label": "输送与旋转",
+          "value": "端部支承托架、输送机构、旋转机构与上下料衔接。"
+        },
+        {
+          "label": "热风与冷却",
+          "value": "分区热风、循环风道、冷却段及对应补排风接口。"
+        },
+        {
+          "label": "测温与控制",
+          "value": "温度控制、代表件测温接口、曲线记录及异常联锁。"
+        },
+        {
+          "label": "现场与上下游",
+          "value": "基础、电力、排风处理、缠绕交接与检验工序的分工。"
+        }
+      ],
+      "note": "设备清单、供货范围与双方分工在技术方案中列明。"
+    },
+    "acceptance": {
+      "title": "交付到哪一步，验收就核对到哪一步",
+      "subtitle": "设备功能、工艺性能与产品验证分别约定条件。",
+      "columns": [
+        {
+          "id": "equipment",
+          "title": "设备功能",
+          "description": "核对装夹、输送、旋转、循环风和排风；验证超温、停风、卡料及断电等约定故障的联锁与记录。"
+        },
+        {
+          "id": "process",
+          "title": "工艺性能",
+          "description": "使用代表瓶体和装载，验证升温、保温、冷却曲线以及最冷和最热位置，明确工件测点、计时与判定条件。"
+        },
+        {
+          "id": "product",
+          "title": "产品验证",
+          "description": "按采用的产品与材料规范验证固化状态及相关性能，气瓶规定检验和试验由约定责任方实施。"
+        }
+      ],
+      "productNote": "固化曲线合格不等于整只气瓶合格；产品用途、结构与采用规范决定后续检验项目。",
+      "stages": [
+        {
+          "id": "requirements",
+          "order": 1,
+          "label": "需求沟通"
+        },
+        {
+          "id": "design",
+          "order": 2,
+          "label": "方案设计"
+        },
+        {
+          "id": "manufacturing-inspection",
+          "order": 3,
+          "label": "制造检验"
+        },
+        {
+          "id": "installation-commissioning",
+          "order": 4,
+          "label": "安装联调"
+        },
+        {
+          "id": "acceptance-delivery",
+          "order": 5,
+          "label": "验收交付"
+        }
+      ],
+      "note": "设备验收与产品检验分别明确条件与责任；代表材料、装载、抽样和判定在协议中约定。"
+    },
+    "faq": {
+      "title": "采购与技术常见问题",
+      "subtitle": "先了解本工艺的选型、配套与现场衔接问题。",
+      "items": [
+        {
+          "id": "faq-1",
+          "question": "为什么要测瓶体温度而不是只看炉温？",
+          "answer": "瓶体尺寸、内胆导热、缠绕层厚度、装载和树脂放热都会改变工件温度。先用代表件确定测点并验证，再将瓶体曲线与各区控制温度关联。",
+          "defaultOpen": true
+        },
+        {
+          "id": "faq-2",
+          "question": "气瓶在炉内为什么需要旋转？",
+          "answer": "部分湿法缠绕体系需要旋转，减小树脂在重力作用下的迁移。是否需要、转速及转运阶段是否持续旋转，要看树脂和产品工艺；托架前进速度与瓶体旋转速度分别配置。",
+          "defaultOpen": false
+        },
+        {
+          "id": "faq-3",
+          "question": "连续固化线需要防爆吗？",
+          "answer": "先依据树脂和清洗剂安全数据表、挥发物释放量、最大装载和通风条件做危险分析，再确定监测、联锁及防火防爆措施，不能只看设定温度。",
+          "defaultOpen": false
+        },
+        {
+          "id": "faq-4",
+          "question": "一条线能做多种树脂吗？",
+          "answer": "可以评估共线，但需核对固化曲线、内胆耐温、放热与排挥、污染清洁和换型损失。配方差异或频繁切换较大时，应同时比较分批固化方案。",
+          "defaultOpen": false
+        },
+        {
+          "id": "faq-5",
+          "question": "固化合格是否等于气瓶合格？",
+          "answer": "不是。固化只是制造过程之一，完整气瓶仍须按适用产品标准完成设计确认、制造检验和规定试验。",
+          "defaultOpen": false
+        }
+      ],
+      "relatedGroups": [
+        {
+          "id": "technical",
+          "title": "选型资料",
+          "links": [
+            {
+              "label": "本线询价参数清单",
+              "href": "/downloads/heat-treatment-lines/cylinder-curing-line.txt"
+            }
+          ]
+        }
+      ]
+    },
+    "inquiry": {
+      "title": "告诉我们瓶体、树脂和产量，开始讨论方案",
+      "description": "已知信息先填，关键工况在方案沟通中补齐。",
+      "form": {
+        "id": "cylinder-curing-line-inquiry",
+        "fields": [
+          {
+            "name": "workpiece_material",
+            "label": "瓶体与树脂体系",
+            "placeholder": "如：内胆、瓶体尺寸、纤维与树脂",
+            "required": false
+          },
+          {
+            "name": "target_performance",
+            "label": "固化制度与要求",
+            "placeholder": "如：工件升温、保温与冷却曲线",
+            "required": false
+          },
+          {
+            "name": "target_output",
+            "label": "目标产量",
+            "placeholder": "如：产量、生产班次与换型频率",
+            "required": false
+          },
+          {
+            "name": "contact_method",
+            "label": "联系方式",
+            "placeholder": "电话、微信或邮箱",
+            "required": true
+          }
+        ],
+        "submitLabel": "获取选型建议",
+        "helperText": "已知信息先填，不明确的项目可留空。"
+      }
+    }
+  }
+}

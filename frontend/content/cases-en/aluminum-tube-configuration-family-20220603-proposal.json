@@ -1,0 +1,13 @@
+{
+  "id": "aluminum-tube-configuration-family-20220603-proposal",
+  "slug": "aluminum-tube-annealing-size-airflow-configuration-proposal",
+  "number": 33,
+  "title": "Which configurations need to change when upsizing a 6061 aluminium-tube annealing furnace?",
+  "summary": "Compare chamber size, doors, heating zones and circulation together when selecting an aluminium-tube annealing furnace. Jiangsu Suneng Industrial Furnace Co., Ltd.'s 2022–2023 records for 6061 aluminium tubes include several new-furnace sizes and a 300 kW retrofit quotation. Configuration changes involve more than increased power. These documents support initial comparison, not a confirmed sequence of capacity expansions or completed modifications.",
+  "body": "aluminum-tube-configuration-family-20220603-proposal.md",
+  "sourceFingerprint": "ee937be72e8a564903827a21c21f99d79b9ce6354ab4c848c4100bd74ad45b4c",
+  "translationStatus": "complete",
+  "translatedAt": "2026-09-12",
+  "coverAlt": "Illustration of aluminium-alloy tubes.",
+  "coverCaption": "Illustration of aluminium-alloy tubes (AI-generated). Not an actual customer workpiece photograph."
+}

@@ -1,0 +1,63 @@
+{
+  "id": "titanium-heated-door-shield-proposal",
+  "slug": "titanium-forging-box-furnace-heated-door-heat-shield-proposal",
+  "title": "钛合金锻件箱式炉的开门隔热与线缆保护",
+  "summary": "苏能一份用于钛合金锻件及大型金属锻件加热的箱式炉方案，将加热元件布置到炉门，并在炉门升起后正对热面的位置设置热防护墙，用来隔开炉门热面与炉顶热电偶、补偿导线等设施。核对这类炉子时，除了看关门后的加热布局，还要检查开门后的热面朝向与被保护部位；升门断开加热电源，并不等于热面已经冷却。",
+  "body": "titanium-heated-door-shield-proposal.md",
+  "contentType": "proposal",
+  "publicationStatus": "draft",
+  "projectStatus": "proposal",
+  "workpiece": [
+    "钛合金锻件",
+    "大型金属锻件"
+  ],
+  "materials": [
+    "钛合金"
+  ],
+  "process": [
+    "锻前加热",
+    "热处理加热"
+  ],
+  "equipment": [
+    "高温箱式电阻炉"
+  ],
+  "need": [
+    "开门热防护与检修布置"
+  ],
+  "tags": [
+    "方案参考",
+    "钛合金锻件",
+    "大型金属锻件",
+    "开门热防护与检修布置"
+  ],
+  "facts": [
+    {
+      "label": "拟加热布局",
+      "value": "五面加热",
+      "unit": "",
+      "condition": "包含炉门，需同时检查升门后的热面方向",
+      "attribute": "方案参数"
+    },
+    {
+      "label": "拟热防护墙位置",
+      "value": "炉门升起正后方",
+      "unit": "",
+      "condition": "原件为炉口上部的可拆卸结构，须以最终覆盖图为准",
+      "attribute": "方案参数"
+    },
+    {
+      "label": "方案加热分区",
+      "value": "4",
+      "unit": "区",
+      "condition": "炉温检测控制分区，不表示四个工件内部测点",
+      "attribute": "方案参数"
+    }
+  ],
+  "participation": "苏能拟提供高温箱式炉、控温记录和热防护结构，并按文件提供设计资料和调试服务。",
+  "sourceSummary": "本文依据江苏苏能工业炉有限公司的历史方案资料整理，介绍拟定配置与供货条件；本文所引原件不构成设备已交付或验收通过的证明。",
+  "coverTitle": "钛合金锻件箱式炉方案：炉门加热面升起后，热防护墙保护什么？",
+  "relatedLinks": [],
+  "sourceDate": "2026-05-19",
+  "listTitle": "钛合金锻件箱式炉的开门隔热与线缆保护",
+  "dateModified": "2026-09-12"
+}

@@ -1,0 +1,13 @@
+{
+  "id": "normalizing-air-cooling-20201030-proposal",
+  "slug": "normalizing-tempering-line-air-cooling-elevator-interfaces-proposal",
+  "number": 45,
+  "title": "What cooling section is needed between mesh-belt normalising and tempering furnaces?",
+  "summary": "The cooling section between normalising and tempering must both remove heat and transfer parts. Jiangsu Suneng Industrial Furnace Co., Ltd.'s roller-supported mesh-belt line proposal dated 30 October 2020 places a forced-air cooler with elevator between the furnaces. Parts enter from the normalising drop opening and are lifted to the tempering inlet after cooling. Check stable transfer, process cooling and belt coordination together.",
+  "body": "normalizing-air-cooling-20201030-proposal.md",
+  "sourceFingerprint": "728651b69d3a0db520f63d8c73390affe6971e17cb6da813b36c6693849455f5",
+  "translationStatus": "complete",
+  "translatedAt": "2026-09-12",
+  "coverAlt": "Illustration of generic rectangular metal blanks",
+  "coverCaption": "AI-generated illustration of generic metal blanks, not a photograph of this project's workpieces. Actual parts and loading arrangements follow the project documents."
+}

@@ -1,0 +1,74 @@
+{
+  "id": "long-cylinder-fit-chain-20260905-proposal",
+  "slug": "long-cylinder-fit-chain-20260905-proposal",
+  "title": "气瓶内胆加长到3500毫米，旧料框还能用吗？",
+  "summary": "苏能一组气瓶设备讨论稿，将3500mm长铝内胆的料框适配列为待确认事项，并在固化段另列瓶体长度与带中心杆总长。核对长气瓶设备时，应按工件在各工序的实际状态分别检查，不能把内胆、料框和带芯轴缠绕瓶当成同一个外形。",
+  "body": "long-cylinder-fit-chain-20260905-proposal.md",
+  "contentType": "proposal",
+  "publicationStatus": "draft",
+  "projectStatus": "proposal",
+  "workpiece": [
+    "铝合金气瓶内胆",
+    "碳纤维缠绕气瓶"
+  ],
+  "materials": [
+    "铝合金",
+    "碳纤维复合材料"
+  ],
+  "process": [
+    "固溶",
+    "时效",
+    "固化"
+  ],
+  "equipment": [
+    "移动式固溶炉",
+    "辊棒式时效炉",
+    "箱式固化炉"
+  ],
+  "need": [
+    "长规格适配"
+  ],
+  "tags": [
+    "方案参考",
+    "铝合金气瓶内胆",
+    "碳纤维缠绕气瓶",
+    "长规格适配"
+  ],
+  "facts": [
+    {
+      "label": "内胆长规格目标",
+      "value": "Φ570×3500",
+      "unit": "mm",
+      "condition": "料框及全流程适配尚待确认，非已验证能力",
+      "attribute": "方案参数"
+    },
+    {
+      "label": "固化瓶体长度",
+      "value": "≤3400",
+      "unit": "mm",
+      "condition": "1#炉讨论稿，对应缠绕后瓶体",
+      "attribute": "方案参数"
+    },
+    {
+      "label": "带中心杆总长",
+      "value": "≤4030",
+      "unit": "mm",
+      "condition": "1#炉讨论稿，方向、芯轴接口及有效区待确认",
+      "attribute": "方案参数"
+    }
+  ],
+  "participation": "内胆固溶时效及缠绕后固化两套讨论稿的装载与转运接口",
+  "sourceSummary": "本文依据江苏苏能工业炉有限公司的历史方案资料整理，介绍拟定配置与供货条件；本文所引原件不构成设备已交付或验收通过的证明。",
+  "coverTitle": "长气瓶配炉方案：内胆加长后，装框、转运与固化装载怎样逐段核对？",
+  "relatedLinks": [],
+  "projectYear": 2026,
+  "sourceDate": "2026-09-05",
+  "cover": {
+    "src": "/images/case-covers/white-background-20260912/cylinder-rotation-curing-20250210-proposal-white.png",
+    "alt": "缠绕气瓶类别工件示意",
+    "caption": "缠绕气瓶类别示意（本稿涉及的一类对象，人工智能生成，非客户实物）",
+    "fit": "contain"
+  },
+  "listTitle": "气瓶内胆加长到3500毫米，旧料框还能用吗？",
+  "dateModified": "2026-09-12"
+}

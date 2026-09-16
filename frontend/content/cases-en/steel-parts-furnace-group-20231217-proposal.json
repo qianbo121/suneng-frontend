@@ -1,0 +1,13 @@
+{
+  "id": "steel-parts-furnace-group-20231217-proposal",
+  "slug": "steel-parts-furnace-group-insulated-transfer-interfaces-proposal",
+  "number": 30,
+  "title": "Load-following insulating covers, lifting fixtures and transfer stations in a heat-treatment furnace group",
+  "summary": "Workpieces, lifting fixtures and insulating covers in a furnace group must be assessed along the actual transfer route, not against one shared load rating. Jiangsu Suneng Industrial Furnace Co., Ltd.'s historical proposals from December 2023 to April 2024 separately list protective-atmosphere pit, nitrate-salt and tempering furnaces, air-cooling and washing equipment, and water-cooling/handling auxiliaries. The salt-furnace proposal also sends an insulating cover through heating and transfer with the load. First identify which components enter each station, then compare space, thermal load and interfaces.",
+  "body": "steel-parts-furnace-group-20231217-proposal.md",
+  "sourceFingerprint": "81b40a1b7a3ea30dba4b4d283fe5f97bd643ef9a3c010a59001e6d75d4356644",
+  "translationStatus": "complete",
+  "translatedAt": "2026-09-12",
+  "coverAlt": "",
+  "coverCaption": ""
+}

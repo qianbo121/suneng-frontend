@@ -32,5 +32,17 @@ describe('productDetailEn coverage', () => {
 
       expect(missingFields, `${slug} -> ${missingFields.join(', ')}`).toEqual([]);
     });
+
+    it('provides a value for every displayed comparison column', () => {
+      const english = productDetailEn[slug];
+      for (const row of english?.comparisonRows ?? []) {
+        const cells = english?.comparisonHeaders?.length === 3
+          ? [row.left, row.middle, row.right]
+          : english?.comparisonHeaders?.length === 2
+            ? [row.left, row.right || row.box || row.middle]
+            : [row.trolley || row.left, row.box || row.right || row.middle];
+        expect(cells.every((cell) => typeof cell === 'string' && cell.trim().length > 0), slug).toBe(true);
+      }
+    });
   });
 });

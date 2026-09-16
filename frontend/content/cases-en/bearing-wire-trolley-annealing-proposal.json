@@ -1,0 +1,13 @@
+{
+  "id": "bearing-wire-trolley-annealing-proposal",
+  "slug": "bearing-wire-trolley-annealing-proposal",
+  "number": 68,
+  "title": "Loading arrangements for a 30-tonne bearing-steel-wire spheroidising bogie-hearth furnace",
+  "summary": "A 2017 proposal for a new bogie-hearth spheroidising annealing furnace for bearing-steel wire specifies an effective chamber of approximately 10×3×2.2 m, a maximum design temperature of 850°C and a maximum load of 30 t excluding fixture support blocks. These conditions illustrate loading and equipment arrangements in the historical proposal; they do not represent actual customer output or acceptance results.",
+  "body": "bearing-wire-trolley-annealing-proposal.md",
+  "sourceFingerprint": "84d0f85c1c2e24dfa13d478c265d1d420d27434a6b508c475d39433f803a0746",
+  "translationStatus": "complete",
+  "translatedAt": "2026-09-12",
+  "coverAlt": "Illustration of tall cylindrical steel-wire coils.",
+  "coverCaption": "Illustration of tall cylindrical steel-wire coils (AI-generated). Not an actual customer workpiece photograph. Does not establish actual dimensions, winding or furnace loading arrangements."
+}

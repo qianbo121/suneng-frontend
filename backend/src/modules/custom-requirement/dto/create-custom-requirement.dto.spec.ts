@@ -68,6 +68,142 @@ describe('CreateCustomRequirementDto', () => {
     },
   );
 
+  it('accepts the approved four-field homepage payload without hidden required fields', async () => {
+    const minimal = plainToInstance(CreateCustomRequirementDto, {
+      formVariant: 'homepage_minimal',
+      projectType: '现有设备改造或维修',
+      requirement: '现有炉温度不均，想先判断改造还是换新',
+      identity: '示例制造公司 / 王工',
+      contact: 'wechat_name-2026',
+      locale: 'zh',
+    });
+
+    await expect(validate(minimal)).resolves.toHaveLength(0);
+    expect(minimal.projectLocation).toBeUndefined();
+    expect(minimal.company).toBeUndefined();
+  });
+
+  it('requires all four visible homepage fields and accepts email as the single contact', async () => {
+    const minimal = (overrides: Record<string, unknown> = {}) =>
+      plainToInstance(CreateCustomRequirementDto, {
+        formVariant: 'homepage_minimal',
+        projectType: '单体工业炉新建',
+        requirement: '需要先确认设备方向',
+        identity: '王工',
+        contact: 'buyer@example.com',
+        locale: 'zh',
+        ...overrides,
+      });
+
+    await expect(validate(minimal())).resolves.toHaveLength(0);
+    for (const field of ['projectType', 'requirement', 'identity', 'contact'] as const) {
+      const errors = await validate(minimal({ [field]: '   ' }));
+      expect(errors.some((error) => error.property === field)).toBe(true);
+    }
+  });
+
+  it('accepts and validates an optional project location for a minimal inquiry', async () => {
+    const minimal = (projectLocation: unknown) =>
+      plainToInstance(CreateCustomRequirementDto, {
+        formVariant: 'homepage_minimal',
+        projectType: '金属带材连续退火 / 固溶生产线',
+        requirement: '需要先做选型初判',
+        identity: '王工',
+        contact: 'wechat_name-2026',
+        projectLocation,
+        locale: 'zh',
+      });
+
+    await expect(validate(minimal('江苏泰州 / 越南'))).resolves.toHaveLength(0);
+    expect(
+      (await validate(minimal('甲'.repeat(181)))).some(
+        (error) => error.property === 'projectLocation',
+      ),
+    ).toBe(true);
+  });
+
+  it('accepts one optional structured workpiece context', async () => {
+    const minimal = plainToInstance(CreateCustomRequirementDto, {
+      formVariant: 'homepage_minimal',
+      projectType: '单体工业炉新建',
+      requirement: '需要先确认设备方向',
+      identity: '王工',
+      contact: 'buyer@example.com',
+      locale: 'zh',
+      workpieceContext: {
+        categoryId: 'welded-structures',
+        workpieceId: 'large-welded-machine-frame',
+        processPurposeId: 'stress-relief',
+        rawConditions: {
+          dimensionLength: 4200,
+          dimensionUnit: 'mm',
+          batchLoadWeightKg: 8000,
+        },
+      },
+    });
+
+    await expect(validate(minimal, { whitelist: true })).resolves.toHaveLength(0);
+  });
+
+  it('rejects invalid raw condition enums, units, ranges, non-finite numbers and markup', async () => {
+    for (const rawConditions of [
+      { loadingOrientation: 'roller_supported' },
+      { dimensionUnit: 'inch' },
+      { batchLoadWeightKg: -1 },
+      { dimensionLength: Number.NaN },
+      { dimensionWidth: Number.POSITIVE_INFINITY },
+      { materialGrade: '<script>alert(1)</script>' },
+    ]) {
+      const minimal = plainToInstance(CreateCustomRequirementDto, {
+        formVariant: 'homepage_minimal',
+        projectType: '单体工业炉新建',
+        requirement: '需要先确认设备方向',
+        identity: '王工',
+        contact: 'buyer@example.com',
+        locale: 'zh',
+        workpieceContext: {
+          categoryId: 'welded-structures',
+          workpieceId: 'large-welded-machine-frame',
+          processPurposeId: 'stress-relief',
+          rawConditions,
+        },
+      });
+
+      expect(await validate(minimal, { whitelist: true })).not.toHaveLength(0);
+    }
+  });
+
+  it('strips arbitrary JSON, forged furnace output and contact fields before persistence', async () => {
+    const minimal = plainToInstance(CreateCustomRequirementDto, {
+      formVariant: 'homepage_minimal',
+      projectType: '单体工业炉新建',
+      requirement: '需要先确认设备方向',
+      identity: '王工',
+      contact: 'buyer@example.com',
+      locale: 'zh',
+      workpieceContext: {
+        categoryId: 'welded-structures',
+        workpieceId: 'large-welded-machine-frame',
+        processPurposeId: 'stress-relief',
+        ruleId: 'forged-rule',
+        furnaceName: '伪造炉型',
+        rawConditions: {
+          dimensionLength: 4200,
+          loadEnvelopeCompatible: true,
+          serverEngineeringPredicates: { loadCapacityCompatible: true },
+          phone: '13000000000',
+          email: 'buyer@example.com',
+          arbitraryObject: { keep: false },
+        },
+      },
+    });
+
+    await expect(validate(minimal, { whitelist: true })).resolves.toHaveLength(0);
+    expect(minimal.workpieceContext).not.toHaveProperty('ruleId');
+    expect(minimal.workpieceContext).not.toHaveProperty('furnaceName');
+    expect(minimal.workpieceContext?.rawConditions).toEqual({ dimensionLength: 4200 });
+  });
+
   it('trims overlong optional source fields before validation instead of rejecting the inquiry', async () => {
     const transformed = plainToInstance(CreateCustomRequirementDto, {
       ...dto(),

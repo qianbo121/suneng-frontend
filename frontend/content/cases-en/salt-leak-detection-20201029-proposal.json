@@ -1,0 +1,13 @@
+{
+  "id": "salt-leak-detection-20201029-proposal",
+  "slug": "crucible-salt-furnace-leak-collection-detection-proposal",
+  "number": 96,
+  "title": "How can salt leakage from a salt-bath furnace be detected?",
+  "summary": "Suneng's 2020 salt-bath heating proposal for steel parts provides a leak-prevention sealing groove at the furnace top plate and salt-leak detection electrodes in a collection trough at the furnace bottom. Confirm sealing, collection and detection locations separately. A salt-leak alarm does not mean the crucible cannot leak or that all subsequent response actions are defined.",
+  "body": "salt-leak-detection-20201029-proposal.md",
+  "sourceFingerprint": "b0b14f6665dac5de4b0ac905e93b102bba95bc92a77b461af88853c0b1fa4c6c",
+  "translationStatus": "complete",
+  "translatedAt": "2026-09-12",
+  "coverAlt": "",
+  "coverCaption": ""
+}

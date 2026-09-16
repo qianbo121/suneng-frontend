@@ -1,0 +1,62 @@
+{
+  "id": "belt-side-discharge-20200119-proposal",
+  "slug": "oil-quench-belt-line-side-discharge-tempering-interface-proposal",
+  "title": "网带炉油淬后能单独收料吗？",
+  "summary": "苏能2020年一份托辊网带热处理线方案，在油槽提升机出口设置可旋转出料斗，供工艺不需要在该线回火的工件侧向出料；正常流程则继续送往回火炉。这个结构提供的是不同接料路径，不能由出料斗能转向，就判断某类工件可以省略回火或已经完成全部热处理。",
+  "body": "belt-side-discharge-20200119-proposal.md",
+  "contentType": "proposal",
+  "publicationStatus": "draft",
+  "projectStatus": "proposal",
+  "workpiece": [
+    "金属工件"
+  ],
+  "materials": [],
+  "process": [
+    "保护气氛加热",
+    "油淬",
+    "回火"
+  ],
+  "equipment": [
+    "托辊网带炉",
+    "侧向出料斗"
+  ],
+  "need": [
+    "油淬后分流核对"
+  ],
+  "tags": [
+    "方案参考",
+    "金属工件",
+    "油淬后分流核对"
+  ],
+  "facts": [
+    {
+      "label": "拟侧向出料机构",
+      "value": "可旋转出料斗",
+      "unit": "",
+      "condition": "只支持原文指定的工艺去向，不是通用免回火方案",
+      "attribute": "方案参数"
+    },
+    {
+      "label": "油槽拟提升有效宽",
+      "value": "1000",
+      "unit": "mm",
+      "condition": "该提升段宽度，非全线统一有效空间",
+      "attribute": "方案参数"
+    },
+    {
+      "label": "方案直通去向",
+      "value": "回火炉入口",
+      "unit": "",
+      "condition": "适用于按工艺继续回火的路径",
+      "attribute": "方案参数"
+    }
+  ],
+  "participation": "苏能方案提出油槽提升后可旋转出料与回火直通路径；产品工艺和现场接料范围需终版确认。",
+  "sourceSummary": "本文依据江苏苏能工业炉有限公司的历史方案资料整理，介绍拟定配置与供货条件；本文所引原件不构成设备已交付或验收通过的证明。",
+  "coverTitle": "网带热处理线方案：油淬后侧向出料，怎样与回火入口区分？",
+  "relatedLinks": [],
+  "projectYear": 2020,
+  "sourceDate": "2020-01-19",
+  "listTitle": "网带炉油淬后能单独收料吗？",
+  "dateModified": "2026-09-12"
+}

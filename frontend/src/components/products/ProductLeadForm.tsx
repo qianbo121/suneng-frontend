@@ -31,6 +31,7 @@ type ProductLeadFormProps = {
   phone?: string;
   email?: string;
   className?: string;
+  inquiryProduct?: string;
 };
 
 const leadFormCopy = {
@@ -225,6 +226,7 @@ function LeadTextarea({
   required = false,
   invalid = false,
   maxLength,
+  defaultValue,
   className = '',
 }: {
   label: string;
@@ -233,6 +235,7 @@ function LeadTextarea({
   required?: boolean;
   invalid?: boolean;
   maxLength?: number;
+  defaultValue?: string;
   className?: string;
 }) {
   return (
@@ -240,6 +243,7 @@ function LeadTextarea({
       <FieldLabel label={label} required={required} />
       <textarea
         name={name}
+        defaultValue={defaultValue}
         required={required}
         maxLength={maxLength}
         aria-invalid={invalid || undefined}
@@ -314,7 +318,8 @@ export function ProductQuoteScrollButton({
   const handleClick = () => {
     trackLeadEvent('quote_cta_click');
     const target = document.getElementById(anchorId);
-    target?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    target?.scrollIntoView({ behavior: prefersReducedMotion ? 'auto' : 'smooth', block: 'start' });
     if (target && updateHash) window.history.replaceState(null, '', `#${anchorId}`);
   };
 
@@ -355,6 +360,7 @@ export function ProductLeadForm({
   phone,
   email,
   className = '',
+  inquiryProduct,
 }: ProductLeadFormProps) {
   const copy = leadFormCopy[locale];
   const resolvedTitle = title ?? copy.defaultTitle;
@@ -382,8 +388,14 @@ export function ProductLeadForm({
     if (submissionId) {
       successWasOpenRef.current = true;
       successButtonRef.current?.focus();
-      const handleKeyDown = (event: KeyboardEvent) =>
+      const handleKeyDown = (event: KeyboardEvent) => {
+        if (event.key === 'Tab') {
+          event.preventDefault();
+          successButtonRef.current?.focus();
+          return;
+        }
         handleSuccessDialogKeyDown(event, () => setSubmissionId(''));
+      };
       document.addEventListener('keydown', handleKeyDown);
       return () => document.removeEventListener('keydown', handleKeyDown);
     }
@@ -459,7 +471,7 @@ export function ProductLeadForm({
         buildCustomRequirementPayload(
           values,
           locale,
-          buildLeadSourceSnapshot(),
+          buildLeadSourceSnapshot(inquiryProduct ? { productTag: inquiryProduct } : undefined),
           getFormIdempotencyKey(idempotencyKeyRef),
         ),
       );
@@ -568,7 +580,7 @@ export function ProductLeadForm({
             <LeadTextInput label={copy.fields.projectLocation.label} name="projectLocation" placeholder={copy.fields.projectLocation.placeholder} required invalid={invalidField === 'projectLocation'} autoComplete="country-name" maxLength={180} />
             <LeadTextInput label={copy.fields.phone.label} name="phone" placeholder={copy.fields.phone.placeholder} type="tel" invalid={invalidField === 'phone'} autoComplete="tel" maxLength={50} />
             <LeadTextInput label={copy.fields.email.label} name="email" placeholder={copy.fields.email.placeholder} type="email" required={locale === 'en'} invalid={invalidField === 'email'} autoComplete="email" maxLength={254} />
-            <LeadTextarea className="md:col-span-2" label={copy.fields.requirement.label} name="requirement" placeholder={copy.fields.requirement.placeholder} required invalid={invalidField === 'requirement'} maxLength={8000} />
+            <LeadTextarea className="md:col-span-2" label={copy.fields.requirement.label} name="requirement" placeholder={copy.fields.requirement.placeholder} defaultValue={inquiryProduct ? `${locale === 'en' ? 'Equipment' : '咨询设备'}: ${inquiryProduct}.\n` : undefined} required invalid={invalidField === 'requirement'} maxLength={8000} />
             <div className="md:col-span-2 flex justify-end pt-1">
               <button type="button" onClick={handleNext} className="h-[46px] w-full rounded-[4px] cta-primary px-6 text-[15px] font-medium text-white sm:w-[220px]">
                 {copy.next}

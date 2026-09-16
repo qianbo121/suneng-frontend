@@ -1,0 +1,75 @@
+{
+  "id": "gas-roller-external-press-20240313-proposal",
+  "slug": "plate-gas-roller-furnace-external-quench-press-interface-proposal",
+  "title": "辊道加热炉接自备压淬机，要对齐哪些接口？",
+  "listTitle": "辊道加热炉接自备压淬机，要对齐哪些接口？",
+  "listSummary": "快速出炉只完成热态工件转运的一段，仍需与后续冷却设备接好。",
+  "summary": "快速出炉只完成热态工件转运的一段，仍需与后续冷却设备接好。江苏苏能工业炉有限公司2024年3月13日的辊棒式燃气淬火炉资料，提出炉内加热后快速出料，同时将压淬机床、冷却系统和沉淀除渣列为用户自理；喷水压淬方式还标注“待定”。因此，这份方案可用于核对交接范围，不能写成整套压淬线已经确定或交付。",
+  "body": "plate-gas-roller-furnace-external-quench-press-interface-proposal.md",
+  "contentType": "proposal",
+  "publicationStatus": "draft",
+  "projectStatus": "proposal",
+  "projectYear": 2024,
+  "sourceDate": "2024-03-13",
+  "workpiece": [
+    "板状工件"
+  ],
+  "materials": [],
+  "process": [
+    "淬火前加热"
+  ],
+  "equipment": [
+    "辊棒式燃气加热炉"
+  ],
+  "need": [
+    "外部压淬设备接入"
+  ],
+  "tags": [
+    "方案参考",
+    "板状工件",
+    "外部压淬设备接入"
+  ],
+  "facts": [
+    {
+      "label": "方案有效工作尺寸",
+      "value": "8350×730×200",
+      "unit": "mm",
+      "condition": "长×宽×高，非外部压淬接料能力",
+      "attribute": "方案参数"
+    },
+    {
+      "label": "方案最高工作温度",
+      "value": "1000",
+      "unit": "℃",
+      "condition": "不等于工件实际淬火工艺温度",
+      "attribute": "方案参数"
+    },
+    {
+      "label": "炉内辊棒中心距",
+      "value": "114.3",
+      "unit": "mm",
+      "condition": "需核实际工件接触与转接支承",
+      "attribute": "方案参数"
+    }
+  ],
+  "participation": "苏能方案拟提供燃气加热炉及进出料配套，压淬机床、冷却和沉淀除渣按原件由用户自理。",
+  "sourceSummary": "江苏苏能工业炉有限公司历史技术方案资料整理。",
+  "coverTitle": "板状工件燃气辊道炉方案：快速出料怎样接到自备压淬设备？",
+  "relatedLinks": [
+    {
+      "title": "了解辊底炉的适用条件",
+      "href": "/zh/products/detail/roller-hearth-furnace"
+    },
+    {
+      "title": "准备询价参数与供货范围",
+      "href": "/zh/articles/gongye-lu-baojia-canshu"
+    }
+  ],
+  "cover": {
+    "src": "/images/case-covers/white-background-20260912/neutral-metal-plate-white.webp",
+    "alt": "板料类别工件示意",
+    "caption": "板料工件示意（人工智能生成，非客户实物）",
+    "fit": "contain"
+  },
+  "dateModified": "2026-09-12"
+}

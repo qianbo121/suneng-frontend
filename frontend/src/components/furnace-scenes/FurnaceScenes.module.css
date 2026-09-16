@@ -8,17 +8,11 @@
   border-radius: inherit;
   isolation: isolate;
   contain: layout paint;
-  background: linear-gradient(180deg, #0f1e33 0%, #0b1526 100%);
+  background: var(--furnace-scene-surface, #f3f5f7);
 }
 
 .sceneRoot::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.03), transparent 22%),
-    radial-gradient(circle at 50% 42%, rgba(255, 176, 77, 0.08), transparent 34%);
+  content: none;
 }
 
 .scene {
@@ -29,6 +23,19 @@
   z-index: 1;
   transform: translateZ(0);
   backface-visibility: hidden;
+}
+
+.scene > rect:first-of-type {
+  fill: var(--furnace-scene-surface, #f3f5f7);
+}
+
+.bogieScene .scene > rect:nth-of-type(2),
+.pitScene .scene > rect:nth-of-type(2) {
+  fill: var(--furnace-scene-surface, #f3f5f7);
+}
+
+.pitScene .scene > rect:nth-of-type(3) {
+  fill: var(--furnace-scene-surface, #f3f5f7);
 }
 
 .scene text {
@@ -68,7 +75,10 @@
 .roller,
 .rotaryDisc,
 .rotaryHeatPath {
-  transition: transform 900ms ease, opacity 600ms ease, filter 600ms ease;
+  transition:
+    transform var(--furnace-transition-transform, 900ms) ease,
+    opacity var(--furnace-transition-opacity, 600ms) ease,
+    filter var(--furnace-transition-filter, 600ms) ease;
   will-change: transform, opacity, filter;
 }
 
@@ -101,7 +111,7 @@
 }
 
 .beltFlow {
-  animation: beltFlow 1.4s linear infinite;
+  animation: beltFlow var(--furnace-belt-flow-duration, 1.4s) linear infinite;
 }
 
 .delay1 {
@@ -129,20 +139,20 @@
 }
 
 .bogieScene[data-mode="flow"] .bogieCart {
-  animation: bogieFlowCart 7.2s ease-in-out infinite;
+  animation: bogieFlowCart var(--furnace-cycle-duration-slow, 7.2s) ease-in-out infinite;
 }
 
 .bogieScene[data-mode="flow"] .doorLift {
-  animation: bogieFlowDoor 7.2s ease-in-out infinite;
+  animation: bogieFlowDoor var(--furnace-cycle-duration-slow, 7.2s) ease-in-out infinite;
 }
 
 .bogieScene[data-mode="flow"] .heatPath {
   stroke-dasharray: 26 20;
-  animation: bogieFlowHeat 7.2s linear infinite;
+  animation: bogieFlowHeat var(--furnace-cycle-duration-slow, 7.2s) linear infinite;
 }
 
 .bogieScene[data-mode="flow"] .bogieLoad {
-  animation: bogieFlowLoad 7.2s ease-in-out infinite;
+  animation: bogieFlowLoad var(--furnace-cycle-duration-slow, 7.2s) ease-in-out infinite;
 }
 
 .meshScene .meshProducts {
@@ -150,12 +160,12 @@
 }
 
 .meshScene[data-mode="flow"] .meshProducts {
-  animation: meshFullFlow 7s linear infinite;
+  animation: meshFullFlow var(--furnace-cycle-duration, 7s) linear infinite;
 }
 
 .meshScene[data-mode="flow"] .heaterPulse {
   opacity: 1;
-  animation: heaterPulse 1.8s ease-in-out infinite;
+  animation: heaterPulse var(--furnace-pulse-duration, 1.8s) ease-in-out infinite;
 }
 
 .pitScene .pitLidGroup {
@@ -167,16 +177,16 @@
 }
 
 .pitScene[data-mode="flow"] .pitLidGroup {
-  animation: pitFullLid 7.2s ease-in-out infinite;
+  animation: pitFullLid var(--furnace-cycle-duration-slow, 7.2s) ease-in-out infinite;
 }
 
 .pitScene[data-mode="flow"] .pitLoadGroup {
-  animation: pitFullLoad 7.2s ease-in-out infinite;
+  animation: pitFullLoad var(--furnace-cycle-duration-slow, 7.2s) ease-in-out infinite;
 }
 
 .pitScene[data-mode="flow"] .pitFlow {
   stroke-dasharray: 28 22;
-  animation: pitFullHeat 7.2s linear infinite;
+  animation: pitFullHeat var(--furnace-cycle-duration-slow, 7.2s) linear infinite;
 }
 
 .boxScene .boxDoor {
@@ -188,16 +198,16 @@
 }
 
 .boxScene[data-mode="flow"] .boxDoor {
-  animation: boxFullDoor 7s ease-in-out infinite;
+  animation: boxFullDoor var(--furnace-cycle-duration, 7s) ease-in-out infinite;
 }
 
 .boxScene[data-mode="flow"] .boxTray {
-  animation: boxFullTray 7s ease-in-out infinite;
+  animation: boxFullTray var(--furnace-cycle-duration, 7s) ease-in-out infinite;
 }
 
 .boxScene[data-mode="flow"] .boxHeatPath {
   stroke-dasharray: 28 18;
-  animation: boxFullHeat 7s linear infinite;
+  animation: boxFullHeat var(--furnace-cycle-duration, 7s) linear infinite;
 }
 
 .pusherScene .pushTrays {
@@ -210,17 +220,17 @@
 }
 
 .pusherScene[data-mode="flow"] .pushTrays {
-  animation: pusherFullFlow 7s ease-in-out infinite;
+  animation: pusherFullFlow var(--furnace-cycle-duration, 7s) ease-in-out infinite;
 }
 
 .pusherScene[data-mode="flow"] .pushRod,
 .pusherScene[data-mode="flow"] .pushHead {
-  animation: rodFullFlow 7s ease-in-out infinite;
+  animation: rodFullFlow var(--furnace-cycle-duration, 7s) ease-in-out infinite;
 }
 
 .pusherScene[data-mode="flow"] .pushHeater {
   opacity: 1;
-  animation: heaterPulse 1.8s ease-in-out infinite;
+  animation: heaterPulse var(--furnace-pulse-duration, 1.8s) ease-in-out infinite;
 }
 
 .bellScene .bellCover {
@@ -233,17 +243,17 @@
 }
 
 .bellScene[data-mode="flow"] .bellCover {
-  animation: bellFullCover 7.2s ease-in-out infinite;
+  animation: bellFullCover var(--furnace-cycle-duration-slow, 7.2s) ease-in-out infinite;
 }
 
 .bellScene[data-mode="flow"] .bellHeater,
 .bellScene[data-mode="flow"] .bellHeatPath {
   stroke-dasharray: 28 18;
-  animation: bellFullHeat 7.2s linear infinite;
+  animation: bellFullHeat var(--furnace-cycle-duration-slow, 7.2s) linear infinite;
 }
 
 .bellScene[data-mode="flow"] .bellLoad {
-  animation: bellFullLoad 7.2s ease-in-out infinite;
+  animation: bellFullLoad var(--furnace-cycle-duration-slow, 7.2s) ease-in-out infinite;
 }
 
 .temperingScene .temperDoor {
@@ -263,20 +273,20 @@
 }
 
 .temperingScene[data-mode="flow"] .temperDoor {
-  animation: boxFullDoor 7s ease-in-out infinite;
+  animation: boxFullDoor var(--furnace-cycle-duration, 7s) ease-in-out infinite;
 }
 
 .temperingScene[data-mode="flow"] .temperTray {
-  animation: boxFullTray 7s ease-in-out infinite;
+  animation: boxFullTray var(--furnace-cycle-duration, 7s) ease-in-out infinite;
 }
 
 .temperingScene[data-mode="flow"] .temperHeatPath {
   stroke-dasharray: 28 18;
-  animation: boxFullHeat 7s linear infinite;
+  animation: boxFullHeat var(--furnace-cycle-duration, 7s) linear infinite;
 }
 
 .temperingScene[data-mode="flow"] .temperFan {
-  animation: fanSpin 2s linear infinite;
+  animation: fanSpin var(--furnace-fan-duration, 2s) linear infinite;
 }
 
 .rollerScene .rollerHeater {
@@ -285,29 +295,31 @@
 
 .rollerScene .rollerTray {
   transform: translate3d(0, 0, 0);
-  transition: opacity 600ms ease, filter 600ms ease;
+  transition:
+    opacity var(--furnace-transition-opacity, 600ms) ease,
+    filter var(--furnace-transition-filter, 600ms) ease;
 }
 
 .rollerScene[data-mode="flow"] .rollerTray {
-  animation: rollerTrayFlow 5.5s linear infinite;
+  animation: rollerTrayFlow var(--furnace-roller-flow-duration, 5.5s) linear infinite;
 }
 
 .rollerScene[data-mode="flow"] .roller {
-  animation: rollerSpin 1.6s linear infinite;
+  animation: rollerSpin var(--furnace-roller-spin-duration, 1.6s) linear infinite;
 }
 
 .rollerScene[data-mode="flow"] .rollerHeater {
   opacity: 1;
-  animation: heaterPulse 1.8s ease-in-out infinite;
+  animation: heaterPulse var(--furnace-pulse-duration, 1.8s) ease-in-out infinite;
 }
 
 .rotaryScene[data-mode="flow"] .rotaryDisc {
-  animation: rotaryDiscSpin 13s linear infinite;
+  animation: rotaryDiscSpin var(--furnace-rotary-spin-duration, 13s) linear infinite;
 }
 
 .rotaryScene[data-mode="flow"] .rotaryHeatPath {
   stroke-dasharray: 28 18;
-  animation: rotaryHeatFlow 4.2s linear infinite;
+  animation: rotaryHeatFlow var(--furnace-rotary-heat-duration, 4.2s) linear infinite;
 }
 
 @keyframes beltFlow {
@@ -676,6 +688,7 @@
   .boxScene *,
   .rollerScene *,
   .bellScene *,
+  .pusherScene *,
   .temperingScene *,
   .rotaryScene *,
   .moreScene * {

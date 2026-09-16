@@ -1,0 +1,73 @@
+{
+  "id": "cylinder-indirect-air-exhaust-20200315-proposal",
+  "slug": "cylinder-curing-indirect-heating-recirculation-exhaust-proposal",
+  "title": "气瓶固化炉的废气怎么排？",
+  "listTitle": "气瓶固化炉的废气怎么排？",
+  "listSummary": "苏能2020年碳纤维全缠绕气瓶固化炉资料，将燃烧烟气换热、炉内热风循环和炉内废气排放分别说明。",
+  "summary": "苏能2020年碳纤维全缠绕气瓶固化炉资料，将燃烧烟气换热、炉内热风循环和炉内废气排放分别说明。其中15～20次/分钟指热风循环次数，不能直接当成新鲜空气置换次数或排废能力。核对固化设备时，应先分清各股气流的对象和出口，再结合树脂释放物、装载及现场排气接口确认配置。",
+  "body": "cylinder-curing-indirect-heating-recirculation-exhaust-proposal.md",
+  "contentType": "proposal",
+  "publicationStatus": "draft",
+  "projectStatus": "proposal",
+  "projectYear": 2020,
+  "sourceDate": "2020-03-15",
+  "workpiece": [
+    "碳纤维全缠绕气瓶"
+  ],
+  "materials": [
+    "碳纤维复合材料"
+  ],
+  "process": [
+    "固化"
+  ],
+  "equipment": [
+    "气瓶固化炉"
+  ],
+  "need": [
+    "循环与排废接口核对"
+  ],
+  "tags": [
+    "方案参考",
+    "碳纤维全缠绕气瓶",
+    "循环与排废接口核对"
+  ],
+  "facts": [
+    {
+      "label": "拟加热方式",
+      "value": "间接式加热",
+      "unit": "",
+      "condition": "烟气换热与炉内空气循环分开，不作零污染或零泄漏保证",
+      "attribute": "方案参数"
+    },
+    {
+      "label": "方案热风循环次数",
+      "value": "15～20",
+      "unit": "次/分钟",
+      "condition": "炉内热风循环，不是新鲜空气置换次数",
+      "attribute": "方案参数"
+    },
+    {
+      "label": "炉内排废配置",
+      "value": "排废气引风机",
+      "unit": "",
+      "condition": "排废量/时间有程序控制描述，实际参数及后续处理需确认",
+      "attribute": "方案参数"
+    }
+  ],
+  "participation": "苏能历史方案分别约定间接加热、热风循环和炉内排废配置，后续处理及现场接入需按终版划分。",
+  "sourceSummary": "江苏苏能工业炉有限公司历史技术方案资料整理。",
+  "coverTitle": "气瓶固化炉方案：间接加热、热风循环与炉内排废怎样分别核对？",
+  "relatedLinks": [
+    {
+      "title": "准备询价参数与供货范围",
+      "href": "/zh/articles/gongye-lu-baojia-canshu"
+    }
+  ],
+  "cover": {
+    "src": "/images/case-covers/white-background-20260912/cylinder-rotation-curing-20250210-proposal-white.png",
+    "alt": "碳纤维缠绕气瓶类别工件示意",
+    "caption": "碳纤维缠绕气瓶工件示意（人工智能生成，非客户实物）",
+    "fit": "contain"
+  },
+  "dateModified": "2026-09-12"
+}

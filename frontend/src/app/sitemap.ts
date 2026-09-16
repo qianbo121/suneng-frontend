@@ -1,14 +1,20 @@
+import { isWithdrawnTechnicalPath } from '@/lib/publication-scope';
+import { getEnglishCases } from '@/lib/cases/english';
+import { englishSolutions } from '@/lib/english-solutions';
+import { unstable_cache } from 'next/cache';
+import { getPublicCases } from '@/lib/cases/server';
+import { CASE_PAGE_SIZE } from '@/lib/cases/types';
 import type { MetadataRoute } from 'next';
 
 import { publicPathExists } from '@/lib/seo/config';
 import { absoluteUrl } from '@/lib/seo/metadata';
-import { getNewsList } from '@/lib/api/news';
+import { getAllNewsForDecisionCenter } from '@/lib/api/news';
 import { getNewsContentModifiedTime } from '@/lib/news-dates';
-import { filterCanonicalNewsItems } from '@/lib/news-routing';
+import { filterCanonicalNewsItems, hasPublishableEnglishNews } from '@/lib/news-routing';
 import { STATIC_PRODUCTS } from '@/constants/static-products';
+import { heatTreatmentLines } from '@/lib/heat-treatment-lines';
+import { additionalFurnaces } from '@/lib/additional-furnaces';
 import {
-  ABOUT_SEO,
-  HENAN_ANNEALING_SOLUTION_CASE_SEO,
   FURNACE_ENERGY_CONVERSION_HEAT_RECOVERY_SEO,
   FURNACE_CONTROL_SYSTEM_UPGRADE_SEO,
   FURNACE_LINING_RENOVATION_GUIDE_SEO,
@@ -16,25 +22,44 @@ import {
   FURNACE_RENOVATION_RISK_CYCLE_GUIDE_SEO,
   FURNACE_RENOVATION_OVERHAUL_SEO,
   INDUSTRIAL_FURNACE_QUOTE_PARAMS_SEO,
-  JINING_SUPPORT_ROLLER_CASE_SEO,
   OLD_HEAT_TREATMENT_FURNACE_REPAIR_OR_REPLACE_SEO,
   PRODUCT_DETAIL_SEO,
   TEMPERATURE_UNIFORMITY_REMEDIATION_SEO,
   CONTINUOUS_HEAT_TREATMENT_LINE_SEO,
-  TSINGSHAN_1250_CASE_SEO,
 } from '@/lib/seo/page-data';
 import { Locale } from '@/types/site';
 
 const sitemapLocales: Locale[] = ['zh', 'en'];
 const zhOnlyLocales: Locale[] = ['zh'];
-const englishStaticPaths = new Set(['/', '/products', '/service', '/about', '/contact']);
-const HOME_CONTENT_MODIFIED_TIME = '2026-07-30';
+const englishStaticPaths = new Set([
+  '/case',
+  '/',
+  '/solutions',
+  '/products',
+  '/service',
+  '/news',
+  '/about',
+  '/contact',
+  '/strength/honors',
+]);
 
 type SitemapEntry = MetadataRoute.Sitemap[number];
 
-// Regenerate hourly; the underlying news fetch is itself cached (revalidate),
-// so this no longer refetches 100 news items on every request.
-export const revalidate = 3600;
+// Fetch after the backend is available, never while building the image.
+// Cache only a complete article list; a failed refresh preserves the prior list.
+export const dynamic = 'force-dynamic';
+const getCompleteSitemapNews = unstable_cache(
+  async () => {
+    const result = await getAllNewsForDecisionCenter();
+    if (result.error || !result.data)
+      throw new Error(
+        `Cannot generate a complete sitemap: ${result.error || 'empty upstream response'}`,
+      );
+    return result;
+  },
+  ['complete-sitemap-news-bilingual-v4-content-review-20260912'],
+  { revalidate: 300 },
+);
 
 function localizedPath(locale: Locale, path: string) {
   if (path === '/') return `/${locale}`;
@@ -90,18 +115,19 @@ function collectStaticRoutes(): MetadataRoute.Sitemap {
       path: '/',
       changeFrequency: 'weekly',
       priority: 1,
-      lastModified: HOME_CONTENT_MODIFIED_TIME,
-      lastModifiedLocales: ['zh'],
     },
     { path: '/products', changeFrequency: 'weekly', priority: 0.9 },
+    { path: '/solutions', changeFrequency: 'monthly', priority: 0.84 },
     { path: '/service', changeFrequency: 'monthly', priority: 0.75 },
+    { path: '/service/installation-after-sales', changeFrequency: 'monthly', priority: 0.7 },
+    { path: '/service/furnace-relocation-restart', changeFrequency: 'monthly', priority: 0.7 },
+    { path: '/case', changeFrequency: 'monthly', priority: 0.76 },
     { path: '/news', changeFrequency: 'weekly', priority: 0.7 },
+    { path: '/inquiry', changeFrequency: 'monthly', priority: 0.55 },
     {
       path: '/about',
       changeFrequency: 'monthly',
       priority: 0.6,
-      lastModified: ABOUT_SEO.modifiedTime,
-      lastModifiedLocales: ['zh'],
     },
     { path: '/partner', changeFrequency: 'monthly', priority: 0.65 },
     { path: '/strength/honors', changeFrequency: 'monthly', priority: 0.55 },
@@ -118,18 +144,31 @@ function collectStaticRoutes(): MetadataRoute.Sitemap {
             : {}),
           changeFrequency: item.changeFrequency,
           priority: item.priority,
-          alternates: routeAlternates(item.path, locales),
+          // The redesigned Chinese overview and legacy English service are not translations.
+          alternates:
+            item.path === '/service'
+              ? {
+                  languages: {
+                    [languageCode(locale)]: absoluteUrl(localizedPath(locale, item.path)),
+                  },
+                }
+              : routeAlternates(item.path, locales),
         }),
       );
     }
   }
 
-  const zhOnlyStaticPaths: Array<{
+  const guideAndZhOnlyStaticPaths: Array<{
     path: string;
     changeFrequency: SitemapEntry['changeFrequency'];
     priority: number;
     lastModified?: string;
   }> = [
+    {
+      path: '/products/detail/copper-wire-annealing-line/inquiry-checklist',
+      changeFrequency: 'monthly',
+      priority: 0.65,
+    },
     {
       path: '/service/furnace-renovation-overhaul',
       changeFrequency: 'monthly',
@@ -145,7 +184,7 @@ function collectStaticRoutes(): MetadataRoute.Sitemap {
     {
       path: '/articles/laojiu-rechuli-lu-daxiu-haishi-maixin',
       changeFrequency: 'monthly',
-      priority: 0.64,
+      priority: 0.7,
       lastModified: OLD_HEAT_TREATMENT_FURNACE_REPAIR_OR_REPLACE_SEO.modifiedTime,
     },
     {
@@ -192,42 +231,30 @@ function collectStaticRoutes(): MetadataRoute.Sitemap {
       priority: 0.86,
       lastModified: CONTINUOUS_HEAT_TREATMENT_LINE_SEO.modifiedTime,
     },
-    {
-      path: '/case/anonymous-tsingshan-1250-renovation',
-      changeFrequency: 'monthly',
-      priority: 0.68,
-      lastModified: TSINGSHAN_1250_CASE_SEO.modifiedTime,
-    },
-    {
-      path: '/case/jining-support-roller-heat-treatment-line',
-      changeFrequency: 'monthly',
-      priority: 0.72,
-      lastModified: JINING_SUPPORT_ROLLER_CASE_SEO.modifiedTime,
-    },
-    {
-      path: '/case/henan-annealing-solution-line',
-      changeFrequency: 'monthly',
-      priority: 0.72,
-      lastModified: HENAN_ANNEALING_SOLUTION_CASE_SEO.modifiedTime,
-    },
   ];
 
-  for (const item of zhOnlyStaticPaths) {
-    routes.push(
-      route(localizedPath('zh', item.path), {
-        ...(item.lastModified ? { lastModified: new Date(item.lastModified) } : {}),
-        changeFrequency: item.changeFrequency,
-        priority: item.priority,
-        alternates: routeAlternates(item.path, zhOnlyLocales),
-      }),
-    );
+  const englishGuidePaths = new Set(englishSolutions.map((item) => `/solutions/${item.slug}`));
+  for (const item of guideAndZhOnlyStaticPaths) {
+    const locales = englishGuidePaths.has(item.path) ? sitemapLocales : zhOnlyLocales;
+    for (const locale of locales) {
+      // English pages are new local content; do not invent a deployed revision date.
+      const modified = locale === 'en' ? undefined : item.lastModified;
+      routes.push(
+        route(localizedPath(locale, item.path), {
+          ...(modified ? { lastModified: new Date(modified) } : {}),
+          changeFrequency: item.changeFrequency,
+          priority: item.priority,
+          alternates: routeAlternates(item.path, locales),
+        }),
+      );
+    }
   }
 
   return routes;
 }
 
 function collectProductRoutes(): MetadataRoute.Sitemap {
-  return sitemapLocales.flatMap((locale) =>
+  const existingRoutes = sitemapLocales.flatMap((locale) =>
     STATIC_PRODUCTS.map((product) => {
       const modifiedTime = PRODUCT_DETAIL_SEO[product.slug]?.modifiedTime;
 
@@ -240,36 +267,100 @@ function collectProductRoutes(): MetadataRoute.Sitemap {
       });
     }),
   );
+  const existingSlugs = new Set(STATIC_PRODUCTS.map((product) => product.slug));
+  const newRoutes = heatTreatmentLines
+    .filter((line) => !existingSlugs.has(line.slug))
+    .map((line) =>
+      route(localizedPath('zh', `/products/detail/${line.slug}`), {
+        // Omit the date until this production line has a verified content revision date.
+        changeFrequency: 'monthly',
+        priority: 0.8,
+        alternates: routeAlternates(`/products/detail/${line.slug}`, zhOnlyLocales),
+      }),
+    );
+  const additionalRoutes = additionalFurnaces.flatMap((furnace) =>
+    sitemapLocales.map((locale) =>
+      route(localizedPath(locale, `/products/detail/${furnace.id}`), {
+        changeFrequency: 'monthly',
+        priority: 0.8,
+        images: publicPathExists(furnace.image) ? [absoluteUrl(furnace.image)] : undefined,
+        alternates: routeAlternates(`/products/detail/${furnace.id}`, sitemapLocales),
+      }),
+    ),
+  );
+  return [...existingRoutes, ...newRoutes, ...additionalRoutes];
 }
 
 async function collectNewsRoutes(): Promise<MetadataRoute.Sitemap> {
-  const newsResult = await getNewsList({ page: 1, pageSize: 100, timeoutMs: 10000 });
+  const newsResult = await getCompleteSitemapNews();
 
-  if (newsResult.error) {
-    return [];
+  if (newsResult.error || !newsResult.data) {
+    throw new Error(
+      `Cannot generate a complete sitemap: ${newsResult.error || 'news unavailable'}`,
+    );
   }
 
-  const items = filterCanonicalNewsItems(newsResult.data?.items ?? []).filter((article) => {
+  const items = filterCanonicalNewsItems(newsResult.data ?? []).filter((article) => {
     const status = 'status' in article ? article.status : undefined;
     const isPublished = 'isPublished' in article ? article.isPublished : undefined;
 
     return article.slug && status === 'published' && isPublished === true;
   });
 
-  return items.map((article) =>
-    route(localizedPath('zh', `/news/${article.slug}`), {
-      lastModified: safeLastModified(getNewsContentModifiedTime(article)),
-      changeFrequency: 'monthly',
-      priority: 0.6,
-      images:
-        article.coverImage && publicPathExists(article.coverImage)
-          ? [absoluteUrl(article.coverImage)]
-          : undefined,
-      alternates: routeAlternates(`/news/${article.slug}`, zhOnlyLocales),
-    }),
-  );
+  return items.flatMap((article) => {
+    const locales = hasPublishableEnglishNews(article) ? sitemapLocales : zhOnlyLocales;
+    return locales.map((locale) => {
+      const coverImage =
+        (locale === 'en' && article.englishCoverImage) || article.coverImage;
+      return route(localizedPath(locale, `/news/${article.slug}`), {
+        lastModified: safeLastModified(getNewsContentModifiedTime(article, locale)),
+        changeFrequency: 'monthly',
+        priority: 0.6,
+        images:
+          coverImage && publicPathExists(coverImage)
+            ? [absoluteUrl(coverImage)]
+            : undefined,
+        alternates: routeAlternates(`/news/${article.slug}`, locales),
+      });
+    });
+  });
 }
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  return [...collectStaticRoutes(), ...collectProductRoutes(), ...(await collectNewsRoutes())];
+  const cases = getPublicCases();
+  const englishCases = getEnglishCases();
+  const englishSlugs = new Set(englishCases.map((item) => item.slug));
+  const caseRoutes = cases.map((item) =>
+    route(`/zh/case/${item.slug}`, {
+      alternates: routeAlternates(`/case/${item.slug}`, englishSlugs.has(item.slug) ? sitemapLocales : zhOnlyLocales),
+      // An editorial date alone is not evidence that a draft has been published.
+      // Retain its source metadata, but advertise sitemap freshness only after
+      // the first publication is recorded.
+      ...(item.datePublished
+        ? { lastModified: safeLastModified(item.dateModified ?? item.datePublished) }
+        : {}),
+      changeFrequency: 'monthly',
+      priority: 0.72,
+    }),
+  );
+  const pageRoutes = Array.from(
+    { length: Math.max(0, Math.ceil(cases.length / CASE_PAGE_SIZE) - 1) },
+    (_, i) => route(`/zh/case?page=${i + 2}`, { changeFrequency: 'monthly', priority: 0.5 }),
+  );
+  return [
+    ...collectStaticRoutes(),
+    ...caseRoutes,
+    ...englishCases.map((item) => route(`/en/case/${item.slug}`, {
+      // These records retain Chinese source dates. Neither a source publication
+      // date nor a translation-completion date records publication of this
+      // English page. Omit freshness until its own publication is recorded.
+      changeFrequency: 'monthly', priority: 0.72,
+      alternates: routeAlternates(`/case/${item.slug}`, sitemapLocales),
+    })),
+    ...Array.from({ length: Math.max(0, Math.ceil(englishCases.length / CASE_PAGE_SIZE) - 1) }, (_, i) =>
+      route(`/en/case?page=${i + 2}`, { changeFrequency: 'monthly', priority: 0.5 })),
+    ...pageRoutes,
+    ...collectProductRoutes(),
+    ...(await collectNewsRoutes()),
+  ].filter((item) => !isWithdrawnTechnicalPath(item.url));
 }

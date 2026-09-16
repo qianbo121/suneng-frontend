@@ -1,6 +1,7 @@
 import { GeoFaqGrid, GeoHeroTags, GeoReviewNote, GeoSection } from '@/components/geo-pages/GeoPageBlocks';
 import { QuoteModalButton } from '@/components/lead/QuoteModalButton';
 import { Breadcrumb } from '@/components/layout/Breadcrumb';
+import type { ReactNode } from 'react';
 
 export type GeoAuthorityCard = {
   label: string;
@@ -19,6 +20,7 @@ export type GeoAuthorityLink = {
 };
 
 export type GeoAuthorityGuideProps = {
+  decisionContent?: ReactNode;
   eyebrow: string;
   breadcrumbLabel: string;
   title: string;
@@ -52,6 +54,7 @@ export type GeoAuthorityGuideProps = {
 };
 
 export function GeoAuthorityGuidePage({
+  decisionContent,
   eyebrow,
   breadcrumbLabel,
   title,
@@ -122,6 +125,7 @@ export function GeoAuthorityGuidePage({
 
       <nav aria-label="页面目录" className="border-b border-[#e2e8f0] bg-white">
         <div className="mx-auto flex max-w-[1180px] gap-6 overflow-x-auto px-5 py-5 text-[14px] font-semibold text-[#475467] lg:px-8">
+          {decisionContent && <a className="flex min-h-11 shrink-0 items-center" href="#buyer-selection">旧台车炉改造判断</a>}
           <a className="flex min-h-11 shrink-0 items-center" href="#answer">直接答案</a>
           <a className="flex min-h-11 shrink-0 items-center" href="#signals">判断信号</a>
           <a className="flex min-h-11 shrink-0 items-center" href="#compare">对比与决策</a>
@@ -147,6 +151,8 @@ export function GeoAuthorityGuidePage({
           </div>
         </div>
       </GeoSection>
+
+      {decisionContent && <div className="mx-auto max-w-[1180px] px-5 lg:px-8">{decisionContent}</div>}
 
       <GeoSection id="signals" eyebrow="02 / JUDGEMENT SIGNALS" title={signalsTitle}>
         <p className="mx-auto max-w-[900px] text-center text-[16px] leading-[1.9] text-[#475467]">{signalsIntro}</p>

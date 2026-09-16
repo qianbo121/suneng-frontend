@@ -1,0 +1,602 @@
+.page {
+  --partner-blue: #3370ff;
+  background: #fff;
+  color: #0b1f3a;
+  padding: 28px 0 48px;
+}
+.container {
+  width: var(--site-page-width);
+  margin-inline: auto;
+}
+.breadcrumb {
+  margin-bottom: 30px;
+}
+.heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 32px;
+  margin-bottom: var(--site-heading-gap);
+}
+.heading h1 {
+  margin: 0 0 8px;
+  font-size: 36px;
+  font-weight: 650;
+  line-height: 1.35;
+  letter-spacing: -0.025em;
+}
+.heading p {
+  margin: 0;
+  color: #66758a;
+  font-size: 16px;
+  line-height: 1.7;
+}
+.search {
+  display: flex;
+  align-items: center;
+  flex: 0 0 300px;
+  height: 46px;
+  gap: 10px;
+  padding: 0 12px;
+  border: 1px solid #cbd8e8;
+  border-radius: 9px;
+  background: #fff;
+  color: #66758a;
+}
+.search > svg {
+  width: 20px;
+  height: 20px;
+  flex: 0 0 auto;
+}
+.search input {
+  width: 100%;
+  min-width: 0;
+  border: 0;
+  background: none;
+  color: #25364d;
+  font: inherit;
+  font-size: 15px;
+  outline: none;
+}
+.search input::-webkit-search-cancel-button {
+  display: none;
+}
+.search input::placeholder {
+  color: #66758a;
+}
+.search:focus-within {
+  outline: 2px solid var(--partner-blue);
+  outline-offset: 3px;
+}
+.search button {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 32px;
+  flex-shrink: 0;
+  border: 0;
+  background: none;
+  color: #66758a;
+}
+.search button svg {
+  width: 18px;
+  height: 18px;
+}
+.mapModule {
+  position: relative;
+  isolation: isolate;
+  height: 620px;
+  border: 1px solid #d8eafa;
+  border-radius: 16px;
+  background:
+    radial-gradient(ellipse at 34% 26%, #ffffffdc, transparent 65%),
+    linear-gradient(130deg, #eef7ff, #e8f3ff 70%, #f4faff);
+  box-shadow:
+    0 8px 30px #2c70b008,
+    inset 0 1px 0 #fff;
+}
+.mapViewport {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  border-radius: inherit;
+}
+.mapCanvas {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1280 / 620;
+  flex-shrink: 0;
+}
+.map {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+.province {
+  stroke: #fff;
+  stroke-width: 1.2;
+  stroke-linejoin: round;
+  cursor: pointer;
+  transition:
+    fill 0.15s,
+    stroke 0.15s;
+}
+.province:hover {
+  fill: #b6d9f5;
+  stroke: #91bde5;
+}
+.province[data-match='true'] {
+  fill: #accffc;
+  stroke: #739ff1;
+}
+.province[data-selected='true'] {
+  fill: var(--partner-blue);
+  stroke: #fff;
+}
+.province:focus-visible {
+  outline: none;
+  fill: #7eaff9;
+  stroke: #153f7e;
+  stroke-width: 2.6;
+}
+.boundary {
+  fill: #c8e1f5;
+  stroke: #8dbbe0;
+  stroke-width: 0.7;
+  pointer-events: none;
+}
+.leader {
+  fill: none;
+  stroke: #749dc4;
+  stroke-width: 0.8;
+  pointer-events: none;
+}
+.insetFrame {
+  fill: #f4faff90;
+  stroke: #aecde9;
+}
+.insetLand {
+  fill: #9bc4e7;
+  stroke: #75a7d0;
+  stroke-width: 0.5;
+}
+.insetTitle {
+  fill: #586f88;
+  font-size: 13px;
+}
+.labels {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.provinceLabel {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  transform: translate(-50%, -50%);
+  padding: 3px 5px;
+  min-height: 30px;
+  border: 1px solid transparent;
+  border-radius: 7px;
+  background: transparent;
+  color: #4e6780;
+  font-size: 13px;
+  line-height: 1.25;
+  white-space: nowrap;
+  pointer-events: auto;
+  cursor: pointer;
+}
+.provinceLabel[data-has-partners='true'] {
+  padding: 5px 8px;
+  color: #17396b;
+  background: #fffffff2;
+  box-shadow: 0 3px 9px #467ead16;
+  font-weight: 600;
+}
+.provinceLabel b {
+  display: inline-grid;
+  place-items: center;
+  min-width: 19px;
+  height: 20px;
+  padding: 0 3px;
+  border-radius: 5px;
+  background: var(--partner-blue);
+  color: #fff;
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+}
+.provinceLabel:hover {
+  background: #e2efff;
+  border-color: #a7c4f4;
+}
+.provinceLabel[data-selected='true'] {
+  background: var(--partner-blue);
+  color: #fff;
+  border-color: #fff;
+  box-shadow: 0 3px 10px #3370ff30;
+}
+.provinceLabel[data-selected='true'] b {
+  background: #fff;
+  color: #1e54c7;
+}
+.provinceLabel[data-match='true'] {
+  border-color: var(--partner-blue);
+}
+.matchDot {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #245dd4;
+  box-shadow: 0 0 0 2px white;
+}
+.mapNote {
+  position: absolute;
+  inset: auto 24px 18px;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  z-index: 1;
+  padding-right: 155px;
+  color: #607a92;
+  font-size: 13px;
+  line-height: 1.5;
+}
+.mapNote p {
+  margin: 0;
+}
+.mapNote button {
+  color: #42648b;
+  background: #ffffffc7;
+  border: 1px solid #d1e3f3;
+  border-radius: 6px;
+  padding: 6px 10px;
+  text-align: left;
+}
+.mapNote button:hover {
+  color: var(--partner-blue);
+  border-color: #a8c7f5;
+}
+.searchStatus {
+  position: absolute;
+  top: 14px;
+  left: 22px;
+  right: 380px;
+  z-index: 1;
+  font-size: 13px;
+  color: #466684;
+  line-height: 1.6;
+  pointer-events: none;
+}
+.searchStatus:not(:empty) {
+  background: #ffffffed;
+  border-radius: 7px;
+  padding: 8px 12px;
+}
+.searchStatus button {
+  color: var(--partner-blue);
+  margin-left: 12px;
+  pointer-events: auto;
+}
+.mobilePicker {
+  display: none;
+}
+.provinceDetails {
+  border: 1px solid #d8e6f3;
+  border-radius: 8px;
+}
+.provinceDetails > summary {
+  padding: 12px 16px;
+  cursor: pointer;
+}
+.distribution[data-enhanced='true'] .provinceDetails {
+  border: 0;
+}
+.provinceDetails > summary {
+  display: none;
+}
+.distribution[data-enhanced='true'] .provinceDetails[open] > .panel {
+  position: absolute;
+  z-index: 4;
+  top: 24px;
+  right: 24px;
+  width: var(--panel-width);
+}
+.panel {
+  padding: var(--site-card-padding);
+  background: #fff;
+  border: 1px solid #edf3fb;
+  border-radius: 12px;
+  box-shadow: 0 12px 35px #327abd1a;
+}
+.panelHeading {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+.panelHeading h2 {
+  margin: 0 0 6px;
+  font-size: 25px;
+  font-weight: 600;
+  line-height: 1.4;
+}
+.panelHeading p {
+  margin: 0;
+  color: #66758a;
+  font-size: 13px;
+  line-height: 1.65;
+}
+.close {
+  display: grid;
+  place-items: center;
+  flex: 0 0 32px;
+  height: 32px;
+  margin: -4px -5px 0 0;
+  color: #66758a;
+  background: none;
+  border: 0;
+  border-radius: 5px;
+}
+.close svg {
+  width: 22px;
+  height: 22px;
+}
+.close:hover {
+  background: #edf3fb;
+  color: #25364d;
+}
+.panelList {
+  max-height: 336px;
+  overflow: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  scrollbar-color: #b9c8da transparent;
+}
+.panelList table {
+  width: 100%;
+  table-layout: fixed;
+  border-collapse: separate;
+  border-spacing: 0;
+  text-align: left;
+  font-size: 14px;
+  line-height: 1.55;
+}
+.panelList thead th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background: #fff;
+  color: #66758a;
+  font-size: 13px;
+  font-weight: 400;
+}
+.panelList th,
+.panelList td {
+  padding: 11px 6px;
+  vertical-align: top;
+  border-bottom: 1px solid #e8eef6;
+  overflow-wrap: anywhere;
+}
+.panelList th:first-child {
+  width: 54%;
+}
+.panelList tbody th {
+  color: #173252;
+  font-weight: 550;
+}
+.panelList td {
+  color: #60718a;
+}
+.panelEmpty {
+  padding: 22px 6px;
+  color: #66758a;
+  font-size: 14px;
+}
+.scrollHint {
+  margin: 12px 0 0;
+  color: #66758a;
+  text-align: center;
+  font-size: 12px;
+}
+.contactLine {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  border-top: 1px solid #dce5f0;
+  margin-top: 26px;
+  padding-top: 16px;
+  font-size: 14px;
+  color: #66758a;
+}
+.contactLine a:hover {
+  color: var(--partner-blue);
+}
+.distribution button:focus-visible,
+.distribution select:focus-visible,
+.distribution summary:focus-visible,
+.panelList:focus-visible,
+.contactLine a:focus-visible {
+  outline: 2px solid var(--partner-blue);
+  outline-offset: 3px;
+}
+@media (max-width: 1099px) {
+  .container {
+    width: var(--site-page-width);
+  }
+  .heading h1 {
+    font-size: 32px;
+  }
+  .mapModule {
+    height: 660px;
+  }
+  .mapViewport {
+    height: calc(100% - 60px);
+    overflow-x: auto;
+    align-items: flex-start;
+  }
+  .mapCanvas {
+    min-width: 1024px;
+  }
+  .mobilePicker {
+    display: flex;
+    position: relative;
+    z-index: 2;
+    align-items: center;
+    gap: 10px;
+    height: 60px;
+    padding: 10px 16px;
+    background: #f7fbffe8;
+    border-radius: 16px 16px 0 0;
+    font-size: 14px;
+  }
+  .mobilePicker select {
+    max-width: 260px;
+    min-width: 0;
+    height: 40px;
+    padding: 0 10px;
+    border: 1px solid #cbdced;
+    border-radius: 6px;
+    background: #fff;
+    color: #25364d;
+    font-size: 14px;
+  }
+  .mobilePicker span {
+    margin-left: auto;
+    color: #66758a;
+    font-size: 12px;
+  }
+  .searchStatus {
+    top: 65px;
+    right: 18px;
+    left: 18px;
+  }
+  .distribution[data-enhanced='true'] .provinceDetails[open] > .panel {
+    top: auto;
+    right: 16px;
+    left: 16px;
+    bottom: 64px;
+    width: auto;
+    max-width: 380px;
+    margin-left: auto;
+  }
+  .mapNote {
+    padding-right: 0;
+  }
+  .provinceLabel {
+    min-height: 36px;
+  }
+}
+@media (max-width: 599px) {
+  .page {
+    padding-top: 20px;
+    padding-bottom: 32px;
+  }
+  .container {
+    width: var(--site-page-width);
+  }
+  .breadcrumb {
+    margin-bottom: 22px;
+  }
+  .heading {
+    align-items: stretch;
+    flex-direction: column;
+    gap: 18px;
+    margin-bottom: var(--site-heading-gap);
+  }
+  .heading h1 {
+    font-size: 30px;
+  }
+  .heading p {
+    font-size: 15px;
+  }
+  .search {
+    flex: auto;
+    width: 100%;
+  }
+  .mapModule {
+    height: 680px;
+  }
+  .mobilePicker {
+    padding: 10px;
+    gap: 8px;
+    flex-wrap: wrap;
+    height: 90px;
+  }
+  .mobilePicker label {
+    font-size: 13px;
+  }
+  .mobilePicker select {
+    flex: 1;
+  }
+  .mobilePicker span {
+    width: 100%;
+    margin: -2px 0 0;
+    text-align: right;
+  }
+  .mapViewport {
+    height: calc(100% - 150px);
+  }
+  .mapNote {
+    left: 12px;
+    right: 12px;
+    bottom: 12px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    font-size: 12px;
+  }
+  .mapNote button {
+    min-height: 36px;
+  }
+  .searchStatus {
+    top: 94px;
+    font-size: 12px;
+  }
+  .provinceLabel {
+    min-height: 44px;
+    font-size: 13px;
+  }
+  .distribution[data-enhanced='true'] .provinceDetails[open] > .panel {
+    left: 10px;
+    right: 10px;
+    bottom: 96px;
+    max-width: none;
+    padding: 14px;
+  }
+  .panelHeading h2 {
+    font-size: 22px;
+  }
+  .panelList {
+    max-height: 280px;
+  }
+  .close {
+    flex-basis: 40px;
+    height: 40px;
+  }
+  .contactLine {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    font-size: 13px;
+  }
+  .contactLine a {
+    display: flex;
+    align-items: center;
+    min-height: 40px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .province {
+    transition: none;
+  }
+}

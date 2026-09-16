@@ -1,0 +1,79 @@
+{
+  "schemaVersion": "1.0.0",
+  "recordType": "workpiece_router_public_baseline_approval",
+  "recordId": "WR-B251-V2-APPROVAL-20260828T083605902+0800",
+  "status": "approved_not_released",
+  "approvedBy": "钱波",
+  "approverRole": "公司最终负责人",
+  "approvedAt": "2026-08-28T08:36:05.902+08:00",
+  "lockedAt": "2026-08-28T08:36:05.902+08:00",
+  "binding": {
+    "baselineVersion": "industry-public-baseline-2026-08-batch2.5-candidate-v2",
+    "technicalSnapshotHash": "sha256:f1577a282715a2f84239917c9d7be8ba6bf85217936f61be81bd302ee6401f61",
+    "approvalBundleHash": "sha256:0f8deb3857d69ccad8aef6e14b2cc7fff76a86ef124cdf7fe7c7c7c76121d547",
+    "candidateSnapshotHash": "sha256:f9d8edb1a30d039de22d8782a8b0daa15025fd9928cf23f62b290a007cc11b1f",
+    "candidateApprovalScopeHash": "sha256:2f9578abeb9ecbbe8722bdb8a0b9a58d31e7ffe42234dd8b9c14ed749405b613"
+  },
+  "approvedScope": {
+    "ruleCount": 6,
+    "pairCount": 23,
+    "approvedRuleIds": [
+      "eqdir-heavy-car-bottom-v1",
+      "eqdir-wear-plate-quench-temper-line-v2",
+      "eqdir-carbon-steel-coil-bell-batch-v2",
+      "eqdir-long-products-roller-thermal-v2",
+      "eqdir-wire-coil-bell-v1",
+      "eqdir-fastener-mesh-quench-temper-v2"
+    ],
+    "approvedPairKeys": [
+      "carbon-steel-coil|coil-professional-line-review|coil-annealing",
+      "hex-nuts|fastener-quench-temper|quench-temper",
+      "high-strength-bolts|fastener-quench-temper|quench-temper",
+      "large-forged-flange|heavy-steel-normalize-temper-anneal|annealing",
+      "large-forged-flange|heavy-steel-normalize-temper-anneal|normalizing",
+      "large-forged-flange|heavy-steel-normalize-temper-anneal|tempering",
+      "large-forged-shaft|heavy-steel-normalize-temper-anneal|annealing",
+      "large-forged-shaft|heavy-steel-normalize-temper-anneal|normalizing",
+      "large-forged-shaft|heavy-steel-normalize-temper-anneal|tempering",
+      "large-steel-casting|heavy-steel-normalize-temper-anneal|annealing",
+      "large-steel-casting|heavy-steel-normalize-temper-anneal|normalizing",
+      "large-steel-casting|heavy-steel-normalize-temper-anneal|tempering",
+      "round-steel-bar|long-products-whole-furnace-treatment|annealing",
+      "round-steel-bar|long-products-whole-furnace-treatment|normalizing",
+      "seamless-steel-pipe|long-products-whole-furnace-treatment|annealing",
+      "seamless-steel-pipe|long-products-whole-furnace-treatment|normalizing",
+      "steel-wire-coil|coiled-wire-protective-anneal-review|recrystallization-annealing",
+      "steel-wire-coil|coiled-wire-protective-anneal-review|spheroidizing-annealing",
+      "wear-resistant-steel-plate|wear-plate-quench-review|quench-temper",
+      "welded-steel-pipe|long-products-whole-furnace-treatment|annealing",
+      "welded-steel-pipe|long-products-whole-furnace-treatment|normalizing",
+      "wire-rod-coil|coiled-wire-protective-anneal-review|recrystallization-annealing",
+      "wire-rod-coil|coiled-wire-protective-anneal-review|spheroidizing-annealing"
+    ],
+    "directionStates": [
+      "matched_direction",
+      "conditional_preview",
+      "engineering_review"
+    ],
+    "claimLabel": "行业常见设备方向",
+    "runtimeApprovedScopeHash": "sha256:7b9dd90c9e4951535c47fa859df90fc308d6b88e6a21986dadf417bbcd5dd6af"
+  },
+  "approvalStatement": "批准上述规则、适用范围、工程门禁、证据边界和客户公开文案，作为工件路由模块后续可公开使用的行业常见设备方向基线。",
+  "doesNotConstitute": [
+    "苏能制造或供货能力证明",
+    "客户项目最终炉型选型",
+    "工艺参数或合同技术承诺",
+    "产品页推荐",
+    "数据库迁移、生产部署或正式上线授权"
+  ],
+  "releaseAuthorization": {
+    "databaseMigration": false,
+    "productionDatabaseChange": false,
+    "productionDeployment": false,
+    "productionActivation": false,
+    "gitCommit": false,
+    "gitPush": false
+  },
+  "recordHashAlgorithm": "sha256-stable-json-v1 over all top-level fields except recordHash; object keys recursively sorted; arrays retain recorded order",
+  "recordHash": "sha256:faad0237c4646e280d372e39fd8dc0d3c6746a62051eeef5160bbf622e3c2674"
+}

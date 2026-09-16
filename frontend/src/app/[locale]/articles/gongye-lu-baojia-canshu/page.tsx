@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import Image from 'next/image';
+import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
 import {
@@ -476,10 +477,15 @@ export default async function IndustrialFurnaceQuoteParamsPage({ params }: PageP
               </time>
             </p>
             <h1 className="text-[36px] font-semibold leading-[1.16] tracking-[0.01em] lg:text-[58px]">
-              工业炉报价需要哪些参数？
+            单台工业炉报价资料清单
             </h1>
             <p className="mt-5 max-w-[900px] text-[18px] font-semibold leading-[1.72] text-white/92 lg:text-[24px]">
-              工业炉属于非标设备，报价不能只看炉型名称。炉膛尺寸、最高温度、工件重量、装炉量、工艺曲线、能源类型、控制要求和现场条件，都会影响方案设计和最终价格。
+              本清单用于单台工业炉及其必要配套的询价。先整理工件、装载、温度曲线、能源、控制和现场条件，再比较炉体与配套的供货范围。
+            </p>
+            <p className="mt-4 max-w-[860px] text-[14px] leading-[1.85] text-white/70 lg:text-[16px]">
+              如果采购的是包含上下料、加热、冷却、输送和控制的整条生产线，请先使用
+              <Link href="/zh/news/shuju-news-29" className="font-semibold text-white underline underline-offset-4">整线询价的 11 组输入清单</Link>，
+              另外核对工序节拍、设备接口和整线责任。
             </p>
             <p className="mt-4 max-w-[860px] text-[14px] leading-[1.85] text-white/70 lg:text-[16px]">
               填写或复制下方报价参数清单后，可通过表单、电话/微信或邮箱提交给苏能。工程技术人员会根据工件、温度、工艺、产能和现场条件，先判断炉型方向、配置边界和报价范围。

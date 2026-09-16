@@ -3,30 +3,6 @@ import { fileURLToPath } from 'node:url';
 
 import { describe, expect, it } from 'vitest';
 
-import {
-  GET as getControlSystemEnglishRoute,
-  HEAD as headControlSystemEnglishRoute,
-} from '@/app/en/solutions/rechuli-lu-kongzhi-xitong-shengji/route';
-import {
-  GET as getEnergyConversionEnglishRoute,
-  HEAD as headEnergyConversionEnglishRoute,
-} from '@/app/en/solutions/rechuli-lu-dian-gai-ran-yure-huishou/route';
-import {
-  GET as getRiskCycleEnglishRoute,
-  HEAD as headRiskCycleEnglishRoute,
-} from '@/app/en/solutions/rechuli-lu-gaizao-fengxian-zhouqi/route';
-import {
-  GET as getLiningEnglishRoute,
-  HEAD as headLiningEnglishRoute,
-} from '@/app/en/solutions/rechuli-lu-luchen-fanxin/route';
-import {
-  GET as getRestartRelocationEnglishRoute,
-  HEAD as headRestartRelocationEnglishRoute,
-} from '@/app/en/solutions/rechuli-lu-tingchan-chongqi-banqian-fuchan/route';
-import {
-  GET as getTemperatureEnglishRoute,
-  HEAD as headTemperatureEnglishRoute,
-} from '@/app/en/solutions/rechuli-lu-wendu-bujun-zhenggai/route';
 import { isZhOnlyPath } from '@/lib/i18n/zh-only';
 
 const readSource = (relativePath: string) =>
@@ -57,9 +33,7 @@ const renovationHubSource = readSource(
 const quoteParamsSource = readSource(
   '../../app/[locale]/articles/gongye-lu-baojia-canshu/page.tsx',
 );
-const repairOrReplaceSource = readSource(
-  '../../app/[locale]/articles/laojiu-rechuli-lu-daxiu-haishi-maixin/page.tsx',
-);
+const repairOrReplaceSource = JSON.parse(readSource('../news-reviewed-copy.json'))['21'].contentZh;
 const globalsSource = readSource('../../app/globals.css');
 const uiTemplateSource = readSource(
   '../../../../docs/seo-geo/ui-review/authority-topic-template-v1.html',
@@ -259,29 +233,17 @@ describe('P5 authority topic pages', () => {
     }
   });
 
-  it('returns real 404 responses for the unsupported English routes', () => {
-    for (const response of [
-      getTemperatureEnglishRoute(),
-      headTemperatureEnglishRoute(),
-      getRiskCycleEnglishRoute(),
-      headRiskCycleEnglishRoute(),
-      getLiningEnglishRoute(),
-      headLiningEnglishRoute(),
-      getEnergyConversionEnglishRoute(),
-      headEnergyConversionEnglishRoute(),
-      getControlSystemEnglishRoute(),
-      headControlSystemEnglishRoute(),
-      getRestartRelocationEnglishRoute(),
-      headRestartRelocationEnglishRoute(),
-    ]) {
-      expect(response.status).toBe(404);
-    }
+  it('enables the translated case index and solution guides while keeping unknown case paths unavailable', () => {
+    expect(isZhOnlyPath('/en/case/unregistered-case')).toBe(true);
 
-    expect(isZhOnlyPath('/en/solutions/rechuli-lu-wendu-bujun-zhenggai')).toBe(true);
-    expect(isZhOnlyPath('/en/solutions/rechuli-lu-gaizao-fengxian-zhouqi')).toBe(true);
-    expect(isZhOnlyPath('/en/solutions/rechuli-lu-luchen-fanxin')).toBe(true);
-    expect(isZhOnlyPath('/en/solutions/rechuli-lu-dian-gai-ran-yure-huishou')).toBe(true);
-    expect(isZhOnlyPath('/en/solutions/rechuli-lu-kongzhi-xitong-shengji')).toBe(true);
-    expect(isZhOnlyPath('/en/solutions/rechuli-lu-tingchan-chongqi-banqian-fuchan')).toBe(true);
+    expect(isZhOnlyPath('/en/solutions/rechuli-lu-wendu-bujun-zhenggai')).toBe(false);
+    expect(isZhOnlyPath('/en/solutions/rechuli-lu-gaizao-fengxian-zhouqi')).toBe(false);
+    expect(isZhOnlyPath('/en/solutions/rechuli-lu-luchen-fanxin')).toBe(false);
+    expect(isZhOnlyPath('/en/solutions/rechuli-lu-dian-gai-ran-yure-huishou')).toBe(false);
+    expect(isZhOnlyPath('/en/solutions/rechuli-lu-changjia')).toBe(false);
+    expect(isZhOnlyPath('/en/solutions/jiangsu-gongye-lu-changjia')).toBe(false);
+    expect(isZhOnlyPath('/en/case')).toBe(false);
+    expect(isZhOnlyPath('/en/solutions/rechuli-lu-kongzhi-xitong-shengji')).toBe(false);
+    expect(isZhOnlyPath('/en/solutions/rechuli-lu-tingchan-chongqi-banqian-fuchan')).toBe(false);
   });
 });

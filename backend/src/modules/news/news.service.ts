@@ -11,6 +11,12 @@ import { NewsListQueryDto } from '@/modules/news/dto/news-list-query.dto';
 import { UpdateNewsDto } from '@/modules/news/dto/update-news.dto';
 import { NewsCategoryService } from '@/modules/news-category/news-category.service';
 import { changesNewsContent } from '@/modules/news/news-content-date';
+import {
+  buildPublicNewsIdentifier,
+  getCanonicalLegacyNewsSlug,
+  NONCANONICAL_NEWS_SLUGS,
+  parsePublicNewsIdentifier,
+} from '@/modules/news/news-public-identifier';
 import { assertNewsPublicationPolicy } from '@/modules/news/news-publication-policy';
 import { PrismaService } from '@/prisma/prisma.service';
 
@@ -38,6 +44,7 @@ export class NewsService {
     const where: Prisma.NewsWhereInput = {
       status: PublishStatus.published,
       isPublished: true,
+      slug: { notIn: NONCANONICAL_NEWS_SLUGS },
       ...(query.categoryId ? { categoryId: query.categoryId } : {}),
     };
     const [items, total] = await this.prisma.$transaction([
@@ -50,16 +57,40 @@ export class NewsService {
       }),
       this.prisma.news.count({ where }),
     ]);
-    return { items, total, page, pageSize };
+    return {
+      items: items.map((item) => this.withPublicIdentifier(item)),
+      total,
+      page,
+      pageSize,
+    };
   }
 
-  async getPublicDetail(slug: string) {
-    const record = await this.prisma.news.findFirst({
-      where: { slug, status: PublishStatus.published, isPublished: true },
+  async getPublicDetail(identifier: string) {
+    const id = parsePublicNewsIdentifier(identifier);
+    const lookupSlug = id ? null : getCanonicalLegacyNewsSlug(identifier);
+    let record = await this.prisma.news.findFirst({
+      where: {
+        ...(id ? { id } : { slug: lookupSlug! }),
+        status: PublishStatus.published,
+        isPublished: true,
+      },
       include: { category: true },
     });
+
+    const canonicalLegacySlug = record ? getCanonicalLegacyNewsSlug(record.slug) : null;
+    if (record && canonicalLegacySlug !== record.slug) {
+      record = await this.prisma.news.findFirst({
+        where: {
+          slug: canonicalLegacySlug!,
+          status: PublishStatus.published,
+          isPublished: true,
+        },
+        include: { category: true },
+      });
+    }
+
     if (!record) throw new NotFoundException('News not found');
-    return record;
+    return this.withPublicIdentifier(record);
   }
 
   // View counting is decoupled from the (cacheable) detail read and driven by a
@@ -103,7 +134,10 @@ export class NewsService {
       select: { id: true, titleZh: true, titleEn: true, slug: true, publishDate: true },
     });
 
-    return { prev, next };
+    return {
+      prev: prev ? this.withPublicIdentifier(prev) : null,
+      next: next ? this.withPublicIdentifier(next) : null,
+    };
   }
 
   async getAdminList(query: NewsListQueryDto) {
@@ -195,12 +229,11 @@ export class NewsService {
       assertNewsPublicationPolicy({ ...record, ...baseData });
     }
 
-    const slugSource = dto.slug || dto.titleEn || dto.titleZh;
-    if (!slugSource) {
+    if (!dto.slug) {
       return this.prisma.news.update({ where: { id }, data: baseData });
     }
 
-    return this.persistWithUniqueSlug(slugSource || record.slug, 'news', id, (slug) =>
+    return this.persistWithUniqueSlug(dto.slug, 'news', id, (slug) =>
       this.prisma.news.update({ where: { id }, data: { ...baseData, slug } }),
     );
   }
@@ -329,7 +362,7 @@ export class NewsService {
         return;
       }
 
-      const url = this.baiduSubmitService.buildNewsUrl(latest.slug);
+      const url = this.baiduSubmitService.buildNewsUrl(buildPublicNewsIdentifier(latest.slug));
       const submitted = await this.baiduSubmitService.submitUrl(url);
       if (!submitted) return;
 
@@ -348,5 +381,9 @@ export class NewsService {
 
   private getErrorMessage(error: unknown) {
     return error instanceof Error ? error.message : String(error);
+  }
+
+  private withPublicIdentifier<T extends { id: number; slug: string }>(record: T): T {
+    return { ...record, slug: buildPublicNewsIdentifier(record.slug) };
   }
 }

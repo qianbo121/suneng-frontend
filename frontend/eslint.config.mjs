@@ -14,10 +14,15 @@ const config = [
   {
     ignores: [
       'next-env.d.ts',
-      '.next/**',
-      '.next-dev/**',
-      '.next-visual/**',
+      '.next*/**',
+      '.artifacts/**',
+      'coverage/**',
+      'private/**',
+      'playwright-report/**',
+      'test-results/**',
       'scripts/**/*.js',
+      // Vendored Three.js build; keep our renderer and application code checked.
+      'public/animations/furnaces/v3/three.module.min.js',
     ],
   },
   ...compat.extends('next/core-web-vitals', 'next/typescript'),

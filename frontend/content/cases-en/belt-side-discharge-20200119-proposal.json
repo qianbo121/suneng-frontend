@@ -1,0 +1,13 @@
+{
+  "id": "belt-side-discharge-20200119-proposal",
+  "slug": "oil-quench-belt-line-side-discharge-tempering-interface-proposal",
+  "number": 94,
+  "title": "Can parts be collected separately after oil quenching on a mesh-belt furnace line?",
+  "summary": "Suneng's 2020 roller-supported mesh-belt heat-treatment line proposal places a rotatable discharge hopper at the oil-tank elevator exit for side discharge of workpieces whose process does not require tempering on this line. The normal route continues into the tempering furnace. This provides alternative receiving paths; hopper rotation does not establish that a material may omit tempering or has completed all heat treatment.",
+  "body": "belt-side-discharge-20200119-proposal.md",
+  "sourceFingerprint": "85c29e1b24a3e85dbe3ce3dbde19a624661b22ddfc53b453cba2f89fb4de8ede",
+  "translationStatus": "complete",
+  "translatedAt": "2026-09-12",
+  "coverAlt": "",
+  "coverCaption": ""
+}

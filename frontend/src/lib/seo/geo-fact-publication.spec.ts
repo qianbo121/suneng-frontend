@@ -10,10 +10,10 @@ const solutionSource = readSource(
   '../../app/[locale]/solutions/continuous-heat-treatment-line/page.tsx',
 );
 const jiningSource = readSource(
-  '../../app/[locale]/case/jining-support-roller-heat-treatment-line/page.tsx',
+  '../../../content/cases/jining-support-roller.md',
 );
 const henanSource = readSource(
-  '../../app/[locale]/case/henan-annealing-solution-line/page.tsx',
+  '../../../content/cases/henan-annealing-solution.md',
 );
 const productSource = readSource('../../constants/static-products.ts');
 const aboutSource = readSource('../../components/about/AboutZhContent.tsx');

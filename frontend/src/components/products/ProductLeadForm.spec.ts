@@ -267,7 +267,7 @@ describe('ProductLeadForm submission behavior', () => {
     expect(source).toContain("trackLeadEvent('form_step_complete')");
     expect(source).toContain('formStartedRef.current = true');
     expect(source).toContain('stepCompletedRef.current = true');
-    expect(source).toContain('buildLeadSourceSnapshot()');
+    expect(source).toMatch(/buildLeadSourceSnapshot\(\s*inquiryProduct \? \{ productTag: inquiryProduct \} : undefined/);
     expect(source).toContain('getFormIdempotencyKey(idempotencyKeyRef)');
     expect(source).toContain('renewFormIdempotencyKey(idempotencyKeyRef)');
     expect(source).toContain('setSubmissionId(String(result.submissionId))');

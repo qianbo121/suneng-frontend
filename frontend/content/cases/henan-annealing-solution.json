@@ -1,0 +1,83 @@
+{
+  "id": "henan-annealing-solution",
+  "slug": "henan-annealing-solution-line",
+  "summary": "河南金誉邦实业有限公司连续退洗线项目中，苏能参与退火炉及固溶冷却段设备配套。比较相似带材项目，要先对齐实际带宽、厚度及温度路径，再按加热、冷却、干燥与整线交接分别比较供货范围。本文结合2017年技术附件与已公开项目记录，说明设备配套的判断方法；方案参数不代表实际产量或验收结果。",
+  "workpiece": [
+    "不锈钢带材"
+  ],
+  "materials": [
+    "不锈钢"
+  ],
+  "process": [
+    "退火",
+    "固溶"
+  ],
+  "equipment": [
+    "连续退火固溶线"
+  ],
+  "need": [
+    "工程配套"
+  ],
+  "tags": [
+    "带材",
+    "850mm",
+    "连续退洗线"
+  ],
+  "publicCustomerName": "河南金誉邦实业有限公司",
+  "facts": [
+    {
+      "label": "方案带宽",
+      "value": "480–750",
+      "unit": "mm",
+      "condition": "200/300系不锈钢，结合具体牌号与厚度",
+      "attribute": "proposed"
+    },
+    {
+      "label": "方案厚度",
+      "value": "1.6–4.0",
+      "unit": "mm",
+      "condition": "结合具体牌号与带宽，不代表全规格已考核",
+      "attribute": "proposed"
+    },
+    {
+      "label": "方案加热炉长",
+      "value": "约130 m，不含冷却等段",
+      "unit": "",
+      "condition": "预热40m、快速加热36m、均热54m；另列固溶冷却及干燥段约45m",
+      "attribute": "proposed"
+    }
+  ],
+  "participation": "苏能参与退火炉及固溶冷却段设备配套；具体工作与现场接口按对应文件分项核对。",
+  "sourceSummary": "2017年7月26日退火炉及固溶段设备技术附件（设计依据、工艺概述及供货分交）；苏能已公开的河南金誉邦项目记录。",
+  "datePublished": "2026-07-24T20:30:00+08:00",
+  "dateModified": "2026-09-12",
+  "relatedLinks": [
+    {
+      "title": "连续退火固溶生产线",
+      "href": "/zh/products/detail/annealing-solution-line"
+    },
+    {
+      "title": "连续热处理生产线方案",
+      "href": "/zh/solutions/continuous-heat-treatment-line"
+    },
+    {
+      "title": "工业炉报价参数清单",
+      "href": "/zh/articles/gongye-lu-baojia-canshu"
+    }
+  ],
+  "title": "850毫米不锈钢退洗线：退火固溶段的供货范围",
+  "body": "henan-annealing-solution.md",
+  "contentType": "experience",
+  "publicationStatus": "draft",
+  "projectStatus": "experience",
+  "coverTitle": "带材\n退火固溶",
+  "cover": {
+    "src": "/images/products/annealing-solution-line/remaining-batch-v1/03-workpiece-8b1942ed56b3.png",
+    "alt": "不锈钢卷与带材工件参考图",
+    "caption": "工件参考图",
+    "fit": "contain"
+  },
+  "sourceDate": "2017-07-26",
+  "projectYear": 2017,
+  "listTitle": "850毫米不锈钢退洗线：退火固溶段的供货范围"
+}

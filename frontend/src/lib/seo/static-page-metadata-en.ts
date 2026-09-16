@@ -17,7 +17,7 @@ export const ENGLISH_STATIC_PAGE_METADATA = {
   service: {
     title: 'Industrial Furnace Service & Maintenance | Suneng',
     description:
-      'After-sales support for Suneng industrial furnaces, including installation, commissioning, maintenance, training, inspection and lifecycle service.',
+      'Industrial furnace installation, maintenance, retrofit and restart assessment. Confirm equipment condition, site requirements and the agreed service scope.',
   },
   contact: {
     title: 'Contact Suneng Industrial Furnace',

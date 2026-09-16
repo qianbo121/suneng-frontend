@@ -37,7 +37,14 @@ export class CustomRequirementController {
   @ApiOperation({ summary: 'Submit custom furnace requirement with evidence chain' })
   createPublic(@Body() dto: CreateCustomRequirementDto, @Req() request: Request) {
     const clientKey =
-      request.ip || dto.phone || dto.email || dto.name || dto.company || 'anonymous';
+      request.ip ||
+      dto.contact ||
+      dto.phone ||
+      dto.email ||
+      dto.identity ||
+      dto.name ||
+      dto.company ||
+      'anonymous';
     return this.service.createPublic(
       dto.deviceType ? dto : { ...dto, deviceType: requestDeviceType(request) },
       clientKey,
@@ -50,6 +57,13 @@ export class CustomRequirementController {
   @ApiOperation({ summary: 'Search custom requirement list for admin without URL query PII' })
   getAdminList(@Body() query: CustomRequirementListQueryDto) {
     return this.service.getAdminList(query);
+  }
+
+  @Get('admin/custom-requirements/:id')
+  @ApiBearerAuth('bearer')
+  @ApiOperation({ summary: 'Read one custom requirement with its saved workpiece context' })
+  findOne(@Param('id', ParseIntPipe) id: number) {
+    return this.service.findOne(id);
   }
 
   @Patch('admin/custom-requirements/:id/follow')

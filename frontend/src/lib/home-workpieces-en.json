@@ -1,0 +1,722 @@
+{
+  "large-welded-machine-frame": {
+    "name": "Large welded frame",
+    "judgement": "Residual stress and loading supports both affect distortion.",
+    "examples": [
+      {
+        "condition": "Whole-part post-weld stress relief",
+        "direction": "Trolley heat-treatment furnace",
+        "boundary": "Typical industry candidate only. Verify material grade, standards or drawings, dimensions, weight, throughput, loading and cooling requirements."
+      },
+      {
+        "condition": "Second stress relief after rough machining",
+        "direction": "Trolley heat-treatment furnace",
+        "boundary": "Only for large welded frames requiring high dimensional stability, where the process documents specify a second stress-relief cycle after rough machining."
+      }
+    ]
+  },
+  "pressure-vessel-shell": {
+    "name": "Pressure vessel shell",
+    "judgement": "Wall thickness and weld positions determine soaking and temperature measurement.",
+    "examples": [
+      {
+        "condition": "Whole-part post-weld heat treatment",
+        "direction": "Trolley heat-treatment furnace",
+        "boundary": "Typical industry candidate only. Verify material grade, standards or drawings, dimensions, weight, throughput, loading and cooling requirements."
+      },
+      {
+        "condition": "Normalizing, with optional tempering, after forming",
+        "direction": "Trolley heat-treatment furnace",
+        "boundary": "Only where material standards, product standards or design documents require it; not applicable to all pressure vessel shells."
+      }
+    ]
+  },
+  "structural-steel-component": {
+    "name": "Steel structure",
+    "judgement": "Loading orientation affects temperature uniformity across a large structure.",
+    "examples": [
+      {
+        "condition": "Whole-part post-weld stress relief",
+        "direction": "Trolley heat-treatment furnace",
+        "boundary": "Typical industry candidate only. Verify material grade, standards or drawings, dimensions, weight, throughput, loading and cooling requirements."
+      },
+      {
+        "condition": "Second stress relief after rough machining",
+        "direction": "Trolley heat-treatment furnace",
+        "boundary": "Only for welded steel structures that will be finish-machined and whose process documents specify a second stress-relief cycle after rough machining. Not a default for building structures."
+      }
+    ]
+  },
+  "welded-assembly": {
+    "name": "Welded assembly",
+    "judgement": "Confirm the specified treatment for assemblies with multiple welds.",
+    "examples": [
+      {
+        "condition": "Whole-part post-weld stress relief",
+        "direction": "Trolley heat-treatment furnace",
+        "boundary": "Typical industry candidate only. Verify material grade, standards or drawings, dimensions, weight, throughput, loading and cooling requirements."
+      },
+      {
+        "condition": "Second stress relief after rough machining",
+        "direction": "Trolley heat-treatment furnace",
+        "boundary": "Only for welded assemblies requiring high dimensional accuracy, with large machining allowances and a documented second stress-relief cycle."
+      }
+    ]
+  },
+  "large-cylinder-shell": {
+    "name": "Large cylindrical shell",
+    "judgement": "Diameter, length and weight determine usable furnace space.",
+    "examples": [
+      {
+        "condition": "Whole-part post-weld stress relief",
+        "direction": "Trolley heat-treatment furnace",
+        "boundary": "Typical industry candidate only. Verify material grade, standards or drawings, dimensions, weight, throughput, loading and cooling requirements."
+      },
+      {
+        "condition": "Normalizing, with optional tempering, after hot forming",
+        "direction": "Trolley heat-treatment furnace",
+        "boundary": "Only for large shells whose material condition changes during hot forming and whose material or product standards require restoration of properties."
+      }
+    ]
+  },
+  "welded-pipe-spool": {
+    "name": "Welded pipe spool",
+    "judgement": "Wall thickness differences and supports affect treatment consistency.",
+    "examples": [
+      {
+        "condition": "Whole-spool post-weld heat treatment",
+        "direction": "Trolley or box heat-treatment furnace",
+        "boundary": "Typical industry candidate only. Verify material grade, standards or drawings, dimensions, weight, throughput, loading and cooling requirements."
+      },
+      {
+        "condition": "Whole-spool solution treatment",
+        "direction": "Trolley or roller hearth solution furnace",
+        "boundary": "Only for stainless steel pipe spools whose grade, weld condition, dimensions and design documents permit whole-spool solution treatment."
+      }
+    ]
+  },
+  "seamless-aluminum-gas-cylinder": {
+    "name": "Seamless aluminium cylinder",
+    "judgement": "Transfer time and cooling method determine solution-treatment results.",
+    "examples": [
+      {
+        "condition": "Solution treatment and water quenching",
+        "direction": "Aluminium cylinder solution-treatment and quenching line",
+        "boundary": "Confirm alloy grade, wall thickness, permitted quench-transfer time and the applicable cylinder product standard."
+      },
+      {
+        "condition": "Artificial aging",
+        "direction": "Forced-circulation aging furnace",
+        "boundary": "Only for aluminium alloy cylinders that have been solution-treated and quenched, and require artificial aging under the product standard."
+      }
+    ]
+  },
+  "seamless-steel-gas-cylinder": {
+    "name": "Seamless steel cylinder",
+    "judgement": "Wall thickness, steel grade and target properties determine the treatment route.",
+    "examples": [
+      {
+        "condition": "Whole-part quenching and tempering",
+        "direction": "Gas cylinder quench-and-temper line",
+        "boundary": "Only for seamless steel cylinders using a quenched-and-tempered steel route; confirm the steel grade and applicable product standard."
+      },
+      {
+        "condition": "Whole-part normalizing, with optional tempering",
+        "direction": "Gas cylinder normalizing line",
+        "boundary": "Only for seamless steel cylinders using a normalized steel route. Do not interchange this with the quenched-and-tempered steel route."
+      }
+    ]
+  },
+  "welded-steel-gas-cylinder": {
+    "name": "Welded steel cylinder",
+    "judgement": "Normalizing must be consistent across both welds and the cylinder body.",
+    "examples": [
+      {
+        "condition": "Whole-part post-weld normalizing",
+        "direction": "Welded cylinder normalizing furnace",
+        "boundary": "Confirm whether normalizing is required by the cylinder type, steel grade and applicable product standard."
+      },
+      {
+        "condition": "Whole-part post-weld stress relief",
+        "direction": "Welded cylinder stress-relief furnace",
+        "boundary": "Only where the applicable cylinder standard permits stress relief. Furnace type depends on dimensions, throughput and loading."
+      }
+    ]
+  },
+  "large-forged-flange": {
+    "name": "Large forged flange",
+    "judgement": "Heating, cooling and soaking must limit temperature differences across thick sections.",
+    "examples": [
+      {
+        "condition": "Normalizing",
+        "direction": "Trolley heat-treatment furnace",
+        "boundary": "Typical industry candidate only. Verify material grade, standards or drawings, dimensions, weight, throughput, loading and cooling requirements."
+      },
+      {
+        "condition": "Whole-part quenching and tempering",
+        "direction": "Trolley quench-and-temper line",
+        "boundary": "Only for large forged flanges requiring quenched-and-tempered delivery under the material standard or drawing. Verify quench medium and transfer time against material and section size."
+      }
+    ]
+  },
+  "large-forged-shaft": {
+    "name": "Large forged shaft",
+    "judgement": "Core properties and loading supports need to be checked together.",
+    "examples": [
+      {
+        "condition": "Normalizing and tempering",
+        "direction": "Trolley furnace for forgings",
+        "boundary": "Typical industry candidate only. Verify material grade, standards or drawings, dimensions, weight, throughput, loading and cooling requirements."
+      },
+      {
+        "condition": "Hydrogen-diffusion annealing",
+        "direction": "Trolley annealing furnace for forgings",
+        "boundary": "Typical industry candidate only. Verify material grade, standards or drawings, dimensions, weight, throughput, loading and cooling requirements."
+      }
+    ]
+  },
+  "large-gear-blank": {
+    "name": "Large gear blank",
+    "judgement": "The required structure and distortion allowance determine preparatory heat treatment.",
+    "examples": [
+      {
+        "condition": "Normalizing before gear cutting",
+        "direction": "Trolley heat-treatment furnace",
+        "boundary": "Typical industry candidate only. Verify material grade, standards or drawings, dimensions, weight, throughput, loading and cooling requirements."
+      },
+      {
+        "condition": "Whole-gear-blank quenching and tempering",
+        "direction": "Trolley quench-and-temper line",
+        "boundary": "Only where the material, drawing or gear performance specification requires whole-blank quenching and tempering. Verify section size, loading and quench cooling."
+      }
+    ]
+  },
+  "large-steel-casting": {
+    "name": "Large steel casting",
+    "judgement": "As-cast structure, repair welds and section changes affect the thermal cycle.",
+    "examples": [
+      {
+        "condition": "Annealing",
+        "direction": "Trolley heat-treatment furnace",
+        "boundary": "Typical industry candidate only. Verify material grade, standards or drawings, dimensions, weight, throughput, loading and cooling requirements."
+      },
+      {
+        "condition": "Normalizing and tempering",
+        "direction": "Trolley heat-treatment furnace",
+        "boundary": "Typical industry candidate only. Verify material grade, standards or drawings, dimensions, weight, throughput, loading and cooling requirements."
+      }
+    ]
+  },
+  "ductile-iron-casting": {
+    "name": "Ductile iron casting",
+    "judgement": "The target matrix determines annealing, normalizing or isothermal treatment.",
+    "examples": [
+      {
+        "condition": "Ferritizing annealing",
+        "direction": "Trolley heat-treatment furnace",
+        "boundary": "Confirm ductile iron grade, target matrix, as-cast structure and section dimensions."
+      },
+      {
+        "condition": "Normalizing",
+        "direction": "Trolley heat-treatment furnace",
+        "boundary": "Confirm ductile iron grade, target matrix, as-cast structure and section dimensions."
+      }
+    ]
+  },
+  "large-die-block-forging": {
+    "name": "Large forged die block",
+    "judgement": "Hydrogen diffusion and structural uniformity are key for thick die blocks.",
+    "examples": [
+      {
+        "condition": "Annealing",
+        "direction": "Trolley furnace for forgings",
+        "boundary": "Typical industry candidate only. Verify material grade, standards or drawings, dimensions, weight, throughput, loading and cooling requirements."
+      },
+      {
+        "condition": "Prehardening by quenching and tempering",
+        "direction": "Trolley quench-and-temper line for forgings",
+        "boundary": "Only for die steel blocks whose grade, delivery hardness and technical documents explicitly require prehardening by quenching and tempering. Not a default for all large die forgings."
+      }
+    ]
+  },
+  "long-shaft": {
+    "name": "Long shaft",
+    "judgement": "Slender parts can bend when heated; loading orientation affects straightness.",
+    "examples": [
+      {
+        "condition": "Whole-part normalizing",
+        "direction": "Pit or trolley heat-treatment furnace",
+        "boundary": "Typical industry candidate only. Verify material grade, standards or drawings, dimensions, weight, throughput, loading and cooling requirements."
+      },
+      {
+        "condition": "Whole-part quenching and tempering",
+        "direction": "Pit furnace quench-and-temper line",
+        "boundary": "Typical industry candidate only. Verify material grade, standards or drawings, dimensions, weight, throughput, loading and cooling requirements."
+      }
+    ]
+  },
+  "gear-shaft": {
+    "name": "Gear shaft",
+    "judgement": "Distinguish preparatory heat treatment, carburizing and local hardening.",
+    "examples": [
+      {
+        "condition": "Carburizing, quenching and low-temperature tempering",
+        "direction": "Sealed-quench furnace with auxiliary equipment",
+        "boundary": "Only where material and technical documents specify carburizing. Use a controlled-atmosphere sealed-quench furnace, with washing and low-temperature tempering as required. Verify loading, quenching and distortion limits."
+      },
+      {
+        "condition": "Whole-part quenching and tempering",
+        "direction": "Pit or trolley quench-and-temper line",
+        "boundary": "Only for gear shafts whose material, drawing or mechanical-property requirements specify whole-part quenching and tempering. Verify furnace and loading against length-to-diameter ratio and distortion limits."
+      }
+    ]
+  },
+  "spline-shaft": {
+    "name": "Spline shaft",
+    "judgement": "Spline distortion and surface quality must be confirmed first.",
+    "examples": [
+      {
+        "condition": "Carburizing, quenching and low-temperature tempering",
+        "direction": "Sealed-quench furnace with auxiliary equipment",
+        "boundary": "Only where material and technical documents specify carburizing. Use a controlled-atmosphere sealed-quench furnace, with washing and low-temperature tempering as required. Verify loading, quenching and distortion limits."
+      },
+      {
+        "condition": "Whole-part quenching and tempering",
+        "direction": "Pit or trolley quench-and-temper line",
+        "boundary": "Only for spline shafts whose material, drawing or mechanical-property requirements specify whole-part quenching and tempering. Verify furnace and loading against length-to-diameter ratio and distortion limits."
+      }
+    ]
+  },
+  "large-gear": {
+    "name": "Large gear",
+    "judgement": "Assess bulk quenching and tempering separately from final tooth hardening.",
+    "examples": [
+      {
+        "condition": "Deep carburizing, quenching and tempering",
+        "direction": "Pit carburizing line with auxiliary equipment",
+        "boundary": "Only for gears whose material and technical documents specify deep carburizing. Match quench tanks, transfer and tempering equipment to effective case depth and distortion limits; verify loading and cooling."
+      },
+      {
+        "condition": "Normalizing or annealing before gear cutting",
+        "direction": "Pit or trolley heat-treatment furnace",
+        "boundary": "Typical industry candidate only. Verify material grade, standards or drawings, dimensions, weight, throughput, loading and cooling requirements."
+      }
+    ]
+  },
+  "large-ring-gear": {
+    "name": "Large ring gear",
+    "judgement": "Thin rings distort easily; supports affect roundness.",
+    "examples": [
+      {
+        "condition": "Whole-part normalizing",
+        "direction": "Pit or trolley heat-treatment furnace",
+        "boundary": "Typical industry candidate only. Verify material grade, standards or drawings, dimensions, weight, throughput, loading and cooling requirements."
+      },
+      {
+        "condition": "Whole-part quenching and tempering",
+        "direction": "Pit or trolley quench-and-temper line",
+        "boundary": "Typical industry candidate only. Verify material grade, standards or drawings, dimensions, weight, throughput, loading and cooling requirements."
+      }
+    ]
+  },
+  "crankshaft": {
+    "name": "Crankshaft",
+    "judgement": "Bulk quenching and tempering can use a furnace; journal hardening needs separate review.",
+    "examples": [
+      {
+        "condition": "Whole-part quenching and tempering",
+        "direction": "Pit furnace quench-and-temper line",
+        "boundary": "Typical industry candidate only. Verify material grade, standards or drawings, dimensions, weight, throughput, loading and cooling requirements."
+      },
+      {
+        "condition": "Whole-part normalizing or annealing",
+        "direction": "Pit or trolley heat-treatment furnace",
+        "boundary": "Typical industry candidate only. Verify material grade, standards or drawings, dimensions, weight, throughput, loading and cooling requirements."
+      }
+    ]
+  },
+  "track-roller": {
+    "name": "Track roller",
+    "judgement": "Assess bulk quenching and tempering separately from tread hardening.",
+    "examples": [
+      {
+        "condition": "Whole-part normalizing in volume",
+        "direction": "Continuous roller hearth normalizing furnace",
+        "boundary": "Typical industry candidate only. Verify material grade, standards or drawings, dimensions, weight, throughput, loading and cooling requirements."
+      },
+      {
+        "condition": "Whole-part quenching and tempering in volume",
+        "direction": "Continuous roller hearth quench-and-temper line",
+        "boundary": "Typical industry candidate only. Verify material grade, standards or drawings, dimensions, weight, throughput, loading and cooling requirements."
+      }
+    ]
+  },
+  "carrier-roller": {
+    "name": "Carrier roller",
+    "judgement": "Batch size and loading affect cycle time and consistency.",
+    "examples": [
+      {
+        "condition": "Whole-part normalizing in volume",
+        "direction": "Continuous roller hearth normalizing furnace",
+        "boundary": "Typical industry candidate only. Verify material grade, standards or drawings, dimensions, weight, throughput, loading and cooling requirements."
+      },
+      {
+        "condition": "Whole-part quenching and tempering in volume",
+        "direction": "Continuous roller hearth quench-and-temper line",
+        "boundary": "Typical industry candidate only. Verify material grade, standards or drawings, dimensions, weight, throughput, loading and cooling requirements."
+      }
+    ]
+  },
+  "idler-wheel": {
+    "name": "Idler wheel",
+    "judgement": "Rim section changes and distortion control determine loading.",
+    "examples": [
+      {
+        "condition": "Whole-part normalizing in volume",
+        "direction": "Continuous roller hearth normalizing furnace",
+        "boundary": "Typical industry candidate only. Verify material grade, standards or drawings, dimensions, weight, throughput, loading and cooling requirements."
+      },
+      {
+        "condition": "Whole-part quenching and tempering in volume",
+        "direction": "Continuous roller hearth quench-and-temper line",
+        "boundary": "Typical industry candidate only. Verify material grade, standards or drawings, dimensions, weight, throughput, loading and cooling requirements."
+      }
+    ]
+  },
+  "drive-sprocket": {
+    "name": "Drive sprocket",
+    "judgement": "Assess tooth requirements separately from treatment of the bulk material.",
+    "examples": [
+      {
+        "condition": "Whole-part normalizing in volume",
+        "direction": "Continuous roller hearth normalizing furnace",
+        "boundary": "Typical industry candidate only. Verify material grade, standards or drawings, dimensions, weight, throughput, loading and cooling requirements."
+      },
+      {
+        "condition": "Whole-part quenching and tempering in volume",
+        "direction": "Continuous roller hearth quench-and-temper line",
+        "boundary": "Typical industry candidate only. Verify material grade, standards or drawings, dimensions, weight, throughput, loading and cooling requirements."
+      }
+    ]
+  },
+  "track-link": {
+    "name": "Track link",
+    "judgement": "Pin-bore and tread properties determine the combination of processes.",
+    "examples": [
+      {
+        "condition": "Whole-track-link quenching and tempering",
+        "direction": "Continuous roller hearth or pusher quench-and-temper line",
+        "boundary": "For track links whose material and drawings specify whole-part quenching and tempering. Quench medium, loading and distortion control depend on the specific size."
+      },
+      {
+        "condition": "Induction hardening of tread or pin bore",
+        "direction": "Dedicated induction hardener and tempering furnace",
+        "boundary": "Only for track links whose drawings specify local surface hardening. Target areas, case depth and tempering method must follow the product drawing."
+      }
+    ]
+  },
+  "engineering-wheel-hub": {
+    "name": "Heavy equipment hub",
+    "judgement": "Balance core properties and distortion in thick-walled hubs.",
+    "examples": [
+      {
+        "condition": "Whole-part normalizing in volume",
+        "direction": "Continuous roller hearth normalizing furnace",
+        "boundary": "Typical industry candidate only. Verify material grade, standards or drawings, dimensions, weight, throughput, loading and cooling requirements."
+      },
+      {
+        "condition": "Whole-part quenching and tempering in volume",
+        "direction": "Continuous roller hearth quench-and-temper line",
+        "boundary": "Typical industry candidate only. Verify material grade, standards or drawings, dimensions, weight, throughput, loading and cooling requirements."
+      }
+    ]
+  },
+  "medium-heavy-steel-plate": {
+    "name": "Medium & heavy steel plate",
+    "judgement": "Plate thickness and flatness determine support, heating and cooling.",
+    "examples": [
+      {
+        "condition": "Normalizing",
+        "direction": "Roller hearth plate normalizing furnace",
+        "boundary": "Typical industry candidate only. Verify material grade, standards or drawings, dimensions, weight, throughput, loading and cooling requirements."
+      },
+      {
+        "condition": "Quenching and tempering of high-strength plate",
+        "direction": "Roller hearth plate quench-and-temper line",
+        "boundary": "Only for high-strength medium or heavy plate whose material standard or delivery condition specifies quenching and tempering. Not a default for ordinary plate."
+      }
+    ]
+  },
+  "wear-resistant-steel-plate": {
+    "name": "Wear-resistant plate",
+    "judgement": "Quench cooling and plate shape control must be considered together.",
+    "examples": [
+      {
+        "condition": "Plate quenching",
+        "direction": "Roller hearth plate quenching line",
+        "boundary": "Confirm steel grade, thickness, target hardness, flatness and cooling intensity."
+      },
+      {
+        "condition": "Low-temperature tempering",
+        "direction": "Roller hearth plate tempering furnace",
+        "boundary": "Only for wear-resistant plate whose delivery condition and material process require tempering after quenching."
+      }
+    ]
+  },
+  "stainless-steel-plate": {
+    "name": "Stainless steel plate",
+    "judgement": "Check surface quality and atmosphere requirements before selecting equipment.",
+    "examples": [
+      {
+        "condition": "Solution treatment of austenitic or duplex steel",
+        "direction": "Stainless steel plate solution-treatment line",
+        "boundary": "Only for austenitic or duplex stainless plate whose grade and technical documents require solution treatment. Select cooling medium by grade, thickness and corrosion-resistance requirements."
+      },
+      {
+        "condition": "Quenching and tempering of martensitic steel",
+        "direction": "Stainless steel plate quench-and-temper line",
+        "boundary": "Only for martensitic stainless plate whose grade and technical documents specify quenching and tempering. Ferritic stainless steel usually requires annealing and needs separate review."
+      }
+    ]
+  },
+  "aluminum-alloy-plate": {
+    "name": "Aluminium alloy plate",
+    "judgement": "Alloy condition and plate shape determine solution treatment or aging.",
+    "examples": [
+      {
+        "condition": "Solution treatment and water quenching",
+        "direction": "Aluminium plate solution-treatment and quenching line",
+        "boundary": "Confirm alloy grade, plate thickness, permitted transfer time and flatness requirements."
+      },
+      {
+        "condition": "Artificial aging",
+        "direction": "Forced-circulation aging furnace",
+        "boundary": "Only for heat-treatable aluminium alloy plate whose material process requires artificial aging."
+      }
+    ]
+  },
+  "aluminum-coil": {
+    "name": "Aluminium coil",
+    "judgement": "Treatment as a coil or as uncoiled strip determines the equipment route.",
+    "examples": [
+      {
+        "condition": "Coil annealing",
+        "direction": "Forced-circulation batch annealing furnace",
+        "boundary": "Confirm furnace structure, air circulation and atmosphere using alloy, incoming condition, coil dimensions and weight, loading, surface and degreasing requirements."
+      },
+      {
+        "condition": "Solution treatment or recrystallization of uncoiled strip",
+        "direction": "Continuous aluminium strip heat-treatment line",
+        "boundary": "Confirm whether the alloy requires solution treatment or recrystallization, then assess a continuous line against product size and throughput."
+      }
+    ]
+  },
+  "carbon-steel-coil": {
+    "name": "Carbon steel coil",
+    "judgement": "Coil weight, strip width and atmosphere requirements determine suitability.",
+    "examples": [
+      {
+        "condition": "Recrystallization annealing in coils",
+        "direction": "All-hydrogen bell annealing furnace",
+        "boundary": "Typical industry candidate only. Verify material grade, standards or drawings, dimensions, weight, throughput, loading and cooling requirements."
+      },
+      {
+        "condition": "Continuous annealing of uncoiled strip",
+        "direction": "Continuous steel strip annealing line",
+        "boundary": "Only where product dimensions, surface requirements and throughput suit continuous treatment of uncoiled strip."
+      }
+    ]
+  },
+  "seamless-steel-pipe": {
+    "name": "Seamless steel pipe",
+    "judgement": "Wall thickness, length and process determine continuous or batch treatment.",
+    "examples": [
+      {
+        "condition": "Whole-pipe normalizing",
+        "direction": "Continuous roller hearth heat-treatment furnace",
+        "boundary": "Typical industry candidate only. Verify material grade, standards or drawings, dimensions, weight, throughput, loading and cooling requirements."
+      },
+      {
+        "condition": "Whole-pipe annealing",
+        "direction": "Continuous roller hearth heat-treatment furnace",
+        "boundary": "Typical industry candidate only. Verify material grade, standards or drawings, dimensions, weight, throughput, loading and cooling requirements."
+      }
+    ]
+  },
+  "welded-steel-pipe": {
+    "name": "Welded steel pipe",
+    "judgement": "Distinguish weld annealing from whole-pipe normalizing using line speed and standards.",
+    "examples": [
+      {
+        "condition": "Whole-pipe normalizing",
+        "direction": "Continuous roller hearth heat-treatment furnace",
+        "boundary": "Typical industry candidate only. Verify material grade, standards or drawings, dimensions, weight, throughput, loading and cooling requirements."
+      },
+      {
+        "condition": "Whole-pipe annealing",
+        "direction": "Continuous roller hearth heat-treatment furnace",
+        "boundary": "Typical industry candidate only. Verify material grade, standards or drawings, dimensions, weight, throughput, loading and cooling requirements."
+      }
+    ]
+  },
+  "round-steel-bar": {
+    "name": "Round steel bar",
+    "judgement": "Diameter, length and quantity determine continuous or batch loading.",
+    "examples": [
+      {
+        "condition": "Whole-bar annealing",
+        "direction": "Continuous roller hearth heat-treatment furnace",
+        "boundary": "Typical industry candidate only. Verify material grade, standards or drawings, dimensions, weight, throughput, loading and cooling requirements."
+      },
+      {
+        "condition": "Whole-bar normalizing",
+        "direction": "Continuous roller hearth heat-treatment furnace",
+        "boundary": "Typical industry candidate only. Verify material grade, standards or drawings, dimensions, weight, throughput, loading and cooling requirements."
+      }
+    ]
+  },
+  "structural-section-steel": {
+    "name": "Heat-treated steel section",
+    "judgement": "Only where standards or drawings require it; not a default for ordinary hot-rolled sections.",
+    "examples": [
+      {
+        "condition": "Whole-part normalizing where specified",
+        "direction": "Continuous roller hearth normalizing furnace",
+        "boundary": "Not for ordinary sections delivered hot-rolled. Use only where material standards, product standards or drawings require whole-section normalizing and the section and length suit roller conveying."
+      },
+      {
+        "condition": "Quenching and tempering of high-strength or alloy sections",
+        "direction": "Continuous roller hearth quench-and-temper line",
+        "boundary": "Only for high-strength or alloy sections whose grade, delivery properties and technical documents require whole-part quenching and tempering, with size and distortion limits compatible with the continuous line."
+      }
+    ]
+  },
+  "wire-rod-coil": {
+    "name": "Wire rod coil",
+    "judgement": "Coil loading and the spheroidizing atmosphere are key selection boundaries.",
+    "examples": [
+      {
+        "condition": "Spheroidizing annealing in coils",
+        "direction": "Protective-atmosphere bell or pit furnace",
+        "boundary": "Typical industry candidate only. Verify material grade, standards or drawings, dimensions, weight, throughput, loading and cooling requirements."
+      },
+      {
+        "condition": "Softening or isothermal annealing in coils",
+        "direction": "Protective-atmosphere bell or pit furnace",
+        "boundary": "Typical industry candidate only. Verify material grade, standards or drawings, dimensions, weight, throughput, loading and cooling requirements."
+      }
+    ]
+  },
+  "steel-wire-coil": {
+    "name": "Steel wire coil",
+    "judgement": "Wire diameter, coil weight and surface requirements determine atmosphere capability.",
+    "examples": [
+      {
+        "condition": "Spheroidizing annealing in coils",
+        "direction": "Protective-atmosphere bell or pit furnace",
+        "boundary": "Typical industry candidate only. Verify material grade, standards or drawings, dimensions, weight, throughput, loading and cooling requirements."
+      },
+      {
+        "condition": "Recrystallization annealing after cold drawing",
+        "direction": "Protective-atmosphere bell or pit furnace",
+        "boundary": "Typical industry candidate only. Verify material grade, standards or drawings, dimensions, weight, throughput, loading and cooling requirements."
+      }
+    ]
+  },
+  "high-strength-bolts": {
+    "name": "High-strength bolts",
+    "judgement": "Strength grade and decarburization control determine atmosphere and quenching.",
+    "examples": [
+      {
+        "condition": "Whole-part quenching and tempering",
+        "direction": "Continuous mesh belt quench-and-temper line",
+        "boundary": "Confirm material grade, property class, decarburization control, loading density, quench medium and tempering schedule."
+      },
+      {
+        "condition": "Hydrogen-embrittlement relief after plating",
+        "direction": "Low-temperature hydrogen-relief furnace",
+        "boundary": "Only where material strength, surface treatment and applicable standards establish a hydrogen-embrittlement risk and require hydrogen relief."
+      }
+    ]
+  },
+  "hex-nuts": {
+    "name": "Nuts",
+    "judgement": "Material, strength grade and batch size determine the continuous process.",
+    "examples": [
+      {
+        "condition": "Whole-part quenching and tempering",
+        "direction": "Continuous mesh belt quench-and-temper line",
+        "boundary": "Confirm material grade, property class, decarburization control, loading density, quench medium and tempering schedule."
+      },
+      {
+        "condition": "Hydrogen-embrittlement relief after plating",
+        "direction": "Low-temperature hydrogen-relief furnace",
+        "boundary": "Only for steel nuts whose plating introduces hydrogen-embrittlement risk and whose standard or customer specification requires hydrogen relief."
+      }
+    ]
+  },
+  "self-drilling-screws": {
+    "name": "Self-tapping & drilling screws",
+    "judgement": "These parts often require carbonitriding; confirm atmosphere capability first.",
+    "examples": [
+      {
+        "condition": "Carbonitriding, quenching and tempering",
+        "direction": "Controlled-atmosphere mesh belt line",
+        "boundary": "Typical industry candidate only. Verify material grade, standards or drawings, dimensions, weight, throughput, loading and cooling requirements."
+      },
+      {
+        "condition": "Carburizing, quenching and tempering",
+        "direction": "Controlled-atmosphere mesh belt line",
+        "boundary": "Typical industry candidate only. Verify material grade, standards or drawings, dimensions, weight, throughput, loading and cooling requirements."
+      }
+    ]
+  },
+  "steel-pins": {
+    "name": "Steel pins",
+    "judgement": "Bulk quenching and tempering, carburizing and local hardening are distinct routes.",
+    "examples": [
+      {
+        "condition": "Whole-part quenching and tempering",
+        "direction": "Continuous quench-and-temper line",
+        "boundary": "Typical industry candidate only. Verify material grade, standards or drawings, dimensions, weight, throughput, loading and cooling requirements."
+      },
+      {
+        "condition": "Carburizing, quenching and low-temperature tempering",
+        "direction": "Controlled-atmosphere continuous carburizing line",
+        "boundary": "Only for pins whose drawings or standards specify carburizing. Verify furnace type against dimensions, load and throughput."
+      }
+    ]
+  },
+  "chain-components": {
+    "name": "Chain components",
+    "judgement": "Confirm separate routes for pins, bushes and link plates.",
+    "examples": [
+      {
+        "condition": "Carburizing of pins and bushes",
+        "direction": "Mesh belt or cast-link belt carburizing line",
+        "boundary": "Typical industry candidate only. Verify material grade, standards or drawings, dimensions, weight, throughput, loading and cooling requirements."
+      },
+      {
+        "condition": "Whole-link-plate quenching and tempering",
+        "direction": "Mesh belt or cast-link belt quench-and-temper line",
+        "boundary": "Typical industry candidate only. Verify material grade, standards or drawings, dimensions, weight, throughput, loading and cooling requirements."
+      }
+    ]
+  },
+  "small-coil-springs": {
+    "name": "Small coil springs",
+    "judgement": "Material supply condition and forming method determine stress relief or quenching and tempering.",
+    "examples": [
+      {
+        "condition": "Stress-relief tempering after cold coiling",
+        "direction": "Continuous mesh belt tempering furnace",
+        "boundary": "Typical industry candidate only. Verify material grade, standards or drawings, dimensions, weight, throughput, loading and cooling requirements."
+      },
+      {
+        "condition": "Whole-part quenching and tempering",
+        "direction": "Continuous mesh belt quench-and-temper line",
+        "boundary": "Only for small springs whose material and manufacturing route require quenching and tempering. This does not replace stress relief for cold-coiled springs."
+      }
+    ]
+  }
+}

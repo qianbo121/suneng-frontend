@@ -1,34 +1,42 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect } from 'react';
+import { isPublicNewsView, registerNewsSessionView } from '@/lib/news-view-session';
 
-type NewsViewPingProps = {
-  newsId?: number;
-};
-
-/**
- * Fire-and-forget client-side view registration.
- *
- * View counting is intentionally decoupled from the (cacheable) detail render:
- * the server component fetch can be ISR-cached without suppressing counts, and
- * the backend enforces per-viewer/day idempotency via an httpOnly cookie. Only
- * fires for real articles (an API id); fallback content has no id and is
- * skipped. Failures are swallowed — a view ping must never break the page.
- */
-export function NewsViewPing({ newsId }: NewsViewPingProps) {
-  const fired = useRef(false);
-
+export function NewsViewPing({ newsId }: { newsId?: number }) {
   useEffect(() => {
-    if (fired.current || typeof newsId !== 'number') {
-      return;
-    }
-    fired.current = true;
-    const base = process.env.NEXT_PUBLIC_API_BASE_URL || '/api';
-    void fetch(`${base}/v1/news/${newsId}/view`, {
-      method: 'POST',
-      credentials: 'include',
-    }).catch(() => {});
+    if (typeof newsId !== 'number') return;
+    const record = () => {
+      if (
+        !isPublicNewsView(
+          location.pathname,
+          location.search,
+          document.visibilityState === 'visible',
+          Boolean((document as Document & { prerendering?: boolean }).prerendering),
+        )
+      )
+        return;
+      let storage: Storage | undefined;
+      try {
+        storage = sessionStorage;
+      } catch {
+        /* private browsing */
+      }
+      void registerNewsSessionView(newsId, storage, async () => {
+        const response = await fetch(`/api/news/${newsId}/view`, {
+          method: 'POST',
+          credentials: 'same-origin',
+        });
+        return response.ok;
+      });
+    };
+    record();
+    document.addEventListener('visibilitychange', record);
+    document.addEventListener('prerenderingchange', record);
+    return () => {
+      document.removeEventListener('visibilitychange', record);
+      document.removeEventListener('prerenderingchange', record);
+    };
   }, [newsId]);
-
   return null;
 }

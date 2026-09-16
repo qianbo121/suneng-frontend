@@ -31,6 +31,8 @@ function dto(categoryId: number | null = 2): ShujuNewsPublishDto {
 function harness(binding: { sourceVersion: number; newsId: number } | null = null) {
   const operations = new Map<string, Record<string, unknown>>();
   const news = {
+    ...dto(),
+    publishDate: new Date('2026-08-01T00:00:00Z'),
     id: binding?.newsId ?? 31,
     slug: dto().slug,
     status: PublishStatus.published,
@@ -62,6 +64,7 @@ function harness(binding: { sourceVersion: number; newsId: number } | null = nul
       findFirst: jest.fn(() => ({ id: 2 })),
     },
     news: {
+      findUnique: jest.fn(() => news),
       create: jest.fn(() => news),
       update: jest.fn(() => news),
     },
@@ -80,10 +83,87 @@ function harness(binding: { sourceVersion: number; newsId: number } | null = nul
     baidu as never,
     new ConfigService({ publicSiteUrl: 'https://www.jssngyl.cn' }),
   );
-  return { service, prisma, tx, operations, upload };
+  return { service, prisma, tx, operations, upload, baidu };
 }
 
 describe('ShujuNewsPublishService', () => {
+  const english = {
+    titleEn: 'Which records support trolley furnace acceptance?',
+    summaryEn: 'Check the process curve and load records.',
+    contentEn: '<p>Check the process curve and load records.</p>',
+    seoKeywordsEn: 'trolley furnace, acceptance',
+  };
+
+  it('saves both languages on one news record with matching English search fields', async () => {
+    const { service, tx } = harness();
+    const payload = { ...dto(), ...english };
+    await service.publish(payload, 'bilingual');
+    expect(tx.news.create).toHaveBeenCalledTimes(1);
+    expect(tx.news.create).toHaveBeenCalledWith({
+      data: expect.objectContaining({
+        ...english,
+        seoTitleEn: english.titleEn,
+        seoDescriptionEn: english.summaryEn,
+      }),
+    });
+    await service.publish(payload, 'bilingual-replay');
+    expect(tx.news.create).toHaveBeenCalledTimes(1);
+    await expect(
+      service.publish({ ...payload, contentEn: '<p>Different English.</p>' }, 'changed-en'),
+    ).rejects.toBeInstanceOf(ConflictException);
+  });
+
+  it.each([
+    { titleEn: english.titleEn },
+    { ...english, contentEn: '<p> </p>' },
+    { ...english, contentEn: '<img src="/media/news/private.png">' },
+    { ...english, contentEn: '<p>We are ISO 14001 certified.</p>' },
+  ])(
+    'rejects incomplete, private or fact-policy violating English before writing: %j',
+    async (copy) => {
+      const { service, prisma } = harness();
+      await expect(service.publish({ ...dto(), ...copy }, 'bad-english')).rejects.toBeInstanceOf(
+        ConflictException,
+      );
+      expect(prisma.$transaction).not.toHaveBeenCalled();
+      expect(prisma.shujuNewsOperation.create).not.toHaveBeenCalled();
+    },
+  );
+
+  it('updates both languages while preserving the original date and news identity', async () => {
+    const { service, tx } = harness({ sourceVersion: 2, newsId: 31 });
+    await service.publish({ ...dto(), ...english }, 'new-translation');
+    expect(tx.news.create).not.toHaveBeenCalled();
+    expect(tx.news.update).toHaveBeenCalledWith({
+      where: { id: 31 },
+      data: expect.objectContaining({
+        ...english,
+        publishDate: new Date('2026-08-01T00:00:00Z'),
+        slug: dto().slug,
+      }),
+    });
+  });
+
+  it('invalidates stale English on Chinese edits from an older publisher', async () => {
+    const { service, tx } = harness({ sourceVersion: 2, newsId: 31 });
+    await service.publish({ ...dto(), contentZh: '<p>改为核对现场记录。</p>' }, 'changed-zh');
+    expect(tx.news.update).toHaveBeenCalledWith({
+      where: { id: 31 },
+      data: expect.objectContaining({
+        titleEn: null,
+        summaryEn: null,
+        contentEn: null,
+        seoTitleEn: null,
+      }),
+    });
+  });
+
+  it('preserves a current translation when a legacy request does not change Chinese text', async () => {
+    const { service, tx } = harness({ sourceVersion: 2, newsId: 31 });
+    await service.publish(dto(), 'same-zh');
+    expect((tx.news.update as jest.Mock).mock.calls[0][0].data).not.toHaveProperty('contentEn');
+  });
+
   it('accepts an omitted category in the public request contract but still rejects an invalid one', async () => {
     const withoutCategory = plainToInstance(ShujuNewsPublishDto, dto(null));
     const invalidCategory = plainToInstance(ShujuNewsPublishDto, dto(0));
@@ -93,8 +173,11 @@ describe('ShujuNewsPublishService', () => {
   });
 
   it('creates one published news row and replays the same idempotency key', async () => {
-    const { service, tx } = harness();
+    const { service, tx, baidu } = harness();
     const first = await service.publish(dto(), 'request-1');
+    expect(first.publication.slug).toBe(dto().slug);
+    expect(first.publication.url).toBe(`https://www.jssngyl.cn/zh/news/${dto().slug}`);
+    expect(baidu.buildNewsUrl).toHaveBeenCalledWith(dto().slug);
     expect(first.replayed).toBe(false);
     expect(first.publication.newsId).toBe(31);
     expect(tx.news.create).toHaveBeenCalledWith(

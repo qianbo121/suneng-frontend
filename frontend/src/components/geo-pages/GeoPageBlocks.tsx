@@ -24,7 +24,7 @@ export function GeoSection({
   eyebrowClassName?: string;
 }) {
   return (
-    <section id={id} className="border-t border-[#e2e8f0] py-12 lg:py-16">
+    <section id={id} className="site-section border-t border-[#e2e8f0]">
       <div className="mx-auto max-w-[1180px] px-5 lg:px-8">
         <div className="text-center">
           {eyebrow ? (
@@ -34,7 +34,7 @@ export function GeoSection({
             {title}
           </h2>
         </div>
-        <div className="mt-8">{children}</div>
+        <div className="mt-[var(--site-heading-gap)]">{children}</div>
       </div>
     </section>
   );
@@ -154,24 +154,24 @@ export function GeoReviewNote({
   reviewerName?: string;
 }) {
   return (
-    <aside aria-label="内容审核信息" className="border-b border-[#e2e8f0] bg-[#f8fafc]">
-      <div className="mx-auto grid max-w-[1180px] gap-4 px-5 py-5 text-[14px] leading-[1.75] text-[#475467] sm:grid-cols-2 lg:px-8">
-        <p>
-          <span className="font-semibold text-[#667085]">{reviewerName ? '内容复核：' : '发布复核：'}</span>
-          <strong className="font-semibold text-[#101828]">
-            {reviewerName ?? '江苏苏能工业炉有限公司'}
-          </strong>
-        </p>
+    <aside aria-label="资料更新与来源" className="border-b border-[#e2e8f0] bg-[#f8fafc]">
+      <div className="mx-auto max-w-[1180px] space-y-2 px-5 py-5 text-[14px] leading-[1.75] text-[#475467] lg:px-8">
         <p>
           <span className="font-semibold text-[#667085]">内容更新：</span>
           <time dateTime={modifiedDate} className="font-semibold text-[#101828]">
             {modifiedDate}
           </time>
         </p>
-        <p className="sm:col-span-2">
+        <p>
           <span className="font-semibold text-[#667085]">事实来源：</span>
           {sourceNote}
         </p>
+        {reviewerName?.trim() && (
+          <p>
+            <span className="font-semibold text-[#667085]">资料复核：</span>
+            {reviewerName}
+          </p>
+        )}
       </div>
     </aside>
   );

@@ -1,0 +1,90 @@
+{
+  "id": "alloy-eight-furnaces-20230808-proposal",
+  "slug": "alloy-eight-furnaces-acceptance-supply-boundaries-proposal",
+  "title": "一次买八台热处理炉，技术要求怎么分别写？",
+  "listTitle": "一次买八台热处理炉，技术要求怎么分别写？",
+  "listSummary": "同一批采购的炉子，并不承担同一种处理任务。",
+  "summary": "同一批采购的炉子，并不承担同一种处理任务。江苏苏能工业炉有限公司2023年8月8日的八台炉汇总资料，包含电渣锭退火、电极及渣料烘烤、固溶、时效、扩散退火和流槽烘烤等设备。它们的装料机构、热源和拟定验收指标分别约定；整组采购时应把每台设备与工件、工艺要求及现场接口一一对应，不能用一个总装炉量或一个温度指标概括整组能力。",
+  "body": "alloy-eight-furnaces-acceptance-supply-boundaries-proposal.md",
+  "contentType": "proposal",
+  "publicationStatus": "draft",
+  "projectStatus": "proposal",
+  "projectYear": 2023,
+  "sourceDate": "2023-08-08",
+  "workpiece": [
+    "电渣锭",
+    "电极",
+    "渣料",
+    "固溶及时效工件",
+    "流槽"
+  ],
+  "materials": [
+    "合金材料"
+  ],
+  "process": [
+    "退火",
+    "烘烤",
+    "固溶",
+    "时效"
+  ],
+  "equipment": [
+    "台车式电阻炉",
+    "叉车固溶炉",
+    "燃气炉"
+  ],
+  "need": [
+    "成套设备分工与验收"
+  ],
+  "tags": [
+    "方案参考",
+    "电渣锭",
+    "电极",
+    "渣料",
+    "固溶及时效工件",
+    "流槽",
+    "成套设备分工与验收"
+  ],
+  "facts": [
+    {
+      "label": "方案设备数量",
+      "value": "8",
+      "unit": "台炉",
+      "condition": "同一期汇总采购范围，不代表同时生产能力",
+      "attribute": "方案参数"
+    },
+    {
+      "label": "方案热源",
+      "value": "电加热与天然气",
+      "unit": "",
+      "condition": "不同设备分别配置",
+      "attribute": "方案参数"
+    },
+    {
+      "label": "方案共同配套",
+      "value": "8台炉集散控制",
+      "unit": "",
+      "condition": "汇总列工控机及编程；不推自动物流或全线控制逻辑",
+      "attribute": "方案参数"
+    }
+  ],
+  "participation": "2023年8月8日汇编拟提供8台炉及集散控制配套；设备基础和二次线缆等排除项须按最终版本明确。",
+  "sourceSummary": "江苏苏能工业炉有限公司历史技术方案资料整理。",
+  "coverTitle": "合金材料炉群方案：八台设备怎样分别约定用途、验收与配套？",
+  "relatedLinks": [
+    {
+      "title": "了解台车炉的适用条件",
+      "href": "/zh/products/detail/trolley-furnace"
+    },
+    {
+      "title": "准备询价参数与供货范围",
+      "href": "/zh/articles/gongye-lu-baojia-canshu"
+    }
+  ],
+  "dateModified": "2026-09-12",
+  "cover": {
+    "src": "/images/case-covers/finalized-20260910/electroslag-ingot.webp",
+    "alt": "电渣锭类别工件示意",
+    "caption": "电渣锭工件示意（炉群涉及的一类工件，人工智能生成，非客户实物）",
+    "fit": "contain"
+  }
+}

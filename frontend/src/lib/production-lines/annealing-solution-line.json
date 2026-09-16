@@ -1,0 +1,575 @@
+{
+  "pageId": "annealing-solution-line",
+  "variant": "wire-strip",
+  "seo": {
+    "title": "带材退火固溶生产线｜连续加热、冷却与张力协同",
+    "description": "面向不锈钢及适用合金带材，介绍连续退火、固溶与保护气氛路线，说明带温与线速、分段冷却、张力纠偏、机组接口、产能核算及交付验收，支持提交材料与带材参数沟通方案。"
+  },
+  "sectionNavigation": [
+    {
+      "label": "适用工件",
+      "href": "#workpieces"
+    },
+    {
+      "label": "工艺与设备",
+      "href": "#process"
+    },
+    {
+      "label": "设备配置",
+      "href": "#configuration"
+    },
+    {
+      "label": "产能与现场",
+      "href": "#site-conditions"
+    },
+    {
+      "label": "交付验收",
+      "href": "#acceptance"
+    },
+    {
+      "label": "常见问题",
+      "href": "#faq"
+    }
+  ],
+  "images": {
+    "hero-line": {
+      "src": "/images/products/annealing-solution-line/remaining-batch-v1/01-hero-3af3a487d728.png",
+      "width": 1672,
+      "height": 941,
+      "alt": "带材连续加热、冷却与收放卷设备的整体形态",
+      "optimized": true
+    },
+    "process-whole-line": {
+      "src": "/images/products/annealing-solution-line/remaining-batch-v1/02-whole-line-d8482593d9ae.png",
+      "width": 2172,
+      "height": 724,
+      "alt": "入口输送、水平加热炉、冷却与收卷出口的完整带材机组",
+      "optimized": true
+    },
+    "workpiece-strip-coils": {
+      "src": "/images/products/annealing-solution-line/remaining-batch-v1/03-workpiece-8b1942ed56b3.png",
+      "width": 1672,
+      "height": 941,
+      "alt": "宽幅与分切不锈钢卷及带材样片",
+      "optimized": true
+    },
+    "loading-strip-entry": {
+      "src": "/images/products/annealing-solution-line/remaining-batch-v1/04-loading-a7c5d29c71a3.png",
+      "width": 1672,
+      "height": 941,
+      "alt": "带材卷料在开卷芯轴上支承并经入口辊组穿带",
+      "optimized": true
+    },
+    "gallery-strip-heating": {
+      "src": "/images/products/annealing-solution-line/remaining-batch-v1/05-detail-1-7de6ac67b508.png",
+      "width": 1672,
+      "height": 941,
+      "alt": "水平带材加热均热炉段与维护通道",
+      "optimized": true
+    },
+    "gallery-strip-cooling": {
+      "src": "/images/products/annealing-solution-line/remaining-batch-v1/06-detail-2-e574f83680a9.png",
+      "width": 1672,
+      "height": 941,
+      "alt": "带材封闭冷却段的风机、罩体和管路形态",
+      "optimized": true
+    },
+    "gallery-strip-exit": {
+      "src": "/images/products/annealing-solution-line/remaining-batch-v1/07-detail-3-114a2e2a42a0.png",
+      "width": 1672,
+      "height": 941,
+      "alt": "带材出口支承辊组与收卷设备",
+      "optimized": true
+    },
+    "site-strip-layout": {
+      "src": "/images/products/annealing-solution-line/remaining-batch-v1/08-site-layout-055906bf4423.png",
+      "width": 1672,
+      "height": 941,
+      "alt": "带材热处理机组的厂房布置与检修通道",
+      "optimized": true
+    }
+  },
+  "sourceRecord": {
+    "path": "frontend/src/lib/heat-treatment-lines-reviewed.json",
+    "record": "annealing-solution-line",
+    "review": "剩余七线交付包：基于公开一手技术资料的案头核对；供当前仓库三方对照接入",
+    "engineeringNotes": "docs/heat-treatment-lines-final-batch-v1/pages/annealing-solution-line/engineering-review.md"
+  },
+  "sections": {
+    "overview": {
+      "title": "带材退火固溶生产线",
+      "subtitle": "从带材与表面要求出发，匹配热工段和连续机组",
+      "description": "面向不锈钢及适用合金带材，配置连续加热、均热与受控冷却，并与收放卷、张力和纠偏系统协同。先确认牌号、来料状态、组织性能与表面要求，再确定退火或固溶的温度路径、线速和设备范围。",
+      "facts": [
+        {
+          "label": "处理对象",
+          "value": "不锈钢及适用合金带材"
+        },
+        {
+          "label": "工艺目标",
+          "value": "按牌号选择退火或固溶"
+        },
+        {
+          "label": "设备组织",
+          "value": "热工段与连续机组协同"
+        },
+        {
+          "label": "配置依据",
+          "value": "带宽、厚度、带温与速度"
+        }
+      ],
+      "gallery": [
+        {
+          "id": "whole-line",
+          "label": "整线",
+          "alt": "带材连续加热、冷却与收放卷设备的整体形态",
+          "thumbnailAssetId": "hero-line",
+          "fullAssetId": "hero-line"
+        },
+        {
+          "id": "heating",
+          "label": "加热均热",
+          "alt": "水平带材加热均热炉段与维护通道",
+          "thumbnailAssetId": "gallery-strip-heating",
+          "fullAssetId": "gallery-strip-heating"
+        },
+        {
+          "id": "cooling",
+          "label": "冷却段",
+          "alt": "带材封闭冷却段的风机、罩体和管路形态",
+          "thumbnailAssetId": "gallery-strip-cooling",
+          "fullAssetId": "gallery-strip-cooling"
+        },
+        {
+          "id": "exit",
+          "label": "出口收卷",
+          "alt": "带材出口支承辊组与收卷设备",
+          "thumbnailAssetId": "gallery-strip-exit",
+          "fullAssetId": "gallery-strip-exit"
+        }
+      ],
+      "actions": [
+        {
+          "label": "提交工况，获取选型建议",
+          "href": "#inquiry",
+          "style": "primary"
+        },
+        {
+          "label": "查看设备配置",
+          "href": "#configuration",
+          "style": "secondary"
+        }
+      ]
+    },
+    "workpieces": {
+      "title": "先看带材与来料状态，再判断工艺路线",
+      "subtitle": "退火和固溶的工艺含义随材料体系而变。不锈钢常用“固溶退火”的称谓，共线与否应回到牌号、目标组织及温度—时间—冷却制度。",
+      "cards": [
+        {
+          "id": "material",
+          "title": "材料与表面目标",
+          "description": "牌号、热轧或冷轧状态、原始组织，以及氧化、光亮度和后续表面处理要求。",
+          "imageAssetId": "workpiece-strip-coils"
+        },
+        {
+          "id": "loading",
+          "title": "卷料与穿带条件",
+          "description": "带宽、厚度、卷重与内外径；同时核对边部、接头、支承、张力和穿带方式。",
+          "imageAssetId": "loading-strip-entry"
+        }
+      ],
+      "note": "卷材能放上开卷机，不等于整线兼容；带宽、厚度、接头通过性、加热能力与冷却窗口需要一起核对。"
+    },
+    "process": {
+      "title": "从进料到出料，看懂整线组成",
+      "subtitle": "入口输送、加热与保温、工艺冷却、出口衔接组成热处理主线；表面要求决定前后工序和气氛配置。",
+      "imageAssetId": "process-whole-line",
+      "mode": "routes",
+      "stages": [],
+      "routes": [
+        {
+          "title": "路线一｜退洗线中的退火或固溶热工段",
+          "steps": [
+            "入口输送与张力",
+            "预热与加热",
+            "均热/退火或固溶",
+            "分段冷却",
+            "按需挤干/烘干",
+            "衔接后续表面处理与出口"
+          ],
+          "note": "适用于允许后续除鳞、酸洗等表面处理的项目；酸洗、清洗、活套和收放卷是否供货须分别列项。冷却组合按材料、板形与后工序选择。"
+        },
+        {
+          "title": "路线二｜保护气氛连续热处理",
+          "steps": [
+            "带材清洁与入口衔接",
+            "密封与气氛建立",
+            "加热与均热",
+            "保护冷却",
+            "出口张力与收卷"
+          ],
+          "note": "用于对氧化和表面状态有相应要求的项目。气体组成、清洁度、露点、氧含量及气氛安全系统按工艺确定；有保护气氛不等于无条件获得光亮表面。"
+        }
+      ],
+      "note": "两条路线分别评估炉型、气氛和冷却条件，不表示同一机组可直接切换。整线图用于说明设备衔接；具体长度、模块数量和酸洗等供货范围不由图片确定。",
+      "imageAlt": "开卷入口、水平炉段、封闭冷却和收卷出口的完整带材机组形态"
+    },
+    "configuration": {
+      "title": "设备怎么配，要看带温、线速和冷却窗口",
+      "subtitle": "加热、冷却与带材运行互相约束，不能只用最高炉温或机械最高速度选型。",
+      "table": {
+        "caption": "带材退火固溶生产线设备配置依据",
+        "columns": [
+          {
+            "key": "item",
+            "label": "配置项目"
+          },
+          {
+            "key": "basis",
+            "label": "设备与衔接要求"
+          }
+        ],
+        "rows": [
+          {
+            "item": "加热与均热",
+            "cells": [
+              "按代表牌号、厚度、目标带温、有效保温时间和热传递条件核算炉段；设定温度与实际带温分别记录。"
+            ]
+          },
+          {
+            "item": "冷却与表面",
+            "cells": [
+              "空冷、气雾/水雾、水冷或保护冷却按材料规范和表面目标选择；核对起冷点、出口温度、水质、板形及干燥衔接。"
+            ]
+          },
+          {
+            "item": "张力与纠偏",
+            "cells": [
+              "入口/出口张力、托辊、纠偏、活套和接头通过性共同核对，并定义加减速、断带和异常停带策略。"
+            ]
+          },
+          {
+            "item": "气氛与热源",
+            "cells": [
+              "热源、燃烧/排烟或保护气氛分别设计；保护气氛路线同时核对密封、置换、监测、排放及故障联锁。"
+            ]
+          },
+          {
+            "item": "测温与记录",
+            "cells": [
+              "区分控制点温度、炉温均匀性及带材实际温度；约定测量方法、代表规格、记录内容与判定条件。"
+            ]
+          },
+          {
+            "item": "上下游接口",
+            "cells": [
+              "开卷、清洗、活套、酸洗、收卷、通信、公辅和总包责任逐项列明，避免把外部工序默认计入热工段供货。"
+            ]
+          }
+        ]
+      },
+      "notes": [
+        "同一牌号的不同厚度可能采用不同线速与配方；换卷、接头和换型的过渡料也要纳入生产组织。"
+      ],
+      "action": {
+        "label": "把已有参数发给工程师",
+        "href": "#inquiry"
+      },
+      "inputs": [
+        {
+          "title": "材料族",
+          "description": "牌号、200/300系或其他合金、来料组织和表面状态"
+        },
+        {
+          "title": "带材规格",
+          "description": "最小/最大/常用带宽、厚度、卷重及边部状态"
+        },
+        {
+          "title": "工艺目标",
+          "description": "退火或固溶的组织/性能目标、对应材料标准与允许窗口"
+        },
+        {
+          "title": "速度与温度路径",
+          "description": "入口/出口速度、带材目标温度、均热时间和有效炉长"
+        },
+        {
+          "title": "冷却要求",
+          "description": "起冷点、冷却速度、出口温度、空/雾/水冷组合与水质"
+        },
+        {
+          "title": "带材运行",
+          "description": "张力、纠偏、活套、托辊、板形和表面划伤边界"
+        },
+        {
+          "title": "气氛/燃烧",
+          "description": "氧化与光亮目标、燃烧方式、密封、排烟和安全联锁"
+        },
+        {
+          "title": "整线接口",
+          "description": "开卷、酸洗、清洗、收卷、公辅、电控、调试与总包责任"
+        }
+      ]
+    },
+    "site-conditions": {
+      "title": "产能与现场条件，一起算清楚",
+      "imageAssetId": "site-strip-layout",
+      "requirements": [
+        {
+          "title": "规格组合与有效产能",
+          "description": "提供代表带宽、厚度、目标吨位、有效班次，以及换卷、焊接接头和换型频率。"
+        },
+        {
+          "title": "热源与公用工程",
+          "description": "核对可用电力或燃气、冷却水、气体供应、排烟排风及配套处理设施。"
+        },
+        {
+          "title": "厂房与检修空间",
+          "description": "同时预留长线长度、侧向检修、卷料周转、吊装、设备基础与排水空间。"
+        },
+        {
+          "title": "整线控制与接口",
+          "description": "明确前后机组张力和速度协调、通信、急停链及分包联调责任。"
+        }
+      ],
+      "capacity": "理论质量流量（kg/h）＝密度（kg/m³）× 带宽（m）× 厚度（m）× 带速（m/min）× 60。年合格产能按各代表规格、有效运行小时和成材率加总；已经扣除的停机或换卷时间不重复计算。炉段停留时间为有效长度除以带速，工件达到目标温度后的有效保温时间另行校核。",
+      "imageCaption": "设备布置形态；现场尺寸、卷料周转和公辅接口按项目设计。"
+    },
+    "delivery-scope": {
+      "title": "热工段、整线配套和现场接口分别列清",
+      "subtitle": "公开项目经验与本次供货清单分别说明，避免把前后工序默认归入同一合同。",
+      "imageAssetId": "process-whole-line",
+      "contentTitle": "交付清单围绕设备与衔接点展开",
+      "items": [
+        {
+          "label": "热工设备",
+          "value": "炉体、加热与均热分区、冷却段、测温和工艺记录，逐项明确设备清单。"
+        },
+        {
+          "label": "机组配套",
+          "value": "托辊、张力、纠偏、穿带、收放卷与活套，按项目分工列入供货或外部接口。"
+        },
+        {
+          "label": "工程配合",
+          "value": "基础、公辅、排烟排风、酸洗清洗、上下游通信和安装调试，列明供方、业主及总包责任。"
+        }
+      ],
+      "note": "设备清单、供货范围与双方分工在技术方案中列明。"
+    },
+    "acceptance": {
+      "title": "交付到哪一步，验收就核对到哪一步",
+      "subtitle": "设备功能、工艺性能与产品验证分别约定条件。",
+      "columns": [
+        {
+          "id": "equipment",
+          "title": "设备功能",
+          "description": "核对穿带、张力、纠偏、活套、加减速、联锁与异常停带策略。"
+        },
+        {
+          "id": "process",
+          "title": "工艺性能",
+          "description": "按代表工况验证温度路径、带温测量、有效保温与冷却条件；控制温度和带温不相互替代。"
+        },
+        {
+          "id": "product",
+          "title": "产品验证",
+          "description": "按代表牌号和厚度检验组织、力学性能、表面与板形；检验项目和抽样按采用标准约定。"
+        }
+      ],
+      "productNote": "设备功能、工艺条件与产品结果分别验证；没有代表材料与判定条件，不能把温控数据直接等同于产品合格。",
+      "stages": [
+        {
+          "id": "requirements",
+          "order": 1,
+          "label": "需求沟通"
+        },
+        {
+          "id": "design",
+          "order": 2,
+          "label": "方案设计"
+        },
+        {
+          "id": "manufacturing-inspection",
+          "order": 3,
+          "label": "制造检验"
+        },
+        {
+          "id": "installation-commissioning",
+          "order": 4,
+          "label": "安装联调"
+        },
+        {
+          "id": "acceptance-delivery",
+          "order": 5,
+          "label": "验收交付"
+        }
+      ],
+      "note": "设备验收与产品检验分别明确条件与责任；代表材料、装载、抽样和判定在协议中约定。"
+    },
+    "faq": {
+      "title": "采购与技术常见问题",
+      "subtitle": "先了解本工艺的选型、配套与现场衔接问题。",
+      "items": [
+        {
+          "id": "faq-1",
+          "question": "退火线和固溶线可以共用吗？",
+          "answer": "可按材料族和产品窗口评估共线，但必须分别建立温度、时间、气氛和冷却配方，并验证切换、清线及上下游能力。",
+          "defaultOpen": true
+        },
+        {
+          "id": "faq-2",
+          "question": "生产线速度由什么决定？",
+          "answer": "厚度、目标带温、有效加热长度、均热时间、冷却能力、张力和前后工序共同决定，不能独立承诺。",
+          "defaultOpen": false
+        },
+        {
+          "id": "faq-3",
+          "question": "为什么只看炉温不够？",
+          "answer": "炉温是设备环境温度；材料是否达到工艺状态还取决于传热、速度、厚度和装载，应按约定方法测量或验证带材温度。",
+          "defaultOpen": false
+        },
+        {
+          "id": "faq-4",
+          "question": "冷却段为什么要分段？",
+          "answer": "不同材料对起冷点、冷却速度、板形、表面和出口温度的要求不同，分段便于组合控制，但具体效果需通过代表工况验证。",
+          "defaultOpen": false
+        },
+        {
+          "id": "faq-5",
+          "question": "总包项目最先确认什么？",
+          "answer": "先确认设备分包、业主和总包三方的机械、电气、公辅、排烟、基础、上下游通讯、安装调试和验收责任。",
+          "defaultOpen": false
+        },
+        {
+          "id": "faq-6",
+          "question": "有保护气氛就一定能得到光亮带材吗？",
+          "answer": "不能仅凭气氛名称判断。来料清洁度、材料、气体组成、露点、氧含量、温度路径、密封和冷却都会影响结果，应以代表工况验证表面状态。",
+          "defaultOpen": false
+        },
+        {
+          "id": "faq-7",
+          "question": "河南项目的参数可以直接用来选型吗？",
+          "answer": "河南项目参数属于特定牌号、规格和设备分工，不能当作所有项目的通用能力。新项目仍应依据带宽、厚度、温度路径、表面与产能要求重新核算。",
+          "defaultOpen": false
+        }
+      ],
+      "relatedGroups": [
+        {
+          "id": "related-lines",
+          "title": "相关生产线",
+          "links": [
+            {
+              "label": "铜丝连续退火生产线",
+              "href": "/zh/products/detail/copper-wire-annealing-line"
+            }
+          ]
+        },
+        {
+          "id": "technical",
+          "title": "选型资料",
+          "links": [
+            {
+              "label": "本线询价参数清单",
+              "href": "/downloads/heat-treatment-lines/annealing-solution-line.txt"
+            }
+          ]
+        },
+        {
+          "id": "existing-project",
+          "title": "已有项目资料",
+          "links": [
+            {
+              "label": "河南带材项目公开记录",
+              "href": "/zh/case/henan-annealing-solution-line"
+            }
+          ]
+        }
+      ]
+    },
+    "inquiry": {
+      "title": "告诉我们材料与产量，开始讨论方案",
+      "description": "已知信息先填，关键工况在方案沟通中补齐。",
+      "form": {
+        "id": "annealing-solution-line-inquiry",
+        "fields": [
+          {
+            "name": "workpiece_material",
+            "label": "材料与带材规格",
+            "placeholder": "如：牌号、带宽、厚度与卷重",
+            "required": false
+          },
+          {
+            "name": "target_performance",
+            "label": "组织与表面目标",
+            "placeholder": "如：退火或固溶、板形与表面",
+            "required": false
+          },
+          {
+            "name": "target_output",
+            "label": "目标产量",
+            "placeholder": "如：产量、生产班次与换型频率",
+            "required": false
+          },
+          {
+            "name": "contact_method",
+            "label": "联系方式",
+            "placeholder": "电话、微信或邮箱",
+            "required": true
+          }
+        ],
+        "submitLabel": "获取选型建议",
+        "helperText": "已知信息先填，不明确的项目可留空。"
+      }
+    }
+  },
+  "projectReference": {
+    "title": "河南带材项目：公开参数与供货边界",
+    "description": "河南金誉邦实业有限公司连续退洗线退火固溶段设备项目。保留已公开的特定项目参数，不作为其他项目的通用能力。",
+    "table": {
+      "caption": "河南带材项目公开参考参数",
+      "columns": [
+        {
+          "key": "item",
+          "label": "项目"
+        },
+        {
+          "key": "reference",
+          "label": "该项目公开参数"
+        }
+      ],
+      "rows": [
+        {
+          "item": "材料规格",
+          "cells": [
+            "200/300 系不锈钢；带宽 480–750 mm，厚度 1.6–4.0 mm"
+          ]
+        },
+        {
+          "item": "名义机组规格",
+          "cells": [
+            "850 mm；这是机组规格标识，不是实际带材宽度"
+          ]
+        },
+        {
+          "item": "带材退火温度",
+          "cells": [
+            "1050–1150℃；高温炉段设计上限 1300℃，不是带材目标固溶温度"
+          ]
+        },
+        {
+          "item": "炉段长度",
+          "cells": [
+            "约 130 m：40 m 预热＋36 m 快速加热＋54 m 均热；不含约 45 m 冷却/固溶段"
+          ]
+        },
+        {
+          "item": "速度核算",
+          "cells": [
+            "TV＝速度（m/min）×厚度（mm）；设计 TV 约 190 m·mm/min"
+          ]
+        }
+      ]
+    },
+    "note": "未公开能耗、产量、成材率、表面结果及验收结果；本项目具体设备和接口仍须单独确认。",
+    "href": "/zh/case/henan-annealing-solution-line"
+  }
+}

@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import Link from 'next/link';
 
 import { AboutStatsPanel, AboutStatsPanelItem } from '@/components/about/AboutStatsPanel';
 import { EmptyState } from '@/components/ui/EmptyState';
@@ -19,20 +20,20 @@ function splitParagraphs(content: string) {
 
 const profileFallbackParagraphs = {
   zh: [
-    '江苏苏能工业炉有限公司专业从事电阻式与燃气式工业加热及热处理装备的研发、设计与制造，业务覆盖单机设备、配套件及整线交钥匙工程。公司聚焦热处理、锻造加热与工业干燥/固化三大工序，服务于装备制造、能源等制造领域客户；航空航天或国防军工相关表述仅指热处理装备或工业炉设备配套场景，不代表苏能持有军品资质、国军标认证、AMS 2750、Nadcap 或 CQI-9 等特殊行业认证。',
+    '江苏苏能工业炉有限公司专业从事电阻式与燃气式工业加热及热处理装备的研发、设计与制造，业务覆盖单机设备、配套件及整线设备供货。公司聚焦热处理、锻造加热与工业干燥/固化三大工序，服务于装备制造、能源等制造领域客户；航空航天或国防军工相关表述仅指热处理装备或工业炉设备配套场景，不代表苏能持有军品资质、国军标认证、AMS 2750、Nadcap 或 CQI-9 等特殊行业认证。',
     '公司拥有完整的炉型产品体系。周期式产品涵盖井式炉、台车炉、车底炉、立式炉、箱式炉、罩式炉、坑式炉、钟罩炉，以及多用炉、密封多用炉、密封箱式多用炉等高端机型；连续式产品涵盖推杆炉、辊底炉、网带炉、链板炉、链式加热炉、步进炉、转底炉、隧道炉等多种传送形式；真空与可控气氛系列涵盖真空热处理炉、保护气氛炉、氮基/吸热式/放热式气氛炉、全氢罩式炉、光亮退火炉、辐射管炉；专用工艺炉则涵盖固化炉（复合材料、碳纤维缠绕、烤漆/油漆/涂层固化）、烧结炉、钎焊炉、焊后热处理炉（PWHT）、盐浴炉、硝盐等温炉、马弗炉、球化退火炉、高温电阻炉等。',
     '在工艺能力上，公司构建了完整的热处理工艺谱系，包括退火（光亮退火、球化退火、真空退火、全氢退火等）、淬火（真空淬火、等温淬火、油/水/气淬等）、回火（真空回火、低/中/高温回火）、正火、调质、固溶、时效、渗碳（含低压渗碳）、渗氮（含离子渗氮、氮势可控渗氮）、碳氮/氮碳共渗、渗硼、焊后热处理（PWHT）、烧结、钎焊及树脂与复合材料固化。可处理碳钢、合金钢、不锈钢、模具钢、铝合金、铜合金、钛合金、高温合金及粉末冶金件等多种材料体系。',
-    '围绕主机产品，公司同步提供全套配套件：工业炉控制系统（电控柜、PLC、DCS、温控系统）、加热元件（硅碳棒、硅钼棒、电阻带、辐射管）、热电偶与测温系统、耐火保温材料、装出料机构与料筐料盘、淬火冷却系统、燃烧器（随整炉/整线配套）、循环风机、蓄热体、炉门炉盖等关联部件；并具备紧固件、螺栓、弹簧、链条等专用热处理生产线，以及渗碳淬火、光亮退火、锻造加热等整线交钥匙工程的设计与建造能力。',
+    '围绕主机产品，公司同步提供全套配套件：工业炉控制系统（电控柜、PLC、DCS、温控系统）、加热元件（硅碳棒、硅钼棒、电阻带、辐射管）、热电偶与测温系统、耐火保温材料、装出料机构与料筐料盘、淬火冷却系统、燃烧器（随整炉/整线配套）、循环风机、蓄热体、炉门炉盖等关联部件；并具备紧固件、螺栓、弹簧、链条等专用热处理生产线，以及渗碳淬火、光亮退火、锻造加热等整线设备的设计、制造与集成能力。',
     '公司产品广泛服务于装备制造、汽车零部件、工程机械、重工机械、能源装备、金属热处理加工等工业制造场景，覆盖齿轮、轴承、紧固件、弹簧、模具、刀具、锻件铸件、压力容器、油气管材、风电零部件、石化设备、矿山机械、农机件等零部件热处理装备需求；同时对接钢厂、有色金属带材厂、管材厂等型材客户，承接板、带、线、管、棒材的热处理装备配套。',
     '公司具备 GB/T 30822 等行业标准的对接与执行能力，紧密契合重大技术装备、高端装备、工业母机等国家战略方向，积极响应“双碳”目标、节能降碳、绿色制造与智能制造转型，致力于以高品质装备与国产替代能力，与客户共同推动工业热处理行业的高质量发展。',
   ],
   en: [
-    'Jiangsu Suneng Industrial Furnace Co., Ltd. specializes in the R&D, design and manufacturing of electric-resistance and gas-fired industrial heating and heat treatment equipment. Its business covers stand-alone equipment, supporting components and turnkey production lines. The company focuses on heat treatment, forging heating and industrial drying/curing, serving customers in equipment manufacturing and energy. References to aerospace or defense-related contexts only indicate industrial furnace or heat treatment equipment support and do not imply military product qualification, GJB certification, AMS 2750, Nadcap or CQI-9 certification.',
-    'Suneng has built a complete furnace portfolio. Batch-type products include pit furnaces, trolley furnaces, car-bottom furnaces, vertical furnaces, box furnaces, bell furnaces, pit-type furnaces, hood furnaces, multi-purpose furnaces, sealed multi-purpose furnaces and sealed box-type multi-purpose furnaces. Continuous products include pusher furnaces, roller hearth furnaces, mesh belt furnaces, chain plate furnaces, chain heating furnaces, walking beam furnaces, rotary hearth furnaces and tunnel furnaces. Vacuum and controlled-atmosphere products include vacuum heat treatment furnaces, protective-atmosphere furnaces, nitrogen-based, endothermic and exothermic atmosphere furnaces, full-hydrogen bell furnaces, bright annealing furnaces and radiant tube furnaces. Dedicated process furnaces include curing furnaces for composite materials, carbon fiber winding, paint and coating processes, sintering furnaces, brazing furnaces, PWHT furnaces, salt bath furnaces, nitrate isothermal furnaces, muffle furnaces, spheroidizing annealing furnaces and high-temperature resistance furnaces.',
-    'In process capability, the company covers a broad heat treatment spectrum, including annealing, bright annealing, spheroidizing annealing, vacuum annealing, full-hydrogen annealing, quenching, vacuum quenching, austempering, oil, water and gas quenching, tempering, vacuum tempering, low, medium and high-temperature tempering, normalizing, quenching and tempering, solution treatment, aging, carburizing including low-pressure carburizing, nitriding including ion nitriding and controllable nitriding potential, carbonitriding, nitrocarburizing, boronizing, PWHT, sintering, brazing and resin or composite curing. The equipment supports carbon steel, alloy steel, stainless steel, die steel, aluminum alloy, copper alloy, titanium alloy, superalloy and powder metallurgy parts.',
-    'Around its main furnace products, Suneng also provides complete supporting components, including industrial furnace control systems, electrical cabinets, PLC, DCS, temperature control systems, heating elements, silicon carbide rods, molybdenum disilicide rods, resistance strips, radiant tubes, thermocouples and temperature measurement systems, refractory insulation materials, loading and unloading mechanisms, baskets and trays, quenching cooling systems, burners supplied with furnace or line projects, circulation fans, regenerators, furnace doors and covers. The company also has design and construction capability for dedicated heat treatment lines for fasteners, bolts, springs and chains, as well as turnkey lines for carburizing and quenching, bright annealing and forging heating.',
-    'The company serves industrial manufacturing scenarios such as equipment manufacturing, automotive components, construction machinery, heavy machinery, energy equipment and metal heat treatment processing. Typical applications include gears, bearings, fasteners, springs, molds, cutting tools, forgings, castings, pressure vessels, oil and gas pipes, wind power components, petrochemical equipment, mining machinery and agricultural machinery. It also supports steel mills, non-ferrous strip plants and pipe manufacturers with heat treatment equipment for plates, strips, wires, pipes and bars.',
-    'Suneng is capable of aligning with and executing industry standards such as GB/T 30822. The company closely follows national strategic directions such as major technical equipment, high-end equipment and industrial mother machines, responds to carbon peaking and carbon neutrality, energy conservation, green manufacturing and intelligent manufacturing transformation, and works with customers to promote high-quality development in industrial heat treatment.',
+    "Jiangsu Suneng Industrial Furnace Co., Ltd. was established in 2006 and operates a manufacturing site in Taizhou, Jiangsu. Suneng designs and manufactures custom industrial furnaces and heat-treatment lines, and evaluates overhaul and retrofit projects for its own equipment and selected third-party furnaces.",
+    "The equipment range includes batch and continuous furnaces such as bogie-hearth, box, pit, bell-type, mesh-belt, roller-hearth, pusher and rotary-hearth furnaces. Production-line proposals coordinate heating, conveying, quenching or other cooling, loading and unloading, and electrical controls around the workpiece and process requirements. Supporting systems may include heating elements, combustion equipment, measurement, refractory insulation and circulation equipment, as defined for each project.",
+    "The delivery process covers requirements and proposal confirmation, furnace fabrication and assembly, line integration, pre-delivery checks, and installation, commissioning and acceptance support. Capacity, temperature performance, energy use and product-quality acceptance must be tied to an agreed material, load, operating condition and test method; design figures are not measured production results.",
+    "Suneng is an equipment manufacturer and retrofit service provider, not a per-piece heat-treatment processor or a general engineering contractor. It does not supply induction-heating systems, steelmaking furnaces, coke or chemical reaction furnaces, cement or glass kilns, building-material ceramic kilns, industrial boilers, cupolas, waste incinerators or domestic heating and cooking products. Burners are supplied as part of furnace or line projects, rather than as standalone burner supply contracts.",
+    "For imported equipment, retrofit feasibility depends on drawings, controls, spare parts and site condition. Special aerospace, defense or automotive process certifications must be confirmed separately; a proposed furnace configuration is not evidence of certification. The company qualification page provides the business license, National High-Tech Enterprise certificate, ISO 9001 certificate and 14 patent certificates, with original documents for inspection.",
+
   ],
 } as const;
 
@@ -46,22 +47,22 @@ const stats: AboutStatsPanelItem[] = [
   },
   {
     key: 'capital',
-    label: { zh: '注册资本', en: 'Capital' },
-    value: { zh: '5080', en: '5080' },
-    unit: { zh: '万元', en: 'Wan RMB' },
+    label: { zh: '注册资本', en: 'Registered Capital' },
+    value: { zh: '5080', en: '50.8' },
+    unit: { zh: '万元', en: 'million CNY' },
     icon: '/images/about/profile-icons-stat-source/stat-capital.png',
   },
   {
     key: 'projects',
-    label: { zh: '工业炉新建与改造项目', en: 'New-build & Retrofit Projects' },
-    value: { zh: '150+', en: '150+' },
+    label: { zh: '工业炉新建与改造项目', en: 'Industrial Furnace New-build & Retrofit Projects' },
+    value: { zh: '1000+', en: '1000+' },
     unit: { zh: '项', en: 'Projects' },
     icon: '/images/about/profile-icons-stat-source/stat-employees.png',
   },
   {
     key: 'area',
     label: { zh: '生产基地占地（公司自报）', en: 'Production Site (Company-reported)' },
-    value: { zh: '约14700', en: 'Approx. 14700' },
+    value: { zh: '约14700', en: 'Approx. 14,700' },
     unit: { zh: '㎡', en: 'm²' },
     icon: '/images/about/profile-icons-stat-source/stat-area.png',
   },
@@ -150,7 +151,9 @@ export function AboutProfileSection({
   content,
 }: AboutProfileSectionProps) {
   const paragraphs = splitParagraphs(content);
-  const displayParagraphs = paragraphs.length ? paragraphs : [...profileFallbackParagraphs[locale]];
+  const displayParagraphs = locale === 'en'
+    ? [...profileFallbackParagraphs.en]
+    : paragraphs.length ? paragraphs : [...profileFallbackParagraphs.zh];
 
   if (!title && !paragraphs.length) {
     return (
@@ -172,6 +175,9 @@ export function AboutProfileSection({
           {displayParagraphs.map((item, index) => (
             <p key={`${item}-${index}`}>{item}</p>
           ))}
+          {locale === 'zh' && <p data-delivery-boundary>整线交付指合同约定的工业炉及配套设备设计、制造、集成与调试配合，不包含土建、环保总包或工程总承包；涉及专项资质的工作，由具备相应资质的单位承担。</p>}
+          {locale === 'en' && <p><Link href="/en/strength/honors" className="font-semibold text-primary underline underline-offset-4">View qualification and patent originals</Link></p>}
+
         </div>
 
         <AboutStatsPanel
@@ -196,7 +202,7 @@ export function AboutProfileSection({
                 <div key={item.title.zh} className="min-h-[165px] rounded-lg border border-[#d8d8d8] bg-white px-4 py-7 text-center shadow-[0_4px_20px_rgba(0,0,0,0.06)]">
                   <SourceIcon src={item.icon} alt="" size={88} className="mx-auto" />
                   <h3 className="mt-4 text-[20px] font-medium leading-none text-[var(--color-text-strong)]">{item.title[locale]}</h3>
-                  <p className="mt-3 text-[15px] leading-[1.9] text-[var(--color-text-muted)]">{item.text[locale]}</p>
+                  <p className="mt-3 text-[15px] leading-[1.9] text-[#667085]">{item.text[locale]}</p>
                 </div>
               );
             })}
@@ -221,7 +227,7 @@ export function AboutProfileSection({
                   <div className="px-6 py-7">
                     <div>
                       <h3 className="text-[18px] font-semibold leading-none text-[var(--color-text-strong)]">{item.title[locale]}</h3>
-                      <p className="mt-4 text-[14px] leading-[1.7] text-[var(--color-text-muted)]">{item.text[locale]}</p>
+                      <p className="mt-4 text-[14px] leading-[1.7] text-[#667085]">{item.text[locale]}</p>
                     </div>
                   </div>
                 </article>

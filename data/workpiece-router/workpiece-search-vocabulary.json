@@ -1,0 +1,190 @@
+{
+  "schemaVersion": "2.1.0",
+  "policy": "This file is the only search source. Canonical names and strongAliases may identify a workpiece but never silently choose among multiple process routes. Only routedAliases may preselect a route. Broad rules always show suggestions or disambiguation. suggestionLabel is the customer-facing workpiece-and-context label.",
+  "entries": [
+    { "targetWorkpieceId": "large-welded-machine-frame", "canonical": "大型焊接机架", "suggestionLabel": "大型焊接机架 · 大型设备机架", "strongAliases": ["焊接机架", "焊接钢结构机架"] },
+    { "targetWorkpieceId": "pressure-vessel-shell", "canonical": "压力容器与筒体", "suggestionLabel": "压力容器与筒体 · 压力容器制造", "strongAliases": ["压力容器", "容器筒体", "压力容器壳体"] },
+    { "targetWorkpieceId": "structural-steel-component", "canonical": "钢结构构件", "suggestionLabel": "钢结构构件 · 钢结构焊接件", "strongAliases": ["钢结构", "焊接钢结构", "大型钢构件"] },
+    { "targetWorkpieceId": "welded-assembly", "canonical": "焊接总成", "suggestionLabel": "焊接总成 · 设备焊接总成", "strongAliases": ["焊接组件", "焊接总成件", "焊接组合件"] },
+    { "targetWorkpieceId": "large-cylinder-shell", "canonical": "大型筒体", "suggestionLabel": "大型筒体 · 大直径卷制筒体", "strongAliases": ["卷制筒体", "大直径筒体", "焊接筒体"] },
+    { "targetWorkpieceId": "welded-pipe-spool", "canonical": "管道焊接件", "suggestionLabel": "管道焊接件 · 管道预制与焊接", "strongAliases": ["管道预制件", "焊接管件", "管路焊接组件"] },
+
+    { "targetWorkpieceId": "seamless-aluminum-gas-cylinder", "canonical": "无缝铝合金气瓶", "suggestionLabel": "无缝铝合金气瓶 · 轻量化高压容器", "strongAliases": ["铝合金气瓶", "铝气瓶", "无缝铝瓶"] },
+    { "targetWorkpieceId": "seamless-steel-gas-cylinder", "canonical": "无缝钢制气瓶", "suggestionLabel": "无缝钢制气瓶 · 高压无缝钢瓶", "strongAliases": ["无缝钢瓶", "钢制无缝气瓶", "高压无缝钢瓶"] },
+    { "targetWorkpieceId": "welded-steel-gas-cylinder", "canonical": "焊接钢制气瓶", "suggestionLabel": "焊接钢制气瓶 · 焊接钢瓶与LPG瓶", "strongAliases": ["焊接钢瓶"] },
+
+    { "targetWorkpieceId": "large-forged-flange", "canonical": "大型法兰", "suggestionLabel": "大型法兰 · 大型环件与法兰", "strongAliases": ["风电法兰", "大型锻造法兰", "环形法兰"] },
+    { "targetWorkpieceId": "large-forged-shaft", "canonical": "大型轴类锻件", "suggestionLabel": "大型轴类锻件 · 重型装备主轴", "strongAliases": ["轴类锻件", "大型轴锻件", "锻造长轴毛坯"] },
+    { "targetWorkpieceId": "large-gear-blank", "canonical": "大型齿轮坯", "suggestionLabel": "大型齿轮坯 · 齿轮加工毛坯", "strongAliases": ["齿轮坯", "锻造齿轮坯", "齿坯"] },
+    { "targetWorkpieceId": "large-steel-casting", "canonical": "大型铸钢件", "suggestionLabel": "大型铸钢件 · 重型装备铸件", "strongAliases": ["重型铸钢件", "铸钢机体"] },
+    { "targetWorkpieceId": "ductile-iron-casting", "canonical": "球墨铸铁件", "suggestionLabel": "球墨铸铁件 · 铸造承载件", "strongAliases": ["球铁件", "球墨铸件", "大型球铁铸件"] },
+    { "targetWorkpieceId": "large-die-block-forging", "canonical": "大型模具模块锻件", "suggestionLabel": "大型模具模块锻件 · 模具钢模块锻件", "strongAliases": ["模块锻件", "模具钢模块", "大型模具锻块"] },
+
+    { "targetWorkpieceId": "long-shaft", "canonical": "长轴", "suggestionLabel": "长轴 · 细长传动件", "strongAliases": ["长杆轴", "传动长轴", "细长轴"] },
+    { "targetWorkpieceId": "gear-shaft", "canonical": "齿轮轴", "suggestionLabel": "齿轮轴 · 齿轮与轴一体件", "strongAliases": ["齿轴", "一体齿轮轴", "传动齿轮轴"] },
+    { "targetWorkpieceId": "spline-shaft", "canonical": "花键轴", "suggestionLabel": "花键轴 · 花键传动件", "strongAliases": ["外花键轴", "传动花键轴", "渐开线花键轴"] },
+    { "targetWorkpieceId": "large-gear", "canonical": "大型齿轮", "suggestionLabel": "大型齿轮 · 重载传动齿轮", "strongAliases": ["大齿轮", "重载齿轮", "大型圆柱齿轮"] },
+    { "targetWorkpieceId": "large-ring-gear", "canonical": "大型齿圈", "suggestionLabel": "大型齿圈 · 回转与传动齿圈", "strongAliases": ["大齿圈", "环形齿轮", "回转窑齿圈"] },
+    { "targetWorkpieceId": "crankshaft", "canonical": "曲轴", "suggestionLabel": "曲轴 · 多拐轴类零件", "strongAliases": ["发动机曲轴", "工业曲轴", "多拐曲轴"] },
+
+    { "targetWorkpieceId": "track-roller", "canonical": "支重轮", "suggestionLabel": "支重轮 · 履带底盘承重轮", "strongAliases": ["履带支重轮", "下托轮", "底盘支重轮"] },
+    { "targetWorkpieceId": "carrier-roller", "canonical": "托链轮", "suggestionLabel": "托链轮 · 履带底盘上托轮", "strongAliases": ["上托链轮", "履带托链轮", "挖掘机托链轮"] },
+    { "targetWorkpieceId": "idler-wheel", "canonical": "引导轮", "suggestionLabel": "引导轮 · 履带底盘导向轮", "strongAliases": ["履带引导轮", "挖掘机引导轮"] },
+    { "targetWorkpieceId": "drive-sprocket", "canonical": "驱动轮", "suggestionLabel": "驱动轮 · 履带底盘驱动件", "strongAliases": ["履带驱动轮", "挖掘机驱动轮", "履带驱动链轮"] },
+    { "targetWorkpieceId": "track-link", "canonical": "履带链轨节", "suggestionLabel": "履带链轨节 · 履带链节", "strongAliases": ["链轨节", "履带链节", "履带节"] },
+    { "targetWorkpieceId": "engineering-wheel-hub", "canonical": "工程机械轮毂", "suggestionLabel": "工程机械轮毂 · 工程车辆轮边件", "strongAliases": ["工程车轮毂", "工程机械重型轮毂"] },
+
+    { "targetWorkpieceId": "medium-heavy-steel-plate", "canonical": "中厚钢板", "suggestionLabel": "中厚钢板 · 普通与高强中厚板", "strongAliases": ["中厚板", "厚钢板", "碳钢板"] },
+    { "targetWorkpieceId": "wear-resistant-steel-plate", "canonical": "耐磨钢板", "suggestionLabel": "耐磨钢板 · 淬火耐磨板", "strongAliases": ["耐磨板", "高强耐磨板"] },
+    { "targetWorkpieceId": "stainless-steel-plate", "canonical": "不锈钢板", "suggestionLabel": "不锈钢板 · 不锈钢中厚板", "strongAliases": ["不锈钢中厚板", "不锈钢板材"] },
+    { "targetWorkpieceId": "aluminum-alloy-plate", "canonical": "铝合金板", "suggestionLabel": "铝合金板 · 有色板材加工", "strongAliases": ["铝板", "铝合金中厚板", "铝板材"] },
+    { "targetWorkpieceId": "aluminum-coil", "canonical": "铝合金卷", "suggestionLabel": "铝合金卷 · 有色卷材加工", "strongAliases": ["铝卷", "铝合金卷材", "铝带卷"] },
+    { "targetWorkpieceId": "carbon-steel-coil", "canonical": "碳钢卷", "suggestionLabel": "碳钢卷 · 钢铁卷材加工", "strongAliases": ["碳钢热轧卷", "热轧碳钢卷", "碳钢卷材"] },
+
+    { "targetWorkpieceId": "seamless-steel-pipe", "canonical": "无缝钢管", "suggestionLabel": "无缝钢管 · 长材无缝管", "strongAliases": ["无缝管", "厚壁无缝管", "合金无缝钢管"] },
+    { "targetWorkpieceId": "welded-steel-pipe", "canonical": "焊接钢管", "suggestionLabel": "焊接钢管 · 钢管生产线", "strongAliases": ["焊管", "直缝钢管", "焊接管材"] },
+    { "targetWorkpieceId": "round-steel-bar", "canonical": "圆钢 / 棒材", "suggestionLabel": "圆钢 / 棒材 · 圆钢与棒材", "strongAliases": ["圆钢", "棒材", "合金钢棒"] },
+    { "targetWorkpieceId": "structural-section-steel", "canonical": "需热处理型钢", "suggestionLabel": "需热处理型钢 · H型钢等长材", "strongAliases": ["型钢", "H型钢", "槽钢", "角钢"] },
+    { "targetWorkpieceId": "wire-rod-coil", "canonical": "盘条", "suggestionLabel": "盘条 · 线材成卷加工", "strongAliases": ["线材盘条", "热轧盘条", "盘圆"] },
+    { "targetWorkpieceId": "steel-wire-coil", "canonical": "钢丝卷", "suggestionLabel": "钢丝卷 · 钢丝成卷加工", "strongAliases": ["冷拔钢丝卷", "钢线卷", "成卷钢丝"] },
+
+    { "targetWorkpieceId": "high-strength-bolts", "canonical": "高强度螺栓", "suggestionLabel": "高强度螺栓 · 高强连接件", "strongAliases": ["高强螺栓", "8.8级螺栓", "10.9级螺栓"] },
+    { "targetWorkpieceId": "hex-nuts", "canonical": "螺母", "suggestionLabel": "螺母 · 批量紧固件", "strongAliases": ["六角螺母", "高强螺母", "螺帽"] },
+    { "targetWorkpieceId": "self-drilling-screws", "canonical": "自攻 / 自钻螺钉", "suggestionLabel": "自攻 / 自钻螺钉 · 自攻与钻尾螺钉", "strongAliases": ["自攻螺钉", "自钻螺钉", "钻尾螺丝"] },
+    { "targetWorkpieceId": "steel-pins", "canonical": "销轴", "suggestionLabel": "销轴 · 机械与履带销轴", "strongAliases": ["机械销轴", "轴销"] },
+    { "targetWorkpieceId": "chain-components", "canonical": "链条零件", "suggestionLabel": "链条零件 · 链板销轴等零件", "strongAliases": ["滚子链零件", "链板", "链条销轴", "链条套筒"] },
+    { "targetWorkpieceId": "small-coil-springs", "canonical": "小型螺旋弹簧", "suggestionLabel": "小型螺旋弹簧 · 冷卷小型弹簧", "strongAliases": ["小型压缩弹簧", "冷卷螺旋弹簧", "小弹簧"] }
+  ],
+  "routedAliases": [
+    { "term": "LPG钢瓶", "targetWorkpieceId": "welded-steel-gas-cylinder", "routeHint": "welded-lpg-cylinder-normalizing", "suggestionLabel": "焊接钢制气瓶 · LPG钢瓶整体正火" },
+    { "term": "液化气钢瓶", "targetWorkpieceId": "welded-steel-gas-cylinder", "routeHint": "welded-lpg-cylinder-normalizing", "suggestionLabel": "焊接钢制气瓶 · 液化气瓶整体正火" },
+    { "term": "正火无缝钢瓶", "targetWorkpieceId": "seamless-steel-gas-cylinder", "routeHint": "seamless-steel-cylinder-normalizing", "suggestionLabel": "无缝钢制气瓶 · 整体正火" },
+    { "term": "调质无缝钢瓶", "targetWorkpieceId": "seamless-steel-gas-cylinder", "routeHint": "seamless-steel-cylinder-quench-temper", "suggestionLabel": "无缝钢制气瓶 · 整体调质" },
+    { "term": "不锈钢无缝气瓶", "targetWorkpieceId": "seamless-steel-gas-cylinder", "routeHint": "seamless-stainless-steel-cylinder-confirmation", "suggestionLabel": "无缝钢制气瓶 · 不锈钢瓶型确认" },
+    { "term": "铝瓶人工时效", "targetWorkpieceId": "seamless-aluminum-gas-cylinder", "routeHint": "aluminum-cylinder-artificial-aging", "suggestionLabel": "无缝铝合金气瓶 · 独立人工时效" }
+  ],
+  "broadRules": [
+    {
+      "terms": ["大型机架", "设备机架"],
+      "allowAutoNavigate": false,
+      "options": [
+        { "type": "workpiece", "id": "large-welded-machine-frame", "label": "大型焊接机架" },
+        { "type": "workpiece", "id": "large-steel-casting", "label": "铸钢机体 / 铸造机架" },
+        { "type": "unlisted", "id": "other-frame", "label": "其他机架或暂不确定" }
+      ]
+    },
+    {
+      "terms": ["大型铸件", "重型铸件"],
+      "allowAutoNavigate": false,
+      "options": [
+        { "type": "workpiece", "id": "large-steel-casting", "label": "大型铸钢件" },
+        { "type": "workpiece", "id": "ductile-iron-casting", "label": "球墨铸铁件" },
+        { "type": "unlisted", "id": "other-casting", "label": "灰铁、有色或其他铸件" }
+      ]
+    },
+    {
+      "terms": ["消防气瓶", "呼吸器气瓶", "工业高压气瓶", "气瓶"],
+      "allowAutoNavigate": false,
+      "options": [
+        { "type": "workpiece", "id": "seamless-aluminum-gas-cylinder", "label": "无缝铝合金气瓶" },
+        { "type": "workpiece", "id": "seamless-steel-gas-cylinder", "label": "无缝钢制气瓶" },
+        { "type": "workpiece", "id": "welded-steel-gas-cylinder", "label": "焊接钢制气瓶" },
+        { "type": "unlisted", "id": "composite-or-other-cylinder", "label": "复合材料 / 其他瓶型" },
+        { "type": "unlisted", "id": "unknown-cylinder", "label": "暂不确定" }
+      ]
+    },
+    {
+      "terms": ["导向轮", "惰轮"],
+      "allowAutoNavigate": false,
+      "options": [
+        { "type": "workpiece", "id": "idler-wheel", "label": "引导轮 · 履带底盘" },
+        { "type": "unlisted", "id": "other-idler", "label": "输送、导向或其他轮类" }
+      ]
+    },
+    {
+      "terms": ["托带轮", "托轮"],
+      "allowAutoNavigate": false,
+      "options": [
+        { "type": "workpiece", "id": "carrier-roller", "label": "托链轮 · 履带底盘" },
+        { "type": "unlisted", "id": "other-support-roller", "label": "输送带或其他托轮" }
+      ]
+    },
+    {
+      "terms": ["驱动链轮", "链轮"],
+      "allowAutoNavigate": false,
+      "options": [
+        { "type": "workpiece", "id": "drive-sprocket", "label": "驱动轮 · 履带底盘" },
+        { "type": "unlisted", "id": "other-sprocket", "label": "其他工业链轮" }
+      ]
+    },
+    {
+      "terms": ["轮边壳体", "轮毂"],
+      "allowAutoNavigate": false,
+      "options": [
+        { "type": "workpiece", "id": "engineering-wheel-hub", "label": "工程机械轮毂 / 轮边壳体" },
+        { "type": "unlisted", "id": "other-wheel-hub", "label": "汽车或其他轮毂" }
+      ]
+    },
+    {
+      "terms": ["钢卷", "热轧卷"],
+      "allowAutoNavigate": false,
+      "options": [
+        { "type": "workpiece", "id": "carbon-steel-coil", "label": "碳钢卷材" },
+        { "type": "unlisted", "id": "stainless-or-other-coil", "label": "不锈钢或其他钢卷" }
+      ]
+    },
+    {
+      "terms": ["淬火钢板"],
+      "allowAutoNavigate": false,
+      "options": [
+        { "type": "workpiece", "id": "wear-resistant-steel-plate", "label": "耐磨钢板" },
+        { "type": "workpiece", "id": "medium-heavy-steel-plate", "label": "普通或高强中厚板" },
+        { "type": "unlisted", "id": "other-quenched-plate", "label": "其他钢板或暂不确定" }
+      ]
+    },
+    {
+      "terms": ["不锈钢薄板"],
+      "allowAutoNavigate": false,
+      "options": [
+        { "type": "workpiece", "id": "stainless-steel-plate", "label": "不锈钢板 · 需确认批次或连续处理" },
+        { "type": "unlisted", "id": "stainless-strip", "label": "不锈钢带材 / 专业连续线" }
+      ]
+    },
+    {
+      "terms": ["钢丝", "线材"],
+      "allowAutoNavigate": false,
+      "options": [
+        { "type": "workpiece", "id": "steel-wire-coil", "label": "钢丝卷 · 成卷装炉" },
+        { "type": "workpiece", "id": "wire-rod-coil", "label": "热轧盘条" },
+        { "type": "unlisted", "id": "straight-or-other-wire", "label": "直条或其他线材" }
+      ]
+    },
+    {
+      "terms": ["螺丝", "螺钉"],
+      "allowAutoNavigate": false,
+      "options": [
+        { "type": "workpiece", "id": "self-drilling-screws", "label": "自攻 / 自钻螺钉" },
+        { "type": "workpiece", "id": "high-strength-bolts", "label": "高强度螺栓" },
+        { "type": "unlisted", "id": "other-screw", "label": "机器螺钉或其他螺丝" }
+      ]
+    },
+    {
+      "terms": ["履带销轴"],
+      "allowAutoNavigate": false,
+      "options": [
+        { "type": "workpiece", "id": "steel-pins", "label": "履带销 · 整体调质", "routeHint": "track-pin-engineering-review" },
+        { "type": "unlisted", "id": "track-pin-local-hardening", "label": "履带销 · 表面或局部硬化" },
+        { "type": "unlisted", "id": "track-pin-uncertain", "label": "履带销 · 暂不确定" }
+      ]
+    },
+    {
+      "terms": ["压缩弹簧", "螺旋弹簧", "弹簧"],
+      "allowAutoNavigate": false,
+      "options": [
+        { "type": "workpiece", "id": "small-coil-springs", "label": "小型冷卷螺旋弹簧" },
+        { "type": "unlisted", "id": "large-hot-coil-spring", "label": "大型热卷弹簧" },
+        { "type": "unlisted", "id": "leaf-spring", "label": "板簧或其他弹簧" }
+      ]
+    }
+  ]
+}

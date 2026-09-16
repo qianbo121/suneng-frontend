@@ -2,8 +2,8 @@ FROM node:22.23.1-alpine AS deps
 
 WORKDIR /app
 
-RUN npm install -g pnpm@9.15.4 --registry=https://registry.npmmirror.com \
-    && pnpm config set registry https://registry.npmmirror.com
+RUN npm install -g pnpm@9.15.4 --registry=https://registry.npmjs.org \
+    && pnpm config set registry https://registry.npmjs.org
 
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 COPY frontend/package.json ./frontend/package.json
@@ -20,8 +20,8 @@ WORKDIR /app
 
 ENV NODE_ENV=production
 
-RUN npm install -g pnpm@9.15.4 --registry=https://registry.npmmirror.com \
-    && pnpm config set registry https://registry.npmmirror.com
+RUN npm install -g pnpm@9.15.4 --registry=https://registry.npmjs.org \
+    && pnpm config set registry https://registry.npmjs.org
 
 COPY --from=deps /app/node_modules ./node_modules
 COPY --from=deps /app/backend/node_modules ./backend/node_modules
@@ -41,6 +41,7 @@ COPY --from=builder /app/backend/node_modules ./backend/node_modules
 COPY --from=builder /app/backend/package.json ./backend/package.json
 COPY --from=builder /app/backend/dist ./backend/dist
 COPY --from=builder /app/backend/prisma ./backend/prisma
+COPY --from=builder /app/data/workpiece-router ./data/workpiece-router
 
 EXPOSE 3001
 

@@ -1,0 +1,67 @@
+{
+  "id": "rolling-furnace-door-cycle-20260513-proposal",
+  "slug": "rolling-furnace-door-cycle-20260513-proposal",
+  "title": "热轧配套箱式炉：3秒开门与完整取料节拍",
+  "summary": "苏能一份热轧配套箱式炉讨论稿提出炉门升降动作不超过3秒，并配置炉门加热、到位压紧和前后两区控温。采购时应把门的动作时间、实际取料过程和送至热轧机的时间分别核对，不能把单个机构的速度直接当成整套生产节拍。",
+  "body": "rolling-furnace-door-cycle-20260513-proposal.md",
+  "contentType": "proposal",
+  "publicationStatus": "draft",
+  "projectStatus": "proposal",
+  "workpiece": [
+    "热轧前坯料"
+  ],
+  "materials": [
+    "钢"
+  ],
+  "process": [
+    "热轧前加热"
+  ],
+  "equipment": [
+    "箱式电阻炉"
+  ],
+  "need": [
+    "取料与热轧衔接"
+  ],
+  "tags": [
+    "方案参考",
+    "热轧前坯料",
+    "取料与热轧衔接"
+  ],
+  "facts": [
+    {
+      "label": "拟炉门升降行程",
+      "value": "1200",
+      "unit": "mm",
+      "condition": "≤3秒是机构动作指标，不是整线节拍",
+      "attribute": "方案参数"
+    },
+    {
+      "label": "方案内尺寸",
+      "value": "2000×800×800",
+      "unit": "mm",
+      "condition": "不是所有工件均可无余量装入的保证",
+      "attribute": "方案参数"
+    },
+    {
+      "label": "拟独立控温区",
+      "value": "2",
+      "unit": "区",
+      "condition": "前后分区，与五面加热不是同一计数",
+      "attribute": "方案参数"
+    }
+  ],
+  "participation": "方案拟配置五面加热、快速升降炉门和前后分区，并安排热轧机联机测试。",
+  "sourceSummary": "本文依据江苏苏能工业炉有限公司的历史方案资料整理，介绍拟定配置与供货条件；本文所引原件不构成设备已交付或验收通过的证明。",
+  "coverTitle": "热轧配套箱式炉方案：炉门动作3秒，能否代表完整取料节拍？",
+  "relatedLinks": [],
+  "projectYear": 2026,
+  "sourceDate": "2026-05-13",
+  "cover": {
+    "src": "/images/case-covers/finalized-20260910/steel-billet.webp",
+    "alt": "钢坯类别工件示意",
+    "caption": "钢坯类别示意（人工智能生成，非客户实物，不表示实际规格或工艺结果）",
+    "fit": "contain"
+  },
+  "listTitle": "热轧配套箱式炉：3秒开门与完整取料节拍",
+  "dateModified": "2026-09-12"
+}

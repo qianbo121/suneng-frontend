@@ -1,0 +1,13 @@
+{
+  "id": "pit-pre-vacuum-sequence-20260519-proposal",
+  "slug": "pit-resistance-furnace-pre-vacuum-nitrogen-refill-pressure-proposal",
+  "number": 52,
+  "title": "Does a pre-evacuated pit furnace heat under vacuum throughout the cycle?",
+  "summary": "Pre-evacuation is a preliminary step in this proposal; it does not mean that the furnace remains under vacuum throughout heating. Jiangsu Suneng Industrial Furnace Co., Ltd.'s pit resistance furnace proposal dated 19 May 2026 first evacuates the muffle retort, then backfills it with nitrogen. Gas admission and discharge maintain the retort's working pressure during heating and cooling. Check the evacuation stage, nitrogen-protection stage and pressure control during temperature changes separately.",
+  "body": "pit-pre-vacuum-sequence-20260519-proposal.md",
+  "sourceFingerprint": "405cc10504b7b0dbd8cd977bee470fe6a13fcc451132c3939973f739287de503",
+  "translationStatus": "complete",
+  "translatedAt": "2026-09-12",
+  "coverAlt": "",
+  "coverCaption": ""
+}

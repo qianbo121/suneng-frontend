@@ -63,7 +63,11 @@ export class ShujuNewsPublishService {
     if (dto.idempotencyKey !== expectedKey) {
       throw new ConflictException('Idempotency key does not match the source version');
     }
-    if (dto.coverImage?.includes('/media/news/') || dto.contentZh.includes('/media/news/')) {
+    if (
+      dto.coverImage?.includes('/media/news/') ||
+      dto.contentZh.includes('/media/news/') ||
+      dto.contentEn?.includes('/media/news/')
+    ) {
       throw new ConflictException('Local Shuju media must be transferred before publishing');
     }
 
@@ -75,6 +79,7 @@ export class ShujuNewsPublishService {
     if (!visibleText && !/<img\s/i.test(sanitizedContent)) {
       throw new ConflictException('Sanitized news content is empty');
     }
+    const english = this.englishCopy(dto);
     assertNewsPublicationPolicy({
       titleZh: dto.titleZh,
       summaryZh: dto.summaryZh,
@@ -82,6 +87,7 @@ export class ShujuNewsPublishService {
       seoTitleZh: dto.seoTitleZh,
       seoDescriptionZh: dto.seoDescriptionZh,
       seoKeywordsZh: dto.seoKeywordsZh,
+      ...english,
     });
     const canonical = {
       sourceDraftId: dto.sourceDraftId,
@@ -96,6 +102,8 @@ export class ShujuNewsPublishService {
       seoTitleZh: dto.seoTitleZh ?? '',
       seoDescriptionZh: dto.seoDescriptionZh ?? '',
       seoKeywordsZh: dto.seoKeywordsZh ?? '',
+      // Preserve the legacy hash when no English was supplied.
+      ...english,
     };
     const payloadSha256 = this.hash(canonical);
     const replay = await this.replay(dto.idempotencyKey, 'publish', payloadSha256);
@@ -119,6 +127,19 @@ export class ShujuNewsPublishService {
           throw new ConflictException('Source version is not newer than the published version');
         }
 
+        const previous = binding
+          ? await tx.news.findUnique({ where: { id: binding.newsId } })
+          : null;
+        if (binding && !previous) throw new NotFoundException('Published news no longer exists');
+        const sourceChanged =
+          previous &&
+          (previous.titleZh !== dto.titleZh ||
+            (previous.summaryZh ?? '') !== (dto.summaryZh ?? '') ||
+            previous.contentZh !== sanitizedContent ||
+            (previous.seoTitleZh ?? '') !== (dto.seoTitleZh ?? '') ||
+            (previous.seoDescriptionZh ?? '') !== (dto.seoDescriptionZh ?? '') ||
+            (previous.seoKeywordsZh ?? '') !== (dto.seoKeywordsZh ?? ''));
+
         const categoryId = await this.resolveCategory(tx, dto.categoryId);
         const data = {
           categoryId,
@@ -127,13 +148,26 @@ export class ShujuNewsPublishService {
           contentZh: sanitizedContent,
           coverImage: dto.coverImage,
           slug: dto.slug,
-          publishDate: dto.publishDate ? new Date(dto.publishDate) : new Date(),
+          publishDate: dto.publishDate
+            ? new Date(dto.publishDate)
+            : (previous?.publishDate ?? new Date()),
           status: PublishStatus.published,
           isPublished: true,
           seoTitleZh: dto.seoTitleZh,
           seoDescriptionZh: dto.seoDescriptionZh,
           seoKeywordsZh: dto.seoKeywordsZh,
           contentUpdatedAt: new Date(),
+          ...(english ??
+            (sourceChanged
+              ? {
+                  titleEn: null,
+                  summaryEn: null,
+                  contentEn: null,
+                  seoTitleEn: null,
+                  seoDescriptionEn: null,
+                  seoKeywordsEn: null,
+                }
+              : {})),
         };
 
         const news = binding
@@ -177,6 +211,34 @@ export class ShujuNewsPublishService {
       }
       throw error;
     }
+  }
+
+  private englishCopy(dto: ShujuNewsPublishDto) {
+    const fields = [
+      dto.titleEn,
+      dto.summaryEn,
+      dto.contentEn,
+      dto.seoTitleEn,
+      dto.seoDescriptionEn,
+      dto.seoKeywordsEn,
+    ];
+    if (fields.every((value) => value === undefined || value === null)) return undefined;
+    const contentEn = DOMPurify.sanitize(dto.contentEn ?? '');
+    if (
+      !dto.titleEn?.trim() ||
+      !dto.summaryEn?.trim() ||
+      !contentEn.replace(/<[^>]+>/g, '').trim()
+    ) {
+      throw new ConflictException('English news requires a complete title, summary and article');
+    }
+    return {
+      titleEn: dto.titleEn.trim(),
+      summaryEn: dto.summaryEn.trim(),
+      contentEn,
+      seoTitleEn: dto.seoTitleEn?.trim() || dto.titleEn.trim(),
+      seoDescriptionEn: dto.seoDescriptionEn?.trim() || dto.summaryEn.trim(),
+      seoKeywordsEn: dto.seoKeywordsEn?.trim() || '',
+    };
   }
 
   async offline(dto: ShujuNewsOfflineDto, requestId: string) {

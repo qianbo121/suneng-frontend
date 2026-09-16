@@ -1,0 +1,13 @@
+{
+  "id": "metal-parts-box-five-face-20200914-proposal",
+  "slug": "metal-parts-box-five-face-two-zone-proposal",
+  "number": 12,
+  "title": "Five-sided heating and two-zone control in a box-type resistance furnace",
+  "summary": "Five-sided heating describes where heating elements are installed; two-zone control describes which elements share temperature regulation. The counts are not interchangeable. Jiangsu Suneng Industrial Furnace Co., Ltd.'s high-temperature box-furnace proposal dated 14 September 2020 places elements on both side walls, the rear wall, door and hearth, divided into front and rear control zones. For similar metal-part heating, map loading to those zones before checking measurement and verification. Five heating faces do not mean five independent temperature zones.",
+  "body": "metal-parts-box-five-face-20200914-proposal.md",
+  "sourceFingerprint": "1f1a9b96b80e26644949b2a09406229eebb74c54e851103c8bfe33e4bfc786a1",
+  "translationStatus": "complete",
+  "translatedAt": "2026-09-12",
+  "coverAlt": "",
+  "coverCaption": ""
+}

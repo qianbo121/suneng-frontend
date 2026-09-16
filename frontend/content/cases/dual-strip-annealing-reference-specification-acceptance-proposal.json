@@ -1,0 +1,77 @@
+{
+  "id": "dual-strip-acceptance-basis-20220808-proposal",
+  "slug": "dual-strip-annealing-reference-specification-acceptance-proposal",
+  "title": "双带不锈钢退火炉的产量按什么规格验收？",
+  "listTitle": "双带不锈钢退火炉的产量按什么规格验收？",
+  "listSummary": "苏能2022年双带不锈钢连续退火炉资料，将单炉双带的设计产量写为34.37t/h，并附有钢种、尺寸和带速条件；最终验收条款另列两种SUS304带钢的连续生产试验。",
+  "summary": "苏能2022年双带不锈钢连续退火炉资料，将单炉双带的设计产量写为34.37t/h，并附有钢种、尺寸和带速条件；最终验收条款另列两种SUS304带钢的连续生产试验。采购核对时，应分别确认设计计算用什么材料、考核实际跑什么规格，以及产量按单带、双带还是两台炉统计。",
+  "body": "dual-strip-annealing-reference-specification-acceptance-proposal.md",
+  "contentType": "proposal",
+  "publicationStatus": "draft",
+  "projectStatus": "proposal",
+  "projectYear": 2022,
+  "sourceDate": "2022-08-08",
+  "workpiece": [
+    "不锈钢带"
+  ],
+  "materials": [
+    "不锈钢"
+  ],
+  "process": [
+    "连续退火"
+  ],
+  "equipment": [
+    "双带连续退火炉"
+  ],
+  "need": [
+    "产能与考核材料核对"
+  ],
+  "tags": [
+    "方案参考",
+    "不锈钢带",
+    "产能与考核材料核对"
+  ],
+  "facts": [
+    {
+      "label": "设计小时产量",
+      "value": "34.37",
+      "unit": "t/h",
+      "condition": "J3A 2.3mm×600mm、26.6m/min；单炉双带设计口径，非实测产量",
+      "attribute": "方案参数"
+    },
+    {
+      "label": "年计算纯生产时间",
+      "value": "8000",
+      "unit": "h",
+      "condition": "标准材料年产量计算条件，非已实现运行时间",
+      "attribute": "方案参数"
+    },
+    {
+      "label": "一项拟考核数量",
+      "value": "200",
+      "unit": "t",
+      "condition": "SUS304 2.2mm×620mm、25m/min连续生产；另一规格另列，不相加替代考核",
+      "attribute": "方案参数"
+    }
+  ],
+  "participation": "苏能历史技术协议提出双带炉段及配套配置，产能条件与最终考核规格需终版统一。",
+  "sourceSummary": "江苏苏能工业炉有限公司历史技术方案资料整理。",
+  "coverTitle": "双带连续退火炉方案：代表规格和考核材料怎样一起确认？",
+  "relatedLinks": [
+    {
+      "title": "连续生产线的选型与项目边界",
+      "href": "/zh/solutions/continuous-heat-treatment-line"
+    },
+    {
+      "title": "准备询价参数与供货范围",
+      "href": "/zh/articles/gongye-lu-baojia-canshu"
+    }
+  ],
+  "cover": {
+    "src": "/images/products/annealing-solution-line/remaining-batch-v1/03-workpiece-8b1942ed56b3.png",
+    "alt": "不锈钢带材类别工件示意",
+    "caption": "不锈钢带材工件示意（人工智能生成，非客户实物）",
+    "fit": "contain"
+  },
+  "dateModified": "2026-09-12"
+}

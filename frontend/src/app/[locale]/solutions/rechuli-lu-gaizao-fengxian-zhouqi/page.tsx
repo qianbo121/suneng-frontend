@@ -1,7 +1,10 @@
+import { EnglishSolutionPage, englishSolutionMetadata } from '@/components/engineering/EnglishSolutionsPage';
+import { solutionAlternates } from '@/lib/english-solutions';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
 import { GeoAuthorityGuidePage } from '@/components/geo-pages/GeoAuthorityGuidePage';
+import { BuyerSelectionGuide } from '@/components/products/BuyerSelectionGuide';
 import { JsonLd } from '@/components/JsonLd';
 import {
   getArticleJsonLd,
@@ -76,14 +79,17 @@ const jsonLd = [
 export const dynamicParams = false;
 
 export async function generateStaticParams() {
-  return [{ locale: 'zh' }];
+  return [{ locale: 'zh' }, { locale: 'en' }];
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  if ((await params).locale !== 'zh') notFound();
+  const { locale } = await params;
+  if (locale === 'en') return englishSolutionMetadata('rechuli-lu-gaizao-fengxian-zhouqi');
+  if (locale !== 'zh') notFound();
   return buildMetadata({
     locale: 'zh',
     path: pagePath,
+    alternateLocales: solutionAlternates('rechuli-lu-gaizao-fengxian-zhouqi'),
     title: seo.title,
     description: seo.description,
     keywords: seo.keywords,
@@ -95,12 +101,15 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 }
 
 export default async function FurnaceRenovationRiskCyclePage({ params }: PageProps) {
-  if ((await params).locale !== 'zh') notFound();
+  const { locale } = await params;
+  if (locale === 'en') return <EnglishSolutionPage slug="rechuli-lu-gaizao-fengxian-zhouqi" />;
+  if (locale !== 'zh') notFound();
 
   return (
     <>
       <JsonLd data={jsonLd} />
       <GeoAuthorityGuidePage
+        decisionContent={<BuyerSelectionGuide guideKey="trolley-renovation" />}
         eyebrow="Renovation risk, cycle & production impact"
         breadcrumbLabel="改造风险与周期"
         title="热处理炉改造有哪些风险？"

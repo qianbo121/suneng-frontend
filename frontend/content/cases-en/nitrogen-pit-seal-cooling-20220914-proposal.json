@@ -1,0 +1,13 @@
+{
+  "id": "nitrogen-pit-seal-cooling-20220914-proposal",
+  "slug": "nitrogen-pit-furnace-seal-water-cooling-proposal",
+  "number": 22,
+  "title": "Why do the seals on a nitrogen-protected pit tempering furnace need cooling water?",
+  "summary": "Cooling a seal and circulating hot gas around workpieces are different duties. Jiangsu Suneng Industrial Furnace Co., Ltd.'s nitrogen-protected pit tempering furnace proposal dated 14 September 2022 provides water cooling at the retort flange seal and water-cooled circulation-fan bearings. Confirm sealing, fan cooling and furnace atmosphere separately. Cooling water is not a workpiece-cooling system, and a nitrogen inlet does not establish verified protection.",
+  "body": "nitrogen-pit-seal-cooling-20220914-proposal.md",
+  "sourceFingerprint": "7998e8f0822ed5ecdefbac4300fd5ea35b4ed9cf5f303a36a07d7ee2d21e3ce5",
+  "translationStatus": "complete",
+  "translatedAt": "2026-09-12",
+  "coverAlt": "",
+  "coverCaption": ""
+}

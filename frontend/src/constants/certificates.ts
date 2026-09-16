@@ -12,6 +12,8 @@ export type CertificateItem = {
   alt: string;
   relatedProduct?: string;
   sortOrder: number;
+  original?: string;
+  verification?: { source: string; checkedAt: string; note: string };
 };
 
 export const SUNENG_QUALIFICATION_CERTIFICATES: CertificateItem[] = [
@@ -59,7 +61,8 @@ export const SUNENG_PATENT_CERTIFICATES: CertificateItem[] = [
     category: 'patent',
     title: '一种高精度温控电阻炉',
     subtitle: '实用新型专利证书',
-    image: '/images/certificates/patents/patent-01-high-precision-temperature-control-resistance-furnace.jpg',
+    image:
+      '/images/certificates/patents/patent-01-high-precision-temperature-control-resistance-furnace.jpg',
     alt: '江苏苏能工业炉有限公司实用新型专利证书：一种高精度温控电阻炉',
     relatedProduct: '电阻炉',
     sortOrder: 1,
@@ -69,7 +72,8 @@ export const SUNENG_PATENT_CERTIFICATES: CertificateItem[] = [
     category: 'patent',
     title: '一种高精度温控燃气热处理炉',
     subtitle: '实用新型专利证书',
-    image: '/images/certificates/patents/patent-02-high-precision-temperature-control-gas-heat-treatment-furnace.jpg',
+    image:
+      '/images/certificates/patents/patent-02-high-precision-temperature-control-gas-heat-treatment-furnace.jpg',
     alt: '江苏苏能工业炉有限公司实用新型专利证书：一种高精度温控燃气热处理炉',
     relatedProduct: '燃气热处理炉',
     sortOrder: 2,
@@ -98,19 +102,21 @@ export const SUNENG_PATENT_CERTIFICATES: CertificateItem[] = [
     id: 'patent-05-stainless-steel-strip-continuous-solution-heat-treatment-line',
     category: 'patent',
     title: '一种不锈钢带连续固溶热处理生产线',
-    subtitle: '实用新型专利证书',
-    image: '/images/certificates/patents/patent-05-stainless-steel-strip-continuous-solution-heat-treatment-line.jpg',
-    alt: '江苏苏能工业炉有限公司实用新型专利证书：一种不锈钢带连续固溶热处理生产线',
+    subtitle: '发明专利证书',
+    image:
+      '/images/certificates/patents/patent-05-stainless-steel-strip-continuous-solution-heat-treatment-line.jpg',
+    alt: '江苏苏能工业炉有限公司发明专利证书：一种不锈钢带连续固溶热处理生产线',
     relatedProduct: '连续固溶热处理生产线',
     sortOrder: 5,
   },
   {
     id: 'patent-06-gas-heated-rapid-solution-aluminum-tooth-furnace',
     category: 'patent',
-    title: '一种燃气加热快速固溶铝齿炉',
+    title: '一种燃气加热快速固溶铲齿炉',
     subtitle: '实用新型专利证书',
-    image: '/images/certificates/patents/patent-06-gas-heated-rapid-solution-aluminum-tooth-furnace.jpg',
-    alt: '江苏苏能工业炉有限公司实用新型专利证书：一种燃气加热快速固溶铝齿炉',
+    image:
+      '/images/certificates/patents/patent-06-gas-heated-rapid-solution-aluminum-tooth-furnace.jpg',
+    alt: '江苏苏能工业炉有限公司实用新型专利证书：一种燃气加热快速固溶铲齿炉',
     relatedProduct: '燃气固溶炉',
     sortOrder: 6,
   },
@@ -129,7 +135,8 @@ export const SUNENG_PATENT_CERTIFICATES: CertificateItem[] = [
     category: 'patent',
     title: '一种链板式铝棒电加热炉',
     subtitle: '实用新型专利证书',
-    image: '/images/certificates/patents/patent-08-chain-plate-aluminum-rod-electric-heating-furnace.jpg',
+    image:
+      '/images/certificates/patents/patent-08-chain-plate-aluminum-rod-electric-heating-furnace.jpg',
     alt: '江苏苏能工业炉有限公司实用新型专利证书：一种链板式铝棒电加热炉',
     relatedProduct: '电加热炉',
     sortOrder: 8,
@@ -148,9 +155,10 @@ export const SUNENG_PATENT_CERTIFICATES: CertificateItem[] = [
     id: 'patent-10-annealing-furnace-roller-scraper-cleaning-device',
     category: 'patent',
     title: '退火炉置用炉辊面刮刀清理装置',
-    subtitle: '实用新型专利证书',
-    image: '/images/certificates/patents/patent-10-annealing-furnace-roller-scraper-cleaning-device.jpg',
-    alt: '江苏苏能工业炉有限公司实用新型专利证书：退火炉置用炉辊面刮刀清理装置',
+    subtitle: '发明专利证书',
+    image:
+      '/images/certificates/patents/patent-10-annealing-furnace-roller-scraper-cleaning-device.jpg',
+    alt: '江苏苏能工业炉有限公司发明专利证书：退火炉置用炉辊面刮刀清理装置',
     relatedProduct: '退火炉',
     sortOrder: 10,
   },
@@ -158,9 +166,9 @@ export const SUNENG_PATENT_CERTIFICATES: CertificateItem[] = [
     id: 'patent-11-forging-furnace',
     category: 'patent',
     title: '一种锻造炉',
-    subtitle: '实用新型专利证书',
+    subtitle: '发明专利证书',
     image: '/images/certificates/patents/patent-11-forging-furnace.jpg',
-    alt: '江苏苏能工业炉有限公司实用新型专利证书：一种锻造炉',
+    alt: '江苏苏能工业炉有限公司发明专利证书：一种锻造炉',
     relatedProduct: '锻造炉',
     sortOrder: 11,
   },
@@ -195,3 +203,20 @@ export const SUNENG_PATENT_CERTIFICATES: CertificateItem[] = [
     sortOrder: 14,
   },
 ];
+
+// Preserve the existing asset URLs; the ISO scan contains both language originals.
+for (const item of [
+  ...SUNENG_QUALIFICATION_CERTIFICATES,
+  ...SUNENG_ISO_CERTIFICATES,
+  ...SUNENG_PATENT_CERTIFICATES,
+]) {
+  item.original = item.image;
+  item.verification = {
+    source: item.image,
+    checkedAt: '2026-09-05',
+    note:
+      item.category === 'patent'
+        ? '接入现有原件；第 6 项按原件核对为铲齿炉，第 10 项原件保留置用；第 5、10、11 项为发明专利。'
+        : '沿用仓库已核实记录与原件；ISO 原图包含中文和英文证书。',
+  };
+}

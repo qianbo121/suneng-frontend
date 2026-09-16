@@ -1,0 +1,70 @@
+{
+  "id": "quench-separate-cooling-20240315-proposal",
+  "slug": "trolley-quench-furnace-bath-support-external-cooling-proposal",
+  "title": "台车炉报价带淬火槽，外部冷却系统也包含吗？",
+  "listTitle": "台车炉报价带淬火槽，外部冷却系统也包含吗？",
+  "listSummary": "配套淬火槽已经列入设备结构，外部冷却也可能仍由用户准备。",
+  "summary": "配套淬火槽已经列入设备结构，外部冷却也可能仍由用户准备。苏能这份台车炉方案列出槽体、搅拌器和承重台，又单列“淬火油槽冷却系统：用户自备”。核定整套供货时，应把槽内装置与外部冷却分开，并统一介质和单次装载条件。",
+  "body": "trolley-quench-furnace-bath-support-external-cooling-proposal.md",
+  "contentType": "proposal",
+  "publicationStatus": "draft",
+  "projectStatus": "proposal",
+  "projectYear": 2024,
+  "sourceDate": "2024-03-15",
+  "workpiece": [
+    "零部件"
+  ],
+  "materials": [],
+  "process": [
+    "淬火"
+  ],
+  "equipment": [
+    "台车式淬火炉",
+    "淬火槽"
+  ],
+  "need": [
+    "外部冷却供货界面"
+  ],
+  "tags": [
+    "方案参考",
+    "零部件",
+    "外部冷却供货界面"
+  ],
+  "facts": [
+    {
+      "label": "槽内搅拌器",
+      "value": "2",
+      "unit": "台",
+      "condition": "拟定数量，不等于外部冷却能力",
+      "attribute": "方案参数"
+    },
+    {
+      "label": "槽内承重台",
+      "value": "≥5",
+      "unit": "吨",
+      "condition": "原文承载工件和料架；不是单次淬火处理能力",
+      "attribute": "方案参数"
+    },
+    {
+      "label": "冷却系统",
+      "value": "用户自备",
+      "unit": "",
+      "condition": "原件冷却系统分项排除；设备和接口细分需确认",
+      "attribute": "方案参数"
+    }
+  ],
+  "participation": "苏能历史方案列台车炉、槽内装置及拟定调试，冷却系统用户自备，介质和范围需终版核定。",
+  "sourceSummary": "江苏苏能工业炉有限公司历史技术方案资料整理。",
+  "coverTitle": "台车炉配淬火槽方案：槽体和搅拌已有了，冷却系统还由谁配？",
+  "relatedLinks": [
+    {
+      "title": "了解台车炉的适用条件",
+      "href": "/zh/products/detail/trolley-furnace"
+    },
+    {
+      "title": "准备询价参数与供货范围",
+      "href": "/zh/articles/gongye-lu-baojia-canshu"
+    }
+  ],
+  "dateModified": "2026-09-12"
+}

@@ -1,0 +1,13 @@
+{
+  "id": "box-two-recorders-20220411-proposal",
+  "slug": "box-furnaces-paper-paperless-temperature-records-proposal",
+  "number": 23,
+  "title": "How should furnace and load temperatures be recorded in a box furnace?",
+  "summary": "When two recorder types are supplied, first identify their sensor inputs. Jiangsu Suneng Industrial Furnace Co., Ltd.'s two box-furnace proposals dated 11 April 2022 cover 180 kW and 130 kW units, with a paper recorder for control points and a six-channel paperless recorder for workpiece-monitoring points. Compare sensors, channels and measured objects first. “Dual recording” does not automatically mean backup data or verified workpiece temperature.",
+  "body": "box-two-recorders-20220411-proposal.md",
+  "sourceFingerprint": "a8b15316297e6198d709874c5c568a9bfb921a47ff7267579a3b95f18831e7cd",
+  "translationStatus": "complete",
+  "translatedAt": "2026-09-12",
+  "coverAlt": "",
+  "coverCaption": ""
+}

@@ -1,7 +1,12 @@
 import type { Metadata } from 'next';
+import { ServicePageView } from '@/components/service-pages/ServicePages';
+import { getServiceMetadata } from '@/components/service-pages/service-metadata';
 import Image from 'next/image';
+import Link from 'next/link';
 
 import { Breadcrumb } from '@/components/layout/Breadcrumb';
+import { JsonLd } from '@/components/JsonLd';
+import { getBreadcrumbJsonLd, getWebPageJsonLd } from '@/lib/seo/jsonld';
 import { PageBanner } from '@/components/layout/PageBanner';
 import { buildMetadata } from '@/lib/seo/metadata';
 import { SERVICE_SEO } from '@/lib/seo/page-data';
@@ -30,68 +35,23 @@ const serviceSeoCopy = {
       'industrial furnace technical support',
     ],
   },
-} satisfies Record<Locale, {
-  title: string;
-  description: string;
-  keywords: string[];
-}>;
+} satisfies Record<
+  Locale,
+  {
+    title: string;
+    description: string;
+    keywords: string[];
+  }
+>;
 
 const servicePageCopy = {
-  zh: {
-    title: '售后服务',
-    englishTitle: 'After-sales Service',
-    subtitle: '从方案设计到现场应用的全周期技术服务',
-    breadcrumbItems: [{ label: '服务支持' }],
-    heading: '江苏苏能工业炉：以匠心筑品质，以服务赢信赖',
-    intro:
-      '江苏苏能工业炉有限公司始终将产品品质与客户服务置于核心地位，以严苛标准保障质量，以高效响应兑现承诺，竭诚为工业热处理生产提供安全可靠的设备支持。',
-    hotlineTitle: '售后服务热线方式',
-    hotlineContact: `联系人：唐荔　电话：${siteSettings.salesPhone}`,
-    sections: [
-      {
-        title: '一、品质基石：源自匠心，始终如一',
-        paragraphs: [
-          '苏能所供工业炉设备为全新未使用状态，采用精工制造工艺，符合合同约定的质量、规格与性能标准。在规范操作与合理维护条件下，设备在合同约定的使用周期内运行稳定。',
-        ],
-      },
-      {
-        title: '二、质保保障：合同约定，规范执行',
-        paragraphs: [
-          '质保期内因设备制造质量或设计缺陷导致的故障，按合同约定提供免费维修或更换服务。',
-          '潜在缺陷处理：如设备在质保期内出现因设计、材料或制造工艺潜在缺陷导致的非正常故障，按合同约定提供维修或更换服务；质保期外的潜在缺陷处理依据合同条款执行。',
-          '超期服务：质保期满后可持续提供原厂维修配件及有偿技术服务，具体收费标准依据合同约定或单独协商。',
-        ],
-      },
-      {
-        title: '三、响应速度：高效出击，不负所托',
-        paragraphs: [
-          `故障咨询：客户服务热线 ${siteSettings.salesPhone}，专业技术团队接听后协助初步诊断问题。`,
-          '现场服务：客户服务热线 8 小时内响应，技术服务团队 24 小时内答复处理方案；现场上门服务依据合同约定、设备状态、现场工况和服务距离安排。',
-          '故障处理：按问题影响等级与合同约定的服务条款响应。具体处理方案、停产损失补偿等事宜，以合同条款为准。',
-        ],
-      },
-      {
-        title: '四、长期服务保障：持续支持，伴您发展',
-        paragraphs: [
-          '免费培训指导：设备交付时提供操作培训，覆盖操作规范、日常维护、应急处理等内容；后续培训依据合同约定或单独协商。',
-          '定期回访：建立常态化客户服务机制，按合同约定的频次安排定期巡检与回访，主动了解设备运行状态。',
-          '长期服务支持：质保期外的维修服务与备品备件供应，依据合同约定或单独报价提供。',
-        ],
-      },
-      {
-        title: '五、实力护航：专业团队，全域覆盖',
-        paragraphs: [
-          '我们组建了一支由30余名专职售后服务人员组成的团队，深耕全国各地工业炉领域，经验丰富、技术精湛。各区域售后服务站配备专职人员，实现快速电话响应、定期巡检及现场服务，全域覆盖，确保无论您身处何地，都能享受到及时、优质的售后服务。',
-        ],
-      },
-    ],
-  },
   en: {
-    title: 'After-sales Service',
-    englishTitle: 'AFTER-SALES SERVICE',
-    subtitle: 'Lifecycle technical service from solution design to on-site operation',
+    title: 'Furnace Services & After-sales Support',
+    englishTitle: 'FURNACE SERVICES',
+    subtitle: 'Installation, maintenance, retrofit and restart support within the agreed equipment scope',
     breadcrumbItems: [{ label: 'Service' }],
-    heading: 'Jiangsu Suneng Industrial Furnace: quality built with care, service delivered with accountability',
+    heading:
+      'Jiangsu Suneng Industrial Furnace: quality built with care, service delivered with accountability',
     intro:
       'Jiangsu Suneng Industrial Furnace Co., Ltd. puts product quality and customer service at the center of every industrial furnace project. With strict standards and responsive support, we help industrial heat treatment operations run with reliable equipment backup.',
     hotlineTitle: 'After-sales service hotline',
@@ -115,7 +75,7 @@ const servicePageCopy = {
         title: '3. Response Speed: fast diagnosis and practical follow-up',
         paragraphs: [
           `Fault consultation: call the customer service hotline at ${siteSettings.salesPhone}. Our technical team will assist with preliminary diagnosis after receiving the request.`,
-          'On-site service: the hotline responds within 8 hours, and the technical service team replies with a handling plan within 24 hours. On-site visits are arranged according to the contract, equipment status, site conditions and service distance.',
+          'Response and on-site service: response times, handling plans and site visits are agreed for each project, taking account of fault severity, equipment condition, available records, site access and travel distance.',
           'Fault handling: response is based on the impact level of the issue and the service terms agreed in the contract. Specific handling plans and any production-loss matters are subject to the contract terms.',
         ],
       },
@@ -128,31 +88,43 @@ const servicePageCopy = {
         ],
       },
       {
-        title: '5. Service Capability: dedicated team and regional coverage',
+        title: '5. Service Scope: technical support matched to the project',
         paragraphs: [
-          'Suneng has built a dedicated after-sales service team of more than 30 people with hands-on experience in industrial furnace projects across China. Regional service stations are staffed for phone response, routine inspection and on-site service, helping customers receive timely and professional after-sales service wherever their equipment is installed.',
+          'Suneng provides technical consultation, installation and commissioning support, operation training, maintenance and spare-parts services within the agreed scope. Remote support and on-site work are arranged according to the equipment, fault information, site conditions and service agreement.',
+        ],
+      },
+      {
+        title: '6. Retrofit, Relocation and Restart Assessment',
+        paragraphs: [
+          'Repair, refractory relining, heating-system renewal and control upgrades are assessed against the existing furnace condition, process target and shutdown window. Provide the equipment identification, drawings where available, fault history, photographs and current operating records.',
+          'For relocation or restart, confirm the dismantling and lifting plan, transport route, foundations, utilities, retained components and commissioning conditions. Imported or third-party equipment requires a separate review of drawings, controls and spare-parts availability.',
+          'The proposal defines equipment supply, installation guidance, commissioning support and acceptance responsibilities. Civil works, environmental contracting and general construction contracting are outside Suneng’s equipment supply scope; work requiring specialist qualifications must be handled by appropriately qualified parties.',
         ],
       },
     ],
   },
-} satisfies Record<Locale, {
-  title: string;
-  englishTitle: string;
-  subtitle: string;
-  breadcrumbItems: { label: string }[];
-  heading: string;
-  intro: string;
-  hotlineTitle: string;
-  hotlineContact: string;
-  sections: {
+} satisfies Record<
+  'en',
+  {
     title: string;
-    paragraphs: string[];
-  }[];
-}>;
+    englishTitle: string;
+    subtitle: string;
+    breadcrumbItems: { label: string }[];
+    heading: string;
+    intro: string;
+    hotlineTitle: string;
+    hotlineContact: string;
+    sections: {
+      title: string;
+      paragraphs: string[];
+    }[];
+  }
+>;
 
 export async function generateMetadata({ params }: ServicePageProps): Promise<Metadata> {
   const { locale } = await params;
   const currentLocale = (locale === 'en' ? 'en' : 'zh') as Locale;
+  if (currentLocale === 'zh') return getServiceMetadata('overview');
   const seo = serviceSeoCopy[currentLocale];
 
   return buildMetadata({
@@ -163,9 +135,8 @@ export async function generateMetadata({ params }: ServicePageProps): Promise<Me
     keywords: seo.keywords,
     image: heroImage,
     alternateLocales: {
-      'zh-CN': '/zh/service',
       'en-US': '/en/service',
-      'x-default': '/zh/service',
+      'x-default': '/en/service',
     },
   });
 }
@@ -173,10 +144,15 @@ export async function generateMetadata({ params }: ServicePageProps): Promise<Me
 export default async function ServicePage({ params }: ServicePageProps) {
   const { locale } = await params;
   const currentLocale = (locale === 'en' ? 'en' : 'zh') as Locale;
+  if (currentLocale === 'zh') return <ServicePageView kind="overview" />;
   const copy = servicePageCopy[currentLocale];
 
   return (
     <div className="bg-[#f7f8fa]">
+      <JsonLd id="english-service-jsonld" data={[
+        getWebPageJsonLd({ path: '/en/service', name: copy.title, description: copy.intro, locale: 'en' }),
+        getBreadcrumbJsonLd([{ name: 'Home', url: '/en' }, { name: copy.title, url: '/en/service' }]),
+      ]} />
       <PageBanner
         locale={locale}
         title={copy.title}
@@ -187,7 +163,7 @@ export default async function ServicePage({ params }: ServicePageProps) {
       />
 
       <div className="border-b border-[#e5e5e5] bg-white">
-        <div className="mx-auto flex min-h-[42px] max-w-[1660px] items-center px-6 lg:px-[86px]">
+        <div className="site-page-container flex min-h-[42px] items-center">
           <Breadcrumb
             locale={locale}
             currentLabel={copy.title}
@@ -198,8 +174,11 @@ export default async function ServicePage({ params }: ServicePageProps) {
         </div>
       </div>
 
-      <section className="mx-auto max-w-[1160px] px-6 py-10 lg:px-8 lg:py-12">
-        <article className="bg-white px-8 py-10 shadow-[0_10px_34px_rgba(15,35,75,0.08)] md:px-14 lg:px-[84px] lg:py-[58px]">
+      <section className="site-section site-page-container">
+        <article
+          id="after-sales-service"
+          className="scroll-mt-[96px] bg-white px-8 py-10 shadow-[0_10px_34px_rgba(15,35,75,0.08)] md:px-14 lg:px-[84px] lg:py-[58px]"
+        >
           <header className="text-center">
             <h2 className="text-[28px] font-bold leading-[1.35] tracking-[0.03em] text-[#071a3d] lg:text-[38px]">
               {copy.heading}
@@ -212,7 +191,9 @@ export default async function ServicePage({ params }: ServicePageProps) {
           <div className="mt-12 space-y-10">
             {copy.sections.map((section) => (
               <section key={section.title}>
-                <h3 className="text-[22px] font-bold leading-[1.45] text-[#071a3d] lg:text-[25px]">{section.title}</h3>
+                <h3 className="text-[22px] font-bold leading-[1.45] text-[#071a3d] lg:text-[25px]">
+                  {section.title}
+                </h3>
                 <div className="mt-4 space-y-2 text-[16px] leading-[2] text-[#253858] lg:text-[18px]">
                   {section.paragraphs.map((paragraph) => (
                     <p key={paragraph}>{paragraph}</p>
@@ -222,15 +203,21 @@ export default async function ServicePage({ params }: ServicePageProps) {
             ))}
           </div>
 
-          <section className="mt-11 flex items-center gap-6 rounded-md border border-[#d9dee7] bg-white px-6 py-5 lg:px-8">
+          <section className="mt-11 flex flex-col items-start gap-6 rounded-md border border-[#d9dee7] bg-white px-6 py-5 sm:flex-row sm:items-center lg:px-8">
             <div className="relative h-[86px] w-[86px] shrink-0 overflow-hidden rounded-full bg-[#feecef]">
               <Image src={phoneIcon} alt="" fill sizes="86px" className="object-cover" />
             </div>
             <div className="text-[#071a3d]">
-              <h3 className="text-[20px] font-normal leading-[1.45] text-[var(--color-accent)]">{copy.hotlineTitle}</h3>
-              <p className="mt-2 text-[18px] font-normal leading-[1.6]">{copy.hotlineContact}</p>
+              <h3 className="text-[20px] font-normal leading-[1.45] text-[var(--color-accent)]">
+                {copy.hotlineTitle}
+              </h3>
+              <p className="mt-2 text-[18px] font-normal leading-[1.6]">Contact: Tang Li<br /><a href={`tel:${siteSettings.salesPhone}`} className="underline underline-offset-4">{siteSettings.salesPhone}</a></p>
             </div>
           </section>
+          <div className="mt-8 flex flex-col gap-4 sm:flex-row">
+            <Link href="/en/contact#product-lead-form" className="inline-flex min-h-12 items-center justify-center rounded border border-[#0c4dcc] bg-[#0c4dcc] px-5 py-3 text-center font-semibold text-white">Discuss a service request</Link>
+            <a href={`mailto:${siteSettings.email}`} className="inline-flex min-h-12 items-center justify-center rounded border border-[#c8d0dc] px-5 py-3 text-center font-semibold text-[#071a3d]">Email our team</a>
+          </div>
         </article>
       </section>
     </div>

@@ -1,0 +1,13 @@
+{
+  "id": "crossflow-fan-rack-layout-20260709-proposal",
+  "slug": "crossflow-fan-rack-layout-20260709-proposal",
+  "number": 113,
+  "title": "Can a 5 × 4 × 3 m oven accommodate 120 loading trolleys?",
+  "summary": "A Suneng oven proposal for cross-flow fan impellers targets 120 transfer-rack frames per batch in a 5 × 4 × 3 m chamber. A loading drawing must verify that quantity: frame arrangement, projecting parts, loading access and blockage of side or bottom air outlets cannot be assessed from total chamber volume alone.",
+  "body": "crossflow-fan-rack-layout-20260709-proposal.md",
+  "sourceFingerprint": "dcfe3dcdb7ef86dac50b7942d00bcfecc18e0b34e88fadf6a2ef37c0e60c3f1a",
+  "translationStatus": "complete",
+  "translatedAt": "2026-09-12",
+  "coverAlt": "Illustration of cross-flow fans.",
+  "coverCaption": "Illustration of cross-flow fans (AI-generated). Not an actual customer workpiece photograph. Does not establish actual specifications or process results."
+}

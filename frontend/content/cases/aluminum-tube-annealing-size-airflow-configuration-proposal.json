@@ -1,0 +1,77 @@
+{
+  "id": "aluminum-tube-configuration-family-20220603-proposal",
+  "slug": "aluminum-tube-annealing-size-airflow-configuration-proposal",
+  "title": "6061铝管退火炉选型，除了炉膛尺寸还要看哪些配置？",
+  "listTitle": "6061铝管退火炉选型，除了炉膛尺寸还要看哪些配置？",
+  "listSummary": "比较铝合金管退火炉，应把炉膛、门体、加热分区和循环方式放在一起看。",
+  "summary": "比较铝合金管退火炉，应把炉膛、门体、加热分区和循环方式放在一起看。江苏苏能工业炉有限公司2022—2023年的这组6061铝合金管历史资料，既有不同尺寸的新炉方案，也有300kW炉的改造报价。同样是台车炉，配置变化并非只增加功率；这些资料可以帮助初筛，但不能当作已经确认的连续扩容或改造完成记录。",
+  "body": "aluminum-tube-annealing-size-airflow-configuration-proposal.md",
+  "contentType": "proposal",
+  "publicationStatus": "draft",
+  "projectStatus": "proposal",
+  "projectYear": 2022,
+  "sourceDate": "2022-06-03",
+  "workpiece": [
+    "铝合金管"
+  ],
+  "materials": [
+    "6061铝合金"
+  ],
+  "process": [
+    "退火"
+  ],
+  "equipment": [
+    "台车式铝合金退火炉"
+  ],
+  "need": [
+    "炉膛与循环配置比较"
+  ],
+  "tags": [
+    "方案参考",
+    "铝合金管",
+    "炉膛与循环配置比较"
+  ],
+  "facts": [
+    {
+      "label": "150kW方案炉膛",
+      "value": "2400×1600×1750",
+      "unit": "mm",
+      "condition": "20220603方案炉膛，非工件可用外形",
+      "attribute": "方案参数"
+    },
+    {
+      "label": "300kW方案炉膛",
+      "value": "5000×1600×1850",
+      "unit": "mm",
+      "condition": "20221208新炉方案；不可套改造报价高度",
+      "attribute": "方案参数"
+    },
+    {
+      "label": "520kW方案炉膛",
+      "value": "8300×2100×2100",
+      "unit": "mm",
+      "condition": "20230916封面方案，非最终签认配置",
+      "attribute": "方案参数"
+    }
+  ],
+  "participation": "苏能历史资料提出多种铝合金管退火炉配置及一份同型号改造范围，实际设备对应及最终选型需按确认资料分别落实。",
+  "sourceSummary": "江苏苏能工业炉有限公司历史技术方案资料整理。",
+  "coverTitle": "6061铝管退火炉选型，除了炉膛尺寸还要看哪些配置？",
+  "relatedLinks": [
+    {
+      "title": "了解台车炉的适用条件",
+      "href": "/zh/products/detail/trolley-furnace"
+    },
+    {
+      "title": "准备询价参数与供货范围",
+      "href": "/zh/articles/gongye-lu-baojia-canshu"
+    }
+  ],
+  "cover": {
+    "src": "/images/case-covers/finalized-20260910/aluminum-tubes.webp",
+    "alt": "铝合金管类别工件示意",
+    "caption": "铝合金管工件示意（人工智能生成，非客户实物）",
+    "fit": "contain"
+  },
+  "dateModified": "2026-09-14"
+}

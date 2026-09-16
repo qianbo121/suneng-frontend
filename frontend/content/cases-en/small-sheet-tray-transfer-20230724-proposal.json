@@ -1,0 +1,13 @@
+{
+  "id": "small-sheet-tray-transfer-20230724-proposal",
+  "slug": "small-sheet-solution-furnace-tray-transfer-interfaces-proposal",
+  "number": 38,
+  "title": "Discharge time and subsequent quench transfer for small sheet-metal parts in a solution-treatment furnace",
+  "summary": "Delivering a tray outside the furnace does not mean the workpiece has reached the next cooling station. Jiangsu Suneng Industrial Furnace Co., Ltd.'s small quenching-furnace proposal dated 24 July 2023 concerns solution heating of opening-frame blanks and small sheet-metal parts. It specifies “no more than 5–7 seconds” from door opening to the tray reaching its discharged position. Define that position before planning unloading and onward transfer; this interval is not complete immersion time.",
+  "body": "small-sheet-tray-transfer-20230724-proposal.md",
+  "sourceFingerprint": "8194eb319cea607080b9292a361b4de1bf0b0fa6a9b08ba02a48ae5abc42a521",
+  "translationStatus": "complete",
+  "translatedAt": "2026-09-12",
+  "coverAlt": "Illustration of opening frames and sheet-metal blanks.",
+  "coverCaption": "Illustration of opening frames and sheet-metal blanks (AI-generated). Not an actual customer workpiece photograph."
+}

@@ -74,6 +74,9 @@ jobs:
             sleep 10
           done
           fc-cache -f
+      - name: Install visual test browser
+        timeout-minutes: 10
+        run: pnpm --dir frontend exec playwright install --with-deps chromium
       - name: Visual regression
         env:
           CI: true

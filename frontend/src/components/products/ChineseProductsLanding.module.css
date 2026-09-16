@@ -1,0 +1,534 @@
+.page {
+  --brand: #3370ff;
+  --brand-strong: #2858d9;
+  --text: #14253b;
+  --muted: #64748b;
+  --border: #d8e0ea;
+  --card-radius: 8px;
+  --card-padding: 20px;
+  --card-gap: var(--site-grid-gap);
+  --section-gap: var(--site-section-gap);
+  --copy-gap: 8px;
+  --page-gutter: var(--site-gutter);
+  color: var(--text);
+  background: #fff;
+  font-size: 16px;
+  line-height: 24px;
+}
+.container,
+.heroContainer,
+.inquirySection :global(#homepage-lead-form) > div {
+  width: var(--site-page-width);
+  margin-inline: auto;
+}
+.hero {
+  position: relative;
+  min-height: 292px;
+  isolation: isolate;
+  color: #fff;
+}
+.heroImage {
+  z-index: -2;
+  object-fit: cover;
+  object-position: center 53%;
+}
+.heroShade {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(90deg, rgb(5 18 31 / 76%), rgb(5 18 31 / 12%));
+}
+.heroContainer {
+  min-height: inherit;
+  display: flex;
+  align-items: center;
+  padding-block: 40px;
+}
+.heroCopy h1 {
+  margin: 20px 0 8px;
+  font-size: 44px;
+  line-height: 56px;
+  font-weight: 600;
+}
+.heroDescription {
+  margin: 0;
+  font-size: 18px;
+  line-height: 28px;
+}
+.breadcrumb {
+  display: flex;
+  gap: 12px;
+  font-size: 14px;
+  line-height: 22px;
+}
+.breadcrumb a {
+  color: inherit;
+}
+.breadcrumb a:hover {
+  text-decoration: underline;
+}
+.section {
+  padding-top: var(--section-gap);
+}
+.sectionHeading,
+.productionLineHeader {
+  margin-bottom: var(--card-gap);
+}
+.sectionHeading h2,
+.productionLineTitle h2 {
+  margin: 0;
+  color: var(--text);
+  font-size: 32px;
+  line-height: 44px;
+  font-weight: 600;
+}
+.sectionHeading p,
+.productionLineIntro p {
+  margin: var(--copy-gap) 0 0;
+  color: var(--muted);
+  font-size: 16px;
+  line-height: 24px;
+}
+.productionLineHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--card-gap);
+  margin-bottom: 28px;
+}
+.productionLineTitle h2 {
+  color: #082e45;
+  font-size: 36px;
+  line-height: 48px;
+  font-weight: 700;
+}
+.productionLineIntro {
+  min-width: 0;
+}
+.productionLineTitle {
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+}
+.productionLineTitle > span {
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 22px;
+  white-space: nowrap;
+}
+.productionLineControls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+}
+.productionLineCounter {
+  margin-right: 4px;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 22px;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.productionLineControl {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  background: #062a42;
+  color: #fff;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+.productionLineControl svg {
+  width: 22px;
+  height: 22px;
+}
+.productionLineControl:hover:not(:disabled) {
+  background: #154660;
+}
+.productionLineControl:disabled {
+  color: #9ba8ba;
+  background: #f0f3f8;
+  cursor: default;
+}
+.productionLineRail {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--card-gap);
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+}
+.productionLineRail::-webkit-scrollbar {
+  display: none;
+}
+.productionLineGroup {
+  flex: 0 0 100%;
+  min-width: 0;
+  display: grid;
+  grid-template-columns: repeat(var(--line-columns), minmax(0, 1fr));
+  column-gap: var(--card-gap);
+  row-gap: 0;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+}
+.productionLineCard {
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  grid-template-rows: subgrid;
+  grid-row: span 5;
+  min-width: 0;
+  border: 1px solid var(--home-line, #d8e2ef);
+  border-radius: var(--card-radius);
+  background: #fff;
+  color: #082e45;
+}
+.productionLineImage {
+  display: block;
+  position: relative;
+  aspect-ratio: 16 / 9;
+  border-radius: calc(var(--card-radius) - 1px) calc(var(--card-radius) - 1px) 0 0;
+  overflow: hidden;
+}
+.productionLineImage img {
+  object-fit: cover;
+}
+.productionLineName {
+  margin: 20px 22px 10px;
+  font-size: 22px;
+  line-height: 30px;
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+.productionLineName a {
+  color: inherit;
+}
+.productionLineName a::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  border-radius: var(--card-radius);
+}
+.productionLineName a:focus-visible::after {
+  outline: 3px solid #70b8ff;
+  outline-offset: -3px;
+}
+.productionLineName a:hover {
+  color: #17658f;
+}
+.productionLineCopy {
+  margin: 0 22px;
+  color: var(--muted);
+  font-size: 16px;
+  line-height: 24px;
+  overflow-wrap: anywhere;
+}
+.productionLineCopy + .productionLineCopy {
+  margin-top: 6px;
+  margin-bottom: 20px;
+}
+.productionLineFlowPanel {
+  min-width: 0;
+  padding: 20px 16px;
+  border-radius: 0 0 calc(var(--card-radius) - 1px) calc(var(--card-radius) - 1px);
+  background: #062a42;
+}
+.productionLineFlowLink {
+  position: relative;
+  z-index: 2;
+  display: block;
+  min-width: 0;
+  margin: 0;
+  color: #eef4f9;
+  text-decoration: none;
+}
+.productionLineFlow {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.productionLineFlow li {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  align-items: center;
+  gap: 10px;
+  text-align: center;
+}
+.productionLineFlow li:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  top: 10px;
+  left: calc(50% + 18px);
+  width: calc(100% - 36px);
+  height: 1px;
+  background: #758d9e;
+  pointer-events: none;
+}
+.productionLineFlow [data-process-number] {
+  color: #b3c9d9;
+  font-size: 16px;
+  font-weight: 400;
+  font-variant-numeric: tabular-nums;
+  line-height: 20px;
+}
+.productionLineFlow [data-process-label] {
+  color: #eef4f9;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 22px;
+  white-space: nowrap;
+}
+.productionLineFlow [data-process-accent] span {
+  color: #e8a020;
+}
+.productionLineFlowLink:hover [data-process-label] {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+.page .productionLineFlowLink:focus-visible {
+  border-radius: 4px;
+  outline-color: #70b8ff;
+}
+.productionLineNote {
+  margin: 16px 0 0;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 22px;
+}
+@media (max-width: 900px), (min-width: 1024px) and (max-width: 1399px) {
+  .productionLineName {
+    margin-inline: 20px;
+    font-size: 22px;
+    line-height: 32px;
+  }
+  .productionLineCopy {
+    margin-inline: 20px;
+  }
+  .productionLineFlowPanel {
+    padding-inline: 20px;
+  }
+  .productionLineFlow {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    row-gap: 20px;
+  }
+  .productionLineFlow li:nth-child(3n)::after {
+    display: none;
+  }
+}
+.furnaceGrid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--card-gap);
+}
+.furnaceCard {
+  min-width: 0;
+}
+.furnaceLink {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-width: 0;
+  border: 1px solid var(--border);
+  border-radius: var(--card-radius);
+  background: #fff;
+  color: var(--text);
+  transition: border-color 160ms ease;
+}
+.furnaceImage {
+  position: relative;
+  display: block;
+  height: 180px;
+  flex-shrink: 0;
+  margin: 12px 8px 0;
+}
+.furnaceImage img {
+  object-fit: contain;
+  object-position: center bottom;
+  padding: 4px 8px;
+}
+.furnaceMediaButton {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+.furnaceScene {
+  position: absolute;
+  inset: 0;
+  display: block;
+  pointer-events: none;
+}
+.furnaceMediaHint {
+  position: absolute;
+  bottom: 2px;
+  right: 8px;
+  padding: 3px 7px;
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.94);
+  color: #516176;
+  font-size: 11px;
+  line-height: 18px;
+}
+.furnaceCardBody {
+  display: grid;
+  gap: var(--copy-gap);
+  padding: var(--card-padding);
+}
+
+.furnaceCardBody .furnaceDescription {
+  margin-top: 10px;
+  color: #516176;
+  font-size: 14px;
+  line-height: 1.75;
+}
+.furnaceCardBody h3 {
+  margin: 0;
+  font-size: 20px;
+  line-height: 28px;
+  font-weight: 600;
+}
+.furnaceCardBody > span {
+  color: var(--muted);
+  font-size: 16px;
+  line-height: 24px;
+  overflow-wrap: anywhere;
+}
+.furnaceLink:hover {
+  border-color: var(--brand);
+}
+.furnaceLink:hover h3 {
+  color: var(--brand);
+}
+.supportSection {
+  padding-block: 40px 32px;
+}
+.supportStrip {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 20px 28px;
+  background: #f3f6fa;
+}
+.supportStrip h2 {
+  margin: 0;
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 600;
+}
+.supportLink {
+  flex-shrink: 0;
+  color: var(--brand-strong);
+  padding-block: 2px;
+  font-weight: 600;
+}
+.supportLink:hover {
+  text-decoration: underline;
+}
+.page a:focus-visible,
+.page button:focus-visible,
+.productionLineRail:focus-visible {
+  outline: 3px solid var(--brand);
+  outline-offset: 3px;
+}
+@media (max-width: 1023px) {
+  .page {
+    --section-gap: var(--site-section-gap);
+  }
+  .furnaceGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 767px) {
+  .page {
+    --page-gutter: var(--site-gutter);
+  }
+}
+@media (max-width: 639px) {
+  .page {
+    --card-gap: var(--site-grid-gap);
+    --section-gap: var(--site-section-gap);
+  }
+  .hero {
+    min-height: 260px;
+  }
+  .heroImage {
+    object-position: 60% center;
+  }
+  .heroCopy h1 {
+    font-size: 36px;
+    line-height: 48px;
+  }
+  .heroDescription {
+    font-size: 16px;
+    line-height: 24px;
+  }
+  .sectionHeading h2,
+  .productionLineTitle h2 {
+    font-size: 28px;
+    line-height: 40px;
+  }
+  .productionLineHeader {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .productionLineControls {
+    align-self: flex-end;
+  }
+  .furnaceImage {
+    height: 140px;
+    margin-inline: 4px;
+  }
+  .furnaceImage img {
+    padding-inline: 0;
+  }
+  .furnaceCardBody {
+    padding: 16px 12px;
+  }
+  .supportStrip {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 20px;
+  }
+  .supportLink {
+    padding-block: 10px;
+  }
+}
+@media (max-width: 359px) {
+  .furnaceGrid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .furnaceImage {
+    height: 180px;
+  }
+  .furnaceCardBody {
+    padding: var(--card-padding);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .furnaceLink {
+    transition: none;
+  }
+}
+
+.furnaceImageLabel {
+  margin: 0;
+  padding: 0 16px 4px;
+  color: #627084;
+  font-size: 11px;
+  line-height: 16px;
+  text-align: center;
+}

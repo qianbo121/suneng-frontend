@@ -1,0 +1,489 @@
+{
+  "schemaVersion": "4.0.0",
+  "defaultCategoryId": "welded-structures",
+  "defaultWorkpieceId": "large-welded-machine-frame",
+  "categories": [
+    {
+      "id": "welded-structures",
+      "label": "焊接结构件",
+      "name": "焊接结构与容器",
+      "cards": [
+        {
+          "id": "large-welded-machine-frame",
+          "name": "大型焊接机架",
+          "image": "/images/workpieces/quality-pilot-20260909/large-welded-machine-frame-v1.png",
+          "alt": "大型焊接机架白底工件图",
+          "judgement": "残余应力与装炉支撑共同影响变形",
+          "contentMode": "dedicated"
+        },
+        {
+          "id": "pressure-vessel-shell",
+          "name": "压力容器与筒体",
+          "image": "/images/workpieces/reviewed-20260909/welded-structures/pressure-vessel-shell.webp",
+          "alt": "压力容器与筒体白底工件图",
+          "judgement": "壁厚与焊缝位置决定保温和测温要求",
+          "contentMode": "dedicated"
+        },
+        {
+          "id": "structural-steel-component",
+          "name": "钢结构构件",
+          "image": "/images/workpieces/reviewed-20260909/welded-structures/structural-steel-component.webp",
+          "alt": "大型钢结构焊接构件白底工件图",
+          "judgement": "尺寸跨度大，装炉姿态影响温度均匀性",
+          "contentMode": "dedicated"
+        },
+        {
+          "id": "welded-assembly",
+          "name": "焊接总成",
+          "image": "/images/workpieces/reviewed-20260909/welded-structures/welded-assembly.webp",
+          "alt": "重型工业焊接总成白底工件图",
+          "judgement": "多处焊缝需要先确认执行工艺",
+          "contentMode": "dedicated"
+        },
+        {
+          "id": "large-cylinder-shell",
+          "name": "大型筒体",
+          "image": "/images/workpieces/reviewed-20260909/welded-structures/large-cylinder-shell.webp",
+          "alt": "大型开口卷制筒体白底工件图",
+          "judgement": "直径、长度和重量决定有效装炉空间",
+          "contentMode": "dedicated"
+        },
+        {
+          "id": "welded-pipe-spool",
+          "name": "管道焊接件",
+          "image": "/images/workpieces/reviewed-20260909/welded-structures/welded-pipe-spool.webp",
+          "alt": "厚壁管道焊接预制件白底工件图",
+          "judgement": "壁厚差异和支撑方式影响处理一致性",
+          "contentMode": "dedicated"
+        }
+      ]
+    },
+    {
+      "id": "gas-cylinders",
+      "label": "气瓶",
+      "name": "气瓶与瓶类产品",
+      "cards": [
+        {
+          "id": "seamless-aluminum-gas-cylinder",
+          "name": "无缝铝合金气瓶",
+          "image": "/images/workpieces/reviewed-20260909/gas-cylinders/seamless-aluminum-gas-cylinder.webp",
+          "alt": "无缝铝合金高压气瓶白底工件图",
+          "judgement": "转移时间与冷却方式决定固溶处理效果",
+          "contentMode": "dedicated"
+        },
+        {
+          "id": "seamless-steel-gas-cylinder",
+          "name": "无缝钢制气瓶",
+          "image": "/images/workpieces/reviewed-20260909/gas-cylinders/seamless-steel-gas-cylinder.webp",
+          "alt": "无缝钢制高压气瓶白底工件图",
+          "judgement": "壁厚、钢种和目标性能决定正火或调质路线",
+          "contentMode": "dedicated"
+        },
+        {
+          "id": "welded-steel-gas-cylinder",
+          "name": "焊接钢制气瓶",
+          "image": "/images/workpieces/reviewed-20260909/gas-cylinders/welded-steel-gas-cylinder.webp",
+          "alt": "焊接钢制气瓶白底工件图",
+          "judgement": "焊缝与瓶体整体正火的一致性需同时控制",
+          "contentMode": "dedicated"
+        }
+      ]
+    },
+    {
+      "id": "heavy-cast-forged",
+      "label": "铸锻重件",
+      "name": "铸锻与重型件",
+      "cards": [
+        {
+          "id": "large-forged-flange",
+          "name": "大型法兰",
+          "image": "/images/workpieces/reviewed-20260909/heavy-cast-forged/large-forged-flange.webp",
+          "alt": "大型锻钢法兰白底工件图",
+          "judgement": "截面厚差大，升降温和保温需防止内外温差",
+          "contentMode": "dedicated"
+        },
+        {
+          "id": "large-forged-shaft",
+          "name": "大型轴类锻件",
+          "image": "/images/workpieces/reviewed-20260909/heavy-cast-forged/large-forged-shaft.webp",
+          "alt": "大型阶梯轴锻件毛坯白底工件图",
+          "judgement": "大截面心部性能与装炉支撑需同时确认",
+          "contentMode": "dedicated"
+        },
+        {
+          "id": "large-gear-blank",
+          "name": "大型齿轮坯",
+          "image": "/images/workpieces/reviewed-20260909/heavy-cast-forged/large-gear-blank.webp",
+          "alt": "大型齿轮锻坯白底工件图",
+          "judgement": "齿前组织与变形余量决定预备热处理路线",
+          "contentMode": "inherited"
+        },
+        {
+          "id": "large-steel-casting",
+          "name": "大型铸钢件",
+          "image": "/images/workpieces/reviewed-20260909/heavy-cast-forged/large-steel-casting.webp",
+          "alt": "大型异形铸钢件白底工件图",
+          "judgement": "铸态组织、补焊与截面差使工艺曲线更复杂",
+          "contentMode": "inherited"
+        },
+        {
+          "id": "ductile-iron-casting",
+          "name": "球墨铸铁件",
+          "image": "/images/workpieces/reviewed-20260909/heavy-cast-forged/ductile-iron-casting.webp",
+          "alt": "大型球墨铸铁件白底工件图",
+          "judgement": "目标基体组织决定退火、正火或等温路线",
+          "contentMode": "inherited"
+        },
+        {
+          "id": "large-die-block-forging",
+          "name": "大型模具模块锻件",
+          "image": "/images/workpieces/reviewed-20260909/heavy-cast-forged/large-die-block-forging.webp",
+          "alt": "大型模具模块锻件白底工件图",
+          "judgement": "模块截面大，扩氢与组织均匀性是关键",
+          "contentMode": "inherited"
+        }
+      ]
+    },
+    {
+      "id": "shafts-gears",
+      "label": "轴杆齿轮",
+      "name": "轴杆与齿轮件",
+      "cards": [
+        {
+          "id": "long-shaft",
+          "name": "长轴",
+          "image": "/images/workpieces/reviewed-20260909/shafts-gears/long-shaft.webp",
+          "alt": "细长阶梯钢轴白底工件图",
+          "judgement": "细长件受热后易弯曲，装炉姿态影响直线度",
+          "contentMode": "dedicated"
+        },
+        {
+          "id": "gear-shaft",
+          "name": "齿轮轴",
+          "image": "/images/workpieces/reviewed-20260909/shafts-gears/gear-shaft.webp",
+          "alt": "带一体齿轮段的齿轮轴白底工件图",
+          "judgement": "先确认预备热处理、渗碳还是局部硬化",
+          "contentMode": "dedicated"
+        },
+        {
+          "id": "spline-shaft",
+          "name": "花键轴",
+          "image": "/images/workpieces/reviewed-20260909/shafts-gears/spline-shaft.webp",
+          "alt": "外花键传动轴白底工件图",
+          "judgement": "花键段变形与表面质量要求需优先确认",
+          "contentMode": "inherited"
+        },
+        {
+          "id": "large-gear",
+          "name": "大型齿轮",
+          "image": "/images/workpieces/reviewed-20260909/shafts-gears/large-gear.webp",
+          "alt": "大型外齿直齿圆柱齿轮白底工件图",
+          "judgement": "整体调质与齿面最终硬化需分段判断",
+          "contentMode": "inherited"
+        },
+        {
+          "id": "large-ring-gear",
+          "name": "大型齿圈",
+          "image": "/images/workpieces/reviewed-20260909/shafts-gears/large-ring-gear.webp",
+          "alt": "大型环形外齿齿圈白底工件图",
+          "judgement": "大直径薄环易变形，支撑方式决定圆度",
+          "contentMode": "inherited"
+        },
+        {
+          "id": "crankshaft",
+          "name": "曲轴",
+          "image": "/images/workpieces/reviewed-20260909/shafts-gears/crankshaft.webp",
+          "alt": "多拐工业曲轴白底工件图",
+          "judgement": "整体调质可进炉，轴颈最终硬化需另行确认",
+          "contentMode": "inherited"
+        }
+      ]
+    },
+    {
+      "id": "engineering-wheels",
+      "label": "工程轮类",
+      "name": "工程机械与轮类",
+      "cards": [
+        {
+          "id": "track-roller",
+          "name": "支重轮",
+          "image": "/images/workpieces/reviewed-20260909/engineering-wheels/track-roller.webp",
+          "alt": "工程机械履带支重轮白底工件图",
+          "judgement": "整体调质与踏面最终硬化必须分开判断",
+          "contentMode": "dedicated"
+        },
+        {
+          "id": "carrier-roller",
+          "name": "托链轮",
+          "image": "/images/workpieces/reviewed-20260909/engineering-wheels/carrier-roller.webp",
+          "alt": "工程机械履带托链轮白底工件图",
+          "judgement": "批量与装料方式影响节拍和一致性",
+          "contentMode": "inherited"
+        },
+        {
+          "id": "idler-wheel",
+          "name": "引导轮",
+          "image": "/images/workpieces/reviewed-20260909/engineering-wheels/idler-wheel.webp",
+          "alt": "工程机械履带引导轮白底工件图",
+          "judgement": "轮缘截面差与变形控制决定装炉方式",
+          "contentMode": "inherited"
+        },
+        {
+          "id": "drive-sprocket",
+          "name": "驱动轮",
+          "image": "/images/workpieces/reviewed-20260909/engineering-wheels/drive-sprocket.webp",
+          "alt": "履带机械驱动链轮白底工件图",
+          "judgement": "齿部要求与整体基体处理需分段确认",
+          "contentMode": "inherited"
+        },
+        {
+          "id": "track-link",
+          "name": "履带链轨节",
+          "image": "/images/workpieces/reviewed-20260909/engineering-wheels/track-link.webp",
+          "alt": "工程机械履带链轨节白底工件图",
+          "judgement": "销孔与踏面性能要求决定工艺组合",
+          "contentMode": "inherited"
+        },
+        {
+          "id": "engineering-wheel-hub",
+          "name": "工程机械轮毂",
+          "image": "/images/workpieces/reviewed-20260909/engineering-wheels/engineering-wheel-hub.webp",
+          "alt": "大型工程机械轮毂白底工件图",
+          "judgement": "厚壁轮毂的心部性能和变形需兼顾",
+          "contentMode": "inherited"
+        }
+      ]
+    },
+    {
+      "id": "plate-strip-coil",
+      "label": "板带卷材",
+      "name": "板带与卷材",
+      "cards": [
+        {
+          "id": "medium-heavy-steel-plate",
+          "name": "中厚钢板",
+          "image": "/images/workpieces/reviewed-20260909/plate-strip-coil/medium-heavy-steel-plate.webp",
+          "alt": "叠放的碳钢中厚板白底工件图",
+          "judgement": "板厚与平整度决定支撑、升温和冷却方式",
+          "contentMode": "inherited"
+        },
+        {
+          "id": "wear-resistant-steel-plate",
+          "name": "耐磨钢板",
+          "image": "/images/workpieces/reviewed-20260909/plate-strip-coil/wear-resistant-steel-plate.webp",
+          "alt": "厚耐磨钢板白底工件图",
+          "judgement": "淬火冷却与板形控制需要成套考虑",
+          "contentMode": "inherited",
+          "processPurposeId": null,
+          "purposeSelectionRequired": true
+        },
+        {
+          "id": "stainless-steel-plate",
+          "name": "不锈钢板",
+          "image": "/images/workpieces/reviewed-20260909/plate-strip-coil/stainless-steel-plate.webp",
+          "alt": "拉丝不锈钢板白底工件图",
+          "judgement": "表面质量与气氛要求先决定是否适配",
+          "contentMode": "inherited",
+          "processPurposeId": null,
+          "purposeSelectionRequired": true
+        },
+        {
+          "id": "aluminum-alloy-plate",
+          "name": "铝合金板",
+          "image": "/images/workpieces/reviewed-20260909/plate-strip-coil/aluminum-alloy-plate.webp",
+          "alt": "厚铝合金板白底工件图",
+          "judgement": "合金状态和板形决定固溶或时效路线",
+          "contentMode": "inherited"
+        },
+        {
+          "id": "aluminum-coil",
+          "name": "铝合金卷",
+          "image": "/images/workpieces/reviewed-20260909/plate-strip-coil/aluminum-coil.webp",
+          "alt": "宽幅铝合金卷材白底工件图",
+          "judgement": "成卷还是展开处理决定设备方向",
+          "contentMode": "inherited"
+        },
+        {
+          "id": "carbon-steel-coil",
+          "name": "碳钢卷",
+          "image": "/images/workpieces/reviewed-20260909/plate-strip-coil/carbon-steel-coil.webp",
+          "alt": "热轧碳钢卷白底工件图",
+          "judgement": "卷重、带宽与保护要求决定是否承接",
+          "contentMode": "inherited"
+        }
+      ]
+    },
+    {
+      "id": "pipe-bar-wire",
+      "label": "管棒线材",
+      "name": "管棒与线材",
+      "cards": [
+        {
+          "id": "seamless-steel-pipe",
+          "name": "无缝钢管",
+          "image": "/images/workpieces/reviewed-20260909/pipe-bar-wire/seamless-steel-pipe.webp",
+          "alt": "厚壁无缝钢管白底工件图",
+          "judgement": "壁厚、长度和目标工艺共同决定连续或周期处理",
+          "contentMode": "dedicated"
+        },
+        {
+          "id": "welded-steel-pipe",
+          "name": "焊接钢管",
+          "image": "/images/workpieces/reviewed-20260909/pipe-bar-wire/welded-steel-pipe.webp",
+          "alt": "大直径直缝焊接钢管白底工件图",
+          "judgement": "焊缝退火还是整体正火，按线速度与标准确认",
+          "contentMode": "inherited"
+        },
+        {
+          "id": "round-steel-bar",
+          "name": "圆钢 / 棒材",
+          "image": "/images/workpieces/reviewed-20260909/pipe-bar-wire/round-steel-bar.webp",
+          "alt": "实心圆钢棒材白底工件图",
+          "judgement": "直径、长度和批量决定连续或批次装炉",
+          "contentMode": "inherited"
+        },
+        {
+          "id": "structural-section-steel",
+          "name": "需热处理型钢",
+          "image": "/images/workpieces/reviewed-20260909/pipe-bar-wire/structural-section-steel.webp",
+          "alt": "H型钢槽钢角钢白底工件图",
+          "judgement": "仅限标准或图纸明确要求，普通热轧型钢不套用",
+          "contentMode": "inherited"
+        },
+        {
+          "id": "wire-rod-coil",
+          "name": "盘条",
+          "image": "/images/workpieces/reviewed-20260909/pipe-bar-wire/wire-rod-coil.webp",
+          "alt": "热轧钢盘条白底工件图",
+          "judgement": "成卷装炉与球化退火气氛是关键边界",
+          "contentMode": "inherited"
+        },
+        {
+          "id": "steel-wire-coil",
+          "name": "钢丝卷",
+          "image": "/images/workpieces/reviewed-20260909/pipe-bar-wire/steel-wire-coil.webp",
+          "alt": "细规格钢丝卷白底工件图",
+          "judgement": "线径、卷重和表面要求决定保护气氛能力",
+          "contentMode": "inherited"
+        }
+      ]
+    },
+    {
+      "id": "fasteners-batch",
+      "label": "紧固批量件",
+      "name": "紧固与批量件",
+      "cards": [
+        {
+          "id": "high-strength-bolts",
+          "name": "高强度螺栓",
+          "image": "/images/workpieces/reviewed-20260909/fasteners-batch/high-strength-bolts.webp",
+          "alt": "高强度六角头钢螺栓白底工件图",
+          "judgement": "强度等级与脱碳控制决定气氛和淬火路线",
+          "contentMode": "dedicated",
+          "processPurposeId": null,
+          "purposeSelectionRequired": true
+        },
+        {
+          "id": "hex-nuts",
+          "name": "螺母",
+          "image": "/images/workpieces/reviewed-20260909/fasteners-batch/hex-nuts.webp",
+          "alt": "重型六角钢螺母白底工件图",
+          "judgement": "材料、强度等级和批量决定连续处理方式",
+          "contentMode": "inherited",
+          "processPurposeId": null,
+          "purposeSelectionRequired": true
+        },
+        {
+          "id": "self-drilling-screws",
+          "name": "自攻 / 自钻螺钉",
+          "image": "/images/workpieces/reviewed-20260909/fasteners-batch/self-drilling-screws.webp",
+          "alt": "自攻自钻钢螺钉白底工件图",
+          "judgement": "此类件常涉及碳氮共渗，先核对气氛能力",
+          "contentMode": "inherited"
+        },
+        {
+          "id": "steel-pins",
+          "name": "销轴",
+          "image": "/images/workpieces/reviewed-20260909/fasteners-batch/steel-pins.webp",
+          "alt": "重型机械钢销轴白底工件图",
+          "judgement": "整体调质、渗碳或局部硬化不能混为一条",
+          "contentMode": "inherited"
+        },
+        {
+          "id": "chain-components",
+          "name": "链条零件",
+          "image": "/images/workpieces/reviewed-20260909/fasteners-batch/chain-components.webp",
+          "alt": "工业滚子链链板销轴套筒白底工件图",
+          "judgement": "销轴、套筒和链板的工艺路线需分别确认",
+          "contentMode": "inherited"
+        },
+        {
+          "id": "small-coil-springs",
+          "name": "小型螺旋弹簧",
+          "image": "/images/workpieces/reviewed-20260909/fasteners-batch/small-coil-springs.webp",
+          "alt": "小型圆柱螺旋压缩弹簧白底工件图",
+          "judgement": "材料供货状态与成形方式决定去应力退火或淬火回火路线",
+          "contentMode": "inherited"
+        }
+      ]
+    }
+  ],
+  "logicUnits": [
+    {
+      "id": "welded_batch",
+      "label": "大型焊接件与容器批次热处理"
+    },
+    {
+      "id": "aluminum_cylinder_solution",
+      "label": "铝合金气瓶固溶与时效"
+    },
+    {
+      "id": "steel_cylinder_normalize_qt",
+      "label": "钢制气瓶正火或调质"
+    },
+    {
+      "id": "heavy_cast_forged",
+      "label": "大型铸锻件批次热处理"
+    },
+    {
+      "id": "shaft_gear_preheat",
+      "label": "轴杆齿轮预备与整体热处理"
+    },
+    {
+      "id": "carburizing_controlled_atmosphere",
+      "label": "渗碳碳氮共渗与可控气氛"
+    },
+    {
+      "id": "engineering_undercarriage_bulk",
+      "label": "工程机械底盘件整体热处理"
+    },
+    {
+      "id": "plate_batch",
+      "label": "板材批次处理"
+    },
+    {
+      "id": "stainless_plate_solution",
+      "label": "不锈钢板固溶与表面控制"
+    },
+    {
+      "id": "strip_coil_professional",
+      "label": "带材卷材专业线"
+    },
+    {
+      "id": "long_products",
+      "label": "管棒型钢长材处理"
+    },
+    {
+      "id": "coiled_wire",
+      "label": "盘条与钢丝成卷处理"
+    },
+    {
+      "id": "fastener_continuous",
+      "label": "紧固件与小件连续处理"
+    },
+    {
+      "id": "small_spring_continuous",
+      "label": "小型弹簧连续处理"
+    }
+  ]
+}

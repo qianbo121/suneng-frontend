@@ -1,0 +1,13 @@
+{
+  "id": "pipe-fixture-port-20260702-proposal",
+  "slug": "pipe-fixture-port-20260702-proposal",
+  "number": 114,
+  "title": "Which interface dimensions are needed when ordering a heating unit for tube-blank samples?",
+  "summary": "A Suneng heating-unit proposal for tube-blank specimens includes sidewall service openings, dedicated supports and controls located in a separate room. For workpieces connected to external equipment, chamber fit is only the first step. The supported centreline, service routes and loading/removal path must also align; fixtures should not be left for adjustment after the furnace body has been completed.",
+  "body": "pipe-fixture-port-20260702-proposal.md",
+  "sourceFingerprint": "29f71250f1bcbc4ce36a8c60a151b2cf069fbdcde735df39d1e59f3e1804479f",
+  "translationStatus": "complete",
+  "translatedAt": "2026-09-12",
+  "coverAlt": "Illustration of tube-blank samples.",
+  "coverCaption": "Illustration of tube-blank samples (AI-generated). Not an actual customer workpiece photograph. Does not establish actual specifications or process results."
+}

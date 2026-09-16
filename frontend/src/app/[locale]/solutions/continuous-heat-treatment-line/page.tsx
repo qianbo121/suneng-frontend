@@ -1,195 +1,55 @@
+import { EnglishSolutionPage, englishSolutionMetadata } from '@/components/engineering/EnglishSolutionsPage';
+import { solutionAlternates } from '@/lib/english-solutions';
 import type { Metadata } from 'next';
 import Image from 'next/image';
+import Link from 'next/link';
 import { notFound } from 'next/navigation';
-
 import {
-  GeoContactCta,
-  GeoFaqGrid,
-  GeoHeroTags,
-  GeoReviewNote,
-  GeoSection as Section,
-} from '@/components/geo-pages/GeoPageBlocks';
+  HiCheckCircle,
+  HiOutlineArchiveBox,
+  HiOutlineChartBar,
+  HiOutlineClipboardDocumentList,
+  HiOutlineCog6Tooth,
+  HiOutlineCube,
+  HiOutlineDocumentText,
+  HiOutlineShieldCheck,
+  HiOutlineSquare3Stack3D,
+  HiOutlineWrenchScrewdriver,
+} from 'react-icons/hi2';
 import { JsonLd } from '@/components/JsonLd';
-import { Breadcrumb } from '@/components/layout/Breadcrumb';
-import { QuoteModalButton } from '@/components/lead/QuoteModalButton';
-import { cleanObject, getBreadcrumbJsonLd, getFaqJsonLd, getWebPageJsonLd } from '@/lib/seo/jsonld';
+import {
+  AnchorNav,
+  FaqSection,
+  Hero,
+  InfoCards,
+  InfoColumns,
+  Resources,
+  Section,
+} from '@/components/engineering/EngineeringPage';
+import { lineFaqs, processes, selectionRows } from '@/components/engineering/engineering-content';
+import styles from '@/components/engineering/EngineeringPage.module.css';
+import { HomepageLeadForm } from '@/components/home/HomepageLeadForm';
+import { getBreadcrumbJsonLd, getFaqJsonLd, getWebPageJsonLd } from '@/lib/seo/jsonld';
 import { buildMetadata } from '@/lib/seo/metadata';
-import { CONTINUOUS_HEAT_TREATMENT_LINE_SEO } from '@/lib/seo/page-data';
 
-type PageProps = {
-  params: Promise<{
-    locale: string;
-  }>;
-};
-
-type LinkCard = {
-  title: string;
-  href: string;
-  text: string;
-};
-
-type TextCard = {
-  title: string;
-  text: string;
-};
-
-type ExperienceCard = {
-  factId: string;
-  title: string;
-  text: string;
-  href?: string;
-};
-
-const pagePath = '/zh/solutions/continuous-heat-treatment-line';
-const heroImage = '/images/products/annealing-solution-line/gallery/line-01.jpg';
-const quoteParamsPath = '/zh/articles/gongye-lu-baojia-canshu';
-const renovationServicePath = '/zh/service/furnace-renovation-overhaul';
-const manufacturerPath = '/zh/solutions/rechuli-lu-changjia';
-const productsPath = '/zh/products';
-const contactPath = '/zh/contact';
-const casePath = '/zh/case/anonymous-tsingshan-1250-renovation';
-const jiningSupportRollerCasePath = '/zh/case/jining-support-roller-heat-treatment-line';
-const henanAnnealingSolutionCasePath = '/zh/case/henan-annealing-solution-line';
-const annealingSolutionLinePath = '/zh/products/detail/annealing-solution-line';
-const copperWireAnnealingLinePath = '/zh/products/detail/copper-wire-annealing-line';
-const rollerMeshBeltLinePath = '/zh/products/detail/roller-mesh-belt-line';
-
-export const dynamicParams = false;
-
-const heroTags = ['连续退火', '固溶处理', '正火 / 回火', '淬火加热', '托辊网带线', '退洗线退火炉', '铜丝退火线', 'PLC / DCS 控制系统'];
-
-const systemReasons = [
-  {
-    title: '工艺链连续',
-    text: '上料、输送、加热、冷却、清洗、回火和收料等设备必须围绕同一节拍协同。',
-  },
-  {
-    title: '产能节拍决定配置',
-    text: '炉膛长度、输送速度、温区数量和冷却能力都需围绕产能目标核算。',
-  },
-  {
-    title: '工件形态决定输送方式',
-    text: '网带、托辊、辊底、推杆、带钢、线材等输送方式需按工件形态选择。',
-  },
-  {
-    title: '后段系统影响整体效果',
-    text: '冷却、清洗、回火、收放线等后段配置会影响生产线稳定性和工件状态。',
-  },
-  {
-    title: '控制系统影响追溯',
-    text: '电气控制、报警联锁、数据记录和接口需求决定生产线运行管理方式。',
-  },
-  {
-    title: '改造项目需看现场',
-    text: '旧线升级还要评估原设备状态、停产窗口、现场空间和上下游设备边界。',
-  },
-];
-
-const lineTypes: TextCard[] = [
-  {
-    title: '退火固溶生产线',
-    text: '适用于不锈钢带材、合金带材、有色金属带材等连续退火、固溶处理场景，重点确认带宽、厚度、卷重、速度、温度、冷却和收放卷系统。',
-  },
-  {
-    title: '不锈钢连续退火 / 退洗线退火炉',
-    text: '适用于不锈钢带材连续退火、酸洗配套、固溶段设备和退洗线技改项目，重点关注带材规格、产线节拍、加热冷却边界和自动化接口。',
-  },
-  {
-    title: '托辊网带式热处理生产线',
-    text: '适用于标准件、五金件、粉末冶金件、支重轮、机械小件等连续正火、回火、淬火加热、清洗、冷却和回火组合工艺。',
-  },
-  {
-    title: '铜丝自动化退火生产线',
-    text: '适用于铜丝、铜线、铜合金丝等线材连续退火、软化退火、光亮退火和去应力处理，重点确认线径、速度、张力控制、收放线和保护气氛。',
-  },
-  {
-    title: '支重轮 / 零部件热处理生产线',
-    text: '适用于支重轮、履带件、工程机械零件等加热、淬火、回火、喷淋冷却或自动输送场景，重点确认节拍、单件重量、硬度要求、冷却方式和自动化程度。',
-  },
-];
-
-const systemComponents = [
-  {
-    title: '节拍与输送系统',
-    text: '围绕上料、输送、炉内停留时间和出料衔接统一设计，避免前后段节拍不匹配。',
-  },
-  {
-    title: '热处理工艺段',
-    text: '按退火、固溶、正火、回火、淬火加热等工艺确定温区、保温时间和加热方式。',
-  },
-  {
-    title: '冷却与后处理段',
-    text: '根据工艺需要评估淬火、冷却、清洗、干燥、回火或收料等后段系统边界。',
-  },
-  {
-    title: '自动化与追溯系统',
-    text: '围绕温度、速度、联锁、报警、记录和数据接口确定控制系统等级。',
-  },
-  {
-    title: '安全与公用工程边界',
-    text: '结合燃料、电力、水气接口、气氛安全、排烟和现场空间明确交付范围。',
-  },
-];
-
-const selectionRows = [
-  {
-    type: '退火固溶生产线',
-    text: '适合不锈钢带材、合金带材、有色金属带材；关注带宽、厚度、卷重、速度、张力、纠偏、冷却和表面质量。',
-  },
-  {
-    type: '托辊网带生产线',
-    text: '适合标准件、五金件、粉末冶金件、小型机械件；关注网带宽度、铺料厚度、托辊结构和产能节拍。',
-  },
-  {
-    type: '铜丝自动化退火生产线',
-    text: '适合铜丝、铜线、铜合金丝等线材；关注线径、速度、张力控制、保护气氛和表面状态。',
-  },
-  {
-    type: '支重轮 / 零部件热处理生产线',
-    text: '适合工程机械件、支重轮、批量机械零件；关注节拍、硬度要求、变形控制和自动化输送。',
-  },
-];
-
-const customParams = [
-  '工件类型',
-  '工件材质',
-  '工件尺寸',
-  '单件重量',
-  '每小时产能',
-  '热处理工艺',
-  '最高温度',
-  '保温时间',
-  '炉内停留时间',
-  '输送方式',
-  '输送速度',
-  '冷却方式',
-  '气氛或表面要求',
-  '是否需要清洗 / 冷却 / 回火段',
-  '温区数量',
-  '控制系统要求',
-  '上下料方式',
-  '现场空间',
-  '交付范围',
-];
-
-const experienceCards: ExperienceCard[] = [
+// Existing published project evidence, preserved with its original limits.
+const publishedProjectEvidence = [
   {
     factId: 'SN-CASE-P0-008',
     title: '3 条 1250 mm 连续退洗线节能改造',
     text: '项目由天然气改为冷煤气：方案按 8500/1450 kcal/Nm³ 热值复算，冷煤气总设计量 17150 Nm³/h、接口压力 20±3 kPa，并采用双交叉限幅控制。以上只对应本项目燃料与设备边界。',
-    href: casePath,
+    href: '/zh/case/anonymous-tsingshan-1250-renovation',
   },
   {
     factId: 'SN-CASE-P0-007',
     title: '1250 mm 连续退洗线退火固溶段',
     text: '1250 mm 为名义规格及最大带宽，实际带宽 800–1250 mm、厚度 2.5–4.0 mm；额定工艺速度 40 m/min、最大 45 m/min，带钢温度约 1080–1180℃，加热/均热段约 105 m。',
-    href: casePath,
   },
   {
     factId: 'SN-CASE-P0-006',
     title: '850 mm 连续退火钝化线退火固溶段',
     text: '850 mm 为名义机组规格，实际带宽 480–750 mm、厚度 1.6–4.0 mm；带钢退火温度 1050–1150℃，炉体约 130 m，设计 TV 约 190 m·mm/min。',
-    href: henanAnnealingSolutionCasePath,
+    href: '/zh/case/henan-annealing-solution-line',
   },
   {
     factId: 'SN-CASE-P0-002',
@@ -230,339 +90,284 @@ const experienceCards: ExperienceCard[] = [
     factId: 'SN-CASE-P0-001',
     title: 'PC200–PC400 支重轮热处理生产线',
     text: '项目淬火炉额定温度 950℃、有效加热区 6400×300×300 mm，最大设计处理能力 500 kg/h，方案折算约 30 件/h；实际能力按工件和节拍确定。',
-    href: jiningSupportRollerCasePath,
+    href: '/zh/case/jining-support-roller-heat-treatment-line',
   },
 ];
 
-const faqs = [
-  {
-    question: 'Q1：连续热处理生产线和单台工业炉有什么区别？',
-    answer:
-      '单台工业炉通常解决一个加热或热处理环节，连续热处理生产线则需要把上料、输送、加热、冷却、清洗、回火、出料和控制系统串联起来。生产线更关注节拍、产能、工艺链和现场布局，不能只按单台炉报价。',
-  },
-  {
-    question: 'Q2：哪些工件适合做连续热处理生产线？',
-    answer:
-      '适合产量稳定、规格相对明确、工艺路线固定的工件，例如不锈钢带材、铜丝线材、标准件、五金件、粉末冶金件、支重轮和批量机械零件。是否适合做连续线，需要结合工件尺寸、产能、节拍和工艺要求判断。',
-  },
-  {
-    question: 'Q3：连续热处理生产线报价主要看哪些参数？',
-    answer:
-      '主要看工件材质、尺寸、单件重量、产能节拍、热处理工艺、最高温度、保温时间、输送方式、冷却方式、气氛要求、温区数量、自动化程度和现场条件。参数越完整，方案和报价越接近真实项目成本。',
-  },
-  {
-    question: 'Q4：退火固溶生产线适合哪些材料？',
-    answer:
-      '退火固溶生产线多用于不锈钢带材、合金带材、有色金属带材等连续热处理场景。需要确认材料牌号、带宽、厚度、卷重、退火或固溶温度、运行速度、冷却方式和表面质量要求。',
-  },
-  {
-    question: 'Q5：托辊网带热处理生产线适合哪些工件？',
-    answer:
-      '托辊网带热处理生产线适合标准件、五金件、粉末冶金件、小型机械件和部分批量零件。它通过托辊支撑网带连续运行，适用于正火、回火、淬火加热、清洗、冷却等组合工艺。',
-  },
-  {
-    question: 'Q6：生产线能否做旧线改造或扩产升级？',
-    answer:
-      '可以根据项目情况评估。旧线改造通常需要检查炉体、炉衬、加热系统、输送系统、控制系统、冷却系统和现场空间。是否适合改造或扩产，需要结合原设备状态、停产窗口和目标产能判断。',
-  },
-  {
-    question: 'Q7：连续热处理生产线能做到固定产能吗？',
-    answer:
-      '不应脱离项目条件直接承诺固定产能。产能与工件尺寸、装料方式、炉膛长度、运行速度、保温时间、冷却方式、上下料节拍和现场管理有关。正式产能指标应在技术方案和合同中明确。',
-  },
-  {
-    question: 'Q8：生产线是否需要 PLC 或 DCS 控制系统？',
-    answer:
-      '连续热处理生产线通常需要自动化控制系统，用于温度、速度、动作、联锁、报警和数据记录。具体采用 PLC、DCS 或其他系统，应根据产线复杂度、客户系统接口和数据追溯要求确定。',
-  },
-  {
-    question: 'Q9：生产线项目周期多久？',
-    answer:
-      '项目周期与生产线长度、设备组成、制造复杂度、外购件周期、现场条件和安装调试范围有关。单条网带线、退火固溶线和大型退洗线的周期差异较大，具体应以技术方案和合同约定为准。',
-  },
-  {
-    question: 'Q10：询价连续热处理生产线前需要准备什么？',
-    answer:
-      '建议准备工件材质、尺寸、单件重量、产能节拍、热处理工艺、最高温度、冷却方式、输送方式、气氛要求、自动化需求、现场平面条件和交付范围。资料不完整也可以先沟通，由技术人员判断需补充内容。',
-  },
-];
-
-const faqJsonLd = getFaqJsonLd(faqs);
-
-const relatedLinks: LinkCard[] = [
-  {
-    title: '工业炉报价需要哪些参数',
-    href: quoteParamsPath,
-    text: '整理连续生产线询价前需要提供的工件、产能、温度、工艺和现场条件。',
-  },
-  {
-    title: '工业炉节能改造与热处理炉大修服务',
-    href: renovationServicePath,
-    text: '旧线改造、大修或搬迁复产项目可先查看评估服务页面。',
-  },
-  {
-    title: '热处理炉厂家页面',
-    href: manufacturerPath,
-    text: '查看苏能作为热处理工业炉厂家的制造能力与交付边界。',
-  },
-  {
-    title: '退火固溶生产线',
-    href: annealingSolutionLinePath,
-    text: '查看金属带材、卷材连续退火与固溶处理生产线参数。',
-  },
-  {
-    title: '铜丝自动化退火生产线',
-    href: copperWireAnnealingLinePath,
-    text: '查看铜丝、铜线、铜合金丝连续退火与收放线配置。',
-  },
-  {
-    title: '托辊型网带式电阻炉生产线',
-    href: rollerMeshBeltLinePath,
-    text: '查看托辊支撑网带、连续退火回火正火设备配置。',
-  },
-  {
-    title: '联系我们',
-    href: contactPath,
-    text: '提交连续生产线参数，获取初步方案沟通。',
-  },
-];
-
-const pageJsonLd = cleanObject([
-  getWebPageJsonLd({
-    path: pagePath,
-    name: '连续热处理生产线解决方案',
-    description: CONTINUOUS_HEAT_TREATMENT_LINE_SEO.description,
-    dateModified: CONTINUOUS_HEAT_TREATMENT_LINE_SEO.modifiedTime,
-  }),
-  getBreadcrumbJsonLd([
-    { name: '首页', url: '/zh' },
-    { name: '产品中心', url: productsPath },
-    { name: '连续热处理生产线解决方案', url: pagePath },
-  ]),
-]);
-
+const pagePath = '/zh/solutions/continuous-heat-treatment-line';
+const description =
+  '苏能根据工件材质、热处理要求与目标产量配置连续热处理生产线，介绍选型方向、工艺流程、济宁支重轮项目经验及供货验收范围。可先发工件照片、材质、产量和已知处理要求咨询。';
+export const dynamicParams = false;
+type PageProps = { params: Promise<{ locale: string }> };
 export function generateStaticParams() {
-  return [{ locale: 'zh' }];
+  return [{ locale: 'zh' }, { locale: 'en' }];
 }
-
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { locale } = await params;
-
-  if (locale !== 'zh') {
-    notFound();
-  }
-
-  return buildMetadata({
-    title: CONTINUOUS_HEAT_TREATMENT_LINE_SEO.title,
-    description: CONTINUOUS_HEAT_TREATMENT_LINE_SEO.description,
+  if (locale === 'en') return englishSolutionMetadata('continuous-heat-treatment-line');
+  if (locale !== 'zh') notFound();
+  const metadata = buildMetadata({
+    title: '连续热处理生产线解决方案｜选型与项目经验',
+    description,
     path: pagePath,
-    pageKey: 'solutions',
-    keywords: CONTINUOUS_HEAT_TREATMENT_LINE_SEO.keywords,
-    image: CONTINUOUS_HEAT_TREATMENT_LINE_SEO.ogImage,
-    type: 'website',
-    modifiedTime: CONTINUOUS_HEAT_TREATMENT_LINE_SEO.modifiedTime,
-    alternateLocales: {
-      'zh-CN': pagePath,
-      'x-default': pagePath,
-    },
+    image: '/images/products/annealing-solution-line/gallery/line-01.jpg',
+    alternateLocales: solutionAlternates('continuous-heat-treatment-line'),
   });
+  if (process.env.NODE_ENV === 'development' || process.env.SITE_NOINDEX === 'true') {
+    metadata.robots = { index: false, follow: false };
+  }
+  return metadata;
 }
-
 export default async function ContinuousHeatTreatmentLinePage({ params }: PageProps) {
   const { locale } = await params;
-
-  if (locale !== 'zh') {
-    notFound();
-  }
-
+  if (locale === 'en') return <EnglishSolutionPage slug="continuous-heat-treatment-line" />;
+  if (locale !== 'zh') notFound();
   return (
-    <main className="bg-white text-[#101828]">
-      <section className="relative overflow-hidden bg-[#101828] text-white">
-        <div className="absolute inset-0">
-          <Image src={heroImage} alt="" fill priority sizes="100vw" className="object-cover object-center opacity-36" />
-          <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(7,18,36,0.96)_0%,rgba(12,38,74,0.84)_58%,rgba(12,38,74,0.5)_100%)]" />
-        </div>
-        <div className="relative mx-auto max-w-[1180px] px-5 py-14 lg:px-8 lg:py-20">
-          <Breadcrumb
-            locale="zh"
-            tone="light"
-            currentLabel="连续热处理生产线解决方案"
-            className="text-[13px]"
-            items={[{ label: '产品中心', href: productsPath }]}
-          />
-          <div className="mt-10 max-w-[980px]">
-            <p className="text-[13px] font-semibold text-white/64 lg:text-[14px]">系统级热处理生产线方案</p>
-            <h1 className="mt-4 text-[34px] font-semibold leading-[1.16] tracking-[0.01em] lg:text-[56px]">
-              连续热处理生产线解决方案
-            </h1>
-            <p className="mt-5 max-w-[920px] text-[18px] font-semibold leading-[1.72] text-white/92 lg:text-[23px]">
-              苏能可根据工件材质、工件形态、热处理工艺、产能节拍、温度制度、冷却方式、自动化程度和现场条件，提供连续退火、固溶、正火、回火、淬火加热、清洗、冷却、上下料和控制系统等热处理生产线方案。
-            </p>
-            <GeoHeroTags tags={heroTags} />
-            <div className="mt-9 flex flex-wrap gap-4">
-              <QuoteModalButton
-                label="获取报价方案"
-                className="inline-flex min-h-[46px] items-center justify-center rounded-[4px] cta-primary px-6 text-[15px] font-semibold text-white transition"
-              />
-              <a
-                href={quoteParamsPath}
-                className="inline-flex min-h-[46px] items-center justify-center rounded-[4px] border border-white/46 px-6 text-[15px] font-semibold text-white transition hover:border-white hover:bg-white/10"
-              >
-                查看报价需要哪些参数
-              </a>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <GeoReviewNote
-        modifiedDate={CONTINUOUS_HEAT_TREATMENT_LINE_SEO.modifiedTime}
-        sourceNote="苏能 GEO 事实台账中的 10 项脱敏项目参数与对应案例资料"
+    <div className={styles.page} data-engineering-page="line">
+      <AnchorNav
+        items={[
+          ['fit', '方案选择'],
+          ['process', '工艺流程'],
+          ['experience', '项目案例'],
+          ['faq', '常见问题'],
+          ['inquiry', '提交需求'],
+        ]}
       />
-
-      <Section id="why" eyebrow="系统逻辑" title="一、为什么连续热处理生产线不是“多台炉子简单组合”？">
-        <p className="max-w-[960px] text-[16px] leading-[1.9] text-[#344054] lg:text-[18px]">
-          连续热处理生产线不仅是加热炉本体，还涉及上料、输送、加热、保温、淬火、冷却、清洗、干燥、回火、收料、电控系统、气氛系统、燃烧系统、余热利用和现场安装调试等多个环节。方案设计需要围绕工艺节拍、产能、温度制度、工件状态和现场布局综合判断。
+      <Hero
+        eyebrow="苏能工业炉 · 热处理生产线"
+        title="连续热处理生产线解决方案"
+        text="苏能根据工件材质、热处理要求与目标产量，配置连续热处理生产线。先发工件照片、材质和产量，初步判断适合的生产线类型。"
+        image="/images/products/annealing-solution-line/gallery/line-01.jpg"
+        alt="带材连续退火固溶生产线参考设备，展示开卷、输送和连续加热炉结构"
+      />
+      <Section
+        id="fit"
+        title="你的项目适合连续线吗？"
+        intro="以下用于初步判断，需结合工件、工艺和现场条件确定设备方向。"
+      >
+        <InfoColumns
+          items={[
+            {
+              title: '较适合连续线',
+              items: ['工件与产量相对稳定', '工艺路线相近，持续生产'],
+              icon: HiCheckCircle,
+            },
+            {
+              title: '需要进一步评估',
+              items: ['品种变化较多，工艺差异较大', '装料方式或现场空间受限'],
+              icon: HiOutlineArchiveBox,
+            },
+            {
+              title: '也可考虑周期炉',
+              items: ['多品种、小批量', '需要经常切换不同工艺'],
+              icon: HiOutlineSquare3Stack3D,
+            },
+          ]}
+        />
+      </Section>
+      <Section id="process" title="不同工艺，对应不同流程" soft>
+        <div className={styles.processes}>
+          {processes.map((process) => (
+            <div className={styles.processRow} key={process.title}>
+              <h3>{process.title}</h3>
+              <ol className={styles.processSteps} aria-label={process.title}>
+                {process.steps.map((step) => (
+                  <li key={step}>{step}</li>
+                ))}
+              </ol>
+            </div>
+          ))}
+        </div>
+        <p className={styles.note}>
+          清洗、干燥按介质与工艺配置；实际流程按材质、热处理要求和输送方式确定。
         </p>
-        <div className="mt-8 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
-          {systemReasons.map((item) => (
-            <article key={item.title} className="rounded-[8px] border border-[#e1e7f0] bg-[#fbfcfe] p-6">
-              <h3 className="text-[20px] font-semibold leading-[1.35] text-[#101828]">{item.title}</h3>
-              <p className="mt-3 text-[15px] leading-[1.85] text-[#475467]">{item.text}</p>
-            </article>
-          ))}
+        <div className={styles.numberStrip}>
+          <h3>整线配置关注这5项</h3>
+          {['上料输送', '加热与控温', '冷却及后处理', '自动化衔接', '安全保护'].map(
+            (item, index) => (
+              <span key={item}>
+                <b className={styles.number}>{String(index + 1).padStart(2, '0')}</b>
+                {item}
+              </span>
+            ),
+          )}
         </div>
       </Section>
-
-      <Section id="line-types" eyebrow="生产线类型" title="二、苏能可覆盖哪些连续热处理生产线？">
-        <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
-          {lineTypes.map((item) => (
-            <article key={item.title} className="rounded-[8px] border border-[#e1e7f0] bg-white p-6">
-              <h3 className="text-[21px] font-semibold leading-[1.35] text-[#101828]">{item.title}</h3>
-              <p className="mt-3 text-[15px] leading-[1.85] text-[#475467]">{item.text}</p>
-            </article>
-          ))}
-        </div>
-      </Section>
-
-      <Section id="systems" eyebrow="系统组成" title="三、连续热处理生产线通常由哪些系统组成？">
-        <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
-          {systemComponents.map((item) => (
-            <article key={item.title} className="rounded-[8px] border border-[#e1e7f0] bg-[#fbfcfe] p-6">
-              <h3 className="text-[20px] font-semibold leading-[1.35] text-[#101828]">{item.title}</h3>
-              <p className="mt-3 text-[15px] leading-[1.85] text-[#475467]">{item.text}</p>
-            </article>
-          ))}
-        </div>
-      </Section>
-
-      <Section id="selection" eyebrow="选型对比" title="四、不同生产线怎么选？">
-        <div className="grid gap-4 md:hidden">
-          {selectionRows.map((row) => (
-            <article key={row.type} className="rounded-[8px] border border-[#e1e7f0] bg-white p-5">
-              <h3 className="text-[17px] font-semibold leading-[1.45] text-[#101828]">{row.type}</h3>
-              <p className="mt-3 text-[15px] leading-[1.8] text-[#475467]">{row.text}</p>
-            </article>
-          ))}
-        </div>
-        <div className="hidden overflow-hidden rounded-[8px] border border-[#dfe6f0] md:block">
-          <table className="w-full border-collapse bg-white text-left">
-            <thead className="bg-[#f8fafc]">
+      <Section id="selection-table" title="从工件和工艺，找到设备方向">
+        <div
+          className={styles.tableWrap}
+          role="region"
+          aria-label="生产线选型表，可横向滚动"
+          tabIndex={0}
+        >
+          <table className={styles.table}>
+            <thead>
               <tr>
-                <th className="w-[260px] border-b border-[#dfe6f0] px-5 py-4 text-[15px] font-semibold text-[#101828]">生产线类型</th>
-                <th className="border-b border-[#dfe6f0] px-5 py-4 text-[15px] font-semibold text-[#101828]">适用判断</th>
+                {['工件／材料', '热处理需求', '可了解的生产线', '进一步确认'].map((h) => (
+                  <th scope="col" key={h}>
+                    {h}
+                  </th>
+                ))}
               </tr>
             </thead>
             <tbody>
-              {selectionRows.map((row) => (
-                <tr key={row.type} className="border-b border-[#edf1f6] last:border-b-0">
-                  <td className="px-5 py-4 text-[15px] font-semibold leading-[1.8] text-[#253047]">{row.type}</td>
-                  <td className="px-5 py-4 text-[15px] leading-[1.8] text-[#475467]">{row.text}</td>
+              {selectionRows.map(([material, process, name, conditions, slug]) => (
+                <tr key={slug}>
+                  <td>{material}</td>
+                  <td>{process}</td>
+                  <td>
+                    <Link href={`/zh/products/detail/${slug}`}>{name}</Link>
+                  </td>
+                  <td>{conditions}</td>
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
-      </Section>
-
-      <Section id="params" eyebrow="定制参数" title="五、连续热处理生产线定制需要确认哪些参数？">
-        <div className="grid gap-8 lg:grid-cols-[0.9fr_1.1fr]">
-          <div>
-            <p className="text-[16px] leading-[1.9] text-[#344054] lg:text-[18px]">
-              连续生产线报价需要先明确工件、节拍、工艺链、控制系统和现场边界。资料越完整，越有利于判断炉型组合、温区配置、输送方式和交付范围。
-            </p>
-            <a
-              href={quoteParamsPath}
-              className="mt-6 inline-flex min-h-[44px] items-center justify-center rounded-[4px] cta-secondary px-5 text-[14px] font-semibold transition"
-            >
-              查看报价需要哪些参数
-            </a>
-          </div>
-          <div className="grid gap-3 sm:grid-cols-2">
-            {customParams.map((item) => (
-              <div key={item} className="rounded-[8px] border border-[#e1e7f0] bg-white px-5 py-4 text-[15px] font-semibold text-[#253047]">
-                {item}
-              </div>
-            ))}
-          </div>
+        <p className={styles.note}>
+          先确定可能适合的生产线，再根据材质、尺寸、质量要求和产量确定配置。
+        </p>
+        <div className={styles.preparation}>
+          <h3>确定方案前，先准备这4类信息</h3>
+          <InfoCards
+            four
+            items={[
+              { title: '工件与装料', text: '照片、材质、尺寸、装料方式。', icon: HiOutlineCube },
+              {
+                title: '工艺与质量',
+                text: '处理要求、硬度、表面要求。',
+                icon: HiOutlineDocumentText,
+              },
+              { title: '产量与节拍', text: '每小时产量、班次安排。', icon: HiOutlineChartBar },
+              { title: '现场与配套', text: '车间空间、电源、燃气及水。', icon: HiOutlineCog6Tooth },
+            ]}
+          />
         </div>
       </Section>
-
-      <Section id="experience" eyebrow="项目经验" title="六、苏能连续热处理生产线项目经验">
-        <div className="grid gap-5 lg:grid-cols-3">
-          {experienceCards.map((item) => (
-            <article key={item.title} className="rounded-[8px] border border-[#e1e7f0] bg-[#fbfcfe] p-6">
-              <p className="text-[12px] font-semibold tracking-[0.08em]">{item.factId}</p>
-              <h3 className="text-[20px] font-semibold leading-[1.4] text-[#101828]">{item.title}</h3>
+      <Section id="experience" title="连续热处理生产线项目经验">
+        <article className={styles.case}>
+          <figure className={styles.caseMedia}>
+            <Image
+              src="/images/about/cases/08-case-jining-support-roller.jpg"
+              alt="连续加热炉与网带输送结构的相关设备参考图"
+              fill
+              sizes="(max-width: 767px) 100vw, 580px"
+            />
+            <figcaption>相关设备</figcaption>
+          </figure>
+          <div className={styles.caseCopy}>
+            <h3>济宁支重轮热处理生产线</h3>
+            <p>工程机械零部件 · 多规格支重轮</p>
+            <dl>
+              {[
+                ['项目需求', '协调连续加热、自动淬火、回火与喷淋冷却。'],
+                ['主要设备', '连续加热炉、自动淬火机床、回火炉、喷淋冷却及电气控制。'],
+                ['苏能参与', '整线方案与节拍协调、设备配置，按合同范围提供制造及安装调试。'],
+              ].map(([label, value]) => (
+                <div key={label}>
+                  <dt>{label}</dt>
+                  <dd>{value}</dd>
+                </div>
+              ))}
+            </dl>
+            <Link
+              className={styles.button}
+              href="/zh/case/jining-support-roller-heat-treatment-line"
+            >
+              查看项目资料
+            </Link>
+          </div>
+        </article>
+        <div className={styles.center}>
+          <Link className={styles.textLink} href="/zh/case">
+            查看更多项目案例
+          </Link>
+        </div>
+      </Section>
+      <Section id="checkpoints" title="设备包括什么，交付时怎么检查？" soft>
+        <InfoCards
+          items={[
+            {
+              title: '供货范围',
+              text: '明确炉体、输送、冷却与控制系统；列清现场配套与双方分工。',
+              icon: HiOutlineWrenchScrewdriver,
+            },
+            {
+              title: '质量与产能',
+              text: '按约定工件、工艺和装料条件，确认质量要求与生产能力。',
+              icon: HiOutlineShieldCheck,
+            },
+            {
+              title: '验收与资料',
+              text: '明确测温、试运行及适用验收项目，交付约定图纸与操作资料。',
+              icon: HiOutlineClipboardDocumentList,
+            },
+          ]}
+        />
+        <p className="mt-5 text-sm leading-7 text-[#526277]" data-delivery-boundary>苏能通常作为热处理工业炉设备供应商、生产线设备供应商或设备分包方参与项目，按合同范围提供设计、制造、供货、安装指导、调试配合和售后支持。涉及土建、压力容器、特种设备、环保总包或工程总承包的部分，由具备相应资质的单位承担或配合实施。</p>
+      </Section>
+      <Section id="project-evidence" title="已公开的项目方案参数与适用边界" soft>
+        <p className={styles.note}>
+          以下为已公开项目技术方案中的参数和口径，用于说明方案经验，不代表当前设备的统一规格或实际验收结果；具体按项目条件确认。
+        </p>
+        <div className="mt-6 grid gap-5 md:grid-cols-2">
+          {publishedProjectEvidence.map((item) => (
+            <article key={item.factId} className="rounded-[8px] border border-[#e1e7f0] bg-white p-6">
+              <h3 className="text-[18px] font-semibold leading-[1.5] text-[#101828]">{item.title}</h3>
               <p className="mt-3 text-[15px] leading-[1.85] text-[#475467]">{item.text}</p>
               {item.href ? (
-                <a
-                  href={item.href}
-                  className="mt-5 inline-flex min-h-[40px] items-center justify-center rounded-[4px] cta-primary px-5 text-[14px] font-semibold text-white transition"
-                >
-                  查看案例详情
-                </a>
-              ) : (
-                <p className="mt-5 rounded-[8px] border border-[#dfe6f0] bg-white p-4 text-[14px] leading-[1.75] text-[#667085]">
-                  以上为已授权脱敏项目参数；新项目仍按工件、工艺、产能和现场条件重新设计。
-                </p>
-              )}
+                <Link href={item.href} className="mt-4 inline-block text-[14px] font-semibold text-[#145ca8] underline underline-offset-4 focus-visible:outline focus-visible:outline-2">
+                  查看对应项目资料与条件
+                </Link>
+              ) : null}
             </article>
           ))}
         </div>
       </Section>
-
-      <Section id="boundary" eyebrow="交付边界" title="七、项目交付边界说明">
-        <p className="rounded-[8px] border border-[#dfe6f0] bg-[#fbfcfe] p-6 text-[16px] leading-[1.95] text-[#344054] lg:text-[18px]">
-          苏能通常作为热处理工业炉设备供应商、热处理生产线设备供应商或设备分包方参与项目，可根据合同范围提供设计、制造、供货、安装指导、调试配合和售后支持。若项目涉及土建、压力容器、特种设备、环保总包或工程总承包，应由具备相应资质的单位承担或配合实施。
-        </p>
-      </Section>
-
-      <Section id="faq" eyebrow="常见问题" title="八、连续热处理生产线常见问题">
-        <GeoFaqGrid items={faqs} />
-      </Section>
-
-      <Section id="related" eyebrow="相关页面" title="九、相关页面内链">
-        <div className="grid gap-4 md:grid-cols-2">
-          {relatedLinks.map((item) => (
-            <a key={item.href} href={item.href} className="rounded-[8px] border border-[#e1e7f0] bg-[#fbfcfe] p-5 transition hover:border-[#c51624]">
-              <span className="text-[17px] font-semibold leading-[1.45]">{item.title}</span>
-              <span className="mt-2 block text-[14px] leading-[1.8] text-[#475467]">{item.text}</span>
-            </a>
-          ))}
-        </div>
-      </Section>
-
-      <GeoContactCta
-        eyebrow="获取产线方案"
-        title="需要规划连续热处理生产线？"
-        description="把工件材质、尺寸、单件重量、产能节拍、热处理工艺、最高温度、冷却方式、输送方式、自动化要求和现场条件发给苏能，技术人员可先判断适合的产线结构、炉型组合、温区配置和交付边界。"
-        secondaryHref={contactPath}
-        secondaryLabel="联系苏能工业炉"
+      <FaqSection title="连续热处理生产线常见问题" faqs={lineFaqs} defaultOpenIndex={2} />
+      <Resources
+        title="选型与采购资料"
+        items={[
+          {
+            title: '生产线产能怎么估算',
+            description: '从目标合格产出，回算装料、工艺时间与上下游配套能力。',
+            href: '/zh/news/shuju-news-36',
+            label: '阅读整线产能回算方法',
+          },
+          {
+            title: '哪些配置影响设备报价',
+            description: '先准备工件与工艺资料，再明确供货和报价范围。',
+            href: '/zh/articles/gongye-lu-baojia-canshu',
+            label: '阅读报价参数清单',
+          },
+          {
+            title: '生产线验收检查哪些项目',
+            description: '分清单机、接口、联动与现场验证，写清测试条件和记录。',
+            href: '/zh/news/heat-treatment-line-fat-single-machine-acceptance',
+            label: '阅读生产线验收范围',
+          },
+        ]}
       />
-
-      <JsonLd id="continuous-heat-treatment-line-page-jsonld" data={pageJsonLd} />
-      <JsonLd id="continuous-heat-treatment-line-faq-jsonld" data={faqJsonLd} />
-    </main>
+      <HomepageLeadForm
+        sectionId="inquiry"
+        pageType="连续热处理生产线解决方案页"
+        productTag="热处理生产线"
+        successProductTag="连续热处理生产线项目情况"
+        sourceModule="continuous_heat_treatment_line_form"
+      />
+      <JsonLd
+        id="continuous-line-page-jsonld"
+        data={getWebPageJsonLd({ path: pagePath, name: '连续热处理生产线解决方案', description })}
+      />
+      <JsonLd
+        id="continuous-line-breadcrumb-jsonld"
+        data={getBreadcrumbJsonLd([
+          { name: '首页', url: '/zh' },
+          { name: '解决方案', url: '/zh/solutions' },
+          { name: '连续热处理生产线解决方案', url: pagePath },
+        ])}
+      />
+      <JsonLd id="continuous-line-faq-jsonld" data={getFaqJsonLd(lineFaqs)} />
+    </div>
   );
 }

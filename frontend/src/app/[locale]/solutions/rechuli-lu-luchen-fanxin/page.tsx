@@ -1,3 +1,5 @@
+import { EnglishSolutionPage, englishSolutionMetadata } from '@/components/engineering/EnglishSolutionsPage';
+import { solutionAlternates } from '@/lib/english-solutions';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
@@ -71,14 +73,17 @@ const jsonLd = [
 export const dynamicParams = false;
 
 export async function generateStaticParams() {
-  return [{ locale: 'zh' }];
+  return [{ locale: 'zh' }, { locale: 'en' }];
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  if ((await params).locale !== 'zh') notFound();
+  const { locale } = await params;
+  if (locale === 'en') return englishSolutionMetadata('rechuli-lu-luchen-fanxin');
+  if (locale !== 'zh') notFound();
   return buildMetadata({
     locale: 'zh',
     path: pagePath,
+    alternateLocales: solutionAlternates('rechuli-lu-luchen-fanxin'),
     title: seo.title,
     description: seo.description,
     keywords: seo.keywords,
@@ -90,7 +95,9 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 }
 
 export default async function FurnaceLiningRenovationPage({ params }: PageProps) {
-  if ((await params).locale !== 'zh') notFound();
+  const { locale } = await params;
+  if (locale === 'en') return <EnglishSolutionPage slug="rechuli-lu-luchen-fanxin" />;
+  if (locale !== 'zh') notFound();
 
   return (
     <>
@@ -128,9 +135,9 @@ export default async function FurnaceLiningRenovationPage({ params }: PageProps)
         evidenceIntro="记录不仅证明施工完成，也为后续判断外壁温升、密封和能耗变化提供可比基线。"
         evidence={[
           { label: 'STRUCTURE / 结构', title: '冷面、锚固与接缝记录', text: '保留拆除前后照片、冷面钢板状态、锚固检查、新旧衬接缝及穿墙接口记录。' },
-          { label: 'MATERIAL / 材料', title: '合格证与施工参数', text: '某项目方案载明“1140 型、压缩量≥40%”，但牌号含义和适用性仍应结合产品资料与施工方案确认。' },
+          { label: 'MATERIAL / 材料', title: '合格证与施工参数', text: '2018年方案将“1140 型、压缩量≥40%”用于烧嘴周围和炉口的局部纤维修复。型号不能直接解释为使用温度；材料牌号、压缩量的计算基准和方向须与产品资料、施工设计对应，不能套到全部炉衬。' },
           { label: 'DRY-OUT / 烘炉', title: '实测曲线与排湿记录', text: '记录时间—温度曲线、保温时长、排湿口状态、排汽观察、异常处理和环境温湿度，不发布跨材料体系的通用曲线。' },
-          { label: 'SURFACE / 外壁', title: '把温升变成可验收条件', text: '某项目采用 800℃、稳定态、热桥除外时外表面温升不超过 40 K 的设计指标；如用于验收，需约定测点、环境温度、仪器与热桥排除规则。' },
+          { label: 'SURFACE / 外壁', title: '把温升变成可验收条件', text: '2018年方案在“炉壁温升”项下写“环境温度+40℃”，另列800℃稳定态和热桥除外条件。外表温度比环境高40℃相当于40 K温升，与外表温度不超过40℃不同。用于验收前，应统一原文口径，明确测量对象、工况、测点、环境基准及排除范围。' },
         ]}
         faqs={faqs}
         parameterTitle="提交炉衬资料，先判断检查边界"

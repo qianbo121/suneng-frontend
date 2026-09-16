@@ -1,0 +1,75 @@
+{
+  "id": "continuous-line-renovation",
+  "slug": "anonymous-tsingshan-1250-renovation",
+  "summary": "苏能2015年三条1250mm连续退洗线改造资料，提出由天然气改用冷煤气，同时更新燃气管道与烧嘴、调整控制并改造固溶段。方案对燃气、助燃空气和排烟采取了不同处理：燃气管路加大更新，助燃空气管路局部调整利旧，外部排烟管道建议保留但更换引风机。采购不能把“换燃料”简化成只换烧嘴，也不能把利旧理解为原系统无需重新核对。",
+  "workpiece": [
+    "不锈钢带"
+  ],
+  "materials": [
+    "不锈钢"
+  ],
+  "process": [
+    "退火",
+    "固溶"
+  ],
+  "equipment": [
+    "连续退洗线"
+  ],
+  "need": [
+    "燃料适配改造"
+  ],
+  "tags": [
+    "方案参考",
+    "不锈钢带",
+    "燃料适配改造"
+  ],
+  "facts": [
+    {
+      "label": "改造项目规模",
+      "value": "3",
+      "unit": "条线",
+      "condition": "原技术协议约定，不表示本轮已证明三线完工",
+      "attribute": "方案参数"
+    },
+    {
+      "label": "拟每炉控温区段",
+      "value": "10",
+      "unit": "区段",
+      "condition": "5个加热室、10控温区段；不把室数和区数混为一项",
+      "attribute": "方案参数"
+    },
+    {
+      "label": "拟更新排烟风机功率",
+      "value": "75",
+      "unit": "kW",
+      "condition": "替换原30kW风机的方案配置，风机选型仍要看流量压力及烟温",
+      "attribute": "方案参数"
+    }
+  ],
+  "participation": "苏能历史资料约定燃烧、控制、炉衬及固溶段改造，买方线缆和分线实施条件需对应确认。",
+  "sourceSummary": "依据历史合同及技术协议整理拟定改造范围；不作为已制造、投运或验收结果。",
+  "datePublished": "2026-05-27T10:00:00+08:00",
+  "dateModified": "2026-09-12",
+  "relatedLinks": [
+    {
+      "title": "工业炉改造与大修",
+      "href": "/zh/service/furnace-renovation-overhaul"
+    }
+  ],
+  "title": "连续退洗线天然气改冷煤气，旧风管和烟道还能用吗？",
+  "body": "continuous-line-renovation.md",
+  "contentType": "proposal",
+  "publicationStatus": "draft",
+  "projectStatus": "proposal",
+  "coverTitle": "连续退洗线\n系统改造",
+  "cover": {
+    "src": "/images/products/annealing-solution-line/remaining-batch-v1/03-workpiece-8b1942ed56b3.png",
+    "alt": "不锈钢卷与带材工件参考图",
+    "caption": "工件参考图",
+    "fit": "contain"
+  },
+  "projectYear": 2015,
+  "sourceDate": "2015-10-09",
+  "listTitle": "连续退洗线天然气改冷煤气，旧风管和烟道还能用吗？",
+  "listSummary": "苏能2015年三条1250mm连续退洗线改造资料，提出由天然气改用冷煤气，同时更新燃气管道与烧嘴、调整控制并改造固溶段。"
+}

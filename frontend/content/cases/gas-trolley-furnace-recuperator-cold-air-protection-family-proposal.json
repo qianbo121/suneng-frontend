@@ -1,0 +1,64 @@
+{
+  "id": "gas-recuperator-protection-family-proposal",
+  "slug": "gas-trolley-furnace-recuperator-cold-air-protection-family-proposal",
+  "title": "燃气炉余热换热器为什么还要加冷风？",
+  "listTitle": "燃气炉余热换热器为什么还要加冷风？",
+  "listSummary": "余热回收和换热器保护需要一起核对。",
+  "summary": "余热回收和换热器保护需要一起核对。苏能两份燃气台车炉资料均以烟气预热助燃空气，同时提出在换热器出烟口测温，并在进烟口设置冷风管。对这类配置，采购时应区分预热效果、保护动作及炉压调节，不能把助燃风温度当作节能实测结果。",
+  "body": "gas-trolley-furnace-recuperator-cold-air-protection-family-proposal.md",
+  "contentType": "proposal",
+  "publicationStatus": "draft",
+  "projectStatus": "proposal",
+  "projectYear": 2023,
+  "sourceDate": "2023-01-30",
+  "workpiece": [
+    "钢制部件"
+  ],
+  "materials": [],
+  "process": [
+    "退火",
+    "回火",
+    "正火"
+  ],
+  "equipment": [
+    "燃气台车炉"
+  ],
+  "need": [
+    "余热回收及保护核对"
+  ],
+  "tags": [
+    "方案参考",
+    "钢制部件",
+    "余热回收及保护核对"
+  ],
+  "facts": [
+    {
+      "label": "4m炉助燃风预热",
+      "value": "200–300",
+      "unit": "℃",
+      "condition": "方案换热器后空气温度，不是实测节能率",
+      "attribute": "方案参数"
+    },
+    {
+      "label": "12m炉助燃风预热",
+      "value": "300",
+      "unit": "℃",
+      "condition": "该独立方案拟定条件，非与4m炉比较测试",
+      "attribute": "方案参数"
+    }
+  ],
+  "participation": "苏能两份独立方案拟定余热回收、烟气掺冷保护及炉压调节；具体管路和动作需各自终版确认。",
+  "sourceSummary": "江苏苏能工业炉有限公司历史技术方案资料整理。",
+  "coverTitle": "燃气台车炉余热回收方案：预热助燃风，为什么还要设置掺冷风？",
+  "relatedLinks": [
+    {
+      "title": "了解台车炉的适用条件",
+      "href": "/zh/products/detail/trolley-furnace"
+    },
+    {
+      "title": "准备询价参数与供货范围",
+      "href": "/zh/articles/gongye-lu-baojia-canshu"
+    }
+  ],
+  "dateModified": "2026-09-12"
+}

@@ -1,15 +1,24 @@
 'use client';
 
 import Image from 'next/image';
-import Link from 'next/link';
+import { NavigationLink as Link } from '@/components/layout/NavigationLink';
 import { usePathname } from 'next/navigation';
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { HiBars3BottomRight, HiChevronRight, HiOutlineXMark } from 'react-icons/hi2';
+import type { ComponentProps } from 'react';
+import {
+  HiBars3BottomRight,
+  HiChevronDown,
+  HiOutlineXMark,
+  HiPhone,
+} from 'react-icons/hi2';
 
 import { isZhOnlyPath } from '@/lib/i18n/zh-only';
 import { buildBrandImageAlt } from '@/lib/seo';
 import { getLocalizedNavigation } from '@/mock/navigation';
+import { siteSettings } from '@/mock/siteSettings';
 import { Locale } from '@/types/site';
+
+import styles from './Header.module.css';
 
 type HeaderProps = {
   locale: string;
@@ -30,10 +39,20 @@ const MOBILE_NAV_COPY = {
 } satisfies Record<Locale, { open: string; close: string; dialog: string }>;
 
 function buildLocaleHref(locale: string, href: string) {
+  if (href.startsWith('/#')) return `/${locale}${href.slice(1)}`;
   return href === '/' ? `/${locale}` : `/${locale}${href}`;
 }
 
-function buildLocaleSwitchPath(pathname: string, nextLocale: 'zh' | 'en', currentLocale: 'zh' | 'en') {
+function SubmenuLink({ href, ...props }: ComponentProps<'a'> & { href: string }) {
+  // Native navigation also resolves fragment targets after the destination page loads.
+  return href.includes('#') ? <a href={href} {...props} /> : <Link href={href} {...props} />;
+}
+
+function buildLocaleSwitchPath(
+  pathname: string,
+  nextLocale: 'zh' | 'en',
+  currentLocale: 'zh' | 'en',
+) {
   // Switching to English from a Chinese-only page (no /en counterpart) lands on
   // the English home instead of a 404. The source of truth is ZH_ONLY_PATHS.
   if (currentLocale === 'zh' && nextLocale === 'en' && isZhOnlyPath(pathname)) {
@@ -54,6 +73,7 @@ function buildLocaleSwitchPath(pathname: string, nextLocale: 'zh' | 'en', curren
 }
 
 function isActiveNavItem(pathname: string, href: string) {
+  if (pathname === '/zh/solutions/continuous-heat-treatment-line') return href === '/zh/products';
   if (pathname === href) {
     return true;
   }
@@ -68,21 +88,51 @@ function isActiveNavItem(pathname: string, href: string) {
 export function Header({ locale }: HeaderProps) {
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [mobileExpandedKey, setMobileExpandedKey] = useState<string | null>(null);
+  const [openDesktopMenu, setOpenDesktopMenu] = useState<string | null>(null);
+  const desktopMenuTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const backgroundHeaderRef = useRef<HTMLElement>(null);
   const mobilePanelRef = useRef<HTMLDivElement>(null);
   const openButtonRef = useRef<HTMLButtonElement>(null);
   const closeButtonRef = useRef<HTMLButtonElement>(null);
   const previouslyFocusedRef = useRef<HTMLElement | null>(null);
   const currentLocale = (locale === 'en' ? 'en' : 'zh') as Locale;
-  const navItems = useMemo(() => getLocalizedNavigation(currentLocale), [currentLocale]);
+  const isEngineeringLanding = pathname === '/zh/solutions/continuous-heat-treatment-line' || pathname === '/zh/service/furnace-renovation-overhaul';
+  const navItems = useMemo(() => getLocalizedNavigation(currentLocale).map(item =>
+    isEngineeringLanding && item.href === '/products' ? { ...item, labelText: '设备与生产线' } : item
+  ), [currentLocale, isEngineeringLanding]);
   const switchLocale = currentLocale === 'zh' ? 'en' : 'zh';
   const switchLocalePath = buildLocaleSwitchPath(pathname, switchLocale, currentLocale);
   const localeLabel = { zh: '中文', en: 'EN' } as const;
   const logoAlt = buildBrandImageAlt(currentLocale, 'full');
   const mobileNavCopy = MOBILE_NAV_COPY[currentLocale];
 
+  const updateDesktopMenu = (key: string | null, delay = 0) => {
+    if (desktopMenuTimerRef.current) clearTimeout(desktopMenuTimerRef.current);
+    desktopMenuTimerRef.current = null;
+    if (delay) {
+      desktopMenuTimerRef.current = setTimeout(() => {
+        setOpenDesktopMenu(key);
+        desktopMenuTimerRef.current = null;
+      }, delay);
+    } else {
+      setOpenDesktopMenu(key);
+    }
+  };
+
+  const dismissDesktopMenu = (menu: HTMLLIElement) => {
+    menu.querySelector<HTMLAnchorElement>('.site-header__nav-link')?.focus({ preventScroll: true });
+    updateDesktopMenu(null);
+  };
+
   useEffect(() => {
     setMobileOpen(false);
+    setMobileExpandedKey(null);
+    setOpenDesktopMenu(null);
+    if (desktopMenuTimerRef.current) clearTimeout(desktopMenuTimerRef.current);
+    return () => {
+      if (desktopMenuTimerRef.current) clearTimeout(desktopMenuTimerRef.current);
+    };
   }, [pathname]);
 
   useEffect(() => {
@@ -133,7 +183,10 @@ export function Header({ locale }: HeaderProps) {
       if (event.shiftKey && (activeElement === firstElement || !panel.contains(activeElement))) {
         event.preventDefault();
         lastElement.focus();
-      } else if (!event.shiftKey && (activeElement === lastElement || !panel.contains(activeElement))) {
+      } else if (
+        !event.shiftKey &&
+        (activeElement === lastElement || !panel.contains(activeElement))
+      ) {
         event.preventDefault();
         firstElement.focus();
       }
@@ -163,10 +216,14 @@ export function Header({ locale }: HeaderProps) {
     <>
       <header
         ref={backgroundHeaderRef}
-        className="relative z-[9999] min-h-[78px] bg-transparent bp-tablet-min:min-h-header-h"
+        className="site-header relative z-[9999] min-h-[78px] bg-transparent xl:min-h-header-h"
       >
-        <div className="fixed inset-x-0 top-0 z-[9999] flex h-[78px] items-center justify-between bg-white px-3 bp-tablet-min:hidden">
-          <Link href={`/${locale}`} className="ml-2 flex h-[72px] w-auto items-center" aria-label={logoAlt}>
+        <div className="fixed inset-x-0 top-0 z-[9999] flex h-[78px] items-center justify-between bg-white px-3 xl:hidden">
+          <Link
+            href={`/${locale}`}
+            className="ml-2 flex h-[72px] w-auto items-center"
+            aria-label={logoAlt}
+          >
             <Image
               src={HEADER_LOGO_SRC}
               alt={logoAlt}
@@ -174,7 +231,7 @@ export function Header({ locale }: HeaderProps) {
               height={40}
               priority
               className="max-w-none object-contain object-left object-center"
-              style={{ width: 'auto', height: '40px' }}
+              style={{ width: '229px', height: 'auto' }}
             />
           </Link>
           <button
@@ -182,22 +239,27 @@ export function Header({ locale }: HeaderProps) {
             type="button"
             onClick={() => {
               previouslyFocusedRef.current = openButtonRef.current;
+              setMobileExpandedKey(null);
               setMobileOpen(true);
             }}
-            className="flex h-[60px] w-[50px] items-center justify-center text-text-secondary"
+            className="flex h-[60px] w-[50px] items-center justify-center text-text-secondary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary"
             aria-label={mobileNavCopy.open}
             aria-expanded={mobileOpen}
             aria-controls="mobile-navigation-dialog"
           >
-            <HiBars3BottomRight className="h-8 w-8" />
+            <HiBars3BottomRight className="h-8 w-8" aria-hidden="true" />
           </button>
         </div>
 
-        <div className="fixed inset-x-0 top-0 z-[9999] hidden h-header-h w-full items-center border-b border-black/6 bg-white shadow-[0_8px_26px_rgba(15,23,42,0.06)] bp-tablet-min:flex">
-          <div className="flex w-full items-center justify-between pl-12 pr-10 bp-desktop-wide-max:pl-10 bp-desktop-wide-max:pr-8 bp-tablet-max:px-4">
+        <div className="site-header__desktop-bar fixed inset-x-0 top-0 z-[9999] hidden h-header-h w-full items-center border-b border-black/6 bg-white shadow-[0_8px_26px_rgba(15,23,42,0.06)] xl:flex">
+          <div className={styles.desktopLayout}>
             <div className="shrink-0 self-center">
               <div className="w-auto">
-                <Link href={`/${locale}`} className="flex h-[78px] w-auto items-center justify-start" aria-label={logoAlt}>
+                <Link
+                  href={`/${locale}`}
+                  className="site-header__desktop-logo-link flex h-[78px] w-auto items-center justify-start"
+                  aria-label={logoAlt}
+                >
                   <Image
                     src={HEADER_LOGO_SRC}
                     alt={logoAlt}
@@ -205,68 +267,97 @@ export function Header({ locale }: HeaderProps) {
                     height={48}
                     priority
                     className="max-w-none object-contain object-left object-center"
-                    style={{ width: 'auto', height: '48px' }}
+                    style={{ width: '275px', height: 'auto' }}
                   />
                 </Link>
               </div>
             </div>
 
-            <div className="ml-10 flex min-w-0 flex-1 self-center justify-end px-2 bp-desktop-wide-max:ml-7 bp-tablet-max:ml-3 bp-tablet-max:px-1">
-              <div className="e_navigationA-24 flex min-w-0 flex-1 items-center justify-end">
+            <div className={styles.primaryNav}>
+              <div className="e_navigationA-24">
                 <div className="p_navButton hidden" />
-                <div className="p_navContent flex items-center justify-end">
-                  <ul className="p_level1Box flex items-center justify-end gap-0">
+                <div className="p_navContent">
+                  <ul className={`p_level1Box ${styles.primaryList}`}>
                     {navItems.map((item) => {
                       const href = buildLocaleHref(locale, item.href);
-                      const childHrefs = item.children?.map((child) => buildLocaleHref(locale, child.href)) ?? [];
-                      const isActive = isActiveNavItem(pathname, href) || childHrefs.some((childHref) => isActiveNavItem(pathname, childHref));
+                      const childHrefs =
+                        item.children?.map((child) => buildLocaleHref(locale, child.href)) ?? [];
+                      const isActive =
+                        isActiveNavItem(pathname, href) ||
+                        childHrefs.some((childHref) => isActiveNavItem(pathname, childHref));
                       const isContactItem = item.key === 'contact';
 
                       return (
                         <li
                           key={item.key}
-                          className={`p_level1Item group relative h-header-h list-none border-none ${
-                            isContactItem ? '' : 'mr-[12px] bp-desktop-wide-max:mr-[8px] bp-tablet-max:mr-[4px]'
-                          }`}
+                          data-open={openDesktopMenu === item.key || undefined}
+                          onMouseEnter={() => updateDesktopMenu(item.children?.length ? item.key : null, 130)}
+                          onMouseLeave={(event) => {
+                            if (!event.currentTarget.contains(document.activeElement)) {
+                              updateDesktopMenu(null, 180);
+                            }
+                          }}
+                          onFocusCapture={(event) => {
+                            if (!event.currentTarget.contains(event.relatedTarget)) {
+                              updateDesktopMenu(item.children?.length ? item.key : null);
+                            }
+                          }}
+                          onBlurCapture={(event) => {
+                            if (!event.currentTarget.contains(event.relatedTarget)) {
+                              updateDesktopMenu(null);
+                            }
+                          }}
+                          onClickCapture={(event) => {
+                            if (event.target instanceof Element && event.target.closest('a[href]')) {
+                              dismissDesktopMenu(event.currentTarget);
+                            }
+                          }}
+                          onKeyDown={(event) => {
+                            if (event.key === 'Escape') {
+                              event.preventDefault();
+                              dismissDesktopMenu(event.currentTarget);
+                            }
+                          }}
+                          className="site-header__nav-item p_level1Item group relative h-header-h list-none border-none"
                         >
                           <p
-                            className={`p_menu1Item relative h-header-h ${
-                              isActive
-                                ? ''
-                                : ''
-                            }`}
+                            className={`site-header__nav-height p_menu1Item relative h-header-h ${isActive ? '' : ''}`}
                           >
                             <Link
                               href={href}
-                              className={`relative z-[2] flex h-header-h items-center whitespace-nowrap px-[16px] text-center text-[15px] tracking-[0.01em] text-text-secondary transition-colors duration-300 bp-desktop-wide-max:px-[14px] bp-tablet-max:px-[10px] bp-tablet-max:text-[14px] ${
-                                isActive ? 'font-semibold text-[#202020]' : 'font-medium group-hover:text-[#202020]'
+                              className={`site-header__nav-link ${isContactItem ? 'site-header__contact-link' : ''} relative z-[2] flex items-center whitespace-nowrap text-center text-[15px] tracking-[0.01em] transition-colors duration-300 ${
+                                isContactItem
+                                  ? 'my-[18px] h-[46px] bg-[#c51624] px-[18px] font-semibold text-white hover:bg-[#a90f1b] focus-visible:bg-[#a90f1b] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#c51624]'
+                                  : `${styles.primaryLink} h-header-h px-[10px] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-4px] focus-visible:outline-brand-primary`
                               }`}
+                              aria-current={isActive ? 'page' : undefined}
+                              aria-expanded={item.children?.length ? openDesktopMenu === item.key : undefined}
+                              aria-controls={item.children?.length ? `desktop-subnav-${item.key}` : undefined}
                             >
-                              <span className={`relative inline-flex items-center leading-none after:absolute after:-bottom-[31px] after:left-[4px] after:right-[4px] after:h-[1.5px] after:rounded-full after:bg-red-600/70 after:transition-transform after:duration-300 after:content-[''] ${
-                                isActive ? 'after:scale-x-100' : 'after:scale-x-0 group-hover:after:scale-x-100'
-                              }`}>
+                              <span className="inline-flex items-center leading-none">
                                 {item.labelText}
                               </span>
-                              {item.children?.length ? (
-                                <HiChevronRight className="ml-[2px] inline-block h-[14px] w-[14px] align-middle text-current bp-tablet-min:hidden" />
-                              ) : null}
                             </Link>
                           </p>
 
                           {item.children?.length ? (
-                            <ul className="p_level2Box absolute left-0 top-full z-[99] hidden min-w-[220px] overflow-hidden border border-[#dddddd] bg-white py-0 shadow-[0_10px_24px_rgba(0,0,0,0.08)] group-hover:block">
+                            <ul
+                              id={`desktop-subnav-${item.key}`}
+                              className={`p_level2Box ${styles.submenu}`}
+                            >
                               {item.children.map((child) => (
-                                <li key={child.key} className="p_level2Item list-none border-b border-[#d5d5d5] last:border-b-0">
+                                <li
+                                  key={child.key}
+                                  className="p_level2Item list-none"
+                                >
                                   <p className="p_menu2Item">
-                                    <Link
+                                    <SubmenuLink
                                       href={buildLocaleHref(locale, child.href)}
-                                      className="group/item flex items-center justify-between whitespace-nowrap px-5 py-3 text-left text-[15px] font-normal leading-[1.8] text-[#333333] transition-all duration-300 hover:bg-bg-language hover:text-text-inverse bp-tablet-max:text-[12px]"
+                                      className={styles.submenuLink}
+                                      aria-current={pathname === buildLocaleHref(locale, child.href) ? 'page' : undefined}
                                     >
-                                      <span>{child.labelText}</span>
-                                      <span className="pc_ej ml-[10px] block h-5 w-[17px] text-transparent transition-colors group-hover/item:text-white/70">
-                                        <HiChevronRight className="h-5 w-[17px]" />
-                                      </span>
-                                    </Link>
+                                      {child.labelText}
+                                    </SubmenuLink>
                                   </p>
                                 </li>
                               ))}
@@ -276,19 +367,33 @@ export function Header({ locale }: HeaderProps) {
                       );
                     })}
 
-                    <li className="p_level1Item group relative h-header-h list-none border-none">
-                      <Link
-                        href={switchLocalePath}
-                        className="relative z-[2] flex h-header-h items-center whitespace-nowrap px-[16px] text-center text-[15px] font-medium tracking-[0.01em] text-text-secondary transition-colors duration-300 bp-desktop-wide-max:px-[14px] bp-tablet-max:px-[10px] bp-tablet-max:text-[14px] hover:text-[#202020]"
-                      >
-                        <span>{localeLabel[switchLocale]}</span>
-                      </Link>
-                    </li>
                   </ul>
                 </div>
               </div>
             </div>
 
+            <ul className={styles.actions}>
+              {(
+                <li className="relative flex list-none items-center border-none">
+                  <a
+                    href={`tel:${siteSettings.salesPhone.replace(/\s+/g, '')}`}
+                    className="flex min-h-[44px] items-center gap-2 whitespace-nowrap text-[13px] font-medium text-[#5b6678] transition-colors duration-200 hover:text-brand-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary"
+                  >
+                    <HiPhone aria-hidden="true" className="h-4 w-4" />
+                    <span>{currentLocale === 'zh' ? siteSettings.salesPhone.replace(/^\+86-?/, '') : siteSettings.salesPhone}</span>
+                  </a>
+                </li>
+              )}
+
+              <li className="relative flex list-none items-center">
+                <Link
+                  href={switchLocalePath}
+                  className="relative z-[2] flex min-h-[44px] min-w-8 items-center justify-center whitespace-nowrap text-center text-[14px] font-medium tracking-[0.01em] text-[#697386] transition-colors duration-300 hover:text-brand-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-4px] focus-visible:outline-brand-primary"
+                >
+                  <span>{localeLabel[switchLocale]}</span>
+                </Link>
+              </li>
+            </ul>
           </div>
         </div>
       </header>
@@ -297,70 +402,117 @@ export function Header({ locale }: HeaderProps) {
         <div
           ref={mobilePanelRef}
           id="mobile-navigation-dialog"
-          className="fixed inset-0 z-[10000] overflow-y-auto bg-white bp-tablet-min:hidden"
+          className="fixed inset-0 z-[10000] overflow-y-auto bg-white xl:hidden"
           role="dialog"
           aria-modal="true"
           aria-label={mobileNavCopy.dialog}
           tabIndex={-1}
         >
-            <div className="flex h-[78px] items-center justify-between border-b border-black/5 px-4">
-              <Link href={`/${locale}`} className="ml-2 flex h-[72px] w-auto items-center" aria-label={logoAlt}>
-                <Image
-                  src={HEADER_LOGO_SRC}
-                  alt={logoAlt}
-                  width={229}
-                  height={40}
-                  priority
-                  className="max-w-none object-contain object-left object-center"
-                  style={{ width: 'auto', height: '40px' }}
-                />
-              </Link>
-              <button
-                ref={closeButtonRef}
-                type="button"
-                onClick={() => setMobileOpen(false)}
-                className="flex h-[60px] w-[50px] items-center justify-center text-brand-primary"
-                aria-label={mobileNavCopy.close}
-              >
-                <HiOutlineXMark className="h-8 w-8" />
-              </button>
-            </div>
+          <div className="sticky top-0 z-20 flex h-[78px] items-center justify-between border-b border-black/5 bg-white px-4">
+            <Link
+              href={`/${locale}`}
+              className="ml-2 flex h-[72px] w-auto items-center"
+              aria-label={logoAlt}
+            >
+              <Image
+                src={HEADER_LOGO_SRC}
+                alt={logoAlt}
+                width={229}
+                height={40}
+                priority
+                className="max-w-none object-contain object-left object-center"
+                style={{ width: '229px', height: 'auto' }}
+              />
+            </Link>
+            <button
+              ref={closeButtonRef}
+              type="button"
+              onClick={() => setMobileOpen(false)}
+              className="flex h-[60px] w-[50px] items-center justify-center text-brand-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary"
+              aria-label={mobileNavCopy.close}
+            >
+              <HiOutlineXMark className="h-8 w-8" aria-hidden="true" />
+            </button>
+          </div>
 
-            <div className="px-5 pb-10 pt-4">
-              <div className="p_navContent">
-                <ul className="p_level1Box flex flex-col">
-                  {navItems.map((item) => {
+          {currentLocale === 'zh' ? (
+            <div className="sticky top-[78px] z-10 border-b border-[#e5e9f0] bg-white px-5 py-3 shadow-[0_8px_18px_rgba(15,23,42,0.05)]">
+              <a
+                href={`tel:${siteSettings.salesPhone.replace(/\s+/g, '')}`}
+                className="flex min-h-[44px] w-full items-center justify-center gap-2 rounded-[4px] border border-[#cfd8e5] px-3 text-[14px] font-semibold text-brand-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary"
+              >
+                <HiPhone aria-hidden="true" className="h-4 w-4" />
+                电话咨询
+              </a>
+            </div>
+          ) : null}
+
+          <div className="px-5 pb-10 pt-4">
+            <div className="p_navContent">
+              <ul className="p_level1Box flex flex-col">
+                {navItems
+                  .filter((item) => currentLocale !== 'zh' || item.key !== 'contact')
+                  .map((item) => {
                     const href = buildLocaleHref(locale, item.href);
-                    const childHrefs = item.children?.map((child) => buildLocaleHref(locale, child.href)) ?? [];
-                    const isActive = isActiveNavItem(pathname, href) || childHrefs.some((childHref) => isActiveNavItem(pathname, childHref));
+                    const childHrefs =
+                      item.children?.map((child) => buildLocaleHref(locale, child.href)) ?? [];
+                    const isActive =
+                      isActiveNavItem(pathname, href) ||
+                      childHrefs.some((childHref) => isActiveNavItem(pathname, childHref));
+                    const isContactItem = item.key === 'contact';
+                    const isExpanded = mobileExpandedKey === item.key;
+                    const submenuId = `mobile-subnav-${item.key}`;
 
                     return (
                       <li key={item.key} className="p_level1Item list-none border-b border-black/5">
-                        <p className="p_menu1Item">
+                        <div className="p_menu1Item flex min-h-[58px] items-center">
                           <Link
                             href={href}
-                            className={`flex min-h-[50px] items-center justify-between py-1 text-[14px] font-semibold leading-[50px] ${
-                              isActive ? 'text-brand-primary' : 'text-text-secondary'
+                            className={`my-1 flex min-h-[50px] min-w-0 flex-1 items-center px-3 py-1 text-[15px] leading-[1.5] focus-visible:outline focus-visible:outline-2 focus-visible:outline-brand-primary ${
+                              isContactItem
+                                ? 'bg-[#c51624] font-semibold text-white'
+                                : styles.primaryLink
                             }`}
+                            aria-current={isActive ? 'page' : undefined}
                           >
                             <span>{item.labelText}</span>
-                            {item.children?.length ? (
-                              <HiChevronRight className={`h-4 w-4 ${isActive ? 'text-brand-primary' : 'text-text-secondary'}`} />
-                            ) : null}
                           </Link>
-                        </p>
+                          {item.children?.length ? (
+                            <button
+                              type="button"
+                              className="flex h-11 w-11 shrink-0 items-center justify-center rounded-[4px] text-text-secondary focus-visible:outline focus-visible:outline-2 focus-visible:outline-brand-primary"
+                              aria-label={`${isExpanded ? '收起' : '展开'}${item.labelText}`}
+                              aria-expanded={isExpanded}
+                              aria-controls={submenuId}
+                              onClick={() =>
+                                setMobileExpandedKey((current) =>
+                                  current === item.key ? null : item.key,
+                                )
+                              }
+                            >
+                              <HiChevronDown
+                                className={`h-5 w-5 transition-transform duration-200 ${isExpanded ? 'rotate-180 text-brand-primary' : ''}`}
+                                aria-hidden="true"
+                              />
+                            </button>
+                          ) : null}
+                        </div>
 
-                        {item.children?.length ? (
-                          <ul className="p_level2Box pb-4 pl-5">
+                        {item.children?.length && isExpanded ? (
+                          <ul id={submenuId} className="p_level2Box pb-4 pl-5">
                             {item.children.map((child) => (
                               <li key={child.key} className="p_level2Item list-none">
                                 <p className="p_menu2Item">
-                                  <Link
+                                  <SubmenuLink
                                     href={buildLocaleHref(locale, child.href)}
-                                    className="block py-2 text-[14px] leading-[30px] text-[#666666]"
+                                    onClick={() => {
+                                      setMobileOpen(false);
+                                      setMobileExpandedKey(null);
+                                    }}
+                                    className="block min-h-[44px] py-2 pr-3 text-[14px] leading-[28px] text-[#5f697b] focus-visible:outline focus-visible:outline-2 focus-visible:outline-brand-primary"
                                   >
                                     {child.labelText}
-                                  </Link>
+                                  </SubmenuLink>
                                 </p>
                               </li>
                             ))}
@@ -370,28 +522,17 @@ export function Header({ locale }: HeaderProps) {
                     );
                   })}
 
-                  <li className="p_level1Item list-none border-b border-black/5">
-                    <Link
-                      href={switchLocalePath}
-                      className="flex min-h-[50px] items-center justify-between py-1 text-[14px] font-semibold leading-[50px] text-text-secondary"
-                    >
-                      <span>{localeLabel[switchLocale]}</span>
-                    </Link>
-                  </li>
-                </ul>
-              </div>
-
-              <div className="mt-6 border-t border-black/5 pt-6">
-                <div className="inline-flex min-w-[120px] items-center justify-center">
+                <li className="p_level1Item list-none border-b border-black/5">
                   <Link
                     href={switchLocalePath}
-                    className="inline-flex min-w-[120px] items-center justify-center bg-bg-language px-4 py-3 text-button font-semibold text-text-inverse"
+                    className="flex min-h-[50px] items-center justify-between py-1 text-[14px] font-semibold leading-[50px] text-text-secondary focus-visible:outline focus-visible:outline-2 focus-visible:outline-brand-primary"
                   >
-                    {localeLabel[switchLocale]}
+                    <span>{localeLabel[switchLocale]}</span>
                   </Link>
-                </div>
-              </div>
+                </li>
+              </ul>
             </div>
+          </div>
         </div>
       ) : null}
     </>

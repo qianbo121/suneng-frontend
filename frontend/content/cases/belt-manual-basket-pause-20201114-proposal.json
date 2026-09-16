@@ -1,0 +1,49 @@
+{
+  "id": "belt-manual-basket-pause-20201114-proposal",
+  "slug": "muffle-belt-oil-quench-manual-basket-change-pause-proposal",
+  "title": "网带油淬炉换料框时要不要停带？",
+  "summary": "苏能2020年11月14日的一份马弗式保护气氛网带炉方案，拟让工件从落料口进入油槽内的活动料框。料框装满后，原文要求暂停网带输送，手动换入空框后再继续。由此，换框不是与加热过程无关的末端搬运：比较处理能力时，应把接料容量、换框占用及炉内工件停留一起核对，不能把约60kg/h的方案值直接当成持续合格产量。",
+  "body": "belt-manual-basket-pause-20201114-proposal.md",
+  "contentType": "proposal",
+  "publicationStatus": "draft",
+  "projectStatus": "proposal",
+  "workpiece": [],
+  "materials": [],
+  "process": [
+    "油淬加热"
+  ],
+  "equipment": [
+    "马弗式保护气氛网带炉"
+  ],
+  "need": [
+    "手动换框与连续加热衔接"
+  ],
+  "tags": [
+    "方案参考",
+    "手动换框与连续加热衔接"
+  ],
+  "facts": [
+    {
+      "label": "拟出料方式",
+      "value": "手动换料框",
+      "unit": "",
+      "condition": "满框需暂停网带，非不停带连续卸料",
+      "attribute": "方案参数"
+    },
+    {
+      "label": "拟料框定位",
+      "value": "滚轮与锁紧机构",
+      "unit": "",
+      "condition": "4套滚轮1套锁紧，具体到位信号未齐",
+      "attribute": "方案参数"
+    }
+  ],
+  "participation": "苏能拟提供网带加热炉及活动料框油淬配套，油槽冷却选配与动作接口按终版统一。",
+  "sourceSummary": "本文依据江苏苏能工业炉有限公司的历史方案资料整理，介绍拟定配置与供货条件；本文所引原件不构成设备已交付或验收通过的证明。",
+  "coverTitle": "网带油淬炉方案：手动换料框，为什么要计入整线节拍？",
+  "relatedLinks": [],
+  "projectYear": 2020,
+  "sourceDate": "2020-11-14",
+  "listTitle": "网带油淬炉换料框时要不要停带？",
+  "dateModified": "2026-09-12"
+}

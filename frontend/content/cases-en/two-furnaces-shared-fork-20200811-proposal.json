@@ -1,0 +1,13 @@
+{
+  "id": "two-furnaces-shared-fork-20200811-proposal",
+  "slug": "two-gas-furnaces-cooling-boxes-shared-fork-transfer-proposal",
+  "number": 87,
+  "title": "How should cooling boxes be scheduled when two heating furnaces share one charging machine?",
+  "summary": "Suneng's 2020 heat-treatment equipment proposal lists two gas-fired heating furnaces, two enclosed cooling boxes and one shared loading/unloading fork truck. Those quantities do not establish continuous output. Put each batch's heating, transfer, cooling-box occupancy and unloading on one schedule to check whether the shared truck and cooling stations can keep pace.",
+  "body": "two-furnaces-shared-fork-20200811-proposal.md",
+  "sourceFingerprint": "d9030c0320d41afa677a6e1d7d8b44d6024826c32220a9410330ca5ffb3a81bf",
+  "translationStatus": "complete",
+  "translatedAt": "2026-09-12",
+  "coverAlt": "",
+  "coverCaption": ""
+}

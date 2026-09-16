@@ -1,0 +1,79 @@
+{
+  "track-shoe-press-quench-line": {
+    "src": "/images/products/track-shoe-press-quench-line/remaining-batch-v1/01-hero-59800739618a.png",
+    "alt": "履带板加热、专用压淬与回火生产线整体配置示意",
+    "width": 1672,
+    "height": 941,
+    "optimized": true
+  },
+  "forging-waste-heat-qt-line": {
+    "src": "/images/products/forging-waste-heat-qt-line/remaining-batch-v1/01-hero-f203cf3ec5e8.png",
+    "alt": "锻件余热调质生产线整体设备组合示意",
+    "width": 1672,
+    "height": 941,
+    "optimized": true
+  },
+  "fastener-quench-temper-line": {
+    "src": "/images/products/fastener-quench-temper-line/reviewed-20260909/hero-line-044caea2c108.png",
+    "alt": "厂房内紧固件调质生产线整体配置示意",
+    "width": 1672,
+    "height": 941,
+    "optimized": true
+  },
+  "mesh-belt-carbonitriding-line": {
+    "src": "/images/products/mesh-belt-carbonitriding-line/mesh-batch-v1/01-hero-17ddaf898df2.png",
+    "alt": "气氛渗碳炉、封闭淬火后处理及独立回火设备配置示意",
+    "width": 1672,
+    "height": 941,
+    "optimized": true
+  },
+  "multi-furnace-quench-cell": {
+    "src": "/images/products/multi-furnace-quench-cell/remaining-batch-v1/01-hero-92504a57faa4.png",
+    "alt": "三台独立前装料加热炉共用横移操作机和左端淬火槽示意",
+    "width": 1672,
+    "height": 941,
+    "optimized": true
+  },
+  "aluminum-solution-aging-line": {
+    "src": "/images/products/aluminum-solution-aging-line/pilot-v1/01-hero-cd9819acb5dc.png",
+    "alt": "落底式铝合金固溶炉、炉下淬火槽及独立时效炉配置示意",
+    "width": 1672,
+    "height": 941,
+    "optimized": true
+  },
+  "aluminum-forging-heating-line": {
+    "src": "/images/products/aluminum-forging-heating-line/remaining-batch-v1/01-hero-d36d78e18c18.png",
+    "alt": "铝合金坯料锻前加热炉组、进出料辊道与测温交接配置示意",
+    "width": 1672,
+    "height": 941,
+    "optimized": true
+  },
+  "cylinder-curing-line": {
+    "src": "/images/products/cylinder-curing-line/remaining-batch-v1/01-hero-185b14897c45.png",
+    "alt": "缠绕气瓶连续热风固化线，包含端部支承送料、保温隧道与出料段示意",
+    "width": 1672,
+    "height": 941,
+    "optimized": true
+  },
+  "roller-mesh-belt-line": {
+    "src": "/images/products/roller-mesh-belt-line/mesh-batch-v1/01-hero-d1c3c740f9f5.png",
+    "alt": "网带连续加热保温、封闭受控冷却与进出料设备配置示意",
+    "width": 1672,
+    "height": 941,
+    "optimized": true
+  },
+  "copper-wire-annealing-line": {
+    "src": "/images/products/copper-wire-annealing-line/remaining-batch-v1/01-hero-64c51665bb66.png",
+    "alt": "铜丝管式连续退火机组与两端收放线设备示意",
+    "width": 1672,
+    "height": 941,
+    "optimized": true
+  },
+  "annealing-solution-line": {
+    "src": "/images/products/annealing-solution-line/remaining-batch-v1/01-hero-3af3a487d728.png",
+    "alt": "带材连续加热、冷却与收放卷设备的整体形态示意",
+    "width": 1672,
+    "height": 941,
+    "optimized": true
+  }
+}

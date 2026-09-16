@@ -1,0 +1,79 @@
+{
+  "id": "rt4-75-6-proposal",
+  "slug": "rt4-75-6-trolley-furnace-proposal",
+  "title": "600公斤台车炉装轴类零件，料架重量算不算？",
+  "listTitle": "600公斤台车炉装轴类零件，料架重量算不算？",
+  "listSummary": "比较轴类及小型零件台车炉，可先用带工装的装炉布置核对空间、支承和温度条件，再按实际测温要求比较仪表、测试与供货范围。",
+  "summary": "比较轴类及小型零件台车炉，可先用带工装的装炉布置核对空间、支承和温度条件，再按实际测温要求比较仪表、测试与供货范围。江苏苏能工业炉有限公司2021年11月2日的RT4-75-6方案，提出900×600×600mm有效加热区、500～650℃使用温度和75kW加热配置，方案额定装载量600kg的工装计入口径尚未明确。当时报价拟包含设备设计、制造、运输、安装和调试，可作为相似需求的比较起点。",
+  "body": "rt4-75-6-proposal.md",
+  "contentType": "proposal",
+  "publicationStatus": "draft",
+  "projectStatus": "proposal",
+  "projectYear": 2021,
+  "sourceDate": "2021-11-02",
+  "workpiece": [
+    "轴类",
+    "小型零件"
+  ],
+  "materials": [],
+  "process": [
+    "批次热处理"
+  ],
+  "equipment": [
+    "台车式电阻炉"
+  ],
+  "need": [
+    "单机配置"
+  ],
+  "tags": [
+    "轴类零件",
+    "台车炉",
+    "RT4-75-6",
+    "装载",
+    "测温",
+    "方案参考"
+  ],
+  "facts": [
+    {
+      "label": "方案有效加热区",
+      "value": "900×600×600",
+      "unit": "mm",
+      "condition": "长×宽×高；需结合工件、工装及循环空间核对，不等于最大工件外形",
+      "attribute": "方案参数"
+    },
+    {
+      "label": "方案使用温度",
+      "value": "500～650",
+      "unit": "℃",
+      "condition": "2021年RT4-75-6方案使用温区；不代表具体工艺或实测温点",
+      "attribute": "方案参数"
+    },
+    {
+      "label": "方案装载量",
+      "value": "600",
+      "unit": "kg",
+      "condition": "2021年方案额定装载量；工装计入口径及对应温度、载荷分布、静止加热/台车移动时的承载条件未展开，不等于净工件量、局部承重或实际产量",
+      "attribute": "方案参数"
+    }
+  ],
+  "participation": "2021年方案及报价拟包含设备设计、制造、运输、安装和调试，不含设备基础；使用方提供安装调试所需风、水、电、气及行吊，冷却水接入和异常处置接口需结合当前要求落实。",
+  "sourceSummary": "江苏苏能工业炉有限公司历史技术方案资料整理。",
+  "coverTitle": "台车式电阻炉\n历史方案",
+  "cover": {
+    "src": "/images/workpieces/fasteners-batch/workpiece-steel-pins.webp",
+    "alt": "轴类及小型零件工件参考图",
+    "caption": "工件参考图",
+    "fit": "contain"
+  },
+  "relatedLinks": [
+    {
+      "title": "了解台车炉的适用条件",
+      "href": "/zh/products/detail/trolley-furnace"
+    },
+    {
+      "title": "准备询价参数与供货范围",
+      "href": "/zh/articles/gongye-lu-baojia-canshu"
+    }
+  ],
+  "dateModified": "2026-09-12"
+}

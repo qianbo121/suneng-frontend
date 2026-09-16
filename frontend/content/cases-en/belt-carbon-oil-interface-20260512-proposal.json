@@ -1,0 +1,13 @@
+{
+  "id": "belt-carbon-oil-interface-20260512-proposal",
+  "slug": "controlled-atmosphere-belt-furnace-oil-smoke-interface-proposal",
+  "number": 92,
+  "title": "Discharge sealing and oil-fume extraction in an atmosphere mesh-belt furnace",
+  "summary": "Suneng's controlled-atmosphere roller-supported mesh-belt furnace proposal combines an oxygen probe and carbon-potential controller with oil-fume handling at the furnace exit. Carbon-potential measurement alone is insufficient for comparison. As workpieces drop from the protective-atmosphere heating zone into oil, the chute's oil-level seal, oil curtain and extraction also affect the proposed atmosphere-control conditions.",
+  "body": "belt-carbon-oil-interface-20260512-proposal.md",
+  "sourceFingerprint": "9acf49caa8f1fb06ccb21a503997d687cf2560639464d1db0adbcab8d56fdc91",
+  "translationStatus": "complete",
+  "translatedAt": "2026-09-12",
+  "coverAlt": "",
+  "coverCaption": ""
+}

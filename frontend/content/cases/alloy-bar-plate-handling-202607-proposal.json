@@ -1,0 +1,73 @@
+{
+  "id": "alloy-bar-plate-handling-202607-proposal",
+  "slug": "alloy-bar-plate-handling-202607-proposal",
+  "title": "高温合金棒料和板卷配炉，厂房装卸条件有什么不同？",
+  "summary": "同一高温合金管板项目的两份苏能方案讨论稿，分别配置棒料斜底加热炉和板卷罩式退火炉。前者要接通翻料、炉内滚动和推料辊道，后者依赖行车装料与移罩；判断现场能否配套，应先核对两条不同的搬运路径。",
+  "body": "alloy-bar-plate-handling-202607-proposal.md",
+  "contentType": "proposal",
+  "publicationStatus": "draft",
+  "projectStatus": "proposal",
+  "workpiece": [
+    "棒料",
+    "板材",
+    "带卷"
+  ],
+  "materials": [
+    "高温合金"
+  ],
+  "process": [
+    "加热",
+    "退火"
+  ],
+  "equipment": [
+    "斜底式燃气炉",
+    "罩式电阻炉"
+  ],
+  "need": [
+    "工程配套"
+  ],
+  "tags": [
+    "方案参考",
+    "棒料",
+    "板材",
+    "带卷",
+    "工程配套"
+  ],
+  "facts": [
+    {
+      "label": "棒料进出方式",
+      "value": "端进侧出",
+      "unit": "",
+      "condition": "仅斜底炉讨论稿，不代表整项目统一物流",
+      "attribute": "方案参数"
+    },
+    {
+      "label": "罩式炉装料",
+      "value": "行车装料",
+      "unit": "",
+      "condition": "内外罩分步装卸，吊运重量另核",
+      "attribute": "方案参数"
+    },
+    {
+      "label": "关键配套",
+      "value": "辊道与行车",
+      "unit": "",
+      "condition": "分别确认两个炉型的外部搬运接口",
+      "attribute": "方案参数"
+    }
+  ],
+  "participation": "同项目棒料加热与板卷退火设备的搬运及现场接口讨论",
+  "sourceSummary": "本文依据江苏苏能工业炉有限公司的历史方案资料整理，介绍拟定配置与供货条件；本文所引原件不构成设备已交付或验收通过的证明。",
+  "coverTitle": "棒料与板卷配炉方案：连续出料和移罩装料，对厂房接口有哪些不同？",
+  "relatedLinks": [],
+  "projectYear": 2026,
+  "sourceDate": "2026-07",
+  "cover": {
+    "src": "/images/case-covers/white-background-20260912/neutral-metal-plate-white.webp",
+    "alt": "合金板料类别工件示意",
+    "caption": "合金板料类别示意（本稿涉及的一类对象，人工智能生成，非客户实物）",
+    "fit": "contain"
+  },
+  "listTitle": "高温合金棒料和板卷配炉，厂房装卸条件有什么不同？",
+  "dateModified": "2026-09-12"
+}

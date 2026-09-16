@@ -1,0 +1,13 @@
+{
+  "id": "salt-temperature-volume-20260511-proposal",
+  "slug": "salt-bath-temperature-freeboard-workpiece-volume-proposal",
+  "number": 97,
+  "title": "Which temperature matters when selecting a salt-bath furnace: chamber temperature or bath temperature?",
+  "summary": "Suneng's 2026 electric salt-bath furnace sample specifies a maximum chamber temperature of 550°C, maximum salt-bath temperature of 400°C and a particular circulating-salt condition of 340°C. These concern different objects and cannot all be called “treatment temperature”. Likewise, separate the φ1500×1400 mm crucible interior, maximum liquid level and actual workpiece dimensions when assessing immersion.",
+  "body": "salt-temperature-volume-20260511-proposal.md",
+  "sourceFingerprint": "eae1a0ea95b472f8dbf940e7148490349a0937d2dd8a871f4f6b440e0d244e86",
+  "translationStatus": "complete",
+  "translatedAt": "2026-09-12",
+  "coverAlt": "",
+  "coverCaption": ""
+}

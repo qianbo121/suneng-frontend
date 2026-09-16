@@ -2,8 +2,8 @@ FROM node:22.23.1-alpine AS deps
 
 WORKDIR /app
 
-RUN npm install -g pnpm@9.15.4 --registry=https://registry.npmmirror.com \
-    && pnpm config set registry https://registry.npmmirror.com
+RUN npm install -g pnpm@9.15.4 --registry=https://registry.npmjs.org \
+    && pnpm config set registry https://registry.npmjs.org
 
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 COPY frontend/package.json ./frontend/package.json
@@ -24,6 +24,11 @@ ARG NEXT_PUBLIC_API_URL=/api
 ARG NEXT_PUBLIC_API_BASE_URL=/api
 ARG NEXT_PUBLIC_SITE_URL=http://localhost
 ARG API_BASE_URL_INTERNAL=http://backend:3001/api
+ARG NEXT_PUBLIC_BAIDU_SITE_VERIFICATION
+ARG NEXT_PUBLIC_BING_SITE_VERIFICATION
+ARG NEXT_PUBLIC_360_SITE_VERIFICATION
+ARG NEXT_PUBLIC_SOGOU_SITE_VERIFICATION
+ARG SITE_NOINDEX=false
 
 ENV NODE_ENV=production
 ENV NEXT_PUBLIC_APP_NAME=${NEXT_PUBLIC_APP_NAME}
@@ -32,9 +37,14 @@ ENV NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL}
 ENV NEXT_PUBLIC_API_BASE_URL=${NEXT_PUBLIC_API_BASE_URL}
 ENV NEXT_PUBLIC_SITE_URL=${NEXT_PUBLIC_SITE_URL}
 ENV API_BASE_URL_INTERNAL=${API_BASE_URL_INTERNAL}
+ENV NEXT_PUBLIC_BAIDU_SITE_VERIFICATION=${NEXT_PUBLIC_BAIDU_SITE_VERIFICATION}
+ENV NEXT_PUBLIC_BING_SITE_VERIFICATION=${NEXT_PUBLIC_BING_SITE_VERIFICATION}
+ENV NEXT_PUBLIC_360_SITE_VERIFICATION=${NEXT_PUBLIC_360_SITE_VERIFICATION}
+ENV NEXT_PUBLIC_SOGOU_SITE_VERIFICATION=${NEXT_PUBLIC_SOGOU_SITE_VERIFICATION}
+ENV SITE_NOINDEX=${SITE_NOINDEX}
 
-RUN npm install -g pnpm@9.15.4 --registry=https://registry.npmmirror.com \
-    && pnpm config set registry https://registry.npmmirror.com
+RUN npm install -g pnpm@9.15.4 --registry=https://registry.npmjs.org \
+    && pnpm config set registry https://registry.npmjs.org
 
 COPY --from=deps /app/node_modules ./node_modules
 COPY --from=deps /app/frontend/node_modules ./frontend/node_modules

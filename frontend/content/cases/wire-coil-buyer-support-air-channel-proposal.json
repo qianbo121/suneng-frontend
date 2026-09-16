@@ -1,0 +1,77 @@
+{
+  "id": "wire-coil-support-airflow-20231224-proposal",
+  "slug": "wire-coil-buyer-support-air-channel-proposal",
+  "title": "钢丝盘圆台车炉的支撑座自己做，需要厂家确认什么？",
+  "listTitle": "钢丝盘圆台车炉的支撑座自己做，需要厂家确认什么？",
+  "listSummary": "钢丝盘圆的支撑座不只决定工件怎样放置，也参与炉底热风通道的形成。",
+  "summary": "钢丝盘圆的支撑座不只决定工件怎样放置，也参与炉底热风通道的形成。江苏苏能工业炉有限公司2023年12月24日的台车式热风循环电阻炉方案，把炉底支撑座列为用户自备，并说明其在承载工件的同时留出底部循环通道，与炉侧导风罩衔接。因此，支撑座应与台车面、装炉排列和导风罩一起确定，不能在设备定型后仅按总重量另配一组垫件。",
+  "body": "wire-coil-buyer-support-air-channel-proposal.md",
+  "contentType": "proposal",
+  "publicationStatus": "draft",
+  "projectStatus": "proposal",
+  "projectYear": 2023,
+  "sourceDate": "2023-12-24",
+  "workpiece": [
+    "钢丝盘圆"
+  ],
+  "materials": [
+    "钢丝"
+  ],
+  "process": [
+    "热处理加热"
+  ],
+  "equipment": [
+    "台车式热风循环电阻炉"
+  ],
+  "need": [
+    "自备支座与热风通道配套"
+  ],
+  "tags": [
+    "方案参考",
+    "钢丝盘圆",
+    "自备支座与热风通道配套"
+  ],
+  "facts": [
+    {
+      "label": "方案装炉组合",
+      "value": "2t/件×44件",
+      "unit": "",
+      "condition": "合计88t；工件与工装是否另计须按本次装炉清单核对",
+      "attribute": "方案参数"
+    },
+    {
+      "label": "方案循环风机",
+      "value": "8",
+      "unit": "套",
+      "condition": "炉顶配置，不据此推各件工件风量",
+      "attribute": "方案参数"
+    },
+    {
+      "label": "方案控温区数",
+      "value": "16",
+      "unit": "区",
+      "condition": "加热控制分组，不推工件测点数量",
+      "attribute": "方案参数"
+    }
+  ],
+  "participation": "历史方案拟提供热风循环台车炉、控制与安装调试；炉底支撑座由用户自备。",
+  "sourceSummary": "江苏苏能工业炉有限公司历史技术方案资料整理。",
+  "coverTitle": "钢丝盘圆台车炉方案：自备支撑座为什么还要对接导风罩？",
+  "relatedLinks": [
+    {
+      "title": "了解台车炉的适用条件",
+      "href": "/zh/products/detail/trolley-furnace"
+    },
+    {
+      "title": "准备询价参数与供货范围",
+      "href": "/zh/articles/gongye-lu-baojia-canshu"
+    }
+  ],
+  "cover": {
+    "src": "/images/workpieces/reviewed-20260909/pipe-bar-wire/wire-rod-coil.webp",
+    "alt": "盘卷线材类别工件示意",
+    "caption": "盘卷线材工件示意（人工智能生成，非客户实物）",
+    "fit": "contain"
+  },
+  "dateModified": "2026-09-12"
+}

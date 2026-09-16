@@ -3,6 +3,7 @@ import {
   App,
   Button,
   Card,
+  Descriptions,
   Empty,
   Form,
   Input,
@@ -13,6 +14,7 @@ import {
   Table,
   Tag,
   Tooltip,
+  Typography,
 } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import { useRef, useState } from 'react';
@@ -21,6 +23,7 @@ import useSWR from 'swr';
 import { usePageTitle } from '@/hooks/usePageTitle';
 import {
   getCustomRequirementList,
+  getCustomRequirementDetail,
   getCustomRequirementNotificationAudits,
   manageCustomRequirementNotification,
   markCustomRequirementFollowed,
@@ -40,6 +43,7 @@ import {
 } from '@/pages/content/latest-target-request';
 import {
   CustomRequirementEntity,
+  CustomRequirementDetailEntity,
   CustomRequirementStatus,
   InquiryNotificationAction,
   InquiryNotificationAudit,
@@ -90,6 +94,92 @@ function NotificationStatusCell({ record }: { record: CustomRequirementEntity })
         </Tooltip>
       ) : null}
     </Space>
+  );
+}
+
+const workpieceStateLabels: Record<string, string> = {
+  purpose_unselected: '尚未选择处理目的',
+  search_no_match: '搜索工件待工程确认',
+  insufficient_conditions: '关键工况待补充',
+  single_direction: '已形成一个公开方向',
+  multiple_directions: '已形成多个公开方向',
+  completed_pending_engineering: '初步条件已完成，待工程确认',
+  engineering_review: '工程复核中',
+  no_match: '现有条件未收敛',
+  special_process_boundary: '专项工艺边界',
+  invalid_input: '输入无效',
+};
+
+function WorkpieceContextPanel({ detail }: { detail: CustomRequirementDetailEntity }) {
+  const context = detail.workpieceContext;
+  if (!context) {
+    return <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description="该询盘未携带工件判断上下文" />;
+  }
+
+  return (
+    <Card
+      size="small"
+      title="工件判断上下文"
+      extra={<Tag color="blue">客户自报工况</Tag>}
+      styles={{ body: { padding: 18 } }}
+    >
+      <Descriptions size="small" column={{ xs: 1, sm: 2, lg: 3 }}>
+        <Descriptions.Item label="工件分类">{context.categoryName}</Descriptions.Item>
+        <Descriptions.Item label="工件名称">
+          {context.workpieceName || '未匹配具体工件'}
+        </Descriptions.Item>
+        <Descriptions.Item label="搜索原词">{context.searchTerm || '-'}</Descriptions.Item>
+        <Descriptions.Item label="处理目的">
+          {context.processPurposeName || '未选择'}
+        </Descriptions.Item>
+        <Descriptions.Item label="服务端判断状态">
+          {workpieceStateLabels[context.displayState] || '待工程确认'}
+        </Descriptions.Item>
+        <Descriptions.Item label="规则版本">{context.ruleVersion}</Descriptions.Item>
+        <Descriptions.Item label="公开基线">
+          {context.baselineVersion || '未签署'}
+        </Descriptions.Item>
+        <Descriptions.Item label="提交时间">
+          {new Date(context.createdAt).toLocaleString('zh-CN')}
+        </Descriptions.Item>
+      </Descriptions>
+
+      <Typography.Title level={5} style={{ margin: '16px 0 8px' }}>
+        客户填写的原始工况
+      </Typography.Title>
+      {context.rawConditions.length ? (
+        <Descriptions size="small" bordered column={{ xs: 1, sm: 2, lg: 3 }}>
+          {context.rawConditions.map((item) => (
+            <Descriptions.Item key={`${item.label}-${item.value}`} label={item.label}>
+              {item.value}
+            </Descriptions.Item>
+          ))}
+        </Descriptions>
+      ) : (
+        <Typography.Text type="secondary">客户未填写具体工况。</Typography.Text>
+      )}
+
+      {context.missingConditions.length ? (
+        <div style={{ marginTop: 14 }}>
+          <Typography.Text strong>缺失或待确认：</Typography.Text>{' '}
+          <Typography.Text>{context.missingConditions.join('、')}</Typography.Text>
+        </div>
+      ) : null}
+
+      {context.publicDirections.length ? (
+        <div style={{ marginTop: 14 }}>
+          <Typography.Text strong>服务端公开方向：</Typography.Text>{' '}
+          <Typography.Text>{context.publicDirections.join('、')}</Typography.Text>
+        </div>
+      ) : null}
+
+      <Alert
+        style={{ marginTop: 16 }}
+        type="info"
+        showIcon
+        message="以上工况由客户自报，仅用于初步判断，最终以图纸、技术资料和工程确认结果为准。"
+      />
+    </Card>
   );
 }
 
@@ -158,6 +248,11 @@ export function CustomRequirementPage() {
   const [auditLoading, setAuditLoading] = useState(false);
   const [auditError, setAuditError] = useState('');
   const auditRequestGuardRef = useRef(createLatestTargetRequestGuard());
+  const [detailTargetId, setDetailTargetId] = useState<number | null>(null);
+  const [detailRecord, setDetailRecord] = useState<CustomRequirementDetailEntity | null>(null);
+  const [detailLoading, setDetailLoading] = useState(false);
+  const [detailError, setDetailError] = useState('');
+  const detailRequestGuardRef = useRef(createLatestTargetRequestGuard());
 
   const { data, isLoading, error, mutate } = useSWR(['custom-requirements', page, filters], () =>
     getCustomRequirementList({
@@ -231,6 +326,38 @@ export function CustomRequirementPage() {
     setAuditLoading(false);
   };
 
+  const closeRequirementDetail = () => {
+    detailRequestGuardRef.current.invalidate();
+    setDetailTargetId(null);
+    setDetailRecord(null);
+    setDetailError('');
+    setDetailLoading(false);
+  };
+
+  const loadRequirementDetail = async (record: CustomRequirementEntity, force = false) => {
+    if (detailTargetId === record.id && !force) {
+      closeRequirementDetail();
+      return;
+    }
+    setDetailTargetId(record.id);
+    await runLatestTargetRequest({
+      guard: detailRequestGuardRef.current,
+      targetId: record.id,
+      request: () => getCustomRequirementDetail(record.id),
+      onStart: () => {
+        setDetailLoading(true);
+        setDetailError('');
+        setDetailRecord(null);
+      },
+      onSuccess: setDetailRecord,
+      onError: (detailRequestError) => {
+        setDetailRecord(null);
+        setDetailError(extractApiErrorMessage(detailRequestError));
+      },
+      onSettled: () => setDetailLoading(false),
+    });
+  };
+
   const columns: ColumnsType<CustomRequirementEntity> = [
     {
       title: '提交日期',
@@ -264,10 +391,14 @@ export function CustomRequirementPage() {
       render: (value?: string | null) => value || '-',
     },
     {
-      title: '联系电话',
+      title: '电话 / 微信',
       dataIndex: 'phone',
       width: 150,
-      render: (value?: string | null) => (value ? <a href={`tel:${value}`}>{value}</a> : '-'),
+      render: (value?: string | null) => {
+        if (!value) return '-';
+        const dialable = /^[+()\d\s-]{6,}$/.test(value);
+        return dialable ? <a href={`tel:${value}`}>{value}</a> : value;
+      },
     },
     {
       title: '邮箱',
@@ -328,27 +459,33 @@ export function CustomRequirementPage() {
     {
       title: '操作',
       fixed: 'right',
-      width: 110,
+      width: 200,
       render: (_, record) => (
-        <Button
-          type="primary"
-          disabled={record.status === 'followed'}
-          onClick={() => {
-            modal.confirm({
-              title: '是否跟进？',
-              content: '确认后，该需求状态将从未跟进变为已跟进。',
-              okText: '是',
-              cancelText: '否',
-              onOk: async () => {
-                await markCustomRequirementFollowed(record.id);
-                message.success('已跟进');
-                await mutate();
-              },
-            });
-          }}
-        >
-          跟进
-        </Button>
+        <Space size={6}>
+          <Button size="small" onClick={() => void loadRequirementDetail(record)}>
+            {detailTargetId === record.id ? '收起详情' : '工况详情'}
+          </Button>
+          <Button
+            size="small"
+            type="primary"
+            disabled={record.status === 'followed'}
+            onClick={() => {
+              modal.confirm({
+                title: '是否跟进？',
+                content: '确认后，该需求状态将从未跟进变为已跟进。',
+                okText: '是',
+                cancelText: '否',
+                onOk: async () => {
+                  await markCustomRequirementFollowed(record.id);
+                  message.success('已跟进');
+                  await mutate();
+                },
+              });
+            }}
+          >
+            跟进
+          </Button>
+        </Space>
       ),
     },
   ];
@@ -410,7 +547,33 @@ export function CustomRequirementPage() {
                   }
                 : undefined
             }
-            scroll={{ x: 2240 }}
+            expandable={{
+              expandedRowKeys: detailTargetId ? [detailTargetId] : [],
+              showExpandColumn: false,
+              expandedRowRender: (record) => (
+                <Spin spinning={detailLoading && detailTargetId === record.id}>
+                  {detailError && detailTargetId === record.id ? (
+                    <Alert
+                      type="error"
+                      showIcon
+                      message="询盘详情加载失败"
+                      description={detailError}
+                      action={
+                        <Button
+                          size="small"
+                          onClick={() => void loadRequirementDetail(record, true)}
+                        >
+                          重试
+                        </Button>
+                      }
+                    />
+                  ) : detailRecord?.id === record.id ? (
+                    <WorkpieceContextPanel detail={detailRecord} />
+                  ) : null}
+                </Spin>
+              ),
+            }}
+            scroll={{ x: 2330 }}
             pagination={{
               current: data?.page || page,
               pageSize: data?.pageSize || 10,

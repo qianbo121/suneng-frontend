@@ -1,0 +1,81 @@
+{
+  "id": "steel-parts-furnace-group-20231217-proposal",
+  "slug": "steel-parts-furnace-group-insulated-transfer-interfaces-proposal",
+  "title": "热处理炉群的随料保温罩、吊具与转运工位",
+  "listTitle": "热处理炉群的随料保温罩、吊具与转运工位",
+  "listSummary": "炉群中的工件、吊具和保温罩需要按实际转移路径核对，不能共用一个装载量。",
+  "summary": "炉群中的工件、吊具和保温罩需要按实际转移路径核对，不能共用一个装载量。江苏苏能工业炉有限公司2023年12月至2024年4月的这组历史方案，分别列出气氛保护井式炉、硝盐炉、回火炉、风冷和清洗设备，以及水冷与吊运配套；硝盐炉稿另提出保温罩随工件加热和转移。采购初筛应先确认每一步进入设备的是哪些部件，再比较尺寸、热载荷与接口。",
+  "body": "steel-parts-furnace-group-insulated-transfer-interfaces-proposal.md",
+  "contentType": "proposal",
+  "publicationStatus": "draft",
+  "projectStatus": "proposal",
+  "projectYear": 2023,
+  "sourceDate": "2023-12-17",
+  "workpiece": [
+    "轴承钢工件",
+    "中碳合金钢工件"
+  ],
+  "materials": [
+    "GCr15",
+    "40CrNiMoA"
+  ],
+  "process": [
+    "球化退火",
+    "淬火加热",
+    "等温淬火",
+    "回火"
+  ],
+  "equipment": [
+    "井式气氛保护炉",
+    "硝盐炉",
+    "井式回火炉",
+    "风冷桶",
+    "清洗槽"
+  ],
+  "need": [
+    "炉群热态转移与配套"
+  ],
+  "tags": [
+    "方案参考",
+    "轴承钢工件",
+    "中碳合金钢工件",
+    "炉群热态转移与配套"
+  ],
+  "facts": [
+    {
+      "label": "硝盐单炉次条件",
+      "value": "≤300",
+      "unit": "kg",
+      "condition": "含料架；对应淬火后硝盐5min内温升≤15℃要求",
+      "attribute": "方案参数"
+    },
+    {
+      "label": "回火炉方案装炉量",
+      "value": "1000",
+      "unit": "kg",
+      "condition": "工件＋料架，不是整组炉群共同能力",
+      "attribute": "方案参数"
+    },
+    {
+      "label": "操作机额定起重量",
+      "value": "3",
+      "unit": "t",
+      "condition": "不能代替工件/吊具/罩体热态组合核对",
+      "attribute": "方案参数"
+    }
+  ],
+  "participation": "历史资料按炉群归并气氛加热、硝盐/回火、风冷清洗及水冷吊运配置，实际路线与各工位载荷/介质/接口需共同确认。",
+  "sourceSummary": "江苏苏能工业炉有限公司历史技术方案资料整理。",
+  "coverTitle": "钢件炉群方案：保温罩随料转移时，怎样核对各工位？",
+  "relatedLinks": [
+    {
+      "title": "了解井式炉的适用条件",
+      "href": "/zh/products/detail/pit-furnace"
+    },
+    {
+      "title": "准备询价参数与供货范围",
+      "href": "/zh/articles/gongye-lu-baojia-canshu"
+    }
+  ],
+  "dateModified": "2026-09-12"
+}

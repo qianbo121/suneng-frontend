@@ -1,0 +1,13 @@
+{
+  "id": "belt-trial-production-boundary-20260821-requirements",
+  "slug": "belt-trial-production-boundary-20260821-requirements",
+  "number": 120,
+  "title": "After a pilot mesh-belt furnace trial works, what still needs verifying before scaling up?",
+  "summary": "A project requirements record lists both a production mesh-belt furnace and a small experimental mesh-belt furnace. Both are intended to reproduce the same heating, holding and binder-removal conditions, but the experimental unit has no capacity requirement, and production loading and target output remain unconfirmed. After successful small-specimen trials, production loading, effective heated length and exhaust-maintenance conditions still need assessment. Equipment size alone cannot establish production capacity.",
+  "body": "belt-trial-production-boundary-20260821-requirements.md",
+  "sourceFingerprint": "ee9433889e6590bf194d26ff29e519d953c8e8a2d2a8c48cfd87b46e11de95a1",
+  "translationStatus": "complete",
+  "translatedAt": "2026-09-12",
+  "coverAlt": "",
+  "coverCaption": ""
+}

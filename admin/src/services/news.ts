@@ -46,7 +46,7 @@ export async function createNews(payload: NewsPayload) {
   return unwrapResponse(response);
 }
 
-export async function updateNews(id: number, payload: NewsPayload) {
+export async function updateNews(id: number, payload: Partial<NewsPayload>) {
   const response = await http.patch<ApiResponse<NewsEntity>>(`/admin/news/${id}`, payload);
   return unwrapResponse(response);
 }

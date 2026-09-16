@@ -1,0 +1,13 @@
+{
+  "id": "bolt-fixture-quench-load-202608-proposal",
+  "slug": "bolt-fixture-quench-load-202608-proposal",
+  "number": 122,
+  "title": "For a 500 kg batch of bolts being quenched and tempered, does the basket weight count?",
+  "summary": "A Suneng quenching-and-tempering line proposal for 40Cr bolts is based on 500 kg of workpieces, while its oil-quench heat calculation separately includes 600 kg of trays and baskets. Even with unchanged workpiece output, changes in the hot load carriers entering the oil alter the thermal load. Review the tank using workpieces, actual load carriers and cooling between batches together.",
+  "body": "bolt-fixture-quench-load-202608-proposal.md",
+  "sourceFingerprint": "6c25eaa6a4794100ab213110fd57d00c368b4726dcade3d4a9511bf3a0baa6ec",
+  "translationStatus": "complete",
+  "translatedAt": "2026-09-12",
+  "coverAlt": "Illustration of bolts.",
+  "coverCaption": "Illustration of bolts (AI-generated). Not an actual customer workpiece photograph. Does not establish actual specifications or process results."
+}

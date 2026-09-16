@@ -1,0 +1,499 @@
+{
+  "pageId": "roller-mesh-belt-line",
+  "variant": "mesh",
+  "seo": {
+    "title": "网带式退火回火生产线｜工业炉设备定制",
+    "description": "面向可稳定铺料的中小型钢件，介绍网带式连续退火与已淬火件回火的适用条件、独立工艺路线、铺料与带速核算、加热冷却配置、供货范围和验收要点。"
+  },
+  "sectionNavigation": [
+    {
+      "label": "适用工件",
+      "href": "#workpieces"
+    },
+    {
+      "label": "工艺与设备",
+      "href": "#process"
+    },
+    {
+      "label": "设备配置",
+      "href": "#configuration"
+    },
+    {
+      "label": "产能与现场",
+      "href": "#site-conditions"
+    },
+    {
+      "label": "交付验收",
+      "href": "#acceptance"
+    },
+    {
+      "label": "常见问题",
+      "href": "#faq"
+    }
+  ],
+  "images": {
+    "hero-line": {
+      "src": "/images/products/roller-mesh-belt-line/mesh-batch-v1/01-hero-d1c3c740f9f5.png",
+      "width": 1672,
+      "height": 941,
+      "alt": "网带连续加热保温、封闭受控冷却与进出料设备配置",
+      "optimized": true
+    },
+    "process-whole-line": {
+      "src": "/images/products/roller-mesh-belt-line/mesh-batch-v1/02-whole-line-0b3b093bb4b7.png",
+      "width": 2172,
+      "height": 724,
+      "alt": "网带进料、加热保温炉段、受控冷却段与出料的完整组成",
+      "optimized": true
+    },
+    "workpiece-representative": {
+      "src": "/images/products/roller-mesh-belt-line/mesh-batch-v1/03-workpiece-6da3891a7fb4.png",
+      "width": 1672,
+      "height": 941,
+      "alt": "分别展示的钢制平垫圈、冲压支架与短套类工件外形",
+      "optimized": true
+    },
+    "loading-mesh-belt": {
+      "src": "/images/products/roller-mesh-belt-line/mesh-batch-v1/04-loading-5e93d93c8652.png",
+      "width": 1672,
+      "height": 941,
+      "alt": "同类平垫圈在金属编织网带上的稀疏平铺状态",
+      "optimized": true
+    },
+    "gallery-feeding": {
+      "src": "/images/products/roller-mesh-belt-line/mesh-batch-v1/05-feeding-dc473ef0c284.png",
+      "width": 1672,
+      "height": 941,
+      "alt": "网带入口料斗、布料口、驱动及支撑配置",
+      "optimized": true
+    },
+    "gallery-heating": {
+      "src": "/images/products/roller-mesh-belt-line/mesh-batch-v1/06-heating-ce820410470d.png",
+      "width": 1672,
+      "height": 941,
+      "alt": "加热炉段的外壳、检修面板与维护平台",
+      "optimized": true
+    },
+    "gallery-cooling": {
+      "src": "/images/products/roller-mesh-belt-line/mesh-batch-v1/07-controlled-cooling-a7fa31f914df.png",
+      "width": 1672,
+      "height": 941,
+      "alt": "封闭冷却段、外部配套与水平网带出料配置",
+      "optimized": true
+    },
+    "site-layout": {
+      "src": "/images/products/roller-mesh-belt-line/mesh-batch-v1/08-site-layout-8984beec6095.png",
+      "width": 1672,
+      "height": 941,
+      "alt": "网带加热冷却线、进出料位置与旁侧通道的高位视图",
+      "optimized": true
+    }
+  },
+  "sourceRecord": {
+    "path": "frontend/src/lib/heat-treatment-lines-reviewed.json",
+    "record": "roller-mesh-belt-line",
+    "review": "2026-09-05 网带类本批正文与公开工程来源核对；图片映射由本批素材清单接入；不构成具体项目合规认证。",
+    "engineeringNotes": "docs/mesh-lines-batch-v1/reviews/roller-mesh-belt-line.md"
+  },
+  "sections": {
+    "overview": {
+      "title": "网带式退火回火生产线",
+      "subtitle": "从工件与铺料出发，匹配连续退火或回火方案",
+      "description": "面向可稳定铺料的中小型钢件，以网带衔接上料、分区加热、保温和受控冷却。退火与已淬火件回火分别设计工艺路线；是否共用一套设备，取决于温度、气氛、冷却和换型条件。",
+      "facts": [
+        {
+          "label": "处理对象",
+          "value": "可稳定铺料的中小型钢件"
+        },
+        {
+          "label": "工艺目标",
+          "value": "退火或已淬火件回火"
+        },
+        {
+          "label": "设备组织",
+          "value": "连续式网带输送"
+        },
+        {
+          "label": "配置依据",
+          "value": "材料、铺料、保温与冷却"
+        }
+      ],
+      "gallery": [
+        {
+          "id": "hero-line",
+          "label": "整线外观",
+          "alt": "网带连续加热保温、封闭受控冷却与进出料设备配置",
+          "thumbnailAssetId": "hero-line",
+          "fullAssetId": "hero-line"
+        },
+        {
+          "id": "gallery-feeding",
+          "label": "上料布料",
+          "alt": "网带入口料斗、布料口、驱动及支撑配置",
+          "thumbnailAssetId": "gallery-feeding",
+          "fullAssetId": "gallery-feeding"
+        },
+        {
+          "id": "gallery-heating",
+          "label": "加热炉段",
+          "alt": "加热炉段的外壳、检修面板与维护平台",
+          "thumbnailAssetId": "gallery-heating",
+          "fullAssetId": "gallery-heating"
+        },
+        {
+          "id": "gallery-cooling",
+          "label": "受控冷却",
+          "alt": "封闭冷却段、外部配套与水平网带出料配置",
+          "thumbnailAssetId": "gallery-cooling",
+          "fullAssetId": "gallery-cooling"
+        }
+      ],
+      "actions": [
+        {
+          "label": "提交工况，获取选型建议",
+          "href": "#inquiry",
+          "style": "primary"
+        },
+        {
+          "label": "查看设备配置",
+          "href": "#configuration",
+          "style": "secondary"
+        }
+      ]
+    },
+    "workpieces": {
+      "title": "先看工件与铺料，再判断连续生产是否适合",
+      "subtitle": "标准件、冲压件等中小型钢件，可在批量稳定、铺料可控时评估网带方案。易滚落、易磕碰、需单件定位或长时间保温的工况，应同时比较其他输送方式或周期式炉。",
+      "cards": [
+        {
+          "id": "material",
+          "title": "工件与材料",
+          "description": "提供牌号、来料状态、常用及最大尺寸、单件重量；先明确退火目的或前序淬火状态。",
+          "imageAssetId": "workpiece-representative"
+        },
+        {
+          "id": "loading",
+          "title": "网带铺料与输送",
+          "description": "确认网孔与工件尺寸的匹配、摆放姿态、铺料厚度和单位长度装料量，并控制混料与翻叠。",
+          "imageAssetId": "loading-mesh-belt"
+        }
+      ]
+    },
+    "process": {
+      "title": "从进料到出料，看懂整线组成",
+      "subtitle": "上料、加热保温、受控冷却与出料连续衔接；退火和已淬火件回火按两条路线理解。",
+      "imageAssetId": "process-whole-line",
+      "mode": "routes",
+      "stages": [],
+      "routes": [
+        {
+          "title": "退火路线",
+          "steps": [
+            "来料与清洁度确认",
+            "上料布料",
+            "退火加热",
+            "按制度保温",
+            "受控冷却",
+            "下料检验"
+          ],
+          "note": "按材料、原始组织与处理目的确定退火类型。需要长时间保温或缓冷的球化等工艺，还需比较炉长、节拍与其他炉型的经济性。"
+        },
+        {
+          "title": "已淬火件回火路线",
+          "steps": [
+            "淬火状态确认",
+            "清洗干燥（按需）",
+            "上料与回火加热",
+            "按制度保温",
+            "按制度冷却",
+            "下料检验"
+          ],
+          "note": "确认前序淬火状态及允许等待时间；这一路线处理已淬火件，完整淬火回火线另需淬火加热和介质系统。"
+        }
+      ],
+      "note": "炉段停留时间不等于工件有效保温时间；保温起点须按采用的工艺规范和代表装载的透热情况确定。",
+      "imageAlt": "网带进料、加热保温炉段、受控冷却段与出料的完整组成"
+    },
+    "configuration": {
+      "title": "围绕铺料、加热与冷却，确定设备配置",
+      "subtitle": "工艺温度、负荷与节拍共同决定炉段和输送系统。",
+      "table": {
+        "caption": "网带式退火回火生产线设备配置依据",
+        "columns": [
+          {
+            "key": "item",
+            "label": "配置项目"
+          },
+          {
+            "key": "basis",
+            "label": "设备与衔接要求"
+          }
+        ],
+        "rows": [
+          {
+            "item": "上料与布料",
+            "cells": [
+              "按工件外形选择给料方式，控制铺料宽度、厚度、翻叠和批次隔离。"
+            ]
+          },
+          {
+            "item": "炉体与温区",
+            "cells": [
+              "结合工件及网带热负荷、透热和保温要求，核算加热方式、分区长度与带速。"
+            ]
+          },
+          {
+            "item": "网带与支撑",
+            "cells": [
+              "按温度、气氛和总载荷校核网带材质、网孔及支撑形式，并考虑热膨胀、张紧和纠偏。"
+            ]
+          },
+          {
+            "item": "气氛与密封",
+            "cells": [
+              "按氧化、脱碳及清洁度要求选择空气或保护气氛；含可燃组分时配置相应置换、监测和联锁。"
+            ]
+          },
+          {
+            "item": "受控冷却",
+            "cells": [
+              "按材料和目标组织确定冷却路径、区段与出料温度；冷却方式和能力须与带速匹配。"
+            ]
+          },
+          {
+            "item": "控制与追溯",
+            "cells": [
+              "联动温度、带速、给料及配套系统，记录配方、报警和批次时间窗，约定异常停带处置。"
+            ]
+          }
+        ]
+      },
+      "notes": [
+        "退火与回火共用设备时，分别核对温区、气氛、冷却、清线和配方切换；最高设计温度不能代替实际工作温区和工件温度验证。"
+      ],
+      "action": {
+        "label": "把已有参数发给工程师",
+        "href": "#inquiry"
+      },
+      "inputs": [
+        {
+          "title": "工件与装载",
+          "description": "尺寸、单重、摆放、铺料厚度和工件净装料量；料具另计机械及热负荷。"
+        },
+        {
+          "title": "材料与来料",
+          "description": "牌号、原始组织、前序加工或淬火记录、表面油污与清洁要求。"
+        },
+        {
+          "title": "工艺与质量",
+          "description": "退火类型或回火制度、目标组织与性能、表面及检验要求。"
+        },
+        {
+          "title": "产量与换型",
+          "description": "每小时或每班产量、有效生产时间、规格切换频率及批次管理。"
+        },
+        {
+          "title": "现场配套",
+          "description": "可用场地、热源、气源、冷却、排风与前后工序接口。"
+        },
+        {
+          "title": "验收条件",
+          "description": "采用的标准、工作温区、代表负载、抽样与判定方法。"
+        }
+      ]
+    },
+    "site-conditions": {
+      "title": "产能与现场条件，一起算清楚",
+      "imageAssetId": "site-layout",
+      "requirements": [
+        {
+          "title": "目标产量与班次",
+          "description": "以代表工件核对铺料、带速、有效生产时间及上下游瓶颈。"
+        },
+        {
+          "title": "电力与热源",
+          "description": "核对选定加热方式所需供电、燃气等接口和运行条件。"
+        },
+        {
+          "title": "冷却与排风",
+          "description": "明确冷却系统所需水、气、排风及处理设施，并划分配套范围。"
+        },
+        {
+          "title": "场地与衔接",
+          "description": "预留进出料、检修、网带维护与通道空间，核对基础和物流接口。"
+        }
+      ],
+      "capacity": "理论工件质量流量（kg/h）＝单位网带长度净装料质量（kg/m）×稳定带速（m/min）×60。净装料量按实际有效宽度和铺料方式测定；网带、料具另计承载与热负荷。设计能力须同时满足透热、保温和冷却要求。年合格产量结合有效生产小时、实际给料利用率与合格率核算，同一停机、空带或质量损失不重复扣减。",
+      "imageAlt": "网带加热冷却线、进出料位置与旁侧通道的高位视图"
+    },
+    "delivery-scope": {
+      "title": "配置参考与交付内容",
+      "subtitle": "明确设备组成、配套系统与现场接口。",
+      "imageAssetId": "process-whole-line",
+      "contentTitle": "围绕工艺主线，明确设备与责任",
+      "items": [
+        {
+          "label": "主设备",
+          "value": "上料布料、网带与驱动支撑、加热保温炉段、受控冷却及出料装置。"
+        },
+        {
+          "label": "配套系统",
+          "value": "测温、控制记录、报警联锁；气氛、清洗、冷却循环等按选定工艺配置。"
+        },
+        {
+          "label": "现场接口",
+          "value": "基础、能源与气源、排风、上下游物流、安装调试及公用工程分工。"
+        }
+      ],
+      "note": "供货设备、配套范围和双方分工在技术协议中逐项列明。",
+      "imageAlt": "网带进料、加热保温炉段、受控冷却段与出料的完整组成"
+    },
+    "acceptance": {
+      "title": "交付到哪一步，验收就核对到哪一步",
+      "subtitle": "设备功能、工艺性能与产品验证分别约定条件。",
+      "columns": [
+        {
+          "id": "equipment",
+          "title": "设备功能",
+          "description": "检查网带输送、跑偏与张紧、负载运行、联锁报警及停带异常处置。"
+        },
+        {
+          "id": "process",
+          "title": "工艺性能",
+          "description": "核对有效加热区、测温与带速，按代表装载验证透热、有效保温和冷却过程。"
+        },
+        {
+          "id": "product",
+          "title": "产品验证",
+          "description": "按目标工艺检验硬度、组织或力学性能，并核对氧化、脱碳及表面要求。"
+        }
+      ],
+      "productNote": "退火与回火分别验证代表配方；若共用设备，还需核对清线、切换和批次隔离。",
+      "stages": [
+        {
+          "id": "requirements",
+          "order": 1,
+          "label": "需求沟通"
+        },
+        {
+          "id": "design",
+          "order": 2,
+          "label": "方案设计"
+        },
+        {
+          "id": "manufacturing-inspection",
+          "order": 3,
+          "label": "制造检验"
+        },
+        {
+          "id": "installation-commissioning",
+          "order": 4,
+          "label": "安装联调"
+        },
+        {
+          "id": "acceptance-delivery",
+          "order": 5,
+          "label": "验收交付"
+        }
+      ],
+      "note": "材料、装载、抽样、判定及双方责任按技术协议执行；设备验收与产品质量验证分别记录。"
+    },
+    "faq": {
+      "title": "采购与技术常见问题",
+      "subtitle": "先了解本工艺的选型、配套与现场衔接问题。",
+      "items": [
+        {
+          "id": "faq-1",
+          "question": "退火和回火能在同一条网带线上完成吗？",
+          "answer": "可评估不同批次共用设备，但两者来料状态和工艺目的不同。须分别确认温区、气氛、冷却能力、清线与切换；本页回火路线接收已淬火件，完整淬火回火生产线需配置相应淬火系统。",
+          "defaultOpen": true
+        },
+        {
+          "id": "faq-2",
+          "question": "网带宽度和速度怎么确定？",
+          "answer": "宽度要容纳工件并满足铺料和边缘留量；带速要同时满足透热、有效保温与冷却要求。炉段长度除以带速得到的是停留时间，不能直接视为工件保温时间。",
+          "defaultOpen": false
+        },
+        {
+          "id": "faq-3",
+          "question": "什么情况下要比较其他炉型？",
+          "answer": "需要长时间保温或缓冷、换型频繁、工件易滚落磕碰、需单件定位，或装载超过网带承载条件时，应比较周期式炉或其他输送方案。是否适合网带生产，要结合工艺周期、负荷与目标产量判断。",
+          "defaultOpen": false
+        },
+        {
+          "id": "faq-4",
+          "question": "如何核算每小时产量？",
+          "answer": "用单位网带长度的工件净装料质量乘稳定带速再乘60，得到连续稳定给料的理论质量流量；随后校核加热、保温、承载和冷却限制。核算整班或全年合格产量时，再计入尚未包含的空带、换型、停机和质量损失。",
+          "defaultOpen": false
+        },
+        {
+          "id": "faq-5",
+          "question": "询价至少提供哪些资料？",
+          "answer": "先提供工件与材料、退火或回火目标、目标产量和联系方式。已有尺寸重量、铺料照片、工艺曲线、前序淬火记录或现场布局，也可一并提供；不明确的项目在沟通中补齐。",
+          "defaultOpen": false
+        }
+      ],
+      "relatedGroups": [
+        {
+          "id": "related-lines",
+          "title": "相关生产线",
+          "links": [
+            {
+              "label": "紧固件调质生产线",
+              "href": "/zh/products/detail/fastener-quench-temper-line"
+            },
+            {
+              "label": "网带式渗碳淬火生产线",
+              "href": "/zh/products/detail/mesh-belt-carbonitriding-line"
+            }
+          ]
+        },
+        {
+          "id": "technical",
+          "title": "选型资料",
+          "links": [
+            {
+              "label": "本线询价参数清单",
+              "href": "/downloads/heat-treatment-lines/roller-mesh-belt-line.txt"
+            }
+          ]
+        }
+      ]
+    },
+    "inquiry": {
+      "title": "告诉我们材料与产量，开始讨论方案",
+      "description": "已知信息先填，关键工况在方案沟通中补齐。",
+      "form": {
+        "id": "roller-mesh-belt-line-inquiry",
+        "fields": [
+          {
+            "name": "workpiece_material",
+            "label": "工件与材料",
+            "placeholder": "如：牌号、尺寸、单重与铺料",
+            "required": false
+          },
+          {
+            "name": "target_performance",
+            "label": "目标工艺",
+            "placeholder": "如：退火类型或已淬火件回火",
+            "required": false
+          },
+          {
+            "name": "target_output",
+            "label": "目标产量",
+            "placeholder": "如：产量、生产班次与换型频率",
+            "required": false
+          },
+          {
+            "name": "contact_method",
+            "label": "联系方式",
+            "placeholder": "电话、微信或邮箱",
+            "required": true
+          }
+        ],
+        "submitLabel": "获取选型建议",
+        "helperText": "已知信息先填，不明确的项目可留空。"
+      }
+    }
+  }
+}

@@ -1,0 +1,71 @@
+{
+  "id": "high-temperature-lining-family-20240305-proposal",
+  "slug": "high-temperature-trolley-heater-lining-interface-proposal",
+  "title": "高温台车炉选纤维毯：1400型材料与整炉温度",
+  "listTitle": "高温台车炉选纤维毯：1400型材料与整炉温度",
+  "listSummary": "苏能2024年两份钢制零部件高温台车炉方案，在电热带与锆铝纤维模块结合部另设一层1400型含锆纤维毯。",
+  "summary": "苏能2024年两份钢制零部件高温台车炉方案，在电热带与锆铝纤维模块结合部另设一层1400型含锆纤维毯。这个条款限定了材料所在的位置，不能直接改写成整炉1400℃使用温度。核对炉衬时，应把模块、结合部纤维毯和电热带的安装关系放在一起看。",
+  "body": "high-temperature-trolley-heater-lining-interface-proposal.md",
+  "contentType": "proposal",
+  "publicationStatus": "draft",
+  "projectStatus": "proposal",
+  "projectYear": 2024,
+  "sourceDate": "2024-01-19",
+  "workpiece": [
+    "钢制零部件"
+  ],
+  "materials": [
+    "钢"
+  ],
+  "process": [
+    "高温热处理"
+  ],
+  "equipment": [
+    "台车式电阻炉"
+  ],
+  "need": [
+    "炉衬及电热元件配置"
+  ],
+  "tags": [
+    "方案参考",
+    "钢制零部件",
+    "炉衬及电热元件配置"
+  ],
+  "facts": [
+    {
+      "label": "方案最高工作温度",
+      "value": "1200",
+      "unit": "℃",
+      "condition": "700kW方案整炉约定，非工件工艺和验收结果",
+      "attribute": "方案参数"
+    },
+    {
+      "label": "炉体模块原文耐温度",
+      "value": "1260",
+      "unit": "℃以上",
+      "condition": "700kW方案材料条款，不是整炉长期使用温度",
+      "attribute": "方案参数"
+    },
+    {
+      "label": "结合部纤维毯",
+      "value": "1400",
+      "unit": "型",
+      "condition": "700kW方案局部一层含锆纤维毯，不改写为1400℃整炉",
+      "attribute": "方案参数"
+    }
+  ],
+  "participation": "苏能历史方案提出炉体、炉门及电热带结合部的材料和安装关系；本文不代表已交付或实测性能。",
+  "sourceSummary": "江苏苏能工业炉有限公司历史技术方案资料整理。",
+  "coverTitle": "高温台车炉方案：电热带结合部的1400型纤维毯怎样核对？",
+  "relatedLinks": [
+    {
+      "title": "了解台车炉的适用条件",
+      "href": "/zh/products/detail/trolley-furnace"
+    },
+    {
+      "title": "准备询价参数与供货范围",
+      "href": "/zh/articles/gongye-lu-baojia-canshu"
+    }
+  ],
+  "dateModified": "2026-09-12"
+}

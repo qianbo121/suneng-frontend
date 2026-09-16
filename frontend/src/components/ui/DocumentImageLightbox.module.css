@@ -1,0 +1,98 @@
+.dialog {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  max-width: none;
+  height: 100%;
+  max-height: none;
+  background: transparent;
+  margin: 0;
+  padding: 24px;
+  color: white;
+}
+.dialog::backdrop {
+  background: rgb(0 22 47 / 0.88);
+}
+.content {
+  margin: auto;
+  width: min(100%, 1100px);
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+.toolbar {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  padding-bottom: 12px;
+}
+.toolbar span {
+  margin-right: auto;
+  font-size: 16px;
+  overflow-wrap: anywhere;
+}
+.toolbar button,
+.bottom button,
+.bottom a {
+  min-height: 44px;
+  padding: 10px 14px;
+  border: 1px solid #c7d2e2;
+  border-radius: 6px;
+  background: #102e4b;
+  color: white;
+  flex-shrink: 0;
+}
+.dialog :is(button, a):focus-visible {
+  outline: 3px solid white;
+  outline-offset: 3px;
+}
+.dialog button:disabled {
+  opacity: 0.4;
+}
+.viewport {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  overscroll-behavior: contain;
+  background: #eef1f5;
+  border-radius: 6px;
+}
+.image {
+  height: 100%;
+  width: 100%;
+  object-fit: contain;
+}
+.zoomed {
+  width: 180%;
+  max-width: none;
+  height: auto;
+}
+.bottom {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  justify-content: center;
+  padding-top: 12px;
+}
+@media (max-width: 600px) {
+  .dialog {
+    padding: 12px;
+  }
+  .toolbar {
+    flex-wrap: wrap;
+  }
+  .toolbar span {
+    width: 100%;
+  }
+  .toolbar button {
+    padding: 8px 12px;
+  }
+  .bottom {
+    gap: 6px;
+    font-size: 14px;
+  }
+  .bottom a,
+  .bottom button {
+    padding-inline: 10px;
+  }
+}

@@ -2,12 +2,14 @@
 
 import type { CSSProperties, ReactNode } from 'react';
 import Image from 'next/image';
-import { HiCheckCircle, HiEnvelope, HiMapPin, HiPhone } from 'react-icons/hi2';
+import { HiEnvelope, HiMapPin, HiPhone } from 'react-icons/hi2';
 
 import { trackLeadEvent } from '@/lib/api/lead-events';
 import { buildBrandImageAlt, joinImageAlt } from '@/lib/seo';
 import { siteSettings } from '@/mock/siteSettings';
 import { Locale } from '@/types/site';
+
+import { FooterDouyinCode } from './FooterDouyinCode';
 
 type FooterProps = {
   locale: string;
@@ -15,26 +17,23 @@ type FooterProps = {
 
 const FOOTER_TOKENS = {
   colors: {
-    background: '#07090b',
+    background: '#061527',
     text: '#C9CED6',
     muted: '#9AA1AA',
-    red: 'var(--color-accent)',
+    brand: 'var(--color-interactive-light)',
     divider: 'rgba(156,163,175,0.42)',
   },
   fontClass: "font-['PingFang_SC','Microsoft_YaHei','SimHei',sans-serif]",
   desktop: {
     containerWidth: 1440,
-    mainPaddingTop: 33,
-    mainPaddingBottom: 28,
-    gridColumns: '360px minmax(360px,1fr) 420px',
-    gridGap: 48,
+    mainPaddingTop: 24,
+    mainPaddingBottom: 24,
+    gridColumns: 'minmax(0,1fr) minmax(0,1fr) minmax(0,1.1fr)',
+    gridGap: 32,
     logoWidth: 203,
     logoHeight: 114,
-    qrSize: 144,
+    qrSize: 120,
     qrGap: 24,
-    titleFontSize: 20,
-    titleUnderlineWidth: 52,
-    titleUnderlineHeight: 3,
     bottomPaddingY: 18,
   },
 } as const;
@@ -48,11 +47,11 @@ function varStyle(vars: Record<string, string | number>) {
 }
 
 const MIIT_BEIAN_URL = 'https://beian.miit.gov.cn/';
-const POLICE_BEIAN_URL = 'http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=32120402001014';
+const POLICE_BEIAN_URL =
+  'http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=32120402001014';
 
 const footerCopy = {
   zh: {
-    contactUs: '联系我们',
     founded: '成立于 2006 年；公司自报生产基地占地约 14700 ㎡',
     brandIntro: '专注热处理工业炉研发制造，提供设计、制造、安装与售后服务。',
     address: '江苏省泰州市姜堰区张甸蔡官工业区',
@@ -61,57 +60,33 @@ const footerCopy = {
     followUs: '关注我们，了解更多产品与解决方案',
     email: siteSettings.email,
     phone: siteSettings.salesPhone,
-    copyright: 'Copyright © 2025 江苏苏能工业炉有限公司 版权所有',
+    copyright: 'Copyright © 2026 江苏苏能工业炉有限公司 版权所有',
     icp: '苏ICP备20020318号-1',
     policeBeian: '苏公网安备32120402001014号',
   },
   en: {
-    contactUs: 'Contact Us',
     founded: 'Founded in 2006; company-reported approx. 14,700 ㎡ site',
-    brandIntro: 'Focused on industrial furnace R&D, manufacturing, installation and after-sales service.',
-    address: 'Caiguan Industrial Park, Zhangdian Town, Jiangyan District, Taizhou, Jiangsu Province, China',
+    brandIntro:
+      'Focused on industrial furnace R&D, manufacturing, installation and after-sales service.',
+    address:
+      'Caiguan Industrial Park, Zhangdian Town, Jiangyan District, Taizhou, Jiangsu Province, China',
     wechat: 'WeChat QR',
     douyin: 'Douyin QR',
     followUs: 'Follow us for more products and solutions.',
     email: siteSettings.email,
     phone: siteSettings.salesPhone,
-    copyright: 'Copyright © 2025 Jiangsu Suneng Industrial Furnace Co., Ltd. All rights reserved.',
+    copyright: 'Copyright © 2026 Jiangsu Suneng Industrial Furnace Co., Ltd. All rights reserved.',
     icp: '苏ICP备20020318号-1',
     policeBeian: '苏公网安备32120402001014号',
   },
 } as const;
 
-function SectionTitle({ children }: { children: ReactNode }) {
-  const { colors, desktop } = FOOTER_TOKENS;
-
+function InfoRow({ children }: { children: ReactNode }) {
   return (
-    <div className="flex flex-col items-center lg:items-start">
-      <h3
-        className={`${FOOTER_TOKENS.fontClass} whitespace-nowrap font-normal leading-none tracking-[0.04em] text-[var(--footer-text-color)]`}
-        style={{ fontSize: desktop.titleFontSize }}
-      >
-        {children}
-      </h3>
+    <div className="flex max-w-full items-center justify-center xl:justify-start">
       <span
-        aria-hidden="true"
-        className="mt-[12px] rounded-[1px]"
-        style={{
-          width: desktop.titleUnderlineWidth,
-          height: desktop.titleUnderlineHeight,
-          backgroundColor: colors.red,
-        }}
-      />
-    </div>
-  );
-}
-
-function InfoRow({ icon, children }: { icon: ReactNode; children: ReactNode }) {
-  return (
-    <div className="flex items-center justify-center gap-[10px] lg:justify-start">
-      <span className="flex h-[18px] w-[18px] shrink-0 items-center justify-center text-[var(--footer-muted-color)]">
-        {icon}
-      </span>
-      <span className={`${FOOTER_TOKENS.fontClass} whitespace-nowrap text-[14px] leading-[1.5] text-[var(--footer-muted-color)]`}>
+        className={`${FOOTER_TOKENS.fontClass} min-w-0 text-center text-[var(--home-font-secondary-size,14px)] leading-[var(--home-font-secondary-line,21px)] text-[var(--footer-muted-color)] xl:text-left`}
+      >
         {children}
       </span>
     </div>
@@ -120,17 +95,23 @@ function InfoRow({ icon, children }: { icon: ReactNode; children: ReactNode }) {
 
 function ContactIcon({ children }: { children: ReactNode }) {
   return (
-    <span className="flex h-[44px] w-[44px] shrink-0 items-center justify-center rounded-full border border-dashed border-[var(--footer-red-color)] text-[var(--footer-red-color)]">
+    <span className="flex h-[44px] w-[44px] shrink-0 items-center justify-center rounded-full border border-dashed border-[var(--footer-brand-color)] text-[var(--footer-brand-color)]">
       {children}
     </span>
   );
 }
 
-function BrandBlock({ copy, locale }: { copy: (typeof footerCopy)['zh'] | (typeof footerCopy)['en']; locale: Locale }) {
+function BrandBlock({
+  copy,
+  locale,
+}: {
+  copy: (typeof footerCopy)['zh'] | (typeof footerCopy)['en'];
+  locale: Locale;
+}) {
   const { desktop } = FOOTER_TOKENS;
 
   return (
-    <div className="flex flex-col items-center text-center lg:items-start lg:text-left">
+    <div className="site-footer__brand flex flex-col items-center text-center xl:items-start xl:text-left">
       <div
         className="footer-logo-container"
         style={varStyle({
@@ -150,49 +131,71 @@ function BrandBlock({ copy, locale }: { copy: (typeof footerCopy)['zh'] | (typeo
         />
       </div>
 
-      <p className={`${FOOTER_TOKENS.fontClass} mt-[14px] max-w-[340px] text-[15px] leading-[1.75] text-[var(--footer-muted-color)]`}>
+      <p
+        className={`${FOOTER_TOKENS.fontClass} mt-[14px] max-w-[340px] text-[var(--home-font-secondary-size,15px)] leading-[var(--home-font-secondary-line,26px)] text-[var(--footer-muted-color)]`}
+      >
         {copy.brandIntro}
       </p>
 
       <div className="mt-[18px] flex flex-col gap-[10px]">
-        <InfoRow icon={<HiCheckCircle className="h-[16px] w-[16px]" />}>{copy.founded}</InfoRow>
+        <InfoRow>{copy.founded}</InfoRow>
       </div>
     </div>
   );
 }
 
-function QrBlock({ copy, locale }: { copy: (typeof footerCopy)['zh'] | (typeof footerCopy)['en']; locale: Locale }) {
+function QrBlock({
+  copy,
+  locale,
+}: {
+  copy: (typeof footerCopy)['zh'] | (typeof footerCopy)['en'];
+  locale: Locale;
+}) {
   const { desktop } = FOOTER_TOKENS;
 
   return (
-    <div className="flex flex-col items-center lg:items-start">
-      <SectionTitle>{copy.contactUs}</SectionTitle>
-
-      <div className="mt-[28px] flex flex-wrap items-start justify-center lg:justify-start" style={{ gap: desktop.qrGap }}>
+    <div className="site-footer__qr flex flex-col items-center xl:items-start">
+      <div
+        className="flex flex-wrap items-start justify-center xl:justify-start"
+        style={{ gap: `var(--home-card-gap, ${px(desktop.qrGap)})` }}
+      >
         {[
-          { src: '/images/footer/wechat-qr.png', label: copy.wechat },
-          { src: '/images/footer/douyin-qr.png', label: copy.douyin },
+          { src: siteSettings.wechatQrCode, label: copy.wechat, isDouyin: false },
+          { src: '/images/footer/douyin-code-original-20260907.png', label: copy.douyin, isDouyin: true },
         ].map((qr) => (
           <div key={qr.label} className="group text-center">
             <div
-              className="flex items-center justify-center rounded-[4px] bg-white transition-transform duration-200 group-hover:scale-[1.08]"
-              style={{ width: desktop.qrSize, height: desktop.qrSize }}
+              className={`flex items-center justify-center rounded-[4px] ${qr.isDouyin ? '' : 'bg-white'} transition-transform duration-200 group-hover:scale-[1.04] motion-reduce:transform-none motion-reduce:transition-none`}
+              style={{
+                width: `var(--home-footer-qr-size, ${px(desktop.qrSize)})`,
+                height: `var(--home-footer-qr-size, ${px(desktop.qrSize)})`,
+              }}
             >
-              <Image
-                src={qr.src}
-                alt={joinImageAlt(locale, [buildBrandImageAlt(locale, 'short'), qr.label])}
-                width={desktop.qrSize}
-                height={desktop.qrSize}
-                className="h-full w-full object-contain [image-rendering:pixelated]"
-              />
+              {qr.isDouyin ? (
+                <FooterDouyinCode
+                  label={joinImageAlt(locale, [buildBrandImageAlt(locale, 'short'), qr.label])}
+                />
+              ) : (
+                <Image
+                  src={qr.src}
+                  alt={joinImageAlt(locale, [buildBrandImageAlt(locale, 'short'), qr.label])}
+                  width={desktop.qrSize}
+                  height={desktop.qrSize}
+                  className="h-full w-full object-contain [image-rendering:pixelated]"
+                />
+              )}
             </div>
-            <p className={`${FOOTER_TOKENS.fontClass} mt-[10px] whitespace-nowrap text-[13px] leading-[1.5] text-[var(--footer-text-color)]`}>
+            <p
+              className={`${FOOTER_TOKENS.fontClass} mt-[8px] whitespace-nowrap text-[var(--home-font-label-size,13px)] leading-[var(--home-font-label-line,20px)] text-[var(--footer-text-color)]`}
+            >
               {qr.label}
             </p>
           </div>
         ))}
       </div>
-      <p className={`${FOOTER_TOKENS.fontClass} mt-[20px] text-[14px] leading-[1.5] text-[var(--footer-muted-color)]`}>
+      <p
+        className={`${FOOTER_TOKENS.fontClass} mt-[12px] text-[var(--home-font-label-size,14px)] leading-[var(--home-font-label-line,21px)] text-[var(--footer-muted-color)]`}
+      >
         {copy.followUs}
       </p>
     </div>
@@ -201,14 +204,14 @@ function QrBlock({ copy, locale }: { copy: (typeof footerCopy)['zh'] | (typeof f
 
 function ContactBlock({ copy }: { copy: (typeof footerCopy)['zh'] | (typeof footerCopy)['en'] }) {
   return (
-    <div className="flex h-full flex-col items-center justify-center gap-[28px] lg:items-start">
+    <div className="site-footer__contact flex h-full flex-col items-center justify-center gap-[24px] xl:items-start">
       <a
         href={`mailto:${copy.email}`}
         onClick={() => trackLeadEvent('email_click')}
-        className={`${FOOTER_TOKENS.fontClass} flex items-center gap-[14px] whitespace-nowrap text-[16px] font-normal leading-[1.5] text-[var(--footer-text-color)] transition-colors hover:text-white`}
+        className={`${FOOTER_TOKENS.fontClass} flex min-h-[44px] max-w-full items-center gap-[14px] text-center text-[var(--home-font-secondary-size,16px)] font-normal leading-[var(--home-font-secondary-line,24px)] text-[var(--footer-text-color)] transition-colors hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--footer-brand-color)] focus-visible:ring-offset-4 focus-visible:ring-offset-[#061527] xl:whitespace-nowrap xl:text-left`}
       >
         <ContactIcon>
-          <HiEnvelope className="h-[20px] w-[20px]" />
+          <HiEnvelope aria-hidden="true" className="h-[20px] w-[20px]" />
         </ContactIcon>
         <span>{copy.email}</span>
       </a>
@@ -216,19 +219,21 @@ function ContactBlock({ copy }: { copy: (typeof footerCopy)['zh'] | (typeof foot
       <a
         href={`tel:${copy.phone.replace(/\s+/g, '')}`}
         onClick={() => trackLeadEvent('phone_click')}
-        className={`${FOOTER_TOKENS.fontClass} flex items-center gap-[14px] whitespace-nowrap text-[16px] font-normal leading-[1.5] text-[var(--footer-text-color)] transition-colors hover:text-white`}
+        className={`${FOOTER_TOKENS.fontClass} flex min-h-[44px] max-w-full items-center gap-[14px] text-center text-[var(--home-font-secondary-size,16px)] font-normal leading-[var(--home-font-secondary-line,24px)] text-[var(--footer-text-color)] transition-colors hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--footer-brand-color)] focus-visible:ring-offset-4 focus-visible:ring-offset-[#061527] xl:whitespace-nowrap xl:text-left`}
       >
         <ContactIcon>
-          <HiPhone className="h-[20px] w-[20px]" />
+          <HiPhone aria-hidden="true" className="h-[20px] w-[20px]" />
         </ContactIcon>
         <span>{copy.phone}</span>
       </a>
 
-      <div className={`${FOOTER_TOKENS.fontClass} flex items-center gap-[14px] whitespace-nowrap text-[16px] font-normal leading-[1.5] text-[var(--footer-text-color)]`}>
+      <div
+        className={`${FOOTER_TOKENS.fontClass} flex min-h-[44px] max-w-full min-w-0 items-center gap-[14px] text-left text-[var(--home-font-secondary-size,16px)] font-normal leading-[var(--home-font-secondary-line,24px)] text-[var(--footer-text-color)] xl:whitespace-nowrap`}
+      >
         <ContactIcon>
-          <HiMapPin className="h-[22px] w-[22px]" />
+          <HiMapPin aria-hidden="true" className="h-[22px] w-[22px]" />
         </ContactIcon>
-        <span>{copy.address}</span>
+        <span className="min-w-0">{copy.address}</span>
       </div>
     </div>
   );
@@ -246,53 +251,53 @@ export function Footer({ locale }: FooterProps) {
         backgroundColor: colors.background,
         '--footer-text-color': colors.text,
         '--footer-muted-color': colors.muted,
-        '--footer-red-color': colors.red,
+        '--footer-brand-color': colors.brand,
         '--footer-divider-color': colors.divider,
-        '--footer-main-pt': px(desktop.mainPaddingTop),
-        '--footer-main-pb': px(desktop.mainPaddingBottom),
+        '--footer-main-pt': `var(--home-footer-main-pt, ${px(desktop.mainPaddingTop)})`,
+        '--footer-main-pb': `var(--home-footer-main-pb, ${px(desktop.mainPaddingBottom)})`,
         backgroundImage:
-          'radial-gradient(circle at 92% 24%, rgba(230,0,18,0.16), transparent 18%), linear-gradient(135deg, rgba(255,255,255,0.05), transparent 34%), linear-gradient(180deg, #11161b 0%, #07090b 100%)',
+          'radial-gradient(circle at 92% 24%, rgba(7,89,230,0.2), transparent 20%), linear-gradient(135deg, rgba(255,255,255,0.05), transparent 34%), linear-gradient(180deg, #0b223b 0%, #061527 100%)',
       })}
     >
-      {/* Footer 主体：品牌信息、二维码、联系方式三列，删除导航和产品列表。 */}
+      {/* Footer 主体：品牌信息、二维码和联系方式。 */}
       <div
         className="mx-auto w-full px-6 pt-[var(--footer-main-pt)] lg:px-10"
         style={{ maxWidth: px(desktop.containerWidth) }}
       >
         <div
-          className="grid items-center gap-9 pb-[var(--footer-main-pb)] md:grid-cols-1 lg:grid-cols-[var(--footer-grid-columns)] lg:gap-[var(--footer-grid-gap)]"
+          className="site-footer__home-grid grid items-center gap-9 pb-[var(--footer-main-pb)] md:grid-cols-1 xl:grid-cols-[var(--footer-grid-columns)] xl:gap-[var(--footer-grid-gap)]"
           style={varStyle({
-            '--footer-grid-columns': desktop.gridColumns,
-            '--footer-grid-gap': px(desktop.gridGap),
+            '--footer-grid-columns': `var(--home-footer-grid-columns, ${desktop.gridColumns})`,
+            '--footer-grid-gap': `var(--home-footer-grid-gap, ${px(desktop.gridGap)})`,
           })}
         >
           <BrandBlock copy={copy} locale={currentLocale} />
-          <div className="relative py-8 lg:ml-[10px] lg:flex lg:self-stretch lg:px-[58px] lg:py-0">
-            {/* 模块分割线：桌面端隔开公司介绍 / 联系我们 / 联系方式。 */}
+          <div className="site-footer__qr-column relative py-8 xl:flex xl:self-stretch xl:px-8 xl:py-0">
+            {/* 模块分割线：桌面端隔开品牌信息 / 二维码 / 联系方式。 */}
             <span
               aria-hidden="true"
-              className="hidden lg:block absolute left-0 top-0 h-full w-px scale-x-50"
+              className="absolute left-0 top-0 hidden h-full w-px scale-x-50 xl:block"
               style={{ backgroundColor: colors.divider }}
             />
             <span
               aria-hidden="true"
-              className="hidden lg:block absolute right-0 top-0 h-full w-px scale-x-50"
+              className="absolute right-0 top-0 hidden h-full w-px scale-x-50 xl:block"
               style={{ backgroundColor: colors.divider }}
             />
-            <div className="w-full lg:flex lg:translate-x-[20px] lg:items-center">
+            <div className="w-full xl:flex xl:items-center xl:justify-center">
               <QrBlock copy={copy} locale={currentLocale} />
             </div>
           </div>
-          <div className="lg:pl-[14px]">
+          <div className="xl:pl-[14px]">
             <ContactBlock copy={copy} />
           </div>
         </div>
       </div>
 
       {/* 底部备案条：版权与备案独立放置，桌面左右对齐，移动端居中堆叠。 */}
-      <div className="relative before:absolute before:inset-x-0 before:top-0 before:h-px before:scale-y-50 before:bg-[var(--footer-divider-color)]">
+      <div className="site-footer__legal relative before:absolute before:inset-x-0 before:top-0 before:h-px before:scale-y-50 before:bg-[var(--footer-divider-color)]">
         <div
-          className={`${FOOTER_TOKENS.fontClass} mx-auto flex w-full flex-col items-center justify-center gap-2 px-6 text-[13px] leading-[1.5] text-[var(--footer-muted-color)] md:flex-row md:gap-[26px] lg:px-10`}
+          className={`${FOOTER_TOKENS.fontClass} mx-auto flex w-full flex-col items-center justify-center gap-2 px-6 text-[var(--home-font-label-size,13px)] leading-[var(--home-font-label-line,20px)] text-[var(--footer-muted-color)] md:flex-row md:gap-[26px] lg:px-10`}
           style={{
             maxWidth: px(desktop.containerWidth),
             paddingTop: desktop.bottomPaddingY,
@@ -300,21 +305,27 @@ export function Footer({ locale }: FooterProps) {
           }}
         >
           <span>{copy.copyright}</span>
-          <span aria-hidden="true" className="hidden h-[14px] w-px scale-x-50 bg-[var(--footer-divider-color)] md:block" />
+          <span
+            aria-hidden="true"
+            className="hidden h-[14px] w-px scale-x-50 bg-[var(--footer-divider-color)] md:block"
+          />
           <a
             href={MIIT_BEIAN_URL}
             target="_blank"
             rel="noopener noreferrer"
-            className="transition-colors hover:text-white"
+            className="transition-colors hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--footer-brand-color)] focus-visible:ring-offset-4 focus-visible:ring-offset-[#061527]"
           >
             {copy.icp}
           </a>
-          <span aria-hidden="true" className="hidden h-[14px] w-px scale-x-50 bg-[var(--footer-divider-color)] md:block" />
+          <span
+            aria-hidden="true"
+            className="hidden h-[14px] w-px scale-x-50 bg-[var(--footer-divider-color)] md:block"
+          />
           <a
             href={POLICE_BEIAN_URL}
             target="_blank"
             rel="noopener noreferrer"
-            className="transition-colors hover:text-white"
+            className="transition-colors hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--footer-brand-color)] focus-visible:ring-offset-4 focus-visible:ring-offset-[#061527]"
           >
             {copy.policeBeian}
           </a>

@@ -44,6 +44,22 @@ function normalizeDate(value: string | undefined, fallback: Date) {
   return Number.isNaN(date.getTime()) ? fallback : date;
 }
 
+function cleanProperties(value: Record<string, unknown> | undefined) {
+  if (!value) return null;
+  const entries: Array<[string, string | number | boolean | null]> = [];
+  for (const [key, item] of Object.entries(value).slice(0, 24)) {
+    const normalizedKey = key.trim().slice(0, 60);
+    if (!normalizedKey) continue;
+    if (typeof item === 'string') entries.push([normalizedKey, item.trim().slice(0, 255)]);
+    else if (typeof item === 'number' && Number.isFinite(item)) {
+      entries.push([normalizedKey, item]);
+    } else if (typeof item === 'boolean' || item === null) {
+      entries.push([normalizedKey, item]);
+    }
+  }
+  return entries.length > 0 ? JSON.stringify(Object.fromEntries(entries)) : null;
+}
+
 @Injectable()
 export class LeadEventService {
   private readonly eventThrottle = new Map<string, SpamThrottleState>();
@@ -65,12 +81,14 @@ export class LeadEventService {
     const ipMasked = maskedIp(rawIp);
     const region = resolveVisitorRegion(rawIp);
     const regionSource = region.province ? 'exact_ip' : null;
+    const properties = cleanProperties(dto.properties);
     await this.prisma.$executeRaw`
       INSERT INTO "WebsiteLeadEvent" (
         "eventType", "pageTitle", "pagePath", "pageType", "productTag",
         "sourceType", "sourceDetail", "searchKeyword", "deviceType", "landingPage",
         "previousPage", "utmSource", "utmMedium", "utmCampaign", "discoverySource",
-        "sessionId", "visitorId", "ipMasked", "userAgent", "province", "city", "regionSource"
+        "sessionId", "visitorId", "ipMasked", "userAgent", "province", "city", "regionSource",
+        "properties"
       ) VALUES (
         ${dto.eventType},
         ${clean(dto.pageTitle, 255)},
@@ -93,7 +111,8 @@ export class LeadEventService {
         ${clean(headerText(request.headers['user-agent']), 500)},
         ${region.province},
         ${region.city},
-        ${regionSource}
+        ${regionSource},
+        ${properties}::jsonb
       )
     `;
     return { ok: true };
@@ -134,6 +153,7 @@ export class LeadEventService {
         "discoverySource",
         "sessionId",
         "visitorId",
+        "properties",
         "ipMasked",
         "createdAt"
       FROM "WebsiteLeadEvent"

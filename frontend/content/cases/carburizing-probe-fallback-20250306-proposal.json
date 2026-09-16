@@ -1,0 +1,52 @@
+{
+  "id": "carburizing-probe-fallback-20250306-proposal",
+  "slug": "carburizing-probe-fallback-20250306-proposal",
+  "title": "渗碳试验炉氧探头故障改手动，试验数据还能直接比较吗？",
+  "summary": "苏能一份渗碳试验炉方案同时列出氧探头反馈控制和故障后的人工设定方式。能够维持设备运行，不等于仍在按同一检测条件控制碳势；比较试验数据时，应保留控制模式、检测状态与工件检验结果。",
+  "body": "carburizing-probe-fallback-20250306-proposal.md",
+  "contentType": "proposal",
+  "publicationStatus": "draft",
+  "projectStatus": "proposal",
+  "workpiece": [
+    "中小型机械零部件"
+  ],
+  "materials": [],
+  "process": [
+    "渗碳试验"
+  ],
+  "equipment": [
+    "井式渗碳试验炉"
+  ],
+  "need": [
+    "试验控制与数据比较"
+  ],
+  "tags": [
+    "方案参考",
+    "中小型机械零部件",
+    "试验控制与数据比较"
+  ],
+  "facts": [
+    {
+      "label": "方案工作尺寸",
+      "value": "≈Φ300×450",
+      "unit": "mm",
+      "condition": "试验有效空间及工装另行核对",
+      "attribute": "方案参数"
+    },
+    {
+      "label": "拟碳势检测",
+      "value": "氧探头反馈",
+      "unit": "",
+      "condition": "正常自动模式，非探头故障后的能力",
+      "attribute": "方案参数"
+    }
+  ],
+  "participation": "拟提供试验炉及温度、碳势控制和探头维护配套，外部配线与基础另核。",
+  "sourceSummary": "本文依据江苏苏能工业炉有限公司的历史方案资料整理，介绍拟定配置与供货条件；本文所引原件不构成设备已交付或验收通过的证明。",
+  "coverTitle": "渗碳试验炉方案：氧探头故障后改手动，试验结果还能直接比较吗？",
+  "relatedLinks": [],
+  "projectYear": 2025,
+  "sourceDate": "2025-03-06",
+  "listTitle": "渗碳试验炉氧探头故障改手动，试验数据还能直接比较吗？",
+  "dateModified": "2026-09-12"
+}

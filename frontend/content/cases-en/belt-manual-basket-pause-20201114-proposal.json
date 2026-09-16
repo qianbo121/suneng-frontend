@@ -1,0 +1,13 @@
+{
+  "id": "belt-manual-basket-pause-20201114-proposal",
+  "slug": "muffle-belt-oil-quench-manual-basket-change-pause-proposal",
+  "number": 104,
+  "title": "Does the belt need to stop when changing a collection basket on a mesh-belt oil-quenching furnace?",
+  "summary": "A Suneng muffle-type protective-atmosphere mesh-belt furnace proposal dated 14 November 2020 directs parts through a discharge opening into a movable basket inside the oil tank. When the basket is full, the source requires the belt to stop while an empty basket is exchanged manually. Basket exchange is therefore part of the heating process's operating cycle. Capacity comparisons must consider receiving volume, exchange time and the residence of parts already in the furnace; the proposed figure of approximately 60 kg/h is not proof of sustained acceptable output.",
+  "body": "belt-manual-basket-pause-20201114-proposal.md",
+  "sourceFingerprint": "c8b68ae2d9361bb26a4e0b9767e5ec7b66c266a4f931068cad8c540e8d083917",
+  "translationStatus": "complete",
+  "translatedAt": "2026-09-12",
+  "coverAlt": "",
+  "coverCaption": ""
+}

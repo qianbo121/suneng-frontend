@@ -1,14 +1,16 @@
 import fs from 'node:fs';
 import { fileURLToPath } from 'node:url';
 
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
+import { renderToStaticMarkup } from 'react-dom/server';
+vi.mock('server-only', () => ({}));
+vi.mock('react', async (original) => ({ ...(await original<typeof import('react')>()), cache: (fn: unknown) => fn }));
+vi.mock('next/navigation', () => ({ usePathname: () => '/zh', notFound: () => { throw new Error('404'); }, permanentRedirect: () => { throw new Error('Unexpected redirect'); } }));
+import ProductPage from '@/app/[locale]/products/detail/[slug]/page';
 
-import {
-  CONTINUOUS_HEAT_TREATMENT_LINE_SEO,
-  INDUSTRIAL_FURNACE_QUOTE_PARAMS_SEO,
-  OLD_HEAT_TREATMENT_FURNACE_REPAIR_OR_REPLACE_SEO,
-  TSINGSHAN_1250_CASE_SEO,
-} from '@/lib/seo/page-data';
+import { TROLLEY_PUBLICATION_REVIEW } from './trolley-publication';
+
+import { CONTINUOUS_HEAT_TREATMENT_LINE_SEO, INDUSTRIAL_FURNACE_QUOTE_PARAMS_SEO, OLD_HEAT_TREATMENT_FURNACE_REPAIR_OR_REPLACE_SEO, TSINGSHAN_1250_CASE_SEO } from '@/lib/seo/page-data';
 
 const readSource = (relativePath: string) =>
   fs.readFileSync(fileURLToPath(new URL(relativePath, import.meta.url)), 'utf8');
@@ -20,35 +22,24 @@ const decisionSource = readSource(
 );
 const renovationServiceSource = readSource(
   '../../app/[locale]/service/furnace-renovation-overhaul/page.tsx',
-);
+) + readSource('../../components/engineering/engineering-content.ts');
 const solutionSource = readSource(
   '../../app/[locale]/solutions/continuous-heat-treatment-line/page.tsx',
 );
 const caseSource = readSource(
-  '../../app/[locale]/case/anonymous-tsingshan-1250-renovation/page.tsx',
+  '../../components/case-studies/CaseArticlePage.tsx',
 );
 
 describe('P3 five-page publication gate', () => {
-  it('shows publication review and truthful update dates without claiming an unperformed person review', () => {
-    for (const source of [
-      trolleySource,
-      quoteSource,
-      decisionSource,
-      solutionSource,
-      caseSource,
-    ]) {
-      expect(source).toContain('GeoReviewNote');
+  it("does not claim an unperformed technical review in retained source files", () => {
+    for(const source of [trolleySource,quoteSource,decisionSource,caseSource,solutionSource]) {
       expect(source).not.toContain('reviewedByTechnicalEngineer: true');
+      expect(source).not.toContain('#technical-reviewer-tang');
     }
-    expect(trolleySource).not.toContain('reviewedByTechnicalEngineer: isP3TrolleyPage');
-    expect(caseSource).not.toContain('#technical-reviewer-tang');
-
-    expect(trolleySource).toContain("const P3_REVIEW_DATE = '2026-07-29'");
+    expect(TROLLEY_PUBLICATION_REVIEW.date).toBe('2026-07-29');
     expect(INDUSTRIAL_FURNACE_QUOTE_PARAMS_SEO.modifiedTime).toContain('2026-07-31');
-    expect(OLD_HEAT_TREATMENT_FURNACE_REPAIR_OR_REPLACE_SEO.modifiedTime).toContain(
-      '2026-07-30',
-    );
-    expect(CONTINUOUS_HEAT_TREATMENT_LINE_SEO.modifiedTime).toContain('2026-07-29');
+    expect(OLD_HEAT_TREATMENT_FURNACE_REPAIR_OR_REPLACE_SEO.modifiedTime).toContain('2026-07-30');
+    expect(CONTINUOUS_HEAT_TREATMENT_LINE_SEO.modifiedTime).toBe('2026-09-07T18:00:00+08:00');
     expect(TSINGSHAN_1250_CASE_SEO.modifiedTime).toContain('2026-07-31');
   });
 
@@ -106,7 +97,18 @@ describe('P3 five-page publication gate', () => {
     expect(solutionSource).toContain('SN-CASE-P0-008');
     expect(solutionSource).toContain('SN-CASE-P0-006');
     expect(solutionSource).toContain('SN-CASE-P0-001');
-    expect(caseSource).toContain('经济性结论需以可比运行记录复核');
+    expect(readSource('../../../content/cases/continuous-line-renovation.md')).toContain('经济性结论需以可比运行记录复核');
     expect(caseSource).not.toContain('7,644 万元/年');
+  });
+});
+
+describe('five actual route render paths', () => {
+  it("retains the equipment page without withdrawn case sections or internal review labels", async () => {
+    const page=await ProductPage({params:Promise.resolve({locale:'zh',slug:'trolley-furnace'})});
+    const html=renderToStaticMarkup(page).replace(/<script\b[^>]*>[\s\S]*?<\/script>/g,'');
+    expect(html).toContain('<h1');
+    expect(html).toContain('台车炉');
+    expect(html).not.toMatch(/href="\/zh\/(case|articles|solutions)/);
+    expect(html).not.toMatch(/未登记公开署名|发布复核：|内容复核：/);
   });
 });

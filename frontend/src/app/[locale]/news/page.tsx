@@ -2,18 +2,16 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
 import { JsonLd } from '@/components/JsonLd';
-import { PageBanner } from '@/components/layout/PageBanner';
-import { QuoteModalButton } from '@/components/lead/QuoteModalButton';
-import { NewsBreadcrumbBar } from '@/components/news/NewsBreadcrumbBar';
-import { NewsListCards } from '@/components/news/NewsListCards';
+import { NewsDecisionCenter } from '@/components/news/NewsDecisionCenter';
+import { NEWS_LIST_HERO_IMAGE, NEWS_PAGE_SIZE } from '@/constants/news';
+import { getNewsDecisionCenterData } from '@/lib/news-decision-center.server';
 import {
-  FALLBACK_NEWS_ITEMS,
-  NEWS_LABEL,
-  NEWS_LIST_HERO_IMAGE,
-  NEWS_PAGE_SIZE,
-  NEWS_SUBTITLE,
-} from '@/constants/news';
-import { getNewsListPageData, mapNewsCard } from '@/lib/news';
+  filterAndSortNewsDecisionItems,
+  NEWS_CENTER_FAQS,
+  normalizeNewsDecisionTopic,
+  normalizeNewsFurnaceFilter,
+  normalizeNewsSort,
+} from '@/lib/news-decision-center';
 import {
   getNewsListCanonicalPath,
   getNewsListPageTitle,
@@ -23,6 +21,7 @@ import { cleanObject, getBreadcrumbJsonLd } from '@/lib/seo/jsonld';
 import { absoluteUrl, buildMetadata } from '@/lib/seo/metadata';
 import { NEWS_SEO } from '@/lib/seo/page-data';
 import { Locale } from '@/types/site';
+import { newsUiText } from '@/lib/news-ui';
 
 type NewsPageProps = {
   params: Promise<{
@@ -30,6 +29,10 @@ type NewsPageProps = {
   }>;
   searchParams: Promise<{
     page?: string;
+    sort?: string;
+    q?: string;
+    topic?: string;
+    furnace?: string;
   }>;
 };
 
@@ -46,39 +49,66 @@ const newsSeoCopy = {
       'furnace retrofit',
     ],
   },
-} satisfies Record<Locale, {
-  title: string;
-  description: string;
-  keywords: string[];
-}>;
+} satisfies Record<
+  Locale,
+  {
+    title: string;
+    description: string;
+    keywords: string[];
+  }
+>;
+
+function validatePageNumber(page: string | undefined) {
+  if (page !== undefined && (!/^[1-9]\d*$/.test(page) || !Number.isSafeInteger(Number(page)))) {
+    notFound();
+  }
+}
 
 export async function generateMetadata({ params, searchParams }: NewsPageProps) {
   const { locale } = await params;
-  const { page } = await searchParams;
+  const { page, q, topic, furnace, sort } = await searchParams;
+  validatePageNumber(page);
   const currentLocale = (locale === 'en' ? 'en' : 'zh') as Locale;
   const currentPage = normalizeNewsPage(page);
   const seo = newsSeoCopy[currentLocale];
-  const pageQuery = currentPage > 1 ? `?page=${currentPage}` : '';
-  const canonicalPath = getNewsListCanonicalPath(currentLocale, currentPage);
-  const title = getNewsListPageTitle(seo.title, currentLocale, currentPage);
+  const hasActiveFilters = Boolean(q?.trim() || topic || furnace || sort);
+  if (!hasActiveFilters && currentPage > 1) {
+    const { data } = await getNewsDecisionCenterData(currentLocale);
+    if (data && currentPage > Math.max(1, Math.ceil(data.length / NEWS_PAGE_SIZE))) {
+      notFound();
+    }
+  }
+  const pageQuery = !hasActiveFilters && currentPage > 1 ? `?page=${currentPage}` : '';
+  const canonicalPath = hasActiveFilters
+    ? `/${currentLocale}/news`
+    : getNewsListCanonicalPath(currentLocale, currentPage);
+  const title = hasActiveFilters
+    ? seo.title
+    : getNewsListPageTitle(seo.title, currentLocale, currentPage);
 
   const metadata = buildMetadata({
     title,
     description: seo.description,
     path: canonicalPath,
     pageKey: 'news',
+    locale: currentLocale,
     keywords: seo.keywords,
-    image: NEWS_LIST_HERO_IMAGE,
-    alternateLocales: currentLocale === 'zh'
-      ? {
-          'zh-CN': `/zh/news${pageQuery}`,
-          'x-default': `/zh/news${pageQuery}`,
-        }
-      : undefined,
+    image:
+      currentLocale === 'en'
+        ? '/images/news/en-final-20260912/news-hero.webp'
+        : NEWS_LIST_HERO_IMAGE,
+    alternateLocales:
+      currentPage === 1
+        ? {
+            'zh-CN': '/zh/news',
+            'en-US': '/en/news',
+            'x-default': '/zh/news',
+          }
+        : { [currentLocale === 'en' ? 'en-US' : 'zh-CN']: `/${currentLocale}/news${pageQuery}` },
   });
 
-  if (currentLocale === 'en') {
-    return { ...metadata, robots: { index: false, follow: false } } satisfies Metadata;
+  if (hasActiveFilters) {
+    return { ...metadata, robots: { index: false, follow: true } } satisfies Metadata;
   }
 
   return metadata;
@@ -86,32 +116,42 @@ export async function generateMetadata({ params, searchParams }: NewsPageProps) 
 
 export default async function NewsPage({ params, searchParams }: NewsPageProps) {
   const { locale } = await params;
-  const { page } = await searchParams;
+  const { page, q, topic: topicParam, furnace: furnaceParam, sort: sortParam } = await searchParams;
+  validatePageNumber(page);
   const currentLocale = (locale === 'en' ? 'en' : 'zh') as Locale;
-  const currentPage = normalizeNewsPage(page);
+  let currentPage = normalizeNewsPage(page);
 
-  if (currentLocale === 'en') {
+  const { data, error } = await getNewsDecisionCenterData(currentLocale);
+  const sourceItems = data || [];
+  const sort = normalizeNewsSort(sortParam);
+  const query = q?.trim() || '';
+  const topic = normalizeNewsDecisionTopic(topicParam);
+  const furnace = normalizeNewsFurnaceFilter(furnaceParam);
+  const filteredItems = filterAndSortNewsDecisionItems(sourceItems, {
+    query,
+    topic,
+    furnace,
+    sort,
+  });
+  const hasActiveFilters = Boolean(query || topicParam || furnaceParam || sortParam);
+  if (
+    data &&
+    !hasActiveFilters &&
+    currentPage > Math.max(1, Math.ceil(filteredItems.length / NEWS_PAGE_SIZE))
+  ) {
     notFound();
   }
-
-  const { list } = await getNewsListPageData(currentLocale, {
-    page: currentPage,
-    pageSize: NEWS_PAGE_SIZE,
-  });
-
-  const newsItems = list?.items?.length
-    ? list.items.map((item) => mapNewsCard(currentLocale, item))
-    : currentPage === 1
-      ? FALLBACK_NEWS_ITEMS
-      : [];
-  const total = list ? list.total : FALLBACK_NEWS_ITEMS.length;
-  const title = NEWS_LABEL[currentLocale];
-  const subtitle = NEWS_SUBTITLE[currentLocale];
-  const contactHref = '/zh/contact';
+  currentPage = Math.min(
+    currentPage,
+    Math.max(1, Math.ceil(filteredItems.length / NEWS_PAGE_SIZE)),
+  );
+  const start = (currentPage - 1) * NEWS_PAGE_SIZE;
+  const newsItems = filteredItems.slice(start, start + NEWS_PAGE_SIZE);
+  const total = filteredItems.length;
   const newsJsonLd = cleanObject([
     getBreadcrumbJsonLd([
-      { name: '首页', url: `/${currentLocale}` },
-      { name: title, url: `/${currentLocale}/news` },
+      { name: currentLocale === 'en' ? 'Home' : '首页', url: `/${currentLocale}` },
+      { name: currentLocale === 'en' ? 'Resources' : '资料中心', url: `/${currentLocale}/news` },
     ]),
     {
       '@context': 'https://schema.org',
@@ -123,55 +163,36 @@ export default async function NewsPage({ params, searchParams }: NewsPageProps) 
         url: absoluteUrl(`/${currentLocale}/news/${item.slug}`),
       })),
     },
+    {
+      '@context': 'https://schema.org',
+      '@type': 'FAQPage',
+      mainEntity: NEWS_CENTER_FAQS.map((item) => ({
+        '@type': 'Question',
+        name: newsUiText(currentLocale, item.question),
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: newsUiText(currentLocale, item.answer),
+        },
+      })),
+    },
   ]);
 
   return (
-    <div className="bg-[#f7f8fa]">
+    <div>
       <JsonLd id={`news-list-jsonld-${currentLocale}`} data={newsJsonLd} />
-      <PageBanner
-        locale={locale}
-        title={title}
-        englishTitle={NEWS_LABEL.en}
-        subtitle={subtitle}
-        backgroundImage={NEWS_LIST_HERO_IMAGE}
-        variant="compact"
+      <NewsDecisionCenter
+        locale={currentLocale}
+        items={newsItems}
+        sourceItems={sourceItems}
+        sort={sort}
+        error={error}
+        page={currentPage}
+        total={total}
+        pageSize={NEWS_PAGE_SIZE}
+        query={query}
+        topic={topic}
+        furnace={furnace}
       />
-
-      <NewsBreadcrumbBar locale={locale} currentLabel={title} />
-
-      <main className="mx-auto max-w-[1660px] px-6 py-10 lg:px-[86px] lg:py-12">
-        <div className="mx-auto w-full max-w-[1120px]">
-          <NewsListCards
-            locale={currentLocale}
-            items={newsItems}
-            page={currentPage}
-            total={total}
-            pageSize={NEWS_PAGE_SIZE}
-          />
-          {currentLocale === 'zh' ? (
-            <div className="mt-10 rounded-[8px] border border-[#e1e7f0] bg-white p-6 shadow-[0_10px_24px_rgba(15,35,75,0.04)] lg:flex lg:items-center lg:justify-between lg:gap-8">
-              <div>
-                <h2 className="text-[22px] font-semibold leading-[1.35] text-[#101828]">需要工业炉报价或方案判断？</h2>
-                <p className="mt-3 text-[15px] leading-[1.8] text-[#475467]">
-                  可先提交工件、温度、工艺和产能信息，由苏能工程师做初步判断。
-                </p>
-              </div>
-              <div className="mt-5 flex flex-col gap-3 sm:flex-row lg:mt-0 lg:shrink-0">
-                <QuoteModalButton
-                  label="获取报价方案"
-                  className="inline-flex min-h-[46px] items-center justify-center rounded-[4px] cta-primary px-6 text-[15px] font-semibold text-white transition"
-                />
-                <a
-                  href={contactHref}
-                  className="inline-flex min-h-[46px] items-center justify-center rounded-[4px] cta-secondary px-6 text-[15px] font-semibold transition"
-                >
-                  联系苏能工程师
-                </a>
-              </div>
-            </div>
-          ) : null}
-        </div>
-      </main>
     </div>
   );
 }

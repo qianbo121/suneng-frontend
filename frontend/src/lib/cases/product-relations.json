@@ -1,0 +1,1524 @@
+[
+  {
+    "number": 1,
+    "caseId": "rt4-75-6-proposal",
+    "products": [
+      "trolley-furnace"
+    ],
+    "entry": null,
+    "focus": "load",
+    "scope": "direct"
+  },
+  {
+    "number": 2,
+    "caseId": "thick-steel-plate-preheat-20231219-proposal",
+    "products": [
+      "trolley-furnace"
+    ],
+    "entry": null,
+    "focus": "load",
+    "scope": "direct"
+  },
+  {
+    "number": 3,
+    "caseId": "aluminum-head-quench-20220324-proposal",
+    "products": [
+      "aluminum-solution-aging-line"
+    ],
+    "entry": null,
+    "focus": "handling",
+    "scope": "direct"
+  },
+  {
+    "number": 4,
+    "caseId": "bearing-ring-roller-hearth-20201224-proposal",
+    "products": [
+      "roller-hearth-furnace"
+    ],
+    "entry": null,
+    "focus": "handling",
+    "scope": "direct"
+  },
+  {
+    "number": 5,
+    "caseId": "cylinder-rotation-curing-20250210-proposal",
+    "products": [
+      "cylinder-curing-line"
+    ],
+    "entry": null,
+    "focus": "handling",
+    "scope": "interface",
+    "note": {
+      "zh": "本案为单件周期固化，仅参考固定杆与旋转装夹接口，不代表连续进出料。",
+      "en": "This single-workpiece batch-curing record supports fixing-rod and rotating-fixture interfaces only, not continuous loading and unloading."
+    }
+  },
+  {
+    "number": 6,
+    "caseId": "fork-tines-two-furnaces-20230212-proposal",
+    "products": [
+      "box-furnace",
+      "shovel-furnace"
+    ],
+    "entry": null,
+    "focus": "handling",
+    "scope": "direct"
+  },
+  {
+    "number": 7,
+    "caseId": "power-fittings-normalizing-20210330-proposal",
+    "products": [
+      "trolley-furnace"
+    ],
+    "entry": null,
+    "focus": "load",
+    "scope": "direct"
+  },
+  {
+    "number": 8,
+    "caseId": "composite-plate-trolley-20210805-proposal",
+    "products": [
+      "trolley-furnace"
+    ],
+    "entry": null,
+    "focus": "load",
+    "scope": "direct"
+  },
+  {
+    "number": 9,
+    "caseId": "glass-fiber-hot-air-20240926-proposal",
+    "products": [
+      "trolley-furnace"
+    ],
+    "entry": null,
+    "focus": "measurement",
+    "scope": "direct"
+  },
+  {
+    "number": 10,
+    "caseId": "shield-frame-gas-trolley-20250312-proposal",
+    "products": [
+      "trolley-furnace"
+    ],
+    "entry": "/solutions/rechuli-lu-wendu-bujun-zhenggai",
+    "focus": "measurement",
+    "scope": "direct"
+  },
+  {
+    "number": 11,
+    "caseId": "lead-alloy-melting-20190221-proposal",
+    "products": [],
+    "entry": "/contact",
+    "focus": "capacity",
+    "scope": "special"
+  },
+  {
+    "number": 12,
+    "caseId": "metal-parts-box-five-face-20200914-proposal",
+    "products": [
+      "box-furnace"
+    ],
+    "entry": null,
+    "focus": "measurement",
+    "scope": "direct"
+  },
+  {
+    "number": 13,
+    "caseId": "large-trolley-dual-fuel-20181113-proposal",
+    "products": [
+      "trolley-furnace"
+    ],
+    "entry": "/solutions/rechuli-lu-gaizao-fengxian-zhouqi",
+    "focus": "renovation",
+    "scope": "direct"
+  },
+  {
+    "number": 14,
+    "caseId": "wire-coil-support-airflow-20231224-proposal",
+    "products": [
+      "trolley-furnace"
+    ],
+    "entry": null,
+    "focus": "load",
+    "scope": "direct"
+  },
+  {
+    "number": 15,
+    "caseId": "metal-plate-alkali-layout-20240504-proposal",
+    "products": [],
+    "entry": "/contact",
+    "focus": "supply",
+    "scope": "special"
+  },
+  {
+    "number": 16,
+    "caseId": "alloy-eight-furnaces-20230808-proposal",
+    "products": [],
+    "entry": "/contact",
+    "focus": "supply",
+    "scope": "special"
+  },
+  {
+    "number": 17,
+    "caseId": "petrochemical-gas-door-seals-20220617-proposal",
+    "products": [
+      "trolley-furnace"
+    ],
+    "entry": null,
+    "focus": "handling",
+    "scope": "direct"
+  },
+  {
+    "number": 18,
+    "caseId": "metal-parts-box-manual-loading-20241121-proposal",
+    "products": [
+      "box-furnace"
+    ],
+    "entry": null,
+    "focus": "handling",
+    "scope": "direct"
+  },
+  {
+    "number": 19,
+    "caseId": "salt-bath-cooling-washing-20240515-proposal",
+    "products": [],
+    "entry": "/contact",
+    "focus": "supply",
+    "scope": "special"
+  },
+  {
+    "number": 20,
+    "caseId": "type-iv-liner-carriers-20220905-proposal",
+    "products": [
+      "trolley-furnace"
+    ],
+    "entry": null,
+    "focus": "load",
+    "scope": "direct"
+  },
+  {
+    "number": 21,
+    "caseId": "trolley-corrosion-exhaust-20240225-proposal",
+    "products": [
+      "trolley-furnace"
+    ],
+    "entry": null,
+    "focus": "atmosphere",
+    "scope": "direct"
+  },
+  {
+    "number": 22,
+    "caseId": "nitrogen-pit-seal-cooling-20220914-proposal",
+    "products": [
+      "pit-furnace"
+    ],
+    "entry": null,
+    "focus": "atmosphere",
+    "scope": "direct"
+  },
+  {
+    "number": 23,
+    "caseId": "box-two-recorders-20220411-proposal",
+    "products": [
+      "box-furnace"
+    ],
+    "entry": null,
+    "focus": "measurement",
+    "scope": "direct"
+  },
+  {
+    "number": 24,
+    "caseId": "cylinder-hood-trolley-20231005-proposal",
+    "products": [
+      "bell-furnace"
+    ],
+    "entry": null,
+    "focus": "handling",
+    "scope": "interface",
+    "note": {
+      "zh": "本案采用自带升降架与台车，仅比较罩体、台车动作和吊装边界，不套用固定炉台与行车移罩结构。",
+      "en": "This proposal uses its own lifting frame and bogie. Compare hood/bogie motions and lifting boundaries only; it is not the fixed-base, overhead-crane hood arrangement."
+    }
+  },
+  {
+    "number": 25,
+    "caseId": "cylinder-three-stages-20200519-proposal",
+    "products": [
+      "aluminum-solution-aging-line"
+    ],
+    "entry": null,
+    "focus": "process",
+    "scope": "direct"
+  },
+  {
+    "number": 26,
+    "caseId": "steel-pipe-inclined-loading-20230907-proposal",
+    "products": [
+      "trolley-furnace"
+    ],
+    "entry": null,
+    "focus": "load",
+    "scope": "direct"
+  },
+  {
+    "number": 27,
+    "caseId": "pressure-vessel-variable-volume-20200427-proposal",
+    "products": [
+      "trolley-furnace"
+    ],
+    "entry": null,
+    "focus": "measurement",
+    "scope": "direct"
+  },
+  {
+    "number": 28,
+    "caseId": "roller-belt-throughput-20220613-proposal",
+    "products": [
+      "roller-mesh-belt-line",
+      "mesh-belt-furnace"
+    ],
+    "entry": null,
+    "focus": "capacity",
+    "scope": "direct"
+  },
+  {
+    "number": 29,
+    "caseId": "steel22a-monthly-output-20230807-proposal",
+    "products": [
+      "trolley-furnace"
+    ],
+    "entry": null,
+    "focus": "capacity",
+    "scope": "direct"
+  },
+  {
+    "number": 30,
+    "caseId": "steel-parts-furnace-group-20231217-proposal",
+    "products": [
+      "multi-furnace-quench-cell"
+    ],
+    "entry": null,
+    "focus": "handling",
+    "scope": "interface",
+    "note": {
+      "zh": "只比较跨炉位热载荷与转运分工；本案的吊运硝盐路线不等同外置货叉入槽结构。",
+      "en": "Compare thermal loads across stations and handling responsibilities only. This lifting-and-nitrate-salt route is not an external fork-to-tank arrangement."
+    }
+  },
+  {
+    "number": 31,
+    "caseId": "titanium-roller-utility-boundary-20250304-proposal",
+    "products": [
+      "roller-hearth-furnace"
+    ],
+    "entry": null,
+    "focus": "supply",
+    "scope": "direct"
+  },
+  {
+    "number": 32,
+    "caseId": "fork-furnace-buyer-tooling-20240320-proposal",
+    "products": [
+      "box-furnace",
+      "shovel-furnace"
+    ],
+    "entry": null,
+    "focus": "handling",
+    "scope": "direct"
+  },
+  {
+    "number": 33,
+    "caseId": "aluminum-tube-configuration-family-20220603-proposal",
+    "products": [
+      "trolley-furnace"
+    ],
+    "entry": "/service/furnace-renovation-overhaul",
+    "focus": "renovation",
+    "scope": "direct"
+  },
+  {
+    "number": 34,
+    "caseId": "tall-chamber-sliding-door-20220426-proposal",
+    "products": [
+      "trolley-furnace"
+    ],
+    "entry": null,
+    "focus": "load",
+    "scope": "direct"
+  },
+  {
+    "number": 35,
+    "caseId": "gas-roller-external-press-20240313-proposal",
+    "products": [
+      "roller-hearth-furnace"
+    ],
+    "entry": null,
+    "focus": "handling",
+    "scope": "direct"
+  },
+  {
+    "number": 36,
+    "caseId": "belt-line-stage-balance-20240531-proposal",
+    "products": [
+      "fastener-quench-temper-line",
+      "mesh-belt-furnace"
+    ],
+    "entry": null,
+    "focus": "capacity",
+    "scope": "direct"
+  },
+  {
+    "number": 37,
+    "caseId": "long-trolley-optional-floor-20230202-proposal",
+    "products": [
+      "trolley-furnace"
+    ],
+    "entry": null,
+    "focus": "load",
+    "scope": "direct"
+  },
+  {
+    "number": 38,
+    "caseId": "small-sheet-tray-transfer-20230724-proposal",
+    "products": [
+      "box-furnace"
+    ],
+    "entry": null,
+    "focus": "handling",
+    "scope": "direct"
+  },
+  {
+    "number": 39,
+    "caseId": "muffle-belt-atmosphere-20241117-proposal",
+    "products": [
+      "mesh-belt-furnace"
+    ],
+    "entry": null,
+    "focus": "atmosphere",
+    "scope": "direct"
+  },
+  {
+    "number": 40,
+    "caseId": "cylinder-manual-anchors-20230906-proposal",
+    "products": [
+      "aluminum-solution-aging-line"
+    ],
+    "entry": null,
+    "focus": "handling",
+    "scope": "direct"
+  },
+  {
+    "number": 41,
+    "caseId": "gas-fork-permits-20250306-proposal",
+    "products": [
+      "shovel-furnace"
+    ],
+    "entry": null,
+    "focus": "handling",
+    "scope": "direct"
+  },
+  {
+    "number": 42,
+    "caseId": "aluminum-steam-interface-20230904-proposal",
+    "products": [
+      "aluminum-solution-aging-line"
+    ],
+    "entry": null,
+    "focus": "supply",
+    "scope": "direct"
+  },
+  {
+    "number": 43,
+    "caseId": "trolley-moving-power-20220408-proposal",
+    "products": [
+      "trolley-furnace"
+    ],
+    "entry": null,
+    "focus": "handling",
+    "scope": "direct"
+  },
+  {
+    "number": 44,
+    "caseId": "heavy-trolley-balance-track-20230214-proposal",
+    "products": [
+      "trolley-furnace"
+    ],
+    "entry": null,
+    "focus": "load",
+    "scope": "direct"
+  },
+  {
+    "number": 45,
+    "caseId": "normalizing-air-cooling-20201030-proposal",
+    "products": [
+      "mesh-belt-furnace"
+    ],
+    "entry": null,
+    "focus": "capacity",
+    "scope": "direct"
+  },
+  {
+    "number": 46,
+    "caseId": "cylinder-double-chamber-20220907-proposal",
+    "products": [
+      "aluminum-solution-aging-line"
+    ],
+    "entry": null,
+    "focus": "handling",
+    "scope": "direct"
+  },
+  {
+    "number": 47,
+    "caseId": "coil-buyer-floor-20211102-proposal",
+    "products": [
+      "trolley-furnace"
+    ],
+    "entry": null,
+    "focus": "load",
+    "scope": "direct"
+  },
+  {
+    "number": 48,
+    "caseId": "fiber-floor-support-20210301-proposal",
+    "products": [
+      "trolley-furnace"
+    ],
+    "entry": null,
+    "focus": "load",
+    "scope": "direct"
+  },
+  {
+    "number": 49,
+    "caseId": "high-temperature-fan-20240321-proposal",
+    "products": [
+      "trolley-furnace"
+    ],
+    "entry": null,
+    "focus": "measurement",
+    "scope": "direct"
+  },
+  {
+    "number": 50,
+    "caseId": "nitriding-heat-reuse-20180912-proposal",
+    "products": [
+      "gas-nitriding-furnace"
+    ],
+    "entry": null,
+    "focus": "atmosphere",
+    "scope": "direct"
+  },
+  {
+    "number": 51,
+    "caseId": "nitriding-analysis-control-20200111-proposal",
+    "products": [
+      "gas-nitriding-furnace"
+    ],
+    "entry": null,
+    "focus": "measurement",
+    "scope": "direct"
+  },
+  {
+    "number": 52,
+    "caseId": "pit-pre-vacuum-sequence-20260519-proposal",
+    "products": [
+      "pit-furnace"
+    ],
+    "entry": null,
+    "focus": "atmosphere",
+    "scope": "direct"
+  },
+  {
+    "number": 53,
+    "caseId": "ring-nitrogen-supply-family-20260519-proposal",
+    "products": [
+      "pit-furnace"
+    ],
+    "entry": null,
+    "focus": "atmosphere",
+    "scope": "direct"
+  },
+  {
+    "number": 54,
+    "caseId": "coil-shared-hood-20200427-proposal",
+    "products": [
+      "bell-furnace"
+    ],
+    "entry": null,
+    "focus": "capacity",
+    "scope": "direct"
+  },
+  {
+    "number": 55,
+    "caseId": "trolley-narrow-wide-20230729-proposal",
+    "products": [
+      "trolley-furnace"
+    ],
+    "entry": null,
+    "focus": "measurement",
+    "scope": "direct"
+  },
+  {
+    "number": 56,
+    "caseId": "coil-bottom-seal-20200515-proposal",
+    "products": [
+      "pit-furnace"
+    ],
+    "entry": null,
+    "focus": "atmosphere",
+    "scope": "direct"
+  },
+  {
+    "number": 57,
+    "caseId": "pit-high-low-points-20260518-proposal",
+    "products": [
+      "pit-furnace"
+    ],
+    "entry": null,
+    "focus": "measurement",
+    "scope": "direct"
+  },
+  {
+    "number": 58,
+    "caseId": "coil-embedded-points-20151104-proposal",
+    "products": [
+      "pit-furnace"
+    ],
+    "entry": null,
+    "focus": "load",
+    "scope": "direct"
+  },
+  {
+    "number": 59,
+    "caseId": "pit-dual-water-supply-20110214-proposal",
+    "products": [
+      "pit-furnace"
+    ],
+    "entry": null,
+    "focus": "atmosphere",
+    "scope": "direct"
+  },
+  {
+    "number": 60,
+    "caseId": "gas-pit-suspension-family-20170409-proposal",
+    "products": [
+      "pit-furnace"
+    ],
+    "entry": null,
+    "focus": "handling",
+    "scope": "direct"
+  },
+  {
+    "number": 61,
+    "caseId": "quench-bath-recovery-20161215-proposal",
+    "products": [
+      "multi-furnace-quench-cell"
+    ],
+    "entry": null,
+    "focus": "capacity",
+    "scope": "interface",
+    "note": {
+      "zh": "仅参考淬火槽冷却负荷与恢复时间，不代表完整炉群配置。",
+      "en": "Use only for quench-tank cooling load and recovery time, not a complete furnace-cell configuration."
+    }
+  },
+  {
+    "number": 62,
+    "caseId": "forge-reversal-20260518-proposal",
+    "products": [
+      "box-furnace"
+    ],
+    "entry": null,
+    "focus": "atmosphere",
+    "scope": "direct"
+  },
+  {
+    "number": 63,
+    "caseId": "aging-direct-recorder-20200831-proposal",
+    "products": [
+      "aluminum-solution-aging-line",
+      "trolley-furnace"
+    ],
+    "entry": null,
+    "focus": "measurement",
+    "scope": "direct"
+  },
+  {
+    "number": 64,
+    "caseId": "quench-separate-cooling-20240315-proposal",
+    "products": [
+      "multi-furnace-quench-cell"
+    ],
+    "entry": null,
+    "focus": "supply",
+    "scope": "interface",
+    "note": {
+      "zh": "仅参考淬火槽与外部冷却供货分界，不代表完整炉群配置。",
+      "en": "Use only for the supply boundary between the quench tank and external cooling, not a complete furnace cell."
+    }
+  },
+  {
+    "number": 65,
+    "caseId": "gas-recuperator-protection-family-proposal",
+    "products": [
+      "trolley-furnace"
+    ],
+    "entry": "/solutions/rechuli-lu-dian-gai-ran-yure-huishou",
+    "focus": "atmosphere",
+    "scope": "direct"
+  },
+  {
+    "number": 66,
+    "caseId": "carbon-buyer-castings-20140313-proposal",
+    "products": [
+      "trolley-furnace"
+    ],
+    "entry": null,
+    "focus": "supply",
+    "scope": "direct"
+  },
+  {
+    "number": 67,
+    "caseId": "trolley-length-extension-20190623-proposal",
+    "products": [
+      "trolley-furnace"
+    ],
+    "entry": "/solutions/rechuli-lu-gaizao-fengxian-zhouqi",
+    "focus": "renovation",
+    "scope": "direct"
+  },
+  {
+    "number": 68,
+    "caseId": "bearing-wire-trolley-annealing-proposal",
+    "products": [
+      "trolley-furnace"
+    ],
+    "entry": null,
+    "focus": "load",
+    "scope": "direct"
+  },
+  {
+    "number": 69,
+    "caseId": "bearing-wire-gas-conversion-20180226-proposal",
+    "products": [
+      "trolley-furnace"
+    ],
+    "entry": "/solutions/rechuli-lu-gaizao-fengxian-zhouqi",
+    "focus": "atmosphere",
+    "scope": "direct"
+  },
+  {
+    "number": 70,
+    "caseId": "steel-pipe-sealed-cooling-20200804-proposal",
+    "products": [
+      "trolley-furnace"
+    ],
+    "entry": null,
+    "focus": "atmosphere",
+    "scope": "direct"
+  },
+  {
+    "number": 71,
+    "caseId": "high-temperature-lining-family-20240305-proposal",
+    "products": [
+      "trolley-furnace"
+    ],
+    "entry": null,
+    "focus": "configuration",
+    "scope": "direct"
+  },
+  {
+    "number": 72,
+    "caseId": "variable-volume-completion-20260512-proposal",
+    "products": [
+      "trolley-furnace"
+    ],
+    "entry": "/solutions/rechuli-lu-gaizao-fengxian-zhouqi",
+    "focus": "renovation",
+    "scope": "direct"
+  },
+  {
+    "number": 73,
+    "caseId": "gas-trolley-remote-viewing-20240706-proposal",
+    "products": [
+      "trolley-furnace"
+    ],
+    "entry": "/solutions/rechuli-lu-kongzhi-xitong-shengji",
+    "focus": "measurement",
+    "scope": "direct"
+  },
+  {
+    "number": 74,
+    "caseId": "steel-pipe-monitoring-backup-20150827-proposal",
+    "products": [
+      "trolley-furnace"
+    ],
+    "entry": "/solutions/rechuli-lu-kongzhi-xitong-shengji",
+    "focus": "measurement",
+    "scope": "direct"
+  },
+  {
+    "number": 75,
+    "caseId": "high-temperature-cooling-outlet-20190319-proposal",
+    "products": [
+      "trolley-furnace"
+    ],
+    "entry": null,
+    "focus": "configuration",
+    "scope": "direct"
+  },
+  {
+    "number": 76,
+    "caseId": "gas-trolley-quote-versions-20231113-proposal",
+    "products": [
+      "trolley-furnace"
+    ],
+    "entry": "/contact",
+    "focus": "supply",
+    "scope": "direct"
+  },
+  {
+    "number": 77,
+    "caseId": "stainless-fork-load-basis-20161217-proposal",
+    "products": [
+      "box-furnace",
+      "shovel-furnace"
+    ],
+    "entry": null,
+    "focus": "load",
+    "scope": "direct"
+  },
+  {
+    "number": 78,
+    "caseId": "casting-pit-lid-gantry-20191205-proposal",
+    "products": [
+      "pit-furnace"
+    ],
+    "entry": null,
+    "focus": "handling",
+    "scope": "interface",
+    "note": {
+      "zh": "本案为大型地坑炉，仅比较炉盖与吊装边界，不等同长轴圆形井式炉。",
+      "en": "This is a large pit installation. Compare cover movement and lifting boundaries only; it is not the same geometry as a cylindrical shaft furnace."
+    }
+  },
+  {
+    "number": 79,
+    "caseId": "hose-pit-five-lids-20201118-proposal",
+    "products": [
+      "pit-furnace"
+    ],
+    "entry": null,
+    "focus": "handling",
+    "scope": "interface",
+    "note": {
+      "zh": "本案为胶管低温多盖地坑炉，仅比较开盖与分区条件，不等同金属长轴热处理。",
+      "en": "This low-temperature, multi-cover hose furnace supports cover and zone comparisons only, not metal-shaft heat-treatment suitability."
+    }
+  },
+  {
+    "number": 80,
+    "caseId": "cylinder-indirect-air-exhaust-20200315-proposal",
+    "products": [
+      "cylinder-curing-line"
+    ],
+    "entry": null,
+    "focus": "supply",
+    "scope": "interface",
+    "note": {
+      "zh": "只参考间接燃烧换热、循环与排废气路，不据此确定连续上料结构。",
+      "en": "Use only for indirect combustion heat exchange, recirculation and exhaust boundaries; this does not establish a continuous loading arrangement."
+    }
+  },
+  {
+    "number": 81,
+    "caseId": "dual-strip-acceptance-basis-20220808-proposal",
+    "products": [
+      "annealing-solution-line"
+    ],
+    "entry": null,
+    "focus": "capacity",
+    "scope": "direct"
+  },
+  {
+    "number": 82,
+    "caseId": "gas-four-zone-tuning-20200604-proposal",
+    "products": [
+      "trolley-furnace"
+    ],
+    "entry": "/solutions/rechuli-lu-wendu-bujun-zhenggai",
+    "focus": "measurement",
+    "scope": "direct"
+  },
+  {
+    "number": 83,
+    "caseId": "continuous-line-renovation",
+    "products": [
+      "annealing-solution-line"
+    ],
+    "entry": "/solutions/rechuli-lu-dian-gai-ran-yure-huishou",
+    "focus": "renovation",
+    "scope": "direct"
+  },
+  {
+    "number": 84,
+    "caseId": "henan-annealing-solution",
+    "products": [
+      "annealing-solution-line"
+    ],
+    "entry": null,
+    "focus": "supply",
+    "scope": "direct"
+  },
+  {
+    "number": 85,
+    "caseId": "strip-lifting-roll-interface-20240423-proposal",
+    "products": [
+      "annealing-solution-line"
+    ],
+    "entry": null,
+    "focus": "handling",
+    "scope": "direct"
+  },
+  {
+    "number": 86,
+    "caseId": "strip-steam-heat-use-202111-proposal",
+    "products": [
+      "annealing-solution-line"
+    ],
+    "entry": "/solutions/rechuli-lu-dian-gai-ran-yure-huishou",
+    "focus": "capacity",
+    "scope": "direct"
+  },
+  {
+    "number": 87,
+    "caseId": "two-furnaces-shared-fork-20200811-proposal",
+    "products": [
+      "shovel-furnace"
+    ],
+    "entry": null,
+    "focus": "handling",
+    "scope": "direct"
+  },
+  {
+    "number": 88,
+    "caseId": "disc-roll-shared-cart-20140923-proposal",
+    "products": [
+      "annealing-solution-line"
+    ],
+    "entry": null,
+    "focus": "handling",
+    "scope": "direct"
+  },
+  {
+    "number": 89,
+    "caseId": "normalizing-cooling-heat-20170902-proposal",
+    "products": [
+      "mesh-belt-furnace"
+    ],
+    "entry": null,
+    "focus": "capacity",
+    "scope": "direct"
+  },
+  {
+    "number": 90,
+    "caseId": "normalizing-lift-cooling-20260519-proposal",
+    "products": [
+      "mesh-belt-furnace"
+    ],
+    "entry": null,
+    "focus": "capacity",
+    "scope": "direct"
+  },
+  {
+    "number": 91,
+    "caseId": "jining-support-roller",
+    "products": [],
+    "entry": "/solutions/continuous-heat-treatment-line",
+    "focus": "capacity",
+    "scope": "direct"
+  },
+  {
+    "number": 92,
+    "caseId": "belt-carbon-oil-interface-20260512-proposal",
+    "products": [
+      "mesh-belt-furnace"
+    ],
+    "entry": null,
+    "focus": "atmosphere",
+    "scope": "direct"
+  },
+  {
+    "number": 93,
+    "caseId": "belt-two-wash-stages-20260519-proposal",
+    "products": [
+      "mesh-belt-furnace"
+    ],
+    "entry": null,
+    "focus": "supply",
+    "scope": "direct"
+  },
+  {
+    "number": 94,
+    "caseId": "belt-side-discharge-20200119-proposal",
+    "products": [
+      "mesh-belt-furnace"
+    ],
+    "entry": null,
+    "focus": "handling",
+    "scope": "direct"
+  },
+  {
+    "number": 95,
+    "caseId": "saw-belt-return-path-20180816-proposal",
+    "products": [
+      "mesh-belt-furnace"
+    ],
+    "entry": null,
+    "focus": "load",
+    "scope": "direct"
+  },
+  {
+    "number": 96,
+    "caseId": "salt-leak-detection-20201029-proposal",
+    "products": [],
+    "entry": "/contact",
+    "focus": "supply",
+    "scope": "special"
+  },
+  {
+    "number": 97,
+    "caseId": "salt-temperature-volume-20260511-proposal",
+    "products": [],
+    "entry": "/contact",
+    "focus": "supply",
+    "scope": "special"
+  },
+  {
+    "number": 98,
+    "caseId": "box-two-chambers-shared-flue-20180716-proposal",
+    "products": [
+      "box-furnace"
+    ],
+    "entry": null,
+    "focus": "measurement",
+    "scope": "direct"
+  },
+  {
+    "number": 99,
+    "caseId": "box-relocation-reused-fork-20120721-proposal",
+    "products": [
+      "shovel-furnace"
+    ],
+    "entry": "/solutions/rechuli-lu-tingchan-chongqi-banqian-fuchan",
+    "focus": "handling",
+    "scope": "direct"
+  },
+  {
+    "number": 100,
+    "caseId": "copper-door-crane-clearance-20260511-proposal",
+    "products": [
+      "box-furnace"
+    ],
+    "entry": null,
+    "focus": "handling",
+    "scope": "direct"
+  },
+  {
+    "number": 101,
+    "caseId": "titanium-heated-door-shield-proposal",
+    "products": [
+      "box-furnace"
+    ],
+    "entry": null,
+    "focus": "handling",
+    "scope": "direct"
+  },
+  {
+    "number": 102,
+    "caseId": "shaft-optional-oil-scope-20260518-proposal",
+    "products": [
+      "mesh-belt-furnace"
+    ],
+    "entry": null,
+    "focus": "supply",
+    "scope": "direct"
+  },
+  {
+    "number": 103,
+    "caseId": "spring-salt-vapor-residue-20260518-proposal",
+    "products": [
+      "mesh-belt-furnace"
+    ],
+    "entry": null,
+    "focus": "atmosphere",
+    "scope": "direct"
+  },
+  {
+    "number": 104,
+    "caseId": "belt-manual-basket-pause-20201114-proposal",
+    "products": [
+      "mesh-belt-furnace"
+    ],
+    "entry": null,
+    "focus": "handling",
+    "scope": "direct"
+  },
+  {
+    "number": 105,
+    "caseId": "dozer-five-zones-three-fans-20201017-proposal",
+    "products": [
+      "roller-hearth-furnace"
+    ],
+    "entry": null,
+    "focus": "configuration",
+    "scope": "direct"
+  },
+  {
+    "number": 106,
+    "caseId": "axle-hanger-external-transport-20201115-proposal",
+    "products": [],
+    "entry": "/solutions/continuous-heat-treatment-line",
+    "focus": "handling",
+    "scope": "direct"
+  },
+  {
+    "number": 107,
+    "caseId": "belt-robot-handoff-20210515-proposal",
+    "products": [
+      "mesh-belt-furnace"
+    ],
+    "entry": "/solutions/rechuli-lu-kongzhi-xitong-shengji",
+    "focus": "handling",
+    "scope": "direct"
+  },
+  {
+    "number": 108,
+    "caseId": "chain-pallet-hold-20221015-proposal",
+    "products": [],
+    "entry": "/solutions/continuous-heat-treatment-line",
+    "focus": "handling",
+    "scope": "direct"
+  },
+  {
+    "number": 109,
+    "caseId": "box-temper-spares-interchange-proposal",
+    "products": [
+      "box-furnace"
+    ],
+    "entry": null,
+    "focus": "supply",
+    "scope": "direct"
+  },
+  {
+    "number": 110,
+    "caseId": "carburizing-probe-fallback-20250306-proposal",
+    "products": [],
+    "entry": "/solutions/rechuli-lu-kongzhi-xitong-shengji",
+    "focus": "measurement",
+    "scope": "direct"
+  },
+  {
+    "number": 111,
+    "caseId": "two-retort-cooling-20241016-proposal",
+    "products": [
+      "pit-furnace"
+    ],
+    "entry": null,
+    "focus": "capacity",
+    "scope": "direct"
+  },
+  {
+    "number": 112,
+    "caseId": "vessel-heating-curve-20260108-proposal",
+    "products": [],
+    "entry": "/solutions/rechuli-lu-wendu-bujun-zhenggai",
+    "focus": "measurement",
+    "scope": "direct"
+  },
+  {
+    "number": 113,
+    "caseId": "crossflow-fan-rack-layout-20260709-proposal",
+    "products": [
+      "box-furnace"
+    ],
+    "entry": null,
+    "focus": "load",
+    "scope": "interface",
+    "note": {
+      "zh": "仅参考工装车架排布与送回风空间；该塑料风叶烘炉不等同金属件热处理配置。",
+      "en": "Compare tooling-rack layout and supply/return-air space only. This plastic fan-blade oven is not equivalent to a metal-part heat-treatment configuration."
+    }
+  },
+  {
+    "number": 114,
+    "caseId": "pipe-fixture-port-20260702-proposal",
+    "products": [
+      "box-furnace"
+    ],
+    "entry": null,
+    "focus": "handling",
+    "scope": "direct"
+  },
+  {
+    "number": 115,
+    "caseId": "qpq-stations-transfer-20260513-proposal",
+    "products": [],
+    "entry": "/contact",
+    "focus": "supply",
+    "scope": "special"
+  },
+  {
+    "number": 116,
+    "caseId": "lab-furnace-measurement-range-202605-proposal",
+    "products": [
+      "box-furnace"
+    ],
+    "entry": null,
+    "focus": "measurement",
+    "scope": "direct"
+  },
+  {
+    "number": 117,
+    "caseId": "rolling-furnace-door-cycle-20260513-proposal",
+    "products": [
+      "box-furnace"
+    ],
+    "entry": null,
+    "focus": "handling",
+    "scope": "direct"
+  },
+  {
+    "number": 118,
+    "caseId": "wheel-mixed-loading-transfer-20260513-proposal",
+    "products": [
+      "aluminum-solution-aging-line",
+      "roller-hearth-furnace"
+    ],
+    "entry": null,
+    "focus": "handling",
+    "scope": "interface",
+    "note": {
+      "zh": "只比较辊棒支承和转移接口，铝轮毂固溶工艺需单独确认。",
+      "en": "Compare roller support and transfer interfaces only; the aluminium-wheel solution-treatment process requires separate confirmation."
+    }
+  },
+  {
+    "number": 119,
+    "caseId": "aluminum-chain-pitch-dwell-202608-proposal",
+    "products": [
+      "aluminum-forging-heating-line"
+    ],
+    "entry": null,
+    "focus": "capacity",
+    "scope": "direct"
+  },
+  {
+    "number": 120,
+    "caseId": "belt-trial-production-boundary-20260821-requirements",
+    "products": [
+      "mesh-belt-furnace"
+    ],
+    "entry": null,
+    "focus": "capacity",
+    "scope": "direct"
+  },
+  {
+    "number": 121,
+    "caseId": "screw-spec-capacity-202608-proposal",
+    "products": [
+      "mesh-belt-carbonitriding-line"
+    ],
+    "entry": null,
+    "focus": "capacity",
+    "scope": "interface",
+    "note": {
+      "zh": "只比较铺料、有效长度与产量核算；共渗与渗碳的气氛及渗层制度须另核。",
+      "en": "Compare loading, effective length and throughput calculations only. Co-diffusion and carburising require separate atmosphere and case-depth process checks."
+    }
+  },
+  {
+    "number": 122,
+    "caseId": "bolt-fixture-quench-load-202608-proposal",
+    "products": [
+      "multi-furnace-quench-cell"
+    ],
+    "entry": null,
+    "focus": "load",
+    "scope": "interface",
+    "note": {
+      "zh": "本案为密封多用炉，只比较工件与料具热负荷，不据此确认外置共用叉车单元。",
+      "en": "This sealed multipurpose furnace supports workpiece/tooling thermal-load comparisons only; it does not establish an external shared-fork furnace cell."
+    }
+  },
+  {
+    "number": 123,
+    "caseId": "aluminum-forging-loader-202608-proposal",
+    "products": [
+      "aluminum-forging-heating-line",
+      "trolley-furnace"
+    ],
+    "entry": null,
+    "focus": "handling",
+    "scope": "direct"
+  },
+  {
+    "number": 124,
+    "caseId": "pyrolysis-test-capacity-202608-proposal",
+    "products": [],
+    "entry": "/contact",
+    "focus": "capacity",
+    "scope": "special"
+  },
+  {
+    "number": 125,
+    "caseId": "wire-winding-positions-202609-proposal",
+    "products": [],
+    "entry": "/contact",
+    "focus": "capacity",
+    "scope": "special"
+  },
+  {
+    "number": 126,
+    "caseId": "wind-flange-furnace-group-202411-proposal",
+    "products": [
+      "trolley-furnace"
+    ],
+    "entry": "/contact",
+    "focus": "supply",
+    "scope": "interface",
+    "note": {
+      "zh": "本产品入口仅对应两台台车电炉；同批采购的五台室式燃气锻造炉是另一种设备。",
+      "en": "This product entry covers only the two electric bogie-hearth furnaces. The five chamber-type gas forging furnaces in the same purchase are different equipment."
+    }
+  },
+  {
+    "number": 127,
+    "caseId": "bar-centering-repair-20260417-proposal",
+    "products": [
+      "walking-beam-furnace"
+    ],
+    "entry": null,
+    "focus": "handling",
+    "scope": "direct"
+  },
+  {
+    "number": 128,
+    "caseId": "forged-ball-line-interfaces-202606-proposal",
+    "products": [],
+    "entry": "/service/furnace-renovation-overhaul",
+    "focus": "renovation",
+    "scope": "direct"
+  },
+  {
+    "number": 129,
+    "caseId": "rolled-ball-flow-split-202601-proposal",
+    "products": [],
+    "entry": "/solutions/continuous-heat-treatment-line",
+    "focus": "capacity",
+    "scope": "direct"
+  },
+  {
+    "number": 130,
+    "caseId": "cylinder-robot-exchange-20260715-proposal",
+    "products": [
+      "cylinder-curing-line"
+    ],
+    "entry": null,
+    "focus": "handling",
+    "scope": "interface",
+    "note": {
+      "zh": "本案为六只气瓶换批固化，仅参考机器人逐只换料接口，不代表炉内连续进出料。",
+      "en": "This six-cylinder furnace cures batches. Use it for individual robot exchange interfaces, not continuous loading and unloading through the furnace."
+    }
+  },
+  {
+    "number": 131,
+    "caseId": "track-link-shared-robot-202608-proposal",
+    "products": [
+      "forging-waste-heat-qt-line"
+    ],
+    "entry": null,
+    "focus": "capacity",
+    "scope": "direct"
+  },
+  {
+    "number": 132,
+    "caseId": "track-shoe-lane-handoffs-202608-proposal",
+    "products": [
+      "track-shoe-press-quench-line"
+    ],
+    "entry": null,
+    "focus": "handling",
+    "scope": "direct"
+  },
+  {
+    "number": 133,
+    "caseId": "alloy-bar-plate-handling-202607-proposal",
+    "products": [
+      "bell-furnace"
+    ],
+    "entry": null,
+    "focus": "handling",
+    "scope": "interface",
+    "note": {
+      "zh": "本页只承接板卷罩式炉与行车条件；棒料斜底炉是另一种结构。",
+      "en": "This product page covers only the plate/coil bell furnace and crane conditions. The bar-heating sloping-hearth furnace has a different structure."
+    }
+  },
+  {
+    "number": 134,
+    "caseId": "copper-coil-circular-loading-20191117-proposal",
+    "products": [
+      "box-furnace"
+    ],
+    "entry": null,
+    "focus": "load",
+    "scope": "direct"
+  },
+  {
+    "number": 135,
+    "caseId": "three-box-shared-quench-202609-proposal",
+    "products": [
+      "multi-furnace-quench-cell",
+      "box-furnace"
+    ],
+    "entry": null,
+    "focus": "handling",
+    "scope": "direct"
+  },
+  {
+    "number": 136,
+    "caseId": "box-line-tray-handoffs-202605-proposal",
+    "products": [
+      "multi-furnace-quench-cell",
+      "box-furnace"
+    ],
+    "entry": null,
+    "focus": "handling",
+    "scope": "direct"
+  },
+  {
+    "number": 137,
+    "caseId": "long-cylinder-fit-chain-20260905-proposal",
+    "products": [
+      "aluminum-solution-aging-line"
+    ],
+    "entry": null,
+    "focus": "load",
+    "scope": "direct"
+  },
+  {
+    "number": 138,
+    "caseId": "cylinder-continuous-scraping-20220907-proposal",
+    "products": [
+      "cylinder-curing-line"
+    ],
+    "entry": null,
+    "focus": "handling",
+    "scope": "direct"
+  },
+  {
+    "number": 139,
+    "caseId": "external-hot-air-exchange-20230610-proposal",
+    "products": [
+      "box-furnace"
+    ],
+    "entry": null,
+    "focus": "measurement",
+    "scope": "direct"
+  },
+  {
+    "number": 140,
+    "caseId": "cylinder-two-stage-balance-202608-proposal",
+    "products": [
+      "cylinder-curing-line"
+    ],
+    "entry": null,
+    "focus": "capacity",
+    "scope": "direct"
+  },
+  {
+    "number": 141,
+    "caseId": "pit-opening-site-fit-202607-proposal",
+    "products": [
+      "aluminum-solution-aging-line"
+    ],
+    "entry": null,
+    "focus": "handling",
+    "scope": "direct"
+  },
+  {
+    "number": 142,
+    "caseId": "belt-width-handoffs-20260730-proposal",
+    "products": [
+      "mesh-belt-furnace"
+    ],
+    "entry": null,
+    "focus": "capacity",
+    "scope": "direct"
+  },
+  {
+    "number": 143,
+    "caseId": "strip-cooling-feedback-20260509-proposal",
+    "products": [
+      "annealing-solution-line"
+    ],
+    "entry": null,
+    "focus": "measurement",
+    "scope": "direct"
+  },
+  {
+    "number": 144,
+    "caseId": "coil-batch-identity-2021-proposal",
+    "products": [
+      "shovel-furnace"
+    ],
+    "entry": null,
+    "focus": "supply",
+    "scope": "direct"
+  },
+  {
+    "number": 145,
+    "caseId": "export-belt-acceptance-20260323-proposal",
+    "products": [
+      "mesh-belt-furnace"
+    ],
+    "entry": "/contact",
+    "focus": "supply",
+    "scope": "direct"
+  },
+  {
+    "number": 146,
+    "caseId": "quench-overflow-loops-20150915-proposal",
+    "products": [
+      "multi-furnace-quench-cell"
+    ],
+    "entry": null,
+    "focus": "capacity",
+    "scope": "interface",
+    "note": {
+      "zh": "仅参考槽体、储液、溢流与冷却接口，不代表完整炉群配置。",
+      "en": "Use only for tank, storage, overflow and cooling interfaces, not a complete furnace-cell configuration."
+    }
+  },
+  {
+    "number": 147,
+    "caseId": "titanium-loaded-test-20201118-proposal",
+    "products": [
+      "roller-hearth-furnace"
+    ],
+    "entry": "/solutions/rechuli-lu-wendu-bujun-zhenggai",
+    "focus": "measurement",
+    "scope": "direct"
+  },
+  {
+    "number": 148,
+    "caseId": "aluminium-immersion-stages-20210519-proposal",
+    "products": [
+      "aluminum-solution-aging-line"
+    ],
+    "entry": null,
+    "focus": "handling",
+    "scope": "direct"
+  }
+]

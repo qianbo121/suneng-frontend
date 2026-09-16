@@ -1,0 +1,13 @@
+{
+  "id": "quench-separate-cooling-20240315-proposal",
+  "slug": "trolley-quench-furnace-bath-support-external-cooling-proposal",
+  "number": 64,
+  "title": "If a bogie-hearth furnace quote includes a quench tank, does it also include external cooling?",
+  "summary": "A quench tank may be included while external cooling remains the user's responsibility. Suneng's bogie-hearth furnace proposal lists the tank, agitators and support platform, but separately states “quench-oil tank cooling system: user-supplied”. Separate internal tank equipment from external cooling when defining the complete supply, and reconcile the medium and batch-loading conditions.",
+  "body": "quench-separate-cooling-20240315-proposal.md",
+  "sourceFingerprint": "006fc0cbf10b41ee8b5ffc32fdd95d839fc013a1fa560288194e07cdd68e2a00",
+  "translationStatus": "complete",
+  "translatedAt": "2026-09-12",
+  "coverAlt": "",
+  "coverCaption": ""
+}

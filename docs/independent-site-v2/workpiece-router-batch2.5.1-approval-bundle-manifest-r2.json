@@ -1,0 +1,475 @@
+{
+  "schemaVersion": "1.0.0",
+  "approvalBundleVersion": "workpiece-router-batch2.5.1-candidate-v2-approval-bundle-r2",
+  "baselineVersion": "industry-public-baseline-2026-08-batch2.5-candidate-v2",
+  "createdAt": "2026-08-27T19:24:13.784Z",
+  "status": "awaiting_responsible_owner_approval",
+  "candidateRuleCount": 6,
+  "candidatePairCount": 23,
+  "pairDistribution": [
+    9,
+    1,
+    1,
+    6,
+    4,
+    2
+  ],
+  "productionPublicRuleCount": 0,
+  "technicalSnapshotHash": "sha256:f1577a282715a2f84239917c9d7be8ba6bf85217936f61be81bd302ee6401f61",
+  "approvalBundleHash": "sha256:0f8deb3857d69ccad8aef6e14b2cc7fff76a86ef124cdf7fe7c7c7c76121d547",
+  "supersededApprovalBundleHash": {
+    "value": "sha256:94680e3ca85e403b0c92861b69c3d674cd6bcff791b6e1ef623a5a64932f1f38",
+    "status": "superseded",
+    "signingAllowed": false,
+    "reason": "已由签署材料补正后的r2审批包取代。"
+  },
+  "hashAlgorithm": {
+    "fileHash": "SHA-256 over exact file bytes; stored as sha256:<lowercase hex>.",
+    "approvalBundleHash": "SHA-256 over UTF-8 canonical JSON of approvalBundleHashPayload. The payload contains only ZIP-internal relative path and SHA-256 pairs.",
+    "canonicalization": "Object keys are recursively sorted with localeCompare(en); files are sorted lexicographically by relative path with localeCompare(en); JSON.stringify emits compact JSON with no extra whitespace.",
+    "exclusions": "This external manifest and the final ZIP are excluded from approvalBundleHash to avoid self-reference.",
+    "approvalBundleHashPayload": {
+      "files": [
+        {
+          "path": "approval/workpiece-router-batch2.5.1-candidate-v2-approval-matrix-r2.xlsx",
+          "sha256": "sha256:4fad35fc6b6c09d055e15f848498ec7fcd393cdad94f54ad5d1f567f48efe7f4"
+        },
+        {
+          "path": "approval/workpiece-router-batch2.5.1-candidate-v2-signing-instructions-r2.md",
+          "sha256": "sha256:3ee10d92b88258a9d07a9d922781495413dea5cb1f907f7caf8ce4154767d77e"
+        },
+        {
+          "path": "candidate/industry-public-baseline-candidate-batch2.5-candidate-v2.json",
+          "sha256": "sha256:893a6f690f312776f9fb23445f06309d3d528960c7a8c5639f3540b4f517163c"
+        },
+        {
+          "path": "candidate/workpiece-router-batch2.5-candidate-v2-public-baseline-candidate.md",
+          "sha256": "sha256:b62112a00c757b07a9628054c43c57927d00d82ef6b62875b67e818229029b46"
+        },
+        {
+          "path": "screenshots/workpiece-router-batch2.5.1-production-zero-public-1440.png",
+          "sha256": "sha256:273af12929a54ab52a2681f2b3aceaacfe78b34387f5e9a1738e826c8ff76b75"
+        },
+        {
+          "path": "screenshots/workpiece-router-batch2.5.1-production-zero-public-390.png",
+          "sha256": "sha256:39d3442181ce3774a2815f97fe339cadab1f59b13a491df9b63ccc66b18af884"
+        },
+        {
+          "path": "screenshots/workpiece-router-batch2.5.1-test-fixture-conditional-1440.png",
+          "sha256": "sha256:3e1f83ef69340b11031cc3e6f9dd8506a66b86fbda78829db15352ef2571fb20"
+        },
+        {
+          "path": "technical-snapshot-source/backend/src/modules/workpiece-router/batch2.5-candidate.spec.ts",
+          "sha256": "sha256:85d8be0d7fffa1d4f44408a762d0afc79ae1d1b16c6705d82f6e9762db5f87bf"
+        },
+        {
+          "path": "technical-snapshot-source/backend/src/modules/workpiece-router/batch2.5.1-candidate.spec.ts",
+          "sha256": "sha256:969ccbbc61b2cf420a65bb291a2b3d3a07935e3542fcbd97349aac924b13ea7c"
+        },
+        {
+          "path": "technical-snapshot-source/backend/src/modules/workpiece-router/dto/resolve-workpiece-router.dto.ts",
+          "sha256": "sha256:5eb8c8bbccfaabc331fe5d3738812cc76f15a5bfd01f1ffa2d22125d6a61c54c"
+        },
+        {
+          "path": "technical-snapshot-source/backend/src/modules/workpiece-router/engineering-resolver.spec.ts",
+          "sha256": "sha256:78a6a97c8e479ee2a894db7bad020dcaef564decd540b69f6fbfdfb643e23674"
+        },
+        {
+          "path": "technical-snapshot-source/backend/src/modules/workpiece-router/engineering-resolver.ts",
+          "sha256": "sha256:07ac30304d15426c7b3a2c991ea3ab36fe41f3258deb7c0d1f88a5dd09134510"
+        },
+        {
+          "path": "technical-snapshot-source/backend/src/modules/workpiece-router/workpiece-router.service.spec.ts",
+          "sha256": "sha256:b7c4b858f5fc741696f668ff4c9d242831b37fb591199e2676f3b6601fd9de81"
+        },
+        {
+          "path": "technical-snapshot-source/backend/src/modules/workpiece-router/workpiece-router.service.ts",
+          "sha256": "sha256:08af65191ef77a66b07776995ba06049b0af558640d78e2a5209076bb7313bf6"
+        },
+        {
+          "path": "technical-snapshot-source/data/workpiece-router/industry-direction-rules.json",
+          "sha256": "sha256:38a103bef51cc5a763ff63f98da30cb0db36088c5a2f6d12c6af197114a166a5"
+        },
+        {
+          "path": "technical-snapshot-source/data/workpiece-router/industry-evidence-registry.json",
+          "sha256": "sha256:e45a8867b76f8e6310ee0fb3464b60a294c5fb2a5f1dcda4b76c334787c0e191"
+        },
+        {
+          "path": "technical-snapshot-source/data/workpiece-router/industry-public-claim-templates.json",
+          "sha256": "sha256:18603fa7a74af71161e9525f27311fe9e71a56d94703073ab9b9117e72074e77"
+        },
+        {
+          "path": "technical-snapshot-source/data/workpiece-router/industry-public-label-mapping.json",
+          "sha256": "sha256:140488e23b12fa295c2a8b12fc5f38a6a7fe28c9f80656d8c1b74e0b8933acc2"
+        },
+        {
+          "path": "technical-snapshot-source/data/workpiece-router/industry-resolver-config.json",
+          "sha256": "sha256:4d2c075ab5eca26d4e4303240810741a8660a6e6a7c97d3f3df87dcaeca6097b"
+        },
+        {
+          "path": "technical-snapshot-source/data/workpiece-router/logic-unit-content-seed.json",
+          "sha256": "sha256:efb6fff6339ed832ce4ffc4325c48f3068ef3ee6451ff8fc93c490e374f99c63"
+        },
+        {
+          "path": "technical-snapshot-source/data/workpiece-router/process-routes.json",
+          "sha256": "sha256:b8be66d5fda9669862382157ff14fe07fd89c50c479a275890ed52d996294fa3"
+        },
+        {
+          "path": "technical-snapshot-source/data/workpiece-router/process-taxonomy.json",
+          "sha256": "sha256:cdc1543f05ce347464f78e40aac6b73e3b142570bfec8494de10d70c69bed53a"
+        },
+        {
+          "path": "technical-snapshot-source/frontend/src/components/home/WorkpieceRouter.tsx",
+          "sha256": "sha256:995d713102ab2f5829802e62bb4e6bc0d53bad342e3422752a4147e82fab132e"
+        },
+        {
+          "path": "technical-snapshot-source/frontend/src/lib/api/workpiece-router.ts",
+          "sha256": "sha256:ce7a2846f43e3452bfa65be8a3be3b3391ce98682ad95d7eb515f5fa28492614"
+        },
+        {
+          "path": "technical-snapshot-source/frontend/src/lib/workpiece-router-2.4a.spec.ts",
+          "sha256": "sha256:1937672d0acaef09fd2b9eb29c47c7e9bb3cb46e14e88be75bd9eb4d7053fa50"
+        },
+        {
+          "path": "technical-snapshot-source/frontend/tests/visual/workpiece-router-batch2.4a.spec.ts",
+          "sha256": "sha256:db940b5d3dfad881a5eea0f331b880fc5c0c221f7a89cee91e25ab2c113c617b"
+        },
+        {
+          "path": "technical-snapshot-source/scripts/generate-workpiece-router-batch2.5.1.mjs",
+          "sha256": "sha256:38829ac3dabd21a72b8e7bf3c8fac9a3e74122a3e228588cf9dd99451e34e261"
+        },
+        {
+          "path": "technical-snapshot-source/scripts/validate-workpiece-router.mjs",
+          "sha256": "sha256:d247fc63547072240d19642f551685d9b1c8c27cb841d810d7594742bc62bd8c"
+        },
+        {
+          "path": "technical/workpiece-router-batch2.5.1-technical-snapshot.json",
+          "sha256": "sha256:73e2117dc1ed7ca35776dac72770c6461d87d039996b46821bfa3f4e9dc6e56d"
+        },
+        {
+          "path": "verification/workpiece-router-batch2.5-test-manifest.json",
+          "sha256": "sha256:c78bce3d3fd7b8ac56d486a50e3e9dadd81e4891583e861689e3495e301ccb88"
+        },
+        {
+          "path": "verification/workpiece-router-batch2.5.1-regression-report.md",
+          "sha256": "sha256:93adaf31896dd99c1444859b103d8cf2b9f01859ffc29f4e1c2ab0e36fe67caa"
+        }
+      ]
+    }
+  },
+  "technicalSnapshotCoverage": {
+    "fileCount": 21,
+    "files": [
+      {
+        "sourcePath": "backend/src/modules/workpiece-router/batch2.5-candidate.spec.ts",
+        "bundlePath": "technical-snapshot-source/backend/src/modules/workpiece-router/batch2.5-candidate.spec.ts",
+        "sha256": "sha256:85d8be0d7fffa1d4f44408a762d0afc79ae1d1b16c6705d82f6e9762db5f87bf"
+      },
+      {
+        "sourcePath": "backend/src/modules/workpiece-router/batch2.5.1-candidate.spec.ts",
+        "bundlePath": "technical-snapshot-source/backend/src/modules/workpiece-router/batch2.5.1-candidate.spec.ts",
+        "sha256": "sha256:969ccbbc61b2cf420a65bb291a2b3d3a07935e3542fcbd97349aac924b13ea7c"
+      },
+      {
+        "sourcePath": "backend/src/modules/workpiece-router/dto/resolve-workpiece-router.dto.ts",
+        "bundlePath": "technical-snapshot-source/backend/src/modules/workpiece-router/dto/resolve-workpiece-router.dto.ts",
+        "sha256": "sha256:5eb8c8bbccfaabc331fe5d3738812cc76f15a5bfd01f1ffa2d22125d6a61c54c"
+      },
+      {
+        "sourcePath": "backend/src/modules/workpiece-router/engineering-resolver.spec.ts",
+        "bundlePath": "technical-snapshot-source/backend/src/modules/workpiece-router/engineering-resolver.spec.ts",
+        "sha256": "sha256:78a6a97c8e479ee2a894db7bad020dcaef564decd540b69f6fbfdfb643e23674"
+      },
+      {
+        "sourcePath": "backend/src/modules/workpiece-router/engineering-resolver.ts",
+        "bundlePath": "technical-snapshot-source/backend/src/modules/workpiece-router/engineering-resolver.ts",
+        "sha256": "sha256:07ac30304d15426c7b3a2c991ea3ab36fe41f3258deb7c0d1f88a5dd09134510"
+      },
+      {
+        "sourcePath": "backend/src/modules/workpiece-router/workpiece-router.service.spec.ts",
+        "bundlePath": "technical-snapshot-source/backend/src/modules/workpiece-router/workpiece-router.service.spec.ts",
+        "sha256": "sha256:b7c4b858f5fc741696f668ff4c9d242831b37fb591199e2676f3b6601fd9de81"
+      },
+      {
+        "sourcePath": "backend/src/modules/workpiece-router/workpiece-router.service.ts",
+        "bundlePath": "technical-snapshot-source/backend/src/modules/workpiece-router/workpiece-router.service.ts",
+        "sha256": "sha256:08af65191ef77a66b07776995ba06049b0af558640d78e2a5209076bb7313bf6"
+      },
+      {
+        "sourcePath": "data/workpiece-router/industry-direction-rules.json",
+        "bundlePath": "technical-snapshot-source/data/workpiece-router/industry-direction-rules.json",
+        "sha256": "sha256:38a103bef51cc5a763ff63f98da30cb0db36088c5a2f6d12c6af197114a166a5"
+      },
+      {
+        "sourcePath": "data/workpiece-router/industry-evidence-registry.json",
+        "bundlePath": "technical-snapshot-source/data/workpiece-router/industry-evidence-registry.json",
+        "sha256": "sha256:e45a8867b76f8e6310ee0fb3464b60a294c5fb2a5f1dcda4b76c334787c0e191"
+      },
+      {
+        "sourcePath": "data/workpiece-router/industry-public-claim-templates.json",
+        "bundlePath": "technical-snapshot-source/data/workpiece-router/industry-public-claim-templates.json",
+        "sha256": "sha256:18603fa7a74af71161e9525f27311fe9e71a56d94703073ab9b9117e72074e77"
+      },
+      {
+        "sourcePath": "data/workpiece-router/industry-public-label-mapping.json",
+        "bundlePath": "technical-snapshot-source/data/workpiece-router/industry-public-label-mapping.json",
+        "sha256": "sha256:140488e23b12fa295c2a8b12fc5f38a6a7fe28c9f80656d8c1b74e0b8933acc2"
+      },
+      {
+        "sourcePath": "data/workpiece-router/industry-resolver-config.json",
+        "bundlePath": "technical-snapshot-source/data/workpiece-router/industry-resolver-config.json",
+        "sha256": "sha256:4d2c075ab5eca26d4e4303240810741a8660a6e6a7c97d3f3df87dcaeca6097b"
+      },
+      {
+        "sourcePath": "data/workpiece-router/logic-unit-content-seed.json",
+        "bundlePath": "technical-snapshot-source/data/workpiece-router/logic-unit-content-seed.json",
+        "sha256": "sha256:efb6fff6339ed832ce4ffc4325c48f3068ef3ee6451ff8fc93c490e374f99c63"
+      },
+      {
+        "sourcePath": "data/workpiece-router/process-routes.json",
+        "bundlePath": "technical-snapshot-source/data/workpiece-router/process-routes.json",
+        "sha256": "sha256:b8be66d5fda9669862382157ff14fe07fd89c50c479a275890ed52d996294fa3"
+      },
+      {
+        "sourcePath": "data/workpiece-router/process-taxonomy.json",
+        "bundlePath": "technical-snapshot-source/data/workpiece-router/process-taxonomy.json",
+        "sha256": "sha256:cdc1543f05ce347464f78e40aac6b73e3b142570bfec8494de10d70c69bed53a"
+      },
+      {
+        "sourcePath": "frontend/src/components/home/WorkpieceRouter.tsx",
+        "bundlePath": "technical-snapshot-source/frontend/src/components/home/WorkpieceRouter.tsx",
+        "sha256": "sha256:995d713102ab2f5829802e62bb4e6bc0d53bad342e3422752a4147e82fab132e"
+      },
+      {
+        "sourcePath": "frontend/src/lib/api/workpiece-router.ts",
+        "bundlePath": "technical-snapshot-source/frontend/src/lib/api/workpiece-router.ts",
+        "sha256": "sha256:ce7a2846f43e3452bfa65be8a3be3b3391ce98682ad95d7eb515f5fa28492614"
+      },
+      {
+        "sourcePath": "frontend/src/lib/workpiece-router-2.4a.spec.ts",
+        "bundlePath": "technical-snapshot-source/frontend/src/lib/workpiece-router-2.4a.spec.ts",
+        "sha256": "sha256:1937672d0acaef09fd2b9eb29c47c7e9bb3cb46e14e88be75bd9eb4d7053fa50"
+      },
+      {
+        "sourcePath": "frontend/tests/visual/workpiece-router-batch2.4a.spec.ts",
+        "bundlePath": "technical-snapshot-source/frontend/tests/visual/workpiece-router-batch2.4a.spec.ts",
+        "sha256": "sha256:db940b5d3dfad881a5eea0f331b880fc5c0c221f7a89cee91e25ab2c113c617b"
+      },
+      {
+        "sourcePath": "scripts/generate-workpiece-router-batch2.5.1.mjs",
+        "bundlePath": "technical-snapshot-source/scripts/generate-workpiece-router-batch2.5.1.mjs",
+        "sha256": "sha256:38829ac3dabd21a72b8e7bf3c8fac9a3e74122a3e228588cf9dd99451e34e261"
+      },
+      {
+        "sourcePath": "scripts/validate-workpiece-router.mjs",
+        "bundlePath": "technical-snapshot-source/scripts/validate-workpiece-router.mjs",
+        "sha256": "sha256:d247fc63547072240d19642f551685d9b1c8c27cb841d810d7594742bc62bd8c"
+      }
+    ]
+  },
+  "approvalBundleCoverage": {
+    "fileCount": 31,
+    "files": [
+      {
+        "path": "approval/workpiece-router-batch2.5.1-candidate-v2-approval-matrix-r2.xlsx",
+        "size": 36003,
+        "sha256": "sha256:4fad35fc6b6c09d055e15f848498ec7fcd393cdad94f54ad5d1f567f48efe7f4"
+      },
+      {
+        "path": "approval/workpiece-router-batch2.5.1-candidate-v2-signing-instructions-r2.md",
+        "size": 1971,
+        "sha256": "sha256:3ee10d92b88258a9d07a9d922781495413dea5cb1f907f7caf8ce4154767d77e"
+      },
+      {
+        "path": "candidate/industry-public-baseline-candidate-batch2.5-candidate-v2.json",
+        "size": 160122,
+        "sha256": "sha256:893a6f690f312776f9fb23445f06309d3d528960c7a8c5639f3540b4f517163c"
+      },
+      {
+        "path": "candidate/workpiece-router-batch2.5-candidate-v2-public-baseline-candidate.md",
+        "size": 20905,
+        "sha256": "sha256:b62112a00c757b07a9628054c43c57927d00d82ef6b62875b67e818229029b46"
+      },
+      {
+        "path": "screenshots/workpiece-router-batch2.5.1-production-zero-public-1440.png",
+        "size": 305905,
+        "sha256": "sha256:273af12929a54ab52a2681f2b3aceaacfe78b34387f5e9a1738e826c8ff76b75"
+      },
+      {
+        "path": "screenshots/workpiece-router-batch2.5.1-production-zero-public-390.png",
+        "size": 85445,
+        "sha256": "sha256:39d3442181ce3774a2815f97fe339cadab1f59b13a491df9b63ccc66b18af884"
+      },
+      {
+        "path": "screenshots/workpiece-router-batch2.5.1-test-fixture-conditional-1440.png",
+        "size": 339802,
+        "sha256": "sha256:3e1f83ef69340b11031cc3e6f9dd8506a66b86fbda78829db15352ef2571fb20"
+      },
+      {
+        "path": "technical-snapshot-source/backend/src/modules/workpiece-router/batch2.5-candidate.spec.ts",
+        "size": 7469,
+        "sha256": "sha256:85d8be0d7fffa1d4f44408a762d0afc79ae1d1b16c6705d82f6e9762db5f87bf"
+      },
+      {
+        "path": "technical-snapshot-source/backend/src/modules/workpiece-router/batch2.5.1-candidate.spec.ts",
+        "size": 9358,
+        "sha256": "sha256:969ccbbc61b2cf420a65bb291a2b3d3a07935e3542fcbd97349aac924b13ea7c"
+      },
+      {
+        "path": "technical-snapshot-source/backend/src/modules/workpiece-router/dto/resolve-workpiece-router.dto.ts",
+        "size": 11164,
+        "sha256": "sha256:5eb8c8bbccfaabc331fe5d3738812cc76f15a5bfd01f1ffa2d22125d6a61c54c"
+      },
+      {
+        "path": "technical-snapshot-source/backend/src/modules/workpiece-router/engineering-resolver.spec.ts",
+        "size": 17474,
+        "sha256": "sha256:78a6a97c8e479ee2a894db7bad020dcaef564decd540b69f6fbfdfb643e23674"
+      },
+      {
+        "path": "technical-snapshot-source/backend/src/modules/workpiece-router/engineering-resolver.ts",
+        "size": 20793,
+        "sha256": "sha256:07ac30304d15426c7b3a2c991ea3ab36fe41f3258deb7c0d1f88a5dd09134510"
+      },
+      {
+        "path": "technical-snapshot-source/backend/src/modules/workpiece-router/workpiece-router.service.spec.ts",
+        "size": 27467,
+        "sha256": "sha256:b7c4b858f5fc741696f668ff4c9d242831b37fb591199e2676f3b6601fd9de81"
+      },
+      {
+        "path": "technical-snapshot-source/backend/src/modules/workpiece-router/workpiece-router.service.ts",
+        "size": 60745,
+        "sha256": "sha256:08af65191ef77a66b07776995ba06049b0af558640d78e2a5209076bb7313bf6"
+      },
+      {
+        "path": "technical-snapshot-source/data/workpiece-router/industry-direction-rules.json",
+        "size": 636277,
+        "sha256": "sha256:38a103bef51cc5a763ff63f98da30cb0db36088c5a2f6d12c6af197114a166a5"
+      },
+      {
+        "path": "technical-snapshot-source/data/workpiece-router/industry-evidence-registry.json",
+        "size": 50384,
+        "sha256": "sha256:e45a8867b76f8e6310ee0fb3464b60a294c5fb2a5f1dcda4b76c334787c0e191"
+      },
+      {
+        "path": "technical-snapshot-source/data/workpiece-router/industry-public-claim-templates.json",
+        "size": 703,
+        "sha256": "sha256:18603fa7a74af71161e9525f27311fe9e71a56d94703073ab9b9117e72074e77"
+      },
+      {
+        "path": "technical-snapshot-source/data/workpiece-router/industry-public-label-mapping.json",
+        "size": 3391,
+        "sha256": "sha256:140488e23b12fa295c2a8b12fc5f38a6a7fe28c9f80656d8c1b74e0b8933acc2"
+      },
+      {
+        "path": "technical-snapshot-source/data/workpiece-router/industry-resolver-config.json",
+        "size": 1082,
+        "sha256": "sha256:4d2c075ab5eca26d4e4303240810741a8660a6e6a7c97d3f3df87dcaeca6097b"
+      },
+      {
+        "path": "technical-snapshot-source/data/workpiece-router/logic-unit-content-seed.json",
+        "size": 23303,
+        "sha256": "sha256:efb6fff6339ed832ce4ffc4325c48f3068ef3ee6451ff8fc93c490e374f99c63"
+      },
+      {
+        "path": "technical-snapshot-source/data/workpiece-router/process-routes.json",
+        "size": 157875,
+        "sha256": "sha256:b8be66d5fda9669862382157ff14fe07fd89c50c479a275890ed52d996294fa3"
+      },
+      {
+        "path": "technical-snapshot-source/data/workpiece-router/process-taxonomy.json",
+        "size": 1462,
+        "sha256": "sha256:cdc1543f05ce347464f78e40aac6b73e3b142570bfec8494de10d70c69bed53a"
+      },
+      {
+        "path": "technical-snapshot-source/frontend/src/components/home/WorkpieceRouter.tsx",
+        "size": 39078,
+        "sha256": "sha256:995d713102ab2f5829802e62bb4e6bc0d53bad342e3422752a4147e82fab132e"
+      },
+      {
+        "path": "technical-snapshot-source/frontend/src/lib/api/workpiece-router.ts",
+        "size": 4904,
+        "sha256": "sha256:ce7a2846f43e3452bfa65be8a3be3b3391ce98682ad95d7eb515f5fa28492614"
+      },
+      {
+        "path": "technical-snapshot-source/frontend/src/lib/workpiece-router-2.4a.spec.ts",
+        "size": 5578,
+        "sha256": "sha256:1937672d0acaef09fd2b9eb29c47c7e9bb3cb46e14e88be75bd9eb4d7053fa50"
+      },
+      {
+        "path": "technical-snapshot-source/frontend/tests/visual/workpiece-router-batch2.4a.spec.ts",
+        "size": 15751,
+        "sha256": "sha256:db940b5d3dfad881a5eea0f331b880fc5c0c221f7a89cee91e25ab2c113c617b"
+      },
+      {
+        "path": "technical-snapshot-source/scripts/generate-workpiece-router-batch2.5.1.mjs",
+        "size": 50857,
+        "sha256": "sha256:38829ac3dabd21a72b8e7bf3c8fac9a3e74122a3e228588cf9dd99451e34e261"
+      },
+      {
+        "path": "technical-snapshot-source/scripts/validate-workpiece-router.mjs",
+        "size": 27307,
+        "sha256": "sha256:d247fc63547072240d19642f551685d9b1c8c27cb841d810d7594742bc62bd8c"
+      },
+      {
+        "path": "technical/workpiece-router-batch2.5.1-technical-snapshot.json",
+        "size": 4205,
+        "sha256": "sha256:73e2117dc1ed7ca35776dac72770c6461d87d039996b46821bfa3f4e9dc6e56d"
+      },
+      {
+        "path": "verification/workpiece-router-batch2.5-test-manifest.json",
+        "size": 380913,
+        "sha256": "sha256:c78bce3d3fd7b8ac56d486a50e3e9dadd81e4891583e861689e3495e301ccb88"
+      },
+      {
+        "path": "verification/workpiece-router-batch2.5.1-regression-report.md",
+        "size": 9292,
+        "sha256": "sha256:93adaf31896dd99c1444859b103d8cf2b9f01859ffc29f4e1c2ab0e36fe67caa"
+      }
+    ]
+  },
+  "zipArtifact": {
+    "path": "workpiece-router-batch2.5.1-candidate-v2-approval-bundle-r2.zip",
+    "size": 964100,
+    "sha256": "sha256:ac56ab5e0623df9d31ffdf8c8862330085dfa7829432f193d2ad60aad5844424",
+    "includedInApprovalBundleHash": false
+  },
+  "verification": {
+    "nodeVersion": "v22.23.1",
+    "technicalFilesUnchanged": true,
+    "technicalSnapshotRecomputed": "sha256:f1577a282715a2f84239917c9d7be8ba6bf85217936f61be81bd302ee6401f61",
+    "technicalSnapshotMatchesFrozenHash": true,
+    "candidateRuleCountMatches": true,
+    "candidatePairCountMatches": true,
+    "productionPublicRuleCountMatches": true,
+    "pairDistributionMatches": true,
+    "all56RuleStatusesClose": true,
+    "publicCopyCount": 18,
+    "all18PublicCopyBlocksPresent": true,
+    "evidenceCount": 14,
+    "evidenceOrphanIds": [],
+    "unknownEvidenceRefs": [],
+    "all14EvidenceRefsClose": true,
+    "pairEvidenceStatusesMatchCandidateJson": true,
+    "nonEmptyRuleGateCount": 6,
+    "matrixImportValidation": {
+      "workbook": "/Users/qianbo/Desktop/Coding/独立站/docs/independent-site-v2/workpiece-router-batch2.5.1-candidate-v2-approval-matrix-r2.xlsx",
+      "pairRows": 23,
+      "evidenceRows": 14,
+      "publicCopyRows": 18,
+      "pairMismatches": [],
+      "evidenceMismatchIds": [],
+      "copyMismatchCount": 0,
+      "ruleGateEmptyIds": [],
+      "shaftPairCount": 3,
+      "shaftGateMissing": [],
+      "narrowingMismatchCount": 0,
+      "formulaError": false,
+      "pass": true
+    },
+    "registeredScreenshotHashesMatch": true,
+    "approvalFieldsRemainEmpty": true,
+    "zipFileCount": 31,
+    "zipFilesMatchManifest": true,
+    "fullIntegrityPass": true
+  }
+}

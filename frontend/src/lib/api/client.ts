@@ -9,6 +9,7 @@ type ApiRequestOptions = {
   cache?: RequestCache;
   searchParams?: Record<string, string | number | boolean | undefined | null>;
   timeoutMs?: number;
+  sameOrigin?: boolean;
 };
 
 type ApiMutationOptions<TBody> = {
@@ -62,8 +63,12 @@ function getRequestTimeoutMs(timeoutMs?: number) {
   return process.env.NODE_ENV === 'development' ? 800 : 3000;
 }
 
-function buildApiUrl(path: string, searchParams?: ApiRequestOptions['searchParams']) {
-  const baseUrl = getApiBaseUrl();
+function buildApiUrl(
+  path: string,
+  searchParams?: ApiRequestOptions['searchParams'],
+  sameOrigin = false,
+) {
+  const baseUrl = sameOrigin ? '/api' : getApiBaseUrl();
 
   if (!baseUrl) {
     throw new ApiRequestError('API base URL is not configured');
@@ -162,7 +167,7 @@ async function apiRequest<T>(
       ? AbortSignal.timeout(getRequestTimeoutMs(options.timeoutMs))
       : undefined;
 
-  const response = await fetch(buildApiUrl(path, options.searchParams), {
+  const response = await fetch(buildApiUrl(path, options.searchParams, options.sameOrigin), {
     method,
     headers: {
       ...(method !== 'GET' ? { 'Content-Type': 'application/json' } : {}),
@@ -204,7 +209,7 @@ async function apiGet<T>(path: string, options: ApiRequestOptions = {}) {
 
 export async function apiPost<T, TBody = Record<string, unknown>>(
   path: string,
-  options: ApiMutationOptions<TBody> & Pick<ApiRequestOptions, 'cache' | 'timeoutMs'> = {},
+  options: ApiMutationOptions<TBody> & Pick<ApiRequestOptions, 'cache' | 'timeoutMs' | 'sameOrigin'> = {},
 ) {
   return apiRequest<T>('POST', path, options);
 }

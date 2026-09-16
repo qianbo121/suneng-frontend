@@ -92,17 +92,29 @@ services:
         NEXT_PUBLIC_API_BASE_URL: /api
         NEXT_PUBLIC_SITE_URL: https://${DOMAIN}
         API_BASE_URL_INTERNAL: http://backend:3001/api
+        NEXT_PUBLIC_BAIDU_SITE_VERIFICATION: ${NEXT_PUBLIC_BAIDU_SITE_VERIFICATION:-}
+        NEXT_PUBLIC_BING_SITE_VERIFICATION: ${NEXT_PUBLIC_BING_SITE_VERIFICATION:-}
+        NEXT_PUBLIC_360_SITE_VERIFICATION: ${NEXT_PUBLIC_360_SITE_VERIFICATION:-}
+        NEXT_PUBLIC_SOGOU_SITE_VERIFICATION: ${NEXT_PUBLIC_SOGOU_SITE_VERIFICATION:-}
+        SITE_NOINDEX: ${SITE_NOINDEX:-false}
     labels:
       org.opencontainers.image.revision: ${DEPLOY_COMMIT:-unknown}
     container_name: corp-site-frontend
     logging: *default-logging
     restart: always
-    mem_limit: 512m
+    mem_limit: 768m
     depends_on:
       backend:
         condition: service_healthy
     environment:
       NODE_ENV: production
+      NODE_OPTIONS: --max-old-space-size=512
+      NEXT_PUBLIC_BAIDU_SITE_VERIFICATION: ${NEXT_PUBLIC_BAIDU_SITE_VERIFICATION:-}
+      INDEXNOW_KEY: ${INDEXNOW_KEY:-}
+      NEXT_PUBLIC_BING_SITE_VERIFICATION: ${NEXT_PUBLIC_BING_SITE_VERIFICATION:-}
+      NEXT_PUBLIC_360_SITE_VERIFICATION: ${NEXT_PUBLIC_360_SITE_VERIFICATION:-}
+      NEXT_PUBLIC_SOGOU_SITE_VERIFICATION: ${NEXT_PUBLIC_SOGOU_SITE_VERIFICATION:-}
+      SITE_NOINDEX: ${SITE_NOINDEX:-false}
       NEXT_PUBLIC_API_URL: /api
       NEXT_PUBLIC_API_BASE_URL: /api
       NEXT_PUBLIC_SITE_URL: https://${DOMAIN}

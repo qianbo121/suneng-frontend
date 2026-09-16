@@ -1,0 +1,274 @@
+{
+  "version": "1.0.0",
+  "description": "首页工件模块使用的行业常规炉型方向。用于公开初步引导，不替代项目工艺核算。",
+  "sources": [
+    {
+      "id": "aichelin-bogie-hearth-stress-relieving",
+      "title": "AICHELIN - Stress relieving / Bogie hearth furnace",
+      "url": "https://www.aichelin.com/en/products/plants/processes/stress-relieving",
+      "appliesTo": ["焊接结构件", "大型铸锻件"]
+    },
+    {
+      "id": "surface-carbottom",
+      "title": "Surface Combustion - Carbottom furnaces",
+      "url": "https://www.surfacecombustion.com/product/lift-cover-tilt-top-carbottom-furnaces/",
+      "appliesTo": ["焊后热处理", "大型铸件与锻件"]
+    },
+    {
+      "id": "seco-pit-large-parts",
+      "title": "SECO/WARWICK - Pit furnaces for large and elongated parts",
+      "url": "https://www.secowarwick.com/en/tech-spotlights/heat-treatment-equipment/",
+      "appliesTo": ["长轴", "大型齿轮", "大型轴类件"]
+    },
+    {
+      "id": "aichelin-roller-hearth",
+      "title": "AICHELIN - Roller hearth furnaces",
+      "url": "https://www.aichelin.com/en/systems-and-components/continuous-furnace-systems/roller-hearth-furnace/",
+      "appliesTo": ["工程机械零件", "齿轮件", "链条件", "批量调质件"]
+    },
+    {
+      "id": "tenova-pipe-tube",
+      "title": "Tenova - Roller hearth furnace for pipe and tube",
+      "url": "https://tenova.com/technologies/roller-hearth-furnace-pipe-tube",
+      "appliesTo": ["钢管", "棒材", "型钢"]
+    },
+    {
+      "id": "tenova-heavy-plate",
+      "title": "Tenova - Tempering furnace for heavy plates",
+      "url": "https://tenova.com/technologies/tempering-furnace-heavy-plates",
+      "appliesTo": ["中厚板", "耐磨板"]
+    },
+    {
+      "id": "ebner-bell-annealers",
+      "title": "EBNER - Bell annealers",
+      "url": "https://www.ebner.cc/en/bell-annealers-overview-en",
+      "appliesTo": ["钢卷", "铝卷", "盘条", "钢丝卷"]
+    },
+    {
+      "id": "andritz-strip-lines",
+      "title": "ANDRITZ - Continuous strip processing furnaces",
+      "url": "https://www.andritz.com/products-en/group/metals/furnaces/continuous-strip-processing/furnace",
+      "appliesTo": ["碳钢带", "不锈钢带", "展开连续处理"]
+    },
+    {
+      "id": "seco-aluminum-solution",
+      "title": "SECO/WARWICK - Continuous aluminum solution heat treatment and aging",
+      "url": "https://www.secowarwick.com/en/products/aluminium-furnace-systems/solution-heat-treatment-and-aging-2/",
+      "appliesTo": ["铝合金气瓶", "铝合金板"]
+    },
+    {
+      "id": "aichelin-fasteners",
+      "title": "AICHELIN - Conveyor belt controlled atmosphere furnace line",
+      "url": "https://cn.aichelin.com/en/products/conveyor-belt-controlled-atmosphere-furnace-line",
+      "appliesTo": ["紧固件", "小型批量件"]
+    },
+    {
+      "id": "afc-mesh-belt",
+      "title": "AFC-Holcroft - Mesh belt continuous furnace",
+      "url": "https://www.afc-holcroft.com/systems-and-components/mesh-belt-continuous-furnace/",
+      "appliesTo": ["螺栓", "螺母", "螺钉", "小型弹簧"]
+    },
+    {
+      "id": "toyo-screw-carburizing",
+      "title": "TOYO-RO - Mesh belt line for screw carburizing",
+      "url": "https://toyo-ro.com/en/products/product01/",
+      "appliesTo": ["自攻螺钉", "自钻螺钉"]
+    },
+    {
+      "id": "lpg-cylinder-normalizing",
+      "title": "Tanhe - LPG cylinder roller conveyor normalizing furnace",
+      "url": "https://www.thlpg.com/lpg-cylinder-and-propane-tank-production-line",
+      "appliesTo": ["焊接钢制气瓶"]
+    }
+  ],
+  "directions": {
+    "large-welded-machine-frame": {
+      "displayWorkpieceName": "大型焊接机架",
+      "examples": [{ "condition": "整体去应力退火或焊后热处理", "direction": "台车式热处理炉" }]
+    },
+    "pressure-vessel-shell": {
+      "displayWorkpieceName": "压力容器与筒体",
+      "examples": [{ "condition": "整件焊后热处理或去应力退火", "direction": "台车式热处理炉" }]
+    },
+    "structural-steel-component": {
+      "displayWorkpieceName": "钢结构构件",
+      "examples": [{ "condition": "整体去应力退火", "direction": "台车式热处理炉" }]
+    },
+    "welded-assembly": {
+      "displayWorkpieceName": "焊接总成",
+      "examples": [{ "condition": "整体焊后热处理", "direction": "台车式热处理炉" }]
+    },
+    "large-cylinder-shell": {
+      "displayWorkpieceName": "大型筒体",
+      "examples": [{ "condition": "整件退火或焊后热处理", "direction": "台车式热处理炉" }]
+    },
+    "welded-pipe-spool": {
+      "displayWorkpieceName": "管道焊接件",
+      "examples": [{ "condition": "整件焊后热处理", "direction": "台车式或室式热处理炉" }]
+    },
+    "seamless-aluminum-gas-cylinder": {
+      "displayWorkpieceName": "无缝铝合金气瓶",
+      "examples": [
+        { "condition": "固溶处理、快速水淬及人工时效", "direction": "连续式固溶淬火及人工时效线" }
+      ]
+    },
+    "seamless-steel-gas-cylinder": {
+      "displayWorkpieceName": "无缝钢制气瓶",
+      "examples": [{ "condition": "整体淬火与回火", "direction": "辊底式连续调质热处理线" }]
+    },
+    "welded-steel-gas-cylinder": {
+      "displayWorkpieceName": "焊接钢制气瓶",
+      "examples": [{ "condition": "焊后整体正火", "direction": "辊道输送式连续正火炉" }]
+    },
+    "large-forged-flange": {
+      "displayWorkpieceName": "大型法兰",
+      "examples": [{ "condition": "正火、回火或退火", "direction": "台车式热处理炉" }]
+    },
+    "large-forged-shaft": {
+      "displayWorkpieceName": "大型轴类锻件",
+      "examples": [{ "condition": "正火、调质或扩氢退火", "direction": "台车式大型锻件热处理炉" }]
+    },
+    "large-gear-blank": {
+      "displayWorkpieceName": "大型齿轮坯",
+      "examples": [{ "condition": "齿前正火或退火", "direction": "台车式热处理炉" }]
+    },
+    "large-steel-casting": {
+      "displayWorkpieceName": "大型铸钢件",
+      "examples": [{ "condition": "退火、正火或正火加回火", "direction": "台车式热处理炉" }]
+    },
+    "ductile-iron-casting": {
+      "displayWorkpieceName": "球墨铸铁件",
+      "examples": [{ "condition": "铁素体化退火或正火", "direction": "台车式退火或正火炉" }]
+    },
+    "large-die-block-forging": {
+      "displayWorkpieceName": "大型模具模块锻件",
+      "examples": [{ "condition": "退火、正火或扩氢处理", "direction": "台车式大型锻件热处理炉" }]
+    },
+    "long-shaft": {
+      "displayWorkpieceName": "长轴",
+      "examples": [{ "condition": "整体正火、退火或调质", "direction": "井式热处理炉" }]
+    },
+    "gear-shaft": {
+      "displayWorkpieceName": "齿轮轴",
+      "examples": [{ "condition": "渗碳或碳氮共渗后淬火", "direction": "可控气氛密封淬火炉" }]
+    },
+    "spline-shaft": {
+      "displayWorkpieceName": "花键轴",
+      "examples": [{ "condition": "渗碳或碳氮共渗后淬火", "direction": "可控气氛密封淬火炉" }]
+    },
+    "large-gear": {
+      "displayWorkpieceName": "大型齿轮",
+      "examples": [{ "condition": "大型齿轮深层渗碳", "direction": "井式可控气氛渗碳炉" }]
+    },
+    "large-ring-gear": {
+      "displayWorkpieceName": "大型齿圈",
+      "examples": [{ "condition": "整体正火、退火或调质", "direction": "井式或台车式热处理炉" }]
+    },
+    "crankshaft": {
+      "displayWorkpieceName": "曲轴",
+      "examples": [{ "condition": "整体调质或回火", "direction": "井式热处理炉" }]
+    },
+    "track-roller": {
+      "displayWorkpieceName": "支重轮",
+      "examples": [{ "condition": "批量正火、调质或回火", "direction": "辊底式连续调质热处理线" }]
+    },
+    "carrier-roller": {
+      "displayWorkpieceName": "托链轮",
+      "examples": [{ "condition": "批量正火、调质或回火", "direction": "辊底式连续调质热处理线" }]
+    },
+    "idler-wheel": {
+      "displayWorkpieceName": "引导轮",
+      "examples": [{ "condition": "批量正火、调质或回火", "direction": "辊底式连续调质热处理线" }]
+    },
+    "drive-sprocket": {
+      "displayWorkpieceName": "驱动轮",
+      "examples": [{ "condition": "整体调质后齿部最终硬化", "direction": "辊底式连续调质热处理线" }]
+    },
+    "track-link": {
+      "displayWorkpieceName": "履带链轨节",
+      "examples": [{ "condition": "批量渗碳或整体调质", "direction": "可控气氛辊底式连续热处理线" }]
+    },
+    "engineering-wheel-hub": {
+      "displayWorkpieceName": "工程机械轮毂",
+      "examples": [{ "condition": "批量正火、调质或回火", "direction": "辊底式连续调质热处理线" }]
+    },
+    "medium-heavy-steel-plate": {
+      "displayWorkpieceName": "中厚钢板",
+      "examples": [{ "condition": "正火、退火或去应力处理", "direction": "辊底式板材热处理炉" }]
+    },
+    "wear-resistant-steel-plate": {
+      "displayWorkpieceName": "耐磨钢板",
+      "examples": [{ "condition": "淬火与回火", "direction": "辊底式板材调质热处理线" }]
+    },
+    "stainless-steel-plate": {
+      "displayWorkpieceName": "不锈钢板",
+      "examples": [{ "condition": "固溶处理与快速冷却", "direction": "辊底式连续固溶处理线" }]
+    },
+    "aluminum-alloy-plate": {
+      "displayWorkpieceName": "铝合金板",
+      "examples": [
+        { "condition": "固溶、水淬及人工时效", "direction": "辊底式固溶淬火及人工时效线" }
+      ]
+    },
+    "aluminum-coil": {
+      "displayWorkpieceName": "铝合金卷",
+      "examples": [{ "condition": "成卷退火", "direction": "强制循环罩式退火炉" }]
+    },
+    "carbon-steel-coil": {
+      "displayWorkpieceName": "碳钢卷",
+      "examples": [{ "condition": "成卷再结晶退火", "direction": "全氢罩式退火炉" }]
+    },
+    "seamless-steel-pipe": {
+      "displayWorkpieceName": "无缝钢管",
+      "examples": [{ "condition": "正火、退火或调质", "direction": "辊底式连续热处理炉" }]
+    },
+    "welded-steel-pipe": {
+      "displayWorkpieceName": "焊接钢管",
+      "examples": [{ "condition": "整管正火或退火", "direction": "辊底式连续热处理炉" }]
+    },
+    "round-steel-bar": {
+      "displayWorkpieceName": "圆钢 / 棒材",
+      "examples": [{ "condition": "退火、正火或调质", "direction": "辊底式连续热处理炉" }]
+    },
+    "structural-section-steel": {
+      "displayWorkpieceName": "型钢",
+      "examples": [{ "condition": "正火、退火或去应力处理", "direction": "辊底式连续热处理炉" }]
+    },
+    "wire-rod-coil": {
+      "displayWorkpieceName": "盘条",
+      "examples": [{ "condition": "球化、再结晶或去应力退火", "direction": "保护气氛罩式退火炉" }]
+    },
+    "steel-wire-coil": {
+      "displayWorkpieceName": "钢丝卷",
+      "examples": [{ "condition": "球化、再结晶或去应力退火", "direction": "保护气氛罩式退火炉" }]
+    },
+    "high-strength-bolts": {
+      "displayWorkpieceName": "高强度螺栓",
+      "examples": [{ "condition": "批量淬火、清洗及回火", "direction": "可控气氛网带式连续调质线" }]
+    },
+    "hex-nuts": {
+      "displayWorkpieceName": "螺母",
+      "examples": [{ "condition": "批量淬火、清洗及回火", "direction": "可控气氛网带式连续调质线" }]
+    },
+    "self-drilling-screws": {
+      "displayWorkpieceName": "自攻 / 自钻螺钉",
+      "examples": [
+        { "condition": "渗碳或碳氮共渗、淬火及回火", "direction": "可控气氛网带式连续热处理线" }
+      ]
+    },
+    "steel-pins": {
+      "displayWorkpieceName": "销轴",
+      "examples": [{ "condition": "批量整体调质", "direction": "辊底式连续调质热处理线" }]
+    },
+    "chain-components": {
+      "displayWorkpieceName": "链条零件",
+      "examples": [
+        { "condition": "销轴、套筒渗碳或链板调质", "direction": "可控气氛铸链板式连续热处理线" }
+      ]
+    },
+    "small-coil-springs": {
+      "displayWorkpieceName": "小型螺旋弹簧",
+      "examples": [{ "condition": "成形后去应力退火或回火", "direction": "网带式连续回火炉" }]
+    }
+  }
+}
