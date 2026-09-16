@@ -177,7 +177,7 @@ class Release:
             internal = probe('corp-site-frontend', self.script)
         else:
             try:
-                run(self.compose() + ['run', '-d', '--no-deps', '--no-build', '--pull', 'never',
+                run(self.compose() + ['run', '-d', '--no-deps', '--pull', 'never',
                                      '--name', canary, 'frontend'], env=self.env)
                 wait_healthy(canary)
                 internal = probe(canary, self.script)
