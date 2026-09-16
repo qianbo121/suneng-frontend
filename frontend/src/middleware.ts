@@ -1,10 +1,11 @@
-import { isWithdrawnRequestPath, withdrawnPageLocale } from '@/lib/publication-scope';
+import { isWithdrawnRequestPath, routablePathname, withdrawnPageLocale } from '@/lib/publication-scope';
 import createMiddleware from 'next-intl/middleware';
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
 import { FALLBACK_NEWS_SLUGS } from '@/constants/news-fallback-slugs';
 import { isLocalizedPublicPath, PUBLIC_PAGE_CACHE_CONTROL, routing } from '@/i18n/routing';
+import { isInternalNewsListPath } from '@/lib/news-list-prerender';
 import { getNewsRouteAvailability, getZhNewsSlug, newsNotFoundHtml } from '@/lib/news-route-guard';
 
 const intlMiddleware = createMiddleware(routing);
@@ -22,6 +23,15 @@ function withdrawnContentHtml(locale: 'zh' | 'en') {
   return `<!doctype html><html lang="${en ? 'en' : 'zh-CN'}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${title} | Suneng</title><style>body{margin:0;font:18px/1.7 system-ui,sans-serif;color:#142d4e;background:#f6f8fb}main{max-width:720px;margin:10vh auto;padding:32px}h1{font-size:32px}a{color:#145ca8;display:inline-block;margin:12px 24px 12px 0;padding:8px 0}a:focus-visible{outline:2px solid;outline-offset:4px}</style></head><body><main><h1>${title}</h1><p>${en ? 'You can browse our news, equipment or contact our team.' : '您可以继续查看新闻、设备产品，或联系我们。'}</p><a href="/${locale}/news">${en ? 'Browse news' : '查看新闻'}</a><a href="/${locale}/products">${en ? 'Browse products' : '查看产品'}</a><a href="/${locale}/contact">${en ? 'Contact us' : '联系我们'}</a></main></body></html>`;
 }
 
+// The prerendered list route is only reachable through the next.config rewrite.
+function isRefusedPath(pathname: string) {
+  return (
+    isWithdrawnRequestPath(pathname) ||
+    isInternalNewsListPath(pathname) ||
+    isInternalNewsListPath(routablePathname(pathname))
+  );
+}
+
 function withdrawnResponse(pathname: string) {
   return new NextResponse(withdrawnContentHtml(withdrawnPageLocale(pathname)), {
     status: 404,
@@ -31,7 +41,7 @@ function withdrawnResponse(pathname: string) {
 
 export default async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
-  if (isWithdrawnRequestPath(pathname)) return withdrawnResponse(pathname);
+  if (isRefusedPath(pathname)) return withdrawnResponse(pathname);
   if (pathname === '/') return permanentRedirect(request, '/zh');
   const hasLocalePrefix = routing.locales.some(
     (locale) => pathname === `/${locale}` || pathname.startsWith(`/${locale}/`),
@@ -92,7 +102,7 @@ export default async function middleware(request: NextRequest) {
     } catch {
       target = null;
     }
-    if (target === null || isWithdrawnRequestPath(target)) return withdrawnResponse(target ?? pathname);
+    if (target === null || isRefusedPath(target)) return withdrawnResponse(target ?? pathname);
   }
 
   if (isLocalizedPublicPath(request.nextUrl.pathname, request.method)) {

@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { ListPagination } from '@/components/ui/ListPagination';
 import { NEWS_PAGE_SIZE } from '@/constants/news';
 
-import { formatNewsDisplayDate } from '@/lib/news';
+import { formatNewsDisplayDate } from '@/lib/news-display-date';
 import {
   buildNewsDecisionHref,
   getNewsDecisionDisplayMeta,
@@ -27,6 +27,7 @@ type NewsListCardsProps = {
   topic?: NewsDecisionTopicId;
   furnace?: NewsFurnaceFilterId;
   sort?: NewsSort;
+  prefetchPages?: boolean;
 };
 
 function NewsListItem({
@@ -41,7 +42,7 @@ function NewsListItem({
   featured: boolean;
 }) {
   const meta = getNewsDecisionDisplayMeta(item, locale);
-  const displayDate = formatNewsDisplayDate(item.updatedAt || item.date);
+  const displayDate = item.listDisplayDate ?? formatNewsDisplayDate(item.updatedAt || item.date);
 
   return (
     <article
@@ -96,6 +97,7 @@ export function NewsListCards({
   topic = 'all',
   furnace = 'all',
   sort = 'recommended',
+  prefetchPages,
 }: NewsListCardsProps) {
   const normalized = items.slice(0, pageSize);
   const pageCount = Math.max(1, Math.ceil(total / pageSize));
@@ -137,6 +139,7 @@ export function NewsListCards({
         href={href}
         locale={locale}
         ariaLabel={locale === 'en' ? 'Resource pages' : '资料分页'}
+        prefetch={prefetchPages}
       />
     </div>
   );

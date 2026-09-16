@@ -1,5 +1,6 @@
 import 'server-only';
 
+import { cache } from 'react';
 import { unstable_cache } from 'next/cache';
 import { getAllNewsForDecisionCenter } from '@/lib/api/news';
 import { mapNewsCard } from '@/lib/news';
@@ -30,6 +31,11 @@ const getCachedCards = unstable_cache(
   ],
   { revalidate: 300 },
 );
+
+// For prerendered list pages: a failed read must throw so a first generation
+// fails instead of caching an error page, and a failed background refresh
+// keeps serving the previous page.
+export const getNewsDecisionCenterCards = cache((locale: Locale) => getCachedCards(locale));
 
 export async function getNewsDecisionCenterData(locale: Locale) {
   try {

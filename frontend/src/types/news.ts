@@ -76,6 +76,8 @@ export type NewsListCardItem = {
   listTopic?: import('@/lib/news-decision-center').NewsDecisionTopicId;
   listFurnaces?: import('@/lib/news-decision-center').NewsFurnaceFilterId[];
   listEquipmentLabel?: string;
+  // Formatted on the server so browser-rendered cards show the same date.
+  listDisplayDate?: string;
   id: number;
   slug: string;
   image: string;

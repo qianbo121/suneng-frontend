@@ -7,6 +7,12 @@ import { QuoteModalButton } from '@/components/lead/QuoteModalButton';
 import { NewsSearchForm } from '@/components/news/NewsSearchForm';
 import { NewsListCards } from '@/components/news/NewsListCards';
 import {
+  NewsListFilterControls,
+  NewsListHeading,
+  NewsListResults,
+  NewsListScope,
+} from '@/components/news/NewsListInteractive';
+import {
   buildNewsDecisionHref,
   NEWS_CENTER_FAQS,
   NEWS_DECISION_TOPICS,
@@ -31,6 +37,13 @@ type Props = {
   sort: NewsSort;
   error?: string | null;
   loading?: boolean;
+  // Lightweight cards for switching topic, equipment, sort and page in the
+  // browser. Search results, errors and the loading shell stay server-driven.
+  interactive?: {
+    cards: NewsListCardItem[];
+    pageTitles: string[];
+    filteredTitle: string;
+  };
 };
 export function NewsDecisionCenter({
   locale = 'zh',
@@ -45,6 +58,7 @@ export function NewsDecisionCenter({
   sort,
   error,
   loading = false,
+  interactive,
 }: Props) {
   const t = (text: string) => newsUiText(locale, text);
   const BASE = `/${locale}/news`;
@@ -79,9 +93,11 @@ export function NewsDecisionCenter({
           : '/zh/solutions/continuous-heat-treatment-line#checkpoints',
     },
   ];
+  const live = interactive && !loading && !error && !query ? interactive : null;
+  const scopeClassName = `${styles.scope} news-center-scope`;
   const visibleTools = tools.filter((item) => !isWithdrawnTechnicalPath(item.href) && (checklist || item.title !== t('工业炉报价参数清单')));
-  return (
-    <div className={`${styles.scope} news-center-scope`}>
+  const content = (
+    <>
       <header className={styles.pageHead}>
         <div className={styles.container}>
           <nav className={styles.breadcrumb} aria-label={t('面包屑')}>
@@ -99,35 +115,41 @@ export function NewsDecisionCenter({
             <NewsSearchForm locale={locale} {...filters} disabled={loading} />
           </div>
           <div className={styles.filterPanel} inert={loading || undefined}>
-            <nav className={styles.topicNav} aria-label={t('内容分类')}>
-              {NEWS_DECISION_TOPICS.map((item) => (
-                <Link
-                  key={item.id}
-                  prefetch={false}
-                  href={buildNewsDecisionHref(BASE, { ...filters, topic: item.id })}
-                  className={`${styles.topicLink} ${!loading && item.id === topic ? styles.topicLinkActive : ''}`}
-                  aria-current={!loading && item.id === topic ? 'page' : undefined}
-                >
-                  {t(item.label)}
-                </Link>
-              ))}
-            </nav>
-            <section className={styles.furnaceInner} aria-label={t('设备类型筛选')}>
-              <span className={styles.furnaceLabel}>{t('设备类型')}</span>
-              <div className={styles.furnaceLinks}>
-                {NEWS_FURNACE_FILTERS.map((item) => (
-                  <Link
-                    key={item.id}
-                    prefetch={false}
-                    href={buildNewsDecisionHref(BASE, { ...filters, furnace: item.id })}
-                    className={`${styles.furnaceLink} ${!loading && item.id === furnace ? styles.furnaceLinkActive : ''}`}
-                    aria-current={!loading && item.id === furnace ? 'page' : undefined}
-                  >
-                    {t(item.label)}
-                  </Link>
-                ))}
-              </div>
-            </section>
+            {live ? (
+              <NewsListFilterControls />
+            ) : (
+              <>
+                <nav className={styles.topicNav} aria-label={t('内容分类')}>
+                  {NEWS_DECISION_TOPICS.map((item) => (
+                    <Link
+                      key={item.id}
+                      prefetch={false}
+                      href={buildNewsDecisionHref(BASE, { ...filters, topic: item.id })}
+                      className={`${styles.topicLink} ${!loading && item.id === topic ? styles.topicLinkActive : ''}`}
+                      aria-current={!loading && item.id === topic ? 'page' : undefined}
+                    >
+                      {t(item.label)}
+                    </Link>
+                  ))}
+                </nav>
+                <section className={styles.furnaceInner} aria-label={t('设备类型筛选')}>
+                  <span className={styles.furnaceLabel}>{t('设备类型')}</span>
+                  <div className={styles.furnaceLinks}>
+                    {NEWS_FURNACE_FILTERS.map((item) => (
+                      <Link
+                        key={item.id}
+                        prefetch={false}
+                        href={buildNewsDecisionHref(BASE, { ...filters, furnace: item.id })}
+                        className={`${styles.furnaceLink} ${!loading && item.id === furnace ? styles.furnaceLinkActive : ''}`}
+                        aria-current={!loading && item.id === furnace ? 'page' : undefined}
+                      >
+                        {t(item.label)}
+                      </Link>
+                    ))}
+                  </div>
+                </section>
+              </>
+            )}
           </div>
         </div>
       </header>
@@ -140,33 +162,39 @@ export function NewsDecisionCenter({
               aria-busy={loading}
             >
               <div className={styles.listHeader}>
-                <h2 id="news-list-title" className={styles.listTitle}>
-                  {loading
-                    ? t('资料列表')
-                    : t(NEWS_DECISION_TOPICS.find((item) => item.id === topic)?.label || '')}
-                </h2>
-                <nav
-                  className={styles.sortNav}
-                  aria-label={t('文章排序')}
-                  inert={loading || undefined}
-                >
-                  {(
-                    [
-                      { id: 'recommended', label: t('推荐阅读') },
-                      { id: 'updated', label: t('最近更新') },
-                    ] as const
-                  ).map((item) => (
-                    <Link
-                      prefetch={false}
-                      key={item.id}
-                      href={buildNewsDecisionHref(BASE, { ...filters, sort: item.id })}
-                      aria-current={!loading && sort === item.id ? 'page' : undefined}
-                      className={`${styles.sortLink} ${!loading && sort === item.id ? styles.sortActive : ''}`}
+                {live ? (
+                  <NewsListHeading />
+                ) : (
+                  <>
+                    <h2 id="news-list-title" className={styles.listTitle}>
+                      {loading
+                        ? t('资料列表')
+                        : t(NEWS_DECISION_TOPICS.find((item) => item.id === topic)?.label || '')}
+                    </h2>
+                    <nav
+                      className={styles.sortNav}
+                      aria-label={t('文章排序')}
+                      inert={loading || undefined}
                     >
-                      {t(item.label)}
-                    </Link>
-                  ))}
-                </nav>
+                      {(
+                        [
+                          { id: 'recommended', label: t('推荐阅读') },
+                          { id: 'updated', label: t('最近更新') },
+                        ] as const
+                      ).map((item) => (
+                        <Link
+                          prefetch={false}
+                          key={item.id}
+                          href={buildNewsDecisionHref(BASE, { ...filters, sort: item.id })}
+                          aria-current={!loading && sort === item.id ? 'page' : undefined}
+                          className={`${styles.sortLink} ${!loading && sort === item.id ? styles.sortActive : ''}`}
+                        >
+                          {t(item.label)}
+                        </Link>
+                      ))}
+                    </nav>
+                  </>
+                )}
               </div>
               {query && (
                 <p className={styles.listHint}>
@@ -197,6 +225,8 @@ export function NewsDecisionCenter({
                   <p>{t('请稍后重试，或联系苏能工程师。')}</p>
                   <a href={buildNewsDecisionHref(BASE, { ...filters, page })}>{t('重新加载')}</a>
                 </div>
+              ) : live ? (
+                <NewsListResults />
               ) : (
                 <NewsListCards
                   locale={locale}
@@ -291,6 +321,22 @@ export function NewsDecisionCenter({
           </section>
         </div>
       </div>
-    </div>
+    </>
+  );
+
+  if (!live) return <div className={scopeClassName}>{content}</div>;
+
+  return (
+    <NewsListScope
+      locale={locale}
+      cards={live.cards}
+      initialState={{ topic, furnace, sort, page }}
+      pageSize={pageSize}
+      pageTitles={live.pageTitles}
+      filteredTitle={live.filteredTitle}
+      className={scopeClassName}
+    >
+      {content}
+    </NewsListScope>
   );
 }

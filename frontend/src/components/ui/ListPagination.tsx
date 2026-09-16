@@ -9,6 +9,8 @@ type ListPaginationProps = {
   pageCount: number;
   href: (page: number) => string;
   ariaLabel: string;
+  // Lists that switch pages in the browser gain nothing from prefetching.
+  prefetch?: boolean;
 };
 
 export function ListPagination({
@@ -17,6 +19,7 @@ export function ListPagination({
   href,
   ariaLabel,
   locale = 'zh',
+  prefetch,
 }: ListPaginationProps) {
   if (pageCount <= 1) return null;
 
@@ -31,7 +34,7 @@ export function ListPagination({
           {locale === 'en' ? 'Previous' : '上一页'}
         </span>
       ) : (
-        <Link href={href(page - 1)} className={`${styles.link} ${styles.step}`}>
+        <Link href={href(page - 1)} prefetch={prefetch} className={`${styles.link} ${styles.step}`}>
           {locale === 'en' ? 'Previous' : '上一页'}
         </Link>
       )}
@@ -39,6 +42,7 @@ export function ListPagination({
         <Link
           key={item}
           href={href(item)}
+          prefetch={prefetch}
           aria-label={locale === 'en' ? `Page ${item}` : `第 ${item} 页`}
           aria-current={item === page ? 'page' : undefined}
           className={`${styles.link} ${item === page ? styles.active : ''}`}
@@ -51,7 +55,7 @@ export function ListPagination({
           {locale === 'en' ? 'Next' : '下一页'}
         </span>
       ) : (
-        <Link href={href(page + 1)} className={`${styles.link} ${styles.step}`}>
+        <Link href={href(page + 1)} prefetch={prefetch} className={`${styles.link} ${styles.step}`}>
           {locale === 'en' ? 'Next' : '下一页'}
         </Link>
       )}
