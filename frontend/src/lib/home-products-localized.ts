@@ -1,6 +1,8 @@
 import { homeProductionLines, type HomeProductionLine } from './home-product-types';
 import { productCenterProductionLines } from './products-landing-data';
 
+// Chinese spotlights use the newer reviewed lines. Keep the English selection on
+// published English detail routes until those three new detail pages are localized.
 const featuredLineIds = [
   'track-shoe-press-quench-line',
   'forging-waste-heat-qt-line',

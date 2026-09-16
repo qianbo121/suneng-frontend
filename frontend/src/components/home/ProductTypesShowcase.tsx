@@ -278,7 +278,11 @@ export function ProductTypesShowcase({ locale = 'zh' }: { locale?: 'zh' | 'en' }
             })}
           </div>
 
-          <nav className={styles.linePagination} aria-label={t('生产线卡片翻页', 'Production line pages')}>
+          <nav
+            className={styles.linePagination}
+            aria-label={t('生产线卡片翻页', 'Production line pages')}
+            data-sticky-contact-pause
+          >
             <button
               type="button"
               className={styles.linePaginationButton}
