@@ -114,6 +114,29 @@ class ContractTest(unittest.TestCase):
                 self.assertTrue(result['applied'])
         return state
 
+    def test_canary_uses_supported_run_options_without_build_or_pull(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            release = self.fixture(tmp)
+            calls = []
+            def command(args, **kwargs):
+                calls.append(args)
+                if args[:3] == ['docker', 'image', 'inspect']:
+                    return json.dumps([{'Id': NEW, 'Config': {'Labels': {'org.opencontainers.image.revision': MANIFEST['sourceCommit']}}}])
+                if 'run' in args:
+                    self.assertNotIn('--no-build', args)
+                    self.assertNotIn('--build', args)
+                    self.assertIn('--no-deps', args)
+                    self.assertEqual(args[args.index('--pull') + 1], 'never')
+                return ''
+            def current(names):
+                return [row for row in rows(OLD) if row['Name'].removeprefix('/corp-site-') in names]
+            with patch.object(r, 'inspect', side_effect=current), patch.object(r, 'run', side_effect=command), \
+                 patch.object(r, 'wait_healthy'), patch.object(r, 'probe', return_value=GOOD), \
+                 patch.object(r, 'public_probe', return_value=[]), patch.object(r.subprocess, 'run'):
+                result = release.execute(apply=False)
+            self.assertFalse(result['applied'])
+            self.assertEqual(len([args for args in calls if 'run' in args]), 1)
+
     def test_dangling_pending_marker_blocks_before_docker(self):
         with tempfile.TemporaryDirectory() as tmp:
             release = self.fixture(tmp)
