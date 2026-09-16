@@ -23,11 +23,12 @@ describe('news route integrity', () => {
     expect(hasPublishableEnglishNews({ ...base, titleEn: null, contentEn: '<p>Body</p>' })).toBe(false);
   });
 
-  it('maps and filters the known duplicate source slug', () => {
+  it('resolves the withdrawn duplicate as itself while preserving list exclusions', () => {
     const duplicate = 'jiang-su-su-neng-gong-ye-lu-tui-huo-gu-rong-sheng-chan-xian-zhu-li-gang-cai-shen-jia-gong-1';
     const canonical = 'jiang-su-su-neng-gong-ye-lu-tui-huo-gu-rong-sheng-chan-xian-zhu-li-gang-cai-shen-jia-gong';
 
-    expect(getCanonicalNewsSlug(duplicate)).toBe(canonical);
+    expect(getCanonicalNewsSlug(duplicate)).toBe(duplicate);
+    expect(getCanonicalNewsSlug(canonical)).toBe(canonical);
     expect(filterCanonicalNewsItems([{ ...base, slug: canonical }, { ...base, id: 2, slug: duplicate }])).toHaveLength(1);
   });
 

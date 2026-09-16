@@ -6,7 +6,8 @@ const LEGACY_DUPLICATE_SLUGS: Record<string, string> = {
 };
 
 export function getCanonicalNewsSlug(slug: string) {
-  return LEGACY_DUPLICATE_SLUGS[slug] ?? slug;
+  // Withdrawn duplicates resolve their own publication state, not another page.
+  return slug;
 }
 
 export function getPublicNewsRedirectSlug(
@@ -17,7 +18,7 @@ export function getPublicNewsRedirectSlug(
 }
 
 export function isLegacyDuplicateNewsSlug(slug: string) {
-  return getCanonicalNewsSlug(slug) !== slug;
+  return Boolean(LEGACY_DUPLICATE_SLUGS[slug]);
 }
 
 export function hasPublishableEnglishNews(item: NewsApiItem) {
