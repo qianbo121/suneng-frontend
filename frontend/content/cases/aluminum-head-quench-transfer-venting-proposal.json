@@ -1,0 +1,78 @@
+{
+  "id": "aluminum-head-quench-20220324-proposal",
+  "slug": "aluminum-head-quench-transfer-venting-proposal",
+  "title": "倒扣的铝合金封头淬火，里面的空气怎么排？",
+  "listTitle": "倒扣的铝合金封头淬火，里面的空气怎么排？",
+  "listSummary": "要给倒扣封头内部留出连续的排气通道，并让排气结构、进水方向和料筐下降动作相互配合。",
+  "summary": "要给倒扣封头内部留出连续的排气通道，并让排气结构、进水方向和料筐下降动作相互配合。江苏苏能工业炉有限公司2022年3月24日的铝合金封头淬火炉方案，将分段管孔状内排气装置纳入料筐，用于工件快速下水时排出内部气体；水槽另配向中心推进的机械搅拌和从料筐底部向上喷水。选这类设备，应同时评价转移速度和内表面接触水的条件。",
+  "body": "aluminum-head-quench-transfer-venting-proposal.md",
+  "contentType": "proposal",
+  "publicationStatus": "draft",
+  "projectStatus": "proposal",
+  "projectYear": 2022,
+  "sourceDate": "2022-03-24",
+  "workpiece": [
+    "铝合金封头"
+  ],
+  "materials": [
+    "铝合金"
+  ],
+  "process": [
+    "淬火"
+  ],
+  "equipment": [
+    "高架式铝合金淬火炉"
+  ],
+  "need": [
+    "倒扣封头排气与淬火转移配合"
+  ],
+  "tags": [
+    "倒扣装料",
+    "淬火转移",
+    "内部排气",
+    "历史方案",
+    "方案参考"
+  ],
+  "facts": [
+    {
+      "label": "方案内排气结构",
+      "value": "分段管孔状",
+      "unit": "",
+      "condition": "按封头与料筐实际装料匹配，不给通用孔径或排气量",
+      "attribute": "方案参数"
+    },
+    {
+      "label": "方案机械搅拌",
+      "value": "4×7.5",
+      "unit": "千瓦",
+      "condition": "方案装机配置，功率合计不等于工件处流速",
+      "attribute": "方案参数"
+    },
+    {
+      "label": "方案内循环冷却泵",
+      "value": "2×18.5",
+      "unit": "千瓦",
+      "condition": "参数表的原称及配套功率，不当成移热功率",
+      "attribute": "方案参数"
+    }
+  ],
+  "participation": "方案拟供应铝合金淬火炉、水槽、提升机构及控制系统，料筐含倒扣封头内排气装置；现场基础等按双方分工衔接。",
+  "sourceSummary": "江苏苏能工业炉有限公司历史技术方案资料整理。",
+  "coverTitle": "倒扣的铝合金封头淬火，里面的空气怎么排？",
+  "cover": {
+    "src": "/images/case-covers/aluminum-head-quench-20220324-proposal-white-v2.png",
+    "alt": "铝合金封头类别工件示意",
+    "caption": "工件示意（人工智能生成，非客户实物）",
+    "fit": "contain"
+  },
+  "relatedLinks": [
+    {
+      "title": "准备询价参数与供货范围",
+      "href": "/zh/articles/gongye-lu-baojia-canshu"
+    }
+  ],
+  "dateModified": "2026-09-15",
+  "datePublished": null,
+  "author": null,
+  "reviewer": null
+}

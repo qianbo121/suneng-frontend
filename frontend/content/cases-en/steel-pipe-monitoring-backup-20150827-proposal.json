@@ -1,0 +1,13 @@
+{
+  "id": "steel-pipe-monitoring-backup-20150827-proposal",
+  "slug": "steel-pipe-gas-furnace-monitoring-backup-power-proposal",
+  "number": 74,
+  "title": "What can the backup power supply keep running during a steel-pipe annealing-furnace power failure?",
+  "summary": "Suneng's 2015 proposal for a large gas-fired steel-pipe annealing furnace specifies an uninterruptible power supply to maintain computer monitoring during emergency or short power interruptions. It separately requires automatic gas-valve closure on power failure. Confirm which monitoring and recording functions continue, and distinguish their backup supply from combustion, fans and mechanical drives.",
+  "body": "steel-pipe-monitoring-backup-20150827-proposal.md",
+  "sourceFingerprint": "c10ddc34f54c6615ace2c9c87d5395187a24a41afc12f798e2d9ed0c4e696c62",
+  "translationStatus": "complete",
+  "translatedAt": "2026-09-12",
+  "coverAlt": "Illustration of steel tubes.",
+  "coverCaption": "Illustration of steel tubes (AI-generated). Not an actual customer workpiece photograph."
+}

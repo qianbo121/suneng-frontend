@@ -356,6 +356,7 @@ model CustomRequirement {
   discoverySource           String?                    @db.VarChar(120)
   sessionId                 String?                    @db.VarChar(120)
   visitorId                 String?                    @db.VarChar(120)
+  workpieceSelectionId      Int?                       @unique
   notificationStatus        InquiryNotificationStatus  @default(legacy_unknown)
   notificationStateVersion  Int                        @default(0)
   notificationAttemptCount  Int                        @default(0)
@@ -368,11 +369,36 @@ model CustomRequirement {
   updatedAt                 DateTime                   @updatedAt
   formSubmitEvent           WebsiteLeadEvent?
   notificationAudits        InquiryNotificationAudit[]
+  workpieceSelection        WorkpieceSelection?        @relation(fields: [workpieceSelectionId], references: [id], onDelete: SetNull)
 
   @@index([status, createdAt])
   @@index([phone])
   @@index([createdAt])
   @@index([notificationStatus, notificationNextAttemptAt], map: "CustomRequirement_notification_due_idx")
+}
+
+model WorkpieceSelection {
+  id                     Int                @id @default(autoincrement())
+  sessionId              String?            @db.VarChar(120)
+  categoryId             String             @db.VarChar(120)
+  workpieceId            String?            @db.VarChar(120)
+  searchTerm             String?            @db.VarChar(255)
+  processPurposeId       String?            @db.VarChar(120)
+  logicUnitId            String?            @db.VarChar(120)
+  rawConditionsJson      Json
+  displayState           String             @db.VarChar(40)
+  missingInputsJson      Json?
+  publicDirectionIdsJson Json?
+  ruleVersion            String             @db.VarChar(120)
+  baselineVersion        String?            @db.VarChar(120)
+  pagePath               String?            @db.VarChar(500)
+  createdAt              DateTime           @default(now())
+  updatedAt              DateTime           @updatedAt
+  inquiry                CustomRequirement?
+
+  @@index([workpieceId, createdAt])
+  @@index([displayState, createdAt])
+  @@index([sessionId, createdAt])
 }
 
 model InquiryNotificationAudit {
@@ -419,6 +445,7 @@ model WebsiteLeadEvent {
   discoverySource   String?            @db.VarChar(120)
   sessionId         String?            @db.VarChar(120)
   visitorId         String?            @db.VarChar(120)
+  properties        Json?
   ipMasked          String?            @db.VarChar(80)
   userAgent         String?            @db.VarChar(500)
   createdAt         DateTime           @default(now())

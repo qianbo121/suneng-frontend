@@ -1,0 +1,61 @@
+{
+  "id": "belt-trial-production-boundary-20260821-requirements",
+  "slug": "belt-trial-production-boundary-20260821-requirements",
+  "title": "小试网带炉试好了，放大生产还要验证什么？",
+  "summary": "一份项目需求记录同时列出正式生产网带炉和小型实验网带炉。两台设备希望模拟相同的升温、保温和排胶条件，但实验炉没有产能要求，生产炉的装炉量与目标产量也尚未确认。因此，小样通过之后，仍需核对正式装载、有效加热长度和排烟维护条件，不能直接按设备大小推算生产能力。",
+  "body": "belt-trial-production-boundary-20260821-requirements.md",
+  "contentType": "proposal",
+  "publicationStatus": "draft",
+  "projectStatus": "proposal",
+  "workpiece": [
+    "材料热处理试样"
+  ],
+  "materials": [],
+  "process": [
+    "分段升温保温",
+    "排胶条件验证"
+  ],
+  "equipment": [
+    "连续式网带炉",
+    "实验网带炉"
+  ],
+  "need": [
+    "实验与生产条件衔接"
+  ],
+  "tags": [
+    "方案参考",
+    "材料热处理试样",
+    "实验与生产条件衔接"
+  ],
+  "facts": [
+    {
+      "label": "拟生产网带宽度",
+      "value": "800",
+      "unit": "mm",
+      "condition": "需求记录，负载与产能未确认",
+      "attribute": "客户需求"
+    },
+    {
+      "label": "拟实验样件最大尺寸",
+      "value": "40×40×60",
+      "unit": "mm",
+      "condition": "只对应实验设备需求",
+      "attribute": "客户需求"
+    },
+    {
+      "label": "拟高温段保温",
+      "value": "60",
+      "unit": "min",
+      "condition": "记录为700℃保温，不含前段和冷却",
+      "attribute": "客户需求"
+    }
+  ],
+  "participation": "本项目需求记录列出生产炉和实验炉，供货方及最终工作分工尚需确认。",
+  "sourceSummary": "本文依据本项目需求整理记录编写，介绍尚待确认的设备要求；该记录不构成苏能已签约、已供货或已完成验收的证明。",
+  "coverTitle": "实验网带炉与生产炉：哪些条件需要一起验证，哪些不能直接放大？",
+  "relatedLinks": [],
+  "projectYear": 2026,
+  "sourceDate": "2026-08-21",
+  "listTitle": "小试网带炉试好了，放大生产还要验证什么？",
+  "dateModified": "2026-09-12"
+}

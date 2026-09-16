@@ -1,0 +1,19 @@
+{
+  "schemaVersion": "3.1.0",
+  "authority": "江苏苏能工业炉技术负责人",
+  "status": "awaiting_technical_approval",
+  "releaseGate": {
+    "requiredForProduction": true,
+    "productionReleaseStatus": "blocked",
+    "emptyWhitelistBehavior": "block_production_release",
+    "previewFallback": "engineering_confirmation_only",
+    "requiresNonEmptyCapabilities": true,
+    "requiresNonEmptyDirectionApprovals": true,
+    "approvalAuthority": "江苏苏能工业炉技术负责人",
+    "prohibitInferredCapabilities": true,
+    "blockReason": "苏能实际炉型、能力边界与方向审批尚未完成，当前数据不得作为生产发布配置。"
+  },
+  "policy": "Both arrays are intentionally empty for preview and must block production release. Preview may use the safe engineering-confirmation fallback. A concrete direction requires a version-bound active directionApproval joining one reviewed route, one exact processVariant, one applicable reviewed candidate and one approved capability with structured typicalCapacity. Active approvals are unique by routeId+processVariantId+candidateId. Product pages may supply official names and product IDs, but must never be used to infer allowed processes, atmosphere, cooling, dimensions, load or production mode.",
+  "capabilities": [],
+  "directionApprovals": []
+}

@@ -497,7 +497,7 @@ export const productDetailEn: Partial<Record<string, ProductDetailEnOverride>> =
       {
         title: 'Mesh-Belt Furnace Page',
         description:
-          'Learn about mesh-belt furnace solutions for continuous batch heat treatment of small parts and standard components.',
+          'Learn about mesh-belt furnace solutions for continuous heat treatment of small parts and standard components.',
         href: '/zh/products/detail/mesh-belt-furnace',
       },
       {
@@ -983,7 +983,7 @@ export const productDetailEn: Partial<Record<string, ProductDetailEnOverride>> =
       {
         title: 'Mesh-Belt Furnace Page',
         description:
-          'Learn about mesh-belt furnace solutions for continuous batch heat treatment of small parts and standard components.',
+          'Learn about mesh-belt furnace solutions for continuous heat treatment of small parts and standard components.',
         href: '/zh/products/detail/mesh-belt-furnace',
       },
       {
@@ -1351,7 +1351,7 @@ export const productDetailEn: Partial<Record<string, ProductDetailEnOverride>> =
       {
         title: 'Mesh-Belt Furnace Page',
         description:
-          'Learn about mesh-belt furnace solutions for small parts, standard parts, and continuous batch heat treatment.',
+          'Learn about mesh-belt furnace solutions for small parts, standard parts, and continuous heat treatment.',
         href: '/zh/products/detail/mesh-belt-furnace',
       },
       {
@@ -2077,7 +2077,7 @@ export const productDetailEn: Partial<Record<string, ProductDetailEnOverride>> =
       {
         title: 'Mesh-belt furnace page',
         description:
-          'Explore mesh-belt furnace solutions for small parts, standard parts and continuous batch heat treatment.',
+          'Explore mesh-belt furnace solutions for small parts, standard parts and continuous heat treatment.',
         href: '/zh/products/detail/mesh-belt-furnace',
       },
       {
@@ -2462,22 +2462,27 @@ export const productDetailEn: Partial<Record<string, ProductDetailEnOverride>> =
     comparisonRows: [
       {
         left: 'Batch processing of small parts, standard parts and fasteners',
+        middle: 'Batch loading of large or individually heavy workpieces',
         right: 'Continuous conveying of plates, bars or fairly regular workpieces',
       },
       {
         left: 'Stable throughput requiring continuous production',
+        middle: 'Changing batches that need the whole load moved in and out',
         right: 'Defined line cycle time with high demands on in-furnace conveying stability',
       },
       {
         left: 'Lightweight parts that can be spread across the mesh belt',
+        middle: 'Loads requiring overhead crane handling or a supporting bogie',
         right: 'Workpieces better suited to roller-table support and straight-line conveying',
       },
       {
         left: 'A focus on mesh-belt speed, layer thickness and charging/discharging integration',
+        middle: 'A focus on chamber dimensions, bogie load capacity and track foundations',
         right: 'A focus on furnace roller material, load, drive and roller-table maintenance',
       },
       {
         left: 'Suited to continuous annealing, tempering, quench heating and other batch processes for small parts',
+        middle: 'Batch heat treatment of large castings, forgings, dies and structural components',
         right:
           'Suited to continuous heat-treatment lines for plates, bars, tubes and similar products',
       },
@@ -3418,11 +3423,10 @@ export const productDetailEn: Partial<Record<string, ProductDetailEnOverride>> =
   },
   'roller-mesh-belt-line': {
     series: 'Mesh-Belt Heat-Treatment Furnace Series',
-    title:
-      'Roller-Supported Mesh-Belt Electric Resistance Furnace Line | Custom-Engineered Continuous Heat-Treatment Equipment',
+    title: 'Mesh-Belt Annealing & Tempering Line',
     breadcrumbSeries: 'Heat-Treatment Lines',
     summary:
-      'The roller-supported mesh-belt electric resistance furnace line is built for the continuous annealing, tempering, normalizing, solution treatment, pre-heating and drying of standard parts, hardware, bearing components, stampings, powder-metallurgy parts and small-to-medium workpieces. Based on workpiece material, dimensions, layer thickness, throughput and cycle time, mesh-belt width, roller-support arrangement and site conditions, Suneng delivers custom-engineered continuous heat-treatment equipment.',
+      'This mesh-belt line is for continuous annealing of suitable small-to-medium steel parts or tempering of previously quenched parts that can be laid out stably on the belt. The two processes require separate temperature, atmosphere and cooling assessments. A complete quench-and-temper line requires additional quench heating and a suitable quenching system; those stages are not implied by this annealing and tempering configuration.',
     sellingPoints: [
       'Continuous heat treatment',
       'Roller-supported mesh belt',
@@ -3431,7 +3435,7 @@ export const productDetailEn: Partial<Record<string, ProductDetailEnOverride>> =
     ],
     quickTags: [
       'Roller-supported mesh-belt furnace',
-      'Continuous annealing / tempering / normalizing',
+      'Annealing / tempering after quenching',
       'Custom mesh-belt width',
       'Roller-support arrangement to be confirmed',
       'Electric resistance heating',
@@ -3552,7 +3556,7 @@ export const productDetailEn: Partial<Record<string, ProductDetailEnOverride>> =
       {
         key: 'Heat-Treatment Process',
         value:
-          'Continuous annealing, tempering, normalizing, solution treatment, pre-heating, drying, etc.',
+          'Continuous annealing of suitable steel parts, or tempering after quenching; assess each process route separately.',
       },
       {
         key: 'Cooling Method',
@@ -3615,10 +3619,6 @@ export const productDetailEn: Partial<Record<string, ProductDetailEnOverride>> =
     processes: [
       'Continuous annealing',
       'Continuous tempering',
-      'Normalizing',
-      'Solution treatment',
-      'Pre-heating',
-      'Drying',
       'Continuous heat treatment',
       'High-volume heat treatment',
     ],
@@ -3695,9 +3695,9 @@ export const productDetailEn: Partial<Record<string, ProductDetailEnOverride>> =
       },
       {
         question:
-          'Q3: Can a roller-supported mesh-belt furnace perform continuous annealing, tempering and normalizing?',
+          'Q3: Can the same mesh-belt line perform annealing and tempering?',
         answer:
-          'Yes. Depending on the project, a roller-supported mesh-belt furnace can be used for continuous annealing, tempering, normalizing, solution treatment, preheating and drying. Each process has different requirements for maximum temperature, holding time, cooling method, belt speed, number of temperature zones and auxiliary sections, all of which should be confirmed item by item during the proposal stage.',
+          'Annealing and post-quench tempering follow separate process routes. Shared equipment is feasible only after confirming temperature range, atmosphere, cooling capacity, cleaning and changeover conditions. A complete quench-and-temper route additionally needs quench heating and a quenching system.',
       },
       {
         question:
@@ -3731,11 +3731,11 @@ export const productDetailEn: Partial<Record<string, ProductDetailEnOverride>> =
     geoSections: [
       {
         title: 'Applicable Workpieces',
-        text: 'The roller-supported mesh-belt furnace line is suited to small parts, fasteners, standard parts, stampings, powder-metallurgy parts and batch continuous heat-treatment parts. Workpiece dimensions, unit weight, the way parts are stacked and the batch cycle affect belt width, roller structure, chamber length and the loading/unloading method, all of which must be confirmed against the on-site line conditions.',
+        text: 'The roller-supported mesh-belt furnace line is suited to small parts, fasteners, standard parts, stampings, powder-metallurgy parts and parts for high-volume continuous heat treatment. Workpiece dimensions, unit weight, the way parts are stacked and the batch cycle affect belt width, roller structure, chamber length and the loading/unloading method, all of which must be confirmed against the on-site line conditions.',
       },
       {
         title: 'Typical Processes',
-        text: 'This type of line is commonly used for continuous quenching, tempering, normalizing, annealing and batch continuous heat treatment. Whether to include a quench tank, tempering section, washing and drying or a protective atmosphere should be evaluated together with the material grade, heat-treatment curve, cooling method and surface-quality requirements.',
+        text: 'This configuration covers annealing of suitable steel parts or tempering after quenching. Material grade, incoming condition, part layout, holding time, atmosphere and controlled cooling must be specified for each route. Other processes require a separately evaluated equipment configuration.',
       },
       {
         title: 'Selection Considerations',
@@ -3772,7 +3772,7 @@ export const productDetailEn: Partial<Record<string, ProductDetailEnOverride>> =
       {
         title: 'Mesh-Belt Furnace Page',
         description:
-          'Explore mesh-belt furnace solutions for small parts, standard parts and continuous batch heat treatment.',
+          'Explore mesh-belt furnace solutions for small parts, standard parts and continuous heat treatment.',
         href: '/zh/products/detail/mesh-belt-furnace',
       },
       {
@@ -3822,7 +3822,7 @@ export const productDetailEn: Partial<Record<string, ProductDetailEnOverride>> =
       'Automated Copper Wire Annealing Line | Custom Continuous Copper Wire Annealing Equipment',
     breadcrumbSeries: 'Heat-Treatment Lines',
     summary:
-      'The automated copper wire annealing line is built for continuous annealing, softening annealing, bright annealing and stress relief of copper wire, copper conductors, copper-alloy wire, tin-plated copper wire and similar wire products. Suneng configures custom-engineered continuous copper wire annealing equipment around the wire material, wire-diameter range, annealing temperature, line speed, tension control, protective atmosphere and pay-off / take-up arrangement.',
+      'The automated copper wire annealing line is built for continuous annealing, softening annealing, bright annealing and stress relief of bare copper and suitable copper-alloy wire. Suneng configures custom-engineered continuous copper wire annealing equipment around the wire material, wire-diameter range, annealing temperature, line speed, tension control, protective atmosphere and pay-off / take-up arrangement.',
     sellingPoints: [
       'Continuous copper wire annealing',
       'Tension control assessed per project',
@@ -3886,7 +3886,7 @@ export const productDetailEn: Partial<Record<string, ProductDetailEnOverride>> =
       {
         key: 'Wire material',
         value:
-          'Pure copper wire, brass wire, copper-alloy wire, tin-plated copper wire and similar; please provide the material grade and surface condition.',
+          'Bare copper and suitable copper-alloy wire; provide grade and surface condition. Coated or tin-plated wire requires separate process evaluation.',
       },
       {
         key: 'Wire-diameter range',
@@ -4081,7 +4081,7 @@ export const productDetailEn: Partial<Record<string, ProductDetailEnOverride>> =
       {
         question: 'Q1: What types of wire is the automated copper wire annealing line suited for?',
         answer:
-          'The automated copper wire annealing line is suited for continuous annealing, softening, and stress-relief treatment of bare copper wire, brass wire, copper alloy wire, tin-plated copper wire, and related copper wires. The specific solution is defined by the wire diameter range, incoming wire condition, surface quality targets, pay-off and take-up arrangement, and tension control requirements.',
+          'The automated copper wire annealing line is suited for continuous annealing, softening, and stress-relief treatment of bare copper and suitable copper-alloy wire. The specific solution is defined by the wire diameter range, incoming wire condition, surface quality targets, pay-off and take-up arrangement, and tension control requirements.',
       },
       {
         question: 'Q2: How is copper wire annealing temperature related to wire diameter?',
@@ -4124,7 +4124,7 @@ export const productDetailEn: Partial<Record<string, ProductDetailEnOverride>> =
     geoSections: [
       {
         title: 'Applicable Workpieces',
-        text: 'The automated copper wire annealing line is suited for continuous annealing or softening of copper wire, copper conductors, copper alloy wire, and certain non-ferrous metal wires. The wire diameter range, wire material, surface condition, pay-off/take-up arrangement, and tension control requirements directly affect the furnace length, speed synchronization, and protective atmosphere configuration.',
+        text: 'The automated copper wire annealing line is suited for continuous annealing or softening of bare copper and suitable copper-alloy wire. The wire diameter range, wire material, surface condition, pay-off/take-up arrangement, and tension control requirements directly affect the furnace length, speed synchronization, and protective atmosphere configuration.',
       },
       {
         title: 'Typical Processes',

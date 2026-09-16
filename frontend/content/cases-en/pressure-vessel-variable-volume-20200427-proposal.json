@@ -1,0 +1,13 @@
+{
+  "id": "pressure-vessel-variable-volume-20200427-proposal",
+  "slug": "pressure-vessel-variable-volume-rear-wall-zones-proposal",
+  "number": 27,
+  "title": "Can a variable-volume bogie-hearth furnace reduce its heating space to suit shorter workpieces?",
+  "summary": "A variable-volume furnace's effective heating space depends on alignment between the movable rear wall, seals and selected heating zones. Jiangsu Suneng Industrial Furnace Co., Ltd.'s proposal dated 27 April 2020 for pressure vessels and other welded parts fixes the rear wall to the bogie frame. Bogie positioning creates 5 m, 10 m or 15 m heated lengths, with rear-wall compression seals and volume-setting interlocks. Check loading, seal contact and burner control for each mode. Selecting a shorter length alone does not establish verified operation for small parts.",
+  "body": "pressure-vessel-variable-volume-20200427-proposal.md",
+  "sourceFingerprint": "b2d415e2694b34cdf8eb0fa06e5547d86548b860d612197679a3a7f81f481e17",
+  "translationStatus": "complete",
+  "translatedAt": "2026-09-12",
+  "coverAlt": "Illustration of welded pressure-vessel components.",
+  "coverCaption": "Illustration of welded pressure-vessel components (AI-generated). Not an actual customer workpiece photograph."
+}

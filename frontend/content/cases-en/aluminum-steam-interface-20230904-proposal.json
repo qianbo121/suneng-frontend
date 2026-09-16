@@ -1,0 +1,13 @@
+{
+  "id": "aluminum-steam-interface-20230904-proposal",
+  "slug": "aluminum-t6-furnace-steam-air-curtain-exhaust-interfaces-proposal",
+  "number": 42,
+  "title": "How is steam extracted when the quench tank sits below an aluminium T6 furnace?",
+  "summary": "With a quench tank directly below a solution furnace, tank-water temperature and steam at the opening need separate checks. Jiangsu Suneng Industrial Furnace Co., Ltd.'s aluminium T6 proposal dated 4 September 2023 places compressed-air curtain pipes beneath the door, with an opposing suction hood and extraction fan to direct rising steam sideways. The movable tank must also coordinate with basket lifting and transfer to ageing. Reserving one exhaust connection on the general arrangement is insufficient.",
+  "body": "aluminum-steam-interface-20230904-proposal.md",
+  "sourceFingerprint": "a5c7a07b8bdbb60e3d4ff43fea156bfb7872f52604d3b01b2a5572ee88b8a914",
+  "translationStatus": "complete",
+  "translatedAt": "2026-09-12",
+  "coverAlt": "",
+  "coverCaption": ""
+}

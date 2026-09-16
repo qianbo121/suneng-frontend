@@ -5,115 +5,191 @@ import { useEffect, useState } from 'react';
 
 import styles from './HomeHero.module.css';
 
+const heroSlides = [
+  {
+    id: 'company',
+    image: '/images/home/reviewed-20260909/factory-enhanced-v1.webp',
+    imageClassName: '',
+    eyebrow: 'JIANGSU SUNENG INDUSTRIAL FURNACE CO LTD',
+    title: '江苏苏能工业炉有限公司',
+    description: '工业炉单机、配套件与整线设备一体化解决方案商',
+    certification: '江苏泰州 · 国家高新技术企业',
+    showStats: true,
+  },
+  {
+    id: 'manufacturing-base',
+    image: '/images/home/reviewed-20260909/manufacturing-enhanced-v1.webp',
+    imageClassName: styles.manufacturingImage,
+    eyebrow: 'SELF-OWNED MANUFACTURING BASE',
+    title: '自主制造基地',
+    description: '炉体制造、管路配套与电控集成一体化生产基地',
+    certification: '江苏泰州 · 生产基地',
+    showStats: false,
+  },
+] as const;
+
 const companyStats = [
   {
     value: '2006',
+    prefix: '',
     unit: '年',
     label: '公司成立',
   },
   {
     value: '5080',
+    prefix: '',
     unit: '万元',
     label: '注册资本',
   },
   {
-    value: '150+',
-    unit: '人',
-    label: '在职人数',
+    value: '1000+',
+    prefix: '',
+    unit: '项',
+    label: '工业炉新建与改造项目',
   },
   {
     value: '14700',
+    prefix: '约',
     unit: 'm²',
-    label: '车间占地',
+    label: '生产基地',
   },
 ] as const;
 
-function AnimatedNumber({ value, duration = 1500 }: { value: number; duration?: number }) {
-  const [displayValue, setDisplayValue] = useState(value);
+export default function HomeHero({ locale = 'zh' }: { locale?: 'zh' | 'en' }) {
+  const english = locale === 'en';
+  const slides = heroSlides.map((slide, index) => english ? {
+    ...slide,
+    title: index === 0 ? 'Jiangsu Suneng Industrial Furnace Co., Ltd.' : 'Our Manufacturing Base',
+    description: index === 0 ? 'Industrial furnaces, components and complete heat-treatment lines.' : 'Furnace fabrication, piping and electrical control integration under one roof.',
+    certification: index === 0 ? 'Taizhou, Jiangsu · National High-tech Enterprise' : 'Taizhou, Jiangsu · Manufacturing facility',
+  } : slide);
+  const stats = english ? [
+    { value: '2006', prefix: '', unit: '', label: 'Founded' },
+    { value: '50.8', prefix: '', unit: 'M CNY', label: 'Registered capital' },
+    { value: '1000+', prefix: '', unit: '', label: 'New-build & retrofit projects' },
+    { value: '14700', prefix: '≈', unit: 'm²', label: 'Production site (company-reported)' },
+  ] : companyStats;
+  const [activeSlide, setActiveSlide] = useState(0);
+  const [isPointerOver, setIsPointerOver] = useState(false);
+  const [isFocusWithin, setIsFocusWithin] = useState(false);
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
 
   useEffect(() => {
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      setDisplayValue(value);
-      return;
-    }
+    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const syncMotionPreference = () => setPrefersReducedMotion(mediaQuery.matches);
 
-    let frameId = 0;
-    let startTime: number | null = null;
+    syncMotionPreference();
+    mediaQuery.addEventListener('change', syncMotionPreference);
 
-    const tick = (timestamp: number) => {
-      if (startTime === null) startTime = timestamp;
-      const elapsed = timestamp - startTime;
-      const progress = Math.min(elapsed / duration, 1);
-      const eased = 1 - Math.pow(1 - progress, 3);
-      setDisplayValue(Math.round(value * eased));
+    return () => mediaQuery.removeEventListener('change', syncMotionPreference);
+  }, []);
 
-      if (progress < 1) {
-        frameId = window.requestAnimationFrame(tick);
-      }
-    };
+  useEffect(() => {
+    if (isPointerOver || isFocusWithin || prefersReducedMotion) return;
 
-    setDisplayValue(0);
-    frameId = window.requestAnimationFrame(tick);
+    const timer = window.setTimeout(() => {
+      setActiveSlide((current) => (current + 1) % heroSlides.length);
+    }, 4000);
 
-    return () => {
-      window.cancelAnimationFrame(frameId);
-    };
-  }, [duration, value]);
+    return () => window.clearTimeout(timer);
+  }, [activeSlide, isFocusWithin, isPointerOver, prefersReducedMotion]);
+
+  const selectSlide = (index: number) => {
+    setActiveSlide(index);
+  };
 
   return (
-    <span
-      className={styles.animatedNumber}
-      style={{ minWidth: `${String(value).length}ch` }}
+    <section
+      className={`${styles.hero} ${styles.chineseHero} ${english ? styles.localizedHero : ''}`}
+      aria-labelledby="hero-title"
+      aria-roledescription={english ? 'carousel' : '轮播图'}
+      data-sticky-contact-start
+      onMouseEnter={() => setIsPointerOver(true)}
+      onMouseLeave={() => setIsPointerOver(false)}
+      onFocusCapture={() => setIsFocusWithin(true)}
+      onBlurCapture={() => setIsFocusWithin(false)}
     >
-      {displayValue}
-    </span>
-  );
-}
-
-export default function HomeHero() {
-  return (
-    <section className={styles.hero} aria-labelledby="hero-title">
-      <Image
-        src="/images/home/suneng-factory-aerial-hd.webp"
-        alt="江苏苏能工业炉有限公司厂区航拍"
-        fill
-        priority
-        unoptimized
-        sizes="100vw"
-        className={styles.heroImage}
-      />
-
+      {slides.map((slide, index) => (
+        <div
+          key={slide.id}
+          className={`${styles.heroMedia} ${index === activeSlide ? styles.heroMediaActive : ''}`}
+          aria-hidden="true"
+        >
+          <Image
+            src={slide.image}
+            alt=""
+            fill
+            priority={index === 0}
+            fetchPriority={index === 0 ? 'high' : 'auto'}
+            quality={85}
+            sizes="(max-width: 899px) 1500px, 100vw"
+            className={`${styles.heroImage} ${slide.imageClassName}`}
+          />
+        </div>
+      ))}
       <div className={styles.blueOverlay} aria-hidden="true" />
 
-      <div className={styles.heroContainer}>
-        <div className={styles.heroCopy}>
-          <p className={styles.eyebrow}>JIANGSU SUNENG INDUSTRIAL FURNACE CO LTD</p>
-
-          <h1 id="hero-title" className={styles.title}>
-            江苏苏能工业炉有限公司
-          </h1>
-
-          <p className={styles.description}>工业炉单机、配套件与整线交钥匙工程一体化解决方案商</p>
-
-          <p className={styles.certification}>江苏泰州·国家高新技术企业</p>
+      {slides.map((slide, index) => (
+        <div
+          key={slide.id}
+          className={`${styles.heroContainer} ${styles.heroCopyLayer} ${
+            index === activeSlide ? styles.heroCopyLayerActive : ''
+          }`}
+          aria-hidden={index === activeSlide ? undefined : 'true'}
+        >
+          <div className={styles.heroCopy}>
+            <p className={styles.eyebrow} translate="no">
+              {slide.eyebrow}
+            </p>
+            {index === activeSlide ? (
+              <h1 id="hero-title" className={styles.title}>
+                {slide.title}
+              </h1>
+            ) : (
+              <div className={styles.title}>{slide.title}</div>
+            )}
+            <p className={styles.description}>{slide.description}</p>
+            <p className={styles.certification}>{slide.certification}</p>
+          </div>
         </div>
-      </div>
+      ))}
 
-      <div className={styles.stats} aria-label="企业实力">
-        {companyStats.map((item, index) => (
-          <div className={styles.statCard} key={item.label} style={{ zIndex: index + 1 }}>
+      <div
+        className={`${styles.chineseStats} ${
+          heroSlides[activeSlide].showStats ? '' : styles.chineseStatsHidden
+        }`}
+        role={heroSlides[activeSlide].showStats ? 'group' : undefined}
+        aria-label={heroSlides[activeSlide].showStats ? (english ? 'Company profile' : '企业实力') : undefined}
+        aria-hidden={heroSlides[activeSlide].showStats ? undefined : 'true'}
+      >
+        {stats.map((item) => (
+          <div className={styles.chineseStatItem} key={item.label}>
             <div className={styles.statContent}>
               <p className={styles.statValue}>
-                <span>
-                  <AnimatedNumber value={Number.parseInt(item.value, 10)} />
-                  {item.value.endsWith('+') ? '+' : null}
-                </span>
-                <span className={styles.statUnit}>{item.unit}</span>
+                {item.prefix ? <span className={styles.statPrefix}>{item.prefix}</span> : null}
+                <span className={styles.statNumber}>{item.value}</span>
+                {item.unit ? <span className={styles.statUnit}>{item.unit}</span> : null}
               </p>
-
               <p className={styles.statLabel}>{item.label}</p>
             </div>
           </div>
+        ))}
+      </div>
+
+      <div className={styles.carouselControls} role="group" aria-label={english ? 'Homepage slides' : '首页主视觉轮播控制'}>
+        {slides.map((slide, index) => (
+          <button
+            key={slide.id}
+            type="button"
+            className={`${styles.carouselDotButton} ${
+              index === activeSlide ? styles.carouselDotButtonActive : ''
+            }`}
+            aria-label={english ? `Slide ${index + 1}: ${slide.title}` : `查看第 ${index + 1} 张：${slide.title}`}
+            aria-current={index === activeSlide ? 'true' : undefined}
+            onClick={() => selectSlide(index)}
+          >
+            <span className={styles.carouselDot} aria-hidden="true" />
+          </button>
         ))}
       </div>
     </section>

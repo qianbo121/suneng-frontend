@@ -1,0 +1,13 @@
+{
+  "id": "strip-cooling-feedback-20260509-proposal",
+  "slug": "strip-cooling-feedback-20260509-proposal",
+  "number": 143,
+  "title": "How is exit-strip temperature controlled on a continuous strip annealing line?",
+  "summary": "A Suneng technical agreement for an 1850 mm coil annealing line separately provides air cooling, air/water mist, water spraying and drying, with strip-temperature measurement at the heating, air-cooling and drying exits. Selection should assess how these measurements relate to airflow, water flow and main-line operation. Total cooling length alone does not establish exit temperature.",
+  "body": "strip-cooling-feedback-20260509-proposal.md",
+  "sourceFingerprint": "dd56c30367a647a463e4cb4ab7673603b0c09a9fe3c17b7d36e55057d4a8176b",
+  "translationStatus": "complete",
+  "translatedAt": "2026-09-12",
+  "coverAlt": "Illustration of metal strip coils.",
+  "coverCaption": "Illustration of metal strip coils (AI-generated). Not an actual customer workpiece photograph. Does not establish actual specifications or process results."
+}

@@ -1,0 +1,67 @@
+{
+  "id": "crossflow-fan-rack-layout-20260709-proposal",
+  "slug": "crossflow-fan-rack-layout-20260709-proposal",
+  "title": "5×4×3米烘炉想装120个车架，空间够不够？",
+  "summary": "苏能一份贯流风扇烘炉方案提出，单炉容纳120个移料工装车架，炉膛为5×4×3m。这个数量需要由装炉排布图验证：车架怎样放、工件是否伸出、装卸是否可达，以及侧部和底部出风是否被遮住，都不能用炉膛总体积代替。",
+  "body": "crossflow-fan-rack-layout-20260709-proposal.md",
+  "contentType": "proposal",
+  "publicationStatus": "draft",
+  "projectStatus": "proposal",
+  "workpiece": [
+    "空调贯流风扇"
+  ],
+  "materials": [
+    "AS+30%玻纤"
+  ],
+  "process": [
+    "批次烘烤"
+  ],
+  "equipment": [
+    "箱式热风烘炉"
+  ],
+  "need": [
+    "工装车架装炉排布"
+  ],
+  "tags": [
+    "方案参考",
+    "空调贯流风扇",
+    "工装车架装炉排布"
+  ],
+  "facts": [
+    {
+      "label": "方案单炉尺寸",
+      "value": "5000×4000×3000",
+      "unit": "mm",
+      "condition": "并非全空间均可用作车架占位",
+      "attribute": "方案参数"
+    },
+    {
+      "label": "方案车架外形",
+      "value": "610×610×850",
+      "unit": "mm",
+      "condition": "工件伸出和叠层条件另核",
+      "attribute": "方案参数"
+    },
+    {
+      "label": "拟独立加热区",
+      "value": "至少2",
+      "unit": "",
+      "condition": "按装载图核对，非均温实测结果",
+      "attribute": "方案参数"
+    }
+  ],
+  "participation": "拟提供单腔批次烘炉、加热循环和控制系统，装载与土建接口待图纸确认。",
+  "sourceSummary": "本文依据江苏苏能工业炉有限公司的历史方案资料整理，介绍拟定配置与供货条件；本文所引原件不构成设备已交付或验收通过的证明。",
+  "coverTitle": "贯流风扇烘炉方案：120个车架，怎样核对单炉装载与气流空间？",
+  "relatedLinks": [],
+  "projectYear": 2026,
+  "sourceDate": "2026-07-09",
+  "cover": {
+    "src": "/images/case-covers/remaining-20260910/crossflow-fan.webp",
+    "alt": "贯流风扇类别工件示意",
+    "caption": "贯流风扇类别示意（人工智能生成，非客户实物，不表示实际规格或工艺结果）",
+    "fit": "contain"
+  },
+  "listTitle": "5×4×3米烘炉想装120个车架，空间够不够？",
+  "dateModified": "2026-09-12"
+}

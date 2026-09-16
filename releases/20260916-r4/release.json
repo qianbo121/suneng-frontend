@@ -1,0 +1,12 @@
+{
+  "release": "20260916-r4",
+  "images": {
+    "backend": "sha256:35349a1151bfb02927340410544308ecfde461ba4d7af48fda77d229554a671c",
+    "admin": "sha256:59c693beb4865607afc6baa66bc52a8ba8e8403481295c17ef8dce99b7a4f0cf",
+    "frontend": "sha256:45f7ddea8532f4d43420dad3e1ad94d8c7a93f656c067386cad13ca4a7c8a880"
+  },
+  "sourceManifest": "source-manifest.json",
+  "publicationScope": "news-products-services-company; legacy technical proposals withdrawn",
+  "originalVerifiedAt": "2026-09-15T16:47:48.937548+00:00",
+  "notes": "This commit records the verified production source. It does not redeploy the running website."
+}

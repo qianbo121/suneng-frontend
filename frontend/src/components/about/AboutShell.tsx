@@ -49,7 +49,7 @@ export function AboutShell({
       />
 
       <div className="border-b border-[#e5e5e5] bg-white">
-        <div className="mx-auto flex max-w-[1660px] flex-col gap-4 px-6 py-0 lg:flex-row lg:items-stretch lg:justify-between lg:px-[86px]">
+        <div className="site-page-container flex flex-col gap-4 py-0 lg:flex-row lg:items-stretch lg:justify-between">
           <div className="flex min-h-[54px] items-center">
             <Breadcrumb
               locale={locale}
@@ -85,7 +85,7 @@ export function AboutShell({
         </div>
       </div>
 
-      <div className="mx-auto max-w-[1660px] px-6 pt-7 lg:px-[86px] lg:pt-9">
+      <div className="site-page-container pt-7 lg:pt-9">
         <div className="min-w-0">{children}</div>
       </div>
     </div>

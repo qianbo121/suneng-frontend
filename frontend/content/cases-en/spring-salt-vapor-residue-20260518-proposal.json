@@ -1,0 +1,13 @@
+{
+  "id": "spring-salt-vapor-residue-20260518-proposal",
+  "slug": "spring-parts-isothermal-quench-vapor-extraction-residual-salt-washing-proposal",
+  "number": 103,
+  "title": "How is residual salt removed from springs after austempering?",
+  "summary": "Suneng's mesh-belt austempering proposal for spring parts, dated 18 May 2026, places an adjustable extraction device at the heating-furnace discharge to prevent salt vapour entering the chamber. After the parts leave the salt tank, separate residual-salt blow-off and water washing are proposed. These provisions act at different locations and on different materials: extraction cannot replace removal of salt from parts, and a washing tank cannot replace extraction after the furnace. Procurement should trace the routes of both parts and gases to establish connections and supply responsibilities.",
+  "body": "spring-salt-vapor-residue-20260518-proposal.md",
+  "sourceFingerprint": "edd11b771e03859c14318bc7346904e53bf82a34e4036721897e0dcffaae7547",
+  "translationStatus": "complete",
+  "translatedAt": "2026-09-12",
+  "coverAlt": "",
+  "coverCaption": ""
+}

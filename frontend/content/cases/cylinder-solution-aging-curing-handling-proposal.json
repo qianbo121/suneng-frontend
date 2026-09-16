@@ -1,0 +1,80 @@
+{
+  "id": "cylinder-three-stages-20200519-proposal",
+  "slug": "cylinder-solution-aging-curing-handling-proposal",
+  "title": "铝合金气瓶固溶、时效、固化分别配什么炉？",
+  "listTitle": "铝合金气瓶固溶、时效、固化分别配什么炉？",
+  "listSummary": "同一气瓶项目中的不同加热设备，装载和转移要求需要分别约定。",
+  "summary": "同一气瓶项目中的不同加热设备，装载和转移要求需要分别约定。江苏苏能工业炉有限公司2020年5月19日的三份方案，分别提出立式固溶炉配料架升降及移动水槽、台车式时效炉，以及缠绕后固化用的箱式旋转机构。相似项目应先对应各阶段的工件状态，再核对料架、台车与旋转固定架；不能把三份资料拼成同一种工件可共用的温度程序或工装。",
+  "body": "cylinder-solution-aging-curing-handling-proposal.md",
+  "contentType": "proposal",
+  "publicationStatus": "draft",
+  "projectStatus": "proposal",
+  "projectYear": 2020,
+  "sourceDate": "2020-05-19",
+  "workpiece": [
+    "铝合金气瓶",
+    "碳纤维缠绕气瓶"
+  ],
+  "materials": [
+    "铝合金",
+    "碳纤维"
+  ],
+  "process": [
+    "固溶",
+    "时效",
+    "固化"
+  ],
+  "equipment": [
+    "固溶炉",
+    "时效炉",
+    "旋转固化炉"
+  ],
+  "need": [
+    "多工序装载与供货衔接"
+  ],
+  "tags": [
+    "方案参考",
+    "铝合金气瓶",
+    "碳纤维缠绕气瓶",
+    "多工序装载与供货衔接"
+  ],
+  "facts": [
+    {
+      "label": "方案固溶转移时间",
+      "value": "≤15",
+      "unit": "s",
+      "condition": "从炉门开启到工件全部没入水中，不是油缸行程时间",
+      "attribute": "方案参数"
+    },
+    {
+      "label": "时效台车额定承载",
+      "value": "6",
+      "unit": "t",
+      "condition": "均匀装载，含工装垫铁",
+      "attribute": "方案参数"
+    },
+    {
+      "label": "固化上料车",
+      "value": "用户自备",
+      "unit": "",
+      "condition": "设备和车间装卸接口需对接",
+      "attribute": "方案参数"
+    }
+  ],
+  "participation": "历史三份方案分别配置气瓶固溶、时效与缠绕后固化设备；固化上料车用户自备，分阶段工件与载具接口需独立确认。",
+  "sourceSummary": "江苏苏能工业炉有限公司历史技术方案资料整理。",
+  "coverTitle": "铝合金气瓶炉群方案：固溶、时效和缠绕后固化怎样分别配置？",
+  "relatedLinks": [
+    {
+      "title": "准备询价参数与供货范围",
+      "href": "/zh/articles/gongye-lu-baojia-canshu"
+    }
+  ],
+  "cover": {
+    "src": "/images/workpieces/reviewed-20260909/gas-cylinders/seamless-aluminum-gas-cylinder.webp",
+    "alt": "铝合金瓶体类别工件示意",
+    "caption": "铝合金瓶体工件示意（人工智能生成，非客户实物）",
+    "fit": "contain"
+  },
+  "dateModified": "2026-09-12"
+}

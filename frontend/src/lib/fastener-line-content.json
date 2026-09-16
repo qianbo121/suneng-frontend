@@ -1,0 +1,660 @@
+{
+  "seo": {
+    "title": "紧固件调质生产线｜连续式与周期式方案｜苏能工业炉",
+    "description": "了解紧固件调质生产线的适用工件、加热淬火与高温回火流程，对比连续式网带与周期式炉组方案，查看设备配置、产能与现场条件及交付验收要点，提交材料与产量获取选型建议。",
+    "canonical": null
+  },
+  "contact": {
+    "phone": {
+      "label": "电话",
+      "display": "130-5298-6814",
+      "href": "tel:13052986814"
+    },
+    "email": {
+      "label": "邮箱",
+      "display": "997518512@qq.com",
+      "href": "mailto:997518512@qq.com"
+    },
+    "address": "泰州姜堰区张甸蔡官工业区",
+    "icp": {
+      "label": "苏ICP备20020318号-1",
+      "href": null
+    }
+  },
+  "sectionNavigation": [
+    {
+      "label": "适用工件",
+      "href": "#workpieces"
+    },
+    {
+      "label": "工艺与设备",
+      "href": "#process"
+    },
+    {
+      "label": "方案比较",
+      "href": "#comparison"
+    },
+    {
+      "label": "设备配置",
+      "href": "#configuration"
+    },
+    {
+      "label": "交付验收",
+      "href": "#acceptance"
+    },
+    {
+      "label": "常见问题",
+      "href": "#faq"
+    }
+  ],
+  "sections": {
+    "overview": {
+      "id": "overview",
+      "type": "hero-gallery",
+      "headingLevel": 1,
+      "title": "紧固件调质生产线",
+      "subtitle": "从工件与产量出发，匹配设备方案",
+      "description": "面向需要调质处理的钢制紧固件，配置加热、淬火、回火及配套系统。",
+      "facts": [
+        {
+          "label": "适用工件",
+          "value": "螺栓、螺母等钢制紧固件"
+        },
+        {
+          "label": "处理工艺",
+          "value": "淬火＋高温回火"
+        },
+        {
+          "label": "方案方向",
+          "value": "连续式与周期式"
+        },
+        {
+          "label": "配置依据",
+          "value": "材料、规格、装载与产量"
+        }
+      ],
+      "gallery": [
+        {
+          "id": "whole-line",
+          "label": "整线外观",
+          "alt": "紧固件调质生产线整线外观示意，钢灰色设备与黄色检修栏杆",
+          "thumbnailAssetId": "gallery-whole-line",
+          "fullAssetId": "gallery-whole-line",
+          "fullSrc": "/images/products/fastener-quench-temper-line/reviewed-20260909/gallery-whole-line-37c00d7dd08c.png",
+          "thumbnailSrc": "/images/products/fastener-quench-temper-line/reviewed-20260909/gallery-whole-line-37c00d7dd08c.png"
+        },
+        {
+          "id": "heating-section",
+          "label": "加热段",
+          "alt": "紧固件调质生产线加热设备与检修平台示意",
+          "thumbnailAssetId": "gallery-heating",
+          "fullAssetId": "gallery-heating",
+          "fullSrc": "/images/products/fastener-quench-temper-line/reviewed-20260909/gallery-heating-a0c86b3afbfb.png",
+          "thumbnailSrc": "/images/products/fastener-quench-temper-line/reviewed-20260909/gallery-heating-a0c86b3afbfb.png"
+        },
+        {
+          "id": "quench-transfer",
+          "label": "淬火输送剖视",
+          "alt": "淬火槽内输送、液面上方的驱动与提升出料衔接剖视示意",
+          "thumbnailAssetId": "gallery-quench-transfer",
+          "fullAssetId": "gallery-quench-transfer",
+          "fullSrc": "/images/products/fastener-quench-temper-line/reviewed-20260909/gallery-quench-transfer-8e39aef32edf.png",
+          "thumbnailSrc": "/images/products/fastener-quench-temper-line/reviewed-20260909/gallery-quench-transfer-8e39aef32edf.png"
+        },
+        {
+          "id": "control-cabinet",
+          "label": "控制系统",
+          "alt": "热处理生产线控制柜示意",
+          "thumbnailAssetId": "gallery-controls",
+          "fullAssetId": "gallery-controls",
+          "fullSrc": "/images/products/fastener-quench-temper-line/reviewed-20260909/gallery-controls-99cbd9fe1181.png",
+          "thumbnailSrc": "/images/products/fastener-quench-temper-line/reviewed-20260909/gallery-controls-99cbd9fe1181.png"
+        }
+      ],
+      "actions": [
+        {
+          "label": "提交工况，获取选型建议",
+          "href": "#inquiry",
+          "style": "primary"
+        },
+        {
+          "label": "比较典型方案",
+          "href": "#comparison",
+          "style": "secondary"
+        }
+      ],
+      "imageAssetId": "hero-line"
+    },
+    "workpieces": {
+      "id": "workpieces",
+      "type": "three-image-cards",
+      "headingLevel": 2,
+      "title": "先看工件与装载，再判断方案",
+      "cards": [
+        {
+          "id": "workpiece-material",
+          "title": "工件与材料",
+          "description": "材料牌号、尺寸与目标性能",
+          "imageAlt": "钢制螺栓与螺母工件示意",
+          "imageAssetId": "workpiece-fasteners"
+        },
+        {
+          "id": "continuous-loading",
+          "title": "连续式铺料",
+          "description": "关注料层、输送与工件状态",
+          "imageAlt": "紧固件在网带上的连续式铺料示意",
+          "imageAssetId": "loading-mesh-belt"
+        },
+        {
+          "id": "batch-loading",
+          "title": "周期式装筐",
+          "description": "关注装筐方式、装炉量与批次",
+          "imageAlt": "紧固件采用金属料筐装载的示意",
+          "imageAssetId": "loading-basket"
+        }
+      ]
+    },
+    "process": {
+      "id": "process",
+      "type": "full-width-connected-line",
+      "headingLevel": 2,
+      "title": "从进料到出料，看懂整线组成",
+      "subtitle": "以含清洗干燥的连续式网带调质线为例，查看工序与设备的衔接。",
+      "imageAlt": "含淬火输送剖视、清洗干燥和回火设备的连续式网带调质线配置示意",
+      "stages": [
+        {
+          "id": "feeding",
+          "order": 1,
+          "title": "上料与输送",
+          "description": "控制铺料与进料节拍"
+        },
+        {
+          "id": "heating",
+          "order": 2,
+          "title": "加热与保温",
+          "description": "匹配温度与工艺时间"
+        },
+        {
+          "id": "quenching",
+          "order": 3,
+          "title": "淬火",
+          "description": "匹配介质与冷却条件"
+        },
+        {
+          "id": "tempering",
+          "order": 4,
+          "title": "高温回火",
+          "description": "匹配目标性能"
+        },
+        {
+          "id": "unloading",
+          "order": 5,
+          "title": "冷却与下料",
+          "description": "对接收料与后续工序"
+        }
+      ],
+      "note": "前清洗、淬火后清洗及干燥，按工件状态与工艺需要配置。图中蓝色仅示意淬火介质，不表示限定为水。",
+      "imageAssetId": "process-whole-line"
+    },
+    "comparison": {
+      "id": "comparison",
+      "type": "two-images-and-comparison-table",
+      "headingLevel": 2,
+      "title": "连续式还是周期式，按生产条件选择",
+      "subtitle": "比较装载与生产组织，确定适合的设备组合。",
+      "schemes": [
+        {
+          "id": "continuous",
+          "title": "连续式网带方案",
+          "description": "偏向稳定批量组织。",
+          "imageAlt": "连续式网带调质生产线设备组合示意",
+          "imageAssetId": "comparison-continuous"
+        },
+        {
+          "id": "batch",
+          "title": "周期式炉组方案",
+          "description": "偏向分批生产组织。",
+          "imageAlt": "周期式加热炉、淬火设备与配套转运的炉组方案示意",
+          "imageAssetId": "comparison-batch"
+        }
+      ],
+      "table": {
+        "caption": "连续式与周期式的装载及生产组织比较",
+        "columns": [
+          {
+            "key": "item",
+            "label": "比较项目",
+            "rowHeader": true
+          },
+          {
+            "key": "continuous",
+            "label": "连续式"
+          },
+          {
+            "key": "batch",
+            "label": "周期式"
+          }
+        ],
+        "rows": [
+          {
+            "item": "工件装载",
+            "continuous": "网带铺料，关注料层与输送",
+            "batch": "料筐或工装，关注装炉与受热"
+          },
+          {
+            "item": "生产组织",
+            "continuous": "按节拍连续组织生产",
+            "batch": "按炉次安排装卸与处理"
+          },
+          {
+            "item": "换型安排",
+            "continuous": "评估清线、过渡料与配方切换",
+            "batch": "评估工装、批次及工艺切换"
+          }
+        ]
+      }
+    },
+    "configuration": {
+      "id": "configuration",
+      "type": "configuration-table",
+      "headingLevel": 2,
+      "title": "把生产要求，落实到设备配置",
+      "subtitle": "对比关键设备、处理能力与配套条件。",
+      "table": {
+        "caption": "连续式网带方案与周期式炉组方案的设备配置核对项",
+        "columns": [
+          {
+            "key": "item",
+            "label": "配置项目",
+            "rowHeader": true
+          },
+          {
+            "key": "continuous",
+            "label": "连续式网带方案"
+          },
+          {
+            "key": "batch",
+            "label": "周期式炉组方案"
+          }
+        ],
+        "rows": [
+          {
+            "item": "产能口径",
+            "continuous": "代表工件的小时处理量",
+            "batch": "单批装载量、炉组节拍与配套能力"
+          },
+          {
+            "item": "加热与回火",
+            "continuous": "网带加热炉＋网带回火炉",
+            "batch": "加热炉＋转运装置＋回火炉"
+          },
+          {
+            "item": "有效工作区",
+            "continuous": "网带有效宽度与加热段长度",
+            "batch": "有效装载空间与装筐方式"
+          },
+          {
+            "item": "淬火配套",
+            "continuous": "出炉入液衔接、淬火槽及循环冷却",
+            "batch": "转移装置、淬火槽及循环冷却"
+          },
+          {
+            "item": "能源与气氛",
+            "continuous": "根据热源、工艺及表面要求配置",
+            "batch": "根据热源、工艺及密封要求配置"
+          },
+          {
+            "item": "控制与记录",
+            "continuous": "批次、配方、装载、温度、速度及关键运行状态与联锁",
+            "batch": "批次、配方、装炉量、温度、时间及关键动作与联锁"
+          }
+        ]
+      },
+      "notes": [
+        "淬火系统核对介质温度、液位、搅拌和冷却能力；出炉入液及淬火至回火的间隔按材料和工艺规定控制。",
+        "脱碳与异常增碳需结合气氛、温度、时间及装载控制；保护气氛的监测项目和联锁按工艺确定。",
+        "产能按代表工件、装载及工艺核算，并校核转运、淬火与回火环节。"
+      ],
+      "action": {
+        "label": "把已有参数发给工程师",
+        "href": "#inquiry",
+        "style": "primary"
+      }
+    },
+    "site-conditions": {
+      "id": "site-conditions",
+      "type": "image-and-requirements",
+      "headingLevel": 2,
+      "title": "产能与现场条件，一起算清楚",
+      "imageAlt": "热处理生产线及料筐、搬运和检修空间的厂房布局示意",
+      "imageCaption": "布局随设备组合与现场条件调整。",
+      "requirements": [
+        {
+          "title": "目标产量与班次",
+          "description": "识别瓶颈工序，核对有效生产时间"
+        },
+        {
+          "title": "电力与热源",
+          "description": "明确能源形式及现场供气供电条件"
+        },
+        {
+          "title": "冷却与排风",
+          "description": "明确循环冷却、排风与废液配套"
+        },
+        {
+          "title": "场地与检修",
+          "description": "预留上料、转运与维护通道"
+        }
+      ],
+      "imageAssetId": "site-layout"
+    },
+    "delivery-scope": {
+      "id": "delivery-scope",
+      "type": "image-and-delivery-scope",
+      "headingLevel": 2,
+      "title": "配置参考与交付内容",
+      "subtitle": "明确设备组成、配套系统与现场接口。",
+      "imageAlt": "热处理设备及承载在辊道转运台上的紧固件料筐示意",
+      "contentTitle": "围绕热处理主线，明确设备与接口",
+      "items": [
+        {
+          "label": "热处理设备",
+          "value": "加热炉、淬火设备与回火炉"
+        },
+        {
+          "label": "配套系统",
+          "value": "上下料、清洗与冷却按工艺配置"
+        },
+        {
+          "label": "现场接口",
+          "value": "基础、公用工程、排风及安装配合"
+        }
+      ],
+      "note": "设备清单、供货范围与双方分工在技术方案中列明。",
+      "imageAssetId": "delivery-configuration"
+    },
+    "acceptance": {
+      "id": "acceptance",
+      "type": "acceptance-columns-and-timeline",
+      "headingLevel": 2,
+      "title": "交付到哪一步，验收就核对到哪一步",
+      "subtitle": "按阶段明确工作内容，便于双方协同推进。",
+      "columns": [
+        {
+          "id": "equipment-function",
+          "title": "设备功能",
+          "description": "核对动作、联锁、报警与运行记录。"
+        },
+        {
+          "id": "process-performance",
+          "title": "工艺性能",
+          "description": "按约定工件及装载，核对设备控温、工件受热与处理能力。"
+        },
+        {
+          "id": "product-verification",
+          "title": "产品验证",
+          "description": "按产品类别与性能等级，约定检验项目、取样及判定条件。"
+        }
+      ],
+      "productNote": "螺栓、螺母分别按适用产品标准和性能等级检验；硬度合格不能替代全部规定性能合格。检验项目、取样和判定条件需在技术方案中明确。",
+      "stages": [
+        {
+          "id": "requirements",
+          "order": 1,
+          "label": "需求沟通"
+        },
+        {
+          "id": "design",
+          "order": 2,
+          "label": "方案设计"
+        },
+        {
+          "id": "manufacturing-inspection",
+          "order": 3,
+          "label": "制造检验"
+        },
+        {
+          "id": "installation-commissioning",
+          "order": 4,
+          "label": "安装联调"
+        },
+        {
+          "id": "acceptance-delivery",
+          "order": 5,
+          "label": "验收交付"
+        }
+      ],
+      "note": "设备验收与产品检验分别明确条件与责任。"
+    },
+    "faq": {
+      "id": "faq",
+      "type": "faq-with-related-links",
+      "headingLevel": 2,
+      "title": "采购与技术常见问题",
+      "subtitle": "先了解选型、配套与现场衔接问题。",
+      "items": [
+        {
+          "id": "applicable-fasteners",
+          "question": "哪些紧固件适合调质处理？",
+          "answer": "根据材料牌号与产品性能要求判断；有渗碳等化学热处理要求时，按相应工艺另行配置。",
+          "defaultOpen": true
+        },
+        {
+          "id": "frequent-changeovers",
+          "question": "连续线是否适合频繁换规格？",
+          "answer": "需要结合批量、换型频率及工艺差异判断。连续式方案要评估清线、过渡料、配方切换和装载变化；周期式方案也要核对工装、批次与工艺切换安排。先提供代表工件、生产计划和目标性能，再比较两类方案的生产组织是否适合。",
+          "defaultOpen": false
+        },
+        {
+          "id": "existing-equipment-integration",
+          "question": "已有设备能否保留并接入？",
+          "answer": "需要核对现有设备状态、处理能力、工艺适配性，以及转运、控制联锁和现场接口。可先提供设备清单、已有技术资料及现场布局，再确认保留、改造或新增的范围；能否接入及双方分工在技术方案中明确。",
+          "defaultOpen": false
+        },
+        {
+          "id": "quotation-factors",
+          "question": "报价主要受哪些配置影响？",
+          "answer": "主要涉及代表工件与目标性能、产量与班次、连续式或周期式组织、有效工作区、热源与气氛，以及淬火、清洗、上下料和控制记录等配套要求。还需明确现场接口、安装配合和供货范围，在可比较的技术方案与设备清单基础上报价。",
+          "defaultOpen": false
+        },
+        {
+          "id": "quenching-and-washing",
+          "question": "淬火介质和清洗设备如何确定？",
+          "answer": "淬火介质及冷却条件应结合材料、工件尺寸与形状、目标性能和质量要求确认，并核对介质温度、液位、搅拌及循环冷却能力。前清洗、淬火后清洗和干燥是否配置，取决于来料状态、介质残留及后续工序要求，同时明确排风和废液等现场配套。",
+          "defaultOpen": false
+        },
+        {
+          "id": "quality-verification",
+          "question": "调质后的紧固件怎样验证质量？",
+          "answer": "按材料、产品类别、性能等级及适用标准确定检验项目。螺栓、螺钉和螺柱需核对适用的拉力、保证载荷、硬度等性能；螺母需核对适用的保证载荷、硬度等性能。脱碳、异常增碳、裂纹及其他表面缺陷，按产品要求明确检验方法、取样阶段、数量和判定条件；不能用单一硬度结果代替全部规定性能。设备验收与产品检验的执行方和责任分别约定。",
+          "defaultOpen": false
+        },
+        {
+          "id": "batch-traceability",
+          "question": "换批和异常工况如何追溯？",
+          "answer": "先建立原材料批次、热处理批次和配方之间的对应关系，再按方案确定装载、温度与时间、速度及淬火介质等关键记录。连续式换型要明确清线、过渡料与混料隔离；周期式要核对炉次和料筐标识。超出约定工艺窗口的批次应识别、隔离和复核，处置按约定程序执行。记录项目、保存方式与交付范围在技术方案中明确。",
+          "defaultOpen": false
+        }
+      ],
+      "relatedGroups": [
+        {
+          "id": "related-equipment",
+          "title": "相关设备",
+          "links": [
+            {
+              "label": "网带炉",
+              "href": null
+            },
+            {
+              "label": "箱式炉",
+              "href": null
+            }
+          ]
+        },
+        {
+          "id": "related-lines",
+          "title": "相关热处理线",
+          "links": [
+            {
+              "label": "网带式渗碳淬火生产线",
+              "href": null
+            }
+          ]
+        },
+        {
+          "id": "technical-resources",
+          "title": "技术资料",
+          "links": [
+            {
+              "label": "调质与渗碳的区别",
+              "href": null
+            },
+            {
+              "label": "连续式与周期式如何选",
+              "href": null
+            }
+          ]
+        }
+      ]
+    },
+    "inquiry": {
+      "id": "inquiry",
+      "type": "contact-and-four-field-form",
+      "headingLevel": 2,
+      "title": "告诉我们工件与产量，开始讨论方案",
+      "description": "先判断设备方向，再梳理配置与现场接口。",
+      "contactKeys": ["phone", "email"],
+      "form": {
+        "id": "fastener-inquiry",
+        "action": null,
+        "method": "post",
+        "fields": [
+          {
+            "name": "workpiece_material",
+            "label": "工件与材料",
+            "type": "text",
+            "placeholder": "如：螺栓、材料牌号及尺寸",
+            "required": false
+          },
+          {
+            "name": "target_performance",
+            "label": "目标性能",
+            "type": "text",
+            "placeholder": "如：性能等级、硬度要求",
+            "required": false
+          },
+          {
+            "name": "target_output",
+            "label": "目标产量",
+            "type": "text",
+            "placeholder": "填写产量与生产班次",
+            "required": false
+          },
+          {
+            "name": "contact_method",
+            "label": "联系方式",
+            "type": "text",
+            "placeholder": "电话、微信或邮箱",
+            "required": true,
+            "requiredMessage": "请填写可联系到您的电话、微信或邮箱。"
+          }
+        ],
+        "submitLabel": "获取选型建议",
+        "helperText": "已知信息先填，不明确的项目可留空。"
+      }
+    }
+  },
+  "images": {
+    "hero-line": {
+      "width": 1672,
+      "height": 941,
+      "alt": "厂房内紧固件调质生产线整体配置示意",
+      "src": "/images/products/fastener-quench-temper-line/reviewed-20260909/hero-line-044caea2c108.png",
+      "optimized": true
+    },
+    "gallery-whole-line": {
+      "width": 1672,
+      "height": 941,
+      "alt": "紧固件调质线整线外观示意",
+      "src": "/images/products/fastener-quench-temper-line/reviewed-20260909/gallery-whole-line-37c00d7dd08c.png",
+      "optimized": true
+    },
+    "gallery-heating": {
+      "width": 1672,
+      "height": 941,
+      "alt": "紧固件调质线加热段配置示意",
+      "src": "/images/products/fastener-quench-temper-line/reviewed-20260909/gallery-heating-a0c86b3afbfb.png",
+      "optimized": true
+    },
+    "gallery-quench-transfer": {
+      "width": 1672,
+      "height": 941,
+      "alt": "淬火槽内输送、液面上方的驱动与提升出料衔接剖视示意",
+      "src": "/images/products/fastener-quench-temper-line/reviewed-20260909/gallery-quench-transfer-8e39aef32edf.png",
+      "optimized": true
+    },
+    "gallery-controls": {
+      "width": 1672,
+      "height": 941,
+      "alt": "控制柜及界面示意，屏幕不是实际过程记录",
+      "src": "/images/products/fastener-quench-temper-line/reviewed-20260909/gallery-controls-99cbd9fe1181.png",
+      "optimized": true
+    },
+    "workpiece-fasteners": {
+      "width": 1672,
+      "height": 941,
+      "alt": "螺栓与螺母等钢制紧固件示意",
+      "src": "/images/products/fastener-quench-temper-line/reviewed-20260909/workpiece-fasteners-8054264b1610.png",
+      "optimized": true
+    },
+    "loading-mesh-belt": {
+      "width": 1672,
+      "height": 941,
+      "alt": "紧固件在网带上的铺料状态示意",
+      "src": "/images/products/fastener-quench-temper-line/reviewed-20260909/loading-mesh-belt-f5d05c60a289.png",
+      "optimized": true
+    },
+    "loading-basket": {
+      "width": 1672,
+      "height": 941,
+      "alt": "紧固件在金属料筐中的装载示意",
+      "src": "/images/products/fastener-quench-temper-line/reviewed-20260909/loading-basket-c0cb42d12e6e.png",
+      "optimized": true
+    },
+    "process-whole-line": {
+      "width": 2172,
+      "height": 724,
+      "alt": "含淬火输送剖视、清洗干燥和回火设备的连续式网带调质线配置示意",
+      "src": "/images/products/fastener-quench-temper-line/reviewed-20260909/process-whole-line-d3dae29a6cb7.png",
+      "optimized": true
+    },
+    "comparison-continuous": {
+      "width": 1672,
+      "height": 941,
+      "alt": "连续式网带热处理生产线配置示意",
+      "src": "/images/products/fastener-quench-temper-line/reviewed-20260909/comparison-continuous-dca7fcad87f8.png",
+      "optimized": true
+    },
+    "comparison-batch": {
+      "width": 1672,
+      "height": 941,
+      "alt": "周期式加热炉、淬火槽、回火炉及覆盖交接工位的桥式转运配置示意",
+      "src": "/images/products/fastener-quench-temper-line/reviewed-20260909/comparison-batch-6ba913731155.png",
+      "optimized": true
+    },
+    "site-layout": {
+      "width": 1672,
+      "height": 941,
+      "alt": "热处理设备、装载区与维护通道布局示意",
+      "src": "/images/products/fastener-quench-temper-line/reviewed-20260909/site-layout-c238af78f59e.png",
+      "optimized": true
+    },
+    "delivery-configuration": {
+      "width": 1672,
+      "height": 941,
+      "alt": "料筐转运及热处理设备配套示意",
+      "src": "/images/products/fastener-quench-temper-line/reviewed-20260909/delivery-configuration-8e06df9af139.png",
+      "optimized": true
+    }
+  }
+}

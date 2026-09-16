@@ -1,0 +1,66 @@
+{
+  "id": "high-temperature-cooling-outlet-20190319-proposal",
+  "slug": "high-temperature-trolley-cooling-pipe-outlet-proposal",
+  "title": "台车炉冷风降温管路的进出口与炉膛连接",
+  "listTitle": "台车炉冷风降温管路的进出口与炉膛连接",
+  "listSummary": "苏能2019年一份65kW高温台车炉方案，写明在炉内布置耐热钢管道，由高压鼓风机向管道内提供冷空气；同段又使用“置换炉内热空气”的表述。",
+  "summary": "苏能2019年一份65kW高温台车炉方案，写明在炉内布置耐热钢管道，由高压鼓风机向管道内提供冷空气；同段又使用“置换炉内热空气”的表述。采购核对时，冷风从哪里进入已有依据，管道出口通向哪里仍需图纸明确。这决定了能否把该配置理解为隔着管壁换热，不能仅凭“翅片管”名称作结论。",
+  "body": "high-temperature-trolley-cooling-pipe-outlet-proposal.md",
+  "contentType": "proposal",
+  "publicationStatus": "draft",
+  "projectStatus": "proposal",
+  "projectYear": 2019,
+  "sourceDate": "2019-03-19",
+  "workpiece": [],
+  "materials": [],
+  "process": [
+    "高温热处理"
+  ],
+  "equipment": [
+    "台车式电阻炉"
+  ],
+  "need": [
+    "降温管路核对"
+  ],
+  "tags": [
+    "方案参考",
+    "降温管路核对"
+  ],
+  "facts": [
+    {
+      "label": "拟降温部件",
+      "value": "耐热钢管道",
+      "unit": "",
+      "condition": "原文在炉内布置，不据此补完整路径",
+      "attribute": "方案参数"
+    },
+    {
+      "label": "拟冷空气入口",
+      "value": "管道内",
+      "unit": "",
+      "condition": "由高压鼓风机提供，不等于直接向炉膛送冷风",
+      "attribute": "方案参数"
+    },
+    {
+      "label": "待核接口",
+      "value": "管道出口与炉膛关系",
+      "unit": "",
+      "condition": "原件置换措辞需配图明确",
+      "attribute": "待核接口"
+    }
+  ],
+  "participation": "苏能历史方案提出炉内耐热钢管道降温配置，出口连接及降温验证条件待终版确认。",
+  "sourceSummary": "江苏苏能工业炉有限公司历史技术方案资料整理。",
+  "coverTitle": "高温台车炉方案：冷风进入管道后，出口与炉膛关系为什么还要核对？",
+  "relatedLinks": [
+    {
+      "title": "了解台车炉的适用条件",
+      "href": "/zh/products/detail/trolley-furnace"
+    },
+    {
+      "title": "准备询价参数与供货范围",
+      "href": "/zh/articles/gongye-lu-baojia-canshu"
+    }
+  ],
+  "dateModified": "2026-09-12"
+}

@@ -1,0 +1,67 @@
+{
+  "id": "aluminum-forging-loader-202608-proposal",
+  "slug": "aluminum-forging-loader-202608-proposal",
+  "title": "铝棒锻前加热选台车炉还是固定炉底？",
+  "summary": "苏能一份铝棒自由锻加热方案列出A、B两台炉，每台分别比较台车式和固定炉底配装料机。这里是两台设备各有两种配置选择，并非四台炉都要采购。比较时，除了炉体，还要核对装料机、料架和现场装卸条件。",
+  "body": "aluminum-forging-loader-202608-proposal.md",
+  "contentType": "proposal",
+  "publicationStatus": "draft",
+  "projectStatus": "proposal",
+  "workpiece": [
+    "铝合金棒料"
+  ],
+  "materials": [
+    "铝合金"
+  ],
+  "process": [
+    "锻造前加热"
+  ],
+  "equipment": [
+    "台车式或固定炉底加热炉"
+  ],
+  "need": [
+    "装卸配置比较"
+  ],
+  "tags": [
+    "方案参考",
+    "铝合金棒料",
+    "装卸配置比较"
+  ],
+  "facts": [
+    {
+      "label": "A炉拟装机",
+      "value": "110",
+      "unit": "kW",
+      "condition": "A炉1000kg核算，两种炉底方案",
+      "attribute": "方案参数"
+    },
+    {
+      "label": "B炉拟装机",
+      "value": "40",
+      "unit": "kW",
+      "condition": "B炉200kg为编制假设，实际量待确认",
+      "attribute": "方案参数"
+    },
+    {
+      "label": "方案工作温度",
+      "value": "350～520",
+      "unit": "℃",
+      "condition": "具体合金与工艺曲线另行确认",
+      "attribute": "方案参数"
+    }
+  ],
+  "participation": "方案拟提供A/B加热炉及两种炉底选项；固定炉底方案含拟定装料机，工装与现场范围另行确认。",
+  "sourceSummary": "本文依据江苏苏能工业炉有限公司的历史方案资料整理，介绍拟定配置与供货条件；本文所引原件不构成设备已交付或验收通过的证明。",
+  "coverTitle": "铝棒锻前加热方案：固定炉底与台车式，怎样把装料机一起比较？",
+  "relatedLinks": [],
+  "projectYear": 2026,
+  "sourceDate": "2026-08",
+  "cover": {
+    "src": "/images/case-covers/remaining-20260910/aluminum-bars.webp",
+    "alt": "铝合金棒料类别工件示意",
+    "caption": "铝合金棒料类别示意（人工智能生成，非客户实物，不表示实际规格或工艺结果）",
+    "fit": "contain"
+  },
+  "listTitle": "铝棒锻前加热选台车炉还是固定炉底？",
+  "dateModified": "2026-09-12"
+}

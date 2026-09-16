@@ -1,0 +1,1678 @@
+{
+  "schemaVersion": "2.5.0",
+  "baselineVersion": "industry-public-baseline-2026-08-batch2.5-candidate-v1",
+  "status": "awaiting_responsible_owner_approval",
+  "createdAt": "2026-08-27T15:14:55.510Z",
+  "sourceDraftVersion": "industry-baseline-2026-08-batch2.3-draft",
+  "productionPublicBaselineVersion": null,
+  "productionPublicRuleCount": 0,
+  "candidateRuleIds": [
+    "eqdir-heavy-car-bottom-v1",
+    "eqdir-wear-plate-quench-temper-line-v2",
+    "eqdir-carbon-steel-coil-bell-batch-v2",
+    "eqdir-long-products-roller-thermal-v2",
+    "eqdir-wire-coil-bell-v1",
+    "eqdir-fastener-mesh-quench-temper-v2"
+  ],
+  "pairScope": [
+    "large-forged-flange|heavy-steel-normalize-temper-anneal|normalizing",
+    "large-forged-flange|heavy-steel-normalize-temper-anneal|tempering",
+    "large-forged-flange|heavy-steel-normalize-temper-anneal|annealing",
+    "large-forged-shaft|heavy-steel-normalize-temper-anneal|normalizing",
+    "large-forged-shaft|heavy-steel-normalize-temper-anneal|tempering",
+    "large-forged-shaft|heavy-steel-normalize-temper-anneal|annealing",
+    "large-steel-casting|heavy-steel-normalize-temper-anneal|normalizing",
+    "large-steel-casting|heavy-steel-normalize-temper-anneal|tempering",
+    "large-steel-casting|heavy-steel-normalize-temper-anneal|annealing",
+    "wear-resistant-steel-plate|wear-plate-quench-review|quench-temper",
+    "carbon-steel-coil|coil-professional-line-review|coil-annealing",
+    "seamless-steel-pipe|long-products-whole-furnace-treatment|normalizing",
+    "seamless-steel-pipe|long-products-whole-furnace-treatment|annealing",
+    "welded-steel-pipe|long-products-whole-furnace-treatment|normalizing",
+    "welded-steel-pipe|long-products-whole-furnace-treatment|annealing",
+    "round-steel-bar|long-products-whole-furnace-treatment|normalizing",
+    "round-steel-bar|long-products-whole-furnace-treatment|annealing",
+    "wire-rod-coil|coiled-wire-protective-anneal-review|spheroidizing-annealing",
+    "wire-rod-coil|coiled-wire-protective-anneal-review|recrystallization-annealing",
+    "steel-wire-coil|coiled-wire-protective-anneal-review|spheroidizing-annealing",
+    "steel-wire-coil|coiled-wire-protective-anneal-review|recrystallization-annealing",
+    "high-strength-bolts|fastener-quench-temper|quench-temper",
+    "hex-nuts|fastener-quench-temper|quench-temper"
+  ],
+  "candidateRuleCount": 6,
+  "candidatePairCount": 23,
+  "evidenceSnapshotHash": "sha256:b8993798ca7d8fa82dff106a480e8c61c1a96dcaa997da612a6464a29f3ac129",
+  "publicCopySnapshotHash": "sha256:c862f0245c6ba471fb2040ad8af34ac95f147a3460edf14e53f70379ebe0b9e7",
+  "codeAndDataSnapshotHash": "sha256:9e109cbdfa89586ecfd50766c446c4c188729d5e4a48b4ce59aadc9f5ed1f0b5",
+  "approvalScopeHash": "sha256:2f9578abeb9ecbbe8722bdb8a0b9a58d31e7ffe42234dd8b9c14ed749405b613",
+  "snapshotHash": "sha256:b6cca52e76685c290f5d3537fc0572db53dee93ba55a94b743811356dc5ab036",
+  "approvalScope": {
+    "candidateRuleIds": [
+      "eqdir-heavy-car-bottom-v1",
+      "eqdir-wear-plate-quench-temper-line-v2",
+      "eqdir-carbon-steel-coil-bell-batch-v2",
+      "eqdir-long-products-roller-thermal-v2",
+      "eqdir-wire-coil-bell-v1",
+      "eqdir-fastener-mesh-quench-temper-v2"
+    ],
+    "candidatePairKeys": [
+      "carbon-steel-coil|coil-professional-line-review|coil-annealing",
+      "hex-nuts|fastener-quench-temper|quench-temper",
+      "high-strength-bolts|fastener-quench-temper|quench-temper",
+      "large-forged-flange|heavy-steel-normalize-temper-anneal|annealing",
+      "large-forged-flange|heavy-steel-normalize-temper-anneal|normalizing",
+      "large-forged-flange|heavy-steel-normalize-temper-anneal|tempering",
+      "large-forged-shaft|heavy-steel-normalize-temper-anneal|annealing",
+      "large-forged-shaft|heavy-steel-normalize-temper-anneal|normalizing",
+      "large-forged-shaft|heavy-steel-normalize-temper-anneal|tempering",
+      "large-steel-casting|heavy-steel-normalize-temper-anneal|annealing",
+      "large-steel-casting|heavy-steel-normalize-temper-anneal|normalizing",
+      "large-steel-casting|heavy-steel-normalize-temper-anneal|tempering",
+      "round-steel-bar|long-products-whole-furnace-treatment|annealing",
+      "round-steel-bar|long-products-whole-furnace-treatment|normalizing",
+      "seamless-steel-pipe|long-products-whole-furnace-treatment|annealing",
+      "seamless-steel-pipe|long-products-whole-furnace-treatment|normalizing",
+      "steel-wire-coil|coiled-wire-protective-anneal-review|recrystallization-annealing",
+      "steel-wire-coil|coiled-wire-protective-anneal-review|spheroidizing-annealing",
+      "wear-resistant-steel-plate|wear-plate-quench-review|quench-temper",
+      "welded-steel-pipe|long-products-whole-furnace-treatment|annealing",
+      "welded-steel-pipe|long-products-whole-furnace-treatment|normalizing",
+      "wire-rod-coil|coiled-wire-protective-anneal-review|recrystallization-annealing",
+      "wire-rod-coil|coiled-wire-protective-anneal-review|spheroidizing-annealing"
+    ],
+    "claimLabel": "行业常见设备方向",
+    "excludesCompanyCapabilityCommitment": true,
+    "excludesProductLinks": true,
+    "excludesUnverifiedNumericParameters": true
+  },
+  "approvalRecord": {
+    "approvedBy": null,
+    "approverRole": null,
+    "approvedAt": null,
+    "baselineVersion": null,
+    "snapshotHash": null,
+    "lockedAt": null
+  },
+  "candidateRules": [
+    {
+      "ruleId": "eqdir-heavy-car-bottom-v1",
+      "sourcePublicationEligibility": "internal_only",
+      "proposedPublicationEligibility": "conditional_public",
+      "internalExecutionStatus": "eligible",
+      "publicClaimScope": "conditional_engineering_direction",
+      "equipmentDirection": "台车式周期炉",
+      "evidenceStatus": "taxonomy_and_application_mapping_verified",
+      "taxonomyEvidenceRef": "tech-us-doe-process-heating-sourcebook3-2015",
+      "applicationMappingEvidenceRef": "candidate-appmap-heavy-car-bottom",
+      "requiredConditions": "大型钢铸件或锻件；整件退火、正火或单独回火；批次生产；移动炉床承载；装载外形、重量、重心、支撑和上下料路径均经服务端确认兼容",
+      "directSupport": "Surface Combustion官方资料直接支持台车式批次炉、移动炉床承载，以及铸件/锻件/轴类的退火、正火和回火应用。",
+      "engineeringDerivation": "将工件属于大型钢铸锻件、工艺为整件热处理、批次运行和服务端工程兼容性结合，条件推导为台车式周期炉。",
+      "unverifiedCriticalAssumptions": [],
+      "engineeringGate": "规则中的关键假设已转为必须由服务端重新计算且明确为true的工程谓词；任一项为unknown仅显示条件候选，为false进入工程复核。",
+      "customerNote": "需继续确认：材质和牌号、有效装载空间、单件与工装重量、重心、支撑跨距、上下料路径。",
+      "riskLevel": "中",
+      "recommendation": "建议纳入首版候选包，等待负责人一次性批准",
+      "selectedPairs": [
+        {
+          "pairKey": "large-forged-flange|heavy-steel-normalize-temper-anneal|normalizing",
+          "routeId": "heavy-steel-normalize-temper-anneal",
+          "workpieceId": "large-forged-flange",
+          "workpieceName": "大型法兰",
+          "categoryId": "heavy-cast-forged",
+          "categoryName": "铸锻重件",
+          "processPurposeId": "normalizing",
+          "processPurposeName": "正火",
+          "evidenceStatus": "taxonomy_and_application_mapping_verified",
+          "evidenceRefs": [
+            "tech-us-doe-process-heating-sourcebook3-2015",
+            "candidate-appmap-heavy-car-bottom"
+          ]
+        },
+        {
+          "pairKey": "large-forged-flange|heavy-steel-normalize-temper-anneal|tempering",
+          "routeId": "heavy-steel-normalize-temper-anneal",
+          "workpieceId": "large-forged-flange",
+          "workpieceName": "大型法兰",
+          "categoryId": "heavy-cast-forged",
+          "categoryName": "铸锻重件",
+          "processPurposeId": "tempering",
+          "processPurposeName": "回火",
+          "evidenceStatus": "taxonomy_and_application_mapping_verified",
+          "evidenceRefs": [
+            "tech-us-doe-process-heating-sourcebook3-2015",
+            "candidate-appmap-heavy-car-bottom"
+          ]
+        },
+        {
+          "pairKey": "large-forged-flange|heavy-steel-normalize-temper-anneal|annealing",
+          "routeId": "heavy-steel-normalize-temper-anneal",
+          "workpieceId": "large-forged-flange",
+          "workpieceName": "大型法兰",
+          "categoryId": "heavy-cast-forged",
+          "categoryName": "铸锻重件",
+          "processPurposeId": "annealing",
+          "processPurposeName": "退火",
+          "evidenceStatus": "taxonomy_and_application_mapping_verified",
+          "evidenceRefs": [
+            "tech-us-doe-process-heating-sourcebook3-2015",
+            "candidate-appmap-heavy-car-bottom"
+          ]
+        },
+        {
+          "pairKey": "large-forged-shaft|heavy-steel-normalize-temper-anneal|normalizing",
+          "routeId": "heavy-steel-normalize-temper-anneal",
+          "workpieceId": "large-forged-shaft",
+          "workpieceName": "大型轴类锻件",
+          "categoryId": "heavy-cast-forged",
+          "categoryName": "铸锻重件",
+          "processPurposeId": "normalizing",
+          "processPurposeName": "正火",
+          "evidenceStatus": "taxonomy_and_application_mapping_verified",
+          "evidenceRefs": [
+            "tech-us-doe-process-heating-sourcebook3-2015",
+            "candidate-appmap-heavy-car-bottom"
+          ]
+        },
+        {
+          "pairKey": "large-forged-shaft|heavy-steel-normalize-temper-anneal|tempering",
+          "routeId": "heavy-steel-normalize-temper-anneal",
+          "workpieceId": "large-forged-shaft",
+          "workpieceName": "大型轴类锻件",
+          "categoryId": "heavy-cast-forged",
+          "categoryName": "铸锻重件",
+          "processPurposeId": "tempering",
+          "processPurposeName": "回火",
+          "evidenceStatus": "taxonomy_and_application_mapping_verified",
+          "evidenceRefs": [
+            "tech-us-doe-process-heating-sourcebook3-2015",
+            "candidate-appmap-heavy-car-bottom"
+          ]
+        },
+        {
+          "pairKey": "large-forged-shaft|heavy-steel-normalize-temper-anneal|annealing",
+          "routeId": "heavy-steel-normalize-temper-anneal",
+          "workpieceId": "large-forged-shaft",
+          "workpieceName": "大型轴类锻件",
+          "categoryId": "heavy-cast-forged",
+          "categoryName": "铸锻重件",
+          "processPurposeId": "annealing",
+          "processPurposeName": "退火",
+          "evidenceStatus": "taxonomy_and_application_mapping_verified",
+          "evidenceRefs": [
+            "tech-us-doe-process-heating-sourcebook3-2015",
+            "candidate-appmap-heavy-car-bottom"
+          ]
+        },
+        {
+          "pairKey": "large-steel-casting|heavy-steel-normalize-temper-anneal|normalizing",
+          "routeId": "heavy-steel-normalize-temper-anneal",
+          "workpieceId": "large-steel-casting",
+          "workpieceName": "大型铸钢件",
+          "categoryId": "heavy-cast-forged",
+          "categoryName": "铸锻重件",
+          "processPurposeId": "normalizing",
+          "processPurposeName": "正火",
+          "evidenceStatus": "taxonomy_and_application_mapping_verified",
+          "evidenceRefs": [
+            "tech-us-doe-process-heating-sourcebook3-2015",
+            "candidate-appmap-heavy-car-bottom"
+          ]
+        },
+        {
+          "pairKey": "large-steel-casting|heavy-steel-normalize-temper-anneal|tempering",
+          "routeId": "heavy-steel-normalize-temper-anneal",
+          "workpieceId": "large-steel-casting",
+          "workpieceName": "大型铸钢件",
+          "categoryId": "heavy-cast-forged",
+          "categoryName": "铸锻重件",
+          "processPurposeId": "tempering",
+          "processPurposeName": "回火",
+          "evidenceStatus": "taxonomy_and_application_mapping_verified",
+          "evidenceRefs": [
+            "tech-us-doe-process-heating-sourcebook3-2015",
+            "candidate-appmap-heavy-car-bottom"
+          ]
+        },
+        {
+          "pairKey": "large-steel-casting|heavy-steel-normalize-temper-anneal|annealing",
+          "routeId": "heavy-steel-normalize-temper-anneal",
+          "workpieceId": "large-steel-casting",
+          "workpieceName": "大型铸钢件",
+          "categoryId": "heavy-cast-forged",
+          "categoryName": "铸锻重件",
+          "processPurposeId": "annealing",
+          "processPurposeName": "退火",
+          "evidenceStatus": "taxonomy_and_application_mapping_verified",
+          "evidenceRefs": [
+            "tech-us-doe-process-heating-sourcebook3-2015",
+            "candidate-appmap-heavy-car-bottom"
+          ]
+        }
+      ],
+      "excludedPairs": [
+        {
+          "pairKey": "large-die-block-forging|heavy-steel-normalize-temper-anneal|normalizing",
+          "reason": "大型模块锻件属于本批明确排除的模具专项。"
+        },
+        {
+          "pairKey": "large-die-block-forging|heavy-steel-normalize-temper-anneal|tempering",
+          "reason": "大型模块锻件属于本批明确排除的模具专项。"
+        },
+        {
+          "pairKey": "large-die-block-forging|heavy-steel-normalize-temper-anneal|annealing",
+          "reason": "大型模块锻件属于本批明确排除的模具专项。"
+        }
+      ],
+      "publicCopy": {
+        "conditional_preview": "如果工件和工艺符合本路线，且大型钢铸件或锻件；整件退火、正火或单独回火；批次生产；移动炉床承载；装载外形、重量、重心、支撑和上下料路径均经服务端确认兼容，行业常见设备方向可考虑“台车式周期炉”。仍需工程复核，不构成最终选型或苏能供货承诺。",
+        "matched_direction": "根据已确认的工件、处理目的和工程兼容性条件，行业常见设备方向为“台车式周期炉”。仍需确认：材质和牌号、有效装载空间、单件与工装重量、重心、支撑跨距、上下料路径。该结果不代表苏能已确认可提供，也不是最终选型。",
+        "engineering_review": "当前输入存在不兼容项，或装载、支撑、上下料、工艺链仍有关键条件待复核，暂不形成设备方向。请补充或复核：材质和牌号、有效装载空间、单件与工装重量、重心、支撑跨距、上下料路径。"
+      }
+    },
+    {
+      "ruleId": "eqdir-wear-plate-quench-temper-line-v2",
+      "sourcePublicationEligibility": "internal_only",
+      "proposedPublicationEligibility": "conditional_public",
+      "internalExecutionStatus": "eligible",
+      "publicClaimScope": "process_system_direction",
+      "equipmentDirection": "辊底式连续调质热处理线",
+      "evidenceStatus": "taxonomy_and_application_mapping_verified",
+      "taxonomyEvidenceRef": "tech-us-doe-process-heating-sourcebook3-2015",
+      "applicationMappingEvidenceRef": "candidate-appmap-wear-plate-quench-temper",
+      "requiredConditions": "耐磨钢板整板调质；生产条件支持连续处理；奥氏体化、转移、淬火、回火和最终冷却阶段完整；板形、辊道支撑和淬火转移经服务端确认兼容",
+      "directSupport": "Tenova LOI官方技术手册直接将耐磨钢厚板与奥氏体化、淬火、回火连续调质线对应。",
+      "engineeringDerivation": "以耐磨板工件、完整调质工艺链、连续生产决策和板形/转移兼容性为条件，推导辊底式连续调质线。",
+      "unverifiedCriticalAssumptions": [],
+      "engineeringGate": "规则中的关键假设已转为必须由服务端重新计算且明确为true的工程谓词；任一项为unknown仅显示条件候选，为false进入工程复核。",
+      "customerNote": "需继续确认：钢种与供货状态、板尺与板厚、板形目标、淬火介质与冷却要求、产能和换型频率。",
+      "riskLevel": "中高",
+      "recommendation": "建议纳入首版候选包，等待负责人一次性批准",
+      "selectedPairs": [
+        {
+          "pairKey": "wear-resistant-steel-plate|wear-plate-quench-review|quench-temper",
+          "routeId": "wear-plate-quench-review",
+          "workpieceId": "wear-resistant-steel-plate",
+          "workpieceName": "耐磨钢板",
+          "categoryId": "plate-strip-coil",
+          "categoryName": "板带卷材",
+          "processPurposeId": "quench-temper",
+          "processPurposeName": "淬火与回火",
+          "evidenceStatus": "taxonomy_and_application_mapping_verified",
+          "evidenceRefs": [
+            "tech-us-doe-process-heating-sourcebook3-2015",
+            "candidate-appmap-wear-plate-quench-temper"
+          ]
+        }
+      ],
+      "excludedPairs": [],
+      "publicCopy": {
+        "conditional_preview": "如果工件和工艺符合本路线，且耐磨钢板整板调质；生产条件支持连续处理；奥氏体化、转移、淬火、回火和最终冷却阶段完整；板形、辊道支撑和淬火转移经服务端确认兼容，行业常见设备方向可考虑“辊底式连续调质热处理线”。仍需工程复核，不构成最终选型或苏能供货承诺。",
+        "matched_direction": "根据已确认的工件、处理目的和工程兼容性条件，行业常见设备方向为“辊底式连续调质热处理线”。仍需确认：钢种与供货状态、板尺与板厚、板形目标、淬火介质与冷却要求、产能和换型频率。该结果不代表苏能已确认可提供，也不是最终选型。",
+        "engineering_review": "当前输入存在不兼容项，或装载、支撑、上下料、工艺链仍有关键条件待复核，暂不形成设备方向。请补充或复核：钢种与供货状态、板尺与板厚、板形目标、淬火介质与冷却要求、产能和换型频率。"
+      }
+    },
+    {
+      "ruleId": "eqdir-carbon-steel-coil-bell-batch-v2",
+      "sourcePublicationEligibility": "internal_only",
+      "proposedPublicationEligibility": "conditional_public",
+      "internalExecutionStatus": "eligible",
+      "publicClaimScope": "conditional_engineering_direction",
+      "equipmentDirection": "罩式周期炉",
+      "evidenceStatus": "taxonomy_and_application_mapping_verified",
+      "taxonomyEvidenceRef": "tech-us-doe-process-heating-sourcebook3-2015",
+      "applicationMappingEvidenceRef": "candidate-appmap-carbon-steel-coil-bell",
+      "requiredConditions": "碳钢带卷成卷退火；成卷批次装料；卷材堆叠、炉内循环路径、表面目标和气氛要求经工程确认",
+      "directSupport": "EBNER官方资料直接支持碳钢带卷使用罩式退火设备进行成卷退火。",
+      "engineeringDerivation": "将碳钢带卷、成卷退火、批次生产和卷材支撑/循环兼容性结合，推导罩式周期炉。",
+      "unverifiedCriticalAssumptions": [],
+      "engineeringGate": "规则中的关键假设已转为必须由服务端重新计算且明确为true的工程谓词；任一项为unknown仅显示条件候选，为false进入工程复核。",
+      "customerNote": "需继续确认：材料牌号、带宽、卷径、卷重、堆叠方式、表面质量和气氛要求。",
+      "riskLevel": "中",
+      "recommendation": "建议纳入首版候选包，等待负责人一次性批准",
+      "selectedPairs": [
+        {
+          "pairKey": "carbon-steel-coil|coil-professional-line-review|coil-annealing",
+          "routeId": "coil-professional-line-review",
+          "workpieceId": "carbon-steel-coil",
+          "workpieceName": "碳钢卷",
+          "categoryId": "plate-strip-coil",
+          "categoryName": "板带卷材",
+          "processPurposeId": "coil-annealing",
+          "processPurposeName": "成卷退火",
+          "evidenceStatus": "taxonomy_and_application_mapping_verified",
+          "evidenceRefs": [
+            "tech-us-doe-process-heating-sourcebook3-2015",
+            "candidate-appmap-carbon-steel-coil-bell"
+          ]
+        }
+      ],
+      "excludedPairs": [],
+      "publicCopy": {
+        "conditional_preview": "如果工件和工艺符合本路线，且碳钢带卷成卷退火；成卷批次装料；卷材堆叠、炉内循环路径、表面目标和气氛要求经工程确认，行业常见设备方向可考虑“罩式周期炉”。仍需工程复核，不构成最终选型或苏能供货承诺。",
+        "matched_direction": "根据已确认的工件、处理目的和工程兼容性条件，行业常见设备方向为“罩式周期炉”。仍需确认：材料牌号、带宽、卷径、卷重、堆叠方式、表面质量和气氛要求。该结果不代表苏能已确认可提供，也不是最终选型。",
+        "engineering_review": "当前输入存在不兼容项，或装载、支撑、上下料、工艺链仍有关键条件待复核，暂不形成设备方向。请补充或复核：材料牌号、带宽、卷径、卷重、堆叠方式、表面质量和气氛要求。"
+      }
+    },
+    {
+      "ruleId": "eqdir-long-products-roller-thermal-v2",
+      "sourcePublicationEligibility": "internal_only",
+      "proposedPublicationEligibility": "conditional_public",
+      "internalExecutionStatus": "eligible",
+      "publicClaimScope": "conditional_engineering_direction",
+      "equipmentDirection": "辊底式连续热处理炉/线",
+      "evidenceStatus": "taxonomy_and_application_mapping_verified",
+      "taxonomyEvidenceRef": "tech-us-doe-process-heating-sourcebook3-2015",
+      "applicationMappingEvidenceRef": "candidate-appmap-long-products-roller-thermal",
+      "requiredConditions": "无缝钢管、焊接钢管或圆钢棒整材退火/正火；产能、品种和装料连续性共同支持连续生产；辊道支撑、直线度和装载尺寸经服务端确认兼容",
+      "directSupport": "Tenova官方资料直接支持钢管、棒材的连续辊底式热处理，并列出退火和正火工艺。",
+      "engineeringDerivation": "以整管/整棒、退火或正火、连续运行决策、辊道支撑和直线度兼容性为条件，推导辊底式连续热处理炉/线。",
+      "unverifiedCriticalAssumptions": [],
+      "engineeringGate": "规则中的关键假设已转为必须由服务端重新计算且明确为true的工程谓词；任一项为unknown仅显示条件候选，为false进入工程复核。",
+      "customerNote": "需继续确认：材质、截面、长度和重量、直线度或变形要求、批量、产能、换型频率和上下料连续性。",
+      "riskLevel": "中",
+      "recommendation": "建议纳入首版候选包，等待负责人一次性批准",
+      "selectedPairs": [
+        {
+          "pairKey": "seamless-steel-pipe|long-products-whole-furnace-treatment|normalizing",
+          "routeId": "long-products-whole-furnace-treatment",
+          "workpieceId": "seamless-steel-pipe",
+          "workpieceName": "无缝钢管",
+          "categoryId": "pipe-bar-wire",
+          "categoryName": "管棒线材",
+          "processPurposeId": "normalizing",
+          "processPurposeName": "正火",
+          "evidenceStatus": "taxonomy_and_application_mapping_verified",
+          "evidenceRefs": [
+            "tech-us-doe-process-heating-sourcebook3-2015",
+            "candidate-appmap-long-products-roller-thermal"
+          ]
+        },
+        {
+          "pairKey": "seamless-steel-pipe|long-products-whole-furnace-treatment|annealing",
+          "routeId": "long-products-whole-furnace-treatment",
+          "workpieceId": "seamless-steel-pipe",
+          "workpieceName": "无缝钢管",
+          "categoryId": "pipe-bar-wire",
+          "categoryName": "管棒线材",
+          "processPurposeId": "annealing",
+          "processPurposeName": "退火",
+          "evidenceStatus": "taxonomy_and_application_mapping_verified",
+          "evidenceRefs": [
+            "tech-us-doe-process-heating-sourcebook3-2015",
+            "candidate-appmap-long-products-roller-thermal"
+          ]
+        },
+        {
+          "pairKey": "welded-steel-pipe|long-products-whole-furnace-treatment|normalizing",
+          "routeId": "long-products-whole-furnace-treatment",
+          "workpieceId": "welded-steel-pipe",
+          "workpieceName": "焊接钢管",
+          "categoryId": "pipe-bar-wire",
+          "categoryName": "管棒线材",
+          "processPurposeId": "normalizing",
+          "processPurposeName": "正火",
+          "evidenceStatus": "taxonomy_and_application_mapping_verified",
+          "evidenceRefs": [
+            "tech-us-doe-process-heating-sourcebook3-2015",
+            "candidate-appmap-long-products-roller-thermal"
+          ]
+        },
+        {
+          "pairKey": "welded-steel-pipe|long-products-whole-furnace-treatment|annealing",
+          "routeId": "long-products-whole-furnace-treatment",
+          "workpieceId": "welded-steel-pipe",
+          "workpieceName": "焊接钢管",
+          "categoryId": "pipe-bar-wire",
+          "categoryName": "管棒线材",
+          "processPurposeId": "annealing",
+          "processPurposeName": "退火",
+          "evidenceStatus": "taxonomy_and_application_mapping_verified",
+          "evidenceRefs": [
+            "tech-us-doe-process-heating-sourcebook3-2015",
+            "candidate-appmap-long-products-roller-thermal"
+          ]
+        },
+        {
+          "pairKey": "round-steel-bar|long-products-whole-furnace-treatment|normalizing",
+          "routeId": "long-products-whole-furnace-treatment",
+          "workpieceId": "round-steel-bar",
+          "workpieceName": "圆钢 / 棒材",
+          "categoryId": "pipe-bar-wire",
+          "categoryName": "管棒线材",
+          "processPurposeId": "normalizing",
+          "processPurposeName": "正火",
+          "evidenceStatus": "taxonomy_and_application_mapping_verified",
+          "evidenceRefs": [
+            "tech-us-doe-process-heating-sourcebook3-2015",
+            "candidate-appmap-long-products-roller-thermal"
+          ]
+        },
+        {
+          "pairKey": "round-steel-bar|long-products-whole-furnace-treatment|annealing",
+          "routeId": "long-products-whole-furnace-treatment",
+          "workpieceId": "round-steel-bar",
+          "workpieceName": "圆钢 / 棒材",
+          "categoryId": "pipe-bar-wire",
+          "categoryName": "管棒线材",
+          "processPurposeId": "annealing",
+          "processPurposeName": "退火",
+          "evidenceStatus": "taxonomy_and_application_mapping_verified",
+          "evidenceRefs": [
+            "tech-us-doe-process-heating-sourcebook3-2015",
+            "candidate-appmap-long-products-roller-thermal"
+          ]
+        }
+      ],
+      "excludedPairs": [
+        {
+          "pairKey": "structural-section-steel|long-products-whole-furnace-treatment|normalizing",
+          "reason": "型钢pair没有被本次官方应用资料直接覆盖，继续内部使用。"
+        },
+        {
+          "pairKey": "structural-section-steel|long-products-whole-furnace-treatment|annealing",
+          "reason": "型钢pair没有被本次官方应用资料直接覆盖，继续内部使用。"
+        }
+      ],
+      "publicCopy": {
+        "conditional_preview": "如果工件和工艺符合本路线，且无缝钢管、焊接钢管或圆钢棒整材退火/正火；产能、品种和装料连续性共同支持连续生产；辊道支撑、直线度和装载尺寸经服务端确认兼容，行业常见设备方向可考虑“辊底式连续热处理炉/线”。仍需工程复核，不构成最终选型或苏能供货承诺。",
+        "matched_direction": "根据已确认的工件、处理目的和工程兼容性条件，行业常见设备方向为“辊底式连续热处理炉/线”。仍需确认：材质、截面、长度和重量、直线度或变形要求、批量、产能、换型频率和上下料连续性。该结果不代表苏能已确认可提供，也不是最终选型。",
+        "engineering_review": "当前输入存在不兼容项，或装载、支撑、上下料、工艺链仍有关键条件待复核，暂不形成设备方向。请补充或复核：材质、截面、长度和重量、直线度或变形要求、批量、产能、换型频率和上下料连续性。"
+      }
+    },
+    {
+      "ruleId": "eqdir-wire-coil-bell-v1",
+      "sourcePublicationEligibility": "internal_only",
+      "proposedPublicationEligibility": "conditional_public",
+      "internalExecutionStatus": "eligible",
+      "publicClaimScope": "conditional_engineering_direction",
+      "equipmentDirection": "罩式周期炉",
+      "evidenceStatus": "taxonomy_and_application_mapping_verified",
+      "taxonomyEvidenceRef": "tech-us-doe-process-heating-sourcebook3-2015",
+      "applicationMappingEvidenceRef": "candidate-appmap-wire-coil-bell",
+      "requiredConditions": "盘条卷或钢丝卷成卷球化/再结晶退火；批次装料；卷材堆叠、炉内循环、气氛和冷却边界经工程确认",
+      "directSupport": "EBNER官方资料直接支持钢丝卷的罩式退火，并明确列出球化和再结晶退火。",
+      "engineeringDerivation": "将成卷盘条/钢丝、球化或再结晶退火、批次生产和卷材堆叠/循环兼容性结合，推导罩式周期炉。",
+      "unverifiedCriticalAssumptions": [],
+      "engineeringGate": "规则中的关键假设已转为必须由服务端重新计算且明确为true的工程谓词；任一项为unknown仅显示条件候选，为false进入工程复核。",
+      "customerNote": "需继续确认：材料和线径、卷径与卷重、堆叠方式、表面与气氛要求、卷内外循环和冷却边界。",
+      "riskLevel": "中",
+      "recommendation": "建议纳入首版候选包，等待负责人一次性批准",
+      "selectedPairs": [
+        {
+          "pairKey": "wire-rod-coil|coiled-wire-protective-anneal-review|spheroidizing-annealing",
+          "routeId": "coiled-wire-protective-anneal-review",
+          "workpieceId": "wire-rod-coil",
+          "workpieceName": "盘条",
+          "categoryId": "pipe-bar-wire",
+          "categoryName": "管棒线材",
+          "processPurposeId": "spheroidizing-annealing",
+          "processPurposeName": "球化退火",
+          "evidenceStatus": "taxonomy_and_application_mapping_verified",
+          "evidenceRefs": [
+            "tech-us-doe-process-heating-sourcebook3-2015",
+            "candidate-appmap-wire-coil-bell"
+          ]
+        },
+        {
+          "pairKey": "wire-rod-coil|coiled-wire-protective-anneal-review|recrystallization-annealing",
+          "routeId": "coiled-wire-protective-anneal-review",
+          "workpieceId": "wire-rod-coil",
+          "workpieceName": "盘条",
+          "categoryId": "pipe-bar-wire",
+          "categoryName": "管棒线材",
+          "processPurposeId": "recrystallization-annealing",
+          "processPurposeName": "再结晶退火",
+          "evidenceStatus": "taxonomy_and_application_mapping_verified",
+          "evidenceRefs": [
+            "tech-us-doe-process-heating-sourcebook3-2015",
+            "candidate-appmap-wire-coil-bell"
+          ]
+        },
+        {
+          "pairKey": "steel-wire-coil|coiled-wire-protective-anneal-review|spheroidizing-annealing",
+          "routeId": "coiled-wire-protective-anneal-review",
+          "workpieceId": "steel-wire-coil",
+          "workpieceName": "钢丝卷",
+          "categoryId": "pipe-bar-wire",
+          "categoryName": "管棒线材",
+          "processPurposeId": "spheroidizing-annealing",
+          "processPurposeName": "球化退火",
+          "evidenceStatus": "taxonomy_and_application_mapping_verified",
+          "evidenceRefs": [
+            "tech-us-doe-process-heating-sourcebook3-2015",
+            "candidate-appmap-wire-coil-bell"
+          ]
+        },
+        {
+          "pairKey": "steel-wire-coil|coiled-wire-protective-anneal-review|recrystallization-annealing",
+          "routeId": "coiled-wire-protective-anneal-review",
+          "workpieceId": "steel-wire-coil",
+          "workpieceName": "钢丝卷",
+          "categoryId": "pipe-bar-wire",
+          "categoryName": "管棒线材",
+          "processPurposeId": "recrystallization-annealing",
+          "processPurposeName": "再结晶退火",
+          "evidenceStatus": "taxonomy_and_application_mapping_verified",
+          "evidenceRefs": [
+            "tech-us-doe-process-heating-sourcebook3-2015",
+            "candidate-appmap-wire-coil-bell"
+          ]
+        }
+      ],
+      "excludedPairs": [
+        {
+          "pairKey": "wire-rod-coil|coiled-wire-protective-anneal-review|stress-relief",
+          "reason": "去应力退火pair未被本次官方应用资料直接覆盖。"
+        },
+        {
+          "pairKey": "steel-wire-coil|coiled-wire-protective-anneal-review|stress-relief",
+          "reason": "去应力退火pair未被本次官方应用资料直接覆盖。"
+        }
+      ],
+      "publicCopy": {
+        "conditional_preview": "如果工件和工艺符合本路线，且盘条卷或钢丝卷成卷球化/再结晶退火；批次装料；卷材堆叠、炉内循环、气氛和冷却边界经工程确认，行业常见设备方向可考虑“罩式周期炉”。仍需工程复核，不构成最终选型或苏能供货承诺。",
+        "matched_direction": "根据已确认的工件、处理目的和工程兼容性条件，行业常见设备方向为“罩式周期炉”。仍需确认：材料和线径、卷径与卷重、堆叠方式、表面与气氛要求、卷内外循环和冷却边界。该结果不代表苏能已确认可提供，也不是最终选型。",
+        "engineering_review": "当前输入存在不兼容项，或装载、支撑、上下料、工艺链仍有关键条件待复核，暂不形成设备方向。请补充或复核：材料和线径、卷径与卷重、堆叠方式、表面与气氛要求、卷内外循环和冷却边界。"
+      }
+    },
+    {
+      "ruleId": "eqdir-fastener-mesh-quench-temper-v2",
+      "sourcePublicationEligibility": "internal_only",
+      "proposedPublicationEligibility": "conditional_public",
+      "internalExecutionStatus": "eligible",
+      "publicClaimScope": "process_system_direction",
+      "equipmentDirection": "网带式调质热处理线",
+      "evidenceStatus": "taxonomy_and_application_mapping_verified",
+      "taxonomyEvidenceRef": "tech-us-doe-process-heating-sourcebook3-2015",
+      "applicationMappingEvidenceRef": "candidate-appmap-fastener-mesh-quench-temper",
+      "requiredConditions": "高强螺栓或六角螺母整体调质；批量、产能和上料连续性支持连续生产；奥氏体化、转移、淬火、回火和最终冷却完整；形状、装料密度和淬火转移经服务端确认兼容",
+      "directSupport": "AFC-Holcroft官方资料直接将紧固件与连续网带式热处理线对应，并列出加热、淬火、清洗和回火工艺链。",
+      "engineeringDerivation": "以螺栓/螺母、完整调质工艺链、连续生产决策、网带承载和淬火转移兼容性为条件，推导网带式调质线。",
+      "unverifiedCriticalAssumptions": [],
+      "engineeringGate": "规则中的关键假设已转为必须由服务端重新计算且明确为true的工程谓词；任一项为unknown仅显示条件候选，为false进入工程复核。",
+      "customerNote": "需继续确认：材料和强度等级、规格与形状、装料密度与黏连风险、气氛、淬火与冷却要求、产能和换型频率。",
+      "riskLevel": "中高",
+      "recommendation": "建议纳入首版候选包，等待负责人一次性批准",
+      "selectedPairs": [
+        {
+          "pairKey": "high-strength-bolts|fastener-quench-temper|quench-temper",
+          "routeId": "fastener-quench-temper",
+          "workpieceId": "high-strength-bolts",
+          "workpieceName": "高强度螺栓",
+          "categoryId": "fasteners-batch",
+          "categoryName": "紧固批量件",
+          "processPurposeId": "quench-temper",
+          "processPurposeName": "淬火与回火",
+          "evidenceStatus": "taxonomy_and_application_mapping_verified",
+          "evidenceRefs": [
+            "tech-us-doe-process-heating-sourcebook3-2015",
+            "candidate-appmap-fastener-mesh-quench-temper"
+          ]
+        },
+        {
+          "pairKey": "hex-nuts|fastener-quench-temper|quench-temper",
+          "routeId": "fastener-quench-temper",
+          "workpieceId": "hex-nuts",
+          "workpieceName": "螺母",
+          "categoryId": "fasteners-batch",
+          "categoryName": "紧固批量件",
+          "processPurposeId": "quench-temper",
+          "processPurposeName": "淬火与回火",
+          "evidenceStatus": "taxonomy_and_application_mapping_verified",
+          "evidenceRefs": [
+            "tech-us-doe-process-heating-sourcebook3-2015",
+            "candidate-appmap-fastener-mesh-quench-temper"
+          ]
+        }
+      ],
+      "excludedPairs": [
+        {
+          "pairKey": "steel-pins|fastener-quench-temper|quench-temper",
+          "reason": "钢销不能仅凭名称等同为适合网带处理的紧固件，本批不入选。"
+        }
+      ],
+      "publicCopy": {
+        "conditional_preview": "如果工件和工艺符合本路线，且高强螺栓或六角螺母整体调质；批量、产能和上料连续性支持连续生产；奥氏体化、转移、淬火、回火和最终冷却完整；形状、装料密度和淬火转移经服务端确认兼容，行业常见设备方向可考虑“网带式调质热处理线”。仍需工程复核，不构成最终选型或苏能供货承诺。",
+        "matched_direction": "根据已确认的工件、处理目的和工程兼容性条件，行业常见设备方向为“网带式调质热处理线”。仍需确认：材料和强度等级、规格与形状、装料密度与黏连风险、气氛、淬火与冷却要求、产能和换型频率。该结果不代表苏能已确认可提供，也不是最终选型。",
+        "engineering_review": "当前输入存在不兼容项，或装载、支撑、上下料、工艺链仍有关键条件待复核，暂不形成设备方向。请补充或复核：材料和强度等级、规格与形状、装料密度与黏连风险、气氛、淬火与冷却要求、产能和换型频率。"
+      }
+    }
+  ],
+  "evidenceSnapshot": [
+    {
+      "evidenceId": "tech-us-doe-process-heating-sourcebook3-2015",
+      "standardNumber": "US DOE Process Heating Sourcebook, Third Edition",
+      "standardTitle": "Improving Process Heating System Performance: A Sourcebook for Industry",
+      "issuingBody": "U.S. Department of Energy",
+      "versionOrYear": "Third Edition, 2015",
+      "status": "current",
+      "evidenceRole": "primary_current",
+      "publishDate": null,
+      "effectiveDate": null,
+      "supersedes": [
+        "tech-us-doe-process-heating-sourcebook2-2007"
+      ],
+      "supersededBy": [],
+      "officialUrl": "https://www.energy.gov/sites/prod/files/2016/04/f30/Improving%20Process%20Heating%20System%20Performance%20A%20Sourcebook%20for%20Industry%20Third%20Edition_0.pdf",
+      "accessLevel": "full_text",
+      "applicability": "普通工业过程加热设备的批次与连续运行方式、物料输送方式和设备结构分类；只支持通用分类及定性约束，不直接证明某一具体工件必须采用某种设备，也不支持客户项目的温度、时间、载荷或尺寸数值。",
+      "clauseRefs": [
+        "Section 2 - Fuel-Based Process Heating Equipment Classification",
+        "Section 2 - Mode of Operation",
+        "Section 2 - Material Handling Systems"
+      ],
+      "pageRefs": [
+        "14-16"
+      ],
+      "verifiedAt": "2026-08-27",
+      "verificationMethod": "读取美国能源部官方第三版完整 PDF，核对设备分类表、运行方式和物料输送段落，并与第二版对应段落逐项比较",
+      "verificationStatus": "full_text_verified",
+      "supportedClaimLevels": [
+        "process_constraint",
+        "equipment_direction"
+      ],
+      "supportScope": [
+        "批次式与连续式运行方式的通用定义",
+        "输送带、辊道、台车、带材连续、立式装料和 bell top 等物料输送或设备结构的通用分类",
+        "设备方向可与已知工件条件和确定性工程规则结合推导，但不直接支持具体工件路线"
+      ],
+      "notes": "当前主要通用设备分类证据。第三版保留第二版所用的批次/连续、输送带或辊道、台车、连续带材、立式装料和 bell top 分类；主要变化为版式、措辞和“heating element”改为“heating device”并补充气体红外发射器，未删除本模块继续使用的通用分类内容。",
+      "evidenceType": "taxonomy_reference"
+    },
+    {
+      "evidenceId": "candidate-appmap-heavy-car-bottom",
+      "standardNumber": "官网产品技术资料",
+      "standardTitle": "Lift Cover, Tilt Top & Carbottom Furnaces",
+      "issuingBody": "Surface Combustion",
+      "versionOrYear": "官网当前页面（2026-08-27核验）",
+      "status": "current",
+      "evidenceRole": "verified_application_mapping",
+      "evidenceType": "application_mapping",
+      "publishDate": null,
+      "effectiveDate": null,
+      "replacedDate": null,
+      "transitionEndDate": null,
+      "successorEvidenceId": null,
+      "officialUrl": "https://www.surfacecombustion.com/product/lift-cover-tilt-top-carbottom-furnaces/",
+      "accessLevel": "full_text",
+      "verificationStatus": "full_text_verified",
+      "clauseRefs": [
+        "Carbottom furnace design and batch operation",
+        "Processes: Annealing, Normalizing, Tempering",
+        "Parts: Castings, Forgings, Shafts"
+      ],
+      "pageRefs": [],
+      "supportedClaimLevels": [
+        "equipment_direction"
+      ],
+      "supportScope": [
+        "台车式批次设备对大型、重载工件的移动炉床承载分类",
+        "铸件、锻件和轴类的退火、正火、单独回火应用映射"
+      ],
+      "notes": "公开方向仍必须以装载外形、重量、重心、支撑和上下料路径由服务端明确核对为true为前提。",
+      "verifiedAt": "2026-08-27",
+      "verificationMethod": "逐段核对官方产品页的批次式台车承载结构、退火/正火/回火工艺和铸件/锻件/轴类应用范围",
+      "applicability": "仅用于大型钢铸件和锻件在批次、移动炉床承载工况下的行业应用映射；不支持苏能制造能力、装载上限、炉温或时间数值。"
+    },
+    {
+      "evidenceId": "candidate-appmap-wear-plate-quench-temper",
+      "standardNumber": "官网技术手册",
+      "standardTitle": "LOI Thermprocess Image Brochure - Plate Heat Treatment",
+      "issuingBody": "Tenova LOI Thermprocess",
+      "versionOrYear": "2024",
+      "status": "current",
+      "evidenceRole": "verified_application_mapping",
+      "evidenceType": "application_mapping",
+      "publishDate": null,
+      "effectiveDate": null,
+      "replacedDate": null,
+      "transitionEndDate": null,
+      "successorEvidenceId": null,
+      "officialUrl": "https://loi.tenova.com/sites/default/files/files/files_to_zip/2024/LOI_Image_Brochure_EN.pdf",
+      "accessLevel": "full_text",
+      "verificationStatus": "full_text_verified",
+      "clauseRefs": [
+        "Quenching and tempering lines for heavy plates",
+        "Abrasion-resistant steel"
+      ],
+      "pageRefs": [
+        "7"
+      ],
+      "supportedClaimLevels": [
+        "equipment_direction"
+      ],
+      "supportScope": [
+        "耐磨钢厚板与连续调质热处理线的应用映射",
+        "奥氏体化、淬火和回火的完整工艺链边界"
+      ],
+      "notes": "板形、辊道支撑、淬火转移和完整调质工艺链必须由服务端逐项核对。",
+      "verifiedAt": "2026-08-27",
+      "verificationMethod": "核对官方PDF中厚板调质线的奥氏体化、淬火、回火工艺链和耐磨钢应用描述",
+      "applicability": "仅用于耐磨钢厚板的连续调质系统方向；不支持淬火介质、冷却速率、温度、节拍或苏能能力数值。"
+    },
+    {
+      "evidenceId": "candidate-appmap-carbon-steel-coil-bell",
+      "standardNumber": "官网应用技术资料",
+      "standardTitle": "Bell annealer for steel strip coils",
+      "issuingBody": "EBNER Industrieofenbau",
+      "versionOrYear": "官网当前页面（2026-08-27核验）",
+      "status": "current",
+      "evidenceRole": "verified_application_mapping",
+      "evidenceType": "application_mapping",
+      "publishDate": null,
+      "effectiveDate": null,
+      "replacedDate": null,
+      "transitionEndDate": null,
+      "successorEvidenceId": null,
+      "officialUrl": "https://www.ebner.cc/en/bell-annealer-steel-strip-en",
+      "accessLevel": "full_text",
+      "verificationStatus": "full_text_verified",
+      "clauseRefs": [
+        "Bell annealer for steel strip coils",
+        "Carbon steel applications"
+      ],
+      "pageRefs": [],
+      "supportedClaimLevels": [
+        "equipment_direction"
+      ],
+      "supportScope": [
+        "碳钢带卷成卷批次退火与罩式退火设备的应用映射"
+      ],
+      "notes": "卷重、堆叠、循环路径、表面目标和气氛要求仍需工程确认。",
+      "verifiedAt": "2026-08-27",
+      "verificationMethod": "核对官方页面对钢带卷、碳钢和罩式退火的直接应用描述",
+      "applicability": "仅用于碳钢带卷成卷退火；不自动延伸到铝卷、展开连续处理、特定气氛数值或苏能能力。"
+    },
+    {
+      "evidenceId": "candidate-appmap-long-products-roller-thermal",
+      "standardNumber": "官网应用技术资料",
+      "standardTitle": "Roller Hearth Furnace for Pipe & Tube",
+      "issuingBody": "Tenova LOI Thermprocess",
+      "versionOrYear": "官网当前页面（2026-08-27核验）",
+      "status": "current",
+      "evidenceRole": "verified_application_mapping",
+      "evidenceType": "application_mapping",
+      "publishDate": null,
+      "effectiveDate": null,
+      "replacedDate": null,
+      "transitionEndDate": null,
+      "successorEvidenceId": null,
+      "officialUrl": "https://tenova.com/technologies/roller-hearth-furnace-pipe-tube",
+      "accessLevel": "full_text",
+      "verificationStatus": "full_text_verified",
+      "clauseRefs": [
+        "Continuous roller hearth plants for tubes and bars",
+        "Normalizing and annealing"
+      ],
+      "pageRefs": [],
+      "supportedClaimLevels": [
+        "equipment_direction"
+      ],
+      "supportScope": [
+        "无缝钢管、焊接钢管和圆钢棒的连续辊底式退火或正火应用映射"
+      ],
+      "notes": "辊道支撑、直线度、装载外形、节拍和换型条件必须明确。",
+      "verifiedAt": "2026-08-27",
+      "verificationMethod": "核对官方页面对钢管、棒材的连续辊底式处理和退火/正火工艺描述",
+      "applicability": "仅用于整管或整棒的连续退火/正火；不自动延伸到型钢、调质整线、线速度或苏能能力。"
+    },
+    {
+      "evidenceId": "candidate-appmap-wire-coil-bell",
+      "standardNumber": "官网应用技术资料",
+      "standardTitle": "Bell annealer for steel wire coils",
+      "issuingBody": "EBNER Industrieofenbau",
+      "versionOrYear": "官网当前页面（2026-08-27核验）",
+      "status": "current",
+      "evidenceRole": "verified_application_mapping",
+      "evidenceType": "application_mapping",
+      "publishDate": null,
+      "effectiveDate": null,
+      "replacedDate": null,
+      "transitionEndDate": null,
+      "successorEvidenceId": null,
+      "officialUrl": "https://www.ebner.cc/en/bell-annealer-for-steel-wire-en",
+      "accessLevel": "full_text",
+      "verificationStatus": "full_text_verified",
+      "clauseRefs": [
+        "Bell annealer for steel wire coils",
+        "Spheroidizing and recrystallizing"
+      ],
+      "pageRefs": [],
+      "supportedClaimLevels": [
+        "equipment_direction"
+      ],
+      "supportScope": [
+        "盘条卷或钢丝卷的罩式球化退火和再结晶退火应用映射"
+      ],
+      "notes": "卷重、堆叠、卷内外循环、气氛和冷却边界仍须工程确认。",
+      "verifiedAt": "2026-08-27",
+      "verificationMethod": "核对官方页面对钢丝卷、罩式退火、球化和再结晶退火的直接描述",
+      "applicability": "仅用于成卷钢丝或盘条的球化/再结晶退火；不包括该规则中尚无直接资料支持的去应力退火pair。"
+    },
+    {
+      "evidenceId": "candidate-appmap-fastener-mesh-quench-temper",
+      "standardNumber": "官网产品技术资料",
+      "standardTitle": "Mesh Belt Continuous Furnace",
+      "issuingBody": "AFC-Holcroft",
+      "versionOrYear": "官网当前页面（2026-08-27核验）",
+      "status": "current",
+      "evidenceRole": "verified_application_mapping",
+      "evidenceType": "application_mapping",
+      "publishDate": null,
+      "effectiveDate": null,
+      "replacedDate": null,
+      "transitionEndDate": null,
+      "successorEvidenceId": null,
+      "officialUrl": "https://www.afc-holcroft.com/systems-and-components/mesh-belt-continuous-furnace/",
+      "accessLevel": "full_text",
+      "verificationStatus": "full_text_verified",
+      "clauseRefs": [
+        "Typical applications: fasteners",
+        "Heating, quenching, washing and tempering"
+      ],
+      "pageRefs": [],
+      "supportedClaimLevels": [
+        "equipment_direction"
+      ],
+      "supportScope": [
+        "高强螺栓和六角螺母等紧固件的连续网带式调质整线应用映射"
+      ],
+      "notes": "黏连风险、堆积密度、气氛、淬火转移和完整调质工艺链必须明确。",
+      "verifiedAt": "2026-08-27",
+      "verificationMethod": "核对官方页面对紧固件、连续网带输送、淬火、清洗和回火整线的直接描述",
+      "applicability": "仅用于形状和装料适合网带连续处理的螺栓和螺母调质；不自动延伸到未明确类型的销件或链条零件。"
+    }
+  ],
+  "publicCopySnapshot": [
+    {
+      "ruleId": "eqdir-heavy-car-bottom-v1",
+      "equipmentDirection": "台车式周期炉",
+      "publicCopy": {
+        "conditional_preview": "如果工件和工艺符合本路线，且大型钢铸件或锻件；整件退火、正火或单独回火；批次生产；移动炉床承载；装载外形、重量、重心、支撑和上下料路径均经服务端确认兼容，行业常见设备方向可考虑“台车式周期炉”。仍需工程复核，不构成最终选型或苏能供货承诺。",
+        "matched_direction": "根据已确认的工件、处理目的和工程兼容性条件，行业常见设备方向为“台车式周期炉”。仍需确认：材质和牌号、有效装载空间、单件与工装重量、重心、支撑跨距、上下料路径。该结果不代表苏能已确认可提供，也不是最终选型。",
+        "engineering_review": "当前输入存在不兼容项，或装载、支撑、上下料、工艺链仍有关键条件待复核，暂不形成设备方向。请补充或复核：材质和牌号、有效装载空间、单件与工装重量、重心、支撑跨距、上下料路径。"
+      }
+    },
+    {
+      "ruleId": "eqdir-wear-plate-quench-temper-line-v2",
+      "equipmentDirection": "辊底式连续调质热处理线",
+      "publicCopy": {
+        "conditional_preview": "如果工件和工艺符合本路线，且耐磨钢板整板调质；生产条件支持连续处理；奥氏体化、转移、淬火、回火和最终冷却阶段完整；板形、辊道支撑和淬火转移经服务端确认兼容，行业常见设备方向可考虑“辊底式连续调质热处理线”。仍需工程复核，不构成最终选型或苏能供货承诺。",
+        "matched_direction": "根据已确认的工件、处理目的和工程兼容性条件，行业常见设备方向为“辊底式连续调质热处理线”。仍需确认：钢种与供货状态、板尺与板厚、板形目标、淬火介质与冷却要求、产能和换型频率。该结果不代表苏能已确认可提供，也不是最终选型。",
+        "engineering_review": "当前输入存在不兼容项，或装载、支撑、上下料、工艺链仍有关键条件待复核，暂不形成设备方向。请补充或复核：钢种与供货状态、板尺与板厚、板形目标、淬火介质与冷却要求、产能和换型频率。"
+      }
+    },
+    {
+      "ruleId": "eqdir-carbon-steel-coil-bell-batch-v2",
+      "equipmentDirection": "罩式周期炉",
+      "publicCopy": {
+        "conditional_preview": "如果工件和工艺符合本路线，且碳钢带卷成卷退火；成卷批次装料；卷材堆叠、炉内循环路径、表面目标和气氛要求经工程确认，行业常见设备方向可考虑“罩式周期炉”。仍需工程复核，不构成最终选型或苏能供货承诺。",
+        "matched_direction": "根据已确认的工件、处理目的和工程兼容性条件，行业常见设备方向为“罩式周期炉”。仍需确认：材料牌号、带宽、卷径、卷重、堆叠方式、表面质量和气氛要求。该结果不代表苏能已确认可提供，也不是最终选型。",
+        "engineering_review": "当前输入存在不兼容项，或装载、支撑、上下料、工艺链仍有关键条件待复核，暂不形成设备方向。请补充或复核：材料牌号、带宽、卷径、卷重、堆叠方式、表面质量和气氛要求。"
+      }
+    },
+    {
+      "ruleId": "eqdir-long-products-roller-thermal-v2",
+      "equipmentDirection": "辊底式连续热处理炉/线",
+      "publicCopy": {
+        "conditional_preview": "如果工件和工艺符合本路线，且无缝钢管、焊接钢管或圆钢棒整材退火/正火；产能、品种和装料连续性共同支持连续生产；辊道支撑、直线度和装载尺寸经服务端确认兼容，行业常见设备方向可考虑“辊底式连续热处理炉/线”。仍需工程复核，不构成最终选型或苏能供货承诺。",
+        "matched_direction": "根据已确认的工件、处理目的和工程兼容性条件，行业常见设备方向为“辊底式连续热处理炉/线”。仍需确认：材质、截面、长度和重量、直线度或变形要求、批量、产能、换型频率和上下料连续性。该结果不代表苏能已确认可提供，也不是最终选型。",
+        "engineering_review": "当前输入存在不兼容项，或装载、支撑、上下料、工艺链仍有关键条件待复核，暂不形成设备方向。请补充或复核：材质、截面、长度和重量、直线度或变形要求、批量、产能、换型频率和上下料连续性。"
+      }
+    },
+    {
+      "ruleId": "eqdir-wire-coil-bell-v1",
+      "equipmentDirection": "罩式周期炉",
+      "publicCopy": {
+        "conditional_preview": "如果工件和工艺符合本路线，且盘条卷或钢丝卷成卷球化/再结晶退火；批次装料；卷材堆叠、炉内循环、气氛和冷却边界经工程确认，行业常见设备方向可考虑“罩式周期炉”。仍需工程复核，不构成最终选型或苏能供货承诺。",
+        "matched_direction": "根据已确认的工件、处理目的和工程兼容性条件，行业常见设备方向为“罩式周期炉”。仍需确认：材料和线径、卷径与卷重、堆叠方式、表面与气氛要求、卷内外循环和冷却边界。该结果不代表苏能已确认可提供，也不是最终选型。",
+        "engineering_review": "当前输入存在不兼容项，或装载、支撑、上下料、工艺链仍有关键条件待复核，暂不形成设备方向。请补充或复核：材料和线径、卷径与卷重、堆叠方式、表面与气氛要求、卷内外循环和冷却边界。"
+      }
+    },
+    {
+      "ruleId": "eqdir-fastener-mesh-quench-temper-v2",
+      "equipmentDirection": "网带式调质热处理线",
+      "publicCopy": {
+        "conditional_preview": "如果工件和工艺符合本路线，且高强螺栓或六角螺母整体调质；批量、产能和上料连续性支持连续生产；奥氏体化、转移、淬火、回火和最终冷却完整；形状、装料密度和淬火转移经服务端确认兼容，行业常见设备方向可考虑“网带式调质热处理线”。仍需工程复核，不构成最终选型或苏能供货承诺。",
+        "matched_direction": "根据已确认的工件、处理目的和工程兼容性条件，行业常见设备方向为“网带式调质热处理线”。仍需确认：材料和强度等级、规格与形状、装料密度与黏连风险、气氛、淬火与冷却要求、产能和换型频率。该结果不代表苏能已确认可提供，也不是最终选型。",
+        "engineering_review": "当前输入存在不兼容项，或装载、支撑、上下料、工艺链仍有关键条件待复核，暂不形成设备方向。请补充或复核：材料和强度等级、规格与形状、装料密度与黏连风险、气氛、淬火与冷却要求、产能和换型频率。"
+      }
+    }
+  ],
+  "frozenFiles": [
+    {
+      "path": "data/workpiece-router/industry-direction-rules.json",
+      "sha256": "sha256:869d64ba0ed3b501642f714c3f94b810133589fa29b4ff12288a4d0d6f1d4d1c"
+    },
+    {
+      "path": "data/workpiece-router/process-routes.json",
+      "sha256": "sha256:b8be66d5fda9669862382157ff14fe07fd89c50c479a275890ed52d996294fa3"
+    },
+    {
+      "path": "data/workpiece-router/process-taxonomy.json",
+      "sha256": "sha256:cdc1543f05ce347464f78e40aac6b73e3b142570bfec8494de10d70c69bed53a"
+    },
+    {
+      "path": "data/workpiece-router/logic-unit-content-seed.json",
+      "sha256": "sha256:efb6fff6339ed832ce4ffc4325c48f3068ef3ee6451ff8fc93c490e374f99c63"
+    },
+    {
+      "path": "data/workpiece-router/industry-evidence-registry.json",
+      "sha256": "sha256:26d1c83038a2ccedb1ea7b96a6571adf1f2026934c16fda0a757450f201dde4b"
+    },
+    {
+      "path": "data/workpiece-router/industry-public-claim-templates.json",
+      "sha256": "sha256:18603fa7a74af71161e9525f27311fe9e71a56d94703073ab9b9117e72074e77"
+    },
+    {
+      "path": "data/workpiece-router/industry-public-label-mapping.json",
+      "sha256": "sha256:140488e23b12fa295c2a8b12fc5f38a6a7fe28c9f80656d8c1b74e0b8933acc2"
+    },
+    {
+      "path": "data/workpiece-router/industry-resolver-config.json",
+      "sha256": "sha256:80afee3645b7389a495db96faa582b6a2aba3c9f041abfef8e6e335b3418dbfe"
+    },
+    {
+      "path": "backend/src/modules/workpiece-router/engineering-resolver.ts",
+      "sha256": "sha256:5509bc926f0fc06b9b77612159f33012584dd21fb32ccbeeb157459b87d86b4a"
+    },
+    {
+      "path": "backend/src/modules/workpiece-router/workpiece-router.service.ts",
+      "sha256": "sha256:c45945d97670e9981dee812f1ae39a906f6992ebafbcf87147231605825fff96"
+    },
+    {
+      "path": "backend/src/modules/workpiece-router/workpiece-router.controller.ts",
+      "sha256": "sha256:9ad03ee981bf73e4802cdc60f934650297cc751314342044a095b4cb17a6a33e"
+    },
+    {
+      "path": "backend/src/modules/workpiece-router/dto/resolve-workpiece-router.dto.ts",
+      "sha256": "sha256:24664abca3e5c1e23cbf384b79bdad532e8de7b49cf56f2e9054214c16e8b752"
+    },
+    {
+      "path": "backend/src/modules/custom-requirement/custom-requirement.controller.ts",
+      "sha256": "sha256:c00ae8eaafde02bdd5963a6a3f74d99fd6e03249fcdcce75ecc299c111ccb424"
+    },
+    {
+      "path": "backend/src/modules/custom-requirement/custom-requirement.service.ts",
+      "sha256": "sha256:bc234cbe275591ab3718e5339c3414132d390b8a9821711ac35e12d6dd80df2e"
+    },
+    {
+      "path": "backend/src/modules/custom-requirement/dto/create-custom-requirement.dto.ts",
+      "sha256": "sha256:437e77ee615e8cfec7f9165ace85429f32257f1b65da13409e595466663ab292"
+    },
+    {
+      "path": "frontend/src/components/home/WorkpieceRouter.tsx",
+      "sha256": "sha256:53a24057d779e86b23703171094fe113092e95faaaee77b6d8ad9af46ff72cfc"
+    },
+    {
+      "path": "frontend/src/components/home/HomepageLeadForm.tsx",
+      "sha256": "sha256:3f4554d422a6a99d960ef7dd58fe2f68504515cc09b7dc42bec036306cd8bba7"
+    },
+    {
+      "path": "frontend/src/lib/api/workpiece-router.ts",
+      "sha256": "sha256:b5eda2c2d9a2f9e6bc72e0e20faa13d85dde9b9807305119b85b4d596a2a75e6"
+    },
+    {
+      "path": "frontend/src/lib/api/homepage-requirements.ts",
+      "sha256": "sha256:7fd12a6bf76922fc43f1f6195092a1b6b5e2f3d543052b829f685be0ab953b71"
+    },
+    {
+      "path": "backend/prisma/schema.prisma",
+      "sha256": "sha256:8613e2914ad79a0e18ea984f0083d6915a48237859819902951eaa98b888f044"
+    },
+    {
+      "path": "backend/prisma/migrations/20260827103000_workpiece_router_context/migration.sql",
+      "sha256": "sha256:6759ce61720a2bb1e56e0d588cd855fd36e728f21b746a0dff3cc9d5b02de8ab"
+    },
+    {
+      "path": "backend/src/modules/workpiece-router/engineering-resolver.spec.ts",
+      "sha256": "sha256:ed00bc53ea32e50522c8d0394f4a5693a7017f727dea1521fe39cd6a47eb58dd"
+    },
+    {
+      "path": "backend/src/modules/workpiece-router/batch2.5-candidate.spec.ts",
+      "sha256": "sha256:6db98f1ec4c93710877f339df1ebb8bd95a42aebb96c744b8e7a63da3e130dd5"
+    },
+    {
+      "path": "backend/src/modules/workpiece-router/workpiece-router.controller.spec.ts",
+      "sha256": "sha256:7d21278afe88668addbbab4c7014248b40c7bd28eea736e97671fbee07c5f512"
+    },
+    {
+      "path": "backend/src/modules/workpiece-router/workpiece-router.service.spec.ts",
+      "sha256": "sha256:95ff93c995b03945be53b83152ce929f4dcdfe65a4feee870973ca9161d7f7da"
+    },
+    {
+      "path": "backend/src/modules/custom-requirement/custom-requirement.service.spec.ts",
+      "sha256": "sha256:b020f58240740d052c2f659ea807c47ef5d4c55bdbd1ef62e49f74bf04d9cf06"
+    },
+    {
+      "path": "backend/src/modules/custom-requirement/custom-requirement.controller.spec.ts",
+      "sha256": "sha256:77172732fc4bd718cfe02c19eb28cd441ea6f8257297a02d9b310fa4883029ee"
+    },
+    {
+      "path": "backend/src/modules/custom-requirement/dto/create-custom-requirement.dto.spec.ts",
+      "sha256": "sha256:05c147afcaf2b9a8416fbb4fde82e1c2dcc097529cd19bdf929fa30c69f17eae"
+    },
+    {
+      "path": "backend/src/modules/custom-requirement/workpiece-context-migration.spec.ts",
+      "sha256": "sha256:2331650ca0cd100e4064b88ecc55e17c973d8393076d14645e7cb35c6d421023"
+    },
+    {
+      "path": "frontend/src/lib/workpiece-router-2.4a.spec.ts",
+      "sha256": "sha256:1937672d0acaef09fd2b9eb29c47c7e9bb3cb46e14e88be75bd9eb4d7053fa50"
+    },
+    {
+      "path": "frontend/src/lib/workpiece-router-data.spec.ts",
+      "sha256": "sha256:01e35b51a289d77f886db6cf57795d080fd774ecdf75f40d77e0b2d89493e2f2"
+    },
+    {
+      "path": "frontend/src/lib/api/homepage-requirements.spec.ts",
+      "sha256": "sha256:6d1ccb1e40abedb620e39503fdf21277537ac1171520bd78dbb7e833af3f81fd"
+    },
+    {
+      "path": "frontend/package.json",
+      "sha256": "sha256:e44fcbffe50be508434b178e710b55bda63ab2e831d264d48bd5e2c5276b9079"
+    },
+    {
+      "path": "frontend/playwright.integration.config.ts",
+      "sha256": "sha256:d8ebac1b2667ee865e476497eab2ebe39c92e9d473191e90ea6bb7db4cb48fe8"
+    },
+    {
+      "path": "frontend/tests/integration/workpiece-router-inquiry-chain.spec.ts",
+      "sha256": "sha256:ceae3e29217e3368e468baa9586d929acce328b4d49fdb49b6b5ce1841618f6b"
+    },
+    {
+      "path": "frontend/tests/visual/workpiece-router-batch2.4a.spec.ts",
+      "sha256": "sha256:5cc8c58a838880ee333c44b75491f8d32ac77d81bfa2237985676d509d8dbd19"
+    },
+    {
+      "path": "admin/src/pages/content/CustomRequirementPage.tsx",
+      "sha256": "sha256:22b6a5c70d2f17dc3512b06c0f5d0865884e2fdab379c8b0da20634268a98251"
+    },
+    {
+      "path": "admin/src/pages/content/CustomRequirementPage.spec.ts",
+      "sha256": "sha256:42cc273317c8024bcc142d35279263019cd16a02d9051b51a19c9645338da077"
+    },
+    {
+      "path": "scripts/validate-workpiece-router.mjs",
+      "sha256": "sha256:755fab71eac3cc4a9f535e22e5411321eb53ec6e2e941d9c32f647a426196dd2"
+    },
+    {
+      "path": "scripts/generate-workpiece-router-batch2.5.mjs",
+      "sha256": "sha256:42506ec04bcc51fa387ca82718f50f7c529178dfd22b456e478a780191ba6e19"
+    },
+    {
+      "path": "docs/independent-site-v2/database-migration-registry.md",
+      "sha256": "sha256:45da84ea307178ae519d0719ffd1bcf70a6a89ef6febba82c17bbb6bf2770c44"
+    }
+  ],
+  "allRuleSelectionStatus": [
+    {
+      "ruleId": "eqdir-wear-plate-quench-temper-line-v2",
+      "internalExecutionStatus": "eligible",
+      "publicationEligibility": "internal_only",
+      "allowedPairCount": 1,
+      "selectedPairCount": 1,
+      "excludedPairCount": 0,
+      "selectionStatus": "full_candidate",
+      "reason": "全部允许pair已进入候选包。"
+    },
+    {
+      "ruleId": "eqdir-aluminum-plate-solution-quench-v2",
+      "internalExecutionStatus": "blocked",
+      "publicationEligibility": "blocked",
+      "allowedPairCount": 1,
+      "selectedPairCount": 0,
+      "excludedPairCount": 1,
+      "selectionStatus": "not_selected",
+      "reason": "blocked：当前不参与候选或公开。"
+    },
+    {
+      "ruleId": "eqdir-stainless-solution-batch-v1",
+      "internalExecutionStatus": "pending_blocked",
+      "publicationEligibility": "internal_only",
+      "allowedPairCount": 1,
+      "selectedPairCount": 0,
+      "excludedPairCount": 1,
+      "selectionStatus": "not_selected",
+      "reason": "pending_blocked：当前不参与候选或公开。"
+    },
+    {
+      "ruleId": "eqdir-stainless-protective-batch-v1",
+      "internalExecutionStatus": "blocked",
+      "publicationEligibility": "blocked",
+      "allowedPairCount": 1,
+      "selectedPairCount": 0,
+      "excludedPairCount": 1,
+      "selectionStatus": "not_selected",
+      "reason": "blocked：当前不参与候选或公开。"
+    },
+    {
+      "ruleId": "eqdir-stainless-continuous-v1",
+      "internalExecutionStatus": "pending_blocked",
+      "publicationEligibility": "internal_only",
+      "allowedPairCount": 1,
+      "selectedPairCount": 0,
+      "excludedPairCount": 1,
+      "selectionStatus": "not_selected",
+      "reason": "pending_blocked：当前不参与候选或公开。"
+    },
+    {
+      "ruleId": "eqdir-aluminum-coil-bell-batch-v2",
+      "internalExecutionStatus": "blocked",
+      "publicationEligibility": "blocked",
+      "allowedPairCount": 1,
+      "selectedPairCount": 0,
+      "excludedPairCount": 1,
+      "selectionStatus": "not_selected",
+      "reason": "blocked：当前不参与候选或公开。"
+    },
+    {
+      "ruleId": "eqdir-aluminum-strip-continuous-v2",
+      "internalExecutionStatus": "eligible",
+      "publicationEligibility": "internal_only",
+      "allowedPairCount": 1,
+      "selectedPairCount": 0,
+      "excludedPairCount": 1,
+      "selectionStatus": "not_selected",
+      "reason": "本批未取得能直接覆盖具体工件、处理目的和设备方向的应用级证据，继续保持内部。"
+    },
+    {
+      "ruleId": "eqdir-carbon-steel-coil-bell-batch-v2",
+      "internalExecutionStatus": "eligible",
+      "publicationEligibility": "internal_only",
+      "allowedPairCount": 1,
+      "selectedPairCount": 1,
+      "excludedPairCount": 0,
+      "selectionStatus": "full_candidate",
+      "reason": "全部允许pair已进入候选包。"
+    },
+    {
+      "ruleId": "eqdir-carbon-steel-strip-continuous-v2",
+      "internalExecutionStatus": "eligible",
+      "publicationEligibility": "internal_only",
+      "allowedPairCount": 1,
+      "selectedPairCount": 0,
+      "excludedPairCount": 1,
+      "selectionStatus": "not_selected",
+      "reason": "本批未取得能直接覆盖具体工件、处理目的和设备方向的应用级证据，继续保持内部。"
+    },
+    {
+      "ruleId": "eqdir-chain-component-mesh-quench-temper-v2",
+      "internalExecutionStatus": "pending_blocked",
+      "publicationEligibility": "internal_only",
+      "allowedPairCount": 1,
+      "selectedPairCount": 0,
+      "excludedPairCount": 1,
+      "selectionStatus": "not_selected",
+      "reason": "pending_blocked：当前不参与候选或公开。"
+    },
+    {
+      "ruleId": "eqdir-chain-component-batch-quench-temper-v2",
+      "internalExecutionStatus": "pending_blocked",
+      "publicationEligibility": "internal_only",
+      "allowedPairCount": 1,
+      "selectedPairCount": 0,
+      "excludedPairCount": 1,
+      "selectionStatus": "not_selected",
+      "reason": "pending_blocked：当前不参与候选或公开。"
+    },
+    {
+      "ruleId": "eqdir-small-spring-stress-relief-continuous-v2",
+      "internalExecutionStatus": "eligible",
+      "publicationEligibility": "internal_only",
+      "allowedPairCount": 1,
+      "selectedPairCount": 0,
+      "excludedPairCount": 1,
+      "selectionStatus": "not_selected",
+      "reason": "本批未取得能直接覆盖具体工件、处理目的和设备方向的应用级证据，继续保持内部。"
+    },
+    {
+      "ruleId": "eqdir-small-spring-stress-relief-batch-v2",
+      "internalExecutionStatus": "pending_blocked",
+      "publicationEligibility": "internal_only",
+      "allowedPairCount": 1,
+      "selectedPairCount": 0,
+      "excludedPairCount": 1,
+      "selectionStatus": "not_selected",
+      "reason": "pending_blocked：当前不参与候选或公开。"
+    },
+    {
+      "ruleId": "eqdir-small-spring-quench-temper-continuous-v2",
+      "internalExecutionStatus": "blocked",
+      "publicationEligibility": "blocked",
+      "allowedPairCount": 1,
+      "selectedPairCount": 0,
+      "excludedPairCount": 1,
+      "selectionStatus": "not_selected",
+      "reason": "blocked：当前不参与候选或公开。"
+    },
+    {
+      "ruleId": "eqdir-small-spring-quench-temper-batch-v2",
+      "internalExecutionStatus": "pending_blocked",
+      "publicationEligibility": "internal_only",
+      "allowedPairCount": 1,
+      "selectedPairCount": 0,
+      "excludedPairCount": 1,
+      "selectionStatus": "not_selected",
+      "reason": "pending_blocked：当前不参与候选或公开。"
+    },
+    {
+      "ruleId": "eqdir-large-gear-quench-temper-line-v2",
+      "internalExecutionStatus": "blocked",
+      "publicationEligibility": "blocked",
+      "allowedPairCount": 2,
+      "selectedPairCount": 0,
+      "excludedPairCount": 2,
+      "selectionStatus": "not_selected",
+      "reason": "blocked：当前不参与候选或公开。"
+    },
+    {
+      "ruleId": "eqdir-aluminum-plate-anneal-aging-v2",
+      "internalExecutionStatus": "eligible",
+      "publicationEligibility": "internal_only",
+      "allowedPairCount": 2,
+      "selectedPairCount": 0,
+      "excludedPairCount": 2,
+      "selectionStatus": "not_selected",
+      "reason": "本批未取得能直接覆盖具体工件、处理目的和设备方向的应用级证据，继续保持内部。"
+    },
+    {
+      "ruleId": "eqdir-steel-plate-batch-thermal-v2",
+      "internalExecutionStatus": "blocked",
+      "publicationEligibility": "blocked",
+      "allowedPairCount": 3,
+      "selectedPairCount": 0,
+      "excludedPairCount": 3,
+      "selectionStatus": "not_selected",
+      "reason": "blocked：当前不参与候选或公开。"
+    },
+    {
+      "ruleId": "eqdir-fastener-mesh-quench-temper-v2",
+      "internalExecutionStatus": "eligible",
+      "publicationEligibility": "internal_only",
+      "allowedPairCount": 3,
+      "selectedPairCount": 2,
+      "excludedPairCount": 1,
+      "selectionStatus": "partial_candidate",
+      "reason": "部分入选；1个pair排除：钢销不能仅凭名称等同为适合网带处理的紧固件，本批不入选。"
+    },
+    {
+      "ruleId": "eqdir-fastener-batch-quench-temper-v2",
+      "internalExecutionStatus": "pending_blocked",
+      "publicationEligibility": "internal_only",
+      "allowedPairCount": 3,
+      "selectedPairCount": 0,
+      "excludedPairCount": 3,
+      "selectionStatus": "not_selected",
+      "reason": "pending_blocked：当前不参与候选或公开。"
+    },
+    {
+      "ruleId": "eqdir-shaft-quench-temper-line-v2",
+      "internalExecutionStatus": "blocked",
+      "publicationEligibility": "blocked",
+      "allowedPairCount": 4,
+      "selectedPairCount": 0,
+      "excludedPairCount": 4,
+      "selectionStatus": "not_selected",
+      "reason": "blocked：当前不参与候选或公开。"
+    },
+    {
+      "ruleId": "eqdir-long-products-roller-quench-temper-v2",
+      "internalExecutionStatus": "eligible",
+      "publicationEligibility": "internal_only",
+      "allowedPairCount": 4,
+      "selectedPairCount": 0,
+      "excludedPairCount": 4,
+      "selectionStatus": "not_selected",
+      "reason": "本批未取得能直接覆盖具体工件、处理目的和设备方向的应用级证据，继续保持内部。"
+    },
+    {
+      "ruleId": "eqdir-long-products-fixed-hearth-quench-temper-v2",
+      "internalExecutionStatus": "pending_blocked",
+      "publicationEligibility": "internal_only",
+      "allowedPairCount": 4,
+      "selectedPairCount": 0,
+      "excludedPairCount": 4,
+      "selectionStatus": "not_selected",
+      "reason": "pending_blocked：当前不参与候选或公开。"
+    },
+    {
+      "ruleId": "eqdir-long-products-vertical-quench-temper-v2",
+      "internalExecutionStatus": "blocked",
+      "publicationEligibility": "blocked",
+      "allowedPairCount": 4,
+      "selectedPairCount": 0,
+      "excludedPairCount": 4,
+      "selectionStatus": "not_selected",
+      "reason": "blocked：当前不参与候选或公开。"
+    },
+    {
+      "ruleId": "eqdir-welded-car-bottom-v1",
+      "internalExecutionStatus": "eligible",
+      "publicationEligibility": "internal_only",
+      "allowedPairCount": 6,
+      "selectedPairCount": 0,
+      "excludedPairCount": 6,
+      "selectionStatus": "not_selected",
+      "reason": "本批未取得能直接覆盖具体工件、处理目的和设备方向的应用级证据，继续保持内部。"
+    },
+    {
+      "ruleId": "eqdir-welded-pwht-whole-car-bottom-v2",
+      "internalExecutionStatus": "eligible",
+      "publicationEligibility": "internal_only",
+      "allowedPairCount": 6,
+      "selectedPairCount": 0,
+      "excludedPairCount": 6,
+      "selectionStatus": "not_selected",
+      "reason": "本批未取得能直接覆盖具体工件、处理目的和设备方向的应用级证据，继续保持内部。"
+    },
+    {
+      "ruleId": "eqdir-welded-vertical-v1",
+      "internalExecutionStatus": "blocked",
+      "publicationEligibility": "blocked",
+      "allowedPairCount": 6,
+      "selectedPairCount": 0,
+      "excludedPairCount": 6,
+      "selectionStatus": "not_selected",
+      "reason": "blocked：当前不参与候选或公开。"
+    },
+    {
+      "ruleId": "eqdir-welded-pwht-whole-vertical-v2",
+      "internalExecutionStatus": "blocked",
+      "publicationEligibility": "blocked",
+      "allowedPairCount": 6,
+      "selectedPairCount": 0,
+      "excludedPairCount": 6,
+      "selectionStatus": "not_selected",
+      "reason": "blocked：当前不参与候选或公开。"
+    },
+    {
+      "ruleId": "eqdir-welded-batch-chamber-v1",
+      "internalExecutionStatus": "pending_blocked",
+      "publicationEligibility": "internal_only",
+      "allowedPairCount": 6,
+      "selectedPairCount": 0,
+      "excludedPairCount": 6,
+      "selectionStatus": "not_selected",
+      "reason": "pending_blocked：当前不参与候选或公开。"
+    },
+    {
+      "ruleId": "eqdir-welded-pwht-local-v2",
+      "internalExecutionStatus": "eligible",
+      "publicationEligibility": "internal_only",
+      "allowedPairCount": 6,
+      "selectedPairCount": 0,
+      "excludedPairCount": 6,
+      "selectionStatus": "not_selected",
+      "reason": "本批未取得能直接覆盖具体工件、处理目的和设备方向的应用级证据，继续保持内部。"
+    },
+    {
+      "ruleId": "eqdir-welded-pwht-field-v2",
+      "internalExecutionStatus": "eligible",
+      "publicationEligibility": "internal_only",
+      "allowedPairCount": 6,
+      "selectedPairCount": 0,
+      "excludedPairCount": 6,
+      "selectionStatus": "not_selected",
+      "reason": "本批未取得能直接覆盖具体工件、处理目的和设备方向的应用级证据，继续保持内部。"
+    },
+    {
+      "ruleId": "eqdir-large-gear-vertical-thermal-v2",
+      "internalExecutionStatus": "eligible",
+      "publicationEligibility": "internal_only",
+      "allowedPairCount": 6,
+      "selectedPairCount": 0,
+      "excludedPairCount": 6,
+      "selectionStatus": "not_selected",
+      "reason": "本批未取得能直接覆盖具体工件、处理目的和设备方向的应用级证据，继续保持内部。"
+    },
+    {
+      "ruleId": "eqdir-large-gear-fixed-hearth-thermal-v2",
+      "internalExecutionStatus": "pending_blocked",
+      "publicationEligibility": "internal_only",
+      "allowedPairCount": 6,
+      "selectedPairCount": 0,
+      "excludedPairCount": 6,
+      "selectionStatus": "not_selected",
+      "reason": "pending_blocked：当前不参与候选或公开。"
+    },
+    {
+      "ruleId": "eqdir-large-gear-continuous-thermal-v2",
+      "internalExecutionStatus": "blocked",
+      "publicationEligibility": "blocked",
+      "allowedPairCount": 6,
+      "selectedPairCount": 0,
+      "excludedPairCount": 6,
+      "selectionStatus": "not_selected",
+      "reason": "blocked：当前不参与候选或公开。"
+    },
+    {
+      "ruleId": "eqdir-wire-coil-vertical-v1",
+      "internalExecutionStatus": "blocked",
+      "publicationEligibility": "blocked",
+      "allowedPairCount": 6,
+      "selectedPairCount": 0,
+      "excludedPairCount": 6,
+      "selectionStatus": "not_selected",
+      "reason": "blocked：当前不参与候选或公开。"
+    },
+    {
+      "ruleId": "eqdir-wire-coil-bell-v1",
+      "internalExecutionStatus": "eligible",
+      "publicationEligibility": "internal_only",
+      "allowedPairCount": 6,
+      "selectedPairCount": 4,
+      "excludedPairCount": 2,
+      "selectionStatus": "partial_candidate",
+      "reason": "部分入选；2个pair排除：去应力退火pair未被本次官方应用资料直接覆盖。"
+    },
+    {
+      "ruleId": "eqdir-undercarriage-continuous-quench-temper-v2",
+      "internalExecutionStatus": "blocked",
+      "publicationEligibility": "blocked",
+      "allowedPairCount": 7,
+      "selectedPairCount": 0,
+      "excludedPairCount": 7,
+      "selectionStatus": "not_selected",
+      "reason": "blocked：当前不参与候选或公开。"
+    },
+    {
+      "ruleId": "eqdir-undercarriage-fixed-hearth-quench-temper-v2",
+      "internalExecutionStatus": "pending_blocked",
+      "publicationEligibility": "internal_only",
+      "allowedPairCount": 7,
+      "selectedPairCount": 0,
+      "excludedPairCount": 7,
+      "selectionStatus": "not_selected",
+      "reason": "pending_blocked：当前不参与候选或公开。"
+    },
+    {
+      "ruleId": "eqdir-undercarriage-car-bottom-quench-temper-v2",
+      "internalExecutionStatus": "blocked",
+      "publicationEligibility": "blocked",
+      "allowedPairCount": 7,
+      "selectedPairCount": 0,
+      "excludedPairCount": 7,
+      "selectionStatus": "not_selected",
+      "reason": "blocked：当前不参与候选或公开。"
+    },
+    {
+      "ruleId": "eqdir-shaft-vertical-thermal-v2",
+      "internalExecutionStatus": "eligible",
+      "publicationEligibility": "internal_only",
+      "allowedPairCount": 8,
+      "selectedPairCount": 0,
+      "excludedPairCount": 8,
+      "selectionStatus": "not_selected",
+      "reason": "本批未取得能直接覆盖具体工件、处理目的和设备方向的应用级证据，继续保持内部。"
+    },
+    {
+      "ruleId": "eqdir-shaft-fixed-hearth-thermal-v2",
+      "internalExecutionStatus": "pending_blocked",
+      "publicationEligibility": "internal_only",
+      "allowedPairCount": 8,
+      "selectedPairCount": 0,
+      "excludedPairCount": 8,
+      "selectionStatus": "not_selected",
+      "reason": "pending_blocked：当前不参与候选或公开。"
+    },
+    {
+      "ruleId": "eqdir-shaft-continuous-thermal-v2",
+      "internalExecutionStatus": "eligible",
+      "publicationEligibility": "internal_only",
+      "allowedPairCount": 8,
+      "selectedPairCount": 0,
+      "excludedPairCount": 8,
+      "selectionStatus": "not_selected",
+      "reason": "本批未取得能直接覆盖具体工件、处理目的和设备方向的应用级证据，继续保持内部。"
+    },
+    {
+      "ruleId": "eqdir-long-products-roller-thermal-v2",
+      "internalExecutionStatus": "eligible",
+      "publicationEligibility": "internal_only",
+      "allowedPairCount": 8,
+      "selectedPairCount": 6,
+      "excludedPairCount": 2,
+      "selectionStatus": "partial_candidate",
+      "reason": "部分入选；2个pair排除：型钢pair没有被本次官方应用资料直接覆盖，继续内部使用。"
+    },
+    {
+      "ruleId": "eqdir-long-products-fixed-hearth-thermal-v2",
+      "internalExecutionStatus": "pending_blocked",
+      "publicationEligibility": "internal_only",
+      "allowedPairCount": 8,
+      "selectedPairCount": 0,
+      "excludedPairCount": 8,
+      "selectionStatus": "not_selected",
+      "reason": "pending_blocked：当前不参与候选或公开。"
+    },
+    {
+      "ruleId": "eqdir-long-products-vertical-thermal-v2",
+      "internalExecutionStatus": "blocked",
+      "publicationEligibility": "blocked",
+      "allowedPairCount": 8,
+      "selectedPairCount": 0,
+      "excludedPairCount": 8,
+      "selectionStatus": "not_selected",
+      "reason": "blocked：当前不参与候选或公开。"
+    },
+    {
+      "ruleId": "eqdir-heavy-car-bottom-v1",
+      "internalExecutionStatus": "eligible",
+      "publicationEligibility": "internal_only",
+      "allowedPairCount": 12,
+      "selectedPairCount": 9,
+      "excludedPairCount": 3,
+      "selectionStatus": "partial_candidate",
+      "reason": "部分入选；3个pair排除：大型模块锻件属于本批明确排除的模具专项。"
+    },
+    {
+      "ruleId": "eqdir-heavy-hydrogen-relief-car-bottom-v2",
+      "internalExecutionStatus": "eligible",
+      "publicationEligibility": "internal_only",
+      "allowedPairCount": 2,
+      "selectedPairCount": 0,
+      "excludedPairCount": 2,
+      "selectionStatus": "not_selected",
+      "reason": "其中1个pair属本批明确排除范围；其余pair仍缺少能直接覆盖具体工件、处理目的和设备方向的应用级证据。"
+    },
+    {
+      "ruleId": "eqdir-heavy-ductile-iron-car-bottom-v2",
+      "internalExecutionStatus": "eligible",
+      "publicationEligibility": "internal_only",
+      "allowedPairCount": 2,
+      "selectedPairCount": 0,
+      "excludedPairCount": 2,
+      "selectionStatus": "not_selected",
+      "reason": "本批未取得能直接覆盖具体工件、处理目的和设备方向的应用级证据，继续保持内部。"
+    },
+    {
+      "ruleId": "eqdir-heavy-normalize-temper-car-bottom-v2",
+      "internalExecutionStatus": "blocked",
+      "publicationEligibility": "blocked",
+      "allowedPairCount": 4,
+      "selectedPairCount": 0,
+      "excludedPairCount": 4,
+      "selectionStatus": "not_selected",
+      "reason": "blocked：当前不参与候选或公开。"
+    },
+    {
+      "ruleId": "eqdir-undercarriage-continuous-thermal-v2",
+      "internalExecutionStatus": "eligible",
+      "publicationEligibility": "internal_only",
+      "allowedPairCount": 12,
+      "selectedPairCount": 0,
+      "excludedPairCount": 12,
+      "selectionStatus": "not_selected",
+      "reason": "本批未取得能直接覆盖具体工件、处理目的和设备方向的应用级证据，继续保持内部。"
+    },
+    {
+      "ruleId": "eqdir-undercarriage-fixed-hearth-thermal-v2",
+      "internalExecutionStatus": "pending_blocked",
+      "publicationEligibility": "internal_only",
+      "allowedPairCount": 12,
+      "selectedPairCount": 0,
+      "excludedPairCount": 12,
+      "selectionStatus": "not_selected",
+      "reason": "pending_blocked：当前不参与候选或公开。"
+    },
+    {
+      "ruleId": "eqdir-undercarriage-car-bottom-thermal-v2",
+      "internalExecutionStatus": "blocked",
+      "publicationEligibility": "blocked",
+      "allowedPairCount": 12,
+      "selectedPairCount": 0,
+      "excludedPairCount": 12,
+      "selectionStatus": "not_selected",
+      "reason": "blocked：当前不参与候选或公开。"
+    },
+    {
+      "ruleId": "eqdir-carburizing-continuous-v1",
+      "internalExecutionStatus": "pending_blocked",
+      "publicationEligibility": "internal_only",
+      "allowedPairCount": 13,
+      "selectedPairCount": 0,
+      "excludedPairCount": 13,
+      "selectionStatus": "not_selected",
+      "reason": "pending_blocked：当前不参与候选或公开。"
+    },
+    {
+      "ruleId": "eqdir-carburizing-batch-v1",
+      "internalExecutionStatus": "pending_blocked",
+      "publicationEligibility": "internal_only",
+      "allowedPairCount": 13,
+      "selectedPairCount": 0,
+      "excludedPairCount": 13,
+      "selectionStatus": "not_selected",
+      "reason": "pending_blocked：当前不参与候选或公开。"
+    },
+    {
+      "ruleId": "eqdir-heavy-vertical-v1",
+      "internalExecutionStatus": "blocked",
+      "publicationEligibility": "blocked",
+      "allowedPairCount": 20,
+      "selectedPairCount": 0,
+      "excludedPairCount": 20,
+      "selectionStatus": "not_selected",
+      "reason": "blocked：当前不参与候选或公开。"
+    },
+    {
+      "ruleId": "eqdir-heavy-batch-chamber-v1",
+      "internalExecutionStatus": "pending_blocked",
+      "publicationEligibility": "internal_only",
+      "allowedPairCount": 20,
+      "selectedPairCount": 0,
+      "excludedPairCount": 20,
+      "selectionStatus": "not_selected",
+      "reason": "pending_blocked：当前不参与候选或公开。"
+    }
+  ],
+  "exclusions": [
+    "9条气瓶路线",
+    "铝瓶固溶淬火转移",
+    "ADI等温淬火",
+    "局部感应和现场局部处理",
+    "模具新增分类",
+    "真空、盐浴及无法确认苏能范围的特殊设备"
+  ]
+}

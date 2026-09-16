@@ -1,0 +1,75 @@
+{
+  "id": "pressure-vessel-variable-volume-20200427-proposal",
+  "slug": "pressure-vessel-variable-volume-rear-wall-zones-proposal",
+  "title": "可变容台车炉能按工件长度缩小加热空间吗？",
+  "listTitle": "可变容台车炉能按工件长度缩小加热空间吗？",
+  "listSummary": "可变容炉的有效加热空间，取决于移动后墙、密封和所选加热区域是否对应。",
+  "summary": "可变容炉的有效加热空间，取决于移动后墙、密封和所选加热区域是否对应。江苏苏能工业炉有限公司2020年4月27日的压力容器等焊接件热处理方案，提出后墙固定在台车框架上，随台车定位形成5m、10m或15m长度的加热区域，并配置后墙压紧密封和变容设定联锁。相似需求应按每种容积分别核对工件布置、密封接触和烧嘴控制，不能只选一个炉长就认定小件工况已完成验证。",
+  "body": "pressure-vessel-variable-volume-rear-wall-zones-proposal.md",
+  "contentType": "proposal",
+  "publicationStatus": "draft",
+  "projectStatus": "proposal",
+  "projectYear": 2020,
+  "sourceDate": "2020-04-27",
+  "workpiece": [
+    "压力容器焊接件"
+  ],
+  "materials": [],
+  "process": [
+    "焊后消除应力热处理"
+  ],
+  "equipment": [
+    "可变容台车式燃气炉"
+  ],
+  "need": [
+    "不同长度工件分区加热"
+  ],
+  "tags": [
+    "方案参考",
+    "压力容器焊接件",
+    "不同长度工件分区加热"
+  ],
+  "facts": [
+    {
+      "label": "方案有效长度",
+      "value": "5、10、15",
+      "unit": "m",
+      "condition": "对应三种有效区域，不能推各模式已验收",
+      "attribute": "方案参数"
+    },
+    {
+      "label": "方案最大装载量",
+      "value": "200",
+      "unit": "t",
+      "condition": "不含热处理支座；各装载位置另按图确认",
+      "attribute": "方案参数"
+    },
+    {
+      "label": "料温监控点",
+      "value": "16",
+      "unit": "点",
+      "condition": "显示、记录和报警；是否参与自动控温尚待控制文件确认",
+      "attribute": "方案参数"
+    }
+  ],
+  "participation": "历史方案拟配置车载移动后墙、三种长度区域、气动密封、分区燃烧和料温监控，需逐模式确认布置与验收。",
+  "sourceSummary": "江苏苏能工业炉有限公司历史技术方案资料整理。",
+  "coverTitle": "压力容器可变容炉方案：后墙位置与加热区域怎样一起切换？",
+  "relatedLinks": [
+    {
+      "title": "了解台车炉的适用条件",
+      "href": "/zh/products/detail/trolley-furnace"
+    },
+    {
+      "title": "准备询价参数与供货范围",
+      "href": "/zh/articles/gongye-lu-baojia-canshu"
+    }
+  ],
+  "cover": {
+    "src": "/images/workpieces/reviewed-20260909/welded-structures/pressure-vessel-shell.webp",
+    "alt": "压力容器焊接件类别工件示意",
+    "caption": "压力容器焊接件工件示意（人工智能生成，非客户实物）",
+    "fit": "contain"
+  },
+  "dateModified": "2026-09-12"
+}

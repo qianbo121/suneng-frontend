@@ -1,0 +1,66 @@
+{
+  "id": "gas-trolley-quote-versions-20231113-proposal",
+  "slug": "gas-trolley-149-166-quote-version-scope-proposal",
+  "title": "燃气台车炉两份报价，烧嘴、炉门和电控差在哪？",
+  "listTitle": "燃气台车炉两份报价，烧嘴、炉门和电控差在哪？",
+  "listSummary": "苏能2023年11月同一12.5米燃气台车炉的两份报价，分别列16套450kW和12套400kW烧嘴；炉门密封裙边套数、标准耐火纤维毯数量和电控部分配置也有差异。",
+  "summary": "苏能2023年11月同一12.5米燃气台车炉的两份报价，分别列16套450kW和12套400kW烧嘴；炉门密封裙边套数、标准耐火纤维毯数量和电控部分配置也有差异。比较时要把清单中的数量、规格、计价和自备项分开，不能仅凭金额变化认定供货范围变化，也不能认定两版具有相同处理能力。",
+  "body": "gas-trolley-149-166-quote-version-scope-proposal.md",
+  "contentType": "proposal",
+  "publicationStatus": "draft",
+  "projectStatus": "proposal",
+  "projectYear": 2023,
+  "sourceDate": "2023-11-04",
+  "workpiece": [],
+  "materials": [],
+  "process": [
+    "热处理"
+  ],
+  "equipment": [
+    "燃气台车炉"
+  ],
+  "need": [
+    "多版报价比较"
+  ],
+  "tags": [
+    "方案参考",
+    "多版报价比较"
+  ],
+  "facts": [
+    {
+      "label": "16烧嘴版配置",
+      "value": "16套 × 450kW",
+      "unit": "",
+      "condition": "历史清单额定配置；不等于实际耗气量或处理能力",
+      "attribute": "方案参数"
+    },
+    {
+      "label": "12烧嘴版配置",
+      "value": "12套 × 400kW",
+      "unit": "",
+      "condition": "历史清单额定配置；不等于实际耗气量或处理能力",
+      "attribute": "方案参数"
+    },
+    {
+      "label": "共同范围限定",
+      "value": "垫铁用户自备、轨道另报",
+      "unit": "",
+      "condition": "按两份报价备注，不能擅自算已含",
+      "attribute": "方案参数"
+    }
+  ],
+  "participation": "苏能同项目历史报价包含设备设计制造安装范围，垫铁、轨道及不同配置按各版分别核对。",
+  "sourceSummary": "江苏苏能工业炉有限公司历史技术方案资料整理。",
+  "coverTitle": "燃气台车炉两版报价\n配置与供货边界",
+  "relatedLinks": [
+    {
+      "title": "了解台车炉的适用条件",
+      "href": "/zh/products/detail/trolley-furnace"
+    },
+    {
+      "title": "准备询价参数与供货范围",
+      "href": "/zh/articles/gongye-lu-baojia-canshu"
+    }
+  ],
+  "dateModified": "2026-09-12"
+}

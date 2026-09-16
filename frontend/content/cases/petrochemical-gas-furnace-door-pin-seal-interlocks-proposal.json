@@ -1,0 +1,81 @@
+{
+  "id": "petrochemical-gas-door-seals-20220617-proposal",
+  "slug": "petrochemical-gas-furnace-door-pin-seal-interlocks-proposal",
+  "title": "大型封头燃气炉的炉门锁定与压紧密封配置",
+  "listTitle": "大型封头燃气炉的炉门锁定与压紧密封配置",
+  "listSummary": "炉门升起后的锁定、炉门关闭后的压紧密封，以及台车移动前的密封释放，属于不同状态。",
+  "summary": "炉门升起后的锁定、炉门关闭后的压紧密封，以及台车移动前的密封释放，属于不同状态。江苏苏能工业炉有限公司2022年6月17日的台车式燃气炉方案，分别列有炉门安全销、门周气动压紧密封和台车侧密封，并将相关动作交给控制系统联锁。核对相似项目时，不能把“炉门到位”当成这些动作都已完成，应分别明确机构、到位信号与允许动作。",
+  "body": "petrochemical-gas-furnace-door-pin-seal-interlocks-proposal.md",
+  "contentType": "proposal",
+  "publicationStatus": "draft",
+  "projectStatus": "proposal",
+  "projectYear": 2022,
+  "sourceDate": "2022-06-17",
+  "workpiece": [
+    "封头",
+    "金属板",
+    "大型石化设备元件"
+  ],
+  "materials": [
+    "金属材料"
+  ],
+  "process": [
+    "热处理加热"
+  ],
+  "equipment": [
+    "台车式燃气加热炉"
+  ],
+  "need": [
+    "炉门台车与密封配套"
+  ],
+  "tags": [
+    "方案参考",
+    "封头",
+    "金属板",
+    "大型石化设备元件",
+    "炉门台车与密封配套"
+  ],
+  "facts": [
+    {
+      "label": "方案炉门压紧配置",
+      "value": "4",
+      "unit": "套气缸",
+      "condition": "门周密封，不等于安全销或行程限位",
+      "attribute": "方案参数"
+    },
+    {
+      "label": "方案台车侧密封",
+      "value": "4",
+      "unit": "套气缸",
+      "condition": "左右各2套，按密封与行走配合核对",
+      "attribute": "方案参数"
+    },
+    {
+      "label": "方案炉门锁定",
+      "value": "安全销锁定",
+      "unit": "",
+      "condition": "炉门升起后对应状态，不推失效处置已验证",
+      "attribute": "方案参数"
+    }
+  ],
+  "participation": "历史方案拟提供燃气台车炉、门车密封及控制系统和冷热调试；土建及现场设施由买方配合。",
+  "sourceSummary": "江苏苏能工业炉有限公司历史技术方案资料整理。",
+  "coverTitle": "大型封头燃气炉方案：炉门安全销与气动密封为什么要分别核对？",
+  "relatedLinks": [
+    {
+      "title": "了解台车炉的适用条件",
+      "href": "/zh/products/detail/trolley-furnace"
+    },
+    {
+      "title": "准备询价参数与供货范围",
+      "href": "/zh/articles/gongye-lu-baojia-canshu"
+    }
+  ],
+  "cover": {
+    "src": "/images/case-covers/white-background-20260912/neutral-metal-plate-white.webp",
+    "alt": "板料类别工件示意",
+    "caption": "板料工件示意（本方案涉及的一类工件，人工智能生成，非客户实物）",
+    "fit": "contain"
+  },
+  "dateModified": "2026-09-12"
+}

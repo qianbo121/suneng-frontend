@@ -1,6 +1,7 @@
 import { http, unwrapResponse } from '@/services/http';
 import {
   CustomRequirementEntity,
+  CustomRequirementDetailEntity,
   CustomRequirementListQuery,
   InquiryNotificationAudit,
   ManageInquiryNotificationPayload,
@@ -17,6 +18,14 @@ export async function getCustomRequirementList(query: CustomRequirementListQuery
       keyword: query.keyword || undefined,
       status: query.status || undefined,
     },
+  );
+  return unwrapResponse(response);
+}
+
+export async function getCustomRequirementDetail(id: number) {
+  const response = await http.get<ApiResponse<CustomRequirementDetailEntity>>(
+    `/admin/custom-requirements/${id}`,
+    { meta: { silentError: true } },
   );
   return unwrapResponse(response);
 }

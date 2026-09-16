@@ -1,0 +1,13 @@
+{
+  "id": "cylinder-continuous-scraping-20220907-proposal",
+  "slug": "cylinder-continuous-scraping-20220907-proposal",
+  "number": 138,
+  "title": "How should loading be arranged when a continuous cylinder curing line still requires manual resin scraping?",
+  "summary": "A 2022 Suneng continuous cylinder-curing proposal provides cylinder rotation both on a seven-position storage rack and during furnace transport, with manual resin scraping after preheating. Compare storage, transfer, scraping and furnace residence together. Continuous conveying does not mean the absence of manual stations or waiting.",
+  "body": "cylinder-continuous-scraping-20220907-proposal.md",
+  "sourceFingerprint": "0c939f8402fa743550b7db0805c295cbbf66b9021deb44d0b40b631c3449c19e",
+  "translationStatus": "complete",
+  "translatedAt": "2026-09-12",
+  "coverAlt": "Illustration of filament-wound gas cylinders.",
+  "coverCaption": "Illustration of filament-wound gas cylinders (AI-generated). Not an actual customer workpiece photograph. Does not establish actual specifications or process results."
+}

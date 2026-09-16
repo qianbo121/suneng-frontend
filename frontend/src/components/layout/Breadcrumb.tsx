@@ -66,7 +66,7 @@ export function Breadcrumb({
       aria-label="Breadcrumb"
       className={cn(
         'flex flex-wrap items-center gap-2 text-sm',
-        tone === 'light' ? 'text-white/72' : 'text-neutral-500',
+        tone === 'light' ? 'text-white/72' : 'text-[#59667a]',
         className,
       )}
     >
@@ -82,6 +82,7 @@ export function Breadcrumb({
         return (
           <div key={`${crumb.href}-${index}`} className="flex items-center gap-2">
             <HiChevronRight
+              aria-hidden="true"
               className={cn('text-xs', tone === 'light' ? 'text-white/38' : 'text-neutral-300')}
             />
             {isCurrent ? (

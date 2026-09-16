@@ -1,0 +1,66 @@
+{
+  "id": "saw-belt-return-path-20180816-proposal",
+  "slug": "saw-blade-double-row-rollers-belt-return-loading-proposal",
+  "title": "锯片网带炉的上下托辊与实际装料面",
+  "summary": "苏能2018年一份网带气氛热处理线方案中的双排托辊，分工是上排传送网带前进、下排传送网带返回，不能理解成上下两层都装工件。用于锯片方案初筛时，应先沿网带路线确认装料面和落料位置，再结合代表规格、排料与加热时间核对处理能力。",
+  "body": "saw-belt-return-path-20180816-proposal.md",
+  "contentType": "proposal",
+  "publicationStatus": "draft",
+  "projectStatus": "proposal",
+  "workpiece": [
+    "锯片"
+  ],
+  "materials": [],
+  "process": [
+    "气氛加热",
+    "淬火"
+  ],
+  "equipment": [
+    "双排托辊网带炉"
+  ],
+  "need": [
+    "装料路线与代表产量核对"
+  ],
+  "tags": [
+    "方案参考",
+    "锯片",
+    "装料路线与代表产量核对"
+  ],
+  "facts": [
+    {
+      "label": "拟前进排托辊",
+      "value": "32",
+      "unit": "只",
+      "condition": "炉膛内上排，不含进料室托辊",
+      "attribute": "方案参数"
+    },
+    {
+      "label": "拟返回排托辊",
+      "value": "16",
+      "unit": "只",
+      "condition": "炉膛内下排，不构成第二承料层",
+      "attribute": "方案参数"
+    },
+    {
+      "label": "方案代表锯片规格",
+      "value": "φ350×1.5",
+      "unit": "",
+      "condition": "原件代表规格记法；据图纸核对尺寸和单位，不扩大为全部规格范围",
+      "attribute": "方案参数"
+    }
+  ],
+  "participation": "苏能方案提出前进与返回网带、淬火槽及提升和后段辊子输送；气氛及压床接口按终版明确。",
+  "sourceSummary": "本文依据江苏苏能工业炉有限公司的历史方案资料整理，介绍拟定配置与供货条件；本文所引原件不构成设备已交付或验收通过的证明。",
+  "coverTitle": "锯片网带炉方案：双层托辊是否表示两层装料？",
+  "relatedLinks": [],
+  "projectYear": 2018,
+  "sourceDate": "2018-08-16",
+  "cover": {
+    "src": "/images/case-covers/remaining-20260910/saw-blade.webp",
+    "alt": "圆锯片类别工件示意",
+    "caption": "圆锯片类别示意（人工智能生成，非客户实物，不表示实际规格或工艺结果）",
+    "fit": "contain"
+  },
+  "listTitle": "锯片网带炉的上下托辊与实际装料面",
+  "dateModified": "2026-09-12"
+}

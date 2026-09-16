@@ -3,6 +3,7 @@ export { MeshScene } from './MeshScene';
 export { PitScene } from './PitScene';
 export { BoxScene } from './BoxScene';
 export { BellScene } from './BellScene';
+export { FurnaceAnimation } from './FurnaceAnimation';
 export { TemperingScene } from './TemperingScene';
 export { RollerScene } from './RollerScene';
 export { PusherScene } from './PusherScene';

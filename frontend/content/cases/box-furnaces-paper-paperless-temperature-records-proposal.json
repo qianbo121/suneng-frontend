@@ -1,0 +1,71 @@
+{
+  "id": "box-two-recorders-20220411-proposal",
+  "slug": "box-furnaces-paper-paperless-temperature-records-proposal",
+  "title": "箱式炉的炉温和料温怎么记录？",
+  "listTitle": "箱式炉的炉温和料温怎么记录？",
+  "listSummary": "两种记录仪同时配置，先要分清各自接入的测点。",
+  "summary": "两种记录仪同时配置，先要分清各自接入的测点。江苏苏能工业炉有限公司2022年4月11日的两份高温箱式炉方案，分别列出180kW与130kW设备，并在温控条款中提出有纸记录温控点、六通道无纸记录工件监控点。比较相似配置时，应先按测点、通道和记录对象核对，不能仅凭“双记录”就认定两套数据互为备份，或工件已经达到要求温度。",
+  "body": "box-furnaces-paper-paperless-temperature-records-proposal.md",
+  "contentType": "proposal",
+  "publicationStatus": "draft",
+  "projectStatus": "proposal",
+  "projectYear": 2022,
+  "sourceDate": "2022-04-11",
+  "workpiece": [
+    "中小型金属机件"
+  ],
+  "materials": [
+    "金属材料"
+  ],
+  "process": [
+    "高温热处理"
+  ],
+  "equipment": [
+    "箱式电阻炉"
+  ],
+  "need": [
+    "温度记录与验收配套"
+  ],
+  "tags": [
+    "方案参考",
+    "中小型金属机件",
+    "温度记录与验收配套"
+  ],
+  "facts": [
+    {
+      "label": "较大规格加热功率",
+      "value": "180",
+      "unit": "kW",
+      "condition": "仅属于S1设备，不合并成单台配置",
+      "attribute": "方案参数"
+    },
+    {
+      "label": "较小规格加热功率",
+      "value": "130",
+      "unit": "kW",
+      "condition": "仅属于S2设备，不由功率比推产能",
+      "attribute": "方案参数"
+    },
+    {
+      "label": "工件记录通道",
+      "value": "六",
+      "unit": "通道",
+      "condition": "各自方案拟定配置，点位和接法另确认",
+      "attribute": "方案参数"
+    }
+  ],
+  "participation": "历史方案拟提供两种规格箱式炉、分区加热和温控/工件监控记录，苏能拟承担安装调试，现场条件由买方配套。",
+  "sourceSummary": "江苏苏能工业炉有限公司历史技术方案资料整理。",
+  "coverTitle": "金属机件箱式炉方案：有纸与无纸双记录分别记录什么？",
+  "relatedLinks": [
+    {
+      "title": "了解箱式炉的适用条件",
+      "href": "/zh/products/detail/box-furnace"
+    },
+    {
+      "title": "准备询价参数与供货范围",
+      "href": "/zh/articles/gongye-lu-baojia-canshu"
+    }
+  ],
+  "dateModified": "2026-09-12"
+}

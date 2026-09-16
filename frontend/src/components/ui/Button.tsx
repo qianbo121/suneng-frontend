@@ -20,7 +20,7 @@ type LinkButtonProps = SharedProps &
     href: string;
   };
 
-function getButtonClass(variant: SharedProps['variant'], size: SharedProps['size']) {
+export function getButtonClass(variant: SharedProps['variant'], size: SharedProps['size']) {
   return cn(
     'inline-flex items-center justify-center rounded-full font-medium transition duration-200',
     size === 'sm' && 'min-h-[40px] px-4 text-sm',

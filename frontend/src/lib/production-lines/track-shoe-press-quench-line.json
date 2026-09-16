@@ -1,0 +1,499 @@
+{
+  "pageId": "track-shoe-press-quench-line",
+  "variant": "handling",
+  "seo": {
+    "title": "履带板压淬生产线｜模压淬火、转移与回火配置",
+    "description": "履带板压淬生产线将加热、快速转移、模具定位、受约束冷却及回火衔接，围绕材料、履齿截面、尺寸变形、压淬循环和现场条件选择配置，并区分设备、工艺与产品验收。"
+  },
+  "sectionNavigation": [
+    {
+      "label": "适用工件",
+      "href": "#workpieces"
+    },
+    {
+      "label": "工艺与设备",
+      "href": "#process"
+    },
+    {
+      "label": "设备配置",
+      "href": "#configuration"
+    },
+    {
+      "label": "产能与现场",
+      "href": "#site-conditions"
+    },
+    {
+      "label": "交付验收",
+      "href": "#acceptance"
+    },
+    {
+      "label": "常见问题",
+      "href": "#faq"
+    }
+  ],
+  "images": {
+    "hero-line": {
+      "src": "/images/products/track-shoe-press-quench-line/remaining-batch-v1/01-hero-59800739618a.png",
+      "width": 1672,
+      "height": 941,
+      "alt": "履带板加热、专用压淬与回火生产线整体配置",
+      "optimized": true
+    },
+    "process-whole-line": {
+      "src": "/images/products/track-shoe-press-quench-line/remaining-batch-v1/02-whole-line-3bc64747eec8.png",
+      "width": 2172,
+      "height": 724,
+      "alt": "履带板压淬生产线白底完整设备组成",
+      "optimized": true
+    },
+    "workpiece-track-shoe": {
+      "src": "/images/products/track-shoe-press-quench-line/remaining-batch-v1/03-workpiece-6918812c59b4.png",
+      "width": 1672,
+      "height": 941,
+      "alt": "带横向履齿和四个安装孔的履带板工件",
+      "optimized": true
+    },
+    "loading-press-die": {
+      "src": "/images/products/track-shoe-press-quench-line/remaining-batch-v1/04-loading-f2ceac47498d.png",
+      "width": 1672,
+      "height": 941,
+      "alt": "履带板在压淬模具中的支承定位与履齿避让",
+      "optimized": true
+    },
+    "gallery-heating-transfer": {
+      "src": "/images/products/track-shoe-press-quench-line/remaining-batch-v1/05-detail-1-a09a14091823.png",
+      "width": 1672,
+      "height": 941,
+      "alt": "履带板加热炉出料口与辊道转移段",
+      "optimized": true
+    },
+    "gallery-press-quench": {
+      "src": "/images/products/track-shoe-press-quench-line/remaining-batch-v1/06-detail-2-0aca578b3827.png",
+      "width": 1672,
+      "height": 941,
+      "alt": "带接液与循环换热设备的封闭压淬机",
+      "optimized": true
+    },
+    "gallery-temper-furnace": {
+      "src": "/images/products/track-shoe-press-quench-line/remaining-batch-v1/07-detail-3-7d54a15e94f6.png",
+      "width": 1672,
+      "height": 941,
+      "alt": "履带板压淬后衔接的独立辊道回火炉",
+      "optimized": true
+    },
+    "site-layout": {
+      "src": "/images/products/track-shoe-press-quench-line/remaining-batch-v1/08-site-layout-fdbb2b9133f8.png",
+      "width": 1672,
+      "height": 941,
+      "alt": "履带板压淬线主机、模具搬运与检修通道布置",
+      "optimized": true
+    }
+  },
+  "sourceRecord": {
+    "path": "frontend/src/lib/heat-treatment-lines-reviewed.json",
+    "record": "track-shoe-press-quench-line",
+    "review": "公开一手资料桌面复核与逐图检查已完成；属于待当前仓库三方比对的内容更新稿，不等同于设备或标准符合性认证。",
+    "engineeringNotes": "docs/heat-treatment-lines-final-batch-v1/pages/track-shoe-press-quench-line/engineering-review.md"
+  },
+  "sections": {
+    "overview": {
+      "title": "履带板压淬生产线",
+      "subtitle": "把加热、压淬与回火衔接起来，控制履带板的性能与变形",
+      "description": "面向需要控制安装面变形的履带板，将奥氏体化加热、快速转移、模具定位、受约束淬火与后续回火衔接。设备方案共同核对钢种、履齿与板身截面、尺寸要求和生产节拍；冷却方式按材料及试验结果选择。",
+      "facts": [
+        {
+          "label": "典型工件",
+          "value": "带履齿及安装孔的履带板"
+        },
+        {
+          "label": "工艺目标",
+          "value": "淬火冷却中约束关键尺寸"
+        },
+        {
+          "label": "核心设备",
+          "value": "加热炉、转移机构、专用压淬机"
+        },
+        {
+          "label": "配置依据",
+          "value": "材料、截面、变形与节拍"
+        }
+      ],
+      "gallery": [
+        {
+          "id": "view-1",
+          "label": "整线",
+          "alt": "履带板加热、专用压淬与回火生产线整体配置",
+          "thumbnailAssetId": "hero-line",
+          "fullAssetId": "hero-line"
+        },
+        {
+          "id": "view-2",
+          "label": "加热与转移",
+          "alt": "履带板加热炉出料口与辊道转移段",
+          "thumbnailAssetId": "gallery-heating-transfer",
+          "fullAssetId": "gallery-heating-transfer"
+        },
+        {
+          "id": "view-3",
+          "label": "压淬与循环",
+          "alt": "带接液与循环换热设备的封闭压淬机",
+          "thumbnailAssetId": "gallery-press-quench",
+          "fullAssetId": "gallery-press-quench"
+        },
+        {
+          "id": "view-4",
+          "label": "回火炉",
+          "alt": "履带板压淬后衔接的独立辊道回火炉",
+          "thumbnailAssetId": "gallery-temper-furnace",
+          "fullAssetId": "gallery-temper-furnace"
+        }
+      ],
+      "actions": [
+        {
+          "label": "提交工况，获取选型建议",
+          "href": "#inquiry",
+          "style": "primary"
+        },
+        {
+          "label": "查看设备配置",
+          "href": "#configuration",
+          "style": "secondary"
+        }
+      ]
+    },
+    "workpieces": {
+      "title": "先看履带板结构，再确定定位与冷却方式",
+      "subtitle": "履带板的板身、履齿和安装面厚薄不同，受热、收缩和冷却条件也不同。先提供工件图和尺寸目标，再共同确定支承、压紧与介质通路。",
+      "cards": [
+        {
+          "id": "material",
+          "title": "履带板与材料",
+          "description": "牌号、前序状态、履齿形状、板身截面、安装孔与基准面；补充单件重量及需覆盖的型号。",
+          "imageAssetId": "workpiece-track-shoe"
+        },
+        {
+          "id": "loading",
+          "title": "专用压淬工装",
+          "description": "按基准面设置支承和定位，核对履齿避让、压紧区域、冷却通道及换模空间；相近外形也需逐型号核对。",
+          "imageAssetId": "loading-press-die"
+        }
+      ],
+      "note": "本页处理对象为履带板；链轨节、销轴及履带总成应分别核对工件与工艺，不能直接沿用同一套模具。"
+    },
+    "process": {
+      "title": "从进料到出料，看懂加热、压淬与回火衔接",
+      "subtitle": "压淬是在受控冷却过程中施加几何约束，转移、模具动作与介质供给需要联动。整图先看设备组成，下方流程核对工艺。",
+      "imageAssetId": "process-whole-line",
+      "mode": "routes",
+      "stages": [],
+      "routes": [
+        {
+          "title": "履带板淬火—回火参考路线",
+          "steps": [
+            "上料与型号识别",
+            "奥氏体化加热",
+            "出炉与定时转移",
+            "模具定位与合模",
+            "受约束冷却",
+            "卸压与转出",
+            "必要的清洗/干燥",
+            "回火与冷却",
+            "尺寸与性能检验"
+          ],
+          "note": "加热制度、起淬条件、冷却方式与回火制度按材料及产品要求确定；清洗、干燥按所用介质和后续工序配置。出炉至起淬时间应明确起止事件并记录。"
+        }
+      ],
+      "note": "模具约束、压力/位移、介质温度与流量分配共同影响变形。最终尺寸按约定回火及冷却状态检验；压淬不等于所有型号零变形。",
+      "imageAlt": "履带板压淬生产线白底完整设备组成"
+    },
+    "configuration": {
+      "title": "把工艺要求转成设备配置，重点核对五个环节",
+      "subtitle": "加热炉形式、转移机构与压淬工装需要一起确定，避免单看压机吨位或加热温度选设备。",
+      "table": {
+        "caption": "履带板压淬生产线设备配置依据",
+        "columns": [
+          {
+            "key": "item",
+            "label": "配置项目"
+          },
+          {
+            "key": "basis",
+            "label": "设备与衔接要求"
+          }
+        ],
+        "rows": [
+          {
+            "item": "加热与出料",
+            "cells": [
+              "按工件支承、装载密度与节拍选择辊底、推杆等形式，核对炉温均匀性与工件到温条件。"
+            ]
+          },
+          {
+            "item": "转移与定位",
+            "cells": [
+              "炉门、转移机构、夹持/推送与模具定位共同计时；异常延迟工件设置分流或处置规则。"
+            ]
+          },
+          {
+            "item": "模具与压淬机",
+            "cells": [
+              "核对支承与压紧基准、履齿避让、压力/位移控制、冷却通道、卸压时机和模具更换。"
+            ]
+          },
+          {
+            "item": "冷却与循环",
+            "cells": [
+              "按确定介质配置收集、循环、过滤与换热，记录温度、流量/压力、液位；泄漏及介质相应防护单独核对。"
+            ]
+          },
+          {
+            "item": "回火与检验",
+            "cells": [
+              "必要的清洗/干燥、淬后转入回火的时间要求、回火装载与最终尺寸检验一并核算。"
+            ]
+          }
+        ]
+      },
+      "notes": [
+        "喷淋、浸淬或组合冷却属于待评估配置，不能仅凭压机外形确定介质和冷却能力。",
+        "压淬压力需与接触区域和冷却效果共同验证，并非越大越好。"
+      ],
+      "action": {
+        "label": "把已有参数发给工程师",
+        "href": "#inquiry"
+      },
+      "inputs": [
+        {
+          "title": "工件族",
+          "description": "型号、二维/三维图、履齿与板身截面、单件重量和换型频率"
+        },
+        {
+          "title": "材料与工艺",
+          "description": "牌号、前序组织、奥氏体化制度、淬透性和回火要求"
+        },
+        {
+          "title": "变形目标",
+          "description": "平面度、翘曲、扭曲、孔距/安装面及基准测量方法"
+        },
+        {
+          "title": "压淬模具",
+          "description": "定位基准、压紧区域、允许接触印、快换和热膨胀补偿"
+        },
+        {
+          "title": "转移节拍",
+          "description": "出炉至起淬的允许条件、计时起止事件、转移路径、定位时间和延迟处置"
+        },
+        {
+          "title": "冷却系统",
+          "description": "介质、温度、流量/压力、喷区或搅拌、过滤和换热"
+        },
+        {
+          "title": "产能",
+          "description": "件/h、炉内节拍、压淬循环、模具数量和回火瓶颈"
+        },
+        {
+          "title": "验收",
+          "description": "代表型号、尺寸统计、硬度/组织、裂纹与连续运行条件"
+        }
+      ]
+    },
+    "site-conditions": {
+      "title": "产能与现场条件，一起算清楚",
+      "imageAssetId": "site-layout",
+      "requirements": [
+        {
+          "title": "目标产量与型号组合",
+          "description": "分别提供件/小时、班次、换型频率；核对加热出料节拍、压淬循环与回火装载。"
+        },
+        {
+          "title": "热源与冷却接口",
+          "description": "确认供电或燃气条件，以及介质循环、换热、补液和排风的设备分工。"
+        },
+        {
+          "title": "压机基础与换模",
+          "description": "核对基础载荷、检修高度、模具搬运路线及起吊条件，预留侧向换模位置。"
+        },
+        {
+          "title": "高温转移与隔离",
+          "description": "高温工件路径与人员通道分开，明确防护、接液区域和异常停机时工件处置。"
+        }
+      ],
+      "capacity": "若每个独立压淬工位每循环处理一件，可用有效工位数 × 3600 ÷ 单循环秒数估算理论件产能；共用转移或循环重叠时不能简单相加。全线还要校核加热出料、转移、压淬、回火和检验瓶颈，并扣除换模、首件确认及停机时间。",
+      "imageCaption": "布置用于说明主机衔接与检修区域；实际占地、基础和通道按项目总图核算。"
+    },
+    "delivery-scope": {
+      "title": "配置参考与交付内容",
+      "subtitle": "明确设备组成、配套系统与现场接口。",
+      "imageAssetId": "process-whole-line",
+      "contentTitle": "主设备、介质循环与现场接口逐项列清",
+      "items": [
+        {
+          "label": "工艺主设备",
+          "value": "加热炉、转移机构、压淬机与配套模具、回火炉及输送，明确各项供货数量与责任。"
+        },
+        {
+          "label": "配套与控制",
+          "value": "按选定介质配置循环、过滤、换热和必要清洗/干燥；测温、动作联锁、工艺配方与过程记录明确到点。"
+        },
+        {
+          "label": "现场与检测",
+          "value": "基础、热源、公用工程、排风与模具起吊接口；尺寸量具、材料检验和产品抽样明确双方分工。"
+        }
+      ],
+      "note": "设备清单、供货范围与双方分工在技术方案中列明。"
+    },
+    "acceptance": {
+      "title": "交付到哪一步，验收就核对到哪一步",
+      "subtitle": "设备功能、工艺性能与产品验证分别约定条件。",
+      "columns": [
+        {
+          "id": "equipment",
+          "title": "设备功能",
+          "description": "核对输送、炉门、转移、定位、压机与介质系统的动作、联锁、报警及异常恢复。"
+        },
+        {
+          "id": "process",
+          "title": "工艺性能",
+          "description": "在代表工件和装载下记录到温条件、出炉至起淬时间、压力/位移、冷却参数及回火制度。"
+        },
+        {
+          "id": "product",
+          "title": "产品验证",
+          "description": "按图样与采用规范核对硬度及分布、组织、裂纹和最终尺寸；附加硬化层指标仅用于另有相应工艺要求的项目。"
+        }
+      ],
+      "productNote": "履带板最终尺寸在约定回火、冷却及测量状态下检验；按代表型号约定样本量、平面度/扭曲/孔距项目和合格判定。",
+      "stages": [
+        {
+          "id": "requirements",
+          "order": 1,
+          "label": "需求沟通"
+        },
+        {
+          "id": "design",
+          "order": 2,
+          "label": "方案设计"
+        },
+        {
+          "id": "manufacturing-inspection",
+          "order": 3,
+          "label": "制造检验"
+        },
+        {
+          "id": "installation-commissioning",
+          "order": 4,
+          "label": "安装联调"
+        },
+        {
+          "id": "acceptance-delivery",
+          "order": 5,
+          "label": "验收交付"
+        }
+      ],
+      "note": "设备验收与产品检验分别明确条件与责任；代表材料、装载、抽样和判定在协议中约定。"
+    },
+    "faq": {
+      "title": "采购与技术常见问题",
+      "subtitle": "先了解本工艺的选型、配套与现场衔接问题。",
+      "items": [
+        {
+          "id": "faq-1",
+          "question": "压淬和普通淬火的核心区别是什么？",
+          "answer": "普通自由淬火主要依靠介质冷却；压淬同时使用专用模具定位并约束指定区域。约束和冷却必须配合，不能只用压力代替淬火条件。",
+          "defaultOpen": true
+        },
+        {
+          "id": "faq-2",
+          "question": "压力越大变形越小吗？",
+          "answer": "不是。过大的或不均匀的约束可能带来接触印、局部冷却差异或开裂风险，需通过压力/位移、模具接触与冷却试验确定窗口。",
+          "defaultOpen": false
+        },
+        {
+          "id": "faq-3",
+          "question": "一套模具能覆盖多个型号吗？",
+          "answer": "相近型号可评估可换镶块或柔性定位，但必须核对基准、接触区域、流场和节拍，不宜只按外形相似判断。",
+          "defaultOpen": false
+        },
+        {
+          "id": "faq-4",
+          "question": "压淬后还需要回火吗？",
+          "answer": "对本页所示淬火—回火路线，回火是后续工艺段，不能用压淬替代。回火制度及淬后转入回火的允许条件按钢种、产品要求与采用规范确定。",
+          "defaultOpen": false
+        },
+        {
+          "id": "faq-5",
+          "question": "验收为什么要看尺寸统计？",
+          "answer": "模压淬火的目标之一是控制变形，单件结果不能代表批量稳定性，应按代表型号和约定样本量统计。",
+          "defaultOpen": false
+        },
+        {
+          "id": "faq-6",
+          "question": "提供哪些资料可以开始选型？",
+          "answer": "先提供履带板图样、牌号、单件重量、最终尺寸与性能目标、每小时产量和常用型号。已有淬火制度、变形数据及现场布置可一起补充。",
+          "defaultOpen": false
+        }
+      ],
+      "relatedGroups": [
+        {
+          "id": "related-lines",
+          "title": "相关生产线",
+          "links": [
+            {
+              "label": "锻件余热调质生产线",
+              "href": "/zh/products/detail/forging-waste-heat-qt-line"
+            },
+            {
+              "label": "多炉共用操作机淬火单元",
+              "href": "/zh/products/detail/multi-furnace-quench-cell"
+            }
+          ]
+        },
+        {
+          "id": "technical",
+          "title": "选型资料",
+          "links": [
+            {
+              "label": "本线询价参数清单",
+              "href": "/downloads/heat-treatment-lines/track-shoe-press-quench-line.txt"
+            }
+          ]
+        }
+      ]
+    },
+    "inquiry": {
+      "title": "告诉我们材料与产量，开始讨论方案",
+      "description": "已知信息先填，关键工况在方案沟通中补齐。",
+      "form": {
+        "id": "track-shoe-press-quench-line-inquiry",
+        "fields": [
+          {
+            "name": "workpiece_material",
+            "label": "履带板与材料",
+            "placeholder": "如：型号、牌号、尺寸与重量",
+            "required": false
+          },
+          {
+            "name": "target_performance",
+            "label": "性能与变形要求",
+            "placeholder": "如：硬度、平面度、孔距要求",
+            "required": false
+          },
+          {
+            "name": "target_output",
+            "label": "目标产量",
+            "placeholder": "如：产量、生产班次与换型频率",
+            "required": false
+          },
+          {
+            "name": "contact_method",
+            "label": "联系方式",
+            "placeholder": "电话、微信或邮箱",
+            "required": true
+          }
+        ],
+        "submitLabel": "获取选型建议",
+        "helperText": "已知信息先填，不明确的项目可留空。"
+      }
+    }
+  }
+}

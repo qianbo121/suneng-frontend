@@ -1,0 +1,59 @@
+{
+  "id": "export-belt-acceptance-20260323-proposal",
+  "slug": "export-belt-acceptance-20260323-proposal",
+  "title": "出口网带调质线交到港口后，安装和验收谁负责？",
+  "summary": "一份面向越南客户的苏能网带调质线技术协议，把国内港交货、买方现场配套和终验收分别约定。设备运到港口之后，仍要完成卸货、就位、公辅连接和现场调试；采购计划需要把这些环节及资料交付衔接起来。",
+  "body": "export-belt-acceptance-20260323-proposal.md",
+  "contentType": "proposal",
+  "publicationStatus": "draft",
+  "projectStatus": "proposal",
+  "workpiece": [
+    "中小型金属零部件"
+  ],
+  "materials": [],
+  "process": [
+    "调质"
+  ],
+  "equipment": [
+    "托辊网带热处理生产线"
+  ],
+  "need": [
+    "出口项目配套"
+  ],
+  "tags": [
+    "方案参考",
+    "中小型金属零部件",
+    "出口项目配套"
+  ],
+  "facts": [
+    {
+      "label": "方案产能",
+      "value": "约300",
+      "unit": "kg/h",
+      "condition": "须代表工件、装载和工艺条件确认",
+      "attribute": "方案参数"
+    },
+    {
+      "label": "交货节点",
+      "value": "上海港",
+      "unit": "",
+      "condition": "原稿为国内港交货，不等于现场终验收",
+      "attribute": "方案参数"
+    },
+    {
+      "label": "连续运行要求",
+      "value": "24",
+      "unit": "小时",
+      "condition": "买方现场终验收条款，不是已完成测试",
+      "attribute": "方案参数"
+    }
+  ],
+  "participation": "连续线设备、二次配线及安装指导调试方案",
+  "sourceSummary": "本文依据江苏苏能工业炉有限公司的历史方案资料整理，介绍拟定配置与供货条件；本文所引原件不构成设备已交付或验收通过的证明。",
+  "coverTitle": "出口网带调质线方案：港口交货、现场配套和终验收怎样衔接？",
+  "relatedLinks": [],
+  "projectYear": 2026,
+  "sourceDate": "2026-03-23",
+  "listTitle": "出口网带调质线交到港口后，安装和验收谁负责？",
+  "dateModified": "2026-09-12"
+}

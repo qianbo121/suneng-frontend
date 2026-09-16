@@ -1,0 +1,68 @@
+{
+  "id": "cylinder-robot-exchange-20260715-proposal",
+  "slug": "cylinder-robot-exchange-20260715-proposal",
+  "title": "一炉六只气瓶的固化炉，机器人怎么换料？",
+  "summary": "苏能一份六工位气瓶固化炉方案采用两层、每层三只的卧式布置。机器人从炉门口逐只上下料，炉内链条负责步进，气瓶在固化时自转；三种动作需要共同对准工装接口与工位状态。",
+  "body": "cylinder-robot-exchange-20260715-proposal.md",
+  "contentType": "proposal",
+  "publicationStatus": "draft",
+  "projectStatus": "proposal",
+  "workpiece": [
+    "复合材料气瓶"
+  ],
+  "materials": [
+    "铝合金6061",
+    "复合材料"
+  ],
+  "process": [
+    "固化"
+  ],
+  "equipment": [
+    "箱式固化炉"
+  ],
+  "need": [
+    "自动化配套"
+  ],
+  "tags": [
+    "方案参考",
+    "复合材料气瓶",
+    "自动化配套"
+  ],
+  "facts": [
+    {
+      "label": "气瓶直径",
+      "value": "310～620",
+      "unit": "mm",
+      "condition": "原件适用范围，不含工装干涉结论",
+      "attribute": "方案参数"
+    },
+    {
+      "label": "气瓶长度",
+      "value": "1500～2500",
+      "unit": "mm",
+      "condition": "需与两端工装及支撑梁调整对应",
+      "attribute": "方案参数"
+    },
+    {
+      "label": "单炉装载",
+      "value": "6",
+      "unit": "只",
+      "condition": "两层各三只，逐只上下料",
+      "attribute": "方案参数"
+    }
+  ],
+  "participation": "固化炉、自转与步进机构、机器人协同及生产数据接口配置",
+  "sourceSummary": "本文依据江苏苏能工业炉有限公司的历史方案资料整理，介绍拟定配置与供货条件；本文所引原件不构成设备已交付或验收通过的证明。",
+  "coverTitle": "六只气瓶固化炉方案：机器人逐只换料，工装、自转和步进怎样配合？",
+  "relatedLinks": [],
+  "projectYear": 2026,
+  "sourceDate": "2026-07-15",
+  "cover": {
+    "src": "/images/case-covers/remaining-20260910/neutral-wound-cylinder.webp",
+    "alt": "缠绕气瓶类别工件示意",
+    "caption": "缠绕气瓶类别示意（人工智能生成，非客户实物，不表示实际规格或工艺结果）",
+    "fit": "contain"
+  },
+  "listTitle": "一炉六只气瓶的固化炉，机器人怎么换料？",
+  "dateModified": "2026-09-12"
+}

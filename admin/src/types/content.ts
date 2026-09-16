@@ -34,6 +34,27 @@ export type CustomRequirementEntity = {
   updatedAt?: string;
 };
 
+export type WorkpieceContextDetail = {
+  categoryId: string;
+  categoryName: string;
+  workpieceId: string | null;
+  workpieceName: string | null;
+  searchTerm: string | null;
+  processPurposeId: string | null;
+  processPurposeName: string | null;
+  rawConditions: Array<{ label: string; value: string }>;
+  missingConditions: string[];
+  displayState: string;
+  publicDirections: string[];
+  ruleVersion: string;
+  baselineVersion: string | null;
+  createdAt: string;
+};
+
+export type CustomRequirementDetailEntity = CustomRequirementEntity & {
+  workpieceContext: WorkpieceContextDetail | null;
+};
+
 export type CustomRequirementListQuery = {
   page?: number;
   pageSize?: number;

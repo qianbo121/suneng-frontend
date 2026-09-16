@@ -3,6 +3,7 @@ import { describe, expect, it } from 'vitest';
 import {
   filterCanonicalNewsItems,
   getCanonicalNewsSlug,
+  getPublicNewsRedirectSlug,
   hasPublishableEnglishNews,
 } from '@/lib/news-routing';
 import type { NewsApiItem } from '@/types/news';
@@ -28,5 +29,11 @@ describe('news route integrity', () => {
 
     expect(getCanonicalNewsSlug(duplicate)).toBe(canonical);
     expect(filterCanonicalNewsItems([{ ...base, slug: canonical }, { ...base, id: 2, slug: duplicate }])).toHaveLength(1);
+  });
+
+  it('redirects numeric lookup aliases to the existing public slug in one step', () => {
+    const slug = 'tai-che-lu-lu-men-lou-re';
+    expect(getPublicNewsRedirectSlug('80', { slug })).toBe(slug);
+    expect(getPublicNewsRedirectSlug(slug, { slug })).toBeNull();
   });
 });

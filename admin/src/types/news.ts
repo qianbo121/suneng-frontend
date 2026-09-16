@@ -35,6 +35,8 @@ export type NewsEntity = {
   slug: string;
   isPublished?: boolean;
   status: PublishStatus;
+  baiduSubmittedAt?: string | null;
+  contentUpdatedAt?: string | null;
   seoTitleZh?: string | null;
   seoTitleEn?: string | null;
   seoDescriptionZh?: string | null;

@@ -1,0 +1,13 @@
+{
+  "id": "composite-plate-trolley-20210805-proposal",
+  "slug": "heavy-steel-plate-support-six-zone-proposal",
+  "number": 8,
+  "title": "How should support blocks be positioned in a 170-tonne thick-plate bogie-hearth furnace?",
+  "summary": "For heavy thick-plate loads, check the load path at each contact from workpiece through support blocks and load-bearing columns to the bogie frame beams. Jiangsu Suneng Industrial Furnace Co., Ltd.'s proposal dated 5 August 2021 specifies a rated furnace load of 170 t and states that the support columns bear on the bogie's steel frame beams. Its quotation lists equipment support bases but excludes workpiece support blocks. Connect the equipment supports and buyer-supplied blocks on the loading drawing; neither 170 t nor the number of supports alone establishes a suitable arrangement.",
+  "body": "composite-plate-trolley-20210805-proposal.md",
+  "sourceFingerprint": "5381cb9880831959b00f93d739aa4402f1e7b538cfbacb3dd1b65384f46a752d",
+  "translationStatus": "complete",
+  "translatedAt": "2026-09-12",
+  "coverAlt": "Illustration of thick steel plate. Not an actual customer workpiece photograph.",
+  "coverCaption": "Illustration of workpieces (AI-generated)."
+}

@@ -27,8 +27,13 @@ describe('SEO metadata generation', () => {
     expect(metadata.alternates?.canonical).toBe('https://www.jssngyl.cn/zh/news');
     expect(metadata.alternates?.languages).toEqual({
       'zh-CN': 'https://www.jssngyl.cn/zh/news',
+      'en-US': 'https://www.jssngyl.cn/en/news',
       'x-default': 'https://www.jssngyl.cn/zh/news',
     });
+    const english = await createNewsListMetadata('en');
+    expect(english.alternates?.canonical).toBe('https://www.jssngyl.cn/en/news');
+    expect(english.alternates?.languages).toEqual(metadata.alternates?.languages);
+    expect(english.openGraph).toMatchObject({ locale: 'en_US', url: 'https://www.jssngyl.cn/en/news' });
     expect(metadata.openGraph).toMatchObject({
       locale: 'zh_CN',
       url: 'https://www.jssngyl.cn/zh/news',
@@ -89,6 +94,15 @@ describe('SEO metadata generation', () => {
     const { metadata } = await import('@/app/layout');
 
     expect(metadata.keywords).toBeUndefined();
+  });
+
+  it('applies the global no-index switch to generated metadata without affecting canonical URLs', () => {
+    vi.stubEnv('SITE_NOINDEX', 'true');
+    try {
+      const metadata = buildMetadata({ title: 'Sample', description: 'Sample', path: '/zh/products' });
+      expect(metadata.robots).toEqual({ index: false, follow: false });
+      expect(metadata.alternates?.canonical).toBe('https://www.jssngyl.cn/zh/products');
+    } finally { vi.unstubAllEnvs(); }
   });
 
   it('keeps canonical URL helper on absolute localized URLs', () => {

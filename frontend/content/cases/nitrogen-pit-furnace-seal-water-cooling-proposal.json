@@ -1,0 +1,72 @@
+{
+  "id": "nitrogen-pit-seal-cooling-20220914-proposal",
+  "slug": "nitrogen-pit-furnace-seal-water-cooling-proposal",
+  "title": "氮气保护井式回火炉的密封处为什么要通水？",
+  "listTitle": "氮气保护井式回火炉的密封处为什么要通水？",
+  "listSummary": "密封处冷却，与工件在炉内接受热风循环，是两件不同的事。",
+  "summary": "密封处冷却，与工件在炉内接受热风循环，是两件不同的事。江苏苏能工业炉有限公司2022年9月14日的氮气保护井式回火炉方案，拟在马弗罐法兰密封圈处设置水冷，并配置水冷轴承的循环风机。核对相似项目时，应把密封、风机冷却和炉内气氛分别确认，不能将冷却水系统理解为工件冷却装置，也不能因有氮气入口就认定保护效果已得到验证。",
+  "body": "nitrogen-pit-furnace-seal-water-cooling-proposal.md",
+  "contentType": "proposal",
+  "publicationStatus": "draft",
+  "projectStatus": "proposal",
+  "projectYear": 2022,
+  "sourceDate": "2022-09-14",
+  "workpiece": [
+    "金属机件"
+  ],
+  "materials": [
+    "金属材料"
+  ],
+  "process": [
+    "回火",
+    "低温退火"
+  ],
+  "equipment": [
+    "氮气保护井式回火炉"
+  ],
+  "need": [
+    "密封水冷与保护气氛配套"
+  ],
+  "tags": [
+    "方案参考",
+    "金属机件",
+    "密封水冷与保护气氛配套"
+  ],
+  "facts": [
+    {
+      "label": "方案有效工作尺寸",
+      "value": "Φ1000×1200",
+      "unit": "mm",
+      "condition": "不能直接作为自备吊具外形上限",
+      "attribute": "方案参数"
+    },
+    {
+      "label": "方案加热功率",
+      "value": "85",
+      "unit": "kW",
+      "condition": "配置功率，非工件实际升温速度",
+      "attribute": "方案参数"
+    },
+    {
+      "label": "方案工作温度",
+      "value": "100～750",
+      "unit": "℃",
+      "condition": "设备范围；均匀性另限定180～750℃热稳态",
+      "attribute": "方案参数"
+    }
+  ],
+  "participation": "历史方案拟配置井式炉、马弗罐、密封水冷、导流循环及供气控制；用户自备工件吊具，现场水气条件另行确认。",
+  "sourceSummary": "江苏苏能工业炉有限公司历史技术方案资料整理。",
+  "coverTitle": "氮气保护井式回火炉方案：密封处水冷与炉内热风循环怎样分工？",
+  "relatedLinks": [
+    {
+      "title": "了解井式炉的适用条件",
+      "href": "/zh/products/detail/pit-furnace"
+    },
+    {
+      "title": "准备询价参数与供货范围",
+      "href": "/zh/articles/gongye-lu-baojia-canshu"
+    }
+  ],
+  "dateModified": "2026-09-12"
+}

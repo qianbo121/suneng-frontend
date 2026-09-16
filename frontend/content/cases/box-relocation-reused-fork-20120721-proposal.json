@@ -1,0 +1,68 @@
+{
+  "id": "box-relocation-reused-fork-20120721-proposal",
+  "slug": "stainless-pipe-box-furnace-relocation-reused-fork-lining-proposal",
+  "title": "管件固溶炉搬迁换炉衬，原来的铲车还能用吗？",
+  "summary": "苏能2012年一份不锈钢管件快速固溶炉搬迁方案，提出更新炉衬和天然气加热系统，同时利旧快速进出料铲车、更新其电控和限位。判断利旧范围时，应把原铲齿、料盘和更新后的炉底支承放在一起核对，不能因为铲车保留，就认定搬迁后的入炉和入水路线无需调整。",
+  "body": "box-relocation-reused-fork-20120721-proposal.md",
+  "contentType": "proposal",
+  "publicationStatus": "draft",
+  "projectStatus": "proposal",
+  "workpiece": [
+    "不锈钢管件"
+  ],
+  "materials": [
+    "不锈钢"
+  ],
+  "process": [
+    "固溶"
+  ],
+  "equipment": [
+    "箱式燃气快速固溶炉",
+    "进出料铲车"
+  ],
+  "need": [
+    "搬迁利旧改造"
+  ],
+  "tags": [
+    "方案参考",
+    "不锈钢管件",
+    "搬迁利旧改造"
+  ],
+  "facts": [
+    {
+      "label": "拟铲车处理",
+      "value": "原机构利旧",
+      "unit": "",
+      "condition": "更新电控遥控，不等于免做机械状态和转运验证",
+      "attribute": "方案参数"
+    },
+    {
+      "label": "炉底拟结构",
+      "value": "承重墩预留铲齿通道",
+      "unit": "",
+      "condition": "需与料盘支承及火焰热风通道共同确认",
+      "attribute": "方案参数"
+    },
+    {
+      "label": "改造拟气源",
+      "value": "管道天然气",
+      "unit": "",
+      "condition": "新厂已有气源条件，非原液化气系统原样复用",
+      "attribute": "方案参数"
+    }
+  ],
+  "participation": "苏能提出炉衬燃烧控制更新和铲车利旧电控改造，买方承担新厂轨道基础等约定现场工作。",
+  "sourceSummary": "本文依据江苏苏能工业炉有限公司的历史方案资料整理，介绍拟定配置与供货条件；本文所引原件不构成设备已交付或验收通过的证明。",
+  "coverTitle": "不锈钢管件炉搬迁改造方案：利旧铲车怎样配合新炉衬？",
+  "relatedLinks": [],
+  "projectYear": 2012,
+  "sourceDate": "2012-07-21",
+  "cover": {
+    "src": "/images/case-covers/finalized-20260910/stainless-pipe-fitting.webp",
+    "alt": "不锈钢管件类别工件示意",
+    "caption": "不锈钢管件类别示意（人工智能生成，非客户实物，不表示实际规格或工艺结果）",
+    "fit": "contain"
+  },
+  "listTitle": "管件固溶炉搬迁换炉衬，原来的铲车还能用吗？",
+  "dateModified": "2026-09-12"
+}

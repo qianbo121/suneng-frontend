@@ -1,0 +1,13 @@
+{
+  "id": "carburizing-probe-fallback-20250306-proposal",
+  "slug": "carburizing-probe-fallback-20250306-proposal",
+  "number": 110,
+  "title": "If a carburising test furnace switches to manual control after an oxygen-probe fault, are the test results still directly comparable?",
+  "summary": "A Suneng carburising test-furnace proposal lists both oxygen-probe feedback control and manual settings following a fault. Keeping the equipment running does not mean carbon potential is still controlled under the same measurement conditions. Comparisons of trial data should retain the control mode, measurement status and workpiece inspection results.",
+  "body": "carburizing-probe-fallback-20250306-proposal.md",
+  "sourceFingerprint": "5c53083d139903c8287fa9e7c2885782cb7ec05731f6ac71af66bf49fa0237ec",
+  "translationStatus": "complete",
+  "translatedAt": "2026-09-12",
+  "coverAlt": "",
+  "coverCaption": ""
+}

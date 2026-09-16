@@ -1,0 +1,832 @@
+{
+  "schemaVersion": "4.0.0",
+  "usage": "Content seed only. Every candidate has a stable candidateId, explicit applicableRouteIds and normalized CapabilityRequirements. A direction renders only through a version-bound active directionApproval in the audited furnace capability whitelist.",
+  "logicUnits": [
+    {
+      "id": "welded_batch",
+      "difficultyPoints": [
+        "焊后残余应力影响尺寸稳定性",
+        "大件温差会放大变形差异",
+        "支撑与装炉姿态影响受热均匀性"
+      ],
+      "commonProcesses": [
+        "去应力退火",
+        "焊后热处理"
+      ],
+      "candidateDirections": [
+        {
+          "candidateId": "welded-heavy-trolley",
+          "condition": "大型重载",
+          "requirements": {
+            "loadingMethods": [
+              "trolley"
+            ],
+            "productionModes": [
+              "batch"
+            ],
+            "heavyLoad": true
+          },
+          "reviewed": true,
+          "reviewVersion": "v2-content-baseline",
+          "applicableRouteIds": [
+            "welded-stress-relief"
+          ]
+        },
+        {
+          "candidateId": "welded-vertical-batch",
+          "condition": "立式装炉",
+          "requirements": {
+            "loadingMethods": [
+              "vertical"
+            ],
+            "productionModes": [
+              "batch"
+            ]
+          },
+          "reviewed": true,
+          "reviewVersion": "v2-content-baseline",
+          "applicableRouteIds": [
+            "welded-stress-relief"
+          ]
+        },
+        {
+          "candidateId": "welded-chamber-batch",
+          "condition": "中小批多规格",
+          "requirements": {
+            "loadingMethods": [
+              "chamber"
+            ],
+            "productionModes": [
+              "batch"
+            ]
+          },
+          "reviewed": true,
+          "reviewVersion": "v2-content-baseline",
+          "applicableRouteIds": [
+            "welded-stress-relief"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "aluminum_cylinder_solution",
+      "difficultyPoints": [
+        "出炉转移与入水节拍影响处理结果",
+        "瓶体内外冷却一致性需要控制",
+        "淬火变形与表面状态需要兼顾"
+      ],
+      "commonProcesses": [
+        "固溶处理",
+        "人工时效"
+      ],
+      "candidateDirections": [
+        {
+          "candidateId": "al-cylinder-continuous",
+          "condition": "连续稳定批量",
+          "requirements": {
+            "productionModes": [
+              "continuous"
+            ],
+            "cooling": [
+              "solution_quench"
+            ],
+            "fastTransfer": true
+          },
+          "reviewed": true,
+          "reviewVersion": "v2-content-baseline",
+          "applicableRouteIds": [
+            "aluminum-cylinder-solution-quench"
+          ]
+        },
+        {
+          "candidateId": "al-cylinder-batch-quench",
+          "condition": "多规格小批",
+          "requirements": {
+            "productionModes": [
+              "batch"
+            ],
+            "cooling": [
+              "solution_quench"
+            ],
+            "fastTransfer": true
+          },
+          "reviewed": true,
+          "reviewVersion": "v2-content-baseline",
+          "applicableRouteIds": [
+            "aluminum-cylinder-solution-quench"
+          ]
+        },
+        {
+          "candidateId": "al-cylinder-aging-batch",
+          "condition": "仅做人工时效",
+          "requirements": {
+            "productionModes": [
+              "batch"
+            ]
+          },
+          "reviewed": true,
+          "reviewVersion": "v2-content-baseline",
+          "applicableRouteIds": [
+            "aluminum-cylinder-artificial-aging"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "steel_cylinder_normalize_qt",
+      "difficultyPoints": [
+        "钢种与壁厚先决定正火还是调质",
+        "淬火路线对转移和冷却一致性敏感",
+        "连续生产需要兼顾节拍与记录"
+      ],
+      "commonProcesses": [
+        "正火",
+        "淬火",
+        "回火"
+      ],
+      "candidateDirections": [
+        {
+          "candidateId": "steel-cylinder-qt-continuous",
+          "condition": "无缝瓶调质",
+          "requirements": {
+            "productionModes": [
+              "continuous"
+            ],
+            "cooling": [
+              "quench"
+            ]
+          },
+          "reviewed": true,
+          "reviewVersion": "v2-content-baseline",
+          "applicableRouteIds": [
+            "seamless-steel-cylinder-quench-temper"
+          ]
+        },
+        {
+          "candidateId": "steel-cylinder-normalize-continuous",
+          "condition": "钢瓶连续正火",
+          "requirements": {
+            "productionModes": [
+              "continuous"
+            ]
+          },
+          "reviewed": true,
+          "reviewVersion": "v2-content-baseline",
+          "applicableRouteIds": [
+            "seamless-steel-cylinder-normalizing",
+            "welded-lpg-cylinder-normalizing"
+          ]
+        },
+        {
+          "candidateId": "steel-cylinder-batch",
+          "condition": "多规格小批",
+          "requirements": {
+            "productionModes": [
+              "batch"
+            ]
+          },
+          "reviewed": true,
+          "reviewVersion": "v2-content-baseline",
+          "applicableRouteIds": [
+            "seamless-steel-cylinder-quench-temper",
+            "seamless-steel-cylinder-normalizing",
+            "welded-lpg-cylinder-normalizing"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "heavy_cast_forged",
+      "difficultyPoints": [
+        "大截面心部升温与保温存在滞后",
+        "异形重件的支撑和装炉方式影响变形",
+        "铸钢、锻钢与球铁需要不同工艺曲线"
+      ],
+      "commonProcesses": [
+        "正火",
+        "回火",
+        "退火",
+        "扩氢退火",
+        "铁素体化退火"
+      ],
+      "candidateDirections": [
+        {
+          "candidateId": "heavy-single-trolley",
+          "condition": "大型单件",
+          "requirements": {
+            "loadingMethods": [
+              "trolley"
+            ],
+            "productionModes": [
+              "batch"
+            ],
+            "heavyLoad": true
+          },
+          "reviewed": true,
+          "reviewVersion": "v2-content-baseline",
+          "applicableRouteIds": [
+            "heavy-steel-normalize-temper-anneal",
+            "heavy-forging-hydrogen-relief",
+            "ductile-iron-anneal-normalize",
+            "ductile-iron-austempering-review"
+          ]
+        },
+        {
+          "candidateId": "heavy-vertical-batch",
+          "condition": "适合立式装炉",
+          "requirements": {
+            "loadingMethods": [
+              "vertical"
+            ],
+            "productionModes": [
+              "batch"
+            ]
+          },
+          "reviewed": true,
+          "reviewVersion": "v2-content-baseline",
+          "applicableRouteIds": [
+            "heavy-steel-normalize-temper-anneal",
+            "heavy-forging-hydrogen-relief",
+            "ductile-iron-anneal-normalize",
+            "ductile-iron-austempering-review"
+          ]
+        },
+        {
+          "candidateId": "heavy-chamber-batch",
+          "condition": "中小批多规格",
+          "requirements": {
+            "loadingMethods": [
+              "chamber"
+            ],
+            "productionModes": [
+              "batch"
+            ]
+          },
+          "reviewed": true,
+          "reviewVersion": "v2-content-baseline",
+          "applicableRouteIds": [
+            "heavy-steel-normalize-temper-anneal",
+            "heavy-forging-hydrogen-relief",
+            "ductile-iron-anneal-normalize",
+            "ductile-iron-austempering-review"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "shaft_gear_preheat",
+      "difficultyPoints": [
+        "细长或环形工件容易发生热处理变形",
+        "装炉姿态和支撑方式影响均匀性",
+        "预备处理与最终表面硬化不能混为一段"
+      ],
+      "commonProcesses": [
+        "正火",
+        "退火",
+        "调质"
+      ],
+      "candidateDirections": [
+        {
+          "candidateId": "shaft-vertical-batch",
+          "condition": "长件立式",
+          "requirements": {
+            "loadingMethods": [
+              "vertical"
+            ],
+            "productionModes": [
+              "batch"
+            ]
+          },
+          "reviewed": true,
+          "reviewVersion": "v2-content-baseline",
+          "applicableRouteIds": [
+            "shaft-gear-whole-normalize-qt",
+            "gear-blank-preliminary-treatment"
+          ]
+        },
+        {
+          "candidateId": "shaft-horizontal-batch",
+          "condition": "水平或大件批次",
+          "requirements": {
+            "loadingMethods": [
+              "trolley",
+              "chamber"
+            ],
+            "productionModes": [
+              "batch"
+            ]
+          },
+          "reviewed": true,
+          "reviewVersion": "v2-content-baseline",
+          "applicableRouteIds": [
+            "shaft-gear-whole-normalize-qt",
+            "gear-blank-preliminary-treatment"
+          ]
+        },
+        {
+          "candidateId": "shaft-continuous",
+          "condition": "稳定连续批量",
+          "requirements": {
+            "productionModes": [
+              "continuous"
+            ]
+          },
+          "reviewed": true,
+          "reviewVersion": "v2-content-baseline",
+          "applicableRouteIds": [
+            "shaft-gear-whole-normalize-qt",
+            "gear-blank-preliminary-treatment"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "carburizing_controlled_atmosphere",
+      "difficultyPoints": [
+        "先确认目标层深和表面碳含量要求",
+        "气氛控制与装料密度影响批次一致性",
+        "渗层与淬火变形需要同步评估"
+      ],
+      "commonProcesses": [
+        "渗碳",
+        "碳氮共渗",
+        "淬火",
+        "回火"
+      ],
+      "candidateDirections": [
+        {
+          "candidateId": "carburizing-continuous-small",
+          "condition": "大批稳定小件",
+          "requirements": {
+            "atmosphere": [
+              "controlled"
+            ],
+            "productionModes": [
+              "continuous"
+            ],
+            "smallParts": true
+          },
+          "reviewed": true,
+          "reviewVersion": "v2-content-baseline",
+          "applicableRouteIds": [
+            "shaft-gear-carburizing-review",
+            "track-link-carburizing-review",
+            "small-parts-carburize-carbonitride-review"
+          ]
+        },
+        {
+          "candidateId": "carburizing-batch",
+          "condition": "多规格批次",
+          "requirements": {
+            "atmosphere": [
+              "controlled"
+            ],
+            "productionModes": [
+              "batch"
+            ]
+          },
+          "reviewed": true,
+          "reviewVersion": "v2-content-baseline",
+          "applicableRouteIds": [
+            "shaft-gear-carburizing-review",
+            "track-link-carburizing-review",
+            "small-parts-carburize-carbonitride-review"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "engineering_undercarriage_bulk",
+      "difficultyPoints": [
+        "轮缘、轮毂和孔部的截面差影响均匀性",
+        "批量装料时需要控制工件间冷却差异",
+        "整体炉内处理与踏面齿部最终硬化需分开"
+      ],
+      "commonProcesses": [
+        "正火",
+        "退火",
+        "调质",
+        "回火"
+      ],
+      "candidateDirections": [
+        {
+          "candidateId": "undercarriage-continuous",
+          "condition": "稳定连续批量",
+          "requirements": {
+            "productionModes": [
+              "continuous"
+            ]
+          },
+          "reviewed": true,
+          "reviewVersion": "v2-content-baseline",
+          "applicableRouteIds": [
+            "undercarriage-whole-normalize-qt",
+            "track-pin-engineering-review"
+          ]
+        },
+        {
+          "candidateId": "undercarriage-chamber-batch",
+          "condition": "多规格批次",
+          "requirements": {
+            "loadingMethods": [
+              "chamber"
+            ],
+            "productionModes": [
+              "batch"
+            ]
+          },
+          "reviewed": true,
+          "reviewVersion": "v2-content-baseline",
+          "applicableRouteIds": [
+            "undercarriage-whole-normalize-qt",
+            "track-pin-engineering-review"
+          ]
+        },
+        {
+          "candidateId": "undercarriage-heavy-trolley",
+          "condition": "大型或重载",
+          "requirements": {
+            "loadingMethods": [
+              "trolley"
+            ],
+            "productionModes": [
+              "batch"
+            ],
+            "heavyLoad": true
+          },
+          "reviewed": true,
+          "reviewVersion": "v2-content-baseline",
+          "applicableRouteIds": [
+            "undercarriage-whole-normalize-qt"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "plate_batch",
+      "difficultyPoints": [
+        "板厚与面积放大加热和冷却不均",
+        "支撑与冷却方式直接影响板形",
+        "表面质量可能限制气氛与装炉方式"
+      ],
+      "commonProcesses": [
+        "退火",
+        "正火",
+        "淬火",
+        "回火",
+        "固溶处理",
+        "人工时效"
+      ],
+      "candidateDirections": [
+        {
+          "candidateId": "plate-trolley-batch",
+          "condition": "板材批次处理",
+          "requirements": {
+            "loadingMethods": [
+              "trolley"
+            ],
+            "productionModes": [
+              "batch"
+            ]
+          },
+          "reviewed": true,
+          "reviewVersion": "v2-content-baseline",
+          "applicableRouteIds": [
+            "plate-batch-anneal-normalize",
+            "wear-plate-quench-review",
+            "aluminum-plate-anneal-aging",
+            "aluminum-plate-solution-quench-review"
+          ]
+        },
+        {
+          "candidateId": "plate-chamber-batch",
+          "condition": "中小规格批次",
+          "requirements": {
+            "loadingMethods": [
+              "chamber"
+            ],
+            "productionModes": [
+              "batch"
+            ]
+          },
+          "reviewed": true,
+          "reviewVersion": "v2-content-baseline",
+          "applicableRouteIds": [
+            "plate-batch-anneal-normalize",
+            "wear-plate-quench-review",
+            "aluminum-plate-anneal-aging",
+            "aluminum-plate-solution-quench-review"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "stainless_plate_solution",
+      "difficultyPoints": [
+        "板厚与面积影响固溶均匀性",
+        "快速冷却与板形控制需联动",
+        "表面要求决定是否需要保护气氛"
+      ],
+      "commonProcesses": [
+        "固溶处理"
+      ],
+      "candidateDirections": [
+        {
+          "candidateId": "stainless-plate-batch-solution",
+          "condition": "批次固溶处理",
+          "requirements": {
+            "productionModes": [
+              "batch"
+            ],
+            "cooling": [
+              "solution_quench"
+            ]
+          },
+          "reviewed": true,
+          "reviewVersion": "v2-content-baseline",
+          "applicableRouteIds": [
+            "stainless-plate-solution-review"
+          ]
+        },
+        {
+          "candidateId": "stainless-plate-protected-surface",
+          "condition": "保护表面要求",
+          "requirements": {
+            "atmosphere": [
+              "protective",
+              "bright"
+            ],
+            "cooling": [
+              "solution_quench"
+            ]
+          },
+          "reviewed": true,
+          "reviewVersion": "v2-content-baseline",
+          "applicableRouteIds": [
+            "stainless-plate-solution-review"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "strip_coil_professional",
+      "difficultyPoints": [
+        "卷芯与外圈温差影响退火一致性",
+        "表面质量决定保护或光亮气氛要求",
+        "带宽、卷重和线速度决定专业线配置"
+      ],
+      "commonProcesses": [
+        "成卷退火",
+        "连续退火",
+        "光亮退火"
+      ],
+      "candidateDirections": [
+        {
+          "candidateId": "coil-bell-batch",
+          "condition": "成卷批次",
+          "requirements": {
+            "loadingMethods": [
+              "bell"
+            ],
+            "productionModes": [
+              "batch"
+            ],
+            "atmosphere": [
+              "protective"
+            ]
+          },
+          "reviewed": true,
+          "reviewVersion": "v2-content-baseline",
+          "applicableRouteIds": [
+            "coil-professional-line-review"
+          ]
+        },
+        {
+          "candidateId": "strip-continuous",
+          "condition": "展开连续",
+          "requirements": {
+            "productionModes": [
+              "continuous"
+            ],
+            "atmosphere": [
+              "protective",
+              "bright"
+            ]
+          },
+          "reviewed": true,
+          "reviewVersion": "v2-content-baseline",
+          "applicableRouteIds": [
+            "coil-professional-line-review"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "long_products",
+      "difficultyPoints": [
+        "长材前后与截面温差影响组织一致性",
+        "装料支撑和热处理变形影响直线度",
+        "连续处理需把工艺时间换算为线速度"
+      ],
+      "commonProcesses": [
+        "正火",
+        "退火",
+        "调质",
+        "整材炉内热处理"
+      ],
+      "candidateDirections": [
+        {
+          "candidateId": "long-products-roller-continuous",
+          "condition": "连续长材",
+          "requirements": {
+            "productionModes": [
+              "continuous"
+            ],
+            "loadingMethods": [
+              "roller"
+            ]
+          },
+          "reviewed": true,
+          "reviewVersion": "v2-content-baseline",
+          "applicableRouteIds": [
+            "long-products-whole-furnace-treatment"
+          ]
+        },
+        {
+          "candidateId": "long-products-batch",
+          "condition": "多规格小批",
+          "requirements": {
+            "productionModes": [
+              "batch"
+            ],
+            "loadingMethods": [
+              "trolley",
+              "chamber"
+            ]
+          },
+          "reviewed": true,
+          "reviewVersion": "v2-content-baseline",
+          "applicableRouteIds": [
+            "long-products-whole-furnace-treatment"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "coiled_wire",
+      "difficultyPoints": [
+        "卷内外温差影响球化或再结晶一致性",
+        "表面脱碳和氧化取决于气氛能力",
+        "卷重、堆叠方式和循环影响传热"
+      ],
+      "commonProcesses": [
+        "球化退火",
+        "再结晶退火",
+        "去应力退火"
+      ],
+      "candidateDirections": [
+        {
+          "candidateId": "wire-coil-vertical-batch",
+          "condition": "成卷立式装炉",
+          "requirements": {
+            "loadingMethods": [
+              "vertical"
+            ],
+            "productionModes": [
+              "batch"
+            ],
+            "atmosphere": [
+              "protective"
+            ]
+          },
+          "reviewed": true,
+          "reviewVersion": "v2-content-baseline",
+          "applicableRouteIds": [
+            "coiled-wire-protective-anneal-review"
+          ]
+        },
+        {
+          "candidateId": "wire-coil-bell-batch",
+          "condition": "成卷罩式处理",
+          "requirements": {
+            "loadingMethods": [
+              "bell"
+            ],
+            "productionModes": [
+              "batch"
+            ],
+            "atmosphere": [
+              "protective"
+            ]
+          },
+          "reviewed": true,
+          "reviewVersion": "v2-content-baseline",
+          "applicableRouteIds": [
+            "coiled-wire-protective-anneal-review"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "fastener_continuous",
+      "difficultyPoints": [
+        "小件大批量容易出现批次与位置差异",
+        "强度等级和脱碳要求决定气氛边界",
+        "装料、淬火和输送节拍需要联动"
+      ],
+      "commonProcesses": [
+        "淬火",
+        "回火",
+        "正火"
+      ],
+      "candidateDirections": [
+        {
+          "candidateId": "fastener-mesh-continuous",
+          "condition": "大批稳定",
+          "requirements": {
+            "loadingMethods": [
+              "mesh"
+            ],
+            "productionModes": [
+              "continuous"
+            ],
+            "smallParts": true
+          },
+          "reviewed": true,
+          "reviewVersion": "v2-content-baseline",
+          "applicableRouteIds": [
+            "fastener-quench-temper"
+          ]
+        },
+        {
+          "candidateId": "fastener-chamber-batch",
+          "condition": "多规格小批",
+          "requirements": {
+            "loadingMethods": [
+              "chamber"
+            ],
+            "productionModes": [
+              "batch"
+            ],
+            "smallParts": true
+          },
+          "reviewed": true,
+          "reviewVersion": "v2-content-baseline",
+          "applicableRouteIds": [
+            "fastener-quench-temper"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "small_spring_continuous",
+      "difficultyPoints": [
+        "细线径件对氧化和脱碳更敏感",
+        "加热与冷却不均会影响弹簧变形",
+        "批量节拍需要兼顾一致性和防缠绕"
+      ],
+      "commonProcesses": [
+        "淬火",
+        "回火",
+        "去应力退火"
+      ],
+      "candidateDirections": [
+        {
+          "candidateId": "small-spring-continuous",
+          "condition": "大批稳定",
+          "requirements": {
+            "productionModes": [
+              "continuous"
+            ],
+            "smallParts": true
+          },
+          "reviewed": true,
+          "reviewVersion": "v2-content-baseline",
+          "applicableRouteIds": [
+            "small-cold-coil-spring-stress-relief",
+            "small-spring-quench-temper-review"
+          ]
+        },
+        {
+          "candidateId": "small-spring-chamber-batch",
+          "condition": "多规格小批",
+          "requirements": {
+            "productionModes": [
+              "batch"
+            ],
+            "loadingMethods": [
+              "chamber"
+            ],
+            "smallParts": true
+          },
+          "reviewed": true,
+          "reviewVersion": "v2-content-baseline",
+          "applicableRouteIds": [
+            "small-cold-coil-spring-stress-relief",
+            "small-spring-quench-temper-review"
+          ]
+        }
+      ]
+    }
+  ]
+}

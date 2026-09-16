@@ -2,7 +2,7 @@ import type { NewsApiItem, NewsListCardItem } from '@/types/news';
 
 export { FALLBACK_NEWS_SLUGS } from '@/constants/news-fallback-slugs';
 
-export const NEWS_PAGE_SIZE = 6;
+export { LIST_PAGE_SIZE as NEWS_PAGE_SIZE } from '@/constants/pagination';
 export const NEWS_LIST_HERO_IMAGE = '/images/news/news-hero.png';
 export const NEWS_FALLBACK_IMAGE = '/images/news/news-delivery.png';
 

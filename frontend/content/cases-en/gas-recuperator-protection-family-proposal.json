@@ -1,0 +1,13 @@
+{
+  "id": "gas-recuperator-protection-family-proposal",
+  "slug": "gas-trolley-furnace-recuperator-cold-air-protection-family-proposal",
+  "number": 65,
+  "title": "Why does a gas-fired furnace waste-heat exchanger also need cold air?",
+  "summary": "Review waste-heat recovery together with heat-exchanger protection. Two Suneng gas-fired bogie-hearth furnace documents use flue gas to preheat combustion air, with temperature measurement at the exchanger's flue-gas outlet and a cold-air pipe at its inlet. Distinguish preheating performance, protective actions and furnace-pressure regulation. Combustion-air temperature is not a measured energy-saving result.",
+  "body": "gas-recuperator-protection-family-proposal.md",
+  "sourceFingerprint": "9dc2d380ebcc14bb18e45fbeb79db47a15fd158093d86146b9905c82313f2454",
+  "translationStatus": "complete",
+  "translatedAt": "2026-09-12",
+  "coverAlt": "",
+  "coverCaption": ""
+}

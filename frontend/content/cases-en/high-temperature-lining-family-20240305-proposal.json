@@ -1,0 +1,13 @@
+{
+  "id": "high-temperature-lining-family-20240305-proposal",
+  "slug": "high-temperature-trolley-heater-lining-interface-proposal",
+  "number": 71,
+  "title": "Choosing fibre blankets for a high-temperature bogie-hearth furnace: 1400-grade material versus furnace temperature",
+  "summary": "Two Suneng 2024 high-temperature bogie-hearth furnace proposals for steel components specify an additional layer of type 1400 zirconia-containing fibre blanket at the junction between heating strips and zirconia-alumina fibre modules. The clause identifies a local material location, not a 1400°C whole-furnace operating temperature. Review the modules, local blanket layer and heating-strip mounting together.",
+  "body": "high-temperature-lining-family-20240305-proposal.md",
+  "sourceFingerprint": "e62bb61ce7329d50b6972d4ed7fa27b5e13179a105ad44c322d4932df5fcffe9",
+  "translationStatus": "complete",
+  "translatedAt": "2026-09-12",
+  "coverAlt": "",
+  "coverCaption": ""
+}

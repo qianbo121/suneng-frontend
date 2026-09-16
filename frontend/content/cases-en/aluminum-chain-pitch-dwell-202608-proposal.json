@@ -1,0 +1,13 @@
+{
+  "id": "aluminum-chain-pitch-dwell-202608-proposal",
+  "slug": "aluminum-chain-pitch-dwell-202608-proposal",
+  "number": 119,
+  "title": "How is furnace length determined for a 120-minute heating and holding cycle in an aluminium chain furnace?",
+  "summary": "A Suneng discussion draft for an aluminium-alloy chain-conveyor furnace proposes discharge every 20–22 seconds per part, 4 parts per row and a combined heating-and-holding time of 120 minutes. Whether these requirements work together depends on actual fixture-row pitch and effective furnace length. Workpiece drawings are still missing, so calculations based on a provisional 100 mm pitch do not establish compliance with the site's space allowance.",
+  "body": "aluminum-chain-pitch-dwell-202608-proposal.md",
+  "sourceFingerprint": "b8073842e92e8f6dbbc284b5ab6ff977f08c8a24a9ad4dc0d7b0df4fa13efff4",
+  "translationStatus": "complete",
+  "translatedAt": "2026-09-12",
+  "coverAlt": "Illustration of aluminium-alloy billets.",
+  "coverCaption": "AI-generated aluminium-alloy billet illustration, not an actual customer workpiece photograph. It does not depict the workpiece geometry, dimensions or row pitch in the original proposal."
+}

@@ -1,0 +1,13 @@
+{
+  "id": "pyrolysis-test-capacity-202608-proposal",
+  "slug": "pyrolysis-test-capacity-202608-proposal",
+  "number": 124,
+  "title": "Throughput and residence-time comparisons for waste-pyrolysis test lines",
+  "summary": "A Suneng proposal groups circuit boards, waste plastics, organic coatings and photovoltaic panels into four test lines for one project. The first three use continuous-feed capacity, while the photovoltaic line converts batch weight into hourly throughput. Distinguish those measurement bases before comparing actual material, loading and complete cycles; four kg/h figures alone are not a valid comparison.",
+  "body": "pyrolysis-test-capacity-202608-proposal.md",
+  "sourceFingerprint": "7371f76bd70df60b57fdb54b8e3cec803ff2219dff80388c2c3d5195be843df9",
+  "translationStatus": "complete",
+  "translatedAt": "2026-09-12",
+  "coverAlt": "Illustration of circuit-board scrap.",
+  "coverCaption": "Illustration of circuit-board scrap (AI-generated). Not an actual customer workpiece photograph. One category of objects covered by this article."
+}

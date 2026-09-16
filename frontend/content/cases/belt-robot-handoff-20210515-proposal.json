@@ -1,0 +1,61 @@
+{
+  "id": "belt-robot-handoff-20210515-proposal",
+  "slug": "belt-robot-handoff-20210515-proposal",
+  "title": "网带回火炉停带后，谁通知机器人取料？",
+  "summary": "苏能一份网带式回火炉方案把出料感应、网带停止、总控开门和机器人取料串成一组动作。核对这类设备，需要把炉子独立运行与整线协同运行分别约定。",
+  "body": "belt-robot-handoff-20210515-proposal.md",
+  "contentType": "proposal",
+  "publicationStatus": "draft",
+  "projectStatus": "proposal",
+  "workpiece": [
+    "金属毛坯",
+    "中间制品"
+  ],
+  "materials": [],
+  "process": [
+    "加热"
+  ],
+  "equipment": [
+    "网带炉"
+  ],
+  "need": [
+    "工程配套"
+  ],
+  "tags": [
+    "方案参考",
+    "金属毛坯",
+    "中间制品",
+    "工程配套"
+  ],
+  "facts": [
+    {
+      "label": "方案有效加热区",
+      "value": "3300×400×200",
+      "unit": "mm",
+      "condition": "方案有效加热区，按工件通过方向核对",
+      "attribute": "方案参数"
+    },
+    {
+      "label": "方案加热功率",
+      "value": "60",
+      "unit": "kW",
+      "condition": "额定配置，不作为实际耗电量",
+      "attribute": "方案参数"
+    },
+    {
+      "label": "方案控温区数",
+      "value": "3",
+      "unit": "区",
+      "condition": "炉温分区，不自动对应产品内部温度",
+      "attribute": "方案参数"
+    }
+  ],
+  "participation": "网带炉及其控制系统，与整线总控进行接口配合",
+  "sourceSummary": "本文依据江苏苏能工业炉有限公司的历史方案资料整理，介绍拟定配置与供货条件；本文所引原件不构成设备已交付或验收通过的证明。",
+  "coverTitle": "网带炉与机器人衔接：到料停带之后，谁发出取料指令？",
+  "relatedLinks": [],
+  "projectYear": 2021,
+  "sourceDate": "2021-05-15",
+  "listTitle": "网带回火炉停带后，谁通知机器人取料？",
+  "dateModified": "2026-09-12"
+}

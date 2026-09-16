@@ -1,0 +1,61 @@
+{
+  "id": "belt-carbon-oil-interface-20260512-proposal",
+  "slug": "controlled-atmosphere-belt-furnace-oil-smoke-interface-proposal",
+  "title": "气氛网带炉的落料口密封与油烟抽排",
+  "summary": "苏能一份可控气氛托辊网带炉方案，同时设置氧探头、碳控仪和炉后油烟处理结构。比较这套配置时，不能只看有没有碳势检测：工件从保护气氛加热区落入油槽，落料通道的油面密封、油帘和抽气安排也关系到方案所述的气氛控制条件。",
+  "body": "belt-carbon-oil-interface-20260512-proposal.md",
+  "contentType": "proposal",
+  "publicationStatus": "draft",
+  "projectStatus": "proposal",
+  "workpiece": [
+    "金属工件"
+  ],
+  "materials": [],
+  "process": [
+    "保护气氛加热",
+    "油淬",
+    "回火"
+  ],
+  "equipment": [
+    "可控气氛托辊网带炉"
+  ],
+  "need": [
+    "气氛与落料口接口核对"
+  ],
+  "tags": [
+    "方案参考",
+    "金属工件",
+    "气氛与落料口接口核对"
+  ],
+  "facts": [
+    {
+      "label": "拟碳势检测探头",
+      "value": "1",
+      "unit": "支",
+      "condition": "氧探头配置，不证明工件实际脱碳或渗碳结果",
+      "attribute": "方案参数"
+    },
+    {
+      "label": "拟气氛原料",
+      "value": "甲醇与丙烷",
+      "unit": "",
+      "condition": "来源供给说明，具体工艺配方不在本文定义",
+      "attribute": "方案参数"
+    },
+    {
+      "label": "拟落料口密封",
+      "value": "伸入淬火油面",
+      "unit": "",
+      "condition": "油槽实际液位及通过状态需对应设计",
+      "attribute": "方案参数"
+    }
+  ],
+  "participation": "苏能样本提出气氛检测调节及炉后油槽、抽排与后续清洗回火配置；实施范围按终版确认。",
+  "sourceSummary": "本文依据江苏苏能工业炉有限公司的历史方案资料整理，介绍拟定配置与供货条件；本文所引原件不构成设备已交付或验收通过的证明。",
+  "coverTitle": "可控气氛网带炉方案：碳势检测为什么还要看炉后落料口？",
+  "relatedLinks": [],
+  "projectYear": 2026,
+  "sourceDate": "2026-05-12",
+  "listTitle": "气氛网带炉的落料口密封与油烟抽排",
+  "dateModified": "2026-09-12"
+}

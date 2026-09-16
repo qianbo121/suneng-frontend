@@ -1,0 +1,13 @@
+{
+  "id": "large-trolley-dual-fuel-20181113-proposal",
+  "slug": "large-trolley-dual-fuel-existing-air-flue-proposal",
+  "number": 13,
+  "title": "Can the existing fans and flue be reused when adding natural gas to an oil-fired bogie-hearth furnace?",
+  "summary": "Reusing fans and flues still requires checking their interfaces with the new combustion system. Jiangsu Suneng Industrial Furnace Co., Ltd.'s 20 m bogie-hearth furnace retrofit proposal dated 13 November 2018 retains oil heating and adds natural-gas combustion. Both can operate independently while sharing the original exhaust and combustion-air systems. New air branches and changeover valves close the original oil-burner air branches during gas operation. Reuse therefore includes changeover design and verification, not simply leaving old equipment untouched.",
+  "body": "large-trolley-dual-fuel-20181113-proposal.md",
+  "sourceFingerprint": "446f674ec549fca684653ce96a8ea8d9f4d85ac5f28851c5de0700d0570e8111",
+  "translationStatus": "complete",
+  "translatedAt": "2026-09-12",
+  "coverAlt": "Illustration of welded structures.",
+  "coverCaption": "Illustration of welded structures (AI-generated). Not an actual customer workpiece photograph."
+}

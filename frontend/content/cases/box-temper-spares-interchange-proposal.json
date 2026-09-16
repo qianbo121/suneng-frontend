@@ -1,0 +1,58 @@
+{
+  "id": "box-temper-spares-interchange-proposal",
+  "slug": "box-temper-spares-interchange-proposal",
+  "title": "再买一台箱式回火炉，怎样确认能与旧炉共用零配件？",
+  "summary": "苏能一份箱式回火炉协议文本要求新增设备与车间原有设备的外形、配置和操作程序基本相同，零配件可互换。这样的需求不能只核对炉膛尺寸，还要把料盘输送、安装接口和控制配置逐项对应。",
+  "body": "box-temper-spares-interchange-proposal.md",
+  "contentType": "proposal",
+  "publicationStatus": "draft",
+  "projectStatus": "proposal",
+  "workpiece": [
+    "汽车零部件"
+  ],
+  "materials": [],
+  "process": [
+    "低温回火"
+  ],
+  "equipment": [
+    "箱式回火炉"
+  ],
+  "need": [
+    "既有设备兼容"
+  ],
+  "tags": [
+    "方案参考",
+    "汽车零部件",
+    "既有设备兼容"
+  ],
+  "facts": [
+    {
+      "label": "方案料盘尺寸",
+      "value": "1500×1100×40",
+      "unit": "mm",
+      "condition": "历史料盘外形，需与既有料具核对",
+      "attribute": "方案参数"
+    },
+    {
+      "label": "拟配料框数量",
+      "value": "4",
+      "unit": "只",
+      "condition": "另配对开门料框，不推定为仓储笼同一对象",
+      "attribute": "方案参数"
+    },
+    {
+      "label": "方案托辊尺寸",
+      "value": "Φ60×1200",
+      "unit": "mm",
+      "condition": "接口仍须按实物或图纸核对",
+      "attribute": "方案参数"
+    }
+  ],
+  "participation": "苏能历史协议拟提供箱式回火炉及运输安装调试，互换范围按双方确认附件。",
+  "sourceSummary": "本文依据江苏苏能工业炉有限公司的历史方案资料整理，介绍拟定配置与供货条件；本文所引原件不构成设备已交付或验收通过的证明。",
+  "coverTitle": "增购箱式回火炉：要求与旧机零配件互换，应该核对到哪一层？",
+  "relatedLinks": [],
+  "sourceDate": "2009-08-26",
+  "listTitle": "再买一台箱式回火炉，怎样确认能与旧炉共用零配件？",
+  "dateModified": "2026-09-12"
+}

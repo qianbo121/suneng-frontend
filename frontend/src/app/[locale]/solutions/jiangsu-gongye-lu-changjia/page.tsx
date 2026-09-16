@@ -1,3 +1,5 @@
+import { EnglishSolutionPage, englishSolutionMetadata } from '@/components/engineering/EnglishSolutionsPage';
+import { solutionAlternates } from '@/lib/english-solutions';
 import type { Metadata } from 'next';
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
@@ -223,26 +225,12 @@ const industryCards = [
 
 const caseCards: CaseCard[] = [
   {
-    title: '某不锈钢深加工企业连续退洗线节能改造',
+    title: '连续退洗线改造：核对现场能源与接口',
     industry: '不锈钢深加工',
-    furnaceType: '连续退洗线 / 热处理生产线',
-    projectType: '工业炉节能改造',
-    scope: '燃料结构升级、燃烧系统改造、烟气余热回收、控温系统优化、现场调试配合。',
+    furnaceType: '连续退洗线',
+    projectType: '现场配合参考',
+    scope: '该案例可用于讨论燃气资料、停产切换、能源计量和调试记录；实施地点与现场条件不同，需要重新确认，不能直接套用原项目结果。',
     href: casePath,
-  },
-  {
-    title: '某不锈钢压延企业罩式炉生产线技改',
-    industry: '不锈钢压延',
-    furnaceType: '罩式炉生产线',
-    projectType: '气氛系统升级与控制系统改造',
-    scope: '围绕罩式炉炉罩、密封、气氛、温控和运行稳定性进行技改评估与设备配套。',
-  },
-  {
-    title: '某工程总包项目设备分包',
-    industry: '工程总包配套',
-    furnaceType: '不锈钢热处理装备',
-    projectType: '工业炉设备分包供应',
-    scope: '作为工业炉设备供应商或设备分包方，配合工程总包单位完成设备制造、调试与售后支持。',
   },
 ];
 
@@ -285,7 +273,7 @@ const faqs = [
   {
     question: 'Q8：苏能是否承接工程总包？',
     answer:
-      '苏能通常作为工业炉设备供应商或设备分包方参与项目，不宣称承接工程总包业务。如项目涉及土建、压力容器、特殊行业资质或工程总包要求，应由具备相应资质的单位承担，苏能可配合设备部分实施。',
+      '区域项目先列清设备供货、运输、卸车吊装、基础施工、能源接入和调试各由谁承担。苏能按约定负责工业炉设备部分，不承接工程总包；土建、压力容器及其他需要专项资质的工作，由具备相应资质的单位承担。',
   },
 ];
 
@@ -366,11 +354,12 @@ const pageJsonLd = cleanObject([
 ]);
 
 export function generateStaticParams() {
-  return [{ locale: 'zh' }];
+  return [{ locale: 'zh' }, { locale: 'en' }];
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { locale } = await params;
+  if (locale === 'en') return englishSolutionMetadata('jiangsu-gongye-lu-changjia');
 
   if (locale !== 'zh') {
     notFound();
@@ -384,15 +373,13 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     keywords: JIANGSU_INDUSTRIAL_FURNACE_MANUFACTURER_SEO.keywords,
     image: JIANGSU_INDUSTRIAL_FURNACE_MANUFACTURER_SEO.ogImage,
     type: 'website',
-    alternateLocales: {
-      'zh-CN': pagePath,
-      'x-default': pagePath,
-    },
+    alternateLocales: solutionAlternates('jiangsu-gongye-lu-changjia'),
   });
 }
 
 export default async function JiangsuIndustrialFurnaceManufacturerPage({ params }: PageProps) {
   const { locale } = await params;
+  if (locale === 'en') return <EnglishSolutionPage slug="jiangsu-gongye-lu-changjia" />;
 
   if (locale !== 'zh') {
     notFound();
@@ -441,6 +428,22 @@ export default async function JiangsuIndustrialFurnaceManufacturerPage({ params 
           </div>
         </div>
       </section>
+
+      <Section id="regional-delivery" eyebrow="现场配合" title="江苏及华东项目，先确认交付条件">
+        <div className="grid gap-5 md:grid-cols-3">
+          {[
+            ['交付地点与进场通道', '提供厂址、厂房入口尺寸、运输通道和可用吊装条件，核对整机运输还是分段到场。'],
+            ['现场勘查与接口资料', '先发总平面、设备照片、电源和燃气等能源资料；是否需要上门勘查、勘查范围及时间，按资料完整程度和项目需要确认。'],
+            ['停产窗口与配合分工', '明确基础、卸车、吊装、管线接入和试验工件的准备责任，再协调实施窗口。服务半径、到场时间与费用按具体项目确认。'],
+          ].map(([title, text]) => (
+            <article key={title} className="rounded-lg border border-[#e1e7f0] p-6">
+              <h3 className="text-xl font-semibold">{title}</h3>
+              <p className="mt-3 text-[15px] leading-[1.85] text-[#475467]">{text}</p>
+            </article>
+          ))}
+        </div>
+        <p className="mt-6 leading-8 text-[#475467]">制造能力、炉型适配与选厂判断，可继续查看<a href={manufacturerPath} className="text-[#0c4dcc] underline underline-offset-4">热处理炉厂家能力说明</a>；本页重点用于确认区域项目的现场配合。</p>
+      </Section>
 
       <Section id="services" eyebrow="服务能力" title="一、苏能在江苏能提供哪些工业炉服务？">
         <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">

@@ -1,0 +1,73 @@
+{
+  "id": "metal-plate-alkali-layout-20240504-proposal",
+  "slug": "metal-plate-alkali-drip-tray-false-bottom-proposal",
+  "title": "板料碱洗设备的接液、清渣与应急转移配置",
+  "listTitle": "板料碱洗设备的接液、清渣与应急转移配置",
+  "listSummary": "筐料在碱锅之间移动、锅内残渣清理和渗漏后的碱液转移，是三种不同的处理任务。",
+  "summary": "筐料在碱锅之间移动、锅内残渣清理和渗漏后的碱液转移，是三种不同的处理任务。江苏苏能工业炉有限公司2024年5月4日的碱洗段方案，分别配置锅间接液盘、可吊起的假底和移动式应急转移装置。核对相似项目时，应把筐料移动、锅盖开启、清理和转移设备的位置放进同一份布置资料中，分别落实空间与配套范围。",
+  "body": "metal-plate-alkali-drip-tray-false-bottom-proposal.md",
+  "contentType": "proposal",
+  "publicationStatus": "draft",
+  "projectStatus": "proposal",
+  "projectYear": 2024,
+  "sourceDate": "2024-05-04",
+  "workpiece": [
+    "金属板料"
+  ],
+  "materials": [
+    "金属材料"
+  ],
+  "process": [
+    "碱洗"
+  ],
+  "equipment": [
+    "碱洗段碱锅"
+  ],
+  "need": [
+    "装料转运与现场配套"
+  ],
+  "tags": [
+    "方案参考",
+    "金属板料",
+    "装料转运与现场配套"
+  ],
+  "facts": [
+    {
+      "label": "方案碱锅数量",
+      "value": "3",
+      "unit": "个",
+      "condition": "碱洗段概述数量；不将单机清单误作全段数量",
+      "attribute": "方案参数"
+    },
+    {
+      "label": "方案单机加热功率",
+      "value": "450",
+      "unit": "kW/台",
+      "condition": "配置功率，非实际耗电量",
+      "attribute": "方案参数"
+    },
+    {
+      "label": "方案内部工作尺寸",
+      "value": "4900×1500×2200",
+      "unit": "mm",
+      "condition": "长×宽×高；坩埚内部，不等于装料外形上限",
+      "attribute": "方案参数"
+    }
+  ],
+  "participation": "历史方案拟配置3个碱锅及其加热、锅盖、接液、清理和应急转移装置；现场接收及吊装配合需明确。",
+  "sourceSummary": "江苏苏能工业炉有限公司历史技术方案资料整理。",
+  "coverTitle": "金属板料碱洗段方案：接液盘、假底与应急转移装置各管哪件事？",
+  "relatedLinks": [
+    {
+      "title": "准备询价参数与供货范围",
+      "href": "/zh/articles/gongye-lu-baojia-canshu"
+    }
+  ],
+  "cover": {
+    "src": "/images/case-covers/white-background-20260912/neutral-metal-plate-white.webp",
+    "alt": "板料类别工件示意",
+    "caption": "板料工件示意（人工智能生成，非客户实物）",
+    "fit": "contain"
+  },
+  "dateModified": "2026-09-12"
+}

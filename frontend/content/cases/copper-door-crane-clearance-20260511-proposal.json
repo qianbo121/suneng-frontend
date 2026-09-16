@@ -1,0 +1,68 @@
+{
+  "id": "copper-door-crane-clearance-20260511-proposal",
+  "slug": "copper-wire-annealing-furnace-door-crane-clearance-proposal",
+  "title": "铜合金线材退火炉开门后，行车还能通过吗？",
+  "summary": "苏能2026年5月的一份铜合金线材退火炉方案，拟用四台室式炉共用一台装卸料小车。原文明确：炉门关闭时行车可以通过，出料时炉门升到最高位后行车不能通过。因此，核对车间布置要同时看关门与开门状态，把炉门的升起空间、行车通行和叉料车装卸顺序一起安排，不能只按设备停放时的外形判断能否放进车间。",
+  "body": "copper-door-crane-clearance-20260511-proposal.md",
+  "contentType": "proposal",
+  "publicationStatus": "draft",
+  "projectStatus": "proposal",
+  "workpiece": [
+    "铜合金线材"
+  ],
+  "materials": [
+    "铜合金"
+  ],
+  "process": [
+    "退火"
+  ],
+  "equipment": [
+    "室式电加热退火炉",
+    "进出料叉料车"
+  ],
+  "need": [
+    "既有车间增设炉组"
+  ],
+  "tags": [
+    "方案参考",
+    "铜合金线材",
+    "既有车间增设炉组"
+  ],
+  "facts": [
+    {
+      "label": "方案炉门升起标高",
+      "value": "+5345",
+      "unit": "mm",
+      "condition": "以原件地面±0.00为基准；该状态行车不能通过，非通用厂房净高",
+      "attribute": "方案参数"
+    },
+    {
+      "label": "方案炉体数量",
+      "value": "4",
+      "unit": "台",
+      "condition": "同一套设备的四台室式炉，不是四套独立装卸系统",
+      "attribute": "方案参数"
+    },
+    {
+      "label": "拟共用叉料车",
+      "value": "1",
+      "unit": "台",
+      "condition": "服务四台炉及装卸料台，实际调度能力另确认",
+      "attribute": "方案参数"
+    }
+  ],
+  "participation": "苏能拟提供四炉本体、共用叉料车、装卸平台和控制，现场公辅接通按分工落实。",
+  "sourceSummary": "本文依据江苏苏能工业炉有限公司的历史方案资料整理，介绍拟定配置与供货条件；本文所引原件不构成设备已交付或验收通过的证明。",
+  "coverTitle": "铜合金线材退火炉方案：炉门升起后，行车还能通过吗？",
+  "relatedLinks": [],
+  "projectYear": 2026,
+  "sourceDate": "2026-05-11",
+  "cover": {
+    "src": "/images/case-covers/remaining-20260910/copper-wire-coil.webp",
+    "alt": "铜合金线材类别工件示意",
+    "caption": "铜合金线材类别示意（人工智能生成，非客户实物，不表示实际规格或工艺结果）",
+    "fit": "contain"
+  },
+  "listTitle": "铜合金线材退火炉开门后，行车还能通过吗？",
+  "dateModified": "2026-09-12"
+}

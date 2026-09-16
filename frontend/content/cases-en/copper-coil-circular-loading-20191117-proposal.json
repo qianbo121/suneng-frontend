@@ -1,0 +1,13 @@
+{
+  "id": "copper-coil-circular-loading-20191117-proposal",
+  "slug": "copper-coil-circular-loading-20191117-proposal",
+  "number": 134,
+  "title": "Which loading dimensions should I use when choosing a rack for a copper-wire-coil annealing furnace?",
+  "summary": "A Suneng copper-wire coil annealing proposal lists both a 2000 × 2000 × 1900 mm chamber and effective working dimensions of Ø1710 × 1600 mm. Racks and coils must be checked against the permitted loading zone, rather than assuming all of the square chamber is available to the workpieces.",
+  "body": "copper-coil-circular-loading-20191117-proposal.md",
+  "sourceFingerprint": "3647e5a40de0146b373370216d118043b1fc817f364a9c26d1f1aceba4286da4",
+  "translationStatus": "complete",
+  "translatedAt": "2026-09-12",
+  "coverAlt": "Illustration of copper wire coils.",
+  "coverCaption": "Illustration of copper wire coils (AI-generated). Not an actual customer workpiece photograph. Does not establish actual specifications or process results."
+}

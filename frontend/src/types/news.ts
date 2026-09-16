@@ -6,6 +6,7 @@ export type NewsCategoryApiItem = {
   nameEn?: string | null;
   slug: string;
   sortOrder?: number;
+  status?: 'draft' | 'published' | 'offline';
   seoTitleZh?: string | null;
   seoTitleEn?: string | null;
   seoDescriptionZh?: string | null;
@@ -13,6 +14,8 @@ export type NewsCategoryApiItem = {
   seoKeywordsZh?: string | null;
   seoKeywordsEn?: string | null;
   ogImage?: string | null;
+  createdAt?: string;
+  updatedAt?: string;
 };
 
 export type NewsApiItem = {
@@ -27,8 +30,15 @@ export type NewsApiItem = {
   coverImage?: string | null;
   publishDate: string;
   contentUpdatedAt?: string | null;
+  englishContentUpdatedAt?: string | null;
+  englishSourceDate?: { label: 'Source reviewed' | 'Source updated'; date: string };
+  englishCoverImage?: string;
   viewCount?: number;
   slug: string;
+  isPublished?: boolean;
+  sortOrder?: number;
+  status?: 'draft' | 'published' | 'offline';
+  baiduSubmittedAt?: string | null;
   seoTitleZh?: string | null;
   seoTitleEn?: string | null;
   seoDescriptionZh?: string | null;
@@ -36,6 +46,8 @@ export type NewsApiItem = {
   seoKeywordsZh?: string | null;
   seoKeywordsEn?: string | null;
   ogImage?: string | null;
+  createdAt?: string;
+  updatedAt?: string;
   category?: NewsCategoryApiItem | null;
 };
 
@@ -60,11 +72,18 @@ export type NewsPrevNextApiData = {
 };
 
 export type NewsListCardItem = {
+  viewCount?: number;
+  listTopic?: import('@/lib/news-decision-center').NewsDecisionTopicId;
+  listFurnaces?: import('@/lib/news-decision-center').NewsFurnaceFilterId[];
+  listEquipmentLabel?: string;
   id: number;
   slug: string;
   image: string;
   title: LocalizedText;
   summary: LocalizedText;
   date: string;
+  updatedAt?: string | null;
   category: LocalizedText;
+  searchText?: string;
+  source?: NewsApiItem;
 };

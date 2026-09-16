@@ -1,0 +1,13 @@
+{
+  "id": "rt4-75-6-proposal",
+  "slug": "rt4-75-6-trolley-furnace-proposal",
+  "number": 1,
+  "title": "Does the 600 kg load rating of a bogie-hearth furnace include the rack for shaft parts?",
+  "summary": "For a bogie-hearth furnace heating shafts and small parts, first compare the space, supports and temperature conditions using a loading layout that includes the fixtures. Then compare instruments, testing and supply scope against the actual measurement requirements. Jiangsu Suneng Industrial Furnace Co., Ltd.'s RT4-75-6 proposal dated 2 November 2021 specified a 900×600×600 mm effective heating zone, a 500–650℃ operating range and 75 kW heating power. Whether its proposed 600 kg rated load included fixtures was not defined. The quotation covered equipment design, manufacture, transport, installation and commissioning, providing a starting point for similar enquiries.",
+  "body": "rt4-75-6-proposal.md",
+  "sourceFingerprint": "5c37be85bb5b7f9e56f2ab6b024aecb241f68cb215c2be7b64080975eb7e6557",
+  "translationStatus": "complete",
+  "translatedAt": "2026-09-12",
+  "coverAlt": "Reference image of shafts and small parts.",
+  "coverCaption": "Workpiece reference image."
+}

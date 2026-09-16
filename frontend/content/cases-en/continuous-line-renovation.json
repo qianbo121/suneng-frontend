@@ -1,0 +1,13 @@
+{
+  "id": "continuous-line-renovation",
+  "slug": "anonymous-tsingshan-1250-renovation",
+  "number": 83,
+  "title": "Can existing air ducts and flues be reused when converting an annealing and pickling line from natural gas to cooled fuel gas?",
+  "summary": "Suneng's 2015 retrofit documents for three 1250 mm continuous annealing and pickling lines propose changing from natural gas to cooled fuel gas, renewing fuel pipes and burners, adjusting controls and modifying the solution-treatment section. They treat fuel, combustion air and exhaust differently: fuel lines are enlarged and renewed, combustion-air ducts partly modified and reused, and external exhaust ducts recommended for retention with a new induced-draught fan. Fuel conversion is more than burner replacement, and reuse still requires review of the existing system.",
+  "body": "continuous-line-renovation.md",
+  "sourceFingerprint": "68a69e49e59bb186c1d922f76dc638d567d99fa2d4859f840faa9b4a4521f36f",
+  "translationStatus": "complete",
+  "translatedAt": "2026-09-12",
+  "coverAlt": "Reference image of stainless steel coils and strip.",
+  "coverCaption": "Workpiece reference image."
+}

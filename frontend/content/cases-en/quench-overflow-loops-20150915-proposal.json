@@ -1,0 +1,13 @@
+{
+  "id": "quench-overflow-loops-20150915-proposal",
+  "slug": "quench-overflow-loops-20150915-proposal",
+  "number": 146,
+  "title": "Does a quench tank also need a storage tank? Check the overflow and cooling arrangements",
+  "summary": "A 2015 group of Suneng quench-oil, water-tank and associated storage-tank documents separately describes in-tank agitation, overflow storage and external circulation. Selection should identify where workpieces cool, where displaced liquid goes and which equipment removes heat from circulation. Storage volume cannot simply be added to usable workpiece-quenching space.",
+  "body": "quench-overflow-loops-20150915-proposal.md",
+  "sourceFingerprint": "ca0b30b3f4f33dac14c8c3db2c96dd12c256cb5a0736cbfe3b6a553b379e57e2",
+  "translationStatus": "complete",
+  "translatedAt": "2026-09-12",
+  "coverAlt": "",
+  "coverCaption": ""
+}

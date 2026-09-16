@@ -1,0 +1,71 @@
+{
+  "id": "steel22a-monthly-output-20230807-proposal",
+  "slug": "steel22a-two-trolley-furnaces-monthly-output-proposal",
+  "title": "钢件退火月产500吨，两台台车炉够不够？",
+  "listTitle": "钢件退火月产500吨，两台台车炉够不够？",
+  "listSummary": "月产目标需要用每炉实际装料和完整炉次周期核算。",
+  "summary": "月产目标需要用每炉实际装料和完整炉次周期核算。江苏苏能工业炉有限公司落款2023年8月7日的22A钢工件退火方案，针对月产500t的需求，提出两台台车炉、每台炉装5件，并列出约2～2.2t单件重量。这个配置思路可以用于初筛，但不能仅凭“两台、每炉5件”认定已达到500t月产量。",
+  "body": "steel22a-two-trolley-furnaces-monthly-output-proposal.md",
+  "contentType": "proposal",
+  "publicationStatus": "draft",
+  "projectStatus": "proposal",
+  "projectYear": 2023,
+  "sourceDate": "2023-08-07",
+  "workpiece": [
+    "22A钢工件"
+  ],
+  "materials": [
+    "22A钢"
+  ],
+  "process": [
+    "退火"
+  ],
+  "equipment": [
+    "台车式电阻炉"
+  ],
+  "need": [
+    "月度产量与炉次规划"
+  ],
+  "tags": [
+    "方案参考",
+    "22A钢工件",
+    "月度产量与炉次规划"
+  ],
+  "facts": [
+    {
+      "label": "月产需求",
+      "value": "500",
+      "unit": "t/月",
+      "condition": "客户需求，不作实际产量",
+      "attribute": "客户需求"
+    },
+    {
+      "label": "方案每炉件数",
+      "value": "5",
+      "unit": "件",
+      "condition": "单件约2～2.2t，按本次装载确认",
+      "attribute": "方案参数"
+    },
+    {
+      "label": "方案台车炉数量",
+      "value": "2",
+      "unit": "台",
+      "condition": "两台周期炉，不证明实际投运",
+      "attribute": "方案参数"
+    }
+  ],
+  "participation": "历史方案针对月产需求拟配置两台台车式退火炉，各装5件；负载周期、实际净重及现场装卸条件需对应核算。",
+  "sourceSummary": "江苏苏能工业炉有限公司历史技术方案资料整理。",
+  "coverTitle": "22A钢工件台车炉方案：每炉5件与月产500t怎样衔接？",
+  "relatedLinks": [
+    {
+      "title": "了解台车炉的适用条件",
+      "href": "/zh/products/detail/trolley-furnace"
+    },
+    {
+      "title": "准备询价参数与供货范围",
+      "href": "/zh/articles/gongye-lu-baojia-canshu"
+    }
+  ],
+  "dateModified": "2026-09-12"
+}

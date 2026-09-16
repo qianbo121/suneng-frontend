@@ -1,0 +1,13 @@
+{
+  "id": "belt-robot-handoff-20210515-proposal",
+  "slug": "belt-robot-handoff-20210515-proposal",
+  "number": 107,
+  "title": "Who signals the robot to pick up parts after a mesh-belt tempering furnace stops its belt?",
+  "summary": "A Suneng mesh-belt tempering-furnace proposal links discharge sensing, belt stoppage, door opening by the line controller and robot unloading in one sequence. Reviewing this equipment requires separate agreements for standalone furnace operation and coordinated whole-line operation.",
+  "body": "belt-robot-handoff-20210515-proposal.md",
+  "sourceFingerprint": "0aa3f6b7bc030b679bafff91555f600e28beb9214a6ac4b2603bd37824f0d06e",
+  "translationStatus": "complete",
+  "translatedAt": "2026-09-12",
+  "coverAlt": "",
+  "coverCaption": ""
+}

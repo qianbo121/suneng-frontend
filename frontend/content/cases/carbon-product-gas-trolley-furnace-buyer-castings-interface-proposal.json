@@ -1,0 +1,72 @@
+{
+  "id": "carbon-buyer-castings-20140313-proposal",
+  "slug": "carbon-product-gas-trolley-furnace-buyer-castings-interface-proposal",
+  "title": "碳素焙烧炉自制面板、边框和垫铁的配套要求",
+  "listTitle": "碳素焙烧炉自制面板、边框和垫铁的配套要求",
+  "listSummary": "自制耐热件不只涉及一块炉底板。",
+  "summary": "自制耐热件不只涉及一块炉底板。苏能2014年这份碳素及石墨制品燃气焙烧炉方案，在报价分项中把耐热钢铸铁面板、台车耐热钢边框铸件和工装垫铁列为用户自制。核对供货时，应将三个部位分别落实到图纸和到货检查，避免只核一张整机总价。",
+  "body": "carbon-product-gas-trolley-furnace-buyer-castings-interface-proposal.md",
+  "contentType": "proposal",
+  "publicationStatus": "draft",
+  "projectStatus": "proposal",
+  "projectYear": 2014,
+  "sourceDate": "2014-03-13",
+  "workpiece": [
+    "碳素及石墨制品"
+  ],
+  "materials": [
+    "碳素",
+    "石墨"
+  ],
+  "process": [
+    "焙烧"
+  ],
+  "equipment": [
+    "燃气台车式焙烧炉"
+  ],
+  "need": [
+    "用户自制部件交接"
+  ],
+  "tags": [
+    "方案参考",
+    "碳素及石墨制品",
+    "用户自制部件交接"
+  ],
+  "facts": [
+    {
+      "label": "面板制作",
+      "value": "用户自制",
+      "unit": "",
+      "condition": "炉体分项名称，不擅改为台车炉底板",
+      "attribute": "方案参数"
+    },
+    {
+      "label": "边框铸件制作",
+      "value": "用户自制",
+      "unit": "",
+      "condition": "台车分项，具体图纸及材料待确认",
+      "attribute": "方案参数"
+    },
+    {
+      "label": "工装垫铁制作",
+      "value": "用户自制",
+      "unit": "",
+      "condition": "原件尺寸18–20mm只是分项规格，不能代替装载设计",
+      "attribute": "方案参数"
+    }
+  ],
+  "participation": "苏能历史方案列整机及相应安装工作，三类耐热部件用户自制，工艺调试由需方负责、供方配合。",
+  "sourceSummary": "江苏苏能工业炉有限公司历史技术方案资料整理。",
+  "coverTitle": "碳素制品焙烧炉方案：面板、边框和垫铁由用户自制，怎样接入整机？",
+  "relatedLinks": [
+    {
+      "title": "了解台车炉的适用条件",
+      "href": "/zh/products/detail/trolley-furnace"
+    },
+    {
+      "title": "准备询价参数与供货范围",
+      "href": "/zh/articles/gongye-lu-baojia-canshu"
+    }
+  ],
+  "dateModified": "2026-09-12"
+}

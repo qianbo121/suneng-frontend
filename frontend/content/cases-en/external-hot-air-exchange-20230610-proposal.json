@@ -1,0 +1,13 @@
+{
+  "id": "external-hot-air-exchange-20230610-proposal",
+  "slug": "external-hot-air-exchange-20230610-proposal",
+  "number": 139,
+  "title": "Why does a hot-air box oven need fresh air if it already has recirculation?",
+  "summary": "A 2023 Suneng hot-air chamber-furnace proposal separately provides external recirculating heating and fresh-air replacement controlled by oxygen measurement. Recirculation sends furnace air through an external heating chamber and back; fresh-air replacement exhausts used gas and introduces new air according to oxygen readings. Review each system's purpose and control conditions separately.",
+  "body": "external-hot-air-exchange-20230610-proposal.md",
+  "sourceFingerprint": "8990deaebf0bc925dec4101f1380d02d006f9fe4dca193d21d0fb0cb769c777d",
+  "translationStatus": "complete",
+  "translatedAt": "2026-09-12",
+  "coverAlt": "",
+  "coverCaption": ""
+}

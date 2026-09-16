@@ -1,119 +1,107 @@
+import { isWithdrawnTechnicalPath } from '@/lib/publication-scope';
 import { isZhOnlyPath } from '@/lib/i18n/zh-only';
 import { Locale, NavigationItem } from '@/types/site';
 
-const navigationItems: NavigationItem[] = [
+const chineseNavigationItems: NavigationItem[] = [
   {
     key: 'home',
     href: '/',
-    label: { zh: '首页', en: 'Home' },
+    label: { zh: '网站首页', en: 'Home' },
   },
   {
     key: 'products',
     href: '/products',
-    label: { zh: '产品中心', en: 'Products' },
+    label: { zh: '设备与生产线', en: 'Products' },
   },
   {
-    key: 'service',
+    key: 'engineering',
     href: '/service',
-    label: { zh: '服务支持', en: 'Service' },
+    label: { zh: '改造与服务', en: 'Engineering Services' },
+    children: [
+      {
+        key: 'engineering-renovation',
+        href: '/service/furnace-renovation-overhaul',
+        label: { zh: '维修与改造', en: 'Repair & Renovation' },
+      },
+      {
+        key: 'engineering-relocation',
+        href: '/service/furnace-relocation-restart',
+        label: { zh: '搬迁与复产', en: 'Relocation & Restart' },
+      },
+      {
+        key: 'engineering-after-sales',
+        href: '/service/installation-after-sales',
+        label: { zh: '安装与售后', en: 'Installation & After-sales' },
+      },
+      {
+        key: 'engineering-guides',
+        href: '/solutions',
+        label: { zh: '选型与改造指南', en: 'Selection & Retrofit Guides' },
+      },
+    ],
+  },
+  {
+    key: 'cases',
+    href: '/case',
+    label: { zh: '项目案例', en: 'Project Cases' },
   },
   {
     key: 'resources',
     href: '/news',
-    label: { zh: '资料中心', en: 'Resources' },
+    label: { zh: '技术资料', en: 'Resources' },
   },
   {
     key: 'about',
     href: '/about',
     label: { zh: '关于苏能', en: 'About' },
-  },
-  {
-    key: 'contact',
-    href: '/contact',
-    label: { zh: '联系我们', en: 'Contact' },
+    children: [
+      {
+        key: 'about-company',
+        href: '/about',
+        label: { zh: '公司介绍', en: 'Company Profile' },
+      },
+      {
+        key: 'about-honors',
+        href: '/strength/honors',
+        label: { zh: '荣誉资质', en: 'Honors' },
+      },
+      {
+        key: 'about-partner',
+        href: '/partner',
+        label: { zh: '合作单位', en: 'Partners' },
+      },
+      {
+        key: 'about-contact',
+        href: '/contact',
+        label: { zh: '联系我们', en: 'Contact' },
+      },
+    ],
   },
 ];
 
-const zhOnlyNavigationChildren: Partial<Record<string, NonNullable<NavigationItem['children']>>> = {
-  about: [
-    {
-      key: 'about-company',
-      href: '/about',
-      label: { zh: '公司简介', en: 'Company Profile' },
-    },
-    {
-      key: 'about-honors',
-      href: '/strength/honors',
-      label: { zh: '荣誉资质', en: 'Honors' },
-    },
-    {
-      key: 'about-certificates',
-      href: '/strength/honors#management-systems',
-      label: { zh: '体系认证', en: 'Certifications' },
-    },
-    {
-      key: 'about-partner',
-      href: '/partner',
-      label: { zh: '合作伙伴', en: 'Partners' },
-    },
-    {
-      key: 'about-case-industrial-furnace-renovation',
-      href: '/case/anonymous-tsingshan-1250-renovation',
-      label: { zh: '项目案例', en: 'Project Case' },
-    },
-  ],
-  service: [
-    {
-      key: 'service-after-sales',
-      href: '/service',
-      label: { zh: '售后服务', en: 'After-sales Service' },
-    },
-    {
-      key: 'service-furnace-renovation-overhaul',
-      href: '/service/furnace-renovation-overhaul',
-      label: { zh: '工业炉节能改造与大修服务', en: 'Furnace Renovation and Overhaul' },
-    },
-    {
-      key: 'service-industrial-furnace-quote-params',
-      href: '/articles/gongye-lu-baojia-canshu',
-      label: { zh: '工业炉报价需要哪些参数', en: 'Industrial Furnace Quote Parameters' },
-    },
-    {
-      key: 'service-repair-or-replace',
-      href: '/articles/laojiu-rechuli-lu-daxiu-haishi-maixin',
-      label: { zh: '老旧工业炉该修还是换', en: 'Repair or Replace Old Furnace' },
-    },
-  ],
-};
+const englishNavigationItems: NavigationItem[] = chineseNavigationItems.map((item) => ({
+  ...item,
+  label: item.key === 'engineering' ? { ...item.label, en: 'Service & Retrofit' } : item.label,
+}));
 
 function getLocalizedText(locale: Locale, text: { zh: string; en: string }) {
   return text[locale];
 }
 
 function getNavigationChildren(locale: Locale, item: NavigationItem) {
-  if (locale !== 'zh') {
-    // Drop base children whose target only exists in Chinese — linking to them
-    // on /en produces a hard 404 (e.g. solutions/continuous-heat-treatment-line).
-    return item.children?.filter((child) => !isZhOnlyPath(child.href));
-  }
-
-  const zhChildren = zhOnlyNavigationChildren[item.key] ?? [];
-  if (!zhChildren.length) return item.children;
-
-  return [...(item.children ?? []), ...zhChildren];
+  return item.children?.filter((child) => !isWithdrawnTechnicalPath(child.href) && (locale === 'zh' || !isZhOnlyPath(child.href)));
 }
 
 export function getLocalizedNavigation(locale: Locale) {
-  return navigationItems
-    .filter((item) => locale === 'zh' || item.key !== 'resources')
-    .map((item) => ({
-      ...item,
-      labelText: getLocalizedText(locale, item.label),
-      children: getNavigationChildren(locale, item)?.map((child) => ({
-        ...child,
-        labelText: getLocalizedText(locale, child.label),
-      })),
-    }));
+  const items = locale === 'zh' ? chineseNavigationItems : englishNavigationItems;
+  return items.filter((item) => !isWithdrawnTechnicalPath(item.href)).map((item) => ({
+    ...item,
+    labelText: getLocalizedText(locale, item.label),
+    children: getNavigationChildren(locale, item)?.map((child) => ({
+      ...child,
+      labelText: getLocalizedText(locale, child.label),
+    })),
+  }));
 }
 
 export function getRouteLabelMap(locale: Locale) {
@@ -122,13 +110,32 @@ export function getRouteLabelMap(locale: Locale) {
   getLocalizedNavigation(locale).forEach((item) => {
     map.set(item.href, item.labelText);
     item.children?.forEach((child) => {
-      if (!map.has(child.href)) {
-        map.set(child.href, child.labelText);
-      }
+      if (!map.has(child.href)) map.set(child.href, child.labelText);
     });
   });
 
-  map.set('/products/detail', locale === 'en' ? 'Product Detail' : '产品详情');
+  // Page breadcrumbs keep their existing names when navigation copy or grouping changes.
+  if (locale === 'zh') {
+    const pageLabels: Record<string, string> = {
+      '/products': '产品中心',
+      '/solutions': '解决方案',
+      '/solutions/continuous-heat-treatment-line': '连续热处理生产线',
+      '/solutions/rechuli-lu-wendu-bujun-zhenggai': '温度不均整改',
+      '/solutions/rechuli-lu-luchen-fanxin': '炉衬翻新',
+      '/solutions/rechuli-lu-kongzhi-xitong-shengji': '控制系统升级',
+      '/service': '改造与工程服务',
+      '/service/furnace-renovation-overhaul': '工业炉改造与大修',
+      '/articles/laojiu-rechuli-lu-daxiu-haishi-maixin': '改造还是换新判断',
+      '/articles/gongye-lu-baojia-canshu': '工业炉报价参数清单',
+      '/case/jining-support-roller-heat-treatment-line': '支重轮热处理生产线',
+      '/case/henan-annealing-solution-line': '连续退火固溶生产线',
+      '/case/anonymous-tsingshan-1250-renovation': '连续退洗线改造项目',
+      '/partner': '合作关系',
+      '/contact': '联系方式',
+    };
+    Object.entries(pageLabels).forEach(([href, label]) => map.set(href, label));
+  }
 
+  map.set('/products/detail', locale === 'en' ? 'Product Detail' : '产品详情');
   return map;
 }

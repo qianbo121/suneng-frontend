@@ -9,8 +9,8 @@ ENV VITE_APP_BASE_PATH=${VITE_APP_BASE_PATH}
 ENV VITE_APP_NAME=${VITE_APP_NAME}
 ENV VITE_API_BASE_URL=${VITE_API_BASE_URL}
 
-RUN npm install -g pnpm@9.15.4 --registry=https://registry.npmmirror.com \
-    && pnpm config set registry https://registry.npmmirror.com
+RUN npm install -g pnpm@9.15.4 --registry=https://registry.npmjs.org \
+    && pnpm config set registry https://registry.npmjs.org
 
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 COPY frontend/package.json ./frontend/package.json

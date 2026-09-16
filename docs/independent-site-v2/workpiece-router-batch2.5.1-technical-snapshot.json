@@ -1,0 +1,93 @@
+{
+  "schemaVersion": "1.0.0",
+  "baselineVersion": "industry-public-baseline-2026-08-batch2.5-candidate-v2",
+  "algorithm": "sha256 over UTF-8 file bytes; paths sorted lexicographically; manifest canonicalized with recursively sorted object keys",
+  "recomputeCommand": "PATH=/private/tmp/suneng-node-22.23.1/node-v22.23.1-darwin-arm64/bin:$PATH node scripts/generate-workpiece-router-batch2.5.1.mjs",
+  "technicalSnapshotHash": "sha256:f1577a282715a2f84239917c9d7be8ba6bf85217936f61be81bd302ee6401f61",
+  "frozenFiles": [
+    {
+      "path": "backend/src/modules/workpiece-router/batch2.5-candidate.spec.ts",
+      "sha256": "sha256:85d8be0d7fffa1d4f44408a762d0afc79ae1d1b16c6705d82f6e9762db5f87bf"
+    },
+    {
+      "path": "backend/src/modules/workpiece-router/batch2.5.1-candidate.spec.ts",
+      "sha256": "sha256:969ccbbc61b2cf420a65bb291a2b3d3a07935e3542fcbd97349aac924b13ea7c"
+    },
+    {
+      "path": "backend/src/modules/workpiece-router/dto/resolve-workpiece-router.dto.ts",
+      "sha256": "sha256:5eb8c8bbccfaabc331fe5d3738812cc76f15a5bfd01f1ffa2d22125d6a61c54c"
+    },
+    {
+      "path": "backend/src/modules/workpiece-router/engineering-resolver.spec.ts",
+      "sha256": "sha256:78a6a97c8e479ee2a894db7bad020dcaef564decd540b69f6fbfdfb643e23674"
+    },
+    {
+      "path": "backend/src/modules/workpiece-router/engineering-resolver.ts",
+      "sha256": "sha256:07ac30304d15426c7b3a2c991ea3ab36fe41f3258deb7c0d1f88a5dd09134510"
+    },
+    {
+      "path": "backend/src/modules/workpiece-router/workpiece-router.service.spec.ts",
+      "sha256": "sha256:b7c4b858f5fc741696f668ff4c9d242831b37fb591199e2676f3b6601fd9de81"
+    },
+    {
+      "path": "backend/src/modules/workpiece-router/workpiece-router.service.ts",
+      "sha256": "sha256:08af65191ef77a66b07776995ba06049b0af558640d78e2a5209076bb7313bf6"
+    },
+    {
+      "path": "data/workpiece-router/industry-direction-rules.json",
+      "sha256": "sha256:38a103bef51cc5a763ff63f98da30cb0db36088c5a2f6d12c6af197114a166a5"
+    },
+    {
+      "path": "data/workpiece-router/industry-evidence-registry.json",
+      "sha256": "sha256:e45a8867b76f8e6310ee0fb3464b60a294c5fb2a5f1dcda4b76c334787c0e191"
+    },
+    {
+      "path": "data/workpiece-router/industry-public-claim-templates.json",
+      "sha256": "sha256:18603fa7a74af71161e9525f27311fe9e71a56d94703073ab9b9117e72074e77"
+    },
+    {
+      "path": "data/workpiece-router/industry-public-label-mapping.json",
+      "sha256": "sha256:140488e23b12fa295c2a8b12fc5f38a6a7fe28c9f80656d8c1b74e0b8933acc2"
+    },
+    {
+      "path": "data/workpiece-router/industry-resolver-config.json",
+      "sha256": "sha256:4d2c075ab5eca26d4e4303240810741a8660a6e6a7c97d3f3df87dcaeca6097b"
+    },
+    {
+      "path": "data/workpiece-router/logic-unit-content-seed.json",
+      "sha256": "sha256:efb6fff6339ed832ce4ffc4325c48f3068ef3ee6451ff8fc93c490e374f99c63"
+    },
+    {
+      "path": "data/workpiece-router/process-routes.json",
+      "sha256": "sha256:b8be66d5fda9669862382157ff14fe07fd89c50c479a275890ed52d996294fa3"
+    },
+    {
+      "path": "data/workpiece-router/process-taxonomy.json",
+      "sha256": "sha256:cdc1543f05ce347464f78e40aac6b73e3b142570bfec8494de10d70c69bed53a"
+    },
+    {
+      "path": "frontend/src/components/home/WorkpieceRouter.tsx",
+      "sha256": "sha256:995d713102ab2f5829802e62bb4e6bc0d53bad342e3422752a4147e82fab132e"
+    },
+    {
+      "path": "frontend/src/lib/api/workpiece-router.ts",
+      "sha256": "sha256:ce7a2846f43e3452bfa65be8a3be3b3391ce98682ad95d7eb515f5fa28492614"
+    },
+    {
+      "path": "frontend/src/lib/workpiece-router-2.4a.spec.ts",
+      "sha256": "sha256:1937672d0acaef09fd2b9eb29c47c7e9bb3cb46e14e88be75bd9eb4d7053fa50"
+    },
+    {
+      "path": "frontend/tests/visual/workpiece-router-batch2.4a.spec.ts",
+      "sha256": "sha256:db940b5d3dfad881a5eea0f331b880fc5c0c221f7a89cee91e25ab2c113c617b"
+    },
+    {
+      "path": "scripts/generate-workpiece-router-batch2.5.1.mjs",
+      "sha256": "sha256:38829ac3dabd21a72b8e7bf3c8fac9a3e74122a3e228588cf9dd99451e34e261"
+    },
+    {
+      "path": "scripts/validate-workpiece-router.mjs",
+      "sha256": "sha256:d247fc63547072240d19642f551685d9b1c8c27cb841d810d7594742bc62bd8c"
+    }
+  ]
+}

@@ -3,8 +3,6 @@ import { fileURLToPath } from 'node:url';
 
 import { describe, expect, it } from 'vitest';
 
-import { TSINGSHAN_1250_CASE_SEO } from '@/lib/seo/page-data';
-
 const readSource = (relativePath: string) =>
   fs.readFileSync(fileURLToPath(new URL(relativePath, import.meta.url)), 'utf8');
 
@@ -18,9 +16,8 @@ const collectSourceFiles = (directory: string): string[] =>
     return /\.(?:ts|tsx|json)$/.test(entry.name) ? [entryPath] : [];
   });
 
-const caseSource = readSource(
-  '../../app/[locale]/case/anonymous-tsingshan-1250-renovation/page.tsx',
-);
+const caseMetadata = JSON.parse(readSource('../../../content/cases/continuous-line-renovation.json'));
+const caseSource = readSource(`../../../content/cases/${caseMetadata.body}`);
 const solutionSource = readSource(
   '../../app/[locale]/solutions/continuous-heat-treatment-line/page.tsx',
 );
@@ -41,26 +38,35 @@ const internalOnlyClaims = [
 const legacyRouteToken = 'anonymous-tsingshan-1250-renovation';
 const allowedLegacyRouteFiles = [
   '/app/[locale]/case/anonymous-tsingshan-1250-renovation/page.tsx',
-  '/app/en/case/anonymous-tsingshan-1250-renovation/route.ts',
 ];
 
 describe('high-risk case fact governance', () => {
-  it('publishes only source-confirmed project scope in indexable metadata', () => {
+  it('keeps source-confirmed project scope in withdrawn metadata', () => {
     const metadata = [
-      TSINGSHAN_1250_CASE_SEO.title,
-      TSINGSHAN_1250_CASE_SEO.description,
-      TSINGSHAN_1250_CASE_SEO.ogTitle,
-      TSINGSHAN_1250_CASE_SEO.ogDescription,
+      caseMetadata.title,
+      caseMetadata.summary,
+      caseMetadata.publicCustomerName || '',
+      caseMetadata.cover?.alt || '',
+      caseMetadata.cover?.caption || '',
+      JSON.stringify(caseMetadata.facts),
     ].join('\n');
 
-    expect(metadata).toContain('3 条 1250mm');
-    expect(metadata).toContain('运行核验方法');
+    expect(caseMetadata.publicationStatus).toBe('draft');
+    expect(metadata).toContain('连续退洗线');
+    expect(caseMetadata.id).toBe('continuous-line-renovation');
+    expect(caseMetadata.title).toBe('连续退洗线天然气改冷煤气，旧风管和烟道还能用吗？');
+    expect(caseMetadata.summary).toContain('由天然气改用冷煤气');
+    expect(caseMetadata.summary).toContain('助燃空气管路局部调整利旧');
+    expect(caseMetadata.contentType).toBe('proposal');
+    expect(caseMetadata.projectStatus).toBe('proposal');
+    expect(caseMetadata.sourceSummary).toContain('不作为已制造、投运或验收结果');
     for (const claim of internalOnlyClaims) {
       expect(metadata).not.toContain(claim);
     }
     expect(metadata).not.toContain('青山');
     expect(metadata.toLowerCase()).not.toContain('tsingshan');
-    expect(TSINGSHAN_1250_CASE_SEO.modifiedTime).toContain('2026-07-31');
+    expect(Number.isFinite(Date.parse(caseMetadata.dateModified))).toBe(true);
+    expect(readSource('../../app/[locale]/case/anonymous-tsingshan-1250-renovation/page.tsx')).toContain(caseMetadata.slug);
   });
 
   it('keeps unverified economic and emissions outcomes off the public case page', () => {
@@ -81,9 +87,8 @@ describe('high-risk case fact governance', () => {
   });
 
   it('allows a bounded summary on the hub but prevents unrelated-page duplication', () => {
-    expect(solutionSource).toContain('3 条 1250 mm');
-    expect(solutionSource).toContain('冷煤气总设计量 17150 Nm³/h');
-    expect(solutionSource).toContain('以上只对应本项目燃料与设备边界');
+    expect(solutionSource).toContain('/zh/case');
+    expect(caseSource).toContain('3 条 1250 mm');
     expect(solutionSource).not.toContain('7,644 万元');
     expect(solutionSource).not.toContain('63.7 元/吨');
     expect(solutionSource).not.toContain('120 万吨/年');
@@ -96,6 +101,7 @@ describe('high-risk case fact governance', () => {
   });
 
   it('retains customer anonymity and confines identity-like route tokens to the frozen URL', () => {
+    expect(caseSource).not.toMatch(/青山|qingshan|tsingshan/iu);
     const sourceFiles = collectSourceFiles(sourceRoot).filter(
       (filePath) => !filePath.endsWith('/high-risk-case-governance.spec.ts'),
     );
@@ -110,7 +116,8 @@ describe('high-risk case fact governance', () => {
         .readFileSync(filePath, 'utf8')
         .replaceAll(legacyRouteToken, '')
         .replaceAll('TSINGSHAN_1250_CASE_SEO', '')
-        .replaceAll('AnonymousTsingshanCasePage', '');
+        .replaceAll('AnonymousTsingshanCasePage', '')
+        .replaceAll('包头市青山区厂前路', '包头市区地址');
 
       expect(source).not.toMatch(/青山/iu);
       expect(source).not.toMatch(/qingshan/iu);

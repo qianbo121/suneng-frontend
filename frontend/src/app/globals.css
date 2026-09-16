@@ -1,4 +1,5 @@
 @import '@/styles/theme.css';
+@import '@/styles/spacing.css';
 
 @tailwind base;
 @tailwind components;
@@ -43,6 +44,12 @@ html {
   overscroll-behavior-y: none;
 }
 
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
 html,
 body {
   min-height: 100%;
@@ -79,19 +86,6 @@ textarea {
 
 ::selection {
   background: rgba(0, 75, 151, 0.16);
-}
-
-@keyframes partner-marquee {
-  from {
-    transform: translateX(0);
-  }
-  to {
-    transform: translateX(-50%);
-  }
-}
-
-.partner-marquee-track {
-  animation: partner-marquee 48s linear infinite;
 }
 
 .news-article h1,

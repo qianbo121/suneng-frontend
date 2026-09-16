@@ -1,52 +1,69 @@
 import { describe, expect, it, vi } from 'vitest';
+import revisedArticles from '@/lib/news-reviewed-copy.json';
+
+vi.mock('next/cache', () => ({ unstable_cache: (fn: unknown) => fn }));
+vi.mock('server-only', () => ({}));
+vi.mock('react', async (importOriginal) => ({
+  ...(await importOriginal<typeof import('react')>()),
+  cache: <T extends (...args: never[]) => unknown>(fn: T) => fn,
+}));
 
 vi.mock('@/lib/api/news', () => ({
-  getNewsList: vi.fn(async () => ({
-    data: {
-      items: [
-        {
-          id: 1,
-          categoryId: 1,
-          titleZh: '标准新闻',
-          slug: 'canonical-news',
-          publishDate: '2026-06-01T00:00:00.000Z',
-          contentUpdatedAt: '2026-07-01T00:00:00.000Z',
-          status: 'published',
-          isPublished: true,
-        },
-        {
-          id: 2,
-          categoryId: 1,
-          titleZh: '重复新闻',
-          slug: 'jiang-su-su-neng-gong-ye-lu-tui-huo-gu-rong-sheng-chan-xian-zhu-li-gang-cai-shen-jia-gong-1',
-          publishDate: '2026-06-02T00:00:00.000Z',
-          status: 'published',
-          isPublished: true,
-        },
-      ],
-    },
+  getAllNewsForDecisionCenter: vi.fn(async () => ({
+    data: [
+      {
+        id: 3,
+        categoryId: 1,
+        slug: 'translated-news',
+        titleZh: '已翻译',
+        titleEn: 'Translated news',
+        contentEn: '<p>Complete English.</p>',
+        publishDate: '2026-06-01T00:00:00Z',
+        englishContentUpdatedAt: '2026-09-01T12:00:00Z',
+        status: 'published',
+        isPublished: true,
+      },
+      {
+        id: 21,
+        categoryId: 1,
+        titleZh: revisedArticles['21'].titleZh,
+        slug: revisedArticles['21'].slug,
+        publishDate: '2026-06-01T00:00:00.000Z',
+        status: 'published',
+        isPublished: true,
+      },
+      {
+        id: 1,
+        categoryId: 1,
+        titleZh: '标准新闻',
+        titleEn: 'Only a title, no English body',
+        slug: 'canonical-news',
+        publishDate: '2026-06-01T00:00:00.000Z',
+        contentUpdatedAt: '2026-07-01T00:00:00.000Z',
+        status: 'published',
+        isPublished: true,
+      },
+      {
+        id: 2,
+        categoryId: 1,
+        titleZh: '重复新闻',
+        slug: 'jiang-su-su-neng-gong-ye-lu-tui-huo-gu-rong-sheng-chan-xian-zhu-li-gang-cai-shen-jia-gong-1',
+        publishDate: '2026-06-02T00:00:00.000Z',
+        status: 'published',
+        isPublished: true,
+      },
+    ],
     error: null,
   })),
 }));
 
 import buildSitemap from '@/app/sitemap';
-import {
-  ABOUT_SEO,
-  CONTINUOUS_HEAT_TREATMENT_LINE_SEO,
-  FURNACE_CONTROL_SYSTEM_UPGRADE_SEO,
-  FURNACE_ENERGY_CONVERSION_HEAT_RECOVERY_SEO,
-  FURNACE_LINING_RENOVATION_GUIDE_SEO,
-  FURNACE_RESTART_RELOCATION_REMANUFACTURING_SEO,
-  FURNACE_RENOVATION_RISK_CYCLE_GUIDE_SEO,
-  FURNACE_RENOVATION_OVERHAUL_SEO,
-  INDUSTRIAL_FURNACE_QUOTE_PARAMS_SEO,
-  PRODUCT_DETAIL_SEO,
-  TEMPERATURE_UNIFORMITY_REMEDIATION_SEO,
-} from '@/lib/seo/page-data';
+
+import { FURNACE_RENOVATION_OVERHAUL_SEO } from '@/lib/seo/page-data';
 
 const DEEP_CRAWL_TARGETS = [
   '/zh/articles/gongye-lu-baojia-canshu',
-  '/zh/articles/laojiu-rechuli-lu-daxiu-haishi-maixin',
+  `/zh/news/${revisedArticles['21'].slug}`,
   '/zh/solutions/rechuli-lu-gaizao-fengxian-zhouqi',
   '/zh/solutions/rechuli-lu-dian-gai-ran-yure-huishou',
   '/zh/solutions/rechuli-lu-kongzhi-xitong-shengji',
@@ -74,70 +91,15 @@ const DEEP_CRAWL_TARGETS = [
 ];
 
 describe('sitemap freshness signals', () => {
-  it('only emits lastModified when a real content date is available', async () => {
-    const entries = await buildSitemap();
-    const byUrl = new Map(entries.map((entry) => [entry.url, entry]));
-
-    expect(byUrl.get('https://www.jssngyl.cn/zh')?.lastModified).toEqual(new Date('2026-07-30'));
-    expect(
-      byUrl.get('https://www.jssngyl.cn/zh/service/furnace-renovation-overhaul')?.lastModified,
-    ).toEqual(new Date(FURNACE_RENOVATION_OVERHAUL_SEO.modifiedTime));
-    expect(
-      byUrl.get('https://www.jssngyl.cn/zh/articles/gongye-lu-baojia-canshu')?.lastModified,
-    ).toEqual(new Date(INDUSTRIAL_FURNACE_QUOTE_PARAMS_SEO.modifiedTime));
-    expect(
-      byUrl.get('https://www.jssngyl.cn/zh/solutions/continuous-heat-treatment-line')?.lastModified,
-    ).toEqual(new Date(CONTINUOUS_HEAT_TREATMENT_LINE_SEO.modifiedTime));
-    expect(
-      byUrl.get('https://www.jssngyl.cn/zh/products/detail/trolley-furnace')?.lastModified,
-    ).toEqual(new Date(PRODUCT_DETAIL_SEO['trolley-furnace'].modifiedTime!));
-    expect(
-      byUrl.get('https://www.jssngyl.cn/zh/solutions/rechuli-lu-wendu-bujun-zhenggai')
-        ?.lastModified,
-    ).toEqual(new Date(TEMPERATURE_UNIFORMITY_REMEDIATION_SEO.modifiedTime));
-    expect(
-      byUrl.get('https://www.jssngyl.cn/zh/solutions/rechuli-lu-gaizao-fengxian-zhouqi')
-        ?.lastModified,
-    ).toEqual(new Date(FURNACE_RENOVATION_RISK_CYCLE_GUIDE_SEO.modifiedTime));
-    expect(
-      byUrl.get('https://www.jssngyl.cn/zh/solutions/rechuli-lu-luchen-fanxin')?.lastModified,
-    ).toEqual(new Date(FURNACE_LINING_RENOVATION_GUIDE_SEO.modifiedTime));
-    expect(
-      byUrl.get('https://www.jssngyl.cn/zh/solutions/rechuli-lu-dian-gai-ran-yure-huishou')
-        ?.lastModified,
-    ).toEqual(new Date(FURNACE_ENERGY_CONVERSION_HEAT_RECOVERY_SEO.modifiedTime));
-    expect(
-      byUrl.get('https://www.jssngyl.cn/zh/solutions/rechuli-lu-kongzhi-xitong-shengji')
-        ?.lastModified,
-    ).toEqual(new Date(FURNACE_CONTROL_SYSTEM_UPGRADE_SEO.modifiedTime));
-    expect(
-      byUrl.get('https://www.jssngyl.cn/zh/solutions/rechuli-lu-tingchan-chongqi-banqian-fuchan')
-        ?.lastModified,
-    ).toEqual(new Date(FURNACE_RESTART_RELOCATION_REMANUFACTURING_SEO.modifiedTime));
-    expect(byUrl.get('https://www.jssngyl.cn/zh/about')?.lastModified).toEqual(
-      new Date(ABOUT_SEO.modifiedTime),
-    );
-    expect(
-      byUrl.get('https://www.jssngyl.cn/zh/products/detail/box-furnace')?.lastModified,
-    ).toBeUndefined();
-
-    const july30Urls = entries
-      .filter(
-        (entry) =>
-          entry.lastModified &&
-          new Intl.DateTimeFormat('en-CA', {
-            timeZone: 'Asia/Shanghai',
-            year: 'numeric',
-            month: '2-digit',
-            day: '2-digit',
-          }).format(new Date(entry.lastModified)) === '2026-07-30',
-      )
-      .map((entry) => entry.url);
-    expect(july30Urls).toEqual([
-      'https://www.jssngyl.cn/zh',
-      'https://www.jssngyl.cn/zh/about',
-      'https://www.jssngyl.cn/zh/articles/laojiu-rechuli-lu-daxiu-haishi-maixin',
-    ]);
+  it("retains real modification dates for live pages and omits withdrawn guides", async () => {
+    const entries=await buildSitemap();
+    const byUrl=new Map(entries.map(entry=>[entry.url,entry]));
+    for(const path of ['/zh','/zh/about','/zh/products/detail/trolley-furnace','/zh/products/detail/box-furnace']) {
+      expect(byUrl.has('https://www.jssngyl.cn'+path)).toBe(true);
+      expect(byUrl.get('https://www.jssngyl.cn'+path)?.lastModified).toBeUndefined();
+    }
+    expect(byUrl.get('https://www.jssngyl.cn/zh/service/furnace-renovation-overhaul')?.lastModified).toEqual(new Date(FURNACE_RENOVATION_OVERHAUL_SEO.modifiedTime));
+    expect(entries.filter(entry=>/\/(case|articles|solutions)(\/|$)/.test(new URL(entry.url).pathname))).toEqual([]);
   });
 
   it('fails when one shared hard-coded date covers 3 or more pages', async () => {
@@ -171,21 +133,18 @@ describe('sitemap freshness signals', () => {
     expect(regressions).toEqual([]);
   });
 
-  it('keeps all authority and deep-crawl targets in the sitemap', async () => {
-    const entries = await buildSitemap();
-    const urls = new Set(entries.map((entry) => entry.url));
-
+  it("keeps live deep-crawl targets while excluding retired technical paths", async () => {
+    const urls=new Set((await buildSitemap()).map(x=>x.url));
     expect(DEEP_CRAWL_TARGETS).toHaveLength(26);
-    for (const path of DEEP_CRAWL_TARGETS) {
-      expect(urls.has(`https://www.jssngyl.cn${path}`), path).toBe(true);
-    }
+    for(const path of DEEP_CRAWL_TARGETS)expect(urls.has('https://www.jssngyl.cn'+path),path).toBe(!/\/(articles|solutions|case)(\/|$)/.test(path));
   });
 
-  it('removes leaked English and empty strength routes plus the duplicate news slug', async () => {
+  it('includes the English news hub while excluding empty strength routes and the duplicate news slug', async () => {
     const entries = await buildSitemap();
     const byUrl = new Map(entries.map((entry) => [entry.url, entry]));
 
-    expect(byUrl.has('https://www.jssngyl.cn/en/news')).toBe(false);
+    expect(byUrl.has('https://www.jssngyl.cn/en/news')).toBe(true);
+    expect(byUrl.has('https://www.jssngyl.cn/en/news/canonical-news')).toBe(false);
     expect(byUrl.has('https://www.jssngyl.cn/zh/strength')).toBe(false);
     expect(byUrl.has('https://www.jssngyl.cn/zh/strength/certificates')).toBe(false);
     expect(
@@ -198,3 +157,46 @@ describe('sitemap freshness signals', () => {
     );
   });
 });
+
+it("excludes all solution guides and their alternates during withdrawal", async () => {
+    const entries=await buildSitemap();
+    expect(entries.length).toBeGreaterThan(20);
+    for(const entry of entries) {
+      expect(entry.url).not.toMatch(/\/solutions(?:\/|$)/);
+      for(const target of Object.values(entry.alternates?.languages??{}))expect(String(target)).not.toMatch(/\/solutions(?:\/|$)/);
+    }
+  });
+
+it('includes all four additional furnaces in both languages with reciprocal addresses', async () => {
+  const sitemap = await buildSitemap();
+  for (const slug of [
+    'shovel-furnace',
+    'walking-beam-furnace',
+    'elevator-hearth-furnace',
+    'gas-nitriding-furnace',
+  ]) {
+    const zh = sitemap.find((item) => item.url.endsWith(`/zh/products/detail/${slug}`));
+    const en = sitemap.find((item) => item.url.endsWith(`/en/products/detail/${slug}`));
+    expect(zh, slug).toBeDefined();
+    expect(en, slug).toBeDefined();
+    expect(zh?.alternates?.languages).toEqual(en?.alternates?.languages);
+    expect(zh?.alternates?.languages?.['zh-CN']).toBe(zh?.url);
+    expect(en?.alternates?.languages?.['en-US']).toBe(en?.url);
+  }
+});
+
+it('emits reciprocal English news addresses only for complete translations with the English edit date', async () => {
+  const entries = await buildSitemap();
+  const en = entries.find((entry) => entry.url.endsWith('/en/news/translated-news'));
+  const zh = entries.find((entry) => entry.url.endsWith('/zh/news/translated-news'));
+  expect(en).toBeDefined();
+  expect(en?.alternates).toEqual(zh?.alternates);
+  expect(en?.lastModified).toEqual(new Date('2026-09-01T12:00:00Z'));
+  expect(zh?.lastModified).toEqual(new Date('2026-06-01T00:00:00Z'));
+});
+
+it("excludes all case indexes, articles and pagination in both languages", async () => {
+    const entries=await buildSitemap();
+    expect(entries.some(x=>x.url.endsWith('/en/news'))).toBe(true);
+    expect(entries.some(x=>/\/(case|articles)(\/|\?|$)/.test(x.url))).toBe(false);
+  });

@@ -21,10 +21,6 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     ...(DEFAULT_OG_IMAGE ? { images: [DEFAULT_OG_IMAGE] } : {}),
   },
-  robots: {
-    index: true,
-    follow: true,
-  },
   icons: {
     icon: [
       { url: '/favicon-32x32.png', sizes: '32x32', type: 'image/png' },

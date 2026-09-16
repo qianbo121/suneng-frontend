@@ -1,0 +1,244 @@
+{
+  "schemaVersion": "2.0.0",
+  "usage": "Dedicated panel copy for the 16 cards marked contentMode=dedicated plus route-specific copy where one workpiece has materially different processes. Rendering precedence is routeContentOverrides, then workpiece overrides, then logic-unit content. Processes and furnace directions still come from active processVariants and approved directionApprovals.",
+  "overrides": [
+    {
+      "workpieceId": "large-welded-machine-frame",
+      "difficultyPoints": [
+        "焊后残余应力影响尺寸稳定性",
+        "大件温差会放大变形差异",
+        "支撑姿态影响受热均匀性"
+      ]
+    },
+    {
+      "workpieceId": "pressure-vessel-shell",
+      "difficultyPoints": [
+        "焊缝与壁厚决定保温要求",
+        "有效加热区与测温需留记录",
+        "支撑不当会影响筒体圆度"
+      ]
+    },
+    {
+      "workpieceId": "structural-steel-component",
+      "difficultyPoints": [
+        "截面差异容易形成升温差",
+        "长跨度构件对支撑更敏感",
+        "焊缝分布会影响变形方向"
+      ]
+    },
+    {
+      "workpieceId": "welded-assembly",
+      "difficultyPoints": [
+        "多种截面导致热容量差异",
+        "多处焊缝需统一处理规范",
+        "装炉干涉会限制摆放姿态"
+      ]
+    },
+    {
+      "workpieceId": "large-cylinder-shell",
+      "difficultyPoints": [
+        "直径长度决定有效装炉空间",
+        "圆度对支撑位置较敏感",
+        "环纵焊缝需确认处理范围"
+      ]
+    },
+    {
+      "workpieceId": "welded-pipe-spool",
+      "difficultyPoints": [
+        "支管与主管壁厚可能不同",
+        "法兰密封面需要控制变形",
+        "复杂姿态影响测温点布置"
+      ]
+    },
+    {
+      "workpieceId": "seamless-aluminum-gas-cylinder",
+      "difficultyPoints": [
+        "合金与标准决定处理制度",
+        "薄壁瓶体对热处理变形较敏感",
+        "批量与装料方式影响设备配置"
+      ]
+    },
+    {
+      "workpieceId": "seamless-steel-gas-cylinder",
+      "difficultyPoints": [
+        "钢种壁厚决定处理制度",
+        "标准范围不能按用途词推断",
+        "规格与产能影响连续或批次路线"
+      ]
+    },
+    {
+      "workpieceId": "welded-steel-gas-cylinder",
+      "difficultyPoints": [
+        "制造标准先于炉型判断",
+        "焊缝热影响区需整体考虑",
+        "输送节拍影响连续路线配置"
+      ]
+    },
+    {
+      "workpieceId": "large-forged-flange",
+      "difficultyPoints": [
+        "大截面心部升温存在滞后",
+        "密封面与孔圈需要控制变形",
+        "单件重量决定装炉与承载"
+      ]
+    },
+    {
+      "workpieceId": "large-forged-shaft",
+      "difficultyPoints": [
+        "心部升温与保温存在滞后",
+        "扩氢要求需按钢种规范确认",
+        "立装或平放影响弯曲变形"
+      ]
+    },
+    {
+      "workpieceId": "long-shaft",
+      "difficultyPoints": ["细长比越大越易热弯曲", "支撑位置影响热后直线度", "整体与局部硬化需分段"]
+    },
+    {
+      "workpieceId": "gear-shaft",
+      "difficultyPoints": [
+        "齿部与轴段处理目标不同",
+        "渗碳与整体调质不能混选",
+        "装炉姿态影响弯曲变形"
+      ]
+    },
+    {
+      "workpieceId": "spline-shaft",
+      "difficultyPoints": [
+        "花键段变形影响啮合精度",
+        "整体调质与渗碳路线需分开确认",
+        "装炉支撑影响热后直线度"
+      ]
+    },
+    {
+      "workpieceId": "large-gear",
+      "difficultyPoints": [
+        "大截面升温与心部组织需兼顾",
+        "整体调质与齿面渗碳不能混选",
+        "齿圈变形影响后续加工精度"
+      ]
+    },
+    {
+      "workpieceId": "track-roller",
+      "difficultyPoints": [
+        "轮体截面差影响整体均匀性",
+        "踏面最终硬化需另行确认",
+        "批量装料影响冷却一致性"
+      ]
+    },
+    {
+      "workpieceId": "track-link",
+      "difficultyPoints": [
+        "销孔与踏面性能要求可能不同",
+        "整体调质与局部硬化需配套确认",
+        "批量装料影响加热与冷却一致性"
+      ]
+    },
+    {
+      "workpieceId": "seamless-steel-pipe",
+      "difficultyPoints": [
+        "长材前后温差影响组织一致",
+        "支撑方式影响热后直线度",
+        "线速度需匹配工艺时间"
+      ]
+    },
+    {
+      "workpieceId": "high-strength-bolts",
+      "difficultyPoints": [
+        "强度等级决定处理路线",
+        "脱碳要求影响气氛选择",
+        "小件输送与淬火节拍需联动"
+      ]
+    },
+    {
+      "workpieceId": "steel-pins",
+      "difficultyPoints": [
+        "直径长度影响心部处理一致性",
+        "整体调质与渗碳路线需分开确认",
+        "局部硬化范围需与整体工艺衔接"
+      ]
+    },
+    {
+      "workpieceId": "chain-components",
+      "difficultyPoints": [
+        "链板、销轴与套筒目标性能不同",
+        "整体调质与渗碳路线需分别确认",
+        "小件装料与输送影响批次一致性"
+      ]
+    }
+  ],
+  "routeContentOverrides": [
+    {
+      "routeId": "aluminum-cylinder-solution-quench",
+      "difficultyPoints": [
+        "出炉转移节拍影响处理结果",
+        "瓶体内外冷却一致性需控制",
+        "淬火变形与表面状态需兼顾"
+      ]
+    },
+    {
+      "routeId": "aluminum-cylinder-artificial-aging",
+      "difficultyPoints": [
+        "装料密度影响时效均匀性",
+        "瓶体温差影响批次一致性",
+        "表面状态与循环方式需兼顾"
+      ]
+    },
+    {
+      "routeId": "seamless-steel-cylinder-quench-temper",
+      "difficultyPoints": [
+        "壁厚影响加热与冷却一致性",
+        "淬火转移和冷却节拍需联动",
+        "回火均匀性影响批次稳定"
+      ]
+    },
+    {
+      "routeId": "seamless-steel-cylinder-normalizing",
+      "difficultyPoints": [
+        "正火均匀性受壁厚影响",
+        "连续输送需匹配保温节拍",
+        "瓶体圆度与直线度需控制"
+      ]
+    },
+    {
+      "routeId": "seamless-stainless-steel-cylinder-confirmation",
+      "difficultyPoints": [
+        "不锈钢路线不能继承碳钢工艺",
+        "材料与标准先决定目标工艺",
+        "表面要求影响气氛选择"
+      ]
+    },
+    {
+      "routeId": "seamless-steel-cylinder-other-material",
+      "difficultyPoints": [
+        "材料范围不能由用途词判断",
+        "执行标准先决定处理制度",
+        "工艺未确认前不推荐设备"
+      ]
+    },
+    {
+      "routeId": "welded-lpg-cylinder-normalizing",
+      "difficultyPoints": [
+        "焊缝热影响区需整体均匀",
+        "壁厚与输送节拍影响正火",
+        "标准要求决定记录与验收"
+      ]
+    },
+    {
+      "routeId": "welded-steel-cylinder-general-standard",
+      "difficultyPoints": [
+        "用途不能代替制造标准",
+        "焊缝与结构形式需先核对",
+        "工艺未确认前不推荐设备"
+      ]
+    },
+    {
+      "routeId": "welded-steel-cylinder-other-standard",
+      "difficultyPoints": [
+        "瓶型范围需先核对制造标准",
+        "焊接结构差异影响处理制度",
+        "工艺未确认前不推荐设备"
+      ]
+    }
+  ]
+}

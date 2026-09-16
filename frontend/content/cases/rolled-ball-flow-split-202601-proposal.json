@@ -1,0 +1,68 @@
+{
+  "id": "rolled-ball-flow-split-202601-proposal",
+  "slug": "rolled-ball-flow-split-202601-proposal",
+  "title": "一条轧球线接两台回火炉，来料怎么分？",
+  "summary": "一项80～100mm轧球回火线在回前风冷出口设置可调分流口，一路进入配套回火炉，另一路接向14米处的另一台回火炉。分流比例应与两端实际接料能力对应，不能把两路都按整线产能同时计算。",
+  "body": "rolled-ball-flow-split-202601-proposal.md",
+  "contentType": "proposal",
+  "publicationStatus": "draft",
+  "projectStatus": "proposal",
+  "workpiece": [
+    "轧球"
+  ],
+  "materials": [
+    "钢"
+  ],
+  "process": [
+    "回火",
+    "冷却"
+  ],
+  "equipment": [
+    "链带式回火炉"
+  ],
+  "need": [
+    "生产线配套"
+  ],
+  "tags": [
+    "方案参考",
+    "轧球",
+    "生产线配套"
+  ],
+  "facts": [
+    {
+      "label": "回前有效风冷段",
+      "value": "17",
+      "unit": "m",
+      "condition": "按180～540mm/min及实际布球核对",
+      "attribute": "方案参数"
+    },
+    {
+      "label": "有效回火段",
+      "value": "20",
+      "unit": "m",
+      "condition": "不能把通过时间直接作为工件到温后保温时间",
+      "attribute": "方案参数"
+    },
+    {
+      "label": "回后有效风冷段",
+      "value": "19",
+      "unit": "m",
+      "condition": "按120～360mm/min及实际来球条件核对",
+      "attribute": "方案参数"
+    }
+  ],
+  "participation": "回火前后风冷、回火炉及过渡分流接球接口",
+  "sourceSummary": "本文依据江苏苏能工业炉有限公司的历史方案资料整理，介绍拟定配置与供货条件；本文所引原件不构成设备已交付或验收通过的证明。",
+  "coverTitle": "轧球回火线方案：一处分流口通向两台回火炉，怎样核对接料能力？",
+  "relatedLinks": [],
+  "projectYear": 2026,
+  "sourceDate": "2026-01",
+  "cover": {
+    "src": "/images/case-covers/remaining-20260910/steel-balls.webp",
+    "alt": "钢球类别工件示意",
+    "caption": "钢球类别示意（人工智能生成，非客户实物，不表示实际规格或工艺结果）",
+    "fit": "contain"
+  },
+  "listTitle": "一条轧球线接两台回火炉，来料怎么分？",
+  "dateModified": "2026-09-12"
+}

@@ -36,7 +36,7 @@ export function PageBanner({
           />
           <div className="absolute inset-0 bg-black/58" />
           <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(2,14,31,0.86)_0%,rgba(2,14,31,0.58)_46%,rgba(2,14,31,0.22)_100%)]" />
-          <div className="relative mx-auto flex h-full max-w-[1660px] items-center px-6 lg:px-[86px]">
+          <div className="site-page-container relative flex h-full items-center">
             <div className="max-w-[780px] text-left">
               <p className="text-[12px] font-semibold uppercase tracking-[0.28em] text-[#e60012] lg:text-[13px]">
                 {englishTitle}
@@ -69,7 +69,7 @@ export function PageBanner({
             className="object-cover object-center"
           />
           <div className="absolute inset-0 bg-black/60" />
-          <div className="relative mx-auto flex h-full max-w-[1660px] items-center justify-center px-6 text-center lg:px-[86px]">
+          <div className="site-page-container relative flex h-full items-center justify-center text-center">
             <div className="max-w-[760px]">
               <h1 className="text-[36px] font-normal leading-none tracking-[0.02em] lg:text-[54px]">
                 {title}

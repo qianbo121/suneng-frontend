@@ -1,0 +1,18 @@
+{
+  "schemaVersion": "2.3.0",
+  "resolverVersion": "workpiece-router-resolver-2.3.0",
+  "ruleSchemaVersion": "2.3.0",
+  "publicLabelMappingVersion": "workpiece-router-public-labels-2.2.0",
+  "publicClaimTemplateVersion": "workpiece-router-public-claims-2.2.0",
+  "canonicalHashAlgorithm": "sha256-stable-json-v1",
+  "operationDecisionTableVersion": "operation-mode-table-2.3.0",
+  "materialHandlingDecisionTableVersion": "material-handling-table-2.3.0",
+  "snapshot": {
+    "ruleSetHash": "sha256:e8393716b575af8877395ed0729f0662a3708918b8617c9450ff03b92d9b607e",
+    "evidenceSnapshotHash": "sha256:bda9ee861d64e0c959303cbdfd29b00d84206188c4127302f02c2844a24b55aa",
+    "publicLabelMappingHash": "sha256:1971cfeb3ca3144e36f4b32b03db84ef9737bc12cdcd53aa243b822edc3ebef8",
+    "publicClaimTemplateHash": "sha256:b01e3bcc22df4891f010b17f8692a8cc400b1ac8e5ade7a411fd301b8a8b493f",
+    "rulePriorityHash": "sha256:386ed5c1181d396fa3c02c98334d9ad37b5016e863bb4fba891832c992955df5",
+    "approvedScopeHash": "sha256:cb0c0bb593ccc5e7f325b493ca78b1b5d2dae0f06ddb332c5af16b0bd029fbb0"
+  }
+}

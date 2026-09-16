@@ -1,0 +1,67 @@
+/* Public-site spacing: shared values, with separate page and wide-workspace widths. */
+:root {
+  --site-space-4: 4px;
+  --site-space-8: 8px;
+  --site-space-12: 12px;
+  --site-space-16: 16px;
+  --site-space-20: 20px;
+  --site-space-24: 24px;
+  --site-space-28: 28px;
+  --site-space-32: 32px;
+  --site-space-40: 40px;
+  --site-space-48: 48px;
+  --site-space-64: 64px;
+  --site-page-max: 1280px;
+  --site-wide-max: 1444px;
+  --site-gutter: 48px;
+  --site-page-width: min(calc(100% - var(--site-gutter) * 2), var(--site-page-max));
+  --site-wide-width: min(calc(100% - var(--site-gutter) * 2), var(--site-wide-max));
+  --site-section-inset: 32px;
+  --site-compact-inset: 24px;
+  --site-section-gap: calc(var(--site-section-inset) * 2);
+  --site-heading-gap: 24px;
+  --site-description-gap: 8px;
+  --site-copy-gap: 12px;
+  --site-card-padding: 24px;
+  --site-small-card-padding: 16px;
+  --site-grid-gap: 24px;
+  --site-column-gap: 48px;
+}
+
+@media (max-width: 1279px) {
+  :root {
+    --site-gutter: 32px;
+    --site-section-inset: 24px;
+    --site-compact-inset: 20px;
+    --site-grid-gap: 20px;
+    --site-column-gap: 32px;
+  }
+}
+
+@media (max-width: 767px) {
+  :root {
+    --site-gutter: 20px;
+    --site-section-inset: 20px;
+    --site-compact-inset: 16px;
+    --site-heading-gap: 20px;
+    --site-card-padding: 20px;
+    --site-small-card-padding: 12px;
+    --site-grid-gap: 16px;
+    --site-column-gap: 24px;
+  }
+}
+
+@media (max-width: 399px) {
+  :root {
+    --site-gutter: 16px;
+  }
+}
+
+.site-page-container {
+  width: var(--site-page-width);
+  margin-inline: auto;
+}
+
+.site-section {
+  padding-block: var(--site-section-inset);
+}

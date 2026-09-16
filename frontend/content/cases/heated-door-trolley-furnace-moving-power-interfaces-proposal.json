@@ -1,0 +1,66 @@
+{
+  "id": "trolley-moving-power-20220408-proposal",
+  "slug": "heated-door-trolley-furnace-moving-power-interfaces-proposal",
+  "title": "台车炉移动时怎么供电？",
+  "listTitle": "台车炉移动时怎么供电？",
+  "listSummary": "台车能行走、炉门能升降，并不意味着它们采用同一种供电方式。",
+  "summary": "台车能行走、炉门能升降，并不意味着它们采用同一种供电方式。江苏苏能工业炉有限公司2022年4月8日的台车炉方案，分别写到炉门加热电源的金属拖链、台车加热电源的动静触头，以及驱动台车电源线的自动卷筒。核对现场安装和动作时，应分清三者服务的设备与移动路径，不能笼统合并成一根“台车电缆”。",
+  "body": "heated-door-trolley-furnace-moving-power-interfaces-proposal.md",
+  "contentType": "proposal",
+  "publicationStatus": "draft",
+  "projectStatus": "proposal",
+  "projectYear": 2022,
+  "sourceDate": "2022-04-08",
+  "workpiece": [],
+  "materials": [],
+  "process": [
+    "热处理加热"
+  ],
+  "equipment": [
+    "台车式加热炉"
+  ],
+  "need": [
+    "移动供电接口"
+  ],
+  "tags": [
+    "方案参考",
+    "移动供电接口"
+  ],
+  "facts": [
+    {
+      "label": "方案工作尺寸",
+      "value": "2100×1100×1000",
+      "unit": "mm",
+      "condition": "长×宽×高，不等于炉膛尺寸",
+      "attribute": "方案参数"
+    },
+    {
+      "label": "方案台车承重",
+      "value": "≥3",
+      "unit": "t",
+      "condition": "不直接当净工件质量或局部承载保证",
+      "attribute": "方案参数"
+    },
+    {
+      "label": "方案加热功率",
+      "value": "180",
+      "unit": "kW",
+      "condition": "2区配置，非实际耗电量",
+      "attribute": "方案参数"
+    }
+  ],
+  "participation": "苏能方案拟提供台车加热炉和三类移动供电安排；现场二次接线材料由买方准备，具体设备配套与施工范围需按清单核对。",
+  "sourceSummary": "江苏苏能工业炉有限公司历史技术方案资料整理。",
+  "coverTitle": "带加热炉门的台车炉方案：三处移动供电怎样分别核对？",
+  "relatedLinks": [
+    {
+      "title": "了解台车炉的适用条件",
+      "href": "/zh/products/detail/trolley-furnace"
+    },
+    {
+      "title": "准备询价参数与供货范围",
+      "href": "/zh/articles/gongye-lu-baojia-canshu"
+    }
+  ],
+  "dateModified": "2026-09-12"
+}

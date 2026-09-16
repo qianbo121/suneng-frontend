@@ -1,0 +1,69 @@
+{
+  "id": "high-temperature-fan-20240321-proposal",
+  "slug": "steel-parts-high-temperature-trolley-fan-speed-cooling-proposal",
+  "title": "高温台车炉循环风机的调速与冷却水配置",
+  "listTitle": "高温台车炉循环风机的调速与冷却水配置",
+  "listSummary": "炉内循环风机的转速与机架冷却，服务不同的对象。",
+  "summary": "炉内循环风机的转速与机架冷却，服务不同的对象。江苏苏能工业炉有限公司2024年3月21日的钢制零部件台车炉方案，列出两台轴流式高温循环风机，采用水冷机架，并提出低温高速、高温低速的变频运行方式。核对时需要分别明确温段转速和机架水路，不能只以“配有两台风机”判断高温运行条件已经完整。",
+  "body": "steel-parts-high-temperature-trolley-fan-speed-cooling-proposal.md",
+  "contentType": "proposal",
+  "publicationStatus": "draft",
+  "projectStatus": "proposal",
+  "projectYear": 2024,
+  "sourceDate": "2024-03-21",
+  "workpiece": [
+    "钢制零部件"
+  ],
+  "materials": [
+    "钢"
+  ],
+  "process": [],
+  "equipment": [
+    "高温台车式电阻炉"
+  ],
+  "need": [
+    "循环风机高温运行条件"
+  ],
+  "tags": [
+    "方案参考",
+    "钢制零部件",
+    "循环风机高温运行条件"
+  ],
+  "facts": [
+    {
+      "label": "方案炉膛尺寸",
+      "value": "3000×1100×1200",
+      "unit": "mm",
+      "condition": "长×宽×高，非工件尺寸",
+      "attribute": "方案参数"
+    },
+    {
+      "label": "方案加热功率",
+      "value": "300",
+      "unit": "kW",
+      "condition": "不等于实耗或整机总功率",
+      "attribute": "方案参数"
+    },
+    {
+      "label": "循环风机",
+      "value": "2",
+      "unit": "台",
+      "condition": "每台1.5kW，工作范围需与分温段调速及机架水冷配合",
+      "attribute": "方案参数"
+    }
+  ],
+  "participation": "苏能拟提供高温台车炉及现场安装调试，循环风机转速、水冷机架和整机部件使用范围需要分别核定。",
+  "sourceSummary": "江苏苏能工业炉有限公司历史技术方案资料整理。",
+  "coverTitle": "高温台车炉方案：风机调速与水冷机架怎样分别核对？",
+  "relatedLinks": [
+    {
+      "title": "了解台车炉的适用条件",
+      "href": "/zh/products/detail/trolley-furnace"
+    },
+    {
+      "title": "准备询价参数与供货范围",
+      "href": "/zh/articles/gongye-lu-baojia-canshu"
+    }
+  ],
+  "dateModified": "2026-09-12"
+}

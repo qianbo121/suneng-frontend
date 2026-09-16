@@ -1,0 +1,67 @@
+{
+  "id": "bar-centering-repair-20260417-proposal",
+  "slug": "bar-centering-repair-20260417-proposal",
+  "title": "棒料步进炉改造：测长居中、导向和出料限位",
+  "summary": "一项棒料步进炉改造在进料口增加测长与居中装置，同时校正步进梁、增加侧导向和出料限位。三处动作分别对应入炉位置、炉内运行和出料边界，应按一根棒料的运行路径核对。",
+  "body": "bar-centering-repair-20260417-proposal.md",
+  "contentType": "proposal",
+  "publicationStatus": "draft",
+  "projectStatus": "proposal",
+  "workpiece": [
+    "钢棒"
+  ],
+  "materials": [
+    "钢"
+  ],
+  "process": [
+    "加热"
+  ],
+  "equipment": [
+    "步进炉"
+  ],
+  "need": [
+    "旧炉改造"
+  ],
+  "tags": [
+    "方案参考",
+    "钢棒",
+    "旧炉改造"
+  ],
+  "facts": [
+    {
+      "label": "适用棒料直径",
+      "value": "80～100",
+      "unit": "mm",
+      "condition": "协议范围，需与来料和支承条件核对",
+      "attribute": "方案参数"
+    },
+    {
+      "label": "适用棒料长度",
+      "value": "1400～1650",
+      "unit": "mm",
+      "condition": "逐根测量并用于居中",
+      "attribute": "方案参数"
+    },
+    {
+      "label": "标准坯出料节奏",
+      "value": "约30",
+      "unit": "s",
+      "condition": "约定节奏，非各规格实测产量",
+      "attribute": "方案参数"
+    }
+  ],
+  "participation": "测距居中、步进机构及出料限位等改造配置与新旧控制衔接",
+  "sourceSummary": "本文依据江苏苏能工业炉有限公司的历史方案资料整理，介绍拟定配置与供货条件；本文所引原件不构成设备已交付或验收通过的证明。",
+  "coverTitle": "棒料步进炉改造：进料居中、炉内导向和出料限位为什么要分开处理？",
+  "relatedLinks": [],
+  "projectYear": 2026,
+  "sourceDate": "2026-04-17",
+  "cover": {
+    "src": "/images/workpieces/reviewed-20260909/pipe-bar-wire/round-steel-bar.webp",
+    "alt": "钢棒类别工件示意",
+    "caption": "钢棒类别示意（人工智能生成，非客户实物，不表示实际规格或工艺结果）",
+    "fit": "contain"
+  },
+  "listTitle": "棒料步进炉改造：测长居中、导向和出料限位",
+  "dateModified": "2026-09-12"
+}

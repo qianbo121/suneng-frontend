@@ -1,0 +1,27 @@
+.guide { scroll-margin-top: 180px; color: #344054; padding: 32px 0; font-size: 16px; line-height: 1.9; min-width: 0; }
+.guide h2 { margin: 0 0 18px; color: #101828; font-size: clamp(26px, 3vw, 36px); font-weight: 600; line-height: 1.35; }
+.guide h3 { margin: 0 0 10px; color: #101828; font-size: 21px; font-weight: 600; line-height: 1.5; }
+.guide p { margin: 0; }
+.answer { max-width: 1000px; }
+.tableScroll { margin: 24px 0; max-width: 100%; overflow-x: auto; border: 1px solid #dfe6f0; border-radius: 8px; }
+.guide table { width: 100%; min-width: 700px; border-collapse: collapse; text-align: left; font-size: 15px; line-height: 1.8; }
+.guide caption { text-align: left; padding: 14px 18px; font-weight: 600; color: #101828; }
+.guide th, .guide td { padding: 16px 18px; vertical-align: top; border-top: 1px solid #e7edf5; }
+.guide thead { background: #f4f7fb; }
+.guide tbody th { width: 20%; font-weight: 600; }
+.point { margin-top: 28px; }
+.guide ol { list-style: decimal; padding-left: 24px; margin: 12px 0 0; }
+.guide li + li { margin-top: 8px; }
+.links { list-style: none; padding: 0; margin: 12px 0 0; }
+.links a { color: #174c83; text-decoration: underline; text-underline-offset: 4px; }
+.links a:hover { color: #b9202b; }
+.links a:focus-visible, .tableScroll:focus-visible { outline: 2px solid #174c83; outline-offset: 4px; }
+.limits { margin-top: 26px; padding: 18px 20px; border: 1px solid #e2e8f0; background: #f8fafc; border-radius: 8px; }
+.limits p { margin-top: 6px; }
+.caseReturn { margin: 32px 0; scroll-margin-top: 140px; color: #344054; font-size: 16px; line-height: 1.9; }
+.caseReturn h2 { margin: 0 0 12px; color: #101828; font-size: 22px; font-weight: 600; line-height: 1.5; }
+.caseReturn p { margin: 0; }
+.caseReturn a { display: inline-block; color: #174c83; text-decoration: underline; text-underline-offset: 4px; }
+.caseReturn a:hover { color: #b9202b; }
+.caseReturn a:focus-visible { outline: 2px solid #174c83; outline-offset: 4px; }
+@media (max-width: 640px) { .guide { padding: 24px 0; } .guide h3 { font-size: 19px; } .guide th, .guide td { padding: 12px 14px; } }

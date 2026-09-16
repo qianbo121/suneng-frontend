@@ -1,15 +1,18 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { Transform } from 'class-transformer';
+import { Transform, Type } from 'class-transformer';
 import {
   IsEmail,
   IsIn,
   IsNotEmpty,
+  IsObject,
   IsOptional,
   IsString,
   Matches,
   MaxLength,
+  ValidateNested,
   ValidateIf,
 } from 'class-validator';
+import { WorkpieceRouterRawConditionsDto } from '@/modules/workpiece-router/dto/resolve-workpiece-router.dto';
 
 function normalizeOptionalSource(maxLength: number) {
   return Transform(({ value }: { value: unknown }) => {
@@ -19,7 +22,40 @@ function normalizeOptionalSource(maxLength: number) {
   });
 }
 
+export class WorkpieceContextDto {
+  @IsString()
+  @IsNotEmpty()
+  @MaxLength(120)
+  categoryId!: string;
+
+  @IsOptional()
+  @IsString()
+  @MaxLength(120)
+  workpieceId?: string | null;
+
+  @IsOptional()
+  @IsString()
+  @MaxLength(255)
+  searchTerm?: string | null;
+
+  @IsOptional()
+  @IsString()
+  @MaxLength(120)
+  processPurposeId?: string | null;
+
+  @IsOptional()
+  @IsObject()
+  @ValidateNested()
+  @Type(() => WorkpieceRouterRawConditionsDto)
+  rawConditions?: WorkpieceRouterRawConditionsDto;
+}
+
 export class CreateCustomRequirementDto {
+  @ApiPropertyOptional({ enum: ['full', 'homepage_minimal'] })
+  @IsOptional()
+  @IsIn(['full', 'homepage_minimal'])
+  formVariant?: 'full' | 'homepage_minimal';
+
   @ApiPropertyOptional({ description: 'Stable key reused when the client retries this submission' })
   @IsOptional()
   @IsString()
@@ -35,21 +71,45 @@ export class CreateCustomRequirementDto {
   projectType!: string;
 
   @ApiProperty()
+  @ValidateIf(
+    (dto: CreateCustomRequirementDto) =>
+      dto.formVariant !== 'homepage_minimal' || dto.projectLocation !== undefined,
+  )
   @IsString()
   @IsNotEmpty()
   @Matches(/\S/)
   @MaxLength(180)
-  projectLocation!: string;
+  projectLocation?: string;
 
   @ApiProperty()
+  @ValidateIf((dto: CreateCustomRequirementDto) => dto.formVariant !== 'homepage_minimal')
   @IsString()
   @IsNotEmpty()
   @Matches(/\S/)
   @MaxLength(120)
-  name!: string;
+  name?: string;
+
+  @ApiPropertyOptional({ description: 'Company or contact name from the four-field homepage form' })
+  @ValidateIf((dto: CreateCustomRequirementDto) => dto.formVariant === 'homepage_minimal')
+  @IsString()
+  @IsNotEmpty()
+  @Matches(/\S/)
+  @MaxLength(180)
+  identity?: string;
+
+  @ApiPropertyOptional({ description: 'One phone, WeChat ID or email from the homepage form' })
+  @ValidateIf((dto: CreateCustomRequirementDto) => dto.formVariant === 'homepage_minimal')
+  @IsString()
+  @IsNotEmpty()
+  @Matches(/^[\p{L}\p{N}+][\p{L}\p{N}\s@()+\-._/#*]{2,253}$/u)
+  @MaxLength(254)
+  contact?: string;
 
   @ApiPropertyOptional()
-  @ValidateIf((dto: CreateCustomRequirementDto) => !dto.email || dto.phone !== undefined)
+  @ValidateIf(
+    (dto: CreateCustomRequirementDto) =>
+      dto.formVariant !== 'homepage_minimal' && (!dto.email || dto.phone !== undefined),
+  )
   @IsString()
   @IsNotEmpty()
   @Matches(/^[\p{L}\p{N}+][\p{L}\p{N}\s()+\-._/#*]{2,49}$/u)
@@ -59,7 +119,8 @@ export class CreateCustomRequirementDto {
   @ApiPropertyOptional()
   @ValidateIf(
     (dto: CreateCustomRequirementDto) =>
-      dto.locale === 'en' || !dto.phone || dto.email !== undefined,
+      dto.formVariant !== 'homepage_minimal' &&
+      (dto.locale === 'en' || !dto.phone || dto.email !== undefined),
   )
   @IsString()
   @IsNotEmpty()
@@ -68,11 +129,12 @@ export class CreateCustomRequirementDto {
   email?: string;
 
   @ApiProperty()
+  @ValidateIf((dto: CreateCustomRequirementDto) => dto.formVariant !== 'homepage_minimal')
   @IsString()
   @IsNotEmpty()
   @Matches(/\S/)
   @MaxLength(180)
-  company!: string;
+  company?: string;
 
   @ApiPropertyOptional()
   @IsOptional()
@@ -211,4 +273,10 @@ export class CreateCustomRequirementDto {
   @IsString()
   @MaxLength(120)
   visitorId?: string;
+
+  @ApiPropertyOptional({ type: WorkpieceContextDto })
+  @IsOptional()
+  @ValidateNested()
+  @Type(() => WorkpieceContextDto)
+  workpieceContext?: WorkpieceContextDto;
 }

@@ -1,13 +1,21 @@
-import Image from 'next/image';
 import Link from 'next/link';
-import { HiClock } from 'react-icons/hi2';
+import { ListPagination } from '@/components/ui/ListPagination';
+import { NEWS_PAGE_SIZE } from '@/constants/news';
 
-import { EmptyState } from '@/components/ui/EmptyState';
-import { Pagination } from '@/components/ui/Pagination';
 import { formatNewsDisplayDate } from '@/lib/news';
-import { cn } from '@/lib/utils';
+import {
+  buildNewsDecisionHref,
+  getNewsDecisionDisplayMeta,
+  isFeaturedNewsPage,
+  type NewsSort,
+  type NewsDecisionTopicId,
+  type NewsFurnaceFilterId,
+} from '@/lib/news-decision-center';
 import { NewsListCardItem } from '@/types/news';
 import { Locale } from '@/types/site';
+
+import { NewsCardImage } from './NewsCardImage';
+import styles from './NewsDecisionCenter.module.css';
 
 type NewsListCardsProps = {
   locale: Locale;
@@ -15,80 +23,121 @@ type NewsListCardsProps = {
   page?: number;
   total?: number;
   pageSize?: number;
+  query?: string;
+  topic?: NewsDecisionTopicId;
+  furnace?: NewsFurnaceFilterId;
+  sort?: NewsSort;
 };
 
 function NewsListItem({
   locale,
   item,
-  last,
+  priority,
+  featured,
 }: {
   locale: Locale;
   item: NewsListCardItem;
-  last: boolean;
+  priority: boolean;
+  featured: boolean;
 }) {
-  return (
-    <Link
-      href={`/${locale}/news/${item.slug}`}
-      className={cn(
-        'group grid gap-7 py-[28px] transition md:grid-cols-[320px_minmax(0,1fr)] md:items-center lg:gap-[36px]',
-        !last && 'border-b border-[#e2e2e2]',
-      )}
-    >
-      <div className="relative aspect-[2/1] overflow-hidden rounded-[6px] bg-[#f3f3f3] md:h-[158px] md:aspect-auto">
-        <Image
-          src={item.image}
-          alt={item.title[locale]}
-          fill
-          sizes="(max-width: 768px) 100vw, 320px"
-          className="object-cover transition-transform duration-500 ease-out group-hover:scale-[1.03]"
-        />
-      </div>
+  const meta = getNewsDecisionDisplayMeta(item, locale);
+  const displayDate = formatNewsDisplayDate(item.updatedAt || item.date);
 
-      <div className="min-w-0">
-        <h2 className="line-clamp-2 text-[22px] font-semibold leading-[1.45] text-[#202020] transition-colors group-hover:text-[var(--color-accent)]">
-          {item.title[locale]}
-        </h2>
-        <p className="mt-[12px] line-clamp-2 text-[15px] font-normal leading-[1.85] text-[#777777] lg:text-[16px]">
-          {item.summary[locale]}
-        </p>
-        <div className="mt-[18px] flex items-center gap-2 text-[15px] font-normal text-[#8b8b8b]">
-          <HiClock className="h-[18px] w-[18px] text-[#9da3aa]" />
-          <span>{formatNewsDisplayDate(item.date)}</span>
+  return (
+    <article
+      className={`${styles.articleCard} ${featured ? styles.featuredCard : ''}`}
+      data-news-id={item.id}
+      data-featured={featured}
+    >
+      <Link href={`/${locale}/news/${item.slug}`} className={styles.articleLink}>
+        <div className={styles.articleImage}>
+          <NewsCardImage
+            src={item.image}
+            alt={locale === 'en' ? item.title.en : `${item.title.zh}封面图`}
+            priority={priority}
+            sizes={
+              featured
+                ? '(max-width: 700px) calc(100vw - 56px), 288px'
+                : '(max-width: 700px) 96px, 176px'
+            }
+          />
         </div>
-      </div>
-    </Link>
+
+        <div className={styles.articleBody}>
+          <h3 className={styles.articleTitle}>{item.title[locale]}</h3>
+          <div className={styles.articleTags}>
+            {featured ? (
+              <span className={styles.recommendLabel}>
+                {locale === 'en' ? 'Recommended' : '推荐阅读'}
+              </span>
+            ) : null}
+            <span className={styles.articleTag}>{meta.topicLabel}</span>
+            <span className={styles.articleTag}>{meta.furnaceLabel}</span>
+            {displayDate ? (
+              <time className={styles.articleDate} dateTime={displayDate}>
+                {displayDate}
+              </time>
+            ) : null}
+          </div>
+          <p className={styles.articleSummary}>{item.summary[locale]}</p>
+        </div>
+      </Link>
+    </article>
   );
 }
 
-export function NewsListCards({ locale, items, page = 1, total = items.length, pageSize = 6 }: NewsListCardsProps) {
+export function NewsListCards({
+  locale,
+  items,
+  page = 1,
+  total = items.length,
+  pageSize = NEWS_PAGE_SIZE,
+  query = '',
+  topic = 'all',
+  furnace = 'all',
+  sort = 'recommended',
+}: NewsListCardsProps) {
   const normalized = items.slice(0, pageSize);
   const pageCount = Math.max(1, Math.ceil(total / pageSize));
+  const href = (nextPage: number) =>
+    buildNewsDecisionHref(`/${locale}/news`, {
+      query,
+      topic,
+      furnace,
+      sort,
+      page: nextPage,
+    });
 
   if (normalized.length === 0) {
     return (
-      <EmptyState
-        title={locale === 'en' ? 'No news found' : '暂无新闻数据'}
-        description={
-          locale === 'en'
-            ? 'There are no published news articles yet.'
-            : '当前还没有已发布的新闻内容。'
-        }
-      />
+      <div className={styles.emptyState}>
+        <h3>{locale === 'en' ? 'No resources found' : '没有找到匹配资料'}</h3>
+        <p>{locale === 'en' ? 'Try another search or filter.' : '请调整搜索词或筛选条件。'}</p>
+        <Link href={`/${locale}/news`}>{locale === 'en' ? 'Reset filters' : '清除筛选'}</Link>
+      </div>
     );
   }
 
   return (
-    <section>
-      <div className="rounded-[10px] border border-[#d9d9d9] bg-white px-[28px] py-[8px] shadow-[0_8px_30px_rgba(0,0,0,0.03)] md:px-[34px]">
+    <div>
+      <div className={styles.articleList}>
         {normalized.map((item, index) => (
-          <NewsListItem key={item.id} locale={locale} item={item} last={index === normalized.length - 1} />
+          <NewsListItem
+            key={item.id}
+            locale={locale}
+            item={item}
+            priority={index === 0}
+            featured={index === 0 && isFeaturedNewsPage({ query, topic, furnace, sort, page })}
+          />
         ))}
       </div>
-      {pageCount > 1 ? (
-        <div className="mt-[24px] flex justify-center">
-          <Pagination page={page} total={total} pageSize={pageSize} baseHref={`/${locale}/news`} />
-        </div>
-      ) : null}
-    </section>
+      <ListPagination
+        page={page}
+        pageCount={pageCount}
+        href={href}
+        locale={locale}
+        ariaLabel={locale === 'en' ? 'Resource pages' : '资料分页'}
+      />
+    </div>
   );
 }

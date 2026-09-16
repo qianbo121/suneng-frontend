@@ -1,0 +1,73 @@
+{
+  "id": "aluminum-steam-interface-20230904-proposal",
+  "slug": "aluminum-t6-furnace-steam-air-curtain-exhaust-interfaces-proposal",
+  "title": "铝合金T6炉下面有水槽，蒸汽怎么排？",
+  "listTitle": "铝合金T6炉下面有水槽，蒸汽怎么排？",
+  "listSummary": "固溶炉下方就是淬火槽时，水槽温度与炉口蒸汽要分开核对。",
+  "summary": "固溶炉下方就是淬火槽时，水槽温度与炉口蒸汽要分开核对。江苏苏能工业炉有限公司2023年9月4日的铝合金T6炉方案，在炉门底部布置压缩空气气幕管，并在对面设置吸风罩和抽风机，拟将上升蒸汽引向一侧排出。同时，水槽仍要移动并与料筐升降、时效转运衔接，不能只在设备总图上给排风口留个位置。",
+  "body": "aluminum-t6-furnace-steam-air-curtain-exhaust-interfaces-proposal.md",
+  "contentType": "proposal",
+  "publicationStatus": "draft",
+  "projectStatus": "proposal",
+  "projectYear": 2023,
+  "sourceDate": "2023-09-04",
+  "workpiece": [
+    "中小型铝合金件"
+  ],
+  "materials": [
+    "铝合金"
+  ],
+  "process": [
+    "固溶",
+    "时效"
+  ],
+  "equipment": [
+    "立式固溶炉",
+    "台车式时效炉"
+  ],
+  "need": [
+    "炉口排汽与转运布置"
+  ],
+  "tags": [
+    "方案参考",
+    "中小型铝合金件",
+    "炉口排汽与转运布置"
+  ],
+  "facts": [
+    {
+      "label": "有效工作室尺寸",
+      "value": "1500×1500×1000",
+      "unit": "mm",
+      "condition": "长×宽×高，配实际装载核对",
+      "attribute": "方案参数"
+    },
+    {
+      "label": "固溶加热功率",
+      "value": "200",
+      "unit": "kW",
+      "condition": "仅加热段，不等于整套装机容量",
+      "attribute": "方案参数"
+    },
+    {
+      "label": "时效加热功率",
+      "value": "108",
+      "unit": "kW",
+      "condition": "与固溶段分别配置",
+      "attribute": "方案参数"
+    }
+  ],
+  "participation": "苏能方案拟提供固溶、时效及移动淬火槽和转运控制设备，炉口吹吸、槽液冷却及现场接口需按最终布置和测试统一。",
+  "sourceSummary": "江苏苏能工业炉有限公司历史技术方案资料整理。",
+  "coverTitle": "铝合金T6炉方案：下方水槽的蒸汽，怎样与炉口和转运空间分开处理？",
+  "relatedLinks": [
+    {
+      "title": "了解台车炉的适用条件",
+      "href": "/zh/products/detail/trolley-furnace"
+    },
+    {
+      "title": "准备询价参数与供货范围",
+      "href": "/zh/articles/gongye-lu-baojia-canshu"
+    }
+  ],
+  "dateModified": "2026-09-12"
+}

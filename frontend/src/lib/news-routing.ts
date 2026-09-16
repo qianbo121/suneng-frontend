@@ -9,6 +9,13 @@ export function getCanonicalNewsSlug(slug: string) {
   return LEGACY_DUPLICATE_SLUGS[slug] ?? slug;
 }
 
+export function getPublicNewsRedirectSlug(
+  requestedSlug: string,
+  article: Pick<NewsApiItem, 'slug'>,
+) {
+  return article.slug === requestedSlug ? null : article.slug;
+}
+
 export function isLegacyDuplicateNewsSlug(slug: string) {
   return getCanonicalNewsSlug(slug) !== slug;
 }

@@ -1,0 +1,13 @@
+{
+  "id": "steel-pipe-sealed-cooling-20200804-proposal",
+  "slug": "steel-pipe-trolley-sealed-atmosphere-cooling-proposal",
+  "number": 70,
+  "title": "How does a steel-pipe bogie-hearth furnace cool under a protective atmosphere?",
+  "summary": "Suneng's 2020 proposal for a 13-metre steel-pipe bogie-hearth furnace specifies high-temperature finned heat-exchange tubes in the roof to cool workpieces while the chamber remains sealed under a protective atmosphere. It lists a cooling rate of 50–100°C/h. Compare cooling rate and atmosphere conditions as one requirement; the document does not establish a fully defined cooling system.",
+  "body": "steel-pipe-sealed-cooling-20200804-proposal.md",
+  "sourceFingerprint": "f1f6248a15a271645c073ab9d7e5c1d9dc41b400e83f1a7adbb8d087b368aa62",
+  "translationStatus": "complete",
+  "translatedAt": "2026-09-12",
+  "coverAlt": "Illustration of steel tubes.",
+  "coverCaption": "Illustration of steel tubes (AI-generated). Not an actual customer workpiece photograph."
+}

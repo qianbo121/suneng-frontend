@@ -1,0 +1,13 @@
+{
+  "id": "forge-reversal-20260518-proposal",
+  "slug": "regenerative-forging-furnace-reversal-exhaust-temperature-proposal",
+  "number": 62,
+  "title": "Switching control and flue-gas temperature measurement in a regenerative forging furnace",
+  "summary": "Reversal in a regenerative furnace is more than alternating ignition between two sides. Suneng's forging-furnace proposal describes one side firing while the other exhausts flue gas and stores its heat; after reversal, their roles switch. Review reversal mode, exhaust-temperature monitoring and valve actions together. A reversal interval alone does not establish heat recovery or satisfactory workpiece heating.",
+  "body": "forge-reversal-20260518-proposal.md",
+  "sourceFingerprint": "ce3a538ce263a0f6881f24960f1d3f59fe896edf4588e40bf0f3d4ecf41e4606",
+  "translationStatus": "complete",
+  "translatedAt": "2026-09-12",
+  "coverAlt": "Illustration of steel billets.",
+  "coverCaption": "Illustration of steel billets (AI-generated). Not an actual customer workpiece photograph."
+}

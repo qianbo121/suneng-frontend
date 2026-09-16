@@ -1,0 +1,79 @@
+{
+  "id": "cylinder-rotation-curing-20250210-proposal",
+  "slug": "carbon-fiber-cylinder-rotation-curing-proposal",
+  "title": "订碳纤维气瓶固化炉，要提供哪些固定杆尺寸？",
+  "listTitle": "订碳纤维气瓶固化炉，要提供哪些固定杆尺寸？",
+  "listSummary": "江苏苏能工业炉有限公司2025年2月10日的气瓶旋转固化炉方案，将两端固定杆列为买方自备，并要求先提供准确尺寸。",
+  "summary": "江苏苏能工业炉有限公司2025年2月10日的气瓶旋转固化炉方案，将两端固定杆列为买方自备，并要求先提供准确尺寸。原因在于：三爪卡盘夹紧一端固定杆，尾部支架支撑另一端，瓶体、固定杆与装夹机构需要一起核对。方案中的Φ500×1000mm工件尺寸不含固定杆，仅凭瓶体尺寸还不能确认能否装夹、旋转和进出炉。",
+  "body": "carbon-fiber-cylinder-rotation-curing-proposal.md",
+  "contentType": "proposal",
+  "publicationStatus": "draft",
+  "projectStatus": "proposal",
+  "projectYear": 2025,
+  "sourceDate": "2025-02-10",
+  "workpiece": [
+    "碳纤维缠绕气瓶"
+  ],
+  "materials": [
+    "碳纤维"
+  ],
+  "process": [
+    "旋转固化"
+  ],
+  "equipment": [
+    "台车式旋转固化炉"
+  ],
+  "need": [
+    "新设备方案"
+  ],
+  "tags": [
+    "气瓶固化",
+    "固定杆",
+    "旋转装夹",
+    "历史方案",
+    "方案参考"
+  ],
+  "facts": [
+    {
+      "label": "方案工件尺寸",
+      "value": "Φ500×1000",
+      "unit": "mm",
+      "condition": "不含买方自备的两端固定杆",
+      "attribute": "方案参数"
+    },
+    {
+      "label": "方案装炉数量",
+      "value": "1",
+      "unit": "件/炉",
+      "condition": "单件装炉；不代表每小时产量",
+      "attribute": "方案参数"
+    },
+    {
+      "label": "方案加热功率",
+      "value": "40",
+      "unit": "kW",
+      "condition": "历史方案配置功率，不是单炉耗电量",
+      "attribute": "方案参数"
+    }
+  ],
+  "participation": "方案拟提供固化炉、带旋转机构的台车、电气控制系统及技术资料；两端固定杆由买方自备。",
+  "sourceSummary": "江苏苏能工业炉有限公司历史技术方案资料整理。",
+  "coverTitle": "碳纤维缠绕气瓶固化方案：为什么先确认两端固定杆？",
+  "cover": {
+    "src": "/images/case-covers/white-background-20260912/cylinder-rotation-curing-20250210-proposal-white.png",
+    "alt": "浅灰背景上的碳纤维缠绕气瓶类别示意，不含固定杆",
+    "caption": "工件示意（人工智能生成，非项目实物）",
+    "fit": "contain"
+  },
+  "relatedLinks": [
+    {
+      "title": "了解台车炉的适用条件",
+      "href": "/zh/products/detail/trolley-furnace"
+    },
+    {
+      "title": "准备询价参数与供货范围",
+      "href": "/zh/articles/gongye-lu-baojia-canshu"
+    }
+  ],
+  "dateModified": "2026-09-12"
+}

@@ -15,6 +15,14 @@ export type LeadEventType =
   | 'email_click'
   | 'form_start'
   | 'form_step_complete'
+  | 'module_view'
+  | 'category_select'
+  | 'workpiece_select'
+  | 'purpose_select'
+  | 'search_match'
+  | 'search_nomatch'
+  | 'cta_click'
+  | 'form_success'
   | 'human_signal'
   | 'effective_interaction'
   | 'automation_signal';
@@ -38,6 +46,9 @@ export type LeadSourceSnapshot = {
   visitorId?: string;
 };
 
+export type LeadEventProperties = Record<string, string | number | boolean | null>;
+type LeadEventExtra = Partial<LeadSourceSnapshot> & { properties?: LeadEventProperties };
+
 const LEAD_SOURCE_LIMITS: Record<keyof LeadSourceSnapshot, number> = {
   pageTitle: 255,
   pagePath: 500,
@@ -59,6 +70,7 @@ const LEAD_SOURCE_LIMITS: Record<keyof LeadSourceSnapshot, number> = {
 
 type LeadEventPayload = LeadSourceSnapshot & {
   eventType: LeadEventType;
+  properties?: LeadEventProperties;
 };
 
 const HIGH_INTENT_EVENTS = new Set<LeadEventType>([
@@ -67,6 +79,7 @@ const HIGH_INTENT_EVENTS = new Set<LeadEventType>([
   'wechat_qr_view',
   'quote_cta_click',
   'email_click',
+  'cta_click',
 ]);
 
 const ENGAGED_SESSION_KEY = 'suneng_engaged_session_recorded';
@@ -159,13 +172,10 @@ function getSessionTrafficSource(
   utmSource: string | undefined,
 ) {
   try {
-    const stored = JSON.parse(storage.getItem(SESSION_SOURCE_KEY) || 'null') as
-      | ReturnType<typeof classifyTrafficSource>
-      | null;
-    if (
-      stored &&
-      ['直接访问', '自然搜索', '外部链接', 'AI引流'].includes(stored.sourceType)
-    ) {
+    const stored = JSON.parse(storage.getItem(SESSION_SOURCE_KEY) || 'null') as ReturnType<
+      typeof classifyTrafficSource
+    > | null;
+    if (stored && ['直接访问', '自然搜索', '外部链接', 'AI引流'].includes(stored.sourceType)) {
       return stored;
     }
     const source = classifyTrafficSource(referrer, utmSource, window.location.hostname);
@@ -302,14 +312,29 @@ export function buildLeadSourceSnapshot(
   });
 }
 
-function currentPayload(eventType: LeadEventType, extra: Partial<LeadSourceSnapshot> = {}) {
+function sanitizeEventProperties(properties?: LeadEventProperties) {
+  if (!properties) return undefined;
+  const entries = Object.entries(properties)
+    .slice(0, 24)
+    .flatMap(([key, value]) => {
+      const normalizedKey = key.trim().slice(0, 60);
+      if (!normalizedKey) return [];
+      const normalizedValue = typeof value === 'string' ? value.trim().slice(0, 255) : value;
+      return [[normalizedKey, normalizedValue] as const];
+    });
+  return entries.length > 0 ? Object.fromEntries(entries) : undefined;
+}
+
+function currentPayload(eventType: LeadEventType, extra: LeadEventExtra = {}) {
+  const { properties, ...sourceExtra } = extra;
   return {
     eventType,
-    ...buildLeadSourceSnapshot(extra),
+    ...buildLeadSourceSnapshot(sourceExtra),
+    properties: sanitizeEventProperties(properties),
   };
 }
 
-function postLeadEvent(eventType: LeadEventType, extra?: Partial<LeadSourceSnapshot>) {
+function postLeadEvent(eventType: LeadEventType, extra?: LeadEventExtra) {
   return apiPost<unknown, LeadEventPayload>('/v1/lead-events', {
     body: currentPayload(eventType, extra),
     cache: 'no-store',
@@ -319,7 +344,7 @@ function postLeadEvent(eventType: LeadEventType, extra?: Partial<LeadSourceSnaps
   );
 }
 
-export function markEngagedSession(extra?: Partial<LeadSourceSnapshot>) {
+export function markEngagedSession(extra?: LeadEventExtra) {
   if (typeof window === 'undefined') return;
   try {
     if (window.sessionStorage.getItem(ENGAGED_SESSION_KEY) === '1' || engagedSessionInFlight)
@@ -504,7 +529,7 @@ export function trackPageView() {
   }
 }
 
-export function trackLeadEvent(eventType: LeadEventType, extra?: Partial<LeadSourceSnapshot>) {
+export function trackLeadEvent(eventType: LeadEventType, extra?: LeadEventExtra) {
   if (typeof window === 'undefined') return;
   void postLeadEvent(eventType, extra);
   if (HIGH_INTENT_EVENTS.has(eventType)) markEngagedSession(extra);

@@ -1,0 +1,13 @@
+{
+  "id": "steel-pipe-inclined-loading-20230907-proposal",
+  "slug": "steel-pipe-inclined-loading-four-metre-chamber-proposal",
+  "number": 26,
+  "title": "How should long steel pipes be supported inside and outside a 4-metre furnace chamber?",
+  "summary": "Chamber depth and whole-pipe length are different dimensions. Jiangsu Suneng Industrial Furnace Co., Ltd.'s bogie-hearth heating proposal dated 7 September 2023 specifies a 4 m-deep chamber and 4–13 m pipes, inserted at an incline with protective grooves at the internal contact end and soft-contact support beneath the opening. First establish the length requiring heat and the loading orientation, then check internal/external supports. The 13 m range does not mean an entire pipe fits inside or heats uniformly in a 4 m chamber.",
+  "body": "steel-pipe-inclined-loading-20230907-proposal.md",
+  "sourceFingerprint": "60df0aa357ce9c8a4564eeb6b61f8d42036334cd4200be6b46b052265ef18a8d",
+  "translationStatus": "complete",
+  "translatedAt": "2026-09-12",
+  "coverAlt": "Illustration of steel tubes.",
+  "coverCaption": "Illustration of steel tubes (AI-generated). Not an actual customer workpiece photograph."
+}

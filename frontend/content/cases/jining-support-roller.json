@@ -1,0 +1,79 @@
+{
+  "id": "jining-support-roller",
+  "slug": "jining-support-roller-heat-treatment-line",
+  "summary": "苏能2026年5月为济宁市五创机械有限公司编制的支重轮热处理线方案配置两台加热炉、两台自动淬火机床和一台回火炉，其中一路通过转向机构接入回火上料段。核对产线节拍时，要把每路出料、淬火和两路汇入后的接料分别对应；方案开头的“最好2分钟”与单机参数的“4分钟/件”不能直接当作同一个已确认节拍。",
+  "workpiece": [
+    "支重轮"
+  ],
+  "materials": [],
+  "process": [
+    "淬火",
+    "回火"
+  ],
+  "equipment": [
+    "连续热处理生产线",
+    "自动淬火机床"
+  ],
+  "need": [
+    "两路合流节拍核对"
+  ],
+  "tags": [
+    "方案参考",
+    "支重轮",
+    "两路合流节拍核对"
+  ],
+  "publicCustomerName": "济宁市五创机械有限公司",
+  "facts": [
+    {
+      "label": "方案加热炉数量",
+      "value": "2",
+      "unit": "台",
+      "condition": "本份设备构成，不代表每台均实现整线产量",
+      "attribute": "方案参数"
+    },
+    {
+      "label": "方案共用回火炉",
+      "value": "1",
+      "unit": "台",
+      "condition": "两路淬火后按方案滑道与上料机构衔接",
+      "attribute": "方案参数"
+    },
+    {
+      "label": "方案转向角度",
+      "value": "90",
+      "unit": "°",
+      "condition": "其中一路回火上料滑道拐角旋转台",
+      "attribute": "方案参数"
+    }
+  ],
+  "participation": "苏能方案提出两路加热淬火与共同回火、后段喷淋及电控配置；最终供货及工艺条件需正式文件确认。",
+  "sourceSummary": "客户名称沿用既有公开确认范围；技术内容依据2026年样本方案，不作为交付或验收结果。",
+  "datePublished": "2026-07-24T20:30:00+08:00",
+  "dateModified": "2026-09-12",
+  "relatedLinks": [
+    {
+      "title": "连续热处理生产线方案",
+      "href": "/zh/solutions/continuous-heat-treatment-line"
+    },
+    {
+      "title": "工业炉报价需要哪些参数？",
+      "href": "/zh/articles/gongye-lu-baojia-canshu"
+    }
+  ],
+  "title": "两路支重轮淬火共用一台回火炉，产量怎么配？",
+  "body": "jining-support-roller.md",
+  "contentType": "proposal",
+  "publicationStatus": "draft",
+  "projectStatus": "proposal",
+  "coverTitle": "支重轮\n连续热处理",
+  "projectYear": 2026,
+  "sourceDate": "2026-05-19",
+  "listTitle": "两路支重轮淬火共用一台回火炉，产量怎么配？",
+  "listSummary": "苏能2026年5月为济宁市五创机械有限公司编制的支重轮热处理线方案配置两台加热炉、两台自动淬火机床和一台回火炉，其中一路通过转向机构接入回火上料段。",
+  "cover": {
+    "src": "/images/case-covers/ai-reviewed-20260911/091-roller-body-v1.png",
+    "alt": "支重轮裸轮体类别示意",
+    "caption": "支重轮轮体示意（人工智能生成，非客户实物；孔径、轮缘及表面状态不代表本项目规格）",
+    "fit": "contain"
+  }
+}

@@ -58,7 +58,7 @@ describe('InquiryNotificationService', () => {
       '**项目地点**\n江苏常州',
       '**联系人**\n张经理',
       '**公司**\n苏能客户公司',
-      '**联系电话**\n13000000000',
+      '**电话 / 微信**\n13000000000',
       '**联系邮箱**\nsales@example.com',
       '**所属行业**\n机械制造',
       '**设备工艺**\n退火',
@@ -66,6 +66,37 @@ describe('InquiryNotificationService', () => {
     ]);
     expect(payload.card.elements[2].text.content).toBe('**设备需求**\n需要一台\n台车炉');
   });
+
+  it.each([
+    ['new', '新建项目'],
+    [' renovation ', '改造项目'],
+    ['after-sales', '售后服务'],
+    ['单体工业炉新建', '单体工业炉新建'],
+    ['custom-project', 'custom-project'],
+  ])(
+    'shows the readable project type for %s without changing the record',
+    async (projectType, label) => {
+      const fetchMock = jest
+        .fn()
+        .mockResolvedValue(new Response(JSON.stringify({ code: 0 }), { status: 200 }));
+      global.fetch = fetchMock;
+      const configService = {
+        get: jest.fn().mockReturnValue('https://example.com/feishu-webhook'),
+      } as unknown as ConfigService;
+      const inquiry = { projectType };
+
+      await new InquiryNotificationService(configService).notifyNewInquiry(inquiry);
+
+      const [, request] = fetchMock.mock.calls[0] as [string, RequestInit];
+      const payload = JSON.parse(request.body as string);
+      expect(payload.card.elements[0].fields).toContainEqual({
+        is_short: true,
+        text: { tag: 'lark_md', content: `**项目类型**\n${label}` },
+      });
+      expect(inquiry.projectType).toBe(projectType);
+      expect(fetchMock).toHaveBeenCalledTimes(1);
+    },
+  );
 
   it('omits empty inquiry fields instead of showing placeholders', async () => {
     const fetchMock = jest
@@ -91,6 +122,30 @@ describe('InquiryNotificationService', () => {
     const payload = JSON.parse(request.body as string);
     expect(payload.card.elements).toHaveLength(1);
     expect(JSON.stringify(payload)).not.toContain('未填写');
+  });
+
+  it('marks a long requirement as truncated and directs operators to the full record', async () => {
+    const fetchMock = jest
+      .fn()
+      .mockResolvedValue(
+        new Response(JSON.stringify({ code: 0, msg: 'success' }), { status: 200 }),
+      );
+    global.fetch = fetchMock;
+    const configService = {
+      get: jest.fn().mockReturnValue('https://example.com/feishu-webhook'),
+    } as unknown as ConfigService;
+    const service = new InquiryNotificationService(configService);
+
+    await service.notifyNewInquiry({
+      phone: 'wechat_name-2026',
+      requirement: '工况'.repeat(2_100),
+    });
+
+    const [, request] = fetchMock.mock.calls[0] as [string, RequestInit];
+    const payload = JSON.parse(request.body as string);
+    const content = payload.card.elements[2].text.content as string;
+    expect(content).toContain('通知中已截断；请到后台查看完整询盘');
+    expect(content.length).toBeLessThanOrEqual(4_010);
   });
 
   it('skips delivery when the webhook is not configured', async () => {

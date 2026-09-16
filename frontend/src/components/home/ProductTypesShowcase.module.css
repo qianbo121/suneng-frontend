@@ -1,0 +1,1164 @@
+.section {
+  overflow: hidden;
+  padding-block: var(--site-section-inset);
+  background: var(--home-surface, #fff);
+  color: var(--home-ink, #0c192a);
+}
+
+.container {
+  width: var(--site-wide-width);
+  margin-inline: auto;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 24px;
+}
+
+.header h2 {
+  margin: 0;
+  color: var(--home-ink, #0c192a);
+  font-size: var(--home-section-title-size, clamp(34px, 2.6vw, 36px));
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  line-height: var(--home-section-title-line, 1.25);
+  text-wrap: balance;
+}
+
+.allProductsLink,
+.lineAction {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 650;
+  text-decoration: none;
+}
+
+.allProductsLink {
+  min-height: 44px;
+  flex: none;
+  color: var(--home-ink, #0c192a);
+  font-size: 16px;
+  -webkit-tap-highlight-color: rgba(12, 77, 204, 0.14);
+  touch-action: manipulation;
+  transition: color 180ms ease;
+}
+
+.allProductsLink svg,
+.lineAction svg {
+  width: 20px;
+  height: 20px;
+  transition: transform 180ms ease;
+}
+
+.allProductsLink:hover,
+.allProductsLink:focus-visible {
+  color: var(--home-blue, #0c4dcc);
+}
+
+.allProductsLink:hover svg,
+.allProductsLink:focus-visible svg {
+  transform: translateX(3px);
+}
+
+.allProductsLink:focus-visible,
+.lineRail:focus-visible,
+.lineCard:focus-visible,
+.nextButton:focus-visible,
+.linePaginationButton:focus-visible,
+.furnaceTitleLink:focus-visible,
+.furnaceMediaControl:focus-visible {
+  outline: 2px solid var(--home-blue, #0c4dcc);
+  outline-offset: 3px;
+}
+
+.lineViewport {
+  position: relative;
+  width: 100%;
+}
+
+.lineRail {
+  display: flex;
+  overflow-x: auto;
+  gap: 24px;
+  padding: 2px 0 18px 2px;
+  cursor: grab;
+  overscroll-behavior-inline: contain;
+  scroll-behavior: smooth;
+  scroll-padding-inline: 2px;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  touch-action: pan-x pan-y;
+}
+
+.lineRail::-webkit-scrollbar {
+  display: none;
+}
+
+.lineRail[data-dragging='true'] {
+  cursor: grabbing;
+  scroll-snap-type: none;
+  user-select: none;
+}
+
+.lineCard {
+  position: relative;
+  width: calc((75% - 18px) / 2);
+  aspect-ratio: 16 / 10;
+  flex: 0 0 auto;
+  overflow: hidden;
+  border-radius: 8px;
+  background: #102a45;
+  color: #fff;
+  scroll-snap-align: start;
+  text-decoration: none;
+  -webkit-tap-highlight-color: rgba(255, 255, 255, 0.12);
+  touch-action: manipulation;
+  transform: translateZ(0);
+}
+
+.lineCardPlaceholder {
+  cursor: grab;
+}
+
+.lineRail[data-dragging='true'] .lineCardPlaceholder {
+  cursor: grabbing;
+}
+
+.productLineGrid {
+  display: grid;
+  overflow: visible;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px;
+  padding: 2px 0 0 2px;
+  cursor: default;
+  scroll-behavior: auto;
+  scroll-snap-type: none;
+  touch-action: auto;
+}
+
+.productLineGridCard {
+  width: auto;
+  min-width: 0;
+  min-height: 330px;
+  aspect-ratio: auto;
+  scroll-snap-align: none;
+}
+
+.productLineGridCard.lineCardPlaceholder {
+  cursor: default;
+}
+
+.lineImage {
+  object-fit: cover;
+}
+
+.lineShade {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg, rgba(3, 17, 32, 0.03) 14%, rgba(3, 18, 35, 0.84) 56%, #061a30 100%),
+    linear-gradient(90deg, rgba(2, 18, 34, 0.1), transparent 52%);
+}
+
+.lineContent {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 1;
+  padding: 24px;
+}
+
+.lineTitleRow {
+  display: flex;
+  min-width: 0;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 18px;
+}
+
+.lineTitleRow > div {
+  min-width: 0;
+}
+
+.lineTitleRow h3 {
+  margin: 0;
+  font-size: 28px;
+  font-weight: 650;
+  letter-spacing: -0.025em;
+  line-height: 1.25;
+}
+
+.lineTitleRow p,
+.lineSummary {
+  margin: 7px 0 0;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 15px;
+  line-height: 1.55;
+}
+
+.lineTitleRow strong {
+  flex: none;
+  color: #ff9418;
+  font-size: 30px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.lineTitleRow small {
+  margin-left: 3px;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.processFlow {
+  display: flex;
+  height: 27px;
+  align-items: center;
+  gap: 5px;
+  margin-top: 7px;
+  overflow: hidden;
+  opacity: 1;
+  pointer-events: none;
+  transform: translateY(0);
+}
+
+.processStepGroup {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  gap: 5px;
+}
+
+.processStep {
+  padding: 2px 7px;
+  border: 1px solid rgba(192, 207, 224, 0.62);
+  border-radius: 3px;
+  background: rgba(5, 27, 48, 0.16);
+  color: rgba(255, 255, 255, 0.94);
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 18px;
+  white-space: nowrap;
+}
+
+.processStepAccent {
+  border-color: #ff9418;
+  background: rgba(255, 148, 24, 0.08);
+}
+
+.processArrow {
+  width: 12px;
+  height: 12px;
+  color: rgba(222, 231, 241, 0.72);
+}
+
+.temperatureScale {
+  margin-top: 12px;
+}
+
+.temperatureTrack {
+  display: block;
+  height: 2px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.55);
+}
+
+.temperatureValue {
+  display: block;
+  height: 100%;
+  background: linear-gradient(90deg, #6eb6ff 0%, #ff9b17 66%, #ef3f24 100%);
+}
+
+.temperatureLabels {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 6px;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 13px;
+  line-height: 20px;
+}
+
+.lineAction {
+  margin-top: 6px;
+  color: #5f9dff;
+  font-size: 16px;
+  line-height: 24px;
+}
+
+.linePlaceholderBadge {
+  position: absolute;
+  z-index: 2;
+  top: 18px;
+  left: 18px;
+  display: inline-flex;
+  min-height: 28px;
+  align-items: center;
+  padding-inline: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.38);
+  border-radius: 999px;
+  background: rgba(6, 26, 48, 0.82);
+  color: rgba(255, 255, 255, 0.94);
+  font-size: 12px;
+  font-weight: 650;
+  line-height: 18px;
+  pointer-events: none;
+}
+
+.linePlaceholderNote {
+  display: inline-flex;
+  margin-top: 6px;
+  color: rgba(214, 225, 238, 0.9);
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 24px;
+}
+
+.linePagination {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 2px;
+}
+
+.linePaginationButton {
+  display: grid;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 1px solid var(--home-line, #d8e2ef);
+  border-radius: 3px;
+  place-items: center;
+  background: #fff;
+  color: var(--home-ink, #0c192a);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  transition:
+    border-color 180ms ease,
+    background-color 180ms ease,
+    color 180ms ease;
+}
+
+.linePaginationButton svg {
+  width: 20px;
+  height: 20px;
+}
+
+.linePaginationButton:hover:not(:disabled) {
+  border-color: var(--home-blue, #0c4dcc);
+  background: var(--home-blue, #0c4dcc);
+  color: #fff;
+}
+
+.linePaginationButton:disabled {
+  border-color: #e4eaf1;
+  color: #aeb9c5;
+  cursor: default;
+}
+
+.linePaginationStatus {
+  display: inline-flex;
+  min-width: 116px;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  color: #596779;
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
+  line-height: 20px;
+}
+
+.linePaginationStatus strong {
+  color: var(--home-blue, #0c4dcc);
+  font-weight: 700;
+}
+
+.linePaginationTrack {
+  width: 38px;
+  height: 2px;
+  overflow: hidden;
+  background: var(--home-line, #d8e2ef);
+}
+
+.linePaginationValue {
+  display: block;
+  height: 100%;
+  background: var(--home-blue, #0c4dcc);
+}
+
+.lineRail.homeLineRail {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 72vw;
+  grid-template-rows: repeat(5, auto);
+  column-gap: 24px;
+  row-gap: 0;
+  padding-left: 0;
+  scroll-padding-left: 0;
+}
+
+.homeLineCard {
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  min-width: 0;
+  grid-template-rows: subgrid;
+  grid-row: span 5;
+  border: 1px solid var(--home-line, #d8e2ef);
+  border-radius: 8px;
+  background: #fff;
+  color: #082e45;
+  scroll-snap-align: start;
+  -webkit-tap-highlight-color: rgba(12, 77, 204, 0.14);
+  touch-action: manipulation;
+}
+
+.homeLineImage {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  border-radius: 7px 7px 0 0;
+  aspect-ratio: 16 / 9;
+}
+
+.homeLineImage img {
+  object-fit: cover;
+}
+
+.homeLineCard .homeLineName {
+  margin: 20px 22px 10px;
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 30px;
+  overflow-wrap: anywhere;
+  text-wrap: balance;
+}
+
+.homeLineName a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.homeLineName a::after {
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  border-radius: 8px;
+  content: '';
+}
+
+.homeLineName a:hover {
+  color: #17658f;
+}
+
+.homeLineName a:focus-visible {
+  outline: none;
+}
+
+.homeLineName a:focus-visible::after {
+  outline: 3px solid #70b8ff;
+  outline-offset: -3px;
+}
+
+.homeLineCard .homeLineCopy {
+  margin: 0 22px;
+  color: #64748b;
+  font-size: 16px;
+  line-height: 24px;
+}
+
+.homeLineCopy + .homeLineCopy {
+  margin-top: 6px;
+  margin-bottom: 20px;
+}
+
+.homeLineFlowPanel {
+  min-width: 0;
+  padding: 20px 16px;
+  border-radius: 0 0 7px 7px;
+  background: #062a42;
+}
+
+.homeLineFlowLink {
+  position: relative;
+  z-index: 2;
+  display: block;
+  min-width: 0;
+  color: #eef4f9;
+  text-decoration: none;
+}
+
+.homeLineFlowLink:focus-visible {
+  border-radius: 4px;
+  outline: 3px solid #70b8ff;
+  outline-offset: 3px;
+}
+
+.homeLineFlow {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.homeLineFlow li {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  align-items: center;
+  gap: 10px;
+  text-align: center;
+}
+
+.homeLineFlow li:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  top: 10px;
+  left: calc(50% + 18px);
+  width: calc(100% - 36px);
+  height: 1px;
+  background: #758d9e;
+  pointer-events: none;
+}
+
+.homeLineFlow [data-process-number] {
+  color: #b3c9d9;
+  font-size: 16px;
+  font-weight: 400;
+  font-variant-numeric: tabular-nums;
+  line-height: 20px;
+}
+
+.homeLineFlow [data-process-label] {
+  color: #eef4f9;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 22px;
+  white-space: nowrap;
+}
+
+.homeLineFlow [data-process-accent] span {
+  color: #e8a020;
+}
+
+.homeLineFlowLink:hover [data-process-label] {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.section .homeLineNote {
+  margin: 0 0 24px;
+  color: #64748b;
+  font-size: 13px;
+  line-height: 22px;
+}
+
+@media (min-width: 1200px) {
+  .homeLineRail {
+    overflow-x: visible;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    cursor: default;
+    scroll-behavior: auto;
+    scroll-snap-type: none;
+    touch-action: auto;
+  }
+
+  .homeLineRail[data-dragging='true'] {
+    cursor: default;
+    user-select: auto;
+  }
+}
+
+.nextButton {
+  position: absolute;
+  z-index: 3;
+  top: calc(50% - 9px);
+  right: 24px;
+  display: grid;
+  width: 48px;
+  height: 48px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  place-items: center;
+  background: #fff;
+  box-shadow: 0 8px 24px rgba(12, 25, 42, 0.14);
+  color: var(--home-ink, #0c192a);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  transform: translateY(-50%);
+  transition:
+    background-color 180ms ease,
+    color 180ms ease,
+    transform 180ms ease;
+}
+
+.nextButton svg {
+  width: 23px;
+  height: 23px;
+}
+
+.nextButton:hover {
+  background: var(--home-blue, #0c4dcc);
+  color: #fff;
+  transform: translateY(-50%) translateX(2px);
+}
+
+.previousButton {
+  right: auto;
+  left: 24px;
+}
+
+.previousButton:hover {
+  transform: translateY(-50%) translateX(-2px);
+}
+
+.furnaceGrid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  margin-top: 12px;
+  border-top: 1px solid var(--home-line, #d8e2ef);
+  border-left: 1px solid var(--home-line, #d8e2ef);
+}
+
+.furnaceItem {
+  --furnace-scene-surface: #f3f5f7;
+
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  min-width: 0;
+  min-height: 304px;
+  flex-direction: column;
+  align-items: stretch;
+  padding: 28px 28px 18px;
+  border-right: 1px solid var(--home-line, #d8e2ef);
+  border-bottom: 1px solid var(--home-line, #d8e2ef);
+  color: inherit;
+  text-align: left;
+  -webkit-tap-highlight-color: rgba(12, 77, 204, 0.12);
+  touch-action: manipulation;
+  transition: background-color 280ms ease;
+}
+
+.furnaceTitleLink {
+  display: block;
+  color: inherit;
+  text-decoration: none;
+}
+
+.furnaceDescription {
+  margin: 6px 0 0;
+  color: #627084;
+  font-size: 13px;
+  line-height: 20px;
+}
+
+.furnaceActions {
+  display: flex;
+  min-height: 44px;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0 6px;
+  margin-top: auto;
+  padding-top: 8px;
+}
+
+.furnaceActions .furnacePlayButton,
+.furnaceDetailsLink {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--home-blue, #0c4dcc);
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 20px;
+  white-space: nowrap;
+  text-decoration: none;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.furnaceDetailsLink {
+  margin-left: auto;
+}
+.furnaceActions .furnacePlayButton svg,
+.furnaceDetailsLink svg {
+  width: 14px;
+  height: 14px;
+}
+.furnaceActions .furnacePlayButton:hover,
+.furnaceDetailsLink:hover {
+  color: #07317f;
+  text-decoration: underline;
+}
+.furnaceTitleLink:focus-visible,
+.furnaceMediaControl:focus-visible,
+.furnaceActions .furnacePlayButton:focus-visible,
+.furnaceDetailsLink:focus-visible {
+  outline: 2px solid var(--home-blue, #0c4dcc);
+  outline-offset: 3px;
+}
+.furnaceError {
+  color: #627084;
+  font-size: 12px;
+  line-height: 18px;
+}
+
+.furnaceEnglishName {
+  color: #596779;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  line-height: 20px;
+  white-space: nowrap;
+}
+
+.furnaceMediaControl {
+  position: relative;
+  display: block;
+  width: 100%;
+  max-width: 260px;
+  align-self: center;
+  margin-top: 12px;
+  padding: 0;
+  overflow: hidden;
+  border: 0;
+  border-radius: 2px;
+  aspect-ratio: 4 / 3;
+  background: transparent;
+  cursor: pointer;
+  -webkit-tap-highlight-color: rgba(12, 77, 204, 0.12);
+  touch-action: manipulation;
+}
+
+.furnaceRealImageLayer,
+.furnaceAnimationLayer {
+  position: absolute;
+  inset: 0;
+  display: block;
+  opacity: 1;
+  transition: opacity 280ms ease;
+}
+
+.furnaceRealImageLayer {
+  mix-blend-mode: darken;
+}
+
+.furnaceImage {
+  object-fit: contain;
+}
+
+.furnaceAnimationLayer {
+  --furnace-transition-transform: 360ms;
+  --furnace-transition-opacity: 180ms;
+  --furnace-transition-filter: 180ms;
+  --furnace-belt-flow-duration: 800ms;
+  --furnace-cycle-duration: 3.8s;
+  --furnace-cycle-duration-slow: 4s;
+  --furnace-pulse-duration: 1s;
+  --furnace-fan-duration: 1.1s;
+  --furnace-roller-flow-duration: 3s;
+  --furnace-roller-spin-duration: 900ms;
+  --furnace-rotary-spin-duration: 6s;
+  --furnace-rotary-heat-duration: 2.2s;
+
+  background: var(--furnace-scene-surface);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.furnaceAnimationLayer:not([data-playing='true']) * {
+  animation-play-state: paused !important;
+}
+
+/* Fade the opaque scene over the intact product image, so loading and both
+   directions of the transition always retain a complete picture underneath. */
+.furnaceAnimationLayer[data-visible='true'] {
+  opacity: 1;
+}
+
+.furnaceItem[data-active='true'] {
+  background: var(--furnace-scene-surface);
+}
+
+.furnaceTouchLabel {
+  position: absolute;
+  bottom: 8px;
+  left: 8px;
+  display: none;
+  min-height: 34px;
+  align-items: center;
+  padding-inline: 10px;
+  border: 1px solid rgba(201, 211, 224, 0.92);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.94);
+  color: #17263a;
+  font-size: 11px;
+  font-weight: 650;
+  line-height: 16px;
+  white-space: nowrap;
+}
+
+.furnaceItem .furnaceTitleLink h3 {
+  margin: 8px 0 0;
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 30px;
+  transform: translateY(-4px);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .furnaceItem:hover,
+  .furnaceItem:focus-within {
+    background: var(--furnace-scene-surface);
+  }
+}
+
+@media (max-width: 1199px) {
+  .lineCard {
+    width: 72vw;
+  }
+
+  .productLineGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .productLineGridCard {
+    width: auto;
+  }
+
+  .linePagination {
+    display: flex;
+  }
+}
+
+@media (max-width: 1023px) {
+  .lineTitleRow h3 {
+    font-size: 25px;
+  }
+
+  .lineTitleRow strong {
+    font-size: 27px;
+  }
+
+  .nextButton {
+    width: 44px;
+    height: 44px;
+  }
+
+  .furnaceGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 767px) {
+  .container {
+    width: var(--site-wide-width);
+  }
+
+  .section {
+    padding-block: var(--site-section-inset);
+  }
+
+  .header {
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 18px;
+  }
+
+  .header h2 {
+    font-size: var(--home-section-title-size, 28px);
+    line-height: var(--home-section-title-line, 38px);
+    white-space: nowrap;
+  }
+
+  .allProductsLink {
+    gap: 6px;
+    font-size: 14px;
+    white-space: nowrap;
+  }
+
+  .allProductsLink svg {
+    width: 17px;
+    height: 17px;
+  }
+
+  .lineViewport {
+    width: calc(100vw - 16px);
+  }
+
+  .lineViewport.lineViewportGrid {
+    width: 100%;
+  }
+
+  .lineRail {
+    gap: 14px;
+    padding-right: 58px;
+    scroll-padding-right: 58px;
+  }
+
+  .productLineGrid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 16px;
+    padding: 2px 0 0;
+    scroll-padding-right: 0;
+  }
+
+  .lineCard {
+    width: 88vw;
+    aspect-ratio: 16 / 10;
+  }
+
+  .productLineGridCard {
+    width: auto;
+    min-height: 330px;
+    aspect-ratio: auto;
+  }
+
+  .lineRail.homeLineRail {
+    grid-auto-columns: calc(100vw - 64px);
+    column-gap: 14px;
+  }
+
+  .homeLineCard .homeLineName {
+    font-size: 20px;
+  }
+
+  .section .homeLineNote {
+    margin-top: 16px;
+  }
+
+  .lineContent {
+    padding: 18px;
+  }
+
+  .lineTitleRow {
+    align-items: flex-end;
+    gap: 10px;
+  }
+
+  .lineTitleRow h3 {
+    font-size: 18px;
+    line-height: 25px;
+  }
+
+  .lineTitleRow p,
+  .lineSummary {
+    margin-top: 3px;
+    font-size: 12px;
+    line-height: 18px;
+  }
+
+  .lineTitleRow strong {
+    font-size: 21px;
+  }
+
+  .temperatureScale {
+    margin-top: 7px;
+  }
+
+  .temperatureLabels {
+    margin-top: 3px;
+    font-size: 11px;
+    line-height: 16px;
+  }
+
+  .lineAction {
+    margin-top: 1px;
+    font-size: 14px;
+    line-height: 20px;
+  }
+
+  .linePlaceholderBadge {
+    top: 12px;
+    left: 12px;
+    min-height: 26px;
+    padding-inline: 9px;
+    font-size: 11px;
+  }
+
+  .linePlaceholderNote {
+    margin-top: 1px;
+    font-size: 12px;
+    line-height: 20px;
+  }
+
+  .processFlow {
+    display: none;
+    max-width: 100%;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .processFlow::-webkit-scrollbar {
+    display: none;
+  }
+
+  .nextButton {
+    right: 14px;
+    left: auto;
+    transform: translateY(-50%);
+  }
+
+  .nextButton:hover {
+    transform: translateY(-50%) translateX(2px);
+  }
+
+  .linePagination {
+    width: calc(100vw - 32px);
+    margin-top: 0;
+  }
+
+  .previousButton {
+    right: auto;
+    left: 14px;
+  }
+
+  .previousButton:hover {
+    transform: translateY(-50%) translateX(-2px);
+  }
+
+  .furnaceGrid {
+    margin-top: 8px;
+  }
+
+  .furnaceItem {
+    min-height: 214px;
+    padding: 18px 16px 12px;
+  }
+
+  .furnaceEnglishName {
+    font-size: 9px;
+    letter-spacing: 0.08em;
+    line-height: 16px;
+  }
+
+  .furnaceMediaControl {
+    max-width: 170px;
+    margin-top: 8px;
+  }
+
+  .furnaceItem .furnaceTitleLink h3 {
+    margin-top: 4px;
+    font-size: 18px;
+    line-height: 26px;
+  }
+
+  .furnaceDescription,
+  .furnaceActions .furnacePlayButton,
+  .furnaceDetailsLink {
+    font-size: 12px;
+  }
+
+  .furnaceActions .furnacePlayButton svg,
+  .furnaceDetailsLink svg {
+    width: 12px;
+    height: 12px;
+  }
+
+  .furnaceTouchLabel {
+    display: inline-flex;
+  }
+}
+
+@media (max-width: 767px), (min-width: 1200px) and (max-width: 1399px) {
+  .homeLineCard .homeLineName {
+    margin-inline: 20px;
+    line-height: 32px;
+  }
+
+  .homeLineCard .homeLineCopy {
+    margin-inline: 20px;
+  }
+
+  .homeLineFlowPanel {
+    padding-inline: 20px;
+  }
+
+  .homeLineFlow {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    row-gap: 20px;
+  }
+
+  .homeLineFlow li:nth-child(3n)::after {
+    display: none;
+  }
+}
+
+@media (hover: none), (pointer: coarse) {
+  .furnaceTouchLabel {
+    display: inline-flex;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .furnaceActions .furnacePlayButton {
+    display: none;
+  }
+
+  .furnaceMediaControl:hover .furnaceImage,
+  .furnaceMediaControl:focus-visible .furnaceImage {
+    transform: none;
+  }
+
+  .lineRail {
+    scroll-behavior: auto;
+  }
+
+  .allProductsLink svg,
+  .lineAction svg,
+  .lineCard,
+  .lineImage,
+  .lineShade,
+  .furnaceImage,
+  .furnaceRealImageLayer,
+  .furnaceAnimationLayer,
+  .nextButton,
+  .linePaginationButton {
+    transition-duration: 0.01ms !important;
+  }
+}
+
+.furnaceVisualNote {
+  display: block;
+  margin-top: 4px;
+  color: #627084;
+  font-size: 11px;
+  line-height: 16px;
+  text-align: center;
+}
+
+@media (max-width: 767px) {
+  .furnaceItem[data-furnace-addition] .furnaceEnglishName {
+    display: block;
+    min-height: 32px;
+    white-space: normal;
+  }
+  .furnaceItem[data-furnace-addition] .furnaceDescription {
+    min-height: 40px;
+  }
+}
+
+.section[data-locale='en'] .header h2 { min-width: 0; white-space: normal; }
+@media (max-width: 767px) {
+  .section[data-locale='en'] .header { align-items: flex-start; }
+  .section[data-locale='en'] .header h2 { flex: 1; line-height: 1.2; }
+  .section[data-locale='en'] .allProductsLink { flex: none; }
+}

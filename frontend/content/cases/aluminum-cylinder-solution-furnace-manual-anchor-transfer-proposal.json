@@ -1,0 +1,73 @@
+{
+  "id": "cylinder-manual-anchors-20230906-proposal",
+  "slug": "aluminum-cylinder-solution-furnace-manual-anchor-transfer-proposal",
+  "title": "铝合金气瓶固溶炉上下料，还有哪些步骤要人工做？",
+  "listTitle": "铝合金气瓶固溶炉上下料，还有哪些步骤要人工做？",
+  "listSummary": "快速下降能力，不能代替料架上下挂接和水槽到位的确认。",
+  "summary": "快速下降能力，不能代替料架上下挂接和水槽到位的确认。江苏苏能工业炉有限公司2023年9月的铝合金气瓶固溶炉方案，安排提升机构与水槽内强制下拉机构配合，转移时间从炉门开启后算到工件全部没入水中；同时明确料架上部提升钩和下部钢丝绳钩采用人工挂接。判断整套动作是否适用，应把这些人工步骤纳入同一张作业图。",
+  "body": "aluminum-cylinder-solution-furnace-manual-anchor-transfer-proposal.md",
+  "contentType": "proposal",
+  "publicationStatus": "draft",
+  "projectStatus": "proposal",
+  "projectYear": 2023,
+  "sourceDate": "2023-09-06",
+  "workpiece": [
+    "铝合金气瓶"
+  ],
+  "materials": [
+    "铝合金"
+  ],
+  "process": [
+    "固溶"
+  ],
+  "equipment": [
+    "立式固溶炉"
+  ],
+  "need": [
+    "人工挂接与快速转移"
+  ],
+  "tags": [
+    "方案参考",
+    "铝合金气瓶",
+    "人工挂接与快速转移"
+  ],
+  "facts": [
+    {
+      "label": "方案炉膛尺寸",
+      "value": "2650×2650×2750",
+      "unit": "mm",
+      "condition": "长×宽×高，需扣实际料架与间隙",
+      "attribute": "方案参数"
+    },
+    {
+      "label": "φ420mm气瓶装架",
+      "value": "16",
+      "unit": "支/料架",
+      "condition": "方案同时另列φ200mm装架，不合计",
+      "attribute": "方案参数"
+    },
+    {
+      "label": "方案固溶转移时间",
+      "value": "≤15",
+      "unit": "s",
+      "condition": "炉门开启后至工件全部没入水中",
+      "attribute": "方案参数"
+    }
+  ],
+  "participation": "苏能方案拟提供固溶加热、料架升降和移动水槽等，人工挂接与最终驱动结构、现场能源及联动试验需逐项确认。",
+  "sourceSummary": "江苏苏能工业炉有限公司历史技术方案资料整理。",
+  "coverTitle": "铝合金气瓶固溶炉方案：快速入水前，哪些挂接动作仍由人工完成？",
+  "relatedLinks": [
+    {
+      "title": "准备询价参数与供货范围",
+      "href": "/zh/articles/gongye-lu-baojia-canshu"
+    }
+  ],
+  "cover": {
+    "src": "/images/workpieces/reviewed-20260909/gas-cylinders/seamless-aluminum-gas-cylinder.webp",
+    "alt": "铝合金瓶体类别工件示意",
+    "caption": "铝合金瓶体工件示意（人工智能生成，非客户实物）",
+    "fit": "contain"
+  },
+  "dateModified": "2026-09-12"
+}

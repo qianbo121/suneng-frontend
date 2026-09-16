@@ -44,6 +44,36 @@ export class ShujuNewsPublishDto {
 
   @IsOptional()
   @IsString()
+  @MaxLength(255)
+  titleEn?: string;
+
+  @IsOptional()
+  @IsString()
+  @MaxLength(1000)
+  summaryEn?: string;
+
+  @IsOptional()
+  @IsString()
+  @MaxLength(500000)
+  contentEn?: string;
+
+  @IsOptional()
+  @IsString()
+  @MaxLength(255)
+  seoTitleEn?: string;
+
+  @IsOptional()
+  @IsString()
+  @MaxLength(1000)
+  seoDescriptionEn?: string;
+
+  @IsOptional()
+  @IsString()
+  @MaxLength(500)
+  seoKeywordsEn?: string;
+
+  @IsOptional()
+  @IsString()
   @IsUrl({ require_protocol: true, protocols: ['http', 'https'] })
   @MaxLength(500)
   coverImage?: string;

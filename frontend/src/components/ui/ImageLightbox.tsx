@@ -1,6 +1,7 @@
 'use client';
 
 import { AnimatePresence, motion } from 'framer-motion';
+import { DocumentImageLightbox } from './DocumentImageLightbox';
 import { useEffect, useState } from 'react';
 import { HiChevronLeft, HiChevronRight, HiOutlineXMark } from 'react-icons/hi2';
 
@@ -10,9 +11,11 @@ type ImageLightboxProps = {
   isOpen: boolean;
   initialIndex?: number;
   onClose: () => void;
+  documentMode?: boolean;
+  locale?: 'zh' | 'en';
 };
 
-export function ImageLightbox({
+function StandardImageLightbox({
   images,
   imageAlts = [],
   isOpen,
@@ -58,7 +61,12 @@ export function ImageLightbox({
           exit={{ opacity: 0 }}
           className="fixed inset-0 z-[80] flex items-center justify-center bg-[#00162f]/88 px-4"
         >
-          <button type="button" className="absolute inset-0" onClick={onClose} aria-label="Close lightbox" />
+          <button
+            type="button"
+            className="absolute inset-0"
+            onClick={onClose}
+            aria-label="Close lightbox"
+          />
           <div className="relative z-[81] flex w-full max-w-5xl items-center gap-3">
             <button
               type="button"
@@ -100,4 +108,10 @@ export function ImageLightbox({
       ) : null}
     </AnimatePresence>
   );
+}
+
+export function ImageLightbox(props: ImageLightboxProps) {
+  if (props.documentMode)
+    return props.isOpen && props.images.length ? <DocumentImageLightbox {...props} /> : null;
+  return <StandardImageLightbox {...props} />;
 }

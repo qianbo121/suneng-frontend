@@ -16,8 +16,8 @@ export const homeBanners: HeroBannerItem[] = [
       en: 'Industrial Heating and Heat Treatment Equipment Specialist',
     },
     subtitle: {
-      zh: '专注电阻式与燃气式工业炉研发制造，为客户提供单机设备、配套件与整线交钥匙工程。',
-      en: 'Focused on electric-resistance and gas-fired industrial furnaces, supporting stand-alone equipment, components and turnkey lines.',
+      zh: '专注电阻式与燃气式工业炉研发制造，为客户提供单机设备、配套件与整线设备供货。',
+      en: 'Focused on electric-resistance and gas-fired industrial furnaces, supporting stand-alone equipment, components and integrated heat-treatment line equipment.',
     },
     ctaLabel: {
       zh: '查看产品中心',

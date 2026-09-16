@@ -1,0 +1,511 @@
+{
+  "pageId": "mesh-belt-carbonitriding-line",
+  "variant": "mesh",
+  "seo": {
+    "title": "网带式渗碳淬火生产线",
+    "description": "网带式渗碳淬火生产线面向适合连续铺料的小型钢件，介绍渗碳与扩散、气氛与碳势控制、淬火清洗、低温回火、装载产能和硬化层验收，帮助准备选型参数。"
+  },
+  "sectionNavigation": [
+    {
+      "label": "适用工件",
+      "href": "#workpieces"
+    },
+    {
+      "label": "工艺与设备",
+      "href": "#process"
+    },
+    {
+      "label": "设备配置",
+      "href": "#configuration"
+    },
+    {
+      "label": "产能与现场",
+      "href": "#site-conditions"
+    },
+    {
+      "label": "交付验收",
+      "href": "#acceptance"
+    },
+    {
+      "label": "常见问题",
+      "href": "#faq"
+    }
+  ],
+  "images": {
+    "hero-line": {
+      "src": "/images/products/mesh-belt-carbonitriding-line/mesh-batch-v1/01-hero-17ddaf898df2.png",
+      "width": 1672,
+      "height": 941,
+      "alt": "气氛渗碳炉、封闭淬火后处理及独立回火设备配置",
+      "optimized": true
+    },
+    "process-whole-line": {
+      "src": "/images/products/mesh-belt-carbonitriding-line/mesh-batch-v1/02-whole-line-3089af0cf685.png",
+      "width": 2172,
+      "height": 724,
+      "alt": "网带渗碳炉、封闭淬火槽、提升后处理与回火设备的完整组成",
+      "optimized": true
+    },
+    "workpiece-representative": {
+      "src": "/images/products/mesh-belt-carbonitriding-line/mesh-batch-v1/03-workpiece-742c147c002f.png",
+      "width": 1672,
+      "height": 941,
+      "alt": "分别展示的小齿轮、台阶销与短套类钢件外形",
+      "optimized": true
+    },
+    "loading-mesh-belt": {
+      "src": "/images/products/mesh-belt-carbonitriding-line/mesh-batch-v1/04-loading-3f5ddd4e063b.png",
+      "width": 1672,
+      "height": 941,
+      "alt": "同类小齿轮端面朝下在编织金属网带上分散铺料",
+      "optimized": true
+    },
+    "gallery-atmosphere": {
+      "src": "/images/products/mesh-belt-carbonitriding-line/mesh-batch-v1/05-atmosphere-furnace-e7effc2e3c9e.png",
+      "width": 1672,
+      "height": 941,
+      "alt": "气氛炉段的外壳、连接管路与维护平台",
+      "optimized": true
+    },
+    "gallery-gas-controls": {
+      "src": "/images/products/mesh-belt-carbonitriding-line/mesh-batch-v1/06-gas-controls-d4202c27cb81.png",
+      "width": 1672,
+      "height": 941,
+      "alt": "配气柜、流量显示器件、压力表和接口的配置外观",
+      "optimized": true
+    },
+    "gallery-quench-post-treatment": {
+      "src": "/images/products/mesh-belt-carbonitriding-line/mesh-batch-v1/07-quench-post-treatment-75185e0b3d18.png",
+      "width": 1672,
+      "height": 941,
+      "alt": "封闭淬火槽、提升输送、后处理单元与相邻回火炉配置",
+      "optimized": true
+    },
+    "site-layout": {
+      "src": "/images/products/mesh-belt-carbonitriding-line/mesh-batch-v1/08-site-layout-130cbf963631.png",
+      "width": 1672,
+      "height": 941,
+      "alt": "渗碳淬火回火设备及旁侧通道的高位配置视图",
+      "optimized": true
+    }
+  },
+  "sourceRecord": {
+    "path": "frontend/src/lib/heat-treatment-lines-reviewed.json",
+    "record": "mesh-belt-carbonitriding-line",
+    "review": "2026-09-05 完成独立正文精修与官方标准目录、制造商工艺资料核查；不是设备认证或标准全文合规审核。",
+    "engineeringNotes": "docs/mesh-lines-batch-v1/reviews/mesh-belt-carbonitriding-line.md"
+  },
+  "sections": {
+    "overview": {
+      "title": "网带式渗碳淬火生产线",
+      "subtitle": "从材料与渗层目标出发，匹配连续渗碳、淬火和回火设备",
+      "description": "面向适合网带连续铺料、需要表面硬化的小型钢件，衔接渗碳与扩散、淬火、后清洗干燥、低温回火和终冷。按材料、硬化层目标与装载组织确定工艺和产能，同时核对表面、芯部质量与变形要求。",
+      "facts": [
+        {
+          "label": "处理对象",
+          "value": "适合连续铺料的小型钢件"
+        },
+        {
+          "label": "工艺目标",
+          "value": "硬化层、表面与芯部性能"
+        },
+        {
+          "label": "设备组织",
+          "value": "渗碳扩散、淬火与回火"
+        },
+        {
+          "label": "配置依据",
+          "value": "材料、层深、装载与产量"
+        }
+      ],
+      "gallery": [
+        {
+          "id": "hero-line",
+          "label": "整线外观",
+          "alt": "气氛渗碳炉、封闭淬火后处理及独立回火设备配置",
+          "thumbnailAssetId": "hero-line",
+          "fullAssetId": "hero-line"
+        },
+        {
+          "id": "gallery-atmosphere",
+          "label": "气氛炉段",
+          "alt": "气氛炉段的外壳、连接管路与维护平台",
+          "thumbnailAssetId": "gallery-atmosphere",
+          "fullAssetId": "gallery-atmosphere"
+        },
+        {
+          "id": "gallery-gas-controls",
+          "label": "配气控制",
+          "alt": "配气柜、流量显示器件、压力表和接口的配置外观",
+          "thumbnailAssetId": "gallery-gas-controls",
+          "fullAssetId": "gallery-gas-controls"
+        },
+        {
+          "id": "gallery-quench-post-treatment",
+          "label": "淬火与后处理",
+          "alt": "封闭淬火槽、提升输送、后处理单元与相邻回火炉配置",
+          "thumbnailAssetId": "gallery-quench-post-treatment",
+          "fullAssetId": "gallery-quench-post-treatment"
+        }
+      ],
+      "actions": [
+        {
+          "label": "提交工况，获取选型建议",
+          "href": "#inquiry",
+          "style": "primary"
+        },
+        {
+          "label": "查看设备配置",
+          "href": "#configuration",
+          "style": "secondary"
+        }
+      ]
+    },
+    "workpieces": {
+      "title": "先看材料、渗层与铺料，再判断是否适合网带",
+      "subtitle": "小齿轮、销轴、短套及部分传动件可按材质与图纸评估连续渗碳。优先核对稳定铺料、气氛接触和淬火出料条件；对长时间渗碳、重件、易磕碰或必须单件定位的工件，同时比较其他装载与炉型方案。",
+      "cards": [
+        {
+          "id": "material",
+          "title": "工件与材料",
+          "description": "核对牌号、截面、硬化部位、来料组织与表面残留；同类外形不代表同一工艺。",
+          "imageAssetId": "workpiece-representative"
+        },
+        {
+          "id": "loading",
+          "title": "铺料与气氛接触",
+          "description": "核对工件与网孔匹配、铺料负荷、相互遮挡及落料碰伤，避免仅按带宽估算装载。",
+          "imageAssetId": "loading-mesh-belt"
+        }
+      ]
+    },
+    "process": {
+      "title": "从上料到终冷，看懂渗碳、淬火与回火衔接",
+      "subtitle": "本页以常压可控气氛渗碳淬火为主线。渗碳和扩散可在同一炉内分区完成，碳氮共渗另行评估。",
+      "imageAssetId": "process-whole-line",
+      "mode": "routes",
+      "stages": [],
+      "routes": [
+        {
+          "title": "连续渗碳淬火路线",
+          "steps": [
+            "来料分选与铺料",
+            "预清洗干燥（按来料）",
+            "密封预热",
+            "渗碳与扩散",
+            "出炉淬火",
+            "后清洗干燥",
+            "低温回火",
+            "终冷出料",
+            "硬化层与质量验证"
+          ],
+          "note": "图中选用封闭油淬及提升出料的代表配置。实际淬火介质、转移衔接和回火制度按工件要求确定；预清洗是否设置取决于前序状态。"
+        },
+        {
+          "title": "碳氮共渗路线（另行评估）",
+          "steps": [
+            "来料与前处理确认",
+            "共渗加热",
+            "按制度均热",
+            "淬火",
+            "后清洗干燥",
+            "低温回火",
+            "终冷与质量验证"
+          ],
+          "note": "需另核含氮介质、气氛控制方法、排放及层组织要求。不得仅增加一条供气管路，就认定原渗碳线兼容共渗。"
+        }
+      ],
+      "note": "碳势是气氛控制量，不是工件表面碳含量的直接读数；温度、时间、材料、表面状态和装载共同影响渗碳结果。最终按采用规范验证有效硬化层深度、表面与芯部硬度、组织及变形。",
+      "imageAlt": "网带渗碳炉、封闭淬火槽、提升后处理与回火设备的完整组成"
+    },
+    "configuration": {
+      "title": "围绕气氛、装载与淬火，确定整线配置",
+      "subtitle": "设备组成需要覆盖完整工艺链；是否新配气源、清洗机及既有设备接口，分别列入方案。",
+      "table": {
+        "caption": "网带式渗碳淬火生产线设备配置依据",
+        "columns": [
+          {
+            "key": "item",
+            "label": "配置项目"
+          },
+          {
+            "key": "basis",
+            "label": "设备与衔接要求"
+          }
+        ],
+        "rows": [
+          {
+            "item": "渗碳与扩散炉段",
+            "cells": [
+              "按工艺分区配置加热、测温、炉压与密封；核对工件实际温度和停留时间，不以仪表显示代替负载验证。"
+            ]
+          },
+          {
+            "item": "供气与碳势控制",
+            "cells": [
+              "明确气氛来源、配气、测量与独立校核方法，核对置换、异常切断及排气处理；气体发生装置是否供货单列。"
+            ]
+          },
+          {
+            "item": "网带与铺料",
+            "cells": [
+              "按温度、气氛和负荷选择网带材质、网孔及支撑，校核驱动与高温伸长，并预留维护更换条件。"
+            ]
+          },
+          {
+            "item": "淬火与提升出料",
+            "cells": [
+              "匹配入液衔接、介质温控、循环冷却与提升输送；核对液位、带出液、油烟收集及相应防火措施。"
+            ]
+          },
+          {
+            "item": "后清洗与干燥",
+            "cells": [
+              "按淬火介质和表面要求确定清洗、脱液及干燥，衔接回火上料，明确废液与排风处理接口。"
+            ]
+          },
+          {
+            "item": "低温回火与记录",
+            "cells": [
+              "配置独立回火炉及终冷出料，匹配淬后允许间隔、回火制度和输送节拍，关联批号、配方与连续生产时间段记录。"
+            ]
+          }
+        ]
+      },
+      "notes": [
+        "渗碳、碳氮共渗与中性淬火分别确认适用范围；共用设备需验证切换条件。"
+      ],
+      "action": {
+        "label": "把已有参数发给工程师",
+        "href": "#inquiry"
+      },
+      "inputs": [
+        {
+          "title": "零件与材料",
+          "description": "牌号、图纸、有效截面、硬化部位、来料组织及前处理。"
+        },
+        {
+          "title": "硬化层目标",
+          "description": "层深定义、检测部位、表面与芯部硬度、组织和变形要求。"
+        },
+        {
+          "title": "工艺路线",
+          "description": "渗碳为主线；需要碳氮共渗或中性淬火时，单独列明需求。"
+        },
+        {
+          "title": "铺料条件",
+          "description": "工件与网孔匹配、单位长度装料、铺料厚度、遮挡与磕碰限制。"
+        },
+        {
+          "title": "气氛与现场气源",
+          "description": "供气来源、配气与校核方法、排风处理和新旧设备分工。"
+        },
+        {
+          "title": "淬火与后处理",
+          "description": "介质、温控与冷却、提升出料、清洗干燥及回火衔接。"
+        },
+        {
+          "title": "产量与换型",
+          "description": "代表工件、目标 kg/h、有效生产时间、订单变化及混料限制。"
+        },
+        {
+          "title": "验证与追溯",
+          "description": "采用规范、代表装载、抽样位置、检验项目和记录关联方式。"
+        }
+      ]
+    },
+    "site-conditions": {
+      "title": "产能与现场条件，一起算清楚",
+      "imageAssetId": "site-layout",
+      "requirements": [
+        {
+          "title": "目标产量与班次",
+          "description": "明确代表工件、净装料、有效生产时间、换型及渗碳、淬火、回火各段限制。"
+        },
+        {
+          "title": "能源与工艺气源",
+          "description": "按加热方式核对电力或燃气接口；工艺气源、置换用气及供气装置分工单独明确。"
+        },
+        {
+          "title": "冷却、排风与处理",
+          "description": "核对淬火循环冷却、油烟及气氛排气收集处理，安排清洗废液处理和相应防火设施。"
+        },
+        {
+          "title": "布置与检修空间",
+          "description": "明确整线占地、上料出料物流、网带更换与检修通道，以及基础和既有设备接口。"
+        }
+      ],
+      "capacity": "理论通过量（kg/h）＝单位长度净装料（kg/m）× 带速（m/min）× 60；有效炉段长度÷带速得到几何停留时间，仍需结合工件升温、渗碳和扩散要求核定。整线产能再受气氛接触、淬火、清洗干燥、回火与换型制约。核算合格产出时统一生产时间和合格率口径，不以加厚铺料直接补足产能。",
+      "imageAlt": "渗碳淬火回火设备及旁侧通道的高位配置视图"
+    },
+    "delivery-scope": {
+      "title": "配置参考与交付内容",
+      "subtitle": "明确设备组成、配套系统与现场接口。",
+      "imageAssetId": "process-whole-line",
+      "contentTitle": "把渗碳、淬火和回火设备逐项列清",
+      "items": [
+        {
+          "label": "热工与主设备",
+          "value": "上料与网带输送、渗碳扩散炉、淬火与提升出料、后清洗干燥、低温回火炉及终冷装置，按确认配置逐项列明。"
+        },
+        {
+          "label": "气氛与配套",
+          "value": "配气与碳势控制、测温记录、介质循环冷却及必要联锁；预清洗、气体发生装置与配套处理设备分别明确是否供货。"
+        },
+        {
+          "label": "现场接口",
+          "value": "能源、工艺与置换用气、循环冷却、排风及处理、基础和上下游物流，明确双方供货、安装与联调分工。"
+        }
+      ],
+      "note": "工序完整性与本项目供货范围分别核对；利用客户已有设备时，也应列清其能力、接口和联调责任。",
+      "imageAlt": "网带渗碳炉、封闭淬火槽、提升后处理与回火设备的完整组成"
+    },
+    "acceptance": {
+      "title": "交付到哪一步，验收就核对到哪一步",
+      "subtitle": "设备功能、工艺性能与产品验证分别约定条件。",
+      "columns": [
+        {
+          "id": "equipment",
+          "title": "设备功能",
+          "description": "核对网带与提升动作、驱动联锁、气氛异常处置、淬火液位与温控、报警和记录。"
+        },
+        {
+          "id": "process",
+          "title": "工艺性能",
+          "description": "在约定装载下核对温度与停留时间、碳势测量及独立校核、淬火与回火衔接。"
+        },
+        {
+          "id": "product",
+          "title": "产品验证",
+          "description": "按采用规范检查有效硬化层深度、表面与芯部硬度、金相、变形及约定表面状态。"
+        }
+      ],
+      "productNote": "渗层验收应写清取样部位、硬度法及试验力、界限硬度和结果判定；总渗层、有效硬化层和表面硬度不能互相替代。",
+      "stages": [
+        {
+          "id": "requirements",
+          "order": 1,
+          "label": "需求沟通"
+        },
+        {
+          "id": "design",
+          "order": 2,
+          "label": "方案设计"
+        },
+        {
+          "id": "manufacturing-inspection",
+          "order": 3,
+          "label": "制造检验"
+        },
+        {
+          "id": "installation-commissioning",
+          "order": 4,
+          "label": "安装联调"
+        },
+        {
+          "id": "acceptance-delivery",
+          "order": 5,
+          "label": "验收交付"
+        }
+      ],
+      "note": "代表材料、装载、试验条件、抽样、记录和双方责任在协议中约定；空炉温度或碳势曲线不能代替产品验证。"
+    },
+    "faq": {
+      "title": "采购与技术常见问题",
+      "subtitle": "先了解本工艺的选型、配套与现场衔接问题。",
+      "items": [
+        {
+          "id": "faq-1",
+          "question": "渗碳和碳氮共渗可以直接切换吗？",
+          "answer": "需要分别评估。碳氮共渗同时涉及碳、氮进入表层，介质、控制方法、工艺窗口和组织要求与渗碳有区别。先核对零件与工艺要求，再确认供气、监测、排放和切换条件，不能仅凭同一台炉体判断兼容。",
+          "defaultOpen": true
+        },
+        {
+          "id": "faq-2",
+          "question": "碳势稳定，是否就代表表面碳含量和硬化层合格？",
+          "answer": "不能直接这样判断。碳势是气氛控制量，工件实际表面状态、材料、温度、时间和装载还会影响渗碳。淬火与回火也影响最终硬度和组织，因此需用规定的硬化层、表面及芯部硬度和金相检验确认结果。",
+          "defaultOpen": false
+        },
+        {
+          "id": "faq-3",
+          "question": "想提高产量，可以把工件铺得更厚吗？",
+          "answer": "铺料增厚会改变透热、气氛接触、落料和淬火条件。应在代表工件和装载下验证硬化层一致性、硬度及碰伤，再确定单位长度装料与带速；同时核对后清洗、干燥和回火能力，不能只用加料量推算整线合格产出。",
+          "defaultOpen": false
+        },
+        {
+          "id": "faq-4",
+          "question": "预清洗、淬火后清洗和回火都要配置吗？",
+          "answer": "预清洗取决于来料油污、涂层与清洁度要求，既有前处理合适时可衔接使用。图示油淬路线配置后清洗干燥，并衔接低温回火和终冷；清洗方式、允许转序间隔与回火制度需匹配工件。利用已有设备时，也要验证其能力和接口。",
+          "defaultOpen": false
+        },
+        {
+          "id": "faq-5",
+          "question": "有效硬化层深度怎么验收？",
+          "answer": "按约定采用的规范在指定部位制取截面，测定由表面向内的硬度分布，依据规定的试验力、界限硬度和判定方法确定深度。可核对 GB/T 9450-2025 等适用方法，不能凭金相照片目测，也不能用表面硬度或总渗层深度代替有效硬化层。",
+          "defaultOpen": false
+        }
+      ],
+      "relatedGroups": [
+        {
+          "id": "related-lines",
+          "title": "相关生产线",
+          "links": [
+            {
+              "label": "网带式退火回火生产线",
+              "href": "/zh/products/detail/roller-mesh-belt-line"
+            },
+            {
+              "label": "紧固件调质生产线",
+              "href": "/zh/products/detail/fastener-quench-temper-line"
+            }
+          ]
+        },
+        {
+          "id": "technical",
+          "title": "选型资料",
+          "links": [
+            {
+              "label": "本线询价参数清单",
+              "href": "/downloads/heat-treatment-lines/mesh-belt-carbonitriding-line.txt"
+            }
+          ]
+        }
+      ]
+    },
+    "inquiry": {
+      "title": "告诉我们材料与产量，开始讨论方案",
+      "description": "已知信息先填，关键工况在方案沟通中补齐。",
+      "form": {
+        "id": "mesh-belt-carbonitriding-line-inquiry",
+        "fields": [
+          {
+            "name": "workpiece_material",
+            "label": "工件与材料",
+            "placeholder": "如：牌号、尺寸与装载方式",
+            "required": false
+          },
+          {
+            "name": "target_performance",
+            "label": "渗层与性能目标",
+            "placeholder": "如：有效硬化层、表面与芯部硬度",
+            "required": false
+          },
+          {
+            "name": "target_output",
+            "label": "目标产量",
+            "placeholder": "如：产量、生产班次与换型频率",
+            "required": false
+          },
+          {
+            "name": "contact_method",
+            "label": "联系方式",
+            "placeholder": "电话、微信或邮箱",
+            "required": true
+          }
+        ],
+        "submitLabel": "获取选型建议",
+        "helperText": "已知信息先填，不明确的项目可留空。"
+      }
+    }
+  }
+}

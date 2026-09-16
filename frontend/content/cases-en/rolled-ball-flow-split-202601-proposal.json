@@ -1,0 +1,13 @@
+{
+  "id": "rolled-ball-flow-split-202601-proposal",
+  "slug": "rolled-ball-flow-split-202601-proposal",
+  "number": 129,
+  "title": "How should incoming balls be divided between two tempering furnaces serving one rolling line?",
+  "summary": "An 80–100 mm rolled-ball tempering-line project places an adjustable splitter at the pre-tempering air-cooler outlet. One branch feeds the associated tempering furnace; the other leads to another furnace 14 m away. The split must match both receiving capacities. Both branches cannot simultaneously be assigned the whole line's output.",
+  "body": "rolled-ball-flow-split-202601-proposal.md",
+  "sourceFingerprint": "1f51d6eed0db6ee66f1687989234589b2aad2037ba8268eebecb80335c213bc5",
+  "translationStatus": "complete",
+  "translatedAt": "2026-09-12",
+  "coverAlt": "Illustration of steel balls.",
+  "coverCaption": "Illustration of steel balls (AI-generated). Not an actual customer workpiece photograph. Does not establish actual specifications or process results."
+}

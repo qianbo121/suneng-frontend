@@ -1,0 +1,72 @@
+{
+  "id": "hose-pit-five-lids-20201118-proposal",
+  "slug": "hose-pit-furnace-five-lids-zones-exhaust-proposal",
+  "title": "12米胶管坑式炉的炉盖、温区与装料空间",
+  "listTitle": "12米胶管坑式炉的炉盖、温区与装料空间",
+  "listSummary": "苏能胶管低温加热炉历史资料提出12m长的工作空间、五只小炉盖、五个控温区和五台循环风机。",
+  "summary": "苏能胶管低温加热炉历史资料提出12m长的工作空间、五只小炉盖、五个控温区和五台循环风机。但这些数量相同，并不等于已划成五个独立炉室，也不能直接推定每盖对应一个温区、可以单独开盖同时加热其他区。采购应把胶管装载长度、盖的开启方式、分区位置和开盖后的加热控制放在同一张布置图上核对。",
+  "body": "hose-pit-furnace-five-lids-zones-exhaust-proposal.md",
+  "contentType": "proposal",
+  "publicationStatus": "draft",
+  "projectStatus": "proposal",
+  "projectYear": 2020,
+  "sourceDate": "2020-11-18",
+  "workpiece": [
+    "胶管"
+  ],
+  "materials": [],
+  "process": [
+    "低温加热",
+    "烘干"
+  ],
+  "equipment": [
+    "坑式低温加热炉"
+  ],
+  "need": [
+    "多盖与温区布置核对"
+  ],
+  "tags": [
+    "方案参考",
+    "胶管",
+    "多盖与温区布置核对"
+  ],
+  "facts": [
+    {
+      "label": "方案工作尺寸",
+      "value": "12000×2000×2000",
+      "unit": "mm",
+      "condition": "原件长×宽×高，不直接均分成每室长度",
+      "attribute": "方案参数"
+    },
+    {
+      "label": "原方案常用温度",
+      "value": "130–140",
+      "unit": "℃",
+      "condition": "胶管低温加热/烘干方案，不作为本次材料通用工艺",
+      "attribute": "方案参数"
+    },
+    {
+      "label": "拟炉盖数量",
+      "value": "5",
+      "unit": "只",
+      "condition": "原件小炉盖，不能据数量认定五独立炉室",
+      "attribute": "方案参数"
+    }
+  ],
+  "participation": "苏能历史方案提出多盖、多温区与循环排气配置，实际开口形式和分区关系需终版图纸确认。",
+  "sourceSummary": "江苏苏能工业炉有限公司历史技术方案资料整理。",
+  "coverTitle": "胶管坑式炉方案：五只炉盖、五个温区，能否理解成五个独立炉室？",
+  "relatedLinks": [
+    {
+      "title": "准备询价参数与供货范围",
+      "href": "/zh/articles/gongye-lu-baojia-canshu"
+    }
+  ],
+  "cover": {
+    "src": "/images/case-covers/finalized-20260910/rubber-hose.webp",
+    "alt": "胶管类别工件示意",
+    "caption": "胶管工件示意（人工智能生成，非客户实物）",
+    "fit": "contain"
+  },
+  "dateModified": "2026-09-12"
+}

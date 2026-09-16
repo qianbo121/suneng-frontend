@@ -1,0 +1,13 @@
+{
+  "id": "dual-strip-acceptance-basis-20220808-proposal",
+  "slug": "dual-strip-annealing-reference-specification-acceptance-proposal",
+  "number": 81,
+  "title": "Which product specifications should be used to verify the output of a twin-strip stainless-steel annealing furnace?",
+  "summary": "Suneng's 2022 dual-strip continuous stainless-steel annealing furnace documents give a design output of 34.37 t/h for two strips in one furnace, with specified steel grade, dimensions and speed. Final acceptance separately specifies continuous-production trials using two SUS304 strip sizes. Distinguish the design-calculation material, actual acceptance-test sizes and whether output is counted per strip, per dual-strip furnace or across two furnaces.",
+  "body": "dual-strip-acceptance-basis-20220808-proposal.md",
+  "sourceFingerprint": "450a31957dc2d0edb15379425168a611385b1fd81c6d66195fc24a684b667c67",
+  "translationStatus": "complete",
+  "translatedAt": "2026-09-12",
+  "coverAlt": "Illustration of stainless steel strip.",
+  "coverCaption": "Illustration of stainless steel strip (AI-generated). Not an actual customer workpiece photograph."
+}

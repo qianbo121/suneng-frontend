@@ -1,0 +1,13 @@
+{
+  "id": "high-temperature-cooling-outlet-20190319-proposal",
+  "slug": "high-temperature-trolley-cooling-pipe-outlet-proposal",
+  "number": 75,
+  "title": "Cold-air cooling pipes in a bogie-hearth furnace: inlets, outlets and chamber connections",
+  "summary": "Suneng's 2019 proposal for a 65 kW high-temperature bogie-hearth furnace specifies heat-resistant steel pipes inside the chamber, supplied with cold air by a high-pressure blower. The same paragraph also refers to “displacing hot air inside the furnace”. The inlet is described, but drawings must establish where the pipes discharge. That determines whether the arrangement exchanges heat through pipe walls; the name “finned tubes” alone is insufficient.",
+  "body": "high-temperature-cooling-outlet-20190319-proposal.md",
+  "sourceFingerprint": "574f7d365e5842e462381b333bdc62fbfe0c8ff60c0bf3453a00ceba202b96b1",
+  "translationStatus": "complete",
+  "translatedAt": "2026-09-12",
+  "coverAlt": "",
+  "coverCaption": ""
+}

@@ -1,0 +1,512 @@
+{
+  "pageId": "copper-wire-annealing-line",
+  "variant": "wire-strip",
+  "seo": {
+    "title": "铜丝连续退火生产线｜线径、张力与收放线配置",
+    "description": "铜丝连续退火生产线的适用线材、管式炉间接加热与直接通电退火区别、保护冷却、张力收放线、产能核算和询价参数。按铜牌号、线径与软化要求评估设备方案。"
+  },
+  "sectionNavigation": [
+    {
+      "label": "适用工件",
+      "href": "#workpieces"
+    },
+    {
+      "label": "工艺与设备",
+      "href": "#process"
+    },
+    {
+      "label": "设备配置",
+      "href": "#configuration"
+    },
+    {
+      "label": "产能与现场",
+      "href": "#site-conditions"
+    },
+    {
+      "label": "交付验收",
+      "href": "#acceptance"
+    },
+    {
+      "label": "常见问题",
+      "href": "#faq"
+    }
+  ],
+  "images": {
+    "hero-line": {
+      "src": "/images/products/copper-wire-annealing-line/remaining-batch-v1/01-hero-64c51665bb66.png",
+      "width": 1672,
+      "height": 941,
+      "alt": "铜丝管式连续退火机组与两端收放线设备",
+      "optimized": true
+    },
+    "process-whole-line": {
+      "src": "/images/products/copper-wire-annealing-line/remaining-batch-v1/02-whole-line-fcaa714e3cb6.png",
+      "width": 2172,
+      "height": 724,
+      "alt": "铜丝连续退火的放线、管式炉、保护冷却与收线整线",
+      "optimized": true
+    },
+    "workpiece-copper-wire": {
+      "src": "/images/products/copper-wire-annealing-line/remaining-batch-v1/03-workpiece-77169a6b87a5.png",
+      "width": 1672,
+      "height": 941,
+      "alt": "绕在线盘上的细裸铜线与伸出的单根线材",
+      "optimized": true
+    },
+    "loading-payoff-spool": {
+      "src": "/images/products/copper-wire-annealing-line/remaining-batch-v1/04-loading-5ad77dda6e6d.png",
+      "width": 1672,
+      "height": 941,
+      "alt": "安装在水平支承轴上的铜线放线盘与导向孔",
+      "optimized": true
+    },
+    "gallery-tube-heating": {
+      "src": "/images/products/copper-wire-annealing-line/remaining-batch-v1/05-detail-1-7fadedc0e406.png",
+      "width": 1672,
+      "height": 941,
+      "alt": "铜丝连续退火管式加热炉的分段外壳与入口",
+      "optimized": true
+    },
+    "gallery-protected-cooling": {
+      "src": "/images/products/copper-wire-annealing-line/remaining-batch-v1/06-detail-2-5ec6e6a47f29.png",
+      "width": 1672,
+      "height": 941,
+      "alt": "铜丝退火后的封闭冷却夹套与循环水连接",
+      "optimized": true
+    },
+    "gallery-wire-takeup": {
+      "src": "/images/products/copper-wire-annealing-line/remaining-batch-v1/07-detail-3-a74082c836cd.png",
+      "width": 1672,
+      "height": 941,
+      "alt": "铜丝收线机的水平线盘、驱动与防护门",
+      "optimized": true
+    },
+    "site-wire-line-layout": {
+      "src": "/images/products/copper-wire-annealing-line/remaining-batch-v1/08-site-layout-234e9e0a5823.png",
+      "width": 1672,
+      "height": 941,
+      "alt": "铜丝管式退火生产线与操作维修通道的俯视布局",
+      "optimized": true
+    }
+  },
+  "sourceRecord": {
+    "path": "frontend/src/lib/production-lines/copper-wire-annealing-line.json",
+    "record": "copper-wire-annealing-line",
+    "review": "本批工程资料桌面核对完成；拟议更新须与当前仓库三方核对，非项目签字验收",
+    "engineeringNotes": "docs/heat-treatment-lines-final-batch-v1/pages/copper-wire-annealing-line/engineering-review.md"
+  },
+  "sections": {
+    "overview": {
+      "title": "铜丝连续退火生产线",
+      "subtitle": "从铜线牌号与线径出发，匹配退火、保护冷却和收放线",
+      "description": "铜丝连续退火通过连续加热与冷却，改善冷作线材的塑性并满足后续加工要求。先确认牌号、线径、软化与表面目标，再匹配加热方式、张力、稳定线速和盘具。图示采用炉内间接电阻加热配置；直接通电退火是另一种设备路线。",
+      "facts": [
+        {
+          "label": "处理对象",
+          "value": "裸铜及适用铜合金线材"
+        },
+        {
+          "label": "工艺目标",
+          "value": "软化、延伸率与表面控制"
+        },
+        {
+          "label": "图示配置",
+          "value": "管式炉加热＋保护冷却"
+        },
+        {
+          "label": "配置依据",
+          "value": "牌号、线径、张力与线速"
+        }
+      ],
+      "gallery": [
+        {
+          "id": "hero-line",
+          "label": "整线",
+          "alt": "铜丝管式连续退火机组与两端收放线设备",
+          "thumbnailAssetId": "hero-line",
+          "fullAssetId": "hero-line"
+        },
+        {
+          "id": "gallery-tube-heating",
+          "label": "管式加热",
+          "alt": "铜丝连续退火管式加热炉的分段外壳与入口",
+          "thumbnailAssetId": "gallery-tube-heating",
+          "fullAssetId": "gallery-tube-heating"
+        },
+        {
+          "id": "gallery-protected-cooling",
+          "label": "保护冷却",
+          "alt": "铜丝退火后的封闭冷却夹套与循环水连接",
+          "thumbnailAssetId": "gallery-protected-cooling",
+          "fullAssetId": "gallery-protected-cooling"
+        },
+        {
+          "id": "gallery-wire-takeup",
+          "label": "牵引收线",
+          "alt": "铜丝收线机的水平线盘、驱动与防护门",
+          "thumbnailAssetId": "gallery-wire-takeup",
+          "fullAssetId": "gallery-wire-takeup"
+        }
+      ],
+      "actions": [
+        {
+          "label": "提交工况，获取选型建议",
+          "href": "#inquiry",
+          "style": "primary"
+        },
+        {
+          "label": "查看设备配置",
+          "href": "#configuration",
+          "style": "secondary"
+        }
+      ]
+    },
+    "workpieces": {
+      "title": "先看线材与盘具，再确定稳定走线方式",
+      "subtitle": "同样是铜线，不同牌号、冷作状态和线径需要分别评估退火条件。裸铜、镀层铜线与漆包线不共用一套默认温度和表面制度。",
+      "cards": [
+        {
+          "id": "material",
+          "title": "铜线与表面状态",
+          "description": "提供铜牌号、含氧状态、常用及极限线径、来料强度和表面清洁度；有镀层时补充材质与厚度。",
+          "imageAssetId": "workpiece-copper-wire",
+          "imageAlt": "绕在线盘上的细裸铜线与伸出的单根线材"
+        },
+        {
+          "id": "loading",
+          "title": "放线盘具与张力",
+          "description": "核对盘具尺寸、放线方式、允许张力、单丝或并行丝数及换盘频率；线盘只负责收放线，线材连续通过热工段。",
+          "imageAssetId": "loading-payoff-spool",
+          "imageAlt": "安装在水平支承轴上的铜线放线盘与导向孔"
+        }
+      ]
+    },
+    "process": {
+      "title": "从放线到收线，看清整线组成",
+      "subtitle": "图示为管式炉间接加热路线。两种加热方式分别选型；连续通线退火与整盘入炉退火的设备组织不同。",
+      "imageAssetId": "process-whole-line",
+      "mode": "routes",
+      "stages": [],
+      "routes": [
+        {
+          "title": "路线一：管式炉／马弗炉间接加热",
+          "steps": [
+            "放线与导向",
+            "张力与稳定牵引",
+            "炉内加热与均热",
+            "保护状态下冷却",
+            "出口处理（按需）",
+            "牵引与收线"
+          ],
+          "note": "线材从受保护的通道连续通过，加热元件加热炉内空间／工作管，不把线材作为发热电阻。有效路径、温区与线速共同决定受热条件；出口清洗和干燥按实际冷却方式配置。"
+        },
+        {
+          "title": "路线二：线材直接通电退火（比较路线）",
+          "steps": [
+            "拉丝出口／独立放线",
+            "接触轮与导向",
+            "线材通电加热",
+            "冷却与保护",
+            "去液干燥（按需）",
+            "牵引与收线"
+          ],
+          "note": "由接触轮向线材送入电流，电参数、接触状态与线速联动。该路线用于理解选型差异，不能直接套用管式炉长度或温区，也不据此确认本项目供货范围。"
+        }
+      ],
+      "note": "含氧铜在高温含氢气氛中有材料损伤风险，应先核对牌号与气氛适配。光亮表面还取决于清洁度、密封、气体品质和保护冷却；不能只凭“通保护气”承诺结果。",
+      "imageAlt": "铜丝连续退火的放线、管式炉、保护冷却与收线整线"
+    },
+    "configuration": {
+      "title": "线径、加热方式与收放线，需要一起匹配",
+      "subtitle": "先给出常用规格与生产目标，再核对极限规格、换盘和加减速工况。",
+      "table": {
+        "caption": "铜丝连续退火生产线设备配置依据",
+        "columns": [
+          {
+            "key": "item",
+            "label": "配置项目"
+          },
+          {
+            "key": "basis",
+            "label": "设备与衔接要求"
+          }
+        ],
+        "rows": [
+          {
+            "item": "放线与牵引",
+            "cells": [
+              "盘具支承、放线阻力、导轮槽型及直径、舞蹈轮／储线装置、牵引与收线同步。"
+            ]
+          },
+          {
+            "item": "间接加热段",
+            "cells": [
+              "按线径、丝数、来料状态、有效加热路径、温区和稳定线速核算；炉温设定值不等于线材实际温度。"
+            ]
+          },
+          {
+            "item": "直接通电路线",
+            "cells": [
+              "另行核对材料电性能、接触轮、退火电源、接触磨损及电参数与线速关系，不与管式炉配置混写。"
+            ]
+          },
+          {
+            "item": "保护与冷却",
+            "cells": [
+              "按材料和表面目标配置密封、气体品质监测、保护冷却与出口处理；含氢方案另行评估材料和气体安全。"
+            ]
+          },
+          {
+            "item": "收线与换盘",
+            "cells": [
+              "核对排线、收线张力、满盘质量、换盘时间；是否不停机换盘须有相应机械和控制配置。"
+            ]
+          },
+          {
+            "item": "异常联锁",
+            "cells": [
+              "定义断线、失速、张力越限、冷却异常和气体异常时的加热、牵引及供气安全状态。"
+            ]
+          }
+        ]
+      },
+      "notes": [
+        "单丝验证不能代替多丝验证；并线数量增加时须核对各丝独立导向、张力、断线识别与收线方式。"
+      ],
+      "action": {
+        "label": "把已有参数发给工程师",
+        "href": "#inquiry"
+      },
+      "inputs": [
+        {
+          "title": "线材材料",
+          "description": "牌号、含氧状态、冷作状态、表面清洁度；镀层材质、厚度和允许热影响单独确认"
+        },
+        {
+          "title": "规格组合",
+          "description": "最小/最大/常用线径、单丝/多丝、并线数量与换规格频率"
+        },
+        {
+          "title": "性能目标",
+          "description": "软化、去应力、延伸率、抗拉强度、电性能及表面目标"
+        },
+        {
+          "title": "加热方式与速度",
+          "description": "拟采用炉内间接加热或直接通电；提供稳定线速、启停条件和是否与拉丝机联机。"
+        },
+        {
+          "title": "张力与盘具",
+          "description": "放线方式、牵引点、收线形式、盘具尺寸和允许张力"
+        },
+        {
+          "title": "气氛与表面",
+          "description": "是否光亮退火、气体成分/露点、密封、置换和尾气安全"
+        },
+        {
+          "title": "冷却与干燥",
+          "description": "冷却介质、出口温度、残液、斑迹及后续镀锡/拉丝要求"
+        },
+        {
+          "title": "质量与追溯",
+          "description": "断线、速度、温度、气氛报警和批次/卷号关联方式"
+        }
+      ]
+    },
+    "site-conditions": {
+      "title": "产量按线径核算，现场按走线与换盘安排",
+      "imageAssetId": "site-wire-line-layout",
+      "requirements": [
+        {
+          "title": "目标产量与有效时间",
+          "description": "同时提供线径、单丝／总丝数、m/min 与 kg/h、班次及换盘停机时间。"
+        },
+        {
+          "title": "电力与冷却",
+          "description": "按热工段、牵引收线和冷却系统核对供电容量、循环水品质及接口。"
+        },
+        {
+          "title": "保护气与排风",
+          "description": "有保护气要求时明确气源、气体品质、监测、排放和故障处置分工。"
+        },
+        {
+          "title": "走线与盘具搬运",
+          "description": "保留放线、穿线、换盘和维修空间；明确拉丝机、收线机与通信接口。"
+        }
+      ],
+      "capacity": "相同线径、相同线速的圆线：理论质量流量（kg/h）＝密度（kg/m³）× π × 线径（m）² ÷ 4 × 并行丝数 × 线速（m/min）× 60。毫米线径先除以 1000；不同线径或速度的各丝应分别计算后求和。实际合格产量还要考虑受热与冷却能力、允许张力、换盘、断线恢复和成材率。",
+      "imageCaption": "管式退火机组与收放线的布局参考；实际长度、维修通道和盘具搬运空间按方案安排。",
+      "imageAlt": "铜丝管式退火生产线与操作维修通道的俯视布局"
+    },
+    "delivery-scope": {
+      "title": "热工段与收放线，交付接口逐项列清",
+      "subtitle": "采购热工段、配套机组或完整生产线，设备清单和联动责任不同。",
+      "imageAssetId": "process-whole-line",
+      "contentTitle": "围绕连续走线，明确设备与责任",
+      "items": [
+        {
+          "label": "热工与冷却",
+          "value": "炉体、工作管／马弗、温区、保护冷却、出口处理及对应控制，逐项列明。"
+        },
+        {
+          "label": "收放线与联动",
+          "value": "放线、导向张力、牵引、排线收线、断线检测及上下游通信，明确由谁提供和调试。"
+        },
+        {
+          "label": "现场配套",
+          "value": "供电、循环水、气源、排风、基础与盘具搬运，确认接口和安装责任。"
+        }
+      ],
+      "note": "设备清单、供货范围与双方分工在技术方案中列明。",
+      "imageAlt": "铜丝连续退火的放线、管式炉、保护冷却与收线整线"
+    },
+    "acceptance": {
+      "title": "交付到哪一步，验收就核对到哪一步",
+      "subtitle": "设备功能、工艺性能与产品验证分别约定条件。",
+      "columns": [
+        {
+          "id": "equipment",
+          "title": "设备与联动",
+          "description": "在约定规格和运行范围内核对走线、张力、加减速、收放线同步、断线检测及异常联锁。"
+        },
+        {
+          "id": "process",
+          "title": "退火与冷却",
+          "description": "按代表牌号和线径验证温度／电参数与线速配方，记录保护、冷却和出口状态；两种加热路线分别制定项目。"
+        },
+        {
+          "id": "product",
+          "title": "线材质量",
+          "description": "按采用的产品规范检验抗拉强度、延伸率、电阻率与表面；外观比较应约定样板或判定方法。"
+        }
+      ],
+      "productNote": "常用与极限规格分别约定验证范围；验收记录关联牌号、线径、盘号、速度和退火配方。",
+      "stages": [
+        {
+          "id": "requirements",
+          "order": 1,
+          "label": "需求沟通"
+        },
+        {
+          "id": "design",
+          "order": 2,
+          "label": "方案设计"
+        },
+        {
+          "id": "manufacturing-inspection",
+          "order": 3,
+          "label": "制造检验"
+        },
+        {
+          "id": "installation-commissioning",
+          "order": 4,
+          "label": "安装联调"
+        },
+        {
+          "id": "acceptance-delivery",
+          "order": 5,
+          "label": "验收交付"
+        }
+      ],
+      "note": "设备联动、工艺性能和线材质量分别约定代表工况、抽样方法与判定要求。页面不提供统一的线径、线速或性能保证范围。"
+    },
+    "faq": {
+      "title": "采购与技术常见问题",
+      "subtitle": "先了解本工艺的选型、配套与现场衔接问题。",
+      "items": [
+        {
+          "id": "faq-1",
+          "question": "管式炉退火和直接通电退火有什么区别？",
+          "answer": "管式炉由外部加热元件向线材传热；直接通电退火通过接触轮向线材通电发热。两者对受热路径、功率控制、线速、接触状态和收放线的要求不同，应按材料及生产组织分别选型。",
+          "defaultOpen": true
+        },
+        {
+          "id": "faq-2",
+          "question": "线径变化时只调线速可以吗？",
+          "answer": "不一定。线径会改变单位长度质量、受热和冷却条件，还需要联动核对温区／电参数、张力、导轮及收放线配置。多丝生产还须检查各丝的一致性。",
+          "defaultOpen": false
+        },
+        {
+          "id": "faq-3",
+          "question": "光亮退火一定要用氢气吗？",
+          "answer": "不一定。先确认铜牌号、含氧状态和表面目标，再选择气氛与冷却制度。含氧铜尤其要评估高温含氢条件下的材料损伤；采用含氢方案还需匹配置换、监测、联锁和尾气处置。",
+          "defaultOpen": false
+        },
+        {
+          "id": "faq-4",
+          "question": "镀锡铜线或漆包线能直接使用裸铜配方吗？",
+          "answer": "不能默认通用。需核对镀层／漆膜的热稳定性、附着与表面要求，以及该工序在整个制造流程中的位置。裸铜退火与漆膜固化不是同一工艺。",
+          "defaultOpen": false
+        },
+        {
+          "id": "faq-5",
+          "question": "产能按米／分钟还是公斤／小时提供？",
+          "answer": "两者都给。线速需标明线径和丝数；质量产量还要写明单丝或总和口径，以及班次、换盘和断线停机等条件。不同规格按各自质量流量分别核算。",
+          "defaultOpen": false
+        },
+        {
+          "id": "faq-6",
+          "question": "哪些资料可以先用于选型？",
+          "answer": "先提供铜牌号、最小／最大／常用线径、软化与表面目标、稳定线速或产量，以及现有盘具和收放线方式。有极限规格、镀层或光亮要求时，代表样线有助于试验判断。",
+          "defaultOpen": false
+        }
+      ],
+      "relatedGroups": [
+        {
+          "id": "related-lines",
+          "title": "相关生产线",
+          "links": [
+            {
+              "label": "带材退火固溶生产线",
+              "href": "/zh/products/detail/annealing-solution-line"
+            }
+          ]
+        },
+        {
+          "id": "technical",
+          "title": "选型资料",
+          "links": [
+            {
+              "label": "本线询价资料准备清单",
+              "href": "/zh/products/detail/copper-wire-annealing-line/inquiry-checklist"
+            }
+          ]
+        }
+      ]
+    },
+    "inquiry": {
+      "title": "告诉我们材料与产量，开始讨论方案",
+      "description": "已知信息先填，关键工况在方案沟通中补齐。",
+      "form": {
+        "id": "copper-wire-annealing-line-inquiry",
+        "fields": [
+          {
+            "name": "workpiece_material",
+            "label": "线材与规格",
+            "placeholder": "如：牌号、线径、单丝或多丝",
+            "required": false
+          },
+          {
+            "name": "target_performance",
+            "label": "软化与表面要求",
+            "placeholder": "如：延伸率、强度和表面要求",
+            "required": false
+          },
+          {
+            "name": "target_output",
+            "label": "目标产量",
+            "placeholder": "如：产量、生产班次与换型频率",
+            "required": false
+          },
+          {
+            "name": "contact_method",
+            "label": "联系方式",
+            "placeholder": "电话、微信或邮箱",
+            "required": true
+          }
+        ],
+        "submitLabel": "获取选型建议",
+        "helperText": "已知信息先填，不明确的项目可留空。"
+      }
+    }
+  }
+}

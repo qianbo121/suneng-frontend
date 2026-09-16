@@ -1,0 +1,13 @@
+{
+  "id": "quench-bath-recovery-20161215-proposal",
+  "slug": "quench-bath-batch-load-liquid-cooling-recovery-cycle-proposal",
+  "number": 61,
+  "title": "How long should I allow between 1.5-tonne batches in a quench tank?",
+  "summary": "Single-batch workpiece capacity is not enough to establish the interval between successive quenches. Suneng's 2016 quench-bath proposal lists a rated batch of 1.5 t, quenching-fluid temperature rise and cooling time, with agitation and a separate heat-exchange circuit. Check the incoming heat load, fluid conditions and next-batch arrival time together; do not schedule continuous production from 1.5 t alone.",
+  "body": "quench-bath-recovery-20161215-proposal.md",
+  "sourceFingerprint": "cb8709770c2a170e160b30e209b2e9fb794ddfd380e0b2ed17ab2188bef10bde",
+  "translationStatus": "complete",
+  "translatedAt": "2026-09-12",
+  "coverAlt": "",
+  "coverCaption": ""
+}

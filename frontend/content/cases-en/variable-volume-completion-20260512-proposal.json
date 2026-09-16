@@ -1,0 +1,13 @@
+{
+  "id": "variable-volume-completion-20260512-proposal",
+  "slug": "variable-volume-furnace-existing-seals-completion-proposal",
+  "number": 72,
+  "title": "What supporting systems are still needed before commissioning a 20-metre variable-volume gas-fired furnace?",
+  "summary": "Suneng's completion proposal for a 20-metre variable-volume gas-fired furnace lists the rear-wall sealing mechanism as already installed on site, but explicitly states that its sealing pipework is still missing. It also schedules lining installation, mechanical completion and electrical-control work. Readiness for commissioning depends on the connections between actuators, sealing sequence, position signals and controls, not merely the presence of mechanisms.",
+  "body": "variable-volume-completion-20260512-proposal.md",
+  "sourceFingerprint": "84460e367186385b0899a3e737d1166139ae5b5864a08df97549dc607336c7c4",
+  "translationStatus": "complete",
+  "translatedAt": "2026-09-12",
+  "coverAlt": "Illustration of cylindrical shells.",
+  "coverCaption": "Illustration of cylindrical shells (AI-generated). Not an actual customer workpiece photograph."
+}

@@ -1,0 +1,64 @@
+{
+  "id": "salt-temperature-volume-20260511-proposal",
+  "slug": "salt-bath-temperature-freeboard-workpiece-volume-proposal",
+  "title": "盐浴炉选温度，看炉膛温度还是盐浴温度？",
+  "summary": "苏能2026年一份电热盐浴炉样本，同时列炉膛内最高550℃、盐浴最高400℃和具体循环盐温340℃。这三个数的对象不同，不能统一称为“处理温度”。同样，φ1500×1400mm坩埚内部尺寸、最高液位与实际工件尺寸也应分开核对，才能判断拟用工件怎样浸入盐浴。",
+  "body": "salt-temperature-volume-20260511-proposal.md",
+  "contentType": "proposal",
+  "publicationStatus": "draft",
+  "projectStatus": "proposal",
+  "workpiece": [
+    "钢件",
+    "不锈钢件"
+  ],
+  "materials": [
+    "钢",
+    "不锈钢"
+  ],
+  "process": [
+    "盐浴加热"
+  ],
+  "equipment": [
+    "电热盐浴炉"
+  ],
+  "need": [
+    "浴温与浸泡空间核对"
+  ],
+  "tags": [
+    "方案参考",
+    "钢件",
+    "不锈钢件",
+    "浴温与浸泡空间核对"
+  ],
+  "facts": [
+    {
+      "label": "方案炉膛最高温度",
+      "value": "550",
+      "unit": "℃",
+      "condition": "炉膛空间，非盐浴工艺温度",
+      "attribute": "方案参数"
+    },
+    {
+      "label": "方案盐浴最高温度",
+      "value": "400",
+      "unit": "℃",
+      "condition": "盐浴对象，不能取炉膛最高值替代",
+      "attribute": "方案参数"
+    },
+    {
+      "label": "方案循环盐温",
+      "value": "340",
+      "unit": "℃",
+      "condition": "本记录的循环条件，不适用于未经确认的其他工件",
+      "attribute": "方案参数"
+    }
+  ],
+  "participation": "苏能样本提出坩埚盐浴设备与控制，工艺目的、浴温、工装和测点需终版文件明确。",
+  "sourceSummary": "本文依据江苏苏能工业炉有限公司的历史方案资料整理，介绍拟定配置与供货条件；本文所引原件不构成设备已交付或验收通过的证明。",
+  "coverTitle": "钢件盐浴炉方案：炉膛温度、盐浴温度和浸泡空间怎样区分？",
+  "relatedLinks": [],
+  "projectYear": 2026,
+  "sourceDate": "2026-05-11",
+  "listTitle": "盐浴炉选温度，看炉膛温度还是盐浴温度？",
+  "dateModified": "2026-09-12"
+}

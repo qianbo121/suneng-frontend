@@ -1,0 +1,13 @@
+{
+  "id": "shield-frame-gas-trolley-20250312-proposal",
+  "slug": "heavy-steel-structure-zoned-gas-heating-proposal",
+  "number": 10,
+  "title": "The furnace is at temperature: do heavy steel structures still need load-temperature measurements?",
+  "summary": "Zoned gas heating for heavy steel structures must be coordinated with loading, support passages and workpiece-temperature sensors. Jiangsu Suneng Industrial Furnace Co., Ltd.'s proposal dated 12 March 2025 specifies sixteen burner sets, sixteen control zones and sixteen furnace-temperature monitoring points, plus sixteen movable workpiece-temperature points. Furnace sensors observe heating regions; load sensors represent selected workpiece locations. They require separate layouts, and the furnace reaching setpoint does not establish that the workpiece interior has reached temperature.",
+  "body": "shield-frame-gas-trolley-20250312-proposal.md",
+  "sourceFingerprint": "4d4e9233d79392cdaf0a530348caa8ab87ffe1f9f47cf74d4e4888e9a0bc4022",
+  "translationStatus": "complete",
+  "translatedAt": "2026-09-12",
+  "coverAlt": "Illustration of heavy steel structures. Not an actual customer workpiece photograph.",
+  "coverCaption": "Illustration of workpieces (AI-generated)."
+}

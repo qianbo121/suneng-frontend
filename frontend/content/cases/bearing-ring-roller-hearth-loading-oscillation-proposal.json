@@ -1,0 +1,77 @@
+{
+  "id": "bearing-ring-roller-hearth-20201224-proposal",
+  "slug": "bearing-ring-roller-hearth-loading-oscillation-proposal",
+  "title": "800公斤轴承圈用辊棒炉，怎么确认承重够不够？",
+  "listTitle": "800公斤轴承圈用辊棒炉，怎么确认承重够不够？",
+  "listSummary": "轴承圈辊棒炉的装载匹配，要把单件重量、实际支承位置和往复运行范围一起核对。",
+  "summary": "轴承圈辊棒炉的装载匹配，要把单件重量、实际支承位置和往复运行范围一起核对。江苏苏能工业炉有限公司2020年12月24日的保护气氛辊棒式加热炉方案，提出800kg×3件、合计2400kg的装炉组合，参数表列炉辊承重500kg/支、间距300mm，并采用连续操作与摆动操作两种制度。总装炉量相近，可以作为比较起点；能否沿用这套辊道布置，还取决于工件在装入、移动和换向时怎样受力、占用多大空间。",
+  "body": "bearing-ring-roller-hearth-loading-oscillation-proposal.md",
+  "contentType": "proposal",
+  "publicationStatus": "draft",
+  "projectStatus": "proposal",
+  "projectYear": 2020,
+  "sourceDate": "2020-12-24",
+  "workpiece": [
+    "轴承圈"
+  ],
+  "materials": [],
+  "process": [
+    "保护气氛加热"
+  ],
+  "equipment": [
+    "辊棒式加热炉"
+  ],
+  "need": [
+    "整线配套"
+  ],
+  "tags": [
+    "轴承圈",
+    "辊棒炉",
+    "装载",
+    "摆动运行",
+    "方案参考"
+  ],
+  "facts": [
+    {
+      "label": "方案装炉量",
+      "value": "2400",
+      "unit": "kg",
+      "condition": "2020年方案为800kg×3件的装炉组合；未明确工装是否另计，不是实际每小时产量",
+      "attribute": "方案参数"
+    },
+    {
+      "label": "方案炉辊承重",
+      "value": "500",
+      "unit": "kg/支",
+      "condition": "参数表口径；结构章节为单根≥500kg设计，需核对各运行位置的载荷分配，不是单件总重上限",
+      "attribute": "方案参数"
+    },
+    {
+      "label": "方案炉辊间距",
+      "value": "300",
+      "unit": "mm",
+      "condition": "2020年炉内辊道方案；需对应工件接触部位及移动时的支承变化",
+      "attribute": "方案参数"
+    }
+  ],
+  "participation": "2021年同组报价拟包含设备设计、制造、运输、安装和调试及炉体至控制柜间二次线缆、桥架；不含设备基础和冷却水处理装置，甲醇裂解装置为选配。",
+  "sourceSummary": "江苏苏能工业炉有限公司历史技术方案资料整理。",
+  "coverTitle": "轴承圈辊棒炉方案：装炉量与往复运行空间怎样一起核对？",
+  "cover": {
+    "src": "/images/case-covers/bearing-ring-roller-hearth-20201224-proposal.png",
+    "alt": "两只通用轴承圈环形工件示意",
+    "caption": "工件示意（人工智能生成，非客户实物）",
+    "fit": "contain"
+  },
+  "relatedLinks": [
+    {
+      "title": "了解辊底炉的适用条件",
+      "href": "/zh/products/detail/roller-hearth-furnace"
+    },
+    {
+      "title": "准备询价参数与供货范围",
+      "href": "/zh/articles/gongye-lu-baojia-canshu"
+    }
+  ],
+  "dateModified": "2026-09-12"
+}

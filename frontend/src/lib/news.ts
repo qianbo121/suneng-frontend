@@ -2,12 +2,13 @@ import { cache } from 'react';
 import type { Metadata } from 'next';
 
 import { NEWS_FALLBACK_IMAGE, NEWS_LABEL } from '@/constants/news';
-import { getNewsDetail, getNewsList, getNewsPrevNext } from '@/lib/api/news';
+import { getNewsDetail, getNewsList } from '@/lib/api/news';
 import { toAssetUrl } from '@/lib/api/client';
 import { compactText } from '@/lib/seo';
 import { absoluteUrl, buildMetadata } from '@/lib/seo/metadata';
 import { filterCanonicalNewsItems, hasPublishableEnglishNews } from '@/lib/news-routing';
-import { richTextToPlainText, sanitizeRichTextHtml } from '@/lib/sanitize';
+import { prepareNewsArticleHtml, richTextToPlainText } from '@/lib/sanitize';
+import { getNewsSummary } from '@/lib/news-summary';
 import { localizeText } from '@/lib/utils';
 import { NewsApiItem, NewsListCardItem } from '@/types/news';
 import { Locale } from '@/types/site';
@@ -28,11 +29,27 @@ function isPlaceholderImage(src: string) {
   return src.includes('placehold.co');
 }
 
+function normalizeNewsImageSource(src?: string | null) {
+  const image = src?.trim() || '';
+
+  if (image.startsWith('/uploads/') || image.startsWith('/images/')) {
+    return image;
+  }
+
+  if (/^https?:\/\/(?:localhost|127\.0\.0\.1)(?::\d+)?\/uploads\//i.test(image)) {
+    return new URL(image).pathname;
+  }
+
+  return toAssetUrl(image);
+}
+
 export function resolveNewsImage(
-  item?: Pick<NewsApiItem, 'coverImage' | 'ogImage'> | null,
-  options?: { preferFallback?: boolean },
+  item?: Pick<NewsApiItem, 'coverImage' | 'ogImage' | 'englishCoverImage'> | null,
+  options?: { preferFallback?: boolean; locale?: Locale },
 ) {
-  const image = toAssetUrl(item?.coverImage || item?.ogImage);
+  const image = normalizeNewsImageSource(
+    (options?.locale === 'en' && item?.englishCoverImage) || item?.coverImage || item?.ogImage,
+  );
 
   if (options?.preferFallback || !image || isPlaceholderImage(image)) {
     return NEWS_FALLBACK_IMAGE;
@@ -41,34 +58,63 @@ export function resolveNewsImage(
   return image;
 }
 
-function getNewsCoverImage(item?: Pick<NewsApiItem, 'coverImage' | 'ogImage'> | null) {
-  return resolveNewsImage(item);
-}
-
 export function mapNewsCard(locale: Locale, item: NewsApiItem): NewsListCardItem {
+  const searchText = [
+    item.titleZh,
+    item.titleEn,
+    item.summaryZh,
+    item.summaryEn,
+    item.contentZh,
+    item.contentEn,
+    item.seoTitleZh,
+    item.seoTitleEn,
+    item.seoDescriptionZh,
+    item.seoDescriptionEn,
+    item.seoKeywordsZh,
+    item.seoKeywordsEn,
+    item.category?.nameZh,
+    item.category?.nameEn,
+    item.category?.slug,
+    item.slug,
+  ]
+    .map((value) => richTextToPlainText(value))
+    .filter(Boolean)
+    .join(' ');
+
   return {
     id: item.id,
     slug: item.slug,
-    image: getNewsCoverImage(item),
+    image: resolveNewsImage(item, { locale }),
     title: {
       zh: item.titleZh,
       en: item.titleEn || item.titleZh,
     },
     summary: {
-      zh: richTextToPlainText(item.summaryZh || item.contentZh),
-      en: richTextToPlainText(item.summaryEn || item.contentEn || item.summaryZh || item.contentZh),
+      zh: getNewsSummary('zh', item),
+      en: getNewsSummary('en', item),
     },
     date: item.publishDate,
+    updatedAt: item.contentUpdatedAt || item.publishDate,
+    viewCount: item.viewCount ?? 0,
     category: {
       zh: item.category?.nameZh || NEWS_LABEL.zh,
-      en: item.category?.nameEn || item.category?.nameZh || NEWS_LABEL.en,
+      en: item.category?.nameEn || NEWS_LABEL.en,
     },
+    searchText,
+    source: item,
   };
 }
 
-export function normalizeNewsHtml(locale: Locale, item: NewsApiItem) {
+export function normalizeNewsHtml(
+  locale: Locale,
+  item: NewsApiItem,
+  options?: { coverImage?: string | null },
+) {
   const content = localizeText(locale, item.contentZh, item.contentEn);
-  return sanitizeRichTextHtml(content);
+  return prepareNewsArticleHtml(content, {
+    coverImage: options?.coverImage,
+    stackSimpleTables: locale === 'en',
+  });
 }
 
 export async function createNewsListMetadata(locale: Locale): Promise<Metadata> {
@@ -88,19 +134,23 @@ export async function createNewsListMetadata(locale: Locale): Promise<Metadata> 
     image: NEWS_FALLBACK_IMAGE,
     alternateLocales: {
       'zh-CN': '/zh/news',
+      'en-US': '/en/news',
       'x-default': '/zh/news',
     },
   });
 
-  return locale === 'en'
-    ? { ...metadata, robots: { index: false, follow: false } }
-    : metadata;
+  return metadata;
 }
 
 export async function createNewsDetailMetadata(locale: Locale, slug: string): Promise<Metadata> {
   const { article: item } = await getNewsDetailPageData(slug);
   const title = item
-    ? localizeText(locale, item.seoTitleZh, item.seoTitleEn, localizeText(locale, item.titleZh, item.titleEn))
+    ? localizeText(
+        locale,
+        item.seoTitleZh,
+        item.seoTitleEn,
+        localizeText(locale, item.titleZh, item.titleEn),
+      )
     : locale === 'en'
       ? 'News Detail'
       : '新闻详情';
@@ -109,10 +159,15 @@ export async function createNewsDetailMetadata(locale: Locale, slug: string): Pr
         locale,
         item.seoDescriptionZh,
         item.seoDescriptionEn,
-        localizeText(locale, item.summaryZh, item.summaryEn, localizeText(locale, item.contentZh, item.contentEn)),
+        localizeText(
+          locale,
+          item.summaryZh,
+          item.summaryEn,
+          localizeText(locale, item.contentZh, item.contentEn),
+        ),
       )
     : '';
-  const image = item ? getNewsCoverImage(item) : NEWS_FALLBACK_IMAGE;
+  const image = item ? resolveNewsImage(item, { locale }) : NEWS_FALLBACK_IMAGE;
 
   return buildMetadata({
     title,
@@ -142,9 +197,8 @@ export async function getNewsListPageData(
   const page = Math.max(1, options?.page ?? 1);
   const pageSize = Math.max(1, options?.pageSize ?? 10);
   const canonicalItems = filterCanonicalNewsItems(listResult.data?.items ?? []);
-  const localizedItems = locale === 'en'
-    ? canonicalItems.filter(hasPublishableEnglishNews)
-    : canonicalItems;
+  const localizedItems =
+    locale === 'en' ? canonicalItems.filter(hasPublishableEnglishNews) : canonicalItems;
   const start = (page - 1) * pageSize;
   const paginatedList = listResult.data
     ? {
@@ -154,9 +208,7 @@ export async function getNewsListPageData(
         pageSize,
       }
     : null;
-  const bannerImage =
-    toAssetUrl(localizedItems[0]?.coverImage || localizedItems[0]?.ogImage) ||
-    NEWS_FALLBACK_IMAGE;
+  const bannerImage = resolveNewsImage(localizedItems[0], { locale });
 
   return {
     categories: [],
@@ -171,12 +223,9 @@ export async function getNewsListPageData(
 export const getNewsDetailPageData = cache(async (slug: string) => {
   const detailResult = await getNewsDetail(slug);
   const item = detailResult.data;
-  const prevNextResult = item ? await getNewsPrevNext(item.id) : { data: null, error: detailResult.error };
-
   return {
     article: item,
-    prevNext: prevNextResult.data,
-    error: detailResult.error || prevNextResult.error,
+    error: detailResult.error,
   };
 });
 

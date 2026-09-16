@@ -1,0 +1,362 @@
+.page {
+  font-size: 15px;
+  line-height: 1.8;
+}
+.hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
+  gap: 56px;
+  align-items: center;
+  padding-block: 64px;
+}
+.hero h1 {
+  margin: 22px 0;
+  font-size: clamp(32px, 3vw, 46px);
+  font-weight: 600;
+  line-height: 1.35;
+  letter-spacing: -0.025em;
+  text-wrap: balance;
+}
+.hero > * {
+  min-width: 0;
+}
+.tags {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin: 24px 0;
+  padding: 0;
+  list-style: none;
+}
+.tags li {
+  padding: 3px 10px;
+  border: 1px solid var(--line);
+  color: var(--muted);
+  font-size: 13px;
+}
+.systemDiagram {
+  padding: 32px;
+  background: var(--navy);
+  color: white;
+}
+.diagramLabel {
+  color: #a8c9ff;
+  font-size: 13px;
+}
+.systemDiagram h2 {
+  font-size: 24px;
+  margin: 10px 0 22px;
+}
+.systemDiagram ol {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+.systemDiagram li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border: 1px solid #38516f;
+  padding: 14px 12px;
+  min-width: 0;
+}
+.systemDiagram li span {
+  color: #8db9fa;
+  font-size: 12px;
+}
+.systemDiagram strong {
+  font-weight: 500;
+  font-size: 14px;
+}
+.systemDiagram > p {
+  color: #c2cee0;
+  font-size: 13px;
+  margin: 22px 0 0;
+}
+.heading {
+  max-width: 940px;
+  margin-bottom: var(--site-heading-gap);
+}
+.heading h2 {
+  font-size: clamp(25px, 2.3vw, 32px);
+  line-height: 1.45;
+  font-weight: 600;
+  margin: 0 0 14px;
+}
+.heading p {
+  color: var(--muted);
+  margin: 0;
+  line-height: 1.9;
+}
+.twoColumns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+.panel {
+  padding: var(--site-card-padding);
+  background: #fff;
+  border: 1px solid var(--line);
+  min-width: 0;
+}
+.panel h3,
+.boundary h3,
+.acceptance h3 {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0 0 16px;
+  font-size: 18px;
+  font-weight: 600;
+}
+.panel svg {
+  color: var(--blue);
+}
+.warm {
+  background: #fffaf4;
+  border-color: #eadccc;
+}
+.bullets {
+  margin: 0;
+  padding-left: 20px;
+  color: var(--muted);
+}
+.bullets li + li {
+  margin-top: 12px;
+}
+.routeStack {
+  display: grid;
+  gap: 20px;
+}
+.route {
+  padding: 28px;
+  background: white;
+  border-left: 3px solid var(--blue);
+}
+.route h3 {
+  font-size: 19px;
+  font-weight: 600;
+  margin: 0 0 18px;
+}
+.route > p {
+  color: var(--muted);
+  margin: 18px 0 0;
+  font-size: 14px;
+}
+.flow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 8px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.flow li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  max-width: 100%;
+}
+.flow li span {
+  padding: 8px 12px;
+  background: #eef3fb;
+  color: #1e467e;
+}
+.flow svg {
+  width: 16px;
+  height: 16px;
+  flex: 0 0 auto;
+  color: #7892b6;
+}
+.configuration {
+  margin-top: 32px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0 32px;
+}
+.configuration article {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 22px 0;
+  border-bottom: 1px solid var(--line);
+  min-width: 0;
+}
+.configuration article > span {
+  font-size: 13px;
+  color: var(--blue);
+  padding-top: 3px;
+}
+.configuration h3 {
+  font-size: 17px;
+  font-weight: 600;
+  margin: 0 0 6px;
+}
+.configuration p {
+  margin: 0;
+  color: var(--muted);
+}
+.boundary {
+  margin-top: 28px;
+  padding: 24px 28px;
+  background: #eaf1fc;
+}
+.inputs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  margin: 0;
+  border-top: 1px solid var(--line);
+}
+.inputs > div {
+  display: grid;
+  grid-template-columns: 122px minmax(0, 1fr);
+  gap: 16px;
+  padding: 20px;
+  border-bottom: 1px solid var(--line);
+}
+.inputs > div:nth-child(odd) {
+  border-right: 1px solid var(--line);
+}
+.inputs dt {
+  font-weight: 600;
+}
+.inputs dd {
+  color: var(--muted);
+  margin: 0;
+}
+.capacity {
+  margin-top: 36px;
+  padding: 32px;
+  background: var(--navy);
+  color: white;
+}
+.capacity > span {
+  font-size: 13px;
+  color: #a8c9ff;
+}
+.capacity h3 {
+  font-size: 23px;
+  font-weight: 600;
+  margin: 8px 0 16px;
+}
+.capacity p {
+  color: #e0e8f3;
+  margin: 0;
+  line-height: 2;
+}
+.capacity .capacityNote {
+  margin-top: 20px;
+  border-top: 1px solid #38516f;
+  padding-top: 16px;
+  color: #b6c8e2;
+  font-size: 13px;
+}
+.acceptance {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  gap: 36px;
+}
+.acceptance article {
+  min-width: 0;
+  padding: 24px 0;
+}
+.acceptance .focusChecks {
+  padding: 28px;
+  background: #eef4ff;
+  border-top: 3px solid var(--blue);
+}
+.related {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 20px;
+  border-top: 1px solid var(--line);
+  margin-top: 32px;
+  padding-top: 28px;
+}
+.related h3 {
+  width: 100%;
+  margin: 0 0 8px;
+  font-size: 17px;
+  font-weight: 600;
+}
+.related a {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  font-size: 14px;
+  color: var(--blue);
+}
+.related svg {
+  width: 16px;
+  flex: 0 0 auto;
+}
+.related a:hover {
+  text-decoration: underline;
+}
+.page a:focus-visible {
+  outline: 2px solid var(--blue);
+  outline-offset: 4px;
+}
+@media (max-width: 1023px) {
+  .hero {
+    gap: 28px;
+  }
+  .inputs > div {
+    grid-template-columns: 1fr;
+    gap: 6px;
+  }
+}
+@media (max-width: 767px) {
+  .hero {
+    grid-template-columns: 1fr;
+    padding-block: 36px;
+    gap: 28px;
+  }
+  .hero h1 {
+    font-size: 32px;
+  }
+  .twoColumns,
+  .configuration,
+  .inputs,
+  .acceptance {
+    grid-template-columns: 1fr;
+  }
+  .twoColumns,
+  .acceptance {
+    gap: 16px;
+  }
+  .inputs > div {
+    padding: 18px 0;
+  }
+  .inputs > div:nth-child(odd) {
+    border-right: 0;
+  }
+  .panel,
+  .route,
+  .boundary,
+  .capacity,
+  .systemDiagram {
+    padding: 22px;
+  }
+  .systemDiagram ol {
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  .systemDiagram li {
+    padding: 10px;
+  }
+  .flow {
+    gap: 10px 6px;
+  }
+  .flow li {
+    gap: 6px;
+  }
+  .flow li span {
+    padding: 7px 10px;
+    font-size: 14px;
+  }
+}

@@ -50,6 +50,7 @@ export const SITE_LOGO_IMAGE = firstExistingPublicPath([
 
 export const DEFAULT_OG_IMAGE = firstExistingPublicPath([
   '/images/og/suneng-og.jpg',
+  '/images/home/suneng-factory-hero-1600.webp',
   SITE_LOGO_IMAGE,
   '/images/home/hero-industrial-furnace-banner-hd.png',
   '/images/home/hero-industrial-factory-daylight-banner.png',

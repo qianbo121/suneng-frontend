@@ -1,4 +1,5 @@
 import { STATIC_PRODUCTS } from '@/constants/static-products';
+import { continuousFurnaceCards, periodicFurnaceCards, productCenterProductionLines } from '@/lib/products-landing-data';
 import {
   ALTERNATE_NAMES,
   BAIDU_APP_ID,
@@ -82,30 +83,6 @@ const HOME_PAGE_EN_DESCRIPTION =
   'Jiangsu Suneng Industrial Furnace (founded 2006, Taizhou, Jiangsu) custom-engineers heat-treatment furnaces — box, bogie-hearth, pit, mesh-belt, roller-hearth and pusher furnaces, continuous heat-treatment lines, plus furnace energy-saving retrofit and overhaul.';
 const PRODUCT_COLLECTION_EN_DESCRIPTION =
   "Browse Suneng's heat-treatment furnaces and custom industrial furnaces: box, bogie-hearth, pit, bell-type, mesh-belt, roller-hearth, pusher and rotary-hearth furnaces, plus continuous heat-treatment lines.";
-const PRODUCT_JSON_LD_DESCRIPTIONS: Partial<Record<string, string>> = {
-  'roller-mesh-belt-line':
-    '托辊型网带式电阻炉生产线适用于小型零件、紧固件、标准件和批量连续热处理件的淬火、回火、正火、退火等工艺，网带宽度、运行速度、加热区长度和冷却方式等参数以最终技术方案为准。',
-  'copper-wire-annealing-line':
-    '铜丝自动化退火生产线适用于铜丝、铜线和有色金属线材的连续退火、软化处理及按项目评估的光亮退火，线径范围、运行速度、温区长度和气氛保护等参数以最终技术方案为准。',
-  'annealing-solution-line':
-    '退火固溶生产线适用于不锈钢带材、有色金属带材和连续退火或固溶材料的退火、固溶及连续热处理，带宽、厚度、运行速度、冷却段和张力控制等参数以最终技术方案为准。',
-  'trolley-furnace':
-    '台车炉适用于大型工件、铸件、焊接件、模具、结构件等周期式热处理场景，可用于退火、回火、正火、淬火加热、时效和去应力处理等工艺，炉膛尺寸、台车承重、加热方式和控制系统需按项目参数确认。',
-  'box-furnace':
-    '箱式炉适用于中小型零件、模具件、试制件和小批量工件的退火、回火、正火、淬火前加热、时效及去应力处理，炉膛尺寸、装炉量、最高温度和加热方式等参数以最终技术方案为准。',
-  'pit-furnace':
-    '井式炉适用于轴类、杆类、套筒类、长轴件和竖向装炉工件的淬火、回火、退火、时效及去应力处理，井深、直径、吊装方式、装炉重量和温度均匀性等参数以最终技术方案为准。',
-  'bell-furnace':
-    '罩式炉适用于卷材、小型零件、批量装框零件和需要罩式加热的工件的退火、回火及按项目评估的保护气氛热处理，炉罩尺寸、密封结构、气氛条件和冷却方式等参数以最终技术方案为准。',
-  'pusher-furnace':
-    '推杆炉适用于批量连续热处理工件、棒材、坯料和结构件的连续加热、正火、退火及淬火前加热，推料机构、料盘料框、节拍、温区数量和出料方式等参数以最终技术方案为准。',
-  'mesh-belt-furnace':
-    '网带炉适用于紧固件、小型零件、冲压件、标准件和批量连续热处理件的淬火、回火、退火及正火，网带宽度、运行速度、加热区、冷却方式和气氛需求等参数以最终技术方案为准。',
-  'roller-hearth-furnace':
-    '辊底炉适用于板材、管材、棒材和中大型连续热处理工件的退火、正火、回火及按项目评估的固溶处理，辊道材质、工件重量、运行速度、温区控制和炉膛密封等参数以最终技术方案为准。',
-  'rotary-hearth-furnace':
-    '转底炉适用于环形布料、模具、锻件和小中型批量工件的加热、退火、正火、回火及时效处理，炉底直径、旋转机构、装料方式、工件重量和进出料节拍等参数以最终技术方案为准。',
-};
 
 function productUrl(slug: string, path?: string) {
   return absoluteUrl(path || `/products/detail/${slug}`);
@@ -368,7 +345,16 @@ export function getBreadcrumbJsonLd(items: Array<{ name: string; url: string }>)
 export function getProductCollectionJsonLd(path = '/products', locale: Locale = 'zh') {
   const isEnglish = isEnglishLocale(locale);
   const pageUrl = absoluteUrl(path);
-  const products = PRODUCT_SCHEMA_ORDER.map((slug) => productBySlug.get(slug)).filter(Boolean);
+  const products = isEnglish
+    ? PRODUCT_SCHEMA_ORDER.flatMap((slug) => {
+        const product = productBySlug.get(slug);
+        return product ? [{ slug, name: product.name.en }] : [];
+      })
+    : [
+        ...productCenterProductionLines.map((product) => ({ slug: product.id, name: product.name })),
+        ...periodicFurnaceCards.map((product) => ({ slug: product.id, name: product.name })),
+        ...continuousFurnaceCards.map((product) => ({ slug: product.id, name: product.name })),
+      ];
   const itemListId = `${pageUrl}#itemlist`;
 
   return cleanObject([
@@ -393,23 +379,23 @@ export function getProductCollectionJsonLd(path = '/products', locale: Locale = 
       '@type': 'ItemList',
       '@id': itemListId,
       itemListElement: products.map((product, index) => {
-        const url = productUrl(product!.slug, `${path.replace(/\/+$/, '')}/detail/${product!.slug}`);
+        const url = productUrl(product.slug, `${path.replace(/\/+$/, '')}/detail/${product.slug}`);
 
         return {
           '@type': 'ListItem',
           position: index + 1,
-          name: product!.name[locale],
+          name: product.name,
           url,
           item: {
             '@type': 'ProductModel',
-            name: product!.name[locale],
+            name: product.name,
             url,
           },
         };
       }),
     },
     getBreadcrumbJsonLd([
-      { name: isEnglish ? 'Home' : '首页', url: isEnglish ? '/en' : '/' },
+      { name: isEnglish ? 'Home' : '首页', url: isEnglish ? '/en' : '/zh' },
       { name: isEnglish ? 'Product Center' : '产品中心', url: path },
     ]),
   ]);
@@ -420,7 +406,7 @@ export function getProductDetailJsonLd(product: ProductDetailJsonLdInput, locale
   const pageUrl = productUrl(product.slug, product.path);
   const productId = `${pageUrl}#product`;
   const images = absoluteImages(product.image);
-  const description = isEnglish ? product.description : PRODUCT_JSON_LD_DESCRIPTIONS[product.slug] || product.description;
+  const description = product.description;
 
   return cleanObject([
     {
@@ -461,7 +447,7 @@ export function getProductDetailJsonLd(product: ProductDetailJsonLdInput, locale
       inLanguage: schemaLanguage(locale),
     },
     getBreadcrumbJsonLd([
-      { name: isEnglish ? 'Home' : '首页', url: isEnglish ? '/en' : '/' },
+      { name: isEnglish ? 'Home' : '首页', url: isEnglish ? '/en' : '/zh' },
       { name: isEnglish ? 'Product Center' : '产品中心', url: product.path?.split('/detail/')[0] || '/products' },
       { name: product.name, url: product.path || `/products/detail/${product.slug}` },
     ]),
@@ -475,6 +461,8 @@ export function getArticleJsonLd(article: ArticleJsonLdInput, locale: Locale = '
   return cleanObject({
     '@context': 'https://schema.org',
     '@type': 'Article',
+    '@id': `${pageUrl}#article`,
+    url: pageUrl,
     headline: article.headline,
     description: article.description,
     image: article.image ? absoluteUrl(article.image) : undefined,
@@ -487,7 +475,14 @@ export function getArticleJsonLd(article: ArticleJsonLdInput, locale: Locale = '
         ? getTechnicalReviewerJsonLd()
         : undefined,
     publisher: { '@id': LOCAL_BUSINESS_ID },
-    mainEntityOfPage: pageUrl,
+    mainEntityOfPage: {
+      '@type': 'WebPage',
+      '@id': webpageId(pageUrl),
+      url: pageUrl,
+      isPartOf: { '@id': `${SITE_URL}/#website` },
+      about: { '@id': LOCAL_BUSINESS_ID },
+      mainEntity: { '@id': `${pageUrl}#article` },
+    },
     inLanguage: schemaLanguage(locale),
   });
 }
@@ -514,7 +509,7 @@ export function getContactPageJsonLd(path = '/contact', locale: 'zh' | 'en' = 'z
       inLanguage: isEnglish ? 'en-US' : 'zh-CN',
     },
     getBreadcrumbJsonLd([
-      { name: isEnglish ? 'Home' : '首页', url: isEnglish ? '/en' : '/' },
+      { name: isEnglish ? 'Home' : '首页', url: isEnglish ? '/en' : '/zh' },
       { name: isEnglish ? 'Contact Us' : '联系我们', url: path },
     ]),
   ]);

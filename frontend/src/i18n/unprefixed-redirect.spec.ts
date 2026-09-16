@@ -11,7 +11,7 @@ describe('unprefixed public route governance', () => {
   });
 
   it('returns real permanent redirects for leaked and duplicate fixed routes', () => {
-    expect(middlewareSource).toContain("pathname === '/en/news'");
+    expect(middlewareSource).not.toContain("pathname === '/en/news'");
     expect(middlewareSource).toContain("pathname === '/en/partner'");
     expect(middlewareSource).toContain("pathname === '/zh/strength'");
     expect(middlewareSource).toContain("pathname === '/zh/strength/certificates'");

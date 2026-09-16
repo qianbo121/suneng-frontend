@@ -1,0 +1,72 @@
+{
+  "id": "forged-ball-line-interfaces-202606-proposal",
+  "slug": "forged-ball-line-interfaces-202606-proposal",
+  "title": "锻球线局部改造，新输送设备怎么接旧线？",
+  "summary": "一批锻球线改造资料同时涉及棒料出炉机构、钢球回火前后风冷、回火炉及装袋装置。设备分别能运行之后，还要核清旧控制程序、工位高度、停留时间和装袋环节的衔接条件。",
+  "body": "forged-ball-line-interfaces-202606-proposal.md",
+  "contentType": "proposal",
+  "publicationStatus": "draft",
+  "projectStatus": "proposal",
+  "workpiece": [
+    "钢棒",
+    "锻球"
+  ],
+  "materials": [
+    "钢"
+  ],
+  "process": [
+    "加热",
+    "回火",
+    "冷却"
+  ],
+  "equipment": [
+    "步进炉",
+    "链式回火炉"
+  ],
+  "need": [
+    "旧炉改造"
+  ],
+  "tags": [
+    "方案参考",
+    "钢棒",
+    "锻球",
+    "旧炉改造"
+  ],
+  "facts": [
+    {
+      "label": "回前有效风冷段",
+      "value": "10",
+      "unit": "m",
+      "condition": "与8m回火段连体，按同一链速核对时间",
+      "attribute": "方案参数"
+    },
+    {
+      "label": "有效回火段",
+      "value": "8",
+      "unit": "m",
+      "condition": "几何通过时间不等于钢球到温后保温时间",
+      "attribute": "方案参数"
+    },
+    {
+      "label": "回后风冷配置",
+      "value": "2台×15",
+      "unit": "m",
+      "condition": "每台有效长度，不能据台数推定全线产能翻倍",
+      "attribute": "方案参数"
+    }
+  ],
+  "participation": "指定步进出料机构和钢球风冷回火、装袋设备的改造及接口配套",
+  "sourceSummary": "本文依据江苏苏能工业炉有限公司的历史方案资料整理，介绍拟定配置与供货条件；本文所引原件不构成设备已交付或验收通过的证明。",
+  "coverTitle": "锻球线分段改造：新输送设备接入旧线，要核对哪些交接点？",
+  "relatedLinks": [],
+  "projectYear": 2026,
+  "sourceDate": "2026-06",
+  "cover": {
+    "src": "/images/case-covers/remaining-20260910/steel-balls.webp",
+    "alt": "钢球类别工件示意",
+    "caption": "钢球类别示意（人工智能生成，非客户实物，不表示实际规格或工艺结果）",
+    "fit": "contain"
+  },
+  "listTitle": "锻球线局部改造，新输送设备怎么接旧线？",
+  "dateModified": "2026-09-12"
+}

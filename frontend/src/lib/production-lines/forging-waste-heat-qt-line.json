@@ -1,0 +1,500 @@
+{
+  "pageId": "forging-waste-heat-qt-line",
+  "variant": "handling",
+  "seo": {
+    "title": "锻件余热调质生产线｜锻后余热淬火与高温回火",
+    "description": "锻件余热调质生产线选型：核对材料、终锻温度与组织、转移时间窗、淬火冷却和回火节拍，了解测温分流、均温补温、产能与节能验收要求。"
+  },
+  "sectionNavigation": [
+    {
+      "label": "适用工件",
+      "href": "#workpieces"
+    },
+    {
+      "label": "工艺与设备",
+      "href": "#process"
+    },
+    {
+      "label": "设备配置",
+      "href": "#configuration"
+    },
+    {
+      "label": "产能与现场",
+      "href": "#site-conditions"
+    },
+    {
+      "label": "交付验收",
+      "href": "#acceptance"
+    },
+    {
+      "label": "常见问题",
+      "href": "#faq"
+    }
+  ],
+  "images": {
+    "hero-line": {
+      "src": "/images/products/forging-waste-heat-qt-line/remaining-batch-v1/01-hero-f203cf3ec5e8.png",
+      "width": 1672,
+      "height": 941,
+      "alt": "锻件余热调质生产线整体设备组合",
+      "optimized": true
+    },
+    "process-whole-line": {
+      "src": "/images/products/forging-waste-heat-qt-line/remaining-batch-v1/02-whole-line-0a7acf13f6be.png",
+      "width": 2172,
+      "height": 724,
+      "alt": "测温进料、均温、封闭淬火、清洗与回火设备组合",
+      "optimized": true
+    },
+    "workpiece-steel-forgings": {
+      "src": "/images/products/forging-waste-heat-qt-line/remaining-batch-v1/03-workpiece-2e76d2d4f385.png",
+      "width": 1672,
+      "height": 941,
+      "alt": "轴类与连杆类钢锻件代表外形",
+      "optimized": true
+    },
+    "loading-forging-transfer": {
+      "src": "/images/products/forging-waste-heat-qt-line/remaining-batch-v1/04-loading-40d90d8ac5cc.png",
+      "width": 1672,
+      "height": 941,
+      "alt": "短轴锻件的支承定位与机械夹持转运",
+      "optimized": true
+    },
+    "gallery-temperature-sorting": {
+      "src": "/images/products/forging-waste-heat-qt-line/remaining-batch-v1/05-detail-1-d8f518d6b2d9.png",
+      "width": 1672,
+      "height": 941,
+      "alt": "入口测温、识别与异常件分流工位",
+      "optimized": true
+    },
+    "gallery-quench-transfer": {
+      "src": "/images/products/forging-waste-heat-qt-line/remaining-batch-v1/06-detail-2-b3649877f988.png",
+      "width": 1672,
+      "height": 941,
+      "alt": "封闭转运淬火工位及循环冷却配套",
+      "optimized": true
+    },
+    "gallery-tempering-furnace": {
+      "src": "/images/products/forging-waste-heat-qt-line/remaining-batch-v1/07-detail-3-fa08be99842f.png",
+      "width": 1672,
+      "height": 941,
+      "alt": "独立回火炉及出料辊道",
+      "optimized": true
+    },
+    "site-layout": {
+      "src": "/images/products/forging-waste-heat-qt-line/remaining-batch-v1/08-site-layout-7a36d10cc55d.png",
+      "width": 1672,
+      "height": 941,
+      "alt": "锻件余热调质设备、维修通道与隔离工位的代表布局",
+      "optimized": true
+    }
+  },
+  "sourceRecord": {
+    "path": "frontend/src/lib/heat-treatment-lines-reviewed.json",
+    "record": "forging-waste-heat-qt-line",
+    "review": "剩余生产线批次 v1：已完成公开一手资料桌面核对；实际工艺与供货能力未作认证",
+    "engineeringNotes": "docs/heat-treatment-lines-final-batch-v1/pages/forging-waste-heat-qt-line/engineering-review.md"
+  },
+  "sections": {
+    "overview": {
+      "title": "锻件余热调质生产线",
+      "subtitle": "把可用锻后余热，衔接到淬火与高温回火",
+      "description": "面向材料与产品规范允许采用余热路线的钢锻件，配置测温分流、按需保温或均温、快速转移、淬火和高温回火。先核对终锻温度、组织状态与转移时间窗，再确定设备组合和锻造节拍的衔接。",
+      "facts": [
+        {
+          "label": "典型对象",
+          "value": "轴类、连杆类等钢锻件"
+        },
+        {
+          "label": "处理目标",
+          "value": "余热淬火与高温回火"
+        },
+        {
+          "label": "核心条件",
+          "value": "材料、组织与时间窗"
+        },
+        {
+          "label": "配置重点",
+          "value": "测温分流、淬火与回火"
+        }
+      ],
+      "gallery": [
+        {
+          "id": "whole",
+          "label": "整线",
+          "alt": "锻件余热调质生产线整体设备组合",
+          "thumbnailAssetId": "hero-line",
+          "fullAssetId": "hero-line"
+        },
+        {
+          "id": "temperature",
+          "label": "测温分流",
+          "alt": "入口测温、识别与异常件分流工位",
+          "thumbnailAssetId": "gallery-temperature-sorting",
+          "fullAssetId": "gallery-temperature-sorting"
+        },
+        {
+          "id": "quench",
+          "label": "转运淬火",
+          "alt": "封闭转运淬火工位及循环冷却配套",
+          "thumbnailAssetId": "gallery-quench-transfer",
+          "fullAssetId": "gallery-quench-transfer"
+        },
+        {
+          "id": "tempering",
+          "label": "独立回火",
+          "alt": "独立回火炉及出料辊道",
+          "thumbnailAssetId": "gallery-tempering-furnace",
+          "fullAssetId": "gallery-tempering-furnace"
+        }
+      ],
+      "actions": [
+        {
+          "label": "提交工况，获取选型建议",
+          "href": "#inquiry",
+          "style": "primary"
+        },
+        {
+          "label": "查看设备配置",
+          "href": "#configuration",
+          "style": "secondary"
+        }
+      ]
+    },
+    "workpieces": {
+      "title": "先看锻件和终锻状态，再判断余热路线",
+      "subtitle": "图纸、牌号、有效截面和终锻热状态要一起看。表面发红或单点测温达标，不能单独证明工件具备直接余热淬火条件。",
+      "cards": [
+        {
+          "id": "material",
+          "title": "钢锻件与关键截面",
+          "description": "核对材料牌号、图纸、重量、厚薄过渡与性能要求；同一外形不能代替材料和工艺判断。",
+          "imageAssetId": "workpiece-steel-forgings"
+        },
+        {
+          "id": "loading",
+          "title": "锻后转运与装载",
+          "description": "核对切边、测温、夹持、等待与入淬顺序，记录温度分布和节拍波动。",
+          "imageAssetId": "loading-forging-transfer"
+        }
+      ],
+      "note": "异常来料先隔离复核。超出允许温度或组织窗口，不等于可以直接补温后重新放行。"
+    },
+    "process": {
+      "title": "从锻后交接到回火出料，看懂整线组成",
+      "subtitle": "先判定来料是否可放行，再执行对应路线。锻造与切边属于前道接口，供货清单单独列明。",
+      "imageAssetId": "process-whole-line",
+      "mode": "routes",
+      "stages": [],
+      "routes": [
+        {
+          "title": "符合条件的余热淬火与回火路线",
+          "steps": [
+            "锻后测温与放行",
+            "保温或均温（按需）",
+            "受控快速转移",
+            "淬火",
+            "清洗或沥液（按需）",
+            "高温回火",
+            "终冷与检验"
+          ],
+          "note": "终锻、切边顺序及终锻至起淬计时点按采用工艺确定；补温只能在已验证的工艺窗口内使用。清洗和沥液安排随介质与后续要求确定。"
+        },
+        {
+          "title": "超窗、冷件与停线件的处置路线",
+          "steps": [
+            "识别并隔离",
+            "复核温度与组织历史",
+            "确定再加热或其他处置",
+            "记录处置与复机确认"
+          ],
+          "note": "重新放行须有适用工艺依据；不能通过延长均温或简单补温，默认恢复已失去的直接余热淬火条件。"
+        }
+      ],
+      "note": "表面测温需结合代表截面的验证；回火仍是本页调质路线的独立工序。设备组合图用于说明功能关系，实际内部转运、尺寸与基础由技术设计确定。",
+      "imageAlt": "锻件余热调质代表设备组合：测温进料、均温段、封闭淬火、清洗与独立回火"
+    },
+    "configuration": {
+      "title": "围绕温度、时间窗与节拍，配置关键设备",
+      "subtitle": "优先解决来料放行、快速转移、淬火冷却和回火衔接，再核定各段规格。",
+      "table": {
+        "caption": "锻件余热调质生产线设备配置依据",
+        "columns": [
+          {
+            "key": "item",
+            "label": "配置项目"
+          },
+          {
+            "key": "basis",
+            "label": "设备与衔接要求"
+          }
+        ],
+        "rows": [
+          {
+            "item": "入口测温与分流",
+            "cells": [
+              "确认测点、视场、发射率校核和工件识别；异常件进入隔离工位并留记录。"
+            ]
+          },
+          {
+            "item": "保温、均温或补温",
+            "cells": [
+              "仅在工艺需要且组织窗口允许时配置；炉温设定不能代替工件实际温度验证。"
+            ]
+          },
+          {
+            "item": "转移与淬火",
+            "cells": [
+              "按工件夹持、计时起止点、入淬姿态及最大瞬时热负荷，核定转运、介质循环与换热。"
+            ]
+          },
+          {
+            "item": "清洗与独立回火",
+            "cells": [
+              "核对介质残留、淬后允许等待、装载与回火保温；缓冲能力与锻造出件节拍匹配。"
+            ]
+          },
+          {
+            "item": "控制与能源记录",
+            "cells": [
+              "关联工件或批次、测温和工艺记录；明确锻造加热、补温、淬火循环、回火与公辅的计量边界。"
+            ]
+          }
+        ]
+      },
+      "notes": [
+        "淬火介质与冷却强度按材料、有效截面及目标组织确定，不按设备照片直接选用。"
+      ],
+      "action": {
+        "label": "把已有参数发给工程师",
+        "href": "#inquiry"
+      },
+      "inputs": [
+        {
+          "title": "锻件信息",
+          "description": "材料、图纸、重量、有效截面、锻造余量和产品族"
+        },
+        {
+          "title": "锻造状态",
+          "description": "终锻温度分布、切边/校正顺序、节拍波动和等待位置"
+        },
+        {
+          "title": "路线可行性",
+          "description": "材料和规范是否允许余热淬火，是否需要均温或补温，以及放行与隔离界限"
+        },
+        {
+          "title": "淬火条件",
+          "description": "介质、温度、搅拌/喷淋、装夹/输送和最大入槽节拍"
+        },
+        {
+          "title": "回火制度",
+          "description": "淬后至回火时间窗、温度/时间、装载和终冷"
+        },
+        {
+          "title": "缓冲策略",
+          "description": "锻造短停、长停、冷件及超窗件的隔离、工艺复核和复机首件确认"
+        },
+        {
+          "title": "产能能源",
+          "description": "kg/h、件/h、班次及基准线能源计量边界"
+        },
+        {
+          "title": "质量验证",
+          "description": "硬度、组织、力学性能、脱碳、裂纹和尺寸抽样"
+        }
+      ]
+    },
+    "site-conditions": {
+      "title": "产能、锻造接口与现场条件，一起算清楚",
+      "imageAssetId": "site-layout",
+      "requirements": [
+        {
+          "title": "出件节拍与缓冲",
+          "description": "记录稳定生产、换型和短停时的出件间隔，核对各段处理时间及在制品容量。"
+        },
+        {
+          "title": "热源与计量",
+          "description": "明确补温、回火和辅助设备的供能与计量点，保留基准路线的可比数据。"
+        },
+        {
+          "title": "淬火冷却与排风",
+          "description": "核对介质循环、换热、液位、排风和联锁，并明确厂务配套接口。"
+        },
+        {
+          "title": "转运与异常工位",
+          "description": "安排受控高温物流、隔离件停放和检修通道，避免异常件回流混入正常产品。"
+        }
+      ],
+      "capacity": "全线能力受锻造出件、测温分流、转移、淬火瞬时热负荷、清洗和回火的共同约束。节能比较采用同类产品与质量口径，列出基准路线、有效产量及计量边界，不预设固定节能比例。",
+      "imageCaption": "代表设备布置；锻造设备、厂房尺寸与基础不由本图确定。"
+    },
+    "delivery-scope": {
+      "title": "设备清单与前后道接口，逐项说清楚",
+      "subtitle": "从锻后交接点到约定的回火出料点，逐项核对设备与配套分工。",
+      "imageAssetId": "process-whole-line",
+      "contentTitle": "热处理设备、锻造接口与现场配套",
+      "items": [
+        {
+          "label": "热处理主设备",
+          "value": "按需保温或均温、转移淬火、清洗或沥液、独立回火与冷却；按确认方案列设备清单。"
+        },
+        {
+          "label": "测控与物流",
+          "value": "入口识别测温、放行分流、输送夹持、过程计时、工艺记录及异常处置联锁。"
+        },
+        {
+          "label": "前后道与厂务",
+          "value": "锻造和切边交接、检验物流、基础、供能、冷却和排风设施，明确由谁提供和联调。"
+        }
+      ],
+      "note": "配图未包含整座锻造车间；是否提供锻造设备、土建或公辅，均以技术协议列明的范围为准。"
+    },
+    "acceptance": {
+      "title": "交付到哪一步，验收就核对到哪一步",
+      "subtitle": "设备功能、工艺性能与产品验证分别约定条件。",
+      "columns": [
+        {
+          "id": "equipment",
+          "title": "设备功能",
+          "description": "核对测温识别、异常分流、夹持转运、循环冷却、停机复机与报警联锁。"
+        },
+        {
+          "id": "process",
+          "title": "工艺性能",
+          "description": "记录代表工况的终锻至起淬时间、热状态、介质温度和回火曲线，并按约定验证温度测量。"
+        },
+        {
+          "id": "product",
+          "title": "产品验证",
+          "description": "按采用产品规范约定硬度、组织、力学性能、脱碳、裂纹与尺寸项目，并明确取样部位。"
+        }
+      ],
+      "productNote": "节能比较采用单位合格品能耗，并说明基准路线、产品组合、开停机工况与能源计量点。",
+      "stages": [
+        {
+          "id": "requirements",
+          "order": 1,
+          "label": "需求沟通"
+        },
+        {
+          "id": "design",
+          "order": 2,
+          "label": "方案设计"
+        },
+        {
+          "id": "manufacturing-inspection",
+          "order": 3,
+          "label": "制造检验"
+        },
+        {
+          "id": "installation-commissioning",
+          "order": 4,
+          "label": "安装联调"
+        },
+        {
+          "id": "acceptance-delivery",
+          "order": 5,
+          "label": "验收交付"
+        }
+      ],
+      "note": "设备验收与产品检验分别明确条件与责任；代表材料、装载、抽样和判定在协议中约定。"
+    },
+    "faq": {
+      "title": "采购与技术常见问题",
+      "subtitle": "先了解本工艺的选型、配套与现场衔接问题。",
+      "items": [
+        {
+          "id": "faq-1",
+          "question": "余热调质是否等于不再加热？",
+          "answer": "不等于。本页路线保留高温回火；在组织与温度窗口允许时，也可能配置保温、均温或补温。是否能利用锻后余热，需先验证材料和实际终锻状态。",
+          "defaultOpen": true
+        },
+        {
+          "id": "faq-2",
+          "question": "终锻温度怎么测才可信？",
+          "answer": "要明确测点、表面状态、发射率、视场和工件姿态，并建立校核方法。红外测量反映目标表面，不能直接当作芯部温度或组织已经合格的证据。",
+          "defaultOpen": false
+        },
+        {
+          "id": "faq-3",
+          "question": "锻造停机时怎么处理在制品？",
+          "answer": "先识别并隔离超窗、低温或状态不明的工件，再按材料和工艺记录决定处置。技术方案应包含短停缓冲、长停分流、常规再加热路线和复机首件确认，不能把全部停线件简单补温后放行。",
+          "defaultOpen": false
+        },
+        {
+          "id": "faq-4",
+          "question": "节能效果如何验收？",
+          "answer": "比较同类产品在约定基准路线和余热路线下的单位合格品能耗，记录产量、质量、开停机工况及电、燃气和公辅计量边界。仅减少一段加热设备，不能直接推出整线节能比例。",
+          "defaultOpen": false
+        },
+        {
+          "id": "faq-5",
+          "question": "产品验收只看硬度可以吗？",
+          "answer": "不能默认只看硬度。应根据材料、用途和采用产品规范约定组织、力学性能、脱碳、裂纹、尺寸及取样部位；设备功能验收不能代替产品质量验证。",
+          "defaultOpen": false
+        }
+      ],
+      "relatedGroups": [
+        {
+          "id": "related-lines",
+          "title": "相关生产线",
+          "links": [
+            {
+              "label": "履带板压淬生产线",
+              "href": "/zh/products/detail/track-shoe-press-quench-line"
+            },
+            {
+              "label": "多炉共用操作机淬火单元",
+              "href": "/zh/products/detail/multi-furnace-quench-cell"
+            }
+          ]
+        },
+        {
+          "id": "technical",
+          "title": "选型资料",
+          "links": [
+            {
+              "label": "本线询价参数清单",
+              "href": "/downloads/heat-treatment-lines/forging-waste-heat-qt-line.txt"
+            }
+          ]
+        }
+      ]
+    },
+    "inquiry": {
+      "title": "告诉我们锻件、终锻状态与产量",
+      "description": "先提交已知牌号、截面、终锻温度和产量，其他工况在方案沟通中补齐。",
+      "form": {
+        "id": "forging-waste-heat-qt-line-inquiry",
+        "fields": [
+          {
+            "name": "workpiece_material",
+            "label": "锻件与来料状态",
+            "placeholder": "如：牌号、截面、终锻温度",
+            "required": false
+          },
+          {
+            "name": "target_performance",
+            "label": "调质目标与时间窗",
+            "placeholder": "如：硬度、组织、起淬时间窗",
+            "required": false
+          },
+          {
+            "name": "target_output",
+            "label": "目标产量",
+            "placeholder": "如：产量、生产班次与换型频率",
+            "required": false
+          },
+          {
+            "name": "contact_method",
+            "label": "联系方式",
+            "placeholder": "电话、微信或邮箱",
+            "required": true
+          }
+        ],
+        "submitLabel": "获取选型建议",
+        "helperText": "已知信息先填，不明确的项目可留空。"
+      }
+    }
+  }
+}

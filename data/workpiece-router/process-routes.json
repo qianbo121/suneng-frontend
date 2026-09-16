@@ -1,0 +1,5539 @@
+{
+  "schemaVersion": "2.3.0",
+  "defaultSupportStatus": "review",
+  "policy": "旧运行字段继续兼容现有页面；新增字段将行业证据、企业能力和基线发布状态拆开。行业方向只有在条款证据满足公开条件且对应基线版本由责任人一次性批准后才可展示。",
+  "routes": [
+    {
+      "id": "welded-stress-relief",
+      "workpieceIds": [
+        "large-welded-machine-frame",
+        "pressure-vessel-shell",
+        "structural-steel-component",
+        "welded-assembly",
+        "large-cylinder-shell",
+        "welded-pipe-spool"
+      ],
+      "logicUnitId": "welded_batch",
+      "label": "去应力退火 / 焊后热处理",
+      "processStage": "final_furnace_treatment",
+      "supportStatus": "review",
+      "statusReason": "待苏能按炉型、有效尺寸、载荷与测温记录能力确认",
+      "customerNote": "请说明材质、最大板厚和工件尺寸，以便判断装炉与加热方式。",
+      "requiredCapabilities": {
+        "productionModes": [
+          "batch"
+        ],
+        "loadingMethods": [
+          "trolley",
+          "vertical",
+          "chamber"
+        ]
+      },
+      "reviewed": true,
+      "reviewVersion": "v2-content-baseline",
+      "processVariants": [
+        {
+          "id": "stress-relief",
+          "label": "去应力退火",
+          "processIds": [
+            "stress_relief_annealing"
+          ],
+          "requirements": {},
+          "processPurposeId": "stress-relief",
+          "processConcept": "treatment_purpose"
+        },
+        {
+          "id": "post-weld-heat-treatment",
+          "label": "焊后热处理",
+          "processIds": [
+            "post_weld_heat_treatment"
+          ],
+          "requirements": {},
+          "processPurposeId": "post-weld-heat-treatment",
+          "processConcept": "process_context"
+        }
+      ],
+      "routeId": "welded-stress-relief",
+      "processPurposeId": null,
+      "purposeSelectionRequired": true,
+      "baselineEvidenceStatus": "partially_verified",
+      "processBoundary": "overall_furnace_treatment",
+      "moduleDisposition": "in_scope",
+      "companyCapabilityStatus": "unknown",
+      "requiredInputs": [
+        "materialFamily",
+        "materialGrade",
+        "applicableStandard",
+        "drawingRequirement",
+        "weldingProcedure",
+        "maximumThickness",
+        "dimensions",
+        "weight",
+        "loadingOrientation",
+        "batchQuantity"
+      ],
+      "missingInputs": [
+        "materialFamily",
+        "materialGrade",
+        "applicableStandard",
+        "drawingRequirement",
+        "weldingProcedure",
+        "maximumThickness",
+        "dimensions",
+        "weight",
+        "loadingOrientation",
+        "batchQuantity"
+      ],
+      "assumptions": [
+        "工件名称只用于归类，不能单独确定唯一设备方向。"
+      ],
+      "evidenceRefs": [],
+      "candidateEvidenceRefs": [
+        "std-gbt-30583-2026",
+        "std-gbt-40741-2021"
+      ],
+      "loadingConstraints": {
+        "applicability": "applicable",
+        "verificationStatus": "baseline_inference",
+        "allowedOrientations": [],
+        "preferredOrientations": [],
+        "prohibitedOrientations": [],
+        "supportAndFixture": {
+          "requirements": [],
+          "notes": []
+        },
+        "stacking": {
+          "allowed": null,
+          "conditions": []
+        },
+        "spacing": {
+          "value": null,
+          "unit": null,
+          "conditions": []
+        },
+        "batchMode": {
+          "modes": [],
+          "conditions": []
+        },
+        "batchQuantityOrWeight": {
+          "quantity": null,
+          "weight": null,
+          "unit": null,
+          "conditions": []
+        },
+        "conveyance": {
+          "modeCandidates": [
+            "trolley",
+            "vertical",
+            "chamber"
+          ],
+          "conditions": []
+        },
+        "rotation": {
+          "required": null,
+          "conditions": []
+        },
+        "transfer": {
+          "required": null,
+          "conditions": []
+        },
+        "quenchEntry": {
+          "required": null,
+          "conditions": []
+        },
+        "requiredInputs": [
+          "dimensions",
+          "weight",
+          "batchQuantity",
+          "loadingOrientation"
+        ],
+        "assumptions": [
+          "conveyance.modeCandidates 迁移自旧 requiredCapabilities.loadingMethods，仅作待核实候选。"
+        ],
+        "evidenceRefs": [],
+        "missingFields": [
+          "allowedOrientations",
+          "preferredOrientations",
+          "prohibitedOrientations",
+          "supportAndFixture",
+          "stacking",
+          "spacing",
+          "batchMode",
+          "batchQuantityOrWeight",
+          "rotation"
+        ],
+        "notApplicableReason": null
+      },
+      "industryDirections": [],
+      "conceptBoundary": {
+        "treatmentPurposeIds": [
+          "stress-relief"
+        ],
+        "processContextIds": [
+          "post-weld-heat-treatment"
+        ],
+        "selectionRelationship": "not_mutually_exclusive",
+        "requiredInputs": [
+          "applicableStandard",
+          "drawingRequirement",
+          "weldingProcedure",
+          "materialGrade",
+          "maximumThickness"
+        ],
+        "note": "去应力退火是处理目的；焊后热处理是受图纸、工艺卡、材料、焊接规范和执行标准控制的工艺上下文。"
+      }
+    },
+    {
+      "id": "aluminum-cylinder-solution-quench",
+      "workpieceIds": [
+        "seamless-aluminum-gas-cylinder"
+      ],
+      "logicUnitId": "aluminum_cylinder_solution",
+      "label": "固溶处理与淬火转移",
+      "processStage": "final_furnace_treatment",
+      "supportStatus": "review",
+      "statusReason": "待确认快速转移、淬火冷却和连续/周期生产线能力",
+      "customerNote": "请确认合金牌号、气瓶尺寸、班产量及允许转移时间。",
+      "standardReferences": [
+        {
+          "code": "GB/T 11640-2021",
+          "scopeNote": "铝合金无缝气瓶",
+          "amendments": [
+            "第1号修改单"
+          ],
+          "verifiedAt": "2026-08-27",
+          "source": "https://std.samr.gov.cn/gb/search/gbDetailed?id=C1A814733B0A7A48E05397BE0A0A1C8D",
+          "evidenceId": "std-gbt-11640-2021",
+          "accessLevel": "metadata_only",
+          "verificationStatus": "metadata_verified"
+        }
+      ],
+      "requiredCapabilities": {
+        "cooling": [
+          "solution_quench"
+        ],
+        "productionModes": [
+          "continuous",
+          "batch"
+        ],
+        "fastTransfer": true
+      },
+      "reviewed": true,
+      "reviewVersion": "v2-content-baseline",
+      "processVariants": [
+        {
+          "id": "solution-quench",
+          "label": "固溶处理与淬火转移",
+          "processIds": [
+            "solution_treatment",
+            "quench_transfer"
+          ],
+          "requirements": {
+            "cooling": [
+              "solution_quench"
+            ],
+            "fastTransfer": true
+          },
+          "processPurposeId": "solution-quench",
+          "processConcept": "treatment_purpose"
+        }
+      ],
+      "routeId": "aluminum-cylinder-solution-quench",
+      "processPurposeId": null,
+      "purposeSelectionRequired": true,
+      "baselineEvidenceStatus": "partially_verified",
+      "processBoundary": "overall_furnace_treatment",
+      "moduleDisposition": "in_scope",
+      "companyCapabilityStatus": "unknown",
+      "requiredInputs": [
+        "materialGrade",
+        "applicableStandard",
+        "supplyCondition",
+        "cylinderDimensions",
+        "batchQuantity",
+        "productionRhythm",
+        "coolingRequirement",
+        "transferRequirement"
+      ],
+      "missingInputs": [
+        "materialGrade",
+        "applicableStandard",
+        "supplyCondition",
+        "cylinderDimensions",
+        "batchQuantity",
+        "productionRhythm",
+        "coolingRequirement",
+        "transferRequirement"
+      ],
+      "assumptions": [
+        "工件名称只用于归类，不能单独确定唯一设备方向。"
+      ],
+      "evidenceRefs": [],
+      "candidateEvidenceRefs": [
+        "std-gbt-11640-2021",
+        "std-gbt-11640-2021-amendment-1"
+      ],
+      "loadingConstraints": {
+        "applicability": "applicable",
+        "verificationStatus": "unverified",
+        "allowedOrientations": [],
+        "preferredOrientations": [],
+        "prohibitedOrientations": [],
+        "supportAndFixture": {
+          "requirements": [],
+          "notes": []
+        },
+        "stacking": {
+          "allowed": null,
+          "conditions": []
+        },
+        "spacing": {
+          "value": null,
+          "unit": null,
+          "conditions": []
+        },
+        "batchMode": {
+          "modes": [],
+          "conditions": []
+        },
+        "batchQuantityOrWeight": {
+          "quantity": null,
+          "weight": null,
+          "unit": null,
+          "conditions": []
+        },
+        "conveyance": {
+          "modeCandidates": [],
+          "conditions": []
+        },
+        "rotation": {
+          "required": null,
+          "conditions": []
+        },
+        "transfer": {
+          "required": null,
+          "conditions": []
+        },
+        "quenchEntry": {
+          "required": null,
+          "conditions": []
+        },
+        "requiredInputs": [
+          "dimensions",
+          "weight",
+          "batchQuantity",
+          "loadingOrientation",
+          "coolingRequirement",
+          "transferRequirement"
+        ],
+        "assumptions": [],
+        "evidenceRefs": [],
+        "missingFields": [
+          "allowedOrientations",
+          "preferredOrientations",
+          "prohibitedOrientations",
+          "supportAndFixture",
+          "stacking",
+          "spacing",
+          "batchMode",
+          "batchQuantityOrWeight",
+          "rotation",
+          "conveyance",
+          "transfer",
+          "quenchEntry"
+        ],
+        "notApplicableReason": null
+      },
+      "industryDirections": [],
+      "transferConstraint": {
+        "required": true,
+        "maxSeconds": null,
+        "timingStartEvent": null,
+        "timingEndEvent": null,
+        "transferDistance": null,
+        "transferMechanism": null,
+        "batchTransferMode": null,
+        "quenchMedium": null,
+        "quenchMediumTemperature": null,
+        "agitationRequirement": null,
+        "applicableMaterialOrTemper": null,
+        "sourceReference": null,
+        "numericConstraintStatus": "unverified",
+        "evidenceRefs": [],
+        "candidateEvidenceRefs": [
+          "std-gbt-11640-2021",
+          "std-gbt-11640-2021-amendment-1"
+        ],
+        "missingFields": [
+          "maxSeconds",
+          "timingStartEvent",
+          "timingEndEvent",
+          "transferDistance",
+          "transferMechanism",
+          "batchTransferMode",
+          "quenchMedium",
+          "quenchMediumTemperature",
+          "agitationRequirement",
+          "applicableMaterialOrTemper",
+          "sourceReference"
+        ]
+      }
+    },
+    {
+      "id": "aluminum-cylinder-artificial-aging",
+      "workpieceIds": [
+        "seamless-aluminum-gas-cylinder"
+      ],
+      "logicUnitId": "aluminum_cylinder_solution",
+      "label": "仅人工时效",
+      "processStage": "final_furnace_treatment",
+      "supportStatus": "review",
+      "statusReason": "独立时效设备与固溶淬火设备必须分开审核",
+      "customerNote": "请说明合金状态、装炉量和时效制度，以便匹配独立时效设备。",
+      "standardReferences": [
+        {
+          "code": "GB/T 11640-2021",
+          "scopeNote": "铝合金无缝气瓶",
+          "amendments": [
+            "第1号修改单"
+          ],
+          "verifiedAt": "2026-08-27",
+          "source": "https://std.samr.gov.cn/gb/search/gbDetailed?id=C1A814733B0A7A48E05397BE0A0A1C8D",
+          "evidenceId": "std-gbt-11640-2021",
+          "accessLevel": "metadata_only",
+          "verificationStatus": "metadata_verified"
+        }
+      ],
+      "requiredCapabilities": {
+        "productionModes": [
+          "batch",
+          "continuous"
+        ]
+      },
+      "reviewed": true,
+      "reviewVersion": "v2-content-baseline",
+      "processVariants": [
+        {
+          "id": "artificial-aging",
+          "label": "人工时效",
+          "processIds": [
+            "artificial_aging"
+          ],
+          "requirements": {},
+          "processPurposeId": "artificial-aging",
+          "processConcept": "treatment_purpose"
+        }
+      ],
+      "routeId": "aluminum-cylinder-artificial-aging",
+      "processPurposeId": null,
+      "purposeSelectionRequired": true,
+      "baselineEvidenceStatus": "partially_verified",
+      "processBoundary": "overall_furnace_treatment",
+      "moduleDisposition": "in_scope",
+      "companyCapabilityStatus": "unknown",
+      "requiredInputs": [
+        "materialGrade",
+        "applicableStandard",
+        "supplyCondition",
+        "cylinderDimensions",
+        "batchQuantity",
+        "productionRhythm",
+        "coolingRequirement"
+      ],
+      "missingInputs": [
+        "materialGrade",
+        "applicableStandard",
+        "supplyCondition",
+        "cylinderDimensions",
+        "batchQuantity",
+        "productionRhythm",
+        "coolingRequirement"
+      ],
+      "assumptions": [
+        "工件名称只用于归类，不能单独确定唯一设备方向。"
+      ],
+      "evidenceRefs": [],
+      "candidateEvidenceRefs": [
+        "std-gbt-11640-2021",
+        "std-gbt-11640-2021-amendment-1"
+      ],
+      "loadingConstraints": {
+        "applicability": "applicable",
+        "verificationStatus": "unverified",
+        "allowedOrientations": [],
+        "preferredOrientations": [],
+        "prohibitedOrientations": [],
+        "supportAndFixture": {
+          "requirements": [],
+          "notes": []
+        },
+        "stacking": {
+          "allowed": null,
+          "conditions": []
+        },
+        "spacing": {
+          "value": null,
+          "unit": null,
+          "conditions": []
+        },
+        "batchMode": {
+          "modes": [],
+          "conditions": []
+        },
+        "batchQuantityOrWeight": {
+          "quantity": null,
+          "weight": null,
+          "unit": null,
+          "conditions": []
+        },
+        "conveyance": {
+          "modeCandidates": [],
+          "conditions": []
+        },
+        "rotation": {
+          "required": null,
+          "conditions": []
+        },
+        "transfer": {
+          "required": null,
+          "conditions": []
+        },
+        "quenchEntry": {
+          "required": null,
+          "conditions": []
+        },
+        "requiredInputs": [
+          "dimensions",
+          "weight",
+          "batchQuantity",
+          "loadingOrientation"
+        ],
+        "assumptions": [],
+        "evidenceRefs": [],
+        "missingFields": [
+          "allowedOrientations",
+          "preferredOrientations",
+          "prohibitedOrientations",
+          "supportAndFixture",
+          "stacking",
+          "spacing",
+          "batchMode",
+          "batchQuantityOrWeight",
+          "rotation",
+          "conveyance"
+        ],
+        "notApplicableReason": null
+      },
+      "industryDirections": []
+    },
+    {
+      "id": "seamless-steel-cylinder-quench-temper",
+      "workpieceIds": [
+        "seamless-steel-gas-cylinder"
+      ],
+      "logicUnitId": "steel_cylinder_normalize_qt",
+      "label": "无缝钢瓶淬火与回火",
+      "processStage": "final_furnace_treatment",
+      "supportStatus": "review",
+      "statusReason": "仅覆盖相应碳钢/合金钢标准范围，待确认淬火转移和生产线能力",
+      "customerNote": "请提供钢种、执行标准、瓶体尺寸和班产量，以便核对淬火转移条件。",
+      "standardReferences": [
+        {
+          "code": "GB/T 5099.1-2017",
+          "scopeNote": "相应强度范围的淬火加回火无缝钢质气瓶",
+          "amendments": [],
+          "verifiedAt": "2026-08-27",
+          "source": "https://std.samr.gov.cn/gb/search/gbDetailed?id=71F772D825F8D3A7E05397BE0A0AB82A",
+          "evidenceId": "std-gbt-5099-1-2017",
+          "accessLevel": "metadata_only",
+          "verificationStatus": "metadata_verified"
+        }
+      ],
+      "requiredCapabilities": {
+        "cooling": [
+          "quench"
+        ],
+        "productionModes": [
+          "continuous",
+          "batch"
+        ]
+      },
+      "reviewed": true,
+      "reviewVersion": "v2-content-baseline",
+      "processVariants": [
+        {
+          "id": "quench-temper",
+          "label": "淬火与回火",
+          "processIds": [
+            "quenching",
+            "tempering"
+          ],
+          "requirements": {
+            "cooling": [
+              "quench"
+            ]
+          },
+          "processPurposeId": "quench-temper",
+          "processConcept": "treatment_purpose"
+        }
+      ],
+      "routeId": "seamless-steel-cylinder-quench-temper",
+      "processPurposeId": null,
+      "purposeSelectionRequired": true,
+      "baselineEvidenceStatus": "partially_verified",
+      "processBoundary": "overall_furnace_treatment",
+      "moduleDisposition": "in_scope",
+      "companyCapabilityStatus": "unknown",
+      "requiredInputs": [
+        "materialFamily",
+        "materialGrade",
+        "applicableStandard",
+        "cylinderDimensions",
+        "batchQuantity",
+        "productionRhythm",
+        "targetMechanicalProperties",
+        "coolingRequirement"
+      ],
+      "missingInputs": [
+        "materialFamily",
+        "materialGrade",
+        "applicableStandard",
+        "cylinderDimensions",
+        "batchQuantity",
+        "productionRhythm",
+        "targetMechanicalProperties",
+        "coolingRequirement"
+      ],
+      "assumptions": [
+        "工件名称只用于归类，不能单独确定唯一设备方向。"
+      ],
+      "evidenceRefs": [],
+      "candidateEvidenceRefs": [
+        "std-gbt-5099-1-2017"
+      ],
+      "loadingConstraints": {
+        "applicability": "applicable",
+        "verificationStatus": "unverified",
+        "allowedOrientations": [],
+        "preferredOrientations": [],
+        "prohibitedOrientations": [],
+        "supportAndFixture": {
+          "requirements": [],
+          "notes": []
+        },
+        "stacking": {
+          "allowed": null,
+          "conditions": []
+        },
+        "spacing": {
+          "value": null,
+          "unit": null,
+          "conditions": []
+        },
+        "batchMode": {
+          "modes": [],
+          "conditions": []
+        },
+        "batchQuantityOrWeight": {
+          "quantity": null,
+          "weight": null,
+          "unit": null,
+          "conditions": []
+        },
+        "conveyance": {
+          "modeCandidates": [],
+          "conditions": []
+        },
+        "rotation": {
+          "required": null,
+          "conditions": []
+        },
+        "transfer": {
+          "required": null,
+          "conditions": []
+        },
+        "quenchEntry": {
+          "required": null,
+          "conditions": []
+        },
+        "requiredInputs": [
+          "dimensions",
+          "weight",
+          "batchQuantity",
+          "loadingOrientation",
+          "coolingRequirement",
+          "transferRequirement"
+        ],
+        "assumptions": [],
+        "evidenceRefs": [],
+        "missingFields": [
+          "allowedOrientations",
+          "preferredOrientations",
+          "prohibitedOrientations",
+          "supportAndFixture",
+          "stacking",
+          "spacing",
+          "batchMode",
+          "batchQuantityOrWeight",
+          "rotation",
+          "conveyance",
+          "transfer",
+          "quenchEntry"
+        ],
+        "notApplicableReason": null
+      },
+      "industryDirections": []
+    },
+    {
+      "id": "seamless-steel-cylinder-normalizing",
+      "workpieceIds": [
+        "seamless-steel-gas-cylinder"
+      ],
+      "logicUnitId": "steel_cylinder_normalize_qt",
+      "label": "无缝钢瓶正火",
+      "processStage": "final_furnace_treatment",
+      "supportStatus": "review",
+      "statusReason": "仅覆盖相应正火钢瓶标准范围，待确认输送、尺寸与节拍",
+      "customerNote": "请提供钢种、执行标准、瓶体尺寸和生产节拍，以便判断正火方式。",
+      "standardReferences": [
+        {
+          "code": "GB/T 5099.3-2017",
+          "scopeNote": "正火处理无缝钢质气瓶",
+          "amendments": [],
+          "verifiedAt": "2026-08-27",
+          "source": "https://std.samr.gov.cn/gb/search/gbDetailed?id=71F772D8230CD3A7E05397BE0A0AB82A",
+          "evidenceId": "std-gbt-5099-3-2017",
+          "accessLevel": "metadata_only",
+          "verificationStatus": "metadata_verified"
+        }
+      ],
+      "requiredCapabilities": {
+        "productionModes": [
+          "continuous",
+          "batch"
+        ]
+      },
+      "reviewed": true,
+      "reviewVersion": "v2-content-baseline",
+      "processVariants": [
+        {
+          "id": "normalizing",
+          "label": "正火",
+          "processIds": [
+            "normalizing"
+          ],
+          "requirements": {},
+          "processPurposeId": "normalizing",
+          "processConcept": "treatment_purpose"
+        }
+      ],
+      "routeId": "seamless-steel-cylinder-normalizing",
+      "processPurposeId": null,
+      "purposeSelectionRequired": true,
+      "baselineEvidenceStatus": "partially_verified",
+      "processBoundary": "overall_furnace_treatment",
+      "moduleDisposition": "in_scope",
+      "companyCapabilityStatus": "unknown",
+      "requiredInputs": [
+        "materialFamily",
+        "materialGrade",
+        "applicableStandard",
+        "cylinderDimensions",
+        "batchQuantity",
+        "productionRhythm",
+        "targetMechanicalProperties",
+        "coolingRequirement"
+      ],
+      "missingInputs": [
+        "materialFamily",
+        "materialGrade",
+        "applicableStandard",
+        "cylinderDimensions",
+        "batchQuantity",
+        "productionRhythm",
+        "targetMechanicalProperties",
+        "coolingRequirement"
+      ],
+      "assumptions": [
+        "工件名称只用于归类，不能单独确定唯一设备方向。"
+      ],
+      "evidenceRefs": [],
+      "candidateEvidenceRefs": [
+        "std-gbt-5099-3-2017"
+      ],
+      "loadingConstraints": {
+        "applicability": "applicable",
+        "verificationStatus": "unverified",
+        "allowedOrientations": [],
+        "preferredOrientations": [],
+        "prohibitedOrientations": [],
+        "supportAndFixture": {
+          "requirements": [],
+          "notes": []
+        },
+        "stacking": {
+          "allowed": null,
+          "conditions": []
+        },
+        "spacing": {
+          "value": null,
+          "unit": null,
+          "conditions": []
+        },
+        "batchMode": {
+          "modes": [],
+          "conditions": []
+        },
+        "batchQuantityOrWeight": {
+          "quantity": null,
+          "weight": null,
+          "unit": null,
+          "conditions": []
+        },
+        "conveyance": {
+          "modeCandidates": [],
+          "conditions": []
+        },
+        "rotation": {
+          "required": null,
+          "conditions": []
+        },
+        "transfer": {
+          "required": null,
+          "conditions": []
+        },
+        "quenchEntry": {
+          "required": null,
+          "conditions": []
+        },
+        "requiredInputs": [
+          "dimensions",
+          "weight",
+          "batchQuantity",
+          "loadingOrientation"
+        ],
+        "assumptions": [],
+        "evidenceRefs": [],
+        "missingFields": [
+          "allowedOrientations",
+          "preferredOrientations",
+          "prohibitedOrientations",
+          "supportAndFixture",
+          "stacking",
+          "spacing",
+          "batchMode",
+          "batchQuantityOrWeight",
+          "rotation",
+          "conveyance"
+        ],
+        "notApplicableReason": null
+      },
+      "industryDirections": []
+    },
+    {
+      "id": "seamless-stainless-steel-cylinder-confirmation",
+      "workpieceIds": [
+        "seamless-steel-gas-cylinder"
+      ],
+      "logicUnitId": "steel_cylinder_normalize_qt",
+      "label": "不锈钢无缝气瓶路线",
+      "materialFamilies": [
+        "stainless_steel"
+      ],
+      "confirmationReasonCode": "material_and_process_required",
+      "processStage": "requires_confirmation",
+      "supportStatus": "review",
+      "statusReason": "不锈钢无缝气瓶不得继承碳钢或合金钢的正火/调质路线，需按材料与标准确认",
+      "customerNote": "不锈钢瓶需先确认牌号、执行标准和目标工艺，再判断设备方式。",
+      "standardReferences": [
+        {
+          "code": "GB/T 5099.4-2017",
+          "scopeNote": "不锈钢无缝气瓶",
+          "amendments": [],
+          "verifiedAt": "2026-08-27",
+          "source": "https://std.samr.gov.cn/gb/search/gbDetailed?id=71F772D829A4D3A7E05397BE0A0AB82A",
+          "evidenceId": "std-gbt-5099-4-2017",
+          "accessLevel": "metadata_only",
+          "verificationStatus": "metadata_verified"
+        }
+      ],
+      "requiredCapabilities": {},
+      "reviewed": true,
+      "reviewVersion": "v2-content-baseline",
+      "processVariants": [],
+      "routeId": "seamless-stainless-steel-cylinder-confirmation",
+      "processPurposeId": null,
+      "purposeSelectionRequired": true,
+      "baselineEvidenceStatus": "partially_verified",
+      "processBoundary": "overall_furnace_treatment",
+      "moduleDisposition": "in_scope",
+      "companyCapabilityStatus": "unknown",
+      "requiredInputs": [
+        "materialFamily",
+        "materialGrade",
+        "applicableStandard",
+        "cylinderDimensions",
+        "batchQuantity",
+        "productionRhythm",
+        "targetMechanicalProperties",
+        "coolingRequirement"
+      ],
+      "missingInputs": [
+        "materialFamily",
+        "materialGrade",
+        "applicableStandard",
+        "cylinderDimensions",
+        "batchQuantity",
+        "productionRhythm",
+        "targetMechanicalProperties",
+        "coolingRequirement"
+      ],
+      "assumptions": [
+        "工件名称只用于归类，不能单独确定唯一设备方向。"
+      ],
+      "evidenceRefs": [],
+      "candidateEvidenceRefs": [
+        "std-gbt-5099-4-2017"
+      ],
+      "loadingConstraints": {
+        "applicability": "applicable",
+        "verificationStatus": "unverified",
+        "allowedOrientations": [],
+        "preferredOrientations": [],
+        "prohibitedOrientations": [],
+        "supportAndFixture": {
+          "requirements": [],
+          "notes": []
+        },
+        "stacking": {
+          "allowed": null,
+          "conditions": []
+        },
+        "spacing": {
+          "value": null,
+          "unit": null,
+          "conditions": []
+        },
+        "batchMode": {
+          "modes": [],
+          "conditions": []
+        },
+        "batchQuantityOrWeight": {
+          "quantity": null,
+          "weight": null,
+          "unit": null,
+          "conditions": []
+        },
+        "conveyance": {
+          "modeCandidates": [],
+          "conditions": []
+        },
+        "rotation": {
+          "required": null,
+          "conditions": []
+        },
+        "transfer": {
+          "required": null,
+          "conditions": []
+        },
+        "quenchEntry": {
+          "required": null,
+          "conditions": []
+        },
+        "requiredInputs": [
+          "dimensions",
+          "weight",
+          "batchQuantity",
+          "loadingOrientation"
+        ],
+        "assumptions": [],
+        "evidenceRefs": [],
+        "missingFields": [
+          "allowedOrientations",
+          "preferredOrientations",
+          "prohibitedOrientations",
+          "supportAndFixture",
+          "stacking",
+          "spacing",
+          "batchMode",
+          "batchQuantityOrWeight",
+          "rotation",
+          "conveyance"
+        ],
+        "notApplicableReason": null
+      },
+      "industryDirections": []
+    },
+    {
+      "id": "seamless-steel-cylinder-other-material",
+      "workpieceIds": [
+        "seamless-steel-gas-cylinder"
+      ],
+      "logicUnitId": "steel_cylinder_normalize_qt",
+      "label": "其他材料或标准的无缝瓶",
+      "confirmationReasonCode": "material_and_standard_required",
+      "processStage": "requires_confirmation",
+      "supportStatus": "review",
+      "statusReason": "GB/T 5099.1、5099.3与5099.4不能代表所有材料和瓶型，需按材料与执行标准另行确认",
+      "customerNote": "请提供材料、执行标准和目标工艺，工程人员将按实际瓶型判断。",
+      "standardReferences": [],
+      "requiredCapabilities": {},
+      "reviewed": true,
+      "reviewVersion": "v2-content-baseline",
+      "processVariants": [],
+      "routeId": "seamless-steel-cylinder-other-material",
+      "processPurposeId": null,
+      "purposeSelectionRequired": true,
+      "baselineEvidenceStatus": "partially_verified",
+      "processBoundary": "overall_furnace_treatment",
+      "moduleDisposition": "in_scope",
+      "companyCapabilityStatus": "unknown",
+      "requiredInputs": [
+        "materialFamily",
+        "materialGrade",
+        "applicableStandard",
+        "cylinderDimensions",
+        "batchQuantity",
+        "productionRhythm",
+        "targetMechanicalProperties",
+        "coolingRequirement"
+      ],
+      "missingInputs": [
+        "materialFamily",
+        "materialGrade",
+        "applicableStandard",
+        "cylinderDimensions",
+        "batchQuantity",
+        "productionRhythm",
+        "targetMechanicalProperties",
+        "coolingRequirement"
+      ],
+      "assumptions": [
+        "工件名称只用于归类，不能单独确定唯一设备方向。"
+      ],
+      "evidenceRefs": [],
+      "candidateEvidenceRefs": [
+        "std-gbt-5099-1-2017",
+        "std-gbt-5099-3-2017",
+        "std-gbt-5099-4-2017"
+      ],
+      "loadingConstraints": {
+        "applicability": "applicable",
+        "verificationStatus": "unverified",
+        "allowedOrientations": [],
+        "preferredOrientations": [],
+        "prohibitedOrientations": [],
+        "supportAndFixture": {
+          "requirements": [],
+          "notes": []
+        },
+        "stacking": {
+          "allowed": null,
+          "conditions": []
+        },
+        "spacing": {
+          "value": null,
+          "unit": null,
+          "conditions": []
+        },
+        "batchMode": {
+          "modes": [],
+          "conditions": []
+        },
+        "batchQuantityOrWeight": {
+          "quantity": null,
+          "weight": null,
+          "unit": null,
+          "conditions": []
+        },
+        "conveyance": {
+          "modeCandidates": [],
+          "conditions": []
+        },
+        "rotation": {
+          "required": null,
+          "conditions": []
+        },
+        "transfer": {
+          "required": null,
+          "conditions": []
+        },
+        "quenchEntry": {
+          "required": null,
+          "conditions": []
+        },
+        "requiredInputs": [
+          "dimensions",
+          "weight",
+          "batchQuantity",
+          "loadingOrientation"
+        ],
+        "assumptions": [],
+        "evidenceRefs": [],
+        "missingFields": [
+          "allowedOrientations",
+          "preferredOrientations",
+          "prohibitedOrientations",
+          "supportAndFixture",
+          "stacking",
+          "spacing",
+          "batchMode",
+          "batchQuantityOrWeight",
+          "rotation",
+          "conveyance"
+        ],
+        "notApplicableReason": null
+      },
+      "industryDirections": []
+    },
+    {
+      "id": "welded-lpg-cylinder-normalizing",
+      "workpieceIds": [
+        "welded-steel-gas-cylinder"
+      ],
+      "logicUnitId": "steel_cylinder_normalize_qt",
+      "label": "LPG焊接钢瓶整体正火",
+      "processStage": "final_furnace_treatment",
+      "supportStatus": "review",
+      "statusReason": "本路线只对应标准范围内的LPG焊接钢瓶，不代表全部焊接钢瓶",
+      "customerNote": "LPG焊接钢瓶通常关注整体正火一致性，请提供标准、尺寸和节拍。",
+      "standardReferences": [
+        {
+          "code": "GB 5842-2023",
+          "scopeNote": "液化石油气钢瓶",
+          "amendments": [],
+          "verifiedAt": "2026-08-27",
+          "source": "https://std.samr.gov.cn/gb/search/gbDetailed?id=0B330DE79FDCCE9DE06397BE0A0AEFB0",
+          "evidenceId": "std-gb-5842-2023",
+          "accessLevel": "metadata_only",
+          "verificationStatus": "metadata_verified"
+        }
+      ],
+      "requiredCapabilities": {
+        "productionModes": [
+          "continuous",
+          "batch"
+        ]
+      },
+      "reviewed": true,
+      "reviewVersion": "v2-content-baseline",
+      "processVariants": [
+        {
+          "id": "normalizing",
+          "label": "整体正火",
+          "processIds": [
+            "normalizing"
+          ],
+          "requirements": {},
+          "processPurposeId": "normalizing",
+          "processConcept": "treatment_purpose"
+        }
+      ],
+      "routeId": "welded-lpg-cylinder-normalizing",
+      "processPurposeId": null,
+      "purposeSelectionRequired": true,
+      "baselineEvidenceStatus": "partially_verified",
+      "processBoundary": "overall_furnace_treatment",
+      "moduleDisposition": "in_scope",
+      "companyCapabilityStatus": "unknown",
+      "requiredInputs": [
+        "materialFamily",
+        "materialGrade",
+        "applicableStandard",
+        "cylinderDimensions",
+        "batchQuantity",
+        "productionRhythm",
+        "targetMechanicalProperties",
+        "coolingRequirement"
+      ],
+      "missingInputs": [
+        "materialFamily",
+        "materialGrade",
+        "applicableStandard",
+        "cylinderDimensions",
+        "batchQuantity",
+        "productionRhythm",
+        "targetMechanicalProperties",
+        "coolingRequirement"
+      ],
+      "assumptions": [
+        "工件名称只用于归类，不能单独确定唯一设备方向。"
+      ],
+      "evidenceRefs": [],
+      "candidateEvidenceRefs": [
+        "std-gb-5842-2023"
+      ],
+      "loadingConstraints": {
+        "applicability": "applicable",
+        "verificationStatus": "unverified",
+        "allowedOrientations": [],
+        "preferredOrientations": [],
+        "prohibitedOrientations": [],
+        "supportAndFixture": {
+          "requirements": [],
+          "notes": []
+        },
+        "stacking": {
+          "allowed": null,
+          "conditions": []
+        },
+        "spacing": {
+          "value": null,
+          "unit": null,
+          "conditions": []
+        },
+        "batchMode": {
+          "modes": [],
+          "conditions": []
+        },
+        "batchQuantityOrWeight": {
+          "quantity": null,
+          "weight": null,
+          "unit": null,
+          "conditions": []
+        },
+        "conveyance": {
+          "modeCandidates": [],
+          "conditions": []
+        },
+        "rotation": {
+          "required": null,
+          "conditions": []
+        },
+        "transfer": {
+          "required": null,
+          "conditions": []
+        },
+        "quenchEntry": {
+          "required": null,
+          "conditions": []
+        },
+        "requiredInputs": [
+          "dimensions",
+          "weight",
+          "batchQuantity",
+          "loadingOrientation"
+        ],
+        "assumptions": [],
+        "evidenceRefs": [],
+        "missingFields": [
+          "allowedOrientations",
+          "preferredOrientations",
+          "prohibitedOrientations",
+          "supportAndFixture",
+          "stacking",
+          "spacing",
+          "batchMode",
+          "batchQuantityOrWeight",
+          "rotation",
+          "conveyance"
+        ],
+        "notApplicableReason": null
+      },
+      "industryDirections": []
+    },
+    {
+      "id": "welded-steel-cylinder-general-standard",
+      "workpieceIds": [
+        "welded-steel-gas-cylinder"
+      ],
+      "logicUnitId": "steel_cylinder_normalize_qt",
+      "label": "通用钢质焊接气瓶路线",
+      "confirmationReasonCode": "standard_and_process_required",
+      "processStage": "requires_confirmation",
+      "supportStatus": "review",
+      "statusReason": "GB/T 5100适用范围内仍需按材料、用途与目标工艺确认，不能直接继承LPG路线",
+      "customerNote": "请提供钢瓶用途、制造标准和目标工艺，以便判断适合的处理方式。",
+      "standardReferences": [
+        {
+          "code": "GB/T 5100-2020",
+          "scopeNote": "标准适用范围内的钢质焊接气瓶",
+          "amendments": [],
+          "verifiedAt": "2026-08-27",
+          "source": "https://std.samr.gov.cn/gb/search/gbDetailed?id=B691BB778683D126E05397BE0A0AF3B3",
+          "evidenceId": "std-gbt-5100-2020",
+          "accessLevel": "metadata_only",
+          "verificationStatus": "metadata_verified"
+        }
+      ],
+      "requiredCapabilities": {},
+      "reviewed": true,
+      "reviewVersion": "v2-content-baseline",
+      "processVariants": [],
+      "routeId": "welded-steel-cylinder-general-standard",
+      "processPurposeId": null,
+      "purposeSelectionRequired": true,
+      "baselineEvidenceStatus": "partially_verified",
+      "processBoundary": "overall_furnace_treatment",
+      "moduleDisposition": "in_scope",
+      "companyCapabilityStatus": "unknown",
+      "requiredInputs": [
+        "materialFamily",
+        "materialGrade",
+        "applicableStandard",
+        "cylinderDimensions",
+        "batchQuantity",
+        "productionRhythm",
+        "targetMechanicalProperties",
+        "coolingRequirement"
+      ],
+      "missingInputs": [
+        "materialFamily",
+        "materialGrade",
+        "applicableStandard",
+        "cylinderDimensions",
+        "batchQuantity",
+        "productionRhythm",
+        "targetMechanicalProperties",
+        "coolingRequirement"
+      ],
+      "assumptions": [
+        "工件名称只用于归类，不能单独确定唯一设备方向。"
+      ],
+      "evidenceRefs": [],
+      "candidateEvidenceRefs": [
+        "std-gbt-5100-2020"
+      ],
+      "loadingConstraints": {
+        "applicability": "applicable",
+        "verificationStatus": "unverified",
+        "allowedOrientations": [],
+        "preferredOrientations": [],
+        "prohibitedOrientations": [],
+        "supportAndFixture": {
+          "requirements": [],
+          "notes": []
+        },
+        "stacking": {
+          "allowed": null,
+          "conditions": []
+        },
+        "spacing": {
+          "value": null,
+          "unit": null,
+          "conditions": []
+        },
+        "batchMode": {
+          "modes": [],
+          "conditions": []
+        },
+        "batchQuantityOrWeight": {
+          "quantity": null,
+          "weight": null,
+          "unit": null,
+          "conditions": []
+        },
+        "conveyance": {
+          "modeCandidates": [],
+          "conditions": []
+        },
+        "rotation": {
+          "required": null,
+          "conditions": []
+        },
+        "transfer": {
+          "required": null,
+          "conditions": []
+        },
+        "quenchEntry": {
+          "required": null,
+          "conditions": []
+        },
+        "requiredInputs": [
+          "dimensions",
+          "weight",
+          "batchQuantity",
+          "loadingOrientation"
+        ],
+        "assumptions": [],
+        "evidenceRefs": [],
+        "missingFields": [
+          "allowedOrientations",
+          "preferredOrientations",
+          "prohibitedOrientations",
+          "supportAndFixture",
+          "stacking",
+          "spacing",
+          "batchMode",
+          "batchQuantityOrWeight",
+          "rotation",
+          "conveyance"
+        ],
+        "notApplicableReason": null
+      },
+      "industryDirections": []
+    },
+    {
+      "id": "welded-steel-cylinder-other-standard",
+      "workpieceIds": [
+        "welded-steel-gas-cylinder"
+      ],
+      "logicUnitId": "steel_cylinder_normalize_qt",
+      "label": "其他焊接钢瓶路线",
+      "confirmationReasonCode": "standard_and_process_required",
+      "processStage": "requires_confirmation",
+      "supportStatus": "review",
+      "statusReason": "用途词不能替代制造方式和执行标准，需先确认标准与目标工艺",
+      "customerNote": "请说明钢瓶材料、制造方式、执行标准和目标工艺。",
+      "standardReferences": [],
+      "requiredCapabilities": {},
+      "reviewed": true,
+      "reviewVersion": "v2-content-baseline",
+      "processVariants": [],
+      "routeId": "welded-steel-cylinder-other-standard",
+      "processPurposeId": null,
+      "purposeSelectionRequired": true,
+      "baselineEvidenceStatus": "partially_verified",
+      "processBoundary": "overall_furnace_treatment",
+      "moduleDisposition": "in_scope",
+      "companyCapabilityStatus": "unknown",
+      "requiredInputs": [
+        "materialFamily",
+        "materialGrade",
+        "applicableStandard",
+        "cylinderDimensions",
+        "batchQuantity",
+        "productionRhythm",
+        "targetMechanicalProperties",
+        "coolingRequirement"
+      ],
+      "missingInputs": [
+        "materialFamily",
+        "materialGrade",
+        "applicableStandard",
+        "cylinderDimensions",
+        "batchQuantity",
+        "productionRhythm",
+        "targetMechanicalProperties",
+        "coolingRequirement"
+      ],
+      "assumptions": [
+        "工件名称只用于归类，不能单独确定唯一设备方向。"
+      ],
+      "evidenceRefs": [],
+      "candidateEvidenceRefs": [
+        "std-gbt-5100-2020"
+      ],
+      "loadingConstraints": {
+        "applicability": "applicable",
+        "verificationStatus": "unverified",
+        "allowedOrientations": [],
+        "preferredOrientations": [],
+        "prohibitedOrientations": [],
+        "supportAndFixture": {
+          "requirements": [],
+          "notes": []
+        },
+        "stacking": {
+          "allowed": null,
+          "conditions": []
+        },
+        "spacing": {
+          "value": null,
+          "unit": null,
+          "conditions": []
+        },
+        "batchMode": {
+          "modes": [],
+          "conditions": []
+        },
+        "batchQuantityOrWeight": {
+          "quantity": null,
+          "weight": null,
+          "unit": null,
+          "conditions": []
+        },
+        "conveyance": {
+          "modeCandidates": [],
+          "conditions": []
+        },
+        "rotation": {
+          "required": null,
+          "conditions": []
+        },
+        "transfer": {
+          "required": null,
+          "conditions": []
+        },
+        "quenchEntry": {
+          "required": null,
+          "conditions": []
+        },
+        "requiredInputs": [
+          "dimensions",
+          "weight",
+          "batchQuantity",
+          "loadingOrientation"
+        ],
+        "assumptions": [],
+        "evidenceRefs": [],
+        "missingFields": [
+          "allowedOrientations",
+          "preferredOrientations",
+          "prohibitedOrientations",
+          "supportAndFixture",
+          "stacking",
+          "spacing",
+          "batchMode",
+          "batchQuantityOrWeight",
+          "rotation",
+          "conveyance"
+        ],
+        "notApplicableReason": null
+      },
+      "industryDirections": []
+    },
+    {
+      "id": "heavy-steel-normalize-temper-anneal",
+      "workpieceIds": [
+        "large-forged-flange",
+        "large-forged-shaft",
+        "large-steel-casting",
+        "large-die-block-forging"
+      ],
+      "logicUnitId": "heavy_cast_forged",
+      "label": "大型钢件正火 / 回火 / 退火",
+      "processStage": "final_furnace_treatment",
+      "supportStatus": "review",
+      "statusReason": "待按材料、最大截面、尺寸和单重确认",
+      "customerNote": "大型钢件需结合材料、最大截面、单重和工艺规范判断装炉方式。",
+      "requiredCapabilities": {
+        "productionModes": [
+          "batch"
+        ],
+        "loadingMethods": [
+          "trolley",
+          "vertical",
+          "chamber"
+        ],
+        "heavyLoad": true
+      },
+      "reviewed": true,
+      "reviewVersion": "v2-content-baseline",
+      "processVariants": [
+        {
+          "id": "normalizing",
+          "label": "正火",
+          "processIds": [
+            "normalizing"
+          ],
+          "requirements": {},
+          "processPurposeId": "normalizing",
+          "processConcept": "treatment_purpose"
+        },
+        {
+          "id": "tempering",
+          "label": "回火",
+          "processIds": [
+            "tempering"
+          ],
+          "requirements": {},
+          "processPurposeId": "tempering",
+          "processConcept": "treatment_purpose"
+        },
+        {
+          "id": "annealing",
+          "label": "退火",
+          "processIds": [
+            "annealing"
+          ],
+          "requirements": {},
+          "processPurposeId": "annealing",
+          "processConcept": "treatment_purpose"
+        },
+        {
+          "id": "normalize-temper",
+          "label": "正火与回火",
+          "processIds": [
+            "normalizing",
+            "tempering"
+          ],
+          "requirements": {},
+          "processPurposeId": "normalize-temper",
+          "processConcept": "treatment_purpose"
+        }
+      ],
+      "routeId": "heavy-steel-normalize-temper-anneal",
+      "processPurposeId": null,
+      "purposeSelectionRequired": true,
+      "baselineEvidenceStatus": "unverified",
+      "processBoundary": "overall_furnace_treatment",
+      "moduleDisposition": "in_scope",
+      "companyCapabilityStatus": "unknown",
+      "requiredInputs": [
+        "materialFamily",
+        "materialGrade",
+        "supplyCondition",
+        "dimensions",
+        "maximumSection",
+        "weight",
+        "batchQuantity",
+        "loadingOrientation",
+        "processSpecification"
+      ],
+      "missingInputs": [
+        "materialFamily",
+        "materialGrade",
+        "supplyCondition",
+        "dimensions",
+        "maximumSection",
+        "weight",
+        "batchQuantity",
+        "loadingOrientation",
+        "processSpecification"
+      ],
+      "assumptions": [
+        "工件名称只用于归类，不能单独确定唯一设备方向。"
+      ],
+      "evidenceRefs": [],
+      "candidateEvidenceRefs": [],
+      "loadingConstraints": {
+        "applicability": "applicable",
+        "verificationStatus": "baseline_inference",
+        "allowedOrientations": [],
+        "preferredOrientations": [],
+        "prohibitedOrientations": [],
+        "supportAndFixture": {
+          "requirements": [],
+          "notes": []
+        },
+        "stacking": {
+          "allowed": null,
+          "conditions": []
+        },
+        "spacing": {
+          "value": null,
+          "unit": null,
+          "conditions": []
+        },
+        "batchMode": {
+          "modes": [],
+          "conditions": []
+        },
+        "batchQuantityOrWeight": {
+          "quantity": null,
+          "weight": null,
+          "unit": null,
+          "conditions": []
+        },
+        "conveyance": {
+          "modeCandidates": [
+            "trolley",
+            "vertical",
+            "chamber"
+          ],
+          "conditions": []
+        },
+        "rotation": {
+          "required": null,
+          "conditions": []
+        },
+        "transfer": {
+          "required": null,
+          "conditions": []
+        },
+        "quenchEntry": {
+          "required": null,
+          "conditions": []
+        },
+        "requiredInputs": [
+          "dimensions",
+          "weight",
+          "batchQuantity",
+          "loadingOrientation"
+        ],
+        "assumptions": [
+          "conveyance.modeCandidates 迁移自旧 requiredCapabilities.loadingMethods，仅作待核实候选。"
+        ],
+        "evidenceRefs": [],
+        "missingFields": [
+          "allowedOrientations",
+          "preferredOrientations",
+          "prohibitedOrientations",
+          "supportAndFixture",
+          "stacking",
+          "spacing",
+          "batchMode",
+          "batchQuantityOrWeight",
+          "rotation"
+        ],
+        "notApplicableReason": null
+      },
+      "industryDirections": []
+    },
+    {
+      "id": "heavy-forging-hydrogen-relief",
+      "workpieceIds": [
+        "large-forged-shaft",
+        "large-die-block-forging"
+      ],
+      "logicUnitId": "heavy_cast_forged",
+      "label": "大型锻件扩氢退火",
+      "processStage": "final_furnace_treatment",
+      "supportStatus": "review",
+      "statusReason": "待按钢种、锻后状态和工艺规范确认",
+      "customerNote": "大型锻件请提供钢种、锻后状态和扩氢退火规范。",
+      "requiredCapabilities": {
+        "productionModes": [
+          "batch"
+        ],
+        "heavyLoad": true
+      },
+      "reviewed": true,
+      "reviewVersion": "v2-content-baseline",
+      "processVariants": [
+        {
+          "id": "hydrogen-relief",
+          "label": "扩氢退火",
+          "processIds": [
+            "hydrogen_relief_annealing"
+          ],
+          "requirements": {},
+          "processPurposeId": "hydrogen-relief",
+          "processConcept": "treatment_purpose"
+        }
+      ],
+      "routeId": "heavy-forging-hydrogen-relief",
+      "processPurposeId": null,
+      "purposeSelectionRequired": true,
+      "baselineEvidenceStatus": "unverified",
+      "processBoundary": "overall_furnace_treatment",
+      "moduleDisposition": "in_scope",
+      "companyCapabilityStatus": "unknown",
+      "requiredInputs": [
+        "materialFamily",
+        "materialGrade",
+        "supplyCondition",
+        "dimensions",
+        "maximumSection",
+        "weight",
+        "batchQuantity",
+        "loadingOrientation",
+        "processSpecification"
+      ],
+      "missingInputs": [
+        "materialFamily",
+        "materialGrade",
+        "supplyCondition",
+        "dimensions",
+        "maximumSection",
+        "weight",
+        "batchQuantity",
+        "loadingOrientation",
+        "processSpecification"
+      ],
+      "assumptions": [
+        "工件名称只用于归类，不能单独确定唯一设备方向。"
+      ],
+      "evidenceRefs": [],
+      "candidateEvidenceRefs": [],
+      "loadingConstraints": {
+        "applicability": "applicable",
+        "verificationStatus": "unverified",
+        "allowedOrientations": [],
+        "preferredOrientations": [],
+        "prohibitedOrientations": [],
+        "supportAndFixture": {
+          "requirements": [],
+          "notes": []
+        },
+        "stacking": {
+          "allowed": null,
+          "conditions": []
+        },
+        "spacing": {
+          "value": null,
+          "unit": null,
+          "conditions": []
+        },
+        "batchMode": {
+          "modes": [],
+          "conditions": []
+        },
+        "batchQuantityOrWeight": {
+          "quantity": null,
+          "weight": null,
+          "unit": null,
+          "conditions": []
+        },
+        "conveyance": {
+          "modeCandidates": [],
+          "conditions": []
+        },
+        "rotation": {
+          "required": null,
+          "conditions": []
+        },
+        "transfer": {
+          "required": null,
+          "conditions": []
+        },
+        "quenchEntry": {
+          "required": null,
+          "conditions": []
+        },
+        "requiredInputs": [
+          "dimensions",
+          "weight",
+          "batchQuantity",
+          "loadingOrientation"
+        ],
+        "assumptions": [],
+        "evidenceRefs": [],
+        "missingFields": [
+          "allowedOrientations",
+          "preferredOrientations",
+          "prohibitedOrientations",
+          "supportAndFixture",
+          "stacking",
+          "spacing",
+          "batchMode",
+          "batchQuantityOrWeight",
+          "rotation",
+          "conveyance"
+        ],
+        "notApplicableReason": null
+      },
+      "industryDirections": []
+    },
+    {
+      "id": "ductile-iron-anneal-normalize",
+      "workpieceIds": [
+        "ductile-iron-casting"
+      ],
+      "logicUnitId": "heavy_cast_forged",
+      "label": "球墨铸铁退火 / 正火",
+      "processStage": "final_furnace_treatment",
+      "supportStatus": "review",
+      "statusReason": "需先确认目标基体组织、尺寸与单重",
+      "customerNote": "球墨铸铁件需先确认目标组织、尺寸、单重和处理要求。",
+      "requiredCapabilities": {
+        "productionModes": [
+          "batch"
+        ]
+      },
+      "reviewed": true,
+      "reviewVersion": "v2-content-baseline",
+      "processVariants": [
+        {
+          "id": "ferritizing-annealing",
+          "label": "铁素体化退火",
+          "processIds": [
+            "ferritizing_annealing"
+          ],
+          "requirements": {},
+          "processPurposeId": "ferritizing-annealing",
+          "processConcept": "treatment_purpose"
+        },
+        {
+          "id": "normalizing",
+          "label": "正火",
+          "processIds": [
+            "normalizing"
+          ],
+          "requirements": {},
+          "processPurposeId": "normalizing",
+          "processConcept": "treatment_purpose"
+        }
+      ],
+      "routeId": "ductile-iron-anneal-normalize",
+      "processPurposeId": null,
+      "purposeSelectionRequired": true,
+      "baselineEvidenceStatus": "unverified",
+      "processBoundary": "overall_furnace_treatment",
+      "moduleDisposition": "in_scope",
+      "companyCapabilityStatus": "unknown",
+      "requiredInputs": [
+        "materialFamily",
+        "materialGrade",
+        "supplyCondition",
+        "dimensions",
+        "maximumSection",
+        "weight",
+        "batchQuantity",
+        "loadingOrientation",
+        "processSpecification"
+      ],
+      "missingInputs": [
+        "materialFamily",
+        "materialGrade",
+        "supplyCondition",
+        "dimensions",
+        "maximumSection",
+        "weight",
+        "batchQuantity",
+        "loadingOrientation",
+        "processSpecification"
+      ],
+      "assumptions": [
+        "工件名称只用于归类，不能单独确定唯一设备方向。"
+      ],
+      "evidenceRefs": [],
+      "candidateEvidenceRefs": [],
+      "loadingConstraints": {
+        "applicability": "applicable",
+        "verificationStatus": "unverified",
+        "allowedOrientations": [],
+        "preferredOrientations": [],
+        "prohibitedOrientations": [],
+        "supportAndFixture": {
+          "requirements": [],
+          "notes": []
+        },
+        "stacking": {
+          "allowed": null,
+          "conditions": []
+        },
+        "spacing": {
+          "value": null,
+          "unit": null,
+          "conditions": []
+        },
+        "batchMode": {
+          "modes": [],
+          "conditions": []
+        },
+        "batchQuantityOrWeight": {
+          "quantity": null,
+          "weight": null,
+          "unit": null,
+          "conditions": []
+        },
+        "conveyance": {
+          "modeCandidates": [],
+          "conditions": []
+        },
+        "rotation": {
+          "required": null,
+          "conditions": []
+        },
+        "transfer": {
+          "required": null,
+          "conditions": []
+        },
+        "quenchEntry": {
+          "required": null,
+          "conditions": []
+        },
+        "requiredInputs": [
+          "dimensions",
+          "weight",
+          "batchQuantity",
+          "loadingOrientation"
+        ],
+        "assumptions": [],
+        "evidenceRefs": [],
+        "missingFields": [
+          "allowedOrientations",
+          "preferredOrientations",
+          "prohibitedOrientations",
+          "supportAndFixture",
+          "stacking",
+          "spacing",
+          "batchMode",
+          "batchQuantityOrWeight",
+          "rotation",
+          "conveyance"
+        ],
+        "notApplicableReason": null
+      },
+      "industryDirections": []
+    },
+    {
+      "id": "ductile-iron-austempering-review",
+      "workpieceIds": [
+        "ductile-iron-casting"
+      ],
+      "logicUnitId": "heavy_cast_forged",
+      "label": "球墨铸铁等温淬火 / ADI",
+      "processStage": "requires_confirmation",
+      "supportStatus": "review",
+      "statusReason": "等温淬火需要专门介质和转移控制，不继承普通台车、井式或箱式方向",
+      "customerNote": "等温淬火需专用冷却与转移条件，请提供材料、尺寸和工艺要求。",
+      "requiredCapabilities": {
+        "cooling": [
+          "austempering_medium"
+        ],
+        "fastTransfer": true
+      },
+      "reviewed": true,
+      "reviewVersion": "v2-content-baseline",
+      "processVariants": [
+        {
+          "id": "austempering",
+          "label": "等温淬火",
+          "processIds": [
+            "austempering"
+          ],
+          "requirements": {
+            "cooling": [
+              "austempering_medium"
+            ],
+            "fastTransfer": true
+          },
+          "processPurposeId": "austempering",
+          "processConcept": "treatment_purpose"
+        }
+      ],
+      "routeId": "ductile-iron-austempering-review",
+      "processPurposeId": null,
+      "purposeSelectionRequired": true,
+      "baselineEvidenceStatus": "special_process",
+      "processBoundary": "austempering_process_chain",
+      "moduleDisposition": "in_scope",
+      "companyCapabilityStatus": "unknown",
+      "requiredInputs": [
+        "materialFamily",
+        "materialGrade",
+        "supplyCondition",
+        "dimensions",
+        "maximumSection",
+        "weight",
+        "batchQuantity",
+        "loadingOrientation",
+        "processSpecification",
+        "coolingRequirement",
+        "transferRequirement"
+      ],
+      "missingInputs": [
+        "materialFamily",
+        "materialGrade",
+        "supplyCondition",
+        "dimensions",
+        "maximumSection",
+        "weight",
+        "batchQuantity",
+        "loadingOrientation",
+        "processSpecification",
+        "coolingRequirement",
+        "transferRequirement"
+      ],
+      "assumptions": [
+        "工件名称只用于归类，不能单独确定唯一设备方向。"
+      ],
+      "evidenceRefs": [],
+      "candidateEvidenceRefs": [
+        "std-gbt-24733-2023"
+      ],
+      "loadingConstraints": {
+        "applicability": "applicable",
+        "verificationStatus": "unverified",
+        "allowedOrientations": [],
+        "preferredOrientations": [],
+        "prohibitedOrientations": [],
+        "supportAndFixture": {
+          "requirements": [],
+          "notes": []
+        },
+        "stacking": {
+          "allowed": null,
+          "conditions": []
+        },
+        "spacing": {
+          "value": null,
+          "unit": null,
+          "conditions": []
+        },
+        "batchMode": {
+          "modes": [],
+          "conditions": []
+        },
+        "batchQuantityOrWeight": {
+          "quantity": null,
+          "weight": null,
+          "unit": null,
+          "conditions": []
+        },
+        "conveyance": {
+          "modeCandidates": [],
+          "conditions": []
+        },
+        "rotation": {
+          "required": null,
+          "conditions": []
+        },
+        "transfer": {
+          "required": null,
+          "conditions": []
+        },
+        "quenchEntry": {
+          "required": null,
+          "conditions": []
+        },
+        "requiredInputs": [
+          "dimensions",
+          "weight",
+          "batchQuantity",
+          "loadingOrientation",
+          "coolingRequirement",
+          "transferRequirement"
+        ],
+        "assumptions": [],
+        "evidenceRefs": [],
+        "missingFields": [
+          "allowedOrientations",
+          "preferredOrientations",
+          "prohibitedOrientations",
+          "supportAndFixture",
+          "stacking",
+          "spacing",
+          "batchMode",
+          "batchQuantityOrWeight",
+          "rotation",
+          "conveyance",
+          "transfer",
+          "quenchEntry"
+        ],
+        "notApplicableReason": null
+      },
+      "industryDirections": [],
+      "specialProcess": {
+        "processChain": [
+          "austenitizing",
+          "controlled_transfer",
+          "austempering_medium",
+          "isothermal_hold"
+        ],
+        "numericConstraintsStatus": "unverified",
+        "companyCapabilityStatus": "unknown",
+        "missingFields": [
+          "austenitizingEquipment",
+          "transferRequirement",
+          "austemperingMedium",
+          "mediumTemperatureControl",
+          "processTime",
+          "safetyAndEnvironmentalRequirements"
+        ]
+      }
+    },
+    {
+      "id": "shaft-gear-whole-normalize-qt",
+      "workpieceIds": [
+        "long-shaft",
+        "gear-shaft",
+        "spline-shaft",
+        "large-gear",
+        "large-ring-gear",
+        "crankshaft"
+      ],
+      "logicUnitId": "shaft_gear_preheat",
+      "label": "整体正火 / 退火 / 调质",
+      "processStage": "preliminary_furnace_treatment",
+      "supportStatus": "review",
+      "statusReason": "本路线只覆盖炉内整体或预备处理，待按尺寸、姿态和淬火能力确认",
+      "customerNote": "本页主要判断整体炉内处理，请说明工件尺寸、装炉姿态和处理目的。",
+      "requiredCapabilities": {
+        "productionModes": [
+          "batch",
+          "continuous"
+        ],
+        "loadingMethods": [
+          "vertical",
+          "trolley",
+          "chamber",
+          "roller"
+        ]
+      },
+      "reviewed": true,
+      "reviewVersion": "v2-content-baseline",
+      "processVariants": [
+        {
+          "id": "normalizing",
+          "label": "整体正火",
+          "processIds": [
+            "normalizing"
+          ],
+          "requirements": {},
+          "processPurposeId": "normalizing",
+          "processConcept": "treatment_purpose"
+        },
+        {
+          "id": "annealing",
+          "label": "整体退火",
+          "processIds": [
+            "annealing"
+          ],
+          "requirements": {},
+          "processPurposeId": "annealing",
+          "processConcept": "treatment_purpose"
+        },
+        {
+          "id": "quench-temper",
+          "label": "整体调质",
+          "processIds": [
+            "quenching",
+            "tempering"
+          ],
+          "requirements": {
+            "cooling": [
+              "quench"
+            ]
+          },
+          "processPurposeId": "quench-temper",
+          "processConcept": "treatment_purpose"
+        }
+      ],
+      "routeId": "shaft-gear-whole-normalize-qt",
+      "processPurposeId": null,
+      "purposeSelectionRequired": true,
+      "baselineEvidenceStatus": "unverified",
+      "processBoundary": "overall_furnace_treatment",
+      "moduleDisposition": "in_scope",
+      "companyCapabilityStatus": "unknown",
+      "requiredInputs": [
+        "materialGrade",
+        "supplyCondition",
+        "dimensions",
+        "lengthDiameterRatio",
+        "weight",
+        "allowedDeformation",
+        "loadingOrientation",
+        "batchQuantity",
+        "processPurposeId",
+        "coolingRequirement"
+      ],
+      "missingInputs": [
+        "materialGrade",
+        "supplyCondition",
+        "dimensions",
+        "lengthDiameterRatio",
+        "weight",
+        "allowedDeformation",
+        "loadingOrientation",
+        "batchQuantity",
+        "processPurposeId",
+        "coolingRequirement"
+      ],
+      "assumptions": [
+        "工件名称只用于归类，不能单独确定唯一设备方向。"
+      ],
+      "evidenceRefs": [],
+      "candidateEvidenceRefs": [],
+      "loadingConstraints": {
+        "applicability": "applicable",
+        "verificationStatus": "baseline_inference",
+        "allowedOrientations": [],
+        "preferredOrientations": [],
+        "prohibitedOrientations": [],
+        "supportAndFixture": {
+          "requirements": [],
+          "notes": []
+        },
+        "stacking": {
+          "allowed": null,
+          "conditions": []
+        },
+        "spacing": {
+          "value": null,
+          "unit": null,
+          "conditions": []
+        },
+        "batchMode": {
+          "modes": [],
+          "conditions": []
+        },
+        "batchQuantityOrWeight": {
+          "quantity": null,
+          "weight": null,
+          "unit": null,
+          "conditions": []
+        },
+        "conveyance": {
+          "modeCandidates": [
+            "vertical",
+            "trolley",
+            "chamber",
+            "roller"
+          ],
+          "conditions": []
+        },
+        "rotation": {
+          "required": null,
+          "conditions": []
+        },
+        "transfer": {
+          "required": null,
+          "conditions": []
+        },
+        "quenchEntry": {
+          "required": null,
+          "conditions": []
+        },
+        "requiredInputs": [
+          "dimensions",
+          "weight",
+          "batchQuantity",
+          "loadingOrientation",
+          "coolingRequirement",
+          "transferRequirement"
+        ],
+        "assumptions": [
+          "conveyance.modeCandidates 迁移自旧 requiredCapabilities.loadingMethods，仅作待核实候选。"
+        ],
+        "evidenceRefs": [],
+        "missingFields": [
+          "allowedOrientations",
+          "preferredOrientations",
+          "prohibitedOrientations",
+          "supportAndFixture",
+          "stacking",
+          "spacing",
+          "batchMode",
+          "batchQuantityOrWeight",
+          "rotation",
+          "transfer",
+          "quenchEntry"
+        ],
+        "notApplicableReason": null
+      },
+      "industryDirections": []
+    },
+    {
+      "id": "shaft-gear-carburizing-review",
+      "workpieceIds": [
+        "gear-shaft",
+        "spline-shaft",
+        "large-gear"
+      ],
+      "logicUnitId": "carburizing_controlled_atmosphere",
+      "label": "渗碳 / 碳氮共渗",
+      "processStage": "final_furnace_treatment",
+      "supportStatus": "review",
+      "statusReason": "不得把全部齿轮件自动归为渗碳；待按材质、层深、气氛和淬火能力确认",
+      "customerNote": "请提供材质、层深、气氛要求和批量，以便判断渗碳或碳氮共渗方式。",
+      "requiredCapabilities": {
+        "atmosphere": [
+          "controlled"
+        ],
+        "cooling": [
+          "quench"
+        ],
+        "productionModes": [
+          "batch",
+          "continuous"
+        ]
+      },
+      "reviewed": true,
+      "reviewVersion": "v2-content-baseline",
+      "processVariants": [
+        {
+          "id": "carburizing",
+          "label": "渗碳",
+          "processIds": [
+            "carburizing"
+          ],
+          "requirements": {
+            "atmosphere": [
+              "controlled"
+            ],
+            "cooling": [
+              "quench"
+            ]
+          },
+          "processPurposeId": "carburizing",
+          "processConcept": "treatment_purpose"
+        },
+        {
+          "id": "carbonitriding",
+          "label": "碳氮共渗",
+          "processIds": [
+            "carbonitriding"
+          ],
+          "requirements": {
+            "atmosphere": [
+              "controlled"
+            ],
+            "cooling": [
+              "quench"
+            ]
+          },
+          "processPurposeId": "carbonitriding",
+          "processConcept": "treatment_purpose"
+        }
+      ],
+      "routeId": "shaft-gear-carburizing-review",
+      "processPurposeId": null,
+      "purposeSelectionRequired": true,
+      "baselineEvidenceStatus": "unverified",
+      "processBoundary": "overall_furnace_treatment",
+      "moduleDisposition": "in_scope",
+      "companyCapabilityStatus": "unknown",
+      "requiredInputs": [
+        "materialGrade",
+        "dimensions",
+        "caseDepthRequirement",
+        "surfaceCarbonRequirement",
+        "atmosphereRequirement",
+        "coolingRequirement",
+        "batchQuantity",
+        "productionRhythm"
+      ],
+      "missingInputs": [
+        "materialGrade",
+        "dimensions",
+        "caseDepthRequirement",
+        "surfaceCarbonRequirement",
+        "atmosphereRequirement",
+        "coolingRequirement",
+        "batchQuantity",
+        "productionRhythm"
+      ],
+      "assumptions": [
+        "工件名称只用于归类，不能单独确定唯一设备方向。"
+      ],
+      "evidenceRefs": [],
+      "candidateEvidenceRefs": [],
+      "loadingConstraints": {
+        "applicability": "applicable",
+        "verificationStatus": "unverified",
+        "allowedOrientations": [],
+        "preferredOrientations": [],
+        "prohibitedOrientations": [],
+        "supportAndFixture": {
+          "requirements": [],
+          "notes": []
+        },
+        "stacking": {
+          "allowed": null,
+          "conditions": []
+        },
+        "spacing": {
+          "value": null,
+          "unit": null,
+          "conditions": []
+        },
+        "batchMode": {
+          "modes": [],
+          "conditions": []
+        },
+        "batchQuantityOrWeight": {
+          "quantity": null,
+          "weight": null,
+          "unit": null,
+          "conditions": []
+        },
+        "conveyance": {
+          "modeCandidates": [],
+          "conditions": []
+        },
+        "rotation": {
+          "required": null,
+          "conditions": []
+        },
+        "transfer": {
+          "required": null,
+          "conditions": []
+        },
+        "quenchEntry": {
+          "required": null,
+          "conditions": []
+        },
+        "requiredInputs": [
+          "dimensions",
+          "weight",
+          "batchQuantity",
+          "loadingOrientation",
+          "coolingRequirement",
+          "transferRequirement"
+        ],
+        "assumptions": [],
+        "evidenceRefs": [],
+        "missingFields": [
+          "allowedOrientations",
+          "preferredOrientations",
+          "prohibitedOrientations",
+          "supportAndFixture",
+          "stacking",
+          "spacing",
+          "batchMode",
+          "batchQuantityOrWeight",
+          "rotation",
+          "conveyance",
+          "transfer",
+          "quenchEntry"
+        ],
+        "notApplicableReason": null
+      },
+      "industryDirections": []
+    },
+    {
+      "id": "shaft-gear-local-hardening-external",
+      "workpieceIds": [
+        "gear-shaft",
+        "large-gear",
+        "large-ring-gear",
+        "crankshaft"
+      ],
+      "logicUnitId": "shaft_gear_preheat",
+      "label": "齿面 / 轴颈局部最终硬化",
+      "processStage": "requires_external_induction",
+      "supportStatus": "unsupported",
+      "statusReason": "本模块不承诺感应等局部最终硬化设备，只说明与前序炉内处理的边界",
+      "customerNote": "齿面或轴颈的局部硬化需单独确认；本页可先判断前序整体热处理需求。",
+      "requiredCapabilities": {},
+      "reviewed": true,
+      "reviewVersion": "v2-content-baseline",
+      "processVariants": [
+        {
+          "id": "local-surface-hardening",
+          "label": "表面或局部硬化",
+          "processIds": [
+            "local_surface_hardening"
+          ],
+          "requirements": {},
+          "processPurposeId": "local-surface-hardening",
+          "processConcept": "treatment_purpose"
+        }
+      ],
+      "routeId": "shaft-gear-local-hardening-external",
+      "processPurposeId": null,
+      "purposeSelectionRequired": true,
+      "baselineEvidenceStatus": "partially_verified",
+      "processBoundary": "local_treatment",
+      "moduleDisposition": "outside_furnace_module",
+      "companyCapabilityStatus": "unknown",
+      "requiredInputs": [
+        "materialGrade",
+        "supplyCondition",
+        "dimensions",
+        "lengthDiameterRatio",
+        "weight",
+        "allowedDeformation",
+        "loadingOrientation",
+        "batchQuantity",
+        "processPurposeId",
+        "treatmentArea",
+        "localTreatmentMethod",
+        "targetHardness",
+        "effectiveHardenedDepth"
+      ],
+      "missingInputs": [
+        "materialGrade",
+        "supplyCondition",
+        "dimensions",
+        "lengthDiameterRatio",
+        "weight",
+        "allowedDeformation",
+        "loadingOrientation",
+        "batchQuantity",
+        "processPurposeId",
+        "treatmentArea",
+        "localTreatmentMethod",
+        "targetHardness",
+        "effectiveHardenedDepth"
+      ],
+      "assumptions": [
+        "工件名称只用于归类，不能单独确定唯一设备方向。"
+      ],
+      "evidenceRefs": [],
+      "candidateEvidenceRefs": [
+        "std-gbt-34882-2017"
+      ],
+      "loadingConstraints": {
+        "applicability": "not_applicable",
+        "verificationStatus": "unverified",
+        "allowedOrientations": [],
+        "preferredOrientations": [],
+        "prohibitedOrientations": [],
+        "supportAndFixture": {
+          "requirements": [],
+          "notes": []
+        },
+        "stacking": {
+          "allowed": null,
+          "conditions": []
+        },
+        "spacing": {
+          "value": null,
+          "unit": null,
+          "conditions": []
+        },
+        "batchMode": {
+          "modes": [],
+          "conditions": []
+        },
+        "batchQuantityOrWeight": {
+          "quantity": null,
+          "weight": null,
+          "unit": null,
+          "conditions": []
+        },
+        "conveyance": {
+          "modeCandidates": [],
+          "conditions": []
+        },
+        "rotation": {
+          "required": null,
+          "conditions": []
+        },
+        "transfer": {
+          "required": null,
+          "conditions": []
+        },
+        "quenchEntry": {
+          "required": null,
+          "conditions": []
+        },
+        "requiredInputs": [
+          "treatmentArea",
+          "localTreatmentMethod",
+          "partDimensions"
+        ],
+        "assumptions": [],
+        "evidenceRefs": [],
+        "missingFields": [],
+        "notApplicableReason": "局部处理路线不继承整体炉内装炉约束，需由对应局部处理工艺单独定义。"
+      },
+      "industryDirections": [],
+      "legacySupportStatusMeaning": "旧 supportStatus 仅维持第1批页面兼容；不得解释为苏能不承接，企业能力状态以 companyCapabilityStatus 为准。"
+    },
+    {
+      "id": "undercarriage-whole-normalize-qt",
+      "workpieceIds": [
+        "track-roller",
+        "carrier-roller",
+        "idler-wheel",
+        "drive-sprocket",
+        "track-link",
+        "engineering-wheel-hub"
+      ],
+      "logicUnitId": "engineering_undercarriage_bulk",
+      "label": "整体正火 / 调质 / 回火",
+      "processStage": "preliminary_furnace_treatment",
+      "supportStatus": "review",
+      "statusReason": "只覆盖整体炉内处理，待按关键截面、装料与淬火能力确认",
+      "customerNote": "请说明处理部位、关键截面、批量和装料方式，以便判断整体热处理方向。",
+      "requiredCapabilities": {
+        "productionModes": [
+          "continuous",
+          "batch"
+        ]
+      },
+      "reviewed": true,
+      "reviewVersion": "v2-content-baseline",
+      "processVariants": [
+        {
+          "id": "normalizing",
+          "label": "整体正火",
+          "processIds": [
+            "normalizing"
+          ],
+          "requirements": {},
+          "processPurposeId": "normalizing",
+          "processConcept": "treatment_purpose"
+        },
+        {
+          "id": "quench-temper",
+          "label": "整体调质",
+          "processIds": [
+            "quenching",
+            "tempering"
+          ],
+          "requirements": {
+            "cooling": [
+              "quench"
+            ]
+          },
+          "processPurposeId": "quench-temper",
+          "processConcept": "treatment_purpose"
+        },
+        {
+          "id": "tempering",
+          "label": "整体回火",
+          "processIds": [
+            "tempering"
+          ],
+          "requirements": {},
+          "processPurposeId": "tempering",
+          "processConcept": "treatment_purpose"
+        }
+      ],
+      "routeId": "undercarriage-whole-normalize-qt",
+      "processPurposeId": null,
+      "purposeSelectionRequired": true,
+      "baselineEvidenceStatus": "unverified",
+      "processBoundary": "overall_furnace_treatment",
+      "moduleDisposition": "in_scope",
+      "companyCapabilityStatus": "unknown",
+      "requiredInputs": [
+        "materialGrade",
+        "dimensions",
+        "criticalSection",
+        "treatmentArea",
+        "batchQuantity",
+        "loadingMethod",
+        "coolingRequirement",
+        "targetMechanicalProperties"
+      ],
+      "missingInputs": [
+        "materialGrade",
+        "dimensions",
+        "criticalSection",
+        "treatmentArea",
+        "batchQuantity",
+        "loadingMethod",
+        "coolingRequirement",
+        "targetMechanicalProperties"
+      ],
+      "assumptions": [
+        "工件名称只用于归类，不能单独确定唯一设备方向。"
+      ],
+      "evidenceRefs": [],
+      "candidateEvidenceRefs": [],
+      "loadingConstraints": {
+        "applicability": "applicable",
+        "verificationStatus": "unverified",
+        "allowedOrientations": [],
+        "preferredOrientations": [],
+        "prohibitedOrientations": [],
+        "supportAndFixture": {
+          "requirements": [],
+          "notes": []
+        },
+        "stacking": {
+          "allowed": null,
+          "conditions": []
+        },
+        "spacing": {
+          "value": null,
+          "unit": null,
+          "conditions": []
+        },
+        "batchMode": {
+          "modes": [],
+          "conditions": []
+        },
+        "batchQuantityOrWeight": {
+          "quantity": null,
+          "weight": null,
+          "unit": null,
+          "conditions": []
+        },
+        "conveyance": {
+          "modeCandidates": [],
+          "conditions": []
+        },
+        "rotation": {
+          "required": null,
+          "conditions": []
+        },
+        "transfer": {
+          "required": null,
+          "conditions": []
+        },
+        "quenchEntry": {
+          "required": null,
+          "conditions": []
+        },
+        "requiredInputs": [
+          "dimensions",
+          "weight",
+          "batchQuantity",
+          "loadingOrientation",
+          "coolingRequirement",
+          "transferRequirement"
+        ],
+        "assumptions": [],
+        "evidenceRefs": [],
+        "missingFields": [
+          "allowedOrientations",
+          "preferredOrientations",
+          "prohibitedOrientations",
+          "supportAndFixture",
+          "stacking",
+          "spacing",
+          "batchMode",
+          "batchQuantityOrWeight",
+          "rotation",
+          "conveyance",
+          "transfer",
+          "quenchEntry"
+        ],
+        "notApplicableReason": null
+      },
+      "industryDirections": []
+    },
+    {
+      "id": "undercarriage-local-hardening-external",
+      "workpieceIds": [
+        "track-roller",
+        "idler-wheel",
+        "drive-sprocket",
+        "track-link"
+      ],
+      "logicUnitId": "engineering_undercarriage_bulk",
+      "label": "踏面 / 齿部 / 销孔局部最终硬化",
+      "processStage": "requires_external_induction",
+      "supportStatus": "unsupported",
+      "statusReason": "不把感应或局部最终硬化当作苏能炉内设备承接范围",
+      "customerNote": "踏面、齿部或销孔的局部硬化需单独确认；本页可先判断整体炉内处理。",
+      "requiredCapabilities": {},
+      "reviewed": true,
+      "reviewVersion": "v2-content-baseline",
+      "processVariants": [
+        {
+          "id": "local-surface-hardening",
+          "label": "踏面、齿部或销孔局部硬化",
+          "processIds": [
+            "local_surface_hardening"
+          ],
+          "requirements": {},
+          "processPurposeId": "local-surface-hardening",
+          "processConcept": "treatment_purpose"
+        }
+      ],
+      "routeId": "undercarriage-local-hardening-external",
+      "processPurposeId": null,
+      "purposeSelectionRequired": true,
+      "baselineEvidenceStatus": "partially_verified",
+      "processBoundary": "local_treatment",
+      "moduleDisposition": "outside_furnace_module",
+      "companyCapabilityStatus": "unknown",
+      "requiredInputs": [
+        "materialGrade",
+        "dimensions",
+        "criticalSection",
+        "treatmentArea",
+        "batchQuantity",
+        "loadingMethod",
+        "coolingRequirement",
+        "targetMechanicalProperties",
+        "localTreatmentMethod",
+        "targetHardness",
+        "effectiveHardenedDepth"
+      ],
+      "missingInputs": [
+        "materialGrade",
+        "dimensions",
+        "criticalSection",
+        "treatmentArea",
+        "batchQuantity",
+        "loadingMethod",
+        "coolingRequirement",
+        "targetMechanicalProperties",
+        "localTreatmentMethod",
+        "targetHardness",
+        "effectiveHardenedDepth"
+      ],
+      "assumptions": [
+        "工件名称只用于归类，不能单独确定唯一设备方向。"
+      ],
+      "evidenceRefs": [],
+      "candidateEvidenceRefs": [
+        "std-gbt-34882-2017"
+      ],
+      "loadingConstraints": {
+        "applicability": "not_applicable",
+        "verificationStatus": "unverified",
+        "allowedOrientations": [],
+        "preferredOrientations": [],
+        "prohibitedOrientations": [],
+        "supportAndFixture": {
+          "requirements": [],
+          "notes": []
+        },
+        "stacking": {
+          "allowed": null,
+          "conditions": []
+        },
+        "spacing": {
+          "value": null,
+          "unit": null,
+          "conditions": []
+        },
+        "batchMode": {
+          "modes": [],
+          "conditions": []
+        },
+        "batchQuantityOrWeight": {
+          "quantity": null,
+          "weight": null,
+          "unit": null,
+          "conditions": []
+        },
+        "conveyance": {
+          "modeCandidates": [],
+          "conditions": []
+        },
+        "rotation": {
+          "required": null,
+          "conditions": []
+        },
+        "transfer": {
+          "required": null,
+          "conditions": []
+        },
+        "quenchEntry": {
+          "required": null,
+          "conditions": []
+        },
+        "requiredInputs": [
+          "treatmentArea",
+          "localTreatmentMethod",
+          "partDimensions"
+        ],
+        "assumptions": [],
+        "evidenceRefs": [],
+        "missingFields": [],
+        "notApplicableReason": "局部处理路线不继承整体炉内装炉约束，需由对应局部处理工艺单独定义。"
+      },
+      "industryDirections": [],
+      "legacySupportStatusMeaning": "旧 supportStatus 仅维持第1批页面兼容；不得解释为苏能不承接，企业能力状态以 companyCapabilityStatus 为准。"
+    },
+    {
+      "id": "track-link-carburizing-review",
+      "workpieceIds": [
+        "track-link"
+      ],
+      "logicUnitId": "carburizing_controlled_atmosphere",
+      "label": "链轨节渗碳路线",
+      "processStage": "requires_confirmation",
+      "supportStatus": "review",
+      "statusReason": "只能作为待审核候选，不得作为链轨节默认事实",
+      "customerNote": "链轨节是否需要渗碳取决于材质、层深和性能要求，请先提供工艺依据。",
+      "requiredCapabilities": {
+        "atmosphere": [
+          "controlled"
+        ],
+        "cooling": [
+          "quench"
+        ]
+      },
+      "reviewed": true,
+      "reviewVersion": "v2-content-baseline",
+      "processVariants": [
+        {
+          "id": "carburizing",
+          "label": "渗碳",
+          "processIds": [
+            "carburizing"
+          ],
+          "requirements": {
+            "atmosphere": [
+              "controlled"
+            ],
+            "cooling": [
+              "quench"
+            ]
+          },
+          "processPurposeId": "carburizing",
+          "processConcept": "treatment_purpose"
+        }
+      ],
+      "routeId": "track-link-carburizing-review",
+      "processPurposeId": null,
+      "purposeSelectionRequired": true,
+      "baselineEvidenceStatus": "unverified",
+      "processBoundary": "overall_furnace_treatment",
+      "moduleDisposition": "in_scope",
+      "companyCapabilityStatus": "unknown",
+      "requiredInputs": [
+        "materialGrade",
+        "dimensions",
+        "caseDepthRequirement",
+        "surfaceCarbonRequirement",
+        "atmosphereRequirement",
+        "coolingRequirement",
+        "batchQuantity",
+        "productionRhythm"
+      ],
+      "missingInputs": [
+        "materialGrade",
+        "dimensions",
+        "caseDepthRequirement",
+        "surfaceCarbonRequirement",
+        "atmosphereRequirement",
+        "coolingRequirement",
+        "batchQuantity",
+        "productionRhythm"
+      ],
+      "assumptions": [
+        "工件名称只用于归类，不能单独确定唯一设备方向。"
+      ],
+      "evidenceRefs": [],
+      "candidateEvidenceRefs": [],
+      "loadingConstraints": {
+        "applicability": "applicable",
+        "verificationStatus": "unverified",
+        "allowedOrientations": [],
+        "preferredOrientations": [],
+        "prohibitedOrientations": [],
+        "supportAndFixture": {
+          "requirements": [],
+          "notes": []
+        },
+        "stacking": {
+          "allowed": null,
+          "conditions": []
+        },
+        "spacing": {
+          "value": null,
+          "unit": null,
+          "conditions": []
+        },
+        "batchMode": {
+          "modes": [],
+          "conditions": []
+        },
+        "batchQuantityOrWeight": {
+          "quantity": null,
+          "weight": null,
+          "unit": null,
+          "conditions": []
+        },
+        "conveyance": {
+          "modeCandidates": [],
+          "conditions": []
+        },
+        "rotation": {
+          "required": null,
+          "conditions": []
+        },
+        "transfer": {
+          "required": null,
+          "conditions": []
+        },
+        "quenchEntry": {
+          "required": null,
+          "conditions": []
+        },
+        "requiredInputs": [
+          "dimensions",
+          "weight",
+          "batchQuantity",
+          "loadingOrientation",
+          "coolingRequirement",
+          "transferRequirement"
+        ],
+        "assumptions": [],
+        "evidenceRefs": [],
+        "missingFields": [
+          "allowedOrientations",
+          "preferredOrientations",
+          "prohibitedOrientations",
+          "supportAndFixture",
+          "stacking",
+          "spacing",
+          "batchMode",
+          "batchQuantityOrWeight",
+          "rotation",
+          "conveyance",
+          "transfer",
+          "quenchEntry"
+        ],
+        "notApplicableReason": null
+      },
+      "industryDirections": []
+    },
+    {
+      "id": "track-pin-engineering-review",
+      "workpieceIds": [
+        "steel-pins"
+      ],
+      "logicUnitId": "engineering_undercarriage_bulk",
+      "label": "履带销整体调质确认",
+      "processStage": "requires_confirmation",
+      "supportStatus": "review",
+      "statusReason": "履带销需带入工程机械用途，不得默认继承普通紧固小件连续线",
+      "customerNote": "履带销请说明材质、直径长度、批量及是否要求整体调质。",
+      "requiredCapabilities": {
+        "productionModes": [
+          "continuous",
+          "batch"
+        ],
+        "cooling": [
+          "quench"
+        ]
+      },
+      "contextOnly": true,
+      "reviewed": true,
+      "reviewVersion": "v2-content-baseline",
+      "processVariants": [
+        {
+          "id": "quench-temper",
+          "label": "整体调质",
+          "processIds": [
+            "quenching",
+            "tempering"
+          ],
+          "requirements": {
+            "cooling": [
+              "quench"
+            ]
+          },
+          "processPurposeId": "quench-temper",
+          "processConcept": "treatment_purpose"
+        }
+      ],
+      "routeId": "track-pin-engineering-review",
+      "processPurposeId": null,
+      "purposeSelectionRequired": true,
+      "baselineEvidenceStatus": "unverified",
+      "processBoundary": "overall_furnace_treatment",
+      "moduleDisposition": "in_scope",
+      "companyCapabilityStatus": "unknown",
+      "requiredInputs": [
+        "materialGrade",
+        "dimensions",
+        "criticalSection",
+        "treatmentArea",
+        "batchQuantity",
+        "loadingMethod",
+        "coolingRequirement",
+        "targetMechanicalProperties"
+      ],
+      "missingInputs": [
+        "materialGrade",
+        "dimensions",
+        "criticalSection",
+        "treatmentArea",
+        "batchQuantity",
+        "loadingMethod",
+        "coolingRequirement",
+        "targetMechanicalProperties"
+      ],
+      "assumptions": [
+        "工件名称只用于归类，不能单独确定唯一设备方向。"
+      ],
+      "evidenceRefs": [],
+      "candidateEvidenceRefs": [],
+      "loadingConstraints": {
+        "applicability": "applicable",
+        "verificationStatus": "unverified",
+        "allowedOrientations": [],
+        "preferredOrientations": [],
+        "prohibitedOrientations": [],
+        "supportAndFixture": {
+          "requirements": [],
+          "notes": []
+        },
+        "stacking": {
+          "allowed": null,
+          "conditions": []
+        },
+        "spacing": {
+          "value": null,
+          "unit": null,
+          "conditions": []
+        },
+        "batchMode": {
+          "modes": [],
+          "conditions": []
+        },
+        "batchQuantityOrWeight": {
+          "quantity": null,
+          "weight": null,
+          "unit": null,
+          "conditions": []
+        },
+        "conveyance": {
+          "modeCandidates": [],
+          "conditions": []
+        },
+        "rotation": {
+          "required": null,
+          "conditions": []
+        },
+        "transfer": {
+          "required": null,
+          "conditions": []
+        },
+        "quenchEntry": {
+          "required": null,
+          "conditions": []
+        },
+        "requiredInputs": [
+          "dimensions",
+          "weight",
+          "batchQuantity",
+          "loadingOrientation",
+          "coolingRequirement",
+          "transferRequirement"
+        ],
+        "assumptions": [],
+        "evidenceRefs": [],
+        "missingFields": [
+          "allowedOrientations",
+          "preferredOrientations",
+          "prohibitedOrientations",
+          "supportAndFixture",
+          "stacking",
+          "spacing",
+          "batchMode",
+          "batchQuantityOrWeight",
+          "rotation",
+          "conveyance",
+          "transfer",
+          "quenchEntry"
+        ],
+        "notApplicableReason": null
+      },
+      "industryDirections": []
+    },
+    {
+      "id": "plate-batch-anneal-normalize",
+      "workpieceIds": [
+        "medium-heavy-steel-plate"
+      ],
+      "logicUnitId": "plate_batch",
+      "label": "普通板材批次退火 / 正火",
+      "processStage": "final_furnace_treatment",
+      "supportStatus": "review",
+      "statusReason": "待按板厚、板形、尺寸与装炉支撑确认",
+      "customerNote": "请提供材质、长宽厚、单重和板形要求，以便判断批次处理方式。",
+      "requiredCapabilities": {
+        "productionModes": [
+          "batch"
+        ],
+        "loadingMethods": [
+          "trolley",
+          "chamber"
+        ]
+      },
+      "reviewed": true,
+      "reviewVersion": "v2-content-baseline",
+      "processVariants": [
+        {
+          "id": "annealing",
+          "label": "退火",
+          "processIds": [
+            "annealing"
+          ],
+          "requirements": {},
+          "processPurposeId": "annealing",
+          "processConcept": "treatment_purpose"
+        },
+        {
+          "id": "normalizing",
+          "label": "正火",
+          "processIds": [
+            "normalizing"
+          ],
+          "requirements": {},
+          "processPurposeId": "normalizing",
+          "processConcept": "treatment_purpose"
+        },
+        {
+          "id": "stress-relief",
+          "label": "去应力退火",
+          "processIds": [
+            "stress_relief_annealing"
+          ],
+          "requirements": {},
+          "processPurposeId": "stress-relief",
+          "processConcept": "treatment_purpose"
+        }
+      ],
+      "routeId": "plate-batch-anneal-normalize",
+      "processPurposeId": null,
+      "purposeSelectionRequired": true,
+      "baselineEvidenceStatus": "unverified",
+      "processBoundary": "overall_furnace_treatment",
+      "moduleDisposition": "in_scope",
+      "companyCapabilityStatus": "unknown",
+      "requiredInputs": [
+        "materialFamily",
+        "materialGrade",
+        "supplyCondition",
+        "plateDimensions",
+        "flatnessRequirement",
+        "batchQuantity",
+        "loadingSupport",
+        "coolingRequirement"
+      ],
+      "missingInputs": [
+        "materialFamily",
+        "materialGrade",
+        "supplyCondition",
+        "plateDimensions",
+        "flatnessRequirement",
+        "batchQuantity",
+        "loadingSupport",
+        "coolingRequirement"
+      ],
+      "assumptions": [
+        "工件名称只用于归类，不能单独确定唯一设备方向。"
+      ],
+      "evidenceRefs": [],
+      "candidateEvidenceRefs": [],
+      "loadingConstraints": {
+        "applicability": "applicable",
+        "verificationStatus": "baseline_inference",
+        "allowedOrientations": [],
+        "preferredOrientations": [],
+        "prohibitedOrientations": [],
+        "supportAndFixture": {
+          "requirements": [],
+          "notes": []
+        },
+        "stacking": {
+          "allowed": null,
+          "conditions": []
+        },
+        "spacing": {
+          "value": null,
+          "unit": null,
+          "conditions": []
+        },
+        "batchMode": {
+          "modes": [],
+          "conditions": []
+        },
+        "batchQuantityOrWeight": {
+          "quantity": null,
+          "weight": null,
+          "unit": null,
+          "conditions": []
+        },
+        "conveyance": {
+          "modeCandidates": [
+            "trolley",
+            "chamber"
+          ],
+          "conditions": []
+        },
+        "rotation": {
+          "required": null,
+          "conditions": []
+        },
+        "transfer": {
+          "required": null,
+          "conditions": []
+        },
+        "quenchEntry": {
+          "required": null,
+          "conditions": []
+        },
+        "requiredInputs": [
+          "dimensions",
+          "weight",
+          "batchQuantity",
+          "loadingOrientation"
+        ],
+        "assumptions": [
+          "conveyance.modeCandidates 迁移自旧 requiredCapabilities.loadingMethods，仅作待核实候选。"
+        ],
+        "evidenceRefs": [],
+        "missingFields": [
+          "allowedOrientations",
+          "preferredOrientations",
+          "prohibitedOrientations",
+          "supportAndFixture",
+          "stacking",
+          "spacing",
+          "batchMode",
+          "batchQuantityOrWeight",
+          "rotation"
+        ],
+        "notApplicableReason": null
+      },
+      "industryDirections": []
+    },
+    {
+      "id": "wear-plate-quench-review",
+      "workpieceIds": [
+        "wear-resistant-steel-plate"
+      ],
+      "logicUnitId": "plate_batch",
+      "label": "耐磨钢板淬火与板形控制",
+      "processStage": "requires_confirmation",
+      "supportStatus": "review",
+      "statusReason": "属于冷却与板形控制专线，不能由普通台车炉白名单自动通过",
+      "customerNote": "耐磨板淬火需同时控制冷却和板形，请提供钢种、板厚与平整度要求。",
+      "requiredCapabilities": {
+        "cooling": [
+          "plate_quench"
+        ],
+        "flatnessControl": true
+      },
+      "reviewed": true,
+      "reviewVersion": "v2-content-baseline",
+      "processVariants": [
+        {
+          "id": "quench-temper",
+          "label": "淬火与回火",
+          "processIds": [
+            "quenching",
+            "tempering"
+          ],
+          "requirements": {
+            "cooling": [
+              "plate_quench"
+            ],
+            "flatnessControl": true
+          },
+          "processPurposeId": "quench-temper",
+          "processConcept": "treatment_purpose"
+        }
+      ],
+      "routeId": "wear-plate-quench-review",
+      "processPurposeId": null,
+      "purposeSelectionRequired": true,
+      "baselineEvidenceStatus": "unverified",
+      "processBoundary": "overall_furnace_treatment",
+      "moduleDisposition": "in_scope",
+      "companyCapabilityStatus": "unknown",
+      "requiredInputs": [
+        "materialFamily",
+        "materialGrade",
+        "supplyCondition",
+        "plateDimensions",
+        "flatnessRequirement",
+        "batchQuantity",
+        "loadingSupport",
+        "coolingRequirement"
+      ],
+      "missingInputs": [
+        "materialFamily",
+        "materialGrade",
+        "supplyCondition",
+        "plateDimensions",
+        "flatnessRequirement",
+        "batchQuantity",
+        "loadingSupport",
+        "coolingRequirement"
+      ],
+      "assumptions": [
+        "工件名称只用于归类，不能单独确定唯一设备方向。"
+      ],
+      "evidenceRefs": [],
+      "candidateEvidenceRefs": [],
+      "loadingConstraints": {
+        "applicability": "applicable",
+        "verificationStatus": "unverified",
+        "allowedOrientations": [],
+        "preferredOrientations": [],
+        "prohibitedOrientations": [],
+        "supportAndFixture": {
+          "requirements": [],
+          "notes": []
+        },
+        "stacking": {
+          "allowed": null,
+          "conditions": []
+        },
+        "spacing": {
+          "value": null,
+          "unit": null,
+          "conditions": []
+        },
+        "batchMode": {
+          "modes": [],
+          "conditions": []
+        },
+        "batchQuantityOrWeight": {
+          "quantity": null,
+          "weight": null,
+          "unit": null,
+          "conditions": []
+        },
+        "conveyance": {
+          "modeCandidates": [],
+          "conditions": []
+        },
+        "rotation": {
+          "required": null,
+          "conditions": []
+        },
+        "transfer": {
+          "required": null,
+          "conditions": []
+        },
+        "quenchEntry": {
+          "required": null,
+          "conditions": []
+        },
+        "requiredInputs": [
+          "dimensions",
+          "weight",
+          "batchQuantity",
+          "loadingOrientation",
+          "coolingRequirement",
+          "transferRequirement"
+        ],
+        "assumptions": [],
+        "evidenceRefs": [],
+        "missingFields": [
+          "allowedOrientations",
+          "preferredOrientations",
+          "prohibitedOrientations",
+          "supportAndFixture",
+          "stacking",
+          "spacing",
+          "batchMode",
+          "batchQuantityOrWeight",
+          "rotation",
+          "conveyance",
+          "transfer",
+          "quenchEntry"
+        ],
+        "notApplicableReason": null
+      },
+      "industryDirections": []
+    },
+    {
+      "id": "stainless-plate-solution-review",
+      "workpieceIds": [
+        "stainless-steel-plate"
+      ],
+      "logicUnitId": "stainless_plate_solution",
+      "label": "不锈钢板固溶与表面控制",
+      "processStage": "requires_confirmation",
+      "supportStatus": "review",
+      "statusReason": "表面、气氛和快速冷却能力未确认前不显示具体设备",
+      "customerNote": "不锈钢板固溶需结合牌号、尺寸、表面和冷却要求判断。",
+      "requiredCapabilities": {},
+      "reviewed": true,
+      "reviewVersion": "v2-content-baseline",
+      "processVariants": [
+        {
+          "id": "solution-treatment",
+          "label": "固溶处理",
+          "processIds": [
+            "solution_treatment"
+          ],
+          "requirements": {
+            "cooling": [
+              "solution_quench"
+            ]
+          },
+          "processPurposeId": "solution-treatment",
+          "processConcept": "treatment_purpose"
+        }
+      ],
+      "routeId": "stainless-plate-solution-review",
+      "processPurposeId": null,
+      "purposeSelectionRequired": true,
+      "baselineEvidenceStatus": "partially_verified",
+      "processBoundary": "overall_furnace_treatment",
+      "moduleDisposition": "in_scope",
+      "companyCapabilityStatus": "unknown",
+      "requiredInputs": [
+        "microstructureType",
+        "materialGrade",
+        "supplyCondition",
+        "serviceRequirement",
+        "plateDimensions",
+        "surfaceRequirement",
+        "atmosphereRequirement",
+        "coolingRequirement",
+        "processPurposeId"
+      ],
+      "missingInputs": [
+        "microstructureType",
+        "materialGrade",
+        "supplyCondition",
+        "serviceRequirement",
+        "plateDimensions",
+        "surfaceRequirement",
+        "atmosphereRequirement",
+        "coolingRequirement",
+        "processPurposeId"
+      ],
+      "assumptions": [
+        "不锈钢板名称不能直接推断固溶处理，必须结合组织类型、牌号、供货状态和使用要求。"
+      ],
+      "evidenceRefs": [],
+      "candidateEvidenceRefs": [
+        "std-gbt-39191-2020"
+      ],
+      "loadingConstraints": {
+        "applicability": "applicable",
+        "verificationStatus": "unverified",
+        "allowedOrientations": [],
+        "preferredOrientations": [],
+        "prohibitedOrientations": [],
+        "supportAndFixture": {
+          "requirements": [],
+          "notes": []
+        },
+        "stacking": {
+          "allowed": null,
+          "conditions": []
+        },
+        "spacing": {
+          "value": null,
+          "unit": null,
+          "conditions": []
+        },
+        "batchMode": {
+          "modes": [],
+          "conditions": []
+        },
+        "batchQuantityOrWeight": {
+          "quantity": null,
+          "weight": null,
+          "unit": null,
+          "conditions": []
+        },
+        "conveyance": {
+          "modeCandidates": [],
+          "conditions": []
+        },
+        "rotation": {
+          "required": null,
+          "conditions": []
+        },
+        "transfer": {
+          "required": null,
+          "conditions": []
+        },
+        "quenchEntry": {
+          "required": null,
+          "conditions": []
+        },
+        "requiredInputs": [
+          "dimensions",
+          "weight",
+          "batchQuantity",
+          "loadingOrientation",
+          "coolingRequirement",
+          "transferRequirement"
+        ],
+        "assumptions": [],
+        "evidenceRefs": [],
+        "missingFields": [
+          "allowedOrientations",
+          "preferredOrientations",
+          "prohibitedOrientations",
+          "supportAndFixture",
+          "stacking",
+          "spacing",
+          "batchMode",
+          "batchQuantityOrWeight",
+          "rotation",
+          "conveyance",
+          "transfer",
+          "quenchEntry"
+        ],
+        "notApplicableReason": null
+      },
+      "industryDirections": []
+    },
+    {
+      "id": "aluminum-plate-anneal-aging",
+      "workpieceIds": [
+        "aluminum-alloy-plate"
+      ],
+      "logicUnitId": "plate_batch",
+      "label": "铝板退火 / 人工时效",
+      "processStage": "final_furnace_treatment",
+      "supportStatus": "review",
+      "statusReason": "待按合金状态、板形、装炉与温度均匀性确认",
+      "customerNote": "请说明合金状态、板材尺寸、装炉量及目标退火或时效制度。",
+      "requiredCapabilities": {
+        "productionModes": [
+          "batch"
+        ]
+      },
+      "reviewed": true,
+      "reviewVersion": "v2-content-baseline",
+      "processVariants": [
+        {
+          "id": "annealing",
+          "label": "退火",
+          "processIds": [
+            "annealing"
+          ],
+          "requirements": {},
+          "processPurposeId": "annealing",
+          "processConcept": "treatment_purpose"
+        },
+        {
+          "id": "artificial-aging",
+          "label": "人工时效",
+          "processIds": [
+            "artificial_aging"
+          ],
+          "requirements": {},
+          "processPurposeId": "artificial-aging",
+          "processConcept": "treatment_purpose"
+        }
+      ],
+      "routeId": "aluminum-plate-anneal-aging",
+      "processPurposeId": null,
+      "purposeSelectionRequired": true,
+      "baselineEvidenceStatus": "unverified",
+      "processBoundary": "overall_furnace_treatment",
+      "moduleDisposition": "in_scope",
+      "companyCapabilityStatus": "unknown",
+      "requiredInputs": [
+        "materialFamily",
+        "materialGrade",
+        "supplyCondition",
+        "plateDimensions",
+        "flatnessRequirement",
+        "batchQuantity",
+        "loadingSupport",
+        "coolingRequirement"
+      ],
+      "missingInputs": [
+        "materialFamily",
+        "materialGrade",
+        "supplyCondition",
+        "plateDimensions",
+        "flatnessRequirement",
+        "batchQuantity",
+        "loadingSupport",
+        "coolingRequirement"
+      ],
+      "assumptions": [
+        "工件名称只用于归类，不能单独确定唯一设备方向。"
+      ],
+      "evidenceRefs": [],
+      "candidateEvidenceRefs": [],
+      "loadingConstraints": {
+        "applicability": "applicable",
+        "verificationStatus": "unverified",
+        "allowedOrientations": [],
+        "preferredOrientations": [],
+        "prohibitedOrientations": [],
+        "supportAndFixture": {
+          "requirements": [],
+          "notes": []
+        },
+        "stacking": {
+          "allowed": null,
+          "conditions": []
+        },
+        "spacing": {
+          "value": null,
+          "unit": null,
+          "conditions": []
+        },
+        "batchMode": {
+          "modes": [],
+          "conditions": []
+        },
+        "batchQuantityOrWeight": {
+          "quantity": null,
+          "weight": null,
+          "unit": null,
+          "conditions": []
+        },
+        "conveyance": {
+          "modeCandidates": [],
+          "conditions": []
+        },
+        "rotation": {
+          "required": null,
+          "conditions": []
+        },
+        "transfer": {
+          "required": null,
+          "conditions": []
+        },
+        "quenchEntry": {
+          "required": null,
+          "conditions": []
+        },
+        "requiredInputs": [
+          "dimensions",
+          "weight",
+          "batchQuantity",
+          "loadingOrientation"
+        ],
+        "assumptions": [],
+        "evidenceRefs": [],
+        "missingFields": [
+          "allowedOrientations",
+          "preferredOrientations",
+          "prohibitedOrientations",
+          "supportAndFixture",
+          "stacking",
+          "spacing",
+          "batchMode",
+          "batchQuantityOrWeight",
+          "rotation",
+          "conveyance"
+        ],
+        "notApplicableReason": null
+      },
+      "industryDirections": []
+    },
+    {
+      "id": "aluminum-plate-solution-quench-review",
+      "workpieceIds": [
+        "aluminum-alloy-plate"
+      ],
+      "logicUnitId": "plate_batch",
+      "label": "铝板固溶与快速淬火",
+      "processStage": "requires_confirmation",
+      "supportStatus": "review",
+      "statusReason": "必须具备快速转移、淬火和板形控制，不能由普通批次炉自动通过",
+      "customerNote": "铝板固溶淬火需确认转移时间、冷却和板形要求。",
+      "requiredCapabilities": {
+        "cooling": [
+          "solution_quench"
+        ],
+        "fastTransfer": true,
+        "flatnessControl": true
+      },
+      "reviewed": true,
+      "reviewVersion": "v2-content-baseline",
+      "processVariants": [
+        {
+          "id": "solution-quench",
+          "label": "固溶处理与淬火转移",
+          "processIds": [
+            "solution_treatment",
+            "quench_transfer"
+          ],
+          "requirements": {
+            "cooling": [
+              "solution_quench"
+            ],
+            "fastTransfer": true,
+            "flatnessControl": true
+          },
+          "processPurposeId": "solution-quench",
+          "processConcept": "treatment_purpose"
+        }
+      ],
+      "routeId": "aluminum-plate-solution-quench-review",
+      "processPurposeId": null,
+      "purposeSelectionRequired": true,
+      "baselineEvidenceStatus": "unverified",
+      "processBoundary": "overall_furnace_treatment",
+      "moduleDisposition": "in_scope",
+      "companyCapabilityStatus": "unknown",
+      "requiredInputs": [
+        "materialFamily",
+        "materialGrade",
+        "supplyCondition",
+        "plateDimensions",
+        "flatnessRequirement",
+        "batchQuantity",
+        "loadingSupport",
+        "coolingRequirement",
+        "transferRequirement"
+      ],
+      "missingInputs": [
+        "materialFamily",
+        "materialGrade",
+        "supplyCondition",
+        "plateDimensions",
+        "flatnessRequirement",
+        "batchQuantity",
+        "loadingSupport",
+        "coolingRequirement",
+        "transferRequirement"
+      ],
+      "assumptions": [
+        "工件名称只用于归类，不能单独确定唯一设备方向。"
+      ],
+      "evidenceRefs": [],
+      "candidateEvidenceRefs": [],
+      "loadingConstraints": {
+        "applicability": "applicable",
+        "verificationStatus": "unverified",
+        "allowedOrientations": [],
+        "preferredOrientations": [],
+        "prohibitedOrientations": [],
+        "supportAndFixture": {
+          "requirements": [],
+          "notes": []
+        },
+        "stacking": {
+          "allowed": null,
+          "conditions": []
+        },
+        "spacing": {
+          "value": null,
+          "unit": null,
+          "conditions": []
+        },
+        "batchMode": {
+          "modes": [],
+          "conditions": []
+        },
+        "batchQuantityOrWeight": {
+          "quantity": null,
+          "weight": null,
+          "unit": null,
+          "conditions": []
+        },
+        "conveyance": {
+          "modeCandidates": [],
+          "conditions": []
+        },
+        "rotation": {
+          "required": null,
+          "conditions": []
+        },
+        "transfer": {
+          "required": null,
+          "conditions": []
+        },
+        "quenchEntry": {
+          "required": null,
+          "conditions": []
+        },
+        "requiredInputs": [
+          "dimensions",
+          "weight",
+          "batchQuantity",
+          "loadingOrientation",
+          "coolingRequirement",
+          "transferRequirement"
+        ],
+        "assumptions": [],
+        "evidenceRefs": [],
+        "missingFields": [
+          "allowedOrientations",
+          "preferredOrientations",
+          "prohibitedOrientations",
+          "supportAndFixture",
+          "stacking",
+          "spacing",
+          "batchMode",
+          "batchQuantityOrWeight",
+          "rotation",
+          "conveyance",
+          "transfer",
+          "quenchEntry"
+        ],
+        "notApplicableReason": null
+      },
+      "industryDirections": []
+    },
+    {
+      "id": "coil-professional-line-review",
+      "workpieceIds": [
+        "aluminum-coil",
+        "carbon-steel-coil"
+      ],
+      "logicUnitId": "strip_coil_professional",
+      "label": "成卷退火或展开连续处理",
+      "processStage": "requires_confirmation",
+      "supportStatus": "review",
+      "statusReason": "罩式、保护气氛或连续带材线属于专业能力，未确认前不显示设备名",
+      "customerNote": "卷材请说明材料、带宽、卷重、表面要求及计划成卷或展开处理。",
+      "requiredCapabilities": {
+        "productionModes": [
+          "batch",
+          "continuous"
+        ],
+        "loadingMethods": [
+          "bell",
+          "roller"
+        ],
+        "atmosphere": [
+          "protective",
+          "bright"
+        ]
+      },
+      "reviewed": true,
+      "reviewVersion": "v2-content-baseline",
+      "processVariants": [
+        {
+          "id": "coil-annealing",
+          "label": "成卷退火",
+          "processIds": [
+            "coil_annealing"
+          ],
+          "requirements": {
+            "productionModes": [
+              "batch"
+            ],
+            "loadingMethods": [
+              "bell"
+            ],
+            "atmosphere": [
+              "protective"
+            ]
+          },
+          "processPurposeId": "coil-annealing",
+          "processConcept": "treatment_purpose"
+        },
+        {
+          "id": "continuous-annealing",
+          "label": "展开连续退火",
+          "processIds": [
+            "continuous_annealing"
+          ],
+          "requirements": {
+            "productionModes": [
+              "continuous"
+            ],
+            "loadingMethods": [
+              "roller"
+            ],
+            "atmosphere": [
+              "protective",
+              "bright"
+            ]
+          },
+          "processPurposeId": "continuous-annealing",
+          "processConcept": "treatment_purpose"
+        }
+      ],
+      "routeId": "coil-professional-line-review",
+      "processPurposeId": null,
+      "purposeSelectionRequired": true,
+      "baselineEvidenceStatus": "unverified",
+      "processBoundary": "overall_furnace_treatment",
+      "moduleDisposition": "in_scope",
+      "companyCapabilityStatus": "unknown",
+      "requiredInputs": [
+        "materialFamily",
+        "materialGrade",
+        "coilDiameter",
+        "coilWidth",
+        "coilWeight",
+        "batchOrContinuous",
+        "stackingPermission",
+        "atmosphereRequirement",
+        "productionRhythm"
+      ],
+      "missingInputs": [
+        "materialFamily",
+        "materialGrade",
+        "coilDiameter",
+        "coilWidth",
+        "coilWeight",
+        "batchOrContinuous",
+        "stackingPermission",
+        "atmosphereRequirement",
+        "productionRhythm"
+      ],
+      "assumptions": [
+        "工件名称只用于归类，不能单独确定唯一设备方向。"
+      ],
+      "evidenceRefs": [],
+      "candidateEvidenceRefs": [],
+      "loadingConstraints": {
+        "applicability": "applicable",
+        "verificationStatus": "baseline_inference",
+        "allowedOrientations": [],
+        "preferredOrientations": [],
+        "prohibitedOrientations": [],
+        "supportAndFixture": {
+          "requirements": [],
+          "notes": []
+        },
+        "stacking": {
+          "allowed": null,
+          "conditions": []
+        },
+        "spacing": {
+          "value": null,
+          "unit": null,
+          "conditions": []
+        },
+        "batchMode": {
+          "modes": [],
+          "conditions": []
+        },
+        "batchQuantityOrWeight": {
+          "quantity": null,
+          "weight": null,
+          "unit": null,
+          "conditions": []
+        },
+        "conveyance": {
+          "modeCandidates": [
+            "bell",
+            "roller"
+          ],
+          "conditions": []
+        },
+        "rotation": {
+          "required": null,
+          "conditions": []
+        },
+        "transfer": {
+          "required": null,
+          "conditions": []
+        },
+        "quenchEntry": {
+          "required": null,
+          "conditions": []
+        },
+        "requiredInputs": [
+          "dimensions",
+          "weight",
+          "batchQuantity",
+          "loadingOrientation"
+        ],
+        "assumptions": [
+          "conveyance.modeCandidates 迁移自旧 requiredCapabilities.loadingMethods，仅作待核实候选。"
+        ],
+        "evidenceRefs": [],
+        "missingFields": [
+          "allowedOrientations",
+          "preferredOrientations",
+          "prohibitedOrientations",
+          "supportAndFixture",
+          "stacking",
+          "spacing",
+          "batchMode",
+          "batchQuantityOrWeight",
+          "rotation"
+        ],
+        "notApplicableReason": null
+      },
+      "industryDirections": []
+    },
+    {
+      "id": "long-products-whole-furnace-treatment",
+      "workpieceIds": [
+        "seamless-steel-pipe",
+        "welded-steel-pipe",
+        "round-steel-bar",
+        "structural-section-steel"
+      ],
+      "logicUnitId": "long_products",
+      "label": "整管 / 整棒 / 型钢炉内处理",
+      "processStage": "final_furnace_treatment",
+      "supportStatus": "review",
+      "statusReason": "待按材质、截面、长度、线速度和整体处理目标确认",
+      "customerNote": "请提供材质、截面、长度、班产量和整体处理目的。",
+      "requiredCapabilities": {
+        "productionModes": [
+          "continuous",
+          "batch"
+        ],
+        "loadingMethods": [
+          "roller",
+          "trolley",
+          "chamber"
+        ]
+      },
+      "reviewed": true,
+      "reviewVersion": "v2-content-baseline",
+      "processVariants": [
+        {
+          "id": "normalizing",
+          "label": "正火",
+          "processIds": [
+            "normalizing"
+          ],
+          "requirements": {},
+          "processPurposeId": "normalizing",
+          "processConcept": "treatment_purpose"
+        },
+        {
+          "id": "annealing",
+          "label": "退火",
+          "processIds": [
+            "annealing"
+          ],
+          "requirements": {},
+          "processPurposeId": "annealing",
+          "processConcept": "treatment_purpose"
+        },
+        {
+          "id": "quench-temper",
+          "label": "调质",
+          "processIds": [
+            "quenching",
+            "tempering"
+          ],
+          "requirements": {
+            "cooling": [
+              "quench"
+            ]
+          },
+          "processPurposeId": "quench-temper",
+          "processConcept": "treatment_purpose"
+        }
+      ],
+      "routeId": "long-products-whole-furnace-treatment",
+      "processPurposeId": null,
+      "purposeSelectionRequired": true,
+      "baselineEvidenceStatus": "unverified",
+      "processBoundary": "overall_furnace_treatment",
+      "moduleDisposition": "in_scope",
+      "companyCapabilityStatus": "unknown",
+      "requiredInputs": [
+        "materialGrade",
+        "section",
+        "length",
+        "weight",
+        "batchQuantity",
+        "productionRhythm",
+        "loadingSupport",
+        "coolingRequirement"
+      ],
+      "missingInputs": [
+        "materialGrade",
+        "section",
+        "length",
+        "weight",
+        "batchQuantity",
+        "productionRhythm",
+        "loadingSupport",
+        "coolingRequirement"
+      ],
+      "assumptions": [
+        "工件名称只用于归类，不能单独确定唯一设备方向。"
+      ],
+      "evidenceRefs": [],
+      "candidateEvidenceRefs": [],
+      "loadingConstraints": {
+        "applicability": "applicable",
+        "verificationStatus": "baseline_inference",
+        "allowedOrientations": [],
+        "preferredOrientations": [],
+        "prohibitedOrientations": [],
+        "supportAndFixture": {
+          "requirements": [],
+          "notes": []
+        },
+        "stacking": {
+          "allowed": null,
+          "conditions": []
+        },
+        "spacing": {
+          "value": null,
+          "unit": null,
+          "conditions": []
+        },
+        "batchMode": {
+          "modes": [],
+          "conditions": []
+        },
+        "batchQuantityOrWeight": {
+          "quantity": null,
+          "weight": null,
+          "unit": null,
+          "conditions": []
+        },
+        "conveyance": {
+          "modeCandidates": [
+            "roller",
+            "trolley",
+            "chamber"
+          ],
+          "conditions": []
+        },
+        "rotation": {
+          "required": null,
+          "conditions": []
+        },
+        "transfer": {
+          "required": null,
+          "conditions": []
+        },
+        "quenchEntry": {
+          "required": null,
+          "conditions": []
+        },
+        "requiredInputs": [
+          "dimensions",
+          "weight",
+          "batchQuantity",
+          "loadingOrientation",
+          "coolingRequirement",
+          "transferRequirement"
+        ],
+        "assumptions": [
+          "conveyance.modeCandidates 迁移自旧 requiredCapabilities.loadingMethods，仅作待核实候选。"
+        ],
+        "evidenceRefs": [],
+        "missingFields": [
+          "allowedOrientations",
+          "preferredOrientations",
+          "prohibitedOrientations",
+          "supportAndFixture",
+          "stacking",
+          "spacing",
+          "batchMode",
+          "batchQuantityOrWeight",
+          "rotation",
+          "transfer",
+          "quenchEntry"
+        ],
+        "notApplicableReason": null
+      },
+      "industryDirections": []
+    },
+    {
+      "id": "welded-pipe-local-seam-treatment-external",
+      "workpieceIds": [
+        "welded-steel-pipe"
+      ],
+      "logicUnitId": "long_products",
+      "label": "在线局部焊缝热处理",
+      "processStage": "requires_external_induction",
+      "supportStatus": "unsupported",
+      "statusReason": "局部焊缝在线处理不能自动映射到整管炉内设备",
+      "customerNote": "在线焊缝局部处理需单独确认；本页可先判断整管炉内处理需求。",
+      "requiredCapabilities": {},
+      "reviewed": true,
+      "reviewVersion": "v2-content-baseline",
+      "processVariants": [
+        {
+          "id": "local-weld-seam-treatment",
+          "label": "在线局部焊缝热处理",
+          "processIds": [
+            "local_weld_seam_treatment"
+          ],
+          "requirements": {},
+          "processPurposeId": "local-weld-seam-treatment",
+          "processConcept": "treatment_purpose"
+        }
+      ],
+      "routeId": "welded-pipe-local-seam-treatment-external",
+      "processPurposeId": null,
+      "purposeSelectionRequired": true,
+      "baselineEvidenceStatus": "unverified",
+      "processBoundary": "local_treatment",
+      "moduleDisposition": "outside_furnace_module",
+      "companyCapabilityStatus": "unknown",
+      "requiredInputs": [
+        "materialGrade",
+        "section",
+        "length",
+        "weight",
+        "batchQuantity",
+        "productionRhythm",
+        "loadingSupport",
+        "coolingRequirement",
+        "treatmentArea",
+        "localTreatmentMethod",
+        "targetHardness",
+        "effectiveHardenedDepth"
+      ],
+      "missingInputs": [
+        "materialGrade",
+        "section",
+        "length",
+        "weight",
+        "batchQuantity",
+        "productionRhythm",
+        "loadingSupport",
+        "coolingRequirement",
+        "treatmentArea",
+        "localTreatmentMethod",
+        "targetHardness",
+        "effectiveHardenedDepth"
+      ],
+      "assumptions": [
+        "工件名称只用于归类，不能单独确定唯一设备方向。"
+      ],
+      "evidenceRefs": [],
+      "candidateEvidenceRefs": [],
+      "loadingConstraints": {
+        "applicability": "not_applicable",
+        "verificationStatus": "unverified",
+        "allowedOrientations": [],
+        "preferredOrientations": [],
+        "prohibitedOrientations": [],
+        "supportAndFixture": {
+          "requirements": [],
+          "notes": []
+        },
+        "stacking": {
+          "allowed": null,
+          "conditions": []
+        },
+        "spacing": {
+          "value": null,
+          "unit": null,
+          "conditions": []
+        },
+        "batchMode": {
+          "modes": [],
+          "conditions": []
+        },
+        "batchQuantityOrWeight": {
+          "quantity": null,
+          "weight": null,
+          "unit": null,
+          "conditions": []
+        },
+        "conveyance": {
+          "modeCandidates": [],
+          "conditions": []
+        },
+        "rotation": {
+          "required": null,
+          "conditions": []
+        },
+        "transfer": {
+          "required": null,
+          "conditions": []
+        },
+        "quenchEntry": {
+          "required": null,
+          "conditions": []
+        },
+        "requiredInputs": [
+          "treatmentArea",
+          "localTreatmentMethod",
+          "partDimensions"
+        ],
+        "assumptions": [],
+        "evidenceRefs": [],
+        "missingFields": [],
+        "notApplicableReason": "局部处理路线不继承整体炉内装炉约束，需由对应局部处理工艺单独定义。"
+      },
+      "industryDirections": [],
+      "legacySupportStatusMeaning": "旧 supportStatus 仅维持第1批页面兼容；不得解释为苏能不承接，企业能力状态以 companyCapabilityStatus 为准。"
+    },
+    {
+      "id": "coiled-wire-protective-anneal-review",
+      "workpieceIds": [
+        "wire-rod-coil",
+        "steel-wire-coil"
+      ],
+      "logicUnitId": "coiled_wire",
+      "label": "成卷球化 / 再结晶 / 去应力退火",
+      "processStage": "requires_confirmation",
+      "supportStatus": "review",
+      "statusReason": "保护气氛、卷重、堆叠与炉内循环未确认前不显示井式或罩式设备名",
+      "customerNote": "请提供材料、线径、卷径卷重、表面及气氛要求。",
+      "requiredCapabilities": {
+        "productionModes": [
+          "batch"
+        ],
+        "loadingMethods": [
+          "vertical",
+          "bell"
+        ],
+        "atmosphere": [
+          "protective"
+        ]
+      },
+      "reviewed": true,
+      "reviewVersion": "v2-content-baseline",
+      "processVariants": [
+        {
+          "id": "spheroidizing-annealing",
+          "label": "球化退火",
+          "processIds": [
+            "spheroidizing_annealing"
+          ],
+          "requirements": {},
+          "processPurposeId": "spheroidizing-annealing",
+          "processConcept": "treatment_purpose"
+        },
+        {
+          "id": "recrystallization-annealing",
+          "label": "再结晶退火",
+          "processIds": [
+            "recrystallization_annealing"
+          ],
+          "requirements": {},
+          "processPurposeId": "recrystallization-annealing",
+          "processConcept": "treatment_purpose"
+        },
+        {
+          "id": "stress-relief",
+          "label": "去应力退火",
+          "processIds": [
+            "stress_relief_annealing"
+          ],
+          "requirements": {},
+          "processPurposeId": "stress-relief",
+          "processConcept": "treatment_purpose"
+        }
+      ],
+      "routeId": "coiled-wire-protective-anneal-review",
+      "processPurposeId": null,
+      "purposeSelectionRequired": true,
+      "baselineEvidenceStatus": "unverified",
+      "processBoundary": "overall_furnace_treatment",
+      "moduleDisposition": "in_scope",
+      "companyCapabilityStatus": "unknown",
+      "requiredInputs": [
+        "materialGrade",
+        "wireDiameter",
+        "coilDiameter",
+        "coilWeight",
+        "stackingPermission",
+        "atmosphereRequirement",
+        "batchQuantity",
+        "productionRhythm"
+      ],
+      "missingInputs": [
+        "materialGrade",
+        "wireDiameter",
+        "coilDiameter",
+        "coilWeight",
+        "stackingPermission",
+        "atmosphereRequirement",
+        "batchQuantity",
+        "productionRhythm"
+      ],
+      "assumptions": [
+        "工件名称只用于归类，不能单独确定唯一设备方向。"
+      ],
+      "evidenceRefs": [],
+      "candidateEvidenceRefs": [],
+      "loadingConstraints": {
+        "applicability": "applicable",
+        "verificationStatus": "baseline_inference",
+        "allowedOrientations": [],
+        "preferredOrientations": [],
+        "prohibitedOrientations": [],
+        "supportAndFixture": {
+          "requirements": [],
+          "notes": []
+        },
+        "stacking": {
+          "allowed": null,
+          "conditions": []
+        },
+        "spacing": {
+          "value": null,
+          "unit": null,
+          "conditions": []
+        },
+        "batchMode": {
+          "modes": [],
+          "conditions": []
+        },
+        "batchQuantityOrWeight": {
+          "quantity": null,
+          "weight": null,
+          "unit": null,
+          "conditions": []
+        },
+        "conveyance": {
+          "modeCandidates": [
+            "vertical",
+            "bell"
+          ],
+          "conditions": []
+        },
+        "rotation": {
+          "required": null,
+          "conditions": []
+        },
+        "transfer": {
+          "required": null,
+          "conditions": []
+        },
+        "quenchEntry": {
+          "required": null,
+          "conditions": []
+        },
+        "requiredInputs": [
+          "dimensions",
+          "weight",
+          "batchQuantity",
+          "loadingOrientation"
+        ],
+        "assumptions": [
+          "conveyance.modeCandidates 迁移自旧 requiredCapabilities.loadingMethods，仅作待核实候选。"
+        ],
+        "evidenceRefs": [],
+        "missingFields": [
+          "allowedOrientations",
+          "preferredOrientations",
+          "prohibitedOrientations",
+          "supportAndFixture",
+          "stacking",
+          "spacing",
+          "batchMode",
+          "batchQuantityOrWeight",
+          "rotation"
+        ],
+        "notApplicableReason": null
+      },
+      "industryDirections": []
+    },
+    {
+      "id": "fastener-quench-temper",
+      "workpieceIds": [
+        "high-strength-bolts",
+        "hex-nuts",
+        "steel-pins",
+        "chain-components"
+      ],
+      "logicUnitId": "fastener_continuous",
+      "label": "小件整体淬火与回火",
+      "processStage": "final_furnace_treatment",
+      "supportStatus": "review",
+      "statusReason": "不因高强或小件自动判断气氛和设备，待按材质、强度、零件部位与批量确认",
+      "customerNote": "请说明材料、强度等级、规格、批量和整体淬火回火要求。",
+      "requiredCapabilities": {
+        "productionModes": [
+          "continuous",
+          "batch"
+        ],
+        "cooling": [
+          "quench"
+        ]
+      },
+      "reviewed": true,
+      "reviewVersion": "v2-content-baseline",
+      "processVariants": [
+        {
+          "id": "quench-temper",
+          "label": "淬火与回火",
+          "processIds": [
+            "quenching",
+            "tempering"
+          ],
+          "requirements": {
+            "cooling": [
+              "quench"
+            ]
+          },
+          "processPurposeId": "quench-temper",
+          "processConcept": "treatment_purpose"
+        }
+      ],
+      "routeId": "fastener-quench-temper",
+      "processPurposeId": null,
+      "purposeSelectionRequired": true,
+      "baselineEvidenceStatus": "unverified",
+      "processBoundary": "overall_furnace_treatment",
+      "moduleDisposition": "in_scope",
+      "companyCapabilityStatus": "unknown",
+      "requiredInputs": [
+        "materialGrade",
+        "strengthGrade",
+        "partDimensions",
+        "partShape",
+        "adhesionRisk",
+        "accumulationPermission",
+        "atmosphereRequirement",
+        "coolingRequirement",
+        "batchQuantity",
+        "productionRhythm"
+      ],
+      "missingInputs": [
+        "materialGrade",
+        "strengthGrade",
+        "partDimensions",
+        "partShape",
+        "adhesionRisk",
+        "accumulationPermission",
+        "atmosphereRequirement",
+        "coolingRequirement",
+        "batchQuantity",
+        "productionRhythm"
+      ],
+      "assumptions": [
+        "工件名称只用于归类，不能单独确定唯一设备方向。"
+      ],
+      "evidenceRefs": [],
+      "candidateEvidenceRefs": [],
+      "loadingConstraints": {
+        "applicability": "applicable",
+        "verificationStatus": "unverified",
+        "allowedOrientations": [],
+        "preferredOrientations": [],
+        "prohibitedOrientations": [],
+        "supportAndFixture": {
+          "requirements": [],
+          "notes": []
+        },
+        "stacking": {
+          "allowed": null,
+          "conditions": []
+        },
+        "spacing": {
+          "value": null,
+          "unit": null,
+          "conditions": []
+        },
+        "batchMode": {
+          "modes": [],
+          "conditions": []
+        },
+        "batchQuantityOrWeight": {
+          "quantity": null,
+          "weight": null,
+          "unit": null,
+          "conditions": []
+        },
+        "conveyance": {
+          "modeCandidates": [],
+          "conditions": []
+        },
+        "rotation": {
+          "required": null,
+          "conditions": []
+        },
+        "transfer": {
+          "required": null,
+          "conditions": []
+        },
+        "quenchEntry": {
+          "required": null,
+          "conditions": []
+        },
+        "requiredInputs": [
+          "dimensions",
+          "weight",
+          "batchQuantity",
+          "loadingOrientation",
+          "coolingRequirement",
+          "transferRequirement"
+        ],
+        "assumptions": [],
+        "evidenceRefs": [],
+        "missingFields": [
+          "allowedOrientations",
+          "preferredOrientations",
+          "prohibitedOrientations",
+          "supportAndFixture",
+          "stacking",
+          "spacing",
+          "batchMode",
+          "batchQuantityOrWeight",
+          "rotation",
+          "conveyance",
+          "transfer",
+          "quenchEntry"
+        ],
+        "notApplicableReason": null
+      },
+      "industryDirections": []
+    },
+    {
+      "id": "small-parts-carburize-carbonitride-review",
+      "workpieceIds": [
+        "self-drilling-screws",
+        "steel-pins",
+        "chain-components"
+      ],
+      "logicUnitId": "carburizing_controlled_atmosphere",
+      "label": "小件渗碳 / 碳氮共渗",
+      "processStage": "requires_confirmation",
+      "supportStatus": "review",
+      "statusReason": "需先确认具体零件、材质、层深、气氛和淬火能力",
+      "customerNote": "请提供零件类型、材料、层深、气氛和批量要求。",
+      "requiredCapabilities": {
+        "atmosphere": [
+          "controlled"
+        ],
+        "cooling": [
+          "quench"
+        ],
+        "productionModes": [
+          "continuous",
+          "batch"
+        ]
+      },
+      "reviewed": true,
+      "reviewVersion": "v2-content-baseline",
+      "processVariants": [
+        {
+          "id": "carburizing",
+          "label": "渗碳",
+          "processIds": [
+            "carburizing"
+          ],
+          "requirements": {
+            "atmosphere": [
+              "controlled"
+            ],
+            "cooling": [
+              "quench"
+            ]
+          },
+          "processPurposeId": "carburizing",
+          "processConcept": "treatment_purpose"
+        },
+        {
+          "id": "carbonitriding",
+          "label": "碳氮共渗",
+          "processIds": [
+            "carbonitriding"
+          ],
+          "requirements": {
+            "atmosphere": [
+              "controlled"
+            ],
+            "cooling": [
+              "quench"
+            ]
+          },
+          "processPurposeId": "carbonitriding",
+          "processConcept": "treatment_purpose"
+        }
+      ],
+      "routeId": "small-parts-carburize-carbonitride-review",
+      "processPurposeId": null,
+      "purposeSelectionRequired": true,
+      "baselineEvidenceStatus": "unverified",
+      "processBoundary": "overall_furnace_treatment",
+      "moduleDisposition": "in_scope",
+      "companyCapabilityStatus": "unknown",
+      "requiredInputs": [
+        "materialGrade",
+        "dimensions",
+        "caseDepthRequirement",
+        "surfaceCarbonRequirement",
+        "atmosphereRequirement",
+        "coolingRequirement",
+        "batchQuantity",
+        "productionRhythm"
+      ],
+      "missingInputs": [
+        "materialGrade",
+        "dimensions",
+        "caseDepthRequirement",
+        "surfaceCarbonRequirement",
+        "atmosphereRequirement",
+        "coolingRequirement",
+        "batchQuantity",
+        "productionRhythm"
+      ],
+      "assumptions": [
+        "工件名称只用于归类，不能单独确定唯一设备方向。"
+      ],
+      "evidenceRefs": [],
+      "candidateEvidenceRefs": [],
+      "loadingConstraints": {
+        "applicability": "applicable",
+        "verificationStatus": "unverified",
+        "allowedOrientations": [],
+        "preferredOrientations": [],
+        "prohibitedOrientations": [],
+        "supportAndFixture": {
+          "requirements": [],
+          "notes": []
+        },
+        "stacking": {
+          "allowed": null,
+          "conditions": []
+        },
+        "spacing": {
+          "value": null,
+          "unit": null,
+          "conditions": []
+        },
+        "batchMode": {
+          "modes": [],
+          "conditions": []
+        },
+        "batchQuantityOrWeight": {
+          "quantity": null,
+          "weight": null,
+          "unit": null,
+          "conditions": []
+        },
+        "conveyance": {
+          "modeCandidates": [],
+          "conditions": []
+        },
+        "rotation": {
+          "required": null,
+          "conditions": []
+        },
+        "transfer": {
+          "required": null,
+          "conditions": []
+        },
+        "quenchEntry": {
+          "required": null,
+          "conditions": []
+        },
+        "requiredInputs": [
+          "dimensions",
+          "weight",
+          "batchQuantity",
+          "loadingOrientation",
+          "coolingRequirement",
+          "transferRequirement"
+        ],
+        "assumptions": [],
+        "evidenceRefs": [],
+        "missingFields": [
+          "allowedOrientations",
+          "preferredOrientations",
+          "prohibitedOrientations",
+          "supportAndFixture",
+          "stacking",
+          "spacing",
+          "batchMode",
+          "batchQuantityOrWeight",
+          "rotation",
+          "conveyance",
+          "transfer",
+          "quenchEntry"
+        ],
+        "notApplicableReason": null
+      },
+      "industryDirections": []
+    },
+    {
+      "id": "chain-component-selection-review",
+      "workpieceIds": [
+        "chain-components"
+      ],
+      "logicUnitId": "fastener_continuous",
+      "label": "先选择链板 / 销轴 / 套筒 / 滚子",
+      "confirmationReasonCode": "component_and_process_required",
+      "processStage": "requires_confirmation",
+      "supportStatus": "review",
+      "statusReason": "链条零件不能作为一个统一材料和工艺对象推荐设备",
+      "customerNote": "链板、销轴、套筒和滚子的工艺可能不同，请先选择具体零件。",
+      "requiredCapabilities": {},
+      "reviewed": true,
+      "reviewVersion": "v2-content-baseline",
+      "processVariants": [],
+      "routeId": "chain-component-selection-review",
+      "processPurposeId": null,
+      "purposeSelectionRequired": true,
+      "baselineEvidenceStatus": "unverified",
+      "processBoundary": "overall_furnace_treatment",
+      "moduleDisposition": "in_scope",
+      "companyCapabilityStatus": "unknown",
+      "requiredInputs": [
+        "materialGrade",
+        "strengthGrade",
+        "partDimensions",
+        "partShape",
+        "adhesionRisk",
+        "accumulationPermission",
+        "atmosphereRequirement",
+        "coolingRequirement",
+        "batchQuantity",
+        "productionRhythm"
+      ],
+      "missingInputs": [
+        "materialGrade",
+        "strengthGrade",
+        "partDimensions",
+        "partShape",
+        "adhesionRisk",
+        "accumulationPermission",
+        "atmosphereRequirement",
+        "coolingRequirement",
+        "batchQuantity",
+        "productionRhythm"
+      ],
+      "assumptions": [
+        "工件名称只用于归类，不能单独确定唯一设备方向。"
+      ],
+      "evidenceRefs": [],
+      "candidateEvidenceRefs": [],
+      "loadingConstraints": {
+        "applicability": "applicable",
+        "verificationStatus": "unverified",
+        "allowedOrientations": [],
+        "preferredOrientations": [],
+        "prohibitedOrientations": [],
+        "supportAndFixture": {
+          "requirements": [],
+          "notes": []
+        },
+        "stacking": {
+          "allowed": null,
+          "conditions": []
+        },
+        "spacing": {
+          "value": null,
+          "unit": null,
+          "conditions": []
+        },
+        "batchMode": {
+          "modes": [],
+          "conditions": []
+        },
+        "batchQuantityOrWeight": {
+          "quantity": null,
+          "weight": null,
+          "unit": null,
+          "conditions": []
+        },
+        "conveyance": {
+          "modeCandidates": [],
+          "conditions": []
+        },
+        "rotation": {
+          "required": null,
+          "conditions": []
+        },
+        "transfer": {
+          "required": null,
+          "conditions": []
+        },
+        "quenchEntry": {
+          "required": null,
+          "conditions": []
+        },
+        "requiredInputs": [
+          "dimensions",
+          "weight",
+          "batchQuantity",
+          "loadingOrientation"
+        ],
+        "assumptions": [],
+        "evidenceRefs": [],
+        "missingFields": [
+          "allowedOrientations",
+          "preferredOrientations",
+          "prohibitedOrientations",
+          "supportAndFixture",
+          "stacking",
+          "spacing",
+          "batchMode",
+          "batchQuantityOrWeight",
+          "rotation",
+          "conveyance"
+        ],
+        "notApplicableReason": null
+      },
+      "industryDirections": []
+    },
+    {
+      "id": "small-cold-coil-spring-stress-relief",
+      "workpieceIds": [
+        "small-coil-springs"
+      ],
+      "logicUnitId": "small_spring_continuous",
+      "label": "小型冷卷弹簧成形后去应力退火",
+      "processStage": "final_furnace_treatment",
+      "supportStatus": "review",
+      "statusReason": "待按材料供货状态、线径、外径和批量确认",
+      "customerNote": "请说明材料供货状态、线径、外径和批量，以确认是否仅需去应力退火。",
+      "requiredCapabilities": {
+        "productionModes": [
+          "continuous",
+          "batch"
+        ],
+        "smallParts": true
+      },
+      "reviewed": true,
+      "reviewVersion": "v2-content-baseline",
+      "processVariants": [
+        {
+          "id": "stress-relief",
+          "label": "去应力退火",
+          "processIds": [
+            "stress_relief_annealing"
+          ],
+          "requirements": {},
+          "processPurposeId": "stress-relief",
+          "processConcept": "treatment_purpose"
+        }
+      ],
+      "routeId": "small-cold-coil-spring-stress-relief",
+      "processPurposeId": null,
+      "purposeSelectionRequired": true,
+      "baselineEvidenceStatus": "unverified",
+      "processBoundary": "overall_furnace_treatment",
+      "moduleDisposition": "in_scope",
+      "companyCapabilityStatus": "unknown",
+      "requiredInputs": [
+        "materialGrade",
+        "supplyCondition",
+        "formingMethod",
+        "springDimensions",
+        "batchQuantity",
+        "productionRhythm",
+        "coolingRequirement"
+      ],
+      "missingInputs": [
+        "materialGrade",
+        "supplyCondition",
+        "formingMethod",
+        "springDimensions",
+        "batchQuantity",
+        "productionRhythm",
+        "coolingRequirement"
+      ],
+      "assumptions": [
+        "工件名称只用于归类，不能单独确定唯一设备方向。"
+      ],
+      "evidenceRefs": [],
+      "candidateEvidenceRefs": [],
+      "loadingConstraints": {
+        "applicability": "applicable",
+        "verificationStatus": "unverified",
+        "allowedOrientations": [],
+        "preferredOrientations": [],
+        "prohibitedOrientations": [],
+        "supportAndFixture": {
+          "requirements": [],
+          "notes": []
+        },
+        "stacking": {
+          "allowed": null,
+          "conditions": []
+        },
+        "spacing": {
+          "value": null,
+          "unit": null,
+          "conditions": []
+        },
+        "batchMode": {
+          "modes": [],
+          "conditions": []
+        },
+        "batchQuantityOrWeight": {
+          "quantity": null,
+          "weight": null,
+          "unit": null,
+          "conditions": []
+        },
+        "conveyance": {
+          "modeCandidates": [],
+          "conditions": []
+        },
+        "rotation": {
+          "required": null,
+          "conditions": []
+        },
+        "transfer": {
+          "required": null,
+          "conditions": []
+        },
+        "quenchEntry": {
+          "required": null,
+          "conditions": []
+        },
+        "requiredInputs": [
+          "dimensions",
+          "weight",
+          "batchQuantity",
+          "loadingOrientation"
+        ],
+        "assumptions": [],
+        "evidenceRefs": [],
+        "missingFields": [
+          "allowedOrientations",
+          "preferredOrientations",
+          "prohibitedOrientations",
+          "supportAndFixture",
+          "stacking",
+          "spacing",
+          "batchMode",
+          "batchQuantityOrWeight",
+          "rotation",
+          "conveyance"
+        ],
+        "notApplicableReason": null
+      },
+      "industryDirections": []
+    },
+    {
+      "id": "small-spring-quench-temper-review",
+      "workpieceIds": [
+        "small-coil-springs"
+      ],
+      "logicUnitId": "small_spring_continuous",
+      "label": "需要淬火回火的小型弹簧路线",
+      "processStage": "requires_confirmation",
+      "supportStatus": "review",
+      "statusReason": "不是所有小型冷卷弹簧都需要淬火回火，需按材料和成形方式确认；大型热卷与板簧不在本卡范围",
+      "customerNote": "请确认材料与成形方式；需要淬火回火时再判断设备与节拍。",
+      "requiredCapabilities": {
+        "productionModes": [
+          "continuous",
+          "batch"
+        ],
+        "cooling": [
+          "quench"
+        ],
+        "smallParts": true
+      },
+      "reviewed": true,
+      "reviewVersion": "v2-content-baseline",
+      "processVariants": [
+        {
+          "id": "quench-temper",
+          "label": "淬火与回火",
+          "processIds": [
+            "quenching",
+            "tempering"
+          ],
+          "requirements": {
+            "cooling": [
+              "quench"
+            ]
+          },
+          "processPurposeId": "quench-temper",
+          "processConcept": "treatment_purpose"
+        }
+      ],
+      "routeId": "small-spring-quench-temper-review",
+      "processPurposeId": null,
+      "purposeSelectionRequired": true,
+      "baselineEvidenceStatus": "unverified",
+      "processBoundary": "overall_furnace_treatment",
+      "moduleDisposition": "in_scope",
+      "companyCapabilityStatus": "unknown",
+      "requiredInputs": [
+        "materialGrade",
+        "supplyCondition",
+        "formingMethod",
+        "springDimensions",
+        "batchQuantity",
+        "productionRhythm",
+        "coolingRequirement"
+      ],
+      "missingInputs": [
+        "materialGrade",
+        "supplyCondition",
+        "formingMethod",
+        "springDimensions",
+        "batchQuantity",
+        "productionRhythm",
+        "coolingRequirement"
+      ],
+      "assumptions": [
+        "工件名称只用于归类，不能单独确定唯一设备方向。"
+      ],
+      "evidenceRefs": [],
+      "candidateEvidenceRefs": [],
+      "loadingConstraints": {
+        "applicability": "applicable",
+        "verificationStatus": "unverified",
+        "allowedOrientations": [],
+        "preferredOrientations": [],
+        "prohibitedOrientations": [],
+        "supportAndFixture": {
+          "requirements": [],
+          "notes": []
+        },
+        "stacking": {
+          "allowed": null,
+          "conditions": []
+        },
+        "spacing": {
+          "value": null,
+          "unit": null,
+          "conditions": []
+        },
+        "batchMode": {
+          "modes": [],
+          "conditions": []
+        },
+        "batchQuantityOrWeight": {
+          "quantity": null,
+          "weight": null,
+          "unit": null,
+          "conditions": []
+        },
+        "conveyance": {
+          "modeCandidates": [],
+          "conditions": []
+        },
+        "rotation": {
+          "required": null,
+          "conditions": []
+        },
+        "transfer": {
+          "required": null,
+          "conditions": []
+        },
+        "quenchEntry": {
+          "required": null,
+          "conditions": []
+        },
+        "requiredInputs": [
+          "dimensions",
+          "weight",
+          "batchQuantity",
+          "loadingOrientation",
+          "coolingRequirement",
+          "transferRequirement"
+        ],
+        "assumptions": [],
+        "evidenceRefs": [],
+        "missingFields": [
+          "allowedOrientations",
+          "preferredOrientations",
+          "prohibitedOrientations",
+          "supportAndFixture",
+          "stacking",
+          "spacing",
+          "batchMode",
+          "batchQuantityOrWeight",
+          "rotation",
+          "conveyance",
+          "transfer",
+          "quenchEntry"
+        ],
+        "notApplicableReason": null
+      },
+      "industryDirections": []
+    },
+    {
+      "id": "gear-blank-preliminary-treatment",
+      "workpieceIds": [
+        "large-gear-blank"
+      ],
+      "logicUnitId": "shaft_gear_preheat",
+      "label": "齿轮坯齿前正火 / 退火",
+      "processStage": "preliminary_furnace_treatment",
+      "supportStatus": "review",
+      "statusReason": "齿坯预备热处理需按材质、截面、批量与后续加工要求确认",
+      "customerNote": "请提供材质、最大截面、批量及齿前加工要求。",
+      "requiredCapabilities": {
+        "productionModes": [
+          "batch",
+          "continuous"
+        ],
+        "loadingMethods": [
+          "trolley",
+          "chamber",
+          "roller"
+        ]
+      },
+      "reviewed": true,
+      "reviewVersion": "v2-content-baseline",
+      "processVariants": [
+        {
+          "id": "normalizing",
+          "label": "齿前正火",
+          "processIds": [
+            "normalizing"
+          ],
+          "requirements": {},
+          "processPurposeId": "normalizing",
+          "processConcept": "treatment_purpose"
+        },
+        {
+          "id": "annealing",
+          "label": "齿前退火",
+          "processIds": [
+            "annealing"
+          ],
+          "requirements": {},
+          "processPurposeId": "annealing",
+          "processConcept": "treatment_purpose"
+        }
+      ],
+      "routeId": "gear-blank-preliminary-treatment",
+      "processPurposeId": null,
+      "purposeSelectionRequired": true,
+      "baselineEvidenceStatus": "unverified",
+      "processBoundary": "overall_furnace_treatment",
+      "moduleDisposition": "in_scope",
+      "companyCapabilityStatus": "unknown",
+      "requiredInputs": [
+        "materialGrade",
+        "supplyCondition",
+        "dimensions",
+        "lengthDiameterRatio",
+        "weight",
+        "allowedDeformation",
+        "loadingOrientation",
+        "batchQuantity",
+        "processPurposeId"
+      ],
+      "missingInputs": [
+        "materialGrade",
+        "supplyCondition",
+        "dimensions",
+        "lengthDiameterRatio",
+        "weight",
+        "allowedDeformation",
+        "loadingOrientation",
+        "batchQuantity",
+        "processPurposeId"
+      ],
+      "assumptions": [
+        "工件名称只用于归类，不能单独确定唯一设备方向。"
+      ],
+      "evidenceRefs": [],
+      "candidateEvidenceRefs": [],
+      "loadingConstraints": {
+        "applicability": "applicable",
+        "verificationStatus": "baseline_inference",
+        "allowedOrientations": [],
+        "preferredOrientations": [],
+        "prohibitedOrientations": [],
+        "supportAndFixture": {
+          "requirements": [],
+          "notes": []
+        },
+        "stacking": {
+          "allowed": null,
+          "conditions": []
+        },
+        "spacing": {
+          "value": null,
+          "unit": null,
+          "conditions": []
+        },
+        "batchMode": {
+          "modes": [],
+          "conditions": []
+        },
+        "batchQuantityOrWeight": {
+          "quantity": null,
+          "weight": null,
+          "unit": null,
+          "conditions": []
+        },
+        "conveyance": {
+          "modeCandidates": [
+            "trolley",
+            "chamber",
+            "roller"
+          ],
+          "conditions": []
+        },
+        "rotation": {
+          "required": null,
+          "conditions": []
+        },
+        "transfer": {
+          "required": null,
+          "conditions": []
+        },
+        "quenchEntry": {
+          "required": null,
+          "conditions": []
+        },
+        "requiredInputs": [
+          "dimensions",
+          "weight",
+          "batchQuantity",
+          "loadingOrientation"
+        ],
+        "assumptions": [
+          "conveyance.modeCandidates 迁移自旧 requiredCapabilities.loadingMethods，仅作待核实候选。"
+        ],
+        "evidenceRefs": [],
+        "missingFields": [
+          "allowedOrientations",
+          "preferredOrientations",
+          "prohibitedOrientations",
+          "supportAndFixture",
+          "stacking",
+          "spacing",
+          "batchMode",
+          "batchQuantityOrWeight",
+          "rotation"
+        ],
+        "notApplicableReason": null
+      },
+      "industryDirections": []
+    },
+    {
+      "id": "steel-pin-local-hardening-external",
+      "workpieceIds": [
+        "steel-pins"
+      ],
+      "logicUnitId": "fastener_continuous",
+      "label": "销轴表面或局部最终硬化",
+      "processStage": "requires_external_induction",
+      "supportStatus": "unsupported",
+      "statusReason": "本模块不承诺感应等局部最终硬化设备，只说明与整体调质或渗碳路线的边界",
+      "customerNote": "销轴表面或局部硬化需单独确认；本页可先判断整体调质或渗碳需求。",
+      "requiredCapabilities": {},
+      "reviewed": true,
+      "reviewVersion": "v2-content-baseline",
+      "processVariants": [
+        {
+          "id": "local-surface-hardening",
+          "label": "表面或局部硬化",
+          "processIds": [
+            "local_surface_hardening"
+          ],
+          "requirements": {},
+          "processPurposeId": "local-surface-hardening",
+          "processConcept": "treatment_purpose"
+        }
+      ],
+      "routeId": "steel-pin-local-hardening-external",
+      "processPurposeId": null,
+      "purposeSelectionRequired": true,
+      "baselineEvidenceStatus": "partially_verified",
+      "processBoundary": "local_treatment",
+      "moduleDisposition": "outside_furnace_module",
+      "companyCapabilityStatus": "unknown",
+      "requiredInputs": [
+        "materialGrade",
+        "strengthGrade",
+        "partDimensions",
+        "partShape",
+        "adhesionRisk",
+        "accumulationPermission",
+        "atmosphereRequirement",
+        "coolingRequirement",
+        "batchQuantity",
+        "productionRhythm",
+        "treatmentArea",
+        "localTreatmentMethod",
+        "targetHardness",
+        "effectiveHardenedDepth"
+      ],
+      "missingInputs": [
+        "materialGrade",
+        "strengthGrade",
+        "partDimensions",
+        "partShape",
+        "adhesionRisk",
+        "accumulationPermission",
+        "atmosphereRequirement",
+        "coolingRequirement",
+        "batchQuantity",
+        "productionRhythm",
+        "treatmentArea",
+        "localTreatmentMethod",
+        "targetHardness",
+        "effectiveHardenedDepth"
+      ],
+      "assumptions": [
+        "工件名称只用于归类，不能单独确定唯一设备方向。"
+      ],
+      "evidenceRefs": [],
+      "candidateEvidenceRefs": [
+        "std-gbt-34882-2017"
+      ],
+      "loadingConstraints": {
+        "applicability": "not_applicable",
+        "verificationStatus": "unverified",
+        "allowedOrientations": [],
+        "preferredOrientations": [],
+        "prohibitedOrientations": [],
+        "supportAndFixture": {
+          "requirements": [],
+          "notes": []
+        },
+        "stacking": {
+          "allowed": null,
+          "conditions": []
+        },
+        "spacing": {
+          "value": null,
+          "unit": null,
+          "conditions": []
+        },
+        "batchMode": {
+          "modes": [],
+          "conditions": []
+        },
+        "batchQuantityOrWeight": {
+          "quantity": null,
+          "weight": null,
+          "unit": null,
+          "conditions": []
+        },
+        "conveyance": {
+          "modeCandidates": [],
+          "conditions": []
+        },
+        "rotation": {
+          "required": null,
+          "conditions": []
+        },
+        "transfer": {
+          "required": null,
+          "conditions": []
+        },
+        "quenchEntry": {
+          "required": null,
+          "conditions": []
+        },
+        "requiredInputs": [
+          "treatmentArea",
+          "localTreatmentMethod",
+          "partDimensions"
+        ],
+        "assumptions": [],
+        "evidenceRefs": [],
+        "missingFields": [],
+        "notApplicableReason": "局部处理路线不继承整体炉内装炉约束，需由对应局部处理工艺单独定义。"
+      },
+      "industryDirections": [],
+      "legacySupportStatusMeaning": "旧 supportStatus 仅维持第1批页面兼容；不得解释为苏能不承接，企业能力状态以 companyCapabilityStatus 为准。"
+    }
+  ],
+  "baselineVersion": "industry-baseline-2026-08-batch2.3-draft"
+}

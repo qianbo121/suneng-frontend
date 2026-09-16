@@ -11,7 +11,7 @@ import {
   Select,
   Space,
 } from 'antd';
-import dayjs, { Dayjs } from 'dayjs';
+import dayjs from 'dayjs';
 import { useMemo, useState } from 'react';
 import useSWR from 'swr';
 
@@ -28,14 +28,12 @@ import {
 } from '@/services/news';
 import { NewsEntity } from '@/types/news';
 import { PublishStatus } from '@/types/product';
-
-type SimpleNewsFormValues = {
-  titleZh: string;
-  coverImage: string;
-  contentZh: string;
-  publishDate: Dayjs | null;
-  status: PublishStatus;
-};
+import {
+  buildNewsCreatePayload,
+  buildNewsUpdatePayload,
+  resolveNewsInitialValues,
+  type SimpleNewsFormValues,
+} from './news-form-data';
 
 const PAGE_SIZE = 5;
 
@@ -74,68 +72,8 @@ function getVisiblePages(current: number, total: number) {
   }, []);
 }
 
-function stripHtml(value?: string | null) {
-  if (!value) return '';
-  return value
-    .replace(/<br\s*\/?>/gi, '\n')
-    .replace(/<\/p>/gi, '\n')
-    .replace(/<[^>]*>/g, '')
-    .replace(/&nbsp;/g, ' ')
-    .replace(/&amp;/g, '&')
-    .replace(/&lt;/g, '<')
-    .replace(/&gt;/g, '>')
-    .trim();
-}
-
-function toHtmlContent(value: string) {
-  const lines = value
-    .split('\n')
-    .map((line) => line.trim())
-    .filter(Boolean);
-
-  if (!lines.length) return '';
-
-  return lines.map((line) => `<p>${line}</p>`).join('');
-}
-
 function formatPublishDate(value?: string | null) {
   return value ? dayjs(value).format('YYYY-MM-DD  HH:mm') : '-';
-}
-
-function resolveInitialValues(record: NewsEntity | null): SimpleNewsFormValues {
-  return {
-    titleZh: record?.titleZh || '',
-    coverImage: record?.coverImage || '',
-    contentZh: stripHtml(record?.contentZh || record?.summaryZh),
-    publishDate: record?.publishDate ? dayjs(record.publishDate) : dayjs(),
-    status: record?.status || 'published',
-  };
-}
-
-function buildPayload(values: SimpleNewsFormValues) {
-  const contentText = values.contentZh.trim();
-  const summary = contentText.slice(0, 140);
-
-  return {
-    titleZh: values.titleZh.trim(),
-    titleEn: undefined,
-    slug: undefined,
-    coverImage: values.coverImage || undefined,
-    summaryZh: summary || undefined,
-    summaryEn: undefined,
-    contentZh: toHtmlContent(contentText) || undefined,
-    contentEn: undefined,
-    publishDate: values.publishDate ? values.publishDate.toISOString() : undefined,
-    isPublished: values.status === 'published',
-    seoTitleZh: values.titleZh.trim() || undefined,
-    seoTitleEn: undefined,
-    seoDescriptionZh: summary || undefined,
-    seoDescriptionEn: undefined,
-    seoKeywordsZh: undefined,
-    seoKeywordsEn: undefined,
-    ogImage: values.coverImage || undefined,
-    sortOrder: 0,
-  };
 }
 
 function CoverImageField() {
@@ -197,7 +135,7 @@ export function NewsListPage() {
 
   const openCreateModal = () => {
     setEditingRecord(null);
-    form.setFieldsValue(resolveInitialValues(null));
+    form.setFieldsValue(resolveNewsInitialValues(null));
     setModalOpen(true);
   };
 
@@ -206,7 +144,7 @@ export function NewsListPage() {
     try {
       const detail = await getNewsDetail(record.id);
       setEditingRecord(detail);
-      form.setFieldsValue(resolveInitialValues(detail));
+      form.setFieldsValue(resolveNewsInitialValues(detail));
       setModalOpen(true);
     } finally {
       setLoadingDetail(false);
@@ -223,15 +161,17 @@ export function NewsListPage() {
 
     setSubmitting(true);
     try {
-      const payload = buildPayload(values);
-
       if (editingRecord) {
-        const result = await updateNews(editingRecord.id, payload);
+        const payload = buildNewsUpdatePayload(values, editingRecord);
+        const result = Object.keys(payload).length
+          ? await updateNews(editingRecord.id, payload)
+          : editingRecord;
         if (values.status !== result.status) {
           await updateNewsStatus(editingRecord.id, values.status);
         }
         message.success('新闻已保存');
       } else {
+        const payload = buildNewsCreatePayload(values);
         const result = await createNews(payload);
         if (values.status !== result.status) {
           await updateNewsStatus(result.id, values.status);

@@ -7,6 +7,7 @@ import { Locale } from '@/types/site';
 
 import EnglishHomeHero from './EnglishHomeHero';
 import HomeHero from './HomeHero';
+import styles from './HeroPartnerMarquee.module.css';
 
 type HeroBannerProps = {
   locale: Locale;
@@ -14,112 +15,144 @@ type HeroBannerProps = {
 
 type HeroPartnerLogo = {
   name: string;
-  image: string;
+  src: string;
+  alt: string;
+  width: number;
+  height: number;
 };
 
 const heroMotionEase: [number, number, number, number] = [0.22, 1, 0.36, 1];
-const heroPartnerLogoBasePath = '/images/partner/logos/home-marquee-normalized';
-const heroPartnerMarqueeCardClass =
-  'relative flex h-[96px] w-[228px] shrink-0 items-center justify-center overflow-hidden rounded-[13px] border border-[#e6ebf2] bg-white px-[10px] py-[10px] transition-all duration-250 hover:-translate-y-[3px] hover:scale-[1.01] hover:border-[#d5deee] hover:bg-[#fbfdff] hover:shadow-[0_12px_32px_rgba(15,23,42,0.16)] md:h-[100px] md:w-[246px] md:rounded-[15px]';
-const heroPartnerMarqueeImageFrameClass =
-  'flex h-[70px] w-[187px] items-center justify-center md:h-[76px] md:w-[203px]';
-const heroPartnerMarqueeImageClass = 'h-full w-full object-contain';
-const heroPartnerMarqueeTrackClass =
-  'flex w-max items-center gap-x-[12px] py-[4px] md:gap-x-[16px] animate-marquee will-change-transform group-hover:[animation-play-state:paused]';
-const heroPartnerMarqueeTrackDuration = '72s';
 const heroPartnerLogos: HeroPartnerLogo[] = [
   {
-    name: '内蒙古北方重工业集团有限公司',
-    image: `${heroPartnerLogoBasePath}/beifang-heavy.png`,
+    name: '中国恩菲工程技术有限公司',
+    src: '/images/partners/homepage/01-enfi.png',
+    alt: '中国恩菲工程技术有限公司 ENFI',
+    width: 316,
+    height: 160,
   },
   {
-    name: '中国恩菲工程技术有限公司',
-    image: `${heroPartnerLogoBasePath}/enfi.png`,
+    name: '湖南华菱涟源钢铁有限公司',
+    src: '/images/partners/homepage/02-lianyuan-steel.png',
+    alt: '湖南华菱涟源钢铁有限公司 涟钢',
+    width: 514,
+    height: 160,
   },
   {
     name: '中国联合工程有限公司',
-    image: `${heroPartnerLogoBasePath}/cuec.png`,
+    src: '/images/partners/homepage/03-cuec.png',
+    alt: '中国联合工程有限公司 CUEC',
+    width: 384,
+    height: 160,
   },
   {
     name: '中集安瑞环科技股份有限公司',
-    image: `${heroPartnerLogoBasePath}/cimctank.png`,
+    src: '/images/partners/homepage/04-cimc-safeway.png',
+    alt: '中集安瑞环科技股份有限公司 CIMC Safeway',
+    width: 536,
+    height: 160,
+  },
+  {
+    name: '青拓集团',
+    src: '/images/partners/homepage/05-tsingtuo-group.png',
+    alt: '青拓集团',
+    width: 559,
+    height: 160,
+  },
+  {
+    name: '内蒙古北方重工业集团有限公司',
+    src: '/images/partners/homepage/06-nhi.png',
+    alt: '内蒙古北方重工业集团有限公司 NHI',
+    width: 368,
+    height: 160,
   },
   {
     name: '江苏天工科技股份有限公司',
-    image: `${heroPartnerLogoBasePath}/tiangong-tech.png`,
+    src: '/images/partners/homepage/07-tiangong-technology.png',
+    alt: '江苏天工科技股份有限公司 天工股份',
+    width: 482,
+    height: 160,
   },
   {
-    name: '中集氢能源科技（南通）有限公司',
-    image: `${heroPartnerLogoBasePath}/cimc-hydrogen.png`,
+    name: '钢诺新材料股份有限公司',
+    src: '/images/partners/homepage/08-gangnuo-coldpro.png',
+    alt: '钢诺新材料股份有限公司 钢诺 Coldpro',
+    width: 734,
+    height: 160,
   },
   {
-    name: '福建青拓实业股份有限公司',
-    image: `${heroPartnerLogoBasePath}/tsingtuo.png`,
+    name: '西安三角防务股份有限公司',
+    src: '/images/partners/homepage/09-triangle-defense.png',
+    alt: '西安三角防务股份有限公司 三角防务',
+    width: 487,
+    height: 160,
   },
   {
-    name: '海隆石油钻具（无锡）有限公司',
-    image: `${heroPartnerLogoBasePath}/hilong.png`,
+    name: '中集氢能科技有限公司',
+    src: '/images/partners/homepage/10-cimc-hydrogen.png',
+    alt: '中集氢能科技有限公司 CIMC Hydrogen',
+    width: 448,
+    height: 160,
   },
   {
-    name: '吉林省致远新能源氢能科技有限公司',
-    image: `${heroPartnerLogoBasePath}/zhiyuan.png`,
+    name: '六和轻合金（苏州）有限公司',
+    src: '/images/partners/homepage/11-liuhe-light-alloy.png',
+    alt: '六和轻合金（苏州）有限公司',
+    width: 427,
+    height: 160,
   },
   {
-    name: '南通中集能源装备有限公司',
-    image: `${heroPartnerLogoBasePath}/cimc-energy.png`,
+    name: '钢研海德',
+    src: '/images/partners/homepage/12-cisri-harder.png',
+    alt: '中国钢研 钢研海德',
+    width: 474,
+    height: 160,
   },
-  { name: '六和轻合金（苏州）有限公司', image: `${heroPartnerLogoBasePath}/liuhe.png` },
 ] as const;
 
-function HeroPartners({ locale }: HeroBannerProps) {
-  const marqueeLogos = [...heroPartnerLogos, ...heroPartnerLogos];
-  const panelClass = [
-    'relative z-30 mx-auto w-[calc(100%-28px)] max-w-[1520px] overflow-hidden rounded-[18px] border border-[#ebedf1] bg-white shadow-[0_20px_46px_rgba(15,23,42,0.11)] md:w-[calc(100%-40px)] lg:w-[calc(100%-192px)]',
-    'mt-[28px]',
-  ].join(' ');
+function PartnerLogoGroup({ duplicate = false }: { duplicate?: boolean }) {
+  return (
+    <div className={styles.logoGroup} aria-hidden={duplicate ? 'true' : undefined}>
+      {heroPartnerLogos.map((partner) => (
+        <Image
+          key={partner.src}
+          src={partner.src}
+          alt={duplicate ? '' : partner.alt}
+          title={duplicate ? undefined : partner.name}
+          width={partner.width}
+          height={partner.height}
+          unoptimized
+          className={styles.logo}
+          sizes="(max-width: 767px) 34px, (max-width: 1024px) 38px, 40px"
+        />
+      ))}
+    </div>
+  );
+}
 
+function HeroPartners({ locale }: HeroBannerProps) {
   return (
     <motion.div
-      initial={{ y: 16, opacity: 0 }}
+      initial={false}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.72, ease: heroMotionEase, delay: 0.52 }}
-      className={panelClass}
+      className={`${styles.panel} mx-auto w-[calc(100%-28px)] max-w-[1550px] md:w-[calc(100%-40px)] lg:w-[calc(100%-162px)]`}
     >
-      <div className="flex min-h-[112px] items-center overflow-x-auto px-[14px] py-[12px] md:overflow-visible md:px-[24px]">
-        <div className="flex min-w-[156px] shrink-0 items-center border-r border-[#e2e8f3] pr-[15px]">
-          <span className="mr-[16px] h-[70px] w-[3px] rounded-full bg-[var(--color-interactive)]" />
-          <span>
-            <span className="block text-[18px] font-semibold leading-none tracking-[0.06em] text-[#202020]">
-              {locale === 'en' ? 'Partners' : '合作伙伴'}
-            </span>
-            {locale === 'zh' ? (
-              <span className="mt-[8px] block text-[11px] font-medium uppercase leading-none tracking-[0.18em] text-[#9b9b9b]">
-                Partners
-              </span>
-            ) : null}
-          </span>
-        </div>
-        <div className="group relative min-w-0 flex-1 overflow-hidden">
-          <div
-            className={heroPartnerMarqueeTrackClass}
-            style={{ animationDuration: heroPartnerMarqueeTrackDuration }}
-          >
-            {marqueeLogos.map((partner, index) => (
-              <div key={`${partner.name}-${index}`} className={heroPartnerMarqueeCardClass}>
-                <div className={heroPartnerMarqueeImageFrameClass}>
-                  <Image
-                    src={partner.image}
-                    alt={`${partner.name} logo`}
-                    width={960}
-                    height={360}
-                    unoptimized
-                    className={heroPartnerMarqueeImageClass}
-                    sizes="203px"
-                  />
-                </div>
-              </div>
-            ))}
-          </div>
+      <div className={styles.heading}>
+        <span className={styles.headingAccent} aria-hidden="true" />
+        <span>
+          <span className={styles.headingTitle}>{locale === 'en' ? 'Partners' : '合作伙伴'}</span>
+          <span className={styles.headingEyebrow}>Partners</span>
+        </span>
+      </div>
+      <div
+        className={styles.viewport}
+        role="region"
+        tabIndex={0}
+        aria-label={locale === 'en' ? 'Partner logo carousel' : '合作伙伴标志轮播'}
+      >
+        <div className={styles.track} data-testid="homepage-partner-track">
+          <PartnerLogoGroup />
+          <PartnerLogoGroup duplicate />
         </div>
       </div>
     </motion.div>

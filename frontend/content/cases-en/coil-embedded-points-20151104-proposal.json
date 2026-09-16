@@ -1,0 +1,13 @@
+{
+  "id": "coil-embedded-points-20151104-proposal",
+  "slug": "drawing-wire-coil-pit-embedded-load-thermocouples-proposal",
+  "number": 58,
+  "title": "Where should load thermocouples be placed when a pit furnace holds seven wire coils?",
+  "summary": "A furnace reaching its set temperature does not establish that the interior of every wire coil has reached the required process temperature. Suneng's 2015 pit furnace proposal for wire-drawing coils specifies seven pieces evenly distributed per batch, two thermocouples measuring furnace temperature and two further sheathed thermocouples embedded in workpieces to measure load temperature. Agree the insertion positions and their relationship to all seven pieces; two readings cannot represent every location in all seven coils without validation.",
+  "body": "coil-embedded-points-20151104-proposal.md",
+  "sourceFingerprint": "0c5dfbf5e810406da79d656fe3e73e24a8c06032901441aa2ab674197b41fb8e",
+  "translationStatus": "complete",
+  "translatedAt": "2026-09-12",
+  "coverAlt": "Illustration of tall, narrow wire-rod coils for drawing.",
+  "coverCaption": "Illustration of tall, narrow wire-rod coils for drawing (AI-generated). Not an actual customer workpiece photograph. Does not establish actual dimensions, winding or furnace loading arrangements."
+}

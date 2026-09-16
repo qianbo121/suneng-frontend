@@ -1,0 +1,288 @@
+.productSeries {
+  width: 100%;
+}
+
+.heading {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 32px;
+  margin-bottom: 28px;
+}
+
+.heading h2 {
+  margin: 0;
+  color: #101828;
+  font-size: clamp(32px, 3vw, 40px);
+  font-weight: 650;
+  letter-spacing: -0.035em;
+  line-height: 1.2;
+  text-wrap: balance;
+}
+
+.interactionHint {
+  margin: 0 0 4px;
+  color: #526277;
+  font-size: 13px;
+  line-height: 20px;
+}
+
+.touchHint {
+  display: none;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  border-top: 1px solid #e0e5ec;
+  border-left: 1px solid #e0e5ec;
+}
+
+.card {
+  display: flex;
+  min-width: 0;
+  min-height: 448px;
+  flex-direction: column;
+  padding: 30px;
+  border-right: 1px solid #e0e5ec;
+  border-bottom: 1px solid #e0e5ec;
+  background: #fff;
+}
+
+.englishName {
+  margin: 0;
+  color: #526277;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  line-height: 20px;
+  text-transform: uppercase;
+}
+
+.card h3 {
+  margin: 8px 0 0;
+  color: #111827;
+  font-size: 24px;
+  font-weight: 650;
+  letter-spacing: -0.02em;
+  line-height: 1.3;
+}
+
+.mediaControl {
+  position: relative;
+  display: block;
+  width: 100%;
+  aspect-ratio: 3 / 2;
+  margin: 22px 0 20px;
+  padding: 0;
+  overflow: hidden;
+  border: 0;
+  border-radius: 2px;
+  background: #fafbfc;
+  cursor: pointer;
+  -webkit-tap-highlight-color: rgba(51, 112, 255, 0.12);
+  touch-action: manipulation;
+}
+
+.mediaControl:focus-visible {
+  outline: 2px solid #3370ff;
+  outline-offset: 3px;
+}
+
+.realImageLayer,
+.animationLayer {
+  position: absolute;
+  inset: 0;
+  display: block;
+  opacity: 1;
+  transition: opacity 220ms ease;
+}
+
+.realImage {
+  padding: 10px;
+  object-fit: contain;
+  object-position: center;
+}
+
+.animationLayer {
+  background: #0d1828;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.animationLayer:not([data-playing='true']) * {
+  animation-play-state: paused !important;
+}
+
+.card[data-active='true'] .realImageLayer {
+  opacity: 0;
+}
+
+.card[data-active='true'] .animationLayer {
+  opacity: 1;
+}
+
+.touchToggleLabel {
+  position: absolute;
+  bottom: 14px;
+  left: 14px;
+  display: none;
+  min-height: 44px;
+  align-items: center;
+  gap: 9px;
+  padding: 0 16px;
+  border: 1px solid rgba(201, 211, 224, 0.9);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.94);
+  color: #17263a;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 20px;
+}
+
+.touchToggleLabel svg {
+  width: 19px;
+  height: 19px;
+  flex: 0 0 19px;
+}
+
+.description {
+  display: -webkit-box;
+  min-height: 44px;
+  margin: 0;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  color: #526277;
+  font-size: 15px;
+  line-height: 1.55;
+  -webkit-line-clamp: 2;
+}
+
+.detailsLink {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  align-self: flex-start;
+  gap: 8px;
+  margin-top: auto;
+  color: #51647a;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 20px;
+  text-decoration: none;
+  transition: color 200ms ease;
+}
+
+.detailsLink svg {
+  width: 18px;
+  height: 18px;
+  transition: transform 200ms ease;
+}
+
+.detailsLink:hover,
+.detailsLink:focus-visible,
+.card[data-active='true'] .detailsLink {
+  color: #3370ff;
+}
+
+.detailsLink:hover svg,
+.detailsLink:focus-visible svg {
+  transform: translateX(3px);
+}
+
+.detailsLink:focus-visible {
+  outline: 2px solid #3370ff;
+  outline-offset: 3px;
+}
+
+@media (min-width: 768px) and (max-width: 1199px) {
+  .grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .card {
+    min-height: 470px;
+  }
+}
+
+@media (max-width: 767px) {
+  .heading {
+    display: block;
+    margin-bottom: 30px;
+  }
+
+  .heading h2 {
+    font-size: 32px;
+  }
+
+  .interactionHint {
+    margin-top: 14px;
+    font-size: 14px;
+    line-height: 22px;
+  }
+
+  .desktopHint {
+    display: none;
+  }
+
+  .touchHint {
+    display: inline;
+  }
+
+  .grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .card {
+    min-height: 0;
+    padding: 26px 24px 24px;
+  }
+
+  .card h3 {
+    font-size: 23px;
+  }
+
+  .mediaControl {
+    aspect-ratio: 4 / 3;
+    margin-block: 20px;
+  }
+
+  .realImage {
+    padding: 8px;
+  }
+
+  .touchToggleLabel {
+    display: inline-flex;
+  }
+
+  .description {
+    min-height: 0;
+  }
+
+  .detailsLink {
+    margin-top: 18px;
+  }
+}
+
+@media (hover: none), (pointer: coarse) {
+  .desktopHint {
+    display: none;
+  }
+
+  .touchHint {
+    display: inline;
+  }
+
+  .touchToggleLabel {
+    display: inline-flex;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .realImageLayer,
+  .animationLayer,
+  .detailsLink,
+  .detailsLink svg {
+    transition: none;
+  }
+}

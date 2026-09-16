@@ -1,3 +1,4 @@
+import { getIndexingRobots } from '@/lib/seo/metadata';
 import type { Metadata } from 'next';
 
 import { JsonLd } from '@/components/JsonLd';
@@ -57,7 +58,6 @@ export async function generateMetadata({ params }: AboutPageProps): Promise<Meta
         absolute: ABOUT_ZH_SEO.title,
       },
       description: ABOUT_ZH_SEO.description,
-      keywords: ABOUT_ZH_SEO.keywords,
       alternates: {
         canonical,
         languages: {
@@ -81,10 +81,7 @@ export async function generateMetadata({ params }: AboutPageProps): Promise<Meta
         description: ABOUT_ZH_SEO.ogDescription,
         images: [image],
       },
-      robots: {
-        index: true,
-        follow: true,
-      },
+      robots: getIndexingRobots(),
     };
   }
 

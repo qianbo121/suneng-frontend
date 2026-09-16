@@ -1,0 +1,13 @@
+{
+  "id": "strip-steam-heat-use-202111-proposal",
+  "slug": "strip-annealing-waste-heat-steam-drying-interface-proposal",
+  "number": 86,
+  "title": "How can a plant use steam generated from continuous annealing-furnace waste heat?",
+  "summary": "Suneng's 2021 continuous stainless-steel annealing furnace specification uses flue gas first to preheat strip, then combustion air, and finally to generate steam in a waste-heat boiler. Steam heats drying air through an exchanger and is also distributed through a pipe network. Beyond proposed steam output, confirm destinations, timing and heat demand at each user, and how these match changing furnace load.",
+  "body": "strip-steam-heat-use-202111-proposal.md",
+  "sourceFingerprint": "03c69cf8ddfe20cee57a3b98b8c4bd30ee84a32b9a99c4050a066def586d98ed",
+  "translationStatus": "complete",
+  "translatedAt": "2026-09-12",
+  "coverAlt": "Illustration of stainless steel strip coils.",
+  "coverCaption": "Illustration of stainless steel strip coils (AI-generated). Not an actual customer workpiece photograph. Does not establish actual specifications or process results."
+}

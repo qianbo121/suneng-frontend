@@ -1,0 +1,59 @@
+{
+  "id": "lab-furnace-measurement-range-202605-proposal",
+  "slug": "lab-furnace-measurement-range-202605-proposal",
+  "title": "1400℃实验炉的长期工作温度与测温范围",
+  "summary": "苏能一份高温箱式实验炉讨论稿提出1400℃最高工作温度、1300℃长期工作温度，但所列热电偶范围为0～1300℃。这几项不能自动拼成一套已经验证的高温能力：采购应确认完整测温配置与拟使用范围一致，再核对载物台和实际样件条件。",
+  "body": "lab-furnace-measurement-range-202605-proposal.md",
+  "contentType": "proposal",
+  "publicationStatus": "draft",
+  "projectStatus": "proposal",
+  "workpiece": [
+    "高温试验样件"
+  ],
+  "materials": [],
+  "process": [
+    "高温材料试验"
+  ],
+  "equipment": [
+    "高温箱式实验炉"
+  ],
+  "need": [
+    "测温范围与验证条件"
+  ],
+  "tags": [
+    "方案参考",
+    "高温试验样件",
+    "测温范围与验证条件"
+  ],
+  "facts": [
+    {
+      "label": "方案加热区",
+      "value": "250×300×250",
+      "unit": "mm",
+      "condition": "有效装载和测点另核",
+      "attribute": "方案参数"
+    },
+    {
+      "label": "讨论稿最高温度",
+      "value": "1400",
+      "unit": "℃",
+      "condition": "所列测温范围需统一，未认定实测能力",
+      "attribute": "方案参数"
+    },
+    {
+      "label": "拟均匀性测试温度",
+      "value": "1300",
+      "unit": "℃",
+      "condition": "讨论稿预验收安排，非已完成结果",
+      "attribute": "方案参数"
+    }
+  ],
+  "participation": "讨论稿拟提供实验炉、抽屉载物台与程序控温，最高温度使用及测量配置待统一。",
+  "sourceSummary": "本文依据江苏苏能工业炉有限公司的历史方案资料整理，介绍拟定配置与供货条件；本文所引原件不构成设备已交付或验收通过的证明。",
+  "coverTitle": "高温实验炉方案：最高温度与测温范围，为什么要一起确认？",
+  "relatedLinks": [],
+  "projectYear": 2026,
+  "sourceDate": "2026-05",
+  "listTitle": "1400℃实验炉的长期工作温度与测温范围",
+  "dateModified": "2026-09-12"
+}

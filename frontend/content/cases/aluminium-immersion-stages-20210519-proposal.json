@@ -1,0 +1,76 @@
+{
+  "id": "aluminium-immersion-stages-20210519-proposal",
+  "slug": "aluminium-immersion-stages-20210519-proposal",
+  "title": "铝合金淬火转移时间，从开门算到什么时候？",
+  "summary": "苏能2021年两份铝合金淬火炉方案，将炉门开启至料框接触介质、接触介质至有效区完全进入分别计时，并为后段设置四档时间。评估快速淬火时，需要先说清每段起止事件和工件姿态，不能用最短档位代替从开门到完全入水的全过程。",
+  "body": "aluminium-immersion-stages-20210519-proposal.md",
+  "contentType": "proposal",
+  "publicationStatus": "draft",
+  "projectStatus": "proposal",
+  "workpiece": [
+    "铝合金罩体",
+    "铝合金型材",
+    "铝合金框环",
+    "铝合金弧板"
+  ],
+  "materials": [
+    "2A12",
+    "2219",
+    "2A14",
+    "7A09"
+  ],
+  "process": [
+    "淬火"
+  ],
+  "equipment": [
+    "高架式铝合金淬火炉"
+  ],
+  "need": [
+    "分段入水控制"
+  ],
+  "tags": [
+    "方案参考",
+    "铝合金罩体",
+    "铝合金型材",
+    "铝合金框环",
+    "铝合金弧板",
+    "分段入水控制"
+  ],
+  "facts": [
+    {
+      "label": "7m方案接液时间",
+      "value": "≤3",
+      "unit": "s",
+      "condition": "门开启至料框接液，非全浸没时间",
+      "attribute": "方案参数"
+    },
+    {
+      "label": "3m方案接液时间",
+      "value": "≤5",
+      "unit": "s",
+      "condition": "门开启至料框接液，非全浸没时间",
+      "attribute": "方案参数"
+    },
+    {
+      "label": "拟定浸入档位",
+      "value": "5/8/12/15",
+      "unit": "s",
+      "condition": "接液至有效区完全进入，仍需与结构段统一",
+      "attribute": "方案参数"
+    }
+  ],
+  "participation": "高架加热、料框升降及水槽转移的方案比较",
+  "sourceSummary": "本文依据江苏苏能工业炉有限公司的历史方案资料整理，介绍拟定配置与供货条件；本文所引原件不构成设备已交付或验收通过的证明。",
+  "coverTitle": "铝合金淬火炉方案：接触水面与完全浸入，为什么分两段计时？",
+  "relatedLinks": [],
+  "projectYear": 2021,
+  "sourceDate": "2021-05-19",
+  "cover": {
+    "src": "/images/case-covers/remaining-20260910/aluminum-curved-panel.webp",
+    "alt": "铝合金弧板类别工件示意",
+    "caption": "铝合金弧板类别示意（本稿涉及的一类对象，人工智能生成，非客户实物）",
+    "fit": "contain"
+  },
+  "listTitle": "铝合金淬火转移时间，从开门算到什么时候？",
+  "dateModified": "2026-09-12"
+}

@@ -1,0 +1,13 @@
+{
+  "id": "coil-batch-identity-2021-proposal",
+  "slug": "coil-batch-identity-2021-proposal",
+  "number": 144,
+  "title": "Stainless-steel-coil solution treatment: tipping, handling and furnace-batch records",
+  "summary": "A 2021 Suneng stainless-steel coil solution-treatment proposal turns horizontal incoming coils upright, then transfers them through conveyors, a loading/unloading table and a fork vehicle into a working furnace. After heating, they move to a water tank. Batches of 2–4 coils pass several handovers, so orientation, position and material identity must stay aligned for process records to identify the actual coils.",
+  "body": "coil-batch-identity-2021-proposal.md",
+  "sourceFingerprint": "e81acafcb5f906638078747c99c2c11465fbcd6f220857bc0163d12df0fd4390",
+  "translationStatus": "complete",
+  "translatedAt": "2026-09-12",
+  "coverAlt": "Illustration of stainless steel coils.",
+  "coverCaption": "Illustration of stainless steel coils (AI-generated). Not an actual customer workpiece photograph. Does not establish actual specifications or process results."
+}

@@ -1,0 +1,1041 @@
+[
+  {
+    "id": "ledger-000",
+    "name": "洛阳物泰轴承有限公司",
+    "shortName": "洛阳物泰",
+    "source": "原始合同买方核对：GEO-20260907-E003-P1",
+    "sourceRecordIds": [],
+    "assetRecordIds": [
+      2,
+      183,
+      225
+    ],
+    "verifiedAt": "2026-09-08",
+    "reviewNote": "合同买方全称已核；所在地证据不足，暂不归省。",
+    "industry": "轴承（推定）",
+    "industrySource": "按公司名称推断（用户于2026-09-10授权）；名称关键词：轴承；未经独立核实。"
+  },
+  {
+    "id": "ledger-001",
+    "name": "张家港海锐达模压装备有限公司",
+    "shortName": "海锐达模压装备",
+    "source": "原始合同买方核对：GEO-20260907-E017-P1",
+    "sourceRecordIds": [],
+    "assetRecordIds": [
+      3,
+      5,
+      170,
+      177
+    ],
+    "verifiedAt": "2026-09-08",
+    "provinceCode": "320000",
+    "provinceName": "江苏省",
+    "provinceVerified": true,
+    "verifiedAddress": "张家港市经济开发区",
+    "provinceSource": "GEO-20260907-E017-P1 合同买方地址",
+    "industry": "模压成形装备（推定）",
+    "industrySource": "按公司名称推断（用户于2026-09-10授权）；名称关键词：模压装备；未经独立核实。"
+  },
+  {
+    "id": "ledger-003",
+    "name": "宜兴市创天管业有限公司",
+    "shortName": "宜兴创天",
+    "source": "原始合同买方核对：GEO-20260907-E018-P1",
+    "sourceRecordIds": [],
+    "assetRecordIds": [
+      6
+    ],
+    "verifiedAt": "2026-09-08",
+    "provinceCode": "320000",
+    "provinceName": "江苏省",
+    "provinceVerified": true,
+    "verifiedAddress": "宜兴市西渚镇",
+    "provinceSource": "GEO-20260907-E018-P1 合同买方地址",
+    "industry": "管材（推定）",
+    "industrySource": "按公司名称推断（用户于2026-09-10授权）；名称关键词：管业；未经独立核实。"
+  },
+  {
+    "id": "ledger-004",
+    "name": "辽宁华荣重工机械有限公司",
+    "shortName": "辽宁华荣重工",
+    "source": "原始合同买方核对：GEO-20260907-E004-P1",
+    "sourceRecordIds": [],
+    "assetRecordIds": [
+      7
+    ],
+    "verifiedAt": "2026-09-08",
+    "provinceCode": "210000",
+    "provinceName": "辽宁省",
+    "provinceVerified": true,
+    "verifiedAddress": "鞍山高新区",
+    "provinceSource": "GEO-20260907-E004-P1 合同买方地址",
+    "industry": "压力容器与石化装备",
+    "industrySource": "https://www.lneec.com/entdetail.aspx?id=78981CB409CC00B5"
+  },
+  {
+    "id": "ledger-005",
+    "name": "贵州安大航空锻造有限责任公司",
+    "shortName": "贵州安大",
+    "source": "原始合同买方核对：GEO-20260907-E001-P1",
+    "sourceRecordIds": [],
+    "assetRecordIds": [
+      8
+    ],
+    "verifiedAt": "2026-09-08",
+    "provinceCode": "520000",
+    "provinceName": "贵州省",
+    "provinceVerified": true,
+    "verifiedAddress": "安顺市东郊",
+    "provinceSource": "GEO-20260907-E001-P1 合同买方地址",
+    "industry": "航空锻件制造",
+    "industrySource": "https://career.cupk.edu.cn/CupkJY/Web/Home/Detail?43kuJdqqW6kyCmomBv0smEAAr-yvSGQUs1-FGGU9xqI=.shtml"
+  },
+  {
+    "id": "ledger-006",
+    "name": "固力发电气有限公司",
+    "shortName": "固力发电气",
+    "source": "原始合同买方核对：GEO-20260907-E063-P3",
+    "sourceRecordIds": [],
+    "assetRecordIds": [
+      9,
+      199
+    ],
+    "verifiedAt": "2026-09-08",
+    "provinceCode": "340000",
+    "provinceName": "安徽省",
+    "provinceVerified": true,
+    "verifiedAddress": "合肥市北城区岗集",
+    "provinceSource": "GEO-20260907-E063-P3 合同买方地址",
+    "industry": "输配电设备与电力金具",
+    "industrySource": "https://www.zhaopin.com/jobdetail/CCL1210588980J40877906512.htm"
+  },
+  {
+    "id": "ledger-009",
+    "name": "扬州荣晟安阀门有限公司",
+    "shortName": "荣晟安阀门",
+    "source": "原始合同买方核对：GEO-20260907-E203-P1",
+    "sourceRecordIds": [],
+    "assetRecordIds": [
+      13
+    ],
+    "verifiedAt": "2026-09-08",
+    "provinceCode": "320000",
+    "provinceName": "江苏省",
+    "provinceVerified": true,
+    "verifiedAddress": "高邮市龙虬镇",
+    "provinceSource": "GEO-20260907-E203-P1 合同买方地址",
+    "industry": "工业阀门",
+    "industrySource": "https://www.bbda.com/purchlist/4819_0.html"
+  },
+  {
+    "id": "ledger-010",
+    "name": "泰州英格伟精密机械有限公司",
+    "shortName": "英格伟精密机械",
+    "source": "原始合同买方核对：GEO-20260907-E061-P2",
+    "sourceRecordIds": [],
+    "assetRecordIds": [
+      14,
+      194
+    ],
+    "verifiedAt": "2026-09-10",
+    "reviewNote": "合同买方全称已核；2026-09-10 复核泰州市生态环境局项目公示，所在地归入江苏。",
+    "provinceCode": "320000",
+    "provinceName": "江苏省",
+    "provinceVerified": true,
+    "provinceSource": "https://hbj.taizhou.gov.cn/ztzl/jsxm/xmnspgs/art/2024/art_f4ab7b5ba9ad4a54a30e019e7a6e55ba.html",
+    "verifiedAddress": "泰州市海陵区兴陵路28号",
+    "industry": "汽车零部件",
+    "industrySource": "https://hbj.taizhou.gov.cn/ztzl/jsxm/xmnspgs/art/2024/art_f4ab7b5ba9ad4a54a30e019e7a6e55ba.html"
+  },
+  {
+    "id": "ledger-014",
+    "name": "宝鸡市博通机电设备有限公司",
+    "shortName": "宝鸡博通",
+    "source": "原始合同买方核对：GEO-20260907-E125-P1",
+    "sourceRecordIds": [],
+    "assetRecordIds": [
+      19,
+      40,
+      49,
+      54,
+      55,
+      58,
+      126
+    ],
+    "verifiedAt": "2026-09-08",
+    "provinceCode": "610000",
+    "provinceName": "陕西省",
+    "provinceVerified": true,
+    "verifiedAddress": "宝鸡市高新区八鱼镇",
+    "provinceSource": "GEO-20260907-E125-P1 合同买方地址",
+    "industry": "机电设备（推定）",
+    "industrySource": "按公司名称推断（用户于2026-09-10授权）；名称关键词：机电设备；未经独立核实。"
+  },
+  {
+    "id": "ledger-016",
+    "name": "东台市瑞代不锈钢制品有限公司",
+    "shortName": "东台瑞代",
+    "source": "原始合同买方核对：GEO-20260907-E195-P1",
+    "sourceRecordIds": [],
+    "assetRecordIds": [
+      21
+    ],
+    "verifiedAt": "2026-09-08",
+    "provinceCode": "320000",
+    "provinceName": "江苏省",
+    "provinceVerified": true,
+    "verifiedAddress": "东台市溱东工业园区",
+    "provinceSource": "GEO-20260907-E195-P1 合同买方地址",
+    "industry": "不锈钢制品（推定）",
+    "industrySource": "按公司名称推断（用户于2026-09-10授权）；名称关键词：不锈钢制品；未经独立核实。"
+  },
+  {
+    "id": "ledger-018",
+    "name": "泰州市诚进机械配件加工部",
+    "shortName": "诚进机械",
+    "source": "原始合同买方核对：GEO-20260907-E215-P1",
+    "sourceRecordIds": [],
+    "assetRecordIds": [
+      23
+    ],
+    "verifiedAt": "2026-09-08",
+    "reviewNote": "合同买方全称已核；所在地证据不足，暂不归省。",
+    "industry": "机械零部件加工（推定）",
+    "industrySource": "按公司名称推断（用户于2026-09-10授权）；名称关键词：机械配件加工；未经独立核实。"
+  },
+  {
+    "id": "ledger-022",
+    "name": "惠柏新材料科技（上海）股份有限公司",
+    "shortName": "惠柏新材",
+    "source": "原始合同买方核对：GEO-20260907-E217-P1",
+    "sourceRecordIds": [],
+    "assetRecordIds": [
+      29,
+      193
+    ],
+    "verifiedAt": "2026-09-08",
+    "provinceCode": "310000",
+    "provinceName": "上海市",
+    "provinceVerified": true,
+    "verifiedAddress": "上海市嘉定区江桥镇",
+    "provinceSource": "GEO-20260907-E217-P1 合同买方地址",
+    "industry": "化工与电子材料",
+    "industrySource": "https://www.wellswam.com/aboutus/"
+  },
+  {
+    "id": "ledger-025",
+    "name": "江油市重鑫特种金属材料有限公司",
+    "shortName": "江油重鑫",
+    "source": "原始合同买方核对：GEO-20260907-E190-P1",
+    "sourceRecordIds": [],
+    "assetRecordIds": [
+      32
+    ],
+    "verifiedAt": "2026-09-08",
+    "provinceCode": "510000",
+    "provinceName": "四川省",
+    "provinceVerified": true,
+    "verifiedAddress": "江油市武都镇",
+    "provinceSource": "GEO-20260907-E190-P1 合同买方地址",
+    "industry": "钢铁冶炼与压延加工",
+    "industrySource": "https://www.mee.gov.cn/xxgk2018/xxgk/xxgk06/202109/W020210903638960303545.pdf"
+  },
+  {
+    "id": "ledger-030",
+    "name": "南通鹏飞铸造有限公司",
+    "shortName": "南通鹏飞铸造",
+    "source": "原始合同买方核对：GEO-20260907-E198-P1",
+    "sourceRecordIds": [],
+    "assetRecordIds": [
+      38
+    ],
+    "verifiedAt": "2026-09-08",
+    "reviewNote": "合同买方全称已核；所在地证据不足，暂不归省。",
+    "industry": "铸造（推定）",
+    "industrySource": "按公司名称推断（用户于2026-09-10授权）；名称关键词：铸造；未经独立核实。"
+  },
+  {
+    "id": "ledger-031",
+    "name": "浙江泰昌实业有限公司",
+    "shortName": "浙江泰昌",
+    "source": "原始合同买方核对：GEO-20260907-E182-P1",
+    "sourceRecordIds": [],
+    "assetRecordIds": [
+      39,
+      50,
+      111
+    ],
+    "verifiedAt": "2026-09-08",
+    "provinceCode": "330000",
+    "provinceName": "浙江省",
+    "provinceVerified": true,
+    "verifiedAddress": "杭州市余杭塘栖工业园区",
+    "provinceSource": "GEO-20260907-E182-P1 合同买方地址",
+    "industry": "输配电设备与电力金具",
+    "industrySource": "https://taichang.com/JC_Data/JC_Edt/file/20250425113226668.pdf"
+  },
+  {
+    "id": "ledger-032",
+    "name": "中集氢能源科技（南通）有限公司",
+    "shortName": "中集氢能源",
+    "source": "原始合同买方核对：GEO-20260907-E174-P1",
+    "sourceRecordIds": [],
+    "assetRecordIds": [
+      41,
+      69,
+      72,
+      97,
+      209
+    ],
+    "verifiedAt": "2026-09-08",
+    "provinceCode": "320000",
+    "provinceName": "江苏省",
+    "provinceVerified": true,
+    "verifiedAddress": "南通市城港路",
+    "provinceSource": "GEO-20260907-E174-P1 合同买方地址",
+    "industry": "能源储运装备",
+    "industrySource": "https://www.chongchuan.gov.cn/ntsccqxzspj/upload/0b3577df-ae22-4f40-865e-26e188f5d8f9.pdf"
+  },
+  {
+    "id": "ledger-042",
+    "name": "浙江缙云韩立锯业有限公司",
+    "shortName": "缙云韩立锯业",
+    "source": "原始合同买方核对：GEO-20260907-E153-P1",
+    "sourceRecordIds": [],
+    "assetRecordIds": [
+      60
+    ],
+    "verifiedAt": "2026-09-08",
+    "provinceCode": "330000",
+    "provinceName": "浙江省",
+    "provinceVerified": true,
+    "verifiedAddress": "缙云县壶镇镇",
+    "provinceSource": "GEO-20260907-E153-P1 合同买方地址",
+    "industry": "锯切工具与工具钢材料",
+    "industrySource": "https://www.dmpsz.com/business.html?category_id=471&max_price=0&min_price=0&orderby=&page=6&s_130=141"
+  },
+  {
+    "id": "ledger-044",
+    "name": "河南省科学院材料研究所",
+    "shortName": "河南省科学院材料所",
+    "source": "原始合同买方核对：GEO-20260907-E152-P4",
+    "sourceRecordIds": [],
+    "assetRecordIds": [
+      62
+    ],
+    "verifiedAt": "2026-09-08",
+    "provinceCode": "410000",
+    "provinceName": "河南省",
+    "provinceVerified": true,
+    "verifiedAddress": "郑州市高新技术开发区",
+    "provinceSource": "GEO-20260907-E152-P4 合同买方地址",
+    "industry": "材料科学研究",
+    "industrySource": "https://www.hniss.cn/agency-2697.html"
+  },
+  {
+    "id": "ledger-046",
+    "name": "扬州汇鑫热处理有限公司",
+    "shortName": "扬州汇鑫热处理",
+    "source": "原始合同买方核对：GEO-20260907-E151-P1",
+    "sourceRecordIds": [],
+    "assetRecordIds": [
+      64
+    ],
+    "verifiedAt": "2026-09-08",
+    "provinceCode": "320000",
+    "provinceName": "江苏省",
+    "provinceVerified": true,
+    "verifiedAddress": "扬州市",
+    "provinceSource": "GEO-20260907-E151-P1 合同买方地址",
+    "industry": "金属热处理",
+    "industrySource": "https://static.sse.com.cn/stock/disclosure/announcement/c/202003/000270_20200312_B7HO.pdf"
+  },
+  {
+    "id": "ledger-048",
+    "name": "宁夏长兴精密机械有限公司",
+    "shortName": "宁夏长兴",
+    "source": "原始合同买方核对：GEO-20260907-E137-P2",
+    "sourceRecordIds": [],
+    "assetRecordIds": [
+      67,
+      113
+    ],
+    "verifiedAt": "2026-09-08",
+    "provinceCode": "640000",
+    "provinceName": "宁夏回族自治区",
+    "provinceVerified": true,
+    "verifiedAddress": "银川经济技术开发区",
+    "provinceSource": "GEO-20260907-E137-P2 合同买方地址",
+    "industry": "数控机床制造",
+    "industrySource": "https://nxcxpm.com/news-center/"
+  },
+  {
+    "id": "ledger-049",
+    "name": "盐城润奇管件有限公司",
+    "shortName": "润奇管件",
+    "source": "原始合同买方核对：GEO-20260907-E146-P1",
+    "sourceRecordIds": [],
+    "assetRecordIds": [
+      68
+    ],
+    "verifiedAt": "2026-09-08",
+    "reviewNote": "合同买方全称已核；所在地证据不足，暂不归省。",
+    "industry": "液压管件与机械配件",
+    "industrySource": "https://www.b2b168.org/huangye/15092769/"
+  },
+  {
+    "id": "ledger-050",
+    "name": "江苏天工科技股份有限公司",
+    "shortName": "天工科技",
+    "source": "原始合同买方核对：GEO-20260907-E168-P1",
+    "sourceRecordIds": [],
+    "assetRecordIds": [
+      70
+    ],
+    "verifiedAt": "2026-09-10",
+    "reviewNote": "合同买方全称已核；2026-09-10 依据公开资料补充历史所在地。公司官网页脚明确全称及地址；上市披露资料亦列明句容市下蜀镇地址。",
+    "industry": "钛及钛合金材料",
+    "industrySource": "https://static.cninfo.com.cn/finalpage/2022-08-29/1214454729.PDF",
+    "provinceCode": "320000",
+    "provinceName": "江苏省",
+    "provinceVerified": true,
+    "provinceSource": "https://www.jstgti.com/about1.html?article_id=3",
+    "verifiedAddress": "江苏省镇江市句容市下蜀镇临港工业园区9号"
+  },
+  {
+    "id": "ledger-052",
+    "name": "张家口瑞泰机械有限责任公司",
+    "shortName": "张家口瑞泰",
+    "source": "原始合同买方核对：GEO-20260907-E157-P1",
+    "sourceRecordIds": [],
+    "assetRecordIds": [
+      73
+    ],
+    "verifiedAt": "2026-09-08",
+    "reviewNote": "合同买方全称已核；所在地证据不足，暂不归省。",
+    "industry": "锻件与机械加工",
+    "industrySource": "https://www.qiyeku.cn/tag/company7edf75-5.html"
+  },
+  {
+    "id": "ledger-053",
+    "name": "盐城市大丰华瑞精工机械有限公司",
+    "shortName": "大丰华瑞精工",
+    "source": "原始合同买方核对：GEO-20260907-E158-P2",
+    "sourceRecordIds": [],
+    "assetRecordIds": [
+      74,
+      207
+    ],
+    "verifiedAt": "2026-09-08",
+    "provinceCode": "320000",
+    "provinceName": "江苏省",
+    "provinceVerified": true,
+    "verifiedAddress": "盐城市大丰区万盈镇",
+    "provinceSource": "GEO-20260907-E158-P2 合同买方地址",
+    "industry": "精密机械（推定）",
+    "industrySource": "按公司名称推断（用户于2026-09-10授权）；名称关键词：精工机械；未经独立核实。"
+  },
+  {
+    "id": "ledger-054",
+    "name": "豪顺北欧（杭州）科技有限公司",
+    "shortName": "豪顺北欧",
+    "source": "原始合同买方核对：GEO-20260907-E177-P1",
+    "sourceRecordIds": [],
+    "assetRecordIds": [
+      76
+    ],
+    "verifiedAt": "2026-09-10",
+    "reviewNote": "合同买方全称已核；2026-09-10 依据公开资料补充历史所在地。富阳电网2023年迎峰度冬名单第1036项明确同名企业列于万市镇；仅采用地区，不据此推断行业。",
+    "industry": "科技类（细分待确认）",
+    "industrySource": "按公司名称推断（用户于2026-09-10授权）；名称关键词：科技；未经独立核实。",
+    "provinceCode": "330000",
+    "provinceName": "浙江省",
+    "provinceVerified": true,
+    "provinceSource": "https://zjjcmspublic.oss-cn-hangzhou-zwynet-d01-a.internet.cloud.zj.gov.cn/jcms_files/jcms1/web2754/site/attach/0/b8a228f73ca94dd6b878dabfbc83a620.pdf",
+    "verifiedAddress": "浙江省杭州市富阳区万市镇"
+  },
+  {
+    "id": "ledger-057",
+    "name": "扬州市管件厂有限公司",
+    "shortName": "扬州市管件厂",
+    "source": "原始合同买方核对：GEO-20260907-E142-P1",
+    "sourceRecordIds": [],
+    "assetRecordIds": [
+      87
+    ],
+    "verifiedAt": "2026-09-10",
+    "reviewNote": "合同买方全称已核；2026-09-10 依据公开资料补充历史所在地。中科院合肥物质科学研究院发布的企业技术需求表第42页，同时列明单位全称与单位地址。",
+    "industry": "工业管件制造",
+    "industrySource": "https://pitchhub.36kr.com/project/1818752432885894",
+    "provinceCode": "320000",
+    "provinceName": "江苏省",
+    "provinceVerified": true,
+    "provinceSource": "https://www.hfcas.ac.cn/hzjl/ydhz/dfxq/201407/P020140731313762128430.pdf",
+    "verifiedAddress": "江苏省宝应经济开发区泰山东路66号"
+  },
+  {
+    "id": "ledger-058",
+    "name": "江苏天工工具新材料股份有限公司",
+    "shortName": "天工工具新材料",
+    "source": "原始合同买方核对：GEO-20260907-E170-P1",
+    "sourceRecordIds": [],
+    "assetRecordIds": [
+      88
+    ],
+    "verifiedAt": "2026-09-10",
+    "reviewNote": "合同买方全称已核；2026-09-10 依据公开资料补充历史所在地。江苏省政府刊载报道明确该全称企业属于丹阳市；只录到已证实的市级。",
+    "industry": "工具钢与模具钢材料",
+    "industrySource": "https://www.tggj.cn/index.php/Index/news_list.html?p=3",
+    "provinceCode": "320000",
+    "provinceName": "江苏省",
+    "provinceVerified": true,
+    "provinceSource": "https://www.jiangsu.gov.cn/art/2025/12/3/art_87819_11684860.html",
+    "verifiedAddress": "江苏省丹阳市"
+  },
+  {
+    "id": "ledger-060",
+    "name": "江苏天工爱和科技有限公司",
+    "shortName": "天工爱和",
+    "source": "原始合同买方核对：GEO-20260907-E162-P1",
+    "sourceRecordIds": [],
+    "assetRecordIds": [
+      91
+    ],
+    "verifiedAt": "2026-09-08",
+    "reviewNote": "合同买方全称已核；所在地证据不足，暂不归省。",
+    "industry": "模具材料",
+    "industrySource": "https://file.smejs.cn/file/group1/M00/01/57/rBIAAWh4V92AOIcoAA6OnA3y6bU324.pdf"
+  },
+  {
+    "id": "ledger-066",
+    "name": "天津润德中天钢管有限公司",
+    "shortName": "润德中天钢管",
+    "source": "原始合同买方核对：GEO-20260907-E040-P2",
+    "sourceRecordIds": [],
+    "assetRecordIds": [
+      103,
+      211
+    ],
+    "verifiedAt": "2026-09-08",
+    "provinceCode": "120000",
+    "provinceName": "天津市",
+    "provinceVerified": true,
+    "verifiedAddress": "天津市津南经济开发区",
+    "provinceSource": "GEO-20260907-E040-P2 合同买方地址",
+    "industry": "无缝钢管制造",
+    "industrySource": "https://www.rdztpipe.com/"
+  },
+  {
+    "id": "ledger-070",
+    "name": "德州新景环境科技有限公司",
+    "shortName": "德州新景环境",
+    "source": "原始合同买方核对：GEO-20260907-E130-P3",
+    "sourceRecordIds": [],
+    "assetRecordIds": [
+      108
+    ],
+    "verifiedAt": "2026-09-08",
+    "provinceCode": "370000",
+    "provinceName": "山东省",
+    "provinceVerified": true,
+    "verifiedAddress": "德州市经济技术开发区",
+    "provinceSource": "GEO-20260907-E130-P3 合同买方地址",
+    "industry": "废气治理材料",
+    "industrySource": "https://dzxj2018.gys.cn/"
+  },
+  {
+    "id": "ledger-073",
+    "name": "东和管道科技（江苏）有限公司",
+    "shortName": "东和管道",
+    "source": "原始合同买方核对：GEO-20260907-E110-P4",
+    "sourceRecordIds": [],
+    "assetRecordIds": [
+      115,
+      143
+    ],
+    "verifiedAt": "2026-09-10",
+    "reviewNote": "合同买方全称已核；2026-09-10 依据公开资料补充历史所在地。启东市台办走访本地台资企业的官方报道列明完整中文名称，地点在启东；只录到市级。",
+    "industry": "不锈钢与合金管件",
+    "industrySource": "https://www.businesswire.com/news/home/20200728005213/en/AFG-Holdings-Inc.-Enters-Long-term-Agreement-with-GPSL ; https://img.tubechina.net/UploadFiles/Static/2018/8/Tube_China%202018_All%20Exhibitor%20List.pdf",
+    "provinceCode": "320000",
+    "provinceName": "江苏省",
+    "provinceVerified": true,
+    "provinceSource": "https://tb.nantong.gov.cn/ntstwswbgs/stkx/content/c4a91293-00c6-41fb-92c1-bb579597fb26.html",
+    "verifiedAddress": "江苏省启东市"
+  },
+  {
+    "id": "ledger-080",
+    "name": "上海万拓实业有限公司",
+    "shortName": "上海万拓",
+    "source": "原始合同买方核对：GEO-20260907-E072-P1",
+    "sourceRecordIds": [],
+    "assetRecordIds": [
+      146
+    ],
+    "verifiedAt": "2026-09-10",
+    "reviewNote": "合同买方全称已核；2026-09-10 依据公开资料补充历史所在地。上海市科委公开名单第1128项将同名企业明确列于上海市金山区。",
+    "industry": "工业钢管与管件制造",
+    "industrySource": "https://www.jobcn.com/position/home.xhtml?comId=112010795&redirect=0&s=page%2Fhome",
+    "provinceCode": "310000",
+    "provinceName": "上海市",
+    "provinceVerified": true,
+    "provinceSource": "https://stcsm.sh.gov.cn/cmsres/9b/9b151bff6a4047b2b11f76d03475a718/3cd3eeaf50e80e0c22f9806848742d7d.pdf",
+    "verifiedAddress": "上海市金山区"
+  },
+  {
+    "id": "ledger-081",
+    "name": "天津日进汽车系统有限公司",
+    "shortName": "天津日进",
+    "source": "原始合同买方核对：GEO-20260907-E096-P1",
+    "sourceRecordIds": [],
+    "assetRecordIds": [
+      149
+    ],
+    "verifiedAt": "2026-09-10",
+    "reviewNote": "合同买方全称已核；2026-09-10 依据公开资料补充历史所在地。企业喷涂设备项目验收报告列明建设单位全称与地址；天津市生态环境局企业名单另将同名主体列于武清区。",
+    "industry": "汽车零部件（轮毂轴承）",
+    "industrySource": "https://13398604.s21i.faiusr.com/61/ABUIABA9GAAg65K69AUorfKy7wY.pdf",
+    "provinceCode": "120000",
+    "provinceName": "天津市",
+    "provinceVerified": true,
+    "provinceSource": "https://13398604.s21i.faiusr.com/61/ABUIABA9GAAg65K69AUorfKy7wY.pdf",
+    "verifiedAddress": "天津新技术产业园区武清开发区泉达路西侧"
+  },
+  {
+    "id": "ledger-082",
+    "name": "江苏和诚制药设备制造有限公司",
+    "shortName": "和诚制药设备",
+    "source": "原始合同买方核对：GEO-20260907-E095-P1",
+    "sourceRecordIds": [],
+    "assetRecordIds": [
+      154
+    ],
+    "verifiedAt": "2026-09-10",
+    "reviewNote": "合同买方全称已核；2026-09-10 依据公开资料补充历史所在地。企业官网页脚同时列明完整公司名和地址。",
+    "industry": "制药与化工装备",
+    "industrySource": "https://www.hf.cas.cn/hzjl/ydhz/dfxq/201707/P020170727537259300501.pdf",
+    "provinceCode": "320000",
+    "provinceName": "江苏省",
+    "provinceVerified": true,
+    "provinceSource": "https://www.jshecheng.com/",
+    "verifiedAddress": "江苏靖江市马桥镇正北高新科技产业区8号"
+  },
+  {
+    "id": "ledger-084",
+    "name": "河南鑫金汇不锈钢产业有限公司",
+    "shortName": "河南鑫金汇",
+    "source": "原始合同买方核对：GEO-20260907-E075-P1",
+    "sourceRecordIds": [],
+    "assetRecordIds": [
+      159,
+      180
+    ],
+    "verifiedAt": "2026-09-08",
+    "provinceCode": "410000",
+    "provinceName": "河南省",
+    "provinceVerified": true,
+    "verifiedAddress": "长葛市大周镇",
+    "provinceSource": "GEO-20260907-E075-P1 合同买方地址",
+    "industry": "不锈钢材料",
+    "industrySource": "https://www.hubin.gov.cn/backend/ueditor/jsp/upload/files/hb_data/2023/0911/20230911101045399.pdf"
+  },
+  {
+    "id": "ledger-088",
+    "name": "天津亚世亚金属制品有限公司",
+    "shortName": "天津亚世亚",
+    "source": "原始合同买方核对：GEO-20260907-E084-P1",
+    "sourceRecordIds": [],
+    "assetRecordIds": [
+      164
+    ],
+    "verifiedAt": "2026-09-08",
+    "provinceCode": "120000",
+    "provinceName": "天津市",
+    "provinceVerified": true,
+    "verifiedAddress": "天津市北辰区双街镇",
+    "provinceSource": "GEO-20260907-E084-P1 合同买方地址",
+    "industry": "金属加工与热处理",
+    "industrySource": "https://pdf.dfcfw.com/pdf/H2_AN202201071539016439_1.pdf"
+  },
+  {
+    "id": "ledger-092",
+    "name": "烟台元铧钢管有限公司",
+    "shortName": "烟台元铧钢管",
+    "source": "原始合同买方核对：GEO-20260907-E026-P1",
+    "sourceRecordIds": [],
+    "assetRecordIds": [
+      171
+    ],
+    "verifiedAt": "2026-09-08",
+    "provinceCode": "370000",
+    "provinceName": "山东省",
+    "provinceVerified": true,
+    "verifiedAddress": "烟台开发区大季家工业园",
+    "provinceSource": "GEO-20260907-E026-P1 合同买方地址",
+    "industry": "钢管与管材",
+    "industrySource": "https://yuanhuasteel.gys.cn/"
+  },
+  {
+    "id": "ledger-093",
+    "name": "天津钢研海德科技有限公司",
+    "shortName": "钢研海德",
+    "source": "原始合同买方核对：GEO-20260907-E027-P1",
+    "sourceRecordIds": [],
+    "assetRecordIds": [
+      172
+    ],
+    "verifiedAt": "2026-09-10",
+    "reviewNote": "合同买方全称已核；2026-09-10 依据公开资料补充历史所在地。授权专利CN112011740B首页第73项列明专利权人完整名称及地址；仅用于历史地区归属。",
+    "industry": "特种合金材料",
+    "industrySource": "https://www.seatone.net.cn/news/727.html",
+    "provinceCode": "120000",
+    "provinceName": "天津市",
+    "provinceVerified": true,
+    "provinceSource": "https://patentimages.storage.googleapis.com/7d/31/d4/0f3d21b7855666/CN112011740B.pdf",
+    "verifiedAddress": "天津市武清区自行车王国产业园区祥园道160号121-20（集中办公区）"
+  },
+  {
+    "id": "ledger-094",
+    "name": "南京宇创石化设备有限公司",
+    "shortName": "南京宇创石化设备",
+    "source": "原始合同买方核对：GEO-20260907-E022-P3",
+    "sourceRecordIds": [],
+    "assetRecordIds": [
+      173
+    ],
+    "verifiedAt": "2026-09-08",
+    "provinceCode": "320000",
+    "provinceName": "江苏省",
+    "provinceVerified": true,
+    "verifiedAddress": "南京市江宁滨江经济技术开发区",
+    "provinceSource": "GEO-20260907-E022-P3 合同买方地址",
+    "industry": "石化设备（推定）",
+    "industrySource": "按公司名称推断（用户于2026-09-10授权）；名称关键词：石化设备；未经独立核实。"
+  },
+  {
+    "id": "ledger-095",
+    "name": "江苏远扬管业股份有限公司",
+    "shortName": "江苏远扬管业",
+    "source": "原始合同买方核对：GEO-20260907-E007-P1",
+    "sourceRecordIds": [],
+    "assetRecordIds": [
+      174
+    ],
+    "verifiedAt": "2026-09-10",
+    "reviewNote": "合同买方全称已核；2026-09-10 依据公开资料补充历史所在地。希中商会经贸代表团企业介绍第33个PDF页（印刷页29），完整公司名、地址及英文地址在同一公司介绍中；不同公司同址不作为合并依据。",
+    "industry": "工业管道与管件",
+    "industrySource": "https://www.greece-china.gr/wp-content/uploads/Company-Profile-of-China-Trade-and-Investment-Mission.pdf",
+    "provinceCode": "320000",
+    "provinceName": "江苏省",
+    "provinceVerified": true,
+    "provinceSource": "https://www.greece-china.gr/wp-content/uploads/Company-Profile-of-China-Trade-and-Investment-Mission.pdf",
+    "verifiedAddress": "江苏省宝应经济开发区泰山东路66号"
+  },
+  {
+    "id": "ledger-096",
+    "name": "湖南华菱涟源钢铁有限公司",
+    "shortName": "华菱涟钢",
+    "source": "原始合同买方核对：GEO-20260907-E023-P1",
+    "sourceRecordIds": [],
+    "assetRecordIds": [
+      175
+    ],
+    "verifiedAt": "2026-09-08",
+    "provinceCode": "430000",
+    "provinceName": "湖南省",
+    "provinceVerified": true,
+    "verifiedAddress": "娄底市黄泥塘",
+    "provinceSource": "https://www.lysteel.com/download/09.pdf",
+    "industry": "钢铁冶炼",
+    "industrySource": "https://www.lysteel.com/download/09.pdf"
+  },
+  {
+    "id": "ledger-099",
+    "name": "福建鼎信科技有限公司",
+    "shortName": "福建鼎信科技",
+    "source": "原始合同买方核对：GEO-20260907-E015-P4",
+    "sourceRecordIds": [],
+    "assetRecordIds": [
+      181,
+      182,
+      228
+    ],
+    "verifiedAt": "2026-09-08",
+    "provinceCode": "350000",
+    "provinceName": "福建省",
+    "provinceVerified": true,
+    "verifiedAddress": "福安市湾坞镇",
+    "provinceSource": "GEO-20260907-E015-P4 合同买方地址",
+    "industry": "不锈钢轧制与深加工",
+    "industrySource": "https://www.tsingtuo.com/meitijujiao/439.html"
+  },
+  {
+    "id": "ledger-101",
+    "name": "宜兴市恒力环保设备有限公司",
+    "shortName": "宜兴恒力环保",
+    "source": "原始合同买方核对：GEO-20260907-E002-P1",
+    "sourceRecordIds": [],
+    "assetRecordIds": [
+      185
+    ],
+    "verifiedAt": "2026-09-08",
+    "reviewNote": "合同买方全称已核；所在地证据不足，暂不归省。",
+    "industry": "环保设备（推定）",
+    "industrySource": "按公司名称推断（用户于2026-09-10授权）；名称关键词：环保设备；未经独立核实。"
+  },
+  {
+    "id": "ledger-102",
+    "name": "广西百矿新材料技术有限公司",
+    "shortName": "广西百矿新材",
+    "source": "原始合同买方核对：GEO-20260907-E071-P12",
+    "sourceRecordIds": [],
+    "assetRecordIds": [
+      186
+    ],
+    "verifiedAt": "2026-09-08",
+    "provinceCode": "450000",
+    "provinceName": "广西壮族自治区",
+    "provinceVerified": true,
+    "verifiedAddress": "百色市田阳区头塘镇",
+    "provinceSource": "GEO-20260907-E071-P12 合同买方地址",
+    "industry": "汽车零部件（铝合金轮毂）",
+    "industrySource": "https://www.bsbkjt.com/newsinfo/2261753.html"
+  },
+  {
+    "id": "ledger-103",
+    "name": "钢诺新材料股份有限公司",
+    "shortName": "钢诺新材",
+    "source": "原始合同买方核对：GEO-20260907-E070-P2",
+    "sourceRecordIds": [],
+    "assetRecordIds": [
+      187
+    ],
+    "verifiedAt": "2026-09-08",
+    "provinceCode": "130000",
+    "provinceName": "河北省",
+    "provinceVerified": true,
+    "verifiedAddress": "邯郸市广平县城南工业园区",
+    "provinceSource": "GEO-20260907-E070-P2 合同买方地址",
+    "industry": "矿用耐磨材料",
+    "industrySource": "https://www.hbgnjs.com/aboutus.html"
+  },
+  {
+    "id": "ledger-105",
+    "name": "江苏省金象传动设备股份有限公司",
+    "shortName": "金象传动",
+    "source": "原始合同买方核对：GEO-20260907-E068-P1",
+    "sourceRecordIds": [],
+    "assetRecordIds": [
+      189
+    ],
+    "verifiedAt": "2026-09-10",
+    "reviewNote": "合同买方全称已核；2026-09-10 复核企业官网联系地址，所在地归入江苏。",
+    "provinceCode": "320000",
+    "provinceName": "江苏省",
+    "provinceVerified": true,
+    "provinceSource": "https://www.js-gear.com/",
+    "verifiedAddress": "江苏省淮安市清江浦区深圳东路6号",
+    "industry": "减速机与传动设备",
+    "industrySource": "https://www.js-gear.com/"
+  },
+  {
+    "id": "ledger-114",
+    "name": "常州南鹏机械有限公司",
+    "shortName": "常州南鹏机械",
+    "source": "原始合同买方核对：GEO-20260907-E044-P2",
+    "sourceRecordIds": [],
+    "assetRecordIds": [
+      210
+    ],
+    "verifiedAt": "2026-09-08",
+    "provinceCode": "320000",
+    "provinceName": "江苏省",
+    "provinceVerified": true,
+    "verifiedAddress": "常州市武进区礼嘉镇",
+    "provinceSource": "GEO-20260907-E044-P2 合同买方地址",
+    "industry": "精密减速机与传动设备",
+    "industrySource": "https://www.zhaopin.com/companydetail/CC321178530.htm"
+  },
+  {
+    "id": "ledger-116",
+    "name": "福安市青拓不锈钢表面处理有限公司",
+    "shortName": "青拓不锈钢表面处理",
+    "source": "原始合同买方核对：GEO-20260907-E039-P2",
+    "sourceRecordIds": [],
+    "assetRecordIds": [
+      213,
+      218
+    ],
+    "verifiedAt": "2026-09-08",
+    "provinceCode": "350000",
+    "provinceName": "福建省",
+    "provinceVerified": true,
+    "verifiedAddress": "福安市湾坞镇",
+    "provinceSource": "GEO-20260907-E039-P2 合同买方地址",
+    "industry": "冶金",
+    "industrySource": "https://gxt.fj.gov.cn/zwgk/zfxxgk/fdzdgknr/gzdt/202403/P020240318558811829327.pdf"
+  },
+  {
+    "id": "ledger-117",
+    "name": "句容市天工新材料科技有限公司",
+    "shortName": "句容天工新材",
+    "source": "原始合同买方核对：GEO-20260907-E035-P4",
+    "sourceRecordIds": [],
+    "assetRecordIds": [
+      214
+    ],
+    "verifiedAt": "2026-09-08",
+    "provinceCode": "320000",
+    "provinceName": "江苏省",
+    "provinceVerified": true,
+    "verifiedAddress": "句容市下蜀镇临港工业区",
+    "provinceSource": "GEO-20260907-E035-P4 合同买方地址",
+    "industry": "特种钢与合金材料",
+    "industrySource": "https://file.finance.sina.com.cn/211.154.219.97%3A9494/MRGG/SBGG/2023/2023-3/2023-03-27/8913327.PDF"
+  },
+  {
+    "id": "ledger-118",
+    "name": "长春致远新能源装备股份有限公司",
+    "shortName": "长春致远新能源装备",
+    "source": "原始合同买方核对：GEO-20260907-E038-P4",
+    "sourceRecordIds": [],
+    "assetRecordIds": [
+      215
+    ],
+    "verifiedAt": "2026-09-08",
+    "provinceCode": "220000",
+    "provinceName": "吉林省",
+    "provinceVerified": true,
+    "verifiedAddress": "长春市朝阳经济开发区",
+    "provinceSource": "GEO-20260907-E038-P4 合同买方地址",
+    "industry": "天然气与氢能装备",
+    "industrySource": "https://static.cninfo.com.cn/finalpage/2025-04-29/1223363291.PDF"
+  },
+  {
+    "id": "ledger-121",
+    "name": "石家庄安瑞科气体机械有限公司",
+    "shortName": "石家庄安瑞科",
+    "source": "原始合同买方核对：GEO-20260907-E032-P1",
+    "sourceRecordIds": [],
+    "assetRecordIds": [
+      220
+    ],
+    "verifiedAt": "2026-09-08",
+    "provinceCode": "130000",
+    "provinceName": "河北省",
+    "provinceVerified": true,
+    "verifiedAddress": "石家庄市栾城区",
+    "provinceSource": "GEO-20260907-E032-P1 合同买方地址",
+    "industry": "气体储运与氢能装备",
+    "industrySource": "https://www.cimc-sjzenric.com/"
+  },
+  {
+    "id": "ledger-122",
+    "name": "宝丰县翔隆不锈钢有限公司",
+    "shortName": "宝丰翔隆不锈钢",
+    "source": "原始合同买方核对：GEO-20260907-E030-P1",
+    "sourceRecordIds": [],
+    "assetRecordIds": [
+      221
+    ],
+    "verifiedAt": "2026-09-10",
+    "reviewNote": "合同买方全称已核；2026-09-10 依据公开资料补充历史所在地。高校发布的企业招聘介绍明确公司位于河南宝丰县产业集聚区；政府公示同名主体地址亦一致。仅展示历年合作记录，不据此声明目前持续经营。",
+    "industry": "不锈钢冶炼与加工",
+    "industrySource": "https://jycy.pzxy.edu.cn/info/1021/1146.htm",
+    "provinceCode": "410000",
+    "provinceName": "河南省",
+    "provinceVerified": true,
+    "provinceSource": "https://jycy.pzxy.edu.cn/info/1021/1146.htm",
+    "verifiedAddress": "河南省宝丰县产业集聚区"
+  },
+  {
+    "id": "ledger-124",
+    "name": "宝鸡法士特齿轮有限责任公司",
+    "shortName": "宝鸡法士特",
+    "source": "原始合同买方核对：GEO-20260907-E019-P1",
+    "sourceRecordIds": [],
+    "assetRecordIds": [
+      224
+    ],
+    "verifiedAt": "2026-09-08",
+    "provinceCode": "610000",
+    "provinceName": "陕西省",
+    "provinceVerified": true,
+    "verifiedAddress": "宝鸡市陈仓区虢镇科技园",
+    "provinceSource": "GEO-20260907-E019-P1 合同买方地址",
+    "industry": "汽车传动零部件",
+    "industrySource": "https://www.chinafastgear.com/default/view/2023120711hUp6C.html"
+  },
+  {
+    "id": "ledger-125",
+    "name": "西安标准热处理有限责任公司",
+    "shortName": "西安标准热处理",
+    "source": "原始合同买方核对：GEO-20260907-E016-P1",
+    "sourceRecordIds": [],
+    "assetRecordIds": [
+      226
+    ],
+    "verifiedAt": "2026-09-08",
+    "provinceCode": "610000",
+    "provinceName": "陕西省",
+    "provinceVerified": true,
+    "verifiedAddress": "西安市",
+    "provinceSource": "https://www.xagytzjt.com/show/22101010dbyNk.html",
+    "industry": "金属热处理",
+    "industrySource": "https://www.xagytzjt.com/show/22101010dbyNk.html"
+  },
+  {
+    "id": "ledger-126",
+    "name": "山东黑旋风锯业有限公司",
+    "shortName": "山东黑旋风锯业",
+    "source": "原始合同买方核对：GEO-20260907-E010-P1",
+    "sourceRecordIds": [],
+    "assetRecordIds": [
+      227
+    ],
+    "verifiedAt": "2026-09-08",
+    "provinceCode": "370000",
+    "provinceName": "山东省",
+    "provinceVerified": true,
+    "verifiedAddress": "莱芜市高新区",
+    "provinceSource": "GEO-20260907-E010-P1 合同买方地址",
+    "industry": "锯片与锯切工具",
+    "industrySource": "https://www.sdhxf.com/"
+  },
+  {
+    "id": "ledger-127",
+    "name": "湖北山江重工有限公司",
+    "shortName": "湖北山江重工",
+    "source": "原始合同买方核对：GEO-20260907-E008-P1",
+    "sourceRecordIds": [],
+    "assetRecordIds": [
+      229
+    ],
+    "verifiedAt": "2026-09-08",
+    "provinceCode": "420000",
+    "provinceName": "湖北省",
+    "provinceVerified": true,
+    "verifiedAddress": "老河口市",
+    "provinceSource": "GEO-20260907-E008-P1 合同买方地址",
+    "industry": "大型铸钢件制造",
+    "industrySource": "https://jxt.hubei.gov.cn/fbjd/xxgkml/sjfb/qt/201504/t20150420_364241.shtml"
+  },
+  {
+    "id": "ledger-128",
+    "name": "四川华都核设备制造有限公司",
+    "shortName": "四川华都核设备",
+    "source": "原始合同买方核对：GEO-20260907-E006-P2",
+    "sourceRecordIds": [],
+    "assetRecordIds": [
+      230
+    ],
+    "verifiedAt": "2026-09-08",
+    "provinceCode": "510000",
+    "provinceName": "四川省",
+    "provinceVerified": true,
+    "verifiedAddress": "都江堰市工业开发区",
+    "provinceSource": "GEO-20260907-E006-P2 合同买方地址",
+    "industry": "核电设备制造",
+    "industrySource": "https://www.hnem.com.cn/index.php?a=lists&c=index&catid=9&m=content"
+  }
+]

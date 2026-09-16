@@ -1,0 +1,13 @@
+{
+  "id": "two-retort-cooling-20241016-proposal",
+  "slug": "two-retort-cooling-20241016-proposal",
+  "number": 111,
+  "title": "One pit furnace, two retorts: when can they reduce main-furnace waiting?",
+  "summary": "While one retort occupies the main furnace for heating, the other can undergo cooling, unloading, reloading and preparation that the process permits outside the furnace. To judge whether two retorts can reduce waiting, compare when the previous retort is ready to enter again with when the other retort is allowed to leave. Shared lifting equipment, gas and water connections, and preparation stations also affect the handover. A pit-type vacuum resistance furnace proposal issued by Jiangsu Suneng Industrial Furnace Co., Ltd. on 16 October 2024 specifies one main furnace, two vacuum retorts and two air-cooling vessels. This article uses that arrangement to explain how to assess alternating operation.",
+  "body": "two-retort-cooling-20241016-proposal.md",
+  "sourceFingerprint": "912736fdf3ae3e13f08b467cf44f1f58b859b73eab35305c1e332aebeb72cd42",
+  "translationStatus": "complete",
+  "translatedAt": "2026-09-15",
+  "coverAlt": "",
+  "coverCaption": ""
+}

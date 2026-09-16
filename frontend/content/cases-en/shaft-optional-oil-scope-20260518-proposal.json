@@ -1,0 +1,13 @@
+{
+  "id": "shaft-optional-oil-scope-20260518-proposal",
+  "slug": "small-shaft-belt-quench-optional-oil-bath-control-scope-proposal",
+  "number": 102,
+  "title": "Does a small-shaft quenching furnace include the oil tank, washing and tempering equipment?",
+  "summary": "Suneng's proposal dated 18 May 2026 for small metal shaft parts covers heating for oil quenching of materials including 40Cr, while listing washing and tempering equipment as buyer-supplied. The equipment schedule includes one oil tank, but the detailed structural description marks it as optional. The final scope must therefore define the tank and lift, oil-temperature recording, cooling water, and subsequent washing and tempering together. The heating-furnace name alone does not establish that the entire process is included.",
+  "body": "shaft-optional-oil-scope-20260518-proposal.md",
+  "sourceFingerprint": "02cd3698db0f8ca155b920f02d4131edda0fd1971df869a6fe365ef7d902c58b",
+  "translationStatus": "complete",
+  "translatedAt": "2026-09-12",
+  "coverAlt": "Illustration of small shaft-type parts.",
+  "coverCaption": "Illustration of small shaft-type parts (AI-generated). Not an actual customer workpiece photograph. Does not establish actual specifications or process results."
+}

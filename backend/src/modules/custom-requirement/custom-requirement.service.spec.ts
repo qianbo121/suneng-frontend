@@ -10,6 +10,7 @@ import { CreateCustomRequirementDto } from '@/modules/custom-requirement/dto/cre
 import { CustomRequirementService } from '@/modules/custom-requirement/custom-requirement.service';
 import { InquiryNotificationProcessor } from '@/modules/custom-requirement/inquiry-notification.processor';
 import { PrismaService } from '@/prisma/prisma.service';
+import { WorkpieceRouterService } from '@/modules/workpiece-router/workpiece-router.service';
 
 describe('CustomRequirementService', () => {
   const createDto = (overrides: Partial<CreateCustomRequirementDto> = {}) => ({
@@ -72,7 +73,7 @@ describe('CustomRequirementService', () => {
       $transaction: transaction,
     } as unknown as PrismaService;
     const processor = { kick: jest.fn() } as unknown as InquiryNotificationProcessor;
-    const service = new CustomRequirementService(prisma, processor);
+    const service = new CustomRequirementService(prisma, processor, new WorkpieceRouterService());
 
     return {
       service,
@@ -108,7 +109,7 @@ describe('CustomRequirementService', () => {
       $transaction: jest.fn((callback) => callback(transactionClient)),
     } as unknown as PrismaService;
     const processor = { kick: jest.fn() } as unknown as InquiryNotificationProcessor;
-    const service = new CustomRequirementService(prisma, processor);
+    const service = new CustomRequirementService(prisma, processor, new WorkpieceRouterService());
     const operator = {
       id: 7,
       username: 'reviewer',
@@ -184,6 +185,226 @@ describe('CustomRequirementService', () => {
     expect(result).toEqual({ submissionId: inquiryData.submissionId });
     expect(Object.keys(result)).toEqual(['submissionId']);
     expect(processor.kick).toHaveBeenCalledTimes(1);
+  });
+
+  it('stores the four-field homepage form without inventing company or location values', async () => {
+    const { service, createInquiry, createEvent } = setup();
+
+    await service.createPublic(
+      createDto({
+        formVariant: 'homepage_minimal',
+        projectType: '现有设备改造或维修',
+        requirement: '炉温不均，想先判断改造还是换新',
+        identity: '示例制造公司 / 王工',
+        contact: 'buyer@example.com',
+        projectLocation: undefined,
+        name: undefined,
+        company: undefined,
+        phone: undefined,
+        email: undefined,
+        pagePath: '/zh',
+      }),
+      'homepage-client',
+    );
+
+    expect(createInquiry.mock.calls[0][0].data).toEqual(
+      expect.objectContaining({
+        projectType: '现有设备改造或维修',
+        projectLocation: undefined,
+        name: '示例制造公司 / 王工',
+        company: undefined,
+        phone: '',
+        email: 'buyer@example.com',
+        requirement: '炉温不均，想先判断改造还是换新',
+      }),
+    );
+    expect(createEvent.mock.calls[0][0].data).toEqual(
+      expect.objectContaining({ eventType: 'form_submit', pagePath: '/zh' }),
+    );
+  });
+
+  it('stores an optional project location supplied by a minimal product inquiry', async () => {
+    const { service, createInquiry } = setup();
+
+    await service.createPublic(
+      createDto({
+        formVariant: 'homepage_minimal',
+        projectType: '金属带材连续退火 / 固溶生产线',
+        projectLocation: '江苏泰州 / 越南',
+        requirement: '需要先做选型初判',
+        identity: '王工',
+        contact: 'wechat_name-2026',
+        name: undefined,
+        company: undefined,
+        phone: undefined,
+        email: undefined,
+      }),
+      'product-page-client',
+    );
+
+    expect(createInquiry.mock.calls[0][0].data).toEqual(
+      expect.objectContaining({
+        projectLocation: '江苏泰州 / 越南',
+        name: '王工',
+        phone: 'wechat_name-2026',
+      }),
+    );
+  });
+
+  it('recomputes and stores workpiece context with the inquiry in the same transaction', async () => {
+    const { service, createInquiry, createEvent } = setup();
+
+    await service.createPublic(
+      createDto({
+        formVariant: 'homepage_minimal',
+        projectType: '单体工业炉新建',
+        requirement: '大型焊接机架去应力处理',
+        identity: '示例公司 / 王工',
+        contact: 'buyer@example.com',
+        projectLocation: undefined,
+        name: undefined,
+        company: undefined,
+        phone: undefined,
+        email: undefined,
+        pagePath: '/zh',
+        sessionId: 'session-workpiece-1',
+        workpieceContext: {
+          categoryId: 'welded-structures',
+          workpieceId: 'large-welded-machine-frame',
+          processPurposeId: 'stress-relief',
+          rawConditions: {
+            batchLoadWeightKg: 8000,
+            loadCapacityCompatible: true,
+            furnaceName: '客户端伪造炉型',
+            phone: '13000000000',
+          } as never,
+        },
+      }),
+      'homepage-workpiece-client',
+    );
+
+    expect(createInquiry.mock.calls[0][0].data.workpieceSelection.create).toEqual(
+      expect.objectContaining({
+        sessionId: 'session-workpiece-1',
+        categoryId: 'welded-structures',
+        workpieceId: 'large-welded-machine-frame',
+        processPurposeId: 'stress-relief',
+        rawConditionsJson: { batchLoadWeightKg: 8000 },
+        displayState: expect.any(String),
+        publicDirectionIdsJson: [],
+        ruleVersion: 'workpiece-router-resolver-2.3.0',
+      }),
+    );
+    expect(createEvent.mock.calls[0][0].data).not.toHaveProperty('properties');
+  });
+
+  it('stores the customer search term when no workpiece matches', async () => {
+    const { service, createInquiry } = setup();
+
+    await service.createPublic(
+      createDto({
+        formVariant: 'homepage_minimal',
+        projectType: '单体工业炉新建',
+        requirement: '需要工程师判断未收录工件',
+        identity: '示例公司 / 李工',
+        contact: 'buyer@example.com',
+        projectLocation: undefined,
+        name: undefined,
+        company: undefined,
+        phone: undefined,
+        email: undefined,
+        pagePath: '/zh',
+        workpieceContext: {
+          categoryId: 'welded-structures',
+          searchTerm: '异形火星零件',
+        },
+      }),
+      'homepage-no-match-client',
+    );
+
+    expect(createInquiry.mock.calls[0][0].data.workpieceSelection.create).toEqual(
+      expect.objectContaining({
+        categoryId: 'welded-structures',
+        searchTerm: '异形火星零件',
+        displayState: 'search_no_match',
+        publicDirectionIdsJson: [],
+      }),
+    );
+    expect(
+      createInquiry.mock.calls[0][0].data.workpieceSelection.create.workpieceId,
+    ).toBeUndefined();
+  });
+
+  it.each([
+    [
+      'unknown category',
+      {
+        categoryId: 'not-a-category',
+        workpieceId: 'large-welded-machine-frame',
+        processPurposeId: 'stress-relief',
+        rawConditions: {},
+      },
+    ],
+    [
+      'workpiece in the wrong category',
+      {
+        categoryId: 'gas-cylinders',
+        workpieceId: 'large-welded-machine-frame',
+        processPurposeId: 'stress-relief',
+        rawConditions: {},
+      },
+    ],
+    [
+      'invalid purpose pair',
+      {
+        categoryId: 'welded-structures',
+        workpieceId: 'large-welded-machine-frame',
+        processPurposeId: 'not-a-purpose',
+        rawConditions: {},
+      },
+    ],
+  ])('rejects %s before opening a database transaction', async (_label, workpieceContext) => {
+    const { service, transaction } = setup();
+
+    await expect(
+      service.createPublic(
+        createDto({ workpieceContext: workpieceContext as never }),
+        'invalid-workpiece-client',
+      ),
+    ).rejects.toBeInstanceOf(BadRequestException);
+    expect(transaction).not.toHaveBeenCalled();
+  });
+
+  it('does not leave follow-up work after any step in the transaction fails', async () => {
+    const createInquiry = jest.fn().mockResolvedValue({ id: 1 });
+    const createEvent = jest.fn().mockRejectedValue(new Error('event insert failed'));
+    const transactionClient = {
+      customRequirement: { create: createInquiry },
+      websiteLeadEvent: { create: createEvent },
+    };
+    const prisma = {
+      customRequirement: { findUnique: jest.fn().mockResolvedValue(null) },
+      $transaction: jest.fn((callback) => callback(transactionClient)),
+    } as unknown as PrismaService;
+    const processor = { kick: jest.fn() } as unknown as InquiryNotificationProcessor;
+    const service = new CustomRequirementService(prisma, processor, new WorkpieceRouterService());
+
+    await expect(
+      service.createPublic(
+        createDto({
+          workpieceContext: {
+            categoryId: 'welded-structures',
+            workpieceId: 'large-welded-machine-frame',
+            processPurposeId: 'stress-relief',
+            rawConditions: { batchLoadWeightKg: 'unknown' },
+          },
+        }),
+        'transaction-failure-client',
+      ),
+    ).rejects.toThrow('event insert failed');
+    expect(createInquiry).toHaveBeenCalledTimes(1);
+    expect(createEvent).toHaveBeenCalledTimes(1);
+    expect(processor.kick).not.toHaveBeenCalled();
   });
 
   it('returns an existing submission before spam throttling and creates no duplicate work', async () => {
@@ -597,9 +818,11 @@ describe('CustomRequirementService', () => {
       customRequirement: { findMany, count },
       $transaction: jest.fn((operations: Array<Promise<unknown>>) => Promise.all(operations)),
     } as unknown as PrismaService;
-    const service = new CustomRequirementService(prisma, {
-      kick: jest.fn(),
-    } as unknown as InquiryNotificationProcessor);
+    const service = new CustomRequirementService(
+      prisma,
+      { kick: jest.fn() } as unknown as InquiryNotificationProcessor,
+      new WorkpieceRouterService(),
+    );
 
     await service.getAdminList({ page: 1, pageSize: 10 });
 
@@ -623,6 +846,70 @@ describe('CustomRequirementService', () => {
     ]) {
       expect(select).not.toHaveProperty(internalField);
     }
+    expect(select).not.toHaveProperty('workpieceSelection');
+  });
+
+  it('returns a read-only admin workpiece context without internal candidates', async () => {
+    const findUnique = jest.fn().mockResolvedValue({
+      id: 41,
+      submissionId: '52d8d7ae-a6ce-47cf-a2dd-95d065d06f7e',
+      status: CustomRequirementStatus.pending,
+      workpieceSelection: {
+        categoryId: 'welded-structures',
+        workpieceId: 'large-welded-machine-frame',
+        searchTerm: null,
+        processPurposeId: 'stress-relief',
+        rawConditionsJson: { batchLoadWeightKg: 8000, dimensionUnit: 'mm' },
+        displayState: 'insufficient_conditions',
+        missingInputsJson: ['dimensionLength'],
+        publicDirectionIdsJson: [],
+        ruleVersion: 'workpiece-router-resolver-2.3.0',
+        baselineVersion: null,
+        createdAt: new Date('2026-08-27T08:00:00.000Z'),
+      },
+    });
+    const prisma = { customRequirement: { findUnique } } as unknown as PrismaService;
+    const service = new CustomRequirementService(
+      prisma,
+      { kick: jest.fn() } as unknown as InquiryNotificationProcessor,
+      new WorkpieceRouterService(),
+    );
+
+    const detail = await service.findOne(41);
+
+    expect(detail.workpieceContext).toMatchObject({
+      categoryName: '焊接结构件',
+      workpieceName: '大型焊接机架',
+      publicDirections: [],
+      ruleVersion: 'workpiece-router-resolver-2.3.0',
+    });
+    expect(detail.workpieceContext?.rawConditions).toContainEqual({
+      label: '批次装载总重',
+      value: '8000kg',
+    });
+    expect(detail.workpieceContext).not.toHaveProperty('logicUnitId');
+    expect(detail.workpieceContext).not.toHaveProperty('ruleId');
+    expect(detail.workpieceContext).not.toHaveProperty('internalCandidates');
+  });
+
+  it('keeps old inquiry details readable when no workpiece context exists', async () => {
+    const findUnique = jest.fn().mockResolvedValue({
+      id: 42,
+      submissionId: '62d8d7ae-a6ce-47cf-a2dd-95d065d06f7e',
+      status: CustomRequirementStatus.pending,
+      workpieceSelection: null,
+    });
+    const prisma = { customRequirement: { findUnique } } as unknown as PrismaService;
+    const service = new CustomRequirementService(
+      prisma,
+      { kick: jest.fn() } as unknown as InquiryNotificationProcessor,
+      new WorkpieceRouterService(),
+    );
+
+    await expect(service.findOne(42)).resolves.toMatchObject({
+      id: 42,
+      workpieceContext: null,
+    });
   });
 
   it('uses the same privacy allowlist when marking an inquiry followed', async () => {
@@ -639,13 +926,16 @@ describe('CustomRequirementService', () => {
     const prisma = {
       customRequirement: { findUnique, update },
     } as unknown as PrismaService;
-    const service = new CustomRequirementService(prisma, {
-      kick: jest.fn(),
-    } as unknown as InquiryNotificationProcessor);
+    const service = new CustomRequirementService(
+      prisma,
+      { kick: jest.fn() } as unknown as InquiryNotificationProcessor,
+      new WorkpieceRouterService(),
+    );
 
     await service.markFollowed(41);
 
-    for (const call of [findUnique.mock.calls[0][0], update.mock.calls[0][0]]) {
+    expect(findUnique.mock.calls[0][0].select).toEqual({ id: true });
+    for (const call of [update.mock.calls[0][0]]) {
       expect(call.select).toMatchObject({ id: true, phone: true, email: true, status: true });
       expect(call.select).not.toHaveProperty('sessionId');
       expect(call.select).not.toHaveProperty('visitorId');
@@ -661,9 +951,11 @@ describe('CustomRequirementService', () => {
       customRequirement: { findUnique },
       inquiryNotificationAudit: { findMany },
     } as unknown as PrismaService;
-    const service = new CustomRequirementService(prisma, {
-      kick: jest.fn(),
-    } as unknown as InquiryNotificationProcessor);
+    const service = new CustomRequirementService(
+      prisma,
+      { kick: jest.fn() } as unknown as InquiryNotificationProcessor,
+      new WorkpieceRouterService(),
+    );
 
     await service.getNotificationAudits(41);
 

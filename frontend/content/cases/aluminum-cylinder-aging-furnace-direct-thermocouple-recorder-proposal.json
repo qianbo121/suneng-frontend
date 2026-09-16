@@ -1,0 +1,70 @@
+{
+  "id": "aging-direct-recorder-20200831-proposal",
+  "slug": "aluminum-cylinder-aging-furnace-direct-thermocouple-recorder-proposal",
+  "title": "气瓶时效炉温度记录：热电偶直连方案",
+  "listTitle": "气瓶时效炉温度记录：热电偶直连方案",
+  "listSummary": "同样能显示温度，记录仪取得的信号也可能不同。",
+  "summary": "同样能显示温度，记录仪取得的信号也可能不同。苏能2020年这份Ⅲ型铝合金气瓶时效炉协议文本，要求热电偶直接连接无纸记录仪，中间不经温控仪反馈传输。核对记录功能时，应先确认信号从哪里来，再核对通道、测点和验收条件。",
+  "body": "aluminum-cylinder-aging-furnace-direct-thermocouple-recorder-proposal.md",
+  "contentType": "proposal",
+  "publicationStatus": "draft",
+  "projectStatus": "proposal",
+  "projectYear": 2020,
+  "sourceDate": "2020-08-31",
+  "workpiece": [
+    "Ⅲ型铝合金气瓶"
+  ],
+  "materials": [
+    "铝合金"
+  ],
+  "process": [
+    "时效"
+  ],
+  "equipment": [
+    "台车式时效炉"
+  ],
+  "need": [
+    "温度记录接线核对"
+  ],
+  "tags": [
+    "方案参考",
+    "Ⅲ型铝合金气瓶",
+    "温度记录接线核对"
+  ],
+  "facts": [
+    {
+      "label": "记录通道",
+      "value": "4",
+      "unit": "通道",
+      "condition": "配置通道数，不等于四个已确定的工件测点",
+      "attribute": "方案参数"
+    },
+    {
+      "label": "均匀性约定",
+      "value": "≤±3",
+      "unit": "℃",
+      "condition": "300℃时9点测试，不冲温、控温仪表不设偏置；非实测结果",
+      "attribute": "方案参数"
+    }
+  ],
+  "participation": "苏能历史文本拟定时效炉及直接记录信号要求，接线、计量与试验资料仍需最终核实。",
+  "sourceSummary": "江苏苏能工业炉有限公司历史技术方案资料整理。",
+  "coverTitle": "气瓶时效炉方案：温度记录为什么要求热电偶直接接入？",
+  "relatedLinks": [
+    {
+      "title": "了解台车炉的适用条件",
+      "href": "/zh/products/detail/trolley-furnace"
+    },
+    {
+      "title": "准备询价参数与供货范围",
+      "href": "/zh/articles/gongye-lu-baojia-canshu"
+    }
+  ],
+  "cover": {
+    "src": "/images/workpieces/reviewed-20260909/gas-cylinders/seamless-aluminum-gas-cylinder.webp",
+    "alt": "铝合金瓶体类别工件示意",
+    "caption": "铝合金瓶体工件示意（人工智能生成，非客户实物）",
+    "fit": "contain"
+  },
+  "dateModified": "2026-09-12"
+}

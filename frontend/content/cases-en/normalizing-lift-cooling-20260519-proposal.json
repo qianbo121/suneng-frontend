@@ -1,0 +1,13 @@
+{
+  "id": "normalizing-lift-cooling-20260519-proposal",
+  "slug": "normalizing-lift-cooling-transfer-to-tempering-proposal",
+  "number": 90,
+  "title": "Lift cooling and mesh-belt transfers between normalising and tempering sections",
+  "summary": "Suneng's 2026 sample proposal for a mesh-belt normalising and tempering line places forced-cooling fans above an inclined lifting belt. Normalised parts drop into a rapid-cooling unit, then the elevator delivers them to the tempering-furnace inlet. Review cooling dwell and transfer together. Adjustable speed and side guards do not prove stable transfer of every workpiece shape at the same cycle.",
+  "body": "normalizing-lift-cooling-20260519-proposal.md",
+  "sourceFingerprint": "e78a948961855c6cc82c02cbcf7157d352d1d3e6c451fc421a0e4121ee69a2d2",
+  "translationStatus": "complete",
+  "translatedAt": "2026-09-12",
+  "coverAlt": "Illustration of generic disc-shaped metal blanks",
+  "coverCaption": "AI-generated illustration of generic metal blanks, not a photograph of this project's workpieces. Actual parts and loading arrangements follow the project documents."
+}

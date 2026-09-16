@@ -5,9 +5,9 @@ export type EnglishProductMetadata = {
 
 export const ENGLISH_PRODUCT_METADATA: Record<string, EnglishProductMetadata> = {
   'roller-mesh-belt-line': {
-    title: 'Roller Mesh-Belt Furnace Line | Suneng',
+    title: 'Mesh-Belt Annealing & Tempering Line | Suneng',
     description:
-      'Custom roller-supported mesh-belt furnace lines for continuous heat treatment. Configure process zones, belt width, throughput and controls by project.',
+      'Mesh-belt lines for steel-part annealing or post-quench tempering. Confirm loading, belt speed, temperature, atmosphere and cooling.',
   },
   'copper-wire-annealing-line': {
     title: 'Copper Wire Annealing Line | Suneng',

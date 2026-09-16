@@ -78,6 +78,19 @@ describe('CustomRequirementController notification operations', () => {
     ).toBe('admin/custom-requirements/search');
   });
 
+  it('exposes one protected inquiry detail without adding a second admin tab', async () => {
+    const findOne = jest.fn().mockResolvedValue({ id: 41, workpieceContext: null });
+    const controller = new CustomRequirementController({
+      findOne,
+    } as unknown as CustomRequirementService);
+
+    await expect(controller.findOne(41)).resolves.toEqual({ id: 41, workpieceContext: null });
+    expect(findOne).toHaveBeenCalledWith(41);
+    expect(Reflect.getMetadata(PATH_METADATA, CustomRequirementController.prototype.findOne)).toBe(
+      'admin/custom-requirements/:id',
+    );
+  });
+
   it('passes the authenticated operator identity into the protected manual action', async () => {
     const manageNotification = jest.fn().mockResolvedValue({ notificationStatus: 'pending' });
     const controller = new CustomRequirementController({

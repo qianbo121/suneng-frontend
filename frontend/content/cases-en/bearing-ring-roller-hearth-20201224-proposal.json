@@ -1,0 +1,13 @@
+{
+  "id": "bearing-ring-roller-hearth-20201224-proposal",
+  "slug": "bearing-ring-roller-hearth-loading-oscillation-proposal",
+  "number": 4,
+  "title": "How do I check whether a roller-hearth furnace can support 800 kg bearing rings?",
+  "summary": "Matching a roller-hearth furnace to bearing rings requires checking individual weight, actual support positions and the full reciprocating travel envelope together. Jiangsu Suneng Industrial Furnace Co., Ltd.'s protective-atmosphere roller-hearth heating furnace proposal dated 24 December 2020 specifies three 800 kg rings, totalling 2400 kg. Its parameter table gives 500 kg per furnace roller at 300 mm spacing, with both continuous and oscillating operating modes. A similar total batch weight is a starting point; suitability of the roller arrangement also depends on support and space during loading, travel and reversal.",
+  "body": "bearing-ring-roller-hearth-20201224-proposal.md",
+  "sourceFingerprint": "8311acf4fdce97f4bb347def4e1b45fd135aa52ef9641247367345e426147b87",
+  "translationStatus": "complete",
+  "translatedAt": "2026-09-12",
+  "coverAlt": "Illustration of two generic bearing-ring workpieces.",
+  "coverCaption": "Illustration of workpieces (AI-generated). Not an actual customer workpiece photograph."
+}

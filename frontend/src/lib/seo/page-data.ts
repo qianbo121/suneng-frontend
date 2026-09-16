@@ -1,8 +1,10 @@
-import { DEFAULT_DESCRIPTION, DEFAULT_TITLE } from '@/lib/seo/config';
+import { servicePages } from '@/components/service-pages/service-content';
+import { getProductionLineContent } from '@/lib/production-line-content';
+import { DEFAULT_TITLE } from '@/lib/seo/config';
 
 export const HOME_SEO = {
   title: DEFAULT_TITLE,
-  description: DEFAULT_DESCRIPTION,
+  description: '江苏苏能工业炉有限公司成立于2006年，位于江苏省泰州市姜堰区，提供工业炉单机、配套件、热处理生产线及改造服务。累计开展1000+工业炉新建与改造项目，生产基地为公司自报约14700㎡，具体性能按项目工况确认。',
   keywords: ['江苏苏能工业炉', '工业炉', '热处理炉', '热处理设备', '非标工业炉'],
 };
 
@@ -29,7 +31,6 @@ export const PRODUCT_DETAIL_SEO: Record<
       '江苏苏能工业炉提供台车炉、台车式热处理炉、台车式电阻炉等非标工业炉定制服务，适用于大型工件、铸件、焊接件、模具、结构件的退火、回火、正火、淬火加热等热处理工艺。',
     keywords: ['台车炉', '台车式炉', '台车式工业炉', '台车式热处理炉', '台车式电阻炉', '台车炉厂家', '台车炉定制', '台车炉价格'],
     alternateName: ['台车式炉', '台车式工业炉', '台车式热处理炉', '台车式电阻炉', 'Trolley Type Heat Treatment Furnace'],
-    modifiedTime: '2026-07-29',
   },
   'box-furnace': {
     title: '箱式炉厂家｜箱式热处理炉、箱式电阻炉定制',
@@ -81,25 +82,19 @@ export const PRODUCT_DETAIL_SEO: Record<
     alternateName: ['转底式热处理炉', '转底式工业炉', '环形炉底连续加热炉', 'Rotary Hearth Furnace'],
   },
   'roller-mesh-belt-line': {
-    title: '托辊型网带式电阻炉生产线｜连续退火回火正火设备定制',
-    description:
-      '江苏苏能工业炉提供托辊型网带式电阻炉生产线、网带式热处理生产线等非标设备定制服务，适用于标准件、五金件、轴承零件、冲压件、粉末冶金件和中小型工件的连续退火、回火、正火、固溶、预热及烘干等工艺。',
-    keywords: ['托辊型网带式电阻炉生产线', '托辊网带炉', '托辊网带生产线', '网带式电阻炉', '网带式热处理生产线', '连续退火回火正火设备', '网带炉厂家', '网带炉定制'],
-    alternateName: ['托辊网带炉', '托辊网带生产线', '网带式电阻炉', '网带式热处理生产线', 'Roller Mesh Belt Heat Treatment Line'],
+    ...getProductionLineContent('roller-mesh-belt-line')!.seo,
+    keywords: [],
+    alternateName: [getProductionLineContent('roller-mesh-belt-line')!.sections.overview.title],
   },
   'copper-wire-annealing-line': {
-    title: '铜丝自动化退火生产线｜铜线材连续退火炉、光亮退火设备定制',
-    description:
-      '江苏苏能工业炉提供铜丝自动化退火生产线、铜线材连续退火设备、铜合金丝退火炉等非标设备定制服务，可根据线径范围、线材材质、退火温度、运行速度、张力控制、保护气氛和收放线方式配置连续退火、软化退火、光亮退火及去应力处理方案。',
-    keywords: ['铜丝自动化退火生产线', '铜丝退火生产线', '铜线退火生产线', '铜丝连续退火炉', '铜线连续退火设备', '铜合金丝退火炉', '光亮退火生产线', '线材连续退火设备'],
-    alternateName: ['铜丝退火生产线', '铜线退火生产线', '铜丝连续退火炉', '铜线连续退火设备', '铜合金丝退火炉', 'Copper Wire Automatic Annealing Line'],
+    ...getProductionLineContent('copper-wire-annealing-line')!.seo,
+    keywords: [],
+    alternateName: [getProductionLineContent('copper-wire-annealing-line')!.sections.overview.title],
   },
   'annealing-solution-line': {
-    title: '退火固溶生产线｜不锈钢带材连续退火固溶设备定制',
-    description:
-      '江苏苏能工业炉提供退火固溶生产线、连续退火生产线、固溶处理生产线、金属带材连续热处理设备等非标设备定制服务，适用于不锈钢带材、合金带材、有色金属带材、卷材的连续退火、固溶处理、光亮退火和去应力处理。',
-    keywords: ['退火固溶生产线', '连续退火生产线', '固溶处理生产线', '不锈钢退火固溶生产线', '金属带材连续热处理设备', '卷材连续退火生产线', '不锈钢固溶炉', '不锈钢退火炉'],
-    alternateName: ['连续退火生产线', '固溶处理生产线', '不锈钢退火固溶生产线', '金属带材连续热处理设备', '卷材连续退火生产线', 'Annealing and Solution Treatment Line'],
+    ...getProductionLineContent('annealing-solution-line')!.seo,
+    keywords: [],
+    alternateName: [getProductionLineContent('annealing-solution-line')!.sections.overview.title],
   },
 };
 
@@ -107,7 +102,6 @@ export const ABOUT_SEO = {
   title: '关于苏能工业炉｜公司资质、业务边界与案例',
   description: '了解江苏苏能工业炉有限公司的主营业务、资质体系、工业炉与热处理设备制造能力，以及明确的不承接业务边界。',
   keywords: ['苏能工业炉', '江苏苏能工业炉有限公司', '苏能资质', '苏能案例', '工业炉制造企业'],
-  modifiedTime: '2026-07-30',
 };
 
 export const CONTACT_SEO = {
@@ -127,10 +121,10 @@ export const NEWS_SEO = {
 };
 
 export const SERVICE_SEO = {
-  title: '售后服务｜工业炉安装调试与热处理设备维护支持',
+  title: '工业炉改造与工程服务｜新建、大修、安装调试与售后支持',
   description:
-    '江苏苏能工业炉提供工业炉售后服务、热处理炉安装调试、设备维修维护、技术培训、定期巡检和全周期服务支持。',
-  keywords: ['工业炉售后服务', '热处理炉售后', '工业炉安装调试', '工业炉维修维护', '工业炉技术支持'],
+    '江苏苏能工业炉提供热处理生产线工程配套、工业炉改造大修、安装调试、设备维修维护、技术培训和售后服务支持。',
+  keywords: ['工业炉工程服务', '工业炉改造大修', '热处理生产线工程', '工业炉安装调试', '工业炉售后服务'],
 };
 
 export const PARTNER_SEO = {
@@ -141,9 +135,9 @@ export const PARTNER_SEO = {
 };
 
 export const FURNACE_RENOVATION_OVERHAUL_SEO = {
-  title: '工业炉节能改造与热处理炉大修服务｜炉衬翻新、燃烧系统升级、控制系统改造',
+  title: '工业炉维修、改造与大修服务',
   description:
-    '苏能工业炉提供工业炉节能改造、热处理炉大修、炉衬翻新、燃烧系统升级、控制系统升级、搬迁复产评估等服务，适用于老旧工业炉能耗高、温控不稳、炉衬老化、燃烧效率低等场景。',
+    '苏能提供台车炉、箱式炉、井式炉、罩式炉、网带炉等工业炉改造与热处理炉大修服务，覆盖炉衬、加热/燃烧、电控、机械传动、保护气氛及排烟余热。可先发铭牌、炉膛和电控柜照片，由工程师初判修、改或换。',
   keywords: [
     '工业炉节能改造',
     '热处理炉大修',
@@ -152,13 +146,13 @@ export const FURNACE_RENOVATION_OVERHAUL_SEO = {
     '控制系统升级',
     '老旧工业炉改造',
   ],
-  ogTitle: '工业炉节能改造与热处理炉大修服务｜炉衬翻新、燃烧系统升级、控制系统改造',
+  ogTitle: '工业炉维修、改造与大修服务',
   ogDescription:
-    '苏能工业炉提供工业炉节能改造、热处理炉大修、炉衬翻新、燃烧系统升级、控制系统升级、搬迁复产评估等服务。',
-  ogImage: '/images/service/after-sales-hero.png',
+    '苏能提供工业炉改造与热处理炉大修服务，覆盖炉衬、加热或燃烧、电控、机械传动、保护气氛及排烟余热，可先发照片由工程师初判修、改或换。',
+  ogImage: '/images/services/furnace-renovation/hero-inspection.webp',
   ogType: 'website',
   canonicalUrl: 'https://www.jssngyl.cn/zh/service/furnace-renovation-overhaul',
-  modifiedTime: '2026-07-31T14:26:10+08:00',
+  modifiedTime: '2026-09-07T18:00:00+08:00',
 };
 
 export const INDUSTRIAL_FURNACE_QUOTE_PARAMS_SEO = {
@@ -264,7 +258,7 @@ export const FURNACE_LINING_RENOVATION_GUIDE_SEO = {
     '从热面、冷面钢板、锚固、密封和失效原因判断局部修复或扩大拆检，并保留材料、烘炉和外壁温升验收证据。',
   ogImage: '/images/service/after-sales-hero.png',
   publishedTime: '2026-07-31T13:40:12+08:00',
-  modifiedTime: '2026-07-31T13:40:12+08:00',
+  modifiedTime: '2026-09-12T14:06:05+08:00',
 };
 
 export const FURNACE_ENERGY_CONVERSION_HEAT_RECOVERY_SEO = {
@@ -307,10 +301,11 @@ export const FURNACE_CONTROL_SYSTEM_UPGRADE_SEO = {
   modifiedTime: '2026-07-31T14:26:20+08:00',
 };
 
+// The relocation route is a service page; use the same published copy and date.
 export const FURNACE_RESTART_RELOCATION_REMANUFACTURING_SEO = {
   title: '停产热处理炉重启与搬迁复产怎么评估？检查、试运行和验收清单',
   description:
-    '停产炉重启、工业炉搬迁复产和旧炉再制造应先核对停机原因、炉体炉衬、能源、电气绝缘、安全联锁、机械系统和资料，再做冷态、空载与负载验证。',
+    '停产炉重启、工业炉搬迁复产和旧炉再制造应先核对停机原因、炉体炉衬、能源、电气绝缘、安全联锁、机械系统和资料，按设备条件确定冷态、热态及负载验证。',
   keywords: [
     '停产多年的热处理炉重启评估',
     '工业炉搬迁复产',
@@ -321,10 +316,10 @@ export const FURNACE_RESTART_RELOCATION_REMANUFACTURING_SEO = {
   ],
   ogTitle: '停产炉重启与搬迁复产指南｜检查、试运行和验收',
   ogDescription:
-    '区分能启动、能安全试运行和能稳定负载生产，按冷态、空载和负载三个阶段形成复产证据。',
+    '区分能启动、具备试运行条件和能稳定负载生产，按实际设备确定冷态、热态与负载验证的条件和顺序。',
   ogImage: '/images/service/after-sales-hero.png',
   publishedTime: '2026-07-31T14:26:21+08:00',
-  modifiedTime: '2026-07-31T14:26:21+08:00',
+  modifiedTime: '2026-09-12T14:06:05+08:00',
 };
 
 export const HEAT_TREATMENT_FURNACE_MANUFACTURER_SEO = {
@@ -371,7 +366,7 @@ export const JIANGSU_INDUSTRIAL_FURNACE_MANUFACTURER_SEO = {
 };
 
 export const CONTINUOUS_HEAT_TREATMENT_LINE_SEO = {
-  title: '连续热处理生产线解决方案｜热处理产线系统规划与设备分包',
+  title: '连续热处理生产线解决方案｜选型与项目经验',
   description:
     '江苏苏能工业炉提供连续热处理生产线系统级方案评估，围绕工件材质、产能节拍、温度制度、输送方式、冷却方式、上下料、自动化控制和交付边界，协助判断热处理产线组合方向。',
   keywords: [
@@ -390,7 +385,7 @@ export const CONTINUOUS_HEAT_TREATMENT_LINE_SEO = {
   ogImage: '/images/products/annealing-solution-line/gallery/line-01.jpg',
   ogType: 'website',
   canonicalUrl: 'https://www.jssngyl.cn/zh/solutions/continuous-heat-treatment-line',
-  modifiedTime: '2026-07-29',
+  modifiedTime: '2026-09-07T18:00:00+08:00',
 };
 
 export const TSINGSHAN_1250_CASE_SEO = {

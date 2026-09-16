@@ -1,0 +1,1098 @@
+{
+  "schemaVersion": "2.2.0",
+  "policy": {
+    "numeric_parameter": "秒数、温度、时间、间距、层数、重量等精确参数必须引用适用的 clause_verified 证据。",
+    "process_constraint": "定性工艺约束必须引用 full_text_verified 或 clause_verified 的标准正文或权威技术资料。",
+    "equipment_direction": "行业设备方向可以由已核实工艺约束、工件条件和确定性工程规则推导；metadata_only 不能单独取得公开资格，也不要求标准正文直接点名炉型。",
+    "evidenceTypes": {
+      "taxonomy_reference": "只支持通用设备分类。",
+      "application_mapping": "支持工件或应用与设备类别的对应关系，不支持具体工艺数值或企业能力。",
+      "process_boundary": "支持定性工艺边界和必需工艺阶段。",
+      "normative_standard": "按访问和核验等级支持标准规定范围。",
+      "company_capability": "只支持经授权的苏能能力主张。"
+    }
+  },
+  "evidence": [
+    {
+      "evidenceId": "tech-us-doe-process-heating-sourcebook3-2015",
+      "standardNumber": "US DOE Process Heating Sourcebook, Third Edition",
+      "standardTitle": "Improving Process Heating System Performance: A Sourcebook for Industry",
+      "issuingBody": "U.S. Department of Energy",
+      "versionOrYear": "Third Edition, 2015",
+      "status": "current",
+      "evidenceRole": "primary_current",
+      "publishDate": null,
+      "effectiveDate": null,
+      "supersedes": [
+        "tech-us-doe-process-heating-sourcebook2-2007"
+      ],
+      "supersededBy": [],
+      "officialUrl": "https://www.energy.gov/sites/prod/files/2016/04/f30/Improving%20Process%20Heating%20System%20Performance%20A%20Sourcebook%20for%20Industry%20Third%20Edition_0.pdf",
+      "accessLevel": "full_text",
+      "applicability": "普通工业过程加热设备的批次与连续运行方式、物料输送方式和设备结构分类；只支持通用分类及定性约束，不直接证明某一具体工件必须采用某种设备，也不支持客户项目的温度、时间、载荷或尺寸数值。",
+      "clauseRefs": [
+        "Section 2 - Fuel-Based Process Heating Equipment Classification",
+        "Section 2 - Mode of Operation",
+        "Section 2 - Material Handling Systems"
+      ],
+      "pageRefs": [
+        "14-16"
+      ],
+      "verifiedAt": "2026-08-27",
+      "verificationMethod": "读取美国能源部官方第三版完整 PDF，核对设备分类表、运行方式和物料输送段落，并与第二版对应段落逐项比较",
+      "verificationStatus": "full_text_verified",
+      "supportedClaimLevels": [
+        "process_constraint",
+        "equipment_direction"
+      ],
+      "supportScope": [
+        "批次式与连续式运行方式的通用定义",
+        "输送带、辊道、台车、带材连续、立式装料和 bell top 等物料输送或设备结构的通用分类",
+        "设备方向可与已知工件条件和确定性工程规则结合推导，但不直接支持具体工件路线"
+      ],
+      "notes": "当前主要通用设备分类证据。第三版保留第二版所用的批次/连续、输送带或辊道、台车、连续带材、立式装料和 bell top 分类；主要变化为版式、措辞和“heating element”改为“heating device”并补充气体红外发射器，未删除本模块继续使用的通用分类内容。",
+      "evidenceType": "taxonomy_reference",
+      "issuer": "U.S. Department of Energy",
+      "title": "Improving Process Heating System Performance: A Sourcebook for Industry, Third Edition",
+      "url": "https://www.energy.gov/sites/prod/files/2016/04/f30/Improving%20Process%20Heating%20System%20Performance%20A%20Sourcebook%20for%20Industry%20Third%20Edition_0.pdf",
+      "accessedAt": "2026-08-28T00:35:00+08:00",
+      "supportedClaims": [
+        "General batch/continuous, material handling and furnace taxonomy only."
+      ],
+      "paragraphRefs": [
+        "Section 2, pages 14-16"
+      ],
+      "contentHash": "sha256:14a1541f606c59989cfc549962ab632afac4c6be34bc03e792d721123ba43325",
+      "contentHashAlgorithm": "sha256-source-bytes-v1",
+      "unsupportedBoundaries": [
+        "不单独证明任何具体工件对应具体炉型。"
+      ]
+    },
+    {
+      "evidenceId": "tech-us-doe-process-heating-sourcebook2-2007",
+      "standardNumber": "US DOE Process Heating Sourcebook, Second Edition",
+      "standardTitle": "Improving Process Heating System Performance: A Sourcebook for Industry",
+      "issuingBody": "U.S. Department of Energy",
+      "versionOrYear": "Second Edition, 2007",
+      "status": "replaced",
+      "evidenceRole": "historical_supplemental",
+      "publishDate": "2007-09-01",
+      "effectiveDate": "2007-09-01",
+      "supersedes": [],
+      "supersededBy": [
+        "tech-us-doe-process-heating-sourcebook3-2015"
+      ],
+      "officialUrl": "https://www.energy.gov/sites/default/files/2014/05/f15/process_heating_sourcebook2.pdf",
+      "accessLevel": "full_text",
+      "applicability": "历史补充来源，仅用于追溯第三版之前的通用设备分类表述；当前规则不再依赖该版取得证据资格。",
+      "clauseRefs": [
+        "Section 2 - Mode of Operation",
+        "Section 2 - Material Handling Systems"
+      ],
+      "pageRefs": [
+        "14-15"
+      ],
+      "verifiedAt": "2026-08-27",
+      "verificationMethod": "读取美国能源部官方完整 PDF，核对设备分类表、运行方式和物料输送段落",
+      "verificationStatus": "full_text_verified",
+      "supportedClaimLevels": [
+        "process_constraint",
+        "equipment_direction"
+      ],
+      "supportScope": [
+        "历史版本中的批次式与连续式运行方式",
+        "历史版本中的物料输送和设备结构通用分类"
+      ],
+      "notes": "第二版继续保留为历史补充来源。逐段比较确认：第三版保留了本模块曾引用的通用分类内容，做了版式和少量措辞调整，没有删除对应分类；因此31条当前规则统一改引第三版，不再用第二版单独取得公开资格。",
+      "evidenceType": "taxonomy_reference"
+    },
+    {
+      "evidenceId": "std-gbt-11640-2021",
+      "standardNumber": "GB/T 11640-2021",
+      "standardTitle": "铝合金无缝气瓶",
+      "issuingBody": "国家标准化管理委员会",
+      "versionOrYear": "2021",
+      "status": "current",
+      "publishDate": "2021-04-30",
+      "effectiveDate": "2021-11-01",
+      "supersedes": [
+        "GB/T 11640-2011"
+      ],
+      "supersededBy": [],
+      "officialUrl": "https://std.samr.gov.cn/gb/search/gbDetailed?id=C1A814733B0A7A48E05397BE0A0A1C8D",
+      "accessLevel": "metadata_only",
+      "applicability": "铝合金无缝气瓶的产品标准元数据；本批未核对热处理条款和转移数值。",
+      "clauseRefs": [],
+      "pageRefs": [],
+      "verifiedAt": "2026-08-27",
+      "verificationMethod": "全国标准信息公共服务平台元数据页核对",
+      "verificationStatus": "metadata_verified",
+      "notes": "标准现行；不得由标题推导转移秒数、温度或装炉参数。",
+      "evidenceType": "normative_standard"
+    },
+    {
+      "evidenceId": "std-gbt-11640-2021-amendment-1",
+      "standardNumber": "GB/T 11640-2021 第1号修改单",
+      "standardTitle": "铝合金无缝气瓶《第1号修改单》",
+      "issuingBody": "国家标准化管理委员会",
+      "versionOrYear": "2025",
+      "status": "current",
+      "publishDate": "2025-08-29",
+      "effectiveDate": "2025-12-01",
+      "supersedes": [],
+      "supersededBy": [],
+      "officialUrl": "https://std.samr.gov.cn/gb/search/gbDetailed?id=2729C404116B6A5FE06397BE0A0AC4F3",
+      "accessLevel": "metadata_only",
+      "applicability": "GB/T 11640-2021 的第1号修改单元数据；本批未核对修改条款正文。",
+      "clauseRefs": [],
+      "pageRefs": [],
+      "verifiedAt": "2026-08-27",
+      "verificationMethod": "全国标准信息公共服务平台元数据页核对",
+      "verificationStatus": "metadata_verified",
+      "notes": "只确认发布日期和实施日期，不声称掌握修改条款。",
+      "evidenceType": "normative_standard"
+    },
+    {
+      "evidenceId": "std-gbt-5099-1-2017",
+      "standardNumber": "GB/T 5099.1-2017",
+      "standardTitle": "钢质无缝气瓶 第1部分：淬火后回火处理的抗拉强度小于1100MPa的钢瓶",
+      "issuingBody": "国家标准化管理委员会",
+      "versionOrYear": "2017",
+      "status": "current",
+      "publishDate": "2017-12-29",
+      "effectiveDate": "2019-01-01",
+      "supersedes": [
+        "GB/T 5099-1994（部分）"
+      ],
+      "supersededBy": [],
+      "officialUrl": "https://std.samr.gov.cn/gb/search/gbDetailed?id=71F772D825F8D3A7E05397BE0A0AB82A",
+      "accessLevel": "metadata_only",
+      "applicability": "标准标题所述强度范围内的淬火后回火无缝钢质气瓶；具体条款未核对。",
+      "clauseRefs": [],
+      "pageRefs": [],
+      "verifiedAt": "2026-08-27",
+      "verificationMethod": "全国标准信息公共服务平台元数据页核对",
+      "verificationStatus": "metadata_verified",
+      "notes": "存在修订计划，但当前标准仍标为现行。",
+      "evidenceType": "normative_standard"
+    },
+    {
+      "evidenceId": "std-gbt-5099-3-2017",
+      "standardNumber": "GB/T 5099.3-2017",
+      "standardTitle": "钢质无缝气瓶 第3部分：正火处理的钢瓶",
+      "issuingBody": "国家标准化管理委员会",
+      "versionOrYear": "2017",
+      "status": "current",
+      "publishDate": "2017-12-29",
+      "effectiveDate": "2019-01-01",
+      "supersedes": [
+        "GB/T 5099-1994（部分）"
+      ],
+      "supersededBy": [],
+      "officialUrl": "https://std.samr.gov.cn/gb/search/gbDetailed?id=71F772D8230CD3A7E05397BE0A0AB82A",
+      "accessLevel": "metadata_only",
+      "applicability": "正火处理的无缝钢质气瓶；具体装炉、输送和工艺条款未核对。",
+      "clauseRefs": [],
+      "pageRefs": [],
+      "verifiedAt": "2026-08-27",
+      "verificationMethod": "全国标准信息公共服务平台元数据页核对",
+      "verificationStatus": "metadata_verified",
+      "notes": "存在修订计划，但当前标准仍标为现行。",
+      "evidenceType": "normative_standard"
+    },
+    {
+      "evidenceId": "std-gbt-5099-4-2017",
+      "standardNumber": "GB/T 5099.4-2017",
+      "standardTitle": "钢质无缝气瓶 第4部分：不锈钢无缝气瓶",
+      "issuingBody": "国家标准化管理委员会",
+      "versionOrYear": "2017",
+      "status": "current",
+      "publishDate": "2017-12-29",
+      "effectiveDate": "2018-07-01",
+      "supersedes": [],
+      "supersededBy": [],
+      "officialUrl": "https://std.samr.gov.cn/gb/search/gbDetailed?id=71F772D829A4D3A7E05397BE0A0AB82A",
+      "accessLevel": "metadata_only",
+      "applicability": "不锈钢无缝气瓶；不得继承碳钢气瓶的正火或调质路线。",
+      "clauseRefs": [],
+      "pageRefs": [],
+      "verifiedAt": "2026-08-27",
+      "verificationMethod": "全国标准信息公共服务平台元数据页核对",
+      "verificationStatus": "metadata_verified",
+      "notes": "存在修订计划；本批未核对材料和热处理条款。",
+      "evidenceType": "normative_standard"
+    },
+    {
+      "evidenceId": "std-gb-5842-2023",
+      "standardNumber": "GB 5842-2023",
+      "standardTitle": "液化石油气钢瓶",
+      "issuingBody": "国家市场监督管理总局、国家标准化管理委员会",
+      "versionOrYear": "2023",
+      "status": "current",
+      "publishDate": "2023-11-27",
+      "effectiveDate": "2023-12-01",
+      "supersedes": [
+        "GB/T 5842-2022"
+      ],
+      "supersededBy": [],
+      "officialUrl": "https://std.samr.gov.cn/gb/search/gbDetailed?id=0B330DE79FDCCE9DE06397BE0A0AEFB0",
+      "accessLevel": "metadata_only",
+      "applicability": "液化石油气钢瓶；本批未核对热处理条款和装炉数值。",
+      "clauseRefs": [],
+      "pageRefs": [],
+      "verifiedAt": "2026-08-27",
+      "verificationMethod": "全国标准信息公共服务平台元数据页核对",
+      "verificationStatus": "metadata_verified",
+      "notes": "强制性现行标准。",
+      "evidenceType": "normative_standard"
+    },
+    {
+      "evidenceId": "std-gbt-5100-2020",
+      "standardNumber": "GB/T 5100-2020",
+      "standardTitle": "钢质焊接气瓶",
+      "issuingBody": "国家标准化管理委员会",
+      "versionOrYear": "2020",
+      "status": "current",
+      "publishDate": "2020-12-14",
+      "effectiveDate": "2021-07-01",
+      "supersedes": [
+        "GB/T 5100-2011"
+      ],
+      "supersededBy": [],
+      "officialUrl": "https://std.samr.gov.cn/gb/search/gbDetailed?id=B691BB778683D126E05397BE0A0AF3B3",
+      "accessLevel": "metadata_only",
+      "applicability": "标准适用范围内的钢质焊接气瓶；具体材料和热处理条款未核对。",
+      "clauseRefs": [],
+      "pageRefs": [],
+      "verifiedAt": "2026-08-27",
+      "verificationMethod": "全国标准信息公共服务平台元数据页核对",
+      "verificationStatus": "metadata_verified",
+      "notes": "现行标准元数据已核实；未把修改单征求意见稿当作已生效修改单。",
+      "evidenceType": "normative_standard"
+    },
+    {
+      "evidenceId": "candidate-gbt-5100-2020-amendment-1",
+      "standardNumber": "GB/T 5100-2020 第1号修改单（征求意见稿）",
+      "standardTitle": "钢质焊接气瓶 第1号修改单",
+      "issuingBody": "待核实",
+      "versionOrYear": null,
+      "status": "unverified",
+      "publishDate": null,
+      "effectiveDate": null,
+      "supersedes": [],
+      "supersededBy": [],
+      "officialUrl": "https://std.samr.gov.cn/dcpspTools/gbPlan/download?path=%2Fzxd%2F2024004507%2F20_%E6%A0%87%E5%87%86%E8%B5%B7%E8%8D%89%2F20_WD_2024004507_%E9%92%A2%E8%B4%A8%E7%84%8A%E6%8E%A5%E6%B0%94%E7%93%B6.pdf",
+      "accessLevel": "metadata_only",
+      "applicability": "只作为后续核验线索，不属于当前有效标准证据。",
+      "clauseRefs": [],
+      "pageRefs": [],
+      "verifiedAt": "2026-08-27",
+      "verificationMethod": "仅发现官方征求意见稿，未发现已批准实施记录",
+      "verificationStatus": "unverified",
+      "notes": "不得进入有效 evidenceRefs。",
+      "evidenceType": "normative_standard"
+    },
+    {
+      "evidenceId": "std-gbt-30583-2014",
+      "standardNumber": "GB/T 30583-2014",
+      "standardTitle": "承压设备焊后热处理规程",
+      "issuingBody": "国家标准化管理委员会",
+      "versionOrYear": "2014",
+      "status": "replaced",
+      "publishDate": "2014-05-06",
+      "effectiveDate": "2014-12-01",
+      "supersedes": [],
+      "supersededBy": [
+        "GB/T 30583-2026"
+      ],
+      "officialUrl": "https://std.samr.gov.cn/gb/search/gbDetailed?id=71F772D7ED69D3A7E05397BE0A0AB82A",
+      "accessLevel": "metadata_only",
+      "applicability": "历史版本，仅用于版本追溯，不得作为当前公开路线证据。",
+      "clauseRefs": [],
+      "pageRefs": [],
+      "verifiedAt": "2026-08-27",
+      "verificationMethod": "全国标准信息公共服务平台版本关系核对",
+      "verificationStatus": "metadata_verified",
+      "notes": "已由 GB/T 30583-2026 全部代替。",
+      "evidenceType": "normative_standard"
+    },
+    {
+      "evidenceId": "std-gbt-30583-2026",
+      "standardNumber": "GB/T 30583-2026",
+      "standardTitle": "承压设备焊后热处理规程",
+      "issuingBody": "国家标准化管理委员会",
+      "versionOrYear": "2026",
+      "status": "current",
+      "publishDate": "2026-01-28",
+      "effectiveDate": "2026-08-01",
+      "supersedes": [
+        "GB/T 30583-2014"
+      ],
+      "supersededBy": [],
+      "officialUrl": "https://std.samr.gov.cn/gb/search/gbDetailed?id=49FD1852CAC1C31FE06397BE0A0A1304",
+      "accessLevel": "metadata_only",
+      "applicability": "承压设备焊后热处理；不能代替气瓶产品标准，具体范围和条款需正文核对。",
+      "clauseRefs": [],
+      "pageRefs": [],
+      "verifiedAt": "2026-08-27",
+      "verificationMethod": "全国标准信息公共服务平台元数据和替代关系核对",
+      "verificationStatus": "metadata_verified",
+      "notes": "已于2026-08-01实施；本批未把标准标题等同于具体炉型要求。",
+      "evidenceType": "normative_standard"
+    },
+    {
+      "evidenceId": "std-gbt-40741-2021",
+      "standardNumber": "GB/T 40741-2021",
+      "standardTitle": "焊后热处理质量要求",
+      "issuingBody": "国家标准化管理委员会",
+      "versionOrYear": "2021",
+      "status": "current",
+      "publishDate": "2021-10-11",
+      "effectiveDate": "2022-05-01",
+      "supersedes": [],
+      "supersededBy": [],
+      "officialUrl": "https://std.samr.gov.cn/gb/search/gbDetailed?id=CE1E6A1DD59658F6E05397BE0A0A68DF",
+      "accessLevel": "metadata_only",
+      "applicability": "焊接及相关工艺的焊后热处理质量要求；具体条款未核对。",
+      "clauseRefs": [],
+      "pageRefs": [],
+      "verifiedAt": "2026-08-27",
+      "verificationMethod": "全国标准信息公共服务平台元数据页核对",
+      "verificationStatus": "metadata_verified",
+      "notes": "支持把焊后热处理建模为受规范控制的工艺上下文，但不能据此直接确定炉型。",
+      "evidenceType": "normative_standard"
+    },
+    {
+      "evidenceId": "std-gbt-34882-2017",
+      "standardNumber": "GB/T 34882-2017",
+      "standardTitle": "钢铁件的感应淬火与回火",
+      "issuingBody": "国家标准化管理委员会",
+      "versionOrYear": "2017",
+      "status": "current",
+      "publishDate": "2017-11-01",
+      "effectiveDate": "2018-05-01",
+      "supersedes": [],
+      "supersededBy": [],
+      "officialUrl": "https://std.samr.gov.cn/gb/search/gbDetailed?id=xMl4lHY0Ogs%3D&mode=p",
+      "accessLevel": "metadata_only",
+      "applicability": "钢铁件感应淬火与回火的独立工艺边界；不能证明苏能具备或不具备该能力。",
+      "clauseRefs": [],
+      "pageRefs": [],
+      "verifiedAt": "2026-08-27",
+      "verificationMethod": "全国标准信息公共服务平台元数据页核对",
+      "verificationStatus": "metadata_verified",
+      "notes": "2025-03-27复审结论为继续有效。",
+      "evidenceType": "normative_standard"
+    },
+    {
+      "evidenceId": "std-gbt-39191-2020",
+      "standardNumber": "GB/T 39191-2020",
+      "standardTitle": "不锈钢和耐热钢件热处理",
+      "issuingBody": "国家标准化管理委员会",
+      "versionOrYear": "2020",
+      "status": "current",
+      "publishDate": "2020-10-11",
+      "effectiveDate": "2021-05-01",
+      "supersedes": [],
+      "supersededBy": [],
+      "officialUrl": "https://std.samr.gov.cn/gb/search/gbDetailed?id=B187EEDE6BCE16D1E05397BE0A0A3342",
+      "accessLevel": "metadata_only",
+      "applicability": "不锈钢和耐热钢件热处理；仅凭“不锈钢板”名称不足以确定固溶处理。",
+      "clauseRefs": [],
+      "pageRefs": [],
+      "verifiedAt": "2026-08-27",
+      "verificationMethod": "全国标准信息公共服务平台元数据页核对",
+      "verificationStatus": "metadata_verified",
+      "notes": "本批未核对不同组织类型和牌号的具体处理条款。",
+      "evidenceType": "normative_standard"
+    },
+    {
+      "evidenceId": "std-gbt-24733-2023",
+      "standardNumber": "GB/T 24733-2023",
+      "standardTitle": "等温淬火球墨铸铁件",
+      "issuingBody": "国家标准化管理委员会",
+      "versionOrYear": "2023",
+      "status": "current",
+      "publishDate": "2023-09-07",
+      "effectiveDate": "2023-09-07",
+      "supersedes": [
+        "GB/T 24733-2009"
+      ],
+      "supersededBy": [],
+      "officialUrl": "https://std.samr.gov.cn/gb/search/gbDetailed?id=053404E3EE078F91E06397BE0A0A9209",
+      "accessLevel": "metadata_only",
+      "applicability": "等温淬火球墨铸铁件；本批只确认特殊工艺属性，不核定介质、温度、时间和转移数值。",
+      "clauseRefs": [],
+      "pageRefs": [],
+      "verifiedAt": "2026-08-27",
+      "verificationMethod": "全国标准信息公共服务平台元数据和替代关系核对",
+      "verificationStatus": "metadata_verified",
+      "notes": "不得让ADI路线继承普通整体炉型的单一方向。",
+      "evidenceType": "normative_standard"
+    },
+    {
+      "evidenceId": "candidate-appmap-heavy-car-bottom",
+      "standardNumber": "官网产品技术资料",
+      "standardTitle": "Lift Cover, Tilt Top & Carbottom Furnaces",
+      "issuingBody": "Surface Combustion",
+      "versionOrYear": "官网当前页面（2026-08-27核验）",
+      "status": "current",
+      "evidenceRole": "equipment_capability_reference",
+      "evidenceType": "application_mapping",
+      "publishDate": null,
+      "effectiveDate": null,
+      "replacedDate": null,
+      "transitionEndDate": null,
+      "successorEvidenceId": null,
+      "officialUrl": "https://www.surfacecombustion.com/product/lift-cover-tilt-top-carbottom-furnaces/",
+      "accessLevel": "full_text",
+      "verificationStatus": "full_text_verified",
+      "clauseRefs": [
+        "Carbottom furnace design and batch operation",
+        "Processes: Annealing, Normalizing, Tempering",
+        "Parts: Castings, Forgings, Shafts"
+      ],
+      "pageRefs": [],
+      "supportedClaimLevels": [
+        "equipment_direction"
+      ],
+      "supportScope": [
+        "台车式设备的一般结构与能力参考"
+      ],
+      "notes": "第2.5.1批降级；不再表述为9个pair的逐项直接应用证据。",
+      "verifiedAt": "2026-08-27",
+      "verificationMethod": "逐段核对官方产品页的批次式台车承载结构、退火/正火/回火工艺和铸件/锻件/轴类应用范围",
+      "applicability": "只能作为设备能力资料和条件性工程推导的补充，不单独使任何pair取得公开资格。",
+      "directPairSupport": false,
+      "issuer": "Surface Combustion",
+      "title": "Lift Cover, Tilt Top & Carbottom Furnaces",
+      "url": "https://www.surfacecombustion.com/product/lift-cover-tilt-top-carbottom-furnaces/",
+      "accessedAt": "2026-08-28T00:35:00+08:00",
+      "supportedClaims": [
+        "Car-bottom equipment structures can support batch thermal processing."
+      ],
+      "paragraphRefs": [
+        "Product overview and application lists"
+      ],
+      "contentHash": "sha256:87ef9f5c9fa6306f3acdeabb7e60bc50cbddae068461fc557988998137e27956",
+      "contentHashAlgorithm": "sha256-source-bytes-v1",
+      "unsupportedBoundaries": [
+        "不作为9个pair的逐项直接证据",
+        "不支持数值参数、苏能能力或最终选型"
+      ]
+    },
+    {
+      "evidenceId": "candidate-appmap-wear-plate-quench-temper",
+      "standardNumber": "官网技术手册",
+      "standardTitle": "LOI Thermprocess Image Brochure - Plate Heat Treatment",
+      "issuingBody": "Tenova LOI Thermprocess",
+      "versionOrYear": "2024",
+      "status": "current",
+      "evidenceRole": "verified_application_mapping",
+      "evidenceType": "application_mapping",
+      "publishDate": null,
+      "effectiveDate": null,
+      "replacedDate": null,
+      "transitionEndDate": null,
+      "successorEvidenceId": null,
+      "officialUrl": "https://loi.tenova.com/sites/default/files/files/files_to_zip/2024/LOI_Image_Brochure_EN.pdf",
+      "accessLevel": "full_text",
+      "verificationStatus": "full_text_verified",
+      "clauseRefs": [
+        "Quenching and tempering lines for heavy plates",
+        "Abrasion-resistant steel"
+      ],
+      "pageRefs": [
+        "7"
+      ],
+      "supportedClaimLevels": [
+        "equipment_direction"
+      ],
+      "supportScope": [
+        "耐磨钢厚板与连续调质热处理线的应用映射",
+        "奥氏体化、淬火和回火的完整工艺链边界"
+      ],
+      "notes": "板形、辊道支撑、淬火转移和完整调质工艺链必须由服务端逐项核对。",
+      "verifiedAt": "2026-08-27",
+      "verificationMethod": "核对官方PDF中厚板调质线的奥氏体化、淬火、回火工艺链和耐磨钢应用描述",
+      "applicability": "仅用于耐磨钢厚板的连续调质系统方向；不支持淬火介质、冷却速率、温度、节拍或苏能能力数值。",
+      "issuer": "Tenova LOI Thermprocess",
+      "title": "LOI Thermprocess Image Brochure - Plate Heat Treatment",
+      "url": "https://loi.tenova.com/sites/default/files/files/files_to_zip/2024/LOI_Image_Brochure_EN.pdf",
+      "accessedAt": "2026-08-28T00:35:00+08:00",
+      "supportedClaims": [
+        "Abrasion-resistant heavy plate quench and temper line application."
+      ],
+      "paragraphRefs": [
+        "Page 7, heavy plate heat treatment"
+      ],
+      "contentHash": "sha256:3e2bff9158680199ea7972725626208af0e54db4ef81cb221c2aa49cfe0eeccf",
+      "contentHashAlgorithm": "sha256-source-bytes-v1",
+      "unsupportedBoundaries": [
+        "不支持复合、堆焊、覆层耐磨板或具体工艺参数。"
+      ]
+    },
+    {
+      "evidenceId": "candidate-appmap-carbon-steel-coil-bell",
+      "standardNumber": "官网应用技术资料",
+      "standardTitle": "Bell annealer for steel strip coils",
+      "issuingBody": "EBNER Industrieofenbau",
+      "versionOrYear": "官网当前页面（2026-08-27核验）",
+      "status": "current",
+      "evidenceRole": "verified_application_mapping",
+      "evidenceType": "application_mapping",
+      "publishDate": null,
+      "effectiveDate": null,
+      "replacedDate": null,
+      "transitionEndDate": null,
+      "successorEvidenceId": null,
+      "officialUrl": "https://www.ebner.cc/en/bell-annealer-steel-strip-en",
+      "accessLevel": "full_text",
+      "verificationStatus": "full_text_verified",
+      "clauseRefs": [
+        "Bell annealer for steel strip coils",
+        "Carbon steel applications"
+      ],
+      "pageRefs": [],
+      "supportedClaimLevels": [
+        "equipment_direction"
+      ],
+      "supportScope": [
+        "碳钢带卷成卷批次退火与罩式退火设备的应用映射"
+      ],
+      "notes": "卷重、堆叠、循环路径、表面目标和气氛要求仍需工程确认。",
+      "verifiedAt": "2026-08-27",
+      "verificationMethod": "核对官方页面对钢带卷、碳钢和罩式退火的直接应用描述",
+      "applicability": "仅用于碳钢带卷成卷退火；不自动延伸到铝卷、展开连续处理、特定气氛数值或苏能能力。",
+      "issuer": "EBNER Industrieofenbau",
+      "title": "Bell annealer for steel strip coils",
+      "url": "https://www.ebner.cc/en/bell-annealer-steel-strip-en",
+      "accessedAt": "2026-08-28T00:35:00+08:00",
+      "supportedClaims": [
+        "Carbon steel strip coils can be batch annealed in bell annealers."
+      ],
+      "paragraphRefs": [
+        "Bell annealer for steel strip coils",
+        "Carbon steel applications"
+      ],
+      "contentHash": "sha256:b01025142e28d3be21b30bc574968f106c0e2a572a68e130d544a5708dfd4453",
+      "contentHashAlgorithm": "sha256-source-bytes-v1",
+      "unsupportedBoundaries": [
+        "不支持涂镀、覆层或开卷连续处理。"
+      ]
+    },
+    {
+      "evidenceId": "candidate-appmap-long-products-roller-thermal",
+      "standardNumber": "官网应用技术资料",
+      "standardTitle": "Roller Hearth Furnace for Pipe & Tube",
+      "issuingBody": "Tenova LOI Thermprocess",
+      "versionOrYear": "官网当前页面（2026-08-27核验）",
+      "status": "current",
+      "evidenceRole": "verified_application_mapping",
+      "evidenceType": "application_mapping",
+      "publishDate": null,
+      "effectiveDate": null,
+      "replacedDate": null,
+      "transitionEndDate": null,
+      "successorEvidenceId": null,
+      "officialUrl": "https://tenova.com/technologies/roller-hearth-furnace-pipe-tube",
+      "accessLevel": "full_text",
+      "verificationStatus": "full_text_verified",
+      "clauseRefs": [
+        "Continuous roller hearth plants for tubes and bars",
+        "Normalizing and annealing"
+      ],
+      "pageRefs": [],
+      "supportedClaimLevels": [
+        "equipment_direction"
+      ],
+      "supportScope": [
+        "无缝钢管、焊接钢管和圆钢棒的连续辊底式退火或正火应用映射"
+      ],
+      "notes": "辊道支撑、直线度、装载外形、节拍和换型条件必须明确。",
+      "verifiedAt": "2026-08-27",
+      "verificationMethod": "核对官方页面对钢管、棒材的连续辊底式处理和退火/正火工艺描述",
+      "applicability": "仅用于整管或整棒的连续退火/正火；不自动延伸到型钢、调质整线、线速度或苏能能力。",
+      "issuer": "Tenova LOI Thermprocess",
+      "title": "Roller Hearth Furnace for Pipe & Tube",
+      "url": "https://tenova.com/technologies/roller-hearth-furnace-pipe-tube",
+      "accessedAt": "2026-08-28T00:35:00+08:00",
+      "supportedClaims": [
+        "Continuous roller-hearth treatment for whole tubes and bars."
+      ],
+      "paragraphRefs": [
+        "Technology overview",
+        "Applications and processes"
+      ],
+      "contentHash": "sha256:254b7fd03dcaf74e0e11b1f058a9021f2d455c4ee407639e1bca5ba4400c0367",
+      "contentHashAlgorithm": "sha256-source-bytes-v1",
+      "unsupportedBoundaries": [
+        "不支持在线焊缝或局部感应处理。"
+      ]
+    },
+    {
+      "evidenceId": "candidate-appmap-long-products-roller-quench-temper",
+      "standardNumber": "待核实OEM一手资料",
+      "standardTitle": "长材辊底式调质线应用对应资料",
+      "issuingBody": "待确定",
+      "versionOrYear": "待确定",
+      "status": "unverified",
+      "evidenceRole": "candidate_application_mapping",
+      "evidenceType": "application_mapping",
+      "publishDate": null,
+      "effectiveDate": null,
+      "replacedDate": null,
+      "transitionEndDate": null,
+      "successorEvidenceId": null,
+      "officialUrl": null,
+      "accessLevel": "metadata_only",
+      "verificationStatus": "unverified",
+      "clauseRefs": [],
+      "pageRefs": [],
+      "supportedClaimLevels": [],
+      "supportScope": "仅计划用于核实工件类别与设备应用对应关系；不得支撑温度、时间、转移秒数、其他数值参数或苏能制造能力。",
+      "notes": "第2.2批只登记证据缺口，不把未核实候选资料作为公开资格。"
+    },
+    {
+      "evidenceId": "candidate-appmap-wire-coil-bell",
+      "standardNumber": "官网应用技术资料",
+      "standardTitle": "Bell annealer for steel wire coils",
+      "issuingBody": "EBNER Industrieofenbau",
+      "versionOrYear": "官网当前页面（2026-08-27核验）",
+      "status": "current",
+      "evidenceRole": "verified_application_mapping",
+      "evidenceType": "application_mapping",
+      "publishDate": null,
+      "effectiveDate": null,
+      "replacedDate": null,
+      "transitionEndDate": null,
+      "successorEvidenceId": null,
+      "officialUrl": "https://www.ebner.cc/en/bell-annealer-for-steel-wire-en",
+      "accessLevel": "full_text",
+      "verificationStatus": "full_text_verified",
+      "clauseRefs": [
+        "Bell annealer for steel wire coils",
+        "Spheroidizing and recrystallizing"
+      ],
+      "pageRefs": [],
+      "supportedClaimLevels": [
+        "equipment_direction"
+      ],
+      "supportScope": [
+        "盘条卷或钢丝卷的罩式球化退火和再结晶退火应用映射"
+      ],
+      "notes": "卷重、堆叠、卷内外循环、气氛和冷却边界仍须工程确认。",
+      "verifiedAt": "2026-08-27",
+      "verificationMethod": "核对官方页面对钢丝卷、罩式退火、球化和再结晶退火的直接描述",
+      "applicability": "仅用于成卷钢丝或盘条的球化/再结晶退火；不包括该规则中尚无直接资料支持的去应力退火pair。",
+      "issuer": "EBNER Industrieofenbau",
+      "title": "Bell annealer for steel wire coils",
+      "url": "https://www.ebner.cc/en/bell-annealer-for-steel-wire-en",
+      "accessedAt": "2026-08-28T00:35:00+08:00",
+      "supportedClaims": [
+        "Steel wire coils can use bell annealing for spheroidizing or recrystallizing."
+      ],
+      "paragraphRefs": [
+        "Bell annealer for steel wire coils",
+        "Processes"
+      ],
+      "contentHash": "sha256:66677f568e1a9eac3d13711bacdb5c2f881a97d5561e816c141e93709c855e07",
+      "contentHashAlgorithm": "sha256-source-bytes-v1",
+      "unsupportedBoundaries": [
+        "不支持未核实的去应力pair或具体气氛参数。"
+      ]
+    },
+    {
+      "evidenceId": "candidate-appmap-fastener-mesh-quench-temper",
+      "standardNumber": "官网产品技术资料",
+      "standardTitle": "Mesh Belt Continuous Furnace",
+      "issuingBody": "AFC-Holcroft",
+      "versionOrYear": "官网当前页面（2026-08-27核验）",
+      "status": "current",
+      "evidenceRole": "verified_application_mapping",
+      "evidenceType": "application_mapping",
+      "publishDate": null,
+      "effectiveDate": null,
+      "replacedDate": null,
+      "transitionEndDate": null,
+      "successorEvidenceId": null,
+      "officialUrl": "https://www.afc-holcroft.com/systems-and-components/mesh-belt-continuous-furnace/",
+      "accessLevel": "full_text",
+      "verificationStatus": "full_text_verified",
+      "clauseRefs": [
+        "Typical applications: fasteners",
+        "Heating, quenching, washing and tempering"
+      ],
+      "pageRefs": [],
+      "supportedClaimLevels": [
+        "equipment_direction"
+      ],
+      "supportScope": [
+        "高强螺栓和六角螺母等紧固件的连续网带式调质整线应用映射"
+      ],
+      "notes": "黏连风险、堆积密度、气氛、淬火转移和完整调质工艺链必须明确。",
+      "verifiedAt": "2026-08-27",
+      "verificationMethod": "核对官方页面对紧固件、连续网带输送、淬火、清洗和回火整线的直接描述",
+      "applicability": "仅用于形状和装料适合网带连续处理的螺栓和螺母调质；不自动延伸到未明确类型的销件或链条零件。",
+      "issuer": "AFC-Holcroft",
+      "title": "Mesh Belt Continuous Furnace",
+      "url": "https://www.afc-holcroft.com/systems-and-components/mesh-belt-continuous-furnace/",
+      "accessedAt": "2026-08-28T00:35:00+08:00",
+      "supportedClaims": [
+        "Fastener mesh-belt lines can include heating, quenching, washing and tempering."
+      ],
+      "paragraphRefs": [
+        "Typical applications",
+        "System process chain"
+      ],
+      "contentHash": "sha256:bdd9a56f107796017c627d2c3ae94ea00257887edc895f1d7c52700966b696fc",
+      "contentHashAlgorithm": "sha256-source-bytes-v1",
+      "unsupportedBoundaries": [
+        "不证明所有螺母结构、材料或装载方式适用。"
+      ]
+    },
+    {
+      "evidenceId": "candidate-appmap-can-eng-car-bottom",
+      "standardNumber": "原厂应用资料",
+      "standardTitle": "Car Bottom Furnace Systems",
+      "issuingBody": "CAN-ENG Furnaces International Limited",
+      "versionOrYear": "官网当前页面（2026-08-28核验）",
+      "status": "current",
+      "evidenceRole": "verified_application_mapping",
+      "evidenceType": "application_mapping",
+      "officialUrl": "https://www.can-eng.com/industrial-furnaces/custom-steel-plant-furnace-systems/details/car-bottom",
+      "accessLevel": "full_text",
+      "verificationStatus": "full_text_verified",
+      "supportedClaimLevels": [
+        "equipment_direction"
+      ],
+      "clauseRefs": [
+        "Car Bottom Furnace Systems",
+        "Processes",
+        "Applications",
+        "Types"
+      ],
+      "pageRefs": [
+        "页面第18-85行对应段落"
+      ],
+      "supportScope": [
+        "台车式设备属于批次炉",
+        "退火、正火等工艺与锻件、长件应用",
+        "台车承载适合侧向或上方装载以及长件"
+      ],
+      "applicability": "只支持台车式批次炉的一般应用边界；不单独证明每个具体工件pair，不支持装载上限、温度或苏能制造能力。",
+      "notes": "与NUTEC Bickley应用资料及服务端工况门禁组合使用。",
+      "issuer": "CAN-ENG Furnaces International Limited",
+      "title": "Car Bottom Furnace Systems",
+      "url": "https://www.can-eng.com/industrial-furnaces/custom-steel-plant-furnace-systems/details/car-bottom",
+      "accessedAt": "2026-08-28T00:35:00+08:00",
+      "supportedClaims": [
+        "Car bottom is a batch type furnace.",
+        "Applications include forgings and long length products; processes include annealing and normalizing."
+      ],
+      "paragraphRefs": [
+        "Overview",
+        "The Benefits",
+        "Processes",
+        "Applications",
+        "Types"
+      ],
+      "contentHash": "sha256:3053f5e338f4d4479100b24fa04f96100f137f53125c4d5cefa7df23b15a5a99",
+      "contentHashAlgorithm": "sha256-source-bytes-v1",
+      "unsupportedBoundaries": [
+        "不直接证明大型锻制法兰、大型轴类锻件或大型铸钢件的每个处理目的pair",
+        "不证明任何数值参数、最终规格或苏能能力"
+      ]
+    },
+    {
+      "evidenceId": "candidate-appmap-nutec-car-bottom",
+      "standardNumber": "原厂应用资料",
+      "standardTitle": "Car Bottom Furnaces",
+      "issuingBody": "NUTEC Bickley",
+      "versionOrYear": "官网当前页面（2026-08-28核验）",
+      "status": "current",
+      "evidenceRole": "verified_application_mapping",
+      "evidenceType": "application_mapping",
+      "officialUrl": "https://www.nutecbickley.com/what-we-do/furnaces-for-metals/car-bottom-furnaces",
+      "accessLevel": "full_text",
+      "verificationStatus": "full_text_verified",
+      "supportedClaimLevels": [
+        "equipment_direction"
+      ],
+      "clauseRefs": [
+        "Large and heavy loads",
+        "Applications of car bottom furnaces"
+      ],
+      "pageRefs": [
+        "页面“CAR BOTTOM FURNACES”“Applications”段落"
+      ],
+      "supportScope": [
+        "大型或重载、异形工件的批次移动炉床承载",
+        "退火、正火、应力消除和回火应用",
+        "锻造与铸造行业应用范围"
+      ],
+      "applicability": "用于大型或重载钢件与台车式批次炉的应用映射；具体卧式支撑、装载外形和变形条件必须由服务端验证。",
+      "notes": "不引用页面中的通用最大能力数值作为本候选或苏能能力。",
+      "issuer": "NUTEC Bickley",
+      "title": "Car Bottom Furnaces",
+      "url": "https://www.nutecbickley.com/what-we-do/furnaces-for-metals/car-bottom-furnaces",
+      "accessedAt": "2026-08-28T00:35:00+08:00",
+      "supportedClaims": [
+        "Car bottom furnaces are used for large and heavy unusual parts and batch handling.",
+        "Applications include annealing, normalizing and tempering of large workpieces."
+      ],
+      "paragraphRefs": [
+        "CAR BOTTOM FURNACES",
+        "Advantages of car bottom furnaces",
+        "Applications of car bottom furnaces"
+      ],
+      "contentHash": "sha256:94980769b3d05b7af1fc4805042b2ec281397a4e859e7aeea3d08c31cc594d77",
+      "contentHashAlgorithm": "sha256-source-bytes-v1",
+      "unsupportedBoundaries": [
+        "不直接确定具体装载规格、支撑方案或变形控制",
+        "不证明苏能供货范围或最终选型"
+      ]
+    },
+    {
+      "evidenceId": "candidate-appmap-nutec-forging",
+      "standardNumber": "原厂行业应用资料",
+      "standardTitle": "Forging Furnaces Solutions",
+      "issuingBody": "NUTEC Bickley",
+      "versionOrYear": "官网当前页面（2026-08-28核验）",
+      "status": "current",
+      "evidenceRole": "verified_application_mapping",
+      "evidenceType": "application_mapping",
+      "officialUrl": "https://www.nutecbickley.com/industries/forging",
+      "accessLevel": "full_text",
+      "verificationStatus": "full_text_verified",
+      "supportedClaimLevels": [
+        "equipment_direction"
+      ],
+      "clauseRefs": [
+        "Car Bottom Furnaces: used for heavy or oversized forgings",
+        "Common applications"
+      ],
+      "pageRefs": [
+        "页面“Forging Industry”“Common applications”段落"
+      ],
+      "supportScope": [
+        "大型或超尺寸锻件使用台车式批次炉的应用映射",
+        "锻造行业应用示例包括法兰和轴类零件"
+      ],
+      "applicability": "只用于大型锻制法兰和大型轴类锻件的条件性应用对应；卧式支撑和变形门禁仍须逐项满足。",
+      "notes": "不把行业示例解释成任何工件必然采用台车炉。",
+      "issuer": "NUTEC Bickley",
+      "title": "Forging Furnaces Solutions",
+      "url": "https://www.nutecbickley.com/industries/forging",
+      "accessedAt": "2026-08-28T00:35:00+08:00",
+      "supportedClaims": [
+        "Car bottom furnaces are used for heavy or oversized forgings.",
+        "Forging applications include flanges and axles."
+      ],
+      "paragraphRefs": [
+        "Car Bottom Furnaces",
+        "Common applications"
+      ],
+      "contentHash": "sha256:f5e0621eb5e5dff2bd7cf1125597148016bea376c0a0b86955f5fb2a4944ec7c",
+      "contentHashAlgorithm": "sha256-source-bytes-v1",
+      "unsupportedBoundaries": [
+        "不证明任意法兰或轴类都适用",
+        "不提供通用长细比阈值或支撑跨距阈值"
+      ]
+    },
+    {
+      "evidenceId": "candidate-appmap-can-eng-tube-bar-annealing",
+      "standardNumber": "原厂应用资料",
+      "standardTitle": "Tube and Bar Annealing Furnace Systems",
+      "issuingBody": "CAN-ENG Furnaces International Limited",
+      "versionOrYear": "官网当前页面（2026-08-28核验）",
+      "status": "current",
+      "evidenceRole": "verified_application_mapping",
+      "evidenceType": "application_mapping",
+      "officialUrl": "https://www.can-eng.com/industrial-furnaces/custom-steel-plant-furnace-systems/details/tube-and-bar-annealing",
+      "accessLevel": "full_text",
+      "verificationStatus": "full_text_verified",
+      "supportedClaimLevels": [
+        "equipment_direction"
+      ],
+      "clauseRefs": [
+        "Anneal or Normalize",
+        "Applications: Round Bars, Tubes/Bars",
+        "Continuous Type"
+      ],
+      "pageRefs": [
+        "页面第18-71行对应段落"
+      ],
+      "supportScope": [
+        "钢管和圆钢棒的连续式退火或正火应用",
+        "辊底式钢管/棒材退火系统的设备方向"
+      ],
+      "applicability": "焊接钢管只适用于整管退火或整管正火；在线焊缝和局部感应处理不在此范围。",
+      "notes": "不使用页面产能、长度或温度数字作为公开参数。",
+      "issuer": "CAN-ENG Furnaces International Limited",
+      "title": "Tube and Bar Annealing Furnace Systems",
+      "url": "https://www.can-eng.com/industrial-furnaces/custom-steel-plant-furnace-systems/details/tube-and-bar-annealing",
+      "accessedAt": "2026-08-28T00:35:00+08:00",
+      "supportedClaims": [
+        "Continuous systems support annealing or normalizing of steel tubes and bars.",
+        "Applications include rods, round bars and tubes/bars."
+      ],
+      "paragraphRefs": [
+        "The Benefits",
+        "Processes",
+        "Applications",
+        "Types"
+      ],
+      "contentHash": "sha256:43a119443bd871bcd6073b1148ee77ec72801c4d9c238ee63f4dab4473bd978a",
+      "contentHashAlgorithm": "sha256-source-bytes-v1",
+      "unsupportedBoundaries": [
+        "不支持在线焊缝或局部感应热处理",
+        "不承诺具体产能、长度、温度或苏能制造能力"
+      ]
+    },
+    {
+      "evidenceId": "candidate-appmap-can-eng-plate-quench-temper",
+      "standardNumber": "原厂应用资料",
+      "standardTitle": "Plate Quench and Temper Furnace Systems",
+      "issuingBody": "CAN-ENG Furnaces International Limited",
+      "versionOrYear": "官网当前页面（2026-08-28核验）",
+      "status": "current",
+      "evidenceRole": "verified_application_mapping",
+      "evidenceType": "application_mapping",
+      "officialUrl": "https://www.can-eng.com/industrial-furnaces/custom-steel-plant-furnace-systems/details/plate-quench-and-temper",
+      "accessLevel": "full_text",
+      "verificationStatus": "full_text_verified",
+      "supportedClaimLevels": [
+        "equipment_direction"
+      ],
+      "clauseRefs": [
+        "Plate Quench and Temper Furnace Systems",
+        "Fully integrated process chain"
+      ],
+      "pageRefs": [
+        "页面第18-65行对应段落"
+      ],
+      "supportScope": [
+        "钢板辊底式调质设备结构",
+        "装载、奥氏体化、淬火、回火和卸载完整工艺链"
+      ],
+      "applicability": "与Tenova耐磨钢板资料组合用于均质耐磨钢板整体调质；复合、堆焊和覆层耐磨板不在范围。",
+      "notes": "不使用页面设备规格数字作为公开参数。",
+      "issuer": "CAN-ENG Furnaces International Limited",
+      "title": "Plate Quench and Temper Furnace Systems",
+      "url": "https://www.can-eng.com/industrial-furnaces/custom-steel-plant-furnace-systems/details/plate-quench-and-temper",
+      "accessedAt": "2026-08-28T00:35:00+08:00",
+      "supportedClaims": [
+        "Roller hearth furnaces are used for plate quench and temper applications.",
+        "The integrated line includes loading, austenitizing, quenching, tempering and unloading."
+      ],
+      "paragraphRefs": [
+        "Overview",
+        "The Benefits",
+        "Processes",
+        "Applications",
+        "Types"
+      ],
+      "contentHash": "sha256:088d754710c1ebeb1cb87b68d37a56acf9815f7fbc8f6b416a81f0d7eccd2b82",
+      "contentHashAlgorithm": "sha256-source-bytes-v1",
+      "unsupportedBoundaries": [
+        "不直接证明复合、堆焊或覆层耐磨板适用",
+        "不证明具体板尺、温度、产能或苏能能力"
+      ]
+    },
+    {
+      "evidenceId": "candidate-appmap-can-eng-fastener-industry",
+      "standardNumber": "原厂行业应用资料",
+      "standardTitle": "Fastener Heat Treatment Solutions",
+      "issuingBody": "CAN-ENG Furnaces International Limited",
+      "versionOrYear": "官网当前页面（2026-08-28核验）",
+      "status": "current",
+      "evidenceRole": "verified_application_mapping",
+      "evidenceType": "application_mapping",
+      "officialUrl": "https://www.can-eng.com/industries-served/fastener",
+      "accessLevel": "full_text",
+      "verificationStatus": "full_text_verified",
+      "supportedClaimLevels": [
+        "equipment_direction"
+      ],
+      "clauseRefs": [
+        "Continuous Mesh Belt Atmosphere Heat Treatment Systems for fasteners"
+      ],
+      "pageRefs": [
+        "页面第16-40行对应段落"
+      ],
+      "supportScope": [
+        "紧固件高产量连续网带式气氛热处理应用"
+      ],
+      "applicability": "只适用于材料、结构、装料方式和完整调质链均满足的钢制紧固件；不能扩展到所有螺母或异种材料。",
+      "notes": "与CAN-ENG网带整线页面组合使用。",
+      "issuer": "CAN-ENG Furnaces International Limited",
+      "title": "Fastener Heat Treatment Solutions",
+      "url": "https://www.can-eng.com/industries-served/fastener",
+      "accessedAt": "2026-08-28T00:35:00+08:00",
+      "supportedClaims": [
+        "Fastener manufacturers use continuous mesh belt atmosphere heat treatment systems for high-capacity processing."
+      ],
+      "paragraphRefs": [
+        "Fastener",
+        "Heat Treatment Solutions",
+        "Furnaces used in the Fastener Industry"
+      ],
+      "contentHash": "sha256:fe160f537f95ded059aef3188d4976b818b5b240c28a0fbad702439df3cd1854",
+      "contentHashAlgorithm": "sha256-source-bytes-v1",
+      "unsupportedBoundaries": [
+        "不证明不锈钢、有色、嵌件、自锁或焊接总成螺母的整体调质适用性",
+        "不证明具体产能数值或苏能能力"
+      ]
+    },
+    {
+      "evidenceId": "candidate-appmap-can-eng-mesh-belt-quench-temper",
+      "standardNumber": "原厂设备应用资料",
+      "standardTitle": "Mesh Belt Atmosphere Furnace Systems",
+      "issuingBody": "CAN-ENG Furnaces International Limited",
+      "versionOrYear": "官网当前页面（2026-08-28核验）",
+      "status": "current",
+      "evidenceRole": "verified_application_mapping",
+      "evidenceType": "application_mapping",
+      "officialUrl": "https://www.can-eng.com/industrial-furnaces/continuous-mesh-belt-furnace-systems/details/mesh-belt-atmosphere",
+      "accessLevel": "full_text",
+      "verificationStatus": "full_text_verified",
+      "supportedClaimLevels": [
+        "equipment_direction"
+      ],
+      "clauseRefs": [
+        "Automated loading, hardening, quench, wash and temper line",
+        "Applications: Fasteners"
+      ],
+      "pageRefs": [
+        "页面第18-97行对应段落"
+      ],
+      "supportScope": [
+        "紧固件网带式加热、淬火、清洗和回火连续整线"
+      ],
+      "applicability": "只支持形状、装料密度、材料和完整工艺链均满足的钢制紧固件调质方向。",
+      "notes": "不把“紧固件”宽泛扩展到所有小件。",
+      "issuer": "CAN-ENG Furnaces International Limited",
+      "title": "Mesh Belt Atmosphere Furnace Systems",
+      "url": "https://www.can-eng.com/industrial-furnaces/continuous-mesh-belt-furnace-systems/details/mesh-belt-atmosphere",
+      "accessedAt": "2026-08-28T00:35:00+08:00",
+      "supportedClaims": [
+        "Automated mesh-belt lines include loading, hardening, quenching, washing and tempering.",
+        "Applications include fasteners."
+      ],
+      "paragraphRefs": [
+        "Overview",
+        "The Benefits",
+        "Processes",
+        "Applications",
+        "Types"
+      ],
+      "contentHash": "sha256:c9165d02a35e85abe6850fb3b267078815fa2adefeecf998f730fcc6a7e81dd0",
+      "contentHashAlgorithm": "sha256-source-bytes-v1",
+      "unsupportedBoundaries": [
+        "不直接证明任何特定螺栓或螺母必然适用",
+        "不证明具体温度、速度、产能或苏能能力"
+      ]
+    }
+  ]
+}

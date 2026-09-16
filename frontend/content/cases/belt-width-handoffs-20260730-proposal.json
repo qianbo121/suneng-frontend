@@ -1,0 +1,60 @@
+{
+  "id": "belt-width-handoffs-20260730-proposal",
+  "slug": "belt-width-handoffs-20260730-proposal",
+  "title": "网带淬火回火线不同带宽的落料与铺料配置",
+  "summary": "苏能2026年7月的一份托辊网带线方案，将淬火炉、油槽提升、脱油、清洗和回火依次连接，网带宽度沿流程发生变化。客户核对输送时，除了看各段带宽，还应看工件落到哪里、怎样重新铺料，以及驱动检测是否覆盖了真实交接状态。",
+  "body": "belt-width-handoffs-20260730-proposal.md",
+  "contentType": "proposal",
+  "publicationStatus": "draft",
+  "projectStatus": "proposal",
+  "workpiece": [
+    "中小型金属零部件"
+  ],
+  "materials": [],
+  "process": [
+    "淬火",
+    "回火"
+  ],
+  "equipment": [
+    "托辊网带热处理线"
+  ],
+  "need": [
+    "输送交接"
+  ],
+  "tags": [
+    "方案参考",
+    "中小型金属零部件",
+    "输送交接"
+  ],
+  "facts": [
+    {
+      "label": "淬火网带宽",
+      "value": "1000",
+      "unit": "mm",
+      "condition": "本方案带宽，产量随实际铺料/工艺变化",
+      "attribute": "方案参数"
+    },
+    {
+      "label": "清洗网带宽",
+      "value": "1300",
+      "unit": "mm",
+      "condition": "本具名方案；不与匿名模板1400mm混用",
+      "attribute": "方案参数"
+    },
+    {
+      "label": "回火网带宽",
+      "value": "1400",
+      "unit": "mm",
+      "condition": "本方案带宽",
+      "attribute": "方案参数"
+    }
+  ],
+  "participation": "网带淬火、油槽提升、脱油清洗及回火冷却单元的拟定配置",
+  "sourceSummary": "本文依据江苏苏能工业炉有限公司的历史方案资料整理，介绍拟定配置与供货条件；本文所引原件不构成设备已交付或验收通过的证明。",
+  "coverTitle": "托辊网带线方案：窄带接宽带，落料交接与检测点怎样核对？",
+  "relatedLinks": [],
+  "projectYear": 2026,
+  "sourceDate": "2026-07-30",
+  "listTitle": "网带淬火回火线不同带宽的落料与铺料配置",
+  "dateModified": "2026-09-12"
+}

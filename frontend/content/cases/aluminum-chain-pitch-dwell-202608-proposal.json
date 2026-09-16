@@ -1,0 +1,67 @@
+{
+  "id": "aluminum-chain-pitch-dwell-202608-proposal",
+  "slug": "aluminum-chain-pitch-dwell-202608-proposal",
+  "title": "铝合金链式炉要加热保温120分钟，炉长怎么定？",
+  "summary": "苏能一份铝合金链式炉讨论稿同时提出每件20～22秒的出件节拍、每排4件和加热保温共计120分钟。几项要求能否同时成立，取决于实际工装排距与有效炉长；讨论稿仍缺工件图，不能把暂按100mm排距算出的结果直接认定为已满足现场占地。",
+  "body": "aluminum-chain-pitch-dwell-202608-proposal.md",
+  "contentType": "proposal",
+  "publicationStatus": "draft",
+  "projectStatus": "proposal",
+  "workpiece": [
+    "铝合金坯料"
+  ],
+  "materials": [
+    "7系铝合金"
+  ],
+  "process": [
+    "锻造前加热保温"
+  ],
+  "equipment": [
+    "链式连续加热炉"
+  ],
+  "need": [
+    "排距与停留时间核对"
+  ],
+  "tags": [
+    "方案参考",
+    "铝合金坯料",
+    "排距与停留时间核对"
+  ],
+  "facts": [
+    {
+      "label": "拟出件节拍",
+      "value": "20～22",
+      "unit": "s/件",
+      "condition": "须与每排4件及机器人实际动作对应",
+      "attribute": "方案参数"
+    },
+    {
+      "label": "拟加热保温总时长",
+      "value": "120",
+      "unit": "min",
+      "condition": "升温和保温共计，不是单独保温时长",
+      "attribute": "方案参数"
+    },
+    {
+      "label": "暂定工装排距",
+      "value": "100",
+      "unit": "mm",
+      "condition": "未由实际工件和工装图冻结",
+      "attribute": "方案参数"
+    }
+  ],
+  "participation": "讨论稿拟配置链式加热炉、上料平台和机器人取件接口，并配合现场联调。",
+  "sourceSummary": "本文依据江苏苏能工业炉有限公司的历史方案资料整理，介绍拟定配置与供货条件；本文所引原件不构成设备已交付或验收通过的证明。",
+  "coverTitle": "铝合金链式炉方案：120分钟在炉时间，怎样与排距和占地一起核对？",
+  "cover": {
+    "src": "/images/case-covers/remaining-20260910/aluminum-bars.webp",
+    "alt": "铝合金坯料类别示意",
+    "caption": "铝合金坯料类别示意（人工智能生成，非客户实物；不表示原方案的工件形状、尺寸或排距）",
+    "fit": "contain"
+  },
+  "relatedLinks": [],
+  "projectYear": 2026,
+  "sourceDate": "2026-08",
+  "listTitle": "铝合金链式炉要加热保温120分钟，炉长怎么定？",
+  "dateModified": "2026-09-12"
+}

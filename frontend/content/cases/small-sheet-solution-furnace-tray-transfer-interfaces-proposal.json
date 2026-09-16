@@ -1,0 +1,77 @@
+{
+  "id": "small-sheet-tray-transfer-20230724-proposal",
+  "slug": "small-sheet-solution-furnace-tray-transfer-interfaces-proposal",
+  "title": "小钣金件固溶炉的出料时间与后续入水安排",
+  "listTitle": "小钣金件固溶炉的出料时间与后续入水安排",
+  "listSummary": "料盘送到炉外，并不等于工件已经进入后续冷却工位。",
+  "summary": "料盘送到炉外，并不等于工件已经进入后续冷却工位。江苏苏能工业炉有限公司2023年7月24日的小型淬火炉方案，用于口框类毛坯和小型钣金零件的固溶加热，规定炉门开启至料盘送出到位“不大于5–7秒”。核对这项要求时，要先明确到位位置，再安排取料与后续转移，不能把这一段时间当作完整的入水时间。",
+  "body": "small-sheet-solution-furnace-tray-transfer-interfaces-proposal.md",
+  "contentType": "proposal",
+  "publicationStatus": "draft",
+  "projectStatus": "proposal",
+  "projectYear": 2023,
+  "sourceDate": "2023-07-24",
+  "workpiece": [
+    "口框类零件毛坯",
+    "小型钣金零件"
+  ],
+  "materials": [],
+  "process": [
+    "固溶加热"
+  ],
+  "equipment": [
+    "箱式空气循环加热炉"
+  ],
+  "need": [
+    "料盘出料与接料接口"
+  ],
+  "tags": [
+    "方案参考",
+    "口框类零件毛坯",
+    "小型钣金零件",
+    "料盘出料与接料接口"
+  ],
+  "facts": [
+    {
+      "label": "方案有效工作区",
+      "value": "≥850×750×500",
+      "unit": "mm",
+      "condition": "长×宽×高，需配实际料框和装载",
+      "attribute": "方案参数"
+    },
+    {
+      "label": "料盘离地高度",
+      "value": "≤600",
+      "unit": "mm",
+      "condition": "不是伸出炉体的长度",
+      "attribute": "方案参数"
+    },
+    {
+      "label": "送盘到位时间",
+      "value": "不大于5–7",
+      "unit": "秒",
+      "condition": "从炉门开启计时，单一验收阈值待统一，不代表完整入水时间",
+      "attribute": "方案参数"
+    }
+  ],
+  "participation": "苏能方案拟提供加热炉、料盘平移及配套料框，并约定现场安装、指定管线敷设与验收工作，后续冷却转移需另核接口。",
+  "sourceSummary": "江苏苏能工业炉有限公司历史技术方案资料整理。",
+  "coverTitle": "小型钣金件固溶方案：料盘送出后还要衔接哪些动作？",
+  "relatedLinks": [
+    {
+      "title": "了解箱式炉的适用条件",
+      "href": "/zh/products/detail/box-furnace"
+    },
+    {
+      "title": "准备询价参数与供货范围",
+      "href": "/zh/articles/gongye-lu-baojia-canshu"
+    }
+  ],
+  "cover": {
+    "src": "/images/case-covers/finalized-20260910/sheetmetal-blanks.webp",
+    "alt": "口框及钣金毛坯类别工件示意",
+    "caption": "口框及钣金毛坯工件示意（人工智能生成，非客户实物）",
+    "fit": "contain"
+  },
+  "dateModified": "2026-09-12"
+}

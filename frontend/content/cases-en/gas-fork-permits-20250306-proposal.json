@@ -1,0 +1,13 @@
+{
+  "id": "gas-fork-permits-20250306-proposal",
+  "slug": "gas-fork-solution-furnace-motion-combustion-permits-proposal",
+  "number": 41,
+  "title": "Door, charging-machine and ignition interlocks on a gas-fired solution-treatment furnace",
+  "summary": "Rapid discharge capability does not establish combustion permission in every movement state. Jiangsu Suneng Industrial Furnace Co., Ltd.'s gas-fired solution-furnace proposal for long bars, dated 6 March 2025, specifies door, travelling-frame and fork conditions alongside combustion-air, gas-pressure and flame monitoring. Map mechanical positions to combustion permissions before verifying loaded discharge and immersion.",
+  "body": "gas-fork-permits-20250306-proposal.md",
+  "sourceFingerprint": "09e47aab0fc8d6b0ddd3c2dde0bb8d2751b537751ab0057ec2a7b90b7ddf34d5",
+  "translationStatus": "complete",
+  "translatedAt": "2026-09-12",
+  "coverAlt": "Illustration of long bars.",
+  "coverCaption": "Illustration of long bars (AI-generated). Not an actual customer workpiece photograph."
+}

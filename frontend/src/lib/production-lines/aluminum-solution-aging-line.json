@@ -1,0 +1,484 @@
+{
+  "pageId": "aluminum-solution-aging-line",
+  "variant": "aluminum",
+  "seo": {
+    "title": "铝合金固溶时效生产线｜固溶炉、淬火与时效炉配置",
+    "description": "面向适用固溶与人工时效工艺的铝合金铸件、锻件及挤压件，介绍固溶炉、快速转移、淬火槽与时效炉配置，说明装载、工件测温、淬火延迟、产能和验收要点，支持按工况选型。"
+  },
+  "sectionNavigation": [
+    {
+      "label": "适用工件",
+      "href": "#workpieces"
+    },
+    {
+      "label": "工艺与设备",
+      "href": "#process"
+    },
+    {
+      "label": "设备配置",
+      "href": "#configuration"
+    },
+    {
+      "label": "产能与现场",
+      "href": "#site-conditions"
+    },
+    {
+      "label": "交付验收",
+      "href": "#acceptance"
+    },
+    {
+      "label": "常见问题",
+      "href": "#faq"
+    }
+  ],
+  "images": {
+    "hero-line": {
+      "src": "/images/products/aluminum-solution-aging-line/pilot-v1/01-hero-cd9819acb5dc.png",
+      "width": 1672,
+      "height": 941,
+      "alt": "落底式铝合金固溶炉、炉下淬火槽及独立时效炉配置",
+      "optimized": true
+    },
+    "process-whole-line": {
+      "src": "/images/products/aluminum-solution-aging-line/pilot-v1/02-whole-line-824a22701c2d.png",
+      "width": 1672,
+      "height": 941,
+      "alt": "铝合金固溶、淬火与人工时效炉组组成",
+      "optimized": true
+    },
+    "workpiece-aluminum": {
+      "src": "/images/products/aluminum-solution-aging-line/pilot-v1/03-workpiece-b2212659938d.png",
+      "width": 1672,
+      "height": 941,
+      "alt": "分别展示的铝合金壳体、支架与短型材",
+      "optimized": true
+    },
+    "loading-rack": {
+      "src": "/images/products/aluminum-solution-aging-line/pilot-v1/04-loading-3746bff7cb0a.png",
+      "width": 1672,
+      "height": 941,
+      "alt": "同类铝合金壳体在开放分层料架上的装载",
+      "optimized": true
+    },
+    "gallery-solution-furnace": {
+      "src": "/images/products/aluminum-solution-aging-line/pilot-v1/05-solution-furnace-f82f4ba05f78.png",
+      "width": 1672,
+      "height": 941,
+      "alt": "架高落底式固溶炉与支架及循环配套",
+      "optimized": true
+    },
+    "gallery-quench-transfer": {
+      "src": "/images/products/aluminum-solution-aging-line/pilot-v1/06-transfer-quench-2b7dc65fafd2.png",
+      "width": 1672,
+      "height": 941,
+      "alt": "料架由升降链条承载并在炉下水槽上方转移",
+      "optimized": true
+    },
+    "gallery-aging-furnace": {
+      "src": "/images/products/aluminum-solution-aging-line/pilot-v1/07-aging-furnace-a1ebda32afb7.png",
+      "width": 1672,
+      "height": 941,
+      "alt": "独立时效炉的双门、导流内壁与辊台装料接口",
+      "optimized": true
+    },
+    "site-layout": {
+      "src": "/images/products/aluminum-solution-aging-line/pilot-v1/08-site-layout-f199be1d80f8.png",
+      "width": 1672,
+      "height": 941,
+      "alt": "铝合金炉组与槽车轨道、装卸区域的高位配置视图",
+      "optimized": true
+    }
+  },
+  "sourceRecord": {
+    "path": "frontend/src/lib/heat-treatment-lines-reviewed.json",
+    "record": "aluminum-solution-aging-line",
+    "review": "已完成试点网页内容修订与工程表述核对；具体项目参数及设备能力另据技术资料确认",
+    "engineeringNotes": "docs/aluminum-solution-aging-pilot-v1-2026-09-05/source-ENGINEERING-REVIEW.md"
+  },
+  "sections": {
+    "overview": {
+      "title": "铝合金固溶时效生产线",
+      "subtitle": "从合金、装载与产量出发，匹配固溶和时效设备",
+      "description": "面向适用固溶与人工时效工艺的热处理强化铝合金，将固溶炉、淬火系统与时效炉配套组织。围绕合金牌号、目标状态和装载条件，控制工件温度、淬火衔接与批次记录。",
+      "facts": [
+        {
+          "label": "处理对象",
+          "value": "适用工艺的铝合金铸件、锻件及挤压件"
+        },
+        {
+          "label": "工艺主线",
+          "value": "固溶 → 淬火 → 人工时效"
+        },
+        {
+          "label": "主要设备",
+          "value": "固溶炉、淬火槽与时效炉"
+        },
+        {
+          "label": "配置依据",
+          "value": "合金状态、装载、产量与现场"
+        }
+      ],
+      "gallery": [
+        {
+          "id": "group-overview",
+          "label": "炉组外观",
+          "alt": "落底式铝合金固溶炉、炉下淬火槽及独立时效炉配置",
+          "thumbnailAssetId": "hero-line",
+          "fullAssetId": "hero-line"
+        },
+        {
+          "id": "solution-furnace",
+          "label": "固溶炉",
+          "alt": "架高落底式固溶炉与支架及循环配套",
+          "thumbnailAssetId": "gallery-solution-furnace",
+          "fullAssetId": "gallery-solution-furnace"
+        },
+        {
+          "id": "quench-transfer",
+          "label": "转移与淬火",
+          "alt": "料架由升降链条承载并在炉下水槽上方转移",
+          "thumbnailAssetId": "gallery-quench-transfer",
+          "fullAssetId": "gallery-quench-transfer"
+        },
+        {
+          "id": "aging-furnace",
+          "label": "时效炉",
+          "alt": "独立时效炉的双门、导流内壁与辊台装料接口",
+          "thumbnailAssetId": "gallery-aging-furnace",
+          "fullAssetId": "gallery-aging-furnace"
+        }
+      ],
+      "actions": [
+        {
+          "label": "提交工况，获取选型建议",
+          "href": "#inquiry",
+          "style": "primary"
+        },
+        {
+          "label": "查看设备配置",
+          "href": "#configuration",
+          "style": "secondary"
+        }
+      ]
+    },
+    "workpieces": {
+      "title": "先看合金与装载，再判断工艺是否适用",
+      "subtitle": "铸件、锻件和挤压件分别核对牌号、来料状态与产品规范；需要单独固溶的零件，与挤压后在线淬火再时效的产品，不能直接套用同一流程。",
+      "cards": [
+        {
+          "id": "material",
+          "title": "合金与产品状态",
+          "description": "明确牌号、铸造或变形加工方式、来料状态与目标状态；不能仅凭外形判断能否固溶时效。",
+          "imageAssetId": "workpiece-aluminum"
+        },
+        {
+          "id": "loading",
+          "title": "料架与装载方式",
+          "description": "提供尺寸、壁厚、单重与每批净装料量。料架支承、工件间距和摆放需兼顾透热、淬火接触及排液。",
+          "imageAssetId": "loading-rack"
+        }
+      ]
+    },
+    "process": {
+      "title": "从装料到出料，看懂设备如何衔接",
+      "subtitle": "落底式固溶炉、炉下淬火槽与相邻独立时效炉，是可评估的一种组合；设备形式还可根据装载和转移要求调整。",
+      "imageAssetId": "process-whole-line",
+      "mode": "routes",
+      "stages": [],
+      "routes": [
+        {
+          "title": "固溶—淬火—人工时效路线",
+          "steps": [
+            "装料与批次识别",
+            "固溶加热",
+            "达到保温条件并保温",
+            "快速转移",
+            "受控淬火",
+            "排液与淬后衔接",
+            "人工时效",
+            "冷却与检验"
+          ],
+          "note": "保温与淬火延迟分别计时，起止条件按采用规范确定。淬后是否需要停放、停放条件及进入人工时效的允许间隔，按合金与采用规范确定并记录。"
+        }
+      ],
+      "note": "自然时效与人工时效是不同工艺安排；需要校形、冷加工、冷藏或清洗的产品，应在方案中补充对应工序，不作为本线默认配置。"
+    },
+    "configuration": {
+      "title": "围绕温度、转移与淬火，确定设备配置",
+      "subtitle": "先明确工件需要经历的温度和时间，再确定炉体、料架、转移机构与冷却能力。",
+      "table": {
+        "caption": "铝合金固溶时效生产线设备配置依据",
+        "columns": [
+          {
+            "key": "item",
+            "label": "配置项目"
+          },
+          {
+            "key": "basis",
+            "label": "设备与衔接要求"
+          }
+        ],
+        "rows": [
+          {
+            "item": "固溶炉",
+            "cells": [
+              "按代表装载设计有效加热区、循环风与导流，结合工件测温确定保温条件，并控制过热、过烧风险。"
+            ]
+          },
+          {
+            "item": "快速转移",
+            "cells": [
+              "依据允许淬火延迟选择落底或其他转移方式，核对料架承载、炉门动作、转移路径与入槽条件。"
+            ]
+          },
+          {
+            "item": "淬火槽",
+            "cells": [
+              "按工件及料架热负荷校核有效液量、搅拌、温控、换热与液位；连续批次还要核对介质恢复时间。"
+            ]
+          },
+          {
+            "item": "时效炉",
+            "cells": [
+              "按人工时效制度匹配有效加热区、循环风和装载，单独验证工作温区，并与固溶批次平衡产能。"
+            ]
+          },
+          {
+            "item": "测温与记录",
+            "cells": [
+              "区分仪表读数、炉内温度分布与工件温度。按采用规范安排测温检查，并关联配方、转移、介质及批次记录。"
+            ]
+          }
+        ]
+      },
+      "notes": [
+        "设备最高温度、仪表控温精度与有效加热区温度均匀性是不同指标，均不能单独证明整批工件已达到保温条件。"
+      ],
+      "action": {
+        "label": "把已有参数发给工程师",
+        "href": "#inquiry"
+      },
+      "inputs": [
+        {
+          "title": "材料与装载",
+          "description": "牌号、产品形态、来料与目标状态、尺寸壁厚、工件净质量及料架质量。"
+        },
+        {
+          "title": "产品与规范",
+          "description": "铸件、变形铝合金零件和原材料分别选择适用要求，明确合同采用版次及检验项目。"
+        },
+        {
+          "title": "固溶制度",
+          "description": "工艺温度范围、保温条件、工件测温位置与代表装载；设备上限不能代替材料工艺要求。"
+        },
+        {
+          "title": "转移计时",
+          "description": "按采用规范明确计时起点、终点、允许延迟、入槽判定及记录方式。"
+        },
+        {
+          "title": "淬火条件",
+          "description": "介质类型与使用条件、液温、搅拌、液量、换热及允许变形；聚合物介质另核浓度等要求。"
+        },
+        {
+          "title": "时效与衔接",
+          "description": "淬后停放温度和时间、必要中间工序、人工时效制度及冷却要求。"
+        },
+        {
+          "title": "设备与场地",
+          "description": "装载外廓、厂房净高、设备基础、转移方式、能源介质接口及检修空间。"
+        },
+        {
+          "title": "验收与记录",
+          "description": "测温检查、代表负载试验、产品抽样与判定、异常批次处理和记录保存要求。"
+        }
+      ]
+    },
+    "site-conditions": {
+      "title": "产能与现场条件，一起算清楚",
+      "imageAssetId": "site-layout",
+      "requirements": [
+        {
+          "title": "目标产量与班次",
+          "description": "明确每批工件净质量、班次与换型频率，平衡固溶、淬火、时效及装卸资源。"
+        },
+        {
+          "title": "电力与热源",
+          "description": "按选择的加热方式核对供电容量、燃气或其他热源接口，并计入风机、循环泵等配套负荷。"
+        },
+        {
+          "title": "淬火与介质恢复",
+          "description": "按最大约定装载验证液温变化、搅拌与换热，确认下一批入槽前能恢复到规定条件。"
+        },
+        {
+          "title": "场地与设备衔接",
+          "description": "落底式布置核对净高、升降与槽体移动空间；独立时效炉、装卸区和检修通道一并规划。"
+        }
+      ],
+      "capacity": "周期式理论处理量＝每批工件净质量×同一统计时段可完成的批次；料架质量计入承载与热负荷，不计入工件产量。各工序可并行，需按固溶、转移、淬火恢复、时效和装卸的瓶颈排程，不能相加各炉产量。合格产出另计换型、停机和检验结果。连续式方案则需另按输送装载与工艺节拍核算。"
+    },
+    "delivery-scope": {
+      "title": "配置参考与交付内容",
+      "subtitle": "明确设备组成、配套系统与现场接口。",
+      "imageAssetId": "process-whole-line",
+      "contentTitle": "固溶、淬火与时效，逐项明确供货内容",
+      "items": [
+        {
+          "label": "热工与主设备",
+          "value": "固溶炉、料架升降或转移机构、淬火槽、时效炉，以及方案包含的装卸设备。"
+        },
+        {
+          "label": "配套系统",
+          "value": "循环风、淬火搅拌与换热、测温、配方控制、过程记录和必要的安全联锁。"
+        },
+        {
+          "label": "现场接口",
+          "value": "设备基础、能源及冷却水、排风排液、上下游衔接和安装配合，逐项明确供方、业主及第三方分工。"
+        }
+      ],
+      "note": "炉数、料架、槽体、清洗及公用工程的供货范围，在设备清单和技术协议中逐项列明。"
+    },
+    "acceptance": {
+      "title": "交付到哪一步，验收就核对到哪一步",
+      "subtitle": "先约定代表材料、装载、试验方法与判定条件，再分别核对设备、工艺和产品。",
+      "columns": [
+        {
+          "id": "equipment",
+          "title": "设备功能",
+          "description": "核对装卸、升降、槽体定位、炉门和联锁；验证报警、故障保持与异常处置，并检查运行记录。"
+        },
+        {
+          "id": "process",
+          "title": "工艺性能",
+          "description": "按采用规范分别检查测温系统、有效加热区和代表装载工件温度，并验证保温、淬火延迟、介质条件及人工时效记录。"
+        },
+        {
+          "id": "product",
+          "title": "产品验证",
+          "description": "按产品规范确定硬度、力学性能、尺寸变形及必要的导电率、组织或腐蚀等检验，不将所有项目套用于每种合金。"
+        }
+      ],
+      "productNote": "用约定的代表及边界装载验证转移、入槽和介质恢复；淬后停放、超时及异常批次应有记录与处置规则。",
+      "stages": [
+        {
+          "id": "requirements",
+          "order": 1,
+          "label": "需求沟通"
+        },
+        {
+          "id": "design",
+          "order": 2,
+          "label": "方案设计"
+        },
+        {
+          "id": "manufacturing-inspection",
+          "order": 3,
+          "label": "制造检验"
+        },
+        {
+          "id": "installation-commissioning",
+          "order": 4,
+          "label": "安装联调"
+        },
+        {
+          "id": "acceptance-delivery",
+          "order": 5,
+          "label": "验收交付"
+        }
+      ],
+      "note": "现场交付时分别核对设备功能、测温检查与约定的工艺和产品验证；试验装载、抽样、判定及双方责任按技术协议执行。"
+    },
+    "faq": {
+      "title": "采购与技术常见问题",
+      "subtitle": "先了解本工艺的选型、配套与现场衔接问题。",
+      "items": [
+        {
+          "id": "faq-1",
+          "question": "为什么固溶后要控制淬火延迟？",
+          "answer": "淬火需要按合金及产品要求保留适合后续时效的固溶状态。延迟过长或冷却不合适，可能影响性能与变形。允许延迟、计时起止和介质条件应按采用规范确定，不能给所有铝合金统一套一个秒数。",
+          "defaultOpen": true
+        },
+        {
+          "id": "faq-2",
+          "question": "炉温均匀性合格，就能开始保温吗？",
+          "answer": "不能仅凭这一项判断。仪表读数、炉内温度分布与工件实际温度不同，工件表面测点也不一定代表厚壁部位或整批装载。应按采用规范和经验证的装载方法确定保温起点、测温位置及记录方式。",
+          "defaultOpen": false
+        },
+        {
+          "id": "faq-3",
+          "question": "落底式与其他转移方式怎么选？",
+          "answer": "先看允许淬火延迟，再比较工件外廓、料架总质量、入槽姿态、厂房净高和维护条件。落底式可缩短垂直入槽路径；其他转移方式也可评估，但需验证整套动作及负载条件能否满足工艺要求。",
+          "defaultOpen": false
+        },
+        {
+          "id": "faq-4",
+          "question": "固溶炉能兼做时效炉吗？",
+          "answer": "可以评估，但需分别验证固溶和时效工作温区的温度控制、循环风、装载与记录能力，还要计算降温切换和占炉时间。持续批量生产可配置独立时效炉平衡节拍；淬后的自然停放不能直接代替要求的人工时效。",
+          "defaultOpen": false
+        },
+        {
+          "id": "faq-5",
+          "question": "验收只检查硬度够不够？",
+          "answer": "应按合金、目标状态与产品规范确定检验组合。除硬度外，可能需要力学性能、尺寸变形，以及适用的导电率、组织或腐蚀检验。试料、抽样、判定和双方责任应在技术协议中明确，不能只用空炉测试代替约定的产品验证。",
+          "defaultOpen": false
+        }
+      ],
+      "relatedGroups": [
+        {
+          "id": "related-lines",
+          "title": "相关生产线",
+          "links": [
+            {
+              "label": "铝合金锻造加热生产线",
+              "href": "/zh/products/detail/aluminum-forging-heating-line"
+            }
+          ]
+        },
+        {
+          "id": "technical",
+          "title": "选型资料",
+          "links": [
+            {
+              "label": "本线询价参数清单",
+              "href": "/downloads/heat-treatment-lines/aluminum-solution-aging-line.txt"
+            }
+          ]
+        }
+      ]
+    },
+    "inquiry": {
+      "title": "告诉我们材料与产量，开始讨论方案",
+      "description": "先提供合金、目标状态与产量，已有图纸或工艺要求可在后续沟通中补充。",
+      "form": {
+        "id": "aluminum-solution-aging-line-inquiry",
+        "fields": [
+          {
+            "name": "workpiece_material",
+            "label": "合金、状态与装载",
+            "placeholder": "如：牌号、铸锻状态、尺寸与装载",
+            "required": false
+          },
+          {
+            "name": "target_performance",
+            "label": "目标状态与性能",
+            "placeholder": "如：目标状态、力学性能与变形",
+            "required": false
+          },
+          {
+            "name": "target_output",
+            "label": "目标产量",
+            "placeholder": "如：产量、生产班次与换型频率",
+            "required": false
+          },
+          {
+            "name": "contact_method",
+            "label": "联系方式",
+            "placeholder": "电话、微信或邮箱",
+            "required": true
+          }
+        ],
+        "submitLabel": "获取选型建议",
+        "helperText": "已知信息先填，不明确的项目可留空。"
+      }
+    }
+  }
+}

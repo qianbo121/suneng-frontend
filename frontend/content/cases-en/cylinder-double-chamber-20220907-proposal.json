@@ -1,0 +1,13 @@
+{
+  "id": "cylinder-double-chamber-20220907-proposal",
+  "slug": "cylinder-double-chamber-aging-oscillating-carrier-proposal",
+  "number": 46,
+  "title": "Rack oscillation and inter-chamber transfer in a twin-chamber cylinder ageing furnace",
+  "summary": "Rack oscillation within a chamber and transfer from front chamber to rear chamber are different movements. Jiangsu Suneng Industrial Furnace Co., Ltd.'s twin-chamber aluminium cylinder ageing-furnace proposal dated 7 September 2022 gives each chamber an independent drive and infrared limits, linked by an intermediate door. The same project's solution and ageing furnaces propose shared racks, but rack interfaces and permitted cylinder lengths still need separate checks.",
+  "body": "cylinder-double-chamber-20220907-proposal.md",
+  "sourceFingerprint": "b83b006cc6f67de5b1e47793faa58f8db6f36c3dd18a511d1e6aad55cae8d7d0",
+  "translationStatus": "complete",
+  "translatedAt": "2026-09-12",
+  "coverAlt": "Illustration of aluminium-alloy cylinder bodies.",
+  "coverCaption": "Illustration of aluminium-alloy cylinder bodies (AI-generated). Not an actual customer workpiece photograph."
+}

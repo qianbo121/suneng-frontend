@@ -1,0 +1,291 @@
+{
+  "schemaVersion": "1.0.0",
+  "batch": "2.5",
+  "baselineVersion": "industry-public-baseline-2026-08-batch2.5-candidate-v1",
+  "createdAt": "2026-08-27T15:14:55.510Z",
+  "status": "awaiting_owner_approval",
+  "candidateRuleIds": [
+    "eqdir-heavy-car-bottom-v1",
+    "eqdir-wear-plate-quench-temper-line-v2",
+    "eqdir-carbon-steel-coil-bell-batch-v2",
+    "eqdir-long-products-roller-thermal-v2",
+    "eqdir-wire-coil-bell-v1",
+    "eqdir-fastener-mesh-quench-temper-v2"
+  ],
+  "pairScope": [
+    "large-forged-flange|heavy-steel-normalize-temper-anneal|normalizing",
+    "large-forged-flange|heavy-steel-normalize-temper-anneal|tempering",
+    "large-forged-flange|heavy-steel-normalize-temper-anneal|annealing",
+    "large-forged-shaft|heavy-steel-normalize-temper-anneal|normalizing",
+    "large-forged-shaft|heavy-steel-normalize-temper-anneal|tempering",
+    "large-forged-shaft|heavy-steel-normalize-temper-anneal|annealing",
+    "large-steel-casting|heavy-steel-normalize-temper-anneal|normalizing",
+    "large-steel-casting|heavy-steel-normalize-temper-anneal|tempering",
+    "large-steel-casting|heavy-steel-normalize-temper-anneal|annealing",
+    "wear-resistant-steel-plate|wear-plate-quench-review|quench-temper",
+    "carbon-steel-coil|coil-professional-line-review|coil-annealing",
+    "seamless-steel-pipe|long-products-whole-furnace-treatment|normalizing",
+    "seamless-steel-pipe|long-products-whole-furnace-treatment|annealing",
+    "welded-steel-pipe|long-products-whole-furnace-treatment|normalizing",
+    "welded-steel-pipe|long-products-whole-furnace-treatment|annealing",
+    "round-steel-bar|long-products-whole-furnace-treatment|normalizing",
+    "round-steel-bar|long-products-whole-furnace-treatment|annealing",
+    "wire-rod-coil|coiled-wire-protective-anneal-review|spheroidizing-annealing",
+    "wire-rod-coil|coiled-wire-protective-anneal-review|recrystallization-annealing",
+    "steel-wire-coil|coiled-wire-protective-anneal-review|spheroidizing-annealing",
+    "steel-wire-coil|coiled-wire-protective-anneal-review|recrystallization-annealing",
+    "high-strength-bolts|fastener-quench-temper|quench-temper",
+    "hex-nuts|fastener-quench-temper|quench-temper"
+  ],
+  "evidenceSnapshotHash": "sha256:b8993798ca7d8fa82dff106a480e8c61c1a96dcaa997da612a6464a29f3ac129",
+  "publicCopySnapshotHash": "sha256:c862f0245c6ba471fb2040ad8af34ac95f147a3460edf14e53f70379ebe0b9e7",
+  "codeAndDataSnapshotHash": "sha256:9e109cbdfa89586ecfd50766c446c4c188729d5e4a48b4ce59aadc9f5ed1f0b5",
+  "approvalScopeHash": "sha256:2f9578abeb9ecbbe8722bdb8a0b9a58d31e7ffe42234dd8b9c14ed749405b613",
+  "snapshotHash": "sha256:b6cca52e76685c290f5d3537fc0572db53dee93ba55a94b743811356dc5ab036",
+  "approvalScope": {
+    "candidateRuleIds": [
+      "eqdir-heavy-car-bottom-v1",
+      "eqdir-wear-plate-quench-temper-line-v2",
+      "eqdir-carbon-steel-coil-bell-batch-v2",
+      "eqdir-long-products-roller-thermal-v2",
+      "eqdir-wire-coil-bell-v1",
+      "eqdir-fastener-mesh-quench-temper-v2"
+    ],
+    "candidatePairKeys": [
+      "carbon-steel-coil|coil-professional-line-review|coil-annealing",
+      "hex-nuts|fastener-quench-temper|quench-temper",
+      "high-strength-bolts|fastener-quench-temper|quench-temper",
+      "large-forged-flange|heavy-steel-normalize-temper-anneal|annealing",
+      "large-forged-flange|heavy-steel-normalize-temper-anneal|normalizing",
+      "large-forged-flange|heavy-steel-normalize-temper-anneal|tempering",
+      "large-forged-shaft|heavy-steel-normalize-temper-anneal|annealing",
+      "large-forged-shaft|heavy-steel-normalize-temper-anneal|normalizing",
+      "large-forged-shaft|heavy-steel-normalize-temper-anneal|tempering",
+      "large-steel-casting|heavy-steel-normalize-temper-anneal|annealing",
+      "large-steel-casting|heavy-steel-normalize-temper-anneal|normalizing",
+      "large-steel-casting|heavy-steel-normalize-temper-anneal|tempering",
+      "round-steel-bar|long-products-whole-furnace-treatment|annealing",
+      "round-steel-bar|long-products-whole-furnace-treatment|normalizing",
+      "seamless-steel-pipe|long-products-whole-furnace-treatment|annealing",
+      "seamless-steel-pipe|long-products-whole-furnace-treatment|normalizing",
+      "steel-wire-coil|coiled-wire-protective-anneal-review|recrystallization-annealing",
+      "steel-wire-coil|coiled-wire-protective-anneal-review|spheroidizing-annealing",
+      "wear-resistant-steel-plate|wear-plate-quench-review|quench-temper",
+      "welded-steel-pipe|long-products-whole-furnace-treatment|annealing",
+      "welded-steel-pipe|long-products-whole-furnace-treatment|normalizing",
+      "wire-rod-coil|coiled-wire-protective-anneal-review|recrystallization-annealing",
+      "wire-rod-coil|coiled-wire-protective-anneal-review|spheroidizing-annealing"
+    ],
+    "claimLabel": "行业常见设备方向",
+    "excludesCompanyCapabilityCommitment": true,
+    "excludesProductLinks": true,
+    "excludesUnverifiedNumericParameters": true
+  },
+  "approvalRecord": {
+    "approvedBy": null,
+    "approverRole": null,
+    "approvedAt": null,
+    "baselineVersion": null,
+    "snapshotHash": null,
+    "lockedAt": null
+  },
+  "frozenFileCount": 41,
+  "frozenFiles": [
+    {
+      "path": "data/workpiece-router/industry-direction-rules.json",
+      "sha256": "sha256:869d64ba0ed3b501642f714c3f94b810133589fa29b4ff12288a4d0d6f1d4d1c"
+    },
+    {
+      "path": "data/workpiece-router/process-routes.json",
+      "sha256": "sha256:b8be66d5fda9669862382157ff14fe07fd89c50c479a275890ed52d996294fa3"
+    },
+    {
+      "path": "data/workpiece-router/process-taxonomy.json",
+      "sha256": "sha256:cdc1543f05ce347464f78e40aac6b73e3b142570bfec8494de10d70c69bed53a"
+    },
+    {
+      "path": "data/workpiece-router/logic-unit-content-seed.json",
+      "sha256": "sha256:efb6fff6339ed832ce4ffc4325c48f3068ef3ee6451ff8fc93c490e374f99c63"
+    },
+    {
+      "path": "data/workpiece-router/industry-evidence-registry.json",
+      "sha256": "sha256:26d1c83038a2ccedb1ea7b96a6571adf1f2026934c16fda0a757450f201dde4b"
+    },
+    {
+      "path": "data/workpiece-router/industry-public-claim-templates.json",
+      "sha256": "sha256:18603fa7a74af71161e9525f27311fe9e71a56d94703073ab9b9117e72074e77"
+    },
+    {
+      "path": "data/workpiece-router/industry-public-label-mapping.json",
+      "sha256": "sha256:140488e23b12fa295c2a8b12fc5f38a6a7fe28c9f80656d8c1b74e0b8933acc2"
+    },
+    {
+      "path": "data/workpiece-router/industry-resolver-config.json",
+      "sha256": "sha256:80afee3645b7389a495db96faa582b6a2aba3c9f041abfef8e6e335b3418dbfe"
+    },
+    {
+      "path": "backend/src/modules/workpiece-router/engineering-resolver.ts",
+      "sha256": "sha256:5509bc926f0fc06b9b77612159f33012584dd21fb32ccbeeb157459b87d86b4a"
+    },
+    {
+      "path": "backend/src/modules/workpiece-router/workpiece-router.service.ts",
+      "sha256": "sha256:c45945d97670e9981dee812f1ae39a906f6992ebafbcf87147231605825fff96"
+    },
+    {
+      "path": "backend/src/modules/workpiece-router/workpiece-router.controller.ts",
+      "sha256": "sha256:9ad03ee981bf73e4802cdc60f934650297cc751314342044a095b4cb17a6a33e"
+    },
+    {
+      "path": "backend/src/modules/workpiece-router/dto/resolve-workpiece-router.dto.ts",
+      "sha256": "sha256:24664abca3e5c1e23cbf384b79bdad532e8de7b49cf56f2e9054214c16e8b752"
+    },
+    {
+      "path": "backend/src/modules/custom-requirement/custom-requirement.controller.ts",
+      "sha256": "sha256:c00ae8eaafde02bdd5963a6a3f74d99fd6e03249fcdcce75ecc299c111ccb424"
+    },
+    {
+      "path": "backend/src/modules/custom-requirement/custom-requirement.service.ts",
+      "sha256": "sha256:bc234cbe275591ab3718e5339c3414132d390b8a9821711ac35e12d6dd80df2e"
+    },
+    {
+      "path": "backend/src/modules/custom-requirement/dto/create-custom-requirement.dto.ts",
+      "sha256": "sha256:437e77ee615e8cfec7f9165ace85429f32257f1b65da13409e595466663ab292"
+    },
+    {
+      "path": "frontend/src/components/home/WorkpieceRouter.tsx",
+      "sha256": "sha256:53a24057d779e86b23703171094fe113092e95faaaee77b6d8ad9af46ff72cfc"
+    },
+    {
+      "path": "frontend/src/components/home/HomepageLeadForm.tsx",
+      "sha256": "sha256:3f4554d422a6a99d960ef7dd58fe2f68504515cc09b7dc42bec036306cd8bba7"
+    },
+    {
+      "path": "frontend/src/lib/api/workpiece-router.ts",
+      "sha256": "sha256:b5eda2c2d9a2f9e6bc72e0e20faa13d85dde9b9807305119b85b4d596a2a75e6"
+    },
+    {
+      "path": "frontend/src/lib/api/homepage-requirements.ts",
+      "sha256": "sha256:7fd12a6bf76922fc43f1f6195092a1b6b5e2f3d543052b829f685be0ab953b71"
+    },
+    {
+      "path": "backend/prisma/schema.prisma",
+      "sha256": "sha256:8613e2914ad79a0e18ea984f0083d6915a48237859819902951eaa98b888f044"
+    },
+    {
+      "path": "backend/prisma/migrations/20260827103000_workpiece_router_context/migration.sql",
+      "sha256": "sha256:6759ce61720a2bb1e56e0d588cd855fd36e728f21b746a0dff3cc9d5b02de8ab"
+    },
+    {
+      "path": "backend/src/modules/workpiece-router/engineering-resolver.spec.ts",
+      "sha256": "sha256:ed00bc53ea32e50522c8d0394f4a5693a7017f727dea1521fe39cd6a47eb58dd"
+    },
+    {
+      "path": "backend/src/modules/workpiece-router/batch2.5-candidate.spec.ts",
+      "sha256": "sha256:6db98f1ec4c93710877f339df1ebb8bd95a42aebb96c744b8e7a63da3e130dd5"
+    },
+    {
+      "path": "backend/src/modules/workpiece-router/workpiece-router.controller.spec.ts",
+      "sha256": "sha256:7d21278afe88668addbbab4c7014248b40c7bd28eea736e97671fbee07c5f512"
+    },
+    {
+      "path": "backend/src/modules/workpiece-router/workpiece-router.service.spec.ts",
+      "sha256": "sha256:95ff93c995b03945be53b83152ce929f4dcdfe65a4feee870973ca9161d7f7da"
+    },
+    {
+      "path": "backend/src/modules/custom-requirement/custom-requirement.service.spec.ts",
+      "sha256": "sha256:b020f58240740d052c2f659ea807c47ef5d4c55bdbd1ef62e49f74bf04d9cf06"
+    },
+    {
+      "path": "backend/src/modules/custom-requirement/custom-requirement.controller.spec.ts",
+      "sha256": "sha256:77172732fc4bd718cfe02c19eb28cd441ea6f8257297a02d9b310fa4883029ee"
+    },
+    {
+      "path": "backend/src/modules/custom-requirement/dto/create-custom-requirement.dto.spec.ts",
+      "sha256": "sha256:05c147afcaf2b9a8416fbb4fde82e1c2dcc097529cd19bdf929fa30c69f17eae"
+    },
+    {
+      "path": "backend/src/modules/custom-requirement/workpiece-context-migration.spec.ts",
+      "sha256": "sha256:2331650ca0cd100e4064b88ecc55e17c973d8393076d14645e7cb35c6d421023"
+    },
+    {
+      "path": "frontend/src/lib/workpiece-router-2.4a.spec.ts",
+      "sha256": "sha256:1937672d0acaef09fd2b9eb29c47c7e9bb3cb46e14e88be75bd9eb4d7053fa50"
+    },
+    {
+      "path": "frontend/src/lib/workpiece-router-data.spec.ts",
+      "sha256": "sha256:01e35b51a289d77f886db6cf57795d080fd774ecdf75f40d77e0b2d89493e2f2"
+    },
+    {
+      "path": "frontend/src/lib/api/homepage-requirements.spec.ts",
+      "sha256": "sha256:6d1ccb1e40abedb620e39503fdf21277537ac1171520bd78dbb7e833af3f81fd"
+    },
+    {
+      "path": "frontend/package.json",
+      "sha256": "sha256:e44fcbffe50be508434b178e710b55bda63ab2e831d264d48bd5e2c5276b9079"
+    },
+    {
+      "path": "frontend/playwright.integration.config.ts",
+      "sha256": "sha256:d8ebac1b2667ee865e476497eab2ebe39c92e9d473191e90ea6bb7db4cb48fe8"
+    },
+    {
+      "path": "frontend/tests/integration/workpiece-router-inquiry-chain.spec.ts",
+      "sha256": "sha256:ceae3e29217e3368e468baa9586d929acce328b4d49fdb49b6b5ce1841618f6b"
+    },
+    {
+      "path": "frontend/tests/visual/workpiece-router-batch2.4a.spec.ts",
+      "sha256": "sha256:5cc8c58a838880ee333c44b75491f8d32ac77d81bfa2237985676d509d8dbd19"
+    },
+    {
+      "path": "admin/src/pages/content/CustomRequirementPage.tsx",
+      "sha256": "sha256:22b6a5c70d2f17dc3512b06c0f5d0865884e2fdab379c8b0da20634268a98251"
+    },
+    {
+      "path": "admin/src/pages/content/CustomRequirementPage.spec.ts",
+      "sha256": "sha256:42cc273317c8024bcc142d35279263019cd16a02d9051b51a19c9645338da077"
+    },
+    {
+      "path": "scripts/validate-workpiece-router.mjs",
+      "sha256": "sha256:755fab71eac3cc4a9f535e22e5411321eb53ec6e2e941d9c32f647a426196dd2"
+    },
+    {
+      "path": "scripts/generate-workpiece-router-batch2.5.mjs",
+      "sha256": "sha256:42506ec04bcc51fa387ca82718f50f7c529178dfd22b456e478a780191ba6e19"
+    },
+    {
+      "path": "docs/independent-site-v2/database-migration-registry.md",
+      "sha256": "sha256:45da84ea307178ae519d0719ffd1bcf70a6a89ef6febba82c17bbb6bf2770c44"
+    }
+  ],
+  "artifactFiles": [
+    {
+      "path": "data/workpiece-router/industry-public-baseline-candidate-batch2.5.json",
+      "sha256": "sha256:501f1737e7dce0c954bfa511567e3f33f781c5ed3788bb90fa0ad24c8695714f"
+    },
+    {
+      "path": "docs/independent-site-v2/workpiece-router-batch2.5-public-baseline-candidate.md",
+      "sha256": "sha256:ec89a964df62c69188b36eb3226ce8b108eba06fb49d2772411e7eb214e34595"
+    },
+    {
+      "path": "docs/independent-site-v2/workpiece-router-batch2.5-public-rule-matrix.xlsx",
+      "sha256": "sha256:ab19e367ce08648b29e51ff00fefe47928da439dd14ccb905abc1055f4d9c6da"
+    },
+    {
+      "path": "docs/independent-site-v2/workpiece-router-batch2.5-regression-report.md",
+      "sha256": "sha256:f93e482eccbcf817cb5d2307a8959525e125245f64acde6d3bd400c070f76d0a"
+    },
+    {
+      "path": "docs/independent-site-v2/workpiece-router-batch2.5-test-manifest.json",
+      "sha256": "sha256:b7c73fe0063492a7b97f6a83d849725e73981d8a5ea21aa2e7af3b2b8c0e759b"
+    },
+    {
+      "path": "docs/independent-site-v2/screenshots/workpiece-router-batch2.5-production-zero-public-1440.png",
+      "sha256": "sha256:c16d00c027adf6e40790c6fdc3895c07cbefec0e151d609959e6a932a56fbdd4"
+    }
+  ],
+  "verification": {
+    "frozenFileHashMismatches": 0,
+    "productionPublicRuleCount": 0,
+    "productionPublicBaselineVersion": null,
+    "approvalFieldsRemainEmpty": true
+  }
+}

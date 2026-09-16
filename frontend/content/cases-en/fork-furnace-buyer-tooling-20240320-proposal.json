@@ -1,0 +1,13 @@
+{
+  "id": "fork-furnace-buyer-tooling-20240320-proposal",
+  "slug": "fork-furnace-buyer-basket-support-water-tank-proposal",
+  "number": 32,
+  "title": "Rapid quench transfer from a box furnace: requirements for buyer-supplied baskets and water tanks",
+  "summary": "Buyer-supplied baskets and water tanks affect whether rapid transfer is feasible. Jiangsu Suneng Industrial Furnace Co., Ltd.'s March 2024 high-temperature box-furnace proposal uses internal blocks to support workpieces and a rail-mounted fork-handling machine for loading and extraction. Baskets and the tank are buyer-supplied, while furnace loading and handling-machine capacity have different definitions. Check all interfaces on one loading/transfer drawing.",
+  "body": "fork-furnace-buyer-tooling-20240320-proposal.md",
+  "sourceFingerprint": "bb0adf12f989f10611cf540a49d0a16cef9f84f07196b2862d40f6d52d6cf228",
+  "translationStatus": "complete",
+  "translatedAt": "2026-09-12",
+  "coverAlt": "",
+  "coverCaption": ""
+}

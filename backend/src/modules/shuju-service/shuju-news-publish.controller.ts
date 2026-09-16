@@ -2,6 +2,7 @@ import {
   BadRequestException,
   Body,
   Controller,
+  Get,
   Logger,
   Post,
   Req,
@@ -36,6 +37,12 @@ export class ShujuNewsPublishController {
   private readonly logger = new Logger(ShujuNewsPublishController.name);
 
   constructor(private readonly service: ShujuNewsPublishService) {}
+
+  @Get('publish-capabilities')
+  @ApiOperation({ summary: 'Check bilingual publishing support before uploading or publishing' })
+  capabilities() {
+    return { englishNews: true, version: 1 };
+  }
 
   @Post('media')
   @UseInterceptors(

@@ -1,3 +1,5 @@
+import { EnglishSolutionPage, englishSolutionMetadata } from '@/components/engineering/EnglishSolutionsPage';
+import { solutionAlternates } from '@/lib/english-solutions';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
@@ -71,14 +73,17 @@ const jsonLd = [
 export const dynamicParams = false;
 
 export async function generateStaticParams() {
-  return [{ locale: 'zh' }];
+  return [{ locale: 'zh' }, { locale: 'en' }];
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  if ((await params).locale !== 'zh') notFound();
+  const { locale } = await params;
+  if (locale === 'en') return englishSolutionMetadata('rechuli-lu-wendu-bujun-zhenggai');
+  if (locale !== 'zh') notFound();
   return buildMetadata({
     locale: 'zh',
     path: pagePath,
+    alternateLocales: solutionAlternates('rechuli-lu-wendu-bujun-zhenggai'),
     title: seo.title,
     description: seo.description,
     keywords: seo.keywords,
@@ -90,7 +95,9 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 }
 
 export default async function TemperatureUniformityRemediationPage({ params }: PageProps) {
-  if ((await params).locale !== 'zh') notFound();
+  const { locale } = await params;
+  if (locale === 'en') return <EnglishSolutionPage slug="rechuli-lu-wendu-bujun-zhenggai" />;
+  if (locale !== 'zh') notFound();
 
   return (
     <>

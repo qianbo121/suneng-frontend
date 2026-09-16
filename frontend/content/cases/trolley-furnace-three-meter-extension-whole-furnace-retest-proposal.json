@@ -1,0 +1,69 @@
+{
+  "id": "trolley-length-extension-20190623-proposal",
+  "slug": "trolley-furnace-three-meter-extension-whole-furnace-retest-proposal",
+  "title": "7米台车炉加长到10米，要改哪些地方？",
+  "listTitle": "7米台车炉加长到10米，要改哪些地方？",
+  "listSummary": "加长台车炉不能只增加一段钢壳。",
+  "summary": "加长台车炉不能只增加一段钢壳。苏能2019年这份改造方案，将有效工作长度由7m扩至10m，同时增加台车段、走轮、密封、300kW加热和两个控温区，并安排改造后全炉重新检测。新旧结构与控制共同接入，才是这份方案需要核对的范围。",
+  "body": "trolley-furnace-three-meter-extension-whole-furnace-retest-proposal.md",
+  "contentType": "proposal",
+  "publicationStatus": "draft",
+  "projectStatus": "proposal",
+  "projectYear": 2019,
+  "sourceDate": "2019-06-23",
+  "workpiece": [
+    "工件"
+  ],
+  "materials": [],
+  "process": [
+    "低温热处理"
+  ],
+  "equipment": [
+    "台车式电阻炉"
+  ],
+  "need": [
+    "旧炉加长改造"
+  ],
+  "tags": [
+    "方案参考",
+    "工件",
+    "旧炉加长改造"
+  ],
+  "facts": [
+    {
+      "label": "拟改造有效长度",
+      "value": "10000",
+      "unit": "mm",
+      "condition": "原7000mm增加3000mm，非全长机械外形",
+      "attribute": "方案参数"
+    },
+    {
+      "label": "拟改造加热功率",
+      "value": "1050",
+      "unit": "kW",
+      "condition": "原750kW加新增300kW，不是耗电量",
+      "attribute": "方案参数"
+    },
+    {
+      "label": "拟改造控温区",
+      "value": "8",
+      "unit": "区",
+      "condition": "原6区加2区，未提供改造后实测",
+      "attribute": "方案参数"
+    }
+  ],
+  "participation": "苏能拟负责炉体台车加长、控制与降温系统改造及整炉检测，买方配套材料范围按原件明确分开。",
+  "sourceSummary": "江苏苏能工业炉有限公司历史技术方案资料整理。",
+  "coverTitle": "台车炉加长改造方案：增加3米，为什么还要重做整炉控制和检测？",
+  "relatedLinks": [
+    {
+      "title": "了解台车炉的适用条件",
+      "href": "/zh/products/detail/trolley-furnace"
+    },
+    {
+      "title": "准备询价参数与供货范围",
+      "href": "/zh/articles/gongye-lu-baojia-canshu"
+    }
+  ],
+  "dateModified": "2026-09-12"
+}

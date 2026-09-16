@@ -1,0 +1,77 @@
+{
+  "id": "cylinder-hood-trolley-20231005-proposal",
+  "slug": "cylinder-hood-lift-trolley-motion-proposal",
+  "title": "台车式罩式炉的装卸空间与炉罩联锁",
+  "listTitle": "台车式罩式炉的装卸空间与炉罩联锁",
+  "listSummary": "罩式炉既有炉罩升降，也有台车进出，采购时应把两类运动的空间与联锁一起核对。",
+  "summary": "罩式炉既有炉罩升降，也有台车进出，采购时应把两类运动的空间与联锁一起核对。江苏苏能工业炉有限公司2023年10月5日的两份台车式罩式炉方案，针对圆筒、圆管类工件，提出炉罩压紧到位后加热、升起时切断加热，以及炉罩上升到位后台车才可进出。相似项目可以参考这条动作关系，但不能据此认定工件吊运、入液或整套淬火节拍已在设备范围内。",
+  "body": "cylinder-hood-lift-trolley-motion-proposal.md",
+  "contentType": "proposal",
+  "publicationStatus": "draft",
+  "projectStatus": "proposal",
+  "projectYear": 2023,
+  "sourceDate": "2023-10-05",
+  "workpiece": [
+    "圆筒",
+    "圆管"
+  ],
+  "materials": [],
+  "process": [
+    "热处理加热"
+  ],
+  "equipment": [
+    "台车式罩式炉"
+  ],
+  "need": [
+    "升降与行走接口"
+  ],
+  "tags": [
+    "方案参考",
+    "圆筒",
+    "圆管",
+    "升降与行走接口"
+  ],
+  "facts": [
+    {
+      "label": "较大规格炉膛",
+      "value": "Φ3800×2150",
+      "unit": "mm",
+      "condition": "S1炉膛直径和高度，不是工件外形",
+      "attribute": "方案参数"
+    },
+    {
+      "label": "较小规格炉膛",
+      "value": "Φ1700×1450",
+      "unit": "mm",
+      "condition": "S2炉膛直径和高度，不是工件外形",
+      "attribute": "方案参数"
+    },
+    {
+      "label": "较大规格额定装炉量",
+      "value": "10",
+      "unit": "t",
+      "condition": "S1额定装炉量，不推定工件净重",
+      "attribute": "方案参数"
+    }
+  ],
+  "participation": "历史方案拟提供罩体升降、移动台车及加热控温系统，现场吊运与后续工位需要另行对应。",
+  "sourceSummary": "江苏苏能工业炉有限公司历史技术方案资料整理。",
+  "coverTitle": "圆筒圆管罩式炉方案：炉罩升降与台车进出怎样配合？",
+  "relatedLinks": [
+    {
+      "title": "了解罩式炉的适用条件",
+      "href": "/zh/products/detail/bell-furnace"
+    },
+    {
+      "title": "准备询价参数与供货范围",
+      "href": "/zh/articles/gongye-lu-baojia-canshu"
+    }
+  ],
+  "cover": {
+    "src": "/images/workpieces/reviewed-20260909/welded-structures/large-cylinder-shell.webp",
+    "alt": "筒体类别工件示意",
+    "caption": "筒体工件示意（人工智能生成，非客户实物）",
+    "fit": "contain"
+  },
+  "dateModified": "2026-09-12"
+}
