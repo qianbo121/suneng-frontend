@@ -9,7 +9,7 @@ import stat
 from urllib import request
 
 
-WEBHOOK = re.compile(r'https://open\.feishu\.cn/open-apis/bot/v2/[A-Za-z0-9-]+')
+WEBHOOK = re.compile(r'https://open\.feishu\.cn/open-apis/bot/v2/(?:hook/)?[0-9a-fA-F]{8}-(?:[0-9a-fA-F]{4}-){3}[0-9a-fA-F]{12}')
 
 
 def read_webhook(path):

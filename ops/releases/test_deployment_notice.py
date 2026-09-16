@@ -10,7 +10,8 @@ sys.path.insert(0, str(Path(__file__).parent))
 import deployment_notice as n
 import frontend_release as r
 
-HOOK = 'https://open.feishu.cn/open-apis/bot/v2/fixture-not-a-real-bot'
+BOT_ID = '00000000-0000-0000-0000-000000000000'
+HOOK = 'https://open.feishu.cn/open-apis/bot/v2/hook/' + BOT_ID
 
 
 class NoticeTests(unittest.TestCase):
@@ -28,6 +29,25 @@ class NoticeTests(unittest.TestCase):
             with self.assertRaises(OSError): n.read_webhook(link)
             path.write_text('https://example.test/open-apis/bot/v2/fixture')
             with self.assertRaises(ValueError): n.read_webhook(path)
+
+    def test_complete_current_and_legacy_addresses_are_accepted(self):
+        for prefix in ['https://open.feishu.cn/open-apis/bot/v2/hook/',
+                       'https://open.feishu.cn/open-apis/bot/v2/']:
+            with tempfile.TemporaryDirectory() as tmp:
+                path = Path(tmp) / 'credential'
+                path.write_text(prefix + BOT_ID)
+                path.chmod(0o600)
+                self.assertEqual(n.read_webhook(path), prefix + BOT_ID)
+
+    def test_truncated_addresses_and_extra_components_never_send(self):
+        invalid = ['https://open.feishu.cn/open-apis/bot/v2/hook',
+                   'https://open.feishu.cn/open-apis/bot/v2/abcd',
+                   HOOK + '/extra', HOOK + '?redirect=example.test',
+                   HOOK + '#fragment', HOOK.replace('open.feishu.cn', 'open.feishu.cn.example.test')]
+        with patch.object(n.request, 'build_opener') as opener:
+            for address in invalid:
+                with self.assertRaises(ValueError): n.send(address, test=True)
+            opener.assert_not_called()
 
     def response(self, body, status=200):
         response = Mock(status=status)
