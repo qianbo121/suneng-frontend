@@ -30,6 +30,9 @@ jobs:
         run: pnpm install --frozen-lockfile
       - name: Secret guard
         run: pnpm check:secrets
+
+      - name: Deployment preflight regression checks
+        run: python3 scripts/test_deploy_preflight.py
       - name: Dependency audit
         run: pnpm audit --audit-level high
       - name: Lint
