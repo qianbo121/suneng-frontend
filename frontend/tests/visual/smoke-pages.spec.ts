@@ -51,6 +51,13 @@ test.describe('core visual smoke pages', () => {
           await page.waitForLoadState('networkidle', { timeout: 15_000 }).catch(() => undefined);
           await page.evaluate(warmLazyContent);
           await page.waitForLoadState('networkidle', { timeout: 5_000 }).catch(() => undefined);
+          if (visualPage.name === 'home') {
+            // Scrolling back to the hero schedules the observer update separately
+            // from network activity. Capture the settled state, not the outgoing dock.
+            const dock = page.locator('[data-sticky-engineer-dock]');
+            await expect(dock).toHaveAttribute('data-visible', 'false');
+            await expect(dock).toBeHidden();
+          }
           await expect(page).toHaveScreenshot(`${visualPage.name}-${viewport.name}.png`, {
             fullPage: true,
             mask: [page.locator('canvas'), page.locator('video')],
