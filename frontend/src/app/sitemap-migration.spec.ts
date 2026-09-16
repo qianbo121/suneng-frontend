@@ -59,7 +59,11 @@ describe('sitemap migration supplementary checks', () => {
       expect(entries.filter((entry) => entry.url === `https://www.jssngyl.cn${suffix}`)).toHaveLength(1);
     }
     expect(entries.some((entry) => entry.url.endsWith('/en/strength/certificates'))).toBe(false);
-    expect(entries.some(entry=>entry.url.includes('/case/'))).toBe(false);
+    // Case detail pages appear only after owner approval.
+    expect(entries.filter((entry) => entry.url.includes('/case/')).map((entry) => entry.url).sort()).toEqual([
+      'https://www.jssngyl.cn/en/case/henan-annealing-solution-line',
+      'https://www.jssngyl.cn/zh/case/henan-annealing-solution-line',
+    ]);
   });
 
 });

@@ -54,12 +54,20 @@ describe('case publication boundaries after article migration', () => {
 // These checks render the actual article component and body; merely keeping a
 // label in a source file or in JSON cannot satisfy the publication gate.
 describe('visible case classification, results and review', () => {
-  it("keeps proposal sources archived and refuses their public article pages", () => {
-    expect(getPublicCases()).toEqual([]);
-    for(const name of ['jining-support-roller','henan-annealing-solution','continuous-line-renovation','rt4-75-6-proposal']) {
+  it("keeps unapproved sources archived and refuses their public article pages", () => {
+    expect(getPublicCases().map((item) => item.slug)).toEqual(['henan-annealing-solution-line']);
+    for(const name of ['jining-support-roller','continuous-line-renovation','rt4-75-6-proposal']) {
       const item=JSON.parse(read(name+'.json'));
       expect(item.publicationStatus).toBe('draft');
       expect(()=>renderToStaticMarkup(createElement(CaseArticlePage,{slug:item.slug,searchParams:{}}))).toThrow('404');
     }
+  });
+  it("renders the owner-approved Henan experience with its visible classification boundary", () => {
+    const item=JSON.parse(read('henan-annealing-solution.json'));
+    expect(item.publicationStatus).toBe('published');
+    const html=renderToStaticMarkup(createElement(CaseArticlePage,{slug:item.slug,searchParams:{}}));
+    expect(html).toContain(item.title);
+    // The reading page keeps the lead's evidence boundary visible.
+    expect(html).toContain('方案参数不代表实际产量或验收结果');
   });
 });

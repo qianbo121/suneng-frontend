@@ -3,6 +3,8 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { cache } from 'react';
 import { prepareCaseBody } from './content';
+import { caseListPresentation } from './list-tags';
+import { PUBLIC_CASE_SLUGS } from './public-case-allowlist';
 import { caseEquipmentCategory, filterCases, paginateCases, toCaseCard } from './query';
 import { CASE_FILTER_KEYS, type CaseMeta, type CaseQuery } from './types';
 
@@ -12,6 +14,7 @@ const slugPattern = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 export function readCaseDirectory(
   directory: string,
   readBody = (filename: string) => prepareCaseBody(fs.readFileSync(filename, 'utf8')),
+  approved?: ReadonlySet<string>,
 ) {
   const ids = new Set<string>();
   const slugs = new Set<string>();
@@ -23,6 +26,8 @@ export function readCaseDirectory(
       const raw = JSON.parse(fs.readFileSync(path.join(directory, file), 'utf8')) as CaseMeta;
       // Drafts are rejected before their body is read, rendered, indexed or serialized.
       if (raw.publicationStatus !== 'published') return [];
+      // A published file is still private until the owner has approved its slug.
+      if (approved && !approved.has(raw.slug)) return [];
       if (
         !slugPattern.test(raw.slug) ||
         !raw.id ||
@@ -122,7 +127,7 @@ export function readCaseDirectory(
 // Re-read metadata and Markdown on every dev request so edits and withdrawals
 // take effect immediately. Only reuse the sanitized strings/TOC for an unchanged
 // body; never retain DOM nodes or accumulate previous versions of a file.
-export function createCaseDirectoryReader(directory: string) {
+export function createCaseDirectoryReader(directory: string, approved?: ReadonlySet<string>) {
   const bodies = new Map<string, { markdown: string; body: ReturnType<typeof prepareCaseBody> }>();
   return () => {
     const used = new Set<string>();
@@ -134,7 +139,7 @@ export function createCaseDirectoryReader(directory: string) {
       const body = prepareCaseBody(markdown);
       bodies.set(filename, { markdown, body });
       return body;
-    });
+    }, approved);
     for (const filename of bodies.keys()) {
       if (!used.has(filename)) bodies.delete(filename);
     }
@@ -142,7 +147,7 @@ export function createCaseDirectoryReader(directory: string) {
   };
 }
 
-const readDevelopmentCases = createCaseDirectoryReader(contentDirectory);
+const readDevelopmentCases = createCaseDirectoryReader(contentDirectory, PUBLIC_CASE_SLUGS);
 // Published case files are bundled into each immutable release. React cache()
 // deduplicates a render, but does not share the parsed corpus between requests.
 // Keep the sanitized strings once per production process; a new deployment
@@ -150,15 +155,19 @@ const readDevelopmentCases = createCaseDirectoryReader(contentDirectory);
 let productionCases: ReturnType<typeof readCaseDirectory> | undefined;
 export const getPublicCases = cache(() => {
   if (process.env.NODE_ENV === 'development') return readDevelopmentCases();
-  if (process.env.NODE_ENV !== 'production') return readCaseDirectory(contentDirectory);
-  return (productionCases ??= readCaseDirectory(contentDirectory));
+  if (process.env.NODE_ENV !== 'production') return readCaseDirectory(contentDirectory, undefined, PUBLIC_CASE_SLUGS);
+  return (productionCases ??= readCaseDirectory(contentDirectory, undefined, PUBLIC_CASE_SLUGS));
 });
 
 export function getCaseArticle(slug: string) {
   return getPublicCases().find((item) => item.slug === slug);
 }
 export function getCaseResults(query: CaseQuery) {
-  return paginateCases(filterCases(getPublicCases(), query).map(toCaseCard), query);
+  // List wording is prepared here so case-specific rules never ship to the browser.
+  const cards = filterCases(getPublicCases(), query)
+    .map(toCaseCard)
+    .map((card) => ({ ...card, summary: caseListPresentation(card).summary }));
+  return paginateCases(cards, query);
 }
 export function getCaseOptions() {
   const records = getPublicCases();

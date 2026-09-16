@@ -88,13 +88,18 @@ function getLocalizedText(locale: Locale, text: { zh: string; en: string }) {
   return text[locale];
 }
 
+// Publication is decided per locale, so check the prefixed destination.
+function localizedHref(locale: Locale, href: string) {
+  return href === '/' ? `/${locale}` : `/${locale}${href}`;
+}
+
 function getNavigationChildren(locale: Locale, item: NavigationItem) {
-  return item.children?.filter((child) => !isWithdrawnTechnicalPath(child.href) && (locale === 'zh' || !isZhOnlyPath(child.href)));
+  return item.children?.filter((child) => !isWithdrawnTechnicalPath(localizedHref(locale, child.href)) && (locale === 'zh' || !isZhOnlyPath(child.href)));
 }
 
 export function getLocalizedNavigation(locale: Locale) {
   const items = locale === 'zh' ? chineseNavigationItems : englishNavigationItems;
-  return items.filter((item) => !isWithdrawnTechnicalPath(item.href)).map((item) => ({
+  return items.filter((item) => !isWithdrawnTechnicalPath(localizedHref(locale, item.href))).map((item) => ({
     ...item,
     labelText: getLocalizedText(locale, item.label),
     children: getNavigationChildren(locale, item)?.map((child) => ({
@@ -127,9 +132,8 @@ export function getRouteLabelMap(locale: Locale) {
       '/service/furnace-renovation-overhaul': '工业炉改造与大修',
       '/articles/laojiu-rechuli-lu-daxiu-haishi-maixin': '改造还是换新判断',
       '/articles/gongye-lu-baojia-canshu': '工业炉报价参数清单',
-      '/case/jining-support-roller-heat-treatment-line': '支重轮热处理生产线',
+      // Only approved case pages belong here: this table ships to every visitor.
       '/case/henan-annealing-solution-line': '连续退火固溶生产线',
-      '/case/anonymous-tsingshan-1250-renovation': '连续退洗线改造项目',
       '/partner': '合作关系',
       '/contact': '联系方式',
     };

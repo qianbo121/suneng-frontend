@@ -1,5 +1,5 @@
 import { isWithdrawnTechnicalPath } from '@/lib/publication-scope';
-import englishCaseSlugs from '@/lib/cases/english-slugs.json';
+import { PUBLIC_ENGLISH_CASE_SLUGS } from '@/lib/cases/public-case-allowlist';
 import type { Locale } from '@/types/site';
 
 /**
@@ -34,9 +34,10 @@ function stripLocale(path: string): string {
 /** True if the path (with or without a locale prefix) is a Chinese-only page. */
 export function isZhOnlyPath(path: string): boolean {
   const pathname = stripLocale(path.split(/[?#]/, 1)[0]).replace(/\/+$/, '') || '/';
-  // This routing index lists completed English counterparts; the server also
-  // checks source publication and fingerprints before serving any English body.
-  return ZH_ONLY_PATHS.has(pathname) || (pathname.startsWith('/case/') && !englishCaseSlugs.includes(pathname.slice('/case/'.length)));
+  // English case pages exist only for owner-approved English copies; the server
+  // also checks source publication and fingerprints before serving any body.
+  if (pathname === '/case') return PUBLIC_ENGLISH_CASE_SLUGS.size === 0;
+  return ZH_ONLY_PATHS.has(pathname) || (pathname.startsWith('/case/') && !PUBLIC_ENGLISH_CASE_SLUGS.has(pathname.slice('/case/'.length)));
 }
 
 /**

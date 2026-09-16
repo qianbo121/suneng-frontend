@@ -14,6 +14,8 @@ import { CaseToc } from './CaseToc';
 import { CaseCoverCaption } from './CaseCoverCaption';
 import { CaseProductConnections } from './CaseEvidenceLinks';
 import { getEnglishCaseBuyerLinks } from '@/lib/cases/buyer-links-en';
+import { getCaseConnections } from '@/lib/cases/product-relations';
+import { TECHNICAL_CONTENT_PUBLISHED, isWithdrawnTechnicalPath } from '@/lib/publication-scope';
 import buyerGuideStyles from '@/components/products/BuyerSelectionGuide.module.css';
 import './cases.css';
 import './cases-en.css';
@@ -24,7 +26,8 @@ export function englishCaseMetadata(slug: string) {
   if (!item) notFound();
   return buildMetadata({
     title: item.title, description: item.summary, path: `/en/case/${slug}`, locale: 'en',
-    type: 'article', image: item.cover?.src, publishedTime: item.datePublished, modifiedTime: item.dateModified,
+    // The source publication date predates this English page, so it is not presented as its own.
+    type: 'article', image: item.cover?.src, modifiedTime: item.dateModified,
     alternateLocales: { 'zh-CN': `/zh/case/${slug}`, 'en-US': `/en/case/${slug}`, 'x-default': `/zh/case/${slug}` },
   });
 }
@@ -37,7 +40,7 @@ function backLink(value: SearchParams['returnTo']) {
   } catch { return '/en/case'; }
 }
 const formatDate = (value: string) => new Intl.DateTimeFormat('en-GB', {
-  day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC',
+  day: 'numeric', month: 'long', year: 'numeric', timeZone: 'Asia/Shanghai',
 }).format(new Date(value));
 
 export function EnglishCaseArticle({ slug, searchParams }: { slug: string; searchParams: SearchParams }) {
@@ -46,8 +49,10 @@ export function EnglishCaseArticle({ slug, searchParams }: { slug: string; searc
   const back = backLink(searchParams.returnTo);
   const url = absoluteUrl(`/en/case/${slug}`);
   const related = getEnglishCases().filter((record) => item.relatedCases.includes(record.slug));
-  const buyerLinks = getEnglishCaseBuyerLinks(slug);
-  const toc = [...item.toc, ...(buyerLinks.length ? [{ id: 'case-buyer-selection', title: 'Compare selection and supporting requirements' }] : []), { id: 'case-product-connections', title: 'Equipment and engineering entries' }];
+  const buyerLinks = getEnglishCaseBuyerLinks(slug).filter((link) => !isWithdrawnTechnicalPath(link.href));
+  // Only list sections that CaseProductConnections actually renders.
+  const hasConnections = TECHNICAL_CONTENT_PUBLISHED && getCaseConnections(item.id, 'en').length > 0;
+  const toc = [...item.toc, ...(buyerLinks.length ? [{ id: 'case-buyer-selection', title: 'Compare selection and supporting requirements' }] : []), ...(hasConnections ? [{ id: 'case-product-connections', title: 'Equipment and engineering entries' }] : [])];
   return <div className="case-page case-detail-page case-english" lang="en">
     <div className="case-container">
       <nav className="case-breadcrumb" aria-label="Breadcrumb"><a href="/en">Home</a><span>/</span><a href={back}>Case studies</a><span>/</span><span aria-current="page">{item.title}</span></nav>
@@ -57,7 +62,6 @@ export function EnglishCaseArticle({ slug, searchParams }: { slug: string; searc
             <p className="case-article-kind">{labels[item.contentType]}</p><h1>{item.title}</h1>
             <div className="case-article-dates">
               {item.sourceDate && <span>Source date: <time dateTime={item.sourceDate}>{formatDate(item.sourceDate)}</time></span>}
-              {item.datePublished && <span>Published: <time dateTime={item.datePublished}>{formatDate(item.datePublished)}</time></span>}
               {item.dateModified && <span>Source updated: <time dateTime={item.dateModified}>{formatDate(item.dateModified)}</time></span>}
               <span>Source: Jiangsu Suneng Industrial Furnace Co., Ltd.</span>
             </div>
@@ -82,7 +86,7 @@ export function EnglishCaseArticle({ slug, searchParams }: { slug: string; searc
       </section>
     </div>
     <JsonLd id="case-article-jsonld" data={[
-      { '@context': 'https://schema.org', '@type': 'Article', '@id': `${url}#article`, headline: item.title, description: item.summary, url, mainEntityOfPage: url, inLanguage: 'en-US', publisher: { '@id': getOrganizationJsonLd()['@id'] }, ...(item.datePublished ? { datePublished: item.datePublished } : {}), ...(item.dateModified ? { dateModified: item.dateModified } : {}), ...(item.cover ? { image: absoluteUrl(item.cover.src) } : {}) },
+      { '@context': 'https://schema.org', '@type': 'Article', '@id': `${url}#article`, headline: item.title, description: item.summary, url, mainEntityOfPage: url, inLanguage: 'en-US', publisher: { '@id': getOrganizationJsonLd()['@id'] }, ...(item.dateModified ? { dateModified: item.dateModified } : {}), ...(item.cover ? { image: absoluteUrl(item.cover.src) } : {}) },
       getBreadcrumbJsonLd([{ name: 'Home', url: '/en' }, { name: 'Case studies', url: '/en/case' }, { name: item.title, url }]),
     ]} />
   </div>;
@@ -91,13 +95,15 @@ export function EnglishCaseArticle({ slug, searchParams }: { slug: string; searc
 export function EnglishCaseIndex({ query }: { query: CaseQuery }) {
   const result = getEnglishCaseResults(query);
   const returnTo = englishCaseHref(query);
+  // Offer the type filter only when it can narrow the public records.
+  const showTypeFilter = new Set(getEnglishCases().map((item) => item.contentType)).size > 1 || Boolean(query.type);
   return <div className="case-page case-index-page case-english" lang="en">
     <header className="case-list-hero"><div className="case-container">
       <nav className="case-breadcrumb" aria-label="Breadcrumb"><a href="/en">Home</a><span>/</span><span aria-current="page">Case studies</span></nav>
       <div className="case-page-heading"><h1>Case studies</h1><p className="case-hero-description">Find comparable workpieces, furnace arrangements and renovation requirements. Review the conditions, equipment scope and evidence behind each record.</p></div>
       <form action="/en/case" method="get" className="case-search-panel case-english-search" aria-label="Search case studies">
         <label>Search by title, workpiece or furnace<input type="search" name="q" defaultValue={query.q} placeholder="e.g. bogie-hearth furnace" /></label>
-        <label>Record type<select name="type" defaultValue={query.type}><option value="">All records</option><option value="proposal">Historical proposals</option><option value="experience">Project experience</option></select></label>
+        {showTypeFilter && <label>Record type<select name="type" defaultValue={query.type}><option value="">All records</option><option value="proposal">Historical proposals</option><option value="experience">Project experience</option></select></label>}
         <label>Sort by<select name="sort" defaultValue={query.sort}><option value="relevance">Relevance</option><option value="updated">Source update</option><option value="year">Project year</option></select></label>
         <button className="case-button case-button-primary" type="submit">Search</button><a href="/en/case">Reset</a>
       </form>

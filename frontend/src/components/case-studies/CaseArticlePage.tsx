@@ -11,8 +11,10 @@ import { getCaseArticle, getPublicCases } from '@/lib/cases/server';
 import { safeCaseReturn, type SearchParams } from '@/lib/cases/query';
 import { CASE_TYPE_LABELS } from '@/lib/cases/types';
 import { getCaseBuyerLinks } from '@/lib/buyer-selection-guides';
+import { isWithdrawnTechnicalPath } from '@/lib/publication-scope';
 import buyerGuideStyles from '@/components/products/BuyerSelectionGuide.module.css';
 import { CaseMobileContact } from './CaseContact';
+import { CaseCoverCaption } from './CaseCoverCaption';
 import { CaseProductConnections } from './CaseEvidenceLinks';
 import {
   AnnealingCaseResources,
@@ -55,7 +57,7 @@ export function CaseArticlePage({
   const item = getCaseArticle(slug);
   if (!item) notFound();
   const backHref = safeCaseReturn(searchParams.returnTo);
-  const buyerLinks = getCaseBuyerLinks(slug);
+  const buyerLinks = getCaseBuyerLinks(slug).filter((link) => !isWithdrawnTechnicalPath(link.href));
   const url = absoluteUrl(`/zh/case/${item.slug}`);
   const organization = getOrganizationJsonLd();
   const related = getPublicCases().filter((record) => item.relatedCases?.includes(record.slug));
@@ -68,7 +70,9 @@ export function CaseArticlePage({
   const bodyHtml = lead?.[2] ?? item.html;
   const resourceLinks = [
     ...related.map((record) => ({ title: record.title, href: `/zh/case/${record.slug}` })),
-    ...(item.relatedLinks ?? []).filter((link) => !link.href.startsWith('/zh/products/detail/')),
+    ...(item.relatedLinks ?? []).filter(
+      (link) => !link.href.startsWith('/zh/products/detail/') && !isWithdrawnTechnicalPath(link.href),
+    ),
     { title: '工业炉与热处理生产线', href: '/zh/products' },
   ];
   const resourceItems = resourceLinks
@@ -116,6 +120,7 @@ export function CaseArticlePage({
                       style={{ objectFit: item.cover.fit || 'contain' }}
                     />
                   </div>
+                  <CaseCoverCaption caption={item.cover.caption ?? ''} />
                 </figure>
               )}
             </header>

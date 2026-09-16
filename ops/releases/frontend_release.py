@@ -22,8 +22,30 @@ from urllib.parse import urlparse
 IMAGE = re.compile(r'^sha256:[0-9a-f]{64}$')
 SHA = re.compile(r'^[0-9a-f]{40}$')
 DIGEST = re.compile(r'^[0-9a-f]{64}$')
+SLUG = re.compile(r'^[a-z0-9]+(?:-[a-z0-9]+)*$')
 PROTECTED = ['postgres', 'backend', 'admin', 'nginx']
-SCOPE = 'news-products-services-company'
+SCOPE = 'news-products-services-company-reviewed-cases'
+# Owner-approved public case pages. Must match frontend/src/lib/cases/public-case-allowlist.ts.
+APPROVED_CASES = {
+    'zh': ['henan-annealing-solution-line'],
+    'en': ['henan-annealing-solution-line'],
+}
+NO_CASES = {'zh': [], 'en': []}
+# Representative unapproved drafts; they must stay private in every release state.
+# A frontend test checks that each is still a draft. Replace one when it is approved.
+DRAFT_CASE_PATHS = [
+    '/zh/case/alloy-eight-furnaces-acceptance-supply-boundaries-proposal',
+    '/zh/case/anonymous-tsingshan-1250-renovation',
+    '/zh/case/jining-support-roller-heat-treatment-line',
+    '/en/case/jining-support-roller-heat-treatment-line',
+]
+# Percent-escaped section names that images before this release still served.
+ENCODED_WITHDRAWN_PATHS = [
+    '/zh/%73olutions/continuous-heat-treatment-line',
+    '/zh/%61rticles/gongye-lu-baojia-canshu',
+]
+CASE_STATES = ('open', 'closed')
+PUBLIC_LIVE = ['/zh', '/en', '/zh/news', '/en/news', '/zh/inquiry', '/en/contact']
 
 
 def now():
@@ -47,6 +69,12 @@ def validate_manifest(value):
         raise ValueError('An explicit expected current image is required')
     if value.get('publicationScope') != SCOPE:
         raise ValueError('The release must retain the current withdrawal scope')
+    if value.get('caseState', 'open') not in CASE_STATES:
+        raise ValueError('Unknown case publication state')
+    if 'approvedCases' in value:
+        normalize_cases(value['approvedCases'])
+    if not isinstance(value.get('legacyEncodedPaths', False), bool):
+        raise ValueError('legacyEncodedPaths must be true or false')
     if value.get('sourceIdentity') == 'git-commit':
         if not SHA.fullmatch(value.get('sourceCommit', '')) or not DIGEST.fullmatch(value.get('archiveSha256', '')):
             raise ValueError('A Git release requires its source commit and archive hash')
@@ -91,11 +119,91 @@ def assert_current(receipt, rows, expected):
         raise RuntimeError('A production service is not running')
 
 
-def probe(container, script):
-    raw = run(['docker', 'exec', container, 'node', '-e', script], timeout=300)
+def normalize_cases(value):
+    """Validate a {'zh': [...], 'en': [...]} list of approved case slugs."""
+    if not isinstance(value, dict) or set(value) != {'zh', 'en'}:
+        raise ValueError('Approved cases must list zh and en slugs')
+    for slugs in value.values():
+        if not isinstance(slugs, list) or not all(isinstance(slug, str) and SLUG.fullmatch(slug) for slug in slugs):
+            raise ValueError('Approved cases must be lists of case slugs')
+    if not set(value['en']) <= set(value['zh']):
+        raise ValueError('An English case page requires its Chinese page to be approved')
+    return {'zh': sorted(set(value['zh'])), 'en': sorted(set(value['en']))}
+
+
+def merge_cases(*values):
+    return {locale: sorted(set().union(*(value[locale] for value in values))) for locale in ('zh', 'en')}
+
+
+def case_contract(state, cases=None, *, encoded=True, withdrawn=None):
+    """Route rules for one case state.
+
+    'open' and 'closed' describe the image being released, with `cases` listing
+    the pages it is approved to serve. 'either' is used for the currently running
+    or restored image; pass the union of the live and target lists so an earlier
+    or later batch is accepted. Guides, solutions and unapproved drafts are
+    private in every state. `withdrawn` lists pages the new image must no longer
+    serve. `encoded` also probes percent-escaped section names.
+    """
+    if state not in (*CASE_STATES, 'either'):
+        raise ValueError('Unknown case publication state')
+    cases = normalize_cases(APPROVED_CASES if cases is None else cases)
+    group, retired = [], ['/zh/solutions', '/en/solutions', '/zh/articles/gongye-lu-baojia-canshu']
+    for locale in ('zh', 'en'):
+        slugs = cases[locale]
+        if slugs:
+            group += [f'/{locale}/case', *[f'/{locale}/case/{slug}' for slug in slugs]]
+        else:
+            retired.append(f'/{locale}/case')
+    drafts = [path for path in DRAFT_CASE_PATHS if path.rsplit('/', 1)[1] not in cases[path.split('/')[1]]]
+    if withdrawn:
+        withdrawn = normalize_cases(withdrawn)
+        drafts += [f'/{locale}/case/{slug}' for locale in ('zh', 'en') for slug in withdrawn[locale]
+                   if slug not in cases[locale] and f'/{locale}/case/{slug}' not in drafts]
+    extra = []
+    if encoded:
+        extra = ENCODED_WITHDRAWN_PATHS + [path.replace('/zh/case/', '/zh/%63ase/', 1)
+                                           for path in drafts if path.startswith('/zh/case/')][:1]
+    return {'state': state, 'group': group, 'retired': retired + drafts + extra}
+
+
+def case_group_failure(statuses, contract):
+    """Return the first case path that breaks the contract, or None."""
+    allowed = {'open': {200}, 'closed': {404}, 'either': {200, 404}}[contract['state']]
+    for path in contract['group']:
+        if statuses.get(path) not in allowed:
+            return path
+    # A case page is never public while its locale's hub is withdrawn.
+    for path in contract['group']:
+        hub = '/'.join(path.split('/')[:3])
+        if path != hub and statuses.get(path) == 200 and statuses.get(hub) != 200:
+            return path
+    return None
+
+
+def sitemap_passes(urls, located, statuses, contract):
+    """urls: every <loc> and alternate href; located: <loc> values only."""
+    paths = {urlparse(url).path for url in located}
+    if not {'/zh/news', '/en/news'} <= paths:
+        return False
+    for url in urls:
+        parsed = urlparse(url)
+        if re.search(r'/(articles|solutions)(/|$)', parsed.path):
+            return False
+        if re.search(r'/case(/|$)', parsed.path):
+            if parsed.query or parsed.path not in contract['group'] or statuses.get(parsed.path) != 200:
+                return False
+    return contract['state'] != 'open' or all(path in paths for path in contract['group'])
+
+
+def probe(container, script, contract):
+    raw = run(['docker', 'exec', '-e', 'RELEASE_CASE_CONTRACT=' + json.dumps(contract),
+               container, 'node', '-e', script], timeout=300)
     report = json.loads(raw)
     if report.get('passed') is not True or report.get('sitemapPassed') is not True:
         raise RuntimeError('Candidate violates the public route or sitemap contract')
+    if report.get('caseState') != contract['state']:
+        raise RuntimeError('Candidate was checked against a different case contract')
     return report
 
 
@@ -110,22 +218,29 @@ def wait_healthy(container):
     raise RuntimeError('Candidate health check timed out')
 
 
-def public_probe(base_url):
-    results = []
-    for path, expected in [('/zh', 200), ('/en', 200), ('/zh/news', 200), ('/en/news', 200),
-                           ('/zh/inquiry', 200), ('/en/contact', 200), ('/zh/case', 404),
-                           ('/en/case', 404), ('/zh/solutions', 404), ('/en/solutions', 404)]:
-        status = run(['curl', '--max-time', '25', '--silent', '--show-error', '--output',
-                      '/dev/null', '--write-out', '%{http_code}', base_url + path])
+def public_probe(base_url, contract):
+    def status_of(path):
+        return run(['curl', '--max-time', '25', '--silent', '--show-error', '--output',
+                    '/dev/null', '--write-out', '%{http_code}', base_url + path])
+    results, statuses = [], {}
+    for path, expected in [*[(p, 200) for p in PUBLIC_LIVE], *[(p, 404) for p in contract['retired']]]:
+        status = status_of(path)
         if status != str(expected):
             raise RuntimeError('Public route check failed: ' + path)
         results.append({'path': path, 'status': expected})
+    for path in contract['group']:
+        status = status_of(path)
+        statuses[path] = int(status) if status.isdigit() else 0
+    failed = case_group_failure(statuses, contract)
+    if failed:
+        raise RuntimeError('Public case route check failed: ' + failed)
+    results += [{'path': path, 'status': status} for path, status in statuses.items()]
     xml = run(['curl', '--fail', '--max-time', '25', '--silent', '--show-error', base_url + '/sitemap.xml'])
-    locations = [element.text or '' for element in ET.fromstring(xml).iter() if element.tag.rsplit('}', 1)[-1] == 'loc']
-    if not all(any(url.endswith(path) for url in locations) for path in ['/zh/news', '/en/news']):
-        raise RuntimeError('Public sitemap is incomplete')
-    if any(re.search(r'/(case|articles|solutions)(/|$)', urlparse(url).path) for url in locations):
-        raise RuntimeError('Public sitemap exposes withdrawn content')
+    elements = list(ET.fromstring(xml).iter())
+    located = [element.text or '' for element in elements if element.tag.rsplit('}', 1)[-1] == 'loc']
+    alternates = [element.get('href', '') for element in elements if element.tag.rsplit('}', 1)[-1] == 'link']
+    if not sitemap_passes(located + alternates, located, statuses, contract):
+        raise RuntimeError('Public sitemap does not match the case publication contract')
     return results
 
 
@@ -138,6 +253,15 @@ class Release:
         self.pins_path = live / 'verified-images.override.yml'
         self.pending_path = live / 'DEPLOYMENT_IN_PROGRESS.json'
         self.receipt = json.loads(self.receipt_path.read_text())
+        # Case pages served by the image being released, and by the live image
+        # (older receipts predate case approval and serve none).
+        target_cases = normalize_cases(manifest.get('approvedCases', APPROVED_CASES))
+        self.served_cases = target_cases if manifest.get('caseState', 'open') == 'open' else NO_CASES
+        live_cases = normalize_cases((self.receipt.get('frontendRelease') or {}).get('servedCases', NO_CASES))
+        self.target_contract = case_contract(manifest.get('caseState', 'open'), target_cases,
+                                             encoded=not manifest.get('legacyEncodedPaths', False),
+                                             withdrawn=live_cases)
+        self.lenient_contract = case_contract('either', merge_cases(target_cases, live_cases), encoded=False)
         self.original_marker = (live / 'DEPLOY_COMMIT').read_bytes() if (live / 'DEPLOY_COMMIT').exists() else None
         self.env = {**os.environ}
         if manifest.get('sourceCommit'):
@@ -210,13 +334,13 @@ class Release:
         same = all(self.target[name] == self.receipt['images'][name] for name in self.components)
         canary = 'suneng-release-check-' + uuid.uuid4().hex[:12]
         if same:
-            internal = probe('corp-site-frontend', self.script)
+            internal = probe('corp-site-frontend', self.script, self.target_contract)
         else:
             try:
                 run(self.compose() + ['run', '-d', '--no-deps', '--pull', 'never',
                                      '--name', canary, 'frontend'], env=self.env)
                 wait_healthy(canary)
-                internal = probe(canary, self.script)
+                internal = probe(canary, self.script, self.target_contract)
             finally:
                 # This uniquely named canary is the only container cleanup permitted here.
                 subprocess.run(['docker', 'rm', '-f', canary], capture_output=True, timeout=30)
@@ -226,7 +350,8 @@ class Release:
                   'image': self.target['frontend'], 'internalChecks': internal,
                   'dataRestored': False, 'notificationsSent': False, 'components': self.components}
         if not apply or same:
-            result['publicChecks'] = public_probe('https://www.jssngyl.cn')
+            # Without a switch the public site still runs the current image.
+            result['publicChecks'] = public_probe('https://www.jssngyl.cn', self.target_contract if same else self.lenient_contract)
             atomic_json(self.audit / 'preflight.json', result)
             return result
         # Re-check the expected current version immediately before replacement.
@@ -244,15 +369,16 @@ class Release:
             self.replace_frontend()
             if 'backend' in self.manifest:
                 result['backendVerification'] = self.backend_check(running=True)
-            result['internalChecks'] = probe('corp-site-frontend', self.script)
-            result['publicChecks'] = public_probe('https://www.jssngyl.cn')
+            result['internalChecks'] = probe('corp-site-frontend', self.script, self.target_contract)
+            result['publicChecks'] = public_probe('https://www.jssngyl.cn', self.target_contract)
             if signature(inspect(self.protected)) != protected:
                 raise RuntimeError('A protected production service changed')
             if any(row['Image'] != self.target[row['Name'].removeprefix('/corp-site-')] for row in inspect(self.components)):
                 raise RuntimeError('Running frontend identity does not match target')
             receipt = copy.deepcopy(self.receipt)
             receipt.update({'images': self.target, 'sourceIdentity': 'component-release',
-                            'frontendRelease': self.manifest, 'previousReceipt': str(self.audit / 'previous-receipt.json'),
+                            'frontendRelease': {**self.manifest, 'servedCases': self.served_cases},
+                            'previousReceipt': str(self.audit / 'previous-receipt.json'),
                             'productionVerifiedAt': now(), 'deploymentStatus': 'verified',
                             'releaseOperation': kind, 'releaseOperationReceipt': str(self.audit / 'result.json')})
             self.write_override(self.pins_path, self.target)
@@ -270,8 +396,9 @@ class Release:
                 self.replace_frontend(self.audit / 'previous.override.json')
                 if any(row['Image'] != self.receipt['images'][row['Name'].removeprefix('/corp-site-')] for row in inspect(self.components)):
                     raise RuntimeError('Recovery did not restore the previous image')
-                probe('corp-site-frontend', self.script)
-                public_probe('https://www.jssngyl.cn')
+                # The restored image may predate the approved cases.
+                probe('corp-site-frontend', self.script, self.lenient_contract)
+                public_probe('https://www.jssngyl.cn', self.lenient_contract)
                 if signature(inspect(self.protected)) != protected:
                     raise RuntimeError('Protected services changed during recovery')
                 self.write_override(self.pins_path, self.receipt['images'])

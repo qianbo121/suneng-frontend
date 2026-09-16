@@ -9,6 +9,7 @@ vi.mock('react', async (original) => ({
   cache: (fn: unknown) => fn,
 }));
 import { readCaseDirectory, getPublicCases, createCaseDirectoryReader } from './server';
+import { PUBLIC_CASE_SLUGS } from './public-case-allowlist';
 import * as content from './content';
 import { prepareCaseBody } from './content';
 import {
@@ -268,8 +269,22 @@ describe('case publishing and browsing contract', () => {
     expect(prepareCaseBody('## 工况').toc[0].id).toBe(body.toc[0].id);
   });
 
-  it("retains archived engineering boundaries while the public registry is empty", () => {
-    expect(getPublicCases()).toEqual([]);
+  it('keeps a published file private until its slug is approved, without reading its body', () => {
+    const directory = fs.mkdtempSync(path.join(os.tmpdir(), 'suneng-case-approval-'));
+    temporary.push(directory);
+    const approved = { ...fixture(1), searchText: undefined };
+    const pending = { ...fixture(2), searchText: undefined, body: 'pending.md' };
+    fs.writeFileSync(path.join(directory, 'approved.json'), JSON.stringify(approved));
+    fs.writeFileSync(path.join(directory, 'body.md'), '## 公开正文\n\n已审核。');
+    fs.writeFileSync(path.join(directory, 'pending.json'), JSON.stringify(pending));
+    // pending.md is intentionally missing: reading it would throw.
+    const records = readCaseDirectory(directory, undefined, new Set([approved.slug]));
+    expect(records.map((item) => item.slug)).toEqual([approved.slug]);
+    expect(readCaseDirectory(directory, undefined, new Set())).toEqual([]);
+  });
+
+  it("retains archived engineering boundaries while only approved cases are public", () => {
+    expect(getPublicCases().map((item) => item.slug)).toEqual([...PUBLIC_CASE_SLUGS]);
     const root=path.join(process.cwd(), 'content/cases');
     const meta=JSON.parse(fs.readFileSync(path.join(root,'rt4-75-6-proposal.json'),'utf8'));
     expect(meta.publicationStatus).toBe('draft');

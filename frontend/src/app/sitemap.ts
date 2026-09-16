@@ -3,7 +3,6 @@ import { getEnglishCases } from '@/lib/cases/english';
 import { englishSolutions } from '@/lib/english-solutions';
 import { unstable_cache } from 'next/cache';
 import { getPublicCases } from '@/lib/cases/server';
-import { CASE_PAGE_SIZE } from '@/lib/cases/types';
 import type { MetadataRoute } from 'next';
 
 import { publicPathExists } from '@/lib/seo/config';
@@ -343,10 +342,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.72,
     }),
   );
-  const pageRoutes = Array.from(
-    { length: Math.max(0, Math.ceil(cases.length / CASE_PAGE_SIZE) - 1) },
-    (_, i) => route(`/zh/case?page=${i + 2}`, { changeFrequency: 'monthly', priority: 0.5 }),
-  );
+  // Case list pages are not listed: every approved case page is listed directly,
+  // and the release contract accepts only unparameterised case addresses.
   return [
     ...collectStaticRoutes(),
     ...caseRoutes,
@@ -357,10 +354,22 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: 'monthly', priority: 0.72,
       alternates: routeAlternates(`/case/${item.slug}`, sitemapLocales),
     })),
-    ...Array.from({ length: Math.max(0, Math.ceil(englishCases.length / CASE_PAGE_SIZE) - 1) }, (_, i) =>
-      route(`/en/case?page=${i + 2}`, { changeFrequency: 'monthly', priority: 0.5 })),
-    ...pageRoutes,
     ...collectProductRoutes(),
     ...(await collectNewsRoutes()),
-  ].filter((item) => !isWithdrawnTechnicalPath(item.url));
+  ]
+    .filter((item) => !isWithdrawnTechnicalPath(item.url))
+    // A public page must not advertise a withdrawn language version either.
+    .map((item) => {
+      const languages = item.alternates?.languages;
+      if (!languages) return item;
+      return {
+        ...item,
+        alternates: {
+          ...item.alternates,
+          languages: Object.fromEntries(
+            Object.entries(languages).filter(([, url]) => !isWithdrawnTechnicalPath(String(url))),
+          ),
+        },
+      };
+    });
 }

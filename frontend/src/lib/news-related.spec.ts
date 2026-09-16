@@ -30,9 +30,11 @@ describe('news thematic internal links', () => {
     expect(links.some((link) => link.href === '/zh/products/detail/mesh-belt-furnace')).toBe(false);
   });
 
-  it("connects renovation articles only to currently public service and equipment", () => {
+  it("connects renovation articles only to public service, equipment and approved cases", () => {
     const links=getNewsRelatedLinks({titleZh:'连续退火生产线节能改造怎么做？',summaryZh:'',contentZh:''});
-    expect(links.map(x=>x.href)).toEqual(['/zh/service/furnace-renovation-overhaul','/zh/products/detail/annealing-solution-line']);
+    expect(links.map(x=>x.href)).toEqual(['/zh/service/furnace-renovation-overhaul','/zh/products/detail/annealing-solution-line','/zh/case/henan-annealing-solution-line']);
+    const english=getNewsRelatedLinks({titleZh:'连续退火生产线节能改造怎么做？',summaryZh:'',contentZh:''},'en');
+    expect(english.map(x=>x.href)).toEqual(['/en/products/detail/annealing-solution-line','/en/case/henan-annealing-solution-line']);
   });
 
   it('does not expose the withdrawn quotation guide or duplicate links', () => {

@@ -60,6 +60,21 @@ vi.mock('@/lib/api/news', () => ({
 import buildSitemap from '@/app/sitemap';
 
 import { FURNACE_RENOVATION_OVERHAUL_SEO } from '@/lib/seo/page-data';
+import { isWithdrawnTechnicalPath } from '@/lib/publication-scope';
+import { REVIEWED_PUBLIC_CASES } from '@/lib/cases/public-case-allowlist';
+
+const site = 'https://www.jssngyl.cn';
+// Only owner-approved case pages may appear, plus the index of each locale that has one.
+const APPROVED_CASE_URLS = [
+  ...REVIEWED_PUBLIC_CASES.flatMap((item) => [
+    `${site}/zh/case/${item.slug}`,
+    ...(item.english ? [`${site}/en/case/${item.slug}`] : []),
+  ]),
+  ...(REVIEWED_PUBLIC_CASES.length ? [`${site}/zh/case`] : []),
+  ...(REVIEWED_PUBLIC_CASES.some((item) => item.english) ? [`${site}/en/case`] : []),
+].sort();
+const casePathUrls = (urls: string[]) =>
+  urls.filter((url) => /^\/(zh|en)\/case(\/|$)/.test(new URL(url).pathname)).sort();
 
 const DEEP_CRAWL_TARGETS = [
   '/zh/articles/gongye-lu-baojia-canshu',
@@ -99,7 +114,8 @@ describe('sitemap freshness signals', () => {
       expect(byUrl.get('https://www.jssngyl.cn'+path)?.lastModified).toBeUndefined();
     }
     expect(byUrl.get('https://www.jssngyl.cn/zh/service/furnace-renovation-overhaul')?.lastModified).toEqual(new Date(FURNACE_RENOVATION_OVERHAUL_SEO.modifiedTime));
-    expect(entries.filter(entry=>/\/(case|articles|solutions)(\/|$)/.test(new URL(entry.url).pathname))).toEqual([]);
+    expect(entries.filter(entry=>/\/(articles|solutions)(\/|$)/.test(new URL(entry.url).pathname))).toEqual([]);
+    expect(casePathUrls(entries.map((entry) => entry.url))).toEqual(APPROVED_CASE_URLS);
   });
 
   it('fails when one shared hard-coded date covers 3 or more pages', async () => {
@@ -136,7 +152,7 @@ describe('sitemap freshness signals', () => {
   it("keeps live deep-crawl targets while excluding retired technical paths", async () => {
     const urls=new Set((await buildSitemap()).map(x=>x.url));
     expect(DEEP_CRAWL_TARGETS).toHaveLength(26);
-    for(const path of DEEP_CRAWL_TARGETS)expect(urls.has('https://www.jssngyl.cn'+path),path).toBe(!/\/(articles|solutions|case)(\/|$)/.test(path));
+    for(const path of DEEP_CRAWL_TARGETS)expect(urls.has('https://www.jssngyl.cn'+path),path).toBe(!isWithdrawnTechnicalPath(path));
   });
 
   it('includes the English news hub while excluding empty strength routes and the duplicate news slug', async () => {
@@ -195,8 +211,13 @@ it('emits reciprocal English news addresses only for complete translations with 
   expect(zh?.lastModified).toEqual(new Date('2026-06-01T00:00:00Z'));
 });
 
-it("excludes all case indexes, articles and pagination in both languages", async () => {
+it("lists only approved case pages and never articles, case pagination or withdrawn alternates", async () => {
     const entries=await buildSitemap();
     expect(entries.some(x=>x.url.endsWith('/en/news'))).toBe(true);
-    expect(entries.some(x=>/\/(case|articles)(\/|\?|$)/.test(x.url))).toBe(false);
+    expect(entries.some(x=>/\/articles(\/|\?|$)/.test(x.url))).toBe(false);
+    expect(entries.some(x=>/\/case\?/.test(x.url))).toBe(false);
+    expect(casePathUrls(entries.map((x) => x.url))).toEqual(APPROVED_CASE_URLS);
+    for (const entry of entries)
+      for (const url of Object.values(entry.alternates?.languages ?? {}))
+        expect(isWithdrawnTechnicalPath(String(url)), `${entry.url} -> ${url}`).toBe(false);
   });

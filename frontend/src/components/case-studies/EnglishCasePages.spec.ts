@@ -14,13 +14,27 @@ import { getCaseBuyerLinks } from '@/lib/buyer-selection-guides';
 
 import { parseCaseQuery } from '@/lib/cases/query';
 import englishSlugs from '@/lib/cases/english-slugs.json';
+import { PUBLIC_CASE_SLUGS, PUBLIC_ENGLISH_CASE_SLUGS } from '@/lib/cases/public-case-allowlist';
+
+const sorted = (values: Iterable<string>) => [...values].sort();
 
 describe('complete English case integration', () => {
-  it("keeps translated sources registered but withdraws every public counterpart", () => {
+  it("keeps translated sources registered and publishes only owner-approved English pages", () => {
     expect(englishSlugs).toHaveLength(148);
-    expect(getEnglishCases()).toEqual([]);
-    expect(getPublicCases()).toEqual([]);
-    for(const slug of englishSlugs)expect(()=>renderToStaticMarkup(createElement(EnglishCaseArticle,{slug,searchParams:{}}))).toThrow('404');
+    expect(sorted(getEnglishCases().map((item) => item.slug))).toEqual(sorted(PUBLIC_ENGLISH_CASE_SLUGS));
+    expect(sorted(getPublicCases().map((item) => item.slug))).toEqual(sorted(PUBLIC_CASE_SLUGS));
+    for (const slug of englishSlugs) {
+      const render = () => renderToStaticMarkup(createElement(EnglishCaseArticle, { slug, searchParams: {} }));
+      if (PUBLIC_ENGLISH_CASE_SLUGS.has(slug)) expect(render, slug).not.toThrow();
+      else expect(render, slug).toThrow('404');
+    }
+  });
+  it('lists only table-of-contents anchors that exist on the page', () => {
+    for (const item of getEnglishCases()) {
+      const html = renderToStaticMarkup(createElement(EnglishCaseArticle, { slug: item.slug, searchParams: {} }));
+      for (const [, id] of html.matchAll(/href="#([^"]+)"/g))
+        expect(html, `${item.slug} #${id}`).toContain(`id="${id}"`);
+    }
   });
   it('renders the complete body, final title, canonical and social titles consistently', () => {
     for (const item of getEnglishCases()) {
@@ -43,8 +57,10 @@ describe('complete English case integration', () => {
       expect(result.items.some((record) => record.id === item.id), item.slug).toBe(true);
     }
   });
-  it("returns no withdrawn guide search results in English", () => {
-    expect(getEnglishCaseResults(parseCaseQuery({q:'furnace'})).items).toEqual([]);
+  it("searches only approved English records and links no withdrawn buyer guides", () => {
+    const found = getEnglishCaseResults(parseCaseQuery({ q: 'furnace' })).items.map((item) => item.slug);
+    expect(found.every((slug) => PUBLIC_ENGLISH_CASE_SLUGS.has(slug))).toBe(true);
+    expect(found).toContain('henan-annealing-solution-line');
     expect(getPublicCases().filter(item=>getCaseBuyerLinks(item.slug).length)).toEqual([]);
   });
 });

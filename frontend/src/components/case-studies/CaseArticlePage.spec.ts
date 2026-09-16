@@ -2,7 +2,10 @@ import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it, vi } from 'vitest';
 import { CaseArticlePage } from './CaseArticlePage';
+import { INTERNAL_CAPTION_NOTE } from './CaseCoverCaption';
+import { AnnealingCaseResources } from './AnnealingCaseResources';
 import { getPublicCases } from '@/lib/cases/server';
+import { PUBLIC_CASE_SLUGS } from '@/lib/cases/public-case-allowlist';
 
 vi.mock('server-only', () => ({}));
 vi.mock('react', async (original) => ({
@@ -36,7 +39,7 @@ function expectPublishedBody(rendered: string, original: string, slug: string) {
 }
 
 describe('case resources preserve the published content', () => {
-  it('renders registered covers in the reading header without visible image labels', () => {
+  it('renders registered covers in the reading header with their reader-facing caption', () => {
     for (const item of getPublicCases()) {
       const html = renderToStaticMarkup(
         createElement(CaseArticlePage, { slug: item.slug, searchParams: {} }),
@@ -49,7 +52,10 @@ describe('case resources preserve the published content', () => {
       const figure = html.split('class="case-article-cover"')[1].split('</figure>')[0];
       expect(figure, item.slug).toContain(`alt="${item.cover.alt}"`);
       expect(figure, item.slug).toContain(`object-fit:${item.cover.fit || 'contain'}`);
-      expect(figure, item.slug).not.toContain('<figcaption>');
+      // An approved cover must say what it is, in reader-facing words rather than a production note.
+      expect(item.cover.caption, item.slug).toBeTruthy();
+      expect(INTERNAL_CAPTION_NOTE.test(item.cover.caption ?? ''), item.slug).toBe(false);
+      expect(figure, item.slug).toContain(`<figcaption>${item.cover.caption}</figcaption>`);
       expect(html.indexOf('class="case-article-header"'), item.slug).toBeLessThan(
         html.indexOf('class="case-article-cover"'),
       );
@@ -58,15 +64,36 @@ describe('case resources preserve the published content', () => {
     }
   });
 
-  it("returns no public case records after withdrawal", () => {
-    expect(getPublicCases()).toEqual([]);
+  it("returns only owner-approved case records", () => {
+    expect(getPublicCases().map((item) => item.slug).sort()).toEqual([...PUBLIC_CASE_SLUGS].sort());
+  });
+
+  it("keeps the approved Henan page free of links to withdrawn guides and solutions", () => {
+    const html = renderToStaticMarkup(createElement(CaseArticlePage, { slug: 'henan-annealing-solution-line', searchParams: {} }));
+    expect(html).toContain('<figcaption>参考图，非项目现场照片</figcaption>');
+    expect(html).not.toMatch(/href="\/zh\/(solutions|articles)(\/|")/);
+    expect(html).toContain('href="/zh/products/detail/annealing-solution-line"');
+    expect(html).toContain('href="/zh/products"');
   });
 
   it("rejects the old eight-furnace article with 404", () => {
     expect(()=>renderToStaticMarkup(createElement(CaseArticlePage,{slug:'alloy-eight-furnaces-acceptance-supply-boundaries-proposal',searchParams:{}}))).toThrow('404');
   });
 
-  it("rejects formerly curated articles rather than republishing their bookmarks", () => {
-    for(const slug of curated)expect(()=>renderToStaticMarkup(createElement(CaseArticlePage,{slug,searchParams:{}}))).toThrow('404');
+  it("keeps at least two live destinations when curated cards point at withdrawn pages", () => {
+    for (const variant of ['annealing', 'support-roller'] as const) {
+      const html = renderToStaticMarkup(createElement(AnnealingCaseResources, {
+        compact: true, backHref: '/zh/case', caseId: 'fixture', sourceSummary: '', variant,
+      }));
+      expect(html, variant).toMatch(/data-count="[2-9]"/);
+      expect(html, variant).not.toMatch(/href="\/zh\/(solutions|articles)(\/|")/);
+      expect(html, variant).toContain('href="/zh/products"');
+    }
+  });
+
+  it("rejects formerly curated articles that the owner has not approved", () => {
+    const pending = [...curated].filter((slug) => !PUBLIC_CASE_SLUGS.has(slug));
+    expect(pending).toContain('jining-support-roller-heat-treatment-line');
+    for(const slug of pending)expect(()=>renderToStaticMarkup(createElement(CaseArticlePage,{slug,searchParams:{}}))).toThrow('404');
   });
 });

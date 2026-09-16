@@ -6,7 +6,6 @@ import Image from 'next/image';
 import { useEffect, useRef, type MouseEvent } from 'react';
 import { ListPagination } from '@/components/ui/ListPagination';
 import { caseListHref } from '@/lib/cases/query';
-import { caseListPresentation } from '@/lib/cases/list-tags';
 import { type CaseCardData, type CasePageResult, type CaseQuery } from '@/lib/cases/types';
 import { trackLeadEvent } from '@/lib/api/lead-events';
 
@@ -93,7 +92,6 @@ function CaseCard({
   const href = `/zh/case/${item.slug}?returnTo=${encodeURIComponent(returnTo)}`;
   const title = item.listTitle || item.title;
   const titleId = `case-title-${item.id}`;
-  const presentation = caseListPresentation(item);
   const pointerStart = useRef<{ x: number; y: number } | null>(null);
   function openCase(event: MouseEvent<HTMLAnchorElement>) {
     const start = pointerStart.current;
@@ -148,7 +146,8 @@ function CaseCard({
         )}
         <div className="case-record-copy">
           <h3 id={titleId}>{title}</h3>
-          <p className="case-record-summary">{presentation.summary}</p>
+          {/* The server prepares list summaries; see getCaseResults. */}
+          <p className="case-record-summary">{item.summary}</p>
         </div>
       </a>
     </article>
