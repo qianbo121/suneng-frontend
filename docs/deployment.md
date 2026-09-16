@@ -1,100 +1,17 @@
-# 部署步骤
+# 部署入口
 
-生产部署以根目录 [DEPLOY.md](../DEPLOY.md) 和 `deploy.sh` 为准。本文只保留入口说明，避免出现两套互相冲突的发布流程。
+当前生产发布以 [官网发布与恢复入口](../DEPLOY.md) 和 [固定程序包发布说明](../ops/releases/README.md) 为准。
 
-## 0. 唯一部署源
+- 候选在独立构建环境生成，检查通过后仅替换前台。
+- 旧 `Build And Deploy` 持续关闭，不能通过 main 合并自动覆盖线上；不要删除固定版本保护来执行旧整站脚本。
+- 数据库、附件、后端和管理端的变更需要单独方案，不能混在前台回退中。
 
-- 本机唯一允许作为官网部署源的工作区：`/Users/qianbo/Desktop/Coding/官网-GEO-P0`。
-- `/Users/qianbo/Desktop/Coding/官网+GEO` 是待分拣的历史工作区，禁止运行 `deploy.sh`、禁止打包部署、禁止用其构建结果覆盖生产。
-- 部署脚本会拒绝带有 `.DO_NOT_DEPLOY` 标记的工作区，并核对 9 个正式方案路由源码是否齐全。
-- 历史工作区的未提交内容只能按功能建立独立迁移分支，以当前正式施工区为基线逐项移植、测试和验收，禁止整树覆盖。
+## 本地开发
 
-## 1. 生产部署入口
+本地联调可以使用开发编排文件：
 
-生产服务器使用：
-
-```bash
-cd /opt/website
-./deploy.sh
-```
-
-当前生产目录为 `/opt/website`，并应与 GitHub Secret `DEPLOY_PATH` 保持一致。
-
-`deploy.sh` 会按固定顺序执行：
-
-1. 校验部署分支必须为 `main` 且工作区干净，再执行 `git pull --ff-only origin main`。CI 远程包部署时通过 `DEPLOY_SKIP_PULL=1` 跳过，并必须携带与 GitHub SHA 一致的 `DEPLOY_COMMIT`。
-2. `docker compose --env-file .env.production -f docker-compose.prod.yml build`，保留 Docker layer cache；源码变更仍会触发对应构建层重跑。
-3. 调用 `backup.sh` 做部署前备份。
-4. 执行 `prisma migrate deploy`。
-5. `up -d` 启动或重建容器，不执行整站 `down`。
-6. 对 nginx 执行 `nginx -s reload`，避免容器 IP 变化后 upstream 缓存导致 502。
-7. 轮询 backend 容器内 `/api/health`。
-
-### 构建缓存约定
-
-日常部署保留 Docker layer cache。不要默认使用 `--no-cache`，否则 frontend / backend / admin 会在服务器上重新安装依赖并全量编译，显著拉长部署时间。
-
-源码变更不会因为保留缓存而丢失：各应用 Dockerfile 在安装依赖后会 `COPY . .`，源文件变化会触发后续构建层重新执行。只有在怀疑缓存损坏、基础镜像层异常或需要彻底重装依赖时，才手动执行一次 `docker compose ... build --no-cache`。
-
-## 2. 生产环境变量
-
-生产环境统一使用根目录 `.env.production`，从 `.env.production.example` 复制后填写：
-
-- `DB_PASSWORD`
-- `JWT_SECRET`
-- `DOMAIN`
-- `ADMIN_DOMAIN`
-- `PUBLIC_SITE_URL`
-
-`DATABASE_URL`、`ALLOWED_ORIGINS`、`FRONTEND_URL`、`ADMIN_URL` 由 `docker-compose.prod.yml` 根据上述变量拼装，生产环境不需要在 `.env.production` 中重复声明。
-
-## 3. 后台访问路径
-
-生产后台部署在独立后台域名根路径：
-
-```text
-https://${ADMIN_DOMAIN}/
-```
-
-因此生产构建使用：
-
-```env
-VITE_APP_BASE_PATH=/
-VITE_API_BASE_URL=/api
-```
-
-本地 Docker 开发栈仍然可以通过主站 `/admin/` 访问，对应 `docker-compose.yml` 中的 `VITE_APP_BASE_PATH=/admin/`。
-
-## 4. GitHub Actions
-
-`.github/workflows/deploy.yml` 负责：
-
-1. 先跑 lint、typecheck、test 和三端 build。
-2. 打包源码到服务器。
-3. 通过 SSH 调用 `DEPLOY_SKIP_PULL=1 bash deploy.sh`。
-
-必须配置 GitHub Secrets：
-
-- `DEPLOY_HOST`
-- `DEPLOY_USERNAME`
-- `DEPLOY_KEY`
-- `DEPLOY_PATH`
-
-未配置这些 Secrets 时，不要依赖 push main 自动部署。
-
-## 5. 本地 Docker 验证
-
-本地联调可以继续使用开发 compose：
-
-```bash
+```sh
 docker compose up -d --build
 ```
 
-本地默认地址：
-
-- 前台：`http://localhost/zh`
-- 后端 API：`http://localhost/api`
-- Swagger：`http://localhost/api/docs`
-- 后台：`http://localhost/admin/`
-
-本地 compose 不等同生产部署；上线、回滚、备份和健康检查以 `DEPLOY.md` 为准。
+以上命令只供本地开发环境使用，不在生产目录执行。本地后台可能使用主站子路径，生产后台使用已配置的独立域名；具体地址与配置以各环境为准。
