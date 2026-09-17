@@ -1,7 +1,7 @@
 {
   "schemaVersion": "4.0.0",
   "defaultCategoryId": "welded-structures",
-  "defaultWorkpieceId": "large-welded-machine-frame",
+  "defaultWorkpieceId": "welded-pipe-spool",
   "categories": [
     {
       "id": "welded-structures",
@@ -9,11 +9,11 @@
       "name": "焊接结构与容器",
       "cards": [
         {
-          "id": "large-welded-machine-frame",
-          "name": "大型焊接机架",
-          "image": "/images/workpieces/quality-pilot-20260909/large-welded-machine-frame-v1.png",
-          "alt": "大型焊接机架白底工件图",
-          "judgement": "残余应力与装炉支撑共同影响变形",
+          "id": "welded-pipe-spool",
+          "name": "管道焊接件",
+          "image": "/images/workpieces/reviewed-20260909/welded-structures/welded-pipe-spool.webp",
+          "alt": "厚壁管道焊接预制件白底工件图",
+          "judgement": "壁厚差异和支撑方式影响处理一致性",
           "contentMode": "dedicated"
         },
         {
@@ -49,11 +49,11 @@
           "contentMode": "dedicated"
         },
         {
-          "id": "welded-pipe-spool",
-          "name": "管道焊接件",
-          "image": "/images/workpieces/reviewed-20260909/welded-structures/welded-pipe-spool.webp",
-          "alt": "厚壁管道焊接预制件白底工件图",
-          "judgement": "壁厚差异和支撑方式影响处理一致性",
+          "id": "large-welded-machine-frame",
+          "name": "大型焊接机架",
+          "image": "/images/workpieces/quality-pilot-20260909/large-welded-machine-frame-v1.png",
+          "alt": "大型焊接机架白底工件图",
+          "judgement": "残余应力与装炉支撑共同影响变形",
           "contentMode": "dedicated"
         }
       ]

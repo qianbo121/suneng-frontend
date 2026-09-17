@@ -2,11 +2,11 @@ import { describe, expect, it } from 'vitest';
 import sources from '../../tests/fixtures/news-migration-public-sources-20260910.json';
 import revisions from './news-reviewed-copy.json';
 import { applyReviewedNewsCopy } from './news-reviewed-copy';
-import { getCanonicalNewsSlug, getPublicNewsRedirectSlug } from './news-routing';
+import { getPublicNewsRedirectSlug, isLegacyDuplicateNewsSlug } from './news-routing';
 import type { NewsApiItem } from '@/types/news';
 
 // Read-only public API snapshots from 2026-09-10, captured before deployment.
-const published = sources.filter((source) => getCanonicalNewsSlug(source.slug) === source.slug);
+const published = sources.filter((source) => !isLegacyDuplicateNewsSlug(source.slug));
 describe('existing published migration copies', () => {
   it('covers nine canonical revised articles plus the recorded duplicate alias', () => {
     expect(published).toHaveLength(9);

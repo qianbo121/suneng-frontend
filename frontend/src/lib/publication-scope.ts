@@ -8,5 +8,10 @@ export function isWithdrawnTechnicalPath(href: string): boolean {
     if (!['www.jssngyl.cn', 'jssngyl.cn', 'localhost', '127.0.0.1'].includes(url.hostname)) return false;
     pathname = url.pathname;
   } catch { return false; }
-  return !TECHNICAL_CONTENT_PUBLISHED && /^\/(?:zh\/|en\/)?(?:case|articles|solutions)(?:\/|$)/.test(pathname);
+  // The router decodes percent-escapes such as /zh/%73olutions, so decode before
+  // matching. A malformed escape cannot name a public page.
+  try {
+    pathname = decodeURIComponent(pathname);
+  } catch { return true; }
+  return !TECHNICAL_CONTENT_PUBLISHED && /^\/(?:zh\/|en\/)?(?:case|articles|solutions)(?:\/|$)/i.test(pathname);
 }

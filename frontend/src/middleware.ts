@@ -8,10 +8,6 @@ import { isLocalizedPublicPath, PUBLIC_PAGE_CACHE_CONTROL, routing } from '@/i18
 import { getNewsRouteAvailability, getZhNewsSlug, newsNotFoundHtml } from '@/lib/news-route-guard';
 
 const intlMiddleware = createMiddleware(routing);
-const DUPLICATE_NEWS_PATH =
-  '/zh/news/jiang-su-su-neng-gong-ye-lu-tui-huo-gu-rong-sheng-chan-xian-zhu-li-gang-cai-shen-jia-gong-1';
-const CANONICAL_NEWS_PATH =
-  '/zh/news/jiang-su-su-neng-gong-ye-lu-tui-huo-gu-rong-sheng-chan-xian-zhu-li-gang-cai-shen-jia-gong';
 
 function permanentRedirect(request: NextRequest, pathname: string) {
   const target = request.nextUrl.clone();
@@ -55,17 +51,6 @@ export default async function middleware(request: NextRequest) {
     const response = permanentRedirect(request, '/zh/strength/honors');
     response.headers.set('Location', `${response.headers.get('Location')}#management-systems`);
     return response;
-  }
-  if (
-    pathname === DUPLICATE_NEWS_PATH ||
-    pathname === DUPLICATE_NEWS_PATH.replace('/zh/', '/en/')
-  ) {
-    return permanentRedirect(
-      request,
-      pathname.startsWith('/en/')
-        ? CANONICAL_NEWS_PATH.replace('/zh/', '/en/')
-        : CANONICAL_NEWS_PATH,
-    );
   }
 
   const englishNewsDetail = pathname.startsWith('/en/news/');
