@@ -1,0 +1,4 @@
+/* Applied only while the home page is captured; see smoke-pages.spec.ts. */
+[data-sticky-engineer-dock] {
+  visibility: hidden !important;
+}

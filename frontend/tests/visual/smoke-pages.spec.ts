@@ -1,3 +1,4 @@
+import path from 'node:path';
 import { expect, test } from '@playwright/test';
 
 const pages = [
@@ -61,6 +62,9 @@ test.describe('core visual smoke pages', () => {
           await expect(page).toHaveScreenshot(`${visualPage.name}-${viewport.name}.png`, {
             fullPage: true,
             mask: [page.locator('canvas'), page.locator('video')],
+            // A full-page capture enlarges the viewport, which re-runs the dock's
+            // visibility observers in no fixed order. Its settled state is checked above.
+            ...(visualPage.name === 'home' ? { stylePath: path.join(__dirname, 'hide-home-dock.css') } : {}),
           });
         });
       }
