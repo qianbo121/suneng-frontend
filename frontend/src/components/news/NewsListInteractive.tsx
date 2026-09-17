@@ -1,8 +1,11 @@
 'use client';
 
 import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
 import {
   createContext,
+  Suspense,
+  useCallback,
   useContext,
   useEffect,
   useLayoutEffect,
@@ -56,6 +59,19 @@ function useNewsList() {
   return value;
 }
 
+// A router navigation that keeps this page, such as the site header link to the
+// plain list, changes the address without popstate and may reuse the rendered
+// page as is. Search params still change, so they trigger a resync. This sits
+// in its own Suspense boundary: reading search params on a prerendered page
+// renders only this component in the browser, not the list.
+function SearchParamsChange({ onChange }: { onChange: () => void }) {
+  const search = useSearchParams()?.toString() ?? '';
+  useEffect(() => {
+    onChange();
+  }, [search, onChange]);
+  return null;
+}
+
 type NewsListScopeProps = {
   locale: Locale;
   cards: NewsListCardItem[];
@@ -87,21 +103,19 @@ export function NewsListScope({
   const titleReady = useRef(false);
   const view = useMemo(() => getNewsListView(cards, state, pageSize), [cards, state, pageSize]);
 
-  // Follow the address bar on back/forward, when the router restores this page
-  // from its cache after the reader returns from an article, and when a link
-  // outside the list (such as the site header) opens another list URL. That
-  // soft navigation keeps this component and only delivers fresh props, after
-  // the router has already updated the address bar.
+  const sync = useCallback(() => {
+    if (window.location.pathname !== listPath) return;
+    const next = parseNewsListState(window.location.search);
+    setState((current) => (isSameNewsListState(current, next) ? current : next));
+  }, [listPath]);
+
+  // Follow the address bar on back/forward, and when the router renders this
+  // page again, for example after the reader returns from an article.
   useBrowserLayoutEffect(() => {
-    const sync = () => {
-      if (window.location.pathname !== listPath) return;
-      const next = parseNewsListState(window.location.search);
-      setState((current) => (isSameNewsListState(current, next) ? current : next));
-    };
     sync();
     window.addEventListener('popstate', sync);
     return () => window.removeEventListener('popstate', sync);
-  }, [listPath, cards, initialState]);
+  }, [sync, cards, initialState]);
 
   useEffect(() => {
     // The server already rendered the right title for the first view.
@@ -170,6 +184,9 @@ export function NewsListScope({
 
   return (
     <NewsListContext.Provider value={{ locale, state, view, pageSize }}>
+      <Suspense fallback={null}>
+        <SearchParamsChange onChange={sync} />
+      </Suspense>
       <div className={className} onClickCapture={handleClickCapture}>
         {children}
       </div>

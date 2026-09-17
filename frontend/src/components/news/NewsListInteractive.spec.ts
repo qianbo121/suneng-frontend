@@ -13,7 +13,31 @@ vi.mock('next/link', () => ({
 vi.mock('next/image', () => ({
   default: ({ src, alt }: { src: string; alt: string }) => h('img', { src, alt }),
 }));
-vi.mock('next/navigation', () => ({ useRouter: () => ({ push: vi.fn() }) }));
+// The router's view of the address, as useSearchParams reports it.
+const router = vi.hoisted(() => {
+  let search = '';
+  const listeners = new Set<() => void>();
+  return {
+    get: () => search,
+    set(value: string) {
+      search = value;
+      listeners.forEach((listener) => listener());
+    },
+    subscribe(listener: () => void) {
+      listeners.add(listener);
+      return () => {
+        listeners.delete(listener);
+      };
+    },
+  };
+});
+vi.mock('next/navigation', async () => {
+  const { useSyncExternalStore } = await import('react');
+  return {
+    useRouter: () => ({ push: vi.fn() }),
+    useSearchParams: () => new URLSearchParams(useSyncExternalStore(router.subscribe, router.get, router.get)),
+  };
+});
 
 import { NewsListFilterControls, NewsListResults, NewsListScope } from './NewsListInteractive';
 import type { NewsListCardItem } from '@/types/news';
@@ -35,16 +59,19 @@ const card = (id: number, topic: string) =>
     listDisplayDate: '2026-09-01',
   }) as unknown as NewsListCardItem;
 
-// Each call builds fresh props, as a router navigation does when it renders the page again.
-const page = () =>
+const props = {
+  locale: 'zh' as const,
+  cards: [card(1, 'procurement'), card(2, 'quality'), card(3, 'quality'), card(4, 'operations')],
+  initialState: { topic: 'all' as const, furnace: 'all' as const, sort: 'recommended' as const, page: 1 },
+  pageSize: 10,
+  pageTitles: ['第 1 页'],
+  filteredTitle: '筛选结果',
+  className: 'scope',
+};
+// fresh: new props objects, as when the router renders the page from new data.
+const page = (fresh = false) =>
   h(NewsListScope, {
-    locale: 'zh',
-    cards: [card(1, 'procurement'), card(2, 'quality'), card(3, 'quality'), card(4, 'operations')],
-    initialState: { topic: 'all', furnace: 'all', sort: 'recommended', page: 1 },
-    pageSize: 10,
-    pageTitles: ['第 1 页'],
-    filteredTitle: '筛选结果',
-    className: 'scope',
+    ...(fresh ? { ...props, cards: [...props.cards], initialState: { ...props.initialState } } : props),
     children: h(Fragment, null, h(NewsListFilterControls), h(NewsListResults)),
   });
 
@@ -60,6 +87,7 @@ const click = (href: string) =>
 
 beforeEach(async () => {
   window.history.replaceState(null, '', '/zh/news');
+  router.set('');
   container = document.createElement('div');
   document.body.appendChild(container);
   root = createRoot(container);
@@ -87,16 +115,26 @@ describe('news list switching in the browser', () => {
 
   it('resets to the address bar when a link outside the list opens the plain list', async () => {
     await click('/zh/news?topic=procurement');
+    await act(async () => router.set('topic=procurement'));
     expect(shown()).toEqual(['1']);
 
     // The site header link is a router navigation: the router records the new
-    // address (no popstate) and renders the same page with fresh props.
+    // address without popstate and can reuse the rendered page as it is.
     await act(async () => {
       window.history.pushState({ __NA: true }, '', '/zh/news');
-      root.render(page());
+      router.set('');
     });
-    expect(window.location.search).toBe('');
     expect(shown()).toEqual(['4', '3', '2', '1']);
     expect(activeTopic()).toBe('/zh/news');
+  });
+
+  it('resets when the router renders the page again from new data', async () => {
+    await click('/zh/news?topic=procurement');
+    expect(shown()).toEqual(['1']);
+    await act(async () => {
+      window.history.pushState({ __NA: true }, '', '/zh/news');
+      root.render(page(true));
+    });
+    expect(shown()).toEqual(['4', '3', '2', '1']);
   });
 });
