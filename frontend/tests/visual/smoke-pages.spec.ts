@@ -52,6 +52,13 @@ test.describe('core visual smoke pages', () => {
           await page.waitForLoadState('networkidle', { timeout: 15_000 }).catch(() => undefined);
           await page.evaluate(warmLazyContent);
           await page.waitForLoadState('networkidle', { timeout: 5_000 }).catch(() => undefined);
+          // The development server optimises each image on its first request, which
+          // can outlast the network-idle wait. Capture images once they have loaded.
+          await page
+            .waitForFunction(() => Array.from(document.images).every((image) => image.complete), undefined, {
+              timeout: 15_000,
+            })
+            .catch(() => undefined);
           if (visualPage.name === 'home') {
             // Scrolling back to the hero schedules the observer update separately
             // from network activity. Capture the settled state, not the outgoing dock.
