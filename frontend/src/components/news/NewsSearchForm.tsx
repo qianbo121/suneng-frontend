@@ -10,6 +10,7 @@ import {
   type NewsFurnaceFilterId,
   type NewsSort,
 } from '@/lib/news-decision-center';
+import { useNewsListState } from './NewsListInteractive';
 import styles from './NewsDecisionCenter.module.css';
 
 export function NewsSearchForm({
@@ -28,6 +29,9 @@ export function NewsSearchForm({
   disabled?: boolean;
 }) {
   const router = useRouter();
+  // Inside the interactive list the filters can change without a new page.
+  const live = useNewsListState();
+  const current = live ?? { topic, furnace, sort };
   const [value, setValue] = useState(query);
   useEffect(() => setValue(query), [query]);
   useEffect(() => {
@@ -48,7 +52,12 @@ export function NewsSearchForm({
       onSubmit={(event) => {
         event.preventDefault();
         router.push(
-          buildNewsDecisionHref(`/${locale}/news`, { query: value, topic, furnace, sort }),
+          buildNewsDecisionHref(`/${locale}/news`, {
+            query: value,
+            topic: current.topic,
+            furnace: current.furnace,
+            sort: current.sort,
+          }),
         );
       }}
     >
@@ -70,9 +79,11 @@ export function NewsSearchForm({
             : '搜索设备、工艺或问题，如：台车炉报价'
         }
       />
-      {topic !== 'all' && <input type="hidden" name="topic" value={topic} />}
-      {furnace !== 'all' && <input type="hidden" name="furnace" value={furnace} />}
-      {sort === 'updated' && <input type="hidden" name="sort" value={sort} />}
+      {current.topic !== 'all' && <input type="hidden" name="topic" value={current.topic} />}
+      {current.furnace !== 'all' && (
+        <input type="hidden" name="furnace" value={current.furnace} />
+      )}
+      {current.sort === 'updated' && <input type="hidden" name="sort" value={current.sort} />}
       <button className={styles.searchButton} type="submit" disabled={disabled}>
         {locale === 'en' ? 'Search' : '搜索'}
       </button>

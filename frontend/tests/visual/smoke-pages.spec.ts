@@ -1,3 +1,4 @@
+import path from 'node:path';
 import { expect, test } from '@playwright/test';
 
 const pages = [
@@ -51,6 +52,13 @@ test.describe('core visual smoke pages', () => {
           await page.waitForLoadState('networkidle', { timeout: 15_000 }).catch(() => undefined);
           await page.evaluate(warmLazyContent);
           await page.waitForLoadState('networkidle', { timeout: 5_000 }).catch(() => undefined);
+          // The development server optimises each image on its first request, which
+          // can outlast the network-idle wait. Capture images once they have loaded.
+          await page
+            .waitForFunction(() => Array.from(document.images).every((image) => image.complete), undefined, {
+              timeout: 15_000,
+            })
+            .catch(() => undefined);
           if (visualPage.name === 'home') {
             // Scrolling back to the hero schedules the observer update separately
             // from network activity. Capture the settled state, not the outgoing dock.
@@ -61,6 +69,9 @@ test.describe('core visual smoke pages', () => {
           await expect(page).toHaveScreenshot(`${visualPage.name}-${viewport.name}.png`, {
             fullPage: true,
             mask: [page.locator('canvas'), page.locator('video')],
+            // A full-page capture enlarges the viewport, which re-runs the dock's
+            // visibility observers in no fixed order. Its settled state is checked above.
+            ...(visualPage.name === 'home' ? { stylePath: path.join(__dirname, 'hide-home-dock.css') } : {}),
           });
         });
       }

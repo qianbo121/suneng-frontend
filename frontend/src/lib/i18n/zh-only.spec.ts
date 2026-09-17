@@ -2,8 +2,12 @@ import { describe, expect, it } from 'vitest';
 import { isZhOnlyPath, localizeOrHideHref } from './zh-only';
 
 describe('case language availability', () => {
-  it('hides registered English case links during withdrawal', () => {
+  it('links English readers only to approved English case pages', () => {
     expect(isZhOnlyPath('/zh/case')).toBe(false);
+    expect(isZhOnlyPath('/zh/case/henan-annealing-solution-line')).toBe(false);
+    expect(localizeOrHideHref('/zh/case/henan-annealing-solution-line', 'en')).toBe('/en/case/henan-annealing-solution-line');
+    // Translated but unapproved pages stay hidden.
+    expect(isZhOnlyPath('/zh/case/rt4-75-6-trolley-furnace-proposal')).toBe(true);
     expect(localizeOrHideHref('/zh/case/rt4-75-6-trolley-furnace-proposal', 'en')).toBeNull();
   });
   it.each(['/zh/case/new-project', '/en/case/new-project/', '/case/new-project?from=list#details'])('recognizes content-driven case paths: %s', (path) => {

@@ -50,31 +50,23 @@
   "participation": "苏能参与退火炉及固溶冷却段设备配套；具体工作与现场接口按对应文件分项核对。",
   "sourceSummary": "2017年7月26日退火炉及固溶段设备技术附件（设计依据、工艺概述及供货分交）；苏能已公开的河南金誉邦项目记录。",
   "datePublished": "2026-07-24T20:30:00+08:00",
-  "dateModified": "2026-09-12",
+  "dateModified": "2026-09-17T01:00:00+08:00",
   "relatedLinks": [
     {
       "title": "连续退火固溶生产线",
       "href": "/zh/products/detail/annealing-solution-line"
-    },
-    {
-      "title": "连续热处理生产线方案",
-      "href": "/zh/solutions/continuous-heat-treatment-line"
-    },
-    {
-      "title": "工业炉报价参数清单",
-      "href": "/zh/articles/gongye-lu-baojia-canshu"
     }
   ],
   "title": "850毫米不锈钢退洗线：退火固溶段的供货范围",
   "body": "henan-annealing-solution.md",
   "contentType": "experience",
-  "publicationStatus": "draft",
+  "publicationStatus": "published",
   "projectStatus": "experience",
   "coverTitle": "带材\n退火固溶",
   "cover": {
     "src": "/images/products/annealing-solution-line/remaining-batch-v1/03-workpiece-8b1942ed56b3.png",
     "alt": "不锈钢卷与带材工件参考图",
-    "caption": "工件参考图",
+    "caption": "参考图，非项目现场照片",
     "fit": "contain"
   },
   "sourceDate": "2017-07-26",

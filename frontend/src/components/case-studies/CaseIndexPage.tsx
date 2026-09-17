@@ -2,7 +2,7 @@
 /* eslint-disable @next/next/no-html-link-for-pages */
 import { JsonLd } from '@/components/JsonLd';
 import { HiOutlineArrowPath, HiOutlineMagnifyingGlass } from 'react-icons/hi2';
-import { getCaseOptions, getCaseResults } from '@/lib/cases/server';
+import { getCaseOptions, getCaseResults, getPublicCases } from '@/lib/cases/server';
 import { caseListHref } from '@/lib/cases/query';
 import { CASE_TYPE_LABELS, type CaseFilterKey, type CaseQuery } from '@/lib/cases/types';
 import { absoluteUrl } from '@/lib/seo/metadata';
@@ -23,6 +23,12 @@ const commonEquipment = ['台车炉', '网带炉', '箱式炉', '井式炉'];
 export function CaseIndexPage({ query }: { query: CaseQuery }) {
   const result = getCaseResults(query);
   const options = getCaseOptions();
+  // While only a few reviewed cases are public, offer shortcuts that can return results.
+  const equipmentShortcuts = commonEquipment.filter(
+    (equipment) => options.equipment.includes(equipment) || query.equipment === equipment,
+  );
+  const contentTypes = new Set(getPublicCases().map((item) => item.contentType));
+  const showTypeFilter = contentTypes.size > 1 || Boolean(query.type);
   const url = absoluteUrl(caseListHref(query));
   function renderFilter(key: CaseFilterKey) {
     return (
@@ -81,7 +87,7 @@ export function CaseIndexPage({ query }: { query: CaseQuery }) {
             <div className="case-c4-equipment-row">
               <span className="case-c4-filter-label">炉型</span>
               <nav className="case-c4-equipment" aria-label="常用炉型">
-                {['', ...commonEquipment].map((equipment) => (
+                {['', ...equipmentShortcuts].map((equipment) => (
                   <a
                     key={equipment}
                     href={caseListHref(query, { equipment, page: 1, from: 1 })}
@@ -112,16 +118,18 @@ export function CaseIndexPage({ query }: { query: CaseQuery }) {
                 <summary>更多筛选</summary>
                 <div className="case-c4-extra-filters">
                   {renderFilter('need')}
-                  <CaseFilterSelect
-                    name="type"
-                    label="内容类型"
-                    value={query.type}
-                    options={[
-                      { value: '', label: '全部内容' },
-                      { value: 'experience', label: CASE_TYPE_LABELS.experience },
-                      { value: 'proposal', label: CASE_TYPE_LABELS.proposal },
-                    ]}
-                  />
+                  {showTypeFilter && (
+                    <CaseFilterSelect
+                      name="type"
+                      label="内容类型"
+                      value={query.type}
+                      options={[
+                        { value: '', label: '全部内容' },
+                        { value: 'experience', label: CASE_TYPE_LABELS.experience },
+                        { value: 'proposal', label: CASE_TYPE_LABELS.proposal },
+                      ]}
+                    />
+                  )}
                 </div>
               </details>
               <a href="/zh/case" className="case-c4-reset">

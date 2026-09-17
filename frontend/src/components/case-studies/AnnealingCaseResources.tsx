@@ -1,5 +1,6 @@
 import { LuFileText, LuHeater } from 'react-icons/lu';
 import type { IconType } from 'react-icons';
+import { isWithdrawnTechnicalPath } from '@/lib/publication-scope';
 import { CaseContact } from './CaseContact';
 import styles from './AnnealingCaseResources.module.css';
 
@@ -97,6 +98,28 @@ const resources: CaseResource[] = [
   },
 ];
 
+// Keep at least two live cards when withdrawn destinations are filtered out.
+const fallbackResources: CaseResource[] = [
+  {
+    category: '设备产品',
+    title: '工业炉与热处理生产线',
+    titleLines: ['工业炉与', '热处理生产线'],
+    description: '查看炉型、生产线与设备配置方向。',
+    href: '/zh/products',
+    action: '查看设备',
+    Icon: LuHeater,
+  },
+  {
+    category: '询价准备',
+    title: '提交项目情况',
+    titleLines: ['提交', '项目情况'],
+    description: '说明工件、产量与现场条件，先判断方向。',
+    href: '/zh/inquiry',
+    action: '提交需求',
+    Icon: LuFileText,
+  },
+];
+
 const supportRollerResources: CaseResource[] = [
   resources[1],
   {
@@ -133,7 +156,14 @@ export function AnnealingCaseResources({
   compact?: boolean;
 }) {
   const isSupportRoller = variant === 'support-roller';
-  const items = customItems ?? (isSupportRoller ? supportRollerResources : resources);
+  const available = (customItems ?? (isSupportRoller ? supportRollerResources : resources)).filter(
+    (item) => !isWithdrawnTechnicalPath(item.href),
+  );
+  const items = [...available];
+  for (const extra of fallbackResources) {
+    if (items.length >= 2) break;
+    if (!items.some((item) => item.href === extra.href)) items.push(extra);
+  }
   return (
     <section
       className={`${styles.section}${compact ? ` ${styles.compact}` : ''}`}

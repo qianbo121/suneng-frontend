@@ -1,8 +1,14 @@
 import copy
+from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 import importlib.util
 import json
+import os
 from pathlib import Path
+import re
+import shutil
+import subprocess
 import tempfile
+import threading
 import unittest
 from unittest.mock import patch
 
@@ -14,7 +20,54 @@ NEW = 'sha256:' + 'b' * 64
 RECEIPT = {'images': {'frontend': OLD, 'backend': 'sha256:' + 'c' * 64, 'admin': 'sha256:' + 'd' * 64}, 'deploymentStatus': 'verified'}
 MANIFEST = {'schemaVersion': 1, 'image': NEW, 'expectedCurrentImage': OLD, 'publicationScope': r.SCOPE,
             'sourceIdentity': 'git-commit', 'sourceCommit': 'e' * 40, 'archiveSha256': 'f' * 64}
-GOOD = {'passed': True, 'sitemapPassed': True, 'checks': []}
+GOOD = {'passed': True, 'sitemapPassed': True, 'checks': [], 'caseState': 'open'}
+HENAN = 'henan-annealing-solution-line'
+CASE_GROUP = ['/zh/case', f'/zh/case/{HENAN}', '/en/case', f'/en/case/{HENAN}']
+OTHER = 'sha256:' + '7' * 64
+LEGACY = sorted(r.LEGACY_ENCODING_IMAGES)[0]
+LEGACY_ROLLBACK = {**MANIFEST, 'image': LEGACY, 'caseState': 'closed', 'approvedCases': r.NO_CASES,
+                   'legacyEncodedPaths': True, 'legacyEncodedPathsApproval': 'site owner, 2026-09-17'}
+
+
+def sitemap(*paths, alternates=(), images=()):
+    links = ''.join(f'<xhtml:link rel="alternate" hreflang="x" href="https://example.test{p}"/>' for p in alternates)
+    # Next lists page images in the image extension namespace.
+    pictures = ''.join(f'<image:image>\n<image:loc>https://example.test{p}</image:loc>\n</image:image>' for p in images)
+    urls = ''.join(f'<url><loc>https://example.test{p}</loc>{links}{pictures}</url>' for p in paths)
+    return ('<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" '
+            'xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">'
+            f'{urls}</urlset>')
+
+
+def image_inspect(args, **kwargs):
+    """docker image inspect for whichever exact image was requested."""
+    if args[:3] != ['docker', 'image', 'inspect']:
+        raise AssertionError(args)
+    return json.dumps([{'Id': args[-1], 'Config': {'Labels': {'org.opencontainers.image.revision': MANIFEST['sourceCommit']}}}])
+
+
+def canary_docker(args, **kwargs):
+    """Image inspection plus starting the canary container."""
+    if args[:3] == ['docker', 'image', 'inspect']:
+        return image_inspect(args)
+    if args[:2] == ['docker', 'compose'] and 'run' in args:
+        return ''
+    raise AssertionError(args)
+
+
+def site(statuses, xml):
+    """A fake public site: listed paths as given, other live pages 200, everything else 404."""
+    def command(args, **kwargs):
+        if args[0] != 'curl':
+            raise AssertionError(args)
+        url = args[-1]
+        if url.endswith('/sitemap.xml'):
+            return xml
+        path = url.removeprefix('https://example.test')
+        if path in statuses:
+            return str(statuses[path])
+        return '200' if path in r.PUBLIC_LIVE else '404'
+    return command
 
 
 def rows(frontend=OLD):
@@ -46,17 +99,210 @@ class ContractTest(unittest.TestCase):
             r.assert_current(wrong, rows(), OLD)
 
     def test_route_and_sitemap_failures_never_count_as_success(self):
-        for value in [{'passed': False, 'sitemapPassed': True}, {'passed': True, 'sitemapPassed': False}]:
-            with patch.object(r, 'run', return_value=json.dumps(value)), self.assertRaises(RuntimeError):
-                r.probe('fixture', 'fixture')
+        contract = r.case_contract('open')
+        for value in [{'passed': False, 'sitemapPassed': True, 'caseState': 'open'},
+                      {'passed': True, 'sitemapPassed': False, 'caseState': 'open'},
+                      {'passed': True, 'sitemapPassed': True, 'caseState': 'either'},
+                      {'passed': True, 'sitemapPassed': True}]:
+            with self.subTest(value=value), patch.object(r, 'run', return_value=json.dumps(value)), self.assertRaises(RuntimeError):
+                r.probe('fixture', 'fixture', contract)
+
+    def test_probe_passes_the_case_contract_to_the_container(self):
+        contract = r.case_contract('either')
+        with patch.object(r, 'run', return_value=json.dumps({**GOOD, 'caseState': 'either'})) as run:
+            r.probe('fixture', 'script', contract)
+        args = run.call_args.args[0]
+        self.assertEqual(json.loads(args[args.index('-e') + 1].split('=', 1)[1]), contract)
+
+    def test_manifest_case_state_is_explicit(self):
+        self.assertEqual(r.validate_manifest({**MANIFEST, 'caseState': 'closed'})['caseState'], 'closed')
+        for value in ['either', 'all', '']:
+            with self.subTest(value=value), self.assertRaises(ValueError):
+                r.validate_manifest({**MANIFEST, 'caseState': value})
+
+    def test_contract_keeps_guides_solutions_and_drafts_private(self):
+        for state in ['open', 'closed', 'either']:
+            contract = r.case_contract(state)
+            self.assertEqual(contract['group'], CASE_GROUP)
+            for path in ['/zh/solutions', '/en/solutions', '/zh/articles/gongye-lu-baojia-canshu', *r.DRAFT_CASE_PATHS]:
+                self.assertIn(path, contract['retired'])
+            self.assertFalse(set(contract['group']) & set(contract['retired']))
+        with self.assertRaises(ValueError):
+            r.case_contract('all')
 
     def test_public_health_does_not_accept_404_as_homepage_health(self):
         with patch.object(r, 'run', return_value='404'), self.assertRaises(RuntimeError):
-            r.public_probe('https://example.test')
+            r.public_probe('https://example.test', r.case_contract('either'))
 
     def test_public_health_rejects_reappearing_retired_page(self):
-        with patch.object(r, 'run', return_value='200'), self.assertRaisesRegex(RuntimeError, '/zh/case'):
-            r.public_probe('https://example.test')
+        with patch.object(r, 'run', return_value='200'), self.assertRaisesRegex(RuntimeError, '/zh/solutions'):
+            r.public_probe('https://example.test', r.case_contract('either'))
+
+    def test_public_health_accepts_each_valid_case_state(self):
+        opened = {path: 200 for path in CASE_GROUP}
+        live = sitemap('/zh/news', '/en/news', *CASE_GROUP, alternates=['/zh/case', '/en/case'])
+        closed = sitemap('/zh/news', '/en/news')
+        for state, statuses, xml in [('open', opened, live), ('either', opened, live),
+                                     ('either', {}, closed), ('closed', {}, closed)]:
+            with self.subTest(state=state), patch.object(r, 'run', side_effect=site(statuses, xml)):
+                r.public_probe('https://example.test', r.case_contract(state))
+
+    def test_public_health_rejects_case_state_violations(self):
+        opened = {path: 200 for path in CASE_GROUP}
+        live = sitemap('/zh/news', '/en/news', *CASE_GROUP)
+        cases = [
+            ('open', {}, live, 'case route'),
+            ('closed', opened, live, 'case route'),
+            ('either', {f'/zh/case/{HENAN}': 200}, live, 'case route'),
+            ('open', opened, sitemap('/zh/news', '/en/news', '/zh/case'), 'sitemap'),
+            ('either', {}, live, 'sitemap'),
+            ('open', opened, sitemap('/zh/news', '/en/news', *CASE_GROUP, '/zh/case/jining-support-roller-heat-treatment-line'), 'sitemap'),
+            ('open', opened, sitemap('/zh/news', '/en/news', *CASE_GROUP, '/zh/case?page=2'), 'sitemap'),
+            ('open', opened, sitemap('/zh/news', '/en/news', *CASE_GROUP, alternates=['/en/solutions']), 'sitemap'),
+            ('open', opened, sitemap('/zh/news', *CASE_GROUP), 'sitemap'),
+        ]
+        for state, statuses, xml, message in cases:
+            with self.subTest(state=state, statuses=statuses, xml=xml), \
+                 patch.object(r, 'run', side_effect=site(statuses, xml)), self.assertRaisesRegex(RuntimeError, message):
+                r.public_probe('https://example.test', r.case_contract(state))
+
+    def test_manifest_case_lists_are_validated(self):
+        value = {**MANIFEST, 'approvedCases': {'zh': [HENAN], 'en': []}, 'legacyEncodedPaths': False}
+        self.assertEqual(r.validate_manifest(value), value)
+        for cases in [{'zh': [HENAN]}, {'zh': HENAN, 'en': []}, {'zh': ['../etc'], 'en': []}, {'zh': [], 'en': [HENAN]}]:
+            with self.subTest(cases=cases), self.assertRaises(ValueError):
+                r.validate_manifest({**MANIFEST, 'approvedCases': cases})
+        with self.assertRaises(ValueError):
+            r.validate_manifest({**MANIFEST, 'legacyEncodedPaths': 'yes'})
+
+    def test_only_an_approved_rollback_to_a_known_earlier_image_skips_encoded_probes(self):
+        self.assertEqual(r.validate_manifest(LEGACY_ROLLBACK), LEGACY_ROLLBACK)
+        unapproved = {key: value for key, value in LEGACY_ROLLBACK.items() if key != 'legacyEncodedPathsApproval'}
+        for value in [unapproved, {**LEGACY_ROLLBACK, 'legacyEncodedPathsApproval': ' '},
+                      {**LEGACY_ROLLBACK, 'legacyEncodedPathsApproval': None},
+                      {**LEGACY_ROLLBACK, 'legacyEncodedPathsApproval': 'x' * 201},
+                      {**LEGACY_ROLLBACK, 'image': NEW}, {**LEGACY_ROLLBACK, 'image': OTHER}]:
+            with self.subTest(value=value), self.assertRaises(ValueError):
+                r.validate_manifest(value)
+        # A deploy may not use the rollback exemption, even with the approved manifest.
+        for apply in [False, True]:
+            with self.subTest(apply=apply), tempfile.TemporaryDirectory() as tmp:
+                release = self.fixture(tmp, LEGACY_ROLLBACK)
+                with patch.object(r, 'inspect') as inspect, patch.object(r, 'run') as run, \
+                     self.assertRaisesRegex(RuntimeError, 'rollback'):
+                    release.execute(apply=apply)
+                inspect.assert_not_called()
+                run.assert_not_called()
+        # The approved rollback checks the old image without encoded probes.
+        with tempfile.TemporaryDirectory() as tmp:
+            release = self.fixture(tmp, LEGACY_ROLLBACK)
+            seen = []
+            with patch.object(r, 'inspect', side_effect=lambda names: [x for x in rows() if x['Name'][11:] in names]), \
+                 patch.object(r, 'run', side_effect=canary_docker), patch.object(r, 'wait_healthy'), \
+                 patch.object(r, 'probe', side_effect=lambda c, s, contract: seen.append(contract) or {**GOOD, 'caseState': contract['state']}), \
+                 patch.object(r, 'public_probe', side_effect=lambda u, contract: seen.append(contract) or []), \
+                 patch.object(r.subprocess, 'run'):
+                self.assertFalse(release.execute(apply=False, kind='rollback')['applied'])
+            self.assertEqual([contract['state'] for contract in seen], ['closed', 'either'])
+            self.assertFalse(any('%' in path for contract in seen for path in contract['retired']))
+
+    def test_a_single_leaking_draft_or_encoded_path_fails(self):
+        opened = {path: 200 for path in CASE_GROUP}
+        live = sitemap('/zh/news', '/en/news', *CASE_GROUP)
+        target = r.case_contract('open')
+        encoded_draft = '/zh/%63ase/alloy-eight-furnaces-acceptance-supply-boundaries-proposal'
+        self.assertIn(encoded_draft, target['retired'])
+        for path in [*r.DRAFT_CASE_PATHS, *r.ENCODED_WITHDRAWN_PATHS, encoded_draft]:
+            with self.subTest(target=path), patch.object(r, 'run', side_effect=site({**opened, path: 200}, live)), \
+                 self.assertRaisesRegex(RuntimeError, re.escape(path)):
+                r.public_probe('https://example.test', target)
+        lenient = r.case_contract('either', encoded=False)
+        for path in r.DRAFT_CASE_PATHS:
+            with self.subTest(lenient=path), patch.object(r, 'run', side_effect=site({**opened, path: 200}, live)), \
+                 self.assertRaisesRegex(RuntimeError, re.escape(path)):
+                r.public_probe('https://example.test', lenient)
+        # Images before this release still resolve encoded section names; a rollback must stay possible.
+        leaky = {**opened, **{path: 200 for path in r.ENCODED_WITHDRAWN_PATHS}, encoded_draft: 200}
+        with patch.object(r, 'run', side_effect=site(leaky, live)):
+            r.public_probe('https://example.test', lenient)
+
+    def test_lenient_contract_accepts_an_earlier_or_later_batch(self):
+        batch1 = r.APPROVED_CASES
+        batch2 = {'zh': [HENAN, 'batch-two'], 'en': [HENAN]}
+        lenient = r.case_contract('either', r.merge_cases(r.normalize_cases(batch1), r.normalize_cases(batch2)), encoded=False)
+        second = ['/zh/case', f'/zh/case/{HENAN}', '/zh/case/batch-two', '/en/case', f'/en/case/{HENAN}']
+        for paths in [CASE_GROUP, second, []]:
+            with self.subTest(paths=paths), patch.object(r, 'run', side_effect=site({p: 200 for p in paths}, sitemap('/zh/news', '/en/news', *paths))):
+                r.public_probe('https://example.test', lenient)
+        # Rolling back to batch 1 checks that image against its own list.
+        with patch.object(r, 'run', side_effect=site({p: 200 for p in CASE_GROUP}, sitemap('/zh/news', '/en/news', *CASE_GROUP))):
+            r.public_probe('https://example.test', r.case_contract('open', batch1, withdrawn=batch2))
+
+    def test_withdrawn_pages_must_disappear_from_the_new_image(self):
+        contract = r.case_contract('open', r.APPROVED_CASES, withdrawn={'zh': [HENAN, 'batch-two'], 'en': []})
+        self.assertIn('/zh/case/batch-two', contract['retired'])
+        self.assertNotIn(f'/zh/case/{HENAN}', contract['retired'])
+        still_served = {**{p: 200 for p in CASE_GROUP}, '/zh/case/batch-two': 200}
+        with patch.object(r, 'run', side_effect=site(still_served, sitemap('/zh/news', '/en/news', *CASE_GROUP))), \
+             self.assertRaisesRegex(RuntimeError, 'batch-two'):
+            r.public_probe('https://example.test', contract)
+
+    def test_release_contracts_follow_the_live_and_target_case_lists(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            live, audit = Path(tmp) / 'live', Path(tmp) / 'audit'
+            live.mkdir()
+            audit.mkdir()
+            served = {'zh': [HENAN, 'batch-two'], 'en': [HENAN]}
+            (live / 'RELEASE_ARTIFACTS.json').write_text(json.dumps({**RECEIPT, 'frontendRelease': {**MANIFEST, 'servedCases': served}}))
+            release = r.Release(live, audit, {**MANIFEST, 'approvedCases': r.APPROVED_CASES}, 'script')
+            self.assertIn('/zh/case/batch-two', release.lenient_contract['group'])
+            self.assertIn('/zh/case/batch-two', release.target_contract['retired'])
+            self.assertEqual(release.served_cases, r.normalize_cases(r.APPROVED_CASES))
+            closed = r.Release(live, audit, LEGACY_ROLLBACK, 'script')
+            self.assertEqual(closed.served_cases, r.NO_CASES)
+            self.assertIn(f'/zh/case/{HENAN}', closed.target_contract['retired'])
+            self.assertFalse(any('%' in path for path in closed.target_contract['retired']))
+            # A closed image serves no case even when its manifest names approved pages.
+            closed_listed = r.Release(live, audit, {**MANIFEST, 'caseState': 'closed', 'approvedCases': r.APPROVED_CASES}, 'script')
+            self.assertEqual(closed_listed.served_cases, r.NO_CASES)
+            self.assertEqual(closed_listed.target_contract['state'], 'closed')
+
+    def test_every_release_without_the_rollback_exemption_probes_encoded_addresses(self):
+        encoded_draft = '/zh/%63ase/alloy-eight-furnaces-acceptance-supply-boundaries-proposal'
+        for manifest in [MANIFEST, {**MANIFEST, 'caseState': 'closed', 'approvedCases': r.NO_CASES},
+                         {**MANIFEST, 'legacyEncodedPaths': False}]:
+            with self.subTest(manifest=manifest), tempfile.TemporaryDirectory() as tmp:
+                release = self.fixture(tmp, manifest)
+                for path in [*r.ENCODED_WITHDRAWN_PATHS, encoded_draft]:
+                    self.assertIn(path, release.target_contract['retired'])
+                self.assertFalse(any('%' in path for path in release.lenient_contract['retired']))
+        # Both languages and every router normalisation seen in the live leak are probed.
+        paths = ' '.join(r.ENCODED_WITHDRAWN_PATHS)
+        for marker in ['/zh/', '/en/', '%09', '%0A', '%0D', '%20', '%1F', '%252e%252e']:
+            self.assertIn(marker, paths)
+
+    def test_either_state_accepts_only_served_or_missing_case_pages(self):
+        lenient = r.case_contract('either', encoded=False)
+        for code in [500, 308, 0]:
+            for path in CASE_GROUP:
+                with self.subTest(code=code, path=path), \
+                     patch.object(r, 'run', side_effect=site({path: code}, sitemap('/zh/news', '/en/news'))), \
+                     self.assertRaisesRegex(RuntimeError, 'case route'):
+                    r.public_probe('https://example.test', lenient)
+
+    def test_sitemap_images_are_not_page_addresses(self):
+        xml = sitemap('/zh/news', '/en/news', *CASE_GROUP, alternates=['/zh/case'],
+                      images=['/images/case/cover.webp', '/images/solutions/line.webp'])
+        located, alternates = r.sitemap_urls(xml)
+        self.assertEqual({url.removeprefix('https://example.test') for url in located}, {'/zh/news', '/en/news', *CASE_GROUP})
+        self.assertEqual({url.removeprefix('https://example.test') for url in alternates}, {'/zh/case'})
+        with patch.object(r, 'run', side_effect=site({p: 200 for p in CASE_GROUP}, xml)):
+            r.public_probe('https://example.test', r.case_contract('open'))
+        # A page address in the same places still counts.
+        leaked = sitemap('/zh/news', '/en/news', *CASE_GROUP, '/zh/solutions/line', images=['/images/case/cover.webp'])
+        with patch.object(r, 'run', side_effect=site({p: 200 for p in CASE_GROUP}, leaked)), \
+             self.assertRaisesRegex(RuntimeError, 'sitemap'):
+            r.public_probe('https://example.test', r.case_contract('open'))
 
     def test_waits_for_health_instead_of_only_image_identity(self):
         row = rows()[0]
@@ -64,14 +310,14 @@ class ContractTest(unittest.TestCase):
         with patch.object(r, 'run', return_value=json.dumps([row])), patch.object(r.time, 'sleep'), self.assertRaises(RuntimeError):
             r.wait_healthy('fixture')
 
-    def fixture(self, tmp):
+    def fixture(self, tmp, manifest=MANIFEST, receipt=RECEIPT):
         live = Path(tmp) / 'live'
         audit = Path(tmp) / 'audit'
         live.mkdir()
         audit.mkdir()
-        (live / 'RELEASE_ARTIFACTS.json').write_text(json.dumps(RECEIPT))
+        (live / 'RELEASE_ARTIFACTS.json').write_text(json.dumps(receipt))
         (live / 'verified-images.override.yml').write_text('original pins')
-        return r.Release(live, audit, MANIFEST, 'fixture health script')
+        return r.Release(live, audit, manifest, 'fixture health script')
 
     def test_bad_candidate_fails_before_replacing_frontend_or_receipts(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -95,17 +341,27 @@ class ContractTest(unittest.TestCase):
                 inspect.assert_not_called()
 
     def perform(self, release, failure=None):
-        state = {'image': OLD, 'switches': 0}
+        """failure: 'public' (new image fails), 'recovery' (switching back fails),
+        'restored-check' (old image is back but fails its check), 'other-image'
+        (switching back leaves an unexpected image)."""
+        state = {'image': OLD, 'switches': 0, 'contracts': [], 'pending': None}
         def inspect(names): return [row for row in rows(state['image']) if row['Name'].removeprefix('/corp-site-') in names]
         def replace(override=None):
             state['switches'] += 1
+            if not override and release.pending_path.exists():
+                state['pending'] = json.loads(release.pending_path.read_text())
             if override and failure == 'recovery': raise RuntimeError('restore failure')
-            state['image'] = OLD if override else NEW
-        def public(_):
-            if state['image'] == NEW and failure: raise RuntimeError('public verification failure')
+            state['image'] = (OTHER if failure == 'other-image' else OLD) if override else NEW
+        def public(_, contract):
+            state['contracts'].append((state['image'], 'public', contract['state']))
+            if failure and (state['image'] == NEW or failure == 'restored-check'):
+                raise RuntimeError('public verification failure')
             return [{'path': '/zh', 'status': 200}]
+        def internal(container, script, contract):
+            state['contracts'].append((state['image'], 'internal', contract['state']))
+            return GOOD
         with patch.object(r, 'inspect', side_effect=inspect), patch.object(r, 'run', return_value=json.dumps([{'Id': NEW, 'Config': {'Labels': {'org.opencontainers.image.revision': MANIFEST['sourceCommit']}}}])), \
-             patch.object(r, 'wait_healthy'), patch.object(r, 'probe', return_value=GOOD), patch.object(r, 'public_probe', side_effect=public), \
+             patch.object(r, 'wait_healthy'), patch.object(r, 'probe', side_effect=internal), patch.object(r, 'public_probe', side_effect=public), \
              patch.object(r.subprocess, 'run'), patch.object(release, 'replace_frontend', side_effect=replace):
             if failure:
                 with self.assertRaises(RuntimeError): release.execute(apply=True, kind='rollback')
@@ -153,15 +409,39 @@ class ContractTest(unittest.TestCase):
             receipt = json.loads(release.receipt_path.read_text())
             pins = json.loads(release.pins_path.read_text())
             self.assertEqual(receipt['images']['frontend'], pins['services']['frontend']['image'])
-            self.assertEqual(receipt['frontendRelease'], MANIFEST)
+            self.assertEqual(receipt['frontendRelease'], {**MANIFEST, 'servedCases': r.normalize_cases(r.APPROVED_CASES)})
             self.assertFalse(release.pending_path.exists())
             self.assertEqual(receipt['images']['backend'], RECEIPT['images']['backend'])
+
+    def test_target_is_checked_open_and_restored_image_is_checked_leniently(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            state = self.perform(self.fixture(tmp))
+            self.assertEqual(state['contracts'], [(OLD, 'internal', 'open'), (NEW, 'internal', 'open'), (NEW, 'public', 'open')])
+        with tempfile.TemporaryDirectory() as tmp:
+            state = self.perform(self.fixture(tmp), failure='public')
+            self.assertEqual(state['contracts'][-2:], [(OLD, 'internal', 'either'), (OLD, 'public', 'either')])
+
+    def test_preflight_checks_the_unchanged_public_site_leniently(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            release = self.fixture(tmp)
+            seen = []
+            def command(args, **kwargs):
+                if args[:3] == ['docker', 'image', 'inspect']:
+                    return json.dumps([{'Id': NEW, 'Config': {'Labels': {'org.opencontainers.image.revision': MANIFEST['sourceCommit']}}}])
+                return ''
+            with patch.object(r, 'inspect', side_effect=lambda names: [x for x in rows() if x['Name'][11:] in names]), \
+                 patch.object(r, 'run', side_effect=command), patch.object(r, 'wait_healthy'), \
+                 patch.object(r, 'probe', side_effect=lambda c, s, contract: seen.append(('internal', contract['state'])) or GOOD), \
+                 patch.object(r, 'public_probe', side_effect=lambda u, contract: seen.append(('public', contract['state'])) or []), \
+                 patch.object(r.subprocess, 'run'):
+                release.execute(apply=False)
+            self.assertEqual(seen, [('internal', 'open'), ('public', 'either')])
 
     def test_failed_switch_restores_previous_frontend_and_preserves_receipt(self):
         with tempfile.TemporaryDirectory() as tmp:
             release = self.fixture(tmp)
             state = self.perform(release, failure='public')
-            self.assertEqual(state, {'image': OLD, 'switches': 2})
+            self.assertEqual((state['image'], state['switches']), (OLD, 2))
             self.assertEqual(json.loads(release.receipt_path.read_text()), RECEIPT)
             self.assertFalse(release.pending_path.exists())
 
@@ -173,6 +453,52 @@ class ContractTest(unittest.TestCase):
             self.assertEqual(receipt['images']['frontend'], NEW)
             self.assertEqual(receipt['deploymentStatus'], 'recovery-required')
             self.assertTrue(release.pending_path.exists())
+
+    def test_failed_recovery_records_the_cases_of_the_running_frontend(self):
+        # Neither list contains the other, so their union differs from both.
+        earlier = {'zh': ['batch-two'], 'en': []}
+        receipt = {**RECEIPT, 'frontendRelease': {**MANIFEST, 'image': OLD, 'servedCases': earlier}}
+        target = r.normalize_cases(r.APPROVED_CASES)
+        expected = {
+            # The new image is still running.
+            'recovery': ({**MANIFEST, 'servedCases': target}, NEW),
+            # The old image is back but unverified.
+            'restored-check': (receipt['frontendRelease'], OLD),
+            # Neither image is running: either list may be served.
+            'other-image': ({**receipt['frontendRelease'], 'servedCases': r.merge_cases(earlier, target),
+                             'servedCasesUnverified': True}, OTHER),
+        }
+        for failure, (release_record, image) in expected.items():
+            with self.subTest(failure=failure), tempfile.TemporaryDirectory() as tmp:
+                release = self.fixture(tmp, receipt=receipt)
+                state = self.perform(release, failure=failure)
+                saved = json.loads(release.receipt_path.read_text())
+                self.assertEqual((saved['images']['frontend'], saved['deploymentStatus']), (image, 'recovery-required'))
+                self.assertEqual(saved['frontendRelease'], release_record)
+                self.assertTrue(release.pending_path.exists())
+                self.assertEqual((state['pending']['previousServedCases'], state['pending']['targetServedCases']),
+                                 (r.normalize_cases(earlier), target))
+                # The next attempt checks the running site against the recorded lists.
+                self.assertEqual(r.normalize_cases(saved['frontendRelease']['servedCases']),
+                                 r.Release(release.live, release.audit, MANIFEST, 'script').live_cases)
+
+    def test_same_image_is_checked_against_its_own_strict_contract(self):
+        for apply in [False, True]:
+            with self.subTest(apply=apply), tempfile.TemporaryDirectory() as tmp:
+                release = self.fixture(tmp, {**MANIFEST, 'image': OLD})
+                seen = []
+                with patch.object(r, 'inspect', side_effect=lambda names: [x for x in rows() if x['Name'][11:] in names]), \
+                     patch.object(r, 'run', side_effect=image_inspect), \
+                     patch.object(r, 'probe', side_effect=lambda c, s, contract: seen.append(('internal', c, contract)) or GOOD), \
+                     patch.object(r, 'public_probe', side_effect=lambda u, contract: seen.append(('public', u, contract)) or []), \
+                     patch.object(r.subprocess, 'run') as cleanup, patch.object(release, 'replace_frontend') as replace:
+                    self.assertFalse(release.execute(apply=apply)['applied'])
+                replace.assert_not_called()
+                cleanup.assert_not_called()
+                self.assertEqual(seen, [('internal', 'corp-site-frontend', release.target_contract),
+                                        ('public', 'https://www.jssngyl.cn', release.target_contract)])
+                self.assertEqual(release.target_contract['state'], 'open')
+                self.assertTrue(set(r.ENCODED_WITHDRAWN_PATHS) <= set(release.target_contract['retired']))
 
 
 
@@ -205,7 +531,7 @@ class UnifiedReleaseTest(unittest.TestCase):
                         return json.dumps([{'Id':args[-1], 'Config':{'Labels':{'org.opencontainers.image.revision':MANIFEST['sourceCommit']}}}])
                     return ''
                 def replace(override=None): state.update(RECEIPT['images'] if override else release.target)
-                def public(_):
+                def public(*_):
                     if fails and state['frontend']==NEW: raise RuntimeError('frontend fails')
                     return []
                 with patch.object(r,'inspect',side_effect=current), patch.object(r,'run',side_effect=command), \
@@ -235,6 +561,143 @@ class UnifiedReleaseTest(unittest.TestCase):
                 replace.assert_not_called()
                 check.assert_called_once_with()
                 self.assertFalse(release.pending_path.exists())
+
+@unittest.skipUnless(shutil.which('node'), 'node is required to run the container health script')
+class HealthScriptTest(unittest.TestCase):
+    """Runs the real check-frontend.cjs against a stub site."""
+
+    LIVE = ['/zh', '/en', '/zh/news', '/en/news', '/zh/products', '/en/products',
+            '/zh/about', '/en/about', '/zh/inquiry', '/en/contact']
+    OPENED = {path: 200 for path in CASE_GROUP}
+    LISTED = sitemap('/zh/news', '/en/news', *CASE_GROUP, alternates=['/zh/case'])
+
+    def run_script(self, contract, statuses, xml, sitemap_status=200):
+        """Returns (exit code, report, number of requests the stub received)."""
+        requests = []
+        live = self.LIVE
+
+        class Handler(BaseHTTPRequestHandler):
+            def do_GET(self):
+                requests.append(self.path)
+                if self.path == '/sitemap.xml':
+                    code, body = sitemap_status, xml.encode()
+                else:
+                    code, body = statuses.get(self.path, 200 if self.path in live else 404), b''
+                self.send_response(code)
+                if 300 <= code < 400:
+                    # A redirect to a live page must not count as the page itself.
+                    self.send_header('Location', '/zh/news')
+                self.end_headers()
+                self.wfile.write(body)
+
+            def log_message(self, *args):
+                pass
+
+        server = ThreadingHTTPServer(('127.0.0.1', 0), Handler)
+        thread = threading.Thread(target=server.serve_forever, daemon=True)
+        thread.start()
+        try:
+            env = {k: v for k, v in os.environ.items() if k != 'RELEASE_CASE_CONTRACT'}
+            env['RELEASE_CHECK_BASE'] = f'http://127.0.0.1:{server.server_port}'
+            if contract is not None:
+                env['RELEASE_CASE_CONTRACT'] = json.dumps(contract)
+            script = Path(__file__).with_name('check-frontend.cjs').read_text()
+            result = subprocess.run(['node', '-e', script], env=env, capture_output=True, text=True, timeout=60)
+        finally:
+            server.shutdown()
+            server.server_close()
+        report = json.loads(result.stdout) if result.stdout.strip() else {}
+        return result.returncode, report, len(requests)
+
+    def test_open_release_passes_only_with_every_approved_case_listed_and_served(self):
+        code, report, _ = self.run_script(r.case_contract('open'), self.OPENED, self.LISTED)
+        self.assertEqual((code, report['passed'], report['caseState']), (0, True, 'open'))
+        self.assertNotEqual(self.run_script(r.case_contract('open'), {}, sitemap('/zh/news', '/en/news'))[0], 0)
+        self.assertNotEqual(self.run_script(r.case_contract('open'), self.OPENED, sitemap('/zh/news', '/en/news', '/zh/case'))[0], 0)
+
+    def test_a_single_leaking_draft_encoded_path_or_alternate_fails(self):
+        contract = r.case_contract('open')
+        for path in [p for p in contract['retired'] if '/case/' in p or '%' in p]:
+            with self.subTest(path=path):
+                code, report, _ = self.run_script(contract, {**self.OPENED, path: 200}, self.LISTED)
+                self.assertNotEqual(code, 0)
+                self.assertFalse(report.get('passed'))
+        for alternate in ['/en/solutions', '/zh/case/jining-support-roller-heat-treatment-line', '/zh/articles/x']:
+            with self.subTest(alternate=alternate):
+                xml = sitemap('/zh/news', '/en/news', *CASE_GROUP, alternates=[alternate])
+                self.assertNotEqual(self.run_script(contract, self.OPENED, xml)[0], 0)
+
+    def test_current_or_restored_image_may_predate_cases_but_never_leaks_drafts(self):
+        lenient = r.case_contract('either', encoded=False)
+        self.assertEqual(self.run_script(lenient, {}, sitemap('/zh/news', '/en/news'))[0], 0)
+        leaked = sitemap('/zh/news', '/en/news', *CASE_GROUP, '/zh/case/jining-support-roller-heat-treatment-line')
+        self.assertNotEqual(self.run_script(lenient, self.OPENED, leaked)[0], 0)
+        self.assertNotEqual(self.run_script(lenient, {f'/en/case/{HENAN}': 200}, sitemap('/zh/news', '/en/news'))[0], 0)
+        self.assertNotEqual(self.run_script(lenient, {**self.OPENED, r.DRAFT_CASE_PATHS[0]: 200}, self.LISTED)[0], 0)
+
+    def test_report_names_the_state_it_checked(self):
+        empty = sitemap('/zh/news', '/en/news')
+        for contract in [r.case_contract('either', encoded=False), r.case_contract('either', r.NO_CASES, encoded=False),
+                         r.case_contract('closed'), r.case_contract('closed', r.NO_CASES)]:
+            with self.subTest(contract=contract):
+                code, report, _ = self.run_script(contract, {}, empty)
+                self.assertEqual((code, report['passed'], report['caseState']), (0, True, contract['state']))
+
+    def test_closed_state_rejects_served_case_pages(self):
+        code, report, _ = self.run_script(r.case_contract('closed'), self.OPENED, sitemap('/zh/news', '/en/news'))
+        self.assertNotEqual(code, 0)
+        self.assertFalse(report.get('passed'))
+
+    def test_live_pages_must_answer_200(self):
+        for statuses in [{'/zh': 500}, {'/en/news': 404}, {'/zh/inquiry': 308}]:
+            with self.subTest(statuses=statuses):
+                code, report, _ = self.run_script(r.case_contract('open'), {**self.OPENED, **statuses}, self.LISTED)
+                self.assertNotEqual(code, 0)
+                self.assertFalse(report.get('passed'))
+
+    def test_sitemap_must_be_served_complete_and_without_case_queries(self):
+        contract = r.case_contract('open')
+        for xml, status in [(sitemap('/zh/news', *CASE_GROUP), 200), (self.LISTED, 500),
+                            (sitemap('/zh/news', '/en/news', *CASE_GROUP, '/zh/case?page=2'), 200)]:
+            with self.subTest(xml=xml, status=status):
+                code, report, _ = self.run_script(contract, self.OPENED, xml, sitemap_status=status)
+                self.assertNotEqual(code, 0)
+                self.assertFalse(report.get('sitemapPassed'))
+
+    def test_either_state_rejects_server_errors_and_redirects(self):
+        lenient = r.case_contract('either', encoded=False)
+        for code in [500, 308]:
+            for path in CASE_GROUP:
+                with self.subTest(code=code, path=path):
+                    result, report, _ = self.run_script(lenient, {path: code}, sitemap('/zh/news', '/en/news'))
+                    self.assertNotEqual(result, 0)
+                    self.assertFalse(report.get('passed'))
+
+    def test_encoded_addresses_are_requested_as_written(self):
+        contract = r.case_contract('closed')
+        code, report, _ = self.run_script(contract, {}, sitemap('/zh/news', '/en/news'))
+        self.assertEqual(code, 0)
+        checked = {check['path'] for check in report['checks']}
+        self.assertTrue(set(r.ENCODED_WITHDRAWN_PATHS) <= checked)
+        for path in r.ENCODED_WITHDRAWN_PATHS:
+            with self.subTest(path=path):
+                self.assertNotEqual(self.run_script(contract, {path: 200}, sitemap('/zh/news', '/en/news'))[0], 0)
+
+    def test_sitemap_images_are_not_page_addresses(self):
+        xml = sitemap('/zh/news', '/en/news', *CASE_GROUP, alternates=['/zh/case'],
+                      images=['/images/case/cover.webp', '/images/solutions/line.webp'])
+        code, report, _ = self.run_script(r.case_contract('open'), self.OPENED, xml)
+        self.assertEqual((code, report['sitemapPassed']), (0, True))
+
+    def test_missing_contract_fails_closed_without_querying_a_healthy_site(self):
+        code, report, requests = self.run_script(None, self.OPENED, self.LISTED)
+        self.assertNotEqual(code, 0)
+        self.assertNotEqual(report.get('passed'), True)
+        self.assertEqual(requests, 0)
+        code, _, requests = self.run_script({**r.case_contract('open'), 'state': 'all'}, self.OPENED, self.LISTED)
+        self.assertNotEqual(code, 0)
+        self.assertEqual(requests, 0)
+
 
 if __name__ == '__main__':
     unittest.main(verbosity=2)

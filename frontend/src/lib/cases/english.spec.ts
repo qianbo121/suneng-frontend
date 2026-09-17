@@ -6,6 +6,7 @@ vi.mock('server-only', () => ({}));
 vi.mock('react', async (original) => ({ ...(await original<typeof import('react')>()), cache: (fn: unknown) => fn }));
 import { caseSourceFingerprint, readEnglishCases, getEnglishCases, getEnglishCaseResults, englishCaseHref } from './english';
 import { parseCaseQuery } from './query';
+import { PUBLIC_ENGLISH_CASE_SLUGS } from './public-case-allowlist';
 
 const temporary: string[] = [];
 afterEach(() => temporary.splice(0).forEach((dir) => fs.rmSync(dir, { recursive: true, force: true })));
@@ -55,8 +56,15 @@ describe('English counterparts follow source authority', () => {
     if (change === 'missing') fs.unlinkSync(path.join(root, 'cases-en/example.md'));
     expect(readEnglishCases(root)).toEqual([]);
   });
-  it("keeps withdrawn English search empty without losing query state", () => {
-    expect(getEnglishCases()).toEqual([]);
+  it('keeps a complete, current translation private until the owner approves its English page', () => {
+    const { root, source } = fixture();
+    // Without approval the source body is never read, so its absence cannot matter.
+    fs.unlinkSync(path.join(root, 'cases/example.md'));
+    expect(readEnglishCases(root, undefined, new Set())).toEqual([]);
+    expect(() => readEnglishCases(root, undefined, new Set([source.slug]))).toThrow();
+  });
+  it("keeps English search limited to approved pages without losing query state", () => {
+    expect(getEnglishCases().map((item) => item.slug)).toEqual([...PUBLIC_ENGLISH_CASE_SLUGS]);
     const query=parseCaseQuery({q:'fixture'});
     expect(getEnglishCaseResults(query).items).toEqual([]);
     const page=new URL(englishCaseHref(query,2),'https://example.test');

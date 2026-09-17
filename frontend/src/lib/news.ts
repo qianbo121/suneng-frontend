@@ -13,17 +13,7 @@ import { localizeText } from '@/lib/utils';
 import { NewsApiItem, NewsListCardItem } from '@/types/news';
 import { Locale } from '@/types/site';
 
-export function formatNewsDisplayDate(value?: string | null) {
-  if (!value) return '';
-
-  const date = new Date(value);
-
-  if (Number.isNaN(date.getTime())) return value;
-
-  return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(
-    date.getDate(),
-  ).padStart(2, '0')}`;
-}
+export { formatNewsDisplayDate } from '@/lib/news-display-date';
 
 function isPlaceholderImage(src: string) {
   return src.includes('placehold.co');

@@ -2,6 +2,7 @@ import { EnglishSolutionPage, englishSolutionMetadata } from '@/components/engin
 import { solutionAlternates } from '@/lib/english-solutions';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
+import { TECHNICAL_CONTENT_PUBLISHED } from '@/lib/publication-scope';
 
 import { GeoAuthorityGuidePage } from '@/components/geo-pages/GeoAuthorityGuidePage';
 import { JsonLd } from '@/components/JsonLd';
@@ -77,6 +78,8 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  // Withdrawn content must not be rendered even if a request slips past middleware.
+  if (!TECHNICAL_CONTENT_PUBLISHED) notFound();
   const { locale } = await params;
   if (locale === 'en') return englishSolutionMetadata('rechuli-lu-wendu-bujun-zhenggai');
   if (locale !== 'zh') notFound();
@@ -95,6 +98,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 }
 
 export default async function TemperatureUniformityRemediationPage({ params }: PageProps) {
+  // Withdrawn content must not be rendered even if a request slips past middleware.
+  if (!TECHNICAL_CONTENT_PUBLISHED) notFound();
   const { locale } = await params;
   if (locale === 'en') return <EnglishSolutionPage slug="rechuli-lu-wendu-bujun-zhenggai" />;
   if (locale !== 'zh') notFound();

@@ -9,18 +9,24 @@ import { caseProductRelations, getEntryCases, productConnectionName } from './pr
 import { EntryCaseEvidence } from '@/components/case-studies/CaseEvidenceLinks';
 import { BuyerSelectionGuide } from '@/components/products/BuyerSelectionGuide';
 import { buyerSelectionGuides } from '@/lib/buyer-selection-guides';
+import { REVIEWED_PUBLIC_CASES } from './public-case-allowlist';
 
 afterEach(() => vi.restoreAllMocks());
 
 describe('reviewed product and case connections', () => {
-  it("retains all archived product mappings without publishing records", () => {
+  it("retains all archived product mappings while connecting only approved records", () => {
     expect(caseProductRelations).toHaveLength(148);
     expect(new Set(caseProductRelations.map(x=>x.caseId)).size).toBe(148);
-    expect(source.getPublicCases()).toEqual([]);
+    const approvedIds = new Set(REVIEWED_PUBLIC_CASES.map((item) => item.id));
+    expect(source.getPublicCases().map((item) => item.id).sort()).toEqual([...approvedIds].sort());
     for(const row of caseProductRelations)for(const product of row.products) {
       expect(productConnectionName(product,'zh')).toBeTruthy();
-      for(const locale of ['zh','en'] as const)expect(getEntryCases('/products/detail/'+product,locale)).toEqual([]);
+      for(const locale of ['zh','en'] as const)
+        for (const item of getEntryCases('/products/detail/'+product,locale))
+          expect(approvedIds.has(item.id), `${product} ${locale} ${item.id}`).toBe(true);
     }
+    for (const locale of ['zh','en'] as const)
+      expect(getEntryCases('/products/detail/annealing-solution-line',locale).map((item) => item.id)).toEqual(['henan-annealing-solution']);
   });
   it("omits withdrawn recommendation sections in both languages", () => {
     for(const locale of ['zh','en'] as const) {

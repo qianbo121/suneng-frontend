@@ -4,6 +4,7 @@ import path from 'node:path';
 import { createHash } from 'node:crypto';
 import { cache } from 'react';
 import { prepareCaseBody } from './content';
+import { PUBLIC_ENGLISH_CASE_SLUGS } from './public-case-allowlist';
 import type { CaseMeta, CaseQuery } from './types';
 import { CASE_PAGE_SIZE } from './types';
 
@@ -17,7 +18,11 @@ export function caseSourceFingerprint(metadata: string, markdown: string) {
 }
 
 /** Source publication controls both languages; missing or stale translations fail closed. */
-export function readEnglishCases(root: string, readBody = (filename: string) => prepareCaseBody(fs.readFileSync(filename, 'utf8'), 'en')) {
+export function readEnglishCases(
+  root: string,
+  readBody = (filename: string) => prepareCaseBody(fs.readFileSync(filename, 'utf8'), 'en'),
+  approved?: ReadonlySet<string>,
+) {
   const sourceDir = path.join(root, 'cases');
   const englishDir = path.join(root, 'cases-en');
   if (!fs.existsSync(englishDir)) return [];
@@ -27,6 +32,8 @@ export function readEnglishCases(root: string, readBody = (filename: string) => 
     const source = JSON.parse(raw) as CaseMeta;
     // Check visibility before reading either language's body.
     if (source.publicationStatus !== 'published') return [];
+    // English pages open only after the owner has approved the English copy too.
+    if (approved && !approved.has(source.slug)) return [];
     // Some legacy Chinese filenames differ from their stable case ID.
     // Match translations by that ID, never by the source filename or title.
     if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(source.id)) return [];
@@ -66,7 +73,7 @@ function readDevelopmentEnglish(root: string) {
     const body = prepareCaseBody(markdown, 'en');
     developmentBodies.set(filename, { markdown, body });
     return body;
-  });
+  }, PUBLIC_ENGLISH_CASE_SLUGS);
   for (const filename of developmentBodies.keys()) if (!used.has(filename)) developmentBodies.delete(filename);
   return records;
 }
@@ -74,8 +81,8 @@ let productionRecords: ReturnType<typeof readEnglishCases> | undefined;
 export const getEnglishCases = cache(() => {
   const root = path.join(process.cwd(), 'content');
   if (process.env.NODE_ENV === 'development') return readDevelopmentEnglish(root);
-  if (process.env.NODE_ENV !== 'production') return readEnglishCases(root);
-  return productionRecords ??= readEnglishCases(root);
+  if (process.env.NODE_ENV !== 'production') return readEnglishCases(root, undefined, PUBLIC_ENGLISH_CASE_SLUGS);
+  return productionRecords ??= readEnglishCases(root, undefined, PUBLIC_ENGLISH_CASE_SLUGS);
 });
 export function getEnglishCase(slug: string) {
   return getEnglishCases().find((item) => item.slug === slug);

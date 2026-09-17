@@ -5,6 +5,11 @@ import Page from './page';
 
 vi.mock('server-only', () => ({}));
 vi.mock('next/navigation', () => ({ notFound: () => { throw new Error('404'); }, usePathname: () => '/zh/solutions/continuous-heat-treatment-line' }));
+// The page is withdrawn at launch; check its content as it would be published.
+vi.mock('@/lib/publication-scope', async (original) => ({
+  ...(await original<typeof import('@/lib/publication-scope')>()),
+  TECHNICAL_CONTENT_PUBLISHED: true,
+}));
 const styles = readFileSync(new URL('../../../../components/engineering/EngineeringPage.module.css', import.meta.url), 'utf8');
 let html: string;
 const text = (markup: string) => markup.replace(/<[^>]*>/g, '');

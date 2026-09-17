@@ -63,7 +63,7 @@ jobs:
                      'imageTag': os.environ['IMAGE_TAG'], 'buildImageId': image['Id'],
                      'rootFsDiffIds': image['RootFS']['Layers'], 'imageBytes': image['Size'],
                      'archiveBytes': archive.stat().st_size, 'archiveSha256': digest.hexdigest(),
-                     'publicationScope': 'news-products-services-company',
+                     'publicationScope': 'news-products-services-company-reviewed-cases',
                      'serverCanaryRequired': True, 'browserAcceptanceRequired': True}
           (root / 'candidate.json').write_text(json.dumps(receipt, indent=2) + '\n')
           (root / 'image.json').unlink()

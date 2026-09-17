@@ -1,3 +1,5 @@
+// Server-only: this module names unpublished case records.
+import 'server-only';
 import type { CaseCardData, CaseFact } from './types';
 
 // Only these self-contained configuration phrases can lose their field label.
