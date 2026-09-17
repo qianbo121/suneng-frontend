@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
+import { TECHNICAL_CONTENT_PUBLISHED } from '@/lib/publication-scope';
 
 import {
   GeoBulletList as BulletList,
@@ -422,6 +423,8 @@ export function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  // Withdrawn content must not be rendered even if a request slips past middleware.
+  if (!TECHNICAL_CONTENT_PUBLISHED) notFound();
   const { locale } = await params;
 
   if (locale !== 'zh') {
@@ -446,6 +449,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 }
 
 export default async function IndustrialFurnaceQuoteParamsPage({ params }: PageProps) {
+  // Withdrawn content must not be rendered even if a request slips past middleware.
+  if (!TECHNICAL_CONTENT_PUBLISHED) notFound();
   const { locale } = await params;
 
   if (locale !== 'zh') {

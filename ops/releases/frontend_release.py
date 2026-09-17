@@ -39,13 +39,28 @@ DRAFT_CASE_PATHS = [
     '/zh/case/jining-support-roller-heat-treatment-line',
     '/en/case/jining-support-roller-heat-treatment-line',
 ]
-# Percent-escaped section names that images before this release still served.
+# Escaped or padded section names that the router still resolves to withdrawn
+# pages; images before this release served the full pages at these addresses.
 ENCODED_WITHDRAWN_PATHS = [
     '/zh/%73olutions/continuous-heat-treatment-line',
     '/zh/%61rticles/gongye-lu-baojia-canshu',
+    '/zh/sol%09utions/continuous-heat-treatment-line',
+    '/zh/%0Asolutions/continuous-heat-treatment-line',
+    '/en/solutions%0D/continuous-heat-treatment-line',
+    '/zh/art%09icles/gongye-lu-baojia-canshu',
+    '/zh/solutions%20',
+    '/en/solutions%1F',
+    '/zh/products/%252e%252e/solutions/continuous-heat-treatment-line',
 ]
+# Earlier frontend images that still serve withdrawn pages at those addresses.
+# Only an owner-approved rollback to one of them may skip the encoded probes.
+LEGACY_ENCODING_IMAGES = {
+    'sha256:d8a49b0fef153e01712611d4cb8dc404cd2d804e3f34aa43426fea3127f1abb5',  # 642b7a2c
+}
 CASE_STATES = ('open', 'closed')
 PUBLIC_LIVE = ['/zh', '/en', '/zh/news', '/en/news', '/zh/inquiry', '/en/contact']
+SITEMAP_NS = '{http://www.sitemaps.org/schemas/sitemap/0.9}'
+XHTML_NS = '{http://www.w3.org/1999/xhtml}'
 
 
 def now():
@@ -73,8 +88,15 @@ def validate_manifest(value):
         raise ValueError('Unknown case publication state')
     if 'approvedCases' in value:
         normalize_cases(value['approvedCases'])
-    if not isinstance(value.get('legacyEncodedPaths', False), bool):
+    legacy = value.get('legacyEncodedPaths', False)
+    if not isinstance(legacy, bool):
         raise ValueError('legacyEncodedPaths must be true or false')
+    if legacy:
+        approval = value.get('legacyEncodedPathsApproval')
+        if not isinstance(approval, str) or not approval.strip() or len(approval) > 200:
+            raise ValueError('Skipping encoded-path probes requires the recorded approval of the site owner')
+        if value['image'] not in LEGACY_ENCODING_IMAGES:
+            raise ValueError('Only a known earlier image may skip encoded-path probes')
     if value.get('sourceIdentity') == 'git-commit':
         if not SHA.fullmatch(value.get('sourceCommit', '')) or not DIGEST.fullmatch(value.get('archiveSha256', '')):
             raise ValueError('A Git release requires its source commit and archive hash')
@@ -196,6 +218,15 @@ def sitemap_passes(urls, located, statuses, contract):
     return contract['state'] != 'open' or all(path in paths for path in contract['group'])
 
 
+def sitemap_urls(xml):
+    """Page addresses and their language alternates, as check-frontend.cjs reads them.
+    Image and other extension entries are not pages."""
+    root = ET.fromstring(xml)
+    located = [loc.text or '' for url in root.iter(SITEMAP_NS + 'url') for loc in url.findall(SITEMAP_NS + 'loc')]
+    alternates = [link.get('href', '') for link in root.iter(XHTML_NS + 'link')]
+    return located, alternates
+
+
 def probe(container, script, contract):
     raw = run(['docker', 'exec', '-e', 'RELEASE_CASE_CONTRACT=' + json.dumps(contract),
                container, 'node', '-e', script], timeout=300)
@@ -236,9 +267,7 @@ def public_probe(base_url, contract):
         raise RuntimeError('Public case route check failed: ' + failed)
     results += [{'path': path, 'status': status} for path, status in statuses.items()]
     xml = run(['curl', '--fail', '--max-time', '25', '--silent', '--show-error', base_url + '/sitemap.xml'])
-    elements = list(ET.fromstring(xml).iter())
-    located = [element.text or '' for element in elements if element.tag.rsplit('}', 1)[-1] == 'loc']
-    alternates = [element.get('href', '') for element in elements if element.tag.rsplit('}', 1)[-1] == 'link']
+    located, alternates = sitemap_urls(xml)
     if not sitemap_passes(located + alternates, located, statuses, contract):
         raise RuntimeError('Public sitemap does not match the case publication contract')
     return results
@@ -257,11 +286,11 @@ class Release:
         # (older receipts predate case approval and serve none).
         target_cases = normalize_cases(manifest.get('approvedCases', APPROVED_CASES))
         self.served_cases = target_cases if manifest.get('caseState', 'open') == 'open' else NO_CASES
-        live_cases = normalize_cases((self.receipt.get('frontendRelease') or {}).get('servedCases', NO_CASES))
+        self.live_cases = normalize_cases((self.receipt.get('frontendRelease') or {}).get('servedCases', NO_CASES))
         self.target_contract = case_contract(manifest.get('caseState', 'open'), target_cases,
                                              encoded=not manifest.get('legacyEncodedPaths', False),
-                                             withdrawn=live_cases)
-        self.lenient_contract = case_contract('either', merge_cases(target_cases, live_cases), encoded=False)
+                                             withdrawn=self.live_cases)
+        self.lenient_contract = case_contract('either', merge_cases(target_cases, self.live_cases), encoded=False)
         self.original_marker = (live / 'DEPLOY_COMMIT').read_bytes() if (live / 'DEPLOY_COMMIT').exists() else None
         self.env = {**os.environ}
         if manifest.get('sourceCommit'):
@@ -308,6 +337,8 @@ class Release:
         return report
 
     def execute(self, apply=False, kind='deploy'):
+        if self.manifest.get('legacyEncodedPaths') and kind != 'rollback':
+            raise RuntimeError('Encoded-path probes may be skipped only for an owner-approved rollback')
         if self.pending_path.exists() or self.pending_path.is_symlink():
             raise RuntimeError('An interrupted deployment requires reconciliation before another attempt')
         if (self.live / '.DO_NOT_DEPLOY').exists() or (self.live / '.DO_NOT_DEPLOY').is_symlink():
@@ -362,7 +393,8 @@ class Release:
         atomic_json(self.audit / 'previous-receipt.json', self.receipt)
         self.write_override(self.audit / 'previous.override.json', self.receipt['images'])
         atomic_json(self.pending_path, {'at': now(), 'auditDirectory': str(self.audit),
-                                       'previousImages': self.receipt['images'], 'targetImages': self.target})
+                                       'previousImages': self.receipt['images'], 'targetImages': self.target,
+                                       'previousServedCases': self.live_cases, 'targetServedCases': self.served_cases})
         try:
             if 'backend' in self.manifest:
                 result['backendMigration'] = self.backend_check(migrate=True)
@@ -416,6 +448,14 @@ class Release:
                 observed = {row['Name'].removeprefix('/corp-site-'): row['Image'] for row in inspect(['frontend', 'backend', 'admin'])}
                 failed = copy.deepcopy(self.receipt)
                 failed.update({'images': observed, 'deploymentStatus': 'recovery-required', 'releaseOperationReceipt': str(self.audit / 'result.json')})
+                # Describe the cases of the frontend that is actually running.
+                if observed.get('frontend') != self.receipt['images']['frontend']:
+                    if observed.get('frontend') == self.target['frontend']:
+                        failed['frontendRelease'] = {**self.manifest, 'servedCases': self.served_cases}
+                    else:
+                        failed['frontendRelease'] = {**(self.receipt.get('frontendRelease') or {}),
+                                                     'servedCases': merge_cases(self.live_cases, self.served_cases),
+                                                     'servedCasesUnverified': True}
                 self.write_override(self.pins_path, observed)
                 atomic_json(self.receipt_path, failed)
                 result['previousFrontendRestoredAndVerified'] = False

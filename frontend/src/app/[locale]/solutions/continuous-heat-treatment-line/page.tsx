@@ -4,6 +4,7 @@ import type { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
+import { TECHNICAL_CONTENT_PUBLISHED } from '@/lib/publication-scope';
 import {
   HiCheckCircle,
   HiOutlineArchiveBox,
@@ -103,6 +104,8 @@ export function generateStaticParams() {
   return [{ locale: 'zh' }, { locale: 'en' }];
 }
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  // Withdrawn content must not be rendered even if a request slips past middleware.
+  if (!TECHNICAL_CONTENT_PUBLISHED) notFound();
   const { locale } = await params;
   if (locale === 'en') return englishSolutionMetadata('continuous-heat-treatment-line');
   if (locale !== 'zh') notFound();
@@ -119,6 +122,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   return metadata;
 }
 export default async function ContinuousHeatTreatmentLinePage({ params }: PageProps) {
+  // Withdrawn content must not be rendered even if a request slips past middleware.
+  if (!TECHNICAL_CONTENT_PUBLISHED) notFound();
   const { locale } = await params;
   if (locale === 'en') return <EnglishSolutionPage slug="continuous-heat-treatment-line" />;
   if (locale !== 'zh') notFound();

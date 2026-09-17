@@ -14,9 +14,9 @@ python3 ops/releases/frontend_release.py --manifest /private/path/manifest.json 
 python3 ops/releases/frontend_release.py --manifest /private/path/previous-compatible.json --apply --kind rollback
 ```
 
-`verified-images.override.yml` 和 `RELEASE_ARTIFACTS.json` 在验证后更新；新构建版本同时更新 `DEPLOY_COMMIT`。每次操作保存前一版本记录及操作日志。若存在 `DEPLOYMENT_IN_PROGRESS.json`，说明上次操作中断，后续发布会拒绝继续；按其中记录的私有审计目录核对运行镜像与前一版本，完成恢复核查后才能清除此标记。
+`verified-images.override.yml` 和 `RELEASE_ARTIFACTS.json` 在验证后更新；新构建版本同时更新 `DEPLOY_COMMIT`。每次操作保存前一版本记录及操作日志。若存在 `DEPLOYMENT_IN_PROGRESS.json`，说明上次操作中断，后续发布会拒绝继续；按其中记录的私有审计目录核对运行镜像与前一版本，完成恢复核查后才能清除此标记。标记里还记有前后两版提供的案例清单（`previousServedCases`、`targetServedCases`）。清除前须确认回执的 `frontendRelease.servedCases` 与实际运行的前台一致；回执带 `servedCasesUnverified` 时，说明运行的镜像两版都不是，须按该镜像实际提供的案例改正后再清除。
 
-回退只能使用经过相同撤下规则检查的版本。已上线的 `642b7a2c`（前台 `d8a49b0f`）不含已审核案例，还会响应百分号编码的栏目地址；回退到它时清单须写 `"caseState": "closed"`、`"approvedCases": {"zh": [], "en": []}` 和 `"legacyEncodedPaths": true`。原先上线前的旧前台可能重新公开已撤下内容，不能继续直接执行旧的 `rollback-frontend.py`。
+回退只能使用经过相同撤下规则检查的版本。本版之前的前台镜像列在 `LEGACY_ENCODING_IMAGES`，例如已上线的 `642b7a2c`（前台 `d8a49b0f`）。这些镜像不含已审核案例，而且换一种网址写法（百分号编码、中间夹制表符或换行、结尾带空格等）仍会整页返回已撤下的方案和文章页。回退到这类镜像，等于重新公开这些页面，必须先取得网站负责人同意。清单须写 `"caseState": "closed"`、`"approvedCases": {"zh": [], "en": []}`、`"legacyEncodedPaths": true`，以及 `"legacyEncodedPathsApproval"`（写明批准人和日期），并且只能配合 `--kind rollback` 使用。工具会拒绝其他镜像或普通部署使用这个开关。原先上线前的旧前台可能重新公开已撤下内容，不能继续直接执行旧的 `rollback-frontend.py`。
 
 ## 项目案例逐篇放出
 
@@ -25,7 +25,7 @@ python3 ops/releases/frontend_release.py --manifest /private/path/previous-compa
 发布合同在 `frontend_release.py` 的 `APPROVED_CASES` 中列出同一批地址，前台测试会核对三者一致。检查规则：
 
 - 清单的 `approvedCases`（缺省为工具内 `APPROVED_CASES`）写明待发布镜像应提供的案例；成功后回执 `frontendRelease.servedCases` 记录线上实际提供的案例。
-- 待发布镜像按清单 `caseState` 检查：`open`（默认）要求栏目页和清单内案例返回 200 并列入网站地图；`closed` 要求全部返回 404。线上曾提供、而新镜像不再提供的案例必须返回 404。新镜像还须对百分号编码的栏目地址（如 `/zh/%73olutions/...`）返回 404。
+- 待发布镜像按清单 `caseState` 检查：`open`（默认）要求栏目页和清单内案例返回 200 并列入网站地图；`closed` 要求全部返回 404。线上曾提供、而新镜像不再提供的案例必须返回 404。新镜像还须对换了写法的栏目地址返回 404，这些地址列在 `ENCODED_WITHDRAWN_PATHS`：百分号编码、中间夹制表符或换行、结尾带空格或控制字符、两层编码的 `..`。
 - 预检查时的线上站点、以及失败后恢复的旧镜像，可能属于更早或更晚的批次，按“线上与目标两份清单的并集，200 或 404 均可”检查，但案例页不能在栏目页撤下时单独公开，网站地图只能列出实际可访问的清单内地址。
 - 任何状态下，选型文章、专题方案、代表性草稿案例都必须返回 404，网站地图及其语言备用链接都不能出现它们。网站地图不列出案例列表分页。
 

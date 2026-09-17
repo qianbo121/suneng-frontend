@@ -11,6 +11,11 @@ vi.mock('next/navigation', () => ({
   permanentRedirect: (location: string) => { throw Object.assign(new Error('permanent redirect'), { location, status: 308 }); },
   notFound: () => { throw Object.assign(new Error('not found'), { status: 404 }); },
 }));
+// The guide is withdrawn at launch; check its content as it would be published.
+vi.mock('@/lib/publication-scope', async (original) => ({
+  ...(await original<typeof import('@/lib/publication-scope')>()),
+  TECHNICAL_CONTENT_PUBLISHED: true,
+}));
 import OldFurnaceGuide from '@/app/[locale]/articles/laojiu-rechuli-lu-daxiu-haishi-maixin/page';
 
 describe('merged guide keeps the historical entrance connected to full content', () => {

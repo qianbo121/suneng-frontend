@@ -2,6 +2,7 @@ import { EnglishSolutionsHub, englishSolutionMetadata } from '@/components/engin
 import { solutionAlternates } from '@/lib/english-solutions';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
+import { TECHNICAL_CONTENT_PUBLISHED } from '@/lib/publication-scope';
 
 import { JsonLd } from '@/components/JsonLd';
 import type { NavigationHubSection } from '@/components/layout/NavigationHubPage';
@@ -121,6 +122,8 @@ export function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  // Withdrawn content must not be rendered even if a request slips past middleware.
+  if (!TECHNICAL_CONTENT_PUBLISHED) notFound();
   const { locale } = await params;
   if (locale === 'en') return englishSolutionMetadata();
   if (locale !== 'zh') notFound();
@@ -138,6 +141,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 }
 
 export default async function SolutionsPage({ params }: PageProps) {
+  // Withdrawn content must not be rendered even if a request slips past middleware.
+  if (!TECHNICAL_CONTENT_PUBLISHED) notFound();
   const { locale } = await params;
   if (locale === 'en') return <EnglishSolutionsHub />;
   if (locale !== 'zh') notFound();

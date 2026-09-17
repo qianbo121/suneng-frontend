@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
+import { TECHNICAL_CONTENT_PUBLISHED } from '@/lib/publication-scope';
 
 import {
   GeoContactCta,
@@ -318,6 +319,8 @@ export function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  // Withdrawn content must not be rendered even if a request slips past middleware.
+  if (!TECHNICAL_CONTENT_PUBLISHED) notFound();
   const { locale } = await params;
 
   if (locale !== 'zh') {
@@ -354,6 +357,8 @@ function CardGrid({ items }: { items: string[] }) {
 }
 
 export default async function OldHeatTreatmentFurnaceDecisionPage({ params }: PageProps) {
+  // Withdrawn content must not be rendered even if a request slips past middleware.
+  if (!TECHNICAL_CONTENT_PUBLISHED) notFound();
   const { locale } = await params;
 
   if (locale !== 'zh') {

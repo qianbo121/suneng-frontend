@@ -2,7 +2,7 @@ import path from 'node:path';
 import { describe, expect, it, vi } from 'vitest';
 vi.mock('server-only', () => ({}));
 vi.mock('react', async (original) => ({ ...(await original<typeof import('react')>()), cache: (fn: unknown) => fn }));
-import { isWithdrawnTechnicalPath } from './publication-scope';
+import { isWithdrawnRequestPath, isWithdrawnTechnicalPath, routablePathname, withdrawnPageLocale } from './publication-scope';
 import { getLocalizedNavigation } from '@/mock/navigation';
 import { readCaseDirectory } from './cases/server';
 import { readEnglishCases } from './cases/english';
@@ -33,11 +33,76 @@ describe('launch publication scope', () => {
       '/ZH/Articles',
       `/zh/case/${approved.toUpperCase()}`,
       `/zh/case/${approved}%2Fextra`,
-      '/zh/%E0%A4%A/solutions',
+      '/zh/solutions/%E0%A4%A',
+      '/zh/%73olutions/x%E0',
     ])
       expect(isWithdrawnTechnicalPath(path), path).toBe(true);
     expect(isWithdrawnTechnicalPath(`/zh/%63ase/${approved}`)).toBe(false);
     expect(isWithdrawnTechnicalPath('/zh/news/%E5%B7%A5%E4%B8%9A%E7%82%89')).toBe(false);
+  });
+
+  it('refuses paths that URL parsing or next-intl would still route to a withdrawn page', () => {
+    for (const path of [
+      // next-intl drops tabs and line breaks after decoding.
+      '/zh/sol%09utions/continuous-heat-treatment-line',
+      '/zh/%0Asolutions/continuous-heat-treatment-line',
+      '/en/solutions%0D/continuous-heat-treatment-line',
+      '/zh/art%09icles/gongye-lu-baojia-canshu',
+      '/zh/%09/solutions',
+      `/zh/case/%0A${approved}x`,
+      // URL parsing trims surrounding spaces and control characters.
+      '/zh/solutions%20',
+      '/en/solutions%1F',
+      '/zh/solutions%00',
+      // Dot segments, doubled escapes, slashes and backslashes.
+      '/zh/products/%2e%2e/articles/gongye-lu-baojia-canshu',
+      '/zh/products/%252e%252e/solutions/continuous-heat-treatment-line',
+      '/zh/products/%252e%252e/solutions/x%25E0',
+      '/zh/%2573olutions/continuous-heat-treatment-line',
+      // Escapes are decoded until stable, beyond what any single layer does.
+      '/zh/%252573olutions/continuous-heat-treatment-line',
+      '/zh/solutions%2Fcontinuous-heat-treatment-line',
+      '/zh/%2Fsolutions',
+      '/zh//solutions',
+      '//zh//solutions',
+      '/zh\\solutions',
+      '/zh/%5Csolutions',
+      // A decoded "?" or "#" cannot hide the rest of the path.
+      '/zh/case/%253F/%252e%252e/jining-support-roller-heat-treatment-line',
+      '/zh/%3F/../solutions',
+      '/zh/case/%23/../jining-support-roller-heat-treatment-line',
+    ])
+      expect(isWithdrawnRequestPath(path), JSON.stringify(path)).toBe(true);
+  });
+
+  it('leaves ordinary and undecodable non-withdrawn paths to the router', () => {
+    for (const path of [
+      '/zh/products/%E0%A4%A',
+      '/zh/news/%E0%A4%A',
+      // An undecodable segment is kept as written, so no layer can turn it into a locale.
+      '/zh/%E0%A4%A/solutions',
+      '/zh/news/100%25-quality',
+      `/zh/case/%0A${approved}`,
+      `/zh/case/${approved}%20`,
+      '/zh/solutions%20x',
+      // Next matches the once-decoded path exactly, so "solutions?" is not "solutions".
+      '/zh/solutions%3F',
+      '/zh/cases',
+      '/zh/products/detail/annealing-solution-line',
+    ])
+      expect(isWithdrawnRequestPath(path), JSON.stringify(path)).toBe(false);
+    // A protocol-relative link in content names another host.
+    expect(isWithdrawnTechnicalPath('//zh//solutions')).toBe(false);
+    expect(isWithdrawnTechnicalPath('//www.jssngyl.cn/zh/solutions')).toBe(true);
+    expect(routablePathname('/zh/news/100%25-quality')).toBe('/zh/news/100%-quality');
+    expect(routablePathname('/zh/products/%E0%A4%A')).toBe('/zh/products/%E0%A4%A');
+  });
+
+  it('answers a withdrawn request in the language the router would use', () => {
+    for (const path of ['/en/solutions', '/EN/solutions', '/%65n/solutions', '/En/case/x', '/en', '/en%09/solutions', '/en/%E0/solutions'])
+      expect(withdrawnPageLocale(path), path).toBe('en');
+    for (const path of ['/solutions', '/zh/solutions', '/english/solutions', '/%E0%A4%A/en', '/enx/solutions'])
+      expect(withdrawnPageLocale(path), path).toBe('zh');
   });
 
   it('opens the case hub and only owner-approved case pages per locale', () => {
