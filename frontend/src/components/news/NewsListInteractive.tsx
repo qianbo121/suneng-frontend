@@ -87,8 +87,11 @@ export function NewsListScope({
   const titleReady = useRef(false);
   const view = useMemo(() => getNewsListView(cards, state, pageSize), [cards, state, pageSize]);
 
-  // Follow the address bar on back/forward, and when the router restores this
-  // page from its cache after the reader returns from an article.
+  // Follow the address bar on back/forward, when the router restores this page
+  // from its cache after the reader returns from an article, and when a link
+  // outside the list (such as the site header) opens another list URL. That
+  // soft navigation keeps this component and only delivers fresh props, after
+  // the router has already updated the address bar.
   useBrowserLayoutEffect(() => {
     const sync = () => {
       if (window.location.pathname !== listPath) return;
@@ -98,7 +101,7 @@ export function NewsListScope({
     sync();
     window.addEventListener('popstate', sync);
     return () => window.removeEventListener('popstate', sync);
-  }, [listPath]);
+  }, [listPath, cards, initialState]);
 
   useEffect(() => {
     // The server already rendered the right title for the first view.

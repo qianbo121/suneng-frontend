@@ -39,6 +39,23 @@ function withdrawnResponse(pathname: string) {
   });
 }
 
+function newsNotFoundResponse(locale: 'zh' | 'en') {
+  return new NextResponse(newsNotFoundHtml(locale), {
+    status: 404,
+    headers: { 'Cache-Control': 'no-store', 'Content-Type': 'text/html; charset=utf-8', 'X-Robots-Tag': 'noindex' },
+  });
+}
+
+// next.config rewrites the plain resource list regardless of letter case, and
+// reads an empty or repeated page value loosely. Keep those spellings a 404,
+// as they were before the rewrite existed.
+function isMisspelledNewsList(pathname: string, searchParams: URLSearchParams) {
+  if (!/^\/(?:zh|en)\/news\/?$/i.test(pathname)) return false;
+  if (!/^\/(?:zh|en)\/news\/?$/.test(pathname)) return true;
+  const pages = searchParams.getAll('page');
+  return pages.length > 1 || (pages.length === 1 && !/^[1-9]\d*$/.test(pages[0]));
+}
+
 export default async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
   if (isRefusedPath(pathname)) return withdrawnResponse(pathname);
@@ -65,6 +82,10 @@ export default async function middleware(request: NextRequest) {
     return response;
   }
 
+  if (isMisspelledNewsList(pathname, request.nextUrl.searchParams)) {
+    return newsNotFoundResponse(/^\/en\//i.test(pathname) ? 'en' : 'zh');
+  }
+
   const englishNewsDetail = pathname.startsWith('/en/news/');
   const newsSlug = getZhNewsSlug(englishNewsDetail ? pathname.replace('/en/', '/zh/') : pathname);
   if (newsSlug && (englishNewsDetail || !FALLBACK_NEWS_SLUGS.has(newsSlug))) {
@@ -72,16 +93,7 @@ export default async function middleware(request: NextRequest) {
       pathname,
       process.env.API_BASE_URL_INTERNAL || process.env.NEXT_PUBLIC_API_BASE_URL || '',
     );
-    if (availability === 'missing') {
-      return new NextResponse(newsNotFoundHtml(englishNewsDetail ? 'en' : 'zh'), {
-        status: 404,
-        headers: {
-          'Cache-Control': 'no-store',
-          'Content-Type': 'text/html; charset=utf-8',
-          'X-Robots-Tag': 'noindex',
-        },
-      });
-    }
+    if (availability === 'missing') return newsNotFoundResponse(englishNewsDetail ? 'en' : 'zh');
   }
 
   // Keep every public URL deterministic for crawlers. Locale negotiation on
