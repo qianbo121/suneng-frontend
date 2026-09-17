@@ -38,10 +38,14 @@ describe('launch publication scope', () => {
       `/zh/case/${approved}%2Fextra`,
       '/zh/solutions/%E0%A4%A',
       '/zh/%73olutions/x%E0',
+      '/en/%63ase/example',
+      '/%73olutions',
     ])
       expect(isWithdrawnTechnicalPath(path), path).toBe(true);
-    expect(isWithdrawnTechnicalPath(`/zh/%63ase/${approved}`)).toBe(false);
+    for (const path of [`/zh/%63ase/${approved}`, '/zh/%63ase', '/zh/%70roducts'])
+      expect(isWithdrawnTechnicalPath(path), path).toBe(false);
     expect(isWithdrawnTechnicalPath('/zh/news/%E5%B7%A5%E4%B8%9A%E7%82%89')).toBe(false);
+    expect(isWithdrawnTechnicalPath('/zh/news/%E8%B5%84%E6%96%99')).toBe(false);
   });
 
   it('refuses paths that URL parsing or next-intl would still route to a withdrawn page', () => {
