@@ -20,6 +20,9 @@ describe('launch publication scope', () => {
         expect(isWithdrawnTechnicalPath(prefix + route), prefix + route).toBe(false);
     }
     expect(isWithdrawnTechnicalPath('https://another.example/case/project')).toBe(false);
+    // Every address of this site counts as this site.
+    for (const href of ['https://jssngyl.cn/zh/solutions', 'http://localhost:3000/en/articles/x', 'http://127.0.0.1:3187/zh/case/foo'])
+      expect(isWithdrawnTechnicalPath(href), href).toBe(true);
   });
 
   it('sees through percent-escapes and letter case that the router would still resolve', () => {
@@ -71,6 +74,15 @@ describe('launch publication scope', () => {
       '/zh/case/%253F/%252e%252e/jining-support-roller-heat-treatment-line',
       '/zh/%3F/../solutions',
       '/zh/case/%23/../jining-support-roller-heat-treatment-line',
+      // A case page must be named exactly: Next reads each of these as another slug.
+      `/zh/case/%0A${approved}`,
+      `/zh/case/${approved}%20`,
+      `/zh/case/${approved}%2F`,
+      `/zh/case/%2568${approved.slice(1)}`,
+      `/zh/case/jining-support-roller-heat-treatment-line%2F%2e%2e%2F${approved}`,
+      `/zh/case/%2e%2e%2Fcase%2F${approved}`,
+      `/en/case/%5C${approved}`,
+      `/zh/case/%2F${approved}`,
     ])
       expect(isWithdrawnRequestPath(path), JSON.stringify(path)).toBe(true);
   });
@@ -82,8 +94,8 @@ describe('launch publication scope', () => {
       // An undecodable segment is kept as written, so no layer can turn it into a locale.
       '/zh/%E0%A4%A/solutions',
       '/zh/news/100%25-quality',
-      `/zh/case/%0A${approved}`,
-      `/zh/case/${approved}%20`,
+      `/zh/%63ase/${approved}`,
+      `/en/case/${approved}/`,
       '/zh/solutions%20x',
       // Next matches the once-decoded path exactly, so "solutions?" is not "solutions".
       '/zh/solutions%3F',

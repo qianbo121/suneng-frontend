@@ -571,7 +571,7 @@ class HealthScriptTest(unittest.TestCase):
     OPENED = {path: 200 for path in CASE_GROUP}
     LISTED = sitemap('/zh/news', '/en/news', *CASE_GROUP, alternates=['/zh/case'])
 
-    def run_script(self, contract, statuses, xml):
+    def run_script(self, contract, statuses, xml, sitemap_status=200):
         """Returns (exit code, report, number of requests the stub received)."""
         requests = []
         live = self.LIVE
@@ -580,10 +580,13 @@ class HealthScriptTest(unittest.TestCase):
             def do_GET(self):
                 requests.append(self.path)
                 if self.path == '/sitemap.xml':
-                    code, body = 200, xml.encode()
+                    code, body = sitemap_status, xml.encode()
                 else:
                     code, body = statuses.get(self.path, 200 if self.path in live else 404), b''
                 self.send_response(code)
+                if 300 <= code < 400:
+                    # A redirect to a live page must not count as the page itself.
+                    self.send_header('Location', '/zh/news')
                 self.end_headers()
                 self.wfile.write(body)
 
@@ -639,6 +642,27 @@ class HealthScriptTest(unittest.TestCase):
             with self.subTest(contract=contract):
                 code, report, _ = self.run_script(contract, {}, empty)
                 self.assertEqual((code, report['passed'], report['caseState']), (0, True, contract['state']))
+
+    def test_closed_state_rejects_served_case_pages(self):
+        code, report, _ = self.run_script(r.case_contract('closed'), self.OPENED, sitemap('/zh/news', '/en/news'))
+        self.assertNotEqual(code, 0)
+        self.assertFalse(report.get('passed'))
+
+    def test_live_pages_must_answer_200(self):
+        for statuses in [{'/zh': 500}, {'/en/news': 404}, {'/zh/inquiry': 308}]:
+            with self.subTest(statuses=statuses):
+                code, report, _ = self.run_script(r.case_contract('open'), {**self.OPENED, **statuses}, self.LISTED)
+                self.assertNotEqual(code, 0)
+                self.assertFalse(report.get('passed'))
+
+    def test_sitemap_must_be_served_complete_and_without_case_queries(self):
+        contract = r.case_contract('open')
+        for xml, status in [(sitemap('/zh/news', *CASE_GROUP), 200), (self.LISTED, 500),
+                            (sitemap('/zh/news', '/en/news', *CASE_GROUP, '/zh/case?page=2'), 200)]:
+            with self.subTest(xml=xml, status=status):
+                code, report, _ = self.run_script(contract, self.OPENED, xml, sitemap_status=status)
+                self.assertNotEqual(code, 0)
+                self.assertFalse(report.get('sitemapPassed'))
 
     def test_either_state_rejects_server_errors_and_redirects(self):
         lenient = r.case_contract('either', encoded=False)

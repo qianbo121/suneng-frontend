@@ -103,5 +103,6 @@ export default async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/((?!api|_next|_vercel|.*\\..*).*)'],
+  // The first rule skips any path with a dot in it; case addresses are checked regardless.
+  matcher: ['/((?!api|_next|_vercel|.*\\..*).*)', '/:locale(zh|en)/case/:path*'],
 };

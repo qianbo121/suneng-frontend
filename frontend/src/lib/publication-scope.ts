@@ -4,7 +4,8 @@ import { PUBLIC_CASE_SLUGS, PUBLIC_ENGLISH_CASE_SLUGS } from '@/lib/cases/public
 export const TECHNICAL_CONTENT_PUBLISHED = false;
 
 const SITE_HOSTS = ['www.jssngyl.cn', 'jssngyl.cn', 'localhost', '127.0.0.1'];
-const SECTION = /^\/(?:(zh|en)\/)?(case|articles|solutions)(?:\/(.*))?$/i;
+const LOCALE = /^(?:zh|en)$/i;
+const SECTION = /^(?:case|articles|solutions)$/i;
 
 function decodeSegment(segment: string, rounds = 5): string {
   let current = segment;
@@ -48,20 +49,38 @@ export function withdrawnPageLocale(pathname: string): 'zh' | 'en' {
   return /^\/en(?:\/|$)/i.test(routablePathname(pathname)) ? 'en' : 'zh';
 }
 
+/** Path segments without the leading and trailing slashes. */
+function segmentsOf(path: string, decode: (segment: string) => string): string[] {
+  const segments = path.replace(/\/+$/, '').split('/').map(decode);
+  if (segments[0] === '') segments.shift();
+  return segments;
+}
+
+function isWithdrawnSegments(segments: string[]): boolean {
+  const locale = LOCALE.test(segments[0] ?? '') ? segments[0].toLowerCase() : undefined;
+  const [section = '', ...rest] = locale ? segments.slice(1) : segments;
+  if (!SECTION.test(section)) return false;
+  if (section.toLowerCase() !== 'case') return !TECHNICAL_CONTENT_PUBLISHED;
+  const approved = locale === 'en' ? PUBLIC_ENGLISH_CASE_SLUGS : PUBLIC_CASE_SLUGS;
+  if (rest.length === 0) return approved.size === 0;
+  return rest.length > 1 || !approved.has(rest[0]);
+}
+
 /**
  * Case studies reopen article by article: the case index is public only when
  * the locale has an owner-approved case, and a case page only when its slug is
  * on that locale's approved list. Nested case paths are never public.
+ *
+ * A request is refused when either the widest reading of its path
+ * (routablePathname) or the literal reading Next uses for route parameters
+ * (each segment decoded once) names withdrawn content, so a case page must be
+ * named exactly.
  */
 export function isWithdrawnRequestPath(pathname: string): boolean {
-  const match = routablePathname(pathname).replace(/\/+$/, '').match(SECTION);
-  if (!match) return false;
-  const [, rawLocale, rawSection, rest] = match;
-  const locale = rawLocale?.toLowerCase();
-  const section = rawSection.toLowerCase();
-  if (section !== 'case') return !TECHNICAL_CONTENT_PUBLISHED;
-  const approved = locale === 'en' ? PUBLIC_ENGLISH_CASE_SLUGS : PUBLIC_CASE_SLUGS;
-  return rest === undefined ? approved.size === 0 : !approved.has(rest);
+  return (
+    isWithdrawnSegments(segmentsOf(routablePathname(pathname), (segment) => segment)) ||
+    isWithdrawnSegments(segmentsOf(pathname, (segment) => decodeSegment(segment, 1)))
+  );
 }
 
 /** Whether a link points at withdrawn content on this site; other hosts never do. */

@@ -2,15 +2,16 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { describe, expect, it, vi } from 'vitest';
 import { NextRequest, NextResponse } from 'next/server';
+import { unstable_doesMiddlewareMatch } from 'next/experimental/testing/server';
 
 vi.mock('@/lib/news-route-guard', async (original) => ({
   ...(await original<typeof import('@/lib/news-route-guard')>()),
   getNewsRouteAvailability: vi.fn(async () => 'available'),
 }));
 
-import middleware from './middleware';
+import middleware, { config } from './middleware';
 
-const run = (path: string) => middleware(new NextRequest(new URL(path, 'https://www.jssngyl.cn')));
+const run = (address: string) => middleware(new NextRequest(new URL(address, 'https://www.jssngyl.cn')));
 
 describe('withdrawn content routing', () => {
   it.each([
@@ -30,13 +31,29 @@ describe('withdrawn content routing', () => {
     ['/zh/solutions%2Fcontinuous-heat-treatment-line', 'zh'],
     ['/zh/%5Csolutions', 'zh'],
     ['/en/%3F/%252e%252e/solutions', 'en'],
-  ])('refuses %s with a real 404 in the reader language', async (path, locale) => {
-    const response = await run(path);
-    expect(response.status, path).toBe(404);
-    expect(response.headers.get('x-middleware-rewrite'), path).toBeNull();
+    // A case page must be named exactly: Next reads each of these as another slug.
+    ['/zh/case/jining-support-roller-heat-treatment-line%2F%2e%2e%2Fhenan-annealing-solution-line', 'zh'],
+    ['/zh/case/%2e%2e%2Fcase%2Fhenan-annealing-solution-line', 'zh'],
+    ['/en/case/x%2F%252e%252e%2Fhenan-annealing-solution-line', 'en'],
+    ['/zh/case/%2568enan-annealing-solution-line', 'zh'],
+    ['/zh/case/henan-annealing-solution-line%09', 'zh'],
+    ['/zh/case/henan-annealing-solution-line%20', 'zh'],
+    ['/zh/case/henan-annealing-solution-line%1F', 'zh'],
+    ['/zh/case/henan-annealing-solution-line%2F', 'zh'],
+    ['/zh/case/henan-annealing-solution-line%0A', 'zh'],
+    ['/en/case/%5Chenan-annealing-solution-line', 'en'],
+    ['/zh/case/%2Fhenan-annealing-solution-line', 'zh'],
+    ['/zh/case/foo.bar', 'zh'],
+    ['/en/case/jining-support-roller-heat-treatment-line.', 'en'],
+  ])('refuses %s with a real 404 in the reader language', async (address, locale) => {
+    const response = await run(address);
+    expect(response.status, address).toBe(404);
+    expect(response.headers.get('x-middleware-rewrite'), address).toBeNull();
+    expect(response.headers.get('x-robots-tag'), address).toBe('noindex');
+    expect(response.headers.get('cache-control'), address).toBe('no-store');
     const html = await response.text();
-    expect(html, path).toContain(locale === 'en' ? 'lang="en"' : 'lang="zh-CN"');
-    expect(html, path).toContain(locale === 'en' ? 'href="/en/news"' : 'href="/zh/news"');
+    expect(html, address).toContain(locale === 'en' ? 'lang="en"' : 'lang="zh-CN"');
+    expect(html, address).toContain(locale === 'en' ? 'href="/en/news"' : 'href="/zh/news"');
   });
 
   it('refuses every rewritten address the release tool probes', async () => {
@@ -72,16 +89,27 @@ describe('withdrawn content routing', () => {
     expect(response.headers.get('x-middleware-rewrite')).toBeNull();
   });
 
+  it('runs for case addresses even when they contain a dot', () => {
+    const matches = (address: string) =>
+      unstable_doesMiddlewareMatch({ config, url: new URL(address, 'https://www.jssngyl.cn').href });
+    for (const address of ['/zh', '/zh/case', '/zh/case/foo.bar', '/en/case/henan-annealing-solution-line.', '/zh/solutions/x'])
+      expect(matches(address), address).toBe(true);
+    for (const address of ['/images/products/a.png', '/_next/static/chunks/a.js', '/api/v1/news', '/favicon-32x32.png'])
+      expect(matches(address), address).toBe(false);
+  });
+
   it.each([
     '/zh',
     '/zh/products',
     '/zh/case',
+    '/zh/case/',
     '/zh/case/henan-annealing-solution-line',
     '/zh/%63ase/henan-annealing-solution-line',
     '/en/case',
     '/en/case/henan-annealing-solution-line',
-  ])('keeps %s reachable', async (path) => {
-    const response = await run(path);
-    expect(response.status, path).not.toBe(404);
+    '/en/case/henan-annealing-solution-line?returnTo=%2Fen%2Fcase',
+  ])('keeps %s reachable', async (address) => {
+    const response = await run(address);
+    expect(response.status, address).not.toBe(404);
   });
 });
