@@ -56,6 +56,7 @@ ENCODED_WITHDRAWN_PATHS = [
 # Only an owner-approved rollback to one of them may skip the encoded probes.
 LEGACY_ENCODING_IMAGES = {
     'sha256:d8a49b0fef153e01712611d4cb8dc404cd2d804e3f34aa43426fea3127f1abb5',  # 642b7a2c
+    'sha256:de534bb2b63afc7c6299089f17bc491007023539e2812da367be5f015a71f818',  # c1bda3ca, hotfix #79
 }
 CASE_STATES = ('open', 'closed')
 PUBLIC_LIVE = ['/zh', '/en', '/zh/news', '/en/news', '/zh/inquiry', '/en/contact']

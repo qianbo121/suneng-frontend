@@ -16,7 +16,7 @@ python3 ops/releases/frontend_release.py --manifest /private/path/previous-compa
 
 `verified-images.override.yml` 和 `RELEASE_ARTIFACTS.json` 在验证后更新；新构建版本同时更新 `DEPLOY_COMMIT`。每次操作保存前一版本记录及操作日志。若存在 `DEPLOYMENT_IN_PROGRESS.json`，说明上次操作中断，后续发布会拒绝继续；按其中记录的私有审计目录核对运行镜像与前一版本，完成恢复核查后才能清除此标记。标记里还记有前后两版提供的案例清单（`previousServedCases`、`targetServedCases`）。清除前须确认回执的 `frontendRelease.servedCases` 与实际运行的前台一致；回执带 `servedCasesUnverified` 时，说明运行的镜像两版都不是，须按该镜像实际提供的案例改正后再清除。
 
-回退只能使用经过相同撤下规则检查的版本。本版之前的前台镜像列在 `LEGACY_ENCODING_IMAGES`，例如已上线的 `642b7a2c`（前台 `d8a49b0f`）。这些镜像不含已审核案例，而且换一种网址写法（百分号编码、中间夹制表符或换行、结尾带空格等）仍会整页返回已撤下的方案和文章页。回退到这类镜像，等于重新公开这些页面，必须先取得网站负责人同意。清单须写 `"caseState": "closed"`、`"approvedCases": {"zh": [], "en": []}`、`"legacyEncodedPaths": true`，以及 `"legacyEncodedPathsApproval"`（写明批准人和日期），并且只能配合 `--kind rollback` 使用。工具会拒绝其他镜像或普通部署使用这个开关。原先上线前的旧前台可能重新公开已撤下内容，不能继续直接执行旧的 `rollback-frontend.py`。
+回退只能使用经过相同撤下规则检查的版本。本版之前的前台镜像列在 `LEGACY_ENCODING_IMAGES`：`642b7a2c`（前台 `d8a49b0f`）和热修 `c1bda3ca`（前台 `de534bb2`）。这些镜像不含已审核案例，而且换一种网址写法（`d8a49b0f` 连百分号编码都拦不住，`de534bb2` 拦不住中间夹制表符或换行、结尾带空格等写法）仍会整页返回已撤下的方案和文章页。回退到这类镜像，等于重新公开这些页面，必须先取得网站负责人同意。清单须写 `"caseState": "closed"`、`"approvedCases": {"zh": [], "en": []}`、`"legacyEncodedPaths": true`，以及 `"legacyEncodedPathsApproval"`（写明批准人和日期），并且只能配合 `--kind rollback` 使用。工具会拒绝其他镜像或普通部署使用这个开关。原先上线前的旧前台可能重新公开已撤下内容，不能继续直接执行旧的 `rollback-frontend.py`。
 
 ## 项目案例逐篇放出
 
