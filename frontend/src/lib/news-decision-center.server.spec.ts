@@ -63,6 +63,44 @@ describe('prepared news collection', () => {
     vi.mocked(getAllNewsForDecisionCenter).mockResolvedValue({ data: [], error: null });
     await expect(getNewsDecisionCenterData('zh')).resolves.toEqual({ data: [], error: null });
   });
+
+  it('shares simultaneous cold loads and permits a fresh load after completion', async () => {
+    vi.mocked(getAllNewsForDecisionCenter).mockResolvedValue({ data: [article], error: null });
+    const results = await Promise.all(
+      Array.from({ length: 5 }, () => getNewsDecisionCenterData('zh')),
+    );
+    expect(getAllNewsForDecisionCenter).toHaveBeenCalledTimes(1);
+    expect(results.every((result) => result.data?.[0].id === article.id)).toBe(true);
+
+    // Persistent caching is mocked out: no completed result may remain in the
+    // in-flight map, otherwise a later CMS change could never become visible.
+    await getNewsDecisionCenterData('zh');
+    expect(getAllNewsForDecisionCenter).toHaveBeenCalledTimes(2);
+  });
+
+  it('releases a shared failed load so the next request can recover', async () => {
+    vi.mocked(getAllNewsForDecisionCenter).mockRejectedValueOnce(new Error('offline'));
+    const results = await Promise.all([
+      getNewsDecisionCenterData('zh'),
+      getNewsDecisionCenterData('zh'),
+    ]);
+    expect(getAllNewsForDecisionCenter).toHaveBeenCalledTimes(1);
+    expect(results.every((result) => result.data === null && result.error)).toBe(true);
+
+    vi.mocked(getAllNewsForDecisionCenter).mockResolvedValue({ data: [article], error: null });
+    expect((await getNewsDecisionCenterData('zh')).data).toHaveLength(1);
+    expect(getAllNewsForDecisionCenter).toHaveBeenCalledTimes(2);
+  });
+
+  it('keeps concurrent Chinese and English collections separate', async () => {
+    vi.mocked(getAllNewsForDecisionCenter).mockResolvedValue({ data: [article], error: null });
+    const [zh, en] = await Promise.all([
+      getNewsDecisionCenterData('zh'),
+      getNewsDecisionCenterData('en'),
+    ]);
+    expect(zh.data).toHaveLength(1);
+    expect(en.data).toHaveLength(0);
+  });
 });
 
 it('keeps English lists restricted to complete translations and uses English search content', async () => {
