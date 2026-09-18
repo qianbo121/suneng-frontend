@@ -129,7 +129,6 @@ export function HeatTreatmentToolCenter({ articles, locale = 'zh' }: HeatTreatme
                     src={featured.coverImage}
                     alt={featured.title}
                     fill
-                    unoptimized
                     sizes="(max-width: 760px) calc(100vw - 56px), (max-width: 1024px) calc(100vw - 80px), 700px"
                     className={styles.articleImage}
                   />
@@ -154,7 +153,6 @@ export function HeatTreatmentToolCenter({ articles, locale = 'zh' }: HeatTreatme
                       src={article.coverImage}
                       alt={article.title}
                       fill
-                      unoptimized
                       sizes="(max-width: 760px) calc(100vw - 56px), (max-width: 1024px) 40vw, 250px"
                       className={styles.articleImage}
                     />
