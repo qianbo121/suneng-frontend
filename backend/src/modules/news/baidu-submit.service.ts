@@ -33,16 +33,21 @@ export class BaiduSubmitService {
       return false;
     }
 
-    const endpoint = new URL('http://data.zz.baidu.com/urls');
+    // https, so the site token is not sent in clear text; the token stays in the
+    // query string because that is the interface Baidu publishes.
+    const endpoint = new URL('https://data.zz.baidu.com/urls');
     endpoint.searchParams.set('site', site);
     endpoint.searchParams.set('token', token);
 
     let response: Response;
     try {
+      // Fire-and-forget from the caller's point of view, so a hung peer must not
+      // keep a socket open indefinitely.
       response = await fetch(endpoint, {
         method: 'POST',
         headers: { 'Content-Type': 'text/plain' },
         body: url,
+        signal: AbortSignal.timeout(5_000),
       });
     } catch {
       throw new Error('Baidu submit request failed');

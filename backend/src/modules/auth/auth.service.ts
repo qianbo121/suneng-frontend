@@ -12,7 +12,14 @@ import { PrismaService } from '@/prisma/prisma.service';
 type LoginAttemptState = {
   count: number;
   lockedUntil?: number;
+  seenAt: number;
 };
+
+// Failed-attempt records are kept in memory, so they must be bounded like the
+// public submission throttle is: without eviction every (IP, username) pair that
+// ever failed once stays for the life of the process.
+const ATTEMPT_RETENTION_MS = 60 * 60 * 1000;
+const MAX_TRACKED_ATTEMPTS = 10_000;
 
 @Injectable()
 export class AuthService {
@@ -120,15 +127,37 @@ export class AuthService {
   }
 
   private markFailure(key: string) {
-    const current = this.attempts.get(key) ?? { count: 0 };
+    const now = Date.now();
+    const current = this.attempts.get(key) ?? { count: 0, seenAt: now };
     current.count += 1;
+    current.seenAt = now;
 
     if (current.count >= this.maxAttempts) {
-      current.lockedUntil = Date.now() + this.lockMinutes * 60 * 1000;
+      current.lockedUntil = now + this.lockMinutes * 60 * 1000;
       current.count = 0;
     }
 
     this.attempts.set(key, current);
+    this.evictStaleAttempts(now);
+  }
+
+  private evictStaleAttempts(now: number) {
+    for (const [key, state] of this.attempts) {
+      const locked = state.lockedUntil && state.lockedUntil > now;
+      if (!locked && now - state.seenAt > ATTEMPT_RETENTION_MS) {
+        this.attempts.delete(key);
+      }
+    }
+
+    // Under a sustained spray the retention window alone is not a bound; drop the
+    // least recent records, never an active lock.
+    if (this.attempts.size <= MAX_TRACKED_ATTEMPTS) return;
+    const evictable = [...this.attempts.entries()]
+      .filter(([, state]) => !(state.lockedUntil && state.lockedUntil > now))
+      .sort((left, right) => left[1].seenAt - right[1].seenAt);
+    for (const [key] of evictable.slice(0, this.attempts.size - MAX_TRACKED_ATTEMPTS)) {
+      this.attempts.delete(key);
+    }
   }
 
   private toSafeUser(user: AdminUser): AuthenticatedUser {
