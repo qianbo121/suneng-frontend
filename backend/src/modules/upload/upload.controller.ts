@@ -15,7 +15,19 @@ import { memoryStorage } from 'multer';
 import { UploadResultDto } from '@/modules/upload/dto/upload-result.dto';
 import { UploadService } from '@/modules/upload/upload.service';
 
-const MAX_FILE_SIZE = Number(process.env.UPLOAD_MAX_FILE_SIZE_MB ?? 10) * 1024 * 1024;
+// Multer limits are decorator metadata, so this is resolved at import time and
+// cannot come from ConfigService. Parse it strictly all the same: a malformed
+// value used to become NaN, and every size comparison against NaN is false,
+// which silently removed the upload size limit instead of failing the boot.
+function uploadLimitBytes(raw: string | undefined) {
+  const normalized = (raw ?? '10').trim();
+  if (!/^[1-9]\d*$/.test(normalized)) {
+    throw new Error('UPLOAD_MAX_FILE_SIZE_MB must be a positive integer number of megabytes');
+  }
+  return Number(normalized) * 1024 * 1024;
+}
+
+const MAX_FILE_SIZE = uploadLimitBytes(process.env.UPLOAD_MAX_FILE_SIZE_MB);
 
 // SVG is intentionally excluded: it carries no magic bytes (so server-side
 // type detection cannot vouch for it) and can embed scripts. The client

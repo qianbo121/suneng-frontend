@@ -23,7 +23,7 @@ def capture(identifier):
     report = {'id': identifier, 'status': 'incomplete', 'kind': 'data-only',
               'started_at': b.now(), 'production_written': False, 'offsite_verified': False}
     b.save_json(destination / 'data-manifest.json', report)
-    with open('/var/lock/corp-site-deploy.lock', 'r') as lock:
+    with open('/var/lock/corp-site-deploy.lock', 'a') as lock:
         fcntl.flock(lock, fcntl.LOCK_SH | fcntl.LOCK_NB)
         before = b.state()
         b.verify_production(before)
@@ -72,7 +72,7 @@ def restore(identifier):
               'isolation': {'network': 'none', 'published_ports': [], 'production_mounts': []}}
     image = next(x['image'] for x in manifest['production_before'] if x['name'] == 'corp-site-postgres')
     name = 'suneng-geo-drill-' + identifier
-    with open('/var/lock/corp-site-deploy.lock', 'r') as lock:
+    with open('/var/lock/corp-site-deploy.lock', 'a') as lock:
         fcntl.flock(lock, fcntl.LOCK_SH | fcntl.LOCK_NB)
         before = b.state()
         b.verify_production(before)

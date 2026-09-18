@@ -33,6 +33,9 @@ jobs:
 
       - name: Deployment preflight regression checks
         run: |
+          # Do not rely on the runner's default shell flags: one failing check in
+          # the middle must not be hidden by the last one succeeding.
+          set -euo pipefail
           python3 scripts/test_deploy_preflight.py
           python3 ops/releases/test_frontend_release.py
           python3 ops/releases/test_deployment_notice.py
@@ -42,6 +45,10 @@ jobs:
         run: pnpm audit --audit-level high
       - name: Lint
         run: pnpm --dir frontend lint
+      # Types are also checked by the build at the end of this job, but that is
+      # seven minutes away; fail fast here instead.
+      - name: Typecheck
+        run: pnpm --dir frontend typecheck
       - name: Test
         run: pnpm --dir frontend test
       - name: Install deterministic CJK font

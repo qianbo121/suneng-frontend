@@ -5,6 +5,8 @@ import type { NextRequest } from 'next/server';
 
 import { FALLBACK_NEWS_SLUGS } from '@/constants/news-fallback-slugs';
 import { isLocalizedPublicPath, PUBLIC_PAGE_CACHE_CONTROL, routing } from '@/i18n/routing';
+import { PUBLIC_CASE_SLUGS, PUBLIC_ENGLISH_CASE_SLUGS } from '@/lib/cases/public-case-allowlist';
+import { CASE_PAGE_SIZE } from '@/lib/cases/types';
 import { isZhOnlyPath } from '@/lib/i18n/zh-only';
 import { isUnknownProductDetailPath } from '@/lib/products/detail-slugs';
 import { isInternalNewsListPath } from '@/lib/news-list-prerender';
@@ -43,6 +45,19 @@ function withdrawnResponse(pathname: string) {
 
 function newsNotFoundResponse(locale: 'zh' | 'en') {
   return new NextResponse(newsNotFoundHtml(locale), {
+    status: 404,
+    headers: { 'Cache-Control': 'no-store', 'Content-Type': 'text/html; charset=utf-8', 'X-Robots-Tag': 'noindex' },
+  });
+}
+
+function caseListNotFoundHtml(locale: 'zh' | 'en') {
+  if (locale === 'en')
+    return '<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="robots" content="noindex"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Page Unavailable | Suneng Industrial Furnace</title></head><body><main><h1>No such page of case studies</h1><p><a href="/en/case">Return to case studies</a></p></main></body></html>';
+  return '<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="robots" content="noindex"><meta name="viewport" content="width=device-width,initial-scale=1"><title>页码不存在｜江苏苏能工业炉有限公司</title></head><body><main><h1>没有这一页项目案例</h1><p><a href="/zh/case">返回项目案例</a></p></main></body></html>';
+}
+
+function caseListNotFoundResponse(locale: 'zh' | 'en') {
+  return new NextResponse(caseListNotFoundHtml(locale), {
     status: 404,
     headers: { 'Cache-Control': 'no-store', 'Content-Type': 'text/html; charset=utf-8', 'X-Robots-Tag': 'noindex' },
   });
@@ -91,6 +106,22 @@ function missingProductResponse(pathname: string) {
   });
 }
 
+// The approved case list is short, so an unbounded ?page= would otherwise mint an
+// unlimited number of distinct, indexable empty pages. Answer plain list pages past
+// the end here, where the status really is 404; filtered views keep their own page.
+const CASE_LIST_QUERY_KEYS = ['q', 'type', 'sort', 'from', 'workpiece', 'process', 'equipment', 'need'];
+
+function isMissingCaseListPage(pathname: string, searchParams: URLSearchParams) {
+  const match = /^\/(zh|en)\/case\/?$/.exec(pathname);
+  if (!match) return false;
+  if (CASE_LIST_QUERY_KEYS.some((key) => searchParams.has(key))) return false;
+  const pages = searchParams.getAll('page');
+  if (pages.length === 0) return false;
+  if (pages.length > 1 || !/^[1-9]\d*$/.test(pages[0])) return true;
+  const approved = match[1] === 'en' ? PUBLIC_ENGLISH_CASE_SLUGS.size : PUBLIC_CASE_SLUGS.size;
+  return Number(pages[0]) > Math.max(1, Math.ceil(approved / CASE_PAGE_SIZE));
+}
+
 export default async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
   if (isRefusedPath(pathname)) return withdrawnResponse(pathname);
@@ -123,6 +154,10 @@ export default async function middleware(request: NextRequest) {
 
   if (isMisspelledNewsList(pathname, request.nextUrl.searchParams)) {
     return newsNotFoundResponse(/^\/en\//i.test(pathname) ? 'en' : 'zh');
+  }
+
+  if (isMissingCaseListPage(pathname, request.nextUrl.searchParams)) {
+    return caseListNotFoundResponse(/^\/en\//i.test(pathname) ? 'en' : 'zh');
   }
 
   const englishNewsDetail = pathname.startsWith('/en/news/');

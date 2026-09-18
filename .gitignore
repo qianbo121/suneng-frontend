@@ -42,3 +42,14 @@ backend/dist
 admin/node_modules
 admin/dist
 backend/prisma/dev.db
+
+# One-off run products:审计、预览、交付包与生成物。它们在主检出里有几 GB，
+# 之前只忽略了 outputs/（复数），一次 git add -A 就会把它们永久写进历史。
+output/
+deliverables/
+artifacts/
+case-output-*/
+banner-review-assets/
+workpiece-router-assets/
+geo-drafts/
+*.zip

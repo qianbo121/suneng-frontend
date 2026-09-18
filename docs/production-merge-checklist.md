@@ -1,6 +1,8 @@
-# Production Merge Checklist
+# Production Merge Checklist（历史文档，2026-07-29）
 
-在 `geo/p0-p1-p2-20260729` 合并 `main` 前执行。`main` 的 push 会触发自动部署，禁止绕过本清单直推。
+> **这份清单已经过期，不要照它操作。** 它针对的是 2026-07-29 那次合并，写于自动部署仍然生效的时期。
+> 现在 `main` 的 push **不会**触发部署，`Build And Deploy` 已停用，发布唯一入口见 [DEPLOY.md](../DEPLOY.md)。
+> 里面的每日备份 cron 已移到 DEPLOY.md「回退与数据保护」一节，以那份为准。保留本文只为留存当时的检查项。
 
 ## 必须通过
 

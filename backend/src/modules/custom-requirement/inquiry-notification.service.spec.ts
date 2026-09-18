@@ -246,4 +246,61 @@ describe('InquiryNotificationService', () => {
       await expect(service.notifyNewInquiry({ phone: '13000000000' })).resolves.toBe(true);
     },
   );
+
+  // Every fixture above answers HTTP 200. These cover the other half: how a
+  // transport-level failure is classified decides whether the notification is
+  // retried at all, so getting it wrong silently drops a sales lead.
+  function serviceWithFetch(fetchMock: jest.Mock) {
+    global.fetch = fetchMock;
+    const configService = {
+      get: jest.fn().mockReturnValue('https://example.com/feishu-webhook'),
+    } as unknown as ConfigService;
+    return new InquiryNotificationService(configService);
+  }
+
+  it.each([408, 425, 429, 500, 502, 503, 504])('treats HTTP %i as retryable', async (status) => {
+    const service = serviceWithFetch(jest.fn().mockResolvedValue(new Response('', { status })));
+
+    await expect(service.notifyNewInquiry({ phone: '13000000000' })).rejects.toMatchObject({
+      kind: 'retryable_failure',
+      message: expect.stringContaining(`HTTP ${status}`),
+    });
+  });
+
+  it.each([400, 401, 403, 404])('treats HTTP %i as a permanent failure', async (status) => {
+    const service = serviceWithFetch(jest.fn().mockResolvedValue(new Response('', { status })));
+
+    await expect(service.notifyNewInquiry({ phone: '13000000000' })).rejects.toMatchObject({
+      kind: 'permanent_failure',
+      message: expect.stringContaining(`HTTP ${status}`),
+    });
+  });
+
+  it('treats a network error as an unknown outcome rather than a failure', async () => {
+    const service = serviceWithFetch(jest.fn().mockRejectedValue(new Error('ECONNRESET')));
+
+    await expect(service.notifyNewInquiry({ phone: '13000000000' })).rejects.toMatchObject({
+      kind: 'unknown',
+    });
+  });
+
+  it('treats an aborted request the same way', async () => {
+    const abort = new Error('The operation was aborted due to timeout');
+    abort.name = 'TimeoutError';
+    const service = serviceWithFetch(jest.fn().mockRejectedValue(abort));
+
+    await expect(service.notifyNewInquiry({ phone: '13000000000' })).rejects.toMatchObject({
+      kind: 'unknown',
+    });
+  });
+
+  it('gives up with a clear signal when the webhook is not configured', async () => {
+    const fetchMock = jest.fn();
+    global.fetch = fetchMock;
+    const configService = { get: jest.fn().mockReturnValue('   ') } as unknown as ConfigService;
+    const service = new InquiryNotificationService(configService);
+
+    await expect(service.notifyNewInquiry({ phone: '13000000000' })).resolves.toBe(false);
+    expect(fetchMock).not.toHaveBeenCalled();
+  });
 });

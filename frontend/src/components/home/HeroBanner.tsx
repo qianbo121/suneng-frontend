@@ -120,7 +120,6 @@ function PartnerLogoGroup({ duplicate = false }: { duplicate?: boolean }) {
           title={duplicate ? undefined : partner.name}
           width={partner.width}
           height={partner.height}
-          unoptimized
           className={styles.logo}
           sizes="(max-width: 767px) 34px, (max-width: 1024px) 38px, 40px"
         />

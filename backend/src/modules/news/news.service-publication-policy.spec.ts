@@ -75,4 +75,32 @@ describe('NewsService publication fact policy', () => {
     );
     expect(news.update).not.toHaveBeenCalled();
   });
+
+  // Public reads need both switches, so they must never be written apart.
+  it('drafts the status when an edit unpublishes the article', async () => {
+    const { service, news } = harness({
+      ...unverifiedRecord,
+      status: PublishStatus.published,
+      isPublished: true,
+    });
+
+    await service.update(22, { isPublished: false });
+
+    expect(news.update).toHaveBeenCalledWith(
+      expect.objectContaining({
+        where: { id: 22 },
+        data: expect.objectContaining({ isPublished: false, status: PublishStatus.draft }),
+      }),
+    );
+  });
+
+  it('leaves both switches alone when an edit does not touch publication', async () => {
+    const { service, news } = harness({ ...unverifiedRecord, status: PublishStatus.draft });
+
+    await service.update(22, { sortOrder: 3 });
+
+    const data = news.update.mock.calls[0][0].data;
+    expect(data).not.toHaveProperty('status');
+    expect(data).not.toHaveProperty('isPublished');
+  });
 });

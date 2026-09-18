@@ -11,7 +11,7 @@
     "seo:submit:dry": "node scripts/submit-search-engines.mjs --dry-run",
     "lint": "eslint . --ext ts,tsx",
     "typecheck": "tsc --noEmit",
-    "test": "vitest run && node --test scripts/search-submission.test.mjs scripts/search-submission-queue.test.mjs",
+    "test": "vitest run && node --test scripts/*.test.mjs",
     "test:visual": "bash scripts/run-visual-regression.sh",
     "test:visual:update": "bash scripts/run-visual-regression.sh --update-snapshots",
     "test:integration:workpiece": "playwright test -c playwright.integration.config.ts workpiece-router-inquiry-chain.spec.ts",

@@ -156,7 +156,6 @@ export function HeatTreatmentLines({ locale, categories }: HeatTreatmentLinesPro
                 alt={buildProductImageAlt(locale, mainLine.title[locale], mainLine.desc[locale])}
                 fill
                 priority
-                unoptimized
                 className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.018]"
                 sizes="(min-width: 1024px) 760px, 100vw"
               />
@@ -203,7 +202,6 @@ export function HeatTreatmentLines({ locale, categories }: HeatTreatmentLinesPro
                     src={item.image}
                     alt={buildProductImageAlt(locale, item.title[locale], item.desc[locale])}
                     fill
-                    unoptimized
                     className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.02]"
                     sizes="(min-width: 1024px) 440px, 100vw"
                   />
@@ -241,7 +239,6 @@ export function HeatTreatmentLines({ locale, categories }: HeatTreatmentLinesPro
                         src={item.image}
                         alt={buildProductImageAlt(locale, locale === 'en' ? item.en : item.zh, item.feature[locale])}
                         fill
-                        unoptimized
                         className="scale-[1.24] object-contain transition-transform duration-500 ease-out group-hover:scale-[1.32]"
                         sizes="(min-width: 1024px) 226px, 45vw"
                       />

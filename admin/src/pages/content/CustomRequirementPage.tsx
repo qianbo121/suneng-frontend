@@ -3,6 +3,7 @@ import {
   App,
   Button,
   Card,
+  Checkbox,
   Descriptions,
   Empty,
   Form,
@@ -53,6 +54,7 @@ import {
 type Filters = {
   keyword: string;
   status?: CustomRequirementStatus;
+  undelivered?: boolean;
 };
 
 type NotificationActionForm = {
@@ -67,6 +69,7 @@ type NotificationActionTarget = {
 const DEFAULT_FILTERS: Filters = {
   keyword: '',
   status: undefined,
+  undelivered: false,
 };
 
 const statusOptions = [
@@ -260,6 +263,7 @@ export function CustomRequirementPage() {
       pageSize: 10,
       keyword: filters.keyword,
       status: filters.status,
+      undelivered: filters.undelivered,
     }),
   );
 
@@ -518,6 +522,10 @@ export function CustomRequirementPage() {
                 style={{ width: 140 }}
                 options={statusOptions}
               />
+            </Form.Item>
+            {/* 通知没送达的线索没人会主动去翻，给它一个一键入口。 */}
+            <Form.Item name="undelivered" valuePropName="checked">
+              <Checkbox onChange={() => form.submit()}>只看通知未送达</Checkbox>
             </Form.Item>
             <Form.Item>
               <Button type="primary" htmlType="submit">

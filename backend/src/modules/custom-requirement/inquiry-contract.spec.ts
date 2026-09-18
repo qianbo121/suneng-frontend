@@ -17,7 +17,13 @@ describe('inquiry release contract', () => {
     expect(supportsInquiryContract({ data: { inquiryContractVersion: 3 } })).toBe(true);
     expect(supportsInquiryContract({ data: { inquiryContractVersion: 1 } })).toBe(false);
     expect(supportsInquiryContract({ status: 'ok' })).toBe(false);
-    expect(new AppController().getHealth().inquiryContractVersion).toBe(2);
+    const health = { status: jest.fn() };
+    const prisma = { $queryRaw: jest.fn(async () => [{ ok: 1 }]) } as never;
+    return expect(
+      new AppController(prisma)
+        .getHealth(health as never)
+        .then((body) => body.inquiryContractVersion),
+    ).resolves.toBe(2);
   });
 
   it('accepts Shuju only after V2 migration and the exact cutover are ready', () => {

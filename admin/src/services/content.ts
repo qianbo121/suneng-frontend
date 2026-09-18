@@ -17,6 +17,7 @@ export async function getCustomRequirementList(query: CustomRequirementListQuery
       pageSize: query.pageSize ?? 10,
       keyword: query.keyword || undefined,
       status: query.status || undefined,
+      undelivered: query.undelivered ? 'true' : undefined,
     },
   );
   return unwrapResponse(response);

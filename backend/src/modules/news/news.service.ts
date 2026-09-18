@@ -212,6 +212,19 @@ export class NewsService {
         ? await this.resolveCategoryId(requestedCategoryId)
         : undefined;
 
+    // Public reads require status === published AND isPublished. This route can
+    // only set isPublished, so carry status with it; otherwise a row can end up
+    // shown as published in the admin list while every public page answers 404.
+    const nextStatus =
+      newsData.isPublished === undefined
+        ? record.status
+        : newsData.isPublished
+          ? PublishStatus.published
+          : PublishStatus.draft;
+    const publicationFields =
+      newsData.isPublished === undefined
+        ? {}
+        : { status: nextStatus, isPublished: nextStatus === PublishStatus.published };
     const baseData = {
       ...newsData,
       ...(typeof newsData.contentZh === 'string'
@@ -223,9 +236,10 @@ export class NewsService {
       ...(categoryId !== undefined ? { categoryId } : {}),
       ...(dto.publishDate ? { publishDate: new Date(dto.publishDate) } : {}),
       ...(changesNewsContent(dto) ? { contentUpdatedAt: new Date() } : {}),
+      ...publicationFields,
     };
 
-    if (record.status === PublishStatus.published && (dto.isPublished ?? record.isPublished)) {
+    if (nextStatus === PublishStatus.published && (dto.isPublished ?? record.isPublished)) {
       assertNewsPublicationPolicy({ ...record, ...baseData });
     }
 
