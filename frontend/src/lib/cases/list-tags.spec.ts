@@ -3,7 +3,10 @@ vi.mock('server-only', () => ({}));
 import { caseFactTag, caseListPresentation } from './list-tags';
 import { toCaseCard } from './query';
 import type { CaseMeta } from './types';
-import comparison from '../../../content/cases/alloy-bar-plate-handling-202607-proposal.json';
+// A retired draft kept only as a test fixture. It lives outside content/cases
+// so the case reader can never publish it, and it exercises the two-furnace
+// summary rewriting that no surviving case happens to contain.
+import comparison from './__fixtures__/list-presentation-case.json';
 
 describe('case list feature tags', () => {
   it('keeps separate furnace meanings in the summary without changing source facts', () => {

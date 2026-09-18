@@ -20,8 +20,11 @@ describe('owner-approved public cases', () => {
   it('publishes exactly the approved source files, and nothing else', () => {
     const published = sources.filter((item) => item.publicationStatus === 'published');
     expect(sorted(published.map((item) => item.slug))).toEqual(sorted(PUBLIC_CASE_SLUGS));
-    expect(sources).toHaveLength(148);
-    expect(sources.length - published.length).toBe(147);
+    // The 147 proposal drafts were retired for rewriting; the two that several
+    // governance specs read as their fact baseline stay unpublished.
+    expect(sources).toHaveLength(3);
+    expect(sorted(sources.filter((item) => item.publicationStatus === 'draft').map((item) => item.slug)))
+      .toEqual(['anonymous-tsingshan-1250-renovation', 'jining-support-roller-heat-treatment-line']);
   });
 
   it('records each approval against the matching source identity', () => {

@@ -37,23 +37,24 @@ const cards = [
 
 describe('news list browser state', () => {
   it('reads the same state the server derives from the URL', () => {
-    expect(parseNewsListState('')).toEqual({ topic: 'all', furnace: 'all', sort: 'recommended', page: 1 });
-    expect(parseNewsListState('?topic=selection&furnace=pit&sort=updated&page=3')).toEqual({
+    // An absent or unreadable sort falls back to the default, newest first.
+    expect(parseNewsListState('')).toEqual({ topic: 'all', furnace: 'all', sort: 'updated', page: 1 });
+    expect(parseNewsListState('?topic=selection&furnace=pit&sort=recommended&page=3')).toEqual({
       topic: 'selection',
       furnace: 'pit',
-      sort: 'updated',
+      sort: 'recommended',
       page: 3,
     });
     expect(parseNewsListState('topic=unknown&furnace=x&sort=y&page=0')).toEqual({
       topic: 'all',
       furnace: 'all',
-      sort: 'recommended',
+      sort: 'updated',
       page: 1,
     });
   });
 
   it('round-trips through the public list href', () => {
-    const state = { topic: 'procurement', furnace: 'trolley', sort: 'updated', page: 2 } as const;
+    const state = { topic: 'procurement', furnace: 'trolley', sort: 'recommended', page: 2 } as const;
     const href = buildNewsDecisionHref('/zh/news', state);
     expect(isSameNewsListState(parseNewsListState(href.split('?')[1] ?? ''), state)).toBe(true);
     expect(hasNewsListFilters(state)).toBe(true);

@@ -285,12 +285,19 @@ describe('case publishing and browsing contract', () => {
 
   it("retains archived engineering boundaries while only approved cases are public", () => {
     expect(getPublicCases().map((item) => item.slug)).toEqual([...PUBLIC_CASE_SLUGS]);
+    // Both surviving drafts must keep design figures separated from verified
+    // results in their own wording, not only in a JSON label.
     const root=path.join(process.cwd(), 'content/cases');
-    const meta=JSON.parse(fs.readFileSync(path.join(root,'rt4-75-6-proposal.json'),'utf8'));
-    expect(meta.publicationStatus).toBe('draft');
-    expect(meta.projectStatus).toBe('proposal');
-    const body=fs.readFileSync(path.join(root,meta.body),'utf8');
-    expect(body).toContain('不等于实际耗电量');
-    expect(body).toContain('预留接口不代表已经完成或通过相应测试');
+    const boundaries: Record<string, string[]> = {
+      'jining-support-roller': ['不等于各规格已经获得相同的淬硬效果', '这些是方案参数，不是实际验收产能'],
+      'continuous-line-renovation': ['不代表三条线已经完成改造或通过验收', '未经验证的方案测算不作为对外结果'],
+    };
+    for (const [name, phrases] of Object.entries(boundaries)) {
+      const meta=JSON.parse(fs.readFileSync(path.join(root,`${name}.json`),'utf8'));
+      expect(meta.publicationStatus, name).toBe('draft');
+      expect(meta.projectStatus, name).toBe('proposal');
+      const body=fs.readFileSync(path.join(root,meta.body),'utf8');
+      for (const phrase of phrases) expect(body, `${name}: ${phrase}`).toContain(phrase);
+    }
   });
 });

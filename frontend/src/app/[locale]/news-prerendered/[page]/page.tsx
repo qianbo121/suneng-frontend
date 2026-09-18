@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation';
 
 import { getNewsListPageCount, NewsListRoute } from '@/components/news/NewsListRoute';
 import { routing } from '@/i18n/routing';
+import { DEFAULT_NEWS_SORT } from '@/lib/news-decision-center';
 import { getNewsDecisionCenterCards } from '@/lib/news-decision-center.server';
 import { buildNewsListMetadata } from '@/lib/news-list-metadata';
 import { NEWS_LIST_PRERENDER_MAX_PAGE } from '@/lib/news-list-prerender';
@@ -56,7 +57,7 @@ export default async function PrerenderedNewsListPage({ params }: PrerenderedNew
       query=""
       topic="all"
       furnace="all"
-      sort="recommended"
+      sort={DEFAULT_NEWS_SORT}
     />
   );
 }

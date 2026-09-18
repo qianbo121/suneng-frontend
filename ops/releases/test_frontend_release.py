@@ -210,7 +210,7 @@ class ContractTest(unittest.TestCase):
         opened = {path: 200 for path in CASE_GROUP}
         live = sitemap('/zh/news', '/en/news', *CASE_GROUP)
         target = r.case_contract('open')
-        encoded_draft = '/zh/%63ase/alloy-eight-furnaces-acceptance-supply-boundaries-proposal'
+        encoded_draft = '/zh/%63ase/anonymous-tsingshan-1250-renovation'
         self.assertIn(encoded_draft, target['retired'])
         for path in [*r.DRAFT_CASE_PATHS, *r.ENCODED_WITHDRAWN_PATHS, encoded_draft]:
             with self.subTest(target=path), patch.object(r, 'run', side_effect=site({**opened, path: 200}, live)), \
@@ -268,7 +268,7 @@ class ContractTest(unittest.TestCase):
             self.assertEqual(closed_listed.target_contract['state'], 'closed')
 
     def test_every_release_without_the_rollback_exemption_probes_encoded_addresses(self):
-        encoded_draft = '/zh/%63ase/alloy-eight-furnaces-acceptance-supply-boundaries-proposal'
+        encoded_draft = '/zh/%63ase/anonymous-tsingshan-1250-renovation'
         for manifest in [MANIFEST, {**MANIFEST, 'caseState': 'closed', 'approvedCases': r.NO_CASES},
                          {**MANIFEST, 'legacyEncodedPaths': False}]:
             with self.subTest(manifest=manifest), tempfile.TemporaryDirectory() as tmp:

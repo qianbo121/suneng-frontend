@@ -13,6 +13,7 @@ import {
 import { normalizeNewsPage } from '@/lib/news-pagination';
 import type { NewsListCardItem } from '@/types/news';
 import type { Locale } from '@/types/site';
+import { DEFAULT_NEWS_SORT } from '@/lib/news-decision-center';
 
 // Everything the browser needs to switch topic, equipment, sort and page
 // without asking the server again. Search stays on the server.
@@ -43,7 +44,7 @@ export function isSameNewsListState(left: NewsListState, right: NewsListState) {
 }
 
 export function hasNewsListFilters(state: NewsListState) {
-  return state.topic !== 'all' || state.furnace !== 'all' || state.sort !== 'recommended';
+  return state.topic !== 'all' || state.furnace !== 'all' || state.sort !== DEFAULT_NEWS_SORT;
 }
 
 // Mirrors the server page: an out-of-range page shows the last page.

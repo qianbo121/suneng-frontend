@@ -34,7 +34,6 @@ NO_CASES = {'zh': [], 'en': []}
 # Representative unapproved drafts; they must stay private in every release state.
 # A frontend test checks that each is still a draft. Replace one when it is approved.
 DRAFT_CASE_PATHS = [
-    '/zh/case/alloy-eight-furnaces-acceptance-supply-boundaries-proposal',
     '/zh/case/anonymous-tsingshan-1250-renovation',
     '/zh/case/jining-support-roller-heat-treatment-line',
     '/en/case/jining-support-roller-heat-treatment-line',
