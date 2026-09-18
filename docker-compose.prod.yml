@@ -41,7 +41,12 @@ services:
     environment:
       NODE_ENV: production
       PORT: 3001
-      DATABASE_URL: postgresql://corporate:${DB_PASSWORD}@postgres:5432/corporate_site?schema=public
+      # Prisma sizes the pool from the CPU count it detects, which here resolves to
+      # three connections. One thirty-day analytics aggregate is enough to hold all
+      # three long enough that everything else — inquiry submissions included —
+      # waits out the pool timeout and fails. Postgres allows 100 connections and
+      # this stack uses about nine, so the pool is stated explicitly instead.
+      DATABASE_URL: postgresql://corporate:${DB_PASSWORD}@postgres:5432/corporate_site?schema=public&connection_limit=10&pool_timeout=20
       JWT_SECRET: ${JWT_SECRET}
       JWT_EXPIRES_IN: ${JWT_EXPIRES_IN:-7d}
       APP_URL: https://${DOMAIN}
