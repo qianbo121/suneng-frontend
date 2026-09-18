@@ -113,3 +113,55 @@ describe('withdrawn content routing', () => {
     expect(response.status, address).not.toBe(404);
   });
 });
+
+describe('Chinese-only pages under /en', () => {
+  it.each([
+    '/en/inquiry',
+    '/en/products/detail/track-shoe-press-quench-line',
+    '/en/products/detail/cylinder-curing-line',
+    '/en/products/detail/copper-wire-annealing-line/inquiry-checklist',
+    '/en/service/installation-after-sales',
+    '/EN/inquiry',
+    '/en/inqui%72y',
+    '/en/inquiry/',
+  ])('answers %s with a real 404, not a 200 shell', async (address) => {
+    const response = await run(address);
+    expect(response?.status).toBe(404);
+    expect(response?.headers.get('X-Robots-Tag')).toBe('noindex');
+  });
+
+  it.each([
+    '/zh/inquiry',
+    '/en/products/detail/shovel-furnace',
+    '/en/case/henan-annealing-solution-line',
+    '/en/contact',
+  ])('leaves %s reachable', async (address) => {
+    const response = await run(address);
+    expect(response?.status).not.toBe(404);
+  });
+});
+
+describe('product detail pages with no product behind them', () => {
+  it.each([
+    '/zh/products/detail/no-such-furnace',
+    '/en/products/detail/no-such-furnace',
+    '/zh/products/detail/no-such-furnace/',
+    '/zh/products/detail/trolley-furnace-typo',
+    '/zh/products/detail/%74rolley-furnace-typo',
+  ])('answers %s with a real 404', async (address) => {
+    const response = await run(address);
+    expect(response?.status, address).toBe(404);
+    expect(response?.headers.get('X-Robots-Tag')).toBe('noindex');
+  });
+
+  it.each([
+    '/zh/products/detail/trolley-furnace',
+    '/en/products/detail/trolley-furnace',
+    '/zh/products/detail/cylinder-curing-line',
+    '/zh/products/detail/copper-wire-annealing-line/inquiry-checklist',
+    '/zh/products',
+  ])('leaves %s reachable', async (address) => {
+    const response = await run(address);
+    expect(response?.status, address).not.toBe(404);
+  });
+});

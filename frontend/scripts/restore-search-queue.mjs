@@ -38,6 +38,14 @@ export async function restoreQueue({ artifacts, previousRuns, repository, curren
   return { state, batches };
 }
 
+/** URLs named when the workflow is dispatched, as a single-use batch. */
+export function manualBatch(raw, runId, runAttempt) {
+  const urls = [...new Set((raw || '').split(/[\s,]+/).map((value) => value.trim()).filter(Boolean))];
+  if (!urls.length) return null;
+  if (!/^\d+$/.test(String(runId || ''))) throw new Error('A run id is required to name a manual batch');
+  return { id: `manual-${runId}-${/^\d+$/.test(String(runAttempt || '')) ? runAttempt : 1}`, urls };
+}
+
 async function main() {
   const repository = process.env.GITHUB_REPOSITORY;
   if (!/^[\w.-]+\/[\w.-]+$/.test(repository || '')) throw new Error('A valid repository is required');
@@ -55,10 +63,16 @@ async function main() {
       return JSON.parse(execFileSync('unzip', ['-p', file, filename], { encoding: 'utf8', maxBuffer: 16 * 1024 * 1024 }));
     },
   });
+  // A release switched over by hand on the server produces no deployment change
+  // list, so the operator can name the URLs when dispatching the workflow. The
+  // run id keeps the batch single-use, and mergeBatches still drops anything
+  // absent from the live sitemap.
+  const manual = manualBatch(process.env.MANUAL_URLS, process.env.GITHUB_RUN_ID, process.env.GITHUB_RUN_ATTEMPT);
+  if (manual) batches.push(manual);
   const dir = process.env.RUNNER_TEMP || '.';
   writeFileSync(join(dir, 'search-queue.json'), JSON.stringify(state, null, 2));
   writeFileSync(join(dir, 'search-batches.json'), JSON.stringify(batches, null, 2));
-  console.log(`Restored ${state.pending.baidu.length} Baidu / ${state.pending.indexnow.length} IndexNow pending URLs; ${batches.length} new deployment batches.`);
+  console.log(`Restored ${state.pending.baidu.length} Baidu / ${state.pending.indexnow.length} IndexNow pending URLs; ${batches.length} new change list(s)${manual ? ` including ${manual.urls.length} URL(s) named by hand` : ''}.`);
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) main().catch((error) => {

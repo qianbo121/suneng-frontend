@@ -5,6 +5,8 @@ import type { NextRequest } from 'next/server';
 
 import { FALLBACK_NEWS_SLUGS } from '@/constants/news-fallback-slugs';
 import { isLocalizedPublicPath, PUBLIC_PAGE_CACHE_CONTROL, routing } from '@/i18n/routing';
+import { isZhOnlyPath } from '@/lib/i18n/zh-only';
+import { isUnknownProductDetailPath } from '@/lib/products/detail-slugs';
 import { isInternalNewsListPath } from '@/lib/news-list-prerender';
 import { getNewsRouteAvailability, getZhNewsSlug, newsNotFoundHtml } from '@/lib/news-route-guard';
 
@@ -56,9 +58,46 @@ function isMisspelledNewsList(pathname: string, searchParams: URLSearchParams) {
   return pages.length > 1 || (pages.length === 1 && !/^[1-9]\d*$/.test(pages[0]));
 }
 
+// Chinese-only pages have no English edition. A page-level notFound() is
+// encoded inside the React stream while the outer response stays 200, which a
+// crawler reads as a soft 404 even though the body already carries noindex.
+// Refuse them here so the status code matches the body. Checked both ways round
+// for the same reason isRefusedPath is: the widest reading of the path and the
+// literal one Next uses for route parameters.
+const EN_PREFIX = /^\/en(?=\/|$)/i;
+function isZhOnlyEnglishPath(pathname: string) {
+  const routable = routablePathname(pathname);
+  if (!EN_PREFIX.test(routable)) return false;
+  // isZhOnlyPath strips the locale case-sensitively, so /EN/... would keep its
+  // prefix and miss the list.
+  const lower = (path: string) => path.replace(EN_PREFIX, '/en');
+  return isZhOnlyPath(lower(routable)) || isZhOnlyPath(lower(pathname));
+}
+
+// A product detail page with no product behind it: notFound() from the page
+// leaves the outer response at 200, the same soft 404 as the Chinese-only
+// addresses above. The slug list this reads is kept equal to the catalogue by
+// detail-slugs.spec.ts.
+function missingProductHtml(locale: 'zh' | 'en') {
+  const en = locale === 'en';
+  const title = en ? 'This equipment page does not exist' : '该设备页面不存在';
+  return `<!doctype html><html lang="${en ? 'en' : 'zh-CN'}"><head><meta charset="utf-8"><meta name="robots" content="noindex"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${title} | Suneng</title><style>body{margin:0;font:18px/1.7 system-ui,sans-serif;color:#142d4e;background:#f6f8fb}main{max-width:720px;margin:10vh auto;padding:32px}h1{font-size:32px}a{color:#145ca8;display:inline-block;margin:12px 24px 12px 0;padding:8px 0}a:focus-visible{outline:2px solid;outline-offset:4px}</style></head><body><main><h1>${title}</h1><p>${en ? 'Browse our equipment, or tell us the working conditions and we will advise.' : '您可以查看全部设备，或把工况发给我们做初步判断。'}</p><a href="/${locale}/products">${en ? 'Browse products' : '查看设备'}</a><a href="/${locale}/contact">${en ? 'Contact us' : '联系我们'}</a></main></body></html>`;
+}
+
+function missingProductResponse(pathname: string) {
+  return new NextResponse(missingProductHtml(withdrawnPageLocale(pathname)), {
+    status: 404,
+    headers: { 'Cache-Control': 'no-store', 'Content-Type': 'text/html; charset=utf-8', 'X-Robots-Tag': 'noindex' },
+  });
+}
+
 export default async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
   if (isRefusedPath(pathname)) return withdrawnResponse(pathname);
+  if (isZhOnlyEnglishPath(pathname)) return withdrawnResponse('/en');
+  if (isUnknownProductDetailPath(routablePathname(pathname)) || isUnknownProductDetailPath(pathname)) {
+    return missingProductResponse(pathname);
+  }
   if (pathname === '/') return permanentRedirect(request, '/zh');
   const hasLocalePrefix = routing.locales.some(
     (locale) => pathname === `/${locale}` || pathname.startsWith(`/${locale}/`),

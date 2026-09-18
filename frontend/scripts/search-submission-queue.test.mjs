@@ -1,7 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { drainQueue, emptyQueue, mergeBatches, validateQueue } from './search-submission-queue.mjs';
-import { restoreQueue } from './restore-search-queue.mjs';
+import { manualBatch, restoreQueue } from './restore-search-queue.mjs';
 import { submitIndexNow } from './submit-search-engines.mjs';
 
 const urls = ['a', 'b', 'c'].map((path) => `https://www.jssngyl.cn/zh/${path}`);
@@ -101,4 +101,16 @@ test('IndexNow stops before POST if the public ownership key does not match', as
     if (key === undefined) delete process.env.INDEXNOW_KEY; else process.env.INDEXNOW_KEY = key;
     if (location === undefined) delete process.env.INDEXNOW_KEY_LOCATION; else process.env.INDEXNOW_KEY_LOCATION = location;
   }
+});
+
+test('accepts URLs named at dispatch as one single-use batch, and only from the live sitemap', () => {
+  const batch = manualBatch(`${urls[0]}\n  ${urls[1]}  \n\n${urls[0]}\n`, '42', '2');
+  assert.deepEqual(batch, { id: 'manual-42-2', urls: [urls[0], urls[1]] });
+  // Replaying the same batch id adds nothing; an address outside the sitemap is dropped.
+  const state = mergeBatches(emptyQueue(), [batch, batch, { id: 'manual-42-3', urls: ['https://www.jssngyl.cn/zh/gone'] }], urls);
+  assert.deepEqual(state.pending.indexnow, [urls[0], urls[1]]);
+  assert.equal(manualBatch('', '42', '1'), null);
+  assert.equal(manualBatch(undefined, '42', '1'), null);
+  assert.equal(manualBatch(urls[0], '7', undefined).id, 'manual-7-1');
+  assert.throws(() => manualBatch(urls[0], '', '1'), /run id/);
 });
