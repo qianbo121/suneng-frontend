@@ -21,7 +21,6 @@ import { JsonLd } from '@/components/JsonLd';
 import { GeoReviewNote } from '@/components/geo-pages/GeoPageBlocks';
 import { Breadcrumb } from '@/components/layout/Breadcrumb';
 import { ProductDetailGallery } from '@/components/products/ProductDetailGallery';
-import { AnnealingSolutionLineDetailPage } from '@/components/products/AnnealingSolutionLineDetailPage';
 import { ProductionLineDetailPage } from '@/components/products/ProductionLineDetailPage';
 import { getProductionLineContent } from '@/lib/production-line-content';
 import { FastenerLineDetailPage } from '@/components/products/FastenerLineDetailPage';
@@ -287,10 +286,6 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
       return href ? [{ ...item, href }] : [];
     });
   const isP3TrolleyPage = currentLocale === 'zh' && product.slug === 'trolley-furnace';
-
-  if (currentLocale === 'zh' && product.slug === 'annealing-solution-line') {
-    return <AnnealingSolutionLineDetailPage />;
-  }
 
   if (currentLocale === 'zh' && product.slug === 'pit-furnace') {
     return <PitFurnaceDetailPage />;
