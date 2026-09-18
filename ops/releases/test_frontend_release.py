@@ -699,5 +699,43 @@ class HealthScriptTest(unittest.TestCase):
         self.assertEqual(requests, 0)
 
 
+class ShippedExamplesTest(unittest.TestCase):
+    """The templates are what an operator copies mid-incident; keep them valid."""
+
+    def load(self, name):
+        data = json.loads((Path(__file__).with_name(name)).read_text())
+        return {key: value for key, value in data.items() if not key.startswith('_')}
+
+    def placeholder_free(self, manifest):
+        # The templates ship placeholders on purpose; validate their shape, not their values.
+        filled = dict(manifest, sourceCommit='e' * 40, archiveSha256='f' * 64,
+                      image=NEW, expectedCurrentImage=OLD)
+        if filled.get('legacyEncodedPaths'):
+            filled['image'] = LEGACY
+        return filled
+
+    def test_deploy_example_is_accepted(self):
+        manifest = self.placeholder_free(self.load('manifest.example.json'))
+        self.assertEqual(r.validate_manifest(manifest)['publicationScope'], r.SCOPE)
+
+    def test_rollback_example_is_accepted_and_carries_what_a_rollback_needs(self):
+        raw = self.load('manifest.rollback.example.json')
+        # A rollback to an earlier frontend needs the owner-approved legacy flag,
+        # and the case list it will serve afterwards.
+        self.assertTrue(raw['legacyEncodedPaths'])
+        self.assertIn('approvedCases', raw)
+        manifest = self.placeholder_free(raw)
+        self.assertEqual(r.validate_manifest(manifest)['caseState'], 'open')
+
+    def test_live_paths_agree_between_the_tool_and_the_health_script(self):
+        script = (Path(__file__).with_name('check-frontend.cjs')).read_text()
+        listed = re.search(r"const live = \[(.*?)\];", script, re.S)
+        self.assertIsNotNone(listed)
+        in_script = set(re.findall(r"'([^']+)'", listed.group(1)))
+        # The tool probes the public site with its own shorter list; every path it
+        # probes must also be one the internal health script treats as live.
+        self.assertTrue(set(r.PUBLIC_LIVE) <= in_script, set(r.PUBLIC_LIVE) - in_script)
+
+
 if __name__ == '__main__':
     unittest.main(verbosity=2)

@@ -1,0 +1,17 @@
+{
+  "_comment": "回退用清单模板。回退与发布走同一个工具，只是加 --kind rollback。三件事最容易漏：expectedCurrentImage 必须是此刻线上那一版（不是要回到的那一版）；approvedCases 要写这次回退后仍然公开的案例；回到旧版前台必须带 legacyEncodedPaths 与站长批准原话，因为旧镜像仍然放行 /zh/sol%09utions/… 这类写法。前一版本的确切镜像号记录在上一次发布的审计目录 previous.override.json 里。",
+  "schemaVersion": 1,
+  "sourceIdentity": "git-commit",
+  "sourceCommit": "REPLACE_WITH_FULL_COMMIT_OF_THE_IMAGE_YOU_ARE_ROLLING_BACK_TO",
+  "archiveSha256": "REPLACE_WITH_THAT_IMAGE_ARCHIVE_SHA256",
+  "image": "REPLACE_WITH_THAT_IMAGE_SHA256_ID",
+  "expectedCurrentImage": "REPLACE_WITH_THE_IMAGE_RUNNING_RIGHT_NOW",
+  "publicationScope": "news-products-services-company-reviewed-cases",
+  "caseState": "open",
+  "approvedCases": {
+    "zh": ["henan-annealing-solution-line"],
+    "en": ["henan-annealing-solution-line"]
+  },
+  "legacyEncodedPaths": true,
+  "legacyEncodedPathsApproval": "REPLACE_WITH_THE_SITE_OWNER_S_OWN_WORDS_AND_THE_DATE"
+}
