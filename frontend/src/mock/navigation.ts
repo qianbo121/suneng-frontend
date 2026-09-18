@@ -44,6 +44,12 @@ const chineseNavigationItems: NavigationItem[] = [
     key: 'cases',
     href: '/case',
     label: { zh: '项目案例', en: 'Project Cases' },
+    // One approved case cannot carry a top-level menu: a visitor who opens
+    // "Project Cases" and finds a single entry reads it as a single project.
+    // The page, its sitemap entry and the evidence links from product pages
+    // stay. Put it back once six to eight delivered, owner-approved cases are
+    // published (see REVIEWED_PUBLIC_CASES).
+    hiddenFromMenu: true,
   },
   {
     key: 'resources',
@@ -97,7 +103,9 @@ function getNavigationChildren(locale: Locale, item: NavigationItem) {
   return item.children?.filter((child) => !isWithdrawnTechnicalPath(localizedHref(locale, child.href)) && (locale === 'zh' || !isZhOnlyPath(child.href)));
 }
 
-export function getLocalizedNavigation(locale: Locale) {
+// Every published destination with its localized names, menu or not: the
+// breadcrumb needs a name for a page the menus leave out.
+function getLocalizedDestinations(locale: Locale) {
   const items = locale === 'zh' ? chineseNavigationItems : englishNavigationItems;
   return items.filter((item) => !isWithdrawnTechnicalPath(localizedHref(locale, item.href))).map((item) => ({
     ...item,
@@ -109,10 +117,15 @@ export function getLocalizedNavigation(locale: Locale) {
   }));
 }
 
+/** The header and drawer menus. */
+export function getLocalizedNavigation(locale: Locale) {
+  return getLocalizedDestinations(locale).filter((item) => !item.hiddenFromMenu);
+}
+
 export function getRouteLabelMap(locale: Locale) {
   const map = new Map<string, string>();
 
-  getLocalizedNavigation(locale).forEach((item) => {
+  getLocalizedDestinations(locale).forEach((item) => {
     map.set(item.href, item.labelText);
     item.children?.forEach((child) => {
       if (!map.has(child.href)) map.set(child.href, child.labelText);

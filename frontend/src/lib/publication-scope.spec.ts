@@ -149,10 +149,12 @@ describe('launch publication scope', () => {
     expect(readEnglishCases(root, undefined, new Set())).toEqual([]);
   });
 
-  it('shows the case hub in navigation without any withdrawn destination', () => {
+  it('keeps every menu destination published, with the case hub left out of the menus', () => {
     for (const locale of ['zh', 'en'] as const) {
       const entries = getLocalizedNavigation(locale);
-      expect(entries.map((item) => item.href)).toEqual(['/', '/products', '/service', '/case', '/news', '/about']);
+      // The case hub stays published but is not a menu entry while a single
+      // approved case cannot carry one; see hiddenFromMenu in mock/navigation.
+      expect(entries.map((item) => item.href)).toEqual(['/', '/products', '/service', '/news', '/about']);
       const hrefs = entries.flatMap((item) => [item.href, ...(item.children ?? []).map((child) => child.href)]);
       expect(hrefs.some((href) => isWithdrawnTechnicalPath(href === '/' ? `/${locale}` : `/${locale}${href}`))).toBe(false);
     }

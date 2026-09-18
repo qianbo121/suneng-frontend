@@ -4,22 +4,24 @@ import { getLocalizedNavigation, getRouteLabelMap } from '@/mock/navigation';
 import { PUBLIC_CASE_SLUGS } from '@/lib/cases/public-case-allowlist';
 
 describe('localized primary navigation', () => {
-  it('starts Chinese navigation with the homepage before the public hubs, including approved cases', () => {
+  it('starts Chinese navigation with the homepage before the public hubs', () => {
     expect(getLocalizedNavigation('zh').map((item) => item.key)).toEqual([
       'home',
       'products',
       'engineering',
-      'cases',
       'resources',
       'about',
     ]);
     expect(getLocalizedNavigation('zh').every((item) => !item.href.includes('#'))).toBe(true);
-    expect(getLocalizedNavigation('zh').find((item) => item.key === 'cases')).toMatchObject({ href: '/case', labelText: '项目案例' });
   });
 
-  it('shows the English case hub only because an English case page is approved', () => {
-    const cases = getLocalizedNavigation('en').filter((item) => item.key === 'cases');
-    expect(cases).toEqual([expect.objectContaining({ href: '/case', labelText: 'Project Cases' })]);
+  // A single approved case cannot carry a top-level menu. The page stays
+  // published, so its breadcrumb still needs the hub's name in both languages.
+  it('leaves the case hub out of both menus while it keeps its breadcrumb name', () => {
+    for (const locale of ['zh', 'en'] as const)
+      expect(getLocalizedNavigation(locale).filter((item) => item.key === 'cases')).toEqual([]);
+    expect(getRouteLabelMap('zh').get('/case')).toBe('项目案例');
+    expect(getRouteLabelMap('en').get('/case')).toBe('Project Cases');
   });
 
   it('keeps existing page breadcrumb names when menus are renamed or removed', () => {
