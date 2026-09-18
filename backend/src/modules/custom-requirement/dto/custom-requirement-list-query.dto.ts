@@ -1,6 +1,6 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
-import { CustomRequirementStatus } from '@prisma/client';
-import { IsEnum, IsOptional, IsString, MaxLength } from 'class-validator';
+import { CustomRequirementStatus, InquiryNotificationStatus } from '@prisma/client';
+import { IsBooleanString, IsEnum, IsOptional, IsString, MaxLength } from 'class-validator';
 
 import { PaginationQueryDto } from '@/common/dto/pagination-query.dto';
 
@@ -15,4 +15,16 @@ export class CustomRequirementListQueryDto extends PaginationQueryDto {
   @IsOptional()
   @IsEnum(CustomRequirementStatus)
   status?: CustomRequirementStatus;
+
+  @ApiPropertyOptional({ enum: InquiryNotificationStatus })
+  @IsOptional()
+  @IsEnum(InquiryNotificationStatus)
+  notificationStatus?: InquiryNotificationStatus;
+
+  // Sales needs one question answered quickly: which leads never reached the
+  // group chat? Filtering by each failure state separately is how they get missed.
+  @ApiPropertyOptional({ description: 'Only inquiries whose notification is not confirmed delivered' })
+  @IsOptional()
+  @IsBooleanString()
+  undelivered?: string;
 }

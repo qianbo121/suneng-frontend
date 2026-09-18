@@ -60,6 +60,7 @@ export type CustomRequirementListQuery = {
   pageSize?: number;
   keyword?: string;
   status?: CustomRequirementStatus;
+  undelivered?: boolean;
 };
 
 export type ManageInquiryNotificationPayload = {

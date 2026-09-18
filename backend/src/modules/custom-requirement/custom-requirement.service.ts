@@ -457,8 +457,16 @@ export class CustomRequirementService {
 
   async getAdminList(query: CustomRequirementListQueryDto) {
     const { page, pageSize, skip, take } = buildPagination(query);
+    // "Not confirmed delivered" is everything except sent; pending and sending are
+    // included on purpose, because a queue that stops moving is exactly the case
+    // the operator needs to see.
+    const undelivered = query.undelivered === 'true';
     const where: Prisma.CustomRequirementWhereInput = {
       status: query.status,
+      ...(query.notificationStatus ? { notificationStatus: query.notificationStatus } : {}),
+      ...(undelivered && !query.notificationStatus
+        ? { notificationStatus: { not: InquiryNotificationStatus.sent } }
+        : {}),
       ...(query.keyword
         ? {
             OR: [
