@@ -37,7 +37,8 @@ export async function readContentGrowth(
   scope: {
     start: Date;
     end: Date;
-    where: Prisma.Sql;
+    /** Dimension conditions only. Time, bot and verified-event filtering happens once, below. */
+    dimensionWhere: Prisma.Sql;
     notBot: Prisma.Sql;
     verified: Prisma.Sql;
     sourceType: Prisma.Sql;
@@ -46,32 +47,37 @@ export async function readContentGrowth(
 ) {
   const rows = await prisma.$queryRaw<{ payload: Payload }[]>(Prisma.sql`
     WITH content_events AS MATERIALIZED (
-      SELECT *,
+      -- Only the columns used below. Carrying every column (properties jsonb included)
+      -- through four materialized stages costs several megabytes of temporary writes.
+      -- "userAgent" is deliberately dropped here: the entry lookup below filters bots on
+      -- its own copy of the table, and keeping the column would make that unqualified
+      -- reference ambiguous with the outer row.
+      SELECT id, "eventType", "pageTitle", "pagePath", "pageType", "sourceType", "sourceDetail",
+        "deviceType", "landingPage", "sessionId", "visitorId", "createdAt", "submissionId",
         NULLIF(REGEXP_REPLACE(SPLIT_PART(SPLIT_PART("pagePath", '?', 1), '#', 1), '/+$', ''), '') AS path,
         NULLIF(REGEXP_REPLACE(SPLIT_PART(SPLIT_PART("landingPage", '?', 1), '#', 1), '/+$', ''), '') AS landing,
         NULLIF("sessionId", '') AS session_key,
-        COALESCE(NULLIF("visitorId", ''), NULLIF("sessionId", ''), 'event:' || id::text) AS identity,
-        ${scope.sourceType} AS source_type, ${scope.sourceDetail} AS source_detail
+        COALESCE(NULLIF("visitorId", ''), NULLIF("sessionId", ''), 'event:' || id::text) AS identity
       FROM "WebsiteLeadEvent"
       WHERE "createdAt" >= ${scope.start} AND "createdAt" < ${scope.end}
         AND ${scope.notBot} AND ${scope.verified}
     ), matched AS MATERIALIZED (
-      SELECT * FROM content_events WHERE ${scope.where}
+      SELECT * FROM content_events WHERE ${scope.dimensionWhere}
     ), views AS MATERIALIZED (
       SELECT * FROM matched WHERE "eventType" = 'page_view' AND path IS NOT NULL
-    ), session_keys AS (
-      SELECT DISTINCT session_key FROM views WHERE session_key IS NOT NULL
-    ), first_views AS (
-      -- Find the actual first recorded page view, including before the selected period.
-      -- A visit spanning midnight must not become a second entry on the following day.
-      SELECT DISTINCT ON (ev."sessionId") ev.id
-      FROM "WebsiteLeadEvent" ev JOIN session_keys k ON k.session_key = ev."sessionId"
-      WHERE ev."eventType" = 'page_view'
-        AND ${scope.notBot}
-      ORDER BY ev."sessionId", ev."createdAt", ev.id
     ), entries AS MATERIALIZED (
-      SELECT v.* FROM views v JOIN first_views f ON f.id = v.id
-      WHERE v.landing IS NULL OR v.path = v.landing
+      -- Each candidate looks up its own visit's first recorded page view through the
+      -- (sessionId, createdAt) index, including views before the selected period.
+      -- A visit spanning midnight must not become a second entry on the following day.
+      -- Matching against a CTE of first views instead makes the planner estimate one row
+      -- and fall back to a nested loop — 27 million row comparisons on a 30-day range.
+      SELECT v.* FROM views v
+      WHERE (v.landing IS NULL OR v.path = v.landing)
+        AND v.id = (
+          SELECT ev.id FROM "WebsiteLeadEvent" ev
+          WHERE ev."sessionId" = v.session_key AND ev."eventType" = 'page_view' AND ${scope.notBot}
+          ORDER BY ev."createdAt", ev.id LIMIT 1
+        )
     ), submissions AS MATERIALIZED (
       SELECT * FROM content_events
       WHERE "eventType" = 'form_submit' AND "submissionId" IS NOT NULL
@@ -114,8 +120,11 @@ export async function readContentGrowth(
       SELECT path, TO_CHAR("createdAt" AT TIME ZONE 'UTC' AT TIME ZONE 'Asia/Shanghai', 'YYYY-MM-DD') AS day,
         COUNT(*) AS visits FROM entries GROUP BY path, day
     ), entry_sources AS (
-      SELECT path, source_type, source_detail, COUNT(*) AS visits FROM entries
-      GROUP BY path, source_type, source_detail
+      -- Source normalisation runs here, on entry rows only. Computing it for every event
+      -- meant nine domain regexes over rows whose source is never reported.
+      SELECT path, ${scope.sourceType} AS source_type, ${scope.sourceDetail} AS source_detail,
+        COUNT(*) AS visits FROM entries
+      GROUP BY path, 2, 3
     ), global_daily AS (
       SELECT day, SUM(visits) AS visits FROM entry_daily GROUP BY day
     ), global_sources AS (
@@ -144,8 +153,13 @@ export async function readContentGrowth(
         SELECT 1 FROM associations a WHERE a."submissionId" = s."submissionId"
       )),
       'unidentifiedPageViews', (SELECT COUNT(*) FROM views WHERE session_key IS NULL),
-      'uncertainEntryVisits', (SELECT COUNT(*) FROM views v JOIN first_views f ON f.id = v.id
-        WHERE v.landing IS NOT NULL AND v.path <> v.landing),
+      'uncertainEntryVisits', (SELECT COUNT(*) FROM views v
+        WHERE v.landing IS NOT NULL AND v.path <> v.landing
+          AND v.id = (
+            SELECT ev.id FROM "WebsiteLeadEvent" ev
+            WHERE ev."sessionId" = v.session_key AND ev."eventType" = 'page_view' AND ${scope.notBot}
+            ORDER BY ev."createdAt", ev.id LIMIT 1
+          )),
       'daily', COALESCE((SELECT JSONB_AGG(JSONB_BUILD_OBJECT('date', day, 'visits', visits) ORDER BY day)
         FROM global_daily), '[]'::jsonb),
       'sources', COALESCE((SELECT JSONB_AGG(JSONB_BUILD_OBJECT('sourceType', source_type, 'visits', visits)

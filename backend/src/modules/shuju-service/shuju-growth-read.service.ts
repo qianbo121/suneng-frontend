@@ -239,10 +239,14 @@ export class ShujuGrowthReadService {
       Prisma.sql`"createdAt" >= ${qualityStart}`,
       Prisma.sql`"createdAt" < ${endExclusive}`,
     ];
+    // 内容聚合自己已经按时间、机器人和有效事件筛过一遍，所以只把维度条件交给它，
+    // 否则同一批正则会在两层各跑一次（30 天区间实测多付约 1.5 秒）。
+    const contentDimensionFilters: Prisma.Sql[] = [];
     const addDimensionFilter = (filter: Prisma.Sql) => {
       filters.push(filter);
       qualityFilters.push(filter);
       deviceCoverageFilters.push(filter);
+      contentDimensionFilters.push(filter);
     };
     if (query.site && query.site !== 'all') {
       addDimensionFilter(
@@ -252,6 +256,7 @@ export class ShujuGrowthReadService {
     if (query.device && query.device !== 'all') {
       filters.push(Prisma.sql`"deviceType" = ${query.device}`);
       qualityFilters.push(Prisma.sql`"deviceType" = ${query.device}`);
+      contentDimensionFilters.push(Prisma.sql`"deviceType" = ${query.device}`);
     }
     if (query.sourceType && query.sourceType !== 'all') {
       addDimensionFilter(Prisma.sql`${NORMALIZED_SOURCE_TYPE} = ${query.sourceType}`);
@@ -623,7 +628,9 @@ export class ShujuGrowthReadService {
     const content = await readContentGrowth(this.prisma, {
       start,
       end: endExclusive,
-      where,
+      dimensionWhere: contentDimensionFilters.length
+        ? Prisma.join(contentDimensionFilters, ' AND ')
+        : Prisma.sql`TRUE`,
       notBot: NOT_BOT,
       verified: VERIFIED_EVENT,
       sourceType: NORMALIZED_SOURCE_TYPE,
