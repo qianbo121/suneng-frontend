@@ -38,6 +38,20 @@ integration('content growth against PostgreSQL', () => {
     );
     await client.query(`CREATE TEMP TABLE "WebsiteLeadEvent" (${columns.join(',')})`);
     await client.query('CREATE INDEX ON "WebsiteLeadEvent" ("sessionId", "createdAt")');
+    // The bot flag is a generated column, so Prisma's schema does not describe it and the
+    // loop above cannot derive it. Run the migration itself against the temp table (which
+    // shadows the real one) rather than restating the definition, so this test can never
+    // drift from what production computes.
+    await client.query(
+      readFileSync(
+        join(
+          __dirname,
+          '../../..',
+          'prisma/migrations/20260918160000_website_lead_event_is_bot/migration.sql',
+        ),
+        'utf8',
+      ),
+    );
     const event = async (
       type: string,
       path: string,

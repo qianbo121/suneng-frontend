@@ -1,3 +1,6 @@
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
+
 import { BadRequestException } from '@nestjs/common';
 
 import {
@@ -290,10 +293,21 @@ describe('ShujuGrowthReadService', () => {
     );
     expect(business.length).toBeGreaterThan(1);
     for (const sql of business) {
-      expect(sql).toContain('userAgent');
+      expect(sql).toContain('isBot');
     }
-    // 服务端写的 form_submit 不带 userAgent，必须放行 NULL，否则询盘会被整批过滤掉
-    expect(statements.some((sql) => sql.includes('IS NULL'))).toBe(true);
+    // 服务端写的 form_submit 不带 userAgent，必须放行 NULL，否则询盘会被整批过滤掉。
+    // 这个放行现在由生成列的定义保证，不再靠每条查询自己写 IS NULL——所以在这里断言定义本身。
+    const migration = readFileSync(
+      join(
+        __dirname,
+        '../../..',
+        'prisma/migrations/20260918160000_website_lead_event_is_bot/migration.sql',
+      ),
+      'utf8',
+    );
+    expect(migration).toContain('"userAgent" IS NOT NULL');
+    expect(migration).toContain('GENERATED ALWAYS AS');
+    expect(migration).toContain('STORED');
     // 过滤了多少要能看见，不能悄悄少掉
     expect(result.botFiltered).toEqual(expect.objectContaining({ visitors: 0, events: 0 }));
     expect(result.botFiltered.pattern).toContain('spider');
@@ -521,7 +535,7 @@ describe('ShujuGrowthReadService', () => {
     const regionQuery = statements.find((sql) => sql.includes('GROUP BY r.\\"province\\"'));
     expect(regionQuery).toBeDefined();
     // 地区只统计停留 5 秒以上访客；仍不能套用“20秒+交互”的有效访问门。
-    expect(regionQuery).toContain('userAgent');
+    expect(regionQuery).toContain('isBot');
     expect(regionQuery).toContain('dwell_visitors');
     expect(regionQuery).toContain("= 'dwell_5s'");
     expect(regionQuery).not.toContain("= 'effective_interaction'");
@@ -583,7 +597,7 @@ describe('ShujuGrowthReadService', () => {
     expect(exitQuery).toContain('DISTINCT ON');
     expect(exitQuery).toContain("'page_view'");
     // 退出页是事实：排机器人，但不能被质量门过滤。
-    expect(exitQuery).toContain('userAgent');
+    expect(exitQuery).toContain('isBot');
     expect(exitQuery).not.toContain("= 'effective_interaction'");
     expect(exitQuery).not.toContain("= 'dwell_20s'");
     expect(result).toHaveProperty('exits');
