@@ -41,12 +41,17 @@ export class AppController {
       await Promise.race([
         this.prisma.$queryRaw`SELECT 1`,
         new Promise((_resolve, reject) => {
-          timer = setTimeout(() => reject(new Error('database probe timed out')), DATABASE_PROBE_TIMEOUT_MS);
+          timer = setTimeout(
+            () => reject(new Error('database probe timed out')),
+            DATABASE_PROBE_TIMEOUT_MS,
+          );
         }),
       ]);
       return true;
     } catch (error) {
-      this.logger.error(`health probe failed: ${error instanceof Error ? error.name : 'unknown error'}`);
+      this.logger.error(
+        `health probe failed: ${error instanceof Error ? error.name : 'unknown error'}`,
+      );
       return false;
     } finally {
       if (timer) clearTimeout(timer);

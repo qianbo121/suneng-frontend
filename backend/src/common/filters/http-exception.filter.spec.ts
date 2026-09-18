@@ -65,16 +65,22 @@ describe('HttpExceptionFilter database availability', () => {
   });
 
   // An inquiry that cannot be stored must never look like a client mistake.
-  it.each(['P1001', 'P1017', 'P2024'])('answers 503 and logs when the database fails with %s', (code) => {
-    const { status, json } = capture(
-      new PrismaClientKnownRequestError('connection lost', { code, clientVersion: 'test' }),
-    );
-    expect(status).toHaveBeenCalledWith(HttpStatus.SERVICE_UNAVAILABLE);
-    expect(json).toHaveBeenCalledWith(
-      expect.objectContaining({ code: HttpStatus.SERVICE_UNAVAILABLE, message: 'Service temporarily unavailable' }),
-    );
-    expect(logError).toHaveBeenCalled();
-  });
+  it.each(['P1001', 'P1017', 'P2024'])(
+    'answers 503 and logs when the database fails with %s',
+    (code) => {
+      const { status, json } = capture(
+        new PrismaClientKnownRequestError('connection lost', { code, clientVersion: 'test' }),
+      );
+      expect(status).toHaveBeenCalledWith(HttpStatus.SERVICE_UNAVAILABLE);
+      expect(json).toHaveBeenCalledWith(
+        expect.objectContaining({
+          code: HttpStatus.SERVICE_UNAVAILABLE,
+          message: 'Service temporarily unavailable',
+        }),
+      );
+      expect(logError).toHaveBeenCalled();
+    },
+  );
 
   it('answers 503 and logs when the client cannot initialise', () => {
     const { status } = capture(

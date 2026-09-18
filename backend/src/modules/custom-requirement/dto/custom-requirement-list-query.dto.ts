@@ -23,7 +23,9 @@ export class CustomRequirementListQueryDto extends PaginationQueryDto {
 
   // Sales needs one question answered quickly: which leads never reached the
   // group chat? Filtering by each failure state separately is how they get missed.
-  @ApiPropertyOptional({ description: 'Only inquiries whose notification is not confirmed delivered' })
+  @ApiPropertyOptional({
+    description: 'Only inquiries whose notification is not confirmed delivered',
+  })
   @IsOptional()
   @IsBooleanString()
   undelivered?: string;

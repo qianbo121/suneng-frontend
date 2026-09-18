@@ -20,7 +20,9 @@ describe('inquiry release contract', () => {
     const health = { status: jest.fn() };
     const prisma = { $queryRaw: jest.fn(async () => [{ ok: 1 }]) } as never;
     return expect(
-      new AppController(prisma).getHealth(health as never).then((body) => body.inquiryContractVersion),
+      new AppController(prisma)
+        .getHealth(health as never)
+        .then((body) => body.inquiryContractVersion),
     ).resolves.toBe(2);
   });
 
