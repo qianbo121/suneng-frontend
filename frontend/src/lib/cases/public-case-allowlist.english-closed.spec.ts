@@ -25,7 +25,7 @@ vi.mock('@/lib/api/news', () => ({
 
 import { isWithdrawnTechnicalPath } from '@/lib/publication-scope';
 import { isZhOnlyPath, localizeOrHideHref } from '@/lib/i18n/zh-only';
-import { getLocalizedNavigation } from '@/mock/navigation';
+import { getLocalizedNavigation, getRouteLabelMap } from '@/mock/navigation';
 import { getPublicCases } from './server';
 import { getEnglishCases } from './english';
 import buildSitemap from '@/app/sitemap';
@@ -44,9 +44,13 @@ describe('a case approved in Chinese only', () => {
     expect(getEnglishCases()).toEqual([]);
   });
 
-  it('shows the case hub only in the Chinese menu and never switches readers to a missing English page', () => {
-    expect(getLocalizedNavigation('zh').some((item) => item.key === 'cases')).toBe(true);
-    expect(getLocalizedNavigation('en').some((item) => item.key === 'cases')).toBe(false);
+  it('names the case hub only for Chinese readers and never switches them to a missing English page', () => {
+    // Neither menu lists the hub now, so the locale gate is read where it still
+    // shows: the breadcrumb names the hub in Chinese and must not in English.
+    for (const locale of ['zh', 'en'] as const)
+      expect(getLocalizedNavigation(locale).some((item) => item.key === 'cases')).toBe(false);
+    expect(getRouteLabelMap('zh').get('/case')).toBe('项目案例');
+    expect(getRouteLabelMap('en').has('/case')).toBe(false);
     expect(isZhOnlyPath('/zh/case')).toBe(true);
     expect(isZhOnlyPath(`/zh/case/${henan}`)).toBe(true);
     expect(localizeOrHideHref(`/zh/case/${henan}`, 'en')).toBeNull();

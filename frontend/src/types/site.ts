@@ -16,6 +16,8 @@ export type NavigationItem = {
   href: string;
   label: LocalizedText;
   children?: NavigationChildItem[];
+  /** Keeps the page and its breadcrumb name, but leaves it out of the menus. */
+  hiddenFromMenu?: boolean;
 };
 
 export type ToolbarItem = {
