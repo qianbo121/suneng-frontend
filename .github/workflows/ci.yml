@@ -37,6 +37,7 @@ jobs:
           # the middle must not be hidden by the last one succeeding.
           set -euo pipefail
           python3 scripts/test_deploy_preflight.py
+          python3 scripts/test_backup_sh.py
           python3 ops/releases/test_frontend_release.py
           python3 ops/releases/test_deployment_notice.py
           python3 ops/releases/test_data_backup.py
