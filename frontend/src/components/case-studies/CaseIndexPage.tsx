@@ -3,7 +3,7 @@
 import { JsonLd } from '@/components/JsonLd';
 import { HiOutlineArrowPath, HiOutlineMagnifyingGlass } from 'react-icons/hi2';
 import { getCaseOptions, getCaseResults, getPublicCases } from '@/lib/cases/server';
-import { caseListHref } from '@/lib/cases/query';
+import { caseListHref, hasCaseSearch } from '@/lib/cases/query';
 import { CASE_TYPE_LABELS, type CaseFilterKey, type CaseQuery } from '@/lib/cases/types';
 import { absoluteUrl } from '@/lib/seo/metadata';
 import { getBreadcrumbJsonLd } from '@/lib/seo/jsonld';
@@ -159,22 +159,26 @@ export function CaseIndexPage({ query }: { query: CaseQuery }) {
       <JsonLd
         id="case-list-jsonld"
         data={[
-          {
-            '@context': 'https://schema.org',
-            '@type': 'CollectionPage',
-            name: '项目案例',
-            url,
-            mainEntity: {
-              '@type': 'ItemList',
-              numberOfItems: result.items.length,
-              itemListElement: result.items.map((item, index) => ({
-                '@type': 'ListItem',
-                position: index + 1,
-                url: absoluteUrl(`/zh/case/${item.slug}`),
-                name: item.title,
-              })),
-            },
-          },
+          // Filtered views are excluded from the index, and an empty page is not a
+          // collection worth describing; neither should claim to be one.
+          ...(hasCaseSearch(query) || result.items.length === 0
+            ? []
+            : [{
+              '@context': 'https://schema.org',
+              '@type': 'CollectionPage',
+              name: '项目案例',
+              url,
+              mainEntity: {
+                '@type': 'ItemList',
+                numberOfItems: result.items.length,
+                itemListElement: result.items.map((item, index) => ({
+                  '@type': 'ListItem',
+                  position: index + 1,
+                  url: absoluteUrl(`/zh/case/${item.slug}`),
+                  name: item.title,
+                })),
+              },
+            }]),
           getBreadcrumbJsonLd([
             { name: '首页', url: '/zh' },
             { name: '项目案例', url: '/zh/case' },
