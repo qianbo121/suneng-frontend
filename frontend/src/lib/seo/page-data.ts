@@ -1,4 +1,3 @@
-import { servicePages } from '@/components/service-pages/service-content';
 import { getProductionLineContent } from '@/lib/production-line-content';
 import { DEFAULT_TITLE } from '@/lib/seo/config';
 
@@ -408,36 +407,4 @@ export const TSINGSHAN_1250_CASE_SEO = {
   modifiedTime: '2026-07-31T17:13:36+08:00',
 };
 
-export const JINING_SUPPORT_ROLLER_CASE_SEO = {
-  title: '济宁支重轮热处理生产线案例｜连续加热、自动淬火与回火冷却',
-  description:
-    '苏能工业炉为济宁市五创机械有限公司提供 PC200 至 PC400 支重轮热处理生产线方案，加热炉额定温度 950℃、有效加热区约 6400×300×300mm，资料设计处理能力约 500kg/h。',
-  keywords: [
-    '济宁支重轮热处理生产线',
-    '支重轮热处理生产线',
-    '工程机械零部件热处理线',
-    '支重轮淬火回火生产线',
-    '连续热处理生产线案例',
-  ],
-  ogImage: '/images/products/roller-mesh-belt-line/gallery/line-01.jpg',
-  canonicalUrl: 'https://www.jssngyl.cn/zh/case/jining-support-roller-heat-treatment-line',
-  publishedTime: '2026-07-24T20:30:00+08:00',
-  modifiedTime: '2026-07-29T18:30:00+08:00',
-};
 
-export const HENAN_ANNEALING_SOLUTION_CASE_SEO = {
-  title: '河南连续退火固溶生产线案例｜不锈钢退洗线退火固溶段设备',
-  description:
-    '苏能工业炉为河南金誉邦实业有限公司 850mm 热轧不锈钢连续退火钝化线提供退火固溶段设备；退火温度约 1050–1150℃、炉温最高 1300℃、炉体主体约 130m。',
-  keywords: [
-    '河南连续退火固溶生产线',
-    '退火固溶段设备',
-    '不锈钢连续退洗线',
-    '不锈钢带材连续退火',
-    '连续热处理生产线案例',
-  ],
-  ogImage: '/images/products/annealing-solution-line/gallery/line-01.jpg',
-  canonicalUrl: 'https://www.jssngyl.cn/zh/case/henan-annealing-solution-line',
-  publishedTime: '2026-07-24T20:30:00+08:00',
-  modifiedTime: '2026-07-29T18:30:00+08:00',
-};
