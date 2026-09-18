@@ -16,6 +16,7 @@ import { Locale } from '@/types/site';
 
 import { NewsCardImage } from './NewsCardImage';
 import styles from './NewsDecisionCenter.module.css';
+import { DEFAULT_NEWS_SORT } from '@/lib/news-decision-center';
 
 type NewsListCardsProps = {
   locale: Locale;
@@ -96,7 +97,7 @@ export function NewsListCards({
   query = '',
   topic = 'all',
   furnace = 'all',
-  sort = 'recommended',
+  sort = DEFAULT_NEWS_SORT,
   prefetchPages,
 }: NewsListCardsProps) {
   const normalized = items.slice(0, pageSize);

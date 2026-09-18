@@ -45,8 +45,14 @@ export const NEWS_CENTER_FAQS = [
 
 export type NewsSort = 'recommended' | 'updated';
 
+// The resource centre defaults to newest first. "Recommended" ranks by view
+// count, which buried every freshly published article behind everything that
+// had ever been read: a new page cannot earn views while it sits on the last
+// page, and it sits there because it has no views.
+export const DEFAULT_NEWS_SORT: NewsSort = 'updated';
+
 export function normalizeNewsSort(value?: string): NewsSort {
-  return value === 'updated' ? 'updated' : 'recommended';
+  return value === 'recommended' ? 'recommended' : DEFAULT_NEWS_SORT;
 }
 
 export type NewsDecisionFilters = {
@@ -130,7 +136,7 @@ function views(item: NewsListCardItem) {
 
 export function isFeaturedNewsPage(filters: NewsDecisionFilters & { page?: number }) {
   return (
-    normalizeNewsSort(filters.sort) === 'recommended' &&
+    normalizeNewsSort(filters.sort) === DEFAULT_NEWS_SORT &&
     (filters.page ?? 1) === 1 &&
     !filters.query?.trim() &&
     normalizeNewsDecisionTopic(filters.topic) === 'all' &&
@@ -189,7 +195,9 @@ export function buildNewsDecisionHref(
   const topic = normalizeNewsDecisionTopic(filters.topic);
   const furnace = normalizeNewsFurnaceFilter(filters.furnace);
 
-  if (normalizeNewsSort(filters.sort) === 'updated') params.set('sort', 'updated');
+  // Only the non-default order is spelled out, so the plain list URL stays canonical.
+  const sort = normalizeNewsSort(filters.sort);
+  if (sort !== DEFAULT_NEWS_SORT) params.set('sort', sort);
   if (query) params.set('q', query);
   if (topic !== 'all') params.set('topic', topic);
   if (furnace !== 'all') params.set('furnace', furnace);

@@ -12,6 +12,7 @@ import {
 } from '@/lib/news-decision-center';
 import { useNewsListState } from './NewsListInteractive';
 import styles from './NewsDecisionCenter.module.css';
+import { DEFAULT_NEWS_SORT } from '@/lib/news-decision-center';
 
 export function NewsSearchForm({
   locale = 'zh',
@@ -83,7 +84,7 @@ export function NewsSearchForm({
       {current.furnace !== 'all' && (
         <input type="hidden" name="furnace" value={current.furnace} />
       )}
-      {current.sort === 'updated' && <input type="hidden" name="sort" value={current.sort} />}
+      {current.sort !== DEFAULT_NEWS_SORT && <input type="hidden" name="sort" value={current.sort} />}
       <button className={styles.searchButton} type="submit" disabled={disabled}>
         {locale === 'en' ? 'Search' : '搜索'}
       </button>

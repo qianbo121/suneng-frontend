@@ -32,12 +32,22 @@ describe('resource center sorting contract', () => {
     const items = Array.from({ length: 110 }, (_, i) => article(i + 1, i));
     items[0] = article(1, 2, '2026-09-08', '热处理生产线备件和售后怎么约定？');
     items[109] = article(110, 109, '2026-06-01', '技术交流活动');
+    // The default order is newest first, so the most recently updated article
+    // leads even though 109 others have more views.
     expect(
       filterAndSortNewsDecisionItems(items)
+        .slice(0, 3)
+        .map((a) => a.id),
+    ).toEqual([1, 2, 3]);
+    expect(filterAndSortNewsDecisionItems(items).at(-1)?.id).toBe(110);
+    // "Recommended" still ranks by views across the whole set.
+    expect(
+      filterAndSortNewsDecisionItems(items, { sort: 'recommended' })
         .slice(0, 6)
         .map((a) => a.id),
     ).toEqual([110, 109, 108, 107, 106, 105]);
     const filtered = filterAndSortNewsDecisionItems(items, {
+      sort: 'recommended',
       query: '台车炉',
       furnace: 'trolley',
       topic: 'procurement',
@@ -52,10 +62,10 @@ describe('resource center sorting contract', () => {
       article(2, 12),
       article(1, undefined, '2026-09-08'),
     ];
-    expect(filterAndSortNewsDecisionItems(items).map((a) => a.id)).toEqual([4, 2, 3, 1]);
-    expect(filterAndSortNewsDecisionItems([...items].reverse()).map((a) => a.id)).toEqual([
-      4, 2, 3, 1,
-    ]);
+    expect(filterAndSortNewsDecisionItems(items, { sort: 'recommended' }).map((a) => a.id)).toEqual([4, 2, 3, 1]);
+    expect(
+      filterAndSortNewsDecisionItems([...items].reverse(), { sort: 'recommended' }).map((a) => a.id),
+    ).toEqual([4, 2, 3, 1]);
     expect(
       filterAndSortNewsDecisionItems([article(2, undefined), article(1, 0)]).map((a) => a.id),
     ).toEqual([1, 2]);
@@ -70,28 +80,32 @@ describe('resource center sorting contract', () => {
       2, 3, 1,
     ]);
   });
-  it('only features the unfiltered first recommended page', () => {
+  it('only features the unfiltered first page in the default order', () => {
     expect(isFeaturedNewsPage({})).toBe(true);
+    expect(isFeaturedNewsPage({ sort: 'updated' })).toBe(true);
     for (const filters of [
       { page: 2 },
       { query: '台车炉' },
       { topic: 'selection' },
       { furnace: 'line' },
-      { sort: 'updated' },
+      { sort: 'recommended' },
     ])
       expect(isFeaturedNewsPage(filters)).toBe(false);
   });
   it('preserves filter identifiers and ordering in refresh/back URLs while resetting page', () => {
-    const filters = { query: ' 报价 ', topic: 'procurement', furnace: 'trolley', sort: 'updated' };
+    // 'recommended' is the non-default order, so it has to survive in the URL;
+    // the default order is left out to keep the plain list address canonical.
+    const filters = { query: ' 报价 ', topic: 'procurement', furnace: 'trolley', sort: 'recommended' };
     const url = new URL(buildNewsDecisionHref('/zh/news', { ...filters, page: 3 }), 'http://local');
     expect(Object.fromEntries(url.searchParams)).toEqual({
-      sort: 'updated',
+      sort: 'recommended',
       q: '报价',
       topic: 'procurement',
       furnace: 'trolley',
       page: '3',
     });
     expect(buildNewsDecisionHref('/zh/news', filters)).not.toContain('page=');
+    expect(buildNewsDecisionHref('/zh/news', { sort: 'updated' })).toBe('/zh/news');
   });
   it('does not assign general comparisons to an incidental single furnace in their body', () => {
     const item = {
