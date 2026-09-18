@@ -13,6 +13,21 @@ import {
   PrismaClientValidationError,
 } from '@prisma/client/runtime/library';
 
+// A request the database could not serve is not a client mistake: these mean the
+// database is unreachable, still starting, out of connections or timing out. They
+// must answer 503 and always be logged, or a failing database silently looks like
+// a stream of bad requests.
+const DATABASE_UNAVAILABLE_CODES = new Set([
+  'P1000', // authentication failed
+  'P1001', // cannot reach database server
+  'P1002', // database server timeout
+  'P1008', // operation timed out
+  'P1017', // server closed the connection
+  'P2024', // timed out fetching a connection from the pool
+  'P2028', // transaction API error
+  'P2034', // write conflict / deadlock, safe to retry
+]);
+
 @Catch()
 export class HttpExceptionFilter implements ExceptionFilter {
   private readonly logger = new Logger(HttpExceptionFilter.name);
@@ -40,13 +55,16 @@ export class HttpExceptionFilter implements ExceptionFilter {
       } else if (exception.code === 'P2025') {
         status = HttpStatus.NOT_FOUND;
         message = 'Record not found';
+      } else if (DATABASE_UNAVAILABLE_CODES.has(exception.code)) {
+        status = HttpStatus.SERVICE_UNAVAILABLE;
+        message = 'Service temporarily unavailable';
       } else {
         message = `Database error: ${exception.code}`;
       }
-    } else if (
-      exception instanceof PrismaClientValidationError ||
-      exception instanceof PrismaClientInitializationError
-    ) {
+    } else if (exception instanceof PrismaClientInitializationError) {
+      status = HttpStatus.SERVICE_UNAVAILABLE;
+      message = 'Service temporarily unavailable';
+    } else if (exception instanceof PrismaClientValidationError) {
       status = HttpStatus.BAD_REQUEST;
       message = 'Database request validation failed';
     }
@@ -59,6 +77,11 @@ export class HttpExceptionFilter implements ExceptionFilter {
     if (status >= HttpStatus.INTERNAL_SERVER_ERROR) {
       const error = exception instanceof Error ? exception.stack : JSON.stringify(exception);
       this.logger.error(`${request.method} ${safePath}`, error);
+    } else if (!(exception instanceof HttpException)) {
+      // Database-shaped failures that legitimately stay 4xx (a unique constraint, an
+      // unknown sort column) still deserve one line, or they are invisible afterwards.
+      const name = exception instanceof Error ? exception.name : 'UnknownError';
+      this.logger.warn(`${request.method} ${safePath} -> ${status} ${name}`);
     }
 
     response.status(status).json({
