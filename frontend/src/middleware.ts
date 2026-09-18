@@ -5,6 +5,7 @@ import type { NextRequest } from 'next/server';
 
 import { FALLBACK_NEWS_SLUGS } from '@/constants/news-fallback-slugs';
 import { isLocalizedPublicPath, PUBLIC_PAGE_CACHE_CONTROL, routing } from '@/i18n/routing';
+import { isZhOnlyPath } from '@/lib/i18n/zh-only';
 import { isInternalNewsListPath } from '@/lib/news-list-prerender';
 import { getNewsRouteAvailability, getZhNewsSlug, newsNotFoundHtml } from '@/lib/news-route-guard';
 
@@ -56,9 +57,26 @@ function isMisspelledNewsList(pathname: string, searchParams: URLSearchParams) {
   return pages.length > 1 || (pages.length === 1 && !/^[1-9]\d*$/.test(pages[0]));
 }
 
+// Chinese-only pages have no English edition. A page-level notFound() is
+// encoded inside the React stream while the outer response stays 200, which a
+// crawler reads as a soft 404 even though the body already carries noindex.
+// Refuse them here so the status code matches the body. Checked both ways round
+// for the same reason isRefusedPath is: the widest reading of the path and the
+// literal one Next uses for route parameters.
+const EN_PREFIX = /^\/en(?=\/|$)/i;
+function isZhOnlyEnglishPath(pathname: string) {
+  const routable = routablePathname(pathname);
+  if (!EN_PREFIX.test(routable)) return false;
+  // isZhOnlyPath strips the locale case-sensitively, so /EN/... would keep its
+  // prefix and miss the list.
+  const lower = (path: string) => path.replace(EN_PREFIX, '/en');
+  return isZhOnlyPath(lower(routable)) || isZhOnlyPath(lower(pathname));
+}
+
 export default async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
   if (isRefusedPath(pathname)) return withdrawnResponse(pathname);
+  if (isZhOnlyEnglishPath(pathname)) return withdrawnResponse('/en');
   if (pathname === '/') return permanentRedirect(request, '/zh');
   const hasLocalePrefix = routing.locales.some(
     (locale) => pathname === `/${locale}` || pathname.startsWith(`/${locale}/`),

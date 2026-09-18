@@ -1,0 +1,74 @@
+# Tells search engines which pages changed. A success receipt means the request
+# was accepted, not that a page is indexed. See docs/seo-geo/search-submission-queue.md.
+#
+# Releases are prepared by Prepare Immutable Frontend Candidate / Prepare Unified
+# Website Release and then switched over by hand on the server, so no workflow
+# completion proves the new pages are live. Run this by hand after a release
+# (optionally pasting the URLs), and let the daily run clear the backlog.
+name: Search Submission Queue
+
+on:
+  workflow_run:
+    workflows: [Build And Deploy]
+    types: [completed]
+    branches: [main]
+  schedule:
+    # 04:17 Asia/Shanghai. Revisit deferred URLs after the daily budget resets.
+    - cron: '17 20 * * *'
+  workflow_dispatch:
+    inputs:
+      urls:
+        description: >-
+          Optional. Newline-separated URLs to notify, for a release switched
+          over by hand. Only addresses in the live sitemap are submitted.
+        required: false
+        type: string
+
+permissions:
+  contents: read
+  actions: read
+
+concurrency:
+  group: search-submission-queue
+  cancel-in-progress: false
+
+jobs:
+  submit:
+    if: github.ref == 'refs/heads/main' && (github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success')
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: main
+          persist-credentials: false
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22.23.1
+      - name: Restore queue and collect unprocessed deployment batches
+        id: restore
+        env:
+          GH_TOKEN: ${{ github.token }}
+          MANUAL_URLS: ${{ inputs.urls }}
+        run: node frontend/scripts/restore-search-queue.mjs
+      - name: Submit within the daily budget
+        env:
+          NEXT_PUBLIC_SITE_URL: https://www.jssngyl.cn
+          INDEXNOW_KEY: ${{ secrets.INDEXNOW_KEY }}
+          INDEXNOW_KEY_LOCATION: ${{ vars.INDEXNOW_KEY_LOCATION }}
+          BAIDU_TOKEN: ${{ secrets.BAIDU_TOKEN }}
+          BAIDU_SITE: ${{ vars.BAIDU_SITE || 'https://www.jssngyl.cn' }}
+          BAIDU_PUSH_MAX_URLS: ${{ vars.BAIDU_PUSH_MAX_URLS || '10' }}
+        run: |
+          set -euo pipefail
+          node frontend/scripts/search-submission-queue.mjs --state-file="$RUNNER_TEMP/search-queue.json" --batches-file="$RUNNER_TEMP/search-batches.json" 2>&1 | tee "$RUNNER_TEMP/search-submission.log"
+      - name: Preserve queue even when a search engine rejects the request
+        if: always() && steps.restore.outcome == 'success'
+        uses: actions/upload-artifact@v4
+        with:
+          name: search-queue-state-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            ${{ runner.temp }}/search-queue.json
+            ${{ runner.temp }}/search-submission.log
+          retention-days: 90
+          if-no-files-found: error

@@ -107,7 +107,13 @@ export function NewsDecisionCenter({
           </nav>
           <div className={styles.titleSearchRow}>
             <div>
-              <h1 className={styles.pageTitle}>{t('工业炉选型与采购资料')}</h1>
+              {/* A skeleton never owns the section heading: this fallback also wraps
+                  /news/[slug], so an <h1> here ships a duplicate on every article. */}
+              {loading ? (
+                <p className={styles.pageTitle}>{t('工业炉选型与采购资料')}</p>
+              ) : (
+                <h1 className={styles.pageTitle}>{t('工业炉选型与采购资料')}</h1>
+              )}
               <p className={styles.pageDescription}>
                 {t('了解设备选型、报价参数、工艺质量、工程验收与维修改造。')}
               </p>
