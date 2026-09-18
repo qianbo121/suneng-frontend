@@ -54,35 +54,15 @@ pnpm dev:admin
 
 ## 生产部署
 
-生产发布以根目录 `DEPLOY.md` 和 `deploy.sh` 为准，最简单一键发布是：
+**唯一入口是 [DEPLOY.md](DEPLOY.md)，请先读它。** 合并 `main` 不会自动发布，`deploy.sh` 也不再是发布方式。
 
-```bash
-./scripts/release-one-click.sh
-```
+当前流程：从已通过 CI 的 `main` 提交构建固定程序包，导入服务器后用 `ops/releases/frontend_release.py` 明确执行替换，只换前台。命令与清单样例见 [固定程序包发布说明](ops/releases/README.md)。
 
-它会执行：
+不要做这三件事：
 
-- 校验工作区干净
-- 运行后端最小门禁（`pnpm --dir backend test`）
-- 将当前改动推到一个独立发布分支
-  - 当你当前在 `main`，脚本会自动创建 `release/YYYYMMDD-HHMM` 分支
-  - 当你当前在功能分支，直接以当前分支名发布
-- 输出 `main` 到该分支的 PR 对比链接，供你在 GitHub 上发起合并
-
-**本脚本不会触发部署。**
-
-请在 PR 通过三组 CI（Backend / Frontend / Admin）后合并，
-合并动作会触发 `Build And Deploy` 自动发布。
-
-如果你要纯手工，也可直接用：
-
-```bash
-cp .env.production.example .env.production
-vim .env.production
-./deploy.sh
-```
-
-`deploy.sh` 会执行生产镜像构建（默认保留 Docker layer cache）、部署前备份、Prisma 迁移、滚动启动、nginx reload 和后端健康检查。不要用本地 `docker compose up -d --build` 作为生产发布流程。
+- 不要运行 `deploy.sh` 或 `scripts/release-one-click.sh`（历史整站流程，会在生产机重建镜像并执行数据库迁移）
+- 不要手动触发已停用的 `Build And Deploy` 工作流
+- 不要删除生产目录里的 `verified-images.override.yml`、`RELEASE_ARTIFACTS.json`、`DEPLOYMENT_IN_PROGRESS.json`（它们是发布保护与运行身份记录）
 
 生产默认访问地址：
 
