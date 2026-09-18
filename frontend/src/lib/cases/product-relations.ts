@@ -1,5 +1,5 @@
 import 'server-only';
-import relations from './product-relations.json';
+import relationsData from './product-relations.json';
 import { getPublicCases } from './server';
 import { getEnglishCases } from './english';
 import { getStaticProductBySlug } from '@/constants/static-products';
@@ -7,6 +7,23 @@ import { getAdditionalFurnace } from '@/lib/additional-furnaces';
 import { getHeatTreatmentLine } from '@/lib/heat-treatment-lines';
 import { localizeOrHideHref } from '@/lib/i18n/zh-only';
 import type { Locale } from '@/types/site';
+
+/**
+ * Declared rather than inferred from the JSON: `note` and `entry` are only
+ * present on some rows, so inference made the record shape depend on which
+ * cases happened to be in the file.
+ */
+export type CaseProductRelation = {
+  number: number;
+  caseId: string;
+  products: string[];
+  entry: string | null;
+  focus: string;
+  scope: string;
+  note?: Record<Locale, string>;
+};
+
+const relations: readonly CaseProductRelation[] = relationsData as CaseProductRelation[];
 
 export const CASE_EVIDENCE_ID = 'related-case-evidence';
 export const caseProductRelations = relations;

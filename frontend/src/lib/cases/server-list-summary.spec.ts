@@ -19,7 +19,10 @@ vi.mock('./query', async (original) => {
 });
 import { getCaseResults, readCaseDirectory } from './server';
 import { parseCaseQuery } from './query';
-import comparison from '../../../content/cases/alloy-bar-plate-handling-202607-proposal.json';
+// A retired draft kept only as a test fixture. It lives outside content/cases
+// so the case reader can never publish it, and it exercises the two-furnace
+// summary rewriting that no surviving case happens to contain.
+import comparison from './__fixtures__/list-presentation-case.json';
 
 describe('case list wording', () => {
   it('rewrites list summaries on the server before cards reach the browser', () => {

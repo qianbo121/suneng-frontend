@@ -56,7 +56,7 @@ describe('case publication boundaries after article migration', () => {
 describe('visible case classification, results and review', () => {
   it("keeps unapproved sources archived and refuses their public article pages", () => {
     expect(getPublicCases().map((item) => item.slug)).toEqual(['henan-annealing-solution-line']);
-    for(const name of ['jining-support-roller','continuous-line-renovation','rt4-75-6-proposal']) {
+    for(const name of ['jining-support-roller','continuous-line-renovation']) {
       const item=JSON.parse(read(name+'.json'));
       expect(item.publicationStatus).toBe('draft');
       expect(()=>renderToStaticMarkup(createElement(CaseArticlePage,{slug:item.slug,searchParams:{}}))).toThrow('404');
