@@ -1,4 +1,4 @@
-import { isWithdrawnTechnicalPath } from '@/lib/publication-scope';
+import { isWithdrawnTechnicalPath, isPublishedGuide } from '@/lib/publication-scope';
 import { PUBLIC_ENGLISH_CASE_SLUGS } from '@/lib/cases/public-case-allowlist';
 import type { Locale } from '@/types/site';
 
@@ -37,7 +37,7 @@ export function isZhOnlyPath(path: string): boolean {
   // English case pages exist only for owner-approved English copies; the server
   // also checks source publication and fingerprints before serving any body.
   if (pathname === '/case') return PUBLIC_ENGLISH_CASE_SLUGS.size === 0;
-  return ZH_ONLY_PATHS.has(pathname) || (pathname.startsWith('/case/') && !PUBLIC_ENGLISH_CASE_SLUGS.has(pathname.slice('/case/'.length)));
+  return isPublishedGuide('zh', `/zh${pathname}`) || ZH_ONLY_PATHS.has(pathname) || (pathname.startsWith('/case/') && !PUBLIC_ENGLISH_CASE_SLUGS.has(pathname.slice('/case/'.length)));
 }
 
 /**
@@ -51,8 +51,8 @@ export function localizeOrHideHref(rawPath: string, locale: Locale): string | nu
   if (!rawPath.startsWith('/')) {
     return rawPath;
   }
-  if (isWithdrawnTechnicalPath(rawPath)) return null;
   const normalized = stripLocale(rawPath);
+  if (isWithdrawnTechnicalPath(`/${locale}${normalized === '/' ? '' : normalized}`)) return null;
   if (locale === 'en' && isZhOnlyPath(normalized)) {
     return null;
   }

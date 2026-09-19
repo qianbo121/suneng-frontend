@@ -31,6 +31,7 @@ APPROVED_CASES = {
     'en': ['henan-annealing-solution-line'],
 }
 NO_CASES = {'zh': [], 'en': []}
+APPROVED_GUIDES = json.loads(Path(__file__).with_name('approved-guides.json').read_text())
 # Representative unapproved drafts; they must stay private in every release state.
 # A frontend test checks that each is still a draft. Replace one when it is approved.
 DRAFT_CASE_PATHS = [
@@ -88,6 +89,7 @@ def validate_manifest(value):
         raise ValueError('Unknown case publication state')
     if 'approvedCases' in value:
         normalize_cases(value['approvedCases'])
+    normalize_guides(value.get('approvedGuides', []))
     legacy = value.get('legacyEncodedPaths', False)
     if not isinstance(legacy, bool):
         raise ValueError('legacyEncodedPaths must be true or false')
@@ -153,24 +155,35 @@ def normalize_cases(value):
     return {'zh': sorted(set(value['zh'])), 'en': sorted(set(value['en']))}
 
 
+def normalize_guides(value):
+    if not isinstance(value, list) or not all(isinstance(path, str) and path in APPROVED_GUIDES for path in value):
+        raise ValueError('Only explicitly approved Chinese guide paths may be released')
+    return sorted(set(value))
+
+
 def merge_cases(*values):
     return {locale: sorted(set().union(*(value[locale] for value in values))) for locale in ('zh', 'en')}
 
 
-def case_contract(state, cases=None, *, encoded=True, withdrawn=None):
+def case_contract(state, cases=None, *, encoded=True, withdrawn=None, guides=None, withdrawn_guides=None, guide_state="open"):
     """Route rules for one case state.
 
     'open' and 'closed' describe the image being released, with `cases` listing
     the pages it is approved to serve. 'either' is used for the currently running
     or restored image; pass the union of the live and target lists so an earlier
-    or later batch is accepted. Guides, solutions and unapproved drafts are
-    private in every state. `withdrawn` lists pages the new image must no longer
+    or later batch is accepted. Guides outside the exact approved list, section hubs and unapproved drafts
+    are private in every state. `withdrawn` lists pages the new image must no longer
     serve. `encoded` also probes percent-escaped section names.
     """
     if state not in (*CASE_STATES, 'either'):
         raise ValueError('Unknown case publication state')
     cases = normalize_cases(APPROVED_CASES if cases is None else cases)
-    group, retired = [], ['/zh/solutions', '/en/solutions', '/zh/articles/gongye-lu-baojia-canshu']
+    group, retired = [], ['/zh/solutions', '/en/solutions', '/zh/articles', '/en/articles',
+                          '/zh/articles/gongye-lu-baojia-canshu',
+                          '/zh/solutions/continuous-heat-treatment-line',
+                          '/zh/solutions/rechuli-lu-changjia',
+                          '/zh/solutions/jiangsu-gongye-lu-changjia',
+                          *[path.replace('/zh/', '/en/', 1) for path in APPROVED_GUIDES]]
     for locale in ('zh', 'en'):
         slugs = cases[locale]
         if slugs:
@@ -186,7 +199,13 @@ def case_contract(state, cases=None, *, encoded=True, withdrawn=None):
     if encoded:
         extra = ENCODED_WITHDRAWN_PATHS + [path.replace('/zh/case/', '/zh/%63ase/', 1)
                                            for path in drafts if path.startswith('/zh/case/')][:1]
-    return {'state': state, 'group': group, 'retired': retired + drafts + extra}
+    guides = normalize_guides([] if guides is None else guides)
+    if guide_state not in ('open', 'either'):
+        raise ValueError('Unknown guide publication state')
+    retired = [path for path in retired if path not in guides]
+    retired += [path for path in sorted(set(APPROVED_GUIDES + (withdrawn_guides or []))) if path not in guides and path not in retired]
+    return {'state': state, 'group': group, 'retired': retired + drafts + extra,
+            'guides': {'state': guide_state, 'paths': guides}}
 
 
 def case_group_failure(statuses, contract):
@@ -211,10 +230,14 @@ def sitemap_passes(urls, located, statuses, contract):
     for url in urls:
         parsed = urlparse(url)
         if re.search(r'/(articles|solutions)(/|$)', parsed.path):
-            return False
+            if parsed.query or parsed.path not in contract.get('guides', {}).get('paths', []) or statuses.get(parsed.path) != 200:
+                return False
         if re.search(r'/case(/|$)', parsed.path):
             if parsed.query or parsed.path not in contract['group'] or statuses.get(parsed.path) != 200:
                 return False
+    guides = contract.get('guides', {'state': 'open', 'paths': []})
+    if any(statuses.get(path) == 200 and path not in paths for path in guides['paths']):
+        return False
     return contract['state'] != 'open' or all(path in paths for path in contract['group'])
 
 
@@ -266,6 +289,13 @@ def public_probe(base_url, contract):
     if failed:
         raise RuntimeError('Public case route check failed: ' + failed)
     results += [{'path': path, 'status': status} for path, status in statuses.items()]
+    guides = contract.get('guides', {'state': 'open', 'paths': []})
+    for path in guides['paths']:
+        status = int(status_of(path))
+        if status not in ({200} if guides['state'] == 'open' else {200, 404}):
+            raise RuntimeError('Public guide route check failed: ' + path)
+        statuses[path] = status
+        results.append({'path': path, 'status': status})
     xml = run(['curl', '--fail', '--max-time', '25', '--silent', '--show-error', base_url + '/sitemap.xml'])
     located, alternates = sitemap_urls(xml)
     if not sitemap_passes(located + alternates, located, statuses, contract):
@@ -284,13 +314,16 @@ class Release:
         self.receipt = json.loads(self.receipt_path.read_text())
         # Case pages served by the image being released, and by the live image
         # (older receipts predate case approval and serve none).
+        self.served_guides = normalize_guides(manifest.get('approvedGuides', []))
+        previous_guides = normalize_guides(self.receipt.get('frontendRelease', {}).get('servedGuides', []))
+        self.previous_guides = previous_guides
         target_cases = normalize_cases(manifest.get('approvedCases', APPROVED_CASES))
         self.served_cases = target_cases if manifest.get('caseState', 'open') == 'open' else NO_CASES
         self.live_cases = normalize_cases((self.receipt.get('frontendRelease') or {}).get('servedCases', NO_CASES))
         self.target_contract = case_contract(manifest.get('caseState', 'open'), target_cases,
-                                             encoded=not manifest.get('legacyEncodedPaths', False),
+                                             encoded=not manifest.get('legacyEncodedPaths', False), guides=self.served_guides, withdrawn_guides=previous_guides,
                                              withdrawn=self.live_cases)
-        self.lenient_contract = case_contract('either', merge_cases(target_cases, self.live_cases), encoded=False)
+        self.lenient_contract = case_contract('either', merge_cases(target_cases, self.live_cases), encoded=False, guides=sorted(set(previous_guides + self.served_guides)), guide_state='either')
         self.original_marker = (live / 'DEPLOY_COMMIT').read_bytes() if (live / 'DEPLOY_COMMIT').exists() else None
         self.env = {**os.environ}
         if manifest.get('sourceCommit'):
@@ -394,7 +427,8 @@ class Release:
         self.write_override(self.audit / 'previous.override.json', self.receipt['images'])
         atomic_json(self.pending_path, {'at': now(), 'auditDirectory': str(self.audit),
                                        'previousImages': self.receipt['images'], 'targetImages': self.target,
-                                       'previousServedCases': self.live_cases, 'targetServedCases': self.served_cases})
+                                       'previousServedCases': self.live_cases, 'targetServedCases': self.served_cases,
+                                       'previousServedGuides': self.previous_guides, 'targetServedGuides': self.served_guides})
         try:
             if 'backend' in self.manifest:
                 result['backendMigration'] = self.backend_check(migrate=True)
@@ -409,7 +443,7 @@ class Release:
                 raise RuntimeError('Running frontend identity does not match target')
             receipt = copy.deepcopy(self.receipt)
             receipt.update({'images': self.target, 'sourceIdentity': 'component-release',
-                            'frontendRelease': {**self.manifest, 'servedCases': self.served_cases},
+                            'frontendRelease': {**self.manifest, 'servedCases': self.served_cases, **({'servedGuides': self.served_guides} if self.served_guides else {})},
                             'previousReceipt': str(self.audit / 'previous-receipt.json'),
                             'productionVerifiedAt': now(), 'deploymentStatus': 'verified',
                             'releaseOperation': kind, 'releaseOperationReceipt': str(self.audit / 'result.json')})
@@ -451,11 +485,13 @@ class Release:
                 # Describe the cases of the frontend that is actually running.
                 if observed.get('frontend') != self.receipt['images']['frontend']:
                     if observed.get('frontend') == self.target['frontend']:
-                        failed['frontendRelease'] = {**self.manifest, 'servedCases': self.served_cases}
+                        failed['frontendRelease'] = {**self.manifest, 'servedCases': self.served_cases, **({'servedGuides': self.served_guides} if self.served_guides else {})}
                     else:
                         failed['frontendRelease'] = {**(self.receipt.get('frontendRelease') or {}),
                                                      'servedCases': merge_cases(self.live_cases, self.served_cases),
-                                                     'servedCasesUnverified': True}
+                                                     'servedCasesUnverified': True,
+                                                     **({'servedGuides': sorted(set(self.previous_guides + self.served_guides)),
+                                                         'servedGuidesUnverified': True} if self.previous_guides or self.served_guides else {})}
                 self.write_override(self.pins_path, observed)
                 atomic_json(self.receipt_path, failed)
                 result['previousFrontendRestoredAndVerified'] = False

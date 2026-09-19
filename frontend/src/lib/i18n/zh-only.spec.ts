@@ -1,3 +1,4 @@
+import { APPROVED_GUIDE_PATHS } from '@/lib/publication-scope';
 import { describe, expect, it } from 'vitest';
 import { isZhOnlyPath, localizeOrHideHref } from './zh-only';
 
@@ -20,5 +21,14 @@ describe('case language availability', () => {
     expect(localizeOrHideHref('/zh/products/detail/shovel-furnace', 'en')).toBe('/en/products/detail/shovel-furnace');
     expect(isZhOnlyPath('/zh/case-study-guide')).toBe(false);
     expect(localizeOrHideHref('https://example.com/case/test', 'en')).toBe('https://example.com/case/test');
+  });
+});
+
+describe('owner-approved Chinese guides', () => {
+  it.each([...APPROVED_GUIDE_PATHS])('keeps %s Chinese-only and resolves unprefixed Chinese links', (path) => {
+    expect(isZhOnlyPath(path)).toBe(true);
+    expect(isZhOnlyPath(path.replace('/zh/', '/en/'))).toBe(true);
+    expect(localizeOrHideHref(path, 'en')).toBeNull();
+    expect(localizeOrHideHref(path.replace('/zh/', '/'), 'zh')).toBe(path);
   });
 });

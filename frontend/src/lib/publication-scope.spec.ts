@@ -1,8 +1,17 @@
 import path from 'node:path';
 import { describe, expect, it, vi } from 'vitest';
 vi.mock('server-only', () => ({}));
-vi.mock('react', async (original) => ({ ...(await original<typeof import('react')>()), cache: (fn: unknown) => fn }));
-import { isWithdrawnRequestPath, isWithdrawnTechnicalPath, routablePathname, withdrawnPageLocale } from './publication-scope';
+vi.mock('react', async (original) => ({
+  ...(await original<typeof import('react')>()),
+  cache: (fn: unknown) => fn,
+}));
+import {
+  APPROVED_GUIDE_PATHS,
+  isWithdrawnRequestPath,
+  isWithdrawnTechnicalPath,
+  routablePathname,
+  withdrawnPageLocale,
+} from './publication-scope';
 import { getLocalizedNavigation } from '@/mock/navigation';
 import { readCaseDirectory } from './cases/server';
 import { readEnglishCases } from './cases/english';
@@ -12,16 +21,40 @@ import { prepareNewsArticleHtml } from './sanitize';
 const approved = 'henan-annealing-solution-line';
 
 describe('launch publication scope', () => {
+  it('opens exactly the eight approved Chinese guides and keeps other editions and lookalikes closed', () => {
+    expect(APPROVED_GUIDE_PATHS.size).toBe(8);
+    for (const path of APPROVED_GUIDE_PATHS) {
+      expect(isWithdrawnRequestPath(path)).toBe(false);
+      expect(isWithdrawnTechnicalPath(path + '?from=service')).toBe(false);
+      for (const other of [
+        path.replace('/zh/', '/en/'),
+        path + '/extra',
+        path + '-copy',
+        path.replace('/zh/', '/'),
+        path.replace('/articles/', '/%61rticles/').replace('/solutions/', '/%73olutions/'),
+      ])
+        expect(isWithdrawnRequestPath(other), other).toBe(true);
+    }
+  });
   it('keeps guides and solutions withdrawn in both languages and on unprefixed routes', () => {
     for (const prefix of ['', '/zh', '/en']) {
       for (const route of ['/articles', '/articles/example', '/solutions', '/solutions/example'])
         expect(isWithdrawnTechnicalPath(prefix + route), prefix + route).toBe(true);
-      for (const route of ['/news/example', '/products/detail/annealing-solution-line', '/service', '/about'])
+      for (const route of [
+        '/news/example',
+        '/products/detail/annealing-solution-line',
+        '/service',
+        '/about',
+      ])
         expect(isWithdrawnTechnicalPath(prefix + route), prefix + route).toBe(false);
     }
     expect(isWithdrawnTechnicalPath('https://another.example/case/project')).toBe(false);
     // Every address of this site counts as this site.
-    for (const href of ['https://jssngyl.cn/zh/solutions', 'http://localhost:3000/en/articles/x', 'http://127.0.0.1:3187/zh/case/foo'])
+    for (const href of [
+      'https://jssngyl.cn/zh/solutions',
+      'http://localhost:3000/en/articles/x',
+      'http://127.0.0.1:3187/zh/case/foo',
+    ])
       expect(isWithdrawnTechnicalPath(href), href).toBe(true);
   });
 
@@ -115,9 +148,23 @@ describe('launch publication scope', () => {
   });
 
   it('answers a withdrawn request in the language the router would use', () => {
-    for (const path of ['/en/solutions', '/EN/solutions', '/%65n/solutions', '/En/case/x', '/en', '/en%09/solutions', '/en/%E0/solutions'])
+    for (const path of [
+      '/en/solutions',
+      '/EN/solutions',
+      '/%65n/solutions',
+      '/En/case/x',
+      '/en',
+      '/en%09/solutions',
+      '/en/%E0/solutions',
+    ])
       expect(withdrawnPageLocale(path), path).toBe('en');
-    for (const path of ['/solutions', '/zh/solutions', '/english/solutions', '/%E0%A4%A/en', '/enx/solutions'])
+    for (const path of [
+      '/solutions',
+      '/zh/solutions',
+      '/english/solutions',
+      '/%E0%A4%A/en',
+      '/enx/solutions',
+    ])
       expect(withdrawnPageLocale(path), path).toBe('zh');
   });
 
@@ -126,7 +173,10 @@ describe('launch publication scope', () => {
       expect(isWithdrawnTechnicalPath(`${prefix}/case`), `${prefix}/case`).toBe(false);
       expect(isWithdrawnTechnicalPath(`${prefix}/case/`), `${prefix}/case/`).toBe(false);
       expect(isWithdrawnTechnicalPath(`${prefix}/case/${approved}`), prefix).toBe(false);
-      expect(isWithdrawnTechnicalPath(`${prefix}/case/${approved}?returnTo=%2Fzh%2Fcase`), prefix).toBe(false);
+      expect(
+        isWithdrawnTechnicalPath(`${prefix}/case/${approved}?returnTo=%2Fzh%2Fcase`),
+        prefix,
+      ).toBe(false);
       // Unapproved drafts, nested paths and look-alike slugs stay withdrawn.
       for (const route of [
         '/case/example?from=2',
@@ -143,8 +193,14 @@ describe('launch publication scope', () => {
 
   it('exposes only approved Chinese and English case records', () => {
     const root = path.join(process.cwd(), 'content');
-    expect(readCaseDirectory(path.join(root, 'cases'), undefined, PUBLIC_CASE_SLUGS).map((item) => item.slug)).toEqual([...PUBLIC_CASE_SLUGS]);
-    expect(readEnglishCases(root, undefined, PUBLIC_ENGLISH_CASE_SLUGS).map((item) => item.slug)).toEqual([...PUBLIC_ENGLISH_CASE_SLUGS]);
+    expect(
+      readCaseDirectory(path.join(root, 'cases'), undefined, PUBLIC_CASE_SLUGS).map(
+        (item) => item.slug,
+      ),
+    ).toEqual([...PUBLIC_CASE_SLUGS]);
+    expect(
+      readEnglishCases(root, undefined, PUBLIC_ENGLISH_CASE_SLUGS).map((item) => item.slug),
+    ).toEqual([...PUBLIC_ENGLISH_CASE_SLUGS]);
     expect(readCaseDirectory(path.join(root, 'cases'), undefined, new Set())).toEqual([]);
     expect(readEnglishCases(root, undefined, new Set())).toEqual([]);
   });
@@ -154,14 +210,29 @@ describe('launch publication scope', () => {
       const entries = getLocalizedNavigation(locale);
       // The case hub stays published but is not a menu entry while a single
       // approved case cannot carry one; see hiddenFromMenu in mock/navigation.
-      expect(entries.map((item) => item.href)).toEqual(['/', '/products', '/service', '/news', '/about']);
-      const hrefs = entries.flatMap((item) => [item.href, ...(item.children ?? []).map((child) => child.href)]);
-      expect(hrefs.some((href) => isWithdrawnTechnicalPath(href === '/' ? `/${locale}` : `/${locale}${href}`))).toBe(false);
+      expect(entries.map((item) => item.href)).toEqual([
+        '/',
+        '/products',
+        '/service',
+        '/news',
+        '/about',
+      ]);
+      const hrefs = entries.flatMap((item) => [
+        item.href,
+        ...(item.children ?? []).map((child) => child.href),
+      ]);
+      expect(
+        hrefs.some((href) =>
+          isWithdrawnTechnicalPath(href === '/' ? `/${locale}` : `/${locale}${href}`),
+        ),
+      ).toBe(false);
     }
   });
 
   it('preserves news text and live links while removing withdrawn inline links', () => {
-    const html = prepareNewsArticleHtml(`<p>正文 <a href="/zh/case/old">项目参数</a> <a href="https://www.jssngyl.cn/en/solutions/old">Guide</a> <a href="/zh/case/${approved}">河南项目</a> <a href="/zh/news/live">新闻</a> <a href="/zh/products">产品</a></p>`);
+    const html = prepareNewsArticleHtml(
+      `<p>正文 <a href="/zh/case/old">项目参数</a> <a href="https://www.jssngyl.cn/en/solutions/old">Guide</a> <a href="/zh/case/${approved}">河南项目</a> <a href="/zh/news/live">新闻</a> <a href="/zh/products">产品</a></p>`,
+    );
     expect(html).toContain('正文 项目参数 Guide');
     expect(html).not.toContain('/case/old');
     expect(html).not.toContain('/solutions/old');

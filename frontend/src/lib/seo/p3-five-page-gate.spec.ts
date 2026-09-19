@@ -1,3 +1,4 @@
+import { isWithdrawnTechnicalPath } from '@/lib/publication-scope';
 import fs from 'node:fs';
 import { fileURLToPath } from 'node:url';
 
@@ -13,7 +14,12 @@ import { TROLLEY_PUBLICATION_REVIEW } from './trolley-publication';
 import { CONTINUOUS_HEAT_TREATMENT_LINE_SEO, INDUSTRIAL_FURNACE_QUOTE_PARAMS_SEO, OLD_HEAT_TREATMENT_FURNACE_REPAIR_OR_REPLACE_SEO, TSINGSHAN_1250_CASE_SEO } from '@/lib/seo/page-data';
 
 const readSource = (relativePath: string) =>
-  fs.readFileSync(fileURLToPath(new URL(relativePath, import.meta.url)), 'utf8');
+  {
+    const source = fs.readFileSync(fileURLToPath(new URL(relativePath, import.meta.url)), 'utf8');
+    const bodies = [...source.matchAll(/from ['"]@\/components\/geo-pages\/reviewed\/([^'"]+)['"]/g)]
+      .map(([, file]) => fs.readFileSync(fileURLToPath(new URL(`../../components/geo-pages/reviewed/${file}${file.endsWith('.json') ? '' : '.tsx'}`, import.meta.url)), 'utf8'));
+    return [source, ...bodies].join('\n');
+  };
 
 const trolleySource = readSource('../../app/[locale]/products/detail/[slug]/page.tsx');
 const quoteSource = readSource('../../app/[locale]/articles/gongye-lu-baojia-canshu/page.tsx');
@@ -48,9 +54,9 @@ describe('P3 five-page publication gate', () => {
       expect(quoteSource).toContain(factId);
     }
 
-    expect(quoteSource).toContain('不能套固定价');
-    expect(quoteSource).toContain('不是标准型号参数');
-    expect(quoteSource).toContain('不代表其他项目的固定价格、产能或配置');
+    expect(quoteSource).toContain('没有脱离工况的通用固定价');
+    expect(quoteSource).toContain('不是通用标准配置');
+    expect(quoteSource).toContain('不代表单台炉标准配置、其他项目的价格或产能');
   });
 
   it('gives the repair-or-replace page three approved decision references without overclaiming', () => {
@@ -58,7 +64,7 @@ describe('P3 five-page publication gate', () => {
       expect(decisionSource).toContain(factId);
     }
 
-    expect(decisionSource).toContain('不能替代对当前旧炉的现场检测');
+    expect(decisionSource).toContain('不能替代对当前旧炉的检测');
     expect(decisionSource).toContain('新建产线作为独立方案比较');
     expect(decisionSource).not.toContain('3 条 1250 mm');
   });
@@ -82,10 +88,10 @@ describe('P3 five-page publication gate', () => {
     }
 
     expect(decisionSource).toContain('热处理炉大修厂家怎么选？');
-    expect(quoteSource).toContain('工业炉节能改造报价通常包括哪些？');
-    expect(quoteSource).toContain('Q8：热处理炉节能改造多少钱？');
-    expect(quoteSource).toContain('Q9：老旧工业炉改造预算怎么估算？');
-    expect(quoteSource).toContain('不能把一个数字当成正式报价');
+    expect(quoteSource).toContain('工业炉节能改造报价包括哪些？');
+    expect(quoteSource).toContain('热处理炉节能改造多少钱？');
+    expect(quoteSource).toContain('老旧工业炉改造预算怎么估算？');
+    expect(quoteSource).toContain('不能用一个固定总价掩盖未知工程量');
   });
 
   it('states explicit fit boundaries on the trolley page and retains evidence on the hub and case', () => {
@@ -108,7 +114,7 @@ describe('five actual route render paths', () => {
     const html=renderToStaticMarkup(page).replace(/<script\b[^>]*>[\s\S]*?<\/script>/g,'');
     expect(html).toContain('<h1');
     expect(html).toContain('台车炉');
-    expect(html).not.toMatch(/href="\/zh\/(case|articles|solutions)/);
+    for (const [, href] of html.matchAll(/href="([^"]+)"/g)) expect(isWithdrawnTechnicalPath(href), href).toBe(false);
     expect(html).not.toMatch(/未登记公开署名|发布复核：|内容复核：/);
   });
 });

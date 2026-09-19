@@ -25,7 +25,10 @@ backup.sh
 docker-compose*.yml
 nginx*.conf*
 docs
-ops
+# The frontend and release checker share this exact public-route list.
+ops/**
+!ops/releases/
+!ops/releases/approved-guides.json
 archive
 *.bundle
 *.tgz

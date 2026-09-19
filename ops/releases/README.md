@@ -56,3 +56,9 @@ python3 ops/releases/frontend_release.py --manifest /private/path/previous-compa
 `frontend_release.py` retains its frontend-only mode. An explicit `backend` manifest entry enables a two-component release using the same source commit. It checks both current versions, runs the backend aggregate as a read-only command without starting a second notification worker, and permits only the reviewed additive content-attribution index migration. PostgreSQL, uploads, admin, nginx container identity and unrelated applications remain protected. On a failed application switch both prior application images are restored; the additive index can safely remain. Customer data is never restored or reset by this operation. An interrupted or unsuccessful recovery leaves the deployment marker for manual reconciliation.
 
 The backend entry must contain `image`, `expectedCurrentImage`, and `archiveSha256`. A database backup and restore rehearsal must precede the apply step. Failure notification is optional until its independent destination is explicitly configured; an operator must supervise the release in that case.
+
+## 2026-09-19 已审核指南逐页发布
+
+网站负责人已批准导航 A 与 8 个中文指南页面的部署。`approved-guides.json` 是这一批的唯一路径清单，前台与发布工具共用；全局 `TECHNICAL_CONTENT_PUBLISHED` 仍为 false。其余文章、解决方案列表、英文指南和未批准案例保持关闭。页面自身与中间件分别验证，网站地图只列出这 8 页的中文地址。
+
+新候选清单携带 `approvedGuides`；缺省为空，旧候选与回退清单不会自动公开指南。发布检查要求清单中每一页为 200 并进入网站地图，清单外的指南与变形地址仍为 404。检查当前版本和失败恢复时兼容旧版指南全部关闭的状态。成功回执新增 `frontendRelease.servedGuides`，作为下一次发布的实际基线。安装工具时必须一并复制 `approved-guides.json`。

@@ -15,6 +15,7 @@ describe('news thematic internal links', () => {
 
     expect(links.map((link) => link.href)).toEqual([
       '/zh/products/detail/mesh-belt-furnace',
+      '/zh/articles/gongye-lu-baojia-canshu',
     ]);
     expect(links.filter((link) => link.href.startsWith('/zh/case/')).map((link) => link.kind))
       .toEqual([]);
@@ -32,15 +33,15 @@ describe('news thematic internal links', () => {
 
   it("connects renovation articles only to public service, equipment and approved cases", () => {
     const links=getNewsRelatedLinks({titleZh:'连续退火生产线节能改造怎么做？',summaryZh:'',contentZh:''});
-    expect(links.map(x=>x.href)).toEqual(['/zh/service/furnace-renovation-overhaul','/zh/products/detail/annealing-solution-line','/zh/case/henan-annealing-solution-line']);
+    expect(links.map(x=>x.href)).toEqual(['/zh/service/furnace-renovation-overhaul','/zh/solutions/rechuli-lu-gaizao-fengxian-zhouqi','/zh/products/detail/annealing-solution-line','/zh/case/henan-annealing-solution-line']);
     const english=getNewsRelatedLinks({titleZh:'连续退火生产线节能改造怎么做？',summaryZh:'',contentZh:''},'en');
     expect(english.map(x=>x.href)).toEqual(['/en/products/detail/annealing-solution-line','/en/case/henan-annealing-solution-line']);
   });
 
-  it('does not expose the withdrawn quotation guide or duplicate links', () => {
+  it('provides only the approved quotation guide as a generic fallback without duplicates', () => {
     const links = getNewsRelatedLinks({ titleZh: '公司动态', summaryZh: '', contentZh: '' });
 
-    expect(links).toEqual([]);
+    expect(links.map(link => link.href)).toEqual(['/zh/articles/gongye-lu-baojia-canshu']);
     expect(new Set(links.map((link) => link.href)).size).toBe(links.length);
   });
 });
@@ -51,7 +52,7 @@ describe('news subject and language boundaries', () => {
     const links = getNewsRelatedLinks({ titleZh: '台车炉温度均匀性怎么测？', summaryZh: '', contentZh: '可比较连续生产线的改造和维修。' });
     expect(links[0].href).toBe('/zh/products/detail/trolley-furnace');
     expect(links.map(x => x.href)).not.toContain('/zh/products/detail/annealing-solution-line');
-    expect(links.map(x => x.href)).not.toContain('/zh/solutions/rechuli-lu-wendu-bujun-zhenggai');
+    expect(links.map(x => x.href)).toContain('/zh/solutions/rechuli-lu-wendu-bujun-zhenggai');
   });
   it.each([
     ['箱式炉尺寸怎么选？', 'box-furnace'],
