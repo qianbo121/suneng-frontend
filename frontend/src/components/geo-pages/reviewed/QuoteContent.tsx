@@ -934,7 +934,7 @@ export function QuoteContent() {
             </a>
           </div>
           <div className={'related-grid'}>
-            <a className={'related-card'} href={'/zh/solutions/jiangsu-gongye-lu-changjia'}>
+            <a className={'related-card'} href={'/zh/products'}>
               <span>{'单台炉选型'}</span>
               <h3>
                 {'不知道选什么炉型'}
@@ -1011,8 +1011,8 @@ export function QuoteContent() {
                   <path d={'M5 12h14M13 6l6 6-6 6'}></path>
                 </svg>
               </a>
-              <a href={'/zh/solutions/continuous-heat-treatment-line'}>
-                {'连续热处理生产线解决方案'}
+              <a href={'/zh/products/detail/annealing-solution-line'}>
+                {'连续退火固溶生产线'}
                 <svg viewBox={'0 0 24 24'} aria-hidden={'true'}>
                   <path d={'M5 12h14M13 6l6 6-6 6'}></path>
                 </svg>

@@ -14,6 +14,11 @@ import middleware, { config } from './middleware';
 const run = (address: string) => middleware(new NextRequest(new URL(address, 'https://www.jssngyl.cn')));
 
 describe('withdrawn content routing', () => {
+  it('accepts an approved canonical address after standard URL dot-segment normalization', async () => {
+    const response = await run('/zh/products/%2e%2e/articles/gongye-lu-baojia-canshu');
+    expect(response.status).toBe(200);
+  });
+
   it.each([
     ['/zh/%73olutions/continuous-heat-treatment-line', 'zh'],
     ['/zh/sol%09utions/continuous-heat-treatment-line', 'zh'],
@@ -23,7 +28,6 @@ describe('withdrawn content routing', () => {
     ['/zh/solutions%20', 'zh'],
     ['/en/solutions%1F', 'en'],
     ['/zh/products/%252e%252e/solutions/continuous-heat-treatment-line', 'zh'],
-    ['/zh/products/%2e%2e/articles/gongye-lu-baojia-canshu', 'zh'],
     ['/zh/%63ase/jining-support-roller-heat-treatment-line', 'zh'],
     ['/%65n/solutions/continuous-heat-treatment-line', 'en'],
     ['/EN/solutions/continuous-heat-treatment-line', 'en'],

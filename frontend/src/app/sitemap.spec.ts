@@ -60,7 +60,7 @@ vi.mock('@/lib/api/news', () => ({
 import buildSitemap from '@/app/sitemap';
 
 import { FURNACE_RENOVATION_OVERHAUL_SEO } from '@/lib/seo/page-data';
-import { isWithdrawnTechnicalPath } from '@/lib/publication-scope';
+import { APPROVED_GUIDE_PATHS, isWithdrawnTechnicalPath } from '@/lib/publication-scope';
 import { REVIEWED_PUBLIC_CASES } from '@/lib/cases/public-case-allowlist';
 
 const site = 'https://www.jssngyl.cn';
@@ -106,21 +106,34 @@ const DEEP_CRAWL_TARGETS = [
 ];
 
 describe('sitemap freshness signals', () => {
-  it("retains real modification dates for live pages and omits withdrawn guides", async () => {
-    const entries=await buildSitemap();
-    const byUrl=new Map(entries.map(entry=>[entry.url,entry]));
-    for(const path of ['/zh','/zh/about','/zh/products/detail/trolley-furnace','/zh/products/detail/box-furnace']) {
-      expect(byUrl.has('https://www.jssngyl.cn'+path)).toBe(true);
-      expect(byUrl.get('https://www.jssngyl.cn'+path)?.lastModified).toBeUndefined();
+  it('retains real modification dates for live pages and omits withdrawn guides', async () => {
+    const entries = await buildSitemap();
+    const byUrl = new Map(entries.map((entry) => [entry.url, entry]));
+    for (const path of [
+      '/zh',
+      '/zh/about',
+      '/zh/products/detail/trolley-furnace',
+      '/zh/products/detail/box-furnace',
+    ]) {
+      expect(byUrl.has('https://www.jssngyl.cn' + path)).toBe(true);
+      expect(byUrl.get('https://www.jssngyl.cn' + path)?.lastModified).toBeUndefined();
     }
-    expect(byUrl.get('https://www.jssngyl.cn/zh/service/furnace-renovation-overhaul')?.lastModified).toEqual(new Date(FURNACE_RENOVATION_OVERHAUL_SEO.modifiedTime));
-    expect(entries.filter(entry=>/\/(articles|solutions)(\/|$)/.test(new URL(entry.url).pathname))).toEqual([]);
+    expect(
+      byUrl.get('https://www.jssngyl.cn/zh/service/furnace-renovation-overhaul')?.lastModified,
+    ).toEqual(new Date(FURNACE_RENOVATION_OVERHAUL_SEO.modifiedTime));
+    expect(
+      entries
+        .filter((entry) => /\/(articles|solutions)(\/|$)/.test(new URL(entry.url).pathname))
+        .map((entry) => new URL(entry.url).pathname)
+        .sort(),
+    ).toEqual([...APPROVED_GUIDE_PATHS].sort());
     expect(casePathUrls(entries.map((entry) => entry.url))).toEqual(APPROVED_CASE_URLS);
   });
 
   it('fails when one shared hard-coded date covers 3 or more pages', async () => {
     const entries = await buildSitemap();
     const pageSpecificUrls = new Set([
+      ...[...APPROVED_GUIDE_PATHS].map((path) => site + path),
       'https://www.jssngyl.cn/zh',
       'https://www.jssngyl.cn/zh/articles/gongye-lu-baojia-canshu',
       'https://www.jssngyl.cn/zh/articles/laojiu-rechuli-lu-daxiu-haishi-maixin',
@@ -149,10 +162,11 @@ describe('sitemap freshness signals', () => {
     expect(regressions).toEqual([]);
   });
 
-  it("keeps live deep-crawl targets while excluding retired technical paths", async () => {
-    const urls=new Set((await buildSitemap()).map(x=>x.url));
+  it('keeps live deep-crawl targets while excluding retired technical paths', async () => {
+    const urls = new Set((await buildSitemap()).map((x) => x.url));
     expect(DEEP_CRAWL_TARGETS).toHaveLength(26);
-    for(const path of DEEP_CRAWL_TARGETS)expect(urls.has('https://www.jssngyl.cn'+path),path).toBe(!isWithdrawnTechnicalPath(path));
+    for (const path of DEEP_CRAWL_TARGETS)
+      expect(urls.has('https://www.jssngyl.cn' + path), path).toBe(!isWithdrawnTechnicalPath(path));
   });
 
   it('includes the English news hub while excluding empty strength routes and the duplicate news slug', async () => {
@@ -174,14 +188,15 @@ describe('sitemap freshness signals', () => {
   });
 });
 
-it("excludes all solution guides and their alternates during withdrawal", async () => {
-    const entries=await buildSitemap();
-    expect(entries.length).toBeGreaterThan(20);
-    for(const entry of entries) {
-      expect(entry.url).not.toMatch(/\/solutions(?:\/|$)/);
-      for(const target of Object.values(entry.alternates?.languages??{}))expect(String(target)).not.toMatch(/\/solutions(?:\/|$)/);
-    }
-  });
+it('excludes unapproved guides and unavailable English alternates', async () => {
+  const entries = await buildSitemap();
+  expect(entries.length).toBeGreaterThan(20);
+  for (const entry of entries) {
+    expect(isWithdrawnTechnicalPath(entry.url)).toBe(false);
+    for (const target of Object.values(entry.alternates?.languages ?? {}))
+      expect(isWithdrawnTechnicalPath(String(target))).toBe(false);
+  }
+});
 
 it('includes all four additional furnaces in both languages with reciprocal addresses', async () => {
   const sitemap = await buildSitemap();
@@ -211,13 +226,18 @@ it('emits reciprocal English news addresses only for complete translations with 
   expect(zh?.lastModified).toEqual(new Date('2026-06-01T00:00:00Z'));
 });
 
-it("lists only approved case pages and never articles, case pagination or withdrawn alternates", async () => {
-    const entries=await buildSitemap();
-    expect(entries.some(x=>x.url.endsWith('/en/news'))).toBe(true);
-    expect(entries.some(x=>/\/articles(\/|\?|$)/.test(x.url))).toBe(false);
-    expect(entries.some(x=>/\/case\?/.test(x.url))).toBe(false);
-    expect(casePathUrls(entries.map((x) => x.url))).toEqual(APPROVED_CASE_URLS);
-    for (const entry of entries)
-      for (const url of Object.values(entry.alternates?.languages ?? {}))
-        expect(isWithdrawnTechnicalPath(String(url)), `${entry.url} -> ${url}`).toBe(false);
-  });
+it('lists only approved cases and guides without pagination or withdrawn alternates', async () => {
+  const entries = await buildSitemap();
+  expect(entries.some((x) => x.url.endsWith('/en/news'))).toBe(true);
+  expect(
+    entries
+      .filter((x) => /\/articles(\/|\?|$)/.test(x.url))
+      .map((x) => new URL(x.url).pathname)
+      .sort(),
+  ).toEqual([...APPROVED_GUIDE_PATHS].filter((path) => path.includes('/articles/')).sort());
+  expect(entries.some((x) => /\/case\?/.test(x.url))).toBe(false);
+  expect(casePathUrls(entries.map((x) => x.url))).toEqual(APPROVED_CASE_URLS);
+  for (const entry of entries)
+    for (const url of Object.values(entry.alternates?.languages ?? {}))
+      expect(isWithdrawnTechnicalPath(String(url)), `${entry.url} -> ${url}`).toBe(false);
+});

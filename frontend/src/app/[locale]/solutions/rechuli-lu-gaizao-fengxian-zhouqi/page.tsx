@@ -1,9 +1,8 @@
-import { TECHNICAL_CONTENT_PUBLISHED } from '@/lib/publication-scope';
+import { isPublishedGuide } from '@/lib/publication-scope';
 import {
   EnglishSolutionPage,
   englishSolutionMetadata,
 } from '@/components/engineering/EnglishSolutionsPage';
-import { solutionAlternates } from '@/lib/english-solutions';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { JsonLd } from '@/components/JsonLd';
@@ -58,14 +57,14 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  if (!TECHNICAL_CONTENT_PUBLISHED) notFound();
   const { locale } = await params;
+  if (!isPublishedGuide(locale, pagePath)) notFound();
   if (locale === 'en') return englishSolutionMetadata('rechuli-lu-gaizao-fengxian-zhouqi');
   if (locale !== 'zh') notFound();
   return buildMetadata({
     locale: 'zh',
     path: pagePath,
-    alternateLocales: solutionAlternates('rechuli-lu-gaizao-fengxian-zhouqi'),
+    alternateLocales: { 'zh-CN': pagePath, 'x-default': pagePath },
     title: seo.title,
     description: seo.description,
     keywords: seo.keywords,
@@ -77,8 +76,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 }
 
 export default async function FurnaceRenovationRiskCyclePage({ params }: PageProps) {
-  if (!TECHNICAL_CONTENT_PUBLISHED) notFound();
   const { locale } = await params;
+  if (!isPublishedGuide(locale, pagePath)) notFound();
   if (locale === 'en') return <EnglishSolutionPage slug="rechuli-lu-gaizao-fengxian-zhouqi" />;
   if (locale !== 'zh') notFound();
   return (

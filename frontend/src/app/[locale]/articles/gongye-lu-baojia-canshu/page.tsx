@@ -1,4 +1,4 @@
-import { TECHNICAL_CONTENT_PUBLISHED } from '@/lib/publication-scope';
+import { isPublishedGuide } from '@/lib/publication-scope';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { JsonLd } from '@/components/JsonLd';
@@ -43,8 +43,8 @@ export function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  if (!TECHNICAL_CONTENT_PUBLISHED) notFound();
   const { locale } = await params;
+  if (!isPublishedGuide(locale, pagePath)) notFound();
 
   if (locale !== 'zh') {
     notFound();
@@ -68,8 +68,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 }
 
 export default async function IndustrialFurnaceQuoteParamsPage({ params }: PageProps) {
-  if (!TECHNICAL_CONTENT_PUBLISHED) notFound();
   const { locale } = await params;
+  if (!isPublishedGuide(locale, pagePath)) notFound();
   if (locale !== 'zh') {
     notFound();
   }

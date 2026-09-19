@@ -369,15 +369,6 @@ export function DecisionContent() {
                         }
                       </p>
                     </div>
-                    <a
-                      className={'text-link'}
-                      href={'/zh/case/jining-support-roller-heat-treatment-line'}
-                    >
-                      {'查看项目记录'}
-                      <svg viewBox={'0 0 24 24'} aria-hidden={'true'}>
-                        <path d={'M5 12h14M13 6l6 6-6 6'}></path>
-                      </svg>
-                    </a>
                   </article>
                 </div>
               </section>

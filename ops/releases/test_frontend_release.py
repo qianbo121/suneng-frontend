@@ -737,5 +737,38 @@ class ShippedExamplesTest(unittest.TestCase):
         self.assertTrue(set(r.PUBLIC_LIVE) <= in_script, set(r.PUBLIC_LIVE) - in_script)
 
 
+
+class ReviewedGuideReleaseTest(unittest.TestCase):
+    def test_rejects_unapproved_or_english_guides(self):
+        for paths in [["/en/solutions/example"], ["/zh/solutions"], ["/zh/case/henan-annealing-solution-line"], "all"]:
+            with self.subTest(paths=paths), self.assertRaises(ValueError):
+                r.validate_manifest({**MANIFEST, 'approvedGuides': paths})
+
+    def test_exact_guides_are_required_and_listed_while_other_guides_stay_private(self):
+        contract = r.case_contract('open', guides=r.APPROVED_GUIDES)
+        statuses = {path: 200 for path in CASE_GROUP + r.APPROVED_GUIDES}
+        xml = sitemap('/zh/news', '/en/news', *CASE_GROUP, *r.APPROVED_GUIDES)
+        with patch.object(r, 'run', side_effect=site(statuses, xml)):
+            r.public_probe('https://example.test', contract)
+        for changed, changed_xml in [({**statuses, r.APPROVED_GUIDES[0]: 404}, xml), (statuses, sitemap('/zh/news', '/en/news', *CASE_GROUP)), (statuses, sitemap('/zh/news', '/en/news', *CASE_GROUP, *r.APPROVED_GUIDES, '/en/solutions/example'))]:
+            with patch.object(r, 'run', side_effect=site(changed, changed_xml)), self.assertRaises(RuntimeError):
+                r.public_probe('https://example.test', contract)
+
+    def test_preflight_and_recovery_accept_previous_closed_guide_state(self):
+        contract = r.case_contract('either', guides=r.APPROVED_GUIDES, guide_state='either', encoded=False)
+        with patch.object(r, 'run', side_effect=site({path: 200 for path in CASE_GROUP}, sitemap('/zh/news', '/en/news', *CASE_GROUP))):
+            r.public_probe('https://example.test', contract)
+        retired = r.case_contract('open', guides=[], withdrawn_guides=r.APPROVED_GUIDES)
+        self.assertTrue(set(r.APPROVED_GUIDES) <= set(retired['retired']))
+
+    def test_container_checker_uses_the_same_guide_contract(self):
+        harness = HealthScriptTest()
+        contract = r.case_contract('open', guides=r.APPROVED_GUIDES)
+        statuses = {path: 200 for path in CASE_GROUP + r.APPROVED_GUIDES}
+        xml = sitemap('/zh/news', '/en/news', *CASE_GROUP, *r.APPROVED_GUIDES)
+        self.assertEqual(harness.run_script(contract, statuses, xml)[0], 0)
+        self.assertNotEqual(harness.run_script(contract, {**statuses, r.APPROVED_GUIDES[0]: 404}, xml)[0], 0)
+        self.assertNotEqual(harness.run_script(contract, statuses, sitemap('/zh/news', '/en/news', *CASE_GROUP))[0], 0)
+
 if __name__ == '__main__':
     unittest.main(verbosity=2)

@@ -316,47 +316,18 @@ export function RiskContent() {
                   '2019-06-23的案例067把有效长度由7m加到10m，加热由750kW增加300kW，控温由6区增加2区，还增加轮组和轨道并要求整炉复测。这些相互关联的改动支持先核对供电、承载、台车行程和新旧温区，再定工程量；原六区记录不能代替改后八区的整炉验收。'
                 }
               </p>
-              <a
-                className={'text-link'}
-                href={
-                  '/zh/case/trolley-furnace-three-meter-extension-whole-furnace-retest-proposal'
-                }
-              >
-                {'查看案例067：加长三米与整炉复测的关系'}
-                <svg viewBox={'0 0 24 24'} aria-hidden={'true'}>
-                  <path d={'M5 12h14M13 6l6 6-6 6'}></path>
-                </svg>
-              </a>
               <h3>{'保留风机和烟道，也要重新确认可用条件'}</h3>
               <p>
                 {
                   '2018-11-13的案例013保留燃油系统，新增16套天然气烧嘴，两种模式共用原助燃与排烟系统，同时增做空气支管和换向装置。因此“利旧”仍涉及风量、压力、支路隔离、模式切换和故障保护的核对。原件未确认两种燃料同时混烧，16个炉温区也不等于另列选配的24点工件记录。'
                 }
               </p>
-              <a
-                className={'text-link'}
-                href={'/zh/case/large-trolley-dual-fuel-existing-air-flue-proposal'}
-              >
-                {'查看案例013：旧风烟系统与新增燃烧系统的接口'}
-                <svg viewBox={'0 0 24 24'} aria-hidden={'true'}>
-                  <path d={'M5 12h14M13 6l6 6-6 6'}></path>
-                </svg>
-              </a>
               <h3>{'换燃料前，把检测、选配和买方配套分开'}</h3>
               <p>
                 {
                   '2018-02-26的案例069讨论冷煤气改天然气，保留8烧嘴、4区的配置数量；燃料管道拟更新，部分风烟设备利旧。2套氧分析为选配，2套一氧化碳报警由买方配置，两者用途不同。它能支持逐项核对气源、管道、阀组、检测与保护范围，不能证明已经实现氧反馈自动调节、节能或表面质量改善。'
                 }
               </p>
-              <a
-                className={'text-link'}
-                href={'/zh/case/bearing-wire-gas-conversion-oxygen-analysis-co-alarm-proposal'}
-              >
-                {'查看案例069：换气源、氧分析与报警供货边界'}
-                <svg viewBox={'0 0 24 24'} aria-hidden={'true'}>
-                  <path d={'M5 12h14M13 6l6 6-6 6'}></path>
-                </svg>
-              </a>
               <h3>{'下一步准备'}</h3>
               <ol>
                 <li>

@@ -6,7 +6,12 @@ import { describe, expect, it } from 'vitest';
 import { isZhOnlyPath } from '@/lib/i18n/zh-only';
 
 const readSource = (relativePath: string) =>
-  fs.readFileSync(fileURLToPath(new URL(relativePath, import.meta.url)), 'utf8');
+  {
+    const source = fs.readFileSync(fileURLToPath(new URL(relativePath, import.meta.url)), 'utf8');
+    const bodies = [...source.matchAll(/from ['"]@\/components\/geo-pages\/reviewed\/([^'"]+)['"]/g)]
+      .map(([, file]) => fs.readFileSync(fileURLToPath(new URL(`../../components/geo-pages/reviewed/${file}${file.endsWith('.json') ? '' : '.tsx'}`, import.meta.url)), 'utf8'));
+    return [source, ...bodies].join('\n');
+  };
 
 const temperatureSource = readSource(
   '../../app/[locale]/solutions/rechuli-lu-wendu-bujun-zhenggai/page.tsx',
@@ -109,16 +114,14 @@ describe('P5 authority topic pages', () => {
       '炉衬坏了一小块，是否只补这一块？',
       '纤维模块压缩量越大越好吗？',
       '炉衬翻新后能承诺节能多少吗？',
-      'Q01',
-      'Q02',
-      'Q03',
-      'Q06',
       '1140 型',
       '压缩量≥40%',
       '800℃',
       '热桥除外',
+      '不能套到全部炉衬',
+      '与外表温度不超过40℃不同',
       '40 K',
-      'reviewerName="王工"',
+      "reviewerName: '王工'",
     ]) {
       expect(liningSource).toContain(marker);
     }
@@ -132,16 +135,11 @@ describe('P5 authority topic pages', () => {
       '热处理炉电改燃一定更省钱吗？',
       '两用燃料系统关闭烧嘴供风就安全了吗？',
       '烟气温度高就适合做余热回收吗？',
-      'Q04',
-      'Q05',
-      'SN-CASE-P1-014',
-      '13×7.4×4.3 m',
-      '700℃',
-      '14 个温控区',
-      '8820 kW',
-      '空气侧断风不等于燃料侧隔离',
-      'FAT 不能替代 SAT',
-      'reviewerName="王工"',
+      '关闭供风不等于切断燃料',
+      '工厂测试不能替代现场验证',
+      '阀位反馈也不能单独证明阀门密封可靠',
+      '烧嘴额定能力、炉体尺寸和温控分区属于方案配置，不能直接代表实际能耗',
+      "reviewerName: '王工'",
     ]) {
       expect(energySource).toContain(marker);
     }
@@ -155,7 +153,6 @@ describe('P5 authority topic pages', () => {
       '热处理炉控制系统升级，就是换一套 PLC 吗？',
       '热处理炉改造用 PLC 还是 DCS？',
       '热处理炉控制系统升级多少钱？',
-      'SN-CASE-P1-012',
       'S7-1200 PLC',
       '14 英寸 HMI',
       '每室 2 区 PID',
@@ -174,11 +171,9 @@ describe('P5 authority topic pages', () => {
       '工业炉搬迁后，原来的工艺参数还能直接用吗？',
       '旧热处理炉值得再制造吗？',
       '停产炉重启或搬迁复产需要多久？',
-      'Q23',
-      'Q24',
-      'Q25',
-      '冷态、空载和负载',
-      '不把空载结果直接作为负载验收结论',
+      '冷态、热态及负载',
+      '不能默认所有炉型都能空炉升温',
+      '是否采用空载升温按炉型、设备文件与维修范围确定',
     ]) {
       expect(restartRelocationSource).toContain(marker);
     }

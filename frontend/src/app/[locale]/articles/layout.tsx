@@ -1,7 +1,15 @@
 import { notFound } from 'next/navigation';
-import { TECHNICAL_CONTENT_PUBLISHED } from '@/lib/publication-scope';
+import { hasPublishedGuides } from '@/lib/publication-scope';
 
-export default function Layout({ children }: { children: React.ReactNode }) {
-  if (!TECHNICAL_CONTENT_PUBLISHED) notFound();
+export default async function Layout({
+  children,
+  params,
+}: {
+  children: React.ReactNode;
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale } = await params;
+  if (!hasPublishedGuides(locale, 'articles')) notFound();
+  // Each leaf page still enforces its own approval, even without middleware.
   return children;
 }

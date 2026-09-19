@@ -87,11 +87,11 @@ describe('continuous heat-treatment line rendered page', () => {
     expect(details.map((match) => match[1].includes('open=""'))).toEqual([false, false, true, false]);
     expect(faqs.match(/<summary>/g)).toHaveLength(4);
   });
-  it("keeps live capacity and acceptance news without the withdrawn quotation guide", () => {
+  it("keeps live capacity and acceptance news with the approved quotation guide", () => {
     const resources=section('resources');
-    expect(resources.match(/<article\b/g)).toHaveLength(2);
+    expect(resources.match(/<article\b/g)).toHaveLength(3);
     for(const term of ['产能','验收'])expect(text(resources)).toContain(term);
-    expect(resources).not.toContain('/zh/articles/gongye-lu-baojia-canshu');
+    expect(resources).toContain('/zh/articles/gongye-lu-baojia-canshu');
   });
   it('keeps horizontal table scrolling within its own region and a mobile layout', () => {
     expect(styles).toContain('overflow-x: auto');

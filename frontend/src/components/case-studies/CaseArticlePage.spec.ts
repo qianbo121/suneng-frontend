@@ -1,3 +1,4 @@
+import { isWithdrawnTechnicalPath } from '@/lib/publication-scope';
 import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it, vi } from 'vitest';
@@ -71,9 +72,9 @@ describe('case resources preserve the published content', () => {
   it("keeps the approved Henan page free of links to withdrawn guides and solutions", () => {
     const html = renderToStaticMarkup(createElement(CaseArticlePage, { slug: 'henan-annealing-solution-line', searchParams: {} }));
     expect(html).toContain('<figcaption>参考图，非项目现场照片</figcaption>');
-    expect(html).not.toMatch(/href="\/zh\/(solutions|articles)(\/|")/);
+    for (const [, href] of html.matchAll(/href="([^"]+)"/g)) expect(isWithdrawnTechnicalPath(href), href).toBe(false);
     expect(html).toContain('href="/zh/products/detail/annealing-solution-line"');
-    expect(html).toContain('href="/zh/products"');
+    expect(html).toContain('href="/zh/articles/gongye-lu-baojia-canshu"');
   });
 
   it("rejects the old eight-furnace article with 404", () => {
@@ -86,8 +87,8 @@ describe('case resources preserve the published content', () => {
         compact: true, backHref: '/zh/case', caseId: 'fixture', sourceSummary: '', variant,
       }));
       expect(html, variant).toMatch(/data-count="[2-9]"/);
-      expect(html, variant).not.toMatch(/href="\/zh\/(solutions|articles)(\/|")/);
-      expect(html, variant).toContain('href="/zh/products"');
+      for (const [, href] of html.matchAll(/href="([^"]+)"/g)) expect(isWithdrawnTechnicalPath(href), href).toBe(false);
+      expect(html, variant).toContain('href="/zh/articles/gongye-lu-baojia-canshu"');
     }
   });
 
