@@ -37,14 +37,47 @@
   transition: color 200ms ease;
 }
 
+.primaryList .primaryLink {
+  gap: 8px;
+  font-size: clamp(15px, 1.12vw, 18px);
+  font-weight: 600;
+}
+
+.primaryList .primaryLink::after {
+  content: '';
+  position: absolute;
+  inset: auto 10px 0;
+  height: 3px;
+  background: currentColor;
+  opacity: 0;
+  transition: opacity 120ms ease;
+}
+
+.primaryList > li[data-open='true'] > p > .primaryLink::after {
+  opacity: 1;
+}
+
+.menuChevron {
+  flex: none;
+  width: 15px;
+  height: 15px;
+  color: #6c8090;
+  transition: transform 120ms ease, color 120ms ease;
+}
+
+.primaryLink[aria-expanded='true'] > .menuChevron {
+  color: currentColor;
+  transform: rotate(180deg);
+}
+
 .submenu {
   position: absolute;
   top: calc(100% + 6px);
   left: 0;
   z-index: 99;
-  min-width: 224px;
+  min-width: 208px;
   margin: 0;
-  padding: 6px;
+  padding: 6px 0;
   border: 1px solid #e4eaf2;
   border-radius: 8px;
   background: #fff;
@@ -78,14 +111,24 @@
 .submenuLink {
   display: flex;
   align-items: center;
-  min-height: 44px;
-  padding: 10px 14px;
-  border-radius: 4px;
+  min-height: 60px;
+  padding: 18px 20px;
   color: #1f2937;
-  font-size: 14px;
+  font-size: 16px;
   line-height: 24px;
   white-space: nowrap;
   transition: background-color 120ms ease, color 120ms ease;
+}
+
+.submenuFooter {
+  margin: 7px 16px 0;
+  border-top: 1px solid #e6edf2;
+  list-style: none;
+}
+
+.submenuFooter > .submenuLink {
+  padding-inline: 4px;
+  color: #003f87;
 }
 
 .submenuLink:is(:hover, :focus-visible, [aria-current='page']) {
@@ -100,9 +143,10 @@
 
 @media (prefers-reduced-motion: reduce) {
   .primaryLink,
+  .primaryLink::after,
+  .menuChevron,
   .submenu,
   .submenuLink {
     transition: none;
-    transform: none;
   }
 }

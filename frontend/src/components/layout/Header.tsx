@@ -337,6 +337,9 @@ export function Header({ locale }: HeaderProps) {
                               <span className="inline-flex items-center leading-none">
                                 {item.labelText}
                               </span>
+                              {item.children?.length ? (
+                                <HiChevronDown aria-hidden="true" className={styles.menuChevron} />
+                              ) : null}
                             </Link>
                           </p>
 
@@ -361,6 +364,13 @@ export function Header({ locale }: HeaderProps) {
                                   </p>
                                 </li>
                               ))}
+                              {item.key === 'engineering' ? (
+                                <li className={styles.submenuFooter}>
+                                  <Link href={href} className={styles.submenuLink}>
+                                    {currentLocale === 'zh' ? '全部改造与服务' : 'All services & retrofit'}
+                                  </Link>
+                                </li>
+                              ) : null}
                             </ul>
                           ) : null}
                         </li>
@@ -468,7 +478,7 @@ export function Header({ locale }: HeaderProps) {
                         <div className="p_menu1Item flex min-h-[58px] items-center">
                           <Link
                             href={href}
-                            className={`my-1 flex min-h-[50px] min-w-0 flex-1 items-center px-3 py-1 text-[15px] leading-[1.5] focus-visible:outline focus-visible:outline-2 focus-visible:outline-brand-primary ${
+                            className={`my-1 flex min-h-[50px] min-w-0 flex-1 items-center px-3 py-1 text-[16px] leading-[1.5] focus-visible:outline focus-visible:outline-2 focus-visible:outline-brand-primary ${
                               isContactItem
                                 ? 'bg-[#c51624] font-semibold text-white'
                                 : styles.primaryLink
@@ -509,7 +519,7 @@ export function Header({ locale }: HeaderProps) {
                                       setMobileOpen(false);
                                       setMobileExpandedKey(null);
                                     }}
-                                    className="block min-h-[44px] py-2 pr-3 text-[14px] leading-[28px] text-[#5f697b] focus-visible:outline focus-visible:outline-2 focus-visible:outline-brand-primary"
+                                    className="flex min-h-[48px] items-center py-3 pr-3 text-[16px] leading-[24px] text-[#5f697b] focus-visible:outline focus-visible:outline-2 focus-visible:outline-brand-primary"
                                   >
                                     {child.labelText}
                                   </SubmenuLink>
