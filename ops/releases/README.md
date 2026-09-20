@@ -62,3 +62,9 @@ The backend entry must contain `image`, `expectedCurrentImage`, and `archiveSha2
 网站负责人已批准导航 A 与 8 个中文指南页面的部署。`approved-guides.json` 是这一批的唯一路径清单，前台与发布工具共用；全局 `TECHNICAL_CONTENT_PUBLISHED` 仍为 false。其余文章、解决方案列表、英文指南和未批准案例保持关闭。页面自身与中间件分别验证，网站地图只列出这 8 页的中文地址。
 
 新候选清单携带 `approvedGuides`；缺省为空，旧候选与回退清单不会自动公开指南。发布检查要求清单中每一页为 200 并进入网站地图，清单外的指南与变形地址仍为 404。检查当前版本和失败恢复时兼容旧版指南全部关闭的状态。成功回执新增 `frontendRelease.servedGuides`，作为下一次发布的实际基线。安装工具时必须一并复制 `approved-guides.json`。
+
+## 指定后台界面的发布
+
+`prepare-admin.yml` 从已通过主分支检查的完整提交构建后台候选，不连接生产。只有清单显式包含 `admin`（`image`、`expectedCurrentImage`、`archiveSha256`）时，发布工具才允许替换后台；镜像必须与前台来自同一提交。没有该字段时，后台继续受到保护。
+
+预检在独立静态容器检查入口、询盘版本和“只看通知未送达”所在的实际页面程序包；上线后核对公网资源与候选逐文件一致。该静态检查不能代替登录后的筛选验收。任何切换后检查失败会同时恢复此前的前台和后台，保留数据库、附件、后端及共享代理容器不变。不发送测试询盘或通知。

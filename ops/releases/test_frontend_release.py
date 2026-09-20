@@ -770,5 +770,108 @@ class ReviewedGuideReleaseTest(unittest.TestCase):
         self.assertNotEqual(harness.run_script(contract, {**statuses, r.APPROVED_GUIDES[0]: 404}, xml)[0], 0)
         self.assertNotEqual(harness.run_script(contract, statuses, sitemap('/zh/news', '/en/news', *CASE_GROUP))[0], 0)
 
+class AdminReleaseTest(unittest.TestCase):
+    def manifest(self):
+        return {**MANIFEST, 'admin': {'image': OTHER, 'expectedCurrentImage': RECEIPT['images']['admin'],
+                                    'archiveSha256': '4' * 64}}
+
+    def test_admin_manifest_requires_immutable_image_previous_version_and_shared_source(self):
+        self.assertEqual(r.validate_manifest(self.manifest()), self.manifest())
+        for admin in [{}, {'image': 'latest'}, {**self.manifest()['admin'], 'archiveSha256': 'bad'},
+                      {**self.manifest()['admin'], 'expectedCurrentImage': ''}]:
+            with self.subTest(admin=admin), self.assertRaises(ValueError):
+                r.validate_manifest({**MANIFEST, 'admin': admin})
+
+    def test_admin_assets_reject_missing_filter_incompatible_contract_and_html_fallback(self):
+        good = {'/': '<script src="/assets/index-abc.js"></script><link href="/assets/index.css">',
+                '/assets/index-abc.js': 'const label="只看通知未送达";const undelivered=true;',
+                '/assets/index.css': 'body{color:black}', '/inquiry-contract-version.txt': '2'}
+        self.assertTrue(r.admin_assets(good.__getitem__)['passed'])
+        for patch_values in [{'/': '<script src="https://other.test/app.js"></script>'},
+                             {'/assets/index-abc.js': '<!DOCTYPE html><html></html>'},
+                             {'/assets/index-abc.js': 'old application'},
+                             {'/inquiry-contract-version.txt': '1'}]:
+            with self.subTest(patch_values=patch_values), self.assertRaises(RuntimeError):
+                r.admin_assets({**good, **patch_values}.__getitem__)
+        previous = {**good, '/assets/index-abc.js': 'old application'}
+        self.assertTrue(r.admin_assets(previous.__getitem__, require_filter=False)['passed'])
+        lazy = {**good, '/assets/index-abc.js': 'import("./CustomRequirementPage-123.js")',
+                '/assets/CustomRequirementPage-123.js': good['/assets/index-abc.js']}
+        self.assertIn('/assets/CustomRequirementPage-123.js', r.admin_assets(lazy.__getitem__)['assets'])
+
+    def test_admin_is_protected_without_an_explicit_manifest(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            release = ContractTest().fixture(tmp)
+            self.assertIn('admin', release.protected)
+            self.assertEqual(release.components, ['frontend'])
+
+    def test_failed_admin_canary_never_replaces_production(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            release = ContractTest().fixture(tmp, self.manifest())
+            with patch.object(r, 'inspect', side_effect=lambda names: [x for x in rows() if x['Name'][11:] in names]), \
+                 patch.object(r, 'run', side_effect=image_inspect), \
+                 patch.object(release, 'admin_check', side_effect=RuntimeError('missing filter')), \
+                 patch.object(release, 'replace_frontend') as replace:
+                with self.assertRaises(RuntimeError): release.execute(apply=True)
+                replace.assert_not_called()
+                self.assertFalse(release.pending_path.exists())
+
+    def test_admin_version_drift_stops_before_canary(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            value = self.manifest()
+            value['admin']['expectedCurrentImage'] = NEW
+            release = ContractTest().fixture(tmp, value)
+            with patch.object(r, 'inspect', side_effect=lambda names: [x for x in rows() if x['Name'][11:] in names]), \
+                 patch.object(r, 'run', side_effect=image_inspect), patch.object(release, 'admin_check') as check:
+                with self.assertRaisesRegex(RuntimeError, 'Admin changed'): release.execute(apply=True)
+                check.assert_not_called()
+
+    def test_public_admin_mismatch_restores_both_frontend_and_admin(self):
+        for fails in [False, True]:
+            with self.subTest(fails=fails), tempfile.TemporaryDirectory() as tmp:
+                release = ContractTest().fixture(tmp, self.manifest())
+                state = dict(RECEIPT['images'])
+                switches = []
+                def current(names):
+                    result = rows(state['frontend'])
+                    for row in result:
+                        name = row['Name'].removeprefix('/corp-site-')
+                        if name in state:
+                            row['Image'] = state[name]
+                            row['Id'] = name + state[name]
+                    return [row for row in result if row['Name'].removeprefix('/corp-site-') in names]
+                def replace(override=None):
+                    switches.append(override)
+                    state.update(RECEIPT['images'] if override else release.target)
+                def admin_check(container=None, require_filter=True):
+                    return {'passed': True, 'assets': {'/assets/app.js': 'wrong' if fails and require_filter else 'checked'}}
+                with patch.object(r, 'inspect', side_effect=current), patch.object(r, 'run', side_effect=canary_docker), \
+                     patch.object(r, 'wait_healthy'), patch.object(r, 'probe', return_value=GOOD), \
+                     patch.object(r, 'public_probe', return_value=[]), patch.object(r.subprocess, 'run'), \
+                     patch.object(release, 'admin_check', return_value={'passed': True, 'assets': {'/assets/app.js': 'checked'}}), \
+                     patch.object(r, 'admin_probe', side_effect=admin_check), \
+                     patch.object(release, 'backend_check') as backend, \
+                     patch.object(release, 'replace_frontend', side_effect=replace):
+                    if fails:
+                        with self.assertRaises(RuntimeError): release.execute(apply=True)
+                    else:
+                        result = release.execute(apply=True)
+                        self.assertTrue(result['applied'])
+                    backend.assert_not_called()
+                self.assertEqual(state['backend'], RECEIPT['images']['backend'])
+                self.assertFalse(release.pending_path.exists())
+                receipt = json.loads(release.receipt_path.read_text())
+                if fails:
+                    self.assertEqual(state, RECEIPT['images'])
+                    self.assertEqual(receipt, RECEIPT)
+                    self.assertEqual(len(switches), 2)
+                    self.assertTrue(json.loads((release.audit / 'result.json').read_text())['previousAdminRestoredAndVerified'])
+                else:
+                    self.assertEqual(state, release.target)
+                    self.assertEqual(receipt['adminRelease']['image'], OTHER)
+                    self.assertEqual(receipt['images']['admin'], OTHER)
+                    self.assertEqual(json.loads(release.pins_path.read_text())['services']['admin']['image'], OTHER)
+
+
 if __name__ == '__main__':
     unittest.main(verbosity=2)
