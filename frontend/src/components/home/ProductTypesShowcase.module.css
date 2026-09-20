@@ -552,11 +552,6 @@
   color: #e8a020;
 }
 
-.homeLineFlowLink:hover [data-process-label] {
-  text-decoration: underline;
-  text-underline-offset: 4px;
-}
-
 .section .homeLineNote {
   margin: 0 0 24px;
   color: #64748b;

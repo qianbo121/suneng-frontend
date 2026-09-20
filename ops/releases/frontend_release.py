@@ -7,6 +7,7 @@ import argparse
 import copy
 import datetime
 import fcntl
+import hashlib
 import json
 import os
 from pathlib import Path
@@ -113,6 +114,12 @@ def validate_manifest(value):
             raise ValueError('Backend release requires exact image, previous image and archive hash')
         if value.get('sourceIdentity') != 'git-commit' or not all(IMAGE.fullmatch(backend[k]) for k in ['image', 'expectedCurrentImage']) or not DIGEST.fullmatch(backend['archiveSha256']):
             raise ValueError('Backend must share the reviewed Git source and use immutable images')
+    if 'admin' in value:
+        admin = value['admin']
+        if not isinstance(admin, dict) or set(admin) != {'image', 'expectedCurrentImage', 'archiveSha256'}:
+            raise ValueError('Admin release requires exact image, previous image and archive hash')
+        if value.get('sourceIdentity') != 'git-commit' or not all(IMAGE.fullmatch(admin[k]) for k in ['image', 'expectedCurrentImage']) or not DIGEST.fullmatch(admin['archiveSha256']):
+            raise ValueError('Admin must share the reviewed Git source and use immutable images')
     return value
 
 
@@ -272,6 +279,38 @@ def wait_healthy(container):
     raise RuntimeError('Candidate health check timed out')
 
 
+def admin_assets(fetch, require_filter=True):
+    """Read public static assets only; never log in or submit an inquiry action."""
+    html = fetch('/')
+    paths = sorted(set(re.findall(r'(?:src|href)=[\"\'](/assets/[A-Za-z0-9_.-]+\.(?:js|css))[\"\']', html)))
+    if not paths or not any(path.endswith('.js') for path in paths):
+        raise RuntimeError('Admin entry has no valid application assets')
+    assets = {path: fetch(path) for path in paths}
+    # Vite loads the inquiry page lazily; follow its entry-bundle reference.
+    for name in sorted(set(re.findall(r'CustomRequirementPage-[A-Za-z0-9_-]+\.js', '\n'.join(assets.values())))):
+        path = '/assets/' + name
+        assets[path] = fetch(path)
+    if any(not body.strip() or body.lstrip().lower().startswith('<!doctype') for body in assets.values()):
+        raise RuntimeError('Admin static asset is missing or returned the HTML fallback')
+    javascript = '\n'.join(body for path, body in assets.items() if path.endswith('.js'))
+    if require_filter and not ('只看通知未送达' in javascript and 'undelivered' in javascript):
+        raise RuntimeError('Admin inquiry filter is absent from the application bundle')
+    if fetch('/inquiry-contract-version.txt').strip() != '2':
+        raise RuntimeError('Admin inquiry contract is incompatible')
+    return {'passed': True, 'filterBundleVerified': require_filter,
+            'assets': {path: hashlib.sha256(body.encode()).hexdigest() for path, body in assets.items()},
+            'authenticatedInteractionVerified': False, 'notificationsSent': False}
+
+
+def admin_probe(container=None, require_filter=True):
+    def fetch(path):
+        if container:
+            return run(['docker', 'exec', container, 'wget', '-qO-', 'http://127.0.0.1' + path])
+        return run(['curl', '--fail', '--max-time', '25', '--silent', '--show-error',
+                    'https://admin.jssngyl.cn' + path])
+    return admin_assets(fetch, require_filter)
+
+
 def public_probe(base_url, contract):
     def status_of(path):
         return run(['curl', '--max-time', '25', '--silent', '--show-error', '--output',
@@ -337,6 +376,10 @@ class Release:
             self.target['backend'] = manifest['backend']['image']
             self.components = ['backend', 'frontend']
             self.protected.remove('backend')
+        if 'admin' in manifest:
+            self.target['admin'] = manifest['admin']['image']
+            self.components.append('admin')
+            self.protected.remove('admin')
 
     def compose(self, override=None):
         return ['docker', 'compose', '-p', 'website', '--project-directory', str(self.live),
@@ -369,6 +412,16 @@ class Release:
             raise RuntimeError('Backend aggregate or migration verification failed')
         return report
 
+    def admin_check(self):
+        canary = 'suneng-admin-check-' + uuid.uuid4().hex[:12]
+        try:
+            run(self.compose() + ['run', '-d', '--no-deps', '--pull', 'never',
+                                 '--name', canary, 'admin'], env=self.env)
+            wait_healthy(canary)
+            return admin_probe(canary)
+        finally:
+            subprocess.run(['docker', 'rm', '-f', canary], capture_output=True, timeout=30)
+
     def execute(self, apply=False, kind='deploy'):
         if self.manifest.get('legacyEncodedPaths') and kind != 'rollback':
             raise RuntimeError('Encoded-path probes may be skipped only for an owner-approved rollback')
@@ -395,6 +448,14 @@ class Release:
             if backend_image['Id'] != self.target['backend'] or (backend_image.get('Config', {}).get('Labels') or {}).get('org.opencontainers.image.revision') != self.manifest['sourceCommit']:
                 raise RuntimeError('Backend image was not built from the same reviewed source')
             self.backend_check()
+        admin_candidate = None
+        if 'admin' in self.manifest:
+            if self.receipt['images']['admin'] != self.manifest['admin']['expectedCurrentImage']:
+                raise RuntimeError('Admin changed since this release was prepared')
+            admin_image = json.loads(run(['docker', 'image', 'inspect', self.target['admin']]))[0]
+            if admin_image['Id'] != self.target['admin'] or (admin_image.get('Config', {}).get('Labels') or {}).get('org.opencontainers.image.revision') != self.manifest['sourceCommit']:
+                raise RuntimeError('Admin image was not built from the same reviewed source')
+            admin_candidate = self.admin_check()
         same = all(self.target[name] == self.receipt['images'][name] for name in self.components)
         canary = 'suneng-release-check-' + uuid.uuid4().hex[:12]
         if same:
@@ -413,6 +474,8 @@ class Release:
         result = {'at': now(), 'passed': True, 'applied': False, 'kind': kind,
                   'image': self.target['frontend'], 'internalChecks': internal,
                   'dataRestored': False, 'notificationsSent': False, 'components': self.components}
+        if admin_candidate:
+            result['adminCandidate'] = admin_candidate
         if not apply or same:
             # Without a switch the public site still runs the current image.
             result['publicChecks'] = public_probe('https://www.jssngyl.cn', self.target_contract if same else self.lenient_contract)
@@ -437,6 +500,10 @@ class Release:
                 result['backendVerification'] = self.backend_check(running=True)
             result['internalChecks'] = probe('corp-site-frontend', self.script, self.target_contract)
             result['publicChecks'] = public_probe('https://www.jssngyl.cn', self.target_contract)
+            if 'admin' in self.manifest:
+                result['adminPublic'] = admin_probe()
+                if result['adminPublic']['assets'] != admin_candidate['assets']:
+                    raise RuntimeError('Public admin assets do not match the checked candidate')
             if signature(inspect(self.protected)) != protected:
                 raise RuntimeError('A protected production service changed')
             if any(row['Image'] != self.target[row['Name'].removeprefix('/corp-site-')] for row in inspect(self.components)):
@@ -447,6 +514,9 @@ class Release:
                             'previousReceipt': str(self.audit / 'previous-receipt.json'),
                             'productionVerifiedAt': now(), 'deploymentStatus': 'verified',
                             'releaseOperation': kind, 'releaseOperationReceipt': str(self.audit / 'result.json')})
+            if 'admin' in self.manifest:
+                receipt['adminRelease'] = {**self.manifest['admin'], 'sourceCommit': self.manifest['sourceCommit'],
+                                           'sourceIdentity': 'git-commit', 'publicAssets': result['adminPublic']['assets']}
             self.write_override(self.pins_path, self.target)
             atomic_json(self.receipt_path, receipt)
             # Version marker refers to the checked-in source of a newly built image only.
@@ -465,6 +535,9 @@ class Release:
                 # The restored image may predate the approved cases.
                 probe('corp-site-frontend', self.script, self.lenient_contract)
                 public_probe('https://www.jssngyl.cn', self.lenient_contract)
+                if 'admin' in self.manifest:
+                    if admin_probe('corp-site-admin', require_filter=False)['assets'] != admin_probe(require_filter=False)['assets']:
+                        raise RuntimeError('Public admin assets did not return to the previous image')
                 if signature(inspect(self.protected)) != protected:
                     raise RuntimeError('Protected services changed during recovery')
                 self.write_override(self.pins_path, self.receipt['images'])
@@ -477,6 +550,8 @@ class Release:
                     (self.live / 'DEPLOY_COMMIT').unlink()
                 self.pending_path.unlink()
                 result['previousFrontendRestoredAndVerified'] = True
+                if 'admin' in self.manifest:
+                    result['previousAdminRestoredAndVerified'] = True
             except Exception:
                 # Leave an explicit pending marker and accurate image identity, never a false success.
                 observed = {row['Name'].removeprefix('/corp-site-'): row['Image'] for row in inspect(['frontend', 'backend', 'admin'])}
@@ -495,6 +570,10 @@ class Release:
                 self.write_override(self.pins_path, observed)
                 atomic_json(self.receipt_path, failed)
                 result['previousFrontendRestoredAndVerified'] = False
+                if 'admin' in self.manifest:
+                    failed['adminRelease'] = {'image': observed['admin'], 'verificationRequired': True}
+                    atomic_json(self.receipt_path, failed)
+                    result['previousAdminRestoredAndVerified'] = False
             atomic_json(self.audit / 'result.json', result)
             raise RuntimeError('Release failed; see the private operation receipt') from error
         atomic_json(self.audit / 'result.json', result)
