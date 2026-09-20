@@ -104,6 +104,8 @@ export function normalizeNewsHtml(
   return prepareNewsArticleHtml(content, {
     coverImage: options?.coverImage,
     stackSimpleTables: locale === 'en',
+    articleSlug: item.slug,
+    locale,
   });
 }
 
