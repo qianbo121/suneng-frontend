@@ -11,6 +11,26 @@ const revision = revisions['73'];
 const casePath = '/zh/case/henan-annealing-solution-line';
 
 describe('approved inline case reference in shuju-news-28', () => {
+  it('exposes all seven existing section labels as headings without changing their wording', () => {
+    const html = prepareNewsArticleHtml(revision.contentZh);
+    const root = DOMPurify.sanitize(html, { RETURN_DOM: true }) as HTMLElement;
+    const headings = root.querySelectorAll('h2.news-section-heading');
+    expect(Array.from(headings, (heading) => heading.textContent)).toEqual([
+      '第一项：厂家是否真正理解产品和工艺？',
+      '第二项：厂家能否算清整条线的生产节奏？',
+      '第三项：设备和系统之间的责任是否写清楚？',
+      '第四项：安全是否覆盖调试、维护和异常？',
+      '第五项：所谓同类经验能否被核验？',
+      '第六项：出厂验收、现场验收和产品验证是否分开？',
+      '第七项：售后承诺能否变成可以执行的条款？',
+    ]);
+    expect(
+      Array.from(root.querySelectorAll('p')).some((p) =>
+        /^第[一二三四五六七]项：/.test(p.textContent ?? ''),
+      ),
+    ).toBe(false);
+  });
+
   it('renders one contextual link between the evidence and confidentiality paragraphs', () => {
     const html = prepareNewsArticleHtml(revision.contentZh);
     const root = DOMPurify.sanitize(html, { RETURN_DOM: true }) as HTMLElement;
