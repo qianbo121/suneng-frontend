@@ -10,7 +10,7 @@ import type { Locale } from '@/types/site';
 export const NEWS_LIST_SEO = {
   zh: NEWS_SEO,
   en: {
-    title: 'Furnace Selection & Heat Treatment Resources | Suneng',
+    title: 'Industrial Furnace Resources | Suneng',
     description:
       'Furnace selection guides, quote-parameter checklists, retrofit resources and company updates from Suneng Industrial Furnace.',
     keywords: [

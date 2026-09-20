@@ -10,6 +10,7 @@ import { CASE_PAGE_SIZE } from './types';
 
 type EnglishCopy = {
   id: string; slug: string; number: number; title: string; summary: string;
+  seoTitle?: string; seoDescription?: string;
   body: string; sourceFingerprint: string; translationStatus: 'complete';
   translatedAt: string; coverAlt: string; coverCaption: string;
 };
@@ -52,6 +53,8 @@ export function readEnglishCases(
     // Never spread arbitrary translation/source metadata into a public response.
     return [{
       id: source.id, slug: source.slug, title: copy.title, summary: copy.summary,
+      seoTitle: copy.seoTitle?.trim() || undefined,
+      seoDescription: copy.seoDescription?.trim() || undefined,
       contentType: source.contentType, projectStatus: source.projectStatus,
       projectYear: source.projectYear, sourceDate: source.sourceDate,
       datePublished: source.datePublished, dateModified: source.dateModified,

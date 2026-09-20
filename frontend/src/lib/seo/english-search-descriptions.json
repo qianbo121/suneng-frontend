@@ -1,0 +1,14 @@
+{
+  "Which Treatments Can a 700°C Box Furnace Perform? Confirm the Material and Requirements": {
+    "sourceDescription": "For a furnace rated for operation at 700°C, assess material-specific tempering, stress relief or annealing; do not assume conventional steel normalizing or stainless-steel solution treatment capability.",
+    "description": "Check material-specific treatments at 700°C; do not assume conventional steel normalizing or stainless-steel solution treatment capability."
+  },
+  "How Do You Calculate the Throughput Limits of a Continuous Mesh-Belt Carburizing Furnace?": {
+    "sourceDescription": "Calculate mesh-belt carburizing throughput from the limiting process-zone speed and verified loading. A worked example distinguishes geometric flow from qualified output.",
+    "description": "Calculate mesh-belt carburizing throughput from process-zone speed and verified loading; distinguish geometric flow from qualified output."
+  },
+  "Steel Annealing at 500 Tonnes per Month: Are Two Bogie Hearth Furnaces Enough?": {
+    "sourceDescription": "Two furnaces and a 500-tonne monthly target do not establish capacity. Check qualified net output per batch, the complete furnace-occupancy cycle, available monthly hours and delivery timing.",
+    "description": "Check net output per batch, full furnace cycle, available hours and delivery timing; two furnaces alone do not establish 500-tonne monthly capacity."
+  }
+}

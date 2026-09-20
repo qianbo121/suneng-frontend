@@ -71,7 +71,7 @@ describe('complete English case integration', () => {
       expect(decoded, item.slug).toBe(item.title);
       const meta = englishCaseMetadata(item.slug);
       const seoTitle = (meta.title as { absolute: string }).absolute;
-      expect(seoTitle).toBe('Henan Strip Annealing & Solution Section | Suneng');
+      expect(seoTitle).toContain(item.seoTitle || item.title);
       expect(seoTitle.length).toBeLessThanOrEqual(60);
       expect(meta.description!.length).toBeLessThanOrEqual(160);
       expect(meta.description).toContain('not verified output or acceptance results');
