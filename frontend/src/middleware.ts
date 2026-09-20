@@ -107,14 +107,11 @@ function missingProductResponse(pathname: string) {
 }
 
 // The approved case list is short, so an unbounded ?page= would otherwise mint an
-// unlimited number of distinct, indexable empty pages. Answer plain list pages past
-// the end here, where the status really is 404; filtered views keep their own page.
-const CASE_LIST_QUERY_KEYS = ['q', 'type', 'sort', 'from', 'workpiece', 'process', 'equipment', 'need'];
-
+// unlimited number of distinct, indexable empty pages. Filters cannot increase the
+// total: reject pages past the global limit, including an empty ?q= bypass.
 function isMissingCaseListPage(pathname: string, searchParams: URLSearchParams) {
   const match = /^\/(zh|en)\/case\/?$/.exec(pathname);
   if (!match) return false;
-  if (CASE_LIST_QUERY_KEYS.some((key) => searchParams.has(key))) return false;
   const pages = searchParams.getAll('page');
   if (pages.length === 0) return false;
   if (pages.length > 1 || !/^[1-9]\d*$/.test(pages[0])) return true;
@@ -199,6 +196,12 @@ export default async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  // The first rule skips any path with a dot in it; case addresses are checked regardless.
-  matcher: ['/((?!api|_next|_vercel|.*\\..*).*)', '/:locale(zh|en)/case/:path*'],
+  // Asset filenames skip the broad rule; public detail routes must still be
+  // checked when a slug contains a dot. Otherwise missing news can be indexed.
+  matcher: [
+    '/((?!api|_next|_vercel|.*\\..*).*)',
+    '/:locale(zh|en)/case/:path*',
+    '/:locale(zh|en)/news/:path*',
+    '/:locale(zh|en)/products/detail/:path*',
+  ],
 };

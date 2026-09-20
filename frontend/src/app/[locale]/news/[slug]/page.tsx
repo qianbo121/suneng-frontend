@@ -28,6 +28,7 @@ import {
 import { getNewsContentModifiedTime } from '@/lib/news-dates';
 import { getArticleJsonLd, getBreadcrumbJsonLd } from '@/lib/seo/jsonld';
 import { buildMetadata } from '@/lib/seo/metadata';
+import { englishNewsSearchMetadata } from '@/lib/seo/english-search-metadata';
 import {
   getCanonicalNewsSlug,
   getPublicNewsRedirectSlug,
@@ -97,8 +98,9 @@ export async function generateMetadata({ params }: NewsDetailPageProps) {
   const modifiedTime = getNewsContentModifiedTime(article, currentLocale);
 
   return buildMetadata({
-    title,
-    description,
+    ...(currentLocale === 'en'
+      ? englishNewsSearchMetadata(title, description, article.seoTitleEn)
+      : { title, description }),
     path: `/${currentLocale}/news/${slug}`,
     pageKey: 'news-detail',
     locale: currentLocale,

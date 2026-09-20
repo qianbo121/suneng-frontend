@@ -33,6 +33,11 @@ jobs:
           echo "SOURCE_COMMIT=$SOURCE_COMMIT" >> "$GITHUB_ENV"
           echo "IMAGE_TAG=suneng-verified-frontend:$SOURCE_COMMIT" >> "$GITHUB_ENV"
       - name: Build candidate outside production
+        env:
+          NEXT_PUBLIC_BAIDU_SITE_VERIFICATION: ${{ vars.NEXT_PUBLIC_BAIDU_SITE_VERIFICATION || secrets.NEXT_PUBLIC_BAIDU_SITE_VERIFICATION }}
+          NEXT_PUBLIC_BING_SITE_VERIFICATION: ${{ vars.NEXT_PUBLIC_BING_SITE_VERIFICATION || secrets.NEXT_PUBLIC_BING_SITE_VERIFICATION }}
+          NEXT_PUBLIC_360_SITE_VERIFICATION: ${{ vars.NEXT_PUBLIC_360_SITE_VERIFICATION || secrets.NEXT_PUBLIC_360_SITE_VERIFICATION }}
+          NEXT_PUBLIC_SOGOU_SITE_VERIFICATION: ${{ vars.NEXT_PUBLIC_SOGOU_SITE_VERIFICATION || secrets.NEXT_PUBLIC_SOGOU_SITE_VERIFICATION }}
         run: |
           set -euo pipefail
           bash scripts/check-no-secrets.sh
@@ -41,6 +46,10 @@ jobs:
             --build-arg NEXT_PUBLIC_API_URL=/api \
             --build-arg NEXT_PUBLIC_API_BASE_URL=/api \
             --build-arg API_BASE_URL_INTERNAL=http://backend:3001/api \
+            --build-arg "NEXT_PUBLIC_BAIDU_SITE_VERIFICATION=$NEXT_PUBLIC_BAIDU_SITE_VERIFICATION" \
+            --build-arg "NEXT_PUBLIC_BING_SITE_VERIFICATION=$NEXT_PUBLIC_BING_SITE_VERIFICATION" \
+            --build-arg "NEXT_PUBLIC_360_SITE_VERIFICATION=$NEXT_PUBLIC_360_SITE_VERIFICATION" \
+            --build-arg "NEXT_PUBLIC_SOGOU_SITE_VERIFICATION=$NEXT_PUBLIC_SOGOU_SITE_VERIFICATION" \
             --label "org.opencontainers.image.revision=$SOURCE_COMMIT" \
             --tag "$IMAGE_TAG" .
       - name: Record immutable artifact identity

@@ -360,7 +360,7 @@ http {
     }
 
     location ~ \.php$ {
-      return 301 https://www.jssngyl.cn/zh;
+      return 404;
     }
 
     location / {
@@ -422,7 +422,7 @@ http {
     }
 
     location ~ \.php$ {
-      return 301 https://www.jssngyl.cn/zh;
+      return 404;
     }
 
     location / {
@@ -488,7 +488,7 @@ http {
     }
 
     location ~ \.php$ {
-      return 301 /zh;
+      return 404;
     }
 
     # Keep the public root deterministic for crawlers. Locale-prefixed URLs

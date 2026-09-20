@@ -1,6 +1,7 @@
 import { existsSync, readFileSync, writeFileSync, renameSync } from 'node:fs';
 import { pathToFileURL } from 'node:url';
-import { loadSitemapUrls, submitBaidu, submitIndexNow } from './submit-search-engines.mjs';
+import { loadSitemapEntries, submitBaidu, submitIndexNow } from './submit-search-engines.mjs';
+import { selectChangedUrls } from './changed-search-urls.mjs';
 
 export function emptyQueue() {
   return { version: 1, sources: [], pending: { baidu: [], indexnow: [] }, baiduDay: '', baiduAttempted: 0 };
@@ -13,7 +14,42 @@ export function validateQueue(state) {
       typeof state.baiduDay !== 'string' || (state.baiduDay && !/^\d{4}-\d{2}-\d{2}$/.test(state.baiduDay))) {
     throw new Error('Invalid queue state; refusing to reset or discard pending URLs');
   }
+  if (state.liveSitemap !== undefined) {
+    const snapshot = state.liveSitemap;
+    if (!Number.isSafeInteger(snapshot?.revision) || snapshot.revision < 1) throw new Error('Invalid live sitemap revision');
+    validateSnapshot(snapshot.entries, snapshot.site);
+  }
   return state;
+}
+
+function validateSnapshot(entries, site) {
+  if (typeof site !== 'string' || new URL(site).origin !== site ||
+      !Array.isArray(entries) || !entries.length || entries.some((entry) =>
+        !Array.isArray(entry) || entry.length !== 2 || typeof entry[0] !== 'string' || typeof entry[1] !== 'string' ||
+        new URL(entry[0]).origin !== site || new URL(entry[0]).search || new URL(entry[0]).hash) ||
+      new Set(entries.map(([url]) => url)).size !== entries.length) {
+    throw new Error('Invalid live sitemap snapshot; refusing to discard pending URLs');
+  }
+}
+
+// Observe the public site, not candidate-build completion. Snapshot and pending
+// URLs are persisted together before any POST, so rejected requests can retry.
+export function refreshLiveQueue(state, live, baseline) {
+  validateQueue(state);
+  if (baseline?.version !== 1 || !Array.isArray(baseline.initialPending) ||
+      baseline.initialPending.some((url) => typeof url !== 'string')) throw new Error('Invalid live baseline');
+  validateSnapshot(baseline.entries, baseline.site);
+  validateSnapshot([...live], baseline.site);
+  if (state.liveSitemap && state.liveSitemap.site !== baseline.site) throw new Error('Live sitemap site changed');
+  const before = new Map(state.liveSitemap?.entries || baseline.entries);
+  const changed = selectChangedUrls(before, live);
+  const revision = (state.liveSitemap?.revision || 0) + 1;
+  mergeBatches(state, [
+    { id: 'live-bootstrap-approved-guides-20260920', urls: baseline.initialPending },
+    ...(changed.length ? [{ id: `live-sitemap-${revision}`, urls: changed }] : []),
+  ], [...live.keys()]);
+  state.liveSitemap = { site: baseline.site, revision, entries: [...live] };
+  return changed;
 }
 
 export function mergeBatches(state, batches, canonicalUrls) {
@@ -68,8 +104,12 @@ async function main() {
   if (!stateFile || !existsSync(stateFile) || !batchFile) throw new Error('Restored state and batches are required; queue initialization belongs to the restore step');
   const state = validateQueue(JSON.parse(readFileSync(stateFile, 'utf8')));
   const site = (process.env.NEXT_PUBLIC_SITE_URL || 'https://www.jssngyl.cn').replace(/\/$/, '');
-  const sitemap = await loadSitemapUrls(site);
-  mergeBatches(state, JSON.parse(readFileSync(batchFile, 'utf8')), sitemap.filter((url) => new URL(url).origin === new URL(site).origin));
+  const baseline = JSON.parse(readFileSync(new URL('./search-live-baseline.json', import.meta.url), 'utf8'));
+  if (site !== baseline.site) throw new Error('Site does not match the reviewed baseline');
+  const sitemap = await loadSitemapEntries(site);
+  const changed = refreshLiveQueue(state, sitemap, baseline);
+  mergeBatches(state, JSON.parse(readFileSync(batchFile, 'utf8')), [...sitemap.keys()]);
+  console.log(`Live sitemap: ${sitemap.size} URLs; ${changed.length} added/changed; pending ${state.pending.baidu.length} Baidu / ${state.pending.indexnow.length} IndexNow.`);
   const save = (value) => { writeFileSync(`${stateFile}.tmp`, JSON.stringify(value, null, 2)); renameSync(`${stateFile}.tmp`, stateFile); };
   if (process.argv.includes('--dry-run')) {
     console.log(JSON.stringify({ dryRun: true, pending: state.pending }));

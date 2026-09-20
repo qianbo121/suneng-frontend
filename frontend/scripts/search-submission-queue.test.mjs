@@ -1,6 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { drainQueue, emptyQueue, mergeBatches, validateQueue } from './search-submission-queue.mjs';
+import { drainQueue, emptyQueue, mergeBatches, refreshLiveQueue, validateQueue } from './search-submission-queue.mjs';
+import { readFileSync } from 'node:fs';
 import { manualBatch, restoreQueue } from './restore-search-queue.mjs';
 import { submitIndexNow } from './submit-search-engines.mjs';
 
@@ -8,6 +9,61 @@ const urls = ['a', 'b', 'c'].map((path) => `https://www.jssngyl.cn/zh/${path}`);
 const queued = () => mergeBatches(emptyQueue(), [{ id: 'deploy-1', urls }], urls);
 const success = async (batch) => ({ ok: true, acceptedUrls: batch });
 const options = (extra = {}) => ({ day: '2026-09-08', limit: 2, available: { baidu: true, indexnow: true }, submit: { baidu: success, indexnow: success }, save: async () => {}, ...extra });
+
+const baseline = () => ({ version: 1, site: 'https://www.jssngyl.cn', entries: [[urls[0], ''], [urls[1], '2026-09-19']], initialPending: [] });
+
+test('discovers real live additions and dated edits, not candidate builds or unchanged undated pages', () => {
+  const state = emptyQueue();
+  assert.deepEqual(refreshLiveQueue(state, new Map(baseline().entries), baseline()), []);
+  assert.deepEqual(state.pending.baidu, []);
+  const live = new Map([[urls[0], ''], [urls[1], '2026-09-20'], [urls[2], '']]);
+  assert.deepEqual(refreshLiveQueue(state, live, baseline()), [urls[1], urls[2]]);
+  assert.deepEqual(state.pending.baidu, [urls[1], urls[2]]);
+});
+
+test('first upgrade seeds only eight confirmed live guides, not all 208 canonical URLs', async () => {
+  const seed = JSON.parse(readFileSync(new URL('./search-live-baseline.json', import.meta.url), 'utf8'));
+  assert.equal(seed.entries.length, 208);
+  assert.equal(seed.initialPending.length, 8);
+  const state = emptyQueue();
+  refreshLiveQueue(state, new Map(seed.entries), seed);
+  assert.deepEqual(state.pending.baidu, seed.initialPending);
+  await drainQueue(state, options({ limit: 10 }));
+  const restored = JSON.parse(JSON.stringify(state));
+  refreshLiveQueue(restored, new Map(seed.entries), seed);
+  assert.deepEqual(restored.pending, { baidu: [], indexnow: [] });
+});
+
+test('live snapshot and pending URLs survive rejected submissions together, without requeueing accepted URLs', async () => {
+  const state = queued(); // Old snapshot format without liveSitemap is supported.
+  const live = new Map([[urls[0], ''], [urls[1], '2026-09-20'], [urls[2], '']]);
+  refreshLiveQueue(state, live, baseline());
+  let saved;
+  await drainQueue(state, options({ save: async value => { saved = structuredClone(value); }, submit: {
+    indexnow: success, baidu: async () => ({ ok: false }),
+  } }));
+  assert.deepEqual(saved.liveSitemap.entries, [...live]);
+  assert.deepEqual(saved.pending.baidu, urls);
+  refreshLiveQueue(saved, live, baseline());
+  assert.deepEqual(saved.pending.indexnow, []);
+  assert.deepEqual(saved.pending.baidu, urls);
+  // An actual later edit to the same address is a new batch, including a reversion.
+  live.set(urls[1], '2026-09-19');
+  refreshLiveQueue(saved, live, baseline());
+  assert.deepEqual(saved.pending.indexnow, [urls[1]]);
+});
+
+test('removed live URLs drop out; corrupt or cross-site snapshots fail before state mutation', () => {
+  const state = queued();
+  refreshLiveQueue(state, new Map([[urls[0], '']]), baseline());
+  assert.deepEqual(state.pending.baidu, [urls[0]]);
+  const before = structuredClone(state);
+  for (const live of [new Map(), new Map([['https://foreign.example/page', '']]), new Map([[urls[0], null]])]) {
+    assert.throws(() => refreshLiveQueue(state, live, baseline()));
+    assert.deepEqual(state, before);
+  }
+  assert.throws(() => validateQueue({ ...state, liveSitemap: { revision: 0, site: baseline().site, entries: baseline().entries } }));
+});
 
 test('retains excess Baidu URLs across serialized runs and drains them on the next day', async () => {
   let state = queued();
