@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import { KeyboardEvent, useEffect, useMemo, useRef, useState } from 'react';
-import { HiArrowRight, HiChevronDown, HiChevronRight } from 'react-icons/hi2';
+import { HiArrowRight, HiChevronRight } from 'react-icons/hi2';
 
 import { trackLeadEvent } from '@/lib/api/lead-events';
 import { getWorkpieceBoundarySummary } from '@/lib/workpiece-direction-summary';
@@ -70,11 +70,11 @@ export function WorkpieceRouter({ catalog, locale = 'zh' }: { catalog: Workpiece
     boundary:
       example.boundary ||
       directionExamples?.customerNote ||
-      '需结合图纸、执行标准、装料与完整工艺链进行工程确认，不构成最终选型或供货承诺。',
+      t(
+        '需结合图纸、执行标准、装料与完整工艺链进行工程确认，不构成最终选型或供货承诺。',
+        'Engineering review must confirm drawings, applicable standards, loading and the full process route. This is not a final equipment selection or supply commitment.',
+      ),
   }));
-  const sharedDirectionCondition =
-    directionConditions.length > 0 &&
-    directionConditions.every((item) => item.boundary === directionConditions[0].boundary);
   const commonProcesses = useMemo(
     () =>
       visibleDirectionExamples.length
@@ -310,7 +310,7 @@ export function WorkpieceRouter({ catalog, locale = 'zh' }: { catalog: Workpiece
                           <strong>{example.direction}</strong>
                         </div>
                         <p className={styles.boundarySummary}>
-                          {english ? 'See application conditions below.' : getWorkpieceBoundarySummary(directionConditions[index].boundary)}
+                          {getWorkpieceBoundarySummary(directionConditions[index].boundary)}
                         </p>
                       </article>
                     ))}
@@ -322,6 +322,14 @@ export function WorkpieceRouter({ catalog, locale = 'zh' }: { catalog: Workpiece
                   <p className={styles.commonProcesses}>
                     <span>{t('常见处理', 'Common treatments')}</span>
                     <strong>{commonProcesses.join('、')}</strong>
+                  </p>
+                ) : null}
+                {visibleDirectionExamples.length ? (
+                  <p className={styles.directionNote}>
+                    {t(
+                      '设备方向仅供初选，具体配置需结合材质、图纸和实际工况确认。',
+                      'Equipment directions are for initial selection only. Confirm the configuration against the material, drawings and actual operating conditions.',
+                    )}
                   </p>
                 ) : null}
               </section>
@@ -360,27 +368,6 @@ export function WorkpieceRouter({ catalog, locale = 'zh' }: { catalog: Workpiece
             </div>
           </section>
 
-          {directionConditions.length ? (
-            <details key={selectedWorkpieceId} className={styles.conditionsFooter} open>
-              <summary>
-                <strong>{t('适用条件', 'Application conditions')}</strong>
-                <span>{t('按材质与工艺确认', 'Confirm material and process')}</span>
-                <HiChevronDown aria-hidden="true" />
-              </summary>
-              <div className={styles.fullConditions}>
-                {sharedDirectionCondition ? (
-                  <p className={styles.sharedCondition}>{directionConditions[0].boundary}</p>
-                ) : (
-                  directionConditions.map((item) => (
-                    <div key={item.condition}>
-                      <strong>{item.condition}</strong>
-                      <p>{item.boundary}</p>
-                    </div>
-                  ))
-                )}
-              </div>
-            </details>
-          ) : null}
         </div>
       </div>
     </section>

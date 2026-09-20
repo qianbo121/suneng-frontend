@@ -251,7 +251,7 @@ export function Header({ locale }: HeaderProps) {
           </button>
         </div>
 
-        <div className="site-header__desktop-bar fixed inset-x-0 top-0 z-[9999] hidden h-header-h w-full items-center border-b border-black/6 bg-white shadow-[0_8px_26px_rgba(15,23,42,0.06)] xl:flex">
+        <div className="site-header__desktop-bar fixed inset-x-0 top-0 z-[9999] hidden h-header-h w-full items-center bg-white shadow-[0_8px_26px_rgba(15,23,42,0.06)] xl:flex">
           <div className={styles.desktopLayout}>
             <div className="shrink-0 self-center">
               <div className="w-auto">
@@ -364,13 +364,6 @@ export function Header({ locale }: HeaderProps) {
                                   </p>
                                 </li>
                               ))}
-                              {item.key === 'engineering' ? (
-                                <li className={styles.submenuFooter}>
-                                  <Link href={href} className={styles.submenuLink}>
-                                    {currentLocale === 'zh' ? '全部改造与服务' : 'All services & retrofit'}
-                                  </Link>
-                                </li>
-                              ) : null}
                             </ul>
                           ) : null}
                         </li>

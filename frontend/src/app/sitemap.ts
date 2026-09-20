@@ -121,6 +121,7 @@ function collectStaticRoutes(): MetadataRoute.Sitemap {
     { path: '/products', changeFrequency: 'weekly', priority: 0.9 },
     { path: '/solutions', changeFrequency: 'monthly', priority: 0.84 },
     { path: '/service', changeFrequency: 'monthly', priority: 0.75 },
+    { path: '/service/selection-retrofit-guide', changeFrequency: 'monthly', priority: 0.7 },
     { path: '/service/installation-after-sales', changeFrequency: 'monthly', priority: 0.7 },
     { path: '/service/furnace-relocation-restart', changeFrequency: 'monthly', priority: 0.7 },
     { path: '/case', changeFrequency: 'monthly', priority: 0.76 },

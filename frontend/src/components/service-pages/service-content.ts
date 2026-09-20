@@ -4,7 +4,7 @@ export const serviceRoutes = {
   relocation: '/zh/service/furnace-relocation-restart',
   relocationGuide: '/zh/solutions/rechuli-lu-tingchan-chongqi-banqian-fuchan',
   installation: '/zh/service/installation-after-sales',
-  guides: '/zh/solutions',
+  guides: '/zh/service/selection-retrofit-guide',
   products: '/zh/products',
   decision: '/zh/articles/laojiu-rechuli-lu-daxiu-haishi-maixin',
   quote: '/zh/articles/gongye-lu-baojia-canshu',

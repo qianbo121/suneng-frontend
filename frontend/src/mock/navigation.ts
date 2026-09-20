@@ -35,7 +35,7 @@ const chineseNavigationItems: NavigationItem[] = [
       },
       {
         key: 'engineering-guides',
-        href: '/solutions',
+        href: '/service/selection-retrofit-guide',
         label: { zh: '选型与改造指南', en: 'Selection & Retrofit Guides' },
       },
     ],

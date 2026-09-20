@@ -186,9 +186,6 @@ export function ProductCenterLineCarousel({
           </div>
         ))}
       </div>
-      <p className={styles.productionLineNote}>
-        设备与典型流程示意，具体工艺及配置按材料、产品要求和供货范围确认
-      </p>
     </>
   );
 }

@@ -1,6 +1,79 @@
 .card {
   min-width: 0;
 }
+
+/* Keep the original grid rows in place so playing never shifts adjacent cards. */
+.card[data-stage-details] > [data-static-info] {
+  visibility: hidden;
+}
+
+.expandedPreview .scene {
+  inset: 3px 0;
+}
+
+.playbackInfo {
+  position: absolute;
+  grid-area: 2 / 1 / 5 / 2;
+  inset: 0;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 6px;
+  padding: 16px 22px;
+  pointer-events: none;
+  animation: reveal 180ms ease-out;
+}
+
+.card .stageHeading {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0;
+  color: #123c56;
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 32px;
+}
+
+.stageNumber {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 36px;
+  height: 34px;
+  padding-inline: 5px;
+  border-radius: 6px;
+  background: #f3b84f;
+  color: #062a42;
+  font-size: 22px;
+  font-variant-numeric: tabular-nums;
+}
+
+.card .stageDescription {
+  margin: 0;
+  color: #456377;
+  font-size: 16px;
+  line-height: 24px;
+  overflow-wrap: anywhere;
+}
+
+.card .stageNote {
+  margin: 0;
+  color: #64748b;
+  font-size: 12px;
+  line-height: 18px;
+  overflow-wrap: anywhere;
+}
+
+.card[data-stage-details] [data-process-accent]:not([data-current]) [data-process-number] {
+  color: #aec8d5;
+}
+
+.card[data-stage-details] [data-process-accent]:not([data-current]) [data-process-label] {
+  color: #eef4f9;
+}
 .preview {
   position: absolute;
   inset: 0;
@@ -102,6 +175,12 @@
   }
 }
 @media (max-width: 639px) {
+  .playbackInfo {
+    padding-inline: 20px;
+  }
+  .card .stageHeading {
+    font-size: 22px;
+  }
   .card .playButton {
     min-height: 36px;
     top: 8px;
@@ -122,6 +201,7 @@
   }
 }
 @media (prefers-reduced-motion: reduce) {
+  .playbackInfo,
   .preview {
     animation: none;
   }

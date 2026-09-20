@@ -14,6 +14,7 @@ import { ProductQuoteScrollButton } from '@/components/products/ProductLeadForm'
 import { getFaqJsonLd, getProductDetailJsonLd } from '@/lib/seo/jsonld';
 
 import { FurnaceCutawayDiagram } from './FurnaceCutawayDiagram';
+import { FurnaceSectionNav } from './FurnaceSectionNav';
 import { PitFurnaceFaq, PitFurnaceGallery } from './PitFurnaceDetailClient';
 import styles from './PitFurnaceDetailPage.module.css';
 import {
@@ -153,17 +154,7 @@ export function IndustryFurnaceDetailPage({ slug }: { slug: IndustryFurnaceSlug 
         </section>
       </div>
 
-      <nav className={styles.anchorNav} aria-label={`${config.name}详情页章节导航`}>
-        <div className={styles.container}>
-          <div className={styles.anchorNavScroll}>
-            {sectionNav.map(([id, label]) => (
-              <a key={id} href={`#${id}`}>
-                {label}
-              </a>
-            ))}
-          </div>
-        </div>
-      </nav>
+      <FurnaceSectionNav items={sectionNav} label={`${config.name}详情页章节导航`} />
 
       <div className={styles.contentArea}>
         <div className={styles.container}>

@@ -2,6 +2,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { HiInformationCircle, HiOutlineDocumentText, HiPhone } from 'react-icons/hi2';
 import { WechatContactButton } from '@/components/lead/WechatContactButton';
+import { isWithdrawnTechnicalPath } from '@/lib/publication-scope';
 import { ServiceAnchorNav } from './ServiceAnchorNav';
 import { serviceContact } from './ServicePageShared';
 import { serviceRoutes } from './service-content';
@@ -27,6 +28,7 @@ const entries = [
     description: '结合设备现状、工艺变化、投入与停产影响，了解判断方法。',
     label: '查看修、改、换判断',
     href: serviceRoutes.decision,
+    fallback: { href: serviceRoutes.repair, label: '查看维修与改造' },
   },
   {
     title: '问题明确，查处理方法',
@@ -39,23 +41,26 @@ const entries = [
     description: '了解需要提供的参数，以及供货与报价范围如何核对。',
     label: '查看报价参数清单',
     href: serviceRoutes.quote,
+    fallback: { href: '/zh/inquiry', label: '整理并提交项目情况' },
   },
 ];
 
 const topics = [
-  ['温度不均整改', '先核对测温、装炉与加热条件', '/zh/solutions/rechuli-lu-wendu-bujun-zhenggai'],
-  ['炉衬损坏与翻新', '了解检查项目和修复边界', '/zh/solutions/rechuli-lu-luchen-fanxin'],
+  ['温度不均整改', '先核对测温、装炉与加热条件', '/zh/solutions/rechuli-lu-wendu-bujun-zhenggai', '温度不均'],
+  ['炉衬损坏与翻新', '了解检查项目和修复边界', '/zh/solutions/rechuli-lu-luchen-fanxin', '炉衬'],
   [
     '能源切换与余热利用',
     '核对能源条件和改造范围',
     '/zh/solutions/rechuli-lu-dian-gai-ran-yure-huishou',
+    '余热',
   ],
-  ['控制系统升级', '明确控制任务与系统接口', '/zh/solutions/rechuli-lu-kongzhi-xitong-shengji'],
-  ['停产与搬迁复产', '了解恢复生产前的检查', serviceRoutes.relocationGuide],
+  ['控制系统升级', '明确控制任务与系统接口', '/zh/solutions/rechuli-lu-kongzhi-xitong-shengji', '控制系统'],
+  ['停产与搬迁复产', '了解恢复生产前的检查', serviceRoutes.relocationGuide, '搬迁'],
   [
     '改造风险与停产安排',
     '区分项目周期与停产窗口',
     '/zh/solutions/rechuli-lu-gaizao-fengxian-zhouqi',
+    '改造',
   ],
 ] as const;
 
@@ -72,6 +77,7 @@ const services = [
 ] as const;
 
 export function SelectionGuidePage({ heroImage }: { heroImage: string }) {
+  const availableProjectGuides = newProjectGuides.filter(([, href]) => !isWithdrawnTechnicalPath(href));
   return (
     <div className={`${shared.page} ${styles.page}`} data-selection-guide>
       <section className={`${shared.hero} ${styles.hero}`} aria-labelledby="guide-title">
@@ -138,20 +144,23 @@ export function SelectionGuidePage({ heroImage }: { heroImage: string }) {
                 </span>
                 <h3>{entry.title}</h3>
                 <p>{entry.description}</p>
-                <Link href={entry.href} className={styles.textLink}>
-                  {entry.label}
+                <Link
+                  href={isWithdrawnTechnicalPath(entry.href) && entry.fallback ? entry.fallback.href : entry.href}
+                  className={styles.textLink}
+                >
+                  {isWithdrawnTechnicalPath(entry.href) && entry.fallback ? entry.fallback.label : entry.label}
                 </Link>
               </li>
             ))}
           </ol>
-          <nav className={styles.related} aria-label="新建项目延伸阅读">
+          {availableProjectGuides.length > 0 && <nav className={styles.related} aria-label="新建项目延伸阅读">
             <span>新建项目参考：</span>
-            {newProjectGuides.map(([title, href]) => (
+            {availableProjectGuides.map(([title, href]) => (
               <Link key={href} href={href} className={styles.textLink}>
                 {title}
               </Link>
             ))}
-          </nav>
+          </nav>}
         </div>
       </section>
 
@@ -166,7 +175,7 @@ export function SelectionGuidePage({ heroImage }: { heroImage: string }) {
             <p>先看检查思路与适用条件，再沟通具体处理方式。</p>
           </header>
           <div className={styles.topics}>
-            {topics.map(([title, description, href]) => (
+            {topics.map(([title, description, href, searchTerm]) => (
               <article className={styles.topic} key={href}>
                 <span className={styles.documentIcon}>
                   <HiOutlineDocumentText aria-hidden="true" />
@@ -175,8 +184,12 @@ export function SelectionGuidePage({ heroImage }: { heroImage: string }) {
                   <h3>{title}</h3>
                   <p>{description}</p>
                 </div>
-                <Link href={href} className={styles.topicButton} aria-label={`查看资料：${title}`}>
-                  查看资料
+                <Link
+                  href={isWithdrawnTechnicalPath(href) ? `/zh/news?q=${encodeURIComponent(searchTerm)}` : href}
+                  className={styles.topicButton}
+                  aria-label={`查看相关资料：${title}`}
+                >
+                  查看相关资料
                 </Link>
               </article>
             ))}

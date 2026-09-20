@@ -62,24 +62,23 @@ export function NewsSearchForm({
         );
       }}
     >
-      <label className="sr-only" htmlFor="news-center-search">
-        {locale === 'en' ? 'Search industrial furnace resources' : '搜索工业炉资料'}
-      </label>
-      <HiMagnifyingGlass className={styles.searchIcon} aria-hidden="true" />
-      <input
-        id="news-center-search"
-        className={styles.searchInput}
-        name="q"
-        type="search"
-        disabled={disabled}
-        value={value}
-        onChange={(event) => setValue(event.target.value)}
-        placeholder={
-          locale === 'en'
-            ? 'Search equipment, process or question…'
-            : '搜索设备、工艺或问题，如：台车炉报价'
-        }
-      />
+      <div className={styles.searchField}>
+        <label className="sr-only" htmlFor="news-center-search">
+          {locale === 'en' ? 'Search industrial furnace resources' : '搜索工业炉资料'}
+        </label>
+        <HiMagnifyingGlass className={styles.searchIcon} aria-hidden="true" />
+        <input
+          id="news-center-search"
+          className={styles.searchInput}
+          name="q"
+          type="search"
+          aria-describedby="news-center-search-hint"
+          disabled={disabled}
+          value={value}
+          onChange={(event) => setValue(event.target.value)}
+          placeholder={locale === 'en' ? 'Search resources' : '搜索设备、工艺或问题'}
+        />
+      </div>
       {current.topic !== 'all' && <input type="hidden" name="topic" value={current.topic} />}
       {current.furnace !== 'all' && (
         <input type="hidden" name="furnace" value={current.furnace} />
@@ -88,6 +87,11 @@ export function NewsSearchForm({
       <button className={styles.searchButton} type="submit" disabled={disabled}>
         {locale === 'en' ? 'Search' : '搜索'}
       </button>
+      <p id="news-center-search-hint" className={styles.searchHint}>
+        {locale === 'en'
+          ? 'Try: trolley furnace pricing or annealing'
+          : '例如：台车炉报价、退火工艺'}
+      </p>
     </form>
   );
 }
