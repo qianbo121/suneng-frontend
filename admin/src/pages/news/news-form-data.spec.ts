@@ -6,11 +6,12 @@ import type { NewsEntity } from '@/types/news';
 import {
   buildNewsCreatePayload,
   buildNewsUpdatePayload,
+  NewsContentProtectionError,
   resolveNewsInitialValues,
 } from './news-form-data';
 
 const record: NewsEntity = {
-  id: 29,
+  id: 99029,
   categoryId: 4,
   titleZh: '原始标题',
   titleEn: 'Original title',
@@ -45,15 +46,16 @@ describe('simple news form data', () => {
     expect(buildNewsUpdatePayload(values, record)).toEqual({});
   });
 
-  it('updates visible fields without overwriting hidden CMS fields', () => {
+  it('updates an unbound plain-text article without overwriting hidden CMS fields', () => {
+    const plainRecord = { ...record, titleEn: null, contentEn: null, contentZh: '<p>原正文</p>' };
     const values = {
-      ...resolveNewsInitialValues(record),
+      ...resolveNewsInitialValues(plainRecord),
       titleZh: '修改后的标题',
       contentZh: '改后的正文',
       publishDate: dayjs('2026-09-01T08:00:00.000Z'),
     };
 
-    const payload = buildNewsUpdatePayload(values, record);
+    const payload = buildNewsUpdatePayload(values, plainRecord);
 
     expect(payload).toEqual({
       titleZh: '修改后的标题',
@@ -66,6 +68,47 @@ describe('simple news form data', () => {
     expect(payload).not.toHaveProperty('sortOrder');
     expect(payload).not.toHaveProperty('seoKeywordsZh');
     expect(payload).not.toHaveProperty('isPublished');
+  });
+
+  it.each([73, 76])('blocks stale CMS text edits to reviewed article %i before a save', (id) => {
+    const source = { ...record, id, titleEn: null, contentEn: null };
+    for (const change of [{ titleZh: '改一个标题字' }, { contentZh: '改一个正文字' }]) {
+      expect(() =>
+        buildNewsUpdatePayload({ ...resolveNewsInitialValues(source), ...change }, source),
+      ).toThrow(NewsContentProtectionError);
+    }
+  });
+
+  it('does not silently invalidate a native English counterpart', () => {
+    expect(() =>
+      buildNewsUpdatePayload({ ...resolveNewsInitialValues(record), titleZh: '新标题' }, record),
+    ).toThrow('英文版');
+  });
+
+  it.each(['h2', 'img', 'a', 'table', 'ul', 'strong'])(
+    'does not flatten existing %s markup',
+    (tag) => {
+      const rich = {
+        ...record,
+        titleEn: null,
+        contentEn: null,
+        contentZh: `<${tag}>原正文</${tag}>`,
+      };
+      expect(() =>
+        buildNewsUpdatePayload({ ...resolveNewsInitialValues(rich), contentZh: '新正文' }, rich),
+      ).toThrow('纯文字保存会丢失');
+    },
+  );
+
+  it('still permits a no-op or a cover-only change without touching reviewed/bilingual text', () => {
+    const reviewed = { ...record, id: 76 };
+    expect(buildNewsUpdatePayload(resolveNewsInitialValues(reviewed), reviewed)).toEqual({});
+    expect(
+      buildNewsUpdatePayload(
+        { ...resolveNewsInitialValues(reviewed), coverImage: '/new.webp' },
+        reviewed,
+      ),
+    ).toEqual({ coverImage: '/new.webp' });
   });
 
   it('still generates complete defaults for a new article', () => {

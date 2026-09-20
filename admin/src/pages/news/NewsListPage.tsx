@@ -31,6 +31,7 @@ import { PublishStatus } from '@/types/product';
 import {
   buildNewsCreatePayload,
   buildNewsUpdatePayload,
+  NewsContentProtectionError,
   resolveNewsInitialValues,
   type SimpleNewsFormValues,
 } from './news-form-data';
@@ -181,6 +182,9 @@ export function NewsListPage() {
 
       setModalOpen(false);
       await mutate();
+    } catch (error) {
+      if (error instanceof NewsContentProtectionError) message.error(error.message);
+      else throw error;
     } finally {
       setSubmitting(false);
     }

@@ -146,6 +146,14 @@
   line-height: 1.55;
 }
 
+/* Preserve the approved paragraph appearance when promoting section labels to headings. */
+.bodyWrap :global(.news-article h2.news-section-heading) {
+  margin: var(--site-copy-gap) 0;
+  color: inherit;
+  font: inherit;
+  text-wrap: wrap;
+}
+
 .bodyWrap :global(.news-article img) {
   width: 100%;
   height: auto;
