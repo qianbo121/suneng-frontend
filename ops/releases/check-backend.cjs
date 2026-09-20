@@ -31,6 +31,18 @@ const ALLOWED_PENDING = new Map([
     const digest = crypto.createHash('sha256').update(fs.readFileSync(path.join(root, name, 'migration.sql'))).digest('hex');
     if (digest !== reviewed) throw new Error('Pending migration differs from reviewed source');
   }
+  const applying = process.env.RELEASE_APPLY_INDEX === '1';
+  if (pending.length && !applying) {
+    // New queries cannot run on the old schema. History/hash checks above are
+    // still mandatory; defer the aggregate until the reviewed migration exists.
+    console.log(JSON.stringify({passed:true,pendingMigrationCount:pending.length,
+      aggregateAvailable:null,aggregateDeferred:true,dataRestored:false,notificationsSent:false}));
+    return;
+  }
+  if (pending.length) {
+    if (process.env.RELEASE_BACKUP_VERIFIED !== '1') throw new Error('Verified backup required before migration');
+    cp.execFileSync(process.execPath, ['backend/node_modules/prisma/build/index.js','migrate','deploy','--schema','backend/prisma/schema.prisma'], {timeout:60000, stdio:'pipe'});
+  }
   const end = new Date().toISOString().slice(0,10);
   const start = new Date(Date.now()-7*86400000).toISOString().slice(0,10);
   const began = Date.now();
@@ -41,10 +53,6 @@ const ALLOWED_PENDING = new Map([
     return new ShujuGrowthReadService(tx).overview({ startDate:start, endDate:end });
   }, { timeout:30000 });
   if (aggregate.content?.status !== 'available') throw new Error('Content aggregate unavailable');
-  if (process.env.RELEASE_APPLY_INDEX === '1' && pending.length) {
-    // Only reviewed, additive migrations are pending. No reset, seed or restore.
-    cp.execFileSync(process.execPath, ['backend/node_modules/prisma/build/index.js','migrate','deploy','--schema','backend/prisma/schema.prisma'], {timeout:60000, stdio:'pipe'});
-  }
   const index = await prisma.$queryRawUnsafe(`SELECT i.indisvalid FROM pg_index i JOIN pg_class c ON c.oid=i.indexrelid WHERE c.relname='WebsiteLeadEvent_sessionId_createdAt_idx'`);
   if (process.env.RELEASE_APPLY_INDEX === '1' && !index.some(x=>x.indisvalid)) throw new Error('Index is not valid');
   // The aggregates above filter on "isBot"; a missing or unpopulated column would silently
