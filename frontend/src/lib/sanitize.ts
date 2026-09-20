@@ -2,6 +2,7 @@ import { isWithdrawnTechnicalPath } from './publication-scope';
 import DOMPurify from 'isomorphic-dompurify';
 import { newsImageNoteReplacements } from './news-image-notes';
 import { marked } from 'marked';
+import { repairNewsPresentation } from './news-presentation-repairs';
 
 function escapeHtml(value: string) {
   return value
@@ -43,6 +44,8 @@ export function sanitizeRichTextHtml(value?: string | null) {
 type PrepareNewsArticleHtmlOptions = {
   stackSimpleTables?: boolean;
   coverImage?: string | null;
+  articleSlug?: string;
+  locale?: string;
 };
 
 const DOUBLE_BREAK_PATTERN = /(?:<br\s*\/?>\s*){2,}/i;
@@ -276,6 +279,7 @@ export function prepareNewsArticleHtml(
     heading.replaceWith(replacement);
   });
 
+  repairNewsPresentation(root, options.articleSlug, options.locale);
   return DOMPurify.sanitize(root.innerHTML);
 }
 
