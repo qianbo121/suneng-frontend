@@ -10,6 +10,7 @@ vi.mock('@/lib/news-route-guard', async (original) => ({
 }));
 
 import middleware, { config } from './middleware';
+import { getNewsRouteAvailability } from '@/lib/news-route-guard';
 
 const run = (address: string) => middleware(new NextRequest(new URL(address, 'https://www.jssngyl.cn')));
 
@@ -93,10 +94,12 @@ describe('withdrawn content routing', () => {
     expect(response.headers.get('x-middleware-rewrite')).toBeNull();
   });
 
-  it('runs for case addresses even when they contain a dot', () => {
+  it('checks public detail routes with dots without intercepting assets', () => {
     const matches = (address: string) =>
       unstable_doesMiddlewareMatch({ config, url: new URL(address, 'https://www.jssngyl.cn').href });
-    for (const address of ['/zh', '/zh/case', '/zh/case/foo.bar', '/en/case/henan-annealing-solution-line.', '/zh/solutions/x'])
+    for (const address of ['/zh', '/zh/case', '/zh/case/foo.bar', '/en/case/henan-annealing-solution-line.', '/zh/solutions/x',
+      '/zh/news/abc.def', '/en/news/whatever.html', '/zh/news/whatever.php',
+      '/zh/products/detail/missing.html', '/en/products/detail/missing.aspx'])
       expect(matches(address), address).toBe(true);
     for (const address of ['/images/products/a.png', '/_next/static/chunks/a.js', '/api/v1/news', '/favicon-32x32.png'])
       expect(matches(address), address).toBe(false);
@@ -152,6 +155,9 @@ describe('product detail pages with no product behind them', () => {
     '/zh/products/detail/no-such-furnace/',
     '/zh/products/detail/trolley-furnace-typo',
     '/zh/products/detail/%74rolley-furnace-typo',
+    '/zh/products/detail/missing.html',
+    '/en/products/detail/missing.aspx',
+    '/zh/products/detail/missing.php',
   ])('answers %s with a real 404', async (address) => {
     const response = await run(address);
     expect(response?.status, address).toBe(404);
@@ -167,5 +173,20 @@ describe('product detail pages with no product behind them', () => {
   ])('leaves %s reachable', async (address) => {
     const response = await run(address);
     expect(response?.status, address).not.toBe(404);
+  });
+});
+
+describe('missing news with dotted slugs', () => {
+  it.each(['/zh/news/abc.def', '/zh/news/missing.html', '/en/news/whatever.html', '/en/news/missing.php'])(
+    'returns a real non-indexable 404 for %s', async (address) => {
+      vi.mocked(getNewsRouteAvailability).mockResolvedValueOnce('missing');
+      const response = await run(address);
+      expect(response.status).toBe(404);
+      expect(response.headers.get('X-Robots-Tag')).toBe('noindex');
+      expect(await response.text()).toContain('noindex');
+    },
+  );
+  it('does not reject a valid dotted slug merely because it contains a dot', async () => {
+    expect((await run('/zh/news/valid.article')).status).not.toBe(404);
   });
 });

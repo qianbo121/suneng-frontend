@@ -29,6 +29,7 @@ import {
 import { getNewsContentModifiedTime } from '@/lib/news-dates';
 import { getArticleJsonLd, getBreadcrumbJsonLd } from '@/lib/seo/jsonld';
 import { buildMetadata } from '@/lib/seo/metadata';
+import { englishNewsSearchDescription } from '@/lib/seo/english-search-description';
 import {
   getCanonicalNewsSlug,
   getPublicNewsRedirectSlug,
@@ -99,7 +100,10 @@ export async function generateMetadata({ params }: NewsDetailPageProps) {
 
   return buildMetadata({
     title,
-    description,
+    description:
+      currentLocale === 'en'
+        ? englishNewsSearchDescription(article.titleEn || article.titleZh, description)
+        : description,
     path: `/${currentLocale}/news/${slug}`,
     pageKey: 'news-detail',
     locale: currentLocale,
@@ -285,7 +289,9 @@ export default async function NewsDetailPage({ params }: NewsDetailPageProps) {
             {relatedLinks.length ? (
               <aside aria-labelledby="news-related-links-title" className={styles.related}>
                 <h2 id="news-related-links-title" className={styles.relatedTitle}>
-                  {currentLocale === 'en' ? 'Related equipment and project guidance' : '相关产品、方案与项目证据'}
+                  {currentLocale === 'en'
+                    ? 'Related equipment and project guidance'
+                    : '相关产品、方案与项目证据'}
                 </h2>
                 <div className={styles.relatedGrid}>
                   {relatedLinks.map((link) => (
