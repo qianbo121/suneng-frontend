@@ -873,5 +873,89 @@ class AdminReleaseTest(unittest.TestCase):
                     self.assertEqual(json.loads(release.pins_path.read_text())['services']['admin']['image'], OTHER)
 
 
+
+class AdminOnlyReleaseTest(unittest.TestCase):
+    def manifest(self):
+        return {**AdminReleaseTest().manifest(), 'image': OLD, 'adminOnly': True}
+
+    def test_scope_rejects_frontend_or_backend_switch_and_missing_admin(self):
+        valid = self.manifest()
+        self.assertEqual(r.validate_manifest(valid), valid)
+        for change in [{'image': NEW}, {'backend': {}}, {'adminOnly': 'true'}]:
+            with self.subTest(change=change), self.assertRaises(ValueError):
+                r.validate_manifest({**valid, **change})
+        value = {k: v for k, v in valid.items() if k != 'admin'}
+        with self.assertRaises(ValueError): r.validate_manifest(value)
+
+    def test_admin_only_switch_and_failed_cache_recovery_preserve_frontend_and_marker(self):
+        for fails, kind in [(False, 'deploy'), (True, 'deploy'), (False, 'rollback')]:
+            with self.subTest(fails=fails, kind=kind), tempfile.TemporaryDirectory() as tmp:
+                receipt = copy.deepcopy(RECEIPT)
+                receipt['frontendRelease'] = {'sourceCommit': '1' * 40, 'servedCases': r.APPROVED_CASES,
+                                              'servedGuides': r.APPROVED_GUIDES}
+                release = ContractTest().fixture(tmp, self.manifest(), receipt)
+                marker = release.live / 'DEPLOY_COMMIT'
+                marker.write_text('1' * 40 + '\n')
+                release = r.Release(release.live, release.audit, self.manifest(), 'fixture')
+                state = dict(RECEIPT['images'])
+                switches = []
+                def current(names):
+                    result = rows()
+                    for row in result:
+                        name = row['Name'].removeprefix('/corp-site-')
+                        if name in state:
+                            row['Image'] = state[name]
+                            row['Id'] = name + state[name]
+                    return [row for row in result if row['Name'].removeprefix('/corp-site-') in names]
+                def replace(override=None):
+                    self.assertEqual(release.components, ['admin'])
+                    self.assertIn('frontend', release.protected)
+                    switches.append(override)
+                    state['admin'] = receipt['images']['admin'] if override else OTHER
+                def image(args, **kwargs):
+                    self.assertEqual(args[:3], ['docker', 'image', 'inspect'])
+                    source = '1' * 40 if args[-1] == OLD else MANIFEST['sourceCommit']
+                    return json.dumps([{'Id': args[-1], 'Config': {'Labels': {'org.opencontainers.image.revision': source}}}])
+                with patch.object(r, 'inspect', side_effect=current), patch.object(r, 'run', side_effect=image), \
+                     patch.object(r, 'probe', return_value=GOOD), patch.object(r, 'public_probe', return_value=[]), \
+                     patch.object(release, 'admin_check', return_value={'passed': True, 'assets': {'/assets/app.js': 'checked'}}), \
+                     patch.object(r, 'admin_probe', return_value={'passed': True, 'assets': {'/assets/app.js': 'checked'}}), \
+                     patch.object(r, 'admin_cache_probe', side_effect=RuntimeError('cache failed') if fails else None) as cache, \
+                     patch.object(release, 'replace_frontend', side_effect=replace):
+                    cache.return_value = []
+                    if fails:
+                        with self.assertRaises(RuntimeError): release.execute(True, kind=kind)
+                    else:
+                        self.assertTrue(release.execute(True, kind=kind)['applied'])
+                if kind == 'rollback': cache.assert_not_called()
+                self.assertEqual(state['frontend'], receipt['images']['frontend'])
+                self.assertEqual(state['backend'], receipt['images']['backend'])
+                after = json.loads(release.receipt_path.read_text())
+                self.assertEqual(after['frontendRelease'], receipt['frontendRelease'])
+                self.assertEqual(marker.read_text(), '1' * 40 + '\n')
+                self.assertFalse(release.pending_path.exists())
+                self.assertEqual(len(switches), 2 if fails else 1)
+                self.assertEqual(state['admin'], receipt['images']['admin'] if fails else OTHER)
+
+    def test_cache_gate_rejects_old_entry_and_soft_404(self):
+        def response(args, **kwargs):
+            self.assertEqual(args[3] if args[0] == 'docker' else args[0], 'curl')
+            self.assertNotIn('--fail', args)
+            missing = args[-1].endswith('.js')
+            headers = 'HTTP/1.1 ' + ('404 Not Found' if missing else '200 OK') + '\nX-Robots-Tag: noindex, nofollow\n'
+            if not missing: headers += 'Cache-Control: no-store, max-age=0\n'
+            return subprocess.CompletedProcess(args, 0, headers, '')
+        for container in [None, 'candidate']:
+            with self.subTest(container=container), patch.object(r.subprocess, 'run', side_effect=response):
+                self.assertEqual(len(r.admin_cache_probe(container)), 5)
+        for headers in ['HTTP/1.1 200 OK\nX-Robots-Tag: noindex, nofollow\n',
+                        'HTTP/1.1 200 OK\nCache-Control: no-store\nX-Robots-Tag: noindex, nofollow\n']:
+            with patch.object(r.subprocess, 'run', return_value=subprocess.CompletedProcess([], 0, headers, '')):
+                with self.assertRaises(RuntimeError): r.admin_cache_probe()
+        headers = 'HTTP/1.1 200 OK\nX-Robots-Tag: noindex, nofollow\nCache-Control: no-store\n'
+        with patch.object(r.subprocess, 'run', return_value=subprocess.CompletedProcess([], 7, headers, 'connection failed')):
+            with self.assertRaises(RuntimeError): r.admin_cache_probe('candidate')
+
+
 if __name__ == '__main__':
     unittest.main(verbosity=2)

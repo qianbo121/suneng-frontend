@@ -48,17 +48,23 @@ describe('case list pagination boundary', () => {
     },
   );
 
-  // Filtered and search views are already excluded from the index and may
-  // legitimately be empty, so they keep answering from the page itself.
+  // Filtering cannot create more pages than the unfiltered approved list.
   it.each([
     '/zh/case?q=%E5%8F%B0%E8%BD%A6%E7%82%89&page=9',
     '/zh/case?equipment=%E5%8F%B0%E8%BD%A6%E7%82%89&page=4',
     '/zh/case?sort=updated&page=8',
     '/zh/case?type=proposal&page=5',
-  ])('does not intercept the filtered view %s', async (path) => {
+    '/zh/case?page=999&q=',
+  ])('rejects the out-of-range filtered view %s', async (path) => {
     const response = await run(path);
-    expect(response.status).toBe(200);
+    expect(response.status).toBe(404);
   });
+
+  it.each(['/zh/case?q=unmatched', '/zh/case?q=&page=1', '/en/case?sort=updated&page=1'])(
+    'preserves the first filtered page %s, even with no results', async (path) => {
+      expect((await run(path)).status).toBe(200);
+    },
+  );
 
   it('keeps the boundary tied to the approved case lists', () => {
     // If a later batch adds cases, this is the number the middleware allows.

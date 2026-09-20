@@ -80,6 +80,12 @@ def atomic_json(path, data):
 
 
 def validate_manifest(value):
+    admin_only = value.get('adminOnly', False)
+    if not isinstance(admin_only, bool):
+        raise ValueError('adminOnly must be a boolean')
+    if admin_only and ('admin' not in value or 'backend' in value or
+                       value.get('image') != value.get('expectedCurrentImage')):
+        raise ValueError('An admin-only release must preserve the frontend and omit backend')
     if value.get('schemaVersion') != 1 or not IMAGE.fullmatch(value.get('image', '')):
         raise ValueError('Invalid release schema or immutable image identity')
     if not IMAGE.fullmatch(value.get('expectedCurrentImage', '')):
@@ -311,6 +317,32 @@ def admin_probe(container=None, require_filter=True):
     return admin_assets(fetch, require_filter)
 
 
+def admin_cache_probe(container=None):
+    """Check entry headers and a definitely absent bundle without authentication."""
+    checks = []
+    for path in ['/', '/index.html', '/login', '/custom-requirements',
+                 '/assets/__suneng_cache_probe_missing__.js']:
+        # BusyBox wget stops before printing headers on a 404. The admin image
+        # already includes curl, which preserves error-response headers.
+        request = ['curl', '--silent', '--show-error', '--max-time', '20',
+                   '-D', '-', '-o', '/dev/null']
+        command = (['docker', 'exec', container, *request, 'http://127.0.0.1' + path]
+                   if container else [*request, 'https://admin.jssngyl.cn' + path])
+        response = subprocess.run(command, text=True, capture_output=True, timeout=25)
+        headers = response.stdout + response.stderr
+        status = re.search(r'HTTP/\S+\s+(\d{3})', headers)
+        cache = ', '.join(re.findall(r'^\s*cache-control:\s*(.+)', headers, re.I | re.M)).strip()
+        robots = re.search(r'^\s*x-robots-tag:\s*noindex, nofollow\s*$', headers, re.I | re.M)
+        expected = 404 if path.endswith('.js') else 200
+        if response.returncode != 0 or not status or int(status[1]) != expected or not robots:
+            raise RuntimeError('Admin cache response failed: ' + path)
+        if (expected == 200 and 'no-store' not in cache.lower()) or (
+                expected == 404 and 'immutable' in cache.lower()):
+            raise RuntimeError('Admin cache policy failed: ' + path)
+        checks.append({'path': path, 'status': expected, 'cacheControl': cache})
+    return checks
+
+
 def public_probe(base_url, contract):
     def status_of(path):
         return run(['curl', '--max-time', '25', '--silent', '--show-error', '--output',
@@ -346,6 +378,7 @@ class Release:
     def __init__(self, live, audit, manifest, health_script):
         self.live, self.audit = live, audit
         self.manifest = validate_manifest(manifest)
+        self.admin_only = manifest.get('adminOnly', False)
         self.script = health_script
         self.receipt_path = live / 'RELEASE_ARTIFACTS.json'
         self.pins_path = live / 'verified-images.override.yml'
@@ -370,8 +403,16 @@ class Release:
         self.override = audit / 'target.override.json'
         self.target = copy.deepcopy(self.receipt['images'])
         self.target['frontend'] = manifest['image']
-        self.components = ['frontend']
+        self.components = [] if self.admin_only else ['frontend']
         self.protected = list(PROTECTED)
+        if self.admin_only:
+            self.protected.append('frontend')
+            # The unchanged frontend keeps its own publication contract and identity.
+            self.served_cases = self.live_cases
+            self.served_guides = self.previous_guides
+            self.target_contract = case_contract('open' if any(self.live_cases.values()) else 'closed',
+                                                 self.live_cases, guides=self.previous_guides)
+            self.lenient_contract = self.target_contract
         if 'backend' in manifest:
             self.target['backend'] = manifest['backend']['image']
             self.components = ['backend', 'frontend']
@@ -412,13 +453,16 @@ class Release:
             raise RuntimeError('Backend aggregate or migration verification failed')
         return report
 
-    def admin_check(self):
+    def admin_check(self, require_cache=False):
         canary = 'suneng-admin-check-' + uuid.uuid4().hex[:12]
         try:
             run(self.compose() + ['run', '-d', '--no-deps', '--pull', 'never',
                                  '--name', canary, 'admin'], env=self.env)
             wait_healthy(canary)
-            return admin_probe(canary)
+            result = admin_probe(canary)
+            if require_cache:
+                result['cacheChecks'] = admin_cache_probe(canary)
+            return result
         finally:
             subprocess.run(['docker', 'rm', '-f', canary], capture_output=True, timeout=30)
 
@@ -440,7 +484,9 @@ class Release:
         if image['Id'] != self.manifest['image']:
             raise RuntimeError('Target did not resolve to the exact imported image')
         if self.manifest.get('sourceIdentity') == 'git-commit':
-            if (image.get('Config', {}).get('Labels') or {}).get('org.opencontainers.image.revision') != self.manifest['sourceCommit']:
+            source = (self.receipt.get('frontendRelease', {}).get('sourceCommit')
+                      if self.admin_only else self.manifest['sourceCommit'])
+            if not source or (image.get('Config', {}).get('Labels') or {}).get('org.opencontainers.image.revision') != source:
                 raise RuntimeError('Image was not built from the recorded source commit')
         self.write_override(self.override, self.target)
         if 'backend' in self.manifest:
@@ -455,10 +501,10 @@ class Release:
             admin_image = json.loads(run(['docker', 'image', 'inspect', self.target['admin']]))[0]
             if admin_image['Id'] != self.target['admin'] or (admin_image.get('Config', {}).get('Labels') or {}).get('org.opencontainers.image.revision') != self.manifest['sourceCommit']:
                 raise RuntimeError('Admin image was not built from the same reviewed source')
-            admin_candidate = self.admin_check()
+            admin_candidate = self.admin_check(require_cache=self.admin_only and kind != 'rollback')
         same = all(self.target[name] == self.receipt['images'][name] for name in self.components)
         canary = 'suneng-release-check-' + uuid.uuid4().hex[:12]
-        if same:
+        if same or self.admin_only:
             internal = probe('corp-site-frontend', self.script, self.target_contract)
         else:
             try:
@@ -502,6 +548,8 @@ class Release:
             result['publicChecks'] = public_probe('https://www.jssngyl.cn', self.target_contract)
             if 'admin' in self.manifest:
                 result['adminPublic'] = admin_probe()
+                if self.admin_only and kind != 'rollback':
+                    result['adminPublic']['cacheChecks'] = admin_cache_probe()
                 if result['adminPublic']['assets'] != admin_candidate['assets']:
                     raise RuntimeError('Public admin assets do not match the checked candidate')
             if signature(inspect(self.protected)) != protected:
@@ -510,7 +558,7 @@ class Release:
                 raise RuntimeError('Running frontend identity does not match target')
             receipt = copy.deepcopy(self.receipt)
             receipt.update({'images': self.target, 'sourceIdentity': 'component-release',
-                            'frontendRelease': {**self.manifest, 'servedCases': self.served_cases, **({'servedGuides': self.served_guides} if self.served_guides else {})},
+                            **({} if self.admin_only else {'frontendRelease': {**self.manifest, 'servedCases': self.served_cases, **({'servedGuides': self.served_guides} if self.served_guides else {})}}),
                             'previousReceipt': str(self.audit / 'previous-receipt.json'),
                             'productionVerifiedAt': now(), 'deploymentStatus': 'verified',
                             'releaseOperation': kind, 'releaseOperationReceipt': str(self.audit / 'result.json')})
@@ -520,7 +568,7 @@ class Release:
             self.write_override(self.pins_path, self.target)
             atomic_json(self.receipt_path, receipt)
             # Version marker refers to the checked-in source of a newly built image only.
-            if self.manifest.get('sourceCommit'):
+            if self.manifest.get('sourceCommit') and not self.admin_only:
                 marker = self.live / 'DEPLOY_COMMIT.next'
                 marker.write_text(self.manifest['sourceCommit'] + '\n')
                 marker.replace(self.live / 'DEPLOY_COMMIT')
