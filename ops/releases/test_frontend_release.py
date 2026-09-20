@@ -939,10 +939,12 @@ class AdminOnlyReleaseTest(unittest.TestCase):
 
     def test_cache_gate_rejects_old_entry_and_soft_404(self):
         def response(args, **kwargs):
+            self.assertEqual(args[3] if args[0] == 'docker' else args[0], 'curl')
+            self.assertNotIn('--fail', args)
             missing = args[-1].endswith('.js')
             headers = 'HTTP/1.1 ' + ('404 Not Found' if missing else '200 OK') + '\nX-Robots-Tag: noindex, nofollow\n'
             if not missing: headers += 'Cache-Control: no-store, max-age=0\n'
-            return subprocess.CompletedProcess(args, 1 if missing and args[0] == 'docker' else 0, headers, '')
+            return subprocess.CompletedProcess(args, 0, headers, '')
         for container in [None, 'candidate']:
             with self.subTest(container=container), patch.object(r.subprocess, 'run', side_effect=response):
                 self.assertEqual(len(r.admin_cache_probe(container)), 5)
@@ -950,6 +952,9 @@ class AdminOnlyReleaseTest(unittest.TestCase):
                         'HTTP/1.1 200 OK\nCache-Control: no-store\nX-Robots-Tag: noindex, nofollow\n']:
             with patch.object(r.subprocess, 'run', return_value=subprocess.CompletedProcess([], 0, headers, '')):
                 with self.assertRaises(RuntimeError): r.admin_cache_probe()
+        headers = 'HTTP/1.1 200 OK\nX-Robots-Tag: noindex, nofollow\nCache-Control: no-store\n'
+        with patch.object(r.subprocess, 'run', return_value=subprocess.CompletedProcess([], 7, headers, 'connection failed')):
+            with self.assertRaises(RuntimeError): r.admin_cache_probe('candidate')
 
 
 if __name__ == '__main__':
