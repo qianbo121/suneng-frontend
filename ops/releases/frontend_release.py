@@ -453,14 +453,14 @@ class Release:
             raise RuntimeError('Backend aggregate or migration verification failed')
         return report
 
-    def admin_check(self):
+    def admin_check(self, require_cache=False):
         canary = 'suneng-admin-check-' + uuid.uuid4().hex[:12]
         try:
             run(self.compose() + ['run', '-d', '--no-deps', '--pull', 'never',
                                  '--name', canary, 'admin'], env=self.env)
             wait_healthy(canary)
             result = admin_probe(canary)
-            if self.admin_only:
+            if require_cache:
                 result['cacheChecks'] = admin_cache_probe(canary)
             return result
         finally:
@@ -501,7 +501,7 @@ class Release:
             admin_image = json.loads(run(['docker', 'image', 'inspect', self.target['admin']]))[0]
             if admin_image['Id'] != self.target['admin'] or (admin_image.get('Config', {}).get('Labels') or {}).get('org.opencontainers.image.revision') != self.manifest['sourceCommit']:
                 raise RuntimeError('Admin image was not built from the same reviewed source')
-            admin_candidate = self.admin_check()
+            admin_candidate = self.admin_check(require_cache=self.admin_only and kind != 'rollback')
         same = all(self.target[name] == self.receipt['images'][name] for name in self.components)
         canary = 'suneng-release-check-' + uuid.uuid4().hex[:12]
         if same or self.admin_only:
@@ -548,7 +548,7 @@ class Release:
             result['publicChecks'] = public_probe('https://www.jssngyl.cn', self.target_contract)
             if 'admin' in self.manifest:
                 result['adminPublic'] = admin_probe()
-                if self.admin_only:
+                if self.admin_only and kind != 'rollback':
                     result['adminPublic']['cacheChecks'] = admin_cache_probe()
                 if result['adminPublic']['assets'] != admin_candidate['assets']:
                     raise RuntimeError('Public admin assets do not match the checked candidate')

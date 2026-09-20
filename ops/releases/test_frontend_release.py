@@ -888,8 +888,8 @@ class AdminOnlyReleaseTest(unittest.TestCase):
         with self.assertRaises(ValueError): r.validate_manifest(value)
 
     def test_admin_only_switch_and_failed_cache_recovery_preserve_frontend_and_marker(self):
-        for fails in [False, True]:
-            with self.subTest(fails=fails), tempfile.TemporaryDirectory() as tmp:
+        for fails, kind in [(False, 'deploy'), (True, 'deploy'), (False, 'rollback')]:
+            with self.subTest(fails=fails, kind=kind), tempfile.TemporaryDirectory() as tmp:
                 receipt = copy.deepcopy(RECEIPT)
                 receipt['frontendRelease'] = {'sourceCommit': '1' * 40, 'servedCases': r.APPROVED_CASES,
                                               'servedGuides': r.APPROVED_GUIDES}
@@ -924,9 +924,10 @@ class AdminOnlyReleaseTest(unittest.TestCase):
                      patch.object(release, 'replace_frontend', side_effect=replace):
                     cache.return_value = []
                     if fails:
-                        with self.assertRaises(RuntimeError): release.execute(True)
+                        with self.assertRaises(RuntimeError): release.execute(True, kind=kind)
                     else:
-                        self.assertTrue(release.execute(True)['applied'])
+                        self.assertTrue(release.execute(True, kind=kind)['applied'])
+                if kind == 'rollback': cache.assert_not_called()
                 self.assertEqual(state['frontend'], receipt['images']['frontend'])
                 self.assertEqual(state['backend'], receipt['images']['backend'])
                 after = json.loads(release.receipt_path.read_text())

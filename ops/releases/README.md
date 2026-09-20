@@ -74,3 +74,5 @@ The backend entry must contain `image`, `expectedCurrentImage`, and `archiveSha2
 清单显式设置 `adminOnly: true` 时，只允许替换 `admin`，不得包含 `backend`，顶层 `image` 必须等于 `expectedCurrentImage` 并对应当前前台。`sourceCommit` 是新后台候选来源，前台沿用原回执中的来源和公开范围；前台容器、`frontendRelease` 与 `DEPLOY_COMMIT` 保持不变。
 
 后台候选及切换后的公网必须验证入口不缓存、失效脚本返回 404，同时保持现有资源和询盘版本检查。任何检查失败只恢复此前后台，禁止为本次后台修复重建或替换前台、后端和数据库。共享代理仅做配置校验和正常重载以更新后台地址，不重建容器。仍使用现有发布锁、固定镜像、私有回执和中断保护。
+
+主动回退使用 `--kind rollback`，保留入口、资源及版本检查，但允许上一版缓存策略，避免旧版没有 no-store 而无法回退。普通部署仍强制验证新缓存策略。
