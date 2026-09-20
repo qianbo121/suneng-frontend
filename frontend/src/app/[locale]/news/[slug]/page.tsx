@@ -1,4 +1,5 @@
 import { getNewsSummary } from '@/lib/news-summary';
+import { getNewsSeoTitle } from '@/lib/news-seo-title';
 import Link from 'next/link';
 import { notFound, permanentRedirect } from 'next/navigation';
 import { HiCalendarDays } from 'react-icons/hi2';
@@ -81,7 +82,7 @@ export async function generateMetadata({ params }: NewsDetailPageProps) {
     notFound();
   }
 
-  const title = currentLocale === 'en' ? article.titleEn || article.titleZh : article.titleZh;
+  const title = await getNewsSeoTitle(currentLocale, article);
   const summary = getNewsSummary(currentLocale, article, true);
   // English summaries include material and acceptance limits; keep the complete
   // sentence so metadata does not cut off a word or its qualifying condition.

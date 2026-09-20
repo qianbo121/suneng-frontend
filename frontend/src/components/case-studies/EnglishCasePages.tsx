@@ -25,7 +25,8 @@ export function englishCaseMetadata(slug: string) {
   const item = getEnglishCase(slug);
   if (!item) notFound();
   return buildMetadata({
-    title: item.title, description: item.summary, path: `/en/case/${slug}`, locale: 'en',
+    title: item.seoTitle || item.title, description: item.seoDescription || item.summary,
+    path: `/en/case/${slug}`, locale: 'en',
     // The source publication date predates this English page, so it is not presented as its own.
     type: 'article', image: item.cover?.src, modifiedTime: item.dateModified,
     alternateLocales: { 'zh-CN': `/zh/case/${slug}`, 'en-US': `/en/case/${slug}`, 'x-default': `/zh/case/${slug}` },
