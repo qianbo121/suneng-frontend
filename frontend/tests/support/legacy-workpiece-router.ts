@@ -1,3 +1,6 @@
+// Historical rule-review reference used only by tests. Never import into application code.
+import type { WorkpieceDisplayState } from '@/lib/workpiece-selection-types';
+
 import capabilityWhitelistJson from '../../../data/workpiece-router/furnace-capability-whitelist.json';
 import baselineVersionsJson from '../../../data/workpiece-router/industry-baseline-versions.json';
 import publicDirectionSnapshotJson from '../../../data/workpiece-router/industry-public-direction-snapshot.json';
@@ -319,14 +322,7 @@ export type IndustryDirection = {
   productHref: null;
 };
 
-export type WorkpieceDisplayState =
-  | 'industry_direction'
-  | 'conditional_directions'
-  | 'insufficient_inputs'
-  | 'special_process'
-  | 'outside_module'
-  | 'engineering_review'
-  | 'unverified';
+
 
 export type WorkpieceSelectionInput = {
   workpieceId: string;

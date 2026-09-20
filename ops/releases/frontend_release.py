@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-"""Apply an already imported, immutable frontend image; never build or change data.
-The same operation is used for deployment and rollback. Old withdrawn-content
-images must pass the canary contract before they can replace the public site.
+"""Apply imported immutable images for explicitly selected application components.
+Pinned additive migrations require a verified daily backup; never reset or restore
+production data. Old withdrawn-content images must pass the canary contract.
 """
 import argparse
 import copy
@@ -403,6 +403,7 @@ class Release:
         self.override = audit / 'target.override.json'
         self.target = copy.deepcopy(self.receipt['images'])
         self.target['frontend'] = manifest['image']
+        self.migration_backup_verified = False
         self.components = [] if self.admin_only else ['frontend']
         self.protected = list(PROTECTED)
         if self.admin_only:
@@ -447,11 +448,16 @@ class Release:
             # Run only a bounded read/check command. Never start the inquiry notification worker twice.
             command = self.compose() + ['run', '--rm', '--no-deps', '--pull', 'never',
                        '-e', 'RELEASE_APPLY_INDEX=' + ('1' if migrate else '0'),
+                       '-e', 'RELEASE_BACKUP_VERIFIED=' + ('1' if migrate and self.migration_backup_verified else '0'),
                        '--entrypoint', 'node', 'backend', '-e', script]
         report = json.loads(run(command, env=self.env, timeout=180))
-        if report.get('passed') is not True:
+        if report.get('passed') is not True or ((migrate or running) and report.get('aggregateAvailable') is not True):
             raise RuntimeError('Backend aggregate or migration verification failed')
         return report
+
+    def verify_backup(self):
+        from backup_gate import verify_daily_backup
+        return verify_daily_backup()
 
     def admin_check(self, require_cache=False):
         canary = 'suneng-admin-check-' + uuid.uuid4().hex[:12]
@@ -489,11 +495,12 @@ class Release:
             if not source or (image.get('Config', {}).get('Labels') or {}).get('org.opencontainers.image.revision') != source:
                 raise RuntimeError('Image was not built from the recorded source commit')
         self.write_override(self.override, self.target)
+        backend_preflight = None
         if 'backend' in self.manifest:
             backend_image = json.loads(run(['docker', 'image', 'inspect', self.target['backend']]))[0]
             if backend_image['Id'] != self.target['backend'] or (backend_image.get('Config', {}).get('Labels') or {}).get('org.opencontainers.image.revision') != self.manifest['sourceCommit']:
                 raise RuntimeError('Backend image was not built from the same reviewed source')
-            self.backend_check()
+            backend_preflight = self.backend_check()
         admin_candidate = None
         if 'admin' in self.manifest:
             if self.receipt['images']['admin'] != self.manifest['admin']['expectedCurrentImage']:
@@ -522,11 +529,18 @@ class Release:
                   'dataRestored': False, 'notificationsSent': False, 'components': self.components}
         if admin_candidate:
             result['adminCandidate'] = admin_candidate
+        if backend_preflight is not None:
+            result['backendPreflight'] = backend_preflight
         if not apply or same:
             # Without a switch the public site still runs the current image.
             result['publicChecks'] = public_probe('https://www.jssngyl.cn', self.target_contract if same else self.lenient_contract)
             atomic_json(self.audit / 'preflight.json', result)
             return result
+        if backend_preflight and backend_preflight.get('pendingMigrationCount', 0):
+            result['databaseBackup'] = self.verify_backup()
+            if result['databaseBackup'].get('verified') is not True:
+                raise RuntimeError('Database backup was not verified')
+            self.migration_backup_verified = True
         # Re-check the expected current version immediately before replacement.
         current = inspect(PROTECTED + ['frontend'])
         assert_current(self.receipt, current, self.manifest['expectedCurrentImage'])
@@ -633,7 +647,7 @@ def main():
     parser.add_argument('--manifest', type=Path, required=True)
     parser.add_argument('--live', type=Path, default=Path('/opt/website'))
     parser.add_argument('--audit-root', type=Path, default=Path('/data/migration-rehearsals/release-ops'))
-    parser.add_argument('--apply', action='store_true', help='Replace the frontend and optional explicitly manifested backend')
+    parser.add_argument('--apply', action='store_true', help='Replace only the explicitly selected frontend/backend/admin components')
     parser.add_argument('--kind', choices=['deploy', 'rollback'], default='deploy')
     parser.add_argument('--failure-webhook-file', type=Path,
                         help='Owner-only Feishu credential file; failure notices only on --apply')

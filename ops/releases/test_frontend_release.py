@@ -562,6 +562,72 @@ class UnifiedReleaseTest(unittest.TestCase):
                 check.assert_called_once_with()
                 self.assertFalse(release.pending_path.exists())
 
+    def test_pending_migration_cannot_switch_without_a_verified_backup(self):
+        for outcome in [ValueError('stale backup'), {'verified': False}, {'verified': True}]:
+            with self.subTest(outcome=outcome), tempfile.TemporaryDirectory() as tmp:
+                release = self.fixture(tmp)
+                state = dict(RECEIPT['images'])
+                events = []
+                def current(names):
+                    result = rows(state['frontend'])
+                    for row in result:
+                        name = row['Name'].removeprefix('/corp-site-')
+                        if name in state:
+                            row.update(Image=state[name], Id=name + state[name])
+                    return [row for row in result if row['Name'].removeprefix('/corp-site-') in names]
+                def command(args, **_):
+                    if args[:3] == ['docker', 'image', 'inspect']:
+                        return json.dumps([{'Id': args[-1], 'Config': {'Labels': {
+                            'org.opencontainers.image.revision': MANIFEST['sourceCommit']}}}])
+                    return ''
+                def backup():
+                    events.append('backup')
+                    if isinstance(outcome, Exception):
+                        raise outcome
+                    return outcome
+                def check(migrate=False, running=False):
+                    events.append('migrate' if migrate else 'running' if running else 'preflight')
+                    if migrate:
+                        self.assertTrue(release.migration_backup_verified)
+                    return {'passed': True, 'pendingMigrationCount': 1 if not migrate and not running else 0,
+                            'aggregateAvailable': migrate or running}
+                def replace(override=None):
+                    events.append('switch')
+                    state.update(RECEIPT['images'] if override else release.target)
+                with patch.object(r, 'inspect', side_effect=current), patch.object(r, 'run', side_effect=command), \
+                     patch.object(r, 'wait_healthy'), patch.object(r, 'probe', return_value=GOOD), \
+                     patch.object(r, 'public_probe', return_value=[]), patch.object(r.subprocess, 'run'), \
+                     patch.object(release, 'backend_check', side_effect=check), \
+                     patch.object(release, 'verify_backup', side_effect=backup), \
+                     patch.object(release, 'replace_frontend', side_effect=replace):
+                    if outcome == {'verified': True}:
+                        self.assertTrue(release.execute(True)['applied'])
+                        self.assertEqual(events, ['preflight', 'backup', 'migrate', 'switch', 'running'])
+                        self.assertEqual(state, release.target)
+                    else:
+                        with self.assertRaises((ValueError, RuntimeError)):
+                            release.execute(True)
+                        self.assertEqual(events, ['preflight', 'backup'])
+                        self.assertEqual(state, RECEIPT['images'])
+                    self.assertFalse(release.pending_path.exists())
+
+    def test_backend_checks_pass_backup_status_and_reject_deferred_final_checks(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            release = self.fixture(tmp)
+            good = {'passed': True, 'aggregateAvailable': True}
+            with patch.object(r, 'run', return_value=json.dumps(good)) as command:
+                release.backend_check()
+                self.assertIn('RELEASE_BACKUP_VERIFIED=0', command.call_args.args[0])
+                release.migration_backup_verified = True
+                release.backend_check(migrate=True)
+                self.assertIn('RELEASE_BACKUP_VERIFIED=1', command.call_args.args[0])
+            deferred = {'passed': True, 'aggregateAvailable': None, 'aggregateDeferred': True}
+            with patch.object(r, 'run', return_value=json.dumps(deferred)):
+                self.assertEqual(release.backend_check(), deferred)
+                for options in [{'migrate': True}, {'running': True}]:
+                    with self.assertRaises(RuntimeError):
+                        release.backend_check(**options)
+
 @unittest.skipUnless(shutil.which('node'), 'node is required to run the container health script')
 class HealthScriptTest(unittest.TestCase):
     """Runs the real check-frontend.cjs against a stub site."""

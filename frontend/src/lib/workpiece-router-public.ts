@@ -1,4 +1,4 @@
-import type { WorkpieceDisplayState } from '@/lib/workpiece-router';
+import type { WorkpieceDisplayState } from '@/lib/workpiece-selection-types';
 import { takeDifficultyPoints } from '@/lib/workpiece-router-difficulty';
 
 export type PublicWorkpieceCard = {

@@ -102,7 +102,7 @@ write_status() {
 }
 
 send_alert() {
-  local text url payload
+  local text url payload response_file http_status
   [ -s "$ALERT_WEBHOOK_FILE" ] || return 0
   url="$(head -n 1 "$ALERT_WEBHOOK_FILE" | tr -d '[:space:]')"
   case "$url" in
@@ -114,12 +114,40 @@ send_alert() {
   esac
   text="$(json_safe "$1")"
   payload="{\"msg_type\":\"text\",\"content\":{\"text\":\"$text\"}}"
-  # The URL is a secret. Handing it over on stdin keeps it out of the process
-  # list, and curl's own output is dropped so it cannot reach the cron log.
-  printf 'url = "%s"\n' "$url" \
-    | curl --silent --max-time 10 --config - \
-      --header 'Content-Type: application/json' --data "$payload" >/dev/null 2>&1 \
-    || echo "Alert could not be delivered (the backup result is unaffected)." >&2
+  # Keep the URL on stdin and never log the platform response: either may
+  # contain credentials. Alert failure must not overwrite the backup outcome.
+  if ! response_file="$(mktemp "$BACKUP_DIR/.alert-response.XXXXXX")"; then
+    echo "Alert could not be checked (the backup result is unaffected)." >&2
+    return 0
+  fi
+  if ! http_status="$(printf 'url = "%s"\n' "$url" \
+    | curl --disable --silent --max-time 10 --config - \
+      --proto '=https' --max-filesize 65536 \
+      --header 'Content-Type: application/json' --data "$payload" \
+      --output "$response_file" --write-out '%{http_code}' 2>/dev/null)"; then
+    echo "Alert could not be delivered (the backup result is unaffected)." >&2
+  elif [ "$http_status" != "200" ]; then
+    echo "Alert received a non-success HTTP response (the backup result is unaffected)." >&2
+  elif ! python3 - "$response_file" 2>/dev/null <<'CHECK_ALERT'
+import json
+import sys
+try:
+    with open(sys.argv[1], 'rb') as response:
+        raw = response.read(65537)
+    if len(raw) > 65536:
+        raise ValueError('oversized response')
+    result = json.loads(raw)
+    code = result.get('code', result.get('StatusCode'))
+    accepted = type(code) is int and code == 0
+except Exception:
+    accepted = False
+sys.exit(0 if accepted else 1)
+CHECK_ALERT
+  then
+    echo "Alert acceptance could not be confirmed by the platform (the backup result is unaffected)." >&2
+  fi
+  rm -f -- "$response_file" || true
+  return 0
 }
 
 on_exit() {

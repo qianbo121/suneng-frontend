@@ -45,6 +45,18 @@ FAKE_CURL = r'''#!/usr/bin/env bash
   echo "ARGS: $*"
   echo "STDIN: $(cat)"
 } >> "$FAKE_STATE/curl.log"
+response_file=""
+while [ "$#" -gt 0 ]; do
+  if [ "$1" = "--output" ]; then
+    shift
+    response_file="$1"
+  fi
+  shift
+done
+if [ -n "$response_file" ]; then
+  printf '%s' "${FAKE_CURL_BODY:-}" > "$response_file"
+fi
+printf '%s' "${FAKE_CURL_HTTP:-200}"
 exit "${FAKE_CURL_EXIT:-0}"
 '''
 
@@ -82,6 +94,7 @@ class BackupScriptTest(unittest.TestCase):
             "BACKUP_ALERT_WEBHOOK_FILE": str(self.webhook_file if webhook else self.tmp / "absent"),
             "BACKUP_MIN_FREE_KB": "1",
             "FAKE_STATE": str(self.state),
+            "FAKE_CURL_BODY": '{"code":0}',
             **{key: str(value) for key, value in env.items()},
         }
         return subprocess.run(
@@ -222,6 +235,57 @@ class BackupScriptTest(unittest.TestCase):
         failed = self.run_backup(FAKE_DUMP_EXIT=2, FAKE_CURL_EXIT=7)
         self.assertEqual(failed.returncode, 2)
         self.assertIn("could not be delivered", failed.stderr)
+
+    def test_platform_acceptance_requires_http_and_business_success(self):
+        for http, body in [
+            (200, '{"code":0}'),
+            (200, '{"StatusCode":0}'),
+            (200, '{"code":0,"StatusCode":0}'),
+        ]:
+            with self.subTest(http=http, body=body):
+                result = self.run_backup(FAKE_DUMP_EXIT=2, FAKE_CURL_HTTP=http, FAKE_CURL_BODY=body)
+                self.assertEqual(result.returncode, 2)
+                self.assertNotIn("Alert ", result.stderr)
+                self.assertEqual(self.names(".alert-response.*"), [])
+
+    def test_http_rejection_is_visible_and_preserves_backup_failure(self):
+        for http in (301, 403, 429, 500):
+            with self.subTest(http=http):
+                result = self.run_backup(FAKE_DUMP_EXIT=2, FAKE_CURL_HTTP=http)
+                self.assertEqual(result.returncode, 2)
+                self.assertIn("non-success HTTP response", result.stderr)
+                self.assertEqual(self.status()["status"], "failed")
+                self.assertEqual(self.names(".alert-response.*"), [])
+
+    def test_business_rejection_and_unknown_responses_are_visible(self):
+        for body in [
+            '{"code":19021,"msg":"SECRET-TOKEN"}',
+            '{"StatusCode":1}', '{"code":false}', '{"code":"0"}',
+            '{"code":1,"StatusCode":0}', '{}', '[]', 'null', '',
+            '<html>SECRET-TOKEN</html>', 'x' * 65537,
+        ]:
+            with self.subTest(body=body[:60]):
+                result = self.run_backup(FAKE_DUMP_EXIT=2, FAKE_CURL_BODY=body)
+                self.assertEqual(result.returncode, 2)
+                self.assertIn("acceptance could not be confirmed", result.stderr)
+                self.assertNotIn("SECRET-TOKEN", result.stdout + result.stderr)
+                self.assertEqual(self.names(".alert-response.*"), [])
+
+    def test_rejected_warning_alert_does_not_invalidate_a_good_backup(self):
+        for env in [
+            {"FAKE_CURL_EXIT": 7}, {"FAKE_CURL_HTTP": 429},
+            {"FAKE_CURL_BODY": '{"code":19021}'},
+        ]:
+            with self.subTest(env=env):
+                for existing in self.backups.glob("db-*.sql.gz"):
+                    existing.unlink()
+                self.old_file("db-20260917-020001.sql.gz", days=1, body=os.urandom(400_000))
+                result = self.run_backup(**env)
+                self.assertEqual(result.returncode, 0, result.stderr)
+                self.assertEqual(self.status()["status"], "ok")
+                self.assertTrue((self.backups / "last-success").exists())
+                self.assertIn("Alert ", result.stderr)
+                self.assertEqual(self.names(".alert-response.*"), [])
 
     def test_non_https_webhook_is_refused(self):
         self.webhook_file.write_text("http://alerts.invalid/hook\n")
