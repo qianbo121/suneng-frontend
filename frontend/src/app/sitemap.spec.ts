@@ -59,7 +59,7 @@ vi.mock('@/lib/api/news', () => ({
 
 import buildSitemap from '@/app/sitemap';
 
-import { FURNACE_RENOVATION_OVERHAUL_SEO } from '@/lib/seo/page-data';
+import { FURNACE_RENOVATION_OVERHAUL_SEO, PRODUCT_DETAIL_SEO } from '@/lib/seo/page-data';
 import { APPROVED_GUIDE_PATHS, isWithdrawnTechnicalPath } from '@/lib/publication-scope';
 import { REVIEWED_PUBLIC_CASES } from '@/lib/cases/public-case-allowlist';
 
@@ -106,6 +106,41 @@ const DEEP_CRAWL_TARGETS = [
 ];
 
 describe('sitemap freshness signals', () => {
+  it('keeps a verified Chinese product date out of the independently maintained English page', async () => {
+    const productSeo = PRODUCT_DETAIL_SEO['box-furnace'];
+    const previous = productSeo.modifiedTime;
+    try {
+      productSeo.modifiedTime = '2026-01-02T03:04:05+08:00';
+      const entries = new Map((await buildSitemap()).map((entry) => [entry.url, entry]));
+      expect(entries.get(`${site}/zh/products/detail/box-furnace`)?.lastModified).toEqual(
+        new Date(productSeo.modifiedTime),
+      );
+      expect(entries.get(`${site}/en/products/detail/box-furnace`)?.lastModified).toBeUndefined();
+    } finally {
+      if (previous === undefined) delete productSeo.modifiedTime;
+      else productSeo.modifiedTime = previous;
+    }
+  });
+
+  it.each(['not-a-date', '2999-01-01'])('omits invalid or future product and guide dates: %s', async (date) => {
+    const productSeo = PRODUCT_DETAIL_SEO['box-furnace'];
+    const previousProductDate = productSeo.modifiedTime;
+    const previousGuideDate = FURNACE_RENOVATION_OVERHAUL_SEO.modifiedTime;
+    try {
+      productSeo.modifiedTime = date;
+      FURNACE_RENOVATION_OVERHAUL_SEO.modifiedTime = date;
+      const entries = new Map((await buildSitemap()).map((entry) => [entry.url, entry]));
+      for (const path of ['/zh/products/detail/box-furnace', '/zh/service/furnace-renovation-overhaul']) {
+        expect(entries.has(site + path)).toBe(true);
+        expect(entries.get(site + path)).not.toHaveProperty('lastModified');
+      }
+    } finally {
+      if (previousProductDate === undefined) delete productSeo.modifiedTime;
+      else productSeo.modifiedTime = previousProductDate;
+      FURNACE_RENOVATION_OVERHAUL_SEO.modifiedTime = previousGuideDate;
+    }
+  });
+
   it('retains real modification dates for live pages and omits withdrawn guides', async () => {
     const entries = await buildSitemap();
     const byUrl = new Map(entries.map((entry) => [entry.url, entry]));

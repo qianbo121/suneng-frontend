@@ -582,27 +582,11 @@ function buildValidation({ cards, draft }) {
       '公开JSON泄漏内部名称或文案',
     );
   }
-  const runtimeSource = readFileSync(join(root, 'frontend/src/lib/workpiece-router.ts'), 'utf8');
-  assert(
-    !runtimeSource.includes('industry-direction-rules.json'),
-    '公共运行时代码直接导入内部规则',
-  );
-  assert(
-    !runtimeSource.includes('industry-evidence-registry.json'),
-    '公共运行时代码直接导入内部证据',
-  );
-  assert(
-    !runtimeSource.includes('industry-public-label-mapping.json'),
-    '公共运行时代码直接导入未批准名称',
-  );
-  assert(
-    !runtimeSource.includes('serverEngineeringPredicates'),
-    '前端仍可注入或覆盖服务器工程谓词',
-  );
 
   const publicRoots = [
     join(root, 'frontend/src/app'),
     join(root, 'frontend/src/components'),
+    join(root, 'frontend/src/lib'),
   ].filter(existsSync);
   const walk = (dir) =>
     readdirSync(dir).flatMap((name) => {
@@ -611,9 +595,27 @@ function buildValidation({ cards, draft }) {
     });
   const publicText = publicRoots
     .flatMap(walk)
-    .filter((path) => /\.(ts|tsx|js|jsx|json)$/.test(path))
+    .filter((path) => /\.(ts|tsx|js|jsx|json)$/.test(path) && !/\.(spec|test)\.[^.]+$/.test(path))
     .map((path) => readFileSync(path, 'utf8'))
     .join('\n');
+  assert(
+    !publicText.includes('industry-direction-rules.json'),
+    '公共运行时代码直接导入内部规则',
+  );
+  assert(
+    !publicText.includes('industry-evidence-registry.json'),
+    '公共运行时代码直接导入内部证据',
+  );
+  assert(
+    !publicText.includes('industry-public-label-mapping.json'),
+    '公共运行时代码直接导入未批准名称',
+  );
+  assert(
+    !publicText.includes('serverEngineeringPredicates'),
+    '前端仍可注入或覆盖服务器工程谓词',
+  );
+
+  assert(!publicText.includes('legacy-workpiece-router'), '历史规则复核代码不可接回生产界面');
   assert(
     !publicText.includes('candidate-appmap-') && !publicText.includes('eqdir-'),
     '公共HTML或SEO源码泄漏内部规则',

@@ -91,9 +91,12 @@ function safeLastModified(value?: string | Date) {
 }
 
 function route(url: string, options: Omit<SitemapEntry, 'url'>): SitemapEntry {
+  const { lastModified, ...rest } = options;
+  const validDate = safeLastModified(lastModified);
   return {
     url: absoluteUrl(url),
-    ...options,
+    ...rest,
+    ...(validDate ? { lastModified: validDate } : {}),
   };
 }
 
@@ -255,7 +258,8 @@ function collectStaticRoutes(): MetadataRoute.Sitemap {
 function collectProductRoutes(): MetadataRoute.Sitemap {
   const existingRoutes = sitemapLocales.flatMap((locale) =>
     STATIC_PRODUCTS.map((product) => {
-      const modifiedTime = PRODUCT_DETAIL_SEO[product.slug]?.modifiedTime;
+      // Chinese product revisions are not evidence of an English content update.
+      const modifiedTime = locale === 'zh' ? PRODUCT_DETAIL_SEO[product.slug]?.modifiedTime : undefined;
 
       return route(localizedPath(locale, `/products/detail/${product.slug}`), {
         ...(modifiedTime ? { lastModified: new Date(modifiedTime) } : {}),

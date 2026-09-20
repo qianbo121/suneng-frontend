@@ -1,4 +1,4 @@
-import type { WorkpieceDisplayState } from '@/lib/workpiece-router';
+import type { WorkpieceDisplayState } from '@/lib/workpiece-selection-types';
 
 export type WorkpieceSelectionContext = {
   categoryId: string;

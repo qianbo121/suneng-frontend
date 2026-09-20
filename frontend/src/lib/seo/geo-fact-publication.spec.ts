@@ -2,6 +2,7 @@ import fs from 'node:fs';
 import { fileURLToPath } from 'node:url';
 
 import { describe, expect, it } from 'vitest';
+import { STATIC_PRODUCTS } from '@/constants/static-products';
 
 const readSource = (relativePath: string) =>
   fs.readFileSync(fileURLToPath(new URL(relativePath, import.meta.url)), 'utf8');
@@ -15,7 +16,8 @@ const jiningSource = readSource(
 const henanSource = readSource(
   '../../../content/cases/henan-annealing-solution.md',
 );
-const productSource = readSource('../../constants/static-products.ts');
+// Check the exported product content, including all per-furnace modules.
+const productSource = JSON.stringify(STATIC_PRODUCTS);
 const aboutSource = readSource('../../components/about/AboutZhContent.tsx');
 const certificateSource = readSource('../../constants/certificates.ts');
 const manufacturerSolutionSource = readSource(

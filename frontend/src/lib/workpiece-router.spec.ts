@@ -19,7 +19,7 @@ import {
   type PublicClaimTemplates,
   type PublicLabelMapping,
   type WorkpieceSelectionInput,
-} from '@/lib/workpiece-router';
+} from '../../tests/support/legacy-workpiece-router';
 
 const rules = directionRulesJson.rules as unknown as IndustryDirectionRule[];
 const evidence = evidenceJson.evidence as unknown as EvidenceRecord[];

@@ -6,7 +6,7 @@ import {
   resolvePublicWorkpieceSelection,
   type WorkpieceRouterPublicCatalog,
 } from '@/lib/workpiece-router-public';
-import { resolveWorkpieceDirections } from '@/lib/workpiece-router';
+import { resolveWorkpieceDirections } from '../../tests/support/legacy-workpiece-router';
 
 describe('workpiece router difficulty points', () => {
   it('keeps all current workpieces populated before process selection', () => {
