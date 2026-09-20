@@ -322,21 +322,21 @@ def admin_cache_probe(container=None):
     checks = []
     for path in ['/', '/index.html', '/login', '/custom-requirements',
                  '/assets/__suneng_cache_probe_missing__.js']:
-        if container:
-            command = ['docker', 'exec', container, 'wget', '-S', '-O', '/dev/null',
-                       'http://127.0.0.1' + path]
-        else:
-            command = ['curl', '--silent', '--show-error', '--max-time', '20',
-                       '-D', '-', '-o', '/dev/null', 'https://admin.jssngyl.cn' + path]
+        # BusyBox wget stops before printing headers on a 404. The admin image
+        # already includes curl, which preserves error-response headers.
+        request = ['curl', '--silent', '--show-error', '--max-time', '20',
+                   '-D', '-', '-o', '/dev/null']
+        command = (['docker', 'exec', container, *request, 'http://127.0.0.1' + path]
+                   if container else [*request, 'https://admin.jssngyl.cn' + path])
         response = subprocess.run(command, text=True, capture_output=True, timeout=25)
         headers = response.stdout + response.stderr
         status = re.search(r'HTTP/\S+\s+(\d{3})', headers)
         cache = ', '.join(re.findall(r'^\s*cache-control:\s*(.+)', headers, re.I | re.M)).strip()
         robots = re.search(r'^\s*x-robots-tag:\s*noindex, nofollow\s*$', headers, re.I | re.M)
         expected = 404 if path.endswith('.js') else 200
-        if not status or int(status[1]) != expected or not robots:
+        if response.returncode != 0 or not status or int(status[1]) != expected or not robots:
             raise RuntimeError('Admin cache response failed: ' + path)
-        if (expected == 200 and (response.returncode != 0 or 'no-store' not in cache.lower())) or (
+        if (expected == 200 and 'no-store' not in cache.lower()) or (
                 expected == 404 and 'immutable' in cache.lower()):
             raise RuntimeError('Admin cache policy failed: ' + path)
         checks.append({'path': path, 'status': expected, 'cacheControl': cache})
