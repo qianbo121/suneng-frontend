@@ -3,15 +3,12 @@
 #
 # Releases are prepared by Prepare Immutable Frontend Candidate / Prepare Unified
 # Website Release and then switched over by hand on the server, so no workflow
-# completion proves the new pages are live. Run this by hand after a release
-# (optionally pasting the URLs), and let the daily run clear the backlog.
+# completion proves the new pages are live. Compare the live sitemap with the
+# durable prior snapshot on each run. Manual URLs remain available for content
+# edits without a truthful lastmod. Never submit a whole sitemap as a fallback.
 name: Search Submission Queue
 
 on:
-  workflow_run:
-    workflows: [Build And Deploy]
-    types: [completed]
-    branches: [main]
   schedule:
     # 04:17 Asia/Shanghai. Revisit deferred URLs after the daily budget resets.
     - cron: '17 20 * * *'
@@ -34,7 +31,7 @@ concurrency:
 
 jobs:
   submit:
-    if: github.ref == 'refs/heads/main' && (github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success')
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
@@ -51,7 +48,7 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           MANUAL_URLS: ${{ inputs.urls }}
         run: node frontend/scripts/restore-search-queue.mjs
-      - name: Submit within the daily budget
+      - name: Discover live changes and submit within the daily budget
         env:
           NEXT_PUBLIC_SITE_URL: https://www.jssngyl.cn
           INDEXNOW_KEY: ${{ secrets.INDEXNOW_KEY }}

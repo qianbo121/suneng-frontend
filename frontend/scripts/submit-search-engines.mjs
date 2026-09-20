@@ -24,10 +24,6 @@ function getEnv(name) {
   return process.env[name]?.trim() || '';
 }
 
-function extractUrlsFromSitemap(xml) {
-  return [...sitemapEntries(xml).keys()];
-}
-
 function normalizeSubmissionUrl(value, siteUrl) {
   const url = new URL(value, `${siteUrl}/`);
   if (url.origin !== new URL(siteUrl).origin) {
@@ -55,6 +51,10 @@ export function selectSubmissionUrls(siteUrl, sitemapUrls) {
 }
 
 export async function loadSitemapUrls(siteUrl) {
+  return [...(await loadSitemapEntries(siteUrl)).keys()];
+}
+
+export async function loadSitemapEntries(siteUrl) {
   const sitemapUrl = `${siteUrl}/sitemap.xml`;
   const response = await fetch(sitemapUrl, {
     signal: AbortSignal.timeout(15000),
@@ -68,13 +68,7 @@ export async function loadSitemapUrls(siteUrl) {
   }
 
   const xml = await response.text();
-  const urls = extractUrlsFromSitemap(xml);
-
-  if (!urls.length) {
-    throw new Error(`No <loc> URLs found in ${sitemapUrl}`);
-  }
-
-  return urls;
+  return sitemapEntries(xml);
 }
 
 export async function submitIndexNow(siteUrl, urls, dryRun) {
