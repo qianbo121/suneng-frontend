@@ -40,6 +40,16 @@ describe('English counterparts follow source authority', () => {
     expect(JSON.stringify(records)).not.toContain('do-not-expose');
     expect(records[0].searchText).toContain('fixture inclusion was not specified');
   });
+  it('exposes optional search copy separately while preserving display text and private-field protection', () => {
+    const { root, copy } = fixture();
+    const file = path.join(root, 'cases-en/example.json');
+    fs.writeFileSync(file, JSON.stringify({ ...copy, seoTitle: '  Fixture capacity | Suneng  ', seoDescription: '  Fixture inclusion is unverified.  ' }));
+    const [record] = readEnglishCases(root);
+    expect(record).toMatchObject({ title: copy.title, summary: copy.summary, seoTitle: 'Fixture capacity | Suneng', seoDescription: 'Fixture inclusion is unverified.' });
+    expect(JSON.stringify(record)).not.toContain('do-not-expose');
+    fs.writeFileSync(file, JSON.stringify({ ...copy, seoTitle: '  ', seoDescription: '' }));
+    expect(readEnglishCases(root)[0]).toMatchObject({ seoTitle: undefined, seoDescription: undefined });
+  });
   it('rejects withdrawn sources before reading either language body, even if English says complete', () => {
     const { root, source } = fixture();
     fs.writeFileSync(path.join(root, 'cases/example.json'), JSON.stringify({ ...source, publicationStatus: 'draft' }));

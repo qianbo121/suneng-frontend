@@ -71,7 +71,7 @@ describe('complete English case integration', () => {
       expect(decoded, item.slug).toBe(item.title);
       const meta = englishCaseMetadata(item.slug);
       const seoTitle = (meta.title as { absolute: string }).absolute;
-      expect(seoTitle).toContain(item.title);
+      expect(seoTitle).toContain(item.seoTitle || item.title);
       expect(meta.openGraph?.title).toBe(seoTitle);
       expect(meta.twitter?.title).toBe(seoTitle);
       expect(meta.alternates?.canonical).toContain(`/en/case/${item.slug}`);
