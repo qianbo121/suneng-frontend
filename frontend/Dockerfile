@@ -54,7 +54,8 @@ COPY --from=deps /app/backend/node_modules ./backend/node_modules
 COPY --from=deps /app/admin/node_modules ./admin/node_modules
 COPY . .
 
-RUN mkdir -p frontend/public && pnpm --dir frontend build
+RUN mkdir -p frontend/public && pnpm --dir frontend build \
+    && node frontend/scripts/prepare-standalone.mjs
 
 FROM node:22.23.1-alpine AS runner
 
@@ -64,9 +65,9 @@ ENV NODE_ENV=production
 ENV PORT=3000
 ENV HOSTNAME=0.0.0.0
 
-COPY --from=builder /app/frontend/public ./frontend/public
+# Public assets and Next static files are already merged into this directory.
+# A single COPY avoids retaining the traced public assets in two image layers.
 COPY --from=builder /app/frontend/.next/standalone ./
-COPY --from=builder /app/frontend/.next/static ./frontend/.next/static
 
 EXPOSE 3000
 

@@ -12,13 +12,13 @@ import json
 import os
 from pathlib import Path
 import re
-import shutil
 import subprocess
 import sys
 import time
 import uuid
 import xml.etree.ElementTree as ET
 from urllib.parse import urlparse
+from storage_policy import working_space
 
 IMAGE = re.compile(r'^sha256:[0-9a-f]{64}$')
 SHA = re.compile(r'^[0-9a-f]{40}$')
@@ -479,8 +479,7 @@ class Release:
             raise RuntimeError('An interrupted deployment requires reconciliation before another attempt')
         if (self.live / '.DO_NOT_DEPLOY').exists() or (self.live / '.DO_NOT_DEPLOY').is_symlink():
             raise RuntimeError('This checkout is explicitly blocked from deployment')
-        if shutil.disk_usage(self.live).free < 2 * 1024**3:
-            raise RuntimeError('Two GiB working reserve required for an already imported image')
+        storage = working_space(self.live, kind)
         before = inspect(PROTECTED + ['frontend'])
         assert_current(self.receipt, before, self.manifest['expectedCurrentImage'])
         protected = signature([r for r in before if r['Name'].removeprefix('/corp-site-') in self.protected])
@@ -526,6 +525,7 @@ class Release:
             raise RuntimeError('A protected production service changed during preflight')
         result = {'at': now(), 'passed': True, 'applied': False, 'kind': kind,
                   'image': self.target['frontend'], 'internalChecks': internal,
+                  'storageCheck': storage,
                   'dataRestored': False, 'notificationsSent': False, 'components': self.components}
         if admin_candidate:
             result['adminCandidate'] = admin_candidate
@@ -542,6 +542,7 @@ class Release:
                 raise RuntimeError('Database backup was not verified')
             self.migration_backup_verified = True
         # Re-check the expected current version immediately before replacement.
+        result['storageCheck'] = working_space(self.live, kind)
         current = inspect(PROTECTED + ['frontend'])
         assert_current(self.receipt, current, self.manifest['expectedCurrentImage'])
         if signature([row for row in current if row['Name'].removeprefix('/corp-site-') in self.protected]) != protected:

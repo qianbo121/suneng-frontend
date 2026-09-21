@@ -331,6 +331,33 @@ class ContractTest(unittest.TestCase):
                 self.assertEqual(json.loads(release.receipt_path.read_text()), RECEIPT)
                 self.assertFalse(release.pending_path.exists())
 
+    def test_low_space_stops_before_starting_a_candidate(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            release = self.fixture(tmp)
+            with patch.object(r, 'working_space', side_effect=RuntimeError('Insufficient space')), \
+                 patch.object(r, 'inspect') as inspect:
+                with self.assertRaisesRegex(RuntimeError, 'Insufficient'):
+                    release.execute(apply=True)
+                inspect.assert_not_called()
+            self.assertEqual(json.loads(release.receipt_path.read_text()), RECEIPT)
+            self.assertFalse(release.pending_path.exists())
+
+    def test_space_lost_during_preflight_stops_before_switching(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            release = self.fixture(tmp)
+            with patch.object(r, 'working_space', side_effect=[{'passed': True}, RuntimeError('Insufficient space')]) as capacity, \
+                 patch.object(r, 'inspect', side_effect=lambda names: [x for x in rows() if x['Name'][11:] in names]), \
+                 patch.object(r, 'run', side_effect=canary_docker), patch.object(r, 'wait_healthy'), \
+                 patch.object(r, 'probe', return_value=GOOD), patch.object(r.subprocess, 'run'), \
+                 patch.object(release, 'replace_frontend') as replace:
+                with self.assertRaisesRegex(RuntimeError, 'Insufficient'):
+                    release.execute(apply=True)
+                self.assertEqual(capacity.call_count, 2)
+                replace.assert_not_called()
+            self.assertEqual(json.loads(release.receipt_path.read_text()), RECEIPT)
+            self.assertEqual((release.live / 'verified-images.override.yml').read_text(), 'original pins')
+            self.assertFalse(release.pending_path.exists())
+
     def test_hold_and_pending_operation_block_before_docker(self):
         for marker in ['.DO_NOT_DEPLOY', 'DEPLOYMENT_IN_PROGRESS.json']:
             with tempfile.TemporaryDirectory() as tmp:

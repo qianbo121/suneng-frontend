@@ -4,7 +4,7 @@
 
 新入口 `frontend_release.py` 只使用已经导入并核对身份的镜像，绝不构建、拉取代码、迁移或恢复数据库。它只替换前台并重新载入现有代理配置，不重启后端、后台、数据库或共享代理。后端或数据改动需要另做有数据保护证据的发布方案，不能混用前台回退。
 
-1. 在独立构建环境从完整 Git 提交生成镜像；将程序包、压缩包校验值、源提交和镜像标识长期保存到经确认的独立存储。导入前预留“镜像展开体积 + 压缩包体积 + 2 GiB 工作空间”；不再占用生产资源重复构建。`prepare-frontend.yml` 只构建候选，不连接生产机。
+1. 在独立构建环境从完整 Git 提交生成镜像；将程序包、压缩包校验值、源提交和镜像标识长期保存到经确认的独立存储。传输和导入前，按下文容量检查预留“全部候选镜像展开体积的两倍 + 压缩包体积 + 5 GiB 工作空间”；不再占用生产资源重复构建。`prepare-frontend.yml` 只构建候选，不连接生产机。
 2. 按 `manifest.example.json` 填写服务器实际导入的不可变镜像身份，以及当前前台身份。先不加 `--apply` 运行检查。候选在独立容器中验证，中英文首页、资料、询价、产品、公司页必须正确；选型文章、专题方案和未经审核的案例必须为 404，网站地图不得列入它们；已审核的案例按下文“项目案例逐篇放出”检查。旧镜像未通过就拒绝切换。
 3. 完成候选真实浏览器验收、通知收件与独立备份验证后，明确执行 `--apply`。切换失败会恢复前一前台并重新检查；若恢复也失败，记录真实运行版本和待处理状态，不显示成功。`--kind rollback` 使用相同检查，绝不恢复旧数据库覆盖新询盘。
 
@@ -83,7 +83,70 @@ The backend entry must contain `image`, `expectedCurrentImage`, and `archiveSha2
 
 顺序为：迁移身份预检 → 本地每日备份校验 → 获准的增量迁移 → 新代码查询检查 → 程序切换 → 运行中后端复核。备份不合格时不会迁移或替换程序；最终复核不能以“查询延后”代替通过。此校验不代表恢复演练或自动异地备份完成；本批仍沿用现有每日备份，外部监测和新告警群保持暂缓。
 
-安装发布工具时必须同时安装 `backup_gate.py` 与 `check-backend.cjs`，保留同目录关系。仅前台或仅管理后台发布不启动这条迁移路径。
+安装发布工具时必须同时安装 `storage_policy.py`、`backup_gate.py` 与 `check-backend.cjs`，保留同目录关系。仅前台或仅管理后台发布不启动这条迁移路径。
+
+## 发布包体积与容量检查
+
+前台构建后由 `frontend/scripts/prepare-standalone.mjs` 将完整的 `public` 和 `.next/static` 合入运行目录，再一次性复制进最终镜像。Next 文件追踪可能已经带入部分公开资源，不能再分别复制公开资源层和运行目录层，也不能假设追踪结果涵盖全部图片、视频。
+
+传输前，先把构建产物中的 `candidate.json` 小文件放到服务器，并核对候选包身份。对这次准备导入的每个候选文件重复提供 `--candidate`：
+
+```sh
+python3 ops/releases/storage_policy.py check-import \
+  --candidate /private/release/frontend/candidate.json \
+  --image-store /var/lib/containerd \
+  --staging /data/migration-rehearsals
+```
+
+该命令只读取候选元数据和磁盘容量，必须在传输大文件、`docker load` 之前单独执行；发布切换入口不负责上传或导入。目录必须已存在，镜像存储路径应以服务器实际配置为准。检查失败返回非零状态，停止传输/导入，先给出经过复核的清理清单。
+
+容量计算不扣除旧版本，也不假定复用现有镜像层。镜像存储保守预留两倍展开体积，覆盖压缩层与展开层同时存在的情况；接收目录另加压缩包体积。同一文件系统合计计算，不同文件系统分别留 5 GiB。该估算不是最大磁盘占用保证，期间仍需关注其他应用写入。
+
+`frontend_release.py` 在候选检查开始前、正式切换前各检查一次工作空间。普通发布至少留 5 GiB，已导入版本的回退沿用 2 GiB 下限。空间不足时不启动切换、不改当前版本记录，也不自动删除任何文件。
+
+## 网站、数炬与报价系统的历史版本保留
+
+保留每个组件经过核对的当前版本和上一可回退版本，以及正在使用、明确保护的对象。正式数据库备份、业务数据、上传附件、配置和保留的恢复归档不进入这个清理规则；它们继续遵守各自现有备份制度。
+
+`storage_policy.py plan --evidence /private/release/storage-inventory.json` 根据最近 24 小时内人工或盘点脚本核验过的证据生成候选清单。它不采集现场状态、不验证输入声明的真实性、不删除文件，也不安装定时任务。生成的候选仍须在执行前再次核对路径、占用、摘要和保留副本，并取得对应清单的删除授权。
+
+证据格式示例（占位身份必须换成现场核实值）：
+
+```json
+{
+  "schemaVersion": 1,
+  "collectedAt": "带时区的实际盘点时间",
+  "components": {
+    "shuju-engine": {
+      "system": "shuju",
+      "verified": true,
+      "current": "sha256:当前镜像的64位小写十六进制标识",
+      "previous": "sha256:上一可回退镜像的64位小写十六进制标识"
+    }
+  },
+  "objects": [{
+    "system": "shuju",
+    "component": "shuju-engine",
+    "kind": "image",
+    "imageId": "sha256:待核对旧镜像的64位小写十六进制标识",
+    "inUse": false,
+    "protected": false,
+    "stable": true,
+    "referencesClear": true,
+    "recoveryVerified": true
+  }]
+}
+```
+
+系统值为 `website`、`shuju`、`furnace`，组件必须属于同一系统。每个组件的两版镜像须不同，且两者均有恢复证据。所有对象都要确认未被容器、进程、待执行任务或回退方案引用，并核实复查期间内容未变。
+
+目录/文件对象使用 `path`，还必须有 `isSymlink: false` 和 `ancestorsVerified: true`，确认本体和父目录均无软链接。允许进入候选的类型与额外证据如下：
+
+- `source-copy`：只认数炬 `releases/repo-before-<提交>-<时间>`、报价系统 `backups/repo_<日期>_<时间>` 的历史源码副本；要求 `fullyCovered: true`，表示源码和配置均有完整、已核对的保留副本。
+- `restore-drill`：只认网站备份批次下的 `data-restore-drill`；要求 `restorePassed: true`，失败或未完成的演练保留。
+- `partial-transfer`：只认网站迁移接收目录下一层批次内的 `.partial` 文件；要求 `truncated: true`，已证明传输截断且无活动传输或其他引用。这类无效文件不要求存在完整副本。
+
+其余类型、缺证对象一律保留。输出固定带 `deletionAuthorized: false`、`executed: false`。当前只是统一规划工具；数炬和报价系统自己的发布脚本、服务器定时任务并未因本仓库改动而自动接入。
 
 ## 登录地址变体与平滑重载
 
