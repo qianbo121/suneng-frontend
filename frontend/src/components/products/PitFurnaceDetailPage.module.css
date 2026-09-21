@@ -334,7 +334,8 @@
   white-space: nowrap;
 }
 
-.anchorNav a:hover {
+.anchorNav a:hover,
+.anchorNav a[aria-current='location'] {
   color: var(--pit-blue);
 }
 

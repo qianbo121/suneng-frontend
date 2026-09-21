@@ -1,4 +1,4 @@
-// Presentation summaries only; the complete source boundary stays available below.
+// Presentation summaries beside each direction; complete boundaries remain in the source data.
 // Match exact source text: a changed or unknown boundary is shown in full, never truncated.
 const SUMMARIES: Record<string, string> = {
   '仅作行业常见方向候选；必须按材质牌号、执行标准或图纸、尺寸重量、产量节拍、装炉方式及冷却要求复核。':

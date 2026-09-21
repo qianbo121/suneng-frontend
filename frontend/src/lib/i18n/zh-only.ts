@@ -22,6 +22,7 @@ export const ZH_ONLY_PATHS = new Set<string>([
   '/service/furnace-renovation-overhaul',
   '/service/installation-after-sales',
   '/service/furnace-relocation-restart',
+  '/service/selection-retrofit-guide',
   '/articles/gongye-lu-baojia-canshu',
   '/articles/laojiu-rechuli-lu-daxiu-haishi-maixin',
 ]);

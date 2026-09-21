@@ -3,6 +3,7 @@ import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 vi.mock('server-only', () => ({}));
 import { getWorkpieceRouterPublicCatalog } from './workpiece-router-public.server';
+import { getWorkpieceBoundarySummary } from './workpiece-direction-summary';
 import { WorkpieceRouter } from '@/components/home/WorkpieceRouter';
 import finalDirectionsJson from '../../../data/workpiece-router/industry-final-directions.json';
 import publicSnapshot from '../../../data/workpiece-router/industry-public-direction-snapshot.json';
@@ -17,7 +18,7 @@ describe('homepage finalized directions', () => {
     expect(catalog.categories.flatMap((category) => category.cards)).toHaveLength(45);
   });
 
-  it('renders both directions and retains their complete conditions in expanded details for all 45 workpieces', () => {
+  it('renders both directions with boundary summaries beside them for all 45 workpieces', () => {
     const catalog = getWorkpieceRouterPublicCatalog();
     for (const category of catalog.categories) {
       for (const card of category.cards) {
@@ -28,12 +29,12 @@ describe('homepage finalized directions', () => {
         expect(html).not.toContain('设备方向需工程判断');
         expect(html).not.toContain('正在读取行业常见方向');
         expect(html.match(/典型工况与设备方向/g)).toHaveLength(1);
-        expect(html.match(/<details\b/g)).toHaveLength(1);
-        expect(html).toMatch(/<details[^>]*\sopen(?:\s|=|>)/);
+        expect(html).not.toMatch(/<details\b/);
+        expect(html).toContain('设备方向仅供初选，具体配置需结合材质、图纸和实际工况确认。');
         for (const example of entry.examples) {
           expect(html).toContain(`<h5>${example.condition}</h5>`);
           expect(html).toContain(`<strong>${example.direction}</strong>`);
-          expect(html.split(example.boundary!).length - 1).toBe(1);
+          expect(html).toContain(getWorkpieceBoundarySummary(example.boundary!));
         }
       }
     }

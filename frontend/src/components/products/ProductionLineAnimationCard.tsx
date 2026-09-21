@@ -93,6 +93,7 @@ export function ProductionLineAnimationCard({
       data-production-line-card
       data-line-id={product.id}
       data-line-preview={mode}
+      data-stage-details={active || undefined}
       data-preview-stage={active ? stage : undefined}
       onPointerEnter={(event) => {
         if (event.pointerType !== 'mouse' || mode !== 'idle' || reducedMotion) return;
@@ -122,7 +123,7 @@ export function ProductionLineAnimationCard({
         </Link>
         {active && (
           <div
-            className={styles.preview}
+            className={`${styles.preview} ${styles.expandedPreview}`}
             data-ready={ready}
             data-motion={reducedMotion ? 'reduced' : 'full'}
           >
@@ -140,11 +141,6 @@ export function ProductionLineAnimationCard({
                 setUnavailable(true);
               }}
             />
-            <p className={styles.caption}>
-              <strong>{product.steps[stage]}</strong>
-              <span>{config.stages[stage]}</span>
-            </p>
-            <span className={styles.note}>{config.note}</span>
           </div>
         )}
         <button
@@ -176,13 +172,23 @@ export function ProductionLineAnimationCard({
                 : t('播放流程', 'Play process')}
         </button>
       </div>
-      <h3 className={card.productionLineName}>
+      <h3 className={card.productionLineName} data-static-info aria-hidden={active || undefined}>
         <Link href={product.href} onClick={stop}>
           {product.name}
         </Link>
       </h3>
-      <p className={card.productionLineCopy}>{t('适用：', 'For: ')}{product.applicable}</p>
-      <p className={card.productionLineCopy}>{product.process}</p>
+      <p className={card.productionLineCopy} data-static-info aria-hidden={active || undefined}>{t('适用：', 'For: ')}{product.applicable}</p>
+      <p className={card.productionLineCopy} data-static-info aria-hidden={active || undefined}>{product.process}</p>
+      {active && (
+        <div className={styles.playbackInfo}>
+          <h3 className={styles.stageHeading}>
+            <span className={styles.stageNumber} aria-hidden="true">{String(stage + 1).padStart(2, '0')}</span>
+            <span>{product.steps[stage]}</span>
+          </h3>
+          <p className={styles.stageDescription}>{config.stages[stage]}</p>
+          <p className={styles.stageNote}>{config.note}</p>
+        </div>
+      )}
       <div className={card.productionLineFlowPanel}>
         <Link
           href={product.compositionHref}

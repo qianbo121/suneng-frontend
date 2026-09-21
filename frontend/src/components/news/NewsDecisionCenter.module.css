@@ -46,10 +46,14 @@
   line-height: 26px;
 }
 .searchForm {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 8px;
+  min-width: 0;
+}
+.searchField {
   position: relative;
   min-width: 0;
-  display: flex;
-  gap: 8px;
 }
 .searchIcon {
   position: absolute;
@@ -62,8 +66,6 @@
   pointer-events: none;
 }
 .searchInput {
-  flex: 1;
-  min-width: 0;
   width: 100%;
   height: 48px;
   border: 1px solid #d3deee;
@@ -73,31 +75,36 @@
   color: var(--news-title);
   font-size: 14px;
 }
+.searchInput::placeholder {
+  color: var(--news-muted);
+  opacity: 1;
+}
 .searchButton {
-  flex: 0 0 auto;
-  min-width: 64px;
   min-height: 48px;
-  padding: 0 16px;
-  border: 1px solid #2456cf;
+  padding: 0 18px;
+  border: 0;
   border-radius: 6px;
-  background: #2456cf;
+  background: var(--news-blue);
   color: #fff;
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 600;
   white-space: nowrap;
   cursor: pointer;
   touch-action: manipulation;
 }
 .searchButton:hover:not(:disabled) {
-  background: #1845b2;
+  background: #245bd6;
 }
 .searchButton:disabled {
-  opacity: 0.55;
+  opacity: 0.6;
   cursor: not-allowed;
 }
-.searchInput::placeholder {
+.searchForm .searchHint {
+  grid-column: 1 / -1;
+  margin: 0;
   color: var(--news-muted);
-  opacity: 1;
+  font-size: 12px;
+  line-height: 20px;
 }
 .scope a:focus-visible,
 .scope button:focus-visible,
