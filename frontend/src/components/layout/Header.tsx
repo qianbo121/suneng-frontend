@@ -380,7 +380,7 @@ export function Header({ locale }: HeaderProps) {
                 <li className="relative flex list-none items-center border-none">
                   <a
                     href={`tel:${siteSettings.salesPhone.replace(/\s+/g, '')}`}
-                    className="flex min-h-[44px] items-center gap-2 whitespace-nowrap text-[13px] font-medium text-[#5b6678] transition-colors duration-200 hover:text-brand-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary"
+                    className="flex min-h-[44px] items-center gap-2 whitespace-nowrap text-[14px] font-normal text-[#5b6678] transition-colors duration-200 hover:text-brand-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary"
                   >
                     <HiPhone aria-hidden="true" className="h-4 w-4" />
                     <span>{currentLocale === 'zh' ? siteSettings.salesPhone.replace(/^\+86-?/, '') : siteSettings.salesPhone}</span>
@@ -391,7 +391,7 @@ export function Header({ locale }: HeaderProps) {
               <li className="relative flex list-none items-center">
                 <Link
                   href={switchLocalePath}
-                  className="relative z-[2] flex min-h-[44px] min-w-8 items-center justify-center whitespace-nowrap text-center text-[14px] font-medium tracking-[0.01em] text-[#697386] transition-colors duration-300 hover:text-brand-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-4px] focus-visible:outline-brand-primary"
+                  className="relative z-[2] flex min-h-[44px] min-w-8 items-center justify-center whitespace-nowrap text-center text-[14px] font-normal tracking-[0.01em] text-[#697386] transition-colors duration-300 hover:text-brand-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-4px] focus-visible:outline-brand-primary"
                 >
                   <span>{localeLabel[switchLocale]}</span>
                 </Link>
