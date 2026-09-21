@@ -513,6 +513,13 @@ http {
       try_files $uri =404;
     }
 
+    # Public ownership proof downloaded from the site's Sogou resource account.
+    location = /sogousiteverification.txt {
+      root /var/www/certbot;
+      default_type text/plain;
+      try_files $uri =404;
+    }
+
     # Keep the public root deterministic for crawlers. Locale-prefixed URLs
     # remain the canonical language entry points; English stays available at /en.
     location = / {
