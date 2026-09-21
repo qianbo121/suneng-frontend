@@ -1411,8 +1411,8 @@
 .tabs { display: flex; width: 100%; height: 40px; gap: 9px; margin: 24px 0 18px; overflow: visible; }
 .tabs button { min-width: 110px; padding: 8px 17px; border-radius: 6px; font-size: 14px; line-height: 22px; }
 .tabs .activeTab { font-weight: 600; box-shadow: none; }
-.workspace { overflow: hidden; border: 1px solid #dde5ef; border-radius: 8px; background: #fff; }
-.workspaceMain { display: grid; grid-template-columns: 232px minmax(0, 1fr) 384px; align-items: stretch; }
+.workspace { --engineering-width: 384px; overflow: hidden; border: 1px solid #dde5ef; border-radius: 8px; background: #fff; }
+.workspaceMain { display: grid; grid-template-columns: 232px minmax(0, 1fr) var(--engineering-width); align-items: stretch; }
 .directory { display: flex; min-width: 0; flex-direction: column; border-right: 1px solid #dde5ef; }
 .directoryHeading { display: flex; min-height: 40px; padding: 9px 14px; align-items: center; justify-content: space-between; gap: 8px; border-bottom: 1px solid #dde5ef; font-size: 13px; line-height: 20px; }
 .directoryHeading strong { font-weight: 600; }
@@ -1445,31 +1445,26 @@
 .engineeringNotes h4 { margin: 0 0 8px; font-size: 15px; line-height: 22px; font-weight: 600; }
 .engineeringNotes ul { display: grid; gap: 4px; margin: 0; padding-left: 14px; color: var(--router-copy); font-size: 14px; line-height: 26px; list-style: disc; }
 .engineeringNotes li::marker { color: #8ba0ba; font-size: 10px; }
-.contactStrip { display: grid; grid-template-columns: minmax(0, 1fr) 280px; align-items: center; gap: 28px; padding: 20px 24px; border-top: 1px solid #dde5ef; }
-.contactGuidance { min-width: 0; }
-.contactGuidance h4 { margin: 0 0 12px; font-size: 16px; line-height: 24px; font-weight: 600; }
-.customerPrompts { display: grid; grid-template-columns: 1.35fr .85fr 1fr 1fr; gap: 16px; margin: 0; }
+.contactStrip { display: grid; grid-template-columns: minmax(0, 1fr) var(--engineering-width); align-items: stretch; border-top: 1px solid #dde5ef; background: #f8fafc; }
+.contactGuidance { min-width: 0; padding: 24px; align-self: center; }
+.customerPrompts { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 24px; margin: 0; }
 .customerPrompts>div { min-width: 0; }
-.customerPrompts dt { color: var(--router-copy); font-size: 14px; line-height: 22px; font-weight: 600; }
-.customerPrompts dd { margin: 4px 0 0; color: var(--router-muted); font-size: 14px; line-height: 22px; }
-.contactAction { padding-left: 24px; border-left: 1px solid #dde5ef; }
-.contactAction .cta { height: auto; min-height: 48px; padding: 10px 12px; gap: 10px; border-radius: 5px; font-size: 14px; line-height: 24px; white-space: nowrap; }
-.contactAction p { margin: 8px 0 0; text-align: center; color: var(--router-muted); font-size: 12px; line-height: 20px; }
-.contactAction p strong { display: block; font-size: 13px; font-weight: 500; color: var(--router-copy); }
-.contactAction p span { display: block; }
+.customerPrompts dt { display: flex; align-items: center; gap: 8px; color: #26364c; font-size: 14px; line-height: 22px; font-weight: 600; }
+.customerPrompts dt svg { width: 18px; height: 18px; flex: none; color: #6b819c; }
+.customerPrompts dd { margin: 8px 0 0; padding-left: 26px; color: #627086; font-size: 13px; line-height: 22px; overflow-wrap: anywhere; text-wrap: balance; }
+.contactAction { display: flex; min-width: 0; padding: 24px; flex-direction: column; justify-content: center; }
+.contactAction .cta { height: auto; min-height: 48px; padding: 10px 16px; gap: 10px; border-radius: 6px; font-size: 14px; line-height: 24px; white-space: nowrap; }
 @media(max-width: 1200px) {
   .container { width: var(--site-wide-width); }
-  .workspaceMain { grid-template-columns: 214px minmax(0,1fr) 360px; }
+  .workspace { --engineering-width: 360px; }
+  .workspaceMain { grid-template-columns: 214px minmax(0,1fr) var(--engineering-width); }
   .directoryItem { grid-template-columns: 58px minmax(0,1fr) 8px; gap: 8px; }
   .directoryItem img { width: 58px; height: 46px; }
   .spotlight { padding-inline: 18px; }
   .spotlight>img { height: 280px; }
   .engineering { padding: 20px; }
   .equipmentLine { column-gap: 8px; }
-  .contactStrip { grid-template-columns: minmax(0,1fr) 248px; gap: 20px; }
-  .contactAction { padding-left: 20px; }
-  .contactAction .cta { font-size: 13px; gap: 8px; }
-  .customerPrompts { grid-template-columns: 1.2fr .8fr 1fr 1fr; gap: 12px; }
+  .customerPrompts { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px 24px; }
 }
 @media(max-width: 1000px) { .tabs { flex-wrap: wrap; height: auto; } }
 @media(max-width: 900px) {
@@ -1479,9 +1474,7 @@
   .engineering { grid-column: 2; border-left: 0; border-top: 1px solid #dde5ef; }
   .spotlight>img { height: 240px; }
   .contactStrip { grid-template-columns: 1fr; }
-  .contactAction { display: flex; padding: 16px 0 0; border-left: 0; border-top: 1px solid #dde5ef; align-items: center; justify-content: space-between; gap: 16px; }
-  .contactAction .cta { width: auto; min-width: 260px; font-size: 14px; }
-  .contactAction p { margin: 0; text-align: left; }
+  .contactAction { padding: 20px 24px; border-top: 1px solid #dde5ef; }
 }
 @media(max-width: 600px) {
   .container { width: var(--site-wide-width); }
@@ -1502,12 +1495,12 @@
   .engineering { padding: 20px 18px; }
   .equipmentLine>strong { font-size: 15px; }
   .engineeringNotes ul { font-size: 13px; line-height: 24px; }
-  .contactStrip { padding: 20px 18px; gap: 18px; }
-  .customerPrompts { grid-template-columns: 1fr 1fr; gap: 16px; }
-  .customerPrompts dt, .customerPrompts dd { font-size: 13px; }
-  .contactAction { display: block; }
-  .contactAction .cta { width: 100%; min-width: 0; }
-  .contactAction p { text-align: center; margin-top: 8px; }
+  .contactGuidance { padding: 22px 18px; }
+  .customerPrompts { gap: 24px 18px; }
+  .customerPrompts dt { font-size: 13px; gap: 6px; }
+  .customerPrompts dt svg { width: 16px; height: 16px; }
+  .customerPrompts dd { padding-left: 22px; font-size: 12px; line-height: 20px; }
+  .contactAction { padding: 20px 18px; }
 }
 @media(prefers-reduced-motion: reduce) { .directoryItem { transition: none; } }
 
