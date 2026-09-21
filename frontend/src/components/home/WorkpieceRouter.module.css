@@ -38,6 +38,7 @@
 
 .headingCopy h2 {
   margin: 0;
+  color: var(--home-ink, #0c192a);
   font-size: var(--home-section-title-size, clamp(34px, 2.6vw, 36px));
   font-weight: 700;
   letter-spacing: -0.04em;
@@ -47,14 +48,10 @@
 
 .headingCopy p {
   display: block;
-  margin: 0;
-  color: var(--router-copy);
-  font-size: 15px;
-  line-height: 26px;
-}
-
-.headingCopy p {
-  margin-top: 12px;
+  margin: var(--home-section-subtitle-gap, 20px) 0 0;
+  color: var(--home-section-subtitle-color, #586a7e);
+  font-size: var(--home-section-subtitle-size, 16px);
+  line-height: var(--home-section-subtitle-line, 26px);
 }
 
 .tabs {
@@ -1408,7 +1405,7 @@
 /* Approved directory, spotlight and paired equipment layout. */
 .container { display: block; width: var(--site-wide-width); }
 .section { scroll-margin-top: 76px; padding-block: var(--site-section-inset); }
-.tabs { display: flex; width: 100%; height: 40px; gap: 9px; margin: 24px 0 18px; overflow: visible; }
+.tabs { display: flex; width: 100%; height: 40px; gap: 9px; margin: var(--home-heading-content-gap, 32px) 0 18px; overflow: visible; }
 .tabs button { min-width: 110px; padding: 8px 17px; border-radius: 6px; font-size: 14px; line-height: 22px; }
 .tabs .activeTab { font-weight: 600; box-shadow: none; }
 .workspace { --engineering-width: 384px; overflow: hidden; border: 1px solid #dde5ef; border-radius: 8px; background: #fff; }
@@ -1478,7 +1475,7 @@
 }
 @media(max-width: 600px) {
   .container { width: var(--site-wide-width); }
-  .tabs { display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); gap: 6px; margin: 20px 0 14px; }
+  .tabs { display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); gap: 6px; margin: var(--home-heading-content-gap, 24px) 0 14px; }
   .tabs button { min-width: 0; min-height: 36px; padding: 8px 2px; font-size: 11px; line-height: 18px; }
   .workspaceMain { display: block; }
   .directory { border-right: 0; border-bottom: 1px solid #dde5ef; }

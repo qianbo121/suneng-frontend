@@ -14,6 +14,11 @@
   --home-dark-copy: #c7d4e6;
   --home-section-title-size: clamp(34px, 2.6vw, 36px);
   --home-section-title-line: 1.25;
+  --home-section-subtitle-size: 16px;
+  --home-section-subtitle-line: 26px;
+  --home-section-subtitle-color: #586a7e;
+  --home-section-subtitle-gap: 20px;
+  --home-heading-content-gap: 32px;
   overflow: clip;
   background: var(--home-surface);
   color: var(--home-ink);
@@ -97,7 +102,7 @@
   grid-template-columns: minmax(0, 1fr) auto;
   align-items: end;
   gap: 24px;
-  margin-bottom: var(--site-heading-gap);
+  margin-bottom: var(--home-heading-content-gap);
 }
 
 .container.entryContainer {
@@ -178,7 +183,7 @@
 
 .taskCard p {
   grid-column: 1 / -1;
-  margin-top: 4px;
+  margin-top: 12px;
   color: var(--home-copy);
   font-size: var(--home-font-secondary-size, 15px);
   line-height: var(--home-font-secondary-line, 26px);
@@ -459,8 +464,8 @@
 }
 
 @media (min-width: 641px) {
-  .formSection:not(.solutionFormSection):not(.embeddedFormSection) .formInner {
-    width: var(--site-page-width);
+  .page .formSection:not(.solutionFormSection):not(.embeddedFormSection) .formInner {
+    width: var(--site-wide-width);
   }
 }
 
@@ -511,6 +516,17 @@
   color: #586a7e;
   font-size: 17px;
   line-height: 1.7;
+}
+
+.page > .formSection .formIntro h2 {
+  color: var(--home-ink);
+}
+
+.page > .formSection .formIntro > p:not(.formEyebrow) {
+  margin-top: var(--home-section-subtitle-gap);
+  color: var(--home-section-subtitle-color);
+  font-size: var(--home-section-subtitle-size);
+  line-height: var(--home-section-subtitle-line);
 }
 
 .formPathList {
@@ -1057,7 +1073,7 @@
 
   .entryHeading {
     grid-template-columns: 1fr;
-    gap: 12px;
+    gap: var(--home-section-subtitle-gap);
   }
 
   .entryHeading > p {
@@ -1081,6 +1097,9 @@
   .page {
     --home-section-title-size: 28px;
     --home-section-title-line: 38px;
+    --home-section-subtitle-size: 15px;
+    --home-section-subtitle-gap: 16px;
+    --home-heading-content-gap: 24px;
   }
 
   .container,
@@ -1108,7 +1127,7 @@
   }
 
   .entryHeading {
-    gap: 8px;
+    gap: var(--home-section-subtitle-gap);
   }
 
   .taskGrid {
