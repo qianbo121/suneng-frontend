@@ -39,6 +39,8 @@ jobs:
           python3 scripts/test_deploy_preflight.py
           python3 scripts/test_backup_sh.py
           python3 ops/releases/test_backup_gate.py
+          python3 ops/releases/test_storage_policy.py
+          node --test frontend/scripts/prepare-standalone.test.mjs
           node --test ops/releases/test_check_backend.cjs
           python3 ops/releases/test_frontend_release.py
           python3 ops/releases/test_deployment_notice.py
