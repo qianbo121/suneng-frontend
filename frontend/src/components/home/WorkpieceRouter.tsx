@@ -29,10 +29,17 @@ const TRACKING_CONTEXT = {
 };
 
 const CUSTOMER_PROMPTS = [
-  ['希望解决什么问题', '当前问题，或已有工艺与质量要求'],
+  ['希望解决什么问题', '当前问题、工艺或质量要求'],
   ['工件材质', '材料名称、已知牌号'],
-  ['工件尺寸与重量', '最大外形尺寸、单件重量'],
-  ['计划处理数量', '每批或每天大约多少件／吨'],
+  ['工件尺寸与重量', '最大尺寸、单件重量'],
+  ['计划处理数量', '每批／每天的件数或吨数'],
+];
+
+const CUSTOMER_PROMPT_ICON_PATHS = [
+  ['M8 7h8M8 11h5', 'M5 3h14a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-8l-5 4v-4H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2Z'],
+  ['m12 3 9 5v8l-9 5-9-5V8l9-5Z', 'm3 8 9 5 9-5M12 13v8M7.5 5.5l9 5'],
+  ['m3 16 13-13 5 5L8 21l-5-5Z', 'm13 6 2 2M10 9l3 3M7 12l2 2'],
+  ['m12 3 9 5-9 5-9-5 9-5Z', 'm3 12 9 5 9-5M3 16l9 5 9-5'],
 ];
 
 export function WorkpieceRouter({ catalog, locale = 'zh' }: { catalog: WorkpieceRouterPublicCatalog; locale?: 'zh' | 'en' }) {
@@ -344,13 +351,17 @@ export function WorkpieceRouter({ catalog, locale = 'zh' }: { catalog: Workpiece
             </aside>
           </div>
 
-          <section className={styles.contactStrip}>
+          <section className={styles.contactStrip} aria-label={t('工程判断所需资料', 'Details for an engineering assessment')}>
             <div className={styles.contactGuidance}>
-              <h4>{t('先告诉我们这些情况', 'Start with these details')}</h4>
               <dl className={styles.customerPrompts}>
-                {(english ? [['Your objective', 'Current issue or process and quality requirements'], ['Material', 'Material type and known grade'], ['Size and weight', 'Maximum dimensions and unit weight'], ['Throughput', 'Approximate pieces or tonnes per batch or day']] : CUSTOMER_PROMPTS).map(([label, hint]) => (
+                {(english ? [['Your objective', 'Current issue or process and quality requirements'], ['Material', 'Material type and known grade'], ['Size and weight', 'Maximum dimensions and unit weight'], ['Throughput', 'Approximate pieces or tonnes per batch or day']] : CUSTOMER_PROMPTS).map(([label, hint], index) => (
                   <div key={label}>
-                    <dt>{label}</dt>
+                    <dt>
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                        {CUSTOMER_PROMPT_ICON_PATHS[index].map((path) => <path key={path} d={path} />)}
+                      </svg>
+                      <span>{label}</span>
+                    </dt>
                     <dd>{hint}</dd>
                   </div>
                 ))}
@@ -361,10 +372,6 @@ export function WorkpieceRouter({ catalog, locale = 'zh' }: { catalog: Workpiece
                 {t('提交工况，获取工程判断', 'Request an assessment')}
                 <HiArrowRight aria-hidden="true" />
               </button>
-              <p>
-                <strong>{t('资料不全也能先沟通', 'Start with the information you have')}</strong>
-                <span>{t('已有图纸或技术要求可一并提供', 'Drawings and specifications can follow')}</span>
-              </p>
             </div>
           </section>
 
