@@ -511,14 +511,15 @@
 
 .chineseHero .description {
   max-width: none;
-  margin-top: 12px;
+  margin-top: 24px;
   font-size: 20px;
   line-height: 32px;
+  text-wrap: balance;
   text-shadow: 0 2px 14px rgba(0, 45, 116, 0.18);
 }
 
 .chineseHero .certification {
-  margin-top: 4px;
+  margin-top: 16px;
   color: rgba(255, 255, 255, 0.98);
   font-size: 19px;
   font-weight: 500;
@@ -730,13 +731,13 @@
   }
 
   .chineseHero .description {
-    margin-top: 12px;
+    margin-top: 24px;
     font-size: 20px;
     line-height: 32px;
   }
 
   .chineseHero .certification {
-    margin-top: 4px;
+    margin-top: 16px;
     font-size: 18px;
     line-height: 28px;
   }
@@ -812,13 +813,13 @@
   }
 
   .chineseHero .description {
-    margin-top: 8px;
+    margin-top: 16px;
     font-size: 19px;
     line-height: 30px;
   }
 
   .chineseHero .certification {
-    margin-top: 4px;
+    margin-top: 16px;
     font-size: 18px;
     line-height: 28px;
   }

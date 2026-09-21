@@ -15,7 +15,7 @@
   align-items: center;
   justify-content: space-between;
   gap: 24px;
-  margin-bottom: 24px;
+  margin-bottom: var(--home-heading-content-gap, 32px);
 }
 
 .header h2 {
@@ -435,7 +435,7 @@
 }
 
 .homeLineCard .homeLineName {
-  margin: 20px 22px 10px;
+  margin: 20px 22px 12px;
   font-size: 22px;
   font-weight: 700;
   line-height: 30px;
@@ -654,8 +654,8 @@
   text-decoration: none;
 }
 
-.furnaceDescription {
-  margin: 6px 0 0;
+.furnaceItem .furnaceDescription {
+  margin: 10px 0 0;
   color: #627084;
   font-size: 13px;
   line-height: 20px;
@@ -818,7 +818,6 @@
   font-size: 22px;
   font-weight: 700;
   line-height: 30px;
-  transform: translateY(-4px);
 }
 
 @media (hover: hover) and (pointer: fine) {
@@ -877,7 +876,7 @@
   .header {
     align-items: center;
     gap: 12px;
-    margin-bottom: 18px;
+    margin-bottom: var(--home-heading-content-gap, 24px);
   }
 
   .header h2 {
@@ -1058,7 +1057,7 @@
     line-height: 26px;
   }
 
-  .furnaceDescription,
+  .furnaceItem .furnaceDescription,
   .furnaceActions .furnacePlayButton,
   .furnaceDetailsLink {
     font-size: 12px;
@@ -1083,6 +1082,7 @@
 
   .homeLineCard .homeLineCopy {
     margin-inline: 20px;
+    text-wrap: balance;
   }
 
   .homeLineFlowPanel {
