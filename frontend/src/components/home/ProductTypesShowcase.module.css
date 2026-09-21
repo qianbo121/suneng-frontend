@@ -654,11 +654,15 @@
   text-decoration: none;
 }
 
-.furnaceItem .furnaceDescription {
-  margin: 10px 0 0;
+.furnaceDescription {
+  margin: 6px 0 0;
   color: #627084;
   font-size: 13px;
   line-height: 20px;
+}
+
+.section .furnaceItem .furnaceDescription {
+  margin-top: 10px;
 }
 
 .furnaceActions {
@@ -818,6 +822,11 @@
   font-size: 22px;
   font-weight: 700;
   line-height: 30px;
+  transform: translateY(-4px);
+}
+
+.section .furnaceItem .furnaceTitleLink h3 {
+  transform: none;
 }
 
 @media (hover: hover) and (pointer: fine) {
@@ -1057,7 +1066,7 @@
     line-height: 26px;
   }
 
-  .furnaceItem .furnaceDescription,
+  .furnaceDescription,
   .furnaceActions .furnacePlayButton,
   .furnaceDetailsLink {
     font-size: 12px;

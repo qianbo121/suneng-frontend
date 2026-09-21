@@ -518,11 +518,11 @@
   line-height: 1.7;
 }
 
-.page .formIntro h2 {
+.page > .formSection .formIntro h2 {
   color: var(--home-ink);
 }
 
-.page .formIntro > p:not(.formEyebrow) {
+.page > .formSection .formIntro > p:not(.formEyebrow) {
   margin-top: var(--home-section-subtitle-gap);
   color: var(--home-section-subtitle-color);
   font-size: var(--home-section-subtitle-size);
