@@ -1,6 +1,6 @@
 import { existsSync, readFileSync, writeFileSync, renameSync } from 'node:fs';
 import { pathToFileURL } from 'node:url';
-import { loadSitemapEntries, submitBaidu, submitIndexNow } from './submit-search-engines.mjs';
+import { describeSubmissionFailure, loadSitemapEntries, submitBaidu, submitIndexNow } from './submit-search-engines.mjs';
 import { selectChangedUrls } from './changed-search-urls.mjs';
 
 export function emptyQueue() {
@@ -65,14 +65,19 @@ export function mergeBatches(state, batches, canonicalUrls) {
   return state;
 }
 
-export async function drainQueue(state, { day, limit, available, submit, save }) {
+export async function drainQueue(state, { day, limit, available, submit, save, baiduMode = 'manual' }) {
   validateQueue(state);
+  if (!['manual', 'auto'].includes(baiduMode)) throw new Error('Invalid Baidu submission mode; expected manual or auto');
   if (!Number.isSafeInteger(limit) || limit < 1) throw new Error('Invalid daily Baidu submission limit');
   if (state.baiduDay > day) throw new Error('Queue date is in the future; refusing to reset budget');
   if (state.baiduDay !== day) { state.baiduDay = day; state.baiduAttempted = 0; }
   const results = {};
   await save(state);
   for (const engine of ['indexnow', 'baidu']) {
+    if (engine === 'baidu' && baiduMode === 'manual') {
+      results.baidu = { skipped: true, paused: true, reason: 'automatic submission paused by owner decision; manual review only; pending URLs retained (not accepted)' };
+      continue;
+    }
     const maximum = engine === 'baidu' ? Math.max(0, limit - state.baiduAttempted) : 10000;
     const urls = state.pending[engine].slice(0, maximum);
     if (!urls.length || !available[engine]) {
@@ -89,8 +94,8 @@ export async function drainQueue(state, { day, limit, available, submit, save })
         const accepted = new Set(result.acceptedUrls || urls);
         state.pending[engine] = state.pending[engine].filter((url) => !accepted.has(url));
       }
-    } catch {
-      results[engine] = { ok: false, reason: 'request failed; pending URLs retained' };
+    } catch (error) {
+      results[engine] = { ok: false, reason: `${describeSubmissionFailure(error)}; pending URLs retained` };
     }
     await save(state);
   }
@@ -118,6 +123,7 @@ async function main() {
   const results = await drainQueue(state, {
     day: new Date(Date.now() + 8 * 3600 * 1000).toISOString().slice(0, 10),
     limit: Number(process.env.BAIDU_PUSH_MAX_URLS || 10),
+    baiduMode: process.env.BAIDU_SUBMISSION_MODE || 'manual',
     available: { baidu: Boolean(process.env.BAIDU_TOKEN?.trim() || process.env.BAIDU_PUSH_TOKEN?.trim()), indexnow: Boolean(process.env.INDEXNOW_KEY?.trim()) },
     submit: { baidu: (urls) => submitBaidu(site, urls, false), indexnow: (urls) => submitIndexNow(site, urls, false) },
     save,

@@ -8,7 +8,7 @@ import { submitIndexNow } from './submit-search-engines.mjs';
 const urls = ['a', 'b', 'c'].map((path) => `https://www.jssngyl.cn/zh/${path}`);
 const queued = () => mergeBatches(emptyQueue(), [{ id: 'deploy-1', urls }], urls);
 const success = async (batch) => ({ ok: true, acceptedUrls: batch });
-const options = (extra = {}) => ({ day: '2026-09-08', limit: 2, available: { baidu: true, indexnow: true }, submit: { baidu: success, indexnow: success }, save: async () => {}, ...extra });
+const options = (extra = {}) => ({ day: '2026-09-08', limit: 2, baiduMode: 'auto', available: { baidu: true, indexnow: true }, submit: { baidu: success, indexnow: success }, save: async () => {}, ...extra });
 
 const baseline = () => ({ version: 1, site: 'https://www.jssngyl.cn', entries: [[urls[0], ''], [urls[1], '2026-09-19']], initialPending: [] });
 
@@ -91,6 +91,65 @@ test('missing credentials preserve both queues without reserving quota', async (
   assert.equal(state.baiduAttempted, 0);
 });
 
+test('manual-only mode sends no Baidu request, reserves no budget and leaves IndexNow working', async () => {
+  for (const hasCredential of [true, false]) {
+    const state = queued();
+    let saved;
+    let baiduRequests = 0;
+    const result = await drainQueue(state, options({
+      baiduMode: 'manual',
+      available: { baidu: hasCredential, indexnow: true },
+      submit: { indexnow: success, baidu: async () => { baiduRequests++; return { ok: true }; } },
+      save: async value => { saved = structuredClone(value); },
+    }));
+    assert.equal(baiduRequests, 0);
+    assert.equal(saved.baiduAttempted, 0);
+    assert.deepEqual(saved.pending, { baidu: urls, indexnow: [] });
+    assert.equal(result.indexnow.ok, true);
+    assert.equal(result.baidu.paused, true);
+    assert.equal(result.baidu.skipped, true);
+    assert.equal(result.baidu.ok, undefined);
+    assert.match(result.baidu.reason, /not accepted/);
+    assert.doesNotMatch(result.baidu.reason, /credentials/);
+  }
+});
+
+test('default manual mode preserves restored URLs and live additions across days', async () => {
+  const state = queued();
+  state.pending.baidu = [urls[0], urls[1]];
+  state.pending.indexnow = [];
+  state.liveSitemap = { site: baseline().site, revision: 1, entries: baseline().entries };
+  const live = new Map([...baseline().entries, [urls[2], '']]);
+  refreshLiveQueue(state, live, baseline());
+  const manualOptions = options({ baiduMode: undefined, submit: { indexnow: success } });
+  await drainQueue(state, manualOptions);
+  const restored = JSON.parse(JSON.stringify(state));
+  refreshLiveQueue(restored, live, baseline());
+  await drainQueue(restored, { ...manualOptions, day: '2026-09-09' });
+  assert.deepEqual(restored.pending, { baidu: urls, indexnow: [] });
+  assert.equal(restored.baiduAttempted, 0);
+});
+
+test('invalid manual-mode configuration fails before saving or sending', async () => {
+  let writes = 0;
+  let requests = 0;
+  await assert.rejects(drainQueue(queued(), options({
+    baiduMode: 'manul',
+    save: async () => { writes++; },
+    submit: { indexnow: async () => { requests++; }, baidu: async () => { requests++; } },
+  })), /Invalid Baidu submission mode/);
+  assert.equal(writes, 0);
+  assert.equal(requests, 0);
+});
+
+test('scheduled queue explicitly uses manual-only Baidu mode without injecting its token', () => {
+  const workflow = readFileSync(new URL('../../.github/workflows/search-submission.yml', import.meta.url), 'utf8');
+  assert.match(workflow, /BAIDU_SUBMISSION_MODE: 'manual'/);
+  assert.doesNotMatch(workflow, /BAIDU_(?:PUSH_)?TOKEN:/);
+  assert.match(workflow, /INDEXNOW_KEY: \$\{\{ secrets\.INDEXNOW_KEY \}\}/);
+  assert.match(workflow, /name: Preserve queue even when a search engine rejects the request/);
+});
+
 test('network and partial-response failures retain pending URLs and reserve ambiguous quota before POST', async () => {
   const state = queued();
   let saved;
@@ -104,6 +163,30 @@ test('network and partial-response failures retain pending URLs and reserve ambi
   assert.deepEqual(state.pending, { baidu: urls, indexnow: urls });
   assert.equal(result.baidu.ok, false);
   assert.equal(result.indexnow.ok, false);
+});
+
+test('Baidu certificate failure is explicit, retains all pending URLs, and does not block IndexNow', async () => {
+  const state = queued();
+  let saved;
+  let attempts = 0;
+  const result = await drainQueue(state, options({
+    save: async (value) => { saved = structuredClone(value); },
+    submit: { indexnow: success, baidu: async () => {
+      attempts++;
+      throw new TypeError('https://data.zz.baidu.com/urls?token=test-secret', {
+        cause: { code: 'ERR_TLS_CERT_ALTNAME_INVALID', message: 'test-secret' },
+      });
+    } },
+  }));
+  assert.equal(result.baidu.ok, false);
+  assert.match(result.baidu.reason, /certificate does not match/);
+  assert.match(result.baidu.reason, /pending URLs retained/);
+  assert.doesNotMatch(JSON.stringify(result), /test-secret|token=/);
+  assert.equal(result.indexnow.ok, true);
+  assert.deepEqual(saved.pending, { baidu: urls, indexnow: [] });
+  assert.equal(saved.baiduAttempted, 2);
+  await drainQueue(saved, options({ submit: { indexnow: success, baidu: async () => { attempts++; } } }));
+  assert.equal(attempts, 1); // Same-day re-runs do not repeat the attempted batch.
 });
 
 test('invalid state, invalid limit and a future budget date stop without silently resetting', async () => {

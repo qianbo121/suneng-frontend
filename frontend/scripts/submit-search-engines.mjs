@@ -24,6 +24,41 @@ function getEnv(name) {
   return process.env[name]?.trim() || '';
 }
 
+// Never log the raw error, URL or cause: submission URLs contain credentials.
+// Only emit fixed descriptions for known transport failures.
+export function describeSubmissionFailure(error) {
+  const seen = new Set();
+  for (let cause = error; cause && !seen.has(cause) && seen.size < 5; cause = cause.cause) {
+    seen.add(cause);
+    switch (cause.code) {
+      case 'ERR_TLS_CERT_ALTNAME_INVALID':
+        return 'TLS certificate does not match the endpoint hostname; secure connection blocked (no insecure fallback)';
+      case 'CERT_HAS_EXPIRED':
+      case 'CERT_NOT_YET_VALID':
+      case 'DEPTH_ZERO_SELF_SIGNED_CERT':
+      case 'SELF_SIGNED_CERT_IN_CHAIN':
+      case 'UNABLE_TO_VERIFY_LEAF_SIGNATURE':
+      case 'UNABLE_TO_GET_ISSUER_CERT_LOCALLY':
+        return 'TLS certificate validation failed; secure connection blocked (no insecure fallback)';
+      case 'ENOTFOUND':
+      case 'EAI_AGAIN':
+        return 'endpoint DNS lookup failed';
+      case 'ETIMEDOUT':
+      case 'UND_ERR_CONNECT_TIMEOUT':
+      case 'UND_ERR_HEADERS_TIMEOUT':
+      case 'UND_ERR_BODY_TIMEOUT':
+        return 'request timed out; acceptance is unconfirmed';
+      case 'ECONNREFUSED':
+      case 'ECONNRESET':
+        return 'endpoint connection failed; acceptance is unconfirmed';
+    }
+    if (cause.name === 'TimeoutError' || cause.name === 'AbortError') {
+      return 'request interrupted or timed out; acceptance is unconfirmed';
+    }
+  }
+  return 'request failed; acceptance is unconfirmed';
+}
+
 function normalizeSubmissionUrl(value, siteUrl) {
   const url = new URL(value, `${siteUrl}/`);
   if (url.origin !== new URL(siteUrl).origin) {
@@ -143,6 +178,8 @@ export async function submitBaidu(siteUrl, urls, dryRun, remaining = Infinity) {
 
   const response = await fetch(endpoint, {
     method: 'POST',
+    // Do not follow redirects with a credential-bearing submission request.
+    redirect: 'error',
     signal: AbortSignal.timeout(15000),
     headers: {
       'content-type': 'text/plain',
@@ -196,8 +233,8 @@ async function main() {
       const result = await submit(siteUrl, urls, dryRun);
       printResult(name, result);
       if (!result.skipped && !result.dryRun && !result.ok) process.exitCode = 1;
-    } catch {
-      console.error(`${name}: request failed; check the engine response and credentials.`);
+    } catch (error) {
+      console.error(`${name}: ${describeSubmissionFailure(error)}.`);
       process.exitCode = 1;
     }
   }
