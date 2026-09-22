@@ -10,7 +10,7 @@ name: Search Submission Queue
 
 on:
   schedule:
-    # 04:17 Asia/Shanghai. Revisit deferred URLs after the daily budget resets.
+    # 04:17 Asia/Shanghai. Retain Baidu URLs for manual review; submit IndexNow.
     - cron: '17 20 * * *'
   workflow_dispatch:
     inputs:
@@ -48,14 +48,14 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           MANUAL_URLS: ${{ inputs.urls }}
         run: node frontend/scripts/restore-search-queue.mjs
-      - name: Discover live changes and submit within the daily budget
+      - name: Discover live changes, retain Baidu queue and submit IndexNow
         env:
           NEXT_PUBLIC_SITE_URL: https://www.jssngyl.cn
           INDEXNOW_KEY: ${{ secrets.INDEXNOW_KEY }}
           INDEXNOW_KEY_LOCATION: ${{ vars.INDEXNOW_KEY_LOCATION }}
-          BAIDU_TOKEN: ${{ secrets.BAIDU_TOKEN }}
-          BAIDU_SITE: ${{ vars.BAIDU_SITE || 'https://www.jssngyl.cn' }}
-          BAIDU_PUSH_MAX_URLS: ${{ vars.BAIDU_PUSH_MAX_URLS || '10' }}
+          # Owner chose manual-only Baidu submission on 2026-09-22.
+          # Do not inject its token into this job or downgrade HTTPS.
+          BAIDU_SUBMISSION_MODE: 'manual'
         run: |
           set -euo pipefail
           node frontend/scripts/search-submission-queue.mjs --state-file="$RUNNER_TEMP/search-queue.json" --batches-file="$RUNNER_TEMP/search-batches.json" 2>&1 | tee "$RUNNER_TEMP/search-submission.log"
