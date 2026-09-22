@@ -170,3 +170,21 @@ test('accepts URLs named at dispatch as one single-use batch, and only from the 
   assert.equal(manualBatch(urls[0], '7', undefined).id, 'manual-7-1');
   assert.throws(() => manualBatch(urls[0], '', '1'), /run id/);
 });
+
+test('certificate failures retain the durable Baidu queue and its reserved budget, without blocking IndexNow', async () => {
+  const state = queued();
+  let saved;
+  const error = new TypeError('fetch failed token=must-not-appear', {
+    cause: Object.assign(new Error('private request data'), { code: 'ERR_TLS_CERT_ALTNAME_INVALID' }),
+  });
+  const result = await drainQueue(state, options({
+    submit: { indexnow: success, baidu: async () => { throw error; } },
+    save: async (value) => { saved = structuredClone(value); },
+  }));
+  assert.deepEqual(saved.pending, { baidu: urls, indexnow: [] });
+  assert.equal(saved.baiduAttempted, 2);
+  assert.equal(result.baidu.ok, false);
+  assert.match(result.baidu.reason, /ERR_TLS_CERT_ALTNAME_INVALID/);
+  assert.ok(!JSON.stringify(result).includes('must-not-appear'));
+  assert.equal(result.indexnow.ok, true);
+});

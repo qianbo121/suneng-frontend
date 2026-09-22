@@ -1,7 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { selectChangedUrls, sitemapEntries } from './changed-search-urls.mjs';
-import { submitBaidu } from './submit-search-engines.mjs';
+import { submitBaidu, safeRequestFailure } from './submit-search-engines.mjs';
 
 const site = 'https://www.jssngyl.cn';
 test('selects additions and true content changes, not unchanged or removed pages', () => {
@@ -48,6 +48,8 @@ test('Baidu uses the shared token, respects budget, and detects HTTP-200 quota e
       assert.equal(new URL(url).searchParams.get('token'), 'test-only');
       assert.equal(new URL(url).searchParams.get('site'), 'www.jssngyl.cn');
       assert.equal(options.body, `${site}/zh`);
+      assert.equal(new URL(url).protocol, 'https:');
+      assert.equal(options.redirect, 'error');
       return new Response(JSON.stringify({ error: 400, message: 'over quota' }), { status: 200 });
     };
     assert.equal((await submitBaidu(site, [`${site}/zh`, `${site}/zh/products`], false)).ok, false);
@@ -57,4 +59,25 @@ test('Baidu uses the shared token, respects budget, and detects HTTP-200 quota e
       if (old[key] === undefined) delete process.env[key]; else process.env[key] = old[key];
     }
   }
+});
+
+test('reports nested TLS failures without exposing request URLs, tokens or certificate details', () => {
+  const secret = 'test-only-do-not-log';
+  const error = new TypeError(`fetch failed https://data.zz.baidu.com/urls?token=${secret}`, {
+    cause: Object.assign(new Error(`certificate details and ${secret}`), { code: 'ERR_TLS_CERT_ALTNAME_INVALID' }),
+  });
+  const reason = safeRequestFailure(error);
+  assert.match(reason, /TLS certificate does not match.*ERR_TLS_CERT_ALTNAME_INVALID/);
+  assert.ok(!reason.includes('pending URLs retained')); // Only the durable queue can make this claim.
+  assert.ok(!reason.includes(secret));
+  assert.ok(!reason.includes('https://'));
+  assert.equal(safeRequestFailure({ code: secret, name: secret, message: secret }), 'request failed');
+  const cyclic = new Error(secret); cyclic.cause = cyclic;
+  assert.equal(safeRequestFailure(cyclic), 'request failed');
+});
+
+test('distinguishes timeout and DNS errors while leaving unknown acceptance unresolved', () => {
+  assert.match(safeRequestFailure(new DOMException('sensitive message', 'TimeoutError')), /acceptance is unknown/);
+  assert.match(safeRequestFailure({ cause: { code: 'ENOTFOUND' } }), /could not be resolved/);
+  assert.match(safeRequestFailure({ cause: { code: 'ECONNRESET' } }), /acceptance is unknown/);
 });

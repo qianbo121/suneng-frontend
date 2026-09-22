@@ -1,6 +1,6 @@
 import { existsSync, readFileSync, writeFileSync, renameSync } from 'node:fs';
 import { pathToFileURL } from 'node:url';
-import { loadSitemapEntries, submitBaidu, submitIndexNow } from './submit-search-engines.mjs';
+import { loadSitemapEntries, submitBaidu, submitIndexNow, safeRequestFailure } from './submit-search-engines.mjs';
 import { selectChangedUrls } from './changed-search-urls.mjs';
 
 export function emptyQueue() {
@@ -89,8 +89,8 @@ export async function drainQueue(state, { day, limit, available, submit, save })
         const accepted = new Set(result.acceptedUrls || urls);
         state.pending[engine] = state.pending[engine].filter((url) => !accepted.has(url));
       }
-    } catch {
-      results[engine] = { ok: false, reason: 'request failed; pending URLs retained' };
+    } catch (error) {
+      results[engine] = { ok: false, reason: `${safeRequestFailure(error)}; pending URLs retained` };
     }
     await save(state);
   }

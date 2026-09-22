@@ -3,6 +3,37 @@ import { readFileSync } from 'node:fs';
 import { sitemapEntries } from './changed-search-urls.mjs';
 const FALLBACK_SITE_URL = 'https://www.jssngyl.cn';
 
+// Never log raw fetch errors: their message/cause may contain the token-bearing
+// request URL. Only known error codes and fixed descriptions may reach logs.
+export function safeRequestFailure(error) {
+  const descriptions = new Map([
+    ['ERR_TLS_CERT_ALTNAME_INVALID', 'TLS certificate does not match the submission host'],
+    ['CERT_HAS_EXPIRED', 'TLS certificate has expired'],
+    ['CERT_NOT_YET_VALID', 'TLS certificate is not yet valid'],
+    ['UNABLE_TO_VERIFY_LEAF_SIGNATURE', 'TLS certificate chain could not be verified'],
+    ['UNABLE_TO_GET_ISSUER_CERT_LOCALLY', 'TLS certificate issuer could not be verified'],
+    ['SELF_SIGNED_CERT_IN_CHAIN', 'TLS certificate chain is not trusted'],
+    ['DEPTH_ZERO_SELF_SIGNED_CERT', 'TLS certificate is not trusted'],
+    ['ENOTFOUND', 'Submission host could not be resolved'],
+    ['EAI_AGAIN', 'Submission host lookup temporarily failed'],
+    ['ECONNREFUSED', 'Submission connection was refused'],
+    ['ECONNRESET', 'Submission connection was interrupted; acceptance is unknown'],
+    ['ETIMEDOUT', 'Submission timed out; acceptance is unknown'],
+    ['UND_ERR_CONNECT_TIMEOUT', 'Submission connection timed out'],
+    ['UND_ERR_HEADERS_TIMEOUT', 'Submission response timed out; acceptance is unknown'],
+    ['UND_ERR_BODY_TIMEOUT', 'Submission response body timed out; acceptance is unknown'],
+    ['TimeoutError', 'Submission timed out; acceptance is unknown'],
+    ['AbortError', 'Submission was aborted; acceptance is unknown'],
+  ]);
+  const seen = new Set();
+  for (let current = error, depth = 0; current && depth < 8 && !seen.has(current); current = current.cause, depth++) {
+    seen.add(current);
+    const code = descriptions.has(current.code) ? current.code : current.name;
+    if (descriptions.has(code)) return `${descriptions.get(code)} (${code})`;
+  }
+  return 'request failed';
+}
+
 function normalizeSiteUrl(value) {
   const cleaned = value?.trim().replace(/\/+$/, '');
   if (!cleaned || /localhost|127\.0\.0\.1/i.test(cleaned)) return FALLBACK_SITE_URL;
@@ -143,6 +174,8 @@ export async function submitBaidu(siteUrl, urls, dryRun, remaining = Infinity) {
 
   const response = await fetch(endpoint, {
     method: 'POST',
+    // Do not forward a credential-bearing request to a redirected endpoint.
+    redirect: 'error',
     signal: AbortSignal.timeout(15000),
     headers: {
       'content-type': 'text/plain',
@@ -196,8 +229,8 @@ async function main() {
       const result = await submit(siteUrl, urls, dryRun);
       printResult(name, result);
       if (!result.skipped && !result.dryRun && !result.ok) process.exitCode = 1;
-    } catch {
-      console.error(`${name}: request failed; check the engine response and credentials.`);
+    } catch (error) {
+      console.error(`${name}: ${safeRequestFailure(error)}`);
       process.exitCode = 1;
     }
   }
