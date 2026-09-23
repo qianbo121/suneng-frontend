@@ -28,20 +28,6 @@ const TRACKING_CONTEXT = {
   productTag: '工件到炉型方向',
 };
 
-const CUSTOMER_PROMPTS = [
-  ['希望解决什么问题', '当前问题、工艺或质量要求'],
-  ['工件材质', '材料名称、已知牌号'],
-  ['工件尺寸与重量', '最大尺寸、单件重量'],
-  ['计划处理数量', '每批／每天的件数或吨数'],
-];
-
-const CUSTOMER_PROMPT_ICON_PATHS = [
-  ['M8 7h8M8 11h5', 'M5 3h14a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-8l-5 4v-4H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2Z'],
-  ['m12 3 9 5v8l-9 5-9-5V8l9-5Z', 'm3 8 9 5 9-5M12 13v8M7.5 5.5l9 5'],
-  ['m3 16 13-13 5 5L8 21l-5-5Z', 'm13 6 2 2M10 9l3 3M7 12l2 2'],
-  ['m12 3 9 5-9 5-9-5 9-5Z', 'm3 12 9 5 9-5M3 16l9 5 9-5'],
-];
-
 export function WorkpieceRouter({ catalog, locale = 'zh' }: { catalog: WorkpieceRouterPublicCatalog; locale?: 'zh' | 'en' }) {
   const english = locale === 'en';
   const t = (zh: string, en: string) => english ? en : zh;
@@ -350,32 +336,20 @@ export function WorkpieceRouter({ catalog, locale = 'zh' }: { catalog: Workpiece
               </section>
             </aside>
           </div>
-
-          <section className={styles.contactStrip} aria-label={t('工程判断所需资料', 'Details for an engineering assessment')}>
-            <div className={styles.contactGuidance}>
-              <dl className={styles.customerPrompts}>
-                {(english ? [['Your objective', 'Current issue or process and quality requirements'], ['Material', 'Material type and known grade'], ['Size and weight', 'Maximum dimensions and unit weight'], ['Throughput', 'Approximate pieces or tonnes per batch or day']] : CUSTOMER_PROMPTS).map(([label, hint], index) => (
-                  <div key={label}>
-                    <dt>
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                        {CUSTOMER_PROMPT_ICON_PATHS[index].map((path) => <path key={path} d={path} />)}
-                      </svg>
-                      <span>{label}</span>
-                    </dt>
-                    <dd>{hint}</dd>
-                  </div>
-                ))}
-              </dl>
-            </div>
-            <div className={styles.contactAction}>
-              <button type="button" className={styles.cta} onClick={goToForm}>
-                {t('提交工况，获取工程判断', 'Request an assessment')}
-                <HiArrowRight aria-hidden="true" />
-              </button>
-            </div>
-          </section>
-
         </div>
+
+        <section className={styles.contactStrip} aria-label={t('工程判断所需资料', 'Details for an engineering assessment')}>
+          <div className={styles.contactGuidance}>
+            <h3>{t('需要进一步确认设备方向？', 'Need help confirming the equipment direction?')}</h3>
+            <p>{t('请准备：问题需求、工件材质、尺寸与重量、计划处理数量', 'Please prepare your requirements, material, dimensions and weight, and planned throughput.')}</p>
+          </div>
+          <div className={styles.contactAction}>
+            <button type="button" className={styles.cta} onClick={goToForm}>
+              {t('提交工况，获取工程判断', 'Request an assessment')}
+              <HiArrowRight aria-hidden="true" />
+            </button>
+          </div>
+        </section>
       </div>
     </section>
   );

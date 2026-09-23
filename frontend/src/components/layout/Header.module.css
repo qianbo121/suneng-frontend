@@ -61,9 +61,9 @@
   top: calc(100% + 6px);
   left: 0;
   z-index: 99;
-  min-width: 208px;
+  min-width: 180px;
   margin: 0;
-  padding: 6px 0;
+  padding: 4px 0;
   border: 1px solid #e4eaf2;
   border-radius: 8px;
   background: #fff;
@@ -97,8 +97,8 @@
 .submenuLink {
   display: flex;
   align-items: center;
-  min-height: 60px;
-  padding: 18px 20px;
+  min-height: 44px;
+  padding: 10px 16px;
   color: #1f2937;
   font-size: 15px;
   font-weight: 400;
