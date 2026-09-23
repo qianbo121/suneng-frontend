@@ -520,11 +520,8 @@ http {
       try_files $uri =404;
     }
 
-    # Keep the public root deterministic for crawlers. Locale-prefixed URLs
-    # remain the canonical language entry points; English stays available at /en.
-    location = / {
-      return 308 https://$DOMAIN/zh;
-    }
+    # The root uses the frontend proxy below so its middleware can choose the
+    # browser's language and return a temporary, non-cacheable redirect.
 
     location = /api/v1/news {
       proxy_cache news_cache;
