@@ -9,7 +9,6 @@ describe('Home facts retained during migration', () => {
     const profile = readSource('../../components/about/AboutProfileSection.tsx');
     expect(home).toContain('1000+');
     expect(home).toContain('工业炉新建与改造项目');
-    expect(home).toContain("prefix: '约'");
     expect(home).toContain("value: '14700'");
     expect(englishHome).toContain('<HomeHero locale="en" />');
     expect(home).toContain('New-build & retrofit projects');

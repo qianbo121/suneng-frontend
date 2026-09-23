@@ -49,7 +49,7 @@ const companyStats = [
   },
   {
     value: '14700',
-    prefix: '约',
+    prefix: '',
     unit: 'm²',
     label: '生产基地',
   },
