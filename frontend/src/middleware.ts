@@ -13,6 +13,7 @@ import { isInternalNewsListPath } from '@/lib/news-list-prerender';
 import { getNewsRouteAvailability, getZhNewsSlug, newsNotFoundHtml } from '@/lib/news-route-guard';
 
 const intlMiddleware = createMiddleware(routing);
+const internationalEntryMiddleware = createMiddleware({ ...routing, defaultLocale: 'en' });
 
 function permanentRedirect(request: NextRequest, pathname: string) {
   const target = request.nextUrl.clone();
@@ -126,7 +127,17 @@ export default async function middleware(request: NextRequest) {
   if (isUnknownProductDetailPath(routablePathname(pathname)) || isUnknownProductDetailPath(pathname)) {
     return missingProductResponse(pathname);
   }
-  if (pathname === '/') return permanentRedirect(request, '/zh');
+  if (pathname === '/') {
+    // Only the language-neutral entry negotiates language. Missing preferences
+    // retain the Chinese default; unsupported browser languages fall back to English.
+    const response = request.headers.get('accept-language')?.trim()
+      ? internationalEntryMiddleware(request)
+      : intlMiddleware(request);
+    // A visitor-specific redirect must never be reused for another language.
+    response.headers.set('Cache-Control', 'private, no-store');
+    response.headers.append('Vary', 'Accept-Language');
+    return response;
+  }
   const hasLocalePrefix = routing.locales.some(
     (locale) => pathname === `/${locale}` || pathname.startsWith(`/${locale}/`),
   );
@@ -167,10 +178,8 @@ export default async function middleware(request: NextRequest) {
     if (availability === 'missing') return newsNotFoundResponse(englishNewsDetail ? 'en' : 'zh');
   }
 
-  // Keep every public URL deterministic for crawlers. Locale negotiation on
-  // unprefixed paths produced temporary 307 redirects and exposed different
-  // targets depending on Accept-Language. English remains available only at
-  // its explicit /en URL.
+  // Keep legacy unprefixed content URLs deterministic for crawlers. Only the
+  // root negotiates language; explicit /zh and /en URLs remain authoritative.
   if (pathname !== '/' && !hasLocalePrefix) {
     return permanentRedirect(request, `/zh${pathname}`);
   }

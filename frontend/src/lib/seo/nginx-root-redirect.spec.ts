@@ -9,12 +9,9 @@ const nginxTemplate = readFileSync(
 const deployScript = readFileSync(new URL('../../../../deploy.sh', import.meta.url), 'utf8');
 
 describe('public root redirect governance', () => {
-  it('keeps exactly one deterministic permanent redirect from www root to Chinese home', () => {
-    const matches = nginxTemplate.match(
-      /location = \/ \{\s*return 308 https:\/\/\$DOMAIN\/zh;\s*\}/g,
-    );
-
-    expect(matches).toHaveLength(1);
+  it('delegates the public root to the frontend for browser-language negotiation', () => {
+    expect(nginxTemplate).not.toMatch(/location = \/\s*\{/);
+    expect(nginxTemplate).toMatch(/location \/ \{\s*proxy_pass http:\/\/frontend_upstream;/);
   });
 
   it('preserves the independently deployed Chengwen route', () => {
