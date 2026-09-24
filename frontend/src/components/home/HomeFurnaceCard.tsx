@@ -176,7 +176,8 @@ export function HomeFurnaceCard({ item: sourceItem, locale = 'zh' }: { item: Hom
               active
               preview={item.animationKind === 'trolley'}
               image={image}
-              label={`${item.name}工作原理演示`}
+              locale={locale}
+              label={english ? `${item.name} operating principle demonstration` : `${item.name}工作原理演示`}
               onReady={() => {
                 setPreview((current) =>
                   current && current.session === session ? { ...current, ready: true } : current,

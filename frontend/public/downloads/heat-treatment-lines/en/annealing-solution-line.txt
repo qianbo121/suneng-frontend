@@ -1,0 +1,13 @@
+Strip Annealing & Solution-treatment Line | Inquiry Checklist
+
+1. Grade, hot/cold-rolled condition, initial microstructure and surface.
+2. Minimum/maximum/typical width and thickness, coil mass, inside/outside diameters, edges and joints.
+3. Annealing/solution-treatment microstructure and property targets, product standards, surface and flatness requirements.
+4. Existing temperature-time-cooling requirements; unknowns may remain blank.
+5. Output for representative sizes, shifts, coil/product-change frequency and existing speed.
+6. Cooling, water quality, exit temperature, oxidation or protective-atmosphere requirements.
+7. Existing uncoiler, accumulators, pickling/washing, recoiler and communication interfaces.
+8. Building layout, lifting/coil handling, utilities and main-contractor responsibilities.
+9. Company, contact and phone/WeChat/email.
+
+Agree separately on representative materials, test conditions, inspection methods and criteria for equipment and product acceptance.

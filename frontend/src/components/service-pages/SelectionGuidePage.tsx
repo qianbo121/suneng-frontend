@@ -1,3 +1,4 @@
+import { localizeServiceContent, serviceHref, serviceText } from '@/components/service-pages/service-localization';
 import Image from 'next/image';
 import Link from 'next/link';
 import { HiInformationCircle, HiOutlineDocumentText, HiPhone } from 'react-icons/hi2';
@@ -9,14 +10,14 @@ import { serviceRoutes } from './service-content';
 import shared from './ServicePages.module.css';
 import styles from './SelectionGuidePage.module.css';
 
-const navigation = [
+const sourceNavigation = [
   ['guide-start', '问题入口'],
   ['guide-topics', '专题资料'],
   ['guide-services', '服务对接'],
   ['guide-contact', '提交需求'],
 ] as const;
 
-const entries = [
+const sourceEntries = [
   {
     title: '新建项目，先找设备方向',
     description: '从工件、工艺和产量出发，了解工业炉与热处理生产线。',
@@ -45,7 +46,7 @@ const entries = [
   },
 ];
 
-const topics = [
+const sourceTopics = [
   ['温度不均整改', '先核对测温、装炉与加热条件', '/zh/solutions/rechuli-lu-wendu-bujun-zhenggai', '温度不均'],
   ['炉衬损坏与翻新', '了解检查项目和修复边界', '/zh/solutions/rechuli-lu-luchen-fanxin', '炉衬'],
   [
@@ -64,27 +65,33 @@ const topics = [
   ],
 ] as const;
 
-const newProjectGuides = [
+const sourceNewProjectGuides = [
   ['连续生产线规划', '/zh/solutions/continuous-heat-treatment-line'],
   ['厂家能力核对', '/zh/solutions/rechuli-lu-changjia'],
   ['江苏及华东项目配套', '/zh/solutions/jiangsu-gongye-lu-changjia'],
 ] as const;
 
-const services = [
+const sourceServices = [
   ['维修与改造', '设备维修、大修与局部改造', serviceRoutes.repair],
   ['搬迁与复产', '搬迁重装、停产检查与复产验证', serviceRoutes.relocation],
   ['安装调试与售后', '安装交付、设备报修与维护支持', serviceRoutes.installation],
 ] as const;
 
-export function SelectionGuidePage({ heroImage }: { heroImage: string }) {
+export function SelectionGuidePage({ heroImage, locale = 'zh' }: { heroImage: string; locale?: 'zh' | 'en' }) {
+  const t = (text: string) => serviceText(text, locale);
+  const navigation = localizeServiceContent(sourceNavigation, locale);
+  const entries = localizeServiceContent(sourceEntries, locale);
+  const topics = localizeServiceContent(sourceTopics, locale);
+  const newProjectGuides = localizeServiceContent(sourceNewProjectGuides, locale);
+  const services = localizeServiceContent(sourceServices, locale);
   const availableProjectGuides = newProjectGuides.filter(([, href]) => !isWithdrawnTechnicalPath(href));
   return (
-    <div className={`${shared.page} ${styles.page}`} data-selection-guide>
+    <div className={`${shared.page} ${styles.page}`} lang={locale} data-selection-guide>
       <section className={`${shared.hero} ${styles.hero}`} aria-labelledby="guide-title">
         <div className={`${shared.heroMedia} ${styles.heroMedia}`}>
           <Image
             src={heroImage}
-            alt="工业炉技术人员核对工件与图纸的场景示意"
+            alt={t("工业炉技术人员核对工件与图纸的场景示意")}
             fill
             priority
             sizes="(max-width: 767px) 100vw, 70vw"
@@ -93,21 +100,17 @@ export function SelectionGuidePage({ heroImage }: { heroImage: string }) {
         </div>
         <div className={`${shared.container} ${shared.heroInner} ${styles.heroInner}`}>
           <div className={`${shared.heroCopy} ${styles.heroCopy}`}>
-            <p className={styles.eyebrow}>苏能工业炉 · 选型与改造指南</p>
+            <p className={styles.eyebrow}>{t("苏能工业炉 · 选型与改造指南")}</p>
             <h1 id="guide-title">
-              工业炉选型
-              <br />
-              与改造指南
-            </h1>
-            <p>从项目问题出发，找到设备方向、判断方法和准备资料。</p>
-            <p className={shared.heroNote}>先了解适用条件，再结合工况确定下一步。</p>
+              {t("工业炉选型")}<br />
+              {t("与改造指南")}</h1>
+            <p>{t("从项目问题出发，找到设备方向、判断方法和准备资料。")}</p>
+            <p className={shared.heroNote}>{t("先了解适用条件，再结合工况确定下一步。")}</p>
             <div className={shared.actions}>
               <a href="#guide-start" className={`${shared.button} ${shared.primary}`}>
-                按问题找资料
-              </a>
-              <Link href="/zh/inquiry" className={`${shared.button} ${shared.light}`}>
-                提交项目情况
-              </Link>
+                {t("按问题找资料")}</a>
+              <Link href={t("/zh/inquiry")} className={`${shared.button} ${shared.light}`}>
+                {t("提交项目情况")}</Link>
             </div>
           </div>
         </div>
@@ -115,26 +118,26 @@ export function SelectionGuidePage({ heroImage }: { heroImage: string }) {
 
       <div className={shared.pathbar}>
         <div className={`${shared.container} ${shared.pathInner}`}>
-          <nav className={shared.breadcrumb} aria-label="面包屑">
+          <nav className={shared.breadcrumb} aria-label={t("面包屑")}>
             <ol>
               <li>
-                <Link href="/zh">首页</Link>
+                <Link href={t("/zh")}>{t("首页")}</Link>
               </li>
               <li>
-                <Link href={serviceRoutes.overview}>改造与服务</Link>
+                <Link href={serviceHref(serviceRoutes.overview, locale)}>{t("改造与服务")}</Link>
               </li>
-              <li aria-current="page">选型与改造指南</li>
+              <li aria-current="page">{t("选型与改造指南")}</li>
             </ol>
           </nav>
-          <ServiceAnchorNav items={navigation} />
+          <ServiceAnchorNav items={navigation} locale={locale} />
         </div>
       </div>
 
       <section id="guide-start" className={shared.section} aria-labelledby="guide-start-heading">
         <div className={shared.container}>
           <header className={shared.heading}>
-            <h2 id="guide-start-heading">您目前需要解决什么问题？</h2>
-            <p>选一个最接近当前情况的方向。</p>
+            <h2 id="guide-start-heading">{t("您目前需要解决什么问题？")}</h2>
+            <p>{t("选一个最接近当前情况的方向。")}</p>
           </header>
           <ol className={styles.entries}>
             {entries.map((entry, index) => (
@@ -153,8 +156,8 @@ export function SelectionGuidePage({ heroImage }: { heroImage: string }) {
               </li>
             ))}
           </ol>
-          {availableProjectGuides.length > 0 && <nav className={styles.related} aria-label="新建项目延伸阅读">
-            <span>新建项目参考：</span>
+          {availableProjectGuides.length > 0 && <nav className={styles.related} aria-label={t("新建项目延伸阅读")}>
+            <span>{t("新建项目参考：")}</span>
             {availableProjectGuides.map(([title, href]) => (
               <Link key={href} href={href} className={styles.textLink}>
                 {title}
@@ -171,11 +174,11 @@ export function SelectionGuidePage({ heroImage }: { heroImage: string }) {
       >
         <div className={shared.container}>
           <header className={shared.heading}>
-            <h2 id="guide-topics-heading">按具体问题，深入了解</h2>
-            <p>先看检查思路与适用条件，再沟通具体处理方式。</p>
+            <h2 id="guide-topics-heading">{t("按具体问题，深入了解")}</h2>
+            <p>{t("先看检查思路与适用条件，再沟通具体处理方式。")}</p>
           </header>
           <div className={styles.topics}>
-            {topics.map(([title, description, href, searchTerm]) => (
+            {topics.map(([title, description, href], index) => (
               <article className={styles.topic} key={href}>
                 <span className={styles.documentIcon}>
                   <HiOutlineDocumentText aria-hidden="true" />
@@ -185,18 +188,17 @@ export function SelectionGuidePage({ heroImage }: { heroImage: string }) {
                   <p>{description}</p>
                 </div>
                 <Link
-                  href={isWithdrawnTechnicalPath(href) ? `/zh/news?q=${encodeURIComponent(searchTerm)}` : href}
+                  href={isWithdrawnTechnicalPath(href) ? `/${locale}/news?q=${encodeURIComponent(sourceTopics[index][3])}` : href}
                   className={styles.topicButton}
-                  aria-label={`查看相关资料：${title}`}
+                  aria-label={`${t('查看相关资料')}: ${title}`}
                 >
-                  查看相关资料
-                </Link>
+                  {t("查看相关资料")}</Link>
               </article>
             ))}
           </div>
           <p className={styles.notice}>
             <HiInformationCircle aria-hidden="true" />
-            <span>资料用于初步了解，具体处理方式需结合设备与现场条件确认。</span>
+            <span>{t("资料用于初步了解，具体处理方式需结合设备与现场条件确认。")}</span>
           </p>
         </div>
       </section>
@@ -209,12 +211,11 @@ export function SelectionGuidePage({ heroImage }: { heroImage: string }) {
         <div className={shared.container}>
           <header className={`${shared.heading} ${styles.serviceHeading}`}>
             <div>
-              <h2 id="guide-services-heading">已经明确需要哪类服务？</h2>
-              <p>查看服务范围，沟通设备情况与实施安排。</p>
+              <h2 id="guide-services-heading">{t("已经明确需要哪类服务？")}</h2>
+              <p>{t("查看服务范围，沟通设备情况与实施安排。")}</p>
             </div>
-            <Link href={serviceRoutes.overview} className={styles.textLink}>
-              返回改造与服务
-            </Link>
+            <Link href={serviceHref(serviceRoutes.overview, locale)} className={styles.textLink}>
+              {t("返回改造与服务")}</Link>
           </header>
           <div className={styles.services}>
             {services.map(([title, description, href], index) => (
@@ -225,9 +226,8 @@ export function SelectionGuidePage({ heroImage }: { heroImage: string }) {
                 <div>
                   <h3>{title}</h3>
                   <p>{description}</p>
-                  <Link className={styles.textLink} href={href} aria-label={`查看服务：${title}`}>
-                    查看服务
-                  </Link>
+                  <Link className={styles.textLink} href={href} aria-label={`${t('查看服务')}: ${title}`}>
+                    {t("查看服务")}</Link>
                 </div>
               </article>
             ))}
@@ -242,20 +242,21 @@ export function SelectionGuidePage({ heroImage }: { heroImage: string }) {
       >
         <div className={`${shared.container} ${styles.contact}`}>
           <div>
-            <h2 id="guide-contact-heading">仍不确定从哪里开始？</h2>
-            <p>说明项目方向和当前主要问题，先沟通下一步。</p>
+            <h2 id="guide-contact-heading">{t("仍不确定从哪里开始？")}</h2>
+            <p>{t("说明项目方向和当前主要问题，先沟通下一步。")}</p>
           </div>
           <div className={styles.contactActions}>
-            <Link href="/zh/inquiry" className={`${shared.button} ${shared.primary}`}>
-              提交项目情况
-            </Link>
+            <Link href={t("/zh/inquiry")} className={`${shared.button} ${shared.primary}`}>
+              {t("提交项目情况")}</Link>
             <WechatContactButton
-              label="加微信，工况初判"
+              locale={locale}
+              description={t("请发送设备全景、铭牌和问题描述；图纸及历史记录可后续补充。")}
+              label={t("加微信，工况初判")}
               className={`${shared.button} ${shared.outline}`}
             />
             <a className={shared.contactPhone} href={serviceContact.phoneHref}>
               <HiPhone aria-hidden="true" />
-              {serviceContact.displayPhone}
+              {locale === 'en' ? '+86-' + serviceContact.displayPhone : serviceContact.displayPhone}
             </a>
           </div>
         </div>

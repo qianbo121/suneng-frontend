@@ -3,6 +3,7 @@ import { defineConfig } from '@playwright/test';
 const port = Number(process.env.VISUAL_PORT || 3102);
 const baseURL = process.env.VISUAL_BASE_URL || `http://127.0.0.1:${port}`;
 const useExternalServer = Boolean(process.env.VISUAL_BASE_URL);
+const newsPort = port + 1;
 const browserChannel = process.env.PLAYWRIGHT_BROWSER_CHANNEL;
 
 export default defineConfig({
@@ -35,11 +36,15 @@ export default defineConfig({
   },
   webServer: useExternalServer
     ? undefined
-    : {
-        command: `NEXT_PUBLIC_API_URL=/api NEXT_PUBLIC_API_BASE_URL=/api NEXT_DIST_DIR=.next-visual pnpm exec next dev -H 127.0.0.1 -p ${port}`,
+    : [{
+        command: `VISUAL_NEWS_PORT=${newsPort} node tests/visual/fixtures/news-server.mjs`,
+        url: `http://127.0.0.1:${newsPort}/health`,
+        reuseExistingServer: false,
+      }, {
+        command: `API_BASE_URL_INTERNAL=http://127.0.0.1:${newsPort}/api NEXT_PUBLIC_API_URL=/api NEXT_PUBLIC_API_BASE_URL=/api NEXT_DIST_DIR=.next-visual pnpm exec next dev -H 127.0.0.1 -p ${port}`,
         url: baseURL,
         reuseExistingServer: !process.env.CI,
         timeout: 120_000,
-      },
+      }],
   projects: [{ name: process.env.VISUAL_PROJECT || 'chrome' }],
 });

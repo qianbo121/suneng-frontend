@@ -32,9 +32,9 @@ describe('copper wire inquiry preparation checklist', () => {
     expect(download).toContain('不作为设备选型、报价或验收依据');
   });
 
-  it('links to the Chinese-only resource page from the copper detail', () => {
+  it('keeps the source resource link and enables its completed English equivalent', () => {
     const technical = content.sections.faq.relatedGroups.find((group) => group.id === 'technical');
     expect(technical?.links[0].href).toBe(copperWireChecklistPath);
-    expect(isZhOnlyPath(copperWireChecklistPath)).toBe(true);
+    expect(isZhOnlyPath(copperWireChecklistPath)).toBe(false);
   });
 });

@@ -15,6 +15,7 @@ type HeroBannerProps = {
 
 type HeroPartnerLogo = {
   name: string;
+  nameEn: string;
   src: string;
   alt: string;
   width: number;
@@ -25,6 +26,7 @@ const heroMotionEase: [number, number, number, number] = [0.22, 1, 0.36, 1];
 const heroPartnerLogos: HeroPartnerLogo[] = [
   {
     name: '中国恩菲工程技术有限公司',
+    nameEn: "China ENFI Engineering",
     src: '/images/partners/homepage/01-enfi.png',
     alt: '中国恩菲工程技术有限公司 ENFI',
     width: 316,
@@ -32,6 +34,7 @@ const heroPartnerLogos: HeroPartnerLogo[] = [
   },
   {
     name: '湖南华菱涟源钢铁有限公司',
+    nameEn: "Hunan Valin Lianyuan Steel",
     src: '/images/partners/homepage/02-lianyuan-steel.png',
     alt: '湖南华菱涟源钢铁有限公司 涟钢',
     width: 514,
@@ -39,6 +42,7 @@ const heroPartnerLogos: HeroPartnerLogo[] = [
   },
   {
     name: '中国联合工程有限公司',
+    nameEn: "China United Engineering",
     src: '/images/partners/homepage/03-cuec.png',
     alt: '中国联合工程有限公司 CUEC',
     width: 384,
@@ -46,6 +50,7 @@ const heroPartnerLogos: HeroPartnerLogo[] = [
   },
   {
     name: '中集安瑞环科技股份有限公司',
+    nameEn: "CIMC Safeway",
     src: '/images/partners/homepage/04-cimc-safeway.png',
     alt: '中集安瑞环科技股份有限公司 CIMC Safeway',
     width: 536,
@@ -53,6 +58,7 @@ const heroPartnerLogos: HeroPartnerLogo[] = [
   },
   {
     name: '青拓集团',
+    nameEn: "Tsingtuo Group",
     src: '/images/partners/homepage/05-tsingtuo-group.png',
     alt: '青拓集团',
     width: 559,
@@ -60,6 +66,7 @@ const heroPartnerLogos: HeroPartnerLogo[] = [
   },
   {
     name: '内蒙古北方重工业集团有限公司',
+    nameEn: "Inner Mongolia North Heavy Industries",
     src: '/images/partners/homepage/06-nhi.png',
     alt: '内蒙古北方重工业集团有限公司 NHI',
     width: 368,
@@ -67,6 +74,7 @@ const heroPartnerLogos: HeroPartnerLogo[] = [
   },
   {
     name: '江苏天工科技股份有限公司',
+    nameEn: "Jiangsu Tiangong Technology",
     src: '/images/partners/homepage/07-tiangong-technology.png',
     alt: '江苏天工科技股份有限公司 天工股份',
     width: 482,
@@ -74,6 +82,7 @@ const heroPartnerLogos: HeroPartnerLogo[] = [
   },
   {
     name: '钢诺新材料股份有限公司',
+    nameEn: "Gangnuo Coldpro",
     src: '/images/partners/homepage/08-gangnuo-coldpro.png',
     alt: '钢诺新材料股份有限公司 钢诺 Coldpro',
     width: 734,
@@ -81,6 +90,7 @@ const heroPartnerLogos: HeroPartnerLogo[] = [
   },
   {
     name: '西安三角防务股份有限公司',
+    nameEn: "Xi’an Triangle Defense",
     src: '/images/partners/homepage/09-triangle-defense.png',
     alt: '西安三角防务股份有限公司 三角防务',
     width: 487,
@@ -88,6 +98,7 @@ const heroPartnerLogos: HeroPartnerLogo[] = [
   },
   {
     name: '中集氢能科技有限公司',
+    nameEn: "CIMC Hydrogen",
     src: '/images/partners/homepage/10-cimc-hydrogen.png',
     alt: '中集氢能科技有限公司 CIMC Hydrogen',
     width: 448,
@@ -95,6 +106,7 @@ const heroPartnerLogos: HeroPartnerLogo[] = [
   },
   {
     name: '六和轻合金（苏州）有限公司',
+    nameEn: "Lioho Light Alloy (Suzhou)",
     src: '/images/partners/homepage/11-liuhe-light-alloy.png',
     alt: '六和轻合金（苏州）有限公司',
     width: 427,
@@ -102,6 +114,7 @@ const heroPartnerLogos: HeroPartnerLogo[] = [
   },
   {
     name: '钢研海德',
+    nameEn: "CISRI Harder",
     src: '/images/partners/homepage/12-cisri-harder.png',
     alt: '中国钢研 钢研海德',
     width: 474,
@@ -109,15 +122,15 @@ const heroPartnerLogos: HeroPartnerLogo[] = [
   },
 ] as const;
 
-function PartnerLogoGroup({ duplicate = false }: { duplicate?: boolean }) {
+function PartnerLogoGroup({ duplicate = false, locale }: { duplicate?: boolean; locale: Locale }) {
   return (
     <div className={styles.logoGroup} aria-hidden={duplicate ? 'true' : undefined}>
       {heroPartnerLogos.map((partner) => (
         <Image
           key={partner.src}
           src={partner.src}
-          alt={duplicate ? '' : partner.alt}
-          title={duplicate ? undefined : partner.name}
+          alt={duplicate ? '' : locale === 'en' ? partner.nameEn : partner.alt}
+          title={duplicate ? undefined : locale === 'en' ? partner.nameEn : partner.name}
           width={partner.width}
           height={partner.height}
           className={styles.logo}
@@ -150,8 +163,8 @@ function HeroPartners({ locale }: HeroBannerProps) {
         aria-label={locale === 'en' ? 'Partner logo carousel' : '合作伙伴标志轮播'}
       >
         <div className={styles.track} data-testid="homepage-partner-track">
-          <PartnerLogoGroup />
-          <PartnerLogoGroup duplicate />
+          <PartnerLogoGroup locale={locale} />
+          <PartnerLogoGroup locale={locale} duplicate />
         </div>
       </div>
     </motion.div>

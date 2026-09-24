@@ -106,7 +106,7 @@ export function HomepageLeadForm({
   const directionListboxId = useId();
   const [values, setValues] = useState<HomepageRequirementValues>(() =>
     inquiryProduct
-      ? { ...emptyValues, direction: inquiryDirection, problem: `咨询设备：${inquiryProduct}。\n` }
+      ? { ...emptyValues, direction: inquiryDirection, problem: english ? `Equipment: ${inquiryProduct}.\n` : `咨询设备：${inquiryProduct}。\n` }
       : emptyValues,
   );
   const [invalidField, setInvalidField] = useState<HomepageRequirementField | null>(null);
@@ -277,7 +277,7 @@ export function HomepageLeadForm({
     setSubmissionId('');
     setValues(
       inquiryProduct
-        ? { ...emptyValues, direction: inquiryDirection, problem: `咨询设备：${inquiryProduct}。\n` }
+        ? { ...emptyValues, direction: inquiryDirection, problem: english ? `Equipment: ${inquiryProduct}.\n` : `咨询设备：${inquiryProduct}。\n` }
         : emptyValues,
     );
     setInvalidField(null);
@@ -301,6 +301,7 @@ export function HomepageLeadForm({
       aria-label={isEmbedded ? t('提交需求', 'Send project details') : undefined}
       aria-labelledby={isEmbedded ? undefined : 'homepage-form-title'}
       data-contact-form
+      lang={locale}
     >
       <div className={styles.formInner}>
         {!isEmbedded ? (
@@ -499,7 +500,7 @@ export function HomepageLeadForm({
                   type="text"
                   value={values.identity}
                   onChange={(event) => updateValue('identity', event.target.value)}
-                  placeholder={t('例如：江苏某公司 张工', 'Company name / contact person')}
+                  placeholder={t('例如：江苏某公司 张工', 'Company / contact name')}
                   autoComplete="organization"
                   maxLength={180}
                   aria-describedby={invalidField === 'identity' ? 'identity-error' : undefined}
@@ -521,13 +522,18 @@ export function HomepageLeadForm({
                   type="text"
                   value={values.contact}
                   onChange={(event) => updateValue('contact', event.target.value)}
-                  placeholder={t('手机号、微信号或邮箱', 'Phone with country code, WeChat or email')}
+                  placeholder={t('手机号、微信号或邮箱', 'Phone, WeChat or email')}
                   autoComplete="off"
                   spellCheck={false}
                   maxLength={254}
-                  aria-describedby={invalidField === 'contact' ? 'contact-error' : undefined}
+                  aria-describedby={[english ? 'contact-hint' : '', invalidField === 'contact' ? 'contact-error' : ''].filter(Boolean).join(' ') || undefined}
                   aria-invalid={invalidField === 'contact' || undefined}
                 />
+                {english ? (
+                  <small id="contact-hint" className={styles.fieldHint}>
+                    For phone numbers, include the country code.
+                  </small>
+                ) : null}
                 {invalidField === 'contact' ? (
                   <span id="contact-error" className={styles.fieldError} aria-live="polite">
                     {english ? 'Please enter a valid phone number, WeChat ID or email address.' : <>请填写有效的{fieldLabels.contact}。</>}

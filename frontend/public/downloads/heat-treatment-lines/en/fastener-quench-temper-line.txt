@@ -1,0 +1,41 @@
+Fastener Quench-and-temper Line | Inquiry Checklist
+
+Fill in available information after each item; mark unknowns for confirmation.
+
+Product family
+Confirm: bolts/nuts/pins, sizes, effective section, unit mass and strength class.
+Details:
+
+Material and prior operations
+Confirm: grade, spheroidized/cold-headed condition, machining, coating/phosphating condition.
+Details:
+
+Property targets
+Confirm: hardness, tensile or proof load, decarburization, metallography and other applicable items for each product category.
+Details:
+
+Equipment and loading
+Confirm: belt loading or batch-furnace baskets, maximum effective section, loading density and anti-mixing rules.
+Details:
+
+Atmosphere
+Confirm: oxidation/decarburization prevention or carbon-restoration target, gas source, carbon potential/dew point and safety.
+Details:
+
+Quenching
+Confirm: oil/polymer/other medium, temperature, agitation, residual liquid and fire protection.
+Details:
+
+Tempering and time window
+Confirm: quench-to-temper delay, temperature/time, final cooling and rust prevention.
+Details:
+
+Traceability and acceptance
+Confirm: batch separation, line clearance, sampling, performance tests and continuous operation.
+Details:
+
+Supplier scope:
+Owner or main-contractor auxiliaries:
+Contact person and details:
+
+Preliminary inputs support design assessment. The confirmed technical agreement governs process and supply scope.

@@ -1,0 +1,31 @@
+Multi-furnace Quenching Cell with Shared Manipulator | Discussion Checklist
+
+Provide available information; unknown items may remain blank.
+
+1. Workpieces and process
+Grade, incoming condition, representative shape/section, target properties and adopted specification.
+Heating/soaking requirements; quenching medium and use conditions; transfer-timing start/end and permitted time.
+Whether post-quench tempering is required, allowable delay and downstream interfaces.
+
+2. Furnace group and discharge windows
+New build or retrofit; existing furnace count/types, door locations, loading heights and opening clearances.
+Each furnace's cycle, batch mass, shifts, discharge window and whether staggered discharge is permitted.
+Existing temperature-control, door and control-interface documents.
+
+3. Trays and manipulator
+Total workpiece, tray and tooling mass and centre of gravity; tray shape and hot distortion.
+Fork clearance, supports/location, pickup/set-down positions, rail travel and lifting height.
+Existing manipulator information or proposed shared-equipment scope.
+
+4. Quenching and site
+Tank count, medium, operating conditions, immersion/removal method and tank occupancy.
+Circulation, agitation, heat exchange, exhaust and other utilities.
+Building layout, travel aisles, segregation zones, service space and abnormal-load parking positions.
+
+5. Targets and delivery
+Conforming output, representative batches, effective production time and changeover frequency.
+Equipment supply, existing-equipment interfaces, foundations, utilities and site-work responsibilities.
+Representative-load and scheduling-conflict validation; equipment and product inspection items.
+
+Calculate shared-cell capacity from the complete cycle and schedule; do not simply add individual furnace ratings.
+This checklist supports preliminary discussion, not equipment-capability or transfer-time guarantees.

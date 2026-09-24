@@ -1,4 +1,5 @@
 import { cache } from 'react';
+import { localizeEnglishNewsPresentation } from './english-news-presentation';
 import type { Metadata } from 'next';
 
 import { NEWS_FALLBACK_IMAGE, NEWS_LABEL } from '@/constants/news';
@@ -101,7 +102,7 @@ export function normalizeNewsHtml(
   options?: { coverImage?: string | null },
 ) {
   const content = localizeText(locale, item.contentZh, item.contentEn);
-  return prepareNewsArticleHtml(content, {
+  return prepareNewsArticleHtml(locale === 'en' ? localizeEnglishNewsPresentation(content, item.slug) : content, {
     coverImage: options?.coverImage,
     stackSimpleTables: locale === 'en',
     articleSlug: item.slug,

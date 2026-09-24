@@ -1,3 +1,5 @@
+import { localizeServiceContent, serviceHref, serviceText } from '@/components/service-pages/service-localization';
+import type { Locale } from '@/types/site';
 import type { CSSProperties, ReactNode } from 'react';
 import type { IconType } from 'react-icons';
 import Image from 'next/image';
@@ -24,16 +26,19 @@ export function ServiceContactButton({
   afterSales = false,
   label,
   light = false,
+  locale = 'zh',
 }: {
   afterSales?: boolean;
   label?: string;
   light?: boolean;
+  locale?: Locale;
 }) {
   return (
     <WechatContactButton
-      label={label ?? (afterSales ? '联系售后' : '加微信，工况初判')}
+      locale={locale}
+      label={label ?? (locale === 'en' ? (afterSales ? 'Contact after-sales' : 'Discuss equipment via WeChat') : afterSales ? '联系售后' : '加微信，工况初判')}
       description={
-        afterSales
+        locale === 'en' ? (afterSales ? 'Send the nameplate, fault symptoms, alarms and site photos to discuss repairs, spare parts or site service.' : 'Send overall equipment photos, the nameplate and a description of the issue. Drawings and records can follow.') : afterSales
           ? '请发送设备铭牌、故障现象、报警信息和现场照片，便于沟通维修、备件或现场服务安排。'
           : '请发送设备全景、铭牌和问题描述；图纸及历史记录可后续补充。'
       }
@@ -41,9 +46,10 @@ export function ServiceContactButton({
     />
   );
 }
-export function ServiceHero({ kind }: { kind: ServicePageKind }) {
-  const page = servicePages[kind];
-  const asset = serviceHeroAssets[kind];
+export function ServiceHero({ kind, locale = 'zh' }: { kind: ServicePageKind; locale?: Locale }) {
+  const page = localizeServiceContent(servicePages[kind], locale);
+  const t = (text: string) => serviceText(text, locale);
+  const asset = localizeServiceContent(serviceHeroAssets[kind], locale);
   return (
     <>
       <section
@@ -72,13 +78,13 @@ export function ServiceHero({ kind }: { kind: ServicePageKind }) {
             <p>{page.description}</p>
             {page.note && <p className={styles.heroNote}>{page.note}</p>}
             <div className={styles.actions}>
-              <ServiceContactButton afterSales={kind === 'installation'} />
+              <ServiceContactButton afterSales={kind === 'installation'} locale={locale} />
               <Link href={page.secondary[1]} className={`${styles.button} ${styles.light}`}>
                 {page.secondary[0]}
               </Link>
             </div>
             {kind === 'installation' && (
-              <p className={styles.repairPrompt}>报修先发这四项，缺少的资料可在沟通中补充：</p>
+              <p className={styles.repairPrompt}>{t("报修先发这四项，缺少的资料可在沟通中补充：")}</p>
             )}
             {page.tags.length > 0 && (
               <ul className={styles.tags}>
@@ -92,20 +98,20 @@ export function ServiceHero({ kind }: { kind: ServicePageKind }) {
       </section>
       <div className={styles.pathbar}>
         <div className={`${styles.container} ${styles.pathInner}`}>
-          <nav className={styles.breadcrumb} aria-label="面包屑">
+          <nav className={styles.breadcrumb} aria-label={locale === 'en' ? 'Breadcrumb' : t("面包屑")}>
             <ol>
               <li>
-                <Link href="/zh">首页</Link>
+                <Link href={`/${locale}`}>{locale === 'en' ? 'Home' : t("首页")}</Link>
               </li>
               {kind !== 'overview' && (
                 <li>
-                  <Link href={serviceRoutes.overview}>改造与服务</Link>
+                  <Link href={serviceHref(serviceRoutes.overview, locale)}>{t("改造与服务")}</Link>
                 </li>
               )}
               <li aria-current="page">{page.breadcrumb}</li>
             </ol>
           </nav>
-          {page.nav.length > 0 && <ServiceAnchorNav items={page.nav} />}
+          {page.nav.length > 0 && <ServiceAnchorNav items={page.nav} locale={locale} />}
         </div>
       </div>
     </>
@@ -256,8 +262,8 @@ export function ServiceFaq({
     </ServiceSection>
   );
 }
-export function ServiceContact({ kind }: { kind: ServicePageKind }) {
-  const page = servicePages[kind];
+export function ServiceContact({ kind, locale = 'zh' }: { kind: ServicePageKind; locale?: Locale }) {
+  const page = localizeServiceContent(servicePages[kind], locale);
   return (
     <section
       id="service-contact"
@@ -272,17 +278,17 @@ export function ServiceContact({ kind }: { kind: ServicePageKind }) {
         </div>
         <div className={styles.contactAside}>
           <div className={styles.actions}>
-            <ServiceContactButton afterSales={kind === 'installation'} />
+            <ServiceContactButton afterSales={kind === 'installation'} locale={locale} />
             <a
               href={serviceContact.phoneHref}
               className={`${styles.button} ${kind === 'relocation' ? styles.outline : styles.light}`}
             >
-              拨打电话
+              {locale === 'en' ? 'Call us' : '拨打电话'}
             </a>
           </div>
           <a href={serviceContact.phoneHref} className={styles.contactPhone}>
             <HiPhone aria-hidden="true" />
-            {serviceContact.displayPhone}
+            {locale === 'en' ? siteSettings.salesPhone : serviceContact.displayPhone}
           </a>
         </div>
       </div>

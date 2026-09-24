@@ -1,0 +1,16 @@
+Filament-wound Cylinder Continuous Curing Line | Discussion Checklist
+
+Provide known information first; complete gaps during discussion. This checklist collects operating conditions.
+
+1. Cylinder: application, structure, dimensions, mass, volume, liner material/temperature limit and neck or mandrel-end drawings.
+2. Composite layer: fiber/resin grades, curing system, winding thickness, technical and safety data sheets.
+3. Process curve: workpiece heat-up, soaking, cooling and permitted windows; preheat, volatile removal or post-curing needs.
+4. Upstream timing: workable time after winding, waiting/storage, resin dripping and rotation requirements during transfer.
+5. Loading: end supports, allowable forces, product pitch, rotation, thermal expansion and anti-roll-off requirements.
+6. Capacity: representative sizes, target pieces, shifts, effective hours, changeover frequency and adjacent cycles.
+7. Heat/exhaust: resin exotherm and volatile data, maximum simultaneous curing load, fresh/exhaust air and treatment interfaces.
+8. Site: plan, access, power, heat source, exhaust destination, maintenance and installation conditions.
+9. Validation: representative-part temperature measurement, curve-to-cylinder traceability, cure testing and subsequent cylinder-inspection responsibilities.
+10. Contact: company, person and phone, WeChat or email.
+
+Configure conveying and rotation separately. Furnace-air temperature does not replace workpiece temperature. Gas-filled or pressurized curing must be raised separately and is excluded from this representative configuration. Agree separately on curing-equipment acceptance and complete-cylinder inspection.

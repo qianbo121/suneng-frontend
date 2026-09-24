@@ -18,8 +18,8 @@ const formSource = readFileSync(new URL('../home/HomepageLeadForm.tsx', import.m
 describe('Chinese products landing structure', () => {
   it('keeps the confirmed one-page order without the duplicate sticky lead bar', () => {
     expect(landingSource).toContain('ProductCenterLineCarousel');
-    expect(landingSource).toContain('title="周期式工业炉"');
-    expect(landingSource).toContain('title="连续式工业炉"');
+    expect(landingSource).toContain('title={t("周期式工业炉", "Batch Furnaces")}');
+    expect(landingSource).toContain('title={t("连续式工业炉", "Continuous Furnaces")}');
     expect(landingSource).toContain('现有设备需要维修、改造或增加配套？');
     expect(landingSource).not.toContain('HomepageBottomLeadBar');
   });

@@ -20,6 +20,7 @@ import styles from './ProductionLineProcess.module.css';
 
 type Props = {
   pageId: string;
+  locale?: 'zh' | 'en';
   image?: LineImage;
   process: ProductionLineContent['sections']['process'];
   model?: ProcessMap;
@@ -32,12 +33,12 @@ const shortTitle = (title: string) =>
 const BODY_HIGHLIGHT_CUTOFF = 215;
 
 function ProcessActionIcon({ title }: { title: string }) {
-  if (/检验|记录|识别|核对|确认|放行/.test(title))
+  if (/检验|记录|识别|核对|确认|放行|inspect|record|identify|check|confirm|release/i.test(title))
     return <HiOutlineClipboardDocumentCheck aria-hidden="true" />;
-  if (/转移|转出|交接|取放|下料|装料|上料|输送|收线/.test(title))
+  if (/转移|转出|交接|取放|下料|装料|上料|输送|收线|transfer|handover|load|convey|discharge/i.test(title))
     return <HiOutlineArrowsRightLeft aria-hidden="true" />;
-  if (/加热|升温|均温|保温|固溶|固化|回火/.test(title)) return <HiOutlineFire aria-hidden="true" />;
-  if (/淬火|冷却|清洗|沥液|排液/.test(title))
+  if (/加热|升温|均温|保温|固溶|固化|回火|heat|equaliz|soak|solution|cur|temper/i.test(title)) return <HiOutlineFire aria-hidden="true" />;
+  if (/淬火|冷却|清洗|沥液|排液|quench|cool|wash|clean|drain/i.test(title))
     return (
       <svg
         viewBox="0 0 24 24"
@@ -53,7 +54,8 @@ function ProcessActionIcon({ title }: { title: string }) {
   return <HiOutlineCog6Tooth aria-hidden="true" />;
 }
 
-export function ProductionLineProcess({ pageId, image, process, model, steps }: Props) {
+export function ProductionLineProcess({ pageId, image, process, model, steps, locale = 'zh' }: Props) {
+  const t = (zh: string, en: string) => locale === 'en' ? en : zh;
   const [ready, setReady] = useState(false);
   const [selected, setSelected] = useState(Math.min(model?.initial ?? 0, steps.length - 1));
   const imageScroll = useRef<HTMLDivElement>(null);
@@ -143,19 +145,19 @@ export function ProductionLineProcess({ pageId, image, process, model, steps }: 
         <h2>{process.routes?.[0]?.title ?? process.title}</h2>
         <p>
           <HiOutlineMapPin aria-hidden="true" />
-          指向设备或点选工序，查看位置与处理动作
+          {t('指向设备或点选工序，查看位置与处理动作', 'Point to equipment or select a step to see its location and action')}
         </p>
       </div>
       {image && (
         <figure className={styles.figure}>
-          <p className={styles.mobileHint}>左右滑动查看整线，或点选下方工序定位</p>
+          <p className={styles.mobileHint}>{t('左右滑动查看整线，或点选下方工序定位', 'Scroll horizontally for the complete line, or select a step below')}</p>
           <div
             className={styles.imageScroll}
             ref={imageScroll}
             data-bottom-labels={cell || pageId === 'aluminum-solution-aging-line' ? '' : undefined}
             tabIndex={0}
             role="region"
-            aria-label="设备工序对应图，可左右滚动"
+            aria-label={t('设备工序对应图，可左右滚动', 'Equipment-to-process map; scroll horizontally')}
           >
             <div
               className={styles.canvas}
@@ -305,7 +307,7 @@ export function ProductionLineProcess({ pageId, image, process, model, steps }: 
                       data-active={active ? '' : undefined}
                       aria-pressed={active}
                       aria-controls={detailsId}
-                      aria-label={`查看${zone.label}对应工序`}
+                      aria-label={locale === 'en' ? `View steps for ${zone.label}` : `查看${zone.label}对应工序`}
                       onClick={() => select(active ? selected : indices[0])}
                       onPointerMove={(event) => {
                         if (
@@ -321,7 +323,7 @@ export function ProductionLineProcess({ pageId, image, process, model, steps }: 
                       <span className={styles.hotspotLabel}>
                         {zone.label}
                         {indices.length > 1 && (
-                          <small>{indices.map(number).join(' / ')} 共用</small>
+                          <small>{indices.map(number).join(' / ')} {t('共用', 'shared')}</small>
                         )}
                       </span>
                     </button>
@@ -344,7 +346,7 @@ export function ProductionLineProcess({ pageId, image, process, model, steps }: 
       <ol
         className={styles.timeline}
         ref={timeline}
-        aria-label="工序顺序，点选查看说明"
+        aria-label={t('工序顺序，点选查看说明', 'Process sequence; select a step for details')}
         style={{ '--step-count': steps.length } as CSSProperties}
       >
         {steps.map((item, index) => (
@@ -371,7 +373,7 @@ export function ProductionLineProcess({ pageId, image, process, model, steps }: 
               <span className={styles.stepNumber}>{number(index)}</span>
               <span className={styles.stepCaption}>
                 <span className={styles.stepTitle}>{shortTitle(item.title)}</span>
-                {item.optional && <span className={styles.optional}>按需</span>}
+                {item.optional && <span className={styles.optional}>{t('按需', 'Optional')}</span>}
               </span>
             </button>
             {index < steps.length - 1 && <span className={styles.connector} aria-hidden="true" />}
@@ -382,7 +384,7 @@ export function ProductionLineProcess({ pageId, image, process, model, steps }: 
         className={styles.detail}
         id={detailsId}
         role="region"
-        aria-label="当前工序说明"
+        aria-label={t('当前工序说明', 'Selected process step')}
         aria-live="polite"
         aria-atomic="true"
         data-selected-step={selected + 1}
@@ -391,46 +393,46 @@ export function ProductionLineProcess({ pageId, image, process, model, steps }: 
           <div className={styles.detailHeading}>
             <span>{number(selected)}</span>
             <h4>{shortTitle(current.title)}</h4>
-            {current.optional && <span className={styles.optional}>按需配置</span>}
+            {current.optional && <span className={styles.optional}>{t('按需配置', 'Optional')}</span>}
             <span className={styles.detailReference}>
-              {activeZone ? '对应上图高亮区域' : '图外工序或交接'}
+              {activeZone ? t('对应上图高亮区域', 'Highlighted area above') : t('图外工序或交接', 'Off-image step or handover')}
             </span>
           </div>
           <p className={styles.detailDescription}>{current.description}</p>
           <p className={styles.location}>
-            {activeZone ? `对应设备：${activeZone.label}` : '图外工序或交接环节'}
+            {activeZone ? `${t('对应设备：', 'Equipment: ')}${activeZone.label}` : t('图外工序或交接环节', 'Off-image operation or handover')}
           </p>
         </div>
-        <div className={styles.sequence} aria-label="本步处理动作示意">
+        <div className={styles.sequence} aria-label={t('本步处理动作示意', 'Actions for this step')}>
           <div className={styles.action}>
             <span className={styles.actionIcon}>
               <HiOutlineArrowLeftOnRectangle className={styles.entryIcon} aria-hidden="true" />
             </span>
-            <span>{activeZone ? '进入本段' : '开始本步'}</span>
+            <span>{activeZone ? t('进入本段', 'Enter this section') : t('开始本步', 'Start this step')}</span>
           </div>
           <HiArrowRight className={styles.actionArrow} aria-hidden="true" />
           <div className={styles.action} data-current="">
             <span className={styles.actionIcon}>
               <ProcessActionIcon title={current.title} />
             </span>
-            <span>{current.title === '淬火' ? '按工艺冷却' : shortTitle(current.title)}</span>
+            <span>{['淬火', 'Quench'].includes(current.title) ? t('按工艺冷却', 'Cool to the process requirements') : shortTitle(current.title)}</span>
           </div>
           <HiArrowRight className={styles.actionArrow} aria-hidden="true" />
           <div className={styles.action}>
             <span className={styles.actionIcon}>
               <HiOutlineArrowRightOnRectangle aria-hidden="true" />
             </span>
-            <span>{selected < steps.length - 1 ? '转入后续工序' : '按约定交接'}</span>
+            <span>{selected < steps.length - 1 ? t('转入后续工序', 'Continue to the next step') : t('按约定交接', 'Complete the agreed handover')}</span>
           </div>
         </div>
       </div>
       <details className={styles.conditions} data-process-conditions>
         <summary>
           <span className={styles.keyCondition}>
-            {model?.movement ?? '具体工艺按材料、型号及性能要求确认。'}
+            {model?.movement ?? t('具体工艺按材料、型号及性能要求确认。', 'Confirm the process against material, model and required properties.')}
           </span>
           <span className={styles.conditionsTrigger}>
-            查看工艺条件与适用限制
+            {t('查看工艺条件与适用限制', 'View process conditions & limitations')}
             <HiChevronDown aria-hidden="true" />
           </span>
         </summary>
@@ -438,7 +440,7 @@ export function ProductionLineProcess({ pageId, image, process, model, steps }: 
           {process.subtitle && <p>{process.subtitle}</p>}
           {process.routes?.[0]?.note && <p>{process.routes[0].note}</p>}
           {process.note && <p>{process.note}</p>}
-          <p>{current.locationNote ?? '高亮表示功能区域，具体设备与布置按方案确定。'}</p>
+          <p>{current.locationNote ?? t('高亮表示功能区域，具体设备与布置按方案确定。', 'Highlights identify functional areas. Equipment and layout follow the agreed proposal.')}</p>
         </div>
       </details>
       {(process.routes?.slice(1) ?? []).map((route) => (
@@ -446,15 +448,15 @@ export function ProductionLineProcess({ pageId, image, process, model, steps }: 
           <summary>
             <span>{route.title}</span>
             <span className={styles.expandHint}>
-              查看路线
+              {t('查看路线', 'View route')}
               <HiChevronDown aria-hidden="true" />
             </span>
           </summary>
           <div className={styles.alternativeBody}>
             <p>
               {pageId === 'forging-waste-heat-qt-line'
-                ? '未满足放行条件时，按以下路线隔离与复核。'
-                : '以下路线单独评估，不与上图设备位置逐一对应。'}
+                ? t('未满足放行条件时，按以下路线隔离与复核。', 'When release conditions are not met, segregate and review using this route.')
+                : t('以下路线单独评估，不与上图设备位置逐一对应。', 'Assess this route separately; it does not map one-to-one to the equipment above.')}
             </p>
             <ol>
               {route.steps.map((item, index) => (

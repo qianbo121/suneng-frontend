@@ -1,0 +1,13 @@
+Aluminum Forging-heating Line | Inquiry Checklist
+
+Provide known information first; complete other items during design discussions.
+1. Alloy grade, incoming condition and application.
+2. Billet shape, section, length, unit mass and initial temperature.
+3. Permitted forging/die-entry temperature window and its basis.
+4. Representative, maximum and minimum sizes; positioning, anti-roll and surface requirements.
+5. Target parts output, shifts, changeovers and the forging press's actual receiving cycle.
+6. Furnace-exit to die-entry route and time; short press stops, restart and abnormal-billet handling.
+7. Available electricity or gas, workshop space and adjacent equipment interfaces.
+8. Test conditions for workpiece temperature, feed cycle and product validation.
+
+Send material/process documents, layout sketches and workpiece photos using the existing contact channels. This checklist supplies design inputs; it does not establish compatibility, supply scope or price.

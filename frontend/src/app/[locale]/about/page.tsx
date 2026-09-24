@@ -1,22 +1,10 @@
 import { getIndexingRobots } from '@/lib/seo/metadata';
 import type { Metadata } from 'next';
+import { localizeCoreValue } from '@/lib/core-page-localization';
 
-import { JsonLd } from '@/components/JsonLd';
-import { AboutProfileSection } from '@/components/about/AboutProfileSection';
-import { AboutShell } from '@/components/about/AboutShell';
 import { ABOUT_ZH_SEO, AboutZhContent } from '@/components/about/AboutZhContent';
-import {
-  getAboutBannerImage,
-  getAboutPageCopy,
-  getAboutPageSource,
-  getProfileSection,
-  localizeAboutText,
-} from '@/lib/about';
-import { getBreadcrumbJsonLd } from '@/lib/seo/jsonld';
 import { absoluteUrl, buildMetadata } from '@/lib/seo/metadata';
-import { ABOUT_SEO } from '@/lib/seo/page-data';
 import { SITE_NAME } from '@/lib/seo/config';
-import { ENGLISH_STATIC_PAGE_METADATA } from '@/lib/seo/static-page-metadata-en';
 import { Locale } from '@/types/site';
 
 type AboutPageProps = {
@@ -24,23 +12,6 @@ type AboutPageProps = {
     locale: string;
   }>;
 };
-
-const aboutSeoCopy = {
-  zh: ABOUT_SEO,
-  en: {
-    ...ENGLISH_STATIC_PAGE_METADATA.about,
-    keywords: [
-      'Suneng Industrial Furnace',
-      'Jiangsu furnace manufacturer',
-      'heat-treatment furnace manufacturer',
-      'custom industrial furnace',
-    ],
-  },
-} satisfies Record<Locale, {
-  title: string;
-  description: string;
-  keywords: string[];
-}>;
 
 export const revalidate = 3600;
 
@@ -85,7 +56,7 @@ export async function generateMetadata({ params }: AboutPageProps): Promise<Meta
     };
   }
 
-  const seo = aboutSeoCopy.en;
+  const seo = localizeCoreValue(ABOUT_ZH_SEO, 'en');
 
   return buildMetadata({
     title: seo.title,
@@ -106,44 +77,5 @@ export default async function AboutPage({ params }: AboutPageProps) {
   const { locale } = await params;
   const currentLocale = (locale === 'en' ? 'en' : 'zh') as Locale;
 
-  if (currentLocale === 'zh') {
-    return <AboutZhContent />;
-  }
-
-  const { data, error, sidebarItems, sidebarTitle } = await getAboutPageSource(currentLocale);
-  const pageCopy = getAboutPageCopy('profile', currentLocale);
-  const profile = getProfileSection(data);
-
-  return (
-    <AboutShell
-      locale={locale}
-      title={pageCopy.title}
-      englishTitle={pageCopy.englishTitle}
-      subtitle={pageCopy.subtitle}
-      bannerTitle={pageCopy.title}
-      bannerImage={getAboutBannerImage('profile', data)}
-      sidebarTitle={sidebarTitle}
-      sidebarItems={sidebarItems}
-    >
-      <JsonLd
-        id={`about-breadcrumb-jsonld-${currentLocale}`}
-        data={getBreadcrumbJsonLd([
-          { name: currentLocale === 'en' ? 'Home' : '首页', url: `/${currentLocale}` },
-          { name: currentLocale === 'en' ? 'About' : '关于我们', url: `/${currentLocale}/about` },
-        ])}
-      />
-      {error ? (
-        <div className="hidden mb-6 border border-[rgba(230,0,18,0.16)] bg-white px-5 py-4 text-sm text-neutral-700 shadow-soft">
-          {currentLocale === 'en'
-            ? 'The live about API is currently unavailable. The page is showing available fallback structure.'
-            : '当前关于我们接口暂时不可用，页面已按可用结构进行降级显示。'}
-        </div>
-      ) : null}
-      <AboutProfileSection
-        locale={currentLocale}
-        title={localizeAboutText(currentLocale, profile, 'title', pageCopy.title)}
-        content={localizeAboutText(currentLocale, profile, 'content')}
-      />
-    </AboutShell>
-  );
+  return <AboutZhContent locale={currentLocale} />;
 }

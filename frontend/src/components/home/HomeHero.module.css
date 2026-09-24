@@ -872,7 +872,13 @@
 }
 
 /* English uses the same hero, with room for longer company and metric labels. */
-.localizedHero .title { max-width: 1000px; font-size: clamp(30px, 3.5vw, 58px); line-height: 1.12; }
+.localizedHero .title {
+  max-width: 100%;
+  font-size: clamp(30px, 3.5vw, 58px);
+  line-height: 1.12;
+  white-space: normal;
+  text-wrap: balance;
+}
 .localizedHero .description { max-width: 820px; }
 .localizedHero .statLabel { line-height: 1.35; }
 @media (max-width: 600px) {

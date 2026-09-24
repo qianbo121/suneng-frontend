@@ -1,3 +1,5 @@
+import type { Locale } from '@/types/site';
+import { localizeServiceContent, serviceHref, serviceText } from '@/components/service-pages/service-localization';
 import type { Metadata } from 'next';
 import {
   getBreadcrumbJsonLd,
@@ -13,8 +15,8 @@ import {
   type ServicePageKind,
 } from './service-content';
 
-export function getServiceMetadata(kind: ServicePageKind): Metadata {
-  const page = servicePages[kind];
+export function getServiceMetadata(kind: ServicePageKind, locale: Locale = 'zh'): Metadata {
+  const page = localizeServiceContent(servicePages[kind], locale);
   return {
     ...buildMetadata({
       title: page.metadataTitle,
@@ -22,22 +24,24 @@ export function getServiceMetadata(kind: ServicePageKind): Metadata {
       path: page.path,
       image: serviceHeroAssets[kind].src,
       type: 'website',
-      alternateLocales: { 'zh-CN': page.path, 'x-default': page.path },
+      alternateLocales: { 'zh-CN': servicePages[kind].path, 'en-US': serviceHref(servicePages[kind].path, 'en'), 'x-default': servicePages[kind].path },
+      locale,
     }),
     ...(process.env.NODE_ENV === 'development' ? { robots: { index: false, follow: true } } : {}),
   };
 }
-export function getServiceJsonLd(kind: ServicePageKind) {
-  const page = servicePages[kind];
+export function getServiceJsonLd(kind: ServicePageKind, locale: Locale = 'zh') {
+  const page = localizeServiceContent(servicePages[kind], locale);
   const serviceId = `${absoluteUrl(page.path)}#service`;
   const webPage = getWebPageJsonLd({
     path: page.path,
     name: page.title,
-    description: page.metadataDescription,
+    description: locale === 'en' ? page.description : page.metadataDescription,
+    locale,
   });
   const breadcrumbs = [
-    { name: '首页', url: '/zh' },
-    ...(kind === 'overview' ? [] : [{ name: '改造与服务', url: serviceRoutes.overview }]),
+    { name: locale === 'en' ? 'Home' : '首页', url: `/${locale}` },
+    ...(kind === 'overview' ? [] : [{ name: serviceText('改造与服务', locale), url: serviceHref(serviceRoutes.overview, locale) }]),
     { name: page.breadcrumb, url: page.path },
   ];
   return [

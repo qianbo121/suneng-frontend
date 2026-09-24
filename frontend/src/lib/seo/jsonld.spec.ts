@@ -8,18 +8,18 @@ import {
 } from '@/lib/seo/jsonld';
 
 describe('SEO JSON-LD entities', () => {
-  it('describes all 23 Chinese products and only the 11 available English products', () => {
+  it('describes the same 23 products in both languages', () => {
     const chinese = getProductCollectionJsonLd('/zh/products', 'zh');
     const english = getProductCollectionJsonLd('/en/products', 'en');
     const items = (graph: typeof chinese) => graph.find((node) => node['@type'] === 'ItemList')?.itemListElement;
     expect(items(chinese)).toHaveLength(23);
-    expect(items(english)).toHaveLength(11);
+    expect(items(english)).toHaveLength(23);
     for (const slug of ['shovel-furnace', 'walking-beam-furnace', 'elevator-hearth-furnace', 'gas-nitriding-furnace']) {
       expect(JSON.stringify(chinese)).toContain(`/zh/products/detail/${slug}`);
-      expect(JSON.stringify(english)).not.toContain(`/en/products/detail/${slug}`);
+      expect(JSON.stringify(english)).toContain(`/en/products/detail/${slug}`);
     }
     expect(JSON.stringify(chinese)).toContain('/zh/products/detail/aluminum-solution-aging-line');
-    expect(JSON.stringify(english)).not.toContain('/en/products/detail/aluminum-solution-aging-line');
+    expect(JSON.stringify(english)).toContain('/en/products/detail/aluminum-solution-aging-line');
   });
 
   it('uses the visible product description instead of a stale furnace-type override', () => {

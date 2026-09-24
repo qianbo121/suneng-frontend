@@ -124,10 +124,6 @@ describe('withdrawn content routing', () => {
 describe('Chinese-only pages under /en', () => {
   it.each([
     '/en/inquiry',
-    '/en/products/detail/track-shoe-press-quench-line',
-    '/en/products/detail/cylinder-curing-line',
-    '/en/products/detail/copper-wire-annealing-line/inquiry-checklist',
-    '/en/service/installation-after-sales',
     '/EN/inquiry',
     '/en/inqui%72y',
     '/en/inquiry/',
@@ -140,6 +136,10 @@ describe('Chinese-only pages under /en', () => {
   it.each([
     '/zh/inquiry',
     '/en/products/detail/shovel-furnace',
+    '/en/products/detail/track-shoe-press-quench-line',
+    '/en/products/detail/cylinder-curing-line',
+    '/en/products/detail/copper-wire-annealing-line/inquiry-checklist',
+    '/en/service/installation-after-sales',
     '/en/case/henan-annealing-solution-line',
     '/en/contact',
   ])('leaves %s reachable', async (address) => {

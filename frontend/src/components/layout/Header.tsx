@@ -39,6 +39,7 @@ const MOBILE_NAV_COPY = {
 } satisfies Record<Locale, { open: string; close: string; dialog: string }>;
 
 function buildLocaleHref(locale: string, href: string) {
+  if (/^\/(zh|en)(?:\/|$)/.test(href)) return href;
   if (href.startsWith('/#')) return `/${locale}${href.slice(1)}`;
   return href === '/' ? `/${locale}` : `/${locale}${href}`;
 }
@@ -252,7 +253,7 @@ export function Header({ locale }: HeaderProps) {
         </div>
 
         <div className="site-header__desktop-bar fixed inset-x-0 top-0 z-[9999] hidden h-header-h w-full items-center bg-white shadow-[0_8px_26px_rgba(15,23,42,0.06)] xl:flex">
-          <div className={styles.desktopLayout}>
+          <div className={styles.desktopLayout} data-locale={currentLocale}>
             <div className="shrink-0 self-center">
               <div className="w-auto">
                 <Link
@@ -438,17 +439,17 @@ export function Header({ locale }: HeaderProps) {
             </button>
           </div>
 
-          {currentLocale === 'zh' ? (
+          {(
             <div className="sticky top-[78px] z-10 border-b border-[#e5e9f0] bg-white px-5 py-3 shadow-[0_8px_18px_rgba(15,23,42,0.05)]">
               <a
                 href={`tel:${siteSettings.salesPhone.replace(/\s+/g, '')}`}
                 className="flex min-h-[44px] w-full items-center justify-center gap-2 rounded-[4px] border border-[#cfd8e5] px-3 text-[14px] font-semibold text-brand-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary"
               >
                 <HiPhone aria-hidden="true" className="h-4 w-4" />
-                电话咨询
+                {currentLocale === 'en' ? 'Call us' : '电话咨询'}
               </a>
             </div>
-          ) : null}
+          )}
 
           <div className="px-5 pb-10 pt-4">
             <div className="p_navContent">
@@ -484,7 +485,7 @@ export function Header({ locale }: HeaderProps) {
                             <button
                               type="button"
                               className="flex h-11 w-11 shrink-0 items-center justify-center rounded-[4px] text-text-secondary focus-visible:outline focus-visible:outline-2 focus-visible:outline-brand-primary"
-                              aria-label={`${isExpanded ? '收起' : '展开'}${item.labelText}`}
+                              aria-label={`${currentLocale === 'en' ? (isExpanded ? 'Collapse ' : 'Expand ') : (isExpanded ? '收起' : '展开')}${item.labelText}`}
                               aria-expanded={isExpanded}
                               aria-controls={submenuId}
                               onClick={() =>

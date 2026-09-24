@@ -89,6 +89,7 @@ export function ProductionLineAnimationCard({
   return (
     <article
       ref={root}
+      lang={locale}
       className={`${card.productionLineCard} ${styles.card}`}
       data-production-line-card
       data-line-id={product.id}
@@ -112,7 +113,7 @@ export function ProductionLineAnimationCard({
       }}
     >
       <div className={card.productionLineImage}>
-        <Link href={product.href} tabIndex={-1} aria-hidden="true" onClick={stop}>
+        <Link href={product.href} className={styles.posterLink} tabIndex={-1} aria-hidden="true" onClick={stop}>
           <Image
             src={product.image}
             alt={product.imageAlt}

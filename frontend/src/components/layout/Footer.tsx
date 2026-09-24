@@ -228,12 +228,12 @@ function ContactBlock({ copy }: { copy: (typeof footerCopy)['zh'] | (typeof foot
       </a>
 
       <div
-        className={`${FOOTER_TOKENS.fontClass} flex min-h-[44px] max-w-full min-w-0 items-center gap-[14px] text-left text-[var(--home-font-secondary-size,16px)] font-normal leading-[var(--home-font-secondary-line,24px)] text-[var(--footer-text-color)] xl:whitespace-nowrap`}
+        className={`${FOOTER_TOKENS.fontClass} flex min-h-[44px] max-w-full min-w-0 items-center gap-[14px] text-left text-[var(--home-font-secondary-size,16px)] font-normal leading-[var(--home-font-secondary-line,24px)] text-[var(--footer-text-color)]`}
       >
         <ContactIcon>
           <HiMapPin aria-hidden="true" className="h-[22px] w-[22px]" />
         </ContactIcon>
-        <span className="min-w-0">{copy.address}</span>
+        <span className="min-w-0 whitespace-normal break-words">{copy.address}</span>
       </div>
     </div>
   );

@@ -21,9 +21,9 @@ describe('service overview and submenu', () => {
     expect(isWithdrawnTechnicalPath(serviceRoutes.decision)).toBe(false);
   });
 
-  it('does not link English visitors to a Chinese-only service guide', () => {
-    expect(localizeOrHideHref(serviceRoutes.guides, 'en')).toBeNull();
-    expect(getLocalizedNavigation('en').flatMap((item) => item.children ?? [])
-      .some((item) => item.href === '/service/selection-retrofit-guide')).toBe(false);
+  it('links all four completed English service pages in the same order', () => {
+    const children = getLocalizedNavigation('en').find((item) => item.key === 'engineering')?.children;
+    expect(children).toHaveLength(4);
+    expect(children?.map((item) => `/en${item.href}`)).toEqual(serviceEntries.map((item) => localizeOrHideHref(item.href, 'en')));
   });
 });

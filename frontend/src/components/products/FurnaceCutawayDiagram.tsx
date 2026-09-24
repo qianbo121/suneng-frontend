@@ -23,6 +23,7 @@ export type FurnaceCutawayCallout = {
 };
 
 type FurnaceCutawayDiagramProps = {
+  locale?: 'zh' | 'en';
   furnaceName: string;
   image: {
     src: string;
@@ -46,6 +47,7 @@ const positionClasses: Record<FurnaceCutawayLabelPosition, string> = {
 
 export function FurnaceCutawayDiagram({
   furnaceName,
+  locale = 'zh',
   image,
   callouts,
   pitCompatibility = false,
@@ -95,7 +97,7 @@ export function FurnaceCutawayDiagram({
             ))}
           </svg>
         </div>
-        <ol className={styles.cutawayMarkerLegend} aria-label={`${furnaceName}结构标注`}>
+        <ol className={styles.cutawayMarkerLegend} aria-label={locale === 'en' ? `${furnaceName} structure labels` : `${furnaceName}结构标注`}>
           {callouts.map(({ target, label }, index) => (
             <li key={target} data-furnace-cutaway-target={target}>
               <span className={styles.cutawayLabelNumber} aria-hidden="true">
@@ -149,7 +151,7 @@ export function FurnaceCutawayDiagram({
           ))}
         </svg>
 
-        <ol className={styles.cutawayLabels} aria-label={`${furnaceName}结构标注`}>
+        <ol className={styles.cutawayLabels} aria-label={locale === 'en' ? `${furnaceName} structure labels` : `${furnaceName}结构标注`}>
           {callouts.map(({ label, position, target }, index) => (
             <li
               key={label}

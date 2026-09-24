@@ -1,0 +1,50 @@
+Continuous Copper-wire Annealing Line | Inquiry Preparation Checklist
+
+Organize existing information so engineers can assess the process and equipment direction.
+Provide known facts; leave uncertain items blank. Entering parameters does not establish compatibility. A tick only means the information is prepared, not that technical requirements are met.
+
+01 MATERIAL AND TARGETS
+Identify the wire and the required results.
+
+[ ] 1. Material and incoming condition — information prepared
+Copper grade, oxygen condition and incoming cold-work state; identify bare, plated or enamelled wire.
+Plated/enamelled wire requires separate assessment; do not assume the bare-copper annealing process applies.
+
+[ ] 2. Diameter and wire count — information prepared
+Minimum, maximum and typical diameters with units; single or parallel wire count. List specifications separately and match each to the speed/output in item 4.
+
+[ ] 3. Properties and surface — information prepared
+Tensile strength, elongation, resistivity, softening and surface requirements. Provide available target values, units, specifications and editions; describe the application if requirements are not yet established.
+
+02 PRODUCTION AND EQUIPMENT
+Describe specifications, production timing and interfaces together.
+
+[ ] 4. Speed, output and production cycle — information prepared
+For each specification give diameter, wire count, target steady speed (m/min) and total output (kg/h). List different diameters/speeds separately and identify per-wire versus whole-unit figures.
+Describe shifts, normal running, start/stop, specification changes, reel changes and wire-break downtime. Provide either existing speed or output if only one is known.
+
+[ ] 5. Project scope and heating method — information prepared
+State whether this is a new complete line, connection to existing drawing/take-up equipment or retrofit of an annealing section. List retained equipment and requested supply scope.
+Identify indirect tubular-furnace heating, direct electrical annealing, or 'undecided — engineering assistance requested'.
+
+[ ] 6. Reel handling — information prepared
+Reel dimensions, full-reel mass, payoff/haul-off/take-up arrangements and allowable tension. Provide photos, models or layouts of existing equipment.
+
+03 SITE AND VALIDATION
+Report existing conditions accurately. Engineers verify required capacity and safety provisions.
+
+[ ] 7. Atmosphere and cooling — information prepared
+Surface targets, existing gas source and known supply conditions, cooling method, exit temperature and residual-liquid limits. Leave unknowns blank; you do not need to choose a protective-gas recipe yourself.
+Engineering note: oxygen-bearing copper risks damage in high-temperature hydrogen-containing atmospheres. Hydrogen availability alone does not justify its use; assess material and process compatibility.
+
+[ ] 8. Site and interfaces — information prepared
+Space, existing power, cooling water, gas and exhaust, reel handling and upstream/downstream interfaces. Include building/equipment layouts if available.
+Customers provide existing conditions; engineers confirm required supply capacity, safety measures and interface responsibilities.
+
+[ ] 9. Wire samples and inspection information — information prepared
+Representative grades and minimum/maximum/typical diameter samples; existing reports, sampling methods and traceability requirements. Confirm trial and acceptance conditions separately during project discussions.
+
+USE BOUNDARY
+This checklist collects preliminary requirements; it is not equipment selection, quotation or acceptance approval. Both parties must confirm heating, process schedule, atmosphere and safety provisions from the material, targets and site conditions.
+
+You can start discussions with incomplete information. Use the inquiry entry on the copper-wire annealing product page to send what is available.

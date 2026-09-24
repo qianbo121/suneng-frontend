@@ -50,7 +50,7 @@ describe('中文关于苏能页', () => {
   it('保持 8 个可见 FAQ 与结构化数据同源', () => {
     expect(ABOUT_FAQS).toHaveLength(8);
     expect(pageSource).toContain('mainEntity: ABOUT_FAQS.map');
-    expect(pageSource).toContain('<AboutFaq items={ABOUT_FAQS} />');
+    expect(pageSource).toContain('<AboutFaq items={localizeCoreValue(ABOUT_FAQS, locale)} />');
   });
 
   it("保留业务边界与产品入口并撤下旧方案入口", () => {
@@ -69,8 +69,8 @@ describe('中文关于苏能页', () => {
 
   it('区分三处转化按钮并让移动端锚点跟随当前模块', () => {
     expect(wechatButtonSource).toContain("label = '加企微，发工况初判'");
-    expect(pageSource).toContain('label="联系业务顾问"');
-    expect(pageSource).toContain('label="提交工况资料"');
+    expect(pageSource).toContain('label={t("联系业务顾问")}');
+    expect(pageSource).toContain('label={t("提交工况资料")}');
     expect(interactiveSource).toContain("window.matchMedia('(max-width: 767px)')");
     expect(interactiveSource).toContain('scroller.scrollTo');
   });

@@ -216,6 +216,10 @@
   flex-shrink: 0;
   font-size: 14px;
 }
+.page[lang='en'] .breadcrumb {
+  min-width: 0;
+  max-width: 100%;
+}
 .breadcrumb ol {
   display: flex;
   flex-wrap: wrap;

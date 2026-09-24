@@ -1,5 +1,6 @@
 import { apiPost } from '@/lib/api/client';
 import { classifyTrafficSource } from '@/lib/analytics/traffic-source';
+import { isLocalPreviewHostname } from '@/lib/analytics/local-preview';
 
 export type LeadEventType =
   | 'page_view'
@@ -335,6 +336,7 @@ function currentPayload(eventType: LeadEventType, extra: LeadEventExtra = {}) {
 }
 
 function postLeadEvent(eventType: LeadEventType, extra?: LeadEventExtra) {
+  if (!canTrackActivity()) return Promise.resolve(false);
   return apiPost<unknown, LeadEventPayload>('/v1/lead-events', {
     body: currentPayload(eventType, extra),
     cache: 'no-store',
@@ -344,8 +346,12 @@ function postLeadEvent(eventType: LeadEventType, extra?: LeadEventExtra) {
   );
 }
 
+function canTrackActivity() {
+  return typeof window !== 'undefined' && !isLocalPreviewHostname(window.location.hostname);
+}
+
 export function markEngagedSession(extra?: LeadEventExtra) {
-  if (typeof window === 'undefined') return;
+  if (!canTrackActivity()) return;
   try {
     if (window.sessionStorage.getItem(ENGAGED_SESSION_KEY) === '1' || engagedSessionInFlight)
       return;
@@ -398,6 +404,7 @@ function writeDwellCounter(key: string, value: number) {
 
 /** 每满一秒调一次。导出仅为可测，页面代码请用 startDwellTracking。 */
 export function tickDwell() {
+  if (!canTrackActivity()) return;
   // 只累计「页面可见且窗口有焦点」的秒数：无头浏览器默认拿不到焦点，
   // 停留时长因此成为少数几个伪装成本很高的信号。
   if (document.visibilityState !== 'visible' || !document.hasFocus()) return;
@@ -435,7 +442,7 @@ function flushDwellMilestones() {
 
 /** 开始计时，返回停表函数。跨页面接着上次的秒数走。 */
 export function startDwellTracking() {
-  if (typeof window === 'undefined') return () => undefined;
+  if (!canTrackActivity()) return () => undefined;
   const timer = window.setInterval(tickDwell, 1000);
   return () => window.clearInterval(timer);
 }
@@ -443,7 +450,7 @@ export function startDwellTracking() {
 const EFFECTIVE_INTERACTION_EVENTS = ['scroll', 'click'] as const;
 
 export function installVisitorNatureTracking() {
-  if (typeof window === 'undefined') return;
+  if (!canTrackActivity()) return;
   try {
     // 必须先立会话再读标记：postLeadEvent 内部会触发会话初始化/轮换。
     getSessionId(window.sessionStorage);
@@ -513,7 +520,7 @@ export function installVisitorNatureTracking() {
 }
 
 export function trackPageView() {
-  if (typeof window === 'undefined') return;
+  if (!canTrackActivity()) return;
   const safePath = sanitizeLeadPagePath(`${window.location.pathname}${window.location.search}`);
   void postLeadEvent('page_view');
   try {
@@ -530,7 +537,7 @@ export function trackPageView() {
 }
 
 export function trackLeadEvent(eventType: LeadEventType, extra?: LeadEventExtra) {
-  if (typeof window === 'undefined') return;
+  if (!canTrackActivity()) return;
   void postLeadEvent(eventType, extra);
   if (HIGH_INTENT_EVENTS.has(eventType)) markEngagedSession(extra);
 }

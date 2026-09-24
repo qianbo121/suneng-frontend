@@ -4,6 +4,7 @@ import { getMessages, setRequestLocale } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 
 import { JsonLd } from '@/components/JsonLd';
+import { LoadingFeedback } from '@/components/common/LoadingFeedback';
 import { WebsiteReadingTracker } from '@/components/analytics/WebsiteReadingTracker';
 import { Footer } from '@/components/layout/Footer';
 import { Header } from '@/components/layout/Header';
@@ -43,7 +44,11 @@ export default async function LocaleLayout({ children, params }: LocaleLayoutPro
           <div className="min-h-screen bg-white text-neutral-900">
             <Header locale={locale} />
             <div id="site-page-content">
-              <main className="min-h-[calc(100vh-520px)] bg-white"><Suspense fallback={null}>{children}</Suspense></main>
+              <main className="min-h-[calc(100vh-520px)] bg-white">
+                <Suspense fallback={<LoadingFeedback locale={currentLocale} />}>
+                  {children}
+                </Suspense>
+              </main>
               <Footer locale={locale} />
             </div>
           </div>

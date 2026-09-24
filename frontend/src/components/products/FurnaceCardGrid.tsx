@@ -5,13 +5,13 @@ import { homeSingleFurnaces, type HomeSingleFurnace } from '@/lib/home-product-t
 
 type FurnaceCard = Pick<HomeSingleFurnace, 'id' | 'href'>;
 
-export function FurnaceCardGrid({ cards }: { cards: readonly FurnaceCard[] }) {
+export function FurnaceCardGrid({ cards, locale = 'zh' }: { cards: readonly FurnaceCard[]; locale?: 'zh' | 'en' }) {
   return (
     <div className={`${homepageStyles.page} ${styles.furnaceGrid}`}>
       {cards.map((product) => {
         const furnace = homeSingleFurnaces.find((item) => item.id === product.id);
         if (!furnace) throw new Error(`Missing shared furnace card for ${product.id}`);
-        return <HomeFurnaceCard key={product.id} item={{ ...furnace, href: product.href }} />;
+        return <HomeFurnaceCard key={product.id} locale={locale} item={{ ...furnace, href: product.href }} />;
       })}
     </div>
   );

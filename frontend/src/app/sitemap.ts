@@ -12,6 +12,7 @@ import { getNewsContentModifiedTime } from '@/lib/news-dates';
 import { filterCanonicalNewsItems, hasPublishableEnglishNews } from '@/lib/news-routing';
 import { STATIC_PRODUCTS } from '@/constants/static-products';
 import { heatTreatmentLines } from '@/lib/heat-treatment-lines';
+import { getEnglishProductionLine } from '@/lib/english-production-lines';
 import { additionalFurnaces } from '@/lib/additional-furnaces';
 import {
   FURNACE_ENERGY_CONVERSION_HEAT_RECOVERY_SEO,
@@ -36,6 +37,9 @@ const englishStaticPaths = new Set([
   '/solutions',
   '/products',
   '/service',
+  '/service/installation-after-sales',
+  '/service/furnace-relocation-restart',
+  '/service/selection-retrofit-guide',
   '/news',
   '/about',
   '/contact',
@@ -147,15 +151,7 @@ function collectStaticRoutes(): MetadataRoute.Sitemap {
             : {}),
           changeFrequency: item.changeFrequency,
           priority: item.priority,
-          // The redesigned Chinese overview and legacy English service are not translations.
-          alternates:
-            item.path === '/service'
-              ? {
-                  languages: {
-                    [languageCode(locale)]: absoluteUrl(localizedPath(locale, item.path)),
-                  },
-                }
-              : routeAlternates(item.path, locales),
+          alternates: routeAlternates(item.path, locales),
         }),
       );
     }
@@ -236,7 +232,11 @@ function collectStaticRoutes(): MetadataRoute.Sitemap {
     },
   ];
 
-  const englishGuidePaths = new Set(englishSolutions.map((item) => `/solutions/${item.slug}`));
+  const englishGuidePaths = new Set([
+    '/products/detail/copper-wire-annealing-line/inquiry-checklist',
+    '/service/furnace-renovation-overhaul',
+    ...englishSolutions.map((item) => `/solutions/${item.slug}`),
+  ]);
   for (const item of guideAndZhOnlyStaticPaths) {
     const locales = englishGuidePaths.has(item.path) ? sitemapLocales : zhOnlyLocales;
     for (const locale of locales) {
@@ -274,14 +274,15 @@ function collectProductRoutes(): MetadataRoute.Sitemap {
   const existingSlugs = new Set(STATIC_PRODUCTS.map((product) => product.slug));
   const newRoutes = heatTreatmentLines
     .filter((line) => !existingSlugs.has(line.slug))
-    .map((line) =>
-      route(localizedPath('zh', `/products/detail/${line.slug}`), {
+    .flatMap((line) => {
+      const locales = getEnglishProductionLine(line.slug) ? sitemapLocales : zhOnlyLocales;
+      return locales.map((locale) => route(localizedPath(locale, `/products/detail/${line.slug}`), {
         // Omit the date until this production line has a verified content revision date.
         changeFrequency: 'monthly',
         priority: 0.8,
-        alternates: routeAlternates(`/products/detail/${line.slug}`, zhOnlyLocales),
-      }),
-    );
+        alternates: routeAlternates(`/products/detail/${line.slug}`, locales),
+      }));
+    });
   const additionalRoutes = additionalFurnaces.flatMap((furnace) =>
     sitemapLocales.map((locale) =>
       route(localizedPath(locale, `/products/detail/${furnace.id}`), {

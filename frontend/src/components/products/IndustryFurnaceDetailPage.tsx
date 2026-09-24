@@ -1,3 +1,5 @@
+import { corePageText, localizeCoreValue } from '@/lib/core-page-localization';
+import type { Locale } from '@/types/site';
 import { isWithdrawnTechnicalPath } from '@/lib/publication-scope';
 import type { ReactNode } from 'react';
 import Image from 'next/image';
@@ -47,44 +49,45 @@ function Panel({ children, className = '' }: { children: ReactNode; className?: 
   return <div className={`${styles.panel} ${className}`}>{children}</div>;
 }
 
-export function IndustryFurnaceDetailPage({ slug }: { slug: IndustryFurnaceSlug }) {
-  const config = industryFurnacePageConfigs[slug];
+export function IndustryFurnaceDetailPage({ slug, locale = 'zh' }: { slug: IndustryFurnaceSlug; locale?: Locale }) {
+  const t = (text: string) => corePageText(text, locale);
+  const config = localizeCoreValue(industryFurnacePageConfigs[slug], locale);
   const bearingWireCase = slug === 'trolley-furnace'
     ? getCaseArticle('bearing-wire-trolley-annealing-proposal')
     : undefined;
   const productEvidenceLinks: Array<readonly [string, string]> = slug === 'mesh-belt-furnace'
     ? [
-        ['网带炉产量怎样核算', '/zh/news/shuju-news-23'],
-        ['网带炉整线报价的九项边界', '/zh/news/shuju-news-22'],
-        ['调质网带整线产量：历史方案参考', '/zh/case/belt-quench-wash-temper-line-throughput-balance-proposal'],
-        ['网带退火带速与排料：历史方案参考', '/zh/case/roller-belt-speed-loading-throughput-proposal'],
+        [t("网带炉产量怎样核算"), t("/zh/news/shuju-news-23")],
+        [t("网带炉整线报价的九项边界"), t("/zh/news/shuju-news-22")],
+        [t("调质网带整线产量：历史方案参考"), t("/zh/case/belt-quench-wash-temper-line-throughput-balance-proposal")],
+        [t("网带退火带速与排料：历史方案参考"), t("/zh/case/roller-belt-speed-loading-throughput-proposal")],
       ]
     : [bearingWireCase
       ? [bearingWireCase.title, `/zh/case/${bearingWireCase.slug}`]
-      : ['查看本设备相关方案与项目资料', '#related-case-evidence']];
+      : [t("查看本设备相关方案与项目资料"), '#related-case-evidence']];
   const evidenceLinks: Array<readonly [string, string]> = [
     ...productEvidenceLinks,
-    ['企业资质与专利证书原件', '/zh/strength/honors'],
-    ...relatedArticles,
+    [t("企业资质与专利证书原件"), t("/zh/strength/honors")],
+    ...localizeCoreValue(relatedArticles, locale),
   ];
   const sourceModule = `${slug.replaceAll('-', '_')}_detail_form`;
 
   return (
-    <main className={styles.page} data-industry-furnace-page={slug} data-furnace-detail-page>
+    <main lang={locale} className={styles.page} data-industry-furnace-page={slug} data-furnace-detail-page>
       <JsonLd
         id={`product-jsonld-${slug}-dedicated`}
         data={getProductDetailJsonLd(
           {
             slug,
-            path: `/zh/products/detail/${slug}`,
+            path: `/${locale}/products/detail/${slug}`,
             name: config.title,
             alternateName: [config.name, config.englishName],
             description: config.description,
             image: config.gallery.map((item) => item.src),
-            keywords: [config.name, `${config.name}定制`, `${config.name}选型`, '工业热处理炉'],
+            keywords: [config.name, locale === 'en' ? `Custom ${config.name}` : `${config.name}定制`, locale === 'en' ? `${config.name} selection` : `${config.name}选型`, t("工业热处理炉")],
             additionalProperties: config.productProperties,
           },
-          'zh',
+          locale,
         )}
       />
       <JsonLd id={`product-faq-jsonld-${slug}-dedicated`} data={getFaqJsonLd(config.faqs)} />
@@ -92,17 +95,17 @@ export function IndustryFurnaceDetailPage({ slug }: { slug: IndustryFurnaceSlug 
       <div className={styles.breadcrumbBar}>
         <div className={styles.container}>
           <Breadcrumb
-            locale="zh"
+            locale={locale}
             tone="dark"
             className={styles.breadcrumb}
-            items={[{ label: '产品中心', href: '/zh/products' }, { label: config.name }]}
+            items={[{ label: t("产品中心"), href: t("/zh/products") }, { label: config.name }]}
           />
         </div>
       </div>
 
       <div className={styles.container}>
         <section id="overview" className={styles.heroSection}>
-          <PitFurnaceGallery images={config.gallery} galleryLabel={`${config.name}图片选择`} />
+          <PitFurnaceGallery imageButtonPrefix={locale === 'en' ? 'View image' : undefined} images={config.gallery} galleryLabel={locale === 'en' ? `${config.name} gallery` : `${config.name}图片选择`} />
 
           <div className={styles.heroContent}>
             <p className={styles.heroEyebrow}>{config.englishName}</p>
@@ -110,8 +113,8 @@ export function IndustryFurnaceDetailPage({ slug }: { slug: IndustryFurnaceSlug 
             {['box-furnace', 'rotary-hearth-furnace'].includes(slug) && (
               <div className={styles.mobileHeroAction}>
                 <ProductQuoteScrollButton
-                  locale="zh"
-                  label="提交工况，获取选型建议"
+                  locale={locale}
+                  label={t("提交工况，获取选型建议")}
                   className={styles.primaryButton}
                   updateHash
                   variant="hero"
@@ -121,7 +124,7 @@ export function IndustryFurnaceDetailPage({ slug }: { slug: IndustryFurnaceSlug 
             )}
             <p className={styles.heroDescription}>{config.description}</p>
 
-            <div className={styles.tagList} aria-label={`${config.name}方案标签`}>
+            <div className={styles.tagList} aria-label={locale === 'en' ? `${config.name} configuration tags` : `${config.name}方案标签`}>
               {config.tags.map((tag) => (
                 <span key={tag}>{tag}</span>
               ))}
@@ -138,31 +141,30 @@ export function IndustryFurnaceDetailPage({ slug }: { slug: IndustryFurnaceSlug 
 
             <div className={styles.heroActions}>
               <ProductQuoteScrollButton
-                locale="zh"
-                label="提交工况，获取选型建议"
+                locale={locale}
+                label={t("提交工况，获取选型建议")}
                 className={styles.primaryButton}
                 updateHash
                 variant="hero"
                 anchorId="inquiry"
               />
               <a href="#selection" className={styles.secondaryButton}>
-                查看典型配置
-              </a>
+                {t("查看典型配置")}</a>
             </div>
             <p className={styles.heroNotice}>{config.heroNotice}</p>
           </div>
         </section>
       </div>
 
-      <FurnaceSectionNav items={sectionNav} label={`${config.name}详情页章节导航`} />
+      <FurnaceSectionNav items={localizeCoreValue(sectionNav, locale)} label={locale === 'en' ? `${config.name} sections` : `${config.name}详情页章节导航`} />
 
       <div className={styles.contentArea}>
         <div className={styles.container}>
-          {productBuyerGuide[slug] && <BuyerSelectionGuide guideKey={productBuyerGuide[slug]} />}
+          {productBuyerGuide[slug] && <BuyerSelectionGuide locale={locale} guideKey={productBuyerGuide[slug]} />}
           <section id="workpieces" className={styles.section}>
             <SectionHeader
-              title="适用工件与需排除的工况"
-              description={`先看工件形态、装料或输送方式，再判断是否适合进入${config.name}方案评估。`}
+              title={t("适用工件与需排除的工况")}
+              description={locale === 'en' ? `Assess workpiece shape and loading or conveying first to determine suitability for a ${config.name.toLowerCase()} design.` : `先看工件形态、装料或输送方式，再判断是否适合进入${config.name}方案评估。`}
             />
             <div className={styles.workpieceCards}>
               {config.workpieces.map((item) => (
@@ -182,7 +184,7 @@ export function IndustryFurnaceDetailPage({ slug }: { slug: IndustryFurnaceSlug 
 
             <Panel className={styles.conditionPanel}>
               <div>
-                <h3>通常可进入方案评估的条件</h3>
+                <h3>{t("通常可进入方案评估的条件")}</h3>
                 <ul>
                   {config.suitableConditions.map((item) => (
                     <li key={item}>{item}</li>
@@ -190,7 +192,7 @@ export function IndustryFurnaceDetailPage({ slug }: { slug: IndustryFurnaceSlug 
                 </ul>
               </div>
               <div>
-                <h3>报价前必须补齐的边界条件</h3>
+                <h3>{t("报价前必须补齐的边界条件")}</h3>
                 <ul>
                   {config.requiredConditions.map((item) => (
                     <li key={item}>{item}</li>
@@ -203,8 +205,8 @@ export function IndustryFurnaceDetailPage({ slug }: { slug: IndustryFurnaceSlug 
 
           <section id="selection" className={styles.section}>
             <SectionHeader
-              title={`五个维度确定${config.name}方案`}
-              description="以下选项是方案条件，不代表系统已经替你选定最终配置。"
+              title={locale === 'en' ? `Five dimensions of ${config.name.toLowerCase()} configuration` : `五个维度确定${config.name}方案`}
+              description={t("以下选项是方案条件，不代表系统已经替你选定最终配置。")}
             />
 
             <Panel className={styles.dimensionPanel}>
@@ -242,11 +244,11 @@ export function IndustryFurnaceDetailPage({ slug }: { slug: IndustryFurnaceSlug 
                     <span>{solution.text}</span>
                     {!solution.image && (
                       <dl className={styles.solutionCardChecks}>
-                        <dt>适用条件</dt>
+                        <dt>{t("适用条件")}</dt>
                         <dd>{solution.suitable}</dd>
-                        <dt>核对重点</dt>
+                        <dt>{t("核对重点")}</dt>
                         <dd>{solution.verify}</dd>
-                        <dt>验收边界</dt>
+                        <dt>{t("验收边界")}</dt>
                         <dd>{solution.noPromise}</dd>
                       </dl>
                     )}
@@ -257,14 +259,14 @@ export function IndustryFurnaceDetailPage({ slug }: { slug: IndustryFurnaceSlug 
 
             <div className={styles.tableScroll}>
               <table className={styles.comparisonTable}>
-                <caption>方案比较与报价前核校</caption>
+                <caption>{t("方案比较与报价前核校")}</caption>
                 <thead>
                   <tr>
-                    <th scope="col">对应方案</th>
-                    <th scope="col">更适合的工况</th>
-                    <th scope="col">关键优势</th>
-                    <th scope="col">必须核校</th>
-                    <th scope="col">不应直接承诺</th>
+                    <th scope="col">{t("对应方案")}</th>
+                    <th scope="col">{t("更适合的工况")}</th>
+                    <th scope="col">{t("关键优势")}</th>
+                    <th scope="col">{t("必须核校")}</th>
+                    <th scope="col">{t("不应直接承诺")}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -284,8 +286,8 @@ export function IndustryFurnaceDetailPage({ slug }: { slug: IndustryFurnaceSlug 
 
           <section id="boundaries" className={styles.section}>
             <SectionHeader
-              title="能力边界：有效区、装载与现场条件"
-              description="把工作空间、装料或输送变量和设备结构变量分开，才能形成可核验的技术方案。"
+              title={t("能力边界：有效区、装载与现场条件")}
+              description={t("把工作空间、装料或输送变量和设备结构变量分开，才能形成可核验的技术方案。")}
             />
 
             <div className={styles.boundaryEquations}>
@@ -312,7 +314,7 @@ export function IndustryFurnaceDetailPage({ slug }: { slug: IndustryFurnaceSlug 
                 <figcaption>{config.boundaryImage.caption}</figcaption>
               </figure>
               <div>
-                <h3>边界变量必须分开表达</h3>
+                <h3>{t("边界变量必须分开表达")}</h3>
                 <dl>
                   {config.boundaryFacts.map(([term, definition]) => (
                     <div key={term}>
@@ -326,11 +328,11 @@ export function IndustryFurnaceDetailPage({ slug }: { slug: IndustryFurnaceSlug 
 
             <div className={styles.tableScroll}>
               <table className={styles.dataTable}>
-                <caption>形成有效方案前必须拿到的数据</caption>
+                <caption>{t("形成有效方案前必须拿到的数据")}</caption>
                 <thead>
                   <tr>
-                    <th scope="col">数据分组</th>
-                    <th scope="col">需要确认的内容</th>
+                    <th scope="col">{t("数据分组")}</th>
+                    <th scope="col">{t("需要确认的内容")}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -358,11 +360,11 @@ export function IndustryFurnaceDetailPage({ slug }: { slug: IndustryFurnaceSlug 
 
           <section id="structure" className={styles.section}>
             <SectionHeader
-              title={`${config.name}关键结构与报价前确认项`}
-              description="结构示例用于建立设备语言，最终布置仍以工件、工艺、载荷、节拍和现场条件为准。"
+              title={locale === 'en' ? `${config.name}: structures and pre-quotation checks` : `${config.name}关键结构与报价前确认项`}
+              description={t("结构示例用于建立设备语言，最终布置仍以工件、工艺、载荷、节拍和现场条件为准。")}
             />
             <div className={styles.structureFeature}>
-              <FurnaceCutawayDiagram
+              <FurnaceCutawayDiagram locale={locale}
                 furnaceName={config.name}
                 image={config.structureImage}
                 callouts={config.structureCallouts}
@@ -370,7 +372,7 @@ export function IndustryFurnaceDetailPage({ slug }: { slug: IndustryFurnaceSlug 
               />
 
               <Panel className={styles.parameterPanel}>
-                <h3>报价前先确认的 5 项结构参数</h3>
+                <h3>{t("报价前先确认的 5 项结构参数")}</h3>
                 <ol>
                   {config.structureParameters.map(([title, text], index) => (
                     <li key={title}>
@@ -400,24 +402,24 @@ export function IndustryFurnaceDetailPage({ slug }: { slug: IndustryFurnaceSlug 
 
           <section id="faq" className={styles.section}>
             <SectionHeader
-              title="采购与技术最常问的五个问题"
-              description="回答只说明选型边界，不代替最终技术方案和合同附件。"
+              title={t("采购与技术最常问的五个问题")}
+              description={t("回答只说明选型边界，不代替最终技术方案和合同附件。")}
             />
             <PitFurnaceFaq items={config.faqs} idPrefix={slug} />
           </section>
 
           <section id="related" className={`${styles.section} ${styles.relatedSection}`}>
             <SectionHeader
-              title="相关设备与选型资料"
-              description="先比较装料或输送方向，再带着完整工况进入技术沟通。"
+              title={t("相关设备与选型资料")}
+              description={t("先比较装料或输送方向，再带着完整工况进入技术沟通。")}
             />
             <div className={styles.relatedLayout}>
               <div className={styles.relatedEquipment}>
-                <h3>相关设备</h3>
+                <h3>{t("相关设备")}</h3>
                 <div>
                   {config.related.map((item) => (
                     <article key={item.title}>
-                      <Link href={item.href} aria-label={`查看${item.title}详情`}>
+                      <Link href={item.href} aria-label={locale === 'en' ? `View ${item.title}` : `查看${item.title}详情`}>
                         <div className={styles.relatedImage}>
                           <Image
                             src={item.image}
@@ -434,7 +436,7 @@ export function IndustryFurnaceDetailPage({ slug }: { slug: IndustryFurnaceSlug 
                 </div>
               </div>
               <div className={styles.relatedArticles}>
-                <h3>选型资料</h3>
+                <h3>{t("选型资料")}</h3>
                 <div>
                   {evidenceLinks.filter(([, href]) => href !== '#related-case-evidence' && !isWithdrawnTechnicalPath(href)).map(([title, href], index) => (
                     <Link key={href} href={href}>
@@ -448,11 +450,11 @@ export function IndustryFurnaceDetailPage({ slug }: { slug: IndustryFurnaceSlug 
             </div>
           </section>
 
-          <HomepageLeadForm
+          <HomepageLeadForm locale={locale}
             sectionId="inquiry"
-            pageType={`${config.name}详情页`}
+            pageType={locale === 'en' ? `${config.name} detail page` : `${config.name}详情页`}
             productTag={config.name}
-            successProductTag={`${config.name}工况`}
+            successProductTag={locale === 'en' ? `${config.name} operating conditions` : `${config.name}工况`}
             sourceModule={sourceModule}
           />
         </div>

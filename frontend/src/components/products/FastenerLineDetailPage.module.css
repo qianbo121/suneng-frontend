@@ -563,6 +563,9 @@
     justify-content: start;
     gap: 20px;
   }
+  .page[lang='en'][data-heat-treatment-line='track-shoe-press-quench-line'] .timeline {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
   .page[data-heat-treatment-line='track-shoe-press-quench-line'] .timeline li {
     justify-content: flex-start;
   }

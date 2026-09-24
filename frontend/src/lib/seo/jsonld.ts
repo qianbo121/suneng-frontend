@@ -1,4 +1,5 @@
-import { STATIC_PRODUCTS } from '@/constants/static-products';
+import { translateLineValue } from '@/lib/production-line-content-en';
+import { homeSingleFurnaces } from '@/lib/home-product-types';
 import { continuousFurnaceCards, periodicFurnaceCards, productCenterProductionLines } from '@/lib/products-landing-data';
 import {
   ALTERNATE_NAMES,
@@ -58,21 +59,6 @@ export type BaiduCambrianInput = {
   pubDate?: string;
 };
 
-const PRODUCT_SCHEMA_ORDER = [
-  'roller-mesh-belt-line',
-  'copper-wire-annealing-line',
-  'annealing-solution-line',
-  'trolley-furnace',
-  'box-furnace',
-  'pit-furnace',
-  'bell-furnace',
-  'mesh-belt-furnace',
-  'roller-hearth-furnace',
-  'pusher-furnace',
-  'rotary-hearth-furnace',
-];
-
-const productBySlug = new Map(STATIC_PRODUCTS.map((product) => [product.slug, product]));
 const LOCAL_BUSINESS_URL = 'https://www.jssngyl.cn/';
 const LOCAL_BUSINESS_ID = `${LOCAL_BUSINESS_URL}#organization`;
 const TECHNICAL_REVIEWER_IDS: Record<TechnicalReviewerName, string> = {
@@ -345,16 +331,18 @@ export function getBreadcrumbJsonLd(items: Array<{ name: string; url: string }>)
 export function getProductCollectionJsonLd(path = '/products', locale: Locale = 'zh') {
   const isEnglish = isEnglishLocale(locale);
   const pageUrl = absoluteUrl(path);
-  const products = isEnglish
-    ? PRODUCT_SCHEMA_ORDER.flatMap((slug) => {
-        const product = productBySlug.get(slug);
-        return product ? [{ slug, name: product.name.en }] : [];
-      })
-    : [
-        ...productCenterProductionLines.map((product) => ({ slug: product.id, name: product.name })),
-        ...periodicFurnaceCards.map((product) => ({ slug: product.id, name: product.name })),
-        ...continuousFurnaceCards.map((product) => ({ slug: product.id, name: product.name })),
-      ];
+  const products = [
+    ...productCenterProductionLines.map((product) => ({
+      slug: product.id,
+      name: isEnglish ? translateLineValue(product.name) : product.name,
+    })),
+    ...[...periodicFurnaceCards, ...continuousFurnaceCards].map((product) => ({
+      slug: product.id,
+      name: isEnglish
+        ? homeSingleFurnaces.find((furnace) => furnace.id === product.id)!.nameEn
+        : product.name,
+    })),
+  ];
   const itemListId = `${pageUrl}#itemlist`;
 
   return cleanObject([

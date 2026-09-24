@@ -1,4 +1,5 @@
 import { isWithdrawnTechnicalPath } from '@/lib/publication-scope';
+import { LoadingFeedback } from '@/components/common/LoadingFeedback';
 import type { Locale } from '@/types/site';
 import { newsUiText } from '@/lib/news-ui';
 import Link from 'next/link';
@@ -210,8 +211,8 @@ export function NewsDecisionCenter({
                 </p>
               )}
               {loading ? (
-                <div role="status" aria-live="polite">
-                  <p className="sr-only">{t('正在加载技术资料…')}</p>
+                <div>
+                  <LoadingFeedback locale={locale} resource />
                   <div aria-hidden="true">
                     {[0, 1, 2].map((index) => (
                       <div className={styles.loadingCard} key={index}>
