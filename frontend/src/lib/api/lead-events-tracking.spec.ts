@@ -2,7 +2,9 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { apiPost } from '@/lib/api/client';
 import {
+  installVisitorNatureTracking,
   markEngagedSession,
+  startDwellTracking,
   tickDwell,
   trackLeadEvent,
   trackPageView,
@@ -42,6 +44,21 @@ describe('website reading events', () => {
     });
     vi.stubGlobal('document', { title: '台车炉', referrer: '' });
   });
+
+  it.each(['localhost', '127.0.0.1', '[::1]', 'preview.localhost'])(
+    'does not record local preview activity on %s',
+    (hostname) => {
+      window.location.hostname = hostname;
+      trackPageView();
+      trackLeadEvent('phone_click');
+      markEngagedSession();
+      tickDwell();
+      installVisitorNatureTracking();
+      startDwellTracking()();
+      expect(apiPost).not.toHaveBeenCalled();
+      expect(window.sessionStorage.getItem('suneng_session_id')).toBeNull();
+    },
+  );
 
   it('records page views and marks a two-page session as actually read once', () => {
     trackPageView();

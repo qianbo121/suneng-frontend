@@ -1,0 +1,18 @@
+Forging Residual-heat Quench-and-temper Line | Project Discussion Checklist
+
+Provide available information first. This supports equipment selection discussions; it is not a process-release document.
+
+1. Workpiece: grade, adopted product specification, drawings, mass, effective section, section transitions and forging allowance.
+2. Targets: hardness, microstructure, mechanical properties, decarburization/oxidation, cracks, dimensions and required sampling locations.
+3. Forging: finish-forging temperature and measurement position, trimming/straightening sequence, temperature-check records, orientation and surface condition.
+4. Timing: start/end definitions for finish forging, temperature checks, equalization, discharge and quench entry; normal, changeover and stoppage cycle records.
+5. Route basis: validation of direct residual-heat quenching, material/microstructure windows, release/segregation criteria and whether reheating is permitted.
+6. Quenching: medium, permitted temperature, circulation/heat exchange, entry orientation, gripping tooling, maximum instantaneous load and interval.
+7. Tempering: permitted post-quench delay, temperature and soaking schedule, loading, final cooling and inspection.
+8. Abnormal parts: segregation locations, review and production-recovery arrangements for cold, out-of-window or undocumented parts.
+9. Capacity: representative parts, parts/hour or kg/hour, effective shifts, product mix and changeover frequency.
+10. Site: forging handover location, space, logistics/service aisles, energy, cooling, exhaust and foundations.
+11. Energy comparison: original route, effective output/yield, start/stop conditions and energy-metering points.
+12. Contact: company, person and phone/WeChat/email.
+
+Surface temperature or visible redness does not replace microstructure and representative-section validation. Segregate and review out-of-window parts first; reheating does not automatically restore direct-quenching eligibility.

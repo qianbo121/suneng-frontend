@@ -24,9 +24,11 @@ import { ProductionLineImage } from './ProductionLineImage';
 export function ProductionLineGallery({
   images,
   items,
+  locale = 'zh',
 }: {
   images: Record<string, LineImage>;
   items: LineGalleryItem[];
+  locale?: 'zh' | 'en';
 }) {
   const [selected, setSelected] = useState<number | null>(
     items[0]?.fullAssetId === 'hero-line' ? 0 : null,
@@ -42,7 +44,7 @@ export function ProductionLineGallery({
       ? null
       : previewIndex === -1
         ? {
-            label: '整线主图',
+            label: locale === 'en' ? 'Complete line' : '整线主图',
             alt: images['hero-line'].alt,
             fullAssetId: 'hero-line',
             thumbnailAssetId: 'hero-line',
@@ -71,8 +73,8 @@ export function ProductionLineGallery({
         className={styles.heroPreviewButton}
         aria-label={
           main.src === images['hero-line'].src
-            ? '查看整线图片'
-            : `查看${items[selected!].label}图片`
+            ? (locale === 'en' ? 'View complete line image' : '查看整线图片')
+            : (locale === 'en' ? `View ${items[selected!].label} image` : `查看${items[selected!].label}图片`)
         }
         aria-haspopup="dialog"
         onClick={(event) => {
@@ -87,7 +89,7 @@ export function ProductionLineGallery({
           sizes="(max-width: 767px) calc(100vw - 40px), (max-width: 959px) calc(100vw - 80px), (max-width: 1199px) calc((100vw - 112px) / 2), (max-width: 1359px) calc(58vw - 65px), 724px"
         />
       </button>
-      <div className={styles.thumbnails} aria-label="设备图片">
+      <div className={styles.thumbnails} aria-label={locale === 'en' ? 'Equipment images' : '设备图片'}>
         {items.map((item, index) => {
           const thumbnail = images[item.thumbnailAssetId as keyof typeof images];
           return (
@@ -132,7 +134,7 @@ export function ProductionLineGallery({
             <h2 id={titleId}>{preview.label}</h2>
             <button
               type="button"
-              aria-label="关闭图片预览"
+              aria-label={locale === 'en' ? 'Close image preview' : '关闭图片预览'}
               className={styles.previewClose}
               onClick={() => setPreviewIndex(null)}
             >
@@ -144,7 +146,7 @@ export function ProductionLineGallery({
               original
               className={styles.nativePreview}
             />
-            <p>{preview.fullAssetId ? '设备参考图' : '细节参考图'}</p>
+            <p>{locale === 'en' ? (preview.fullAssetId ? 'Equipment reference image' : 'Detail reference image') : (preview.fullAssetId ? '设备参考图' : '细节参考图')}</p>
           </div>
         )}
       </dialog>
@@ -152,7 +154,7 @@ export function ProductionLineGallery({
   );
 }
 
-export function ProductionLineAnchorNav({ items }: { items: { label: string; href: string }[] }) {
+export function ProductionLineAnchorNav({ items, locale = 'zh' }: { items: { label: string; href: string }[]; locale?: 'zh' | 'en' }) {
   const [active, setActive] = useState(items[0].href);
   const navRef = useRef<HTMLElement>(null);
   useEffect(() => {
@@ -192,7 +194,7 @@ export function ProductionLineAnchorNav({ items }: { items: { label: string; hre
     };
   }, [items]);
   return (
-    <nav ref={navRef} className={styles.anchorNav} aria-label="本页内容">
+    <nav ref={navRef} className={styles.anchorNav} aria-label={locale === 'en' ? 'On this page' : '本页内容'}>
       <div className={styles.container}>
         {items.map((item) => (
           <a

@@ -9,20 +9,8 @@ import type { Locale } from '@/types/site';
  * entries in app/sitemap.ts.
  */
 export const ZH_ONLY_PATHS = new Set<string>([
-  '/products/detail/copper-wire-annealing-line/inquiry-checklist',
-  '/products/detail/track-shoe-press-quench-line',
-  '/products/detail/forging-waste-heat-qt-line',
-  '/products/detail/fastener-quench-temper-line',
-  '/products/detail/mesh-belt-carbonitriding-line',
-  '/products/detail/multi-furnace-quench-cell',
-  '/products/detail/aluminum-solution-aging-line',
-  '/products/detail/aluminum-forging-heating-line',
-  '/products/detail/cylinder-curing-line',
+  '/partner',
   '/inquiry',
-  '/service/furnace-renovation-overhaul',
-  '/service/installation-after-sales',
-  '/service/furnace-relocation-restart',
-  '/service/selection-retrofit-guide',
   '/articles/gongye-lu-baojia-canshu',
   '/articles/laojiu-rechuli-lu-daxiu-haishi-maixin',
 ]);

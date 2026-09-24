@@ -125,3 +125,15 @@
     transition: none;
   }
 }
+
+/* Longer English labels use the same navigation layout at the desktop breakpoint. */
+.desktopLayout[data-locale='en'] {
+  column-gap: clamp(12px, 1.2vw, 24px);
+}
+.desktopLayout[data-locale='en'] .primaryList {
+  gap: clamp(2px, 0.5vw, 10px);
+}
+.desktopLayout[data-locale='en'] .primaryList .primaryLink {
+  font-size: 15px;
+  padding-inline: 6px;
+}

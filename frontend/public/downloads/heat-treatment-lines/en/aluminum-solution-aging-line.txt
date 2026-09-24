@@ -1,0 +1,30 @@
+Aluminum Solution-treatment & Aging Line | Inquiry Checklist
+
+Provide known information first; discuss unknowns during design.
+
+1. Material and loading
+Grade, product form, incoming/target condition, dimensions and wall thickness, net workpiece and rack masses.
+
+2. Products and specifications
+Choose applicable requirements separately for castings, wrought-aluminum parts and raw materials. State the contracted edition and inspection items.
+
+3. Solution-treatment schedule
+Temperature range, soaking conditions, workpiece measurement positions and representative loads. Equipment limits do not replace material-process requirements.
+
+4. Transfer timing
+Define the timing start/end, allowed delay, immersion criterion and records according to the adopted specification.
+
+5. Quenching conditions
+Medium and use conditions, bath temperature, agitation, volume, heat exchange and allowable distortion. Check concentration and other requirements separately for polymer media.
+
+6. Aging and interfaces
+Post-quench storage temperature/time, necessary intermediate operations, artificial-aging schedule and cooling requirements.
+
+7. Equipment and site
+Loading envelope, building clearance, foundations, transfer method, energy/media interfaces and maintenance space.
+
+8. Acceptance and records
+Temperature checks, representative-load trials, product sampling/assessment, abnormal-batch handling and record retention.
+
+Contact: company, person and phone, WeChat or email.
+The confirmed technical documents govern the process and equipment design.

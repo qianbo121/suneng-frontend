@@ -1,0 +1,25 @@
+Mesh-belt Annealing & Tempering Line | Inquiry Checklist
+
+Start with four items; unknown information may remain blank:
+1. Workpiece and material: part name, grade and incoming condition.
+2. Target process: specific annealing objective or tempering requirements for already quenched parts.
+3. Output: hourly/shift output, shifts and changeover frequency.
+4. Contact: phone, WeChat or email.
+
+Also provide any available:
+- Drawings, typical/maximum dimensions, unit mass and photos.
+- Loading photos, orientation, layer depth and collision/mixing restrictions.
+- Material certificates, initial microstructure and previous processing/quenching records.
+- Process curves, soaking/cooling requirements and permitted delays.
+- Hardness, microstructure/mechanical targets, oxidation/decarburization requirements and inspection standards.
+- Space, energy, gas, cooling/exhaust conditions and adjacent interfaces.
+
+Confirm together during design:
+- Annealing and post-quench tempering are separate routes. Shared equipment requires checks of zones, atmosphere, cooling, clearance and recipe changes.
+- For long soaking or slow cooling, compare belt and other furnaces using output and furnace length.
+- Calculate belt residence, workpiece through-heating and effective soaking separately.
+- Capacity uses net workpiece loading; account for tooling/belt mechanical and thermal loads separately. Do not deduct downtime or empty-belt losses twice.
+- Allocate supply responsibilities for loading, heating, cooling, discharge, auxiliaries and site interfaces.
+- Agree on representative materials, loading, sampling, inspection methods and delivery/acceptance responsibilities.
+
+Product page: /en/products/detail/roller-mesh-belt-line

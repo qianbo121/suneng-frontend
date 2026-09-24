@@ -8,12 +8,14 @@ import { HiEnvelope, HiPhone, HiXMark } from 'react-icons/hi2';
 import { siteSettings } from '@/mock/siteSettings';
 
 type WechatContactButtonProps = {
+  locale?: 'zh' | 'en';
   label?: string;
   description?: string;
   className?: string;
 };
 
 export function WechatContactButton({
+  locale = 'zh',
   label = '加企微，发工况初判',
   description = '扫码后发送工件、工艺、产能和现场条件，用于初步判断设备方向。',
   className,
@@ -100,7 +102,7 @@ export function WechatContactButton({
                       id={titleId}
                       className="text-pretty text-[24px] font-semibold leading-[1.35]"
                     >
-                      添加苏能技术顾问
+                      {locale === 'en' ? 'Contact a Suneng technical adviser' : '添加苏能技术顾问'}
                     </h2>
                     <p id={descriptionId} className="mt-2 text-[15px] leading-7 text-[#5a687b]">
                       {description}
@@ -109,7 +111,7 @@ export function WechatContactButton({
                   <button
                     ref={closeButtonRef}
                     type="button"
-                    aria-label="关闭企微联系弹窗"
+                    aria-label={locale === 'en' ? 'Close contact dialog' : '关闭企微联系弹窗'}
                     className="flex h-11 w-11 shrink-0 items-center justify-center rounded-[10px] border border-[#dbe2ec] text-[#334155] transition-colors duration-200 hover:border-[#3370ff] hover:text-[#3370ff] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#3370ff]"
                     onClick={() => setIsOpen(false)}
                   >
@@ -120,7 +122,7 @@ export function WechatContactButton({
                 <div className="mx-auto mt-6 w-fit rounded-[12px] border border-[#dbe2ec] bg-white p-3">
                   <Image
                     src={siteSettings.wechatQrCode}
-                    alt="江苏苏能工业炉微信二维码"
+                    alt={locale === 'en' ? 'Suneng WeChat QR code' : '江苏苏能工业炉微信二维码'}
                     width={220}
                     height={220}
                     priority
@@ -129,24 +131,24 @@ export function WechatContactButton({
                 </div>
 
                 <p className="mt-4 text-center text-[14px] leading-6 text-[#5a687b]">
-                  手机端可查看原图后，长按识别或保存二维码
+                  {locale === 'en' ? 'On your phone, open the original image to scan or save the QR code.' : '手机端可查看原图后，长按识别或保存二维码'}
                 </p>
 
-                <a href={siteSettings.wechatQrCode} target="_blank" rel="noopener noreferrer" className="mt-3 flex min-h-11 items-center justify-center rounded-[10px] border border-[#cfd8e5] px-4 text-[14px] font-semibold text-[#3370ff] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#3370ff]">查看二维码原图（可长按保存）</a>
+                <a href={siteSettings.wechatQrCode} target="_blank" rel="noopener noreferrer" className="mt-3 flex min-h-11 items-center justify-center rounded-[10px] border border-[#cfd8e5] px-4 text-[14px] font-semibold text-[#3370ff] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#3370ff]">{locale === 'en' ? 'Open the original QR code' : '查看二维码原图（可长按保存）'}</a>
                 <div className="mt-6 grid gap-3 sm:grid-cols-2">
                   <a
                     href={`tel:${siteSettings.salesPhone.replace(/\s+/g, '')}`}
                     className="flex min-h-11 items-center justify-center gap-2 rounded-[10px] border border-[#cfd8e5] px-4 text-[14px] font-semibold transition-colors duration-200 hover:border-[#3370ff] hover:text-[#3370ff] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#3370ff]"
                   >
                     <HiPhone aria-hidden="true" className="h-4 w-4" />
-                    电话联系
+                    {locale === 'en' ? 'Call us' : '电话联系'}
                   </a>
                   <a
                     href={`mailto:${siteSettings.email}`}
                     className="flex min-h-11 items-center justify-center gap-2 rounded-[10px] border border-[#cfd8e5] px-4 text-[14px] font-semibold transition-colors duration-200 hover:border-[#3370ff] hover:text-[#3370ff] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#3370ff]"
                   >
                     <HiEnvelope aria-hidden="true" className="h-4 w-4" />
-                    邮箱发资料
+                    {locale === 'en' ? 'Email documents' : '邮箱发资料'}
                   </a>
                 </div>
               </div>

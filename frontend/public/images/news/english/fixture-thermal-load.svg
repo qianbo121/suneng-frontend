@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="905" viewBox="0 0 1000 905" role="img" aria-labelledby="title desc">
+<title id="title">Fixtures also consume heating capacity</title><desc id="desc">Illustrative sensible-heat comparison for the load only.
+Similar average specific heat, initial and target temperatures. 28.6% is NOT total furnace energy share or an energy-saving rate.
+Excludes lining/structure heat, losses and auxiliary energy.
+Do not apply directly with different heat capacities or phase changes.</desc>
+<rect width="100%" height="100%" rx="24" fill="#f3f6fa"/>
+<rect x="0" y="0" width="1000" height="12" fill="#14558c"/>
+<text x="52" y="78" font-family="Arial,sans-serif" font-size="36" font-weight="700" fill="#12324f">Fixtures also consume heating capacity</text>
+<text x="52" y="126" font-family="Arial,sans-serif" font-size="25" fill="#475a70">Illustrative sensible-heat comparison for the load only.</text>
+<text x="52" y="162" font-family="Arial,sans-serif" font-size="25" fill="#475a70">Similar average specific heat, initial and target temperatures.</text>
+<rect x="42" y="205" width="916" height="145" rx="14" fill="white" stroke="#d1dce7"/>
+<circle cx="83" cy="250" r="23" fill="#14558c"/>
+<text x="83" y="259" text-anchor="middle" font-family="Arial,sans-serif" font-size="26" font-weight="700" fill="white">1</text>
+<text x="125" y="256" font-family="Arial,sans-serif" font-size="29" font-weight="700" fill="#12324f">Workpieces: 2.0 t  +  fixtures: 0.8 t</text>
+<text x="70" y="296" font-family="Arial,sans-serif" font-size="25" fill="#334b63">Total workpiece-and-fixture mass = 2.8 t.</text>
+<text x="70" y="328" font-family="Arial,sans-serif" font-size="25" fill="#334b63">Include fixtures in carrying-load and thermal calculations.</text>
+<path d="M500 357 v15 m-7 -7 l7 7 7 -7" stroke="#66829c" fill="none" stroke-width="3"/>
+<rect x="42" y="380" width="916" height="145" rx="14" fill="white" stroke="#d1dce7"/>
+<circle cx="83" cy="425" r="23" fill="#14558c"/>
+<text x="83" y="434" text-anchor="middle" font-family="Arial,sans-serif" font-size="26" font-weight="700" fill="white">2</text>
+<text x="125" y="431" font-family="Arial,sans-serif" font-size="29" font-weight="700" fill="#12324f">Fixture share: 0.8 / 2.8 ≈ 28.6%</text>
+<text x="70" y="471" font-family="Arial,sans-serif" font-size="25" fill="#334b63">Under the stated assumptions, fixtures account for about</text>
+<text x="70" y="503" font-family="Arial,sans-serif" font-size="25" fill="#334b63">28.6% of workpiece-and-fixture sensible heat.</text>
+<path d="M500 532 v15 m-7 -7 l7 7 7 -7" stroke="#66829c" fill="none" stroke-width="3"/>
+<rect x="42" y="555" width="916" height="145" rx="14" fill="white" stroke="#d1dce7"/>
+<circle cx="83" cy="600" r="23" fill="#14558c"/>
+<text x="83" y="609" text-anchor="middle" font-family="Arial,sans-serif" font-size="26" font-weight="700" fill="white">3</text>
+<text x="125" y="606" font-family="Arial,sans-serif" font-size="29" font-weight="700" fill="#12324f">Keep product output and equipment load separate</text>
+<text x="70" y="646" font-family="Arial,sans-serif" font-size="25" fill="#334b63">Fixtures add no product tonnage, but use carrying and</text>
+<text x="70" y="678" font-family="Arial,sans-serif" font-size="25" fill="#334b63">heating capacity. Check supports, spacing and thermal history.</text>
+<text x="52" y="745" font-family="Arial,sans-serif" font-size="24" font-weight="600" fill="#8c3a21">28.6% is NOT total furnace energy share or an energy-saving rate.</text>
+<text x="52" y="778" font-family="Arial,sans-serif" font-size="24" font-weight="600" fill="#8c3a21">Excludes lining/structure heat, losses and auxiliary energy.</text>
+<text x="52" y="811" font-family="Arial,sans-serif" font-size="24" font-weight="600" fill="#8c3a21">Do not apply directly with different heat capacities or phase changes.</text>
+</svg>

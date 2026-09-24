@@ -1,0 +1,575 @@
+[
+  {
+    "slug": "track-shoe-press-quench-line",
+    "title": "Track Shoe Press Quenching Line",
+    "seoTitle": "Track Shoe Press Quenching Line | Suneng",
+    "summary": "Coordinate heating, timed transfer, die restraint, quenching and tempering around track shoe dimensions, material and production rate.",
+    "description": "Select a track shoe press quenching line around part geometry, die restraint, transfer timing, cooling conditions, tempering and dimensional acceptance.",
+    "fit": [
+      "Track shoes requiring control of mounting-face flatness, twist or hole spacing.",
+      "Part families with defined steel grades, drawings and quench-and-temper requirements.",
+      "Production with sufficient space for hot transfer, die changing and cooling-system maintenance."
+    ],
+    "limits": [
+      "Similar external dimensions do not prove that different models can share a die or cooling recipe.",
+      "Press force alone does not establish cooling performance or final dimensional accuracy."
+    ],
+    "process": [
+      {
+        "title": "Reference quench-and-temper route",
+        "steps": [
+          "Identify & load",
+          "Austenitize",
+          "Timed transfer",
+          "Position & close die",
+          "Restrained quench",
+          "Release & transfer",
+          "Clean / dry if required",
+          "Temper & cool",
+          "Inspect"
+        ],
+        "note": "Define the start and end events for transfer timing. Heating, quench conditions and tempering follow the material and product specification; cleaning depends on the medium and downstream requirements."
+      }
+    ],
+    "selection": [
+      {
+        "title": "Part and die geometry",
+        "text": "Provide part drawings, grouser and plate sections, weight, locating datums, allowable contact marks and changeover frequency. Check die contact, cooling passages and thermal expansion together."
+      },
+      {
+        "title": "Transfer and cooling",
+        "text": "Coordinate furnace discharge, gripping, positioning and quench start. Define delayed-part disposition and verify medium temperature, flow distribution, circulation, filtration and heat removal."
+      },
+      {
+        "title": "Capacity and site",
+        "text": "Compare furnace discharge, press cycles, shared transfer, tempering and inspection. Include die changes and first-off approval; nominal press capacities cannot simply be added where resources are shared."
+      },
+      {
+        "title": "Scope and interfaces",
+        "text": "List heating, transfer, press and dies, tempering, medium circulation and controls separately. Agree foundations, lifting, utilities, extraction, gauges and inspection responsibilities."
+      }
+    ],
+    "acceptance": [
+      "Verify positioning, loaded transfer, die and press actions, cooling permissives, alarms and controlled recovery.",
+      "Record representative part temperatures, transfer times, pressure or displacement, cooling conditions and tempering.",
+      "Inspect hardness, microstructure, cracks and agreed dimensions after the specified tempering and cooling state. Set sample sizes and measurement datums for each representative model."
+    ],
+    "faqs": [
+      {
+        "question": "Does higher press force always reduce distortion?",
+        "answer": "No. Excessive or uneven restraint can produce contact marks, cooling differences or cracking risks. Establish the process window using die contact, pressure or displacement and cooling trials."
+      },
+      {
+        "question": "Can one die cover several track shoe models?",
+        "answer": "Replaceable inserts or adjustable positioning may be considered, but datums, contact areas, flow paths and cycle time must be checked for every model."
+      },
+      {
+        "question": "Is tempering still required after press quenching?",
+        "answer": "Tempering remains a separate stage in the quench-and-temper route shown here. Its cycle and the permitted interval after quenching follow the steel grade and adopted specification."
+      }
+    ],
+    "overview": "For steel track shoes with grousers and mounting holes, the line connects austenitizing, controlled transfer, die positioning, restrained cooling and subsequent tempering. Select the cooling method against the steel grade, section geometry and trial results. Press quenching helps control specified dimensions; it does not promise zero distortion for every part."
+  },
+  {
+    "slug": "forging-waste-heat-qt-line",
+    "title": "Forging Residual-Heat Quench & Temper Line",
+    "seoTitle": "Forging Residual-Heat Treatment Line | Suneng",
+    "summary": "Assess post-forging heat, material condition and transfer timing before connecting temperature sorting, quenching and tempering.",
+    "description": "Assess residual-heat treatment of steel forgings: material suitability, temperature sorting, transfer timing, quenching, tempering and quality verification.",
+    "fit": [
+      "Steel forgings such as shafts or connecting rods whose material and product requirements permit the proposed residual-heat route.",
+      "Production with known finishing-temperature distribution, section sizes and transfer history.",
+      "Projects able to identify and isolate cold, delayed or uncertain workpieces."
+    ],
+    "limits": [
+      "Surface infrared readings do not prove core temperature or a suitable microstructure.",
+      "Simple reheating or extended equalization must not be assumed to restore a lost direct-quenching window."
+    ],
+    "process": [
+      {
+        "title": "Parts within the validated process window",
+        "steps": [
+          "Measure & release",
+          "Hold / equalize if required",
+          "Controlled transfer",
+          "Quench",
+          "Clean / drain if required",
+          "High-temperature temper",
+          "Cool & inspect"
+        ],
+        "note": "Define finishing, trimming and quench-start timing events. Supplemental heating is considered only within a validated process window."
+      },
+      {
+        "title": "Cold, delayed or interrupted batches",
+        "steps": [
+          "Identify & isolate",
+          "Review thermal history",
+          "Decide an approved disposition",
+          "Record & confirm restart"
+        ],
+        "note": "Agree a suitable reheating or alternative route before releasing affected parts. Do not mix uncertain parts back into normal production."
+      }
+    ],
+    "selection": [
+      {
+        "title": "Material and forging handover",
+        "text": "Provide grades, section drawings, initial structure, finishing temperatures, trimming sequence, cycle variations and target properties."
+      },
+      {
+        "title": "Measurement and transfer",
+        "text": "Define measurement locations, surface condition, emissivity checks and part identification. Size transfer and quench cooling against actual load, timing and instantaneous heat input."
+      },
+      {
+        "title": "Tempering and buffering",
+        "text": "Confirm the allowed quench-to-temper interval, loading, holding and final cooling. Plan short stops, long stops and first-off checks when production restarts."
+      },
+      {
+        "title": "Capacity and energy comparison",
+        "text": "Check forging output, sorting, transfer, quenching and tempering together. Compare energy per conforming product using the same product mix and stated electricity, fuel and auxiliary-system boundaries; no fixed saving percentage is assumed."
+      }
+    ],
+    "acceptance": [
+      "Verify part identification, sorting, transfer, circulation, alarms and the agreed shutdown/restart sequence.",
+      "Record representative thermal conditions, finishing-to-quench timing, medium conditions and tempering curves.",
+      "Agree hardness, microstructure, mechanical properties, decarburization, cracks, dimensions and sampling positions under the applicable product specification."
+    ],
+    "faqs": [
+      {
+        "question": "Does residual-heat treatment eliminate all further heating?",
+        "answer": "No. This route retains high-temperature tempering. Holding, equalization or supplemental heating may also be needed where the verified material and process window allow them."
+      },
+      {
+        "question": "How should interrupted production be handled?",
+        "answer": "Identify and isolate parts outside the permitted window. Use the recorded thermal history to select an approved disposition, with first-off confirmation after restart."
+      },
+      {
+        "question": "How should energy savings be verified?",
+        "answer": "Compare energy per conforming product against an agreed baseline route. Include production quantity, quality, stops and the defined metering boundaries; removing one heating stage does not establish a whole-line saving percentage."
+      }
+    ],
+    "overview": "This route uses retained heat from steel forgings only where the material, product specification and verified post-forging condition permit it. Temperature checking and sorting, optional holding or equalization, controlled transfer, quenching and high-temperature tempering must work with the forging rhythm."
+  },
+  {
+    "slug": "fastener-quench-temper-line",
+    "title": "Fastener Quench & Temper Line",
+    "seoTitle": "Fastener Quench & Temper Line | Suneng",
+    "summary": "Compare continuous mesh-belt and batch furnace arrangements for steel fasteners using material, property class, loading and output requirements.",
+    "description": "Compare fastener quench and temper routes, furnace loading, atmosphere control, cooling, downstream capacity and representative-product acceptance checks.",
+    "fit": [
+      "Steel bolts, screws, studs or nuts with specified material and mechanical-property requirements.",
+      "Stable production suitable for controlled belt loading, or mixed batches suited to a furnace group.",
+      "Projects with identified quench, cleaning, atmosphere and downstream interfaces."
+    ],
+    "limits": [
+      "A hardness result alone cannot establish compliance with every requirement of a fastener property class.",
+      "Frequent changes in size or recipe require checks of line clearance, transition parts and batch separation."
+    ],
+    "process": [
+      {
+        "title": "Typical continuous mesh-belt arrangement",
+        "steps": [
+          "Feed & spread",
+          "Heat & soak",
+          "Quench",
+          "Clean / dry as required",
+          "High-temperature temper",
+          "Cool & unload",
+          "Verify quality"
+        ],
+        "note": "Pre-cleaning depends on incoming condition. Choose quench medium, cleaning and transfer intervals from material, geometry and product requirements; the equipment illustration does not prescribe water quenching."
+      }
+    ],
+    "selection": [
+      {
+        "title": "Continuous or batch",
+        "text": "Compare hourly output and controlled belt loading with batch weight, fixtures and furnace-group scheduling. Include order mix, recipe changes and traceability rather than selecting by nominal output alone."
+      },
+      {
+        "title": "Heating and surface condition",
+        "text": "Confirm the effective working zone, material heating time, atmosphere and monitoring. Control decarburization and unwanted carbon pickup against temperature, time, loading and atmosphere."
+      },
+      {
+        "title": "Quenching and tempering",
+        "text": "Check medium temperature, level, agitation and heat removal, furnace-to-quench transfer and the allowed interval before tempering. Match cleaning and drying to residues and downstream needs."
+      },
+      {
+        "title": "Retained equipment and scope",
+        "text": "Existing equipment may be reused after checking condition, process capacity, transfer, controls and site interfaces. Separate new supply, modifications, installation support and owner-provided utilities in the quotation."
+      }
+    ],
+    "acceptance": [
+      "Verify conveying, furnace and quench functions, interlocks, alarms and process records.",
+      "Check heating and throughput with representative parts and agreed loading; relate batches to recipes and temperature, time, speed and quench records.",
+      "For bolts, screws and studs, agree applicable tensile, proof-load and hardness tests; for nuts, agree applicable proof-load and hardness tests. Define additional surface, crack and decarburization checks, sampling and responsibilities."
+    ],
+    "faqs": [
+      {
+        "question": "Is a continuous line suitable for frequent product changes?",
+        "answer": "Assess batch size, change frequency and process differences. Continuous production needs a plan for line clearance and transition material; batch systems still require fixture, batch and recipe management."
+      },
+      {
+        "question": "Can existing equipment be retained?",
+        "answer": "Potentially, after its condition, capacity and process fit are checked together with handling, interlocks and site interfaces. The technical proposal must identify what is retained, modified or newly supplied."
+      },
+      {
+        "question": "What should be supplied for a quotation?",
+        "answer": "Provide representative parts, material, property class, production plan, output and shifts, available energy, atmosphere and quench requirements, and the expected supply and site responsibilities."
+      }
+    ],
+    "overview": "For steel fasteners requiring quenching and tempering, coordinate heating, quenching, high-temperature tempering and the necessary handling and auxiliary systems. Choose continuous mesh-belt or batch production around representative parts, batch sizes and changeover needs. Carburizing requirements need a separately assessed process."
+  },
+  {
+    "slug": "mesh-belt-carbonitriding-line",
+    "title": "Mesh Belt Carburizing & Quenching Line",
+    "seoTitle": "Mesh Belt Carburizing & Quenching Line | Suneng",
+    "summary": "Plan carburizing, diffusion, quenching, washing and low-temperature tempering for small steel parts requiring case hardening.",
+    "description": "Plan a mesh belt carburizing and quenching line: material suitability, atmosphere control, case-depth requirements, loading, cleaning and tempering.",
+    "fit": [
+      "Small steel parts requiring surface hardening and suitable for stable mesh-belt loading.",
+      "Defined effective case-depth, surface and core hardness, microstructure and distortion requirements.",
+      "Production with adequate atmosphere supply, quench cooling, extraction and post-treatment capacity."
+    ],
+    "limits": [
+      "Carbon potential is an atmosphere-control variable, not a direct reading of the carbon content at the part surface.",
+      "Adding a nitrogen-bearing gas supply does not by itself make a carburizing line suitable for carbonitriding."
+    ],
+    "process": [
+      {
+        "title": "Reference carburizing route",
+        "steps": [
+          "Sort & spread",
+          "Pre-clean if required",
+          "Preheat",
+          "Carburize & diffuse",
+          "Quench",
+          "Wash & dry",
+          "Low-temperature temper",
+          "Cool & inspect"
+        ],
+        "note": "The illustrated arrangement uses enclosed oil quenching as a reference. Confirm medium, transfer, cleaning and tempering against the workpiece requirements."
+      },
+      {
+        "title": "Carbonitriding option",
+        "steps": [
+          "Confirm material & preparation",
+          "Carbonitride",
+          "Soak as specified",
+          "Quench",
+          "Wash & dry",
+          "Temper",
+          "Inspect"
+        ],
+        "note": "Assess nitrogen-bearing media, atmosphere control, emissions, layer structure and changeover conditions separately from carburizing."
+      }
+    ],
+    "selection": [
+      {
+        "title": "Material and hardened layer",
+        "text": "Provide grades, section drawings, hardening locations, incoming structure, surface preparation and the definition and measurement method for the required case depth."
+      },
+      {
+        "title": "Belt loading and furnace residence",
+        "text": "Check mesh size, part contact, layer depth, mass per unit belt length and residence time. Greater loading can change heating, atmosphere access, drop-off and quenching."
+      },
+      {
+        "title": "Atmosphere and quench systems",
+        "text": "Define gas supply, measurement and independent checks, purge and abnormal-state handling. Coordinate quench level, temperature, circulation, heat removal, lifting discharge and extraction."
+      },
+      {
+        "title": "Whole-line output and scope",
+        "text": "Check washing, drying and tempering as well as the carburizing furnace. List gas generation, wastewater handling, utilities and existing-equipment interfaces separately."
+      }
+    ],
+    "acceptance": [
+      "Verify belt and discharge movements, atmosphere safeguards, quench conditions, interlocks and records.",
+      "Check temperature and residence time under agreed loading, carbon-potential measurement and independent checks, and quench-to-temper coordination.",
+      "Specify effective case-depth sampling locations, hardness-test method and load, threshold hardness and judgment criteria. Surface hardness, total case depth and effective case depth are not interchangeable."
+    ],
+    "faqs": [
+      {
+        "question": "Can carburizing and carbonitriding use the same recipe?",
+        "answer": "No. Assess the media, controls, process window, layer structure, emissions and changeover requirements separately. A shared furnace body does not establish compatibility."
+      },
+      {
+        "question": "Does stable carbon potential prove that the parts meet requirements?",
+        "answer": "No. Material, surface condition, temperature, time and loading still affect the result. Verify case depth, surface and core hardness, microstructure and agreed distortion after treatment."
+      },
+      {
+        "question": "Can output be increased just by loading a thicker layer?",
+        "answer": "A thicker layer changes heating, atmosphere contact and quenching. Validate representative loading and downstream capacity before increasing the load or belt speed."
+      }
+    ],
+    "overview": "For small steel parts suitable for continuous mesh-belt loading, match carburizing and diffusion, quenching, post-cleaning, drying, low-temperature tempering and final cooling to the case-depth target and core requirements. This page uses atmospheric controlled-gas carburizing as its main route. Carbonitriding requires a separate assessment."
+  },
+  {
+    "slug": "multi-furnace-quench-cell",
+    "title": "Multi-Furnace Quenching Cell",
+    "seoTitle": "Multi-Furnace Quenching Cell | Suneng",
+    "summary": "Independent heating furnaces coordinated with a shared transfer system and quench tank for batch heat treatment.",
+    "description": "Compare multi-furnace quenching cells: shared transfer and tank scheduling, batch loading, process timing, equipment scope and acceptance checks.",
+    "fit": [
+      "Batch heat treatment where several independent heating furnaces can share a transfer system and quench resources.",
+      "Parts with defined loading arrangements, quenching requirements and allowable transfer times.",
+      "Projects that can coordinate furnace release, transfer movements, tank availability and downstream tempering."
+    ],
+    "limits": [
+      "This is a coordinated cell, not a route in which each batch passes through every furnace in sequence.",
+      "The number of furnaces and the cell layout require project-specific assessment; an illustration does not define the supplied configuration.",
+      "Adding furnace capacity does not resolve a bottleneck in the shared transfer system, quench tank or tempering equipment."
+    ],
+    "process": [
+      {
+        "title": "Typical batch sequence",
+        "steps": [
+          "Assign furnace and batch",
+          "Load and heat",
+          "Confirm transfer and tank availability",
+          "Unload and transfer",
+          "Quench",
+          "Handover and release shared resources"
+        ],
+        "note": "Coordinate door, transfer and tank movements through the agreed sequence. Where required, define the interval between quenching and tempering as part of the complete process."
+      }
+    ],
+    "selection": [
+      {
+        "title": "Batch and fixture data",
+        "text": "Provide part dimensions, batch mass, loading pattern, fixture mass and centre of gravity. Check both heating uniformity and handling stability."
+      },
+      {
+        "title": "Shared-resource scheduling",
+        "text": "Assess overlapping furnace completion times, transfer travel, tank occupation and cooling recovery. Use realistic mixed-batch scenarios to estimate output."
+      },
+      {
+        "title": "Quenching and downstream timing",
+        "text": "Specify the transfer-time measurement points, medium conditions, quench cycle and tempering interface for each representative product."
+      },
+      {
+        "title": "Site and recovery conditions",
+        "text": "Confirm travel paths, maintenance access, guarding and utility interfaces. Agree controlled responses to interrupted movements or loss of a shared resource before hot trials."
+      }
+    ],
+    "acceptance": [
+      "Check furnace identification, batch tracking, resource reservation and movement interlocks with representative task conflicts.",
+      "Validate the agreed transfer timing, quench conditions and temperature performance under representative loading.",
+      "Demonstrate agreed interruption and recovery functions, then verify treated-part properties and dimensions against the product acceptance plan."
+    ],
+    "faqs": [
+      {
+        "question": "Does a three-furnace cell provide three times the output?",
+        "answer": "Not necessarily. Transfer travel, tank occupation, cooling recovery and downstream operations may limit output. Assess the full schedule for representative batches."
+      },
+      {
+        "question": "Does each batch pass through all of the furnaces?",
+        "answer": "Usually each heating furnace handles its assigned batch and uses the shared quench resources when available. The detailed sequence depends on the agreed process."
+      },
+      {
+        "question": "Does the controller brand establish cell safety?",
+        "answer": "No. Review the complete operating sequence, guards, sensing, interlocks and recovery behaviour. Validate these functions against the agreed project requirements."
+      }
+    ]
+  },
+  {
+    "slug": "aluminum-solution-aging-line",
+    "title": "Aluminum Solution Treatment & Aging Line",
+    "seoTitle": "Aluminum Solution Treatment & Aging Line | Suneng",
+    "summary": "Solution heat treatment, quenching and artificial aging for suitable heat-treatable aluminum alloys, with controlled loading and transfer.",
+    "description": "Plan aluminum solution treatment and aging: alloy suitability, load temperature, quench delay, cooling recovery, aging sequence and acceptance requirements.",
+    "fit": [
+      "Heat-treatable aluminum alloy parts with an identified alloy, incoming condition and target temper.",
+      "Projects that need coordinated solution heating, quenching and a separate artificial-aging stage.",
+      "Parts with agreed mechanical-property, dimensional and inspection requirements for representative loading."
+    ],
+    "limits": [
+      "This route does not apply to every aluminum alloy, and a T6 designation alone does not define a complete process.",
+      "A drop-bottom solution furnace is one possible arrangement; select the handling method around the parts, fixtures and timing requirements.",
+      "Straightening, cold working, refrigerated storage and other intermediate operations are included only when required and separately agreed."
+    ],
+    "process": [
+      {
+        "title": "Representative solution and artificial-aging route",
+        "steps": [
+          "Load parts and fixtures",
+          "Solution heat treatment",
+          "Transfer and quench",
+          "Required intermediate operations",
+          "Artificial aging",
+          "Inspect finished condition"
+        ],
+        "note": "Define soak-start criteria, quench-delay measurement points and the allowed sequence after quenching from the applicable product requirements. Natural aging and artificial aging are different operations."
+      }
+    ],
+    "selection": [
+      {
+        "title": "Alloy and target condition",
+        "text": "Provide the alloy designation, incoming condition, section thickness and final property requirements. Confirm the applicable material or customer specification."
+      },
+      {
+        "title": "Representative load",
+        "text": "Describe part spacing, fixtures, batch mass and temperature measurement positions. Furnace air temperature alone does not establish the temperature of every part."
+      },
+      {
+        "title": "Quench delay and cooling",
+        "text": "Agree where the delay starts and ends, the permitted timing, quench medium and temperature range. Check tank circulation and recovery for successive loads."
+      },
+      {
+        "title": "Aging and intermediate handling",
+        "text": "Confirm the permitted holding interval and any required straightening, cold work or storage. Match aging capacity to the upstream batch schedule."
+      }
+    ],
+    "acceptance": [
+      "Check loading, door and transfer sequences, quench-tank functions, interlocks and process records.",
+      "Validate agreed temperature performance under representative loading and measure quench delay using the specified start and end points.",
+      "Verify hardness, mechanical properties and dimensions as specified. Conductivity, microstructure or corrosion checks apply only where the product acceptance requirements call for them."
+    ],
+    "faqs": [
+      {
+        "question": "Can one recipe produce T6 properties in every aluminum alloy?",
+        "answer": "No. Alloy, section thickness, incoming condition, quenching and aging all affect the result. Establish and verify a suitable process for the specified product."
+      },
+      {
+        "question": "Is the furnace setpoint enough to confirm soaking?",
+        "answer": "No. Apply the agreed soak-start criteria and temperature-verification method for the representative load. Air temperature and part temperature are not interchangeable."
+      },
+      {
+        "question": "Is the shortest possible quench delay always the only target?",
+        "answer": "The delay must meet the applicable process requirement and be measured consistently. Handling reliability, quench conditions and distortion also need verification."
+      }
+    ]
+  },
+  {
+    "slug": "aluminum-forging-heating-line",
+    "title": "Aluminum Billet Heating Line for Forging",
+    "seoTitle": "Aluminum Forging Heating Line | Suneng",
+    "summary": "Controlled heating and temperature equalization of aluminum billets before forging, coordinated with press demand and transfer conditions.",
+    "description": "Select an aluminum forging heating line around billet size, core heating, press rhythm, discharge temperature checks and controlled handling during stops.",
+    "fit": [
+      "Aluminum billets requiring controlled preheating and temperature equalization before a forging operation.",
+      "Projects with known billet dimensions, alloy, allowable forging-temperature window and press demand.",
+      "New lines or upgrades where the furnace discharge and billet handover can be coordinated with downstream equipment."
+    ],
+    "limits": [
+      "This page covers heating before forging, not post-forging solution treatment and aging.",
+      "A surface temperature reading does not by itself prove that the billet core has reached the required condition.",
+      "Indefinite holding or repeated reheating during a press stoppage must not be assumed acceptable."
+    ],
+    "process": [
+      {
+        "title": "Heating-to-forging handover",
+        "steps": [
+          "Identify and load billets",
+          "Heat and equalize",
+          "Verify discharge condition",
+          "Measure and sort as required",
+          "Transfer to forging press"
+        ],
+        "note": "Agree allowable holding, reduced-feed and segregation actions for downstream interruptions. Heating-system selection and forging-press supply remain separately defined parts of the project."
+      }
+    ],
+    "selection": [
+      {
+        "title": "Billet and alloy range",
+        "text": "Provide alloy grades, diameter or section dimensions, length, mass and incoming temperature. Identify the representative sizes used to establish heating and equalization time."
+      },
+      {
+        "title": "Press rhythm and transfer",
+        "text": "State normal press demand, transfer distance, expected pauses and restart conditions. Match output to both the required thermal cycle and downstream consumption."
+      },
+      {
+        "title": "Temperature verification",
+        "text": "Define discharge measurement locations and the method used to validate core heating. Infrared measurements require suitable emissivity assumptions, a clear view and consistent surface conditions."
+      },
+      {
+        "title": "Heating and supply interfaces",
+        "text": "Assess electric or gas heating against process and site conditions. If induction or other equipment is proposed, assess its role and supplier interfaces separately. Confirm utilities, conveying and press integration."
+      }
+    ],
+    "acceptance": [
+      "Check loading, feeding, temperature-based handling and the agreed stop/restart functions.",
+      "Verify heating and equalization for representative billet sizes, then correlate discharge measurements with the agreed thermal-verification method.",
+      "Measure sustainable delivery to the press under the agreed operating rhythm. Verify forged-product quality through the separately agreed downstream process and inspection plan."
+    ],
+    "faqs": [
+      {
+        "question": "Is this the same as an aluminum solution-treatment line?",
+        "answer": "No. This line prepares billets for forging. Solution treatment and aging after forging have different process objectives and equipment requirements."
+      },
+      {
+        "question": "Can an infrared reading confirm billet core temperature?",
+        "answer": "Not by itself. Infrared devices measure the observed surface. Validate the relationship between surface readings and internal heating for the agreed alloy and billet sizes."
+      },
+      {
+        "question": "What happens when the forging press stops?",
+        "answer": "Define an approved holding, feed-control and segregation strategy during process planning. Whether a billet can remain in the furnace or be reheated depends on its material and thermal history."
+      }
+    ]
+  },
+  {
+    "slug": "cylinder-curing-line",
+    "title": "Composite Cylinder Curing Line",
+    "seoTitle": "Composite Cylinder Curing Line | Suneng",
+    "summary": "Controlled curing of resin in fiber-wound composite cylinders, with coordinated heating, support, rotation where required, and cooling.",
+    "description": "Plan a composite cylinder curing line around resin cure curves, liner limits, part temperature, rotation, ventilation and representative-load validation.",
+    "fit": [
+      "Fiber-wound composite cylinders with an established resin-system cure schedule and known liner temperature limits.",
+      "Projects with defined cylinder dimensions, mass, support interfaces and required handling or rotation.",
+      "Batch or continuous production where the thermal cycle can be validated on representative cylinders and loading."
+    ],
+    "limits": [
+      "Resin exotherm and actual part temperature must be assessed; heater setpoint alone does not define the cure condition.",
+      "Pressure-assisted curing is outside this representative arrangement and requires a separate equipment assessment.",
+      "Completing a cure cycle does not establish compliance of the finished pressure cylinder with all applicable product requirements."
+    ],
+    "process": [
+      {
+        "title": "Representative controlled curing sequence",
+        "steps": [
+          "Load and support wound cylinders",
+          "Vent or precondition if required",
+          "Heat through agreed zones",
+          "Maintain the validated cure cycle",
+          "Cool under controlled conditions",
+          "Unload and inspect"
+        ],
+        "note": "Conveying speed and rotation speed are separate settings. If the resin system requires rotation before or during curing, define the requirements for waiting and transfer as well as furnace residence."
+      }
+    ],
+    "selection": [
+      {
+        "title": "Resin, liner and thermal limits",
+        "text": "Provide the resin supplier’s cure instructions and safety data, liner limits and representative winding details. Consider resin exotherm and the permitted part-temperature range."
+      },
+      {
+        "title": "Support and rotation",
+        "text": "Confirm neck, mandrel or other end-support interfaces, loading mass and required rotation. Assess handling without assuming the composite body can serve as a load-bearing contact surface."
+      },
+      {
+        "title": "Load and production pattern",
+        "text": "State the cylinder range, simultaneous load, production rhythm and changeover frequency. Compare batch and continuous arrangements when resin systems or cure schedules vary."
+      },
+      {
+        "title": "Ventilation and abnormal conditions",
+        "text": "Assess emissions, ventilation and the maximum simultaneous resin load from the actual materials and process. Resin exotherm can continue after heating is switched off; agree the required safeguards during design."
+      }
+    ],
+    "acceptance": [
+      "Check conveying, supports, required rotation, ventilation functions, interlocks and recording.",
+      "Record representative part-temperature curves, including locations relevant to thermal variation and exotherm, and verify them against the agreed cure schedule.",
+      "Confirm cure-quality checks and downstream cylinder testing in the product inspection plan. Equipment thermal acceptance and finished-cylinder qualification are separate requirements."
+    ],
+    "faqs": [
+      {
+        "question": "Can the air-temperature curve prove that the resin is cured?",
+        "answer": "Not alone. Part temperature is affected by loading, heat transfer and resin exotherm. Validate the actual part-temperature history and the agreed cure-quality indicators."
+      },
+      {
+        "question": "Must every cylinder rotate during curing?",
+        "answer": "Rotation depends on the resin system, winding process and product requirements. When required, define its speed and continuity through waiting, transfer and curing."
+      },
+      {
+        "question": "Does passing furnace acceptance qualify the finished cylinder?",
+        "answer": "No. Finished cylinders still require the product-specific inspection and qualification agreed for their intended application."
+      }
+    ]
+  }
+]

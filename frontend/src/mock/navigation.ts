@@ -11,17 +11,17 @@ const chineseNavigationItems: NavigationItem[] = [
   {
     key: 'products',
     href: '/products',
-    label: { zh: '设备与生产线', en: 'Products' },
+    label: { zh: '设备与生产线', en: 'Furnaces & Lines' },
   },
   {
     key: 'engineering',
     href: '/service',
-    label: { zh: '改造与服务', en: 'Engineering Services' },
+    label: { zh: '改造与服务', en: 'Retrofit & Services' },
     children: [
       {
         key: 'engineering-renovation',
         href: '/service/furnace-renovation-overhaul',
-        label: { zh: '维修与改造', en: 'Repair & Renovation' },
+        label: { zh: '维修与改造', en: 'Repair & Retrofit' },
       },
       {
         key: 'engineering-relocation',
@@ -54,12 +54,12 @@ const chineseNavigationItems: NavigationItem[] = [
   {
     key: 'resources',
     href: '/news',
-    label: { zh: '技术资料', en: 'Resources' },
+    label: { zh: '技术资料', en: 'Technical Resources' },
   },
   {
     key: 'about',
     href: '/about',
-    label: { zh: '关于苏能', en: 'About' },
+    label: { zh: '关于苏能', en: 'About Suneng' },
     children: [
       {
         key: 'about-company',
@@ -69,7 +69,7 @@ const chineseNavigationItems: NavigationItem[] = [
       {
         key: 'about-honors',
         href: '/strength/honors',
-        label: { zh: '荣誉资质', en: 'Honors' },
+        label: { zh: '荣誉资质', en: 'Qualifications & Honors' },
       },
       {
         key: 'about-partner',
@@ -85,34 +85,32 @@ const chineseNavigationItems: NavigationItem[] = [
   },
 ];
 
-const englishNavigationItems: NavigationItem[] = chineseNavigationItems.map((item) => ({
-  ...item,
-  label: item.key === 'engineering' ? { ...item.label, en: 'Service & Retrofit' } : item.label,
-}));
-
 function getLocalizedText(locale: Locale, text: { zh: string; en: string }) {
   return text[locale];
 }
 
-// Publication is decided per locale, so check the prefixed destination.
+// Keep publication checks scoped to the actual destination language.
 function localizedHref(locale: Locale, href: string) {
+  if (/^\/(?:zh|en)(?:\/|$)/.test(href)) return href;
   return href === '/' ? `/${locale}` : `/${locale}${href}`;
 }
 
 function getNavigationChildren(locale: Locale, item: NavigationItem) {
-  return item.children?.filter((child) => !isWithdrawnTechnicalPath(localizedHref(locale, child.href)) && (locale === 'zh' || !isZhOnlyPath(child.href)));
+  return item.children?.filter((child) => !isWithdrawnTechnicalPath(localizedHref(locale === 'en' && isZhOnlyPath(child.href) ? 'zh' : locale, child.href)));
+
 }
 
-// Every published destination with its localized names, menu or not: the
-// breadcrumb needs a name for a page the menus leave out.
+// Breadcrumb destinations include approved pages hidden from the top-level menu.
 function getLocalizedDestinations(locale: Locale) {
-  const items = locale === 'zh' ? chineseNavigationItems : englishNavigationItems;
+  const items = chineseNavigationItems;
   return items.filter((item) => !isWithdrawnTechnicalPath(localizedHref(locale, item.href))).map((item) => ({
+
     ...item,
     labelText: getLocalizedText(locale, item.label),
     children: getNavigationChildren(locale, item)?.map((child) => ({
       ...child,
-      labelText: getLocalizedText(locale, child.label),
+      href: locale === 'en' && isZhOnlyPath(child.href) ? `/zh${child.href}` : child.href,
+      labelText: getLocalizedText(locale, child.label) + (locale === 'en' && isZhOnlyPath(child.href) ? ' (Chinese)' : ''),
     })),
   }));
 }

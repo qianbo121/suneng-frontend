@@ -1,3 +1,5 @@
+import { corePageText, localizeCoreValue } from '@/lib/core-page-localization';
+import type { Locale } from '@/types/site';
 import Image from 'next/image';
 import Link from 'next/link';
 import { HiArrowUpRight, HiChevronDoubleRight } from 'react-icons/hi2';
@@ -34,7 +36,7 @@ export const ABOUT_ZH_SEO = {
     '江苏苏能工业炉有限公司成立于2006年，生产基地位于江苏泰州，提供非标工业炉、热处理生产线及工业炉大修与改造服务。查看制造交付流程、企业资质、公开项目与承接范围，支持预约验厂。',
 } as const;
 
-const workflowItems = [
+const sourceWorkflowItems = [
   {
     number: '01',
     title: '需求与方案确认',
@@ -77,30 +79,30 @@ const workflowItems = [
   },
 ] as const;
 
-const deliveryPhotos = [
+const sourceDeliveryPhotos = [
   {
     caption: '需求与方案协同',
-    image: workflowItems[0].image,
-    alt: workflowItems[0].alt,
+    image: sourceWorkflowItems[0].image,
+    alt: sourceWorkflowItems[0].alt,
   },
   {
     caption: '炉体制造现场',
-    image: workflowItems[1].image,
-    alt: workflowItems[1].alt,
+    image: sourceWorkflowItems[1].image,
+    alt: sourceWorkflowItems[1].alt,
   },
   {
     caption: '整线装配现场',
-    image: workflowItems[2].image,
-    alt: workflowItems[2].alt,
+    image: sourceWorkflowItems[2].image,
+    alt: sourceWorkflowItems[2].alt,
   },
   {
     caption: '设备发运现场',
-    image: workflowItems[4].image,
-    alt: workflowItems[4].alt,
+    image: sourceWorkflowItems[4].image,
+    alt: sourceWorkflowItems[4].alt,
   },
 ] as const;
 
-const capabilityItems = [
+const sourceCapabilityItems = [
   {
     title: '单机设备',
     text: '台车炉、箱式炉、井式炉、网带炉、辊底炉、推杆炉等周期式或连续式工业炉。',
@@ -129,7 +131,7 @@ const fullCertificateCount =
   SUNENG_ISO_CERTIFICATES.length +
   SUNENG_PATENT_CERTIFICATES.length;
 
-const certificateCards = [
+const sourceCertificateCards = [
   {
     title: '国家高新技术企业',
     summary: highTechCertificate.subtitle!,
@@ -159,7 +161,7 @@ const certificateCards = [
 
 
 
-const partnerLogos = [
+const sourcePartnerLogos = [
   {
     name: '中国恩菲工程技术有限公司',
     src: '/images/partners/homepage/01-enfi.png',
@@ -198,7 +200,7 @@ const partnerLogos = [
   },
 ] as const;
 
-const faqJsonLd = {
+const sourceFaqJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'FAQPage',
   mainEntity: ABOUT_FAQS.map((item) => ({
@@ -211,26 +213,34 @@ const faqJsonLd = {
   })),
 };
 
-export function AboutZhContent() {
+export function AboutZhContent({ locale = 'zh' }: { locale?: Locale }) {
+  const t = (text: string) => corePageText(text, locale);
+  const workflowItems = localizeCoreValue(sourceWorkflowItems, locale);
+  const deliveryPhotos = localizeCoreValue(sourceDeliveryPhotos, locale);
+  const capabilityItems = localizeCoreValue(sourceCapabilityItems, locale);
+  const certificateCards = localizeCoreValue(sourceCertificateCards, locale).map((card, index) => locale === 'en' && index === 2 ? { ...card, title: `${SUNENG_PATENT_CERTIFICATES.length} granted patents` } : card);
+  const partnerLogos = localizeCoreValue(sourcePartnerLogos, locale);
+  const faqJsonLd = localizeCoreValue(sourceFaqJsonLd, locale);
+
   return (
-    <div className={styles.page}>
+    <div lang={locale} className={styles.page}>
       <JsonLd
-        id="about-zh-page-jsonld"
+        id={`about-${locale}-page-jsonld`}
         data={[
           getBreadcrumbJsonLd([
-            { name: '首页', url: '/zh' },
-            { name: '关于苏能', url: '/zh/about' },
+            { name: t("首页"), url: t("/zh") },
+            { name: t("关于苏能"), url: t("/zh/about") },
           ]),
           faqJsonLd,
         ]}
       />
 
-      <AboutAnchorNav items={ABOUT_ANCHORS} />
+      <AboutAnchorNav items={localizeCoreValue(ABOUT_ANCHORS, locale)} locale={locale} />
 
-      <AboutCompanyHero className={styles.sectionAnchor} />
+      <AboutCompanyHero locale={locale} className={styles.sectionAnchor} />
       <div className={styles.container}>
         <p className={styles.visitStrip} data-company-facts>
-          <span>江苏苏能工业炉有限公司成立于 2006 年，注册资本 5080 万元，累计开展 1000+ 工业炉新建与改造项目；生产基地为公司自报约 14700㎡，位于{siteSettings.address.zh}。具体设备性能按项目工况确认。</span>
+          <span>{t("江苏苏能工业炉有限公司成立于 2006 年，注册资本 5080 万元，累计开展 1000+ 工业炉新建与改造项目；生产基地为公司自报约 14700㎡，位于")}{siteSettings.address[locale]}{t("。具体设备性能按项目工况确认。")}</span>
         </p>
       </div>
 
@@ -243,8 +253,8 @@ export function AboutZhContent() {
         <div className={styles.container}>
           <div className={styles.sectionHeading}>
             <div>
-              <h2 id="delivery-title">从需求确认到安装验收的 5 个环节</h2>
-              <p>项目按已确认的条件和节点资料往前推进，方便客户核对进度、接口和验收范围。</p>
+              <h2 id="delivery-title">{t("从需求确认到安装验收的 5 个环节")}</h2>
+              <p>{t("项目按已确认的条件和节点资料往前推进，方便客户核对进度、接口和验收范围。")}</p>
             </div>
           </div>
 
@@ -259,7 +269,7 @@ export function AboutZhContent() {
                   <h3>{item.title}</h3>
                   <p>{item.description}</p>
                   <div className={styles.nodeMaterial}>
-                    <strong>交付资料</strong>
+                    <strong>{t("交付资料")}</strong>
                     <span>{item.material}</span>
                   </div>
                 </div>
@@ -285,7 +295,7 @@ export function AboutZhContent() {
           </div>
 
           <div className={styles.visitStrip}>
-            <span>泰州姜堰生产基地 · {siteSettings.address.zh}</span>
+            <span>{t("泰州姜堰生产基地 ·")}{siteSettings.address[locale]}</span>
           </div>
         </div>
       </section>
@@ -298,8 +308,8 @@ export function AboutZhContent() {
         <div className={styles.container}>
           <div className={styles.sectionHeading}>
             <div>
-              <h2 id="scope-title">我们做什么，也明确不做什么</h2>
-              <p>先按设备范围判断是否匹配，再结合具体工况确认方案和供货边界。</p>
+              <h2 id="scope-title">{t("我们做什么，也明确不做什么")}</h2>
+              <p>{t("先按设备范围判断是否匹配，再结合具体工况确认方案和供货边界。")}</p>
             </div>
           </div>
 
@@ -317,7 +327,7 @@ export function AboutZhContent() {
                 </article>
               ))}
             </div>
-            <AboutBoundaryList items={ABOUT_BOUNDARIES} />
+            <AboutBoundaryList items={ABOUT_BOUNDARIES} locale={locale} />
           </div>
         </div>
       </section>
@@ -330,22 +340,20 @@ export function AboutZhContent() {
         <div className={styles.container}>
           <div className={styles.sectionHeading}>
             <div>
-              <h2 id="qualifications-title">企业资质与授权专利</h2>
-              <p>集中展示当前可核验的企业资质、体系认证与已授权专利。</p>
+              <h2 id="qualifications-title">{t("企业资质与授权专利")}</h2>
+              <p>{t("集中展示当前可核验的企业资质、体系认证与已授权专利。")}</p>
             </div>
             <Link
-              href="/zh/strength/honors"
+              href={t("/zh/strength/honors")}
               className={homeToolStyles.allArticlesLink}
             >
-              查看全部
-              <HiChevronDoubleRight aria-hidden="true" />
+              {t("查看全部")}<HiChevronDoubleRight aria-hidden="true" />
             </Link>
           </div>
 
-          <AboutCertificateGrid cards={[...certificateCards]} />
+          <AboutCertificateGrid locale={locale} cards={[...certificateCards]} />
           <p className={styles.srOnly}>
-            完整资料共 {fullCertificateCount} 张，包含企业资质、质量管理体系证书和授权专利。
-          </p>
+            {t("完整资料共")}{fullCertificateCount} {t("张，包含企业资质、质量管理体系证书和授权专利。")}</p>
         </div>
       </section>
 
@@ -355,17 +363,17 @@ export function AboutZhContent() {
         aria-labelledby="projects-title"
       >
         <div className={styles.container}>
-          <h2 id="projects-title" className={styles.srOnly}>项目合作</h2>
+          <h2 id="projects-title" className={styles.srOnly}>{t("项目合作")}</h2>
 
-          <div className={styles.partnerStrip} aria-label="部分合作单位">
+          <div className={styles.partnerStrip} aria-label={t("部分合作单位")}>
             <div className={styles.partnerIntro}>
-              <strong>部分合作单位</strong>
-              <span>不同项目的合作形式和供货范围可能不同</span>
+              <strong>{t("部分合作单位")}</strong>
+              <span>{t("不同项目的合作形式和供货范围可能不同")}</span>
             </div>
             <ul
               className={styles.partnerLogos}
               data-about-layout="partner-logos"
-              aria-label="合作单位标志"
+              aria-label={t("合作单位标志")}
             >
               {partnerLogos.map((partner) => (
                 <li key={partner.src} className={styles.partnerLogo}>
@@ -393,19 +401,19 @@ export function AboutZhContent() {
         <div className={`${styles.container} ${styles.faqLayout}`}>
           <div className={styles.sectionHeading}>
             <div>
-              <h2 id="faq-title">您关心的，我们说清楚。</h2>
-              <p>厂家身份、承接范围与项目对接，从这几个问题开始了解。</p>
+              <h2 id="faq-title">{t("您关心的，我们说清楚。")}</h2>
+              <p>{t("厂家身份、承接范围与项目对接，从这几个问题开始了解。")}</p>
             </div>
           </div>
 
-          <AboutFaq items={ABOUT_FAQS} />
+          <AboutFaq items={localizeCoreValue(ABOUT_FAQS, locale)} />
 
           <div className={styles.faqContact}>
             <p>
-              还有具体问题？<span>提供工况，让技术人员帮您初步核对。</span>
+              {t("还有具体问题？")}<span>{t("提供工况，让技术人员帮您初步核对。")}</span>
             </p>
             <div className={styles.faqContactAction}>
-              <WechatContactButton label="联系业务顾问" className={styles.faqContactButton} />
+              <WechatContactButton locale={locale} description={locale === 'en' ? 'Send workpieces, process, throughput and site conditions for an initial assessment.' : undefined} label={t("联系业务顾问")} className={styles.faqContactButton} />
               <HiArrowUpRight aria-hidden="true" />
             </div>
           </div>
@@ -415,13 +423,12 @@ export function AboutZhContent() {
       <section className={styles.inquirySection} aria-labelledby="inquiry-title">
         <div className={`${styles.container} ${styles.contactPanel}`}>
           <div>
-            <h2 id="inquiry-title">发工况，获取初步方向与报价资料清单</h2>
+            <h2 id="inquiry-title">{t("发工况，获取初步方向与报价资料清单")}</h2>
             <p className={styles.contactDescription}>
-              提交工件、材质、温度、工艺曲线、装料方式、产能节拍和现场条件，技术人员可先做方向与配置边界判断。
-            </p>
+              {t("提交工件、材质、温度、工艺曲线、装料方式、产能节拍和现场条件，技术人员可先做方向与配置边界判断。")}</p>
           </div>
-          <WechatContactButton
-            label="提交工况资料"
+          <WechatContactButton locale={locale} description={locale === 'en' ? 'Send workpieces, process, throughput and site conditions for an initial assessment.' : undefined}
+            label={t("提交工况资料")}
             className={`${getButtonClass('primary', 'lg')} ${styles.primaryButton}`}
           />
         </div>

@@ -43,9 +43,9 @@ export function Section({
     </section>
   );
 }
-export function AnchorNav({ items }: { items: readonly (readonly [string, string])[] }) {
+export function AnchorNav({ items, locale = 'zh' }: { items: readonly (readonly [string, string])[]; locale?: 'zh' | 'en' }) {
   return (
-    <nav className={styles.nav} aria-label="页内导航">
+    <nav className={styles.nav} aria-label={locale === 'en' ? 'On this page' : '页内导航'}>
       <div className={`${styles.container} ${styles.navInner}`}>
         {items.map(([id, label]) => (
           <a href={`#${id}`} key={id}>
@@ -57,6 +57,7 @@ export function AnchorNav({ items }: { items: readonly (readonly [string, string
   );
 }
 export function Hero({
+  locale = 'zh',
   eyebrow,
   title,
   text,
@@ -65,6 +66,7 @@ export function Hero({
   alt,
   tags,
 }: {
+  locale?: 'zh' | 'en';
   eyebrow: string;
   title: string;
   text: string;
@@ -79,9 +81,9 @@ export function Hero({
         <div className={styles.heroCopy}>
           <p className={styles.eyebrow}>{eyebrow}</p>
           <h1 id="page-title">
-            <span>{title.startsWith('连续') ? '连续热处理生产线' : '工业炉维修、改造'}</span>
+            <span>{locale === 'en' ? title : title.startsWith('连续') ? '连续热处理生产线' : '工业炉维修、改造'}</span>
             <wbr />
-            <span>{title.startsWith('连续') ? '解决方案' : '与大修服务'}</span>
+            {locale === 'zh' && <span>{title.startsWith('连续') ? '解决方案' : '与大修服务'}</span>}
           </h1>
           <p>{text}</p>
           {tags && (
@@ -99,12 +101,13 @@ export function Hero({
           )}
           <div className={styles.actions}>
             <WechatContactButton
-              label="加微信，工况初判"
+              locale={locale}
+              label={locale === 'en' ? 'Discuss equipment via WeChat' : '加微信，工况初判'}
               className={styles.button}
-              description="先发送照片和已知工况，技术人员再与您沟通需要补充的资料。"
+              description={locale === 'en' ? 'Send photos and known operating conditions. Our technical staff will discuss any further information needed.' : '先发送照片和已知工况，技术人员再与您沟通需要补充的资料。'}
             />
             <a className={styles.secondaryButton} href={title.startsWith('连续') ? '#fit' : '#scope'}>
-              {title.startsWith('连续') ? '查看适用条件' : '查看服务范围'}
+              {title.startsWith('连续') ? '查看适用条件' : locale === 'en' ? 'View service scope' : '查看服务范围'}
             </a>
           </div>
           {!tags && note && <p className={styles.note}>{note}</p>}
@@ -192,11 +195,13 @@ export function FaqSection({
   );
 }
 export function Resources({
+  locale = 'zh',
   title,
   items,
 }: {
   title: string;
   items: { title: string; description: string; href: string; label: string }[];
+  locale?: 'zh' | 'en';
 }) {
   items = items.filter((item) => !isWithdrawnTechnicalPath(item.href));
   if (!items.length) return null;
@@ -213,7 +218,7 @@ export function Resources({
                 <h3>{item.title}</h3>
                 <p>{item.description}</p>
                 <Link className={styles.textLink} href={item.href}>
-                  {item.label}{' '}
+                  {item.label}{locale === 'en' && item.href.startsWith('/zh/') ? ' (Chinese)' : ''}{' '}
                   <HiOutlineArrowRight
                     style={{ display: 'inline', width: 14 }}
                     aria-hidden="true"

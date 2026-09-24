@@ -1,3 +1,5 @@
+import type { Locale } from '@/types/site';
+import { getEnglishLineProcess } from '@/lib/production-line-content-en';
 import { isWithdrawnTechnicalPath, TECHNICAL_CONTENT_PUBLISHED } from '@/lib/publication-scope';
 import Link from 'next/link';
 import { HiArrowRight, HiChevronDown } from 'react-icons/hi2';
@@ -80,11 +82,11 @@ function Heading({
   );
 }
 
-function ComparisonTable({ data, id }: { data: LineTable; id: string }) {
+function ComparisonTable({ data, id, locale = 'zh' }: { data: LineTable; id: string; locale?: Locale }) {
   return (
     <>
       <p id={`${id}-scroll-hint`} className={styles.scrollHint}>
-        左右滑动查看完整对照表
+        {locale === 'en' ? 'Scroll horizontally to view the complete comparison' : '左右滑动查看完整对照表'}
       </p>
       <div
         className={styles.tableScroll}
@@ -120,21 +122,24 @@ function ComparisonTable({ data, id }: { data: LineTable; id: string }) {
   );
 }
 
-function relatedHref(label: string): string | undefined {
+function relatedHref(label: string, locale: Locale): string | undefined {
   const furnace =
-    label === '网带炉' ? 'mesh-belt-furnace' : label === '箱式炉' ? 'box-furnace' : undefined;
-  if (furnace && getStaticProductBySlug(furnace)) return `/zh/products/detail/${furnace}`;
-  if (label === '网带式渗碳淬火生产线' && getHeatTreatmentLine('mesh-belt-carbonitriding-line'))
-    return '/zh/products/detail/mesh-belt-carbonitriding-line';
+    ['网带炉', 'Mesh Belt Furnace'].includes(label) ? 'mesh-belt-furnace' : ['箱式炉', 'Box Furnace'].includes(label) ? 'box-furnace' : undefined;
+  if (furnace && getStaticProductBySlug(furnace)) return `/${locale}/products/detail/${furnace}`;
+  if (['网带式渗碳淬火生产线', 'Mesh Belt Carburizing & Quenching Line'].includes(label) && getHeatTreatmentLine('mesh-belt-carbonitriding-line'))
+    return `/${locale}/products/detail/mesh-belt-carbonitriding-line`;
   return undefined;
 }
 
-export function ProductionLineDetailPage({ content }: { content: ProductionLineContent }) {
+export function ProductionLineDetailPage({ content, locale = 'zh' }: { content: ProductionLineContent; locale?: Locale }) {
+  const en = locale === 'en';
+  const t = (zh: string, english: string) => en ? english : zh;
+  const processData = en ? getEnglishLineProcess(content.pageId) : { model: productionLineProcessMaps[content.pageId], steps: getLineProcessSteps(content) };
   const s = content.sections;
   const inquiryConditions = s.inquiry.form.fields
     .filter((field) => field.name !== 'contact_method')
     .map((field) => field.label)
-    .join('、');
+    .join(en ? ', ' : '、');
   const earlyInquiry = [
     'fastener-quench-temper-line',
     'aluminum-solution-aging-line',
@@ -172,11 +177,12 @@ export function ProductionLineDetailPage({ content }: { content: ProductionLineC
       ))}
     </div>
   );
-  const path = `/zh/products/detail/${content.pageId}`;
+  const path = `/${locale}/products/detail/${content.pageId}`;
   return (
     <>
     <div
       className={styles.page}
+      lang={locale}
       data-fastener-page={content.pageId === 'fastener-quench-temper-line' ? '' : undefined}
       data-heat-treatment-line={content.pageId}
       data-line-variant={content.variant}
@@ -192,17 +198,17 @@ export function ProductionLineDetailPage({ content }: { content: ProductionLineC
             description: s.overview.description,
             ...(content.images['hero-line'] ? { image: content.images['hero-line'].src } : {}),
           },
-          'zh',
+          locale,
         )}
       />
       <JsonLd id="fastener-faq" data={getFaqJsonLd(s.faq.items)} />
       <div className={styles.breadcrumbBar}>
         <div className={styles.container}>
           <Breadcrumb
-            locale="zh"
+            locale={locale}
             tone="dark"
             currentLabel={s.overview.title}
-            items={[{ label: '产品中心', href: '/zh/products' }]}
+            items={[{ label: t('产品中心', 'Product Center'), href: `/${locale}/products` }]}
           />
         </div>
       </div>
@@ -219,6 +225,7 @@ export function ProductionLineDetailPage({ content }: { content: ProductionLineC
               key={content.pageId}
               images={content.images}
               items={s.overview.gallery}
+              locale={locale}
             />
           ) : (
             <ProductionLineHeroDiagram content={content} />
@@ -239,7 +246,7 @@ export function ProductionLineDetailPage({ content }: { content: ProductionLineC
         </div>
       </section>
 
-      <ProductionLineAnchorNav items={content.sectionNavigation.filter((item) => TECHNICAL_CONTENT_PUBLISHED || item.href !== '#project')} />
+      <ProductionLineAnchorNav locale={locale} items={content.sectionNavigation.filter((item) => TECHNICAL_CONTENT_PUBLISHED || item.href !== '#project')} />
 
       <section id="workpieces" className={`${styles.section} ${styles.soft}`}>
         <div className={styles.container}>
@@ -273,8 +280,9 @@ export function ProductionLineDetailPage({ content }: { content: ProductionLineC
             pageId={content.pageId}
             process={s.process}
             image={s.process.imageAssetId ? content.images[s.process.imageAssetId] : undefined}
-            model={productionLineProcessMaps[content.pageId]}
-            steps={getLineProcessSteps(content)}
+            model={processData.model}
+            steps={processData.steps}
+            locale={locale}
           />
         </div>
       </section>
@@ -297,7 +305,7 @@ export function ProductionLineDetailPage({ content }: { content: ProductionLineC
                 </article>
               ))}
             </div>
-            <ComparisonTable data={s.comparison.table} id="scheme-table" />
+            <ComparisonTable locale={locale} data={s.comparison.table} id="scheme-table" />
           </div>
         </section>
       )}
@@ -305,10 +313,10 @@ export function ProductionLineDetailPage({ content }: { content: ProductionLineC
       <section id="configuration" className={`${styles.section} ${styles.soft}`}>
         <div className={styles.container}>
           <Heading title={s.configuration.title} subtitle={s.configuration.subtitle} />
-          <ComparisonTable data={s.configuration.table} id="configuration-table" />
+          <ComparisonTable locale={locale} data={s.configuration.table} id="configuration-table" />
           {s.configuration.inputs && (
             <div className={styles.configurationInputs}>
-              <h3>选型沟通要确认的工况</h3>
+              <h3>{t('选型沟通要确认的工况', 'Operating conditions to confirm')}</h3>
               <dl className={styles.requirements}>
                 {s.configuration.inputs.map((item) => (
                   <div key={item.title}>
@@ -371,10 +379,10 @@ export function ProductionLineDetailPage({ content }: { content: ProductionLineC
               title={content.projectReference.title}
               subtitle={content.projectReference.description}
             />
-            <ComparisonTable data={content.projectReference.table} id="project-reference-table" />
+            <ComparisonTable locale={locale} data={content.projectReference.table} id="project-reference-table" />
             <p className={styles.note}>{content.projectReference.note}</p>
             <Link href={content.projectReference.href} className={styles.secondaryButton}>
-              查看河南项目公开记录 <HiArrowRight aria-hidden="true" />
+              {t('查看河南项目公开记录', 'View the public Henan project record')} <HiArrowRight aria-hidden="true" />
             </Link>
           </div>
         </section>
@@ -450,13 +458,13 @@ export function ProductionLineDetailPage({ content }: { content: ProductionLineC
               </details>
             ))}
           </div>
-          <aside className={styles.related} aria-label="相关内容">
-            {s.faq.relatedGroups.map((group) => ({ ...group, links: group.links.filter((item) => !isWithdrawnTechnicalPath(item.href ?? relatedHref(item.label) ?? '')) })).filter((group) => group.links.length).map((group) => (
+          <aside className={styles.related} aria-label={t('相关内容', 'Related resources')}>
+            {s.faq.relatedGroups.map((group) => ({ ...group, links: group.links.filter((item) => !isWithdrawnTechnicalPath(item.href ?? relatedHref(item.label, locale) ?? '')) })).filter((group) => group.links.length).map((group) => (
               <div key={group.id}>
                 <h3>{group.title}</h3>
                 <ul>
                   {group.links.map((item) => {
-                    const href = item.href ?? relatedHref(item.label);
+                    const href = item.href ?? relatedHref(item.label, locale);
                     return (
                       <li key={item.label}>
                         {href ? (
@@ -482,21 +490,22 @@ export function ProductionLineDetailPage({ content }: { content: ProductionLineC
 
     </div>
 
-    <EntryCaseEvidence entryPath={`/products/detail/${content.pageId}`} locale="zh" />
+    <EntryCaseEvidence entryPath={`/products/detail/${content.pageId}`} locale={locale} />
 
     <div className={styles.page}>
       <HomepageLeadForm
         key={content.pageId}
         sectionId="inquiry"
-        eyebrow={`${s.overview.title} · 方案咨询`}
+        locale={locale}
+        eyebrow={`${s.overview.title} · ${t('方案咨询', 'Project consultation')}`}
         pageType="热处理生产线产品页"
         productTag={s.overview.title}
         successProductTag={s.overview.title}
         sourceModule="production_line_form"
         inquiryProduct={s.overview.title}
         inquiryDirection="新建热处理生产线"
-        problemPlaceholder={`例如：${inquiryConditions}，已知信息先填`}
-        inquiryHint={`可先说明${inquiryConditions}，详细资料可后续补充。`}
+        problemPlaceholder={en ? `For example: ${inquiryConditions}. Share what you know.` : `例如：${inquiryConditions}，已知信息先填`}
+        inquiryHint={en ? `Start with ${inquiryConditions}. Further documents can follow.` : `可先说明${inquiryConditions}，详细资料可后续补充。`}
       />
     </div>
     </>

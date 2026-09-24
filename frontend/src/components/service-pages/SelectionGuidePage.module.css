@@ -84,6 +84,11 @@
   font-size: 15px;
   white-space: nowrap;
 }
+.page[lang='en'] .entry > .textLink {
+  min-width: 0;
+  max-width: 100%;
+  white-space: normal;
+}
 .related {
   display: flex;
   flex-wrap: wrap;

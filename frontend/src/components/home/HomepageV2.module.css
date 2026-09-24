@@ -694,6 +694,12 @@
   line-height: 22px;
 }
 
+.fieldHint {
+  color: #586a7e;
+  font-size: 13px;
+  line-height: 20px;
+}
+
 .directionSelect {
   position: relative;
   min-width: 0;
@@ -874,6 +880,7 @@
   display: grid;
   min-width: 0;
   grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: start;
   gap: 20px;
 }
 
@@ -1489,4 +1496,17 @@
   .page {
     --home-routing-width: var(--site-wide-width);
   }
+}
+
+/* English result labels must stay within the inquiry card. */
+.formSection:lang(en) .formOutcomeResults {
+  grid-template-columns: minmax(0, 1fr);
+  gap: 8px;
+}
+.formSection:lang(en) .formOutcomeResults strong {
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+.formSection:lang(en) .formOutcomeResults > span {
+  display: none;
 }

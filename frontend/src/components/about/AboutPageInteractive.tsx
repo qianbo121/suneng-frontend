@@ -1,5 +1,9 @@
 'use client';
 
+import { aboutPageText } from '@/lib/about-page-localization';
+import type { Locale } from '@/types/site';
+
+
 import Image from 'next/image';
 import {
   type KeyboardEvent as ReactKeyboardEvent,
@@ -28,7 +32,8 @@ type CertificateCard = {
   linkLabel: string;
 };
 
-export function AboutAnchorNav({ items }: { items: AboutAnchorItem[] }) {
+export function AboutAnchorNav({ items, locale = 'zh' }: { items: AboutAnchorItem[]; locale?: Locale }) {
+  const t = (text: string) => aboutPageText(text, locale);
   const [activeId, setActiveId] = useState(items[0]?.id ?? '');
   const scrollerRef = useRef<HTMLDivElement>(null);
   const linkRefs = useRef<Record<string, HTMLAnchorElement | null>>({});
@@ -119,7 +124,7 @@ export function AboutAnchorNav({ items }: { items: AboutAnchorItem[] }) {
   };
 
   return (
-    <nav className={styles.anchorNav} aria-label="关于苏能页内导航">
+    <nav className={styles.anchorNav} aria-label={t("关于苏能页内导航")}>
       <div ref={scrollerRef} className={styles.anchorScroller} data-about-layout="anchor-nav">
         {items.map((item) => (
           <a
@@ -141,7 +146,8 @@ export function AboutAnchorNav({ items }: { items: AboutAnchorItem[] }) {
   );
 }
 
-export function AboutBoundaryList({ items }: { items: AboutBoundaryItem[] }) {
+export function AboutBoundaryList({ items, locale = 'zh' }: { items: AboutBoundaryItem[]; locale?: Locale }) {
+  const t = (text: string) => aboutPageText(text, locale);
   const [expanded, setExpanded] = useState(false);
   const featuredTitles = [
     '感应加热设备',
@@ -167,16 +173,16 @@ export function AboutBoundaryList({ items }: { items: AboutBoundaryItem[] }) {
     <div className={styles.boundaryPanel}>
       <div className={styles.boundaryHeading}>
         <div>
-          <h3>承接范围说明</h3>
+          <h3>{t('承接范围说明')}</h3>
         </div>
-        <p>提前核对设备与服务是否匹配。</p>
+        <p>{t('提前核对设备与服务是否匹配。')}</p>
       </div>
 
       <ul id="about-boundary-list" className={styles.boundaryGrid}>
         {orderedItems.map((item, index) => (
           <li key={item.title} hidden={!expanded && index >= 6}>
-            <strong>{displayTitles[item.title] ?? item.title}</strong>
-            <span>{item.text}</span>
+            <strong>{t(displayTitles[item.title] ?? item.title)}</strong>
+            <span>{t(item.text)}</span>
           </li>
         ))}
       </ul>
@@ -188,7 +194,7 @@ export function AboutBoundaryList({ items }: { items: AboutBoundaryItem[] }) {
         aria-controls="about-boundary-list"
         onClick={() => setExpanded((current) => !current)}
       >
-        {expanded ? '收起完整边界清单' : `展开完整边界清单（${items.length} 类）`}
+        {expanded ? t('收起完整边界清单') : locale === 'en' ? `Show all scope boundaries (${items.length})` : `展开完整边界清单（${items.length} 类）`}
         <HiChevronDown
           aria-hidden="true"
           className={expanded ? styles.chevronExpanded : undefined}
@@ -198,7 +204,8 @@ export function AboutBoundaryList({ items }: { items: AboutBoundaryItem[] }) {
   );
 }
 
-export function AboutCertificateGrid({ cards }: { cards: CertificateCard[] }) {
+export function AboutCertificateGrid({ cards, locale = 'zh' }: { cards: CertificateCard[]; locale?: Locale }) {
+  const t = (text: string) => aboutPageText(text, locale);
   const [activeCard, setActiveCard] = useState<CertificateCard | null>(null);
   const dialogRef = useRef<HTMLDivElement>(null);
   const closeButtonRef = useRef<HTMLButtonElement>(null);
@@ -254,7 +261,7 @@ export function AboutCertificateGrid({ cards }: { cards: CertificateCard[] }) {
             <button
               type="button"
               className={styles.certificateImageButton}
-              aria-label={`查看${card.title}大图`}
+              aria-label={locale === 'en' ? `View ${card.title}` : `查看${card.title}大图`}
               onClick={(event) => {
                 triggerRef.current = event.currentTarget;
                 setActiveCard(card);
@@ -268,14 +275,14 @@ export function AboutCertificateGrid({ cards }: { cards: CertificateCard[] }) {
                 sizes="(max-width: 767px) calc(100vw - 48px), (max-width: 1199px) 33vw, 360px"
                 className={styles.certificateImage}
               />
-              <span className={styles.viewImageHint}>点击查看大图</span>
+              <span className={styles.viewImageHint}>{t("点击查看大图")}</span>
             </button>
             <div className={styles.certificateBody}>
               <h3>{card.title}</h3>
               <p>{card.summary}</p>
               <span>{card.detail}</span>
               {card.validUntil ? (
-                <span className={styles.certificateValidity}>有效期至：{card.validUntil}</span>
+                <span className={styles.certificateValidity}>{t("有效期至：")}{card.validUntil}</span>
               ) : null}
               <button
                 type="button"
@@ -317,7 +324,7 @@ export function AboutCertificateGrid({ cards }: { cards: CertificateCard[] }) {
                 ref={closeButtonRef}
                 type="button"
                 className={styles.lightboxClose}
-                aria-label="关闭证书大图"
+                aria-label={t("关闭证书大图")}
                 onClick={() => setActiveCard(null)}
               >
                 <HiXMark aria-hidden="true" />

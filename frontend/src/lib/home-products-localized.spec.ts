@@ -2,9 +2,23 @@ import { describe, expect, it } from 'vitest';
 import { getHomeProductionLines, homeLineMotionCopyEn } from './home-products-localized';
 import { getStaticProductBySlug } from '@/constants/static-products';
 import { isZhOnlyPath } from '@/lib/i18n/zh-only';
+import { productCenterProductionLines } from './products-landing-data';
+import { productionLineAnimationConfig } from './production-line-animation-config';
 
 describe('locale-specific homepage production line selection', () => {
-  it('keeps the approved Chinese spotlights without advertising unpublished English details', () => {
+  it('provides every product-list animation with all English stages and its process note', () => {
+    for (const line of productCenterProductionLines) {
+      const motion = homeLineMotionCopyEn[line.id];
+      expect(motion, `Missing English animation captions for ${line.id}`).toBeDefined();
+      expect(motion.stages).toHaveLength(line.steps.length);
+      expect(motion.stages).toHaveLength(productionLineAnimationConfig[line.id].stages.length);
+      for (const text of [...motion.stages, motion.note]) {
+        expect(text.trim()).not.toBe('');
+        expect(text).not.toMatch(/[\u3400-\u9fff]/);
+      }
+    }
+  });
+  it('keeps approved homepage selections while allowing their completed English details', () => {
     const chinese = getHomeProductionLines('zh');
     expect(chinese.map((line) => line.id)).toEqual([
       'track-shoe-press-quench-line',
@@ -12,12 +26,12 @@ describe('locale-specific homepage production line selection', () => {
       'fastener-quench-temper-line',
     ]);
     for (const line of chinese) {
-      expect(isZhOnlyPath(line.href)).toBe(true);
+      expect(isZhOnlyPath(line.href)).toBe(false);
     }
     expect(getHomeProductionLines('en').map((line) => line.id)).toEqual([
-      'roller-mesh-belt-line',
-      'copper-wire-annealing-line',
-      'annealing-solution-line',
+      'track-shoe-press-quench-line',
+      'forging-waste-heat-qt-line',
+      'fastener-quench-temper-line',
     ]);
   });
 

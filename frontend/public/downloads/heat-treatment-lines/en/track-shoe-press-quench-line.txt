@@ -1,0 +1,15 @@
+Track-shoe Press-quenching Line | Project Discussion Checklist
+
+Provide available information first; resolve unknowns during discussion.
+1. Track-shoe model, material grade, preceding operations and incoming condition.
+2. 2D/3D drawings, grouser and plate cross-sections, mass, mounting holes and measurement datums.
+3. Final hardness, microstructure, crack inspection, flatness/twist/hole-spacing requirements and applicable specifications.
+4. Existing heating, quenching and tempering schedules; historical distortion or nonconformity records.
+5. Target parts/hour, shifts, usual model mix and die-change frequency.
+6. Existing die, support/locating, clamping and cooling-structure information.
+7. Site plan, press-foundation conditions, maintenance height, die lifting and access routes.
+8. Electricity/gas, cooling, exhaust, upstream/downstream interfaces and supply responsibilities.
+9. Representative models, test pieces and sample counts; separate equipment, process and product acceptance requirements.
+10. Company, contact person and phone/WeChat/email.
+
+Verify process and equipment capability for the workpiece and adopted specification. This checklist assumes no universal pressure, temperature, medium or parts-per-hour capacity.

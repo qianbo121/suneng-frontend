@@ -14,10 +14,13 @@ type ProductionLine = (typeof productCenterProductionLines)[number];
 export function ProductCenterLineCarousel({
   items,
   previewAll = false,
+  locale = 'zh',
 }: {
   items: ProductionLine[];
   previewAll?: boolean;
+  locale?: 'zh' | 'en';
 }) {
+  const t = (zh: string, en: string) => locale === 'en' ? en : zh;
   const railRef = useRef<HTMLDivElement>(null);
   const [columns, setColumns] = useState(3);
   const [page, setPage] = useState(0);
@@ -83,10 +86,10 @@ export function ProductCenterLineCarousel({
       <div className={styles.productionLineHeader}>
         <div className={styles.productionLineIntro}>
           <div className={styles.productionLineTitle}>
-            <h2 id="production-line-title">热处理生产线</h2>
-            <span>{items.length} 条</span>
+            <h2 id="production-line-title">{t("热处理生产线", "Heat-Treatment Lines")}</h2>
+            <span>{items.length} {t("条", "lines")}</span>
           </div>
-          <p>按工件与工艺需求，了解对应的生产线</p>
+          <p>{t("按工件与工艺需求，了解对应的生产线", "Find the line for your workpiece and process requirements")}</p>
         </div>
         <div className={styles.productionLineControls}>
           <output className={styles.productionLineCounter} aria-live="polite" aria-atomic="true">
@@ -94,7 +97,7 @@ export function ProductCenterLineCarousel({
           </output>
           <button
             type="button"
-            aria-label="查看上一组生产线"
+            aria-label={t("查看上一组生产线", "Previous lines")}
             aria-controls="production-line-rail"
             className={styles.productionLineControl}
             disabled={page === 0}
@@ -104,7 +107,7 @@ export function ProductCenterLineCarousel({
           </button>
           <button
             type="button"
-            aria-label="查看下一组生产线"
+            aria-label={t("查看下一组生产线", "Next lines")}
             aria-controls="production-line-rail"
             className={styles.productionLineControl}
             disabled={page >= groups.length - 1}
@@ -119,7 +122,7 @@ export function ProductCenterLineCarousel({
         id="production-line-rail"
         className={styles.productionLineRail}
         role="region"
-        aria-label="产品中心热处理生产线列表"
+        aria-label={t("产品中心热处理生产线列表", "Heat-treatment line list")}
         tabIndex={0}
         onKeyDown={onKeyDown}
       >
@@ -132,7 +135,7 @@ export function ProductCenterLineCarousel({
           >
             {group.map((product) =>
               previewAll || isProductionLineAnimationApproved(product.id) ? (
-                <ProductionLineAnimationCard key={product.id} product={product} />
+                <ProductionLineAnimationCard key={product.id} product={product} locale={locale} />
               ) : (
                 <article
                   key={product.id}
@@ -157,15 +160,15 @@ export function ProductCenterLineCarousel({
                   <h3 className={styles.productionLineName}>
                     <Link href={product.href}>{product.name}</Link>
                   </h3>
-                  <p className={styles.productionLineCopy}>适用：{product.applicable}</p>
+                  <p className={styles.productionLineCopy}>{t("适用：", "For: ")}{product.applicable}</p>
                   <p className={styles.productionLineCopy}>{product.process}</p>
                   <div className={styles.productionLineFlowPanel}>
                     <Link
                       href={product.compositionHref}
                       className={styles.productionLineFlowLink}
-                      aria-label={`${product.name}：查看完整工艺流程`}
+                      aria-label={`${product.name}: ${t("查看完整工艺流程", "View complete process flow")}`}
                     >
-                      <ol className={styles.productionLineFlow} aria-label="典型工艺流程">
+                      <ol className={styles.productionLineFlow} aria-label={t("典型工艺流程", "Typical process flow")}>
                         {product.steps.map((step, stepIndex) => (
                           <li
                             key={step}

@@ -276,3 +276,42 @@ it('lists only approved cases and guides without pagination or withdrawn alterna
     for (const url of Object.values(entry.alternates?.languages ?? {}))
       expect(isWithdrawnTechnicalPath(String(url)), `${entry.url} -> ${url}`).toBe(false);
 });
+
+it('includes reciprocal language links for the completed English service pages', async () => {
+  const sitemap = await buildSitemap();
+  const paths = [
+    '/service',
+    '/service/furnace-renovation-overhaul',
+    '/service/furnace-relocation-restart',
+    '/service/installation-after-sales',
+    '/service/selection-retrofit-guide',
+  ];
+  for (const path of paths) {
+    const zh = `https://www.jssngyl.cn/zh${path}`;
+    const en = `https://www.jssngyl.cn/en${path}`;
+    for (const url of [zh, en]) {
+      const entries = sitemap.filter((entry) => entry.url === url);
+      expect(entries).toHaveLength(1);
+      expect(entries[0].alternates?.languages).toEqual({ 'zh-CN': zh, 'en-US': en, 'x-default': zh });
+    }
+  }
+});
+
+it('includes reciprocal language links for the eight completed English production lines', async () => {
+  const sitemap = await buildSitemap();
+  const slugs = [
+    'track-shoe-press-quench-line', 'forging-waste-heat-qt-line',
+    'fastener-quench-temper-line', 'mesh-belt-carbonitriding-line',
+    'multi-furnace-quench-cell', 'aluminum-solution-aging-line',
+    'aluminum-forging-heating-line', 'cylinder-curing-line',
+  ];
+  for (const slug of slugs) {
+    const zh = `https://www.jssngyl.cn/zh/products/detail/${slug}`;
+    const en = `https://www.jssngyl.cn/en/products/detail/${slug}`;
+    for (const url of [zh, en]) {
+      const entries = sitemap.filter((entry) => entry.url === url);
+      expect(entries).toHaveLength(1);
+      expect(entries[0].alternates?.languages).toEqual({ 'zh-CN': zh, 'en-US': en, 'x-default': zh });
+    }
+  }
+});

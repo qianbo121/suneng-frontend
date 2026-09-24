@@ -46,7 +46,7 @@ export function ProductDetailGallery({ locale, images, title, fillMode = 'contai
               <button
                 className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-white/80 text-[#6b7280] shadow-[0_4px_12px_rgba(15,23,42,0.12)] transition hover:bg-white hover:text-[#1f2937]"
                 type="button"
-                aria-label="上一张"
+                aria-label={locale === 'en' ? 'Previous image' : '上一张'}
                 onClick={goPrev}
               >
                 <HiChevronLeft className="h-[14px] w-[14px]" />
@@ -69,7 +69,7 @@ export function ProductDetailGallery({ locale, images, title, fillMode = 'contai
                 key={image}
                 type="button"
                 onClick={() => setActiveIndex(index)}
-                aria-label={`切换到第 ${index + 1} 张产品图`}
+                aria-label={locale === 'en' ? `View product image ${index + 1}` : `切换到第 ${index + 1} 张产品图`}
                 aria-current={isActive ? 'true' : undefined}
                 className={thumbClassName}
               >
@@ -88,7 +88,7 @@ export function ProductDetailGallery({ locale, images, title, fillMode = 'contai
               <button
                 className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-white/80 text-[#6b7280] shadow-[0_4px_12px_rgba(15,23,42,0.12)] transition hover:bg-white hover:text-[#1f2937]"
                 type="button"
-                aria-label="下一张"
+                aria-label={locale === 'en' ? 'Next image' : '下一张'}
                 onClick={goNext}
               >
                 <HiChevronRight className="h-[14px] w-[14px]" />

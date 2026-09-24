@@ -1,0 +1,45 @@
+Mesh-belt Carburizing & Quenching Line | Inquiry Checklist
+
+Prepare known information first and resolve unknowns during discussion.
+
+1. Workpieces and incoming condition
+Part name, drawings or clear photos:
+Material grade and certificates:
+Dimensions, effective section, unit mass and areas to harden:
+Incoming microstructure, previous heat treatment, oil or coating residues:
+Subsequent machining, mating dimensions and allowable distortion:
+
+2. Targets and acceptance basis
+Process: carburizing and quenching. List carbonitriding or neutral hardening separately if required:
+Product standards, customer specifications and editions:
+Effective case depth and test locations:
+Surface/core hardness, microstructure and surface requirements:
+Hardness method, test force, limiting hardness and sampling:
+Test reports, batch traceability and witness requirements:
+
+3. Loading and production
+Main sizes and their proportions:
+Proposed layer depth or load per belt length:
+Shielding, overlap, mixing, collision or individual-location restrictions:
+Target output and units, e.g. kg/h:
+Shifts, effective production time and changeover frequency:
+
+4. Atmosphere, quenching and tempering
+Existing process curves, atmosphere source and controls, if available:
+Proposed medium, temperature control and circulation/cooling requirements, if known:
+Post-quench washing/drying, permitted transfer delay and tempering requirements:
+Available gas sources, washers, tempering furnaces or other auxiliary equipment:
+
+5. Site and supply responsibilities
+Available length, width, height and logistics direction:
+Power/gas, process/purge gas and cooling water:
+Exhaust, oil-fume and atmosphere-exhaust treatment; washing-effluent treatment:
+Foundations, installation, maintenance and belt-replacement space:
+Requested supplier equipment, auxiliaries and integrated-commissioning scope:
+
+6. Contact
+Company and person:
+Phone, WeChat or email:
+Project location and planned timing:
+
+Part shape, furnace temperature or carbon potential alone cannot establish the complete process. Calculate capacity from representative parts, loading and continuous-operation conditions. Validate case depth, hardness, microstructure and distortion using agreed methods.

@@ -38,17 +38,21 @@ describe('localized primary navigation', () => {
         if (href.startsWith('/case/')) expect(PUBLIC_CASE_SLUGS.has(href.slice('/case/'.length)), href).toBe(true);
   });
 
-  it('links the completed English hubs with localized navigation labels', () => {
-    const english = getLocalizedNavigation('en');
-    for (const [key, href, labelText] of [
-      ['resources', '/news', 'Resources'],
-    ]) {
-      expect(english.filter((item) => item.key === key)).toEqual([
-        expect.objectContaining({ href, labelText }),
-      ]);
-      expect(getRouteLabelMap('en').get(href)).toBe(labelText);
-    }
-    expect(getLocalizedNavigation('zh').find((item) => item.key === 'resources'))
-      .toMatchObject({ href: '/news', labelText: '技术资料' });
+  it('uses the current Chinese hierarchy for both languages, including service children', () => {
+    const shape = (locale: 'zh' | 'en') => getLocalizedNavigation(locale).map((item) => ({
+      key: item.key, href: item.href,
+      children: item.children?.map((child) => ({ key: child.key, href: child.href.replace(/^\/zh/, '') })),
+    }));
+    expect(shape('en')).toEqual(shape('zh'));
+    expect(getLocalizedNavigation('en').map((item) => item.labelText)).toEqual([
+      'Home', 'Furnaces & Lines', 'Retrofit & Services', 'Technical Resources', 'About Suneng',
+    ]);
+    expect(getRouteLabelMap('en').get('/case')).toBe('Project Cases');
+  });
+
+  it('labels the actual Chinese partner page instead of linking to a nonexistent English page', () => {
+    const partner = getLocalizedNavigation('en').find((item) => item.key === 'about')?.children?.find((item) => item.key === 'about-partner');
+    expect(partner).toMatchObject({ href: '/zh/partner', labelText: 'Partners (Chinese)' });
+
   });
 });

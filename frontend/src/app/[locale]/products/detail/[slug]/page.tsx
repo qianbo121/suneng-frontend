@@ -22,11 +22,14 @@ import { GeoReviewNote } from '@/components/geo-pages/GeoPageBlocks';
 import { Breadcrumb } from '@/components/layout/Breadcrumb';
 import { ProductDetailGallery } from '@/components/products/ProductDetailGallery';
 import { ProductionLineDetailPage } from '@/components/products/ProductionLineDetailPage';
+import { EnglishProductionLineDetailPage } from '@/components/products/EnglishProductionLineDetailPage';
+import { getEnglishProductionLine, getEnglishLineImage } from '@/lib/english-production-lines';
 import { getProductionLineContent } from '@/lib/production-line-content';
 import { FastenerLineDetailPage } from '@/components/products/FastenerLineDetailPage';
 import { IndustryFurnaceDetailPage } from '@/components/products/IndustryFurnaceDetailPage';
 import { PitFurnaceDetailPage } from '@/components/products/PitFurnaceDetailPage';
-import { isIndustryFurnaceSlug } from '@/components/products/industry-furnace-detail-data';
+import { corePageText, localizeCoreValue } from '@/lib/core-page-localization';
+import { industryFurnacePageConfigs, isIndustryFurnaceSlug } from '@/components/products/industry-furnace-detail-data';
 import { ProductLeadForm, ProductQuoteScrollButton } from '@/components/products/ProductLeadForm';
 import { getProductDetailEn, pickDetail } from '@/constants/static-products-en';
 import {
@@ -114,7 +117,10 @@ export function generateStaticParams() {
     ]),
     ...heatTreatmentLines
       .filter((line) => !getStaticProductBySlug(line.slug))
-      .map((line) => ({ locale: 'zh', slug: line.slug })),
+      .flatMap((line) => [
+        { locale: 'zh', slug: line.slug },
+        ...(getEnglishProductionLine(line.slug) ? [{ locale: 'en', slug: line.slug }] : []),
+      ]),
   ];
 }
 
@@ -132,7 +138,32 @@ export async function generateMetadata({ params }: ProductDetailPageProps): Prom
       'x-default': `/zh/products/detail/${slug}`,
     },
   });
+  if (currentLocale === 'en' && (isIndustryFurnaceSlug(slug) || slug === 'pit-furnace')) {
+    const config = isIndustryFurnaceSlug(slug) ? localizeCoreValue(industryFurnacePageConfigs[slug], 'en') : undefined;
+    return buildMetadata({
+      title: config?.title ?? corePageText('井式炉｜长轴类工件立式热处理', 'en'),
+      description: config?.description ?? corePageText('井式炉用于长轴、辊轴、拉杆、套筒及吊篮装料工件的立式热处理。方案需结合有效加热区、装炉包络、温度等级、热源、冷却路径、起吊总质量和厂房条件确认。', 'en'),
+      path: `/en/products/detail/${slug}`, pageKey: 'product-detail',
+      image: config?.gallery[0].src ?? '/images/products/pit-furnace/pit-furnace-main.png',
+      alternateLocales: { 'zh-CN': `/zh/products/detail/${slug}`, 'en-US': `/en/products/detail/${slug}`, 'x-default': `/zh/products/detail/${slug}` },
+    });
+  }
   const product = getStaticProductBySlug(slug);
+  const englishLine = getEnglishProductionLine(slug);
+  if (currentLocale === 'en' && englishLine) {
+    return buildMetadata({
+      title: englishLine.seoTitle,
+      description: englishLine.description,
+      path: `/en/products/detail/${slug}`,
+      pageKey: 'product-detail',
+      image: getEnglishLineImage(slug).src,
+      alternateLocales: {
+        'zh-CN': `/zh/products/detail/${slug}`,
+        'en-US': `/en/products/detail/${slug}`,
+        'x-default': `/zh/products/detail/${slug}`,
+      },
+    });
+  }
 
   const line = currentLocale === 'zh' ? getHeatTreatmentLine(slug) : undefined;
   if (line) {
@@ -145,7 +176,7 @@ export async function generateMetadata({ params }: ProductDetailPageProps): Prom
       image: pageContent?.images['hero-line']?.src,
       alternateLocales: {
         'zh-CN': `/zh/products/detail/${slug}`,
-        ...(product ? { 'en-US': `/en/products/detail/${slug}` } : {}),
+        ...(product || englishLine ? { 'en-US': `/en/products/detail/${slug}` } : {}),
         'x-default': `/zh/products/detail/${slug}`,
       },
     });
@@ -236,6 +267,8 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
   const currentLocale = (locale === 'en' ? 'en' : 'zh') as Locale;
   const addition = getAdditionalFurnace(slug);
   if (addition) return <AdditionalFurnaceDetailPage furnace={addition} locale={currentLocale} />;
+  const englishLine = currentLocale === 'en' ? getEnglishProductionLine(slug) : undefined;
+  if (englishLine) return <EnglishProductionLineDetailPage line={englishLine} />;
   const product = getStaticProductBySlug(slug);
 
   const line = currentLocale === 'zh' ? getHeatTreatmentLine(slug) : undefined;
@@ -287,12 +320,12 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
     });
   const isP3TrolleyPage = currentLocale === 'zh' && product.slug === 'trolley-furnace';
 
-  if (currentLocale === 'zh' && product.slug === 'pit-furnace') {
-    return <PitFurnaceDetailPage />;
+  if (product.slug === 'pit-furnace') {
+    return <PitFurnaceDetailPage locale={currentLocale} />;
   }
 
-  if (currentLocale === 'zh' && isIndustryFurnaceSlug(product.slug)) {
-    return <IndustryFurnaceDetailPage slug={product.slug} />;
+  if (isIndustryFurnaceSlug(product.slug)) {
+    return <IndustryFurnaceDetailPage slug={product.slug} locale={currentLocale} />;
   }
 
   const PageContainer = currentLocale === 'en' ? 'div' : 'main';

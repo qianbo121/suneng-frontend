@@ -16,9 +16,10 @@
 .heroCard {
   width: min(1040px, 100%);
   margin-inline: auto;
-  border: 1px solid #dfe5ed;
+  border: 1px solid #dceafb;
   border-radius: 10px;
-  background: #f4f6f9;
+  background: var(--color-surface, #fff);
+  box-shadow: 0 4px 16px rgb(16 43 78 / 3%);
 }
 
 .heroCopy {
@@ -38,29 +39,49 @@
   align-items: center;
   padding: 0 13px;
   border-radius: 6px;
-  background: #eef3fb;
-  color: #5e6f89;
+  background: #edf5ff;
+  color: #164d85;
   font-size: 13px;
+  font-weight: 600;
   line-height: 1;
 }
 
+.tag:nth-child(2) {
+  background: #fff3e8;
+  color: #b84c0a;
+}
+
 .title {
+  position: relative;
   margin: 0;
-  color: #101828;
+  padding-inline-start: 20px;
+  color: #102b4e;
   font-size: 34px;
-  font-weight: 650;
+  font-weight: 700;
   letter-spacing: -0.02em;
   line-height: 1.38;
   overflow-wrap: break-word;
   text-wrap: pretty;
 }
 
+.title::before {
+  position: absolute;
+  inset-block-start: 0.24em;
+  inset-inline-start: 0;
+  width: 6px;
+  height: 0.9em;
+  border-radius: 999px;
+  background: #f47516;
+  content: '';
+}
+
 .meta {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
-  gap: 8px;
+  gap: 6px 8px;
   margin-top: 0;
-  color: #8a94a6;
+  color: #627e9e;
   font-size: 14px;
   font-variant-numeric: tabular-nums;
 }
@@ -69,7 +90,7 @@
   width: 17px;
   height: 17px;
   flex: 0 0 auto;
-  color: #9aa3b1;
+  color: currentColor;
 }
 
 .englishMeta {
@@ -77,7 +98,7 @@
   flex-direction: column;
   gap: 8px;
   margin-top: 18px;
-  color: #596579;
+  color: #5b7391;
   font-size: 14px;
   line-height: 1.6;
   font-variant-numeric: tabular-nums;

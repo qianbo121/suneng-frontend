@@ -163,6 +163,22 @@
   border-radius: 4px;
   box-shadow: 0 0 0 4px #f3b84f;
 }
+.card[lang='en'] ol {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  row-gap: 16px;
+}
+
+.card[lang='en'] ol li:nth-child(3n)::after {
+  display: none;
+}
+
+.card[lang='en'] [data-process-label] {
+  max-width: 100%;
+  padding-inline: 3px;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
 .card [data-current] [data-process-label] {
   color: #ffd58a;
 }
@@ -205,4 +221,9 @@
   .preview {
     animation: none;
   }
+}
+.posterLink {
+  position: absolute;
+  inset: 0;
+  display: block;
 }
