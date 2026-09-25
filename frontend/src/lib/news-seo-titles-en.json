@@ -343,5 +343,20 @@
     "id": 20,
     "sourceFingerprint": "2eaa8adfb7109e30155bc9158af2d5d024f890979de64fccb5c135db1698d6a5",
     "title": "Furnace Retrofits: Combustion, Lining & Controls | Suneng"
+  },
+  "atmosphere-furnace-pressure-fluctuation-process-or-equipment": {
+    "id": 94,
+    "sourceFingerprint": "5b1d1ede327da5dc636b52e708009098d2e6fe726ddd8fc4714399a41130f9aa",
+    "title": "Atmosphere Furnace Pressure Fluctuations | Suneng"
+  },
+  "heat-treatment-furnace-loading-rack-fixture-selection": {
+    "id": 93,
+    "sourceFingerprint": "f85ee6bd7a6fed7f403aa540f455aab81fd765779411f6e1dcd23c6e2a8a338a",
+    "title": "Heat Treatment Fixtures & Loading Racks | Suneng"
+  },
+  "multi-product-heat-treatment-furnace-changeover-boundaries": {
+    "id": 92,
+    "sourceFingerprint": "a6f28785b3b6662f49355d51143cbacefc1894d3b9c462713e30b6c2aeaa435c",
+    "title": "Heat Treatment Furnace Changeover Limits | Suneng"
   }
 }

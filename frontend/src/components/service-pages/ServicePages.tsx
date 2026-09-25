@@ -43,6 +43,7 @@ import {
 } from './service-content';
 import { getServiceJsonLd } from './service-metadata';
 import styles from './ServicePages.module.css';
+import { OverseasDeliverySection } from './OverseasDeliverySection';
 
 function OverviewContent({ locale = 'zh' }: { locale?: Locale }) {
   const en = locale === 'en';
@@ -257,6 +258,7 @@ function InstallationContent({ locale }: { locale: Locale }) {
         <ServiceInfoCards items={localizeServiceContent(deliveryItems, locale)} />
         <p className={styles.note}>{t("程序备份及其他资料，按设备配置与实际供货范围提供。")}</p>
       </ServiceSection>
+      <OverseasDeliverySection locale={locale} />
       <ServiceSection id="warranty" title={t("质保与后续服务")}>
         <ServiceInfoCards
           items={localizeServiceContent(warrantyItems, locale)}

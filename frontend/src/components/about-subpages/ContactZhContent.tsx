@@ -1,6 +1,7 @@
 import { corePageText } from '@/lib/core-page-localization';
 import type { Locale } from '@/types/site';
 import Image from 'next/image';
+import Link from 'next/link';
 import { siteSettings } from '@/mock/siteSettings';
 import { Button } from '@/components/ui/Button';
 import { SUNENG_CONTACT } from '@/constants/contact';
@@ -59,6 +60,11 @@ export function ContactZhContent({ locale = 'zh', inquiryProduct }: { locale?: L
             </div>
           </div>
         </section>
+        <p>
+          <Link className={styles.emailLink} href={`/${locale}/service/installation-after-sales#overseas-delivery`}>
+            {locale === 'en' ? 'Planning an overseas project? View the delivery checklist.' : '规划海外项目？查看交付核对清单。'}
+          </Link>
+        </p>
         <section className={styles.address} aria-labelledby="contact-address-heading">
           <h2 id="contact-address-heading">{t("到厂地址")}</h2>
           <div>

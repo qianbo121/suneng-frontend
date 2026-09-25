@@ -4,12 +4,14 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
 import { FALLBACK_NEWS_SLUGS } from '@/constants/news-fallback-slugs';
+import { NEWS_PAGE_SIZE } from '@/constants/news';
 import { isLocalizedPublicPath, PUBLIC_PAGE_CACHE_CONTROL, routing } from '@/i18n/routing';
 import { PUBLIC_CASE_SLUGS, PUBLIC_ENGLISH_CASE_SLUGS } from '@/lib/cases/public-case-allowlist';
 import { CASE_PAGE_SIZE } from '@/lib/cases/types';
 import { isZhOnlyPath } from '@/lib/i18n/zh-only';
 import { isUnknownProductDetailPath } from '@/lib/products/detail-slugs';
 import { isInternalNewsListPath } from '@/lib/news-list-prerender';
+import { getNewsListStatus, newsListStatusHtml } from '@/lib/news-list-route-guard';
 import { getNewsRouteAvailability, getZhNewsSlug, newsNotFoundHtml } from '@/lib/news-route-guard';
 
 const intlMiddleware = createMiddleware(routing);
@@ -145,9 +147,6 @@ export default async function middleware(request: NextRequest) {
   // These are fixed route-governance outcomes, so return real HTTP redirects
   // before Next renders a static shell. A page-level notFound/redirect can be
   // encoded in the React stream while the outer response remains 200.
-  if (pathname === '/en/partner') {
-    return permanentRedirect(request, '/en/about');
-  }
   if (pathname === '/zh/strength/technical-team' || pathname === '/en/strength/technical-team') {
     return permanentRedirect(request, pathname.startsWith('/en/') ? '/en/about' : '/zh/about');
   }
@@ -162,6 +161,22 @@ export default async function middleware(request: NextRequest) {
 
   if (isMisspelledNewsList(pathname, request.nextUrl.searchParams)) {
     return newsNotFoundResponse(/^\/en\//i.test(pathname) ? 'en' : 'zh');
+  }
+
+  const listStatus = await getNewsListStatus(request.nextUrl, async (locale) => {
+    const { getNewsDecisionCenterCards } = await import('@/lib/news-decision-center.server');
+    const cards = await getNewsDecisionCenterCards(locale);
+    return Math.max(1, Math.ceil(cards.length / NEWS_PAGE_SIZE));
+  });
+  if (listStatus) {
+    return new NextResponse(newsListStatusHtml(pathname.startsWith('/en/') ? 'en' : 'zh', listStatus), {
+      status: listStatus,
+      headers: {
+        'Cache-Control': 'no-store',
+        'Content-Type': 'text/html; charset=utf-8',
+        ...(listStatus === 404 ? { 'X-Robots-Tag': 'noindex' } : { 'Retry-After': '30' }),
+      },
+    });
   }
 
   if (isMissingCaseListPage(pathname, request.nextUrl.searchParams)) {
@@ -205,6 +220,7 @@ export default async function middleware(request: NextRequest) {
 }
 
 export const config = {
+  runtime: 'nodejs',
   // Asset filenames skip the broad rule; public detail routes must still be
   // checked when a slug contains a dot. Otherwise missing news can be indexed.
   matcher: [

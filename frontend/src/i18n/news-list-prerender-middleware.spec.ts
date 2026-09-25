@@ -1,5 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+
+vi.mock('@/lib/news-list-route-guard', async (importOriginal) => {
+  const original = await importOriginal<typeof import('@/lib/news-list-route-guard')>();
+  return { ...original, getNewsListStatus: vi.fn().mockResolvedValue(null) };
+});
+vi.mock('@/lib/news-decision-center.server', () => ({ getNewsDecisionCenterCards: vi.fn() }));
 
 vi.mock('next-intl/middleware', () => ({ default: () => () => NextResponse.next() }));
 vi.mock('@/lib/news-route-guard', async (importOriginal) => {
@@ -8,10 +14,28 @@ vi.mock('@/lib/news-route-guard', async (importOriginal) => {
 });
 
 import middleware from '../middleware';
+import { getNewsListStatus } from '@/lib/news-list-route-guard';
+
+beforeEach(() => { vi.mocked(getNewsListStatus).mockResolvedValue(null); });
 
 const run = (path: string) => middleware(new NextRequest(`https://www.jssngyl.cn${path}`));
 
 describe('prerendered resource list middleware', () => {
+  it('returns a real 404 before rendering the list shell', async () => {
+    vi.mocked(getNewsListStatus).mockResolvedValue(404);
+    const response = await run('/en/news?page=100');
+    expect(response.status).toBe(404);
+    expect(response.headers.get('x-middleware-next')).toBeNull();
+    expect(response.headers.get('X-Robots-Tag')).toBe('noindex');
+    expect(await response.text()).toContain('Return to Resources');
+  });
+  it('returns a temporary failure without a removal directive when data is unavailable', async () => {
+    vi.mocked(getNewsListStatus).mockResolvedValue(503);
+    const response = await run('/zh/news?page=2');
+    expect(response.status).toBe(503);
+    expect(response.headers.get('Retry-After')).toBe('30');
+    expect(response.headers.get('X-Robots-Tag')).toBeNull();
+  });
   it.each([
     '/zh/news-prerendered/1',
     '/en/news-prerendered/2',

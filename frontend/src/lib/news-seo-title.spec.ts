@@ -56,4 +56,12 @@ describe('news search metadata', () => {
     vi.mocked(getNewsDetailPageData).mockResolvedValue({ article: null, error: null });
     await expect(generateMetadata({ params: Promise.resolve({ locale: 'en', slug: 'missing' }) })).rejects.toThrow('NEXT_NOT_FOUND');
   });
+  it('preserves the complete Chinese acceptance limitation in search and share descriptions', async () => {
+    const summary = '热处理生产线的单机验收，是逐台确认某台设备的制造、配置、动作和保护是否符合约定；工厂验收（FAT）则是在发货前，按验收方案对一台或多台设备以及工厂具备条件的接口、联动、记录和文件进行阶段性确认。单机验收可以是FAT的一部分，但不能代替整线联动、现场验收或产品工艺验证。';
+    vi.mocked(getNewsDetailPageData).mockResolvedValue({ article: { ...article, seoDescriptionZh: summary }, error: null });
+    const metadata = await generateMetadata({ params: Promise.resolve({ locale: 'zh', slug: article.slug }) });
+    expect(metadata.description).toBe(summary);
+    expect(metadata.openGraph?.description).toBe(summary);
+    expect(metadata.twitter?.description).toBe(summary);
+  });
 });

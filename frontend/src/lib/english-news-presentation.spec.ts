@@ -4,7 +4,7 @@ import { localizeEnglishNewsPresentation as localize } from './english-news-pres
 describe('English article presentation corrections', () => {
   it('updates only the available English service link and its obsolete language label', () => {
     const input = '<a href="/zh/service/furnace-renovation-overhaul">Furnace Retrofit and Overhaul Services (Chinese)</a><a href="/zh/partner">Partners (Chinese)</a>';
-    expect(localize(input)).toBe('<a href="/en/service/furnace-renovation-overhaul">Furnace Retrofit and Overhaul Services</a><a href="/zh/partner">Partners (Chinese)</a>');
+    expect(localize(input)).toBe('<a href="/en/service/furnace-renovation-overhaul">Furnace Retrofit and Overhaul Services</a><a href="/en/partner">Partners</a>');
     expect(localize('<a href="https://www.jssngyl.cn/zh/service/furnace-renovation-overhaul/">Review</a>')).toContain('href="/en/service/furnace-renovation-overhaul"');
   });
   it('uses the reviewed English diagram without changing unrelated images or safety notes', () => {

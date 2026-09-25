@@ -1,6 +1,8 @@
 'use client';
 
 import { useId, useState } from 'react';
+import { partnerText } from '@/lib/partner-copy';
+import type { Locale } from '@/types/site';
 import type { Partner } from './map-kit/PartnerMap';
 import { PARTNER_INDUSTRY_GROUPS, partnerIndustryGroup } from '@/lib/partner-industry-groups';
 import styles from './PartnerPage.module.css';
@@ -9,7 +11,8 @@ const PREVIEW_ROWS = 8;
 const normalize = (value: string) =>
   value.normalize('NFKC').replace(/\s+/g, '').toLocaleLowerCase('zh-CN');
 
-export function PartnerIndustryDirectory({ partners }: { partners: readonly Partner[] }) {
+export function PartnerIndustryDirectory({ partners, locale = 'zh' }: { partners: readonly Partner[]; locale?: Locale }) {
+  const t = (text: string) => partnerText(text, locale);
   const searchId = useId();
   const [group, setGroup] = useState('全部行业');
   const [query, setQuery] = useState('');
@@ -19,7 +22,7 @@ export function PartnerIndustryDirectory({ partners }: { partners: readonly Part
     (partner) =>
       (group === '全部行业' || partnerIndustryGroup(partner.industry) === group) &&
       (!needle ||
-        normalize(`${partner.fullName} ${partner.shortName} ${partner.industry ?? ''}`).includes(
+        normalize(`${partner.fullName} ${partner.shortName} ${partner.industry ?? ''} ${t(partner.industry ?? '')}`).includes(
           needle,
         )),
   );
@@ -33,8 +36,8 @@ export function PartnerIndustryDirectory({ partners }: { partners: readonly Part
     >
       <div className={styles.sectionHeading}>
         <div>
-          <h2 id="partner-industry-title">按行业查看合作客户</h2>
-          <p>从您熟悉的行业，了解苏能的历年合作单位。</p>
+          <h2 id="partner-industry-title">{t("按行业查看合作客户")}</h2>
+          <p>{t("从您熟悉的行业，了解苏能的历年合作单位。")}</p>
         </div>
         <label className={styles.directorySearch} htmlFor={searchId}>
           <svg
@@ -49,13 +52,13 @@ export function PartnerIndustryDirectory({ partners }: { partners: readonly Part
             <circle cx="10.5" cy="10.5" r="6.5" />
             <path d="m15.5 15.5 5 5" />
           </svg>
-          <span className={styles.srOnly}>搜索行业名单</span>
+          <span className={styles.srOnly}>{t("搜索行业名单")}</span>
           <input
             id={searchId}
             type="search"
             name="industry-directory-search"
             autoComplete="off"
-            placeholder="输入公司或行业…"
+            placeholder={t("输入公司或行业…")}
             maxLength={120}
             value={query}
             onChange={(event) => {
@@ -65,10 +68,10 @@ export function PartnerIndustryDirectory({ partners }: { partners: readonly Part
           />
         </label>
       </div>
-      <div className={styles.filters} role="group" aria-label="筛选合作客户行业">
+      <div className={styles.filters} role="group" aria-label={t("筛选合作客户行业")}>
         {['全部行业', ...PARTNER_INDUSTRY_GROUPS].map((name) => (
           <button
-            key={name}
+            key={t(name)}
             type="button"
             aria-pressed={group === name}
             onClick={() => {
@@ -76,19 +79,19 @@ export function PartnerIndustryDirectory({ partners }: { partners: readonly Part
               setExpanded(false);
             }}
           >
-            {name}
+            {t(name)}
           </button>
         ))}
       </div>
       <p className={styles.resultCount} role="status" aria-live="polite">
-        {group} · {matching.length} 家合作单位
+        {t(group)} · {matching.length} {locale === 'en' ? 'companies' : '家合作单位'}
       </p>
       <div className={styles.directoryTable}>
         <table>
           <thead>
             <tr>
-              <th scope="col">合作单位名称</th>
-              <th scope="col">所属行业</th>
+              <th scope="col">{t("合作单位名称")}</th>
+              <th scope="col">{t("所属行业")}</th>
             </tr>
           </thead>
           <tbody>
@@ -99,7 +102,7 @@ export function PartnerIndustryDirectory({ partners }: { partners: readonly Part
                 </th>
                 {partner.industry && (
                   <td>
-                    <span>{partner.industry}</span>
+                    <span>{t(partner.industry)}</span>
                   </td>
                 )}
               </tr>
@@ -108,7 +111,7 @@ export function PartnerIndustryDirectory({ partners }: { partners: readonly Part
         </table>
         {!matching.length && (
           <div className={styles.empty}>
-            <p>没有找到匹配的合作单位。</p>
+            <p>{t("没有找到匹配的合作单位。")}</p>
             <button
               type="button"
               onClick={() => {
@@ -117,7 +120,7 @@ export function PartnerIndustryDirectory({ partners }: { partners: readonly Part
                 setExpanded(false);
               }}
             >
-              清除筛选，查看全部客户
+              {t("清除筛选，查看全部客户")}
             </button>
           </div>
         )}
@@ -128,7 +131,7 @@ export function PartnerIndustryDirectory({ partners }: { partners: readonly Part
             aria-expanded={expanded}
             onClick={() => setExpanded(!expanded)}
           >
-            {expanded ? '收起名单' : `展开全部 ${matching.length} 家合作单位`}
+            {expanded ? t('收起名单') : locale === 'en' ? `Show All ${matching.length} Companies` : `展开全部 ${matching.length} 家合作单位`}
             <svg
               viewBox="0 0 20 20"
               width="18"
@@ -144,7 +147,7 @@ export function PartnerIndustryDirectory({ partners }: { partners: readonly Part
           </button>
         )}
       </div>
-      <p className={styles.note}>展示部分历年合作单位，具体合作形式与供货范围以项目资料为准。</p>
+      <p className={styles.note}>{t("展示部分历年合作单位，具体合作形式与供货范围以项目资料为准。")}</p>
     </section>
   );
 }

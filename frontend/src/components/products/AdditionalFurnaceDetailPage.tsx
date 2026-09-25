@@ -60,7 +60,7 @@ export function AdditionalFurnaceDetailPage({
   const structure = additionalFurnaceStructures[furnace.id];
   const selection = additionalFurnaceSelection[furnace.id][locale];
   const inquiryHref = en
-    ? `/en/contact?product=${furnace.id}#product-lead-form`
+    ? `/en/contact?product=${furnace.id}#contact-inquiry-form-fields`
     : `/zh/inquiry?product=${furnace.id}#project-inquiry-form-fields`;
   const inquiryLabel = en ? 'Request selection advice' : '提交工况，获取选型建议';
   const structureImage = structure.image ?? `/images/products/${furnace.id}/detail-v2-20260910/02-cutaway.webp`;

@@ -1,4 +1,6 @@
 import Link from 'next/link';
+import { partnerText } from '@/lib/partner-copy';
+import { ENGLISH_PROVINCES } from '@/lib/partner-provinces-en';
 import { notFound } from 'next/navigation';
 import { Breadcrumb } from '@/components/layout/Breadcrumb';
 import { AboutSubpageJsonLd } from '@/components/about-subpages/AboutSubpageJsonLd';
@@ -121,43 +123,47 @@ const description =
   '展示苏能工业炉部分历年合作客户，按省份和行业查看合作单位，了解工业炉设备配套与合作范围。';
 export async function generateMetadata({ params }: PartnerPageProps) {
   const { locale } = await params;
-  if (locale !== 'zh') notFound();
+  if (locale !== 'zh' && locale !== 'en') notFound();
+  const t = (text: string) => partnerText(text, locale);
   return {
     ...buildMetadata({
-      title: '合作客户',
-      description,
-      path: '/zh/partner',
-      alternateLocales: { 'zh-CN': '/zh/partner', 'x-default': '/zh/partner' },
+      title: t('合作客户'),
+      description: locale === 'en' ? 'Explore selected Suneng customers and partners by region and industry, with equipment applications and project scope information.' : description,
+      path: `/${locale}/partner`,
+      alternateLocales: { 'zh-CN': '/zh/partner', 'en-US': '/en/partner', 'x-default': '/zh/partner' },
     }),
-    robots: { index: locale === 'zh', follow: locale === 'zh' },
+    robots: { index: true, follow: true },
   };
 }
 export default async function PartnerPage({ params }: PartnerPageProps) {
-  if ((await params).locale !== 'zh') notFound();
+  const { locale } = await params;
+  if (locale !== 'zh' && locale !== 'en') notFound();
+  const t = (text: string) => partnerText(text, locale);
   const partners = getPartnerMapData();
   return (
     <div className={styles.page} data-about-subpage="partners">
       <AboutSubpageJsonLd
-        title="合作客户"
-        description={description}
-        path="/zh/partner"
+        title={t("合作客户")}
+        description={locale === 'en' ? 'Selected Suneng customers and partners by region and industry.' : description}
+        path={`/${locale}/partner`}
+        locale={locale}
         type="CollectionPage"
       />
       <div className={styles.container}>
         <Breadcrumb
-          locale="zh"
+          locale={locale}
           tone="dark"
-          currentLabel="合作客户"
-          items={[{ label: '关于苏能', href: '/zh/about' }, { label: '合作客户' }]}
+          currentLabel={t("合作客户")}
+          items={[{ label: t('关于苏能'), href: `/${locale}/about` }, { label: t('合作客户') }]}
           className={styles.breadcrumb}
         />
         <header className={styles.hero}>
           <div>
-            <h1>合作客户</h1>
-            <p>从客户分布到行业应用，了解苏能的历年合作网络。</p>
+            <h1>{t("合作客户")}</h1>
+            <p>{t("从客户分布到行业应用，了解苏能的历年合作网络。")}</p>
           </div>
           <a className={styles.heroLink} href="#partner-industries">
-            按行业找客户
+            {t("按行业找客户")}
             <svg
               viewBox="0 0 20 20"
               width="18"
@@ -174,22 +180,24 @@ export default async function PartnerPage({ params }: PartnerPageProps) {
         <div className={styles.map}>
           <PartnerMap
             headingLevel={2}
-            title="历年合作客户分布"
+            title={t("历年合作客户分布")}
+            locale={locale}
             assetBasePath="/partner-map"
             partners={partners}
             provinces={provinces.map(
               (province): Province => ({
                 ...province,
+                ...(locale === 'en' ? ENGLISH_PROVINCES[province.code] : {}),
                 anchor: [province.anchor[0], province.anchor[1]],
                 label: [province.label[0], province.label[1]],
               }),
             )}
           />
         </div>
-        <PartnerIndustryDirectory partners={partners} />
+        <PartnerIndustryDirectory partners={partners} locale={locale} />
         <details className={styles.applications} data-partner-industries>
           <summary>
-            行业应用与设备方向
+            {t("行业应用与设备方向")}
             <svg
               viewBox="0 0 20 20"
               width="20"
@@ -203,18 +211,18 @@ export default async function PartnerPage({ params }: PartnerPageProps) {
             </svg>
           </summary>
           <p className={styles.note}>
-            下列场景用于说明通用工业热处理装备的应用方向，不代表名单中每家企业的具体采购内容。涉及特殊工艺认证的项目，须另行核对相应资质和项目要求。
+            {t("下列场景用于说明通用工业热处理装备的应用方向，不代表名单中每家企业的具体采购内容。涉及特殊工艺认证的项目，须另行核对相应资质和项目要求。")}
           </p>
           <div className={styles.applicationsGrid}>
             {industryFields.map((field) => (
-              <article key={field.title}>
-                <h3>{field.title}</h3>
-                <p>{field.description}</p>
-                <p>参考炉型：{field.furnaceTypes}</p>
+              <article key={t(field.title)}>
+                <h3>{t(field.title)}</h3>
+                <p>{t(field.description)}</p>
+                <p>{locale === 'en' ? 'Example Equipment: ' : '参考炉型：'}{t(field.furnaceTypes)}</p>
                 <div>
                   {field.links.map((link) => (
-                    <Link key={link.href} href={link.href}>
-                      {link.label}
+                    <Link key={link.href} href={link.href.replace(/^\/zh/, `/${locale}`)}>
+                      {t(link.label)}
                     </Link>
                   ))}
                 </div>
@@ -224,12 +232,12 @@ export default async function PartnerPage({ params }: PartnerPageProps) {
         </details>
         <section className={styles.contact} aria-labelledby="partner-contact-title">
           <div>
-            <h2 id="partner-contact-title">沟通您的设备需求</h2>
-            <p>带上工件与工艺要求，一起讨论设备配置与供货范围。</p>
+            <h2 id="partner-contact-title">{t("沟通您的设备需求")}</h2>
+            <p>{t("带上工件与工艺要求，一起讨论设备配置与供货范围。")}</p>
           </div>
           <div className={styles.contactActions}>
-            <Link className={styles.contactPrimary} href="/zh/contact">
-              沟通设备需求
+            <Link className={styles.contactPrimary} href={`/${locale}/contact`}>
+              {t("沟通设备需求")}
               <svg
                 viewBox="0 0 20 20"
                 width="18"
@@ -243,12 +251,12 @@ export default async function PartnerPage({ params }: PartnerPageProps) {
               </svg>
             </Link>
             <a className={styles.phone} href={`tel:${siteSettings.salesPhone}`}>
-              130-5298-6814
+              {locale === 'en' ? '+86-130-5298-6814' : '130-5298-6814'}
             </a>
           </div>
         </section>
         <p className={styles.note}>
-          苏能通常作为工业炉设备供应商或设备分包方参与项目，不承接工程总承包业务。合作形式包括设备应用、设备配套、工程协作或相关业务往来，具体以项目资料和可披露信息为准。
+          {t("苏能通常作为工业炉设备供应商或设备分包方参与项目，不承接工程总承包业务。合作形式包括设备应用、设备配套、工程协作或相关业务往来，具体以项目资料和可披露信息为准。")}
         </p>
       </div>
     </div>

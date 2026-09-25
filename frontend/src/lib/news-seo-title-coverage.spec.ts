@@ -28,7 +28,7 @@ function reviewedArticle(id: number, slug: string): NewsApiItem {
 
 describe('complete reviewed English title inventory', () => {
   it('covers every published English news page in the independently captured inventory', () => {
-    expect(sources.inventory).toHaveLength(69);
+    expect(sources.inventory).toHaveLength(72);
     expect(Object.keys(revisions).sort()).toEqual(
       sources.inventory.map((item) => item.slug).sort(),
     );
