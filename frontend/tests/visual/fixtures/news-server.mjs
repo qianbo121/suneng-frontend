@@ -1,6 +1,7 @@
 // A local, read-only content service for browser tests, including server rendering.
 // It never contacts production or accepts inquiry/analytics writes.
 import { createServer } from 'node:http';
+import { readFileSync } from 'node:fs';
 
 const category = { id: 900001, nameZh: '设备选型', nameEn: 'Equipment Selection', slug: 'selection' };
 const article = {
@@ -15,6 +16,41 @@ const article = {
   publishDate: '2026-09-01T00:00:00Z', status: 'published', isPublished: true,
 };
 
+// Keep production-independent fixtures for pagination, exact reviewed snippets,
+// seven resource entry links and articles without an English counterpart.
+const reviewedSources = JSON.parse(readFileSync(new URL('../../fixtures/news-seo-title-sources-20260920.json', import.meta.url), 'utf8'));
+const reviewedSlugs = [
+  'atmosphere-furnace-pressure-fluctuation-process-or-equipment',
+  'heat-treatment-furnace-loading-rack-fixture-selection',
+  'multi-product-heat-treatment-furnace-changeover-boundaries',
+];
+const prioritySlugs = [
+  'dian-jia-re-tai-che-lu-he-ran-qi-tai-che-lu-zen-me-xuan-xian-bi-jiao-7-xiang-tiao-jian',
+  'shuju-news-16', 'shuju-news-21', 'shuju-news-17', 'shuju-news-34',
+  'heat-treatment-line-batch-traceability',
+  'heat-treatment-line-capacity-bottleneck-troubleshooting',
+];
+const untranslatedSlugs = [
+  'gas-cylinder-curing-oven-slow-heating',
+  'heat-treatment-basket-turnover-quantity',
+  'multi-station-curing-oven-independent-operation',
+];
+const articles = [
+  article,
+  ...reviewedSlugs.map(slug => {
+    const source = reviewedSources.cms.find(item => item.slug === slug);
+    if (!source) throw new Error(`Missing reviewed browser fixture: ${slug}`);
+    return { ...article, ...source };
+  }),
+  ...prioritySlugs.map((slug, index) => ({ ...article, id: 900100 + index, slug })),
+  ...untranslatedSlugs.map((slug, index) => ({
+    ...article, id: 900200 + index, slug, titleEn: '', summaryEn: '', contentEn: '',
+  })),
+  ...Array.from({ length: 12 }, (_, index) => ({
+    ...article, id: 900300 + index, slug: `visual-test-annealing-page-${index + 1}`,
+  })),
+];
+
 createServer((request, response) => {
   const url = new URL(request.url, 'http://127.0.0.1');
   let data;
@@ -26,9 +62,18 @@ createServer((request, response) => {
   else if (url.pathname === '/api/v1/news/categories') data = [category];
   else if (url.pathname === '/api/v1/news') {
     const page = Number(url.searchParams.get('page') || 1);
-    data = { items: page === 1 ? [article] : [], total: 1, page, pageSize: Number(url.searchParams.get('pageSize') || 10) };
-  } else if (url.pathname === `/api/v1/news/${article.slug}`) data = article;
-  else if (url.pathname === `/api/v1/news/${article.id}/prev-next`) data = { prev: null, next: null };
+    const pageSize = Number(url.searchParams.get('pageSize') || 10);
+    data = { items: articles.slice((page - 1) * pageSize, page * pageSize), total: articles.length, page, pageSize };
+  } else if (url.pathname.startsWith('/api/v1/news/')) {
+    const slug = decodeURIComponent(url.pathname.slice('/api/v1/news/'.length));
+    data = /^\d+\/prev-next$/.test(slug)
+      ? { prev: null, next: null }
+      : articles.find(item => item.slug === slug);
+    if (!data) {
+      response.writeHead(404).end();
+      return;
+    }
+  }
   else {
     response.writeHead(404).end();
     return;
