@@ -45,6 +45,9 @@ for (const width of [1440, 1280, 390]) {
       await form.screenshot({ path: testInfo.outputPath('inquiry.png') });
       const title = page.locator('#hero-title');
       if (await title.count()) expect(await title.evaluate(e => e.scrollWidth <= e.clientWidth + 1)).toBe(true);
+      // Closing this context while the shared dev server is still generating
+      // a lazy poster can leave subsequent screenshot tests waiting on it.
+      await page.waitForLoadState('networkidle');
     });
   }
 }
