@@ -16,8 +16,9 @@ for (const width of [1440, 390]) {
       }
       return route.continue();
     });
-    await page.goto('/en/products', { waitUntil: 'networkidle' });
+    await page.goto('/en/products', { waitUntil: 'domcontentloaded' });
     const cards = page.locator('[data-production-line-card]');
+    await expect(cards.first()).toBeVisible();
     for (const card of await cards.all()) {
       const poster = card.locator('a > img').first();
       await poster.scrollIntoViewIfNeeded();

@@ -1,5 +1,5 @@
 import path from 'node:path';
-import { expect, test } from '@playwright/test';
+import { expect, test, type Page } from '@playwright/test';
 
 const pages = [
   { name: 'home', path: '/zh' },
@@ -15,17 +15,26 @@ const viewports = [
   { name: 'mobile-390', width: 390, height: 844 },
 ];
 
-async function warmLazyContent() {
-  const step = Math.max(window.innerHeight, 600);
-  const pageHeight = document.documentElement.scrollHeight;
-
+async function warmLazyContent(page: Page) {
+  const { step, pageHeight } = await page.evaluate(() => ({
+    step: Math.max(window.innerHeight, 600),
+    pageHeight: document.documentElement.scrollHeight,
+  }));
   for (let y = 0; y < pageHeight; y += step) {
-    window.scrollTo(0, y);
-    await new Promise((resolve) => window.setTimeout(resolve, 50));
+    await page.evaluate((top) => window.scrollTo(0, top), y);
+    // Do not scroll away from an in-flight lazy image and capture its blank
+    // poster. Offscreen carousel slides need not load for a full-page capture.
+    await page.waitForFunction(() => Array.from(document.images).every((image) => {
+      const box = image.getBoundingClientRect();
+      const visible = box.width > 0 && box.height > 0 && box.bottom > 0 &&
+        box.top < innerHeight && box.right > 0 && box.left < innerWidth;
+      return !visible || (image.complete && image.naturalWidth > 0);
+    }), undefined, { timeout: 30_000 });
   }
-
-  window.scrollTo(0, 0);
-  await document.fonts?.ready;
+  await page.evaluate(async () => {
+    window.scrollTo(0, 0);
+    await document.fonts.ready;
+  });
 }
 
 test.describe('core visual smoke pages', () => {
@@ -35,6 +44,7 @@ test.describe('core visual smoke pages', () => {
 
       for (const visualPage of pages) {
         test(visualPage.name, async ({ page }) => {
+          test.setTimeout(90_000);
           await page.emulateMedia({ reducedMotion: 'reduce' });
           await page.goto(visualPage.path, { waitUntil: 'domcontentloaded' });
           await page.addStyleTag({
@@ -49,16 +59,8 @@ test.describe('core visual smoke pages', () => {
               html { scroll-behavior: auto !important; }
             `,
           });
-          await page.waitForLoadState('networkidle', { timeout: 15_000 }).catch(() => undefined);
-          await page.evaluate(warmLazyContent);
-          await page.waitForLoadState('networkidle', { timeout: 5_000 }).catch(() => undefined);
-          // The development server optimises each image on its first request, which
-          // can outlast the network-idle wait. Capture images once they have loaded.
-          await page
-            .waitForFunction(() => Array.from(document.images).every((image) => image.complete), undefined, {
-              timeout: 15_000,
-            })
-            .catch(() => undefined);
+          await expect(page.locator('main h1')).toBeVisible();
+          await warmLazyContent(page);
           if (visualPage.name === 'home') {
             // Scrolling back to the hero schedules the observer update separately
             // from network activity. Capture the settled state, not the outgoing dock.

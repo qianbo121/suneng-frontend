@@ -10,6 +10,9 @@ export default defineConfig({
   testDir: './tests/visual',
   timeout: 60_000,
   fullyParallel: false,
+  // All files share one Next dev server and its in-flight image cache. Keep
+  // browser contexts from interrupting each other's first image requests.
+  workers: 1,
   reporter: [['list'], ['html', { outputFolder: './test-results/visual-report', open: 'never' }]],
   outputDir: './test-results/visual-artifacts',
   snapshotPathTemplate: '{testDir}/__screenshots__/{testFilePath}/{projectName}/{arg}{ext}',
