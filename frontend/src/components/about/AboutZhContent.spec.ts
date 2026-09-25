@@ -3,6 +3,7 @@ import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 
 import { ABOUT_ANCHORS, ABOUT_BOUNDARIES, ABOUT_FAQS } from './about-page-data';
+import { corePageText, localizeCoreValue } from '@/lib/core-page-localization';
 
 const heroSource = readFileSync(new URL('./AboutCompanyHero.tsx', import.meta.url), 'utf8');
 const pageSource = readFileSync(new URL('./AboutZhContent.tsx', import.meta.url), 'utf8');
@@ -51,6 +52,7 @@ describe('中文关于苏能页', () => {
     expect(ABOUT_FAQS).toHaveLength(8);
     expect(pageSource).toContain('mainEntity: ABOUT_FAQS.map');
     expect(pageSource).toContain('<AboutFaq items={localizeCoreValue(ABOUT_FAQS, locale)} />');
+    expect(localizeCoreValue(ABOUT_FAQS, 'zh')).toBe(ABOUT_FAQS);
   });
 
   it("保留业务边界与产品入口并撤下旧方案入口", () => {
@@ -71,6 +73,8 @@ describe('中文关于苏能页', () => {
     expect(wechatButtonSource).toContain("label = '加企微，发工况初判'");
     expect(pageSource).toContain('label={t("联系业务顾问")}');
     expect(pageSource).toContain('label={t("提交工况资料")}');
+    expect(corePageText('联系业务顾问', 'zh')).toBe('联系业务顾问');
+    expect(corePageText('提交工况资料', 'zh')).toBe('提交工况资料');
     expect(interactiveSource).toContain("window.matchMedia('(max-width: 767px)')");
     expect(interactiveSource).toContain('scroller.scrollTo');
   });

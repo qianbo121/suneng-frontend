@@ -20,6 +20,20 @@ function compare(source: unknown, translated: unknown) {
 }
 
 describe('service and product content source consistency', () => {
+  it('uses verified English service articles while preserving Chinese-only links and query state', () => {
+    const articles = [
+      '/zh/news/gong-ye-lu-gai-zao-yan-shou-kan-na-xie-zhi-biao-cong-wen-du-jun-yun-xing-neng-hao-dao-kong-zhi-xi-tong-wen-ding-xing',
+      '/zh/news/re-chu-li-lu-jie-neng-gai-zao-duo-shao-qian-fei-yong-gou-cheng-yu-suan-ying-xiang-yin-su-he-xun-jia-qian-zhun-bei',
+    ];
+    for (const path of articles) {
+      expect(serviceHref(path, 'en')).toBe(path.replace('/zh/', '/en/'));
+      expect(serviceHref(`${path}/?source=service#checklist`, 'en'))
+        .toBe(`${path.replace('/zh/', '/en/')}/?source=service#checklist`);
+      expect(serviceHref(path, 'zh')).toBe(path);
+    }
+    const untranslated = '/zh/news/not-yet-translated?source=service#details';
+    expect(serviceHref(untranslated, 'en')).toBe(untranslated);
+  });
   it('keeps service records, assets, tables and FAQ scope tied to the Chinese source', () => {
     const source = { ...content, renovationFaqs, repairSystems };
     const before = JSON.stringify(source);
