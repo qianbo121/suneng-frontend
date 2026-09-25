@@ -61,6 +61,9 @@ test.describe('core visual smoke pages', () => {
           });
           await expect(page.locator('main h1')).toBeVisible();
           await warmLazyContent(page);
+          // Dev route chunks and their styles may still settle after the heading
+          // and lazy images are visible. Keep fallback-font frames out of baselines.
+          await page.waitForLoadState('networkidle');
           if (visualPage.name === 'home') {
             // Scrolling back to the hero schedules the observer update separately
             // from network activity. Capture the settled state, not the outgoing dock.
