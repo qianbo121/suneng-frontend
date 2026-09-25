@@ -1,11 +1,20 @@
 import translations from './service-translations-en.json';
 import type { Locale } from '@/types/site';
 
+// These service references have verified, published English counterparts.
+const translatedServiceNews = new Set([
+  '/zh/news/gong-ye-lu-gai-zao-yan-shou-kan-na-xie-zhi-biao-cong-wen-du-jun-yun-xing-neng-hao-dao-kong-zhi-xi-tong-wen-ding-xing',
+  '/zh/news/re-chu-li-lu-jie-neng-gai-zao-duo-shao-qian-fei-yong-gou-cheng-yu-suan-ying-xiang-yin-su-he-xun-jia-qian-zhun-bei',
+]);
+
 export function serviceHref(path: string, locale: Locale) {
   if (locale !== 'en') return path;
   if (path === '/zh/inquiry') return '/en/contact';
-  // News translations are independently reviewed; retain the actual Chinese article.
-  if (path.startsWith('/zh/news/')) return path;
+  // Unverified news must still retain its actual Chinese destination.
+  if (path.startsWith('/zh/news/')) {
+    const pathname = path.split(/[?#]/, 1)[0].replace(/\/$/, '');
+    return translatedServiceNews.has(pathname) ? path.replace(/^\/zh\//, '/en/') : path;
+  }
   return path.replace(/^\/zh(?=\/|$)/, '/en');
 }
 
