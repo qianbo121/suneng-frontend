@@ -3,6 +3,7 @@ import { LoadingFeedback } from '@/components/common/LoadingFeedback';
 import type { Locale } from '@/types/site';
 import { newsUiText } from '@/lib/news-ui';
 import Link from 'next/link';
+import { getPriorityNews } from '@/lib/priority-news';
 import { HiOutlineDocumentText } from 'react-icons/hi2';
 import { QuoteModalButton } from '@/components/lead/QuoteModalButton';
 import { NewsSearchForm } from '@/components/news/NewsSearchForm';
@@ -75,7 +76,13 @@ export function NewsDecisionCenter({
     articleHref(21, '/zh/service/furnace-renovation-overhaul'),
   ];
   const checklist = sourceItems.find((a) => a.id === 67);
+  const priorityNews = getPriorityNews(sourceItems);
   const tools = [
+    {
+      title: locale === 'en' ? 'Overseas Delivery Checklist' : '海外交付核对清单',
+      detail: '',
+      href: `/${locale}/service/installation-after-sales#overseas-delivery`,
+    },
     {
       title: checklist ? t('网带炉报价边界清单') : t('工业炉报价参数清单'),
       detail: checklist ? t('9项内容') : '',
@@ -277,6 +284,22 @@ export function NewsDecisionCenter({
                   ))}
                 </div>
               </section>}
+              {!loading && !error && priorityNews.length > 0 && (
+                <section className={styles.sideModule} aria-labelledby="priority-news-title" data-priority-news>
+                  <h2 id="priority-news-title" className={styles.moduleTitle}>
+                    {locale === 'en' ? 'Equipment & Production Guides' : '设备与生产管理精选'}
+                  </h2>
+                  <div className={styles.faqList}>
+                    {priorityNews.map((item) => (
+                      <article key={item.slug} className={styles.faqItem}>
+                        <h3 className={styles.faqQuestion}>
+                          <Link href={`/${locale}/news/${item.slug}`}>{item.title[locale]}</Link>
+                        </h3>
+                      </article>
+                    ))}
+                  </div>
+                </section>
+              )}
               <section className={styles.sideModule} aria-labelledby="news-faq-title">
                 <h2 id="news-faq-title" className={styles.moduleTitle}>
                   {t('常见问题')}

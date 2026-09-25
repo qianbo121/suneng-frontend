@@ -50,9 +50,9 @@ describe('localized primary navigation', () => {
     expect(getRouteLabelMap('en').get('/case')).toBe('Project Cases');
   });
 
-  it('labels the actual Chinese partner page instead of linking to a nonexistent English page', () => {
+  it('links to the localized partner page', () => {
     const partner = getLocalizedNavigation('en').find((item) => item.key === 'about')?.children?.find((item) => item.key === 'about-partner');
-    expect(partner).toMatchObject({ href: '/zh/partner', labelText: 'Partners (Chinese)' });
+    expect(partner).toMatchObject({ href: '/partner', labelText: 'Partners' });
 
   });
 });

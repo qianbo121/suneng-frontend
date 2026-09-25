@@ -22,7 +22,7 @@ describe('unprefixed public route governance', () => {
 
   it('preserves unrelated fixed permanent redirects', () => {
     expect(middlewareSource).not.toContain("pathname === '/en/news'");
-    expect(middlewareSource).toContain("pathname === '/en/partner'");
+    expect(middlewareSource).not.toContain("pathname === '/en/partner'");
     expect(middlewareSource).toContain("pathname === '/zh/strength'");
     expect(middlewareSource).toContain("pathname === '/zh/strength/certificates'");
   });

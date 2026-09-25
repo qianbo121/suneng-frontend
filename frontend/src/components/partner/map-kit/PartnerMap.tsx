@@ -2,6 +2,8 @@
 
 import './partner-map.css';
 import Image from 'next/image';
+import { partnerText } from '@/lib/partner-copy';
+import type { Locale } from '@/types/site';
 
 import { useEffect, useId, useMemo, useRef, useState } from 'react';
 import type { CSSProperties, MouseEvent as ReactMouseEvent } from 'react';
@@ -41,6 +43,7 @@ export type PartnerMapProps = {
   idPrefix?: string;
   headingLevel?: 1 | 2;
   title?: string;
+  locale?: Locale;
 };
 
 const VIEWBOX_WIDTH = 1280;
@@ -101,7 +104,9 @@ export default function PartnerMap({
   idPrefix,
   headingLevel = 1,
   title = '部分合作客户展示',
+  locale = 'zh',
 }: PartnerMapProps) {
+  const t = (text: string) => partnerText(text, locale);
   const reactId = useId();
   const safePrefix = idPrefix?.replace(/[^a-zA-Z0-9_-]/g, '');
   const uid = `suneng-map-${safePrefix || reactId.replace(/[^a-zA-Z0-9_-]/g, '')}`;
@@ -150,7 +155,7 @@ export default function PartnerMap({
 
   const matches = (partner: Partner) =>
     !normalizedQuery ||
-    normalize(`${partner.fullName} ${partner.shortName} ${partner.industry ?? ''}`).includes(
+    normalize(`${partner.fullName} ${partner.shortName} ${partner.industry ?? ''} ${t(partner.industry ?? '')}`).includes(
       normalizedQuery,
     );
 
@@ -158,7 +163,9 @@ export default function PartnerMap({
   const unknownPartners = groups.get(UNKNOWN) ?? [];
   const unknownMatchCount = unknownPartners.filter(matches).length;
   const locatedMatchCount = matchingCount - unknownMatchCount;
-  const searchFeedback = !matchingCount
+  const searchFeedback = locale === 'en'
+    ? (!matchingCount ? 'No matching companies found.' : `${matchingCount} matching companies${unknownMatchCount ? `; ${unknownMatchCount} with location unconfirmed` : '; select a highlighted region'}`)
+    : !matchingCount
     ? '未找到匹配的合作伙伴'
     : !locatedMatchCount
       ? `匹配 ${unknownMatchCount} 家，请查看“所在地待补充”`
@@ -266,9 +273,9 @@ export default function PartnerMap({
           <div>
             <PopupHeading id={`${uid}-heading-${code}`}>{name}</PopupHeading>
             <p>
-              共 <strong>{allRows.length}</strong> 家合作伙伴
+              {locale === 'en' ? '' : '共 '}<strong>{allRows.length}</strong> {locale === 'en' ? 'companies' : '家合作伙伴'}
               {normalizedQuery && (
-                <span className="suneng-map-matched"> · 匹配 {rows.length} 家</span>
+                <span className="suneng-map-matched"> · {locale === 'en' ? 'Matches: ' : '匹配 '}{rows.length}{locale === 'en' ? '' : ' 家'}</span>
               )}
             </p>
           </div>
@@ -276,19 +283,19 @@ export default function PartnerMap({
             className="suneng-map-close"
             type="button"
             onClick={() => closePanel()}
-            aria-label={`关闭${name}合作伙伴`}
+            aria-label={locale === 'en' ? `Close ${name} Companies` : `关闭${name}合作伙伴`}
           >
             <svg viewBox="0 0 20 20" width="20" height="20" aria-hidden="true">
               <path d="M5 5l10 10M15 5L5 15" />
             </svg>
           </button>
         </div>
-        <div className="suneng-map-table-scroll" tabIndex={0} aria-label={`${name}合作伙伴列表`}>
+        <div className="suneng-map-table-scroll" tabIndex={0} aria-label={locale === 'en' ? `${name} Companies` : `${name}合作伙伴列表`}>
           <table className="suneng-map-table">
             <thead>
               <tr>
-                <th scope="col">公司简称</th>
-                <th scope="col">所属行业</th>
+                <th scope="col">{t("公司简称")}</th>
+                <th scope="col">{t("所属行业")}</th>
               </tr>
             </thead>
             <tbody>
@@ -297,15 +304,15 @@ export default function PartnerMap({
                   <th scope="row" title={partner.fullName} colSpan={partner.industry ? 1 : 2}>
                     <span aria-label={partner.fullName}>{partner.shortName}</span>
                   </th>
-                  {partner.industry && <td>{partner.industry}</td>}
+                  {partner.industry && <td>{t(partner.industry)}</td>}
                 </tr>
               ))}
             </tbody>
           </table>
-          {!rows.length && <p className="suneng-map-empty">该地区没有匹配的合作伙伴。</p>}
+          {!rows.length && <p className="suneng-map-empty">{t("该地区没有匹配的合作伙伴。")}</p>}
         </div>
         {selected === code && hasMoreRows && (
-          <p className="suneng-map-scroll-hint">向下滚动查看更多</p>
+          <p className="suneng-map-scroll-hint">{t("向下滚动查看更多")}</p>
         )}
       </section>
     );
@@ -314,6 +321,7 @@ export default function PartnerMap({
   return (
     <section
       className="suneng-map"
+      lang={locale}
       data-enhanced={enhanced ? 'true' : 'false'}
       data-searching={normalizedQuery ? 'true' : 'false'}
       data-has-selection={selected && selectedCount > 0 ? 'true' : 'false'}
@@ -324,9 +332,9 @@ export default function PartnerMap({
       <header className="suneng-map-header">
         <div>
           <Heading className="suneng-map-title" id={`${uid}-title`}>
-            {title}
+            {t(title)}
           </Heading>
-          <p className="suneng-map-description">以下展示部分历年合作客户，点击省份查看。</p>
+          <p className="suneng-map-description">{t("以下展示部分历年合作客户，点击省份查看。")}</p>
         </div>
         <div className="suneng-map-search-wrap">
           <label className="suneng-map-search" htmlFor={`${uid}-search`}>
@@ -334,7 +342,7 @@ export default function PartnerMap({
               <circle cx="10.5" cy="10.5" r="6.5" />
               <path d="m15.5 15.5 5 5" />
             </svg>
-            <span className="suneng-map-sr-only">搜索公司或行业</span>
+            <span className="suneng-map-sr-only">{t("搜索公司或行业")}</span>
             <input
               id={`${uid}-search`}
               type="search"
@@ -342,7 +350,7 @@ export default function PartnerMap({
               maxLength={120}
               value={query}
               onChange={(event) => setQuery(event.target.value)}
-              placeholder="搜索公司或行业"
+              placeholder={t("搜索公司或行业")}
               autoComplete="off"
             />
           </label>
@@ -367,7 +375,7 @@ export default function PartnerMap({
                   searchFeedback
                 )}
                 <button type="button" onClick={() => setQuery('')}>
-                  清空
+                  {t("清空")}
                 </button>
               </>
             )}
@@ -376,7 +384,7 @@ export default function PartnerMap({
       </header>
 
       <label className="suneng-map-mobile-selector" htmlFor={`${uid}-province-select`}>
-        <span>查看省份</span>
+        <span>{t("查看省份")}</span>
         <select
           id={`${uid}-province-select`}
           ref={provinceSelectRef}
@@ -387,7 +395,7 @@ export default function PartnerMap({
             else closePanel(false);
           }}
         >
-          <option value="">请选择省份</option>
+          <option value="">{t("请选择省份")}</option>
           {provinceItems.map((province) => {
             const rows = groups.get(province.code) ?? [];
             return rows.length ? (
@@ -396,8 +404,8 @@ export default function PartnerMap({
                 value={province.code}
                 data-muted={normalizedQuery && !rows.some(matches) ? 'true' : 'false'}
               >
-                {province.name} · {rows.length} 家
-                {normalizedQuery ? `（匹配 ${rows.filter(matches).length} 家）` : ''}
+                {province.name} · {rows.length} {locale === 'en' ? 'companies' : '家'}
+                {normalizedQuery ? (locale === 'en' ? ` (${rows.filter(matches).length} matches)` : `（匹配 ${rows.filter(matches).length} 家）`) : ''}
               </option>
             ) : null;
           })}
@@ -406,8 +414,8 @@ export default function PartnerMap({
               value={UNKNOWN}
               data-muted={normalizedQuery && !unknownMatchCount ? 'true' : 'false'}
             >
-              所在地待补充 · {unknownPartners.length} 家
-              {normalizedQuery ? `（匹配 ${unknownMatchCount} 家）` : ''}
+              {t('所在地待补充')} · {unknownPartners.length} {locale === 'en' ? 'companies' : '家'}
+              {normalizedQuery ? (locale === 'en' ? ` (${unknownMatchCount} matches)` : `（匹配 ${unknownMatchCount} 家）`) : ''}
             </option>
           )}
         </select>
@@ -494,8 +502,8 @@ export default function PartnerMap({
             <circle cx="17" cy="17" r="6" />
             <path d="m23 22 3 14 4-6 6-3Z" />
           </svg>
-          <p className="suneng-map-idle-title">选择一个省份</p>
-          <p>查看合作伙伴及所属行业</p>
+          <p className="suneng-map-idle-title">{t("选择一个省份")}</p>
+          <p>{t("查看合作伙伴及所属行业")}</p>
         </div>
 
         {provinceItems.map((province) => {
@@ -528,7 +536,7 @@ export default function PartnerMap({
                 data-selected={selected === province.code ? 'true' : 'false'}
                 data-muted={isMuted ? 'true' : 'false'}
                 data-suneng-map-trigger="true"
-                aria-label={`${province.name}，${rows.length}家合作伙伴`}
+                aria-label={locale === 'en' ? `${province.name}, ${rows.length} companies` : `${province.name}，${rows.length}家合作伙伴`}
                 aria-controls={`${uid}-panel-${province.code}`}
                 onClick={(event) => onSummaryClick(event, province.code)}
                 onPointerEnter={() => setHovered(province.code)}
@@ -544,11 +552,11 @@ export default function PartnerMap({
           );
         })}
 
-        <span className="suneng-map-inset-label" style={position([1187, 607])}>
-          南海诸岛
+        <span className="suneng-map-inset-label" style={locale === 'en' ? undefined : position([1187, 607])}>
+          {t("南海诸岛")}
         </span>
 
-        <p className="suneng-map-legend">省份数字为本页展示客户数量</p>
+        <p className="suneng-map-legend">{t("省份数字为本页展示客户数量")}</p>
         {!!unknownPartners.length && (
           <details className="suneng-map-disclosure" open={selected === UNKNOWN}>
             <summary
@@ -562,10 +570,10 @@ export default function PartnerMap({
               onClick={(event) => onSummaryClick(event, UNKNOWN)}
               aria-controls={`${uid}-panel-${UNKNOWN}`}
             >
-              所在地待补充 {unknownPartners.length} 家
-              {normalizedQuery && ` · 匹配 ${unknownMatchCount} 家`}
+              {t('所在地待补充')} {unknownPartners.length} {locale === 'en' ? 'companies' : '家'}
+              {normalizedQuery && (locale === 'en' ? ` · ${unknownMatchCount} matches` : ` · 匹配 ${unknownMatchCount} 家`)}
             </summary>
-            {renderPopup(UNKNOWN, '所在地待补充')}
+            {renderPopup(UNKNOWN, t('所在地待补充'))}
           </details>
         )}
       </div>

@@ -85,9 +85,8 @@ export async function generateMetadata({ params }: NewsDetailPageProps) {
 
   const title = await getNewsSeoTitle(currentLocale, article);
   const summary = getNewsSummary(currentLocale, article, true);
-  // English summaries include material and acceptance limits; keep the complete
-  // sentence so metadata does not cut off a word or its qualifying condition.
-  const description = currentLocale === 'en' ? summary : summary.slice(0, 120);
+  // Keep complete summaries in both languages, including acceptance limitations.
+  const description = summary;
   const image = resolveNewsImage(article, {
     preferFallback: FALLBACK_NEWS_SLUGS.has(slug),
     locale: currentLocale,

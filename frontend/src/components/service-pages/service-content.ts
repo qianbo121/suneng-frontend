@@ -141,6 +141,7 @@ export const servicePages = {
       ['after-sales', '故障报修'],
       ['installation-preparation', '安装调试'],
       ['delivery-documents', '交付资料'],
+      ['overseas-delivery', '海外交付'],
       ['warranty', '质保服务'],
       ['questions', '常见问题'],
     ],

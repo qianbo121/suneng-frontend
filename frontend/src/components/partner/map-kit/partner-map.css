@@ -776,3 +776,20 @@
     scroll-behavior: auto !important;
   }
 }
+
+/* English map labels need room for words instead of two-character region labels. */
+.suneng-map[lang='en'] .suneng-map-inset-label {
+  left: 92.734375%;
+  top: 97.903226%;
+}
+@container sunengPartnerMap (max-width: 599px) {
+  .suneng-map[lang='en'] .suneng-map-inset-label {
+    left: 88%;
+    top: 90%;
+    width: 68px;
+    white-space: normal;
+    text-align: center;
+    font-size: 8px;
+    line-height: 9px;
+  }
+}

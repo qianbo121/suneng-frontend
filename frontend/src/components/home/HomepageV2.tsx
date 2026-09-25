@@ -95,7 +95,7 @@ export function HomepageV2({ locale = 'zh' }: { locale?: 'zh' | 'en' }) {
   const sourceCatalog = getWorkpieceRouterPublicCatalog();
   const workpieceRouterCatalog = english ? localizeHomeWorkpieces(sourceCatalog) : sourceCatalog;
   const englishTasks = [
-    { title: 'Plan a heat-treatment line', description: 'Configure a complete line around your parts, process and output.', href: '/en/products#continuous-lines', imageAlt: 'Complete heat-treatment line engineering drawing' },
+    { title: 'Plan a heat-treatment line', description: 'Configure a complete line around your parts, process and output.', href: '/en/products#production-line-title', imageAlt: 'Complete heat-treatment line engineering drawing' },
     { title: 'Choose a furnace', description: 'Start with your workpiece, process temperature and batch load.', href: '/en/products', imageAlt: 'Pit, box and bell furnace engineering drawing' },
     { title: 'Improve an existing furnace', description: 'High energy use or uneven temperatures? Assess repair, retrofit or replacement.', href: '/en/service', imageAlt: 'Existing trolley furnace engineering drawing' },
   ];

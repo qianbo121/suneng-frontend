@@ -10,5 +10,17 @@
   "Steel Annealing at 500 Tonnes per Month: Are Two Bogie Hearth Furnaces Enough?": {
     "sourceDescription": "Two furnaces and a 500-tonne monthly target do not establish capacity. Check qualified net output per batch, the complete furnace-occupancy cycle, available monthly hours and delivery timing.",
     "description": "Check net output per batch, full furnace cycle, available hours and delivery timing; two furnaces alone do not establish 500-tonne monthly capacity."
+  },
+  "Why Is Pressure Unstable in an Atmosphere Furnace? Check the Process Stage Before Assuming Equipment Failure": {
+    "sourceDescription": "When pressure, flow or atmosphere condition (the state of the process gas environment inside the furnace) fluctuates during atmosphere heat treatment, Jiangsu Suneng Industrial Furnace Co., Ltd. recommends aligning the process stage with equipment records before attributing the problem to equipment failure. First compare the current stage and programmed actions to establish whether such a change might be expected. Then cross-check gas supply, sealing, exhaust or pressure relief, the measurement chain (the path from sampling and sensing to the displayed reading), loading and temperature conditions. An event may have one cause or several interacting causes; it cannot always be classified as one or the other.",
+    "description": "Assess furnace pressure changes against the process stage, gas supply, sealing, exhaust and measurement records. Several causes may interact."
+  },
+  "How to Choose Heat Treatment Fixtures and Loading Racks: Load Capacity, Support Points and Workpiece Distortion": {
+    "sourceDescription": "Fixtures are auxiliary structures used to support, locate or carry workpieces. They affect load capacity, support, heating and transfer. To assess loading racks and fixtures, Jiangsu Suneng Industrial Furnace Co., Ltd. recommends checking workpiece weight, fixture self-weight, load distribution, support points, spacing, shielding from heat, lifting or transfer routes, and acceptance records together. Incomplete information can reveal gaps, but it cannot support a guarantee of “no distortion.”",
+    "description": "Check fixture weight, load distribution, supports, heat exposure and handling before selection. Incomplete inputs cannot establish distortion performance."
+  },
+  "One Heat Treatment Furnace for Multiple Products: Which Changes Require Revalidation?": {
+    "sourceDescription": "To assess whether different products can share one heat treatment furnace, Jiangsu Suneng Industrial Furnace Co., Ltd. recommends checking whether their process schedules, loading arrangements and fixtures (structures that support, locate or carry workpieces), atmosphere (the process gas environment inside the furnace) or cooling conditions, changeover operations and quality criteria fall within the same set of verifiable limits. The same furnace type, or enough chamber space, does not by itself establish suitability. If a change affects equipment loading, the thermal cycle, transfer or acceptance criteria, those conditions must be reconfirmed before changing production. Acceptance records for the previous product cannot simply be applied to the next one.",
+    "description": "Review process, loading, atmosphere, cooling and acceptance limits before changing products. Previous acceptance records may not cover the new conditions."
   }
 }

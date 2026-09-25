@@ -44,6 +44,7 @@ const englishStaticPaths = new Set([
   '/about',
   '/contact',
   '/strength/honors',
+  '/partner',
 ]);
 
 type SitemapEntry = MetadataRoute.Sitemap[number];

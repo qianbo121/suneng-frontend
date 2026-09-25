@@ -19,6 +19,7 @@ import { siteSettings } from '@/mock/siteSettings';
 import { Locale } from '@/types/site';
 
 import styles from './Header.module.css';
+import { useEnglishNewsLink } from './useEnglishNewsLink';
 
 type HeaderProps = {
   locale: string;
@@ -103,7 +104,11 @@ export function Header({ locale }: HeaderProps) {
     isEngineeringLanding && item.href === '/products' ? { ...item, labelText: '设备与生产线' } : item
   ), [currentLocale, isEngineeringLanding]);
   const switchLocale = currentLocale === 'zh' ? 'en' : 'zh';
-  const switchLocalePath = buildLocaleSwitchPath(pathname, switchLocale, currentLocale);
+  const englishNewsLink = useEnglishNewsLink(pathname);
+  const switchLocalePath = englishNewsLink ?? buildLocaleSwitchPath(pathname, switchLocale, currentLocale);
+  const switchLocaleTitle = englishNewsLink === '/en/news'
+    ? 'English resources — this article has no confirmed English version'
+    : undefined;
   const localeLabel = { zh: '中文', en: 'EN' } as const;
   const logoAlt = buildBrandImageAlt(currentLocale, 'full');
   const mobileNavCopy = MOBILE_NAV_COPY[currentLocale];
@@ -392,6 +397,7 @@ export function Header({ locale }: HeaderProps) {
               <li className="relative flex list-none items-center">
                 <Link
                   href={switchLocalePath}
+                  title={switchLocaleTitle}
                   className="relative z-[2] flex min-h-[44px] min-w-8 items-center justify-center whitespace-nowrap text-center text-[14px] font-normal tracking-[0.01em] text-[#697386] transition-colors duration-300 hover:text-brand-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-4px] focus-visible:outline-brand-primary"
                 >
                   <span>{localeLabel[switchLocale]}</span>
@@ -529,6 +535,7 @@ export function Header({ locale }: HeaderProps) {
                 <li className="p_level1Item list-none border-b border-black/5">
                   <Link
                     href={switchLocalePath}
+                    title={switchLocaleTitle}
                     className="flex min-h-[50px] items-center justify-between py-1 text-[14px] font-semibold leading-[50px] text-text-secondary focus-visible:outline focus-visible:outline-2 focus-visible:outline-brand-primary"
                   >
                     <span>{localeLabel[switchLocale]}</span>

@@ -24,6 +24,11 @@ export function localizeEnglishNewsPresentation(html: string, slug?: string | nu
     (_match, opening: string, attrs: string, label: string, closing: string) =>
       `${opening}/en/service/furnace-renovation-overhaul${attrs}${label.replace(/\s*\(Chinese\)/g, '')}${closing}`,
   );
+  result = result.replace(
+    /(<a\b[^>]*\bhref=["'])(?:https?:\/\/(?:www\.)?jssngyl\.cn)?\/zh\/partner\/?(["'][^>]*>)([\s\S]*?)(<\/a>)/gi,
+    (_match, opening: string, attrs: string, label: string, closing: string) =>
+      `${opening}/en/partner${attrs}${label.replace(/\s*\(Chinese\)/g, '')}${closing}`,
+  );
   const diagram = slug ? diagrams[slug] : undefined;
   if (diagram && result.includes(diagram.original)) {
     // Replace only the reviewed illustration, including any link to its original.
