@@ -1,0 +1,66 @@
+.feedback {
+  display: grid;
+  padding: 24px 16px;
+  color: #475467;
+  font-size: 15px;
+  line-height: 1.6;
+  text-align: center;
+}
+
+/* Reserve the recovery space to prevent the content below from jumping.
+   CSS also keeps the recovery link usable if hydration is delayed or fails. */
+.pending,
+.slow {
+  grid-area: 1 / 1;
+  margin: 0;
+}
+
+.pending {
+  visibility: visible;
+  animation: hide-pending 0s 8s forwards;
+}
+
+.slow {
+  visibility: hidden;
+  animation: show-recovery 0s 8s forwards;
+}
+
+.slow p {
+  margin: 0;
+}
+
+.retry {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  margin-top: 12px;
+  padding: 0 20px;
+  border-radius: 4px;
+  color: #145ca8;
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.retry:hover {
+  background: #eff6ff;
+}
+
+.retry:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 2px;
+}
+
+/* These are delayed state changes, not motion: retain the delay when the
+   visitor prefers reduced motion. Hidden recovery links cannot receive focus. */
+@keyframes hide-pending {
+  to {
+    visibility: hidden;
+  }
+}
+
+@keyframes show-recovery {
+  to {
+    visibility: visible;
+  }
+}

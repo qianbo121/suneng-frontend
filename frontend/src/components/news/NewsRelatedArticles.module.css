@@ -1,0 +1,113 @@
+.card {
+  padding: 26px;
+  border: 1px solid #e6ebf2;
+  border-radius: 14px;
+  background: #fff;
+}
+
+.heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px 12px;
+  margin-bottom: 22px;
+}
+
+.heading h2 {
+  margin: 0;
+  color: #092b59;
+  font-size: 21px;
+  font-weight: 700;
+  line-height: 1.5;
+}
+
+.heading a {
+  display: inline-flex;
+  min-height: 32px;
+  align-items: center;
+  gap: 4px;
+  color: var(--color-primary, #004a9d);
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+.heading svg {
+  width: 15px;
+  height: 15px;
+}
+
+.list {
+  display: grid;
+  gap: 22px;
+}
+
+.item {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  min-width: 0;
+}
+
+.image {
+  position: relative;
+  flex: 0 0 100px;
+  height: 70px;
+  overflow: hidden;
+  border-radius: 6px;
+  background: #f7f9fc;
+}
+
+.image img {
+  object-fit: cover;
+}
+
+.copy {
+  min-width: 0;
+}
+
+.title {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  color: #092b59;
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.65;
+  overflow-wrap: anywhere;
+}
+
+.copy time {
+  display: block;
+  margin-top: 7px;
+  color: #7a899e;
+  font-size: 13px;
+  line-height: 1.5;
+  font-variant-numeric: tabular-nums;
+}
+
+.item:hover .title,
+.heading a:hover {
+  color: var(--color-primary, #004a9d);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.card a:focus-visible {
+  outline: 2px solid var(--color-primary, #004a9d);
+  outline-offset: 4px;
+  border-radius: 3px;
+}
+
+@media (max-width: 599px) {
+  .card {
+    padding: 22px;
+  }
+  .heading a {
+    min-height: 44px;
+  }
+  .image {
+    flex-basis: 90px;
+  }
+}
