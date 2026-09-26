@@ -3,15 +3,13 @@ import { describe, expect, it, vi } from 'vitest';
 vi.mock('next-intl/server', () => ({ getLocale: vi.fn() }));
 
 import { getLocale } from 'next-intl/server';
-import RootNotFoundPage, { generateMetadata } from './not-found';
+import RootNotFoundPage, { metadata } from './not-found';
 
 describe('server-rendered missing page language', () => {
-  it.each([
-    ['en', 'en', 'Page Not Found | Suneng'],
-    ['zh', 'zh-CN', '页面未找到｜苏能工业炉'],
-  ])('renders %s content and metadata from the same request locale', async (locale, lang, title) => {
-    vi.mocked(getLocale).mockResolvedValue(locale);
-    expect(await generateMetadata()).toMatchObject({ title: { absolute: title }, robots: { index: false } });
-    expect((await RootNotFoundPage()).props.lang).toBe(lang);
+  it('does not read request headers while Next prepares a cached page', async () => {
+    vi.mocked(getLocale).mockImplementation(() => { throw new Error('DYNAMIC_SERVER_USAGE'); });
+    expect((await RootNotFoundPage()).props.lang).toBe('zh-CN');
+    expect(metadata).toMatchObject({ robots: { index: false } });
+    expect(getLocale).not.toHaveBeenCalled();
   });
 });

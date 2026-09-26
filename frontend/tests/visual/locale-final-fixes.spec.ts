@@ -104,6 +104,15 @@ for (const width of [1440, 390]) {
       await expect(back).toHaveAttribute('href', `/${locale}`);
       expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
       await page.screenshot({ path: info.outputPath(`missing-${locale}.png`) });
+      // Unmatched URLs require a full document response, including when switching languages.
+      if (width === 390) {
+        await page.getByRole('button', { name: locale === 'en' ? 'Open navigation' : '打开导航', exact: true }).click();
+      }
+      const otherLocale = locale === 'en' ? 'zh' : 'en';
+      await page.getByRole('link', { name: locale === 'en' ? '中文' : 'EN', exact: true }).click();
+      await expect(page).toHaveURL(new RegExp(`/${otherLocale}/seo-missing-review$`));
+      await expect(page).toHaveTitle(otherLocale === 'en' ? 'Page Not Found | Suneng' : '页面未找到｜苏能工业炉');
+      await page.goto(`/${locale}/seo-missing-review`, { waitUntil: 'networkidle' });
       await back.click();
       await expect(page).toHaveURL(new RegExp(`/${locale}$`));
       await expect(page.locator('main h1')).toBeVisible();
