@@ -31,6 +31,8 @@ export const newsListPrerenderRewrites = [
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
+  // Resolve unmatched URLs outside cached page rendering and streamed layouts.
+  experimental: { globalNotFound: true },
   distDir,
   // Keep each environment's generated route checks out of the other's program.
   // Source-only tsc uses tsconfig.json; Next still checks freshly generated types.

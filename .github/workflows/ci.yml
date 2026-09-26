@@ -118,6 +118,8 @@ jobs:
           NEXT_PUBLIC_API_BASE_URL: /api
           API_BASE_URL_INTERNAL: http://backend:3001/api
         run: pnpm --dir frontend build
+      - name: Verify production news rendering
+        run: node frontend/scripts/verify-production-news.mjs
 
   backend:
     name: Backend (lint + typecheck + test + build)
