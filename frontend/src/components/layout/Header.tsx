@@ -23,6 +23,7 @@ import { useEnglishNewsLink } from './useEnglishNewsLink';
 
 type HeaderProps = {
   locale: string;
+  localeSwitchReload?: boolean;
 };
 
 const HEADER_LOGO_SRC = '/images/brand/sn-logo-header-cropped.png';
@@ -87,7 +88,8 @@ function isActiveNavItem(pathname: string, href: string) {
   return pathname.startsWith(`${href}/`);
 }
 
-export function Header({ locale }: HeaderProps) {
+export function Header({ locale, localeSwitchReload = false }: HeaderProps) {
+  const LocaleSwitchLink = localeSwitchReload ? 'a' : Link;
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [mobileExpandedKey, setMobileExpandedKey] = useState<string | null>(null);
@@ -395,13 +397,13 @@ export function Header({ locale }: HeaderProps) {
               )}
 
               <li className="relative flex list-none items-center">
-                <Link
+                <LocaleSwitchLink
                   href={switchLocalePath}
                   title={switchLocaleTitle}
                   className="relative z-[2] flex min-h-[44px] min-w-8 items-center justify-center whitespace-nowrap text-center text-[14px] font-normal tracking-[0.01em] text-[#697386] transition-colors duration-300 hover:text-brand-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-4px] focus-visible:outline-brand-primary"
                 >
                   <span>{localeLabel[switchLocale]}</span>
-                </Link>
+                </LocaleSwitchLink>
               </li>
             </ul>
           </div>
@@ -533,13 +535,13 @@ export function Header({ locale }: HeaderProps) {
                   })}
 
                 <li className="p_level1Item list-none border-b border-black/5">
-                  <Link
+                  <LocaleSwitchLink
                     href={switchLocalePath}
                     title={switchLocaleTitle}
                     className="flex min-h-[50px] items-center justify-between py-1 text-[14px] font-semibold leading-[50px] text-text-secondary focus-visible:outline focus-visible:outline-2 focus-visible:outline-brand-primary"
                   >
                     <span>{localeLabel[switchLocale]}</span>
-                  </Link>
+                  </LocaleSwitchLink>
                 </li>
               </ul>
             </div>
