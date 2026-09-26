@@ -49,6 +49,11 @@ const articles = [
   ...Array.from({ length: 12 }, (_, index) => ({
     ...article, id: 900300 + index, slug: `visual-test-annealing-page-${index + 1}`,
   })),
+  {
+    ...article, id: 900500, slug: 'visual-test-article-directory',
+    contentZh: '<h2>一、确认工件条件</h2><p>记录工件尺寸、材质、装炉方式与目标产能，保留实际工况供技术沟通。</p><h2>二、核对工艺要求</h2><p>结合工件条件核对温度、节拍和冷却要求，不以单个参数替代完整工艺确认。</p><h2>三、整理现场条件</h2><p>整理场地、能源和前后道衔接条件，再与技术人员逐项确认。</p>',
+    contentEn: '<h2>Confirm workpiece conditions</h2><p>Record dimensions, material, loading and target throughput for technical review.</p><h2>Check process requirements</h2><p>Review temperature, cycle time and cooling against the workpiece conditions.</p><h2>Prepare site conditions</h2><p>Record available space, utilities and upstream and downstream interfaces for review.</p>',
+  },
 ];
 
 createServer((request, response) => {
