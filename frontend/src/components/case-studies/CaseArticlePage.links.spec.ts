@@ -38,7 +38,7 @@ vi.mock('@/lib/cases/server', async (original) => {
       slug: fixture.slug,
       relatedCases: [],
       relatedLinks: [
-        { title: '已撤回的方案页', href: '/zh/solutions/continuous-heat-treatment-line' },
+        { title: '已撤回的方案页', href: '/zh/solutions/rechuli-lu-changjia' },
         { title: '编码后的撤回文章', href: '/zh/%61rticles/gongye-lu-baojia-canshu' },
         { title: '未批准的案例', href: '/zh/case/jining-support-roller-heat-treatment-line' },
         { title: '服务范围', href: '/zh/service' },

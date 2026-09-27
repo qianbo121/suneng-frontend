@@ -1,10 +1,8 @@
-import { EnglishSolutionPage, englishSolutionMetadata } from '@/components/engineering/EnglishSolutionsPage';
-import { solutionAlternates } from '@/lib/english-solutions';
 import type { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { TECHNICAL_CONTENT_PUBLISHED } from '@/lib/publication-scope';
+import { isPublishedGuide, isWithdrawnTechnicalPath } from '@/lib/publication-scope';
 import {
   HiCheckCircle,
   HiOutlineArchiveBox,
@@ -104,17 +102,14 @@ export function generateStaticParams() {
   return [{ locale: 'zh' }, { locale: 'en' }];
 }
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  // Withdrawn content must not be rendered even if a request slips past middleware.
-  if (!TECHNICAL_CONTENT_PUBLISHED) notFound();
   const { locale } = await params;
-  if (locale === 'en') return englishSolutionMetadata('continuous-heat-treatment-line');
-  if (locale !== 'zh') notFound();
+  if (!isPublishedGuide(locale, pagePath)) notFound();
   const metadata = buildMetadata({
     title: '连续热处理生产线解决方案｜选型与项目经验',
     description,
     path: pagePath,
     image: '/images/products/annealing-solution-line/gallery/line-01.jpg',
-    alternateLocales: solutionAlternates('continuous-heat-treatment-line'),
+    alternateLocales: { 'zh-CN': pagePath, 'x-default': pagePath },
   });
   if (process.env.NODE_ENV === 'development' || process.env.SITE_NOINDEX === 'true') {
     metadata.robots = { index: false, follow: false };
@@ -122,11 +117,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   return metadata;
 }
 export default async function ContinuousHeatTreatmentLinePage({ params }: PageProps) {
-  // Withdrawn content must not be rendered even if a request slips past middleware.
-  if (!TECHNICAL_CONTENT_PUBLISHED) notFound();
   const { locale } = await params;
-  if (locale === 'en') return <EnglishSolutionPage slug="continuous-heat-treatment-line" />;
-  if (locale !== 'zh') notFound();
+  if (!isPublishedGuide(locale, pagePath)) notFound();
   return (
     <div className={styles.page} data-engineering-page="line">
       <AnchorNav
@@ -275,12 +267,14 @@ export default async function ContinuousHeatTreatmentLinePage({ params }: PagePr
                 </div>
               ))}
             </dl>
-            <Link
-              className={styles.button}
-              href="/zh/case/jining-support-roller-heat-treatment-line"
-            >
-              查看项目资料
-            </Link>
+            {!isWithdrawnTechnicalPath('/zh/case/jining-support-roller-heat-treatment-line') && (
+              <Link
+                className={styles.button}
+                href="/zh/case/jining-support-roller-heat-treatment-line"
+              >
+                查看项目资料
+              </Link>
+            )}
           </div>
         </article>
         <div className={styles.center}>
@@ -320,7 +314,7 @@ export default async function ContinuousHeatTreatmentLinePage({ params }: PagePr
             <article key={item.factId} className="rounded-[8px] border border-[#e1e7f0] bg-white p-6">
               <h3 className="text-[18px] font-semibold leading-[1.5] text-[#101828]">{item.title}</h3>
               <p className="mt-3 text-[15px] leading-[1.85] text-[#475467]">{item.text}</p>
-              {item.href ? (
+              {item.href && !isWithdrawnTechnicalPath(item.href) ? (
                 <Link href={item.href} className="mt-4 inline-block text-[14px] font-semibold text-[#145ca8] underline underline-offset-4 focus-visible:outline focus-visible:outline-2">
                   查看对应项目资料与条件
                 </Link>
@@ -368,7 +362,6 @@ export default async function ContinuousHeatTreatmentLinePage({ params }: PagePr
         id="continuous-line-breadcrumb-jsonld"
         data={getBreadcrumbJsonLd([
           { name: '首页', url: '/zh' },
-          { name: '解决方案', url: '/zh/solutions' },
           { name: '连续热处理生产线解决方案', url: pagePath },
         ])}
       />

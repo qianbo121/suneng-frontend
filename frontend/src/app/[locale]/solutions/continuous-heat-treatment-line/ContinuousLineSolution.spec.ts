@@ -5,11 +5,6 @@ import Page from './page';
 
 vi.mock('server-only', () => ({}));
 vi.mock('next/navigation', () => ({ notFound: () => { throw new Error('404'); }, usePathname: () => '/zh/solutions/continuous-heat-treatment-line' }));
-// The page is withdrawn at launch; check its content as it would be published.
-vi.mock('@/lib/publication-scope', async (original) => ({
-  ...(await original<typeof import('@/lib/publication-scope')>()),
-  TECHNICAL_CONTENT_PUBLISHED: true,
-}));
 const styles = readFileSync(new URL('../../../../components/engineering/EngineeringPage.module.css', import.meta.url), 'utf8');
 let html: string;
 const text = (markup: string) => markup.replace(/<[^>]*>/g, '');
@@ -50,19 +45,20 @@ describe('continuous heat-treatment line rendered page', () => {
     for (const phrase of ['供货范围', '质量与产能', '验收与资料', '按合同范围']) expect(text(checks)).toContain(phrase);
     expect(styles).toMatch(/\.cards \{[^}]*grid-template-columns: repeat\(3, minmax\(0, 1fr\)\)/);
   });
-  it('gives the main project a direct title, scope and complete detail entrance', () => {
+  it('retains the main project description without linking to its withdrawn detail', () => {
     const experience = section('experience');
     for (const phrase of ['济宁支重轮热处理生产线', '项目需求', '主要设备', '苏能参与']) expect(text(experience)).toContain(phrase);
-    expect(experience).toContain('href="/zh/case/jining-support-roller-heat-treatment-line"');
+    expect(experience).not.toContain('href="/zh/case/jining-support-roller-heat-treatment-line"');
   });
-  it("retains a described reference image in the archived component", () => {
+  it("retains a described reference image", () => {
     const experience=section('experience');
     expect(experience).toMatch(/alt="[^"]+"/);
     expect(experience).toContain('<img');
   });
-  it('connects the historical evidence to all three real case pages', () => {
+  it('links historical evidence only to currently approved case pages', () => {
     const evidence = section('project-evidence');
-    for (const slug of ['anonymous-tsingshan-1250-renovation', 'henan-annealing-solution-line', 'jining-support-roller-heat-treatment-line']) expect(evidence).toContain(`href="/zh/case/${slug}"`);
+    expect(evidence).toContain('href="/zh/case/henan-annealing-solution-line"');
+    for (const slug of ['anonymous-tsingshan-1250-renovation', 'jining-support-roller-heat-treatment-line']) expect(evidence).not.toContain(`href="/zh/case/${slug}"`);
   });
   it('renders the real shared inquiry form with exactly the four customer fields', () => {
     const form = section('inquiry');
