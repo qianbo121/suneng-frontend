@@ -1,8 +1,19 @@
-import { Controller, Get, Logger, Query, Req, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  HttpCode,
+  Logger,
+  Post,
+  Query,
+  Req,
+  UseGuards,
+} from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 
 import { Public } from '@/common/decorators/public.decorator';
 import { ShujuGrowthReadQueryDto } from '@/modules/shuju-service/dto/shuju-growth-read-query.dto';
+import { ShujuGrowthOverviewDto } from '@/modules/shuju-service/dto/shuju-growth-overview.dto';
 import {
   GrowthServiceRequest,
   ShujuGrowthReadAuthGuard,
@@ -18,6 +29,17 @@ export class ShujuGrowthReadController {
   private readonly logger = new Logger(ShujuGrowthReadController.name);
 
   constructor(private readonly service: ShujuGrowthReadService) {}
+
+  @Post('overview')
+  @HttpCode(200)
+  @ApiOperation({ summary: 'Read privacy-safe growth aggregates with internal inquiry review' })
+  async reviewedOverview(
+    @Body() body: ShujuGrowthOverviewDto,
+    @Req() request: GrowthServiceRequest,
+  ) {
+    // The class-level service guard also protects this read-only POST. No browser review input.
+    return this.overview(body, request);
+  }
 
   @Get('overview')
   @ApiOperation({ summary: 'Read privacy-safe website growth aggregates' })

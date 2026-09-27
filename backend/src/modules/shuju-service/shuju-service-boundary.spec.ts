@@ -78,7 +78,7 @@ describe('Shuju service security boundary', () => {
     expect(compose).toContain('SHUJU_INQUIRY_READ_MIN_ID: ${SHUJU_INQUIRY_READ_MIN_ID:-0}');
   });
 
-  it('exposes only privacy-safe website growth aggregates through an independent GET route', () => {
+  it('exposes only privacy-safe growth reads through guarded GET and POST overview routes', () => {
     const controller = read('backend/src/modules/shuju-service/shuju-growth-read.controller.ts');
     const service = read('backend/src/modules/shuju-service/shuju-growth-read.service.ts');
     const configuration = read('backend/src/config/configuration.ts');
@@ -86,12 +86,17 @@ describe('Shuju service security boundary', () => {
 
     expect(controller).toContain("@Controller('svc/growth')");
     expect(controller).toContain("@Get('overview')");
+    expect(controller).toContain("@Post('overview')");
     expect(controller).toContain('@UseGuards(ShujuGrowthReadAuthGuard)');
-    expect(controller).not.toMatch(/@(Post|Patch|Put|Delete)\b/);
+    expect(controller).not.toMatch(/@(Patch|Put|Delete)\b/);
     expect(service).toContain('FROM "WebsiteLeadEvent"');
     expect(service).not.toContain('"phone"');
     expect(service).not.toContain('"email"');
     expect(service).not.toContain('"requirement"');
+    const content = read('backend/src/modules/shuju-service/shuju-content-growth.ts');
+    expect(content).not.toMatch(/\b(INSERT INTO|UPDATE "|DELETE FROM)\b/);
+    expect(content).not.toContain('"phone"');
+    expect(content).not.toContain('"email"');
     expect(configuration).toContain(
       'SHUJU_GROWTH_READ_JWT_SECRET must use an independent trust domain',
     );
