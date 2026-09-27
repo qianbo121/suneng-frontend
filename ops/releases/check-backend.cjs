@@ -25,6 +25,8 @@ const ALLOWED_PENDING = new Map([
   }
   const done = new Set(applied.filter(x => x.finished_at && !x.rolled_back_at).map(x => x.migration_name));
   const pending = migrations.filter(x => !done.has(x));
+  const noMigrations = process.env.RELEASE_NO_MIGRATIONS === '1';
+  if (noMigrations && pending.length) throw new Error('Backend-only release requires zero pending migrations');
   for (const name of pending) {
     const reviewed = ALLOWED_PENDING.get(name);
     if (!reviewed) throw new Error('Unexpected pending migration');
@@ -54,11 +56,11 @@ const ALLOWED_PENDING = new Map([
   }, { timeout:30000 });
   if (aggregate.content?.status !== 'available') throw new Error('Content aggregate unavailable');
   const index = await prisma.$queryRawUnsafe(`SELECT i.indisvalid FROM pg_index i JOIN pg_class c ON c.oid=i.indexrelid WHERE c.relname='WebsiteLeadEvent_sessionId_createdAt_idx'`);
-  if (process.env.RELEASE_APPLY_INDEX === '1' && !index.some(x=>x.indisvalid)) throw new Error('Index is not valid');
+  if ((process.env.RELEASE_APPLY_INDEX === '1' || noMigrations) && !index.some(x=>x.indisvalid)) throw new Error('Index is not valid');
   // The aggregates above filter on "isBot"; a missing or unpopulated column would silently
   // change every visitor number rather than fail, so confirm it is really there and stored.
   const botColumn = await prisma.$queryRawUnsafe(`SELECT is_generated FROM information_schema.columns WHERE table_name='WebsiteLeadEvent' AND column_name='isBot'`);
   const botColumnStored = botColumn.some(x => x.is_generated === 'ALWAYS');
-  if (process.env.RELEASE_APPLY_INDEX === '1' && !botColumnStored) throw new Error('Bot column is missing or not generated');
+  if ((process.env.RELEASE_APPLY_INDEX === '1' || noMigrations) && !botColumnStored) throw new Error('Bot column is missing or not generated');
   console.log(JSON.stringify({passed:true,pendingMigrationCount:pending.length,indexPresent:index.some(x=>x.indisvalid),botColumnStored,aggregateAvailable:true,aggregateCheckMs:Date.now()-began,dataRestored:false,notificationsSent:false}));
 })().catch(() => { console.error('Backend release check failed; no customer data is printed.');process.exitCode=1; }).finally(()=>prisma.$disconnect());
