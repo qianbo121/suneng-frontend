@@ -73,7 +73,7 @@ describe('withdrawn content routing', () => {
     vi.resetModules();
     vi.doMock('next-intl/middleware', () => ({
       default: () => (request: NextRequest) =>
-        NextResponse.rewrite(new URL('/zh/solutions/continuous-heat-treatment-line', request.url)),
+        NextResponse.rewrite(new URL('/zh/solutions/rechuli-lu-changjia', request.url)),
     }));
     try {
       const { default: rewritten } = await import('./middleware');
