@@ -8,7 +8,7 @@ const root = path.resolve(__dirname, '../..');
 const script = fs.readFileSync(path.join(__dirname, 'check-backend.cjs'), 'utf8');
 const pendingName = '20260918160000_website_lead_event_is_bot';
 
-async function check({ pending = true, apply = false, backup = false, brokenHistory = false } = {}) {
+async function check({ pending = true, apply = false, backup = false, brokenHistory = false, noMigrations = false, index = true, botColumn = true } = {}) {
   const events = [];
   let migrated = !pending;
   let report;
@@ -20,13 +20,13 @@ async function check({ pending = true, apply = false, backup = false, brokenHist
   const client = {
     async $queryRawUnsafe(sql) {
       if (sql.includes('_prisma_migrations')) { events.push('history'); return history; }
-      if (sql.includes('pg_index')) return [{ indisvalid: true }];
-      return migrated ? [{ is_generated: 'ALWAYS' }] : [];
+      if (sql.includes('pg_index')) return [{ indisvalid: index }];
+      return migrated && botColumn ? [{ is_generated: 'ALWAYS' }] : [];
     },
     async $transaction(callback) { return callback({ $executeRawUnsafe: async () => {} }); },
     async $disconnect() { events.push('disconnect'); },
   };
-  const proc = { env: { RELEASE_APPLY_INDEX: apply ? '1' : '0', RELEASE_BACKUP_VERIFIED: backup ? '1' : '0' }, execPath: process.execPath };
+  const proc = { env: { RELEASE_NO_MIGRATIONS: noMigrations ? '1' : '0', RELEASE_APPLY_INDEX: apply ? '1' : '0', RELEASE_BACKUP_VERIFIED: backup ? '1' : '0' }, execPath: process.execPath };
   const result = vm.runInNewContext(script, {
     require(name) {
       if (name.includes('@prisma/client')) return { PrismaClient: class { constructor() { return client; } } };
@@ -60,4 +60,21 @@ test('unchanged schema still runs the real aggregate verification stage', async 
 test('unreconciled history blocks all later steps', async () => {
   const result = await check({ brokenHistory:true, apply:true, backup:true }); assert.equal(result.failed,true);
   assert.ok(!result.events.includes('migrate')); assert.ok(!result.events.includes('aggregate'));
+});
+
+test('backend-only refuses even approved pending migrations before aggregate or mutation', async () => {
+  for (const apply of [false, true]) {
+    const result = await check({ noMigrations:true, apply, backup:true });
+    assert.equal(result.failed,true);
+    assert.ok(!result.events.includes('aggregate')); assert.ok(!result.events.includes('migrate'));
+  }
+});
+test('backend-only verifies unchanged schema and rejects missing index or bot column', async () => {
+  const good = await check({ pending:false, noMigrations:true });
+  assert.equal(good.failed,false); assert.equal(good.report.pendingMigrationCount,0);
+  assert.equal(good.report.aggregateAvailable,true); assert.ok(!good.events.includes('migrate'));
+  for (const missing of [{index:false}, {botColumn:false}]) {
+    const result = await check({ pending:false, noMigrations:true, ...missing });
+    assert.equal(result.failed,true); assert.ok(!result.events.includes('migrate'));
+  }
 });

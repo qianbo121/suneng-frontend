@@ -2,7 +2,8 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 
 import { ShujuGrowthReadQueryDto } from '@/modules/shuju-service/dto/shuju-growth-read-query.dto';
-import { readContentGrowth } from '@/modules/shuju-service/shuju-content-growth';
+import { ShujuGrowthOverviewDto, validateInquiryReview } from './dto/shuju-growth-overview.dto';
+import { OperatingSource, readContentGrowth } from '@/modules/shuju-service/shuju-content-growth';
 import { PrismaService } from '@/prisma/prisma.service';
 
 type CountRow = {
@@ -155,6 +156,28 @@ function count(value: bigint | number | null | undefined) {
   return Number(value ?? 0);
 }
 
+function operatingSourceCounts(
+  rows: OperatingSource[] | undefined,
+  row: SourceRow,
+  reviewed: boolean,
+) {
+  const match = rows?.find(
+    (item) =>
+      item.sourceType === (row.sourceType || '无法识别') &&
+      item.sourceDetail === (row.sourceDetail || null),
+  );
+  return {
+    visits: match?.visits ?? 0,
+    dwell20Visitors: match?.dwell20Visitors ?? 0,
+    contactVisitors: match?.contactVisitors ?? 0,
+    rawSubmissions: match?.rawSubmissions ?? 0,
+    validSubmissions: reviewed ? (match?.validSubmissions ?? 0) : null,
+    excludedSubmissions: reviewed ? (match?.excludedSubmissions ?? 0) : null,
+    pendingSubmissions: reviewed ? (match?.pendingSubmissions ?? 0) : null,
+    unknownSubmissions: reviewed ? (match?.unknownSubmissions ?? 0) : null,
+  };
+}
+
 function normalizedPageType(value: string | null | undefined) {
   if (value === '服务页') return '解决方案页';
   if (value === '资料文章') return '文章页';
@@ -207,7 +230,8 @@ function dateRange(query: ShujuGrowthReadQueryDto) {
 export class ShujuGrowthReadService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async overview(query: ShujuGrowthReadQueryDto) {
+  async overview(query: ShujuGrowthOverviewDto) {
+    validateInquiryReview(query.inquiryReview);
     const { start, endExclusive, days } = dateRange(query);
     const [trackingCoverage, dwellCoverage] = await Promise.all([
       this.prisma.$queryRaw<TrackingCoverageRow[]>(Prisma.sql`
@@ -426,8 +450,8 @@ export class ShujuGrowthReadService {
         ORDER BY sessions DESC, "pageViews" DESC
         LIMIT 100
       `),
-      // 客户所在地：只统计当前筛选范围内停留达到 5 秒的访客。
-      // 5 秒是地区面板自己的展示分母，不替代全站访客、漏斗或真实提交口径。
+      // 客户所在地：只统计当前筛选范围内停留达到 20 秒的访客。
+      // 20 秒只是行为筛选，不证明绝对真人，不替代全站访客或真实提交口径。
       // 每个访客只取当前范围内最近一次可靠地区，避免跨地区访问被重复计算。
       this.prisma.$queryRaw<RegionRow[]>(Prisma.sql`
         WITH scoped AS (
@@ -439,7 +463,7 @@ export class ShujuGrowthReadService {
         ), dwell_visitors AS (
           SELECT DISTINCT identity
           FROM scoped
-          WHERE "eventType" = 'dwell_5s'
+          WHERE "eventType" = 'dwell_20s'
         ), resolved_visitors AS (
           SELECT DISTINCT ON (s.identity)
             s.identity,
@@ -453,7 +477,7 @@ export class ShujuGrowthReadService {
         SELECT
           r."province",
           COUNT(DISTINCT r.identity)::bigint AS visitors,
-          COUNT(DISTINCT s.session_key) FILTER (WHERE s."eventType" = 'dwell_5s')::bigint AS sessions,
+          COUNT(DISTINCT s.session_key) FILTER (WHERE s."eventType" = 'dwell_20s')::bigint AS sessions,
           COUNT(DISTINCT s.identity) FILTER (WHERE s."eventType" = 'engaged_session')::bigint AS "engagedVisitors",
           COUNT(DISTINCT s.identity) FILTER (WHERE s."eventType" IN ('phone_click','wechat_click','wechat_qr_view','quote_cta_click','email_click','form_start','form_step_complete','form_submit'))::bigint AS "highIntentVisitors"
         FROM resolved_visitors r
@@ -471,7 +495,7 @@ export class ShujuGrowthReadService {
         ), dwell_visitors AS (
           SELECT DISTINCT identity
           FROM scoped
-          WHERE "eventType" = 'dwell_5s'
+          WHERE "eventType" = 'dwell_20s'
         ), resolved_visitors AS (
           SELECT DISTINCT d.identity
           FROM dwell_visitors d
@@ -637,20 +661,27 @@ export class ShujuGrowthReadService {
       `),
     ]);
 
-    const content = await readContentGrowth(this.prisma, {
-      start,
-      end: endExclusive,
-      dimensionWhere: contentDimensionFilters.length
-        ? Prisma.join(contentDimensionFilters, ' AND ')
-        : Prisma.sql`TRUE`,
-      notBot: NOT_BOT,
-      verified: VERIFIED_EVENT,
-      sourceType: NORMALIZED_SOURCE_TYPE,
-      sourceDetail: NORMALIZED_SOURCE_DETAIL,
-    });
+    const { operating, operatingSources, operatingSourceDetails, ...content } =
+      await readContentGrowth(this.prisma, {
+        start,
+        end: endExclusive,
+        dimensionWhere: contentDimensionFilters.length
+          ? Prisma.join(contentDimensionFilters, ' AND ')
+          : Prisma.sql`TRUE`,
+        notBot: NOT_BOT,
+        verified: VERIFIED_EVENT,
+        sourceType: NORMALIZED_SOURCE_TYPE,
+        sourceDetail: NORMALIZED_SOURCE_DETAIL,
+        inquiryReview: query.inquiryReview,
+      });
 
     return {
       content,
+      operating: operating || {
+        version: 1,
+        contactVisitors: 0,
+        inquiries: { raw: 0, valid: null, excluded: null, pending: null, unknown: null },
+      },
       range: {
         startDate: query.startDate.slice(0, 10),
         endDate: query.endDate.slice(0, 10),
@@ -671,7 +702,7 @@ export class ShujuGrowthReadService {
         // 把整个窗口缩到它的上线日会让别的数字凭空变小。
         dwellStartAt: hasDwellStart ? dwellStartAt!.toISOString() : null,
         region: {
-          cohort: 'dwell_5s',
+          cohort: 'dwell_20s',
           eligibleVisitors: count(regionCoverageRows[0]?.eligibleVisitors),
           resolvedVisitors: count(regionCoverageRows[0]?.resolvedVisitors),
           rate: count(regionCoverageRows[0]?.eligibleVisitors)
@@ -746,6 +777,7 @@ export class ShujuGrowthReadService {
         visitors: count(row.visitorCount),
       })),
       sources: sources.map((row) => ({
+        ...operatingSourceCounts(operatingSources, row, query.inquiryReview !== undefined),
         sourceType: row.sourceType || '无法识别',
         sourceDetail: row.sourceDetail || null,
         visitors: count(row.visitors),
@@ -757,6 +789,7 @@ export class ShujuGrowthReadService {
         submissions: count(row.submissions),
       })),
       sourceDetails: sourceDetails.map((row) => ({
+        ...operatingSourceCounts(operatingSourceDetails, row, query.inquiryReview !== undefined),
         sourceType: row.sourceType || '无法识别',
         sourceDetail: row.sourceDetail || null,
         visitors: count(row.visitors),

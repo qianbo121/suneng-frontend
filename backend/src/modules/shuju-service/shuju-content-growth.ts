@@ -1,6 +1,28 @@
 import { Prisma } from '@prisma/client';
 
 import { PrismaService } from '@/prisma/prisma.service';
+import { InquiryReviewDto } from './dto/shuju-growth-overview.dto';
+
+export type OperatingInquiryCounts = {
+  raw: number;
+  valid: number | null;
+  excluded: number | null;
+  pending: number | null;
+  unknown: number | null;
+};
+
+export type OperatingSource = {
+  sourceType: string;
+  sourceDetail: string | null;
+  visits: number;
+  dwell20Visitors: number;
+  contactVisitors: number;
+  rawSubmissions: number;
+  validSubmissions: number | null;
+  pendingSubmissions: number | null;
+  excludedSubmissions: number | null;
+  unknownSubmissions: number | null;
+};
 
 export type ContentGrowthPage = {
   pagePath: string;
@@ -9,6 +31,11 @@ export type ContentGrowthPage = {
   visitors: number;
   pageViews: number;
   contacts: number;
+  contactVisitors: number;
+  dwell20EntryVisitors: number;
+  validDirectSubmissions: number | null;
+  validAssociatedSubmissions: number | null;
+  validCrossPageSubmissions: number | null;
   directSubmissions: number;
   entryVisits: number;
   associatedSubmissions: number;
@@ -20,6 +47,9 @@ export type ContentGrowthPage = {
 };
 
 type Payload = {
+  operating: { version: number; contactVisitors: number; inquiries: OperatingInquiryCounts };
+  operatingSources: OperatingSource[];
+  operatingSourceDetails: OperatingSource[];
   pages: ContentGrowthPage[];
   totalPages: number;
   entryVisits: number;
@@ -43,10 +73,19 @@ export async function readContentGrowth(
     verified: Prisma.Sql;
     sourceType: Prisma.Sql;
     sourceDetail: Prisma.Sql;
+    inquiryReview?: InquiryReviewDto;
   },
 ) {
+  const reviewed = scope.inquiryReview !== undefined;
+  const reviewRows = [
+    ...(scope.inquiryReview?.excludedIds || []).map((id) => ({ id, status: 'excluded' })),
+    ...(scope.inquiryReview?.validIds || []).map((id) => ({ id, status: 'valid' })),
+    ...(scope.inquiryReview?.pendingIds || []).map((id) => ({ id, status: 'pending' })),
+  ];
   const rows = await prisma.$queryRaw<{ payload: Payload }[]>(Prisma.sql`
-    WITH content_events AS MATERIALIZED (
+    WITH review_items AS (
+      SELECT * FROM JSONB_TO_RECORDSET(${JSON.stringify(reviewRows)}::jsonb) AS r(id int, status text)
+    ), content_events AS MATERIALIZED (
       -- Only the columns used below. Carrying every column (properties jsonb included)
       -- through four materialized stages costs several megabytes of temporary writes.
       -- "userAgent" is deliberately dropped here: the entry lookup below filters bots on
@@ -62,7 +101,9 @@ export async function readContentGrowth(
       WHERE "createdAt" >= ${scope.start} AND "createdAt" < ${scope.end}
         AND ${scope.notBot} AND ${scope.verified}
     ), matched AS MATERIALIZED (
-      SELECT * FROM content_events WHERE ${scope.dimensionWhere}
+      -- Normalise only matched events, once, for the new source operating metrics.
+      SELECT *, ${scope.sourceType} AS source_type, ${scope.sourceDetail} AS source_detail
+      FROM content_events WHERE ${scope.dimensionWhere}
     ), views AS MATERIALIZED (
       SELECT * FROM matched WHERE "eventType" = 'page_view' AND path IS NOT NULL
     ), entries AS MATERIALIZED (
@@ -89,6 +130,16 @@ export async function readContentGrowth(
         AND s."createdAt" >= v."createdAt"
         AND (s."visitorId" IS NULL OR v."visitorId" IS NULL OR s."visitorId" = v."visitorId")
       WHERE v.session_key IS NOT NULL
+    ), scoped_submissions AS MATERIALIZED (
+      SELECT "submissionId" FROM matched WHERE "eventType" = 'form_submit'
+      UNION SELECT "submissionId" FROM associations
+    ), reviewed_submissions AS MATERIALIZED (
+      -- Event UUIDs identify submissions, whereas the internal review lists contain inquiry row IDs.
+      -- Missing records and rows not reviewed by the caller remain unknown, never implicitly valid.
+      SELECT s."submissionId", COALESCE(r.status, 'unknown') AS review_status
+      FROM scoped_submissions s
+      LEFT JOIN "CustomRequirement" c ON c."submissionId" = s."submissionId"
+      LEFT JOIN review_items r ON r.id = c.id
     ), page_metrics AS (
       SELECT m.path,
         MAX(m."pageTitle") FILTER (WHERE m."eventType" = 'page_view') AS title,
@@ -97,46 +148,128 @@ export async function readContentGrowth(
         COUNT(*) FILTER (WHERE m."eventType" = 'page_view') AS page_views,
         COUNT(DISTINCT m.identity) FILTER (WHERE m."eventType" IN
           ('phone_click','wechat_click','wechat_qr_view','quote_cta_click','email_click')) AS contacts,
+        COUNT(DISTINCT m.identity) FILTER (WHERE m."eventType" IN
+          ('phone_click','wechat_click','wechat_qr_view','email_click')) AS contact_visitors,
         COUNT(DISTINCT m."submissionId") FILTER (WHERE m."eventType" = 'form_submit') AS direct_submissions,
+        COUNT(DISTINCT m."submissionId") FILTER (WHERE m."eventType" = 'form_submit'
+          AND rs.review_status = 'valid') AS valid_direct_submissions,
         COUNT(*) FILTER (WHERE m."eventType" = 'page_view' AND m.session_key IS NULL) AS unidentified_views,
         COUNT(DISTINCT m."submissionId") FILTER (WHERE m."eventType" = 'form_submit' AND NOT EXISTS (
           SELECT 1 FROM associations a WHERE a.path = m.path AND a."submissionId" = m."submissionId"
-        )) AS unlinked_direct
-      FROM matched m WHERE m.path IS NOT NULL GROUP BY m.path
+        )) AS unlinked_direct,
+        COUNT(DISTINCT m."submissionId") FILTER (WHERE m."eventType" = 'form_submit'
+          AND rs.review_status = 'valid' AND NOT EXISTS (
+            SELECT 1 FROM associations a WHERE a.path = m.path AND a."submissionId" = m."submissionId"
+          )) AS valid_unlinked_direct
+      FROM matched m LEFT JOIN reviewed_submissions rs ON rs."submissionId" = m."submissionId"
+      WHERE m.path IS NOT NULL GROUP BY m.path
+    ), dwell_events AS MATERIALIZED (
+      -- Keep repeated visit matching on the small, narrow dwell set, not all event payloads.
+      SELECT session_key, "createdAt", "visitorId" FROM content_events
+      WHERE "eventType" = 'dwell_20s'
+    ), qualified_entry_ids AS MATERIALIZED (
+      -- Calculate the unique entry set once: older planners can severely underestimate entries
+      -- and otherwise inline this whole join into a nested loop for each entry being counted.
+      SELECT DISTINCT e.id
+      FROM entries e JOIN dwell_events d
+        ON d.session_key = e.session_key
+        AND d."createdAt" >= e."createdAt"
+        AND (d."visitorId" IS NULL OR e."visitorId" IS NULL OR d."visitorId" = e."visitorId")
     ), entry_counts AS (
-      SELECT path, COUNT(*) AS visits FROM entries GROUP BY path
+      SELECT e.path, COUNT(*) AS visits,
+        COUNT(DISTINCT e.identity) FILTER (WHERE q.id IS NOT NULL) AS dwell20_entry_visitors
+      FROM entries e LEFT JOIN qualified_entry_ids q ON q.id = e.id
+      GROUP BY e.path
     ), association_counts AS (
-      SELECT path, COUNT(*) AS total,
-        COUNT(*) FILTER (WHERE submitted_path IS DISTINCT FROM path) AS cross_page
-      FROM associations GROUP BY path
+      SELECT a.path, COUNT(*) AS total,
+        COUNT(*) FILTER (WHERE a.submitted_path IS DISTINCT FROM a.path) AS cross_page,
+        COUNT(*) FILTER (WHERE rs.review_status = 'valid') AS valid_total,
+        COUNT(*) FILTER (WHERE rs.review_status = 'valid'
+          AND a.submitted_path IS DISTINCT FROM a.path) AS valid_cross_page
+      FROM associations a JOIN reviewed_submissions rs ON rs."submissionId" = a."submissionId"
+      GROUP BY a.path
     ), ranked AS (
       SELECT p.*, COALESCE(e.visits, 0) AS entry_visits,
+        COALESCE(e.dwell20_entry_visitors, 0) AS dwell20_entry_visitors,
         COALESCE(a.total, 0) + p.unlinked_direct AS associated,
-        COALESCE(a.cross_page, 0) AS cross_page
+        COALESCE(a.cross_page, 0) AS cross_page,
+        COALESCE(a.valid_total, 0) + p.valid_unlinked_direct AS valid_associated,
+        COALESCE(a.valid_cross_page, 0) AS valid_cross_page
       FROM page_metrics p LEFT JOIN entry_counts e USING(path)
       LEFT JOIN association_counts a USING(path)
-      ORDER BY entry_visits DESC, visitors DESC, path LIMIT 200
+      -- Return the entire filtered set so title search and alternate rankings cannot omit tail pages.
+      ORDER BY entry_visits DESC, visitors DESC, path
     ), entry_daily AS (
       SELECT path, TO_CHAR("createdAt" AT TIME ZONE 'UTC' AT TIME ZONE 'Asia/Shanghai', 'YYYY-MM-DD') AS day,
         COUNT(*) AS visits FROM entries GROUP BY path, day
     ), entry_sources AS (
-      -- Source normalisation runs here, on entry rows only. Computing it for every event
-      -- meant nine domain regexes over rows whose source is never reported.
-      SELECT path, ${scope.sourceType} AS source_type, ${scope.sourceDetail} AS source_detail,
-        COUNT(*) AS visits FROM entries
+      -- Reuse the normalised source already required by operating metrics.
+      SELECT path, source_type, source_detail, COUNT(*) AS visits FROM entries
       GROUP BY path, 2, 3
     ), global_daily AS (
       SELECT day, SUM(visits) AS visits FROM entry_daily GROUP BY day
     ), global_sources AS (
       SELECT source_type, SUM(visits) AS visits FROM entry_sources GROUP BY source_type
-    ), scoped_submissions AS (
-      SELECT "submissionId" FROM matched WHERE "eventType" = 'form_submit'
-      UNION SELECT "submissionId" FROM associations
+    ), submission_sources AS (
+      SELECT source_type, source_detail, "submissionId" FROM matched WHERE "eventType" = 'form_submit'
+      UNION
+      SELECT v.source_type, v.source_detail, a."submissionId"
+      FROM associations a JOIN views v ON v.path = a.path
+      JOIN submissions s ON s."submissionId" = a."submissionId"
+        AND s.session_key = v.session_key AND s."createdAt" >= v."createdAt"
+        AND (s."visitorId" IS NULL OR v."visitorId" IS NULL OR s."visitorId" = v."visitorId")
+    ), source_facts AS (
+      SELECT source_type, source_detail, 'event'::text AS kind, "eventType" AS event_type,
+        identity, session_key, NULL::uuid AS submission_id, NULL::text AS review_status
+      FROM matched
+      UNION ALL
+      SELECT s.source_type, s.source_detail, 'inquiry', NULL, NULL, NULL,
+        s."submissionId", r.review_status
+      FROM submission_sources s JOIN reviewed_submissions r ON r."submissionId" = s."submissionId"
+    ), source_metrics AS (
+      SELECT source_type, source_detail, GROUPING(source_detail) AS detail_group,
+        COUNT(DISTINCT session_key) FILTER (WHERE event_type = 'page_view') AS visits,
+        COUNT(DISTINCT identity) FILTER (WHERE event_type = 'dwell_20s') AS dwell20_visitors,
+        COUNT(DISTINCT identity) FILTER (WHERE event_type IN
+          ('phone_click','wechat_click','wechat_qr_view','email_click')) AS contact_visitors,
+        COUNT(DISTINCT submission_id) AS raw_submissions,
+        COUNT(DISTINCT submission_id) FILTER (WHERE review_status = 'valid') AS valid,
+        COUNT(DISTINCT submission_id) FILTER (WHERE review_status = 'pending') AS pending,
+        COUNT(DISTINCT submission_id) FILTER (WHERE review_status = 'excluded') AS excluded,
+        COUNT(DISTINCT submission_id) FILTER (WHERE review_status = 'unknown') AS unknown
+      FROM source_facts GROUP BY GROUPING SETS ((source_type), (source_type, source_detail))
+    ), source_payloads AS (
+      SELECT detail_group, source_detail, JSONB_BUILD_OBJECT(
+        'sourceType', source_type, 'sourceDetail', source_detail,
+        'visits', visits, 'dwell20Visitors', dwell20_visitors, 'contactVisitors', contact_visitors,
+        'rawSubmissions', raw_submissions,
+        'validSubmissions', CASE WHEN ${reviewed} THEN valid END,
+        'pendingSubmissions', CASE WHEN ${reviewed} THEN pending END,
+        'excludedSubmissions', CASE WHEN ${reviewed} THEN excluded END,
+        'unknownSubmissions', CASE WHEN ${reviewed} THEN unknown END
+      ) AS payload FROM source_metrics
     )
     SELECT JSONB_BUILD_OBJECT(
+      'operating', JSONB_BUILD_OBJECT('version', 1,
+        'contactVisitors', (SELECT COUNT(DISTINCT identity) FROM matched WHERE "eventType" IN
+          ('phone_click','wechat_click','wechat_qr_view','email_click')),
+        'inquiries', JSONB_BUILD_OBJECT(
+          'raw', (SELECT COUNT(*) FROM reviewed_submissions),
+          'valid', CASE WHEN ${reviewed} THEN (SELECT COUNT(*) FROM reviewed_submissions WHERE review_status = 'valid') END,
+          'excluded', CASE WHEN ${reviewed} THEN (SELECT COUNT(*) FROM reviewed_submissions WHERE review_status = 'excluded') END,
+          'pending', CASE WHEN ${reviewed} THEN (SELECT COUNT(*) FROM reviewed_submissions WHERE review_status = 'pending') END,
+          'unknown', CASE WHEN ${reviewed} THEN (SELECT COUNT(*) FROM reviewed_submissions WHERE review_status = 'unknown') END
+        )),
+      'operatingSources', COALESCE((SELECT JSONB_AGG(payload) FROM source_payloads WHERE detail_group = 1), '[]'::jsonb),
+      'operatingSourceDetails', COALESCE((SELECT JSONB_AGG(payload) FROM source_payloads
+        WHERE detail_group = 0 AND source_detail IS NOT NULL), '[]'::jsonb),
       'pages', COALESCE((SELECT JSONB_AGG(JSONB_BUILD_OBJECT(
         'pagePath', r.path, 'pageTitle', r.title, 'pageType', r.page_type,
         'visitors', r.visitors, 'pageViews', r.page_views, 'contacts', r.contacts,
+        'contactVisitors', r.contact_visitors, 'dwell20EntryVisitors', r.dwell20_entry_visitors,
+        'validDirectSubmissions', CASE WHEN ${reviewed} THEN r.valid_direct_submissions END,
+        'validAssociatedSubmissions', CASE WHEN ${reviewed} THEN r.valid_associated END,
+        'validCrossPageSubmissions', CASE WHEN ${reviewed} THEN r.valid_cross_page END,
         'directSubmissions', r.direct_submissions, 'entryVisits', r.entry_visits,
         'associatedSubmissions', r.associated, 'crossPageSubmissions', r.cross_page,
         'unlinkedDirectSubmissions', r.unlinked_direct, 'unidentifiedPageViews', r.unidentified_views,
@@ -171,7 +304,8 @@ export async function readContentGrowth(
     status: rows[0] ? 'available' : 'unavailable',
     attributionRule: 'same_session_read_before_submit_in_range',
     entryRule: 'first_recorded_view_matching_landing',
-    pageLimit: 200,
+    pageLimit: null,
+    pageScope: 'all_matching',
     ...rows[0]?.payload,
   };
 }

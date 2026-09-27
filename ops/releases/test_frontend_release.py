@@ -1050,5 +1050,136 @@ class AdminOnlyReleaseTest(unittest.TestCase):
             with self.assertRaises(RuntimeError): r.admin_cache_probe('candidate')
 
 
+class BackendOnlyReleaseTest(unittest.TestCase):
+    def manifest(self):
+        return {**MANIFEST, 'image': OLD, 'backendOnly': True,
+                'backend': {'image': OTHER, 'expectedCurrentImage': RECEIPT['images']['backend'],
+                            'archiveSha256': '8' * 64}}
+
+    def fixture(self, tmp):
+        receipt = copy.deepcopy(RECEIPT)
+        receipt['frontendRelease'] = {'sourceCommit': '1' * 40, 'servedCases': r.APPROVED_CASES,
+                                      'servedGuides': r.APPROVED_GUIDES}
+        receipt['adminRelease'] = {'sourceCommit': '2' * 40, 'image': RECEIPT['images']['admin']}
+        release = ContractTest().fixture(tmp, self.manifest(), receipt)
+        (release.live / 'DEPLOY_COMMIT').write_text('1' * 40 + '\n')
+        return r.Release(release.live, release.audit, self.manifest(), 'fixture')
+
+    def image(self, args, **kwargs):
+        self.assertEqual(args[:3], ['docker', 'image', 'inspect'])
+        source = '1' * 40 if args[-1] == OLD else MANIFEST['sourceCommit']
+        return json.dumps([{'Id': args[-1], 'Config': {'Labels': {'org.opencontainers.image.revision': source}}}])
+
+    def test_manifest_is_explicit_mutually_exclusive_and_preserves_other_images(self):
+        valid = self.manifest()
+        self.assertEqual(r.validate_manifest(valid), valid)
+        for change in [{'image': NEW}, {'admin': {}}, {'backendOnly': 'true'}, {'adminOnly': True}]:
+            with self.subTest(change=change), self.assertRaises(ValueError):
+                r.validate_manifest({**valid, **change})
+        with self.assertRaises(ValueError):
+            r.validate_manifest({k: v for k, v in valid.items() if k != 'backend'})
+
+    def test_switch_and_failure_restore_only_backend_preserving_frontend_contract_and_marker(self):
+        for fails, apply, kind in [(False, True, 'deploy'), (True, True, 'deploy'),
+                                   (False, False, 'deploy'), (False, True, 'rollback')]:
+            with self.subTest(fails=fails, apply=apply, kind=kind), tempfile.TemporaryDirectory() as tmp:
+                release = self.fixture(tmp)
+                receipt = copy.deepcopy(release.receipt)
+                state = dict(receipt['images'])
+                switches = []
+                checks = []
+                def current(names):
+                    result = rows()
+                    for row in result:
+                        name = row['Name'].removeprefix('/corp-site-')
+                        if name in state:
+                            row.update(Image=state[name], Id=name + state[name])
+                    return [row for row in result if row['Name'].removeprefix('/corp-site-') in names]
+                def replace(override=None):
+                    self.assertEqual(release.components, ['backend'])
+                    self.assertEqual(set(release.protected), {'frontend', 'admin', 'nginx', 'postgres'})
+                    switches.append(override)
+                    state['backend'] = receipt['images']['backend'] if override else OTHER
+                def backend_check(migrate=False, running=False):
+                    self.assertFalse(migrate)
+                    checks.append('running' if running else 'candidate')
+                    return {'passed': True, 'pendingMigrationCount': 0, 'aggregateAvailable': True}
+                def public(*args):
+                    self.assertEqual(args[1], release.target_contract)
+                    if fails and state['backend'] == OTHER:
+                        raise RuntimeError('public route failed')
+                    return []
+                with patch.object(r, 'inspect', side_effect=current), patch.object(r, 'run', side_effect=self.image), \
+                     patch.object(r, 'probe', return_value=GOOD) as probe, patch.object(r, 'public_probe', side_effect=public), \
+                     patch.object(release, 'backend_check', side_effect=backend_check), \
+                     patch.object(release, 'replace_frontend', side_effect=replace), \
+                     patch.object(release, 'verify_backup') as backup:
+                    if fails:
+                        with self.assertRaises(RuntimeError): release.execute(apply, kind=kind)
+                    else:
+                        result = release.execute(apply, kind=kind)
+                        self.assertEqual(result['applied'], apply)
+                    backup.assert_not_called()
+                    self.assertTrue(all(call.args[0] == 'corp-site-frontend' for call in probe.call_args_list))
+                after = json.loads(release.receipt_path.read_text())
+                self.assertEqual(after['frontendRelease'], receipt['frontendRelease'])
+                self.assertEqual(after['adminRelease'], receipt['adminRelease'])
+                self.assertEqual((release.live / 'DEPLOY_COMMIT').read_text(), '1' * 40 + '\n')
+                self.assertEqual(state['frontend'], receipt['images']['frontend'])
+                self.assertEqual(state['admin'], receipt['images']['admin'])
+                self.assertEqual(state['backend'], receipt['images']['backend'] if fails or not apply else OTHER)
+                self.assertFalse(release.pending_path.exists())
+                self.assertEqual(len(switches), 0 if not apply else 2 if fails else 1)
+                self.assertEqual(checks, ['candidate'] if not apply else ['candidate', 'candidate', 'running'] + (['running'] if fails else []))
+                if apply and not fails:
+                    self.assertEqual(after['backendRelease'], {**self.manifest()['backend'],
+                                     'sourceCommit': MANIFEST['sourceCommit'], 'sourceIdentity': 'git-commit'})
+                else:
+                    self.assertEqual(after, receipt)
+
+    def test_pending_or_deferred_preflight_never_enters_migration_or_switch(self):
+        for report in [{'passed': True, 'pendingMigrationCount': 1, 'aggregateAvailable': None},
+                       {'passed': True, 'aggregateAvailable': True},
+                       {'passed': True, 'pendingMigrationCount': 0, 'aggregateAvailable': None}]:
+            with self.subTest(report=report), tempfile.TemporaryDirectory() as tmp:
+                release = self.fixture(tmp)
+                with patch.object(r, 'inspect', return_value=rows()), patch.object(r, 'run', side_effect=self.image), \
+                     patch.object(release, 'backend_check', return_value=report), \
+                     patch.object(release, 'replace_frontend') as replace, patch.object(release, 'verify_backup') as backup:
+                    with self.assertRaises(RuntimeError): release.execute(True)
+                    replace.assert_not_called()
+                    backup.assert_not_called()
+                    self.assertFalse(release.pending_path.exists())
+
+    def test_backend_commands_forbid_migration_and_require_complete_read_only_check(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            release = self.fixture(tmp)
+            good = {'passed': True, 'pendingMigrationCount': 0, 'aggregateAvailable': True}
+            with patch.object(r, 'run', return_value=json.dumps(good)) as command:
+                for running in [False, True]:
+                    release.backend_check(running=running)
+                    args = command.call_args.args[0]
+                    self.assertIn('RELEASE_NO_MIGRATIONS=1', args)
+                    self.assertIn('RELEASE_APPLY_INDEX=0', args)
+                command.reset_mock()
+                with self.assertRaises(RuntimeError): release.backend_check(migrate=True)
+                command.assert_not_called()
+            for report in [{**good, 'pendingMigrationCount': 1}, {**good, 'aggregateAvailable': None}]:
+                with patch.object(r, 'run', return_value=json.dumps(report)), self.assertRaises(RuntimeError):
+                    release.backend_check()
+
+    def test_replace_command_selects_only_backend_and_reloads_existing_proxy(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            release = self.fixture(tmp)
+            with patch.object(r, 'run', return_value='') as run, patch.object(r, 'wait_healthy') as health:
+                release.replace_frontend()
+            commands = [call.args[0] for call in run.call_args_list]
+            self.assertEqual(len(commands), 3)
+            self.assertEqual(commands[0][-7:], ['up', '-d', '--no-deps', '--no-build', '--pull', 'never', 'backend'])
+            self.assertEqual(commands[1:], [['docker', 'exec', 'corp-site-nginx', 'nginx', '-t'],
+                                             ['docker', 'exec', 'corp-site-nginx', 'nginx', '-s', 'reload']])
+            health.assert_called_once_with('corp-site-backend')
+
+
 if __name__ == '__main__':
     unittest.main(verbosity=2)

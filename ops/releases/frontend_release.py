@@ -81,8 +81,14 @@ def atomic_json(path, data):
 
 def validate_manifest(value):
     admin_only = value.get('adminOnly', False)
-    if not isinstance(admin_only, bool):
-        raise ValueError('adminOnly must be a boolean')
+    backend_only = value.get('backendOnly', False)
+    if not isinstance(admin_only, bool) or not isinstance(backend_only, bool):
+        raise ValueError('adminOnly and backendOnly must be booleans')
+    if admin_only and backend_only:
+        raise ValueError('Component-only release modes are mutually exclusive')
+    if backend_only and ('backend' not in value or 'admin' in value or
+                         value.get('image') != value.get('expectedCurrentImage')):
+        raise ValueError('A backend-only release must preserve the frontend and omit admin')
     if admin_only and ('admin' not in value or 'backend' in value or
                        value.get('image') != value.get('expectedCurrentImage')):
         raise ValueError('An admin-only release must preserve the frontend and omit backend')
@@ -379,6 +385,8 @@ class Release:
         self.live, self.audit = live, audit
         self.manifest = validate_manifest(manifest)
         self.admin_only = manifest.get('adminOnly', False)
+        self.backend_only = manifest.get('backendOnly', False)
+        self.preserve_frontend = self.admin_only or self.backend_only
         self.script = health_script
         self.receipt_path = live / 'RELEASE_ARTIFACTS.json'
         self.pins_path = live / 'verified-images.override.yml'
@@ -404,9 +412,9 @@ class Release:
         self.target = copy.deepcopy(self.receipt['images'])
         self.target['frontend'] = manifest['image']
         self.migration_backup_verified = False
-        self.components = [] if self.admin_only else ['frontend']
+        self.components = [] if self.preserve_frontend else ['frontend']
         self.protected = list(PROTECTED)
-        if self.admin_only:
+        if self.preserve_frontend:
             self.protected.append('frontend')
             # The unchanged frontend keeps its own publication contract and identity.
             self.served_cases = self.live_cases
@@ -416,7 +424,7 @@ class Release:
             self.lenient_contract = self.target_contract
         if 'backend' in manifest:
             self.target['backend'] = manifest['backend']['image']
-            self.components = ['backend', 'frontend']
+            self.components = ['backend'] if self.backend_only else ['backend', 'frontend']
             self.protected.remove('backend')
         if 'admin' in manifest:
             self.target['admin'] = manifest['admin']['image']
@@ -441,17 +449,23 @@ class Release:
         run(['docker', 'exec', 'corp-site-nginx', 'nginx', '-s', 'reload'])
 
     def backend_check(self, migrate=False, running=False):
+        if self.backend_only and migrate:
+            raise RuntimeError('Backend-only releases cannot apply migrations')
         script = Path(__file__).with_name('check-backend.cjs').read_text()
         if running:
-            command = ['docker', 'exec', 'corp-site-backend', 'node', '-e', script]
+            strict = ['-e', 'RELEASE_NO_MIGRATIONS=1', '-e', 'RELEASE_APPLY_INDEX=0'] if self.backend_only else []
+            command = ['docker', 'exec', *strict, 'corp-site-backend', 'node', '-e', script]
         else:
             # Run only a bounded read/check command. Never start the inquiry notification worker twice.
             command = self.compose() + ['run', '--rm', '--no-deps', '--pull', 'never',
                        '-e', 'RELEASE_APPLY_INDEX=' + ('1' if migrate else '0'),
+                       '-e', 'RELEASE_NO_MIGRATIONS=' + ('1' if self.backend_only else '0'),
                        '-e', 'RELEASE_BACKUP_VERIFIED=' + ('1' if migrate and self.migration_backup_verified else '0'),
                        '--entrypoint', 'node', 'backend', '-e', script]
         report = json.loads(run(command, env=self.env, timeout=180))
-        if report.get('passed') is not True or ((migrate or running) and report.get('aggregateAvailable') is not True):
+        if self.backend_only and report.get('pendingMigrationCount') != 0:
+            raise RuntimeError('Backend-only releases require zero pending migrations')
+        if report.get('passed') is not True or ((migrate or running or self.backend_only) and report.get('aggregateAvailable') is not True):
             raise RuntimeError('Backend aggregate or migration verification failed')
         return report
 
@@ -490,7 +504,7 @@ class Release:
             raise RuntimeError('Target did not resolve to the exact imported image')
         if self.manifest.get('sourceIdentity') == 'git-commit':
             source = (self.receipt.get('frontendRelease', {}).get('sourceCommit')
-                      if self.admin_only else self.manifest['sourceCommit'])
+                      if self.preserve_frontend else self.manifest['sourceCommit'])
             if not source or (image.get('Config', {}).get('Labels') or {}).get('org.opencontainers.image.revision') != source:
                 raise RuntimeError('Image was not built from the recorded source commit')
         self.write_override(self.override, self.target)
@@ -500,6 +514,9 @@ class Release:
             if backend_image['Id'] != self.target['backend'] or (backend_image.get('Config', {}).get('Labels') or {}).get('org.opencontainers.image.revision') != self.manifest['sourceCommit']:
                 raise RuntimeError('Backend image was not built from the same reviewed source')
             backend_preflight = self.backend_check()
+            if self.backend_only and (backend_preflight.get('pendingMigrationCount') != 0 or
+                                      backend_preflight.get('aggregateAvailable') is not True):
+                raise RuntimeError('Backend-only releases require a verified unchanged schema')
         admin_candidate = None
         if 'admin' in self.manifest:
             if self.receipt['images']['admin'] != self.manifest['admin']['expectedCurrentImage']:
@@ -510,7 +527,7 @@ class Release:
             admin_candidate = self.admin_check(require_cache=self.admin_only and kind != 'rollback')
         same = all(self.target[name] == self.receipt['images'][name] for name in self.components)
         canary = 'suneng-release-check-' + uuid.uuid4().hex[:12]
-        if same or self.admin_only:
+        if same or self.preserve_frontend:
             internal = probe('corp-site-frontend', self.script, self.target_contract)
         else:
             try:
@@ -554,7 +571,10 @@ class Release:
                                        'previousServedCases': self.live_cases, 'targetServedCases': self.served_cases,
                                        'previousServedGuides': self.previous_guides, 'targetServedGuides': self.served_guides})
         try:
-            if 'backend' in self.manifest:
+            if self.backend_only:
+                # Recheck immediately before the switch; no migration command is ever permitted.
+                result['backendBeforeSwitch'] = self.backend_check()
+            elif 'backend' in self.manifest:
                 result['backendMigration'] = self.backend_check(migrate=True)
             self.replace_frontend()
             if 'backend' in self.manifest:
@@ -573,17 +593,20 @@ class Release:
                 raise RuntimeError('Running frontend identity does not match target')
             receipt = copy.deepcopy(self.receipt)
             receipt.update({'images': self.target, 'sourceIdentity': 'component-release',
-                            **({} if self.admin_only else {'frontendRelease': {**self.manifest, 'servedCases': self.served_cases, **({'servedGuides': self.served_guides} if self.served_guides else {})}}),
+                            **({} if self.preserve_frontend else {'frontendRelease': {**self.manifest, 'servedCases': self.served_cases, **({'servedGuides': self.served_guides} if self.served_guides else {})}}),
                             'previousReceipt': str(self.audit / 'previous-receipt.json'),
                             'productionVerifiedAt': now(), 'deploymentStatus': 'verified',
                             'releaseOperation': kind, 'releaseOperationReceipt': str(self.audit / 'result.json')})
+            if self.backend_only:
+                receipt['backendRelease'] = {**self.manifest['backend'], 'sourceCommit': self.manifest['sourceCommit'],
+                                             'sourceIdentity': 'git-commit'}
             if 'admin' in self.manifest:
                 receipt['adminRelease'] = {**self.manifest['admin'], 'sourceCommit': self.manifest['sourceCommit'],
                                            'sourceIdentity': 'git-commit', 'publicAssets': result['adminPublic']['assets']}
             self.write_override(self.pins_path, self.target)
             atomic_json(self.receipt_path, receipt)
             # Version marker refers to the checked-in source of a newly built image only.
-            if self.manifest.get('sourceCommit') and not self.admin_only:
+            if self.manifest.get('sourceCommit') and not self.preserve_frontend:
                 marker = self.live / 'DEPLOY_COMMIT.next'
                 marker.write_text(self.manifest['sourceCommit'] + '\n')
                 marker.replace(self.live / 'DEPLOY_COMMIT')
@@ -595,6 +618,8 @@ class Release:
                 self.replace_frontend(self.audit / 'previous.override.json')
                 if any(row['Image'] != self.receipt['images'][row['Name'].removeprefix('/corp-site-')] for row in inspect(self.components)):
                     raise RuntimeError('Recovery did not restore the previous image')
+                if self.backend_only:
+                    result['backendRecoveryVerification'] = self.backend_check(running=True)
                 # The restored image may predate the approved cases.
                 probe('corp-site-frontend', self.script, self.lenient_contract)
                 public_probe('https://www.jssngyl.cn', self.lenient_contract)
@@ -613,6 +638,8 @@ class Release:
                     (self.live / 'DEPLOY_COMMIT').unlink()
                 self.pending_path.unlink()
                 result['previousFrontendRestoredAndVerified'] = True
+                if self.backend_only:
+                    result['previousBackendRestoredAndVerified'] = True
                 if 'admin' in self.manifest:
                     result['previousAdminRestoredAndVerified'] = True
             except Exception:
@@ -633,6 +660,10 @@ class Release:
                 self.write_override(self.pins_path, observed)
                 atomic_json(self.receipt_path, failed)
                 result['previousFrontendRestoredAndVerified'] = False
+                if self.backend_only:
+                    failed['backendRelease'] = {'image': observed['backend'], 'verificationRequired': True}
+                    atomic_json(self.receipt_path, failed)
+                    result['previousBackendRestoredAndVerified'] = False
                 if 'admin' in self.manifest:
                     failed['adminRelease'] = {'image': observed['admin'], 'verificationRequired': True}
                     atomic_json(self.receipt_path, failed)
