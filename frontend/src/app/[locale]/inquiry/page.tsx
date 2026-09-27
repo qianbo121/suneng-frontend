@@ -1,10 +1,10 @@
 import type { Metadata } from 'next';
+import Image from 'next/image';
+import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { HiCheckCircle } from 'react-icons/hi2';
 
 import { HomepageLeadForm } from '@/components/home/HomepageLeadForm';
-import { Breadcrumb } from '@/components/layout/Breadcrumb';
-import { PageBanner } from '@/components/layout/PageBanner';
 import { JsonLd } from '@/components/JsonLd';
 import { getBreadcrumbJsonLd, getWebPageJsonLd } from '@/lib/seo/jsonld';
 import { buildMetadata } from '@/lib/seo/metadata';
@@ -57,20 +57,27 @@ export default async function InquiryPage({ params, searchParams }: PageProps) {
         getWebPageJsonLd({ path: pagePath, name: '提交工业炉项目情况', description: '提交新建、选型、改造与维修需求，资料不全也可先说明项目方向、主要问题和联系方式。' }),
         getBreadcrumbJsonLd([{ name: '首页', url: '/zh' }, { name: '提交项目情况', url: pagePath }]),
       ]} />
-      <PageBanner
-        locale="zh"
-        title="提交项目情况"
-        englishTitle="PROJECT INQUIRY"
-        subtitle="资料不全也可以先提交，先判断方向，再逐步补充图纸和工艺条件"
-        backgroundImage={heroImage}
-        variant="compact"
-      />
-
-      <div className="border-b border-[#e5e9f0] bg-white">
-        <div className="site-page-container flex min-h-[42px] items-center">
-          <Breadcrumb locale="zh" currentLabel="提交项目情况" tone="dark" className="text-[13px]" />
+      <section aria-labelledby="inquiry-title" className="relative flex min-h-[198px] items-center overflow-hidden bg-[#0f2238] text-white lg:min-h-[285px]">
+        <Image src={heroImage} alt="" fill priority sizes="100vw" className="object-cover object-center" />
+        <div aria-hidden="true" className="absolute inset-0 bg-black/58" />
+        <div aria-hidden="true" className="absolute inset-0 bg-[linear-gradient(90deg,rgba(2,14,31,0.86)_0%,rgba(2,14,31,0.58)_46%,rgba(2,14,31,0.22)_100%)]" />
+        <div
+          className="site-page-container relative py-7"
+          style={{ fontFamily: '-apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif' }}
+        >
+          <nav aria-label="面包屑导航" className="flex gap-3 text-[14px] font-normal leading-[22px] [@media(max-width:600px)]:text-[12px]">
+            <Link href="/zh" className="text-white hover:underline">首页</Link>
+            <span aria-hidden="true">/</span>
+            <span aria-current="page">提交项目情况</span>
+          </nav>
+          <h1 id="inquiry-title" className="mb-2 mt-[18px] text-[44px] font-semibold leading-[56px] tracking-normal [@media(max-width:600px)]:mt-[14px] [@media(max-width:600px)]:text-[30px] [@media(max-width:600px)]:leading-[40px]">
+            提交项目情况
+          </h1>
+          <p className="text-[18px] font-normal leading-[28px] text-white [@media(max-width:600px)]:text-[15px] [@media(max-width:600px)]:leading-[25px]">
+            资料不全也可以先提交，先判断方向，再逐步补充图纸和工艺条件
+          </p>
         </div>
-      </div>
+      </section>
 
       <section className="site-section">
         <div className="site-page-container grid gap-5 md:grid-cols-3">
