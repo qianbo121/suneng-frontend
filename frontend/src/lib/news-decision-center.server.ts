@@ -46,9 +46,8 @@ const getCachedCards = unstable_cache(
   { revalidate: 300 },
 );
 
-// For prerendered list pages: a failed read must throw so a first generation
-// fails instead of caching an error page, and a failed background refresh
-// keeps serving the previous page.
+// All list pages share this complete collection. A failed refresh throws inside
+// the data cache, retaining the last successful collection instead of partial data.
 export const getNewsDecisionCenterCards = cache((locale: Locale) => getCachedCards(locale));
 
 // Metadata and page rendering share one read in the same request as well.

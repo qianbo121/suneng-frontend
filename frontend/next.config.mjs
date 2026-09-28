@@ -6,13 +6,10 @@ const withNextIntl = createNextIntlPlugin('./src/i18n/request.ts');
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const distDir = process.env.NEXT_DIST_DIR || (process.env.NODE_ENV === 'development' ? '.next-dev' : '.next');
 
-// Plain resource-list URLs (/zh/news, /zh/news?page=N) are answered by the
-// prerendered route src/app/[locale]/news-prerendered/[page] while the public
-// URL stays the same. Search and filter URLs keep the on-demand route, and so do
-// page numbers above NEWS_LIST_PRERENDER_MAX_PAGE (200), which bounds the page
-// cache. Middleware refuses direct requests for the internal path. A config
-// rewrite is used rather than a middleware rewrite because it stays internal
-// whatever hostname the server was started with.
+// Plain resource-list URLs use the existing internal route while keeping the
+// public URL. That route renders from one cached complete collection, without
+// independent page HTML caches. Search and filter URLs use the on-demand route.
+// Middleware blocks direct access to the internal path.
 const newsListFilterParams = ['q', 'topic', 'furnace', 'sort'].map((key) => ({ type: 'query', key }));
 export const newsListPrerenderRewrites = [
   {

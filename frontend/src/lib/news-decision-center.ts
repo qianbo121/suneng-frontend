@@ -45,10 +45,8 @@ export const NEWS_CENTER_FAQS = [
 
 export type NewsSort = 'recommended' | 'updated';
 
-// The resource centre defaults to newest first. "Recommended" ranks by view
-// count, which buried every freshly published article behind everything that
-// had ever been read: a new page cannot earn views while it sits on the last
-// page, and it sits there because it has no views.
+// Default to publication date. Keep the legacy "updated" URL value compatible;
+// content edits are not new publications. "Recommended" still ranks by views.
 export const DEFAULT_NEWS_SORT: NewsSort = 'updated';
 
 export function normalizeNewsSort(value?: string): NewsSort {
@@ -123,10 +121,10 @@ export function getNewsFurnaceFilter(item: NewsListCardItem): NewsFurnaceFilterI
   return getNewsFurnaceFilters(item)[0] ?? null;
 }
 
-function modifiedTime(item: NewsListCardItem) {
-  const updated = Date.parse(item.updatedAt || '');
+function publishedTime(item: NewsListCardItem) {
+  // Editing a historical article must not move it into the latest publications.
   const published = Date.parse(item.date || '');
-  return Number.isFinite(updated) ? updated : Number.isFinite(published) ? published : 0;
+  return Number.isFinite(published) ? published : 0;
 }
 
 function views(item: NewsListCardItem) {
@@ -159,7 +157,7 @@ export function filterAndSortNewsDecisionItems(
     .sort(
       (left, right) =>
         (normalizeNewsSort(filters.sort) === 'recommended' ? views(right) - views(left) : 0) ||
-        modifiedTime(right) - modifiedTime(left) ||
+        publishedTime(right) - publishedTime(left) ||
         left.id - right.id ||
         left.slug.localeCompare(right.slug, 'en'),
     );

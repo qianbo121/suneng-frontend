@@ -80,7 +80,7 @@ export function toNewsListLiteCards(items: NewsListCardItem[], locale: Locale): 
       ...(locale === 'zh' && item.listEquipmentLabel
         ? { listEquipmentLabel: item.listEquipmentLabel }
         : {}),
-      listDisplayDate: formatNewsDisplayDate(item.updatedAt || item.date),
+      listDisplayDate: formatNewsDisplayDate(item.date),
     };
   });
 }
