@@ -213,7 +213,10 @@ export default async function middleware(request: NextRequest) {
   }
 
   if (isLocalizedPublicPath(request.nextUrl.pathname, request.method)) {
-    response.headers.set('Cache-Control', newsSlug ? 'no-store' : PUBLIC_PAGE_CACHE_CONTROL);
+    // A proxy must not retain numbered list pages from different collection
+    // snapshots. The complete article collection keeps its shared server cache.
+    const isNewsList = /^\/(?:zh|en)\/news\/?$/.test(pathname);
+    response.headers.set('Cache-Control', newsSlug || isNewsList ? 'no-store' : PUBLIC_PAGE_CACHE_CONTROL);
   }
 
   return response;

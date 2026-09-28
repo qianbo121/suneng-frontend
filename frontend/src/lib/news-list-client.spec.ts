@@ -1,7 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
 import { buildNewsDecisionHref, filterAndSortNewsDecisionItems } from '@/lib/news-decision-center';
-import { formatNewsDisplayDate } from '@/lib/news-display-date';
 import type { NewsListCardItem } from '@/types/news';
 
 import {
@@ -99,8 +98,33 @@ describe('lite list cards', () => {
     );
   });
 
-  it('formats the card date on the server with the existing formatter', () => {
+  it('shows the publication date even when content was recently edited', () => {
     const [first] = toNewsListLiteCards([article(9, '回火炉温度', 1, '2026-09-15T20:30:00.000Z')], 'zh');
-    expect(first.listDisplayDate).toBe(formatNewsDisplayDate('2026-09-15T20:30:00.000Z'));
+    expect(first.listDisplayDate).toBe('2026-07-01');
+  });
+});
+
+
+describe('historical article pagination', () => {
+  it.each(['zh', 'en'] as const)('lists all 85 records once in publication order for %s, including the oldest page', (locale) => {
+    const historical = Array.from({ length: 85 }, (_, index) => ({
+      ...article(index + 1, `台车炉选型 ${index + 1}`, index),
+      date: new Date(Date.UTC(2026, 4, 28 + index)).toISOString(),
+      // Old articles were all reviewed recently; this must not reorder publication.
+      updatedAt: new Date(Date.UTC(2026, 8, 28 - index % 5)).toISOString(),
+    })).reverse();
+    const lite = toNewsListLiteCards(historical, locale);
+    const seen: number[] = [];
+    for (let page = 1; page <= 9; page++) {
+      const state = parseNewsListState(`page=${page}`);
+      const server = getNewsListView(historical, state, 10);
+      const browser = getNewsListView(lite, state, 10);
+      expect(browser.total).toBe(85);
+      expect(browser.items.map((item) => item.id)).toEqual(server.items.map((item) => item.id));
+      seen.push(...browser.items.map((item) => item.id));
+    }
+    expect(seen).toEqual(Array.from({ length: 85 }, (_, index) => 85 - index));
+    expect(new Set(seen).size).toBe(85);
+    expect(getNewsListView(lite, parseNewsListState('page=9'), 10).items.at(-1)?.listDisplayDate).toBe('2026-05-28');
   });
 });

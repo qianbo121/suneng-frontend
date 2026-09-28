@@ -26,7 +26,7 @@ export const ENGLISH_NEWS_UI: Record<string, string> = {
   资料列表: 'Resources',
   文章排序: 'Sort articles',
   推荐阅读: 'Recommended',
-  最近更新: 'Recently Updated',
+  最新发布: 'Latest Published',
   '正在加载技术资料…': 'Loading resources…',
   资料暂时无法加载: 'Resources are temporarily unavailable',
   '请稍后重试，或联系苏能工程师。': 'Please try again later or contact Suneng.',

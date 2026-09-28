@@ -43,7 +43,7 @@ function NewsListItem({
   featured: boolean;
 }) {
   const meta = getNewsDecisionDisplayMeta(item, locale);
-  const displayDate = item.listDisplayDate ?? formatNewsDisplayDate(item.updatedAt || item.date);
+  const displayDate = item.listDisplayDate ?? formatNewsDisplayDate(item.date);
 
   return (
     <article

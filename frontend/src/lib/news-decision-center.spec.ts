@@ -11,7 +11,7 @@ import { applyNewsListCopy, cleanNewsListSummary } from './news-list-copy';
 function article(
   id: number,
   viewCount?: number,
-  updatedAt = '2026-08-30',
+  date = '2026-08-30',
   title = '台车炉报价参数',
 ): NewsListCardItem {
   return {
@@ -20,8 +20,8 @@ function article(
     image: '/cover.webp',
     title: { zh: title, en: title },
     summary: { zh: '采购核对', en: '' },
-    date: '2026-07-01',
-    updatedAt,
+    date,
+    updatedAt: '2026-09-28',
     viewCount,
     category: { zh: '技术资料', en: '' },
   };
@@ -32,7 +32,7 @@ describe('resource center sorting contract', () => {
     const items = Array.from({ length: 110 }, (_, i) => article(i + 1, i));
     items[0] = article(1, 2, '2026-09-08', '热处理生产线备件和售后怎么约定？');
     items[109] = article(110, 109, '2026-06-01', '技术交流活动');
-    // The default order is newest first, so the most recently updated article
+    // The default order is newest first, so the most recently published article
     // leads even though 109 others have more views.
     expect(
       filterAndSortNewsDecisionItems(items)
@@ -55,7 +55,7 @@ describe('resource center sorting contract', () => {
     expect(filtered.slice(0, 6).map((a) => a.id)).toEqual([109, 108, 107, 106, 105, 104]);
     expect(items[0].id).toBe(1);
   });
-  it('breaks equal views by true modification date then stable id, independent of input order', () => {
+  it('breaks equal views by publication date then stable id, independent of input order', () => {
     const items = [
       article(4, 12, '2026-08-31'),
       article(3, 12),
@@ -70,14 +70,16 @@ describe('resource center sorting contract', () => {
       filterAndSortNewsDecisionItems([article(2, undefined), article(1, 0)]).map((a) => a.id),
     ).toEqual([1, 2]);
   });
-  it('uses update/publication dates for recently updated without inventing dates', () => {
+  it('ignores recent edits when ordering historical publications and never invents missing dates', () => {
     const items = [
-      article(1, 999, '2026-07-10'),
+      { ...article(1, 999, '2026-07-10'), updatedAt: '2026-09-28' },
       { ...article(2, 0, ''), date: '2026-09-01' },
       article(3, 2, '2026-08-01'),
+      { ...article(4, 0, ''), updatedAt: '2026-09-29' },
+      article(5, 0, 'invalid'),
     ];
     expect(filterAndSortNewsDecisionItems(items, { sort: 'updated' }).map((a) => a.id)).toEqual([
-      2, 3, 1,
+      2, 3, 1, 4, 5,
     ]);
   });
   it('only features the unfiltered first page in the default order', () => {

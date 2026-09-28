@@ -248,7 +248,7 @@ export function NewsListHeading() {
         {(
           [
             { id: 'recommended', label: t('推荐阅读') },
-            { id: 'updated', label: t('最近更新') },
+            { id: 'updated', label: t('最新发布') },
           ] as const
         ).map((item) => (
           <Link

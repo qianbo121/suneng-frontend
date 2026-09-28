@@ -1,12 +1,11 @@
-// Kept free of server-only imports so list cards can render in the browser.
+// Keep publication dates identical on the server and in readers' time zones.
+const publicationDateFormatter = new Intl.DateTimeFormat('en-CA', {
+  timeZone: 'Asia/Shanghai', year: 'numeric', month: '2-digit', day: '2-digit',
+});
+
 export function formatNewsDisplayDate(value?: string | null) {
   if (!value) return '';
-
   const date = new Date(value);
-
   if (Number.isNaN(date.getTime())) return value;
-
-  return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(
-    date.getDate(),
-  ).padStart(2, '0')}`;
+  return publicationDateFormatter.format(date);
 }
