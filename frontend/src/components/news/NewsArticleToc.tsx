@@ -19,7 +19,6 @@ export function NewsArticleToc({
 }) {
   const [headings, setHeadings] = useState<Heading[]>([]);
   const [active, setActive] = useState('');
-  const [docked, setDocked] = useState(false);
   const detailsRef = useRef<HTMLDetailsElement>(null);
   const label = locale === 'en' ? 'On this page' : '文章目录';
 
@@ -54,12 +53,6 @@ export function NewsArticleToc({
           }
         }
         setActive(current);
-        // Let the lower cards leave naturally before docking the directory.
-        // This keeps a long sticky directory from covering recommendations or contact controls.
-        if (!mobile) {
-          const cards = document.querySelector('[data-news-sidebar-cards]');
-          setDocked(!cards || cards.getBoundingClientRect().bottom <= top - 16);
-        }
       });
     };
     update();
@@ -70,7 +63,7 @@ export function NewsArticleToc({
       window.removeEventListener('scroll', update);
       window.removeEventListener('resize', update);
     };
-  }, [contentId, mobile]);
+  }, [contentId]);
 
   if (!headings.length) return null;
 
@@ -119,7 +112,7 @@ export function NewsArticleToc({
   }
 
   return (
-    <section className={styles.desktop} data-docked={docked || undefined} aria-label={label}>
+    <section className={styles.desktop} aria-label={label}>
       <h2>{label}</h2>
       {links}
     </section>
