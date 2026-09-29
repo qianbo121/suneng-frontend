@@ -5,6 +5,7 @@ import { localizeCoreValue } from '@/lib/core-page-localization';
 import { ABOUT_ZH_SEO, AboutZhContent } from '@/components/about/AboutZhContent';
 import { absoluteUrl, buildMetadata } from '@/lib/seo/metadata';
 import { SITE_NAME } from '@/lib/seo/config';
+import { ENGLISH_STATIC_PAGE_METADATA } from '@/lib/seo/static-page-metadata-en';
 import { Locale } from '@/types/site';
 
 type AboutPageProps = {
@@ -59,8 +60,7 @@ export async function generateMetadata({ params }: AboutPageProps): Promise<Meta
   const seo = localizeCoreValue(ABOUT_ZH_SEO, 'en');
 
   return buildMetadata({
-    title: seo.title,
-    description: seo.description,
+    ...ENGLISH_STATIC_PAGE_METADATA.about,
     path: `/${currentLocale}/about`,
     pageKey: 'about',
     keywords: seo.keywords,

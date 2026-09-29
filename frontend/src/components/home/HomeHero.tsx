@@ -109,6 +109,7 @@ export default function HomeHero({ locale = 'zh' }: { locale?: 'zh' | 'en' }) {
       onFocusCapture={() => setIsFocusWithin(true)}
       onBlurCapture={() => setIsFocusWithin(false)}
     >
+      <h1 id="hero-title" className="sr-only">{slides[0].title}</h1>
       {slides.map((slide, index) => (
         <div
           key={slide.id}
@@ -141,13 +142,7 @@ export default function HomeHero({ locale = 'zh' }: { locale?: 'zh' | 'en' }) {
             <p className={styles.eyebrow} translate="no">
               {slide.eyebrow}
             </p>
-            {index === activeSlide ? (
-              <h1 id="hero-title" className={styles.title}>
-                {slide.title}
-              </h1>
-            ) : (
-              <div className={styles.title}>{slide.title}</div>
-            )}
+            <div className={styles.title}>{slide.title}</div>
             <p className={styles.description}>{slide.description}</p>
             <p className={styles.certification}>{slide.certification}</p>
           </div>
