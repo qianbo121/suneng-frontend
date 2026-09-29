@@ -11,6 +11,7 @@ import {
   renewFormIdempotencyKey,
   submitCustomRequirement,
   validateLeadStepOne,
+  validateLeadPreferredContact,
 } from '@/lib/api/custom-requirements';
 import { buildLeadSourceSnapshot, trackLeadEvent } from '@/lib/api/lead-events';
 import { Locale } from '@/types/site';
@@ -91,6 +92,9 @@ const leadFormCopy = {
     required: '请完整填写第一步的必填信息',
     requiredContact: '电话或邮箱至少填写一项',
     invalidEmail: '请输入正确的邮箱地址',
+    preferredContactHint: '只能选择上一步已填写的联系方式，也可以不选。',
+    preferredPhone: '如需电话联系，请返回上一步填写电话，或选择已有的联系方式。',
+    preferredEmail: '如需邮箱联系，请返回上一步填写邮箱，或选择已有的联系方式。',
     idempotencyConflict: '之前版本可能已提交。当前内容已保留，请再次点击提交，作为新版本发送。',
     submitFailed: '提交失败，请稍后再试',
     success: '项目工况已提交，工程师会尽快与您联系。',
@@ -155,6 +159,9 @@ const leadFormCopy = {
     required: 'Complete all required fields in step one.',
     requiredContact: 'Enter your business email.',
     invalidEmail: 'Enter a valid email address.',
+    preferredContactHint: 'Choose a contact method provided in step one, or leave this blank.',
+    preferredPhone: 'To request a phone call, go back and enter a phone number, or choose an available contact method.',
+    preferredEmail: 'To request email contact, go back and enter an email address, or choose an available contact method.',
     idempotencyConflict: 'An earlier version may already have been submitted. Your current entries are still here. Click submit again to send them as a new version.',
     submitFailed: 'Submission failed. Please try again later.',
     success: 'Your project request has been received. Our engineers will contact you soon.',
@@ -165,7 +172,7 @@ const leadFormCopy = {
   },
 } as const;
 
-type SelectOption = { value: string; label: string };
+type SelectOption = { value: string; label: string; disabled?: boolean };
 
 function FieldLabel({ label, required = false }: { label: string; required?: boolean }) {
   return (
@@ -261,6 +268,7 @@ function LeadSelect({
   placeholder,
   name,
   options,
+  describedBy,
   required = false,
   invalid = false,
   className = '',
@@ -269,6 +277,7 @@ function LeadSelect({
   placeholder: string;
   name: string;
   options: readonly (string | SelectOption)[];
+  describedBy?: string;
   required?: boolean;
   invalid?: boolean;
   className?: string;
@@ -279,6 +288,7 @@ function LeadSelect({
       <select
         name={name}
         defaultValue=""
+        aria-describedby={describedBy}
         required={required}
         aria-invalid={invalid || undefined}
         className={`mt-2 h-[44px] w-full rounded-[4px] border bg-white px-3 text-[14px] text-[#1a1d23] outline-none transition focus:border-[#c51624] focus:shadow-[0_0_0_3px_rgba(197,22,36,0.08)] ${
@@ -289,7 +299,7 @@ function LeadSelect({
         {options.map((option) => {
           const value = typeof option === 'string' ? option : option.value;
           const optionLabel = typeof option === 'string' ? option : option.label;
-          return <option key={value} value={value}>{optionLabel}</option>;
+          return <option key={value} value={value} disabled={typeof option === 'string' ? undefined : option.disabled}>{optionLabel}</option>;
         })}
       </select>
     </label>
@@ -369,6 +379,7 @@ export function ProductLeadForm({
   const formIdPrefix = useId();
   const privacyNoticeId = `${formIdPrefix}-privacy-notice`;
   const successDialogTitleId = `${formIdPrefix}-success-title`;
+  const preferredContactHintId = `${formIdPrefix}-preferred-contact-hint`;
   const formRef = useRef<HTMLFormElement>(null);
   const formStartedRef = useRef(false);
   const stepCompletedRef = useRef(false);
@@ -382,6 +393,8 @@ export function ProductLeadForm({
   const [invalidField, setInvalidField] = useState<keyof ProjectLeadValues | null>(null);
   const [showPrivacyNotice, setShowPrivacyNotice] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [availableContacts, setAvailableContacts] = useState({ phone: false, email: false });
+  const [preferredContactError, setPreferredContactError] = useState('');
   const hasLeadSidebar = Boolean(leadBullets?.length);
 
   useEffect(() => {
@@ -419,6 +432,8 @@ export function ProductLeadForm({
   const issueMessage = (issue: LeadValidationIssue) => {
     if (issue.reason === 'contact') return copy.requiredContact;
     if (issue.reason === 'email') return copy.invalidEmail;
+    if (issue.reason === 'preferredPhone') return copy.preferredPhone;
+    if (issue.reason === 'preferredEmail') return copy.preferredEmail;
     return copy.required;
   };
 
@@ -438,11 +453,18 @@ export function ProductLeadForm({
   const handleNext = () => {
     const form = formRef.current;
     if (!form) return;
-    const issue = validateLeadStepOne(readLeadValues(form), locale);
+    const values = readLeadValues(form);
+    const issue = validateLeadStepOne(values, locale);
     if (issue) {
       focusIssue(issue);
       return;
     }
+    setAvailableContacts({ phone: Boolean(values.phone), email: Boolean(values.email) });
+    if (validateLeadPreferredContact(values)) {
+      const preferredContact = form.elements.namedItem('preferredContact');
+      if (preferredContact instanceof HTMLSelectElement) preferredContact.value = '';
+    }
+    setPreferredContactError('');
     setInvalidField(null);
     if (!stepCompletedRef.current) {
       stepCompletedRef.current = true;
@@ -459,6 +481,14 @@ export function ProductLeadForm({
     if (issue) {
       setStep(1);
       window.setTimeout(() => focusIssue(issue), 0);
+      return;
+    }
+
+    const preferredContactIssue = validateLeadPreferredContact(values);
+    if (preferredContactIssue) {
+      setStep(2);
+      setPreferredContactError(issueMessage(preferredContactIssue));
+      window.setTimeout(() => focusIssue(preferredContactIssue), 0);
       return;
     }
 
@@ -480,6 +510,8 @@ export function ProductLeadForm({
       formStartedRef.current = false;
       stepCompletedRef.current = false;
       setInvalidField(null);
+      setPreferredContactError('');
+      setAvailableContacts({ phone: false, email: false });
       setStep(1);
       setSubmissionId(String(result.submissionId));
     } catch (error) {
@@ -529,6 +561,7 @@ export function ProductLeadForm({
           onChangeCapture={() => {
             handleFormStart();
             if (invalidField) setInvalidField(null);
+            if (preferredContactError) setPreferredContactError('');
           }}
           noValidate
           className={`p-[20px] sm:p-[24px] lg:p-[28px] ${hasLeadSidebar ? '' : 'lg:p-[32px]'}`}
@@ -594,7 +627,22 @@ export function ProductLeadForm({
             <LeadTextInput label={copy.fields.industry.label} name="industry" placeholder={copy.fields.industry.placeholder} maxLength={180} />
             <LeadTextInput label={copy.fields.process.label} name="process" placeholder={copy.fields.process.placeholder} maxLength={180} />
             <LeadTextInput label={copy.fields.temperature.label} name="temperature" placeholder={copy.fields.temperature.placeholder} maxLength={120} />
-            <LeadSelect label={copy.fields.preferredContact.label} placeholder={locale === 'zh' ? '请选择' : 'Select an option'} name="preferredContact" options={copy.fields.preferredContact.options} />
+            <div>
+              <LeadSelect
+                label={copy.fields.preferredContact.label}
+                placeholder={locale === 'zh' ? '请选择' : 'Select an option'}
+                name="preferredContact"
+                options={copy.fields.preferredContact.options.map((option) => ({
+                  ...option,
+                  disabled: !availableContacts[option.value],
+                }))}
+                invalid={invalidField === 'preferredContact'}
+                describedBy={preferredContactHintId}
+              />
+              <p id={preferredContactHintId} role={preferredContactError ? 'alert' : undefined} className={`mt-2 text-[12px] leading-[1.7] ${preferredContactError ? 'text-[#c51624]' : 'text-[#667085]'}`}>
+                {preferredContactError || copy.preferredContactHint}
+              </p>
+            </div>
             <LeadSelect className="md:col-span-2" label={copy.fields.discoverySource.label} placeholder={locale === 'zh' ? '请选择' : 'Select an option'} name="discoverySource" options={copy.fields.discoverySource.options} />
 
             <p className="rounded-[4px] border border-[#e0e6ee] bg-[#f8fafc] p-3 text-[13px] leading-[1.7] text-[#667085] md:col-span-2">{copy.fileNote}</p>

@@ -1,7 +1,9 @@
 import Image from 'next/image';
 import type { Locale } from '@/types/site';
 import { translateLineValue } from '@/lib/production-line-content-en';
+import { isWithdrawnTechnicalPath } from '@/lib/publication-scope';
 import Link from 'next/link';
+import { HiArrowRight } from 'react-icons/hi2';
 
 import { HomepageLeadForm } from '@/components/home/HomepageLeadForm';
 import {
@@ -15,6 +17,12 @@ import { ProductCenterLineCarousel } from './ProductCenterLineCarousel';
 import { FurnaceCardGrid as FurnaceGrid } from './FurnaceCardGrid';
 
 const HERO_IMAGE = '/images/home/heat-treatment-line-manufacturing-base-3840.webp';
+
+const purchaseReferences = [
+  ['连续生产线规划', '/zh/solutions/continuous-heat-treatment-line'],
+  ['厂家能力核对', '/zh/solutions/rechuli-lu-changjia'],
+  ['江苏及华东项目配套', '/zh/solutions/jiangsu-gongye-lu-changjia'],
+] as const;
 
 function SectionHeading({
   id,
@@ -37,6 +45,9 @@ function SectionHeading({
 
 export function ChineseProductsLanding({ locale = 'zh' }: { locale?: Locale }) {
   const en = locale === 'en';
+  const availablePurchaseReferences = en
+    ? []
+    : purchaseReferences.filter(([, href]) => !isWithdrawnTechnicalPath(href));
   const t = (zh: string, english: string) => en ? english : zh;
   return (
     <div className={`home-page-scope ${styles.page}`}>
@@ -100,6 +111,30 @@ export function ChineseProductsLanding({ locale = 'zh' }: { locale?: Locale }) {
           <FurnaceGrid cards={continuousFurnaceCards} locale={locale} />
         </div>
       </section>
+
+      {availablePurchaseReferences.length > 0 && (
+        <section
+          id="selection-purchase-reference"
+          className={`${styles.section} ${styles.referenceSection}`}
+          aria-labelledby="purchase-reference-title"
+        >
+          <div className={styles.container}>
+            <SectionHeading
+              id="purchase-reference-title"
+              title="选型与采购参考"
+              description="先明确设备选型方向，再核对厂家能力与项目所在地的配套条件。"
+            />
+            <div className={styles.referenceGrid}>
+              {availablePurchaseReferences.map(([label, href]) => (
+                <Link key={href} href={href} className={styles.referenceLink}>
+                  <span>{label}</span>
+                  <HiArrowRight aria-hidden="true" />
+                </Link>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
 
       <section className={styles.supportSection} aria-labelledby="support-title">
         <div className={styles.container}>

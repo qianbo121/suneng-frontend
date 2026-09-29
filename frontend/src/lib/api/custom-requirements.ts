@@ -54,7 +54,7 @@ export type CustomRequirementResponse = {
 
 export type LeadValidationIssue = {
   field: keyof ProjectLeadValues;
-  reason: 'required' | 'contact' | 'email';
+  reason: 'required' | 'contact' | 'email' | 'preferredPhone' | 'preferredEmail';
 };
 
 export type IdempotencyKeyRef = {
@@ -133,6 +133,18 @@ export function validateLeadStepOne(
     if (email && !isValidEmail(email)) return { field: 'email', reason: 'email' };
   }
 
+  return null;
+}
+
+export function validateLeadPreferredContact(
+  values: Pick<ProjectLeadValues, 'phone' | 'email' | 'preferredContact'>,
+): LeadValidationIssue | null {
+  if (clean(values.preferredContact) === 'phone' && !clean(values.phone)) {
+    return { field: 'preferredContact', reason: 'preferredPhone' };
+  }
+  if (clean(values.preferredContact) === 'email' && !clean(values.email)) {
+    return { field: 'preferredContact', reason: 'preferredEmail' };
+  }
   return null;
 }
 

@@ -410,6 +410,37 @@
 .furnaceLink:hover h3 {
   color: var(--brand);
 }
+.referenceSection {
+  scroll-margin-top: 112px;
+}
+.referenceGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--card-gap);
+}
+.referenceLink {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  min-width: 0;
+  padding: var(--card-padding);
+  border: 1px solid var(--border);
+  border-radius: var(--card-radius);
+  color: var(--text);
+  font-weight: 600;
+}
+.referenceLink:hover {
+  border-color: var(--brand);
+  background: #f3f6fa;
+  color: var(--brand-strong);
+}
+.referenceLink > svg {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  color: var(--brand-strong);
+}
 .supportSection {
   padding-block: 40px 32px;
 }
@@ -451,6 +482,9 @@
   }
 }
 @media (max-width: 767px) {
+  .referenceGrid {
+    grid-template-columns: minmax(0, 1fr);
+  }
   .page {
     --page-gutter: var(--site-gutter);
   }
