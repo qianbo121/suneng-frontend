@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { ListPagination } from '@/components/ui/ListPagination';
+import { NewsPagination } from '@/components/news/NewsPagination';
 import { NEWS_PAGE_SIZE } from '@/constants/news';
 
 import { formatNewsDisplayDate } from '@/lib/news-display-date';
@@ -134,7 +134,7 @@ export function NewsListCards({
           />
         ))}
       </div>
-      <ListPagination
+      <NewsPagination
         page={page}
         pageCount={pageCount}
         href={href}

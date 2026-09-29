@@ -1,0 +1,170 @@
+.pagination {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: 24px;
+  font-size: 14px;
+  font-variant-numeric: tabular-nums;
+}
+
+.navigation,
+.pageNumbers,
+.jumpSection,
+.jumpForm {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.pagination .link {
+  display: inline-flex;
+  min-width: 40px;
+  height: 44px;
+  align-items: center;
+  justify-content: center;
+  padding: 0 12px;
+  border: 1px solid #d3deee;
+  border-radius: 5px;
+  background: #fff;
+  color: #102544;
+  font-size: 14px;
+  line-height: 20px;
+  white-space: nowrap;
+  text-decoration: none;
+  touch-action: manipulation;
+}
+
+.pagination a.link:hover,
+.pagination button.link:hover {
+  border-color: #3370ff;
+  color: #3370ff;
+}
+
+.pagination .link:focus-visible,
+.pageInput:focus-visible {
+  outline: 2px solid #3370ff;
+  outline-offset: 3px;
+}
+
+.pagination .active,
+.pagination .active:hover {
+  background: #3370ff;
+  color: #fff;
+  border-color: #3370ff;
+}
+
+.pagination .edge {
+  border-color: #abc4ff;
+  color: #3370ff;
+}
+
+.pagination .disabled {
+  color: #a9b5c6;
+  border-color: #e2e8f0;
+  background: #f7f9fc;
+}
+
+.jumpSection {
+  gap: 18px;
+  color: #718096;
+  white-space: nowrap;
+}
+
+.currentPage {
+  display: none;
+}
+
+.currentPage strong {
+  color: #3370ff;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.jumpForm {
+  position: relative;
+}
+
+.jumpForm button {
+  cursor: pointer;
+}
+
+.pageInput {
+  width: 50px;
+  height: 44px;
+  min-width: 0;
+  padding: 0 4px;
+  border: 1px solid #d3deee;
+  border-radius: 5px;
+  background: #fff;
+  color: #102544;
+  text-align: center;
+  font: inherit;
+  appearance: textfield;
+  -moz-appearance: textfield;
+}
+
+.pageInput::-webkit-inner-spin-button,
+.pageInput::-webkit-outer-spin-button {
+  margin: 0;
+  -webkit-appearance: none;
+}
+
+.pageInput[aria-invalid='true'] {
+  border-color: #b42318;
+}
+
+.jumpError {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  color: #b42318;
+  font-size: 12px;
+  line-height: 18px;
+}
+
+@media (max-width: 700px) {
+  .pagination {
+    gap: 12px;
+  }
+
+  .navigation {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    width: 100%;
+  }
+
+  .pagination .link {
+    min-width: 0;
+    padding-inline: 8px;
+  }
+
+  .pageNumbers,
+  .totalPages {
+    display: none;
+  }
+
+  .currentPage {
+    display: inline;
+  }
+
+  .jumpSection {
+    width: 100%;
+    justify-content: space-between;
+    gap: 8px;
+  }
+
+  .jumpForm {
+    gap: 6px;
+  }
+
+  .pageInput {
+    width: 46px;
+    font-size: 16px;
+  }
+
+  .jumpForm button {
+    min-width: 56px;
+  }
+}

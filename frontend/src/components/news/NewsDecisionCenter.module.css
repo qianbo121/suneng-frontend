@@ -185,7 +185,7 @@
 }
 .contentGrid {
   display: grid;
-  grid-template-columns: minmax(0, 880px) 288px;
+  grid-template-columns: minmax(0, 1fr) 288px;
   gap: 32px;
   align-items: start;
 }
