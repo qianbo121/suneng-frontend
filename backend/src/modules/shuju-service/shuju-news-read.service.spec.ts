@@ -56,4 +56,50 @@ describe('ShujuNewsReadService', () => {
       select: { id: true, nameZh: true, slug: true },
     });
   });
+
+  it('reads only selected public articles without changing counts or filling missing articles', async () => {
+    const findMany = jest.fn().mockResolvedValue([
+      { id: 1, viewCount: 0 },
+      { id: 5, viewCount: 123 },
+    ]);
+    const write = jest.fn();
+    const prisma = {
+      news: { findMany, create: write, update: write, updateMany: write, delete: write },
+    } as unknown as PrismaService;
+    const service = new ShujuNewsReadService(prisma);
+    const before = Date.now();
+
+    const result = await service.readership({ ids: [1, 3, 5, 7] });
+
+    expect(findMany).toHaveBeenCalledTimes(1);
+    expect(findMany).toHaveBeenCalledWith({
+      where: {
+        id: { in: [1, 3, 5, 7] },
+        status: PublishStatus.published,
+        isPublished: true,
+      },
+      orderBy: { id: 'asc' },
+      select: { id: true, viewCount: true },
+    });
+    expect(result.items).toEqual([
+      { id: 1, viewCount: 0 },
+      { id: 5, viewCount: 123 },
+    ]);
+    expect(new Date(result.checkedAt).toISOString()).toBe(result.checkedAt);
+    expect(Date.parse(result.checkedAt)).toBeGreaterThanOrEqual(before);
+    expect(Date.parse(result.checkedAt)).toBeLessThanOrEqual(Date.now());
+    expect(write).not.toHaveBeenCalled();
+  });
+
+  it('returns an empty list when no requested article is public', async () => {
+    const findMany = jest.fn().mockResolvedValue([]);
+    const service = new ShujuNewsReadService({
+      news: { findMany },
+    } as unknown as PrismaService);
+
+    await expect(service.readership({ ids: [2, 3] })).resolves.toEqual({
+      items: [],
+      checkedAt: expect.any(String),
+    });
+  });
 });

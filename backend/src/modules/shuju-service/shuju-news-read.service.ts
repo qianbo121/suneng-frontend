@@ -3,6 +3,7 @@ import { Prisma, PublishStatus } from '@prisma/client';
 
 import { buildPagination } from '@/common/utils/pagination';
 import { ShujuNewsReadQueryDto } from '@/modules/shuju-service/dto/shuju-news-read-query.dto';
+import { ShujuNewsReadershipQueryDto } from '@/modules/shuju-service/dto/shuju-news-readership-query.dto';
 import { PrismaService } from '@/prisma/prisma.service';
 
 @Injectable()
@@ -58,5 +59,19 @@ export class ShujuNewsReadService {
       orderBy: [{ sortOrder: 'asc' }, { id: 'asc' }],
       select: { id: true, nameZh: true, slug: true },
     });
+  }
+
+  async readership(query: ShujuNewsReadershipQueryDto) {
+    const items = await this.prisma.news.findMany({
+      where: {
+        id: { in: query.ids },
+        // Keep the same visibility rule as the official article detail.
+        status: PublishStatus.published,
+        isPublished: true,
+      },
+      orderBy: { id: 'asc' },
+      select: { id: true, viewCount: true },
+    });
+    return { items, checkedAt: new Date().toISOString() };
   }
 }
