@@ -42,6 +42,8 @@ test('separate public mode removes traced duplicates but preserves original asse
   const root = mkdtempSync(path.join(os.tmpdir(), 'standalone-split-'));
   try {
     const runtime = path.join(root, '.next/standalone/frontend');
+    const publicLayer = path.join(root, '.next/public-layer');
+    const copied = path.join(publicLayer, 'app/frontend/public/images/traced.png');
     for (const dir of ['public/images', '.next/static/chunks', '.next/standalone/frontend/public/images']) {
       mkdirSync(path.join(root, dir), { recursive: true });
     }
@@ -59,14 +61,17 @@ test('separate public mode removes traced duplicates but preserves original asse
       assert.equal(readFileSync(path.join(root, 'public/images/untraced.png'), 'utf8'), 'untraced image');
       assert.equal(readFileSync(path.join(runtime, '.next/static/chunks/page.js'), 'utf8'), version);
       assert.equal(readFileSync(path.join(runtime, 'server.js'), 'utf8'), 'server');
-      const stamp = statSync(path.join(root, 'public/images/traced.png')).mtimeMs;
+      assert.equal(readFileSync(copied, 'utf8'), 'original image');
+      const stamp = statSync(copied).mtimeMs;
       if (assetStamp !== undefined) assert.equal(stamp, assetStamp);
       assetStamp = stamp;
-      assert.equal(statSync(path.join(root, 'public/images')).mtimeMs, 0);
+      for (const parent of ['', 'app', 'app/frontend', 'app/frontend/public', 'app/frontend/public/images']) {
+        assert.equal(statSync(path.join(publicLayer, parent)).mtimeMs, 0);
+      }
     }
     writeFileSync(path.join(root, 'public/images/traced.png'), 'replaced image'); // Same size, different content.
     prepareStandalone(root, { separatePublic: true });
-    assert.notEqual(statSync(path.join(root, 'public/images/traced.png')).mtimeMs, assetStamp);
+    assert.notEqual(statSync(copied).mtimeMs, assetStamp);
   } finally {
     rmSync(root, { recursive: true, force: true });
   }

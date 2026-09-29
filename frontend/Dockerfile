@@ -69,7 +69,7 @@ ENV HOSTNAME=0.0.0.0
 
 # Keep unchanged public files in a reusable layer, before the application layer.
 # The preparation step removes traced public copies from standalone first.
-COPY --from=builder /app/frontend/public ./frontend/public
+COPY --link --from=builder /app/frontend/.next/public-layer/ /
 COPY --from=builder /app/frontend/.next/standalone ./
 
 EXPOSE 3000

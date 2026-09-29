@@ -6,6 +6,8 @@ from pathlib import Path
 import subprocess
 import tempfile
 import uuid
+import tarfile
+import io
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -48,7 +50,20 @@ def main():
                     'assert.equal(fs.readFileSync("frontend/public/images/asset.txt","utf8"),"identical image bytes");'
                     f'assert.equal(fs.readFileSync("frontend/.next/static/page.js","utf8"),"page version {version}");'
                     'assert(!fs.existsSync("frontend/public/asset.txt"));')
-        assert layers[0][-2] == layers[1][-2], 'Unchanged public layer was not reused'
+        if layers[0][-2] != layers[1][-2]:
+            # Keep exact file metadata in the CI failure output; no site data is
+            # included in these tiny, generated fixture images.
+            for tag in tags:
+                with tempfile.TemporaryDirectory() as directory:
+                    archive = Path(directory) / 'fixture.tar'
+                    run('docker', 'save', '-o', str(archive), tag)
+                    with tarfile.open(archive) as image:
+                        manifest = json.load(image.extractfile('manifest.json'))[0]
+                        payload = image.extractfile(manifest['Layers'][-2]).read()
+                        with tarfile.open(fileobj=io.BytesIO(payload)) as layer:
+                            print(json.dumps([{'name': f.name, 'size': f.size, 'mtime': f.mtime,
+                                               'mode': f.mode, 'headers': f.pax_headers} for f in layer]))
+            raise AssertionError('Unchanged public layer was not reused')
         assert layers[0][-1] != layers[1][-1], 'Changed application layer did not change'
         print(json.dumps({'passed': True, 'publicLayerReused': True, 'assetsReadable': True}))
     finally:

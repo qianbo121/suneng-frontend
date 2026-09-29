@@ -1,4 +1,4 @@
-import { chmodSync, cpSync, existsSync, lstatSync, readFileSync, readdirSync, rmSync, statSync, utimesSync } from 'node:fs';
+import { chmodSync, cpSync, existsSync, lstatSync, mkdirSync, readFileSync, readdirSync, rmSync, statSync, utimesSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -41,9 +41,13 @@ export function prepareStandalone(frontendRoot, { separatePublic = false } = {})
       rmSync(path.join(runtime, 'public'), { recursive: true, force: true });
       const publicRoot = path.join(frontendRoot, 'public');
       if (lstatSync(publicRoot).isSymbolicLink()) throw new Error('Public directory must not be a symlink');
-      // Fresh checkouts have different mtimes; preserve bytes but canonicalize
-      // metadata so separate builders can produce the same public layer.
-      normalizePublicAssets(publicRoot);
+      // Include every destination parent in the source tree. COPY to a nested
+      // path otherwise creates parents with build-time mtimes in each layer.
+      const publicLayer = path.join(frontendRoot, '.next/public-layer');
+      rmSync(publicLayer, { recursive: true, force: true });
+      mkdirSync(path.join(publicLayer, 'app/frontend'), { recursive: true });
+      cpSync(publicRoot, path.join(publicLayer, 'app/frontend/public'), { recursive: true });
+      normalizePublicAssets(publicLayer);
       continue;
     }
     cpSync(path.join(frontendRoot, relative), path.join(runtime, relative), {
