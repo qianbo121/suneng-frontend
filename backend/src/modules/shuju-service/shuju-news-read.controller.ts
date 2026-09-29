@@ -4,6 +4,7 @@ import type { Request } from 'express';
 
 import { Public } from '@/common/decorators/public.decorator';
 import { ShujuNewsReadQueryDto } from '@/modules/shuju-service/dto/shuju-news-read-query.dto';
+import { ShujuNewsReadershipQueryDto } from '@/modules/shuju-service/dto/shuju-news-readership-query.dto';
 import { ShujuNewsReadService } from '@/modules/shuju-service/shuju-news-read.service';
 import { ShujuServiceAuthGuard } from '@/modules/shuju-service/shuju-service-auth.guard';
 
@@ -38,6 +39,23 @@ export class ShujuNewsReadController {
         pageSize: result.pageSize,
         returned: result.items.length,
         total: result.total,
+      }),
+    );
+    return result;
+  }
+
+  @Get('readership')
+  @ApiOperation({ summary: 'Read cumulative views for selected public news articles' })
+  async readership(@Query() query: ShujuNewsReadershipQueryDto, @Req() request: ServiceRequest) {
+    const result = await this.service.readership(query);
+    this.logger.log(
+      JSON.stringify({
+        event: 'shuju_service_news_readership',
+        subject: request.shujuService?.subject ?? 'unknown',
+        scope: request.shujuService?.scope ?? 'unknown',
+        requestId: request.shujuService?.jti ?? '',
+        requested: query.ids.length,
+        returned: result.items.length,
       }),
     );
     return result;
