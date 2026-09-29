@@ -235,8 +235,8 @@ describe('P5 authority topic pages', () => {
     expect(isZhOnlyPath('/en/solutions/rechuli-lu-gaizao-fengxian-zhouqi')).toBe(true);
     expect(isZhOnlyPath('/en/solutions/rechuli-lu-luchen-fanxin')).toBe(true);
     expect(isZhOnlyPath('/en/solutions/rechuli-lu-dian-gai-ran-yure-huishou')).toBe(true);
-    expect(isZhOnlyPath('/en/solutions/rechuli-lu-changjia')).toBe(false);
-    expect(isZhOnlyPath('/en/solutions/jiangsu-gongye-lu-changjia')).toBe(false);
+    expect(isZhOnlyPath('/en/solutions/rechuli-lu-changjia')).toBe(true);
+    expect(isZhOnlyPath('/en/solutions/jiangsu-gongye-lu-changjia')).toBe(true);
     expect(isZhOnlyPath('/en/case')).toBe(false);
     expect(isZhOnlyPath('/en/solutions/rechuli-lu-kongzhi-xitong-shengji')).toBe(true);
     expect(isZhOnlyPath('/en/solutions/rechuli-lu-tingchan-chongqi-banqian-fuchan')).toBe(true);

@@ -1,9 +1,7 @@
-import { EnglishSolutionPage, englishSolutionMetadata } from '@/components/engineering/EnglishSolutionsPage';
-import { solutionAlternates } from '@/lib/english-solutions';
 import type { Metadata } from 'next';
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
-import { TECHNICAL_CONTENT_PUBLISHED } from '@/lib/publication-scope';
+import { isPublishedGuide, isWithdrawnTechnicalPath } from '@/lib/publication-scope';
 
 import { GeoContactCta, GeoFaqGrid, GeoHeroTags, GeoSection as Section } from '@/components/geo-pages/GeoPageBlocks';
 import { JsonLd } from '@/components/JsonLd';
@@ -431,14 +429,8 @@ export function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  // Withdrawn content must not be rendered even if a request slips past middleware.
-  if (!TECHNICAL_CONTENT_PUBLISHED) notFound();
   const { locale } = await params;
-  if (locale === 'en') return englishSolutionMetadata('rechuli-lu-changjia');
-
-  if (locale !== 'zh') {
-    notFound();
-  }
+  if (!isPublishedGuide(locale, pagePath)) notFound();
 
   return buildMetadata({
     title: HEAT_TREATMENT_FURNACE_MANUFACTURER_SEO.title,
@@ -448,19 +440,16 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     keywords: HEAT_TREATMENT_FURNACE_MANUFACTURER_SEO.keywords,
     image: HEAT_TREATMENT_FURNACE_MANUFACTURER_SEO.ogImage,
     type: 'website',
-    alternateLocales: solutionAlternates('rechuli-lu-changjia'),
+    alternateLocales: { 'zh-CN': pagePath, 'x-default': pagePath },
   });
 }
 
 export default async function HeatTreatmentFurnaceManufacturerPage({ params }: PageProps) {
-  // Withdrawn content must not be rendered even if a request slips past middleware.
-  if (!TECHNICAL_CONTENT_PUBLISHED) notFound();
   const { locale } = await params;
-  if (locale === 'en') return <EnglishSolutionPage slug="rechuli-lu-changjia" />;
-
-  if (locale !== 'zh') {
-    notFound();
-  }
+  if (!isPublishedGuide(locale, pagePath)) notFound();
+  const publicCaseCards = caseCards.filter(
+    (item) => item.href && !isWithdrawnTechnicalPath(item.href),
+  );
 
   return (
     <main className="bg-white text-[#101828]">
@@ -629,44 +618,46 @@ export default async function HeatTreatmentFurnaceManufacturerPage({ params }: P
         </div>
       </Section>
 
-      <Section id="cases" eyebrow="项目经验" title="八、典型案例 / 项目经验">
-        <div className="grid gap-5 lg:grid-cols-3">
-          {caseCards.map((item) => (
-            <article key={item.title} className="rounded-[8px] border border-[#e1e7f0] bg-[#fbfcfe] p-6">
-              <h3 className="text-[21px] font-semibold leading-[1.4] text-[#101828]">{item.title}</h3>
-              <dl className="mt-5 space-y-3 text-[14px] leading-[1.75]">
-                {[
-                  ['行业', item.industry],
-                  ['炉型', item.furnaceType],
-                  ['工艺', item.process],
-                  ['项目类型', item.projectType],
-                ].map(([label, value]) => (
-                  <div key={label} className="grid grid-cols-[76px_1fr] gap-3">
-                    <dt className="font-semibold text-[#667085]">{label}</dt>
-                    <dd className="text-[#344054]">{value}</dd>
-                  </div>
-                ))}
-              </dl>
-              <p className="mt-5 text-[15px] leading-[1.85] text-[#475467]">{item.scope}</p>
-              {item.href ? (
-                <a
-                  href={item.href}
-                  className="mt-5 inline-flex min-h-[42px] items-center justify-center rounded-[4px] cta-primary px-5 text-[14px] font-semibold text-white transition"
-                >
-                  查看完整案例
-                </a>
-              ) : (
-                <p className="mt-5 rounded-[8px] border border-[#dfe6f0] bg-white p-4 text-[14px] leading-[1.75] text-[#667085]">
-                  暂无公开详情页，可在商务沟通中提供经授权的参考材料。
-                </p>
-              )}
-            </article>
-          ))}
-        </div>
-        <p className="mt-7 rounded-[8px] border border-[#fed7aa] bg-[#fff7ed] p-5 text-[14px] leading-[1.85] text-[#7c2d12]">
-          案例信息以公开页面和脱敏描述为准，不代表所有热处理炉项目均具备相同配置、周期或效果。具体方案需结合项目参数单独评估。
-        </p>
-      </Section>
+      {publicCaseCards.length > 0 && (
+        <Section id="cases" eyebrow="项目经验" title="八、典型案例 / 项目经验">
+          <div className="grid gap-5 lg:grid-cols-3">
+            {publicCaseCards.map((item) => (
+              <article key={item.title} className="rounded-[8px] border border-[#e1e7f0] bg-[#fbfcfe] p-6">
+                <h3 className="text-[21px] font-semibold leading-[1.4] text-[#101828]">{item.title}</h3>
+                <dl className="mt-5 space-y-3 text-[14px] leading-[1.75]">
+                  {[
+                    ['行业', item.industry],
+                    ['炉型', item.furnaceType],
+                    ['工艺', item.process],
+                    ['项目类型', item.projectType],
+                  ].map(([label, value]) => (
+                    <div key={label} className="grid grid-cols-[76px_1fr] gap-3">
+                      <dt className="font-semibold text-[#667085]">{label}</dt>
+                      <dd className="text-[#344054]">{value}</dd>
+                    </div>
+                  ))}
+                </dl>
+                <p className="mt-5 text-[15px] leading-[1.85] text-[#475467]">{item.scope}</p>
+                {item.href ? (
+                  <a
+                    href={item.href}
+                    className="mt-5 inline-flex min-h-[42px] items-center justify-center rounded-[4px] cta-primary px-5 text-[14px] font-semibold text-white transition"
+                  >
+                    查看完整案例
+                  </a>
+                ) : (
+                  <p className="mt-5 rounded-[8px] border border-[#dfe6f0] bg-white p-4 text-[14px] leading-[1.75] text-[#667085]">
+                    暂无公开详情页，可在商务沟通中提供经授权的参考材料。
+                  </p>
+                )}
+              </article>
+            ))}
+          </div>
+          <p className="mt-7 rounded-[8px] border border-[#fed7aa] bg-[#fff7ed] p-5 text-[14px] leading-[1.85] text-[#7c2d12]">
+            案例信息以公开页面和脱敏描述为准，不代表所有热处理炉项目均具备相同配置、周期或效果。具体方案需结合项目参数单独评估。
+          </p>
+        </Section>
+      )}
 
       <Section id="flow" eyebrow="定制流程" title="九、热处理炉定制流程">
         <div className="grid gap-4">

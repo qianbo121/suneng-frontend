@@ -21,8 +21,8 @@ import { prepareNewsArticleHtml } from './sanitize';
 const approved = 'henan-annealing-solution-line';
 
 describe('launch publication scope', () => {
-  it('opens exactly the eight approved Chinese guides and keeps other editions and lookalikes closed', () => {
-    expect(APPROVED_GUIDE_PATHS.size).toBe(8);
+  it('opens exactly the eleven approved Chinese guides and keeps other editions and lookalikes closed', () => {
+    expect(APPROVED_GUIDE_PATHS.size).toBe(11);
     for (const path of APPROVED_GUIDE_PATHS) {
       expect(isWithdrawnRequestPath(path)).toBe(false);
       expect(isWithdrawnTechnicalPath(path + '?from=service')).toBe(false);

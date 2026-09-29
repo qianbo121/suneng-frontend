@@ -10,6 +10,7 @@ import {
   renewFormIdempotencyKey,
   submitCustomRequirement,
   validateLeadStepOne,
+  validateLeadPreferredContact,
 } from '@/lib/api/custom-requirements';
 import { ApiRequestError } from '@/lib/api/client';
 import {
@@ -69,6 +70,42 @@ describe('ProductLeadForm step-one rules', () => {
     });
     expect(validateLeadStepOne(completeValues({ email: 'buyer@gmail.com' }), 'en')).toBeNull();
     expect(validateLeadStepOne(completeValues({ phone: '' }), 'en')).toBeNull();
+  });
+});
+
+describe('ProductLeadForm preferred contact rules', () => {
+  it('rejects email preference when only a phone number was provided', () => {
+    expect(
+      validateLeadPreferredContact(completeValues({ phone: '13800138000', email: '', preferredContact: 'email' })),
+    ).toEqual({ field: 'preferredContact', reason: 'preferredEmail' });
+  });
+
+  it('rejects phone preference when only an email address was provided', () => {
+    expect(
+      validateLeadPreferredContact(completeValues({ phone: '', preferredContact: 'phone' })),
+    ).toEqual({ field: 'preferredContact', reason: 'preferredPhone' });
+  });
+
+  it.each([
+    { phone: '13800138000', email: '', preferredContact: 'phone' },
+    { phone: '', email: 'buyer@factory.cn', preferredContact: 'email' },
+    { phone: '13800138000', email: 'buyer@factory.cn', preferredContact: 'phone' },
+    { phone: '13800138000', email: 'buyer@factory.cn', preferredContact: 'email' },
+    { phone: '13800138000', email: '', preferredContact: '' },
+    { phone: '', email: 'buyer@factory.cn', preferredContact: '' },
+  ])('accepts an available or optional preference: $preferredContact', (values) => {
+    expect(validateLeadPreferredContact(completeValues(values))).toBeNull();
+  });
+
+  it.each([
+    { field: 'phone', preferredContact: 'phone', reason: 'preferredPhone' },
+    { field: 'email', preferredContact: 'email', reason: 'preferredEmail' },
+  ] as const)('rechecks the $field after returning to edit step one', ({ field, preferredContact, reason }) => {
+    const values = completeValues({ phone: '13800138000', preferredContact });
+    expect(validateLeadPreferredContact(values)).toBeNull();
+
+    values[field] = '   ';
+    expect(validateLeadPreferredContact(values)).toEqual({ field: 'preferredContact', reason });
   });
 });
 
