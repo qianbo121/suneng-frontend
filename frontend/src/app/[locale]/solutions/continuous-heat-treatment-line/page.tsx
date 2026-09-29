@@ -340,6 +340,7 @@ export default async function ContinuousHeatTreatmentLinePage({ params }: PagePr
       <FaqSection title="连续热处理生产线常见问题" faqs={lineFaqs} defaultOpenIndex={2} />
       <Resources
         title="选型与采购资料"
+        columns={2}
         items={[
           {
             title: '生产线产能怎么估算',
@@ -358,6 +359,12 @@ export default async function ContinuousHeatTreatmentLinePage({ params }: PagePr
             description: '分清单机、接口、联动与现场验证，写清测试条件和记录。',
             href: '/zh/news/heat-treatment-line-fat-single-machine-acceptance',
             label: '阅读生产线验收范围',
+          },
+          {
+            title: '已有生产线维修与改造',
+            description: '先核对保留设备、停产窗口和整线接口，再评估改造或更换。',
+            href: '/zh/service/furnace-renovation-overhaul',
+            label: '查看维修与改造服务',
           },
         ]}
       />

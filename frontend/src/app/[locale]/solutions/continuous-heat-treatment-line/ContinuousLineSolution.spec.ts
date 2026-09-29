@@ -104,20 +104,23 @@ describe('continuous heat-treatment line rendered page', () => {
   it('keeps only the third question open by default using native keyboard controls', () => {
     const faqs = section('faq');
     const details = [...faqs.matchAll(/<details\b([^>]*)>([\s\S]*?)<\/details>/g)];
-    expect(details).toHaveLength(4);
+    expect(details).toHaveLength(6);
     expect(details.map((match) => match[1].includes('open=""'))).toEqual([
       false,
       false,
       true,
       false,
+      false,
+      false,
     ]);
-    expect(faqs.match(/<summary>/g)).toHaveLength(4);
+    expect(faqs.match(/<summary>/g)).toHaveLength(6);
   });
-  it('keeps live capacity and acceptance news with the approved quotation guide', () => {
+  it('keeps capacity, acceptance and quotation guides alongside the renovation service', () => {
     const resources = section('resources');
-    expect(resources.match(/<article\b/g)).toHaveLength(3);
+    expect(resources.match(/<article\b/g)).toHaveLength(4);
     for (const term of ['产能', '验收']) expect(text(resources)).toContain(term);
     expect(resources).toContain('/zh/articles/gongye-lu-baojia-canshu');
+    expect(resources).toContain('/zh/service/furnace-renovation-overhaul');
   });
   it('keeps horizontal table scrolling within its own region and a mobile layout', () => {
     expect(styles).toContain('overflow-x: auto');

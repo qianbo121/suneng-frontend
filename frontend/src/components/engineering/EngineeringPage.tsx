@@ -198,17 +198,19 @@ export function Resources({
   locale = 'zh',
   title,
   items,
+  columns = 3,
 }: {
   title: string;
   items: { title: string; description: string; href: string; label: string }[];
   locale?: 'zh' | 'en';
+  columns?: 2 | 3;
 }) {
   items = items.filter((item) => !isWithdrawnTechnicalPath(item.href));
   if (!items.length) return null;
   const icons = [HiOutlineBookOpen, HiOutlineDocumentText, HiOutlineClipboardDocumentList];
   return (
     <Section id="resources" title={title}>
-      <div className={styles.cards}>
+      <div className={`${styles.cards}${columns === 2 ? ` ${styles.twoColumnCards}` : ''}`}>
         {items.map((item, index) => {
           const Icon = icons[index % icons.length];
           return (
