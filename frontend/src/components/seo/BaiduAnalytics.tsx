@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import { usePathname } from 'next/navigation';
 import Script from 'next/script';
 
-import { isBaiduAnalyticsHostname } from '@/lib/analytics/baidu';
+import { canLoadBaiduAnalytics } from '@/lib/analytics/baidu';
 
 const DEFAULT_BAIDU_TONGJI_ID = 'aecc3dcdd0269720537a44fc963eddbb';
 const BAIDU_TONGJI_ID = process.env.NEXT_PUBLIC_BAIDU_TONGJI_ID || DEFAULT_BAIDU_TONGJI_ID;
@@ -22,7 +22,7 @@ export function BaiduAnalytics() {
   const [runtimeAllowed, setRuntimeAllowed] = useState(false);
 
   useEffect(() => {
-    setRuntimeAllowed(isBaiduAnalyticsHostname(window.location.hostname));
+    setRuntimeAllowed(canLoadBaiduAnalytics(window.location.href, document.referrer));
   }, []);
 
   useEffect(() => {

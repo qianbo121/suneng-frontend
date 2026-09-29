@@ -1,0 +1,28 @@
+{
+  "FURNACE_LINING_RENOVATION_GUIDE_SEO": {
+    "commit": "76555a100feaedc31d864f8bc170fcf91e98684f",
+    "modifiedTime": "2026-09-19T21:34:27+08:00",
+    "reason": "Reconcile metadata with the committed substantive body revision; this is not a deployment timestamp.",
+    "files": [
+      "frontend/src/components/geo-pages/reviewed/LiningContent.tsx",
+      "frontend/src/components/geo-pages/reviewed/lining-faqs.json"
+    ],
+    "bodySha256": {
+      "frontend/src/components/geo-pages/reviewed/LiningContent.tsx": "92dcb6e1285a8fc1fe075c3c3a7c91a1ea00b0561dad6e634b9197b39d212568",
+      "frontend/src/components/geo-pages/reviewed/lining-faqs.json": "8db6a5073a3eaa5becb121c51bbb282f405156e51515360115cd2562f5490b2a"
+    }
+  },
+  "FURNACE_RESTART_RELOCATION_REMANUFACTURING_SEO": {
+    "commit": "76555a100feaedc31d864f8bc170fcf91e98684f",
+    "modifiedTime": "2026-09-19T21:34:27+08:00",
+    "reason": "Reconcile metadata with the committed substantive body revision; this is not a deployment timestamp.",
+    "files": [
+      "frontend/src/components/geo-pages/reviewed/RestartContent.tsx",
+      "frontend/src/components/geo-pages/reviewed/restart-faqs.json"
+    ],
+    "bodySha256": {
+      "frontend/src/components/geo-pages/reviewed/RestartContent.tsx": "bc6a91fcc32d22923c93b68e520980d64afd4b35601af0c0eee2cc535da1fba8",
+      "frontend/src/components/geo-pages/reviewed/restart-faqs.json": "a30b8347325d6f71101db67f47a5a1538c8ee92f1b7aee20b6f6f30f68546740"
+    }
+  }
+}

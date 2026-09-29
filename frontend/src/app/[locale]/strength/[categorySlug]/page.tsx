@@ -5,6 +5,11 @@ import { buildMetadata } from '@/lib/seo/metadata';
 
 type StrengthCategoryPageProps = { params: Promise<{ locale: string; categorySlug: string }> };
 export const revalidate = 3600;
+export const dynamicParams = false;
+
+export function generateStaticParams() {
+  return ['zh', 'en'].map(locale => ({ locale, categorySlug: 'honors' }));
+}
 
 async function resolvePage(params: StrengthCategoryPageProps['params']) {
   const { locale, categorySlug } = await params;

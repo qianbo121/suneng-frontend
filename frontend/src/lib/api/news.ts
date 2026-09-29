@@ -1,6 +1,7 @@
 import { safeApiGet } from '@/lib/api/client';
 import { applyReviewedNewsCopy } from '@/lib/news-reviewed-copy';
 import { applyEnglishNewsCopy } from '@/lib/english-news';
+import { applyNewsReferenceCleanup } from '@/lib/news-reference-cleanup';
 import {
   NewsApiItem,
   NewsCategoryApiItem,
@@ -43,7 +44,7 @@ export async function getNewsList(options: GetNewsListOptions = {}) {
       ...result.data,
       items: await Promise.all(
         result.data.items.map(async (item) =>
-          applyEnglishNewsCopy(await applyReviewedNewsCopy(item)),
+          applyNewsReferenceCleanup(await applyEnglishNewsCopy(await applyReviewedNewsCopy(item))),
         ),
       ),
     },
@@ -62,7 +63,7 @@ export async function getNewsDetail(slug: string) {
     cache: 'no-store',
   });
   return result.data
-    ? { ...result, data: await applyEnglishNewsCopy(await applyReviewedNewsCopy(result.data)) }
+    ? { ...result, data: applyNewsReferenceCleanup(await applyEnglishNewsCopy(await applyReviewedNewsCopy(result.data))) }
     : result;
 }
 

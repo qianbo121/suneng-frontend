@@ -12,7 +12,8 @@ import { isZhOnlyPath } from '@/lib/i18n/zh-only';
 import { isUnknownProductDetailPath } from '@/lib/products/detail-slugs';
 import { isInternalNewsListPath } from '@/lib/news-list-prerender';
 import { getNewsListStatus, newsListStatusHtml } from '@/lib/news-list-route-guard';
-import { getNewsRouteAvailability, getZhNewsSlug, newsNotFoundHtml } from '@/lib/news-route-guard';
+import { getFixedPublicRouteStatus } from '@/lib/public-route-status';
+import { getNewsRouteResolution, getZhNewsSlug, newsNotFoundHtml } from '@/lib/news-route-guard';
 
 const intlMiddleware = createMiddleware(routing);
 const internationalEntryMiddleware = createMiddleware({ ...routing, defaultLocale: 'en' });
@@ -147,15 +148,10 @@ export default async function middleware(request: NextRequest) {
   // These are fixed route-governance outcomes, so return real HTTP redirects
   // before Next renders a static shell. A page-level notFound/redirect can be
   // encoded in the React stream while the outer response remains 200.
-  if (pathname === '/zh/strength/technical-team' || pathname === '/en/strength/technical-team') {
-    return permanentRedirect(request, pathname.startsWith('/en/') ? '/en/about' : '/zh/about');
-  }
-  if (pathname === '/zh/strength') {
-    return permanentRedirect(request, '/zh/strength/honors');
-  }
-  if (pathname === '/zh/strength/certificates') {
-    const response = permanentRedirect(request, '/zh/strength/honors');
-    response.headers.set('Location', `${response.headers.get('Location')}#management-systems`);
+  const fixedRoute = getFixedPublicRouteStatus(pathname);
+  if (fixedRoute?.redirectPath) {
+    const response = permanentRedirect(request, fixedRoute.redirectPath);
+    if (fixedRoute.hash) response.headers.set('Location', `${response.headers.get('Location')}${fixedRoute.hash}`);
     return response;
   }
 
@@ -186,11 +182,14 @@ export default async function middleware(request: NextRequest) {
   const englishNewsDetail = pathname.startsWith('/en/news/');
   const newsSlug = getZhNewsSlug(englishNewsDetail ? pathname.replace('/en/', '/zh/') : pathname);
   if (newsSlug && (englishNewsDetail || !FALLBACK_NEWS_SLUGS.has(newsSlug))) {
-    const availability = await getNewsRouteAvailability(
+    const resolution = await getNewsRouteResolution(
       pathname,
-      process.env.API_BASE_URL_INTERNAL || process.env.NEXT_PUBLIC_API_BASE_URL || '',
+      process.env.API_BASE_URL_INTERNAL || process.env.NEXT_PUBLIC_API_URL || process.env.NEXT_PUBLIC_API_BASE_URL || '',
     );
-    if (availability === 'missing') return newsNotFoundResponse(englishNewsDetail ? 'en' : 'zh');
+    if (resolution?.availability === 'available' && resolution.redirectPath) {
+      return permanentRedirect(request, resolution.redirectPath);
+    }
+    if (resolution?.availability === 'missing') return newsNotFoundResponse(englishNewsDetail ? 'en' : 'zh');
   }
 
   // Keep legacy unprefixed content URLs deterministic for crawlers. Only the

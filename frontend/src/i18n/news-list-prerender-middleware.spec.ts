@@ -10,7 +10,7 @@ vi.mock('@/lib/news-decision-center.server', () => ({ getNewsDecisionCenterCards
 vi.mock('next-intl/middleware', () => ({ default: () => () => NextResponse.next() }));
 vi.mock('@/lib/news-route-guard', async (importOriginal) => {
   const original = await importOriginal<typeof import('@/lib/news-route-guard')>();
-  return { ...original, getNewsRouteAvailability: vi.fn().mockResolvedValue('available') };
+  return { ...original, getNewsRouteResolution: vi.fn().mockResolvedValue({ availability: 'available' }) };
 });
 
 import middleware from '../middleware';

@@ -101,7 +101,7 @@ export class CreateCustomRequirementDto {
   @ValidateIf((dto: CreateCustomRequirementDto) => dto.formVariant === 'homepage_minimal')
   @IsString()
   @IsNotEmpty()
-  @Matches(/^[\p{L}\p{N}+][\p{L}\p{N}\s@()+\-._/#*]{2,253}$/u)
+  @Matches(/^(?=.*[\p{L}\p{N}])[\p{L}\p{N}+(（][\p{L}\p{N}\s@()（）+\-._/#*:：,，、;；]{2,253}$/u)
   @MaxLength(254)
   contact?: string;
 
@@ -112,7 +112,7 @@ export class CreateCustomRequirementDto {
   )
   @IsString()
   @IsNotEmpty()
-  @Matches(/^[\p{L}\p{N}+][\p{L}\p{N}\s()+\-._/#*]{2,49}$/u)
+  @Matches(/^(?=.*[\p{L}\p{N}])[\p{L}\p{N}+(（][\p{L}\p{N}\s()（）+\-._/#*:：,，、;；]{2,49}$/u)
   @MaxLength(50)
   phone?: string;
 

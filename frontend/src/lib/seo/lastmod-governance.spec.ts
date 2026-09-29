@@ -1,9 +1,11 @@
-import { execFileSync } from 'node:child_process';
+import { execFileSync, spawnSync } from 'node:child_process';
+import { createHash } from 'node:crypto';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import { describe, expect, it } from 'vitest';
+import contentRevisionEvidence from './content-revision-evidence.json';
 
 const REPO_ROOT = fileURLToPath(new URL('../../../../', import.meta.url));
 const PAGE_DATA_PATH = 'frontend/src/lib/seo/page-data.ts';
@@ -68,7 +70,62 @@ function comparisonRef() {
   return pageDataStatus ? 'HEAD' : 'HEAD^';
 }
 
+type ContentRevisionEvidence = {
+  commit: string;
+  modifiedTime: string;
+  files: string[];
+  bodySha256: Record<string, string>;
+};
+
+// Metadata can be reconciled after its substantive body was committed separately.
+// Accept only the exact recorded commit time and unchanged, verifiable body files;
+// this does not permit an arbitrary newer date or a link-only revision.
+function hasVerifiedHistoricalRevision(
+  evidence: ContentRevisionEvidence | undefined,
+  currentTime: string,
+) {
+  if (!evidence || currentTime !== evidence.modifiedTime || !evidence.files.length) return false;
+  // The original body commit is local provenance, outside main's history.
+  // Its timestamp and exact files were verified before recording these hashes.
+  // A shallow checkout can validate that frozen evidence without fetching an
+  // unrelated work branch; full-history checkouts also verify the commit itself.
+  for (const file of evidence.files) {
+    const currentPath = path.join(REPO_ROOT, file);
+    if (!fs.existsSync(currentPath)) return false;
+    const digest = createHash('sha256').update(fs.readFileSync(currentPath)).digest('hex');
+    if (digest !== evidence.bodySha256[file]) return false;
+  }
+  const hasCommit = spawnSync('git', ['cat-file', '-e', `${evidence.commit}^{commit}`], {
+    cwd: REPO_ROOT, stdio: 'ignore',
+  }).status === 0;
+  if (!hasCommit) return true;
+  const commitTime = git(['show', '-s', '--format=%cI', evidence.commit]).trim();
+  if (currentTime !== commitTime) return false;
+
+  let substantiveChange = false;
+  for (const relativePath of evidence.files) {
+    const committed = readGitFile(evidence.commit, relativePath);
+    const currentPath = path.join(REPO_ROOT, relativePath);
+    if (committed === null || !fs.existsSync(currentPath)) return false;
+    if (fs.readFileSync(currentPath, 'utf8') !== committed) return false;
+    const parent = readGitFile(`${evidence.commit}^`, relativePath);
+    if (parent === null || contentFingerprint(parent) !== contentFingerprint(committed)) {
+      substantiveChange = true;
+    }
+  }
+  return substantiveChange;
+}
+
 describe('lastmod content governance', () => {
+  it('verifies historical corrections against their actual committed body and timestamp', () => {
+    for (const evidence of Object.values(contentRevisionEvidence)) {
+      expect(hasVerifiedHistoricalRevision(evidence, evidence.modifiedTime)).toBe(true);
+      expect(hasVerifiedHistoricalRevision(evidence, '2026-09-29T00:00:00+08:00')).toBe(false);
+      expect(hasVerifiedHistoricalRevision({ ...evidence, files: [] }, evidence.modifiedTime)).toBe(false);
+      expect(hasVerifiedHistoricalRevision({ ...evidence, bodySha256: {} }, evidence.modifiedTime)).toBe(false);
+    }
+  });
+
   it('treats path constants and related-link cards as link-only changes', () => {
     const before = `
       const contactPath = '/zh/contact';
@@ -127,7 +184,11 @@ describe('lastmod content governance', () => {
       if (!previousRoute || !fs.existsSync(currentRoutePath)) continue;
 
       const currentRoute = fs.readFileSync(currentRoutePath, 'utf8');
-      if (contentFingerprint(previousRoute) === contentFingerprint(currentRoute)) {
+      const evidence = (contentRevisionEvidence as Record<string, ContentRevisionEvidence>)[seoExport];
+      if (
+        contentFingerprint(previousRoute) === contentFingerprint(currentRoute) &&
+        !hasVerifiedHistoricalRevision(evidence, currentTime)
+      ) {
         violations.push(`${seoExport} -> ${routePath}`);
       }
     }

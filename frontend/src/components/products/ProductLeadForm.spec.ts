@@ -319,9 +319,9 @@ describe('ProductLeadForm submission behavior', () => {
     const noticeIndex = source.indexOf('{copy.privacy.summary}');
     const firstStepIndex = source.indexOf("step === 1 ? 'grid' : 'hidden'");
 
-    expect(source).toContain('开始填写后，我们会记录本次必要的页面与来源信息');
+    expect(source).toContain('浏览网站时会记录必要的访问与来源信息');
     expect(source).toContain(
-      'When you start this form, we record the necessary page and source information',
+      'While you browse, we record necessary visit and source information',
     );
     expect(noticeIndex).toBeGreaterThan(-1);
     expect(noticeIndex).toBeLessThan(firstStepIndex);

@@ -10,6 +10,7 @@ const prisma = new PrismaClient();
 // A pending migration that is not listed here, or whose file no longer hashes to the pinned
 // value, stops the release. Add an entry only for a migration that has been reviewed.
 const ALLOWED_PENDING = new Map([
+  ['20260929160000_align_minimal_inquiry_contact_limits', '4d75527f320fd6fff0baffdb07a2fd7e5815c8bf027e43254ce5f82523d4f9ff'],
   ['20260915103000_content_growth_session_index', '93b3973b671f12b3ed17dc5c91e9162b06b63e278f7d3f2af01fed6156b8aa88'],
   ['20260918160000_website_lead_event_is_bot', '2ed71856eddb253f4f96f42daad5dc76b901e6c4984a446615d8c12df6fc7b2d'],
 ]);
@@ -62,5 +63,9 @@ const ALLOWED_PENDING = new Map([
   const botColumn = await prisma.$queryRawUnsafe(`SELECT is_generated FROM information_schema.columns WHERE table_name='WebsiteLeadEvent' AND column_name='isBot'`);
   const botColumnStored = botColumn.some(x => x.is_generated === 'ALWAYS');
   if ((process.env.RELEASE_APPLY_INDEX === '1' || noMigrations) && !botColumnStored) throw new Error('Bot column is missing or not generated');
-  console.log(JSON.stringify({passed:true,pendingMigrationCount:pending.length,indexPresent:index.some(x=>x.indisvalid),botColumnStored,aggregateAvailable:true,aggregateCheckMs:Date.now()-began,dataRestored:false,notificationsSent:false}));
+  const contactColumns = await prisma.$queryRawUnsafe(`SELECT column_name, character_maximum_length FROM information_schema.columns WHERE table_name='CustomRequirement' AND column_name IN ('name', 'phone')`);
+  const contactLimitsMatch = ['name', 'phone'].every(name => contactColumns.some(column =>
+    column.column_name === name && column.character_maximum_length === (name === 'name' ? 180 : 254)));
+  if (!contactLimitsMatch) throw new Error('Inquiry storage does not match the accepted form limits');
+  console.log(JSON.stringify({passed:true,contactLimitsMatch,pendingMigrationCount:pending.length,indexPresent:index.some(x=>x.indisvalid),botColumnStored,aggregateAvailable:true,aggregateCheckMs:Date.now()-began,dataRestored:false,notificationsSent:false}));
 })().catch(() => { console.error('Backend release check failed; no customer data is printed.');process.exitCode=1; }).finally(()=>prisma.$disconnect());
