@@ -43,7 +43,12 @@ for (const width of [1440, 1280, 390]) {
       if (width > 767) expect(Math.abs(sizes[0].y - sizes[1].y)).toBeLessThanOrEqual(1);
       await expect(form.locator('#contact-hint')).toBeVisible();
       await form.screenshot({ path: testInfo.outputPath('inquiry.png') });
-      const title = page.locator('#hero-title');
+      // The homepage's document heading is intentionally screen-reader-only;
+      // measure the active visible carousel title for layout overflow instead.
+      const title = route === '/en'
+        ? page.locator('section[aria-roledescription] > [class*="heroCopyLayer"]:not([aria-hidden="true"]) [class*="title"]')
+        : page.locator('#hero-title');
+      if (route === '/en') await expect(title).toHaveCount(1);
       if (await title.count()) expect(await title.evaluate(e => e.scrollWidth <= e.clientWidth + 1)).toBe(true);
       // Closing this context while the shared dev server is still generating
       // a lazy poster can leave subsequent screenshot tests waiting on it.
