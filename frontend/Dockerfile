@@ -1,3 +1,5 @@
+# Stable layer metadata; newer than the content-derived public asset timestamps.
+ARG SOURCE_DATE_EPOCH=1104537600
 FROM node:22.23.1-alpine AS deps
 
 WORKDIR /app
@@ -55,7 +57,7 @@ COPY --from=deps /app/admin/node_modules ./admin/node_modules
 COPY . .
 
 RUN mkdir -p frontend/public && pnpm --dir frontend build \
-    && node frontend/scripts/prepare-standalone.mjs
+    && node frontend/scripts/prepare-standalone.mjs --separate-public
 
 FROM node:22.23.1-alpine AS runner
 
@@ -65,8 +67,9 @@ ENV NODE_ENV=production
 ENV PORT=3000
 ENV HOSTNAME=0.0.0.0
 
-# Public assets and Next static files are already merged into this directory.
-# A single COPY avoids retaining the traced public assets in two image layers.
+# Keep unchanged public files in a reusable layer, before the application layer.
+# The preparation step removes traced public copies from standalone first.
+COPY --link --from=builder /app/frontend/.next/public-layer/ /
 COPY --from=builder /app/frontend/.next/standalone ./
 
 EXPOSE 3000

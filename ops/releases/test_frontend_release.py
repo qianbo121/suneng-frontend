@@ -367,7 +367,7 @@ class ContractTest(unittest.TestCase):
                     release.execute(apply=True)
                 inspect.assert_not_called()
 
-    def perform(self, release, failure=None):
+    def perform(self, release, failure=None, kind='deploy'):
         """failure: 'public' (new image fails), 'recovery' (switching back fails),
         'restored-check' (old image is back but fails its check), 'other-image'
         (switching back leaves an unexpected image)."""
@@ -393,7 +393,7 @@ class ContractTest(unittest.TestCase):
             if failure:
                 with self.assertRaises(RuntimeError): release.execute(apply=True, kind='rollback')
             else:
-                result = release.execute(apply=True)
+                result = release.execute(apply=True, kind=kind)
                 self.assertTrue(result['applied'])
         return state
 
@@ -439,6 +439,27 @@ class ContractTest(unittest.TestCase):
             self.assertEqual(receipt['frontendRelease'], {**MANIFEST, 'servedCases': r.normalize_cases(r.APPROVED_CASES)})
             self.assertFalse(release.pending_path.exists())
             self.assertEqual(receipt['images']['backend'], RECEIPT['images']['backend'])
+            pending = json.loads((release.audit / 'retention-pending.json').read_text())
+            self.assertEqual(pending['components'], ['frontend'])
+            self.assertTrue(pending['acceptanceRequired'])
+            self.assertEqual(json.loads((release.audit / 'result.json').read_text())['retention']['status'],
+                             'awaiting-acceptance')
+
+    def test_cleanup_queue_failure_does_not_fail_or_roll_back_a_healthy_publication(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            release = self.fixture(tmp)
+            with patch('release_retention.queue', side_effect=OSError('cannot write cleanup plan')):
+                state = self.perform(release)
+            self.assertEqual((state['image'], state['switches']), (NEW, 1))
+            result = json.loads((release.audit / 'result.json').read_text())
+            self.assertTrue(result['passed'])
+            self.assertEqual(result['retention'], {'status': 'needs-attention', 'imagesRemoved': False})
+
+    def test_successful_rollback_never_queues_cleanup(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            release = self.fixture(tmp)
+            self.perform(release, kind='rollback')
+            self.assertFalse((release.audit / 'retention-pending.json').exists())
 
     def test_target_is_checked_open_and_restored_image_is_checked_leniently(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -463,6 +484,7 @@ class ContractTest(unittest.TestCase):
                  patch.object(r.subprocess, 'run'):
                 release.execute(apply=False)
             self.assertEqual(seen, [('internal', 'open'), ('public', 'either')])
+            self.assertFalse((release.audit / 'retention-pending.json').exists())
 
     def test_failed_switch_restores_previous_frontend_and_preserves_receipt(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -471,6 +493,7 @@ class ContractTest(unittest.TestCase):
             self.assertEqual((state['image'], state['switches']), (OLD, 2))
             self.assertEqual(json.loads(release.receipt_path.read_text()), RECEIPT)
             self.assertFalse(release.pending_path.exists())
+            self.assertFalse((release.audit / 'retention-pending.json').exists())
 
     def test_failed_recovery_reports_actual_image_and_leaves_pending_marker(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -525,6 +548,7 @@ class ContractTest(unittest.TestCase):
                 self.assertEqual(seen, [('internal', 'corp-site-frontend', release.target_contract),
                                         ('public', 'https://www.jssngyl.cn', release.target_contract)])
                 self.assertEqual(release.target_contract['state'], 'open')
+                self.assertFalse((release.audit / 'retention-pending.json').exists())
                 self.assertTrue(set(r.ENCODED_WITHDRAWN_PATHS) <= set(release.target_contract['retired']))
 
 
@@ -569,10 +593,16 @@ class UnifiedReleaseTest(unittest.TestCase):
                     if fails:
                         with self.assertRaises(RuntimeError): release.execute(True)
                         self.assertEqual(state, RECEIPT['images'])
+                        self.assertFalse((release.audit / 'retention-pending.json').exists())
                     else:
                         self.assertTrue(release.execute(True)['applied'])
                         self.assertEqual(state, release.target)
                         self.assertIn(unittest.mock.call(migrate=True),check.call_args_list)
+                        saved = json.loads(release.receipt_path.read_text())
+                        self.assertEqual(saved['backendRelease'], {**release.manifest['backend'],
+                                         'sourceCommit': MANIFEST['sourceCommit'], 'sourceIdentity': 'git-commit'})
+                        self.assertCountEqual(json.loads((release.audit / 'retention-pending.json').read_text())['components'],
+                                              ['frontend', 'backend'])
                     self.assertEqual(state['admin'], RECEIPT['images']['admin'])
                     self.assertFalse(release.pending_path.exists())
 

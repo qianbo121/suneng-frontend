@@ -7,6 +7,7 @@
 1. 在独立构建环境从完整 Git 提交生成镜像；将程序包、压缩包校验值、源提交和镜像标识长期保存到经确认的独立存储。传输和导入前，按下文容量检查预留“全部候选镜像展开体积的两倍 + 压缩包体积 + 5 GiB 工作空间”；不再占用生产资源重复构建。`prepare-frontend.yml` 只构建候选，不连接生产机。
 2. 按 `manifest.example.json` 填写服务器实际导入的不可变镜像身份，以及当前前台身份。先不加 `--apply` 运行检查。候选在独立容器中验证，中英文首页、资料、询价、产品、公司页必须正确；选型文章、专题方案和未经审核的案例必须为 404，网站地图不得列入它们；已审核的案例按下文“项目案例逐篇放出”检查。旧镜像未通过就拒绝切换。
 3. 完成候选真实浏览器验收、通知收件与独立备份验证后，明确执行 `--apply`。切换失败会恢复前一前台并重新检查；若恢复也失败，记录真实运行版本和待处理状态，不显示成功。`--kind rollback` 使用相同检查，绝不恢复旧数据库覆盖新询盘。
+4. 发布成功后完成线上真实浏览器验收及当前、上一版恢复材料核对，按下文“验收后的旧镜像收尾”执行清理。没有这一步的有效证据，旧镜像继续保留；清理失败不触发程序回退。
 
 ```sh
 python3 ops/releases/frontend_release.py --manifest /private/path/manifest.json
@@ -91,11 +92,15 @@ The backend entry must contain `image`, `expectedCurrentImage`, and `archiveSha2
 
 顺序为：迁移身份预检 → 本地每日备份校验 → 获准的增量迁移 → 新代码查询检查 → 程序切换 → 运行中后端复核。备份不合格时不会迁移或替换程序；最终复核不能以“查询延后”代替通过。此校验不代表恢复演练或自动异地备份完成；本批仍沿用现有每日备份，外部监测和新告警群保持暂缓。
 
-安装发布工具时必须同时安装 `storage_policy.py`、`backup_gate.py` 与 `check-backend.cjs`，保留同目录关系。仅前台或仅管理后台发布不启动这条迁移路径。
+安装发布工具时必须同时安装 `storage_policy.py`、`backup_gate.py`、`release_retention.py` 与 `check-backend.cjs`，保留同目录关系。仅前台或仅管理后台发布不启动这条迁移路径。
 
 ## 发布包体积与容量检查
 
-前台构建后由 `frontend/scripts/prepare-standalone.mjs` 将完整的 `public` 和 `.next/static` 合入运行目录，再一次性复制进最终镜像。Next 文件追踪可能已经带入部分公开资源，不能再分别复制公开资源层和运行目录层，也不能假设追踪结果涵盖全部图片、视频。
+前台构建使用 `frontend/scripts/prepare-standalone.mjs --separate-public`，先从追踪产物中移除重复的 `public`，保留 `.next/static`；公开资源在构建目录统一时间戳和权限，内容不变。最终镜像先复制完整公开资源，再复制程序运行目录，并固定镜像构建时间基准。这样图片、视频既不会遗漏或重复打包，也能在资源未变时复用独立镜像层。首次采用新层仍要导入一次，不能把未来复用量算作本次已经释放的空间。不带该参数时仍会合入完整资源，供本地独立启动使用。云端用 `scripts/test_frontend_layer_reuse.py` 构建两份小样例，比较真实资源层身份并读取图片、页面文件；实际候选包仍须另行验收。
+
+时间戳处理依据：[Docker 的可重复构建说明](https://docs.docker.com/build/ci/github-actions/reproducible-builds/)。它不能代替上述实际镜像层比较。
+
+后端编译后使用锁定版本的 pnpm 9 `deploy --prod` 生成仅含 `dist`、`prisma` 和生产依赖的独立目录。Prisma 命令行属于发布迁移必需的运行依赖，不能裁掉；客户端在独立目录重新生成。`backend/scripts/verify-runtime.cjs` 修正 pnpm 的本包链接，并核对文件、依赖、客户端、图片处理和内容清洗；最终容器还会脱离构建目录再检查一次，均不连接数据库。云端候选构建通过及候选运行验收前，不把本地检查当成真实镜像验收。
 
 传输前，先把构建产物中的 `candidate.json` 小文件放到服务器，并核对候选包身份。对这次准备导入的每个候选文件重复提供 `--candidate`：
 
@@ -117,6 +122,46 @@ python3 ops/releases/storage_policy.py check-import \
 保留每个组件经过核对的当前版本和上一可回退版本，以及正在使用、明确保护的对象。正式数据库备份、业务数据、上传附件、配置和保留的恢复归档不进入这个清理规则；它们继续遵守各自现有备份制度。
 
 `storage_policy.py plan --evidence /private/release/storage-inventory.json` 根据最近 24 小时内人工或盘点脚本核验过的证据生成候选清单。它不采集现场状态、不验证输入声明的真实性、不删除文件，也不安装定时任务。生成的候选仍须在执行前再次核对路径、占用、摘要和保留副本，并取得对应清单的删除授权。
+
+### 验收后的旧镜像收尾（官网）
+
+成功应用 Git 版本的发布会生成私有 `retention-pending.json`，操作结果为 `retention.status: awaiting-acceptance`。纯预检、版本未变化、失败或主动回退均不生成清理计划。计划生成失败记录 `needs-attention`，不影响已成功的发布。前后端一起发布时分别记录两者的上一版身份。
+
+操作者在线上浏览器验收后，在同一私有记录目录写 `acceptance.json`。下列占位值必须替换为真实记录，不能预先声明通过；`operationReceiptSha256` 对最终的发布 `result.json` 文件取摘要，`images` 必须与当前回执完全一致。浏览器证据记录实际检查页面和结果，恢复证据记录当前/上一版的固定身份、保存位置及实际校验结果，不包含凭据。时间必须晚于该次发布且在 24 小时内。
+
+```json
+{
+  "schemaVersion": 1,
+  "sourceCommit": "本次发布的完整提交号",
+  "images": {"frontend": "sha256:实际身份", "backend": "sha256:实际身份", "admin": "sha256:实际身份"},
+  "passed": true,
+  "browserPassed": true,
+  "recoveryVerified": true,
+  "checkedAt": "带时区的实际验收时间",
+  "operationReceiptSha256": "最终发布结果文件的校验值",
+  "evidence": [
+    {"purpose": "browser", "path": "/data/migration-rehearsals/本批次/browser.json", "sha256": "文件校验值"},
+    {"purpose": "recovery", "path": "/data/migration-rehearsals/本批次/recovery.json", "sha256": "文件校验值"}
+  ]
+}
+```
+
+先看现场重新核对后的清单，再对同一批次执行：
+
+```sh
+python3 ops/releases/release_retention.py \
+  --plan /data/migration-rehearsals/本批次/retention-pending.json \
+  --acceptance /data/migration-rehearsals/本批次/acceptance.json
+python3 ops/releases/release_retention.py \
+  --plan /data/migration-rehearsals/本批次/retention-pending.json \
+  --acceptance /data/migration-rehearsals/本批次/acceptance.json --apply
+```
+
+这是发布验收后的显式收尾步骤，不是定时清理，也不会在发布切换中删除镜像。清理与发布共用锁，每次只考虑本批次被替换组件的上上一版，必须有已验收历史、明确归属标签和来源提交。当前及上一版、全部容器引用（包括停止的容器）、配置引用、额外标签或明确保护的镜像均保留。未发布候选与来历不明的镜像不进入删除清单。
+
+额外需要长留的镜像，在生产目录 `RETENTION_PROTECTED_IMAGES.json` 写固定镜像身份的 JSON 数组，或构建时加入 `org.jssngyl.retention.protect=true` 标签。计划外的特殊回退版本应先列入保护。每次删除前重查版本、验收和容器状态，任何变化停止；仅按准确身份执行不带强制参数的删除，不使用整机清理命令。结果记录在本批次 `retention-*/result.json`，支持中断后重新核对、续做。
+
+本自动核对及执行入口仅覆盖官网；数炬、报价系统仍沿用前述盘点方案，不自动处理。数据库、附件、配置、正式备份、恢复归档、发布历史记录和未用候选均不在此删除范围。缺失历史、恢复材料或验收证据时先保留，不能补写未经验证的成功记录。
 
 证据格式示例（占位身份必须换成现场核实值）：
 

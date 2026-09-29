@@ -597,7 +597,7 @@ class Release:
                             'previousReceipt': str(self.audit / 'previous-receipt.json'),
                             'productionVerifiedAt': now(), 'deploymentStatus': 'verified',
                             'releaseOperation': kind, 'releaseOperationReceipt': str(self.audit / 'result.json')})
-            if self.backend_only:
+            if 'backend' in self.manifest:
                 receipt['backendRelease'] = {**self.manifest['backend'], 'sourceCommit': self.manifest['sourceCommit'],
                                              'sourceIdentity': 'git-commit'}
             if 'admin' in self.manifest:
@@ -671,6 +671,15 @@ class Release:
             atomic_json(self.audit / 'result.json', result)
             raise RuntimeError('Release failed; see the private operation receipt') from error
         atomic_json(self.audit / 'result.json', result)
+        if kind == 'deploy' and self.manifest.get('sourceIdentity') == 'git-commit':
+            # Browser acceptance happens after publication. Queue only; never
+            # retire recovery images inside the publication/rollback transaction.
+            try:
+                from release_retention import queue
+                result['retention'] = queue(self.live, self.audit, self.components, self.manifest['sourceCommit'])
+            except Exception:
+                result['retention'] = {'status': 'needs-attention', 'imagesRemoved': False}
+            atomic_json(self.audit / 'result.json', result)
         return result
 
 
