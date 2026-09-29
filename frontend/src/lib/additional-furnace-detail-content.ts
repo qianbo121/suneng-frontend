@@ -368,7 +368,11 @@ export const additionalFurnaceDetailContent: Record<string, DetailContent> = {
           'Check handling layout, drive and maintenance access, foundations, utilities and load handling after an abnormal stop. Assess water cooling only where included in the design.',
         ),
       },
-    ],
+      {
+        question: c("比较报价前，哪些配置和分工要对齐？", "Which configurations and responsibilities should be aligned before comparing quotations?"),
+        answer: c("先对齐材料、截面、装载间距、支承与表面要求、温度路径和步进节拍，再明确炉体、步进梁与驱动、装出料、测温控制和冷却接口。基础、公用工程、安装联调与停机处置分别列清；如采用水冷部件，相关系统及责任单列，不能只按机械步频比价。", "First align material, section, loading spacing, support and surface requirements, temperature profile and stepping cycle. Then define the furnace, walking beams and drive, loading and unloading, temperature measurement and controls, and cooling interfaces. List foundations, utilities, installation and integrated commissioning, and shutdown handling separately. If water-cooled components are used, list the related systems and responsibilities separately. Do not compare mechanical stepping rate alone."),
+      },
+  ],
     related: ['pusher-furnace', 'roller-hearth-furnace'],
   },
   'elevator-hearth-furnace': {
@@ -548,7 +552,11 @@ export const additionalFurnaceDetailContent: Record<string, DetailContent> = {
           'Measure building height, hearth loading area, lifting route and foundations, then account for travel, maintenance and support space.',
         ),
       },
-    ],
+      {
+        question: c("比较报价前，哪些配置和分工要对齐？", "Which configurations and responsibilities should be aligned before comparing quotations?"),
+        answer: c("先明确炉底升降或炉体升降结构，再对齐工件、料具和升降承载部件的载荷、重心、行程、热源与工艺条件。炉台、驱动、可靠支承、气氛、冷却设备、基础和安装分工逐项列清；普通升降结构不能默认包含快速淬火系统。", "First establish whether the hearth or furnace body moves. Then align the loads, centre of gravity and travel of the workpieces, tooling and lifting structure, together with heat source and process conditions. List the scope for the hearth, drive, secure supports, atmosphere, cooling equipment, foundations and installation. A conventional lifting design does not include a rapid-quench system by default."),
+      },
+  ],
     related: ['box-furnace', 'bell-furnace'],
   },
   'gas-nitriding-furnace': {

@@ -425,6 +425,12 @@
           "question": "产能为什么要看锻机的实际运行情况？",
           "answer": "锻机能够稳定接收的合格坯料才形成有效产出。停机、换模和速度波动会反向影响在炉时间，应把加热、缓冲和锻压节拍共同核算。",
           "defaultOpen": false
+        },
+        {
+          "id": "faq-6",
+          "question": "比较这条生产线的报价，哪些条件和供货范围要对齐？",
+          "answer": "比较报价应对齐铝合金牌号、坯料截面与长度、装载、允许温度窗口和锻机节拍，再列清加热炉、输送、出炉测温、分流及控制记录。锻压机、机械手、基础、公用工程和安装配合分别确认，不从整线示意图推定全部设备已包含。",
+          "defaultOpen": false
         }
       ],
       "relatedGroups": [
@@ -445,6 +451,11 @@
             {
               "label": "本线询价参数清单",
               "href": "/downloads/heat-treatment-lines/aluminum-forging-heating-line.txt"
+            },
+            {
+              "label": "现有热工设备维修与改造评估",
+              "href": "/zh/service/furnace-renovation-overhaul",
+              "note": "先评估现有炉体、加热、冷却与控制状况；整线机械、专用工装及第三方设备的范围另行确认。"
             }
           ]
         }

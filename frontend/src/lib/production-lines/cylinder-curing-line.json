@@ -427,6 +427,12 @@
           "question": "固化合格是否等于气瓶合格？",
           "answer": "不是。固化只是制造过程之一，完整气瓶仍须按适用产品标准完成设计确认、制造检验和规定试验。",
           "defaultOpen": false
+        },
+        {
+          "id": "faq-6",
+          "question": "比较这条生产线的报价，哪些条件和供货范围要对齐？",
+          "answer": "比较报价应对齐瓶体尺寸、树脂体系、代表装载、工件固化曲线和输送节拍，再核对输送旋转、分区热风、冷却、测温记录及排风联锁配置。排风处理、缠绕交接、检验工序、基础和安装分工单列；固化设备交付不等于包含气瓶全部制造与检验工序。",
+          "defaultOpen": false
         }
       ],
       "relatedGroups": [
@@ -437,6 +443,11 @@
             {
               "label": "本线询价参数清单",
               "href": "/downloads/heat-treatment-lines/cylinder-curing-line.txt"
+            },
+            {
+              "label": "现有热工设备维修与改造评估",
+              "href": "/zh/service/furnace-renovation-overhaul",
+              "note": "先评估现有炉体、加热、冷却与控制状况；整线机械、专用工装及第三方设备的范围另行确认。"
             }
           ]
         }

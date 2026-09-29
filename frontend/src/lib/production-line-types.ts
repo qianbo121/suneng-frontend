@@ -99,7 +99,7 @@ export type ProductionLineContent = {
       relatedGroups: {
         id: string;
         title: string;
-        links: { label: string; href: string | null }[];
+        links: { label: string; href: string | null; note?: string }[];
       }[];
     };
     inquiry: { title: string; description: string; form: LineForm };

@@ -444,5 +444,8 @@
   "阅读改造费用构成": "Read the retrofit cost breakdown",
   "工业炉维修改造服务页": "Industrial furnace repair and retrofit service page",
   "旧炉维修／改造": "Existing furnace repair / retrofit",
-  "工业炉维修改造项目情况": "Industrial furnace retrofit project information"
+  "工业炉维修改造项目情况": "Industrial furnace retrofit project information",
+  "先区分控制点的温度波动、有效加热区各位置的温差，以及工件实际达到的温度。能达到的目标要结合工艺、原炉结构、加热与循环、测温系统和装炉方式评估，不能只凭更换控制器就承诺统一数值。验收前应写清测试温度、空载或代表负载、测点、仪器校准和保温条件，再按约定条件复测。": "Distinguish temperature variation at the control point, differences across the effective heated zone, and the actual workpiece temperature. Assess achievable targets against the process, existing furnace structure, heating and circulation, measurement system and loading. Replacing a controller alone does not justify a universal limit. Agree on test temperatures, unloaded or representative loaded conditions, measurement points, instrument calibration and holding conditions before repeating the tests under the agreed conditions.",
+  "费用先拆成诊断与方案、炉体炉衬、加热或燃烧系统、机械与电控、拆装运输、调试验收等项目，再写清保留旧件、客户自备、基础吊装和能源接入由谁承担。旧炉隐藏损伤和现场条件尚未查清的部分，应列为待确认项。节能效果在可比工件、工艺、装料和产量下，明确计量范围后比较改造前后实测数据，不能把其他项目的数字直接作为保证。": "Break the cost down into diagnosis and engineering, furnace structure and lining, heating or combustion, mechanical and control systems, removal and transport, commissioning and acceptance. Define responsibility for retained parts, customer-supplied items, foundations, lifting and utility connections. Treat hidden damage and unverified site conditions as items to be confirmed. Compare measured energy use before and after the retrofit under comparable workpiece, process, loading and output conditions, with a defined metering boundary. Figures from other projects are not guarantees.",
+  "改造后控温精度能做到多少？": "What temperature-control accuracy can be achieved after a retrofit?"
 }
