@@ -251,6 +251,31 @@ describe('CustomRequirementService', () => {
     );
   });
 
+  it('keeps the full accepted homepage identity and contact for persistence', async () => {
+    const { service, createInquiry } = setup();
+    const identity = '王'.repeat(180);
+    const contact = `微信：${'a'.repeat(230)}，电话：13812345678`;
+
+    expect(contact.length).toBeGreaterThan(50);
+    expect(contact.length).toBeLessThanOrEqual(254);
+    await service.createPublic(
+      createDto({
+        formVariant: 'homepage_minimal',
+        identity,
+        contact,
+        name: undefined,
+        company: undefined,
+        phone: undefined,
+        email: undefined,
+      }),
+      'long-homepage-contact-client',
+    );
+
+    expect(createInquiry.mock.calls[0][0].data).toEqual(
+      expect.objectContaining({ name: identity, phone: contact, email: undefined }),
+    );
+  });
+
   it('recomputes and stores workpiece context with the inquiry in the same transaction', async () => {
     const { service, createInquiry, createEvent } = setup();
 

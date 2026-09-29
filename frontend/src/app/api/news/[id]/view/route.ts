@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { SITE_URL } from '@/lib/seo/config';
 
 // Same-origin bridge: retain the backend's httpOnly viewer/day receipt even when
 // the public API is configured on a different origin. GET/prefetch never writes.
@@ -7,7 +8,10 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
   if (!/^[1-9]\d*$/.test(id))
     return NextResponse.json({ error: 'Invalid article' }, { status: 400 });
   const origin = request.headers.get('origin');
-  if (origin && origin !== request.nextUrl.origin) return new NextResponse(null, { status: 403 });
+  // Behind the reverse proxy, nextUrl may use the container's internal host.
+  // Trust the configured public origin, never a client-supplied forwarded host.
+  if (origin && origin !== request.nextUrl.origin && origin !== new URL(SITE_URL).origin)
+    return new NextResponse(null, { status: 403 });
   if (
     /prefetch|prerender/i.test(
       `${request.headers.get('purpose')} ${request.headers.get('sec-purpose')}`,

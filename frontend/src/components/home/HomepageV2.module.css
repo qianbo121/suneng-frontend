@@ -670,6 +670,47 @@
   line-height: var(--home-font-label-line, 20px);
 }
 
+.formFootnote > p,
+.privacyDetails > p {
+  margin: 0;
+}
+
+.privacyLink,
+.privacyDetails a {
+  color: #1d4ed8;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.privacyLink {
+  min-height: 24px;
+  padding: 2px 0;
+  border: 0;
+  background: transparent;
+  font: inherit;
+  cursor: pointer;
+}
+
+.privacyLink:hover,
+.privacyDetails a:hover {
+  color: #143f83;
+}
+
+.privacyLink:focus-visible,
+.privacyDetails a:focus-visible {
+  outline: 2px solid #1d4ed8;
+  outline-offset: 3px;
+}
+
+.privacyDetails {
+  margin-top: 8px;
+  padding: 12px;
+  border: 1px solid #e0e6ee;
+  border-radius: 4px;
+  background: #f8fafc;
+  overflow-wrap: anywhere;
+}
+
 .formMessage {
   padding: 11px 13px;
   border: 1px solid #c9d8ee;

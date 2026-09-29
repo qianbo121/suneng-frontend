@@ -11,6 +11,8 @@ import { buildMetadata } from '@/lib/seo/metadata';
 
 type Props = { params: Promise<{ locale: string; slug: string }> };
 
+export const dynamicParams = false;
+
 export function generateStaticParams() {
   return ['zh', 'en'].map(locale => ({ locale, slug: 'copper-wire-annealing-line' }));
 }

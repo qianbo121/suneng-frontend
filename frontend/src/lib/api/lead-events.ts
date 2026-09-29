@@ -1,6 +1,7 @@
 import { apiPost } from '@/lib/api/client';
 import { classifyTrafficSource } from '@/lib/analytics/traffic-source';
 import { isLocalPreviewHostname } from '@/lib/analytics/local-preview';
+import { getBrowserStorage } from '@/lib/browser-storage';
 
 export type LeadEventType =
   | 'page_view'
@@ -116,7 +117,8 @@ export function sanitizeLeadSourceSnapshot(snapshot: LeadSourceSnapshot): LeadSo
   ) as LeadSourceSnapshot;
 }
 
-function getStoredId(key: string, storage: Storage) {
+function getStoredId(key: string, storage: Storage | undefined) {
+  if (!storage) return undefined;
   try {
     const current = storage.getItem(key);
     if (current) return current;
@@ -137,7 +139,8 @@ function newAnonymousId() {
     : `${Date.now()}-${Math.random().toString(16).slice(2)}`;
 }
 
-function getSessionId(storage: Storage) {
+function getSessionId(storage: Storage | undefined) {
+  if (!storage) return undefined;
   try {
     const now = Date.now();
     const current = storage.getItem(SESSION_ID_KEY);
@@ -168,19 +171,19 @@ function getSessionId(storage: Storage) {
 }
 
 function getSessionTrafficSource(
-  storage: Storage,
+  storage: Storage | undefined,
   referrer: string,
   utmSource: string | undefined,
 ) {
   try {
-    const stored = JSON.parse(storage.getItem(SESSION_SOURCE_KEY) || 'null') as ReturnType<
+    const stored = JSON.parse(storage?.getItem(SESSION_SOURCE_KEY) || 'null') as ReturnType<
       typeof classifyTrafficSource
     > | null;
     if (stored && ['直接访问', '自然搜索', '外部链接', 'AI引流'].includes(stored.sourceType)) {
       return stored;
     }
     const source = classifyTrafficSource(referrer, utmSource, window.location.hostname);
-    storage.setItem(SESSION_SOURCE_KEY, JSON.stringify(source));
+    storage?.setItem(SESSION_SOURCE_KEY, JSON.stringify(source));
     return source;
   } catch {
     return classifyTrafficSource(referrer, utmSource, window.location.hostname);
@@ -286,13 +289,14 @@ export function buildLeadSourceSnapshot(
 ): LeadSourceSnapshot {
   const path = `${window.location.pathname}${window.location.search}`;
   const title = document.title || undefined;
-  const sessionId = getSessionId(window.sessionStorage);
+  const sessionStorage = getBrowserStorage('sessionStorage');
+  const sessionId = getSessionId(sessionStorage);
   const landingPage = getLandingPage(path);
   const campaign = campaignParams(landingPage);
   // 来源是一次访问的入口属性，不能每次点击都用 document.referrer
   // 重算；否则用户在官网内跳转后，自家域名会被误算成外部推荐。
   const trafficSource = getSessionTrafficSource(
-    window.sessionStorage,
+    sessionStorage,
     document.referrer,
     campaign.utmSource,
   );
@@ -308,7 +312,7 @@ export function buildLeadSourceSnapshot(
     previousPage: sanitizeLeadReferrer(document.referrer),
     ...campaign,
     sessionId,
-    visitorId: getStoredId('suneng_visitor_id', window.localStorage),
+    visitorId: getStoredId('suneng_visitor_id', getBrowserStorage('localStorage')),
     ...extra,
   });
 }
@@ -411,7 +415,7 @@ export function tickDwell() {
 
   // 先建立/轮换会话再加秒数。否则第一个里程碑组装请求时才建会话，
   // 会把刚累计的停留数误当成上一个会话清掉。
-  getSessionId(window.sessionStorage);
+  getSessionId(getBrowserStorage('sessionStorage'));
 
   const activeSeconds = readDwellCounter(DWELL_SECONDS_KEY) + 1;
   writeDwellCounter(DWELL_SECONDS_KEY, activeSeconds);

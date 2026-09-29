@@ -25,6 +25,7 @@ import {
 } from '@/lib/workpiece-router-draft-context';
 import { markStickyEngineerConverted } from '@/components/home/sticky-engineer';
 import { hasConfirmedSubmission } from '@/lib/fastener-line-inquiry';
+import { siteSettings } from '@/mock/siteSettings';
 
 import styles from './HomepageV2.module.css';
 
@@ -73,6 +74,7 @@ type HomepageLeadFormProps = {
   problemPlaceholder?: string;
   inquiryHint?: string;
   layoutVariant?: 'default' | 'solution' | 'embedded' | 'productCenter';
+  privacyNoticeEnabled?: boolean;
 };
 
 export function HomepageLeadForm({
@@ -88,6 +90,7 @@ export function HomepageLeadForm({
   problemPlaceholder = '例如：工件、产量、工艺要求或现有设备问题',
   inquiryHint = '填写已有信息即可，详细资料可后续补充。',
   layoutVariant = 'default',
+  privacyNoticeEnabled = false,
 }: HomepageLeadFormProps = {}) {
   const english = locale === 'en';
   const t = (zh: string, en: string) => english ? en : zh;
@@ -104,6 +107,7 @@ export function HomepageLeadForm({
   const submittingRef = useRef(false);
   const idempotencyKeyRef = useRef<string | null>(null);
   const directionListboxId = useId();
+  const privacyNoticeId = useId();
   const [values, setValues] = useState<HomepageRequirementValues>(() =>
     inquiryProduct
       ? { ...emptyValues, direction: inquiryDirection, problem: english ? `Equipment: ${inquiryProduct}.\n` : `咨询设备：${inquiryProduct}。\n` }
@@ -114,6 +118,7 @@ export function HomepageLeadForm({
   const [submissionId, setSubmissionId] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isDirectionOpen, setIsDirectionOpen] = useState(false);
+  const [showPrivacyNotice, setShowPrivacyNotice] = useState(false);
   const [activeDirectionIndex, setActiveDirectionIndex] = useState(0);
 
   useEffect(() => {
@@ -382,6 +387,7 @@ export function HomepageLeadForm({
           </div>
         ) : (
           <form
+            method="post"
             id={`${sectionId}-fields`}
             ref={formRef}
             className={`${styles.leadForm} ${isProductCenter ? styles.productCenterLeadForm : ''}`}
@@ -545,7 +551,30 @@ export function HomepageLeadForm({
             <button type="submit" className={styles.submitButton} disabled={isSubmitting}>
               {isSubmitting ? t('正在提交…', 'Sending…') : t('提交需求', 'Send project details')}
             </button>
-            <p className={styles.formFootnote}>{t('您提交的信息仅用于本次需求沟通。', 'Your information is used only to discuss this project.')}</p>
+            {privacyNoticeEnabled ? <div className={styles.formFootnote}>
+              <p>
+                {t('您提交的信息仅用于本次需求沟通。', 'Your information is used only to discuss this project.')}{' '}
+                <button
+                  type="button"
+                  className={styles.privacyLink}
+                  aria-expanded={showPrivacyNotice}
+                  aria-controls={privacyNoticeId}
+                  onClick={() => setShowPrivacyNotice((current) => !current)}
+                >
+                  {t('查看隐私说明', 'View privacy notice')}
+                </button>
+              </p>
+              <div id={privacyNoticeId} className={styles.privacyDetails} hidden={!showPrivacyNotice}>
+                <p>
+                  {t(
+                    '您提交的姓名、联系方式、公司与项目需求仅用于回复询盘、评估设备方案及后续沟通。如需查询、更正或删除已提交信息，请联系 ',
+                    'The name, contact details, company information and project requirements you provide are used only to respond to your inquiry, evaluate a furnace solution and continue project communication. To request access, correction or deletion, contact ',
+                  )}
+                  <a href={`mailto:${siteSettings.email}`}>{siteSettings.email}</a>
+                  {t('。请勿提交与项目无关的敏感个人信息。', '. Do not submit unrelated sensitive personal information.')}
+                </p>
+              </div>
+            </div> : <p className={styles.formFootnote}>{t('您提交的信息仅用于本次需求沟通。', 'Your information is used only to discuss this project.')}</p>}
           </form>
         )}
       </div>

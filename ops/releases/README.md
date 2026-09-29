@@ -212,3 +212,7 @@ python3 ops/releases/release_retention.py \
 标准登录地址、末段大小写变体、尾斜杠及解码后相同的地址共用限速计数；其他后台操作的计数键为空，不占登录额度。规则使用新的 `admin_login_v2` 区域：Nginx 不允许在平滑重载时改变既有共享区域的计数键，因此不能直接复用旧 `admin_login` 名称。
 
 本机可用 `python3 scripts/test_admin_login_reload.py --nginx /path/to/nginx` 验证旧规则到新规则的重载和 29 次相邻路径请求。完整模板验证仍使用 `scripts/test_admin_login_edge.py --docker /path/to/docker --image <已有镜像>`；这两种检查范围不同，发布前还须检查实际服务器完整配置。只更新前台镜像不会安装代理模板或备份脚本。
+
+## 2026-09-29 验收修复发布
+
+本批额外允许经过摘要固定的 `20260929160000_align_minimal_inquiry_contact_limits`：只放宽询盘姓名与联系方式容量，事务内设置 5 秒锁等待和 30 秒执行上限。部署前仍要求有效备份，部署后核对实际容量。回退只换应用版本，保留兼容旧版的容量扩展，不缩短或恢复客户数据。

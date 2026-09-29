@@ -6,11 +6,11 @@ import { unstable_doesMiddlewareMatch } from 'next/experimental/testing/server';
 
 vi.mock('@/lib/news-route-guard', async (original) => ({
   ...(await original<typeof import('@/lib/news-route-guard')>()),
-  getNewsRouteAvailability: vi.fn(async () => 'available'),
+  getNewsRouteResolution: vi.fn(async () => ({ availability: 'available' })),
 }));
 
 import middleware, { config } from './middleware';
-import { getNewsRouteAvailability } from '@/lib/news-route-guard';
+import { getNewsRouteResolution } from '@/lib/news-route-guard';
 
 const run = (address: string) => middleware(new NextRequest(new URL(address, 'https://www.jssngyl.cn')));
 
@@ -179,7 +179,7 @@ describe('product detail pages with no product behind them', () => {
 describe('missing news with dotted slugs', () => {
   it.each(['/zh/news/abc.def', '/zh/news/missing.html', '/en/news/whatever.html', '/en/news/missing.php'])(
     'returns a real non-indexable 404 for %s', async (address) => {
-      vi.mocked(getNewsRouteAvailability).mockResolvedValueOnce('missing');
+      vi.mocked(getNewsRouteResolution).mockResolvedValueOnce({ availability: 'missing' });
       const response = await run(address);
       expect(response.status).toBe(404);
       expect(response.headers.get('X-Robots-Tag')).toBe('noindex');

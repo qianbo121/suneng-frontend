@@ -1,6 +1,10 @@
 import englishIndex from './english-news-index.json';
 
 export type NewsRouteAvailability = 'available' | 'missing' | 'unknown';
+export type NewsRouteResolution = {
+  availability: NewsRouteAvailability;
+  redirectPath?: string;
+};
 
 type FetchLike = typeof fetch;
 
@@ -16,37 +20,55 @@ export function getZhNewsSlug(pathname: string) {
   }
 }
 
-export async function getNewsRouteAvailability(
+export async function getNewsRouteResolution(
   pathname: string,
   apiBaseUrl: string,
   fetchImpl: FetchLike = fetch,
-): Promise<NewsRouteAvailability | null> {
+): Promise<NewsRouteResolution | null> {
   const isEnglish = pathname.startsWith('/en/news/');
   const slug = getZhNewsSlug(isEnglish ? pathname.replace('/en/', '/zh/') : pathname);
   if (!slug) return null;
-  if (!apiBaseUrl) return 'unknown';
+  if (!apiBaseUrl) return { availability: 'unknown' };
 
   const base = apiBaseUrl.replace(/\/$/, '');
+  const isNumericSlug = /^\d+$/.test(slug);
   const controller = new AbortController();
-  const timer = setTimeout(() => controller.abort(), 2_000);
+  // Legacy IDs need the canonical slug before rendering starts. Give that
+  // lookup more time without extending the guard on ordinary article URLs.
+  const timer = setTimeout(() => controller.abort(), isNumericSlug ? 5_000 : 2_000);
   try {
     const response = await fetchImpl(`${base}/v1/news/${encodeURIComponent(slug)}`, {
       cache: 'no-store',
       signal: controller.signal,
       headers: { Accept: 'application/json' },
     });
-    if (response.status === 404) return 'missing';
+    if (response.status === 404) return { availability: 'missing' };
     if (response.ok) {
-      if (!isEnglish) return 'available';
+      // Ordinary Chinese slugs already use the public endpoint's visibility
+      // decision. Numeric legacy URLs also need its canonical slug, using this
+      // same request rather than issuing another lookup from middleware.
+      if (!isEnglish && !isNumericSlug) return { availability: 'available' };
       const result = await response.json();
       const item = result.data ?? result;
-      if (item.status !== 'published' || item.isPublished !== true) return 'missing';
+      if (!item || typeof item.status !== 'string' || typeof item.isPublished !== 'boolean')
+        return { availability: 'unknown' };
+      if (item.status !== 'published' || item.isPublished !== true)
+        return { availability: 'missing' };
+      const available: NewsRouteResolution = { availability: 'available' };
+      if (isNumericSlug && typeof item.slug === 'string' && item.slug !== slug) {
+        // The destination is always a single same-origin path segment. Do not
+        // promote malformed upstream data into a redirect or false 404.
+        if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/i.test(item.slug))
+          return { availability: 'unknown' };
+        available.redirectPath = `/${isEnglish ? 'en' : 'zh'}/news/${item.slug}`;
+      }
+      if (!isEnglish) return available;
       if (item.titleEn?.trim() && item.contentEn?.replace(/<[^>]+>/g, '').trim())
-        return 'available';
+        return available;
       const entry = (
         englishIndex as Record<string, { slug: string; rawSourceFingerprint: string }>
       )[String(item.id)];
-      if (!entry || item.slug !== entry.slug) return 'missing';
+      if (!entry || item.slug !== entry.slug) return { availability: 'missing' };
       const source = JSON.stringify([
         item.titleZh ?? null,
         item.summaryZh ?? null,
@@ -61,16 +83,24 @@ export async function getNewsRouteAvailability(
       const fingerprint = Array.from(new Uint8Array(digest), (byte) =>
         byte.toString(16).padStart(2, '0'),
       ).join('');
-      return fingerprint === entry.rawSourceFingerprint ? 'available' : 'missing';
+      return fingerprint === entry.rawSourceFingerprint ? available : { availability: 'missing' };
     }
-    return 'unknown';
+    return { availability: 'unknown' };
   } catch {
     // A backend outage must not turn all existing news URLs into false 404s.
     // Let the page-level error boundary handle unavailable upstream reads.
-    return 'unknown';
+    return { availability: 'unknown' };
   } finally {
     clearTimeout(timer);
   }
+}
+
+export async function getNewsRouteAvailability(
+  pathname: string,
+  apiBaseUrl: string,
+  fetchImpl: FetchLike = fetch,
+): Promise<NewsRouteAvailability | null> {
+  return (await getNewsRouteResolution(pathname, apiBaseUrl, fetchImpl))?.availability ?? null;
 }
 
 export function newsNotFoundHtml(locale: 'zh' | 'en' = 'zh') {

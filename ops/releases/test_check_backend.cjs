@@ -6,9 +6,9 @@ const path = require('node:path');
 const crypto = require('node:crypto');
 const root = path.resolve(__dirname, '../..');
 const script = fs.readFileSync(path.join(__dirname, 'check-backend.cjs'), 'utf8');
-const pendingName = '20260918160000_website_lead_event_is_bot';
+const CONTACT_MIGRATION = '20260929160000_align_minimal_inquiry_contact_limits';
 
-async function check({ pending = true, apply = false, backup = false, brokenHistory = false, noMigrations = false, index = true, botColumn = true } = {}) {
+async function check({ pending = true, apply = false, backup = false, brokenHistory = false, noMigrations = false, index = true, botColumn = true, contactLimits = true, pendingName = '20260918160000_website_lead_event_is_bot', tampered = false } = {}) {
   const events = [];
   let migrated = !pending;
   let report;
@@ -20,6 +20,7 @@ async function check({ pending = true, apply = false, backup = false, brokenHist
   const client = {
     async $queryRawUnsafe(sql) {
       if (sql.includes('_prisma_migrations')) { events.push('history'); return history; }
+      if (sql.includes("table_name='CustomRequirement'")) return [{ column_name: 'name', character_maximum_length: contactLimits ? 180 : 120 }, { column_name: 'phone', character_maximum_length: contactLimits ? 254 : 50 }];
       if (sql.includes('pg_index')) return [{ indisvalid: index }];
       return migrated && botColumn ? [{ is_generated: 'ALWAYS' }] : [];
     },
@@ -33,7 +34,7 @@ async function check({ pending = true, apply = false, backup = false, brokenHist
       if (name.includes('shuju-growth-read')) return { ShujuGrowthReadService: class { async overview() {
         events.push('aggregate'); if (!migrated) throw Error('isBot column does not exist'); return { content: { status: 'available' } };
       } } };
-      if (name === 'node:fs') return { readdirSync: p => fs.readdirSync(path.join(root,p)), existsSync: p => fs.existsSync(path.join(root,p)), readFileSync: p => fs.readFileSync(path.join(root,p)) };
+      if (name === 'node:fs') return { readdirSync: p => fs.readdirSync(path.join(root,p)), existsSync: p => fs.existsSync(path.join(root,p)), readFileSync: p => tampered && p.includes(CONTACT_MIGRATION) ? Buffer.from('ALTER TABLE unexpected;') : fs.readFileSync(path.join(root,p)) };
       if (name === 'node:child_process') return { execFileSync() { events.push('migrate'); migrated = true; } };
       return require(name);
     }, process: proc, console: { log: value => { report = JSON.parse(value); }, error() {} }, Date,
@@ -77,4 +78,15 @@ test('backend-only verifies unchanged schema and rejects missing index or bot co
     const result = await check({ pending:false, noMigrations:true, ...missing });
     assert.equal(result.failed,true); assert.ok(!result.events.includes('migrate'));
   }
+});
+
+test('contact widening is pinned, backup-gated, and verifies the final capacity', async () => {
+  const good = await check({ pendingName: CONTACT_MIGRATION, apply:true, backup:true });
+  assert.equal(good.failed,false); assert.equal(good.report.contactLimitsMatch,true);
+  for (const change of [{ backup:false }, { tampered:true }]) {
+    const bad = await check({ pendingName: CONTACT_MIGRATION, apply:true, backup:true, ...change });
+    assert.equal(bad.failed,true); assert.ok(!bad.events.includes('migrate'));
+  }
+  const stale = await check({ pending:false, contactLimits:false });
+  assert.equal(stale.failed,true);
 });

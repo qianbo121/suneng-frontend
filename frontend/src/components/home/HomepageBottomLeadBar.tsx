@@ -7,6 +7,7 @@ import { FaWeixin } from 'react-icons/fa6';
 import { HiChevronUp, HiEnvelope, HiPhone, HiWrenchScrewdriver, HiXMark } from 'react-icons/hi2';
 
 import { trackLeadEvent } from '@/lib/api/lead-events';
+import { getBrowserStorage } from '@/lib/browser-storage';
 
 import styles from './HomepageBottomLeadBar.module.css';
 import {
@@ -28,9 +29,9 @@ const WECHAT_PANEL_ID = 'sticky-engineer-wechat-panel';
 const STICKY_TRACKING_CONTEXT = { discoverySource: 'sticky_engineer_dock' } as const;
 type CopiedContact = 'phone' | 'email' | 'phone-error' | 'email-error' | null;
 
-function readStorageFlag(storage: Storage, key: string) {
+function readStorageFlag(storage: Storage | undefined, key: string) {
   try {
-    return storage.getItem(key) === '1';
+    return storage?.getItem(key) === '1';
   } catch {
     return false;
   }
@@ -74,10 +75,11 @@ export function HomepageBottomLeadBar({ locale = 'zh' }: { locale?: 'zh' | 'en' 
     const shouldPersist = shouldPersistStickyEngineerSuppression(window.location.hostname);
     setIsDismissed(
       shouldPersist &&
-        readStorageFlag(window.sessionStorage, STICKY_ENGINEER_SESSION_CLOSED_KEY),
+        readStorageFlag(getBrowserStorage('sessionStorage'), STICKY_ENGINEER_SESSION_CLOSED_KEY),
     );
     setIsConverted(
-      shouldPersist && readStorageFlag(window.localStorage, STICKY_ENGINEER_CONVERTED_KEY),
+      shouldPersist &&
+        readStorageFlag(getBrowserStorage('localStorage'), STICKY_ENGINEER_CONVERTED_KEY),
     );
     setStorageReady(true);
   }, []);
