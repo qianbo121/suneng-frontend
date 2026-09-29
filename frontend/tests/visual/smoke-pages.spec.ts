@@ -47,6 +47,11 @@ test.describe('core visual smoke pages', () => {
           test.setTimeout(90_000);
           await page.emulateMedia({ reducedMotion: 'reduce' });
           await page.goto(visualPage.path, { waitUntil: 'domcontentloaded' });
+          // The first dev compilation can replace shared styles after the
+          // document was created. Capture a fresh document of the compiled
+          // route; production cold responses are checked by the release gate.
+          await page.waitForLoadState('networkidle');
+          await page.reload({ waitUntil: 'networkidle' });
           await page.addStyleTag({
             content: `
               *, *::before, *::after {

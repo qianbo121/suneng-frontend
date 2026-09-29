@@ -1,6 +1,7 @@
 import { isWithdrawnTechnicalPath } from './publication-scope';
 import DOMPurify from 'isomorphic-dompurify';
 import { newsImageNoteReplacements } from './news-image-notes';
+import { getReviewedNewsImageDescription } from './news-image-descriptions';
 import { marked } from 'marked';
 import { repairNewsPresentation } from './news-presentation-repairs';
 
@@ -164,6 +165,12 @@ export function prepareNewsArticleHtml(
   const root = DOMPurify.sanitize(sanitized, { RETURN_DOM: true }) as HTMLElement;
   const document = root.ownerDocument;
   if (!document) return sanitized;
+  if (options.locale === 'zh') {
+    for (const image of root.querySelectorAll('img')) {
+      const description = getReviewedNewsImageDescription(image.getAttribute('src'), image.getAttribute('alt'));
+      if (description) image.setAttribute('alt', description);
+    }
+  }
   for (const link of root.querySelectorAll('a[href]')) {
     if (isWithdrawnTechnicalPath(link.getAttribute('href') ?? '')) link.replaceWith(...Array.from(link.childNodes));
   }

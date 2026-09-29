@@ -8,6 +8,7 @@ import {
   getWebPageJsonLd,
 } from '@/lib/seo/jsonld';
 import { absoluteUrl, buildMetadata } from '@/lib/seo/metadata';
+import { ENGLISH_STATIC_PAGE_METADATA } from '@/lib/seo/static-page-metadata-en';
 import {
   serviceHeroAssets,
   servicePages,
@@ -21,6 +22,7 @@ export function getServiceMetadata(kind: ServicePageKind, locale: Locale = 'zh')
     ...buildMetadata({
       title: page.metadataTitle,
       description: page.metadataDescription,
+      ...(locale === 'en' && kind === 'overview' ? ENGLISH_STATIC_PAGE_METADATA.service : {}),
       path: page.path,
       image: serviceHeroAssets[kind].src,
       type: 'website',

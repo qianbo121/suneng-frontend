@@ -140,9 +140,10 @@ export async function generateMetadata({ params }: ProductDetailPageProps): Prom
   });
   if (currentLocale === 'en' && (isIndustryFurnaceSlug(slug) || slug === 'pit-furnace')) {
     const config = isIndustryFurnaceSlug(slug) ? localizeCoreValue(industryFurnacePageConfigs[slug], 'en') : undefined;
+    const searchMetadata = getEnglishProductMetadata(slug);
     return buildMetadata({
-      title: config?.title ?? corePageText('井式炉｜长轴类工件立式热处理', 'en'),
-      description: config?.description ?? corePageText('井式炉用于长轴、辊轴、拉杆、套筒及吊篮装料工件的立式热处理。方案需结合有效加热区、装炉包络、温度等级、热源、冷却路径、起吊总质量和厂房条件确认。', 'en'),
+      title: searchMetadata?.title ?? config?.title ?? corePageText('井式炉｜长轴类工件立式热处理', 'en'),
+      description: searchMetadata?.description ?? config?.description ?? corePageText('井式炉用于长轴、辊轴、拉杆、套筒及吊篮装料工件的立式热处理。方案需结合有效加热区、装炉包络、温度等级、热源、冷却路径、起吊总质量和厂房条件确认。', 'en'),
       path: `/en/products/detail/${slug}`, pageKey: 'product-detail',
       image: config?.gallery[0].src ?? '/images/products/pit-furnace/pit-furnace-main.png',
       alternateLocales: { 'zh-CN': `/zh/products/detail/${slug}`, 'en-US': `/en/products/detail/${slug}`, 'x-default': `/zh/products/detail/${slug}` },
@@ -151,9 +152,10 @@ export async function generateMetadata({ params }: ProductDetailPageProps): Prom
   const product = getStaticProductBySlug(slug);
   const englishLine = getEnglishProductionLine(slug);
   if (currentLocale === 'en' && englishLine) {
+    const searchMetadata = getEnglishProductMetadata(slug);
     return buildMetadata({
-      title: englishLine.seoTitle,
-      description: englishLine.description,
+      title: searchMetadata?.title ?? englishLine.seoTitle,
+      description: searchMetadata?.description ?? englishLine.description,
       path: `/en/products/detail/${slug}`,
       pageKey: 'product-detail',
       image: getEnglishLineImage(slug).src,
