@@ -1,3 +1,4 @@
+import { getReviewedManufacturerLinks } from './news-manufacturer-related';
 import { isWithdrawnTechnicalPath } from '@/lib/publication-scope';
 import type { NewsApiItem } from '@/types/news';
 
@@ -150,7 +151,9 @@ export function getNewsRelatedLinks(
   item: Pick<NewsApiItem, 'titleZh' | 'summaryZh' | 'contentZh'>,
   locale: 'zh' | 'en' = 'zh',
 ): NewsRelatedLink[] {
-  const links = getChineseNewsRelatedLinks(item).filter((link) => !isWithdrawnTechnicalPath(link.href));
+  const candidates = locale === 'zh' ? getReviewedManufacturerLinks(item.titleZh) : undefined;
+  const links = (candidates ?? getChineseNewsRelatedLinks(item))
+    .filter((link) => !isWithdrawnTechnicalPath(link.href));
   if (locale === 'zh') return links;
   return unique(links.flatMap((link) => {
     const english = ENGLISH_LINKS[link.href];
