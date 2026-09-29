@@ -9,7 +9,9 @@ for (const locale of ['zh', 'en'] as const) {
       await page.route('**/*', route => ['GET', 'HEAD', 'OPTIONS'].includes(route.request().method()) ? route.continue() : route.abort());
       const errors: string[] = [];
       page.on('pageerror', error => errors.push(error.message));
-      await page.goto(`/${locale}`, { waitUntil: 'domcontentloaded' });
+      // The server-rendered buttons are visible before their deferred scripts
+      // are ready. Exercise the real handler only after the document loads.
+      await page.goto(`/${locale}`, { waitUntil: 'load' });
       const title = locale === 'zh' ? '江苏苏能工业炉有限公司' : 'Jiangsu Suneng Industrial Furnace Co., Ltd.';
       const secondTitle = locale === 'zh' ? '自主制造基地' : 'Our Manufacturing Base';
       const firstButton = page.getByRole('button', { name: locale === 'zh' ? `查看第 1 张：${title}` : `Slide 1: ${title}`, exact: true });
