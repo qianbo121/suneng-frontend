@@ -101,6 +101,7 @@ export default async function InquiryPage({ params, searchParams }: PageProps) {
       </section>
 
       <HomepageLeadForm
+        privacyNoticeEnabled
         key={inquiryProduct || 'general'}
         inquiryProduct={inquiryProduct}
         sectionId="project-inquiry-form"

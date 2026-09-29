@@ -81,7 +81,7 @@ const leadFormCopy = {
     },
     fileNote: '技术文件本批暂不上传，可在工程师联系后补充。',
     privacy: {
-      summary: '开始填写后，我们会记录本次必要的页面与来源信息，仅用于处理项目需求和改进官网。查看《隐私说明》',
+      summary: '浏览网站时会记录必要的访问与来源信息，仅用于处理项目需求和改进官网。查看《隐私说明》',
       notice:
         '您提交的姓名、联系方式、公司与项目需求仅用于回复询盘、评估设备方案及后续沟通。如需查询、更正或删除已提交信息，请联系 997518512@qq.com。请勿提交与项目无关的敏感个人信息。',
     },
@@ -148,7 +148,7 @@ const leadFormCopy = {
     },
     fileNote: 'Technical files are not uploaded in this form. You can provide them after an engineer contacts you.',
     privacy: {
-      summary: 'When you start this form, we record the necessary page and source information only to handle your request and improve the site. View the Privacy Notice.',
+      summary: 'While you browse, we record necessary visit and source information only to handle your request and improve the site. View the Privacy Notice.',
       notice:
         'The name, contact details, company information and project requirements you provide are used only to respond to your inquiry, evaluate a furnace solution and continue project communication. To request access, correction or deletion, contact 997518512@qq.com. Do not submit unrelated sensitive personal information.',
     },
@@ -556,6 +556,7 @@ export function ProductLeadForm({
         ) : null}
 
         <form
+          method="post"
           ref={formRef}
           onSubmit={handleSubmit}
           onChangeCapture={() => {

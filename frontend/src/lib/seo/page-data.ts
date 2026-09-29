@@ -257,7 +257,8 @@ export const FURNACE_LINING_RENOVATION_GUIDE_SEO = {
     '从热面、冷面钢板、锚固、密封和失效原因判断局部修复或扩大拆检，并保留材料、烘炉和外壁温升验收证据。',
   ogImage: '/images/service/after-sales-hero.png',
   publishedTime: '2026-07-31T13:40:12+08:00',
-  modifiedTime: '2026-09-12T14:06:05+08:00',
+  // Body revision verified against commit 76555a10; see content-revision-evidence.json.
+  modifiedTime: '2026-09-19T21:34:27+08:00',
 };
 
 export const FURNACE_ENERGY_CONVERSION_HEAT_RECOVERY_SEO = {
@@ -318,7 +319,8 @@ export const FURNACE_RESTART_RELOCATION_REMANUFACTURING_SEO = {
     '区分能启动、具备试运行条件和能稳定负载生产，按实际设备确定冷态、热态与负载验证的条件和顺序。',
   ogImage: '/images/service/after-sales-hero.png',
   publishedTime: '2026-07-31T14:26:21+08:00',
-  modifiedTime: '2026-09-12T14:06:05+08:00',
+  // Body revision verified against commit 76555a10; see content-revision-evidence.json.
+  modifiedTime: '2026-09-19T21:34:27+08:00',
 };
 
 export const HEAT_TREATMENT_FURNACE_MANUFACTURER_SEO = {

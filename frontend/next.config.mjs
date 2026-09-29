@@ -25,6 +25,15 @@ export const newsListPrerenderRewrites = [
   },
 ];
 
+// Outside development, let Next resolve this preview as an unmatched URL before
+// the locale layout can stream a 200 response. Keep the existing full 404 page.
+export const unavailablePreviewRewrites = process.env.NODE_ENV === 'development' ? [] : [
+  {
+    source: '/:locale(zh|en)/products/animation-review',
+    destination: '/:locale/__unavailable-animation-review',
+  },
+];
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
@@ -102,7 +111,7 @@ const nextConfig = {
     ];
   },
   async rewrites() {
-    return { beforeFiles: newsListPrerenderRewrites };
+    return { beforeFiles: [...unavailablePreviewRewrites, ...newsListPrerenderRewrites] };
   },
   async redirects() {
     return [

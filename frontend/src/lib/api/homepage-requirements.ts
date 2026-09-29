@@ -68,7 +68,7 @@ export function validateHomepageRequirement(
     if (!value || value.length > FIELD_LIMITS[field]) return field;
   }
 
-  if (!/^[\p{L}\p{N}+][\p{L}\p{N}\s@()+\-._/#*]{2,253}$/u.test(clean(values.contact))) {
+  if (!/^(?=.*[\p{L}\p{N}])[\p{L}\p{N}+(（][\p{L}\p{N}\s@()（）+\-._/#*:：,，、;；]{2,253}$/u.test(clean(values.contact))) {
     return 'contact';
   }
 

@@ -29,6 +29,36 @@ describe('homepage four-field requirement', () => {
     }
   });
 
+  it.each([
+    '(0523)88888888',
+    '（0523）88888888',
+    '微信：abc123',
+    '微信:abc123',
+    'WhatsApp: +86 13812345678',
+    '13812345678，微信同号',
+    '13812345678,微信同号',
+    '13812345678、0523-88888888',
+    '13812345678；0523-88888888',
+  ])('accepts practical contact formatting: %s', (contact) => {
+    expect(validateHomepageRequirement(completeValues({ contact }))).toBeNull();
+  });
+
+  it.each(['<script>', 'abc" onclick="alert(1)', 'abc\u0000', '((()))', 'ab', '1'.repeat(255)])(
+    'rejects unsafe, empty-content or overlong contact text: %s',
+    (contact) => {
+      expect(validateHomepageRequirement(completeValues({ contact }))).toBe('contact');
+    },
+  );
+
+  it('preserves the full identity and contact allowed by the existing form', () => {
+    const values = completeValues({ identity: '王'.repeat(180), contact: '1'.repeat(254) });
+    expect(validateHomepageRequirement(values)).toBeNull();
+    expect(validateHomepageRequirement(completeValues({ identity: '王'.repeat(181) }))).toBe('identity');
+    const payload = buildHomepageRequirementPayload(values, {}, 'length-boundary-inquiry');
+    expect(payload.identity).toBe(values.identity);
+    expect(payload.contact).toBe(values.contact);
+  });
+
   it('passes the assisted-judgment direction through the existing project type field', () => {
     const direction = '还不确定，需要协助判断';
     const values = completeValues({ direction });

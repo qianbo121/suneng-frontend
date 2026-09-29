@@ -1,12 +1,29 @@
 'use client';
 
 import { usePathname } from 'next/navigation';
+import type { ReactNode } from 'react';
 
 import { Button } from '@/components/ui/Button';
 
 type NotFoundStateProps = {
   locale?: string;
 };
+
+export function NotFoundMain({ children }: { children: ReactNode }) {
+  const pathname = usePathname();
+  // Finite routes now reject unknown params before streaming. Keep the spacing
+  // they previously received from the locale layout when rendering a 404.
+  const preserveLocaleSpacing = /^\/(zh|en)\/strength\/[^/]+\/?$/.test(pathname)
+    || /^\/(zh|en)\/products\/detail\/[^/]+\/inquiry-checklist\/?$/.test(pathname)
+    || /^\/(zh|en)\/(?:products\/animation-review|__unavailable-animation-review)\/?$/.test(pathname);
+  return (
+    <main className={preserveLocaleSpacing
+      ? 'min-h-[calc(100vh-520px)] bg-white'
+      : 'min-h-[calc(100vh-520px)] pt-[78px] lg:pt-[88px]'}>
+      {children}
+    </main>
+  );
+}
 
 export function NotFoundState({ locale }: NotFoundStateProps) {
   const pathname = usePathname();

@@ -126,7 +126,7 @@ export function HomepageV2({ locale = 'zh' }: { locale?: 'zh' | 'en' }) {
         <HomepageArticles locale={locale} />
       </Suspense>
 
-      <HomepageLeadForm locale={locale} />
+      <HomepageLeadForm locale={locale} privacyNoticeEnabled />
 
       <HomepageBottomLeadBar locale={locale} />
     </div>

@@ -38,18 +38,29 @@ describe('CreateCustomRequirementDto', () => {
     expect(errors.some((error) => error.property === 'email')).toBe(true);
   });
 
-  it.each(['+86 (0519) 8888-6666', 'wechat_name-2026'])(
-    'accepts practical international phone or WeChat contact text: %s',
+  it.each([
+    '+86 (0519) 8888-6666',
+    'wechat_name-2026',
+    '(0523)88888888',
+    '（0523）88888888',
+    '微信：abc123',
+    '微信:abc123',
+    'WhatsApp: +86 13812345678',
+    '13812345678，微信同号',
+    '13812345678,微信同号',
+    '13812345678、0523-88888888',
+    '13812345678；0523-88888888',
+  ])('accepts practical international phone or WeChat contact text: %s', async (phone) => {
+    await expect(validate(dto({ phone }))).resolves.toHaveLength(0);
+  });
+
+  it.each(['<script>', 'abc" onclick="alert(1)', 'abc\u0000', '((()))', 'ab', '1'.repeat(51)])(
+    'keeps the full-form contact safety and length limits: %s',
     async (phone) => {
-      await expect(validate(dto({ phone }))).resolves.toHaveLength(0);
+      const errors = await validate(dto({ phone }));
+      expect(errors.some((error) => error.property === 'phone')).toBe(true);
     },
   );
-
-  it('rejects unsafe phone or WeChat punctuation without imposing a country format', async () => {
-    const errors = await validate(dto({ phone: '<script>' }));
-
-    expect(errors.some((error) => error.property === 'phone')).toBe(true);
-  });
 
   it('validates a supplied reusable idempotency key', async () => {
     await expect(
@@ -120,6 +131,28 @@ describe('CreateCustomRequirementDto', () => {
         (error) => error.property === 'projectLocation',
       ),
     ).toBe(true);
+  });
+
+  it('accepts practical homepage contact separators and keeps its declared limits', async () => {
+    const minimal = (overrides: Partial<CreateCustomRequirementDto> = {}) =>
+      dto({
+        formVariant: 'homepage_minimal',
+        identity: '示例制造公司 / 王工',
+        contact: '微信：abc123，电话（0523）88888888',
+        ...overrides,
+      });
+
+    await expect(validate(minimal())).resolves.toHaveLength(0);
+    await expect(
+      validate(minimal({ identity: '王'.repeat(180), contact: '1'.repeat(254) })),
+    ).resolves.toHaveLength(0);
+
+    for (const contact of ['<script>', '((()))', 'ab', '1'.repeat(255)]) {
+      const errors = await validate(minimal({ contact }));
+      expect(errors.some((error) => error.property === 'contact')).toBe(true);
+    }
+    const errors = await validate(minimal({ identity: '王'.repeat(181) }));
+    expect(errors.some((error) => error.property === 'identity')).toBe(true);
   });
 
   it('accepts one optional structured workpiece context', async () => {

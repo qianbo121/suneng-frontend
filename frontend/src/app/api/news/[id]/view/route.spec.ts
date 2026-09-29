@@ -6,6 +6,39 @@ afterEach(() => {
   vi.unstubAllEnvs();
 });
 describe('persistent view service bridge', () => {
+  it('accepts the public origin behind an internal reverse proxy address', async () => {
+    vi.stubEnv('API_BASE_URL_INTERNAL', 'http://backend.test/api');
+    const fetcher = vi.fn().mockResolvedValue(new Response('{"counted":true}'));
+    vi.stubGlobal('fetch', fetcher);
+    const response = await POST(
+      new NextRequest('https://0.0.0.0:3000/api/news/77/view', {
+        method: 'POST',
+        headers: { origin: 'https://www.jssngyl.cn' },
+      }),
+      { params: Promise.resolve({ id: '77' }) },
+    );
+    expect(response.status).toBe(200);
+    expect(fetcher).toHaveBeenCalledOnce();
+  });
+
+  it('does not trust a forged forwarded host to authorize a foreign origin', async () => {
+    const fetcher = vi.fn();
+    vi.stubGlobal('fetch', fetcher);
+    const response = await POST(
+      new NextRequest('https://0.0.0.0:3000/api/news/77/view', {
+        method: 'POST',
+        headers: {
+          origin: 'https://untrusted.test',
+          'x-forwarded-host': 'untrusted.test',
+          'x-forwarded-proto': 'https',
+        },
+      }),
+      { params: Promise.resolve({ id: '77' }) },
+    );
+    expect(response.status).toBe(403);
+    expect(fetcher).not.toHaveBeenCalled();
+  });
+
   it('forwards to the existing server counter and preserves its deduplication cookie', async () => {
     vi.stubEnv('API_BASE_URL_INTERNAL', 'http://backend.test/api');
     const fetcher = vi.fn<typeof fetch>(
