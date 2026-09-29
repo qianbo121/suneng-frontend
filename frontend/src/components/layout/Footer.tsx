@@ -52,7 +52,7 @@ const POLICE_BEIAN_URL =
 
 const footerCopy = {
   zh: {
-    founded: '成立于 2006 年；公司自报生产基地占地约 14700 ㎡',
+    founded: '成立于 2006 年；公司生产基地占地约 14700 ㎡',
     brandIntro: '专注热处理工业炉研发制造，提供设计、制造、安装与售后服务。',
     address: '江苏省泰州市姜堰区张甸蔡官工业区',
     wechat: '微信二维码',
