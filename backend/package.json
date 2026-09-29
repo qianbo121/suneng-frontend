@@ -2,6 +2,10 @@
   "name": "@corp-site/backend",
   "version": "0.1.0",
   "private": true,
+  "files": [
+    "dist",
+    "prisma"
+  ],
   "scripts": {
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"prisma/**/*.prisma\"",
@@ -39,6 +43,7 @@
     "passport-jwt": "^4.0.1",
     "pg": "^8.13.1",
     "pinyin-pro": "^3.26.0",
+    "prisma": "^6.0.1",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1",
     "sharp": "^0.35.4"
@@ -62,7 +67,6 @@
     "eslint-plugin-prettier": "^5.2.1",
     "jest": "^30.4.2",
     "prettier": "^3.4.2",
-    "prisma": "^6.0.1",
     "source-map-support": "^0.5.21",
     "ts-jest": "^29.4.11",
     "ts-loader": "^9.5.1",

@@ -40,7 +40,9 @@ jobs:
           python3 scripts/test_backup_sh.py
           python3 ops/releases/test_backup_gate.py
           python3 ops/releases/test_storage_policy.py
+          python3 ops/releases/test_release_retention.py
           node --test frontend/scripts/prepare-standalone.test.mjs
+          python3 scripts/test_frontend_layer_reuse.py
           node --test ops/releases/test_check_backend.cjs
           python3 ops/releases/test_frontend_release.py
           python3 ops/releases/test_deployment_notice.py
@@ -158,6 +160,13 @@ jobs:
         run: pnpm --dir backend test
       - name: Build
         run: pnpm --dir backend build
+      - name: Verify portable production package
+        run: |
+          set -euo pipefail
+          pnpm --filter @corp-site/backend --prod deploy "$RUNNER_TEMP/backend-runtime"
+          node "$RUNNER_TEMP/backend-runtime/node_modules/prisma/build/index.js" generate \
+            --schema "$RUNNER_TEMP/backend-runtime/prisma/schema.prisma"
+          node backend/scripts/verify-runtime.cjs "$RUNNER_TEMP/backend-runtime" --repair-self-link
 
   admin:
     name: Admin (lint + test + build)
