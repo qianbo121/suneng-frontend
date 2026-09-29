@@ -1,7 +1,7 @@
 import approvedGuidePaths from '../../../ops/releases/approved-guides.json';
 import { PUBLIC_CASE_SLUGS, PUBLIC_ENGLISH_CASE_SLUGS } from '@/lib/cases/public-case-allowlist';
 
-/** The default remains closed; the owner approved only the eight Chinese guides below. */
+/** The default remains closed; the owner approved the listed Chinese guides. */
 export const TECHNICAL_CONTENT_PUBLISHED = false;
 export const APPROVED_GUIDE_PATHS: ReadonlySet<string> = new Set(approvedGuidePaths);
 export function isPublishedGuide(locale: string, chinesePath: string): boolean {

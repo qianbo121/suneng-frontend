@@ -1,10 +1,8 @@
-import { EnglishSolutionPage, englishSolutionMetadata } from '@/components/engineering/EnglishSolutionsPage';
-import { solutionAlternates } from '@/lib/english-solutions';
 import type { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { TECHNICAL_CONTENT_PUBLISHED } from '@/lib/publication-scope';
+import { isPublishedGuide, isWithdrawnTechnicalPath } from '@/lib/publication-scope';
 import {
   HiCheckCircle,
   HiOutlineArchiveBox,
@@ -97,24 +95,21 @@ const publishedProjectEvidence = [
 
 const pagePath = '/zh/solutions/continuous-heat-treatment-line';
 const description =
-  '苏能根据工件材质、热处理要求与目标产量配置连续热处理生产线，介绍选型方向、工艺流程、济宁支重轮项目经验及供货验收范围。可先发工件照片、材质、产量和已知处理要求咨询。';
+  '苏能根据工件材质、热处理要求与目标产量配置连续热处理生产线，介绍选型方向、工艺流程、已公开方案资料及供货验收范围。可先发工件照片、材质、产量和已知处理要求咨询。';
 export const dynamicParams = false;
 type PageProps = { params: Promise<{ locale: string }> };
 export function generateStaticParams() {
   return [{ locale: 'zh' }, { locale: 'en' }];
 }
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  // Withdrawn content must not be rendered even if a request slips past middleware.
-  if (!TECHNICAL_CONTENT_PUBLISHED) notFound();
   const { locale } = await params;
-  if (locale === 'en') return englishSolutionMetadata('continuous-heat-treatment-line');
-  if (locale !== 'zh') notFound();
+  if (!isPublishedGuide(locale, pagePath)) notFound();
   const metadata = buildMetadata({
     title: '连续热处理生产线解决方案｜选型与项目经验',
     description,
     path: pagePath,
     image: '/images/products/annealing-solution-line/gallery/line-01.jpg',
-    alternateLocales: solutionAlternates('continuous-heat-treatment-line'),
+    alternateLocales: { 'zh-CN': pagePath, 'x-default': pagePath },
   });
   if (process.env.NODE_ENV === 'development' || process.env.SITE_NOINDEX === 'true') {
     metadata.robots = { index: false, follow: false };
@@ -122,11 +117,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   return metadata;
 }
 export default async function ContinuousHeatTreatmentLinePage({ params }: PageProps) {
-  // Withdrawn content must not be rendered even if a request slips past middleware.
-  if (!TECHNICAL_CONTENT_PUBLISHED) notFound();
   const { locale } = await params;
-  if (locale === 'en') return <EnglishSolutionPage slug="continuous-heat-treatment-line" />;
-  if (locale !== 'zh') notFound();
+  if (!isPublishedGuide(locale, pagePath)) notFound();
   return (
     <div className={styles.page} data-engineering-page="line">
       <AnchorNav
@@ -249,43 +241,47 @@ export default async function ContinuousHeatTreatmentLinePage({ params }: PagePr
           />
         </div>
       </Section>
-      <Section id="experience" title="连续热处理生产线项目经验">
-        <article className={styles.case}>
-          <figure className={styles.caseMedia}>
-            <Image
-              src="/images/about/cases/08-case-jining-support-roller.jpg"
-              alt="连续加热炉与网带输送结构的相关设备参考图"
-              fill
-              sizes="(max-width: 767px) 100vw, 580px"
-            />
-            <figcaption>相关设备</figcaption>
-          </figure>
-          <div className={styles.caseCopy}>
-            <h3>济宁支重轮热处理生产线</h3>
-            <p>工程机械零部件 · 多规格支重轮</p>
-            <dl>
-              {[
-                ['项目需求', '协调连续加热、自动淬火、回火与喷淋冷却。'],
-                ['主要设备', '连续加热炉、自动淬火机床、回火炉、喷淋冷却及电气控制。'],
-                ['苏能参与', '整线方案与节拍协调、设备配置，按合同范围提供制造及安装调试。'],
-              ].map(([label, value]) => (
-                <div key={label}>
-                  <dt>{label}</dt>
-                  <dd>{value}</dd>
-                </div>
-              ))}
-            </dl>
-            <Link
-              className={styles.button}
-              href="/zh/case/jining-support-roller-heat-treatment-line"
-            >
-              查看项目资料
-            </Link>
-          </div>
-        </article>
+      <Section id="experience" title="连续热处理生产线项目资料">
+        {!isWithdrawnTechnicalPath('/zh/case/jining-support-roller-heat-treatment-line') && (
+          <article className={styles.case}>
+            <figure className={styles.caseMedia}>
+              <Image
+                src="/images/about/cases/08-case-jining-support-roller.jpg"
+                alt="连续加热炉与网带输送结构的相关设备参考图"
+                fill
+                sizes="(max-width: 767px) 100vw, 580px"
+              />
+              <figcaption>相关设备</figcaption>
+            </figure>
+            <div className={styles.caseCopy}>
+              <h3>济宁支重轮热处理生产线</h3>
+              <p>工程机械零部件 · 多规格支重轮</p>
+              <dl>
+                {[
+                  ['项目需求', '协调连续加热、自动淬火、回火与喷淋冷却。'],
+                  ['主要设备', '连续加热炉、自动淬火机床、回火炉、喷淋冷却及电气控制。'],
+                  ['苏能参与', '整线方案与节拍协调、设备配置，按合同范围提供制造及安装调试。'],
+                ].map(([label, value]) => (
+                  <div key={label}>
+                    <dt>{label}</dt>
+                    <dd>{value}</dd>
+                  </div>
+                ))}
+              </dl>
+              {!isWithdrawnTechnicalPath('/zh/case/jining-support-roller-heat-treatment-line') && (
+                <Link
+                  className={styles.button}
+                  href="/zh/case/jining-support-roller-heat-treatment-line"
+                >
+                  查看项目资料
+                </Link>
+              )}
+            </div>
+          </article>
+        )}
         <div className={styles.center}>
           <Link className={styles.textLink} href="/zh/case">
-            查看更多项目案例
+            查看已公开的项目案例
           </Link>
         </div>
       </Section>
@@ -309,24 +305,36 @@ export default async function ContinuousHeatTreatmentLinePage({ params }: PagePr
             },
           ]}
         />
-        <p className="mt-5 text-sm leading-7 text-[#526277]" data-delivery-boundary>苏能通常作为热处理工业炉设备供应商、生产线设备供应商或设备分包方参与项目，按合同范围提供设计、制造、供货、安装指导、调试配合和售后支持。涉及土建、压力容器、特种设备、环保总包或工程总承包的部分，由具备相应资质的单位承担或配合实施。</p>
+        <p className="mt-5 text-sm leading-7 text-[#526277]" data-delivery-boundary>
+          苏能通常作为热处理工业炉设备供应商、生产线设备供应商或设备分包方参与项目，按合同范围提供设计、制造、供货、安装指导、调试配合和售后支持。涉及土建、压力容器、特种设备、环保总包或工程总承包的部分，由具备相应资质的单位承担或配合实施。
+        </p>
       </Section>
       <Section id="project-evidence" title="已公开的项目方案参数与适用边界" soft>
         <p className={styles.note}>
           以下为已公开项目技术方案中的参数和口径，用于说明方案经验，不代表当前设备的统一规格或实际验收结果；具体按项目条件确认。
         </p>
         <div className="mt-6 grid gap-5 md:grid-cols-2">
-          {publishedProjectEvidence.map((item) => (
-            <article key={item.factId} className="rounded-[8px] border border-[#e1e7f0] bg-white p-6">
-              <h3 className="text-[18px] font-semibold leading-[1.5] text-[#101828]">{item.title}</h3>
-              <p className="mt-3 text-[15px] leading-[1.85] text-[#475467]">{item.text}</p>
-              {item.href ? (
-                <Link href={item.href} className="mt-4 inline-block text-[14px] font-semibold text-[#145ca8] underline underline-offset-4 focus-visible:outline focus-visible:outline-2">
-                  查看对应项目资料与条件
-                </Link>
-              ) : null}
-            </article>
-          ))}
+          {publishedProjectEvidence
+            .filter((item) => item.href && !isWithdrawnTechnicalPath(item.href))
+            .map((item) => (
+              <article
+                key={item.factId}
+                className="rounded-[8px] border border-[#e1e7f0] bg-white p-6"
+              >
+                <h3 className="text-[18px] font-semibold leading-[1.5] text-[#101828]">
+                  {item.title}
+                </h3>
+                <p className="mt-3 text-[15px] leading-[1.85] text-[#475467]">{item.text}</p>
+                {item.href && !isWithdrawnTechnicalPath(item.href) ? (
+                  <Link
+                    href={item.href}
+                    className="mt-4 inline-block text-[14px] font-semibold text-[#145ca8] underline underline-offset-4 focus-visible:outline focus-visible:outline-2"
+                  >
+                    查看对应项目资料与条件
+                  </Link>
+                ) : null}
+              </article>
+            ))}
         </div>
       </Section>
       <FaqSection title="连续热处理生产线常见问题" faqs={lineFaqs} defaultOpenIndex={2} />
@@ -368,7 +376,6 @@ export default async function ContinuousHeatTreatmentLinePage({ params }: PagePr
         id="continuous-line-breadcrumb-jsonld"
         data={getBreadcrumbJsonLd([
           { name: '首页', url: '/zh' },
-          { name: '解决方案', url: '/zh/solutions' },
           { name: '连续热处理生产线解决方案', url: pagePath },
         ])}
       />
