@@ -1354,5 +1354,10 @@
   "江苏苏能工业炉有限公司实用新型专利证书：一种高精度温控电阻炉": "Suneng utility-model patent certificate: a high-precision temperature-control resistance furnace",
   "证书编号：GR202432008987": "Certificate no.: GR202432008987",
   "证书编号：03824Q60289R3S": "Certificate no.: 03824Q60289R3S",
-  "江苏苏能工业炉有限公司": "Jiangsu Suneng Industrial Furnace Co., Ltd."
+  "江苏苏能工业炉有限公司": "Jiangsu Suneng Industrial Furnace Co., Ltd.",
+  "采购与技术最常问的六个问题": "Six common purchasing and technical questions",
+  "报价前提供哪些资料，比较报价还要对齐什么？": "What information is needed, and what should be aligned when comparing quotations?",
+  "至少需要工件最大外形、单件质量、每炉数量、净装载、料具、支点与载荷分布、工艺曲线、炉门与台车方向、轨道基础、吊装和能源条件。比较报价时，还要对齐有效加热区、台车承载与支承、热源、温区和控制记录配置，并明确轨道基础、能源接口、安装调试和验收的供货范围与双方分工，不能只比较炉膛大小和总价。": "Provide maximum part shape, unit mass, batch quantity, net load, tooling, supports and load distribution, process curve, door/bogie direction, rail foundations, lifting and energy conditions. Compare quotations against the same effective heated zone, bogie load capacity and supports, heat source, temperature zones, and control and recording configuration. Also clarify the supply scope and responsibilities for rail foundations, energy interfaces, installation and commissioning, and acceptance. Do not compare furnace chamber dimensions and total price alone.",
+  "台车炉温度均匀性怎样约定和验收？": "How should bogie-hearth furnace temperature uniformity be specified and verified?",
+  "先约定测试温度、有效加热区、空载或代表装载、工件与料具布置、测点和记录方法，再按采用的标准和技术协议判断。大型重件应同时明确支承位置和装炉状态。炉内温场、工件实际温度与最终产品性能应分别验证；具体指标以确认工况为准，不能把配置循环风机直接当作均匀性保证。": "First agree on the test temperatures, effective heated zone, unloaded or representative loaded conditions, workpiece and tooling arrangement, measurement points and recording method. Assess the results against the applicable standard and technical agreement. For large, heavy workpieces, also specify support positions and loading conditions. Verify the furnace temperature field, actual workpiece temperatures and final product properties separately. Specific limits depend on the agreed operating conditions; fitting a circulation fan alone does not guarantee temperature uniformity."
 }
