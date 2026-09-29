@@ -25,7 +25,7 @@ describe('inquiry evidence migration', () => {
   it('preserves legacy columns and the old backend non-null phone contract', () => {
     expect(migration).not.toMatch(/DROP COLUMN/);
     expect(migration).not.toContain('ALTER COLUMN "phone" DROP NOT NULL');
-    expect(schema).toMatch(/phone\s+String\s+@db\.VarChar\(50\)/);
+    expect(schema).toMatch(/phone\s+String\s+@db\.VarChar\(254\)/);
     expect(migration).toContain(`"notificationStatus" = 'legacy_unknown'`);
     expect(migration).toContain('"CustomRequirement_clientIdempotencyKey_key"');
     expect(migration).toContain('"CustomRequirement_notification_due_idx"');
