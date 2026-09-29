@@ -437,7 +437,7 @@ export function PitFurnaceDetailPage({ locale = 'zh' }: { locale?: Locale }) {
 
           <section id="faq" className={styles.section}>
             <SectionHeader
-              title={t("采购与技术最常问的五个问题")}
+              title={t("采购与技术最常问的六个问题")}
               description={t("回答只说明选型边界，不代替最终技术方案和合同附件。")}
             />
             <PitFurnaceFaq items={faqItems} />

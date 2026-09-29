@@ -450,6 +450,12 @@
           "question": "河南项目的参数可以直接用来选型吗？",
           "answer": "河南项目参数属于特定牌号、规格和设备分工，不能当作所有项目的通用能力。新项目仍应依据带宽、厚度、温度路径、表面与产能要求重新核算。",
           "defaultOpen": false
+        },
+        {
+          "id": "faq-8",
+          "question": "比较这条生产线的报价，哪些条件和供货范围要对齐？",
+          "answer": "比较报价应先对齐材料牌号、带宽厚度、目标带温、稳定线速、气氛与冷却要求。热工段与收放卷、张力纠偏、活套、清洗酸洗等配套分别列清，基础、公辅、排风、通信及安装联调明确双方和总包分工。相同产量不代表设备配置或供货范围相同。",
+          "defaultOpen": false
         }
       ],
       "relatedGroups": [
@@ -470,6 +476,11 @@
             {
               "label": "本线询价参数清单",
               "href": "/downloads/heat-treatment-lines/annealing-solution-line.txt"
+            },
+            {
+              "label": "现有热工设备维修与改造评估",
+              "href": "/zh/service/furnace-renovation-overhaul",
+              "note": "先评估现有炉体、加热、冷却与控制状况；整线机械、专用工装及第三方设备的范围另行确认。"
             }
           ]
         },
