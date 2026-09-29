@@ -31,14 +31,19 @@ function reviewedItem(id: number): NewsApiItem {
 }
 
 describe('approved Chinese news reference cleanup', () => {
-  it.each(ids)('removes exactly the approved block from the full reviewed article %i', (id) => {
-    const item = reviewedItem(id);
-    const before = item.contentZh!;
+  it.each(ids)('preserves cleaned copy and removes only a reintroduced legacy block: %i', (id) => {
+    const reviewed = reviewedItem(id);
+    expect(reviewed.contentZh).not.toContain(targetUrl);
+    expect(applyNewsReferenceCleanup(reviewed)).toBe(reviewed);
     const block = expectedBlock(id);
+    // The reviewed source is now clean; a later CMS copy may still carry the old block.
+    const before = reviewed.contentZh!.replace('</p>', `</p>${block}`);
+    const item = { ...reviewed, contentZh: before };
     expect(before.split(block)).toHaveLength(2);
     const start = before.indexOf(block);
     const result = applyNewsReferenceCleanup(item);
     expect(result).toEqual({ ...item, contentZh: before.slice(0, start) + before.slice(start + block.length) });
+    expect(result).toEqual(reviewed);
     expect(result.contentZh).not.toContain(targetUrl);
     expect(item.contentZh).toBe(before);
     expect(applyNewsReferenceCleanup(result)).toBe(result);
