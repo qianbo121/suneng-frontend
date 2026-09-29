@@ -350,6 +350,23 @@ http {
       root /var/www/certbot;
     }
 
+    # Verified legacy entry pages: redirect directly to their matching content.
+    location = /product/index.php {
+      return 301 https://www.jssngyl.cn/zh/products;
+    }
+
+    location = /contact/show.php {
+      return 301 https://www.jssngyl.cn/zh/contact;
+    }
+
+    location = /news/index.php {
+      return 301 https://www.jssngyl.cn/zh/news;
+    }
+
+    location = /about/show.php {
+      return 301 https://www.jssngyl.cn/zh/about;
+    }
+
     location = /product/showproduct.php {
       return 301 https://www.jssngyl.cn/zh/products;
     }
@@ -410,6 +427,23 @@ http {
 
     location = /en/about/organization {
       return 301 https://www.jssngyl.cn/en/about;
+    }
+
+    # Verified legacy entry pages: redirect directly to their matching content.
+    location = /product/index.php {
+      return 301 https://www.jssngyl.cn/zh/products;
+    }
+
+    location = /contact/show.php {
+      return 301 https://www.jssngyl.cn/zh/contact;
+    }
+
+    location = /news/index.php {
+      return 301 https://www.jssngyl.cn/zh/news;
+    }
+
+    location = /about/show.php {
+      return 301 https://www.jssngyl.cn/zh/about;
     }
 
     location = /product/showproduct.php {
@@ -476,6 +510,23 @@ http {
     # calling the backend directly. Never proxy them from the public website.
     location ^~ /api/svc/ {
       return 404;
+    }
+
+    # Verified legacy entry pages: redirect directly to their matching content.
+    location = /product/index.php {
+      return 301 https://www.jssngyl.cn/zh/products;
+    }
+
+    location = /contact/show.php {
+      return 301 https://www.jssngyl.cn/zh/contact;
+    }
+
+    location = /news/index.php {
+      return 301 https://www.jssngyl.cn/zh/news;
+    }
+
+    location = /about/show.php {
+      return 301 https://www.jssngyl.cn/zh/about;
     }
 
     location = /product/showproduct.php {

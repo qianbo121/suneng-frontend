@@ -29,4 +29,17 @@ describe('search-related production wiring', () => {
       for (const block of blocks) expect(block.split('}')[0]).toContain('return 301');
     }
   });
+  it.each([
+    ['/product/index.php', '/zh/products'],
+    ['/contact/show.php', '/zh/contact'],
+    ['/news/index.php', '/zh/news'],
+    ['/about/show.php', '/zh/about'],
+  ])('routes the real legacy entry %s directly to %s on all website hosts', (legacy, destination) => {
+    const nginx = readFileSync(new URL('nginx.prod.conf.template', root), 'utf8');
+    const blocks = nginx.split(`location = ${legacy} {`).slice(1);
+    expect(blocks).toHaveLength(3);
+    for (const block of blocks) {
+      expect(block.split('}')[0].trim()).toBe(`return 301 https://www.jssngyl.cn${destination};`);
+    }
+  });
 });

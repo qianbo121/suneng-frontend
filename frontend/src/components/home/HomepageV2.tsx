@@ -22,7 +22,7 @@ const taskPaths = [
     id: 'heat-treatment-line',
     title: '我要上热处理线',
     description: '工件、工艺和产量，整线按需配置',
-    href: '/zh/products#continuous-furnace-title',
+    href: '/zh/solutions/continuous-heat-treatment-line',
     image: '/images/home/scenario-01-heat-treatment-line-780.webp',
     imageAlt: '完整热处理生产线工程手绘图',
     imageWidth: 1653,
