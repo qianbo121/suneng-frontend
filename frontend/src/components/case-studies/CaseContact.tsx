@@ -14,19 +14,12 @@ export function CaseContact({
   label?: string;
 }) {
   return (
-    <span
-      className="case-contact-button"
-      onClickCapture={(event) => {
-        // Portal clicks bubble through React; only count the actual trigger in this span.
-        if (event.currentTarget.contains(event.target as Node)) {
-          trackLeadEvent('wechat_click', {
-            pageType: 'case',
-            properties: { position, caseId: caseId ?? 'list' },
-          });
-        }
-      }}
-    >
-      <WechatContactButton label={label} className="case-button case-button-primary" />
+    <span className="case-contact-button">
+      <WechatContactButton
+        label={label}
+        className="case-button case-button-primary"
+        trackingContext={{ pageType: 'case', properties: { position, caseId: caseId ?? 'list' } }}
+      />
     </span>
   );
 }
