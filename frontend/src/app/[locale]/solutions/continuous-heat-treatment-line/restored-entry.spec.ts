@@ -12,6 +12,7 @@ vi.mock('react', async (original) => ({
   cache: (fn: unknown) => fn,
 }));
 vi.mock('next/navigation', () => ({
+  useParams: () => ({ locale: 'zh' }),
   notFound: () => { throw new Error('404'); },
   usePathname: () => '/zh/solutions/continuous-heat-treatment-line',
 }));

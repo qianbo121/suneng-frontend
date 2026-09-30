@@ -11,6 +11,7 @@ vi.mock('react', async (original) => ({
   cache: (fn: unknown) => fn,
 }));
 vi.mock('next/navigation', () => ({
+  useParams: () => ({ locale: 'zh' }),
   notFound: () => {
     throw Object.assign(new Error('not found'), { withdrawn: true });
   },

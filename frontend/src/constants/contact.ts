@@ -7,6 +7,7 @@ export const SUNENG_CONTACT = {
   email: siteSettings.email,
   address: siteSettings.address.zh,
   wechatQr: siteSettings.wechatQrCode,
+  wechatId: 'suneng2005',
   // No verified coordinates are stored; use an explicit address search.
   mapHref: `https://www.amap.com/search?query=${encodeURIComponent(`${siteSettings.companyName.zh} ${siteSettings.address.zh}`)}`,
 };

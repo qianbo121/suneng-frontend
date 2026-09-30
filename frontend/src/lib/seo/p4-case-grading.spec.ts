@@ -13,7 +13,8 @@ vi.mock('react', async (original) => ({
     return () => (value ??= fn());
   },
 }));
-vi.mock('next/navigation', () => ({ notFound: () => { throw new Error('404'); } }));
+vi.mock('next/navigation', () => ({
+  useParams: () => ({ locale: 'zh' }), notFound: () => { throw new Error('404'); } }));
 import { CaseArticlePage } from '@/components/case-studies/CaseArticlePage';
 import { getPublicCases } from '@/lib/cases/server';
 

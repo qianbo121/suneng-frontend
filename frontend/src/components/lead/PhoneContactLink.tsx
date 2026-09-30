@@ -1,8 +1,9 @@
 'use client';
 
 import type { ReactNode } from 'react';
-import { trackLeadEvent } from '@/lib/api/lead-events';
-import { siteSettings } from '@/mock/siteSettings';
+
+import { ContactAction } from '@/components/lead/ContactAction';
+import type { trackLeadEvent } from '@/lib/api/lead-events';
 
 export function PhoneContactLink({
   children,
@@ -14,12 +15,8 @@ export function PhoneContactLink({
   trackingContext?: Parameters<typeof trackLeadEvent>[1];
 }) {
   return (
-    <a
-      href={`tel:${siteSettings.salesPhone.replace(/[^+\d]/g, '')}`}
-      className={className}
-      onClick={() => trackLeadEvent('phone_click', trackingContext)}
-    >
+    <ContactAction kind="phone" className={className} trackingContext={trackingContext}>
       {children}
-    </a>
+    </ContactAction>
   );
 }

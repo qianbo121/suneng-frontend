@@ -64,12 +64,12 @@ for (const width of [1440, 1280, 390]) {
       const dialog = page.getByRole('dialog');
       await expect(dialog).toBeVisible();
       const close = dialog.getByRole('button', {
-        name: locale === 'en' ? 'Close contact dialog' : '关闭企微联系弹窗',
+        name: locale === 'en' ? 'Close contact dialog' : '关闭联系弹窗',
       });
       await expect(close).toBeFocused();
       await page.keyboard.press('Shift+Tab');
       await expect(
-        dialog.getByRole('link', { name: locale === 'en' ? 'Email documents' : '邮箱发资料' }),
+        dialog.getByRole('link', { name: locale === 'en' ? 'View original QR code' : '查看二维码原图' }),
       ).toBeFocused();
       await page.keyboard.press('Tab');
       await expect(close).toBeFocused();

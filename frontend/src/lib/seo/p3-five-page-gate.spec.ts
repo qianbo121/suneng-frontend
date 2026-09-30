@@ -6,7 +6,8 @@ import { describe, expect, it, vi } from 'vitest';
 import { renderToStaticMarkup } from 'react-dom/server';
 vi.mock('server-only', () => ({}));
 vi.mock('react', async (original) => ({ ...(await original<typeof import('react')>()), cache: (fn: unknown) => fn }));
-vi.mock('next/navigation', () => ({ usePathname: () => '/zh', notFound: () => { throw new Error('404'); }, permanentRedirect: () => { throw new Error('Unexpected redirect'); } }));
+vi.mock('next/navigation', () => ({
+  useParams: () => ({ locale: 'zh' }), usePathname: () => '/zh', notFound: () => { throw new Error('404'); }, permanentRedirect: () => { throw new Error('Unexpected redirect'); } }));
 import ProductPage from '@/app/[locale]/products/detail/[slug]/page';
 
 import { TROLLEY_PUBLICATION_REVIEW } from './trolley-publication';
