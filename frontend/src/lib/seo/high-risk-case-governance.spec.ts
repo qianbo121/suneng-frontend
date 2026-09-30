@@ -26,6 +26,8 @@ const unrelatedPublicSources = [
   readSource('../../app/[locale]/partner/page.tsx'),
   readSource('../../app/[locale]/solutions/rechuli-lu-changjia/page.tsx'),
   readSource('../../app/[locale]/solutions/jiangsu-gongye-lu-changjia/page.tsx'),
+  readSource('../../components/manufacturer-pages/ManufacturerContent.tsx'),
+  readSource('../../components/manufacturer-pages/JiangsuManufacturerContent.tsx'),
 ];
 
 const internalOnlyClaims = [
