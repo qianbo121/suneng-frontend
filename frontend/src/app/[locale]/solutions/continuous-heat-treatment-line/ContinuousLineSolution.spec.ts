@@ -5,6 +5,7 @@ import Page from './page';
 
 vi.mock('server-only', () => ({}));
 vi.mock('next/navigation', () => ({
+  useParams: () => ({ locale: 'zh' }),
   notFound: () => {
     throw new Error('404');
   },

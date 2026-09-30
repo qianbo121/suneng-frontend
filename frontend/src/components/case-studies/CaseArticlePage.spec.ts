@@ -19,6 +19,7 @@ vi.mock('react', async (original) => ({
   },
 }));
 vi.mock('next/navigation', () => ({
+  useParams: () => ({ locale: 'zh' }),
   notFound: () => {
     throw new Error('404');
   },
