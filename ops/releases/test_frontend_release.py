@@ -319,6 +319,30 @@ class ContractTest(unittest.TestCase):
         (live / 'verified-images.override.yml').write_text('original pins')
         return r.Release(live, audit, manifest, 'fixture health script')
 
+    def test_public_html_mismatch_rolls_back_without_recording_success(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            release = self.fixture(tmp, {**MANIFEST, 'htmlCachePolicy': 'no-store'})
+            state = {'image': OLD}
+            def current(names):
+                return [row for row in rows(state['image']) if row['Name'][11:] in names]
+            def replace(override=None):
+                state['image'] = OLD if override else NEW
+            candidate = {'/zh': {'scripts': ['new']}, '/en': {'scripts': ['new']}}
+            with patch.object(r, 'inspect', side_effect=current), patch.object(r, 'run', side_effect=canary_docker), \
+                 patch.object(r, 'wait_healthy'), patch.object(r, 'probe', return_value=GOOD), \
+                 patch.object(r, 'public_probe', return_value=[]), patch.object(r.subprocess, 'run'), \
+                 patch.object(release, 'replace_frontend', side_effect=replace), \
+                 patch.object(r, 'frontend_html_probe', side_effect=[candidate, RuntimeError('stale public homepage')]) as check:
+                with self.assertRaises(RuntimeError):
+                    release.execute(apply=True)
+            self.assertEqual(check.call_args.kwargs['expected'], candidate)
+            self.assertEqual(state['image'], OLD)
+            self.assertEqual(json.loads(release.receipt_path.read_text()), RECEIPT)
+
+    def test_html_cache_policy_rejects_unknown_values(self):
+        with self.assertRaises(ValueError):
+            r.validate_manifest({**MANIFEST, 'htmlCachePolicy': 'cache-forever'})
+
     def test_bad_candidate_fails_before_replacing_frontend_or_receipts(self):
         with tempfile.TemporaryDirectory() as tmp:
             release = self.fixture(tmp)

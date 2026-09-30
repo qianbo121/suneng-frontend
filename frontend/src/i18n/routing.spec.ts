@@ -9,9 +9,9 @@ describe('localized routing headers and cookies', () => {
     expect(routing.alternateLinks).toBe(false);
   });
 
-  it('only shares cacheable localized GET and HEAD pages', () => {
+  it('prevents shared caches from retaining release-specific HTML', () => {
     expect(PUBLIC_PAGE_CACHE_CONTROL).toBe(
-      'public, max-age=0, s-maxage=300, stale-while-revalidate=86400',
+      'private, no-store, max-age=0',
     );
     expect(isLocalizedPublicPath('/zh/products', 'GET')).toBe(true);
     expect(isLocalizedPublicPath('/en', 'HEAD')).toBe(true);

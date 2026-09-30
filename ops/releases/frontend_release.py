@@ -19,6 +19,7 @@ import uuid
 import xml.etree.ElementTree as ET
 from urllib.parse import urlparse
 from storage_policy import working_space
+from frontend_html import frontend_html_probe
 
 IMAGE = re.compile(r'^sha256:[0-9a-f]{64}$')
 SHA = re.compile(r'^[0-9a-f]{40}$')
@@ -80,6 +81,8 @@ def atomic_json(path, data):
 
 
 def validate_manifest(value):
+    if 'htmlCachePolicy' in value and value['htmlCachePolicy'] != 'no-store':
+        raise ValueError('Unknown public HTML cache policy')
     admin_only = value.get('adminOnly', False)
     backend_only = value.get('backendOnly', False)
     if not isinstance(admin_only, bool) or not isinstance(backend_only, bool):
@@ -526,15 +529,21 @@ class Release:
                 raise RuntimeError('Admin image was not built from the same reviewed source')
             admin_candidate = self.admin_check(require_cache=self.admin_only and kind != 'rollback')
         same = all(self.target[name] == self.receipt['images'][name] for name in self.components)
+        check_html = self.manifest.get('htmlCachePolicy') == 'no-store' and not self.preserve_frontend
+        candidate_html = None
         canary = 'suneng-release-check-' + uuid.uuid4().hex[:12]
         if same or self.preserve_frontend:
             internal = probe('corp-site-frontend', self.script, self.target_contract)
+            if check_html:
+                candidate_html = frontend_html_probe('corp-site-frontend', require_no_store=kind != 'rollback')
         else:
             try:
                 run(self.compose() + ['run', '-d', '--no-deps', '--pull', 'never',
                                      '--name', canary, 'frontend'], env=self.env)
                 wait_healthy(canary)
                 internal = probe(canary, self.script, self.target_contract)
+                if check_html:
+                    candidate_html = frontend_html_probe(canary, require_no_store=kind != 'rollback')
             finally:
                 # This uniquely named canary is the only container cleanup permitted here.
                 subprocess.run(['docker', 'rm', '-f', canary], capture_output=True, timeout=30)
@@ -548,9 +557,13 @@ class Release:
             result['adminCandidate'] = admin_candidate
         if backend_preflight is not None:
             result['backendPreflight'] = backend_preflight
+        if candidate_html is not None:
+            result['candidateHtml'] = candidate_html
         if not apply or same:
             # Without a switch the public site still runs the current image.
             result['publicChecks'] = public_probe('https://www.jssngyl.cn', self.target_contract if same else self.lenient_contract)
+            if check_html and same:
+                result['publicHtml'] = frontend_html_probe(expected=candidate_html, require_no_store=kind != 'rollback')
             atomic_json(self.audit / 'preflight.json', result)
             return result
         if backend_preflight and backend_preflight.get('pendingMigrationCount', 0):
@@ -581,6 +594,8 @@ class Release:
                 result['backendVerification'] = self.backend_check(running=True)
             result['internalChecks'] = probe('corp-site-frontend', self.script, self.target_contract)
             result['publicChecks'] = public_probe('https://www.jssngyl.cn', self.target_contract)
+            if check_html:
+                result['publicHtml'] = frontend_html_probe(expected=candidate_html, require_no_store=kind != 'rollback')
             if 'admin' in self.manifest:
                 result['adminPublic'] = admin_probe()
                 if self.admin_only and kind != 'rollback':

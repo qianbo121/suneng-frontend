@@ -1,4 +1,4 @@
-import { ArgumentsHost, HttpStatus, Logger } from '@nestjs/common';
+import { ArgumentsHost, BadRequestException, HttpStatus, Logger } from '@nestjs/common';
 import { Request, Response } from 'express';
 import {
   PrismaClientInitializationError,
@@ -20,6 +20,17 @@ function capture(exception: unknown, path = '/api/v2/custom-requirements') {
 }
 
 describe('HttpExceptionFilter privacy boundary', () => {
+  it('records inquiry validation failures without customer values', () => {
+    const logWarn = jest.spyOn(Logger.prototype, 'warn').mockImplementation();
+    try {
+      capture(new BadRequestException('Invalid customer@example.com / 13800000000'));
+      expect(logWarn).toHaveBeenCalledWith('Inquiry rejected: POST /api/v2/custom-requirements -> 400');
+      expect(JSON.stringify(logWarn.mock.calls)).not.toContain('customer@example.com');
+      expect(JSON.stringify(logWarn.mock.calls)).not.toContain('13800000000');
+    } finally {
+      logWarn.mockRestore();
+    }
+  });
   it('never copies protected admin search queries into logs or error payloads', () => {
     const request = {
       method: 'GET',

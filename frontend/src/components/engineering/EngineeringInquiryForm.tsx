@@ -10,7 +10,8 @@ import {
   getFormIdempotencyKey,
   renewIdempotencyKeyAfterConflict,
 } from '@/lib/api/custom-requirements';
-import { buildLeadSourceSnapshot } from '@/lib/api/lead-events';
+import { buildLeadSourceSnapshot, trackLeadEvent } from '@/lib/api/lead-events';
+import { trackInquiryAttempt, trackInquiryError, trackInquiryRequestError } from '@/lib/api/inquiry-events';
 import {
   INQUIRY_FILE_ACCEPT,
   INQUIRY_FILE_COUNT,
@@ -21,6 +22,7 @@ import {
 import { isApiRequestErrorStatus } from '@/lib/api/client';
 import { inquiryCopy } from './engineering-content';
 import styles from './EngineeringPage.module.css';
+import { InquiryContactOptions } from '@/components/lead/InquiryContactOptions';
 
 type Attachment = { file: File; receipt?: string };
 export function EngineeringInquiryForm({ kind }: { kind: 'line' | 'renovation' }) {
@@ -37,6 +39,7 @@ export function EngineeringInquiryForm({ kind }: { kind: 'line' | 'renovation' }
   const [progress, setProgress] = useState('');
   const [submissionId, setSubmissionId] = useState('');
   const busy = useRef(false);
+  const started = useRef(false);
   const key = useRef<string | null>(null);
   const form = useRef<HTMLFormElement>(null);
   const confirmation = useRef<HTMLDivElement>(null);
@@ -46,6 +49,10 @@ export function EngineeringInquiryForm({ kind }: { kind: 'line' | 'renovation' }
     confirmation.current?.focus({ preventScroll: true });
   }, [submissionId]);
   const update = (field: keyof HomepageRequirementValues, value: string) => {
+    if (!started.current) {
+      started.current = true;
+      trackLeadEvent('form_start', { properties: { source_module: `engineering_${kind}_form` } });
+    }
     setValues((current) => ({ ...current, [field]: value }));
     setInvalidField(null);
     setMessage('');
@@ -55,6 +62,7 @@ export function EngineeringInquiryForm({ kind }: { kind: 'line' | 'renovation' }
     const incoming = Array.from(selected);
     const issue = incoming.map(validateInquiryFile).find(Boolean);
     if (issue || files.length + incoming.length > INQUIRY_FILE_COUNT) {
+      trackInquiryError(`engineering_${kind}_form`, 'attachments', 'attachment_invalid');
       setMessage(issue || '每次最多添加3个附件。');
       return;
     }
@@ -66,6 +74,7 @@ export function EngineeringInquiryForm({ kind }: { kind: 'line' | 'renovation' }
     if (busy.current) return;
     const issue = validateHomepageRequirement(values);
     if (issue) {
+      trackInquiryError(`engineering_${kind}_form`, issue, values[issue].trim() ? 'invalid' : 'required');
       const labels = {
         direction: '需求类型',
         problem: copy.content,
@@ -81,6 +90,7 @@ export function EngineeringInquiryForm({ kind }: { kind: 'line' | 'renovation' }
     setMessage('');
     const pending = files.map((item) => ({ ...item }));
     try {
+      trackInquiryAttempt(`engineering_${kind}_form`);
       const inquiryKey = getFormIdempotencyKey(key);
       for (const [index, item] of pending.entries()) {
         if (!item.receipt) {
@@ -102,7 +112,9 @@ export function EngineeringInquiryForm({ kind }: { kind: 'line' | 'renovation' }
         pending.map((item) => item.receipt!),
       );
       setSubmissionId(String(result.submissionId));
+      trackLeadEvent('form_success', { properties: { source_module: `engineering_${kind}_form` } });
     } catch (error) {
+      trackInquiryRequestError(`engineering_${kind}_form`, error);
       if (renewIdempotencyKeyAfterConflict(error, key))
         setFiles((current) => current.map(({ file }) => ({ file })));
       if (
@@ -130,6 +142,7 @@ export function EngineeringInquiryForm({ kind }: { kind: 'line' | 'renovation' }
   return (
     <div className={styles.form}>
       <h3>{copy.formTitle}</h3>
+      <InquiryContactOptions />
       {submissionId ? (
         <div ref={confirmation} className={styles.success} role="status" tabIndex={-1}>
           <h3>需求已提交</h3>

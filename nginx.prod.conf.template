@@ -350,6 +350,27 @@ http {
       root /var/www/certbot;
     }
 
+    # Exact historical entry pages keep their equivalent destination.
+    location = /contact/show.php {
+      return 301 https://www.jssngyl.cn/zh/contact;
+    }
+
+    location = /about/show.php {
+      return 301 https://www.jssngyl.cn/zh/about;
+    }
+
+    location = /product/index.php {
+      return 301 https://www.jssngyl.cn/zh/products;
+    }
+
+    location = /news/index.php {
+      return 301 https://www.jssngyl.cn/zh/news;
+    }
+
+    location = /index.php {
+      return 301 https://www.jssngyl.cn/zh;
+    }
+
     location = /product/showproduct.php {
       return 301 https://www.jssngyl.cn/zh/products;
     }
@@ -412,6 +433,27 @@ http {
       return 301 https://www.jssngyl.cn/en/about;
     }
 
+    # Exact historical entry pages keep their equivalent destination.
+    location = /contact/show.php {
+      return 301 https://www.jssngyl.cn/zh/contact;
+    }
+
+    location = /about/show.php {
+      return 301 https://www.jssngyl.cn/zh/about;
+    }
+
+    location = /product/index.php {
+      return 301 https://www.jssngyl.cn/zh/products;
+    }
+
+    location = /news/index.php {
+      return 301 https://www.jssngyl.cn/zh/news;
+    }
+
+    location = /index.php {
+      return 301 https://www.jssngyl.cn/zh;
+    }
+
     location = /product/showproduct.php {
       return 301 https://www.jssngyl.cn/zh/products;
     }
@@ -442,6 +484,284 @@ http {
     http2 on;
     server_name ${DOMAIN};
     access_log /var/log/nginx/www.access.json analytics_json;
+
+    # ESA origin ranges verified in the site console on 2026-09-30.
+    # Scope trust to the public website; never trust arbitrary forwarded headers.
+    # Origin Protection uses a pinned list; review notices before updating it.
+    set_real_ip_from 117.49.26.96/27;
+    set_real_ip_from 27.128.150.128/25;
+    set_real_ip_from 111.63.174.128/25;
+    set_real_ip_from 117.49.26.128/26;
+    set_real_ip_from 163.181.67.128/25;
+    set_real_ip_from 157.255.137.128/25;
+    set_real_ip_from 117.49.181.0/25;
+    set_real_ip_from 183.60.170.128/25;
+    set_real_ip_from 120.241.64.0/25;
+    set_real_ip_from 163.181.122.128/25;
+    set_real_ip_from 163.181.15.128/25;
+    set_real_ip_from 120.241.14.64/26;
+    set_real_ip_from 112.90.140.64/26;
+    set_real_ip_from 120.241.13.128/26;
+    set_real_ip_from 61.241.9.128/25;
+    set_real_ip_from 124.95.162.128/25;
+    set_real_ip_from 42.96.222.128/25;
+    set_real_ip_from 106.38.189.128/25;
+    set_real_ip_from 117.49.153.0/25;
+    set_real_ip_from 39.156.171.128/25;
+    set_real_ip_from 219.144.87.0/25;
+    set_real_ip_from 8.152.80.0/25;
+    set_real_ip_from 123.126.111.128/25;
+    set_real_ip_from 140.249.255.128/25;
+    set_real_ip_from 59.36.91.0/26;
+    set_real_ip_from 120.222.200.128/25;
+    set_real_ip_from 111.19.142.0/25;
+    set_real_ip_from 113.201.176.0/25;
+    set_real_ip_from 183.36.45.64/26;
+    set_real_ip_from 183.240.195.128/25;
+    set_real_ip_from 117.49.179.0/25;
+    set_real_ip_from 27.221.6.128/25;
+    set_real_ip_from 42.248.141.128/25;
+    set_real_ip_from 8.147.211.128/25;
+    set_real_ip_from 58.251.89.64/26;
+    set_real_ip_from 120.201.61.128/25;
+    set_real_ip_from 163.181.32.128/25;
+    set_real_ip_from 47.120.92.128/25;
+    set_real_ip_from 49.7.244.0/25;
+    set_real_ip_from 111.202.96.128/25;
+    set_real_ip_from 111.13.210.192/26;
+    set_real_ip_from 121.14.100.0/25;
+    set_real_ip_from 111.13.221.128/26;
+    set_real_ip_from 163.181.83.128/25;
+    set_real_ip_from 123.184.196.128/25;
+    set_real_ip_from 117.49.78.128/25;
+    set_real_ip_from 36.131.160.128/25;
+    set_real_ip_from 218.60.99.128/25;
+    set_real_ip_from 112.124.132.128/25;
+    set_real_ip_from 39.175.133.0/25;
+    set_real_ip_from 60.188.15.0/25;
+    set_real_ip_from 101.71.19.0/25;
+    set_real_ip_from 180.178.229.128/25;
+    set_real_ip_from 117.49.183.128/25;
+    set_real_ip_from 112.48.243.128/25;
+    set_real_ip_from 36.250.255.128/25;
+    set_real_ip_from 163.181.132.128/25;
+    set_real_ip_from 163.181.241.128/25;
+    set_real_ip_from 47.95.190.128/25;
+    set_real_ip_from 123.138.130.128/25;
+    set_real_ip_from 112.46.42.0/25;
+    set_real_ip_from 1.82.252.0/25;
+    set_real_ip_from 117.49.229.192/26;
+    set_real_ip_from 163.181.146.128/25;
+    set_real_ip_from 101.67.10.0/25;
+    set_real_ip_from 111.0.39.0/25;
+    set_real_ip_from 183.131.180.0/25;
+    set_real_ip_from 117.49.105.128/25;
+    set_real_ip_from 140.207.206.128/25;
+    set_real_ip_from 117.184.35.0/25;
+    set_real_ip_from 183.192.185.128/25;
+    set_real_ip_from 117.185.225.0/25;
+    set_real_ip_from 47.123.117.0/25;
+    set_real_ip_from 180.163.72.0/24;
+    set_real_ip_from 47.117.201.128/25;
+    set_real_ip_from 8.132.38.0/25;
+    set_real_ip_from 112.65.34.0/25;
+    set_real_ip_from 140.207.192.128/25;
+    set_real_ip_from 101.226.38.0/25;
+    set_real_ip_from 155.102.129.128/25;
+    set_real_ip_from 155.102.143.128/25;
+    set_real_ip_from 163.181.79.128/25;
+    set_real_ip_from 163.181.223.128/25;
+    set_real_ip_from 101.206.246.128/25;
+    set_real_ip_from 118.123.166.128/25;
+    set_real_ip_from 223.85.58.128/25;
+    set_real_ip_from 163.181.34.128/25;
+    set_real_ip_from 155.102.202.128/25;
+    set_real_ip_from 155.102.210.128/25;
+    set_real_ip_from 47.121.109.0/25;
+    set_real_ip_from 39.156.236.0/25;
+    set_real_ip_from 121.89.63.0/25;
+    set_real_ip_from 106.38.186.128/25;
+    set_real_ip_from 114.250.56.0/25;
+    set_real_ip_from 221.195.236.0/25;
+    set_real_ip_from 116.148.202.128/25;
+    set_real_ip_from 110.219.5.128/25;
+    set_real_ip_from 222.188.226.128/25;
+    set_real_ip_from 222.188.226.64/26;
+    set_real_ip_from 116.148.161.128/26;
+    set_real_ip_from 116.148.161.0/25;
+    set_real_ip_from 110.219.6.128/26;
+    set_real_ip_from 222.188.245.0/25;
+    set_real_ip_from 110.219.6.0/25;
+    set_real_ip_from 163.181.89.128/25;
+    set_real_ip_from 43.109.167.0/25;
+    set_real_ip_from 155.102.147.128/25;
+    set_real_ip_from 114.250.55.64/26;
+    set_real_ip_from 106.38.245.128/26;
+    set_real_ip_from 8.161.208.0/26;
+    set_real_ip_from 221.179.212.0/26;
+    set_real_ip_from 43.109.115.128/25;
+    set_real_ip_from 43.109.107.128/25;
+    set_real_ip_from 163.181.19.128/25;
+    set_real_ip_from 43.109.146.0/25;
+    set_real_ip_from 43.109.138.128/25;
+    set_real_ip_from 43.109.139.128/25;
+    set_real_ip_from 117.49.233.192/26;
+    set_real_ip_from 120.222.245.0/26;
+    set_real_ip_from 150.139.155.0/26;
+    set_real_ip_from 221.215.47.0/26;
+    set_real_ip_from 61.162.50.0/24;
+    set_real_ip_from 117.49.24.128/26;
+    set_real_ip_from 111.7.168.64/26;
+    set_real_ip_from 222.138.192.0/25;
+    set_real_ip_from 117.49.24.96/27;
+    set_real_ip_from 221.15.68.64/26;
+    set_real_ip_from 123.149.174.0/25;
+    set_real_ip_from 123.53.180.64/26;
+    set_real_ip_from 111.7.71.0/25;
+    set_real_ip_from 117.49.85.0/27;
+    set_real_ip_from 119.167.177.128/25;
+    set_real_ip_from 139.129.79.128/25;
+    set_real_ip_from 120.222.205.128/25;
+    set_real_ip_from 150.139.146.128/25;
+    set_real_ip_from 117.49.126.128/26;
+    set_real_ip_from 117.49.146.32/27;
+    set_real_ip_from 114.232.93.0/25;
+    set_real_ip_from 122.193.247.0/25;
+    set_real_ip_from 117.49.175.0/24;
+    set_real_ip_from 36.156.79.0/25;
+    set_real_ip_from 47.97.242.128/25;
+    set_real_ip_from 115.238.4.128/25;
+    set_real_ip_from 117.148.170.0/25;
+    set_real_ip_from 101.67.60.128/25;
+    set_real_ip_from 115.227.45.0/25;
+    set_real_ip_from 124.160.169.128/25;
+    set_real_ip_from 8.154.82.128/25;
+    set_real_ip_from 39.173.42.128/25;
+    set_real_ip_from 112.13.112.224/27;
+    set_real_ip_from 101.71.18.192/26;
+    set_real_ip_from 112.13.103.192/27;
+    set_real_ip_from 183.136.179.64/26;
+    set_real_ip_from 60.188.139.0/26;
+    set_real_ip_from 121.199.80.128/25;
+    set_real_ip_from 39.173.41.128/26;
+    set_real_ip_from 124.160.142.128/26;
+    set_real_ip_from 43.109.218.128/25;
+    set_real_ip_from 43.109.219.128/25;
+    set_real_ip_from 2409:8c04:1110:2::/64;
+    set_real_ip_from 2408:871a:7000:fff6::/64;
+    set_real_ip_from 240e:b1:c803::/64;
+    set_real_ip_from 2404:2280:1d1::/64;
+    set_real_ip_from 2408:8756:d0fe:3::/64;
+    set_real_ip_from 2409:8c54:1841:200a::/64;
+    set_real_ip_from 240e:97d:10:1714::/64;
+    set_real_ip_from 2409:8c54:1031:4006::/64;
+    set_real_ip_from 2404:2280:1d4::/64;
+    set_real_ip_from 240e:904:2c01:101f::/64;
+    set_real_ip_from 240e:945:3:200e::/64;
+    set_real_ip_from 2409:8c14:e08:1201::/64;
+    set_real_ip_from 2408:4003:1:b::/64;
+    set_real_ip_from 2404:2280:105::/64;
+    set_real_ip_from 240e:90c:2000:703::/64;
+    set_real_ip_from 2408:8706:3:101c::/64;
+    set_real_ip_from 2404:2280:1c3::/64;
+    set_real_ip_from 2409:8c70:3a00:300::/64;
+    set_real_ip_from 2408:872f:20:c::/64;
+    set_real_ip_from 240e:954:0:102::/64;
+    set_real_ip_from 240e:904:2c01:1020::/64;
+    set_real_ip_from 2409:8c00:8412:101b::/64;
+    set_real_ip_from 2408:400e:1001:e::/64;
+    set_real_ip_from 2409:8c3c:a01:200e::/64;
+    set_real_ip_from 2408:8719:2201:200e::/64;
+    set_real_ip_from 240e:97c:404c:4006::/64;
+    set_real_ip_from 2408:400a:1010:22::/64;
+    set_real_ip_from 2409:8c00:8412:101c::/64;
+    set_real_ip_from 2408:8773:8000:109::/64;
+    set_real_ip_from 2404:2280:198::/64;
+    set_real_ip_from 2408:400a:1010:21::/64;
+    set_real_ip_from 2408:8756:2cfa:4003::/64;
+    set_real_ip_from 2408:8706:3:101b::/64;
+    set_real_ip_from 2409:8c28:d05:1011::/64;
+    set_real_ip_from 2408:4005:1010:1c::/64;
+    set_real_ip_from 2408:8742:c381:1011::/64;
+    set_real_ip_from 240e:f7:8013:f011::/64;
+    set_real_ip_from 2408:8748:c110:59::/64;
+    set_real_ip_from 2409:8c34:4400:1000::/64;
+    set_real_ip_from 2401:d920:0:60::/64;
+    set_real_ip_from 2404:2280:1d6::/64;
+    set_real_ip_from 2404:2280:17c::/64;
+    set_real_ip_from 240e:97c:400c:2102::/64;
+    set_real_ip_from 2408:4003:1:16::/64;
+    set_real_ip_from 2408:8756:2cff:d102::/64;
+    set_real_ip_from 2409:8c54:1004:1102::/64;
+    set_real_ip_from 2404:2280:1da::/64;
+    set_real_ip_from 240e:f7:8e00:42b::/64;
+    set_real_ip_from 2409:8c28:203:203::/64;
+    set_real_ip_from 2408:8740:c3fc:107::/64;
+    set_real_ip_from 2409:801e:300d:f007::/64;
+    set_real_ip_from 2408:4002:1:1a::/64;
+    set_real_ip_from 2409:8c1e:8f91:1012::/64;
+    set_real_ip_from 240e:96c:202:1011::/64;
+    set_real_ip_from 2408:870c:41:1012::/64;
+    set_real_ip_from 2408:4002:1:19::/64;
+    set_real_ip_from 2408:870c:41:1011::/64;
+    set_real_ip_from 240e:96c:202:1012::/64;
+    set_real_ip_from 2408:400a:1010:1d::/64;
+    set_real_ip_from 2409:8c70:3a04:3001::/64;
+    set_real_ip_from 240e:954:0:1001::/64;
+    set_real_ip_from 2408:8770:1:3001::/64;
+    set_real_ip_from 2404:2280:209::/64;
+    set_real_ip_from 2404:2280:18a::/64;
+    set_real_ip_from 2404:2280:14f::/64;
+    set_real_ip_from 2408:8766:1:b::/64;
+    set_real_ip_from 2409:8c62:e10:44::/64;
+    set_real_ip_from 240e:974:e200:4501::/64;
+    set_real_ip_from 2404:2280:106::/64;
+    set_real_ip_from 2404:2280:21b::/64;
+    set_real_ip_from 2404:2280:21e::/64;
+    set_real_ip_from 240e:904:2c01:101c::/64;
+    set_real_ip_from 2408:8706:3:1018::/64;
+    set_real_ip_from 2409:8c00:8411:600a::/64;
+    set_real_ip_from 2408:400a:1010:1e::/64;
+    set_real_ip_from 2408:8740:51fc:203::/64;
+    set_real_ip_from 2409:8720:2200:c::/64;
+    set_real_ip_from 240e:978:301:f::/64;
+    set_real_ip_from 2408:8740:51fc:201::/64;
+    set_real_ip_from 2404:2280:1c5::/64;
+    set_real_ip_from 2404:2280:20c::/64;
+    set_real_ip_from 240e:904:2c01:100c::/64;
+    set_real_ip_from 2408:8706:3:1008::/64;
+    set_real_ip_from 2409:8c00:8412:1008::/64;
+    set_real_ip_from 2408:400a:1010:12::/64;
+    set_real_ip_from 2404:2280:2cb::/64;
+    set_real_ip_from 2404:2280:2f2::/64;
+    set_real_ip_from 2404:2280:2dd::/64;
+    set_real_ip_from 2409:8c3c:1300:35a::/64;
+    set_real_ip_from 240e:945:5:203::/64;
+    set_real_ip_from 2a0b:da40:0:50::/64;
+    set_real_ip_from 2408:8719:2000:66::/64;
+    set_real_ip_from 2408:8719:2000:67::/64;
+    set_real_ip_from 240e:93d:1:a::/64;
+    set_real_ip_from 2408:8722:1900::/64;
+    set_real_ip_from 2409:8c44:1b00:300::/64;
+    set_real_ip_from 2409:8c3c:a01:200b::/64;
+    set_real_ip_from 240e:945:3:200b::/64;
+    set_real_ip_from 2408:8719:2201:200b::/64;
+    set_real_ip_from 2408:400e:1001:b::/64;
+    set_real_ip_from 2408:873c:7814:82::/64;
+    set_real_ip_from 240e:979:9503:c1::/64;
+    set_real_ip_from 2409:8c20:5a63:3::/64;
+    set_real_ip_from 2408:8742:c381:1013::/64;
+    set_real_ip_from 2409:8c28:d05:1013::/64;
+    set_real_ip_from 2408:4005:1010:1e::/64;
+    set_real_ip_from 240e:f7:8013:f013::/64;
+    set_real_ip_from 2408:8742:c381:1010::/64;
+    set_real_ip_from 2409:8c28:d05:1010::/64;
+    set_real_ip_from 2408:4005:1010:16::/64;
+    set_real_ip_from 240e:f7:8013:f010::/64;
+    set_real_ip_from 2404:2280:304::/64;
+    real_ip_header ali-real-client-ip;
+    real_ip_recursive off;
+
 
     ssl_certificate /etc/nginx/certs/fullchain.pem;
     ssl_certificate_key /etc/nginx/certs/privkey.pem;
@@ -476,6 +796,27 @@ http {
     # calling the backend directly. Never proxy them from the public website.
     location ^~ /api/svc/ {
       return 404;
+    }
+
+    # Exact historical entry pages keep their equivalent destination.
+    location = /contact/show.php {
+      return 301 /zh/contact;
+    }
+
+    location = /about/show.php {
+      return 301 /zh/about;
+    }
+
+    location = /product/index.php {
+      return 301 /zh/products;
+    }
+
+    location = /news/index.php {
+      return 301 /zh/news;
+    }
+
+    location = /index.php {
+      return 301 /zh;
     }
 
     location = /product/showproduct.php {
