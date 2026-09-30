@@ -1,7 +1,7 @@
 import { expect, test } from '@playwright/test';
 
 for (const locale of ['zh', 'en'] as const) {
-  test(`${locale} mobile line controls remain usable without dismissing the contact dock`, async ({ page }, testInfo) => {
+  test(`${locale} mobile line controls remain usable above the persistent contact toolbar`, async ({ page }, testInfo) => {
     await page.setViewportSize({ width: 390, height: 844 });
     await page.route('**/api/v1/lead-events', (route) => route.fulfill({
       status: 200,
@@ -9,18 +9,20 @@ for (const locale of ['zh', 'en'] as const) {
       body: JSON.stringify({ code: 0, data: {}, message: 'ok' }),
     }));
     await page.goto(`/${locale}`, { waitUntil: 'networkidle' });
-    const dock = page.locator('[data-sticky-engineer-dock]');
+    const contacts = page.locator('[data-contact-toolbar]');
     const pages = page.getByRole('navigation', {
       name: locale === 'en' ? 'Production line pages' : '生产线卡片翻页',
     });
-    await expect(dock).toHaveAttribute('data-visible', 'false');
+    await expect(page.locator('[data-sticky-engineer-dock]')).toHaveCount(0);
+    await expect(contacts).toBeVisible();
 
-    // Put the controls exactly in the area formerly covered by the fixed dock.
+    // Keep carousel controls inside the usable viewport above the contact bar.
     await pages.evaluate((element) => {
-      window.scrollTo(0, window.scrollY + element.getBoundingClientRect().bottom - 820);
+      const contactTop = document.querySelector('[data-contact-toolbar]')!.getBoundingClientRect().top;
+      window.scrollTo(0, window.scrollY + element.getBoundingClientRect().bottom - contactTop + 16);
     });
     await expect(pages).toBeInViewport();
-    await expect(dock).toHaveAttribute('data-visible', 'false');
+    await expect(contacts).toBeVisible();
     const next = pages.getByRole('button', {
       name: locale === 'en' ? 'Next production line' : '查看下一条生产线',
     });
@@ -38,10 +40,10 @@ for (const locale of ['zh', 'en'] as const) {
     await page.screenshot({ path: testInfo.outputPath(`${locale}-line-controls.png`) });
     expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBe(390);
 
-    // Suppression is temporary: the contact entry returns in the following section.
+    // The contact entry stays available in the following section as well.
     await pages.evaluate((element) => {
       window.scrollTo(0, window.scrollY + element.getBoundingClientRect().bottom + 40);
     });
-    await expect(dock).toHaveAttribute('data-visible', 'true');
+    await expect(contacts).toBeVisible();
   });
 }
