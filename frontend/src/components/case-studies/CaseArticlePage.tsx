@@ -13,7 +13,6 @@ import { CASE_TYPE_LABELS } from '@/lib/cases/types';
 import { getCaseBuyerLinks } from '@/lib/buyer-selection-guides';
 import { isWithdrawnTechnicalPath } from '@/lib/publication-scope';
 import buyerGuideStyles from '@/components/products/BuyerSelectionGuide.module.css';
-import { CaseMobileContact } from './CaseContact';
 import { CaseCoverCaption } from './CaseCoverCaption';
 import { CaseProductConnections } from './CaseEvidenceLinks';
 import {
@@ -159,7 +158,6 @@ export function CaseArticlePage({
           }
         />
       </div>
-      <CaseMobileContact caseId={item.id} />
       <JsonLd
         id="case-article-jsonld"
         data={[

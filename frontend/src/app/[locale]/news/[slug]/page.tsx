@@ -6,6 +6,7 @@ import { HiPhone } from 'react-icons/hi2';
 
 import { JsonLd } from '@/components/JsonLd';
 import { Breadcrumb } from '@/components/layout/Breadcrumb';
+import { PhoneContactLink } from '@/components/lead/PhoneContactLink';
 import { WechatContactButton } from '@/components/lead/WechatContactButton';
 import { NewsArticleContent } from '@/components/news/NewsArticleContent';
 import { NewsArticleToc } from '@/components/news/NewsArticleToc';
@@ -333,14 +334,15 @@ export default async function NewsDetailPage({ params }: NewsDetailPageProps) {
                     : undefined
                 }
                 className={styles.consultButton}
+                trackingContext={{ pageType: 'news', properties: { position: 'article_consultation' } }}
               />
-              <a
+              <PhoneContactLink
                 className={styles.phone}
-                href={`tel:${siteSettings.salesPhone.replace(/[^+\d]/g, '')}`}
+                trackingContext={{ pageType: 'news', properties: { position: 'article_consultation' } }}
               >
                 <HiPhone aria-hidden="true" />
                 {currentLocale === 'en' ? siteSettings.salesPhone : '130-5298-6814'}
-              </a>
+              </PhoneContactLink>
               <p className={styles.hours}>
                 {currentLocale === 'en' ? 'Weekdays 8:30–17:30 (China time)' : '工作日 8:30–17:30'}
               </p>

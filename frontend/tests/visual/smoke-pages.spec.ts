@@ -1,4 +1,3 @@
-import path from 'node:path';
 import { expect, test, type Page } from '@playwright/test';
 
 const pages = [
@@ -69,19 +68,18 @@ test.describe('core visual smoke pages', () => {
           // Dev route chunks and their styles may still settle after the heading
           // and lazy images are visible. Keep fallback-font frames out of baselines.
           await page.waitForLoadState('networkidle');
+          const contacts = page.locator('[data-contact-toolbar]');
+          await expect(contacts).toBeVisible();
+          await expect(contacts.getByRole('link', { name: '电话联系', exact: true }))
+            .toHaveAttribute('href', 'tel:+8613052986814');
+          await expect(contacts.getByRole('link', { name: '邮箱联系', exact: true }))
+            .toHaveAttribute('href', 'mailto:997518512@qq.com');
           if (visualPage.name === 'home') {
-            // Scrolling back to the hero schedules the observer update separately
-            // from network activity. Capture the settled state, not the outgoing dock.
-            const dock = page.locator('[data-sticky-engineer-dock]');
-            await expect(dock).toHaveAttribute('data-visible', 'false');
-            await expect(dock).toBeHidden();
+            await expect(page.locator('[data-sticky-engineer-dock]')).toHaveCount(0);
           }
           await expect(page).toHaveScreenshot(`${visualPage.name}-${viewport.name}.png`, {
             fullPage: true,
             mask: [page.locator('canvas'), page.locator('video')],
-            // A full-page capture enlarges the viewport, which re-runs the dock's
-            // visibility observers in no fixed order. Its settled state is checked above.
-            ...(visualPage.name === 'home' ? { stylePath: path.join(__dirname, 'hide-home-dock.css') } : {}),
           });
         });
       }

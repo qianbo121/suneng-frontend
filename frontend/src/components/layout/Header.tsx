@@ -2,6 +2,7 @@
 
 import Image from 'next/image';
 import { NavigationLink as Link } from '@/components/layout/NavigationLink';
+import { PhoneContactLink } from '@/components/lead/PhoneContactLink';
 import { usePathname } from 'next/navigation';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import type { ComponentProps } from 'react';
@@ -386,13 +387,13 @@ export function Header({ locale, localeSwitchReload = false }: HeaderProps) {
             <ul className={styles.actions}>
               {(
                 <li className="relative flex list-none items-center border-none">
-                  <a
-                    href={`tel:${siteSettings.salesPhone.replace(/\s+/g, '')}`}
+                  <PhoneContactLink
+                    trackingContext={{ properties: { position: 'header_desktop' } }}
                     className="flex min-h-[44px] items-center gap-2 whitespace-nowrap text-[14px] font-normal text-[#5b6678] transition-colors duration-200 hover:text-brand-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary"
                   >
                     <HiPhone aria-hidden="true" className="h-4 w-4" />
                     <span>{currentLocale === 'zh' ? siteSettings.salesPhone.replace(/^\+86-?/, '') : siteSettings.salesPhone}</span>
-                  </a>
+                  </PhoneContactLink>
                 </li>
               )}
 
@@ -449,13 +450,13 @@ export function Header({ locale, localeSwitchReload = false }: HeaderProps) {
 
           {(
             <div className="sticky top-[78px] z-10 border-b border-[#e5e9f0] bg-white px-5 py-3 shadow-[0_8px_18px_rgba(15,23,42,0.05)]">
-              <a
-                href={`tel:${siteSettings.salesPhone.replace(/\s+/g, '')}`}
+              <PhoneContactLink
+                trackingContext={{ properties: { position: 'header_mobile_menu' } }}
                 className="flex min-h-[44px] w-full items-center justify-center gap-2 rounded-[4px] border border-[#cfd8e5] px-3 text-[14px] font-semibold text-brand-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary"
               >
                 <HiPhone aria-hidden="true" className="h-4 w-4" />
                 {currentLocale === 'en' ? 'Call us' : '电话咨询'}
-              </a>
+              </PhoneContactLink>
             </div>
           )}
 

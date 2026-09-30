@@ -1,10 +1,11 @@
 'use client';
 
 import Image from 'next/image';
-import { useEffect, useId, useRef, useState } from 'react';
+import { useEffect, useId, useRef, useState, type ReactNode } from 'react';
 import { createPortal } from 'react-dom';
 import { HiEnvelope, HiPhone, HiXMark } from 'react-icons/hi2';
 
+import { trackLeadEvent } from '@/lib/api/lead-events';
 import { siteSettings } from '@/mock/siteSettings';
 
 type WechatContactButtonProps = {
@@ -12,6 +13,8 @@ type WechatContactButtonProps = {
   label?: string;
   description?: string;
   className?: string;
+  icon?: ReactNode;
+  trackingContext?: Parameters<typeof trackLeadEvent>[1];
 };
 
 export function WechatContactButton({
@@ -19,8 +22,11 @@ export function WechatContactButton({
   label = '加企微，发工况初判',
   description = '扫码后发送工件、工艺、产能和现场条件，用于初步判断设备方向。',
   className,
+  icon,
+  trackingContext,
 }: WechatContactButtonProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const qrTrackedRef = useRef(false);
   const dialogRef = useRef<HTMLDivElement>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
   const closeButtonRef = useRef<HTMLButtonElement>(null);
@@ -74,9 +80,15 @@ export function WechatContactButton({
         type="button"
         className={className}
         aria-haspopup="dialog"
-        onClick={() => setIsOpen(true)}
+        aria-expanded={isOpen}
+        onClick={() => {
+          qrTrackedRef.current = false;
+          trackLeadEvent('wechat_click', trackingContext);
+          setIsOpen(true);
+        }}
       >
-        {label}
+        {icon}
+        <span>{label}</span>
       </button>
 
       {isOpen
@@ -126,6 +138,11 @@ export function WechatContactButton({
                     width={220}
                     height={220}
                     priority
+                    onLoad={() => {
+                      if (qrTrackedRef.current) return;
+                      qrTrackedRef.current = true;
+                      trackLeadEvent('wechat_qr_view', trackingContext);
+                    }}
                     className="h-[220px] w-[220px] object-contain"
                   />
                 </div>
@@ -138,6 +155,10 @@ export function WechatContactButton({
                 <div className="mt-6 grid gap-3 sm:grid-cols-2">
                   <a
                     href={`tel:${siteSettings.salesPhone.replace(/\s+/g, '')}`}
+                    onClick={() => trackLeadEvent('phone_click', {
+                      ...trackingContext,
+                      properties: { ...trackingContext?.properties, contactSurface: 'wechat_dialog' },
+                    })}
                     className="flex min-h-11 items-center justify-center gap-2 rounded-[10px] border border-[#cfd8e5] px-4 text-[14px] font-semibold transition-colors duration-200 hover:border-[#3370ff] hover:text-[#3370ff] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#3370ff]"
                   >
                     <HiPhone aria-hidden="true" className="h-4 w-4" />
@@ -145,6 +166,10 @@ export function WechatContactButton({
                   </a>
                   <a
                     href={`mailto:${siteSettings.email}`}
+                    onClick={() => trackLeadEvent('email_click', {
+                      ...trackingContext,
+                      properties: { ...trackingContext?.properties, contactSurface: 'wechat_dialog' },
+                    })}
                     className="flex min-h-11 items-center justify-center gap-2 rounded-[10px] border border-[#cfd8e5] px-4 text-[14px] font-semibold transition-colors duration-200 hover:border-[#3370ff] hover:text-[#3370ff] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#3370ff]"
                   >
                     <HiEnvelope aria-hidden="true" className="h-4 w-4" />

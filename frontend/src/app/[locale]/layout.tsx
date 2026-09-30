@@ -6,6 +6,7 @@ import { notFound } from 'next/navigation';
 import { JsonLd } from '@/components/JsonLd';
 import { LoadingFeedback } from '@/components/common/LoadingFeedback';
 import { WebsiteReadingTracker } from '@/components/analytics/WebsiteReadingTracker';
+import { FloatToolbar } from '@/components/layout/FloatToolbar';
 import { Footer } from '@/components/layout/Footer';
 import { Header } from '@/components/layout/Header';
 import { BaiduAnalytics } from '@/components/seo/BaiduAnalytics';
@@ -41,7 +42,7 @@ export default async function LocaleLayout({ children, params }: LocaleLayoutPro
       <body>
         <NextIntlClientProvider locale={locale} messages={messages}>
           <WebsiteReadingTracker />
-          <div className="min-h-screen bg-white text-neutral-900">
+          <div className="min-h-screen bg-white pb-[calc(64px+env(safe-area-inset-bottom))] text-neutral-900 xl:pb-0">
             <Header locale={locale} />
             <div id="site-page-content">
               <main className="min-h-[calc(100vh-520px)] bg-white">
@@ -50,6 +51,7 @@ export default async function LocaleLayout({ children, params }: LocaleLayoutPro
                 </Suspense>
               </main>
               <Footer locale={locale} />
+              <FloatToolbar locale={locale} />
             </div>
           </div>
         </NextIntlClientProvider>

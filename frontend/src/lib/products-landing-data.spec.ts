@@ -38,6 +38,9 @@ describe('Chinese product-center landing data', () => {
 
   it('preserves existing line identities and furnace routes', () => {
     expect(productCenterProductionLines.map((card) => card.id)).toEqual([
+      'roller-mesh-belt-line',
+      'copper-wire-annealing-line',
+      'annealing-solution-line',
       'track-shoe-press-quench-line',
       'forging-waste-heat-qt-line',
       'fastener-quench-temper-line',
@@ -46,9 +49,6 @@ describe('Chinese product-center landing data', () => {
       'aluminum-solution-aging-line',
       'aluminum-forging-heating-line',
       'cylinder-curing-line',
-      'roller-mesh-belt-line',
-      'copper-wire-annealing-line',
-      'annealing-solution-line',
     ]);
     const categories = new Set(PRODUCT_CENTER_CATEGORIES.map((product) => product.slug));
     for (const card of [...periodicFurnaceCards, ...continuousFurnaceCards]) {

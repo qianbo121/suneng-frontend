@@ -263,9 +263,10 @@ const productionLineFlows: Record<string, { steps: string[]; accentSteps: string
   },
 };
 
+// Keep the three owner-confirmed priority lines first, matching the homepage.
 export const productCenterProductionLines = [
-  ...productCenterPlaceholderProductionLines,
   ...publishedProductionLines,
+  ...productCenterPlaceholderProductionLines,
 ].map((card) => {
   const line = getHeatTreatmentLine(card.id);
   if (!line) throw new Error(`Missing reviewed production-line content for ${card.id}`);

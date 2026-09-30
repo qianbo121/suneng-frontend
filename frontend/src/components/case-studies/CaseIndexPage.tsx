@@ -9,7 +9,7 @@ import { absoluteUrl } from '@/lib/seo/metadata';
 import { getBreadcrumbJsonLd } from '@/lib/seo/jsonld';
 import { CaseList, CaseSelectSubmit } from './CaseList';
 import { CaseFilterSelect } from './CaseFilterSelect';
-import { CaseContactBand, CaseMobileContact } from './CaseContact';
+import { CaseContactBand } from './CaseContact';
 import './cases.css';
 import './case-c4.css';
 
@@ -155,7 +155,6 @@ export function CaseIndexPage({ query }: { query: CaseQuery }) {
         </section>
         <CaseContactBand />
       </div>
-      <CaseMobileContact />
       <JsonLd
         id="case-list-jsonld"
         data={[

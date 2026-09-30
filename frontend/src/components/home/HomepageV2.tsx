@@ -2,8 +2,8 @@ import Link from 'next/link';
 import { Suspense } from 'react';
 import { HiOutlineCursorArrowRays } from 'react-icons/hi2';
 
-import { HomepageBottomLeadBar } from '@/components/home/HomepageBottomLeadBar';
 import { HeatTreatmentToolCenter } from '@/components/home/HeatTreatmentToolCenter';
+import { HomePurchaseGuides } from '@/components/home/HomePurchaseGuides';
 import { HomepageLeadForm } from '@/components/home/HomepageLeadForm';
 import { HomepageTaskCards } from '@/components/home/HomepageTaskCards';
 import { ProductTypesShowcase } from '@/components/home/ProductTypesShowcase';
@@ -118,6 +118,8 @@ export function HomepageV2({ locale = 'zh' }: { locale?: 'zh' | 'en' }) {
         </div>
       </section>
 
+      {!english ? <HomePurchaseGuides /> : null}
+
       <WorkpieceRouter catalog={workpieceRouterCatalog} locale={locale} />
 
       <ProductTypesShowcase locale={locale} />
@@ -128,7 +130,6 @@ export function HomepageV2({ locale = 'zh' }: { locale?: 'zh' | 'en' }) {
 
       <HomepageLeadForm locale={locale} privacyNoticeEnabled />
 
-      <HomepageBottomLeadBar locale={locale} />
     </div>
   );
 }
