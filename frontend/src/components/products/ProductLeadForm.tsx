@@ -14,6 +14,8 @@ import {
   validateLeadPreferredContact,
 } from '@/lib/api/custom-requirements';
 import { buildLeadSourceSnapshot, trackLeadEvent } from '@/lib/api/lead-events';
+import { trackInquiryAttempt, trackInquiryError, trackInquiryRequestError } from '@/lib/api/inquiry-events';
+import { InquiryContactOptions } from '@/components/lead/InquiryContactOptions';
 import { Locale } from '@/types/site';
 import {
   handleSuccessDialogKeyDown,
@@ -438,6 +440,7 @@ export function ProductLeadForm({
   };
 
   const focusIssue = (issue: LeadValidationIssue) => {
+    trackInquiryError('product_lead_form', issue.field, issue.reason === 'required' || issue.reason === 'contact' ? 'required' : 'invalid');
     setInvalidField(issue.field);
     showToast(issueMessage(issue));
     const field = formRef.current?.elements.namedItem(issue.field);
@@ -497,6 +500,7 @@ export function ProductLeadForm({
 
     try {
       setIsSubmitting(true);
+      trackInquiryAttempt('product_lead_form', undefined, false);
       const result = await submitCustomRequirement(
         buildCustomRequirementPayload(
           values,
@@ -514,7 +518,9 @@ export function ProductLeadForm({
       setAvailableContacts({ phone: false, email: false });
       setStep(1);
       setSubmissionId(String(result.submissionId));
+      trackLeadEvent('form_success', { properties: { source_module: 'product_lead_form' } });
     } catch (error) {
+      trackInquiryRequestError('product_lead_form', error);
       if (renewIdempotencyKeyAfterConflict(error, idempotencyKeyRef)) {
         showToast(copy.idempotencyConflict, 6000);
       } else {
@@ -567,6 +573,7 @@ export function ProductLeadForm({
           noValidate
           className={`p-[20px] sm:p-[24px] lg:p-[28px] ${hasLeadSidebar ? '' : 'lg:p-[32px]'}`}
         >
+          {!hasLeadSidebar ? <InquiryContactOptions locale={locale} /> : null}
           {!hasLeadSidebar ? (
             <div className="mb-6">
               <p className="mb-2 text-[14px] font-semibold tracking-[0.18em]">{copy.onlineMessage}</p>
@@ -612,7 +619,7 @@ export function ProductLeadForm({
             <LeadTextInput label={copy.fields.company.label} name="company" placeholder={copy.fields.company.placeholder} required invalid={invalidField === 'company'} autoComplete="organization" maxLength={180} />
             <LeadTextInput label={copy.fields.name.label} name="name" placeholder={copy.fields.name.placeholder} required invalid={invalidField === 'name'} autoComplete="name" maxLength={120} />
             <LeadTextInput label={copy.fields.projectLocation.label} name="projectLocation" placeholder={copy.fields.projectLocation.placeholder} required invalid={invalidField === 'projectLocation'} autoComplete="country-name" maxLength={180} />
-            <LeadTextInput label={copy.fields.phone.label} name="phone" placeholder={copy.fields.phone.placeholder} type="tel" invalid={invalidField === 'phone'} autoComplete="tel" maxLength={50} />
+            <LeadTextInput label={copy.fields.phone.label} name="phone" placeholder={copy.fields.phone.placeholder} type="text" invalid={invalidField === 'phone'} autoComplete="tel" maxLength={50} />
             <LeadTextInput label={copy.fields.email.label} name="email" placeholder={copy.fields.email.placeholder} type="email" required={locale === 'en'} invalid={invalidField === 'email'} autoComplete="email" maxLength={254} />
             <LeadTextarea className="md:col-span-2" label={copy.fields.requirement.label} name="requirement" placeholder={copy.fields.requirement.placeholder} defaultValue={inquiryProduct ? `${locale === 'en' ? 'Equipment' : '咨询设备'}: ${inquiryProduct}.\n` : undefined} required invalid={invalidField === 'requirement'} maxLength={8000} />
             <div className="md:col-span-2 flex justify-end pt-1">

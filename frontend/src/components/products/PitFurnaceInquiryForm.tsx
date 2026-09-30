@@ -11,6 +11,8 @@ import {
   type ProjectLeadValues,
 } from '@/lib/api/custom-requirements';
 import { buildLeadSourceSnapshot, trackLeadEvent } from '@/lib/api/lead-events';
+import { trackInquiryAttempt, trackInquiryError, trackInquiryRequestError } from '@/lib/api/inquiry-events';
+import { InquiryContactOptions } from '@/components/lead/InquiryContactOptions';
 
 import styles from './PitFurnaceDetailPage.module.css';
 
@@ -75,6 +77,7 @@ export function PitFurnaceInquiryForm() {
     const phone = fieldValue(formData, 'phone');
     const email = fieldValue(formData, 'email');
     if (!phone && !email) {
+      trackInquiryError('pit_furnace_form', 'contact', 'required');
       setMessage('电话 / 微信与邮箱至少填写一项。');
       const phoneField = form.elements.namedItem('phone');
       if (phoneField instanceof HTMLElement) phoneField.focus();
@@ -99,6 +102,7 @@ export function PitFurnaceInquiryForm() {
     setIsSubmitting(true);
     setMessage('');
     try {
+      trackInquiryAttempt('pit_furnace_form', { pageType: '产品详情', productTag: '井式炉' });
       const result = await submitCustomRequirement(
         buildCustomRequirementPayload(
           values,
@@ -114,6 +118,7 @@ export function PitFurnaceInquiryForm() {
       form.reset();
       startedRef.current = false;
     } catch (error) {
+      trackInquiryRequestError('pit_furnace_form', error);
       if (renewIdempotencyKeyAfterConflict(error, idempotencyKeyRef)) {
         setMessage('刚才的版本可能已提交，内容仍然保留；请再次点击提交，作为新版本发送。');
       } else {
@@ -131,7 +136,9 @@ export function PitFurnaceInquiryForm() {
       className={styles.inquiryForm}
       onSubmit={handleSubmit}
       onChangeCapture={handleStart}
+      onInvalidCapture={(event) => trackInquiryError('pit_furnace_form', (event.target as HTMLInputElement).name, 'invalid')}
     >
+      <InquiryContactOptions />
       <div className={styles.formGrid}>
         <label className={styles.field}>
           <span>公司名称</span>
@@ -143,7 +150,7 @@ export function PitFurnaceInquiryForm() {
         </label>
         <label className={styles.field}>
           <span>电话 / 微信</span>
-          <input name="phone" type="tel" autoComplete="tel" placeholder="与邮箱至少填写一项" />
+          <input name="phone" type="text" autoComplete="tel" placeholder="手机号码或微信号，与邮箱至少填写一项" />
         </label>
         <label className={styles.field}>
           <span>邮箱</span>

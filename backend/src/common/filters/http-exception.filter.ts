@@ -77,6 +77,15 @@ export class HttpExceptionFilter implements ExceptionFilter {
     if (status >= HttpStatus.INTERNAL_SERVER_ERROR) {
       const error = exception instanceof Error ? exception.stack : JSON.stringify(exception);
       this.logger.error(`${request.method} ${safePath}`, error);
+    } else if (
+      request.method === 'POST' &&
+      /^\/api\/v[12]\/(?:custom-requirements|engineering-requirements)(?:\/attachments)?\/?$/.test(
+        safePath,
+      )
+    ) {
+      // A validation rejection must be observable, without logging the body,
+      // query, or error message (all may contain customer-provided values).
+      this.logger.warn(`Inquiry rejected: ${request.method} ${safePath} -> ${status}`);
     } else if (!(exception instanceof HttpException)) {
       // Database-shaped failures that legitimately stay 4xx (a unique constraint, an
       // unknown sort column) still deserve one line, or they are invisible afterwards.

@@ -1,5 +1,6 @@
 {
   "schemaVersion": 1,
+  "htmlCachePolicy": "no-store",
   "sourceIdentity": "git-commit",
   "sourceCommit": "REPLACE_WITH_FULL_VERIFIED_COMMIT",
   "archiveSha256": "REPLACE_WITH_VERIFIED_ARCHIVE_SHA256",

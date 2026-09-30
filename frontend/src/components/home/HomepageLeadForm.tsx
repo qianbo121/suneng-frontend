@@ -18,6 +18,7 @@ import {
   validateHomepageRequirement,
 } from '@/lib/api/homepage-requirements';
 import { buildLeadSourceSnapshot, trackLeadEvent } from '@/lib/api/lead-events';
+import { trackInquiryAttempt, trackInquiryError, trackInquiryRequestError } from '@/lib/api/inquiry-events';
 import { getActiveWorkpieceContext } from '@/lib/workpiece-selection-context';
 import {
   clearActiveWorkpieceRouterDraft,
@@ -26,6 +27,7 @@ import {
 import { markStickyEngineerConverted } from '@/components/home/sticky-engineer';
 import { hasConfirmedSubmission } from '@/lib/fastener-line-inquiry';
 import { siteSettings } from '@/mock/siteSettings';
+import { InquiryContactOptions } from '@/components/lead/InquiryContactOptions';
 
 import styles from './HomepageV2.module.css';
 
@@ -221,6 +223,7 @@ export function HomepageLeadForm({
     if (submittingRef.current) return;
     const issue = validateHomepageRequirement(values);
     if (issue) {
+      trackInquiryError(sourceModule, issue, values[issue].trim() ? 'invalid' : 'required', { pageType, productTag });
       setInvalidField(issue);
       setMessage('');
       focusField(issue);
@@ -231,6 +234,7 @@ export function HomepageLeadForm({
     setIsSubmitting(true);
     setMessage('');
     try {
+      trackInquiryAttempt(sourceModule, { pageType, productTag });
       const trackingWorkpieceContext = inquiryProduct ? null : getActiveWorkpieceContext();
       const workpieceContext = inquiryProduct
         ? undefined
@@ -266,6 +270,7 @@ export function HomepageLeadForm({
       });
       renewFormIdempotencyKey(idempotencyKeyRef);
     } catch (error) {
+      trackInquiryRequestError(sourceModule, error, { pageType, productTag });
       if (renewIdempotencyKeyAfterConflict(error, idempotencyKeyRef)) {
         setMessage(t('刚才提交出了点小状况，您填的内容都在，请再点一次提交。', 'There was a submission issue. Your details are saved here; please submit again.'));
       } else {
@@ -320,6 +325,7 @@ export function HomepageLeadForm({
               {eyebrow ? <p className={styles.formEyebrow}>{eyebrow}</p> : null}
               <h2 id="homepage-form-title">{t('资料不全，也能先判断方向', 'Start with what you know')}</h2>
               <p>{t('只需说明工件、产量或现有设备问题，图纸和详细参数可后续补充。', 'Tell us about the workpiece, throughput or existing equipment issue. Drawings and detailed parameters can follow.')}</p>
+              {sectionId === 'inquiry' || inquiryProduct ? <InquiryContactOptions locale={locale} /> : null}
               <div className={styles.formPathList}>
                 {initialResults.map(([title, result]) => (
                   <div key={title}>
