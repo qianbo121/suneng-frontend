@@ -21,7 +21,7 @@ const productSource = JSON.stringify(STATIC_PRODUCTS);
 const aboutSource = readSource('../../components/about/AboutZhContent.tsx');
 const certificateSource = readSource('../../constants/certificates.ts');
 const manufacturerSolutionSource = readSource(
-  '../../app/[locale]/solutions/rechuli-lu-changjia/page.tsx',
+  '../../components/manufacturer-pages/ManufacturerContent.tsx',
 );
 
 describe('GEO fact publication boundaries', () => {
@@ -58,7 +58,7 @@ describe('GEO fact publication boundaries', () => {
     expect(manufacturerSolutionSource).not.toContain('ISO 14001');
     expect(manufacturerSolutionSource).not.toContain('ISO 45001');
     expect(manufacturerSolutionSource).not.toContain('ISO 9001 / 14001 / 45001');
-    expect(manufacturerSolutionSource).toContain('03824Q60289R3S');
-    expect(manufacturerSolutionSource).toContain('2027-01-11');
+    expect(certificateSource).toContain('03824Q60289R3S');
+    expect(manufacturerSolutionSource).toContain('2027 年 1 月 11 日');
   });
 });
