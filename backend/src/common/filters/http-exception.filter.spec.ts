@@ -24,7 +24,9 @@ describe('HttpExceptionFilter privacy boundary', () => {
     const logWarn = jest.spyOn(Logger.prototype, 'warn').mockImplementation();
     try {
       capture(new BadRequestException('Invalid customer@example.com / 13800000000'));
-      expect(logWarn).toHaveBeenCalledWith('Inquiry rejected: POST /api/v2/custom-requirements -> 400');
+      expect(logWarn).toHaveBeenCalledWith(
+        'Inquiry rejected: POST /api/v2/custom-requirements -> 400',
+      );
       expect(JSON.stringify(logWarn.mock.calls)).not.toContain('customer@example.com');
       expect(JSON.stringify(logWarn.mock.calls)).not.toContain('13800000000');
     } finally {

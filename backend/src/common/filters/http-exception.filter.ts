@@ -79,7 +79,9 @@ export class HttpExceptionFilter implements ExceptionFilter {
       this.logger.error(`${request.method} ${safePath}`, error);
     } else if (
       request.method === 'POST' &&
-      /^\/api\/v[12]\/(?:custom-requirements|engineering-requirements)(?:\/attachments)?\/?$/.test(safePath)
+      /^\/api\/v[12]\/(?:custom-requirements|engineering-requirements)(?:\/attachments)?\/?$/.test(
+        safePath,
+      )
     ) {
       // A validation rejection must be observable, without logging the body,
       // query, or error message (all may contain customer-provided values).
