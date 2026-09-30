@@ -4,8 +4,7 @@ import { FaWeixin } from 'react-icons/fa';
 import { HiChevronUp, HiOutlineEnvelope, HiOutlinePhone } from 'react-icons/hi2';
 
 import { WechatContactButton } from '@/components/lead/WechatContactButton';
-import { trackLeadEvent } from '@/lib/api/lead-events';
-import { siteSettings } from '@/mock/siteSettings';
+import { ContactAction } from '@/components/lead/ContactAction';
 
 const itemClass = 'flex min-h-[64px] flex-col items-center justify-center gap-1 text-[11px] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-4px] xl:h-[92px] xl:w-[72px] xl:gap-[10px] xl:border xl:border-white/10 xl:text-[13px] xl:text-white xl:transition-colors xl:duration-200';
 const contactItemClass = `${itemClass} focus-visible:outline-[#3370ff] xl:bg-[#0b1f36] xl:hover:bg-[var(--color-interactive)]`;
@@ -27,29 +26,28 @@ export function FloatToolbar({ locale = 'zh' }: { locale?: string }) {
       <WechatContactButton
         locale={language}
         label={copy.wechat}
-        description={language === 'en' ? 'Scan to share your workpiece, process, capacity and site requirements.' : '扫码后发送工件、工艺、产能和现场条件，用于初步判断设备方向。'}
         icon={<FaWeixin aria-hidden="true" className={iconClass} />}
         className={`${contactItemClass} text-[var(--color-interactive)] xl:rounded-t-[10px]`}
         trackingContext={trackingContext}
       />
-      <a
-        href={`tel:${siteSettings.salesPhone.replace(/[^+\d]/g, '')}`}
-        title={siteSettings.salesPhone}
+      <ContactAction
+        kind="phone"
+        locale={language}
         className={`${contactItemClass} text-[var(--color-action)]`}
-        onClick={() => trackLeadEvent('phone_click', trackingContext)}
+        trackingContext={trackingContext}
       >
         <HiOutlinePhone aria-hidden="true" className={iconClass} />
         <span>{copy.phone}</span>
-      </a>
-      <a
-        href={`mailto:${siteSettings.email}`}
-        title={siteSettings.email}
+      </ContactAction>
+      <ContactAction
+        kind="email"
+        locale={language}
         className={`${contactItemClass} text-[var(--color-interactive)]`}
-        onClick={() => trackLeadEvent('email_click', trackingContext)}
+        trackingContext={trackingContext}
       >
         <HiOutlineEnvelope aria-hidden="true" className={iconClass} />
         <span>{copy.email}</span>
-      </a>
+      </ContactAction>
       <button
         type="button"
         className={`${itemClass} bg-[var(--color-primary)] text-white hover:bg-[var(--color-interactive)] focus-visible:outline-white xl:rounded-b-[10px]`}
