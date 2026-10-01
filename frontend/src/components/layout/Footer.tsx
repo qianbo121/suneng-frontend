@@ -4,7 +4,7 @@ import type { CSSProperties, ReactNode } from 'react';
 import Image from 'next/image';
 import { HiEnvelope, HiMapPin, HiPhone } from 'react-icons/hi2';
 
-import { trackLeadEvent } from '@/lib/api/lead-events';
+import { trackContactEntry } from '@/lib/api/contact-events';
 import { buildBrandImageAlt, joinImageAlt } from '@/lib/seo';
 import { siteSettings } from '@/mock/siteSettings';
 import { Locale } from '@/types/site';
@@ -207,7 +207,7 @@ function ContactBlock({ copy }: { copy: (typeof footerCopy)['zh'] | (typeof foot
     <div className="site-footer__contact flex h-full flex-col items-center justify-center gap-[24px] xl:items-start">
       <a
         href={`mailto:${copy.email}`}
-        onClick={() => trackLeadEvent('email_click')}
+        onClick={() => trackContactEntry('email', { properties: { position: 'footer', contact_purpose: 'general' } })}
         className={`${FOOTER_TOKENS.fontClass} flex min-h-[44px] max-w-full items-center gap-[14px] text-center text-[var(--home-font-secondary-size,16px)] font-normal leading-[var(--home-font-secondary-line,24px)] text-[var(--footer-text-color)] transition-colors hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--footer-brand-color)] focus-visible:ring-offset-4 focus-visible:ring-offset-[#061527] xl:whitespace-nowrap xl:text-left`}
       >
         <ContactIcon>
@@ -218,7 +218,7 @@ function ContactBlock({ copy }: { copy: (typeof footerCopy)['zh'] | (typeof foot
 
       <a
         href={`tel:${copy.phone.replace(/\s+/g, '')}`}
-        onClick={() => trackLeadEvent('phone_click')}
+        onClick={() => trackContactEntry('phone', { properties: { position: 'footer', contact_purpose: 'general' } })}
         className={`${FOOTER_TOKENS.fontClass} flex min-h-[44px] max-w-full items-center gap-[14px] text-center text-[var(--home-font-secondary-size,16px)] font-normal leading-[var(--home-font-secondary-line,24px)] text-[var(--footer-text-color)] transition-colors hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--footer-brand-color)] focus-visible:ring-offset-4 focus-visible:ring-offset-[#061527] xl:whitespace-nowrap xl:text-left`}
       >
         <ContactIcon>

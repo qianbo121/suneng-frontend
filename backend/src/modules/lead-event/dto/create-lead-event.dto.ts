@@ -13,6 +13,7 @@ export const LEAD_EVENT_TYPES = [
   'wechat_qr_view',
   'quote_cta_click',
   'email_click',
+  'contact_action',
   'form_start',
   'form_step_complete',
   'form_attempt',

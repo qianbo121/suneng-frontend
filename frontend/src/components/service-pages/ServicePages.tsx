@@ -43,6 +43,7 @@ import {
 } from './service-content';
 import { getServiceJsonLd } from './service-metadata';
 import styles from './ServicePages.module.css';
+import { TrackedContactLink } from '@/components/lead/TrackedContactLink';
 import { OverseasDeliverySection } from './OverseasDeliverySection';
 
 function OverviewContent({ locale = 'zh' }: { locale?: Locale }) {
@@ -228,17 +229,18 @@ function InstallationContent({ locale }: { locale: Locale }) {
         <aside className={styles.hotline}>
           <div>
             <span>{t("售后服务电话")}</span>
-            <a
+            <TrackedContactLink
+              kind="phone" position="after_sales_hotline" purpose="after_sales"
               className={`${styles.contactPhone} ${styles.hotlineNumber}`}
               href={serviceContact.phoneHref}
             >
               <HiPhone aria-hidden="true" />
               {locale === 'en' ? '+86-' + serviceContact.displayPhone : serviceContact.displayPhone}
-            </a>
+            </TrackedContactLink>
           </div>
           <p>
             {t("先核对故障与资料，再沟通远程支持、备件或现场服务。技术反馈、到场及恢复生产的时间分别确认。")}</p>
-          <ServiceContactButton afterSales locale={locale} />
+          <ServiceContactButton afterSales locale={locale} position="after_sales_hotline_wechat" />
         </aside>
       </ServiceSection>
       <ServiceSection

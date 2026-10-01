@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { TrackedContactLink } from '@/components/lead/TrackedContactLink';
 import { partnerText } from '@/lib/partner-copy';
 import { ENGLISH_PROVINCES } from '@/lib/partner-provinces-en';
 import { notFound } from 'next/navigation';
@@ -250,9 +251,9 @@ export default async function PartnerPage({ params }: PartnerPageProps) {
                 <path d="M3 10h14m-5-5 5 5-5 5" />
               </svg>
             </Link>
-            <a className={styles.phone} href={`tel:${siteSettings.salesPhone}`}>
+            <TrackedContactLink kind="phone" position="partner_bottom_phone" purpose="sales" className={styles.phone} href={`tel:${siteSettings.salesPhone}`}>
               {locale === 'en' ? '+86-130-5298-6814' : '130-5298-6814'}
-            </a>
+            </TrackedContactLink>
           </div>
         </section>
         <p className={styles.note}>

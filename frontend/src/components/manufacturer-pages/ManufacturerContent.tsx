@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import { TrackedContactLink } from '@/components/lead/TrackedContactLink';
 import { ManufacturerFaqs } from './ManufacturerFaqs';
 import faqs from './manufacturer-faqs.json';
 import styles from './ManufacturerPages.module.css';
@@ -59,9 +60,9 @@ export function ManufacturerContent() {
                 </svg>
               </a>
             </div>
-            <a className={'hero-phone'} href={'tel:+8613052986814'}>
+            <TrackedContactLink kind="phone" position="manufacturer_hero_phone" purpose="sales" className={'hero-phone'} href={'tel:+8613052986814'}>
               {'电话咨询：130-5298-6814'}
-            </a>
+            </TrackedContactLink>
           </div>
         </div>
       </section>
@@ -807,9 +808,9 @@ export function ManufacturerContent() {
                 ></path>
               </svg>
             </a>
-            <a className={'phone'} href={'tel:+8613052986814'}>
+            <TrackedContactLink kind="phone" position="manufacturer_bottom_phone" purpose="sales" className={'phone'} href={'tel:+8613052986814'}>
               {'电话：130-5298-6814（同号微信）'}
-            </a>
+            </TrackedContactLink>
           </div>
         </div>
       </section>
