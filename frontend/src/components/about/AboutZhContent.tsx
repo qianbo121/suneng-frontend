@@ -14,6 +14,7 @@ import {
 } from '@/components/about/AboutPageInteractive';
 import { ABOUT_ANCHORS, ABOUT_BOUNDARIES, ABOUT_FAQS } from '@/components/about/about-page-data';
 import { WechatContactButton } from '@/components/lead/WechatContactButton';
+import { InquiryContactOptions } from '@/components/lead/InquiryContactOptions';
 import { getButtonClass } from '@/components/ui/Button';
 import {
   SUNENG_ISO_CERTIFICATES,
@@ -426,6 +427,11 @@ export function AboutZhContent({ locale = 'zh' }: { locale?: Locale }) {
             <h2 id="inquiry-title">{t("发工况，获取初步方向与报价资料清单")}</h2>
             <p className={styles.contactDescription}>
               {t("提交工件、材质、温度、工艺曲线、装料方式、产能节拍和现场条件，技术人员可先做方向与配置边界判断。")}</p>
+            {locale === 'zh' ? (
+              <div className="mt-4">
+                <InquiryContactOptions showWechat={false} trackingPosition="about_contact" />
+              </div>
+            ) : null}
           </div>
           <WechatContactButton locale={locale} description={locale === 'en' ? 'Send workpieces, process, throughput and site conditions for an initial assessment.' : undefined}
             label={t("提交工况资料")}

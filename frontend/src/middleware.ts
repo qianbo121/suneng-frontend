@@ -3,7 +3,6 @@ import createMiddleware from 'next-intl/middleware';
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
-import { FALLBACK_NEWS_SLUGS } from '@/constants/news-fallback-slugs';
 import { NEWS_PAGE_SIZE } from '@/constants/news';
 import { isLocalizedPublicPath, PUBLIC_PAGE_CACHE_CONTROL, routing } from '@/i18n/routing';
 import { PUBLIC_CASE_SLUGS, PUBLIC_ENGLISH_CASE_SLUGS } from '@/lib/cases/public-case-allowlist';
@@ -181,7 +180,7 @@ export default async function middleware(request: NextRequest) {
 
   const englishNewsDetail = pathname.startsWith('/en/news/');
   const newsSlug = getZhNewsSlug(englishNewsDetail ? pathname.replace('/en/', '/zh/') : pathname);
-  if (newsSlug && (englishNewsDetail || !FALLBACK_NEWS_SLUGS.has(newsSlug))) {
+  if (newsSlug) {
     const resolution = await getNewsRouteResolution(
       pathname,
       process.env.API_BASE_URL_INTERNAL || process.env.NEXT_PUBLIC_API_URL || process.env.NEXT_PUBLIC_API_BASE_URL || '',
