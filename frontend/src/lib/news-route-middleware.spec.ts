@@ -61,3 +61,28 @@ describe('dotted news request chain', () => {
     expect((await run('/zh/news/valid.article')).status).not.toBe(404);
   });
 });
+
+
+describe('retired bundled news examples', () => {
+  it.each([
+    'company-delivery-batch-1',
+    'large-trolley-furnace-delivery',
+    'industry-technology-exchange',
+    'intelligent-control-system-upgrade',
+    'equipment-upgrade-production-stability',
+    'international-heat-treatment-expo',
+    'industrial-furnace-maintenance-sharing',
+  ])('does not resurrect unpublished content at %s', async (slug) => {
+    vi.stubEnv('API_BASE_URL_INTERNAL', 'http://backend.test/api');
+    vi.stubGlobal('fetch', vi.fn<typeof fetch>().mockResolvedValue(new Response('{}', { status: 404 })));
+    const response = await run(`/zh/news/${slug}`);
+    expect(response.status).toBe(404);
+    expect(response.headers.get('x-robots-tag')).toBe('noindex');
+  });
+
+  it('still serves a genuine published article if it uses an old example slug', async () => {
+    vi.stubEnv('API_BASE_URL_INTERNAL', 'http://backend.test/api');
+    vi.stubGlobal('fetch', vi.fn<typeof fetch>().mockResolvedValue(Response.json({ data: { slug: 'large-trolley-furnace-delivery' } })));
+    expect((await run('/zh/news/large-trolley-furnace-delivery')).status).not.toBe(404);
+  });
+});

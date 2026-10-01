@@ -5,6 +5,7 @@ import { JsonLd } from '@/components/JsonLd';
 import { getFaqJsonLd, getProductDetailJsonLd } from '@/lib/seo/jsonld';
 import { Breadcrumb } from '@/components/layout/Breadcrumb';
 import { Button } from '@/components/ui/Button';
+import { InquiryContactOptions } from '@/components/lead/InquiryContactOptions';
 import { getStaticProductBySlug } from '@/constants/static-products';
 import type { additionalFurnaces } from '@/lib/additional-furnaces';
 import { additionalFurnaceSelection } from '@/lib/additional-furnace-selection';
@@ -434,6 +435,11 @@ export function AdditionalFurnaceDetailPage({
                 <li key={input}>{input}</li>
               ))}
             </ul>
+            {!en ? (
+              <div className="mt-4">
+                <InquiryContactOptions trackingPosition="product_selection_contact" />
+              </div>
+            ) : null}
             <Button
               href={inquiryHref}
               className={`${shared.primaryButton} ${styles.primaryAction}`}

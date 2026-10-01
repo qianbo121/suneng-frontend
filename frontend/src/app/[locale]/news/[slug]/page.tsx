@@ -13,12 +13,7 @@ import { NewsArticleToc } from '@/components/news/NewsArticleToc';
 import { NewsRelatedArticles } from '@/components/news/NewsRelatedArticles';
 import { siteSettings } from '@/mock/siteSettings';
 import { NewsViewPing } from '@/components/news/NewsViewPing';
-import {
-  FALLBACK_NEWS_DETAIL,
-  FALLBACK_NEWS_ITEMS,
-  FALLBACK_NEWS_SLUGS,
-  NEWS_LABEL,
-} from '@/constants/news';
+import { NEWS_LABEL } from '@/constants/news';
 import { getNewsList } from '@/lib/api/news';
 import { selectNewsContinueReadingItems } from '@/lib/news-continue-reading';
 import {
@@ -60,9 +55,8 @@ export async function generateMetadata({ params }: NewsDetailPageProps) {
   const lookupSlug = getCanonicalNewsSlug(slug);
 
   const { article: apiArticle, error } = await getNewsDetailPageData(lookupSlug);
-  const article =
-    apiArticle ||
-    (currentLocale === 'zh' && FALLBACK_NEWS_SLUGS.has(lookupSlug) ? FALLBACK_NEWS_DETAIL : null);
+  // Public news must come from the published content endpoint, never bundled examples.
+  const article = apiArticle;
 
   if (!article) {
     // Distinguish a genuinely-missing article (404) from an upstream API outage:
@@ -89,7 +83,6 @@ export async function generateMetadata({ params }: NewsDetailPageProps) {
   // Keep complete summaries in both languages, including acceptance limitations.
   const description = summary;
   const image = resolveNewsImage(article, {
-    preferFallback: FALLBACK_NEWS_SLUGS.has(slug),
     locale: currentLocale,
   });
   const keywords =
@@ -126,9 +119,8 @@ export default async function NewsDetailPage({ params }: NewsDetailPageProps) {
   const lookupSlug = getCanonicalNewsSlug(slug);
 
   const { article: apiArticle, error } = await getNewsDetailPageData(lookupSlug);
-  const article =
-    apiArticle ||
-    (currentLocale === 'zh' && FALLBACK_NEWS_SLUGS.has(lookupSlug) ? FALLBACK_NEWS_DETAIL : null);
+  // Public news must come from the published content endpoint, never bundled examples.
+  const article = apiArticle;
 
   if (!article) {
     // Distinguish a genuinely-missing article (404) from an upstream API outage:
@@ -153,7 +145,6 @@ export default async function NewsDetailPage({ params }: NewsDetailPageProps) {
   const title = currentLocale === 'en' ? article.titleEn || article.titleZh : article.titleZh;
   const summary = getNewsSummary(currentLocale, article);
   const image = resolveNewsImage(article, {
-    preferFallback: FALLBACK_NEWS_SLUGS.has(slug),
     locale: currentLocale,
   });
   const html = normalizeNewsHtml(currentLocale, article, { coverImage: image });
@@ -172,14 +163,7 @@ export default async function NewsDetailPage({ params }: NewsDetailPageProps) {
         title: currentLocale === 'en' ? item.titleEn?.trim() || item.titleZh : item.titleZh,
         categoryId: item.categoryId,
       })) ??
-    (!apiArticle && currentLocale === 'zh'
-      ? FALLBACK_NEWS_ITEMS.map((item) => ({
-          id: item.id,
-          slug: item.slug,
-          title: item.title.zh,
-          categoryId: FALLBACK_NEWS_DETAIL.categoryId,
-        }))
-      : []);
+    [];
   const continueReadingItems = selectNewsContinueReadingItems(
     { id: article.id, slug: article.slug, categoryId: article.categoryId },
     recommendationCandidates,
@@ -187,16 +171,13 @@ export default async function NewsDetailPage({ params }: NewsDetailPageProps) {
   );
   const relatedArticles = continueReadingItems.map((item) => {
     const source = newsListResult.data?.items.find((candidate) => candidate.id === item.id);
-    const fallback = !source
-      ? FALLBACK_NEWS_ITEMS.find((candidate) => candidate.id === item.id)
-      : undefined;
-    const date = source?.publishDate || fallback?.date;
+    const date = source?.publishDate;
     return {
       ...item,
       image:
         source && (source.coverImage || source.ogImage)
           ? resolveNewsImage(source, { locale: currentLocale })
-          : fallback?.image,
+          : undefined,
       date,
       displayDate: date ? formatNewsDisplayDate(date) : undefined,
     };
