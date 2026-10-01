@@ -10,6 +10,7 @@ type ApiRequestOptions = {
   searchParams?: Record<string, string | number | boolean | undefined | null>;
   timeoutMs?: number;
   sameOrigin?: boolean;
+  keepalive?: boolean;
 };
 
 type ApiMutationOptions<TBody> = {
@@ -176,6 +177,7 @@ async function apiRequest<T>(
     ...(method !== 'GET' && 'body' in options ? { body: JSON.stringify(options.body ?? {}) } : {}),
     ...(timeoutSignal ? { signal: timeoutSignal } : {}),
     ...(options.cache ? { cache: options.cache } : {}),
+    ...(options.keepalive ? { keepalive: true } : {}),
     ...(!options.cache && method === 'GET'
       ? {
           next: {
@@ -209,7 +211,7 @@ async function apiGet<T>(path: string, options: ApiRequestOptions = {}) {
 
 export async function apiPost<T, TBody = Record<string, unknown>>(
   path: string,
-  options: ApiMutationOptions<TBody> & Pick<ApiRequestOptions, 'cache' | 'timeoutMs' | 'sameOrigin'> = {},
+  options: ApiMutationOptions<TBody> & Pick<ApiRequestOptions, 'cache' | 'timeoutMs' | 'sameOrigin' | 'keepalive'> = {},
 ) {
   return apiRequest<T>('POST', path, options);
 }

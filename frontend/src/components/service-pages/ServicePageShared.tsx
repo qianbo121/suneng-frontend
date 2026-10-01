@@ -6,6 +6,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { HiOutlineDocumentText, HiPhone } from 'react-icons/hi2';
 import { WechatContactButton } from '@/components/lead/WechatContactButton';
+import { TrackedContactLink } from '@/components/lead/TrackedContactLink';
 import { siteSettings } from '@/mock/siteSettings';
 import { ServiceAnchorNav } from './ServiceAnchorNav';
 import {
@@ -27,15 +28,18 @@ export function ServiceContactButton({
   label,
   light = false,
   locale = 'zh',
+  position = 'service_contact_wechat',
 }: {
   afterSales?: boolean;
   label?: string;
   light?: boolean;
   locale?: Locale;
+  position?: string;
 }) {
   return (
     <WechatContactButton
       locale={locale}
+      trackingContext={{ properties: { position, contact_purpose: afterSales ? 'after_sales' : 'sales' } }}
       label={label ?? (locale === 'en' ? (afterSales ? 'Contact after-sales' : 'Discuss equipment via WeChat') : afterSales ? '联系售后' : '加微信，工况初判')}
       description={
         locale === 'en' ? (afterSales ? 'Send the nameplate, fault symptoms, alarms and site photos to discuss repairs, spare parts or site service.' : 'Send overall equipment photos, the nameplate and a description of the issue. Drawings and records can follow.') : afterSales
@@ -78,7 +82,7 @@ export function ServiceHero({ kind, locale = 'zh' }: { kind: ServicePageKind; lo
             <p>{page.description}</p>
             {page.note && <p className={styles.heroNote}>{page.note}</p>}
             <div className={styles.actions}>
-              <ServiceContactButton afterSales={kind === 'installation'} locale={locale} />
+              <ServiceContactButton afterSales={kind === 'installation'} locale={locale} position="service_hero_wechat" />
               <Link href={page.secondary[1]} className={`${styles.button} ${styles.light}`}>
                 {page.secondary[0]}
               </Link>
@@ -278,18 +282,19 @@ export function ServiceContact({ kind, locale = 'zh' }: { kind: ServicePageKind;
         </div>
         <div className={styles.contactAside}>
           <div className={styles.actions}>
-            <ServiceContactButton afterSales={kind === 'installation'} locale={locale} />
-            <a
+            <ServiceContactButton afterSales={kind === 'installation'} locale={locale} position="service_bottom_wechat" />
+            <TrackedContactLink
+              kind="phone" position="service_bottom_call_button" purpose={kind === 'installation' ? 'after_sales' : 'sales'}
               href={serviceContact.phoneHref}
               className={`${styles.button} ${kind === 'relocation' ? styles.outline : styles.light}`}
             >
               {locale === 'en' ? 'Call us' : '拨打电话'}
-            </a>
+            </TrackedContactLink>
           </div>
-          <a href={serviceContact.phoneHref} className={styles.contactPhone}>
+          <TrackedContactLink kind="phone" position="service_bottom_number" purpose={kind === 'installation' ? 'after_sales' : 'sales'} href={serviceContact.phoneHref} className={styles.contactPhone}>
             <HiPhone aria-hidden="true" />
             {locale === 'en' ? siteSettings.salesPhone : serviceContact.displayPhone}
-          </a>
+          </TrackedContactLink>
         </div>
       </div>
     </section>

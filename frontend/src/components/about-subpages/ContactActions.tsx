@@ -3,16 +3,18 @@
 import { aboutPageText } from '@/lib/about-page-localization';
 import type { Locale } from '@/types/site';
 
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { HiOutlineClipboardDocument } from 'react-icons/hi2';
 import { Button } from '@/components/ui/Button';
 import { HomepageLeadForm } from '@/components/home/HomepageLeadForm';
 import { trackLeadEvent } from '@/lib/api/lead-events';
+import { copyContactValue, trackContactEntry, type ContactKind } from '@/lib/api/contact-events';
 import styles from './AboutSubpages.module.css';
 
-export function CopyContactButton({ value, label, locale = 'zh' }: { value: string; label: string; locale?: Locale }) {
+export function CopyContactButton({ value, label, locale = 'zh', contactKind }: { value: string; label: string; locale?: Locale; contactKind?: ContactKind }) {
   const t = (text: string) => aboutPageText(text, locale);
   const [message, setMessage] = useState('');
+  const copyingRef = useRef(false);
   return (
     <div className={styles.copyControl}>
       <Button
@@ -20,11 +22,15 @@ export function CopyContactButton({ value, label, locale = 'zh' }: { value: stri
         variant="secondary"
         className={styles.actionButton}
         onClick={async () => {
+          if (copyingRef.current) return;
+          copyingRef.current = true;
           try {
-            await navigator.clipboard.writeText(value);
-            setMessage(t("已复制"));
-          } catch {
-            setMessage(t("复制失败，请长按或选中文字复制。"));
+            const copied = await copyContactValue(value, contactKind, {
+              properties: { position: 'contact_body', contact_purpose: 'sales' },
+            });
+            setMessage(t(copied ? "已复制" : "复制失败，请长按或选中文字复制。"));
+          } finally {
+            copyingRef.current = false;
           }
         }}
       >
@@ -44,9 +50,9 @@ export function ContactPhoneButton({ href, locale = 'zh' }: { href: string; loca
       href={href}
       className={styles.actionButton}
       onClick={() =>
-        trackLeadEvent('phone_click', {
+        trackContactEntry('phone', {
           pageType: t("联系我们"),
-          properties: { source_module: 'contact_phone' },
+          properties: { source_module: 'contact_phone', position: 'contact_body_call_button', contact_purpose: 'sales' },
         })
       }
     >

@@ -3,6 +3,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { HiInformationCircle, HiOutlineDocumentText, HiPhone } from 'react-icons/hi2';
 import { WechatContactButton } from '@/components/lead/WechatContactButton';
+import { TrackedContactLink } from '@/components/lead/TrackedContactLink';
 import { isWithdrawnTechnicalPath } from '@/lib/publication-scope';
 import { ServiceAnchorNav } from './ServiceAnchorNav';
 import { serviceContact } from './ServicePageShared';
@@ -250,14 +251,15 @@ export function SelectionGuidePage({ heroImage, locale = 'zh' }: { heroImage: st
               {t("提交项目情况")}</Link>
             <WechatContactButton
               locale={locale}
+              trackingContext={{ properties: { position: 'guide_bottom_wechat', contact_purpose: 'sales' } }}
               description={t("请发送设备全景、铭牌和问题描述；图纸及历史记录可后续补充。")}
               label={t("加微信，工况初判")}
               className={`${shared.button} ${shared.outline}`}
             />
-            <a className={shared.contactPhone} href={serviceContact.phoneHref}>
+            <TrackedContactLink kind="phone" position="guide_bottom_phone" purpose="sales" className={shared.contactPhone} href={serviceContact.phoneHref}>
               <HiPhone aria-hidden="true" />
               {locale === 'en' ? '+86-' + serviceContact.displayPhone : serviceContact.displayPhone}
-            </a>
+            </TrackedContactLink>
           </div>
         </div>
       </section>

@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { siteSettings } from '@/mock/siteSettings';
 import { Button } from '@/components/ui/Button';
 import { SUNENG_CONTACT } from '@/constants/contact';
+import { TrackedContactLink } from '@/components/lead/TrackedContactLink';
 import { AboutSubpageHeader } from './AboutSubpageHeader';
 import { AboutSubpageJsonLd } from './AboutSubpageJsonLd';
 import { ContactMessageForm, ContactPhoneButton, CopyContactButton } from './ContactActions';
@@ -28,12 +29,12 @@ export function ContactZhContent({ locale = 'zh', inquiryProduct }: { locale?: L
           <div className={styles.phone}>
             <h2>{contact.company}</h2>
             <p className={styles.contactLabel}>{t("设备咨询")}</p>
-            <a href={contact.phoneHref} className={styles.phoneNumber}>
+            <TrackedContactLink kind="phone" position="contact_body_number" purpose="sales" href={contact.phoneHref} className={styles.phoneNumber}>
               {contact.phone}
-            </a>
+            </TrackedContactLink>
             <div className={styles.actions}>
               <ContactPhoneButton locale={locale} href={contact.phoneHref} />
-              <CopyContactButton locale={locale} label={t("复制号码")} value={contact.phone} />
+              <CopyContactButton locale={locale} label={t("复制号码")} value={contact.phone} contactKind="phone" />
             </div>
           </div>
           <div className={styles.wechat}>
@@ -53,10 +54,10 @@ export function ContactZhContent({ locale = 'zh', inquiryProduct }: { locale?: L
           <div className={styles.email}>
             <h2 className={styles.contactLabel}>{t("业务邮箱")}</h2>
             <div className={styles.emailRow}>
-              <a className={styles.emailLink} href={`mailto:${contact.email}`}>
+              <TrackedContactLink kind="email" position="contact_body_email" purpose="sales" className={styles.emailLink} href={`mailto:${contact.email}`}>
                 {contact.email}
-              </a>
-              <CopyContactButton locale={locale} label={t("复制邮箱")} value={contact.email} />
+              </TrackedContactLink>
+              <CopyContactButton locale={locale} label={t("复制邮箱")} value={contact.email} contactKind="email" />
             </div>
           </div>
         </section>

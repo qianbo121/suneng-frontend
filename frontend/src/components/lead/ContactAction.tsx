@@ -8,6 +8,13 @@ import { HiOutlineDocumentDuplicate, HiOutlineEnvelope, HiOutlinePhone, HiXMark 
 
 import { SUNENG_CONTACT } from '@/constants/contact';
 import { trackLeadEvent } from '@/lib/api/lead-events';
+import {
+  captureContactContext,
+  copyContactValue,
+  trackContactAction,
+  trackContactEntry,
+  type ContactTrackingContext,
+} from '@/lib/api/contact-events';
 import styles from './ContactAction.module.css';
 
 type ContactKind = 'wechat' | 'phone' | 'email';
@@ -37,6 +44,8 @@ export function ContactAction({ kind, children, locale, description, className, 
   const valueRef = useRef<HTMLDivElement>(null);
   const qrTrackedRef = useRef(false);
   const copyAttemptRef = useRef(0);
+  const copyInFlightRef = useRef(false);
+  const contactContextRef = useRef<ContactTrackingContext>({});
   const titleId = useId();
   const descriptionId = useId();
 
@@ -58,7 +67,7 @@ export function ContactAction({ kind, children, locale, description, className, 
       label: english ? 'Contact number' : '咨询电话',
       value: phone,
       copy: english ? 'Copy phone number' : '复制电话号码',
-      secondary: english ? 'Open calling app' : '打开拨号应用',
+      secondary: english ? 'Open calling app' : '直接拨号',
       href: SUNENG_CONTACT.phoneHref,
       note: english ? 'You can also dial this number on your phone.' : '也可直接用手机拨打上方号码。',
     },
@@ -110,8 +119,22 @@ export function ContactAction({ kind, children, locale, description, className, 
 
   function activate(event: MouseEvent<HTMLElement>) {
     if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || event.button !== 0) return;
-    trackLeadEvent(`${kind}_click`, trackingContext);
-    if (kind === 'phone' && isPhoneDevice()) return;
+    const directPhone = kind === 'phone' && isPhoneDevice();
+    contactContextRef.current = captureContactContext({
+      ...trackingContext,
+      properties: {
+        ...trackingContext?.properties,
+        position: trackingContext?.properties?.position
+          ?? trackingContext?.properties?.source_module
+          ?? event.currentTarget.closest('section[id]')?.id
+          ?? 'inline_contact',
+        entry_label: event.currentTarget.textContent?.trim().slice(0, 120) ?? '',
+        contact_purpose: trackingContext?.properties?.contact_purpose ?? 'general',
+        contact_kind: kind,
+      },
+    });
+    trackContactEntry(kind, contactContextRef.current, directPhone ? 'open_external' : 'open_dialog');
+    if (directPhone) return;
     event.preventDefault();
     qrTrackedRef.current = false;
     setCopyState('idle');
@@ -119,13 +142,21 @@ export function ContactAction({ kind, children, locale, description, className, 
   }
 
   async function copyValue() {
+    if (copyInFlightRef.current) return;
+    copyInFlightRef.current = true;
     const attempt = ++copyAttemptRef.current;
     setCopyState('copying');
     try {
-      await navigator.clipboard.writeText(kind === 'phone' ? content.value.replace(/\s/g, '') : content.value);
-      if (attempt === copyAttemptRef.current) setCopyState('copied');
-    } catch {
+      const copied = await copyContactValue(
+        kind === 'phone' ? content.value.replace(/\s/g, '') : content.value,
+        kind,
+        contactContextRef.current,
+      );
       if (attempt !== copyAttemptRef.current) return;
+      if (copied) {
+        setCopyState('copied');
+        return;
+      }
       setCopyState('failed');
       if (valueRef.current) {
         const range = document.createRange();
@@ -134,6 +165,8 @@ export function ContactAction({ kind, children, locale, description, className, 
         selection?.removeAllRanges();
         selection?.addRange(range);
       }
+    } finally {
+      copyInFlightRef.current = false;
     }
   }
 
@@ -162,7 +195,7 @@ export function ContactAction({ kind, children, locale, description, className, 
                   <Image src={SUNENG_CONTACT.wechatQr} alt={english ? 'Suneng WeChat QR code' : '苏能技术顾问微信二维码'} width={176} height={176} priority className={styles.qr} onLoad={() => {
                     if (qrTrackedRef.current) return;
                     qrTrackedRef.current = true;
-                    trackLeadEvent('wechat_qr_view', trackingContext);
+                    trackLeadEvent('wechat_qr_view', contactContextRef.current);
                   }} />
                 </div>
               )}
@@ -177,7 +210,8 @@ export function ContactAction({ kind, children, locale, description, className, 
                   <HiOutlineDocumentDuplicate aria-hidden="true" />
                   {copyState === 'copied' ? (english ? 'Copied' : '已复制') : copyState === 'copying' ? (english ? 'Copying…' : '复制中…') : content.copy}
                 </button>
-                <a href={content.href} className={`${styles.action} ${styles.secondary}`} target={kind === 'wechat' ? '_blank' : undefined} rel={kind === 'wechat' ? 'noopener noreferrer' : undefined}>
+                <a href={content.href} className={`${styles.action} ${styles.secondary}`} target={kind === 'wechat' ? '_blank' : undefined} rel={kind === 'wechat' ? 'noopener noreferrer' : undefined}
+                  onClick={() => trackContactAction(kind, kind === 'wechat' ? 'open_qr_original' : 'open_external', 'requested', contactContextRef.current)}>
                   {kind === 'phone' && <HiOutlinePhone aria-hidden="true" />}
                   {kind === 'email' && <HiOutlineEnvelope aria-hidden="true" />}
                   {content.secondary}

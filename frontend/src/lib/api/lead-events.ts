@@ -15,6 +15,7 @@ export type LeadEventType =
   | 'wechat_qr_view'
   | 'quote_cta_click'
   | 'email_click'
+  | 'contact_action'
   | 'form_start'
   | 'form_step_complete'
   | 'form_attempt'
@@ -346,6 +347,7 @@ function postLeadEvent(eventType: LeadEventType, extra?: LeadEventExtra) {
   return apiPost<unknown, LeadEventPayload>('/v1/lead-events', {
     body: currentPayload(eventType, extra),
     cache: 'no-store',
+    keepalive: true,
   }).then(
     () => true,
     () => false,
