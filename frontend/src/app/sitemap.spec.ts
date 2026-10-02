@@ -157,6 +157,9 @@ describe('sitemap freshness signals', () => {
       byUrl.get('https://www.jssngyl.cn/zh/service/furnace-renovation-overhaul')?.lastModified,
     ).toEqual(new Date(FURNACE_RENOVATION_OVERHAUL_SEO.modifiedTime));
     expect(
+      byUrl.get('https://www.jssngyl.cn/zh/solutions/continuous-heat-treatment-line')?.lastModified,
+    ).toEqual(new Date('2026-09-29T17:36:50+08:00'));
+    expect(
       entries
         .filter((entry) => /\/(articles|solutions)(\/|$)/.test(new URL(entry.url).pathname))
         .map((entry) => new URL(entry.url).pathname)
