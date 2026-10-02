@@ -1354,5 +1354,13 @@
   "江苏苏能工业炉有限公司实用新型专利证书：一种高精度温控电阻炉": "Suneng utility-model patent certificate: a high-precision temperature-control resistance furnace",
   "证书编号：GR202432008987": "Certificate no.: GR202432008987",
   "证书编号：03824Q60289R3S": "Certificate no.: 03824Q60289R3S",
-  "江苏苏能工业炉有限公司": "Jiangsu Suneng Industrial Furnace Co., Ltd."
+  "江苏苏能工业炉有限公司": "Jiangsu Suneng Industrial Furnace Co., Ltd.",
+  "报价前需确认的条件": "Conditions to confirm before a quotation",
+  "以下为可选配置，需结合工况确认。": "These are configuration options to confirm against operating conditions.",
+  "最大尺寸、最大装载和温差须经技术审核确认。": "Maximum dimensions, load and temperature spread require technical review.",
+  "最大尺寸、最大装载和周期须经技术审核确认。": "Maximum dimensions, load and cycle time require technical review.",
+  "产量和质量结果须经工艺与实物铺料验证。": "Throughput and quality results require process and actual loading validation.",
+  "推力、产量和合格率须经热态与负载验证。": "Thrust, throughput and pass rate require hot-state and load validation.",
+  "最大载荷、速度和产量须经热态与负载验证。": "Maximum load, speed and throughput require hot-state and load validation.",
+  "参数确认": "Parameter confirmation"
 }

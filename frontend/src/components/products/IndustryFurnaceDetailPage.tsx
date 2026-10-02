@@ -192,7 +192,7 @@ export function IndustryFurnaceDetailPage({ slug, locale = 'zh' }: { slug: Indus
                 </ul>
               </div>
               <div>
-                <h3>{t("报价前必须补齐的边界条件")}</h3>
+                <h3>{t("报价前需确认的条件")}</h3>
                 <ul>
                   {config.requiredConditions.map((item) => (
                     <li key={item}>{item}</li>
@@ -206,7 +206,7 @@ export function IndustryFurnaceDetailPage({ slug, locale = 'zh' }: { slug: Indus
           <section id="selection" className={styles.section}>
             <SectionHeader
               title={locale === 'en' ? `Five dimensions of ${config.name.toLowerCase()} configuration` : `五个维度确定${config.name}方案`}
-              description={t("以下选项是方案条件，不代表系统已经替你选定最终配置。")}
+              description={t("以下为可选配置，需结合工况确认。")}
             />
 
             <Panel className={styles.dimensionPanel}>

@@ -222,7 +222,7 @@ export function PitFurnaceDetailPage({ locale = 'zh' }: { locale?: Locale }) {
                 </ul>
               </div>
               <div>
-                <h3>{t("报价前必须补齐的边界条件")}</h3>
+                <h3>{t("报价前需确认的条件")}</h3>
                 <ul>
                   <li>{t("长期工作温度、最高温度、工艺曲线与保温时间。")}</li>
                   <li>{t("工件净装载、随炉料具质量与最大起吊总质量。")}</li>
@@ -237,7 +237,7 @@ export function PitFurnaceDetailPage({ locale = 'zh' }: { locale?: Locale }) {
           <section id="selection" className={styles.section}>
             <SectionHeader
               title={t("五个维度确定井式炉方案")}
-              description={t("以下选项是方案条件，不代表系统已经替你选定最终配置。")}
+              description={t("以下为可选配置，需结合工况确认。")}
             />
             <Panel className={styles.dimensionPanel}>
               {selectionDimensions.map((item) => (
@@ -352,8 +352,8 @@ export function PitFurnaceDetailPage({ locale = 'zh' }: { locale?: Locale }) {
                     <dd>{t("起吊机构和厂房行车均应按最大起吊总质量校核。")}</dd>
                   </div>
                   <div>
-                    <dt>{t("公开边界")}</dt>
-                    <dd>{t("不公开未经技术审核的最大尺寸、最大装载和温差承诺。")}</dd>
+                    <dt>{t("参数确认")}</dt>
+                    <dd>{t("最大尺寸、最大装载和温差须经技术审核确认。")}</dd>
                   </div>
                 </dl>
               </div>

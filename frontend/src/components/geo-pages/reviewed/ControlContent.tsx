@@ -31,7 +31,7 @@ export function ControlContent() {
                 </h1>
                 <p className={'guide-hero-intro'}>
                   {
-                    '先盘点控制对象、测量回路、执行机构、安全联锁、程序备份和数据接口，再决定保留、局部升级还是更换架构。PLC、DCS 或其他架构应按项目复杂度与维护条件选择。'
+                    '热处理炉控制系统升级需先盘点控制对象、测量回路、执行机构、安全联锁、程序备份和数据接口，再决定保留、局部升级还是更换架构。PLC、DCS 或其他架构应按项目复杂度与维护条件选择。'
                   }
                 </p>
                 <div className={'guide-hero-actions'}>
@@ -344,11 +344,6 @@ export function ControlContent() {
                 <span className={'section-number'}>{'05'}</span>
                 <h2>{'提交图纸、点表和程序信息，先拆保留与替换边界'}</h2>
               </div>
-              <p className={'section-intro'}>
-                {
-                  '建议提供炉型与工艺、原电气图、I/O 点表、PLC 与 HMI 型号和程序、测温与执行机构清单、联锁与报警、数据接口、故障记录和可用停产窗口。'
-                }
-              </p>
               <ul className={'input-list'}>
                 <li>
                   <svg viewBox={'0 0 24 24'} aria-hidden={'true'}>
@@ -372,7 +367,7 @@ export function ControlContent() {
                   <svg viewBox={'0 0 24 24'} aria-hidden={'true'}>
                     <path d={'m5 12 4 4L19 6'}></path>
                   </svg>
-                  {'PLC 与 HMI 程序'}
+                  {'PLC 与 HMI 型号和程序'}
                 </li>
                 <li>
                   <svg viewBox={'0 0 24 24'} aria-hidden={'true'}>
@@ -391,6 +386,12 @@ export function ControlContent() {
                     <path d={'m5 12 4 4L19 6'}></path>
                   </svg>
                   {'数据接口'}
+                </li>
+                <li>
+                  <svg viewBox={'0 0 24 24'} aria-hidden={'true'}>
+                    <path d={'m5 12 4 4L19 6'}></path>
+                  </svg>
+                  {'故障记录'}
                 </li>
                 <li>
                   <svg viewBox={'0 0 24 24'} aria-hidden={'true'}>
@@ -570,7 +571,6 @@ export function ControlContent() {
         <details className={'page-facts container'}>
           <summary>{'资料来源与适用边界'}</summary>
           <p>{'公司批准公开的控制系统改造判断方法与项目技术方案配置。 '}</p>
-          <p>{'原页面标题：热处理炉控制系统升级怎么做？PLC、DCS、测温、联锁与数据接口检查清单'}</p>
         </details>
       </ReviewedDocument>
     </>

@@ -75,12 +75,12 @@ type ContentRevisionEvidence = {
   modifiedTime: string;
   files: string[];
   bodySha256: Record<string, string>;
+  snapshots?: Record<string, string>;
 };
 
-// Metadata can be reconciled after its substantive body was committed separately.
-// Accept only the exact recorded commit time and unchanged, verifiable body files;
-// this does not permit an arbitrary newer date or a link-only revision.
-function hasVerifiedHistoricalRevision(
+// Historical provenance belongs to the recorded revision, not today's editable
+// page. Frozen snapshots keep it verifiable in a shallow checkout.
+function hasVerifiedHistoricalEvidence(
   evidence: ContentRevisionEvidence | undefined,
   currentTime: string,
 ) {
@@ -90,7 +90,7 @@ function hasVerifiedHistoricalRevision(
   // A shallow checkout can validate that frozen evidence without fetching an
   // unrelated work branch; full-history checkouts also verify the commit itself.
   for (const file of evidence.files) {
-    const currentPath = path.join(REPO_ROOT, file);
+    const currentPath = path.join(REPO_ROOT, evidence.snapshots?.[file] ?? file);
     if (!fs.existsSync(currentPath)) return false;
     const digest = createHash('sha256').update(fs.readFileSync(currentPath)).digest('hex');
     if (digest !== evidence.bodySha256[file]) return false;
@@ -105,7 +105,7 @@ function hasVerifiedHistoricalRevision(
   let substantiveChange = false;
   for (const relativePath of evidence.files) {
     const committed = readGitFile(evidence.commit, relativePath);
-    const currentPath = path.join(REPO_ROOT, relativePath);
+    const currentPath = path.join(REPO_ROOT, evidence.snapshots?.[relativePath] ?? relativePath);
     if (committed === null || !fs.existsSync(currentPath)) return false;
     if (fs.readFileSync(currentPath, 'utf8') !== committed) return false;
     const parent = readGitFile(`${evidence.commit}^`, relativePath);
@@ -116,13 +116,34 @@ function hasVerifiedHistoricalRevision(
   return substantiveChange;
 }
 
+// A historical revision may justify a date correction only while the current
+// body still matches it. Editorial changes never inherit a freshness exemption.
+function hasVerifiedHistoricalRevision(
+  evidence: ContentRevisionEvidence | undefined,
+  currentTime: string,
+) {
+  if (!hasVerifiedHistoricalEvidence(evidence, currentTime) || !evidence) return false;
+  return evidence.files.every((file) => {
+    const currentPath = path.join(REPO_ROOT, file);
+    return fs.existsSync(currentPath)
+      && createHash('sha256').update(fs.readFileSync(currentPath)).digest('hex') === evidence.bodySha256[file];
+  });
+}
+
 describe('lastmod content governance', () => {
   it('verifies historical corrections against their actual committed body and timestamp', () => {
     for (const evidence of Object.values(contentRevisionEvidence)) {
-      expect(hasVerifiedHistoricalRevision(evidence, evidence.modifiedTime)).toBe(true);
-      expect(hasVerifiedHistoricalRevision(evidence, '2026-09-29T00:00:00+08:00')).toBe(false);
-      expect(hasVerifiedHistoricalRevision({ ...evidence, files: [] }, evidence.modifiedTime)).toBe(false);
-      expect(hasVerifiedHistoricalRevision({ ...evidence, bodySha256: {} }, evidence.modifiedTime)).toBe(false);
+      expect(hasVerifiedHistoricalEvidence(evidence, evidence.modifiedTime)).toBe(true);
+      expect(hasVerifiedHistoricalEvidence(evidence, '2026-09-29T00:00:00+08:00')).toBe(false);
+      expect(hasVerifiedHistoricalEvidence({ ...evidence, files: [] }, evidence.modifiedTime)).toBe(false);
+      expect(hasVerifiedHistoricalEvidence({ ...evidence, bodySha256: {} }, evidence.modifiedTime)).toBe(false);
+    }
+  });
+
+  it('does not let edited pages reuse historical evidence to advance their date', () => {
+    for (const evidence of Object.values(contentRevisionEvidence)) {
+      expect(hasVerifiedHistoricalRevision(evidence, evidence.modifiedTime)).toBe(false);
+      expect(hasVerifiedHistoricalEvidence({ ...evidence, snapshots: {} }, evidence.modifiedTime)).toBe(false);
     }
   });
 
