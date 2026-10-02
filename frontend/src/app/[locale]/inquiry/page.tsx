@@ -74,7 +74,7 @@ export default async function InquiryPage({ params, searchParams }: PageProps) {
             提交项目情况
           </h1>
           <p className="text-[18px] font-normal leading-[28px] text-white [@media(max-width:600px)]:text-[15px] [@media(max-width:600px)]:leading-[25px]">
-            资料不全也可以先提交，先判断方向，再逐步补充图纸和工艺条件
+            热处理生产线、工业炉选型、改造与维修项目咨询
           </p>
         </div>
       </section>

@@ -31,7 +31,7 @@ export function TemperatureContent() {
                 </h1>
                 <p className={'guide-hero-intro'}>
                   {
-                    '从测试条件、测温回路、加热分区、循环导流、密封炉衬到装炉工艺，把温度不均拆成可诊断、可整改、可复测的问题。'
+                    '热处理炉温度不均整改需核对测试条件、测温回路、加热分区、循环导流、密封炉衬和装炉工艺，先诊断，再整改与复测。'
                   }
                 </p>
                 <div className={'guide-hero-actions'}>
@@ -526,7 +526,6 @@ export function TemperatureContent() {
         <details className={'page-facts container'}>
           <summary>{'资料来源与适用边界'}</summary>
           <p>{'公司批准公开的温度诊断方法、项目事实边界与验收口径。 '}</p>
-          <p>{'原页面标题：热处理炉温度不均怎么整改？'}</p>
         </details>
       </ReviewedDocument>
     </>

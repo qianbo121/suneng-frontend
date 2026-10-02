@@ -53,7 +53,7 @@ export function ContactAction({ kind, children, locale, description, className, 
   const content = {
     wechat: {
       title: english ? 'WeChat contact' : '微信联系',
-      description: english ? 'Scan to add a Suneng adviser and share your workpiece, process and capacity requirements.' : '扫码添加苏能技术顾问，发送工件、工艺和产能要求。',
+      description: english ? 'Scan to add a Suneng adviser.' : '扫码添加苏能技术顾问。',
       label: english ? 'WeChat ID' : '微信号',
       value: SUNENG_CONTACT.wechatId,
       copy: english ? 'Copy WeChat ID' : '复制微信号',
@@ -69,7 +69,7 @@ export function ContactAction({ kind, children, locale, description, className, 
       copy: english ? 'Copy phone number' : '复制电话号码',
       secondary: english ? 'Open calling app' : '直接拨号',
       href: SUNENG_CONTACT.phoneHref,
-      note: english ? 'You can also dial this number on your phone.' : '也可直接用手机拨打上方号码。',
+      note: '',
     },
     email: {
       title: english ? 'Email contact' : '邮箱联系',
@@ -79,7 +79,7 @@ export function ContactAction({ kind, children, locale, description, className, 
       copy: english ? 'Copy email address' : '复制邮箱地址',
       secondary: english ? 'Open email app' : '打开邮件应用',
       href: `mailto:${SUNENG_CONTACT.email}`,
-      note: english ? 'If no email app opens, paste the address into your usual email service.' : '若未打开邮件应用，可复制地址到常用邮箱发送。',
+      note: english ? 'No email app? Copy the address to send an email.' : '无法打开邮件应用？可复制邮箱地址发送。',
     },
   }[kind];
 
@@ -206,7 +206,7 @@ export function ContactAction({ kind, children, locale, description, className, 
             </div>
             <div className={styles.footer}>
               <div className={styles.actions}>
-                <button type="button" className={`${styles.action} ${styles.primary}`} onClick={copyValue} disabled={copyState === 'copying'}>
+                <button type="button" className={`${styles.action} ${styles.primary}`} onClick={copyValue} disabled={copyState === 'copying'} aria-live="polite">
                   <HiOutlineDocumentDuplicate aria-hidden="true" />
                   {copyState === 'copied' ? (english ? 'Copied' : '已复制') : copyState === 'copying' ? (english ? 'Copying…' : '复制中…') : content.copy}
                 </button>
@@ -217,9 +217,9 @@ export function ContactAction({ kind, children, locale, description, className, 
                   {content.secondary}
                 </a>
               </div>
-              <p className={styles.note}>{content.note}</p>
-              <p className={`${styles.feedback} ${copyState === 'failed' ? styles.failed : ''}`} role="status" aria-live="polite">
-                {copyState === 'copied' ? (english ? 'Copied. You can paste it now.' : '已复制，可以直接粘贴使用。') : copyState === 'failed' ? (english ? 'Copy was unavailable. Select the contact above and copy it manually.' : '未能自动复制，请选中上方联系方式手动复制。') : ''}
+              {content.note && <p className={styles.note}>{content.note}</p>}
+              <p className={`${styles.feedback} ${styles.failed}`} role="status" aria-live="polite">
+                {copyState === 'failed' ? (english ? 'Copy was unavailable. Select the contact above and copy it manually.' : '未能自动复制，请选中上方联系方式手动复制。') : ''}
               </p>
             </div>
           </div>

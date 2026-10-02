@@ -90,7 +90,7 @@ export function HomepageLeadForm({
   inquiryProduct,
   inquiryDirection = '单体工业炉新建',
   problemPlaceholder = '例如：工件、产量、工艺要求或现有设备问题',
-  inquiryHint = '填写已有信息即可，详细资料可后续补充。',
+  inquiryHint = '先填写已有信息，详细资料可后续补充。',
   layoutVariant = 'default',
   privacyNoticeEnabled = false,
 }: HomepageLeadFormProps = {}) {
@@ -323,8 +323,8 @@ export function HomepageLeadForm({
           ) : (
             <div className={styles.formIntro}>
               {eyebrow ? <p className={styles.formEyebrow}>{eyebrow}</p> : null}
-              <h2 id="homepage-form-title">{t('资料不全，也能先判断方向', 'Start with what you know')}</h2>
-              <p>{t('只需说明工件、产量或现有设备问题，图纸和详细参数可后续补充。', 'Tell us about the workpiece, throughput or existing equipment issue. Drawings and detailed parameters can follow.')}</p>
+              <h2 id="homepage-form-title">{t('咨询设备选型与改造', 'Start with what you know')}</h2>
+              <p>{t('说明工件、产量或现有设备问题。', 'Tell us about the workpiece, throughput or existing equipment issue. Drawings and detailed parameters can follow.')}</p>
               {sectionId === 'inquiry' || inquiryProduct ? <InquiryContactOptions locale={locale} /> : null}
               <div className={styles.formPathList}>
                 {initialResults.map(([title, result]) => (

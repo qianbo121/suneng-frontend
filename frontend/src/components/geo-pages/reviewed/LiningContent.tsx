@@ -31,7 +31,7 @@ export function LiningContent() {
                 </h1>
                 <p className={'guide-hero-intro'}>
                   {
-                    '从热面损坏、冷面钢板、锚固体系和密封接口入手，判断局部修复、扩大拆检还是整体处理，并把烘炉与外壁温升写成可核对的验收条件。'
+                    '热处理炉炉衬翻新应先诊断热面损坏、冷面钢板、锚固体系和密封接口，判断局部修复、扩大拆检还是整体处理，确认耐材选型、烘炉与外壁温升验收条件。'
                   }
                 </p>
                 <div className={'guide-hero-actions'}>
@@ -326,11 +326,6 @@ export function LiningContent() {
                 <span className={'section-number'}>{'05'}</span>
                 <h2>{'提交炉衬资料，先判断检查边界'}</h2>
               </div>
-              <p className={'section-intro'}>
-                {
-                  '建议提供炉型与温度、运行气氛、炉衬结构图、损坏照片、冷面温度、维修与异常历史、计划工况、可用停产窗口和希望复测的指标。'
-                }
-              </p>
               <ul className={'input-list'}>
                 <li>
                   <svg viewBox={'0 0 24 24'} aria-hidden={'true'}>
@@ -379,6 +374,12 @@ export function LiningContent() {
                     <path d={'m5 12 4 4L19 6'}></path>
                   </svg>
                   {'可用停产窗口'}
+                </li>
+                <li>
+                  <svg viewBox={'0 0 24 24'} aria-hidden={'true'}>
+                    <path d={'m5 12 4 4L19 6'}></path>
+                  </svg>
+                  {'希望复测的指标'}
                 </li>
               </ul>
               <div className={'input-bottom'}>
@@ -552,7 +553,6 @@ export function LiningContent() {
         <details className={'page-facts container'}>
           <summary>{'资料来源与适用边界'}</summary>
           <p>{'公司批准公开的炉衬诊断方法、项目技术方案、材料与验收边界。 '}</p>
-          <p>{'原页面标题：热处理炉炉衬翻新方案：旧衬诊断、耐材选型与验收'}</p>
         </details>
       </ReviewedDocument>
     </>

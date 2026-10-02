@@ -31,7 +31,7 @@ export function EnergyContent() {
                 </h1>
                 <p className={'guide-hero-intro'}>
                   {
-                    '先建立同工况能源基线，再核算炉体、工艺、燃烧或配电、安全、排放、维护和停产边界；能源单价只是输入之一，不是改造结论。'
+                    '热处理炉电改燃、燃改电和余热回收需先建立同工况能源基线，再核算炉体、工艺、燃烧或配电、安全、排放、维护和停产边界；不能只看能源单价。'
                   }
                 </p>
                 <div className={'guide-hero-actions'}>
@@ -428,11 +428,6 @@ export function EnergyContent() {
                 <span className={'section-number'}>{'05'}</span>
                 <h2>{'提交能源与运行资料，先做边界核算'}</h2>
               </div>
-              <p className={'section-intro'}>
-                {
-                  '建议提供工件与装炉量、工艺曲线、产量与运行时数、改造前能耗、能源价格和热值、炉体尺寸、配电/供气条件、烟气参数、排放要求、利用端与停产窗口。'
-                }
-              </p>
               <ul className={'input-list'}>
                 <li>
                   <svg viewBox={'0 0 24 24'} aria-hidden={'true'}>
@@ -468,13 +463,13 @@ export function EnergyContent() {
                   <svg viewBox={'0 0 24 24'} aria-hidden={'true'}>
                     <path d={'m5 12 4 4L19 6'}></path>
                   </svg>
-                  {'炉体与公辅条件'}
+                  {'炉体尺寸与配电/供气条件'}
                 </li>
                 <li>
                   <svg viewBox={'0 0 24 24'} aria-hidden={'true'}>
                     <path d={'m5 12 4 4L19 6'}></path>
                   </svg>
-                  {'烟气与排放要求'}
+                  {'烟气参数与排放要求'}
                 </li>
                 <li>
                   <svg viewBox={'0 0 24 24'} aria-hidden={'true'}>
@@ -655,10 +650,9 @@ export function EnergyContent() {
           <summary>{'资料来源与适用边界'}</summary>
           <p>
             {
-              '资料整理范围：能源切换与余热利用的前期评估、现场配套及验收记录要求。具体方案按设备安全设计、项目技术文件和适用要求确认。 本页已按正文技术审查意见修订，供文稿与版式确认；不代表具体设备已完成设计批准或现场验收。'
+              '资料整理范围：能源切换与余热利用的前期评估、现场配套及验收记录要求。具体方案按设备安全设计、项目技术文件和适用要求确认。 本文不代表具体设备已完成设计批准或现场验收。'
             }
           </p>
-          <p>{'原页面标题：热处理炉电改燃、燃改电和余热回收怎么选？'}</p>
         </details>
       </ReviewedDocument>
     </>

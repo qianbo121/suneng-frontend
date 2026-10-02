@@ -264,7 +264,6 @@ export function NewsDecisionCenter({
                 <h2 id="news-tools-title" className={styles.moduleTitle}>
                   {t('常用清单')}
                 </h2>
-                <p className={styles.moduleDescription}>{t('先预览内容，再按项目需要使用。')}</p>
                 <div className={styles.toolRows}>
                   {visibleTools.map((tool) => (
                     <div key={tool.title} className={styles.toolRow}>

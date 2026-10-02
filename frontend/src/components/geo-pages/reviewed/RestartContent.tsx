@@ -31,7 +31,7 @@ export function RestartContent() {
                 </h1>
                 <p className={'guide-hero-intro'}>
                   {
-                    '不能从“设备还能启动”直接跳到负载生产。应先还原停机原因和设备状态，再检查结构、炉衬、能源、电气、测温、联锁和机械系统，按实际设备确定冷态、热态及负载验证的适用条件。'
+                    '停产热处理炉重启与搬迁复产，不能从“设备还能启动”直接跳到负载生产。应先还原停机原因和设备状态，再检查结构、炉衬、能源、电气、测温、联锁和机械系统，按实际设备确定冷态、热态及负载验证的适用条件。'
                   }
                 </p>
                 <div className={'guide-hero-actions'}>
@@ -338,11 +338,6 @@ export function RestartContent() {
                 <span className={'section-number'}>{'05'}</span>
                 <h2>{'提交设备现状，先判断检查与复产边界'}</h2>
               </div>
-              <p className={'section-intro'}>
-                {
-                  '建议提供炉型与工艺、停机原因和最后工况、设备照片、原图纸与程序、铭牌、维修记录、搬迁拆解记录、能源条件、目标工件和计划复产窗口。'
-                }
-              </p>
               <ul className={'input-list'}>
                 <li>
                   <svg viewBox={'0 0 24 24'} aria-hidden={'true'}>
@@ -571,10 +566,9 @@ export function RestartContent() {
           <summary>{'资料来源与适用边界'}</summary>
           <p>
             {
-              '公司批准公开的停产炉重启、搬迁复产与再制造检查方法。 本页已按正文技术审查意见修订，供文稿与版式确认；不代表具体设备已完成设计批准或现场验收。'
+              '公司批准公开的停产炉重启、搬迁复产与再制造检查方法。 本文不代表具体设备已完成设计批准或现场验收。'
             }
           </p>
-          <p>{'原页面标题：停产热处理炉重启与搬迁复产怎么评估？检查、试运行和验收清单'}</p>
         </details>
       </ReviewedDocument>
     </>
