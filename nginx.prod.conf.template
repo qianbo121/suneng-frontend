@@ -96,6 +96,15 @@ http {
     242 /zh/products/detail/trolley-furnace;
   }
 
+  # Verified original news bodies; continue the same equipment type only.
+  # This does not restore old article text or specifications. Unknown news stays news.
+  map $arg_id $legacy_news_path {
+    default /zh/news;
+    38 /zh/products/detail/trolley-furnace;
+    39 /zh/products/detail/trolley-furnace;
+    41 /zh/products/detail/mesh-belt-furnace;
+  }
+
   map "$request_method:$uri" $lead_event {
     default "";
     ~^POST:/api/v1/custom-requirements/?$ "custom_requirement_submit";
@@ -419,7 +428,7 @@ http {
     }
 
     location = /news/shownews.php {
-      return 301 https://www.jssngyl.cn/zh/news;
+      return 301 https://www.jssngyl.cn$legacy_news_path;
     }
 
     location = /news/news.php {
@@ -502,7 +511,7 @@ http {
     }
 
     location = /news/shownews.php {
-      return 301 https://www.jssngyl.cn/zh/news;
+      return 301 https://www.jssngyl.cn$legacy_news_path;
     }
 
     location = /news/news.php {
@@ -867,7 +876,7 @@ http {
     }
 
     location = /news/shownews.php {
-      return 301 /zh/news;
+      return 301 https://www.jssngyl.cn$legacy_news_path;
     }
 
     location = /news/news.php {

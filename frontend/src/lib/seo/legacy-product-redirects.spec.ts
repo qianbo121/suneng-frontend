@@ -165,13 +165,13 @@ describe('verified original-PHP product redirects', () => {
       ['/news/index.php', '/zh/news'],
       ['/index.php', '/zh'],
       ['/product/product.php', '/zh/products'],
-      ['/news/shownews.php', '/zh/news'],
       ['/news/news.php', '/zh/news'],
     ]) {
       const body = locationBody(block, legacy);
       expect(body).toBe('return 301 ' + prefix + target + ';');
       expect(body).not.toContain('$legacy_product_path');
     }
+    expect(locationBody(block, '/news/shownews.php')).toBe('return 301 https://www.jssngyl.cn$legacy_news_path;');
     const unknown = block.split('location ~ \\.php$ {').slice(1);
     expect(unknown).toHaveLength(1);
     expect(unknown[0].split('}')[0].trim()).toBe('return 404;');

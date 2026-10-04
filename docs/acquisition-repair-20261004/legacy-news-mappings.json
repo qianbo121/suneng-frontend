@@ -1,0 +1,122 @@
+{
+  "kind": "verified-original-php-news-type-continuity",
+  "baseCommit": "f3823e8a602d50e3a72fac8870da35c6e8c7682d",
+  "mappingCount": 3,
+  "implementation": "Only /news/shownews.php uses an independent exact arg_id map in all three public hosts; absolute 301 target without the source query string.",
+  "unknownIdBehavior": "Existing /zh/news fallback retained, including id=44 and all unapproved IDs.",
+  "preservedProductMapSha256": "df128b9c0e816d85f1ee11c29fbfdfbeff62ec86d8bdb9f565c27b2d1a38b9b8",
+  "mappingMeaning": "同类设备承接，非原文恢复；不宣称旧型号、参数、工艺结果、文章长尾主题或排名和咨询已经恢复。",
+  "originalNewsBodyRestored": false,
+  "independentIntentReview": {
+    "source": "output/acquisition-full-closeout-20261004/technical/news-mapping-intent-review.json",
+    "sha256": "e103d53c1bd4db4717635e790b99866150d4734a47fc92e612f88b7ef0ebf5f5",
+    "checkedAt": "2026-10-04T10:57:22.141709+00:00"
+  },
+  "heldIds": [
+    {
+      "oldId": 44,
+      "reason": "原文还包含维修、温区和工艺故障问答，当前产品页未完整回答；保持原新闻列表兜底，不凭同设备名称强行映射。"
+    }
+  ],
+  "mappings": [
+    {
+      "oldId": 38,
+      "oldUrl": "http://jssngyl.cn/news/shownews.php?id=38",
+      "oldRequestPath": "/news/shownews.php?id=38",
+      "oldTitle": "燃气台车炉_燃气台车炉加热的特点",
+      "archiveTimestamp": "20240916200324",
+      "archiveReplayUrl": "https://web.archive.org/web/20240916200324/http://jssngyl.cn/news/shownews.php?id=38",
+      "originalUrlAndTimestampVerified": true,
+      "sourceType": "verified-original-news-body",
+      "sourceEvidence": {
+        "archiveMetadata": "output/acquisition-full-closeout-20261004/legacy/missing-known-news-recovered-news38.json",
+        "originalArticleText": "output/acquisition-full-closeout-20261004/legacy/missing-known-news-recovered-news38.article.txt",
+        "originalArticleHtml": "output/acquisition-full-closeout-20261004/legacy/missing-known-news-recovered-news38.article.html",
+        "originalArticleTextSha256": "c66ccd4fc5abd4a163439f409c3bb91d4a6b5c32bf9061df6f7abd38415d0e26",
+        "originalArticleHtmlSha256": "a9f185c99605edc1b9152ebd6887fdcb019817ed7b871103fc1f9480693bfcbf",
+        "originalResponseSha256": "459571ae0988a3992c3bc3d7b2b509296bab9a1b362e00cf283ae50902ad48c4"
+      },
+      "dominantIntent": "燃气台车炉加热和结构特点介绍",
+      "newTarget": "https://www.jssngyl.cn/zh/products/detail/trolley-furnace",
+      "newRequestPath": "/zh/products/detail/trolley-furnace",
+      "newObservedAt": "2026-10-04T10:34:55.404875+00:00",
+      "newObservedStatus": 200,
+      "newCanonical": "https://www.jssngyl.cn/zh/products/detail/trolley-furnace",
+      "newNoindex": false,
+      "currentProductRawHtmlSha256": "71176e20f3a6724fbf427b23c8dddf055b384dbf0c9dbb94dd1f5db6b02c80dc",
+      "mappingReason": "原标题及主体结构/燃烧/炉压内容明确燃气台车炉；现台车页明确燃气热源、燃烧排烟炉压联锁和选型边界。",
+      "mappingIntent": "same-equipment-type-only",
+      "originalNewsBodyRestored": false,
+      "limits": [
+        "首段泛定义电阻炉与后文燃气介绍混杂，不能据首段把整篇认定为纯电炉。",
+        "原文1200℃、燃烧器配置和具体构造未逐项在新页恢复或证明。"
+      ]
+    },
+    {
+      "oldId": 39,
+      "oldUrl": "http://jssngyl.cn/news/shownews.php?id=39",
+      "oldRequestPath": "/news/shownews.php?id=39",
+      "oldTitle": "燃气台车炉_退火炉​_燃气台车炉是国家标准能结构",
+      "archiveTimestamp": "20250812145059",
+      "archiveReplayUrl": "https://web.archive.org/web/20250812145059/http://jssngyl.cn/news/shownews.php?id=39",
+      "originalUrlAndTimestampVerified": true,
+      "sourceType": "verified-original-news-body",
+      "sourceEvidence": {
+        "archiveMetadata": "output/acquisition-full-closeout-20261004/legacy/news39-one-replay-attempt.json",
+        "originalArticleText": "output/acquisition-full-closeout-20261004/legacy/news39-one-replay-attempt.article.txt",
+        "originalArticleHtml": "output/acquisition-full-closeout-20261004/legacy/news39-one-replay-attempt.article.html",
+        "originalArticleTextSha256": "b21ae23ea3f85b4b4edd190dc138ad714e086be3f76fac5dfe893b914fd34283",
+        "originalArticleHtmlSha256": "f8d338e0b4be71075de9119424dec44ea38f658049025e26358af442480c34d1",
+        "originalResponseSha256": "f4f98b469383611b8904b403433b86664fc3bd5e1524fccceda4e91d26023106"
+      },
+      "dominantIntent": "燃气台车炉与台车退火炉特点介绍",
+      "newTarget": "https://www.jssngyl.cn/zh/products/detail/trolley-furnace",
+      "newRequestPath": "/zh/products/detail/trolley-furnace",
+      "newObservedAt": "2026-10-04T10:34:55.404875+00:00",
+      "newObservedStatus": 200,
+      "newCanonical": "https://www.jssngyl.cn/zh/products/detail/trolley-furnace",
+      "newNoindex": false,
+      "currentProductRawHtmlSha256": "71176e20f3a6724fbf427b23c8dddf055b384dbf0c9dbb94dd1f5db6b02c80dc",
+      "mappingReason": "正文明确台车式燃气及电阻带退火两类，现台车页同时公开电阻/天然气方案并围绕大型工件周期式热处理选型。",
+      "mappingIntent": "same-equipment-type-only",
+      "originalNewsBodyRestored": false,
+      "limits": [
+        "旧文混合燃气、电阻退火、最高温度、节能百分比和温控精度，不是单一已证实型号。",
+        "节能30–50%、1250℃、±1℃及绝对无污染等旧主张未由当前资料逐项证实，也不随301恢复。"
+      ]
+    },
+    {
+      "oldId": 41,
+      "oldUrl": "http://jssngyl.cn/news/shownews.php?id=41",
+      "oldRequestPath": "/news/shownews.php?id=41",
+      "oldTitle": "网带炉_保护气氛网带炉的理解",
+      "archiveTimestamp": "20240916183557",
+      "archiveReplayUrl": "https://web.archive.org/web/20240916183557/http://jssngyl.cn/news/shownews.php?id=41",
+      "originalUrlAndTimestampVerified": true,
+      "sourceType": "verified-original-news-body",
+      "sourceEvidence": {
+        "archiveMetadata": "output/acquisition-full-closeout-20261004/legacy/missing-known-news-recovered-news41.json",
+        "originalArticleText": "output/acquisition-full-closeout-20261004/legacy/missing-known-news-recovered-news41.article.txt",
+        "originalArticleHtml": "output/acquisition-full-closeout-20261004/legacy/missing-known-news-recovered-news41.article.html",
+        "originalArticleTextSha256": "efdb6c04193a4928da5d03dce0349c7e364f126dbc2e672d204ed5376023f2ff",
+        "originalArticleHtmlSha256": "6ce6fa9a35e25e32fd32304519686c0d50531a3e7a04e955e1c485f3a302967a",
+        "originalResponseSha256": "f62f5acf5f40da86f887eb8205bb43896d6ffcffca2e2e5a72e74470857fc938"
+      },
+      "dominantIntent": "保护气氛网带炉与连续淬火清洗回火配置介绍",
+      "newTarget": "https://www.jssngyl.cn/zh/products/detail/mesh-belt-furnace",
+      "newRequestPath": "/zh/products/detail/mesh-belt-furnace",
+      "newObservedAt": "2026-10-04T10:34:59.337027+00:00",
+      "newObservedStatus": 200,
+      "newCanonical": "https://www.jssngyl.cn/zh/products/detail/mesh-belt-furnace",
+      "newNoindex": false,
+      "currentProductRawHtmlSha256": "20f1710ffeef5a8f66ca94782303cde22ae2149af39bfe60fc0d8dccfcc32f44",
+      "mappingReason": "原连续输送、保护气氛和多工序路线，在现公开网带页的保护/可控气氛及淬火清洗回火机组中有明确对应。",
+      "mappingIntent": "same-equipment-type-only",
+      "originalNewsBodyRestored": false,
+      "limits": [
+        "旧9温区、5400mm加热段、冷却段分长及SUS310结构是具体旧配置，不等于现页同型号承诺。",
+        "现页给保护气氛和热处理机组能力边界，不能据此宣称原全部渗碳/碳氮共渗具体工艺结果和尺寸已经迁移。"
+      ]
+    }
+  ]
+}
