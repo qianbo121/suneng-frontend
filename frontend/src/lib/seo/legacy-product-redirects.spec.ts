@@ -34,10 +34,12 @@ const verifiedProducts = [
   ['175', '/zh/products/detail/bell-furnace'],
   ['177', '/zh/products/detail/bell-furnace'],
 ] as const;
+const verifiedWorkshopPages = ['186', '187', '188', '189'].map((id) => [id, '/zh/about#delivery'] as const);
+const verifiedMappings = [...verifiedProducts, ...verifiedWorkshopPages];
 const verifiedDirectoryIds = ['123', '125', '142', '143', '147', '156', '158', '242', '164', '165', '159', '160', '161', '162', '163', '170', '171', '172', '173', '141', '175', '177'] as const;
 const mappingLedger = JSON.parse(readFileSync(new URL('docs/acquisition-repair-20261004/legacy-product-mappings.json', root), 'utf8')) as {
   mappingCount: number;
-  mappings: Array<{ oldId: number; oldUrl: string; oldTitle: string; newRequestPath: string; sourceType?: string;
+  mappings: Array<{ oldId: number; oldUrl: string; oldTitle: string; newRequestPath: string; sourceType?: string; mappingIntent?: string;
     sourceAnchors?: Array<{ originalHref: string; sourceOldUrl: string; anchorVisibleText: string; originalHtmlFileSha256: string }> }>;
 };
 
@@ -85,9 +87,9 @@ function productMap() {
   expect(maps).toHaveLength(1);
   const rows = maps[0][1].split('\n').map((line) => line.trim()).filter(Boolean);
   const entries = rows.map((row) => {
-    const match = row.match(/^(default|\d+)\s+(\/[a-z0-9/-]+);$/);
+    const match = row.match(/^(default|\d+)\s+(\/[a-z0-9/-]+|"\/zh\/about#delivery");$/);
     expect(match, 'Only exact decimal IDs and one default are permitted: ' + row).not.toBeNull();
-    return [match![1], match![2]] as const;
+    return [match![1], match![2].replace(/^"|"$/g, '')] as const;
   });
   expect(new Set(entries.map(([id]) => id)).size).toBe(entries.length);
   return new Map(entries);
@@ -97,7 +99,7 @@ describe('verified original-PHP product redirects', () => {
   it('permits exactly the approved known IDs and preserves the existing catalog default', () => {
     expect([...productMap().entries()].sort()).toEqual([
       ['default', '/zh/products'],
-      ...verifiedProducts,
+      ...verifiedMappings,
     ].sort());
   });
 
@@ -110,9 +112,28 @@ describe('verified original-PHP product redirects', () => {
     }
   });
 
+  it.each(verifiedWorkshopPages)('old workshop %s reaches the existing company delivery section', (id, target) => {
+    expect(productMap().get(id)).toBe(target);
+    for (const [, serverName, listen] of publicHosts) {
+      expect(locationBody(publicBlock(serverName, listen), '/product/showproduct.php'))
+        .toBe('return 301 https://www.jssngyl.cn$legacy_product_path;');
+    }
+    const row = mappingLedger.mappings.find((entry) => String(entry.oldId) === id)!;
+    expect(row.oldTitle).toBe('设备制作车间');
+    expect(row.sourceType).toBe('original-directory-photo-company-anchor');
+    expect(row.mappingIntent).toBe('photo-company-intent');
+    expect(row.sourceAnchors).toHaveLength(1);
+    for (const anchor of row.sourceAnchors ?? []) {
+      expect(new URL(anchor.originalHref, anchor.sourceOldUrl).href).toBe(row.oldUrl);
+      expect(new URL(row.oldUrl).hostname).toBe('jssngyl.cn');
+      expect(anchor.anchorVisibleText).toBe('设备制作车间');
+      expect(anchor.originalHtmlFileSha256).toMatch(/^[a-f0-9]{64}$/);
+    }
+  });
+
   it('keeps the mapping ledger consistent and binds new IDs to exact original directory links', () => {
-    expect(mappingLedger.mappingCount).toBe(verifiedProducts.length);
-    expect(mappingLedger.mappings.map((row) => [String(row.oldId), row.newRequestPath]).sort()).toEqual([...verifiedProducts].sort());
+    expect(mappingLedger.mappingCount).toBe(verifiedMappings.length);
+    expect(mappingLedger.mappings.map((row) => [String(row.oldId), row.newRequestPath]).sort()).toEqual([...verifiedMappings].sort());
     const directoryRows = mappingLedger.mappings.filter((row) => row.sourceType === 'original-directory-anchor');
     expect(directoryRows.map((row) => String(row.oldId)).sort()).toEqual([...verifiedDirectoryIds].sort());
     for (const row of directoryRows) {
@@ -125,7 +146,7 @@ describe('verified original-PHP product redirects', () => {
     }
   });
 
-  it.each(['', '139', '148', '149', '151', '153', '155', '174', '176', '999999', '1500', '0150', '%31%35%30'])(
+  it.each(['', '139', '148', '149', '151', '153', '155', '174', '176', '999999', '1500', '0150', '%31%35%30', '1860', '0186', '%31%38%36'])(
     'unverified or nonexact ID %s retains the catalog fallback',
     (id) => {
       const map = productMap();

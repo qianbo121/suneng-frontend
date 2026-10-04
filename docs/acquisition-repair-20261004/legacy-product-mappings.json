@@ -5,7 +5,7 @@
   "implementation": "Only /product/showproduct.php uses the exact arg_id map in all three public hosts; absolute 301 target without source query string.",
   "unknownIdBehavior": "Existing /zh/products catalog fallback retained.",
   "otherRoutes": "/product/product.php and /product/index.php unchanged; four main entry routes and unknown PHP 404 unchanged.",
-  "mappingCount": 29,
+  "mappingCount": 33,
   "mappings": [
     {
       "oldId": 150,
@@ -1751,15 +1751,295 @@
       },
       "mappingReason": "原目录明确多工位罩式炉；现公开罩式炉页明确多炉台与加热罩、冷却罩生产组织。",
       "mappingMeaning": "同设备类型承接，不声称原型号、尺寸、图片、产能或参数全文已迁移。"
+    },
+    {
+      "oldId": 186,
+      "oldUrl": "http://jssngyl.cn/product/showproduct.php?id=186",
+      "oldRequestPath": "/product/showproduct.php?id=186",
+      "oldTitle": "设备制作车间",
+      "sourceType": "original-directory-photo-company-anchor",
+      "mappingIntent": "photo-company-intent",
+      "oldTextBoundary": "原目录真实编号、标题与车间展示图片链接；未取得旧详情正文，不声称旧照片或全文逐页还原。",
+      "capturedAtUtc": "2025-11-18T07:00:14Z",
+      "officialArchiveIndex": "CC-MAIN-2025-47",
+      "sourceAnchors": [
+        {
+          "sourceOldUrl": "http://jssngyl.cn/product/index.php?class1=127&page=7",
+          "sourceTitle": "产品展示-江苏苏能工业炉有限公司 官方网站-第7页",
+          "archiveTimestamp": "20251118070014",
+          "sourceArchive": "Common Crawl CC-MAIN-2025-47",
+          "officialWarcDataUrl": "https://data.commoncrawl.org/crawl-data/CC-MAIN-2025-47/segments/1762439651195.78/warc/CC-MAIN-20251118060923-20251118090923-00583.warc.gz",
+          "byteRange": "bytes 20370341-20375599/925932671",
+          "warcTargetUri": "http://jssngyl.cn/product/index.php?class1=127&page=7",
+          "targetMatchesIndex": true,
+          "originalHtmlPath": "/Users/qianbo/Desktop/Coding/独立站/output/acquisition-repair-20261004/public-legacy-source-search/commoncrawl-page-b88a8d93b281.html",
+          "originalHtmlFileSha256": "58c48262d2e0086caf7c793ce6dfce883865f5c9c00082a0c4905431a433309c",
+          "originalPayloadSha256": "58c48262d2e0086caf7c793ce6dfce883865f5c9c00082a0c4905431a433309c",
+          "recordEvidencePath": "/Users/qianbo/Desktop/Coding/独立站/output/acquisition-repair-20261004/public-legacy-source-search/commoncrawl-page-b88a8d93b281-evidence.json",
+          "originalHref": "../product/showproduct.php?id=186",
+          "anchorNameAttribute": "设备制作车间",
+          "imageAltNameAttribute": "设备制作车间",
+          "anchorVisibleText": "设备制作车间",
+          "rawAnchorHtml": "<a class=\"bg-white pro-li mt-5 d-block py-4 px-4\" href=\"../product/showproduct.php?id=186\" title=\"设备制作车间\">\n                            <i class=\"fa fa-search fa-2x text-white ico\"></i>\n                            <p class=\"text-center mt-2\">\n                                <img src=\"../upload/thumb_src/700_650/20200514105548_968.jpeg\" class=\"img-fluid img-responsive\" alt=\"设备制作车间\">\n                            </p>\n                            <h5 class=\"fs-18 mt-5 mb-2 text-center\">设备制作车间</h5>\n                            <p class=\"text-center fs-28 mb-2\"><i class=\"fa fa-arrow-circle-o-right\"></i></p>\n                        </a>",
+          "uniqueVisibleName": [
+            "设备制作车间"
+          ],
+          "sameOldUrlAnchorOccurrencesInSource": 1
+        }
+      ],
+      "newTarget": "https://www.jssngyl.cn/zh/about#delivery",
+      "newRequestPath": "/zh/about#delivery",
+      "newVerifiedAt": "2026-10-04T09:54:45.352Z",
+      "newStatus": 200,
+      "responseStatusEvidence": {
+        "method": "real browser Navigation Timing responseStatus",
+        "value": 200,
+        "capturedAt": "2026-10-04T09:59:33.566Z"
+      },
+      "newCanonical": [
+        "https://www.jssngyl.cn/zh/about"
+      ],
+      "newNoindex": false,
+      "newH1": [
+        "关于苏能工业炉"
+      ],
+      "newPageKeyText": [
+        "炉体制作与装配",
+        "整线集成与联调",
+        "试炉检查与出厂",
+        "安装调试与验收"
+      ],
+      "publishedCompanySourceEvidence": {
+        "path": "frontend/src/components/about/AboutZhContent.tsx",
+        "sourceCommit": "9c603ee690012455c01ed29c2781f542de9b1aef",
+        "sha256": "daa2d42f319776af8654a955cbdda474149ff96533829d8992e4b7afda8b491f",
+        "sectionId": "delivery",
+        "realBrowserDomEvidence": "/Users/qianbo/Desktop/Coding/独立站/output/acquisition-full-closeout-20261004/legacy/about-delivery-dom.json",
+        "realBrowserScreenshot": "/Users/qianbo/Desktop/Coding/独立站/output/acquisition-full-closeout-20261004/legacy/about-delivery-live.png",
+        "loadedPhotoCount": 4
+      },
+      "mappingReason": "原页面是设备制作车间照片展示，现公开公司页制造交付章节具有对应制作、装配和现场照片内容。",
+      "mappingMeaning": "车间展示意图承接；不视为设备类型映射，不声称旧四张照片或原详情全文已迁移。"
+    },
+    {
+      "oldId": 187,
+      "oldUrl": "http://jssngyl.cn/product/showproduct.php?id=187",
+      "oldRequestPath": "/product/showproduct.php?id=187",
+      "oldTitle": "设备制作车间",
+      "sourceType": "original-directory-photo-company-anchor",
+      "mappingIntent": "photo-company-intent",
+      "oldTextBoundary": "原目录真实编号、标题与车间展示图片链接；未取得旧详情正文，不声称旧照片或全文逐页还原。",
+      "capturedAtUtc": "2025-11-18T07:00:14Z",
+      "officialArchiveIndex": "CC-MAIN-2025-47",
+      "sourceAnchors": [
+        {
+          "sourceOldUrl": "http://jssngyl.cn/product/index.php?class1=127&page=7",
+          "sourceTitle": "产品展示-江苏苏能工业炉有限公司 官方网站-第7页",
+          "archiveTimestamp": "20251118070014",
+          "sourceArchive": "Common Crawl CC-MAIN-2025-47",
+          "officialWarcDataUrl": "https://data.commoncrawl.org/crawl-data/CC-MAIN-2025-47/segments/1762439651195.78/warc/CC-MAIN-20251118060923-20251118090923-00583.warc.gz",
+          "byteRange": "bytes 20370341-20375599/925932671",
+          "warcTargetUri": "http://jssngyl.cn/product/index.php?class1=127&page=7",
+          "targetMatchesIndex": true,
+          "originalHtmlPath": "/Users/qianbo/Desktop/Coding/独立站/output/acquisition-repair-20261004/public-legacy-source-search/commoncrawl-page-b88a8d93b281.html",
+          "originalHtmlFileSha256": "58c48262d2e0086caf7c793ce6dfce883865f5c9c00082a0c4905431a433309c",
+          "originalPayloadSha256": "58c48262d2e0086caf7c793ce6dfce883865f5c9c00082a0c4905431a433309c",
+          "recordEvidencePath": "/Users/qianbo/Desktop/Coding/独立站/output/acquisition-repair-20261004/public-legacy-source-search/commoncrawl-page-b88a8d93b281-evidence.json",
+          "originalHref": "../product/showproduct.php?id=187",
+          "anchorNameAttribute": "设备制作车间",
+          "imageAltNameAttribute": "设备制作车间",
+          "anchorVisibleText": "设备制作车间",
+          "rawAnchorHtml": "<a class=\"bg-white pro-li mt-5 d-block py-4 px-4\" href=\"../product/showproduct.php?id=187\" title=\"设备制作车间\">\n                            <i class=\"fa fa-search fa-2x text-white ico\"></i>\n                            <p class=\"text-center mt-2\">\n                                <img src=\"../upload/thumb_src/700_650/20200514105607_830.jpeg\" class=\"img-fluid img-responsive\" alt=\"设备制作车间\">\n                            </p>\n                            <h5 class=\"fs-18 mt-5 mb-2 text-center\">设备制作车间</h5>\n                            <p class=\"text-center fs-28 mb-2\"><i class=\"fa fa-arrow-circle-o-right\"></i></p>\n                        </a>",
+          "uniqueVisibleName": [
+            "设备制作车间"
+          ],
+          "sameOldUrlAnchorOccurrencesInSource": 1
+        }
+      ],
+      "newTarget": "https://www.jssngyl.cn/zh/about#delivery",
+      "newRequestPath": "/zh/about#delivery",
+      "newVerifiedAt": "2026-10-04T09:54:45.352Z",
+      "newStatus": 200,
+      "responseStatusEvidence": {
+        "method": "real browser Navigation Timing responseStatus",
+        "value": 200,
+        "capturedAt": "2026-10-04T09:59:33.566Z"
+      },
+      "newCanonical": [
+        "https://www.jssngyl.cn/zh/about"
+      ],
+      "newNoindex": false,
+      "newH1": [
+        "关于苏能工业炉"
+      ],
+      "newPageKeyText": [
+        "炉体制作与装配",
+        "整线集成与联调",
+        "试炉检查与出厂",
+        "安装调试与验收"
+      ],
+      "publishedCompanySourceEvidence": {
+        "path": "frontend/src/components/about/AboutZhContent.tsx",
+        "sourceCommit": "9c603ee690012455c01ed29c2781f542de9b1aef",
+        "sha256": "daa2d42f319776af8654a955cbdda474149ff96533829d8992e4b7afda8b491f",
+        "sectionId": "delivery",
+        "realBrowserDomEvidence": "/Users/qianbo/Desktop/Coding/独立站/output/acquisition-full-closeout-20261004/legacy/about-delivery-dom.json",
+        "realBrowserScreenshot": "/Users/qianbo/Desktop/Coding/独立站/output/acquisition-full-closeout-20261004/legacy/about-delivery-live.png",
+        "loadedPhotoCount": 4
+      },
+      "mappingReason": "原页面是设备制作车间照片展示，现公开公司页制造交付章节具有对应制作、装配和现场照片内容。",
+      "mappingMeaning": "车间展示意图承接；不视为设备类型映射，不声称旧四张照片或原详情全文已迁移。"
+    },
+    {
+      "oldId": 188,
+      "oldUrl": "http://jssngyl.cn/product/showproduct.php?id=188",
+      "oldRequestPath": "/product/showproduct.php?id=188",
+      "oldTitle": "设备制作车间",
+      "sourceType": "original-directory-photo-company-anchor",
+      "mappingIntent": "photo-company-intent",
+      "oldTextBoundary": "原目录真实编号、标题与车间展示图片链接；未取得旧详情正文，不声称旧照片或全文逐页还原。",
+      "capturedAtUtc": "2025-11-18T07:00:14Z",
+      "officialArchiveIndex": "CC-MAIN-2025-47",
+      "sourceAnchors": [
+        {
+          "sourceOldUrl": "http://jssngyl.cn/product/index.php?class1=127&page=7",
+          "sourceTitle": "产品展示-江苏苏能工业炉有限公司 官方网站-第7页",
+          "archiveTimestamp": "20251118070014",
+          "sourceArchive": "Common Crawl CC-MAIN-2025-47",
+          "officialWarcDataUrl": "https://data.commoncrawl.org/crawl-data/CC-MAIN-2025-47/segments/1762439651195.78/warc/CC-MAIN-20251118060923-20251118090923-00583.warc.gz",
+          "byteRange": "bytes 20370341-20375599/925932671",
+          "warcTargetUri": "http://jssngyl.cn/product/index.php?class1=127&page=7",
+          "targetMatchesIndex": true,
+          "originalHtmlPath": "/Users/qianbo/Desktop/Coding/独立站/output/acquisition-repair-20261004/public-legacy-source-search/commoncrawl-page-b88a8d93b281.html",
+          "originalHtmlFileSha256": "58c48262d2e0086caf7c793ce6dfce883865f5c9c00082a0c4905431a433309c",
+          "originalPayloadSha256": "58c48262d2e0086caf7c793ce6dfce883865f5c9c00082a0c4905431a433309c",
+          "recordEvidencePath": "/Users/qianbo/Desktop/Coding/独立站/output/acquisition-repair-20261004/public-legacy-source-search/commoncrawl-page-b88a8d93b281-evidence.json",
+          "originalHref": "../product/showproduct.php?id=188",
+          "anchorNameAttribute": "设备制作车间",
+          "imageAltNameAttribute": "设备制作车间",
+          "anchorVisibleText": "设备制作车间",
+          "rawAnchorHtml": "<a class=\"bg-white pro-li mt-5 d-block py-4 px-4\" href=\"../product/showproduct.php?id=188\" title=\"设备制作车间\">\n                            <i class=\"fa fa-search fa-2x text-white ico\"></i>\n                            <p class=\"text-center mt-2\">\n                                <img src=\"../upload/thumb_src/700_650/20200514105638_510.jpeg\" class=\"img-fluid img-responsive\" alt=\"设备制作车间\">\n                            </p>\n                            <h5 class=\"fs-18 mt-5 mb-2 text-center\">设备制作车间</h5>\n                            <p class=\"text-center fs-28 mb-2\"><i class=\"fa fa-arrow-circle-o-right\"></i></p>\n                        </a>",
+          "uniqueVisibleName": [
+            "设备制作车间"
+          ],
+          "sameOldUrlAnchorOccurrencesInSource": 1
+        }
+      ],
+      "newTarget": "https://www.jssngyl.cn/zh/about#delivery",
+      "newRequestPath": "/zh/about#delivery",
+      "newVerifiedAt": "2026-10-04T09:54:45.352Z",
+      "newStatus": 200,
+      "responseStatusEvidence": {
+        "method": "real browser Navigation Timing responseStatus",
+        "value": 200,
+        "capturedAt": "2026-10-04T09:59:33.566Z"
+      },
+      "newCanonical": [
+        "https://www.jssngyl.cn/zh/about"
+      ],
+      "newNoindex": false,
+      "newH1": [
+        "关于苏能工业炉"
+      ],
+      "newPageKeyText": [
+        "炉体制作与装配",
+        "整线集成与联调",
+        "试炉检查与出厂",
+        "安装调试与验收"
+      ],
+      "publishedCompanySourceEvidence": {
+        "path": "frontend/src/components/about/AboutZhContent.tsx",
+        "sourceCommit": "9c603ee690012455c01ed29c2781f542de9b1aef",
+        "sha256": "daa2d42f319776af8654a955cbdda474149ff96533829d8992e4b7afda8b491f",
+        "sectionId": "delivery",
+        "realBrowserDomEvidence": "/Users/qianbo/Desktop/Coding/独立站/output/acquisition-full-closeout-20261004/legacy/about-delivery-dom.json",
+        "realBrowserScreenshot": "/Users/qianbo/Desktop/Coding/独立站/output/acquisition-full-closeout-20261004/legacy/about-delivery-live.png",
+        "loadedPhotoCount": 4
+      },
+      "mappingReason": "原页面是设备制作车间照片展示，现公开公司页制造交付章节具有对应制作、装配和现场照片内容。",
+      "mappingMeaning": "车间展示意图承接；不视为设备类型映射，不声称旧四张照片或原详情全文已迁移。"
+    },
+    {
+      "oldId": 189,
+      "oldUrl": "http://jssngyl.cn/product/showproduct.php?id=189",
+      "oldRequestPath": "/product/showproduct.php?id=189",
+      "oldTitle": "设备制作车间",
+      "sourceType": "original-directory-photo-company-anchor",
+      "mappingIntent": "photo-company-intent",
+      "oldTextBoundary": "原目录真实编号、标题与车间展示图片链接；未取得旧详情正文，不声称旧照片或全文逐页还原。",
+      "capturedAtUtc": "2025-11-18T07:00:14Z",
+      "officialArchiveIndex": "CC-MAIN-2025-47",
+      "sourceAnchors": [
+        {
+          "sourceOldUrl": "http://jssngyl.cn/product/index.php?class1=127&page=7",
+          "sourceTitle": "产品展示-江苏苏能工业炉有限公司 官方网站-第7页",
+          "archiveTimestamp": "20251118070014",
+          "sourceArchive": "Common Crawl CC-MAIN-2025-47",
+          "officialWarcDataUrl": "https://data.commoncrawl.org/crawl-data/CC-MAIN-2025-47/segments/1762439651195.78/warc/CC-MAIN-20251118060923-20251118090923-00583.warc.gz",
+          "byteRange": "bytes 20370341-20375599/925932671",
+          "warcTargetUri": "http://jssngyl.cn/product/index.php?class1=127&page=7",
+          "targetMatchesIndex": true,
+          "originalHtmlPath": "/Users/qianbo/Desktop/Coding/独立站/output/acquisition-repair-20261004/public-legacy-source-search/commoncrawl-page-b88a8d93b281.html",
+          "originalHtmlFileSha256": "58c48262d2e0086caf7c793ce6dfce883865f5c9c00082a0c4905431a433309c",
+          "originalPayloadSha256": "58c48262d2e0086caf7c793ce6dfce883865f5c9c00082a0c4905431a433309c",
+          "recordEvidencePath": "/Users/qianbo/Desktop/Coding/独立站/output/acquisition-repair-20261004/public-legacy-source-search/commoncrawl-page-b88a8d93b281-evidence.json",
+          "originalHref": "../product/showproduct.php?id=189",
+          "anchorNameAttribute": "设备制作车间",
+          "imageAltNameAttribute": "设备制作车间",
+          "anchorVisibleText": "设备制作车间",
+          "rawAnchorHtml": "<a class=\"bg-white pro-li mt-5 d-block py-4 px-4\" href=\"../product/showproduct.php?id=189\" title=\"设备制作车间\">\n                            <i class=\"fa fa-search fa-2x text-white ico\"></i>\n                            <p class=\"text-center mt-2\">\n                                <img src=\"../upload/thumb_src/700_650/20200514105648_595.jpeg\" class=\"img-fluid img-responsive\" alt=\"设备制作车间\">\n                            </p>\n                            <h5 class=\"fs-18 mt-5 mb-2 text-center\">设备制作车间</h5>\n                            <p class=\"text-center fs-28 mb-2\"><i class=\"fa fa-arrow-circle-o-right\"></i></p>\n                        </a>",
+          "uniqueVisibleName": [
+            "设备制作车间"
+          ],
+          "sameOldUrlAnchorOccurrencesInSource": 1
+        }
+      ],
+      "newTarget": "https://www.jssngyl.cn/zh/about#delivery",
+      "newRequestPath": "/zh/about#delivery",
+      "newVerifiedAt": "2026-10-04T09:54:45.352Z",
+      "newStatus": 200,
+      "responseStatusEvidence": {
+        "method": "real browser Navigation Timing responseStatus",
+        "value": 200,
+        "capturedAt": "2026-10-04T09:59:33.566Z"
+      },
+      "newCanonical": [
+        "https://www.jssngyl.cn/zh/about"
+      ],
+      "newNoindex": false,
+      "newH1": [
+        "关于苏能工业炉"
+      ],
+      "newPageKeyText": [
+        "炉体制作与装配",
+        "整线集成与联调",
+        "试炉检查与出厂",
+        "安装调试与验收"
+      ],
+      "publishedCompanySourceEvidence": {
+        "path": "frontend/src/components/about/AboutZhContent.tsx",
+        "sourceCommit": "9c603ee690012455c01ed29c2781f542de9b1aef",
+        "sha256": "daa2d42f319776af8654a955cbdda474149ff96533829d8992e4b7afda8b491f",
+        "sectionId": "delivery",
+        "realBrowserDomEvidence": "/Users/qianbo/Desktop/Coding/独立站/output/acquisition-full-closeout-20261004/legacy/about-delivery-dom.json",
+        "realBrowserScreenshot": "/Users/qianbo/Desktop/Coding/独立站/output/acquisition-full-closeout-20261004/legacy/about-delivery-live.png",
+        "loadedPhotoCount": 4
+      },
+      "mappingReason": "原页面是设备制作车间照片展示，现公开公司页制造交付章节具有对应制作、装配和现场照片内容。",
+      "mappingMeaning": "车间展示意图承接；不视为设备类型映射，不声称旧四张照片或原详情全文已迁移。"
     }
   ],
   "limits": [
     "同设备类型承接，不声称旧产品型号、尺寸、图片及参数全文迁移。",
     "原台车页的电炉依据是原产品名称；不伪造原正文另有电阻加热句子。",
-    "四目标公开响应分别于10/4 16:24与17:11核验正常；本次新增规则未部署，旧型号详情全文不等同类型承接。",
-    "新增测试只验证配置契约，不代替真实Nginx语法或HTTP验收。"
+    "原29条设备类型映射已独立上线；新增4条车间展示跳转仅本地实现，仍须真实Nginx语法、HTTP与章节定位验收后才能视为上线。",
+    "新增测试只验证配置契约，不代替真实Nginx语法或HTTP验收。",
+    "4条设备制作车间仅恢复公司制造展示意图，不等于4款设备或旧详情、原照片全文还原。"
   ],
   "incrementalDirectoryMappingCount": 22,
-  "currentPublishedNginxBaselineSha256": "aa805939209ef84d2aa6531b638e8ffbec42aeac3e925033253924e2831bd690",
-  "directoryEvidenceRule": "Original authoritative href plus unique explicit equipment name and same-type current published source; no guessed IDs, no cross-type assignment."
+  "currentPublishedNginxBaselineSha256": "1cca7b9057a90fb479e01ad98a1751105d342946754377dd0e1e6670c1c1e747",
+  "directoryEvidenceRule": "Original authoritative href plus unique explicit equipment name and same-type current published source; workshop display IDs require original workshop title and live company manufacturing-photo section. No guessed IDs or capabilities.",
+  "equipmentTypeMappingCount": 29,
+  "photoCompanyIntentMappingCount": 4,
+  "newWorkshopDirectoryMappingCount": 4
 }
