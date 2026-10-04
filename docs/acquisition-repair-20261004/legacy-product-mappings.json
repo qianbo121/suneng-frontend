@@ -5,7 +5,7 @@
   "implementation": "Only /product/showproduct.php uses the exact arg_id map in all three public hosts; absolute 301 target without source query string.",
   "unknownIdBehavior": "Existing /zh/products catalog fallback retained.",
   "otherRoutes": "/product/product.php and /product/index.php unchanged; four main entry routes and unknown PHP 404 unchanged.",
-  "mappingCount": 33,
+  "mappingCount": 37,
   "mappings": [
     {
       "oldId": 150,
@@ -2027,19 +2027,269 @@
       },
       "mappingReason": "原页面是设备制作车间照片展示，现公开公司页制造交付章节具有对应制作、装配和现场照片内容。",
       "mappingMeaning": "车间展示意图承接；不视为设备类型映射，不声称旧四张照片或原详情全文已迁移。"
+    },
+    {
+      "oldId": 193,
+      "oldUrl": "http://jssngyl.cn/product/showproduct.php?id=193",
+      "oldRequestPath": "/product/showproduct.php?id=193",
+      "oldTitle": "不锈钢连续退火酸洗退火炉设备",
+      "sourceType": "original-directory-thermal-section-procurement-anchor",
+      "mappingIntent": "stainless-continuous-annealing-thermal-section-procurement-intent",
+      "oldTextBoundary": "真实原目录编号、名称和图片文字；无原详情或旧规格，不声称旧设备与某现有机组逐项相同。",
+      "sourceAnchors": [
+        {
+          "sourceOldUrl": "http://jssngyl.cn/product/index.php?class1=127&page=7",
+          "sourceTitle": "产品展示-江苏苏能工业炉有限公司 官方网站-第7页",
+          "archiveTimestamp": "20251118070014",
+          "sourceArchive": "Common Crawl CC-MAIN-2025-47",
+          "officialWarcDataUrl": "https://data.commoncrawl.org/crawl-data/CC-MAIN-2025-47/segments/1762439651195.78/warc/CC-MAIN-20251118060923-20251118090923-00583.warc.gz",
+          "byteRange": "bytes 20370341-20375599/925932671",
+          "warcTargetUri": "http://jssngyl.cn/product/index.php?class1=127&page=7",
+          "targetMatchesIndex": true,
+          "originalHtmlPath": "/Users/qianbo/Desktop/Coding/独立站/output/acquisition-repair-20261004/public-legacy-source-search/commoncrawl-page-b88a8d93b281.html",
+          "originalHtmlFileSha256": "58c48262d2e0086caf7c793ce6dfce883865f5c9c00082a0c4905431a433309c",
+          "recordEvidencePath": "/Users/qianbo/Desktop/Coding/独立站/output/acquisition-repair-20261004/public-legacy-source-search/commoncrawl-page-b88a8d93b281-evidence.json",
+          "originalHref": "../product/showproduct.php?id=193",
+          "anchorNameAttribute": "不锈钢连续退火酸洗退火炉设备",
+          "imageAltNameAttribute": "不锈钢连续退火酸洗退火炉设备",
+          "anchorVisibleText": "不锈钢连续退火酸洗退火炉设备",
+          "rawAnchorHtml": "<a class=\"bg-white pro-li mt-5 d-block py-4 px-4\" href=\"../product/showproduct.php?id=193\" title=\"不锈钢连续退火酸洗退火炉设备\">\n                            <i class=\"fa fa-search fa-2x text-white ico\"></i>\n                            <p class=\"text-center mt-2\">\n                                <img src=\"../upload/thumb_src/700_650/20200908150907_964.jpeg\" class=\"img-fluid img-responsive\" alt=\"不锈钢连续退火酸洗退火炉设备\">\n                            </p>\n                            <h5 class=\"fs-18 mt-5 mb-2 text-center\">不锈钢连续退火酸洗退火炉设备</h5>\n                            <p class=\"text-center fs-28 mb-2\"><i class=\"fa fa-arrow-circle-o-right\"></i></p>\n                        </a>"
+        }
+      ],
+      "newTarget": "https://www.jssngyl.cn/zh/products/detail/annealing-solution-line",
+      "newRequestPath": "/zh/products/detail/annealing-solution-line",
+      "newStatus": 200,
+      "newCanonical": [
+        "https://www.jssngyl.cn/zh/products/detail/annealing-solution-line"
+      ],
+      "newNoindex": false,
+      "newH1": [
+        "带材退火固溶生产线"
+      ],
+      "newPageKeyText": [
+        "面向不锈钢及适用合金带材，配置连续加热、均热与受控冷却，并与收放卷、张力和纠偏系统协同。先确认牌号、来料状态、组织性能与表面要求，再确定退火或固溶的温度路径、线速和设备范围。",
+        "路线一｜退洗线中的退火或固溶热工段",
+        "适用于允许后续除鳞、酸洗等表面处理的项目；酸洗、清洗、活套和收放卷是否供货须分别列项。冷却组合按材料、板形与后工序选择。",
+        "开卷、清洗、活套、酸洗、收卷、通信、公辅和总包责任逐项列明，避免把外部工序默认计入热工段供货。"
+      ],
+      "publishedTargetSourceEvidence": {
+        "path": "frontend/src/lib/production-lines/annealing-solution-line.json",
+        "sourceCommit": "78a686d5028c438c40b6ce36644accf4954e92e2",
+        "sha256": "3dcadffe4a92e204dfc6a2582fad61ea3512a142bc050867b09e480a35a758bd",
+        "actualPublicResponsePath": "/Users/qianbo/Desktop/Coding/独立站/output/acquisition-next-repairs-20261005/legacy-matching-evidence/annealing-solution-line-current.html",
+        "actualPublicResponseSha256": "ab1fec9af3dc5e8a705a90fa02e621944a0cb6d10aff3112d827b81351420e57",
+        "reviewReportPath": "/Users/qianbo/Desktop/Coding/独立站/output/acquisition-next-repairs-20261005/legacy-matching-review.json",
+        "reviewReportSha256": "ef8448f3c487f0fb3a3f2ee105c49f9849b00f6c61b5bc7574f1ca57fb479bf5"
+      },
+      "mappingReason": "原标题明确不锈钢、连续退火以及退洗项目的退火炉设备；当前专门设备页明确相同材料和连续热工段，并显示退洗线炉段路线，足以承接这一炉段的采购评估。",
+      "mappingMeaning": "退洗项目连续退火炉段采购意图承接；不恢复原规格、原详情或酸洗整线供货承诺。",
+      "originalDetailBodyRestored": false,
+      "sameOriginalEquipmentIdentityProven": false,
+      "newRuleImplemented": true,
+      "newRulePublished": false,
+      "liveOriginalUrlVerifiedAfterThisRule": false
+    },
+    {
+      "oldId": 194,
+      "oldUrl": "http://jssngyl.cn/product/showproduct.php?id=194",
+      "oldRequestPath": "/product/showproduct.php?id=194",
+      "oldTitle": "不锈钢连续退火酸洗退火炉设备",
+      "sourceType": "original-directory-thermal-section-procurement-anchor",
+      "mappingIntent": "stainless-continuous-annealing-thermal-section-procurement-intent",
+      "oldTextBoundary": "真实原目录编号、名称和图片文字；无原详情或旧规格，不声称旧设备与某现有机组逐项相同。",
+      "sourceAnchors": [
+        {
+          "sourceOldUrl": "http://jssngyl.cn/product/index.php?class1=127&page=7",
+          "sourceTitle": "产品展示-江苏苏能工业炉有限公司 官方网站-第7页",
+          "archiveTimestamp": "20251118070014",
+          "sourceArchive": "Common Crawl CC-MAIN-2025-47",
+          "officialWarcDataUrl": "https://data.commoncrawl.org/crawl-data/CC-MAIN-2025-47/segments/1762439651195.78/warc/CC-MAIN-20251118060923-20251118090923-00583.warc.gz",
+          "byteRange": "bytes 20370341-20375599/925932671",
+          "warcTargetUri": "http://jssngyl.cn/product/index.php?class1=127&page=7",
+          "targetMatchesIndex": true,
+          "originalHtmlPath": "/Users/qianbo/Desktop/Coding/独立站/output/acquisition-repair-20261004/public-legacy-source-search/commoncrawl-page-b88a8d93b281.html",
+          "originalHtmlFileSha256": "58c48262d2e0086caf7c793ce6dfce883865f5c9c00082a0c4905431a433309c",
+          "recordEvidencePath": "/Users/qianbo/Desktop/Coding/独立站/output/acquisition-repair-20261004/public-legacy-source-search/commoncrawl-page-b88a8d93b281-evidence.json",
+          "originalHref": "../product/showproduct.php?id=194",
+          "anchorNameAttribute": "不锈钢连续退火酸洗退火炉设备",
+          "imageAltNameAttribute": "不锈钢连续退火酸洗退火炉设备",
+          "anchorVisibleText": "不锈钢连续退火酸洗退火炉设备",
+          "rawAnchorHtml": "<a class=\"bg-white pro-li mt-5 d-block py-4 px-4\" href=\"../product/showproduct.php?id=194\" title=\"不锈钢连续退火酸洗退火炉设备\">\n                            <i class=\"fa fa-search fa-2x text-white ico\"></i>\n                            <p class=\"text-center mt-2\">\n                                <img src=\"../upload/thumb_src/700_650/20200908150903_542.jpeg\" class=\"img-fluid img-responsive\" alt=\"不锈钢连续退火酸洗退火炉设备\">\n                            </p>\n                            <h5 class=\"fs-18 mt-5 mb-2 text-center\">不锈钢连续退火酸洗退火炉设备</h5>\n                            <p class=\"text-center fs-28 mb-2\"><i class=\"fa fa-arrow-circle-o-right\"></i></p>\n                        </a>"
+        }
+      ],
+      "newTarget": "https://www.jssngyl.cn/zh/products/detail/annealing-solution-line",
+      "newRequestPath": "/zh/products/detail/annealing-solution-line",
+      "newStatus": 200,
+      "newCanonical": [
+        "https://www.jssngyl.cn/zh/products/detail/annealing-solution-line"
+      ],
+      "newNoindex": false,
+      "newH1": [
+        "带材退火固溶生产线"
+      ],
+      "newPageKeyText": [
+        "面向不锈钢及适用合金带材，配置连续加热、均热与受控冷却，并与收放卷、张力和纠偏系统协同。先确认牌号、来料状态、组织性能与表面要求，再确定退火或固溶的温度路径、线速和设备范围。",
+        "路线一｜退洗线中的退火或固溶热工段",
+        "适用于允许后续除鳞、酸洗等表面处理的项目；酸洗、清洗、活套和收放卷是否供货须分别列项。冷却组合按材料、板形与后工序选择。",
+        "开卷、清洗、活套、酸洗、收卷、通信、公辅和总包责任逐项列明，避免把外部工序默认计入热工段供货。"
+      ],
+      "publishedTargetSourceEvidence": {
+        "path": "frontend/src/lib/production-lines/annealing-solution-line.json",
+        "sourceCommit": "78a686d5028c438c40b6ce36644accf4954e92e2",
+        "sha256": "3dcadffe4a92e204dfc6a2582fad61ea3512a142bc050867b09e480a35a758bd",
+        "actualPublicResponsePath": "/Users/qianbo/Desktop/Coding/独立站/output/acquisition-next-repairs-20261005/legacy-matching-evidence/annealing-solution-line-current.html",
+        "actualPublicResponseSha256": "ab1fec9af3dc5e8a705a90fa02e621944a0cb6d10aff3112d827b81351420e57",
+        "reviewReportPath": "/Users/qianbo/Desktop/Coding/独立站/output/acquisition-next-repairs-20261005/legacy-matching-review.json",
+        "reviewReportSha256": "ef8448f3c487f0fb3a3f2ee105c49f9849b00f6c61b5bc7574f1ca57fb479bf5"
+      },
+      "mappingReason": "原标题明确不锈钢、连续退火以及退洗项目的退火炉设备；当前专门设备页明确相同材料和连续热工段，并显示退洗线炉段路线，足以承接这一炉段的采购评估。",
+      "mappingMeaning": "退洗项目连续退火炉段采购意图承接；不恢复原规格、原详情或酸洗整线供货承诺。",
+      "originalDetailBodyRestored": false,
+      "sameOriginalEquipmentIdentityProven": false,
+      "newRuleImplemented": true,
+      "newRulePublished": false,
+      "liveOriginalUrlVerifiedAfterThisRule": false
+    },
+    {
+      "oldId": 195,
+      "oldUrl": "http://jssngyl.cn/product/showproduct.php?id=195",
+      "oldRequestPath": "/product/showproduct.php?id=195",
+      "oldTitle": "不锈钢连续退火酸洗退火炉设备",
+      "sourceType": "original-directory-thermal-section-procurement-anchor",
+      "mappingIntent": "stainless-continuous-annealing-thermal-section-procurement-intent",
+      "oldTextBoundary": "真实原目录编号、名称和图片文字；无原详情或旧规格，不声称旧设备与某现有机组逐项相同。",
+      "sourceAnchors": [
+        {
+          "sourceOldUrl": "http://jssngyl.cn/product/index.php?class1=127&page=7",
+          "sourceTitle": "产品展示-江苏苏能工业炉有限公司 官方网站-第7页",
+          "archiveTimestamp": "20251118070014",
+          "sourceArchive": "Common Crawl CC-MAIN-2025-47",
+          "officialWarcDataUrl": "https://data.commoncrawl.org/crawl-data/CC-MAIN-2025-47/segments/1762439651195.78/warc/CC-MAIN-20251118060923-20251118090923-00583.warc.gz",
+          "byteRange": "bytes 20370341-20375599/925932671",
+          "warcTargetUri": "http://jssngyl.cn/product/index.php?class1=127&page=7",
+          "targetMatchesIndex": true,
+          "originalHtmlPath": "/Users/qianbo/Desktop/Coding/独立站/output/acquisition-repair-20261004/public-legacy-source-search/commoncrawl-page-b88a8d93b281.html",
+          "originalHtmlFileSha256": "58c48262d2e0086caf7c793ce6dfce883865f5c9c00082a0c4905431a433309c",
+          "recordEvidencePath": "/Users/qianbo/Desktop/Coding/独立站/output/acquisition-repair-20261004/public-legacy-source-search/commoncrawl-page-b88a8d93b281-evidence.json",
+          "originalHref": "../product/showproduct.php?id=195",
+          "anchorNameAttribute": "不锈钢连续退火酸洗退火炉设备",
+          "imageAltNameAttribute": "不锈钢连续退火酸洗退火炉设备",
+          "anchorVisibleText": "不锈钢连续退火酸洗退火炉设备",
+          "rawAnchorHtml": "<a class=\"bg-white pro-li mt-5 d-block py-4 px-4\" href=\"../product/showproduct.php?id=195\" title=\"不锈钢连续退火酸洗退火炉设备\">\n                            <i class=\"fa fa-search fa-2x text-white ico\"></i>\n                            <p class=\"text-center mt-2\">\n                                <img src=\"../upload/thumb_src/700_650/20200908150859_139.jpeg\" class=\"img-fluid img-responsive\" alt=\"不锈钢连续退火酸洗退火炉设备\">\n                            </p>\n                            <h5 class=\"fs-18 mt-5 mb-2 text-center\">不锈钢连续退火酸洗退火炉设备</h5>\n                            <p class=\"text-center fs-28 mb-2\"><i class=\"fa fa-arrow-circle-o-right\"></i></p>\n                        </a>"
+        }
+      ],
+      "newTarget": "https://www.jssngyl.cn/zh/products/detail/annealing-solution-line",
+      "newRequestPath": "/zh/products/detail/annealing-solution-line",
+      "newStatus": 200,
+      "newCanonical": [
+        "https://www.jssngyl.cn/zh/products/detail/annealing-solution-line"
+      ],
+      "newNoindex": false,
+      "newH1": [
+        "带材退火固溶生产线"
+      ],
+      "newPageKeyText": [
+        "面向不锈钢及适用合金带材，配置连续加热、均热与受控冷却，并与收放卷、张力和纠偏系统协同。先确认牌号、来料状态、组织性能与表面要求，再确定退火或固溶的温度路径、线速和设备范围。",
+        "路线一｜退洗线中的退火或固溶热工段",
+        "适用于允许后续除鳞、酸洗等表面处理的项目；酸洗、清洗、活套和收放卷是否供货须分别列项。冷却组合按材料、板形与后工序选择。",
+        "开卷、清洗、活套、酸洗、收卷、通信、公辅和总包责任逐项列明，避免把外部工序默认计入热工段供货。"
+      ],
+      "publishedTargetSourceEvidence": {
+        "path": "frontend/src/lib/production-lines/annealing-solution-line.json",
+        "sourceCommit": "78a686d5028c438c40b6ce36644accf4954e92e2",
+        "sha256": "3dcadffe4a92e204dfc6a2582fad61ea3512a142bc050867b09e480a35a758bd",
+        "actualPublicResponsePath": "/Users/qianbo/Desktop/Coding/独立站/output/acquisition-next-repairs-20261005/legacy-matching-evidence/annealing-solution-line-current.html",
+        "actualPublicResponseSha256": "ab1fec9af3dc5e8a705a90fa02e621944a0cb6d10aff3112d827b81351420e57",
+        "reviewReportPath": "/Users/qianbo/Desktop/Coding/独立站/output/acquisition-next-repairs-20261005/legacy-matching-review.json",
+        "reviewReportSha256": "ef8448f3c487f0fb3a3f2ee105c49f9849b00f6c61b5bc7574f1ca57fb479bf5"
+      },
+      "mappingReason": "原标题明确不锈钢、连续退火以及退洗项目的退火炉设备；当前专门设备页明确相同材料和连续热工段，并显示退洗线炉段路线，足以承接这一炉段的采购评估。",
+      "mappingMeaning": "退洗项目连续退火炉段采购意图承接；不恢复原规格、原详情或酸洗整线供货承诺。",
+      "originalDetailBodyRestored": false,
+      "sameOriginalEquipmentIdentityProven": false,
+      "newRuleImplemented": true,
+      "newRulePublished": false,
+      "liveOriginalUrlVerifiedAfterThisRule": false
+    },
+    {
+      "oldId": 196,
+      "oldUrl": "http://jssngyl.cn/product/showproduct.php?id=196",
+      "oldRequestPath": "/product/showproduct.php?id=196",
+      "oldTitle": "不锈钢连续退火酸洗退火炉设备",
+      "sourceType": "original-directory-thermal-section-procurement-anchor",
+      "mappingIntent": "stainless-continuous-annealing-thermal-section-procurement-intent",
+      "oldTextBoundary": "真实原目录编号、名称和图片文字；无原详情或旧规格，不声称旧设备与某现有机组逐项相同。",
+      "sourceAnchors": [
+        {
+          "sourceOldUrl": "http://jssngyl.cn/product/index.php?class1=127&page=7",
+          "sourceTitle": "产品展示-江苏苏能工业炉有限公司 官方网站-第7页",
+          "archiveTimestamp": "20251118070014",
+          "sourceArchive": "Common Crawl CC-MAIN-2025-47",
+          "officialWarcDataUrl": "https://data.commoncrawl.org/crawl-data/CC-MAIN-2025-47/segments/1762439651195.78/warc/CC-MAIN-20251118060923-20251118090923-00583.warc.gz",
+          "byteRange": "bytes 20370341-20375599/925932671",
+          "warcTargetUri": "http://jssngyl.cn/product/index.php?class1=127&page=7",
+          "targetMatchesIndex": true,
+          "originalHtmlPath": "/Users/qianbo/Desktop/Coding/独立站/output/acquisition-repair-20261004/public-legacy-source-search/commoncrawl-page-b88a8d93b281.html",
+          "originalHtmlFileSha256": "58c48262d2e0086caf7c793ce6dfce883865f5c9c00082a0c4905431a433309c",
+          "recordEvidencePath": "/Users/qianbo/Desktop/Coding/独立站/output/acquisition-repair-20261004/public-legacy-source-search/commoncrawl-page-b88a8d93b281-evidence.json",
+          "originalHref": "../product/showproduct.php?id=196",
+          "anchorNameAttribute": "不锈钢连续退火酸洗退火炉设备",
+          "imageAltNameAttribute": "不锈钢连续退火酸洗退火炉设备",
+          "anchorVisibleText": "不锈钢连续退火酸洗退火炉设备",
+          "rawAnchorHtml": "<a class=\"bg-white pro-li mt-5 d-block py-4 px-4\" href=\"../product/showproduct.php?id=196\" title=\"不锈钢连续退火酸洗退火炉设备\">\n                            <i class=\"fa fa-search fa-2x text-white ico\"></i>\n                            <p class=\"text-center mt-2\">\n                                <img src=\"../upload/thumb_src/700_650/20200908150843_384.jpg\" class=\"img-fluid img-responsive\" alt=\"不锈钢连续退火酸洗退火炉设备\">\n                            </p>\n                            <h5 class=\"fs-18 mt-5 mb-2 text-center\">不锈钢连续退火酸洗退火炉设备</h5>\n                            <p class=\"text-center fs-28 mb-2\"><i class=\"fa fa-arrow-circle-o-right\"></i></p>\n                        </a>"
+        }
+      ],
+      "newTarget": "https://www.jssngyl.cn/zh/products/detail/annealing-solution-line",
+      "newRequestPath": "/zh/products/detail/annealing-solution-line",
+      "newStatus": 200,
+      "newCanonical": [
+        "https://www.jssngyl.cn/zh/products/detail/annealing-solution-line"
+      ],
+      "newNoindex": false,
+      "newH1": [
+        "带材退火固溶生产线"
+      ],
+      "newPageKeyText": [
+        "面向不锈钢及适用合金带材，配置连续加热、均热与受控冷却，并与收放卷、张力和纠偏系统协同。先确认牌号、来料状态、组织性能与表面要求，再确定退火或固溶的温度路径、线速和设备范围。",
+        "路线一｜退洗线中的退火或固溶热工段",
+        "适用于允许后续除鳞、酸洗等表面处理的项目；酸洗、清洗、活套和收放卷是否供货须分别列项。冷却组合按材料、板形与后工序选择。",
+        "开卷、清洗、活套、酸洗、收卷、通信、公辅和总包责任逐项列明，避免把外部工序默认计入热工段供货。"
+      ],
+      "publishedTargetSourceEvidence": {
+        "path": "frontend/src/lib/production-lines/annealing-solution-line.json",
+        "sourceCommit": "78a686d5028c438c40b6ce36644accf4954e92e2",
+        "sha256": "3dcadffe4a92e204dfc6a2582fad61ea3512a142bc050867b09e480a35a758bd",
+        "actualPublicResponsePath": "/Users/qianbo/Desktop/Coding/独立站/output/acquisition-next-repairs-20261005/legacy-matching-evidence/annealing-solution-line-current.html",
+        "actualPublicResponseSha256": "ab1fec9af3dc5e8a705a90fa02e621944a0cb6d10aff3112d827b81351420e57",
+        "reviewReportPath": "/Users/qianbo/Desktop/Coding/独立站/output/acquisition-next-repairs-20261005/legacy-matching-review.json",
+        "reviewReportSha256": "ef8448f3c487f0fb3a3f2ee105c49f9849b00f6c61b5bc7574f1ca57fb479bf5"
+      },
+      "mappingReason": "原标题明确不锈钢、连续退火以及退洗项目的退火炉设备；当前专门设备页明确相同材料和连续热工段，并显示退洗线炉段路线，足以承接这一炉段的采购评估。",
+      "mappingMeaning": "退洗项目连续退火炉段采购意图承接；不恢复原规格、原详情或酸洗整线供货承诺。",
+      "originalDetailBodyRestored": false,
+      "sameOriginalEquipmentIdentityProven": false,
+      "newRuleImplemented": true,
+      "newRulePublished": false,
+      "liveOriginalUrlVerifiedAfterThisRule": false
     }
   ],
   "limits": [
     "同设备类型承接，不声称旧产品型号、尺寸、图片及参数全文迁移。",
     "原台车页的电炉依据是原产品名称；不伪造原正文另有电阻加热句子。",
-    "原29条设备类型映射已独立上线；新增4条车间展示跳转仅本地实现，仍须真实Nginx语法、HTTP与章节定位验收后才能视为上线。",
+    "原33条产品与8条新闻映射已独立上线；本批新增4条退洗项目连续退火炉段采购跳转仅本地实现，仍须真实Nginx语法、HTTP与恢复保护验收后才能视为上线。",
     "新增测试只验证配置契约，不代替真实Nginx语法或HTTP验收。",
-    "4条设备制作车间仅恢复公司制造展示意图，不等于4款设备或旧详情、原照片全文还原。"
+    "4条设备制作车间仅恢复公司制造展示意图，不等于4款设备或旧详情、原照片全文还原。",
+    "本批4条只承接旧原名明确的退火炉设备采购，不声明原宽厚规格、炉内结构、同一项目或酸洗整线供货。"
   ],
-  "incrementalDirectoryMappingCount": 22,
-  "currentPublishedNginxBaselineSha256": "1cca7b9057a90fb479e01ad98a1751105d342946754377dd0e1e6670c1c1e747",
+  "incrementalDirectoryMappingCount": 26,
+  "currentPublishedNginxBaselineSha256": "bec5e0d0f35af5cc6a2d9d153ecae1f235311523e594f36ac8dd6425febf80e1",
   "directoryEvidenceRule": "Original authoritative href plus unique explicit equipment name and same-type current published source; workshop display IDs require original workshop title and live company manufacturing-photo section. No guessed IDs or capabilities.",
-  "equipmentTypeMappingCount": 29,
+  "equipmentTypeMappingCount": 33,
   "photoCompanyIntentMappingCount": 4,
-  "newWorkshopDirectoryMappingCount": 4
+  "newWorkshopDirectoryMappingCount": 4,
+  "currentPublishedNginxBaselineSource": "af08585ffa27c20035942287e7c3b199157069c0",
+  "currentPublishedFrontendSource": "78a686d5028c438c40b6ce36644accf4954e92e2",
+  "previousPublishedProductMappingCount": 33,
+  "previousPublishedNewsMappingCount": 8,
+  "newAnnealingThermalSectionMappingCount": 4
 }
