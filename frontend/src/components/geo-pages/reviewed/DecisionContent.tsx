@@ -3,6 +3,7 @@ import { ReviewedDocument } from '../ReviewedDocument';
 import styles from './article.module.css';
 import { ReviewedFaqs } from '../ReviewedFaqs';
 import faqs from './decision-faqs.json';
+import { TrackedContactLink } from '@/components/lead/TrackedContactLink';
 
 /** Reviewed design content imported from output/article-ui-draft-20260915/index.html; edit this JSX for future revisions. */
 export function DecisionContent() {
@@ -578,7 +579,13 @@ export function DecisionContent() {
                     <path d={'M5 12h14M13 6l6 6-6 6'}></path>
                   </svg>
                 </a>
-                <a className={'phone-link'} href={'tel:13052986814'}>
+                <TrackedContactLink
+                  kind="phone"
+                  position="repair_decision_aside_phone"
+                  purpose="sales"
+                  className={'phone-link'}
+                  href={'tel:13052986814'}
+                >
                   <svg viewBox={'0 0 24 24'} aria-hidden={'true'}>
                     <path
                       d={
@@ -587,7 +594,7 @@ export function DecisionContent() {
                     ></path>
                   </svg>
                   {'130–5298–6814'}
-                </a>
+                </TrackedContactLink>
               </div>
               <div className={'aside-related'}>
                 <h3>{'继续了解'}</h3>

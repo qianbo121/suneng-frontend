@@ -57,6 +57,19 @@ http {
     ~*^crawler-verification$ "crawler_verification";
   }
 
+  # Verified original-PHP product names from Common Crawl CC-MAIN-2025-47.
+  # Unknown IDs retain the existing catalog fallback. Apply only to showproduct.
+  map $arg_id $legacy_product_path {
+    default /zh/products;
+    150 /zh/products/detail/trolley-furnace;
+    152 /zh/products/detail/trolley-furnace;
+    154 /zh/products/detail/trolley-furnace;
+    166 /zh/products/detail/mesh-belt-furnace;
+    167 /zh/products/detail/mesh-belt-furnace;
+    168 /zh/products/detail/mesh-belt-furnace;
+    169 /zh/products/detail/mesh-belt-furnace;
+  }
+
   map "$request_method:$uri" $lead_event {
     default "";
     ~^POST:/api/v1/custom-requirements/?$ "custom_requirement_submit";
@@ -372,7 +385,7 @@ http {
     }
 
     location = /product/showproduct.php {
-      return 301 https://www.jssngyl.cn/zh/products;
+      return 301 https://www.jssngyl.cn$legacy_product_path;
     }
 
     location = /product/product.php {
@@ -455,7 +468,7 @@ http {
     }
 
     location = /product/showproduct.php {
-      return 301 https://www.jssngyl.cn/zh/products;
+      return 301 https://www.jssngyl.cn$legacy_product_path;
     }
 
     location = /product/product.php {
@@ -820,7 +833,7 @@ http {
     }
 
     location = /product/showproduct.php {
-      return 301 /zh/products;
+      return 301 https://www.jssngyl.cn$legacy_product_path;
     }
 
     location = /product/product.php {
