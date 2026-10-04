@@ -96,13 +96,18 @@ http {
     242 /zh/products/detail/trolley-furnace;
   }
 
-  # Verified original news bodies; continue the same equipment type only.
-  # This does not restore old article text or specifications. Unknown news stays news.
+  # Verified old news: preserve equipment continuity and approved same-question replacements.
+  # Reviewed replacements do not restore unverified old text or specifications. Unknown news stays news.
   map $arg_id $legacy_news_path {
     default /zh/news;
+    25 /zh/news/mesh-belt-furnace-oil-fume-treatment-checklist;
+    37 /zh/news/mesh-belt-furnace-carbon-cleaning-review;
     38 /zh/products/detail/trolley-furnace;
     39 /zh/products/detail/trolley-furnace;
+    40 /zh/news/mesh-belt-furnace-quality-tracking-checklist;
     41 /zh/products/detail/mesh-belt-furnace;
+    42 /zh/news/gas-trolley-furnace-operation-maintenance-documents;
+    44 /zh/news/mesh-belt-quenching-furnace-principle-process-checklist;
   }
 
   map "$request_method:$uri" $lead_event {

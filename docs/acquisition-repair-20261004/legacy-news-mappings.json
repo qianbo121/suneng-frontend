@@ -1,23 +1,18 @@
 {
-  "kind": "verified-original-php-news-type-continuity",
-  "baseCommit": "f3823e8a602d50e3a72fac8870da35c6e8c7682d",
-  "mappingCount": 3,
+  "kind": "verified-original-php-news-continuity",
+  "baseCommit": "78a686d5028c438c40b6ce36644accf4954e92e2",
+  "mappingCount": 8,
   "implementation": "Only /news/shownews.php uses an independent exact arg_id map in all three public hosts; absolute 301 target without the source query string.",
-  "unknownIdBehavior": "Existing /zh/news fallback retained, including id=44 and all unapproved IDs.",
+  "unknownIdBehavior": "Existing /zh/news fallback retained, including id=43 and all unapproved IDs.",
   "preservedProductMapSha256": "df128b9c0e816d85f1ee11c29fbfdfbeff62ec86d8bdb9f565c27b2d1a38b9b8",
-  "mappingMeaning": "同类设备承接，非原文恢复；不宣称旧型号、参数、工艺结果、文章长尾主题或排名和咨询已经恢复。",
+  "mappingMeaning": "原3条保持同类设备承接；新5条接向用户批准的同题审定替代正文。原文未经确认的操作、规格和主张未恢复，也不宣称排名或咨询已恢复。",
   "originalNewsBodyRestored": false,
   "independentIntentReview": {
     "source": "output/acquisition-full-closeout-20261004/technical/news-mapping-intent-review.json",
     "sha256": "e103d53c1bd4db4717635e790b99866150d4734a47fc92e612f88b7ef0ebf5f5",
     "checkedAt": "2026-10-04T10:57:22.141709+00:00"
   },
-  "heldIds": [
-    {
-      "oldId": 44,
-      "reason": "原文还包含维修、温区和工艺故障问答，当前产品页未完整回答；保持原新闻列表兜底，不凭同设备名称强行映射。"
-    }
-  ],
+  "heldIds": [],
   "mappings": [
     {
       "oldId": 38,
@@ -117,6 +112,266 @@
         "旧9温区、5400mm加热段、冷却段分长及SUS310结构是具体旧配置，不等于现页同型号承诺。",
         "现页给保护气氛和热处理机组能力边界，不能据此宣称原全部渗碳/碳氮共渗具体工艺结果和尺寸已经迁移。"
       ]
+    },
+    {
+      "oldId": 25,
+      "oldUrl": "http://jssngyl.cn/news/shownews.php?id=25",
+      "oldRequestPath": "/news/shownews.php?id=25",
+      "oldTitle": "网带炉_高温淬火网带炉热处理油烟废气净化设备",
+      "archiveTimestamp": "20241010204903",
+      "archiveReplayUrl": "https://web.archive.org/web/20241010204903/http://jssngyl.cn/news/shownews.php?id=25",
+      "originalUrlAndTimestampVerified": true,
+      "sourceType": "verified-original-news-body-and-approved-reviewed-replacement",
+      "sourceEvidence": {
+        "archiveMetadata": "output/acquisition-full-closeout-20261004/legacy/missing-nine-recovered-news25.json",
+        "originalArticleText": "output/acquisition-full-closeout-20261004/legacy/missing-nine-recovered-news25.article.txt",
+        "originalArticleHtml": "output/acquisition-full-closeout-20261004/legacy/missing-nine-recovered-news25.article.html",
+        "originalArticleTextSha256": "93962a98d43ed59d6ce46282fdeaaef3821092bf27d7f49007839465014b9d03",
+        "originalArticleHtmlSha256": "12bafe5116b9b46d980e5c2dbde4dff22e5fb3c53e735aba82084925327a70e0",
+        "originalResponseSha256": "a07007fd4ef36f7ff171ea2064975de06c7ed51919de4737e7aa4a618503cc70"
+      },
+      "newTitle": "网带炉油烟废气净化设备怎么选？先确认来源、接口和验收要求",
+      "newCategoryId": 1,
+      "newTarget": "https://www.jssngyl.cn/zh/news/mesh-belt-furnace-oil-fume-treatment-checklist",
+      "newRequestPath": "/zh/news/mesh-belt-furnace-oil-fume-treatment-checklist",
+      "newCanonical": "https://www.jssngyl.cn/zh/news/mesh-belt-furnace-oil-fume-treatment-checklist",
+      "newObservedAt": null,
+      "newObservedStatus": null,
+      "newNoindex": null,
+      "mappingIntent": "same-question-reviewed-replacement",
+      "originalNewsBodyRestored": false,
+      "reviewedReplacement": {
+        "draftPath": "output/acquisition-full-closeout-20261004/restoration-preview/remaining-drafts/news25-draft.md",
+        "draftSha256": "93020b979b7325ba76226d20197f76784d8527c570b7758a999b4ab087433c3a",
+        "htmlPath": "output/acquisition-five-restoration-release-20261004/content-review/news25-body.html",
+        "htmlSha256": "915cae0852d118a6271d9792611995acc4d7d3ebc0be8d239cd9ae31c4749ed1",
+        "contentEquivalentToApprovedPreview": true,
+        "bodyAndUiApprovedAccordingToTrustedParent": true,
+        "scope": {
+          "language": "zh",
+          "newImages": false,
+          "externalChannels": false
+        },
+        "authorizationSource": "Trusted root task: user approved the five reviewed bodies/UI and authorized Chinese publication plus their old links; no approval inferred from historical preapproval snapshots."
+      },
+      "publicationState": "pending-target-publication-and-edge-release",
+      "reviewedReplacementBodyPublished": false,
+      "newLegacyRedirectDeployed": false,
+      "limits": [
+        "Reviewed same-question content replaces the old question; original unsafe instructions, unverified parameters and claims are not republished.",
+        "Source configuration and user approval do not prove public target publication, live redirect, indexing, rankings, AI citations or customer inquiries."
+      ]
+    },
+    {
+      "oldId": 37,
+      "oldUrl": "http://jssngyl.cn/news/shownews.php?id=37",
+      "oldRequestPath": "/news/shownews.php?id=37",
+      "oldTitle": "网带炉_如何去除网带炉中的碳？",
+      "archiveTimestamp": "20250812143500",
+      "archiveReplayUrl": "https://web.archive.org/web/20250812143500/http://jssngyl.cn/news/shownews.php?id=37",
+      "originalUrlAndTimestampVerified": true,
+      "sourceType": "verified-original-news-body-and-approved-reviewed-replacement",
+      "sourceEvidence": {
+        "archiveMetadata": "output/acquisition-full-closeout-20261004/legacy/missing-nine-recovered-news37.json",
+        "originalArticleText": "output/acquisition-full-closeout-20261004/legacy/missing-nine-recovered-news37.article.txt",
+        "originalArticleHtml": "output/acquisition-full-closeout-20261004/legacy/missing-nine-recovered-news37.article.html",
+        "originalArticleTextSha256": "06aa7edaf98ef53a79d77ef8056051a6dc1e1a1e740cdf6ac35ac8760c7375dd",
+        "originalArticleHtmlSha256": "c1cf6648cae3bdea441d611a570d00e397bee22758c677cf058df1232c821924",
+        "originalResponseSha256": "1f7a6940edce8c88b2053408331f48298b9f69f37315dd7548950fcbb2f26df4"
+      },
+      "newTitle": "网带炉积碳怎么处理？先确认工况和检修资料",
+      "newCategoryId": 1,
+      "newTarget": "https://www.jssngyl.cn/zh/news/mesh-belt-furnace-carbon-cleaning-review",
+      "newRequestPath": "/zh/news/mesh-belt-furnace-carbon-cleaning-review",
+      "newCanonical": "https://www.jssngyl.cn/zh/news/mesh-belt-furnace-carbon-cleaning-review",
+      "newObservedAt": null,
+      "newObservedStatus": null,
+      "newNoindex": null,
+      "mappingIntent": "same-question-reviewed-replacement",
+      "originalNewsBodyRestored": false,
+      "reviewedReplacement": {
+        "draftPath": "output/acquisition-full-closeout-20261004/restoration-preview/remaining-drafts/news37-draft.md",
+        "draftSha256": "f240b1fcef80caa7e9ee7595ec6a7e80c2ead2e92a613ce0e9bb9f173640a43b",
+        "htmlPath": "output/acquisition-five-restoration-release-20261004/content-review/news37-body.html",
+        "htmlSha256": "f28cd6b409172bb09069fa7e871f72dfb264bfa45015de787828d8d086732420",
+        "contentEquivalentToApprovedPreview": true,
+        "bodyAndUiApprovedAccordingToTrustedParent": true,
+        "scope": {
+          "language": "zh",
+          "newImages": false,
+          "externalChannels": false
+        },
+        "authorizationSource": "Trusted root task: user approved the five reviewed bodies/UI and authorized Chinese publication plus their old links; no approval inferred from historical preapproval snapshots."
+      },
+      "publicationState": "pending-target-publication-and-edge-release",
+      "reviewedReplacementBodyPublished": false,
+      "newLegacyRedirectDeployed": false,
+      "limits": [
+        "Reviewed same-question content replaces the old question; original unsafe instructions, unverified parameters and claims are not republished.",
+        "Source configuration and user approval do not prove public target publication, live redirect, indexing, rankings, AI citations or customer inquiries."
+      ]
+    },
+    {
+      "oldId": 40,
+      "oldUrl": "http://jssngyl.cn/news/shownews.php?id=40",
+      "oldRequestPath": "/news/shownews.php?id=40",
+      "oldTitle": "网带炉_如何辨别网带炉的质量？网带炉跑偏时经常检查的部位和处理方法有",
+      "archiveTimestamp": "20250719120058",
+      "archiveReplayUrl": "https://web.archive.org/web/20250719120058/http://jssngyl.cn/news/shownews.php?id=40",
+      "originalUrlAndTimestampVerified": true,
+      "sourceType": "verified-original-news-body-and-approved-reviewed-replacement",
+      "sourceEvidence": {
+        "archiveMetadata": "output/acquisition-full-closeout-20261004/legacy/missing-nine-recovered-news40.json",
+        "originalArticleText": "output/acquisition-full-closeout-20261004/legacy/missing-nine-recovered-news40.article.txt",
+        "originalArticleHtml": "output/acquisition-full-closeout-20261004/legacy/missing-nine-recovered-news40.article.html",
+        "originalArticleTextSha256": "b29ba81afda0a94b730d571f34a7e41838f53a47cd2928006a0ebf3e097c9c65",
+        "originalArticleHtmlSha256": "385aca738a02960ccdf622e6634b4b1fda95fb5ed61a95bf246c5ed26e9cf573",
+        "originalResponseSha256": "d6a83252e412388374b8495523e13541bb99fe9875503cb8a26d7892e4315416"
+      },
+      "newTitle": "网带炉质量怎么看？跑偏问题先核对哪些部位和资料？",
+      "newCategoryId": 1,
+      "newTarget": "https://www.jssngyl.cn/zh/news/mesh-belt-furnace-quality-tracking-checklist",
+      "newRequestPath": "/zh/news/mesh-belt-furnace-quality-tracking-checklist",
+      "newCanonical": "https://www.jssngyl.cn/zh/news/mesh-belt-furnace-quality-tracking-checklist",
+      "newObservedAt": null,
+      "newObservedStatus": null,
+      "newNoindex": null,
+      "mappingIntent": "same-question-reviewed-replacement",
+      "originalNewsBodyRestored": false,
+      "reviewedReplacement": {
+        "draftPath": "output/acquisition-full-closeout-20261004/restoration-preview/news40-draft.md",
+        "draftSha256": "7fad6e299efc5b3a57e6776ebc45194c31267679659e02bf6b2d3c5d3850c43f",
+        "htmlPath": "output/acquisition-five-restoration-release-20261004/content-review/news40-body.html",
+        "htmlSha256": "8dc2d6274073e6c2cab677c177106c63db7ce8b9dbce49b94e57a012aa72e442",
+        "contentEquivalentToApprovedPreview": true,
+        "bodyAndUiApprovedAccordingToTrustedParent": true,
+        "scope": {
+          "language": "zh",
+          "newImages": false,
+          "externalChannels": false
+        },
+        "authorizationSource": "Trusted root task: user approved the five reviewed bodies/UI and authorized Chinese publication plus their old links; no approval inferred from historical preapproval snapshots."
+      },
+      "publicationState": "pending-target-publication-and-edge-release",
+      "reviewedReplacementBodyPublished": false,
+      "newLegacyRedirectDeployed": false,
+      "limits": [
+        "Reviewed same-question content replaces the old question; original unsafe instructions, unverified parameters and claims are not republished.",
+        "Source configuration and user approval do not prove public target publication, live redirect, indexing, rankings, AI citations or customer inquiries."
+      ]
+    },
+    {
+      "oldId": 42,
+      "oldUrl": "http://jssngyl.cn/news/shownews.php?id=42",
+      "oldRequestPath": "/news/shownews.php?id=42",
+      "oldTitle": "燃气台车炉_燃气台车炉的操作维修规程",
+      "archiveTimestamp": "20240916200952",
+      "archiveReplayUrl": "https://web.archive.org/web/20240916200952/http://jssngyl.cn/news/shownews.php?id=42",
+      "originalUrlAndTimestampVerified": true,
+      "sourceType": "verified-original-news-body-and-approved-reviewed-replacement",
+      "sourceEvidence": {
+        "archiveMetadata": "output/acquisition-full-closeout-20261004/legacy/missing-known-news-recovered-news42.json",
+        "originalArticleText": "output/acquisition-full-closeout-20261004/legacy/missing-known-news-recovered-news42.article.txt",
+        "originalArticleHtml": "output/acquisition-full-closeout-20261004/legacy/missing-known-news-recovered-news42.article.html",
+        "originalArticleTextSha256": "e7fb736d74410f78a36f5c8a0b7f9c5d23ad81ed70ba55828b05b818ff921e63",
+        "originalArticleHtmlSha256": "dfe1acf40f5d11ba8640ef9707bab775ff7ec98407ab3cf0f0fed16f20f52292",
+        "originalResponseSha256": "b527eda43240d1f5657975ef84a042844d1e0f186de444763026d1ca9f450e96"
+      },
+      "newTitle": "燃气台车炉操作与维修规程怎么核对？先把设备、责任和验收记录对齐",
+      "newCategoryId": 1,
+      "newTarget": "https://www.jssngyl.cn/zh/news/gas-trolley-furnace-operation-maintenance-documents",
+      "newRequestPath": "/zh/news/gas-trolley-furnace-operation-maintenance-documents",
+      "newCanonical": "https://www.jssngyl.cn/zh/news/gas-trolley-furnace-operation-maintenance-documents",
+      "newObservedAt": null,
+      "newObservedStatus": null,
+      "newNoindex": null,
+      "mappingIntent": "same-question-reviewed-replacement",
+      "originalNewsBodyRestored": false,
+      "reviewedReplacement": {
+        "draftPath": "output/acquisition-full-closeout-20261004/restoration-preview/remaining-drafts/news42-draft.md",
+        "draftSha256": "217016968d02fa3ffec1ea34b0789d4eb2835d6154985270a17bbd9c4af7677c",
+        "htmlPath": "output/acquisition-five-restoration-release-20261004/content-review/news42-body.html",
+        "htmlSha256": "bcb363612bfa014ba97c05f243f2ee77081e5335e45f85d2029126c485e6386f",
+        "contentEquivalentToApprovedPreview": true,
+        "bodyAndUiApprovedAccordingToTrustedParent": true,
+        "scope": {
+          "language": "zh",
+          "newImages": false,
+          "externalChannels": false
+        },
+        "authorizationSource": "Trusted root task: user approved the five reviewed bodies/UI and authorized Chinese publication plus their old links; no approval inferred from historical preapproval snapshots."
+      },
+      "publicationState": "pending-target-publication-and-edge-release",
+      "reviewedReplacementBodyPublished": false,
+      "newLegacyRedirectDeployed": false,
+      "limits": [
+        "Reviewed same-question content replaces the old question; original unsafe instructions, unverified parameters and claims are not republished.",
+        "Source configuration and user approval do not prove public target publication, live redirect, indexing, rankings, AI citations or customer inquiries."
+      ]
+    },
+    {
+      "oldId": 44,
+      "oldUrl": "http://jssngyl.cn/news/shownews.php?id=44",
+      "oldRequestPath": "/news/shownews.php?id=44",
+      "oldTitle": "网带炉_网带淬火炉的工作原理",
+      "archiveTimestamp": "20240916202205",
+      "archiveReplayUrl": "https://web.archive.org/web/20240916202205/http://jssngyl.cn/news/shownews.php?id=44",
+      "originalUrlAndTimestampVerified": true,
+      "sourceType": "verified-original-news-body-and-approved-reviewed-replacement",
+      "sourceEvidence": {
+        "archiveMetadata": "output/acquisition-full-closeout-20261004/legacy/missing-known-news-recovered-news44.json",
+        "originalArticleText": "output/acquisition-full-closeout-20261004/legacy/missing-known-news-recovered-news44.article.txt",
+        "originalArticleHtml": "output/acquisition-full-closeout-20261004/legacy/missing-known-news-recovered-news44.article.html",
+        "originalArticleTextSha256": "c2df2f1eb7395e3b75313bbdb2b9931b97921666330f86cc41692cbabbaa7efc",
+        "originalArticleHtmlSha256": "1643545f804def83956ab3f063862b60ebae39c5d76f0ae5672b787d2c06f92f",
+        "originalResponseSha256": "bb79840470cdae841b40ffc8f3a309f6bffe246d55e95cb953dcfe1c20feac30"
+      },
+      "newTitle": "网带淬火炉怎么工作？工艺温度和故障处理先看哪些条件",
+      "newCategoryId": 1,
+      "newTarget": "https://www.jssngyl.cn/zh/news/mesh-belt-quenching-furnace-principle-process-checklist",
+      "newRequestPath": "/zh/news/mesh-belt-quenching-furnace-principle-process-checklist",
+      "newCanonical": "https://www.jssngyl.cn/zh/news/mesh-belt-quenching-furnace-principle-process-checklist",
+      "newObservedAt": null,
+      "newObservedStatus": null,
+      "newNoindex": null,
+      "mappingIntent": "same-question-reviewed-replacement",
+      "originalNewsBodyRestored": false,
+      "reviewedReplacement": {
+        "draftPath": "output/acquisition-full-closeout-20261004/restoration-preview/remaining-drafts/news44-draft.md",
+        "draftSha256": "7e99b633cc16627db8ba1ac9888c37e0617b156a699011ea203112a2403ee2e9",
+        "htmlPath": "output/acquisition-five-restoration-release-20261004/content-review/news44-body.html",
+        "htmlSha256": "77b9ce2a0be4dc707b44b2cb81cd6ff912382a20c5656e02f5f3b8a13b714600",
+        "contentEquivalentToApprovedPreview": true,
+        "bodyAndUiApprovedAccordingToTrustedParent": true,
+        "scope": {
+          "language": "zh",
+          "newImages": false,
+          "externalChannels": false
+        },
+        "authorizationSource": "Trusted root task: user approved the five reviewed bodies/UI and authorized Chinese publication plus their old links; no approval inferred from historical preapproval snapshots."
+      },
+      "publicationState": "pending-target-publication-and-edge-release",
+      "reviewedReplacementBodyPublished": false,
+      "newLegacyRedirectDeployed": false,
+      "limits": [
+        "Reviewed same-question content replaces the old question; original unsafe instructions, unverified parameters and claims are not republished.",
+        "Source configuration and user approval do not prove public target publication, live redirect, indexing, rankings, AI citations or customer inquiries."
+      ]
     }
-  ]
+  ],
+  "historicalEquipmentContinuityBaseCommit": "f3823e8a602d50e3a72fac8870da35c6e8c7682d",
+  "mappingCountMeaning": "Checked-in candidate news mappings; not a claim that all eight are deployed.",
+  "existingNewsMappingsPreserved": 3,
+  "newQuestionMappingIds": [
+    25,
+    37,
+    40,
+    42,
+    44
+  ],
+  "newQuestionMappingCount": 5,
+  "newQuestionMappingPublicationState": "pending-target-publication-and-edge-release",
+  "currentPublishedNewsMappingsBeforeThisChange": 3,
+  "currentPublishedTotalMappingsBeforeThisChange": 36,
+  "candidateTotalMappings": 41
 }
