@@ -1,0 +1,1675 @@
+{
+  "schemaVersion": 1,
+  "goldenSource": "Published braces@3.0.3, gitHead 74b2db2938fad48a2ea54a9c8bf27a37a62c350d; independently recorded original outputs under Node22.23.2",
+  "cases": [
+    {
+      "name": "deep brace string compile",
+      "method": "compile",
+      "inputKind": "braces",
+      "depth": 3500,
+      "kind": "security",
+      "expected": {
+        "errorName": "SyntaxError",
+        "messageContains": "exceeds max depth"
+      }
+    },
+    {
+      "name": "deep brace string expand",
+      "method": "expand",
+      "inputKind": "braces",
+      "depth": 3500,
+      "kind": "security",
+      "expected": {
+        "errorName": "SyntaxError",
+        "messageContains": "exceeds max depth"
+      }
+    },
+    {
+      "name": "deep parentheses string compile",
+      "method": "compile",
+      "inputKind": "parens",
+      "depth": 4500,
+      "kind": "security",
+      "expected": {
+        "errorName": "SyntaxError",
+        "messageContains": "exceeds max depth"
+      }
+    },
+    {
+      "name": "deep parentheses string expand",
+      "method": "expand",
+      "inputKind": "parens",
+      "depth": 4500,
+      "kind": "security",
+      "expected": {
+        "errorName": "SyntaxError",
+        "messageContains": "exceeds max depth"
+      }
+    },
+    {
+      "name": "deep parentheses string stringify",
+      "method": "stringify",
+      "inputKind": "parens",
+      "depth": 4500,
+      "kind": "security",
+      "expected": {
+        "errorName": "SyntaxError",
+        "messageContains": "exceeds max depth"
+      }
+    },
+    {
+      "name": "mixed nesting compile",
+      "method": "compile",
+      "inputKind": "mixed",
+      "depth": 3000,
+      "kind": "security",
+      "expected": {
+        "errorName": "SyntaxError",
+        "messageContains": "exceeds max depth"
+      }
+    },
+    {
+      "name": "mixed nesting expand",
+      "method": "expand",
+      "inputKind": "mixed",
+      "depth": 3000,
+      "kind": "security",
+      "expected": {
+        "errorName": "SyntaxError",
+        "messageContains": "exceeds max depth"
+      }
+    },
+    {
+      "name": "mixed nesting stringify",
+      "method": "stringify",
+      "inputKind": "mixed",
+      "depth": 3000,
+      "kind": "security",
+      "expected": {
+        "errorName": "SyntaxError",
+        "messageContains": "exceeds max depth"
+      }
+    },
+    {
+      "name": "parse unclosed braces",
+      "method": "parse",
+      "inputKind": "unclosed",
+      "depth": 3500,
+      "kind": "security",
+      "expected": {
+        "errorName": "SyntaxError",
+        "messageContains": "exceeds max depth"
+      }
+    },
+    {
+      "name": "external AST compile",
+      "method": "compile",
+      "inputKind": "ast",
+      "depth": 4500,
+      "kind": "security",
+      "expected": {
+        "errorName": "RangeError",
+        "messageContains": "exceeds max depth"
+      }
+    },
+    {
+      "name": "external AST expand",
+      "method": "expand",
+      "inputKind": "ast",
+      "depth": 4500,
+      "kind": "security",
+      "expected": {
+        "errorName": "RangeError",
+        "messageContains": "exceeds max depth"
+      }
+    },
+    {
+      "name": "external AST stringify",
+      "method": "stringify",
+      "inputKind": "ast",
+      "depth": 4500,
+      "kind": "security",
+      "expected": {
+        "errorName": "RangeError",
+        "messageContains": "exceeds max depth"
+      }
+    },
+    {
+      "name": "external child cycle compile",
+      "method": "compile",
+      "inputKind": "ast-child-cycle",
+      "kind": "security",
+      "expected": {
+        "errorName": "RangeError",
+        "messageContains": "exceeds max depth"
+      }
+    },
+    {
+      "name": "external child cycle expand",
+      "method": "expand",
+      "inputKind": "ast-child-cycle",
+      "kind": "security",
+      "expected": {
+        "errorName": "RangeError",
+        "messageContains": "exceeds max depth"
+      }
+    },
+    {
+      "name": "external child cycle stringify",
+      "method": "stringify",
+      "inputKind": "ast-child-cycle",
+      "kind": "security",
+      "expected": {
+        "errorName": "RangeError",
+        "messageContains": "exceeds max depth"
+      }
+    },
+    {
+      "name": "external parent cycle expand",
+      "method": "expand",
+      "inputKind": "ast-parent-cycle",
+      "kind": "security",
+      "expected": {
+        "errorName": "RangeError",
+        "messageContains": "parent chain contains a cycle"
+      }
+    },
+    {
+      "name": "boundary 101 braces parse",
+      "method": "parse",
+      "inputKind": "braces",
+      "depth": 101,
+      "kind": "security",
+      "expected": {
+        "errorName": "SyntaxError",
+        "messageContains": "exceeds max depth"
+      }
+    },
+    {
+      "name": "boundary 101 parens parse",
+      "method": "parse",
+      "inputKind": "parens",
+      "depth": 101,
+      "kind": "security",
+      "expected": {
+        "errorName": "SyntaxError",
+        "messageContains": "exceeds max depth"
+      }
+    },
+    {
+      "name": "cannot bypass cap: parse infinity",
+      "method": "parse",
+      "inputKind": "braces",
+      "depth": 101,
+      "optionKind": "infinity",
+      "kind": "security",
+      "expected": {
+        "errorName": "SyntaxError",
+        "messageContains": "exceeds max depth"
+      }
+    },
+    {
+      "name": "cannot bypass cap: parse nan",
+      "method": "parse",
+      "inputKind": "braces",
+      "depth": 101,
+      "optionKind": "nan",
+      "kind": "security",
+      "expected": {
+        "errorName": "SyntaxError",
+        "messageContains": "exceeds max depth"
+      }
+    },
+    {
+      "name": "cannot bypass cap: parse huge",
+      "method": "parse",
+      "inputKind": "braces",
+      "depth": 101,
+      "optionKind": "huge",
+      "kind": "security",
+      "expected": {
+        "errorName": "SyntaxError",
+        "messageContains": "exceeds max depth"
+      }
+    },
+    {
+      "name": "boundary 101 braces compile",
+      "method": "compile",
+      "inputKind": "braces",
+      "depth": 101,
+      "kind": "security",
+      "expected": {
+        "errorName": "SyntaxError",
+        "messageContains": "exceeds max depth"
+      }
+    },
+    {
+      "name": "boundary 101 parens compile",
+      "method": "compile",
+      "inputKind": "parens",
+      "depth": 101,
+      "kind": "security",
+      "expected": {
+        "errorName": "SyntaxError",
+        "messageContains": "exceeds max depth"
+      }
+    },
+    {
+      "name": "cannot bypass cap: compile infinity",
+      "method": "compile",
+      "inputKind": "braces",
+      "depth": 101,
+      "optionKind": "infinity",
+      "kind": "security",
+      "expected": {
+        "errorName": "SyntaxError",
+        "messageContains": "exceeds max depth"
+      }
+    },
+    {
+      "name": "cannot bypass cap: compile nan",
+      "method": "compile",
+      "inputKind": "braces",
+      "depth": 101,
+      "optionKind": "nan",
+      "kind": "security",
+      "expected": {
+        "errorName": "SyntaxError",
+        "messageContains": "exceeds max depth"
+      }
+    },
+    {
+      "name": "cannot bypass cap: compile huge",
+      "method": "compile",
+      "inputKind": "braces",
+      "depth": 101,
+      "optionKind": "huge",
+      "kind": "security",
+      "expected": {
+        "errorName": "SyntaxError",
+        "messageContains": "exceeds max depth"
+      }
+    },
+    {
+      "name": "boundary 101 braces expand",
+      "method": "expand",
+      "inputKind": "braces",
+      "depth": 101,
+      "kind": "security",
+      "expected": {
+        "errorName": "SyntaxError",
+        "messageContains": "exceeds max depth"
+      }
+    },
+    {
+      "name": "boundary 101 parens expand",
+      "method": "expand",
+      "inputKind": "parens",
+      "depth": 101,
+      "kind": "security",
+      "expected": {
+        "errorName": "SyntaxError",
+        "messageContains": "exceeds max depth"
+      }
+    },
+    {
+      "name": "cannot bypass cap: expand infinity",
+      "method": "expand",
+      "inputKind": "braces",
+      "depth": 101,
+      "optionKind": "infinity",
+      "kind": "security",
+      "expected": {
+        "errorName": "SyntaxError",
+        "messageContains": "exceeds max depth"
+      }
+    },
+    {
+      "name": "cannot bypass cap: expand nan",
+      "method": "expand",
+      "inputKind": "braces",
+      "depth": 101,
+      "optionKind": "nan",
+      "kind": "security",
+      "expected": {
+        "errorName": "SyntaxError",
+        "messageContains": "exceeds max depth"
+      }
+    },
+    {
+      "name": "cannot bypass cap: expand huge",
+      "method": "expand",
+      "inputKind": "braces",
+      "depth": 101,
+      "optionKind": "huge",
+      "kind": "security",
+      "expected": {
+        "errorName": "SyntaxError",
+        "messageContains": "exceeds max depth"
+      }
+    },
+    {
+      "name": "boundary 101 braces stringify",
+      "method": "stringify",
+      "inputKind": "braces",
+      "depth": 101,
+      "kind": "security",
+      "expected": {
+        "errorName": "SyntaxError",
+        "messageContains": "exceeds max depth"
+      }
+    },
+    {
+      "name": "boundary 101 parens stringify",
+      "method": "stringify",
+      "inputKind": "parens",
+      "depth": 101,
+      "kind": "security",
+      "expected": {
+        "errorName": "SyntaxError",
+        "messageContains": "exceeds max depth"
+      }
+    },
+    {
+      "name": "cannot bypass cap: stringify infinity",
+      "method": "stringify",
+      "inputKind": "braces",
+      "depth": 101,
+      "optionKind": "infinity",
+      "kind": "security",
+      "expected": {
+        "errorName": "SyntaxError",
+        "messageContains": "exceeds max depth"
+      }
+    },
+    {
+      "name": "cannot bypass cap: stringify nan",
+      "method": "stringify",
+      "inputKind": "braces",
+      "depth": 101,
+      "optionKind": "nan",
+      "kind": "security",
+      "expected": {
+        "errorName": "SyntaxError",
+        "messageContains": "exceeds max depth"
+      }
+    },
+    {
+      "name": "cannot bypass cap: stringify huge",
+      "method": "stringify",
+      "inputKind": "braces",
+      "depth": 101,
+      "optionKind": "huge",
+      "kind": "security",
+      "expected": {
+        "errorName": "SyntaxError",
+        "messageContains": "exceeds max depth"
+      }
+    },
+    {
+      "name": "AST cannot bypass cap: compile infinity",
+      "method": "compile",
+      "inputKind": "ast",
+      "depth": 101,
+      "optionKind": "infinity",
+      "kind": "security",
+      "expected": {
+        "errorName": "RangeError",
+        "messageContains": "exceeds max depth"
+      }
+    },
+    {
+      "name": "AST cannot bypass cap: compile nan",
+      "method": "compile",
+      "inputKind": "ast",
+      "depth": 101,
+      "optionKind": "nan",
+      "kind": "security",
+      "expected": {
+        "errorName": "RangeError",
+        "messageContains": "exceeds max depth"
+      }
+    },
+    {
+      "name": "AST cannot bypass cap: compile huge",
+      "method": "compile",
+      "inputKind": "ast",
+      "depth": 101,
+      "optionKind": "huge",
+      "kind": "security",
+      "expected": {
+        "errorName": "RangeError",
+        "messageContains": "exceeds max depth"
+      }
+    },
+    {
+      "name": "AST cannot bypass cap: expand infinity",
+      "method": "expand",
+      "inputKind": "ast",
+      "depth": 101,
+      "optionKind": "infinity",
+      "kind": "security",
+      "expected": {
+        "errorName": "RangeError",
+        "messageContains": "exceeds max depth"
+      }
+    },
+    {
+      "name": "AST cannot bypass cap: expand nan",
+      "method": "expand",
+      "inputKind": "ast",
+      "depth": 101,
+      "optionKind": "nan",
+      "kind": "security",
+      "expected": {
+        "errorName": "RangeError",
+        "messageContains": "exceeds max depth"
+      }
+    },
+    {
+      "name": "AST cannot bypass cap: expand huge",
+      "method": "expand",
+      "inputKind": "ast",
+      "depth": 101,
+      "optionKind": "huge",
+      "kind": "security",
+      "expected": {
+        "errorName": "RangeError",
+        "messageContains": "exceeds max depth"
+      }
+    },
+    {
+      "name": "AST cannot bypass cap: stringify infinity",
+      "method": "stringify",
+      "inputKind": "ast",
+      "depth": 101,
+      "optionKind": "infinity",
+      "kind": "security",
+      "expected": {
+        "errorName": "RangeError",
+        "messageContains": "exceeds max depth"
+      }
+    },
+    {
+      "name": "AST cannot bypass cap: stringify nan",
+      "method": "stringify",
+      "inputKind": "ast",
+      "depth": 101,
+      "optionKind": "nan",
+      "kind": "security",
+      "expected": {
+        "errorName": "RangeError",
+        "messageContains": "exceeds max depth"
+      }
+    },
+    {
+      "name": "AST cannot bypass cap: stringify huge",
+      "method": "stringify",
+      "inputKind": "ast",
+      "depth": 101,
+      "optionKind": "huge",
+      "kind": "security",
+      "expected": {
+        "errorName": "RangeError",
+        "messageContains": "exceeds max depth"
+      }
+    },
+    {
+      "name": "reject malformed ast-value-array compile",
+      "method": "compile",
+      "inputKind": "ast-value-array",
+      "depth": 4500,
+      "kind": "security",
+      "expected": {
+        "errorName": "TypeError",
+        "messageContains": "AST node value must be a string"
+      }
+    },
+    {
+      "name": "reject malformed ast-value-cycle compile",
+      "method": "compile",
+      "inputKind": "ast-value-cycle",
+      "depth": 4500,
+      "kind": "security",
+      "expected": {
+        "errorName": "TypeError",
+        "messageContains": "AST node value must be a string"
+      }
+    },
+    {
+      "name": "reject malformed ast-range-value-array compile",
+      "method": "compile",
+      "inputKind": "ast-range-value-array",
+      "depth": 4500,
+      "kind": "security",
+      "expected": {
+        "errorName": "TypeError",
+        "messageContains": "AST node value must be a string"
+      }
+    },
+    {
+      "name": "reject malformed ast-value-object compile",
+      "method": "compile",
+      "inputKind": "ast-value-object",
+      "depth": 4500,
+      "kind": "security",
+      "expected": {
+        "errorName": "TypeError",
+        "messageContains": "AST node value must be a string"
+      }
+    },
+    {
+      "name": "reject malformed ast-array-node compile",
+      "method": "compile",
+      "inputKind": "ast-array-node",
+      "depth": 4500,
+      "kind": "security",
+      "expected": {
+        "errorName": "TypeError",
+        "messageContains": "AST node must be an object"
+      }
+    },
+    {
+      "name": "reject malformed ast-invalid-children compile",
+      "method": "compile",
+      "inputKind": "ast-invalid-children",
+      "depth": 4500,
+      "kind": "security",
+      "expected": {
+        "errorName": "TypeError",
+        "messageContains": "AST node children must be an array"
+      }
+    },
+    {
+      "name": "reject malformed ast-value-array expand",
+      "method": "expand",
+      "inputKind": "ast-value-array",
+      "depth": 4500,
+      "kind": "security",
+      "expected": {
+        "errorName": "TypeError",
+        "messageContains": "AST node value must be a string"
+      }
+    },
+    {
+      "name": "reject malformed ast-value-cycle expand",
+      "method": "expand",
+      "inputKind": "ast-value-cycle",
+      "depth": 4500,
+      "kind": "security",
+      "expected": {
+        "errorName": "TypeError",
+        "messageContains": "AST node value must be a string"
+      }
+    },
+    {
+      "name": "reject malformed ast-range-value-array expand",
+      "method": "expand",
+      "inputKind": "ast-range-value-array",
+      "depth": 4500,
+      "kind": "security",
+      "expected": {
+        "errorName": "TypeError",
+        "messageContains": "AST node value must be a string"
+      }
+    },
+    {
+      "name": "reject malformed ast-value-object expand",
+      "method": "expand",
+      "inputKind": "ast-value-object",
+      "depth": 4500,
+      "kind": "security",
+      "expected": {
+        "errorName": "TypeError",
+        "messageContains": "AST node value must be a string"
+      }
+    },
+    {
+      "name": "reject malformed ast-array-node expand",
+      "method": "expand",
+      "inputKind": "ast-array-node",
+      "depth": 4500,
+      "kind": "security",
+      "expected": {
+        "errorName": "TypeError",
+        "messageContains": "AST node must be an object"
+      }
+    },
+    {
+      "name": "reject malformed ast-invalid-children expand",
+      "method": "expand",
+      "inputKind": "ast-invalid-children",
+      "depth": 4500,
+      "kind": "security",
+      "expected": {
+        "errorName": "TypeError",
+        "messageContains": "AST node children must be an array"
+      }
+    },
+    {
+      "name": "reject malformed ast-value-array stringify",
+      "method": "stringify",
+      "inputKind": "ast-value-array",
+      "depth": 4500,
+      "kind": "security",
+      "expected": {
+        "errorName": "TypeError",
+        "messageContains": "AST node value must be a string"
+      }
+    },
+    {
+      "name": "reject malformed ast-value-cycle stringify",
+      "method": "stringify",
+      "inputKind": "ast-value-cycle",
+      "depth": 4500,
+      "kind": "security",
+      "expected": {
+        "errorName": "TypeError",
+        "messageContains": "AST node value must be a string"
+      }
+    },
+    {
+      "name": "reject malformed ast-range-value-array stringify",
+      "method": "stringify",
+      "inputKind": "ast-range-value-array",
+      "depth": 4500,
+      "kind": "security",
+      "expected": {
+        "errorName": "TypeError",
+        "messageContains": "AST node value must be a string"
+      }
+    },
+    {
+      "name": "reject malformed ast-value-object stringify",
+      "method": "stringify",
+      "inputKind": "ast-value-object",
+      "depth": 4500,
+      "kind": "security",
+      "expected": {
+        "errorName": "TypeError",
+        "messageContains": "AST node value must be a string"
+      }
+    },
+    {
+      "name": "reject malformed ast-array-node stringify",
+      "method": "stringify",
+      "inputKind": "ast-array-node",
+      "depth": 4500,
+      "kind": "security",
+      "expected": {
+        "errorName": "TypeError",
+        "messageContains": "AST node must be an object"
+      }
+    },
+    {
+      "name": "reject malformed ast-invalid-children stringify",
+      "method": "stringify",
+      "inputKind": "ast-invalid-children",
+      "depth": 4500,
+      "kind": "security",
+      "expected": {
+        "errorName": "TypeError",
+        "messageContains": "AST node children must be an array"
+      }
+    },
+    {
+      "name": "normal compile src/**/*.{ts,tsx}",
+      "method": "compile",
+      "pattern": "src/**/*.{ts,tsx}",
+      "kind": "compatibility",
+      "expected": {
+        "outcome": "returned",
+        "outputSha256": "e2946973d39f2f5796c65062e56976bf532ef66214250fd799763a7e7c9da58e"
+      }
+    },
+    {
+      "name": "normal compile a/{b,c}/d",
+      "method": "compile",
+      "pattern": "a/{b,c}/d",
+      "kind": "compatibility",
+      "expected": {
+        "outcome": "returned",
+        "outputSha256": "493ece31286cf228b122fc3f420a66866776baa0d700eb923160e90320e88f42"
+      }
+    },
+    {
+      "name": "normal compile {1..10}",
+      "method": "compile",
+      "pattern": "{1..10}",
+      "kind": "compatibility",
+      "expected": {
+        "outcome": "returned",
+        "outputSha256": "bba4e807d181fbcabb026efdc55a3779b429bdf8e2804f1ca1eb0bf911a2b2b7"
+      }
+    },
+    {
+      "name": "normal compile {01..05}",
+      "method": "compile",
+      "pattern": "{01..05}",
+      "kind": "compatibility",
+      "expected": {
+        "outcome": "returned",
+        "outputSha256": "1822b93e76dc5962c172ea87a139479ad4830f28dad9fa3687f54fe81d79f2c8"
+      }
+    },
+    {
+      "name": "normal compile {a..f..2}",
+      "method": "compile",
+      "pattern": "{a..f..2}",
+      "kind": "compatibility",
+      "expected": {
+        "outcome": "returned",
+        "outputSha256": "09b174be84fa97daa45c1949ca8385b4389747e4a84138c5b72b0a4d7bdd4ffd"
+      }
+    },
+    {
+      "name": "normal compile {{a,b},c}",
+      "method": "compile",
+      "pattern": "{{a,b},c}",
+      "kind": "compatibility",
+      "expected": {
+        "outcome": "returned",
+        "outputSha256": "9bc4528ab5d88b588374ad2dbe6c37dcd7b6558145a7c3d018dbee47b26aff71"
+      }
+    },
+    {
+      "name": "normal compile {a,@(b,c)}",
+      "method": "compile",
+      "pattern": "{a,@(b,c)}",
+      "kind": "compatibility",
+      "expected": {
+        "outcome": "returned",
+        "outputSha256": "2941f26ff762d90f6d597aca68af6940d53838d1f7678e10a51301205f356122"
+      }
+    },
+    {
+      "name": "normal compile foo/({a,b})",
+      "method": "compile",
+      "pattern": "foo/({a,b})",
+      "kind": "compatibility",
+      "expected": {
+        "outcome": "returned",
+        "outputSha256": "291dac24f97fe77da51a9bb46c32b61c8bd960b84294acc9a5fcc4e8f1b47feb"
+      }
+    },
+    {
+      "name": "normal compile {,eno,thro,ro}ugh",
+      "method": "compile",
+      "pattern": "{,eno,thro,ro}ugh",
+      "kind": "compatibility",
+      "expected": {
+        "outcome": "returned",
+        "outputSha256": "2d7e6a8b2fbd71624d0a20812a9fbd7a707e301aa1fd0690d43db3ad0da10a28"
+      }
+    },
+    {
+      "name": "normal compile {}{a}",
+      "method": "compile",
+      "pattern": "{}{a}",
+      "kind": "compatibility",
+      "expected": {
+        "outcome": "returned",
+        "outputSha256": "f60998ef887e5a97627be0501bac7a3f11296ac95214dce7b0f323cc35b54d6e"
+      }
+    },
+    {
+      "name": "normal compile {a,{b,{c}}}",
+      "method": "compile",
+      "pattern": "{a,{b,{c}}}",
+      "kind": "compatibility",
+      "expected": {
+        "outcome": "returned",
+        "outputSha256": "bd7613d19684a2454fc80133a324838d8530abb61875381025cc1a6bd79eadea"
+      }
+    },
+    {
+      "name": "normal compile ${HOME}/{a,b}",
+      "method": "compile",
+      "pattern": "${HOME}/{a,b}",
+      "kind": "compatibility",
+      "expected": {
+        "outcome": "returned",
+        "outputSha256": "88b2b6a59cc60f2595ada8046521a446bf51e7081971e378b44b2d572da32c73"
+      }
+    },
+    {
+      "name": "normal compile a/[{b,c}]/d",
+      "method": "compile",
+      "pattern": "a/[{b,c}]/d",
+      "kind": "compatibility",
+      "expected": {
+        "outcome": "returned",
+        "outputSha256": "302566b965461e760964e040f311246265248848b22efd42a2dce9293ef0dd28"
+      }
+    },
+    {
+      "name": "normal compile {\"a,b\",c}",
+      "method": "compile",
+      "pattern": "{\"a,b\",c}",
+      "kind": "compatibility",
+      "expected": {
+        "outcome": "returned",
+        "outputSha256": "5edecb3922191ad3a7d8425412f95f3bf8da825b5bbb65a20856a0752ff01666"
+      }
+    },
+    {
+      "name": "normal compile {a,a,b}",
+      "method": "compile",
+      "pattern": "{a,a,b}",
+      "kind": "compatibility",
+      "expected": {
+        "outcome": "returned",
+        "outputSha256": "baeda73607d1e61662632fc3f5b870af2d8319ed0eba25a90c71dabf3dd46c07"
+      }
+    },
+    {
+      "name": "normal compile plain/file.ts",
+      "method": "compile",
+      "pattern": "plain/file.ts",
+      "kind": "compatibility",
+      "expected": {
+        "outcome": "returned",
+        "outputSha256": "97fe7a2e76f44673d6c0d7b3c82332e0430008d2a421c794cf89dd7204971623"
+      }
+    },
+    {
+      "name": "boundary 100 braces compile",
+      "method": "compile",
+      "inputKind": "braces",
+      "depth": 100,
+      "kind": "compatibility",
+      "expected": {
+        "outcome": "returned",
+        "outputSha256": "ea289bd486c492ffeb64ca84c56b7c6dc534f3060e43178d5d26ee9bc88b9040"
+      }
+    },
+    {
+      "name": "boundary 100 parens compile",
+      "method": "compile",
+      "inputKind": "parens",
+      "depth": 100,
+      "kind": "compatibility",
+      "expected": {
+        "outcome": "returned",
+        "outputSha256": "2238562c119bffffbdcea88a21faac0a66f9f48c99e8add7934c209fccfdaad1"
+      }
+    },
+    {
+      "name": "normal expand src/**/*.{ts,tsx}",
+      "method": "expand",
+      "pattern": "src/**/*.{ts,tsx}",
+      "kind": "compatibility",
+      "expected": {
+        "outcome": "returned",
+        "outputSha256": "a081a5dbd65282d91468420b736fa15675cb87d962bac0eda948140d7c332bbf"
+      }
+    },
+    {
+      "name": "normal expand a/{b,c}/d",
+      "method": "expand",
+      "pattern": "a/{b,c}/d",
+      "kind": "compatibility",
+      "expected": {
+        "outcome": "returned",
+        "outputSha256": "bf6ec0283d5a959abfd797ae5bf6be5ec6dd4663675df9ed259d04ff39efbc1c"
+      }
+    },
+    {
+      "name": "normal expand {1..10}",
+      "method": "expand",
+      "pattern": "{1..10}",
+      "kind": "compatibility",
+      "expected": {
+        "outcome": "returned",
+        "outputSha256": "e82855a2ce90f29d3321230d4eb36d1e0344745f4f2e8656002f4914fb858f33"
+      }
+    },
+    {
+      "name": "normal expand {01..05}",
+      "method": "expand",
+      "pattern": "{01..05}",
+      "kind": "compatibility",
+      "expected": {
+        "outcome": "returned",
+        "outputSha256": "55893d65c9604e07cce113fdd69303f05f3c4a039edd2fe10ba4e6a0e886f1a1"
+      }
+    },
+    {
+      "name": "normal expand {a..f..2}",
+      "method": "expand",
+      "pattern": "{a..f..2}",
+      "kind": "compatibility",
+      "expected": {
+        "outcome": "returned",
+        "outputSha256": "a73da2902dedd07e26c74781f5790e57d6e8f3a80e3c0f1fa941a6b32e138e1f"
+      }
+    },
+    {
+      "name": "normal expand {{a,b},c}",
+      "method": "expand",
+      "pattern": "{{a,b},c}",
+      "kind": "compatibility",
+      "expected": {
+        "outcome": "returned",
+        "outputSha256": "fa1844c2988ad15ab7b49e0ece09684500fad94df916859fb9a43ff85f5bb477"
+      }
+    },
+    {
+      "name": "normal expand {a,@(b,c)}",
+      "method": "expand",
+      "pattern": "{a,@(b,c)}",
+      "kind": "compatibility",
+      "expected": {
+        "outcome": "returned",
+        "outputSha256": "c5ab46ce82b5b575fb9fae3740e8a489962c405af458e2085eb2ecfeaa473221"
+      }
+    },
+    {
+      "name": "normal expand foo/({a,b})",
+      "method": "expand",
+      "pattern": "foo/({a,b})",
+      "kind": "compatibility",
+      "expected": {
+        "outcome": "returned",
+        "outputSha256": "eb7adf2febaf07ce01b3f6ae929db27bc73294a25c27b9b0f6882c0b1628e314"
+      }
+    },
+    {
+      "name": "normal expand {,eno,thro,ro}ugh",
+      "method": "expand",
+      "pattern": "{,eno,thro,ro}ugh",
+      "kind": "compatibility",
+      "expected": {
+        "outcome": "returned",
+        "outputSha256": "f6c8163920919d999016eb38c0c87b6d645fc887d4c9f91957416ff25da36f4e"
+      }
+    },
+    {
+      "name": "normal expand {}{a}",
+      "method": "expand",
+      "pattern": "{}{a}",
+      "kind": "compatibility",
+      "expected": {
+        "outcome": "returned",
+        "outputSha256": "72b9b5d5ecb38a5308da2cbf2eb8b59eb6fc8e562cc34ef3c5a6f7796f8f4f2a"
+      }
+    },
+    {
+      "name": "normal expand {a,{b,{c}}}",
+      "method": "expand",
+      "pattern": "{a,{b,{c}}}",
+      "kind": "compatibility",
+      "expected": {
+        "outcome": "returned",
+        "outputSha256": "d5768bd9be7d9fc5322e43356591d9386c2f62cd99978f593c50cf1dd36b30a3"
+      }
+    },
+    {
+      "name": "normal expand ${HOME}/{a,b}",
+      "method": "expand",
+      "pattern": "${HOME}/{a,b}",
+      "kind": "compatibility",
+      "expected": {
+        "outcome": "returned",
+        "outputSha256": "5a370660460e929b906c38537d02c0213ed0364a23929a07e439db713d264c49"
+      }
+    },
+    {
+      "name": "normal expand a/[{b,c}]/d",
+      "method": "expand",
+      "pattern": "a/[{b,c}]/d",
+      "kind": "compatibility",
+      "expected": {
+        "outcome": "returned",
+        "outputSha256": "f5cd4d95db64fc6eb78e521f28dc8407da9ad772a4263ab39f080fab12504b6a"
+      }
+    },
+    {
+      "name": "normal expand {\"a,b\",c}",
+      "method": "expand",
+      "pattern": "{\"a,b\",c}",
+      "kind": "compatibility",
+      "expected": {
+        "outcome": "returned",
+        "outputSha256": "569c363fb7e855f85eeae4e4dc032d1f8d262191b68ade7297566486982b5183"
+      }
+    },
+    {
+      "name": "normal expand {a,a,b}",
+      "method": "expand",
+      "pattern": "{a,a,b}",
+      "kind": "compatibility",
+      "expected": {
+        "outcome": "returned",
+        "outputSha256": "2819ab78cc3edbe00e0df2eed49a4a1cc7a1003c42f96fa6e24d8c7a5a63d9b6"
+      }
+    },
+    {
+      "name": "normal expand plain/file.ts",
+      "method": "expand",
+      "pattern": "plain/file.ts",
+      "kind": "compatibility",
+      "expected": {
+        "outcome": "returned",
+        "outputSha256": "70a5021f2a4eef2aed60f6fe7de7a2d47b9361db119a12f464923656b1a354a2"
+      }
+    },
+    {
+      "name": "boundary 100 braces expand",
+      "method": "expand",
+      "inputKind": "braces",
+      "depth": 100,
+      "kind": "compatibility",
+      "expected": {
+        "outcome": "returned",
+        "outputSha256": "041c04cea4512f98c7814be6dfc9e71d25be01295f16eea903354a7166e22b5a"
+      }
+    },
+    {
+      "name": "boundary 100 parens expand",
+      "method": "expand",
+      "inputKind": "parens",
+      "depth": 100,
+      "kind": "compatibility",
+      "expected": {
+        "outcome": "returned",
+        "outputSha256": "d8538b53191a8fba890688eeac09187337a895217517c7b15976a886de3cae2b"
+      }
+    },
+    {
+      "name": "normal stringify src/**/*.{ts,tsx}",
+      "method": "stringify",
+      "pattern": "src/**/*.{ts,tsx}",
+      "kind": "compatibility",
+      "expected": {
+        "outcome": "returned",
+        "outputSha256": "e63b7eeaf326fd2bc8b322acc106744e1787344c568ad5ec3c76e2074e33b6ba"
+      }
+    },
+    {
+      "name": "normal stringify a/{b,c}/d",
+      "method": "stringify",
+      "pattern": "a/{b,c}/d",
+      "kind": "compatibility",
+      "expected": {
+        "outcome": "returned",
+        "outputSha256": "12c62fe6e5cb9552ea8a87207e32b10b7a5faddcc4dee9a76374459006ebc757"
+      }
+    },
+    {
+      "name": "normal stringify {1..10}",
+      "method": "stringify",
+      "pattern": "{1..10}",
+      "kind": "compatibility",
+      "expected": {
+        "outcome": "returned",
+        "outputSha256": "7ea54b344f0ba48169d350f105dadfefad25eda4c4a8ce5df3b70986a2dae9c3"
+      }
+    },
+    {
+      "name": "normal stringify {01..05}",
+      "method": "stringify",
+      "pattern": "{01..05}",
+      "kind": "compatibility",
+      "expected": {
+        "outcome": "returned",
+        "outputSha256": "f22db2c2505f4b6c7988db172d68b1024245f336e77126c4aee4a202caec56f2"
+      }
+    },
+    {
+      "name": "normal stringify {a..f..2}",
+      "method": "stringify",
+      "pattern": "{a..f..2}",
+      "kind": "compatibility",
+      "expected": {
+        "outcome": "returned",
+        "outputSha256": "8b18efe35412b6bea994c87c025198f06317595b0d8f712cf06297be562b6035"
+      }
+    },
+    {
+      "name": "normal stringify {{a,b},c}",
+      "method": "stringify",
+      "pattern": "{{a,b},c}",
+      "kind": "compatibility",
+      "expected": {
+        "outcome": "returned",
+        "outputSha256": "6cf97ffeaac4ce08edbf4984be2d5a77337a99ae7ef58c239fbeea6859066f4b"
+      }
+    },
+    {
+      "name": "normal stringify {a,@(b,c)}",
+      "method": "stringify",
+      "pattern": "{a,@(b,c)}",
+      "kind": "compatibility",
+      "expected": {
+        "outcome": "returned",
+        "outputSha256": "79f0f010cc089f41a14577ce0432914fdd6b63fb7d2cda657ca186bbcd01201c"
+      }
+    },
+    {
+      "name": "normal stringify foo/({a,b})",
+      "method": "stringify",
+      "pattern": "foo/({a,b})",
+      "kind": "compatibility",
+      "expected": {
+        "outcome": "returned",
+        "outputSha256": "6fc165788e4daa7e063f62a68176d0aaa5f13eff9f36c421f56178bc7a0e75f3"
+      }
+    },
+    {
+      "name": "normal stringify {,eno,thro,ro}ugh",
+      "method": "stringify",
+      "pattern": "{,eno,thro,ro}ugh",
+      "kind": "compatibility",
+      "expected": {
+        "outcome": "returned",
+        "outputSha256": "44c1d2aab5a4a9a4376ad6b479a2fc336d54bc8b4b683197f3aca013d5514c1c"
+      }
+    },
+    {
+      "name": "normal stringify {}{a}",
+      "method": "stringify",
+      "pattern": "{}{a}",
+      "kind": "compatibility",
+      "expected": {
+        "outcome": "returned",
+        "outputSha256": "f60998ef887e5a97627be0501bac7a3f11296ac95214dce7b0f323cc35b54d6e"
+      }
+    },
+    {
+      "name": "normal stringify {a,{b,{c}}}",
+      "method": "stringify",
+      "pattern": "{a,{b,{c}}}",
+      "kind": "compatibility",
+      "expected": {
+        "outcome": "returned",
+        "outputSha256": "0882b6b161e598a15ea84217b9f42ed18b08ce7cdaa6f9e3e5fb714eefc4c4f4"
+      }
+    },
+    {
+      "name": "normal stringify ${HOME}/{a,b}",
+      "method": "stringify",
+      "pattern": "${HOME}/{a,b}",
+      "kind": "compatibility",
+      "expected": {
+        "outcome": "returned",
+        "outputSha256": "3a8ee8deff8c1c6e320339ed95e47ea4098697b296c95bc2479efd39ac51324f"
+      }
+    },
+    {
+      "name": "normal stringify a/[{b,c}]/d",
+      "method": "stringify",
+      "pattern": "a/[{b,c}]/d",
+      "kind": "compatibility",
+      "expected": {
+        "outcome": "returned",
+        "outputSha256": "302566b965461e760964e040f311246265248848b22efd42a2dce9293ef0dd28"
+      }
+    },
+    {
+      "name": "normal stringify {\"a,b\",c}",
+      "method": "stringify",
+      "pattern": "{\"a,b\",c}",
+      "kind": "compatibility",
+      "expected": {
+        "outcome": "returned",
+        "outputSha256": "362cdca8f8dbe32832950f7e721d22b5a0bc4d23d1bd592e96e42edcaddd389f"
+      }
+    },
+    {
+      "name": "normal stringify {a,a,b}",
+      "method": "stringify",
+      "pattern": "{a,a,b}",
+      "kind": "compatibility",
+      "expected": {
+        "outcome": "returned",
+        "outputSha256": "a0e5eb1b3fb35fc511a98fc89705c10d73be2cba3e65f1fe3560528da6198464"
+      }
+    },
+    {
+      "name": "normal stringify plain/file.ts",
+      "method": "stringify",
+      "pattern": "plain/file.ts",
+      "kind": "compatibility",
+      "expected": {
+        "outcome": "returned",
+        "outputSha256": "97fe7a2e76f44673d6c0d7b3c82332e0430008d2a421c794cf89dd7204971623"
+      }
+    },
+    {
+      "name": "boundary 100 braces stringify",
+      "method": "stringify",
+      "inputKind": "braces",
+      "depth": 100,
+      "kind": "compatibility",
+      "expected": {
+        "outcome": "returned",
+        "outputSha256": "4e3353a63183d8092ffbbbaf9f4a39d7a2cc23e2401bcbbb58c305b898b08dd8"
+      }
+    },
+    {
+      "name": "boundary 100 parens stringify",
+      "method": "stringify",
+      "inputKind": "parens",
+      "depth": 100,
+      "kind": "compatibility",
+      "expected": {
+        "outcome": "returned",
+        "outputSha256": "2238562c119bffffbdcea88a21faac0a66f9f48c99e8add7934c209fccfdaad1"
+      }
+    },
+    {
+      "name": "normal parse src/**/*.{ts,tsx}",
+      "method": "parse",
+      "pattern": "src/**/*.{ts,tsx}",
+      "kind": "compatibility",
+      "expected": {
+        "outcome": "returned",
+        "outputSha256": "80275220601c56386a86c220d93e805805971bf5c293469d4362d5420d0f2f4f"
+      }
+    },
+    {
+      "name": "normal parse a/{b,c}/d",
+      "method": "parse",
+      "pattern": "a/{b,c}/d",
+      "kind": "compatibility",
+      "expected": {
+        "outcome": "returned",
+        "outputSha256": "e4dd7a9997edf59fe4f15d49d93c6b3ea3baa51f8fd45375cd2e059fe8e6855d"
+      }
+    },
+    {
+      "name": "normal parse {1..10}",
+      "method": "parse",
+      "pattern": "{1..10}",
+      "kind": "compatibility",
+      "expected": {
+        "outcome": "returned",
+        "outputSha256": "66a5202a491933b6bb6843ebfca622714c763a6621ab2b5f9d623c8aa70f56eb"
+      }
+    },
+    {
+      "name": "normal parse {01..05}",
+      "method": "parse",
+      "pattern": "{01..05}",
+      "kind": "compatibility",
+      "expected": {
+        "outcome": "returned",
+        "outputSha256": "7558afa31d890e97fcebd5fcefa665d65cef61e7c74d6f1a1aa00dece35ccc70"
+      }
+    },
+    {
+      "name": "normal parse {a..f..2}",
+      "method": "parse",
+      "pattern": "{a..f..2}",
+      "kind": "compatibility",
+      "expected": {
+        "outcome": "returned",
+        "outputSha256": "24ac1a3a7f44eb7c9a08fe6c34960b67525a507c2e481160c99da3a18f06e976"
+      }
+    },
+    {
+      "name": "normal parse {{a,b},c}",
+      "method": "parse",
+      "pattern": "{{a,b},c}",
+      "kind": "compatibility",
+      "expected": {
+        "outcome": "returned",
+        "outputSha256": "0aa537f455d241b7be721a9f5e0ebd49987fd66c4b424dd020b6a1188a143fbf"
+      }
+    },
+    {
+      "name": "normal parse {a,@(b,c)}",
+      "method": "parse",
+      "pattern": "{a,@(b,c)}",
+      "kind": "compatibility",
+      "expected": {
+        "outcome": "returned",
+        "outputSha256": "03cbc616a088fcc3cd2deb4e52c31c5a68b49a3a1786021ede4422ebaacbcfb2"
+      }
+    },
+    {
+      "name": "normal parse foo/({a,b})",
+      "method": "parse",
+      "pattern": "foo/({a,b})",
+      "kind": "compatibility",
+      "expected": {
+        "outcome": "returned",
+        "outputSha256": "1c612d2341c6b4c17a44687bcb7f5a41819428ed91c1de75244ebc2dd852bd20"
+      }
+    },
+    {
+      "name": "normal parse {,eno,thro,ro}ugh",
+      "method": "parse",
+      "pattern": "{,eno,thro,ro}ugh",
+      "kind": "compatibility",
+      "expected": {
+        "outcome": "returned",
+        "outputSha256": "5f059329ddb01af1f17bb482d8722db16cc0cf4c2dcf7022c9fdf8af1d783195"
+      }
+    },
+    {
+      "name": "normal parse {}{a}",
+      "method": "parse",
+      "pattern": "{}{a}",
+      "kind": "compatibility",
+      "expected": {
+        "outcome": "returned",
+        "outputSha256": "f20778db1b84317122e9f09501d9b768eb72d937dbfe79c941d58f80e4ee12ea"
+      }
+    },
+    {
+      "name": "normal parse {a,{b,{c}}}",
+      "method": "parse",
+      "pattern": "{a,{b,{c}}}",
+      "kind": "compatibility",
+      "expected": {
+        "outcome": "returned",
+        "outputSha256": "309009927b013e500a6de583717775c03988a259cfd14d1feaba6c973bb58ceb"
+      }
+    },
+    {
+      "name": "normal parse ${HOME}/{a,b}",
+      "method": "parse",
+      "pattern": "${HOME}/{a,b}",
+      "kind": "compatibility",
+      "expected": {
+        "outcome": "returned",
+        "outputSha256": "19eb26e5d122d25fd221c5aba62fc13b7d91cdb9ebdb108a29ecc814dafd1671"
+      }
+    },
+    {
+      "name": "normal parse a/[{b,c}]/d",
+      "method": "parse",
+      "pattern": "a/[{b,c}]/d",
+      "kind": "compatibility",
+      "expected": {
+        "outcome": "returned",
+        "outputSha256": "3ced3b90fdf0586cfed10b96c46b29deff4f4224974b831869fdeea08d8024ce"
+      }
+    },
+    {
+      "name": "normal parse {\"a,b\",c}",
+      "method": "parse",
+      "pattern": "{\"a,b\",c}",
+      "kind": "compatibility",
+      "expected": {
+        "outcome": "returned",
+        "outputSha256": "01f9132025683fb1dd7d414543add8ca3e4f5521305f1cdafa2a33464c00909b"
+      }
+    },
+    {
+      "name": "normal parse {a,a,b}",
+      "method": "parse",
+      "pattern": "{a,a,b}",
+      "kind": "compatibility",
+      "expected": {
+        "outcome": "returned",
+        "outputSha256": "99c636cfce182fbc9bfd37bfefa7e36d5e298a70fe8bef5b303f7472dc2bf809"
+      }
+    },
+    {
+      "name": "normal parse plain/file.ts",
+      "method": "parse",
+      "pattern": "plain/file.ts",
+      "kind": "compatibility",
+      "expected": {
+        "outcome": "returned",
+        "outputSha256": "9639fe563f67b18cee6edc18c0cce10520b11840d8ea5dce8dc6d1747fdf0b1c"
+      }
+    },
+    {
+      "name": "boundary 100 braces parse",
+      "method": "parse",
+      "inputKind": "braces",
+      "depth": 100,
+      "kind": "compatibility",
+      "expected": {
+        "outcome": "returned",
+        "outputSha256": "f8851c0f12b6d2ad4b4c45b93f4504760d489ad86a9dbe3b098af1745c86f7f3"
+      }
+    },
+    {
+      "name": "boundary 100 parens parse",
+      "method": "parse",
+      "inputKind": "parens",
+      "depth": 100,
+      "kind": "compatibility",
+      "expected": {
+        "outcome": "returned",
+        "outputSha256": "b7e0acf66485979315557db513ed515a643e6e64a5a76ed9afc98b1e1456fbb3"
+      }
+    },
+    {
+      "name": "escapeInvalid compatibility {{a}}",
+      "method": "stringify",
+      "pattern": "{{a}}",
+      "options": {
+        "escapeInvalid": true
+      },
+      "kind": "compatibility",
+      "expected": {
+        "outcome": "returned",
+        "outputSha256": "49b716c34a0d0b19e60bc2301704d2708faa60212e194f07170ff2f80b0462b4"
+      }
+    },
+    {
+      "name": "escapeInvalid compatibility {a,{b}}",
+      "method": "stringify",
+      "pattern": "{a,{b}}",
+      "options": {
+        "escapeInvalid": true
+      },
+      "kind": "compatibility",
+      "expected": {
+        "outcome": "returned",
+        "outputSha256": "ef6893c489a2b9de39f41141680b5cfb4ef2151c844896110f50416f20271aba"
+      }
+    },
+    {
+      "name": "escapeInvalid compatibility {{x}y}",
+      "method": "stringify",
+      "pattern": "{{x}y}",
+      "options": {
+        "escapeInvalid": true
+      },
+      "kind": "compatibility",
+      "expected": {
+        "outcome": "returned",
+        "outputSha256": "a88abbf45b5d7ca26ad86df78f36e1294556933119f735bbd8d1fcd92adecf71"
+      }
+    },
+    {
+      "name": "escapeInvalid compatibility {a,{b,{c}}}",
+      "method": "stringify",
+      "pattern": "{a,{b,{c}}}",
+      "options": {
+        "escapeInvalid": true
+      },
+      "kind": "compatibility",
+      "expected": {
+        "outcome": "returned",
+        "outputSha256": "0882b6b161e598a15ea84217b9f42ed18b08ce7cdaa6f9e3e5fb714eefc4c4f4"
+      }
+    },
+    {
+      "name": "escapeInvalid compatibility {}{a}",
+      "method": "stringify",
+      "pattern": "{}{a}",
+      "options": {
+        "escapeInvalid": true
+      },
+      "kind": "compatibility",
+      "expected": {
+        "outcome": "returned",
+        "outputSha256": "f60998ef887e5a97627be0501bac7a3f11296ac95214dce7b0f323cc35b54d6e"
+      }
+    },
+    {
+      "name": "deduplication",
+      "method": "expand",
+      "pattern": "{a,a,b}",
+      "options": {
+        "nodupes": true
+      },
+      "kind": "compatibility",
+      "expected": {
+        "outcome": "returned",
+        "outputSha256": "0473ef2dc0d324ab659d3580c1134e9d812035905c4781fdd6d529b0c6860e13"
+      }
+    },
+    {
+      "name": "empty result filtering",
+      "method": "expand",
+      "pattern": "{,a,}",
+      "options": {
+        "noempty": true
+      },
+      "kind": "compatibility",
+      "expected": {
+        "outcome": "returned",
+        "outputSha256": "0eb5b8d6f81bc677da8a08567cc4fa9a06a57e9ec8da85ed73a7f62727996002"
+      }
+    },
+    {
+      "name": "preserve quotes",
+      "method": "expand",
+      "pattern": "{\"a,b\",c}",
+      "options": {
+        "keepQuotes": true
+      },
+      "kind": "compatibility",
+      "expected": {
+        "outcome": "returned",
+        "outputSha256": "4a12efb4796b5381048738b4fa02be810adc7066b337623f5b0000dc8fc31c11"
+      }
+    },
+    {
+      "name": "keep escape",
+      "method": "stringify",
+      "pattern": "\\{a,b\\}",
+      "options": {
+        "keepEscaping": true
+      },
+      "kind": "compatibility",
+      "expected": {
+        "outcome": "returned",
+        "outputSha256": "eac788981c0972e7883094b58aec87245de0e3d9a2e3d3ba860d56bd56dca188"
+      }
+    },
+    {
+      "name": "default main entry",
+      "method": "main",
+      "pattern": "a/{b,c}/d",
+      "kind": "compatibility",
+      "expected": {
+        "outcome": "returned",
+        "outputSha256": "7777c5aa2a3e309e90285e6b672c9c3be34139560ac42da77fab8def3d3e2730"
+      }
+    },
+    {
+      "name": "expansion main entry",
+      "method": "main",
+      "pattern": "a/{b,c}/d",
+      "options": {
+        "expand": true
+      },
+      "kind": "compatibility",
+      "expected": {
+        "outcome": "returned",
+        "outputSha256": "bf6ec0283d5a959abfd797ae5bf6be5ec6dd4663675df9ed259d04ff39efbc1c"
+      }
+    },
+    {
+      "name": "range safety limit unchanged",
+      "method": "expand",
+      "pattern": "{1..10000}",
+      "kind": "compatibility",
+      "expected": {
+        "outcome": "threw",
+        "errorName": "RangeError",
+        "errorMessage": "expanded array length exceeds range limit. Use options.rangeLimit to increase or disable the limit."
+      }
+    },
+    {
+      "name": "character safety limit unchanged",
+      "method": "parse",
+      "inputKind": "character-limit",
+      "depth": 10001,
+      "kind": "compatibility",
+      "expected": {
+        "outcome": "threw",
+        "errorName": "SyntaxError",
+        "errorMessage": "Input length (10001), exceeds max characters (10000)"
+      }
+    },
+    {
+      "name": "micromatch 4.0.8 integration **/*.{ts,tsx}",
+      "integration": "micromatch",
+      "files": [
+        "src/app.ts",
+        "src/component.tsx",
+        "src/style.css",
+        "test/app.spec.ts",
+        "docs/guide.md"
+      ],
+      "pattern": "**/*.{ts,tsx}",
+      "kind": "compatibility",
+      "expected": {
+        "outcome": "returned",
+        "outputSha256": "f11adb95931a4dda539c4a164efb0b28d29718ce7cef860d071bf8613b083fb1"
+      }
+    },
+    {
+      "name": "micromatch 4.0.8 integration src/{app,component}.{ts,tsx}",
+      "integration": "micromatch",
+      "files": [
+        "src/app.ts",
+        "src/component.tsx",
+        "src/style.css",
+        "test/app.spec.ts",
+        "docs/guide.md"
+      ],
+      "pattern": "src/{app,component}.{ts,tsx}",
+      "kind": "compatibility",
+      "expected": {
+        "outcome": "returned",
+        "outputSha256": "8d10ac41c6933c6d14bf5b0cd6cdb87b0e3ad65270539f4e3421d6c111006296"
+      }
+    },
+    {
+      "name": "micromatch 4.0.8 integration {src,test}/**/*.ts",
+      "integration": "micromatch",
+      "files": [
+        "src/app.ts",
+        "src/component.tsx",
+        "src/style.css",
+        "test/app.spec.ts",
+        "docs/guide.md"
+      ],
+      "pattern": "{src,test}/**/*.ts",
+      "kind": "compatibility",
+      "expected": {
+        "outcome": "returned",
+        "outputSha256": "19d6551c5a959b1bb9c4e99a770a5286f695dd91f2af90ee64289c0d1048b290"
+      }
+    },
+    {
+      "name": "micromatch 4.0.8 integration !**/*.css",
+      "integration": "micromatch",
+      "files": [
+        "src/app.ts",
+        "src/component.tsx",
+        "src/style.css",
+        "test/app.spec.ts",
+        "docs/guide.md"
+      ],
+      "pattern": "!**/*.css",
+      "kind": "compatibility",
+      "expected": {
+        "outcome": "returned",
+        "outputSha256": "8ed20e164f3b84753b68adce7b81ceabaf45a8e50916f492bbcff86b4110acbc"
+      }
+    }
+  ]
+}

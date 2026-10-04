@@ -20,6 +20,7 @@ import xml.etree.ElementTree as ET
 from urllib.parse import urlparse
 from storage_policy import working_space
 from frontend_html import frontend_html_probe
+from acquisition_continuity import acquisition_continuity_probe
 
 IMAGE = re.compile(r'^sha256:[0-9a-f]{64}$')
 SHA = re.compile(r'^[0-9a-f]{40}$')
@@ -489,6 +490,13 @@ class Release:
         finally:
             subprocess.run(['docker', 'rm', '-f', canary], capture_output=True, timeout=30)
 
+    def acquisition_check(self, container, phase):
+        report = acquisition_continuity_probe(container, public=phase == 'public')
+        atomic_json(self.audit / (phase + '-acquisition.json'), report)
+        if report['passed'] is not True:
+            raise RuntimeError('Approved procurement continuity failed: ' + phase)
+        return report
+
     def execute(self, apply=False, kind='deploy'):
         if self.manifest.get('legacyEncodedPaths') and kind != 'rollback':
             raise RuntimeError('Encoded-path probes may be skipped only for an owner-approved rollback')
@@ -530,6 +538,9 @@ class Release:
             admin_candidate = self.admin_check(require_cache=self.admin_only and kind != 'rollback')
         same = all(self.target[name] == self.receipt['images'][name] for name in self.components)
         check_html = self.manifest.get('htmlCachePolicy') == 'no-store' and not self.preserve_frontend
+        check_acquisition = (kind == 'deploy' and not self.preserve_frontend
+                             and self.target['frontend'] != self.receipt['images']['frontend'])
+        candidate_acquisition = None
         candidate_html = None
         canary = 'suneng-release-check-' + uuid.uuid4().hex[:12]
         if same or self.preserve_frontend:
@@ -544,6 +555,8 @@ class Release:
                 internal = probe(canary, self.script, self.target_contract)
                 if check_html:
                     candidate_html = frontend_html_probe(canary, require_no_store=kind != 'rollback')
+                if check_acquisition:
+                    candidate_acquisition = self.acquisition_check(canary, 'candidate')
             finally:
                 # This uniquely named canary is the only container cleanup permitted here.
                 subprocess.run(['docker', 'rm', '-f', canary], capture_output=True, timeout=30)
@@ -559,6 +572,8 @@ class Release:
             result['backendPreflight'] = backend_preflight
         if candidate_html is not None:
             result['candidateHtml'] = candidate_html
+        if candidate_acquisition is not None:
+            result['candidateAcquisition'] = candidate_acquisition
         if not apply or same:
             # Without a switch the public site still runs the current image.
             result['publicChecks'] = public_probe('https://www.jssngyl.cn', self.target_contract if same else self.lenient_contract)
@@ -594,6 +609,8 @@ class Release:
                 result['backendVerification'] = self.backend_check(running=True)
             result['internalChecks'] = probe('corp-site-frontend', self.script, self.target_contract)
             result['publicChecks'] = public_probe('https://www.jssngyl.cn', self.target_contract)
+            if check_acquisition:
+                result['publicAcquisition'] = self.acquisition_check('corp-site-frontend', 'public')
             if check_html:
                 result['publicHtml'] = frontend_html_probe(expected=candidate_html, require_no_store=kind != 'rollback')
             if 'admin' in self.manifest:

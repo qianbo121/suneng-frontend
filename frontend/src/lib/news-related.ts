@@ -151,7 +151,21 @@ export function getNewsRelatedLinks(
   locale: 'zh' | 'en' = 'zh',
 ): NewsRelatedLink[] {
   const links = getChineseNewsRelatedLinks(item).filter((link) => !isWithdrawnTechnicalPath(link.href));
-  if (locale === 'zh') return links;
+  if (locale === 'zh') {
+    // Reserve the approved repair guide only for explicit Chinese repair topics.
+    // English keeps the original candidate list and localization below.
+    if (!/维修|大修|改造|换新/.test(item.titleZh) || isWithdrawnTechnicalPath(LINKS.repair.href)) {
+      return links;
+    }
+    const candidates = links.filter((link) => link.href !== LINKS.repair.href);
+    const quoteIndex = candidates.findIndex((link) => link.href === LINKS.quote.href);
+    const position = quoteIndex < 0 ? Math.min(3, candidates.length) : Math.min(3, quoteIndex);
+    return unique([
+      ...candidates.slice(0, position),
+      LINKS.repair,
+      ...candidates.slice(position),
+    ]).slice(0, 4);
+  }
   return unique(links.flatMap((link) => {
     const english = ENGLISH_LINKS[link.href];
     return english && !isWithdrawnTechnicalPath(english.href) ? [{ ...link, ...english }] : [];
