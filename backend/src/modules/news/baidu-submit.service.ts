@@ -1,12 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 
-type BaiduSubmitResponse = {
-  success?: number;
-  remain?: number;
-  error?: number;
-  message?: string;
-};
+import { submitSingleUrlToBaidu } from './baidu-submit-response';
 
 @Injectable()
 export class BaiduSubmitService {
@@ -24,7 +19,6 @@ export class BaiduSubmitService {
   async submitUrl(url: string) {
     const site = this.configService.get<string>('baiduSite')?.trim();
     const token = this.configService.get<string>('baiduToken')?.trim();
-
     if (!site || !token) {
       if (!this.hasWarnedMissingConfig) {
         this.logger.warn('Baidu submit skipped: BAIDU_SITE or BAIDU_TOKEN is missing');
@@ -32,51 +26,8 @@ export class BaiduSubmitService {
       }
       return false;
     }
-
-    // https, so the site token is not sent in clear text; the token stays in the
-    // query string because that is the interface Baidu publishes.
-    const endpoint = new URL('https://data.zz.baidu.com/urls');
-    endpoint.searchParams.set('site', site);
-    endpoint.searchParams.set('token', token);
-
-    let response: Response;
-    try {
-      // Fire-and-forget from the caller's point of view, so a hung peer must not
-      // keep a socket open indefinitely.
-      response = await fetch(endpoint, {
-        method: 'POST',
-        headers: { 'Content-Type': 'text/plain' },
-        body: url,
-        signal: AbortSignal.timeout(5_000),
-      });
-    } catch {
-      throw new Error('Baidu submit request failed');
-    }
-
-    const responseText = await response.text();
-    const parsed = this.parseResponse(responseText);
-
-    if (!response.ok) {
-      throw new Error(`Baidu submit returned HTTP ${response.status}`);
-    }
-
-    if (parsed?.error !== undefined) {
-      throw new Error(
-        `Baidu submit returned error ${parsed.error}: ${parsed.message ?? 'unknown error'}`,
-      );
-    }
-
-    this.logger.log(`Baidu submitted news URL: ${url}`);
+    await submitSingleUrlToBaidu(site, token, url);
+    this.logger.log('Baidu accepted one news URL for discovery');
     return true;
-  }
-
-  private parseResponse(responseText: string) {
-    if (!responseText) return undefined;
-
-    try {
-      return JSON.parse(responseText) as BaiduSubmitResponse;
-    } catch {
-      return undefined;
-    }
   }
 }

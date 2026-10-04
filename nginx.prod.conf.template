@@ -93,6 +93,10 @@ http {
     187 "/zh/about#delivery";
     188 "/zh/about#delivery";
     189 "/zh/about#delivery";
+    193 /zh/products/detail/annealing-solution-line;
+    194 /zh/products/detail/annealing-solution-line;
+    195 /zh/products/detail/annealing-solution-line;
+    196 /zh/products/detail/annealing-solution-line;
     242 /zh/products/detail/trolley-furnace;
   }
 

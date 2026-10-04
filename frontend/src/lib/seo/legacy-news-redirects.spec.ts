@@ -118,8 +118,10 @@ describe('verified original-PHP news continuity', () => {
     expect(unknown[0].split('}')[0].trim()).toBe('return 404;');
   });
 
-  it('preserves the complete pre-change 33-product map byte for byte', () => {
-    const hash = createHash('sha256').update(mapBody('legacy_product_path')[0]).digest('hex');
+  it('preserves the pre-news 33-product map apart from the four later approved thermal-section entries', () => {
+    const historicalMap = mapBody('legacy_product_path')[0]
+      .replace(/^    19[3-6] \/zh\/products\/detail\/annealing-solution-line;\n/gm, '');
+    const hash = createHash('sha256').update(historicalMap).digest('hex');
     expect(hash).toBe('df128b9c0e816d85f1ee11c29fbfdfbeff62ec86d8bdb9f565c27b2d1a38b9b8');
     expect(ledger.preservedProductMapSha256).toBe(hash);
   });

@@ -5,12 +5,10 @@ import {
   NONCANONICAL_NEWS_SLUGS,
 } from '../src/modules/news/news-public-identifier';
 
-type BaiduSubmitResponse = {
-  success?: number;
-  remain?: number;
-  error?: number;
-  message?: string;
-};
+import {
+  submitSingleUrlToBaidu,
+  safeBaiduFailureMessage,
+} from '../src/modules/news/baidu-submit-response';
 
 type BackfillArgs = {
   execute: boolean;
@@ -54,48 +52,38 @@ function buildNewsUrl(slug: string) {
   return `${publicSiteUrl()}/zh/news/${encodeURIComponent(buildPublicNewsIdentifier(slug))}`;
 }
 
-function baiduEndpoint() {
+async function submitToBaidu(url: string) {
   const site = process.env.BAIDU_SITE?.trim();
   const token = process.env.BAIDU_TOKEN?.trim();
-
-  if (!site || !token) {
-    throw new Error('BAIDU_SITE and BAIDU_TOKEN are required when --execute is used');
-  }
-
-  const endpoint = new URL('http://data.zz.baidu.com/urls');
-  endpoint.searchParams.set('site', site);
-  endpoint.searchParams.set('token', token);
-  return endpoint;
+  if (!site || !token) throw new Error('Missing Baidu configuration');
+  await submitSingleUrlToBaidu(site, token, url);
 }
 
-async function submitToBaidu(url: string) {
-  const response = await fetch(baiduEndpoint(), {
-    method: 'POST',
-    headers: { 'Content-Type': 'text/plain' },
-    body: url,
-  });
-  const text = await response.text();
-  const parsed = parseBaiduResponse(text);
-
-  if (!response.ok) {
-    throw new Error(`Baidu returned HTTP ${response.status}`);
+export async function backfillNewsItems(
+  prisma: PrismaClient,
+  newsItems: { id: number; slug: string }[],
+  execute: boolean,
+) {
+  let successCount = 0;
+  let failureCount = 0;
+  for (const item of newsItems) {
+    console.log(`News ${item.id}`);
+    if (!execute) continue;
+    try {
+      await submitToBaidu(buildNewsUrl(item.slug));
+      await prisma.news.updateMany({
+        where: { id: item.id, baiduSubmittedAt: null },
+        data: { baiduSubmittedAt: new Date() },
+      });
+      successCount += 1;
+      console.log(`Submitted ${item.id}`);
+    } catch (error) {
+      failureCount += 1;
+      console.error(`Failed ${item.id}: ${safeBaiduFailureMessage(error)}`);
+    }
   }
-
-  if (parsed?.error !== undefined) {
-    throw new Error(`Baidu returned error ${parsed.error}: ${parsed.message ?? 'unknown error'}`);
-  }
-
-  return parsed;
-}
-
-function parseBaiduResponse(text: string) {
-  if (!text) return undefined;
-
-  try {
-    return JSON.parse(text) as BaiduSubmitResponse;
-  } catch {
-    return undefined;
-  }
+  if (failureCount > 0) process.exitCode = 1;
+  return { successCount, failureCount };
 }
 
 async function main() {
@@ -104,13 +92,6 @@ async function main() {
 
   console.log(`Mode: ${args.execute ? 'execute' : 'dry-run'}`);
   console.log(`Limit: ${args.limit}`);
-  console.log(`PUBLIC_SITE_URL=${publicSiteUrl()}`);
-  console.log(`BAIDU_SITE=${process.env.BAIDU_SITE?.trim() || 'EMPTY'}`);
-  console.log(
-    process.env.BAIDU_TOKEN?.trim()
-      ? `BAIDU_TOKEN=***MASKED*** length=${process.env.BAIDU_TOKEN.trim().length}`
-      : 'BAIDU_TOKEN=EMPTY',
-  );
 
   try {
     const newsItems = await prisma.news.findMany({
@@ -131,37 +112,7 @@ async function main() {
 
     console.log(`Pending count: ${newsItems.length}`);
 
-    let successCount = 0;
-    let failureCount = 0;
-
-    for (const item of newsItems) {
-      const url = buildNewsUrl(item.slug);
-      console.log(`News ${item.id} | ${item.slug} | ${url}`);
-
-      if (!args.execute) {
-        continue;
-      }
-
-      try {
-        await submitToBaidu(url);
-        await prisma.news.updateMany({
-          where: {
-            id: item.id,
-            baiduSubmittedAt: null,
-          },
-          data: {
-            baiduSubmittedAt: new Date(),
-          },
-        });
-        successCount += 1;
-        console.log(`Submitted ${item.id}`);
-      } catch (error) {
-        failureCount += 1;
-        console.error(
-          `Failed ${item.id}: ${error instanceof Error ? error.message : String(error)}`,
-        );
-      }
-    }
+    const { successCount, failureCount } = await backfillNewsItems(prisma, newsItems, args.execute);
 
     console.log(
       `Summary: mode=${args.execute ? 'executed' : 'dry-run'} success=${successCount} failed=${failureCount} pending=${newsItems.length}`,
@@ -171,7 +122,9 @@ async function main() {
   }
 }
 
-main().catch((error) => {
-  console.error(error instanceof Error ? error.message : String(error));
-  process.exitCode = 1;
-});
+if (require.main === module) {
+  main().catch(() => {
+    console.error('Baidu backfill failed');
+    process.exitCode = 1;
+  });
+}
