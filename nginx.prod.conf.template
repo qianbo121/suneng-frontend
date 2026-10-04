@@ -61,13 +61,35 @@ http {
   # Unknown IDs retain the existing catalog fallback. Apply only to showproduct.
   map $arg_id $legacy_product_path {
     default /zh/products;
+    123 /zh/products/detail/trolley-furnace;
+    125 /zh/products/detail/trolley-furnace;
+    141 /zh/products/detail/pit-furnace;
+    142 /zh/products/detail/trolley-furnace;
+    143 /zh/products/detail/trolley-furnace;
+    147 /zh/products/detail/trolley-furnace;
     150 /zh/products/detail/trolley-furnace;
     152 /zh/products/detail/trolley-furnace;
     154 /zh/products/detail/trolley-furnace;
+    156 /zh/products/detail/trolley-furnace;
+    158 /zh/products/detail/trolley-furnace;
+    159 /zh/products/detail/mesh-belt-furnace;
+    160 /zh/products/detail/mesh-belt-furnace;
+    161 /zh/products/detail/mesh-belt-furnace;
+    162 /zh/products/detail/mesh-belt-furnace;
+    163 /zh/products/detail/mesh-belt-furnace;
+    164 /zh/products/detail/mesh-belt-furnace;
+    165 /zh/products/detail/mesh-belt-furnace;
     166 /zh/products/detail/mesh-belt-furnace;
     167 /zh/products/detail/mesh-belt-furnace;
     168 /zh/products/detail/mesh-belt-furnace;
     169 /zh/products/detail/mesh-belt-furnace;
+    170 /zh/products/detail/mesh-belt-furnace;
+    171 /zh/products/detail/mesh-belt-furnace;
+    172 /zh/products/detail/mesh-belt-furnace;
+    173 /zh/products/detail/mesh-belt-furnace;
+    175 /zh/products/detail/bell-furnace;
+    177 /zh/products/detail/bell-furnace;
+    242 /zh/products/detail/trolley-furnace;
   }
 
   map "$request_method:$uri" $lead_event {

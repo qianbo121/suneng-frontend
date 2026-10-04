@@ -1,0 +1,21 @@
+{
+  "schemaVersion": 1,
+  "advisory": "GHSA-vfj7-8cjw-p6xm",
+  "packageName": "braces",
+  "packageVersion": "3.0.3",
+  "patchSha256": "73941958658f0237a44d18086d7393bd656eaa41300e2b7a82485197d15133dc",
+  "upstreamPull": "https://github.com/micromatch/braces/pull/72",
+  "upstreamCommit": "28d440b5dd449dbf1fe6f3506cf94ecca4d02660",
+  "upstreamStatusAtReview": "open/unmerged",
+  "projectAddition": "Reject malformed AST node/value/children types before recursive coercion or flattening",
+  "runtimeSha256": {
+    "index.js": "332ea07c7b006361aad12aa994ca75dc1db8e8382b884909e2f38f10b85c88a4",
+    "package.json": "56f08b888a4f30dc7cf8a7dbb36ffe92b737912ba36abe9d069d32167c957ac7",
+    "lib/constants.js": "f9fb688959232eee3e6ad7906a5b0e3234815db49ee857ef86983d65b917dc7c",
+    "lib/parse.js": "72aabaadaa555cdfbd07fbd7c7f743373e4dc8eec04a97550cc57bbeec30eb6c",
+    "lib/compile.js": "520d44d0543b498f2c53fcf2ee69eb9046488f7af81e6d8409ca1e7ec61365d2",
+    "lib/expand.js": "6dbe3a05b71a5a88748bb09965cb318a024d317c41d9664dd9ecbcd8cd25b18f",
+    "lib/stringify.js": "d5fd3db2e4532072be4e2000199b780a4fb576dd53c017328a287c98ae7d33f9",
+    "lib/utils.js": "07694123aab5102041b7cc66f21fc357fa17e2757cf86e32dfaaf748f1869dbc"
+  }
+}

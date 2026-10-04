@@ -42,14 +42,27 @@ jobs:
           python3 ops/releases/test_storage_policy.py
           python3 ops/releases/test_release_retention.py
           node --test frontend/scripts/prepare-standalone.test.mjs
+          node --test frontend/scripts/acquisition-continuity.test.mjs
+          node --test scripts/check-dependency-audit.test.mjs
           python3 scripts/test_frontend_layer_reuse.py
           node --test ops/releases/test_check_backend.cjs
           python3 ops/releases/test_frontend_release.py
+          python3 ops/releases/test_acquisition_continuity.py
           python3 ops/releases/test_deployment_notice.py
           python3 ops/releases/test_data_backup.py
           python3 scripts/geo-migration/test_backup_rehearsal.py
-      - name: Dependency audit
-        run: pnpm audit --audit-level high
+      - name: Dependency audit with verified local fix
+        run: node scripts/check-dependency-audit.mjs --report "$RUNNER_TEMP/dependency-audit.json"
+      - name: Preserve dependency audit and patch verification
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: dependency-audit-${{ github.run_attempt }}
+          path: |
+            ${{ runner.temp }}/dependency-audit.json
+            ${{ runner.temp }}/dependency-audit.json.verification.json
+          if-no-files-found: ignore
+          retention-days: 30
       - name: Lint
         run: pnpm --dir frontend lint
       # Types are also checked by the build at the end of this job, but that is

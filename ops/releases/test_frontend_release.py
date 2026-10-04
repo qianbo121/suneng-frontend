@@ -77,7 +77,16 @@ def rows(frontend=OLD):
             for name in ['postgres', 'backend', 'admin', 'nginx', 'frontend']]
 
 
-class ContractTest(unittest.TestCase):
+class MockAcquisitionChecks:
+    """Other release-contract tests isolate their existing concern from this gate."""
+    def setUp(self):
+        super().setUp()
+        check = patch.object(r, 'acquisition_continuity_probe', return_value={'passed': True, 'pagesChecked': 11})
+        check.start()
+        self.addCleanup(check.stop)
+
+
+class ContractTest(MockAcquisitionChecks, unittest.TestCase):
     def test_rejects_mutable_image_missing_identity_or_changed_scope(self):
         for field, value in [('image', 'frontend:latest'), ('sourceCommit', 'main'),
                              ('expectedCurrentImage', ''), ('archiveSha256', ''),
@@ -577,7 +586,7 @@ class ContractTest(unittest.TestCase):
 
 
 
-class UnifiedReleaseTest(unittest.TestCase):
+class UnifiedReleaseTest(MockAcquisitionChecks, unittest.TestCase):
     def fixture(self, tmp):
         release = ContractTest().fixture(tmp)
         manifest = {**MANIFEST, 'backend': {'image': 'sha256:' + '9' * 64,
@@ -917,7 +926,7 @@ class ReviewedGuideReleaseTest(unittest.TestCase):
         self.assertNotEqual(harness.run_script(contract, {**statuses, r.APPROVED_GUIDES[0]: 404}, xml)[0], 0)
         self.assertNotEqual(harness.run_script(contract, statuses, sitemap('/zh/news', '/en/news', *CASE_GROUP))[0], 0)
 
-class AdminReleaseTest(unittest.TestCase):
+class AdminReleaseTest(MockAcquisitionChecks, unittest.TestCase):
     def manifest(self):
         return {**MANIFEST, 'admin': {'image': OTHER, 'expectedCurrentImage': RECEIPT['images']['admin'],
                                     'archiveSha256': '4' * 64}}
@@ -1237,3 +1246,90 @@ class BackendOnlyReleaseTest(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main(verbosity=2)
+
+
+
+class ProcurementContinuityReleaseTest(unittest.TestCase):
+    def perform(self, tmp, failure=None, apply=True, kind='deploy', same=False):
+        manifest = {**MANIFEST, 'approvedGuides': r.APPROVED_GUIDES,
+                    **({'image': OLD} if same else {})}
+        release = ContractTest().fixture(tmp, manifest)
+        state = {'image': OLD, 'switches': []}
+        original_receipt = release.receipt_path.read_bytes()
+        def current(names):
+            return [row for row in rows(state['image']) if row['Name'].removeprefix('/corp-site-') in names]
+        def replace(override=None):
+            state['switches'].append(override)
+            state['image'] = OLD if override else NEW
+        def check(container, public=False):
+            self.assertEqual(state['image'], NEW if public else OLD)
+            return {'passed': failure != ('public' if public else 'candidate'), 'pagesChecked': 11,
+                    'failedPages': int(failure == ('public' if public else 'candidate')),
+                    'failedCheck': 'contactToolbar' if failure else None}
+        with patch.object(r, 'inspect', side_effect=current), patch.object(r, 'run', side_effect=canary_docker), \
+             patch.object(r, 'wait_healthy'), patch.object(r, 'probe', return_value=GOOD), \
+             patch.object(r, 'public_probe', return_value=[]), patch.object(r.subprocess, 'run'), \
+             patch.object(release, 'replace_frontend', side_effect=replace), \
+             patch.object(r, 'acquisition_continuity_probe', side_effect=check) as gate:
+            if failure:
+                with self.assertRaises(RuntimeError): release.execute(apply=apply, kind=kind)
+                result = None
+            else:
+                result = release.execute(apply=apply, kind=kind)
+        return release, state, gate.call_args_list, result, original_receipt
+
+    def test_missing_candidate_contact_refuses_switch_even_if_other_status_checks_pass(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            release, state, calls, _, original = self.perform(tmp, failure='candidate')
+            self.assertEqual(state['switches'], [])
+            self.assertEqual(len(calls), 1)
+            self.assertFalse(json.loads((release.audit / 'candidate-acquisition.json').read_text())['passed'])
+            self.assertEqual(release.receipt_path.read_bytes(), original)
+            self.assertFalse(release.pending_path.exists())
+            self.assertFalse((release.audit / 'result.json').exists())
+
+    def test_missing_new_public_contact_restores_previous_frontend_and_receipt(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            release, state, calls, _, original = self.perform(tmp, failure='public')
+            self.assertEqual(state['image'], OLD)
+            self.assertEqual(len(state['switches']), 2)
+            self.assertEqual([c.kwargs['public'] for c in calls], [False, True])
+            self.assertFalse(json.loads((release.audit / 'public-acquisition.json').read_text())['passed'])
+            result = json.loads((release.audit / 'result.json').read_text())
+            self.assertFalse(result['passed'])
+            self.assertTrue(result['previousFrontendRestoredAndVerified'])
+            self.assertEqual(json.loads(release.receipt_path.read_text()), json.loads(original))
+            self.assertFalse(release.pending_path.exists())
+
+    def test_new_frontend_requires_candidate_and_post_switch_public_receipts(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            release, state, calls, result, _ = self.perform(tmp)
+            self.assertEqual(state['image'], NEW)
+            self.assertEqual([c.kwargs['public'] for c in calls], [False, True])
+            self.assertTrue(calls[0].args[0].startswith('suneng-release-check-'))
+            self.assertEqual(calls[1].args[0], 'corp-site-frontend')
+            self.assertTrue(result['candidateAcquisition']['passed'])
+            self.assertTrue(result['publicAcquisition']['passed'])
+            self.assertTrue((release.audit / 'candidate-acquisition.json').exists())
+            self.assertTrue((release.audit / 'public-acquisition.json').exists())
+
+    def test_dry_run_only_checks_candidate_not_yet_published_target(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            release, state, calls, result, original = self.perform(tmp, apply=False)
+            self.assertEqual([c.kwargs['public'] for c in calls], [False])
+            self.assertEqual(state['switches'], [])
+            self.assertFalse(result['applied'])
+            self.assertNotIn('publicAcquisition', result)
+            self.assertEqual(release.receipt_path.read_bytes(), original)
+
+    def test_same_frontend_and_rollback_do_not_impose_new_contract_on_old_image(self):
+        for options in [{'same': True}, {'kind': 'rollback'}]:
+            with self.subTest(options=options), tempfile.TemporaryDirectory() as tmp:
+                _, _, calls, _, _ = self.perform(tmp, **options)
+                self.assertEqual(calls, [])
+
+    def test_backend_only_and_admin_only_keep_their_own_existing_contracts(self):
+        with patch.object(r, 'acquisition_continuity_probe', side_effect=AssertionError('must not check unchanged frontend')) as gate:
+            BackendOnlyReleaseTest().test_switch_and_failure_restore_only_backend_preserving_frontend_contract_and_marker()
+            AdminOnlyReleaseTest().test_admin_only_switch_and_failed_cache_recovery_preserve_frontend_and_marker()
+        gate.assert_not_called()

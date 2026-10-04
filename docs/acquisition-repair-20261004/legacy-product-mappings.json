@@ -5,7 +5,7 @@
   "implementation": "Only /product/showproduct.php uses the exact arg_id map in all three public hosts; absolute 301 target without source query string.",
   "unknownIdBehavior": "Existing /zh/products catalog fallback retained.",
   "otherRoutes": "/product/product.php and /product/index.php unchanged; four main entry routes and unknown PHP 404 unchanged.",
-  "mappingCount": 7,
+  "mappingCount": 29,
   "mappings": [
     {
       "oldId": 150,
@@ -202,12 +202,1564 @@
       ],
       "mappingReason": "原名称明确通用网带炉，新页同为通用网带炉，并说明连续输送与多温区工艺边界；未硬送特定渗碳整线。",
       "mappingMeaning": "原设备类型到同类型现公开产品页的直接永久跳转；不声称旧产品型号、尺寸、图片和参数已全文迁移。"
+    },
+    {
+      "oldId": 123,
+      "oldUrl": "http://jssngyl.cn/product/showproduct.php?id=123",
+      "oldRequestPath": "/product/showproduct.php?id=123",
+      "oldTitle": "台车式燃气炉",
+      "sourceType": "original-directory-anchor",
+      "oldTextBoundary": "原目录/首页的真实链接与唯一明确设备名称；未取得该详情页正文，不声称原型号内容已迁移。",
+      "capturedAtUtc": "2025-11-18T06:22:06Z",
+      "officialArchiveIndex": "CC-MAIN-2025-47",
+      "sourceAnchors": [
+        {
+          "sourceOldUrl": "http://jssngyl.cn/product/index.php?class1=127&page=11",
+          "sourceTitle": "产品展示-江苏苏能工业炉有限公司 官方网站-第11页",
+          "archiveTimestamp": "20251118062206",
+          "sourceArchive": "Common Crawl CC-MAIN-2025-47",
+          "officialWarcDataUrl": "https://data.commoncrawl.org/crawl-data/CC-MAIN-2025-47/segments/1762439651195.78/warc/CC-MAIN-20251118060923-20251118090923-00328.warc.gz",
+          "byteRange": "bytes 17608627-17613559/920388053",
+          "warcTargetUri": "http://jssngyl.cn/product/index.php?class1=127&page=11",
+          "targetMatchesIndex": true,
+          "originalHtmlPath": "/Users/qianbo/Desktop/Coding/独立站/output/acquisition-repair-20261004/public-legacy-source-search/commoncrawl-page-8b374a73284f.html",
+          "originalHtmlFileSha256": "f283b6ae25d0f470c709389ac3fdb1ecbbfc33562aad5ef1b3834f3141b21c5f",
+          "originalPayloadSha256": "f283b6ae25d0f470c709389ac3fdb1ecbbfc33562aad5ef1b3834f3141b21c5f",
+          "recordEvidencePath": "/Users/qianbo/Desktop/Coding/独立站/output/acquisition-repair-20261004/public-legacy-source-search/commoncrawl-page-8b374a73284f-evidence.json",
+          "originalHref": "../product/showproduct.php?id=123",
+          "anchorNameAttribute": "台车式燃气炉",
+          "anchorVisibleText": "台车式燃气炉",
+          "rawAnchorHtml": "<a class=\"bg-white pro-li mt-5 d-block py-4 px-4\" href=\"../product/showproduct.php?id=123\" title=\"台车式燃气炉\">\n                            <i class=\"fa fa-search fa-2x text-white ico\"></i>\n                            <p class=\"text-center mt-2\">\n                                <img src=\"../upload/thumb_src/700_650/20200908111052_378.jpeg\" class=\"img-fluid img-responsive\" alt=\"台车式燃气炉\">\n                            </p>\n                            <h5 class=\"fs-18 mt-5 mb-2 text-center\">台车式燃气炉</h5>\n                            <p class=\"text-center fs-28 mb-2\"><i class=\"fa fa-arrow-circle-o-right\"></i></p>\n                        </a>",
+          "uniqueVisibleEquipmentName": [
+            "台车式燃气炉"
+          ],
+          "sameOldUrlAnchorOccurrencesInSource": 1
+        }
+      ],
+      "newTarget": "https://www.jssngyl.cn/zh/products/detail/trolley-furnace",
+      "newRequestPath": "/zh/products/detail/trolley-furnace",
+      "newVerifiedAt": "2026-10-04T08:24:51.841754+00:00",
+      "newStatus": 200,
+      "newCanonical": [
+        "https://www.jssngyl.cn/zh/products/detail/trolley-furnace"
+      ],
+      "newNoindex": false,
+      "newH1": [
+        "台车炉｜大型重型工件周期式热处理"
+      ],
+      "newPageKeyText": [
+        "台车式燃气炉",
+        "天然气加热"
+      ],
+      "publishedTypeSourceEvidence": {
+        "path": "frontend/src/components/products/industry-furnace-data/trolley-furnace.ts",
+        "sourceCommit": "9c603ee690012455c01ed29c2781f542de9b1aef",
+        "sha256": "6b15f5bff57c757c4463f8aa316d2f7e6589ed05b5e4c742cfd3f8d8846d357c",
+        "matchingQuotes": [
+          "台车式燃气炉",
+          "天然气加热"
+        ]
+      },
+      "mappingReason": "原目录明确给出此编号链接和炉型名称；现公开同炉型页面明确覆盖所列热源/台车/网带特征，详见逐条类型证据。",
+      "mappingMeaning": "同设备类型到当前公开类型页的直接永久跳转；不声称旧型号、尺寸、图片、参数或整篇原内容已迁移。"
+    },
+    {
+      "oldId": 125,
+      "oldUrl": "http://jssngyl.cn/product/showproduct.php?id=125",
+      "oldRequestPath": "/product/showproduct.php?id=125",
+      "oldTitle": "双台车式燃气炉",
+      "sourceType": "original-directory-anchor",
+      "oldTextBoundary": "原目录/首页的真实链接与唯一明确设备名称；未取得该详情页正文，不声称原型号内容已迁移。",
+      "capturedAtUtc": "2025-11-18T06:22:06Z",
+      "officialArchiveIndex": "CC-MAIN-2025-47",
+      "sourceAnchors": [
+        {
+          "sourceOldUrl": "http://jssngyl.cn/product/index.php?class1=127&page=11",
+          "sourceTitle": "产品展示-江苏苏能工业炉有限公司 官方网站-第11页",
+          "archiveTimestamp": "20251118062206",
+          "sourceArchive": "Common Crawl CC-MAIN-2025-47",
+          "officialWarcDataUrl": "https://data.commoncrawl.org/crawl-data/CC-MAIN-2025-47/segments/1762439651195.78/warc/CC-MAIN-20251118060923-20251118090923-00328.warc.gz",
+          "byteRange": "bytes 17608627-17613559/920388053",
+          "warcTargetUri": "http://jssngyl.cn/product/index.php?class1=127&page=11",
+          "targetMatchesIndex": true,
+          "originalHtmlPath": "/Users/qianbo/Desktop/Coding/独立站/output/acquisition-repair-20261004/public-legacy-source-search/commoncrawl-page-8b374a73284f.html",
+          "originalHtmlFileSha256": "f283b6ae25d0f470c709389ac3fdb1ecbbfc33562aad5ef1b3834f3141b21c5f",
+          "originalPayloadSha256": "f283b6ae25d0f470c709389ac3fdb1ecbbfc33562aad5ef1b3834f3141b21c5f",
+          "recordEvidencePath": "/Users/qianbo/Desktop/Coding/独立站/output/acquisition-repair-20261004/public-legacy-source-search/commoncrawl-page-8b374a73284f-evidence.json",
+          "originalHref": "../product/showproduct.php?id=125",
+          "anchorNameAttribute": "双台车式燃气炉",
+          "anchorVisibleText": "双台车式燃气炉",
+          "rawAnchorHtml": "<a class=\"bg-white pro-li mt-5 d-block py-4 px-4\" href=\"../product/showproduct.php?id=125\" title=\"双台车式燃气炉\">\n                            <i class=\"fa fa-search fa-2x text-white ico\"></i>\n                            <p class=\"text-center mt-2\">\n                                <img src=\"../upload/thumb_src/700_650/20200514171427_349.jpeg\" class=\"img-fluid img-responsive\" alt=\"双台车式燃气炉\">\n                            </p>\n                            <h5 class=\"fs-18 mt-5 mb-2 text-center\">双台车式燃气炉</h5>\n                            <p class=\"text-center fs-28 mb-2\"><i class=\"fa fa-arrow-circle-o-right\"></i></p>\n                        </a>",
+          "uniqueVisibleEquipmentName": [
+            "双台车式燃气炉"
+          ],
+          "sameOldUrlAnchorOccurrencesInSource": 1
+        }
+      ],
+      "newTarget": "https://www.jssngyl.cn/zh/products/detail/trolley-furnace",
+      "newRequestPath": "/zh/products/detail/trolley-furnace",
+      "newVerifiedAt": "2026-10-04T08:24:51.841754+00:00",
+      "newStatus": 200,
+      "newCanonical": [
+        "https://www.jssngyl.cn/zh/products/detail/trolley-furnace"
+      ],
+      "newNoindex": false,
+      "newH1": [
+        "台车炉｜大型重型工件周期式热处理"
+      ],
+      "newPageKeyText": [
+        "台车式燃气炉",
+        "天然气加热",
+        "双台车 / 交换台车"
+      ],
+      "publishedTypeSourceEvidence": {
+        "path": "frontend/src/components/products/industry-furnace-data/trolley-furnace.ts",
+        "sourceCommit": "9c603ee690012455c01ed29c2781f542de9b1aef",
+        "sha256": "6b15f5bff57c757c4463f8aa316d2f7e6589ed05b5e4c742cfd3f8d8846d357c",
+        "matchingQuotes": [
+          "台车式燃气炉",
+          "天然气加热",
+          "双台车 / 交换台车"
+        ]
+      },
+      "mappingReason": "原目录明确给出此编号链接和炉型名称；现公开同炉型页面明确覆盖所列热源/台车/网带特征，详见逐条类型证据。",
+      "mappingMeaning": "同设备类型到当前公开类型页的直接永久跳转；不声称旧型号、尺寸、图片、参数或整篇原内容已迁移。"
+    },
+    {
+      "oldId": 142,
+      "oldUrl": "http://jssngyl.cn/product/showproduct.php?id=142",
+      "oldRequestPath": "/product/showproduct.php?id=142",
+      "oldTitle": "双台车电阻炉",
+      "sourceType": "original-directory-anchor",
+      "oldTextBoundary": "原目录/首页的真实链接与唯一明确设备名称；未取得该详情页正文，不声称原型号内容已迁移。",
+      "capturedAtUtc": "2025-11-18T06:40:11Z",
+      "officialArchiveIndex": "CC-MAIN-2025-47",
+      "sourceAnchors": [
+        {
+          "sourceOldUrl": "http://jssngyl.cn/product/index.php?class2=137&page=2",
+          "sourceTitle": "工业电阻炉-江苏苏能工业炉有限公司 官方网站-第2页",
+          "archiveTimestamp": "20251118064011",
+          "sourceArchive": "Common Crawl CC-MAIN-2025-47",
+          "officialWarcDataUrl": "https://data.commoncrawl.org/crawl-data/CC-MAIN-2025-47/segments/1762439651195.78/warc/CC-MAIN-20251118060923-20251118090923-00482.warc.gz",
+          "byteRange": "bytes 8583607-8588554/872175035",
+          "warcTargetUri": "http://jssngyl.cn/product/index.php?class2=137&page=2",
+          "targetMatchesIndex": true,
+          "originalHtmlPath": "/Users/qianbo/Desktop/Coding/独立站/output/acquisition-repair-20261004/public-legacy-source-search/commoncrawl-page-0a103c341e90.html",
+          "originalHtmlFileSha256": "bdeebe828297b247d1a3075ce0fb11c03bca19b0137fc01c26c73da20ff0a047",
+          "originalPayloadSha256": "bdeebe828297b247d1a3075ce0fb11c03bca19b0137fc01c26c73da20ff0a047",
+          "recordEvidencePath": "/Users/qianbo/Desktop/Coding/独立站/output/acquisition-repair-20261004/public-legacy-source-search/commoncrawl-page-0a103c341e90-evidence.json",
+          "originalHref": "../product/showproduct.php?id=142",
+          "anchorNameAttribute": "双台车电阻炉",
+          "anchorVisibleText": "双台车电阻炉",
+          "rawAnchorHtml": "<a class=\"bg-white pro-li mt-5 d-block py-4 px-4\" href=\"../product/showproduct.php?id=142\" title=\"双台车电阻炉\">\n                            <i class=\"fa fa-search fa-2x text-white ico\"></i>\n                            <p class=\"text-center mt-2\">\n                                <img src=\"../upload/thumb_src/700_650/20200908150814_360.jpeg\" class=\"img-fluid img-responsive\" alt=\"双台车电阻炉\">\n                            </p>\n                            <h5 class=\"fs-18 mt-5 mb-2 text-center\">双台车电阻炉</h5>\n                            <p class=\"text-center fs-28 mb-2\"><i class=\"fa fa-arrow-circle-o-right\"></i></p>\n                        </a>",
+          "uniqueVisibleEquipmentName": [
+            "双台车电阻炉"
+          ],
+          "sameOldUrlAnchorOccurrencesInSource": 1
+        }
+      ],
+      "newTarget": "https://www.jssngyl.cn/zh/products/detail/trolley-furnace",
+      "newRequestPath": "/zh/products/detail/trolley-furnace",
+      "newVerifiedAt": "2026-10-04T08:24:51.841754+00:00",
+      "newStatus": 200,
+      "newCanonical": [
+        "https://www.jssngyl.cn/zh/products/detail/trolley-furnace"
+      ],
+      "newNoindex": false,
+      "newH1": [
+        "台车炉｜大型重型工件周期式热处理"
+      ],
+      "newPageKeyText": [
+        "台车式电阻炉",
+        "电阻加热",
+        "双台车 / 交换台车"
+      ],
+      "publishedTypeSourceEvidence": {
+        "path": "frontend/src/components/products/industry-furnace-data/trolley-furnace.ts",
+        "sourceCommit": "9c603ee690012455c01ed29c2781f542de9b1aef",
+        "sha256": "6b15f5bff57c757c4463f8aa316d2f7e6589ed05b5e4c742cfd3f8d8846d357c",
+        "matchingQuotes": [
+          "台车式电阻炉",
+          "电阻加热",
+          "双台车 / 交换台车"
+        ]
+      },
+      "mappingReason": "原目录明确给出此编号链接和炉型名称；现公开同炉型页面明确覆盖所列热源/台车/网带特征，详见逐条类型证据。",
+      "mappingMeaning": "同设备类型到当前公开类型页的直接永久跳转；不声称旧型号、尺寸、图片、参数或整篇原内容已迁移。"
+    },
+    {
+      "oldId": 143,
+      "oldUrl": "http://jssngyl.cn/product/showproduct.php?id=143",
+      "oldRequestPath": "/product/showproduct.php?id=143",
+      "oldTitle": "双台车电阻炉",
+      "sourceType": "original-directory-anchor",
+      "oldTextBoundary": "原目录/首页的真实链接与唯一明确设备名称；未取得该详情页正文，不声称原型号内容已迁移。",
+      "capturedAtUtc": "2025-11-18T06:40:11Z",
+      "officialArchiveIndex": "CC-MAIN-2025-47",
+      "sourceAnchors": [
+        {
+          "sourceOldUrl": "http://jssngyl.cn/product/index.php?class2=137&page=2",
+          "sourceTitle": "工业电阻炉-江苏苏能工业炉有限公司 官方网站-第2页",
+          "archiveTimestamp": "20251118064011",
+          "sourceArchive": "Common Crawl CC-MAIN-2025-47",
+          "officialWarcDataUrl": "https://data.commoncrawl.org/crawl-data/CC-MAIN-2025-47/segments/1762439651195.78/warc/CC-MAIN-20251118060923-20251118090923-00482.warc.gz",
+          "byteRange": "bytes 8583607-8588554/872175035",
+          "warcTargetUri": "http://jssngyl.cn/product/index.php?class2=137&page=2",
+          "targetMatchesIndex": true,
+          "originalHtmlPath": "/Users/qianbo/Desktop/Coding/独立站/output/acquisition-repair-20261004/public-legacy-source-search/commoncrawl-page-0a103c341e90.html",
+          "originalHtmlFileSha256": "bdeebe828297b247d1a3075ce0fb11c03bca19b0137fc01c26c73da20ff0a047",
+          "originalPayloadSha256": "bdeebe828297b247d1a3075ce0fb11c03bca19b0137fc01c26c73da20ff0a047",
+          "recordEvidencePath": "/Users/qianbo/Desktop/Coding/独立站/output/acquisition-repair-20261004/public-legacy-source-search/commoncrawl-page-0a103c341e90-evidence.json",
+          "originalHref": "../product/showproduct.php?id=143",
+          "anchorNameAttribute": "双台车电阻炉",
+          "anchorVisibleText": "双台车电阻炉",
+          "rawAnchorHtml": "<a class=\"bg-white pro-li mt-5 d-block py-4 px-4\" href=\"../product/showproduct.php?id=143\" title=\"双台车电阻炉\">\n                            <i class=\"fa fa-search fa-2x text-white ico\"></i>\n                            <p class=\"text-center mt-2\">\n                                <img src=\"../upload/thumb_src/700_650/20200908150804_974.jpeg\" class=\"img-fluid img-responsive\" alt=\"双台车电阻炉\">\n                            </p>\n                            <h5 class=\"fs-18 mt-5 mb-2 text-center\">双台车电阻炉</h5>\n                            <p class=\"text-center fs-28 mb-2\"><i class=\"fa fa-arrow-circle-o-right\"></i></p>\n                        </a>",
+          "uniqueVisibleEquipmentName": [
+            "双台车电阻炉"
+          ],
+          "sameOldUrlAnchorOccurrencesInSource": 1
+        }
+      ],
+      "newTarget": "https://www.jssngyl.cn/zh/products/detail/trolley-furnace",
+      "newRequestPath": "/zh/products/detail/trolley-furnace",
+      "newVerifiedAt": "2026-10-04T08:24:51.841754+00:00",
+      "newStatus": 200,
+      "newCanonical": [
+        "https://www.jssngyl.cn/zh/products/detail/trolley-furnace"
+      ],
+      "newNoindex": false,
+      "newH1": [
+        "台车炉｜大型重型工件周期式热处理"
+      ],
+      "newPageKeyText": [
+        "台车式电阻炉",
+        "电阻加热",
+        "双台车 / 交换台车"
+      ],
+      "publishedTypeSourceEvidence": {
+        "path": "frontend/src/components/products/industry-furnace-data/trolley-furnace.ts",
+        "sourceCommit": "9c603ee690012455c01ed29c2781f542de9b1aef",
+        "sha256": "6b15f5bff57c757c4463f8aa316d2f7e6589ed05b5e4c742cfd3f8d8846d357c",
+        "matchingQuotes": [
+          "台车式电阻炉",
+          "电阻加热",
+          "双台车 / 交换台车"
+        ]
+      },
+      "mappingReason": "原目录明确给出此编号链接和炉型名称；现公开同炉型页面明确覆盖所列热源/台车/网带特征，详见逐条类型证据。",
+      "mappingMeaning": "同设备类型到当前公开类型页的直接永久跳转；不声称旧型号、尺寸、图片、参数或整篇原内容已迁移。"
+    },
+    {
+      "oldId": 147,
+      "oldUrl": "http://jssngyl.cn/product/showproduct.php?id=147",
+      "oldRequestPath": "/product/showproduct.php?id=147",
+      "oldTitle": "台车热处理电炉",
+      "sourceType": "original-directory-anchor",
+      "oldTextBoundary": "原目录/首页的真实链接与唯一明确设备名称；未取得该详情页正文，不声称原型号内容已迁移。",
+      "capturedAtUtc": "2025-11-18T06:40:11Z",
+      "officialArchiveIndex": "CC-MAIN-2025-47",
+      "sourceAnchors": [
+        {
+          "sourceOldUrl": "http://jssngyl.cn/product/index.php?class2=137&page=2",
+          "sourceTitle": "工业电阻炉-江苏苏能工业炉有限公司 官方网站-第2页",
+          "archiveTimestamp": "20251118064011",
+          "sourceArchive": "Common Crawl CC-MAIN-2025-47",
+          "officialWarcDataUrl": "https://data.commoncrawl.org/crawl-data/CC-MAIN-2025-47/segments/1762439651195.78/warc/CC-MAIN-20251118060923-20251118090923-00482.warc.gz",
+          "byteRange": "bytes 8583607-8588554/872175035",
+          "warcTargetUri": "http://jssngyl.cn/product/index.php?class2=137&page=2",
+          "targetMatchesIndex": true,
+          "originalHtmlPath": "/Users/qianbo/Desktop/Coding/独立站/output/acquisition-repair-20261004/public-legacy-source-search/commoncrawl-page-0a103c341e90.html",
+          "originalHtmlFileSha256": "bdeebe828297b247d1a3075ce0fb11c03bca19b0137fc01c26c73da20ff0a047",
+          "originalPayloadSha256": "bdeebe828297b247d1a3075ce0fb11c03bca19b0137fc01c26c73da20ff0a047",
+          "recordEvidencePath": "/Users/qianbo/Desktop/Coding/独立站/output/acquisition-repair-20261004/public-legacy-source-search/commoncrawl-page-0a103c341e90-evidence.json",
+          "originalHref": "../product/showproduct.php?id=147",
+          "anchorNameAttribute": "台车热处理电炉",
+          "anchorVisibleText": "台车热处理电炉",
+          "rawAnchorHtml": "<a class=\"bg-white pro-li mt-5 d-block py-4 px-4\" href=\"../product/showproduct.php?id=147\" title=\"台车热处理电炉\">\n                            <i class=\"fa fa-search fa-2x text-white ico\"></i>\n                            <p class=\"text-center mt-2\">\n                                <img src=\"../upload/thumb_src/700_650/20200514101026_455.jpeg\" class=\"img-fluid img-responsive\" alt=\"台车热处理电炉\">\n                            </p>\n                            <h5 class=\"fs-18 mt-5 mb-2 text-center\">台车热处理电炉</h5>\n                            <p class=\"text-center fs-28 mb-2\"><i class=\"fa fa-arrow-circle-o-right\"></i></p>\n                        </a>",
+          "uniqueVisibleEquipmentName": [
+            "台车热处理电炉"
+          ],
+          "sameOldUrlAnchorOccurrencesInSource": 1
+        }
+      ],
+      "newTarget": "https://www.jssngyl.cn/zh/products/detail/trolley-furnace",
+      "newRequestPath": "/zh/products/detail/trolley-furnace",
+      "newVerifiedAt": "2026-10-04T08:24:51.841754+00:00",
+      "newStatus": 200,
+      "newCanonical": [
+        "https://www.jssngyl.cn/zh/products/detail/trolley-furnace"
+      ],
+      "newNoindex": false,
+      "newH1": [
+        "台车炉｜大型重型工件周期式热处理"
+      ],
+      "newPageKeyText": [
+        "台车式电阻炉",
+        "电阻加热"
+      ],
+      "publishedTypeSourceEvidence": {
+        "path": "frontend/src/components/products/industry-furnace-data/trolley-furnace.ts",
+        "sourceCommit": "9c603ee690012455c01ed29c2781f542de9b1aef",
+        "sha256": "6b15f5bff57c757c4463f8aa316d2f7e6589ed05b5e4c742cfd3f8d8846d357c",
+        "matchingQuotes": [
+          "台车式电阻炉",
+          "电阻加热"
+        ]
+      },
+      "mappingReason": "原目录明确给出此编号链接和炉型名称；现公开同炉型页面明确覆盖所列热源/台车/网带特征，详见逐条类型证据。",
+      "mappingMeaning": "同设备类型到当前公开类型页的直接永久跳转；不声称旧型号、尺寸、图片、参数或整篇原内容已迁移。"
+    },
+    {
+      "oldId": 156,
+      "oldUrl": "http://jssngyl.cn/product/showproduct.php?id=156",
+      "oldRequestPath": "/product/showproduct.php?id=156",
+      "oldTitle": "台车热处理电炉",
+      "sourceType": "original-directory-anchor",
+      "oldTextBoundary": "原目录/首页的真实链接与唯一明确设备名称；未取得该详情页正文，不声称原型号内容已迁移。",
+      "capturedAtUtc": "2025-11-18T08:07:04Z",
+      "officialArchiveIndex": "CC-MAIN-2025-47",
+      "sourceAnchors": [
+        {
+          "sourceOldUrl": "http://jssngyl.cn/",
+          "sourceTitle": "江苏苏能工业炉有限公司 官方网站",
+          "archiveTimestamp": "20251118080704",
+          "sourceArchive": "Common Crawl CC-MAIN-2025-47",
+          "officialWarcDataUrl": "https://data.commoncrawl.org/crawl-data/CC-MAIN-2025-47/segments/1762439651195.78/warc/CC-MAIN-20251118060923-20251118090923-00939.warc.gz",
+          "byteRange": "bytes 10671393-10677594/896891510",
+          "warcTargetUri": "http://jssngyl.cn/",
+          "targetMatchesIndex": true,
+          "originalHtmlPath": "/Users/qianbo/Desktop/Coding/独立站/output/acquisition-repair-20261004/public-legacy-source-search/commoncrawl-page-377631dc4700.html",
+          "originalHtmlFileSha256": "f22da9f77cf6c9bc6b23eecd6c930877ab5074928d85b363c931b644dd06fd49",
+          "originalPayloadSha256": "f22da9f77cf6c9bc6b23eecd6c930877ab5074928d85b363c931b644dd06fd49",
+          "recordEvidencePath": "/Users/qianbo/Desktop/Coding/独立站/output/acquisition-repair-20261004/public-legacy-source-search/commoncrawl-page-377631dc4700-evidence.json",
+          "originalHref": "product/showproduct.php?id=156",
+          "anchorNameAttribute": null,
+          "anchorVisibleText": "台车热处理电炉 查看详情",
+          "rawAnchorHtml": "<a href=\"product/showproduct.php?id=156\">\n                                    <div class=\"pro-img\"><img src=\"upload/gydzl/20200514101707_299.jpeg\" alt=\"台车热处理电炉\"></div>\n                                    <div class=\"pro-cover\"></div>\n                                    <h5>台车热处理电炉</h5>\n                                    <div class=\"more\">\n                                        <p>查看详情</p>\n                                        <i class=\"fa fa-link\"></i>\n                                    </div>\n                                </a>",
+          "uniqueVisibleEquipmentName": [
+            "台车热处理电炉"
+          ],
+          "sameOldUrlAnchorOccurrencesInSource": 1
+        }
+      ],
+      "newTarget": "https://www.jssngyl.cn/zh/products/detail/trolley-furnace",
+      "newRequestPath": "/zh/products/detail/trolley-furnace",
+      "newVerifiedAt": "2026-10-04T08:24:51.841754+00:00",
+      "newStatus": 200,
+      "newCanonical": [
+        "https://www.jssngyl.cn/zh/products/detail/trolley-furnace"
+      ],
+      "newNoindex": false,
+      "newH1": [
+        "台车炉｜大型重型工件周期式热处理"
+      ],
+      "newPageKeyText": [
+        "台车式电阻炉",
+        "电阻加热"
+      ],
+      "publishedTypeSourceEvidence": {
+        "path": "frontend/src/components/products/industry-furnace-data/trolley-furnace.ts",
+        "sourceCommit": "9c603ee690012455c01ed29c2781f542de9b1aef",
+        "sha256": "6b15f5bff57c757c4463f8aa316d2f7e6589ed05b5e4c742cfd3f8d8846d357c",
+        "matchingQuotes": [
+          "台车式电阻炉",
+          "电阻加热"
+        ]
+      },
+      "mappingReason": "原目录明确给出此编号链接和炉型名称；现公开同炉型页面明确覆盖所列热源/台车/网带特征，详见逐条类型证据。",
+      "mappingMeaning": "同设备类型到当前公开类型页的直接永久跳转；不声称旧型号、尺寸、图片、参数或整篇原内容已迁移。"
+    },
+    {
+      "oldId": 158,
+      "oldUrl": "http://jssngyl.cn/product/showproduct.php?id=158",
+      "oldRequestPath": "/product/showproduct.php?id=158",
+      "oldTitle": "台车热处理电炉",
+      "sourceType": "original-directory-anchor",
+      "oldTextBoundary": "原目录/首页的真实链接与唯一明确设备名称；未取得该详情页正文，不声称原型号内容已迁移。",
+      "capturedAtUtc": "2025-11-18T08:07:04Z",
+      "officialArchiveIndex": "CC-MAIN-2025-47",
+      "sourceAnchors": [
+        {
+          "sourceOldUrl": "http://jssngyl.cn/",
+          "sourceTitle": "江苏苏能工业炉有限公司 官方网站",
+          "archiveTimestamp": "20251118080704",
+          "sourceArchive": "Common Crawl CC-MAIN-2025-47",
+          "officialWarcDataUrl": "https://data.commoncrawl.org/crawl-data/CC-MAIN-2025-47/segments/1762439651195.78/warc/CC-MAIN-20251118060923-20251118090923-00939.warc.gz",
+          "byteRange": "bytes 10671393-10677594/896891510",
+          "warcTargetUri": "http://jssngyl.cn/",
+          "targetMatchesIndex": true,
+          "originalHtmlPath": "/Users/qianbo/Desktop/Coding/独立站/output/acquisition-repair-20261004/public-legacy-source-search/commoncrawl-page-377631dc4700.html",
+          "originalHtmlFileSha256": "f22da9f77cf6c9bc6b23eecd6c930877ab5074928d85b363c931b644dd06fd49",
+          "originalPayloadSha256": "f22da9f77cf6c9bc6b23eecd6c930877ab5074928d85b363c931b644dd06fd49",
+          "recordEvidencePath": "/Users/qianbo/Desktop/Coding/独立站/output/acquisition-repair-20261004/public-legacy-source-search/commoncrawl-page-377631dc4700-evidence.json",
+          "originalHref": "product/showproduct.php?id=158",
+          "anchorNameAttribute": null,
+          "anchorVisibleText": "台车热处理电炉 查看详情",
+          "rawAnchorHtml": "<a href=\"product/showproduct.php?id=158\">\n                                    <div class=\"pro-img\"><img src=\"upload/gydzl/20200514101835_317.jpeg\" alt=\"台车热处理电炉\"></div>\n                                    <div class=\"pro-cover\"></div>\n                                    <h5>台车热处理电炉</h5>\n                                    <div class=\"more\">\n                                        <p>查看详情</p>\n                                        <i class=\"fa fa-link\"></i>\n                                    </div>\n                                </a>",
+          "uniqueVisibleEquipmentName": [
+            "台车热处理电炉"
+          ],
+          "sameOldUrlAnchorOccurrencesInSource": 1
+        }
+      ],
+      "newTarget": "https://www.jssngyl.cn/zh/products/detail/trolley-furnace",
+      "newRequestPath": "/zh/products/detail/trolley-furnace",
+      "newVerifiedAt": "2026-10-04T08:24:51.841754+00:00",
+      "newStatus": 200,
+      "newCanonical": [
+        "https://www.jssngyl.cn/zh/products/detail/trolley-furnace"
+      ],
+      "newNoindex": false,
+      "newH1": [
+        "台车炉｜大型重型工件周期式热处理"
+      ],
+      "newPageKeyText": [
+        "台车式电阻炉",
+        "电阻加热"
+      ],
+      "publishedTypeSourceEvidence": {
+        "path": "frontend/src/components/products/industry-furnace-data/trolley-furnace.ts",
+        "sourceCommit": "9c603ee690012455c01ed29c2781f542de9b1aef",
+        "sha256": "6b15f5bff57c757c4463f8aa316d2f7e6589ed05b5e4c742cfd3f8d8846d357c",
+        "matchingQuotes": [
+          "台车式电阻炉",
+          "电阻加热"
+        ]
+      },
+      "mappingReason": "原目录明确给出此编号链接和炉型名称；现公开同炉型页面明确覆盖所列热源/台车/网带特征，详见逐条类型证据。",
+      "mappingMeaning": "同设备类型到当前公开类型页的直接永久跳转；不声称旧型号、尺寸、图片、参数或整篇原内容已迁移。"
+    },
+    {
+      "oldId": 242,
+      "oldUrl": "http://jssngyl.cn/product/showproduct.php?id=242",
+      "oldRequestPath": "/product/showproduct.php?id=242",
+      "oldTitle": "电阻式台车炉",
+      "sourceType": "original-directory-anchor",
+      "oldTextBoundary": "原目录/首页的真实链接与唯一明确设备名称；未取得该详情页正文，不声称原型号内容已迁移。",
+      "capturedAtUtc": "2025-11-18T08:07:04Z",
+      "officialArchiveIndex": "CC-MAIN-2025-47",
+      "sourceAnchors": [
+        {
+          "sourceOldUrl": "http://jssngyl.cn/",
+          "sourceTitle": "江苏苏能工业炉有限公司 官方网站",
+          "archiveTimestamp": "20251118080704",
+          "sourceArchive": "Common Crawl CC-MAIN-2025-47",
+          "officialWarcDataUrl": "https://data.commoncrawl.org/crawl-data/CC-MAIN-2025-47/segments/1762439651195.78/warc/CC-MAIN-20251118060923-20251118090923-00939.warc.gz",
+          "byteRange": "bytes 10671393-10677594/896891510",
+          "warcTargetUri": "http://jssngyl.cn/",
+          "targetMatchesIndex": true,
+          "originalHtmlPath": "/Users/qianbo/Desktop/Coding/独立站/output/acquisition-repair-20261004/public-legacy-source-search/commoncrawl-page-377631dc4700.html",
+          "originalHtmlFileSha256": "f22da9f77cf6c9bc6b23eecd6c930877ab5074928d85b363c931b644dd06fd49",
+          "originalPayloadSha256": "f22da9f77cf6c9bc6b23eecd6c930877ab5074928d85b363c931b644dd06fd49",
+          "recordEvidencePath": "/Users/qianbo/Desktop/Coding/独立站/output/acquisition-repair-20261004/public-legacy-source-search/commoncrawl-page-377631dc4700-evidence.json",
+          "originalHref": "product/showproduct.php?id=242",
+          "anchorNameAttribute": null,
+          "anchorVisibleText": "电阻式台车炉 查看详情",
+          "rawAnchorHtml": "<a href=\"product/showproduct.php?id=242\">\n                                    <div class=\"pro-img\"><img src=\"upload/202507/1753860311.jpg\" alt=\"电阻式台车炉\"></div>\n                                    <div class=\"pro-cover\"></div>\n                                    <h5>电阻式台车炉</h5>\n                                    <div class=\"more\">\n                                        <p>查看详情</p>\n                                        <i class=\"fa fa-link\"></i>\n                                    </div>\n                                </a>",
+          "uniqueVisibleEquipmentName": [
+            "电阻式台车炉"
+          ],
+          "sameOldUrlAnchorOccurrencesInSource": 1
+        }
+      ],
+      "newTarget": "https://www.jssngyl.cn/zh/products/detail/trolley-furnace",
+      "newRequestPath": "/zh/products/detail/trolley-furnace",
+      "newVerifiedAt": "2026-10-04T08:24:51.841754+00:00",
+      "newStatus": 200,
+      "newCanonical": [
+        "https://www.jssngyl.cn/zh/products/detail/trolley-furnace"
+      ],
+      "newNoindex": false,
+      "newH1": [
+        "台车炉｜大型重型工件周期式热处理"
+      ],
+      "newPageKeyText": [
+        "台车式电阻炉",
+        "电阻加热"
+      ],
+      "publishedTypeSourceEvidence": {
+        "path": "frontend/src/components/products/industry-furnace-data/trolley-furnace.ts",
+        "sourceCommit": "9c603ee690012455c01ed29c2781f542de9b1aef",
+        "sha256": "6b15f5bff57c757c4463f8aa316d2f7e6589ed05b5e4c742cfd3f8d8846d357c",
+        "matchingQuotes": [
+          "台车式电阻炉",
+          "电阻加热"
+        ]
+      },
+      "mappingReason": "原目录明确给出此编号链接和炉型名称；现公开同炉型页面明确覆盖所列热源/台车/网带特征，详见逐条类型证据。",
+      "mappingMeaning": "同设备类型到当前公开类型页的直接永久跳转；不声称旧型号、尺寸、图片、参数或整篇原内容已迁移。"
+    },
+    {
+      "oldId": 164,
+      "oldUrl": "http://jssngyl.cn/product/showproduct.php?id=164",
+      "oldRequestPath": "/product/showproduct.php?id=164",
+      "oldTitle": "网带炉",
+      "sourceType": "original-directory-anchor",
+      "oldTextBoundary": "原目录/首页的真实链接与唯一明确设备名称；未取得该详情页正文，不声称原型号内容已迁移。",
+      "capturedAtUtc": "2025-11-18T06:26:35Z",
+      "officialArchiveIndex": "CC-MAIN-2025-47",
+      "sourceAnchors": [
+        {
+          "sourceOldUrl": "http://jssngyl.cn/product/product.php?class2=139",
+          "sourceTitle": "网带炉-江苏苏能工业炉有限公司 官方网站",
+          "archiveTimestamp": "20251118062635",
+          "sourceArchive": "Common Crawl CC-MAIN-2025-47",
+          "officialWarcDataUrl": "https://data.commoncrawl.org/crawl-data/CC-MAIN-2025-47/segments/1762439651195.78/warc/CC-MAIN-20251118060923-20251118090923-00189.warc.gz",
+          "byteRange": "bytes 12335572-12340676/889559563",
+          "warcTargetUri": "http://jssngyl.cn/product/product.php?class2=139",
+          "targetMatchesIndex": true,
+          "originalHtmlPath": "/Users/qianbo/Desktop/Coding/独立站/output/acquisition-repair-20261004/public-legacy-source-search/commoncrawl-page-6e2f57237cf8.html",
+          "originalHtmlFileSha256": "e806cdde5d9144df3a3d670b1adf65afe838d8eab21d990b5465997c4631a52f",
+          "originalPayloadSha256": "e806cdde5d9144df3a3d670b1adf65afe838d8eab21d990b5465997c4631a52f",
+          "recordEvidencePath": "/Users/qianbo/Desktop/Coding/独立站/output/acquisition-repair-20261004/public-legacy-source-search/commoncrawl-page-6e2f57237cf8-evidence.json",
+          "originalHref": "../product/showproduct.php?id=164",
+          "anchorNameAttribute": "网带炉",
+          "anchorVisibleText": "网带炉",
+          "rawAnchorHtml": "<a class=\"bg-white pro-li mt-5 d-block py-4 px-4\" href=\"../product/showproduct.php?id=164\" title=\"网带炉\">\n                            <i class=\"fa fa-search fa-2x text-white ico\"></i>\n                            <p class=\"text-center mt-2\">\n                                <img src=\"../upload/thumb_src/700_650/20200908150702_121.jpeg\" class=\"img-fluid img-responsive\" alt=\"网带炉\">\n                            </p>\n                            <h5 class=\"fs-18 mt-5 mb-2 text-center\">网带炉</h5>\n                            <p class=\"text-center fs-28 mb-2\"><i class=\"fa fa-arrow-circle-o-right\"></i></p>\n                        </a>",
+          "uniqueVisibleEquipmentName": [
+            "网带炉"
+          ],
+          "sameOldUrlAnchorOccurrencesInSource": 1
+        },
+        {
+          "sourceOldUrl": "http://jssngyl.cn/product/index.php?class1=127&page=2",
+          "sourceTitle": "产品展示-江苏苏能工业炉有限公司 官方网站-第2页",
+          "archiveTimestamp": "20251118072828",
+          "sourceArchive": "Common Crawl CC-MAIN-2025-47",
+          "officialWarcDataUrl": "https://data.commoncrawl.org/crawl-data/CC-MAIN-2025-47/segments/1762439651195.78/warc/CC-MAIN-20251118060923-20251118090923-00578.warc.gz",
+          "byteRange": "bytes 15805966-15811169/906761892",
+          "warcTargetUri": "http://jssngyl.cn/product/index.php?class1=127&page=2",
+          "targetMatchesIndex": true,
+          "originalHtmlPath": "/Users/qianbo/Desktop/Coding/独立站/output/acquisition-repair-20261004/public-legacy-source-search/commoncrawl-page-33ece16fe4c4.html",
+          "originalHtmlFileSha256": "927f8c031b710263d32b4eecab97ca888e26a8d5831605251e7932475d80a819",
+          "originalPayloadSha256": "927f8c031b710263d32b4eecab97ca888e26a8d5831605251e7932475d80a819",
+          "recordEvidencePath": "/Users/qianbo/Desktop/Coding/独立站/output/acquisition-repair-20261004/public-legacy-source-search/commoncrawl-page-33ece16fe4c4-evidence.json",
+          "originalHref": "../product/showproduct.php?id=164",
+          "anchorNameAttribute": "网带炉",
+          "anchorVisibleText": "网带炉",
+          "rawAnchorHtml": "<a class=\"bg-white pro-li mt-5 d-block py-4 px-4\" href=\"../product/showproduct.php?id=164\" title=\"网带炉\">\n                            <i class=\"fa fa-search fa-2x text-white ico\"></i>\n                            <p class=\"text-center mt-2\">\n                                <img src=\"../upload/thumb_src/700_650/20200908150702_121.jpeg\" class=\"img-fluid img-responsive\" alt=\"网带炉\">\n                            </p>\n                            <h5 class=\"fs-18 mt-5 mb-2 text-center\">网带炉</h5>\n                            <p class=\"text-center fs-28 mb-2\"><i class=\"fa fa-arrow-circle-o-right\"></i></p>\n                        </a>",
+          "uniqueVisibleEquipmentName": [
+            "网带炉"
+          ],
+          "sameOldUrlAnchorOccurrencesInSource": 1
+        }
+      ],
+      "newTarget": "https://www.jssngyl.cn/zh/products/detail/mesh-belt-furnace",
+      "newRequestPath": "/zh/products/detail/mesh-belt-furnace",
+      "newVerifiedAt": "2026-10-04T08:24:51.389363+00:00",
+      "newStatus": 200,
+      "newCanonical": [
+        "https://www.jssngyl.cn/zh/products/detail/mesh-belt-furnace"
+      ],
+      "newNoindex": false,
+      "newH1": [
+        "网带炉｜小型工件连续热处理"
+      ],
+      "newPageKeyText": [
+        "网带炉｜小型工件连续热处理",
+        "网带连续输送"
+      ],
+      "publishedTypeSourceEvidence": {
+        "path": "frontend/src/components/products/industry-furnace-data/mesh-belt-furnace.ts",
+        "sourceCommit": "9c603ee690012455c01ed29c2781f542de9b1aef",
+        "sha256": "92589cebf4a5b525f63249883e04978d6496a6312aec48f6e89faf389652abbd",
+        "matchingQuotes": [
+          "网带炉｜小型工件连续热处理",
+          "网带连续输送"
+        ]
+      },
+      "mappingReason": "原目录明确给出此编号链接和炉型名称；现公开同炉型页面明确覆盖所列热源/台车/网带特征，详见逐条类型证据。",
+      "mappingMeaning": "同设备类型到当前公开类型页的直接永久跳转；不声称旧型号、尺寸、图片、参数或整篇原内容已迁移。"
+    },
+    {
+      "oldId": 165,
+      "oldUrl": "http://jssngyl.cn/product/showproduct.php?id=165",
+      "oldRequestPath": "/product/showproduct.php?id=165",
+      "oldTitle": "网带炉",
+      "sourceType": "original-directory-anchor",
+      "oldTextBoundary": "原目录/首页的真实链接与唯一明确设备名称；未取得该详情页正文，不声称原型号内容已迁移。",
+      "capturedAtUtc": "2025-11-18T06:26:35Z",
+      "officialArchiveIndex": "CC-MAIN-2025-47",
+      "sourceAnchors": [
+        {
+          "sourceOldUrl": "http://jssngyl.cn/product/product.php?class2=139",
+          "sourceTitle": "网带炉-江苏苏能工业炉有限公司 官方网站",
+          "archiveTimestamp": "20251118062635",
+          "sourceArchive": "Common Crawl CC-MAIN-2025-47",
+          "officialWarcDataUrl": "https://data.commoncrawl.org/crawl-data/CC-MAIN-2025-47/segments/1762439651195.78/warc/CC-MAIN-20251118060923-20251118090923-00189.warc.gz",
+          "byteRange": "bytes 12335572-12340676/889559563",
+          "warcTargetUri": "http://jssngyl.cn/product/product.php?class2=139",
+          "targetMatchesIndex": true,
+          "originalHtmlPath": "/Users/qianbo/Desktop/Coding/独立站/output/acquisition-repair-20261004/public-legacy-source-search/commoncrawl-page-6e2f57237cf8.html",
+          "originalHtmlFileSha256": "e806cdde5d9144df3a3d670b1adf65afe838d8eab21d990b5465997c4631a52f",
+          "originalPayloadSha256": "e806cdde5d9144df3a3d670b1adf65afe838d8eab21d990b5465997c4631a52f",
+          "recordEvidencePath": "/Users/qianbo/Desktop/Coding/独立站/output/acquisition-repair-20261004/public-legacy-source-search/commoncrawl-page-6e2f57237cf8-evidence.json",
+          "originalHref": "../product/showproduct.php?id=165",
+          "anchorNameAttribute": "网带炉",
+          "anchorVisibleText": "网带炉",
+          "rawAnchorHtml": "<a class=\"bg-white pro-li mt-5 d-block py-4 px-4\" href=\"../product/showproduct.php?id=165\" title=\"网带炉\">\n                            <i class=\"fa fa-search fa-2x text-white ico\"></i>\n                            <p class=\"text-center mt-2\">\n                                <img src=\"../upload/thumb_src/700_650/20200908150657_823.jpeg\" class=\"img-fluid img-responsive\" alt=\"网带炉\">\n                            </p>\n                            <h5 class=\"fs-18 mt-5 mb-2 text-center\">网带炉</h5>\n                            <p class=\"text-center fs-28 mb-2\"><i class=\"fa fa-arrow-circle-o-right\"></i></p>\n                        </a>",
+          "uniqueVisibleEquipmentName": [
+            "网带炉"
+          ],
+          "sameOldUrlAnchorOccurrencesInSource": 1
+        },
+        {
+          "sourceOldUrl": "http://jssngyl.cn/product/index.php?class1=127&page=2",
+          "sourceTitle": "产品展示-江苏苏能工业炉有限公司 官方网站-第2页",
+          "archiveTimestamp": "20251118072828",
+          "sourceArchive": "Common Crawl CC-MAIN-2025-47",
+          "officialWarcDataUrl": "https://data.commoncrawl.org/crawl-data/CC-MAIN-2025-47/segments/1762439651195.78/warc/CC-MAIN-20251118060923-20251118090923-00578.warc.gz",
+          "byteRange": "bytes 15805966-15811169/906761892",
+          "warcTargetUri": "http://jssngyl.cn/product/index.php?class1=127&page=2",
+          "targetMatchesIndex": true,
+          "originalHtmlPath": "/Users/qianbo/Desktop/Coding/独立站/output/acquisition-repair-20261004/public-legacy-source-search/commoncrawl-page-33ece16fe4c4.html",
+          "originalHtmlFileSha256": "927f8c031b710263d32b4eecab97ca888e26a8d5831605251e7932475d80a819",
+          "originalPayloadSha256": "927f8c031b710263d32b4eecab97ca888e26a8d5831605251e7932475d80a819",
+          "recordEvidencePath": "/Users/qianbo/Desktop/Coding/独立站/output/acquisition-repair-20261004/public-legacy-source-search/commoncrawl-page-33ece16fe4c4-evidence.json",
+          "originalHref": "../product/showproduct.php?id=165",
+          "anchorNameAttribute": "网带炉",
+          "anchorVisibleText": "网带炉",
+          "rawAnchorHtml": "<a class=\"bg-white pro-li mt-5 d-block py-4 px-4\" href=\"../product/showproduct.php?id=165\" title=\"网带炉\">\n                            <i class=\"fa fa-search fa-2x text-white ico\"></i>\n                            <p class=\"text-center mt-2\">\n                                <img src=\"../upload/thumb_src/700_650/20200908150657_823.jpeg\" class=\"img-fluid img-responsive\" alt=\"网带炉\">\n                            </p>\n                            <h5 class=\"fs-18 mt-5 mb-2 text-center\">网带炉</h5>\n                            <p class=\"text-center fs-28 mb-2\"><i class=\"fa fa-arrow-circle-o-right\"></i></p>\n                        </a>",
+          "uniqueVisibleEquipmentName": [
+            "网带炉"
+          ],
+          "sameOldUrlAnchorOccurrencesInSource": 1
+        }
+      ],
+      "newTarget": "https://www.jssngyl.cn/zh/products/detail/mesh-belt-furnace",
+      "newRequestPath": "/zh/products/detail/mesh-belt-furnace",
+      "newVerifiedAt": "2026-10-04T08:24:51.389363+00:00",
+      "newStatus": 200,
+      "newCanonical": [
+        "https://www.jssngyl.cn/zh/products/detail/mesh-belt-furnace"
+      ],
+      "newNoindex": false,
+      "newH1": [
+        "网带炉｜小型工件连续热处理"
+      ],
+      "newPageKeyText": [
+        "网带炉｜小型工件连续热处理",
+        "网带连续输送"
+      ],
+      "publishedTypeSourceEvidence": {
+        "path": "frontend/src/components/products/industry-furnace-data/mesh-belt-furnace.ts",
+        "sourceCommit": "9c603ee690012455c01ed29c2781f542de9b1aef",
+        "sha256": "92589cebf4a5b525f63249883e04978d6496a6312aec48f6e89faf389652abbd",
+        "matchingQuotes": [
+          "网带炉｜小型工件连续热处理",
+          "网带连续输送"
+        ]
+      },
+      "mappingReason": "原目录明确给出此编号链接和炉型名称；现公开同炉型页面明确覆盖所列热源/台车/网带特征，详见逐条类型证据。",
+      "mappingMeaning": "同设备类型到当前公开类型页的直接永久跳转；不声称旧型号、尺寸、图片、参数或整篇原内容已迁移。"
+    },
+    {
+      "oldId": 159,
+      "oldUrl": "http://jssngyl.cn/product/showproduct.php?id=159",
+      "oldRequestPath": "/product/showproduct.php?id=159",
+      "oldTitle": "可控气氛网带炉生产线",
+      "sourceType": "original-directory-anchor",
+      "oldTextBoundary": "原目录/首页的真实链接与唯一明确设备名称；未取得该详情页正文，不声称原型号内容已迁移。",
+      "capturedAtUtc": "2025-11-18T07:28:28Z",
+      "officialArchiveIndex": "CC-MAIN-2025-47",
+      "sourceAnchors": [
+        {
+          "sourceOldUrl": "http://jssngyl.cn/product/index.php?class1=127&page=2",
+          "sourceTitle": "产品展示-江苏苏能工业炉有限公司 官方网站-第2页",
+          "archiveTimestamp": "20251118072828",
+          "sourceArchive": "Common Crawl CC-MAIN-2025-47",
+          "officialWarcDataUrl": "https://data.commoncrawl.org/crawl-data/CC-MAIN-2025-47/segments/1762439651195.78/warc/CC-MAIN-20251118060923-20251118090923-00578.warc.gz",
+          "byteRange": "bytes 15805966-15811169/906761892",
+          "warcTargetUri": "http://jssngyl.cn/product/index.php?class1=127&page=2",
+          "targetMatchesIndex": true,
+          "originalHtmlPath": "/Users/qianbo/Desktop/Coding/独立站/output/acquisition-repair-20261004/public-legacy-source-search/commoncrawl-page-33ece16fe4c4.html",
+          "originalHtmlFileSha256": "927f8c031b710263d32b4eecab97ca888e26a8d5831605251e7932475d80a819",
+          "originalPayloadSha256": "927f8c031b710263d32b4eecab97ca888e26a8d5831605251e7932475d80a819",
+          "recordEvidencePath": "/Users/qianbo/Desktop/Coding/独立站/output/acquisition-repair-20261004/public-legacy-source-search/commoncrawl-page-33ece16fe4c4-evidence.json",
+          "originalHref": "../product/showproduct.php?id=159",
+          "anchorNameAttribute": "可控气氛网带炉生产线",
+          "anchorVisibleText": "可控气氛网带炉生产线",
+          "rawAnchorHtml": "<a class=\"bg-white pro-li mt-5 d-block py-4 px-4\" href=\"../product/showproduct.php?id=159\" title=\"可控气氛网带炉生产线\">\n                            <i class=\"fa fa-search fa-2x text-white ico\"></i>\n                            <p class=\"text-center mt-2\">\n                                <img src=\"../upload/thumb_src/700_650/20210913143438_518.png\" class=\"img-fluid img-responsive\" alt=\"可控气氛网带炉生产线\">\n                            </p>\n                            <h5 class=\"fs-18 mt-5 mb-2 text-center\">可控气氛网带炉生产线</h5>\n                            <p class=\"text-center fs-28 mb-2\"><i class=\"fa fa-arrow-circle-o-right\"></i></p>\n                        </a>",
+          "uniqueVisibleEquipmentName": [
+            "可控气氛网带炉生产线"
+          ],
+          "sameOldUrlAnchorOccurrencesInSource": 1
+        }
+      ],
+      "newTarget": "https://www.jssngyl.cn/zh/products/detail/mesh-belt-furnace",
+      "newRequestPath": "/zh/products/detail/mesh-belt-furnace",
+      "newVerifiedAt": "2026-10-04T08:24:51.389363+00:00",
+      "newStatus": 200,
+      "newCanonical": [
+        "https://www.jssngyl.cn/zh/products/detail/mesh-belt-furnace"
+      ],
+      "newNoindex": false,
+      "newH1": [
+        "网带炉｜小型工件连续热处理"
+      ],
+      "newPageKeyText": [
+        "网带连续输送",
+        "淬火＋清洗＋回火联线",
+        "可控气氛需密封与联锁",
+        "网带式淬火回火机组"
+      ],
+      "publishedTypeSourceEvidence": {
+        "path": "frontend/src/components/products/industry-furnace-data/mesh-belt-furnace.ts",
+        "sourceCommit": "9c603ee690012455c01ed29c2781f542de9b1aef",
+        "sha256": "92589cebf4a5b525f63249883e04978d6496a6312aec48f6e89faf389652abbd",
+        "matchingQuotes": [
+          "网带连续输送",
+          "淬火＋清洗＋回火联线",
+          "可控气氛需密封与联锁",
+          "网带式淬火回火机组"
+        ]
+      },
+      "mappingReason": "现网带炉类型页明确提供可控气氛及淬火清洗回火联线方案。原目录未指明某特定渗碳工艺，不硬配渗碳专线。",
+      "mappingMeaning": "同类网带设备/配置的承接，详情正文未获保存；不声称旧整线工艺、产能、型号、图片或尺寸已迁移。",
+      "oldTitleHasProductionLine": true,
+      "newPageExplicitLineConfiguration": "淬火＋清洗＋回火联线；可控气氛需密封与联锁",
+      "oldSpecificProductionLineParametersRestored": false
+    },
+    {
+      "oldId": 160,
+      "oldUrl": "http://jssngyl.cn/product/showproduct.php?id=160",
+      "oldRequestPath": "/product/showproduct.php?id=160",
+      "oldTitle": "可控气氛网带炉生产线",
+      "sourceType": "original-directory-anchor",
+      "oldTextBoundary": "原目录/首页的真实链接与唯一明确设备名称；未取得该详情页正文，不声称原型号内容已迁移。",
+      "capturedAtUtc": "2025-11-18T07:28:28Z",
+      "officialArchiveIndex": "CC-MAIN-2025-47",
+      "sourceAnchors": [
+        {
+          "sourceOldUrl": "http://jssngyl.cn/product/index.php?class1=127&page=2",
+          "sourceTitle": "产品展示-江苏苏能工业炉有限公司 官方网站-第2页",
+          "archiveTimestamp": "20251118072828",
+          "sourceArchive": "Common Crawl CC-MAIN-2025-47",
+          "officialWarcDataUrl": "https://data.commoncrawl.org/crawl-data/CC-MAIN-2025-47/segments/1762439651195.78/warc/CC-MAIN-20251118060923-20251118090923-00578.warc.gz",
+          "byteRange": "bytes 15805966-15811169/906761892",
+          "warcTargetUri": "http://jssngyl.cn/product/index.php?class1=127&page=2",
+          "targetMatchesIndex": true,
+          "originalHtmlPath": "/Users/qianbo/Desktop/Coding/独立站/output/acquisition-repair-20261004/public-legacy-source-search/commoncrawl-page-33ece16fe4c4.html",
+          "originalHtmlFileSha256": "927f8c031b710263d32b4eecab97ca888e26a8d5831605251e7932475d80a819",
+          "originalPayloadSha256": "927f8c031b710263d32b4eecab97ca888e26a8d5831605251e7932475d80a819",
+          "recordEvidencePath": "/Users/qianbo/Desktop/Coding/独立站/output/acquisition-repair-20261004/public-legacy-source-search/commoncrawl-page-33ece16fe4c4-evidence.json",
+          "originalHref": "../product/showproduct.php?id=160",
+          "anchorNameAttribute": "可控气氛网带炉生产线",
+          "anchorVisibleText": "可控气氛网带炉生产线",
+          "rawAnchorHtml": "<a class=\"bg-white pro-li mt-5 d-block py-4 px-4\" href=\"../product/showproduct.php?id=160\" title=\"可控气氛网带炉生产线\">\n                            <i class=\"fa fa-search fa-2x text-white ico\"></i>\n                            <p class=\"text-center mt-2\">\n                                <img src=\"../upload/thumb_src/700_650/20210913143423_845.png\" class=\"img-fluid img-responsive\" alt=\"可控气氛网带炉生产线\">\n                            </p>\n                            <h5 class=\"fs-18 mt-5 mb-2 text-center\">可控气氛网带炉生产线</h5>\n                            <p class=\"text-center fs-28 mb-2\"><i class=\"fa fa-arrow-circle-o-right\"></i></p>\n                        </a>",
+          "uniqueVisibleEquipmentName": [
+            "可控气氛网带炉生产线"
+          ],
+          "sameOldUrlAnchorOccurrencesInSource": 1
+        }
+      ],
+      "newTarget": "https://www.jssngyl.cn/zh/products/detail/mesh-belt-furnace",
+      "newRequestPath": "/zh/products/detail/mesh-belt-furnace",
+      "newVerifiedAt": "2026-10-04T08:24:51.389363+00:00",
+      "newStatus": 200,
+      "newCanonical": [
+        "https://www.jssngyl.cn/zh/products/detail/mesh-belt-furnace"
+      ],
+      "newNoindex": false,
+      "newH1": [
+        "网带炉｜小型工件连续热处理"
+      ],
+      "newPageKeyText": [
+        "网带连续输送",
+        "淬火＋清洗＋回火联线",
+        "可控气氛需密封与联锁",
+        "网带式淬火回火机组"
+      ],
+      "publishedTypeSourceEvidence": {
+        "path": "frontend/src/components/products/industry-furnace-data/mesh-belt-furnace.ts",
+        "sourceCommit": "9c603ee690012455c01ed29c2781f542de9b1aef",
+        "sha256": "92589cebf4a5b525f63249883e04978d6496a6312aec48f6e89faf389652abbd",
+        "matchingQuotes": [
+          "网带连续输送",
+          "淬火＋清洗＋回火联线",
+          "可控气氛需密封与联锁",
+          "网带式淬火回火机组"
+        ]
+      },
+      "mappingReason": "现网带炉类型页明确提供可控气氛及淬火清洗回火联线方案。原目录未指明某特定渗碳工艺，不硬配渗碳专线。",
+      "mappingMeaning": "同类网带设备/配置的承接，详情正文未获保存；不声称旧整线工艺、产能、型号、图片或尺寸已迁移。",
+      "oldTitleHasProductionLine": true,
+      "newPageExplicitLineConfiguration": "淬火＋清洗＋回火联线；可控气氛需密封与联锁",
+      "oldSpecificProductionLineParametersRestored": false
+    },
+    {
+      "oldId": 161,
+      "oldUrl": "http://jssngyl.cn/product/showproduct.php?id=161",
+      "oldRequestPath": "/product/showproduct.php?id=161",
+      "oldTitle": "可控气氛网带炉生产线",
+      "sourceType": "original-directory-anchor",
+      "oldTextBoundary": "原目录/首页的真实链接与唯一明确设备名称；未取得该详情页正文，不声称原型号内容已迁移。",
+      "capturedAtUtc": "2025-11-18T07:28:28Z",
+      "officialArchiveIndex": "CC-MAIN-2025-47",
+      "sourceAnchors": [
+        {
+          "sourceOldUrl": "http://jssngyl.cn/product/index.php?class1=127&page=2",
+          "sourceTitle": "产品展示-江苏苏能工业炉有限公司 官方网站-第2页",
+          "archiveTimestamp": "20251118072828",
+          "sourceArchive": "Common Crawl CC-MAIN-2025-47",
+          "officialWarcDataUrl": "https://data.commoncrawl.org/crawl-data/CC-MAIN-2025-47/segments/1762439651195.78/warc/CC-MAIN-20251118060923-20251118090923-00578.warc.gz",
+          "byteRange": "bytes 15805966-15811169/906761892",
+          "warcTargetUri": "http://jssngyl.cn/product/index.php?class1=127&page=2",
+          "targetMatchesIndex": true,
+          "originalHtmlPath": "/Users/qianbo/Desktop/Coding/独立站/output/acquisition-repair-20261004/public-legacy-source-search/commoncrawl-page-33ece16fe4c4.html",
+          "originalHtmlFileSha256": "927f8c031b710263d32b4eecab97ca888e26a8d5831605251e7932475d80a819",
+          "originalPayloadSha256": "927f8c031b710263d32b4eecab97ca888e26a8d5831605251e7932475d80a819",
+          "recordEvidencePath": "/Users/qianbo/Desktop/Coding/独立站/output/acquisition-repair-20261004/public-legacy-source-search/commoncrawl-page-33ece16fe4c4-evidence.json",
+          "originalHref": "../product/showproduct.php?id=161",
+          "anchorNameAttribute": "可控气氛网带炉生产线",
+          "anchorVisibleText": "可控气氛网带炉生产线",
+          "rawAnchorHtml": "<a class=\"bg-white pro-li mt-5 d-block py-4 px-4\" href=\"../product/showproduct.php?id=161\" title=\"可控气氛网带炉生产线\">\n                            <i class=\"fa fa-search fa-2x text-white ico\"></i>\n                            <p class=\"text-center mt-2\">\n                                <img src=\"../upload/thumb_src/700_650/20210913143408_548.png\" class=\"img-fluid img-responsive\" alt=\"可控气氛网带炉生产线\">\n                            </p>\n                            <h5 class=\"fs-18 mt-5 mb-2 text-center\">可控气氛网带炉生产线</h5>\n                            <p class=\"text-center fs-28 mb-2\"><i class=\"fa fa-arrow-circle-o-right\"></i></p>\n                        </a>",
+          "uniqueVisibleEquipmentName": [
+            "可控气氛网带炉生产线"
+          ],
+          "sameOldUrlAnchorOccurrencesInSource": 1
+        }
+      ],
+      "newTarget": "https://www.jssngyl.cn/zh/products/detail/mesh-belt-furnace",
+      "newRequestPath": "/zh/products/detail/mesh-belt-furnace",
+      "newVerifiedAt": "2026-10-04T08:24:51.389363+00:00",
+      "newStatus": 200,
+      "newCanonical": [
+        "https://www.jssngyl.cn/zh/products/detail/mesh-belt-furnace"
+      ],
+      "newNoindex": false,
+      "newH1": [
+        "网带炉｜小型工件连续热处理"
+      ],
+      "newPageKeyText": [
+        "网带连续输送",
+        "淬火＋清洗＋回火联线",
+        "可控气氛需密封与联锁",
+        "网带式淬火回火机组"
+      ],
+      "publishedTypeSourceEvidence": {
+        "path": "frontend/src/components/products/industry-furnace-data/mesh-belt-furnace.ts",
+        "sourceCommit": "9c603ee690012455c01ed29c2781f542de9b1aef",
+        "sha256": "92589cebf4a5b525f63249883e04978d6496a6312aec48f6e89faf389652abbd",
+        "matchingQuotes": [
+          "网带连续输送",
+          "淬火＋清洗＋回火联线",
+          "可控气氛需密封与联锁",
+          "网带式淬火回火机组"
+        ]
+      },
+      "mappingReason": "现网带炉类型页明确提供可控气氛及淬火清洗回火联线方案。原目录未指明某特定渗碳工艺，不硬配渗碳专线。",
+      "mappingMeaning": "同类网带设备/配置的承接，详情正文未获保存；不声称旧整线工艺、产能、型号、图片或尺寸已迁移。",
+      "oldTitleHasProductionLine": true,
+      "newPageExplicitLineConfiguration": "淬火＋清洗＋回火联线；可控气氛需密封与联锁",
+      "oldSpecificProductionLineParametersRestored": false
+    },
+    {
+      "oldId": 162,
+      "oldUrl": "http://jssngyl.cn/product/showproduct.php?id=162",
+      "oldRequestPath": "/product/showproduct.php?id=162",
+      "oldTitle": "可控气氛网带炉生产线",
+      "sourceType": "original-directory-anchor",
+      "oldTextBoundary": "原目录/首页的真实链接与唯一明确设备名称；未取得该详情页正文，不声称原型号内容已迁移。",
+      "capturedAtUtc": "2025-11-18T06:26:35Z",
+      "officialArchiveIndex": "CC-MAIN-2025-47",
+      "sourceAnchors": [
+        {
+          "sourceOldUrl": "http://jssngyl.cn/product/product.php?class2=139",
+          "sourceTitle": "网带炉-江苏苏能工业炉有限公司 官方网站",
+          "archiveTimestamp": "20251118062635",
+          "sourceArchive": "Common Crawl CC-MAIN-2025-47",
+          "officialWarcDataUrl": "https://data.commoncrawl.org/crawl-data/CC-MAIN-2025-47/segments/1762439651195.78/warc/CC-MAIN-20251118060923-20251118090923-00189.warc.gz",
+          "byteRange": "bytes 12335572-12340676/889559563",
+          "warcTargetUri": "http://jssngyl.cn/product/product.php?class2=139",
+          "targetMatchesIndex": true,
+          "originalHtmlPath": "/Users/qianbo/Desktop/Coding/独立站/output/acquisition-repair-20261004/public-legacy-source-search/commoncrawl-page-6e2f57237cf8.html",
+          "originalHtmlFileSha256": "e806cdde5d9144df3a3d670b1adf65afe838d8eab21d990b5465997c4631a52f",
+          "originalPayloadSha256": "e806cdde5d9144df3a3d670b1adf65afe838d8eab21d990b5465997c4631a52f",
+          "recordEvidencePath": "/Users/qianbo/Desktop/Coding/独立站/output/acquisition-repair-20261004/public-legacy-source-search/commoncrawl-page-6e2f57237cf8-evidence.json",
+          "originalHref": "../product/showproduct.php?id=162",
+          "anchorNameAttribute": "可控气氛网带炉生产线",
+          "anchorVisibleText": "可控气氛网带炉生产线",
+          "rawAnchorHtml": "<a class=\"bg-white pro-li mt-5 d-block py-4 px-4\" href=\"../product/showproduct.php?id=162\" title=\"可控气氛网带炉生产线\">\n                            <i class=\"fa fa-search fa-2x text-white ico\"></i>\n                            <p class=\"text-center mt-2\">\n                                <img src=\"../upload/thumb_src/700_650/20210913143346_320.png\" class=\"img-fluid img-responsive\" alt=\"可控气氛网带炉生产线\">\n                            </p>\n                            <h5 class=\"fs-18 mt-5 mb-2 text-center\">可控气氛网带炉生产线</h5>\n                            <p class=\"text-center fs-28 mb-2\"><i class=\"fa fa-arrow-circle-o-right\"></i></p>\n                        </a>",
+          "uniqueVisibleEquipmentName": [
+            "可控气氛网带炉生产线"
+          ],
+          "sameOldUrlAnchorOccurrencesInSource": 1
+        },
+        {
+          "sourceOldUrl": "http://jssngyl.cn/product/index.php?class1=127&page=2",
+          "sourceTitle": "产品展示-江苏苏能工业炉有限公司 官方网站-第2页",
+          "archiveTimestamp": "20251118072828",
+          "sourceArchive": "Common Crawl CC-MAIN-2025-47",
+          "officialWarcDataUrl": "https://data.commoncrawl.org/crawl-data/CC-MAIN-2025-47/segments/1762439651195.78/warc/CC-MAIN-20251118060923-20251118090923-00578.warc.gz",
+          "byteRange": "bytes 15805966-15811169/906761892",
+          "warcTargetUri": "http://jssngyl.cn/product/index.php?class1=127&page=2",
+          "targetMatchesIndex": true,
+          "originalHtmlPath": "/Users/qianbo/Desktop/Coding/独立站/output/acquisition-repair-20261004/public-legacy-source-search/commoncrawl-page-33ece16fe4c4.html",
+          "originalHtmlFileSha256": "927f8c031b710263d32b4eecab97ca888e26a8d5831605251e7932475d80a819",
+          "originalPayloadSha256": "927f8c031b710263d32b4eecab97ca888e26a8d5831605251e7932475d80a819",
+          "recordEvidencePath": "/Users/qianbo/Desktop/Coding/独立站/output/acquisition-repair-20261004/public-legacy-source-search/commoncrawl-page-33ece16fe4c4-evidence.json",
+          "originalHref": "../product/showproduct.php?id=162",
+          "anchorNameAttribute": "可控气氛网带炉生产线",
+          "anchorVisibleText": "可控气氛网带炉生产线",
+          "rawAnchorHtml": "<a class=\"bg-white pro-li mt-5 d-block py-4 px-4\" href=\"../product/showproduct.php?id=162\" title=\"可控气氛网带炉生产线\">\n                            <i class=\"fa fa-search fa-2x text-white ico\"></i>\n                            <p class=\"text-center mt-2\">\n                                <img src=\"../upload/thumb_src/700_650/20210913143346_320.png\" class=\"img-fluid img-responsive\" alt=\"可控气氛网带炉生产线\">\n                            </p>\n                            <h5 class=\"fs-18 mt-5 mb-2 text-center\">可控气氛网带炉生产线</h5>\n                            <p class=\"text-center fs-28 mb-2\"><i class=\"fa fa-arrow-circle-o-right\"></i></p>\n                        </a>",
+          "uniqueVisibleEquipmentName": [
+            "可控气氛网带炉生产线"
+          ],
+          "sameOldUrlAnchorOccurrencesInSource": 1
+        }
+      ],
+      "newTarget": "https://www.jssngyl.cn/zh/products/detail/mesh-belt-furnace",
+      "newRequestPath": "/zh/products/detail/mesh-belt-furnace",
+      "newVerifiedAt": "2026-10-04T08:24:51.389363+00:00",
+      "newStatus": 200,
+      "newCanonical": [
+        "https://www.jssngyl.cn/zh/products/detail/mesh-belt-furnace"
+      ],
+      "newNoindex": false,
+      "newH1": [
+        "网带炉｜小型工件连续热处理"
+      ],
+      "newPageKeyText": [
+        "网带连续输送",
+        "淬火＋清洗＋回火联线",
+        "可控气氛需密封与联锁",
+        "网带式淬火回火机组"
+      ],
+      "publishedTypeSourceEvidence": {
+        "path": "frontend/src/components/products/industry-furnace-data/mesh-belt-furnace.ts",
+        "sourceCommit": "9c603ee690012455c01ed29c2781f542de9b1aef",
+        "sha256": "92589cebf4a5b525f63249883e04978d6496a6312aec48f6e89faf389652abbd",
+        "matchingQuotes": [
+          "网带连续输送",
+          "淬火＋清洗＋回火联线",
+          "可控气氛需密封与联锁",
+          "网带式淬火回火机组"
+        ]
+      },
+      "mappingReason": "现网带炉类型页明确提供可控气氛及淬火清洗回火联线方案。原目录未指明某特定渗碳工艺，不硬配渗碳专线。",
+      "mappingMeaning": "同类网带设备/配置的承接，详情正文未获保存；不声称旧整线工艺、产能、型号、图片或尺寸已迁移。",
+      "oldTitleHasProductionLine": true,
+      "newPageExplicitLineConfiguration": "淬火＋清洗＋回火联线；可控气氛需密封与联锁",
+      "oldSpecificProductionLineParametersRestored": false
+    },
+    {
+      "oldId": 163,
+      "oldUrl": "http://jssngyl.cn/product/showproduct.php?id=163",
+      "oldRequestPath": "/product/showproduct.php?id=163",
+      "oldTitle": "可控气氛网带炉生产线",
+      "sourceType": "original-directory-anchor",
+      "oldTextBoundary": "原目录/首页的真实链接与唯一明确设备名称；未取得该详情页正文，不声称原型号内容已迁移。",
+      "capturedAtUtc": "2025-11-18T06:26:35Z",
+      "officialArchiveIndex": "CC-MAIN-2025-47",
+      "sourceAnchors": [
+        {
+          "sourceOldUrl": "http://jssngyl.cn/product/product.php?class2=139",
+          "sourceTitle": "网带炉-江苏苏能工业炉有限公司 官方网站",
+          "archiveTimestamp": "20251118062635",
+          "sourceArchive": "Common Crawl CC-MAIN-2025-47",
+          "officialWarcDataUrl": "https://data.commoncrawl.org/crawl-data/CC-MAIN-2025-47/segments/1762439651195.78/warc/CC-MAIN-20251118060923-20251118090923-00189.warc.gz",
+          "byteRange": "bytes 12335572-12340676/889559563",
+          "warcTargetUri": "http://jssngyl.cn/product/product.php?class2=139",
+          "targetMatchesIndex": true,
+          "originalHtmlPath": "/Users/qianbo/Desktop/Coding/独立站/output/acquisition-repair-20261004/public-legacy-source-search/commoncrawl-page-6e2f57237cf8.html",
+          "originalHtmlFileSha256": "e806cdde5d9144df3a3d670b1adf65afe838d8eab21d990b5465997c4631a52f",
+          "originalPayloadSha256": "e806cdde5d9144df3a3d670b1adf65afe838d8eab21d990b5465997c4631a52f",
+          "recordEvidencePath": "/Users/qianbo/Desktop/Coding/独立站/output/acquisition-repair-20261004/public-legacy-source-search/commoncrawl-page-6e2f57237cf8-evidence.json",
+          "originalHref": "../product/showproduct.php?id=163",
+          "anchorNameAttribute": "可控气氛网带炉生产线",
+          "anchorVisibleText": "可控气氛网带炉生产线",
+          "rawAnchorHtml": "<a class=\"bg-white pro-li mt-5 d-block py-4 px-4\" href=\"../product/showproduct.php?id=163\" title=\"可控气氛网带炉生产线\">\n                            <i class=\"fa fa-search fa-2x text-white ico\"></i>\n                            <p class=\"text-center mt-2\">\n                                <img src=\"../upload/thumb_src/700_650/20210913143234_802.png\" class=\"img-fluid img-responsive\" alt=\"可控气氛网带炉生产线\">\n                            </p>\n                            <h5 class=\"fs-18 mt-5 mb-2 text-center\">可控气氛网带炉生产线</h5>\n                            <p class=\"text-center fs-28 mb-2\"><i class=\"fa fa-arrow-circle-o-right\"></i></p>\n                        </a>",
+          "uniqueVisibleEquipmentName": [
+            "可控气氛网带炉生产线"
+          ],
+          "sameOldUrlAnchorOccurrencesInSource": 1
+        },
+        {
+          "sourceOldUrl": "http://jssngyl.cn/product/index.php?class1=127&page=2",
+          "sourceTitle": "产品展示-江苏苏能工业炉有限公司 官方网站-第2页",
+          "archiveTimestamp": "20251118072828",
+          "sourceArchive": "Common Crawl CC-MAIN-2025-47",
+          "officialWarcDataUrl": "https://data.commoncrawl.org/crawl-data/CC-MAIN-2025-47/segments/1762439651195.78/warc/CC-MAIN-20251118060923-20251118090923-00578.warc.gz",
+          "byteRange": "bytes 15805966-15811169/906761892",
+          "warcTargetUri": "http://jssngyl.cn/product/index.php?class1=127&page=2",
+          "targetMatchesIndex": true,
+          "originalHtmlPath": "/Users/qianbo/Desktop/Coding/独立站/output/acquisition-repair-20261004/public-legacy-source-search/commoncrawl-page-33ece16fe4c4.html",
+          "originalHtmlFileSha256": "927f8c031b710263d32b4eecab97ca888e26a8d5831605251e7932475d80a819",
+          "originalPayloadSha256": "927f8c031b710263d32b4eecab97ca888e26a8d5831605251e7932475d80a819",
+          "recordEvidencePath": "/Users/qianbo/Desktop/Coding/独立站/output/acquisition-repair-20261004/public-legacy-source-search/commoncrawl-page-33ece16fe4c4-evidence.json",
+          "originalHref": "../product/showproduct.php?id=163",
+          "anchorNameAttribute": "可控气氛网带炉生产线",
+          "anchorVisibleText": "可控气氛网带炉生产线",
+          "rawAnchorHtml": "<a class=\"bg-white pro-li mt-5 d-block py-4 px-4\" href=\"../product/showproduct.php?id=163\" title=\"可控气氛网带炉生产线\">\n                            <i class=\"fa fa-search fa-2x text-white ico\"></i>\n                            <p class=\"text-center mt-2\">\n                                <img src=\"../upload/thumb_src/700_650/20210913143234_802.png\" class=\"img-fluid img-responsive\" alt=\"可控气氛网带炉生产线\">\n                            </p>\n                            <h5 class=\"fs-18 mt-5 mb-2 text-center\">可控气氛网带炉生产线</h5>\n                            <p class=\"text-center fs-28 mb-2\"><i class=\"fa fa-arrow-circle-o-right\"></i></p>\n                        </a>",
+          "uniqueVisibleEquipmentName": [
+            "可控气氛网带炉生产线"
+          ],
+          "sameOldUrlAnchorOccurrencesInSource": 1
+        }
+      ],
+      "newTarget": "https://www.jssngyl.cn/zh/products/detail/mesh-belt-furnace",
+      "newRequestPath": "/zh/products/detail/mesh-belt-furnace",
+      "newVerifiedAt": "2026-10-04T08:24:51.389363+00:00",
+      "newStatus": 200,
+      "newCanonical": [
+        "https://www.jssngyl.cn/zh/products/detail/mesh-belt-furnace"
+      ],
+      "newNoindex": false,
+      "newH1": [
+        "网带炉｜小型工件连续热处理"
+      ],
+      "newPageKeyText": [
+        "网带连续输送",
+        "淬火＋清洗＋回火联线",
+        "可控气氛需密封与联锁",
+        "网带式淬火回火机组"
+      ],
+      "publishedTypeSourceEvidence": {
+        "path": "frontend/src/components/products/industry-furnace-data/mesh-belt-furnace.ts",
+        "sourceCommit": "9c603ee690012455c01ed29c2781f542de9b1aef",
+        "sha256": "92589cebf4a5b525f63249883e04978d6496a6312aec48f6e89faf389652abbd",
+        "matchingQuotes": [
+          "网带连续输送",
+          "淬火＋清洗＋回火联线",
+          "可控气氛需密封与联锁",
+          "网带式淬火回火机组"
+        ]
+      },
+      "mappingReason": "现网带炉类型页明确提供可控气氛及淬火清洗回火联线方案。原目录未指明某特定渗碳工艺，不硬配渗碳专线。",
+      "mappingMeaning": "同类网带设备/配置的承接，详情正文未获保存；不声称旧整线工艺、产能、型号、图片或尺寸已迁移。",
+      "oldTitleHasProductionLine": true,
+      "newPageExplicitLineConfiguration": "淬火＋清洗＋回火联线；可控气氛需密封与联锁",
+      "oldSpecificProductionLineParametersRestored": false
+    },
+    {
+      "oldId": 170,
+      "oldUrl": "http://jssngyl.cn/product/showproduct.php?id=170",
+      "oldRequestPath": "/product/showproduct.php?id=170",
+      "oldTitle": "托辊网带炉",
+      "sourceType": "original-directory-anchor",
+      "oldTextBoundary": "原目录/首页的真实链接与唯一明确设备名称；未取得该详情页正文，不声称原型号内容已迁移。",
+      "capturedAtUtc": "2025-11-18T06:26:35Z",
+      "officialArchiveIndex": "CC-MAIN-2025-47",
+      "sourceAnchors": [
+        {
+          "sourceOldUrl": "http://jssngyl.cn/product/product.php?class2=139",
+          "sourceTitle": "网带炉-江苏苏能工业炉有限公司 官方网站",
+          "archiveTimestamp": "20251118062635",
+          "sourceArchive": "Common Crawl CC-MAIN-2025-47",
+          "officialWarcDataUrl": "https://data.commoncrawl.org/crawl-data/CC-MAIN-2025-47/segments/1762439651195.78/warc/CC-MAIN-20251118060923-20251118090923-00189.warc.gz",
+          "byteRange": "bytes 12335572-12340676/889559563",
+          "warcTargetUri": "http://jssngyl.cn/product/product.php?class2=139",
+          "targetMatchesIndex": true,
+          "originalHtmlPath": "/Users/qianbo/Desktop/Coding/独立站/output/acquisition-repair-20261004/public-legacy-source-search/commoncrawl-page-6e2f57237cf8.html",
+          "originalHtmlFileSha256": "e806cdde5d9144df3a3d670b1adf65afe838d8eab21d990b5465997c4631a52f",
+          "originalPayloadSha256": "e806cdde5d9144df3a3d670b1adf65afe838d8eab21d990b5465997c4631a52f",
+          "recordEvidencePath": "/Users/qianbo/Desktop/Coding/独立站/output/acquisition-repair-20261004/public-legacy-source-search/commoncrawl-page-6e2f57237cf8-evidence.json",
+          "originalHref": "../product/showproduct.php?id=170",
+          "anchorNameAttribute": "托辊网带炉",
+          "anchorVisibleText": "托辊网带炉",
+          "rawAnchorHtml": "<a class=\"bg-white pro-li mt-5 d-block py-4 px-4\" href=\"../product/showproduct.php?id=170\" title=\"托辊网带炉\">\n                            <i class=\"fa fa-search fa-2x text-white ico\"></i>\n                            <p class=\"text-center mt-2\">\n                                <img src=\"../upload/thumb_src/700_650/20200514103118_764.jpeg\" class=\"img-fluid img-responsive\" alt=\"托辊网带炉\">\n                            </p>\n                            <h5 class=\"fs-18 mt-5 mb-2 text-center\">托辊网带炉</h5>\n                            <p class=\"text-center fs-28 mb-2\"><i class=\"fa fa-arrow-circle-o-right\"></i></p>\n                        </a>",
+          "uniqueVisibleEquipmentName": [
+            "托辊网带炉"
+          ],
+          "sameOldUrlAnchorOccurrencesInSource": 1
+        },
+        {
+          "sourceOldUrl": "http://jssngyl.cn/",
+          "sourceTitle": "江苏苏能工业炉有限公司 官方网站",
+          "archiveTimestamp": "20251118080704",
+          "sourceArchive": "Common Crawl CC-MAIN-2025-47",
+          "officialWarcDataUrl": "https://data.commoncrawl.org/crawl-data/CC-MAIN-2025-47/segments/1762439651195.78/warc/CC-MAIN-20251118060923-20251118090923-00939.warc.gz",
+          "byteRange": "bytes 10671393-10677594/896891510",
+          "warcTargetUri": "http://jssngyl.cn/",
+          "targetMatchesIndex": true,
+          "originalHtmlPath": "/Users/qianbo/Desktop/Coding/独立站/output/acquisition-repair-20261004/public-legacy-source-search/commoncrawl-page-377631dc4700.html",
+          "originalHtmlFileSha256": "f22da9f77cf6c9bc6b23eecd6c930877ab5074928d85b363c931b644dd06fd49",
+          "originalPayloadSha256": "f22da9f77cf6c9bc6b23eecd6c930877ab5074928d85b363c931b644dd06fd49",
+          "recordEvidencePath": "/Users/qianbo/Desktop/Coding/独立站/output/acquisition-repair-20261004/public-legacy-source-search/commoncrawl-page-377631dc4700-evidence.json",
+          "originalHref": "product/showproduct.php?id=170",
+          "anchorNameAttribute": null,
+          "anchorVisibleText": "托辊网带炉 查看详情",
+          "rawAnchorHtml": "<a href=\"product/showproduct.php?id=170\">\n                                    <div class=\"pro-img\"><img src=\"upload/wdl/20200514103118_764.jpeg\" alt=\"托辊网带炉\"></div>\n                                    <div class=\"pro-cover\"></div>\n                                    <h5>托辊网带炉</h5>\n                                    <div class=\"more\">\n                                        <p>查看详情</p>\n                                        <i class=\"fa fa-link\"></i>\n                                    </div>\n                                </a>",
+          "uniqueVisibleEquipmentName": [
+            "托辊网带炉"
+          ],
+          "sameOldUrlAnchorOccurrencesInSource": 1
+        }
+      ],
+      "newTarget": "https://www.jssngyl.cn/zh/products/detail/mesh-belt-furnace",
+      "newRequestPath": "/zh/products/detail/mesh-belt-furnace",
+      "newVerifiedAt": "2026-10-04T08:24:51.389363+00:00",
+      "newStatus": 200,
+      "newCanonical": [
+        "https://www.jssngyl.cn/zh/products/detail/mesh-belt-furnace"
+      ],
+      "newNoindex": false,
+      "newH1": [
+        "网带炉｜小型工件连续热处理"
+      ],
+      "newPageKeyText": [
+        "网带连续输送",
+        "托辊支承按载荷选配"
+      ],
+      "publishedTypeSourceEvidence": {
+        "path": "frontend/src/components/products/industry-furnace-data/mesh-belt-furnace.ts",
+        "sourceCommit": "9c603ee690012455c01ed29c2781f542de9b1aef",
+        "sha256": "92589cebf4a5b525f63249883e04978d6496a6312aec48f6e89faf389652abbd",
+        "matchingQuotes": [
+          "网带连续输送",
+          "托辊支承按载荷选配"
+        ]
+      },
+      "mappingReason": "原目录明确托辊网带炉/网带托辊炉，现通用网带炉页明确托辊支承按载荷选配；不错误配成辊底炉。",
+      "mappingMeaning": "同类网带设备/配置的承接，详情正文未获保存；不声称旧整线工艺、产能、型号、图片或尺寸已迁移。"
+    },
+    {
+      "oldId": 171,
+      "oldUrl": "http://jssngyl.cn/product/showproduct.php?id=171",
+      "oldRequestPath": "/product/showproduct.php?id=171",
+      "oldTitle": "托辊网带炉",
+      "sourceType": "original-directory-anchor",
+      "oldTextBoundary": "原目录/首页的真实链接与唯一明确设备名称；未取得该详情页正文，不声称原型号内容已迁移。",
+      "capturedAtUtc": "2025-11-18T06:26:35Z",
+      "officialArchiveIndex": "CC-MAIN-2025-47",
+      "sourceAnchors": [
+        {
+          "sourceOldUrl": "http://jssngyl.cn/product/product.php?class2=139",
+          "sourceTitle": "网带炉-江苏苏能工业炉有限公司 官方网站",
+          "archiveTimestamp": "20251118062635",
+          "sourceArchive": "Common Crawl CC-MAIN-2025-47",
+          "officialWarcDataUrl": "https://data.commoncrawl.org/crawl-data/CC-MAIN-2025-47/segments/1762439651195.78/warc/CC-MAIN-20251118060923-20251118090923-00189.warc.gz",
+          "byteRange": "bytes 12335572-12340676/889559563",
+          "warcTargetUri": "http://jssngyl.cn/product/product.php?class2=139",
+          "targetMatchesIndex": true,
+          "originalHtmlPath": "/Users/qianbo/Desktop/Coding/独立站/output/acquisition-repair-20261004/public-legacy-source-search/commoncrawl-page-6e2f57237cf8.html",
+          "originalHtmlFileSha256": "e806cdde5d9144df3a3d670b1adf65afe838d8eab21d990b5465997c4631a52f",
+          "originalPayloadSha256": "e806cdde5d9144df3a3d670b1adf65afe838d8eab21d990b5465997c4631a52f",
+          "recordEvidencePath": "/Users/qianbo/Desktop/Coding/独立站/output/acquisition-repair-20261004/public-legacy-source-search/commoncrawl-page-6e2f57237cf8-evidence.json",
+          "originalHref": "../product/showproduct.php?id=171",
+          "anchorNameAttribute": "托辊网带炉",
+          "anchorVisibleText": "托辊网带炉",
+          "rawAnchorHtml": "<a class=\"bg-white pro-li mt-5 d-block py-4 px-4\" href=\"../product/showproduct.php?id=171\" title=\"托辊网带炉\">\n                            <i class=\"fa fa-search fa-2x text-white ico\"></i>\n                            <p class=\"text-center mt-2\">\n                                <img src=\"../upload/thumb_src/700_650/20200514103142_547.jpeg\" class=\"img-fluid img-responsive\" alt=\"托辊网带炉\">\n                            </p>\n                            <h5 class=\"fs-18 mt-5 mb-2 text-center\">托辊网带炉</h5>\n                            <p class=\"text-center fs-28 mb-2\"><i class=\"fa fa-arrow-circle-o-right\"></i></p>\n                        </a>",
+          "uniqueVisibleEquipmentName": [
+            "托辊网带炉"
+          ],
+          "sameOldUrlAnchorOccurrencesInSource": 1
+        },
+        {
+          "sourceOldUrl": "http://jssngyl.cn/",
+          "sourceTitle": "江苏苏能工业炉有限公司 官方网站",
+          "archiveTimestamp": "20251118080704",
+          "sourceArchive": "Common Crawl CC-MAIN-2025-47",
+          "officialWarcDataUrl": "https://data.commoncrawl.org/crawl-data/CC-MAIN-2025-47/segments/1762439651195.78/warc/CC-MAIN-20251118060923-20251118090923-00939.warc.gz",
+          "byteRange": "bytes 10671393-10677594/896891510",
+          "warcTargetUri": "http://jssngyl.cn/",
+          "targetMatchesIndex": true,
+          "originalHtmlPath": "/Users/qianbo/Desktop/Coding/独立站/output/acquisition-repair-20261004/public-legacy-source-search/commoncrawl-page-377631dc4700.html",
+          "originalHtmlFileSha256": "f22da9f77cf6c9bc6b23eecd6c930877ab5074928d85b363c931b644dd06fd49",
+          "originalPayloadSha256": "f22da9f77cf6c9bc6b23eecd6c930877ab5074928d85b363c931b644dd06fd49",
+          "recordEvidencePath": "/Users/qianbo/Desktop/Coding/独立站/output/acquisition-repair-20261004/public-legacy-source-search/commoncrawl-page-377631dc4700-evidence.json",
+          "originalHref": "product/showproduct.php?id=171",
+          "anchorNameAttribute": null,
+          "anchorVisibleText": "托辊网带炉 查看详情",
+          "rawAnchorHtml": "<a href=\"product/showproduct.php?id=171\">\n                                    <div class=\"pro-img\"><img src=\"upload/wdl/20200514103142_547.jpeg\" alt=\"托辊网带炉\"></div>\n                                    <div class=\"pro-cover\"></div>\n                                    <h5>托辊网带炉</h5>\n                                    <div class=\"more\">\n                                        <p>查看详情</p>\n                                        <i class=\"fa fa-link\"></i>\n                                    </div>\n                                </a>",
+          "uniqueVisibleEquipmentName": [
+            "托辊网带炉"
+          ],
+          "sameOldUrlAnchorOccurrencesInSource": 1
+        }
+      ],
+      "newTarget": "https://www.jssngyl.cn/zh/products/detail/mesh-belt-furnace",
+      "newRequestPath": "/zh/products/detail/mesh-belt-furnace",
+      "newVerifiedAt": "2026-10-04T08:24:51.389363+00:00",
+      "newStatus": 200,
+      "newCanonical": [
+        "https://www.jssngyl.cn/zh/products/detail/mesh-belt-furnace"
+      ],
+      "newNoindex": false,
+      "newH1": [
+        "网带炉｜小型工件连续热处理"
+      ],
+      "newPageKeyText": [
+        "网带连续输送",
+        "托辊支承按载荷选配"
+      ],
+      "publishedTypeSourceEvidence": {
+        "path": "frontend/src/components/products/industry-furnace-data/mesh-belt-furnace.ts",
+        "sourceCommit": "9c603ee690012455c01ed29c2781f542de9b1aef",
+        "sha256": "92589cebf4a5b525f63249883e04978d6496a6312aec48f6e89faf389652abbd",
+        "matchingQuotes": [
+          "网带连续输送",
+          "托辊支承按载荷选配"
+        ]
+      },
+      "mappingReason": "原目录明确托辊网带炉/网带托辊炉，现通用网带炉页明确托辊支承按载荷选配；不错误配成辊底炉。",
+      "mappingMeaning": "同类网带设备/配置的承接，详情正文未获保存；不声称旧整线工艺、产能、型号、图片或尺寸已迁移。"
+    },
+    {
+      "oldId": 172,
+      "oldUrl": "http://jssngyl.cn/product/showproduct.php?id=172",
+      "oldRequestPath": "/product/showproduct.php?id=172",
+      "oldTitle": "网带托辊炉",
+      "sourceType": "original-directory-anchor",
+      "oldTextBoundary": "原目录/首页的真实链接与唯一明确设备名称；未取得该详情页正文，不声称原型号内容已迁移。",
+      "capturedAtUtc": "2025-11-18T06:26:35Z",
+      "officialArchiveIndex": "CC-MAIN-2025-47",
+      "sourceAnchors": [
+        {
+          "sourceOldUrl": "http://jssngyl.cn/product/product.php?class2=139",
+          "sourceTitle": "网带炉-江苏苏能工业炉有限公司 官方网站",
+          "archiveTimestamp": "20251118062635",
+          "sourceArchive": "Common Crawl CC-MAIN-2025-47",
+          "officialWarcDataUrl": "https://data.commoncrawl.org/crawl-data/CC-MAIN-2025-47/segments/1762439651195.78/warc/CC-MAIN-20251118060923-20251118090923-00189.warc.gz",
+          "byteRange": "bytes 12335572-12340676/889559563",
+          "warcTargetUri": "http://jssngyl.cn/product/product.php?class2=139",
+          "targetMatchesIndex": true,
+          "originalHtmlPath": "/Users/qianbo/Desktop/Coding/独立站/output/acquisition-repair-20261004/public-legacy-source-search/commoncrawl-page-6e2f57237cf8.html",
+          "originalHtmlFileSha256": "e806cdde5d9144df3a3d670b1adf65afe838d8eab21d990b5465997c4631a52f",
+          "originalPayloadSha256": "e806cdde5d9144df3a3d670b1adf65afe838d8eab21d990b5465997c4631a52f",
+          "recordEvidencePath": "/Users/qianbo/Desktop/Coding/独立站/output/acquisition-repair-20261004/public-legacy-source-search/commoncrawl-page-6e2f57237cf8-evidence.json",
+          "originalHref": "../product/showproduct.php?id=172",
+          "anchorNameAttribute": "网带托辊炉",
+          "anchorVisibleText": "网带托辊炉",
+          "rawAnchorHtml": "<a class=\"bg-white pro-li mt-5 d-block py-4 px-4\" href=\"../product/showproduct.php?id=172\" title=\"网带托辊炉\">\n                            <i class=\"fa fa-search fa-2x text-white ico\"></i>\n                            <p class=\"text-center mt-2\">\n                                <img src=\"../upload/thumb_src/700_650/20200514103209_194.jpeg\" class=\"img-fluid img-responsive\" alt=\"网带托辊炉\">\n                            </p>\n                            <h5 class=\"fs-18 mt-5 mb-2 text-center\">网带托辊炉</h5>\n                            <p class=\"text-center fs-28 mb-2\"><i class=\"fa fa-arrow-circle-o-right\"></i></p>\n                        </a>",
+          "uniqueVisibleEquipmentName": [
+            "网带托辊炉"
+          ],
+          "sameOldUrlAnchorOccurrencesInSource": 1
+        },
+        {
+          "sourceOldUrl": "http://jssngyl.cn/",
+          "sourceTitle": "江苏苏能工业炉有限公司 官方网站",
+          "archiveTimestamp": "20251118080704",
+          "sourceArchive": "Common Crawl CC-MAIN-2025-47",
+          "officialWarcDataUrl": "https://data.commoncrawl.org/crawl-data/CC-MAIN-2025-47/segments/1762439651195.78/warc/CC-MAIN-20251118060923-20251118090923-00939.warc.gz",
+          "byteRange": "bytes 10671393-10677594/896891510",
+          "warcTargetUri": "http://jssngyl.cn/",
+          "targetMatchesIndex": true,
+          "originalHtmlPath": "/Users/qianbo/Desktop/Coding/独立站/output/acquisition-repair-20261004/public-legacy-source-search/commoncrawl-page-377631dc4700.html",
+          "originalHtmlFileSha256": "f22da9f77cf6c9bc6b23eecd6c930877ab5074928d85b363c931b644dd06fd49",
+          "originalPayloadSha256": "f22da9f77cf6c9bc6b23eecd6c930877ab5074928d85b363c931b644dd06fd49",
+          "recordEvidencePath": "/Users/qianbo/Desktop/Coding/独立站/output/acquisition-repair-20261004/public-legacy-source-search/commoncrawl-page-377631dc4700-evidence.json",
+          "originalHref": "product/showproduct.php?id=172",
+          "anchorNameAttribute": null,
+          "anchorVisibleText": "网带托辊炉 查看详情",
+          "rawAnchorHtml": "<a href=\"product/showproduct.php?id=172\">\n                                    <div class=\"pro-img\"><img src=\"upload/wdl/20200514103209_194.jpeg\" alt=\"网带托辊炉\"></div>\n                                    <div class=\"pro-cover\"></div>\n                                    <h5>网带托辊炉</h5>\n                                    <div class=\"more\">\n                                        <p>查看详情</p>\n                                        <i class=\"fa fa-link\"></i>\n                                    </div>\n                                </a>",
+          "uniqueVisibleEquipmentName": [
+            "网带托辊炉"
+          ],
+          "sameOldUrlAnchorOccurrencesInSource": 1
+        }
+      ],
+      "newTarget": "https://www.jssngyl.cn/zh/products/detail/mesh-belt-furnace",
+      "newRequestPath": "/zh/products/detail/mesh-belt-furnace",
+      "newVerifiedAt": "2026-10-04T08:24:51.389363+00:00",
+      "newStatus": 200,
+      "newCanonical": [
+        "https://www.jssngyl.cn/zh/products/detail/mesh-belt-furnace"
+      ],
+      "newNoindex": false,
+      "newH1": [
+        "网带炉｜小型工件连续热处理"
+      ],
+      "newPageKeyText": [
+        "网带连续输送",
+        "托辊支承按载荷选配"
+      ],
+      "publishedTypeSourceEvidence": {
+        "path": "frontend/src/components/products/industry-furnace-data/mesh-belt-furnace.ts",
+        "sourceCommit": "9c603ee690012455c01ed29c2781f542de9b1aef",
+        "sha256": "92589cebf4a5b525f63249883e04978d6496a6312aec48f6e89faf389652abbd",
+        "matchingQuotes": [
+          "网带连续输送",
+          "托辊支承按载荷选配"
+        ]
+      },
+      "mappingReason": "原目录明确托辊网带炉/网带托辊炉，现通用网带炉页明确托辊支承按载荷选配；不错误配成辊底炉。",
+      "mappingMeaning": "同类网带设备/配置的承接，详情正文未获保存；不声称旧整线工艺、产能、型号、图片或尺寸已迁移。"
+    },
+    {
+      "oldId": 173,
+      "oldUrl": "http://jssngyl.cn/product/showproduct.php?id=173",
+      "oldRequestPath": "/product/showproduct.php?id=173",
+      "oldTitle": "托辊网带炉",
+      "sourceType": "original-directory-anchor",
+      "oldTextBoundary": "原目录/首页的真实链接与唯一明确设备名称；未取得该详情页正文，不声称原型号内容已迁移。",
+      "capturedAtUtc": "2025-11-18T06:26:35Z",
+      "officialArchiveIndex": "CC-MAIN-2025-47",
+      "sourceAnchors": [
+        {
+          "sourceOldUrl": "http://jssngyl.cn/product/product.php?class2=139",
+          "sourceTitle": "网带炉-江苏苏能工业炉有限公司 官方网站",
+          "archiveTimestamp": "20251118062635",
+          "sourceArchive": "Common Crawl CC-MAIN-2025-47",
+          "officialWarcDataUrl": "https://data.commoncrawl.org/crawl-data/CC-MAIN-2025-47/segments/1762439651195.78/warc/CC-MAIN-20251118060923-20251118090923-00189.warc.gz",
+          "byteRange": "bytes 12335572-12340676/889559563",
+          "warcTargetUri": "http://jssngyl.cn/product/product.php?class2=139",
+          "targetMatchesIndex": true,
+          "originalHtmlPath": "/Users/qianbo/Desktop/Coding/独立站/output/acquisition-repair-20261004/public-legacy-source-search/commoncrawl-page-6e2f57237cf8.html",
+          "originalHtmlFileSha256": "e806cdde5d9144df3a3d670b1adf65afe838d8eab21d990b5465997c4631a52f",
+          "originalPayloadSha256": "e806cdde5d9144df3a3d670b1adf65afe838d8eab21d990b5465997c4631a52f",
+          "recordEvidencePath": "/Users/qianbo/Desktop/Coding/独立站/output/acquisition-repair-20261004/public-legacy-source-search/commoncrawl-page-6e2f57237cf8-evidence.json",
+          "originalHref": "../product/showproduct.php?id=173",
+          "anchorNameAttribute": "托辊网带炉",
+          "anchorVisibleText": "托辊网带炉",
+          "rawAnchorHtml": "<a class=\"bg-white pro-li mt-5 d-block py-4 px-4\" href=\"../product/showproduct.php?id=173\" title=\"托辊网带炉\">\n                            <i class=\"fa fa-search fa-2x text-white ico\"></i>\n                            <p class=\"text-center mt-2\">\n                                <img src=\"../upload/thumb_src/700_650/20200514103234_362.jpeg\" class=\"img-fluid img-responsive\" alt=\"托辊网带炉\">\n                            </p>\n                            <h5 class=\"fs-18 mt-5 mb-2 text-center\">托辊网带炉</h5>\n                            <p class=\"text-center fs-28 mb-2\"><i class=\"fa fa-arrow-circle-o-right\"></i></p>\n                        </a>",
+          "uniqueVisibleEquipmentName": [
+            "托辊网带炉"
+          ],
+          "sameOldUrlAnchorOccurrencesInSource": 1
+        },
+        {
+          "sourceOldUrl": "http://jssngyl.cn/",
+          "sourceTitle": "江苏苏能工业炉有限公司 官方网站",
+          "archiveTimestamp": "20251118080704",
+          "sourceArchive": "Common Crawl CC-MAIN-2025-47",
+          "officialWarcDataUrl": "https://data.commoncrawl.org/crawl-data/CC-MAIN-2025-47/segments/1762439651195.78/warc/CC-MAIN-20251118060923-20251118090923-00939.warc.gz",
+          "byteRange": "bytes 10671393-10677594/896891510",
+          "warcTargetUri": "http://jssngyl.cn/",
+          "targetMatchesIndex": true,
+          "originalHtmlPath": "/Users/qianbo/Desktop/Coding/独立站/output/acquisition-repair-20261004/public-legacy-source-search/commoncrawl-page-377631dc4700.html",
+          "originalHtmlFileSha256": "f22da9f77cf6c9bc6b23eecd6c930877ab5074928d85b363c931b644dd06fd49",
+          "originalPayloadSha256": "f22da9f77cf6c9bc6b23eecd6c930877ab5074928d85b363c931b644dd06fd49",
+          "recordEvidencePath": "/Users/qianbo/Desktop/Coding/独立站/output/acquisition-repair-20261004/public-legacy-source-search/commoncrawl-page-377631dc4700-evidence.json",
+          "originalHref": "product/showproduct.php?id=173",
+          "anchorNameAttribute": null,
+          "anchorVisibleText": "托辊网带炉 查看详情",
+          "rawAnchorHtml": "<a href=\"product/showproduct.php?id=173\">\n                                    <div class=\"pro-img\"><img src=\"upload/wdl/20200514103234_362.jpeg\" alt=\"托辊网带炉\"></div>\n                                    <div class=\"pro-cover\"></div>\n                                    <h5>托辊网带炉</h5>\n                                    <div class=\"more\">\n                                        <p>查看详情</p>\n                                        <i class=\"fa fa-link\"></i>\n                                    </div>\n                                </a>",
+          "uniqueVisibleEquipmentName": [
+            "托辊网带炉"
+          ],
+          "sameOldUrlAnchorOccurrencesInSource": 1
+        }
+      ],
+      "newTarget": "https://www.jssngyl.cn/zh/products/detail/mesh-belt-furnace",
+      "newRequestPath": "/zh/products/detail/mesh-belt-furnace",
+      "newVerifiedAt": "2026-10-04T08:24:51.389363+00:00",
+      "newStatus": 200,
+      "newCanonical": [
+        "https://www.jssngyl.cn/zh/products/detail/mesh-belt-furnace"
+      ],
+      "newNoindex": false,
+      "newH1": [
+        "网带炉｜小型工件连续热处理"
+      ],
+      "newPageKeyText": [
+        "网带连续输送",
+        "托辊支承按载荷选配"
+      ],
+      "publishedTypeSourceEvidence": {
+        "path": "frontend/src/components/products/industry-furnace-data/mesh-belt-furnace.ts",
+        "sourceCommit": "9c603ee690012455c01ed29c2781f542de9b1aef",
+        "sha256": "92589cebf4a5b525f63249883e04978d6496a6312aec48f6e89faf389652abbd",
+        "matchingQuotes": [
+          "网带连续输送",
+          "托辊支承按载荷选配"
+        ]
+      },
+      "mappingReason": "原目录明确托辊网带炉/网带托辊炉，现通用网带炉页明确托辊支承按载荷选配；不错误配成辊底炉。",
+      "mappingMeaning": "同类网带设备/配置的承接，详情正文未获保存；不声称旧整线工艺、产能、型号、图片或尺寸已迁移。"
+    },
+    {
+      "oldId": 141,
+      "oldUrl": "http://jssngyl.cn/product/showproduct.php?id=141",
+      "oldRequestPath": "/product/showproduct.php?id=141",
+      "oldTitle": "井式燃气处理炉",
+      "sourceType": "original-directory-anchor",
+      "oldTextBoundary": "原目录/首页的真实链接与唯一明确设备名称；未取得该详情页正文，不声称原型号内容已迁移。",
+      "capturedAtUtc": "2025-11-18T08:07:04Z",
+      "officialArchiveIndex": "CC-MAIN-2025-47",
+      "sourceAnchors": [
+        {
+          "sourceOldUrl": "http://jssngyl.cn/",
+          "sourceTitle": "江苏苏能工业炉有限公司 官方网站",
+          "archiveTimestamp": "20251118080704",
+          "sourceArchive": "Common Crawl CC-MAIN-2025-47",
+          "officialWarcDataUrl": "https://data.commoncrawl.org/crawl-data/CC-MAIN-2025-47/segments/1762439651195.78/warc/CC-MAIN-20251118060923-20251118090923-00939.warc.gz",
+          "byteRange": "bytes 10671393-10677594/896891510",
+          "warcTargetUri": "http://jssngyl.cn/",
+          "targetMatchesIndex": true,
+          "originalHtmlPath": "/Users/qianbo/Desktop/Coding/独立站/output/acquisition-repair-20261004/public-legacy-source-search/commoncrawl-page-377631dc4700.html",
+          "originalHtmlFileSha256": "f22da9f77cf6c9bc6b23eecd6c930877ab5074928d85b363c931b644dd06fd49",
+          "originalPayloadSha256": "f22da9f77cf6c9bc6b23eecd6c930877ab5074928d85b363c931b644dd06fd49",
+          "recordEvidencePath": "/Users/qianbo/Desktop/Coding/独立站/output/acquisition-repair-20261004/public-legacy-source-search/commoncrawl-page-377631dc4700-evidence.json",
+          "originalHref": "product/showproduct.php?id=141",
+          "anchorNameAttribute": null,
+          "imageAltNameAttribute": "井式燃气处理炉",
+          "anchorVisibleText": "井式燃气处理炉 查看详情",
+          "rawAnchorHtml": "<a href=\"product/showproduct.php?id=141\">\n                                    <div class=\"pro-img\"><img src=\"upload/gyrql/20200514100216_512.jpeg\" alt=\"井式燃气处理炉\"></div>\n                                    <div class=\"pro-cover\"></div>\n                                    <h5>井式燃气处理炉</h5>\n                                    <div class=\"more\">\n                                        <p>查看详情</p>\n                                        <i class=\"fa fa-link\"></i>\n                                    </div>\n                                </a>",
+          "uniqueVisibleEquipmentName": [
+            "井式燃气处理炉"
+          ],
+          "sameOldUrlAnchorOccurrencesInSource": 1
+        }
+      ],
+      "newTarget": "https://www.jssngyl.cn/zh/products/detail/pit-furnace",
+      "newRequestPath": "/zh/products/detail/pit-furnace",
+      "newVerifiedAt": "2026-10-04T09:11:51.862408+00:00",
+      "newStatus": 200,
+      "newCanonical": [
+        "https://www.jssngyl.cn/zh/products/detail/pit-furnace"
+      ],
+      "newNoindex": false,
+      "newH1": [
+        "井式炉｜长轴类工件立式热处理"
+      ],
+      "newPageKeyText": [
+        "井式燃气炉",
+        "燃烧系统、排烟、安全联锁与厂房公用条件需逐项确认。"
+      ],
+      "publishedTypeSourceEvidence": {
+        "path": "frontend/src/components/products/pit-furnace-detail-data.ts",
+        "sourceCommit": "9c603ee690012455c01ed29c2781f542de9b1aef",
+        "sha256": "7cc44ea101ff0b9461a37fdde0550b2d1cb95943c063d68f05ef4c01e1c5eb94",
+        "matchingQuotes": [
+          "井式燃气炉",
+          "燃烧系统、排烟、安全联锁与厂房公用条件需逐项确认。"
+        ],
+        "additionalSourceEvidence": {
+          "path": "frontend/src/constants/product-details/pit-furnace.ts",
+          "sourceCommit": "9c603ee690012455c01ed29c2781f542de9b1aef",
+          "sha256": "1deff8e6206a00b636928ae64d8ee49d845d09bee7e020324c51d63d1e6a4832",
+          "matchingQuotes": [
+            "电阻 / 燃气可选",
+            "电阻加热 / 燃气加热"
+          ]
+        }
+      },
+      "mappingReason": "原目录明确井式燃气炉；现公开井式炉页明确井式燃气炉及燃烧、排烟、安全联锁条件。",
+      "mappingMeaning": "同设备类型承接，不声称原型号、尺寸、图片、产能或参数全文已迁移。"
+    },
+    {
+      "oldId": 175,
+      "oldUrl": "http://jssngyl.cn/product/showproduct.php?id=175",
+      "oldRequestPath": "/product/showproduct.php?id=175",
+      "oldTitle": "多工位罩式炉",
+      "sourceType": "original-directory-anchor",
+      "oldTextBoundary": "原目录/首页的真实链接与唯一明确设备名称；未取得该详情页正文，不声称原型号内容已迁移。",
+      "capturedAtUtc": "2025-11-18T08:07:04Z",
+      "officialArchiveIndex": "CC-MAIN-2025-47",
+      "sourceAnchors": [
+        {
+          "sourceOldUrl": "http://jssngyl.cn/",
+          "sourceTitle": "江苏苏能工业炉有限公司 官方网站",
+          "archiveTimestamp": "20251118080704",
+          "sourceArchive": "Common Crawl CC-MAIN-2025-47",
+          "officialWarcDataUrl": "https://data.commoncrawl.org/crawl-data/CC-MAIN-2025-47/segments/1762439651195.78/warc/CC-MAIN-20251118060923-20251118090923-00939.warc.gz",
+          "byteRange": "bytes 10671393-10677594/896891510",
+          "warcTargetUri": "http://jssngyl.cn/",
+          "targetMatchesIndex": true,
+          "originalHtmlPath": "/Users/qianbo/Desktop/Coding/独立站/output/acquisition-repair-20261004/public-legacy-source-search/commoncrawl-page-377631dc4700.html",
+          "originalHtmlFileSha256": "f22da9f77cf6c9bc6b23eecd6c930877ab5074928d85b363c931b644dd06fd49",
+          "originalPayloadSha256": "f22da9f77cf6c9bc6b23eecd6c930877ab5074928d85b363c931b644dd06fd49",
+          "recordEvidencePath": "/Users/qianbo/Desktop/Coding/独立站/output/acquisition-repair-20261004/public-legacy-source-search/commoncrawl-page-377631dc4700-evidence.json",
+          "originalHref": "product/showproduct.php?id=175",
+          "anchorNameAttribute": null,
+          "imageAltNameAttribute": "多工位罩式炉",
+          "anchorVisibleText": "多工位罩式炉 查看详情",
+          "rawAnchorHtml": "<a href=\"product/showproduct.php?id=175\">\n                                    <div class=\"pro-img\"><img src=\"upload/zsl/20200514104040_359.jpeg\" alt=\"多工位罩式炉\"></div>\n                                    <div class=\"pro-cover\"></div>\n                                    <h5>多工位罩式炉</h5>\n                                    <div class=\"more\">\n                                        <p>查看详情</p>\n                                        <i class=\"fa fa-link\"></i>\n                                    </div>\n                                </a>",
+          "uniqueVisibleEquipmentName": [
+            "多工位罩式炉"
+          ],
+          "sameOldUrlAnchorOccurrencesInSource": 1
+        }
+      ],
+      "newTarget": "https://www.jssngyl.cn/zh/products/detail/bell-furnace",
+      "newRequestPath": "/zh/products/detail/bell-furnace",
+      "newVerifiedAt": "2026-10-04T09:11:52.329792+00:00",
+      "newStatus": 200,
+      "newCanonical": [
+        "https://www.jssngyl.cn/zh/products/detail/bell-furnace"
+      ],
+      "newNoindex": false,
+      "newH1": [
+        "罩式炉｜固定炉台上的批次热处理"
+      ],
+      "newPageKeyText": [
+        "多炉台生产组织",
+        "多炉台、加热罩和冷却罩数量按生产节拍与物流核算。"
+      ],
+      "publishedTypeSourceEvidence": {
+        "path": "frontend/src/components/products/industry-furnace-data/bell-furnace.ts",
+        "sourceCommit": "9c603ee690012455c01ed29c2781f542de9b1aef",
+        "sha256": "c01f3bc2a5c8e92f28c16f298d8034f1bc8512cd94fa14029a7dbdc80f5a313a",
+        "matchingQuotes": [
+          "多炉台生产组织",
+          "多炉台、加热罩和冷却罩数量按生产节拍与物流核算。"
+        ]
+      },
+      "mappingReason": "原目录明确多工位罩式炉；现公开罩式炉页明确多炉台与加热罩、冷却罩生产组织。",
+      "mappingMeaning": "同设备类型承接，不声称原型号、尺寸、图片、产能或参数全文已迁移。"
+    },
+    {
+      "oldId": 177,
+      "oldUrl": "http://jssngyl.cn/product/showproduct.php?id=177",
+      "oldRequestPath": "/product/showproduct.php?id=177",
+      "oldTitle": "多工位罩式炉",
+      "sourceType": "original-directory-anchor",
+      "oldTextBoundary": "原目录/首页的真实链接与唯一明确设备名称；未取得该详情页正文，不声称原型号内容已迁移。",
+      "capturedAtUtc": "2025-11-18T08:07:04Z",
+      "officialArchiveIndex": "CC-MAIN-2025-47",
+      "sourceAnchors": [
+        {
+          "sourceOldUrl": "http://jssngyl.cn/",
+          "sourceTitle": "江苏苏能工业炉有限公司 官方网站",
+          "archiveTimestamp": "20251118080704",
+          "sourceArchive": "Common Crawl CC-MAIN-2025-47",
+          "officialWarcDataUrl": "https://data.commoncrawl.org/crawl-data/CC-MAIN-2025-47/segments/1762439651195.78/warc/CC-MAIN-20251118060923-20251118090923-00939.warc.gz",
+          "byteRange": "bytes 10671393-10677594/896891510",
+          "warcTargetUri": "http://jssngyl.cn/",
+          "targetMatchesIndex": true,
+          "originalHtmlPath": "/Users/qianbo/Desktop/Coding/独立站/output/acquisition-repair-20261004/public-legacy-source-search/commoncrawl-page-377631dc4700.html",
+          "originalHtmlFileSha256": "f22da9f77cf6c9bc6b23eecd6c930877ab5074928d85b363c931b644dd06fd49",
+          "originalPayloadSha256": "f22da9f77cf6c9bc6b23eecd6c930877ab5074928d85b363c931b644dd06fd49",
+          "recordEvidencePath": "/Users/qianbo/Desktop/Coding/独立站/output/acquisition-repair-20261004/public-legacy-source-search/commoncrawl-page-377631dc4700-evidence.json",
+          "originalHref": "product/showproduct.php?id=177",
+          "anchorNameAttribute": null,
+          "imageAltNameAttribute": "多工位罩式炉",
+          "anchorVisibleText": "多工位罩式炉 查看详情",
+          "rawAnchorHtml": "<a href=\"product/showproduct.php?id=177\">\n                                    <div class=\"pro-img\"><img src=\"upload/zsl/20200514104107_196.jpeg\" alt=\"多工位罩式炉\"></div>\n                                    <div class=\"pro-cover\"></div>\n                                    <h5>多工位罩式炉</h5>\n                                    <div class=\"more\">\n                                        <p>查看详情</p>\n                                        <i class=\"fa fa-link\"></i>\n                                    </div>\n                                </a>",
+          "uniqueVisibleEquipmentName": [
+            "多工位罩式炉"
+          ],
+          "sameOldUrlAnchorOccurrencesInSource": 1
+        }
+      ],
+      "newTarget": "https://www.jssngyl.cn/zh/products/detail/bell-furnace",
+      "newRequestPath": "/zh/products/detail/bell-furnace",
+      "newVerifiedAt": "2026-10-04T09:11:52.329792+00:00",
+      "newStatus": 200,
+      "newCanonical": [
+        "https://www.jssngyl.cn/zh/products/detail/bell-furnace"
+      ],
+      "newNoindex": false,
+      "newH1": [
+        "罩式炉｜固定炉台上的批次热处理"
+      ],
+      "newPageKeyText": [
+        "多炉台生产组织",
+        "多炉台、加热罩和冷却罩数量按生产节拍与物流核算。"
+      ],
+      "publishedTypeSourceEvidence": {
+        "path": "frontend/src/components/products/industry-furnace-data/bell-furnace.ts",
+        "sourceCommit": "9c603ee690012455c01ed29c2781f542de9b1aef",
+        "sha256": "c01f3bc2a5c8e92f28c16f298d8034f1bc8512cd94fa14029a7dbdc80f5a313a",
+        "matchingQuotes": [
+          "多炉台生产组织",
+          "多炉台、加热罩和冷却罩数量按生产节拍与物流核算。"
+        ]
+      },
+      "mappingReason": "原目录明确多工位罩式炉；现公开罩式炉页明确多炉台与加热罩、冷却罩生产组织。",
+      "mappingMeaning": "同设备类型承接，不声称原型号、尺寸、图片、产能或参数全文已迁移。"
     }
   ],
   "limits": [
     "同设备类型承接，不声称旧产品型号、尺寸、图片及参数全文迁移。",
     "原台车页的电炉依据是原产品名称；不伪造原正文另有电阻加热句子。",
-    "新目标沿用10/3只读响应证据，本轮尚未执行生产HTTP复验或部署。",
+    "四目标公开响应分别于10/4 16:24与17:11核验正常；本次新增规则未部署，旧型号详情全文不等同类型承接。",
     "新增测试只验证配置契约，不代替真实Nginx语法或HTTP验收。"
-  ]
+  ],
+  "incrementalDirectoryMappingCount": 22,
+  "currentPublishedNginxBaselineSha256": "aa805939209ef84d2aa6531b638e8ffbec42aeac3e925033253924e2831bd690",
+  "directoryEvidenceRule": "Original authoritative href plus unique explicit equipment name and same-type current published source; no guessed IDs, no cross-type assignment."
 }

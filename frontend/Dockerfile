@@ -12,6 +12,7 @@ COPY frontend/package.json ./frontend/package.json
 COPY backend/package.json ./backend/package.json
 COPY admin/package.json ./admin/package.json
 COPY backend/prisma/schema.prisma ./backend/prisma/schema.prisma
+COPY frontend/patches/ ./frontend/patches/
 
 RUN --mount=type=cache,id=pnpm-store,target=/root/.local/share/pnpm/store/v3,sharing=locked \
     pnpm install --frozen-lockfile --config.dangerously-allow-all-builds=true

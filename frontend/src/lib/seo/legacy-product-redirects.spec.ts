@@ -11,7 +11,35 @@ const verifiedProducts = [
   ['167', '/zh/products/detail/mesh-belt-furnace'],
   ['168', '/zh/products/detail/mesh-belt-furnace'],
   ['169', '/zh/products/detail/mesh-belt-furnace'],
+  ['123', '/zh/products/detail/trolley-furnace'],
+  ['125', '/zh/products/detail/trolley-furnace'],
+  ['142', '/zh/products/detail/trolley-furnace'],
+  ['143', '/zh/products/detail/trolley-furnace'],
+  ['147', '/zh/products/detail/trolley-furnace'],
+  ['156', '/zh/products/detail/trolley-furnace'],
+  ['158', '/zh/products/detail/trolley-furnace'],
+  ['242', '/zh/products/detail/trolley-furnace'],
+  ['164', '/zh/products/detail/mesh-belt-furnace'],
+  ['165', '/zh/products/detail/mesh-belt-furnace'],
+  ['159', '/zh/products/detail/mesh-belt-furnace'],
+  ['160', '/zh/products/detail/mesh-belt-furnace'],
+  ['161', '/zh/products/detail/mesh-belt-furnace'],
+  ['162', '/zh/products/detail/mesh-belt-furnace'],
+  ['163', '/zh/products/detail/mesh-belt-furnace'],
+  ['170', '/zh/products/detail/mesh-belt-furnace'],
+  ['171', '/zh/products/detail/mesh-belt-furnace'],
+  ['172', '/zh/products/detail/mesh-belt-furnace'],
+  ['173', '/zh/products/detail/mesh-belt-furnace'],
+  ['141', '/zh/products/detail/pit-furnace'],
+  ['175', '/zh/products/detail/bell-furnace'],
+  ['177', '/zh/products/detail/bell-furnace'],
 ] as const;
+const verifiedDirectoryIds = ['123', '125', '142', '143', '147', '156', '158', '242', '164', '165', '159', '160', '161', '162', '163', '170', '171', '172', '173', '141', '175', '177'] as const;
+const mappingLedger = JSON.parse(readFileSync(new URL('docs/acquisition-repair-20261004/legacy-product-mappings.json', root), 'utf8')) as {
+  mappingCount: number;
+  mappings: Array<{ oldId: number; oldUrl: string; oldTitle: string; newRequestPath: string; sourceType?: string;
+    sourceAnchors?: Array<{ originalHref: string; sourceOldUrl: string; anchorVisibleText: string; originalHtmlFileSha256: string }> }>;
+};
 
 // Read the checked-in configuration, never reconstruct it from a test fixture.
 // This is a static routing contract; actual Nginx -t / HTTP checks are separate.
@@ -65,8 +93,8 @@ function productMap() {
   return new Map(entries);
 }
 
-describe('seven verified original-PHP product redirects', () => {
-  it('permits exactly seven known IDs and preserves the existing catalog default', () => {
+describe('verified original-PHP product redirects', () => {
+  it('permits exactly the approved known IDs and preserves the existing catalog default', () => {
     expect([...productMap().entries()].sort()).toEqual([
       ['default', '/zh/products'],
       ...verifiedProducts,
@@ -82,7 +110,22 @@ describe('seven verified original-PHP product redirects', () => {
     }
   });
 
-  it.each(['', '151', '153', '155', '165', '170', '1500', '0150', '%31%35%30'])(
+  it('keeps the mapping ledger consistent and binds new IDs to exact original directory links', () => {
+    expect(mappingLedger.mappingCount).toBe(verifiedProducts.length);
+    expect(mappingLedger.mappings.map((row) => [String(row.oldId), row.newRequestPath]).sort()).toEqual([...verifiedProducts].sort());
+    const directoryRows = mappingLedger.mappings.filter((row) => row.sourceType === 'original-directory-anchor');
+    expect(directoryRows.map((row) => String(row.oldId)).sort()).toEqual([...verifiedDirectoryIds].sort());
+    for (const row of directoryRows) {
+      expect(row.sourceAnchors?.length).toBeGreaterThan(0);
+      for (const anchor of row.sourceAnchors ?? []) {
+        expect(new URL(anchor.originalHref, anchor.sourceOldUrl).href).toBe(row.oldUrl);
+        expect(anchor.anchorVisibleText).toContain(row.oldTitle);
+        expect(anchor.originalHtmlFileSha256).toMatch(/^[a-f0-9]{64}$/);
+      }
+    }
+  });
+
+  it.each(['', '139', '148', '149', '151', '153', '155', '174', '176', '999999', '1500', '0150', '%31%35%30'])(
     'unverified or nonexact ID %s retains the catalog fallback',
     (id) => {
       const map = productMap();
