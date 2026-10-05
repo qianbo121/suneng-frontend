@@ -27,6 +27,17 @@
     guideChecks.push({path, status: statuses[path], expected: guideAllowed.join('|')});
   }
   const guidesPassed = guideChecks.every((check) => guideAllowed.includes(check.status));
+  const procurement = contract.procurement || {state: 'open', paths: []};
+  const exactProcurement = ['/zh/articles/special-industrial-furnace-procurement-assessment', '/zh/service/industrial-furnace-parts-purchasing'];
+  if (!Array.isArray(procurement.paths) || procurement.paths.some(p => !exactProcurement.includes(p)) || new Set(procurement.paths).size !== procurement.paths.length) throw new Error('unapproved procurement scope');
+  if (!['open', 'either'].includes(procurement.state)) throw new Error('unknown procurement state');
+  const procurementAllowed = procurement.state === 'open' ? [200] : procurement.state === 'either' ? [200, 404] : [];
+  const procurementChecks = [];
+  for (const path of procurement.paths) {
+    statuses[path] = await status(path);
+    procurementChecks.push({path, status: statuses[path], expected: procurementAllowed.join('|')});
+  }
+  const procurementPassed = procurementChecks.every(c => procurementAllowed.includes(c.status));
   const sitemap = await fetch(base + '/sitemap.xml', { redirect: 'manual', signal: AbortSignal.timeout(15000) });
   const xml = await sitemap.text();
   const decode = (value) => value.replace(/&amp;/g, '&');
@@ -35,15 +46,16 @@
   const paths = new Set(located.map((u) => new URL(u, 'http://local').pathname));
   const caseUrlPasses = (u) => {
     const url = new URL(u, 'http://local');
-    if (/\/(articles|solutions)(\/|$)/.test(url.pathname)) return !url.search && guides.paths.includes(url.pathname) && statuses[url.pathname] === 200;
+    if (exactProcurement.includes(url.pathname) || exactProcurement.map(p => p.replace('/zh/', '/en/')).includes(url.pathname)) return !url.search && !url.hash && procurement.paths.includes(url.pathname) && statuses[url.pathname] === 200;
+    if (/\/(articles|solutions)(\/|$)/.test(url.pathname)) return !url.search && [...guides.paths, ...procurement.paths].includes(url.pathname) && statuses[url.pathname] === 200;
     if (!/\/case(\/|$)/.test(url.pathname)) return true;
     return !url.search && contract.group.includes(url.pathname) && statuses[url.pathname] === 200;
   };
   const sitemapPassed = sitemap.status === 200 && paths.has('/zh/news') && paths.has('/en/news')
     && [...located, ...alternates].every(caseUrlPasses)
     && (contract.state !== 'open' || contract.group.every((path) => paths.has(path)))
-    && guides.paths.every((path) => statuses[path] !== 200 || paths.has(path));
-  const passed = fixedChecks.every((c) => c.status === c.expected) && casesPassed && guidesPassed && sitemapPassed;
-  console.log(JSON.stringify({ passed, checks: [...fixedChecks, ...caseChecks, ...guideChecks], sitemapPassed, caseState: contract.state, notificationSent: false, inquirySubmitted: false }));
+    && [...guides.paths, ...procurement.paths].every((path) => statuses[path] !== 200 || paths.has(path));
+  const passed = fixedChecks.every((c) => c.status === c.expected) && casesPassed && guidesPassed && procurementPassed && sitemapPassed;
+  console.log(JSON.stringify({ passed, checks: [...fixedChecks, ...caseChecks, ...guideChecks, ...procurementChecks], sitemapPassed, caseState: contract.state, notificationSent: false, inquirySubmitted: false }));
   process.exit(passed ? 0 : 1);
 })().catch(() => { console.error('Release route check failed; no response body or credentials logged.'); process.exit(1); });

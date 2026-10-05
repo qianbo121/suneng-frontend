@@ -59,7 +59,9 @@ jobs:
           docker save "$IMAGE_TAG" | gzip > "$RUNNER_TEMP/frontend-candidate/frontend.tar.gz"
           docker image inspect "$IMAGE_TAG" > "$RUNNER_TEMP/frontend-candidate/image.json"
           python3 - <<'PY'
-          import hashlib, json, os, pathlib
+          import hashlib, json, os, pathlib, sys
+          sys.path.insert(0, "ops/releases")
+          from procurement_approval import procurement_candidate_fields
           root = pathlib.Path(os.environ['RUNNER_TEMP']) / 'frontend-candidate'
           archive = root / 'frontend.tar.gz'
           digest = hashlib.sha256()
@@ -75,6 +77,7 @@ jobs:
                      'publicationScope': 'news-products-services-company-reviewed-cases',
                      'htmlCachePolicy': 'no-store',
                      'approvedGuides': json.loads(pathlib.Path('ops/releases/approved-guides.json').read_text()),
+                     **procurement_candidate_fields(pathlib.Path('.')),
                      'serverCanaryRequired': True, 'browserAcceptanceRequired': True}
           (root / 'candidate.json').write_text(json.dumps(receipt, indent=2) + '\n')
           (root / 'image.json').unlink()

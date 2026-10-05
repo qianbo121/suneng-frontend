@@ -21,6 +21,8 @@ from urllib.parse import urlparse
 from storage_policy import working_space
 from frontend_html import frontend_html_probe
 from acquisition_continuity import acquisition_continuity_probe
+from procurement_approval import APPROVED_PATHS as APPROVED_PROCUREMENT_PATHS, APPROVAL_SHA256 as PROCUREMENT_APPROVAL_SHA256, SCOPE_FIELD, normalize_procurement
+from approved_procurement_continuity import approved_procurement_probe
 
 IMAGE = re.compile(r'^sha256:[0-9a-f]{64}$')
 SHA = re.compile(r'^[0-9a-f]{40}$')
@@ -107,6 +109,7 @@ def validate_manifest(value):
     if 'approvedCases' in value:
         normalize_cases(value['approvedCases'])
     normalize_guides(value.get('approvedGuides', []))
+    normalize_procurement(value.get(SCOPE_FIELD, []), value.get('procurementApprovalSha256'), require_approval=True)
     legacy = value.get('legacyEncodedPaths', False)
     if not isinstance(legacy, bool):
         raise ValueError('legacyEncodedPaths must be true or false')
@@ -188,7 +191,7 @@ def merge_cases(*values):
     return {locale: sorted(set().union(*(value[locale] for value in values))) for locale in ('zh', 'en')}
 
 
-def case_contract(state, cases=None, *, encoded=True, withdrawn=None, guides=None, withdrawn_guides=None, guide_state="open"):
+def case_contract(state, cases=None, *, encoded=True, withdrawn=None, guides=None, withdrawn_guides=None, guide_state="open", procurement=None, procurement_state="open"):
     """Route rules for one case state.
 
     'open' and 'closed' describe the image being released, with `cases` listing
@@ -227,8 +230,14 @@ def case_contract(state, cases=None, *, encoded=True, withdrawn=None, guides=Non
         raise ValueError('Unknown guide publication state')
     retired = [path for path in retired if path not in guides]
     retired += [path for path in sorted(set(APPROVED_GUIDES + (withdrawn_guides or []))) if path not in guides and path not in retired]
+    procurement = normalize_procurement([] if procurement is None else procurement)
+    if procurement_state not in ('open', 'either'):
+        raise ValueError('Unknown separate procurement publication state')
+    retired += [p for p in APPROVED_PROCUREMENT_PATHS if p not in procurement and p not in retired]
+    retired += [p.replace('/zh/', '/en/', 1) for p in APPROVED_PROCUREMENT_PATHS]
     return {'state': state, 'group': group, 'retired': retired + drafts + extra,
-            'guides': {'state': guide_state, 'paths': guides}}
+            'guides': {'state': guide_state, 'paths': guides},
+            'procurement': {'state': procurement_state, 'paths': procurement}}
 
 
 def case_group_failure(statuses, contract):
@@ -250,16 +259,21 @@ def sitemap_passes(urls, located, statuses, contract):
     paths = {urlparse(url).path for url in located}
     if not {'/zh/news', '/en/news'} <= paths:
         return False
+    procurement = contract.get('procurement', {'state': 'open', 'paths': []})
+    approved_paths = contract.get('guides', {}).get('paths', []) + procurement['paths']
     for url in urls:
         parsed = urlparse(url)
+        if parsed.path in APPROVED_PROCUREMENT_PATHS or parsed.path in [p.replace('/zh/', '/en/', 1) for p in APPROVED_PROCUREMENT_PATHS]:
+            if parsed.query or parsed.fragment or parsed.path not in procurement['paths'] or statuses.get(parsed.path) != 200:
+                return False
         if re.search(r'/(articles|solutions)(/|$)', parsed.path):
-            if parsed.query or parsed.path not in contract.get('guides', {}).get('paths', []) or statuses.get(parsed.path) != 200:
+            if parsed.query or parsed.path not in approved_paths or statuses.get(parsed.path) != 200:
                 return False
         if re.search(r'/case(/|$)', parsed.path):
             if parsed.query or parsed.path not in contract['group'] or statuses.get(parsed.path) != 200:
                 return False
     guides = contract.get('guides', {'state': 'open', 'paths': []})
-    if any(statuses.get(path) == 200 and path not in paths for path in guides['paths']):
+    if any(statuses.get(path) == 200 and path not in paths for path in guides['paths'] + procurement['paths']):
         return False
     return contract['state'] != 'open' or all(path in paths for path in contract['group'])
 
@@ -377,6 +391,13 @@ def public_probe(base_url, contract):
             raise RuntimeError('Public guide route check failed: ' + path)
         statuses[path] = status
         results.append({'path': path, 'status': status})
+    procurement = contract.get('procurement', {'state': 'open', 'paths': []})
+    for path in procurement['paths']:
+        status = int(status_of(path))
+        if status not in ({200} if procurement['state'] == 'open' else {200, 404}):
+            raise RuntimeError('Public separately approved procurement route check failed: ' + path)
+        statuses[path] = status
+        results.append({'path': path, 'status': status})
     xml = run(['curl', '--fail', '--max-time', '25', '--silent', '--show-error', base_url + '/sitemap.xml'])
     located, alternates = sitemap_urls(xml)
     if not sitemap_passes(located + alternates, located, statuses, contract):
@@ -401,13 +422,19 @@ class Release:
         self.served_guides = normalize_guides(manifest.get('approvedGuides', []))
         previous_guides = normalize_guides(self.receipt.get('frontendRelease', {}).get('servedGuides', []))
         self.previous_guides = previous_guides
+        previous_release = self.receipt.get('frontendRelease') or {}
+        self.has_procurement_scope = SCOPE_FIELD in manifest or SCOPE_FIELD in previous_release
+        if previous_release.get(SCOPE_FIELD + 'Unverified'):
+            raise ValueError('Previous procurement scope requires reconciliation')
+        self.served_procurement = normalize_procurement(manifest.get(SCOPE_FIELD, []), manifest.get('procurementApprovalSha256'), require_approval=True)
+        self.previous_procurement = normalize_procurement(previous_release.get(SCOPE_FIELD, []), previous_release.get('procurementApprovalSha256'))
         target_cases = normalize_cases(manifest.get('approvedCases', APPROVED_CASES))
         self.served_cases = target_cases if manifest.get('caseState', 'open') == 'open' else NO_CASES
         self.live_cases = normalize_cases((self.receipt.get('frontendRelease') or {}).get('servedCases', NO_CASES))
         self.target_contract = case_contract(manifest.get('caseState', 'open'), target_cases,
                                              encoded=not manifest.get('legacyEncodedPaths', False), guides=self.served_guides, withdrawn_guides=previous_guides,
-                                             withdrawn=self.live_cases)
-        self.lenient_contract = case_contract('either', merge_cases(target_cases, self.live_cases), encoded=False, guides=sorted(set(previous_guides + self.served_guides)), guide_state='either')
+                                             withdrawn=self.live_cases, procurement=self.served_procurement)
+        self.lenient_contract = case_contract('either', merge_cases(target_cases, self.live_cases), encoded=False, guides=sorted(set(previous_guides + self.served_guides)), guide_state='either', procurement=sorted(set(self.previous_procurement + self.served_procurement)), procurement_state='either')
         self.original_marker = (live / 'DEPLOY_COMMIT').read_bytes() if (live / 'DEPLOY_COMMIT').exists() else None
         self.env = {**os.environ}
         if manifest.get('sourceCommit'):
@@ -423,8 +450,9 @@ class Release:
             # The unchanged frontend keeps its own publication contract and identity.
             self.served_cases = self.live_cases
             self.served_guides = self.previous_guides
+            self.served_procurement = self.previous_procurement
             self.target_contract = case_contract('open' if any(self.live_cases.values()) else 'closed',
-                                                 self.live_cases, guides=self.previous_guides)
+                                                 self.live_cases, guides=self.previous_guides, procurement=self.previous_procurement)
             self.lenient_contract = self.target_contract
         if 'backend' in manifest:
             self.target['backend'] = manifest['backend']['image']
@@ -497,6 +525,19 @@ class Release:
             raise RuntimeError('Approved procurement continuity failed: ' + phase)
         return report
 
+    def procurement_check(self, container, phase, paths):
+        report = approved_procurement_probe(container, paths, public=phase.startswith('public'))
+        atomic_json(self.audit / (phase + '-approved-procurement.json'), report)
+        if report['passed'] is not True:
+            raise RuntimeError('Separate approved procurement continuity failed: ' + phase)
+        return report
+
+    def frontend_receipt(self):
+        return {**self.manifest, 'servedCases': self.served_cases,
+                **({'servedGuides': self.served_guides} if self.served_guides else {}),
+                **({SCOPE_FIELD: self.served_procurement,
+                    'procurementApprovalSha256': PROCUREMENT_APPROVAL_SHA256} if self.has_procurement_scope else {})}
+
     def execute(self, apply=False, kind='deploy'):
         if self.manifest.get('legacyEncodedPaths') and kind != 'rollback':
             raise RuntimeError('Encoded-path probes may be skipped only for an owner-approved rollback')
@@ -541,10 +582,13 @@ class Release:
         check_acquisition = (kind == 'deploy' and not self.preserve_frontend
                              and self.target['frontend'] != self.receipt['images']['frontend'])
         candidate_acquisition = None
+        candidate_procurement = None
         candidate_html = None
         canary = 'suneng-release-check-' + uuid.uuid4().hex[:12]
         if same or self.preserve_frontend:
             internal = probe('corp-site-frontend', self.script, self.target_contract)
+            if self.served_procurement:
+                candidate_procurement = self.procurement_check('corp-site-frontend', 'candidate', self.served_procurement)
             if check_html:
                 candidate_html = frontend_html_probe('corp-site-frontend', require_no_store=kind != 'rollback')
         else:
@@ -553,6 +597,8 @@ class Release:
                                      '--name', canary, 'frontend'], env=self.env)
                 wait_healthy(canary)
                 internal = probe(canary, self.script, self.target_contract)
+                if self.served_procurement:
+                    candidate_procurement = self.procurement_check(canary, 'candidate', self.served_procurement)
                 if check_html:
                     candidate_html = frontend_html_probe(canary, require_no_store=kind != 'rollback')
                 if check_acquisition:
@@ -574,9 +620,14 @@ class Release:
             result['candidateHtml'] = candidate_html
         if candidate_acquisition is not None:
             result['candidateAcquisition'] = candidate_acquisition
+        if candidate_procurement is not None:
+            result['candidateApprovedProcurement'] = candidate_procurement
         if not apply or same:
             # Without a switch the public site still runs the current image.
             result['publicChecks'] = public_probe('https://www.jssngyl.cn', self.target_contract if same else self.lenient_contract)
+            public_scope = self.served_procurement if same or self.preserve_frontend else self.previous_procurement
+            if public_scope:
+                result['publicApprovedProcurement'] = self.procurement_check('corp-site-frontend', 'public', public_scope)
             if check_html and same:
                 result['publicHtml'] = frontend_html_probe(expected=candidate_html, require_no_store=kind != 'rollback')
             atomic_json(self.audit / 'preflight.json', result)
@@ -597,7 +648,8 @@ class Release:
         atomic_json(self.pending_path, {'at': now(), 'auditDirectory': str(self.audit),
                                        'previousImages': self.receipt['images'], 'targetImages': self.target,
                                        'previousServedCases': self.live_cases, 'targetServedCases': self.served_cases,
-                                       'previousServedGuides': self.previous_guides, 'targetServedGuides': self.served_guides})
+                                       'previousServedGuides': self.previous_guides, 'targetServedGuides': self.served_guides,
+                                       'previousApprovedProcurementPages': self.previous_procurement, 'targetApprovedProcurementPages': self.served_procurement})
         try:
             if self.backend_only:
                 # Recheck immediately before the switch; no migration command is ever permitted.
@@ -609,6 +661,8 @@ class Release:
                 result['backendVerification'] = self.backend_check(running=True)
             result['internalChecks'] = probe('corp-site-frontend', self.script, self.target_contract)
             result['publicChecks'] = public_probe('https://www.jssngyl.cn', self.target_contract)
+            if self.served_procurement:
+                result['publicApprovedProcurement'] = self.procurement_check('corp-site-frontend', 'public', self.served_procurement)
             if check_acquisition:
                 result['publicAcquisition'] = self.acquisition_check('corp-site-frontend', 'public')
             if check_html:
@@ -625,7 +679,7 @@ class Release:
                 raise RuntimeError('Running frontend identity does not match target')
             receipt = copy.deepcopy(self.receipt)
             receipt.update({'images': self.target, 'sourceIdentity': 'component-release',
-                            **({} if self.preserve_frontend else {'frontendRelease': {**self.manifest, 'servedCases': self.served_cases, **({'servedGuides': self.served_guides} if self.served_guides else {})}}),
+                            **({} if self.preserve_frontend else {'frontendRelease': self.frontend_receipt()}),
                             'previousReceipt': str(self.audit / 'previous-receipt.json'),
                             'productionVerifiedAt': now(), 'deploymentStatus': 'verified',
                             'releaseOperation': kind, 'releaseOperationReceipt': str(self.audit / 'result.json')})
@@ -655,6 +709,8 @@ class Release:
                 # The restored image may predate the approved cases.
                 probe('corp-site-frontend', self.script, self.lenient_contract)
                 public_probe('https://www.jssngyl.cn', self.lenient_contract)
+                if self.previous_procurement:
+                    result['previousApprovedProcurement'] = self.procurement_check('corp-site-frontend', 'public-recovery', self.previous_procurement)
                 if 'admin' in self.manifest:
                     if admin_probe('corp-site-admin', require_filter=False)['assets'] != admin_probe(require_filter=False)['assets']:
                         raise RuntimeError('Public admin assets did not return to the previous image')
@@ -682,11 +738,13 @@ class Release:
                 # Describe the cases of the frontend that is actually running.
                 if observed.get('frontend') != self.receipt['images']['frontend']:
                     if observed.get('frontend') == self.target['frontend']:
-                        failed['frontendRelease'] = {**self.manifest, 'servedCases': self.served_cases, **({'servedGuides': self.served_guides} if self.served_guides else {})}
+                        failed['frontendRelease'] = self.frontend_receipt()
                     else:
                         failed['frontendRelease'] = {**(self.receipt.get('frontendRelease') or {}),
                                                      'servedCases': merge_cases(self.live_cases, self.served_cases),
                                                      'servedCasesUnverified': True,
+                                                     **({SCOPE_FIELD: sorted(set(self.previous_procurement + self.served_procurement)),
+                                                         SCOPE_FIELD + 'Unverified': True} if self.has_procurement_scope else {}),
                                                      **({'servedGuides': sorted(set(self.previous_guides + self.served_guides)),
                                                          'servedGuidesUnverified': True} if self.previous_guides or self.served_guides else {})}
                 self.write_override(self.pins_path, observed)
