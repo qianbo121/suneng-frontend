@@ -150,17 +150,38 @@ export async function submitIndexNow(siteUrl, urls, dryRun) {
   };
 }
 
+// These holds only prevent duplicate API attempts for the approved repair batch.
+// They never turn a manual report/receipt into an API acceptance or timestamp.
+export function selectUnprotectedBaiduUrls(urls) {
+  const registry = JSON.parse(readFileSync(new URL('./baidu-manual-submission-protection.json', import.meta.url), 'utf8'));
+  if (registry.version !== 1 || !Array.isArray(registry.entries) || registry.entries.some((entry) =>
+    !['user-reported-submitted', 'platform-received'].includes(entry.evidenceStatus) ||
+    typeof entry.url !== 'string' || new URL(entry.url).origin !== FALLBACK_SITE_URL ||
+    new URL(entry.url).search || new URL(entry.url).hash || new URL(entry.url).href !== entry.url) ||
+    new Set(registry.entries.map((entry) => entry.url)).size !== registry.entries.length) {
+    throw new Error('Invalid manual-submission protection; refusing an automatic attempt');
+  }
+  const held = new Set(registry.entries.map((entry) => entry.url));
+  return { urls: urls.filter((url) => !held.has(url)), protectedUrls: urls.filter((url) => held.has(url)) };
+}
+
 export async function submitBaidu(siteUrl, urls, dryRun, remaining = Infinity) {
+  const protection = selectUnprotectedBaiduUrls(urls);
+  urls = protection.urls;
+  const protectedUrls = protection.protectedUrls;
+  if (!urls.length && protectedUrls.length) {
+    return { skipped: true, reason: 'manually handled URLs protected; no API attempt or acceptance', protectedUrls, acceptedUrls: [] };
+  }
   const token = getEnv('BAIDU_TOKEN') || getEnv('BAIDU_PUSH_TOKEN');
 
   if (!token) {
-    return { skipped: true, reason: 'BAIDU_TOKEN is not set (BAIDU_PUSH_TOKEN is accepted as a legacy alias)' };
+    return { skipped: true, reason: 'BAIDU_TOKEN is not set (BAIDU_PUSH_TOKEN is accepted as a legacy alias)', protectedUrls };
   }
 
   const limit = Number(getEnv('BAIDU_PUSH_MAX_URLS') || 10);
   if (!Number.isInteger(limit) || limit < 1) throw new Error('Invalid Baidu submission limit');
   const selected = urls.slice(0, Math.min(limit, remaining));
-  if (!selected.length) return { skipped: true, reason: 'Daily submission budget exhausted' };
+  if (!selected.length) return { skipped: true, reason: 'Daily submission budget exhausted', protectedUrls };
   if (selected.length < urls.length) {
     console.warn(`${process.env.CI ? '::warning::' : ''}Baidu: ${urls.length - selected.length} URLs deferred by per-run budget:`);
     for (const url of urls.slice(limit)) console.log(`DEFERRED ${url}`);
@@ -173,7 +194,7 @@ export async function submitBaidu(siteUrl, urls, dryRun, remaining = Infinity) {
   const endpoint = `https://data.zz.baidu.com/urls?site=${encodeURIComponent(registeredSite)}&token=${encodeURIComponent(token)}`;
 
   if (dryRun) {
-    return { skipped: false, dryRun: true, submitted: selected.length };
+    return { skipped: false, dryRun: true, submitted: selected.length, protectedUrls };
   }
 
   const response = await fetch(endpoint, {
@@ -189,8 +210,16 @@ export async function submitBaidu(siteUrl, urls, dryRun, remaining = Infinity) {
 
   const body = await response.text();
   let accepted = false;
-  try { const result = JSON.parse(body); accepted = !result.error && Number(result.success) === selected.length; } catch { /* Invalid responses are failures. */ }
-  return { skipped: false, ok: response.ok && accepted, status: response.status, body, acceptedUrls: response.ok && accepted ? selected : [] };
+  try {
+    const result = JSON.parse(body);
+    accepted = Boolean(result && typeof result === 'object' && !Array.isArray(result) &&
+      !Object.prototype.hasOwnProperty.call(result, 'error') &&
+      Number.isSafeInteger(result.success) && result.success === selected.length &&
+      (result.remain === undefined || (Number.isSafeInteger(result.remain) && result.remain >= 0)) &&
+      ['not_valid', 'not_same_site'].every((key) => result[key] === undefined ||
+        (Array.isArray(result[key]) && result[key].length === 0)));
+  } catch { /* Invalid responses are failures. */ }
+  return { skipped: false, ok: response.ok && accepted, status: response.status, body, acceptedUrls: response.ok && accepted ? selected : [], protectedUrls };
 
 }
 

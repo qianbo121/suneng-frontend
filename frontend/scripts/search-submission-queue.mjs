@@ -1,6 +1,6 @@
 import { existsSync, readFileSync, writeFileSync, renameSync } from 'node:fs';
 import { pathToFileURL } from 'node:url';
-import { describeSubmissionFailure, loadSitemapEntries, submitBaidu, submitIndexNow } from './submit-search-engines.mjs';
+import { describeSubmissionFailure, loadSitemapEntries, selectUnprotectedBaiduUrls, submitBaidu, submitIndexNow } from './submit-search-engines.mjs';
 import { selectChangedUrls } from './changed-search-urls.mjs';
 
 export function emptyQueue() {
@@ -79,9 +79,12 @@ export async function drainQueue(state, { day, limit, available, submit, save, b
       continue;
     }
     const maximum = engine === 'baidu' ? Math.max(0, limit - state.baiduAttempted) : 10000;
-    const urls = state.pending[engine].slice(0, maximum);
+    const selection = engine === 'baidu' ? selectUnprotectedBaiduUrls(state.pending.baidu) : { urls: state.pending[engine] };
+    const urls = selection.urls.slice(0, maximum);
     if (!urls.length || !available[engine]) {
-      results[engine] = { skipped: true, reason: !available[engine] ? 'credentials missing; pending URLs retained' : 'empty queue or daily budget exhausted' };
+      const allProtected = engine === 'baidu' && !selection.urls.length && selection.protectedUrls.length;
+      results[engine] = { skipped: true, reason: allProtected ? 'manually handled URLs protected; no API attempt or acceptance' : !available[engine] ? 'credentials missing; pending URLs retained' : 'empty queue or daily budget exhausted',
+        ...(engine === 'baidu' ? { protectedUrls: selection.protectedUrls } : {}) };
       continue;
     }
     // Reserve quota before the request. An ambiguous/partial response stays pending.
@@ -89,13 +92,14 @@ export async function drainQueue(state, { day, limit, available, submit, save, b
     await save(state);
     try {
       const result = await submit[engine](urls);
-      results[engine] = result;
+      results[engine] = engine === 'baidu' ? { ...result, protectedUrls: selection.protectedUrls } : result;
       if (result.ok) {
         const accepted = new Set(result.acceptedUrls || urls);
         state.pending[engine] = state.pending[engine].filter((url) => !accepted.has(url));
       }
     } catch (error) {
-      results[engine] = { ok: false, reason: `${describeSubmissionFailure(error)}; pending URLs retained` };
+      results[engine] = { ok: false, reason: `${describeSubmissionFailure(error)}; pending URLs retained`,
+        ...(engine === 'baidu' ? { protectedUrls: selection.protectedUrls } : {}) };
     }
     await save(state);
   }

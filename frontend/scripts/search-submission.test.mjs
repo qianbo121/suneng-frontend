@@ -1,7 +1,8 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
 import { selectChangedUrls, sitemapEntries } from './changed-search-urls.mjs';
-import { describeSubmissionFailure, submitBaidu } from './submit-search-engines.mjs';
+import { describeSubmissionFailure, selectUnprotectedBaiduUrls, submitBaidu } from './submit-search-engines.mjs';
 
 const site = 'https://www.jssngyl.cn';
 test('selects additions and true content changes, not unchanged or removed pages', () => {
@@ -106,4 +107,140 @@ test('Baidu TLS failure makes one HTTPS attempt without redirect or insecure fal
       if (saved[key] === undefined) delete process.env[key]; else process.env[key] = saved[key];
     }
   }
+});
+
+
+async function withMockedBaidu(response, check) {
+  const originalFetch = globalThis.fetch;
+  const names = ['BAIDU_TOKEN', 'BAIDU_PUSH_TOKEN', 'BAIDU_SITE', 'BAIDU_PUSH_MAX_URLS'];
+  const saved = Object.fromEntries(names.map((name) => [name, process.env[name]]));
+  const calls = [];
+  try {
+    process.env.BAIDU_TOKEN = 'test-only';
+    delete process.env.BAIDU_PUSH_TOKEN;
+    process.env.BAIDU_SITE = site;
+    process.env.BAIDU_PUSH_MAX_URLS = '10';
+    globalThis.fetch = async (endpoint, options) => {
+      assert.equal(new URL(endpoint).origin, 'https://data.zz.baidu.com');
+      assert.equal(options.redirect, 'error');
+      calls.push(options.body);
+      return new Response(response.body, { status: response.status ?? 200 });
+    };
+    await check(calls);
+  } finally {
+    globalThis.fetch = originalFetch;
+    for (const name of names) {
+      if (saved[name] === undefined) delete process.env[name];
+      else process.env[name] = saved[name];
+    }
+  }
+}
+
+test('Baidu accepts only the exact selected batch and returns only those URLs', async () => {
+  const urls = [`${site}/zh/news/test-one`, `${site}/zh/news/test-two`];
+  await withMockedBaidu({ body: JSON.stringify({ success: 2, remain: 0, not_valid: [], not_same_site: [] }) }, async (calls) => {
+    const result = await submitBaidu(site, urls, false);
+    assert.equal(result.ok, true);
+    assert.deepEqual(result.acceptedUrls, urls);
+    assert.deepEqual(calls, [urls.join('\n')]);
+  });
+  await withMockedBaidu({ body: JSON.stringify({ success: 1 }) }, async (calls) => {
+    const result = await submitBaidu(site, urls, false, 1);
+    assert.equal(result.ok, true);
+    assert.deepEqual(result.acceptedUrls, urls.slice(0, 1));
+    assert.deepEqual(calls, [urls[0]]);
+  });
+});
+
+test('Baidu rejects malformed, contradictory, partial and invalid acceptance replies', async (t) => {
+  const urls = [`${site}/zh/news/test-one`, `${site}/zh/news/test-two`];
+  const cases = [
+    ['invalid JSON', '{'], ['empty body', ''],
+    ['null', 'null'], ['array', '[]'], ['string', '"accepted"'], ['number', '2'],
+    ['missing success', {}], ['zero accepted', { success: 0 }], ['partial accepted', { success: 1 }],
+    ['excess accepted', { success: 3 }], ['string count', { success: '2' }],
+    ['boolean count', { success: true }], ['fractional count', { success: 2.5 }],
+    ['negative count', { success: -2 }], ['unsafe count', { success: Number.MAX_SAFE_INTEGER + 1 }],
+    ['error field zero', { success: 2, error: 0 }], ['error field null', { success: 2, error: null }],
+    ['error field message', { success: 2, error: 400 }],
+    ['negative quota', { success: 2, remain: -1 }], ['fractional quota', { success: 2, remain: 1.5 }],
+    ['string quota', { success: 2, remain: '10' }], ['null quota', { success: 2, remain: null }],
+    ['unsafe quota', { success: 2, remain: Number.MAX_SAFE_INTEGER + 1 }],
+    ['invalid URLs', { success: 2, not_valid: [urls[0]] }],
+    ['off-site URLs', { success: 2, not_same_site: ['https://other.example/test'] }],
+    ['invalid field type', { success: 2, not_valid: '' }],
+    ['off-site field type', { success: 2, not_same_site: null }],
+  ];
+  for (const [name, body] of cases) {
+    await t.test(name, async () => {
+      await withMockedBaidu({ body: typeof body === 'string' ? body : JSON.stringify(body) }, async (calls) => {
+        const result = await submitBaidu(site, urls, false);
+        assert.equal(result.ok, false);
+        assert.deepEqual(result.acceptedUrls, []);
+        assert.deepEqual(calls, [urls.join('\n')]);
+      });
+    });
+  }
+});
+
+test('Baidu HTTP failures remain unaccepted even with an exact positive count', async () => {
+  const urls = [`${site}/zh/news/test-one`];
+  await withMockedBaidu({ status: 503, body: JSON.stringify({ success: 1 }) }, async (calls) => {
+    const result = await submitBaidu(site, urls, false);
+    assert.equal(result.ok, false);
+    assert.equal(result.status, 503);
+    assert.deepEqual(result.acceptedUrls, []);
+    assert.deepEqual(calls, [urls[0]]);
+  });
+});
+
+
+const manualProtection = JSON.parse(readFileSync(new URL('./baidu-manual-submission-protection.json', import.meta.url), 'utf8'));
+const protectedUrls = manualProtection.entries.map((entry) => entry.url);
+
+test('manual protection distinguishes five user reports from three platform receipts without claiming a timestamp', () => {
+  assert.equal(protectedUrls.length, 8);
+  assert.equal(new Set(protectedUrls).size, 8);
+  assert.equal(manualProtection.entries.filter((entry) => entry.evidenceStatus === 'user-reported-submitted').length, 5);
+  assert.equal(manualProtection.entries.filter((entry) => entry.evidenceStatus === 'platform-received').length, 3);
+  assert.equal(manualProtection.entries.every((entry) => entry.exactSubmissionTime === null), true);
+  assert.match(manualProtection.releaseCondition, /substantial content update or explicit resubmission authorization/);
+  assert.deepEqual(selectUnprotectedBaiduUrls([...protectedUrls, `${site}/zh/news/new-unhandled`]), {
+    urls: [`${site}/zh/news/new-unhandled`], protectedUrls,
+  });
+});
+
+test('mixed manual and unhandled URLs send and accept only the unhandled URL', async () => {
+  const fresh = `${site}/zh/news/new-unhandled`;
+  const held = [protectedUrls[0], protectedUrls[7]];
+  await withMockedBaidu({ body: JSON.stringify({ success: 1 }) }, async (calls) => {
+    const result = await submitBaidu(site, [held[0], fresh, held[1]], false, 1);
+    assert.equal(result.ok, true);
+    assert.deepEqual(result.acceptedUrls, [fresh]);
+    assert.deepEqual(result.protectedUrls, held);
+    assert.deepEqual(calls, [fresh]);
+  });
+});
+
+test('all eight manually handled URLs skip the API and never claim acceptance', async () => {
+  await withMockedBaidu({ body: JSON.stringify({ success: 8 }) }, async (calls) => {
+    const result = await submitBaidu(site, protectedUrls, false);
+    assert.equal(result.skipped, true);
+    assert.equal(result.ok, undefined);
+    assert.deepEqual(result.acceptedUrls, []);
+    assert.deepEqual(result.protectedUrls, protectedUrls);
+    assert.deepEqual(calls, []);
+    assert.match(result.reason, /no API attempt or acceptance/);
+  });
+});
+
+test('a bad mixed-batch count cannot turn protected URLs into API acceptances', async () => {
+  const fresh = `${site}/zh/news/new-unhandled`;
+  await withMockedBaidu({ body: JSON.stringify({ success: 2 }) }, async (calls) => {
+    const result = await submitBaidu(site, [protectedUrls[0], fresh], false);
+    assert.equal(result.ok, false);
+    assert.deepEqual(result.acceptedUrls, []);
+    assert.deepEqual(result.protectedUrls, [protectedUrls[0]]);
+    assert.deepEqual(calls, [fresh]);
+  });
 });
