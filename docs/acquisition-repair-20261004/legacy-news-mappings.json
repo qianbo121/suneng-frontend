@@ -1,9 +1,9 @@
 {
   "kind": "verified-original-php-news-continuity",
   "baseCommit": "78a686d5028c438c40b6ce36644accf4954e92e2",
-  "mappingCount": 8,
+  "mappingCount": 9,
   "implementation": "Only /news/shownews.php uses an independent exact arg_id map in all three public hosts; absolute 301 target without the source query string.",
-  "unknownIdBehavior": "Existing /zh/news fallback retained, including id=43 and all unapproved IDs.",
+  "unknownIdBehavior": "Existing /zh/news fallback retained for all IDs absent from the exact news map; unknown PHP remains 404.",
   "preservedProductMapSha256": "df128b9c0e816d85f1ee11c29fbfdfbeff62ec86d8bdb9f565c27b2d1a38b9b8",
   "mappingMeaning": "原3条保持同类设备承接；新5条接向用户批准的同题审定替代正文。原文未经确认的操作、规格和主张未恢复，也不宣称排名或咨询已恢复。",
   "originalNewsBodyRestored": false,
@@ -357,11 +357,76 @@
         "Reviewed same-question content replaces the old question; original unsafe instructions, unverified parameters and claims are not republished.",
         "Source configuration and user approval do not prove public target publication, live redirect, indexing, rankings, AI citations or customer inquiries."
       ]
+    },
+    {
+      "oldId": 43,
+      "oldUrl": "http://jssngyl.cn/news/shownews.php?id=43",
+      "oldRequestPath": "/news/shownews.php?id=43",
+      "oldTitle": "退火炉_什么是退火炉？",
+      "archiveTimestamp": "20240916185219",
+      "archiveReplayUrl": "https://web.archive.org/web/20240916185219/http://jssngyl.cn/news/shownews.php?id=43",
+      "originalUrlAndTimestampVerified": true,
+      "sourceType": "verified-original-news-body-and-human-approved-replacement",
+      "sourceEvidence": {
+        "archiveMetadata": "output/acquisition-full-closeout-20261004/legacy/missing-known-news-recovered-news43.json",
+        "originalArticleText": "output/acquisition-full-closeout-20261004/legacy/missing-known-news-recovered-news43.article.txt",
+        "originalArticleHtml": "output/acquisition-full-closeout-20261004/legacy/missing-known-news-recovered-news43.article.html",
+        "originalArticleTextSha256": "ea218088e005494a066376207b6953fe66f879ddf8180e8c7c9aabc15e4106cb",
+        "originalArticleHtmlSha256": "5cfbdc082e1ed218651a336604c87f200738e5ef58a9bf49667d2912e090ad7e",
+        "originalResponseSha256": "39d9ee7770d34c9af7515e98c6c5073de5aa505adb018c5920d2bf9d03b55a15"
+      },
+      "newTarget": "https://www.jssngyl.cn/zh/news/annealing-furnace-metal-semiconductor-selection",
+      "newRequestPath": "/zh/news/annealing-furnace-metal-semiconductor-selection",
+      "newCanonical": "https://www.jssngyl.cn/zh/news/annealing-furnace-metal-semiconductor-selection",
+      "newTitle": "退火炉怎么选？先分清金属工件与半导体晶片",
+      "newObservedAt": "2026-10-05T11:29:39+00:00",
+      "newObservedStatus": 200,
+      "newNoindex": null,
+      "originalNewsBodyRestored": false,
+      "mappingIntent": "human-approved-annealing-metal-semiconductor-boundary-replacement",
+      "reviewedReplacementBodyPublished": true,
+      "newLegacyRedirectDeployed": false,
+      "publicationState": "target-published-edge-awaiting-two-static-targets-and-release",
+      "reviewedReplacementBodySha256": "b8a98475935d1066ba62ecad5b227f30c4bb5868c1c1200ad3b0df323995a715",
+      "sourceReview": {
+        "approvalRecord": {
+          "path": "output/acquisition-next-repairs-20261005/approved-ui-release/human-approval.json",
+          "sha256": "c4fd9b71641683d533e3d61c038400f7207086dda75ef56621f536ce77b82339",
+          "statement": "同意",
+          "scope": "two existing entries, three Chinese pages and 56 exact legacy mappings"
+        },
+        "placementPlan": {
+          "path": "output/acquisition-next-repairs-20261005/content/placement-plan-v2.json",
+          "sha256": "77fafc116c67706ef3da5e29567241a79232225bae4f7f505fe451b8a80f05c9"
+        },
+        "originalRemainingRecord": {
+          "path": "output/acquisition-next-repairs-20261005/remaining-56.json",
+          "sha256": "b24f09dd0be5f1b310d369baa35e07cd37d11808027c5f0f02d0de83b7589473"
+        }
+      },
+      "limits": [
+        "这是用户批准的退火选型审定替代正文，不是原半导体操作、规格或能力主张全文复原。",
+        "审定替代文章已通过统一发布与完整正文核验；另外两静态目标和新边缘规则尚未上线，必须等本批三目标门槛与受保护边缘验收。",
+        "不宣称排名、AI引用或采购咨询恢复。"
+      ],
+      "reviewedTargetPublicationEvidence": {
+        "batch": "output/acquisition-next-repairs-20261005/approved-ui-release/news43/batch.json",
+        "batchSha256": "69e57058efefb75bdc8b98dcd08d2a3022aaea97fc42e10b36ee14f9ece397cd",
+        "browserEquivalence": "output/acquisition-next-repairs-20261005/approved-ui-release/ui/news43-body-equivalence.json",
+        "browserEquivalenceSha256": "0f44b9db993d7a613d801704323ebb44ea81964ff3a1eaa32ce40cb078855276",
+        "newsId": 133,
+        "sourceDraftId": 2026100543,
+        "sourceVersion": 1,
+        "publishedAt": "2026-10-05T11:28:54.133Z",
+        "publishedAtReliable": true,
+        "verifiedAt": "2026-10-05T11:29:39+00:00",
+        "newLegacyRedirectDeployed": false
+      }
     }
   ],
   "historicalEquipmentContinuityBaseCommit": "f3823e8a602d50e3a72fac8870da35c6e8c7682d",
-  "mappingCountMeaning": "Checked-in candidate news mappings; not a claim that all eight are deployed.",
-  "existingNewsMappingsPreserved": 3,
+  "mappingCountMeaning": "Checked-in candidate nine news mappings; original eight row histories retained, new43 not claimed published.",
+  "existingNewsMappingsPreserved": 8,
   "newQuestionMappingIds": [
     25,
     37,
@@ -371,7 +436,32 @@
   ],
   "newQuestionMappingCount": 5,
   "newQuestionMappingPublicationState": "pending-target-publication-and-edge-release",
-  "currentPublishedNewsMappingsBeforeThisChange": 3,
-  "currentPublishedTotalMappingsBeforeThisChange": 36,
-  "candidateTotalMappings": 41
+  "currentPublishedNewsMappingsBeforeThisChange": 8,
+  "currentPublishedTotalMappingsBeforeThisChange": 45,
+  "candidateTotalMappings": 101,
+  "historicalFiveQuestionBatch": {
+    "currentPublishedNewsMappingsBeforeThisChange": 3,
+    "currentPublishedTotalMappingsBeforeThisChange": 36,
+    "candidateTotalMappings": 41
+  },
+  "newAnnealingKnowledgeMappingIds": [
+    43
+  ],
+  "newBatchPublicationState": "approved-candidate-awaiting-three-target-publication-and-edge-release",
+  "thisBatchApproval": {
+    "approvalRecord": {
+      "path": "output/acquisition-next-repairs-20261005/approved-ui-release/human-approval.json",
+      "sha256": "c4fd9b71641683d533e3d61c038400f7207086dda75ef56621f536ce77b82339",
+      "statement": "同意",
+      "scope": "two existing entries, three Chinese pages and 56 exact legacy mappings"
+    },
+    "placementPlan": {
+      "path": "output/acquisition-next-repairs-20261005/content/placement-plan-v2.json",
+      "sha256": "77fafc116c67706ef3da5e29567241a79232225bae4f7f505fe451b8a80f05c9"
+    },
+    "originalRemainingRecord": {
+      "path": "output/acquisition-next-repairs-20261005/remaining-56.json",
+      "sha256": "b24f09dd0be5f1b310d369baa35e07cd37d11808027c5f0f02d0de83b7589473"
+    }
+  }
 }

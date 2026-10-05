@@ -22,6 +22,7 @@ const purchaseReferences = [
   ['连续生产线规划', '/zh/solutions/continuous-heat-treatment-line'],
   ['厂家能力核对', '/zh/solutions/rechuli-lu-changjia'],
   ['江苏及华东项目配套', '/zh/solutions/jiangsu-gongye-lu-changjia'],
+  ['专项工业炉采购评估', '/zh/articles/special-industrial-furnace-procurement-assessment'],
 ] as const;
 
 function SectionHeading({

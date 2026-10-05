@@ -165,6 +165,16 @@ function collectStaticRoutes(): MetadataRoute.Sitemap {
     lastModified?: string;
   }> = [
     {
+      path: '/articles/special-industrial-furnace-procurement-assessment',
+      changeFrequency: 'monthly',
+      priority: 0.65,
+    },
+    {
+      path: '/service/industrial-furnace-parts-purchasing',
+      changeFrequency: 'monthly',
+      priority: 0.65,
+    },
+    {
       path: '/products/detail/copper-wire-annealing-line/inquiry-checklist',
       changeFrequency: 'monthly',
       priority: 0.65,

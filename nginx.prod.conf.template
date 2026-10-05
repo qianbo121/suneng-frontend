@@ -98,6 +98,61 @@ http {
     195 /zh/products/detail/annealing-solution-line;
     196 /zh/products/detail/annealing-solution-line;
     242 /zh/products/detail/trolley-furnace;
+    122 "/zh/articles/special-industrial-furnace-procurement-assessment#room-gas-forging-regenerative-assessment";
+    124 "/zh/articles/special-industrial-furnace-procurement-assessment#room-gas-forging-regenerative-assessment";
+    132 "/zh/articles/special-industrial-furnace-procurement-assessment#room-gas-forging-regenerative-assessment";
+    136 "/zh/articles/special-industrial-furnace-procurement-assessment#room-gas-forging-regenerative-assessment";
+    137 "/zh/articles/special-industrial-furnace-procurement-assessment#room-gas-forging-regenerative-assessment";
+    138 "/zh/articles/special-industrial-furnace-procurement-assessment#room-gas-forging-regenerative-assessment";
+    139 "/zh/articles/special-industrial-furnace-procurement-assessment#room-gas-forging-regenerative-assessment";
+    140 "/zh/articles/special-industrial-furnace-procurement-assessment#room-gas-forging-regenerative-assessment";
+    144 "/zh/articles/special-industrial-furnace-procurement-assessment#solution-nitriding-atmosphere-assessment";
+    145 "/zh/articles/special-industrial-furnace-procurement-assessment#solution-nitriding-atmosphere-assessment";
+    146 "/zh/articles/special-industrial-furnace-procurement-assessment#solution-nitriding-atmosphere-assessment";
+    148 "/zh/articles/special-industrial-furnace-procurement-assessment#solution-nitriding-atmosphere-assessment";
+    149 "/zh/articles/special-industrial-furnace-procurement-assessment#solution-nitriding-atmosphere-assessment";
+    151 "/zh/articles/special-industrial-furnace-procurement-assessment#solution-nitriding-atmosphere-assessment";
+    153 "/zh/articles/special-industrial-furnace-procurement-assessment#solution-nitriding-atmosphere-assessment";
+    155 "/zh/articles/special-industrial-furnace-procurement-assessment#solution-nitriding-atmosphere-assessment";
+    157 "/zh/articles/special-industrial-furnace-procurement-assessment#solution-nitriding-atmosphere-assessment";
+    174 "/zh/articles/special-industrial-furnace-procurement-assessment#large-bell-assessment";
+    176 "/zh/articles/special-industrial-furnace-procurement-assessment#large-bell-assessment";
+    178 "/zh/articles/special-industrial-furnace-procurement-assessment#oven-preheat-curing-assessment";
+    179 "/zh/articles/special-industrial-furnace-procurement-assessment#oven-preheat-curing-assessment";
+    180 "/zh/articles/special-industrial-furnace-procurement-assessment#oven-preheat-curing-assessment";
+    181 "/zh/articles/special-industrial-furnace-procurement-assessment#oven-preheat-curing-assessment";
+    182 "/zh/articles/special-industrial-furnace-procurement-assessment#spheroidizing-assessment";
+    183 "/zh/articles/special-industrial-furnace-procurement-assessment#spheroidizing-assessment";
+    184 "/zh/articles/special-industrial-furnace-procurement-assessment#spheroidizing-assessment";
+    185 "/zh/articles/special-industrial-furnace-procurement-assessment#spheroidizing-assessment";
+    205 "/zh/service/industrial-furnace-parts-purchasing#parts-heating";
+    206 "/zh/service/industrial-furnace-parts-purchasing#parts-baskets-welded";
+    207 "/zh/service/industrial-furnace-parts-purchasing#parts-baskets-welded";
+    208 "/zh/service/industrial-furnace-parts-purchasing#parts-baskets-welded";
+    209 "/zh/service/industrial-furnace-parts-purchasing#parts-baskets-welded";
+    210 "/zh/service/industrial-furnace-parts-purchasing#parts-baskets-welded";
+    211 "/zh/service/industrial-furnace-parts-purchasing#parts-baskets-welded";
+    212 "/zh/service/industrial-furnace-parts-purchasing#parts-heating";
+    213 "/zh/service/industrial-furnace-parts-purchasing#parts-heating";
+    214 "/zh/service/industrial-furnace-parts-purchasing#parts-heating";
+    215 "/zh/service/industrial-furnace-parts-purchasing#parts-heating";
+    216 "/zh/service/industrial-furnace-parts-purchasing#parts-heating";
+    217 "/zh/service/industrial-furnace-parts-purchasing#parts-heating";
+    218 "/zh/service/industrial-furnace-parts-purchasing#parts-fans-shafts";
+    219 "/zh/service/industrial-furnace-parts-purchasing#parts-cover-motor-guide";
+    220 "/zh/service/industrial-furnace-parts-purchasing#parts-fans-shafts";
+    221 "/zh/service/industrial-furnace-parts-purchasing#parts-fans-shafts";
+    222 "/zh/service/industrial-furnace-parts-purchasing#parts-fans-shafts";
+    223 "/zh/service/industrial-furnace-parts-purchasing#parts-fans-shafts";
+    224 "/zh/service/industrial-furnace-parts-purchasing#parts-fans-shafts";
+    225 "/zh/service/industrial-furnace-parts-purchasing#parts-cover-motor-guide";
+    226 "/zh/service/industrial-furnace-parts-purchasing#parts-fans-shafts";
+    227 "/zh/service/industrial-furnace-parts-purchasing#parts-heating";
+    228 "/zh/service/industrial-furnace-parts-purchasing#parts-heating";
+    241 "/zh/service/industrial-furnace-parts-purchasing#parts-cover-motor-guide";
+    243 "/zh/articles/special-industrial-furnace-procurement-assessment#oven-preheat-curing-assessment";
+    244 "/zh/articles/special-industrial-furnace-procurement-assessment#oven-preheat-curing-assessment";
+    245 "/zh/articles/special-industrial-furnace-procurement-assessment#oven-preheat-curing-assessment";
   }
 
   # Verified old news: preserve equipment continuity and approved same-question replacements.
@@ -112,6 +167,7 @@ http {
     41 /zh/products/detail/mesh-belt-furnace;
     42 /zh/news/gas-trolley-furnace-operation-maintenance-documents;
     44 /zh/news/mesh-belt-quenching-furnace-principle-process-checklist;
+    43 /zh/news/annealing-furnace-metal-semiconductor-selection;
   }
 
   map "$request_method:$uri" $lead_event {

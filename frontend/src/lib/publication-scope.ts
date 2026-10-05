@@ -4,6 +4,17 @@ import { PUBLIC_CASE_SLUGS, PUBLIC_ENGLISH_CASE_SLUGS } from '@/lib/cases/public
 /** The default remains closed; the owner approved the listed Chinese guides. */
 export const TECHNICAL_CONTENT_PUBLISHED = false;
 export const APPROVED_GUIDE_PATHS: ReadonlySet<string> = new Set(approvedGuidePaths);
+/** Additional exact Chinese procurement pages approved separately from the eleven guides. */
+export const APPROVED_PROCUREMENT_PATHS: ReadonlySet<string> = new Set([
+  '/zh/articles/special-industrial-furnace-procurement-assessment',
+  '/zh/service/industrial-furnace-parts-purchasing',
+]);
+export function isPublishedProcurementPage(locale: string, chinesePath: string): boolean {
+  return locale === 'zh' && APPROVED_PROCUREMENT_PATHS.has(chinesePath);
+}
+function isApprovedChinesePath(path: string): boolean {
+  return APPROVED_GUIDE_PATHS.has(path) || APPROVED_PROCUREMENT_PATHS.has(path);
+}
 export function isPublishedGuide(locale: string, chinesePath: string): boolean {
   return locale === 'zh' && APPROVED_GUIDE_PATHS.has(chinesePath);
 }
@@ -73,7 +84,7 @@ function isWithdrawnSegments(segments: string[]): boolean {
   if (!SECTION.test(section)) return false;
   if (section.toLowerCase() !== 'case') {
     const approved =
-      locale === 'zh' && rest.length === 1 && APPROVED_GUIDE_PATHS.has(`/zh/${section}/${rest[0]}`);
+      locale === 'zh' && rest.length === 1 && isApprovedChinesePath(`/zh/${section}/${rest[0]}`);
     return !TECHNICAL_CONTENT_PUBLISHED && !approved;
   }
   const approved = locale === 'en' ? PUBLIC_ENGLISH_CASE_SLUGS : PUBLIC_CASE_SLUGS;
@@ -94,8 +105,8 @@ function isWithdrawnSegments(segments: string[]): boolean {
 export function isWithdrawnRequestPath(pathname: string): boolean {
   const canonical = routablePathname(pathname).replace(/\/+$/, '');
   if (
-    APPROVED_GUIDE_PATHS.has(canonical) &&
-    !APPROVED_GUIDE_PATHS.has(pathname.replace(/\/+$/, ''))
+    isApprovedChinesePath(canonical) &&
+    !isApprovedChinesePath(pathname.replace(/\/+$/, ''))
   )
     return true;
   return (
