@@ -16,7 +16,8 @@ const approvedQuestions = [
   ['42', '/zh/news/gas-trolley-furnace-operation-maintenance-documents'],
   ['44', '/zh/news/mesh-belt-quenching-furnace-principle-process-checklist'],
 ] as const;
-const allApproved = [...approved, ...approvedQuestions];
+const approvedAnnealingKnowledge = [['43', '/zh/news/annealing-furnace-metal-semiconductor-selection']] as const;
+const allApproved = [...approved, ...approvedQuestions, ...approvedAnnealingKnowledge];
 const approvedQuestionBodies = [
   [25, '93020b979b7325ba76226d20197f76784d8527c570b7758a999b4ab087433c3a', '915cae0852d118a6271d9792611995acc4d7d3ebc0be8d239cd9ae31c4749ed1'],
   [37, 'f240b1fcef80caa7e9ee7595ec6a7e80c2ead2e92a613ce0e9bb9f173640a43b', 'f28cd6b409172bb09069fa7e871f72dfb264bfa45015de787828d8d086732420'],
@@ -32,11 +33,12 @@ const origins = [
 const ledger = JSON.parse(readFileSync(new URL('docs/acquisition-repair-20261004/legacy-news-mappings.json', root), 'utf8')) as {
   mappingCount: number; originalNewsBodyRestored: boolean; preservedProductMapSha256: string;
   newQuestionMappingIds: number[]; currentPublishedTotalMappingsBeforeThisChange: number; candidateTotalMappings: number;
+  historicalFiveQuestionBatch: { currentPublishedTotalMappingsBeforeThisChange: number; candidateTotalMappings: number };
   mappings: Array<{ oldId: number; oldUrl: string; oldTitle: string; archiveTimestamp: string; archiveReplayUrl: string;
     originalUrlAndTimestampVerified: boolean; newRequestPath: string; newTarget: string; newCanonical: string;
     newObservedStatus: number | null; newNoindex: boolean | null; originalNewsBodyRestored: boolean; mappingIntent: string; limits: string[];
     newTitle?: string; newCategoryId?: number; newObservedAt?: string | null; publicationState?: string;
-    reviewedReplacementBodyPublished?: boolean; newLegacyRedirectDeployed?: boolean;
+    reviewedReplacementBodyPublished?: boolean; newLegacyRedirectDeployed?: boolean; reviewedReplacementBodySha256?: string;
     reviewedReplacement?: { draftSha256: string; htmlSha256: string; contentEquivalentToApprovedPreview: boolean;
       bodyAndUiApprovedAccordingToTrustedParent: boolean; scope: { language: string; newImages: boolean; externalChannels: boolean } };
     sourceEvidence: { originalArticleTextSha256: string; originalArticleHtmlSha256: string; originalResponseSha256: string } }>;
@@ -84,7 +86,7 @@ function locationBody(block: string, path: string) {
 }
 
 describe('verified original-PHP news continuity', () => {
-  it('permits only the eight approved news IDs and the existing news default', () => {
+  it('permits only the nine approved news IDs and the existing news default', () => {
     expect([...newsMap().entries()].sort()).toEqual([['default', '/zh/news'], ...allApproved].sort());
   });
 
@@ -97,7 +99,7 @@ describe('verified original-PHP news continuity', () => {
     }
   });
 
-  it.each(['', '43', '150', '186', '999999', '038', '38x', '%33%38', '025', '37x', '%33%37'])('unapproved or nonexact news ID %s stays at the news fallback', (id) => {
+  it.each(['', '24', '26', '36', '45', '150', '186', '999999', '038', '38x', '%33%38', '025', '37x', '%33%37', '043', '43x', '%34%33'])('unapproved or nonexact news ID %s stays at the news fallback', (id) => {
     expect(newsMap().has(id)).toBe(false);
     expect(newsMap().get('default')).toBe('/zh/news');
   });
@@ -119,15 +121,18 @@ describe('verified original-PHP news continuity', () => {
   });
 
   it('preserves the pre-news 33-product map apart from the four later approved thermal-section entries', () => {
-    const historicalMap = mapBody('legacy_product_path')[0]
+    let historicalMap = mapBody('legacy_product_path')[0]
       .replace(/^    19[3-6] \/zh\/products\/detail\/annealing-solution-line;\n/gm, '');
+    for (const id of ["122", "124", "132", "136", "137", "138", "139", "140", "144", "145", "146", "148", "149", "151", "153", "155", "157", "174", "176", "178", "179", "180", "181", "182", "183", "184", "185", "205", "206", "207", "208", "209", "210", "211", "212", "213", "214", "215", "216", "217", "218", "219", "220", "221", "222", "223", "224", "225", "226", "227", "228", "241", "243", "244", "245"]) {
+      historicalMap = historicalMap.replace(new RegExp('^    ' + id + ' \"[^\"]+\";\\n', 'gm'), '');
+    }
     const hash = createHash('sha256').update(historicalMap).digest('hex');
     expect(hash).toBe('df128b9c0e816d85f1ee11c29fbfdfbeff62ec86d8bdb9f565c27b2d1a38b9b8');
     expect(ledger.preservedProductMapSha256).toBe(hash);
   });
 
   it('binds each approved ID to exact archived identity without claiming article restoration', () => {
-    expect(ledger.mappingCount).toBe(8);
+    expect(ledger.mappingCount).toBe(9);
     expect(ledger.originalNewsBodyRestored).toBe(false);
     expect(ledger.mappings.map((row) => [String(row.oldId), row.newRequestPath]).sort()).toEqual([...allApproved].sort());
     for (const row of ledger.mappings) {
@@ -151,10 +156,25 @@ describe('verified original-PHP news continuity', () => {
     }
   });
 
+  it('binds news43 only to the human-approved metal and semiconductor boundary replacement', () => {
+    const row = ledger.mappings.find((item) => item.oldId === 43)!;
+    expect(row.oldTitle).toBe('退火炉_什么是退火炉？');
+    expect(row.newRequestPath).toBe('/zh/news/annealing-furnace-metal-semiconductor-selection');
+    expect(row.mappingIntent).toBe('human-approved-annealing-metal-semiconductor-boundary-replacement');
+    expect(row.reviewedReplacementBodySha256).toBe('b8a98475935d1066ba62ecad5b227f30c4bb5868c1c1200ad3b0df323995a715');
+    expect(row.newObservedStatus).toBe(200);
+    expect(row.reviewedReplacementBodyPublished).toBe(true);
+    expect(row.newLegacyRedirectDeployed).toBe(false);
+    expect(row.originalNewsBodyRestored).toBe(false);
+    expect(row.publicationState).toBe('target-published-edge-awaiting-two-static-targets-and-release');
+  });
+
   it('keeps the five reviewed question targets separate from existing equipment continuity', () => {
     expect(ledger.newQuestionMappingIds).toEqual([25, 37, 40, 42, 44]);
-    expect(ledger.currentPublishedTotalMappingsBeforeThisChange).toBe(36);
-    expect(ledger.candidateTotalMappings).toBe(41);
+    expect(ledger.historicalFiveQuestionBatch.currentPublishedTotalMappingsBeforeThisChange).toBe(36);
+    expect(ledger.historicalFiveQuestionBatch.candidateTotalMappings).toBe(41);
+    expect(ledger.currentPublishedTotalMappingsBeforeThisChange).toBe(45);
+    expect(ledger.candidateTotalMappings).toBe(101);
     const rows = ledger.mappings.filter((row) => row.mappingIntent === 'same-question-reviewed-replacement');
     expect(rows.map((row) => [String(row.oldId), row.newRequestPath]).sort()).toEqual([...approvedQuestions].sort());
     for (const [id, draftSha256, htmlSha256] of approvedQuestionBodies) {

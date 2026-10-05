@@ -1,5 +1,5 @@
 import { renderToStaticMarkup } from 'react-dom/server';
-import { APPROVED_GUIDE_PATHS, isWithdrawnTechnicalPath } from '@/lib/publication-scope';
+import { APPROVED_GUIDE_PATHS, APPROVED_PROCUREMENT_PATHS, isWithdrawnTechnicalPath } from '@/lib/publication-scope';
 import fs from 'node:fs';
 import path from 'node:path';
 import { describe, expect, it, vi } from 'vitest';
@@ -35,7 +35,7 @@ const guarded = ['solutions', 'articles'].flatMap((section) =>
 
 describe('unapproved sections render nothing, even without the middleware', () => {
   it('covers every page and layout under the withdrawn sections', () => {
-    expect(guarded).toHaveLength(20);
+    expect(guarded).toHaveLength(21);
   });
 
   it.each(guarded.flatMap((file) => ['zh', 'en'].map((locale) => [file, locale])))(
@@ -48,7 +48,7 @@ describe('unapproved sections render nothing, even without the middleware', () =
         expect(await page.default(props)).toBe('reviewed-child');
         return;
       }
-      if (locale === 'zh' && APPROVED_GUIDE_PATHS.has(route)) {
+      if (locale === 'zh' && (APPROVED_GUIDE_PATHS.has(route) || APPROVED_PROCUREMENT_PATHS.has(route))) {
         const html = renderToStaticMarkup(await page.default(props));
         expect(html).toContain(file.endsWith('/layout.tsx') ? 'reviewed-child' : '<h1');
         for (const [, href] of html.matchAll(/href="([^"]+)"/g))

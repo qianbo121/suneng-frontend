@@ -5,7 +5,7 @@
   "implementation": "Only /product/showproduct.php uses the exact arg_id map in all three public hosts; absolute 301 target without source query string.",
   "unknownIdBehavior": "Existing /zh/products catalog fallback retained.",
   "otherRoutes": "/product/product.php and /product/index.php unchanged; four main entry routes and unknown PHP 404 unchanged.",
-  "mappingCount": 37,
+  "mappingCount": 92,
   "mappings": [
     {
       "oldId": 150,
@@ -2271,25 +2271,2742 @@
       "newRuleImplemented": true,
       "newRulePublished": false,
       "liveOriginalUrlVerifiedAfterThisRule": false
+    },
+    {
+      "oldId": 122,
+      "oldUrl": "http://jssngyl.cn/product/showproduct.php?id=122",
+      "oldRequestPath": "/product/showproduct.php?id=122",
+      "oldTitle": "室式电加热退火炉",
+      "sourceType": "original-identity-and-human-approved-procurement-content",
+      "mappingIntent": "approved-equipment-family-assessment",
+      "newTarget": "https://www.jssngyl.cn/zh/articles/special-industrial-furnace-procurement-assessment#room-gas-forging-regenerative-assessment",
+      "newRequestPath": "/zh/articles/special-industrial-furnace-procurement-assessment#room-gas-forging-regenerative-assessment",
+      "newCanonical": "https://www.jssngyl.cn/zh/articles/special-industrial-furnace-procurement-assessment",
+      "newStatus": null,
+      "newNoindex": null,
+      "newVerifiedAt": null,
+      "targetFragment": "room-gas-forging-regenerative-assessment",
+      "targetBodySha256": "cd47deec017c82945a64b81e515e62369c6d1b73289af3c05afd4830fcf7c5d6",
+      "originalTitleEvidence": [
+        {
+          "source": "原站首页/目录公开档案的真实链接文字，未等同详情正文",
+          "visibleAnchorText": "室式电加热退火炉",
+          "sourceOldUrl": "http://jssngyl.cn/product/index.php?class1=127&page=11",
+          "archiveTimestamp": "20251118062206",
+          "evidenceFile": "output/acquisition-repair-20261004/public-legacy-source-search/commoncrawl-page-8b374a73284f-evidence.json"
+        }
+      ],
+      "originalDetailBodyRestored": false,
+      "oldModelAndParametersFullyRestored": false,
+      "newRuleImplemented": true,
+      "newRulePublished": false,
+      "liveIndividualUrlVerifiedThisRound": false,
+      "publicationState": "approved-candidate-awaiting-three-target-publication-and-edge-release",
+      "sourceReview": {
+        "approvalRecord": {
+          "path": "output/acquisition-next-repairs-20261005/approved-ui-release/human-approval.json",
+          "sha256": "c4fd9b71641683d533e3d61c038400f7207086dda75ef56621f536ce77b82339",
+          "statement": "同意",
+          "scope": "two existing entries, three Chinese pages and 56 exact legacy mappings"
+        },
+        "placementPlan": {
+          "path": "output/acquisition-next-repairs-20261005/content/placement-plan-v2.json",
+          "sha256": "77fafc116c67706ef3da5e29567241a79232225bae4f7f505fe451b8a80f05c9"
+        },
+        "originalRemainingRecord": {
+          "path": "output/acquisition-next-repairs-20261005/remaining-56.json",
+          "sha256": "b24f09dd0be5f1b310d369baa35e07cd37d11808027c5f0f02d0de83b7589473"
+        }
+      },
+      "mappingReason": "用户已批准的同家族采购评估或配件采购正文承接，保留准确旧名称与真实分段地址；不推断旧规格、库存、原厂身份或制造验收业绩。"
+    },
+    {
+      "oldId": 124,
+      "oldUrl": "http://jssngyl.cn/product/showproduct.php?id=124",
+      "oldRequestPath": "/product/showproduct.php?id=124",
+      "oldTitle": "室式电加热退火炉",
+      "sourceType": "original-identity-and-human-approved-procurement-content",
+      "mappingIntent": "approved-equipment-family-assessment",
+      "newTarget": "https://www.jssngyl.cn/zh/articles/special-industrial-furnace-procurement-assessment#room-gas-forging-regenerative-assessment",
+      "newRequestPath": "/zh/articles/special-industrial-furnace-procurement-assessment#room-gas-forging-regenerative-assessment",
+      "newCanonical": "https://www.jssngyl.cn/zh/articles/special-industrial-furnace-procurement-assessment",
+      "newStatus": null,
+      "newNoindex": null,
+      "newVerifiedAt": null,
+      "targetFragment": "room-gas-forging-regenerative-assessment",
+      "targetBodySha256": "cd47deec017c82945a64b81e515e62369c6d1b73289af3c05afd4830fcf7c5d6",
+      "originalTitleEvidence": [
+        {
+          "source": "原站首页/目录公开档案的真实链接文字，未等同详情正文",
+          "visibleAnchorText": "室式电加热退火炉",
+          "sourceOldUrl": "http://jssngyl.cn/product/index.php?class1=127&page=11",
+          "archiveTimestamp": "20251118062206",
+          "evidenceFile": "output/acquisition-repair-20261004/public-legacy-source-search/commoncrawl-page-8b374a73284f-evidence.json"
+        }
+      ],
+      "originalDetailBodyRestored": false,
+      "oldModelAndParametersFullyRestored": false,
+      "newRuleImplemented": true,
+      "newRulePublished": false,
+      "liveIndividualUrlVerifiedThisRound": false,
+      "publicationState": "approved-candidate-awaiting-three-target-publication-and-edge-release",
+      "sourceReview": {
+        "approvalRecord": {
+          "path": "output/acquisition-next-repairs-20261005/approved-ui-release/human-approval.json",
+          "sha256": "c4fd9b71641683d533e3d61c038400f7207086dda75ef56621f536ce77b82339",
+          "statement": "同意",
+          "scope": "two existing entries, three Chinese pages and 56 exact legacy mappings"
+        },
+        "placementPlan": {
+          "path": "output/acquisition-next-repairs-20261005/content/placement-plan-v2.json",
+          "sha256": "77fafc116c67706ef3da5e29567241a79232225bae4f7f505fe451b8a80f05c9"
+        },
+        "originalRemainingRecord": {
+          "path": "output/acquisition-next-repairs-20261005/remaining-56.json",
+          "sha256": "b24f09dd0be5f1b310d369baa35e07cd37d11808027c5f0f02d0de83b7589473"
+        }
+      },
+      "mappingReason": "用户已批准的同家族采购评估或配件采购正文承接，保留准确旧名称与真实分段地址；不推断旧规格、库存、原厂身份或制造验收业绩。"
+    },
+    {
+      "oldId": 132,
+      "oldUrl": "http://jssngyl.cn/product/showproduct.php?id=132",
+      "oldRequestPath": "/product/showproduct.php?id=132",
+      "oldTitle": "室内锻造加热炉",
+      "sourceType": "original-identity-and-human-approved-procurement-content",
+      "mappingIntent": "approved-equipment-family-assessment",
+      "newTarget": "https://www.jssngyl.cn/zh/articles/special-industrial-furnace-procurement-assessment#room-gas-forging-regenerative-assessment",
+      "newRequestPath": "/zh/articles/special-industrial-furnace-procurement-assessment#room-gas-forging-regenerative-assessment",
+      "newCanonical": "https://www.jssngyl.cn/zh/articles/special-industrial-furnace-procurement-assessment",
+      "newStatus": null,
+      "newNoindex": null,
+      "newVerifiedAt": null,
+      "targetFragment": "room-gas-forging-regenerative-assessment",
+      "targetBodySha256": "cd47deec017c82945a64b81e515e62369c6d1b73289af3c05afd4830fcf7c5d6",
+      "originalTitleEvidence": [
+        {
+          "source": "One exact official Wayback replay response, original URL/time identity verified",
+          "originalTitle": "室内锻造加热炉",
+          "sourceOldUrl": "http://jssngyl.cn/product/showproduct.php?id=132",
+          "archiveTimestamp": "20250719105023",
+          "evidenceFile": "/Users/qianbo/Desktop/Coding/独立站/output/acquisition-full-closeout-20261004/legacy/missing-nine-recovered-product132.json",
+          "responseBodySha256": "38a967555682a562590ea4e1332bdc44a5161f8e9798f9736e992188fc439305"
+        }
+      ],
+      "originalDetailBodyRestored": false,
+      "oldModelAndParametersFullyRestored": false,
+      "newRuleImplemented": true,
+      "newRulePublished": false,
+      "liveIndividualUrlVerifiedThisRound": false,
+      "publicationState": "approved-candidate-awaiting-three-target-publication-and-edge-release",
+      "sourceReview": {
+        "approvalRecord": {
+          "path": "output/acquisition-next-repairs-20261005/approved-ui-release/human-approval.json",
+          "sha256": "c4fd9b71641683d533e3d61c038400f7207086dda75ef56621f536ce77b82339",
+          "statement": "同意",
+          "scope": "two existing entries, three Chinese pages and 56 exact legacy mappings"
+        },
+        "placementPlan": {
+          "path": "output/acquisition-next-repairs-20261005/content/placement-plan-v2.json",
+          "sha256": "77fafc116c67706ef3da5e29567241a79232225bae4f7f505fe451b8a80f05c9"
+        },
+        "originalRemainingRecord": {
+          "path": "output/acquisition-next-repairs-20261005/remaining-56.json",
+          "sha256": "b24f09dd0be5f1b310d369baa35e07cd37d11808027c5f0f02d0de83b7589473"
+        }
+      },
+      "mappingReason": "用户已批准的同家族采购评估或配件采购正文承接，保留准确旧名称与真实分段地址；不推断旧规格、库存、原厂身份或制造验收业绩。"
+    },
+    {
+      "oldId": 136,
+      "oldUrl": "http://jssngyl.cn/product/showproduct.php?id=136",
+      "oldRequestPath": "/product/showproduct.php?id=136",
+      "oldTitle": "燃气热处理炉",
+      "sourceType": "original-identity-and-human-approved-procurement-content",
+      "mappingIntent": "approved-equipment-family-assessment",
+      "newTarget": "https://www.jssngyl.cn/zh/articles/special-industrial-furnace-procurement-assessment#room-gas-forging-regenerative-assessment",
+      "newRequestPath": "/zh/articles/special-industrial-furnace-procurement-assessment#room-gas-forging-regenerative-assessment",
+      "newCanonical": "https://www.jssngyl.cn/zh/articles/special-industrial-furnace-procurement-assessment",
+      "newStatus": null,
+      "newNoindex": null,
+      "newVerifiedAt": null,
+      "targetFragment": "room-gas-forging-regenerative-assessment",
+      "targetBodySha256": "cd47deec017c82945a64b81e515e62369c6d1b73289af3c05afd4830fcf7c5d6",
+      "originalTitleEvidence": [
+        {
+          "source": "One exact official Wayback replay response, original URL/time identity verified",
+          "originalTitle": "燃气热处理炉",
+          "sourceOldUrl": "http://jssngyl.cn/product/showproduct.php?id=136",
+          "archiveTimestamp": "20250719104227",
+          "evidenceFile": "/Users/qianbo/Desktop/Coding/独立站/output/acquisition-full-closeout-20261004/legacy/missing-nine-recovered-product136.json",
+          "responseBodySha256": "5aa800a5926810cd2b00b20b4c5430c3cbd972a339093f1e1d337ee4cf9b1901"
+        }
+      ],
+      "originalDetailBodyRestored": false,
+      "oldModelAndParametersFullyRestored": false,
+      "newRuleImplemented": true,
+      "newRulePublished": false,
+      "liveIndividualUrlVerifiedThisRound": false,
+      "publicationState": "approved-candidate-awaiting-three-target-publication-and-edge-release",
+      "sourceReview": {
+        "approvalRecord": {
+          "path": "output/acquisition-next-repairs-20261005/approved-ui-release/human-approval.json",
+          "sha256": "c4fd9b71641683d533e3d61c038400f7207086dda75ef56621f536ce77b82339",
+          "statement": "同意",
+          "scope": "two existing entries, three Chinese pages and 56 exact legacy mappings"
+        },
+        "placementPlan": {
+          "path": "output/acquisition-next-repairs-20261005/content/placement-plan-v2.json",
+          "sha256": "77fafc116c67706ef3da5e29567241a79232225bae4f7f505fe451b8a80f05c9"
+        },
+        "originalRemainingRecord": {
+          "path": "output/acquisition-next-repairs-20261005/remaining-56.json",
+          "sha256": "b24f09dd0be5f1b310d369baa35e07cd37d11808027c5f0f02d0de83b7589473"
+        }
+      },
+      "mappingReason": "用户已批准的同家族采购评估或配件采购正文承接，保留准确旧名称与真实分段地址；不推断旧规格、库存、原厂身份或制造验收业绩。"
+    },
+    {
+      "oldId": 137,
+      "oldUrl": "http://jssngyl.cn/product/showproduct.php?id=137",
+      "oldRequestPath": "/product/showproduct.php?id=137",
+      "oldTitle": "燃气热处理炉",
+      "sourceType": "original-identity-and-human-approved-procurement-content",
+      "mappingIntent": "approved-equipment-family-assessment",
+      "newTarget": "https://www.jssngyl.cn/zh/articles/special-industrial-furnace-procurement-assessment#room-gas-forging-regenerative-assessment",
+      "newRequestPath": "/zh/articles/special-industrial-furnace-procurement-assessment#room-gas-forging-regenerative-assessment",
+      "newCanonical": "https://www.jssngyl.cn/zh/articles/special-industrial-furnace-procurement-assessment",
+      "newStatus": null,
+      "newNoindex": null,
+      "newVerifiedAt": null,
+      "targetFragment": "room-gas-forging-regenerative-assessment",
+      "targetBodySha256": "cd47deec017c82945a64b81e515e62369c6d1b73289af3c05afd4830fcf7c5d6",
+      "originalTitleEvidence": [
+        {
+          "source": "One exact official Wayback replay response, original URL/time identity verified",
+          "originalTitle": "燃气热处理炉",
+          "sourceOldUrl": "http://jssngyl.cn/product/showproduct.php?id=137",
+          "archiveTimestamp": "20250719111452",
+          "evidenceFile": "/Users/qianbo/Desktop/Coding/独立站/output/acquisition-full-closeout-20261004/legacy/missing-nine-recovered-product137.json",
+          "responseBodySha256": "6c7c5e37c1cb79be347f416b077b3ccd6d03d8d89fb1840e9190387a51bbcdeb"
+        }
+      ],
+      "originalDetailBodyRestored": false,
+      "oldModelAndParametersFullyRestored": false,
+      "newRuleImplemented": true,
+      "newRulePublished": false,
+      "liveIndividualUrlVerifiedThisRound": false,
+      "publicationState": "approved-candidate-awaiting-three-target-publication-and-edge-release",
+      "sourceReview": {
+        "approvalRecord": {
+          "path": "output/acquisition-next-repairs-20261005/approved-ui-release/human-approval.json",
+          "sha256": "c4fd9b71641683d533e3d61c038400f7207086dda75ef56621f536ce77b82339",
+          "statement": "同意",
+          "scope": "two existing entries, three Chinese pages and 56 exact legacy mappings"
+        },
+        "placementPlan": {
+          "path": "output/acquisition-next-repairs-20261005/content/placement-plan-v2.json",
+          "sha256": "77fafc116c67706ef3da5e29567241a79232225bae4f7f505fe451b8a80f05c9"
+        },
+        "originalRemainingRecord": {
+          "path": "output/acquisition-next-repairs-20261005/remaining-56.json",
+          "sha256": "b24f09dd0be5f1b310d369baa35e07cd37d11808027c5f0f02d0de83b7589473"
+        }
+      },
+      "mappingReason": "用户已批准的同家族采购评估或配件采购正文承接，保留准确旧名称与真实分段地址；不推断旧规格、库存、原厂身份或制造验收业绩。"
+    },
+    {
+      "oldId": 138,
+      "oldUrl": "http://jssngyl.cn/product/showproduct.php?id=138",
+      "oldRequestPath": "/product/showproduct.php?id=138",
+      "oldTitle": "燃气热处理炉",
+      "sourceType": "original-identity-and-human-approved-procurement-content",
+      "mappingIntent": "approved-equipment-family-assessment",
+      "newTarget": "https://www.jssngyl.cn/zh/articles/special-industrial-furnace-procurement-assessment#room-gas-forging-regenerative-assessment",
+      "newRequestPath": "/zh/articles/special-industrial-furnace-procurement-assessment#room-gas-forging-regenerative-assessment",
+      "newCanonical": "https://www.jssngyl.cn/zh/articles/special-industrial-furnace-procurement-assessment",
+      "newStatus": null,
+      "newNoindex": null,
+      "newVerifiedAt": null,
+      "targetFragment": "room-gas-forging-regenerative-assessment",
+      "targetBodySha256": "cd47deec017c82945a64b81e515e62369c6d1b73289af3c05afd4830fcf7c5d6",
+      "originalTitleEvidence": [
+        {
+          "source": "One exact official Wayback replay response, original URL/time identity verified",
+          "originalTitle": "燃气热处理炉",
+          "sourceOldUrl": "http://jssngyl.cn/product/showproduct.php?id=138",
+          "archiveTimestamp": "20240916192408",
+          "evidenceFile": "/Users/qianbo/Desktop/Coding/独立站/output/acquisition-full-closeout-20261004/legacy/missing-nine-recovered-product138.json",
+          "responseBodySha256": "df6ba78094653123a77cfa21b23858d6727dcd643fd9ed8bea06e8906f85f631"
+        }
+      ],
+      "originalDetailBodyRestored": false,
+      "oldModelAndParametersFullyRestored": false,
+      "newRuleImplemented": true,
+      "newRulePublished": false,
+      "liveIndividualUrlVerifiedThisRound": false,
+      "publicationState": "approved-candidate-awaiting-three-target-publication-and-edge-release",
+      "sourceReview": {
+        "approvalRecord": {
+          "path": "output/acquisition-next-repairs-20261005/approved-ui-release/human-approval.json",
+          "sha256": "c4fd9b71641683d533e3d61c038400f7207086dda75ef56621f536ce77b82339",
+          "statement": "同意",
+          "scope": "two existing entries, three Chinese pages and 56 exact legacy mappings"
+        },
+        "placementPlan": {
+          "path": "output/acquisition-next-repairs-20261005/content/placement-plan-v2.json",
+          "sha256": "77fafc116c67706ef3da5e29567241a79232225bae4f7f505fe451b8a80f05c9"
+        },
+        "originalRemainingRecord": {
+          "path": "output/acquisition-next-repairs-20261005/remaining-56.json",
+          "sha256": "b24f09dd0be5f1b310d369baa35e07cd37d11808027c5f0f02d0de83b7589473"
+        }
+      },
+      "mappingReason": "用户已批准的同家族采购评估或配件采购正文承接，保留准确旧名称与真实分段地址；不推断旧规格、库存、原厂身份或制造验收业绩。"
+    },
+    {
+      "oldId": 139,
+      "oldUrl": "http://jssngyl.cn/product/showproduct.php?id=139",
+      "oldRequestPath": "/product/showproduct.php?id=139",
+      "oldTitle": "蓄热式加热炉",
+      "sourceType": "original-identity-and-human-approved-procurement-content",
+      "mappingIntent": "approved-equipment-family-assessment",
+      "newTarget": "https://www.jssngyl.cn/zh/articles/special-industrial-furnace-procurement-assessment#room-gas-forging-regenerative-assessment",
+      "newRequestPath": "/zh/articles/special-industrial-furnace-procurement-assessment#room-gas-forging-regenerative-assessment",
+      "newCanonical": "https://www.jssngyl.cn/zh/articles/special-industrial-furnace-procurement-assessment",
+      "newStatus": null,
+      "newNoindex": null,
+      "newVerifiedAt": null,
+      "targetFragment": "room-gas-forging-regenerative-assessment",
+      "targetBodySha256": "cd47deec017c82945a64b81e515e62369c6d1b73289af3c05afd4830fcf7c5d6",
+      "originalTitleEvidence": [],
+      "originalDetailBodyRestored": false,
+      "oldModelAndParametersFullyRestored": false,
+      "newRuleImplemented": true,
+      "newRulePublished": false,
+      "liveIndividualUrlVerifiedThisRound": false,
+      "publicationState": "approved-candidate-awaiting-three-target-publication-and-edge-release",
+      "sourceReview": {
+        "approvalRecord": {
+          "path": "output/acquisition-next-repairs-20261005/approved-ui-release/human-approval.json",
+          "sha256": "c4fd9b71641683d533e3d61c038400f7207086dda75ef56621f536ce77b82339",
+          "statement": "同意",
+          "scope": "two existing entries, three Chinese pages and 56 exact legacy mappings"
+        },
+        "placementPlan": {
+          "path": "output/acquisition-next-repairs-20261005/content/placement-plan-v2.json",
+          "sha256": "77fafc116c67706ef3da5e29567241a79232225bae4f7f505fe451b8a80f05c9"
+        },
+        "originalRemainingRecord": {
+          "path": "output/acquisition-next-repairs-20261005/remaining-56.json",
+          "sha256": "b24f09dd0be5f1b310d369baa35e07cd37d11808027c5f0f02d0de83b7589473"
+        }
+      },
+      "mappingReason": "用户已批准的同家族采购评估或配件采购正文承接，保留准确旧名称与真实分段地址；不推断旧规格、库存、原厂身份或制造验收业绩。"
+    },
+    {
+      "oldId": 140,
+      "oldUrl": "http://jssngyl.cn/product/showproduct.php?id=140",
+      "oldRequestPath": "/product/showproduct.php?id=140",
+      "oldTitle": "蓄热式加热炉",
+      "sourceType": "original-identity-and-human-approved-procurement-content",
+      "mappingIntent": "approved-equipment-family-assessment",
+      "newTarget": "https://www.jssngyl.cn/zh/articles/special-industrial-furnace-procurement-assessment#room-gas-forging-regenerative-assessment",
+      "newRequestPath": "/zh/articles/special-industrial-furnace-procurement-assessment#room-gas-forging-regenerative-assessment",
+      "newCanonical": "https://www.jssngyl.cn/zh/articles/special-industrial-furnace-procurement-assessment",
+      "newStatus": null,
+      "newNoindex": null,
+      "newVerifiedAt": null,
+      "targetFragment": "room-gas-forging-regenerative-assessment",
+      "targetBodySha256": "cd47deec017c82945a64b81e515e62369c6d1b73289af3c05afd4830fcf7c5d6",
+      "originalTitleEvidence": [
+        {
+          "source": "原站首页/目录公开档案的真实链接文字，未等同详情正文",
+          "visibleAnchorText": "蓄热式加热炉 查看详情",
+          "sourceOldUrl": "http://jssngyl.cn/",
+          "archiveTimestamp": "20251118080704",
+          "evidenceFile": "output/acquisition-repair-20261004/public-legacy-source-search/commoncrawl-page-377631dc4700-evidence.json"
+        }
+      ],
+      "originalDetailBodyRestored": false,
+      "oldModelAndParametersFullyRestored": false,
+      "newRuleImplemented": true,
+      "newRulePublished": false,
+      "liveIndividualUrlVerifiedThisRound": false,
+      "publicationState": "approved-candidate-awaiting-three-target-publication-and-edge-release",
+      "sourceReview": {
+        "approvalRecord": {
+          "path": "output/acquisition-next-repairs-20261005/approved-ui-release/human-approval.json",
+          "sha256": "c4fd9b71641683d533e3d61c038400f7207086dda75ef56621f536ce77b82339",
+          "statement": "同意",
+          "scope": "two existing entries, three Chinese pages and 56 exact legacy mappings"
+        },
+        "placementPlan": {
+          "path": "output/acquisition-next-repairs-20261005/content/placement-plan-v2.json",
+          "sha256": "77fafc116c67706ef3da5e29567241a79232225bae4f7f505fe451b8a80f05c9"
+        },
+        "originalRemainingRecord": {
+          "path": "output/acquisition-next-repairs-20261005/remaining-56.json",
+          "sha256": "b24f09dd0be5f1b310d369baa35e07cd37d11808027c5f0f02d0de83b7589473"
+        }
+      },
+      "mappingReason": "用户已批准的同家族采购评估或配件采购正文承接，保留准确旧名称与真实分段地址；不推断旧规格、库存、原厂身份或制造验收业绩。"
+    },
+    {
+      "oldId": 144,
+      "oldUrl": "http://jssngyl.cn/product/showproduct.php?id=144",
+      "oldRequestPath": "/product/showproduct.php?id=144",
+      "oldTitle": "快速固溶炉",
+      "sourceType": "original-identity-and-human-approved-procurement-content",
+      "mappingIntent": "approved-equipment-family-assessment",
+      "newTarget": "https://www.jssngyl.cn/zh/articles/special-industrial-furnace-procurement-assessment#solution-nitriding-atmosphere-assessment",
+      "newRequestPath": "/zh/articles/special-industrial-furnace-procurement-assessment#solution-nitriding-atmosphere-assessment",
+      "newCanonical": "https://www.jssngyl.cn/zh/articles/special-industrial-furnace-procurement-assessment",
+      "newStatus": null,
+      "newNoindex": null,
+      "newVerifiedAt": null,
+      "targetFragment": "solution-nitriding-atmosphere-assessment",
+      "targetBodySha256": "cd47deec017c82945a64b81e515e62369c6d1b73289af3c05afd4830fcf7c5d6",
+      "originalTitleEvidence": [
+        {
+          "source": "原站首页/目录公开档案的真实链接文字，未等同详情正文",
+          "visibleAnchorText": "快速固溶炉",
+          "sourceOldUrl": "http://jssngyl.cn/product/index.php?class2=137&page=2",
+          "archiveTimestamp": "20251118064011",
+          "evidenceFile": "output/acquisition-repair-20261004/public-legacy-source-search/commoncrawl-page-0a103c341e90-evidence.json"
+        }
+      ],
+      "originalDetailBodyRestored": false,
+      "oldModelAndParametersFullyRestored": false,
+      "newRuleImplemented": true,
+      "newRulePublished": false,
+      "liveIndividualUrlVerifiedThisRound": false,
+      "publicationState": "approved-candidate-awaiting-three-target-publication-and-edge-release",
+      "sourceReview": {
+        "approvalRecord": {
+          "path": "output/acquisition-next-repairs-20261005/approved-ui-release/human-approval.json",
+          "sha256": "c4fd9b71641683d533e3d61c038400f7207086dda75ef56621f536ce77b82339",
+          "statement": "同意",
+          "scope": "two existing entries, three Chinese pages and 56 exact legacy mappings"
+        },
+        "placementPlan": {
+          "path": "output/acquisition-next-repairs-20261005/content/placement-plan-v2.json",
+          "sha256": "77fafc116c67706ef3da5e29567241a79232225bae4f7f505fe451b8a80f05c9"
+        },
+        "originalRemainingRecord": {
+          "path": "output/acquisition-next-repairs-20261005/remaining-56.json",
+          "sha256": "b24f09dd0be5f1b310d369baa35e07cd37d11808027c5f0f02d0de83b7589473"
+        }
+      },
+      "mappingReason": "用户已批准的同家族采购评估或配件采购正文承接，保留准确旧名称与真实分段地址；不推断旧规格、库存、原厂身份或制造验收业绩。"
+    },
+    {
+      "oldId": 145,
+      "oldUrl": "http://jssngyl.cn/product/showproduct.php?id=145",
+      "oldRequestPath": "/product/showproduct.php?id=145",
+      "oldTitle": "大型氮化炉",
+      "sourceType": "original-identity-and-human-approved-procurement-content",
+      "mappingIntent": "approved-equipment-family-assessment",
+      "newTarget": "https://www.jssngyl.cn/zh/articles/special-industrial-furnace-procurement-assessment#solution-nitriding-atmosphere-assessment",
+      "newRequestPath": "/zh/articles/special-industrial-furnace-procurement-assessment#solution-nitriding-atmosphere-assessment",
+      "newCanonical": "https://www.jssngyl.cn/zh/articles/special-industrial-furnace-procurement-assessment",
+      "newStatus": null,
+      "newNoindex": null,
+      "newVerifiedAt": null,
+      "targetFragment": "solution-nitriding-atmosphere-assessment",
+      "targetBodySha256": "cd47deec017c82945a64b81e515e62369c6d1b73289af3c05afd4830fcf7c5d6",
+      "originalTitleEvidence": [
+        {
+          "source": "原站首页/目录公开档案的真实链接文字，未等同详情正文",
+          "visibleAnchorText": "大型氮化炉",
+          "sourceOldUrl": "http://jssngyl.cn/product/index.php?class2=137&page=2",
+          "archiveTimestamp": "20251118064011",
+          "evidenceFile": "output/acquisition-repair-20261004/public-legacy-source-search/commoncrawl-page-0a103c341e90-evidence.json"
+        }
+      ],
+      "originalDetailBodyRestored": false,
+      "oldModelAndParametersFullyRestored": false,
+      "newRuleImplemented": true,
+      "newRulePublished": false,
+      "liveIndividualUrlVerifiedThisRound": false,
+      "publicationState": "approved-candidate-awaiting-three-target-publication-and-edge-release",
+      "sourceReview": {
+        "approvalRecord": {
+          "path": "output/acquisition-next-repairs-20261005/approved-ui-release/human-approval.json",
+          "sha256": "c4fd9b71641683d533e3d61c038400f7207086dda75ef56621f536ce77b82339",
+          "statement": "同意",
+          "scope": "two existing entries, three Chinese pages and 56 exact legacy mappings"
+        },
+        "placementPlan": {
+          "path": "output/acquisition-next-repairs-20261005/content/placement-plan-v2.json",
+          "sha256": "77fafc116c67706ef3da5e29567241a79232225bae4f7f505fe451b8a80f05c9"
+        },
+        "originalRemainingRecord": {
+          "path": "output/acquisition-next-repairs-20261005/remaining-56.json",
+          "sha256": "b24f09dd0be5f1b310d369baa35e07cd37d11808027c5f0f02d0de83b7589473"
+        }
+      },
+      "mappingReason": "用户已批准的同家族采购评估或配件采购正文承接，保留准确旧名称与真实分段地址；不推断旧规格、库存、原厂身份或制造验收业绩。"
+    },
+    {
+      "oldId": 146,
+      "oldUrl": "http://jssngyl.cn/product/showproduct.php?id=146",
+      "oldRequestPath": "/product/showproduct.php?id=146",
+      "oldTitle": "铝合金淬火炉",
+      "sourceType": "original-identity-and-human-approved-procurement-content",
+      "mappingIntent": "approved-equipment-family-assessment",
+      "newTarget": "https://www.jssngyl.cn/zh/articles/special-industrial-furnace-procurement-assessment#solution-nitriding-atmosphere-assessment",
+      "newRequestPath": "/zh/articles/special-industrial-furnace-procurement-assessment#solution-nitriding-atmosphere-assessment",
+      "newCanonical": "https://www.jssngyl.cn/zh/articles/special-industrial-furnace-procurement-assessment",
+      "newStatus": null,
+      "newNoindex": null,
+      "newVerifiedAt": null,
+      "targetFragment": "solution-nitriding-atmosphere-assessment",
+      "targetBodySha256": "cd47deec017c82945a64b81e515e62369c6d1b73289af3c05afd4830fcf7c5d6",
+      "originalTitleEvidence": [
+        {
+          "source": "原站首页/目录公开档案的真实链接文字，未等同详情正文",
+          "visibleAnchorText": "铝合金淬火炉",
+          "sourceOldUrl": "http://jssngyl.cn/product/index.php?class2=137&page=2",
+          "archiveTimestamp": "20251118064011",
+          "evidenceFile": "output/acquisition-repair-20261004/public-legacy-source-search/commoncrawl-page-0a103c341e90-evidence.json"
+        }
+      ],
+      "originalDetailBodyRestored": false,
+      "oldModelAndParametersFullyRestored": false,
+      "newRuleImplemented": true,
+      "newRulePublished": false,
+      "liveIndividualUrlVerifiedThisRound": false,
+      "publicationState": "approved-candidate-awaiting-three-target-publication-and-edge-release",
+      "sourceReview": {
+        "approvalRecord": {
+          "path": "output/acquisition-next-repairs-20261005/approved-ui-release/human-approval.json",
+          "sha256": "c4fd9b71641683d533e3d61c038400f7207086dda75ef56621f536ce77b82339",
+          "statement": "同意",
+          "scope": "two existing entries, three Chinese pages and 56 exact legacy mappings"
+        },
+        "placementPlan": {
+          "path": "output/acquisition-next-repairs-20261005/content/placement-plan-v2.json",
+          "sha256": "77fafc116c67706ef3da5e29567241a79232225bae4f7f505fe451b8a80f05c9"
+        },
+        "originalRemainingRecord": {
+          "path": "output/acquisition-next-repairs-20261005/remaining-56.json",
+          "sha256": "b24f09dd0be5f1b310d369baa35e07cd37d11808027c5f0f02d0de83b7589473"
+        }
+      },
+      "mappingReason": "用户已批准的同家族采购评估或配件采购正文承接，保留准确旧名称与真实分段地址；不推断旧规格、库存、原厂身份或制造验收业绩。"
+    },
+    {
+      "oldId": 148,
+      "oldUrl": "http://jssngyl.cn/product/showproduct.php?id=148",
+      "oldRequestPath": "/product/showproduct.php?id=148",
+      "oldTitle": "大型可控气氛炉",
+      "sourceType": "original-identity-and-human-approved-procurement-content",
+      "mappingIntent": "approved-equipment-family-assessment",
+      "newTarget": "https://www.jssngyl.cn/zh/articles/special-industrial-furnace-procurement-assessment#solution-nitriding-atmosphere-assessment",
+      "newRequestPath": "/zh/articles/special-industrial-furnace-procurement-assessment#solution-nitriding-atmosphere-assessment",
+      "newCanonical": "https://www.jssngyl.cn/zh/articles/special-industrial-furnace-procurement-assessment",
+      "newStatus": null,
+      "newNoindex": null,
+      "newVerifiedAt": null,
+      "targetFragment": "solution-nitriding-atmosphere-assessment",
+      "targetBodySha256": "cd47deec017c82945a64b81e515e62369c6d1b73289af3c05afd4830fcf7c5d6",
+      "originalTitleEvidence": [],
+      "originalDetailBodyRestored": false,
+      "oldModelAndParametersFullyRestored": false,
+      "newRuleImplemented": true,
+      "newRulePublished": false,
+      "liveIndividualUrlVerifiedThisRound": false,
+      "publicationState": "approved-candidate-awaiting-three-target-publication-and-edge-release",
+      "sourceReview": {
+        "approvalRecord": {
+          "path": "output/acquisition-next-repairs-20261005/approved-ui-release/human-approval.json",
+          "sha256": "c4fd9b71641683d533e3d61c038400f7207086dda75ef56621f536ce77b82339",
+          "statement": "同意",
+          "scope": "two existing entries, three Chinese pages and 56 exact legacy mappings"
+        },
+        "placementPlan": {
+          "path": "output/acquisition-next-repairs-20261005/content/placement-plan-v2.json",
+          "sha256": "77fafc116c67706ef3da5e29567241a79232225bae4f7f505fe451b8a80f05c9"
+        },
+        "originalRemainingRecord": {
+          "path": "output/acquisition-next-repairs-20261005/remaining-56.json",
+          "sha256": "b24f09dd0be5f1b310d369baa35e07cd37d11808027c5f0f02d0de83b7589473"
+        }
+      },
+      "mappingReason": "用户已批准的同家族采购评估或配件采购正文承接，保留准确旧名称与真实分段地址；不推断旧规格、库存、原厂身份或制造验收业绩。"
+    },
+    {
+      "oldId": 149,
+      "oldUrl": "http://jssngyl.cn/product/showproduct.php?id=149",
+      "oldRequestPath": "/product/showproduct.php?id=149",
+      "oldTitle": "铝合金淬火炉",
+      "sourceType": "original-identity-and-human-approved-procurement-content",
+      "mappingIntent": "approved-equipment-family-assessment",
+      "newTarget": "https://www.jssngyl.cn/zh/articles/special-industrial-furnace-procurement-assessment#solution-nitriding-atmosphere-assessment",
+      "newRequestPath": "/zh/articles/special-industrial-furnace-procurement-assessment#solution-nitriding-atmosphere-assessment",
+      "newCanonical": "https://www.jssngyl.cn/zh/articles/special-industrial-furnace-procurement-assessment",
+      "newStatus": null,
+      "newNoindex": null,
+      "newVerifiedAt": null,
+      "targetFragment": "solution-nitriding-atmosphere-assessment",
+      "targetBodySha256": "cd47deec017c82945a64b81e515e62369c6d1b73289af3c05afd4830fcf7c5d6",
+      "originalTitleEvidence": [],
+      "originalDetailBodyRestored": false,
+      "oldModelAndParametersFullyRestored": false,
+      "newRuleImplemented": true,
+      "newRulePublished": false,
+      "liveIndividualUrlVerifiedThisRound": false,
+      "publicationState": "approved-candidate-awaiting-three-target-publication-and-edge-release",
+      "sourceReview": {
+        "approvalRecord": {
+          "path": "output/acquisition-next-repairs-20261005/approved-ui-release/human-approval.json",
+          "sha256": "c4fd9b71641683d533e3d61c038400f7207086dda75ef56621f536ce77b82339",
+          "statement": "同意",
+          "scope": "two existing entries, three Chinese pages and 56 exact legacy mappings"
+        },
+        "placementPlan": {
+          "path": "output/acquisition-next-repairs-20261005/content/placement-plan-v2.json",
+          "sha256": "77fafc116c67706ef3da5e29567241a79232225bae4f7f505fe451b8a80f05c9"
+        },
+        "originalRemainingRecord": {
+          "path": "output/acquisition-next-repairs-20261005/remaining-56.json",
+          "sha256": "b24f09dd0be5f1b310d369baa35e07cd37d11808027c5f0f02d0de83b7589473"
+        }
+      },
+      "mappingReason": "用户已批准的同家族采购评估或配件采购正文承接，保留准确旧名称与真实分段地址；不推断旧规格、库存、原厂身份或制造验收业绩。"
+    },
+    {
+      "oldId": 151,
+      "oldUrl": "http://jssngyl.cn/product/showproduct.php?id=151",
+      "oldRequestPath": "/product/showproduct.php?id=151",
+      "oldTitle": "大型可控气氛炉",
+      "sourceType": "original-identity-and-human-approved-procurement-content",
+      "mappingIntent": "approved-equipment-family-assessment",
+      "newTarget": "https://www.jssngyl.cn/zh/articles/special-industrial-furnace-procurement-assessment#solution-nitriding-atmosphere-assessment",
+      "newRequestPath": "/zh/articles/special-industrial-furnace-procurement-assessment#solution-nitriding-atmosphere-assessment",
+      "newCanonical": "https://www.jssngyl.cn/zh/articles/special-industrial-furnace-procurement-assessment",
+      "newStatus": null,
+      "newNoindex": null,
+      "newVerifiedAt": null,
+      "targetFragment": "solution-nitriding-atmosphere-assessment",
+      "targetBodySha256": "cd47deec017c82945a64b81e515e62369c6d1b73289af3c05afd4830fcf7c5d6",
+      "originalTitleEvidence": [],
+      "originalDetailBodyRestored": false,
+      "oldModelAndParametersFullyRestored": false,
+      "newRuleImplemented": true,
+      "newRulePublished": false,
+      "liveIndividualUrlVerifiedThisRound": false,
+      "publicationState": "approved-candidate-awaiting-three-target-publication-and-edge-release",
+      "sourceReview": {
+        "approvalRecord": {
+          "path": "output/acquisition-next-repairs-20261005/approved-ui-release/human-approval.json",
+          "sha256": "c4fd9b71641683d533e3d61c038400f7207086dda75ef56621f536ce77b82339",
+          "statement": "同意",
+          "scope": "two existing entries, three Chinese pages and 56 exact legacy mappings"
+        },
+        "placementPlan": {
+          "path": "output/acquisition-next-repairs-20261005/content/placement-plan-v2.json",
+          "sha256": "77fafc116c67706ef3da5e29567241a79232225bae4f7f505fe451b8a80f05c9"
+        },
+        "originalRemainingRecord": {
+          "path": "output/acquisition-next-repairs-20261005/remaining-56.json",
+          "sha256": "b24f09dd0be5f1b310d369baa35e07cd37d11808027c5f0f02d0de83b7589473"
+        }
+      },
+      "mappingReason": "用户已批准的同家族采购评估或配件采购正文承接，保留准确旧名称与真实分段地址；不推断旧规格、库存、原厂身份或制造验收业绩。"
+    },
+    {
+      "oldId": 153,
+      "oldUrl": "http://jssngyl.cn/product/showproduct.php?id=153",
+      "oldRequestPath": "/product/showproduct.php?id=153",
+      "oldTitle": "大型可控气氛炉",
+      "sourceType": "original-identity-and-human-approved-procurement-content",
+      "mappingIntent": "approved-equipment-family-assessment",
+      "newTarget": "https://www.jssngyl.cn/zh/articles/special-industrial-furnace-procurement-assessment#solution-nitriding-atmosphere-assessment",
+      "newRequestPath": "/zh/articles/special-industrial-furnace-procurement-assessment#solution-nitriding-atmosphere-assessment",
+      "newCanonical": "https://www.jssngyl.cn/zh/articles/special-industrial-furnace-procurement-assessment",
+      "newStatus": null,
+      "newNoindex": null,
+      "newVerifiedAt": null,
+      "targetFragment": "solution-nitriding-atmosphere-assessment",
+      "targetBodySha256": "cd47deec017c82945a64b81e515e62369c6d1b73289af3c05afd4830fcf7c5d6",
+      "originalTitleEvidence": [],
+      "originalDetailBodyRestored": false,
+      "oldModelAndParametersFullyRestored": false,
+      "newRuleImplemented": true,
+      "newRulePublished": false,
+      "liveIndividualUrlVerifiedThisRound": false,
+      "publicationState": "approved-candidate-awaiting-three-target-publication-and-edge-release",
+      "sourceReview": {
+        "approvalRecord": {
+          "path": "output/acquisition-next-repairs-20261005/approved-ui-release/human-approval.json",
+          "sha256": "c4fd9b71641683d533e3d61c038400f7207086dda75ef56621f536ce77b82339",
+          "statement": "同意",
+          "scope": "two existing entries, three Chinese pages and 56 exact legacy mappings"
+        },
+        "placementPlan": {
+          "path": "output/acquisition-next-repairs-20261005/content/placement-plan-v2.json",
+          "sha256": "77fafc116c67706ef3da5e29567241a79232225bae4f7f505fe451b8a80f05c9"
+        },
+        "originalRemainingRecord": {
+          "path": "output/acquisition-next-repairs-20261005/remaining-56.json",
+          "sha256": "b24f09dd0be5f1b310d369baa35e07cd37d11808027c5f0f02d0de83b7589473"
+        }
+      },
+      "mappingReason": "用户已批准的同家族采购评估或配件采购正文承接，保留准确旧名称与真实分段地址；不推断旧规格、库存、原厂身份或制造验收业绩。"
+    },
+    {
+      "oldId": 155,
+      "oldUrl": "http://jssngyl.cn/product/showproduct.php?id=155",
+      "oldRequestPath": "/product/showproduct.php?id=155",
+      "oldTitle": "大型可控气氛炉",
+      "sourceType": "original-identity-and-human-approved-procurement-content",
+      "mappingIntent": "approved-equipment-family-assessment",
+      "newTarget": "https://www.jssngyl.cn/zh/articles/special-industrial-furnace-procurement-assessment#solution-nitriding-atmosphere-assessment",
+      "newRequestPath": "/zh/articles/special-industrial-furnace-procurement-assessment#solution-nitriding-atmosphere-assessment",
+      "newCanonical": "https://www.jssngyl.cn/zh/articles/special-industrial-furnace-procurement-assessment",
+      "newStatus": null,
+      "newNoindex": null,
+      "newVerifiedAt": null,
+      "targetFragment": "solution-nitriding-atmosphere-assessment",
+      "targetBodySha256": "cd47deec017c82945a64b81e515e62369c6d1b73289af3c05afd4830fcf7c5d6",
+      "originalTitleEvidence": [
+        {
+          "source": "One exact official Wayback replay response, original URL/time identity verified",
+          "originalTitle": "大型可控气氛炉",
+          "sourceOldUrl": "http://jssngyl.cn/product/showproduct.php?id=155",
+          "archiveTimestamp": "20240916200702",
+          "evidenceFile": "/Users/qianbo/Desktop/Coding/独立站/output/acquisition-full-closeout-20261004/legacy/missing-nine-recovered-product155.json",
+          "responseBodySha256": "6991eaf7c5b41336dbff87bfd032f72b1162da7a83f1d45f39e7dd2590394fd7"
+        }
+      ],
+      "originalDetailBodyRestored": false,
+      "oldModelAndParametersFullyRestored": false,
+      "newRuleImplemented": true,
+      "newRulePublished": false,
+      "liveIndividualUrlVerifiedThisRound": false,
+      "publicationState": "approved-candidate-awaiting-three-target-publication-and-edge-release",
+      "sourceReview": {
+        "approvalRecord": {
+          "path": "output/acquisition-next-repairs-20261005/approved-ui-release/human-approval.json",
+          "sha256": "c4fd9b71641683d533e3d61c038400f7207086dda75ef56621f536ce77b82339",
+          "statement": "同意",
+          "scope": "two existing entries, three Chinese pages and 56 exact legacy mappings"
+        },
+        "placementPlan": {
+          "path": "output/acquisition-next-repairs-20261005/content/placement-plan-v2.json",
+          "sha256": "77fafc116c67706ef3da5e29567241a79232225bae4f7f505fe451b8a80f05c9"
+        },
+        "originalRemainingRecord": {
+          "path": "output/acquisition-next-repairs-20261005/remaining-56.json",
+          "sha256": "b24f09dd0be5f1b310d369baa35e07cd37d11808027c5f0f02d0de83b7589473"
+        }
+      },
+      "mappingReason": "用户已批准的同家族采购评估或配件采购正文承接，保留准确旧名称与真实分段地址；不推断旧规格、库存、原厂身份或制造验收业绩。"
+    },
+    {
+      "oldId": 157,
+      "oldUrl": "http://jssngyl.cn/product/showproduct.php?id=157",
+      "oldRequestPath": "/product/showproduct.php?id=157",
+      "oldTitle": "大型可控气氛炉",
+      "sourceType": "original-identity-and-human-approved-procurement-content",
+      "mappingIntent": "approved-equipment-family-assessment",
+      "newTarget": "https://www.jssngyl.cn/zh/articles/special-industrial-furnace-procurement-assessment#solution-nitriding-atmosphere-assessment",
+      "newRequestPath": "/zh/articles/special-industrial-furnace-procurement-assessment#solution-nitriding-atmosphere-assessment",
+      "newCanonical": "https://www.jssngyl.cn/zh/articles/special-industrial-furnace-procurement-assessment",
+      "newStatus": null,
+      "newNoindex": null,
+      "newVerifiedAt": null,
+      "targetFragment": "solution-nitriding-atmosphere-assessment",
+      "targetBodySha256": "cd47deec017c82945a64b81e515e62369c6d1b73289af3c05afd4830fcf7c5d6",
+      "originalTitleEvidence": [
+        {
+          "source": "原站首页/目录公开档案的真实链接文字，未等同详情正文",
+          "visibleAnchorText": "大型可控气氛炉 查看详情",
+          "sourceOldUrl": "http://jssngyl.cn/",
+          "archiveTimestamp": "20251118080704",
+          "evidenceFile": "output/acquisition-repair-20261004/public-legacy-source-search/commoncrawl-page-377631dc4700-evidence.json"
+        }
+      ],
+      "originalDetailBodyRestored": false,
+      "oldModelAndParametersFullyRestored": false,
+      "newRuleImplemented": true,
+      "newRulePublished": false,
+      "liveIndividualUrlVerifiedThisRound": false,
+      "publicationState": "approved-candidate-awaiting-three-target-publication-and-edge-release",
+      "sourceReview": {
+        "approvalRecord": {
+          "path": "output/acquisition-next-repairs-20261005/approved-ui-release/human-approval.json",
+          "sha256": "c4fd9b71641683d533e3d61c038400f7207086dda75ef56621f536ce77b82339",
+          "statement": "同意",
+          "scope": "two existing entries, three Chinese pages and 56 exact legacy mappings"
+        },
+        "placementPlan": {
+          "path": "output/acquisition-next-repairs-20261005/content/placement-plan-v2.json",
+          "sha256": "77fafc116c67706ef3da5e29567241a79232225bae4f7f505fe451b8a80f05c9"
+        },
+        "originalRemainingRecord": {
+          "path": "output/acquisition-next-repairs-20261005/remaining-56.json",
+          "sha256": "b24f09dd0be5f1b310d369baa35e07cd37d11808027c5f0f02d0de83b7589473"
+        }
+      },
+      "mappingReason": "用户已批准的同家族采购评估或配件采购正文承接，保留准确旧名称与真实分段地址；不推断旧规格、库存、原厂身份或制造验收业绩。"
+    },
+    {
+      "oldId": 174,
+      "oldUrl": "http://jssngyl.cn/product/showproduct.php?id=174",
+      "oldRequestPath": "/product/showproduct.php?id=174",
+      "oldTitle": "300吨双炉台罩式炉",
+      "sourceType": "original-identity-and-human-approved-procurement-content",
+      "mappingIntent": "approved-equipment-family-assessment",
+      "newTarget": "https://www.jssngyl.cn/zh/articles/special-industrial-furnace-procurement-assessment#large-bell-assessment",
+      "newRequestPath": "/zh/articles/special-industrial-furnace-procurement-assessment#large-bell-assessment",
+      "newCanonical": "https://www.jssngyl.cn/zh/articles/special-industrial-furnace-procurement-assessment",
+      "newStatus": null,
+      "newNoindex": null,
+      "newVerifiedAt": null,
+      "targetFragment": "large-bell-assessment",
+      "targetBodySha256": "cd47deec017c82945a64b81e515e62369c6d1b73289af3c05afd4830fcf7c5d6",
+      "originalTitleEvidence": [
+        {
+          "source": "原站首页/目录公开档案的真实链接文字，未等同详情正文",
+          "visibleAnchorText": "300吨双炉台罩式炉 查看详情",
+          "sourceOldUrl": "http://jssngyl.cn/",
+          "archiveTimestamp": "20251118080704",
+          "evidenceFile": "output/acquisition-repair-20261004/public-legacy-source-search/commoncrawl-page-377631dc4700-evidence.json"
+        }
+      ],
+      "originalDetailBodyRestored": false,
+      "oldModelAndParametersFullyRestored": false,
+      "newRuleImplemented": true,
+      "newRulePublished": false,
+      "liveIndividualUrlVerifiedThisRound": false,
+      "publicationState": "approved-candidate-awaiting-three-target-publication-and-edge-release",
+      "sourceReview": {
+        "approvalRecord": {
+          "path": "output/acquisition-next-repairs-20261005/approved-ui-release/human-approval.json",
+          "sha256": "c4fd9b71641683d533e3d61c038400f7207086dda75ef56621f536ce77b82339",
+          "statement": "同意",
+          "scope": "two existing entries, three Chinese pages and 56 exact legacy mappings"
+        },
+        "placementPlan": {
+          "path": "output/acquisition-next-repairs-20261005/content/placement-plan-v2.json",
+          "sha256": "77fafc116c67706ef3da5e29567241a79232225bae4f7f505fe451b8a80f05c9"
+        },
+        "originalRemainingRecord": {
+          "path": "output/acquisition-next-repairs-20261005/remaining-56.json",
+          "sha256": "b24f09dd0be5f1b310d369baa35e07cd37d11808027c5f0f02d0de83b7589473"
+        }
+      },
+      "mappingReason": "用户已批准的同家族采购评估或配件采购正文承接，保留准确旧名称与真实分段地址；不推断旧规格、库存、原厂身份或制造验收业绩。"
+    },
+    {
+      "oldId": 176,
+      "oldUrl": "http://jssngyl.cn/product/showproduct.php?id=176",
+      "oldRequestPath": "/product/showproduct.php?id=176",
+      "oldTitle": "5.2米罩式炉",
+      "sourceType": "original-identity-and-human-approved-procurement-content",
+      "mappingIntent": "approved-equipment-family-assessment",
+      "newTarget": "https://www.jssngyl.cn/zh/articles/special-industrial-furnace-procurement-assessment#large-bell-assessment",
+      "newRequestPath": "/zh/articles/special-industrial-furnace-procurement-assessment#large-bell-assessment",
+      "newCanonical": "https://www.jssngyl.cn/zh/articles/special-industrial-furnace-procurement-assessment",
+      "newStatus": null,
+      "newNoindex": null,
+      "newVerifiedAt": null,
+      "targetFragment": "large-bell-assessment",
+      "targetBodySha256": "cd47deec017c82945a64b81e515e62369c6d1b73289af3c05afd4830fcf7c5d6",
+      "originalTitleEvidence": [
+        {
+          "source": "原站首页/目录公开档案的真实链接文字，未等同详情正文",
+          "visibleAnchorText": "5.2米罩式炉 查看详情",
+          "sourceOldUrl": "http://jssngyl.cn/",
+          "archiveTimestamp": "20251118080704",
+          "evidenceFile": "output/acquisition-repair-20261004/public-legacy-source-search/commoncrawl-page-377631dc4700-evidence.json"
+        }
+      ],
+      "originalDetailBodyRestored": false,
+      "oldModelAndParametersFullyRestored": false,
+      "newRuleImplemented": true,
+      "newRulePublished": false,
+      "liveIndividualUrlVerifiedThisRound": false,
+      "publicationState": "approved-candidate-awaiting-three-target-publication-and-edge-release",
+      "sourceReview": {
+        "approvalRecord": {
+          "path": "output/acquisition-next-repairs-20261005/approved-ui-release/human-approval.json",
+          "sha256": "c4fd9b71641683d533e3d61c038400f7207086dda75ef56621f536ce77b82339",
+          "statement": "同意",
+          "scope": "two existing entries, three Chinese pages and 56 exact legacy mappings"
+        },
+        "placementPlan": {
+          "path": "output/acquisition-next-repairs-20261005/content/placement-plan-v2.json",
+          "sha256": "77fafc116c67706ef3da5e29567241a79232225bae4f7f505fe451b8a80f05c9"
+        },
+        "originalRemainingRecord": {
+          "path": "output/acquisition-next-repairs-20261005/remaining-56.json",
+          "sha256": "b24f09dd0be5f1b310d369baa35e07cd37d11808027c5f0f02d0de83b7589473"
+        }
+      },
+      "mappingReason": "用户已批准的同家族采购评估或配件采购正文承接，保留准确旧名称与真实分段地址；不推断旧规格、库存、原厂身份或制造验收业绩。"
+    },
+    {
+      "oldId": 178,
+      "oldUrl": "http://jssngyl.cn/product/showproduct.php?id=178",
+      "oldRequestPath": "/product/showproduct.php?id=178",
+      "oldTitle": "工业烘箱",
+      "sourceType": "original-identity-and-human-approved-procurement-content",
+      "mappingIntent": "approved-equipment-family-assessment",
+      "newTarget": "https://www.jssngyl.cn/zh/articles/special-industrial-furnace-procurement-assessment#oven-preheat-curing-assessment",
+      "newRequestPath": "/zh/articles/special-industrial-furnace-procurement-assessment#oven-preheat-curing-assessment",
+      "newCanonical": "https://www.jssngyl.cn/zh/articles/special-industrial-furnace-procurement-assessment",
+      "newStatus": null,
+      "newNoindex": null,
+      "newVerifiedAt": null,
+      "targetFragment": "oven-preheat-curing-assessment",
+      "targetBodySha256": "cd47deec017c82945a64b81e515e62369c6d1b73289af3c05afd4830fcf7c5d6",
+      "originalTitleEvidence": [
+        {
+          "source": "原站首页/目录公开档案的真实链接文字，未等同详情正文",
+          "visibleAnchorText": "工业烘箱",
+          "sourceOldUrl": "http://jssngyl.cn/product/index.php?class1=127&page=2",
+          "archiveTimestamp": "20251118072828",
+          "evidenceFile": "output/acquisition-repair-20261004/public-legacy-source-search/commoncrawl-page-33ece16fe4c4-evidence.json"
+        }
+      ],
+      "originalDetailBodyRestored": false,
+      "oldModelAndParametersFullyRestored": false,
+      "newRuleImplemented": true,
+      "newRulePublished": false,
+      "liveIndividualUrlVerifiedThisRound": false,
+      "publicationState": "approved-candidate-awaiting-three-target-publication-and-edge-release",
+      "sourceReview": {
+        "approvalRecord": {
+          "path": "output/acquisition-next-repairs-20261005/approved-ui-release/human-approval.json",
+          "sha256": "c4fd9b71641683d533e3d61c038400f7207086dda75ef56621f536ce77b82339",
+          "statement": "同意",
+          "scope": "two existing entries, three Chinese pages and 56 exact legacy mappings"
+        },
+        "placementPlan": {
+          "path": "output/acquisition-next-repairs-20261005/content/placement-plan-v2.json",
+          "sha256": "77fafc116c67706ef3da5e29567241a79232225bae4f7f505fe451b8a80f05c9"
+        },
+        "originalRemainingRecord": {
+          "path": "output/acquisition-next-repairs-20261005/remaining-56.json",
+          "sha256": "b24f09dd0be5f1b310d369baa35e07cd37d11808027c5f0f02d0de83b7589473"
+        }
+      },
+      "mappingReason": "用户已批准的同家族采购评估或配件采购正文承接，保留准确旧名称与真实分段地址；不推断旧规格、库存、原厂身份或制造验收业绩。"
+    },
+    {
+      "oldId": 179,
+      "oldUrl": "http://jssngyl.cn/product/showproduct.php?id=179",
+      "oldRequestPath": "/product/showproduct.php?id=179",
+      "oldTitle": "工业烘箱",
+      "sourceType": "original-identity-and-human-approved-procurement-content",
+      "mappingIntent": "approved-equipment-family-assessment",
+      "newTarget": "https://www.jssngyl.cn/zh/articles/special-industrial-furnace-procurement-assessment#oven-preheat-curing-assessment",
+      "newRequestPath": "/zh/articles/special-industrial-furnace-procurement-assessment#oven-preheat-curing-assessment",
+      "newCanonical": "https://www.jssngyl.cn/zh/articles/special-industrial-furnace-procurement-assessment",
+      "newStatus": null,
+      "newNoindex": null,
+      "newVerifiedAt": null,
+      "targetFragment": "oven-preheat-curing-assessment",
+      "targetBodySha256": "cd47deec017c82945a64b81e515e62369c6d1b73289af3c05afd4830fcf7c5d6",
+      "originalTitleEvidence": [
+        {
+          "source": "原站首页/目录公开档案的真实链接文字，未等同详情正文",
+          "visibleAnchorText": "工业烘箱 查看详情",
+          "sourceOldUrl": "http://jssngyl.cn/",
+          "archiveTimestamp": "20251118080704",
+          "evidenceFile": "output/acquisition-repair-20261004/public-legacy-source-search/commoncrawl-page-377631dc4700-evidence.json"
+        },
+        {
+          "source": "原站首页/目录公开档案的真实链接文字，未等同详情正文",
+          "visibleAnchorText": "工业烘箱",
+          "sourceOldUrl": "http://jssngyl.cn/product/index.php?class1=127&page=2",
+          "archiveTimestamp": "20251118072828",
+          "evidenceFile": "output/acquisition-repair-20261004/public-legacy-source-search/commoncrawl-page-33ece16fe4c4-evidence.json"
+        }
+      ],
+      "originalDetailBodyRestored": false,
+      "oldModelAndParametersFullyRestored": false,
+      "newRuleImplemented": true,
+      "newRulePublished": false,
+      "liveIndividualUrlVerifiedThisRound": false,
+      "publicationState": "approved-candidate-awaiting-three-target-publication-and-edge-release",
+      "sourceReview": {
+        "approvalRecord": {
+          "path": "output/acquisition-next-repairs-20261005/approved-ui-release/human-approval.json",
+          "sha256": "c4fd9b71641683d533e3d61c038400f7207086dda75ef56621f536ce77b82339",
+          "statement": "同意",
+          "scope": "two existing entries, three Chinese pages and 56 exact legacy mappings"
+        },
+        "placementPlan": {
+          "path": "output/acquisition-next-repairs-20261005/content/placement-plan-v2.json",
+          "sha256": "77fafc116c67706ef3da5e29567241a79232225bae4f7f505fe451b8a80f05c9"
+        },
+        "originalRemainingRecord": {
+          "path": "output/acquisition-next-repairs-20261005/remaining-56.json",
+          "sha256": "b24f09dd0be5f1b310d369baa35e07cd37d11808027c5f0f02d0de83b7589473"
+        }
+      },
+      "mappingReason": "用户已批准的同家族采购评估或配件采购正文承接，保留准确旧名称与真实分段地址；不推断旧规格、库存、原厂身份或制造验收业绩。"
+    },
+    {
+      "oldId": 180,
+      "oldUrl": "http://jssngyl.cn/product/showproduct.php?id=180",
+      "oldRequestPath": "/product/showproduct.php?id=180",
+      "oldTitle": "工业烘箱",
+      "sourceType": "original-identity-and-human-approved-procurement-content",
+      "mappingIntent": "approved-equipment-family-assessment",
+      "newTarget": "https://www.jssngyl.cn/zh/articles/special-industrial-furnace-procurement-assessment#oven-preheat-curing-assessment",
+      "newRequestPath": "/zh/articles/special-industrial-furnace-procurement-assessment#oven-preheat-curing-assessment",
+      "newCanonical": "https://www.jssngyl.cn/zh/articles/special-industrial-furnace-procurement-assessment",
+      "newStatus": null,
+      "newNoindex": null,
+      "newVerifiedAt": null,
+      "targetFragment": "oven-preheat-curing-assessment",
+      "targetBodySha256": "cd47deec017c82945a64b81e515e62369c6d1b73289af3c05afd4830fcf7c5d6",
+      "originalTitleEvidence": [
+        {
+          "source": "原站首页/目录公开档案的真实链接文字，未等同详情正文",
+          "visibleAnchorText": "工业烘箱 查看详情",
+          "sourceOldUrl": "http://jssngyl.cn/",
+          "archiveTimestamp": "20251118080704",
+          "evidenceFile": "output/acquisition-repair-20261004/public-legacy-source-search/commoncrawl-page-377631dc4700-evidence.json"
+        },
+        {
+          "source": "原站首页/目录公开档案的真实链接文字，未等同详情正文",
+          "visibleAnchorText": "工业烘箱",
+          "sourceOldUrl": "http://jssngyl.cn/product/index.php?class1=127&page=2",
+          "archiveTimestamp": "20251118072828",
+          "evidenceFile": "output/acquisition-repair-20261004/public-legacy-source-search/commoncrawl-page-33ece16fe4c4-evidence.json"
+        }
+      ],
+      "originalDetailBodyRestored": false,
+      "oldModelAndParametersFullyRestored": false,
+      "newRuleImplemented": true,
+      "newRulePublished": false,
+      "liveIndividualUrlVerifiedThisRound": false,
+      "publicationState": "approved-candidate-awaiting-three-target-publication-and-edge-release",
+      "sourceReview": {
+        "approvalRecord": {
+          "path": "output/acquisition-next-repairs-20261005/approved-ui-release/human-approval.json",
+          "sha256": "c4fd9b71641683d533e3d61c038400f7207086dda75ef56621f536ce77b82339",
+          "statement": "同意",
+          "scope": "two existing entries, three Chinese pages and 56 exact legacy mappings"
+        },
+        "placementPlan": {
+          "path": "output/acquisition-next-repairs-20261005/content/placement-plan-v2.json",
+          "sha256": "77fafc116c67706ef3da5e29567241a79232225bae4f7f505fe451b8a80f05c9"
+        },
+        "originalRemainingRecord": {
+          "path": "output/acquisition-next-repairs-20261005/remaining-56.json",
+          "sha256": "b24f09dd0be5f1b310d369baa35e07cd37d11808027c5f0f02d0de83b7589473"
+        }
+      },
+      "mappingReason": "用户已批准的同家族采购评估或配件采购正文承接，保留准确旧名称与真实分段地址；不推断旧规格、库存、原厂身份或制造验收业绩。"
+    },
+    {
+      "oldId": 181,
+      "oldUrl": "http://jssngyl.cn/product/showproduct.php?id=181",
+      "oldRequestPath": "/product/showproduct.php?id=181",
+      "oldTitle": "工业烘箱",
+      "sourceType": "original-identity-and-human-approved-procurement-content",
+      "mappingIntent": "approved-equipment-family-assessment",
+      "newTarget": "https://www.jssngyl.cn/zh/articles/special-industrial-furnace-procurement-assessment#oven-preheat-curing-assessment",
+      "newRequestPath": "/zh/articles/special-industrial-furnace-procurement-assessment#oven-preheat-curing-assessment",
+      "newCanonical": "https://www.jssngyl.cn/zh/articles/special-industrial-furnace-procurement-assessment",
+      "newStatus": null,
+      "newNoindex": null,
+      "newVerifiedAt": null,
+      "targetFragment": "oven-preheat-curing-assessment",
+      "targetBodySha256": "cd47deec017c82945a64b81e515e62369c6d1b73289af3c05afd4830fcf7c5d6",
+      "originalTitleEvidence": [
+        {
+          "source": "原站首页/目录公开档案的真实链接文字，未等同详情正文",
+          "visibleAnchorText": "工业烘箱 查看详情",
+          "sourceOldUrl": "http://jssngyl.cn/",
+          "archiveTimestamp": "20251118080704",
+          "evidenceFile": "output/acquisition-repair-20261004/public-legacy-source-search/commoncrawl-page-377631dc4700-evidence.json"
+        },
+        {
+          "source": "原站首页/目录公开档案的真实链接文字，未等同详情正文",
+          "visibleAnchorText": "工业烘箱",
+          "sourceOldUrl": "http://jssngyl.cn/product/index.php?class1=127&page=2",
+          "archiveTimestamp": "20251118072828",
+          "evidenceFile": "output/acquisition-repair-20261004/public-legacy-source-search/commoncrawl-page-33ece16fe4c4-evidence.json"
+        }
+      ],
+      "originalDetailBodyRestored": false,
+      "oldModelAndParametersFullyRestored": false,
+      "newRuleImplemented": true,
+      "newRulePublished": false,
+      "liveIndividualUrlVerifiedThisRound": false,
+      "publicationState": "approved-candidate-awaiting-three-target-publication-and-edge-release",
+      "sourceReview": {
+        "approvalRecord": {
+          "path": "output/acquisition-next-repairs-20261005/approved-ui-release/human-approval.json",
+          "sha256": "c4fd9b71641683d533e3d61c038400f7207086dda75ef56621f536ce77b82339",
+          "statement": "同意",
+          "scope": "two existing entries, three Chinese pages and 56 exact legacy mappings"
+        },
+        "placementPlan": {
+          "path": "output/acquisition-next-repairs-20261005/content/placement-plan-v2.json",
+          "sha256": "77fafc116c67706ef3da5e29567241a79232225bae4f7f505fe451b8a80f05c9"
+        },
+        "originalRemainingRecord": {
+          "path": "output/acquisition-next-repairs-20261005/remaining-56.json",
+          "sha256": "b24f09dd0be5f1b310d369baa35e07cd37d11808027c5f0f02d0de83b7589473"
+        }
+      },
+      "mappingReason": "用户已批准的同家族采购评估或配件采购正文承接，保留准确旧名称与真实分段地址；不推断旧规格、库存、原厂身份或制造验收业绩。"
+    },
+    {
+      "oldId": 182,
+      "oldUrl": "http://jssngyl.cn/product/showproduct.php?id=182",
+      "oldRequestPath": "/product/showproduct.php?id=182",
+      "oldTitle": "单层连续式球化退火炉",
+      "sourceType": "original-identity-and-human-approved-procurement-content",
+      "mappingIntent": "approved-equipment-family-assessment",
+      "newTarget": "https://www.jssngyl.cn/zh/articles/special-industrial-furnace-procurement-assessment#spheroidizing-assessment",
+      "newRequestPath": "/zh/articles/special-industrial-furnace-procurement-assessment#spheroidizing-assessment",
+      "newCanonical": "https://www.jssngyl.cn/zh/articles/special-industrial-furnace-procurement-assessment",
+      "newStatus": null,
+      "newNoindex": null,
+      "newVerifiedAt": null,
+      "targetFragment": "spheroidizing-assessment",
+      "targetBodySha256": "cd47deec017c82945a64b81e515e62369c6d1b73289af3c05afd4830fcf7c5d6",
+      "originalTitleEvidence": [
+        {
+          "source": "原站首页/目录公开档案的真实链接文字，未等同详情正文",
+          "visibleAnchorText": "单层连续式球化退火炉",
+          "sourceOldUrl": "http://jssngyl.cn/product/index.php?class1=127&page=7",
+          "archiveTimestamp": "20251118070014",
+          "evidenceFile": "output/acquisition-repair-20261004/public-legacy-source-search/commoncrawl-page-b88a8d93b281-evidence.json"
+        }
+      ],
+      "originalDetailBodyRestored": false,
+      "oldModelAndParametersFullyRestored": false,
+      "newRuleImplemented": true,
+      "newRulePublished": false,
+      "liveIndividualUrlVerifiedThisRound": false,
+      "publicationState": "approved-candidate-awaiting-three-target-publication-and-edge-release",
+      "sourceReview": {
+        "approvalRecord": {
+          "path": "output/acquisition-next-repairs-20261005/approved-ui-release/human-approval.json",
+          "sha256": "c4fd9b71641683d533e3d61c038400f7207086dda75ef56621f536ce77b82339",
+          "statement": "同意",
+          "scope": "two existing entries, three Chinese pages and 56 exact legacy mappings"
+        },
+        "placementPlan": {
+          "path": "output/acquisition-next-repairs-20261005/content/placement-plan-v2.json",
+          "sha256": "77fafc116c67706ef3da5e29567241a79232225bae4f7f505fe451b8a80f05c9"
+        },
+        "originalRemainingRecord": {
+          "path": "output/acquisition-next-repairs-20261005/remaining-56.json",
+          "sha256": "b24f09dd0be5f1b310d369baa35e07cd37d11808027c5f0f02d0de83b7589473"
+        }
+      },
+      "mappingReason": "用户已批准的同家族采购评估或配件采购正文承接，保留准确旧名称与真实分段地址；不推断旧规格、库存、原厂身份或制造验收业绩。"
+    },
+    {
+      "oldId": 183,
+      "oldUrl": "http://jssngyl.cn/product/showproduct.php?id=183",
+      "oldRequestPath": "/product/showproduct.php?id=183",
+      "oldTitle": "单层连续式球化退火炉",
+      "sourceType": "original-identity-and-human-approved-procurement-content",
+      "mappingIntent": "approved-equipment-family-assessment",
+      "newTarget": "https://www.jssngyl.cn/zh/articles/special-industrial-furnace-procurement-assessment#spheroidizing-assessment",
+      "newRequestPath": "/zh/articles/special-industrial-furnace-procurement-assessment#spheroidizing-assessment",
+      "newCanonical": "https://www.jssngyl.cn/zh/articles/special-industrial-furnace-procurement-assessment",
+      "newStatus": null,
+      "newNoindex": null,
+      "newVerifiedAt": null,
+      "targetFragment": "spheroidizing-assessment",
+      "targetBodySha256": "cd47deec017c82945a64b81e515e62369c6d1b73289af3c05afd4830fcf7c5d6",
+      "originalTitleEvidence": [
+        {
+          "source": "原站首页/目录公开档案的真实链接文字，未等同详情正文",
+          "visibleAnchorText": "单层连续式球化退火炉",
+          "sourceOldUrl": "http://jssngyl.cn/product/index.php?class1=127&page=7",
+          "archiveTimestamp": "20251118070014",
+          "evidenceFile": "output/acquisition-repair-20261004/public-legacy-source-search/commoncrawl-page-b88a8d93b281-evidence.json"
+        }
+      ],
+      "originalDetailBodyRestored": false,
+      "oldModelAndParametersFullyRestored": false,
+      "newRuleImplemented": true,
+      "newRulePublished": false,
+      "liveIndividualUrlVerifiedThisRound": false,
+      "publicationState": "approved-candidate-awaiting-three-target-publication-and-edge-release",
+      "sourceReview": {
+        "approvalRecord": {
+          "path": "output/acquisition-next-repairs-20261005/approved-ui-release/human-approval.json",
+          "sha256": "c4fd9b71641683d533e3d61c038400f7207086dda75ef56621f536ce77b82339",
+          "statement": "同意",
+          "scope": "two existing entries, three Chinese pages and 56 exact legacy mappings"
+        },
+        "placementPlan": {
+          "path": "output/acquisition-next-repairs-20261005/content/placement-plan-v2.json",
+          "sha256": "77fafc116c67706ef3da5e29567241a79232225bae4f7f505fe451b8a80f05c9"
+        },
+        "originalRemainingRecord": {
+          "path": "output/acquisition-next-repairs-20261005/remaining-56.json",
+          "sha256": "b24f09dd0be5f1b310d369baa35e07cd37d11808027c5f0f02d0de83b7589473"
+        }
+      },
+      "mappingReason": "用户已批准的同家族采购评估或配件采购正文承接，保留准确旧名称与真实分段地址；不推断旧规格、库存、原厂身份或制造验收业绩。"
+    },
+    {
+      "oldId": 184,
+      "oldUrl": "http://jssngyl.cn/product/showproduct.php?id=184",
+      "oldRequestPath": "/product/showproduct.php?id=184",
+      "oldTitle": "井式球化退火炉",
+      "sourceType": "original-identity-and-human-approved-procurement-content",
+      "mappingIntent": "approved-equipment-family-assessment",
+      "newTarget": "https://www.jssngyl.cn/zh/articles/special-industrial-furnace-procurement-assessment#spheroidizing-assessment",
+      "newRequestPath": "/zh/articles/special-industrial-furnace-procurement-assessment#spheroidizing-assessment",
+      "newCanonical": "https://www.jssngyl.cn/zh/articles/special-industrial-furnace-procurement-assessment",
+      "newStatus": null,
+      "newNoindex": null,
+      "newVerifiedAt": null,
+      "targetFragment": "spheroidizing-assessment",
+      "targetBodySha256": "cd47deec017c82945a64b81e515e62369c6d1b73289af3c05afd4830fcf7c5d6",
+      "originalTitleEvidence": [
+        {
+          "source": "原站首页/目录公开档案的真实链接文字，未等同详情正文",
+          "visibleAnchorText": "井式球化退火炉",
+          "sourceOldUrl": "http://jssngyl.cn/product/index.php?class1=127&page=7",
+          "archiveTimestamp": "20251118070014",
+          "evidenceFile": "output/acquisition-repair-20261004/public-legacy-source-search/commoncrawl-page-b88a8d93b281-evidence.json"
+        }
+      ],
+      "originalDetailBodyRestored": false,
+      "oldModelAndParametersFullyRestored": false,
+      "newRuleImplemented": true,
+      "newRulePublished": false,
+      "liveIndividualUrlVerifiedThisRound": false,
+      "publicationState": "approved-candidate-awaiting-three-target-publication-and-edge-release",
+      "sourceReview": {
+        "approvalRecord": {
+          "path": "output/acquisition-next-repairs-20261005/approved-ui-release/human-approval.json",
+          "sha256": "c4fd9b71641683d533e3d61c038400f7207086dda75ef56621f536ce77b82339",
+          "statement": "同意",
+          "scope": "two existing entries, three Chinese pages and 56 exact legacy mappings"
+        },
+        "placementPlan": {
+          "path": "output/acquisition-next-repairs-20261005/content/placement-plan-v2.json",
+          "sha256": "77fafc116c67706ef3da5e29567241a79232225bae4f7f505fe451b8a80f05c9"
+        },
+        "originalRemainingRecord": {
+          "path": "output/acquisition-next-repairs-20261005/remaining-56.json",
+          "sha256": "b24f09dd0be5f1b310d369baa35e07cd37d11808027c5f0f02d0de83b7589473"
+        }
+      },
+      "mappingReason": "用户已批准的同家族采购评估或配件采购正文承接，保留准确旧名称与真实分段地址；不推断旧规格、库存、原厂身份或制造验收业绩。"
+    },
+    {
+      "oldId": 185,
+      "oldUrl": "http://jssngyl.cn/product/showproduct.php?id=185",
+      "oldRequestPath": "/product/showproduct.php?id=185",
+      "oldTitle": "双层连续式球化退火炉",
+      "sourceType": "original-identity-and-human-approved-procurement-content",
+      "mappingIntent": "approved-equipment-family-assessment",
+      "newTarget": "https://www.jssngyl.cn/zh/articles/special-industrial-furnace-procurement-assessment#spheroidizing-assessment",
+      "newRequestPath": "/zh/articles/special-industrial-furnace-procurement-assessment#spheroidizing-assessment",
+      "newCanonical": "https://www.jssngyl.cn/zh/articles/special-industrial-furnace-procurement-assessment",
+      "newStatus": null,
+      "newNoindex": null,
+      "newVerifiedAt": null,
+      "targetFragment": "spheroidizing-assessment",
+      "targetBodySha256": "cd47deec017c82945a64b81e515e62369c6d1b73289af3c05afd4830fcf7c5d6",
+      "originalTitleEvidence": [
+        {
+          "source": "原站首页/目录公开档案的真实链接文字，未等同详情正文",
+          "visibleAnchorText": "双层连续式球化退火炉",
+          "sourceOldUrl": "http://jssngyl.cn/product/index.php?class1=127&page=7",
+          "archiveTimestamp": "20251118070014",
+          "evidenceFile": "output/acquisition-repair-20261004/public-legacy-source-search/commoncrawl-page-b88a8d93b281-evidence.json"
+        }
+      ],
+      "originalDetailBodyRestored": false,
+      "oldModelAndParametersFullyRestored": false,
+      "newRuleImplemented": true,
+      "newRulePublished": false,
+      "liveIndividualUrlVerifiedThisRound": false,
+      "publicationState": "approved-candidate-awaiting-three-target-publication-and-edge-release",
+      "sourceReview": {
+        "approvalRecord": {
+          "path": "output/acquisition-next-repairs-20261005/approved-ui-release/human-approval.json",
+          "sha256": "c4fd9b71641683d533e3d61c038400f7207086dda75ef56621f536ce77b82339",
+          "statement": "同意",
+          "scope": "two existing entries, three Chinese pages and 56 exact legacy mappings"
+        },
+        "placementPlan": {
+          "path": "output/acquisition-next-repairs-20261005/content/placement-plan-v2.json",
+          "sha256": "77fafc116c67706ef3da5e29567241a79232225bae4f7f505fe451b8a80f05c9"
+        },
+        "originalRemainingRecord": {
+          "path": "output/acquisition-next-repairs-20261005/remaining-56.json",
+          "sha256": "b24f09dd0be5f1b310d369baa35e07cd37d11808027c5f0f02d0de83b7589473"
+        }
+      },
+      "mappingReason": "用户已批准的同家族采购评估或配件采购正文承接，保留准确旧名称与真实分段地址；不推断旧规格、库存、原厂身份或制造验收业绩。"
+    },
+    {
+      "oldId": 205,
+      "oldUrl": "http://jssngyl.cn/product/showproduct.php?id=205",
+      "oldRequestPath": "/product/showproduct.php?id=205",
+      "oldTitle": "连续炉辐射管",
+      "sourceType": "original-identity-and-human-approved-procurement-content",
+      "mappingIntent": "approved-standalone-parts-family-purchasing",
+      "newTarget": "https://www.jssngyl.cn/zh/service/industrial-furnace-parts-purchasing#parts-heating",
+      "newRequestPath": "/zh/service/industrial-furnace-parts-purchasing#parts-heating",
+      "newCanonical": "https://www.jssngyl.cn/zh/service/industrial-furnace-parts-purchasing",
+      "newStatus": null,
+      "newNoindex": null,
+      "newVerifiedAt": null,
+      "targetFragment": "parts-heating",
+      "targetBodySha256": "00ca6626315687f2b921519101f35aee75c1e2cbae2799aed23d8b811ff4c481",
+      "originalTitleEvidence": [
+        {
+          "source": "原站首页/目录公开档案的真实链接文字，未等同详情正文",
+          "visibleAnchorText": "连续炉辐射管",
+          "sourceOldUrl": "http://jssngyl.cn/product/index.php?class1=127&page=5",
+          "archiveTimestamp": "20251118064311",
+          "evidenceFile": "output/acquisition-repair-20261004/public-legacy-source-search/commoncrawl-page-ce46d69ec4c1-evidence.json"
+        }
+      ],
+      "originalDetailBodyRestored": false,
+      "oldModelAndParametersFullyRestored": false,
+      "newRuleImplemented": true,
+      "newRulePublished": false,
+      "liveIndividualUrlVerifiedThisRound": false,
+      "publicationState": "approved-candidate-awaiting-three-target-publication-and-edge-release",
+      "sourceReview": {
+        "approvalRecord": {
+          "path": "output/acquisition-next-repairs-20261005/approved-ui-release/human-approval.json",
+          "sha256": "c4fd9b71641683d533e3d61c038400f7207086dda75ef56621f536ce77b82339",
+          "statement": "同意",
+          "scope": "two existing entries, three Chinese pages and 56 exact legacy mappings"
+        },
+        "placementPlan": {
+          "path": "output/acquisition-next-repairs-20261005/content/placement-plan-v2.json",
+          "sha256": "77fafc116c67706ef3da5e29567241a79232225bae4f7f505fe451b8a80f05c9"
+        },
+        "originalRemainingRecord": {
+          "path": "output/acquisition-next-repairs-20261005/remaining-56.json",
+          "sha256": "b24f09dd0be5f1b310d369baa35e07cd37d11808027c5f0f02d0de83b7589473"
+        }
+      },
+      "mappingReason": "用户已批准的同家族采购评估或配件采购正文承接，保留准确旧名称与真实分段地址；不推断旧规格、库存、原厂身份或制造验收业绩。"
+    },
+    {
+      "oldId": 206,
+      "oldUrl": "http://jssngyl.cn/product/showproduct.php?id=206",
+      "oldRequestPath": "/product/showproduct.php?id=206",
+      "oldTitle": "焊接系列炉用料筐",
+      "sourceType": "original-identity-and-human-approved-procurement-content",
+      "mappingIntent": "approved-standalone-parts-family-purchasing",
+      "newTarget": "https://www.jssngyl.cn/zh/service/industrial-furnace-parts-purchasing#parts-baskets-welded",
+      "newRequestPath": "/zh/service/industrial-furnace-parts-purchasing#parts-baskets-welded",
+      "newCanonical": "https://www.jssngyl.cn/zh/service/industrial-furnace-parts-purchasing",
+      "newStatus": null,
+      "newNoindex": null,
+      "newVerifiedAt": null,
+      "targetFragment": "parts-baskets-welded",
+      "targetBodySha256": "00ca6626315687f2b921519101f35aee75c1e2cbae2799aed23d8b811ff4c481",
+      "originalTitleEvidence": [
+        {
+          "source": "原站首页/目录公开档案的真实链接文字，未等同详情正文",
+          "visibleAnchorText": "焊接系列炉用料筐",
+          "sourceOldUrl": "http://jssngyl.cn/product/index.php?class1=127&page=5",
+          "archiveTimestamp": "20251118064311",
+          "evidenceFile": "output/acquisition-repair-20261004/public-legacy-source-search/commoncrawl-page-ce46d69ec4c1-evidence.json"
+        }
+      ],
+      "originalDetailBodyRestored": false,
+      "oldModelAndParametersFullyRestored": false,
+      "newRuleImplemented": true,
+      "newRulePublished": false,
+      "liveIndividualUrlVerifiedThisRound": false,
+      "publicationState": "approved-candidate-awaiting-three-target-publication-and-edge-release",
+      "sourceReview": {
+        "approvalRecord": {
+          "path": "output/acquisition-next-repairs-20261005/approved-ui-release/human-approval.json",
+          "sha256": "c4fd9b71641683d533e3d61c038400f7207086dda75ef56621f536ce77b82339",
+          "statement": "同意",
+          "scope": "two existing entries, three Chinese pages and 56 exact legacy mappings"
+        },
+        "placementPlan": {
+          "path": "output/acquisition-next-repairs-20261005/content/placement-plan-v2.json",
+          "sha256": "77fafc116c67706ef3da5e29567241a79232225bae4f7f505fe451b8a80f05c9"
+        },
+        "originalRemainingRecord": {
+          "path": "output/acquisition-next-repairs-20261005/remaining-56.json",
+          "sha256": "b24f09dd0be5f1b310d369baa35e07cd37d11808027c5f0f02d0de83b7589473"
+        }
+      },
+      "mappingReason": "用户已批准的同家族采购评估或配件采购正文承接，保留准确旧名称与真实分段地址；不推断旧规格、库存、原厂身份或制造验收业绩。"
+    },
+    {
+      "oldId": 207,
+      "oldUrl": "http://jssngyl.cn/product/showproduct.php?id=207",
+      "oldRequestPath": "/product/showproduct.php?id=207",
+      "oldTitle": "焊接系列炉用料筐",
+      "sourceType": "original-identity-and-human-approved-procurement-content",
+      "mappingIntent": "approved-standalone-parts-family-purchasing",
+      "newTarget": "https://www.jssngyl.cn/zh/service/industrial-furnace-parts-purchasing#parts-baskets-welded",
+      "newRequestPath": "/zh/service/industrial-furnace-parts-purchasing#parts-baskets-welded",
+      "newCanonical": "https://www.jssngyl.cn/zh/service/industrial-furnace-parts-purchasing",
+      "newStatus": null,
+      "newNoindex": null,
+      "newVerifiedAt": null,
+      "targetFragment": "parts-baskets-welded",
+      "targetBodySha256": "00ca6626315687f2b921519101f35aee75c1e2cbae2799aed23d8b811ff4c481",
+      "originalTitleEvidence": [
+        {
+          "source": "原站首页/目录公开档案的真实链接文字，未等同详情正文",
+          "visibleAnchorText": "焊接系列炉用料筐",
+          "sourceOldUrl": "http://jssngyl.cn/product/index.php?class1=127&page=5",
+          "archiveTimestamp": "20251118064311",
+          "evidenceFile": "output/acquisition-repair-20261004/public-legacy-source-search/commoncrawl-page-ce46d69ec4c1-evidence.json"
+        }
+      ],
+      "originalDetailBodyRestored": false,
+      "oldModelAndParametersFullyRestored": false,
+      "newRuleImplemented": true,
+      "newRulePublished": false,
+      "liveIndividualUrlVerifiedThisRound": false,
+      "publicationState": "approved-candidate-awaiting-three-target-publication-and-edge-release",
+      "sourceReview": {
+        "approvalRecord": {
+          "path": "output/acquisition-next-repairs-20261005/approved-ui-release/human-approval.json",
+          "sha256": "c4fd9b71641683d533e3d61c038400f7207086dda75ef56621f536ce77b82339",
+          "statement": "同意",
+          "scope": "two existing entries, three Chinese pages and 56 exact legacy mappings"
+        },
+        "placementPlan": {
+          "path": "output/acquisition-next-repairs-20261005/content/placement-plan-v2.json",
+          "sha256": "77fafc116c67706ef3da5e29567241a79232225bae4f7f505fe451b8a80f05c9"
+        },
+        "originalRemainingRecord": {
+          "path": "output/acquisition-next-repairs-20261005/remaining-56.json",
+          "sha256": "b24f09dd0be5f1b310d369baa35e07cd37d11808027c5f0f02d0de83b7589473"
+        }
+      },
+      "mappingReason": "用户已批准的同家族采购评估或配件采购正文承接，保留准确旧名称与真实分段地址；不推断旧规格、库存、原厂身份或制造验收业绩。"
+    },
+    {
+      "oldId": 208,
+      "oldUrl": "http://jssngyl.cn/product/showproduct.php?id=208",
+      "oldRequestPath": "/product/showproduct.php?id=208",
+      "oldTitle": "焊接系列炉用料筐",
+      "sourceType": "original-identity-and-human-approved-procurement-content",
+      "mappingIntent": "approved-standalone-parts-family-purchasing",
+      "newTarget": "https://www.jssngyl.cn/zh/service/industrial-furnace-parts-purchasing#parts-baskets-welded",
+      "newRequestPath": "/zh/service/industrial-furnace-parts-purchasing#parts-baskets-welded",
+      "newCanonical": "https://www.jssngyl.cn/zh/service/industrial-furnace-parts-purchasing",
+      "newStatus": null,
+      "newNoindex": null,
+      "newVerifiedAt": null,
+      "targetFragment": "parts-baskets-welded",
+      "targetBodySha256": "00ca6626315687f2b921519101f35aee75c1e2cbae2799aed23d8b811ff4c481",
+      "originalTitleEvidence": [
+        {
+          "source": "原站首页/目录公开档案的真实链接文字，未等同详情正文",
+          "visibleAnchorText": "焊接系列炉用料筐",
+          "sourceOldUrl": "http://jssngyl.cn/product/index.php?class1=127&page=5",
+          "archiveTimestamp": "20251118064311",
+          "evidenceFile": "output/acquisition-repair-20261004/public-legacy-source-search/commoncrawl-page-ce46d69ec4c1-evidence.json"
+        }
+      ],
+      "originalDetailBodyRestored": false,
+      "oldModelAndParametersFullyRestored": false,
+      "newRuleImplemented": true,
+      "newRulePublished": false,
+      "liveIndividualUrlVerifiedThisRound": false,
+      "publicationState": "approved-candidate-awaiting-three-target-publication-and-edge-release",
+      "sourceReview": {
+        "approvalRecord": {
+          "path": "output/acquisition-next-repairs-20261005/approved-ui-release/human-approval.json",
+          "sha256": "c4fd9b71641683d533e3d61c038400f7207086dda75ef56621f536ce77b82339",
+          "statement": "同意",
+          "scope": "two existing entries, three Chinese pages and 56 exact legacy mappings"
+        },
+        "placementPlan": {
+          "path": "output/acquisition-next-repairs-20261005/content/placement-plan-v2.json",
+          "sha256": "77fafc116c67706ef3da5e29567241a79232225bae4f7f505fe451b8a80f05c9"
+        },
+        "originalRemainingRecord": {
+          "path": "output/acquisition-next-repairs-20261005/remaining-56.json",
+          "sha256": "b24f09dd0be5f1b310d369baa35e07cd37d11808027c5f0f02d0de83b7589473"
+        }
+      },
+      "mappingReason": "用户已批准的同家族采购评估或配件采购正文承接，保留准确旧名称与真实分段地址；不推断旧规格、库存、原厂身份或制造验收业绩。"
+    },
+    {
+      "oldId": 209,
+      "oldUrl": "http://jssngyl.cn/product/showproduct.php?id=209",
+      "oldRequestPath": "/product/showproduct.php?id=209",
+      "oldTitle": "焊接系列炉用料筐",
+      "sourceType": "original-identity-and-human-approved-procurement-content",
+      "mappingIntent": "approved-standalone-parts-family-purchasing",
+      "newTarget": "https://www.jssngyl.cn/zh/service/industrial-furnace-parts-purchasing#parts-baskets-welded",
+      "newRequestPath": "/zh/service/industrial-furnace-parts-purchasing#parts-baskets-welded",
+      "newCanonical": "https://www.jssngyl.cn/zh/service/industrial-furnace-parts-purchasing",
+      "newStatus": null,
+      "newNoindex": null,
+      "newVerifiedAt": null,
+      "targetFragment": "parts-baskets-welded",
+      "targetBodySha256": "00ca6626315687f2b921519101f35aee75c1e2cbae2799aed23d8b811ff4c481",
+      "originalTitleEvidence": [
+        {
+          "source": "原站首页/目录公开档案的真实链接文字，未等同详情正文",
+          "visibleAnchorText": "焊接系列炉用料筐",
+          "sourceOldUrl": "http://jssngyl.cn/product/index.php?class1=127&page=5",
+          "archiveTimestamp": "20251118064311",
+          "evidenceFile": "output/acquisition-repair-20261004/public-legacy-source-search/commoncrawl-page-ce46d69ec4c1-evidence.json"
+        }
+      ],
+      "originalDetailBodyRestored": false,
+      "oldModelAndParametersFullyRestored": false,
+      "newRuleImplemented": true,
+      "newRulePublished": false,
+      "liveIndividualUrlVerifiedThisRound": false,
+      "publicationState": "approved-candidate-awaiting-three-target-publication-and-edge-release",
+      "sourceReview": {
+        "approvalRecord": {
+          "path": "output/acquisition-next-repairs-20261005/approved-ui-release/human-approval.json",
+          "sha256": "c4fd9b71641683d533e3d61c038400f7207086dda75ef56621f536ce77b82339",
+          "statement": "同意",
+          "scope": "two existing entries, three Chinese pages and 56 exact legacy mappings"
+        },
+        "placementPlan": {
+          "path": "output/acquisition-next-repairs-20261005/content/placement-plan-v2.json",
+          "sha256": "77fafc116c67706ef3da5e29567241a79232225bae4f7f505fe451b8a80f05c9"
+        },
+        "originalRemainingRecord": {
+          "path": "output/acquisition-next-repairs-20261005/remaining-56.json",
+          "sha256": "b24f09dd0be5f1b310d369baa35e07cd37d11808027c5f0f02d0de83b7589473"
+        }
+      },
+      "mappingReason": "用户已批准的同家族采购评估或配件采购正文承接，保留准确旧名称与真实分段地址；不推断旧规格、库存、原厂身份或制造验收业绩。"
+    },
+    {
+      "oldId": 210,
+      "oldUrl": "http://jssngyl.cn/product/showproduct.php?id=210",
+      "oldRequestPath": "/product/showproduct.php?id=210",
+      "oldTitle": "焊接系列",
+      "sourceType": "original-identity-and-human-approved-procurement-content",
+      "mappingIntent": "approved-standalone-parts-family-purchasing",
+      "newTarget": "https://www.jssngyl.cn/zh/service/industrial-furnace-parts-purchasing#parts-baskets-welded",
+      "newRequestPath": "/zh/service/industrial-furnace-parts-purchasing#parts-baskets-welded",
+      "newCanonical": "https://www.jssngyl.cn/zh/service/industrial-furnace-parts-purchasing",
+      "newStatus": null,
+      "newNoindex": null,
+      "newVerifiedAt": null,
+      "targetFragment": "parts-baskets-welded",
+      "targetBodySha256": "00ca6626315687f2b921519101f35aee75c1e2cbae2799aed23d8b811ff4c481",
+      "originalTitleEvidence": [
+        {
+          "source": "原站首页/目录公开档案的真实链接文字，未等同详情正文",
+          "visibleAnchorText": "焊接系列",
+          "sourceOldUrl": "http://jssngyl.cn/product/index.php?class1=127&page=5",
+          "archiveTimestamp": "20251118064311",
+          "evidenceFile": "output/acquisition-repair-20261004/public-legacy-source-search/commoncrawl-page-ce46d69ec4c1-evidence.json"
+        }
+      ],
+      "originalDetailBodyRestored": false,
+      "oldModelAndParametersFullyRestored": false,
+      "newRuleImplemented": true,
+      "newRulePublished": false,
+      "liveIndividualUrlVerifiedThisRound": false,
+      "publicationState": "approved-candidate-awaiting-three-target-publication-and-edge-release",
+      "sourceReview": {
+        "approvalRecord": {
+          "path": "output/acquisition-next-repairs-20261005/approved-ui-release/human-approval.json",
+          "sha256": "c4fd9b71641683d533e3d61c038400f7207086dda75ef56621f536ce77b82339",
+          "statement": "同意",
+          "scope": "two existing entries, three Chinese pages and 56 exact legacy mappings"
+        },
+        "placementPlan": {
+          "path": "output/acquisition-next-repairs-20261005/content/placement-plan-v2.json",
+          "sha256": "77fafc116c67706ef3da5e29567241a79232225bae4f7f505fe451b8a80f05c9"
+        },
+        "originalRemainingRecord": {
+          "path": "output/acquisition-next-repairs-20261005/remaining-56.json",
+          "sha256": "b24f09dd0be5f1b310d369baa35e07cd37d11808027c5f0f02d0de83b7589473"
+        }
+      },
+      "mappingReason": "用户已批准的同家族采购评估或配件采购正文承接，保留准确旧名称与真实分段地址；不推断旧规格、库存、原厂身份或制造验收业绩。"
+    },
+    {
+      "oldId": 211,
+      "oldUrl": "http://jssngyl.cn/product/showproduct.php?id=211",
+      "oldRequestPath": "/product/showproduct.php?id=211",
+      "oldTitle": "焊接系列",
+      "sourceType": "original-identity-and-human-approved-procurement-content",
+      "mappingIntent": "approved-standalone-parts-family-purchasing",
+      "newTarget": "https://www.jssngyl.cn/zh/service/industrial-furnace-parts-purchasing#parts-baskets-welded",
+      "newRequestPath": "/zh/service/industrial-furnace-parts-purchasing#parts-baskets-welded",
+      "newCanonical": "https://www.jssngyl.cn/zh/service/industrial-furnace-parts-purchasing",
+      "newStatus": null,
+      "newNoindex": null,
+      "newVerifiedAt": null,
+      "targetFragment": "parts-baskets-welded",
+      "targetBodySha256": "00ca6626315687f2b921519101f35aee75c1e2cbae2799aed23d8b811ff4c481",
+      "originalTitleEvidence": [
+        {
+          "source": "原站首页/目录公开档案的真实链接文字，未等同详情正文",
+          "visibleAnchorText": "焊接系列",
+          "sourceOldUrl": "http://jssngyl.cn/product/index.php?class1=127&page=5",
+          "archiveTimestamp": "20251118064311",
+          "evidenceFile": "output/acquisition-repair-20261004/public-legacy-source-search/commoncrawl-page-ce46d69ec4c1-evidence.json"
+        }
+      ],
+      "originalDetailBodyRestored": false,
+      "oldModelAndParametersFullyRestored": false,
+      "newRuleImplemented": true,
+      "newRulePublished": false,
+      "liveIndividualUrlVerifiedThisRound": false,
+      "publicationState": "approved-candidate-awaiting-three-target-publication-and-edge-release",
+      "sourceReview": {
+        "approvalRecord": {
+          "path": "output/acquisition-next-repairs-20261005/approved-ui-release/human-approval.json",
+          "sha256": "c4fd9b71641683d533e3d61c038400f7207086dda75ef56621f536ce77b82339",
+          "statement": "同意",
+          "scope": "two existing entries, three Chinese pages and 56 exact legacy mappings"
+        },
+        "placementPlan": {
+          "path": "output/acquisition-next-repairs-20261005/content/placement-plan-v2.json",
+          "sha256": "77fafc116c67706ef3da5e29567241a79232225bae4f7f505fe451b8a80f05c9"
+        },
+        "originalRemainingRecord": {
+          "path": "output/acquisition-next-repairs-20261005/remaining-56.json",
+          "sha256": "b24f09dd0be5f1b310d369baa35e07cd37d11808027c5f0f02d0de83b7589473"
+        }
+      },
+      "mappingReason": "用户已批准的同家族采购评估或配件采购正文承接，保留准确旧名称与真实分段地址；不推断旧规格、库存、原厂身份或制造验收业绩。"
+    },
+    {
+      "oldId": 212,
+      "oldUrl": "http://jssngyl.cn/product/showproduct.php?id=212",
+      "oldRequestPath": "/product/showproduct.php?id=212",
+      "oldTitle": "双边立绕加热芯",
+      "sourceType": "original-identity-and-human-approved-procurement-content",
+      "mappingIntent": "approved-standalone-parts-family-purchasing",
+      "newTarget": "https://www.jssngyl.cn/zh/service/industrial-furnace-parts-purchasing#parts-heating",
+      "newRequestPath": "/zh/service/industrial-furnace-parts-purchasing#parts-heating",
+      "newCanonical": "https://www.jssngyl.cn/zh/service/industrial-furnace-parts-purchasing",
+      "newStatus": null,
+      "newNoindex": null,
+      "newVerifiedAt": null,
+      "targetFragment": "parts-heating",
+      "targetBodySha256": "00ca6626315687f2b921519101f35aee75c1e2cbae2799aed23d8b811ff4c481",
+      "originalTitleEvidence": [
+        {
+          "source": "原站首页/目录公开档案的真实链接文字，未等同详情正文",
+          "visibleAnchorText": "双边立绕加热芯",
+          "sourceOldUrl": "http://jssngyl.cn/product/index.php?class1=127&page=5",
+          "archiveTimestamp": "20251118064311",
+          "evidenceFile": "output/acquisition-repair-20261004/public-legacy-source-search/commoncrawl-page-ce46d69ec4c1-evidence.json"
+        }
+      ],
+      "originalDetailBodyRestored": false,
+      "oldModelAndParametersFullyRestored": false,
+      "newRuleImplemented": true,
+      "newRulePublished": false,
+      "liveIndividualUrlVerifiedThisRound": false,
+      "publicationState": "approved-candidate-awaiting-three-target-publication-and-edge-release",
+      "sourceReview": {
+        "approvalRecord": {
+          "path": "output/acquisition-next-repairs-20261005/approved-ui-release/human-approval.json",
+          "sha256": "c4fd9b71641683d533e3d61c038400f7207086dda75ef56621f536ce77b82339",
+          "statement": "同意",
+          "scope": "two existing entries, three Chinese pages and 56 exact legacy mappings"
+        },
+        "placementPlan": {
+          "path": "output/acquisition-next-repairs-20261005/content/placement-plan-v2.json",
+          "sha256": "77fafc116c67706ef3da5e29567241a79232225bae4f7f505fe451b8a80f05c9"
+        },
+        "originalRemainingRecord": {
+          "path": "output/acquisition-next-repairs-20261005/remaining-56.json",
+          "sha256": "b24f09dd0be5f1b310d369baa35e07cd37d11808027c5f0f02d0de83b7589473"
+        }
+      },
+      "mappingReason": "用户已批准的同家族采购评估或配件采购正文承接，保留准确旧名称与真实分段地址；不推断旧规格、库存、原厂身份或制造验收业绩。"
+    },
+    {
+      "oldId": 213,
+      "oldUrl": "http://jssngyl.cn/product/showproduct.php?id=213",
+      "oldRequestPath": "/product/showproduct.php?id=213",
+      "oldTitle": "立绕辐射管",
+      "sourceType": "original-identity-and-human-approved-procurement-content",
+      "mappingIntent": "approved-standalone-parts-family-purchasing",
+      "newTarget": "https://www.jssngyl.cn/zh/service/industrial-furnace-parts-purchasing#parts-heating",
+      "newRequestPath": "/zh/service/industrial-furnace-parts-purchasing#parts-heating",
+      "newCanonical": "https://www.jssngyl.cn/zh/service/industrial-furnace-parts-purchasing",
+      "newStatus": null,
+      "newNoindex": null,
+      "newVerifiedAt": null,
+      "targetFragment": "parts-heating",
+      "targetBodySha256": "00ca6626315687f2b921519101f35aee75c1e2cbae2799aed23d8b811ff4c481",
+      "originalTitleEvidence": [
+        {
+          "source": "原站首页/目录公开档案的真实链接文字，未等同详情正文",
+          "visibleAnchorText": "立绕辐射管",
+          "sourceOldUrl": "http://jssngyl.cn/product/index.php?class1=127&page=5",
+          "archiveTimestamp": "20251118064311",
+          "evidenceFile": "output/acquisition-repair-20261004/public-legacy-source-search/commoncrawl-page-ce46d69ec4c1-evidence.json"
+        }
+      ],
+      "originalDetailBodyRestored": false,
+      "oldModelAndParametersFullyRestored": false,
+      "newRuleImplemented": true,
+      "newRulePublished": false,
+      "liveIndividualUrlVerifiedThisRound": false,
+      "publicationState": "approved-candidate-awaiting-three-target-publication-and-edge-release",
+      "sourceReview": {
+        "approvalRecord": {
+          "path": "output/acquisition-next-repairs-20261005/approved-ui-release/human-approval.json",
+          "sha256": "c4fd9b71641683d533e3d61c038400f7207086dda75ef56621f536ce77b82339",
+          "statement": "同意",
+          "scope": "two existing entries, three Chinese pages and 56 exact legacy mappings"
+        },
+        "placementPlan": {
+          "path": "output/acquisition-next-repairs-20261005/content/placement-plan-v2.json",
+          "sha256": "77fafc116c67706ef3da5e29567241a79232225bae4f7f505fe451b8a80f05c9"
+        },
+        "originalRemainingRecord": {
+          "path": "output/acquisition-next-repairs-20261005/remaining-56.json",
+          "sha256": "b24f09dd0be5f1b310d369baa35e07cd37d11808027c5f0f02d0de83b7589473"
+        }
+      },
+      "mappingReason": "用户已批准的同家族采购评估或配件采购正文承接，保留准确旧名称与真实分段地址；不推断旧规格、库存、原厂身份或制造验收业绩。"
+    },
+    {
+      "oldId": 214,
+      "oldUrl": "http://jssngyl.cn/product/showproduct.php?id=214",
+      "oldRequestPath": "/product/showproduct.php?id=214",
+      "oldTitle": "方形加热芯",
+      "sourceType": "original-identity-and-human-approved-procurement-content",
+      "mappingIntent": "approved-standalone-parts-family-purchasing",
+      "newTarget": "https://www.jssngyl.cn/zh/service/industrial-furnace-parts-purchasing#parts-heating",
+      "newRequestPath": "/zh/service/industrial-furnace-parts-purchasing#parts-heating",
+      "newCanonical": "https://www.jssngyl.cn/zh/service/industrial-furnace-parts-purchasing",
+      "newStatus": null,
+      "newNoindex": null,
+      "newVerifiedAt": null,
+      "targetFragment": "parts-heating",
+      "targetBodySha256": "00ca6626315687f2b921519101f35aee75c1e2cbae2799aed23d8b811ff4c481",
+      "originalTitleEvidence": [
+        {
+          "source": "原站首页/目录公开档案的真实链接文字，未等同详情正文",
+          "visibleAnchorText": "方形加热芯",
+          "sourceOldUrl": "http://jssngyl.cn/product/index.php?class1=127&page=5",
+          "archiveTimestamp": "20251118064311",
+          "evidenceFile": "output/acquisition-repair-20261004/public-legacy-source-search/commoncrawl-page-ce46d69ec4c1-evidence.json"
+        }
+      ],
+      "originalDetailBodyRestored": false,
+      "oldModelAndParametersFullyRestored": false,
+      "newRuleImplemented": true,
+      "newRulePublished": false,
+      "liveIndividualUrlVerifiedThisRound": false,
+      "publicationState": "approved-candidate-awaiting-three-target-publication-and-edge-release",
+      "sourceReview": {
+        "approvalRecord": {
+          "path": "output/acquisition-next-repairs-20261005/approved-ui-release/human-approval.json",
+          "sha256": "c4fd9b71641683d533e3d61c038400f7207086dda75ef56621f536ce77b82339",
+          "statement": "同意",
+          "scope": "two existing entries, three Chinese pages and 56 exact legacy mappings"
+        },
+        "placementPlan": {
+          "path": "output/acquisition-next-repairs-20261005/content/placement-plan-v2.json",
+          "sha256": "77fafc116c67706ef3da5e29567241a79232225bae4f7f505fe451b8a80f05c9"
+        },
+        "originalRemainingRecord": {
+          "path": "output/acquisition-next-repairs-20261005/remaining-56.json",
+          "sha256": "b24f09dd0be5f1b310d369baa35e07cd37d11808027c5f0f02d0de83b7589473"
+        }
+      },
+      "mappingReason": "用户已批准的同家族采购评估或配件采购正文承接，保留准确旧名称与真实分段地址；不推断旧规格、库存、原厂身份或制造验收业绩。"
+    },
+    {
+      "oldId": 215,
+      "oldUrl": "http://jssngyl.cn/product/showproduct.php?id=215",
+      "oldRequestPath": "/product/showproduct.php?id=215",
+      "oldTitle": "电加热器",
+      "sourceType": "original-identity-and-human-approved-procurement-content",
+      "mappingIntent": "approved-standalone-parts-family-purchasing",
+      "newTarget": "https://www.jssngyl.cn/zh/service/industrial-furnace-parts-purchasing#parts-heating",
+      "newRequestPath": "/zh/service/industrial-furnace-parts-purchasing#parts-heating",
+      "newCanonical": "https://www.jssngyl.cn/zh/service/industrial-furnace-parts-purchasing",
+      "newStatus": null,
+      "newNoindex": null,
+      "newVerifiedAt": null,
+      "targetFragment": "parts-heating",
+      "targetBodySha256": "00ca6626315687f2b921519101f35aee75c1e2cbae2799aed23d8b811ff4c481",
+      "originalTitleEvidence": [
+        {
+          "source": "原站首页/目录公开档案的真实链接文字，未等同详情正文",
+          "visibleAnchorText": "电加热器",
+          "sourceOldUrl": "http://jssngyl.cn/product/index.php?class1=127&page=5",
+          "archiveTimestamp": "20251118064311",
+          "evidenceFile": "output/acquisition-repair-20261004/public-legacy-source-search/commoncrawl-page-ce46d69ec4c1-evidence.json"
+        }
+      ],
+      "originalDetailBodyRestored": false,
+      "oldModelAndParametersFullyRestored": false,
+      "newRuleImplemented": true,
+      "newRulePublished": false,
+      "liveIndividualUrlVerifiedThisRound": false,
+      "publicationState": "approved-candidate-awaiting-three-target-publication-and-edge-release",
+      "sourceReview": {
+        "approvalRecord": {
+          "path": "output/acquisition-next-repairs-20261005/approved-ui-release/human-approval.json",
+          "sha256": "c4fd9b71641683d533e3d61c038400f7207086dda75ef56621f536ce77b82339",
+          "statement": "同意",
+          "scope": "two existing entries, three Chinese pages and 56 exact legacy mappings"
+        },
+        "placementPlan": {
+          "path": "output/acquisition-next-repairs-20261005/content/placement-plan-v2.json",
+          "sha256": "77fafc116c67706ef3da5e29567241a79232225bae4f7f505fe451b8a80f05c9"
+        },
+        "originalRemainingRecord": {
+          "path": "output/acquisition-next-repairs-20261005/remaining-56.json",
+          "sha256": "b24f09dd0be5f1b310d369baa35e07cd37d11808027c5f0f02d0de83b7589473"
+        }
+      },
+      "mappingReason": "用户已批准的同家族采购评估或配件采购正文承接，保留准确旧名称与真实分段地址；不推断旧规格、库存、原厂身份或制造验收业绩。"
+    },
+    {
+      "oldId": 216,
+      "oldUrl": "http://jssngyl.cn/product/showproduct.php?id=216",
+      "oldRequestPath": "/product/showproduct.php?id=216",
+      "oldTitle": "灯笼加热芯",
+      "sourceType": "original-identity-and-human-approved-procurement-content",
+      "mappingIntent": "approved-standalone-parts-family-purchasing",
+      "newTarget": "https://www.jssngyl.cn/zh/service/industrial-furnace-parts-purchasing#parts-heating",
+      "newRequestPath": "/zh/service/industrial-furnace-parts-purchasing#parts-heating",
+      "newCanonical": "https://www.jssngyl.cn/zh/service/industrial-furnace-parts-purchasing",
+      "newStatus": null,
+      "newNoindex": null,
+      "newVerifiedAt": null,
+      "targetFragment": "parts-heating",
+      "targetBodySha256": "00ca6626315687f2b921519101f35aee75c1e2cbae2799aed23d8b811ff4c481",
+      "originalTitleEvidence": [
+        {
+          "source": "原站首页/目录公开档案的真实链接文字，未等同详情正文",
+          "visibleAnchorText": "灯笼加热芯",
+          "sourceOldUrl": "http://jssngyl.cn/product/index.php?class1=127&page=5",
+          "archiveTimestamp": "20251118064311",
+          "evidenceFile": "output/acquisition-repair-20261004/public-legacy-source-search/commoncrawl-page-ce46d69ec4c1-evidence.json"
+        }
+      ],
+      "originalDetailBodyRestored": false,
+      "oldModelAndParametersFullyRestored": false,
+      "newRuleImplemented": true,
+      "newRulePublished": false,
+      "liveIndividualUrlVerifiedThisRound": false,
+      "publicationState": "approved-candidate-awaiting-three-target-publication-and-edge-release",
+      "sourceReview": {
+        "approvalRecord": {
+          "path": "output/acquisition-next-repairs-20261005/approved-ui-release/human-approval.json",
+          "sha256": "c4fd9b71641683d533e3d61c038400f7207086dda75ef56621f536ce77b82339",
+          "statement": "同意",
+          "scope": "two existing entries, three Chinese pages and 56 exact legacy mappings"
+        },
+        "placementPlan": {
+          "path": "output/acquisition-next-repairs-20261005/content/placement-plan-v2.json",
+          "sha256": "77fafc116c67706ef3da5e29567241a79232225bae4f7f505fe451b8a80f05c9"
+        },
+        "originalRemainingRecord": {
+          "path": "output/acquisition-next-repairs-20261005/remaining-56.json",
+          "sha256": "b24f09dd0be5f1b310d369baa35e07cd37d11808027c5f0f02d0de83b7589473"
+        }
+      },
+      "mappingReason": "用户已批准的同家族采购评估或配件采购正文承接，保留准确旧名称与真实分段地址；不推断旧规格、库存、原厂身份或制造验收业绩。"
+    },
+    {
+      "oldId": 217,
+      "oldUrl": "http://jssngyl.cn/product/showproduct.php?id=217",
+      "oldRequestPath": "/product/showproduct.php?id=217",
+      "oldTitle": "U型加热管",
+      "sourceType": "original-identity-and-human-approved-procurement-content",
+      "mappingIntent": "approved-standalone-parts-family-purchasing",
+      "newTarget": "https://www.jssngyl.cn/zh/service/industrial-furnace-parts-purchasing#parts-heating",
+      "newRequestPath": "/zh/service/industrial-furnace-parts-purchasing#parts-heating",
+      "newCanonical": "https://www.jssngyl.cn/zh/service/industrial-furnace-parts-purchasing",
+      "newStatus": null,
+      "newNoindex": null,
+      "newVerifiedAt": null,
+      "targetFragment": "parts-heating",
+      "targetBodySha256": "00ca6626315687f2b921519101f35aee75c1e2cbae2799aed23d8b811ff4c481",
+      "originalTitleEvidence": [
+        {
+          "source": "原站首页/目录公开档案的真实链接文字，未等同详情正文",
+          "visibleAnchorText": "U型加热管",
+          "sourceOldUrl": "http://jssngyl.cn/product/index.php?class1=127&page=4",
+          "archiveTimestamp": "20251118074039",
+          "evidenceFile": "output/acquisition-repair-20261004/public-legacy-source-search/commoncrawl-page-51930c1989bb-evidence.json"
+        }
+      ],
+      "originalDetailBodyRestored": false,
+      "oldModelAndParametersFullyRestored": false,
+      "newRuleImplemented": true,
+      "newRulePublished": false,
+      "liveIndividualUrlVerifiedThisRound": false,
+      "publicationState": "approved-candidate-awaiting-three-target-publication-and-edge-release",
+      "sourceReview": {
+        "approvalRecord": {
+          "path": "output/acquisition-next-repairs-20261005/approved-ui-release/human-approval.json",
+          "sha256": "c4fd9b71641683d533e3d61c038400f7207086dda75ef56621f536ce77b82339",
+          "statement": "同意",
+          "scope": "two existing entries, three Chinese pages and 56 exact legacy mappings"
+        },
+        "placementPlan": {
+          "path": "output/acquisition-next-repairs-20261005/content/placement-plan-v2.json",
+          "sha256": "77fafc116c67706ef3da5e29567241a79232225bae4f7f505fe451b8a80f05c9"
+        },
+        "originalRemainingRecord": {
+          "path": "output/acquisition-next-repairs-20261005/remaining-56.json",
+          "sha256": "b24f09dd0be5f1b310d369baa35e07cd37d11808027c5f0f02d0de83b7589473"
+        }
+      },
+      "mappingReason": "用户已批准的同家族采购评估或配件采购正文承接，保留准确旧名称与真实分段地址；不推断旧规格、库存、原厂身份或制造验收业绩。"
+    },
+    {
+      "oldId": 218,
+      "oldUrl": "http://jssngyl.cn/product/showproduct.php?id=218",
+      "oldRequestPath": "/product/showproduct.php?id=218",
+      "oldTitle": "易普森风叶轴",
+      "sourceType": "original-identity-and-human-approved-procurement-content",
+      "mappingIntent": "approved-standalone-parts-family-purchasing",
+      "newTarget": "https://www.jssngyl.cn/zh/service/industrial-furnace-parts-purchasing#parts-fans-shafts",
+      "newRequestPath": "/zh/service/industrial-furnace-parts-purchasing#parts-fans-shafts",
+      "newCanonical": "https://www.jssngyl.cn/zh/service/industrial-furnace-parts-purchasing",
+      "newStatus": null,
+      "newNoindex": null,
+      "newVerifiedAt": null,
+      "targetFragment": "parts-fans-shafts",
+      "targetBodySha256": "00ca6626315687f2b921519101f35aee75c1e2cbae2799aed23d8b811ff4c481",
+      "originalTitleEvidence": [
+        {
+          "source": "原站首页/目录公开档案的真实链接文字，未等同详情正文",
+          "visibleAnchorText": "易普森风叶轴",
+          "sourceOldUrl": "http://jssngyl.cn/product/index.php?class1=127&page=4",
+          "archiveTimestamp": "20251118074039",
+          "evidenceFile": "output/acquisition-repair-20261004/public-legacy-source-search/commoncrawl-page-51930c1989bb-evidence.json"
+        }
+      ],
+      "originalDetailBodyRestored": false,
+      "oldModelAndParametersFullyRestored": false,
+      "newRuleImplemented": true,
+      "newRulePublished": false,
+      "liveIndividualUrlVerifiedThisRound": false,
+      "publicationState": "approved-candidate-awaiting-three-target-publication-and-edge-release",
+      "sourceReview": {
+        "approvalRecord": {
+          "path": "output/acquisition-next-repairs-20261005/approved-ui-release/human-approval.json",
+          "sha256": "c4fd9b71641683d533e3d61c038400f7207086dda75ef56621f536ce77b82339",
+          "statement": "同意",
+          "scope": "two existing entries, three Chinese pages and 56 exact legacy mappings"
+        },
+        "placementPlan": {
+          "path": "output/acquisition-next-repairs-20261005/content/placement-plan-v2.json",
+          "sha256": "77fafc116c67706ef3da5e29567241a79232225bae4f7f505fe451b8a80f05c9"
+        },
+        "originalRemainingRecord": {
+          "path": "output/acquisition-next-repairs-20261005/remaining-56.json",
+          "sha256": "b24f09dd0be5f1b310d369baa35e07cd37d11808027c5f0f02d0de83b7589473"
+        }
+      },
+      "mappingReason": "用户已批准的同家族采购评估或配件采购正文承接，保留准确旧名称与真实分段地址；不推断旧规格、库存、原厂身份或制造验收业绩。"
+    },
+    {
+      "oldId": 219,
+      "oldUrl": "http://jssngyl.cn/product/showproduct.php?id=219",
+      "oldRequestPath": "/product/showproduct.php?id=219",
+      "oldTitle": "炉盖总成",
+      "sourceType": "original-identity-and-human-approved-procurement-content",
+      "mappingIntent": "approved-standalone-parts-family-purchasing",
+      "newTarget": "https://www.jssngyl.cn/zh/service/industrial-furnace-parts-purchasing#parts-cover-motor-guide",
+      "newRequestPath": "/zh/service/industrial-furnace-parts-purchasing#parts-cover-motor-guide",
+      "newCanonical": "https://www.jssngyl.cn/zh/service/industrial-furnace-parts-purchasing",
+      "newStatus": null,
+      "newNoindex": null,
+      "newVerifiedAt": null,
+      "targetFragment": "parts-cover-motor-guide",
+      "targetBodySha256": "00ca6626315687f2b921519101f35aee75c1e2cbae2799aed23d8b811ff4c481",
+      "originalTitleEvidence": [
+        {
+          "source": "原站首页/目录公开档案的真实链接文字，未等同详情正文",
+          "visibleAnchorText": "炉盖总成",
+          "sourceOldUrl": "http://jssngyl.cn/product/index.php?class1=127&page=4",
+          "archiveTimestamp": "20251118074039",
+          "evidenceFile": "output/acquisition-repair-20261004/public-legacy-source-search/commoncrawl-page-51930c1989bb-evidence.json"
+        }
+      ],
+      "originalDetailBodyRestored": false,
+      "oldModelAndParametersFullyRestored": false,
+      "newRuleImplemented": true,
+      "newRulePublished": false,
+      "liveIndividualUrlVerifiedThisRound": false,
+      "publicationState": "approved-candidate-awaiting-three-target-publication-and-edge-release",
+      "sourceReview": {
+        "approvalRecord": {
+          "path": "output/acquisition-next-repairs-20261005/approved-ui-release/human-approval.json",
+          "sha256": "c4fd9b71641683d533e3d61c038400f7207086dda75ef56621f536ce77b82339",
+          "statement": "同意",
+          "scope": "two existing entries, three Chinese pages and 56 exact legacy mappings"
+        },
+        "placementPlan": {
+          "path": "output/acquisition-next-repairs-20261005/content/placement-plan-v2.json",
+          "sha256": "77fafc116c67706ef3da5e29567241a79232225bae4f7f505fe451b8a80f05c9"
+        },
+        "originalRemainingRecord": {
+          "path": "output/acquisition-next-repairs-20261005/remaining-56.json",
+          "sha256": "b24f09dd0be5f1b310d369baa35e07cd37d11808027c5f0f02d0de83b7589473"
+        }
+      },
+      "mappingReason": "用户已批准的同家族采购评估或配件采购正文承接，保留准确旧名称与真实分段地址；不推断旧规格、库存、原厂身份或制造验收业绩。"
+    },
+    {
+      "oldId": 220,
+      "oldUrl": "http://jssngyl.cn/product/showproduct.php?id=220",
+      "oldRequestPath": "/product/showproduct.php?id=220",
+      "oldTitle": "连续炉风叶",
+      "sourceType": "original-identity-and-human-approved-procurement-content",
+      "mappingIntent": "approved-standalone-parts-family-purchasing",
+      "newTarget": "https://www.jssngyl.cn/zh/service/industrial-furnace-parts-purchasing#parts-fans-shafts",
+      "newRequestPath": "/zh/service/industrial-furnace-parts-purchasing#parts-fans-shafts",
+      "newCanonical": "https://www.jssngyl.cn/zh/service/industrial-furnace-parts-purchasing",
+      "newStatus": null,
+      "newNoindex": null,
+      "newVerifiedAt": null,
+      "targetFragment": "parts-fans-shafts",
+      "targetBodySha256": "00ca6626315687f2b921519101f35aee75c1e2cbae2799aed23d8b811ff4c481",
+      "originalTitleEvidence": [
+        {
+          "source": "原站首页/目录公开档案的真实链接文字，未等同详情正文",
+          "visibleAnchorText": "连续炉风叶",
+          "sourceOldUrl": "http://jssngyl.cn/product/index.php?class1=127&page=4",
+          "archiveTimestamp": "20251118074039",
+          "evidenceFile": "output/acquisition-repair-20261004/public-legacy-source-search/commoncrawl-page-51930c1989bb-evidence.json"
+        }
+      ],
+      "originalDetailBodyRestored": false,
+      "oldModelAndParametersFullyRestored": false,
+      "newRuleImplemented": true,
+      "newRulePublished": false,
+      "liveIndividualUrlVerifiedThisRound": false,
+      "publicationState": "approved-candidate-awaiting-three-target-publication-and-edge-release",
+      "sourceReview": {
+        "approvalRecord": {
+          "path": "output/acquisition-next-repairs-20261005/approved-ui-release/human-approval.json",
+          "sha256": "c4fd9b71641683d533e3d61c038400f7207086dda75ef56621f536ce77b82339",
+          "statement": "同意",
+          "scope": "two existing entries, three Chinese pages and 56 exact legacy mappings"
+        },
+        "placementPlan": {
+          "path": "output/acquisition-next-repairs-20261005/content/placement-plan-v2.json",
+          "sha256": "77fafc116c67706ef3da5e29567241a79232225bae4f7f505fe451b8a80f05c9"
+        },
+        "originalRemainingRecord": {
+          "path": "output/acquisition-next-repairs-20261005/remaining-56.json",
+          "sha256": "b24f09dd0be5f1b310d369baa35e07cd37d11808027c5f0f02d0de83b7589473"
+        }
+      },
+      "mappingReason": "用户已批准的同家族采购评估或配件采购正文承接，保留准确旧名称与真实分段地址；不推断旧规格、库存、原厂身份或制造验收业绩。"
+    },
+    {
+      "oldId": 221,
+      "oldUrl": "http://jssngyl.cn/product/showproduct.php?id=221",
+      "oldRequestPath": "/product/showproduct.php?id=221",
+      "oldTitle": "连续炉风叶",
+      "sourceType": "original-identity-and-human-approved-procurement-content",
+      "mappingIntent": "approved-standalone-parts-family-purchasing",
+      "newTarget": "https://www.jssngyl.cn/zh/service/industrial-furnace-parts-purchasing#parts-fans-shafts",
+      "newRequestPath": "/zh/service/industrial-furnace-parts-purchasing#parts-fans-shafts",
+      "newCanonical": "https://www.jssngyl.cn/zh/service/industrial-furnace-parts-purchasing",
+      "newStatus": null,
+      "newNoindex": null,
+      "newVerifiedAt": null,
+      "targetFragment": "parts-fans-shafts",
+      "targetBodySha256": "00ca6626315687f2b921519101f35aee75c1e2cbae2799aed23d8b811ff4c481",
+      "originalTitleEvidence": [
+        {
+          "source": "原站首页/目录公开档案的真实链接文字，未等同详情正文",
+          "visibleAnchorText": "连续炉风叶",
+          "sourceOldUrl": "http://jssngyl.cn/product/index.php?class1=127&page=4",
+          "archiveTimestamp": "20251118074039",
+          "evidenceFile": "output/acquisition-repair-20261004/public-legacy-source-search/commoncrawl-page-51930c1989bb-evidence.json"
+        }
+      ],
+      "originalDetailBodyRestored": false,
+      "oldModelAndParametersFullyRestored": false,
+      "newRuleImplemented": true,
+      "newRulePublished": false,
+      "liveIndividualUrlVerifiedThisRound": false,
+      "publicationState": "approved-candidate-awaiting-three-target-publication-and-edge-release",
+      "sourceReview": {
+        "approvalRecord": {
+          "path": "output/acquisition-next-repairs-20261005/approved-ui-release/human-approval.json",
+          "sha256": "c4fd9b71641683d533e3d61c038400f7207086dda75ef56621f536ce77b82339",
+          "statement": "同意",
+          "scope": "two existing entries, three Chinese pages and 56 exact legacy mappings"
+        },
+        "placementPlan": {
+          "path": "output/acquisition-next-repairs-20261005/content/placement-plan-v2.json",
+          "sha256": "77fafc116c67706ef3da5e29567241a79232225bae4f7f505fe451b8a80f05c9"
+        },
+        "originalRemainingRecord": {
+          "path": "output/acquisition-next-repairs-20261005/remaining-56.json",
+          "sha256": "b24f09dd0be5f1b310d369baa35e07cd37d11808027c5f0f02d0de83b7589473"
+        }
+      },
+      "mappingReason": "用户已批准的同家族采购评估或配件采购正文承接，保留准确旧名称与真实分段地址；不推断旧规格、库存、原厂身份或制造验收业绩。"
+    },
+    {
+      "oldId": 222,
+      "oldUrl": "http://jssngyl.cn/product/showproduct.php?id=222",
+      "oldRequestPath": "/product/showproduct.php?id=222",
+      "oldTitle": "井式炉风扇",
+      "sourceType": "original-identity-and-human-approved-procurement-content",
+      "mappingIntent": "approved-standalone-parts-family-purchasing",
+      "newTarget": "https://www.jssngyl.cn/zh/service/industrial-furnace-parts-purchasing#parts-fans-shafts",
+      "newRequestPath": "/zh/service/industrial-furnace-parts-purchasing#parts-fans-shafts",
+      "newCanonical": "https://www.jssngyl.cn/zh/service/industrial-furnace-parts-purchasing",
+      "newStatus": null,
+      "newNoindex": null,
+      "newVerifiedAt": null,
+      "targetFragment": "parts-fans-shafts",
+      "targetBodySha256": "00ca6626315687f2b921519101f35aee75c1e2cbae2799aed23d8b811ff4c481",
+      "originalTitleEvidence": [
+        {
+          "source": "原站首页/目录公开档案的真实链接文字，未等同详情正文",
+          "visibleAnchorText": "井式炉风扇",
+          "sourceOldUrl": "http://jssngyl.cn/product/index.php?class1=127&page=4",
+          "archiveTimestamp": "20251118074039",
+          "evidenceFile": "output/acquisition-repair-20261004/public-legacy-source-search/commoncrawl-page-51930c1989bb-evidence.json"
+        }
+      ],
+      "originalDetailBodyRestored": false,
+      "oldModelAndParametersFullyRestored": false,
+      "newRuleImplemented": true,
+      "newRulePublished": false,
+      "liveIndividualUrlVerifiedThisRound": false,
+      "publicationState": "approved-candidate-awaiting-three-target-publication-and-edge-release",
+      "sourceReview": {
+        "approvalRecord": {
+          "path": "output/acquisition-next-repairs-20261005/approved-ui-release/human-approval.json",
+          "sha256": "c4fd9b71641683d533e3d61c038400f7207086dda75ef56621f536ce77b82339",
+          "statement": "同意",
+          "scope": "two existing entries, three Chinese pages and 56 exact legacy mappings"
+        },
+        "placementPlan": {
+          "path": "output/acquisition-next-repairs-20261005/content/placement-plan-v2.json",
+          "sha256": "77fafc116c67706ef3da5e29567241a79232225bae4f7f505fe451b8a80f05c9"
+        },
+        "originalRemainingRecord": {
+          "path": "output/acquisition-next-repairs-20261005/remaining-56.json",
+          "sha256": "b24f09dd0be5f1b310d369baa35e07cd37d11808027c5f0f02d0de83b7589473"
+        }
+      },
+      "mappingReason": "用户已批准的同家族采购评估或配件采购正文承接，保留准确旧名称与真实分段地址；不推断旧规格、库存、原厂身份或制造验收业绩。"
+    },
+    {
+      "oldId": 223,
+      "oldUrl": "http://jssngyl.cn/product/showproduct.php?id=223",
+      "oldRequestPath": "/product/showproduct.php?id=223",
+      "oldTitle": "回火炉风扇",
+      "sourceType": "original-identity-and-human-approved-procurement-content",
+      "mappingIntent": "approved-standalone-parts-family-purchasing",
+      "newTarget": "https://www.jssngyl.cn/zh/service/industrial-furnace-parts-purchasing#parts-fans-shafts",
+      "newRequestPath": "/zh/service/industrial-furnace-parts-purchasing#parts-fans-shafts",
+      "newCanonical": "https://www.jssngyl.cn/zh/service/industrial-furnace-parts-purchasing",
+      "newStatus": null,
+      "newNoindex": null,
+      "newVerifiedAt": null,
+      "targetFragment": "parts-fans-shafts",
+      "targetBodySha256": "00ca6626315687f2b921519101f35aee75c1e2cbae2799aed23d8b811ff4c481",
+      "originalTitleEvidence": [
+        {
+          "source": "原站首页/目录公开档案的真实链接文字，未等同详情正文",
+          "visibleAnchorText": "回火炉风扇",
+          "sourceOldUrl": "http://jssngyl.cn/product/index.php?class1=127&page=4",
+          "archiveTimestamp": "20251118074039",
+          "evidenceFile": "output/acquisition-repair-20261004/public-legacy-source-search/commoncrawl-page-51930c1989bb-evidence.json"
+        }
+      ],
+      "originalDetailBodyRestored": false,
+      "oldModelAndParametersFullyRestored": false,
+      "newRuleImplemented": true,
+      "newRulePublished": false,
+      "liveIndividualUrlVerifiedThisRound": false,
+      "publicationState": "approved-candidate-awaiting-three-target-publication-and-edge-release",
+      "sourceReview": {
+        "approvalRecord": {
+          "path": "output/acquisition-next-repairs-20261005/approved-ui-release/human-approval.json",
+          "sha256": "c4fd9b71641683d533e3d61c038400f7207086dda75ef56621f536ce77b82339",
+          "statement": "同意",
+          "scope": "two existing entries, three Chinese pages and 56 exact legacy mappings"
+        },
+        "placementPlan": {
+          "path": "output/acquisition-next-repairs-20261005/content/placement-plan-v2.json",
+          "sha256": "77fafc116c67706ef3da5e29567241a79232225bae4f7f505fe451b8a80f05c9"
+        },
+        "originalRemainingRecord": {
+          "path": "output/acquisition-next-repairs-20261005/remaining-56.json",
+          "sha256": "b24f09dd0be5f1b310d369baa35e07cd37d11808027c5f0f02d0de83b7589473"
+        }
+      },
+      "mappingReason": "用户已批准的同家族采购评估或配件采购正文承接，保留准确旧名称与真实分段地址；不推断旧规格、库存、原厂身份或制造验收业绩。"
+    },
+    {
+      "oldId": 224,
+      "oldUrl": "http://jssngyl.cn/product/showproduct.php?id=224",
+      "oldRequestPath": "/product/showproduct.php?id=224",
+      "oldTitle": "风扇",
+      "sourceType": "original-identity-and-human-approved-procurement-content",
+      "mappingIntent": "approved-standalone-parts-family-purchasing",
+      "newTarget": "https://www.jssngyl.cn/zh/service/industrial-furnace-parts-purchasing#parts-fans-shafts",
+      "newRequestPath": "/zh/service/industrial-furnace-parts-purchasing#parts-fans-shafts",
+      "newCanonical": "https://www.jssngyl.cn/zh/service/industrial-furnace-parts-purchasing",
+      "newStatus": null,
+      "newNoindex": null,
+      "newVerifiedAt": null,
+      "targetFragment": "parts-fans-shafts",
+      "targetBodySha256": "00ca6626315687f2b921519101f35aee75c1e2cbae2799aed23d8b811ff4c481",
+      "originalTitleEvidence": [
+        {
+          "source": "原站首页/目录公开档案的真实链接文字，未等同详情正文",
+          "visibleAnchorText": "风扇",
+          "sourceOldUrl": "http://jssngyl.cn/product/index.php?class1=127&page=4",
+          "archiveTimestamp": "20251118074039",
+          "evidenceFile": "output/acquisition-repair-20261004/public-legacy-source-search/commoncrawl-page-51930c1989bb-evidence.json"
+        }
+      ],
+      "originalDetailBodyRestored": false,
+      "oldModelAndParametersFullyRestored": false,
+      "newRuleImplemented": true,
+      "newRulePublished": false,
+      "liveIndividualUrlVerifiedThisRound": false,
+      "publicationState": "approved-candidate-awaiting-three-target-publication-and-edge-release",
+      "sourceReview": {
+        "approvalRecord": {
+          "path": "output/acquisition-next-repairs-20261005/approved-ui-release/human-approval.json",
+          "sha256": "c4fd9b71641683d533e3d61c038400f7207086dda75ef56621f536ce77b82339",
+          "statement": "同意",
+          "scope": "two existing entries, three Chinese pages and 56 exact legacy mappings"
+        },
+        "placementPlan": {
+          "path": "output/acquisition-next-repairs-20261005/content/placement-plan-v2.json",
+          "sha256": "77fafc116c67706ef3da5e29567241a79232225bae4f7f505fe451b8a80f05c9"
+        },
+        "originalRemainingRecord": {
+          "path": "output/acquisition-next-repairs-20261005/remaining-56.json",
+          "sha256": "b24f09dd0be5f1b310d369baa35e07cd37d11808027c5f0f02d0de83b7589473"
+        }
+      },
+      "mappingReason": "用户已批准的同家族采购评估或配件采购正文承接，保留准确旧名称与真实分段地址；不推断旧规格、库存、原厂身份或制造验收业绩。"
+    },
+    {
+      "oldId": 225,
+      "oldUrl": "http://jssngyl.cn/product/showproduct.php?id=225",
+      "oldRequestPath": "/product/showproduct.php?id=225",
+      "oldTitle": "成套密封电机",
+      "sourceType": "original-identity-and-human-approved-procurement-content",
+      "mappingIntent": "approved-standalone-parts-family-purchasing",
+      "newTarget": "https://www.jssngyl.cn/zh/service/industrial-furnace-parts-purchasing#parts-cover-motor-guide",
+      "newRequestPath": "/zh/service/industrial-furnace-parts-purchasing#parts-cover-motor-guide",
+      "newCanonical": "https://www.jssngyl.cn/zh/service/industrial-furnace-parts-purchasing",
+      "newStatus": null,
+      "newNoindex": null,
+      "newVerifiedAt": null,
+      "targetFragment": "parts-cover-motor-guide",
+      "targetBodySha256": "00ca6626315687f2b921519101f35aee75c1e2cbae2799aed23d8b811ff4c481",
+      "originalTitleEvidence": [
+        {
+          "source": "原站首页/目录公开档案的真实链接文字，未等同详情正文",
+          "visibleAnchorText": "成套密封电机",
+          "sourceOldUrl": "http://jssngyl.cn/product/index.php?class1=127&page=4",
+          "archiveTimestamp": "20251118074039",
+          "evidenceFile": "output/acquisition-repair-20261004/public-legacy-source-search/commoncrawl-page-51930c1989bb-evidence.json"
+        }
+      ],
+      "originalDetailBodyRestored": false,
+      "oldModelAndParametersFullyRestored": false,
+      "newRuleImplemented": true,
+      "newRulePublished": false,
+      "liveIndividualUrlVerifiedThisRound": false,
+      "publicationState": "approved-candidate-awaiting-three-target-publication-and-edge-release",
+      "sourceReview": {
+        "approvalRecord": {
+          "path": "output/acquisition-next-repairs-20261005/approved-ui-release/human-approval.json",
+          "sha256": "c4fd9b71641683d533e3d61c038400f7207086dda75ef56621f536ce77b82339",
+          "statement": "同意",
+          "scope": "two existing entries, three Chinese pages and 56 exact legacy mappings"
+        },
+        "placementPlan": {
+          "path": "output/acquisition-next-repairs-20261005/content/placement-plan-v2.json",
+          "sha256": "77fafc116c67706ef3da5e29567241a79232225bae4f7f505fe451b8a80f05c9"
+        },
+        "originalRemainingRecord": {
+          "path": "output/acquisition-next-repairs-20261005/remaining-56.json",
+          "sha256": "b24f09dd0be5f1b310d369baa35e07cd37d11808027c5f0f02d0de83b7589473"
+        }
+      },
+      "mappingReason": "用户已批准的同家族采购评估或配件采购正文承接，保留准确旧名称与真实分段地址；不推断旧规格、库存、原厂身份或制造验收业绩。"
+    },
+    {
+      "oldId": 226,
+      "oldUrl": "http://jssngyl.cn/product/showproduct.php?id=226",
+      "oldRequestPath": "/product/showproduct.php?id=226",
+      "oldTitle": "风叶系列 成套风叶轴",
+      "sourceType": "original-identity-and-human-approved-procurement-content",
+      "mappingIntent": "approved-standalone-parts-family-purchasing",
+      "newTarget": "https://www.jssngyl.cn/zh/service/industrial-furnace-parts-purchasing#parts-fans-shafts",
+      "newRequestPath": "/zh/service/industrial-furnace-parts-purchasing#parts-fans-shafts",
+      "newCanonical": "https://www.jssngyl.cn/zh/service/industrial-furnace-parts-purchasing",
+      "newStatus": null,
+      "newNoindex": null,
+      "newVerifiedAt": null,
+      "targetFragment": "parts-fans-shafts",
+      "targetBodySha256": "00ca6626315687f2b921519101f35aee75c1e2cbae2799aed23d8b811ff4c481",
+      "originalTitleEvidence": [
+        {
+          "source": "原站首页/目录公开档案的真实链接文字，未等同详情正文",
+          "visibleAnchorText": "风叶系列 成套风叶轴",
+          "sourceOldUrl": "http://jssngyl.cn/product/index.php?class1=127&page=4",
+          "archiveTimestamp": "20251118074039",
+          "evidenceFile": "output/acquisition-repair-20261004/public-legacy-source-search/commoncrawl-page-51930c1989bb-evidence.json"
+        }
+      ],
+      "originalDetailBodyRestored": false,
+      "oldModelAndParametersFullyRestored": false,
+      "newRuleImplemented": true,
+      "newRulePublished": false,
+      "liveIndividualUrlVerifiedThisRound": false,
+      "publicationState": "approved-candidate-awaiting-three-target-publication-and-edge-release",
+      "sourceReview": {
+        "approvalRecord": {
+          "path": "output/acquisition-next-repairs-20261005/approved-ui-release/human-approval.json",
+          "sha256": "c4fd9b71641683d533e3d61c038400f7207086dda75ef56621f536ce77b82339",
+          "statement": "同意",
+          "scope": "two existing entries, three Chinese pages and 56 exact legacy mappings"
+        },
+        "placementPlan": {
+          "path": "output/acquisition-next-repairs-20261005/content/placement-plan-v2.json",
+          "sha256": "77fafc116c67706ef3da5e29567241a79232225bae4f7f505fe451b8a80f05c9"
+        },
+        "originalRemainingRecord": {
+          "path": "output/acquisition-next-repairs-20261005/remaining-56.json",
+          "sha256": "b24f09dd0be5f1b310d369baa35e07cd37d11808027c5f0f02d0de83b7589473"
+        }
+      },
+      "mappingReason": "用户已批准的同家族采购评估或配件采购正文承接，保留准确旧名称与真实分段地址；不推断旧规格、库存、原厂身份或制造验收业绩。"
+    },
+    {
+      "oldId": 227,
+      "oldUrl": "http://jssngyl.cn/product/showproduct.php?id=227",
+      "oldRequestPath": "/product/showproduct.php?id=227",
+      "oldTitle": "电热辐射管 网带炉加热芯",
+      "sourceType": "original-identity-and-human-approved-procurement-content",
+      "mappingIntent": "approved-standalone-parts-family-purchasing",
+      "newTarget": "https://www.jssngyl.cn/zh/service/industrial-furnace-parts-purchasing#parts-heating",
+      "newRequestPath": "/zh/service/industrial-furnace-parts-purchasing#parts-heating",
+      "newCanonical": "https://www.jssngyl.cn/zh/service/industrial-furnace-parts-purchasing",
+      "newStatus": null,
+      "newNoindex": null,
+      "newVerifiedAt": null,
+      "targetFragment": "parts-heating",
+      "targetBodySha256": "00ca6626315687f2b921519101f35aee75c1e2cbae2799aed23d8b811ff4c481",
+      "originalTitleEvidence": [
+        {
+          "source": "原站首页/目录公开档案的真实链接文字，未等同详情正文",
+          "visibleAnchorText": "电热辐射管 网带炉加热芯",
+          "sourceOldUrl": "http://jssngyl.cn/product/index.php?class1=127&page=4",
+          "archiveTimestamp": "20251118074039",
+          "evidenceFile": "output/acquisition-repair-20261004/public-legacy-source-search/commoncrawl-page-51930c1989bb-evidence.json"
+        }
+      ],
+      "originalDetailBodyRestored": false,
+      "oldModelAndParametersFullyRestored": false,
+      "newRuleImplemented": true,
+      "newRulePublished": false,
+      "liveIndividualUrlVerifiedThisRound": false,
+      "publicationState": "approved-candidate-awaiting-three-target-publication-and-edge-release",
+      "sourceReview": {
+        "approvalRecord": {
+          "path": "output/acquisition-next-repairs-20261005/approved-ui-release/human-approval.json",
+          "sha256": "c4fd9b71641683d533e3d61c038400f7207086dda75ef56621f536ce77b82339",
+          "statement": "同意",
+          "scope": "two existing entries, three Chinese pages and 56 exact legacy mappings"
+        },
+        "placementPlan": {
+          "path": "output/acquisition-next-repairs-20261005/content/placement-plan-v2.json",
+          "sha256": "77fafc116c67706ef3da5e29567241a79232225bae4f7f505fe451b8a80f05c9"
+        },
+        "originalRemainingRecord": {
+          "path": "output/acquisition-next-repairs-20261005/remaining-56.json",
+          "sha256": "b24f09dd0be5f1b310d369baa35e07cd37d11808027c5f0f02d0de83b7589473"
+        }
+      },
+      "mappingReason": "用户已批准的同家族采购评估或配件采购正文承接，保留准确旧名称与真实分段地址；不推断旧规格、库存、原厂身份或制造验收业绩。"
+    },
+    {
+      "oldId": 228,
+      "oldUrl": "http://jssngyl.cn/product/showproduct.php?id=228",
+      "oldRequestPath": "/product/showproduct.php?id=228",
+      "oldTitle": "电热辐射管连续炉加热芯",
+      "sourceType": "original-identity-and-human-approved-procurement-content",
+      "mappingIntent": "approved-standalone-parts-family-purchasing",
+      "newTarget": "https://www.jssngyl.cn/zh/service/industrial-furnace-parts-purchasing#parts-heating",
+      "newRequestPath": "/zh/service/industrial-furnace-parts-purchasing#parts-heating",
+      "newCanonical": "https://www.jssngyl.cn/zh/service/industrial-furnace-parts-purchasing",
+      "newStatus": null,
+      "newNoindex": null,
+      "newVerifiedAt": null,
+      "targetFragment": "parts-heating",
+      "targetBodySha256": "00ca6626315687f2b921519101f35aee75c1e2cbae2799aed23d8b811ff4c481",
+      "originalTitleEvidence": [
+        {
+          "source": "原站首页/目录公开档案的真实链接文字，未等同详情正文",
+          "visibleAnchorText": "电热辐射管连续炉加热芯",
+          "sourceOldUrl": "http://jssngyl.cn/product/index.php?class1=127&page=4",
+          "archiveTimestamp": "20251118074039",
+          "evidenceFile": "output/acquisition-repair-20261004/public-legacy-source-search/commoncrawl-page-51930c1989bb-evidence.json"
+        }
+      ],
+      "originalDetailBodyRestored": false,
+      "oldModelAndParametersFullyRestored": false,
+      "newRuleImplemented": true,
+      "newRulePublished": false,
+      "liveIndividualUrlVerifiedThisRound": false,
+      "publicationState": "approved-candidate-awaiting-three-target-publication-and-edge-release",
+      "sourceReview": {
+        "approvalRecord": {
+          "path": "output/acquisition-next-repairs-20261005/approved-ui-release/human-approval.json",
+          "sha256": "c4fd9b71641683d533e3d61c038400f7207086dda75ef56621f536ce77b82339",
+          "statement": "同意",
+          "scope": "two existing entries, three Chinese pages and 56 exact legacy mappings"
+        },
+        "placementPlan": {
+          "path": "output/acquisition-next-repairs-20261005/content/placement-plan-v2.json",
+          "sha256": "77fafc116c67706ef3da5e29567241a79232225bae4f7f505fe451b8a80f05c9"
+        },
+        "originalRemainingRecord": {
+          "path": "output/acquisition-next-repairs-20261005/remaining-56.json",
+          "sha256": "b24f09dd0be5f1b310d369baa35e07cd37d11808027c5f0f02d0de83b7589473"
+        }
+      },
+      "mappingReason": "用户已批准的同家族采购评估或配件采购正文承接，保留准确旧名称与真实分段地址；不推断旧规格、库存、原厂身份或制造验收业绩。"
+    },
+    {
+      "oldId": 241,
+      "oldUrl": "http://jssngyl.cn/product/showproduct.php?id=241",
+      "oldRequestPath": "/product/showproduct.php?id=241",
+      "oldTitle": "侧导轨 导轨系列",
+      "sourceType": "original-identity-and-human-approved-procurement-content",
+      "mappingIntent": "approved-standalone-parts-family-purchasing",
+      "newTarget": "https://www.jssngyl.cn/zh/service/industrial-furnace-parts-purchasing#parts-cover-motor-guide",
+      "newRequestPath": "/zh/service/industrial-furnace-parts-purchasing#parts-cover-motor-guide",
+      "newCanonical": "https://www.jssngyl.cn/zh/service/industrial-furnace-parts-purchasing",
+      "newStatus": null,
+      "newNoindex": null,
+      "newVerifiedAt": null,
+      "targetFragment": "parts-cover-motor-guide",
+      "targetBodySha256": "00ca6626315687f2b921519101f35aee75c1e2cbae2799aed23d8b811ff4c481",
+      "originalTitleEvidence": [
+        {
+          "source": "原站首页/目录公开档案的真实链接文字，未等同详情正文",
+          "visibleAnchorText": "侧导轨 导轨系列",
+          "sourceOldUrl": "http://jssngyl.cn/product/index.php?class1=127&page=2",
+          "archiveTimestamp": "20251118072828",
+          "evidenceFile": "output/acquisition-repair-20261004/public-legacy-source-search/commoncrawl-page-33ece16fe4c4-evidence.json"
+        }
+      ],
+      "originalDetailBodyRestored": false,
+      "oldModelAndParametersFullyRestored": false,
+      "newRuleImplemented": true,
+      "newRulePublished": false,
+      "liveIndividualUrlVerifiedThisRound": false,
+      "publicationState": "approved-candidate-awaiting-three-target-publication-and-edge-release",
+      "sourceReview": {
+        "approvalRecord": {
+          "path": "output/acquisition-next-repairs-20261005/approved-ui-release/human-approval.json",
+          "sha256": "c4fd9b71641683d533e3d61c038400f7207086dda75ef56621f536ce77b82339",
+          "statement": "同意",
+          "scope": "two existing entries, three Chinese pages and 56 exact legacy mappings"
+        },
+        "placementPlan": {
+          "path": "output/acquisition-next-repairs-20261005/content/placement-plan-v2.json",
+          "sha256": "77fafc116c67706ef3da5e29567241a79232225bae4f7f505fe451b8a80f05c9"
+        },
+        "originalRemainingRecord": {
+          "path": "output/acquisition-next-repairs-20261005/remaining-56.json",
+          "sha256": "b24f09dd0be5f1b310d369baa35e07cd37d11808027c5f0f02d0de83b7589473"
+        }
+      },
+      "mappingReason": "用户已批准的同家族采购评估或配件采购正文承接，保留准确旧名称与真实分段地址；不推断旧规格、库存、原厂身份或制造验收业绩。"
+    },
+    {
+      "oldId": 243,
+      "oldUrl": "http://jssngyl.cn/product/showproduct.php?id=243",
+      "oldRequestPath": "/product/showproduct.php?id=243",
+      "oldTitle": "烘箱",
+      "sourceType": "original-identity-and-human-approved-procurement-content",
+      "mappingIntent": "approved-equipment-family-assessment",
+      "newTarget": "https://www.jssngyl.cn/zh/articles/special-industrial-furnace-procurement-assessment#oven-preheat-curing-assessment",
+      "newRequestPath": "/zh/articles/special-industrial-furnace-procurement-assessment#oven-preheat-curing-assessment",
+      "newCanonical": "https://www.jssngyl.cn/zh/articles/special-industrial-furnace-procurement-assessment",
+      "newStatus": null,
+      "newNoindex": null,
+      "newVerifiedAt": null,
+      "targetFragment": "oven-preheat-curing-assessment",
+      "targetBodySha256": "cd47deec017c82945a64b81e515e62369c6d1b73289af3c05afd4830fcf7c5d6",
+      "originalTitleEvidence": [
+        {
+          "source": "原站首页/目录公开档案的真实链接文字，未等同详情正文",
+          "visibleAnchorText": "烘箱 查看详情",
+          "sourceOldUrl": "http://jssngyl.cn/",
+          "archiveTimestamp": "20251118080704",
+          "evidenceFile": "output/acquisition-repair-20261004/public-legacy-source-search/commoncrawl-page-377631dc4700-evidence.json"
+        }
+      ],
+      "originalDetailBodyRestored": false,
+      "oldModelAndParametersFullyRestored": false,
+      "newRuleImplemented": true,
+      "newRulePublished": false,
+      "liveIndividualUrlVerifiedThisRound": false,
+      "publicationState": "approved-candidate-awaiting-three-target-publication-and-edge-release",
+      "sourceReview": {
+        "approvalRecord": {
+          "path": "output/acquisition-next-repairs-20261005/approved-ui-release/human-approval.json",
+          "sha256": "c4fd9b71641683d533e3d61c038400f7207086dda75ef56621f536ce77b82339",
+          "statement": "同意",
+          "scope": "two existing entries, three Chinese pages and 56 exact legacy mappings"
+        },
+        "placementPlan": {
+          "path": "output/acquisition-next-repairs-20261005/content/placement-plan-v2.json",
+          "sha256": "77fafc116c67706ef3da5e29567241a79232225bae4f7f505fe451b8a80f05c9"
+        },
+        "originalRemainingRecord": {
+          "path": "output/acquisition-next-repairs-20261005/remaining-56.json",
+          "sha256": "b24f09dd0be5f1b310d369baa35e07cd37d11808027c5f0f02d0de83b7589473"
+        }
+      },
+      "mappingReason": "用户已批准的同家族采购评估或配件采购正文承接，保留准确旧名称与真实分段地址；不推断旧规格、库存、原厂身份或制造验收业绩。"
+    },
+    {
+      "oldId": 244,
+      "oldUrl": "http://jssngyl.cn/product/showproduct.php?id=244",
+      "oldRequestPath": "/product/showproduct.php?id=244",
+      "oldTitle": "模具预热炉",
+      "sourceType": "original-identity-and-human-approved-procurement-content",
+      "mappingIntent": "approved-equipment-family-assessment",
+      "newTarget": "https://www.jssngyl.cn/zh/articles/special-industrial-furnace-procurement-assessment#oven-preheat-curing-assessment",
+      "newRequestPath": "/zh/articles/special-industrial-furnace-procurement-assessment#oven-preheat-curing-assessment",
+      "newCanonical": "https://www.jssngyl.cn/zh/articles/special-industrial-furnace-procurement-assessment",
+      "newStatus": null,
+      "newNoindex": null,
+      "newVerifiedAt": null,
+      "targetFragment": "oven-preheat-curing-assessment",
+      "targetBodySha256": "cd47deec017c82945a64b81e515e62369c6d1b73289af3c05afd4830fcf7c5d6",
+      "originalTitleEvidence": [
+        {
+          "source": "原站首页/目录公开档案的真实链接文字，未等同详情正文",
+          "visibleAnchorText": "模具预热炉 查看详情",
+          "sourceOldUrl": "http://jssngyl.cn/",
+          "archiveTimestamp": "20251118080704",
+          "evidenceFile": "output/acquisition-repair-20261004/public-legacy-source-search/commoncrawl-page-377631dc4700-evidence.json"
+        }
+      ],
+      "originalDetailBodyRestored": false,
+      "oldModelAndParametersFullyRestored": false,
+      "newRuleImplemented": true,
+      "newRulePublished": false,
+      "liveIndividualUrlVerifiedThisRound": false,
+      "publicationState": "approved-candidate-awaiting-three-target-publication-and-edge-release",
+      "sourceReview": {
+        "approvalRecord": {
+          "path": "output/acquisition-next-repairs-20261005/approved-ui-release/human-approval.json",
+          "sha256": "c4fd9b71641683d533e3d61c038400f7207086dda75ef56621f536ce77b82339",
+          "statement": "同意",
+          "scope": "two existing entries, three Chinese pages and 56 exact legacy mappings"
+        },
+        "placementPlan": {
+          "path": "output/acquisition-next-repairs-20261005/content/placement-plan-v2.json",
+          "sha256": "77fafc116c67706ef3da5e29567241a79232225bae4f7f505fe451b8a80f05c9"
+        },
+        "originalRemainingRecord": {
+          "path": "output/acquisition-next-repairs-20261005/remaining-56.json",
+          "sha256": "b24f09dd0be5f1b310d369baa35e07cd37d11808027c5f0f02d0de83b7589473"
+        }
+      },
+      "mappingReason": "用户已批准的同家族采购评估或配件采购正文承接，保留准确旧名称与真实分段地址；不推断旧规格、库存、原厂身份或制造验收业绩。"
+    },
+    {
+      "oldId": 245,
+      "oldUrl": "http://jssngyl.cn/product/showproduct.php?id=245",
+      "oldRequestPath": "/product/showproduct.php?id=245",
+      "oldTitle": "双工位固化炉",
+      "sourceType": "original-identity-and-human-approved-procurement-content",
+      "mappingIntent": "approved-equipment-family-assessment",
+      "newTarget": "https://www.jssngyl.cn/zh/articles/special-industrial-furnace-procurement-assessment#oven-preheat-curing-assessment",
+      "newRequestPath": "/zh/articles/special-industrial-furnace-procurement-assessment#oven-preheat-curing-assessment",
+      "newCanonical": "https://www.jssngyl.cn/zh/articles/special-industrial-furnace-procurement-assessment",
+      "newStatus": null,
+      "newNoindex": null,
+      "newVerifiedAt": null,
+      "targetFragment": "oven-preheat-curing-assessment",
+      "targetBodySha256": "cd47deec017c82945a64b81e515e62369c6d1b73289af3c05afd4830fcf7c5d6",
+      "originalTitleEvidence": [
+        {
+          "source": "原站首页/目录公开档案的真实链接文字，未等同详情正文",
+          "visibleAnchorText": "双工位固化炉 查看详情",
+          "sourceOldUrl": "http://jssngyl.cn/",
+          "archiveTimestamp": "20251118080704",
+          "evidenceFile": "output/acquisition-repair-20261004/public-legacy-source-search/commoncrawl-page-377631dc4700-evidence.json"
+        }
+      ],
+      "originalDetailBodyRestored": false,
+      "oldModelAndParametersFullyRestored": false,
+      "newRuleImplemented": true,
+      "newRulePublished": false,
+      "liveIndividualUrlVerifiedThisRound": false,
+      "publicationState": "approved-candidate-awaiting-three-target-publication-and-edge-release",
+      "sourceReview": {
+        "approvalRecord": {
+          "path": "output/acquisition-next-repairs-20261005/approved-ui-release/human-approval.json",
+          "sha256": "c4fd9b71641683d533e3d61c038400f7207086dda75ef56621f536ce77b82339",
+          "statement": "同意",
+          "scope": "two existing entries, three Chinese pages and 56 exact legacy mappings"
+        },
+        "placementPlan": {
+          "path": "output/acquisition-next-repairs-20261005/content/placement-plan-v2.json",
+          "sha256": "77fafc116c67706ef3da5e29567241a79232225bae4f7f505fe451b8a80f05c9"
+        },
+        "originalRemainingRecord": {
+          "path": "output/acquisition-next-repairs-20261005/remaining-56.json",
+          "sha256": "b24f09dd0be5f1b310d369baa35e07cd37d11808027c5f0f02d0de83b7589473"
+        }
+      },
+      "mappingReason": "用户已批准的同家族采购评估或配件采购正文承接，保留准确旧名称与真实分段地址；不推断旧规格、库存、原厂身份或制造验收业绩。"
     }
   ],
   "limits": [
-    "同设备类型承接，不声称旧产品型号、尺寸、图片及参数全文迁移。",
-    "原台车页的电炉依据是原产品名称；不伪造原正文另有电阻加热句子。",
-    "原33条产品与8条新闻映射已独立上线；本批新增4条退洗项目连续退火炉段采购跳转仅本地实现，仍须真实Nginx语法、HTTP与恢复保护验收后才能视为上线。",
-    "新增测试只验证配置契约，不代替真实Nginx语法或HTTP验收。",
-    "4条设备制作车间仅恢复公司制造展示意图，不等于4款设备或旧详情、原照片全文还原。",
-    "本批4条只承接旧原名明确的退火炉设备采购，不声明原宽厚规格、炉内结构、同一项目或酸洗整线供货。"
+    "本批55条仅为用户批准的候选源码；三目标真实上线、分段可见并完成受保护边缘验收后才可称上线。",
+    "原37产品与8新闻承接保持；原行历史记录及依据未回写假上线。",
+    "采购评估或配件家族承接，不代表旧型号参数、原图片或原文全文复原，也不证明排名、AI引用或真实咨询恢复。"
   ],
   "incrementalDirectoryMappingCount": 26,
-  "currentPublishedNginxBaselineSha256": "bec5e0d0f35af5cc6a2d9d153ecae1f235311523e594f36ac8dd6425febf80e1",
+  "currentPublishedNginxBaselineSha256": "2dd0aa587f170e7ed3d67aaf211022c0365ec8efcda713e95d1d9fc9cbbfa7dc",
   "directoryEvidenceRule": "Original authoritative href plus unique explicit equipment name and same-type current published source; workshop display IDs require original workshop title and live company manufacturing-photo section. No guessed IDs or capabilities.",
   "equipmentTypeMappingCount": 33,
   "photoCompanyIntentMappingCount": 4,
   "newWorkshopDirectoryMappingCount": 4,
-  "currentPublishedNginxBaselineSource": "af08585ffa27c20035942287e7c3b199157069c0",
+  "currentPublishedNginxBaselineSource": "b48711165f8b308daa4e5a121299a45824dcc268",
   "currentPublishedFrontendSource": "78a686d5028c438c40b6ce36644accf4954e92e2",
-  "previousPublishedProductMappingCount": 33,
+  "previousPublishedProductMappingCount": 37,
   "previousPublishedNewsMappingCount": 8,
-  "newAnnealingThermalSectionMappingCount": 4
+  "newAnnealingThermalSectionMappingCount": 4,
+  "historicalBeforeApprovedUiRestoration": {
+    "currentPublishedNginxBaselineSha256": "bec5e0d0f35af5cc6a2d9d153ecae1f235311523e594f36ac8dd6425febf80e1",
+    "currentPublishedNginxBaselineSource": "af08585ffa27c20035942287e7c3b199157069c0",
+    "currentPublishedFrontendSource": "78a686d5028c438c40b6ce36644accf4954e92e2",
+    "previousPublishedProductMappingCount": 33,
+    "previousPublishedNewsMappingCount": 8,
+    "limits": [
+      "同设备类型承接，不声称旧产品型号、尺寸、图片及参数全文迁移。",
+      "原台车页的电炉依据是原产品名称；不伪造原正文另有电阻加热句子。",
+      "原33条产品与8条新闻映射已独立上线；本批新增4条退洗项目连续退火炉段采购跳转仅本地实现，仍须真实Nginx语法、HTTP与恢复保护验收后才能视为上线。",
+      "新增测试只验证配置契约，不代替真实Nginx语法或HTTP验收。",
+      "4条设备制作车间仅恢复公司制造展示意图，不等于4款设备或旧详情、原照片全文还原。",
+      "本批4条只承接旧原名明确的退火炉设备采购，不声明原宽厚规格、炉内结构、同一项目或酸洗整线供货。"
+    ]
+  },
+  "newApprovedProcurementMappingCount": 55,
+  "newApprovedProcurementMappingIds": [
+    122,
+    124,
+    132,
+    136,
+    137,
+    138,
+    139,
+    140,
+    144,
+    145,
+    146,
+    148,
+    149,
+    151,
+    153,
+    155,
+    157,
+    174,
+    176,
+    178,
+    179,
+    180,
+    181,
+    182,
+    183,
+    184,
+    185,
+    205,
+    206,
+    207,
+    208,
+    209,
+    210,
+    211,
+    212,
+    213,
+    214,
+    215,
+    216,
+    217,
+    218,
+    219,
+    220,
+    221,
+    222,
+    223,
+    224,
+    225,
+    226,
+    227,
+    228,
+    241,
+    243,
+    244,
+    245
+  ],
+  "candidateTotalProductMappings": 92,
+  "candidateTotalNewsMappings": 9,
+  "candidateTotalMappings": 101,
+  "newBatchPublicationState": "approved-candidate-awaiting-three-target-publication-and-edge-release",
+  "thisBatchApproval": {
+    "approvalRecord": {
+      "path": "output/acquisition-next-repairs-20261005/approved-ui-release/human-approval.json",
+      "sha256": "c4fd9b71641683d533e3d61c038400f7207086dda75ef56621f536ce77b82339",
+      "statement": "同意",
+      "scope": "two existing entries, three Chinese pages and 56 exact legacy mappings"
+    },
+    "placementPlan": {
+      "path": "output/acquisition-next-repairs-20261005/content/placement-plan-v2.json",
+      "sha256": "77fafc116c67706ef3da5e29567241a79232225bae4f7f505fe451b8a80f05c9"
+    },
+    "originalRemainingRecord": {
+      "path": "output/acquisition-next-repairs-20261005/remaining-56.json",
+      "sha256": "b24f09dd0be5f1b310d369baa35e07cd37d11808027c5f0f02d0de83b7589473"
+    }
+  },
+  "historicalExistingRowStatesPreserved": true
 }

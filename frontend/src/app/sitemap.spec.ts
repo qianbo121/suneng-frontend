@@ -60,7 +60,7 @@ vi.mock('@/lib/api/news', () => ({
 import buildSitemap from '@/app/sitemap';
 
 import { FURNACE_RENOVATION_OVERHAUL_SEO, PRODUCT_DETAIL_SEO } from '@/lib/seo/page-data';
-import { APPROVED_GUIDE_PATHS, isWithdrawnTechnicalPath } from '@/lib/publication-scope';
+import { APPROVED_GUIDE_PATHS, APPROVED_PROCUREMENT_PATHS, isWithdrawnTechnicalPath } from '@/lib/publication-scope';
 import { REVIEWED_PUBLIC_CASES } from '@/lib/cases/public-case-allowlist';
 
 const site = 'https://www.jssngyl.cn';
@@ -164,7 +164,7 @@ describe('sitemap freshness signals', () => {
         .filter((entry) => /\/(articles|solutions)(\/|$)/.test(new URL(entry.url).pathname))
         .map((entry) => new URL(entry.url).pathname)
         .sort(),
-    ).toEqual([...APPROVED_GUIDE_PATHS].sort());
+    ).toEqual([...APPROVED_GUIDE_PATHS, ...APPROVED_PROCUREMENT_PATHS].filter((path) => /\/(articles|solutions)\//.test(path)).sort());
     expect(casePathUrls(entries.map((entry) => entry.url))).toEqual(APPROVED_CASE_URLS);
   });
 
@@ -272,7 +272,7 @@ it('lists only approved cases and guides without pagination or withdrawn alterna
       .filter((x) => /\/articles(\/|\?|$)/.test(x.url))
       .map((x) => new URL(x.url).pathname)
       .sort(),
-  ).toEqual([...APPROVED_GUIDE_PATHS].filter((path) => path.includes('/articles/')).sort());
+  ).toEqual([...APPROVED_GUIDE_PATHS, ...APPROVED_PROCUREMENT_PATHS].filter((path) => path.includes('/articles/')).sort());
   expect(entries.some((x) => /\/case\?/.test(x.url))).toBe(false);
   expect(casePathUrls(entries.map((x) => x.url))).toEqual(APPROVED_CASE_URLS);
   for (const entry of entries)
@@ -316,5 +316,19 @@ it('includes reciprocal language links for the eight completed English productio
       expect(entries).toHaveLength(1);
       expect(entries[0].alternates?.languages).toEqual({ 'zh-CN': zh, 'en-US': en, 'x-default': zh });
     }
+  }
+});
+
+it('includes both approved Chinese procurement pages without English alternates or invented dates', async () => {
+  const entries = await buildSitemap();
+  for (const pathname of APPROVED_PROCUREMENT_PATHS) {
+    const matching = entries.filter((entry) => new URL(entry.url).pathname === pathname);
+    expect(matching).toHaveLength(1);
+    expect(matching[0].alternates?.languages).toEqual({
+      'zh-CN': 'https://www.jssngyl.cn' + pathname,
+      'x-default': 'https://www.jssngyl.cn' + pathname,
+    });
+    expect(matching[0].lastModified).toBeUndefined();
+    expect(entries.some((entry) => new URL(entry.url).pathname === pathname.replace('/zh/', '/en/'))).toBe(false);
   }
 });

@@ -100,6 +100,16 @@ export function ServiceHero({ kind, locale = 'zh' }: { kind: ServicePageKind; lo
           </div>
         </div>
       </section>
+      {kind === 'installation' && locale === 'zh' && (
+        <section className={styles.section} data-parts-purchase-entry>
+          <div className={styles.container}>
+            <p>
+              工业炉配件可独立采购，也可评估其他厂家设备配套。{' '}
+              <Link href="/zh/service/industrial-furnace-parts-purchasing">查看配件采购范围</Link>
+            </p>
+          </div>
+        </section>
+      )}
       <div className={styles.pathbar}>
         <div className={`${styles.container} ${styles.pathInner}`}>
           <nav className={styles.breadcrumb} aria-label={locale === 'en' ? 'Breadcrumb' : t("面包屑")}>
