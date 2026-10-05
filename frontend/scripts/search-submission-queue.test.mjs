@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { drainQueue, emptyQueue, mergeBatches, refreshLiveQueue, validateQueue } from './search-submission-queue.mjs';
 import { readFileSync } from 'node:fs';
 import { manualBatch, restoreQueue } from './restore-search-queue.mjs';
-import { submitIndexNow } from './submit-search-engines.mjs';
+import { submitBaidu, submitIndexNow } from './submit-search-engines.mjs';
 
 const urls = ['a', 'b', 'c'].map((path) => `https://www.jssngyl.cn/zh/${path}`);
 const queued = () => mergeBatches(emptyQueue(), [{ id: 'deploy-1', urls }], urls);
@@ -252,4 +252,92 @@ test('accepts URLs named at dispatch as one single-use batch, and only from the 
   assert.equal(manualBatch(undefined, '42', '1'), null);
   assert.equal(manualBatch(urls[0], '7', undefined).id, 'manual-7-1');
   assert.throws(() => manualBatch(urls[0], '', '1'), /run id/);
+});
+
+
+const heldBaiduUrls = JSON.parse(readFileSync(new URL('./baidu-manual-submission-protection.json', import.meta.url), 'utf8')).entries.map((entry) => entry.url);
+const withHeldQueue = (batch) => mergeBatches(emptyQueue(), [{ id: 'manual-and-new', urls: batch }], batch);
+
+test('Baidu protects manual URLs before budget slicing while IndexNow processes the full mixed batch', async () => {
+  const batch = [heldBaiduUrls[0], urls[0], heldBaiduUrls[7], urls[1]];
+  const state = withHeldQueue(batch);
+  let baiduBatch;
+  let indexNowBatch;
+  const result = await drainQueue(state, options({ limit: 1, submit: {
+    indexnow: async (sent) => { indexNowBatch = sent; return success(sent); },
+    baidu: async (sent) => {
+      assert.equal(state.baiduAttempted, 1);
+      baiduBatch = sent;
+      return success(sent);
+    },
+  } }));
+  assert.deepEqual(indexNowBatch, batch);
+  assert.deepEqual(baiduBatch, [urls[0]]);
+  assert.equal(state.baiduAttempted, 1);
+  assert.deepEqual(state.pending, { baidu: [heldBaiduUrls[0], heldBaiduUrls[7], urls[1]], indexnow: [] });
+  assert.deepEqual(result.baidu.acceptedUrls, [urls[0]]);
+  assert.deepEqual(result.baidu.protectedUrls, [heldBaiduUrls[0], heldBaiduUrls[7]]);
+});
+
+test('all manually handled Baidu URLs remain protected across runs without attempts or API acceptance', async () => {
+  const state = withHeldQueue(heldBaiduUrls);
+  let requests = 0;
+  const opts = options({ submit: { indexnow: success, baidu: async () => { requests++; } } });
+  const result = await drainQueue(state, opts);
+  await drainQueue(state, { ...opts, day: '2026-09-09' });
+  assert.equal(requests, 0);
+  assert.equal(state.baiduAttempted, 0);
+  assert.deepEqual(state.pending, { baidu: heldBaiduUrls, indexnow: [] });
+  assert.equal(result.baidu.skipped, true);
+  assert.equal(result.baidu.ok, undefined);
+  assert.equal(result.baidu.acceptedUrls, undefined);
+  assert.deepEqual(result.baidu.protectedUrls, heldBaiduUrls);
+});
+
+test('bad actual helper replies preserve mixed pending URLs and reserve only unprotected attempts', async () => {
+  const originalFetch = globalThis.fetch;
+  const names = ['BAIDU_TOKEN', 'BAIDU_PUSH_TOKEN', 'BAIDU_SITE', 'BAIDU_PUSH_MAX_URLS'];
+  const saved = Object.fromEntries(names.map((name) => [name, process.env[name]]));
+  const batch = [heldBaiduUrls[0], urls[0]];
+  const state = withHeldQueue(batch);
+  let calls = 0;
+  try {
+    process.env.BAIDU_TOKEN = 'test-only';
+    delete process.env.BAIDU_PUSH_TOKEN;
+    process.env.BAIDU_SITE = 'https://www.jssngyl.cn';
+    process.env.BAIDU_PUSH_MAX_URLS = '10';
+    globalThis.fetch = async (_endpoint, request) => {
+      calls++;
+      assert.equal(request.body, urls[0]);
+      return new Response(JSON.stringify({ success: '1' }));
+    };
+    const result = await drainQueue(state, options({ submit: {
+      indexnow: success, baidu: (sent) => submitBaidu('https://www.jssngyl.cn', sent, false),
+    } }));
+    assert.equal(calls, 1);
+    assert.equal(state.baiduAttempted, 1);
+    assert.deepEqual(state.pending, { baidu: batch, indexnow: [] });
+    assert.equal(result.baidu.ok, false);
+    assert.deepEqual(result.baidu.acceptedUrls, []);
+    assert.deepEqual(result.baidu.protectedUrls, [heldBaiduUrls[0]]);
+  } finally {
+    globalThis.fetch = originalFetch;
+    for (const name of names) {
+      if (saved[name] === undefined) delete process.env[name];
+      else process.env[name] = saved[name];
+    }
+  }
+});
+
+test('manual mode remains unchanged even when all pending URLs have manual protection', async () => {
+  const state = withHeldQueue(heldBaiduUrls);
+  let requests = 0;
+  const result = await drainQueue(state, options({ baiduMode: 'manual', submit: {
+    indexnow: success, baidu: async () => { requests++; },
+  } }));
+  assert.equal(requests, 0);
+  assert.equal(state.baiduAttempted, 0);
+  assert.deepEqual(state.pending, { baidu: heldBaiduUrls, indexnow: [] });
+  assert.equal(result.baidu.paused, true);
+  assert.equal(Object.prototype.hasOwnProperty.call(result.baidu, 'protectedUrls'), false);
 });

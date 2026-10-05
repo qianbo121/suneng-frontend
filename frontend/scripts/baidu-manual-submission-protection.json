@@ -1,0 +1,48 @@
+{
+  "version": 1,
+  "scope": "acquisition-repair-20261004-through-20261006",
+  "purpose": "Hold only this repair batch from automatic resubmission; this is not an API acceptance ledger.",
+  "releaseCondition": "Remove a hold only after a verified substantial content update or explicit resubmission authorization. Do not infer submission time from evidence recording time.",
+  "entries": [
+    {
+      "url": "https://www.jssngyl.cn/zh/news/mesh-belt-furnace-quality-tracking-checklist",
+      "evidenceStatus": "user-reported-submitted",
+      "exactSubmissionTime": null
+    },
+    {
+      "url": "https://www.jssngyl.cn/zh/news/mesh-belt-furnace-oil-fume-treatment-checklist",
+      "evidenceStatus": "user-reported-submitted",
+      "exactSubmissionTime": null
+    },
+    {
+      "url": "https://www.jssngyl.cn/zh/news/mesh-belt-furnace-carbon-cleaning-review",
+      "evidenceStatus": "user-reported-submitted",
+      "exactSubmissionTime": null
+    },
+    {
+      "url": "https://www.jssngyl.cn/zh/news/gas-trolley-furnace-operation-maintenance-documents",
+      "evidenceStatus": "user-reported-submitted",
+      "exactSubmissionTime": null
+    },
+    {
+      "url": "https://www.jssngyl.cn/zh/news/mesh-belt-quenching-furnace-principle-process-checklist",
+      "evidenceStatus": "user-reported-submitted",
+      "exactSubmissionTime": null
+    },
+    {
+      "url": "https://www.jssngyl.cn/zh/news/annealing-furnace-metal-semiconductor-selection",
+      "evidenceStatus": "platform-received",
+      "exactSubmissionTime": null
+    },
+    {
+      "url": "https://www.jssngyl.cn/zh/articles/special-industrial-furnace-procurement-assessment",
+      "evidenceStatus": "platform-received",
+      "exactSubmissionTime": null
+    },
+    {
+      "url": "https://www.jssngyl.cn/zh/service/industrial-furnace-parts-purchasing",
+      "evidenceStatus": "platform-received",
+      "exactSubmissionTime": null
+    }
+  ]
+}
