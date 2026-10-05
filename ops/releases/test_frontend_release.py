@@ -1547,6 +1547,128 @@ class SeparateProcurementHttpTest(unittest.TestCase):
                 a.approved_procurement_probe('candidate',r.APPROVED_PROCUREMENT_PATHS)
 
 
+
+class FrontendRecoverySourceTest(unittest.TestCase):
+    OLD_SOURCE = '1' * 40
+    def fixture(self, tmp, previous=None):
+        receipt = copy.deepcopy(RECEIPT)
+        receipt['frontendRelease'] = ({'sourceIdentity': 'git-commit', 'sourceCommit': self.OLD_SOURCE,
+                                       'image': OLD} if previous is None else previous)
+        release = ContractTest().fixture(tmp, receipt=receipt)
+        (release.live / 'DEPLOY_COMMIT').write_text(self.OLD_SOURCE + '\n')
+        return r.Release(release.live, release.audit, MANIFEST, 'fixture health script')
+
+    def call_replace(self, release, override=None):
+        original_env = dict(release.env)
+        with patch.object(r, 'run', return_value='') as command, patch.object(r, 'wait_healthy'):
+            release.replace_frontend(override)
+        self.assertEqual(release.env, original_env)
+        calls = [c for c in command.call_args_list if c.args[0][0:2] == ['docker', 'compose']]
+        return calls
+
+    def test_normal_frontend_deploy_keeps_new_source_environment(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            release = self.fixture(tmp)
+            calls = self.call_replace(release)
+            self.assertEqual(len(calls), 1)
+            self.assertEqual(calls[0].kwargs['env']['DEPLOY_COMMIT'], MANIFEST['sourceCommit'])
+            self.assertIs(calls[0].kwargs['env'], release.env)
+
+    def test_exact_old_image_override_uses_old_source_in_a_local_copy(self):
+        for identity_present in [True, False]:
+            with self.subTest(identity_present=identity_present), tempfile.TemporaryDirectory() as tmp:
+                previous = {'sourceCommit': self.OLD_SOURCE, 'image': OLD}
+                if identity_present: previous['sourceIdentity'] = 'git-commit'
+                release = self.fixture(tmp, previous)
+                override = release.audit / 'arbitrary-filename-old-image.json'
+                release.write_override(override, release.receipt['images'])
+                calls = self.call_replace(release, override)
+                self.assertEqual(calls[0].kwargs['env']['DEPLOY_COMMIT'], self.OLD_SOURCE)
+                self.assertIsNot(calls[0].kwargs['env'], release.env)
+                self.assertEqual(release.env['DEPLOY_COMMIT'], MANIFEST['sourceCommit'])
+
+    def test_a_previous_filename_cannot_make_a_foreign_image_trusted(self):
+        for image in [NEW, OTHER, 'frontend:latest']:
+            with self.subTest(image=image), tempfile.TemporaryDirectory() as tmp:
+                release = self.fixture(tmp)
+                override = release.audit / 'previous.override.json'
+                release.write_override(override, {**release.receipt['images'], 'frontend': image})
+                with patch.object(r, 'run') as command, self.assertRaises(RuntimeError):
+                    release.replace_frontend(override)
+                command.assert_not_called()
+                self.assertEqual(release.env['DEPLOY_COMMIT'], MANIFEST['sourceCommit'])
+
+    def test_contradictory_old_source_image_is_rejected_before_compose(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            release = self.fixture(tmp, {'sourceCommit': self.OLD_SOURCE, 'image': NEW})
+            override = release.audit / 'previous.override.json'
+            release.write_override(override, release.receipt['images'])
+            with patch.object(r, 'run') as command, self.assertRaises(RuntimeError):
+                release.replace_frontend(override)
+            command.assert_not_called()
+            self.assertEqual(release.env['DEPLOY_COMMIT'], MANIFEST['sourceCommit'])
+
+    def test_legacy_unknown_source_can_restore_without_claiming_the_new_commit(self):
+        for previous in [{}, {'sourceCommit': None}, {'sourceCommit': 'main'},
+                         {'sourceCommit': '2'*40, 'sourceIdentity': 'frozen-snapshot'},
+                         {'sourceCommit': '2'*39}, {'sourceCommit': '2'*40 + '\n'}]:
+            with self.subTest(previous=previous), tempfile.TemporaryDirectory() as tmp:
+                release = self.fixture(tmp, previous)
+                override = release.audit / 'previous.override.json'
+                release.write_override(override, release.receipt['images'])
+                calls = self.call_replace(release, override)
+                self.assertEqual(calls[0].kwargs['env']['DEPLOY_COMMIT'], 'unknown')
+                self.assertEqual(release.env['DEPLOY_COMMIT'], MANIFEST['sourceCommit'])
+
+    def test_backend_admin_and_mixed_component_environments_are_unchanged(self):
+        manifests = [BackendOnlyReleaseTest().manifest(), AdminOnlyReleaseTest().manifest(),
+                     {**MANIFEST, 'backend': {'image': OTHER, 'expectedCurrentImage': RECEIPT['images']['backend'], 'archiveSha256': '8'*64}}]
+        for manifest in manifests:
+            with self.subTest(manifest=manifest), tempfile.TemporaryDirectory() as tmp:
+                receipt = {**RECEIPT, 'frontendRelease': {'sourceCommit': self.OLD_SOURCE, 'image': OLD}}
+                release = ContractTest().fixture(tmp, manifest, receipt)
+                override = release.audit / 'previous.override.json'
+                release.write_override(override, release.receipt['images'])
+                calls = self.call_replace(release, override)
+                self.assertEqual([c.args[0][-1] for c in calls], release.components)
+                self.assertTrue(all(c.kwargs['env'] is release.env for c in calls))
+                self.assertTrue(all(c.kwargs['env']['DEPLOY_COMMIT'] == MANIFEST['sourceCommit'] for c in calls))
+
+    def test_actual_failed_frontend_switch_restores_old_source_as_well_as_old_image(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            release = self.fixture(tmp)
+            original_receipt = release.receipt_path.read_bytes()
+            state = {'image': OLD, 'source': self.OLD_SOURCE, 'switches': []}
+            def inspect(names):
+                selected = [x for x in rows(state['image']) if x['Name'][11:] in names]
+                for row in selected:
+                    if row['Name'] == '/corp-site-frontend':
+                        row['Config'] = {'Labels': {'org.opencontainers.image.revision': state['source']}}
+                return selected
+            def command(args, **kwargs):
+                if args[:3] == ['docker', 'image', 'inspect']: return image_inspect(args)
+                if args[:2] == ['docker', 'compose'] and 'up' in args:
+                    is_old = str(release.audit / 'previous.override.json') in args
+                    state['image'] = OLD if is_old else NEW
+                    state['source'] = kwargs['env']['DEPLOY_COMMIT']
+                    state['switches'].append((state['image'], state['source']))
+                return ''
+            def public(*args):
+                if state['image'] == NEW: raise RuntimeError('new public site fails its check')
+                return []
+            with patch.object(r, 'working_space', return_value={'passed': True}), patch.object(r, 'inspect', side_effect=inspect), \
+                 patch.object(r, 'run', side_effect=command), patch.object(r, 'wait_healthy'), \
+                 patch.object(r, 'probe', return_value=GOOD), patch.object(r, 'public_probe', side_effect=public), \
+                 patch.object(r.subprocess, 'run'), patch.object(r, 'acquisition_continuity_probe', return_value={'passed': True, 'pagesChecked': 11}):
+                with self.assertRaises(RuntimeError): release.execute(apply=True)
+            self.assertEqual(state['switches'], [(NEW, MANIFEST['sourceCommit']), (OLD, self.OLD_SOURCE)])
+            self.assertEqual((state['image'], state['source']), (OLD, self.OLD_SOURCE))
+            self.assertEqual(release.env['DEPLOY_COMMIT'], MANIFEST['sourceCommit'])
+            self.assertEqual(json.loads(release.receipt_path.read_text()), json.loads(original_receipt))
+            self.assertEqual((release.live / 'DEPLOY_COMMIT').read_text(), self.OLD_SOURCE+'\n')
+            self.assertTrue(json.loads((release.audit/'result.json').read_text())['previousFrontendRestoredAndVerified'])
+
+
 if __name__ == '__main__':
     unittest.main(verbosity=2)
 

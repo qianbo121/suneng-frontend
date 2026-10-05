@@ -474,8 +474,26 @@ class Release:
 
     def replace_frontend(self, override=None):
         # The historical method name is kept for frontend-only callers and tests.
+        compose_env = self.env
+        if override is not None and self.components == ['frontend']:
+            # This branch restores the recorded old image, not merely a file
+            # named "previous". Never label it with the failed candidate source.
+            try:
+                material = json.loads(Path(override).read_text())
+                old_image = self.receipt['images']['frontend']
+                if material['services']['frontend']['image'] != old_image:
+                    raise ValueError('Recovery override does not select the recorded old frontend')
+                previous = self.receipt.get('frontendRelease') or {}
+                if 'image' in previous and previous['image'] != old_image:
+                    raise ValueError('Previous frontend source record names another image')
+            except (OSError, ValueError, TypeError, KeyError) as error:
+                raise RuntimeError('Frontend recovery image or provenance cannot be verified') from error
+            old_source = previous.get('sourceCommit')
+            known_source = (isinstance(old_source, str) and SHA.fullmatch(old_source)
+                            and previous.get('sourceIdentity', 'git-commit') == 'git-commit')
+            compose_env = {**self.env, 'DEPLOY_COMMIT': old_source if known_source else 'unknown'}
         for service in self.components:
-            run(self.compose(override) + ['up', '-d', '--no-deps', '--no-build', '--pull', 'never', service], env=self.env)
+            run(self.compose(override) + ['up', '-d', '--no-deps', '--no-build', '--pull', 'never', service], env=compose_env)
             wait_healthy('corp-site-' + service)
         run(['docker', 'exec', 'corp-site-nginx', 'nginx', '-t'])
         run(['docker', 'exec', 'corp-site-nginx', 'nginx', '-s', 'reload'])
