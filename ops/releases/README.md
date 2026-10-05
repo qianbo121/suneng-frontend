@@ -230,3 +230,12 @@ python3 ops/releases/release_retention.py \
 仅后台、仅后端、前台镜像未变及主动回退不加这一新合同；旧镜像恢复仍沿用其原撤回/案例/选型页合同，避免把新版 11 页要求套到历史回退版本。撤回案例和未批准英文页继续保持原保护。
 
 安装发布工具时新增 `acquisition_continuity.py`、`acquisition-continuity.mjs`，与 `approved-guides.json` 和 `frontend_release.py` 保持同目录。Node 模块是前台独立检查器的原字节副本，测试要求两者保持一致；候选运行时通过标准输入交给现有镜像中的 Node，不需要前台镜像包含源脚本，不改镜像或安装依赖。候选只请求自身 `127.0.0.1:3000`，地图里的正式域子地址也映射回候选路径；切换后的公网检查显式选择正式域名。全程只读 GET、不提交询盘或联系动作；这些门槛不替代真实浏览器和实际接收验收，也不证明排名或咨询恢复。
+
+
+### 单独批准的采购页面发布保护
+
+原 `approved-guides.json` 的 11 页保持不变。`approved-procurement-pages.json` 单独记录 2026-10-05 用户已批准的两个中文采购页面、批准证据摘要、完整正文指纹和 9 个旧入口锚点。`procurement_approval.py` 将地址、批准记录摘要及源页面正文核对；不能在清单中临时加入第三页、英文页、变形地址或伪批准对象。
+
+两个正式准备入口（前台专用及统一发布的前台分支）都会携带 `independentlyApprovedProcurementPages` 和 `procurementApprovalSha256`；统一发布的后端候选不受影响。候选清单只表示批准范围，不能证明候选已支持页面。发布工具另外在候选和切换后的公网用只读请求检查两页的 200、完整正文指纹、唯一标题及规范地址、索引许可、联系条、9 个唯一锚点、地图与入口链接；任一失败拒绝切换或恢复原版本。此检查不点击电话、微信或提交询盘，也不证明客户恢复。
+
+成功收据持久保存独立采购范围；旧 4edd 批次收据已有的精确两页列表可以作为历史基线，但候选必须带批准记录摘要并通过实际检查。旧候选清单缺省为空，不会自动重新开放两页；回退按旧版本实际范围检查，关闭页和英文页仍需 404。安装标准发布工具时，还须同目录复制 `procurement_approval.py`、`approved-procurement-pages.json`、`approved_procurement_continuity.py`、`approved-procurement-continuity.cjs`。

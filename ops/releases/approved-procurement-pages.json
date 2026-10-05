@@ -1,0 +1,39 @@
+{
+  "schemaVersion": 1,
+  "approvalSource": {
+    "approvedAt": "2026-10-05",
+    "humanApprovalSha256": "c4fd9b71641683d533e3d61c038400f7207086dda75ef56621f536ce77b82339",
+    "approvedPlanSha256": "77fafc116c67706ef3da5e29567241a79232225bae4f7f505fe451b8a80f05c9"
+  },
+  "pages": [
+    {
+      "path": "/zh/articles/special-industrial-furnace-procurement-assessment",
+      "h1": "专项工业炉采购评估",
+      "bodyId": "procurement-equipment-body",
+      "approvedBodySha256": "cd47deec017c82945a64b81e515e62369c6d1b73289af3c05afd4830fcf7c5d6",
+      "contentStreamSha256": "c6bfde693f4215b8d6f853a8c718d63be5a4da223e1964c2a8b9a74f7fdd7d8e",
+      "anchors": [
+        "room-gas-forging-regenerative-assessment",
+        "solution-nitriding-atmosphere-assessment",
+        "large-bell-assessment",
+        "oven-preheat-curing-assessment",
+        "spheroidizing-assessment"
+      ],
+      "entryPath": "/zh/products"
+    },
+    {
+      "path": "/zh/service/industrial-furnace-parts-purchasing",
+      "h1": "工业炉配件采购",
+      "bodyId": "procurement-parts-body",
+      "approvedBodySha256": "00ca6626315687f2b921519101f35aee75c1e2cbae2799aed23d8b811ff4c481",
+      "contentStreamSha256": "a2fe92ac7113220f4e651c62ceb93f1bd0e0b3668de8ca53201e0b89a20df08b",
+      "anchors": [
+        "parts-heating",
+        "parts-baskets-welded",
+        "parts-fans-shafts",
+        "parts-cover-motor-guide"
+      ],
+      "entryPath": "/zh/service/installation-after-sales"
+    }
+  ]
+}

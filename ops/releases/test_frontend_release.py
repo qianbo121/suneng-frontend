@@ -7,6 +7,7 @@ from pathlib import Path
 import re
 import shutil
 import subprocess
+import sys
 import tempfile
 import threading
 import unittest
@@ -1242,6 +1243,430 @@ class BackendOnlyReleaseTest(unittest.TestCase):
             self.assertEqual(commands[1:], [['docker', 'exec', 'corp-site-nginx', 'nginx', '-t'],
                                              ['docker', 'exec', 'corp-site-nginx', 'nginx', '-s', 'reload']])
             health.assert_called_once_with('corp-site-backend')
+
+
+
+class SeparateProcurementReleaseTest(unittest.TestCase):
+    PATHS = r.APPROVED_PROCUREMENT_PATHS
+    def manifest(self, paths=None):
+        return {**MANIFEST, 'approvedGuides': r.APPROVED_GUIDES,
+                r.SCOPE_FIELD: self.PATHS if paths is None else paths,
+                'procurementApprovalSha256': r.PROCUREMENT_APPROVAL_SHA256}
+
+    def test_exact_scope_provenance_and_old_manifest_compatibility(self):
+        self.assertEqual(r.validate_manifest(self.manifest())[r.SCOPE_FIELD], self.PATHS)
+        self.assertEqual(r.validate_manifest(MANIFEST), MANIFEST)
+        self.assertEqual(len(r.APPROVED_GUIDES), 11)
+        self.assertNotIn(self.PATHS[0], r.APPROVED_GUIDES)
+        for value in [['/zh/articles/third'], ['/en/service/industrial-furnace-parts-purchasing'],
+                      [self.PATHS[0] + ' '], self.PATHS * 2, [{'path': self.PATHS[0]}], 'all']:
+            with self.subTest(value=value), self.assertRaises(ValueError):
+                r.validate_manifest(self.manifest(value))
+        for approval in [None, '0' * 64, {'approved': True}]:
+            bad = self.manifest()
+            if approval is None: bad.pop('procurementApprovalSha256')
+            else: bad['procurementApprovalSha256'] = approval
+            with self.subTest(approval=approval), self.assertRaises(ValueError): r.validate_manifest(bad)
+
+    def test_tampered_registry_and_source_body_cannot_create_approval(self):
+        import procurement_approval as approval
+        root = Path(__file__).resolve().parents[2]
+        with tempfile.TemporaryDirectory() as tmp:
+            fake = Path(tmp) / 'approval.json'
+            changed = approval.approval_document();changed['pages'][1]['h1'] = '未经确认的页面'
+            fake.write_text(json.dumps(changed, ensure_ascii=False))
+            with patch.object(approval, 'APPROVAL_FILE', fake), self.assertRaises(ValueError):
+                approval.normalize_procurement(self.PATHS)
+            fake_root = Path(tmp) / 'project'
+            for relative in ['frontend/src/lib/approved-procurement-pages.ts', 'frontend/src/lib/publication-scope.ts',
+                             'frontend/src/app/[locale]/articles/special-industrial-furnace-procurement-assessment/page.tsx',
+                             'frontend/src/app/[locale]/service/industrial-furnace-parts-purchasing/page.tsx']:
+                output = fake_root / relative;output.parent.mkdir(parents=True, exist_ok=True);output.write_bytes((root / relative).read_bytes())
+            self.assertEqual(approval.procurement_candidate_fields(fake_root)[r.SCOPE_FIELD], self.PATHS)
+            body_file = fake_root / 'frontend/src/lib/approved-procurement-pages.ts'
+            body_file.write_text(body_file.read_text().replace('苏能接受工业炉配件的独立采购需求', '未经批准的新内容', 1))
+            with self.assertRaises(ValueError): approval.procurement_candidate_fields(fake_root)
+
+    def test_source_and_both_actual_prepare_metadata_blocks_carry_exact_scope(self):
+        from procurement_approval import procurement_candidate_fields
+        root = Path(__file__).resolve().parents[2]
+        self.assertEqual(procurement_candidate_fields(root)[r.SCOPE_FIELD], self.PATHS)
+        for workflow, component in [('prepare-frontend.yml', None), ('prepare-release.yml', 'frontend'), ('prepare-release.yml', 'backend')]:
+            text = (root / '.github/workflows' / workflow).read_text()
+            source = text.split("          python3 - <<'PY'\n", 1)[1].split('\n          PY', 1)[0]
+            source = '\n'.join(line[10:] for line in source.splitlines())
+            with self.subTest(workflow=workflow, component=component), tempfile.TemporaryDirectory() as tmp:
+                folder = Path(tmp) / ('release-' + component if component else 'frontend-candidate');folder.mkdir()
+                (folder / ((component or 'frontend') + '.tar.gz')).write_bytes(b'fixture-not-an-image')
+                (folder / 'image.json').write_text(json.dumps([{'Id': NEW, 'RootFS': {'Layers': []}, 'Size': 10}]))
+                env = {**os.environ, 'RUNNER_TEMP': tmp, 'SOURCE_COMMIT': 'e'*40, 'IMAGE_TAG': 'fixture'}
+                if component: env['COMPONENT'] = component
+                result = subprocess.run([sys.executable, '-c', source], cwd=root, env=env, capture_output=True, text=True, timeout=15)
+                self.assertEqual(result.returncode, 0, result.stderr)
+                actual = json.loads((folder / 'candidate.json').read_text())
+                if component != 'backend':
+                    self.assertEqual(actual['approvedGuides'], r.APPROVED_GUIDES)
+                    self.assertEqual(actual[r.SCOPE_FIELD], self.PATHS)
+                    self.assertEqual(actual['procurementApprovalSha256'], r.PROCUREMENT_APPROVAL_SHA256)
+                else:
+                    self.assertNotIn(r.SCOPE_FIELD, actual)
+                    self.assertNotIn('approvedGuides', actual)
+                    self.assertNotIn('htmlCachePolicy', actual)
+
+    def test_prepared_scope_is_not_evidence_candidate_is_serving_the_pages(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            release = ContractTest().fixture(tmp, self.manifest())
+            with patch.object(r, 'working_space', return_value={'passed': True}), \
+                 patch.object(r, 'inspect', side_effect=lambda names: [x for x in rows() if x['Name'][11:] in names]), \
+                 patch.object(r, 'run', side_effect=canary_docker), patch.object(r, 'wait_healthy'), \
+                 patch.object(r, 'probe', return_value=GOOD), patch.object(r.subprocess, 'run'), \
+                 patch.object(r, 'approved_procurement_probe', return_value={'passed': False, 'pagesChecked': 2}), \
+                 patch.object(release, 'replace_frontend') as switch:
+                with self.assertRaisesRegex(RuntimeError, 'continuity'): release.execute(apply=True)
+                switch.assert_not_called()
+                self.assertEqual(json.loads(release.receipt_path.read_text()), RECEIPT)
+
+    def perform(self, tmp, *, previous=None, paths=None, failure=None, apply=True, kind='deploy', same=False):
+        receipt = copy.deepcopy(RECEIPT)
+        if previous is not None:
+            # The actually published 4edd wrapper records these exact paths without a later schema hash.
+            receipt['frontendRelease'] = {r.SCOPE_FIELD: previous, 'servedGuides': r.APPROVED_GUIDES}
+        manifest = self.manifest(paths)
+        if same: manifest['image'] = OLD
+        release = ContractTest().fixture(tmp, manifest, receipt)
+        state = {'image': OLD, 'switches': []}
+        def current(names): return [x for x in rows(state['image']) if x['Name'][11:] in names]
+        def replace(override=None):
+            state['switches'].append(override);state['image'] = OLD if override else NEW
+        count = {'n': 0}
+        def check(container, checked, public=False):
+            count['n'] += 1
+            return {'passed': failure != ('public' if public else 'candidate') and not (failure == 'public-once' and count['n'] == 2), 'pagesChecked': len(checked)}
+        with patch.object(r, 'working_space', return_value={'passed': True}), patch.object(r, 'inspect', side_effect=current), \
+             patch.object(r, 'run', side_effect=canary_docker), patch.object(r, 'wait_healthy'), patch.object(r, 'probe', return_value=GOOD), \
+             patch.object(r, 'public_probe', return_value=[]), patch.object(r.subprocess, 'run'), \
+             patch.object(release, 'replace_frontend', side_effect=replace), \
+             patch.object(r, 'acquisition_continuity_probe', return_value={'passed': True, 'pagesChecked': 11}), \
+             patch.object(r, 'approved_procurement_probe', side_effect=check) as gate:
+            if failure:
+                with self.assertRaises(RuntimeError): release.execute(apply=apply, kind=kind)
+                result = None
+            else: result = release.execute(apply=apply, kind=kind)
+        return release, state, gate.call_args_list, result, receipt
+
+    def test_new_public_receipt_preserves_two_page_scope_and_actual_checks(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            release, state, calls, result, _ = self.perform(tmp, previous=self.PATHS)
+            self.assertEqual(state['image'], NEW)
+            self.assertEqual([c.kwargs['public'] for c in calls], [False, True])
+            saved = json.loads(release.receipt_path.read_text())['frontendRelease']
+            self.assertEqual(saved[r.SCOPE_FIELD], sorted(self.PATHS))
+            self.assertEqual(saved['procurementApprovalSha256'], r.PROCUREMENT_APPROVAL_SHA256)
+            self.assertEqual(saved['servedGuides'], sorted(r.APPROVED_GUIDES))
+            self.assertTrue(result['candidateApprovedProcurement']['passed'])
+            self.assertTrue(result['publicApprovedProcurement']['passed'])
+
+    def test_public_body_failure_restores_original_scope_and_receipt(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            release, state, _, _, original = self.perform(tmp, previous=[], failure='public')
+            self.assertEqual(state['image'], OLD)
+            self.assertEqual(len(state['switches']), 2)
+            self.assertEqual(json.loads(release.receipt_path.read_text()), original)
+            self.assertTrue(json.loads((release.audit/'result.json').read_text())['previousFrontendRestoredAndVerified'])
+
+    def test_recovery_rechecks_the_previous_two_actual_bodies(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            release, state, calls, _, original = self.perform(tmp, previous=self.PATHS, failure='public-once')
+            self.assertEqual(state['image'], OLD)
+            self.assertEqual([c.kwargs['public'] for c in calls], [False, True, True])
+            self.assertEqual(calls[-1].args[1], sorted(self.PATHS))
+            result = json.loads((release.audit / 'result.json').read_text())
+            self.assertTrue(result['previousApprovedProcurement']['passed'])
+            self.assertTrue(result['previousFrontendRestoredAndVerified'])
+            self.assertEqual(json.loads(release.receipt_path.read_text()), original)
+
+    def test_old_image_rollback_closes_two_pages_instead_of_reusing_new_scope(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            release, _, calls, _, _ = self.perform(tmp, previous=self.PATHS, paths=[], kind='rollback')
+            self.assertEqual(calls, [])
+            self.assertEqual(release.target_contract['procurement']['paths'], [])
+            self.assertEqual(release.lenient_contract['procurement']['paths'], sorted(self.PATHS))
+            self.assertTrue(all(p in release.target_contract['retired'] for p in self.PATHS))
+            self.assertEqual(json.loads(release.receipt_path.read_text())['frontendRelease'][r.SCOPE_FIELD], [])
+
+    def test_rollback_to_supported_image_still_checks_actual_two_bodies(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            _, _, calls, _, _ = self.perform(tmp, previous=self.PATHS, kind='rollback')
+            self.assertEqual([c.kwargs['public'] for c in calls], [False, True])
+
+    def test_same_image_and_preflight_keep_actual_scope_distinct(self):
+        for same in [False, True]:
+            with self.subTest(same=same), tempfile.TemporaryDirectory() as tmp:
+                release, state, calls, result, original = self.perform(tmp, previous=self.PATHS, apply=False, same=same)
+                self.assertEqual([c.kwargs['public'] for c in calls], [False, True])
+                self.assertEqual(state['switches'], [])
+                self.assertFalse(result['applied'])
+                self.assertEqual(json.loads(release.receipt_path.read_text()), original)
+
+    def test_component_only_release_keeps_previous_scope(self):
+        manifest = {**MANIFEST, 'image': OLD, 'backendOnly': True,
+                    'backend': {'image': NEW, 'expectedCurrentImage': RECEIPT['images']['backend'], 'archiveSha256': 'f'*64}}
+        receipt = copy.deepcopy(RECEIPT);receipt['frontendRelease']={r.SCOPE_FIELD: self.PATHS}
+        with tempfile.TemporaryDirectory() as tmp:
+            release = ContractTest().fixture(tmp, manifest, receipt)
+            self.assertEqual(release.served_procurement, sorted(self.PATHS))
+            self.assertEqual(release.target_contract['procurement']['paths'], sorted(self.PATHS))
+
+    def test_previous_forged_or_unverified_scope_cannot_be_used_as_approval(self):
+        for previous in [{r.SCOPE_FIELD:['/zh/articles/third']}, {r.SCOPE_FIELD:self.PATHS, r.SCOPE_FIELD+'Unverified':True},
+                         {r.SCOPE_FIELD:self.PATHS, 'procurementApprovalSha256':'0'*64}]:
+            receipt={**RECEIPT,'frontendRelease':previous}
+            with self.subTest(previous=previous), tempfile.TemporaryDirectory() as tmp, self.assertRaises(ValueError):
+                ContractTest().fixture(tmp, self.manifest(), receipt)
+
+    def test_true_retired_path_and_unapproved_alternates_stay_rejected(self):
+        contract = r.case_contract('open', guides=r.APPROVED_GUIDES, procurement=self.PATHS)
+        statuses={p:200 for p in CASE_GROUP+r.APPROVED_GUIDES+self.PATHS}
+        xml=sitemap('/zh/news','/en/news',*CASE_GROUP,*r.APPROVED_GUIDES,*self.PATHS)
+        with patch.object(r,'run',side_effect=site(statuses,xml)): r.public_probe('https://example.test',contract)
+        for bad in ['/en/service/industrial-furnace-parts-purchasing','/zh/articles/third',self.PATHS[0]+'?approved=true',self.PATHS[1]+'#fake']:
+            changed=sitemap('/zh/news','/en/news',*CASE_GROUP,*r.APPROVED_GUIDES,*self.PATHS,alternates=[bad])
+            with self.subTest(bad=bad), patch.object(r,'run',side_effect=site(statuses,changed)), self.assertRaises(RuntimeError):
+                r.public_probe('https://example.test',contract)
+        with patch.object(r,'run',side_effect=site({**statuses,'/zh/solutions':200},xml)), self.assertRaisesRegex(RuntimeError,'/zh/solutions'):
+            r.public_probe('https://example.test',contract)
+
+    def test_real_internal_health_requires_separate_pages_and_preserves_retirement(self):
+        fixture=HealthScriptTest();contract=r.case_contract('open',guides=r.APPROVED_GUIDES,procurement=self.PATHS)
+        statuses={p:200 for p in CASE_GROUP+r.APPROVED_GUIDES+self.PATHS}
+        xml=sitemap('/zh/news','/en/news',*CASE_GROUP,*r.APPROVED_GUIDES,*self.PATHS)
+        code,report,_=fixture.run_script(contract,statuses,xml)
+        self.assertEqual(code,0);self.assertTrue(report['passed'])
+        for bad in [{**statuses,self.PATHS[1]:404},{**statuses,'/zh/solutions':200}]:
+            with self.subTest(bad=bad): self.assertNotEqual(fixture.run_script(contract,bad,xml)[0],0)
+        self.assertNotEqual(fixture.run_script(contract,statuses,sitemap('/zh/news','/en/news',*CASE_GROUP,*r.APPROVED_GUIDES,*self.PATHS,alternates=['/en/articles/special-industrial-furnace-procurement-assessment']))[0],0)
+
+
+class SeparateProcurementHttpTest(unittest.TestCase):
+    def actual_check(self, fault=None):
+        import approved_procurement_continuity as a
+        from procurement_approval import approval_document
+        project=Path(__file__).resolve().parents[2]
+        raw=(project/'frontend/src/lib/approved-procurement-pages.ts').read_text()
+        source=json.loads(raw.split('export const approvedProcurementPages = ',1)[1].split(' as const;',1)[0])
+        pages=approval_document()['pages'];target=pages[1]['path'];requests=[]
+        class Handler(BaseHTTPRequestHandler):
+            def log_message(self,*args):pass
+            def do_GET(self):
+                requests.append(self.path);status=200;headers={};content='text/html'
+                if self.path=='/sitemap.xml':
+                    body=sitemap(*[p['path'] for p in pages if not (fault=='sitemap' and p['path']==target)]).replace('https://example.test',a.PUBLIC_ORIGIN);content='application/xml'
+                elif self.path in [p['entryPath'] for p in pages]:
+                    p=next(p for p in pages if p['entryPath']==self.path)
+                    body='' if fault=='entry' and p['path']==target else '<a href="'+p['path']+'">采购入口</a>'
+                elif self.path in [p['path'] for p in pages]:
+                    p=next(p for p in pages if p['path']==self.path);changed=self.path==target
+                    item=next(s for s in source.values() if s['path']==p['path']);html=item['html']
+                    if changed and fault=='body':html=html.replace('苏能接受','苏能不接受',1)
+                    if changed and fault=='missing-anchor':html=html.replace('id="'+p['anchors'][0]+'"','')
+                    if changed and fault=='hidden-body':html='<div hidden>'+html+'</div>'
+                    h1='其他厂家配件' if changed and fault=='h1' else p['h1']
+                    canonical=a.PUBLIC_ORIGIN+('/zh/products' if changed and fault=='canonical' else p['path'])
+                    toolbar='' if changed and fault=='contact' else '<nav data-contact-toolbar><a href="tel:13052986814">电话联系</a><button aria-haspopup="dialog">微信联系</button></nav>'
+                    body='<html><head><link rel="canonical" href="'+canonical+'">'+('<meta name="robots" content="noindex">' if changed and fault=='noindex' else '')+'</head><body><main><h1>'+h1+'</h1><div id="'+p['bodyId']+'"><div>'+html+'</div></div></main>'+toolbar+'<footer>130-5298-6814</footer></body></html>'
+                    if changed and fault=='wrong-phone':body=body.replace('tel:13052986814','tel:13000000000')
+                    if changed and fault=='disabled-phone':body=body.replace('<a href="tel:13052986814"','<a aria-disabled="true" href="tel:13052986814"')
+                    if changed and fault=='disabled-wechat':body=body.replace('<button aria-haspopup="dialog"','<button disabled aria-haspopup="dialog"')
+                    if changed and fault=='hidden-contact':body=body.replace('<nav data-contact-toolbar','<nav hidden data-contact-toolbar')
+                    if changed and fault=='phone-script-only':body=body.replace('<footer>130-5298-6814</footer>','<script>const phone="13052986814"</script>')
+                    if changed and fault=='hidden-phone':body=body.replace('<footer>130-5298-6814</footer>','<footer hidden>130-5298-6814</footer>')
+                    if changed and fault=='duplicate-anchor':body+='<div id="'+p['anchors'][0]+'"></div>'
+                    if changed and fault=='404':status=404
+                    if changed and fault=='redirect':status=302;headers['Location']='/zh/products'
+                    if changed and fault=='header-noindex':headers['X-Robots-Tag']='noindex'
+                else:status=404;body=''
+                self.send_response(status);self.send_header('Content-Type',content)
+                for k,v in headers.items():self.send_header(k,v)
+                self.end_headers();self.wfile.write(body.encode())
+            def do_POST(self):raise AssertionError('No contact/form actions allowed')
+        server=ThreadingHTTPServer(('127.0.0.1',0),Handler);thread=threading.Thread(target=server.serve_forever,daemon=True);thread.start()
+        base='http://127.0.0.1:'+str(server.server_port);real_run=subprocess.run
+        def transport(command,**kwargs):
+            self.assertEqual(command,['docker','exec','-i','candidate','node','-'])
+            return real_run(['node','-'],**kwargs)
+        try:
+            with patch.object(a,'CANDIDATE_ORIGIN',base),patch.object(a.subprocess,'run',side_effect=transport):
+                report=a.approved_procurement_probe('candidate',r.APPROVED_PROCUREMENT_PATHS)
+            self.assertEqual(len(requests),5)
+            self.assertTrue(all(p in [x['path'] for x in pages]+[x['entryPath'] for x in pages]+['/sitemap.xml'] for p in requests))
+            return report
+        finally:server.shutdown();server.server_close();thread.join()
+
+    def test_actual_captured_ssr_bodies_and_contact_markup_pass(self):
+        fixture = Path(__file__).with_name('fixtures') / 'approved-procurement-real-ssr.json'
+        script = r"""
+        const fs = require('node:fs');
+        const checker = require('./ops/releases/approved-procurement-continuity.cjs');
+        const approval = require('./ops/releases/approved-procurement-pages.json');
+        const fixtures = JSON.parse(fs.readFileSync(process.argv[1], 'utf8'));
+        const results = fixtures.pages.map((fixture, i) => checker.inspectApprovedPage(fixture.html, approval.pages[i], {}));
+        console.log(JSON.stringify(results));
+        process.exitCode = results.every(result => Object.values(result.checks).every(Boolean)) ? 0 : 1;
+        """
+        result = subprocess.run(['node', '-e', script, str(fixture)], cwd=Path(__file__).resolve().parents[2], capture_output=True, text=True, timeout=15)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        rows = json.loads(result.stdout)
+        self.assertEqual(len(rows), 2)
+        self.assertTrue(all(row['checks']['body'] and row['checks']['contactToolbar'] and row['checks']['anchors'] for row in rows))
+
+    def test_complete_real_http_body_fingerprints_and_nine_anchors_pass(self):
+        report=self.actual_check();self.assertTrue(report['passed']);self.assertEqual(report['pagesChecked'],2)
+
+    def test_real_two_page_faults_never_count_as_success(self):
+        for fault,check in [('404','http'),('redirect','http'),('body','body'),('hidden-body','body'),('h1','h1'),('canonical','canonical'),
+                            ('noindex','indexable'),('header-noindex','indexable'),('contact','contactToolbar'),('wrong-phone','contactToolbar'),('disabled-phone','contactToolbar'),('disabled-wechat','contactToolbar'),('hidden-contact','contactToolbar'),('phone-script-only','contactToolbar'),('hidden-phone','contactToolbar'),('missing-anchor','anchors'),('duplicate-anchor','anchors'),('sitemap','sitemap'),('entry','entry')]:
+            with self.subTest(fault=fault):
+                report=self.actual_check(fault);self.assertFalse(report['passed'])
+                self.assertFalse(next(p for p in report['pages'] if p['path']==r.APPROVED_PROCUREMENT_PATHS[1])['checks'][check]['passed'])
+
+    def test_forged_success_or_wrong_scope_is_rejected(self):
+        import approved_procurement_continuity as a
+        from procurement_approval import approval_document
+        document=approval_document();rows=[]
+        for p in document['pages']:
+            rows.append({'path':p['path'],'status':200,'passed':True,'contentStreamSha256':p['contentStreamSha256'],
+                         'checks':{k:{'passed':True} for k in a.REQUIRED}})
+        good={'baseUrl':a.CANDIDATE_ORIGIN,'canonicalOrigin':a.PUBLIC_ORIGIN,'pagesChecked':2,'passed':True,'pages':rows}
+        for fault in ['wrong-path','body','contact','missing']:
+            value=copy.deepcopy(good)
+            if fault=='wrong-path':value['pages'][1]['path']='/zh/articles/third'
+            if fault=='body':value['pages'][1]['contentStreamSha256']='0'*64
+            if fault=='contact':value['pages'][1]['checks']['contactToolbar']['passed']=False
+            if fault=='missing':value['pages'].pop()
+            with self.subTest(fault=fault),patch.object(a.subprocess,'run',return_value=subprocess.CompletedProcess([],0,stdout=json.dumps(value))),self.assertRaises(RuntimeError):
+                a.approved_procurement_probe('candidate',r.APPROVED_PROCUREMENT_PATHS)
+
+
+
+class FrontendRecoverySourceTest(unittest.TestCase):
+    OLD_SOURCE = '1' * 40
+    def fixture(self, tmp, previous=None):
+        receipt = copy.deepcopy(RECEIPT)
+        receipt['frontendRelease'] = ({'sourceIdentity': 'git-commit', 'sourceCommit': self.OLD_SOURCE,
+                                       'image': OLD} if previous is None else previous)
+        release = ContractTest().fixture(tmp, receipt=receipt)
+        (release.live / 'DEPLOY_COMMIT').write_text(self.OLD_SOURCE + '\n')
+        return r.Release(release.live, release.audit, MANIFEST, 'fixture health script')
+
+    def call_replace(self, release, override=None):
+        original_env = dict(release.env)
+        with patch.object(r, 'run', return_value='') as command, patch.object(r, 'wait_healthy'):
+            release.replace_frontend(override)
+        self.assertEqual(release.env, original_env)
+        calls = [c for c in command.call_args_list if c.args[0][0:2] == ['docker', 'compose']]
+        return calls
+
+    def test_normal_frontend_deploy_keeps_new_source_environment(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            release = self.fixture(tmp)
+            calls = self.call_replace(release)
+            self.assertEqual(len(calls), 1)
+            self.assertEqual(calls[0].kwargs['env']['DEPLOY_COMMIT'], MANIFEST['sourceCommit'])
+            self.assertIs(calls[0].kwargs['env'], release.env)
+
+    def test_exact_old_image_override_uses_old_source_in_a_local_copy(self):
+        for identity_present in [True, False]:
+            with self.subTest(identity_present=identity_present), tempfile.TemporaryDirectory() as tmp:
+                previous = {'sourceCommit': self.OLD_SOURCE, 'image': OLD}
+                if identity_present: previous['sourceIdentity'] = 'git-commit'
+                release = self.fixture(tmp, previous)
+                override = release.audit / 'arbitrary-filename-old-image.json'
+                release.write_override(override, release.receipt['images'])
+                calls = self.call_replace(release, override)
+                self.assertEqual(calls[0].kwargs['env']['DEPLOY_COMMIT'], self.OLD_SOURCE)
+                self.assertIsNot(calls[0].kwargs['env'], release.env)
+                self.assertEqual(release.env['DEPLOY_COMMIT'], MANIFEST['sourceCommit'])
+
+    def test_a_previous_filename_cannot_make_a_foreign_image_trusted(self):
+        for image in [NEW, OTHER, 'frontend:latest']:
+            with self.subTest(image=image), tempfile.TemporaryDirectory() as tmp:
+                release = self.fixture(tmp)
+                override = release.audit / 'previous.override.json'
+                release.write_override(override, {**release.receipt['images'], 'frontend': image})
+                with patch.object(r, 'run') as command, self.assertRaises(RuntimeError):
+                    release.replace_frontend(override)
+                command.assert_not_called()
+                self.assertEqual(release.env['DEPLOY_COMMIT'], MANIFEST['sourceCommit'])
+
+    def test_contradictory_old_source_image_is_rejected_before_compose(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            release = self.fixture(tmp, {'sourceCommit': self.OLD_SOURCE, 'image': NEW})
+            override = release.audit / 'previous.override.json'
+            release.write_override(override, release.receipt['images'])
+            with patch.object(r, 'run') as command, self.assertRaises(RuntimeError):
+                release.replace_frontend(override)
+            command.assert_not_called()
+            self.assertEqual(release.env['DEPLOY_COMMIT'], MANIFEST['sourceCommit'])
+
+    def test_legacy_unknown_source_can_restore_without_claiming_the_new_commit(self):
+        for previous in [{}, {'sourceCommit': None}, {'sourceCommit': 'main'},
+                         {'sourceCommit': '2'*40, 'sourceIdentity': 'frozen-snapshot'},
+                         {'sourceCommit': '2'*39}, {'sourceCommit': '2'*40 + '\n'}]:
+            with self.subTest(previous=previous), tempfile.TemporaryDirectory() as tmp:
+                release = self.fixture(tmp, previous)
+                override = release.audit / 'previous.override.json'
+                release.write_override(override, release.receipt['images'])
+                calls = self.call_replace(release, override)
+                self.assertEqual(calls[0].kwargs['env']['DEPLOY_COMMIT'], 'unknown')
+                self.assertEqual(release.env['DEPLOY_COMMIT'], MANIFEST['sourceCommit'])
+
+    def test_backend_admin_and_mixed_component_environments_are_unchanged(self):
+        manifests = [BackendOnlyReleaseTest().manifest(), AdminOnlyReleaseTest().manifest(),
+                     {**MANIFEST, 'backend': {'image': OTHER, 'expectedCurrentImage': RECEIPT['images']['backend'], 'archiveSha256': '8'*64}}]
+        for manifest in manifests:
+            with self.subTest(manifest=manifest), tempfile.TemporaryDirectory() as tmp:
+                receipt = {**RECEIPT, 'frontendRelease': {'sourceCommit': self.OLD_SOURCE, 'image': OLD}}
+                release = ContractTest().fixture(tmp, manifest, receipt)
+                override = release.audit / 'previous.override.json'
+                release.write_override(override, release.receipt['images'])
+                calls = self.call_replace(release, override)
+                self.assertEqual([c.args[0][-1] for c in calls], release.components)
+                self.assertTrue(all(c.kwargs['env'] is release.env for c in calls))
+                self.assertTrue(all(c.kwargs['env']['DEPLOY_COMMIT'] == MANIFEST['sourceCommit'] for c in calls))
+
+    def test_actual_failed_frontend_switch_restores_old_source_as_well_as_old_image(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            release = self.fixture(tmp)
+            original_receipt = release.receipt_path.read_bytes()
+            state = {'image': OLD, 'source': self.OLD_SOURCE, 'switches': []}
+            def inspect(names):
+                selected = [x for x in rows(state['image']) if x['Name'][11:] in names]
+                for row in selected:
+                    if row['Name'] == '/corp-site-frontend':
+                        row['Config'] = {'Labels': {'org.opencontainers.image.revision': state['source']}}
+                return selected
+            def command(args, **kwargs):
+                if args[:3] == ['docker', 'image', 'inspect']: return image_inspect(args)
+                if args[:2] == ['docker', 'compose'] and 'up' in args:
+                    is_old = str(release.audit / 'previous.override.json') in args
+                    state['image'] = OLD if is_old else NEW
+                    state['source'] = kwargs['env']['DEPLOY_COMMIT']
+                    state['switches'].append((state['image'], state['source']))
+                return ''
+            def public(*args):
+                if state['image'] == NEW: raise RuntimeError('new public site fails its check')
+                return []
+            with patch.object(r, 'working_space', return_value={'passed': True}), patch.object(r, 'inspect', side_effect=inspect), \
+                 patch.object(r, 'run', side_effect=command), patch.object(r, 'wait_healthy'), \
+                 patch.object(r, 'probe', return_value=GOOD), patch.object(r, 'public_probe', side_effect=public), \
+                 patch.object(r.subprocess, 'run'), patch.object(r, 'acquisition_continuity_probe', return_value={'passed': True, 'pagesChecked': 11}):
+                with self.assertRaises(RuntimeError): release.execute(apply=True)
+            self.assertEqual(state['switches'], [(NEW, MANIFEST['sourceCommit']), (OLD, self.OLD_SOURCE)])
+            self.assertEqual((state['image'], state['source']), (OLD, self.OLD_SOURCE))
+            self.assertEqual(release.env['DEPLOY_COMMIT'], MANIFEST['sourceCommit'])
+            self.assertEqual(json.loads(release.receipt_path.read_text()), json.loads(original_receipt))
+            self.assertEqual((release.live / 'DEPLOY_COMMIT').read_text(), self.OLD_SOURCE+'\n')
+            self.assertTrue(json.loads((release.audit/'result.json').read_text())['previousFrontendRestoredAndVerified'])
 
 
 if __name__ == '__main__':
