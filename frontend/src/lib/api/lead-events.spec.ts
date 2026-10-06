@@ -2,6 +2,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import {
   buildLeadSourceSnapshot,
+  captureLeadEventProperties,
   sanitizeLeadPagePath,
   sanitizeLeadReferrer,
 } from '@/lib/api/lead-events';
@@ -87,5 +88,27 @@ describe('lead source privacy', () => {
     expect(snapshot.sessionId).toHaveLength(120);
     expect(snapshot.visitorId).toHaveLength(120);
     expect(snapshot.landingPage).not.toContain('token');
+  });
+});
+
+
+describe('manual QA source privacy', () => {
+  it('retains only a boolean, never the QA token or contact query values', () => {
+    const sessionStorage = storageMock();
+    // Match the real browser storage interface used for visit rotation.
+    Object.assign(sessionStorage, { removeItem: () => undefined });
+    vi.stubGlobal('window', {
+      location: { pathname: '/zh/contact', search: '?acquisition_qa=analytics75_20261006164649566&utm_source=baidu&phone=private-phone&email=private-email&identity=private-identity&problem=private-problem', hostname: 'www.jssngyl.cn' },
+      sessionStorage, localStorage: storageMock(), matchMedia: () => ({ matches: false }),
+    });
+    vi.stubGlobal('document', { title: '联系苏能', referrer: 'https://www.baidu.com/s?wd=炉子&phone=private-referrer' });
+    const snapshot = buildLeadSourceSnapshot();
+    const payload = { ...snapshot, properties: captureLeadEventProperties(undefined, snapshot) };
+    expect(payload).toMatchObject({ pagePath: '/zh/contact?utm_source=baidu', sourceType: '自然搜索', sourceDetail: '百度', utmSource: 'baidu', properties: { manual_qa: true } });
+    for (const value of ['acquisition_qa', 'analytics75_', 'private-phone', 'private-email', 'private-identity', 'private-problem', 'private-referrer']) {
+      expect(JSON.stringify(payload)).not.toContain(value);
+    }
+    expect(sessionStorage.getItem('suneng_manual_qa_session_v1')).toBe(snapshot.sessionId);
+    expect(sessionStorage.getItem('suneng_landing_page')).not.toContain('acquisition_qa');
   });
 });

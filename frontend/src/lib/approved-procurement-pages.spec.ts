@@ -57,6 +57,42 @@ describe('the two owner-approved Chinese procurement pages', () => {
     expect(body.querySelector('a[href="/zh/inquiry"]')).not.toBeNull();
   });
 
+  it.each(approvedCases)('%s server-renders its own page identity and the visible breadcrumb hierarchy', (id) => {
+    const page = approvedProcurementPages[id];
+    const doc = documentOf(renderToStaticMarkup(createElement(ApprovedProcurementPage, { id })));
+    const scripts = doc.querySelectorAll(`#procurement-${id}-page-jsonld`);
+    expect(scripts).toHaveLength(1);
+    expect(scripts[0].getAttribute('type')).toBe('application/ld+json');
+    const [webpage, breadcrumb] = JSON.parse(scripts[0].textContent!) as Array<Record<string, unknown>>;
+    const canonical = 'https://www.jssngyl.cn' + page.path;
+    expect(webpage).toEqual({
+      '@context': 'https://schema.org',
+      '@type': 'WebPage',
+      '@id': canonical + '#webpage',
+      url: canonical,
+      name: doc.querySelector('h1')?.textContent,
+      description: page.description,
+      isPartOf: { '@id': 'https://www.jssngyl.cn/#website' },
+      about: { '@id': 'https://www.jssngyl.cn/#organization' },
+      inLanguage: 'zh-CN',
+    });
+    expect(breadcrumb).toEqual({
+      '@context': 'https://schema.org',
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: '首页', item: 'https://www.jssngyl.cn/zh' },
+        { '@type': 'ListItem', position: 2, name: page.parentLabel, item: 'https://www.jssngyl.cn' + page.parentPath },
+        { '@type': 'ListItem', position: 3, name: page.heading, item: canonical },
+      ],
+    });
+    const parent = doc.querySelector(`nav[aria-label="Breadcrumb"] a[href="${page.parentPath}"]`);
+    expect(parent?.textContent).toBe(page.parentLabel);
+    expect(webpage).not.toHaveProperty('datePublished');
+    expect(webpage).not.toHaveProperty('dateModified');
+    expect(webpage).not.toHaveProperty('author');
+    expect(webpage).not.toHaveProperty('reviewedBy');
+  });
+
   it.each(approvedCases)('%s has a self canonical, Chinese-only metadata and no invented news date', async (id, route) => {
     const page = approvedProcurementPages[id];
     const metadata = await route.generateMetadata({ params: Promise.resolve({ locale: 'zh' }) });

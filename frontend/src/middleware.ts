@@ -194,7 +194,11 @@ export default async function middleware(request: NextRequest) {
   // Keep legacy unprefixed content URLs deterministic for crawlers. Only the
   // root negotiates language; explicit /zh and /en URLs remain authoritative.
   if (pathname !== '/' && !hasLocalePrefix) {
-    return permanentRedirect(request, `/zh${pathname}`);
+    // This changes only the language prefix; retain pagination, filters and
+    // acquisition parameters. Fixed aliases above keep their query-free targets.
+    const target = request.nextUrl.clone();
+    target.pathname = `/zh${pathname}`;
+    return NextResponse.redirect(target, 308);
   }
 
   const response = intlMiddleware(request);

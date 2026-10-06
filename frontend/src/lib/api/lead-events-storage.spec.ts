@@ -101,3 +101,49 @@ describe('reading and contact events when browser storage is restricted', () => 
     }).not.toThrow();
   });
 });
+
+
+describe('manual QA when session storage is unavailable', () => {
+  function manualQaValues() {
+    return vi.mocked(apiPost).mock.calls.map(([, options]) =>
+      (options?.body as { properties: { manual_qa: boolean } }).properties.manual_qa);
+  }
+  beforeEach(() => {
+    vi.mocked(apiPost).mockReset().mockResolvedValue({});
+    vi.stubGlobal('window', {
+      location: { pathname: '/zh', search: '?acquisition_qa=1', hostname: 'www.jssngyl.cn' },
+      sessionStorage: storageMock(), localStorage: storageMock(), matchMedia: () => ({ matches: false }),
+    });
+    vi.stubGlobal('document', { title: '工业炉', referrer: '' });
+  });
+  afterEach(() => vi.unstubAllGlobals());
+
+  it.each(['getter', 'method'])('marks the current page and client navigation despite a storage %s failure', (failure) => {
+    if (failure === 'getter') Object.defineProperty(window, 'sessionStorage', { configurable: true, get() { throw new DOMException('denied', 'SecurityError'); } });
+    else window.sessionStorage.getItem = () => { throw new DOMException('denied', 'SecurityError'); };
+    trackPageView();
+    window.location.search = '';
+    window.location.pathname = '/zh/contact';
+    trackLeadEvent('phone_click');
+    expect(manualQaValues().every(Boolean)).toBe(true);
+  });
+
+  it('transfers an in-memory QA marker when storage becomes available again', () => {
+    Object.defineProperty(window, 'sessionStorage', { configurable: true, get() { throw new DOMException('denied', 'SecurityError'); } });
+    trackPageView();
+    window.location.search = '';
+    Object.defineProperty(window, 'sessionStorage', { configurable: true, value: storageMock() });
+    trackLeadEvent('wechat_click');
+    expect(manualQaValues().every(Boolean)).toBe(true);
+    expect(window.sessionStorage.getItem('suneng_manual_qa_session_v1')).toBe(window.sessionStorage.getItem('suneng_session_id'));
+  });
+
+  it('documents the full-reload boundary: denied storage cannot restore a missing token', () => {
+    Object.defineProperty(window, 'sessionStorage', { configurable: true, get() { throw new DOMException('denied', 'SecurityError'); } });
+    trackPageView();
+    vi.stubGlobal('window', { location: { pathname: '/zh/contact', search: '', hostname: 'www.jssngyl.cn' }, matchMedia: () => ({ matches: false }) });
+    Object.defineProperty(window, 'sessionStorage', { configurable: true, get() { throw new DOMException('denied', 'SecurityError'); } });
+    trackPageView();
+    expect(manualQaValues()).toEqual([true, false]);
+  });
+});
