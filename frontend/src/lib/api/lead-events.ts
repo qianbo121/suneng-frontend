@@ -92,6 +92,10 @@ const SESSION_PAGE_PATHS_KEY = 'suneng_session_page_paths';
 const SESSION_ID_KEY = 'suneng_session_id';
 const SESSION_LAST_SEEN_KEY = 'suneng_session_last_seen';
 const SESSION_SOURCE_KEY = 'suneng_session_traffic_source';
+const MANUAL_QA_SESSION_KEY = 'suneng_manual_qa_session_v1';
+// Only booleans and the anonymous session association are retained, never the URL token.
+const manualQaByWindow = new WeakMap<object, { active: boolean; lastSeen: number }>();
+const manualQaBySnapshot = new WeakMap<LeadSourceSnapshot, boolean>();
 const SESSION_TIMEOUT_MS = 30 * 60 * 1000;
 const DWELL_SECONDS_KEY = 'suneng_dwell_seconds';
 const DWELL_MILESTONE_KEY = 'suneng_dwell_milestone';
@@ -142,34 +146,71 @@ function newAnonymousId() {
     : `${Date.now()}-${Math.random().toString(16).slice(2)}`;
 }
 
+function hasManualQaToken() {
+  const tokens = new URLSearchParams(window.location.search).getAll('acquisition_qa');
+  return tokens.length === 1 && /^[A-Za-z0-9_-]{1,80}$/.test(tokens[0]);
+}
+
+function rememberManualQa(active: boolean, now: number) {
+  manualQaByWindow.set(window, { active, lastSeen: now });
+}
+
+function fallbackSession(now: number, requested: boolean) {
+  const previous = manualQaByWindow.get(window);
+  const stillActive = previous && now - previous.lastSeen <= SESSION_TIMEOUT_MS;
+  rememberManualQa(requested || Boolean(stillActive && previous.active), now);
+  // Memory survives client navigation, but cannot survive a full reload when storage is denied.
+  return undefined;
+}
+
+function resetSessionState(storage: Storage) {
+  storage.removeItem(ENGAGED_SESSION_KEY);
+  storage.removeItem(EFFECTIVE_INTERACTION_KEY);
+  storage.removeItem(AUTOMATION_SIGNAL_KEY);
+  storage.removeItem(SESSION_PAGE_PATHS_KEY);
+  storage.removeItem(SESSION_SOURCE_KEY);
+  storage.removeItem(MANUAL_QA_SESSION_KEY);
+  storage.removeItem('suneng_landing_page');
+  storage.removeItem(DWELL_SECONDS_KEY);
+  storage.removeItem(DWELL_MILESTONE_KEY);
+  // In-flight acknowledgements for an old visit cannot confirm a new visit's milestones.
+  dwellRequestGeneration += 1;
+  dwellMilestoneInFlight = false;
+  engagedSessionInFlight = false;
+}
+
 function getSessionId(storage: Storage | undefined) {
-  if (!storage) return undefined;
+  const now = Date.now();
+  const remembered = manualQaByWindow.get(window);
+  const requested = hasManualQaToken() || Boolean(
+    remembered?.active && now - remembered.lastSeen <= SESSION_TIMEOUT_MS,
+  );
+  if (!storage) return fallbackSession(now, requested);
   try {
-    const now = Date.now();
     const current = storage.getItem(SESSION_ID_KEY);
     const lastSeen = Number(storage.getItem(SESSION_LAST_SEEN_KEY));
     const expired =
       Number.isFinite(lastSeen) && lastSeen > 0 && now - lastSeen > SESSION_TIMEOUT_MS;
-    if (!current || expired) {
+    const currentQa = Boolean(current && storage.getItem(MANUAL_QA_SESSION_KEY) === current);
+    const enteringQa = Boolean(current && !expired && requested && !currentQa);
+    if (!current || expired || enteringQa) {
+      // Split an explicit QA run from preceding ordinary browsing. Source/campaign facts
+      // remain unchanged; testing is a separate property, not a replacement traffic source.
+      const previousSource = enteringQa ? storage.getItem(SESSION_SOURCE_KEY) : null;
+      const previousLanding = enteringQa ? storage.getItem('suneng_landing_page') : null;
       const next = newAnonymousId();
       storage.setItem(SESSION_ID_KEY, next);
-      storage.removeItem(ENGAGED_SESSION_KEY);
-      storage.removeItem(EFFECTIVE_INTERACTION_KEY);
-      storage.removeItem(AUTOMATION_SIGNAL_KEY);
-      storage.removeItem(SESSION_PAGE_PATHS_KEY);
-      storage.removeItem(SESSION_SOURCE_KEY);
-      storage.removeItem('suneng_landing_page');
-      storage.removeItem(DWELL_SECONDS_KEY);
-      storage.removeItem(DWELL_MILESTONE_KEY);
-      // 旧会话尚未返回的埋点不得在新会话里确认里程碑。
-      dwellRequestGeneration += 1;
-      dwellMilestoneInFlight = false;
-      engagedSessionInFlight = false;
+      resetSessionState(storage);
+      if (previousSource) storage.setItem(SESSION_SOURCE_KEY, previousSource);
+      if (previousLanding) storage.setItem('suneng_landing_page', previousLanding);
+      if (requested) storage.setItem(MANUAL_QA_SESSION_KEY, next);
     }
     storage.setItem(SESSION_LAST_SEEN_KEY, String(now));
-    return storage.getItem(SESSION_ID_KEY) || undefined;
+    const sessionId = storage.getItem(SESSION_ID_KEY) || undefined;
+    rememberManualQa(Boolean(sessionId && storage.getItem(MANUAL_QA_SESSION_KEY) === sessionId), now);
+    return sessionId;
   } catch {
-    return undefined;
+    return fallbackSession(now, requested);
   }
 }
 
@@ -303,7 +344,7 @@ export function buildLeadSourceSnapshot(
     document.referrer,
     campaign.utmSource,
   );
-  return sanitizeLeadSourceSnapshot({
+  const snapshot = sanitizeLeadSourceSnapshot({
     pageTitle: title,
     pagePath: sanitizeLeadPagePath(path),
     pageType: pageType(path),
@@ -318,6 +359,8 @@ export function buildLeadSourceSnapshot(
     visitorId: getStoredId('suneng_visitor_id', getBrowserStorage('localStorage')),
     ...extra,
   });
+  manualQaBySnapshot.set(snapshot, manualQaByWindow.get(window)?.active === true);
+  return snapshot;
 }
 
 function sanitizeEventProperties(properties?: LeadEventProperties) {
@@ -333,12 +376,28 @@ function sanitizeEventProperties(properties?: LeadEventProperties) {
   return entries.length > 0 ? Object.fromEntries(entries) : undefined;
 }
 
+// Contact actions capture true AND false before awaiting the clipboard. A later page or
+// visit must not change the classification of an action that already began.
+export function captureLeadEventProperties(
+  properties: LeadEventProperties | undefined,
+  snapshot: LeadSourceSnapshot,
+): LeadEventProperties {
+  const frozen = typeof properties?.manual_qa === 'boolean' ? properties.manual_qa : undefined;
+  const manualQa = frozen ?? manualQaBySnapshot.get(snapshot) === true;
+  const ordinary = Object.fromEntries(
+    Object.entries(properties ?? {}).filter(([key]) => key.trim().slice(0, 60) !== 'manual_qa'),
+  );
+  // Reserve the first of the existing 24 slots so a crowded context cannot drop QA.
+  return sanitizeEventProperties({ manual_qa: manualQa, ...ordinary })!;
+}
+
 function currentPayload(eventType: LeadEventType, extra: LeadEventExtra = {}) {
   const { properties, ...sourceExtra } = extra;
+  const snapshot = buildLeadSourceSnapshot(sourceExtra);
   return {
     eventType,
-    ...buildLeadSourceSnapshot(sourceExtra),
-    properties: sanitizeEventProperties(properties),
+    ...snapshot,
+    properties: captureLeadEventProperties(properties, snapshot),
   };
 }
 

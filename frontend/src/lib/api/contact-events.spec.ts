@@ -21,7 +21,7 @@ function events() {
     pagePath: string;
     sessionId: string;
     sourceType: string;
-    properties: Record<string, string>;
+    properties: Record<string, string | boolean>;
   }).filter((event) => event.eventType !== 'engaged_session');
 }
 
@@ -115,5 +115,62 @@ describe('contact entry and follow-up accounting', () => {
     trackContactEntry('phone');
     await copyContactValue('13052986814', 'phone');
     expect(apiPost).not.toHaveBeenCalled();
+  });
+});
+
+
+describe('frozen manual QA contact context', () => {
+  beforeEach(() => {
+    vi.mocked(apiPost).mockReset().mockResolvedValue({});
+    vi.stubGlobal('window', {
+      location: { pathname: '/zh/contact', search: '', hostname: 'www.jssngyl.cn' },
+      sessionStorage: storage(), localStorage: storage(), matchMedia: () => ({ matches: false }),
+    });
+    vi.stubGlobal('document', { title: '联系苏能', referrer: 'https://www.baidu.com/s?wd=工业炉' });
+    vi.stubGlobal('navigator', { clipboard: { writeText: vi.fn().mockResolvedValue(undefined) } });
+  });
+  afterEach(() => vi.unstubAllGlobals());
+
+  it('keeps a QA copy true after navigation and visit expiry', async () => {
+    const clock = vi.spyOn(Date, 'now').mockReturnValue(1000);
+    try {
+      window.location.search = '?acquisition_qa=1';
+      let finish!: () => void;
+      vi.mocked(navigator.clipboard.writeText).mockImplementation(() => new Promise<void>(resolve => { finish = resolve; }));
+      const context = captureContactContext({ properties: { position: 'floating_toolbar' } });
+      const oldSession = context.sessionId;
+      const pending = copyContactValue('suneng2005', 'wechat', context);
+      window.location.pathname = '/zh'; window.location.search = '';
+      clock.mockReturnValue(30 * 60 * 1000 + 2000);
+      finish(); await pending;
+      expect(events()[0]).toMatchObject({ pagePath: '/zh/contact', sessionId: oldSession, properties: { manual_qa: true, contact_kind: 'wechat', contact_action: 'copy', contact_result: 'success' } });
+    } finally { clock.mockRestore(); }
+  });
+
+  it('keeps an ordinary pending copy false when a later QA visit starts', async () => {
+    let finish!: () => void;
+    vi.mocked(navigator.clipboard.writeText).mockImplementation(() => new Promise<void>(resolve => { finish = resolve; }));
+    const context = captureContactContext({ properties: { position: 'contact_body' } });
+    const oldSession = context.sessionId;
+    const pending = copyContactValue('13052986814', 'phone', context);
+    window.location.pathname = '/zh'; window.location.search = '?acquisition_qa=1';
+    trackContactEntry('wechat');
+    const qaEntry = events()[0];
+    expect(qaEntry.properties.manual_qa).toBe(true);
+    expect(qaEntry.sessionId).not.toBe(oldSession);
+    finish(); await pending;
+    const copy = events().find(event => event.eventType === 'contact_action')!;
+    expect(copy).toMatchObject({ pagePath: '/zh/contact', sessionId: oldSession, properties: { manual_qa: false, contact_kind: 'phone', contact_action: 'copy', contact_result: 'success' } });
+  });
+
+  it('marks one WeChat entry and its follow-up without counting a copied account as a customer', async () => {
+    window.location.search = '?acquisition_qa=1&phone=private-value';
+    const context = captureContactContext({ properties: { position: 'floating_toolbar' } });
+    trackContactEntry('wechat', context, 'open_dialog');
+    await copyContactValue('suneng2005', 'wechat', context);
+    expect(events().map(event => event.eventType)).toEqual(['wechat_click', 'contact_action']);
+    expect(events().every(event => event.properties.manual_qa === true)).toBe(true);
+    expect(JSON.stringify(events())).not.toContain('private-value');
+    expect(JSON.stringify(events())).not.toContain('suneng2005');
   });
 });

@@ -358,3 +358,96 @@ describe('停留时长（进官网就计时，跨页面累计）', () => {
     expect(postedEventTypes().filter((type) => type === 'engaged_session')).toHaveLength(2);
   });
 });
+
+
+describe('manual QA visit classification', () => {
+  function bodies() {
+    return vi.mocked(apiPost).mock.calls.map(([, options]) => options?.body as {
+      eventType: string; sessionId?: string; sourceType?: string; sourceDetail?: string;
+      utmSource?: string; utmCampaign?: string; properties: Record<string, unknown>;
+    });
+  }
+  beforeEach(() => {
+    vi.mocked(apiPost).mockReset().mockResolvedValue({});
+    vi.stubGlobal('window', {
+      location: { pathname: '/zh', search: '?utm_source=baidu&utm_campaign=original', hostname: 'www.jssngyl.cn' },
+      sessionStorage: storageMock(), localStorage: storageMock(), matchMedia: () => ({ matches: false }),
+    });
+    vi.stubGlobal('document', { title: '工业炉', referrer: 'https://www.baidu.com/s?wd=工业炉' });
+  });
+
+  it('splits ordinary-to-QA browsing without replacing the first source/campaign', () => {
+    trackPageView();
+    const ordinary = bodies()[0];
+    window.location.search = '?acquisition_qa=acceptance_1';
+    trackPageView();
+    const qa = bodies().find((body) => body.eventType === 'page_view' && body.properties.manual_qa === true)!;
+    expect(ordinary.properties.manual_qa).toBe(false);
+    expect(qa.sessionId).not.toBe(ordinary.sessionId);
+    expect(qa).toMatchObject({ sourceType: '自然搜索', sourceDetail: '百度', utmSource: 'baidu', utmCampaign: 'original' });
+    trackLeadEvent('phone_click');
+    expect(bodies().at(-2)?.sessionId).toBe(qa.sessionId);
+    expect(bodies().every((body) => body.properties.manual_qa === (body.sessionId === qa.sessionId))).toBe(true);
+  });
+
+  it('keeps QA across full-page navigation without the parameter', () => {
+    window.location.search += '&acquisition_qa=1';
+    trackPageView();
+    const first = bodies()[0];
+    // New global/window with the same sessionStorage models a complete page navigation.
+    vi.stubGlobal('window', { ...window, location: { pathname: '/zh/contact', search: '', hostname: 'www.jssngyl.cn' } });
+    vi.stubGlobal('document', { title: '联系我们', referrer: 'https://www.jssngyl.cn/zh' });
+    trackLeadEvent('wechat_click');
+    expect(bodies().at(-2)).toMatchObject({ sessionId: first.sessionId, sourceType: '自然搜索', sourceDetail: '百度', utmCampaign: 'original', properties: { manual_qa: true } });
+  });
+
+  it('clears QA after 30 minutes without a new explicit token', () => {
+    const clock = vi.spyOn(Date, 'now').mockReturnValue(1000);
+    try {
+      window.location.search = '?acquisition_qa=1';
+      trackPageView();
+      const first = bodies()[0];
+      window.location.search = '';
+      clock.mockReturnValue(30 * 60 * 1000 + 2000);
+      trackPageView();
+      const last = bodies().at(-1)!;
+      expect(last.sessionId).not.toBe(first.sessionId);
+      expect(last.properties.manual_qa).toBe(false);
+      expect(window.sessionStorage.getItem('suneng_manual_qa_session_v1')).toBeNull();
+    } finally { clock.mockRestore(); }
+  });
+
+  it('starts another QA visit after expiry if the page still explicitly asks for QA', () => {
+    const clock = vi.spyOn(Date, 'now').mockReturnValue(1000);
+    try {
+      window.location.search = '?acquisition_qa=1';
+      trackPageView();
+      const first = bodies()[0];
+      clock.mockReturnValue(30 * 60 * 1000 + 2000);
+      trackPageView();
+      const last = bodies().at(-1)!;
+      expect(last.sessionId).not.toBe(first.sessionId);
+      expect(last.properties.manual_qa).toBe(true);
+    } finally { clock.mockRestore(); }
+  });
+
+  it('marks every event and reserves one of the 24 property slots', () => {
+    window.location.search = '?acquisition_qa=1';
+    const crowded = Object.fromEntries(Array.from({ length: 30 }, (_, i) => [`key${i}`, i]));
+    for (const type of ['page_view', 'phone_click', 'wechat_click', 'contact_action', 'dwell_20s'] as const) {
+      trackLeadEvent(type, { properties: { ...crowded, manual_qa: 'unsafe-value', ' manual_qa ': 'unsafe-alias' } });
+    }
+    for (const body of bodies()) {
+      expect(body.properties.manual_qa).toBe(true);
+      expect(Object.keys(body.properties).length).toBeLessThanOrEqual(24);
+      expect(JSON.stringify(body.properties)).not.toContain('unsafe-');
+    }
+  });
+
+  it.each(['?acquisition_qa=', '?acquisition_qa=two+words', '?acquisition_qa=中文', `?acquisition_qa=${'x'.repeat(81)}`, '?acquisition_qa=1&acquisition_qa=2'])('does not label an invalid token as QA: %s', (search) => {
+    window.location.search = search;
+    trackPageView();
+    expect(bodies()[0].properties.manual_qa).toBe(false);
+    expect(window.sessionStorage.getItem('suneng_manual_qa_session_v1')).toBeNull();
+  });
+});

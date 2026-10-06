@@ -1,4 +1,4 @@
-import { buildLeadSourceSnapshot, trackLeadEvent } from '@/lib/api/lead-events';
+import { buildLeadSourceSnapshot, captureLeadEventProperties, trackLeadEvent } from '@/lib/api/lead-events';
 
 export type ContactKind = 'phone' | 'wechat' | 'email';
 export type ContactPurpose = 'sales' | 'after_sales' | 'general';
@@ -10,7 +10,8 @@ export function captureContactContext(
 ): ContactTrackingContext {
   const { properties, ...source } = context;
   try {
-    return { ...buildLeadSourceSnapshot(source), properties };
+    const snapshot = buildLeadSourceSnapshot(source);
+    return { ...snapshot, properties: captureLeadEventProperties(properties, snapshot) };
   } catch {
     return context;
   }
