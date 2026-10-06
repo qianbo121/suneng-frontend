@@ -61,12 +61,12 @@ describe('Baidu statistics public build identifier', () => {
 
   it.each(['', 'disabled', fixtureTongjiId, fixtureTongjiId.toUpperCase()])('accepts the permitted public value %j in the actual Docker guard', (value) => {
     expect(tongjiGuard).toBeTruthy();
-    const result = spawnSync(process.execPath, ['-e', tongjiGuard!], { env: { [tongjiName]: value }, encoding: 'utf8' });
+    const result = spawnSync(process.execPath, ['-e', tongjiGuard!], { env: { NODE_ENV: 'test', [tongjiName]: value }, encoding: 'utf8' });
     expect(result.status).toBe(0);
   });
 
   it.each(['a'.repeat(31), 'a'.repeat(33), 'g'.repeat(32), 'disabled ', 'false', ` ${fixtureTongjiId}`, 'https://hm.baidu.com/hm.js?value', '";globalThis.injected=true;//'])('rejects an invalid value without echoing it: %j', (value) => {
-    const result = spawnSync(process.execPath, ['-e', tongjiGuard!], { env: { [tongjiName]: value }, encoding: 'utf8' });
+    const result = spawnSync(process.execPath, ['-e', tongjiGuard!], { env: { NODE_ENV: 'test', [tongjiName]: value }, encoding: 'utf8' });
     expect(result.status).not.toBe(0);
     expect(result.stderr).toContain('Invalid public Baidu Tongji identifier');
     expect(result.stderr).not.toContain(value);
@@ -78,6 +78,7 @@ describe('Baidu statistics public build identifier', () => {
     const script = 'docker() { printf "%s\n" "$@"; }\nbash() { :; }\n' + candidateBuildScript(workflow);
     const result = spawnSync('/bin/bash', ['-c', script], {
       env: {
+        NODE_ENV: 'test',
         COMPONENT: component,
         [tongjiName]: fixtureTongjiId,
         NEXT_PUBLIC_BAIDU_SITE_VERIFICATION: '',
