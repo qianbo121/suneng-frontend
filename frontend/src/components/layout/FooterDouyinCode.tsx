@@ -1,11 +1,10 @@
 'use client';
 
-import { useId } from 'react';
+// The site footer renders this cutout once per page; keep its SVG reference stable across hydration.
+const FOOTER_DOUYIN_CLIP_ID = 'suneng-footer-douyin-code-clip';
 
 /** Display-only cutout: retain the original Douyin code pixels, never redraw the code. */
 export function FooterDouyinCode({ label }: { label: string }) {
-  const clipId = useId();
-
   return (
     <svg
       data-douyin-code
@@ -17,7 +16,7 @@ export function FooterDouyinCode({ label }: { label: string }) {
       className="h-full w-full"
     >
       <defs>
-        <clipPath id={clipId}>
+        <clipPath id={FOOTER_DOUYIN_CLIP_ID}>
           <circle cx="609" cy="650" r="388" />
           <circle cx="846" cy="414" r="91" />
         </clipPath>
@@ -26,7 +25,7 @@ export function FooterDouyinCode({ label }: { label: string }) {
         href="/images/footer/douyin-code-original-20260907.png"
         width="1219"
         height="1820"
-        clipPath={`url(#${clipId})`}
+        clipPath={`url(#${FOOTER_DOUYIN_CLIP_ID})`}
       />
     </svg>
   );
