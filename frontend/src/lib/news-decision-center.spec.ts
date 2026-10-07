@@ -3,10 +3,12 @@ import type { NewsListCardItem } from '@/types/news';
 import {
   buildNewsDecisionHref,
   filterAndSortNewsDecisionItems,
+  getNewsDecisionDisplayMeta,
   getNewsFurnaceFilters,
   isFeaturedNewsPage,
 } from './news-decision-center';
 import { applyNewsListCopy, cleanNewsListSummary } from './news-list-copy';
+import { toNewsListLiteCards } from './news-list-client';
 
 function article(
   id: number,
@@ -26,6 +28,79 @@ function article(
     category: { zh: '技术资料', en: '' },
   };
 }
+
+// Original identities and titles from the seven reviewed public articles.
+const reviewedFurnaceArticles = [
+  [132, 'mesh-belt-quenching-furnace-principle-process-checklist', '网带淬火炉怎么工作？工艺温度和故障处理先看哪些条件', 'mesh-belt'],
+  [107, 'cold-coiled-compression-spring-stress-relief-furnace-manufacturers', '我们冷卷压簧要去应力回火，准备买网带回火炉，能推荐几家厂家吗？', 'mesh-belt'],
+  [106, 'grade-10-nut-mesh-belt-line-capability', '10级螺母采购网带调质线，怎么判断厂家有没有同类能力？', 'mesh-belt'],
+  [105, 'carbon-steel-self-drilling-screw-carburizing-line-selection', '碳钢自钻螺钉做渗碳淬火，选网带线厂家要核对什么？', 'mesh-belt'],
+  [100, 'self-tapping-screw-carbonitriding-line-selection', '自攻螺钉碳氮共渗网带线怎么选？先核对层深、心部和连续产量', 'mesh-belt'],
+  [99, 'bolt-mesh-belt-quench-temper-capability', '8.8级和10.9级螺栓买网带调质线，怎么判断厂家有没有同类能力？', 'mesh-belt'],
+  [115, 'titanium-alloy-thick-plate-roller-hearth-furnace-selection', '钛合金厚板加热炉怎么选？先把板材组合排进辊道炉', 'roller-hearth'],
+] as const;
+
+describe('reviewed furnace classification repairs', () => {
+  it.each(reviewedFurnaceArticles)('includes reviewed article %i without changing its presentation', (id, slug, title, furnace) => {
+    const item = { ...article(id, 1, '2026-09-28', title), slug };
+    expect(getNewsFurnaceFilters(item)).toEqual([furnace]);
+    expect(getNewsFurnaceFilters({ ...item, listFurnaces: [] })).toEqual([furnace]);
+    expect(filterAndSortNewsDecisionItems([item], { furnace })).toEqual([item]);
+    expect(getNewsDecisionDisplayMeta(item).furnaceLabel).toBe(
+      furnace === 'mesh-belt' ? '网带炉' : '辊底炉',
+    );
+    expect(item.title.zh).toBe(title);
+    expect(item.slug).toBe(slug);
+    expect(item.date).toBe('2026-09-28');
+  });
+
+  it.each(reviewedFurnaceArticles)('requires article %i identity and original title together', (id, slug, title) => {
+    const item = { ...article(id, 1, '2026-09-28', title), slug };
+    for (const changed of [
+      { ...item, id: 99999 },
+      { ...item, slug: `${slug}-other` },
+      { ...item, title: { ...item.title, zh: `${title}（已修订）` } },
+    ]) {
+      expect(getNewsFurnaceFilters(changed)).toEqual([]);
+      expect(getNewsFurnaceFilters({ ...changed, listFurnaces: [] })).toEqual([]);
+    }
+    const retitled = { ...item, title: { ...item.title, zh: '井式炉和台车炉怎么选？' } };
+    expect(getNewsFurnaceFilters(retitled)).toEqual(['trolley', 'pit']);
+  });
+
+  it.each(reviewedFurnaceArticles)('keeps nonempty editorial classification ahead of repair %i', (id, slug, title) => {
+    const item: NewsListCardItem = {
+      ...article(id, 1, '2026-09-28', title),
+      slug,
+      listFurnaces: ['pit', 'box'],
+    };
+    expect(getNewsFurnaceFilters(item)).toBe(item.listFurnaces);
+    expect(getNewsFurnaceFilters(item)).toEqual(['pit', 'box']);
+  });
+
+  it.each(reviewedFurnaceArticles)('retains repaired article %i after trimming for client filters', (id, slug, title, furnace) => {
+    const item = { ...article(id, 1, '2026-09-28', title), slug, listFurnaces: [] };
+    for (const locale of ['zh', 'en'] as const) {
+      const [lite] = toNewsListLiteCards([item], locale);
+      expect(getNewsFurnaceFilters(lite)).toEqual([furnace]);
+      expect(filterAndSortNewsDecisionItems([lite], { furnace })).toEqual([lite]);
+      expect(lite.slug).toBe(slug);
+      expect(lite.date).toBe(item.date);
+    }
+  });
+
+  it('keeps the existing cross-furnace article 110 and empty unrelated classifications', () => {
+    const comparison = {
+      ...article(110, 1, '2026-09-29', '长螺栓调质怕弯，选井式炉还是网带炉？'),
+      slug: 'long-bolt-quench-temper-pit-mesh-belt-furnace-selection',
+    };
+    expect(getNewsFurnaceFilters(comparison)).toEqual(['mesh-belt', 'pit']);
+    expect(getNewsDecisionDisplayMeta(comparison).furnaceLabel).toBe('网带炉 / 井式炉');
+    const [lite] = toNewsListLiteCards([comparison], 'zh');
+    expect(getNewsFurnaceFilters(lite)).toEqual(['mesh-belt', 'pit']);
+    expect(getNewsFurnaceFilters({ ...article(99999), listFurnaces: [] })).toEqual([]);
+  });
+});
 
 describe('resource center sorting contract', () => {
   it('sorts the whole matching set before pagination, never pins a quote article', () => {
