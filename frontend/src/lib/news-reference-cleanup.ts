@@ -15,6 +15,7 @@ const APPROVED_ARTICLES: Record<number, string> = {
 };
 
 const WITHDRAWN_CASE_URL = 'https://www.jssngyl.cn/zh/case/anonymous-tsingshan-1250-renovation';
+const WITHDRAWN_CASE_GUIDANCE = '历史方案如何划分改造范围，以及能源测算有哪些条件，可参考某不锈钢企业的连续退火/退洗线节能改造案例（见文末）。';
 
 /** Run after reviewed Chinese and fingerprint-checked English copy overlays. */
 export function applyNewsReferenceCleanup(item: NewsApiItem): NewsApiItem {
@@ -31,6 +32,8 @@ export function applyNewsReferenceCleanup(item: NewsApiItem): NewsApiItem {
     : `<p>某不锈钢企业 1250mm 三线节能改造案例：${WITHDRAWN_CASE_URL}</p>`;
   // Match only the approved literal block; never rewrite a later CMS paragraph
   // with changed structure, wording, links or other editorial content.
-  const contentZh = item.contentZh.replace(reference, '');
+  let contentZh = item.contentZh.replace(reference, '');
+  // Only article 26's approved literal sentence points to the removed case.
+  if (item.id === 26) contentZh = contentZh.replace(WITHDRAWN_CASE_GUIDANCE, '');
   return contentZh === item.contentZh ? item : { ...item, contentZh };
 }

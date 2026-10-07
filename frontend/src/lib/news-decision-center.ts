@@ -103,7 +103,55 @@ export function getNewsDecisionTopic(item: NewsListCardItem): NewsDecisionTopicI
   return 'quality';
 }
 
+// Reviewed repairs for seven existing articles whose original titles do not
+// match the generic furnace names below. Identity and title must all match;
+// edited or unrelated articles keep their existing classification rules.
+const reviewedMissingFurnaceFilters: Record<
+  number,
+  { slug: string; title: string; furnaces: NewsFurnaceFilterId[] }
+> = {
+  132: {
+    slug: 'mesh-belt-quenching-furnace-principle-process-checklist',
+    title: '网带淬火炉怎么工作？工艺温度和故障处理先看哪些条件',
+    furnaces: ['mesh-belt'],
+  },
+  107: {
+    slug: 'cold-coiled-compression-spring-stress-relief-furnace-manufacturers',
+    title: '我们冷卷压簧要去应力回火，准备买网带回火炉，能推荐几家厂家吗？',
+    furnaces: ['mesh-belt'],
+  },
+  106: {
+    slug: 'grade-10-nut-mesh-belt-line-capability',
+    title: '10级螺母采购网带调质线，怎么判断厂家有没有同类能力？',
+    furnaces: ['mesh-belt'],
+  },
+  105: {
+    slug: 'carbon-steel-self-drilling-screw-carburizing-line-selection',
+    title: '碳钢自钻螺钉做渗碳淬火，选网带线厂家要核对什么？',
+    furnaces: ['mesh-belt'],
+  },
+  100: {
+    slug: 'self-tapping-screw-carbonitriding-line-selection',
+    title: '自攻螺钉碳氮共渗网带线怎么选？先核对层深、心部和连续产量',
+    furnaces: ['mesh-belt'],
+  },
+  99: {
+    slug: 'bolt-mesh-belt-quench-temper-capability',
+    title: '8.8级和10.9级螺栓买网带调质线，怎么判断厂家有没有同类能力？',
+    furnaces: ['mesh-belt'],
+  },
+  115: {
+    slug: 'titanium-alloy-thick-plate-roller-hearth-furnace-selection',
+    title: '钛合金厚板加热炉怎么选？先把板材组合排进辊道炉',
+    furnaces: ['roller-hearth'],
+  },
+};
+
 export function getNewsFurnaceFilters(item: NewsListCardItem): NewsFurnaceFilterId[] {
+  if (item.listFurnaces?.length) return item.listFurnaces;
+  const reviewed = reviewedMissingFurnaceFilters[item.id];
+  if (reviewed?.slug === item.slug && reviewed.title === item.title.zh)
+    return [...reviewed.furnaces];
   if (item.listFurnaces) return item.listFurnaces;
   // A body may compare many furnace types. Do not classify by its first incidental mention.
   const text = item.title.zh;
