@@ -287,7 +287,7 @@ export function AboutZhContent({ locale = 'zh' }: { locale?: Locale }) {
                     alt={photo.alt}
                     fill
                     loading="lazy"
-                    sizes="(max-width: 767px) calc((100vw - 56px) / 2), 282px"
+                    sizes="(max-width: 1100px) calc((100vw - 56px) / 2), 282px"
                   />
                 </div>
                 <figcaption>{photo.caption}</figcaption>
