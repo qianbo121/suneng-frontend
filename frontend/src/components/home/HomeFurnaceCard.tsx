@@ -152,7 +152,7 @@ export function HomeFurnaceCard({ item: sourceItem, locale = 'zh' }: { item: Hom
             // Serve the compact matched assets at source resolution, like their reference row.
             unoptimized={Boolean(matchedImage)}
             fill
-            sizes="(max-width: 767px) 50vw, 25vw"
+            sizes="(max-width: 1023px) 50vw, 25vw"
             className={styles.furnaceImage}
             draggable={false}
           />

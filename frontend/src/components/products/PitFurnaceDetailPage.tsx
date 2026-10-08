@@ -264,7 +264,7 @@ export function PitFurnaceDetailPage({ locale = 'zh' }: { locale?: Locale }) {
                       src={card.image}
                       alt={card.alt}
                       fill
-                      sizes="(min-width: 1024px) 25vw, 100vw"
+                      sizes="(max-width: 640px) 100vw, (max-width: 1100px) 50vw, 25vw"
                     />
                   </div>
                   <div className={styles.solutionCardBody}>
@@ -459,7 +459,7 @@ export function PitFurnaceDetailPage({ locale = 'zh' }: { locale?: Locale }) {
                           src={image}
                           alt={alt}
                           fill
-                          sizes="(min-width: 1024px) 210px, 100vw"
+                          sizes="(max-width: 640px) 100vw, (max-width: 1100px) 33vw, 280px"
                         />
                       </div>
                       <h4>{title}</h4>

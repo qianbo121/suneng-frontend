@@ -66,7 +66,7 @@ export function PitFurnaceGallery({
               unoptimized={image.unoptimized}
               alt=""
               fill
-              sizes="(min-width: 1024px) 128px, 24vw"
+              sizes="(min-width: 1024px) 160px, 24vw"
               className={styles.galleryThumbImage}
             />
           </button>

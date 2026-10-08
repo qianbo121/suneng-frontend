@@ -180,7 +180,7 @@ export function FurnaceAnimation({
           src={fallback}
           alt=""
           fill
-          sizes="(max-width: 767px) 50vw, 25vw"
+          sizes="(max-width: 1023px) 50vw, 25vw"
           unoptimized={kind === 'pusher' || kind === 'mesh'}
           className={styles.fallback}
           aria-hidden="true"

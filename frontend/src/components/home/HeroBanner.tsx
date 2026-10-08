@@ -134,7 +134,8 @@ function PartnerLogoGroup({ duplicate = false, locale }: { duplicate?: boolean; 
           width={partner.width}
           height={partner.height}
           className={styles.logo}
-          sizes="(max-width: 767px) 34px, (max-width: 1024px) 38px, 40px"
+          quality={85}
+          sizes={`(max-width: 767px) ${Math.ceil((partner.width / partner.height) * 33)}px, (max-width: 1024px) ${Math.ceil((partner.width / partner.height) * 37)}px, ${Math.ceil((partner.width / partner.height) * 40)}px`}
         />
       ))}
     </div>
