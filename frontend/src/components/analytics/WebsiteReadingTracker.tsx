@@ -3,13 +3,17 @@
 import { usePathname } from 'next/navigation';
 import { useEffect } from 'react';
 
-import { installVisitorNatureTracking, startDwellTracking, trackPageView } from '@/lib/api/lead-events';
+import {
+  installVisitorNatureTracking,
+  startDwellTracking,
+  trackPageView,
+} from '@/lib/api/lead-events';
 
 export function WebsiteReadingTracker() {
   const pathname = usePathname();
 
   useEffect(() => {
-    installVisitorNatureTracking();
+    return installVisitorNatureTracking();
   }, []);
 
   useEffect(() => {

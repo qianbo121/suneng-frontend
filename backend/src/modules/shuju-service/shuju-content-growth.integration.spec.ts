@@ -14,6 +14,7 @@ integration('content growth against PostgreSQL', () => {
   const range = { startDate: '2026-09-14', endDate: '2026-09-15' };
   const articleA = '/zh/news/acceptance';
   const articleB = '/zh/news/energy';
+  const automationRange = { startDate: '2026-10-02', endDate: '2026-10-07' };
   let nextId = 1;
   let event: (
     type: string,
@@ -149,6 +150,76 @@ integration('content growth against PostgreSQL', () => {
       sourceType: '自然搜索',
       sourceDetail: 'www.baidu.com',
     });
+    // A historical marker outside the selected date, language and source still applies
+    // to this visit. The same visitor's later, separate normal visit must survive.
+    await event('automation_signal', '/en/history', 'marked-session', '2026-09-20T01:00:00Z', {
+      visitorId: 'shared-visitor',
+      sourceType: '外部链接',
+      sourceDetail: 'example.com',
+    });
+    const trafficVisit = async (
+      session: string,
+      at: string,
+      extra: Record<string, unknown> = {},
+    ) => {
+      for (const type of [
+        'page_view',
+        'dwell_5s',
+        'dwell_20s',
+        'effective_interaction',
+        'phone_click',
+      ]) {
+        await event(type, '/zh/news/statistics-' + session, session, at, {
+          landingPage: '/zh/news/statistics-' + session,
+          visitorId: 'shared-visitor',
+          ...extra,
+        });
+      }
+    };
+    await trafficVisit('marked-session', '2026-10-02T01:00:00Z');
+    await event('form_submit', '/zh/inquiry', 'marked-session', '2026-10-02T01:02:00Z', {
+      submissionId: '00000000-0000-4000-8000-000000000004',
+      visitorId: 'shared-visitor',
+      userAgent: null,
+      properties: { automationDetected: true },
+    });
+    await trafficVisit('real-session', '2026-10-03T01:00:00Z');
+    // A property on any successfully recorded event works if a standalone marker was lost.
+    await event('page_view', '/en/property-marker', 'property-session', '2026-10-01T01:00:00Z', {
+      properties: { automationDetected: true },
+      sourceType: '外部链接',
+    });
+    await trafficVisit('property-session', '2026-10-04T01:00:00Z');
+    // Later evidence must correct an earlier visit as well, without changing its raw rows.
+    await trafficVisit('later-marked-session', '2026-10-05T01:00:00Z');
+    await event(
+      'automation_signal',
+      '/en/later-marker',
+      'later-marked-session',
+      '2026-10-08T01:00:00Z',
+    );
+    await trafficVisit('known-bot-session', '2026-10-06T01:00:00Z', { userAgent: 'Googlebot' });
+    // Empty identifiers cannot connect unrelated records into one automated session.
+    await event('automation_signal', '/en/empty-marker', '', '2026-10-01T02:00:00Z');
+    await event('automation_signal', '/en/null-marker', null, '2026-10-01T02:01:00Z');
+    await event('page_view', '/zh/news/statistics-empty', '', '2026-10-07T01:00:00Z', {
+      visitorId: 'empty-session-visitor',
+      landingPage: '/zh/news/statistics-empty',
+    });
+    await event('page_view', '/zh/news/statistics-null', null, '2026-10-07T01:01:00Z', {
+      visitorId: 'null-session-visitor',
+      landingPage: '/zh/news/statistics-null',
+    });
+    await event(
+      'page_view',
+      '/zh/news/statistics-property-without-session',
+      null,
+      '2026-10-07T01:02:00Z',
+      {
+        visitorId: 'automated-unknown-session',
+        properties: { automationDetected: true },
+      },
+    );
     service = new ShujuGrowthReadService({
       $queryRaw: (sql: { text: string; values: unknown[] }) =>
         client.query(sql.text, sql.values).then((result: { rows: unknown[] }) => result.rows),
@@ -640,5 +711,48 @@ integration('content growth against PostgreSQL', () => {
       pending: 0,
       unknown: 0,
     });
+  });
+
+  it('excludes marked visits across history while keeping other visits, unknown ids and real submissions', async () => {
+    const result = await service.overview(automationRange);
+    expect(result.eventCounts.page_view).toEqual({ events: 3, visitors: 3, sessions: 3 });
+    expect(result.eventCounts.dwell_20s).toEqual({ events: 1, visitors: 1, sessions: 1 });
+    expect(result.eventCounts.phone_click).toEqual({ events: 1, visitors: 1, sessions: 1 });
+    expect(result.eventCounts.form_submit).toEqual({ events: 1, visitors: 1, sessions: 1 });
+    expect(result.quality.effectiveVisitors).toBe(1);
+    expect(result.botFiltered).toEqual(expect.objectContaining({ visitors: 1, events: 1 }));
+    expect(
+      result.daily.filter((row) => row.eventType === 'page_view').map((row) => row.events),
+    ).toEqual([0, 1, 0, 0, 0, 2]);
+    expect(result.sources.reduce((total, row) => total + row.pageViews, 0)).toBe(3);
+    expect(result.pages.reduce((total, row) => total + row.pageViews, 0)).toBe(3);
+    expect(result.content.entryVisits).toBe(1);
+    expect(result.content.unidentifiedPageViews).toBe(2);
+    expect(result.content.submissions).toBe(1);
+    expect(result.content.unlinkedSubmissions).toBe(1);
+    expect(
+      result.content.pages!.find((row) => row.pagePath === '/zh/inquiry')!.directSubmissions,
+    ).toBe(1);
+    expect(
+      result.content.pages!.some((row) => /marked|property|known-bot/.test(row.pagePath)),
+    ).toBe(false);
+  });
+
+  it('uses the same session exclusion with date, language, source and content filters', async () => {
+    const result = await service.overview({
+      ...automationRange,
+      site: 'zh',
+      sourceType: 'AI引流',
+      pageType: '文章页',
+    });
+    expect(result.eventCounts.page_view.events).toBe(3);
+    expect(result.content.entryVisits).toBe(1);
+    expect(result.content.pages!.map((row) => row.pagePath).sort()).toEqual([
+      '/zh/news/statistics-empty',
+      '/zh/news/statistics-null',
+      '/zh/news/statistics-real-session',
+    ]);
+    // Reads made after the successful submission in another visit never recreate attribution.
+    expect(result.content.submissions).toBe(0);
   });
 });

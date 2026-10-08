@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { Prisma } from '@prisma/client';
 import { Request } from 'express';
 
 import {
@@ -82,14 +83,30 @@ export class LeadEventService {
     const region = resolveVisitorRegion(rawIp);
     const regionSource = region.province ? 'exact_ip' : null;
     const properties = cleanProperties(dto.properties);
-    await this.prisma.$executeRaw`
+    const savedProperties = properties ? (JSON.parse(properties) as Record<string, unknown>) : {};
+    const candidateId = savedProperties.collectionId;
+    const collectionId =
+      typeof candidateId === 'string' && /^[A-Za-z0-9][A-Za-z0-9._:-]{0,119}$/.test(candidateId)
+        ? candidateId
+        : null;
+    const sessionId = clean(dto.sessionId, 120);
+    const duplicateGuard =
+      collectionId && sessionId
+        ? Prisma.sql`NOT EXISTS (
+            SELECT 1 FROM "WebsiteLeadEvent" prior
+            WHERE prior."sessionId" = ${sessionId}
+              AND prior."eventType" = ${dto.eventType}
+              AND prior."properties" ->> 'collectionId' = ${collectionId}
+          )`
+        : Prisma.sql`TRUE`;
+    const insert = (database: Pick<PrismaService, '$executeRaw'>) => database.$executeRaw`
       INSERT INTO "WebsiteLeadEvent" (
         "eventType", "pageTitle", "pagePath", "pageType", "productTag",
         "sourceType", "sourceDetail", "searchKeyword", "deviceType", "landingPage",
         "previousPage", "utmSource", "utmMedium", "utmCampaign", "discoverySource",
         "sessionId", "visitorId", "ipMasked", "userAgent", "province", "city", "regionSource",
         "properties"
-      ) VALUES (
+      ) SELECT
         ${dto.eventType},
         ${clean(dto.pageTitle, 255)},
         ${clean(dto.pagePath, 500)},
@@ -105,7 +122,7 @@ export class LeadEventService {
         ${clean(dto.utmMedium, 120)},
         ${clean(dto.utmCampaign, 255)},
         ${clean(dto.discoverySource, 120)},
-        ${clean(dto.sessionId, 120)},
+        ${sessionId},
         ${clean(dto.visitorId, 120)},
         ${ipMasked},
         ${clean(headerText(request.headers['user-agent']), 500)},
@@ -113,8 +130,26 @@ export class LeadEventService {
         ${region.city},
         ${regionSource},
         ${properties}::jsonb
-      )
+      WHERE ${duplicateGuard}
     `;
+    if (collectionId && sessionId) {
+      // Lock and insert are separate statements so a retry sees the preceding
+      // transaction's committed row even when its HTTP response was lost.
+      // No new persistent table or index is required; lookup uses sessionId.
+      await this.prisma.$transaction(
+        async (database) => {
+          const key = JSON.stringify(['website-lead', sessionId, dto.eventType, collectionId]);
+          await database.$queryRaw`
+            SELECT pg_advisory_xact_lock(hashtextextended(${key}, 0))::text AS locked
+          `;
+          await insert(database);
+        },
+        { isolationLevel: Prisma.TransactionIsolationLevel.ReadCommitted },
+      );
+    } else {
+      // Existing clients without a collection ID retain their original contract.
+      await insert(this.prisma);
+    }
     return { ok: true };
   }
 

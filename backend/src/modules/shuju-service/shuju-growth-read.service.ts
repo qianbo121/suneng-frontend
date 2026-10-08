@@ -5,6 +5,11 @@ import { ShujuGrowthReadQueryDto } from '@/modules/shuju-service/dto/shuju-growt
 import { ShujuGrowthOverviewDto, validateInquiryReview } from './dto/shuju-growth-overview.dto';
 import { OperatingSource, readContentGrowth } from '@/modules/shuju-service/shuju-content-growth';
 import { PrismaService } from '@/prisma/prisma.service';
+import {
+  allowedTraffic,
+  readAutomatedSessions,
+  readTrafficCoverageStart,
+} from '@/modules/shuju-service/shuju-traffic-filter';
 
 type CountRow = {
   eventType: string;
@@ -85,7 +90,6 @@ type FunnelRow = {
   stepCompletedVisitors: bigint;
   submissionVisitors: bigint;
 };
-type TrackingCoverageRow = { trackingStartAt: Date | string | null };
 type BotRow = { visitors: bigint; events: bigint };
 type QualityRow = { visitors: bigint; sessions: bigint; pageViews: bigint };
 type PageFunnelRow = {
@@ -111,7 +115,6 @@ const BOT_PATTERN =
 // 不再每次查询重跑 BOT_PATTERN。本页十八条聚合原先各跑一遍正则：30 天区间实测
 // 扫表 3ms、聚合 75ms、正则 710ms，正则占单条查询的 99.6%。
 // BOT_PATTERN 仍保留：它是这一列的口径来源，改动必须同时新写一条迁移。
-const NOT_BOT = Prisma.sql`NOT "isBot"`;
 
 // 有效访问口径：同一次访问必须同时出现“前台累计停留 20 秒”和
 // “真实滑动或点击”。两个信号都只是筛选条件，不宣称能证明绝对真人。
@@ -233,28 +236,20 @@ export class ShujuGrowthReadService {
   async overview(query: ShujuGrowthOverviewDto) {
     validateInquiryReview(query.inquiryReview);
     const { start, endExclusive, days } = dateRange(query);
-    const [trackingCoverage, dwellCoverage] = await Promise.all([
-      this.prisma.$queryRaw<TrackingCoverageRow[]>(Prisma.sql`
-      SELECT MIN("createdAt") AS "trackingStartAt"
-      FROM "WebsiteLeadEvent"
-      WHERE "eventType" = 'page_view' AND ${NOT_BOT}
-    `),
-      // 停留时长 2026-08-19 才上线，比埋点晚得多。
-      // 不显式列举而写 LIKE 'dwell_%' 会踩坑：LIKE 里的下划线是单字符通配符。
-      this.prisma.$queryRaw<TrackingCoverageRow[]>(Prisma.sql`
-      SELECT MIN("createdAt") AS "trackingStartAt"
-      FROM "WebsiteLeadEvent"
-      WHERE "eventType" IN ('dwell_5s', 'dwell_20s', 'dwell_60s', 'dwell_180s') AND ${NOT_BOT}
-    `),
+    const automatedSessions = await readAutomatedSessions(this.prisma, start, endExclusive);
+    const NOT_BOT = allowedTraffic('WebsiteLeadEvent', automatedSessions, true);
+    const [trackingStartAt, dwellStartAt] = await Promise.all([
+      readTrafficCoverageStart(this.prisma, ['page_view'], true),
+      readTrafficCoverageStart(
+        this.prisma,
+        ['dwell_5s', 'dwell_20s', 'dwell_60s', 'dwell_180s'],
+        true,
+      ),
     ]);
-    const trackingStartValue = trackingCoverage[0]?.trackingStartAt;
-    const trackingStartAt = trackingStartValue ? new Date(trackingStartValue) : null;
     const hasTrackingStart = Boolean(trackingStartAt && !Number.isNaN(trackingStartAt.getTime()));
     const trackingAvailableInRange = Boolean(
       hasTrackingStart && trackingStartAt!.getTime() < endExclusive.getTime(),
     );
-    const dwellStartValue = dwellCoverage[0]?.trackingStartAt;
-    const dwellStartAt = dwellStartValue ? new Date(dwellStartValue) : null;
     const hasDwellStart = Boolean(dwellStartAt && !Number.isNaN(dwellStartAt.getTime()));
     const comparableStart = trackingAvailableInRange
       ? new Date(Math.max(start.getTime(), trackingStartAt!.getTime()))
@@ -315,7 +310,7 @@ export class ShujuGrowthReadService {
       FROM "WebsiteLeadEvent" q
       WHERE q."eventType" IN ('effective_interaction', 'dwell_20s')
         AND q."createdAt" >= ${qualityStart} AND q."createdAt" < ${endExclusive}
-        AND NOT q."isBot"
+        AND ${allowedTraffic('q', automatedSessions, true)}
       GROUP BY COALESCE(NULLIF(q."sessionId", ''), NULLIF(q."visitorId", ''), 'event:' || q."id"::text)
       HAVING COUNT(*) FILTER (WHERE q."eventType" = 'effective_interaction') > 0
          AND COUNT(*) FILTER (WHERE q."eventType" = 'dwell_20s') > 0
@@ -668,7 +663,7 @@ export class ShujuGrowthReadService {
         dimensionWhere: contentDimensionFilters.length
           ? Prisma.join(contentDimensionFilters, ' AND ')
           : Prisma.sql`TRUE`,
-        notBot: NOT_BOT,
+        trafficFilter: (alias: string) => allowedTraffic(alias, automatedSessions, true),
         verified: VERIFIED_EVENT,
         sourceType: NORMALIZED_SOURCE_TYPE,
         sourceDetail: NORMALIZED_SOURCE_DETAIL,

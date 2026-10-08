@@ -51,40 +51,39 @@ describe('reading and contact events when browser storage is restricted', () => 
     vi.unstubAllGlobals();
   });
 
-  it.each([
-    ['sessionStorage'],
-    ['localStorage'],
-    ['sessionStorage', 'localStorage'],
-  ])('survives a SecurityError from storage property getters: %s', (...names) => {
-    for (const name of names) {
-      Object.defineProperty(window, name, {
-        configurable: true,
-        get() {
-          throw new DOMException('Storage access denied', 'SecurityError');
-        },
-      });
-    }
+  it.each([['sessionStorage'], ['localStorage'], ['sessionStorage', 'localStorage']])(
+    'survives a SecurityError from storage property getters: %s',
+    (...names) => {
+      for (const name of names) {
+        Object.defineProperty(window, name, {
+          configurable: true,
+          get() {
+            throw new DOMException('Storage access denied', 'SecurityError');
+          },
+        });
+      }
 
-    expect(buildLeadSourceSnapshot()).toMatchObject({
-      pageTitle: '联系苏能',
-      pagePath: '/zh/contact?utm_source=baidu',
-      sourceType: '自然搜索',
-      utmSource: 'baidu',
-    });
-    expect(() => {
-      installVisitorNatureTracking();
-      trackPageView();
-      tickDwell();
-      trackLeadEvent('phone_click');
-      startDwellTracking()();
-    }).not.toThrow();
-    const eventTypes = vi.mocked(apiPost).mock.calls.map(([, options]) =>
-      (options?.body as { eventType: string }).eventType,
-    );
-    expect(eventTypes).toContain('page_view');
-    expect(eventTypes).toContain('phone_click');
-    expect(window.clearInterval).toHaveBeenCalledWith(7);
-  });
+      expect(buildLeadSourceSnapshot()).toMatchObject({
+        pageTitle: '联系苏能',
+        pagePath: '/zh/contact?utm_source=baidu',
+        sourceType: '自然搜索',
+        utmSource: 'baidu',
+      });
+      expect(() => {
+        installVisitorNatureTracking();
+        trackPageView();
+        tickDwell();
+        trackLeadEvent('phone_click');
+        startDwellTracking()();
+      }).not.toThrow();
+      const eventTypes = vi
+        .mocked(apiPost)
+        .mock.calls.map(([, options]) => (options?.body as { eventType: string }).eventType);
+      expect(eventTypes).toContain('page_view');
+      expect(eventTypes).toContain('phone_click');
+      expect(window.clearInterval).toHaveBeenCalledWith(7);
+    },
+  );
 
   it('also survives storage method failures after the getter succeeds', () => {
     for (const storage of [window.sessionStorage, window.localStorage]) {
@@ -102,47 +101,97 @@ describe('reading and contact events when browser storage is restricted', () => 
   });
 });
 
-
 describe('manual QA when session storage is unavailable', () => {
   function manualQaValues() {
-    return vi.mocked(apiPost).mock.calls.map(([, options]) =>
-      (options?.body as { properties: { manual_qa: boolean } }).properties.manual_qa);
+    return vi
+      .mocked(apiPost)
+      .mock.calls.map(
+        ([, options]) =>
+          (options?.body as { properties: { manual_qa: boolean } }).properties.manual_qa,
+      );
   }
   beforeEach(() => {
     vi.mocked(apiPost).mockReset().mockResolvedValue({});
     vi.stubGlobal('window', {
       location: { pathname: '/zh', search: '?acquisition_qa=1', hostname: 'www.jssngyl.cn' },
-      sessionStorage: storageMock(), localStorage: storageMock(), matchMedia: () => ({ matches: false }),
+      sessionStorage: storageMock(),
+      localStorage: storageMock(),
+      matchMedia: () => ({ matches: false }),
     });
     vi.stubGlobal('document', { title: '工业炉', referrer: '' });
   });
   afterEach(() => vi.unstubAllGlobals());
 
-  it.each(['getter', 'method'])('marks the current page and client navigation despite a storage %s failure', (failure) => {
-    if (failure === 'getter') Object.defineProperty(window, 'sessionStorage', { configurable: true, get() { throw new DOMException('denied', 'SecurityError'); } });
-    else window.sessionStorage.getItem = () => { throw new DOMException('denied', 'SecurityError'); };
-    trackPageView();
-    window.location.search = '';
-    window.location.pathname = '/zh/contact';
-    trackLeadEvent('phone_click');
-    expect(manualQaValues().every(Boolean)).toBe(true);
-  });
+  it.each(['getter', 'method'])(
+    'marks the current page and client navigation despite a storage %s failure',
+    (failure) => {
+      if (failure === 'getter')
+        Object.defineProperty(window, 'sessionStorage', {
+          configurable: true,
+          get() {
+            throw new DOMException('denied', 'SecurityError');
+          },
+        });
+      else
+        window.sessionStorage.getItem = () => {
+          throw new DOMException('denied', 'SecurityError');
+        };
+      trackPageView();
+      window.location.search = '';
+      window.location.pathname = '/zh/contact';
+      trackLeadEvent('phone_click');
+      expect(manualQaValues().every(Boolean)).toBe(true);
+    },
+  );
 
   it('transfers an in-memory QA marker when storage becomes available again', () => {
-    Object.defineProperty(window, 'sessionStorage', { configurable: true, get() { throw new DOMException('denied', 'SecurityError'); } });
+    Object.defineProperty(window, 'sessionStorage', {
+      configurable: true,
+      get() {
+        throw new DOMException('denied', 'SecurityError');
+      },
+    });
     trackPageView();
+    const firstSession = (vi.mocked(apiPost).mock.calls[0][1]?.body as { sessionId?: string })
+      .sessionId;
+    expect(firstSession).toBeTruthy();
     window.location.search = '';
     Object.defineProperty(window, 'sessionStorage', { configurable: true, value: storageMock() });
     trackLeadEvent('wechat_click');
     expect(manualQaValues().every(Boolean)).toBe(true);
-    expect(window.sessionStorage.getItem('suneng_manual_qa_session_v1')).toBe(window.sessionStorage.getItem('suneng_session_id'));
+    expect(window.sessionStorage.getItem('suneng_session_id')).toBe(firstSession);
+    expect(window.sessionStorage.getItem('suneng_manual_qa_session_v1')).toBe(firstSession);
+    // Restored writes must also survive a complete page navigation without the token.
+    vi.stubGlobal('window', {
+      ...window,
+      location: { pathname: '/zh/contact', search: '', hostname: 'www.jssngyl.cn' },
+    });
+    trackPageView();
+    const last = vi.mocked(apiPost).mock.calls.at(-1)?.[1]?.body as {
+      sessionId?: string;
+      properties: { manual_qa: boolean };
+    };
+    expect(last).toMatchObject({ sessionId: firstSession, properties: { manual_qa: true } });
   });
 
   it('documents the full-reload boundary: denied storage cannot restore a missing token', () => {
-    Object.defineProperty(window, 'sessionStorage', { configurable: true, get() { throw new DOMException('denied', 'SecurityError'); } });
+    Object.defineProperty(window, 'sessionStorage', {
+      configurable: true,
+      get() {
+        throw new DOMException('denied', 'SecurityError');
+      },
+    });
     trackPageView();
-    vi.stubGlobal('window', { location: { pathname: '/zh/contact', search: '', hostname: 'www.jssngyl.cn' }, matchMedia: () => ({ matches: false }) });
-    Object.defineProperty(window, 'sessionStorage', { configurable: true, get() { throw new DOMException('denied', 'SecurityError'); } });
+    vi.stubGlobal('window', {
+      location: { pathname: '/zh/contact', search: '', hostname: 'www.jssngyl.cn' },
+      matchMedia: () => ({ matches: false }),
+    });
+    Object.defineProperty(window, 'sessionStorage', {
+      configurable: true,
+      get() {
+        throw new DOMException('denied', 'SecurityError');
+      },
+    });
     trackPageView();
     expect(manualQaValues()).toEqual([true, false]);
   });
