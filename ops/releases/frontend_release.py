@@ -474,25 +474,32 @@ class Release:
 
     def replace_frontend(self, override=None):
         # The historical method name is kept for frontend-only callers and tests.
-        compose_env = self.env
-        if override is not None and self.components == ['frontend']:
-            # This branch restores the recorded old image, not merely a file
-            # named "previous". Never label it with the failed candidate source.
+        recovery_envs = {}
+        if override is not None:
+            # Verify every selected old image/source before switching any service.
+            # Components may have been released from different source commits.
             try:
                 material = json.loads(Path(override).read_text())
-                old_image = self.receipt['images']['frontend']
-                if material['services']['frontend']['image'] != old_image:
-                    raise ValueError('Recovery override does not select the recorded old frontend')
-                previous = self.receipt.get('frontendRelease') or {}
-                if 'image' in previous and previous['image'] != old_image:
-                    raise ValueError('Previous frontend source record names another image')
+                for service in self.components:
+                    old_image = self.receipt['images'][service]
+                    if material['services'][service]['image'] != old_image:
+                        raise ValueError('Recovery override does not select the recorded old ' + service)
+                    previous = self.receipt.get(service + 'Release') or {}
+                    if not isinstance(previous, dict):
+                        raise ValueError('Previous source record is invalid')
+                    legacy_frontend = self.components == ['frontend']
+                    if ('image' in previous or not legacy_frontend) and previous.get('image') != old_image:
+                        raise ValueError('Previous ' + service + ' source record names another image')
+                    old_source = previous.get('sourceCommit')
+                    known_source = (isinstance(old_source, str) and SHA.fullmatch(old_source)
+                                    and previous.get('sourceIdentity', 'git-commit') == 'git-commit')
+                    if not known_source and not legacy_frontend:
+                        raise ValueError('Previous ' + service + ' source commit cannot be verified')
+                    recovery_envs[service] = {**self.env, 'DEPLOY_COMMIT': old_source if known_source else 'unknown'}
             except (OSError, ValueError, TypeError, KeyError) as error:
-                raise RuntimeError('Frontend recovery image or provenance cannot be verified') from error
-            old_source = previous.get('sourceCommit')
-            known_source = (isinstance(old_source, str) and SHA.fullmatch(old_source)
-                            and previous.get('sourceIdentity', 'git-commit') == 'git-commit')
-            compose_env = {**self.env, 'DEPLOY_COMMIT': old_source if known_source else 'unknown'}
+                raise RuntimeError('Recovery image or provenance cannot be verified') from error
         for service in self.components:
+            compose_env = recovery_envs.get(service, self.env)
             run(self.compose(override) + ['up', '-d', '--no-deps', '--no-build', '--pull', 'never', service], env=compose_env)
             wait_healthy('corp-site-' + service)
         run(['docker', 'exec', 'corp-site-nginx', 'nginx', '-t'])
