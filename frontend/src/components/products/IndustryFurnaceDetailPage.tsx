@@ -234,7 +234,7 @@ export function IndustryFurnaceDetailPage({ slug, locale = 'zh' }: { slug: Indus
                         src={solution.image}
                         alt={solution.alt ?? solution.title}
                         fill
-                        sizes="(min-width: 1100px) 300px, (min-width: 640px) 50vw, 100vw"
+                        sizes="(max-width: 640px) 100vw, (max-width: 1100px) 50vw, 300px"
                       />
                     </div>
                   )}
@@ -425,7 +425,7 @@ export function IndustryFurnaceDetailPage({ slug, locale = 'zh' }: { slug: Indus
                             src={item.image}
                             alt={item.alt}
                             fill
-                            sizes="(min-width: 1024px) 210px, 100vw"
+                            sizes="(max-width: 640px) 100vw, (max-width: 1100px) 33vw, 280px"
                           />
                         </div>
                       </Link>

@@ -14,7 +14,7 @@ export function ManufacturerContent() {
           alt={'苏能工业炉生产基地外景'}
           fill
           priority
-          sizes={'100vw'}
+          sizes={'(max-width: 900px) 1500px, 100vw'}
         />
         <div className={'container hero-inner'}>
           <div className={'hero-copy'}>
