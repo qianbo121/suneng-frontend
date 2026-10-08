@@ -123,7 +123,7 @@ export default function HomeHero({ locale = 'zh' }: { locale?: 'zh' | 'en' }) {
             priority={index === 0}
             fetchPriority={index === 0 ? 'high' : 'auto'}
             quality={85}
-            sizes="100vw"
+            sizes="(max-width: 899px) 1500px, 100vw"
             className={`${styles.heroImage} ${slide.imageClassName}`}
           />
         </div>
