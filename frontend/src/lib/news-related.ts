@@ -84,6 +84,46 @@ const LINKS = {
   meshBeltCarburizingLine: { kind: '产品', title: '网带式渗碳淬火生产线', description: '核对层深、心部性能、渗碳时间与后续淬火回火。', href: '/zh/products/detail/mesh-belt-carbonitriding-line' },
 } satisfies Record<string, NewsRelatedLink>;
 
+// Exact Chinese article links from the reviewed procurement-entry preview.
+const ARTICLE_PRODUCT_LINKS: Record<string, NewsRelatedLink[]> = {
+  "bolts-nuts-shared-heat-treatment-line-loading-transfer": [
+    {
+      "kind": "产品",
+      "title": "查看紧固件调质生产线",
+      "description": "按螺栓、螺母的材料、规格和产量，评估连续式或周期式方案。",
+      "href": "/zh/products/detail/fastener-quench-temper-line"
+    },
+    {
+      "kind": "产品",
+      "title": "查看网带炉",
+      "description": "进一步核对铺料、网带、工艺时间和上下游接口。",
+      "href": "/zh/products/detail/mesh-belt-furnace"
+    }
+  ],
+  "da-xing-chi-lun-tiao-zhi-yong-shen-me-lu-xian-kan-zhi-jing-dan-chong-he-zhuan-yun": [
+    {
+      "kind": "产品",
+      "title": "查看台车炉",
+      "description": "按齿轮直径、单重、支承和台车进出条件评估水平装炉方案。",
+      "href": "/zh/products/detail/trolley-furnace"
+    },
+    {
+      "kind": "产品",
+      "title": "查看井式炉",
+      "description": "按垂直装夹、厂房净高、起吊和淬火转移条件比较方案。",
+      "href": "/zh/products/detail/pit-furnace"
+    }
+  ],
+  "titanium-alloy-thick-plate-roller-hearth-furnace-selection": [
+    {
+      "kind": "产品",
+      "title": "设备需求评估：查看辊底炉",
+      "description": "按板材组合、支承位置、运行方式和现场流向核对设备需求；具体规格逐项目确认。",
+      "href": "/zh/products/detail/roller-hearth-furnace"
+    }
+  ]
+};
+
 function unique(links: NewsRelatedLink[]) {
   return links.filter((link, index) => links.findIndex((item) => item.href === link.href) === index);
 }
@@ -164,7 +204,12 @@ export function getNewsRelatedLinks(
   item: Pick<NewsApiItem, 'titleZh' | 'summaryZh' | 'contentZh'> & Partial<Pick<NewsApiItem, 'slug'>>,
   locale: 'zh' | 'en' = 'zh',
 ): NewsRelatedLink[] {
-  const subjectLinks = getChineseNewsRelatedLinks(item);
+  const articleLinks = locale === 'zh' && item.slug
+    && Object.prototype.hasOwnProperty.call(ARTICLE_PRODUCT_LINKS, item.slug)
+    ? ARTICLE_PRODUCT_LINKS[item.slug] : undefined;
+  const subjectLinks = articleLinks
+    ? unique([...articleLinks, ...getChineseNewsRelatedLinks(item)])
+    : getChineseNewsRelatedLinks(item);
   if (locale === 'zh') {
     const links = subjectLinks.filter((link) => !isWithdrawnTechnicalPath(link.href)
       && link.href !== `/${locale}/news/${item.slug}`);
