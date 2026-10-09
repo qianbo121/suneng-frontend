@@ -69,7 +69,7 @@ export async function readContentGrowth(
     end: Date;
     /** Dimension conditions only. Time, bot and verified-event filtering happens once, below. */
     dimensionWhere: Prisma.Sql;
-    notBot: Prisma.Sql;
+    trafficFilter: (alias: string) => Prisma.Sql;
     verified: Prisma.Sql;
     sourceType: Prisma.Sql;
     sourceDetail: Prisma.Sql;
@@ -99,7 +99,7 @@ export async function readContentGrowth(
         COALESCE(NULLIF("visitorId", ''), NULLIF("sessionId", ''), 'event:' || id::text) AS identity
       FROM "WebsiteLeadEvent"
       WHERE "createdAt" >= ${scope.start} AND "createdAt" < ${scope.end}
-        AND ${scope.notBot} AND ${scope.verified}
+        AND ${scope.trafficFilter('WebsiteLeadEvent')} AND ${scope.verified}
     ), matched AS MATERIALIZED (
       -- Normalise only matched events, once, for the new source operating metrics.
       SELECT *, ${scope.sourceType} AS source_type, ${scope.sourceDetail} AS source_detail
@@ -116,7 +116,7 @@ export async function readContentGrowth(
       WHERE (v.landing IS NULL OR v.path = v.landing)
         AND v.id = (
           SELECT ev.id FROM "WebsiteLeadEvent" ev
-          WHERE ev."sessionId" = v.session_key AND ev."eventType" = 'page_view' AND ${scope.notBot}
+          WHERE ev."sessionId" = v.session_key AND ev."eventType" = 'page_view' AND ${scope.trafficFilter('ev')}
           ORDER BY ev."createdAt", ev.id LIMIT 1
         )
     ), submissions AS MATERIALIZED (
@@ -290,7 +290,7 @@ export async function readContentGrowth(
         WHERE v.landing IS NOT NULL AND v.path <> v.landing
           AND v.id = (
             SELECT ev.id FROM "WebsiteLeadEvent" ev
-            WHERE ev."sessionId" = v.session_key AND ev."eventType" = 'page_view' AND ${scope.notBot}
+            WHERE ev."sessionId" = v.session_key AND ev."eventType" = 'page_view' AND ${scope.trafficFilter('ev')}
             ORDER BY ev."createdAt", ev.id LIMIT 1
           )),
       'daily', COALESCE((SELECT JSONB_AGG(JSONB_BUILD_OBJECT('date', day, 'visits', visits) ORDER BY day)

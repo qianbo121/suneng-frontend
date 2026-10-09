@@ -32,6 +32,17 @@ function routedQueryRaw(routes: Array<[string, unknown]>) {
   });
 }
 
+function coverageRow(at: string, eventType = 'page_view') {
+  return {
+    id: 1,
+    createdAt: new Date(at),
+    sessionId: null,
+    eventType,
+    userAgent: 'Mozilla/5.0',
+    properties: null,
+  };
+}
+
 describe('ShujuGrowthReadService', () => {
   it('fills calendar days with a real zero instead of dropping them from the trend', () => {
     const result = fillDailyPageViewGaps(
@@ -59,7 +70,7 @@ describe('ShujuGrowthReadService', () => {
       //  · 'effective_interaction' 不能用——有效访问门在每个查询的 where 里，到处都有
       //  · 'MAX("pageTitle")' 页面表现和分段明细都有，分段明细要先用 deviceType 截住
       //  · 'GROUP BY day, "eventType"' 是分段明细 GROUP BY 的前缀，日趋势必须排在它后面
-      ['MIN(', [{ trackingStartAt: new Date('2026-08-14T16:00:00Z') }]],
+      ['SELECT id, "createdAt", "sessionId"', [coverageRow('2026-08-14T16:00:00Z')]],
       ['last_view', [{ pagePath: '/zh/contact', sessions: 3n }]],
       [
         'SELECT r."province"',
@@ -237,7 +248,7 @@ describe('ShujuGrowthReadService', () => {
 
   it('returns an empty comparable window when page-view tracking has not started', async () => {
     // 埋点还没开始：覆盖查询返回 null，其余一律空
-    const queryRaw = routedQueryRaw([['MIN(', [{ trackingStartAt: null }]]]);
+    const queryRaw = routedQueryRaw([['SELECT id, "createdAt", "sessionId"', []]]);
     const service = new ShujuGrowthReadService({ $queryRaw: queryRaw } as unknown as PrismaService);
 
     const result = await service.overview({ startDate: '2026-08-15', endDate: '2026-08-15' });
@@ -261,8 +272,12 @@ describe('ShujuGrowthReadService', () => {
   it('distinguishes a pre-tracking date range from a real zero after tracking started', async () => {
     const queryRaw = jest.fn((sql: unknown) => {
       const text = ((sql as { strings?: string[] }).strings || []).join('?').replace(/\s+/g, ' ');
-      if (text.includes('SELECT MIN') && text.includes("= 'page_view'")) {
-        return Promise.resolve([{ trackingStartAt: new Date('2026-08-18T00:00:00Z') }]);
+      const values = (sql as { values?: unknown[] }).values || [];
+      if (
+        text.includes('SELECT id, "createdAt", "sessionId"') &&
+        values.some((value) => Array.isArray(value) && value.includes('page_view'))
+      ) {
+        return Promise.resolve([coverageRow('2026-08-18T00:00:00Z')]);
       }
       return Promise.resolve([]);
     });
@@ -289,7 +304,10 @@ describe('ShujuGrowthReadService', () => {
     const statements = queryRaw.mock.calls.map(([sql]) => JSON.stringify(sql));
     // 每一条业务查询都必须带上排除条件，否则同一页上会出现两套访客口径
     const business = statements.filter(
-      (sql) => sql.includes('WebsiteLeadEvent') && !sql.includes('SELECT MIN'),
+      (sql) =>
+        sql.includes('WebsiteLeadEvent') &&
+        !sql.includes('SELECT id, \\"createdAt\\", \\"sessionId\\"') &&
+        !sql.includes('candidate_sessions AS MATERIALIZED'),
     );
     expect(business.length).toBeGreaterThan(1);
     for (const sql of business) {
@@ -348,7 +366,7 @@ describe('ShujuGrowthReadService', () => {
 
   it('快速提交、无停留、无交互或访问标识丢失时仍保留服务端提交', async () => {
     const queryRaw = routedQueryRaw([
-      ['MIN(', [{ trackingStartAt: new Date('2026-08-19T00:00:00Z') }]],
+      ['SELECT id, "createdAt", "sessionId"', [coverageRow('2026-08-19T00:00:00Z')]],
       [
         'AS "visitSessions"',
         [
@@ -481,7 +499,7 @@ describe('ShujuGrowthReadService', () => {
 
     const statements = queryRaw.mock.calls.map(([sql]) => JSON.stringify(sql));
     const dwellCoverage = statements.filter(
-      (sql) => sql.includes('dwell_5s') && sql.includes('MIN'),
+      (sql) => sql.includes('dwell_5s') && sql.includes('LIMIT 128'),
     );
     expect(dwellCoverage).toHaveLength(1);
     // 四个刻度必须显式列举：LIKE 'dwell_%' 里的下划线是单字符通配符，会误匹配。
@@ -496,12 +514,13 @@ describe('ShujuGrowthReadService', () => {
   it('使用固定发布时刻作为质量口径起点，不依赖第一条达标结果', async () => {
     const queryRaw = jest.fn((sql: unknown) => {
       const text = ((sql as { strings?: string[] }).strings || []).join('?').replace(/\s+/g, ' ');
-      if (!text.includes('SELECT MIN')) return Promise.resolve([]);
-      if (text.includes("= 'page_view'")) {
-        return Promise.resolve([{ trackingStartAt: new Date('2026-08-18T00:00:00Z') }]);
+      if (!text.includes('SELECT id, "createdAt", "sessionId"')) return Promise.resolve([]);
+      const values = (sql as { values?: unknown[] }).values || [];
+      if (values.some((value) => Array.isArray(value) && value.includes('page_view'))) {
+        return Promise.resolve([coverageRow('2026-08-18T00:00:00Z')]);
       }
-      if (text.includes("IN ('dwell_5s'")) {
-        return Promise.resolve([{ trackingStartAt: new Date('2026-08-19T00:00:00Z') }]);
+      if (values.some((value) => Array.isArray(value) && value.includes('dwell_5s'))) {
+        return Promise.resolve([coverageRow('2026-08-19T00:00:00Z', 'dwell_5s')]);
       }
       return Promise.resolve([]);
     });

@@ -101,6 +101,9 @@ const DWELL_SECONDS_KEY = 'suneng_dwell_seconds';
 const DWELL_MILESTONE_KEY = 'suneng_dwell_milestone';
 let dwellMilestoneInFlight = false;
 let dwellRequestGeneration = 0;
+let pendingDwellPayload:
+  | { generation: number; milestone: number; payload: LeadEventPayload }
+  | undefined;
 let engagedSessionInFlight = false;
 // 有效交互信号：只记录真实滑动或点击。最终的“有效访问”还需要
 // 同一次访问累计前台停留 20 秒，由服务端合并两个事实判定。
@@ -109,6 +112,98 @@ const EFFECTIVE_INTERACTION_KEY = 'suneng_effective_interaction_recorded_v1';
 const AUTOMATION_SIGNAL_KEY = 'suneng_automation_signal_recorded_v1';
 let effectiveInteractionInFlight = false;
 let automationSignalInFlight = false;
+
+type TrackingStorage = Pick<Storage, 'getItem' | 'setItem' | 'removeItem'>;
+let trackingWindow: Window | undefined;
+let sessionStorageFallback: TrackingStorage;
+let localStorageFallback: TrackingStorage;
+let natureTrackingInstalled = false;
+let natureTrackingCleanup: (() => void) | undefined;
+let dwellTimer: number | undefined;
+const PAGE_VIEW_RETRY_DELAYS_MS = [1000, 3000] as const;
+const pendingRetriedEvents = new Set<{ timer?: number; owner: Window; cancel: () => void }>();
+
+// 内存保留本页面已读/已写的值。某个键写入失败后，不能再读浏览器里旧的值。
+function createTrackingStorage(name: 'sessionStorage' | 'localStorage'): TrackingStorage {
+  const values = new Map<string, string | null>();
+  const memoryOnlyKeys = new Set<string>();
+  return {
+    getItem(key) {
+      if (memoryOnlyKeys.has(key)) {
+        const value = values.get(key) ?? null;
+        try {
+          const storage = getBrowserStorage(name);
+          if (storage) {
+            if (value === null) storage.removeItem(key);
+            else storage.setItem(key, value);
+            memoryOnlyKeys.delete(key);
+          }
+        } catch {
+          // 恢复前继续使用内存；不能把浏览器里尚未清理的旧值读回来。
+        }
+        return value;
+      }
+      if (!memoryOnlyKeys.has(key)) {
+        try {
+          const storage = getBrowserStorage(name);
+          if (storage) {
+            const value = storage.getItem(key);
+            values.set(key, value);
+            return value;
+          }
+        } catch {
+          // 读失败时继续使用本页面最后已知的值。
+        }
+      }
+      return values.get(key) ?? null;
+    },
+    setItem(key, value) {
+      values.set(key, value);
+      try {
+        const storage = getBrowserStorage(name);
+        if (!storage) throw new Error('Storage unavailable');
+        storage.setItem(key, value);
+        memoryOnlyKeys.delete(key);
+      } catch {
+        memoryOnlyKeys.add(key);
+      }
+    },
+    removeItem(key) {
+      values.set(key, null);
+      try {
+        const storage = getBrowserStorage(name);
+        if (!storage) throw new Error('Storage unavailable');
+        storage.removeItem(key);
+        memoryOnlyKeys.delete(key);
+      } catch {
+        memoryOnlyKeys.add(key);
+      }
+    },
+  };
+}
+
+function cancelEventRetries() {
+  for (const request of pendingRetriedEvents) request.cancel();
+}
+
+function trackingStorage(name: 'sessionStorage' | 'localStorage') {
+  if (trackingWindow !== window) {
+    trackingWindow = window;
+    sessionStorageFallback = createTrackingStorage('sessionStorage');
+    localStorageFallback = createTrackingStorage('localStorage');
+    dwellRequestGeneration += 1;
+    dwellMilestoneInFlight = false;
+    pendingDwellPayload = undefined;
+    engagedSessionInFlight = false;
+    effectiveInteractionInFlight = false;
+    automationSignalInFlight = false;
+    natureTrackingInstalled = false;
+    natureTrackingCleanup = undefined;
+    dwellTimer = undefined;
+    cancelEventRetries();
+  }
+  return name === 'sessionStorage' ? sessionStorageFallback : localStorageFallback;
+}
 
 function boundedSourceValue(value: string | undefined, limit: number) {
   const normalized = value?.trim();
@@ -124,8 +219,7 @@ export function sanitizeLeadSourceSnapshot(snapshot: LeadSourceSnapshot): LeadSo
   ) as LeadSourceSnapshot;
 }
 
-function getStoredId(key: string, storage: Storage | undefined) {
-  if (!storage) return undefined;
+function getStoredId(key: string, storage: TrackingStorage) {
   try {
     const current = storage.getItem(key);
     if (current) return current;
@@ -163,7 +257,7 @@ function fallbackSession(now: number, requested: boolean) {
   return undefined;
 }
 
-function resetSessionState(storage: Storage) {
+function resetSessionState(storage: TrackingStorage) {
   storage.removeItem(ENGAGED_SESSION_KEY);
   storage.removeItem(EFFECTIVE_INTERACTION_KEY);
   storage.removeItem(AUTOMATION_SIGNAL_KEY);
@@ -176,16 +270,19 @@ function resetSessionState(storage: Storage) {
   // In-flight acknowledgements for an old visit cannot confirm a new visit's milestones.
   dwellRequestGeneration += 1;
   dwellMilestoneInFlight = false;
+  pendingDwellPayload = undefined;
   engagedSessionInFlight = false;
+  effectiveInteractionInFlight = false;
+  automationSignalInFlight = false;
+  cancelEventRetries();
 }
 
-function getSessionId(storage: Storage | undefined) {
+function getSessionId(storage: TrackingStorage) {
   const now = Date.now();
   const remembered = manualQaByWindow.get(window);
-  const requested = hasManualQaToken() || Boolean(
-    remembered?.active && now - remembered.lastSeen <= SESSION_TIMEOUT_MS,
-  );
-  if (!storage) return fallbackSession(now, requested);
+  const requested =
+    hasManualQaToken() ||
+    Boolean(remembered?.active && now - remembered.lastSeen <= SESSION_TIMEOUT_MS);
   try {
     const current = storage.getItem(SESSION_ID_KEY);
     const lastSeen = Number(storage.getItem(SESSION_LAST_SEEN_KEY));
@@ -193,7 +290,8 @@ function getSessionId(storage: Storage | undefined) {
       Number.isFinite(lastSeen) && lastSeen > 0 && now - lastSeen > SESSION_TIMEOUT_MS;
     const currentQa = Boolean(current && storage.getItem(MANUAL_QA_SESSION_KEY) === current);
     const enteringQa = Boolean(current && !expired && requested && !currentQa);
-    if (!current || expired || enteringQa) {
+    const rotated = !current || expired || enteringQa;
+    if (rotated) {
       // Split an explicit QA run from preceding ordinary browsing. Source/campaign facts
       // remain unchanged; testing is a separate property, not a replacement traffic source.
       const previousSource = enteringQa ? storage.getItem(SESSION_SOURCE_KEY) : null;
@@ -207,7 +305,12 @@ function getSessionId(storage: Storage | undefined) {
     }
     storage.setItem(SESSION_LAST_SEEN_KEY, String(now));
     const sessionId = storage.getItem(SESSION_ID_KEY) || undefined;
-    rememberManualQa(Boolean(sessionId && storage.getItem(MANUAL_QA_SESSION_KEY) === sessionId), now);
+    rememberManualQa(
+      Boolean(sessionId && storage.getItem(MANUAL_QA_SESSION_KEY) === sessionId),
+      now,
+    );
+    // 先写新会话和最后访问时刻，再刷新监听，避免程序标记递归触发轮换。
+    if (rotated && natureTrackingInstalled) refreshVisitorNatureTracking();
     return sessionId;
   } catch {
     return fallbackSession(now, requested);
@@ -215,7 +318,7 @@ function getSessionId(storage: Storage | undefined) {
 }
 
 function getSessionTrafficSource(
-  storage: Storage | undefined,
+  storage: TrackingStorage,
   referrer: string,
   utmSource: string | undefined,
 ) {
@@ -265,15 +368,15 @@ export function sanitizeLeadReferrer(referrer: string) {
 function getLandingPage(path: string) {
   const safePath = sanitizeLeadPagePath(path);
   try {
-    const current = window.sessionStorage.getItem('suneng_landing_page');
+    const current = trackingStorage('sessionStorage').getItem('suneng_landing_page');
     if (current) {
       const sanitizedCurrent = sanitizeLeadPagePath(current);
       if (sanitizedCurrent !== current) {
-        window.sessionStorage.setItem('suneng_landing_page', sanitizedCurrent);
+        trackingStorage('sessionStorage').setItem('suneng_landing_page', sanitizedCurrent);
       }
       return sanitizedCurrent;
     }
-    window.sessionStorage.setItem('suneng_landing_page', safePath);
+    trackingStorage('sessionStorage').setItem('suneng_landing_page', safePath);
     return safePath;
   } catch {
     return safePath;
@@ -333,7 +436,7 @@ export function buildLeadSourceSnapshot(
 ): LeadSourceSnapshot {
   const path = `${window.location.pathname}${window.location.search}`;
   const title = document.title || undefined;
-  const sessionStorage = getBrowserStorage('sessionStorage');
+  const sessionStorage = trackingStorage('sessionStorage');
   const sessionId = getSessionId(sessionStorage);
   const landingPage = getLandingPage(path);
   const campaign = campaignParams(landingPage);
@@ -356,7 +459,7 @@ export function buildLeadSourceSnapshot(
     previousPage: sanitizeLeadReferrer(document.referrer),
     ...campaign,
     sessionId,
-    visitorId: getStoredId('suneng_visitor_id', getBrowserStorage('localStorage')),
+    visitorId: getStoredId('suneng_visitor_id', trackingStorage('localStorage')),
     ...extra,
   });
   manualQaBySnapshot.set(snapshot, manualQaByWindow.get(window)?.active === true);
@@ -394,17 +497,31 @@ export function captureLeadEventProperties(
 function currentPayload(eventType: LeadEventType, extra: LeadEventExtra = {}) {
   const { properties, ...sourceExtra } = extra;
   const snapshot = buildLeadSourceSnapshot(sourceExtra);
+  // 联系方式复制等异步动作保留开始时冻结的 true/false，不能被后来的访问改写。
+  const captured = captureLeadEventProperties(properties, snapshot);
+  const ordinary = Object.fromEntries(
+    Object.entries(captured).filter(
+      ([key]) => !['collectionId', 'automationDetected', 'manual_qa'].includes(key.trim()),
+    ),
+  );
   return {
     eventType,
     ...snapshot,
-    properties: captureLeadEventProperties(properties, snapshot),
+    properties: sanitizeEventProperties({
+      // 三个系统属性优先占位，业务属性不能覆盖或挤掉它们。
+      collectionId: newAnonymousId().slice(0, 120),
+      ...(typeof navigator !== 'undefined' && navigator.webdriver === true
+        ? { automationDetected: true }
+        : {}),
+      manual_qa: captured.manual_qa,
+      ...ordinary,
+    }),
   };
 }
 
-function postLeadEvent(eventType: LeadEventType, extra?: LeadEventExtra) {
-  if (!canTrackActivity()) return Promise.resolve(false);
+function postLeadPayload(payload: LeadEventPayload) {
   return apiPost<unknown, LeadEventPayload>('/v1/lead-events', {
-    body: currentPayload(eventType, extra),
+    body: payload,
     cache: 'no-store',
     keepalive: true,
   }).then(
@@ -413,14 +530,23 @@ function postLeadEvent(eventType: LeadEventType, extra?: LeadEventExtra) {
   );
 }
 
+function postLeadEvent(eventType: LeadEventType, extra?: LeadEventExtra) {
+  if (!canTrackActivity()) return Promise.resolve(false);
+  return postLeadPayload(currentPayload(eventType, extra));
+}
+
 function canTrackActivity() {
   return typeof window !== 'undefined' && !isLocalPreviewHostname(window.location.hostname);
 }
 
 export function markEngagedSession(extra?: LeadEventExtra) {
   if (!canTrackActivity()) return;
+  getSessionId(trackingStorage('sessionStorage'));
   try {
-    if (window.sessionStorage.getItem(ENGAGED_SESSION_KEY) === '1' || engagedSessionInFlight)
+    if (
+      trackingStorage('sessionStorage').getItem(ENGAGED_SESSION_KEY) === '1' ||
+      engagedSessionInFlight
+    )
       return;
   } catch {
     return;
@@ -432,7 +558,7 @@ export function markEngagedSession(extra?: LeadEventExtra) {
     engagedSessionInFlight = false;
     if (!accepted) return;
     try {
-      window.sessionStorage.setItem(ENGAGED_SESSION_KEY, '1');
+      trackingStorage('sessionStorage').setItem(ENGAGED_SESSION_KEY, '1');
     } catch {
       // 写标记失败只会导致以后再上报一次，宁可重复去重，也不能把失败冒充成已采集。
     }
@@ -454,7 +580,7 @@ const DWELL_MILESTONES = [
 
 function readDwellCounter(key: string) {
   try {
-    const value = Number(window.sessionStorage.getItem(key));
+    const value = Number(trackingStorage('sessionStorage').getItem(key));
     return Number.isFinite(value) && value > 0 ? value : 0;
   } catch {
     return 0;
@@ -463,9 +589,9 @@ function readDwellCounter(key: string) {
 
 function writeDwellCounter(key: string, value: number) {
   try {
-    window.sessionStorage.setItem(key, String(value));
+    trackingStorage('sessionStorage').setItem(key, String(value));
   } catch {
-    // sessionStorage 不可用时退化成「本次页面内计时」，不影响页面本身。
+    // 数值已保存在本页面内存里，浏览器写入失败不停止累计。
   }
 }
 
@@ -478,7 +604,7 @@ export function tickDwell() {
 
   // 先建立/轮换会话再加秒数。否则第一个里程碑组装请求时才建会话，
   // 会把刚累计的停留数误当成上一个会话清掉。
-  getSessionId(getBrowserStorage('sessionStorage'));
+  getSessionId(trackingStorage('sessionStorage'));
 
   const activeSeconds = readDwellCounter(DWELL_SECONDS_KEY) + 1;
   writeDwellCounter(DWELL_SECONDS_KEY, activeSeconds);
@@ -496,11 +622,23 @@ function flushDwellMilestones() {
 
   dwellMilestoneInFlight = true;
   const generation = dwellRequestGeneration;
-  void postLeadEvent(milestone.event).then((accepted) => {
+  if (
+    !pendingDwellPayload ||
+    pendingDwellPayload.generation !== generation ||
+    pendingDwellPayload.milestone !== nextMilestone
+  ) {
+    pendingDwellPayload = {
+      generation,
+      milestone: nextMilestone,
+      payload: currentPayload(milestone.event),
+    };
+  }
+  void postLeadPayload(pendingDwellPayload.payload).then((accepted) => {
     // 请求期间如果已经换了会话，旧响应不能污染新会话。
     if (generation !== dwellRequestGeneration) return;
     dwellMilestoneInFlight = false;
-    if (!accepted) return; // 下一秒继续重试，不把上报失败冒充成已采集。
+    if (!accepted) return; // 下一秒保留原采集号重试，防止响应丢失导致重复写入。
+    pendingDwellPayload = undefined;
     writeDwellCounter(DWELL_MILESTONE_KEY, nextMilestone + 1);
     // 页面卡顿后可能一次跨过多个刻度，成功后顺序补齐，保证数学上单调。
     flushDwellMilestones();
@@ -510,93 +648,133 @@ function flushDwellMilestones() {
 /** 开始计时，返回停表函数。跨页面接着上次的秒数走。 */
 export function startDwellTracking() {
   if (!canTrackActivity()) return () => undefined;
+  trackingStorage('sessionStorage');
+  if (dwellTimer !== undefined) window.clearInterval(dwellTimer);
   const timer = window.setInterval(tickDwell, 1000);
-  return () => window.clearInterval(timer);
+  dwellTimer = timer;
+  return () => {
+    window.clearInterval(timer);
+    if (dwellTimer === timer) dwellTimer = undefined;
+  };
 }
 
 const EFFECTIVE_INTERACTION_EVENTS = ['scroll', 'click'] as const;
 
-export function installVisitorNatureTracking() {
-  if (!canTrackActivity()) return;
-  try {
-    // 必须先立会话再读标记：postLeadEvent 内部会触发会话初始化/轮换。
-    getSessionId(window.sessionStorage);
-  } catch {
-    return;
-  }
-  // 默认自动化浏览器单独标记，不安装有效交互监听。
+function refreshVisitorNatureTracking() {
+  natureTrackingCleanup?.();
+  natureTrackingCleanup = undefined;
+  const storage = trackingStorage('sessionStorage');
+  // 自动化记录保留供服务端排除，不把合成操作当作真人交互。
   if (typeof navigator !== 'undefined' && navigator.webdriver === true) {
-    try {
-      if (
-        window.sessionStorage.getItem(AUTOMATION_SIGNAL_KEY) === '1' ||
-        automationSignalInFlight
-      ) {
-        return;
-      }
-    } catch {
-      return;
-    }
+    if (storage.getItem(AUTOMATION_SIGNAL_KEY) === '1' || automationSignalInFlight) return;
     automationSignalInFlight = true;
     const generation = dwellRequestGeneration;
-    void postLeadEvent('automation_signal').then((accepted) => {
-      automationSignalInFlight = false;
+    void postPayloadWithRetry(currentPayload('automation_signal')).then((accepted) => {
       if (generation !== dwellRequestGeneration) return;
-      if (!accepted) return;
-      try {
-        window.sessionStorage.setItem(AUTOMATION_SIGNAL_KEY, '1');
-      } catch {
-        // 写标记失败可能多上报一次，服务端依然按会话去重。
-      }
+      automationSignalInFlight = false;
+      if (accepted) storage.setItem(AUTOMATION_SIGNAL_KEY, '1');
     });
     return;
   }
+  if (storage.getItem(EFFECTIVE_INTERACTION_KEY) === '1') return;
   const onFirstInteraction = (event: Event) => {
-    // 页面脚本合成的事件 isTrusted=false，不算有效交互。
-    if (!event.isTrusted || effectiveInteractionInFlight) return;
-    try {
-      getSessionId(window.sessionStorage);
-      if (window.sessionStorage.getItem(EFFECTIVE_INTERACTION_KEY) === '1') return;
-    } catch {
-      return;
-    }
+    if (!event.isTrusted) return;
+    getSessionId(storage);
+    if (storage.getItem(EFFECTIVE_INTERACTION_KEY) === '1' || effectiveInteractionInFlight) return;
     effectiveInteractionInFlight = true;
     const generation = dwellRequestGeneration;
     void postLeadEvent('effective_interaction').then((accepted) => {
-      effectiveInteractionInFlight = false;
       if (generation !== dwellRequestGeneration) return;
-      if (!accepted) return; // 保留监听，下一次真实滑动/点击继续重试。
-      try {
-        window.sessionStorage.setItem(EFFECTIVE_INTERACTION_KEY, '1');
-      } catch {
-        // 写标记失败时不假装成已记录。
-        return;
-      }
-      for (const name of EFFECTIVE_INTERACTION_EVENTS) {
-        window.removeEventListener(name, onFirstInteraction, true);
-      }
+      effectiveInteractionInFlight = false;
+      if (!accepted) return;
+      storage.setItem(EFFECTIVE_INTERACTION_KEY, '1');
+      natureTrackingCleanup?.();
+      natureTrackingCleanup = undefined;
     });
   };
-  try {
-    if (window.sessionStorage.getItem(EFFECTIVE_INTERACTION_KEY) === '1') return;
-  } catch {
-    return;
-  }
+  const listenerWindow = window;
   for (const name of EFFECTIVE_INTERACTION_EVENTS) {
-    window.addEventListener(name, onFirstInteraction, { capture: true, passive: true });
+    listenerWindow.addEventListener(name, onFirstInteraction, { capture: true, passive: true });
   }
+  natureTrackingCleanup = () => {
+    for (const name of EFFECTIVE_INTERACTION_EVENTS) {
+      listenerWindow.removeEventListener(name, onFirstInteraction, true);
+    }
+  };
+}
+
+export function installVisitorNatureTracking() {
+  if (!canTrackActivity()) return () => undefined;
+  getSessionId(trackingStorage('sessionStorage'));
+  if (!natureTrackingInstalled) {
+    natureTrackingInstalled = true;
+    refreshVisitorNatureTracking();
+  }
+  return () => {
+    natureTrackingInstalled = false;
+    natureTrackingCleanup?.();
+    natureTrackingCleanup = undefined;
+  };
+}
+
+// 最多补报两次，所有尝试都使用原始页面、来源和访问标识，且过期后丢弃。
+function postPayloadWithRetry(payload: LeadEventPayload): Promise<boolean> {
+  const storage = trackingStorage('sessionStorage');
+  const generation = dwellRequestGeneration;
+  const owner = window;
+  if (pendingRetriedEvents.size >= 20) return postLeadPayload(payload);
+  return new Promise((resolve) => {
+    const request: { timer?: number; owner: Window; cancel: () => void } = {
+      owner,
+      cancel: () => finish(false),
+    };
+    const finish = (accepted: boolean) => {
+      if (!pendingRetriedEvents.delete(request)) return;
+      if (request.timer !== undefined) owner.clearTimeout(request.timer);
+      resolve(accepted);
+    };
+    pendingRetriedEvents.add(request);
+    const send = (attempt: number) => {
+      if (
+        generation !== dwellRequestGeneration ||
+        Date.now() - Number(storage.getItem(SESSION_LAST_SEEN_KEY)) > SESSION_TIMEOUT_MS
+      ) {
+        finish(false);
+        return;
+      }
+      void postLeadPayload(payload).then((accepted) => {
+        if (!pendingRetriedEvents.has(request)) return;
+        if (
+          accepted ||
+          generation !== dwellRequestGeneration ||
+          attempt >= PAGE_VIEW_RETRY_DELAYS_MS.length
+        ) {
+          finish(accepted);
+          return;
+        }
+        request.timer = owner.setTimeout(
+          () => send(attempt + 1),
+          PAGE_VIEW_RETRY_DELAYS_MS[attempt],
+        );
+      });
+    };
+    send(0);
+  });
 }
 
 export function trackPageView() {
   if (!canTrackActivity()) return;
   const safePath = sanitizeLeadPagePath(`${window.location.pathname}${window.location.search}`);
-  void postLeadEvent('page_view');
+  void postPayloadWithRetry(currentPayload('page_view'));
   try {
-    const stored = JSON.parse(window.sessionStorage.getItem(SESSION_PAGE_PATHS_KEY) || '[]');
+    const stored = JSON.parse(
+      trackingStorage('sessionStorage').getItem(SESSION_PAGE_PATHS_KEY) || '[]',
+    );
     const paths = Array.isArray(stored)
       ? stored.filter((value): value is string => typeof value === 'string').slice(-20)
       : [];
     if (!paths.includes(safePath)) paths.push(safePath);
-    window.sessionStorage.setItem(SESSION_PAGE_PATHS_KEY, JSON.stringify(paths));
+    trackingStorage('sessionStorage').setItem(SESSION_PAGE_PATHS_KEY, JSON.stringify(paths));
     if (paths.length >= 2) markEngagedSession();
   } catch {
     // Page-view recording must never interrupt website use when storage is unavailable.

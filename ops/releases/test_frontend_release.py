@@ -1620,19 +1620,78 @@ class FrontendRecoverySourceTest(unittest.TestCase):
                 self.assertEqual(calls[0].kwargs['env']['DEPLOY_COMMIT'], 'unknown')
                 self.assertEqual(release.env['DEPLOY_COMMIT'], MANIFEST['sourceCommit'])
 
-    def test_backend_admin_and_mixed_component_environments_are_unchanged(self):
+    def test_normal_backend_admin_and_mixed_component_environments_are_unchanged(self):
         manifests = [BackendOnlyReleaseTest().manifest(), AdminOnlyReleaseTest().manifest(),
                      {**MANIFEST, 'backend': {'image': OTHER, 'expectedCurrentImage': RECEIPT['images']['backend'], 'archiveSha256': '8'*64}}]
         for manifest in manifests:
             with self.subTest(manifest=manifest), tempfile.TemporaryDirectory() as tmp:
                 receipt = {**RECEIPT, 'frontendRelease': {'sourceCommit': self.OLD_SOURCE, 'image': OLD}}
                 release = ContractTest().fixture(tmp, manifest, receipt)
-                override = release.audit / 'previous.override.json'
-                release.write_override(override, release.receipt['images'])
-                calls = self.call_replace(release, override)
+                calls = self.call_replace(release)
                 self.assertEqual([c.args[0][-1] for c in calls], release.components)
                 self.assertTrue(all(c.kwargs['env'] is release.env for c in calls))
                 self.assertTrue(all(c.kwargs['env']['DEPLOY_COMMIT'] == MANIFEST['sourceCommit'] for c in calls))
+
+    def test_dual_recovery_uses_each_recorded_old_source_before_switching(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            receipt = copy.deepcopy(RECEIPT)
+            receipt['frontendRelease'] = {'sourceCommit': self.OLD_SOURCE, 'image': OLD}
+            receipt['backendRelease'] = {'sourceIdentity': 'git-commit', 'sourceCommit': '2'*40,
+                                         'image': receipt['images']['backend']}
+            manifest = {**MANIFEST, 'backend': {'image': OTHER,
+                        'expectedCurrentImage': receipt['images']['backend'], 'archiveSha256': '8'*64}}
+            release = ContractTest().fixture(tmp, manifest, receipt)
+            override = release.audit / 'previous.override.json'
+            release.write_override(override, receipt['images'])
+            calls = self.call_replace(release, override)
+            self.assertEqual([c.args[0][-1] for c in calls], ['backend', 'frontend'])
+            self.assertEqual([c.kwargs['env']['DEPLOY_COMMIT'] for c in calls], ['2'*40, self.OLD_SOURCE])
+            self.assertTrue(all(c.kwargs['env'] is not release.env for c in calls))
+            self.assertEqual(release.env['DEPLOY_COMMIT'], MANIFEST['sourceCommit'])
+            self.assertEqual(json.loads(override.read_text())['services']['backend']['image'], receipt['images']['backend'])
+
+    def test_backend_only_recovery_uses_backend_source_and_leaves_other_components_alone(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            receipt = copy.deepcopy(RECEIPT)
+            receipt['frontendRelease'] = {'sourceCommit': self.OLD_SOURCE, 'image': OLD}
+            receipt['backendRelease'] = {'sourceCommit': '2'*40, 'image': receipt['images']['backend']}
+            release = ContractTest().fixture(tmp, BackendOnlyReleaseTest().manifest(), receipt)
+            override = release.audit / 'previous.override.json'
+            release.write_override(override, receipt['images'])
+            with patch.object(r, 'run', return_value='') as command, patch.object(r, 'wait_healthy') as health:
+                original_env = dict(release.env)
+                release.replace_frontend(override)
+            calls = [c for c in command.call_args_list if c.args[0][:2] == ['docker', 'compose']]
+            self.assertEqual([c.args[0][-1] for c in calls], ['backend'])
+            self.assertEqual(calls[0].kwargs['env']['DEPLOY_COMMIT'], '2'*40)
+            self.assertEqual(release.env, original_env)
+            health.assert_called_once_with('corp-site-backend')
+            self.assertEqual(command.call_args_list[-2].args[0], ['docker', 'exec', 'corp-site-nginx', 'nginx', '-t'])
+            self.assertEqual(command.call_args_list[-1].args[0], ['docker', 'exec', 'corp-site-nginx', 'nginx', '-s', 'reload'])
+
+    def test_all_selected_recovery_provenance_is_verified_before_any_compose_command(self):
+        for fault in ['foreign-override', 'foreign-record', 'missing-record', 'unknown-source']:
+            with self.subTest(fault=fault), tempfile.TemporaryDirectory() as tmp:
+                receipt = copy.deepcopy(RECEIPT)
+                receipt['frontendRelease'] = {'sourceCommit': self.OLD_SOURCE, 'image': OLD}
+                receipt['backendRelease'] = {'sourceCommit': '2'*40, 'image': receipt['images']['backend']}
+                images = dict(receipt['images'])
+                # Frontend is last in the dual sequence; an invalid record must
+                # prevent even the first (backend) compose command.
+                if fault == 'foreign-override': images['frontend'] = NEW
+                if fault == 'foreign-record': receipt['frontendRelease']['image'] = NEW
+                if fault == 'missing-record': receipt.pop('frontendRelease')
+                if fault == 'unknown-source': receipt['frontendRelease']['sourceCommit'] = 'main'
+                manifest = {**MANIFEST, 'backend': {'image': OTHER,
+                            'expectedCurrentImage': receipt['images']['backend'], 'archiveSha256': '8'*64}}
+                release = ContractTest().fixture(tmp, manifest, receipt)
+                override = release.audit / 'previous.override.json'
+                release.write_override(override, images)
+                with patch.object(r, 'run') as command, patch.object(r, 'wait_healthy') as health, self.assertRaises(RuntimeError):
+                    release.replace_frontend(override)
+                command.assert_not_called()
+                health.assert_not_called()
+                self.assertEqual(release.env['DEPLOY_COMMIT'], MANIFEST['sourceCommit'])
 
     def test_actual_failed_frontend_switch_restores_old_source_as_well_as_old_image(self):
         with tempfile.TemporaryDirectory() as tmp:
