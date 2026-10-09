@@ -174,6 +174,8 @@ export default async function FurnaceRenovationPage({ params }: PageProps) {
             },
           ]}
         />
+        <p className="mt-5 text-sm leading-7 text-[#526277] xl:pe-8" data-warranty-term>{t("整机质保期通常为最终验收合格后 12 个月，或设备发货后 18 个月，以先到者为准；具体起算时间、适用范围及分项期限以合同为准。")}</p>
+        <p className="mt-3 text-sm leading-7 text-[#526277] xl:pe-8" data-warranty-exclusions>{t("设计、制造、材料和安装质量造成的故障通常纳入合同质保；加热元件、密封件、热电偶等正常易损耗件及违规操作、擅自改造、超载超温等情形通常不在通用质保范围内。")}</p>
         <p className="mt-5 text-sm leading-7 text-[#526277] xl:pe-8" data-acceptance-boundary>{t("改造验收应按改造范围，从安全联锁、升温与温度控制、有效加热区温度均匀性、产能与生产节拍、机械与连续运行、能耗或排放六类中选择适用项目，明确工况、方法和判据；安全项目按适用要求核验。温度、产能和能耗结论须同时记录负载、工件、装炉方式、测点、保温时间、仪器校准、统计周期与异常工况，不能脱离测试条件复用。")}</p>
         <p className="mt-3 text-sm leading-7 text-[#526277]">{t("苏能不承接工程总承包业务，通常作为工业炉设备供应商或设备分包方参与项目；涉及压力容器、特种设备或专项认证的部分，由具备相应资质的单位承担或配合实施。")}</p>
       </Section>

@@ -2,17 +2,18 @@
 import json
 from pathlib import Path
 import subprocess
-from procurement_approval import approval_document, normalize_procurement
+from procurement_approval import approval_document, normalize_procurement, resolve_approval_sha
 
 PUBLIC_ORIGIN = 'https://www.jssngyl.cn'
 CANDIDATE_ORIGIN = 'http://127.0.0.1:3000'
 REQUIRED = {'http', 'indexable', 'canonical', 'h1', 'body', 'anchors', 'contactToolbar', 'sitemap', 'entry'}
 
 
-def approved_procurement_probe(container, paths, *, public=False):
-    paths = normalize_procurement(paths)
+def approved_procurement_probe(container, paths, *, public=False, approval_sha=None):
+    selected = resolve_approval_sha(approval_sha)
+    paths = normalize_procurement(paths, selected)
     base = PUBLIC_ORIGIN if public else CANDIDATE_ORIGIN
-    pages = [p for p in approval_document()['pages'] if p['path'] in paths]
+    pages = [p for p in approval_document(selected)['pages'] if p['path'] in paths]
     source = Path(__file__).with_name('approved-procurement-continuity.cjs').read_text()
     source += '\ncheckApprovedProcurement(' + json.dumps({'baseUrl': base, 'pages': pages}) + ').then(r => console.log(JSON.stringify(r))).catch(() => { console.error("Approved procurement check failed; no private output logged"); process.exitCode = 1; });\n'
     try:
@@ -38,4 +39,5 @@ def approved_procurement_probe(container, paths, *, public=False):
             or any(p['checks'][k].get('passed') is not True for k in REQUIRED) for p in rows):
         raise RuntimeError('Approved procurement success lacks actual body/contact/anchor evidence')
     report['releasePhase'] = 'public' if public else 'candidate'
+    report['procurementApprovalSha256'] = selected
     return report

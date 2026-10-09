@@ -1,0 +1,191 @@
+{
+  "reviewedOn": "2026-10-09",
+  "scope": "32个已知详情对应到明确对象的采购或选型段；保留原服务器已有产品与新闻映射，原详情规格不由跳转推定。",
+  "routes": [
+    {
+      "id": "126",
+      "oldTopic": "双台车式燃气炉",
+      "target": "/zh/products/detail/trolley-furnace#selection"
+    },
+    {
+      "id": "127",
+      "oldTopic": "烘干炉",
+      "target": "/zh/articles/special-industrial-furnace-procurement-assessment#drying-furnace-assessment",
+      "coverage": "明确对象的采购资料核对；原型号、原图、参数、制造形式和供货能力须另核，不作为已恢复结论。"
+    },
+    {
+      "id": "128",
+      "oldTopic": "烘干炉",
+      "target": "/zh/articles/special-industrial-furnace-procurement-assessment#drying-furnace-assessment",
+      "coverage": "明确对象的采购资料核对；原型号、原图、参数、制造形式和供货能力须另核，不作为已恢复结论。"
+    },
+    {
+      "id": "129",
+      "oldTopic": "大型燃气台车炉",
+      "target": "/zh/products/detail/trolley-furnace#selection"
+    },
+    {
+      "id": "130",
+      "oldTopic": "台车炉",
+      "target": "/zh/products/detail/trolley-furnace#selection"
+    },
+    {
+      "id": "131",
+      "oldTopic": "大型燃气台车炉",
+      "target": "/zh/products/detail/trolley-furnace#selection"
+    },
+    {
+      "id": "133",
+      "oldTopic": "燃气加热炉",
+      "target": "/zh/articles/special-industrial-furnace-procurement-assessment#gas-furnace-assessment",
+      "coverage": "明确对象的采购资料核对；原型号、原图、参数、制造形式和供货能力须另核，不作为已恢复结论。"
+    },
+    {
+      "id": "134",
+      "oldTopic": "大型燃气台车炉",
+      "target": "/zh/products/detail/trolley-furnace#selection"
+    },
+    {
+      "id": "135",
+      "oldTopic": "大型台车炉",
+      "target": "/zh/products/detail/trolley-furnace#selection"
+    },
+    {
+      "id": "190",
+      "oldTopic": "不锈钢连续退火酸洗退火炉设备",
+      "target": "/zh/articles/special-industrial-furnace-procurement-assessment#stainless-annealing-pickling-assessment",
+      "coverage": "明确对象的采购资料核对；原型号、原图、参数、制造形式和供货能力须另核，不作为已恢复结论。"
+    },
+    {
+      "id": "191",
+      "oldTopic": "不锈钢连续退火酸洗退火炉设备",
+      "target": "/zh/articles/special-industrial-furnace-procurement-assessment#stainless-annealing-pickling-assessment",
+      "coverage": "明确对象的采购资料核对；原型号、原图、参数、制造形式和供货能力须另核，不作为已恢复结论。"
+    },
+    {
+      "id": "192",
+      "oldTopic": "不锈钢连续退火酸洗退火炉设备",
+      "target": "/zh/articles/special-industrial-furnace-procurement-assessment#stainless-annealing-pickling-assessment",
+      "coverage": "明确对象的采购资料核对；原型号、原图、参数、制造形式和供货能力须另核，不作为已恢复结论。"
+    },
+    {
+      "id": "197",
+      "oldTopic": "热处理网带",
+      "target": "/zh/service/industrial-furnace-parts-purchasing#parts-mesh-belt",
+      "coverage": "明确对象的采购资料核对；原型号、原图、参数、制造形式和供货能力须另核，不作为已恢复结论。"
+    },
+    {
+      "id": "198",
+      "oldTopic": "密封箱式炉料盘",
+      "target": "/zh/service/industrial-furnace-parts-purchasing#parts-trays-baskets",
+      "coverage": "明确对象的采购资料核对；原型号、原图、参数、制造形式和供货能力须另核，不作为已恢复结论。"
+    },
+    {
+      "id": "199",
+      "oldTopic": "箱式炉装料筐",
+      "target": "/zh/service/industrial-furnace-parts-purchasing#parts-trays-baskets",
+      "coverage": "明确对象的采购资料核对；原型号、原图、参数、制造形式和供货能力须另核，不作为已恢复结论。"
+    },
+    {
+      "id": "200",
+      "oldTopic": "燃气炉辐射管",
+      "target": "/zh/service/industrial-furnace-parts-purchasing#parts-gas-radiant",
+      "coverage": "明确对象的采购资料核对；原型号、原图、参数、制造形式和供货能力须另核，不作为已恢复结论。"
+    },
+    {
+      "id": "201",
+      "oldTopic": "燃气炉辐射管",
+      "target": "/zh/service/industrial-furnace-parts-purchasing#parts-gas-radiant",
+      "coverage": "明确对象的采购资料核对；原型号、原图、参数、制造形式和供货能力须另核，不作为已恢复结论。"
+    },
+    {
+      "id": "202",
+      "oldTopic": "燃气炉辐射管",
+      "target": "/zh/service/industrial-furnace-parts-purchasing#parts-gas-radiant",
+      "coverage": "明确对象的采购资料核对；原型号、原图、参数、制造形式和供货能力须另核，不作为已恢复结论。"
+    },
+    {
+      "id": "203",
+      "oldTopic": "耐热铸管",
+      "target": "/zh/service/industrial-furnace-parts-purchasing#parts-heat-resistant-identity",
+      "coverage": "明确对象的采购资料核对；原型号、原图、参数、制造形式和供货能力须另核，不作为已恢复结论。"
+    },
+    {
+      "id": "204",
+      "oldTopic": "耐热扎辊",
+      "target": "/zh/service/industrial-furnace-parts-purchasing#parts-heat-resistant-identity",
+      "coverage": "明确对象的采购资料核对；原型号、原图、参数、制造形式和供货能力须另核，不作为已恢复结论。"
+    },
+    {
+      "id": "229",
+      "oldTopic": "连续炉辐射管",
+      "target": "/zh/service/industrial-furnace-parts-purchasing#parts-heating"
+    },
+    {
+      "id": "230",
+      "oldTopic": "电热辐射管 丰东辐射管",
+      "target": "/zh/service/industrial-furnace-parts-purchasing#parts-brand-fit",
+      "coverage": "明确对象的采购资料核对；原型号、原图、参数、制造形式和供货能力须另核，不作为已恢复结论。"
+    },
+    {
+      "id": "231",
+      "oldTopic": "电热辐射管 爱协林辐射管加热芯",
+      "target": "/zh/service/industrial-furnace-parts-purchasing#parts-brand-fit",
+      "coverage": "明确对象的采购资料核对；原型号、原图、参数、制造形式和供货能力须另核，不作为已恢复结论。"
+    },
+    {
+      "id": "232",
+      "oldTopic": "电热辐射管 爱协林辐射管加热芯",
+      "target": "/zh/service/industrial-furnace-parts-purchasing#parts-brand-fit",
+      "coverage": "明确对象的采购资料核对；原型号、原图、参数、制造形式和供货能力须另核，不作为已恢复结论。"
+    },
+    {
+      "id": "233",
+      "oldTopic": "导轨系列 有轮推头",
+      "target": "/zh/service/industrial-furnace-parts-purchasing#parts-pusher-column-beam",
+      "coverage": "明确对象的采购资料核对；原型号、原图、参数、制造形式和供货能力须另核，不作为已恢复结论。"
+    },
+    {
+      "id": "234",
+      "oldTopic": "导轨系列 推头",
+      "target": "/zh/service/industrial-furnace-parts-purchasing#parts-pusher-column-beam",
+      "coverage": "明确对象的采购资料核对；原型号、原图、参数、制造形式和供货能力须另核，不作为已恢复结论。"
+    },
+    {
+      "id": "235",
+      "oldTopic": "导轨系列 螺纹立柱",
+      "target": "/zh/service/industrial-furnace-parts-purchasing#parts-pusher-column-beam",
+      "coverage": "明确对象的采购资料核对；原型号、原图、参数、制造形式和供货能力须另核，不作为已恢复结论。"
+    },
+    {
+      "id": "236",
+      "oldTopic": "导轨系列 料筐",
+      "target": "/zh/service/industrial-furnace-parts-purchasing#parts-trays-baskets",
+      "coverage": "明确对象的采购资料核对；原型号、原图、参数、制造形式和供货能力须另核，不作为已恢复结论。"
+    },
+    {
+      "id": "237",
+      "oldTopic": "导轨系列 立柱",
+      "target": "/zh/service/industrial-furnace-parts-purchasing#parts-pusher-column-beam",
+      "coverage": "明确对象的采购资料核对；原型号、原图、参数、制造形式和供货能力须另核，不作为已恢复结论。"
+    },
+    {
+      "id": "238",
+      "oldTopic": "导轨系列 挂梁",
+      "target": "/zh/service/industrial-furnace-parts-purchasing#parts-pusher-column-beam",
+      "coverage": "明确对象的采购资料核对；原型号、原图、参数、制造形式和供货能力须另核，不作为已恢复结论。"
+    },
+    {
+      "id": "239",
+      "oldTopic": "导轨系列",
+      "target": "/zh/service/industrial-furnace-parts-purchasing#parts-guide-chain",
+      "coverage": "明确对象的采购资料核对；原型号、原图、参数、制造形式和供货能力须另核，不作为已恢复结论。"
+    },
+    {
+      "id": "240",
+      "oldTopic": "侧导轨 导链槽",
+      "target": "/zh/service/industrial-furnace-parts-purchasing#parts-guide-chain",
+      "coverage": "明确对象的采购资料核对；原型号、原图、参数、制造形式和供货能力须另核，不作为已恢复结论。"
+    }
+  ]
+}

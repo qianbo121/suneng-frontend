@@ -44,10 +44,11 @@ describe('sitemap migration supplementary checks', () => {
     await expect(buildSitemap()).rejects.toThrow('Cannot generate a complete sitemap');
   });
   it('keeps content modification dates stable when the crawl date changes', async () => {
-    const before = (await buildSitemap()).map(({ url, lastModified }) => ({ url, lastModified }));
     vi.useFakeTimers({ toFake: ['Date'] });
     try {
-      vi.setSystemTime(new Date('2026-10-08T00:00:00Z'));
+      vi.setSystemTime(new Date('2026-10-10T00:00:00Z'));
+      const before = (await buildSitemap()).map(({ url, lastModified }) => ({ url, lastModified }));
+      vi.setSystemTime(new Date('2026-10-11T00:00:00Z'));
       const after = (await buildSitemap()).map(({ url, lastModified }) => ({ url, lastModified }));
       expect(after).toEqual(before);
     } finally { vi.useRealTimers(); }

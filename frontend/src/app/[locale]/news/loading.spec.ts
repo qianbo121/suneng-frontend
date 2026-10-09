@@ -9,7 +9,7 @@ describe('article loading feedback', () => {
     ['zh', '正在加载技术资料…'],
     ['en', 'Loading resources…'],
   ]) {
-    it(`renders synchronous ${locale} feedback without an extra page heading`, () => {
+    it(`keeps ${locale} loading and recovery text out of the server-rendered page`, () => {
       const html = renderToStaticMarkup(
         jsx(NextIntlClientProvider, {
           locale,
@@ -18,9 +18,13 @@ describe('article loading feedback', () => {
           children: jsx(NewsDetailLoading, {}),
         }),
       );
-      expect(html).toContain(text);
-      expect(html).toContain('role="status"');
-      expect(html).toContain('href=""');
+      expect(html).not.toContain(text);
+      expect(html).not.toContain('加载时间较长');
+      expect(html).not.toContain('Loading is taking longer');
+      expect(html).not.toContain('重新加载');
+      expect(html).not.toContain('Retry loading');
+      expect(html).not.toContain('href=""');
+      expect(html).toContain('<div');
       expect(html).not.toMatch(/<h1\b/);
       expect(html).not.toContain('data-news-id');
     });

@@ -158,15 +158,18 @@ python3 ops/releases/storage_policy.py check-import \
 }
 ```
 
-先看现场重新核对后的清单，再对同一批次执行：
+先把现场清单留存，再对同一批次的真实验收结果收尾。新的收尾包装器仍调用原删除程序，要求复核过的清单、工具版本和现场状态均未变化，不在发布事务中自动清理：
 
 ```sh
-python3 ops/releases/release_retention.py \
+python3 ops/releases/release_closeout.py \
   --plan /data/migration-rehearsals/本批次/retention-pending.json \
-  --acceptance /data/migration-rehearsals/本批次/acceptance.json
-python3 ops/releases/release_retention.py \
+  --acceptance /data/migration-rehearsals/本批次/acceptance.json \
+  --output-dir /data/migration-rehearsals/本批次/closeout-preflight
+python3 ops/releases/release_closeout.py \
   --plan /data/migration-rehearsals/本批次/retention-pending.json \
-  --acceptance /data/migration-rehearsals/本批次/acceptance.json --apply
+  --acceptance /data/migration-rehearsals/本批次/acceptance.json \
+  --reviewed-preflight /data/migration-rehearsals/本批次/closeout-preflight/preflight.json \
+  --output-dir /data/migration-rehearsals/本批次/closeout-apply --apply
 ```
 
 这是发布验收后的显式收尾步骤，不是定时清理，也不会在发布切换中删除镜像。清理与发布共用锁，每次只考虑本批次被替换组件的上上一版，必须有已验收历史、明确归属标签和来源提交。当前及上一版、全部容器引用（包括停止的容器）、配置引用、额外标签或明确保护的镜像均保留。未发布候选与来历不明的镜像不进入删除清单。
@@ -174,6 +177,8 @@ python3 ops/releases/release_retention.py \
 额外需要长留的镜像，在生产目录 `RETENTION_PROTECTED_IMAGES.json` 写固定镜像身份的 JSON 数组，或构建时加入 `org.jssngyl.retention.protect=true` 标签。计划外的特殊回退版本应先列入保护。每次删除前重查版本、验收和容器状态，任何变化停止；仅按准确身份执行不带强制参数的删除，不使用整机清理命令。结果记录在本批次 `retention-*/result.json`，支持中断后重新核对、续做。
 
 本自动核对及执行入口仅覆盖官网；数炬、报价系统仍沿用前述盘点方案，不自动处理。数据库、附件、配置、正式备份、恢复归档、发布历史记录和未用候选均不在此删除范围。缺失历史、恢复材料或验收证据时先保留，不能补写未经验证的成功记录。
+
+收尾目录必须是新目录，不能覆盖之前的证据。`closeout-result.json` 分别记录检查通过、实际删除、零删除和失败；原删除回执也留存。检查通过不代表已经腾出空间，零删除不记作回收容量。缺验收、现场变化或工具版本改变时，先停止并重新核查。
 
 证据格式示例（占位身份必须换成现场核实值）：
 
@@ -239,3 +244,59 @@ python3 ops/releases/release_retention.py \
 两个正式准备入口（前台专用及统一发布的前台分支）都会携带 `independentlyApprovedProcurementPages` 和 `procurementApprovalSha256`；统一发布的后端候选不受影响。候选清单只表示批准范围，不能证明候选已支持页面。发布工具另外在候选和切换后的公网用只读请求检查两页的 200、完整正文指纹、唯一标题及规范地址、索引许可、联系条、9 个唯一锚点、地图与入口链接；任一失败拒绝切换或恢复原版本。此检查不点击电话、微信或提交询盘，也不证明客户恢复。
 
 成功收据持久保存独立采购范围；旧 4edd 批次收据已有的精确两页列表可以作为历史基线，但候选必须带批准记录摘要并通过实际检查。旧候选清单缺省为空，不会自动重新开放两页；回退按旧版本实际范围检查，关闭页和英文页仍需 404。安装标准发布工具时，还须同目录复制 `procurement_approval.py`、`approved-procurement-pages.json`、`approved_procurement_continuity.py`、`approved-procurement-continuity.cjs`。
+
+## 可复用的发布准备、计时与续跑
+
+新批次使用这里维护的程序和每批清单，不从历史 `output` 目录复制、替换日期或修改程序里的包大小。历史冻结材料仍保留原字节，正在执行的旧批次不自动迁移到新入口。安装时同目录加入 `preparation_guard.py`、`phase_runtime.py` 和 `release_closeout.py`。
+
+准备基线记录全部运行服务、配置与版本摘要。只允许阶段开始前、同容器和同镜像的健康重启刷新启动时间；服务替换、版本或来源变化、配置或回执变化，以及新增未知容器仍停止。有效基线单独留存，原基线不改。阶段开始以后，包括实际切换和回退期间，仍严格核对启动时间，不能以准备前的刷新规则放行。
+
+```sh
+python3 ops/releases/frontend_release.py \
+  --manifest /private/release/manifest.json \
+  --capture-preparation-baseline /private/release/baseline.json
+python3 ops/releases/frontend_release.py \
+  --manifest /private/release/manifest.json \
+  --preparation-baseline /private/release/baseline.json \
+  --phase-directory /private/release/phases
+python3 ops/releases/frontend_release.py \
+  --status --phase-directory /private/release/phases
+```
+
+阶段记录分别保存开始、结束、实际执行秒数、通过或安全失败类别。每次尝试都有独立目录，失败和中断记录不会被覆盖。状态查询不连接生产、不改文件。预检失败或中断后，先查真实状态，再用同一清单、基线和阶段目录明确追加 `--resume`；该选项只允许重新核验预检。
+
+正式发布沿用同一入口明确追加 `--apply`，仍须满足前述官方来源、候选验收、真实浏览器与恢复条件；不能只因为计时或准备基线通过就切换。已经尝试的切换不自动再执行，存在中断标记时仍进入现有核对和恢复流程。需要新一轮切换时，必须先确认上一轮结果，再重新准备新的批次记录。
+
+这个入口覆盖发布器的候选预检与正式切换，不包含网络上传计时，也不取消共享主机的发布锁。候选打包和传输不长时间占用该锁；最终核验、切换和收尾继续逐项取得同一把锁。
+
+## 减少重复页面检查
+
+三端的代码检查、类型检查、单测和构建仍对实际提交执行。`scripts/visual-check-scope.py` 只对明确审阅过的统计、采集纯逻辑文件及其测试省略完整截图；组件、样式、图片、依赖、配置、截图用例和未知文件仍做完整截图。拿不到可靠比较提交、实际检出版本不符、基准图缺失时，也做完整截图。审阅阶段比较实际检出的合并树，正式分支比较本次推送的完整区间，不复用来源不匹配的成功标记。
+
+此规则不能保证所有统计修复都省略截图：涉及采集组件 `.tsx` 时，仍按页面影响处理。既有截图标准、基准和页面交互不变。
+
+## 可选的程序包分段复用
+
+两个候选准备流程默认仍生成原单压缩归档，兼容现有正式证明器。只有明确设置 `segmented_archive: true` 的新批次才使用分段格式，候选清单附真实片段索引和格式标记。官方压缩包仍只有候选清单和完整镜像归档两个成员；完整归档的大小、摘要和镜像来源契约继续保留。
+
+`archive_transfer.py` 只处理本地文件：从完整校验过的旧官方包建立缓存，打包本次缺失的片段，在接收端还原与本次官方包逐字节相同的文件，并重新核对官方完整摘要、镜像配置来源与每层实际内容。旧归档、没有缓存或不能分段的包走全包方式；缓存损坏不作为可复用片段，接收端缺失或损坏则要求补传。此工具不联网、不导入镜像、不切换服务、不清理文件。
+
+```sh
+python3 ops/releases/archive_transfer.py seed \
+  --official /private/release/previous-official.zip \
+  --official-sha256 <从官方记录取得的完整摘要> --cache /private/release/segments
+python3 ops/releases/archive_transfer.py bundle \
+  --official /private/release/current-official.zip \
+  --official-sha256 <本次官方完整摘要> --cache /private/release/segments \
+  --output /private/release/transfer.zip
+python3 ops/releases/archive_transfer.py receive \
+  --bundle /private/release/transfer.zip \
+  --official-sha256 <本次官方完整摘要> --cache /private/release/segments \
+  --output /private/release/restored-official.zip
+```
+
+发送端和接收端各自从同一个完整校验过的旧官方包建立缓存。官方摘要应来自已核对的构建记录，不取传输包自己的声明。首次没有缓存时仍全量传输。接收文件原子落盘且不覆盖同名文件，只有完整验证后才能交给发布链路。
+
+缓存、传输包、还原时的临时文件和最终官方包会同时占用空间。分段复用减少的是重复传输，不能把它当作磁盘空间已经释放；使用前须按这些额外文件核对容量，现有导入容量检查不替代这一步。
+
+分段归档需要用 `gzip.open` 完整解压后交给 `tarfile` 的 `r|` 模式；旧证明器的 `r|gz` 或自动识别的 `r|*` 无法完整读取拼接压缩成员。因此新格式必须使用新的完整验证入口，不能直接送旧证明器。新传输组件验证完成不替代服务器实际镜像身份、候选、浏览器和回退验收。实际传输节省和耗时尚须在正式启用后测量，不把模拟结果当作线上提速。

@@ -87,6 +87,146 @@ class MockAcquisitionChecks:
         self.addCleanup(check.stop)
 
 
+class PreparationIntegrationTest(MockAcquisitionChecks, unittest.TestCase):
+    def prepare(self, tmp):
+        import preparation_guard
+        release = ContractTest().fixture(str(Path(tmp).resolve()))
+        state = {'image': OLD, 'sharedStartedAt': 'unchanged', 'frontendStartedAt': 'unchanged', 'switches': []}
+        def inventory():
+            current = rows(state['image'])
+            current[-1]['State']['StartedAt'] = state['frontendStartedAt']
+            current.append({'Name': '/shuju-engine', 'Id': 'shared-id', 'Image': OTHER,
+                            'State': {'Running': True, 'StartedAt': state['sharedStartedAt'], 'Health': {'Status': 'healthy'}}})
+            return current
+        def command(args):
+            if args == ['docker', 'ps', '-q']:
+                return '\n'.join(row['Id'] for row in inventory())
+            if args[:2] == ['docker', 'inspect']:
+                return json.dumps(inventory())
+            if args[:3] == ['docker', 'exec', 'corp-site-nginx']:
+                return 'stable active proxy'
+            raise AssertionError(args)
+        baseline = Path(tmp).resolve() / 'baseline.json'
+        preparation_guard.capture(baseline, release.live, release.manifest, command)
+        return release, state, inventory, command, baseline
+
+    def perform(self, tmp, *, apply=False, shared_change=False, frontend_change=False, late_change=False, foreign_marker=False):
+        import preparation_guard
+        release, state, inventory, command, baseline = self.prepare(tmp)
+        def replace(override=None):
+            state['switches'].append(bool(override))
+            state['image'] = OLD if override else NEW
+            if shared_change and not override:
+                state['sharedStartedAt'] = 'restarted inside transaction'
+            if foreign_marker and not override:
+                release.pending_path.write_text(json.dumps({'foreignOperation': True}))
+                release.receipt_path.write_text('foreign receipt sentinel')
+                release.pins_path.write_text('foreign pins sentinel')
+                (release.live / 'DEPLOY_COMMIT').write_text('foreign source sentinel')
+        def public(*_):
+            if frontend_change:
+                state['frontendStartedAt'] = 'restarted in public preflight'
+            return []
+        if late_change:
+            original = release.execute
+            def execute(*args):
+                result = original(*args)
+                if late_change == 'baseline':
+                    baseline.write_bytes(baseline.read_bytes() + b' ')
+                else:
+                    state['sharedStartedAt'] = 'restarted after core returned'
+                return result
+            release.execute = execute
+        with patch.object(r, 'working_space', return_value={'passed': True}), \
+             patch.object(r, 'inspect', side_effect=lambda names: [row for row in inventory() if row['Name'].removeprefix('/corp-site-') in names]), \
+             patch.object(r, 'run', side_effect=canary_docker), patch.object(r, 'wait_healthy'), \
+             patch.object(r, 'probe', return_value=GOOD), patch.object(r, 'public_probe', side_effect=public), \
+             patch.object(r.subprocess, 'run'), patch.object(release, 'replace_frontend', side_effect=replace):
+            if shared_change or frontend_change or late_change or foreign_marker:
+                with self.assertRaises(RuntimeError):
+                    preparation_guard.execute_prepared(release, apply, 'deploy', baseline, command)
+                result = None
+            else:
+                result = preparation_guard.execute_prepared(release, apply, 'deploy', baseline, command)
+        return release, state, result
+
+    def test_guarded_preflight_and_apply_keep_existing_result_shape(self):
+        for apply in (False, True):
+            with self.subTest(apply=apply), tempfile.TemporaryDirectory() as tmp:
+                release, state, result = self.perform(tmp, apply=apply)
+                self.assertTrue(result['passed'])
+                self.assertEqual(result['applied'], apply)
+                self.assertFalse(release.pending_path.exists())
+                self.assertTrue((release.audit / 'effective-preparation-baseline.json').is_file())
+
+    def test_preflight_frontend_restart_refuses_without_changing_live_receipt(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            release, state, result = self.perform(tmp, frontend_change=True)
+            self.assertEqual(state['switches'], [])
+            self.assertEqual(json.loads(release.receipt_path.read_text()), RECEIPT)
+            self.assertFalse((release.audit / 'preflight.json').exists())
+
+    def test_shared_service_change_enters_existing_recovery_and_interruption_gate(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            release, state, result = self.perform(tmp, apply=True, shared_change=True)
+            self.assertEqual(state['switches'], [False, True])
+            self.assertEqual(state['image'], OLD)
+            self.assertTrue(release.pending_path.exists())
+            self.assertEqual(json.loads(release.receipt_path.read_text())['deploymentStatus'], 'recovery-required')
+            self.assertFalse(json.loads((release.audit / 'result.json').read_text())['passed'])
+
+    def test_change_after_core_return_cannot_report_wrapper_success_or_reapply(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            release, state, result = self.perform(tmp, apply=True, late_change=True)
+            self.assertEqual(state['switches'], [False])
+            self.assertTrue(json.loads(release.pending_path.read_text())['reconciliationRequired'])
+            with patch.object(r, 'inspect') as inspect, self.assertRaisesRegex(RuntimeError, 'reconciliation'):
+                release.execute(True, 'deploy')
+            inspect.assert_not_called()
+
+    def test_foreign_interruption_marker_is_not_removed_by_recovery(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            release, state, _ = self.perform(tmp, apply=True, foreign_marker=True)
+            self.assertEqual(state['switches'], [False])
+            self.assertEqual(json.loads(release.pending_path.read_text()), {'foreignOperation': True})
+            self.assertEqual(release.receipt_path.read_text(), 'foreign receipt sentinel')
+            self.assertEqual(release.pins_path.read_text(), 'foreign pins sentinel')
+            self.assertEqual((release.live / 'DEPLOY_COMMIT').read_text(), 'foreign source sentinel')
+            self.assertTrue(json.loads((release.audit / 'result.json').read_text())['liveMetadataPreserved'])
+
+    def test_baseline_read_failure_after_core_success_leaves_interruption_gate(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            release, state, _ = self.perform(tmp, apply=True, late_change='baseline')
+            self.assertEqual(state['switches'], [False])
+            self.assertTrue(json.loads(release.pending_path.read_text())['reconciliationRequired'])
+
+    def test_failed_apply_preflight_still_checks_all_shared_services(self):
+        import preparation_guard
+        with tempfile.TemporaryDirectory() as tmp:
+            release, state, inventory, command, baseline = self.prepare(tmp)
+            def fail_probe(*_):
+                state['sharedStartedAt'] = 'restarted during failed candidate check'
+                raise RuntimeError('candidate check failed')
+            with patch.object(r, 'working_space', return_value={'passed': True}), \
+                 patch.object(r, 'inspect', side_effect=lambda names: [row for row in inventory() if row['Name'].removeprefix('/corp-site-') in names]), \
+                 patch.object(r, 'run', side_effect=canary_docker), patch.object(r, 'wait_healthy'), \
+                 patch.object(r, 'probe', side_effect=fail_probe), patch.object(r.subprocess, 'run'), \
+                 patch.object(release, 'replace_frontend') as replace:
+                with self.assertRaises(preparation_guard.ProtectionChanged):
+                    preparation_guard.execute_prepared(release, True, 'deploy', baseline, command)
+            replace.assert_not_called()
+            self.assertEqual(json.loads(release.receipt_path.read_text()), RECEIPT)
+
+    def test_status_cli_does_not_require_manifest_lock_or_docker(self):
+        with tempfile.TemporaryDirectory() as tmp, patch.object(r, 'inspect') as inspect, \
+             patch.object(r, 'run') as command, patch('builtins.open') as open_file, patch('builtins.print') as output:
+            r.main(['--status', '--phase-directory', tmp])
+            self.assertFalse(json.loads(output.call_args.args[0])['applyAttempted'])
+            inspect.assert_not_called()
+            command.assert_not_called()
+            open_file.assert_not_called()
+
+
 class ContractTest(MockAcquisitionChecks, unittest.TestCase):
     def test_rejects_mutable_image_missing_identity_or_changed_scope(self):
         for field, value in [('image', 'frontend:latest'), ('sourceCommit', 'main'),
@@ -1299,7 +1439,8 @@ class SeparateProcurementReleaseTest(unittest.TestCase):
                 folder = Path(tmp) / ('release-' + component if component else 'frontend-candidate');folder.mkdir()
                 (folder / ((component or 'frontend') + '.tar.gz')).write_bytes(b'fixture-not-an-image')
                 (folder / 'image.json').write_text(json.dumps([{'Id': NEW, 'RootFS': {'Layers': []}, 'Size': 10}]))
-                env = {**os.environ, 'RUNNER_TEMP': tmp, 'SOURCE_COMMIT': 'e'*40, 'IMAGE_TAG': 'fixture'}
+                env = {**os.environ, 'RUNNER_TEMP': tmp, 'SOURCE_COMMIT': 'e'*40, 'IMAGE_TAG': 'fixture',
+                       'SEGMENTED_ARCHIVE': 'false'}
                 if component: env['COMPONENT'] = component
                 result = subprocess.run([sys.executable, '-c', source], cwd=root, env=env, capture_output=True, text=True, timeout=15)
                 self.assertEqual(result.returncode, 0, result.stderr)
@@ -1307,7 +1448,7 @@ class SeparateProcurementReleaseTest(unittest.TestCase):
                 if component != 'backend':
                     self.assertEqual(actual['approvedGuides'], r.APPROVED_GUIDES)
                     self.assertEqual(actual[r.SCOPE_FIELD], self.PATHS)
-                    self.assertEqual(actual['procurementApprovalSha256'], r.PROCUREMENT_APPROVAL_SHA256)
+                    self.assertEqual(actual['procurementApprovalSha256'], r.CURRENT_PROCUREMENT_APPROVAL_SHA256)
                 else:
                     self.assertNotIn(r.SCOPE_FIELD, actual)
                     self.assertNotIn('approvedGuides', actual)
@@ -1326,12 +1467,17 @@ class SeparateProcurementReleaseTest(unittest.TestCase):
                 switch.assert_not_called()
                 self.assertEqual(json.loads(release.receipt_path.read_text()), RECEIPT)
 
-    def perform(self, tmp, *, previous=None, paths=None, failure=None, apply=True, kind='deploy', same=False):
+    def perform(self, tmp, *, previous=None, paths=None, failure=None, apply=True, kind='deploy', same=False,
+                target_approval=None, previous_approval=None):
         receipt = copy.deepcopy(RECEIPT)
         if previous is not None:
             # The actually published 4edd wrapper records these exact paths without a later schema hash.
             receipt['frontendRelease'] = {r.SCOPE_FIELD: previous, 'servedGuides': r.APPROVED_GUIDES}
+            if previous_approval is not None:
+                receipt['frontendRelease']['procurementApprovalSha256'] = previous_approval
         manifest = self.manifest(paths)
+        if target_approval is not None:
+            manifest['procurementApprovalSha256'] = target_approval
         if same: manifest['image'] = OLD
         release = ContractTest().fixture(tmp, manifest, receipt)
         state = {'image': OLD, 'switches': []}
@@ -1339,9 +1485,9 @@ class SeparateProcurementReleaseTest(unittest.TestCase):
         def replace(override=None):
             state['switches'].append(override);state['image'] = OLD if override else NEW
         count = {'n': 0}
-        def check(container, checked, public=False):
+        def check(container, checked, public=False, approval_sha=None):
             count['n'] += 1
-            return {'passed': failure != ('public' if public else 'candidate') and not (failure == 'public-once' and count['n'] == 2), 'pagesChecked': len(checked)}
+            return {'passed': failure != ('public' if public else 'candidate') and not (failure == 'public-once' and count['n'] == 2), 'pagesChecked': len(checked), 'procurementApprovalSha256': approval_sha}
         with patch.object(r, 'working_space', return_value={'passed': True}), patch.object(r, 'inspect', side_effect=current), \
              patch.object(r, 'run', side_effect=canary_docker), patch.object(r, 'wait_healthy'), patch.object(r, 'probe', return_value=GOOD), \
              patch.object(r, 'public_probe', return_value=[]), patch.object(r.subprocess, 'run'), \
@@ -1450,11 +1596,11 @@ class SeparateProcurementReleaseTest(unittest.TestCase):
 class SeparateProcurementHttpTest(unittest.TestCase):
     def actual_check(self, fault=None):
         import approved_procurement_continuity as a
-        from procurement_approval import approval_document
+        from procurement_approval import approval_document, CURRENT_APPROVAL_SHA256
         project=Path(__file__).resolve().parents[2]
         raw=(project/'frontend/src/lib/approved-procurement-pages.ts').read_text()
         source=json.loads(raw.split('export const approvedProcurementPages = ',1)[1].split(' as const;',1)[0])
-        pages=approval_document()['pages'];target=pages[1]['path'];requests=[]
+        pages=approval_document(CURRENT_APPROVAL_SHA256)['pages'];target=pages[1]['path'];requests=[]
         class Handler(BaseHTTPRequestHandler):
             def log_message(self,*args):pass
             def do_GET(self):
@@ -1496,7 +1642,7 @@ class SeparateProcurementHttpTest(unittest.TestCase):
             return real_run(['node','-'],**kwargs)
         try:
             with patch.object(a,'CANDIDATE_ORIGIN',base),patch.object(a.subprocess,'run',side_effect=transport):
-                report=a.approved_procurement_probe('candidate',r.APPROVED_PROCUREMENT_PATHS)
+                report=a.approved_procurement_probe('candidate',r.APPROVED_PROCUREMENT_PATHS,approval_sha=CURRENT_APPROVAL_SHA256)
             self.assertEqual(len(requests),5)
             self.assertTrue(all(p in [x['path'] for x in pages]+[x['entryPath'] for x in pages]+['/sitemap.xml'] for p in requests))
             return report
@@ -1728,8 +1874,6 @@ class FrontendRecoverySourceTest(unittest.TestCase):
             self.assertTrue(json.loads((release.audit/'result.json').read_text())['previousFrontendRestoredAndVerified'])
 
 
-if __name__ == '__main__':
-    unittest.main(verbosity=2)
 
 
 
@@ -1817,3 +1961,7 @@ class ProcurementContinuityReleaseTest(unittest.TestCase):
             BackendOnlyReleaseTest().test_switch_and_failure_restore_only_backend_preserving_frontend_contract_and_marker()
             AdminOnlyReleaseTest().test_admin_only_switch_and_failed_cache_recovery_preserve_frontend_and_marker()
         gate.assert_not_called()
+
+
+if __name__ == '__main__':
+    unittest.main(verbosity=2)

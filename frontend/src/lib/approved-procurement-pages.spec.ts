@@ -23,12 +23,14 @@ const { JSDOM }: { JSDOM: new (html: string) => { window: { document: Document }
   createRequire(load.resolve('isomorphic-dompurify'))('jsdom');
 const documentOf = (html: string) => new JSDOM(html).window.document;
 const approvedCases = [
-  ['equipment', EquipmentRoute, 'cd47deec017c82945a64b81e515e62369c6d1b73289af3c05afd4830fcf7c5d6', [
+  ['equipment', EquipmentRoute, 'bd3636cd05c8f4c0018dd010381cb1b9b817c6abc746a77f2b207f4e4f662ebf', [
     'room-gas-forging-regenerative-assessment', 'solution-nitriding-atmosphere-assessment',
     'large-bell-assessment', 'oven-preheat-curing-assessment', 'spheroidizing-assessment',
+    'gas-furnace-assessment', 'electric-resistance-furnace-assessment', 'drying-furnace-assessment', 'stainless-annealing-pickling-assessment',
   ]],
-  ['parts', PartsRoute, '00ca6626315687f2b921519101f35aee75c1e2cbae2799aed23d8b811ff4c481', [
+  ['parts', PartsRoute, '06ce11f1417de21a421e601b32603fa259e41208d332c57d5a9153a4ffa4d9ea', [
     'parts-heating', 'parts-baskets-welded', 'parts-fans-shafts', 'parts-cover-motor-guide',
+    'parts-mesh-belt', 'parts-trays-baskets', 'parts-gas-radiant', 'parts-brand-fit', 'parts-pusher-column-beam', 'parts-guide-chain', 'parts-heat-resistant-identity',
   ]],
 ] as const;
 

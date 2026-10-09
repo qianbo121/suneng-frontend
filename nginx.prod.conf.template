@@ -153,6 +153,38 @@ http {
     243 "/zh/articles/special-industrial-furnace-procurement-assessment#oven-preheat-curing-assessment";
     244 "/zh/articles/special-industrial-furnace-procurement-assessment#oven-preheat-curing-assessment";
     245 "/zh/articles/special-industrial-furnace-procurement-assessment#oven-preheat-curing-assessment";
+    126 "/zh/products/detail/trolley-furnace#selection";
+    127 "/zh/articles/special-industrial-furnace-procurement-assessment#drying-furnace-assessment";
+    128 "/zh/articles/special-industrial-furnace-procurement-assessment#drying-furnace-assessment";
+    129 "/zh/products/detail/trolley-furnace#selection";
+    130 "/zh/products/detail/trolley-furnace#selection";
+    131 "/zh/products/detail/trolley-furnace#selection";
+    133 "/zh/articles/special-industrial-furnace-procurement-assessment#gas-furnace-assessment";
+    134 "/zh/products/detail/trolley-furnace#selection";
+    135 "/zh/products/detail/trolley-furnace#selection";
+    190 "/zh/articles/special-industrial-furnace-procurement-assessment#stainless-annealing-pickling-assessment";
+    191 "/zh/articles/special-industrial-furnace-procurement-assessment#stainless-annealing-pickling-assessment";
+    192 "/zh/articles/special-industrial-furnace-procurement-assessment#stainless-annealing-pickling-assessment";
+    197 "/zh/service/industrial-furnace-parts-purchasing#parts-mesh-belt";
+    198 "/zh/service/industrial-furnace-parts-purchasing#parts-trays-baskets";
+    199 "/zh/service/industrial-furnace-parts-purchasing#parts-trays-baskets";
+    200 "/zh/service/industrial-furnace-parts-purchasing#parts-gas-radiant";
+    201 "/zh/service/industrial-furnace-parts-purchasing#parts-gas-radiant";
+    202 "/zh/service/industrial-furnace-parts-purchasing#parts-gas-radiant";
+    203 "/zh/service/industrial-furnace-parts-purchasing#parts-heat-resistant-identity";
+    204 "/zh/service/industrial-furnace-parts-purchasing#parts-heat-resistant-identity";
+    229 "/zh/service/industrial-furnace-parts-purchasing#parts-heating";
+    230 "/zh/service/industrial-furnace-parts-purchasing#parts-brand-fit";
+    231 "/zh/service/industrial-furnace-parts-purchasing#parts-brand-fit";
+    232 "/zh/service/industrial-furnace-parts-purchasing#parts-brand-fit";
+    233 "/zh/service/industrial-furnace-parts-purchasing#parts-pusher-column-beam";
+    234 "/zh/service/industrial-furnace-parts-purchasing#parts-pusher-column-beam";
+    235 "/zh/service/industrial-furnace-parts-purchasing#parts-pusher-column-beam";
+    236 "/zh/service/industrial-furnace-parts-purchasing#parts-trays-baskets";
+    237 "/zh/service/industrial-furnace-parts-purchasing#parts-pusher-column-beam";
+    238 "/zh/service/industrial-furnace-parts-purchasing#parts-pusher-column-beam";
+    239 "/zh/service/industrial-furnace-parts-purchasing#parts-guide-chain";
+    240 "/zh/service/industrial-furnace-parts-purchasing#parts-guide-chain";
   }
 
   # Verified old news: preserve equipment continuity and approved same-question replacements.
@@ -168,6 +200,18 @@ http {
     42 /zh/news/gas-trolley-furnace-operation-maintenance-documents;
     44 /zh/news/mesh-belt-quenching-furnace-principle-process-checklist;
     43 /zh/news/annealing-furnace-metal-semiconductor-selection;
+  }
+
+  map $arg_class2 $legacy_product_category_path {
+    default /zh/products;
+    136 "/zh/articles/special-industrial-furnace-procurement-assessment#gas-furnace-assessment";
+    137 "/zh/articles/special-industrial-furnace-procurement-assessment#electric-resistance-furnace-assessment";
+    139 "/zh/products/detail/mesh-belt-furnace";
+    170 "/zh/products/detail/bell-furnace";
+    171 "/zh/articles/special-industrial-furnace-procurement-assessment#oven-preheat-curing-assessment";
+    172 "/zh/articles/special-industrial-furnace-procurement-assessment#spheroidizing-assessment";
+    173 "/zh/articles/special-industrial-furnace-procurement-assessment#stainless-annealing-pickling-assessment";
+    174 "/zh/service/industrial-furnace-parts-purchasing";
   }
 
   map "$request_method:$uri" $lead_event {
@@ -473,7 +517,7 @@ http {
     }
 
     location = /product/index.php {
-      return 301 https://www.jssngyl.cn/zh/products;
+      return 301 https://www.jssngyl.cn$legacy_product_category_path;
     }
 
     location = /news/index.php {
@@ -488,8 +532,12 @@ http {
       return 301 https://www.jssngyl.cn$legacy_product_path;
     }
 
-    location = /product/product.php {
+    location = /product/ {
       return 301 https://www.jssngyl.cn/zh/products;
+    }
+
+    location = /product/product.php {
+      return 301 https://www.jssngyl.cn$legacy_product_category_path;
     }
 
     location = /news/shownews.php {
@@ -556,7 +604,7 @@ http {
     }
 
     location = /product/index.php {
-      return 301 https://www.jssngyl.cn/zh/products;
+      return 301 https://www.jssngyl.cn$legacy_product_category_path;
     }
 
     location = /news/index.php {
@@ -571,8 +619,12 @@ http {
       return 301 https://www.jssngyl.cn$legacy_product_path;
     }
 
-    location = /product/product.php {
+    location = /product/ {
       return 301 https://www.jssngyl.cn/zh/products;
+    }
+
+    location = /product/product.php {
+      return 301 https://www.jssngyl.cn$legacy_product_category_path;
     }
 
     location = /news/shownews.php {
@@ -921,7 +973,7 @@ http {
     }
 
     location = /product/index.php {
-      return 301 /zh/products;
+      return 301 https://www.jssngyl.cn$legacy_product_category_path;
     }
 
     location = /news/index.php {
@@ -936,8 +988,12 @@ http {
       return 301 https://www.jssngyl.cn$legacy_product_path;
     }
 
+    location = /product/ {
+      return 301 https://www.jssngyl.cn/zh/products;
+    }
+
     location = /product/product.php {
-      return 301 /zh/products;
+      return 301 https://www.jssngyl.cn$legacy_product_category_path;
     }
 
     location = /news/shownews.php {

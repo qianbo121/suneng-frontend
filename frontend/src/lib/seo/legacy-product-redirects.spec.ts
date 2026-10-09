@@ -96,6 +96,8 @@ const approvedUiProcurementMappings = [
   ['245', '/zh/articles/special-industrial-furnace-procurement-assessment#oven-preheat-curing-assessment'],
 ] as const;
 const verifiedMappings = [...verifiedProducts, ...verifiedWorkshopPages, ...verifiedAnnealingFurnaces, ...approvedUiProcurementMappings];
+const continuedMappings = [["126", "/zh/products/detail/trolley-furnace#selection"], ["127", "/zh/articles/special-industrial-furnace-procurement-assessment#drying-furnace-assessment"], ["128", "/zh/articles/special-industrial-furnace-procurement-assessment#drying-furnace-assessment"], ["129", "/zh/products/detail/trolley-furnace#selection"], ["130", "/zh/products/detail/trolley-furnace#selection"], ["131", "/zh/products/detail/trolley-furnace#selection"], ["133", "/zh/articles/special-industrial-furnace-procurement-assessment#gas-furnace-assessment"], ["134", "/zh/products/detail/trolley-furnace#selection"], ["135", "/zh/products/detail/trolley-furnace#selection"], ["190", "/zh/articles/special-industrial-furnace-procurement-assessment#stainless-annealing-pickling-assessment"], ["191", "/zh/articles/special-industrial-furnace-procurement-assessment#stainless-annealing-pickling-assessment"], ["192", "/zh/articles/special-industrial-furnace-procurement-assessment#stainless-annealing-pickling-assessment"], ["197", "/zh/service/industrial-furnace-parts-purchasing#parts-mesh-belt"], ["198", "/zh/service/industrial-furnace-parts-purchasing#parts-trays-baskets"], ["199", "/zh/service/industrial-furnace-parts-purchasing#parts-trays-baskets"], ["200", "/zh/service/industrial-furnace-parts-purchasing#parts-gas-radiant"], ["201", "/zh/service/industrial-furnace-parts-purchasing#parts-gas-radiant"], ["202", "/zh/service/industrial-furnace-parts-purchasing#parts-gas-radiant"], ["203", "/zh/service/industrial-furnace-parts-purchasing#parts-heat-resistant-identity"], ["204", "/zh/service/industrial-furnace-parts-purchasing#parts-heat-resistant-identity"], ["229", "/zh/service/industrial-furnace-parts-purchasing#parts-heating"], ["230", "/zh/service/industrial-furnace-parts-purchasing#parts-brand-fit"], ["231", "/zh/service/industrial-furnace-parts-purchasing#parts-brand-fit"], ["232", "/zh/service/industrial-furnace-parts-purchasing#parts-brand-fit"], ["233", "/zh/service/industrial-furnace-parts-purchasing#parts-pusher-column-beam"], ["234", "/zh/service/industrial-furnace-parts-purchasing#parts-pusher-column-beam"], ["235", "/zh/service/industrial-furnace-parts-purchasing#parts-pusher-column-beam"], ["236", "/zh/service/industrial-furnace-parts-purchasing#parts-trays-baskets"], ["237", "/zh/service/industrial-furnace-parts-purchasing#parts-pusher-column-beam"], ["238", "/zh/service/industrial-furnace-parts-purchasing#parts-pusher-column-beam"], ["239", "/zh/service/industrial-furnace-parts-purchasing#parts-guide-chain"], ["240", "/zh/service/industrial-furnace-parts-purchasing#parts-guide-chain"]] as const;
+const allVerifiedMappings = [...verifiedMappings, ...continuedMappings];
 const verifiedDirectoryIds = ['123', '125', '142', '143', '147', '156', '158', '242', '164', '165', '159', '160', '161', '162', '163', '170', '171', '172', '173', '141', '175', '177'] as const;
 const mappingLedger = JSON.parse(readFileSync(new URL('docs/acquisition-repair-20261004/legacy-product-mappings.json', root), 'utf8')) as {
   mappingCount: number;
@@ -159,7 +161,7 @@ describe('verified original-PHP product redirects', () => {
   it('permits exactly the approved known IDs and preserves the existing catalog default', () => {
     expect([...productMap().entries()].sort()).toEqual([
       ['default', '/zh/products'],
-      ...verifiedMappings,
+      ...allVerifiedMappings,
     ].sort());
   });
 
@@ -239,12 +241,25 @@ describe('verified original-PHP product redirects', () => {
       expect(createHash('sha256').update(page.html).digest('hex')).toBe(page.sha256);
       const fragment = target.hash.slice(1);
       expect(page.html.match(new RegExp('id="' + fragment + '"', 'g'))).toHaveLength(1);
-      expect(mappingLedger.mappings.find((row) => String(row.oldId) === id)?.targetBodySha256).toBe(page.sha256);
+      expect(mappingLedger.mappings.find((row) => String(row.oldId) === id)?.targetBodySha256).toBe(page.originalApprovedBodySha256);
     }
   });
 
   it('adds only the approved 56 rows to the already published 45-rule template', () => {
-    let baseline = nginx;
+    let baseline = nginx.replace(/  map \$arg_class2 \$legacy_product_category_path \{\n[\s\S]*?\n  \}\n\n/, '');
+    for (const [, serverName, listen] of publicHosts) {
+      const block = publicBlock(serverName, listen);
+      const prefix = listen === '443 ssl' && serverName === '${DOMAIN}' ? '' : 'https://www.jssngyl.cn';
+      const restored = block
+        .replaceAll('return 301 https://www.jssngyl.cn$legacy_product_category_path;', 'return 301 ' + prefix + '/zh/products;')
+        .replace(/^[ \t]*location = \/product\/ \{\n[ \t]*return 301 https:\/\/www\.jssngyl\.cn\/zh\/products;\n[ \t]*\}\n\n/gm, '');
+      baseline = baseline.replace(block, restored);
+    }
+    for (const [id, target] of continuedMappings) {
+      const line = '    ' + id + ' "' + target + '";\n';
+      expect(baseline.split(line)).toHaveLength(2);
+      baseline = baseline.replace(line, '');
+    }
     for (const [id, path] of approvedUiProcurementMappings) {
       const line = '    ' + id + ' "' + path + '";\n';
       expect(baseline.split(line)).toHaveLength(2);
@@ -272,7 +287,7 @@ describe('verified original-PHP product redirects', () => {
     }
   });
 
-  it.each(['', '126', '127', '133', '134', '135', '191', '192', '197', '198', '204', '229', '240', '246', '999999', '1500', '0150', '%31%35%30', '1860', '0186', '%31%38%36', '1220', '0122', '%31%32%32', '2050', '0205', '%32%30%35', '1930', '0193', '%31%39%33'])(
+  it.each(['', '246', '999999', '1500', '0150', '%31%35%30', '1860', '0186', '%31%38%36', '1220', '0122', '%31%32%32', '2050', '0205', '%32%30%35', '1930', '0193', '%31%39%33'])(
     'unverified or nonexact ID %s retains the catalog fallback',
     (id) => {
       const map = productMap();
@@ -287,15 +302,16 @@ describe('verified original-PHP product redirects', () => {
     for (const [legacy, target] of [
       ['/contact/show.php', '/zh/contact'],
       ['/about/show.php', '/zh/about'],
-      ['/product/index.php', '/zh/products'],
       ['/news/index.php', '/zh/news'],
       ['/index.php', '/zh'],
-      ['/product/product.php', '/zh/products'],
       ['/news/news.php', '/zh/news'],
     ]) {
       const body = locationBody(block, legacy);
       expect(body).toBe('return 301 ' + prefix + target + ';');
       expect(body).not.toContain('$legacy_product_path');
+    }
+    for (const path of ['/product/product.php', '/product/index.php']) {
+      expect(locationBody(block, path)).toBe('return 301 https://www.jssngyl.cn$legacy_product_category_path;');
     }
     expect(locationBody(block, '/news/shownews.php')).toBe('return 301 https://www.jssngyl.cn$legacy_news_path;');
     const unknown = block.split('location ~ \\.php$ {').slice(1);

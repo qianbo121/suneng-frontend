@@ -22,6 +22,27 @@ jobs:
         with:
           # lastmod governance compares committed content with its parent.
           fetch-depth: 2
+      - name: Classify visual regression scope
+        id: visual_scope
+        timeout-minutes: 3
+        env:
+          VISUAL_EVENT_NAME: ${{ github.event_name }}
+          # PR checkout is the actual merge commit; push compares the whole
+          # before/after range, including multi-commit pushes.
+          VISUAL_BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before }}
+          VISUAL_HEAD_SHA: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          # Fetch only the explicit comparison commit. An unavailable or zero
+          # before SHA is handled conservatively by the classifier as full scope.
+          if [[ "$VISUAL_BASE_SHA" =~ ^[0-9a-fA-F]{40}$ ]] && [[ "$VISUAL_BASE_SHA" != "0000000000000000000000000000000000000000" ]]; then
+            if ! git cat-file -e "${VISUAL_BASE_SHA}^{commit}" 2>/dev/null; then
+              timeout 60 git fetch --no-tags --depth=1 origin "$VISUAL_BASE_SHA" || echo "Comparison commit unavailable; full visual checks required."
+            fi
+          fi
+          python3 scripts/visual-check-scope.py \
+            --base "$VISUAL_BASE_SHA" --head "$VISUAL_HEAD_SHA" --event "$VISUAL_EVENT_NAME" \
+            --github-output "$GITHUB_OUTPUT" --summary "$GITHUB_STEP_SUMMARY"
       - uses: actions/setup-node@v7
         with:
           node-version: 22.23.1
@@ -37,6 +58,7 @@ jobs:
           # the middle must not be hidden by the last one succeeding.
           set -euo pipefail
           python3 scripts/test_deploy_preflight.py
+          python3 scripts/test_visual_check_scope.py
           python3 scripts/test_backup_sh.py
           python3 ops/releases/test_backup_gate.py
           python3 ops/releases/test_storage_policy.py
@@ -47,6 +69,7 @@ jobs:
           python3 scripts/test_frontend_layer_reuse.py
           node --test ops/releases/test_check_backend.cjs
           python3 ops/releases/test_frontend_release.py
+          (cd ops/releases && python3 -m unittest test_preparation_guard test_phase_runtime test_archive_transfer test_release_closeout test_procurement_versions -v)
           python3 ops/releases/test_acquisition_continuity.py
           python3 ops/releases/test_deployment_notice.py
           python3 ops/releases/test_data_backup.py
@@ -72,6 +95,7 @@ jobs:
       - name: Test
         run: pnpm --dir frontend test
       - name: Install deterministic CJK font
+        if: steps.visual_scope.outputs.required != 'false'
         # runner 默认镜像 azure.archive.ubuntu.com 会整段无响应，apt 随后静默挂死：
         # 2026-08-19 实测两次，一次卡 2 小时、一次卡 27 分钟，全程零输出。
         # 改指官方源，每个 apt 调用单独套 timeout，再加步骤级超时兜底。
@@ -107,15 +131,17 @@ jobs:
           done
           fc-cache -f
       - name: Install visual test browser
+        if: steps.visual_scope.outputs.required != 'false'
         timeout-minutes: 10
         run: pnpm --dir frontend exec playwright install --with-deps chromium
       - name: Visual regression
+        if: steps.visual_scope.outputs.required != 'false'
         env:
           CI: true
           VISUAL_PROJECT: linux-chrome
         run: pnpm --dir frontend test:visual
       - name: Upload visual failure artifacts
-        if: failure()
+        if: always() && steps.visual_scope.outputs.required != 'false' && failure()
         uses: actions/upload-artifact@v4
         with:
           name: visual-regression-failure-${{ github.run_attempt }}
