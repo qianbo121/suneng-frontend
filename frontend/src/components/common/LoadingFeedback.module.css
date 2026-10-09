@@ -1,10 +1,18 @@
 .feedback {
   display: grid;
+  align-content: start;
+  min-height: calc(100svh - 78px);
   padding: 24px 16px;
   color: #475467;
   font-size: 15px;
   line-height: 1.6;
   text-align: center;
+}
+
+@media (min-width: 1280px) {
+  .feedback {
+    min-height: calc(100svh - 82px);
+  }
 }
 
 /* Reserve the recovery space to prevent the content below from jumping.

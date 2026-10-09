@@ -32,6 +32,11 @@
   align-items: center;
   padding: 18px 0 28px;
 }
+@media (min-width: 1280px) and (max-height: 700px) {
+  .titleSearchRow {
+    padding-inline-end: 96px;
+  }
+}
 .pageTitle {
   margin: 0;
   color: var(--news-title);

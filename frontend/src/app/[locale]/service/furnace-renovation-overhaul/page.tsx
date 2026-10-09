@@ -174,7 +174,7 @@ export default async function FurnaceRenovationPage({ params }: PageProps) {
             },
           ]}
         />
-        <p className="mt-5 text-sm leading-7 text-[#526277]" data-acceptance-boundary>{t("改造验收应覆盖安全联锁、升温与温度控制、有效加热区温度均匀性、产能与生产节拍、机械与连续运行、能耗或排放六类指标。温度、产能和能耗结论须同时记录负载、工件、装炉方式、测点、保温时间、仪器校准、统计周期与异常工况，不能脱离测试条件复用。")}</p>
+        <p className="mt-5 text-sm leading-7 text-[#526277] xl:pe-8" data-acceptance-boundary>{t("改造验收应按改造范围，从安全联锁、升温与温度控制、有效加热区温度均匀性、产能与生产节拍、机械与连续运行、能耗或排放六类中选择适用项目，明确工况、方法和判据；安全项目按适用要求核验。温度、产能和能耗结论须同时记录负载、工件、装炉方式、测点、保温时间、仪器校准、统计周期与异常工况，不能脱离测试条件复用。")}</p>
         <p className="mt-3 text-sm leading-7 text-[#526277]">{t("苏能不承接工程总承包业务，通常作为工业炉设备供应商或设备分包方参与项目；涉及压力容器、特种设备或专项认证的部分，由具备相应资质的单位承担或配合实施。")}</p>
       </Section>
       <FaqSection title={t("工业炉维修与改造常见问题")} faqs={localizeServiceContent(renovationFaqs, locale)} />
