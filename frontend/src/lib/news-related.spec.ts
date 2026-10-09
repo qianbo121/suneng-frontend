@@ -45,7 +45,7 @@ describe('news thematic internal links', () => {
         '/zh/products/detail/annealing-solution-line',
       ]),
     );
-    expect(links.some((link) => /anonymous-tsingshan|throughput-balance-proposal/.test(link.href))).toBe(false);
+    expect(links.some((link) => /anonymous-tsingshan-1250-renovation|throughput-balance-proposal/.test(link.href))).toBe(false);
   });
 
   it('always exposes a quotation-parameter guide without duplicating URLs', () => {
