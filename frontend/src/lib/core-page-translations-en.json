@@ -1362,5 +1362,6 @@
   "产量和质量结果须经工艺与实物铺料验证。": "Throughput and quality results require process and actual loading validation.",
   "推力、产量和合格率须经热态与负载验证。": "Thrust, throughput and pass rate require hot-state and load validation.",
   "最大载荷、速度和产量须经热态与负载验证。": "Maximum load, speed and throughput require hot-state and load validation.",
-  "参数确认": "Parameter confirmation"
+  "参数确认": "Parameter confirmation",
+  "上述数据来自苏能现有辊底炉项目资料，仅作为选型参考。输送速度需按工件、装载和工艺条件确认，并区分进出炉、往复与稳定工艺运行；未经核实的速度不能用于计算加热时间或产能。工件支承、炉辊载荷和工艺节拍须按项目校核。": "These existing Suneng project data are selection references only. Confirm conveying speed for the workpiece, loading and process conditions, distinguishing entry/exit, reciprocating and steady process operation. Do not use unverified speed to calculate heating time or capacity. Verify supports, roller loads and process cycle for each project."
 }

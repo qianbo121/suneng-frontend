@@ -112,7 +112,7 @@ describe('verified original-PHP news continuity', () => {
     }
     expect(locationBody(block, '/product/showproduct.php')).toBe('return 301 https://www.jssngyl.cn$legacy_product_path;');
     for (const path of ['/product/product.php', '/product/index.php']) {
-      expect(locationBody(block, path)).toBe('return 301 ' + prefix + '/zh/products;');
+      expect(locationBody(block, path)).toBe('return 301 https://www.jssngyl.cn$legacy_product_category_path;');
     }
     expect(block.match(/\$legacy_news_path\b/g)).toHaveLength(1);
     const unknown = block.split('location ~ \\.php$ {').slice(1);
@@ -124,6 +124,10 @@ describe('verified original-PHP news continuity', () => {
     let historicalMap = mapBody('legacy_product_path')[0]
       .replace(/^    19[3-6] \/zh\/products\/detail\/annealing-solution-line;\n/gm, '');
     for (const id of ["122", "124", "132", "136", "137", "138", "139", "140", "144", "145", "146", "148", "149", "151", "153", "155", "157", "174", "176", "178", "179", "180", "181", "182", "183", "184", "185", "205", "206", "207", "208", "209", "210", "211", "212", "213", "214", "215", "216", "217", "218", "219", "220", "221", "222", "223", "224", "225", "226", "227", "228", "241", "243", "244", "245"]) {
+      historicalMap = historicalMap.replace(new RegExp('^    ' + id + ' \"[^\"]+\";\\n', 'gm'), '');
+    }
+    const continued = ["126", "127", "128", "129", "130", "131", "133", "134", "135", "190", "191", "192", "197", "198", "199", "200", "201", "202", "203", "204", "229", "230", "231", "232", "233", "234", "235", "236", "237", "238", "239", "240"];
+    for (const id of continued) {
       historicalMap = historicalMap.replace(new RegExp('^    ' + id + ' \"[^\"]+\";\\n', 'gm'), '');
     }
     const hash = createHash('sha256').update(historicalMap).digest('hex');

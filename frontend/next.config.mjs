@@ -37,6 +37,8 @@ export const unavailablePreviewRewrites = process.env.NODE_ENV === 'development'
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
+  // Keep page metadata in the initial head for browsers and crawlers.
+  htmlLimitedBots: /.*/,
   // Resolve unmatched URLs outside cached page rendering and streamed layouts.
   experimental: { globalNotFound: true },
   distDir,

@@ -31,8 +31,24 @@ import { HomepageLeadForm } from '@/components/home/HomepageLeadForm';
 import { getBreadcrumbJsonLd, getFaqJsonLd, getWebPageJsonLd } from '@/lib/seo/jsonld';
 import { buildMetadata } from '@/lib/seo/metadata';
 
-// Existing published project evidence, preserved with its original limits.
-const publishedProjectEvidence = [
+// Historical scheme references; keep source-confirmed values separate from outcomes.
+type ProjectEvidence = {
+  factId: string;
+  title: string;
+  text: string;
+  href?: string;
+  sourceSummary?: string;
+};
+const restoredSchemeReferenceIds = new Set([
+  'SN-CASE-P0-002',
+  'SN-CASE-P0-003',
+  'SN-CASE-P0-004',
+  'SN-CASE-P0-005',
+  'SN-CASE-P0-009',
+  'SN-CASE-P0-010',
+  'SN-CASE-P0-011',
+]);
+const publishedProjectEvidence: ProjectEvidence[] = [
   {
     factId: 'SN-CASE-P0-008',
     title: '3 条 1250 mm 连续退洗线节能改造',
@@ -53,43 +69,69 @@ const publishedProjectEvidence = [
   {
     factId: 'SN-CASE-P0-002',
     title: '托辊网带正火回火连续线',
-    text: '2017 方案为正火炉 800 mm、回火炉 1000 mm；2026 方案为正火炉 1000 mm、回火炉 1200 mm。额定温度分别为 950℃、650℃，多区 PID 与变频网带属于方案配置。',
+    text: '2017 年方案的正火炉、回火炉有效宽度分别为 800 mm、1000 mm；2026 年方案分别为 1000 mm、1200 mm。两份方案的正火炉、回火炉额定温度分别为 950℃、650℃，分区控温与网带变频调速属于方案配置；不同年份、炉段的参数不能拼成一组通用规格。',
+    sourceSummary: '来源：2017 年 9 月《托辊式网带正火回火生产线技术方案》及 2026 年 5 月同类方案中的正火炉、回火炉主要技术参数。',
   },
   {
     factId: 'SN-CASE-P0-003',
     title: 'RCWT 托辊网带淬火回火线',
-    text: '2020 RCWT-360/220-9/6：宽度 850/1000 mm、速度 30–250 mm/min；2026 RCWT-250/200-9/6：宽度 800/1000 mm、速度 50–300 mm/min。950℃、650℃均为额定温度。',
+    text: '2020 年 RCWT-360/220-9/6 方案的淬火炉、回火炉有效宽度分别为 850 mm、1000 mm，淬火炉网带速度为 30–250 mm/min。2026 年 RCWT-250/200-9/6 方案的对应宽度为 800 mm、1000 mm，淬火炉和回火炉网带速度 50–300 mm/min。两份方案的 950℃、650℃均为对应炉段额定温度，不是工件的实际工艺温度。',
+    sourceSummary: '来源：2020 年 1 月及 2026 年 5 月《托辊式网带炉热处理生产线技术方案》中的淬火炉、回火炉主要技术参数；型号和年份分别对应。',
   },
   {
     factId: 'SN-CASE-P0-004',
     title: 'RCWT-75/45-9/6 可控气氛网带线',
-    text: '淬火段有效尺寸 400×3200 mm，回火段 400×5600 mm，网带速度 30–250 mm/min；最大设计能力约 150 kg/h，按 0.4 m×0.25 m/min×60×25 kg/㎡计算。',
+    text: '2026 年方案的淬火段、回火段有效宽度×加热长度分别为 400×3200 mm、400×5600 mm，网带速度为 30–250 mm/min。按带宽 0.4 m、速度 0.25 m/min、每平方米铺料 25 kg 的条件复算：0.4 m×0.25 m/min×60 min/h×25 kg/㎡＝150 kg/h，为设计参考能力，不是实际验收产能。改变工件、铺料密度或加热时间后需重新核算。',
+    sourceSummary: '来源：2026 年 5 月《可控气氛托辊网带炉生产线技术方案》的淬火炉、回火炉主要技术参数；150 kg/h 的公式为按方案值及所列铺料条件复算。',
   },
   {
     factId: 'SN-CASE-P0-005',
     title: '网带式渗碳气氛热处理生产线',
-    text: '有效加热区 9300×1000×100 mm，炉段功率 300 kW，最高工作温度 950℃；典型设计能力约 5000 件/24 h，最大工况约 6000 件/24 h，均不是实际日产量。',
+    text: '2018 年方案中，加热炉有效加热区长×宽×高为 9300×1000×100 mm，加热炉段功率为 300 kW，最高工作温度为 950℃。300 kW 不能当作全线总功率；不同工件的产能还需按规格、铺料、网带速度和连续运行时间确认，方案生产量均不是实际日产量。',
+    sourceSummary: '来源：2018 年 8 月《网带式渗碳气氛热处理生产线技术方案》第五部分“加热炉主要技术参数”。',
   },
   {
     factId: 'SN-CASE-P0-009',
     title: '热轧退火酸洗项目退火炉',
-    text: '2021 年 850 mm 与 2024 年 1250 mm 为两个 HAPL 项目；炉体采用预热段 + 4 个加热段、约 8 区控制。700–1200℃为工艺覆盖范围，低于 80℃为冷却/干燥出口项目考核目标。',
+    text: '2021 年 850 mm 与 2024 年 1250 mm 是两份不同机组规格的热轧退火酸洗方案，不能合成一条通用规格。两份技术附件均列出 1 个预热段、4 个加热段与 8 个独立燃烧控制区；700–1200℃为工艺覆盖范围，冷却至 80℃以下为该项目要求，均不表示已经达到的验收结果。',
+    sourceSummary: '来源：2021 年 11 月 850 设备及 2024 年 4 月 1250 设备的《热轧退火酸洗项目技术附件》，对应“概况”“退火炉设备组成”及燃烧控制说明。',
   },
   {
     factId: 'SN-CASE-P0-010',
     title: '低氮燃气加热炉生产线',
-    text: '同一生产线含 2 台炉，单台有效尺寸 2500×1600×800 mm；每台 4 套 250 kW 级低氮天然气烧嘴，燃烧装机能力约 1000 kW。助燃空气 200–300℃为设计预热目标，NOx 以现场检测为准。',
+    text: '2020 年方案列出 2 台燃气加热炉，单台有效尺寸为 2500×1600×800 mm，每台配置 4 套 250 kW 级低氮天然气烧嘴。4×250 kW＝约 1000 kW 是单台燃烧输入能力，不是电气功率。助燃空气预热至 200–300℃为设计目标；氮氧化物排放：NOx 以现场检测为准，不作固定排放达标或节能比例承诺。',
+    sourceSummary: '来源：2020 年 8 月《低氮氧化物燃气加热炉生产线技术方案》第二、三部分的数量、尺寸、燃烧装置和供风参数。',
   },
   {
     factId: 'SN-CASE-P0-011',
-    title: '750 t/d 不锈钢连续退火双带炉',
-    text: '750 t/d 为单台炉合同设计能力，代表条件为 J3A、2.3×600 mm、双带、26.6 m/min；炉体约 110 m，含水冷、挤干和干燥段后约 125.4 m，不代表实际日产量。',
+    title: '不锈钢连续退火双带炉',
+    text: '2022 年双带炉方案的炉子段约 110 m，其中预热段约 25.6 m、加热均热段约 84.4 m；连同水冷、挤干、干燥及过渡部分，退火工艺段总长约 125.4 m。比较厂房布置时要先对齐长度包含哪些设备，不能只拿炉子段长度代替整个工艺段，也不能由长度推定实际日产量。',
+    sourceSummary: '来源：2022 年 8 月《不锈钢连续退火炉（双带炉）技术协议》中的“工艺流程概述”及“主要技术参数”。',
   },
   {
     factId: 'SN-CASE-P0-001',
     title: 'PC200–PC400 支重轮热处理生产线',
     text: '项目淬火炉额定温度 950℃、有效加热区 6400×300×300 mm，最大设计处理能力 500 kg/h，方案折算约 30 件/h；实际能力按工件和节拍确定。',
     href: '/zh/case/jining-support-roller-heat-treatment-line',
+  },
+];
+
+const continuousLineFaqs = [
+  ...lineFaqs,
+  {
+    question: '已有生产线可以改造扩产吗？',
+    answer:
+      '可以先评估，但先找出限制产量的工序，并核查旧炉状态、输送与冷却能力、控制系统和现场能源条件。设备安全、原工艺仍适配且问题范围明确时，可比较局部改造；结构或工艺不再适配时，应同时比较换新。不能只提高网带速度就承诺扩产，改后产能须在约定工件、装料和工艺条件下验证。',
+  },
+  {
+    question: '连续生产线的控制系统怎么选？',
+    answer:
+      '先核对温度、速度、动作、安全联锁、报警和数据记录这些控制任务，再按控制对象数量、联锁复杂度、冗余需求、客户系统接口、数据追溯及现场维护能力选择。PLC 是设备逻辑控制系统，DCS 是集中管理多个过程回路的控制系统；选择不能只看名称或品牌，保留、局部升级还是更换架构应按项目资料确认。',
+  },
+  {
+    question: '项目周期和实际停产时间是一回事吗？',
+    answer:
+      '需要分别安排。项目总周期包含现场核查、方案设计、采购制造、安装调试与验收；其中准备、备料和预制可在停产前安排。旧线实际停产窗口还要计入安全停机与冷却、拆装和接口切换、必要烘炉、调试及负载验证，按设备状态、改造范围和生产排程确认，不能用总交期直接代替停产天数。',
   },
 ];
 
@@ -125,7 +167,7 @@ export default async function ContinuousHeatTreatmentLinePage({ params }: PagePr
         items={[
           ['fit', '方案选择'],
           ['process', '工艺流程'],
-          ['experience', '项目案例'],
+          ['project-evidence', '方案资料'],
           ['faq', '常见问题'],
           ['inquiry', '提交需求'],
         ]}
@@ -315,7 +357,11 @@ export default async function ContinuousHeatTreatmentLinePage({ params }: PagePr
         </p>
         <div className="mt-6 grid gap-5 md:grid-cols-2">
           {publishedProjectEvidence
-            .filter((item) => item.href && !isWithdrawnTechnicalPath(item.href))
+            .filter((item) =>
+              item.href
+                ? !isWithdrawnTechnicalPath(item.href)
+                : restoredSchemeReferenceIds.has(item.factId),
+            )
             .map((item) => (
               <article
                 key={item.factId}
@@ -325,6 +371,11 @@ export default async function ContinuousHeatTreatmentLinePage({ params }: PagePr
                   {item.title}
                 </h3>
                 <p className="mt-3 text-[15px] leading-[1.85] text-[#475467]">{item.text}</p>
+                {item.sourceSummary && (
+                  <p className="mt-3 text-[13px] leading-6 text-[#526277]">
+                    {item.sourceSummary}
+                  </p>
+                )}
                 {item.href && !isWithdrawnTechnicalPath(item.href) ? (
                   <Link
                     href={item.href}
@@ -337,7 +388,7 @@ export default async function ContinuousHeatTreatmentLinePage({ params }: PagePr
             ))}
         </div>
       </Section>
-      <FaqSection title="连续热处理生产线常见问题" faqs={lineFaqs} defaultOpenIndex={2} />
+      <FaqSection title="连续热处理生产线常见问题" faqs={continuousLineFaqs} defaultOpenIndex={2} />
       <Resources
         title="选型与采购资料"
         items={[
@@ -359,6 +410,24 @@ export default async function ContinuousHeatTreatmentLinePage({ params }: PagePr
             href: '/zh/news/heat-treatment-line-fat-single-machine-acceptance',
             label: '阅读生产线验收范围',
           },
+          {
+            title: '旧线改造还是换新',
+            description: '先核设备安全、工艺适配和问题范围，再比较大修、局部改造与换新。',
+            href: '/zh/articles/laojiu-rechuli-lu-daxiu-haishi-maixin',
+            label: '阅读旧炉修、改、换判断',
+          },
+          {
+            title: '控制系统怎么选与升级',
+            description: '按控制任务、接口和维护条件选架构，明确保留、替换、备份与回退范围。',
+            href: '/zh/solutions/rechuli-lu-kongzhi-xitong-shengji',
+            label: '阅读控制系统升级核对方法',
+          },
+          {
+            title: '项目周期与停产窗口怎么安排',
+            description: '分开设计制造、现场切换与调试验收，确认哪些工作能在停产前完成。',
+            href: '/zh/solutions/rechuli-lu-gaizao-fengxian-zhouqi',
+            label: '阅读改造风险与周期说明',
+          },
         ]}
       />
       <HomepageLeadForm
@@ -379,7 +448,7 @@ export default async function ContinuousHeatTreatmentLinePage({ params }: PagePr
           { name: '连续热处理生产线解决方案', url: pagePath },
         ])}
       />
-      <JsonLd id="continuous-line-faq-jsonld" data={getFaqJsonLd(lineFaqs)} />
+      <JsonLd id="continuous-line-faq-jsonld" data={getFaqJsonLd(continuousLineFaqs)} />
     </div>
   );
 }

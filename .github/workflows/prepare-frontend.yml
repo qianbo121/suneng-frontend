@@ -6,6 +6,11 @@ on:
         description: Full current main commit after CI and review
         required: true
         type: string
+      segmented_archive:
+        description: Opt in to segmented gzip; requires the new archive transport verifier
+        required: false
+        type: boolean
+        default: false
 permissions:
   contents: read
   actions: read
@@ -55,10 +60,18 @@ jobs:
             --label "org.opencontainers.image.revision=$SOURCE_COMMIT" \
             --tag "$IMAGE_TAG" .
       - name: Record immutable artifact identity
+        env:
+          SEGMENTED_ARCHIVE: ${{ inputs.segmented_archive }}
         run: |
           set -euo pipefail
           mkdir -p "$RUNNER_TEMP/frontend-candidate"
-          docker save "$IMAGE_TAG" | gzip > "$RUNNER_TEMP/frontend-candidate/frontend.tar.gz"
+          if [[ "$SEGMENTED_ARCHIVE" == true ]]; then
+            docker save "$IMAGE_TAG" | python3 ops/releases/archive_transfer.py pack \
+              --output "$RUNNER_TEMP/frontend-candidate/frontend.tar.gz" \
+              --index "$RUNNER_TEMP/frontend-candidate/archive-segments.json"
+          else
+            docker save "$IMAGE_TAG" | gzip > "$RUNNER_TEMP/frontend-candidate/frontend.tar.gz"
+          fi
           docker image inspect "$IMAGE_TAG" > "$RUNNER_TEMP/frontend-candidate/image.json"
           python3 - <<'PY'
           import hashlib, json, os, pathlib, sys
@@ -76,6 +89,9 @@ jobs:
                      'imageTag': os.environ['IMAGE_TAG'], 'buildImageId': image['Id'],
                      'rootFsDiffIds': image['RootFS']['Layers'], 'imageBytes': image['Size'],
                      'archiveBytes': archive.stat().st_size, 'archiveSha256': digest.hexdigest(),
+                     **({'archiveFormat': 'gzip-segments-v1',
+                         'archiveSegments': json.loads((root / 'archive-segments.json').read_text())}
+                        if os.environ['SEGMENTED_ARCHIVE'] == 'true' else {}),
                      'publicationScope': 'news-products-services-company-reviewed-cases',
                      'htmlCachePolicy': 'no-store',
                      'approvedGuides': json.loads(pathlib.Path('ops/releases/approved-guides.json').read_text()),
@@ -83,6 +99,8 @@ jobs:
                      'serverCanaryRequired': True, 'browserAcceptanceRequired': True}
           (root / 'candidate.json').write_text(json.dumps(receipt, indent=2) + '\n')
           (root / 'image.json').unlink()
+          if os.environ['SEGMENTED_ARCHIVE'] == 'true':
+              (root / 'archive-segments.json').unlink()
           PY
       - uses: actions/upload-artifact@v4
         with:

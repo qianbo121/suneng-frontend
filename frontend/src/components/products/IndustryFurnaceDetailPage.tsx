@@ -9,6 +9,7 @@ import { HiArrowRight } from 'react-icons/hi2';
 import { JsonLd } from '@/components/JsonLd';
 import { BuyerSelectionGuide } from './BuyerSelectionGuide';
 import { productBuyerGuide } from '@/lib/buyer-selection-guides';
+import { getTrolleyProcurementResources } from '@/lib/trolley-procurement-resources';
 import { getCaseArticle } from '@/lib/cases/server';
 import { HomepageLeadForm } from '@/components/home/HomepageLeadForm';
 import { Breadcrumb } from '@/components/layout/Breadcrumb';
@@ -55,6 +56,7 @@ export function IndustryFurnaceDetailPage({ slug, locale = 'zh' }: { slug: Indus
   const bearingWireCase = slug === 'trolley-furnace'
     ? getCaseArticle('bearing-wire-trolley-annealing-proposal')
     : undefined;
+  const englishTrolleyResources = getTrolleyProcurementResources(locale, slug);
   const productEvidenceLinks: Array<readonly [string, string]> = slug === 'mesh-belt-furnace'
     ? [
         [t("网带炉产量怎样核算"), t("/zh/news/shuju-news-23")],
@@ -66,6 +68,7 @@ export function IndustryFurnaceDetailPage({ slug, locale = 'zh' }: { slug: Indus
       ? [bearingWireCase.title, `/zh/case/${bearingWireCase.slug}`]
       : [t("查看本设备相关方案与项目资料"), '#related-case-evidence']];
   const evidenceLinks: Array<readonly [string, string]> = [
+    ...englishTrolleyResources,
     ...productEvidenceLinks,
     [t("企业资质与专利证书原件"), t("/zh/strength/honors")],
     ...localizeCoreValue(relatedArticles, locale),
@@ -408,7 +411,7 @@ export function IndustryFurnaceDetailPage({ slug, locale = 'zh' }: { slug: Indus
             <PitFurnaceFaq items={config.faqs} idPrefix={slug} />
           </section>
 
-          <section id="related" className={`${styles.section} ${styles.relatedSection}`}>
+          <section id="related" className={`${styles.section} ${styles.relatedSection}${englishTrolleyResources.length ? ' lg:!pr-24' : ''}`}>
             <SectionHeader
               title={t("相关设备与选型资料")}
               description={t("先比较装料或输送方向，再带着完整工况进入技术沟通。")}

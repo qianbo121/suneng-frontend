@@ -1,0 +1,54 @@
+{
+  "reviewedOn": "2026-10-09",
+  "defaultTarget": "/zh/products",
+  "routes": [
+    {
+      "category": "136",
+      "oldTopic": "工业燃气炉",
+      "target": "/zh/articles/special-industrial-furnace-procurement-assessment#gas-furnace-assessment",
+      "coverage": "按已公开设备结构与工艺方向核对采购资料；热源、原规格及供货内容按项目确认。"
+    },
+    {
+      "category": "137",
+      "oldTopic": "工业电阻炉",
+      "target": "/zh/articles/special-industrial-furnace-procurement-assessment#electric-resistance-furnace-assessment",
+      "coverage": "按已公开设备结构与工艺方向核对采购资料；热源、原规格及供货内容按项目确认。"
+    },
+    {
+      "category": "139",
+      "oldTopic": "网带炉",
+      "target": "/zh/products/detail/mesh-belt-furnace",
+      "coverage": "承接网带炉类型选型；旧型号和整线接口仍须按工况确认。"
+    },
+    {
+      "category": "170",
+      "oldTopic": "罩式炉",
+      "target": "/zh/products/detail/bell-furnace",
+      "coverage": "承接罩式结构、多炉台组织与承载吊装核校；旧大规格不是现统一规格或实绩承诺。"
+    },
+    {
+      "category": "171",
+      "oldTopic": "烘干箱",
+      "target": "/zh/articles/special-industrial-furnace-procurement-assessment#oven-preheat-curing-assessment",
+      "coverage": "现公开段明确工业烘箱及温度、装载、排气条件，不把所有烘箱改去气瓶固化生产线。"
+    },
+    {
+      "category": "172",
+      "oldTopic": "球化退火炉",
+      "target": "/zh/articles/special-industrial-furnace-procurement-assessment#spheroidizing-assessment",
+      "coverage": "公开段落说明单层连续、双层连续和井式球化退火设备的采购评估；不宣称全部历史图片和参数已恢复。"
+    },
+    {
+      "category": "173",
+      "oldTopic": "大型退火炉（旧栏目实为不锈钢连续退火酸洗设备）",
+      "target": "/zh/articles/special-industrial-furnace-procurement-assessment#stainless-annealing-pickling-assessment",
+      "coverage": "先核带材或其他处理对象，以及炉段、酸洗、清洗和输送配套分工；不从通用名称推定整线供货。"
+    },
+    {
+      "category": "174",
+      "oldTopic": "工业炉配件",
+      "target": "/zh/service/industrial-furnace-parts-purchasing",
+      "coverage": "现公开页按辐射管、加热芯、导轨及料筐等采购方向分组，独立采购和他厂配套仍须核尺寸版本。"
+    }
+  ]
+}

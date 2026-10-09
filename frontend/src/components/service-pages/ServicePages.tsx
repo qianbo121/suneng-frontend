@@ -86,6 +86,8 @@ function OverviewContent({ locale = 'zh' }: { locale?: Locale }) {
       <ServiceSection id="service-process" title={en ? 'From equipment assessment to implementation and handover' : '从设备现状，到实施与交付'} soft>
         <ServiceSteps items={localizeServiceContent(overviewSteps, locale)} />
         <p className={styles.note}>{en ? 'Equipment eligibility and work scope depend on documentation, configuration and site conditions.' : '服务对象与实施范围，需结合设备资料、配置和现场条件评估。'}</p>
+        <p className={styles.note} data-service-response-policy>{en ? 'On-site service: the hotline responds within 8 hours, and the technical service team replies with a handling plan within 24 hours. On-site visits are arranged according to the contract, equipment status, site conditions and service distance.' : '现场服务：客户服务热线 8 小时内响应，技术服务团队 24 小时内答复处理方案；现场上门服务依据合同约定、设备状态、现场工况和服务距离安排。'}</p>
+        <p className={styles.note} data-service-response-contract>{en ? 'Fault handling: response is based on the impact level of the issue and the service terms agreed in the contract. Specific handling plans and any production-loss matters are subject to the contract terms.' : '故障处理：按问题影响等级与合同约定的服务条款响应。具体处理方案、停产损失补偿等事宜，以合同条款为准。'}</p>
       </ServiceSection>
       <ServiceSection id="consultation-materials" title={en ? 'Not sure where to start? Send these three items' : '暂时不知道选哪项？先发这三项'}>
         <ServiceInfoCards

@@ -1,0 +1,59 @@
+{
+  "schemaVersion": 1,
+  "approvalVersion": 2,
+  "previousApprovalSha256": "125f4dee788ead6de9f909fdc66346b31c1fdb9faaecd76f15a908176bd6c383",
+  "approvalSource": {
+    "approvedAt": "2026-10-09T16:36:43+08:00",
+    "humanApprovalSha256": "111b4418c854ba6e0d2920c3519897473a9a6d92d62ec61bac2dce5401c72f66",
+    "authorizationEvidence": "procurement-content-authorization-20261009.json",
+    "sourceCommit": "0dd9fded40c2eb8f291f080ca2a8beeec504e9ee",
+    "sourceThreadId": "01a11e5d-29e9-7083-99c3-3bdb2c8cb84d",
+    "humanTurnIds": [
+      "01a11fb1-48dd-72e3-8b53-b9c0e8c37209",
+      "01a11fce-b583-7ec1-bf6e-5221959a5c5d"
+    ],
+    "deploymentAuthorized": false
+  },
+  "pages": [
+    {
+      "path": "/zh/articles/special-industrial-furnace-procurement-assessment",
+      "h1": "专项工业炉采购评估",
+      "bodyId": "procurement-equipment-body",
+      "approvedBodySha256": "bd3636cd05c8f4c0018dd010381cb1b9b817c6abc746a77f2b207f4e4f662ebf",
+      "contentStreamSha256": "cb7f50665fd2360d0a7351553135d8010fe01124810bf83921af32d88f39c56c",
+      "anchors": [
+        "room-gas-forging-regenerative-assessment",
+        "solution-nitriding-atmosphere-assessment",
+        "large-bell-assessment",
+        "oven-preheat-curing-assessment",
+        "spheroidizing-assessment",
+        "gas-furnace-assessment",
+        "electric-resistance-furnace-assessment",
+        "drying-furnace-assessment",
+        "stainless-annealing-pickling-assessment"
+      ],
+      "entryPath": "/zh/products"
+    },
+    {
+      "path": "/zh/service/industrial-furnace-parts-purchasing",
+      "h1": "工业炉配件采购",
+      "bodyId": "procurement-parts-body",
+      "approvedBodySha256": "06ce11f1417de21a421e601b32603fa259e41208d332c57d5a9153a4ffa4d9ea",
+      "contentStreamSha256": "e9bef7080a1bf9685cae370dd374b240cae32838ce82752fab7555a6896f89da",
+      "anchors": [
+        "parts-heating",
+        "parts-baskets-welded",
+        "parts-fans-shafts",
+        "parts-cover-motor-guide",
+        "parts-mesh-belt",
+        "parts-trays-baskets",
+        "parts-gas-radiant",
+        "parts-brand-fit",
+        "parts-pusher-column-beam",
+        "parts-guide-chain",
+        "parts-heat-resistant-identity"
+      ],
+      "entryPath": "/zh/service/installation-after-sales"
+    }
+  ]
+}

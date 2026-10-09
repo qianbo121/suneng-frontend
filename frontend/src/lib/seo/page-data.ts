@@ -1,9 +1,8 @@
 import { getProductionLineContent } from '@/lib/production-line-content';
-import { DEFAULT_TITLE } from '@/lib/seo/config';
 
 export const HOME_SEO = {
-  title: DEFAULT_TITLE,
-  description: '江苏苏能工业炉有限公司成立于2006年，位于江苏省泰州市姜堰区，提供工业炉单机、配套件、热处理生产线及改造服务。累计开展1000+工业炉新建与改造项目，生产基地为公司自报约14700㎡，具体性能按项目工况确认。',
+  title: '热处理炉厂家｜台车炉、箱式炉、网带炉定制',
+  description: '江苏苏能工业炉位于江苏泰州，提供台车炉、箱式炉、网带炉等热处理炉定制，以及热处理生产线配套与设备改造服务。',
   keywords: ['江苏苏能工业炉', '工业炉', '热处理炉', '热处理设备', '非标工业炉'],
 };
 

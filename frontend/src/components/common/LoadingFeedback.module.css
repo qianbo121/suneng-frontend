@@ -16,7 +16,7 @@
 }
 
 /* Reserve the recovery space to prevent the content below from jumping.
-   CSS also keeps the recovery link usable if hydration is delayed or fails. */
+   Switch to recovery if the client is still waiting after the delay. */
 .pending,
 .slow {
   grid-area: 1 / 1;

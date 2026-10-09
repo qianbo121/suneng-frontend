@@ -67,18 +67,21 @@ const LINKS = {
     description: '先核对工件、铺料与工艺，再选择退火回火、调质或渗碳淬火配置。',
     href: '/zh/products/detail/mesh-belt-furnace',
   },
-  meshBeltThroughput: {
+  meshBeltOutput: {
     kind: '方案',
-    title: '调质网带整线产量：历史方案参考',
-    description: '核对淬火、清洗与回火的能力匹配；方案产量不等于实测或渗碳产量。',
-    href: '/zh/case/belt-quench-wash-temper-line-throughput-balance-proposal',
+    title: '网带炉每小时产量怎么算',
+    description: '先算铺料与带速形成的理论值，再核对工艺时间、瓶颈和停机。',
+    href: '/zh/news/shuju-news-23',
   },
-  rollerBeltThroughput: {
+  meshBeltCarburizing: {
     kind: '方案',
-    title: '网带退火带速与排料：历史方案参考',
-    description: '把带速、实际铺料与热处理要求一起核对，区分方案条件和实际产出。',
-    href: '/zh/case/roller-belt-speed-loading-throughput-proposal',
+    title: '网带炉连续渗碳的产量边界',
+    description: '渗碳停留时间和有效长度需要单独校核，不能直接套用调质线产量。',
+    href: '/zh/news/mesh-belt-carburizing-throughput-process-limits',
   },
+  meshBeltQuotation: { kind: '指南', title: '网带炉报价前的九项边界', description: '按同一工件、工艺、配套和供货范围比较报价。', href: '/zh/news/shuju-news-22' },
+  meshBeltAnnealing: { kind: '产品', title: '网带式退火回火生产线', description: '核对工件铺料、温度时间、带速与冷却要求。', href: '/zh/products/detail/roller-mesh-belt-line' },
+  meshBeltCarburizingLine: { kind: '产品', title: '网带式渗碳淬火生产线', description: '核对层深、心部性能、渗碳时间与后续淬火回火。', href: '/zh/products/detail/mesh-belt-carbonitriding-line' },
 } satisfies Record<string, NewsRelatedLink>;
 
 function unique(links: NewsRelatedLink[]) {
@@ -90,7 +93,11 @@ function getChineseNewsRelatedLinks(
 ) {
   // Use the article's subject so an incidental body mention does not replace its own topic.
   if (/网带/.test(item.titleZh)) {
-    return [LINKS.meshBelt, LINKS.meshBeltThroughput, LINKS.rollerBeltThroughput, LINKS.quote];
+    const carburizing = /渗碳|碳氮共渗/.test(item.titleZh);
+    const product = carburizing ? LINKS.meshBeltCarburizingLine
+      : /退火|回火/.test(item.titleZh) && !/淬火|调质/.test(item.titleZh)
+        ? LINKS.meshBeltAnnealing : LINKS.meshBelt;
+    return [product, carburizing ? LINKS.meshBeltCarburizing : LINKS.meshBeltOutput, LINKS.meshBeltQuotation];
   }
 
   const text = item.titleZh;
@@ -109,8 +116,12 @@ function getChineseNewsRelatedLinks(
     links.push(LINKS.renovation, LINKS.risk, LINKS.repair);
   }
 
-  if (/连续|退火|固溶|生产线/.test(text)) {
+  // The published Henan record is a metal-strip line, not evidence for copper
+  // wire, semiconductor annealing or every continuous production line.
+  if (/带材|钢带|不锈钢连续退火|连续退洗/.test(text)) {
     links.push(LINKS.continuous, LINKS.annealingProduct, LINKS.lineCase);
+  } else if (/生产线|整线|交钥匙|集成商/.test(text)) {
+    links.push(LINKS.continuous);
   }
 
   if (/台车炉|台车式/.test(text)) {
@@ -127,38 +138,42 @@ function getChineseNewsRelatedLinks(
   return diverse.slice(0, 4);
 }
 
-// English destinations are explicit: some Chinese service pages have no English route.
+// English destinations are explicit and only point to existing public pages.
 const ENGLISH_LINKS: Record<string, Omit<NewsRelatedLink, 'kind'>> = {
-  [LINKS.quote.href]: { title: 'Prepare a furnace enquiry', description: 'Gather workpiece, process, loading, utilities and acceptance requirements.', href: '/en/solutions/rechuli-lu-changjia' },
-  [LINKS.repair.href]: { title: 'Retrofit risks and downtime', description: 'Define the shutdown window, responsibilities and acceptance evidence.', href: '/en/solutions/rechuli-lu-gaizao-fengxian-zhouqi' },
-  [LINKS.renovation.href]: { title: 'Retrofit risks and downtime', description: 'Define the shutdown window, responsibilities and acceptance evidence.', href: '/en/solutions/rechuli-lu-gaizao-fengxian-zhouqi' },
-  [LINKS.risk.href]: { title: 'Retrofit risks and downtime', description: 'Define the shutdown window, responsibilities and acceptance evidence.', href: '/en/solutions/rechuli-lu-gaizao-fengxian-zhouqi' },
-  [LINKS.continuous.href]: { title: 'Continuous heat treatment lines', description: 'Connect process stages, throughput, cooling, transfer and control interfaces.', href: '/en/solutions/continuous-heat-treatment-line' },
+  [LINKS.quote.href]: { title: 'Prepare a furnace enquiry', description: 'Send workpiece, process, loading, utilities and acceptance requirements.', href: '/en/contact' },
+  [LINKS.repair.href]: { title: 'Furnace renovation and overhaul', description: 'Define the shutdown window, responsibilities and applicable acceptance checks.', href: '/en/service/furnace-renovation-overhaul' },
+  [LINKS.renovation.href]: { title: 'Furnace renovation and overhaul', description: 'Define the shutdown window, responsibilities and applicable acceptance checks.', href: '/en/service/furnace-renovation-overhaul' },
+  [LINKS.risk.href]: { title: 'Furnace renovation and overhaul', description: 'Define the shutdown window, responsibilities and applicable acceptance checks.', href: '/en/service/furnace-renovation-overhaul' },
+  [LINKS.continuous.href]: { title: 'Equipment selection and project scope', description: 'Connect process stages, throughput, cooling, transfer and control interfaces.', href: '/en/service/selection-retrofit-guide' },
   [LINKS.annealingProduct.href]: { title: 'Annealing and solution treatment line', description: 'Review process zones, cooling and control boundaries.', href: '/en/products/detail/annealing-solution-line' },
   [LINKS.trolley.href]: { title: 'Trolley furnace', description: 'Review loading, working dimensions, heating and acceptance conditions.', href: '/en/products/detail/trolley-furnace' },
   [LINKS.box.href]: { title: 'Box furnace', description: 'Check workpieces, loading, working zone and temperature conditions.', href: '/en/products/detail/box-furnace' },
   [LINKS.pit.href]: { title: 'Pit furnace', description: 'Check workpiece length, effective depth, lifting and measurement conditions.', href: '/en/products/detail/pit-furnace' },
   [LINKS.roller.href]: { title: 'Roller-hearth furnace', description: 'Check workpiece support, transfer cycle and upstream/downstream interfaces.', href: '/en/products/detail/roller-hearth-furnace' },
-  [LINKS.uniformity.href]: { title: 'Investigate temperature non-uniformity', description: 'Compare measurement, loading, heat transfer and repeat-test evidence.', href: '/en/solutions/rechuli-lu-wendu-bujun-zhenggai' },
+  [LINKS.uniformity.href]: { title: 'Furnace assessment and renovation', description: 'Compare measurement, loading, heat transfer and applicable repeat-test evidence.', href: '/en/service/furnace-renovation-overhaul' },
   [LINKS.lineCase.href]: { title: 'Annealing and solution treatment project', description: 'Review the published project scope, design parameters and delivery boundaries.', href: '/en/case/henan-annealing-solution-line' },
-  [LINKS.meshBeltThroughput.href]: { title: 'Mesh belt line throughput proposal', description: 'Compare quenching, washing and tempering capacities; proposed output is not a measured result.', href: '/en/case/belt-quench-wash-temper-line-throughput-balance-proposal' },
-  [LINKS.rollerBeltThroughput.href]: { title: 'Belt speed and loading proposal', description: 'Compare proposed belt speed and loading with process requirements and actual output.', href: '/en/case/roller-belt-speed-loading-throughput-proposal' },
+  [LINKS.meshBeltOutput.href]: { title: 'Calculate mesh belt furnace hourly output', description: 'Check theoretical loading and belt speed against process time, bottlenecks and downtime.', href: '/en/news/shuju-news-23' },
+  [LINKS.meshBeltCarburizing.href]: { title: 'Mesh belt carburizing throughput limits', description: 'Check carburizing time and effective length separately from quench-and-temper throughput.', href: '/en/news/mesh-belt-carburizing-throughput-process-limits' },
+  [LINKS.meshBeltQuotation.href]: { title: 'Nine mesh belt quotation boundaries', description: 'Compare quotations using the same workpiece, process, auxiliaries and supply scope.', href: '/en/news/shuju-news-22' },
+  [LINKS.meshBeltAnnealing.href]: { title: 'Mesh belt annealing and tempering line', description: 'Check workpiece loading, temperature, residence time, belt speed and cooling.', href: '/en/products/detail/roller-mesh-belt-line' },
+  [LINKS.meshBeltCarburizingLine.href]: { title: 'Mesh belt carburizing and quenching line', description: 'Check case depth, core properties, carburizing time and subsequent quenching and tempering.', href: '/en/products/detail/mesh-belt-carbonitriding-line' },
   [LINKS.meshBelt.href]: { title: 'Mesh belt furnace', description: 'Match workpieces and loading with the required heat treatment process.', href: '/en/products/detail/mesh-belt-furnace' },
 };
 
 export function getNewsRelatedLinks(
-  item: Pick<NewsApiItem, 'titleZh' | 'summaryZh' | 'contentZh'>,
+  item: Pick<NewsApiItem, 'titleZh' | 'summaryZh' | 'contentZh'> & Partial<Pick<NewsApiItem, 'slug'>>,
   locale: 'zh' | 'en' = 'zh',
 ): NewsRelatedLink[] {
-  const links = getChineseNewsRelatedLinks(item).filter((link) => !isWithdrawnTechnicalPath(link.href));
+  const subjectLinks = getChineseNewsRelatedLinks(item);
   if (locale === 'zh') {
+    const links = subjectLinks.filter((link) => !isWithdrawnTechnicalPath(link.href)
+      && link.href !== `/${locale}/news/${item.slug}`);
     // Reserve the approved repair guide only for explicit Chinese repair topics.
-    // English keeps the original candidate list and localization below.
     if (!/维修|大修|改造|换新/.test(item.titleZh) || isWithdrawnTechnicalPath(LINKS.repair.href)) {
       return links;
     }
     const candidates = links.filter((link) => link.href !== LINKS.repair.href);
-    const quoteIndex = candidates.findIndex((link) => link.href === LINKS.quote.href);
+    const quoteIndex = candidates.findIndex((link) => link.href === LINKS.quote.href || link.href === LINKS.meshBeltQuotation.href);
     const position = quoteIndex < 0 ? Math.min(3, candidates.length) : Math.min(3, quoteIndex);
     return unique([
       ...candidates.slice(0, position),
@@ -166,8 +181,10 @@ export function getNewsRelatedLinks(
       ...candidates.slice(position),
     ]).slice(0, 4);
   }
-  return unique(links.flatMap((link) => {
+  const localized = unique(subjectLinks.flatMap((link) => {
     const english = ENGLISH_LINKS[link.href];
-    return english && !isWithdrawnTechnicalPath(english.href) ? [{ ...link, ...english }] : [];
+    return english ? [{ ...link, ...english }] : [];
   }));
+  return localized.filter((link) => !isWithdrawnTechnicalPath(link.href)
+    && link.href !== `/${locale}/news/${item.slug}`);
 }

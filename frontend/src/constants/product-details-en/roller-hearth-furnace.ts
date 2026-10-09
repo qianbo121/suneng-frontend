@@ -115,7 +115,7 @@ const detail: Partial<StaticProductDetail> = {
       {
         key: 'Conveying Speed',
         value:
-          'Calculated from in-furnace dwell time, throughput cycle time, heating-zone length and charging/discharging capacity.',
+          'Confirm speed for the workpiece, loading and process conditions, distinguishing entry/exit, reciprocating and steady process operation. Do not use unverified speed to calculate heating time or capacity.',
       },
       {
         key: 'Number of Temperature Zones',

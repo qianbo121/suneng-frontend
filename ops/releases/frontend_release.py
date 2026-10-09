@@ -21,7 +21,7 @@ from urllib.parse import urlparse
 from storage_policy import working_space
 from frontend_html import frontend_html_probe
 from acquisition_continuity import acquisition_continuity_probe
-from procurement_approval import APPROVED_PATHS as APPROVED_PROCUREMENT_PATHS, APPROVAL_SHA256 as PROCUREMENT_APPROVAL_SHA256, SCOPE_FIELD, normalize_procurement
+from procurement_approval import APPROVED_PATHS as APPROVED_PROCUREMENT_PATHS, APPROVAL_SHA256 as PROCUREMENT_APPROVAL_SHA256, CURRENT_APPROVAL_SHA256 as CURRENT_PROCUREMENT_APPROVAL_SHA256, SCOPE_FIELD, normalize_procurement, resolve_approval_sha
 from approved_procurement_continuity import approved_procurement_probe
 
 IMAGE = re.compile(r'^sha256:[0-9a-f]{64}$')
@@ -428,6 +428,8 @@ class Release:
             raise ValueError('Previous procurement scope requires reconciliation')
         self.served_procurement = normalize_procurement(manifest.get(SCOPE_FIELD, []), manifest.get('procurementApprovalSha256'), require_approval=True)
         self.previous_procurement = normalize_procurement(previous_release.get(SCOPE_FIELD, []), previous_release.get('procurementApprovalSha256'))
+        self.served_procurement_approval = resolve_approval_sha(manifest.get('procurementApprovalSha256'))
+        self.previous_procurement_approval = resolve_approval_sha(previous_release.get('procurementApprovalSha256'))
         target_cases = normalize_cases(manifest.get('approvedCases', APPROVED_CASES))
         self.served_cases = target_cases if manifest.get('caseState', 'open') == 'open' else NO_CASES
         self.live_cases = normalize_cases((self.receipt.get('frontendRelease') or {}).get('servedCases', NO_CASES))
@@ -451,6 +453,7 @@ class Release:
             self.served_cases = self.live_cases
             self.served_guides = self.previous_guides
             self.served_procurement = self.previous_procurement
+            self.served_procurement_approval = self.previous_procurement_approval
             self.target_contract = case_contract('open' if any(self.live_cases.values()) else 'closed',
                                                  self.live_cases, guides=self.previous_guides, procurement=self.previous_procurement)
             self.lenient_contract = self.target_contract
@@ -550,8 +553,8 @@ class Release:
             raise RuntimeError('Approved procurement continuity failed: ' + phase)
         return report
 
-    def procurement_check(self, container, phase, paths):
-        report = approved_procurement_probe(container, paths, public=phase.startswith('public'))
+    def procurement_check(self, container, phase, paths, approval_sha):
+        report = approved_procurement_probe(container, paths, public=phase.startswith('public'), approval_sha=approval_sha)
         atomic_json(self.audit / (phase + '-approved-procurement.json'), report)
         if report['passed'] is not True:
             raise RuntimeError('Separate approved procurement continuity failed: ' + phase)
@@ -561,7 +564,13 @@ class Release:
         return {**self.manifest, 'servedCases': self.served_cases,
                 **({'servedGuides': self.served_guides} if self.served_guides else {}),
                 **({SCOPE_FIELD: self.served_procurement,
-                    'procurementApprovalSha256': PROCUREMENT_APPROVAL_SHA256} if self.has_procurement_scope else {})}
+                    'procurementApprovalSha256': self.served_procurement_approval} if self.has_procurement_scope else {})}
+
+    def check_phase_protection(self, stage, receipt=None, pending=None):
+        # Optional shared-host guard; historical direct callers retain their strict signatures.
+        guard = getattr(self, 'phase_guard', None)
+        if guard is not None:
+            guard.check(stage, receipt, pending)
 
     def execute(self, apply=False, kind='deploy'):
         if self.manifest.get('legacyEncodedPaths') and kind != 'rollback':
@@ -613,7 +622,7 @@ class Release:
         if same or self.preserve_frontend:
             internal = probe('corp-site-frontend', self.script, self.target_contract)
             if self.served_procurement:
-                candidate_procurement = self.procurement_check('corp-site-frontend', 'candidate', self.served_procurement)
+                candidate_procurement = self.procurement_check('corp-site-frontend', 'candidate', self.served_procurement, self.served_procurement_approval)
             if check_html:
                 candidate_html = frontend_html_probe('corp-site-frontend', require_no_store=kind != 'rollback')
         else:
@@ -623,7 +632,7 @@ class Release:
                 wait_healthy(canary)
                 internal = probe(canary, self.script, self.target_contract)
                 if self.served_procurement:
-                    candidate_procurement = self.procurement_check(canary, 'candidate', self.served_procurement)
+                    candidate_procurement = self.procurement_check(canary, 'candidate', self.served_procurement, self.served_procurement_approval)
                 if check_html:
                     candidate_html = frontend_html_probe(canary, require_no_store=kind != 'rollback')
                 if check_acquisition:
@@ -651,10 +660,12 @@ class Release:
             # Without a switch the public site still runs the current image.
             result['publicChecks'] = public_probe('https://www.jssngyl.cn', self.target_contract if same else self.lenient_contract)
             public_scope = self.served_procurement if same or self.preserve_frontend else self.previous_procurement
+            public_approval = self.served_procurement_approval if same or self.preserve_frontend else self.previous_procurement_approval
             if public_scope:
-                result['publicApprovedProcurement'] = self.procurement_check('corp-site-frontend', 'public', public_scope)
+                result['publicApprovedProcurement'] = self.procurement_check('corp-site-frontend', 'public', public_scope, public_approval)
             if check_html and same:
                 result['publicHtml'] = frontend_html_probe(expected=candidate_html, require_no_store=kind != 'rollback')
+            self.check_phase_protection('preflight')
             atomic_json(self.audit / 'preflight.json', result)
             return result
         if backend_preflight and backend_preflight.get('pendingMigrationCount', 0):
@@ -668,14 +679,19 @@ class Release:
         assert_current(self.receipt, current, self.manifest['expectedCurrentImage'])
         if signature([row for row in current if row['Name'].removeprefix('/corp-site-') in self.protected]) != protected:
             raise RuntimeError('A protected production service changed before replacement')
+        self.check_phase_protection('before-switch')
         atomic_json(self.audit / 'previous-receipt.json', self.receipt)
         self.write_override(self.audit / 'previous.override.json', self.receipt['images'])
-        atomic_json(self.pending_path, {'at': now(), 'auditDirectory': str(self.audit),
-                                       'previousImages': self.receipt['images'], 'targetImages': self.target,
-                                       'previousServedCases': self.live_cases, 'targetServedCases': self.served_cases,
-                                       'previousServedGuides': self.previous_guides, 'targetServedGuides': self.served_guides,
-                                       'previousApprovedProcurementPages': self.previous_procurement, 'targetApprovedProcurementPages': self.served_procurement})
+        pending = {'at': now(), 'auditDirectory': str(self.audit),
+                   'previousImages': self.receipt['images'], 'targetImages': self.target,
+                   'previousServedCases': self.live_cases, 'targetServedCases': self.served_cases,
+                   'previousServedGuides': self.previous_guides, 'targetServedGuides': self.served_guides,
+                   'previousApprovedProcurementPages': self.previous_procurement, 'targetApprovedProcurementPages': self.served_procurement,
+                   'previousProcurementApprovalSha256': self.previous_procurement_approval,
+                   'targetProcurementApprovalSha256': self.served_procurement_approval}
+        atomic_json(self.pending_path, pending)
         try:
+            self.check_phase_protection('switch-start', pending=pending)
             if self.backend_only:
                 # Recheck immediately before the switch; no migration command is ever permitted.
                 result['backendBeforeSwitch'] = self.backend_check()
@@ -687,7 +703,7 @@ class Release:
             result['internalChecks'] = probe('corp-site-frontend', self.script, self.target_contract)
             result['publicChecks'] = public_probe('https://www.jssngyl.cn', self.target_contract)
             if self.served_procurement:
-                result['publicApprovedProcurement'] = self.procurement_check('corp-site-frontend', 'public', self.served_procurement)
+                result['publicApprovedProcurement'] = self.procurement_check('corp-site-frontend', 'public', self.served_procurement, self.served_procurement_approval)
             if check_acquisition:
                 result['publicAcquisition'] = self.acquisition_check('corp-site-frontend', 'public')
             if check_html:
@@ -702,6 +718,7 @@ class Release:
                 raise RuntimeError('A protected production service changed')
             if any(row['Image'] != self.target[row['Name'].removeprefix('/corp-site-')] for row in inspect(self.components)):
                 raise RuntimeError('Running frontend identity does not match target')
+            self.check_phase_protection('after-switch')
             receipt = copy.deepcopy(self.receipt)
             receipt.update({'images': self.target, 'sourceIdentity': 'component-release',
                             **({} if self.preserve_frontend else {'frontendRelease': self.frontend_receipt()}),
@@ -721,11 +738,13 @@ class Release:
                 marker = self.live / 'DEPLOY_COMMIT.next'
                 marker.write_text(self.manifest['sourceCommit'] + '\n')
                 marker.replace(self.live / 'DEPLOY_COMMIT')
+            self.check_phase_protection('after-commit', receipt)
             self.pending_path.unlink()
             result['applied'] = True
         except Exception as error:
             result.update({'passed': False, 'failureType': type(error).__name__})
             try:
+                self.check_phase_protection('before-recovery')
                 self.replace_frontend(self.audit / 'previous.override.json')
                 if any(row['Image'] != self.receipt['images'][row['Name'].removeprefix('/corp-site-')] for row in inspect(self.components)):
                     raise RuntimeError('Recovery did not restore the previous image')
@@ -735,7 +754,7 @@ class Release:
                 probe('corp-site-frontend', self.script, self.lenient_contract)
                 public_probe('https://www.jssngyl.cn', self.lenient_contract)
                 if self.previous_procurement:
-                    result['previousApprovedProcurement'] = self.procurement_check('corp-site-frontend', 'public-recovery', self.previous_procurement)
+                    result['previousApprovedProcurement'] = self.procurement_check('corp-site-frontend', 'public-recovery', self.previous_procurement, self.previous_procurement_approval)
                 if 'admin' in self.manifest:
                     if admin_probe('corp-site-admin', require_filter=False)['assets'] != admin_probe(require_filter=False)['assets']:
                         raise RuntimeError('Public admin assets did not return to the previous image')
@@ -749,6 +768,7 @@ class Release:
                     marker.replace(self.live / 'DEPLOY_COMMIT')
                 elif (self.live / 'DEPLOY_COMMIT').exists():
                     (self.live / 'DEPLOY_COMMIT').unlink()
+                self.check_phase_protection('after-recovery', self.receipt)
                 self.pending_path.unlink()
                 result['previousFrontendRestoredAndVerified'] = True
                 if self.backend_only:
@@ -757,6 +777,21 @@ class Release:
                     result['previousAdminRestoredAndVerified'] = True
             except Exception:
                 # Leave an explicit pending marker and accurate image identity, never a false success.
+                guard = getattr(self, 'phase_guard', None)
+                if guard is not None and not guard.owns_pending():
+                    # Unknown marker ownership also forbids overwriting another operation's metadata.
+                    observed = {row['Name'].removeprefix('/corp-site-'): row['Image'] for row in inspect(['frontend', 'backend', 'admin'])}
+                    result.update({'observedImages': observed, 'reconciliationRequired': True,
+                                   'liveMetadataPreserved': True, 'previousFrontendRestoredAndVerified': False})
+                    if self.backend_only:
+                        result['previousBackendRestoredAndVerified'] = False
+                    if 'admin' in self.manifest:
+                        result['previousAdminRestoredAndVerified'] = False
+                    atomic_json(self.audit / 'result.json', result)
+                    raise RuntimeError('Release ownership changed; reconciliation required') from error
+                if not self.pending_path.exists() and not self.pending_path.is_symlink():
+                    from phase_runtime import exclusive_json
+                    exclusive_json(self.pending_path, {**pending, 'reconciliationRequired': True})
                 observed = {row['Name'].removeprefix('/corp-site-'): row['Image'] for row in inspect(['frontend', 'backend', 'admin'])}
                 failed = copy.deepcopy(self.receipt)
                 failed.update({'images': observed, 'deploymentStatus': 'recovery-required', 'releaseOperationReceipt': str(self.audit / 'result.json')})
@@ -798,16 +833,42 @@ class Release:
         return result
 
 
-def main():
+def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--manifest', type=Path, required=True)
+    parser.add_argument('--manifest', type=Path)
     parser.add_argument('--live', type=Path, default=Path('/opt/website'))
     parser.add_argument('--audit-root', type=Path, default=Path('/data/migration-rehearsals/release-ops'))
     parser.add_argument('--apply', action='store_true', help='Replace only the explicitly selected frontend/backend/admin components')
     parser.add_argument('--kind', choices=['deploy', 'rollback'], default='deploy')
     parser.add_argument('--failure-webhook-file', type=Path,
                         help='Owner-only Feishu credential file; failure notices only on --apply')
-    args = parser.parse_args()
+    parser.add_argument('--capture-preparation-baseline', type=Path,
+                        help='Capture new frozen preparation evidence under the deployment lock')
+    parser.add_argument('--preparation-baseline', type=Path,
+                        help='Verify shared-host preparation evidence; only healthy pre-phase restarts may refresh')
+    parser.add_argument('--protect-file', type=Path, action='append', default=[],
+                        help='Additional shared application configuration to protect during this batch')
+    parser.add_argument('--phase-directory', type=Path,
+                        help='Batch directory for append-only timing receipts and explicit preflight resume')
+    parser.add_argument('--status', action='store_true', help='Read phase receipts without checking or changing production')
+    parser.add_argument('--resume', action='store_true', help='Explicitly rerun a failed/interrupted preflight; never repeat apply')
+    args = parser.parse_args(argv)
+    if args.status:
+        if not args.phase_directory or args.apply or args.resume or args.capture_preparation_baseline:
+            parser.error('--status requires only a phase directory and cannot perform release actions')
+        from phase_runtime import status
+        print(json.dumps(status(args.phase_directory)))
+        return
+    if not args.manifest:
+        parser.error('--manifest is required for capture and release actions')
+    if args.capture_preparation_baseline and (args.apply or args.resume or args.preparation_baseline or args.phase_directory):
+        parser.error('Capture is a separate, non-apply action')
+    if args.protect_file and not args.capture_preparation_baseline:
+        parser.error('--protect-file is recorded only when capturing a new baseline')
+    if args.resume and (args.apply or not args.phase_directory):
+        parser.error('--resume requires a phase directory and cannot repeat apply')
+    if args.preparation_baseline and not args.phase_directory:
+        parser.error('--preparation-baseline requires a phase directory to retain timing and interruption receipts')
     os.umask(0o077)
     manifest = validate_manifest(json.loads(args.manifest.read_text()))
     webhook = None
@@ -816,16 +877,34 @@ def main():
         webhook = read_webhook(args.failure_webhook_file)
     with open('/var/lock/corp-site-deploy.lock', 'a') as lock:
         fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
+        if args.capture_preparation_baseline:
+            from preparation_guard import capture
+            print(json.dumps(capture(args.capture_preparation_baseline, args.live, manifest, run, args.protect_file)))
+            return
         audit = args.audit_root / (datetime.datetime.now().strftime('%Y%m%d-%H%M%S-') + uuid.uuid4().hex[:8])
         audit.mkdir(parents=True)
         script = Path(__file__).with_name('check-frontend.cjs').read_text()
         release = Release(args.live, audit, manifest, script)
-        print(json.dumps(execute_with_notice(release, args.apply, args.kind, webhook)))
+        if args.phase_directory:
+            from phase_runtime import run_phase
+            def action(attempt):
+                if args.preparation_baseline:
+                    from preparation_guard import execute_prepared
+                    return execute_with_notice(release, args.apply, args.kind, webhook,
+                                               lambda: execute_prepared(release, args.apply, args.kind, args.preparation_baseline, run))
+                return execute_with_notice(release, args.apply, args.kind, webhook)
+            identity = {'manifest': manifest, 'kind': args.kind, 'live': str(args.live.resolve()),
+                        'preparationBaselineSha256': hashlib.sha256(args.preparation_baseline.read_bytes()).hexdigest() if args.preparation_baseline else None}
+            result = run_phase(args.phase_directory, 'apply' if args.apply else 'preflight', action,
+                               identity=identity, resume=args.resume)
+        else:
+            result = execute_with_notice(release, args.apply, args.kind, webhook)
+        print(json.dumps(result))
 
 
-def execute_with_notice(release, apply, kind, webhook=None):
+def execute_with_notice(release, apply, kind, webhook=None, action=None):
     try:
-        return release.execute(apply, kind)
+        return action() if action is not None else release.execute(apply, kind)
     except Exception:
         if apply and webhook:
             from deployment_notice import send
