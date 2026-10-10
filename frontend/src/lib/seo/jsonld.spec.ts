@@ -5,9 +5,45 @@ import {
   getOrganizationJsonLd,
   getProductDetailJsonLd,
   getProductCollectionJsonLd,
+  getEngineeringTeamAuthorName,
 } from '@/lib/seo/jsonld';
 
 describe('SEO JSON-LD entities', () => {
+  it.each([
+    ['zh', '江苏苏能工业炉工程技术团队'],
+    ['en', 'Jiangsu Suneng Industrial Furnace Engineering Team'],
+  ] as const)('matches the visible %s news author while keeping the company as publisher', (locale, name) => {
+    const article = getArticleJsonLd({
+      slug: 'team-authored-news',
+      path: `/${locale}/news/team-authored-news`,
+      headline: 'News article',
+      description: 'News description',
+      datePublished: '2026-06-12',
+      author: 'engineering-team',
+    }, locale);
+
+    expect(getEngineeringTeamAuthorName(locale)).toBe(name);
+    expect(article.author).toEqual({
+      '@type': 'Organization',
+      '@id': 'https://www.jssngyl.cn/#engineering-team',
+      name,
+      parentOrganization: { '@id': 'https://www.jssngyl.cn/#organization' },
+    });
+    expect(article.publisher).toEqual({ '@id': 'https://www.jssngyl.cn/#organization' });
+  });
+
+  it.each(['zh', 'en'] as const)('preserves the company author by default for other %s articles', (locale) => {
+    const article = getArticleJsonLd({
+      slug: 'company-authored-article',
+      headline: 'Article',
+      description: 'Description',
+      datePublished: '2026-06-12',
+    }, locale);
+
+    expect(article.author).toEqual({ '@id': 'https://www.jssngyl.cn/#organization' });
+    expect(article.publisher).toEqual({ '@id': 'https://www.jssngyl.cn/#organization' });
+  });
+
   it('describes the same 23 products in both languages', () => {
     const chinese = getProductCollectionJsonLd('/zh/products', 'zh');
     const english = getProductCollectionJsonLd('/en/products', 'en');

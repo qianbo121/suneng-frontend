@@ -120,6 +120,7 @@ export function EnglishCaseIndex({ query }: { query: CaseQuery }) {
       {!result.items.length && <div className="case-empty"><h3>{result.total ? 'No records on this page' : 'No matching records'}</h3><p>Try a shorter phrase or fewer conditions.</p><a href="/en/case">View all records</a></div>}
       <div className="case-pagination"><ListPagination locale="en" page={query.page} pageCount={result.totalPages} href={(page) => englishCaseHref(query, page)} ariaLabel="Case study pages" /></div>
     </section></div>
+    <JsonLd id="case-list-breadcrumb-jsonld" data={getBreadcrumbJsonLd([{ name: 'Home', url: '/en' }, { name: 'Case studies', url: '/en/case' }])} />
     {/* Filtered views are excluded from the index, and an empty page is not a collection worth describing. */}
     {!hasCaseSearch(query) && result.items.length > 0 && <JsonLd id="case-list-jsonld" data={{ '@context': 'https://schema.org', '@type': 'CollectionPage', name: 'Case studies', inLanguage: 'en-US', url: absoluteUrl(returnTo), mainEntity: { '@type': 'ItemList', numberOfItems: result.items.length, itemListElement: result.items.map((item, index) => ({ '@type': 'ListItem', position: index + 1, url: absoluteUrl(`/en/case/${item.slug}`), name: item.title })) } }} />}
   </div>;

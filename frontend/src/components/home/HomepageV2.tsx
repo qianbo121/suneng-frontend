@@ -75,16 +75,13 @@ async function HomepageArticles({ locale }: { locale: 'zh' | 'en' }) {
 }
 
 function HomepageArticlesLoading({ locale }: { locale: 'zh' | 'en' }) {
-  const english = locale === 'en';
   return (
     <section className={toolStyles.section} aria-busy="true" aria-label={newsUiText(locale, '工业炉选型与采购资料')}>
       <div className={toolStyles.container}>
         <header className={toolStyles.heading}>
           <h2>{newsUiText(locale, '工业炉选型与采购资料')}</h2>
         </header>
-        <div className="mt-6 min-h-80 rounded-lg bg-slate-100 p-6" role="status">
-          {english ? 'Loading technical resources…' : '正在加载技术资料…'}
-        </div>
+        <div className="mt-6 min-h-80 rounded-lg bg-slate-100 p-6" aria-hidden="true" />
       </div>
     </section>
   );
