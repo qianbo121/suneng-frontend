@@ -481,6 +481,14 @@ export function ProductionLineDetailPage({ content, locale = 'zh' }: { content: 
                       </li>
                     );
                   })}
+                  {locale === 'zh' && content.pageId === 'annealing-solution-line' && group.id === 'technical' && (
+                    <li>
+                      <Link href="/zh/news/annealing-furnace-metal-semiconductor-selection">
+                        退火炉怎么选？先分清金属工件与半导体晶片
+                        <HiArrowRight aria-hidden="true" />
+                      </Link>
+                    </li>
+                  )}
                 </ul>
               </div>
             ))}
