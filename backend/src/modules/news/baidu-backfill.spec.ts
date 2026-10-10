@@ -11,7 +11,7 @@ describe('Baidu backfill marker and process status', () => {
     jest.spyOn(console, 'error').mockImplementation(() => undefined);
     jest.replaceProperty(process, 'env', {
       ...process.env,
-      BAIDU_SITE: 'jssngyl.cn',
+      BAIDU_SITE: 'www.jssngyl.cn',
       BAIDU_TOKEN: 'test-token',
       BAIDU_SUBMISSION_MODE: 'automatic',
       BAIDU_ALLOW_HTTP: undefined,

@@ -67,6 +67,67 @@ test('only literal true selects the fixed official HTTP endpoint in automatic mo
   }
 });
 
+test('Baidu keeps the validated registered site literal and encodes only the token', async () => {
+  const token = 'test-only&other=/#?';
+  for (const [registeredSite, submittedSite] of [
+    [site, site], [`${site}/`, site], ['http://www.jssngyl.cn', 'http://www.jssngyl.cn'],
+    ['www.jssngyl.cn', 'www.jssngyl.cn'],
+  ]) {
+    await withBaiduConfiguration({ BAIDU_SUBMISSION_MODE: 'automatic', BAIDU_SITE: registeredSite, BAIDU_TOKEN: token }, async () => {
+      globalThis.fetch = async (endpoint) => {
+        assert.equal(endpoint, `https://data.zz.baidu.com/urls?site=${submittedSite}&token=${encodeURIComponent(token)}`);
+        assert.doesNotMatch(endpoint.split('&token=')[0], /%3A|%2F/i);
+        assert.equal(new URL(endpoint).searchParams.get('token'), token);
+        return new Response(JSON.stringify({ success: 1 }));
+      };
+      assert.equal((await submitBaidu(site, [`${site}/zh`], false)).ok, true);
+    });
+  }
+});
+
+test('Baidu rejects unsafe registered-site components before constructing a request', async () => {
+  for (const registeredSite of [
+    `${site}/path`, `${site}?token=injected`, `${site}#fragment`,
+    'https://user:password@www.jssngyl.cn', 'ftp://www.jssngyl.cn',
+  ]) {
+    await withBaiduConfiguration({ BAIDU_SUBMISSION_MODE: 'automatic', BAIDU_SITE: registeredSite }, async () => {
+      let calls = 0;
+      globalThis.fetch = async () => { calls++; throw new Error('must not request'); };
+      await assert.rejects(submitBaidu(site, [`${site}/zh`], false), /must match/);
+      assert.equal(calls, 0);
+    });
+  }
+});
+
+test('Baidu failures expose only fixed categories and safe numeric response fields', async (t) => {
+  const secret = 'token=test-only';
+  const cases = [
+    ['site error', 400, { error: 400, message: 'site error', success: 0, remain: 0, raw: secret }, 'site_error', { errorCode: 400, success: 0, remain: 0 }],
+    ['empty content', 400, { error: 400, message: 'empty content', raw: secret }, 'empty_content', { errorCode: 400 }],
+    ['invalid token', 401, { error: 401, message: 'token is not valid', raw: secret }, 'invalid_token', { errorCode: 401 }],
+    ['over quota', 200, { error: 400, message: 'over quota', raw: secret }, 'over_quota', { errorCode: 400 }],
+    ['unknown secret echo', 400, { error: 400, message: `${secret} site error over quota` }, 'baidu_error', { errorCode: 400 }],
+    ['prototype-like message', 400, { error: 400, message: '__proto__', raw: secret }, 'baidu_error', { errorCode: 400 }],
+    ['unsafe response fields', 400, { error: secret, message: { token: secret }, success: secret, remain: secret }, 'baidu_error', {}],
+    ['unsafe integers', 400, { error: Number.MAX_SAFE_INTEGER + 1, success: Number.MAX_SAFE_INTEGER + 1, remain: -1, message: secret }, 'baidu_error', {}],
+    ['HTTP failure', 503, { success: 1, remain: 4, message: secret }, 'http_error', { success: 1, remain: 4 }],
+    ['invalid JSON', 200, `<html>${secret}</html>`, 'invalid_response', {}],
+    ['incomplete batch', 200, { success: 0, remain: 4, message: secret }, 'incomplete_batch', { success: 0, remain: 4 }],
+  ];
+  for (const [name, status, body, reason, summary] of cases) {
+    await t.test(name, async () => {
+      await withBaiduConfiguration({ BAIDU_SUBMISSION_MODE: 'automatic' }, async () => {
+        globalThis.fetch = async () => new Response(typeof body === 'string' ? body : JSON.stringify(body), { status });
+        const result = await submitBaidu(site, [`${site}/zh`], false);
+        assert.deepEqual(result, { skipped: false, ok: false, status, reason, ...summary, acceptedUrls: [], protectedUrls: [] });
+        assert.doesNotMatch(JSON.stringify(result), /test-only|token=|__proto__/);
+        assert.equal(Object.hasOwn(result, 'body'), false);
+        assert.equal(Object.hasOwn(result, 'message'), false);
+      });
+    });
+  }
+});
+
 test('explicit HTTP transport failure is attempted once with no other endpoint or fallback', async () => {
   await withBaiduConfiguration({ BAIDU_SUBMISSION_MODE: 'automatic', BAIDU_ALLOW_HTTP: 'true' }, async () => {
     let calls = 0;
