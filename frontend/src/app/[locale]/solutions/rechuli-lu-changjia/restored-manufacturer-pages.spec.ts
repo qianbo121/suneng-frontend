@@ -30,6 +30,13 @@ const pages = [
   },
 ];
 
+const publicNewsSlugs = new Set([
+  ...Object.values(reviewedNews).map((article) => article.slug),
+  // CMS article verified publicly on 2026-10-10; reviewedNews covers copy overrides, not all published records.
+  // https://www.jssngyl.cn/zh/news/custom-heat-treatment-furnace-chamber-process
+  'custom-heat-treatment-furnace-chamber-process',
+]);
+
 describe.each(pages)('restored Chinese manufacturer page: $slug', ({ slug, Page, metadata, projectBoundary }) => {
   const pagePath = `/zh/solutions/${slug}`;
   const params = (locale: string) => ({ params: Promise.resolve({ locale }) });
@@ -78,7 +85,7 @@ describe.each(pages)('restored Chinese manufacturer page: $slug', ({ slug, Page,
       if (href.startsWith('/zh/products/detail/')) {
         expect(getStaticProductBySlug(href.split('/').at(-1)!), href).toBeDefined();
       } else if (href.startsWith('/zh/news/')) {
-        expect(Object.values(reviewedNews).some((article) => article.slug === href.split('/').at(-1)), href).toBe(true);
+        expect(publicNewsSlugs.has(href.split('/').at(-1)!), href).toBe(true);
       } else if (href === '/zh/strength/honors') {
         expect(strengthParams()).toContainEqual({ locale: 'zh', categorySlug: 'honors' });
       } else {
