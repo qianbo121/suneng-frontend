@@ -40,6 +40,7 @@ export type ArticleJsonLdInput = {
   image?: string;
   datePublished: string;
   dateModified?: string;
+  author?: 'engineering-team';
   reviewedByTechnicalEngineer?: boolean;
   reviewerName?: TechnicalReviewerName;
 };
@@ -84,6 +85,12 @@ function isEnglishLocale(locale: Locale) {
 
 function schemaLanguage(locale: Locale) {
   return isEnglishLocale(locale) ? 'en-US' : 'zh-CN';
+}
+
+export function getEngineeringTeamAuthorName(locale: Locale = 'zh') {
+  return isEnglishLocale(locale)
+    ? 'Jiangsu Suneng Industrial Furnace Engineering Team'
+    : '江苏苏能工业炉工程技术团队';
 }
 
 export function getTechnicalReviewerJsonLd(name: TechnicalReviewerName = '唐工') {
@@ -456,7 +463,14 @@ export function getArticleJsonLd(article: ArticleJsonLdInput, locale: Locale = '
     image: article.image ? absoluteUrl(article.image) : undefined,
     datePublished: article.datePublished,
     dateModified,
-    author: { '@id': LOCAL_BUSINESS_ID },
+    author: article.author === 'engineering-team'
+      ? {
+          '@type': 'Organization',
+          '@id': `${LOCAL_BUSINESS_URL}#engineering-team`,
+          name: getEngineeringTeamAuthorName(locale),
+          parentOrganization: { '@id': LOCAL_BUSINESS_ID },
+        }
+      : { '@id': LOCAL_BUSINESS_ID },
     reviewedBy: article.reviewerName
       ? getTechnicalReviewerJsonLd(article.reviewerName)
       : article.reviewedByTechnicalEngineer

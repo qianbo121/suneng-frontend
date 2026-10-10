@@ -2,12 +2,15 @@ import type { Metadata } from 'next';
 import translations from '@/lib/copper-wire-checklist-translations-en.json';
 import { notFound } from 'next/navigation';
 
+import { JsonLd } from '@/components/JsonLd';
 import { CopperWireInquiryChecklist } from '@/components/products/CopperWireInquiryChecklist';
 import {
   copperWireChecklistPath,
   copperWireChecklistTitle,
+  copperWireDetailPath,
 } from '@/lib/copper-wire-inquiry-checklist';
 import { buildMetadata } from '@/lib/seo/metadata';
+import { getBreadcrumbJsonLd } from '@/lib/seo/jsonld';
 
 type Props = { params: Promise<{ locale: string; slug: string }> };
 
@@ -32,5 +35,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function InquiryChecklistPage({ params }: Props) {
   const { locale, slug } = await params;
   if (!['zh', 'en'].includes(locale) || slug !== 'copper-wire-annealing-line') notFound();
-  return <CopperWireInquiryChecklist locale={locale === 'en' ? 'en' : 'zh'} translations={locale === 'en' ? translations : undefined} />;
+  const isEnglish = locale === 'en';
+  return <>
+    <CopperWireInquiryChecklist locale={isEnglish ? 'en' : 'zh'} translations={isEnglish ? translations : undefined} />
+    <JsonLd id="copper-wire-checklist-breadcrumb-jsonld" data={getBreadcrumbJsonLd([
+      { name: isEnglish ? 'Home' : '首页', url: `/${locale}` },
+      { name: isEnglish ? translations['产品中心'] : '产品中心', url: `/${locale}/products` },
+      { name: isEnglish ? translations['铜丝连续退火生产线'] : '铜丝连续退火生产线', url: copperWireDetailPath.replace('/zh/', `/${locale}/`) },
+      { name: isEnglish ? translations['询价资料准备清单'] : '询价资料准备清单', url: copperWireChecklistPath.replace('/zh/', `/${locale}/`) },
+    ])} />
+  </>;
 }

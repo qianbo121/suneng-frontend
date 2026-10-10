@@ -16,7 +16,7 @@ type PageProps = {
 
 const pagePath = '/zh/articles/laojiu-rechuli-lu-daxiu-haishi-maixin';
 
-const servicePath = '/zh/service';
+const servicePath = '/zh/service/furnace-renovation-overhaul';
 
 export const dynamicParams = false;
 
@@ -34,7 +34,7 @@ const pageJsonLd = cleanObject([
   }),
   getBreadcrumbJsonLd([
     { name: '首页', url: '/zh' },
-    { name: '服务支持', url: servicePath },
+    { name: '改造与服务', url: servicePath },
     { name: '老旧热处理炉是大修还是买新的', url: pagePath },
   ]),
 ]);

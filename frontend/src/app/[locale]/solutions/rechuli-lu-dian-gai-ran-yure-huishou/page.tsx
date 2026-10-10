@@ -21,7 +21,7 @@ type PageProps = { params: Promise<{ locale: string }> };
 
 const pagePath = '/zh/solutions/rechuli-lu-dian-gai-ran-yure-huishou';
 
-const servicePath = '/zh/service/furnace-renovation-overhaul';
+const servicePath = '/zh/service';
 
 const organizationJsonLd = {
   ...getOrganizationJsonLd('zh'),
@@ -41,7 +41,7 @@ const jsonLd = [
   }),
   getBreadcrumbJsonLd([
     { name: '首页', url: '/zh' },
-    { name: '工业炉改造服务', url: servicePath },
+    { name: '改造与服务', url: servicePath },
     { name: '能源改造与余热回收', url: pagePath },
   ]),
   organizationJsonLd,

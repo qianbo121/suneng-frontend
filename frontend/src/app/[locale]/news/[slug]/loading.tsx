@@ -7,5 +7,11 @@ import { LoadingFeedback } from '@/components/common/LoadingFeedback';
 // the completed page without replacing the current content with a loading shell.
 export default function NewsDetailLoading() {
   const locale = useLocale();
-  return <LoadingFeedback locale={locale === 'en' ? 'en' : 'zh'} resource />;
+  return (
+    <LoadingFeedback
+      locale={locale === 'en' ? 'en' : 'zh'}
+      resource
+      variant="article-skeleton"
+    />
+  );
 }

@@ -60,8 +60,10 @@
   font-variant-numeric: tabular-nums;
 }
 
-.metaDivider {
-  color: #b9c3d0;
+.metaDate {
+  display: inline-flex;
+  gap: 6px;
+  white-space: nowrap;
 }
 
 .bodyWrap {
