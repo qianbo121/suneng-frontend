@@ -9,6 +9,7 @@ import copy
 import fcntl
 import json
 import os
+import shutil
 from pathlib import Path
 
 import release_retention as retention
@@ -48,6 +49,72 @@ def snapshot(state):
     return {key: copy.deepcopy(state[key]) for key in [
         'planSha256', 'acceptanceSha256', 'containers', 'images', 'protected', 'targets', 'skipped'
     ]} | {'configurationSha256': configuration(state)}
+
+
+def release_binding(plan_path, acceptance_path, root):
+    """Capture exact evidence even when finalization fails before inspecting Docker."""
+    plan_bytes = retention.read_file(plan_path, root)
+    plan = json.loads(plan_bytes)
+    if (plan.get('schemaVersion') != 1
+            or not isinstance(plan.get('receiptSha256'), str)
+            or not retention.DIGEST.fullmatch(plan['receiptSha256'])):
+        raise ValueError('A versioned, receipt-bound retention plan is required')
+    live = Path(plan['live'])
+    if not live.is_absolute() or live.resolve() != live:
+        raise ValueError('The plan must identify the canonical production directory')
+    binding = {'planSha256': retention.digest(plan_bytes),
+               'receiptSha256': plan['receiptSha256'], 'live': str(live),
+               'observedReceiptSha256': None, 'acceptanceSha256': None, 'operationReceiptSha256': None}
+    for key, path, records in [
+        ('observedReceiptSha256', live / 'RELEASE_ARTIFACTS.json', live),
+        ('acceptanceSha256', acceptance_path, root),
+        ('operationReceiptSha256', plan['operationReceipt'], root),
+    ]:
+        try:
+            binding[key] = retention.digest(retention.read_file(path, records))
+        except (OSError, ValueError):
+            # Missing or unsafe evidence is a failure, never permission to delete.
+            pass
+    return binding
+
+
+def save_started(plan_path, output, receipt, root):
+    """An interrupted apply must not leave an earlier success looking current."""
+    latest = Path(plan_path).parent / 'retention-latest.json'
+    if latest.exists() or latest.is_symlink():
+        retention.read_file(latest, root)
+    data = retention.read_file(output / 'started.json', root)
+    retention.write_json(latest, {
+        'schemaVersion': 1, 'recordedAt': receipt['startedAt'],
+        'plan': str(plan_path), 'planSha256': receipt['planSha256'],
+        'receiptSha256': receipt['receiptSha256'],
+        'observedReceiptSha256': receipt['observedReceiptSha256'],
+        'acceptance': receipt['acceptance'], 'acceptanceSha256': receipt['acceptanceSha256'],
+        'operationReceiptSha256': receipt['operationReceiptSha256'],
+        'closeoutStarted': str(output / 'started.json'),
+        'closeoutStartedSha256': retention.digest(data), 'status': 'pending',
+    })
+
+
+def save_latest(plan_path, output, receipt, root):
+    """Write a sidecar only; accepted release/operation evidence stays unchanged."""
+    if not receipt.get('applied') or 'receiptSha256' not in receipt:
+        return
+    latest = Path(plan_path).parent / 'retention-latest.json'
+    if latest.exists() or latest.is_symlink():
+        retention.read_file(latest, root)  # Reject unsafe output/ancestor paths.
+    data = retention.read_file(output / 'closeout-result.json', root)
+    status = ('cleaned' if receipt.get('deletedImageCount', 0) else 'no-targets') if receipt['passed'] else 'failed'
+    retention.write_json(latest, {
+        'schemaVersion': 1, 'recordedAt': receipt['finishedAt'],
+        'plan': str(plan_path), 'planSha256': receipt['planSha256'],
+        'receiptSha256': receipt['receiptSha256'],
+        'observedReceiptSha256': receipt['observedReceiptSha256'],
+        'acceptance': receipt['acceptance'], 'acceptanceSha256': receipt['acceptanceSha256'],
+        'operationReceiptSha256': receipt['operationReceiptSha256'],
+        'closeoutResult': str(output / 'closeout-result.json'),
+        'closeoutResultSha256': retention.digest(data), 'status': status,
+    })
 
 
 class ObservedDocker:
@@ -108,8 +175,11 @@ class Closeout:
                    'applied': apply, 'passed': False}
         retention.write_json(output / 'started.json', receipt)
         raw = None
-        native_before = set(self.plan.parent.glob('retention-*'))
+        native_before = {p for p in self.plan.parent.glob('retention-*') if p.is_dir()}
         try:
+            receipt.update(release_binding(self.plan, self.acceptance, self.root))
+            if apply:
+                save_started(self.plan, output, receipt, self.root)
             initial = retention.Finalizer(self.plan, self.acceptance, self.root, self.engine).inspect()
             state = snapshot(initial)
             receipt.update(planSha256=initial['planSha256'], acceptanceSha256=initial['acceptanceSha256'])
@@ -148,7 +218,7 @@ class Closeout:
         finally:
             capture_error, successful = None, receipt['passed']
             try:
-                native_after = set(self.plan.parent.glob('retention-*')) - native_before
+                native_after = {p for p in self.plan.parent.glob('retention-*') if p.is_dir()} - native_before
                 if apply and raw is not None and len(native_after) != 1:
                     raise RuntimeError('The original retention result could not be uniquely located')
                 if apply and len(native_after) == 1:
@@ -160,11 +230,31 @@ class Closeout:
                     receipt.update(nativeResult=str(native), nativeResultSha256=retention.digest(data))
                     if raw is None:
                         retention.write_json(output / 'retention-result.json', native_result)
+                    receipt.update(
+                        removed=native_result['removed'],
+                        deletedImageCount=len(native_result['removed']),
+                        freeBytesBefore=native_result['freeBytesBefore'],
+                        freeBytesAfter=native_result['freeBytesAfter'],
+                        observedFreeBytesChange=native_result['freeBytesAfter'] - native_result['freeBytesBefore'],
+                        reclaimedBytes=native_result['reclaimedBytes'] if native_result['removed'] else 0,
+                    )
             except Exception as error:
                 capture_error = error
                 receipt.update(passed=False, status='failed', nativeCaptureFailureType=type(error).__name__)
+            if apply and 'freeBytesAfter' not in receipt and receipt.get('live'):
+                try:
+                    receipt['freeBytesAfter'] = shutil.disk_usage(receipt['live']).free
+                except OSError:
+                    receipt['spaceReadFailed'] = True
             receipt['finishedAt'] = retention.now().isoformat()
             retention.write_json(output / 'closeout-result.json', receipt)
+            try:
+                save_latest(self.plan, output, receipt, self.root)
+            except Exception as error:
+                receipt.update(passed=False, status='failed', latestStateFailureType=type(error).__name__)
+                retention.write_json(output / 'closeout-result.json', receipt)
+                if capture_error is None:
+                    capture_error = error
             if successful and capture_error is not None:
                 raise capture_error
         return receipt
