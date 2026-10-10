@@ -1,8 +1,21 @@
 # 固定程序包发布与前台回退
 
-旧 `Build And Deploy` 已从代码中取消 main 推送触发，仓库开关继续关闭。它仍是保留的旧流程；当前生产版本带固定镜像标记，会在同步前拒绝该路径。不要删除标记后恢复服务器构建。容量不足时不再自动清理这台共享服务器。
+旧 `Build And Deploy` 已取消 main 推送触发，全部任务在代码中固定停用，仓库开关继续关闭。旧一键脚本仅提示正确入口后退出；当前生产版本的固定镜像标记也继续阻止历史整站路径。不要删除标记后恢复服务器构建。容量不足时不再自动清理这台共享服务器。
 
-新入口 `frontend_release.py` 只使用已经导入并核对身份的镜像，绝不构建、拉取代码、迁移或恢复数据库。它只替换前台并重新载入现有代理配置，不重启后端、后台、数据库或共享代理。后端或数据改动需要另做有数据保护证据的发布方案，不能混用前台回退。
+统一发版窗口先记录本批来源提交、任务、模块和负责人，其他窗口只负责迭代和相关检查；任务不会因同属项目而自动加入批次。`prepare-release.yml`（`Prepare Selected Website Release`）默认只准备前台，可明确选择业务后台、管理后台及组合，完整选择规则见下表。准备完成不等于已发布。
+
+| 修改内容 | 候选选择 | 实际发布方式 |
+| --- | --- | --- |
+| 前台页面、样式、图片或前台内容 | `frontend`（默认） | 默认前台模式 |
+| 管理后台界面 | `admin` | `adminOnly: true` |
+| 业务、询盘或通知逻辑，无数据变更 | `backend` | `backendOnly: true` |
+| 关联模块同时改变 | 明确选择所需组合 | 清单显式加入对应模块；前台参与的组合沿用现有组合模式 |
+| 仅业务后台和管理后台同时改变 | `backend+admin` | 可一并准备，分成两个单独发布批次，不加入无改动的前台 |
+| 公共依赖、配置、接口约定或数据改变 | 先核对影响，再选择模块 | 先确认兼容及数据保护，再按支持的模式发布 |
+
+仅后台两种模式不能混用；选择组合只决定构建范围，不自动授权生产切换。每个模块交付完整、可核对版本的程序包，不逐页覆盖线上文件。同一来源、配置、检查范围及程序包下有效的证据可以复用；既有主分支质量门禁保持不变，实际切换后的线上验收必须重新执行。
+
+`frontend_release.py` 只使用已经导入并核对身份的镜像，不在生产构建或拉取代码，也不恢复数据库。默认只替换前台；其他模块须使用下文对应模式和显式清单。未选模块和业务数据受到保护，共享代理仅校验配置并正常重载。已审核的增量数据变更仅走下文专用门禁，不能混用前台回退。
 
 1. 在独立构建环境从完整 Git 提交生成镜像；将程序包、压缩包校验值、源提交和镜像标识长期保存到经确认的独立存储。传输和导入前，按下文容量检查预留“全部候选镜像展开体积的两倍 + 压缩包体积 + 5 GiB 工作空间”；不再占用生产资源重复构建。`prepare-frontend.yml` 只构建候选，不连接生产机。
 2. 按 `manifest.example.json` 填写服务器实际导入的不可变镜像身份，以及当前前台身份。先不加 `--apply` 运行检查。候选在独立容器中验证，中英文首页、资料、询价、产品、公司页必须正确；未列入候选 `approvedGuides` 的选型文章和专题方案，以及未经审核的案例必须为 404，网站地图不得列入它们；已审核的案例按下文“项目案例逐篇放出”检查。旧镜像未通过就拒绝切换。
@@ -52,7 +65,7 @@ python3 ops/releases/frontend_release.py --manifest /private/path/previous-compa
 
 ### Unified application release
 
-`prepare-release.yml` builds both frontend and backend from the exact CI-passed main commit, outside production. It does not deploy automatically. Each component records its archive checksum and immutable image identity.
+`prepare-release.yml` builds only explicitly selected components from the exact CI-passed main commit, outside production; the default is frontend only. Its fixed choices cover frontend, backend, admin and their combinations. Preparation does not deploy automatically, and a preparation combination must still use a supported apply manifest. Each selected component records its archive checksum and immutable image identity.
 
 `frontend_release.py` retains its frontend-only mode. An explicit `backend` manifest entry enables a two-component release using the same source commit. It checks both current versions, runs the backend aggregate as a read-only command without starting a second notification worker, and permits only the reviewed additive content-attribution index migration. PostgreSQL, uploads, admin, nginx container identity and unrelated applications remain protected. On a failed application switch both prior application images are restored; the additive index can safely remain. Customer data is never restored or reset by this operation. An interrupted or unsuccessful recovery leaves the deployment marker for manual reconciliation.
 

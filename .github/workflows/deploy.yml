@@ -5,6 +5,8 @@ on:
 
 jobs:
   build:
+    # Retired: only explicit component candidate workflows may prepare releases.
+    if: ${{ false }}
     name: Build Applications
     runs-on: ubuntu-latest
     # 实测约 5 分钟。默认 6 小时太长，卡住会白烧机器时间。
@@ -169,7 +171,7 @@ jobs:
     # 否则 job 先被杀，ssh 那道超时形同虚设。默认 6 小时太长，卡住会白烧机器时间。
     timeout-minutes: 60
     needs: build
-    if: github.ref == 'refs/heads/main'
+    if: ${{ false }}
     concurrency:
       # Production deploys must finish in order. Cancelling an SSH action can
       # leave its remote Docker build running after the runner disconnects.
@@ -308,7 +310,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     needs: [build, deploy]
-    if: failure() && github.ref == 'refs/heads/main'
+    if: ${{ false }}
     steps:
       - name: Post to Feishu
         env:

@@ -1,4 +1,4 @@
-name: Prepare Unified Website Release
+name: Prepare Selected Website Release
 on:
   workflow_dispatch:
     inputs:
@@ -6,6 +6,19 @@ on:
         description: Full current main commit after CI and review
         required: true
         type: string
+      components:
+        description: Explicit reviewed release components; frontend is the default
+        required: true
+        type: choice
+        default: frontend
+        options:
+          - frontend
+          - backend
+          - admin
+          - frontend+backend
+          - frontend+admin
+          - backend+admin
+          - frontend+backend+admin
       segmented_archive:
         description: Opt in to segmented gzip; requires the new archive transport verifier
         required: false
@@ -15,14 +28,38 @@ permissions:
   contents: read
   actions: read
 jobs:
+  selection:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    outputs:
+      matrix: ${{ steps.select.outputs.matrix }}
+    steps:
+      - name: Validate explicit release components
+        id: select
+        env:
+          RELEASE_COMPONENTS: ${{ inputs.components }}
+        run: |
+          set -euo pipefail
+          case "$RELEASE_COMPONENTS" in
+            frontend) matrix='{"component":["frontend"]}' ;;
+            backend) matrix='{"component":["backend"]}' ;;
+            admin) matrix='{"component":["admin"]}' ;;
+            frontend+backend) matrix='{"component":["frontend","backend"]}' ;;
+            frontend+admin) matrix='{"component":["frontend","admin"]}' ;;
+            backend+admin) matrix='{"component":["backend","admin"]}' ;;
+            frontend+backend+admin) matrix='{"component":["frontend","backend","admin"]}' ;;
+            *) echo 'A nonempty, explicit reviewed component selection is required.' >&2; exit 1 ;;
+          esac
+          printf 'matrix=%s\n' "$matrix" >> "$GITHUB_OUTPUT"
   candidate:
+    needs: selection
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     timeout-minutes: 35
     strategy:
       fail-fast: false
-      matrix:
-        component: [frontend, backend]
+      matrix: ${{ fromJSON(needs.selection.outputs.matrix) }}
     env:
       COMPONENT: ${{ matrix.component }}
     steps:
@@ -53,20 +90,32 @@ jobs:
         run: |
           set -euo pipefail
           bash scripts/check-no-secrets.sh
-          set --
-          if [[ "$COMPONENT" == frontend ]]; then
-            set -- --build-arg "NEXT_PUBLIC_BAIDU_TONGJI_ID=$NEXT_PUBLIC_BAIDU_TONGJI_ID"
-          fi
-          docker build --platform linux/amd64 -f "$COMPONENT/Dockerfile" \
-            --build-arg NEXT_PUBLIC_SITE_URL=https://www.jssngyl.cn \
-            --build-arg NEXT_PUBLIC_API_URL=/api \
-            --build-arg NEXT_PUBLIC_API_BASE_URL=/api \
-            --build-arg API_BASE_URL_INTERNAL=http://backend:3001/api \
-            "$@" \
-            --build-arg "NEXT_PUBLIC_BAIDU_SITE_VERIFICATION=$NEXT_PUBLIC_BAIDU_SITE_VERIFICATION" \
-            --build-arg "NEXT_PUBLIC_BING_SITE_VERIFICATION=$NEXT_PUBLIC_BING_SITE_VERIFICATION" \
-            --build-arg "NEXT_PUBLIC_360_SITE_VERIFICATION=$NEXT_PUBLIC_360_SITE_VERIFICATION" \
-            --build-arg "NEXT_PUBLIC_SOGOU_SITE_VERIFICATION=$NEXT_PUBLIC_SOGOU_SITE_VERIFICATION" \
+          case "$COMPONENT" in
+            frontend|backend)
+              if [[ "$COMPONENT" == frontend ]]; then
+                dockerfile=frontend/Dockerfile
+                set -- --build-arg "NEXT_PUBLIC_BAIDU_TONGJI_ID=$NEXT_PUBLIC_BAIDU_TONGJI_ID"
+              else
+                dockerfile=backend/Dockerfile
+                set --
+              fi
+              set -- "$@" \
+                --build-arg NEXT_PUBLIC_SITE_URL=https://www.jssngyl.cn \
+                --build-arg NEXT_PUBLIC_API_URL=/api \
+                --build-arg NEXT_PUBLIC_API_BASE_URL=/api \
+                --build-arg API_BASE_URL_INTERNAL=http://backend:3001/api \
+                --build-arg "NEXT_PUBLIC_BAIDU_SITE_VERIFICATION=$NEXT_PUBLIC_BAIDU_SITE_VERIFICATION" \
+                --build-arg "NEXT_PUBLIC_BING_SITE_VERIFICATION=$NEXT_PUBLIC_BING_SITE_VERIFICATION" \
+                --build-arg "NEXT_PUBLIC_360_SITE_VERIFICATION=$NEXT_PUBLIC_360_SITE_VERIFICATION" \
+                --build-arg "NEXT_PUBLIC_SOGOU_SITE_VERIFICATION=$NEXT_PUBLIC_SOGOU_SITE_VERIFICATION"
+              ;;
+            admin)
+              dockerfile=admin/Dockerfile
+              set -- --build-arg VITE_APP_BASE_PATH=/ --build-arg VITE_API_BASE_URL=/api
+              ;;
+            *) echo 'Unexpected release component.' >&2; exit 1 ;;
+          esac
+          docker build --platform linux/amd64 -f "$dockerfile" "$@" \
             --label "org.opencontainers.image.revision=$SOURCE_COMMIT" \
             --tag "$IMAGE_TAG" .
       - name: Record immutable artifact identity

@@ -56,11 +56,11 @@ pnpm dev:admin
 
 **唯一入口是 [DEPLOY.md](DEPLOY.md)，请先读它。** 合并 `main` 不会自动发布，`deploy.sh` 也不再是发布方式。
 
-当前流程：从已通过 CI 的 `main` 提交构建固定程序包，导入服务器后用 `ops/releases/frontend_release.py` 明确执行替换，只换前台。命令与清单样例见 [固定程序包发布说明](ops/releases/README.md)。
+其他窗口负责迭代，统一发版窗口汇总待发任务、来源提交及受影响模块。从已通过主分支质量检查的提交构建固定程序包，候选准备默认只构建前台；业务后台、管理后台或组合须明确选择。导入服务器后用 `ops/releases/frontend_release.py` 按清单只替换选中的模块。命令与清单样例见 [固定程序包发布说明](ops/releases/README.md)。
 
 不要做这三件事：
 
-- 不要运行 `deploy.sh` 或 `scripts/release-one-click.sh`（历史整站流程，会在生产机重建镜像并执行数据库迁移）
+- 不要运行历史整站 `deploy.sh`（包含服务器构建和数据库迁移）；旧 `scripts/release-one-click.sh` 现仅提示正确入口并退出，不再自动推送
 - 不要手动触发已停用的 `Build And Deploy` 工作流
 - 不要删除生产目录里的 `verified-images.override.yml`、`RELEASE_ARTIFACTS.json`、`DEPLOYMENT_IN_PROGRESS.json`（它们是发布保护与运行身份记录）
 
