@@ -24,6 +24,15 @@ function getEnv(name) {
   return process.env[name]?.trim() || '';
 }
 
+// Both direct and queued submissions must honor the same explicit owner switch.
+export function baiduSubmissionMode(value = process.env.BAIDU_SUBMISSION_MODE) {
+  const mode = value?.trim() || 'manual';
+  if (!['manual', 'automatic'].includes(mode)) {
+    throw new Error('Invalid Baidu submission mode; expected manual or automatic');
+  }
+  return mode;
+}
+
 // Never log the raw error, URL or cause: submission URLs contain credentials.
 // Only emit fixed descriptions for known transport failures.
 export function describeSubmissionFailure(error) {
@@ -152,8 +161,26 @@ export async function submitIndexNow(siteUrl, urls, dryRun) {
 
 // These holds only prevent duplicate API attempts for the approved repair batch.
 // They never turn a manual report/receipt into an API acceptance or timestamp.
-export function selectUnprotectedBaiduUrls(urls) {
-  const registry = JSON.parse(readFileSync(new URL('./baidu-manual-submission-protection.json', import.meta.url), 'utf8'));
+// A hold can only be released by a recorded human authorization for the exact
+// currently observed content date. Missing/changed versions never match.
+export function baiduReleaseAuthorizations(registry) {
+  const releases = registry.releaseAuthorizations ?? [];
+  if (!Array.isArray(releases) || releases.some((entry) => {
+    try {
+      const url = new URL(entry.url);
+      return url.origin !== FALLBACK_SITE_URL || url.search || url.hash || url.href !== entry.url ||
+        typeof entry.contentLastmod !== 'string' || !entry.contentLastmod ||
+        !Number.isFinite(Date.parse(entry.contentLastmod)) || entry.authorizedBy !== 'user' ||
+        typeof entry.authorizationSource !== 'string' || !entry.authorizationSource.trim();
+    } catch { return true; }
+  }) || new Set(releases.map((entry) => JSON.stringify([entry.url, entry.contentLastmod]))).size !== releases.length) {
+    throw new Error('Invalid version-specific Baidu release authorization; refusing to release a hold');
+  }
+  return releases;
+}
+
+export function selectUnprotectedBaiduUrls(urls, liveVersions = new Map(), registry =
+    JSON.parse(readFileSync(new URL('./baidu-manual-submission-protection.json', import.meta.url), 'utf8'))) {
   if (registry.version !== 1 || !Array.isArray(registry.entries) || registry.entries.some((entry) =>
     !['user-reported-submitted', 'platform-received'].includes(entry.evidenceStatus) ||
     typeof entry.url !== 'string' || new URL(entry.url).origin !== FALLBACK_SITE_URL ||
@@ -161,16 +188,23 @@ export function selectUnprotectedBaiduUrls(urls) {
     new Set(registry.entries.map((entry) => entry.url)).size !== registry.entries.length) {
     throw new Error('Invalid manual-submission protection; refusing an automatic attempt');
   }
-  const held = new Set(registry.entries.map((entry) => entry.url));
+  if (!(liveVersions instanceof Map)) throw new Error('Current content versions are required for Baidu release checks');
+  const released = new Set(baiduReleaseAuthorizations(registry)
+    .filter((entry) => liveVersions.get(entry.url) === entry.contentLastmod).map((entry) => entry.url));
+  const held = new Set(registry.entries.map((entry) => entry.url).filter((url) => !released.has(url)));
   return { urls: urls.filter((url) => !held.has(url)), protectedUrls: urls.filter((url) => held.has(url)) };
 }
 
-export async function submitBaidu(siteUrl, urls, dryRun, remaining = Infinity) {
-  const protection = selectUnprotectedBaiduUrls(urls);
+export async function submitBaidu(siteUrl, urls, dryRun, remaining = Infinity, { liveVersions = new Map(), registry } = {}) {
+  const mode = baiduSubmissionMode();
+  const protection = selectUnprotectedBaiduUrls(urls, liveVersions, registry);
   urls = protection.urls;
   const protectedUrls = protection.protectedUrls;
   if (!urls.length && protectedUrls.length) {
     return { skipped: true, reason: 'manually handled URLs protected; no API attempt or acceptance', protectedUrls, acceptedUrls: [] };
+  }
+  if (mode === 'manual') {
+    return { skipped: true, paused: true, reason: 'automatic submission paused by owner decision; manual review only; pending URLs retained (not accepted)', protectedUrls, acceptedUrls: [] };
   }
   const token = getEnv('BAIDU_TOKEN') || getEnv('BAIDU_PUSH_TOKEN');
 
@@ -184,14 +218,18 @@ export async function submitBaidu(siteUrl, urls, dryRun, remaining = Infinity) {
   if (!selected.length) return { skipped: true, reason: 'Daily submission budget exhausted', protectedUrls };
   if (selected.length < urls.length) {
     console.warn(`${process.env.CI ? '::warning::' : ''}Baidu: ${urls.length - selected.length} URLs deferred by per-run budget:`);
-    for (const url of urls.slice(limit)) console.log(`DEFERRED ${url}`);
+    for (const url of urls.slice(selected.length)) console.log(`DEFERRED ${url}`);
   }
   const registeredSite = getEnv('BAIDU_SITE') || siteUrl;
   const registeredUrl = new URL(registeredSite.includes('://') ? registeredSite : `https://${registeredSite}`);
   if (!['http:', 'https:'].includes(registeredUrl.protocol) || registeredUrl.hostname !== new URL(siteUrl).hostname || registeredUrl.username || registeredUrl.password || registeredUrl.search || registeredUrl.hash || registeredUrl.pathname !== '/') {
     throw new Error('Baidu registered site must match the public website host');
   }
-  const endpoint = `https://data.zz.baidu.com/urls?site=${encodeURIComponent(registeredSite)}&token=${encodeURIComponent(token)}`;
+  // The official HTTP endpoint is available only by a separate literal opt-in.
+  // Never downgrade after a TLS error or accept a caller-supplied endpoint.
+  const protocol = process.env.BAIDU_ALLOW_HTTP === 'true' ? 'http' : 'https';
+  const submittedSite = registeredSite.includes('://') ? registeredUrl.origin : registeredUrl.hostname;
+  const endpoint = `${protocol}://data.zz.baidu.com/urls?site=${submittedSite}&token=${encodeURIComponent(token)}`;
 
   if (dryRun) {
     return { skipped: false, dryRun: true, submitted: selected.length, protectedUrls };
@@ -209,9 +247,10 @@ export async function submitBaidu(siteUrl, urls, dryRun, remaining = Infinity) {
   });
 
   const body = await response.text();
+  let result;
   let accepted = false;
   try {
-    const result = JSON.parse(body);
+    result = JSON.parse(body);
     accepted = Boolean(result && typeof result === 'object' && !Array.isArray(result) &&
       !Object.prototype.hasOwnProperty.call(result, 'error') &&
       Number.isSafeInteger(result.success) && result.success === selected.length &&
@@ -219,7 +258,23 @@ export async function submitBaidu(siteUrl, urls, dryRun, remaining = Infinity) {
       ['not_valid', 'not_same_site'].every((key) => result[key] === undefined ||
         (Array.isArray(result[key]) && result[key].length === 0)));
   } catch { /* Invalid responses are failures. */ }
-  return { skipped: false, ok: response.ok && accepted, status: response.status, body, acceptedUrls: response.ok && accepted ? selected : [], protectedUrls };
+  // Do not expose raw response bodies: an upstream error may echo the token.
+  const ok = response.ok && accepted;
+  const record = result && typeof result === 'object' && !Array.isArray(result);
+  const hasError = record && Object.prototype.hasOwnProperty.call(result, 'error');
+  const failureReasons = new Map([
+    ['site error', 'site_error'], ['empty content', 'empty_content'],
+    ['token is not valid', 'invalid_token'], ['over quota', 'over_quota'],
+  ]);
+  const reason = hasError ? (failureReasons.get(result.message) ?? 'baidu_error')
+    : !response.ok ? 'http_error' : !record ? 'invalid_response' : 'incomplete_batch';
+  return { skipped: false, ok,
+    ...(Number.isSafeInteger(response.status) ? { status: response.status } : {}),
+    ...(!ok ? { reason } : {}),
+    ...(record && Number.isSafeInteger(result.error) ? { errorCode: result.error } : {}),
+    ...(record && Number.isSafeInteger(result.success) && result.success >= 0 ? { success: result.success } : {}),
+    ...(record && Number.isSafeInteger(result.remain) && result.remain >= 0 ? { remain: result.remain } : {}),
+    acceptedUrls: ok ? selected : [], protectedUrls };
 
 }
 

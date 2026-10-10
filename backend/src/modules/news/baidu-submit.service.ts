@@ -17,6 +17,8 @@ export class BaiduSubmitService {
   }
 
   async submitUrl(url: string) {
+    if (this.configService.get<string>('baiduSubmissionMode') !== 'automatic') return false;
+
     const site = this.configService.get<string>('baiduSite')?.trim();
     const token = this.configService.get<string>('baiduToken')?.trim();
     if (!site || !token) {
@@ -26,7 +28,12 @@ export class BaiduSubmitService {
       }
       return false;
     }
-    await submitSingleUrlToBaidu(site, token, url);
+    await submitSingleUrlToBaidu(
+      site,
+      token,
+      url,
+      this.configService.get<boolean>('baiduAllowHttp') === true,
+    );
     this.logger.log('Baidu accepted one news URL for discovery');
     return true;
   }

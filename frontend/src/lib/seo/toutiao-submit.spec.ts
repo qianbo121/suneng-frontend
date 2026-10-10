@@ -79,14 +79,37 @@ describe('Toutiao dispatch lifecycle', () => {
     fake.images[0].onload?.call(fake.images[0] as unknown as GlobalEventHandlers, {} as Event);
     expect(new URL(fake.images[0].src).searchParams.get('url')).toBe(articleA);
   });
-  it('can retry a failed image without leaking an exception into the page', () => {
+  it('keeps a dispatched article deduplicated when a text response fires an image error', () => {
     const fake = fakeImages();
     const submit = createToutiaoArticleSubmitter('test-site', fake.create);
-    submit(articleA, articleA);
-    fake.images[0].onerror?.call(fake.images[0] as unknown as GlobalEventHandlers, {} as Event);
     expect(submit(articleA, articleA)).toBe(true);
-    const failing = createToutiaoArticleSubmitter('test-site', () => { throw new Error('blocked image'); });
-    expect(failing(articleA, articleA)).toBe(false);
+    // An HTTP 200 text response still fires Image.onerror, rather than onload.
+    fake.images[0].onerror?.call(fake.images[0] as unknown as GlobalEventHandlers, {} as Event);
+    expect(submit(articleA, articleA)).toBe(false);
+    expect(submit(`${articleA}#toc`, articleA)).toBe(false);
+    expect(submit(articleB, articleB)).toBe(true);
+    expect(submit(articleA, articleA)).toBe(false);
+    expect(fake.create).toHaveBeenCalledTimes(2);
+  });
+  it.each(['create', 'src'])('can retry a synchronous %s failure before dispatch without leaking an exception', (stage) => {
+    let attempts = 0;
+    const fake = fakeImages();
+    const submit = createToutiaoArticleSubmitter('test-site', () => {
+      attempts += 1;
+      if (attempts === 1) {
+        if (stage === 'create') throw new Error('blocked image');
+        return {
+          set src(_value: string) { throw new Error('blocked address'); },
+          onload: null,
+          onerror: null,
+        };
+      }
+      return fake.create();
+    });
+    expect(submit(articleA, articleA)).toBe(false);
+    expect(submit(articleA, articleA)).toBe(true);
+    expect(submit(articleA, articleA)).toBe(false);
+    expect(fake.create).toHaveBeenCalledTimes(1);
   });
   it('does not attempt a request without a site identifier', () => {
     const fake = fakeImages();

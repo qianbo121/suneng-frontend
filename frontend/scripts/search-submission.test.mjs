@@ -2,9 +2,157 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { selectChangedUrls, sitemapEntries } from './changed-search-urls.mjs';
-import { describeSubmissionFailure, selectUnprotectedBaiduUrls, submitBaidu } from './submit-search-engines.mjs';
+import { baiduSubmissionMode, describeSubmissionFailure, selectUnprotectedBaiduUrls, submitBaidu } from './submit-search-engines.mjs';
 
 const site = 'https://www.jssngyl.cn';
+
+async function withBaiduConfiguration(values, check) {
+  const names = ['BAIDU_TOKEN', 'BAIDU_PUSH_TOKEN', 'BAIDU_SITE', 'BAIDU_PUSH_MAX_URLS', 'BAIDU_SUBMISSION_MODE', 'BAIDU_ALLOW_HTTP'];
+  const saved = Object.fromEntries(names.map((name) => [name, process.env[name]]));
+  const originalFetch = globalThis.fetch;
+  try {
+    for (const name of names) delete process.env[name];
+    Object.assign(process.env, { BAIDU_TOKEN: 'test-only', BAIDU_SITE: site, BAIDU_PUSH_MAX_URLS: '10', ...values });
+    await check();
+  } finally {
+    globalThis.fetch = originalFetch;
+    for (const name of names) {
+      if (saved[name] === undefined) delete process.env[name];
+      else process.env[name] = saved[name];
+    }
+  }
+}
+
+test('direct Baidu entry defaults to manual and never requests even with token and HTTP opt-in', async () => {
+  for (const values of [{}, { BAIDU_ALLOW_HTTP: 'true' }, { BAIDU_SUBMISSION_MODE: 'manual', BAIDU_ALLOW_HTTP: 'true' }]) {
+    await withBaiduConfiguration(values, async () => {
+      let calls = 0;
+      globalThis.fetch = async () => { calls++; throw new Error('must not request'); };
+      const result = await submitBaidu(site, [`${site}/zh`], false);
+      assert.equal(result.paused, true);
+      assert.equal(result.skipped, true);
+      assert.deepEqual(result.acceptedUrls, []);
+      assert.equal(calls, 0);
+    });
+  }
+});
+
+test('invalid Baidu modes fail before requesting and do not treat the old auto spelling as authorization', async () => {
+  assert.equal(baiduSubmissionMode(''), 'manual');
+  for (const mode of ['auto', 'true', 'AUTOMATIC', 'invalid']) {
+    await withBaiduConfiguration({ BAIDU_SUBMISSION_MODE: mode, BAIDU_ALLOW_HTTP: 'true' }, async () => {
+      let calls = 0;
+      globalThis.fetch = async () => { calls++; };
+      await assert.rejects(submitBaidu(site, [`${site}/zh`], false), /Invalid Baidu submission mode/);
+      assert.equal(calls, 0);
+    });
+  }
+});
+
+test('only literal true selects the fixed official HTTP endpoint in automatic mode', async () => {
+  for (const value of [undefined, 'false', 'TRUE', '1', 'yes', ' true ', 'true']) {
+    await withBaiduConfiguration({ BAIDU_SUBMISSION_MODE: 'automatic', ...(value === undefined ? {} : { BAIDU_ALLOW_HTTP: value }) }, async () => {
+      let calls = 0;
+      globalThis.fetch = async (endpoint, request) => {
+        calls++;
+        assert.equal(new URL(endpoint).origin, value === 'true' ? 'http://data.zz.baidu.com' : 'https://data.zz.baidu.com');
+        assert.equal(new URL(endpoint).pathname, '/urls');
+        assert.equal(request.redirect, 'error');
+        assert.equal(request.body, `${site}/zh`);
+        return new Response(JSON.stringify({ success: 1 }));
+      };
+      assert.equal((await submitBaidu(site, [`${site}/zh`], false)).ok, true);
+      assert.equal(calls, 1);
+    });
+  }
+});
+
+test('Baidu keeps the validated registered site literal and encodes only the token', async () => {
+  const token = 'test-only&other=/#?';
+  for (const [registeredSite, submittedSite] of [
+    [site, site], [`${site}/`, site], ['http://www.jssngyl.cn', 'http://www.jssngyl.cn'],
+    ['www.jssngyl.cn', 'www.jssngyl.cn'],
+  ]) {
+    await withBaiduConfiguration({ BAIDU_SUBMISSION_MODE: 'automatic', BAIDU_SITE: registeredSite, BAIDU_TOKEN: token }, async () => {
+      globalThis.fetch = async (endpoint) => {
+        assert.equal(endpoint, `https://data.zz.baidu.com/urls?site=${submittedSite}&token=${encodeURIComponent(token)}`);
+        assert.doesNotMatch(endpoint.split('&token=')[0], /%3A|%2F/i);
+        assert.equal(new URL(endpoint).searchParams.get('token'), token);
+        return new Response(JSON.stringify({ success: 1 }));
+      };
+      assert.equal((await submitBaidu(site, [`${site}/zh`], false)).ok, true);
+    });
+  }
+});
+
+test('Baidu rejects unsafe registered-site components before constructing a request', async () => {
+  for (const registeredSite of [
+    `${site}/path`, `${site}?token=injected`, `${site}#fragment`,
+    'https://user:password@www.jssngyl.cn', 'ftp://www.jssngyl.cn',
+  ]) {
+    await withBaiduConfiguration({ BAIDU_SUBMISSION_MODE: 'automatic', BAIDU_SITE: registeredSite }, async () => {
+      let calls = 0;
+      globalThis.fetch = async () => { calls++; throw new Error('must not request'); };
+      await assert.rejects(submitBaidu(site, [`${site}/zh`], false), /must match/);
+      assert.equal(calls, 0);
+    });
+  }
+});
+
+test('Baidu failures expose only fixed categories and safe numeric response fields', async (t) => {
+  const secret = 'token=test-only';
+  const cases = [
+    ['site error', 400, { error: 400, message: 'site error', success: 0, remain: 0, raw: secret }, 'site_error', { errorCode: 400, success: 0, remain: 0 }],
+    ['empty content', 400, { error: 400, message: 'empty content', raw: secret }, 'empty_content', { errorCode: 400 }],
+    ['invalid token', 401, { error: 401, message: 'token is not valid', raw: secret }, 'invalid_token', { errorCode: 401 }],
+    ['over quota', 200, { error: 400, message: 'over quota', raw: secret }, 'over_quota', { errorCode: 400 }],
+    ['unknown secret echo', 400, { error: 400, message: `${secret} site error over quota` }, 'baidu_error', { errorCode: 400 }],
+    ['prototype-like message', 400, { error: 400, message: '__proto__', raw: secret }, 'baidu_error', { errorCode: 400 }],
+    ['unsafe response fields', 400, { error: secret, message: { token: secret }, success: secret, remain: secret }, 'baidu_error', {}],
+    ['unsafe integers', 400, { error: Number.MAX_SAFE_INTEGER + 1, success: Number.MAX_SAFE_INTEGER + 1, remain: -1, message: secret }, 'baidu_error', {}],
+    ['HTTP failure', 503, { success: 1, remain: 4, message: secret }, 'http_error', { success: 1, remain: 4 }],
+    ['invalid JSON', 200, `<html>${secret}</html>`, 'invalid_response', {}],
+    ['incomplete batch', 200, { success: 0, remain: 4, message: secret }, 'incomplete_batch', { success: 0, remain: 4 }],
+  ];
+  for (const [name, status, body, reason, summary] of cases) {
+    await t.test(name, async () => {
+      await withBaiduConfiguration({ BAIDU_SUBMISSION_MODE: 'automatic' }, async () => {
+        globalThis.fetch = async () => new Response(typeof body === 'string' ? body : JSON.stringify(body), { status });
+        const result = await submitBaidu(site, [`${site}/zh`], false);
+        assert.deepEqual(result, { skipped: false, ok: false, status, reason, ...summary, acceptedUrls: [], protectedUrls: [] });
+        assert.doesNotMatch(JSON.stringify(result), /test-only|token=|__proto__/);
+        assert.equal(Object.hasOwn(result, 'body'), false);
+        assert.equal(Object.hasOwn(result, 'message'), false);
+      });
+    });
+  }
+});
+
+test('explicit HTTP transport failure is attempted once with no other endpoint or fallback', async () => {
+  await withBaiduConfiguration({ BAIDU_SUBMISSION_MODE: 'automatic', BAIDU_ALLOW_HTTP: 'true' }, async () => {
+    let calls = 0;
+    globalThis.fetch = async (endpoint, request) => {
+      calls++;
+      assert.equal(new URL(endpoint).origin, 'http://data.zz.baidu.com');
+      assert.equal(request.redirect, 'error');
+      throw new TypeError('test-only credential URL must not be logged');
+    };
+    await assert.rejects(submitBaidu(site, [`${site}/zh`], false), { name: 'TypeError' });
+    assert.equal(calls, 1);
+  });
+});
+
+test('Baidu response summaries cannot expose a credential echoed in raw response bodies', async () => {
+  await withBaiduConfiguration({ BAIDU_SUBMISSION_MODE: 'automatic', BAIDU_ALLOW_HTTP: 'true' }, async () => {
+    for (const body of [{ success: 1, message: 'token=test-only' }, { error: 400, message: 'token=test-only' }]) {
+      globalThis.fetch = async () => new Response(JSON.stringify(body));
+      const result = await submitBaidu(site, [`${site}/zh`], false);
+      assert.doesNotMatch(JSON.stringify(result), /test-only|token=/);
+      assert.equal(Object.hasOwn(result, 'body'), false);
+    }
+  });
+});
+
 test('selects additions and true content changes, not unchanged or removed pages', () => {
   const before = new Map([[`${site}/zh`, '2026-09-01'], [`${site}/zh/products`, ''], [`${site}/zh/gone`, '']]);
   const after = new Map([[`${site}/zh`, '2026-09-08'], [`${site}/zh/products`, ''], [`${site}/zh/new`, '']]);
@@ -13,8 +161,10 @@ test('selects additions and true content changes, not unchanged or removed pages
 
 test('Baidu refuses a different registered website before sending its credential', async () => {
   const original = globalThis.fetch;
-  const saved = { BAIDU_TOKEN: process.env.BAIDU_TOKEN, BAIDU_SITE: process.env.BAIDU_SITE };
+  const saved = { BAIDU_TOKEN: process.env.BAIDU_TOKEN, BAIDU_SITE: process.env.BAIDU_SITE, BAIDU_SUBMISSION_MODE: process.env.BAIDU_SUBMISSION_MODE, BAIDU_ALLOW_HTTP: process.env.BAIDU_ALLOW_HTTP };
   try {
+    process.env.BAIDU_SUBMISSION_MODE = 'automatic';
+    delete process.env.BAIDU_ALLOW_HTTP;
     process.env.BAIDU_TOKEN = 'test-only';
     process.env.BAIDU_SITE = 'https://wrong-site.example';
     let posts = 0;
@@ -42,6 +192,8 @@ test('Baidu uses the shared token, respects budget, and detects HTTP-200 quota e
   const original = globalThis.fetch;
   const old = { ...process.env };
   try {
+    process.env.BAIDU_SUBMISSION_MODE = 'automatic';
+    delete process.env.BAIDU_ALLOW_HTTP;
     process.env.BAIDU_TOKEN = 'test-only';
     process.env.BAIDU_SITE = 'www.jssngyl.cn';
     process.env.BAIDU_PUSH_MAX_URLS = '1';
@@ -56,7 +208,7 @@ test('Baidu uses the shared token, respects budget, and detects HTTP-200 quota e
     assert.equal((await submitBaidu(site, [`${site}/zh`, `${site}/zh/products`], false)).ok, false);
   } finally {
     globalThis.fetch = original;
-    for (const key of ['BAIDU_TOKEN', 'BAIDU_PUSH_MAX_URLS', 'BAIDU_SITE']) {
+    for (const key of ['BAIDU_TOKEN', 'BAIDU_PUSH_MAX_URLS', 'BAIDU_SITE', 'BAIDU_SUBMISSION_MODE', 'BAIDU_ALLOW_HTTP']) {
       if (old[key] === undefined) delete process.env[key]; else process.env[key] = old[key];
     }
   }
@@ -89,6 +241,8 @@ test('Baidu TLS failure makes one HTTPS attempt without redirect or insecure fal
   const original = globalThis.fetch;
   const saved = { ...process.env };
   try {
+    process.env.BAIDU_SUBMISSION_MODE = 'automatic';
+    delete process.env.BAIDU_ALLOW_HTTP;
     process.env.BAIDU_TOKEN = 'test-only';
     process.env.BAIDU_SITE = site;
     process.env.BAIDU_PUSH_MAX_URLS = '10';
@@ -103,7 +257,7 @@ test('Baidu TLS failure makes one HTTPS attempt without redirect or insecure fal
     assert.equal(attempts, 1);
   } finally {
     globalThis.fetch = original;
-    for (const key of ['BAIDU_TOKEN', 'BAIDU_SITE', 'BAIDU_PUSH_MAX_URLS']) {
+    for (const key of ['BAIDU_TOKEN', 'BAIDU_SITE', 'BAIDU_PUSH_MAX_URLS', 'BAIDU_SUBMISSION_MODE', 'BAIDU_ALLOW_HTTP']) {
       if (saved[key] === undefined) delete process.env[key]; else process.env[key] = saved[key];
     }
   }
@@ -112,10 +266,12 @@ test('Baidu TLS failure makes one HTTPS attempt without redirect or insecure fal
 
 async function withMockedBaidu(response, check) {
   const originalFetch = globalThis.fetch;
-  const names = ['BAIDU_TOKEN', 'BAIDU_PUSH_TOKEN', 'BAIDU_SITE', 'BAIDU_PUSH_MAX_URLS'];
+  const names = ['BAIDU_TOKEN', 'BAIDU_PUSH_TOKEN', 'BAIDU_SITE', 'BAIDU_PUSH_MAX_URLS', 'BAIDU_SUBMISSION_MODE', 'BAIDU_ALLOW_HTTP'];
   const saved = Object.fromEntries(names.map((name) => [name, process.env[name]]));
   const calls = [];
   try {
+    process.env.BAIDU_SUBMISSION_MODE = 'automatic';
+    delete process.env.BAIDU_ALLOW_HTTP;
     process.env.BAIDU_TOKEN = 'test-only';
     delete process.env.BAIDU_PUSH_TOKEN;
     process.env.BAIDU_SITE = site;
@@ -198,11 +354,11 @@ test('Baidu HTTP failures remain unaccepted even with an exact positive count', 
 const manualProtection = JSON.parse(readFileSync(new URL('./baidu-manual-submission-protection.json', import.meta.url), 'utf8'));
 const protectedUrls = manualProtection.entries.map((entry) => entry.url);
 
-test('manual protection distinguishes five user reports from three platform receipts without claiming a timestamp', () => {
-  assert.equal(protectedUrls.length, 8);
-  assert.equal(new Set(protectedUrls).size, 8);
+test('manual protection distinguishes five reports and sixteen receipt records without claiming exact submission times', () => {
+  assert.equal(protectedUrls.length, 21);
+  assert.equal(new Set(protectedUrls).size, 21);
   assert.equal(manualProtection.entries.filter((entry) => entry.evidenceStatus === 'user-reported-submitted').length, 5);
-  assert.equal(manualProtection.entries.filter((entry) => entry.evidenceStatus === 'platform-received').length, 3);
+  assert.equal(manualProtection.entries.filter((entry) => entry.evidenceStatus === 'platform-received').length, 16);
   assert.equal(manualProtection.entries.every((entry) => entry.exactSubmissionTime === null), true);
   assert.match(manualProtection.releaseCondition, /substantial content update or explicit resubmission authorization/);
   assert.deepEqual(selectUnprotectedBaiduUrls([...protectedUrls, `${site}/zh/news/new-unhandled`]), {
@@ -222,7 +378,7 @@ test('mixed manual and unhandled URLs send and accept only the unhandled URL', a
   });
 });
 
-test('all eight manually handled URLs skip the API and never claim acceptance', async () => {
+test('all registered manually handled URLs skip the API and never claim acceptance', async () => {
   await withMockedBaidu({ body: JSON.stringify({ success: 8 }) }, async (calls) => {
     const result = await submitBaidu(site, protectedUrls, false);
     assert.equal(result.skipped, true);
@@ -242,5 +398,38 @@ test('a bad mixed-batch count cannot turn protected URLs into API acceptances', 
     assert.deepEqual(result.acceptedUrls, []);
     assert.deepEqual(result.protectedUrls, [protectedUrls[0]]);
     assert.deepEqual(calls, [fresh]);
+  });
+});
+
+
+test('manual protection releases only the authorized address and exact observed content version', async () => {
+  const url = protectedUrls[0]; const other = protectedUrls[1];
+  const version = '2026-10-08T00:00:00Z';
+  const registry = { ...manualProtection, releaseAuthorizations: [{ url, contentLastmod: version,
+    authorizedBy: 'user', authorizationSource: 'test-human-explicit-version-release' }] };
+  assert.deepEqual(selectUnprotectedBaiduUrls([url, other], new Map(), registry),
+    { urls: [], protectedUrls: [url, other] });
+  assert.deepEqual(selectUnprotectedBaiduUrls([url, other], new Map([[url, '2026-10-09T00:00:00Z']]), registry),
+    { urls: [], protectedUrls: [url, other] });
+  assert.deepEqual(selectUnprotectedBaiduUrls([url, other], new Map([[url, version]]), registry),
+    { urls: [url], protectedUrls: [other] });
+  await withMockedBaidu({ body: JSON.stringify({ success: 1 }) }, async (calls) => {
+    const result = await submitBaidu(site, [url, other], false, 10, {
+      liveVersions: new Map([[url, version]]), registry,
+    });
+    assert.deepEqual(calls, [url]);
+    assert.deepEqual(result.acceptedUrls, [url]);
+    assert.deepEqual(result.protectedUrls, [other]);
+  });
+});
+
+test('an unproven release fails before sending a credential-bearing request', async () => {
+  await withMockedBaidu({ body: JSON.stringify({ success: 1 }) }, async (calls) => {
+    const registry = { ...manualProtection, releaseAuthorizations: [{ url: protectedUrls[0],
+      contentLastmod: '2026-10-08T00:00:00Z', authorizedBy: 'automation', authorizationSource: 'not-human' }] };
+    await assert.rejects(submitBaidu(site, [protectedUrls[0]], false, 10, {
+      liveVersions: new Map([[protectedUrls[0], '2026-10-08T00:00:00Z']]), registry,
+    }), /Invalid version-specific/);
+    assert.deepEqual(calls, []);
   });
 });
