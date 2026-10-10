@@ -69,7 +69,7 @@ jobs:
           python3 scripts/test_frontend_layer_reuse.py
           node --test ops/releases/test_check_backend.cjs
           python3 ops/releases/test_frontend_release.py
-          (cd ops/releases && python3 -m unittest test_preparation_guard test_phase_runtime test_archive_transfer test_release_closeout test_procurement_versions -v)
+          (cd ops/releases && python3 -m unittest test_preparation_guard test_phase_runtime test_archive_transfer test_archive_identity test_release_browser test_release_candidate test_release_closeout test_procurement_versions -v)
           python3 ops/releases/test_acquisition_continuity.py
           python3 ops/releases/test_deployment_notice.py
           python3 ops/releases/test_data_backup.py

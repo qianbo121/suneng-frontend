@@ -1,4 +1,8 @@
 from datetime import datetime, timedelta, timezone
+import hashlib
+import io
+import json
+import os
 from pathlib import Path
 from types import SimpleNamespace
 import tempfile
@@ -55,6 +59,182 @@ class CapacityTest(unittest.TestCase):
                 p.import_space([{'imageTag': 'x', 'imageBytes': value, 'archiveBytes': 1}], '.', '.')
         with self.assertRaises(ValueError):
             p.import_space([{'imageTag': 'x'}]*2, '.', '.')
+
+
+class StagedCapacityTest(unittest.TestCase):
+    def setUp(self):
+        self.temp = tempfile.TemporaryDirectory()
+        self.addCleanup(self.temp.cleanup)
+        self.root = Path(self.temp.name).resolve()
+        self.store, self.staging = self.root / 'store', self.root / 'staging'
+        self.store.mkdir(); self.staging.mkdir()
+        self.archive = self.staging / 'candidate.tar.gz'
+        self.archive.write_bytes(b'candidate-image' * 4096)
+        self.candidate_path = self.staging / 'candidate.json'
+        self.candidate = {'imageTag': 'frontend:x', 'imageBytes': p.GIB,
+                          'sourceCommit': 'a' * 40,
+                          'archiveBytes': self.archive.stat().st_size,
+                          'archiveSha256': hashlib.sha256(self.archive.read_bytes()).hexdigest()}
+        self.write_candidate(self.candidate)
+
+    def write_candidate(self, candidate):
+        raw = json.dumps(candidate).encode()
+        self.candidate_path.write_bytes(raw)
+        self.candidate_sha256 = hashlib.sha256(raw).hexdigest()
+
+    def check(self):
+        return p.staged_import_space(self.candidate_path, self.candidate_sha256,
+                                     self.archive, self.store, self.staging)
+
+    def test_complete_archive_is_counted_once_but_both_entire_images_are_reserved(self):
+        free = p.DEPLOY_RESERVE + 2 * p.GIB
+        with patch.object(p.shutil, 'disk_usage', return_value=SimpleNamespace(free=free)):
+            self.assertFalse(p.import_space([self.candidate], self.store, self.staging)['passed'])
+            result = self.check()
+        self.assertTrue(result['passed'])
+        self.assertEqual(result['phase'], 'after-verified-transfer')
+        self.assertTrue(result['archiveFullReadVerified'])
+        self.assertEqual(result['candidateBinding']['sha256'], self.candidate_sha256)
+        self.assertEqual(result['candidateBinding']['sourceCommit'], 'a' * 40)
+        self.assertEqual(result['filesystems'][0]['requiredBytes'], free)
+        self.assertEqual(result['filesystems'][0]['pretransferRequiredBytes'], free + self.candidate['archiveBytes'])
+        self.assertEqual(result['fullImageCopiesStillReserved'], 2)
+        self.assertFalse(result['currentOrPreviousImageBytesSubtracted'])
+        self.assertFalse(result['layerReuseAssumed'])
+        self.assertFalse(result['deletionAuthorized'])
+
+    def test_remaining_same_device_capacity_cannot_use_old_images_or_claimed_verification(self):
+        self.write_candidate({**self.candidate, 'verified': True,
+                              'currentImageBytes': 100 * p.GIB, 'previousImageBytes': 100 * p.GIB})
+        with patch.object(p.shutil, 'disk_usage', return_value=SimpleNamespace(free=7*p.GIB - 1)):
+            self.assertFalse(self.check()['passed'])
+        with self.assertRaises(ValueError):
+            p.staged_import_space(self.candidate, self.candidate_sha256,
+                                  self.archive, self.store, self.staging)
+
+    def test_separate_devices_reserve_each_device_without_cross_device_credit(self):
+        original_stat = Path.stat
+        def stats(path, *args, **kwargs):
+            info = original_stat(path, *args, **kwargs)
+            if path != self.store:
+                return info
+            return SimpleNamespace(st_dev=info.st_dev+1, st_ino=info.st_ino, st_mode=info.st_mode)
+        for store_free, staging_free, passed in [(7*p.GIB, 5*p.GIB, True),
+                                                 (7*p.GIB-1, 100*p.GIB, False),
+                                                 (100*p.GIB, 5*p.GIB-1, False)]:
+            def disk(path):
+                return SimpleNamespace(free=store_free if Path(path) == self.store else staging_free)
+            with self.subTest(store_free=store_free, staging_free=staging_free):
+                with patch.object(Path, 'stat', stats), patch.object(p.shutil, 'disk_usage', side_effect=disk):
+                    result = self.check()
+                self.assertEqual(result['passed'], passed)
+                self.assertEqual(len(result['filesystems']), 2)
+                self.assertEqual(result['filesystems'][0]['requiredBytes'], 7*p.GIB)
+                self.assertEqual(result['filesystems'][0]['verifiedAlreadyAllocatedArchiveBytes'], 0)
+                self.assertEqual(result['filesystems'][1]['requiredBytes'], 5*p.GIB)
+
+    def test_corrupt_archive_or_wrong_metadata_binding_fails_closed(self):
+        with self.assertRaisesRegex(ValueError, 'SHA256'):
+            p.staged_import_space(self.candidate_path, '0'*64, self.archive, self.store, self.staging)
+        self.archive.write_bytes(b'x' * self.candidate['archiveBytes'])
+        with self.assertRaisesRegex(ValueError, 'SHA256'):
+            self.check()
+
+    def test_wrong_size_sparse_archive_and_hard_link_are_rejected(self):
+        self.archive.write_bytes(b'too short')
+        with self.assertRaisesRegex(ValueError, 'size'):
+            self.check()
+        with self.archive.open('wb') as stream:
+            stream.seek(2*p.GIB)
+            stream.write(b'x')
+        self.write_candidate({**self.candidate, 'archiveBytes': self.archive.stat().st_size})
+        with self.assertRaisesRegex(ValueError, 'non-sparse'):
+            self.check()
+        self.archive.write_bytes(b'candidate-image' * 4096)
+        self.write_candidate(self.candidate)
+        os.link(self.archive, self.staging / 'duplicate.tar.gz')
+        with self.assertRaisesRegex(ValueError, 'single-link'):
+            self.check()
+
+    def test_archive_file_and_parent_symlinks_are_rejected(self):
+        real_archive = self.staging / 'real.tar.gz'
+        self.archive.rename(real_archive)
+        self.archive.symlink_to(real_archive)
+        with self.assertRaisesRegex(ValueError, 'Symbolic'):
+            self.check()
+        alias = self.root / 'alias'
+        alias.symlink_to(self.staging, target_is_directory=True)
+        with self.assertRaisesRegex(ValueError, 'Symbolic'):
+            p.staged_import_space(alias / 'candidate.json', self.candidate_sha256,
+                                  real_archive, self.store, self.staging)
+
+    def test_archive_outside_staging_or_on_another_device_is_rejected(self):
+        outside = self.root / 'outside.tar.gz'
+        self.archive.rename(outside)
+        with self.assertRaisesRegex(ValueError, 'inside'):
+            p.staged_import_space(self.candidate_path, self.candidate_sha256,
+                                  outside, self.store, self.staging)
+        outside.rename(self.archive)
+        original_stat = Path.stat
+        def stats(path, *args, **kwargs):
+            info = original_stat(path, *args, **kwargs)
+            if path != self.staging:
+                return info
+            return SimpleNamespace(st_dev=info.st_dev+1, st_ino=info.st_ino, st_mode=info.st_mode)
+        with patch.object(Path, 'stat', stats), self.assertRaisesRegex(ValueError, 'staging filesystem'):
+            self.check()
+
+    def test_archive_and_candidate_changes_during_capacity_check_are_rejected(self):
+        for changed_path in (self.archive, self.candidate_path):
+            with self.subTest(path=changed_path):
+                def disk(path):
+                    changed_path.write_bytes(changed_path.read_bytes() + b'changed')
+                    return SimpleNamespace(free=100*p.GIB)
+                with patch.object(p.shutil, 'disk_usage', side_effect=disk):
+                    with self.assertRaisesRegex(ValueError, 'changed during the capacity'):
+                        self.check()
+                self.archive.write_bytes(b'candidate-image' * 4096)
+                self.write_candidate(self.candidate)
+
+    def test_mutation_during_full_read_is_rejected(self):
+        original_fstat = os.fstat
+        def changed_stat(fd):
+            info = original_fstat(fd)
+            if info.st_ino == self.archive.stat().st_ino:
+                self.archive.write_bytes(b'x' * self.candidate['archiveBytes'])
+            return info
+        with patch.object(p.os, 'fstat', side_effect=changed_stat):
+            with self.assertRaisesRegex(ValueError, 'changed during the full read'):
+                self.check()
+
+    def test_multiple_candidates_invalid_digests_and_sizes_cannot_enter_staged_path(self):
+        self.write_candidate([self.candidate, self.candidate])
+        with self.assertRaisesRegex(ValueError, 'Exactly one'):
+            self.check()
+        self.write_candidate(self.candidate)
+        with patch('sys.argv', ['storage_policy.py', 'check-import-after-transfer',
+                               '--candidate', str(self.candidate_path), '--candidate', str(self.candidate_path),
+                               '--candidate-sha256', self.candidate_sha256, '--archive', str(self.archive)]):
+            with self.assertRaisesRegex(ValueError, 'Only one'):
+                p.main()
+        for change in ({'archiveSha256': None}, {'archiveBytes': True}, {'imageBytes': 0}):
+            self.write_candidate({**self.candidate, **change})
+            with self.subTest(change=change), self.assertRaises(ValueError):
+                self.check()
+
+    def test_staged_cli_returns_success_or_low_space_without_changing_files(self):
+        argv = ['storage_policy.py', 'check-import-after-transfer',
+                '--candidate', str(self.candidate_path), '--candidate-sha256', self.candidate_sha256,
+                '--archive', str(self.archive), '--image-store', str(self.store),
+                '--staging', str(self.staging)]
+        original_archive = self.archive.read_bytes()
+        for free, exit_code in [(7*p.GIB, 0), (7*p.GIB-1, 75)]:
+            output = io.StringIO()
+            with self.subTest(free=free), patch('sys.argv', argv), patch('sys.stdout', output):
+                with patch.object(p.shutil, 'disk_usage', return_value=SimpleNamespace(free=free)):
+                    self.assertEqual(p.main(), exit_code)
+            self.assertEqual(json.loads(output.getvalue())['passed'], exit_code == 0)
+            self.assertEqual(self.archive.read_bytes(), original_archive)
 
 
 class RetentionTest(unittest.TestCase):

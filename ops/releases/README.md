@@ -300,3 +300,43 @@ python3 ops/releases/archive_transfer.py receive \
 缓存、传输包、还原时的临时文件和最终官方包会同时占用空间。分段复用减少的是重复传输，不能把它当作磁盘空间已经释放；使用前须按这些额外文件核对容量，现有导入容量检查不替代这一步。
 
 分段归档需要用 `gzip.open` 完整解压后交给 `tarfile` 的 `r|` 模式；旧证明器的 `r|gz` 或自动识别的 `r|*` 无法完整读取拼接压缩成员。因此新格式必须使用新的完整验证入口，不能直接送旧证明器。新传输组件验证完成不替代服务器实际镜像身份、候选、浏览器和回退验收。实际传输节省和耗时尚须在正式启用后测量，不把模拟结果当作线上提速。
+
+## 统一候选准备与验收材料核对
+
+`release_candidate.py` 将归档核对、已传输包的容量核对、浏览器材料核对和证据打包收敛为一个准备入口。它仅读取已有文件并新建私人回执；不执行网络上传、镜像导入、容器切换、消息发送或清理。实际发布仍通过 `frontend_release.py` 的既有锁、官方来源、基线、恢复与 `--apply` 条件。安装时同目录加入 `archive_identity.py`、`browser_capture_guard.py`、`release_browser.py`、`release_candidate.py`，并使用本次正式检出版本的 `storage_policy.py`。
+
+所有摘要由已经核对的构建或冻结记录传入，不能相信待核对文件自己声明的摘要。回执和证据包必须指定不存在的新路径，失败材料保留，不能覆盖后假装第一次通过。
+
+```sh
+python3 ops/releases/release_candidate.py verify-archive \
+  --candidate /private/release/candidate.json --candidate-sha256 "$CANDIDATE_SHA256" \
+  --archive /private/release/frontend.tar.gz --source-commit "$SOURCE_COMMIT" \
+  --receipt /private/release/archive-proof.json
+python3 ops/releases/release_candidate.py check-import-after-transfer \
+  --candidate /private/release/candidate.json --candidate-sha256 "$CANDIDATE_SHA256" \
+  --archive /private/release/staging/frontend.tar.gz \
+  --staging /private/release/staging --image-store /data/docker \
+  --receipt /private/release/staged-space-proof.json
+```
+
+归档核对完整读取一次压缩文件计算摘要，再顺序展开一次，核对实际配置、运行镜像身份和每层内容；不反复回退解压、不提取大包。已有 `archive_transfer.py` 的分段传输接口不变。这一步不替代正式构建来源证明、服务器导入后的实际镜像核对或浏览器验收。
+
+普通传输前 `check-import` 规则保持不变。只有一个官方候选已经完整落在本机、真实大小和完整摘要一致、同一文件系统且位于指定暂存目录中时，才可以选用 `check-import-after-transfer`；已经占用的归档不会再次计作未来传输占用。仍保留每个文件系统的安全余量和两份完整镜像的导入余量，不以旧版本、层复用或删除文件抵扣。该命令本身仍完整核对本地归档，不能拿另一台机器的核对结果替代。
+
+```sh
+python3 ops/releases/release_candidate.py verify-browser \
+  --root /private/release/frozen --plan-sha256 "$PLAN_SHA256" \
+  --report browser/production-checks.json --report-sha256 "$REPORT_SHA256" \
+  --phase production \
+  --interaction-report browser/production-interaction-report.json \
+  --interaction-sha256 "$INTERACTION_SHA256" \
+  --receipt /private/release/browser-proof.json
+```
+
+冻结计划包含原页面契约及其文件摘要；页面报告必须绑定实际截图、观察、原始日志、采集器和前后实际运行身份。正式线上必须有真实非空的测试访问身份，以及完整交互矩阵；联系人任务要实际打开弹窗，但不拨号、不发消息、不提交表单。默认交互矩阵为电脑、手机各四项，新计划如有批准的不同矩阵须显式冻结 `interactionContract`。候选阶段只核对基础页面，不能声称已经做过线上交互。
+
+仅候选阶段允许额外传入 `--preview-sha256`：事先冻结的声明必须绑定原计划与原20项页面契约，变化只能是四个无查询参数的中英文首页，将测试身份断言改成实际回环预览已抑制统计。必须保留原诊断材料、观察到真实抑制、两项身份均为空；正式线上禁止使用该豁免。此声明不会修改原计划，也不会将旧失败材料改为成功。
+
+`pack-browser` 使用同一组浏览器参数，另加 `--bundle /private/release/browser-evidence.tar.gz`。保留 `browser` 目录中的历史失败与成功材料；空文件仅接受已被报告绑定的真实 `console.log` 或 `errors.log`。每个文件最多32MiB、最多3000个文件，原文件总量与最终压缩包分别最多128MiB，输出仅本人可读写。包内保留失败不表示失败检查已通过。 已有同批候选或失败材料可通过重复的 `--retained-report <相对报告路径> <外部核对摘要>` 绑定；逐份核对同批来源、计划与全部材料摘要，仅用于保留，不参与本次通过数量。
+
+`prepare-routing-receipt --help` 提供一个仅本地的路由回执提案：先核对线上基础与交互报告、外部绑定的最终状态、历史入口与相邻路径摘要，只构造本批边缘路由对象，其他对象保持相等，旧完整回执摘要作为历史来源。提案不是生产回执安装工具，也不替代正式部署回执；安装前仍需要发布锁和新的实时状态核对。此轮不新增线上自动安装、保留策略或删除行为。
