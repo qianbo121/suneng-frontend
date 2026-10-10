@@ -170,6 +170,13 @@ export function ContactAction({ kind, children, locale, description, className, 
     }
   }
 
+  const copyButton = (
+    <button type="button" className={`${styles.action} ${styles.primary}`} onClick={copyValue} disabled={copyState === 'copying'} aria-live="polite">
+      <HiOutlineDocumentDuplicate aria-hidden="true" />
+      {copyState === 'copied' ? (english ? 'Copied' : '已复制') : copyState === 'copying' ? (english ? 'Copying…' : '复制中…') : content.copy}
+    </button>
+  );
+
   return (
     <>
       {kind === 'wechat' ? (
@@ -190,6 +197,11 @@ export function ContactAction({ kind, children, locale, description, className, 
             </div>
             <div className={styles.body}>
               <p id={descriptionId} className={styles.description}>{description ?? content.description}</p>
+              <div className={styles.valueBox}>
+                <div className={styles.valueLabel}>{content.label}</div>
+                <div ref={valueRef} className={`${styles.value} ${kind === 'phone' ? styles.phoneValue : ''}`}>{content.value}</div>
+                {kind === 'wechat' ? <div className={styles.copyFirst}>{copyButton}<p className={styles.note}>{content.note}</p></div> : null}
+              </div>
               {kind === 'wechat' && (
                 <div className={styles.qrBox}>
                   <Image src={SUNENG_CONTACT.wechatQr} alt={english ? 'Suneng WeChat QR code' : '苏能技术顾问微信二维码'} width={176} height={176} priority className={styles.qr} onLoad={() => {
@@ -199,17 +211,10 @@ export function ContactAction({ kind, children, locale, description, className, 
                   }} />
                 </div>
               )}
-              <div className={styles.valueBox}>
-                <div className={styles.valueLabel}>{content.label}</div>
-                <div ref={valueRef} className={`${styles.value} ${kind === 'phone' ? styles.phoneValue : ''}`}>{content.value}</div>
-              </div>
             </div>
             <div className={styles.footer}>
-              <div className={styles.actions}>
-                <button type="button" className={`${styles.action} ${styles.primary}`} onClick={copyValue} disabled={copyState === 'copying'} aria-live="polite">
-                  <HiOutlineDocumentDuplicate aria-hidden="true" />
-                  {copyState === 'copied' ? (english ? 'Copied' : '已复制') : copyState === 'copying' ? (english ? 'Copying…' : '复制中…') : content.copy}
-                </button>
+              <div className={`${styles.actions} ${kind === 'wechat' ? styles.singleAction : ''}`}>
+                {kind !== 'wechat' ? copyButton : null}
                 <a href={content.href} className={`${styles.action} ${styles.secondary}`} target={kind === 'wechat' ? '_blank' : undefined} rel={kind === 'wechat' ? 'noopener noreferrer' : undefined}
                   onClick={() => trackContactAction(kind, kind === 'wechat' ? 'open_qr_original' : 'open_external', 'requested', contactContextRef.current)}>
                   {kind === 'phone' && <HiOutlinePhone aria-hidden="true" />}
@@ -217,7 +222,7 @@ export function ContactAction({ kind, children, locale, description, className, 
                   {content.secondary}
                 </a>
               </div>
-              {content.note && <p className={styles.note}>{content.note}</p>}
+              {content.note && kind !== 'wechat' && <p className={styles.note}>{content.note}</p>}
               <p className={`${styles.feedback} ${styles.failed}`} role="status" aria-live="polite">
                 {copyState === 'failed' ? (english ? 'Copy was unavailable. Select the contact above and copy it manually.' : '未能自动复制，请选中上方联系方式手动复制。') : ''}
               </p>

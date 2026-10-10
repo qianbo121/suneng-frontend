@@ -61,6 +61,7 @@ const footerCopy = {
     email: siteSettings.email,
     phone: siteSettings.salesPhone,
     copyright: 'Copyright © 2026 江苏苏能工业炉有限公司 版权所有',
+    copyrightParts: ['Copyright © 2026', '江苏苏能工业炉有限公司', '版权所有'],
     icp: '苏ICP备20020318号-1',
     policeBeian: '苏公网安备32120402001014号',
   },
@@ -76,6 +77,7 @@ const footerCopy = {
     email: siteSettings.email,
     phone: siteSettings.salesPhone,
     copyright: 'Copyright © 2026 Jiangsu Suneng Industrial Furnace Co., Ltd. All rights reserved.',
+    copyrightParts: ['Copyright © 2026', 'Jiangsu Suneng Industrial Furnace Co., Ltd.', 'All rights reserved.'],
     icp: '苏ICP备20020318号-1',
     policeBeian: '苏公网安备32120402001014号',
   },
@@ -134,11 +136,17 @@ function BrandBlock({
       <p
         className={`${FOOTER_TOKENS.fontClass} mt-[14px] max-w-[340px] text-[var(--home-font-secondary-size,15px)] leading-[var(--home-font-secondary-line,26px)] text-[var(--footer-muted-color)]`}
       >
-        {copy.brandIntro}
+        {locale === 'zh' ? <>
+          <span className="block xl:inline">专注热处理工业炉研发制造，</span>
+          <span className="block xl:inline">提供设计、制造、安装与售后服务。</span>
+        </> : copy.brandIntro}
       </p>
 
       <div className="mt-[18px] flex flex-col gap-[10px]">
-        <InfoRow>{copy.founded}</InfoRow>
+        <InfoRow>{locale === 'zh' ? <>
+          <span className="block xl:inline">成立于 2006 年；</span>{' '}
+          <span className="block xl:inline">公司生产基地占地约 <span className="whitespace-nowrap">14700 ㎡</span></span>
+        </> : copy.founded}</InfoRow>
       </div>
     </div>
   );
@@ -297,17 +305,19 @@ export function Footer({ locale }: FooterProps) {
       {/* 底部备案条：版权与备案独立放置，桌面左右对齐，移动端居中堆叠。 */}
       <div className="site-footer__legal relative before:absolute before:inset-x-0 before:top-0 before:h-px before:scale-y-50 before:bg-[var(--footer-divider-color)]">
         <div
-          className={`${FOOTER_TOKENS.fontClass} mx-auto flex w-full flex-col items-center justify-center gap-2 px-6 text-[var(--home-font-label-size,13px)] leading-[var(--home-font-label-line,20px)] text-[var(--footer-muted-color)] md:flex-row md:gap-[26px] lg:px-10`}
+          className={`${FOOTER_TOKENS.fontClass} mx-auto flex w-full flex-col items-center justify-center gap-2 px-6 text-center text-[var(--home-font-label-size,13px)] leading-[var(--home-font-label-line,20px)] text-[var(--footer-muted-color)] xl:flex-row xl:gap-[26px] lg:px-10`}
           style={{
             maxWidth: px(desktop.containerWidth),
             paddingTop: desktop.bottomPaddingY,
             paddingBottom: desktop.bottomPaddingY,
           }}
         >
-          <span>{copy.copyright}</span>
+          <span className="min-w-0 max-w-full">
+            {copy.copyrightParts.map((part, index) => <span key={part} className="block xl:inline">{index > 0 ? <span className="hidden xl:inline"> </span> : null}{part}</span>)}
+          </span>
           <span
             aria-hidden="true"
-            className="hidden h-[14px] w-px scale-x-50 bg-[var(--footer-divider-color)] md:block"
+            className="hidden h-[14px] w-px scale-x-50 bg-[var(--footer-divider-color)] xl:block"
           />
           <a
             href={MIIT_BEIAN_URL}
@@ -319,7 +329,7 @@ export function Footer({ locale }: FooterProps) {
           </a>
           <span
             aria-hidden="true"
-            className="hidden h-[14px] w-px scale-x-50 bg-[var(--footer-divider-color)] md:block"
+            className="hidden h-[14px] w-px scale-x-50 bg-[var(--footer-divider-color)] xl:block"
           />
           <a
             href={POLICE_BEIAN_URL}
