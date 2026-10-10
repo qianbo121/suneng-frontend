@@ -39,10 +39,9 @@ export function createToutiaoArticleSubmitter(siteToken: string, createImage: ()
       submitted.add(articleUrl);
       pending.set(articleUrl, image);
       image.onload = () => { pending.delete(articleUrl); };
-      image.onerror = () => {
-        pending.delete(articleUrl);
-        submitted.delete(articleUrl);
-      };
+      // The official endpoint can return text, which fires Image.onerror even
+      // after a successful HTTP response. Keep the dispatch deduplicated.
+      image.onerror = () => { pending.delete(articleUrl); };
       image.src = `https://zhanzhang.toutiao.com/s.gif?url=${encodeURIComponent(articleUrl)}&token=${encodeURIComponent(siteToken)}`;
       return true;
     } catch {
