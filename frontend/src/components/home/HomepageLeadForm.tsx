@@ -144,19 +144,23 @@ export function HomepageLeadForm({
         setIsDirectionOpen(false);
       }
     };
-    const closeOnPageScroll = (event: Event) => {
+    // Browser positioning can finish scrolling after the trigger is clicked.
+    // Close on a user scroll gesture, while allowing the menu itself to scroll.
+    const closeOnUserScroll = (event: WheelEvent | TouchEvent) => {
       if (event.target instanceof Node && directionMenuRef.current?.contains(event.target)) return;
       setIsDirectionOpen(false);
     };
     const closeOnResize = () => setIsDirectionOpen(false);
 
     document.addEventListener('pointerdown', closeOnOutsidePointer);
-    window.addEventListener('scroll', closeOnPageScroll, true);
+    window.addEventListener('wheel', closeOnUserScroll, { capture: true, passive: true });
+    window.addEventListener('touchmove', closeOnUserScroll, { capture: true, passive: true });
     window.addEventListener('resize', closeOnResize);
     window.visualViewport?.addEventListener('resize', closeOnResize);
     return () => {
       document.removeEventListener('pointerdown', closeOnOutsidePointer);
-      window.removeEventListener('scroll', closeOnPageScroll, true);
+      window.removeEventListener('wheel', closeOnUserScroll, true);
+      window.removeEventListener('touchmove', closeOnUserScroll, true);
       window.removeEventListener('resize', closeOnResize);
       window.visualViewport?.removeEventListener('resize', closeOnResize);
     };

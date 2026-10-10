@@ -75,6 +75,9 @@ for (const width of [1440, 390]) {
     });
     await page.goto('/en/news', { waitUntil: 'networkidle' });
     await expect(page.locator('[data-news-id]').first()).toBeVisible();
+    if (width === 390) {
+      await page.getByRole('button', { name: /^Filter resources/ }).click();
+    }
     await page.getByRole('link', { name: 'Equipment Selection', exact: true }).click();
     await expect(page).toHaveURL(/topic=selection/);
     await expect(page.locator('[data-news-id]').first()).toBeVisible();
