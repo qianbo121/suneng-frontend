@@ -34,7 +34,7 @@ describe('Published news Baidu success marker', () => {
     const submit = new BaiduSubmitService(
       new ConfigService({
         baiduSubmissionMode: mode,
-        baiduSite: 'jssngyl.cn',
+        baiduSite: 'www.jssngyl.cn',
         baiduToken: 'test-token',
       }),
     );

@@ -19,6 +19,7 @@ const SAFE_CODES = new Set([
 
 type FailureCategory =
   | 'invalid_response'
+  | 'invalid_site'
   | 'not_accepted'
   | 'api_error'
   | 'http_error'
@@ -97,6 +98,35 @@ export function assertSingleUrlAccepted(text: string): void {
   }
 }
 
+function normalizedBaiduSite(site: string, articleUrl: string): string {
+  const value = site.trim();
+  const hasProtocol = /^[a-z][a-z\d+.-]*:\/\//i.test(value);
+  const rootOnly = hasProtocol ? /^https?:\/\/[^/?#\\\s]+\/?$/i : /^[^/?#\\\s]+\/?$/;
+  if (!rootOnly.test(value) || value.includes('@')) throw new BaiduSubmitError('invalid_site');
+  try {
+    const configured = new URL(hasProtocol ? value : `https://${value}`);
+    const article = new URL(articleUrl);
+    if (
+      !['http:', 'https:'].includes(configured.protocol) ||
+      !['http:', 'https:'].includes(article.protocol) ||
+      configured.username ||
+      configured.password ||
+      article.username ||
+      article.password ||
+      configured.search ||
+      configured.hash ||
+      configured.pathname !== '/' ||
+      !configured.hostname ||
+      configured.hostname !== article.hostname
+    ) {
+      throw new BaiduSubmitError('invalid_site');
+    }
+    return hasProtocol ? configured.origin : configured.hostname;
+  } catch {
+    throw new BaiduSubmitError('invalid_site');
+  }
+}
+
 export async function submitSingleUrlToBaidu(
   site: string,
   token: string,
@@ -104,11 +134,12 @@ export async function submitSingleUrlToBaidu(
   allowHttp = false,
 ): Promise<void> {
   // HTTP requires an explicit configuration choice, never a TLS-error fallback.
-  const endpoint = new URL(
-    allowHttp === true ? 'http://data.zz.baidu.com/urls' : 'https://data.zz.baidu.com/urls',
-  );
-  endpoint.searchParams.set('site', site);
-  endpoint.searchParams.set('token', token);
+  const normalizedSite = normalizedBaiduSite(site, url);
+  const base =
+    allowHttp === true ? 'http://data.zz.baidu.com/urls' : 'https://data.zz.baidu.com/urls';
+  // Baidu expects the registered site's protocol separators as literal characters.
+  // Validate site before interpolation; keep credentials encoded and redirects blocked.
+  const endpoint = new URL(`${base}?site=${normalizedSite}&token=${encodeURIComponent(token)}`);
   try {
     const response = await fetch(endpoint, {
       method: 'POST',
