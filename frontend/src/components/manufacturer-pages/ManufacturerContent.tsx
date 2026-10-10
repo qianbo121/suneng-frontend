@@ -553,6 +553,22 @@ export function ManufacturerContent() {
               '工艺、气氛或质量要求可能改变设备系统；尺寸与重量跨越材料、承载或安装条件时，也会改变方案。下面五项应分别写进询价条件。'
             }
           </p>
+          <p className={'short-answer'}>
+            {'炉膛或工艺有特殊要求？'}
+            <a className={'text-link'} href={'/zh/news/custom-heat-treatment-furnace-chamber-process'}>
+              {'查看非标热处理炉定制咨询清单'}
+              <svg aria-hidden={'true'} viewBox={'0 0 24 24'} width={'18'} height={'18'}>
+                <path
+                  d={'M5 12h14M13 6l6 6-6 6'}
+                  fill={'none'}
+                  stroke={'currentColor'}
+                  strokeWidth={'1.8'}
+                  strokeLinecap={'round'}
+                  strokeLinejoin={'round'}
+                ></path>
+              </svg>
+            </a>
+          </p>
           <div className={'decision-table'}>
             <table>
               <thead>
