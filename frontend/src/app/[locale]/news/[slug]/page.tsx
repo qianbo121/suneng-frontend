@@ -13,6 +13,7 @@ import { NewsArticleToc } from '@/components/news/NewsArticleToc';
 import { NewsRelatedArticles } from '@/components/news/NewsRelatedArticles';
 import { siteSettings } from '@/mock/siteSettings';
 import { NewsViewPing } from '@/components/news/NewsViewPing';
+import { ToutiaoAutoSubmit } from '@/components/seo/ToutiaoAutoSubmit';
 import { NEWS_LABEL } from '@/constants/news';
 import { getNewsList } from '@/lib/api/news';
 import { selectNewsContinueReadingItems } from '@/lib/news-continue-reading';
@@ -24,7 +25,7 @@ import {
 } from '@/lib/news';
 import { getNewsContentModifiedTime } from '@/lib/news-dates';
 import { getArticleJsonLd, getBreadcrumbJsonLd, getEngineeringTeamAuthorName } from '@/lib/seo/jsonld';
-import { buildMetadata } from '@/lib/seo/metadata';
+import { absoluteUrl, buildMetadata } from '@/lib/seo/metadata';
 import { englishNewsSearchDescription } from '@/lib/seo/english-search-description';
 import {
   getCanonicalNewsSlug,
@@ -190,6 +191,7 @@ export default async function NewsDetailPage({ params }: NewsDetailPageProps) {
   return (
     <div className={styles.page}>
       <NewsViewPing newsId={apiArticle?.id} />
+      <ToutiaoAutoSubmit canonicalUrl={absoluteUrl(`/${currentLocale}/news/${slug}`)} />
       <JsonLd
         id={`news-detail-jsonld-${slug}`}
         data={[
