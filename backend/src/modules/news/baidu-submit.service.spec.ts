@@ -12,7 +12,11 @@ describe('Baidu single-URL acceptance', () => {
     jest.spyOn(Logger.prototype, 'log').mockImplementation(() => undefined);
     jest.spyOn(Logger.prototype, 'warn').mockImplementation(() => undefined);
     service = new BaiduSubmitService(
-      new ConfigService({ baiduSite: 'jssngyl.cn', baiduToken: 'test-token' }),
+      new ConfigService({
+        baiduSubmissionMode: 'automatic',
+        baiduSite: 'jssngyl.cn',
+        baiduToken: 'test-token',
+      }),
     );
   });
   afterEach(() => jest.restoreAllMocks());
@@ -91,8 +95,59 @@ describe('Baidu single-URL acceptance', () => {
     expect(timeout).toHaveBeenCalledWith(5000);
   });
   it('skips missing configuration without calling fetch', async () => {
-    const missing = new BaiduSubmitService(new ConfigService());
+    const missing = new BaiduSubmitService(new ConfigService({ baiduSubmissionMode: 'automatic' }));
     await expect(missing.submitUrl(url)).resolves.toBe(false);
     expect(fetchMock).not.toHaveBeenCalled();
+  });
+  it.each([undefined, 'manual', 'AUTOMATIC', ' automatic ', 'other'])(
+    'keeps mode %s paused even when credentials and HTTP permission are present',
+    async (baiduSubmissionMode) => {
+      const paused = new BaiduSubmitService(
+        new ConfigService({
+          baiduSubmissionMode,
+          baiduAllowHttp: true,
+          baiduSite: 'jssngyl.cn',
+          baiduToken: 'test-token',
+        }),
+      );
+      await expect(paused.submitUrl(url)).resolves.toBe(false);
+      expect(fetchMock).not.toHaveBeenCalled();
+      expect(Logger.prototype.log).not.toHaveBeenCalled();
+    },
+  );
+  it.each([
+    [true, 'http:'],
+    [false, 'https:'],
+    [undefined, 'https:'],
+    ['true', 'https:'],
+  ])(
+    'uses only the explicitly selected official protocol for %s',
+    async (baiduAllowHttp, protocol) => {
+      const configured = new BaiduSubmitService(
+        new ConfigService({
+          baiduSubmissionMode: 'automatic',
+          baiduAllowHttp,
+          baiduSite: 'jssngyl.cn',
+          baiduToken: 'test-token',
+        }),
+      );
+      fetchMock.mockResolvedValue(new Response('{"success":1}'));
+      await expect(configured.submitUrl(url)).resolves.toBe(true);
+      const [endpoint, options] = fetchMock.mock.calls[0];
+      expect(endpoint.protocol).toBe(protocol);
+      expect(endpoint.hostname).toBe('data.zz.baidu.com');
+      expect(endpoint.pathname).toBe('/urls');
+      expect(options.redirect).toBe('error');
+      expect(fetchMock).toHaveBeenCalledTimes(1);
+    },
+  );
+  it('does not retry over HTTP when the HTTPS certificate fails', async () => {
+    fetchMock.mockRejectedValue(
+      Object.assign(new Error('certificate mismatch'), { code: 'ERR_TLS_CERT_ALTNAME_INVALID' }),
+    );
+    await expect(service.submitUrl(url)).rejects.toThrow('tls_certificate');
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+    expect(fetchMock.mock.calls[0][0].protocol).toBe('https:');
+    expect(Logger.prototype.log).not.toHaveBeenCalled();
   });
 });

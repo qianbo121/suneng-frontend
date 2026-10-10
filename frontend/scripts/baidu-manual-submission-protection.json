@@ -1,48 +1,285 @@
 {
   "version": 1,
-  "scope": "acquisition-repair-20261004-through-20261006",
-  "purpose": "Hold only this repair batch from automatic resubmission; this is not an API acceptance ledger.",
-  "releaseCondition": "Remove a hold only after a verified substantial content update or explicit resubmission authorization. Do not infer submission time from evidence recording time.",
+  "scope": "confirmed-manual-processing-through-20261007",
+  "purpose": "Separate 21 manually processed addresses from the active automatic queue, while retaining uncertain evidence and later content versions for manual review. No API acceptance or indexing claim.",
+  "releaseCondition": "A change in the observed live content date creates a durable manual-review item. Release a hold only after verified substantial content update or explicit resubmission authorization; unknown dates remain held. Never infer actual submission time from receipt observation time.",
   "entries": [
     {
       "url": "https://www.jssngyl.cn/zh/news/mesh-belt-furnace-quality-tracking-checklist",
       "evidenceStatus": "user-reported-submitted",
-      "exactSubmissionTime": null
+      "exactSubmissionTime": null,
+      "receiptObservedAt": null,
+      "receiptEvidenceScope": "human-report",
+      "evidenceSources": [
+        "https://github.com/qianbo121/suneng-frontend/blob/6b8de877ff9e00546b55db36f0ebf46e0c4d24da/frontend/scripts/baidu-manual-submission-protection.json"
+      ],
+      "sourceGroup": "prior-eight-protection"
     },
     {
       "url": "https://www.jssngyl.cn/zh/news/mesh-belt-furnace-oil-fume-treatment-checklist",
       "evidenceStatus": "user-reported-submitted",
-      "exactSubmissionTime": null
+      "exactSubmissionTime": null,
+      "receiptObservedAt": null,
+      "receiptEvidenceScope": "human-report",
+      "evidenceSources": [
+        "https://github.com/qianbo121/suneng-frontend/blob/6b8de877ff9e00546b55db36f0ebf46e0c4d24da/frontend/scripts/baidu-manual-submission-protection.json"
+      ],
+      "sourceGroup": "prior-eight-protection"
     },
     {
       "url": "https://www.jssngyl.cn/zh/news/mesh-belt-furnace-carbon-cleaning-review",
       "evidenceStatus": "user-reported-submitted",
-      "exactSubmissionTime": null
+      "exactSubmissionTime": null,
+      "receiptObservedAt": null,
+      "receiptEvidenceScope": "human-report",
+      "evidenceSources": [
+        "https://github.com/qianbo121/suneng-frontend/blob/6b8de877ff9e00546b55db36f0ebf46e0c4d24da/frontend/scripts/baidu-manual-submission-protection.json"
+      ],
+      "sourceGroup": "prior-eight-protection"
     },
     {
       "url": "https://www.jssngyl.cn/zh/news/gas-trolley-furnace-operation-maintenance-documents",
       "evidenceStatus": "user-reported-submitted",
-      "exactSubmissionTime": null
+      "exactSubmissionTime": null,
+      "receiptObservedAt": null,
+      "receiptEvidenceScope": "human-report",
+      "evidenceSources": [
+        "https://github.com/qianbo121/suneng-frontend/blob/6b8de877ff9e00546b55db36f0ebf46e0c4d24da/frontend/scripts/baidu-manual-submission-protection.json"
+      ],
+      "sourceGroup": "prior-eight-protection"
     },
     {
       "url": "https://www.jssngyl.cn/zh/news/mesh-belt-quenching-furnace-principle-process-checklist",
       "evidenceStatus": "user-reported-submitted",
-      "exactSubmissionTime": null
+      "exactSubmissionTime": null,
+      "receiptObservedAt": null,
+      "receiptEvidenceScope": "human-report",
+      "evidenceSources": [
+        "https://github.com/qianbo121/suneng-frontend/blob/6b8de877ff9e00546b55db36f0ebf46e0c4d24da/frontend/scripts/baidu-manual-submission-protection.json"
+      ],
+      "sourceGroup": "prior-eight-protection"
     },
     {
       "url": "https://www.jssngyl.cn/zh/news/annealing-furnace-metal-semiconductor-selection",
       "evidenceStatus": "platform-received",
-      "exactSubmissionTime": null
+      "exactSubmissionTime": null,
+      "receiptObservedAt": null,
+      "receiptEvidenceScope": "prior-platform-receipt-record",
+      "evidenceSources": [
+        "https://github.com/qianbo121/suneng-frontend/blob/6b8de877ff9e00546b55db36f0ebf46e0c4d24da/frontend/scripts/baidu-manual-submission-protection.json"
+      ],
+      "sourceGroup": "prior-eight-protection"
     },
     {
       "url": "https://www.jssngyl.cn/zh/articles/special-industrial-furnace-procurement-assessment",
       "evidenceStatus": "platform-received",
-      "exactSubmissionTime": null
+      "exactSubmissionTime": null,
+      "receiptObservedAt": null,
+      "receiptEvidenceScope": "prior-platform-receipt-record",
+      "evidenceSources": [
+        "https://github.com/qianbo121/suneng-frontend/blob/6b8de877ff9e00546b55db36f0ebf46e0c4d24da/frontend/scripts/baidu-manual-submission-protection.json"
+      ],
+      "sourceGroup": "prior-eight-protection"
     },
     {
       "url": "https://www.jssngyl.cn/zh/service/industrial-furnace-parts-purchasing",
       "evidenceStatus": "platform-received",
-      "exactSubmissionTime": null
+      "exactSubmissionTime": null,
+      "receiptObservedAt": null,
+      "receiptEvidenceScope": "prior-platform-receipt-record",
+      "evidenceSources": [
+        "https://github.com/qianbo121/suneng-frontend/blob/6b8de877ff9e00546b55db36f0ebf46e0c4d24da/frontend/scripts/baidu-manual-submission-protection.json"
+      ],
+      "sourceGroup": "prior-eight-protection"
+    },
+    {
+      "url": "https://www.jssngyl.cn/zh/news/jiangsu-heat-treatment-furnace-onsite-survey",
+      "evidenceStatus": "platform-received",
+      "exactSubmissionTime": null,
+      "receiptObservedAt": "2026-10-07T14:37:42.585114+08:00",
+      "receiptEvidenceScope": "batch-level-ui-success",
+      "evidenceSources": [
+        "output/acquisition-followup-20261006/handoff-completion/baidu-fallback-execution-20261007/submission/人工提交成功回执.json"
+      ],
+      "receiptSourceSha256": "561126068d3a889f15d8dd4492b1c243cfe1ec4a389924f6bc371ef712b9b65e",
+      "receiptScreenshotSha256": "715e77ba7180f959327867d8e19caf68b6f08f73f8418420319f25547091d501",
+      "sourceGroup": "manual-batch-20261007"
+    },
+    {
+      "url": "https://www.jssngyl.cn/zh/news/heat-treatment-furnace-manufacturing-factory-audit",
+      "evidenceStatus": "platform-received",
+      "exactSubmissionTime": null,
+      "receiptObservedAt": "2026-10-07T14:37:42.585114+08:00",
+      "receiptEvidenceScope": "batch-level-ui-success",
+      "evidenceSources": [
+        "output/acquisition-followup-20261006/handoff-completion/baidu-fallback-execution-20261007/submission/人工提交成功回执.json"
+      ],
+      "receiptSourceSha256": "561126068d3a889f15d8dd4492b1c243cfe1ec4a389924f6bc371ef712b9b65e",
+      "receiptScreenshotSha256": "715e77ba7180f959327867d8e19caf68b6f08f73f8418420319f25547091d501",
+      "sourceGroup": "manual-batch-20261007"
+    },
+    {
+      "url": "https://www.jssngyl.cn/zh/news/china-heat-treatment-furnace-manufacturing-identity",
+      "evidenceStatus": "platform-received",
+      "exactSubmissionTime": null,
+      "receiptObservedAt": "2026-10-07T14:37:42.585114+08:00",
+      "receiptEvidenceScope": "batch-level-ui-success",
+      "evidenceSources": [
+        "output/acquisition-followup-20261006/handoff-completion/baidu-fallback-execution-20261007/submission/人工提交成功回执.json"
+      ],
+      "receiptSourceSha256": "561126068d3a889f15d8dd4492b1c243cfe1ec4a389924f6bc371ef712b9b65e",
+      "receiptScreenshotSha256": "715e77ba7180f959327867d8e19caf68b6f08f73f8418420319f25547091d501",
+      "sourceGroup": "manual-batch-20261007"
+    },
+    {
+      "url": "https://www.jssngyl.cn/zh/news/taizhou-industrial-furnace-supplier-check",
+      "evidenceStatus": "platform-received",
+      "exactSubmissionTime": null,
+      "receiptObservedAt": "2026-10-07T14:37:42.585114+08:00",
+      "receiptEvidenceScope": "batch-level-ui-success",
+      "evidenceSources": [
+        "output/acquisition-followup-20261006/handoff-completion/baidu-fallback-execution-20261007/submission/人工提交成功回执.json"
+      ],
+      "receiptSourceSha256": "561126068d3a889f15d8dd4492b1c243cfe1ec4a389924f6bc371ef712b9b65e",
+      "receiptScreenshotSha256": "715e77ba7180f959327867d8e19caf68b6f08f73f8418420319f25547091d501",
+      "sourceGroup": "manual-batch-20261007"
+    },
+    {
+      "url": "https://www.jssngyl.cn/zh/news/first-heat-treatment-furnace-purchase-evidence",
+      "evidenceStatus": "platform-received",
+      "exactSubmissionTime": null,
+      "receiptObservedAt": "2026-10-07T14:37:42.585114+08:00",
+      "receiptEvidenceScope": "batch-level-ui-success",
+      "evidenceSources": [
+        "output/acquisition-followup-20261006/handoff-completion/baidu-fallback-execution-20261007/submission/人工提交成功回执.json"
+      ],
+      "receiptSourceSha256": "561126068d3a889f15d8dd4492b1c243cfe1ec4a389924f6bc371ef712b9b65e",
+      "receiptScreenshotSha256": "715e77ba7180f959327867d8e19caf68b6f08f73f8418420319f25547091d501",
+      "sourceGroup": "manual-batch-20261007"
+    },
+    {
+      "url": "https://www.jssngyl.cn/zh/news/jiangsu-industrial-furnace-process-fit",
+      "evidenceStatus": "platform-received",
+      "exactSubmissionTime": null,
+      "receiptObservedAt": "2026-10-07T14:37:42.585114+08:00",
+      "receiptEvidenceScope": "batch-level-ui-success",
+      "evidenceSources": [
+        "output/acquisition-followup-20261006/handoff-completion/baidu-fallback-execution-20261007/submission/人工提交成功回执.json"
+      ],
+      "receiptSourceSha256": "561126068d3a889f15d8dd4492b1c243cfe1ec4a389924f6bc371ef712b9b65e",
+      "receiptScreenshotSha256": "715e77ba7180f959327867d8e19caf68b6f08f73f8418420319f25547091d501",
+      "sourceGroup": "manual-batch-20261007"
+    },
+    {
+      "url": "https://www.jssngyl.cn/zh/news/heat-treatment-line-turnkey-supply-scope",
+      "evidenceStatus": "platform-received",
+      "exactSubmissionTime": null,
+      "receiptObservedAt": "2026-10-07T14:37:42.585114+08:00",
+      "receiptEvidenceScope": "batch-level-ui-success",
+      "evidenceSources": [
+        "output/acquisition-followup-20261006/handoff-completion/baidu-fallback-execution-20261007/submission/人工提交成功回执.json"
+      ],
+      "receiptSourceSha256": "561126068d3a889f15d8dd4492b1c243cfe1ec4a389924f6bc371ef712b9b65e",
+      "receiptScreenshotSha256": "715e77ba7180f959327867d8e19caf68b6f08f73f8418420319f25547091d501",
+      "sourceGroup": "manual-batch-20261007"
+    },
+    {
+      "url": "https://www.jssngyl.cn/zh/news/custom-heat-treatment-furnace-chamber-process",
+      "evidenceStatus": "platform-received",
+      "exactSubmissionTime": null,
+      "receiptObservedAt": "2026-10-07T14:37:42.585114+08:00",
+      "receiptEvidenceScope": "batch-level-ui-success",
+      "evidenceSources": [
+        "output/acquisition-followup-20261006/handoff-completion/baidu-fallback-execution-20261007/submission/人工提交成功回执.json"
+      ],
+      "receiptSourceSha256": "561126068d3a889f15d8dd4492b1c243cfe1ec4a389924f6bc371ef712b9b65e",
+      "receiptScreenshotSha256": "715e77ba7180f959327867d8e19caf68b6f08f73f8418420319f25547091d501",
+      "sourceGroup": "manual-batch-20261007"
+    },
+    {
+      "url": "https://www.jssngyl.cn/zh/news/heat-treatment-line-supplier-output-verification",
+      "evidenceStatus": "platform-received",
+      "exactSubmissionTime": null,
+      "receiptObservedAt": "2026-10-07T14:37:42.585114+08:00",
+      "receiptEvidenceScope": "batch-level-ui-success",
+      "evidenceSources": [
+        "output/acquisition-followup-20261006/handoff-completion/baidu-fallback-execution-20261007/submission/人工提交成功回执.json"
+      ],
+      "receiptSourceSha256": "561126068d3a889f15d8dd4492b1c243cfe1ec4a389924f6bc371ef712b9b65e",
+      "receiptScreenshotSha256": "715e77ba7180f959327867d8e19caf68b6f08f73f8418420319f25547091d501",
+      "sourceGroup": "manual-batch-20261007"
+    },
+    {
+      "url": "https://www.jssngyl.cn/zh/news/heat-treatment-line-integrator-or-furnace-maker",
+      "evidenceStatus": "platform-received",
+      "exactSubmissionTime": null,
+      "receiptObservedAt": "2026-10-07T14:37:42.585114+08:00",
+      "receiptEvidenceScope": "batch-level-ui-success",
+      "evidenceSources": [
+        "output/acquisition-followup-20261006/handoff-completion/baidu-fallback-execution-20261007/submission/人工提交成功回执.json"
+      ],
+      "receiptSourceSha256": "561126068d3a889f15d8dd4492b1c243cfe1ec4a389924f6bc371ef712b9b65e",
+      "receiptScreenshotSha256": "715e77ba7180f959327867d8e19caf68b6f08f73f8418420319f25547091d501",
+      "sourceGroup": "manual-batch-20261007"
+    },
+    {
+      "url": "https://www.jssngyl.cn/zh/solutions/continuous-heat-treatment-line",
+      "evidenceStatus": "platform-received",
+      "exactSubmissionTime": null,
+      "receiptObservedAt": "2026-10-01T19:13:29.088980+08:00",
+      "receiptEvidenceScope": "batch-level-ui-success",
+      "evidenceSources": [
+        "output/acquisition-final-reconciliation-20261002/baidu-manual-receipt.json"
+      ],
+      "receiptSourceSha256": "26a3b58246ffa518fc243b6f567f96b2b920adf29791dfd7b1a2f96ed1a0be08",
+      "receiptScreenshotSha256": "4ec1bd79f1c87ccb03e94c1f328aa80e04e054d313d48837b3cc86366f2fbeef",
+      "sourceGroup": "manual-batch-20261001"
+    },
+    {
+      "url": "https://www.jssngyl.cn/zh/solutions/jiangsu-gongye-lu-changjia",
+      "evidenceStatus": "platform-received",
+      "exactSubmissionTime": null,
+      "receiptObservedAt": "2026-10-01T19:13:29.088980+08:00",
+      "receiptEvidenceScope": "batch-level-ui-success",
+      "evidenceSources": [
+        "output/acquisition-final-reconciliation-20261002/baidu-manual-receipt.json"
+      ],
+      "receiptSourceSha256": "26a3b58246ffa518fc243b6f567f96b2b920adf29791dfd7b1a2f96ed1a0be08",
+      "receiptScreenshotSha256": "4ec1bd79f1c87ccb03e94c1f328aa80e04e054d313d48837b3cc86366f2fbeef",
+      "sourceGroup": "manual-batch-20261001"
+    },
+    {
+      "url": "https://www.jssngyl.cn/zh/solutions/rechuli-lu-changjia",
+      "evidenceStatus": "platform-received",
+      "exactSubmissionTime": null,
+      "receiptObservedAt": "2026-10-01T19:13:29.088980+08:00",
+      "receiptEvidenceScope": "batch-level-ui-success",
+      "evidenceSources": [
+        "output/acquisition-final-reconciliation-20261002/baidu-manual-receipt.json"
+      ],
+      "receiptSourceSha256": "26a3b58246ffa518fc243b6f567f96b2b920adf29791dfd7b1a2f96ed1a0be08",
+      "receiptScreenshotSha256": "4ec1bd79f1c87ccb03e94c1f328aa80e04e054d313d48837b3cc86366f2fbeef",
+      "sourceGroup": "manual-batch-20261001"
     }
-  ]
+  ],
+  "sourceSummary": {
+    "priorEight": {
+      "count": 8,
+      "humanReports": 5,
+      "platformReceiptRecords": 3,
+      "source": "https://github.com/qianbo121/suneng-frontend/blob/6b8de877ff9e00546b55db36f0ebf46e0c4d24da/frontend/scripts/baidu-manual-submission-protection.json"
+    },
+    "manualTen": {
+      "count": 10,
+      "source": "output/acquisition-followup-20261006/handoff-completion/baidu-fallback-execution-20261007/submission/人工提交成功回执.json"
+    },
+    "manualThree": {
+      "count": 3,
+      "source": "output/acquisition-final-reconciliation-20261002/baidu-manual-receipt.json"
+    },
+    "totalUnique": 21,
+    "platformReceiptRecords": 16,
+    "humanReports": 5
+  },
+  "releaseAuthorizations": []
 }

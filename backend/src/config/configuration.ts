@@ -145,6 +145,8 @@ export default () => ({
   publicSiteUrl: process.env.PUBLIC_SITE_URL ?? 'https://www.jssngyl.cn',
   baiduSite: process.env.BAIDU_SITE,
   baiduToken: process.env.BAIDU_TOKEN,
+  baiduSubmissionMode: process.env.BAIDU_SUBMISSION_MODE === 'automatic' ? 'automatic' : 'manual',
+  baiduAllowHttp: process.env.BAIDU_ALLOW_HTTP === 'true',
   feishuInquiryWebhookUrl: process.env.FEISHU_INQUIRY_WEBHOOK_URL,
   allowedOrigins: getRequiredProductionEnv('ALLOWED_ORIGINS') ?? '',
   uploadRoot: process.env.UPLOAD_ROOT ?? 'uploads',

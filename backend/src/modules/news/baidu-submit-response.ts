@@ -101,9 +101,12 @@ export async function submitSingleUrlToBaidu(
   site: string,
   token: string,
   url: string,
+  allowHttp = false,
 ): Promise<void> {
-  // No plaintext fallback or certificate-verification override.
-  const endpoint = new URL('https://data.zz.baidu.com/urls');
+  // HTTP requires an explicit configuration choice, never a TLS-error fallback.
+  const endpoint = new URL(
+    allowHttp === true ? 'http://data.zz.baidu.com/urls' : 'https://data.zz.baidu.com/urls',
+  );
   endpoint.searchParams.set('site', site);
   endpoint.searchParams.set('token', token);
   try {
