@@ -38,6 +38,65 @@ class PreparationGuardTest(unittest.TestCase):
         guard.capture(path, live, release.manifest, command)
         return release, path, state, command
 
+    def test_mount_order_does_not_change_identity_or_mutate_inspection(self):
+        row = container('/shuju-engine')
+        row['Mounts'] = [
+            {'Type': 'bind', 'Source': '/private/source', 'Destination': '/app/data',
+             'Mode': 'ro', 'RW': False, 'Propagation': 'rprivate'},
+            {'Type': 'volume', 'Name': 'shared-volume', 'Driver': 'local',
+             'Source': '/volumes/shared', 'Destination': '/app/cache',
+             'Mode': 'rw', 'RW': True, 'Propagation': ''},
+        ]
+        original = copy.deepcopy(row)
+        reversed_row = copy.deepcopy(row)
+        reversed_row['Mounts'].reverse()
+        self.assertEqual(guard.container_identity(row), guard.container_identity(reversed_row))
+        self.assertEqual(row, original)
+        self.assertEqual(reversed_row['Mounts'], list(reversed(original['Mounts'])))
+
+    def test_mount_fields_counts_and_unknown_fields_remain_protected(self):
+        row = container('/shuju-engine')
+        row['Mounts'] = [
+            {'Type': 'volume', 'Name': 'shared-volume', 'Driver': 'local',
+             'Source': '/volumes/shared', 'Destination': '/app/data',
+             'Mode': 'rw', 'RW': True, 'Propagation': 'rprivate'},
+        ]
+        original = guard.container_identity(row)
+        changes = {'Type': 'bind', 'Name': 'another-volume', 'Driver': 'another-driver',
+                   'Source': '/volumes/other', 'Destination': '/app/other',
+                   'Mode': 'ro', 'RW': False, 'Propagation': 'rshared'}
+        for field, value in changes.items():
+            with self.subTest(field=field):
+                changed = copy.deepcopy(row)
+                changed['Mounts'][0][field] = value
+                self.assertNotEqual(original, guard.container_identity(changed))
+        for change in ('added-field', 'removed-field', 'added-mount', 'removed-mount'):
+            with self.subTest(change=change):
+                changed = copy.deepcopy(row)
+                if change == 'added-field': changed['Mounts'][0]['AdditionalOptions'] = {'readOnly': True}
+                elif change == 'removed-field': changed['Mounts'][0].pop('Mode')
+                elif change == 'added-mount': changed['Mounts'].append(copy.deepcopy(changed['Mounts'][0]))
+                else: changed['Mounts'].clear()
+                self.assertNotEqual(original, guard.container_identity(changed))
+
+    def test_preflight_accepts_reordered_mounts_but_rejects_permission_change(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            release, path, state, command = self.fixture(tmp)
+            row = state['rows'][1]
+            row['Mounts'] = [
+                {'Type': 'bind', 'Source': '/private/data', 'Destination': '/app/data', 'RW': False},
+                {'Type': 'bind', 'Source': '/private/cache', 'Destination': '/app/cache', 'RW': True},
+            ]
+            path.unlink()
+            guard.capture(path, release.live, release.manifest, command)
+            operation = guard.PreparationGuard(path, release, command)
+            operation.begin()
+            row['Mounts'].reverse()
+            operation.check('preflight')
+            row['Mounts'][0]['RW'] = not row['Mounts'][0]['RW']
+            with self.assertRaises(guard.ProtectionChanged):
+                operation.check('preflight')
+
     def test_healthy_same_identity_restart_refreshes_only_effective_baseline(self):
         with tempfile.TemporaryDirectory() as tmp:
             release, path, state, command = self.fixture(tmp)

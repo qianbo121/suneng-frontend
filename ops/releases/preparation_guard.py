@@ -41,6 +41,10 @@ def file_identity(path):
 def container_identity(row):
     state = row['State']
     config = row.get('Config') or {}
+    mounts = row.get('Mounts')
+    if isinstance(mounts, list):
+        # Docker inspect may return the same mount map in a different order.
+        mounts = sorted(mounts, key=lambda mount: json.dumps(mount, sort_keys=True, separators=(',', ':')))
     return {'id': row['Id'], 'image': row['Image'], 'startedAt': state['StartedAt'],
             'running': state['Running'], 'paused': state.get('Paused', False),
             'restarting': state.get('Restarting', False), 'dead': state.get('Dead', False),
@@ -48,7 +52,7 @@ def container_identity(row):
             'health': (state.get('Health') or {}).get('Status'),
             'source': (config.get('Labels') or {}).get('org.opencontainers.image.revision'),
             # Persist digests only, never container environment or configuration values.
-            'configSha256': digest({'Config': config, 'HostConfig': row.get('HostConfig'), 'Mounts': row.get('Mounts')})}
+            'configSha256': digest({'Config': config, 'HostConfig': row.get('HostConfig'), 'Mounts': mounts})}
 
 
 def snapshot(live, command, extra_files=()):

@@ -23,7 +23,7 @@ import {
   resolveNewsImage,
 } from '@/lib/news';
 import { getNewsContentModifiedTime } from '@/lib/news-dates';
-import { getArticleJsonLd, getBreadcrumbJsonLd } from '@/lib/seo/jsonld';
+import { getArticleJsonLd, getBreadcrumbJsonLd, getEngineeringTeamAuthorName } from '@/lib/seo/jsonld';
 import { buildMetadata } from '@/lib/seo/metadata';
 import { englishNewsSearchDescription } from '@/lib/seo/english-search-description';
 import {
@@ -152,6 +152,10 @@ export default async function NewsDetailPage({ params }: NewsDetailPageProps) {
   const detailLabel = currentLocale === 'en' ? 'Article' : '正文';
   const contentId = `news-body-${article.id}`;
   const modifiedTime = getNewsContentModifiedTime(article, currentLocale);
+  const updatedTime =
+    modifiedTime && new Date(modifiedTime).getTime() > new Date(article.publishDate).getTime()
+      ? modifiedTime
+      : undefined;
   const relatedLinks = getNewsRelatedLinks(article, currentLocale);
   const newsListResult = await getNewsList({ page: 1, pageSize: 12 });
   const recommendationCandidates =
@@ -198,12 +202,13 @@ export default async function NewsDetailPage({ params }: NewsDetailPageProps) {
               image,
               datePublished: article.publishDate,
               dateModified: modifiedTime || article.publishDate,
+              author: 'engineering-team',
             },
             currentLocale,
           ),
           getBreadcrumbJsonLd([
             { name: currentLocale === 'en' ? 'Home' : '首页', url: `/${currentLocale}` },
-            { name: newsLabel, url: `/${currentLocale}/news` },
+            { name: currentLocale === 'en' ? newsLabel : '技术资料', url: `/${currentLocale}/news` },
             { name: title, url: `/${currentLocale}/news/${slug}` },
           ]),
         ]}
@@ -231,9 +236,18 @@ export default async function NewsDetailPage({ params }: NewsDetailPageProps) {
               {title}
             </h1>
             <div className={styles.meta}>
-              <time dateTime={article.publishDate}>
-                {formatNewsDisplayDate(article.publishDate)}
-              </time>
+              <span className={styles.metaDate}>
+                {currentLocale === 'en' ? 'Published' : '发布于'}
+                <time dateTime={article.publishDate}>
+                  {formatNewsDisplayDate(article.publishDate)}
+                </time>
+              </span>
+              {updatedTime && (
+                <span className={styles.metaDate}>
+                  {currentLocale === 'en' ? 'Updated' : '更新于'}
+                  <time dateTime={updatedTime}>{formatNewsDisplayDate(updatedTime)}</time>
+                </span>
+              )}
               {currentLocale === 'en' && article.englishSourceDate && (
                 <span>
                   {article.englishSourceDate.label}:{' '}
@@ -242,14 +256,7 @@ export default async function NewsDetailPage({ params }: NewsDetailPageProps) {
                   </time>
                 </span>
               )}
-              <span className={styles.metaDivider} aria-hidden="true">
-                |
-              </span>
-              <span>
-                {currentLocale === 'en'
-                  ? 'Jiangsu Suneng Industrial Furnace Engineering Team'
-                  : '江苏苏能工业炉工程技术团队'}
-              </span>
+              <span>{getEngineeringTeamAuthorName(currentLocale)}</span>
             </div>
           </header>
 
