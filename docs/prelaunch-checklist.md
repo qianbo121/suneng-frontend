@@ -56,7 +56,7 @@
 - [x] `docker-compose.prod.yml`
 - [x] `nginx.conf`（本地验证）
 - [x] `nginx.prod.conf.template`
-- [x] `deploy.sh` 生产发布脚本
+- [x] [固定程序包与分模块发布入口](../DEPLOY.md)（旧 `deploy.sh` 不用于日常生产发布）
 - [x] GitHub Actions 基础流程
 - [ ] 生产域名已解析
 - [ ] SSL 证书已签发并启用

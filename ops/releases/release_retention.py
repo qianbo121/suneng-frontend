@@ -93,8 +93,9 @@ class Docker:
                        for r in rows], key=lambda r: r['id'])
 
     def remove(self, image_id):
+        # Keep untagged parent images; remove only the reviewed immutable identity.
         # Deliberately no --force, broad prune, mutable tag, or filesystem delete.
-        self.run(['image', 'rm', image_id])
+        self.run(['image', 'rm', '--no-prune', image_id])
 
 
 def boundaries(receipt):

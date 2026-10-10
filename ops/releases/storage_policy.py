@@ -2,15 +2,19 @@
 """Capacity gate and evidence-based retention plan. Never deletes or deploys."""
 import argparse
 from datetime import datetime, timezone
+import hashlib
 import json
+import os
 from pathlib import Path
 import re
 import shutil
+import stat
 
 GIB = 1024**3
 DEPLOY_RESERVE = 5 * GIB
 ROLLBACK_RESERVE = 2 * GIB
 IMAGE = re.compile(r'^sha256:[0-9a-f]{64}$')
+DIGEST = re.compile(r'^[0-9a-f]{64}$')
 SYSTEMS = {'website', 'shuju', 'furnace'}
 SOURCE_PATHS = {
     'shuju': re.compile(r'^/opt/shuju/releases/repo-before-[0-9a-f]{7,40}-[0-9]{8}T[0-9]{4,6}$'),
@@ -80,6 +84,107 @@ def import_space(candidates, store, staging):
     return {'passed': all(x['passed'] for x in filesystems), 'filesystems': filesystems,
             'imageBytes': image_bytes, 'archiveBytes': archive_bytes,
             'reserveBytes': DEPLOY_RESERVE, 'deletionAuthorized': False}
+
+
+def _safe_absolute_path(value):
+    if not isinstance(value, (str, Path)):
+        raise ValueError('A file or directory path is required')
+    path = Path(value)
+    if not path.is_absolute() or '..' in path.parts:
+        raise ValueError('Absolute paths without parent traversal are required')
+    if any(p.is_symlink() for p in (path, *path.parents)):
+        raise ValueError('Symbolic links in file or parent paths are not allowed')
+    return path
+
+
+def _file_identity(info):
+    return (info.st_dev, info.st_ino, info.st_size, info.st_mtime_ns,
+            info.st_ctime_ns, info.st_mode, info.st_nlink, info.st_blocks)
+
+
+def _verified_file(path, digest, size=None, capture=False):
+    if not isinstance(digest, str) or not DIGEST.fullmatch(digest):
+        raise ValueError('An external SHA256 digest is required')
+    path = _safe_absolute_path(path)
+    before = path.stat()
+    if not stat.S_ISREG(before.st_mode) or before.st_nlink != 1:
+        raise ValueError('A regular single-link file is required')
+    if size is not None and (before.st_size != size or before.st_blocks * 512 < size):
+        raise ValueError('The archive must have its exact size and be non-sparse')
+    if capture and before.st_size > 1024 * 1024:
+        raise ValueError('Candidate metadata exceeds the 1 MiB limit')
+    calculated, data, read_bytes = hashlib.sha256(), [], 0
+    with os.fdopen(os.open(path, os.O_RDONLY | os.O_NOFOLLOW), 'rb') as stream:
+        if _file_identity(before) != _file_identity(os.fstat(stream.fileno())):
+            raise ValueError('File identity changed before the full read')
+        for block in iter(lambda: stream.read(8 * 1024 * 1024), b''):
+            calculated.update(block)
+            read_bytes += len(block)
+            if capture:
+                data.append(block)
+        after_read = os.fstat(stream.fileno())
+    after = _safe_absolute_path(path).stat()
+    if not (_file_identity(before) == _file_identity(after_read) == _file_identity(after)):
+        raise ValueError('File changed during the full read')
+    if read_bytes != before.st_size:
+        raise ValueError('The full file was not read')
+    if calculated.hexdigest() != digest:
+        raise ValueError('The full file SHA256 does not match the external candidate binding')
+    return before, b''.join(data)
+
+
+def staged_import_space(candidate_path, candidate_sha256, archive, store, staging):
+    """Check AFTER one complete transfer, before load; never trust a verified dict.
+
+    Only the externally bound candidate archive already on the staging device
+    is removed from future allocation. Each device still keeps its 5 GiB reserve
+    and the image store still reserves two entire images without layer reuse.
+    """
+    candidate_path = _safe_absolute_path(candidate_path)
+    candidate_info, raw = _verified_file(candidate_path, candidate_sha256, capture=True)
+    candidate = json.loads(raw)
+    if not isinstance(candidate, dict):
+        raise ValueError('Exactly one candidate object is supported; use check-import for multiple candidates')
+    store, staging, archive = map(_safe_absolute_path, (store, staging, archive))
+    if not store.is_dir() or not staging.is_dir():
+        raise ValueError('Image store and staging must be existing directories')
+    if staging not in archive.parents:
+        raise ValueError('The candidate archive must be inside the staging directory')
+    store_info, staging_info = store.stat(), staging.stat()
+    archive_bytes = positive_bytes(candidate.get('archiveBytes'), 'archiveBytes')
+    archive_info, _ = _verified_file(archive, candidate.get('archiveSha256'), archive_bytes)
+    if archive_info.st_dev != staging_info.st_dev:
+        raise ValueError('The archive must occupy the staging filesystem')
+    result = import_space([candidate], store, staging)
+    for row in result['filesystems']:
+        row['pretransferRequiredBytes'] = row['requiredBytes']
+        on_staging = Path(row['path']).stat().st_dev == staging_info.st_dev
+        allocated = archive_info.st_blocks * 512 if on_staging else 0
+        row['verifiedAlreadyAllocatedArchiveBytes'] = allocated
+        if on_staging:
+            row['requiredBytes'] -= archive_bytes
+        row['passed'] = (row['availableBytes'] >= row['requiredBytes'] and
+                         row['availableBytes'] + allocated >= row['pretransferRequiredBytes'])
+    for path, info in ((candidate_path, candidate_info), (archive, archive_info)):
+        if _file_identity(_safe_absolute_path(path).stat()) != _file_identity(info):
+            raise ValueError('Verified file changed during the capacity check')
+    for path, info in ((store, store_info), (staging, staging_info)):
+        current = _safe_absolute_path(path).stat()
+        if (current.st_dev, current.st_ino) != (info.st_dev, info.st_ino):
+            raise ValueError('Storage directories changed during the capacity check')
+    result.update(passed=all(row['passed'] for row in result['filesystems']),
+                  phase='after-verified-transfer', archiveFullReadVerified=True,
+                  candidateBinding={'path': str(candidate_path), 'sha256': candidate_sha256,
+                                    'imageTag': candidate['imageTag'],
+                                    'sourceCommit': candidate.get('sourceCommit')},
+                  verifiedStagedArchive={'path': str(archive), 'bytes': archive_bytes,
+                                         'sha256': candidate['archiveSha256'],
+                                         'allocatedBytes': archive_info.st_blocks * 512,
+                                         'device': archive_info.st_dev,
+                                         'identity': list(_file_identity(archive_info))},
+                  archiveFutureCopiesReserved=0, fullImageCopiesStillReserved=2,
+                  currentOrPreviousImageBytesSubtracted=False, layerReuseAssumed=False)
+    return result
 
 
 def retention_plan(evidence):
@@ -168,11 +273,22 @@ def main():
     space.add_argument('--candidate', type=Path, action='append', required=True)
     space.add_argument('--image-store', type=Path, default=Path('/var/lib/containerd'))
     space.add_argument('--staging', type=Path, default=Path('/data/migration-rehearsals'))
+    staged = sub.add_parser('check-import-after-transfer')
+    staged.add_argument('--candidate', type=Path, action='append', required=True)
+    staged.add_argument('--candidate-sha256', required=True)
+    staged.add_argument('--archive', type=Path, required=True)
+    staged.add_argument('--image-store', type=Path, default=Path('/var/lib/containerd'))
+    staged.add_argument('--staging', type=Path, default=Path('/data/migration-rehearsals'))
     plan = sub.add_parser('plan')
     plan.add_argument('--evidence', type=Path, required=True)
     args = parser.parse_args()
     if args.command == 'check-import':
         result = import_space([json.loads(p.read_text()) for p in args.candidate], args.image_store, args.staging)
+    elif args.command == 'check-import-after-transfer':
+        if len(args.candidate) != 1:
+            raise ValueError('Only one staged candidate is supported; use check-import or check separately')
+        result = staged_import_space(args.candidate[0], args.candidate_sha256, args.archive,
+                                     args.image_store, args.staging)
     else:
         result = retention_plan(json.loads(args.evidence.read_text()))
     print(json.dumps(result, ensure_ascii=False, indent=2))

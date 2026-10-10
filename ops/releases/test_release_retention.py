@@ -4,6 +4,7 @@ import json
 from pathlib import Path
 import tempfile
 import unittest
+from unittest.mock import patch
 
 import release_retention as r
 
@@ -115,6 +116,12 @@ class RetentionTest(unittest.TestCase):
         self.assertEqual(self.engine.removed, [ident(1)])
         self.assertEqual(set(self.engine.records), before - {ident(1)})
         self.assertEqual(self.finalizer.execute(apply=True)['removed'], [])
+
+    def test_docker_removes_only_exact_identity_without_pruning_parents(self):
+        engine = r.Docker()
+        with patch.object(engine, 'run') as run:
+            engine.remove(ident(1))
+        run.assert_called_once_with(['image', 'rm', '--no-prune', ident(1)])
 
     def test_unpublished_candidates_are_never_swept(self):
         self.engine.add('frontend', 99)

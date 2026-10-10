@@ -1,13 +1,26 @@
 # 固定程序包发布与前台回退
 
-旧 `Build And Deploy` 已从代码中取消 main 推送触发，仓库开关继续关闭。它仍是保留的旧流程；当前生产版本带固定镜像标记，会在同步前拒绝该路径。不要删除标记后恢复服务器构建。容量不足时不再自动清理这台共享服务器。
+旧 `Build And Deploy` 已取消 main 推送触发，全部任务在代码中固定停用，仓库开关继续关闭。旧一键脚本仅提示正确入口后退出；当前生产版本的固定镜像标记也继续阻止历史整站路径。不要删除标记后恢复服务器构建。容量不足时不再自动清理这台共享服务器。
 
-新入口 `frontend_release.py` 只使用已经导入并核对身份的镜像，绝不构建、拉取代码、迁移或恢复数据库。它只替换前台并重新载入现有代理配置，不重启后端、后台、数据库或共享代理。后端或数据改动需要另做有数据保护证据的发布方案，不能混用前台回退。
+统一发版窗口先记录本批来源提交、任务、模块和负责人，其他窗口只负责迭代和相关检查；任务不会因同属项目而自动加入批次。`prepare-release.yml`（`Prepare Selected Website Release`）默认只准备前台，可明确选择业务后台、管理后台及组合，完整选择规则见下表。准备完成不等于已发布。
+
+| 修改内容 | 候选选择 | 实际发布方式 |
+| --- | --- | --- |
+| 前台页面、样式、图片或前台内容 | `frontend`（默认） | 默认前台模式 |
+| 管理后台界面 | `admin` | `adminOnly: true` |
+| 业务、询盘或通知逻辑，无数据变更 | `backend` | `backendOnly: true` |
+| 关联模块同时改变 | 明确选择所需组合 | 清单显式加入对应模块；前台参与的组合沿用现有组合模式 |
+| 仅业务后台和管理后台同时改变 | `backend+admin` | 可一并准备，分成两个单独发布批次，不加入无改动的前台 |
+| 公共依赖、配置、接口约定或数据改变 | 先核对影响，再选择模块 | 先确认兼容及数据保护，再按支持的模式发布 |
+
+仅后台两种模式不能混用；选择组合只决定构建范围，不自动授权生产切换。每个模块交付完整、可核对版本的程序包，不逐页覆盖线上文件。同一来源、配置、检查范围及程序包下有效的证据可以复用；既有主分支质量门禁保持不变，实际切换后的线上验收必须重新执行。
+
+`frontend_release.py` 只使用已经导入并核对身份的镜像，不在生产构建或拉取代码，也不恢复数据库。默认只替换前台；其他模块须使用下文对应模式和显式清单。未选模块和业务数据受到保护，共享代理仅校验配置并正常重载。已审核的增量数据变更仅走下文专用门禁，不能混用前台回退。
 
 1. 在独立构建环境从完整 Git 提交生成镜像；将程序包、压缩包校验值、源提交和镜像标识长期保存到经确认的独立存储。传输和导入前，按下文容量检查预留“全部候选镜像展开体积的两倍 + 压缩包体积 + 5 GiB 工作空间”；不再占用生产资源重复构建。`prepare-frontend.yml` 只构建候选，不连接生产机。
 2. 按 `manifest.example.json` 填写服务器实际导入的不可变镜像身份，以及当前前台身份。先不加 `--apply` 运行检查。候选在独立容器中验证，中英文首页、资料、询价、产品、公司页必须正确；未列入候选 `approvedGuides` 的选型文章和专题方案，以及未经审核的案例必须为 404，网站地图不得列入它们；已审核的案例按下文“项目案例逐篇放出”检查。旧镜像未通过就拒绝切换。
 3. 完成候选真实浏览器验收、通知收件与独立备份验证后，明确执行 `--apply`。切换失败会恢复前一前台并重新检查；若恢复也失败，记录真实运行版本和待处理状态，不显示成功。`--kind rollback` 使用相同检查，绝不恢复旧数据库覆盖新询盘。
-4. 发布成功后完成线上真实浏览器验收及当前、上一版恢复材料核对，按下文“验收后的旧镜像收尾”执行清理。没有这一步的有效证据，旧镜像继续保留；清理失败不触发程序回退。
+4. 发布成功后完成线上真实浏览器验收及当前、上一版恢复材料核对，按下文“验收后的旧镜像收尾”先查状态、留存清单、明确执行，再查实际结果和余量。没有这一步的有效证据，旧镜像继续保留；清理失败不触发程序回退或重新发版。
 
 ```sh
 python3 ops/releases/frontend_release.py --manifest /private/path/manifest.json
@@ -52,7 +65,7 @@ python3 ops/releases/frontend_release.py --manifest /private/path/previous-compa
 
 ### Unified application release
 
-`prepare-release.yml` builds both frontend and backend from the exact CI-passed main commit, outside production. It does not deploy automatically. Each component records its archive checksum and immutable image identity.
+`prepare-release.yml` builds only explicitly selected components from the exact CI-passed main commit, outside production; the default is frontend only. Its fixed choices cover frontend, backend, admin and their combinations. Preparation does not deploy automatically, and a preparation combination must still use a supported apply manifest. Each selected component records its archive checksum and immutable image identity.
 
 `frontend_release.py` retains its frontend-only mode. An explicit `backend` manifest entry enables a two-component release using the same source commit. It checks both current versions, runs the backend aggregate as a read-only command without starting a second notification worker, and permits only the reviewed additive content-attribution index migration. PostgreSQL, uploads, admin, nginx container identity and unrelated applications remain protected. On a failed application switch both prior application images are restored; the additive index can safely remain. Customer data is never restored or reset by this operation. An interrupted or unsuccessful recovery leaves the deployment marker for manual reconciliation.
 
@@ -174,11 +187,48 @@ python3 ops/releases/release_closeout.py \
 
 这是发布验收后的显式收尾步骤，不是定时清理，也不会在发布切换中删除镜像。清理与发布共用锁，每次只考虑本批次被替换组件的上上一版，必须有已验收历史、明确归属标签和来源提交。当前及上一版、全部容器引用（包括停止的容器）、配置引用、额外标签或明确保护的镜像均保留。未发布候选与来历不明的镜像不进入删除清单。
 
-额外需要长留的镜像，在生产目录 `RETENTION_PROTECTED_IMAGES.json` 写固定镜像身份的 JSON 数组，或构建时加入 `org.jssngyl.retention.protect=true` 标签。计划外的特殊回退版本应先列入保护。每次删除前重查版本、验收和容器状态，任何变化停止；仅按准确身份执行不带强制参数的删除，不使用整机清理命令。结果记录在本批次 `retention-*/result.json`，支持中断后重新核对、续做。
+额外需要长留的镜像，在生产目录 `RETENTION_PROTECTED_IMAGES.json` 写固定镜像身份的 JSON 数组，或构建时加入 `org.jssngyl.retention.protect=true` 标签。计划外的特殊回退版本应先列入保护。每次删除前重查版本、验收和容器状态，任何变化停止；仅按准确身份执行带 `--no-prune` 的删除，保留未打标签的父镜像；不带强制参数，不使用整机清理命令。结果记录在本批次 `retention-*/result.json`，支持中断后重新核对、续做。
 
 本自动核对及执行入口仅覆盖官网；数炬、报价系统仍沿用前述盘点方案，不自动处理。数据库、附件、配置、正式备份、恢复归档、发布历史记录和未用候选均不在此删除范围。缺失历史、恢复材料或验收证据时先保留，不能补写未经验证的成功记录。
 
 收尾目录必须是新目录，不能覆盖之前的证据。`closeout-result.json` 分别记录检查通过、实际删除、零删除和失败；原删除回执也留存。检查通过不代表已经腾出空间，零删除不记作回收容量。缺验收、现场变化或工具版本改变时，先停止并重新核查。
+
+
+### 统一发版入口的必做收尾与只读状态
+
+统一发版负责人每轮必须完成以下动作：发布后验收并核对恢复材料；执行前面的收尾预检、复核实际清单，按授权明确执行；最后用新的只读入口读取实际结果及当前余量。没有合格旧镜像时，也要执行已有清单对应的明确收尾，留下“零删除”结果。缺验收、缺恢复材料或现场变化时保留所有对象，记录待处理或失败，不补写成功、不重发网站。
+
+```sh
+python3 ops/releases/release_storage_status.py \
+  --live /opt/website --records-root /data/migration-rehearsals
+```
+
+入口从当前生产回执关联的发布结果目录定位清理计划，而不是按日期猜“最新批次”。它只读取已有文件及磁盘余量，不连接远程服务器、不调用 Docker、不写文件。控制记录限1MiB；实际验收材料采用流式读取核对完整摘要，避免大证据包一次装入内存。状态分别为：
+
+- `pending`：计划已排队或正式收尾已开始，但还没有有效最终记录；预检通过也属于待执行。
+- `no-targets`：本批正式收尾通过且零删除，仅说明本次有限清单没有合格目标；仍保留未核实或受保护对象，不表示全部历史积压清空。
+- `cleaned`：本批正式收尾通过，记录了实际删除的镜像、原删除结果及收尾时余量。
+- `failed`：正式收尾尝试失败，包括部分删除后失败、最终现场核验失败。实际删除仍保留记录，网站不因此回退。
+- `missing`：当前有效回执缺关联计划或发布结果入口；`unknown`：证据缺失、被改动、路径不安全或发布仍在进行；`new-current`：指定计划或最近收尾记录属于另一份生产回执，不能套用旧结论。
+
+正式 `release_closeout.py --apply` 在计划所在审计目录写独立的 `retention-latest.json`：开始时绑定本次尝试，完成后绑定计划、当前生产回执、原发布结果、验收及实际收尾结果的完整摘要；含零删除和失败。它不回写旧的接受记录、发布结果或生产回执。收尾中断、最终状态写入失败时保持待处理，不沿用旧成功。状态入口重新核对保留的浏览器和恢复材料，但已完成的历史收尾不会因为验收时间超过24小时失效；实际执行删除仍要求24小时内的有效验收。
+
+状态入口同时重新读取当前磁盘余量，收尾时的余量仅作为历史观察值。其他应用写入可能抵消释放量，不把空间变化全部算成清理收益。
+
+新批次可同时核对导入前容量，候选摘要取自已核对的构建记录；多个候选重复提供 `--candidate`：
+
+```sh
+python3 ops/releases/release_storage_status.py \
+  --live /opt/website --records-root /data/migration-rehearsals \
+  --candidate /private/release/candidate.json "$CANDIDATE_SHA256" \
+  --image-store /var/lib/containerd --staging /data/migration-rehearsals/本批次
+```
+
+这里复用现有导入前规则，按实际文件系统合并“两份完整展开镜像＋尚未传输的归档＋每盘5GiB工作余量”，不设15GB总量门槛，不抵扣预计清理收益，也不假定镜像层复用。已完整传输的包仍使用前述完整核对后的 `check-import-after-transfer`，避免重算已占归档。候选容量组合模式仅在容量不足或候选容量证据不成立时返回非零状态（75），停止下一步传输或导入；收尾的待处理、失败或无法核验状态保留提醒，不能据此自动删东西。纯状态查询遇到无法核验或错批状态返回非零，不承担导入容量放行。
+
+镜像两版保留只是程序恢复边界，不能代替数据库、上传附件和业务配置的有效备份。长期留存的特殊版本、数据备份和恢复归档继续单独保护。本入口不清理历史目录、传输包或其他系统，也不安装定时任务。
+
+本轮仅提供工具和统一负责人的执行约定；实际导入器、网站发布器及其他窗口尚未自动调用新模块。必须安装配套版本、在实际统一发版入口执行上述命令并留存有效状态后，才能称治理机制已接入生产。代码测试通过或文档写完，不代表服务器已经自动回收，也不代表多个窗口会自动合并部署。
 
 证据格式示例（占位身份必须换成现场核实值）：
 
@@ -247,7 +297,7 @@ python3 ops/releases/release_closeout.py \
 
 ## 可复用的发布准备、计时与续跑
 
-新批次使用这里维护的程序和每批清单，不从历史 `output` 目录复制、替换日期或修改程序里的包大小。历史冻结材料仍保留原字节，正在执行的旧批次不自动迁移到新入口。安装时同目录加入 `preparation_guard.py`、`phase_runtime.py` 和 `release_closeout.py`。
+新批次使用这里维护的程序和每批清单，不从历史 `output` 目录复制、替换日期或修改程序里的包大小。历史冻结材料仍保留原字节，正在执行的旧批次不自动迁移到新入口。安装时同目录加入 `preparation_guard.py`、`phase_runtime.py`、`release_closeout.py` 和 `release_storage_status.py`，使用配套版本的 `release_retention.py` 与 `storage_policy.py`。
 
 准备基线记录全部运行服务、配置与版本摘要。只允许阶段开始前、同容器和同镜像的健康重启刷新启动时间；服务替换、版本或来源变化、配置或回执变化，以及新增未知容器仍停止。有效基线单独留存，原基线不改。阶段开始以后，包括实际切换和回退期间，仍严格核对启动时间，不能以准备前的刷新规则放行。
 
@@ -300,3 +350,43 @@ python3 ops/releases/archive_transfer.py receive \
 缓存、传输包、还原时的临时文件和最终官方包会同时占用空间。分段复用减少的是重复传输，不能把它当作磁盘空间已经释放；使用前须按这些额外文件核对容量，现有导入容量检查不替代这一步。
 
 分段归档需要用 `gzip.open` 完整解压后交给 `tarfile` 的 `r|` 模式；旧证明器的 `r|gz` 或自动识别的 `r|*` 无法完整读取拼接压缩成员。因此新格式必须使用新的完整验证入口，不能直接送旧证明器。新传输组件验证完成不替代服务器实际镜像身份、候选、浏览器和回退验收。实际传输节省和耗时尚须在正式启用后测量，不把模拟结果当作线上提速。
+
+## 统一候选准备与验收材料核对
+
+`release_candidate.py` 将归档核对、已传输包的容量核对、浏览器材料核对和证据打包收敛为一个准备入口。它仅读取已有文件并新建私人回执；不执行网络上传、镜像导入、容器切换、消息发送或清理。实际发布仍通过 `frontend_release.py` 的既有锁、官方来源、基线、恢复与 `--apply` 条件。安装时同目录加入 `archive_identity.py`、`browser_capture_guard.py`、`release_browser.py`、`release_candidate.py`，并使用本次正式检出版本的 `storage_policy.py`。
+
+所有摘要由已经核对的构建或冻结记录传入，不能相信待核对文件自己声明的摘要。回执和证据包必须指定不存在的新路径，失败材料保留，不能覆盖后假装第一次通过。
+
+```sh
+python3 ops/releases/release_candidate.py verify-archive \
+  --candidate /private/release/candidate.json --candidate-sha256 "$CANDIDATE_SHA256" \
+  --archive /private/release/frontend.tar.gz --source-commit "$SOURCE_COMMIT" \
+  --receipt /private/release/archive-proof.json
+python3 ops/releases/release_candidate.py check-import-after-transfer \
+  --candidate /private/release/candidate.json --candidate-sha256 "$CANDIDATE_SHA256" \
+  --archive /private/release/staging/frontend.tar.gz \
+  --staging /private/release/staging --image-store /data/docker \
+  --receipt /private/release/staged-space-proof.json
+```
+
+归档核对完整读取一次压缩文件计算摘要，再顺序展开一次，核对实际配置、运行镜像身份和每层内容；不反复回退解压、不提取大包。已有 `archive_transfer.py` 的分段传输接口不变。这一步不替代正式构建来源证明、服务器导入后的实际镜像核对或浏览器验收。
+
+普通传输前 `check-import` 规则保持不变。只有一个官方候选已经完整落在本机、真实大小和完整摘要一致、同一文件系统且位于指定暂存目录中时，才可以选用 `check-import-after-transfer`；已经占用的归档不会再次计作未来传输占用。仍保留每个文件系统的安全余量和两份完整镜像的导入余量，不以旧版本、层复用或删除文件抵扣。该命令本身仍完整核对本地归档，不能拿另一台机器的核对结果替代。
+
+```sh
+python3 ops/releases/release_candidate.py verify-browser \
+  --root /private/release/frozen --plan-sha256 "$PLAN_SHA256" \
+  --report browser/production-checks.json --report-sha256 "$REPORT_SHA256" \
+  --phase production \
+  --interaction-report browser/production-interaction-report.json \
+  --interaction-sha256 "$INTERACTION_SHA256" \
+  --receipt /private/release/browser-proof.json
+```
+
+冻结计划包含原页面契约及其文件摘要；页面报告必须绑定实际截图、观察、原始日志、采集器和前后实际运行身份。正式线上必须有真实非空的测试访问身份，以及完整交互矩阵；联系人任务要实际打开弹窗，但不拨号、不发消息、不提交表单。默认交互矩阵为电脑、手机各四项，新计划如有批准的不同矩阵须显式冻结 `interactionContract`。候选阶段只核对基础页面，不能声称已经做过线上交互。
+
+仅候选阶段允许额外传入 `--preview-sha256`：事先冻结的声明必须绑定原计划与原20项页面契约，变化只能是四个无查询参数的中英文首页，将测试身份断言改成实际回环预览已抑制统计。必须保留原诊断材料、观察到真实抑制、两项身份均为空；正式线上禁止使用该豁免。此声明不会修改原计划，也不会将旧失败材料改为成功。
+
+`pack-browser` 使用同一组浏览器参数，另加 `--bundle /private/release/browser-evidence.tar.gz`。保留 `browser` 目录中的历史失败与成功材料；空文件仅接受已被报告绑定的真实 `console.log` 或 `errors.log`。每个文件最多32MiB、最多3000个文件，原文件总量与最终压缩包分别最多128MiB，输出仅本人可读写。包内保留失败不表示失败检查已通过。 已有同批候选或失败材料可通过重复的 `--retained-report <相对报告路径> <外部核对摘要>` 绑定；逐份核对同批来源、计划与全部材料摘要，仅用于保留，不参与本次通过数量。
+
+`prepare-routing-receipt --help` 提供一个仅本地的路由回执提案：先核对线上基础与交互报告、外部绑定的最终状态、历史入口与相邻路径摘要，只构造本批边缘路由对象，其他对象保持相等，旧完整回执摘要作为历史来源。提案不是生产回执安装工具，也不替代正式部署回执；安装前仍需要发布锁和新的实时状态核对。此轮不新增线上自动安装、保留策略或删除行为。
