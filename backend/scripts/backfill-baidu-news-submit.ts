@@ -56,7 +56,7 @@ async function submitToBaidu(url: string) {
   const site = process.env.BAIDU_SITE?.trim();
   const token = process.env.BAIDU_TOKEN?.trim();
   if (!site || !token) throw new Error('Missing Baidu configuration');
-  await submitSingleUrlToBaidu(site, token, url);
+  await submitSingleUrlToBaidu(site, token, url, process.env.BAIDU_ALLOW_HTTP === 'true');
 }
 
 export async function backfillNewsItems(
@@ -66,6 +66,10 @@ export async function backfillNewsItems(
 ) {
   let successCount = 0;
   let failureCount = 0;
+  if (execute && process.env.BAIDU_SUBMISSION_MODE !== 'automatic') {
+    console.log('Baidu backfill paused: BAIDU_SUBMISSION_MODE is not automatic');
+    return { successCount, failureCount, skippedCount: newsItems.length };
+  }
   for (const item of newsItems) {
     console.log(`News ${item.id}`);
     if (!execute) continue;
@@ -83,7 +87,7 @@ export async function backfillNewsItems(
     }
   }
   if (failureCount > 0) process.exitCode = 1;
-  return { successCount, failureCount };
+  return { successCount, failureCount, skippedCount: 0 };
 }
 
 async function main() {
@@ -112,10 +116,14 @@ async function main() {
 
     console.log(`Pending count: ${newsItems.length}`);
 
-    const { successCount, failureCount } = await backfillNewsItems(prisma, newsItems, args.execute);
+    const { successCount, failureCount, skippedCount } = await backfillNewsItems(
+      prisma,
+      newsItems,
+      args.execute,
+    );
 
     console.log(
-      `Summary: mode=${args.execute ? 'executed' : 'dry-run'} success=${successCount} failed=${failureCount} pending=${newsItems.length}`,
+      `Summary: mode=${args.execute ? 'execute' : 'dry-run'} success=${successCount} failed=${failureCount} skipped=${skippedCount} pending=${newsItems.length}`,
     );
   } finally {
     await prisma.$disconnect();

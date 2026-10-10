@@ -13,6 +13,8 @@ describe('Baidu backfill marker and process status', () => {
       ...process.env,
       BAIDU_SITE: 'jssngyl.cn',
       BAIDU_TOKEN: 'test-token',
+      BAIDU_SUBMISSION_MODE: 'automatic',
+      BAIDU_ALLOW_HTTP: undefined,
     });
   });
   afterEach(() => {
@@ -30,6 +32,7 @@ describe('Baidu backfill marker and process status', () => {
     await expect(backfillNewsItems(prisma, [item], true)).resolves.toEqual({
       successCount: 1,
       failureCount: 0,
+      skippedCount: 0,
     });
     expect(updateMany).toHaveBeenCalledTimes(1);
     expect(process.exitCode).toBeUndefined();
@@ -43,6 +46,7 @@ describe('Baidu backfill marker and process status', () => {
       await expect(backfillNewsItems(prisma, [item], true)).resolves.toEqual({
         successCount: 0,
         failureCount: 1,
+        skippedCount: 0,
       });
       expect(updateMany).not.toHaveBeenCalled();
       expect(process.exitCode).toBe(1);
@@ -61,6 +65,8 @@ describe('Baidu backfill marker and process status', () => {
     expect(console.error).toHaveBeenCalledWith(
       'Failed 123: Baidu submit failed (tls_certificate: ERR_TLS_CERT_ALTNAME_INVALID)',
     );
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+    expect(fetchMock.mock.calls[0][0].protocol).toBe('https:');
   });
   it('keeps dry-run free of requests and marker writes', async () => {
     const { prisma, updateMany } = client();
@@ -68,4 +74,43 @@ describe('Baidu backfill marker and process status', () => {
     expect(fetchMock).not.toHaveBeenCalled();
     expect(updateMany).not.toHaveBeenCalled();
   });
+  it.each([undefined, 'manual', 'AUTOMATIC', ' automatic ', 'other'])(
+    'keeps mode %s paused without requests, timestamps, or a failure exit',
+    async (mode) => {
+      if (mode === undefined) delete process.env.BAIDU_SUBMISSION_MODE;
+      else process.env.BAIDU_SUBMISSION_MODE = mode;
+      process.env.BAIDU_ALLOW_HTTP = 'true';
+      const { prisma, updateMany } = client();
+      await expect(backfillNewsItems(prisma, [item], true)).resolves.toEqual({
+        successCount: 0,
+        failureCount: 0,
+        skippedCount: 1,
+      });
+      expect(fetchMock).not.toHaveBeenCalled();
+      expect(updateMany).not.toHaveBeenCalled();
+      expect(process.exitCode).toBeUndefined();
+      expect(console.log).not.toHaveBeenCalledWith('Submitted 123');
+    },
+  );
+  it.each([
+    ['true', 'http:'],
+    ['false', 'https:'],
+    ['TRUE', 'https:'],
+    [' true ', 'https:'],
+    ['1', 'https:'],
+  ])(
+    'uses only literal HTTP permission %s when automatic mode executes',
+    async (permission, protocol) => {
+      process.env.BAIDU_ALLOW_HTTP = permission;
+      const { prisma, updateMany } = client();
+      fetchMock.mockResolvedValue(new Response('{"success":1}'));
+      await backfillNewsItems(prisma, [item], true);
+      const [endpoint, options] = fetchMock.mock.calls[0];
+      expect(endpoint.protocol).toBe(protocol);
+      expect(endpoint.hostname).toBe('data.zz.baidu.com');
+      expect(endpoint.pathname).toBe('/urls');
+      expect(options.redirect).toBe('error');
+      expect(updateMany).toHaveBeenCalledTimes(1);
+    },
+  );
 });

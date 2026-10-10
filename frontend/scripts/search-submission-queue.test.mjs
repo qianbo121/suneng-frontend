@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { drainQueue, emptyQueue, mergeBatches, refreshLiveQueue, validateQueue } from './search-submission-queue.mjs';
+import { drainQueue, emptyQueue, mergeBatches, preserveBaiduManualBackup, reconcileBaiduManualQueue, refreshLiveQueue, validateQueue } from './search-submission-queue.mjs';
 import { readFileSync } from 'node:fs';
 import { manualBatch, restoreQueue } from './restore-search-queue.mjs';
 import { submitBaidu, submitIndexNow } from './submit-search-engines.mjs';
@@ -8,7 +8,57 @@ import { submitBaidu, submitIndexNow } from './submit-search-engines.mjs';
 const urls = ['a', 'b', 'c'].map((path) => `https://www.jssngyl.cn/zh/${path}`);
 const queued = () => mergeBatches(emptyQueue(), [{ id: 'deploy-1', urls }], urls);
 const success = async (batch) => ({ ok: true, acceptedUrls: batch });
-const options = (extra = {}) => ({ day: '2026-09-08', limit: 2, baiduMode: 'auto', available: { baidu: true, indexnow: true }, submit: { baidu: success, indexnow: success }, save: async () => {}, ...extra });
+const options = (extra = {}) => ({ day: '2026-09-08', limit: 2, baiduMode: 'automatic', available: { baidu: true, indexnow: true }, submit: { baidu: success, indexnow: success }, save: async () => {}, ...extra });
+
+test('queue normalizes manual mode with the same parser as the direct entry before sending', async () => {
+  const state = queued();
+  let baiduRequests = 0;
+  const result = await drainQueue(state, options({ baiduMode: ' manual ', submit: {
+    indexnow: success, baidu: async () => { baiduRequests++; },
+  } }));
+  assert.equal(result.baidu.paused, true);
+  assert.equal(baiduRequests, 0);
+  assert.equal(state.baiduAttempted, 0);
+  assert.deepEqual(state.pending.baidu, urls);
+});
+
+test('HTTP quota, partial or unreadable receipts and transport failure retain the durable queue', async () => {
+  const names = ['BAIDU_TOKEN', 'BAIDU_PUSH_TOKEN', 'BAIDU_SITE', 'BAIDU_PUSH_MAX_URLS', 'BAIDU_SUBMISSION_MODE', 'BAIDU_ALLOW_HTTP'];
+  const saved = Object.fromEntries(names.map((name) => [name, process.env[name]]));
+  const originalFetch = globalThis.fetch;
+  try {
+    for (const name of names) delete process.env[name];
+    Object.assign(process.env, { BAIDU_TOKEN: 'test-only', BAIDU_SITE: 'https://www.jssngyl.cn', BAIDU_SUBMISSION_MODE: 'automatic', BAIDU_ALLOW_HTTP: 'true' });
+    for (const body of [JSON.stringify({ error: 400, message: 'over quota' }), JSON.stringify({ success: 1 }), '{', null]) {
+      let calls = 0;
+      let snapshot;
+      globalThis.fetch = async (endpoint, request) => {
+        calls++;
+        assert.equal(new URL(endpoint).origin, 'http://data.zz.baidu.com');
+        assert.equal(request.redirect, 'error');
+        if (body === null) throw new TypeError('transport failure');
+        return new Response(body);
+      };
+      const state = queued();
+      const result = await drainQueue(state, options({ baiduMode: undefined,
+        submit: { indexnow: success, baidu: (sent) => submitBaidu('https://www.jssngyl.cn', sent, false) },
+        save: async (value) => { snapshot = structuredClone(value); },
+      }));
+      assert.equal(result.baidu.ok, false);
+      assert.deepEqual(snapshot.pending.baidu, urls);
+      assert.equal(snapshot.baiduAttempted, 2);
+      assert.equal(calls, 1);
+      assert.doesNotMatch(JSON.stringify(result), /test-only|token=/);
+      assert.deepEqual(validateQueue(JSON.parse(JSON.stringify(snapshot))).pending.baidu, urls);
+    }
+  } finally {
+    globalThis.fetch = originalFetch;
+    for (const name of names) {
+      if (saved[name] === undefined) delete process.env[name];
+      else process.env[name] = saved[name];
+    }
+  }
+});
 
 const baseline = () => ({ version: 1, site: 'https://www.jssngyl.cn', entries: [[urls[0], ''], [urls[1], '2026-09-19']], initialPending: [] });
 
@@ -142,10 +192,12 @@ test('invalid manual-mode configuration fails before saving or sending', async (
   assert.equal(requests, 0);
 });
 
-test('scheduled queue explicitly uses manual-only Baidu mode without injecting its token', () => {
+test('scheduled queue wires owner-controlled mode and HTTP opt-in with safe defaults', () => {
   const workflow = readFileSync(new URL('../../.github/workflows/search-submission.yml', import.meta.url), 'utf8');
-  assert.match(workflow, /BAIDU_SUBMISSION_MODE: 'manual'/);
-  assert.doesNotMatch(workflow, /BAIDU_(?:PUSH_)?TOKEN:/);
+  assert.match(workflow, /BAIDU_SUBMISSION_MODE: \$\{\{ vars\.BAIDU_SUBMISSION_MODE \|\| 'manual' \}\}/);
+  assert.match(workflow, /BAIDU_ALLOW_HTTP: \$\{\{ vars\.BAIDU_ALLOW_HTTP \|\| 'false' \}\}/);
+  assert.match(workflow, /BAIDU_SITE: \$\{\{ vars\.BAIDU_SITE \}\}/);
+  assert.match(workflow, /BAIDU_TOKEN: \$\{\{ secrets\.BAIDU_TOKEN \|\| secrets\.BAIDU_PUSH_TOKEN \}\}/);
   assert.match(workflow, /INDEXNOW_KEY: \$\{\{ secrets\.INDEXNOW_KEY \}\}/);
   assert.match(workflow, /name: Preserve queue even when a search engine rejects the request/);
 });
@@ -296,12 +348,14 @@ test('all manually handled Baidu URLs remain protected across runs without attem
 
 test('bad actual helper replies preserve mixed pending URLs and reserve only unprotected attempts', async () => {
   const originalFetch = globalThis.fetch;
-  const names = ['BAIDU_TOKEN', 'BAIDU_PUSH_TOKEN', 'BAIDU_SITE', 'BAIDU_PUSH_MAX_URLS'];
+  const names = ['BAIDU_TOKEN', 'BAIDU_PUSH_TOKEN', 'BAIDU_SITE', 'BAIDU_PUSH_MAX_URLS', 'BAIDU_SUBMISSION_MODE', 'BAIDU_ALLOW_HTTP'];
   const saved = Object.fromEntries(names.map((name) => [name, process.env[name]]));
   const batch = [heldBaiduUrls[0], urls[0]];
   const state = withHeldQueue(batch);
   let calls = 0;
   try {
+    process.env.BAIDU_SUBMISSION_MODE = 'automatic';
+    delete process.env.BAIDU_ALLOW_HTTP;
     process.env.BAIDU_TOKEN = 'test-only';
     delete process.env.BAIDU_PUSH_TOKEN;
     process.env.BAIDU_SITE = 'https://www.jssngyl.cn';
@@ -340,4 +394,199 @@ test('manual mode remains unchanged even when all pending URLs have manual prote
   assert.deepEqual(state.pending, { baidu: heldBaiduUrls, indexnow: [] });
   assert.equal(result.baidu.paused, true);
   assert.equal(Object.prototype.hasOwnProperty.call(result.baidu, 'protectedUrls'), false);
+});
+
+
+const manualReceiptEntry = (url, extra = {}) => ({ url, evidenceStatus: 'platform-received',
+  exactSubmissionTime: null, receiptObservedAt: '2026-10-07T06:37:42Z',
+  receiptEvidenceScope: 'batch-level-ui-success', evidenceSources: ['reviewed-receipt.json'], ...extra });
+const reviewRegistry = (entries) => ({ version: 1, entries });
+const reviewedLive = () => new Map(urls.map((url) => [url, '2026-10-02T15:00:00Z']));
+
+test('old schema restores with the complete original queue intact before manual separation', () => {
+  const old = queued();
+  const original = structuredClone(old);
+  validateQueue(old);
+  preserveBaiduManualBackup(old);
+  const result = reconcileBaiduManualQueue(old, reviewedLive(), reviewRegistry([manualReceiptEntry(urls[0])]));
+  assert.deepEqual(old.baiduManualReconciliation.originalQueue, original);
+  assert.deepEqual(old.pending.baidu, urls.slice(1));
+  assert.equal(result.originalPendingCount, 3);
+  assert.equal(result.receivedUnchanged.length, 1);
+  assert.equal(result.receivedUnchanged[0].apiAcceptanceVerified, false);
+  assert.equal(result.receivedUnchanged[0].indexingVerified, false);
+  const restored = JSON.parse(JSON.stringify(old));
+  validateQueue(restored);
+  assert.deepEqual(restored.baiduManualReconciliation.originalQueue, original);
+});
+
+test('repeated restored manual reconciliation does not requeue or submit a received batch', async () => {
+  let state = queued();
+  const registry = reviewRegistry(urls.map((url) => manualReceiptEntry(url)));
+  reconcileBaiduManualQueue(state, reviewedLive(), registry);
+  state = JSON.parse(JSON.stringify(state));
+  mergeBatches(state, [{ id: 'later-dispatch', urls }], urls);
+  reconcileBaiduManualQueue(state, reviewedLive(), registry);
+  let posts = 0;
+  const result = await drainQueue(state, options({ baiduMode: 'manual', submit: {
+    indexnow: success, baidu: async () => { posts++; return success(urls); },
+  } }));
+  assert.equal(posts, 0);
+  assert.deepEqual(state.pending.baidu, []);
+  assert.equal(state.baiduManualReconciliation.records.length, 3);
+  assert.equal(state.baiduManualReconciliation.originalQueue.pending.baidu.length, 3);
+  assert.equal(result.baidu.ok, undefined);
+  assert.equal(state.baiduAttempted, 0);
+});
+
+test('human reports, missing receipts and unknown content dates remain held without acceptance', () => {
+  const state = queued();
+  const live = reviewedLive(); live.set(urls[2], '');
+  const result = reconcileBaiduManualQueue(state, live, reviewRegistry([
+    manualReceiptEntry(urls[0], { evidenceStatus: 'user-reported-submitted' }),
+    manualReceiptEntry(urls[1], { evidenceSources: [] }),
+    manualReceiptEntry(urls[2]),
+  ]));
+  assert.equal(result.receivedUnchanged.length, 0);
+  assert.deepEqual(result.manualReview.map((entry) => entry.disposition),
+    ['user-report-hold', 'receipt-evidence-missing', 'content-date-unknown']);
+  assert.equal(result.manualReview.every((entry) => entry.needsReview && !entry.apiAcceptanceVerified && !entry.indexingVerified), true);
+  assert.equal(result.manualReview.length, 3);
+  assert.equal(state.baiduManualReconciliation.originalQueue.pending.baidu.length, 3);
+  const unknownScope = reconcileBaiduManualQueue(queued(), reviewedLive(), reviewRegistry([
+    manualReceiptEntry(urls[0], { receiptEvidenceScope: 'unverified' }),
+  ]));
+  assert.equal(unknownScope.receivedUnchanged.length, 0);
+  assert.equal(unknownScope.manualReview[0].disposition, 'receipt-evidence-missing');
+  const invalid = queued(); const before = structuredClone(invalid);
+  assert.throws(() => reconcileBaiduManualQueue(invalid, live, reviewRegistry([
+    manualReceiptEntry(urls[0], { evidenceStatus: 'unknown' }),
+  ])), /Invalid manual-submission registry/);
+  assert.deepEqual(invalid, before);
+});
+
+test('changed and reverted content versions stay durable manual-review work instead of permanent success', () => {
+  const state = queued(); const registry = reviewRegistry([manualReceiptEntry(urls[0])]);
+  const live = reviewedLive();
+  reconcileBaiduManualQueue(state, live, registry);
+  live.set(urls[0], '2026-10-08T00:00:00Z');
+  mergeBatches(state, [{ id: 'later-content-change', urls: [urls[0]] }], urls);
+  let result = reconcileBaiduManualQueue(state, live, registry);
+  assert.equal(result.receivedUnchanged.length, 0);
+  assert.equal(result.manualReview[0].disposition, 'content-changed-review');
+  assert.equal(result.manualReview[0].needsReview, true);
+  assert.equal(result.manualReview[0].currentLastmod, '2026-10-08T00:00:00Z');
+  assert.deepEqual(state.baiduManualReconciliation.originalQueue.pending.baidu, urls);
+  live.set(urls[0], '2026-10-02T15:00:00Z');
+  result = reconcileBaiduManualQueue(state, live, registry);
+  assert.equal(result.manualReview[0].disposition, 'content-changed-review');
+  assert.equal(result.manualReview[0].apiAcceptanceVerified, false);
+});
+
+test('missing receipt dates or omitted registry entries never discard held records', () => {
+  const state = queued();
+  const first = reconcileBaiduManualQueue(state, reviewedLive(), reviewRegistry([
+    manualReceiptEntry(urls[0], { receiptObservedAt: null }),
+  ]));
+  assert.equal(first.manualReview[0].disposition, 'receipt-date-unknown');
+  const second = reconcileBaiduManualQueue(state, reviewedLive(), reviewRegistry([]));
+  assert.equal(second.manualReview.length, 1);
+  assert.equal(second.manualReview[0].disposition, 'receipt-evidence-missing');
+  assert.deepEqual(state.baiduManualReconciliation.originalQueue.pending.baidu, urls);
+});
+
+test('unhandled manual export prioritizes Chinese articles without losing other URLs', () => {
+  const values = ['https://www.jssngyl.cn/en/news/english', 'https://www.jssngyl.cn/zh/service/help',
+    'https://www.jssngyl.cn/zh/news/chinese'];
+  const state = mergeBatches(emptyQueue(), [{ id: 'mixed-languages', urls: values }], values);
+  const result = reconcileBaiduManualQueue(state, new Map(values.map((url) => [url, ''])), reviewRegistry([]));
+  assert.deepEqual(result.unhandledUrls, [values[2], values[1], values[0]]);
+  assert.deepEqual(state.baiduManualReconciliation.originalQueue.pending.baidu, values);
+});
+
+
+const releaseFor = (url, contentLastmod, extra = {}) => ({ url, contentLastmod,
+  authorizedBy: 'user', authorizationSource: 'test-human-explicit-release-message', ...extra });
+
+test('explicit matching-version authorization releases an omitted archived URL once and preserves its evidence', () => {
+  let state = queued(); const live = reviewedLive();
+  reconcileBaiduManualQueue(state, live, reviewRegistry([manualReceiptEntry(urls[0])]));
+  const original = structuredClone(state.baiduManualReconciliation.originalQueue);
+  const omitted = reconcileBaiduManualQueue(state, live, reviewRegistry([]));
+  assert.equal(omitted.manualReview[0].disposition, 'receipt-evidence-missing');
+  assert.equal(state.pending.baidu.includes(urls[0]), false);
+  const registry = { ...reviewRegistry([]), releaseAuthorizations: [releaseFor(urls[0], live.get(urls[0]))] };
+  let result = reconcileBaiduManualQueue(state, live, registry);
+  assert.equal(result.releasedForVersion.length, 1);
+  assert.equal(state.pending.baidu.filter((url) => url === urls[0]).length, 1);
+  assert.equal(result.receivedUnchanged.length, 0);
+  assert.deepEqual(state.baiduManualReconciliation.originalQueue, original);
+  assert.deepEqual(result.releasedForVersion[0].evidenceSources, ['reviewed-receipt.json']);
+  assert.equal(result.releasedForVersion[0].apiAcceptanceVerified, false);
+  state = JSON.parse(JSON.stringify(state));
+  result = reconcileBaiduManualQueue(state, live, registry);
+  assert.equal(state.pending.baidu.filter((url) => url === urls[0]).length, 1);
+  assert.equal(result.releasedForVersion[0].releaseHistory.length, 1);
+  // Model a later processed item: replaying the same authorization cannot enqueue it again.
+  state.pending.baidu = state.pending.baidu.filter((url) => url !== urls[0]);
+  reconcileBaiduManualQueue(state, live, registry);
+  assert.equal(state.pending.baidu.includes(urls[0]), false);
+});
+
+test('version-specific release expires on a later edit and needs a new explicit version authorization', () => {
+  const state = queued(); const live = reviewedLive();
+  const oldVersion = live.get(urls[0]);
+  const registry = { ...reviewRegistry([manualReceiptEntry(urls[0])]),
+    releaseAuthorizations: [releaseFor(urls[0], oldVersion)] };
+  reconcileBaiduManualQueue(state, live, registry);
+  live.set(urls[0], '2026-10-08T00:00:00Z');
+  let result = reconcileBaiduManualQueue(state, live, registry);
+  assert.equal(state.pending.baidu.includes(urls[0]), false);
+  assert.equal(result.releasedForVersion.length, 0);
+  assert.equal(result.manualReview[0].disposition, 'content-changed-review');
+  assert.equal(result.manualReview[0].releaseHistory.length, 1);
+  live.set(urls[0], oldVersion);
+  result = reconcileBaiduManualQueue(state, live, registry);
+  assert.equal(result.releasedForVersion.length, 0);
+  assert.equal(result.manualReview[0].disposition, 'content-changed-review');
+  assert.equal(state.pending.baidu.includes(urls[0]), false);
+  live.set(urls[0], '2026-10-08T00:00:00Z');
+  registry.releaseAuthorizations.push(releaseFor(urls[0], live.get(urls[0]), {
+    authorizationSource: 'test-second-human-explicit-release-message',
+  }));
+  result = reconcileBaiduManualQueue(state, live, registry);
+  assert.equal(state.pending.baidu.includes(urls[0]), true);
+  assert.equal(result.releasedForVersion[0].releaseHistory.length, 2);
+});
+
+test('missing versions or authorization provenance cannot release a hold or mutate the old state', () => {
+  for (const extra of [{ contentLastmod: '' }, { authorizedBy: 'automation' }, { authorizationSource: '' }]) {
+    const state = queued(); const original = structuredClone(state);
+    const registry = { ...reviewRegistry([manualReceiptEntry(urls[0])]),
+      releaseAuthorizations: [releaseFor(urls[0], reviewedLive().get(urls[0]), extra)] };
+    assert.throws(() => reconcileBaiduManualQueue(state, reviewedLive(), registry), /Invalid version-specific/);
+    assert.deepEqual(state, original);
+  }
+  const state = queued();
+  const registry = { ...reviewRegistry([manualReceiptEntry(urls[0])]),
+    releaseAuthorizations: [releaseFor(urls[0], '2026-10-01T00:00:00Z')] };
+  const result = reconcileBaiduManualQueue(state, reviewedLive(), registry);
+  assert.equal(result.releasedForVersion.length, 0);
+  assert.equal(state.pending.baidu.includes(urls[0]), false);
+});
+
+test('explicit release restores manual work without changing manual mode or making a platform request', async () => {
+  const state = queued(); const live = reviewedLive();
+  const registry = { ...reviewRegistry([manualReceiptEntry(urls[0])]),
+    releaseAuthorizations: [releaseFor(urls[0], live.get(urls[0]))] };
+  reconcileBaiduManualQueue(state, live, registry);
+  let requests = 0;
+  const result = await drainQueue(state, options({ baiduMode: undefined, submit: {
+    indexnow: success, baidu: async () => { requests++; },
+  } }));
+  assert.equal(result.baidu.paused, true);
+  assert.equal(result.baidu.ok, undefined);
+  assert.equal(requests, 0);
+  assert.equal(state.pending.baidu.includes(urls[0]), true);
+  assert.equal(state.baiduAttempted, 0);
 });

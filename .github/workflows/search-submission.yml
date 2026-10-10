@@ -48,14 +48,18 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           MANUAL_URLS: ${{ inputs.urls }}
         run: node frontend/scripts/restore-search-queue.mjs
-      - name: Discover live changes, retain Baidu queue and submit IndexNow
+      - name: Discover live changes and process configured search submissions
         env:
           NEXT_PUBLIC_SITE_URL: https://www.jssngyl.cn
           INDEXNOW_KEY: ${{ secrets.INDEXNOW_KEY }}
           INDEXNOW_KEY_LOCATION: ${{ vars.INDEXNOW_KEY_LOCATION }}
-          # Owner chose manual-only Baidu submission on 2026-09-22.
-          # Do not inject its token into this job or downgrade HTTPS.
-          BAIDU_SUBMISSION_MODE: 'manual'
+          # Publishing this wiring alone does not resume Baidu submissions.
+          # HTTP needs a separate explicit opt-in after owner authorization.
+          BAIDU_SUBMISSION_MODE: ${{ vars.BAIDU_SUBMISSION_MODE || 'manual' }}
+          BAIDU_ALLOW_HTTP: ${{ vars.BAIDU_ALLOW_HTTP || 'false' }}
+          BAIDU_PUSH_MAX_URLS: ${{ vars.BAIDU_PUSH_MAX_URLS || '10' }}
+          BAIDU_SITE: ${{ vars.BAIDU_SITE }}
+          BAIDU_TOKEN: ${{ secrets.BAIDU_TOKEN || secrets.BAIDU_PUSH_TOKEN }}
         run: |
           set -euo pipefail
           node frontend/scripts/search-submission-queue.mjs --state-file="$RUNNER_TEMP/search-queue.json" --batches-file="$RUNNER_TEMP/search-batches.json" 2>&1 | tee "$RUNNER_TEMP/search-submission.log"
