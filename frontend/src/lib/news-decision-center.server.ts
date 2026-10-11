@@ -5,6 +5,7 @@ import { unstable_cache } from 'next/cache';
 import { getAllNewsForDecisionCenter } from '@/lib/api/news';
 import { mapNewsCard } from '@/lib/news';
 import { applyNewsListCopy } from '@/lib/news-list-copy';
+import { includeStandaloneNewsResources } from '@/lib/news-list-resources';
 import { filterCanonicalNewsItems, hasPublishableEnglishNews } from '@/lib/news-routing';
 import type { Locale } from '@/types/site';
 import type { NewsListCardItem } from '@/types/news';
@@ -48,12 +49,14 @@ const getCachedCards = unstable_cache(
 
 // All list pages share this complete collection. A failed refresh throws inside
 // the data cache, retaining the last successful collection instead of partial data.
-export const getNewsDecisionCenterCards = cache((locale: Locale) => getCachedCards(locale));
+export const getNewsDecisionCenterCards = cache(async (locale: Locale) =>
+  includeStandaloneNewsResources(await getCachedCards(locale), locale),
+);
 
 // Metadata and page rendering share one read in the same request as well.
 export const getNewsDecisionCenterData = cache(async (locale: Locale) => {
   try {
-    return { data: await getCachedCards(locale), error: null };
+    return { data: await getNewsDecisionCenterCards(locale), error: null };
   } catch {
     // Failed/partial loads throw inside the cache, so a later request can retry.
     return { data: null, error: '资料暂时无法加载' };

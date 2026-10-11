@@ -65,6 +65,10 @@ export function toNewsListLiteCards(items: NewsListCardItem[], locale: Locale): 
     return {
       id: item.id,
       slug: item.slug,
+      ...(item.href ? { href: item.href } : {}),
+      ...(item.listRecommendedPosition !== undefined
+        ? { listRecommendedPosition: item.listRecommendedPosition }
+        : {}),
       image: item.image,
       title: { zh: locale === 'zh' ? item.title.zh : '', en: locale === 'en' ? item.title.en : '' },
       summary: {

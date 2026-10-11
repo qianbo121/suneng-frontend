@@ -56,12 +56,16 @@ describe('prepared news collection', () => {
     });
 
     vi.mocked(getAllNewsForDecisionCenter).mockResolvedValue({ data: [article], error: null });
-    expect((await getNewsDecisionCenterData('zh')).data).toHaveLength(1);
+    expect((await getNewsDecisionCenterData('zh')).data).toHaveLength(2);
   });
 
   it('accepts a successfully loaded empty collection', async () => {
     vi.mocked(getAllNewsForDecisionCenter).mockResolvedValue({ data: [], error: null });
-    await expect(getNewsDecisionCenterData('zh')).resolves.toEqual({ data: [], error: null });
+    const result = await getNewsDecisionCenterData('zh');
+    expect(result.error).toBeNull();
+    expect(result.data?.map((item) => item.href)).toEqual([
+      '/zh/articles/special-industrial-furnace-procurement-assessment',
+    ]);
   });
 
   it('shares simultaneous cold loads and permits a fresh load after completion', async () => {
@@ -88,7 +92,7 @@ describe('prepared news collection', () => {
     expect(results.every((result) => result.data === null && result.error)).toBe(true);
 
     vi.mocked(getAllNewsForDecisionCenter).mockResolvedValue({ data: [article], error: null });
-    expect((await getNewsDecisionCenterData('zh')).data).toHaveLength(1);
+    expect((await getNewsDecisionCenterData('zh')).data).toHaveLength(2);
     expect(getAllNewsForDecisionCenter).toHaveBeenCalledTimes(2);
   });
 
@@ -98,7 +102,7 @@ describe('prepared news collection', () => {
       getNewsDecisionCenterData('zh'),
       getNewsDecisionCenterData('en'),
     ]);
-    expect(zh.data).toHaveLength(1);
+    expect(zh.data).toHaveLength(2);
     expect(en.data).toHaveLength(0);
   });
 });
@@ -119,5 +123,5 @@ it('keeps English lists restricted to complete translations and uses English sea
   expect(result.data).toHaveLength(1);
   expect(result.data?.[0].title.en).toBe(translated.titleEn);
   expect(result.data?.[0].searchText).toContain('English-only search phrase');
-  expect((await getNewsDecisionCenterData('zh')).data).toHaveLength(2);
+  expect((await getNewsDecisionCenterData('zh')).data).toHaveLength(3);
 });
