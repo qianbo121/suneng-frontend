@@ -1,10 +1,9 @@
-import { ReactNode, Suspense } from 'react';
+import { ReactNode } from 'react';
 import { hasLocale, NextIntlClientProvider } from 'next-intl';
 import { getMessages, setRequestLocale } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 
 import { JsonLd } from '@/components/JsonLd';
-import { LoadingFeedback } from '@/components/common/LoadingFeedback';
 import { WebsiteReadingTracker } from '@/components/analytics/WebsiteReadingTracker';
 import { FloatToolbar } from '@/components/layout/FloatToolbar';
 import { Footer } from '@/components/layout/Footer';
@@ -46,9 +45,7 @@ export default async function LocaleLayout({ children, params }: LocaleLayoutPro
             <Header locale={locale} />
             <div id="site-page-content">
               <main className="min-h-[calc(100vh-520px)] bg-white">
-                <Suspense fallback={<LoadingFeedback locale={currentLocale} />}>
-                  {children}
-                </Suspense>
+                {children}
               </main>
               <Footer locale={locale} />
               <FloatToolbar locale={locale} />

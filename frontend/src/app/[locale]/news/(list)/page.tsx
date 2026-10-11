@@ -13,7 +13,7 @@ import { normalizeNewsPage } from '@/lib/news-pagination';
 import { Locale } from '@/types/site';
 
 // Plain list URLs (/zh/news, /zh/news?page=N) are rewritten by middleware to
-// the prerendered route in ../news-prerendered. This on-demand route answers
+// the prerendered news-list route. This on-demand route answers
 // search and filter URLs, plus any page number the prerendered route refuses.
 type NewsPageProps = {
   params: Promise<{
