@@ -5,6 +5,8 @@ import { renderToStaticMarkup } from 'react-dom/server';
 // heading does not depend on them.
 vi.mock('@/components/news/NewsListInteractive', () => ({
   NewsListFilterControls: () => null,
+  NewsFilterPanel: ({ children }: { children: React.ReactNode }) => children,
+  NewsResultsSummary: () => null,
   NewsListHeading: () => null,
   NewsListResults: () => null,
   NewsListScope: ({ children }: { children?: unknown }) => children ?? null,

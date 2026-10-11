@@ -43,8 +43,8 @@
 .close {
   display: grid;
   place-items: center;
-  width: 36px;
-  height: 36px;
+  width: 44px;
+  height: 44px;
   flex-shrink: 0;
   border: 1px solid #dce4ef;
   border-radius: 8px;
@@ -56,7 +56,7 @@
 .close svg { width: 20px; height: 20px; }
 .body { min-height: 0; overflow-y: auto; overscroll-behavior: contain; padding: 0 28px; }
 .description { margin: 0 0 19px; color: #65748a; font-size: 14px; line-height: 1.8; }
-.qrBox { display: flex; justify-content: center; margin-bottom: 20px; padding: 12px; border: 1px solid #dce4ef; border-radius: 9px; background: #f7f9fc; }
+.qrBox { display: flex; justify-content: center; margin-top: 20px; padding: 12px; border: 1px solid #dce4ef; border-radius: 9px; background: #f7f9fc; }
 .qr { width: 176px; height: 176px; object-fit: contain; background: #fff; }
 .valueBox { padding: 18px 19px; border: 1px solid #dce4ef; border-radius: 9px; background: #f7f9fc; }
 .valueLabel { margin-bottom: 8px; color: #65748a; font-size: 12px; line-height: 1.5; }
@@ -64,6 +64,8 @@
 .phoneValue { font-size: 27px; letter-spacing: .2px; }
 .footer { flex-shrink: 0; padding: 22px 28px 28px; }
 .actions { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 12px; }
+.singleAction { grid-template-columns: minmax(0, 1fr); }
+.copyFirst { display: grid; margin-top: 14px; }
 .action { display: flex; align-items: center; justify-content: center; gap: 8px; min-height: 46px; padding: 10px 8px; border: 1px solid #cdd8e6; border-radius: 8px; font: inherit; font-size: 14px; font-weight: 600; line-height: 1.5; text-decoration: none; text-align: center; cursor: pointer; }
 .action svg { width: 17px; height: 17px; flex-shrink: 0; }
 .primary { color: #fff; background: #07539a; border-color: #07539a; }

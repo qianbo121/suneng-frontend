@@ -11,6 +11,8 @@ import {
   HiChevronDown,
   HiOutlineXMark,
   HiPhone,
+  HiOutlineDocumentText,
+  HiLanguage,
 } from 'react-icons/hi2';
 
 import { isZhOnlyPath } from '@/lib/i18n/zh-only';
@@ -21,6 +23,7 @@ import { Locale } from '@/types/site';
 
 import styles from './Header.module.css';
 import { useEnglishNewsLink } from './useEnglishNewsLink';
+import { InquiryLink } from './InquiryLink';
 
 type HeaderProps = {
   locale: string;
@@ -450,6 +453,15 @@ export function Header({ locale, localeSwitchReload = false }: HeaderProps) {
 
           {(
             <div className="sticky top-[78px] z-10 border-b border-[#e5e9f0] bg-white px-5 py-3 shadow-[0_8px_18px_rgba(15,23,42,0.05)]">
+              <div className="grid grid-cols-2 gap-3">
+              <InquiryLink
+                locale={currentLocale}
+                onClick={() => setMobileOpen(false)}
+                className="flex min-h-[44px] items-center justify-center gap-2 rounded-[4px] bg-brand-primary px-3 text-[14px] font-semibold text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary"
+              >
+                <HiOutlineDocumentText aria-hidden="true" className="h-4 w-4" />
+                {currentLocale === 'en' ? 'Online inquiry' : '在线询价'}
+              </InquiryLink>
               <PhoneContactLink
                 trackingContext={{ properties: { position: 'header_mobile_menu' } }}
                 className="flex min-h-[44px] w-full items-center justify-center gap-2 rounded-[4px] border border-[#cfd8e5] px-3 text-[14px] font-semibold text-brand-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary"
@@ -457,6 +469,10 @@ export function Header({ locale, localeSwitchReload = false }: HeaderProps) {
                 <HiPhone aria-hidden="true" className="h-4 w-4" />
                 {currentLocale === 'en' ? 'Call us' : '电话咨询'}
               </PhoneContactLink>
+              </div>
+              <Link href={`/${currentLocale}/contact`} onClick={() => setMobileOpen(false)} className="mt-1 flex min-h-[40px] items-center justify-center text-[13px] text-[#5f697b] underline decoration-[#cfd8e5] underline-offset-4">
+                {currentLocale === 'en' ? 'More contact options' : '查看全部联系方式'}
+              </Link>
             </div>
           )}
 
@@ -479,8 +495,21 @@ export function Header({ locale, localeSwitchReload = false }: HeaderProps) {
                     return (
                       <li key={item.key} className="p_level1Item list-none border-b border-black/5">
                         <div className="p_menu1Item flex min-h-[58px] items-center">
-                          <Link
+                          {item.children?.length ? (
+                            <button
+                              type="button"
+                              className={`my-1 flex min-h-[50px] min-w-0 flex-1 items-center justify-between gap-3 px-3 py-1 text-left text-[16px] leading-[1.5] focus-visible:outline focus-visible:outline-2 focus-visible:outline-brand-primary ${styles.primaryLink}`}
+                              aria-expanded={isExpanded}
+                              aria-controls={submenuId}
+                              aria-current={isActive ? 'page' : undefined}
+                              onClick={() => setMobileExpandedKey((current) => current === item.key ? null : item.key)}
+                            >
+                              <span>{item.labelText}</span>
+                              <HiChevronDown className={`h-5 w-5 shrink-0 transition-transform duration-200 ${isExpanded ? 'rotate-180 text-brand-primary' : ''}`} aria-hidden="true" />
+                            </button>
+                          ) : <Link
                             href={href}
+                            onClick={() => setMobileOpen(false)}
                             className={`my-1 flex min-h-[50px] min-w-0 flex-1 items-center px-3 py-1 text-[16px] leading-[1.5] focus-visible:outline focus-visible:outline-2 focus-visible:outline-brand-primary ${
                               isContactItem
                                 ? 'bg-[#c51624] font-semibold text-white'
@@ -489,30 +518,16 @@ export function Header({ locale, localeSwitchReload = false }: HeaderProps) {
                             aria-current={isActive ? 'page' : undefined}
                           >
                             <span>{item.labelText}</span>
-                          </Link>
-                          {item.children?.length ? (
-                            <button
-                              type="button"
-                              className="flex h-11 w-11 shrink-0 items-center justify-center rounded-[4px] text-text-secondary focus-visible:outline focus-visible:outline-2 focus-visible:outline-brand-primary"
-                              aria-label={`${currentLocale === 'en' ? (isExpanded ? 'Collapse ' : 'Expand ') : (isExpanded ? '收起' : '展开')}${item.labelText}`}
-                              aria-expanded={isExpanded}
-                              aria-controls={submenuId}
-                              onClick={() =>
-                                setMobileExpandedKey((current) =>
-                                  current === item.key ? null : item.key,
-                                )
-                              }
-                            >
-                              <HiChevronDown
-                                className={`h-5 w-5 transition-transform duration-200 ${isExpanded ? 'rotate-180 text-brand-primary' : ''}`}
-                                aria-hidden="true"
-                              />
-                            </button>
-                          ) : null}
+                          </Link>}
                         </div>
 
                         {item.children?.length && isExpanded ? (
                           <ul id={submenuId} className="p_level2Box pb-4 pl-5">
+                            {!childHrefs.includes(href) ? <li className="list-none">
+                              <Link href={href} onClick={() => setMobileOpen(false)} className="flex min-h-[48px] items-center py-3 pr-3 text-[15px] font-semibold leading-[24px] text-brand-primary">
+                                {currentLocale === 'en' ? 'Overview' : '栏目总览'}
+                              </Link>
+                            </li> : null}
                             {item.children.map((child) => (
                               <li key={child.key} className="p_level2Item list-none">
                                 <p className="p_menu2Item">
@@ -539,9 +554,11 @@ export function Header({ locale, localeSwitchReload = false }: HeaderProps) {
                   <LocaleSwitchLink
                     href={switchLocalePath}
                     title={switchLocaleTitle}
-                    className="flex min-h-[50px] items-center justify-between py-1 text-[14px] font-semibold leading-[50px] text-text-secondary focus-visible:outline focus-visible:outline-2 focus-visible:outline-brand-primary"
+                    onClick={() => setMobileOpen(false)}
+                    className="flex min-h-[50px] items-center justify-between px-3 py-1 text-[14px] font-semibold leading-[50px] text-text-secondary focus-visible:outline focus-visible:outline-2 focus-visible:outline-brand-primary"
                   >
                     <span>{localeLabel[switchLocale]}</span>
+                    <HiLanguage aria-hidden="true" className="h-5 w-5" />
                   </LocaleSwitchLink>
                 </li>
               </ul>

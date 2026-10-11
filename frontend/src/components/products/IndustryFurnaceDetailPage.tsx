@@ -17,6 +17,7 @@ import { ProductQuoteScrollButton } from '@/components/products/ProductLeadForm'
 import { getFaqJsonLd, getProductDetailJsonLd } from '@/lib/seo/jsonld';
 
 import { FurnaceCutawayDiagram } from './FurnaceCutawayDiagram';
+import { ProductHeroDetails } from './ProductHeroDetails';
 import { FurnaceSectionNav } from './FurnaceSectionNav';
 import { PitFurnaceFaq, PitFurnaceGallery } from './PitFurnaceDetailClient';
 import styles from './PitFurnaceDetailPage.module.css';
@@ -127,6 +128,7 @@ export function IndustryFurnaceDetailPage({ slug, locale = 'zh' }: { slug: Indus
             )}
             <p className={styles.heroDescription}>{config.description}</p>
 
+            <ProductHeroDetails label={locale === 'en' ? 'Technical conditions and tags' : "查看选型条件与方案标签"}>
             <div className={styles.tagList} aria-label={locale === 'en' ? `${config.name} configuration tags` : `${config.name}方案标签`}>
               {config.tags.map((tag) => (
                 <span key={tag}>{tag}</span>
@@ -142,7 +144,9 @@ export function IndustryFurnaceDetailPage({ slug, locale = 'zh' }: { slug: Indus
               ))}
             </div>
 
-            <div className={styles.heroActions}>
+            </ProductHeroDetails>
+
+            <div className={`${styles.heroActions} ${['box-furnace', 'rotary-hearth-furnace'].includes(slug) ? styles.heroActionsWithMobileAction : ''}`}>
               <ProductQuoteScrollButton
                 locale={locale}
                 label={t("提交工况，获取选型建议")}
@@ -260,9 +264,15 @@ export function IndustryFurnaceDetailPage({ slug, locale = 'zh' }: { slug: Indus
               ))}
             </div>
 
-            <div className={styles.tableScroll}>
+            <p className={styles.comparisonMobileTitle} aria-hidden="true">
+              {t("方案比较与报价前核校")}
+            </p>
+            <p className={styles.tableHint} id={`${slug}-comparison-help`}>
+              {locale === 'en' ? 'Swipe sideways to compare; the solution name stays on the left.' : "左右滑动查看方案比较，方案名称会固定在左侧。"}
+            </p>
+            <div className={styles.tableScroll} tabIndex={0} aria-describedby={`${slug}-comparison-help`}>
               <table className={styles.comparisonTable}>
-                <caption>{t("方案比较与报价前核校")}</caption>
+                <caption className={styles.comparisonCaption}>{t("方案比较与报价前核校")}</caption>
                 <thead>
                   <tr>
                     <th scope="col">{t("对应方案")}</th>
@@ -329,7 +339,7 @@ export function IndustryFurnaceDetailPage({ slug, locale = 'zh' }: { slug: Indus
               </div>
             </div>
 
-            <div className={styles.tableScroll}>
+            <div className={`${styles.tableScroll} ${styles.dataListScroll}`}>
               <table className={styles.dataTable}>
                 <caption>{t("形成有效方案前必须拿到的数据")}</caption>
                 <thead>

@@ -3,6 +3,7 @@ import type { RawConditions, WorkpieceRouterDisplayState } from '@/lib/api/workp
 export type WorkpieceRouterDraftContext = {
   categoryId: string;
   workpieceId: string | null;
+  workpieceName?: string;
   searchTerm: string | null;
   processPurposeId: string | null;
   rawConditions: RawConditions;

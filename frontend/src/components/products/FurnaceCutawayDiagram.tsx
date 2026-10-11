@@ -1,4 +1,7 @@
+'use client';
+
 import Image from 'next/image';
+import { useState } from 'react';
 
 import styles from './PitFurnaceDetailPage.module.css';
 
@@ -45,6 +48,68 @@ const positionClasses: Record<FurnaceCutawayLabelPosition, string> = {
   rightBottom: styles.cutawayLabelRightBottom,
 };
 
+function CutawayImage({
+  image,
+  furnaceName,
+  locale,
+  pitCompatibility = false,
+}: {
+  image: FurnaceCutawayDiagramProps['image'];
+  furnaceName: string;
+  locale: 'zh' | 'en';
+  pitCompatibility?: boolean;
+}) {
+  const [attempt, setAttempt] = useState(0);
+  const [status, setStatus] = useState<'loading' | 'ready' | 'error'>('loading');
+  const separator = image.src.includes('?') ? '&' : '?';
+  const source = attempt ? `${image.src}${separator}retry=${attempt}` : image.src;
+
+  return (
+    <>
+      <Image
+        key={source}
+        src={source}
+        unoptimized={image.src.endsWith('.svg') && image.unoptimized}
+        alt={image.alt}
+        fill
+        sizes="(max-width: 640px) calc(100vw - 64px), (min-width: 1100px) 650px, 100vw"
+        className={styles.cutawayImage}
+        data-furnace-cutaway-image={furnaceName}
+        {...(pitCompatibility ? { 'data-pit-cutaway-image': true } : {})}
+        onLoad={() => setStatus('ready')}
+        onError={() => setStatus('error')}
+      />
+      {status !== 'ready' && (
+        <div className={styles.cutawayImageStatus} role="status" aria-live="polite">
+          <span>{status === 'error'
+            ? locale === 'en' ? 'The diagram did not load. Retry or view the original below.' : '结构图暂未加载，可重试或查看下方原图。'
+            : locale === 'en' ? 'Loading structural diagram…' : '结构示意图加载中…'}</span>
+          {status === 'error' && (
+            <button type="button" onClick={() => {
+              setStatus('loading');
+              setAttempt((value) => value + 1);
+            }}>
+              {locale === 'en' ? 'Retry diagram' : '重新加载结构图'}
+            </button>
+          )}
+        </div>
+      )}
+    </>
+  );
+}
+
+function CutawayCaption({ image, locale }: { image: FurnaceCutawayDiagramProps['image']; locale: 'zh' | 'en' }) {
+  return (
+    <figcaption>
+      {image.caption}
+      <br />
+      <a className={styles.cutawayOriginalLink} href={image.src} target="_blank" rel="noopener noreferrer">
+        {locale === 'en' ? 'View original image' : '查看原图'}
+      </a>
+    </figcaption>
+  );
+}
+
 export function FurnaceCutawayDiagram({
   furnaceName,
   locale = 'zh',
@@ -57,15 +122,7 @@ export function FurnaceCutawayDiagram({
     return (
       <figure className={styles.cutawayFigure}>
         <div className={styles.cutawayMarkerStage} data-furnace-cutaway-stage={furnaceName}>
-          <Image
-            src={image.src}
-            unoptimized={image.unoptimized}
-            alt={image.alt}
-            fill
-            sizes="(min-width: 1100px) 650px, 100vw"
-            className={styles.cutawayImage}
-            data-furnace-cutaway-image={furnaceName}
-          />
+          <CutawayImage image={image} furnaceName={furnaceName} locale={locale} />
           <svg
             className={styles.cutawayMarkerOverlay}
             viewBox="0 0 100 75"
@@ -107,7 +164,7 @@ export function FurnaceCutawayDiagram({
             </li>
           ))}
         </ol>
-        <figcaption>{image.caption}</figcaption>
+        <CutawayCaption image={image} locale={locale} />
       </figure>
     );
   }
@@ -120,16 +177,7 @@ export function FurnaceCutawayDiagram({
         {...(pitCompatibility ? { 'data-pit-cutaway-stage': true } : {})}
       >
         <div className={styles.cutawayImageFrame}>
-          <Image
-            src={image.src}
-            unoptimized={image.unoptimized}
-            alt={image.alt}
-            fill
-            sizes="(min-width: 1100px) 650px, 100vw"
-            className={styles.cutawayImage}
-            data-furnace-cutaway-image={furnaceName}
-            {...(pitCompatibility ? { 'data-pit-cutaway-image': true } : {})}
-          />
+          <CutawayImage image={image} furnaceName={furnaceName} locale={locale} pitCompatibility={pitCompatibility} />
         </div>
 
         <svg
@@ -183,7 +231,7 @@ export function FurnaceCutawayDiagram({
           ))}
         </ol>
       </div>
-      <figcaption>{image.caption}</figcaption>
+      <CutawayCaption image={image} locale={locale} />
     </figure>
   );
 }

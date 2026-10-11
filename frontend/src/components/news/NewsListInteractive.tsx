@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
+import { HiChevronDown } from 'react-icons/hi2';
 import {
   createContext,
   Suspense,
@@ -134,8 +135,9 @@ export function NewsListScope({
     const heading = target ? document.getElementById('news-list-title') : null;
     if (!heading) return;
     const top = heading.getBoundingClientRect().top;
-    if (top < 0 || top > window.innerHeight * 0.6) {
-      window.scrollTo({ top: Math.max(0, window.scrollY + top - 24) });
+    const clearance = window.innerWidth < 1280 ? 96 : 120;
+    if (top < clearance || top > window.innerHeight * 0.6) {
+      window.scrollTo({ top: Math.max(0, window.scrollY + top - clearance), behavior: 'instant' });
     }
     if (target === 'focus-heading') heading.focus({ preventScroll: true });
   }, [view]);
@@ -194,6 +196,42 @@ export function NewsListScope({
   );
 }
 
+export function NewsFilterPanel({ locale, topic, furnace, loading, children }: {
+  locale: Locale;
+  topic: NewsListState['topic'];
+  furnace: NewsListState['furnace'];
+  loading?: boolean;
+  children: ReactNode;
+}) {
+  const liveState = useNewsListState();
+  const [expanded, setExpanded] = useState(false);
+  const activeTopic = liveState?.topic ?? topic;
+  const activeFurnace = liveState?.furnace ?? furnace;
+  const t = (text: string) => newsUiText(locale, text);
+  const summary = `${t(NEWS_DECISION_TOPICS.find((item) => item.id === activeTopic)?.label || '')} · ${t(NEWS_FURNACE_FILTERS.find((item) => item.id === activeFurnace)?.label || '')}`;
+
+  return <div className={styles.filterPanel} inert={loading || undefined}>
+    <button type="button" className={styles.filterToggle} aria-expanded={expanded} aria-controls="news-filter-options" onClick={() => setExpanded((current) => !current)}>
+      <span>
+        <strong>{locale === 'en' ? 'Filter resources' : '筛选资料'}</strong>
+        <span className={styles.filterSummary}>{summary}</span>
+      </span>
+      <HiChevronDown aria-hidden="true" className={expanded ? styles.filterChevronOpen : styles.filterChevron} />
+    </button>
+    <div id="news-filter-options" className={styles.filterOptions} data-expanded={expanded}>
+      {children}
+    </div>
+  </div>;
+}
+
+export function NewsResultsSummary({ locale, total, page, pageSize }: { locale: Locale; total: number; page: number; pageSize: number }) {
+  const pageCount = Math.max(1, Math.ceil(total / pageSize));
+  const currentPage = Math.min(Math.max(1, page), pageCount);
+  return <p className={styles.resultsSummary} role="status" aria-live="polite">
+    {locale === 'en' ? `${total} resources · Page ${currentPage} of ${pageCount}` : `共 ${total} 篇资料 · 第 ${currentPage} / ${pageCount} 页`}
+  </p>;
+}
+
 export function NewsListFilterControls() {
   const { locale, state } = useNewsList();
   const t = (text: string) => newsUiText(locale, text);
@@ -235,15 +273,18 @@ export function NewsListFilterControls() {
 }
 
 export function NewsListHeading() {
-  const { locale, state } = useNewsList();
+  const { locale, state, view, pageSize } = useNewsList();
   const t = (text: string) => newsUiText(locale, text);
   const base = `/${locale}/news`;
 
   return (
     <>
-      <h2 id="news-list-title" className={styles.listTitle} tabIndex={-1}>
-        {t(NEWS_DECISION_TOPICS.find((item) => item.id === state.topic)?.label || '')}
-      </h2>
+      <div className={styles.headingCopy}>
+        <h2 id="news-list-title" className={styles.listTitle} tabIndex={-1}>
+          {t(NEWS_DECISION_TOPICS.find((item) => item.id === state.topic)?.label || '')}
+        </h2>
+        <NewsResultsSummary locale={locale} total={view.total} page={view.page} pageSize={pageSize} />
+      </div>
       <nav className={styles.sortNav} aria-label={t('文章排序')}>
         {(
           [

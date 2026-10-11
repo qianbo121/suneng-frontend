@@ -175,6 +175,11 @@ export function WorkpieceRouter({ catalog, locale = 'zh' }: { catalog: Workpiece
     setActiveWorkpieceRouterDraft({
       categoryId: activeCategoryId,
       workpieceId: selectedWorkpieceId,
+      workpieceName:
+        standardDirections?.displayWorkpieceName ??
+        directionExamples?.displayWorkpieceName ??
+        selectedWorkpiece?.name ??
+        resolution.workpieceName,
       searchTerm: null,
       processPurposeId: null,
       rawConditions: {},
@@ -192,9 +197,13 @@ export function WorkpieceRouter({ catalog, locale = 'zh' }: { catalog: Workpiece
         display_state: 'engineering_review',
       },
     });
-    document.getElementById('homepage-lead-form')?.scrollIntoView({
-      behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth',
-      block: 'start',
+    window.requestAnimationFrame(() => {
+      const form = document.getElementById('homepage-lead-form-fields') ??
+        document.getElementById('homepage-lead-form');
+      form?.scrollIntoView({
+        behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth',
+        block: 'start',
+      });
     });
   };
 

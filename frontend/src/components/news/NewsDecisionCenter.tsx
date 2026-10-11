@@ -13,6 +13,8 @@ import {
   NewsListHeading,
   NewsListResults,
   NewsListScope,
+  NewsFilterPanel,
+  NewsResultsSummary,
 } from '@/components/news/NewsListInteractive';
 import {
   buildNewsDecisionHref,
@@ -128,7 +130,7 @@ export function NewsDecisionCenter({
             </div>
             <NewsSearchForm locale={locale} {...filters} disabled={loading} />
           </div>
-          <div className={styles.filterPanel} inert={loading || undefined}>
+          <NewsFilterPanel locale={locale} topic={topic} furnace={furnace} loading={loading}>
             {live ? (
               <NewsListFilterControls />
             ) : (
@@ -164,7 +166,7 @@ export function NewsDecisionCenter({
                 </section>
               </>
             )}
-          </div>
+          </NewsFilterPanel>
         </div>
       </header>
       <div className={styles.mainArea}>
@@ -180,11 +182,14 @@ export function NewsDecisionCenter({
                   <NewsListHeading />
                 ) : (
                   <>
+                    <div className={styles.headingCopy}>
                     <h2 id="news-list-title" className={styles.listTitle}>
                       {loading
                         ? t('资料列表')
                         : t(NEWS_DECISION_TOPICS.find((item) => item.id === topic)?.label || '')}
                     </h2>
+                    {!loading && !error ? <NewsResultsSummary locale={locale} total={total} page={page} pageSize={pageSize} /> : null}
+                    </div>
                     <nav
                       className={styles.sortNav}
                       aria-label={t('文章排序')}

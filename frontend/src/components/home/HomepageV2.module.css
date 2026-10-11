@@ -826,6 +826,83 @@
   box-shadow: 0 14px 32px rgba(11, 29, 51, 0.14);
 }
 
+.directionSelectMenu[data-placement='above'] {
+  top: auto;
+  bottom: calc(100% + 8px);
+}
+
+.mobileFormPreparation {
+  display: none;
+}
+
+.workpieceSummary {
+  grid-column: 1 / -1;
+  padding: 14px;
+  border: 1px solid #ccdced;
+  border-radius: 6px;
+  background: #f4f8fd;
+}
+
+.workpieceSummaryHeading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.workpieceSummaryHeading > div {
+  display: grid;
+  min-width: 0;
+  gap: 4px;
+}
+
+.workpieceSummaryHeading span,
+.workpieceSummary > p {
+  color: #586a7e;
+  font-size: 13px;
+  line-height: 20px;
+}
+
+.workpieceSummaryHeading strong {
+  color: #17263a;
+  font-size: 16px;
+  line-height: 24px;
+  overflow-wrap: anywhere;
+}
+
+.workpieceSummary > p {
+  margin-top: 8px;
+}
+
+.workpieceModify {
+  min-width: 64px;
+  min-height: 44px;
+  flex-shrink: 0;
+  padding: 10px 12px;
+  border: 1px solid #c4d4e8;
+  border-radius: 5px;
+  background: #fff;
+  color: #0c4dcc;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+.workpieceModify:focus-visible {
+  outline: 2px solid #3370ff;
+  outline-offset: 3px;
+}
+
+.compactFormSection .formInner {
+  display: block;
+  max-width: 960px;
+  padding-block: 32px;
+}
+
+.compactFormSection .leadForm,
+.compactFormSection .successPanel {
+  max-width: none;
+}
+
 .directionSelectOption {
   display: grid;
   width: 100%;
@@ -1333,6 +1410,56 @@
   .leadForm,
   .successPanel {
     padding: 24px;
+  }
+
+  .directionSelectTrigger,
+  .directionSelectOption,
+  .field :is(input, select, textarea) {
+    font-size: 16px;
+  }
+
+  .directionSelectTrigger {
+    height: auto;
+    min-height: 52px;
+    padding-block: 12px;
+  }
+
+  .directionSelectTrigger > span {
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+
+  .desktopFormPreparation {
+    display: none;
+  }
+
+  .mobileFormPreparation {
+    display: block;
+    margin-top: 12px;
+    border-top: 1px solid #dce4ee;
+    border-bottom: 1px solid #dce4ee;
+  }
+
+  .mobileFormPreparation summary {
+    min-height: 44px;
+    padding-block: 12px;
+    color: #143f83;
+    font-size: 14px;
+    line-height: 20px;
+    cursor: pointer;
+  }
+
+  .mobileFormPreparation > div {
+    display: grid;
+    gap: 10px;
+    padding-bottom: 16px;
+    color: #586a7e;
+    font-size: 14px;
+    line-height: 24px;
+  }
+
+  .formSection .formInner {
+    gap: 20px;
   }
 
   .contactFields {

@@ -23,6 +23,8 @@ import { getActiveWorkpieceContext } from '@/lib/workpiece-selection-context';
 import {
   clearActiveWorkpieceRouterDraft,
   getActiveWorkpieceRouterDraft,
+  subscribeToWorkpieceRouterDraft,
+  type WorkpieceRouterDraftContext,
 } from '@/lib/workpiece-router-draft-context';
 import { markStickyEngineerConverted } from '@/components/home/sticky-engineer';
 import { hasConfirmedSubmission } from '@/lib/fastener-line-inquiry';
@@ -77,6 +79,7 @@ type HomepageLeadFormProps = {
   inquiryHint?: string;
   layoutVariant?: 'default' | 'solution' | 'embedded' | 'productCenter';
   privacyNoticeEnabled?: boolean;
+  compactIntro?: boolean;
 };
 
 export function HomepageLeadForm({
@@ -93,6 +96,7 @@ export function HomepageLeadForm({
   inquiryHint = '先填写已有信息，详细资料可后续补充。',
   layoutVariant = 'default',
   privacyNoticeEnabled = false,
+  compactIntro = false,
 }: HomepageLeadFormProps = {}) {
   const english = locale === 'en';
   const t = (zh: string, en: string) => english ? en : zh;
@@ -104,6 +108,7 @@ export function HomepageLeadForm({
   const formRef = useRef<HTMLFormElement>(null);
   const directionTriggerRef = useRef<HTMLButtonElement>(null);
   const directionSelectRef = useRef<HTMLDivElement>(null);
+  const directionMenuRef = useRef<HTMLDivElement>(null);
   const directionOptionRefs = useRef<Array<HTMLButtonElement | null>>([]);
   const formStartedRef = useRef(false);
   const submittingRef = useRef(false);
@@ -122,6 +127,14 @@ export function HomepageLeadForm({
   const [isDirectionOpen, setIsDirectionOpen] = useState(false);
   const [showPrivacyNotice, setShowPrivacyNotice] = useState(false);
   const [activeDirectionIndex, setActiveDirectionIndex] = useState(0);
+  const [workpieceDraft, setWorkpieceDraft] = useState<WorkpieceRouterDraftContext | null>(null);
+  const [directionMenuLayout, setDirectionMenuLayout] = useState({ placement: 'below', maxHeight: 320 });
+
+  useEffect(() => {
+    if (inquiryProduct || !document.getElementById('workpiece-router')) return;
+    setWorkpieceDraft(getActiveWorkpieceRouterDraft());
+    return subscribeToWorkpieceRouterDraft(setWorkpieceDraft);
+  }, [inquiryProduct]);
 
   useEffect(() => {
     if (!isDirectionOpen) return;
@@ -131,9 +144,26 @@ export function HomepageLeadForm({
         setIsDirectionOpen(false);
       }
     };
+    // Browser positioning can finish scrolling after the trigger is clicked.
+    // Close on a user scroll gesture, while allowing the menu itself to scroll.
+    const closeOnUserScroll = (event: WheelEvent | TouchEvent) => {
+      if (event.target instanceof Node && directionMenuRef.current?.contains(event.target)) return;
+      setIsDirectionOpen(false);
+    };
+    const closeOnResize = () => setIsDirectionOpen(false);
 
     document.addEventListener('pointerdown', closeOnOutsidePointer);
-    return () => document.removeEventListener('pointerdown', closeOnOutsidePointer);
+    window.addEventListener('wheel', closeOnUserScroll, { capture: true, passive: true });
+    window.addEventListener('touchmove', closeOnUserScroll, { capture: true, passive: true });
+    window.addEventListener('resize', closeOnResize);
+    window.visualViewport?.addEventListener('resize', closeOnResize);
+    return () => {
+      document.removeEventListener('pointerdown', closeOnOutsidePointer);
+      window.removeEventListener('wheel', closeOnUserScroll, true);
+      window.removeEventListener('touchmove', closeOnUserScroll, true);
+      window.removeEventListener('resize', closeOnResize);
+      window.visualViewport?.removeEventListener('resize', closeOnResize);
+    };
   }, [isDirectionOpen]);
 
   const updateValue = (field: HomepageRequirementField, value: string) => {
@@ -159,10 +189,42 @@ export function HomepageLeadForm({
 
   const focusDirectionOption = (index: number) => {
     setActiveDirectionIndex(index);
-    requestAnimationFrame(() => directionOptionRefs.current[index]?.focus());
+    requestAnimationFrame(() => {
+      const option = directionOptionRefs.current[index];
+      const menu = directionMenuRef.current;
+      option?.focus({ preventScroll: true });
+      if (!option || !menu) return;
+      if (option.offsetTop < menu.scrollTop) menu.scrollTop = option.offsetTop;
+      else if (option.offsetTop + option.offsetHeight > menu.scrollTop + menu.clientHeight) {
+        menu.scrollTop = option.offsetTop + option.offsetHeight - menu.clientHeight;
+      }
+    });
   };
 
   const openDirectionMenu = (index?: number) => {
+    const trigger = directionTriggerRef.current;
+    if (!trigger) return;
+    const rect = trigger.getBoundingClientRect();
+    const viewportTop = window.visualViewport?.offsetTop ?? 0;
+    const viewportBottom = viewportTop + (window.visualViewport?.height ?? window.innerHeight);
+    let topLimit = viewportTop + 8;
+    let bottomLimit = viewportBottom - 8;
+    document.querySelectorAll<HTMLElement>('.site-header > div').forEach((element) => {
+      const bounds = element.getBoundingClientRect();
+      if (getComputedStyle(element).position === 'fixed' && bounds.height && bounds.top <= viewportTop + 1) {
+        topLimit = Math.max(topLimit, bounds.bottom + 8);
+      }
+    });
+    document.querySelectorAll<HTMLElement>('[data-mobile-contact-bar], [data-sticky-engineer-dock][data-visible="true"]').forEach((element) => {
+      const bounds = element.getBoundingClientRect();
+      if (bounds.height && bounds.width && bounds.bottom <= viewportBottom + 1 && bounds.top > rect.top) {
+        bottomLimit = Math.min(bottomLimit, bounds.top - 8);
+      }
+    });
+    const below = Math.max(0, bottomLimit - rect.bottom - 8);
+    const above = Math.max(0, rect.top - topLimit - 8);
+    const placement = below >= 320 || below >= above ? 'below' : 'above';
+    setDirectionMenuLayout({ placement, maxHeight: Math.min(320, placement === 'below' ? below : above) });
     const selectedIndex = directionOptions.findIndex((option) => option.value === values.direction);
     const nextIndex = index ?? Math.max(selectedIndex, 0);
     setIsDirectionOpen(true);
@@ -296,6 +358,17 @@ export function HomepageLeadForm({
     requestAnimationFrame(() => directionTriggerRef.current?.focus());
   };
 
+  const changeWorkpiece = () => {
+    closeDirectionMenu();
+    const choice = document.querySelector<HTMLButtonElement>('#workpiece-router [data-workpiece-id][aria-pressed="true"]');
+    const target = choice ?? document.getElementById('workpiece-router');
+    target?.scrollIntoView({
+      behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth',
+      block: 'center',
+    });
+    choice?.focus({ preventScroll: true });
+  };
+
   return (
     <section
       id={sectionId}
@@ -305,16 +378,17 @@ export function HomepageLeadForm({
         layoutVariant === 'solution' ? styles.solutionFormSection : '',
         isEmbedded ? styles.embeddedFormSection : '',
         isProductCenter ? styles.productCenterFormSection : '',
+        compactIntro ? styles.compactFormSection : '',
       ]
         .filter(Boolean)
         .join(' ')}
-      aria-label={isEmbedded ? t('提交需求', 'Send project details') : undefined}
-      aria-labelledby={isEmbedded ? undefined : 'homepage-form-title'}
+      aria-label={isEmbedded || compactIntro ? t('提交需求', 'Send project details') : undefined}
+      aria-labelledby={isEmbedded || compactIntro ? undefined : 'homepage-form-title'}
       data-contact-form
       lang={locale}
     >
       <div className={styles.formInner}>
-        {!isEmbedded ? (
+        {!isEmbedded && !compactIntro ? (
           isProductCenter ? (
             <div className={`${styles.formIntro} ${styles.productCenterFormIntro}`}>
               <h2 id="homepage-form-title">{t('把需求告诉我们', 'Tell us about your project')}</h2>
@@ -326,6 +400,16 @@ export function HomepageLeadForm({
               <h2 id="homepage-form-title">{t('咨询设备选型与改造', 'Start with what you know')}</h2>
               <p>{t('说明工件、产量或现有设备问题。', 'Tell us about the workpiece, throughput or existing equipment issue. Drawings and detailed parameters can follow.')}</p>
               {sectionId === 'inquiry' || inquiryProduct ? <InquiryContactOptions locale={locale} /> : null}
+              <details className={styles.mobileFormPreparation}>
+                <summary>{t('查看选型与沟通说明', 'Selection and consultation details')}</summary>
+                <div>
+                  {initialResults.map(([title, result]) => (
+                    <p key={title}><strong>{title}</strong>：{result}</p>
+                  ))}
+                  <p>{t('照片、图纸和详细参数可以后补。先沟通初步设备方向与预算参考范围。', 'Photos, drawings and detailed parameters can follow. Start with an equipment direction and indicative budget range.')}</p>
+                </div>
+              </details>
+              <div className={styles.desktopFormPreparation}>
               <div className={styles.formPathList}>
                 {initialResults.map(([title, result]) => (
                   <div key={title}>
@@ -353,8 +437,13 @@ export function HomepageLeadForm({
                   </div>
                 </div>
               </div>
+              </div>
             </div>
           )
+        ) : null}
+
+        {compactIntro && (sectionId === 'inquiry' || inquiryProduct) ? (
+          <InquiryContactOptions locale={locale} />
         ) : null}
 
         {submissionId ? (
@@ -403,6 +492,15 @@ export function HomepageLeadForm({
             {!isProductCenter ? (
               <p className={styles.privacyNote}>{english ? 'Share the information available now; detailed documents can follow.' : inquiryHint}</p>
             ) : null}
+            {workpieceDraft ? (
+              <div className={styles.workpieceSummary} data-workpiece-summary>
+                <div className={styles.workpieceSummaryHeading}>
+                  <div><span>{t('已选工件', 'Selected workpiece')}</span><strong>{workpieceDraft.workpieceName || t('已选择工件', 'Workpiece selected')}</strong></div>
+                  <button type="button" className={styles.workpieceModify} onClick={changeWorkpiece}>{t('修改', 'Change')}</button>
+                </div>
+                <p>{t('修改工件不会清空下面填写的内容。', 'Changing the workpiece keeps the details entered below.')}</p>
+              </div>
+            ) : null}
             {message ? (
               <p className={styles.formMessage} role="alert">
                 {message}
@@ -440,8 +538,11 @@ export function HomepageLeadForm({
                 </button>
                 {isDirectionOpen ? (
                   <div
+                    ref={directionMenuRef}
                     id={directionListboxId}
                     className={styles.directionSelectMenu}
+                    data-placement={directionMenuLayout.placement}
+                    style={{ maxHeight: directionMenuLayout.maxHeight }}
                     role="listbox"
                     aria-labelledby="homepage-direction-label"
                     onKeyDown={handleDirectionMenuKeyDown}

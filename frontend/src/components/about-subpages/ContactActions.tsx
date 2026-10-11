@@ -3,7 +3,7 @@
 import { aboutPageText } from '@/lib/about-page-localization';
 import type { Locale } from '@/types/site';
 
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { HiOutlineClipboardDocument } from 'react-icons/hi2';
 import { Button } from '@/components/ui/Button';
 import { HomepageLeadForm } from '@/components/home/HomepageLeadForm';
@@ -63,6 +63,23 @@ export function ContactMessageForm({ locale = 'zh', inquiryProduct }: { locale?:
   const t = (text: string) => aboutPageText(text, locale);
   const [open, setOpen] = useState(Boolean(inquiryProduct));
   const [hasOpened, setHasOpened] = useState(Boolean(inquiryProduct));
+  useEffect(() => {
+    if (window.location.hash === '#contact-inquiry-form') {
+      setOpen(true);
+      setHasOpened(true);
+    }
+  }, []);
+  useEffect(() => {
+    if (!open || window.location.hash !== '#contact-inquiry-form') return;
+    const frame = requestAnimationFrame(() => {
+      const field = document.querySelector<HTMLElement>('#contact-inquiry-form form button[id], #contact-inquiry-form form input:not([type="hidden"])');
+      const target = field?.closest<HTMLElement>('[class*="field"]') ?? field;
+      if (!target) return;
+      window.scrollTo({ top: Math.max(0, window.scrollY + target.getBoundingClientRect().top - (window.innerWidth < 1280 ? 98 : 120)), behavior: 'instant' });
+      field?.focus({ preventScroll: true });
+    });
+    return () => cancelAnimationFrame(frame);
+  }, [open]);
   return (
     <section className={styles.message} aria-labelledby="contact-message-heading">
       <h2 id="contact-message-heading">

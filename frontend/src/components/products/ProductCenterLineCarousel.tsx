@@ -24,6 +24,7 @@ export function ProductCenterLineCarousel({
   const railRef = useRef<HTMLDivElement>(null);
   const [columns, setColumns] = useState(3);
   const [page, setPage] = useState(0);
+  const [ready, setReady] = useState(false);
   const groups = Array.from({ length: Math.ceil(items.length / columns) }, (_, index) =>
     items.slice(index * columns, (index + 1) * columns),
   );
@@ -39,6 +40,8 @@ export function ProductCenterLineCarousel({
   useEffect(() => {
     const rail = railRef.current;
     if (!rail) return;
+    const viewportColumns = window.innerWidth >= 1024 ? 3 : window.innerWidth >= 640 ? 2 : 1;
+    if (columns !== viewportColumns) return;
     // Reset the old offset when cards are regrouped at a responsive breakpoint.
     rail.scrollTo({ left: 0, behavior: 'instant' });
     setPage(0);
@@ -54,6 +57,7 @@ export function ProductCenterLineCarousel({
     const resize = new ResizeObserver(syncPage);
     resize.observe(rail);
     rail.addEventListener('scroll', syncPage, { passive: true });
+    setReady(true);
     return () => {
       cancelAnimationFrame(frame);
       resize.disconnect();
@@ -61,10 +65,10 @@ export function ProductCenterLineCarousel({
     };
   }, [columns, items.length]);
 
-  const move = (direction: number) => {
+  const goToPage = (requestedPage: number) => {
     const rail = railRef.current;
     if (!rail) return;
-    const target = Math.max(0, Math.min(page + direction, groups.length - 1));
+    const target = Math.max(0, Math.min(requestedPage, groups.length - 1));
     const gap = parseFloat(getComputedStyle(rail).columnGap) || 0;
     rail.scrollTo({
       left: target * (rail.clientWidth + gap),
@@ -73,6 +77,7 @@ export function ProductCenterLineCarousel({
         : 'smooth',
     });
   };
+  const move = (direction: number) => goToPage(page + direction);
   const onKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
     if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') return;
     event.preventDefault();
@@ -100,7 +105,7 @@ export function ProductCenterLineCarousel({
             aria-label={t("查看上一组生产线", "Previous lines")}
             aria-controls="production-line-rail"
             className={styles.productionLineControl}
-            disabled={page === 0}
+            disabled={!ready || page === 0}
             onClick={() => move(-1)}
           >
             <HiChevronLeft aria-hidden="true" />
@@ -110,13 +115,28 @@ export function ProductCenterLineCarousel({
             aria-label={t("查看下一组生产线", "Next lines")}
             aria-controls="production-line-rail"
             className={styles.productionLineControl}
-            disabled={page >= groups.length - 1}
+            disabled={!ready || page >= groups.length - 1}
             onClick={() => move(1)}
           >
             <HiChevronRight aria-hidden="true" />
           </button>
         </div>
       </div>
+      <label className={styles.productionLineDirectory}>
+        <span>{t("快速查看生产线", "Quick line selection")}</span>
+        <select
+          aria-controls="production-line-rail"
+          value={page * columns}
+          disabled={!ready}
+          onChange={(event) => goToPage(Math.floor(Number(event.target.value) / columns))}
+        >
+          {items.map((item, index) => (
+            <option key={item.id} value={index}>
+              {String(index + 1).padStart(2, '0')} {item.name}
+            </option>
+          ))}
+        </select>
+      </label>
       <div
         ref={railRef}
         id="production-line-rail"

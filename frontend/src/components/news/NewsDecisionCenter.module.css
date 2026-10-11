@@ -122,6 +122,15 @@
   border-radius: 8px;
   background: #f3f6fa;
 }
+.filterToggle { display: none; }
+.filterOptions { min-width: 0; }
+.headingCopy { min-width: 0; }
+.resultsSummary {
+  margin: 6px 0 0;
+  color: var(--news-muted);
+  font-size: 13px;
+  line-height: 20px;
+}
 .topicNav {
   display: flex;
   flex-wrap: wrap;
@@ -213,6 +222,7 @@
   font-size: 26px;
   line-height: 36px;
   font-weight: 650;
+  scroll-margin-top: 120px;
 }
 .sortNav {
   display: flex;
@@ -599,6 +609,35 @@
   .filterPanel {
     padding: 12px;
   }
+  .filterToggle {
+    display: flex;
+    width: 100%;
+    min-height: 48px;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: var(--news-title);
+    text-align: left;
+    font: inherit;
+    font-size: 15px;
+    cursor: pointer;
+  }
+  .filterToggle > span { min-width: 0; }
+  .filterSummary {
+    display: block;
+    margin-top: 4px;
+    color: var(--news-muted);
+    font-size: 13px;
+    line-height: 20px;
+    overflow-wrap: anywhere;
+  }
+  .filterChevron, .filterChevronOpen { width: 20px; height: 20px; flex-shrink: 0; }
+  .filterChevronOpen { transform: rotate(180deg); }
+  .filterOptions[data-expanded='false'] { display: none; }
+  .filterOptions[data-expanded='true'] { padding-top: 14px; }
   .topicNav {
     gap: 6px;
     flex-wrap: wrap;
@@ -627,10 +666,15 @@
   .listTitle {
     font-size: 22px;
     line-height: 30px;
+    scroll-margin-top: 96px;
+    overflow-wrap: anywhere;
   }
   .listHeader {
-    gap: 8px;
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 10px;
   }
+  .sortNav { max-width: 100%; flex-wrap: wrap; gap: 6px; }
   .sortLink {
     padding: 0 8px;
     min-height: 40px;
