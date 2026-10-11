@@ -49,7 +49,19 @@ describe('the two owner-approved Chinese procurement pages', () => {
       [...approvedBody.querySelectorAll('h2')].map((_, index) => `procurement-${id}-body-section-${index + 1}`),
     );
     expect([...body.querySelectorAll('section[id]')].map((node) => node.id)).toEqual(anchors);
-    expect(doc.querySelector('time')).toBeNull();
+    if (id === 'equipment') {
+      expect(doc.querySelector('time')?.textContent).toBe('2026-10-10');
+      expect(doc.querySelector('time')?.getAttribute('datetime')).toBe(approvedProcurementPages.equipment.bodyUpdatedAt);
+      expect(doc.querySelector('header')?.textContent).toContain('发布单位：江苏苏能工业炉有限公司');
+      const references = doc.querySelector('section[aria-labelledby="procurement-equipment-body-references"]');
+      expect([...references!.querySelectorAll('a')].map((node) => node.getAttribute('href'))).toEqual([
+        '/zh/products/detail/bell-furnace', '/zh/products/detail/gas-nitriding-furnace',
+      ]);
+      expect(body.contains(references)).toBe(false);
+    } else {
+      expect(doc.querySelector('time')).toBeNull();
+      expect(doc.querySelector('section[aria-labelledby$="-references"]')).toBeNull();
+    }
     expect(body.querySelector('img, form, script, style, h1')).toBeNull();
     expect(doc.body.textContent).not.toMatch(/待审核|未上线|整页新增/);
     const phone = doc.querySelector('a[href^="tel:"]')!;
@@ -77,6 +89,10 @@ describe('the two owner-approved Chinese procurement pages', () => {
       isPartOf: { '@id': 'https://www.jssngyl.cn/#website' },
       about: { '@id': 'https://www.jssngyl.cn/#organization' },
       inLanguage: 'zh-CN',
+      ...(id === 'equipment' ? {
+        dateModified: approvedProcurementPages.equipment.publishedModifiedAt,
+        publisher: { '@id': 'https://www.jssngyl.cn/#organization' },
+      } : {}),
     });
     expect(breadcrumb).toEqual({
       '@context': 'https://schema.org',
@@ -90,7 +106,7 @@ describe('the two owner-approved Chinese procurement pages', () => {
     const parent = doc.querySelector(`nav[aria-label="Breadcrumb"] a[href="${page.parentPath}"]`);
     expect(parent?.textContent).toBe(page.parentLabel);
     expect(webpage).not.toHaveProperty('datePublished');
-    expect(webpage).not.toHaveProperty('dateModified');
+    if (id === 'parts') expect(webpage).not.toHaveProperty('dateModified');
     expect(webpage).not.toHaveProperty('author');
     expect(webpage).not.toHaveProperty('reviewedBy');
   });
