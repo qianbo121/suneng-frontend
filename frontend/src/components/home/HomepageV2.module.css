@@ -446,6 +446,7 @@
 }
 
 .formSection {
+  overflow: visible;
   scroll-margin-top: 92px;
   background: #fff;
   color: #0b1d33;
