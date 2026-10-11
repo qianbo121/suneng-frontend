@@ -324,10 +324,10 @@ function getSessionId(storage: TrackingStorage) {
     const enteringQa = Boolean(current && !expired && requested && !currentQa);
     const rotated = !current || expired || enteringQa || changingInternal;
     if (rotated) {
-      // Split an explicit QA run from preceding ordinary browsing. Source/campaign facts
-      // remain unchanged; testing is a separate property, not a replacement traffic source.
-      const previousSource = enteringQa ? storage.getItem(SESSION_SOURCE_KEY) : null;
-      const previousLanding = enteringQa ? storage.getItem('suneng_landing_page') : null;
+      // Changing QA/internal classification splits a visit without changing its entry facts.
+      const preserveEntry = enteringQa || changingInternal;
+      const previousSource = preserveEntry ? storage.getItem(SESSION_SOURCE_KEY) : null;
+      const previousLanding = preserveEntry ? storage.getItem('suneng_landing_page') : null;
       const next = newAnonymousId();
       storage.setItem(SESSION_ID_KEY, next);
       resetSessionState(storage);

@@ -164,6 +164,34 @@ describe('explicit internal browser registration', () => {
     expect(window.localStorage.getItem(INTERNAL_TRAFFIC_BROWSER_KEY)).toBeNull();
   });
 
+  it.each([true, false])('keeps entry, source and campaign when internal registration becomes %s', (enabled) => {
+    window.location.pathname = '/zh/products/detail/trolley-furnace';
+    window.location.search = '?utm_source=chatgpt&utm_medium=geo&utm_campaign=registration-check';
+    vi.stubGlobal('document', { title: 'Trolley furnace', referrer: 'https://chatgpt.com/' });
+    if (!enabled) expect(setInternalTrafficBrowser(true)).toBe(true);
+    const entry = buildLeadSourceSnapshot();
+    expect(entry.utmCampaign).toBe('registration-check');
+    trackPageView();
+
+    // A full page navigation no longer carries the original URL parameters/referrer.
+    vi.stubGlobal('window', { ...window, location: {
+      pathname: '/zh/contact', search: '', hostname: 'www.jssngyl.cn',
+    } });
+    vi.stubGlobal('document', { title: 'Contact', referrer: 'https://www.jssngyl.cn/zh/products/detail/trolley-furnace' });
+    expect(setInternalTrafficBrowser(enabled)).toBe(true);
+    trackLeadEvent('phone_click');
+    const contact = bodies().find((body) => body.eventType === 'phone_click')!;
+    expect(contact.sessionId).not.toBe(entry.sessionId);
+    expect(contact).toMatchObject({
+      sourceType: entry.sourceType,
+      sourceDetail: entry.sourceDetail,
+      landingPage: entry.landingPage,
+      utmSource: 'chatgpt', utmMedium: 'geo', utmCampaign: 'registration-check',
+      pagePath: '/zh/contact',
+      properties: { internal_traffic: enabled },
+    });
+  });
+
   it('keeps explicit registration across full page navigation, not across browsers', () => {
     expect(setInternalTrafficBrowser(true)).toBe(true);
     trackPageView();
