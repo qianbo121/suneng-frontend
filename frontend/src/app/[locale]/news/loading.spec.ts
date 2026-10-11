@@ -2,9 +2,9 @@ import { jsx } from 'react/jsx-runtime';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { NextIntlClientProvider } from 'next-intl';
 import { describe, expect, it } from 'vitest';
-import NewsDetailLoading from './[slug]/loading';
+import NewsListLoading from './(list)/loading';
 
-describe('article loading feedback', () => {
+describe('news list loading feedback', () => {
   for (const [locale, text] of [
     ['zh', '正在加载技术资料…'],
     ['en', 'Loading resources…'],
@@ -15,7 +15,7 @@ describe('article loading feedback', () => {
           locale,
           messages: {},
           timeZone: 'Asia/Shanghai',
-          children: jsx(NewsDetailLoading, {}),
+          children: jsx(NewsListLoading, {}),
         }),
       );
       expect(html).not.toContain(text);
