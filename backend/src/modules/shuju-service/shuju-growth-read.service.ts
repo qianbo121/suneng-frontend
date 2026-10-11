@@ -137,7 +137,7 @@ const NORMALIZED_SOURCE_TYPE = Prisma.sql`CASE
     CASE WHEN COALESCE(NULLIF("sourceType", ''), '无法识别') = '外部链接' THEN '无法识别'
          ELSE COALESCE(NULLIF("sourceType", ''), '无法识别') END
   WHEN LOWER(COALESCE("sourceDetail", '')) ~ '(^|\\.)jssngyl\\.cn$' THEN '无法识别'
-  WHEN LOWER(COALESCE("sourceDetail", '')) ~ '(^|\\.)(baidu\\.com|bing\\.com|google\\.com|google\\.com\\.hk|sogou\\.com|so\\.com)$' THEN '自然搜索'
+  WHEN LOWER(COALESCE("sourceDetail", '')) ~ '(^|\\.)(baidu\\.com|bing\\.com|google\\.com|google\\.com\\.hk|sogou\\.com|so\\.com|m\\.sm\\.cn)$' THEN '自然搜索'
   WHEN LOWER(COALESCE("sourceDetail", '')) ~ '(^|\\.)(doubao\\.com|kimi\\.com|moonshot\\.cn|yuanbao\\.tencent\\.com|deepseek\\.com|tongyi\\.aliyun\\.com|qianwen\\.com|qwen\\.ai|metaso\\.cn|chatgpt\\.com|openai\\.com|perplexity\\.ai|yiyan\\.baidu\\.com|quark\\.cn)$' THEN 'AI引流'
   WHEN COALESCE(NULLIF("sourceType", ''), '无法识别') = '外部链接'
     AND NULLIF("sourceDetail", '') IS NULL THEN '无法识别'
@@ -152,6 +152,7 @@ const NORMALIZED_SOURCE_DETAIL = Prisma.sql`CASE
   WHEN LOWER(COALESCE("sourceDetail", '')) ~ '(^|\\.)(google\\.com|google\\.com\\.hk)$' THEN 'Google'
   WHEN LOWER(COALESCE("sourceDetail", '')) ~ '(^|\\.)sogou\\.com$' THEN '搜狗'
   WHEN LOWER(COALESCE("sourceDetail", '')) ~ '(^|\\.)so\\.com$' THEN '360搜索'
+  WHEN LOWER(COALESCE("sourceDetail", '')) ~ '(^|\\.)m\\.sm\\.cn$' THEN '神马'
   ELSE NULLIF("sourceDetail", '')
 END`;
 
@@ -179,6 +180,31 @@ function operatingSourceCounts(
     pendingSubmissions: reviewed ? (match?.pendingSubmissions ?? 0) : null,
     unknownSubmissions: reviewed ? (match?.unknownSubmissions ?? 0) : null,
   };
+}
+
+function operatingSourceRows(rows: OperatingSource[] | undefined, legacy: SourceRow[]) {
+  // Operating aggregates are authoritative for the overview and its details.
+  // Legacy rows only supply the older metrics; they must not decide which source
+  // rows exist (missing detail or a real unlinked inquiry must remain visible).
+  if (rows === undefined) return legacy;
+  return rows.map(
+    (row) =>
+      legacy.find(
+        (item) =>
+          (item.sourceType || '无法识别') === row.sourceType &&
+          (item.sourceDetail || null) === row.sourceDetail,
+      ) || {
+        sourceType: row.sourceType,
+        sourceDetail: row.sourceDetail,
+        visitors: 0n,
+        pageViews: 0n,
+        engagedVisitors: 0n,
+        highIntentVisitors: 0n,
+        formStarts: 0n,
+        stepCompleted: 0n,
+        submissions: 0n,
+      },
+  );
 }
 
 function normalizedPageType(value: string | null | undefined) {
@@ -427,10 +453,8 @@ export class ShujuGrowthReadService {
           ON v.normalized_source_type = s.normalized_source_type
           AND v.normalized_source_detail IS NOT DISTINCT FROM s.normalized_source_detail
           AND v.identity = s.identity
-        WHERE s.normalized_source_detail IS NOT NULL
         GROUP BY s.normalized_source_type, s.normalized_source_detail
         ORDER BY "pageViews" DESC, visitors DESC
-        LIMIT 200
       `),
       this.prisma.$queryRaw<LandingRow[]>(Prisma.sql`
         SELECT
@@ -771,7 +795,7 @@ export class ShujuGrowthReadService {
         events: count(row.eventCount),
         visitors: count(row.visitorCount),
       })),
-      sources: sources.map((row) => ({
+      sources: operatingSourceRows(operatingSources, sources).map((row) => ({
         ...operatingSourceCounts(operatingSources, row, query.inquiryReview !== undefined),
         sourceType: row.sourceType || '无法识别',
         sourceDetail: row.sourceDetail || null,
@@ -783,7 +807,7 @@ export class ShujuGrowthReadService {
         stepCompleted: count(row.stepCompleted),
         submissions: count(row.submissions),
       })),
-      sourceDetails: sourceDetails.map((row) => ({
+      sourceDetails: operatingSourceRows(operatingSourceDetails, sourceDetails).map((row) => ({
         ...operatingSourceCounts(operatingSourceDetails, row, query.inquiryReview !== undefined),
         sourceType: row.sourceType || '无法识别',
         sourceDetail: row.sourceDetail || null,

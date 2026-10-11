@@ -11,7 +11,8 @@ import { PrismaService } from '@/prisma/prisma.service';
 
 // Explicit opt-in; only a connection-local table receives synthetic traffic.
 const databaseUrl = process.env.CONTENT_GROWTH_TEST_DATABASE_URL;
-const integration = databaseUrl ? describe : describe.skip;
+const pgliteModule = process.env.CONTENT_GROWTH_TEST_PGLITE_MODULE;
+const integration = databaseUrl || pgliteModule ? describe : describe.skip;
 
 integration('traffic exclusions against isolated PostgreSQL', () => {
   const { Client } = jest.requireActual('pg');
@@ -28,11 +29,23 @@ integration('traffic exclusions against isolated PostgreSQL', () => {
   const alternateUa = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 14_0) Safari/17.7';
 
   beforeAll(async () => {
-    if (!['localhost', '127.0.0.1', '[::1]'].includes(new URL(databaseUrl!).hostname)) {
-      throw new Error('Traffic integration tests require a loopback database');
+    if (pgliteModule) {
+      // An in-memory PostgreSQL runtime has no production connection or persistent tables.
+      const { PGlite } = jest.requireActual(pgliteModule);
+      // Prisma returns the UTC-stored timestamp as a UTC Date; PGlite's default parser
+      // otherwise treats timestamp-without-zone as the developer machine's local time.
+      const db = new PGlite({ parsers: {
+        1114: (value: string) => new Date(value.replace(' ', 'T') + 'Z'),
+      } });
+      await db.waitReady;
+      client = { query: db.query.bind(db), end: db.close.bind(db) };
+    } else {
+      if (!['localhost', '127.0.0.1', '[::1]'].includes(new URL(databaseUrl!).hostname)) {
+        throw new Error('Traffic integration tests require a loopback database');
+      }
+      client = new Client({ connectionString: databaseUrl });
+      await client.connect();
     }
-    client = new Client({ connectionString: databaseUrl });
-    await client.connect();
     const { readFileSync } = jest.requireActual('node:fs');
     const { join } = jest.requireActual('node:path');
     const schema = readFileSync(join(__dirname, '../../..', 'prisma/schema.prisma'), 'utf8');
@@ -426,5 +439,35 @@ integration('traffic exclusions against isolated PostgreSQL', () => {
       ['2026-10-08', 1],
     ]);
     expect(result.content.entryVisits).toBe(2);
+  });
+
+  it('excludes explicit internal reading without dropping contact facts, real inquiries or raw audit rows', async () => {
+    await visit('internal-browsing', {}, publicPrefixes.slice(0, 1));
+    // The one explicit marker covers the same visit across dates/languages, never other visits.
+    await event('module_view', 'internal-browsing', start.getTime() - 1000, {
+      pagePath: '/en/about', properties: { internal_traffic: true },
+    });
+    await event('phone_click', 'internal-browsing', morning + 25000);
+    await event('form_submit', 'internal-browsing', morning + 26000, {
+      userAgent: null, submissionId: '00000000-0000-4000-8000-000000000004',
+    });
+    await client.query('INSERT INTO pg_temp."CustomRequirement" (id,"submissionId") VALUES (24,$1)',
+      ['00000000-0000-4000-8000-000000000004']);
+    await visit('ordinary-browser', { properties: { internal_traffic: false } }, publicPrefixes.slice(0, 1), morning + 60000);
+    await visit('console-referral', { previousPage: 'https://console.volcengine.com/' }, publicPrefixes.slice(0, 1), morning + 120000);
+    await event('page_view', null, morning + 1000, { visitorId: 'no-session-internal', properties: { internal_traffic: true } });
+    const before = (await client.query('SELECT COUNT(*)::int AS count FROM pg_temp."WebsiteLeadEvent"')).rows[0].count;
+    const result = await service.overview({ ...day, inquiryReview: {
+      version: 1, validIds: [24], excludedIds: [], pendingIds: [],
+    } });
+    expect(result.eventCounts.page_view.events).toBe(2);
+    expect(result.eventCounts.dwell_20s.visitors).toBe(2);
+    expect(result.eventCounts.phone_click.events).toBe(1);
+    expect(result.operating.contactVisitors).toBe(1);
+    expect(result.eventCounts.form_submit.events).toBe(1);
+    expect(result.operating.inquiries).toEqual({ raw: 1, valid: 1, excluded: 0, pending: 0, unknown: 0 });
+    expect(result.content.entryVisits).toBe(2);
+    expect((await client.query('SELECT COUNT(*)::int AS count FROM pg_temp."WebsiteLeadEvent"')).rows[0].count).toBe(before);
+    expect(await readTrafficCoverageStart(prisma, ['page_view'])).toEqual(new Date(morning + 60000));
   });
 });
