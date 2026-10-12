@@ -179,7 +179,7 @@ export function SelectionGuidePage({ heroImage, locale = 'zh' }: { heroImage: st
             <p>{t("先看检查思路与适用条件，再沟通具体处理方式。")}</p>
           </header>
           <div className={styles.topics}>
-            {topics.map(([title, description, href], index) => (
+            {topics.map(([title, description, href, query]) => (
               <article className={styles.topic} key={href}>
                 <span className={styles.documentIcon}>
                   <HiOutlineDocumentText aria-hidden="true" />
@@ -189,7 +189,7 @@ export function SelectionGuidePage({ heroImage, locale = 'zh' }: { heroImage: st
                   <p>{description}</p>
                 </div>
                 <Link
-                  href={isWithdrawnTechnicalPath(href) ? `/${locale}/news?q=${encodeURIComponent(sourceTopics[index][3])}` : href}
+                  href={isWithdrawnTechnicalPath(href) ? `/${locale}/news?q=${encodeURIComponent(query)}` : href}
                   className={styles.topicButton}
                   aria-label={`${t('查看相关资料')}: ${title}`}
                 >

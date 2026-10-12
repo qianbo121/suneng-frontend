@@ -7,19 +7,26 @@ import { applyEnglishNewsCopy } from './english-news';
 import { applyNewsReferenceCleanup } from './news-reference-cleanup';
 import { getNewsDetail, getNewsList } from './api/news';
 import { safeApiGet } from './api/client';
+import currentSnapshot from '../../tests/fixtures/news-seo-repair-current-20261012.json';
+import { applyReviewedNewsCopy } from './news-reviewed-copy';
 
 vi.mock('./api/client', () => ({ safeApiGet: vi.fn() }));
 
 const ids = [20, 22, 23, 24, 25, 26, 27, 29, 30];
 const targetUrl = 'https://www.jssngyl.cn/zh/case/anonymous-tsingshan-1250-renovation';
 const danglingGuidance = '历史方案如何划分改造范围，以及能源测算有哪些条件，可参考某不锈钢企业的连续退火/退洗线节能改造案例（见文末）。';
+const reviewHandoff = '历史方案只能说明拟定改造范围与测算条件，不代表实际改造或验收结果。如需核验相关资料，请通过<a href="/zh/service/furnace-renovation-overhaul">维修与改造服务提交设备现状和工况</a>，联系确认是否有可披露内容及其核验范围；具体资料能否提供需另行确认。';
+const caseHandoff = '如需核验相关项目资料，可通过<a href="/zh/service/furnace-renovation-overhaul">维修与改造服务联系确认可披露内容和核验范围</a>；具体资料能否提供需另行确认。';
 const expectedBlock = (id: number) => id === 20
   ? `<p>完整案例可参考：</p><p>${targetUrl}</p>`
   : `<p>某不锈钢企业 1250mm 三线节能改造案例：${targetUrl}</p>`;
 
 function expectedChineseContent(id: number, contentZh: string): string {
   const cleanedReference = contentZh.replace(expectedBlock(id), '');
-  return id === 26 ? cleanedReference.replace(danglingGuidance, '') : cleanedReference;
+  if (id === 26) return cleanedReference.replace(danglingGuidance, '');
+  if ([23, 24].includes(id)) return cleanedReference.replace(danglingGuidance, reviewHandoff);
+  if ([29, 30].includes(id)) return cleanedReference.replace('具体项目情况可参考案例页。', caseHandoff);
+  return cleanedReference;
 }
 
 function reviewedItem(id: number): NewsApiItem {
@@ -87,7 +94,7 @@ describe('approved Chinese news reference cleanup', () => {
       const item = { ...guidanceOnly, ...change };
       expect(applyNewsReferenceCleanup(item)).toBe(item);
     }
-    const otherApprovedArticle = { ...reviewedItem(23), contentZh: guidanceOnly.contentZh };
+    const otherApprovedArticle = { ...reviewedItem(25), contentZh: guidanceOnly.contentZh };
     expect(applyNewsReferenceCleanup(otherApprovedArticle)).toBe(otherApprovedArticle);
   });
 
@@ -145,5 +152,45 @@ describe('approved Chinese news reference cleanup', () => {
       expect(list.data?.items[index]).toEqual(detail.data);
     }
     expect(original20.contentZh).toContain(targetUrl);
+  });
+});
+
+describe('current Chinese answer and disclosure repairs', () => {
+  it.each([23, 24, 29, 30, 37])('replaces article %i public-case promise with a real conditional review entrance', async (id) => {
+    const source = currentSnapshot.items.find(item => item.id === id) as NewsApiItem;
+    const reviewed = await applyReviewedNewsCopy(source);
+    const result = applyNewsReferenceCleanup(reviewed);
+    expect(result.contentZh).not.toContain('见文末');
+    expect(result.contentZh).not.toContain('具体项目情况可参考案例页。');
+    expect(result.contentZh).not.toContain('官网公开了某不锈钢加工企业');
+    expect(result.contentZh).toContain('href="/zh/service/furnace-renovation-overhaul"');
+    expect(result.contentZh).toContain('具体资料能否提供需另行确认');
+    for (const key of ['id', 'slug', 'publishDate', 'coverImage', 'titleZh', 'contentEn'] as const) {
+      expect(result[key]).toBe(reviewed[key]);
+    }
+    expect(applyNewsReferenceCleanup(result)).toBe(result);
+  });
+
+  it('answers the current resistance-element title and preserves all calculations after the first paragraph', async () => {
+    const source = currentSnapshot.items.find(item => item.id === 103) as NewsApiItem;
+    const reviewed = await applyReviewedNewsCopy(source);
+    const result = applyNewsReferenceCleanup(reviewed);
+    expect(result.contentZh).toMatch(/^<p>有关系，但不能只凭总功率判断电阻丝寿命。/);
+    expect(result.summaryZh).toMatch(/^有关系，但不能只凭总功率判断电阻丝寿命。/);
+    expect(result.contentZh!.slice(result.contentZh!.indexOf('</p>') + 4))
+      .toBe(reviewed.contentZh!.slice(reviewed.contentZh!.indexOf('</p>') + 4));
+    expect(result.titleZh).toBe(source.titleZh);
+    expect(result.publishDate).toBe(source.publishDate);
+    expect(applyNewsReferenceCleanup(result)).toBe(result);
+  });
+
+  it('preserves later editorial answers and refuses a reused or nonpublic identity', () => {
+    const source = currentSnapshot.items.find(item => item.id === 103) as NewsApiItem;
+    const retitledContent = { ...source, contentZh: source.contentZh!.replace('不一定。', '本文已由工程人员重新回答。') };
+    expect(applyNewsReferenceCleanup(retitledContent)).toBe(retitledContent);
+    for (const change of [{ id: 99999 }, { slug: 'new-purpose' }, { status: 'offline' as const }, { isPublished: false }]) {
+      const changed = { ...source, ...change };
+      expect(applyNewsReferenceCleanup(changed)).toBe(changed);
+    }
   });
 });

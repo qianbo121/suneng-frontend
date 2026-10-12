@@ -103,7 +103,7 @@ export default function PartnerMap({
   initialProvince = null,
   idPrefix,
   headingLevel = 1,
-  title = '部分合作客户展示',
+  title = '部分客户与合作单位展示',
   locale = 'zh',
 }: PartnerMapProps) {
   const t = (text: string) => partnerText(text, locale);
@@ -334,7 +334,7 @@ export default function PartnerMap({
           <Heading className="suneng-map-title" id={`${uid}-title`}>
             {t(title)}
           </Heading>
-          <p className="suneng-map-description">{t("以下展示部分历年合作客户，点击省份查看。")}</p>
+          <p className="suneng-map-description">{t("以下展示部分历年客户与合作单位，点击省份查看。")}</p>
         </div>
         <div className="suneng-map-search-wrap">
           <label className="suneng-map-search" htmlFor={`${uid}-search`}>
@@ -556,7 +556,7 @@ export default function PartnerMap({
           {t("南海诸岛")}
         </span>
 
-        <p className="suneng-map-legend">{t("省份数字为本页展示客户数量")}</p>
+        <p className="suneng-map-legend">{t("省份数字为本页展示单位数量")}</p>
         {!!unknownPartners.length && (
           <details className="suneng-map-disclosure" open={selected === UNKNOWN}>
             <summary

@@ -455,6 +455,14 @@
             {
               "label": "本线询价参数清单",
               "href": "/downloads/heat-treatment-lines/roller-mesh-belt-line.txt"
+            },
+            {
+              "label": "网带铺料、带速与理论产量核算：需校核本线工艺时间",
+              "href": "/zh/news/shuju-news-23"
+            },
+            {
+              "label": "网带炉报价前的九项工况与供货边界",
+              "href": "/zh/news/shuju-news-22"
             }
           ]
         }

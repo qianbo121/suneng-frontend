@@ -3,12 +3,16 @@ import type { NewsListCardItem } from '@/types/news';
 import {
   buildNewsDecisionHref,
   filterAndSortNewsDecisionItems,
+  getNewsDecisionTopic,
   getNewsDecisionDisplayMeta,
   getNewsFurnaceFilters,
   isFeaturedNewsPage,
 } from './news-decision-center';
 import { applyNewsListCopy, cleanNewsListSummary } from './news-list-copy';
 import { toNewsListLiteCards } from './news-list-client';
+import currentSnapshot from '../../tests/fixtures/news-seo-repair-current-20261012.json';
+import { applyReviewedNewsCopy } from './news-reviewed-copy';
+import type { NewsApiItem } from '@/types/news';
 
 function article(
   id: number,
@@ -39,6 +43,35 @@ const reviewedFurnaceArticles = [
   [99, 'bolt-mesh-belt-quench-temper-capability', '8.8级和10.9级螺栓买网带调质线，怎么判断厂家有没有同类能力？', 'mesh-belt'],
   [115, 'titanium-alloy-thick-plate-roller-hearth-furnace-selection', '钛合金厚板加热炉怎么选？先把板材组合排进辊道炉', 'roller-hearth'],
 ] as const;
+
+describe('reviewed main questions from current public content', () => {
+  it.each([
+    [127, 'procurement'], [125, 'procurement'], [107, 'procurement'], [66, 'selection'],
+  ] as const)('assigns article %i by its main question and keeps existing furnace tags', async (id, topic) => {
+    const source = currentSnapshot.items.find(item => item.id === id) as NewsApiItem;
+    const reviewed = await applyReviewedNewsCopy(source);
+    const item = applyNewsListCopy({
+      ...article(source.id, 1, source.publishDate, reviewed.titleZh),
+      slug: source.slug,
+      updatedAt: reviewed.contentUpdatedAt || reviewed.publishDate,
+      summary: { zh: reviewed.summaryZh || '', en: '' },
+    });
+    const originalFurnaces = getNewsFurnaceFilters(item);
+    expect(getNewsDecisionTopic(item)).toBe(topic);
+    expect(filterAndSortNewsDecisionItems([item], { topic })).toEqual([item]);
+    const [lite] = toNewsListLiteCards([item], 'zh');
+    expect(getNewsDecisionTopic(lite)).toBe(topic);
+    expect(getNewsFurnaceFilters(lite)).toEqual(originalFurnaces);
+    expect(lite.slug).toBe(source.slug);
+    expect(lite.date).toBe(source.publishDate);
+  });
+
+  it('does not override a reused identity after a later title change', () => {
+    const item = { ...article(127, 1, '', '退火炉温度均匀性怎么判断？'), slug: 'heat-treatment-line-integrator-or-furnace-maker' };
+    expect(getNewsDecisionTopic(item)).toBe('quality');
+    expect(getNewsDecisionTopic({ ...item, listTopic: 'engineering' })).toBe('engineering');
+  });
+});
 
 describe('reviewed furnace classification repairs', () => {
   it.each(reviewedFurnaceArticles)('includes reviewed article %i without changing its presentation', (id, slug, title, furnace) => {

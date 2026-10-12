@@ -24,6 +24,34 @@ export const NEWS_FURNACE_FILTERS = [
 export type NewsDecisionTopicId = (typeof NEWS_DECISION_TOPICS)[number]['id'];
 export type NewsFurnaceFilterId = (typeof NEWS_FURNACE_FILTERS)[number]['id'];
 
+// Reviewed main questions; retain process and furnace names as auxiliary tags.
+// All identity fields must match so later editorial changes use the normal rules.
+const reviewedMainTopics: Record<
+  number,
+  { slug: string; title: string; topic: NewsDecisionTopicId }
+> = {
+  127: {
+    slug: 'heat-treatment-line-integrator-or-furnace-maker',
+    title: '买热处理生产线，找集成商还是直接找炉厂？',
+    topic: 'procurement',
+  },
+  125: {
+    slug: 'custom-heat-treatment-furnace-chamber-process',
+    title: '非标热处理炉定制，炉膛和工艺有特殊要求找谁咨询？',
+    topic: 'procurement',
+  },
+  107: {
+    slug: 'cold-coiled-compression-spring-stress-relief-furnace-manufacturers',
+    title: '我们冷卷压簧要去应力回火，准备买网带回火炉，能推荐几家厂家吗？',
+    topic: 'procurement',
+  },
+  66: {
+    slug: 'shuju-news-21',
+    title: '江苏苏能工业炉有限公司｜公司介绍',
+    topic: 'selection',
+  },
+};
+
 export const NEWS_CENTER_FAQS = [
   {
     question: '工业炉报价前需要准备哪些参数？',
@@ -79,6 +107,8 @@ export function normalizeNewsFurnaceFilter(value?: string): NewsFurnaceFilterId 
 }
 
 export function getNewsDecisionTopic(item: NewsListCardItem): NewsDecisionTopicId {
+  const reviewed = reviewedMainTopics[item.id];
+  if (reviewed?.slug === item.slug && reviewed.title === item.title.zh) return reviewed.topic;
   if (item.listTopic) return item.listTopic;
 
   // A summary can mention purchasing or maintenance as context. Prefer the
