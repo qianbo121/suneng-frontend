@@ -13,6 +13,7 @@ import { ProductQuoteScrollButton } from '@/components/products/ProductLeadForm'
 import { getFaqJsonLd, getProductDetailJsonLd } from '@/lib/seo/jsonld';
 
 import { FurnaceCutawayDiagram } from './FurnaceCutawayDiagram';
+import { ProductHeroDetails } from './ProductHeroDetails';
 import {
   PitFurnaceFaq,
   PitFurnaceGallery,
@@ -132,6 +133,7 @@ export function PitFurnaceDetailPage({ locale = 'zh' }: { locale?: Locale }) {
             <p className={styles.heroDescription}>
               {t("面向长轴、辊轴、拉杆、套筒及吊篮装料工件，先根据工件长径比、装炉包络、热处理工艺、起吊路径和厂房条件判断井式炉是否适用，再确定有效加热区与结构方案。")}</p>
 
+            <ProductHeroDetails label={locale === 'en' ? 'Technical conditions and tags' : "查看选型条件与方案标签"}>
             <div className={styles.tagList} aria-label={t("井式炉方案标签")}>
               {[t("长轴 / 杆件"), t("吊挂或料筐装料"), t("分区控温"), t("非标方案需工况校核")].map((tag) => (
                 <span key={tag}>{tag}</span>
@@ -157,7 +159,9 @@ export function PitFurnaceDetailPage({ locale = 'zh' }: { locale?: Locale }) {
               </div>
             </div>
 
-            <div className={styles.heroActions}>
+            </ProductHeroDetails>
+
+            <div className={`${styles.heroActions} ${styles.heroActionsWithMobileAction}`}>
               <ProductQuoteScrollButton
                 locale={locale}
                 label={t("提交工况，获取选型建议")}
