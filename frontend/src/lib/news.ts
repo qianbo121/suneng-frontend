@@ -1,5 +1,8 @@
 import { cache } from 'react';
-import { localizeEnglishNewsPresentation } from './english-news-presentation';
+import {
+  getReviewedEnglishNewsCover,
+  localizeEnglishNewsPresentation,
+} from './english-news-presentation';
 import { applyReviewedNewsSourcePresentation } from './news-source-presentation';
 import type { Metadata } from 'next';
 
@@ -36,11 +39,15 @@ function normalizeNewsImageSource(src?: string | null) {
 }
 
 export function resolveNewsImage(
-  item?: Pick<NewsApiItem, 'coverImage' | 'ogImage' | 'englishCoverImage'> | null,
+  item?:
+    | (Pick<NewsApiItem, 'coverImage' | 'ogImage' | 'englishCoverImage'> & Partial<Pick<NewsApiItem, 'slug'>>)
+    | null,
   options?: { preferFallback?: boolean; locale?: Locale },
 ) {
   const image = normalizeNewsImageSource(
-    (options?.locale === 'en' && item?.englishCoverImage) || item?.coverImage || item?.ogImage,
+    (options?.locale === 'en' && (item?.englishCoverImage || getReviewedEnglishNewsCover(item?.slug))) ||
+      item?.coverImage ||
+      item?.ogImage,
   );
 
   if (options?.preferFallback || !image || isPlaceholderImage(image)) {

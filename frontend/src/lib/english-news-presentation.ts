@@ -18,6 +18,13 @@ const diagrams: Record<string, { original: string; replacement: string; obsolete
   },
 };
 
+export function getReviewedEnglishNewsCover(slug?: string | null): string | undefined {
+  if (slug === 'atmosphere-furnace-pressure-fluctuation-process-or-equipment') {
+    return diagrams[slug].replacement.replace(/\.svg$/, '.png');
+  }
+  return undefined;
+}
+
 export function localizeEnglishNewsPresentation(html: string, slug?: string | null): string {
   let result = html.replace(
     /(<a\b[^>]*\bhref=["'])(?:https?:\/\/(?:www\.)?jssngyl\.cn)?\/zh\/service\/furnace-renovation-overhaul\/?(["'][^>]*>)([\s\S]*?)(<\/a>)/gi,
