@@ -22,8 +22,28 @@ describe('localized news cover', () => {
     expect(item.coverImage).toBe('/uploads/original.webp');
   });
 
-  it('preserves the shared original when no English cover is present', () => {
-    expect(resolveNewsImage({ coverImage: '/uploads/original.webp' }, { locale: 'en' })).toBe(
+  it('uses the reviewed English diagram for the pressure article without changing its Chinese cover', () => {
+    const item = {
+      slug: 'atmosphere-furnace-pressure-fluctuation-process-or-equipment',
+      coverImage: '/uploads/original.webp',
+    };
+    expect(resolveNewsImage(item, { locale: 'en' })).toBe(
+      '/images/news/english/atmosphere-pressure-review.png',
+    );
+    expect(resolveNewsImage(item, { locale: 'zh' })).toBe('/uploads/original.webp');
+    expect(item.coverImage).toBe('/uploads/original.webp');
+  });
+
+  it('keeps an explicit English cover ahead of the reviewed fallback', () => {
+    expect(resolveNewsImage({
+      slug: 'atmosphere-furnace-pressure-fluctuation-process-or-equipment',
+      coverImage: '/uploads/original.webp',
+      englishCoverImage: '/images/news/english-custom.webp',
+    }, { locale: 'en' })).toBe('/images/news/english-custom.webp');
+  });
+
+  it('preserves the shared original for an unrelated article without an English cover', () => {
+    expect(resolveNewsImage({ slug: 'unreviewed-article', coverImage: '/uploads/original.webp' }, { locale: 'en' })).toBe(
       '/uploads/original.webp',
     );
   });
