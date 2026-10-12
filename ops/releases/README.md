@@ -394,6 +394,23 @@ python3 ops/releases/frontend_release.py \
 
 此规则不能保证所有统计修复都省略截图：涉及采集组件 `.tsx` 时，仍按页面影响处理。既有截图标准、基准和页面交互不变。
 
+
+## 基础浏览器采集与恢复材料读取
+
+`release_capture.py` 从维护中的 `browser/` 准备六份采集程序，逐字节绑定本批四份检查资料。程序不再使用旧批次日期命名浏览器会话，检查项、真实点击、禁止询盘提交、失败保留及截图要求不变。只准备程序和资料不代表验收通过。
+
+每批 `capture-inputs.json` 以 `browserContract.json`、`browser-assertion-spec.json`、`acceptance-plan.json`、`browser-identity-and-evidence-contract.json` 为键，每项提供已经核对的绝对 `path` 和 `sha256`。其中基础清单保持20项，须与本批计划的内嵌清单及摘要一致。已有同名文件只有完全相同才复用，不覆盖历史失败或既有证据。
+
+```sh
+python3 ops/releases/release_capture.py --root /private/release \
+  --plan-sha256 ACTUAL_PLAN_SHA256 --inputs /private/release/capture-inputs.json \
+  --inputs-sha256 ACTUAL_INPUTS_SHA256
+```
+
+采集器继续使用本批计划、实际运行身份和明确阶段。基础采集的会话名为 `release-<阶段>-base-<pc或mobile>-<本批提交前12位>`；交互采集使用独立的 `interactive` 会话。采集后按原报告组装器和 `release_entry.py` 检查实际材料，不降低20项基础页面及8项正式交互的要求。
+
+`verify_recovery_materials.py --input 本批恢复输入 --input-sha256 实际摘要 --tools-root 已核对工具目录` 只读核对本批现用/上一版原包、正式回执链、六个保护镜像及全部服务和配置。版本、归档路径和工具摘要来自外部绑定的本批输入；任何缺失或变化都失败。沿用既有报告字段以保持入口兼容，并额外记录实际检查工具数量。此步骤不恢复数据库、不导入镜像、不重启服务、不删除资料。恢复原包保存在已确认的独立归档主机时，本批输入可将对应 `serverArchivePath` 明确设为空，并提供有外部摘要绑定的 `localFormalReportPath`。该报告必须是切换之后由已核对的 `archive_identity.py` 完整读取原包和所有镜像层的真实观察；服务器另外核对实际保护镜像、来源和所有层。报告分别注明原包读取位置，不能把独立主机读取说成服务器读取，也不为满足工具而把旧原包重复传回服务器。
+
 ## 可选的程序包分段复用
 
 两个候选准备流程默认仍生成原单压缩归档，兼容现有正式证明器。只有明确设置 `segmented_archive: true` 的新批次才使用分段格式，候选清单附真实片段索引和格式标记。官方压缩包仍只有候选清单和完整镜像归档两个成员；完整归档的大小、摘要和镜像来源契约继续保留。
