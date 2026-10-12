@@ -58,6 +58,7 @@ vi.mock('@/lib/api/news', () => ({
 }));
 
 import buildSitemap from '@/app/sitemap';
+import { approvedProcurementPages } from '@/lib/approved-procurement-pages';
 
 import { FURNACE_RENOVATION_OVERHAUL_SEO, PRODUCT_DETAIL_SEO } from '@/lib/seo/page-data';
 import { APPROVED_GUIDE_PATHS, APPROVED_PROCUREMENT_PATHS, isWithdrawnTechnicalPath } from '@/lib/publication-scope';
@@ -328,7 +329,11 @@ it('includes both approved Chinese procurement pages without English alternates 
       'zh-CN': 'https://www.jssngyl.cn' + pathname,
       'x-default': 'https://www.jssngyl.cn' + pathname,
     });
-    expect(matching[0].lastModified).toBeUndefined();
+    expect(matching[0].lastModified).toEqual(
+      pathname === approvedProcurementPages.equipment.path
+        ? new Date(approvedProcurementPages.equipment.publishedModifiedAt)
+        : undefined,
+    );
     expect(entries.some((entry) => new URL(entry.url).pathname === pathname.replace('/zh/', '/en/'))).toBe(false);
   }
 });

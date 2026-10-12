@@ -45,4 +45,22 @@ describe('traffic source classification', () => {
       sourceDetail: '百度',
     });
   });
+
+  it.each(['https://so.m.sm.cn/s?q=test', 'https://m.sm.cn/s?q=test'])(
+    'recognizes mobile Shenma search without changing AI attribution: %s',
+    (referrer) => {
+      expect(classifyTrafficSource(referrer)).toEqual({ sourceType: '自然搜索', sourceDetail: '神马' });
+      expect(classifyTrafficSource(referrer, 'chatgpt')).toEqual({ sourceType: 'AI引流', sourceDetail: 'ChatGPT' });
+    },
+  );
+
+  it.each(['https://yandex.ru/search/?text=test', 'https://yandex.com/yandsearch?text=test'])(
+    'requires a Yandex search path: %s',
+    (referrer) => expect(classifyTrafficSource(referrer)).toEqual({ sourceType: '自然搜索', sourceDetail: 'Yandex' }),
+  );
+
+  it.each(['https://yandex.ru/', 'https://mail.yandex.ru/inbox', 'https://yandex.ru/maps/', 'https://so.m.sm.cn.example.org/s'])(
+    'does not infer search from unrelated services or spoofed hostnames: %s',
+    (referrer) => expect(classifyTrafficSource(referrer).sourceType).toBe('外部链接'),
+  );
 });

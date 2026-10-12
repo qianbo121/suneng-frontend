@@ -32,7 +32,8 @@ function sessionProfiles(prefix: string) {
         BOOL_OR("eventType" = 'form_submit' AND "submissionId" IS NOT NULL) AS verified_form,
         BOOL_OR("eventType" = 'automation_signal'
           OR COALESCE(properties->'automationDetected' = 'true'::jsonb, FALSE)) AS marked_automation,
-        BOOL_OR(COALESCE(properties->'manual_qa' = 'true'::jsonb, FALSE)) AS manual_qa
+        BOOL_OR(COALESCE(properties->'manual_qa' = 'true'::jsonb, FALSE)) AS manual_qa,
+        BOOL_OR(COALESCE(properties->'internal_traffic' = 'true'::jsonb, FALSE)) AS internal_traffic
       FROM ${prefix}_events GROUP BY "sessionId"
     ), ${prefix}_parsed_ips AS MATERIALIZED (
       SELECT e."sessionId" AS session, e."createdAt",
@@ -70,6 +71,7 @@ function eligibleProfile(alias: string) {
   return Prisma.sql`(${Prisma.raw(`${alias}.first_page IS NOT NULL AND ${alias}.visitor IS NOT NULL AND ${alias}.has_dwell20
     AND ${alias}.stable_ua AND NOT ${alias}.interactive AND NOT ${alias}.verified_form
     AND NOT ${alias}.marked_automation AND NOT ${alias}.manual_qa
+    AND NOT ${alias}.internal_traffic
     AND NOT ${alias}.unknown_ip`)} AND ${column(alias, 'ua')} !~* ${BOT_PATTERN})`;
 }
 
@@ -141,6 +143,33 @@ type CoverageEvent = {
   properties: Prisma.JsonValue;
 };
 
+// Internal browsing affects acquisition/reading counts only. Contact actions and genuine
+// server submissions remain recorded facts; this does not silently re-review any inquiry.
+const INTERNAL_VISIT_EVENTS = [
+  'page_view',
+  'engaged_session',
+  'dwell_5s',
+  'dwell_20s',
+  'dwell_60s',
+  'dwell_180s',
+  'human_signal',
+  'effective_interaction',
+] as const;
+
+function excludedInternalTraffic(alias: string) {
+  const event = column(alias, 'eventType');
+  const properties = column(alias, 'properties');
+  const session = column(alias, 'sessionId');
+  return Prisma.sql`(${event} = ANY(${[...INTERNAL_VISIT_EVENTS]}::text[]) AND (
+    COALESCE(${properties}->'internal_traffic' = 'true'::jsonb, FALSE)
+    OR (NULLIF(BTRIM(${session}), '') IS NOT NULL AND EXISTS (
+      SELECT 1 FROM "WebsiteLeadEvent" internal_marker
+      WHERE internal_marker."sessionId" = ${session}
+        AND COALESCE(internal_marker.properties->'internal_traffic' = 'true'::jsonb, FALSE)
+    ))
+  ))`;
+}
+
 /** Find the first retained record in batches, sharing the exact session classifier. */
 export async function readTrafficCoverageStart(
   prisma: PrismaService,
@@ -155,6 +184,7 @@ export async function readTrafficCoverageStart(
       FROM "WebsiteLeadEvent"
       WHERE "eventType" = ANY(${eventTypes}::text[])
         AND ${indexedBot ? Prisma.sql`NOT "isBot"` : Prisma.sql`("userAgent" IS NULL OR "userAgent" !~* ${BOT_PATTERN})`}
+        AND NOT ${excludedInternalTraffic('WebsiteLeadEvent')}
         ${cursor ? Prisma.sql`AND ("createdAt", id) > (${cursor.createdAt}, ${cursor.id})` : Prisma.empty}
       ORDER BY "createdAt", id LIMIT 128
     `);
@@ -203,7 +233,7 @@ export function excludedTraffic(alias: string, sessions: readonly string[], inde
   const bot = indexedBot
     ? column(alias, 'isBot')
     : Prisma.sql`COALESCE(${ua} ~* ${BOT_PATTERN}, FALSE)`;
-  return Prisma.sql`(${bot} OR (
+  return Prisma.sql`(${bot} OR ${excludedInternalTraffic(alias)} OR (
     NOT (${event} = 'form_submit' AND ${submission} IS NOT NULL)
     AND (${hasAutomatedSession(alias, sessions)}
       OR ${event} = 'automation_signal'

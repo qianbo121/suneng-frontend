@@ -1,4 +1,5 @@
 import { HiPhone } from 'react-icons/hi2';
+import Link from 'next/link';
 import { JsonLd } from '@/components/JsonLd';
 import { Breadcrumb } from '@/components/layout/Breadcrumb';
 import { PhoneContactLink } from '@/components/lead/PhoneContactLink';
@@ -7,18 +8,30 @@ import { NewsArticleContent } from '@/components/news/NewsArticleContent';
 import { NewsArticleToc } from '@/components/news/NewsArticleToc';
 import { approvedProcurementPages, type ApprovedProcurementPageId } from '@/lib/approved-procurement-pages';
 import { getBreadcrumbJsonLd, getWebPageJsonLd } from '@/lib/seo/jsonld';
+import { SITE_URL } from '@/lib/seo/config';
 import styles from '@/app/[locale]/news/[slug]/NewsDetailPage.module.css';
+import procurementStyles from './ApprovedProcurementPage.module.css';
 
 export function ApprovedProcurementPage({ id }: { id: ApprovedProcurementPageId }) {
   const page = approvedProcurementPages[id];
+  const details = id === 'equipment' ? approvedProcurementPages.equipment : undefined;
+  const bodyUpdatedDate = details
+    ? new Intl.DateTimeFormat('sv-SE', {
+      timeZone: 'Asia/Shanghai', year: 'numeric', month: '2-digit', day: '2-digit',
+    }).format(new Date(details.bodyUpdatedAt))
+    : undefined;
   const contentId = `procurement-${id}-body`;
   const pageJsonLd = [
-    getWebPageJsonLd({
-      path: page.path,
-      name: page.heading,
-      description: page.description,
-      locale: 'zh',
-    }),
+    {
+      ...getWebPageJsonLd({
+        path: page.path,
+        name: page.heading,
+        description: page.description,
+        locale: 'zh',
+        dateModified: details?.publishedModifiedAt,
+      }),
+      ...(details ? { publisher: { '@id': `${SITE_URL}/#organization` } } : {}),
+    },
     getBreadcrumbJsonLd([
       { name: '首页', url: '/zh' },
       { name: page.parentLabel, url: page.parentPath },
@@ -42,12 +55,28 @@ export function ApprovedProcurementPage({ id }: { id: ApprovedProcurementPageId 
         <article className={styles.article}>
           <header className={styles.articleHeader}>
             <h1 id="news-detail-title" className={styles.title}>{page.heading}</h1>
-            <div className={styles.meta}>采购评估资料</div>
+            {details ? (
+              <div className={`${styles.meta} ${procurementStyles.meta}`}>
+                <div>采购评估资料 · 正文更新：<time dateTime={details.bodyUpdatedAt}>{bodyUpdatedDate}</time>（北京时间）</div>
+                <div>发布单位：{details.publisherName}</div>
+              </div>
+            ) : <div className={styles.meta}>采购评估资料</div>}
           </header>
           <NewsArticleToc contentId={contentId} locale="zh" mobile />
           <div id={contentId} className={styles.bodyWrap}>
             <NewsArticleContent html={html} />
           </div>
+          {details ? (
+            <section className={procurementStyles.references} aria-labelledby={`${contentId}-references`}>
+              <h2 id={`${contentId}-references`}>参考资料（苏能官网）</h2>
+              <p>以下公开资料可用于核对相关设备的结构和选型条件；具体规格、适用工况与供货范围，仍按项目确认。</p>
+              <div className={procurementStyles.referenceLinks}>
+                {details.references.map((reference) => (
+                  <Link key={reference.href} href={reference.href}>{reference.title}</Link>
+                ))}
+              </div>
+            </section>
+          ) : null}
         </article>
         <aside className={styles.sidebar} aria-label="文章辅助资料">
           <NewsArticleToc contentId={contentId} locale="zh" />

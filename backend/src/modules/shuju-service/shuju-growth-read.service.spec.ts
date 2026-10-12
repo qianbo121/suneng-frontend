@@ -497,10 +497,15 @@ describe('ShujuGrowthReadService', () => {
 
     const result = await service.overview({ startDate: '2026-08-15', endDate: '2026-08-17' });
 
-    const statements = queryRaw.mock.calls.map(([sql]) => JSON.stringify(sql));
-    const dwellCoverage = statements.filter(
-      (sql) => sql.includes('dwell_5s') && sql.includes('LIMIT 128'),
-    );
+    const dwellCoverage = queryRaw.mock.calls
+      .map(([sql]) => sql)
+      .filter(
+        (sql) =>
+          Array.isArray(sql.values[0]) &&
+          sql.values[0].includes('dwell_5s') &&
+          sql.strings.join('?').includes('LIMIT 128'),
+      )
+      .map((sql) => JSON.stringify(sql));
     expect(dwellCoverage).toHaveLength(1);
     // 四个刻度必须显式列举：LIKE 'dwell_%' 里的下划线是单字符通配符，会误匹配。
     for (const event of ['dwell_5s', 'dwell_20s', 'dwell_60s', 'dwell_180s']) {

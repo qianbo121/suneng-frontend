@@ -72,6 +72,9 @@ export type NewsPrevNextApiData = {
 };
 
 export type NewsListCardItem = {
+  // Standalone resources retain their existing public article URL.
+  href?: string;
+  listRecommendedPosition?: number;
   viewCount?: number;
   listTopic?: import('@/lib/news-decision-center').NewsDecisionTopicId;
   listFurnaces?: import('@/lib/news-decision-center').NewsFurnaceFilterId[];

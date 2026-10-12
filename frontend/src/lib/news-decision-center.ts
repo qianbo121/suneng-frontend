@@ -198,7 +198,7 @@ export function filterAndSortNewsDecisionItems(
   const furnace = normalizeNewsFurnaceFilter(filters.furnace);
   const query = filters.query?.trim().toLowerCase() || '';
 
-  return items
+  const sorted = items
     .filter((item) => !query || searchableText(item).includes(query))
     .filter((item) => topic === 'all' || getNewsDecisionTopic(item) === topic)
     .filter((item) => furnace === 'all' || getNewsFurnaceFilters(item).includes(furnace))
@@ -209,6 +209,18 @@ export function filterAndSortNewsDecisionItems(
         left.id - right.id ||
         left.slug.localeCompare(right.slug, 'en'),
     );
+
+  if (normalizeNewsSort(filters.sort) === 'updated') return sorted;
+
+  const placed = sorted.filter((item) => Number.isInteger(item.listRecommendedPosition));
+  if (!placed.length) return sorted;
+  const result = sorted.filter((item) => !Number.isInteger(item.listRecommendedPosition));
+  for (const item of placed.sort(
+    (left, right) => left.listRecommendedPosition! - right.listRecommendedPosition!,
+  )) {
+    result.splice(Math.max(0, Math.min(item.listRecommendedPosition!, result.length)), 0, item);
+  }
+  return result;
 }
 
 export function getNewsDecisionDisplayMeta(item: NewsListCardItem, locale: Locale = 'zh') {

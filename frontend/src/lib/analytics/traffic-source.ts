@@ -9,6 +9,7 @@ const SEARCH_SOURCE_RULES: Array<{ label: string; domains: string[] }> = [
   { label: 'Google', domains: ['google.com', 'google.com.hk'] },
   { label: '搜狗', domains: ['sogou.com'] },
   { label: '360搜索', domains: ['so.com'] },
+  { label: '神马', domains: ['m.sm.cn', 'so.m.sm.cn'] },
 ];
 
 const AI_SOURCE_RULES: Array<{ label: string; domains: string[]; aliases: string[] }> = [
@@ -108,6 +109,13 @@ export function classifyTrafficSource(
   )?.label;
 
   if (aiFromReferrer) return { sourceType: 'AI引流', sourceDetail: aiFromReferrer };
+  // Yandex also hosts non-search services. A bare domain is not search evidence.
+  if (
+    ['yandex.ru', 'yandex.com'].some((domain) => matchesDomain(host, domain)) &&
+    /^\/(?:search|yandsearch)(?:\/|$)/i.test(new URL(referrer).pathname)
+  ) {
+    return { sourceType: '自然搜索', sourceDetail: 'Yandex' };
+  }
   const searchFromReferrer = SEARCH_SOURCE_RULES.find((rule) =>
     rule.domains.some((domain) => matchesDomain(host, domain)),
   )?.label;

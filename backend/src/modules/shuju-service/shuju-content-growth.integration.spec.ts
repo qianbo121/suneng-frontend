@@ -27,7 +27,11 @@ integration('content growth against PostgreSQL', () => {
   beforeAll(async () => {
     if (pgliteModule) {
       const { PGlite } = jest.requireActual(pgliteModule);
-      const db = new PGlite();
+      const db = new PGlite({
+        // Match Prisma's UTC interpretation of stored timestamp-without-zone,
+        // not the developer computer's current local timezone.
+        parsers: { 1114: (value: string) => new Date(value.replace(' ', 'T') + 'Z') },
+      });
       await db.waitReady;
       client = { query: db.query.bind(db), end: db.close.bind(db) };
       executeMigration = db.exec.bind(db);
@@ -271,6 +275,132 @@ integration('content growth against PostgreSQL', () => {
     expect(JSON.stringify(result.content)).not.toMatch(
       /private-|sessionId|visitorId|00000000-0000|submissionId/,
     );
+  });
+
+  it('reconciles source visits and every detail without discarding incomplete entries or counting a changed source twice', async () => {
+    const at = '2026-10-09T01:00:00Z';
+    const source = { sourceType: '自然搜索', sourceDetail: 'www.baidu.com' };
+    await event('page_view', articleA, 'source-switch', at);
+    await event('page_view', articleB, 'source-switch', '2026-10-09T01:01:00Z', source);
+    // A retained view with an inconsistent landing page is still a source visit.
+    await event('page_view', articleB, 'source-incomplete-entry', at, source);
+    await event('phone_click', articleB, 'source-incomplete-entry', '2026-10-09T01:00:20Z', source);
+    await event('page_view', articleA, 'source-missing-detail', at, {
+      sourceType: '自然搜索',
+      sourceDetail: null,
+    });
+    await event('phone_click', articleA, 'source-missing-detail', '2026-10-09T01:00:20Z', {
+      sourceType: '自然搜索',
+      sourceDetail: null,
+    });
+    await event('page_view', articleA, 'source-detail-switch', at, source);
+    await event('page_view', articleB, 'source-detail-switch', '2026-10-09T01:01:00Z', {
+      sourceType: '自然搜索',
+      sourceDetail: 'www.bing.com',
+    });
+    const result = await service.overview({ startDate: '2026-10-09', endDate: '2026-10-09' });
+    expect(result.sources.reduce((sum, row) => sum + row.visits, 0)).toBe(4);
+    expect(result.sourceDetails.reduce((sum, row) => sum + row.visits, 0)).toBe(4);
+    expect(result.sources.find((row) => row.sourceType === '自然搜索')!.visits).toBe(3);
+    expect(result.sources.find((row) => row.sourceType === 'AI引流')!.visits).toBe(1);
+    expect(result.sourceDetails.find((row) => row.sourceDetail === '必应')!.visits).toBe(0);
+    expect(
+      result.sourceDetails.find(
+        (row) => row.sourceType === '自然搜索' && row.sourceDetail === null,
+      ),
+    ).toMatchObject({ visits: 1, contactVisitors: 1 });
+    for (const sourceRow of result.sources) {
+      expect(
+        result.sourceDetails
+          .filter((row) => row.sourceType === sourceRow.sourceType)
+          .reduce((sum, row) => sum + row.visits, 0),
+      ).toBe(sourceRow.visits);
+    }
+    expect(result.content.entryVisits).toBe(3);
+    expect(result.content.uncertainEntryVisits).toBe(1);
+    expect(result.operating.contactVisitors).toBe(1); // One browser identity, two genuine clicks.
+    const search = await service.overview({
+      startDate: '2026-10-09',
+      endDate: '2026-10-09',
+      sourceType: '自然搜索',
+    });
+    expect(search.sources.every((row) => row.sourceType === '自然搜索')).toBe(true);
+    expect(search.sources[0].visits).toBe(4); // First matching view, not an invented global entry.
+    expect(search.sourceDetails.reduce((sum, row) => sum + row.visits, 0)).toBe(4);
+  });
+
+  it('retains all five real submissions without page views, and never promotes the unmatched submission', async () => {
+    for (let number = 1; number <= 5; number++) {
+      const submissionId = `00000000-0000-4000-8000-${String(1000 + number).padStart(12, '0')}`;
+      await event('form_submit', '/zh/inquiry', null, '2026-10-10T01:00:00Z', {
+        sourceType: '直接访问',
+        sourceDetail: null,
+        submissionId,
+      });
+      if (number < 5) {
+        await client.query('INSERT INTO "CustomRequirement" VALUES ($1,$2)', [
+          1000 + number,
+          submissionId,
+        ]);
+      }
+    }
+    // A retry of a real submission is not another inquiry.
+    await event('form_submit', '/zh/inquiry', null, '2026-10-10T01:01:00Z', {
+      sourceType: '直接访问',
+      sourceDetail: null,
+      submissionId: '00000000-0000-4000-8000-000000001005',
+    });
+    const result = await service.overview({
+      startDate: '2026-10-10',
+      endDate: '2026-10-10',
+      inquiryReview: {
+        version: 1,
+        validIds: [],
+        excludedIds: [1001, 1002, 1003],
+        pendingIds: [1004],
+      },
+    });
+    expect(result.operating.inquiries).toEqual({
+      raw: 5,
+      valid: 0,
+      excluded: 3,
+      pending: 1,
+      unknown: 1,
+    });
+    expect(result.content.entryVisits).toBe(0);
+    expect(result.content.unlinkedSubmissions).toBe(5);
+    expect(
+      result.content.pages!.find((row) => row.pagePath === '/zh/inquiry')!.directSubmissions,
+    ).toBe(5);
+    for (const row of [...result.sources, ...result.sourceDetails]) {
+      expect(row).toMatchObject({
+        visits: 0,
+        rawSubmissions: 5,
+        excludedSubmissions: 3,
+        pendingSubmissions: 1,
+        unknownSubmissions: 1,
+      });
+      expect(row.rawSubmissions).toBe(
+        row.validSubmissions! +
+          row.excludedSubmissions! +
+          row.pendingSubmissions! +
+          row.unknownSubmissions!,
+      );
+    }
+  });
+
+  it('recognises only confirmed Shenma domains without relabelling unknown services as search', async () => {
+    const domains = ['so.m.sm.cn', 'm.sm.cn', 'sm.cn', 'yandex.ru', 'm.sm.cn.example.com'];
+    for (const [index, domain] of domains.entries()) {
+      await event('page_view', articleA, `search-domain-${index}`, '2026-10-09T02:00:00Z', {
+        sourceType: '外部链接',
+        sourceDetail: domain,
+      });
+    }
+    const result = await service.overview({ startDate: '2026-10-09', endDate: '2026-10-09' });
+    expect(result.sources.find((row) => row.sourceType === '自然搜索')!.visits).toBe(2);
+    expect(result.sourceDetails.find((row) => row.sourceDetail === '神马')!.visits).toBe(2);
+    expect(result.sources.find((row) => row.sourceType === '外部链接')!.visits).toBe(3);
   });
 
   it('keeps article-scoped cross-page inquiries and source/site filters consistent', async () => {

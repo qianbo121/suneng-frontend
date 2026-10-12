@@ -4,7 +4,7 @@ import type { Locale } from '@/types/site';
 import { newsUiText } from '@/lib/news-ui';
 import Link from 'next/link';
 import { getPriorityNews } from '@/lib/priority-news';
-import { HiOutlineDocumentText } from 'react-icons/hi2';
+import { NewsChecklists } from '@/components/news/NewsChecklists';
 import { QuoteModalButton } from '@/components/lead/QuoteModalButton';
 import { NewsSearchForm } from '@/components/news/NewsSearchForm';
 import { NewsListCards } from '@/components/news/NewsListCards';
@@ -262,32 +262,14 @@ export function NewsDecisionCenter({
               aria-label={t('资料工具与常见问题')}
               inert={loading || undefined}
             >
-              {visibleTools.length > 0 && <section
-                className={`${styles.sideModule} ${styles.toolsModule}`}
-                aria-labelledby="news-tools-title"
-              >
-                <h2 id="news-tools-title" className={styles.moduleTitle}>
-                  {t('常用清单')}
-                </h2>
-                <div className={styles.toolRows}>
-                  {visibleTools.map((tool) => (
-                    <div key={tool.title} className={styles.toolRow}>
-                      <HiOutlineDocumentText aria-hidden="true" />
-                      <div>
-                        <h3>{tool.title}</h3>
-                        {tool.detail && <p>{tool.detail}</p>}
-                        <Link href={tool.href}>
-                          {locale === 'en' ? 'View Checklist' : '预览清单'}
-                          <span className="sr-only">
-                            {locale === 'en' ? ': ' : '：'}
-                            {tool.title}
-                          </span>
-                        </Link>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </section>}
+              {visibleTools.length > 0 && (
+                <NewsChecklists
+                  className={styles.sideModule}
+                  title={t('常用清单')}
+                  previewLabel={locale === 'en' ? 'View Checklist' : '预览清单'}
+                  tools={visibleTools}
+                />
+              )}
               {!loading && !error && priorityNews.length > 0 && (
                 <section className={styles.sideModule} aria-labelledby="priority-news-title" data-priority-news>
                   <h2 id="priority-news-title" className={styles.moduleTitle}>

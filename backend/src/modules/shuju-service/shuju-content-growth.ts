@@ -218,10 +218,19 @@ export async function readContentGrowth(
       JOIN submissions s ON s."submissionId" = a."submissionId"
         AND s.session_key = v.session_key AND s."createdAt" >= v."createdAt"
         AND (s."visitorId" IS NULL OR v."visitorId" IS NULL OR s."visitorId" = v."visitorId")
-    ), source_facts AS (
-      SELECT source_type, source_detail, 'event'::text AS kind, "eventType" AS event_type,
-        identity, session_key, NULL::uuid AS submission_id, NULL::text AS review_status
+    ), source_visits AS MATERIALIZED (
+      -- The source overview and details count the same retained page-view set.
+      -- If a visit changes its recorded source, only its first matching view owns
+      -- the visit count. Missing landing evidence does not mean a missing source.
+      SELECT DISTINCT ON (session_key) id
       FROM matched
+      WHERE "eventType" = 'page_view' AND session_key IS NOT NULL
+      ORDER BY session_key, "createdAt", id
+    ), source_facts AS (
+      SELECT source_type, source_detail, 'event'::text AS kind,
+        CASE WHEN "eventType" = 'page_view' AND v.id IS NULL THEN NULL ELSE "eventType" END AS event_type,
+        identity, session_key, NULL::uuid AS submission_id, NULL::text AS review_status
+      FROM matched m LEFT JOIN source_visits v ON v.id = m.id
       UNION ALL
       SELECT s.source_type, s.source_detail, 'inquiry', NULL, NULL, NULL,
         s."submissionId", r.review_status
@@ -262,7 +271,7 @@ export async function readContentGrowth(
         )),
       'operatingSources', COALESCE((SELECT JSONB_AGG(payload) FROM source_payloads WHERE detail_group = 1), '[]'::jsonb),
       'operatingSourceDetails', COALESCE((SELECT JSONB_AGG(payload) FROM source_payloads
-        WHERE detail_group = 0 AND source_detail IS NOT NULL), '[]'::jsonb),
+        WHERE detail_group = 0), '[]'::jsonb),
       'pages', COALESCE((SELECT JSONB_AGG(JSONB_BUILD_OBJECT(
         'pagePath', r.path, 'pageTitle', r.title, 'pageType', r.page_type,
         'visitors', r.visitors, 'pageViews', r.page_views, 'contacts', r.contacts,
@@ -304,6 +313,7 @@ export async function readContentGrowth(
     status: rows[0] ? 'available' : 'unavailable',
     attributionRule: 'same_session_read_before_submit_in_range',
     entryRule: 'first_recorded_view_matching_landing',
+    sourceVisitRule: 'first_matching_view_per_session_in_range',
     pageLimit: null,
     pageScope: 'all_matching',
     ...rows[0]?.payload,

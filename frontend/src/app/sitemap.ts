@@ -9,6 +9,7 @@ import { publicPathExists } from '@/lib/seo/config';
 import { absoluteUrl } from '@/lib/seo/metadata';
 import { getAllNewsForDecisionCenter } from '@/lib/api/news';
 import { getNewsContentModifiedTime } from '@/lib/news-dates';
+import { approvedProcurementPages } from '@/lib/approved-procurement-pages';
 import { filterCanonicalNewsItems, hasPublishableEnglishNews } from '@/lib/news-routing';
 import { STATIC_PRODUCTS } from '@/constants/static-products';
 import { heatTreatmentLines } from '@/lib/heat-treatment-lines';
@@ -168,6 +169,7 @@ function collectStaticRoutes(): MetadataRoute.Sitemap {
       path: '/articles/special-industrial-furnace-procurement-assessment',
       changeFrequency: 'monthly',
       priority: 0.65,
+      lastModified: approvedProcurementPages.equipment.publishedModifiedAt,
     },
     {
       path: '/service/industrial-furnace-parts-purchasing',
