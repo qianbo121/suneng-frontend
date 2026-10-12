@@ -76,7 +76,14 @@ class CloseoutTest(unittest.TestCase):
                 output = self.audit / ('closeout-' + kind)
                 with self.assertRaises(ValueError):
                     self.runner().run(output, apply=True, reviewed_preflight=preflight)
-                self.assertFalse(json.loads((output / 'closeout-result.json').read_text())['passed'])
+                result = json.loads((output / 'closeout-result.json').read_text())
+                self.assertFalse(result['passed'])
+                self.assertEqual(result['failureStage'], 'reviewed-preflight-validation')
+                self.assertEqual(result['failureCode'], 'reviewed-preflight-mismatch')
+                section = {'image': 'images', 'container': 'containers',
+                           'configuration': 'configurationSha256', 'protection': 'protected'}[kind]
+                self.assertIn(section, result['changedSections'])
+                self.assertNotIn('unrelated_setting', json.dumps(result))
                 self.assertEqual(self.engine.removed, [])
                 self.engine.records, self.engine.rows = original, rows
                 config.unlink(missing_ok=True)
@@ -89,6 +96,8 @@ class CloseoutTest(unittest.TestCase):
             self.runner().run(output)
         self.assertEqual(self.engine.removed, [])
         self.assertFalse(json.loads((output / 'closeout-result.json').read_text())['passed'])
+        self.assertEqual(json.loads((output / 'closeout-result.json').read_text())['failureStage'],
+                         'initial-inspection')
         self.assertFalse((output / 'preflight.json').exists())
 
     def test_modified_preflight_or_tool_identity_is_rejected(self):
@@ -110,7 +119,35 @@ class CloseoutTest(unittest.TestCase):
             r.write_json(edited, changed)
             with self.assertRaises(ValueError):
                 self.runner().run(self.audit / ('closeout-modified-' + kind), True, edited)
+            result = json.loads((self.audit / ('closeout-modified-' + kind) / 'closeout-result.json').read_text())
+            field = {'hash': 'snapshotSha256', 'tool': 'toolSha256',
+                     'retention-tool': 'retentionToolSha256', 'apply': 'applied', 'plan': 'plan'}[kind]
+            self.assertEqual(result['mismatchFields'], [field])
+            self.assertEqual(result['changedSections'], [])
             self.assertEqual(self.engine.removed, [])
+
+    def test_invalid_preflight_diagnostic_does_not_echo_untrusted_values(self):
+        preflight = self.preview()
+        secret = 'TOKEN_DO_NOT_COPY_INTO_DIAGNOSTIC'
+        edited = self.audit / 'untrusted-preflight.json'
+        r.write_json(edited, [secret])
+        output = self.audit / 'closeout-untrusted'
+        with self.assertRaises(c.PreflightMismatch):
+            self.runner().run(output, True, edited)
+        result = json.loads((output / 'closeout-result.json').read_text())
+        self.assertEqual(result['mismatchFields'], ['document'])
+        self.assertNotIn(secret, json.dumps(result))
+        self.assertEqual(self.engine.removed, [])
+
+    def test_boolean_preflight_checks_remain_strict(self):
+        value = json.loads(self.preview().read_text())
+        for field, number in [('passed', 1), ('applied', 0)]:
+            with self.subTest(field=field):
+                edited = self.audit / (field + '-numeric.json')
+                r.write_json(edited, {**value, field: number})
+                with self.assertRaises(c.PreflightMismatch):
+                    self.runner().run(self.audit / ('closeout-numeric-' + field), True, edited)
+        self.assertEqual(self.engine.removed, [])
 
     def test_output_must_be_unique_canonical_and_inside_records_root(self):
         preflight = self.preview()
@@ -145,6 +182,7 @@ class CloseoutTest(unittest.TestCase):
         self.assertFalse(own['passed'])
         self.assertFalse(raw['passed'])
         self.assertTrue(Path(own['nativeResult']).is_file())
+        self.assertEqual(own['failureStage'], 'retention-execution')
 
     def test_failure_keeps_original_failure_and_never_reports_success(self):
         preflight = self.preview()
@@ -162,6 +200,8 @@ class CloseoutTest(unittest.TestCase):
         self.assertFalse(own['passed'])
         self.assertFalse(raw['passed'])
         self.assertEqual(raw['removed'], [])
+        self.assertEqual(own['failureStage'], 'retention-execution')
+        self.assertNotIn('simulated Docker removal failure', json.dumps(own))
         self.assertIn(ident(2), self.engine.records)
 
     def test_zero_deletion_is_not_reported_as_reclaimed_space(self):
@@ -196,6 +236,7 @@ class CloseoutTest(unittest.TestCase):
         self.assertFalse(own['passed'])
         self.assertTrue(raw['passed'])
         self.assertEqual(self.engine.removed, [ident(1)])
+        self.assertEqual(own['failureStage'], 'post-cleanup-inspection')
 
 
 if __name__ == '__main__':

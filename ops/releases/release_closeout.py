@@ -51,6 +51,30 @@ def snapshot(state):
     ]} | {'configurationSha256': configuration(state)}
 
 
+class PreflightMismatch(ValueError):
+    def __init__(self, fields, sections):
+        super().__init__('Retained preflight does not match this tool and exact current release state')
+        self.fields, self.sections = fields, sections
+
+
+def validate_reviewed(reviewed, state, plan, acceptance):
+    """Report fixed field names only, never configuration values or exception text."""
+    if not isinstance(reviewed, dict):
+        raise PreflightMismatch(['document'], [])
+    expected = {'schemaVersion': 1, 'passed': True, 'applied': False,
+                'toolSha256': tool_digest(), 'retentionToolSha256': retention_tool_digest(),
+                'plan': str(plan), 'acceptance': str(acceptance),
+                'snapshotSha256': retention.digest(canonical(reviewed.get('snapshot'))),
+                'snapshot': state}
+    fields = [key for key, value in expected.items()
+              if (reviewed.get(key) is not value if key in ('passed', 'applied')
+                  else reviewed.get(key) != value)]
+    previous = reviewed.get('snapshot')
+    sections = [key for key in state if not isinstance(previous, dict) or previous.get(key) != state[key]]
+    if fields:
+        raise PreflightMismatch(fields, sections)
+
+
 def release_binding(plan_path, acceptance_path, root):
     """Capture exact evidence even when finalization fails before inspecting Docker."""
     plan_bytes = retention.read_file(plan_path, root)
@@ -175,31 +199,33 @@ class Closeout:
                    'applied': apply, 'passed': False}
         retention.write_json(output / 'started.json', receipt)
         raw = None
+        stage = 'release-binding'
         native_before = {p for p in self.plan.parent.glob('retention-*') if p.is_dir()}
         try:
             receipt.update(release_binding(self.plan, self.acceptance, self.root))
             if apply:
+                stage = 'started-receipt'
                 save_started(self.plan, output, receipt, self.root)
+            stage = 'initial-inspection'
             initial = retention.Finalizer(self.plan, self.acceptance, self.root, self.engine).inspect()
             state = snapshot(initial)
             receipt.update(planSha256=initial['planSha256'], acceptanceSha256=initial['acceptanceSha256'])
             if apply:
+                stage = 'reviewed-preflight-validation'
                 reviewed_bytes = retention.read_file(reviewed_preflight, self.root)
                 reviewed = json.loads(reviewed_bytes)
-                if (reviewed.get('schemaVersion') != 1 or reviewed.get('passed') is not True
-                        or reviewed.get('applied') is not False or reviewed.get('toolSha256') != tool_digest()
-                        or reviewed.get('retentionToolSha256') != retention_tool_digest()
-                        or reviewed.get('plan') != str(self.plan) or reviewed.get('acceptance') != str(self.acceptance)
-                        or reviewed.get('snapshotSha256') != retention.digest(canonical(reviewed.get('snapshot')))
-                        or reviewed.get('snapshot') != state):
-                    raise ValueError('Retained preflight does not match this tool and exact current release state')
+                validate_reviewed(reviewed, state, self.plan, self.acceptance)
                 receipt.update(reviewedPreflight=str(reviewed_preflight),
                                reviewedPreflightSha256=retention.digest(reviewed_bytes))
             finalizer = ReviewedFinalizer(self.plan, self.acceptance, self.root, self.engine, state)
+            stage = 'retention-execution'
             raw = finalizer.execute(apply=apply)
+            stage = 'retention-receipt'
             retention.write_json(output / 'retention-result.json', raw)
             if apply:
+                stage = 'post-cleanup-inspection'
                 finalizer.inspect()  # Recheck healthy services, recovery boundaries and configuration after cleanup.
+            stage = 'closeout-receipt'
             if not apply:
                 preflight = {**receipt, 'passed': True, 'snapshot': state,
                              'snapshotSha256': retention.digest(canonical(state)), 'result': raw}
@@ -213,7 +239,10 @@ class Closeout:
                                reclaimedBytes=raw['reclaimedBytes'] if removed else 0)
             receipt['passed'] = True
         except Exception as error:
-            receipt.update(status='failed', failureType=type(error).__name__)
+            receipt.update(status='failed', failureType=type(error).__name__, failureStage=stage)
+            if isinstance(error, PreflightMismatch):
+                receipt.update(failureCode='reviewed-preflight-mismatch',
+                               mismatchFields=error.fields, changedSections=error.sections)
             raise
         finally:
             capture_error, successful = None, receipt['passed']
@@ -241,6 +270,7 @@ class Closeout:
             except Exception as error:
                 capture_error = error
                 receipt.update(passed=False, status='failed', nativeCaptureFailureType=type(error).__name__)
+                receipt.setdefault('failureStage', 'native-receipt-capture')
             if apply and 'freeBytesAfter' not in receipt and receipt.get('live'):
                 try:
                     receipt['freeBytesAfter'] = shutil.disk_usage(receipt['live']).free
@@ -252,6 +282,7 @@ class Closeout:
                 save_latest(self.plan, output, receipt, self.root)
             except Exception as error:
                 receipt.update(passed=False, status='failed', latestStateFailureType=type(error).__name__)
+                receipt.setdefault('failureStage', 'latest-state-receipt')
                 retention.write_json(output / 'closeout-result.json', receipt)
                 if capture_error is None:
                     capture_error = error
