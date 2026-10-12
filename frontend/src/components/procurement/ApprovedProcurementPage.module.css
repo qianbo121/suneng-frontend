@@ -1,0 +1,65 @@
+.meta {
+  display: block;
+  color: #69788b;
+}
+
+.meta > div + div {
+  margin-top: 4px;
+}
+
+.references {
+  margin-top: 32px;
+  padding: 22px 26px;
+  border: 1px solid #e6ebf2;
+  border-radius: 12px;
+  background: #fff;
+}
+
+.references h2 {
+  margin: 0 0 12px;
+  color: #092b59;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.5;
+  scroll-margin-top: 112px;
+}
+
+.references p {
+  margin: 0 0 12px;
+  color: #536277;
+  font-size: 14px;
+  line-height: 1.8;
+}
+
+.referenceLinks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 24px;
+}
+
+.referenceLinks a {
+  color: #0759a6;
+  font-size: 15px;
+  line-height: 1.8;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.referenceLinks a:hover {
+  color: #092b59;
+}
+
+.referenceLinks a:focus-visible {
+  outline: 2px solid #0759a6;
+  outline-offset: 4px;
+}
+
+@media (max-width: 599px) {
+  .references {
+    padding: 20px;
+  }
+
+  .references h2 {
+    scroll-margin-top: 100px;
+  }
+}

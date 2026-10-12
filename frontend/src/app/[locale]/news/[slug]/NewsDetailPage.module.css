@@ -339,6 +339,24 @@
   line-height: 1.75;
 }
 
+@media (min-width: 1200px) {
+  .sidebar,
+  .sidebarCards {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .sidebarCards {
+    flex: 1;
+  }
+
+  .consultation {
+    position: sticky;
+    top: 112px;
+    flex-shrink: 0;
+  }
+}
+
 @media (max-width: 1199px) {
   .main {
     grid-template-columns: minmax(0, 1fr);

@@ -93,9 +93,13 @@ const SESSION_ID_KEY = 'suneng_session_id';
 const SESSION_LAST_SEEN_KEY = 'suneng_session_last_seen';
 const SESSION_SOURCE_KEY = 'suneng_session_traffic_source';
 const MANUAL_QA_SESSION_KEY = 'suneng_manual_qa_session_v1';
+// Registration is explicit and local to this browser; website/admin login is not evidence.
+export const INTERNAL_TRAFFIC_BROWSER_KEY = 'suneng_internal_traffic_browser_v1';
+const INTERNAL_TRAFFIC_SESSION_KEY = 'suneng_internal_traffic_session_v1';
 // Only booleans and the anonymous session association are retained, never the URL token.
 const manualQaByWindow = new WeakMap<object, { active: boolean; lastSeen: number }>();
 const manualQaBySnapshot = new WeakMap<LeadSourceSnapshot, boolean>();
+const internalTrafficBySnapshot = new WeakMap<LeadSourceSnapshot, boolean>();
 const SESSION_TIMEOUT_MS = 30 * 60 * 1000;
 const DWELL_SECONDS_KEY = 'suneng_dwell_seconds';
 const DWELL_MILESTONE_KEY = 'suneng_dwell_milestone';
@@ -245,6 +249,28 @@ function hasManualQaToken() {
   return tokens.length === 1 && /^[A-Za-z0-9_-]{1,80}$/.test(tokens[0]);
 }
 
+function isRegisteredInternalBrowser() {
+  return trackingStorage('localStorage').getItem(INTERNAL_TRAFFIC_BROWSER_KEY) === '1';
+}
+
+/** Opt in/out only after confirming this browser is used for internal browsing. */
+export function setInternalTrafficBrowser(enabled: boolean) {
+  if (typeof window === 'undefined') return false;
+  // A denied storage write must not be reported as a persistent registration.
+  const storage = getBrowserStorage('localStorage');
+  if (!storage) return false;
+  try {
+    if (enabled) storage.setItem(INTERNAL_TRAFFIC_BROWSER_KEY, '1');
+    else storage.removeItem(INTERNAL_TRAFFIC_BROWSER_KEY);
+    if ((storage.getItem(INTERNAL_TRAFFIC_BROWSER_KEY) === '1') !== enabled) return false;
+    trackingStorage('localStorage').getItem(INTERNAL_TRAFFIC_BROWSER_KEY);
+    getSessionId(trackingStorage('sessionStorage'));
+    return true;
+  } catch {
+    return false;
+  }
+}
+
 function rememberManualQa(active: boolean, now: number) {
   manualQaByWindow.set(window, { active, lastSeen: now });
 }
@@ -264,6 +290,7 @@ function resetSessionState(storage: TrackingStorage) {
   storage.removeItem(SESSION_PAGE_PATHS_KEY);
   storage.removeItem(SESSION_SOURCE_KEY);
   storage.removeItem(MANUAL_QA_SESSION_KEY);
+  storage.removeItem(INTERNAL_TRAFFIC_SESSION_KEY);
   storage.removeItem('suneng_landing_page');
   storage.removeItem(DWELL_SECONDS_KEY);
   storage.removeItem(DWELL_MILESTONE_KEY);
@@ -289,19 +316,25 @@ function getSessionId(storage: TrackingStorage) {
     const expired =
       Number.isFinite(lastSeen) && lastSeen > 0 && now - lastSeen > SESSION_TIMEOUT_MS;
     const currentQa = Boolean(current && storage.getItem(MANUAL_QA_SESSION_KEY) === current);
+    const internal = isRegisteredInternalBrowser();
+    const currentInternal = Boolean(
+      current && storage.getItem(INTERNAL_TRAFFIC_SESSION_KEY) === current,
+    );
+    const changingInternal = Boolean(current && !expired && internal !== currentInternal);
     const enteringQa = Boolean(current && !expired && requested && !currentQa);
-    const rotated = !current || expired || enteringQa;
+    const rotated = !current || expired || enteringQa || changingInternal;
     if (rotated) {
-      // Split an explicit QA run from preceding ordinary browsing. Source/campaign facts
-      // remain unchanged; testing is a separate property, not a replacement traffic source.
-      const previousSource = enteringQa ? storage.getItem(SESSION_SOURCE_KEY) : null;
-      const previousLanding = enteringQa ? storage.getItem('suneng_landing_page') : null;
+      // Changing QA/internal classification splits a visit without changing its entry facts.
+      const preserveEntry = enteringQa || changingInternal;
+      const previousSource = preserveEntry ? storage.getItem(SESSION_SOURCE_KEY) : null;
+      const previousLanding = preserveEntry ? storage.getItem('suneng_landing_page') : null;
       const next = newAnonymousId();
       storage.setItem(SESSION_ID_KEY, next);
       resetSessionState(storage);
       if (previousSource) storage.setItem(SESSION_SOURCE_KEY, previousSource);
       if (previousLanding) storage.setItem('suneng_landing_page', previousLanding);
       if (requested) storage.setItem(MANUAL_QA_SESSION_KEY, next);
+      if (internal) storage.setItem(INTERNAL_TRAFFIC_SESSION_KEY, next);
     }
     storage.setItem(SESSION_LAST_SEEN_KEY, String(now));
     const sessionId = storage.getItem(SESSION_ID_KEY) || undefined;
@@ -463,6 +496,7 @@ export function buildLeadSourceSnapshot(
     ...extra,
   });
   manualQaBySnapshot.set(snapshot, manualQaByWindow.get(window)?.active === true);
+  internalTrafficBySnapshot.set(snapshot, isRegisteredInternalBrowser());
   return snapshot;
 }
 
@@ -487,11 +521,20 @@ export function captureLeadEventProperties(
 ): LeadEventProperties {
   const frozen = typeof properties?.manual_qa === 'boolean' ? properties.manual_qa : undefined;
   const manualQa = frozen ?? manualQaBySnapshot.get(snapshot) === true;
+  const frozenInternal =
+    typeof properties?.internal_traffic === 'boolean' ? properties.internal_traffic : undefined;
+  const internalTraffic = frozenInternal ?? internalTrafficBySnapshot.get(snapshot) === true;
   const ordinary = Object.fromEntries(
-    Object.entries(properties ?? {}).filter(([key]) => key.trim().slice(0, 60) !== 'manual_qa'),
+    Object.entries(properties ?? {}).filter(
+      ([key]) => !['manual_qa', 'internal_traffic'].includes(key.trim().slice(0, 60)),
+    ),
   );
-  // Reserve the first of the existing 24 slots so a crowded context cannot drop QA.
-  return sanitizeEventProperties({ manual_qa: manualQa, ...ordinary })!;
+  // Reserve two of the existing 24 slots so a crowded context cannot drop either marker.
+  return sanitizeEventProperties({
+    manual_qa: manualQa,
+    internal_traffic: internalTraffic,
+    ...ordinary,
+  })!;
 }
 
 function currentPayload(eventType: LeadEventType, extra: LeadEventExtra = {}) {
@@ -501,19 +544,21 @@ function currentPayload(eventType: LeadEventType, extra: LeadEventExtra = {}) {
   const captured = captureLeadEventProperties(properties, snapshot);
   const ordinary = Object.fromEntries(
     Object.entries(captured).filter(
-      ([key]) => !['collectionId', 'automationDetected', 'manual_qa'].includes(key.trim()),
+      ([key]) =>
+        !['collectionId', 'automationDetected', 'manual_qa', 'internal_traffic'].includes(key.trim()),
     ),
   );
   return {
     eventType,
     ...snapshot,
     properties: sanitizeEventProperties({
-      // 三个系统属性优先占位，业务属性不能覆盖或挤掉它们。
+      // 系统属性优先占位，业务属性不能覆盖或挤掉它们。
       collectionId: newAnonymousId().slice(0, 120),
       ...(typeof navigator !== 'undefined' && navigator.webdriver === true
         ? { automationDetected: true }
         : {}),
       manual_qa: captured.manual_qa,
+      internal_traffic: captured.internal_traffic,
       ...ordinary,
     }),
   };

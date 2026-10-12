@@ -9,6 +9,7 @@ import {
   type NewsSort,
 } from '@/lib/news-decision-center';
 import { toNewsListLiteCards } from '@/lib/news-list-client';
+import { getNewsListCardHref } from '@/lib/news-list-resources';
 import { getNewsListDocumentTitles } from '@/lib/news-list-metadata';
 import { newsUiText } from '@/lib/news-ui';
 import { cleanObject, getBreadcrumbJsonLd } from '@/lib/seo/jsonld';
@@ -67,7 +68,7 @@ export function NewsListRoute({
         '@type': 'ListItem',
         position: (currentPage - 1) * NEWS_PAGE_SIZE + index + 1,
         name: item.title[locale],
-        url: absoluteUrl(`/${locale}/news/${item.slug}`),
+        url: absoluteUrl(getNewsListCardHref(item, locale)),
       })),
     },
     {

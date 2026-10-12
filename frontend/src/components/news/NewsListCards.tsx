@@ -3,6 +3,7 @@ import { NewsPagination } from '@/components/news/NewsPagination';
 import { NEWS_PAGE_SIZE } from '@/constants/news';
 
 import { formatNewsDisplayDate } from '@/lib/news-display-date';
+import { getNewsListCardHref } from '@/lib/news-list-resources';
 import {
   buildNewsDecisionHref,
   getNewsDecisionDisplayMeta,
@@ -51,7 +52,7 @@ function NewsListItem({
       data-news-id={item.id}
       data-featured={featured}
     >
-      <Link href={`/${locale}/news/${item.slug}`} className={styles.articleLink}>
+      <Link href={getNewsListCardHref(item, locale)} className={styles.articleLink}>
         <div className={styles.articleImage}>
           <NewsCardImage
             src={item.image}
@@ -130,7 +131,7 @@ export function NewsListCards({
             locale={locale}
             item={item}
             priority={index === 0}
-            featured={index === 0 && isFeaturedNewsPage({ query, topic, furnace, sort, page })}
+            featured={!item.href && index === 0 && isFeaturedNewsPage({ query, topic, furnace, sort, page })}
           />
         ))}
       </div>

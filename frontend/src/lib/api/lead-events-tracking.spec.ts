@@ -3,7 +3,11 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { apiPost } from '@/lib/api/client';
 import {
   installVisitorNatureTracking,
+  buildLeadSourceSnapshot,
+  captureLeadEventProperties,
+  INTERNAL_TRAFFIC_BROWSER_KEY,
   markEngagedSession,
+  setInternalTrafficBrowser,
   startDwellTracking,
   tickDwell,
   trackLeadEvent,
@@ -115,6 +119,115 @@ describe('website reading events', () => {
     expect(bodies.at(-2)).toEqual(
       expect.objectContaining({ sourceType: '自然搜索', sourceDetail: '百度' }),
     );
+  });
+});
+
+describe('explicit internal browser registration', () => {
+  function bodies() {
+    return vi.mocked(apiPost).mock.calls.map(([, options]) => options?.body as {
+      eventType: string; sessionId?: string; properties: Record<string, unknown>;
+    });
+  }
+
+  beforeEach(() => {
+    vi.mocked(apiPost).mockReset().mockResolvedValue({});
+    vi.stubGlobal('window', {
+      location: { pathname: '/en/contact', search: '', hostname: 'www.jssngyl.cn' },
+      sessionStorage: storageMock(), localStorage: storageMock(), matchMedia: () => ({ matches: true }),
+    });
+    vi.stubGlobal('document', { title: 'Contact Suneng', referrer: 'https://console.volcengine.com/' });
+  });
+
+  it('does not infer internal browsing from a console source or login keys', () => {
+    window.localStorage.setItem('accessToken', 'not-a-real-token');
+    trackPageView();
+    expect(bodies()[0].properties.internal_traffic).toBe(false);
+    expect(window.localStorage.getItem(INTERNAL_TRAFFIC_BROWSER_KEY)).toBeNull();
+  });
+
+  it('splits both opt-in and opt-out visits without dropping contact events', () => {
+    trackPageView();
+    const ordinary = bodies()[0];
+    expect(setInternalTrafficBrowser(true)).toBe(true);
+    trackPageView();
+    const internal = bodies().at(-1)!;
+    expect(internal.sessionId).not.toBe(ordinary.sessionId);
+    expect(internal.properties.internal_traffic).toBe(true);
+    trackLeadEvent('phone_click');
+    expect(bodies().find((body) => body.eventType === 'phone_click')).toMatchObject({
+      sessionId: internal.sessionId, properties: { internal_traffic: true },
+    });
+    expect(setInternalTrafficBrowser(false)).toBe(true);
+    trackPageView();
+    expect(bodies().at(-1)!.sessionId).not.toBe(internal.sessionId);
+    expect(bodies().at(-1)!.properties.internal_traffic).toBe(false);
+    expect(window.localStorage.getItem(INTERNAL_TRAFFIC_BROWSER_KEY)).toBeNull();
+  });
+
+  it.each([true, false])('keeps entry, source and campaign when internal registration becomes %s', (enabled) => {
+    window.location.pathname = '/zh/products/detail/trolley-furnace';
+    window.location.search = '?utm_source=chatgpt&utm_medium=geo&utm_campaign=registration-check';
+    vi.stubGlobal('document', { title: 'Trolley furnace', referrer: 'https://chatgpt.com/' });
+    if (!enabled) expect(setInternalTrafficBrowser(true)).toBe(true);
+    const entry = buildLeadSourceSnapshot();
+    expect(entry.utmCampaign).toBe('registration-check');
+    trackPageView();
+
+    // A full page navigation no longer carries the original URL parameters/referrer.
+    vi.stubGlobal('window', { ...window, location: {
+      pathname: '/zh/contact', search: '', hostname: 'www.jssngyl.cn',
+    } });
+    vi.stubGlobal('document', { title: 'Contact', referrer: 'https://www.jssngyl.cn/zh/products/detail/trolley-furnace' });
+    expect(setInternalTrafficBrowser(enabled)).toBe(true);
+    trackLeadEvent('phone_click');
+    const contact = bodies().find((body) => body.eventType === 'phone_click')!;
+    expect(contact.sessionId).not.toBe(entry.sessionId);
+    expect(contact).toMatchObject({
+      sourceType: entry.sourceType,
+      sourceDetail: entry.sourceDetail,
+      landingPage: entry.landingPage,
+      utmSource: 'chatgpt', utmMedium: 'geo', utmCampaign: 'registration-check',
+      pagePath: '/zh/contact',
+      properties: { internal_traffic: enabled },
+    });
+  });
+
+  it('keeps explicit registration across full page navigation, not across browsers', () => {
+    expect(setInternalTrafficBrowser(true)).toBe(true);
+    trackPageView();
+    const first = bodies().at(-1)!;
+    vi.stubGlobal('window', { ...window, location: { ...window.location, pathname: '/zh/contact' } });
+    trackPageView();
+    expect(bodies().at(-1)).toMatchObject({ sessionId: first.sessionId, properties: { internal_traffic: true } });
+    vi.stubGlobal('window', { ...window, sessionStorage: storageMock(), localStorage: storageMock() });
+    trackPageView();
+    expect(bodies().at(-1)!.properties.internal_traffic).toBe(false);
+  });
+
+  it('freezes the internal flag for an action that began before opt-in', () => {
+    const snapshot = buildLeadSourceSnapshot();
+    const frozen = captureLeadEventProperties(undefined, snapshot);
+    expect(setInternalTrafficBrowser(true)).toBe(true);
+    trackLeadEvent('contact_action', { ...snapshot, properties: frozen });
+    expect(bodies().at(-1)).toMatchObject({ sessionId: snapshot.sessionId, properties: { internal_traffic: false } });
+  });
+
+  it('reserves the marker in a crowded context and never stores account identifiers', () => {
+    expect(setInternalTrafficBrowser(true)).toBe(true);
+    const crowded = Object.fromEntries(Array.from({ length: 30 }, (_, index) => [`key${index}`, index]));
+    trackLeadEvent('dwell_20s', { properties: { ...crowded, ' internal_traffic ': 'not-a-boolean' } });
+    expect(bodies().at(-1)!.properties.internal_traffic).toBe(true);
+    expect(Object.keys(bodies().at(-1)!.properties).length).toBeLessThanOrEqual(24);
+    expect(JSON.stringify(bodies().at(-1))).not.toContain('not-a-boolean');
+  });
+
+  it('does not claim persistent registration when storage is unavailable', () => {
+    vi.stubGlobal('window', { ...window, localStorage: {
+      getItem: () => null, setItem: () => { throw new Error('blocked'); }, removeItem: () => { throw new Error('blocked'); },
+    } });
+    expect(setInternalTrafficBrowser(true)).toBe(false);
+    trackPageView();
+    expect(bodies().at(-1)!.properties.internal_traffic).toBe(false);
   });
 });
 
