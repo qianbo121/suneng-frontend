@@ -499,9 +499,11 @@ describe('ShujuGrowthReadService', () => {
 
     const dwellCoverage = queryRaw.mock.calls
       .map(([sql]) => sql)
-      .filter((sql) =>
-        Array.isArray(sql.values[0]) && sql.values[0].includes('dwell_5s') &&
-        sql.strings.join('?').includes('LIMIT 128'),
+      .filter(
+        (sql) =>
+          Array.isArray(sql.values[0]) &&
+          sql.values[0].includes('dwell_5s') &&
+          sql.strings.join('?').includes('LIMIT 128'),
       )
       .map((sql) => JSON.stringify(sql));
     expect(dwellCoverage).toHaveLength(1);
