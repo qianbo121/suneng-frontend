@@ -4,6 +4,7 @@ import { newsImageNoteReplacements } from './news-image-notes';
 import { getReviewedNewsImageDescription } from './news-image-descriptions';
 import { marked } from 'marked';
 import { repairNewsPresentation } from './news-presentation-repairs';
+import { normalizeNewsContactFormat } from './news-contact-format';
 
 function escapeHtml(value: string) {
   return value
@@ -287,6 +288,7 @@ export function prepareNewsArticleHtml(
   });
 
   repairNewsPresentation(root, options.articleSlug, options.locale);
+  if (options.locale === 'zh') normalizeNewsContactFormat(root);
   return DOMPurify.sanitize(root.innerHTML);
 }
 

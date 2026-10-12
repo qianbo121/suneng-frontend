@@ -156,3 +156,20 @@ describe('English news mobile comparison tables', () => {
     ).not.toContain('furnace-decision-table');
   });
 });
+
+
+describe('Chinese news contact display', () => {
+  const contact = '<p>咨询电话：+86-130-5298-6814；邮箱：<a href="mailto:997518512@qq.com">997518512@qq.com</a>。</p>';
+
+  it('applies the contact rule after article preparation for Chinese only', () => {
+    const out = prepareNewsArticleHtml(contact, { locale: 'zh' });
+    expect(out).toContain('咨询电话：+86-130-5298-6814<br>邮箱：');
+    expect(out).toContain('href="mailto:997518512@qq.com"');
+    expect(out).not.toContain('6814；');
+    expect(out).not.toContain('</a>。');
+  });
+
+  it('keeps English article contact copy unchanged', () => {
+    expect(prepareNewsArticleHtml(contact, { locale: 'en' })).toBe(contact);
+  });
+});
