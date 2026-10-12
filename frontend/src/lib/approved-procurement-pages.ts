@@ -1,3 +1,4 @@
+// Public metadata revision belongs to this batch; validate it against the actual release receipt.
 /** Approved original Chinese bodies retained; local topic additions require unified deployment. */
 export const approvedProcurementPages = {
   "equipment": {
@@ -8,7 +9,6 @@ export const approvedProcurementPages = {
     "parentLabel": "产品中心",
     "parentPath": "/zh/products",
     "bodyUpdatedAt": "2026-10-10T02:27:07+08:00",
-    // Verified public body revision. A new public update must use its actual release receipt.
     "publishedModifiedAt": "2026-10-11T23:54:50+00:00",
     "publisherName": "江苏苏能工业炉有限公司",
     "references": [
