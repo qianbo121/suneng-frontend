@@ -43,6 +43,55 @@ class RecoveryRead(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, 'ordinary-single-link-file-required'):
             recovery.full_read(self.file, self.sha)
 
+class IndependentArchiveObservation(unittest.TestCase):
+    def setUp(self):
+        self.version = {'role':'previous','sourceCommit':'a'*40,'runtimeImage':'sha256:'+'b'*64,
+            'archiveSha256':'c'*64,'archiveBytes':10,'rootFsDiffIds':['sha256:'+'d'*64]}
+        self.proof = {'passed':True,'completeArchiveAndAllLayerPayloadsVerified':True,
+            'completeGzipEofVerified':True,'serverImported':False,'productionSwitched':False,
+            'sourceCommit':self.version['sourceCommit'],'archiveSha256':self.version['archiveSha256'],
+            'archiveBytes':10,'scanStats':{'rawArchiveBytesHashed':10},
+            'checkedAtUtc':'2026-10-12T15:01:00+00:00',
+            'imageIdentity':{'ociRuntimeManifestDigest':self.version['runtimeImage'],
+                'configSource':self.version['sourceCommit'],'rootFsDiffIds':self.version['rootFsDiffIds'],
+                'rootFsDiffIdsMatched':True,'layerBlobChecks':[{'rootFsDiffId':self.version['rootFsDiffIds'][0],'passed':True}]}}
+        self.report = {'kind':'complete-independent-program-archive-observation','algorithmSha256':'e'*64,
+            'checks':{'current':{},'previous':self.proof}}
+
+    def check(self):
+        return recovery.independent_archive_check(self.version,self.report,'2026-10-12T15:00:00+00:00','e'*64)
+
+    def test_pass_keeps_read_location_explicit_and_requires_native_check(self):
+        result=self.check()
+        self.assertEqual(result['archiveReadLocation'],'independent-release-host')
+        self.assertFalse(result['serverArchiveRead'])
+        self.assertTrue(result['serverNativeImageStillRequiresVerification'])
+
+    def test_pre_switch_observation_refused(self):
+        self.proof['checkedAtUtc']='2026-10-12T14:59:00+00:00'
+        with self.assertRaisesRegex(ValueError,'fresh-post-switch'):
+            self.check()
+
+    def test_changed_algorithm_refused(self):
+        self.report['algorithmSha256']='f'*64
+        with self.assertRaisesRegex(ValueError,'bound-independent'):
+            self.check()
+
+    def test_missing_layer_refused(self):
+        self.proof['imageIdentity']['layerBlobChecks']=[]
+        with self.assertRaisesRegex(ValueError,'all-layers'):
+            self.check()
+
+    def test_incomplete_read_refused(self):
+        self.proof['scanStats']['rawArchiveBytesHashed']=9
+        with self.assertRaisesRegex(ValueError,'identity-mismatch'):
+            self.check()
+
+    def test_wrong_runtime_image_refused(self):
+        self.proof['imageIdentity']['ociRuntimeManifestDigest']='sha256:'+'f'*64
+        with self.assertRaisesRegex(ValueError,'all-layers'):
+            self.check()
+
 
 if __name__ == '__main__':
     unittest.main()

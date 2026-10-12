@@ -92,6 +92,37 @@ def verified_installed_tools():
              hashlib.sha256(raw).hexdigest() == expected, 'installed-tools-changed-or-unreviewed')
     return TOOLS_ROOT
 
+def independent_archive_check(version, local_report, verified_at, algorithm_sha):
+    """Validate a real complete-read observation made at the independent archive host."""
+    need(local_report.get('kind')=='complete-independent-program-archive-observation' and
+         local_report.get('algorithmSha256')==algorithm_sha and
+         set(local_report.get('checks',{}))=={'current','previous'},'bound-independent-archive-observation-required')
+    proof=local_report['checks'][version['role']]
+    need(proof.get('passed') is True and proof.get('completeArchiveAndAllLayerPayloadsVerified') is True and
+         proof.get('completeGzipEofVerified') is True and proof.get('serverImported') is False and
+         proof.get('productionSwitched') is False,'actual-offline-complete-read-required')
+    need(proof.get('sourceCommit')==version['sourceCommit'] and
+         proof.get('archiveSha256')==version['archiveSha256'] and
+         proof.get('archiveBytes')==version['archiveBytes'] and
+         proof.get('scanStats',{}).get('rawArchiveBytesHashed')==version['archiveBytes'],
+         'independent-archive-identity-mismatch')
+    identity=proof.get('imageIdentity',{})
+    roots=version['rootFsDiffIds'];layers=identity.get('layerBlobChecks',[])
+    need(bool(roots) and identity.get('ociRuntimeManifestDigest')==version['runtimeImage'] and
+         identity.get('configSource')==version['sourceCommit'] and identity.get('rootFsDiffIds')==roots and
+         identity.get('rootFsDiffIdsMatched') is True and len(layers)==len(roots) and
+         [x.get('rootFsDiffId') for x in layers]==roots and all(x.get('passed') is True for x in layers),
+         'independent-archive-all-layers-required')
+    observed=datetime.datetime.fromisoformat(proof['checkedAtUtc'].replace('Z','+00:00'))
+    switched=datetime.datetime.fromisoformat(verified_at.replace('Z','+00:00'))
+    need(observed.tzinfo is not None and switched.tzinfo is not None and observed>=switched,
+         'fresh-post-switch-independent-read-required')
+    return {'passed':True,'sourceCommit':version['sourceCommit'],'sha256':version['archiveSha256'],
+            'bytes':version['archiveBytes'],'archiveReadLocation':'independent-release-host',
+            'completeArchiveReadAtUtc':proof['checkedAtUtc'],'serverArchiveRead':False,
+            'serverNativeImageStillRequiresVerification':True}
+
+
 def main():
  global TOOLS_ROOT,TOOLS_SHA256
  parser=argparse.ArgumentParser()
@@ -167,12 +198,21 @@ def main():
    record,data,stamp=full_read(path,capture=True);stamps.append((path,stamp));history_records[str(path)]={'path':str(path),'sha256':record['sha256'],'bytes':record['sizeBytes']};return data
   retention.read_file=traced_history
   frontend=config['frontendVersions'];need([v['role'] for v in frontend]==['current','previous'] and [v['sourceCommit'] for v in frontend]==EXPECTED_SOURCES,'exact-frontend-version-set')
-  archive_checks={}
+  archive_checks={};local_report=None
+  if any(v.get('serverArchivePath') is None for v in frontend):
+   local_path=Path(config['localFormalReportPath'])
+   need(local_path.is_absolute() and local_path.is_relative_to(args.records_root) and '..' not in local_path.parts,'bound-local-report-copy-path-required')
+   local_read,local_raw,local_stamp=full_read(local_path,config['localFormalReportSha256'],capture=True)
+   stamps.append((local_path,local_stamp));local_report=json.loads(local_raw)
   for v in frontend:
-   expected=Path(v['serverArchivePath'])
-   need(expected.is_absolute() and expected.is_relative_to(args.records_root) and expected.name=='frontend.tar.gz' and '..' not in expected.parts,'bound-archive-path-required')
-   info,_=storage._verified_file(expected,v['archiveSha256'],size=v['archiveBytes']);stamps.append((expected,signature(info)))
-   archive_checks[v['role']]={'path':str(expected),'bytes':info.st_size,'sha256':v['archiveSha256'],'device':info.st_dev,'inode':info.st_ino,'sourceCommit':v['sourceCommit'],'passed':True}
+   if v.get('serverArchivePath') is None:
+    archive_checks[v['role']]=independent_archive_check(v,local_report,current['productionVerifiedAt'],config['maintainedToolsSha256']['archive_identity.py'])
+    archive_checks[v['role']]['localReportSha256']=config['localFormalReportSha256']
+   else:
+    expected=Path(v['serverArchivePath'])
+    need(expected.is_absolute() and expected.is_relative_to(args.records_root) and expected.name=='frontend.tar.gz' and '..' not in expected.parts,'bound-archive-path-required')
+    info,_=storage._verified_file(expected,v['archiveSha256'],size=v['archiveBytes']);stamps.append((expected,signature(info)))
+    archive_checks[v['role']]={'path':str(expected),'bytes':info.st_size,'sha256':v['archiveSha256'],'device':info.st_dev,'inode':info.st_ino,'sourceCommit':v['sourceCommit'],'passed':True,'archiveReadLocation':'production-host','serverArchiveRead':True}
   image_checks={}
   for component in ['frontend','backend','admin']:
    meta=current[component+'Release'];checks={}
