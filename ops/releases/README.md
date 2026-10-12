@@ -1,5 +1,74 @@
 # 固定程序包发布与前台回退
 
+## 前台统一运行入口（本地工具完成后另行安装）
+
+`release_entry.py` 将程序包、候选检查、原发布器、正式验收、恢复资料交接和浏览器归档串为固定步骤。首版只接受前台批次；其他模块继续使用本文既有入口。它复用原有版本、容量、共享服务保护与发布锁，不替代代码门禁。新增工具须经提交、合入和对应工具安装后才在远端生效，修改工具本身不要求重发网站。
+
+每批写一份私有 `entry-config.json`：
+
+- `schemaVersion: 1`、现有批次目录 `root`、完整来源 `sourceCommit`、`components: ["frontend"]`。
+- `inputs` 中每项由批次内相对 `path` 与实际 `sha256` 组成。开始时必须具备 `candidate`、`archive`、`plan`（路径固定为 `plan.json`）和 `manifest`；后续实际产生的证据可逐步登记。
+- 候选与正式验收分别登记 `candidateReport`、`productionReport`、`interactionReport`。有候选首页例外时登记 `previewDeclaration`，它只能用于候选，不能用于正式网站。
+- 调用原发布器前登记 `preparationBaseline`。它必须来自已维护的 `--capture-preparation-baseline`，并在候选预览收尾后核对原有服务；不要把已经关闭的临时候选当作原有服务恢复。
+- 恢复资料登记 `recoveryInput` 与实际 `recoveryReport`。资料齐全只表示可以开始核对，不表示已恢复演练或已经验收通过。
+- 需要12项首开/菜单检查或24项补充采集时，另登记 `releaseConfig`（固定路径 `release-config.json`）以及相应 `candidateIdentity`/`productionIdentity`。采集使用真实、干净的来源工作区及既有浏览器依赖，全部原有检查保留。
+- 可配置原发布器的 `live`、`auditRoot`、`failureWebhookFile`。通知凭据沿用本人所有、私有文件规则，不能写入普通配置或归档；配置中只引用私有文件路径。
+
+候选元数据的构建配置身份和运行程序身份不同；统一入口沿用 `archive_identity.py` 的完整校验结果，把实际运行身份与计划及清单相互核对，不直接把构建配置身份当作运行身份。
+
+同一批次的来源、模块、程序包、计划、清单与服务器运行选项固定后不可变。证据更新保留旧步骤记录并重新核验受影响部分，不覆盖失败。服务器阶段在服务器执行，本地浏览器阶段在验收电脑执行；沿用现有受核对的传输方法同步批次材料及追加记录，配置摘要按各自实际文件核对。
+
+```sh
+python3 ops/releases/release_entry.py --config /private/release/entry-config.json --config-sha256 ACTUAL_SHA256 check --step archive
+python3 ops/releases/release_entry.py --config /private/release/entry-config.json --config-sha256 ACTUAL_SHA256 run --step archive
+python3 ops/releases/release_entry.py --config /private/release/entry-config.json --config-sha256 ACTUAL_SHA256 run --step candidate
+python3 ops/releases/release_entry.py --config /private/release/entry-config.json --config-sha256 ACTUAL_SHA256 run --step preflight
+```
+
+候选和发布前检查均通过、用户明确授权本批上线后，才由统一发版窗口执行：
+
+```sh
+python3 ops/releases/release_entry.py --config /private/release/entry-config.json --config-sha256 ACTUAL_SHA256 run --step apply --apply
+```
+
+`ACTUAL_SHA256` 必须换为实际配置摘要，示例不是可直接使用的发布授权。`apply` 已开始后，无论成功、失败还是中断都不能重复调用。结果不明时先核对实际运行版本，按原规则整理新的获准批次；不能用 `--resume` 重播切换。发布前检查失败可显式 `run --step preflight --resume`，原失败及原输出保留。
+
+实际切换后的正式浏览器观察必须晚于本次切换，恢复观察也必须晚于切换。分别完成以下步骤：
+
+```sh
+python3 ops/releases/release_entry.py --config /private/release/entry-config.json --config-sha256 ACTUAL_SHA256 run --step production
+python3 ops/releases/release_entry.py --config /private/release/entry-config.json --config-sha256 ACTUAL_SHA256 check --step recovery-input
+python3 ops/releases/release_entry.py --config /private/release/entry-config.json --config-sha256 ACTUAL_SHA256 run --step recovery-input
+python3 ops/releases/release_entry.py --config /private/release/entry-config.json --config-sha256 ACTUAL_SHA256 run --step recovery
+python3 ops/releases/release_entry.py --config /private/release/entry-config.json --config-sha256 ACTUAL_SHA256 run --step pack
+python3 ops/releases/release_entry.py --config /private/release/entry-config.json --config-sha256 ACTUAL_SHA256 status
+```
+
+`status` 与 `check` 不执行服务器操作，也不建立步骤目录。包归档通过不自动写“整批已验收”，最终仍由发布窗口核对原始观察和恢复材料并生成正式回执。归档和检查不清理旧程序、不恢复数据库、不发送询盘。
+
+归档同时重新核对候选与正式材料，使用两阶段报告绑定文件。正常没有警告或错误的空日志，只有在对应报告中绑定后才可保留；没有产生或没有绑定的空文件仍会被拒绝。
+
+额外浏览器检查按实际影响选择，不将原20项页面与8项核心交互的门禁移除。同一来源和条件下有效的记录可沿既有规则复用：
+
+```sh
+python3 ops/releases/release_entry.py --config /private/release/entry-config.json --config-sha256 ACTUAL_SHA256 run --step focused-candidate
+python3 ops/releases/release_entry.py --config /private/release/entry-config.json --config-sha256 ACTUAL_SHA256 run --step capture-candidate
+```
+
+正式网站对应 `focused-production` 与 `capture-production`。固定采集器只使用真实鼠标/键盘，联系默认操作被阻止、需求不提交；真实电话、微信及通知送达仍须独立业务验收。三次独立打开的预算按三次导航和动作总量计算，默认每项180秒；检查数量、文章数量与断言不减少，失败不会自动改成通过。12项检查任意跳过、重试后掩盖失败或不完整均拒绝。
+
+资料和结果协议由 `release_contract.py` 统一检查。“程序健康”和“验收通过”分别处理；漏基线或工具身份时在调用观察程序前明确失败。版本、输入摘要、切换时间或保护观察不匹配时停止。24项既有补充检查固化在 `capture-supplemental.cjs`，增加可见目标唯一性、滚动稳定和中心遮挡核对；新的尝试目录不能覆盖旧截图。
+
+本地自测使用已有小程序包与明确标注的合成协议资料，以及真实浏览器中的本地测试页；不把合成资料当线上验收证据：
+
+```sh
+cd ops/releases
+python3 -B -m unittest test_release_contract test_release_entry
+RELEASE_TEST_PACKAGE_JSON=/absolute/clean/source/frontend/package.json node --test test_capture-supplemental.cjs
+```
+
+新入口的服务器切换和跨机器交接，须在用户后续授权的工具安装及实际发版中验证；本地自测不等于服务器已安装或新版流程已生效。
+
 旧 `Build And Deploy` 已取消 main 推送触发，全部任务在代码中固定停用，仓库开关继续关闭。旧一键脚本仅提示正确入口后退出；当前生产版本的固定镜像标记也继续阻止历史整站路径。不要删除标记后恢复服务器构建。容量不足时不再自动清理这台共享服务器。
 
 统一发版窗口先记录本批来源提交、任务、模块和负责人，其他窗口只负责迭代和相关检查；任务不会因同属项目而自动加入批次。`prepare-release.yml`（`Prepare Selected Website Release`）默认只准备前台，可明确选择业务后台、管理后台及组合，完整选择规则见下表。准备完成不等于已发布。
