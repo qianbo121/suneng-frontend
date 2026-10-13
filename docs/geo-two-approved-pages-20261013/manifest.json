@@ -1,0 +1,128 @@
+{
+  "version": "V1",
+  "status": "implementation_verified_pending_release",
+  "language": "zh",
+  "scope": "two existing Chinese pages, frontend content implementation",
+  "published": false,
+  "online_mutation": false,
+  "title_and_url_preserved": true,
+  "contacts_preserved": {
+    "phone": "+86-130-5298-6814",
+    "email": "997518512@qq.com",
+    "existing_wechat_and_form": "keep unchanged on existing page"
+  },
+  "sources": [
+    {
+      "name": "2019台车式电阻炉加长方案",
+      "path": "docs/news-chief-geo-final-20260915/safety-scope/sources/30/S1-fresh.txt",
+      "used": "结构变化与加热、控温联动",
+      "not_proven": "交付、实测节能、其他项目适用性"
+    },
+    {
+      "name": "2024台车式高温电阻炉方案",
+      "path": "docs/news-chief-geo-final-20260915/safety-scope/sources/26/S8-fresh.txt",
+      "used": "空炉检测、负载调试与协议验收的区分",
+      "not_proven": "旧炉改造实绩、已通过验收"
+    }
+  ],
+  "files": {
+    "01_维修改造服务页_修改稿.html": {
+      "sha256": "5daa5da7abca9cd535f24aa00f12d8253049492d0d6702aa579a76be483b56e4",
+      "bytes": 16151
+    },
+    "审阅入口.html": {
+      "sha256": "7b4ee3f0c24501c9d9658f5cb38ff3ca002517724143d8075c6b5c6f7da538bf",
+      "bytes": 4848
+    },
+    "03_改动说明与核对.html": {
+      "sha256": "e3f8f6c684464c48fe80eff242745496af1ae1bead9f5c6f08d26e6809ddb5ef",
+      "bytes": 11790
+    },
+    "02_大修厂家选择文章_修改稿.html": {
+      "sha256": "2f105d74d1d2ae7cbc6396c7d74bcb2e008709e70c7e63ec5e3d5168f20ae22e",
+      "bytes": 15359
+    }
+  },
+  "content_approval": {
+    "user_message": "好的 可以",
+    "scope": "两份中文修改稿内容确认，联系方式保留",
+    "recorded_at": "2026-10-13T00:01:19.701620-07:00",
+    "confirmed_files": {
+      "01_维修改造服务页_修改稿.html": "5daa5da7abca9cd535f24aa00f12d8253049492d0d6702aa579a76be483b56e4",
+      "02_大修厂家选择文章_修改稿.html": "2f105d74d1d2ae7cbc6396c7d74bcb2e008709e70c7e63ec5e3d5168f20ae22e"
+    },
+    "publication_authorized": false,
+    "preceding_constraint": "联系方式保留，先不要发布"
+  },
+  "publication_approval": {
+    "user_message": "可以发布，需要让另外一个窗口执行吗？",
+    "scope": "two approved Chinese pages, frontend only",
+    "supersedes_previous_no_publish_constraint": true
+  },
+  "execution_instruction": {
+    "user_message": "你先提交 我后面自己转",
+    "scope": "implement, verify and commit locally; user forwards to release window",
+    "send_to_other_thread": false,
+    "push": false,
+    "deploy_this_window": false
+  },
+  "implementation_base": "739666557a4ba4cb533950d94b215b8549ea57e5",
+  "live_article_source_checked_at": "2026-10-13T07:13:55+00:00",
+  "live_article_source_fingerprint": "1869494553b7c326b48b809d05b497e493a70e545daf1dcab186d133b483aa05",
+  "preserved_existing_behavior": [
+    "phone and email",
+    "service hero and six system images",
+    "nine further-reading entries",
+    "WeChat dialog and inquiry form",
+    "article title slug and original publication date",
+    "English text and English review date",
+    "baseline warranty clauses"
+  ],
+  "presentation_only_changes": [
+    "service tables scroll on narrow screens",
+    "article tables reuse existing labelled mobile cards; approved text unchanged"
+  ],
+  "validation": {
+    "typecheck": "passed",
+    "scoped_eslint": "passed",
+    "test_files": 3,
+    "tests_passed": 18,
+    "browser_views": [
+      {
+        "page": "service",
+        "width": 1440,
+        "approved_fragments": 106,
+        "missing_fragments": 0,
+        "horizontal_overflow": false
+      },
+      {
+        "page": "service",
+        "width": 390,
+        "approved_fragments": 106,
+        "missing_fragments": 0,
+        "horizontal_overflow": false
+      },
+      {
+        "page": "article",
+        "width": 390,
+        "approved_fragments": 85,
+        "missing_fragments": 0,
+        "horizontal_overflow": false
+      },
+      {
+        "page": "article",
+        "width": 1440,
+        "approved_fragments": 85,
+        "missing_fragments": 0,
+        "horizontal_overflow": false
+      }
+    ],
+    "final_browser_console_errors": 0,
+    "english_article_and_service": "passed",
+    "full_build": "not run in commit task",
+    "production_acceptance": "not performed",
+    "completed_at": "2026-10-13T07:32:30+00:00",
+    "preview_read_timeout": "Initial default-timeout article request failed; final local preview used 15000 ms. No production configuration changed."
+  },
+  "screenshots_directory": "/Users/qianbo/Desktop/Coding/独立站/output/geo-two-page-drafts-review-v1/internal/implementation-checks"
+}
