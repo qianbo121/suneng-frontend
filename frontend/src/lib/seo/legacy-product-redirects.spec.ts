@@ -266,8 +266,9 @@ describe('verified original-PHP product redirects', () => {
       baseline = baseline.replace(line, '');
     }
     baseline = baseline.replace('    43 /zh/news/annealing-furnace-metal-semiconductor-selection;\n', '');
+    // Same redirect baseline, with the owner-approved legacy admin retirement applied.
     expect(createHash('sha256').update(baseline).digest('hex'))
-      .toBe('2dd0aa587f170e7ed3d67aaf211022c0365ec8efcda713e95d1d9fc9cbbfa7dc');
+      .toBe('b3fc26e3709201fccb4df654600b6fba27c2d38b2dbbc6e2afa90d2f2a6ebeae');
     expect(approvedUiProcurementMappings).toHaveLength(55);
     expect(new Set(approvedUiProcurementMappings.map(([, path]) => new URL('https://www.jssngyl.cn' + path).hash)).size).toBe(9);
   });
