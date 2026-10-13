@@ -13,11 +13,7 @@ WORKFLOW = ROOT / '.github/workflows/prepare-release.yml'
 SELECTIONS = {
     'frontend': ['frontend'],
     'backend': ['backend'],
-    'admin': ['admin'],
     'frontend+backend': ['frontend', 'backend'],
-    'frontend+admin': ['frontend', 'admin'],
-    'backend+admin': ['backend', 'admin'],
-    'frontend+backend+admin': ['frontend', 'backend', 'admin'],
 }
 
 
@@ -67,7 +63,7 @@ class ComponentSelectionTests(unittest.TestCase):
                 self.assertEqual(json.loads(output.removeprefix('matrix=')), {'component': expected})
 
     def test_empty_unknown_duplicate_and_shell_input_are_rejected(self):
-        invalid = ['', 'all', 'unknown', 'frontend,backend', 'frontend+frontend',
+        invalid = ['admin', 'frontend+admin', 'backend+admin', 'frontend+backend+admin', '', 'all', 'unknown', 'frontend,backend', 'frontend+frontend',
                    'backend+frontend', 'frontend ', '../backend', 'frontend\nadmin',
                    'frontend; echo injected', '$(echo frontend)', '${frontend}']
         for selection in invalid:
@@ -112,7 +108,7 @@ class ComponentSelectionTests(unittest.TestCase):
         return result
 
     def test_builds_use_fixed_module_and_compatible_arguments(self):
-        for component in ['frontend', 'backend', 'admin']:
+        for component in ['frontend', 'backend']:
             with self.subTest(component=component):
                 result = self.build_component(component)
                 self.assertEqual(result.returncode, 0, result.stderr)

@@ -6,7 +6,7 @@
 
 - `frontend`: Next.js App Router + TypeScript + Tailwind CSS + next-intl
 - `backend`: NestJS + Prisma + PostgreSQL
-- `admin`: React 18 + Vite + Ant Design 5
+- `admin`: 已退役的旧管理页面源码，仅用于历史追溯，不参与安装、构建、部署和验收
 - `deploy`: Docker Compose + Nginx + GitHub Actions
 
 ## 项目结构
@@ -49,7 +49,7 @@ pnpm --dir backend prisma:generate
 ```bash
 pnpm dev:frontend
 pnpm dev:backend
-pnpm dev:admin
+# 旧管理页面已退役
 ```
 
 ## 生产部署

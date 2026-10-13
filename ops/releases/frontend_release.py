@@ -18,6 +18,7 @@ import time
 import uuid
 import xml.etree.ElementTree as ET
 from urllib.parse import urlparse
+from component_lifecycle import active_components, retired_admin
 from storage_policy import working_space
 from frontend_html import frontend_html_probe
 from acquisition_continuity import acquisition_continuity_probe
@@ -162,7 +163,7 @@ def assert_current(receipt, rows, expected):
     images = {row['Name'].removeprefix('/corp-site-'): row['Image'] for row in rows}
     if images['frontend'] != expected:
         raise RuntimeError('Production changed since this release was prepared')
-    for service in ['frontend', 'backend', 'admin']:
+    for service in active_components(receipt):
         if receipt['images'].get(service) != images[service]:
             raise RuntimeError('Active receipt does not match running images')
     if not all(row['State']['Running'] for row in rows):
@@ -417,6 +418,10 @@ class Release:
         self.pins_path = live / 'verified-images.override.yml'
         self.pending_path = live / 'DEPLOYMENT_IN_PROGRESS.json'
         self.receipt = json.loads(self.receipt_path.read_text())
+        self.active_components = active_components(self.receipt)
+        if retired_admin(self.receipt) and ('admin' in manifest or self.admin_only):
+            raise ValueError('The owner-retired admin UI cannot be released')
+        self.production_services = ['postgres', 'nginx', *self.active_components]
         # Case pages served by the image being released, and by the live image
         # (older receipts predate case approval and serve none).
         self.served_guides = normalize_guides(manifest.get('approvedGuides', []))
@@ -446,7 +451,7 @@ class Release:
         self.target['frontend'] = manifest['image']
         self.migration_backup_verified = False
         self.components = [] if self.preserve_frontend else ['frontend']
-        self.protected = list(PROTECTED)
+        self.protected = [s for s in PROTECTED if s != 'admin' or 'admin' in self.active_components]
         if self.preserve_frontend:
             self.protected.append('frontend')
             # The unchanged frontend keeps its own publication contract and identity.
@@ -580,7 +585,7 @@ class Release:
         if (self.live / '.DO_NOT_DEPLOY').exists() or (self.live / '.DO_NOT_DEPLOY').is_symlink():
             raise RuntimeError('This checkout is explicitly blocked from deployment')
         storage = working_space(self.live, kind)
-        before = inspect(PROTECTED + ['frontend'])
+        before = inspect(self.production_services)
         assert_current(self.receipt, before, self.manifest['expectedCurrentImage'])
         protected = signature([r for r in before if r['Name'].removeprefix('/corp-site-') in self.protected])
         if 'backend' in self.manifest and self.receipt['images']['backend'] != self.manifest['backend']['expectedCurrentImage']:
@@ -675,7 +680,7 @@ class Release:
             self.migration_backup_verified = True
         # Re-check the expected current version immediately before replacement.
         result['storageCheck'] = working_space(self.live, kind)
-        current = inspect(PROTECTED + ['frontend'])
+        current = inspect(self.production_services)
         assert_current(self.receipt, current, self.manifest['expectedCurrentImage'])
         if signature([row for row in current if row['Name'].removeprefix('/corp-site-') in self.protected]) != protected:
             raise RuntimeError('A protected production service changed before replacement')
@@ -780,7 +785,7 @@ class Release:
                 guard = getattr(self, 'phase_guard', None)
                 if guard is not None and not guard.owns_pending():
                     # Unknown marker ownership also forbids overwriting another operation's metadata.
-                    observed = {row['Name'].removeprefix('/corp-site-'): row['Image'] for row in inspect(['frontend', 'backend', 'admin'])}
+                    observed = {row['Name'].removeprefix('/corp-site-'): row['Image'] for row in inspect(self.active_components)}
                     result.update({'observedImages': observed, 'reconciliationRequired': True,
                                    'liveMetadataPreserved': True, 'previousFrontendRestoredAndVerified': False})
                     if self.backend_only:
@@ -792,7 +797,7 @@ class Release:
                 if not self.pending_path.exists() and not self.pending_path.is_symlink():
                     from phase_runtime import exclusive_json
                     exclusive_json(self.pending_path, {**pending, 'reconciliationRequired': True})
-                observed = {row['Name'].removeprefix('/corp-site-'): row['Image'] for row in inspect(['frontend', 'backend', 'admin'])}
+                observed = {row['Name'].removeprefix('/corp-site-'): row['Image'] for row in inspect(self.active_components)}
                 failed = copy.deepcopy(self.receipt)
                 failed.update({'images': observed, 'deploymentStatus': 'recovery-required', 'releaseOperationReceipt': str(self.audit / 'result.json')})
                 # Describe the cases of the frontend that is actually running.

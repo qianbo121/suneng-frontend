@@ -2,7 +2,7 @@ import { readFileSync } from 'node:fs';
 
 import { describe, expect, it } from 'vitest';
 
-const dockerfiles = ['frontend/Dockerfile', 'backend/Dockerfile', 'admin/Dockerfile'];
+const dockerfiles = ['frontend/Dockerfile', 'backend/Dockerfile'];
 const backendDockerfile = readFileSync(
   new URL('../../../../backend/Dockerfile', import.meta.url),
   'utf8',

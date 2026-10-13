@@ -90,7 +90,7 @@ class Status:
         receipt = json.loads(receipt_bytes)
         if (receipt.get('deploymentStatus') != 'verified'
                 or not all(retention.IMAGE.fullmatch(receipt.get('images', {}).get(c, ''))
-                           for c in retention.COMPONENTS)):
+                           for c in retention.active_components(receipt))):
             raise ValueError('The current receipt is not a verified website release')
         receipt_sha = retention.digest(receipt_bytes)
         report['currentReceipt'] = {'path': str(receipt_path), 'sha256': receipt_sha,
@@ -101,6 +101,18 @@ class Status:
             return
         operation_bytes = metadata_bytes(operation_path, self.root)
         operation = json.loads(operation_bytes)
+        if receipt.get('releaseOperation') == 'retire-admin':
+            if (not retention.retired_admin(receipt)
+                    or operation.get('kind') != 'retire-admin'
+                    or operation.get('passed') is not True or operation.get('applied') is not True
+                    or operation.get('images') != receipt['images']
+                    or operation.get('retiredAt') != receipt['retiredComponents']['admin']['retiredAt']
+                    or operation.get('previousReceipt') != receipt.get('previousReceipt')
+                    or retention.digest(metadata_bytes(receipt['previousReceipt'], self.root))
+                       != operation.get('previousReceiptSha256')):
+                raise ValueError('Unverified component retirement')
+            report.update(status='not-required', reason='retirement-preserves-recovery-no-image-deletion')
+            return
         plan_path = Path(plan_path) if plan_path else Path(operation_path).parent / 'retention-pending.json'
         report['plan'] = str(plan_path)
         if not plan_path.exists() and not plan_path.is_symlink():
@@ -232,7 +244,7 @@ class Status:
             except Exception as error:
                 report['capacity'] = {'passed': False, 'failureType': type(error).__name__,
                                       'deletionAuthorized': False}
-        report['needsAttention'] = (report['status'] not in {'cleaned', 'no-targets'}
+        report['needsAttention'] = (report['status'] not in {'cleaned', 'no-targets', 'not-required'}
                                     or bool(report.get('closeout', {}).get('skipped'))
                                     or report.get('capacity', {}).get('passed') is False)
         return report

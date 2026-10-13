@@ -68,7 +68,8 @@ describe('inquiry release contract', () => {
       deploy.indexOf('prisma migrate deploy'),
     );
     expect(compose).toContain(healthGate);
-    expect(compose).toContain('/usr/share/nginx/html/inquiry-contract-version.txt');
+    // The archived admin marker remains historical evidence, not an active service gate.
+    expect(compose).not.toContain('container_name: corp-site-admin');
     expect(compose).not.toContain('r.statusCode === 200 ? 0 : 1');
     expect(adminMarker.trim()).toBe('2');
   });

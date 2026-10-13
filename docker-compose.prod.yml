@@ -142,36 +142,6 @@ services:
       retries: 12
       start_period: 30s
 
-  admin:
-    build:
-      context: .
-      dockerfile: admin/Dockerfile
-      args:
-        VITE_APP_BASE_PATH: /
-        VITE_APP_NAME: Corporate Admin
-        VITE_API_BASE_URL: /api
-    labels:
-      org.opencontainers.image.revision: ${DEPLOY_COMMIT:-unknown}
-    container_name: corp-site-admin
-    logging: *default-logging
-    restart: always
-    mem_limit: 256m
-    depends_on:
-      backend:
-        condition: service_healthy
-    expose:
-      - '80'
-    healthcheck:
-      test:
-        [
-          'CMD-SHELL',
-          'test "$(cat /usr/share/nginx/html/inquiry-contract-version.txt 2>/dev/null)" = "2" && wget -q -O /dev/null http://127.0.0.1/',
-        ]
-      interval: 10s
-      timeout: 5s
-      retries: 12
-      start_period: 20s
-
   nginx:
     image: nginx:1.27-alpine
     container_name: corp-site-nginx
@@ -182,8 +152,6 @@ services:
       backend:
         condition: service_healthy
       frontend:
-        condition: service_healthy
-      admin:
         condition: service_healthy
     environment:
       DOMAIN: ${DOMAIN}

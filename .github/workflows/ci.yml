@@ -1,4 +1,4 @@
-# Quality gate: lint + typecheck + unit tests + build for all three packages.
+# Quality gate: lint + typecheck + unit tests + build for the two active packages.
 # Unit tests cover the security-critical units (RolesGuard default-deny, upload
 # magic-byte validation, rich-text sanitizer). Behavioral/e2e coverage (full
 # RBAC routes, ISR, viewcount idempotency) is still validated by the per-batch
@@ -69,7 +69,7 @@ jobs:
           python3 scripts/test_frontend_layer_reuse.py
           node --test ops/releases/test_check_backend.cjs
           python3 ops/releases/test_frontend_release.py
-          (cd ops/releases && python3 -m unittest test_preparation_guard test_phase_runtime test_archive_transfer test_archive_identity test_release_browser test_release_candidate test_release_closeout test_release_storage_status test_procurement_versions test_release_capture test_verify_recovery_materials -v)
+          (cd ops/releases && python3 -m unittest test_preparation_guard test_phase_runtime test_archive_transfer test_archive_identity test_release_browser test_release_candidate test_release_closeout test_release_storage_status test_component_lifecycle test_procurement_versions test_release_capture test_verify_recovery_materials -v)
           python3 ops/releases/test_acquisition_continuity.py
           python3 ops/releases/test_deployment_notice.py
           python3 ops/releases/test_data_backup.py
@@ -206,29 +206,3 @@ jobs:
           node "$RUNNER_TEMP/backend-runtime/node_modules/prisma/build/index.js" generate \
             --schema "$RUNNER_TEMP/backend-runtime/prisma/schema.prisma"
           node backend/scripts/verify-runtime.cjs "$RUNNER_TEMP/backend-runtime" --repair-self-link
-
-  admin:
-    name: Admin (lint + test + build)
-    runs-on: ubuntu-latest
-    # 实测约 5 分钟。默认 6 小时太长，卡住会白烧机器时间。
-    timeout-minutes: 20
-    steps:
-      - uses: actions/checkout@v7
-      - uses: actions/setup-node@v7
-        with:
-          node-version: 22.23.1
-      - uses: pnpm/action-setup@v6
-      - name: Install
-        run: pnpm install --frozen-lockfile
-      - name: Lint
-        run: pnpm --dir admin lint
-      - name: Test
-        run: pnpm --dir admin test
-      # admin build is `tsc -b && vite build`, so the build step also type-checks
-      # (project-references mode; plain `tsc --noEmit` throws TS6310 here).
-      - name: Build
-        env:
-          VITE_APP_NAME: Corporate Admin
-          VITE_API_BASE_URL: /api
-          VITE_APP_BASE_PATH: /
-        run: pnpm --dir admin build

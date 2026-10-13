@@ -14,11 +14,7 @@ on:
         options:
           - frontend
           - backend
-          - admin
           - frontend+backend
-          - frontend+admin
-          - backend+admin
-          - frontend+backend+admin
       segmented_archive:
         description: Opt in to segmented gzip; requires the new archive transport verifier
         required: false
@@ -44,11 +40,7 @@ jobs:
           case "$RELEASE_COMPONENTS" in
             frontend) matrix='{"component":["frontend"]}' ;;
             backend) matrix='{"component":["backend"]}' ;;
-            admin) matrix='{"component":["admin"]}' ;;
             frontend+backend) matrix='{"component":["frontend","backend"]}' ;;
-            frontend+admin) matrix='{"component":["frontend","admin"]}' ;;
-            backend+admin) matrix='{"component":["backend","admin"]}' ;;
-            frontend+backend+admin) matrix='{"component":["frontend","backend","admin"]}' ;;
             *) echo 'A nonempty, explicit reviewed component selection is required.' >&2; exit 1 ;;
           esac
           printf 'matrix=%s\n' "$matrix" >> "$GITHUB_OUTPUT"
@@ -108,10 +100,6 @@ jobs:
                 --build-arg "NEXT_PUBLIC_BING_SITE_VERIFICATION=$NEXT_PUBLIC_BING_SITE_VERIFICATION" \
                 --build-arg "NEXT_PUBLIC_360_SITE_VERIFICATION=$NEXT_PUBLIC_360_SITE_VERIFICATION" \
                 --build-arg "NEXT_PUBLIC_SOGOU_SITE_VERIFICATION=$NEXT_PUBLIC_SOGOU_SITE_VERIFICATION"
-              ;;
-            admin)
-              dockerfile=admin/Dockerfile
-              set -- --build-arg VITE_APP_BASE_PATH=/ --build-arg VITE_API_BASE_URL=/api
               ;;
             *) echo 'Unexpected release component.' >&2; exit 1 ;;
           esac

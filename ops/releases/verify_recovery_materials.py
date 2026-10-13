@@ -182,7 +182,8 @@ def main():
   need(operation['retention']['plan']==config['formalRecords']['retentionPlan']['path'] and plan['live']=='/opt/website' and plan['receiptSha256']==config['formalRecords']['current']['sha256'] and plan['previousReceiptSha256']==config['formalRecords']['previous']['sha256'],'final-retention-raw-bindings')
   need(operation['kind']=='deploy' and operation['passed'] is True and operation['applied'] is True and operation['image']==current['images']['frontend'] and operation['components']==plan['components']==['frontend'] and plan['acceptanceRequired'] is True,'real-frontend-only-activation')
   need(current['images']==config['expectedCurrentImages'] and current['frontendRelease']['expectedCurrentImage']==previous['images']['frontend'],'current-previous-runtime-boundary')
-  for component in ['backend','admin']:
+  for component in retention.active_components(current):
+   if component=='frontend':continue
    need(current['images'][component]==previous['images'][component] and current[component+'Release']==previous[component+'Release'],'unselected-components-preserved')
   protected=retention.boundaries(current)
   need(len(protected)==6 and protected=={v['image'] for v in config['sixNativeProtectedImages']} and len(config['sixNativeProtectedImages'])==6,'native-six-recovery-boundaries')
@@ -225,6 +226,9 @@ def main():
     observation=before_images[image]
     need(retention.owned_image(observation,component,source) and observation['layers']==expectation['rootFsDiffIds'],'exact-owned-tag-source-ordered-layers')
     checks[role]={'image':image,'sourceCommit':source,'tag':observation['tags'][0],'rootFsDiffIds':observation['layers'],'passed':True}
+   if component not in retention.active_components(current):
+    need(not any(r['name']=='/corp-site-'+component and r['running'] for r in before_containers),'retired-component-running')
+    checks['retired']=True;image_checks[component]=checks;continue
    running=[r for r in before_containers if r['name']=='/corp-site-'+component]
    need(len(running)==1 and running[0]['image']==meta['image'] and running[0]['running'] is True and running[0]['health']=='healthy','exact-running-component-healthy')
    checks['runningHealthy']=True;image_checks[component]=checks

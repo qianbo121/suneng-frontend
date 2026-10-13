@@ -8,7 +8,6 @@ RUN npm install -g pnpm@9.15.4 --registry=https://registry.npmjs.org \
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 COPY frontend/package.json ./frontend/package.json
 COPY backend/package.json ./backend/package.json
-COPY admin/package.json ./admin/package.json
 COPY backend/prisma/schema.prisma ./backend/prisma/schema.prisma
 COPY frontend/patches/ ./frontend/patches/
 

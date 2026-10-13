@@ -36,3 +36,6 @@ archive
 *.sql
 !.dockerignore
 !backend/prisma/migrations/**/*.sql
+
+# Retired operator UI is not a production build input.
+admin

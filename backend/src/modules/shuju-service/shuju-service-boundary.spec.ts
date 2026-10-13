@@ -103,14 +103,17 @@ describe('Shuju service security boundary', () => {
     expect(compose).toContain('SHUJU_GROWTH_READ_ENABLED: ${SHUJU_GROWTH_READ_ENABLED:-false}');
   });
 
-  it('blocks service routes on both production public hosts and local nginx', () => {
+  it('blocks public service routes and retires the entire old admin host', () => {
     const productionNginx = read('nginx.prod.conf.template');
     const localNginx = read('nginx.conf');
     const productionBlocks = productionNginx.match(
       /location \^~ \/api\/svc\/ \{\s*return 404;\s*\}/g,
     );
 
-    expect(productionBlocks).toHaveLength(2);
+    expect(productionBlocks).toHaveLength(1);
+    const retiredAdmin = productionNginx.split('server_name ${ADMIN_DOMAIN};').at(-1)!;
+    expect(retiredAdmin).toMatch(/location \/ \{\s*return 410;\s*\}/);
+    expect(retiredAdmin).not.toContain('proxy_pass');
     expect(localNginx).toMatch(/location \^~ \/api\/svc\/ \{\s*return 404;\s*\}/);
   });
 
