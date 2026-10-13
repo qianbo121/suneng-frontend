@@ -14,6 +14,26 @@ _SANITIZER_SPEC = importlib.util.spec_from_file_location('sanitize_evidence', _S
 _SANITIZER = importlib.util.module_from_spec(_SANITIZER_SPEC)
 _SANITIZER_SPEC.loader.exec_module(_SANITIZER)
 
+def expected_headings_for(frozen):
+    headings = {article['path']:article['title'] for article in frozen['articles']}
+    headings.update({
+        '/en/news':'Industrial Furnace Selection & Purchasing Resources',
+        '/en/products/detail/trolley-furnace':'Bogie-hearth Furnace | Batch Heat Treatment of Large Heavy Parts',
+        '/zh/products/detail/fastener-quench-temper-line':'紧固件调质生产线',
+        '/zh/products/detail/mesh-belt-furnace':'网带炉｜小型工件连续热处理',
+        '/zh/products/detail/trolley-furnace':'台车炉｜大型重型工件周期式热处理',
+        '/zh/products/detail/pit-furnace':'井式炉｜长轴类工件立式热处理',
+        '/zh/products/detail/roller-hearth-furnace':'辊底炉｜规整工件辊道连续热处理',
+    })
+    overrides = frozen.get('headingOverrides', {})
+    if not isinstance(overrides, dict) or not set(overrides) <= set(headings):
+        raise ValueError('Heading overrides must name existing acceptance routes')
+    if any(not isinstance(title, str) or not title.strip() or title != title.strip()
+           for title in overrides.values()):
+        raise ValueError('Heading overrides require nonempty frozen titles')
+    headings.update(overrides)
+    return headings
+
 parser = argparse.ArgumentParser()
 parser.add_argument('--phase', choices=['candidate', 'production'], required=True)
 parser.add_argument('--plan', required=True)
@@ -36,7 +56,9 @@ base = identity['baseUrl']
 origin = urllib.parse.urlsplit(base)
 assert (origin.hostname=='127.0.0.1' and origin.scheme=='http') if args.phase=='candidate' else base=='https://www.jssngyl.cn'
 assert re.fullmatch(r'[A-Za-z0-9_-]{1,80}', plan['qaMarker'])
-frozen = json.loads((root/'acceptance-plan.json').read_text())
+frozen_bytes = (root/'acceptance-plan.json').read_bytes()
+frozen = json.loads(frozen_bytes)
+expected_headings = expected_headings_for(frozen)
 case_dir = root/args.phase/plan['sourceCommit'][:12]/'interactive'/args.viewport/args.task
 if args.attempt==2:
     assert json.loads((case_dir/'attempt-1'/'interaction-receipt.json').read_text())['passed'] is False
@@ -65,16 +87,6 @@ def evaluate(js,name):
     result=run(['eval','--stdin'],name,stdin=js)['result']
     return json.loads(result) if isinstance(result,str) else result
 
-expected_headings = {article['path']:article['title'] for article in frozen['articles']}
-expected_headings.update({
-    '/en/news':'Industrial Furnace Selection & Purchasing Resources',
-    '/en/products/detail/trolley-furnace':'Bogie-hearth Furnace | Batch Heat Treatment of Large Heavy Parts',
-    '/zh/products/detail/fastener-quench-temper-line':'紧固件调质生产线',
-    '/zh/products/detail/mesh-belt-furnace':'网带炉｜小型工件连续热处理',
-    '/zh/products/detail/trolley-furnace':'台车炉｜大型重型工件周期式热处理',
-    '/zh/products/detail/pit-furnace':'井式炉｜长轴类工件立式热处理',
-    '/zh/products/detail/roller-hearth-furnace':'辊底炉｜规整工件辊道连续热处理',
-})
 
 def ready(path,name,heading=None):
     condition='location.pathname==='+json.dumps(path)
@@ -245,7 +257,7 @@ finally:
     except Exception as error:
         failure=failure or _SANITIZER.redact_text(str(error))
     passed=failure is None and len(states)>0 and all(all(s['assertions'].values()) for s in states) and console_ok and errors_ok
-    receipt={'atUtc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'method':'real-browser','phase':args.phase,'sourceCommit':plan['sourceCommit'],'runtimeImage':plan['runtimeImage'],'planSha256':args.plan_sha256,'identityBeforeInput':str(pathlib.Path(args.identity_before).resolve()),'task':args.task,'viewport':viewport,'session':session,'attempt':args.attempt,'passed':passed,'collectorFailure':failure,'states':states,'actualNavigationArrivals':navigations,'contactClicked':contact_clicked,'contactDialogOpened':contact_opened,'externalContactActivated':False,'formSubmitted':False,'leadFormSubmitted':False,'searchFormSubmitted':search_form_submitted,'collectorFile':'browser/capture-interactions.py','collectorSourceSha256':hashlib.sha256(pathlib.Path(__file__).read_bytes()).hexdigest(),'consoleRawFile':'console.raw.json','errorsRawFile':'errors.raw.json','consoleMessageCount':console_count,'runtimeErrorCount':error_count,'commands':commands,'boundFilesSha256':{f.name:hashlib.sha256(f.read_bytes()).hexdigest() for f in out.iterdir() if f.is_file()},'limits':['Separate from read-only base view report.','formSubmitted refers to inquiry/lead forms; read-only GET search submission is recorded separately.','Mobile means viewport size with desktop user agent; real dialing is excluded.','Phone contact check installs an explicit native external-protocol prevention guard, while preserving the page handler.','Desktop covers all 5 equipment and 3 trolley destinations; mobile checks one representative of each.','No lead form submissions, calls, outgoing WeChat/email or clipboard writes.','Empty extra console/error logs are not generated; actual zero-count raw JSON is retained.']}
+    receipt={'atUtc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'method':'real-browser','phase':args.phase,'sourceCommit':plan['sourceCommit'],'runtimeImage':plan['runtimeImage'],'planSha256':args.plan_sha256,'identityBeforeInput':str(pathlib.Path(args.identity_before).resolve()),'task':args.task,'viewport':viewport,'session':session,'attempt':args.attempt,'passed':passed,'collectorFailure':failure,'states':states,'actualNavigationArrivals':navigations,'contactClicked':contact_clicked,'contactDialogOpened':contact_opened,'externalContactActivated':False,'formSubmitted':False,'leadFormSubmitted':False,'searchFormSubmitted':search_form_submitted,'collectorFile':'browser/capture-interactions.py','collectorSourceSha256':hashlib.sha256(pathlib.Path(__file__).read_bytes()).hexdigest(),'acceptancePlanSha256':hashlib.sha256(frozen_bytes).hexdigest(),'consoleRawFile':'console.raw.json','errorsRawFile':'errors.raw.json','consoleMessageCount':console_count,'runtimeErrorCount':error_count,'commands':commands,'boundFilesSha256':{f.name:hashlib.sha256(f.read_bytes()).hexdigest() for f in out.iterdir() if f.is_file()},'limits':['Separate from read-only base view report.','formSubmitted refers to inquiry/lead forms; read-only GET search submission is recorded separately.','Mobile means viewport size with desktop user agent; real dialing is excluded.','Phone contact check installs an explicit native external-protocol prevention guard, while preserving the page handler.','Desktop covers all 5 equipment and 3 trolley destinations; mobile checks one representative of each.','No lead form submissions, calls, outgoing WeChat/email or clipboard writes.','Empty extra console/error logs are not generated; actual zero-count raw JSON is retained.']}
     with (out/'interaction-receipt.json').open('x') as handle:json.dump(receipt,handle,ensure_ascii=False,indent=2);handle.write('\n')
 if not passed:
     raise SystemExit('Interaction failed: '+str(out))

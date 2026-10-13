@@ -69,6 +69,7 @@ for view in ['pc','mobile']:
             'actualSourceBound':receipt['sourceCommit']==plan['sourceCommit'] and receipt['runtimeImage']==plan['runtimeImage'],
             'actualPlanBound':receipt['planSha256']==a.plan_sha256,
             'collectorSourceUnchanged':receipt['collectorSourceSha256']==hashlib.sha256((root/'capture-interactions.py').read_bytes()).hexdigest(),
+            'frozenAcceptancePlanUnchanged':receipt.get('acceptancePlanSha256')==hashlib.sha256((root/'acceptance-plan.json').read_bytes()).hexdigest(),
             'actualViewportBound':receipt['viewport']==viewport,
             'actualTaskBound':receipt['task']==task and receipt['phase']==a.phase,
             'leadFormNotSubmitted':receipt['leadFormSubmitted'] is False and receipt['formSubmitted'] is False,
