@@ -1,3 +1,4 @@
+import { getReviewedManufacturerLinks } from './news-manufacturer-related';
 import { isWithdrawnTechnicalPath } from '@/lib/publication-scope';
 import type { NewsApiItem } from '@/types/news';
 
@@ -207,9 +208,11 @@ export function getNewsRelatedLinks(
   const articleLinks = locale === 'zh' && item.slug
     && Object.prototype.hasOwnProperty.call(ARTICLE_PRODUCT_LINKS, item.slug)
     ? ARTICLE_PRODUCT_LINKS[item.slug] : undefined;
+  const reviewedLinks = locale === 'zh' ? getReviewedManufacturerLinks(item.titleZh) : undefined;
+  const fallbackLinks = reviewedLinks ?? getChineseNewsRelatedLinks(item);
   const subjectLinks = articleLinks
-    ? unique([...articleLinks, ...getChineseNewsRelatedLinks(item)])
-    : getChineseNewsRelatedLinks(item);
+    ? unique([...articleLinks, ...fallbackLinks])
+    : fallbackLinks;
   if (locale === 'zh') {
     const links = subjectLinks.filter((link) => !isWithdrawnTechnicalPath(link.href)
       && link.href !== `/${locale}/news/${item.slug}`);

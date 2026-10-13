@@ -18,6 +18,9 @@ for (const width of [1440, 390]) {
     });
     await page.goto('/en/products', { waitUntil: 'domcontentloaded' });
     const cards = page.locator('[data-production-line-card]');
+    // The carousel regroups server-rendered cards for the actual viewport. Its
+    // control is enabled only after that effect, so do not scroll stale cards.
+    await expect(page.getByRole('button', { name: 'Next lines', exact: true })).toBeEnabled();
     await expect(cards.first()).toBeVisible();
     for (const card of await cards.all()) {
       const poster = card.locator('a > img').first();

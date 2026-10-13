@@ -435,6 +435,12 @@
           "question": "这套单元是否已经包含回火？",
           "answer": "本页重点是加热炉群、共享操作机与淬火资源。工件需要回火时，应另外确认回火设备、淬后允许间隔与转运接口，并在供货清单中列明。",
           "defaultOpen": false
+        },
+        {
+          "id": "faq-7",
+          "question": "比较这条生产线的报价，哪些条件和供货范围要对齐？",
+          "answer": "比较报价应对齐工件及料盘载荷、炉位数量、调度节拍、转移时间和淬火条件，再列清加热炉、操作机、轨道、淬火槽、工装和控制记录。既有炉位改造、基础、公辅、安装及后续回火分别确认范围，不能只按炉数相加估算产量或报价。",
+          "defaultOpen": false
         }
       ],
       "relatedGroups": [
@@ -459,6 +465,11 @@
             {
               "label": "本线询价参数清单",
               "href": "/downloads/heat-treatment-lines/multi-furnace-quench-cell.txt"
+            },
+            {
+              "label": "现有热工设备维修与改造评估",
+              "href": "/zh/service/furnace-renovation-overhaul",
+              "note": "先评估现有炉体、加热、冷却与控制状况；整线机械、专用工装及第三方设备的范围另行确认。"
             }
           ]
         }

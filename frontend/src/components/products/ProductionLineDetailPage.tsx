@@ -478,6 +478,7 @@ export function ProductionLineDetailPage({ content, locale = 'zh' }: { content: 
                         ) : (
                           <span>{item.label}</span>
                         )}
+                        {item.note && <p className={styles.note}>{item.note}</p>}
                       </li>
                     );
                   })}

@@ -173,10 +173,10 @@ describe('continuous heat-treatment line rendered page', () => {
     expect(styles).toMatch(/\.actions \{[^}]*flex-wrap: wrap/);
     expect(styles).not.toMatch(/\.hero h1 \{[^}]*white-space: nowrap/);
   });
-  it('renders seven real answers while only the original third question is open by default', () => {
+  it('renders eight real answers while only the original third question is open by default', () => {
     const faqs = section('faq');
     const details = [...faqs.matchAll(/<details\b([^>]*)>([\s\S]*?)<\/details>/g)];
-    expect(details).toHaveLength(7);
+    expect(details).toHaveLength(8);
     expect(details.map((match) => match[1].includes('open=""'))).toEqual([
       false,
       false,
@@ -185,13 +185,15 @@ describe('continuous heat-treatment line rendered page', () => {
       false,
       false,
       false,
+      false,
     ]);
-    expect(faqs.match(/<summary>/g)).toHaveLength(7);
+    expect(faqs.match(/<summary>/g)).toHaveLength(8);
     const questions = [
       '连续式炉与周期式炉有什么区别？',
       '没有完整工艺资料，也可以咨询吗？',
       '生产线产能需要根据哪些条件确定？',
       '询价前需要提供哪些资料？',
+      '连续热处理生产线报价包含哪些内容？',
       '已有生产线可以改造扩产吗？',
       '连续生产线的控制系统怎么选？',
       '项目周期和实际停产时间是一回事吗？',
@@ -202,13 +204,14 @@ describe('continuous heat-treatment line rendered page', () => {
       expect(text(summary!), questions[index]).toContain(questions[index]);
       expect(detail[2]).toMatch(/<p>[\s\S]+<\/p>/);
     });
-    expect(text(details[4][2])).toContain('不能只提高网带速度就承诺扩产');
-    expect(text(details[4][2])).toContain('约定工件、装料和工艺条件下验证');
-    expect(text(details[5][2])).toContain('客户系统接口、数据追溯及现场维护能力');
-    expect(text(details[5][2])).toContain('不能只看名称或品牌');
-    expect(text(details[6][2])).toContain('停产前安排');
-    expect(text(details[6][2])).toContain('必要烘炉、调试及负载验证');
-    expect(text(details[6][2])).toContain('不能用总交期直接代替停产天数');
+    expect(text(details[4][2])).toContain('相同供货范围比较报价');
+    expect(text(details[5][2])).toContain('不能只提高网带速度就承诺扩产');
+    expect(text(details[5][2])).toContain('约定工件、装料和工艺条件下验证');
+    expect(text(details[6][2])).toContain('客户系统接口、数据追溯及现场维护能力');
+    expect(text(details[6][2])).toContain('不能只看名称或品牌');
+    expect(text(details[7][2])).toContain('停产前安排');
+    expect(text(details[7][2])).toContain('必要烘炉、调试及负载验证');
+    expect(text(details[7][2])).toContain('不能用总交期直接代替停产天数');
   });
   it('renders six real resources covering capacity, acceptance and the three restored decisions', () => {
     const resources = section('resources');

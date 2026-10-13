@@ -64,6 +64,7 @@ export type FurnacePageConfig = {
   structureCallouts: FurnaceCutawayCallout[];
   structureParameters: Array<[string, string]>;
   structureSystems: Array<[string, string]>;
+  faqTitle?: string;
   faqs: Array<{ question: string; answer: string }>;
   related: Array<{
     title: string;
