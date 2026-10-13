@@ -65,7 +65,7 @@ for (const width of [1440, 390]) {
     if (width < 600) await page.getByRole('button', { name: 'Open navigation' }).click();
     await page.getByRole('link', { name: '中文', exact: true }).click();
     await expect(page).toHaveURL(/\/zh\/partner$/);
-    await expect(page.getByRole('heading', { name: '合作客户', exact: true })).toBeVisible();
+    await expect(page.getByRole('heading', { name: '客户与合作单位', exact: true })).toBeVisible();
     const chineseStructure = await regions.locator('h1,h2,[data-partner-industries] article').evaluateAll((elements) => elements.map((element) => element.tagName));
     expect(chineseStructure).toEqual(englishStructure);
     await noOverflow(page);
