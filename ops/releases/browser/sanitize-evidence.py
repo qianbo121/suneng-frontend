@@ -2,7 +2,8 @@
 import json, re
 from urllib.parse import parse_qs, urlencode, urlsplit
 from pathlib import Path
-_COMPONENT = Path('/Users/qianbo/.codex/worktrees/toutiao-auto-submit-20261010/独立站/frontend/src/components/seo/ToutiaoAutoSubmit.tsx')
+# Read only the source paired with this tool checkout; installed tools may have no source.
+_COMPONENT = Path(__file__).resolve().parents[3] / 'frontend/src/components/seo/ToutiaoAutoSubmit.tsx'
 _TOKEN = ''
 if _COMPONENT.is_file():
     match = re.search(r'\bTOUTIAO_SITE_TOKEN\s*=\s*[\'\"]([^\'\"]+)', _COMPONENT.read_text())
