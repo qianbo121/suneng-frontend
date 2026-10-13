@@ -2,6 +2,7 @@ import { describe, expect, it, vi } from 'vitest';
 import type { NewsApiItem } from '@/types/news';
 import originalSources from '../../tests/fixtures/news-migration-public-sources-20260910.json';
 import revisions from './news-reviewed-copy.json';
+import previousOverhaulRevision from '../../tests/fixtures/news-overhaul-reviewed-before-20261013.json';
 import translations from './english-news-copy.json';
 import { applyEnglishNewsCopy } from './english-news';
 import { applyNewsReferenceCleanup } from './news-reference-cleanup';
@@ -44,8 +45,14 @@ function reviewedItem(id: number): NewsApiItem {
 }
 
 describe('approved Chinese news reference cleanup', () => {
+  it('preserves the newly approved overhaul article that already removed the old reference', () => {
+    const item = reviewedItem(22);
+    expect(item.contentZh).not.toContain(targetUrl);
+    expect(applyNewsReferenceCleanup(item)).toBe(item);
+  });
+
   it.each(ids)('removes only the approved block and guidance from the full reviewed article %i', (id) => {
-    const item = reviewedItem(id);
+    const item = id === 22 ? { ...reviewedItem(id), contentZh: previousOverhaulRevision.contentZh } : reviewedItem(id);
     const before = item.contentZh!;
     const block = expectedBlock(id);
     expect(before.split(block)).toHaveLength(2);

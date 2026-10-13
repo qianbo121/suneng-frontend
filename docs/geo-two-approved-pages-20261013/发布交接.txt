@@ -1,0 +1,33 @@
+苏能两页中文改稿：发布交接
+
+一、范围与授权
+用户已确认两份稿件，并说“可以发布，需要让另外一个窗口执行吗？”，随后明确“你先提交 我后面自己转”。本窗口完成修改、检查和本地提交，不推送、不部署、不代发其他窗口。用户自行转交“发版专用”窗口纳入获准发布。
+
+只发布前台，涉及这两页中文正文：
+https://www.jssngyl.cn/zh/service/furnace-renovation-overhaul
+https://www.jssngyl.cn/zh/news/re-chu-li-lu-da-xiu-chang-jia-zen-me-xuan-cong-lu-ti-jie-gou-kong-wen-xi-tong-dao-shou-hou-neng-li-de-pan-duan-biao-zhun
+
+保留电话 +86-130-5298-6814、邮箱 997518512@qq.com，以及原标题、网址、文章原发布日期（2026-06-03）、署名、图片、微信、询盘表单和相关阅读。现有基线的质保条款继续保留。英文正文和英文复核日期未改；仅同步本篇英文补充稿的版本对应关系，避免中文更新后英文正文失效。
+确认稿及原始核对说明保存在本目录。全部批准文字完整保留；服务页窄屏表格可横向查看，文章表格复用网站现有手机分组卡片样式并保留栏目标签。审阅提示、内部来源路径和“未发布”页尾不属于公开正文。
+
+二、已完成与待完成
+已修改：两页中文确认稿已接入前台；文章沿用既有后台源版本保护，不改数据库。
+已测试：类型检查、相关代码检查及3个文件共18项测试通过。1440和390宽度真实浏览器检查通过：服务页106处、文章85处批准文字无缺失，无整页横向溢出；16个常见问题、两页各2张表格、电话邮箱、微信弹窗与二维码、手机文章目录跳转已核对。英文文章、英文服务页及原日期已核对。
+本地文章读取曾超出默认等待时间，最终增加本地等待时间后通过；正式配置未变。browser-checks.json保留历史日志和最终无错误日志。
+未执行整站构建、程序包准备、推送、部署或线上验收。本地提交不代表已上线，发布成功也不代表大模型推荐效果已经改善。
+
+三、发版窗口接手
+将本批来源提交纳入干净的集成分支，沿用发版窗口当前固定程序包入口、发布锁、必要门禁和恢复材料，只选前台模块。保留目标分支已有图片、质保条款、联系入口及相邻修复，不混入无关未提交内容。
+发布前核对文章后台源版本仍匹配；后台后续编辑会使旧覆盖稿自动停用，不移除这层保护。候选核对中文全文、表格、联系方式及英文保留情况。实际切换后重新核对这两条公开地址、正文、图片和联系入口、索引设置、原发布日期及英文页面，通过后才登记已上线。
+
+技术证据（供执行窗口核查）
+工作目录：/Users/qianbo/.codex/worktrees/geo-two-approved-pages-20261013/独立站
+分支：codex/geo-two-approved-pages-20261013
+实现基线：739666557a4ba4cb533950d94b215b8549ea57e5
+来源提交：本交接单所在的本地提交；交付回执另附完整提交号。
+服务页入口：frontend/src/app/[locale]/service/furnace-renovation-overhaul/page.tsx
+正文组件和数据：frontend/src/components/engineering/RenovationReviewedContent.tsx、RenovationReviewedContent.module.css、renovation-reviewed-copy.json
+文章：frontend/src/lib/news-reviewed-copy.json 第22篇，仅正文与中文复核时间变化。
+英文关联：frontend/src/lib/english-news-copy.json 第22篇，仅版本指纹变化。
+确认稿摘要、源版本核对、检查记录：本目录 manifest.json、browser-checks.json。
+截图：/Users/qianbo/Desktop/Coding/独立站/output/geo-two-page-drafts-review-v1/internal/implementation-checks/

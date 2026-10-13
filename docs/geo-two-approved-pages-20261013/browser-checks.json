@@ -1,0 +1,310 @@
+{
+  "views": [
+    {
+      "contacts": [
+        {
+          "href": "tel:+8613052986814",
+          "text": "130-5298-6814"
+        },
+        {
+          "href": "tel:+8613052986814",
+          "text": "+86-130-5298-6814"
+        },
+        {
+          "href": "mailto:997518512@qq.com",
+          "text": "997518512@qq.com"
+        },
+        {
+          "href": "tel:+8613052986814",
+          "text": "+86-130-5298-6814"
+        },
+        {
+          "href": "mailto:997518512@qq.com",
+          "text": "997518512@qq.com"
+        },
+        {
+          "href": "mailto:997518512@qq.com",
+          "text": "997518512@qq.com"
+        },
+        {
+          "href": "tel:+86-130-5298-6814",
+          "text": "+86-130-5298-6814"
+        },
+        {
+          "href": "tel:+8613052986814",
+          "text": "电话联系"
+        },
+        {
+          "href": "mailto:997518512@qq.com",
+          "text": "邮箱联系"
+        }
+      ],
+      "faq": 16,
+      "h1": [
+        "工业炉维修、改造与大修服务"
+      ],
+      "scrollWidth": 1440,
+      "tables": [
+        {
+          "overflow": "auto",
+          "parentWidth": 1278,
+          "rows": 5,
+          "width": 1278
+        },
+        {
+          "overflow": "auto",
+          "parentWidth": 1278,
+          "rows": 7,
+          "width": 1278
+        }
+      ],
+      "times": [],
+      "width": 1440,
+      "kind": "service",
+      "approvedFragments": 106,
+      "missing": []
+    },
+    {
+      "contacts": [
+        {
+          "href": "tel:+8613052986814",
+          "text": "130-5298-6814"
+        },
+        {
+          "href": "tel:+8613052986814",
+          "text": "+86-130-5298-6814"
+        },
+        {
+          "href": "mailto:997518512@qq.com",
+          "text": "997518512@qq.com"
+        },
+        {
+          "href": "tel:+8613052986814",
+          "text": "+86-130-5298-6814"
+        },
+        {
+          "href": "mailto:997518512@qq.com",
+          "text": "997518512@qq.com"
+        },
+        {
+          "href": "mailto:997518512@qq.com",
+          "text": "997518512@qq.com"
+        },
+        {
+          "href": "tel:+86-130-5298-6814",
+          "text": "+86-130-5298-6814"
+        },
+        {
+          "href": "tel:+8613052986814",
+          "text": "电话联系"
+        },
+        {
+          "href": "mailto:997518512@qq.com",
+          "text": "邮箱联系"
+        }
+      ],
+      "faq": 16,
+      "h1": [
+        "工业炉维修、改造与大修服务"
+      ],
+      "scrollWidth": 390,
+      "tables": [
+        {
+          "overflow": "auto",
+          "parentWidth": 356,
+          "rows": 5,
+          "width": 680
+        },
+        {
+          "overflow": "auto",
+          "parentWidth": 356,
+          "rows": 7,
+          "width": 680
+        }
+      ],
+      "times": [],
+      "width": 390,
+      "kind": "service",
+      "approvedFragments": 106,
+      "missing": []
+    },
+    {
+      "contacts": [
+        {
+          "href": "tel:+8613052986814",
+          "text": "+86-130-5298-6814"
+        },
+        {
+          "href": "mailto:997518512@qq.com",
+          "text": "997518512@qq.com"
+        }
+      ],
+      "h1": [
+        "热处理炉大修厂家怎么选？从炉体结构、控温系统到售后能力的判断标准"
+      ],
+      "scrollWidth": 390,
+      "tables": [
+        {
+          "cellDisplay": "block",
+          "labels": [
+            "你遇到的问题",
+            "应让厂家说明",
+            "报价前应形成的依据",
+            "你遇到的问题",
+            "应让厂家说明",
+            "报价前应形成的依据",
+            "你遇到的问题",
+            "应让厂家说明",
+            "报价前应形成的依据",
+            "你遇到的问题",
+            "应让厂家说明",
+            "报价前应形成的依据"
+          ],
+          "rows": 5,
+          "width": 324
+        },
+        {
+          "cellDisplay": "block",
+          "labels": [
+            "需要确认的结果",
+            "文件里应写清楚",
+            "不能替代它的说法",
+            "需要确认的结果",
+            "文件里应写清楚",
+            "不能替代它的说法",
+            "需要确认的结果",
+            "文件里应写清楚",
+            "不能替代它的说法",
+            "需要确认的结果",
+            "文件里应写清楚",
+            "不能替代它的说法"
+          ],
+          "rows": 5,
+          "width": 324
+        }
+      ],
+      "times": [
+        "2026-06-03T04:47:30.257Z",
+        "2026-10-13T07:13:55Z"
+      ],
+      "width": 390,
+      "kind": "article",
+      "approvedFragments": 85,
+      "missing": []
+    },
+    {
+      "contacts": [
+        {
+          "href": "tel:+8613052986814",
+          "text": "+86-130-5298-6814"
+        },
+        {
+          "href": "mailto:997518512@qq.com",
+          "text": "997518512@qq.com"
+        }
+      ],
+      "h1": [
+        "热处理炉大修厂家怎么选？从炉体结构、控温系统到售后能力的判断标准"
+      ],
+      "scrollWidth": 1440,
+      "tables": [
+        {
+          "cellDisplay": "table-cell",
+          "labels": [
+            "你遇到的问题",
+            "应让厂家说明",
+            "报价前应形成的依据",
+            "你遇到的问题",
+            "应让厂家说明",
+            "报价前应形成的依据",
+            "你遇到的问题",
+            "应让厂家说明",
+            "报价前应形成的依据",
+            "你遇到的问题",
+            "应让厂家说明",
+            "报价前应形成的依据"
+          ],
+          "rows": 5,
+          "width": 781.359375
+        },
+        {
+          "cellDisplay": "table-cell",
+          "labels": [
+            "需要确认的结果",
+            "文件里应写清楚",
+            "不能替代它的说法",
+            "需要确认的结果",
+            "文件里应写清楚",
+            "不能替代它的说法",
+            "需要确认的结果",
+            "文件里应写清楚",
+            "不能替代它的说法",
+            "需要确认的结果",
+            "文件里应写清楚",
+            "不能替代它的说法"
+          ],
+          "rows": 5,
+          "width": 781.359375
+        }
+      ],
+      "times": [
+        "2026-06-03T04:47:30.257Z",
+        "2026-10-13T07:13:55Z"
+      ],
+      "width": 1440,
+      "kind": "article",
+      "approvedFragments": 85,
+      "missing": []
+    }
+  ],
+  "interactions": [
+    {
+      "wechatDialog": {
+        "images": [
+          {
+            "alt": "苏能技术顾问微信二维码",
+            "loaded": true
+          }
+        ],
+        "open": true,
+        "text": "微信联系\n\n先发送照片和已知工况，技术人员再与您沟通需要补充的资料。\n\n微信号\nsuneng2005\n复制微信号\n\n复制微信号后，在微信中搜索添加。\n\n查看二维码原图"
+      }
+    },
+    {
+      "kind": "service",
+      "mobileTableScroll": {
+        "left": 200,
+        "scrollWidth": 680,
+        "width": 356
+      }
+    },
+    {
+      "articleMobileTables": "existing labelled cards; 2 tables, all cells retain column labels"
+    },
+    {
+      "articleMobileToc": {
+        "hash": "#news-body-22-section-8",
+        "target": "八、什么情况下可以找苏能工业炉评估？"
+      }
+    }
+  ],
+  "runtimeErrors": "",
+  "englishArticle": {
+    "times": [
+      "2026-06-03T04:47:30.257Z",
+      "2026-09-15T02:52:20.962782+00:00"
+    ],
+    "title": "Choosing a Heat Treatment Furnace Overhaul Supplier: Structure, Controls and Service",
+    "bodyLength": 7044
+  },
+  "englishService": {
+    "reviewedChinese": false,
+    "title": "Industrial Furnace Repair, Retrofit & Overhaul",
+    "warranty": "The whole-equipment warranty normally ends 12 months after final acceptance or 18 months after shipment, whichever comes first. The contract governs the exact start date, applicable scope and any separate component periods."
+  },
+  "console": "[info] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold\n[log] [Fast Refresh] rebuilding\n[log] [Fast Refresh] done in 407ms\n[info] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold\n[log] [Fast Refresh] rebuilding\n[log] [Fast Refresh] done in 340ms\n[info] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold\n[log] [Fast Refresh] rebuilding\n[log] [Fast Refresh] done in 353ms\n[info] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold\n[info] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold\n[error] %o\n\n%s {name: \"Error\", environmentName: \"Server\", digest: \"3306209495\", stack: \"Error: Failed to load news article \"re-chu-li-lu-d…om-webpack-client.browser.development.js:3303:13)\", message: \"Failed to load news article \"re-chu-li-lu-da-xiu-c…o-zhun\": The operation was aborted due to timeout\"} The above error occurred in the <NewsDetailPage> component. It was handled by the <ErrorBoundaryHandler> error boundary.\n[error] {name: \"Error\", environmentName: \"Server\", digest: \"3306209495\", stack: \"Error: Failed to load news article \"re-chu-li-lu-d…om-webpack-client.browser.development.js:3303:13)\", message: \"Failed to load news article \"re-chu-li-lu-da-xiu-c…o-zhun\": The operation was aborted due to timeout\", ...}\n[warning] Image with src \"/images/brand/sn-logo-white-transparent.png\" was detected as the Largest Contentful Paint (LCP). Please add the \"priority\" property if this image is above the fold.\nRead more: https://nextjs.org/docs/api-reference/next/image#priority\n[log] [Fast Refresh] rebuilding\n[log] [Fast Refresh] done in 1171ms\n[info] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold\n[log] [Fast Refresh] rebuilding\n[log] [Fast Refresh] done in 261ms\n[info] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold\n[info] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold\n[info] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold\n[log] [Fast Refresh] rebuilding\n[log] [Fast Refresh] done in 1183ms\n[info] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold\n[info] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold\n[info] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold\n[info] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold\n",
+  "localApiTimeoutMs": 15000,
+  "initialReadTimeout": "Initial local article request exceeded the default timeout; local-only wait increased for final verification. Production configuration unchanged.",
+  "finalConsole": "[info] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold\n[info] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold\n",
+  "finalRuntimeErrors": ""
+}

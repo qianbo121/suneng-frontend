@@ -25,6 +25,9 @@ import { HomepageLeadForm } from '@/components/home/HomepageLeadForm';
 import { getBreadcrumbJsonLd, getFaqJsonLd, getWebPageJsonLd } from '@/lib/seo/jsonld';
 import { buildMetadata } from '@/lib/seo/metadata';
 
+import reviewedCopy from '@/components/engineering/renovation-reviewed-copy.json';
+import { RenovationReviewedContent, RenovationReviewedContact } from '@/components/engineering/RenovationReviewedContent';
+
 const pagePath = '/zh/service/furnace-renovation-overhaul';
 const description =
   '苏能根据旧炉现状、工艺要求和停产安排，评估工业炉维修、大修、局部改造或换新，介绍炉衬、燃烧、电控等系统及不锈钢连续退洗线改造项目。可先发设备照片、铭牌和当前问题咨询。';
@@ -70,12 +73,13 @@ export default async function FurnaceRenovationPage({ params }: PageProps) {
         locale={locale}
         eyebrow={t("苏能工业炉 · 维修与改造")}
         title={t("工业炉维修、改造与大修服务")}
-        text={t("苏能根据旧炉现状、工艺要求和停产安排，初步判断适合维修、大修、局部改造，还是换新。")}
-        note={t("先发设备照片和目前的问题，沟通处理方式。")}
+        text={locale === 'zh' ? reviewedCopy.lead : t("苏能根据旧炉现状、工艺要求和停产安排，初步判断适合维修、大修、局部改造，还是换新。")}
+        note={locale === 'zh' ? undefined : t("先发设备照片和目前的问题，沟通处理方式。")}
         image="/images/services/furnace-renovation/hero-mechanical-repair-20260911.jpg"
         alt={t("工业炉维修场景示意：技术人员使用工具检修停机炉的炉门机械机构")}
         tags={[t("热处理炉大修"), t("节能改造"), t("控制系统升级")]}
       />
+      {locale === 'zh' ? <RenovationReviewedContent /> : (<>
       <Section id="fit" title={t("旧炉出问题，先判断怎么处理")}>
         <InfoColumns
           items={[
@@ -179,7 +183,9 @@ export default async function FurnaceRenovationPage({ params }: PageProps) {
         <p className="mt-5 text-sm leading-7 text-[#526277] xl:pe-8" data-acceptance-boundary>{t("改造验收应按改造范围，从安全联锁、升温与温度控制、有效加热区温度均匀性、产能与生产节拍、机械与连续运行、能耗或排放六类中选择适用项目，明确工况、方法和判据；安全项目按适用要求核验。温度、产能和能耗结论须同时记录负载、工件、装炉方式、测点、保温时间、仪器校准、统计周期与异常工况，不能脱离测试条件复用。")}</p>
         <p className="mt-3 text-sm leading-7 text-[#526277]">{t("苏能不承接工程总承包业务，通常作为工业炉设备供应商或设备分包方参与项目；涉及压力容器、特种设备或专项认证的部分，由具备相应资质的单位承担或配合实施。")}</p>
       </Section>
-      <FaqSection title={t("工业炉维修与改造常见问题")} faqs={localizeServiceContent(renovationFaqs, locale)} />
+      </>)}
+      <FaqSection title={t("工业炉维修与改造常见问题")} faqs={locale === 'zh' ? reviewedCopy.faqs : localizeServiceContent(renovationFaqs, locale)} />
+      {locale === 'zh' && <RenovationReviewedContact />}
       <Resources
         locale={locale}
         title={t("改造前，可以先看这些资料")}
@@ -260,7 +266,7 @@ export default async function FurnaceRenovationPage({ params }: PageProps) {
           { name: t("工业炉维修、改造与大修服务"), url: serviceHref(pagePath, locale) },
         ])}
       />
-      <JsonLd id="renovation-faq-jsonld" data={getFaqJsonLd(localizeServiceContent(renovationFaqs, locale))} />
+      <JsonLd id="renovation-faq-jsonld" data={getFaqJsonLd(locale === 'zh' ? reviewedCopy.faqs : localizeServiceContent(renovationFaqs, locale))} />
     </div>
   );
 }

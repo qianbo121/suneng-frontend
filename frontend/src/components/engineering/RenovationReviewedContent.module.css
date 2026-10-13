@@ -1,0 +1,99 @@
+.intro {
+  padding-top: 24px;
+}
+.copy {
+  min-width: 0;
+  color: var(--muted);
+  font-size: 16px;
+  line-height: 1.9;
+  overflow-wrap: anywhere;
+}
+.copy p + p {
+  margin-top: 16px;
+}
+.copy h3 {
+  margin: 28px 0 12px;
+  color: var(--ink);
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.5;
+  text-wrap: balance;
+}
+.copy h3:first-child {
+  margin-top: 0;
+}
+.copy strong {
+  color: var(--ink);
+}
+.copy ol {
+  padding-left: 24px;
+  list-style: decimal;
+}
+.copy li + li {
+  margin-top: 14px;
+}
+.copy :global(.table-wrap) {
+  margin: 20px 0;
+  overflow-x: auto;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+}
+.copy table {
+  width: 100%;
+  min-width: 680px;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 15px;
+}
+.copy th,
+.copy td {
+  width: 33.333%;
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--line);
+  vertical-align: top;
+}
+.copy th {
+  background: #11294b;
+  color: #fff;
+  font-weight: 600;
+}
+.copy tr:last-child td {
+  border-bottom: 0;
+}
+.copy a {
+  color: var(--blue);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+.copy a:hover {
+  text-decoration-thickness: 2px;
+}
+.copy a:focus-visible,
+.copy :global(.table-wrap):focus-visible {
+  outline: 2px solid var(--blue);
+  outline-offset: 4px;
+}
+.copy :global(.contact) {
+  margin-top: 24px;
+  padding: 20px;
+  background: var(--soft);
+  border-radius: 6px;
+}
+.copy :global(.contact) p + p {
+  margin-top: 6px;
+}
+.copy :global(.address) {
+  font-size: 14px;
+}
+.images {
+  margin-top: 28px;
+}
+.caption {
+  padding: 16px 20px;
+  color: var(--ink);
+  font-weight: 600;
+}
+
+.warranty {
+  margin-top: 24px;
+}
