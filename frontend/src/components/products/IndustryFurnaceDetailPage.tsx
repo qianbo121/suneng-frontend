@@ -385,7 +385,11 @@ export function IndustryFurnaceDetailPage({ slug, locale = 'zh' }: { slug: Indus
               />
 
               <Panel className={styles.parameterPanel}>
-                <h3>{t("报价前先确认的 5 项结构参数")}</h3>
+                <h3>{config.structureParameters.length === 5
+                  ? t("报价前先确认的 5 项结构参数")
+                  : locale === 'en'
+                    ? `${config.structureParameters.length} structural inputs to confirm before quoting`
+                    : `报价前先确认的 ${config.structureParameters.length} 项结构参数`}</h3>
                 <ol>
                   {config.structureParameters.map(([title, text], index) => (
                     <li key={title}>

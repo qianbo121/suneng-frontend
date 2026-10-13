@@ -36,7 +36,7 @@ export function PartnerIndustryDirectory({ partners, locale = 'zh' }: { partners
     >
       <div className={styles.sectionHeading}>
         <div>
-          <h2 id="partner-industry-title">{t("按行业查看合作客户")}</h2>
+          <h2 id="partner-industry-title">{t("按行业查看客户与合作单位")}</h2>
           <p>{t("从您熟悉的行业，了解苏能的历年合作单位。")}</p>
         </div>
         <label className={styles.directorySearch} htmlFor={searchId}>
@@ -68,7 +68,7 @@ export function PartnerIndustryDirectory({ partners, locale = 'zh' }: { partners
           />
         </label>
       </div>
-      <div className={styles.filters} role="group" aria-label={t("筛选合作客户行业")}>
+      <div className={styles.filters} role="group" aria-label={t("筛选客户与合作单位行业")}>
         {['全部行业', ...PARTNER_INDUSTRY_GROUPS].map((name) => (
           <button
             key={t(name)}
@@ -120,7 +120,7 @@ export function PartnerIndustryDirectory({ partners, locale = 'zh' }: { partners
                 setExpanded(false);
               }}
             >
-              {t("清除筛选，查看全部客户")}
+              {t("清除筛选，查看全部单位")}
             </button>
           </div>
         )}

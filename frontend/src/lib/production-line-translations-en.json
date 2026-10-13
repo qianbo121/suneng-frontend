@@ -1546,5 +1546,7 @@
   "按前段冷却和表面要求配置挤干或烘干。": "Configure squeeze or hot-air drying for the preceding cooling method and surface requirements.",
   "按需后处理；具体装置未在图中单独明确。": "Optional post-treatment; the specific units are not separately identified in the drawing.",
   "衔接后续表面处理与出口组织，酸洗等设备是否供货单独列项。": "Connect to subsequent surface treatment and exit handling. List pickling and other equipment separately in the supply scope.",
-  "高亮出口衔接端；不能据图确认酸洗等供货范围。": "The exit interface is highlighted; the drawing does not establish whether pickling or other equipment is supplied."
+  "高亮出口衔接端；不能据图确认酸洗等供货范围。": "The exit interface is highlighted; the drawing does not establish whether pickling or other equipment is supplied.",
+  "网带铺料、带速与理论产量核算：需校核本线工艺时间": "Mesh-belt loading, speed and theoretical throughput: verify the processing time for this line",
+  "网带炉报价前的九项工况与供货边界": "Nine operating conditions and supply-scope checks before requesting a mesh-belt furnace quotation"
 }

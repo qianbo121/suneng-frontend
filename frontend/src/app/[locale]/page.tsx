@@ -1,6 +1,4 @@
 import dynamic from 'next/dynamic';
-import { Suspense } from 'react';
-import LocalePageLoading from '@/components/layout/LocalePageLoading';
 
 import { JsonLd } from '@/components/JsonLd';
 import { HomepageV2 } from '@/components/home/HomepageV2';
@@ -64,15 +62,7 @@ export async function generateMetadata({ params }: LocaleHomePageProps) {
   });
 }
 
-export default function LocaleHomePage(props: LocaleHomePageProps) {
-  return (
-    <Suspense fallback={<LocalePageLoading />}>
-      <LocaleHomeContent {...props} />
-    </Suspense>
-  );
-}
-
-async function LocaleHomeContent({ params }: LocaleHomePageProps) {
+export default async function LocaleHomePage({ params }: LocaleHomePageProps) {
   const { locale } = await params;
   const currentLocale = (locale === 'en' ? 'en' : 'zh') as Locale;
 

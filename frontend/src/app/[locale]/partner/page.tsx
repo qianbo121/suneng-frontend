@@ -121,14 +121,14 @@ const industryFields = [
 
 type PartnerPageProps = { params: Promise<{ locale: string }> };
 const description =
-  '展示苏能工业炉部分历年合作客户，按省份和行业查看合作单位，了解工业炉设备配套与合作范围。';
+  '展示苏能工业炉部分历年客户与合作单位，按省份和行业查看名单，了解工业炉设备配套与合作范围。';
 export async function generateMetadata({ params }: PartnerPageProps) {
   const { locale } = await params;
   if (locale !== 'zh' && locale !== 'en') notFound();
   const t = (text: string) => partnerText(text, locale);
   return {
     ...buildMetadata({
-      title: t('合作客户'),
+      title: t('客户与合作单位'),
       description: locale === 'en' ? 'Explore selected Suneng customers and partners by region and industry, with equipment applications and project scope information.' : description,
       path: `/${locale}/partner`,
       alternateLocales: { 'zh-CN': '/zh/partner', 'en-US': '/en/partner', 'x-default': '/zh/partner' },
@@ -144,7 +144,7 @@ export default async function PartnerPage({ params }: PartnerPageProps) {
   return (
     <div className={styles.page} data-about-subpage="partners">
       <AboutSubpageJsonLd
-        title={t("合作客户")}
+        title={t("客户与合作单位")}
         description={locale === 'en' ? 'Selected Suneng customers and partners by region and industry.' : description}
         path={`/${locale}/partner`}
         locale={locale}
@@ -154,17 +154,17 @@ export default async function PartnerPage({ params }: PartnerPageProps) {
         <Breadcrumb
           locale={locale}
           tone="dark"
-          currentLabel={t("合作客户")}
-          items={[{ label: t('关于苏能'), href: `/${locale}/about` }, { label: t('合作客户') }]}
+          currentLabel={t("客户与合作单位")}
+          items={[{ label: t('关于苏能'), href: `/${locale}/about` }, { label: t('客户与合作单位') }]}
           className={styles.breadcrumb}
         />
         <header className={styles.hero}>
           <div>
-            <h1>{t("合作客户")}</h1>
-            <p>{t("从客户分布到行业应用，了解苏能的历年合作网络。")}</p>
+            <h1>{t("客户与合作单位")}</h1>
+            <p>{t("从客户与合作单位分布到行业应用，了解苏能的历年合作网络。")}</p>
           </div>
           <a className={styles.heroLink} href="#partner-industries">
-            {t("按行业找客户")}
+            {t("按行业查看单位")}
             <svg
               viewBox="0 0 20 20"
               width="18"
@@ -181,7 +181,7 @@ export default async function PartnerPage({ params }: PartnerPageProps) {
         <div className={styles.map}>
           <PartnerMap
             headingLevel={2}
-            title={t("历年合作客户分布")}
+            title={t("历年客户与合作单位分布")}
             locale={locale}
             assetBasePath="/partner-map"
             partners={partners}

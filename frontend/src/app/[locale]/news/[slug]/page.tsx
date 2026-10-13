@@ -15,10 +15,12 @@ import { siteSettings } from '@/mock/siteSettings';
 import { NewsViewPing } from '@/components/news/NewsViewPing';
 import { ToutiaoAutoSubmit } from '@/components/seo/ToutiaoAutoSubmit';
 import { NEWS_LABEL } from '@/constants/news';
-import { getNewsList } from '@/lib/api/news';
+import { getNewsDecisionCenterData } from '@/lib/news-decision-center.server';
+import { getNewsFurnaceFilters } from '@/lib/news-decision-center';
 import { selectNewsContinueReadingItems } from '@/lib/news-continue-reading';
 import {
   formatNewsDisplayDate,
+  mapNewsCard,
   getNewsDetailPageData,
   normalizeNewsHtml,
   resolveNewsImage,
@@ -158,31 +160,33 @@ export default async function NewsDetailPage({ params }: NewsDetailPageProps) {
       ? modifiedTime
       : undefined;
   const relatedLinks = getNewsRelatedLinks(article, currentLocale);
-  const newsListResult = await getNewsList({ page: 1, pageSize: 12 });
+  // Read the complete published collection so relevant older articles are eligible.
+  const newsListResult = await getNewsDecisionCenterData(currentLocale);
   const recommendationCandidates =
-    newsListResult.data?.items
-      .filter((item) => currentLocale === 'zh' || hasPublishableEnglishNews(item))
-      .map((item) => ({
+    newsListResult.data?.map((item) => ({
         id: item.id,
         slug: item.slug,
-        title: currentLocale === 'en' ? item.titleEn?.trim() || item.titleZh : item.titleZh,
-        categoryId: item.categoryId,
+        title: item.title[currentLocale],
+        titleZh: item.title.zh,
+        furnaces: getNewsFurnaceFilters(item),
       })) ??
     [];
   const continueReadingItems = selectNewsContinueReadingItems(
-    { id: article.id, slug: article.slug, categoryId: article.categoryId },
+    {
+      id: article.id,
+      slug: article.slug,
+      titleZh: article.titleZh,
+      furnaces: getNewsFurnaceFilters(mapNewsCard(currentLocale, article)),
+    },
     recommendationCandidates,
     3,
   );
   const relatedArticles = continueReadingItems.map((item) => {
-    const source = newsListResult.data?.items.find((candidate) => candidate.id === item.id);
-    const date = source?.publishDate;
+    const source = newsListResult.data?.find((candidate) => candidate.id === item.id);
+    const date = source?.date;
     return {
       ...item,
-      image:
-        source && (source.coverImage || source.ogImage)
-          ? resolveNewsImage(source, { locale: currentLocale })
-          : undefined,
+      image: source?.image,
       date,
       displayDate: date ? formatNewsDisplayDate(date) : undefined,
     };

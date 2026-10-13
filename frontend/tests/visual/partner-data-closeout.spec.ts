@@ -101,7 +101,7 @@ test('mobile keyboard deletion and reset restore the unfiltered list', async ({
   }
   await search.fill('没有这家公司123');
   await expect(directory.locator('tbody tr')).toHaveCount(0);
-  await directory.getByRole('button', { name: '清除筛选，查看全部客户', exact: true }).click();
+  await directory.getByRole('button', { name: '清除筛选，查看全部单位', exact: true }).click();
   await expect(search).toHaveValue('');
   await expect(directory.getByRole('status')).toHaveText(
     `全部行业 · ${partners.length} 家合作单位`,
