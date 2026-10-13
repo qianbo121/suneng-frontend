@@ -259,17 +259,6 @@ http {
   # Shuju also has a persistent per-account lock. This edge zone adds a
   # separate per-IP boundary before password verification reaches the app.
   limit_req_zone $binary_remote_addr zone=shuju_login:10m rate=5r/m;
-  # The site admin sign-in needs the same edge boundary: its application-side lock
-  # is keyed by (IP + username) and lives in process memory, so it does not bound
-  # a spray from changing addresses and resets on every deployment.
-  # Express accepts mixed case and an optional trailing slash for login.
-  # Empty keys leave other admin endpoints outside this rate-limit zone.
-  map $uri $admin_login_key {
-    default "";
-    ~*^/api/admin/auth/login/?$ $binary_remote_addr;
-  }
-  # A changed key needs a new zone name so the existing proxy can reload safely.
-  limit_req_zone $admin_login_key zone=admin_login_v2:10m rate=5r/m;
   resolver 127.0.0.11 valid=10s ipv6=off;
 
   upstream frontend_upstream {
@@ -280,9 +269,6 @@ http {
     server backend:3001;
   }
 
-  upstream admin_upstream {
-    server admin:80;
-  }
 
   # Chengwen is deployed independently but shares this edge proxy. Keep this
   # upstream and both virtual hosts in the checked-in template so a website
@@ -937,7 +923,7 @@ http {
     # Enforce a conservative baseline while allowing the current Next.js runtime
     # script/style requirements. Tighten unsafe-inline/unsafe-eval after report
     # telemetry confirms the runtime no longer needs them.
-    add_header Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://hm.baidu.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https://www.jssngyl.cn https://admin.jssngyl.cn https://hm.baidu.com; object-src 'none'; base-uri 'self'; frame-ancestors 'self'; form-action 'self'; upgrade-insecure-requests" always;
+    add_header Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://hm.baidu.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https://www.jssngyl.cn https://hm.baidu.com; object-src 'none'; base-uri 'self'; frame-ancestors 'self'; form-action 'self'; upgrade-insecure-requests" always;
 
     # 兼容旧版智能工厂工时二维码，保留令牌路径并切到正确子域名。
     location ^~ /h5/work-scan/ {
@@ -1191,82 +1177,17 @@ http {
     http2 on;
     server_name ${ADMIN_DOMAIN};
     access_log /var/log/nginx/admin.access.json analytics_json;
-
     ssl_certificate /etc/nginx/certs/fullchain.pem;
     ssl_certificate_key /etc/nginx/certs/privkey.pem;
-
-    add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
-    add_header X-Frame-Options "SAMEORIGIN" always;
+    add_header Cache-Control "no-store" always;
+    add_header X-Robots-Tag "noindex, nofollow" always;
     add_header X-Content-Type-Options "nosniff" always;
-    # Enforce a conservative baseline while allowing the current Vite bundle
-    # script/style requirements. Tighten unsafe-inline/unsafe-eval after report
-    # telemetry confirms the runtime no longer needs them.
-    add_header Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https://www.jssngyl.cn https://admin.jssngyl.cn; object-src 'none'; base-uri 'self'; frame-ancestors 'self'; form-action 'self'; upgrade-insecure-requests" always;
-
-    # Retired GET list route: old cached admin pages must not forward customer
-    # search terms in the URL to an upstream where an error log can copy them.
     location = /api/admin/custom-requirements {
       return 410;
     }
-
     location = /api/admin/custom-requirements/ {
       return 410;
     }
-
-    location ^~ /api/admin/ {
-      limit_req zone=admin_login_v2 burst=3 nodelay;
-      proxy_pass http://backend_upstream;
-      proxy_http_version 1.1;
-      proxy_set_header Host $host;
-      proxy_set_header X-Real-IP $remote_addr;
-      proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-      proxy_set_header X-Forwarded-Proto $scheme;
-    }
-
-    location ^~ /api/svc/ {
-      return 404;
-    }
-
-    location /api/ {
-      return 403;
-    }
-
-    # Force svg/pdf to download (never render inline) so a stored file cannot
-    # execute script in the user's origin. Regex locations are matched before
-    # the /uploads/ prefix, so raster images below stay inline as before.
-    location ~* ^/uploads/(?<upload_asset>.+\.(?:svg|pdf))$ {
-      alias /var/www/uploads/$upload_asset;
-      add_header Content-Disposition "attachment" always;
-      add_header X-Content-Type-Options "nosniff" always;
-      access_log off;
-      expires 30d;
-      # nginx drops every inherited add_header as soon as a location sets one of
-      # its own, so the server-level security baseline is repeated here.
-      add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
-      add_header X-Frame-Options "SAMEORIGIN" always;
-      add_header X-Content-Type-Options "nosniff" always;
-    }
-
-    location /uploads/ {
-      alias /var/www/uploads/;
-      access_log off;
-      expires 30d;
-      add_header Cache-Control "public, max-age=2592000, immutable";
-      # nginx drops every inherited add_header as soon as a location sets one of
-      # its own, so the server-level security baseline is repeated here.
-      add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
-      add_header X-Frame-Options "SAMEORIGIN" always;
-      add_header X-Content-Type-Options "nosniff" always;
-      try_files $uri =404;
-    }
-
-    location / {
-      proxy_pass http://admin_upstream;
-      proxy_http_version 1.1;
-      proxy_set_header Host $host;
-      proxy_set_header X-Real-IP $remote_addr;
-      proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-      proxy_set_header X-Forwarded-Proto $scheme;
-    }
+    location / { return 410; }
   }
 }

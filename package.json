@@ -34,14 +34,11 @@
   "scripts": {
     "dev:frontend": "pnpm --dir frontend dev",
     "dev:backend": "pnpm --dir backend start:dev",
-    "dev:admin": "pnpm --dir admin dev",
     "build:frontend": "pnpm --dir frontend build",
     "build:backend": "pnpm --dir backend build",
-    "build:admin": "pnpm --dir admin build",
     "build": "pnpm -r build",
     "lint:frontend": "pnpm --dir frontend lint",
     "lint:backend": "pnpm --dir backend lint",
-    "lint:admin": "pnpm --dir admin lint",
     "lint": "pnpm -r lint",
     "typecheck": "pnpm -r typecheck",
     "test": "pnpm -r test",
@@ -52,7 +49,7 @@
     "check:workpiece-router:publication": "node scripts/validate-workpiece-router.mjs --mode=publication",
     "export:workpiece-router-review": "node scripts/export-workpiece-rule-review.mjs",
     "check:secrets": "bash scripts/check-no-secrets.sh",
-    "format": "pnpm --dir frontend format && pnpm --dir backend format && pnpm --dir admin format",
+    "format": "pnpm --dir frontend format && pnpm --dir backend format",
     "docker:up": "docker compose up --build",
     "docker:down": "docker compose down"
   }

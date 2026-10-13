@@ -16,6 +16,7 @@ import re
 import shutil
 import subprocess
 import uuid
+from component_lifecycle import active_components, retired_admin, recovery_image
 
 IMAGE = re.compile(r'^sha256:[0-9a-f]{64}$')
 SHA = re.compile(r'^[0-9a-f]{40}$')
@@ -102,7 +103,7 @@ def boundaries(receipt):
     protected = set()
     for component in COMPONENTS:
         meta = receipt.get(component + 'Release', {})
-        current, previous = receipt.get('images', {}).get(component), meta.get('expectedCurrentImage')
+        current, previous = recovery_image(receipt, component), meta.get('expectedCurrentImage')
         if not all(isinstance(x, str) and IMAGE.fullmatch(x) for x in [current, previous]):
             raise ValueError('Current and rollback identities must be recorded for every component')
         if meta.get('image') != current or previous == current:
@@ -196,7 +197,9 @@ class Finalizer:
         images, containers = self.docker.images(), self.docker.containers()
         if not protected <= images.keys():
             raise RuntimeError('A current or rollback image is missing')
-        for component in COMPONENTS:
+        if retired_admin(receipt) and any(c['name'] == '/corp-site-admin' and c['running'] for c in containers):
+            raise RuntimeError('Retired admin is unexpectedly running')
+        for component in active_components(receipt):
             current = next((c for c in containers if c['name'] == '/corp-site-' + component), None)
             if (not current or current['image'] != receipt['images'][component] or not current['running']
                     or current['health'] != 'healthy'):

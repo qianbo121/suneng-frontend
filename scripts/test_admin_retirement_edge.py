@@ -20,7 +20,7 @@ def main():
     parser.add_argument('--image', required=True)
     parser.add_argument('--config', type=Path, default=Path(__file__).resolve().parents[1] / 'nginx.prod.conf.template')
     args = parser.parse_args()
-    name = 'suneng-login-edge-test-' + uuid.uuid4().hex[:10]
+    name = 'suneng-admin-retirement-test-' + uuid.uuid4().hex[:10]
     results = []
 
     def docker(*parts, check=True):
@@ -29,7 +29,7 @@ def main():
             raise RuntimeError(result.stderr or result.stdout)
         return result
 
-    with tempfile.TemporaryDirectory(prefix='suneng-login-edge-') as directory:
+    with tempfile.TemporaryDirectory(prefix='suneng-admin-retirement-') as directory:
         fixture = Path(directory)
         # Keep the real virtual hosts, locations, maps and limits. Only replace
         # upstream addresses/certificates with inert, local test fixtures.
@@ -67,24 +67,15 @@ def main():
                 if actual != expected:
                     raise AssertionError(f'{host}{path}: expected {expected}, got {actual}')
 
-            # Nginx allows one request plus the configured burst of three.
-            # Spend all four slots using different spellings of the same route.
-            for path in ['/api/admin/auth/login', '/api/admin/auth/login/',
-                         '/api/admin/auth/LOGIN', '/api/admin/Auth/LoGiN/']:
-                request(path, 204)
-            # Every spelling must now share the same exhausted bucket.
-            for path in ['/api/admin/auth/login', '/api/admin/auth/login/',
-                         '/api/admin/auth/LOGIN', '/api/admin/Auth/LoGiN/',
-                         '/api/admin/auth/login?variant=1', '/api/admin/auth/%6cogin']:
-                request(path, 503)
-            # The empty map key must exempt other admin operations even when
-            # login is limited, with the retired/forbidden routes kept intact.
-            for _ in range(8):
-                request('/api/admin/auth/me', 204)
-                request('/api/admin/custom-requirements/search', 204)
-            request('/api/admin/custom-requirements', 410)
-            request('/api/svc/test', 404)
+            for path in ['/', '/login', '/news', '/inquiries', '/assets/legacy.js',
+                         '/api/admin/auth/login', '/api/admin/auth/LOGIN/',
+                         '/api/admin/custom-requirements', '/api/svc/test']:
+                request(path, 410)
             request('/api/admin/auth/login', 403, host='www.audit.test')
+            request('/api/svc/test', 404, host='www.audit.test')
+            request('/api/custom-requirements', 204, host='www.audit.test')
+            request('/zh', 204, host='www.audit.test')
+            request('/en', 204, host='www.audit.test')
         finally:
             docker('rm', '-f', name, check=False)
     print(json.dumps({'checks': len(results), 'results': results}, ensure_ascii=False, indent=2))
