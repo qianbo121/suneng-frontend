@@ -432,6 +432,12 @@
           "question": "产品验收只看硬度可以吗？",
           "answer": "不能默认只看硬度。应根据材料、用途和采用产品规范约定组织、力学性能、脱碳、裂纹、尺寸及取样部位；设备功能验收不能代替产品质量验证。",
           "defaultOpen": false
+        },
+        {
+          "id": "faq-6",
+          "question": "比较这条生产线的报价，哪些条件和供货范围要对齐？",
+          "answer": "比较报价应对齐锻件材料、截面、锻后温度条件、转移节拍、淬火和回火要求，再核对保温均温、测温分流、转移淬火、清洗或沥液、回火及冷却配置。锻造切边接口、公辅、检验物流和联调责任单列，不能把利用余热理解成无需任何后续加热设备。",
+          "defaultOpen": false
         }
       ],
       "relatedGroups": [
@@ -456,6 +462,11 @@
             {
               "label": "本线询价参数清单",
               "href": "/downloads/heat-treatment-lines/forging-waste-heat-qt-line.txt"
+            },
+            {
+              "label": "现有热工设备维修与改造评估",
+              "href": "/zh/service/furnace-renovation-overhaul",
+              "note": "先评估现有炉体、加热、冷却与控制状况；整线机械、专用工装及第三方设备的范围另行确认。"
             }
           ]
         }
