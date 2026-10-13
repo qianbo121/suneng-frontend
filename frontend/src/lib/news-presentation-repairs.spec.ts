@@ -28,7 +28,7 @@ const parse = (html: string) => DOMPurify.sanitize(html, { RETURN_DOM: true }) a
 describe('format-only repair of the automation article', () => {
   it('promotes exactly the four original labels without changing visible text or source data', () => {
     const beforeItem = JSON.stringify(item);
-    const before = parse(prepareNewsArticleHtml(item.contentZh));
+    const before = parse(prepareNewsArticleHtml(item.contentZh, { locale: 'zh' }));
     const after = parse(normalizeNewsHtml('zh', item));
     expect(
       Array.from(after.querySelectorAll('h2.news-section-heading'), (h) => h.textContent),
@@ -39,7 +39,7 @@ describe('format-only repair of the automation article', () => {
   });
 
   it('describes only the verified diagram and retains its source plus all links', () => {
-    const before = parse(prepareNewsArticleHtml(item.contentZh));
+    const before = parse(prepareNewsArticleHtml(item.contentZh, { locale: 'zh' }));
     const after = parse(normalizeNewsHtml('zh', item));
     const attrs = (root: HTMLElement, selector: string, name: string) =>
       Array.from(root.querySelectorAll(selector), (el) => el.getAttribute(name));
@@ -54,7 +54,7 @@ describe('format-only repair of the automation article', () => {
 
   it('leaves another article and a later changed image description alone', () => {
     expect(normalizeNewsHtml('zh', { ...item, slug: 'other-article' })).toBe(
-      prepareNewsArticleHtml(item.contentZh),
+      prepareNewsArticleHtml(item.contentZh, { locale: 'zh' }),
     );
     const changed = {
       ...item,
