@@ -21,6 +21,8 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 45
     env:
+      # Importing the frozen Python gate must not create untracked __pycache__.
+      PYTHONDONTWRITEBYTECODE: '1'
       QA_RECEIPTS: ${{ inputs.receipts }}
       QA_RECEIPTS_SHA256: ${{ inputs.receipts_sha256 }}
     steps:
