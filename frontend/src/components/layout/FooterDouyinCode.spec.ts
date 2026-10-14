@@ -40,19 +40,21 @@ describe('footer Douyin code hydration', () => {
     expect(warnings).not.toHaveBeenCalled();
     expect(recovered).toEqual([]);
     expect(container.innerHTML).toBe(serverMarkup);
-    const svg = container.querySelector('svg')!;
-    const clip = svg.querySelector('clipPath')!;
-    const image = svg.querySelector('image')!;
-    expect(svg.getAttribute('aria-label')).toBe(label);
-    expect(svg.getAttribute('viewBox')).toBe('208 248 808 808');
-    expect(svg.getAttribute('width')).toBe('124');
-    expect(svg.getAttribute('height')).toBe('124');
-    expect(image.getAttribute('clip-path')).toBe(`url(#${clip.id})`);
-    expect(image.getAttribute('href')).toBe('/images/footer/douyin-code-original-20260907.png');
+    const clip = container.querySelector('clipPath')!;
+    const image = container.querySelector('img')!;
+    expect(image.getAttribute('alt')).toBe(label);
+    expect(image.getAttribute('loading')).toBe('lazy');
+    expect(image.getAttribute('decoding')).toBe('async');
+    expect(image.style.clipPath.replaceAll('"', '')).toBe(`url(#${clip.id})`);
+    expect(image.getAttribute('src')).toBe('/images/footer/douyin-code-original-20260907.png');
     expect(image.getAttribute('width')).toBe('1219');
     expect(image.getAttribute('height')).toBe('1820');
-    expect(Array.from(clip.querySelectorAll('circle'), (circle) => [
-      circle.getAttribute('cx'), circle.getAttribute('cy'), circle.getAttribute('r'),
-    ])).toEqual([['609', '650', '388'], ['846', '414', '91']]);
+    expect(clip.getAttribute('clipPathUnits')).toBe('objectBoundingBox');
+    expect(Array.from(clip.querySelectorAll('ellipse'), (ellipse) => [
+      Number(ellipse.getAttribute('cx')) * 1219,
+      Number(ellipse.getAttribute('cy')) * 1820,
+      Number(ellipse.getAttribute('rx')) * 1219,
+      Number(ellipse.getAttribute('ry')) * 1820,
+    ]).flat().map(Math.round)).toEqual([609, 650, 388, 388, 846, 414, 91, 91]);
   });
 });

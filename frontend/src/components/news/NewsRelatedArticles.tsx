@@ -1,4 +1,4 @@
-import Link from 'next/link';
+import { NavigationLink as Link } from '@/components/layout/NavigationLink';
 import { HiArrowRight } from 'react-icons/hi2';
 
 import { NewsCardImage } from '@/components/news/NewsCardImage';
