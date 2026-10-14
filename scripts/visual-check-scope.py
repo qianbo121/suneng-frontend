@@ -38,6 +38,15 @@ NON_RENDERING_PATHS = frozenset({
     'backend/src/modules/shuju-service/shuju-growth-read-order.spec.ts',
 })
 
+# These files only run read-only acceptance against a separately frozen source.
+# Keep the list exact: CI itself, deployment tools and browser test contracts
+# are deliberately not included. Their own boundary tests always run in CI.
+READ_ONLY_ACCEPTANCE_PATHS = frozenset({
+    '.github/workflows/verify-live-frontend.yml',
+    'scripts/remote_frontend_acceptance.py',
+    'scripts/test_remote_frontend_acceptance.py',
+})
+
 BASELINE_PREFIX = 'frontend/tests/visual/__screenshots__/smoke-pages.spec.ts/linux-chrome/'
 REQUIRED_BASELINES = frozenset(
     BASELINE_PREFIX + name
@@ -129,7 +138,7 @@ def classify(repository, base, head, event):
         changed = {path for _status, paths in changes for path in paths}
         if not changes:
             return Scope(True, 'Full visual checks: empty comparison cannot justify skipping.', 0)
-        if any(path not in NON_RENDERING_PATHS for path in changed):
+        if any(path not in NON_RENDERING_PATHS | READ_ONLY_ACCEPTANCE_PATHS for path in changed):
             return Scope(True, 'Full visual checks: change includes UI, configuration or an unreviewed path.', len(changed))
         if any(status[0] not in ('A', 'M', 'D', 'R') for status, _paths in changes):
             return Scope(True, 'Full visual checks: change includes a file type or unsupported status.', len(changed))
@@ -140,7 +149,7 @@ def classify(repository, base, head, event):
             if any(mode not in ('100644', '100755') or kind != 'blob'
                    for mode, kind in entries.values()):
                 return Scope(True, 'Full visual checks: reviewed file is no longer a regular source file.', len(changed))
-        return Scope(False, 'Screenshots skipped: only reviewed analytics/collection logic and its tests changed; lint, types, unit tests and builds still run.', len(changed))
+        return Scope(False, 'Screenshots skipped: only reviewed non-rendering logic or read-only acceptance tools changed; lint, types, unit tests and builds still run.', len(changed))
     except (subprocess.SubprocessError, OSError, ValueError, UnicodeError):
         return Scope(True, 'Full visual checks: unable to verify the complete comparison safely.')
 

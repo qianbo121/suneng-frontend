@@ -65,6 +65,51 @@ class VisualScopeTest(unittest.TestCase):
         self.assertEqual(result.changed_paths, 2)
         self.assertIn('unit tests and builds still run', result.reason)
 
+    def test_each_reviewed_acceptance_tool_skips_only_screenshots(self):
+        for path in scope.READ_ONLY_ACCEPTANCE_PATHS:
+            with self.subTest(path=path):
+                self.git('reset', '--hard', self.base)
+                self.git('clean', '-fd')
+                self.write(path, 'read-only tool fixture\n')
+                result = self.classified(self.commit('read-only acceptance tool'))
+                self.assertFalse(result.required)
+                self.assertEqual(result.changed_paths, 1)
+                self.assertIn('unit tests and builds still run', result.reason)
+
+    def test_acceptance_tools_and_reviewed_logic_can_share_a_change(self):
+        for path in scope.READ_ONLY_ACCEPTANCE_PATHS:
+            self.write(path, 'read-only tool fixture\n')
+        self.write(LOGIC, 'export const value = 2;\n')
+        result = self.classified(self.commit('acceptance and reviewed logic'))
+        self.assertFalse(result.required)
+        self.assertEqual(result.changed_paths, 4)
+
+    def test_acceptance_tool_mixed_with_rendering_or_gate_change_is_full(self):
+        for path in (UI, 'pnpm-lock.yaml', 'frontend/next.config.mjs',
+                     '.github/workflows/ci.yml', 'scripts/visual-check-scope.py',
+                     'scripts/test_visual_check_scope.py',
+                     'frontend/tests/visual/page-first-load-stability.spec.ts',
+                     'ops/releases/frontend_release.py',
+                     'ops/releases/run_browser_checks.py',
+                     'scripts/another_acceptance_tool.py'):
+            with self.subTest(path=path):
+                self.git('reset', '--hard', self.base)
+                self.git('clean', '-fd')
+                self.write('scripts/remote_frontend_acceptance.py', 'tool change\n')
+                self.write(path, 'unreviewed change\n')
+                self.assertTrue(self.classified(self.commit('mixed tool change')).required)
+
+    def test_acceptance_tool_symlink_and_rename_outside_list_are_full(self):
+        tool = 'scripts/remote_frontend_acceptance.py'
+        self.write(tool, 'tool fixture\n')
+        base = self.commit('existing acceptance tool')
+        (self.repo / tool).unlink()
+        (self.repo / tool).symlink_to('another.py')
+        self.assertTrue(self.classified(self.commit('symlink tool'), base=base).required)
+        self.git('reset', '--hard', base)
+        self.git('mv', tool, 'scripts/unreviewed.py')
+        self.assertTrue(self.classified(self.commit('rename tool'), base=base).required)
+
     def test_one_ui_change_makes_a_mixed_change_full(self):
         self.write(LOGIC, 'export const value = 2;\n')
         self.write(UI, 'export const Header = () => <nav />;\n')
