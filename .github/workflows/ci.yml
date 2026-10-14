@@ -59,6 +59,7 @@ jobs:
           set -euo pipefail
           python3 scripts/test_deploy_preflight.py
           python3 scripts/test_visual_check_scope.py
+          python3 scripts/test_remote_frontend_acceptance.py
           python3 scripts/test_backup_sh.py
           python3 ops/releases/test_backup_gate.py
           python3 ops/releases/test_storage_policy.py
