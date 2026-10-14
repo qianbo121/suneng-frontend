@@ -1,0 +1,67 @@
+name: Verify Live Frontend (read only)
+on:
+  workflow_dispatch:
+    inputs:
+      receipts:
+        description: Reviewed gzip/base64 frozen JSON receipts (no credentials or business data)
+        type: string
+        required: true
+      receipts_sha256:
+        description: SHA-256 of the compressed receipt bundle
+        type: string
+        required: true
+permissions:
+  contents: read
+concurrency:
+  group: live-frontend-acceptance
+  cancel-in-progress: false
+jobs:
+  verify:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      QA_RECEIPTS: ${{ inputs.receipts }}
+      QA_RECEIPTS_SHA256: ${{ inputs.receipts_sha256 }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          path: tools
+          persist-credentials: false
+      - name: Validate and restore frozen JSON receipts in an ephemeral directory
+        run: |
+          set -euo pipefail
+          python3 tools/scripts/test_remote_frontend_acceptance.py
+          sudo mkdir -p /Users/qianbo
+          sudo chown "$USER" /Users/qianbo
+          python3 tools/scripts/remote_frontend_acceptance.py prepare
+      - uses: actions/checkout@v7
+        with:
+          path: frozen-source
+          ref: ${{ env.QA_SOURCE }}
+          persist-credentials: false
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22.23.1
+      - uses: pnpm/action-setup@v6
+        with:
+          package_json_file: frozen-source/package.json
+      - name: Install the frozen source and browser
+        run: |
+          set -euo pipefail
+          mv frozen-source "$QA_WORKSPACE"
+          cd "$QA_WORKSPACE"
+          pnpm install --frozen-lockfile
+          pnpm --dir frontend exec playwright install --with-deps chrome
+          test "$(git rev-parse HEAD)" = "$QA_SOURCE"
+          test -z "$(git status --porcelain)"
+      - name: Run the unchanged focused production entry
+        run: python3 tools/scripts/remote_frontend_acceptance.py run
+      - name: Preserve original results and execution provenance
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: focused-production-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/focused-evidence
+          if-no-files-found: warn
+          retention-days: 7
