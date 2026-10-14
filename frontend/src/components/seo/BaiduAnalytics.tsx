@@ -53,7 +53,8 @@ export function BaiduAnalytics() {
   }
 
   return (
-    <Script id="baidu-analytics" strategy="afterInteractive">
+    // External analytics must not keep the document load event waiting.
+    <Script id="baidu-analytics" strategy="lazyOnload">
       {`
 var _hmt = _hmt || [];
 (function() {
