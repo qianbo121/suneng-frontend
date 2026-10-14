@@ -38,7 +38,7 @@ async function streamDelayedPage(pathname: string, listOwnBoundary = false) {
       output.on('end', () => resolve(html));
       output.on('error', reject);
       const stream = renderToPipeableStream(
-        createElement(PageLoadingBoundary, { locale: pathname.startsWith('/en') ? 'en' : 'zh', children }),
+        <PageLoadingBoundary locale={pathname.startsWith('/en') ? 'en' : 'zh'}>{children}</PageLoadingBoundary>,
         { onShellReady() { stream.pipe(output); }, onShellError: reject, onError: reject },
       );
     });
