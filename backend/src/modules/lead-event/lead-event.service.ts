@@ -45,10 +45,54 @@ function normalizeDate(value: string | undefined, fallback: Date) {
   return Number.isNaN(date.getTime()) ? fallback : date;
 }
 
-function cleanProperties(value: Record<string, unknown> | undefined) {
-  if (!value) return null;
+function requestHost(value: string | string[] | undefined) {
+  const raw = headerText(value);
+  if (!raw || raw.length > 4096) return null;
+  try {
+    const parsed = new URL(raw);
+    return ['http:', 'https:'].includes(parsed.protocol) && !parsed.username && !parsed.password
+      ? parsed.hostname.toLowerCase().slice(0, 253)
+      : null;
+  } catch {
+    return null;
+  }
+}
+
+function observedEvidence(request: Request) {
+  const header = (name: string, max = 255) =>
+    clean(headerText(request.headers[name])?.replace(/[\x00-\x1f\x7f]/g, ''), max);
+  const token = (name: string, allowed: string[]) => {
+    const value = header(name, 40);
+    return value && allowed.includes(value) ? value : null;
+  };
+  // These are request declarations observed by the server, not proof of a human.
+  // Do not persist full URLs, high-entropy browser hints or an unmasked IP.
+  return {
+    version: 1,
+    originHost: requestHost(request.headers.origin),
+    referrerHost: requestHost(request.headers.referer),
+    fetchSite: token('sec-fetch-site', ['none', 'same-origin', 'same-site', 'cross-site']),
+    fetchMode: token('sec-fetch-mode', ['cors', 'navigate', 'no-cors', 'same-origin', 'websocket']),
+    fetchDest: token('sec-fetch-dest', [
+      'empty',
+      'document',
+      'iframe',
+      'script',
+      'image',
+      'worker',
+    ]),
+    browserBrands: header('sec-ch-ua'),
+    browserMobile: token('sec-ch-ua-mobile', ['?0', '?1']),
+    browserPlatform: header('sec-ch-ua-platform', 80),
+    networkCategory: 'unknown',
+  };
+}
+
+function cleanProperties(value: Record<string, unknown> | undefined, request: Request) {
   const entries: Array<[string, string | number | boolean | null]> = [];
-  for (const [key, item] of Object.entries(value).slice(0, 24)) {
+  for (const [key, item] of Object.entries(value || {})
+    .filter(([key]) => key.trim() !== 'serverEvidence')
+    .slice(0, 24)) {
     const normalizedKey = key.trim().slice(0, 60);
     if (!normalizedKey) continue;
     if (typeof item === 'string') entries.push([normalizedKey, item.trim().slice(0, 255)]);
@@ -58,7 +102,10 @@ function cleanProperties(value: Record<string, unknown> | undefined) {
       entries.push([normalizedKey, item]);
     }
   }
-  return entries.length > 0 ? JSON.stringify(Object.fromEntries(entries)) : null;
+  return JSON.stringify({
+    ...Object.fromEntries(entries),
+    serverEvidence: observedEvidence(request),
+  });
 }
 
 @Injectable()
@@ -82,7 +129,7 @@ export class LeadEventService {
     const ipMasked = maskedIp(rawIp);
     const region = resolveVisitorRegion(rawIp);
     const regionSource = region.province ? 'exact_ip' : null;
-    const properties = cleanProperties(dto.properties);
+    const properties = cleanProperties(dto.properties, request);
     const savedProperties = properties ? (JSON.parse(properties) as Record<string, unknown>) : {};
     const candidateId = savedProperties.collectionId;
     const collectionId =

@@ -5,6 +5,7 @@ import { ShujuGrowthReadQueryDto } from '@/modules/shuju-service/dto/shuju-growt
 import { ShujuGrowthOverviewDto, validateInquiryReview } from './dto/shuju-growth-overview.dto';
 import { OperatingSource, readContentGrowth } from '@/modules/shuju-service/shuju-content-growth';
 import { PrismaService } from '@/prisma/prisma.service';
+import { readTrafficReview } from './shuju-traffic-review';
 import {
   allowedTraffic,
   readAutomatedSessions,
@@ -721,8 +722,17 @@ export class ShujuGrowthReadService {
         inquiryReview: query.inquiryReview,
       });
 
+    const trafficReview = await readTrafficReview(
+      this.prisma,
+      Prisma.join([...filters, VERIFIED_EVENT], ' AND '),
+      automatedSessions,
+      query.startDate.slice(0, 10),
+      query.endDate.slice(0, 10),
+    );
+
     return {
       content,
+      trafficReview,
       visitTrend: {
         version: 1,
         rule: 'first_matching_page_view_per_session_in_range',

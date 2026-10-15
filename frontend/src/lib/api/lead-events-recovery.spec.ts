@@ -306,7 +306,8 @@ describe('reading collection recovery', () => {
     expect(listeners.get('scroll')).toHaveLength(1);
     fireInteraction();
     await settleRequests();
-    expect([...listeners.values()].flat()).toHaveLength(0);
+    expect(listeners.get('scroll')).toHaveLength(0);
+    expect(listeners.get('keydown')).toHaveLength(1);
     vi.setSystemTime(Date.now() + 31 * 60 * 1000);
     tickDwell();
     expect(listeners.get('scroll')).toHaveLength(1);
@@ -321,6 +322,234 @@ describe('reading collection recovery', () => {
     vi.setSystemTime(Date.now() + 31 * 60 * 1000);
     tickDwell();
     expect([...listeners.values()].flat()).toHaveLength(0);
+  });
+
+  it('records one new page view before resumed quiet reading after a hidden idle timeout', async () => {
+    trackPageView();
+    const original = postedBodies()[0];
+    const stop = startDwellTracking();
+    await vi.advanceTimersByTimeAsync(10_000);
+    Object.defineProperty(document, 'visibilityState', { configurable: true, value: 'hidden' });
+    await vi.advanceTimersByTimeAsync(31 * 60 * 1000);
+    expect(postedBodies().filter((body) => body.eventType === 'page_view')).toHaveLength(1);
+    expect(window.sessionStorage.getItem('suneng_dwell_seconds')).toBe('10');
+    Object.defineProperty(document, 'visibilityState', { configurable: true, value: 'visible' });
+    await vi.advanceTimersByTimeAsync(20_000);
+    const pages = postedBodies().filter((body) => body.eventType === 'page_view');
+    expect(pages).toHaveLength(2);
+    expect(pages[1]).toMatchObject({
+      pagePath: original.pagePath,
+      visitorId: original.visitorId,
+      properties: { pageViewReason: 'session_resume', collectorVersion: '2' },
+    });
+    expect(pages[1].sessionId).not.toBe(original.sessionId);
+    expect(postedBodies().find((body) => body.eventType === 'dwell_20s')).toMatchObject({
+      sessionId: pages[1].sessionId,
+    });
+    expect(postedBodies().filter((body) => body.sessionId === pages[1].sessionId)[0]).toBe(
+      pages[1],
+    );
+    expect(postedBodies().some((body) => body.eventType === 'human_signal')).toBe(false);
+    stop();
+  });
+
+  it('keeps a resumed page view stable during retry and concurrent input and dwell', async () => {
+    trackPageView();
+    installVisitorNatureTracking();
+    await settleRequests();
+    vi.setSystemTime(Date.now() + 31 * 60 * 1000);
+    vi.mocked(apiPost).mockImplementation((_path, options) => {
+      const body = options?.body as { eventType: string; properties?: Record<string, unknown> };
+      if (body.eventType === 'page_view' && body.properties?.pageViewReason === 'session_resume') {
+        return Promise.reject(new Error('Response lost'));
+      }
+      return Promise.resolve({});
+    });
+    fireInteraction();
+    await tick(5);
+    await vi.advanceTimersByTimeAsync(5000);
+    const resumed = postedBodies().filter(
+      (body) => body.properties?.pageViewReason === 'session_resume',
+    );
+    expect(resumed).toHaveLength(3);
+    expect(resumed[1]).toEqual(resumed[0]);
+    expect(resumed[2]).toEqual(resumed[0]);
+    await tick(20);
+    expect(
+      postedBodies().filter((body) => body.properties?.pageViewReason === 'session_resume'),
+    ).toHaveLength(3);
+  });
+
+  it('records a resumed view for a quick contact before the next timer tick', async () => {
+    trackPageView();
+    await settleRequests();
+    vi.setSystemTime(Date.now() + 31 * 60 * 1000);
+    trackLeadEvent('phone_click');
+    const pages = postedBodies().filter((body) => body.eventType === 'page_view');
+    expect(pages).toHaveLength(2);
+    expect(pages[1].properties?.pageViewReason).toBe('session_resume');
+    expect(postedBodies().find((body) => body.eventType === 'phone_click')?.sessionId).toBe(
+      pages[1].sessionId,
+    );
+    await tick(5);
+    expect(postedBodies().filter((body) => body.eventType === 'page_view')).toHaveLength(2);
+  });
+
+  it('leaves normal navigation and reload page views distinct after an idle timeout', async () => {
+    trackPageView();
+    await settleRequests();
+    vi.setSystemTime(Date.now() + 31 * 60 * 1000);
+    window.location.pathname = '/zh/contact';
+    tickDwell(); // Router effect has not run yet: it owns this page view.
+    trackPageView();
+    await tick(5);
+    let pages = postedBodies().filter((body) => body.eventType === 'page_view');
+    expect(pages).toHaveLength(2);
+    expect(pages[1].pagePath).toBe('/zh/contact');
+    expect(pages[1].properties?.pageViewReason).toBeUndefined();
+    vi.stubGlobal('window', { ...window }); // Full reload retains browser storage.
+    trackPageView();
+    pages = postedBodies().filter((body) => body.eventType === 'page_view');
+    expect(pages).toHaveLength(3);
+    expect(pages[2].sessionId).toBe(pages[1].sessionId);
+    expect(pages[2].properties?.collectionId).not.toBe(pages[1].properties?.collectionId);
+  });
+
+  it.each(['click', 'pointerdown', 'touchstart', 'keydown'])(
+    'records only the first trusted %s kind, never event contents',
+    async (type) => {
+      installVisitorNatureTracking();
+      const fire = (name: string, trusted: boolean) => {
+        for (const listener of [...(listeners.get(name) ?? [])]) {
+          listener({
+            isTrusted: trusted,
+            key: 'secret typed text',
+            clientX: 123,
+            target: 'private-input',
+          } as unknown as Event);
+        }
+      };
+      fire(type, false);
+      expect(postedBodies()).toHaveLength(0);
+      fire('scroll', true);
+      await settleRequests();
+      expect(
+        postedBodies().filter((body) => body.eventType === 'effective_interaction'),
+      ).toHaveLength(1);
+      expect(postedBodies()[0].properties).toMatchObject({
+        evidenceVersion: 1,
+        interactionType: 'scroll',
+        interactionStrength: 'weak',
+      });
+      expect(postedBodies().some((body) => body.eventType === 'human_signal')).toBe(false);
+      fire(type, true);
+      await settleRequests();
+      for (const name of ['click', 'pointerdown', 'touchstart', 'keydown']) fire(name, true);
+      await settleRequests();
+      const strong = postedBodies().filter((body) => body.eventType === 'human_signal');
+      expect(strong).toHaveLength(1);
+      expect(strong[0].properties).toMatchObject({
+        evidenceVersion: 1,
+        interactionType: type,
+        interactionStrength: 'strong',
+      });
+      expect(JSON.stringify(postedBodies())).not.toMatch(/secret typed text|private-input|clientX/);
+      expect([...listeners.values()].flat()).toHaveLength(0);
+    },
+  );
+
+  it('retains the first strong input payload and collection ID across response loss', async () => {
+    let failed = false;
+    vi.mocked(apiPost).mockImplementation((_path, options) => {
+      if ((options?.body as { eventType: string }).eventType === 'human_signal' && !failed) {
+        failed = true;
+        return Promise.reject(new Error('Response lost'));
+      }
+      return Promise.resolve({});
+    });
+    installVisitorNatureTracking();
+    for (const listener of [...(listeners.get('keydown') ?? [])])
+      listener({ isTrusted: true } as Event);
+    await settleRequests();
+    for (const listener of [...(listeners.get('touchstart') ?? [])])
+      listener({ isTrusted: true } as Event);
+    await vi.advanceTimersByTimeAsync(1000);
+    const strong = postedBodies().filter((body) => body.eventType === 'human_signal');
+    expect(strong).toHaveLength(2);
+    expect(strong[1]).toEqual(strong[0]);
+    expect(strong[1].properties?.interactionType).toBe('keydown');
+  });
+
+  it('retains the first strong input after exhausted retries, then resets it for the next visit', async () => {
+    let attempts = 0;
+    vi.mocked(apiPost).mockImplementation((_path, options) => {
+      if (
+        (options?.body as { eventType: string }).eventType === 'human_signal' &&
+        ++attempts <= 3
+      ) {
+        return Promise.reject(new Error('Response lost after server accepted'));
+      }
+      return Promise.resolve({});
+    });
+    installVisitorNatureTracking();
+    const fire = (type: string) => {
+      for (const listener of [...(listeners.get(type) ?? [])])
+        listener({ isTrusted: true } as Event);
+    };
+    fire('keydown');
+    await vi.advanceTimersByTimeAsync(5000);
+    const failed = postedBodies().filter((body) => body.eventType === 'human_signal');
+    expect(failed).toHaveLength(3);
+    expect(new Set(failed.map((body) => body.properties?.collectionId)).size).toBe(1);
+    window.location.pathname = '/zh/contact';
+    fire('touchstart');
+    await settleRequests();
+    const recovered = postedBodies().filter((body) => body.eventType === 'human_signal');
+    expect(recovered).toHaveLength(4);
+    expect(recovered[3]).toEqual(failed[0]);
+    expect(recovered[3]).toMatchObject({
+      pagePath: '/zh',
+      properties: { interactionType: 'keydown' },
+    });
+    vi.setSystemTime(Date.now() + 31 * 60 * 1000);
+    tickDwell();
+    fire('touchstart');
+    await settleRequests();
+    const next = postedBodies()
+      .filter((body) => body.eventType === 'human_signal')
+      .at(-1)!;
+    expect(next.sessionId).not.toBe(failed[0].sessionId);
+    expect(next.properties?.collectionId).not.toBe(failed[0].properties?.collectionId);
+    expect(next.properties?.interactionType).toBe('touchstart');
+  });
+
+  it('reads only available browser brand major versions and reserves bounded system properties', () => {
+    const highEntropy = vi.fn(() => {
+      throw new Error('Must not request fingerprint data');
+    });
+    vi.stubGlobal('navigator', {
+      webdriver: false,
+      userAgentData: {
+        brands: [
+          { brand: 'Chromium', version: '144.1.2' },
+          { brand: 'Example Browser', version: '145' },
+        ],
+        getHighEntropyValues: highEntropy,
+      },
+    });
+    trackLeadEvent('module_view', {
+      properties: {
+        ...Object.fromEntries(Array.from({ length: 30 }, (_, index) => [`detail${index}`, index])),
+        collectorVersion: 'spoof',
+        browserBrands: 'spoof',
+      },
+    });
+    expect(postedBodies()[0].properties).toMatchObject({
+      collectorVersion: '2',
+      browserBrands: 'Chromium/144; Example Browser/145',
+    });
+    expect(Object.keys(postedBodies()[0].properties ?? {}).length).toBeLessThanOrEqual(24);
+    expect(highEntropy).not.toHaveBeenCalled();
   });
 
   it('keeps a single dwell timer across repeated starts', async () => {
