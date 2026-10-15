@@ -1,0 +1,191 @@
+{
+  "minBodyCharacters": 300,
+  "extraPages": [
+    "/zh",
+    "/en"
+  ],
+  "requiredReadablePaths": [],
+  "readabilityExceptions": [
+    {
+      "path": "/zh/inquiry",
+      "reason": "Interactive inquiry page intentionally keeps its loading boundary; separate isolated form validation is required."
+    },
+    {
+      "path": "/zh/products/detail/copper-wire-annealing-line/inquiry-checklist",
+      "reason": "Interactive product inquiry checklist intentionally keeps its loading boundary; isolated form validation is required."
+    },
+    {
+      "path": "/en/products/detail/copper-wire-annealing-line/inquiry-checklist",
+      "reason": "Interactive product inquiry checklist intentionally keeps its loading boundary; isolated form validation is required."
+    }
+  ],
+  "expectedUrls": [
+    {
+      "path": "/en/solutions/jiangsu-gongye-lu-changjia",
+      "statuses": [
+        404
+      ],
+      "reason": "English procurement content has not been approved for publication."
+    },
+    {
+      "path": "/en/solutions/rechuli-lu-changjia",
+      "statuses": [
+        404
+      ],
+      "reason": "English procurement content has not been approved for publication."
+    },
+    {
+      "path": "/en/solutions/continuous-heat-treatment-line",
+      "statuses": [
+        404
+      ],
+      "reason": "English procurement content has not been approved for publication."
+    },
+    {
+      "path": "/en/articles/gongye-lu-baojia-canshu",
+      "statuses": [
+        404
+      ],
+      "reason": "English procurement content has not been approved for publication."
+    },
+    {
+      "path": "/en/articles/laojiu-rechuli-lu-daxiu-haishi-maixin",
+      "statuses": [
+        404
+      ],
+      "reason": "English procurement content has not been approved for publication."
+    },
+    {
+      "path": "/zh/case/anonymous-tsingshan-1250-renovation",
+      "statuses": [
+        404
+      ],
+      "reason": "Withdrawn content remains closed until item-specific approval; preserve recorded state.",
+      "evidence": "output/site-before-after-acquisition-audit-20260930/migration-comparison.json"
+    },
+    {
+      "path": "/zh/case/jining-support-roller-heat-treatment-line",
+      "statuses": [
+        404
+      ],
+      "reason": "Withdrawn content remains closed until item-specific approval; preserve recorded state.",
+      "evidence": "output/site-before-after-acquisition-audit-20260930/migration-comparison.json"
+    },
+    {
+      "path": "/zh/news/jiang-su-su-neng-gong-ye-lu-tui-huo-gu-rong-sheng-chan-xian-zhu-li-gang-cai-shen-jia-gong",
+      "statuses": [
+        404
+      ],
+      "reason": "Withdrawn content remains closed until item-specific approval; preserve recorded state.",
+      "evidence": "output/site-before-after-acquisition-audit-20260930/migration-comparison.json"
+    },
+    {
+      "path": "/zh/news/jiang-su-su-neng-gong-ye-lu-xiang-shi-re-chu-li-lu-ti-sheng-zhong-xiao-pi-liang-sheng-chan-xiao-l",
+      "statuses": [
+        404
+      ],
+      "reason": "Withdrawn content remains closed until item-specific approval; preserve recorded state.",
+      "evidence": "output/site-before-after-acquisition-audit-20260930/migration-comparison.json"
+    },
+    {
+      "path": "/zh/news/jiang-su-su-neng-gong-ye-lu-zai-2026-gong-ye-lu-yu-re-chu-li-ji-shu-jiao-liu-hui-shang-fen-xiang-zhi-neng-gong-yi-jing-yan",
+      "statuses": [
+        404
+      ],
+      "reason": "Withdrawn content remains closed until item-specific approval; preserve recorded state.",
+      "evidence": "output/site-before-after-acquisition-audit-20260930/migration-comparison.json"
+    },
+    {
+      "path": "/zh/news/jiang-su-su-neng-gong-ye-lu-zai-2026-quan-guo-gang-cai-re-chu-li-ji-shu-lun-tan-fen-xiang-gong-yi-chuang-xin",
+      "statuses": [
+        404
+      ],
+      "reason": "Withdrawn content remains closed until item-specific approval; preserve recorded state.",
+      "evidence": "output/site-before-after-acquisition-audit-20260930/migration-comparison.json"
+    },
+    {
+      "path": "/zh/news/jiang-su-su-neng-gong-ye-lu-zhuan-di-shi-re-chu-li-lu-ji-shu-sheng-ji-ji-ying-yong-an-li",
+      "statuses": [
+        404
+      ],
+      "reason": "Withdrawn content remains closed until item-specific approval; preserve recorded state.",
+      "evidence": "output/site-before-after-acquisition-audit-20260930/migration-comparison.json"
+    },
+    {
+      "path": "/zh/news/tong-si-zi-dong-hua-tui-huo-sheng-chan-xian-zhi-neng-hua-sheng-ji-yu-hang-ye-ying-yong",
+      "statuses": [
+        404
+      ],
+      "reason": "Withdrawn content remains closed until item-specific approval; preserve recorded state.",
+      "evidence": "output/site-before-after-acquisition-audit-20260930/migration-comparison.json"
+    },
+    {
+      "path": "/zh/news/xiang-shi-lu-he-ma-fu-lu-de-qu-bie-6-ge-wei-du-de-gong-ye-xuan-xing-zhi-nan",
+      "statuses": [
+        404
+      ],
+      "reason": "Withdrawn content remains closed until item-specific approval; preserve recorded state.",
+      "evidence": "output/site-before-after-acquisition-audit-20260930/migration-comparison.json"
+    },
+    {
+      "path": "/en/inquiry",
+      "statuses": [
+        404
+      ],
+      "reason": "The English inquiry route explicitly returns notFound; it is not a published readability exception.",
+      "evidence": "frontend/src/app/[locale]/inquiry/page.tsx"
+    }
+  ],
+  "historicalUrlCoverage": {
+    "knownClosedChineseAddresses": 9,
+    "englishProcurementExamples": 5,
+    "phpMappings": "Not inferred; add only mappings verified from a dated log and approved URL manifest."
+  },
+  "contentContracts": {
+    "/zh/contact": {
+      "path": "/zh/contact",
+      "expectedH1": "联系我们",
+      "requiredTexts": [
+        "设备咨询、项目沟通与来厂联系。",
+        "江苏苏能工业炉有限公司",
+        "130-5298-6814",
+        "微信咨询",
+        "业务邮箱",
+        "997518512@qq.com",
+        "到厂地址"
+      ],
+      "requiredMainLinks": [
+        {
+          "href": "tel:+8613052986814"
+        },
+        {
+          "href": "mailto:997518512@qq.com"
+        }
+      ],
+      "evidence": [
+        "frontend/src/components/about-subpages/ContactZhContent.tsx",
+        "output/readability-batch-one-20261015/local-candidate.json"
+      ],
+      "reason": "The contact page is intentionally concise; verify its substantive contact blocks instead of reducing the global length requirement."
+    },
+    "/zh/case": {
+      "path": "/zh/case",
+      "expectedH1": "项目案例",
+      "requiredTexts": [
+        "按工件、炉型和工艺，查找相似项目。",
+        "850毫米不锈钢退洗线：退火固溶段的供货范围"
+      ],
+      "requiredMainLinks": [
+        {
+          "pathname": "/zh/case/henan-annealing-solution-line"
+        }
+      ],
+      "evidence": [
+        "frontend/src/components/case-studies/CaseIndexPage.tsx",
+        "frontend/src/lib/cases/public-case-allowlist.ts",
+        "output/readability-batch-one-20261015/local-candidate.json"
+      ],
+      "reason": "The index currently presents one approved case; require its actual visible card and detail link rather than padding text."
+    }
+  }
+}
