@@ -79,3 +79,34 @@ describe('plain news entry initial HTML', () => {
     expect(html).not.toContain('Shared pending');
   });
 });
+
+
+describe('product detail initial HTML', () => {
+  it.each(['zh', 'en'].flatMap(locale => [
+    `/${locale}/products/detail/box-furnace`,
+    `/${locale}/products/detail/annealing-solution-line/`,
+    `/${locale}/products/detail/copper-wire-annealing-line`,
+  ]))('renders delayed product content without a hidden segment at %s', async pathname => {
+    const html = await streamDelayedPage(pathname);
+    expect(html).toContain('<h1>Technical resources</h1>');
+    expect(html).not.toMatch(/<div hidden\b/);
+    expect(html).not.toContain('Shared pending');
+  });
+
+  it.each(['zh', 'en'].flatMap(locale => [
+    `/${locale}/inquiry`,
+    `/${locale}/products/detail/copper-wire-annealing-line/inquiry-checklist`,
+    `/${locale}/products/detail/box-furnace/inquiry`,
+    `/${locale}/products/animation-review`,
+  ]))('keeps nested inquiry and unrelated pages protected at %s', async pathname => {
+    const html = await streamDelayedPage(pathname);
+    expect(html).toContain('Shared pending');
+    expect(html).toMatch(/<div hidden\b/);
+  });
+
+  it.each(['/zh/products', '/zh/service/furnace-renovation-overhaul'])(
+    'preserves already readable routes at %s', async pathname => {
+      expect(await streamDelayedPage(pathname)).not.toContain('Shared pending');
+    },
+  );
+});

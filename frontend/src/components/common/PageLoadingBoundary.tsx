@@ -11,10 +11,11 @@ export function PageLoadingBoundary({ children, locale }: { children: ReactNode;
   // Keep core pages, article bodies and ordinary list entry links readable.
   // Search/filter lists retain their own (list)/loading boundary; plain lists
   // may reach this layout through the internal news-prerendered rewrite.
-  // Other routes retain the shared boundary while their page data is arriving.
+  // Product details also render their content directly; nested inquiry tools
+  // and other routes retain the shared boundary while page data is arriving.
   if (pathname && (
     /^\/(?:zh|en)\/?$/.test(pathname)
-    || /^\/(?:zh|en)\/products\/detail\/copper-wire-annealing-line\/?$/.test(pathname)
+    || /^\/(?:zh|en)\/products\/detail\/[^/]+\/?$/.test(pathname)
     || /^\/zh\/(?:products|products\/detail\/(?:mesh-belt-furnace|trolley-furnace)|service\/furnace-renovation-overhaul)\/?$/.test(pathname)
     || /^\/(?:zh|en)\/news\/[^/]+\/?$/.test(pathname)
     || /^\/(?:zh|en)\/news\/?$/.test(pathname)
