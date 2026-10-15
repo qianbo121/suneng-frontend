@@ -30,7 +30,23 @@ describe('contact follow-up event receipt', () => {
       const values = execute.mock.calls[0].slice(1);
       expect(values).toContain('contact_action');
       expect(values).toContain('/zh/service/installation-after-sales');
-      expect(values).toContain(JSON.stringify(dto.properties));
+      expect(values).toContain(
+        JSON.stringify({
+          ...dto.properties,
+          serverEvidence: {
+            version: 1,
+            originHost: null,
+            referrerHost: null,
+            fetchSite: null,
+            fetchMode: null,
+            fetchDest: null,
+            browserBrands: null,
+            browserMobile: null,
+            browserPlatform: null,
+            networkCategory: 'unknown',
+          },
+        }),
+      );
     },
   );
 });
