@@ -1,8 +1,7 @@
 import type { Metadata } from 'next';
-import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { isPublishedGuide, isWithdrawnTechnicalPath } from '@/lib/publication-scope';
+import { isPublishedGuide, isWithdrawnTechnicalPath, isHiddenCaseEntry } from '@/lib/publication-scope';
 import {
   HiCheckCircle,
   HiOutlineArchiveBox,
@@ -283,50 +282,6 @@ export default async function ContinuousHeatTreatmentLinePage({ params }: PagePr
           />
         </div>
       </Section>
-      <Section id="experience" title="连续热处理生产线项目资料">
-        {!isWithdrawnTechnicalPath('/zh/case/jining-support-roller-heat-treatment-line') && (
-          <article className={styles.case}>
-            <figure className={styles.caseMedia}>
-              <Image
-                src="/images/about/cases/08-case-jining-support-roller.jpg"
-                alt="连续加热炉与网带输送结构的相关设备参考图"
-                fill
-                sizes="(max-width: 767px) 100vw, 580px"
-              />
-              <figcaption>相关设备</figcaption>
-            </figure>
-            <div className={styles.caseCopy}>
-              <h3>济宁支重轮热处理生产线</h3>
-              <p>工程机械零部件 · 多规格支重轮</p>
-              <dl>
-                {[
-                  ['项目需求', '协调连续加热、自动淬火、回火与喷淋冷却。'],
-                  ['主要设备', '连续加热炉、自动淬火机床、回火炉、喷淋冷却及电气控制。'],
-                  ['苏能参与', '整线方案与节拍协调、设备配置，按合同范围提供制造及安装调试。'],
-                ].map(([label, value]) => (
-                  <div key={label}>
-                    <dt>{label}</dt>
-                    <dd>{value}</dd>
-                  </div>
-                ))}
-              </dl>
-              {!isWithdrawnTechnicalPath('/zh/case/jining-support-roller-heat-treatment-line') && (
-                <Link
-                  className={styles.button}
-                  href="/zh/case/jining-support-roller-heat-treatment-line"
-                >
-                  查看项目资料
-                </Link>
-              )}
-            </div>
-          </article>
-        )}
-        <div className={styles.center}>
-          <Link className={styles.textLink} href="/zh/case">
-            查看已公开的项目案例
-          </Link>
-        </div>
-      </Section>
       <Section id="checkpoints" title="设备包括什么，交付时怎么检查？" soft>
         <InfoCards
           items={[
@@ -376,7 +331,7 @@ export default async function ContinuousHeatTreatmentLinePage({ params }: PagePr
                     {item.sourceSummary}
                   </p>
                 )}
-                {item.href && !isWithdrawnTechnicalPath(item.href) ? (
+                {item.href && !isWithdrawnTechnicalPath(item.href) && !isHiddenCaseEntry(item.href) ? (
                   <Link
                     href={item.href}
                     className="mt-4 inline-block text-[14px] font-semibold text-[#145ca8] underline underline-offset-4 focus-visible:outline focus-visible:outline-2"
