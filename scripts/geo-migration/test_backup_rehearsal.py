@@ -84,6 +84,46 @@ class BackupSafety(unittest.TestCase):
         b[0]['mounts'][0]['rw'] = True
         self.assertFalse(m.same_state(a, b))
 
+    def production_records(self):
+        rows = [{'name': name, 'running': True, 'image': 'sha256:' + 'a'*64, 'mounts': []} for name in m.PRODUCTION]
+        mapping = {x['name']: x for x in rows}
+        for name, source, destination in [('corp-site-postgres', '/data/postgres', '/var/lib/postgresql/data'), ('corp-site-backend', '/data/uploads', '/app/uploads'), ('corp-site-nginx', '/data/uploads', '/var/www/uploads')]:
+            mapping[name]['mounts'].append({'source': source, 'destination': destination, 'rw': True})
+        return rows
+
+    def test_retired_admin_requires_explicit_identity_and_stopped_state(self):
+        rows = self.production_records()
+        admin = next(x for x in rows if x['name'] == 'corp-site-admin')
+        admin['running'] = False
+        with patch.object(m, 'retired_admin_image', return_value=admin['image']):
+            m.verify_production(rows)
+            for field, value in [('running', True), ('image', 'sha256:' + 'b'*64)]:
+                changed = json.loads(json.dumps(rows));next(x for x in changed if x['name'] == 'corp-site-admin')[field] = value
+                with self.subTest(field=field), self.assertRaises(RuntimeError):m.verify_production(changed)
+
+    def test_retirement_never_allows_other_missing_or_stopped_services(self):
+        rows = self.production_records();next(x for x in rows if x['name'] == 'corp-site-admin')['running'] = False
+        with patch.object(m, 'retired_admin_image', return_value='sha256:' + 'a'*64):
+            for name in m.PRODUCTION:
+                with self.subTest(missing=name), self.assertRaises(RuntimeError):m.verify_production([x for x in rows if x['name'] != name])
+            for name in ['corp-site-postgres', 'corp-site-backend', 'corp-site-frontend', 'corp-site-nginx']:
+                changed = json.loads(json.dumps(rows));next(x for x in changed if x['name'] == name)['running'] = False
+                with self.subTest(stopped=name), self.assertRaises(RuntimeError):m.verify_production(changed)
+        with patch.object(m, 'retired_admin_image', return_value=None), self.assertRaises(RuntimeError):m.verify_production(rows)
+
+    def test_retirement_receipt_is_validated_and_symlink_refused(self):
+        image = 'sha256:' + 'a'*64
+        receipt = {'retiredComponents': {'admin': {'status': 'retired', 'retiredAt': '2026-10-12', 'image': image}}, 'adminRelease': {'image': image}, 'images': {}}
+        with tempfile.TemporaryDirectory() as directory, patch.object(m, 'ROOT', Path(directory)):
+            p = Path(directory)/'RELEASE_ARTIFACTS.json'
+            self.assertIsNone(m.retired_admin_image())
+            p.write_text(json.dumps(receipt));self.assertEqual(m.retired_admin_image(), image)
+            receipt['retiredComponents']['admin']['image'] = 'sha256:' + 'b'*64
+            p.write_text(json.dumps(receipt))
+            with self.assertRaises(ValueError):m.retired_admin_image()
+            p.unlink();p.symlink_to(Path(directory)/'missing')
+            with self.assertRaises(ValueError):m.retired_admin_image()
+
     def oci_archive(self, omit_layer=False):
         blobs = {}
         def blob(data):

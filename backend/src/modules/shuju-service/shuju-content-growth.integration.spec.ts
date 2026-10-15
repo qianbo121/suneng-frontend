@@ -257,6 +257,96 @@ integration('content growth against PostgreSQL', () => {
     expect(content.pages!.some((row) => row.pagePath.includes('?'))).toBe(false);
   });
 
+  it('visit trend retains 15 incomplete entries and normal short visits in the overview total', async () => {
+    for (let index = 0; index < 15; index++) {
+      await event('page_view', articleB, `incomplete-trend-${index}`, '2026-10-11T01:00:00Z');
+    }
+    await event('page_view', articleA, 'normal-short-trend', '2026-10-11T02:00:00Z');
+    await event('dwell_5s', articleA, 'normal-short-trend', '2026-10-11T02:00:05Z');
+    await event('page_view', articleA, 'known-bot-trend', '2026-10-11T03:00:00Z', {
+      userAgent: 'Googlebot',
+    });
+    await event('page_view', articleA, 'marked-trend', '2026-10-11T04:00:00Z', {
+      properties: { automationDetected: true },
+    });
+    const result = await service.overview({ startDate: '2026-10-11', endDate: '2026-10-12' });
+    expect(result.content.entryVisits).toBe(1);
+    expect(result.content.uncertainEntryVisits).toBe(15);
+    expect(result.visitTrend).toEqual({
+      version: 1,
+      rule: 'first_matching_page_view_per_session_in_range',
+      total: 16,
+      daily: [
+        { date: '2026-10-11', visits: 16 },
+        { date: '2026-10-12', visits: 0 },
+      ],
+    });
+    expect(result.visitTrend.total).toBe(result.funnel.visitSessions);
+    expect(result.visitTrend.daily.reduce((sum, row) => sum + row.visits, 0)).toBe(16);
+  });
+
+  it('visit trend counts a cross-midnight visit once on the first matching date after every filter', async () => {
+    await event('page_view', '/en/contact', 'midnight-trend', '2026-10-11T15:59:00Z', {
+      sourceType: '直接访问',
+      sourceDetail: null,
+    });
+    await event('page_view', articleA, 'midnight-trend', '2026-10-11T16:01:00Z', {
+      deviceType: '移动端',
+    });
+    await event('page_view', articleB, 'midnight-trend', '2026-10-12T01:00:00Z', {
+      deviceType: '移动端',
+    });
+    const selectedRange = { startDate: '2026-10-11', endDate: '2026-10-13' };
+    const result = await service.overview(selectedRange);
+    expect(result.visitTrend.daily).toEqual([
+      { date: '2026-10-11', visits: 1 },
+      { date: '2026-10-12', visits: 0 },
+      { date: '2026-10-13', visits: 0 },
+    ]);
+    for (const filter of [
+      { site: 'zh' as const },
+      { device: '移动端' as const },
+      { sourceType: 'AI引流' as const },
+      { pageType: '文章页' as const },
+      { startDate: '2026-10-12' },
+    ]) {
+      const filtered = await service.overview({ ...selectedRange, ...filter });
+      expect(filtered.visitTrend.daily.filter((row) => row.visits > 0)).toEqual([
+        { date: '2026-10-12', visits: 1 },
+      ]);
+      expect(filtered.visitTrend.total).toBe(1);
+      expect(filtered.visitTrend.total).toBe(filtered.funnel.visitSessions);
+    }
+  });
+
+  it('visit trend keeps missing-session page views without inventing visits or merging distinct IDs', async () => {
+    for (const [index, session] of [null, '', '   '].entries()) {
+      await event('page_view', articleA, session, '2026-10-11T01:00:00Z', {
+        visitorId: `missing-session-trend-${index}`,
+      });
+    }
+    const missing = await service.overview({ startDate: '2026-10-11', endDate: '2026-10-11' });
+    expect(missing.funnel).toMatchObject({ pageViews: 3, pageVisitors: 3, visitSessions: 0 });
+    expect(missing.visitTrend).toMatchObject({
+      total: 0,
+      daily: [{ date: '2026-10-11', visits: 0 }],
+    });
+    for (const session of ['valid-session-trend', ' valid-session-trend ']) {
+      await event('page_view', articleA, session, '2026-10-11T02:00:00Z');
+    }
+    const result = await service.overview({ startDate: '2026-10-11', endDate: '2026-10-12' });
+    expect(result.funnel).toMatchObject({ pageViews: 5, visitSessions: 2 });
+    expect(result.visitTrend.daily).toEqual([
+      { date: '2026-10-11', visits: 2 },
+      { date: '2026-10-12', visits: 0 },
+    ]);
+    const empty = await service.overview({ startDate: '2026-10-12', endDate: '2026-10-12' });
+    expect(empty.visitTrend).toMatchObject({
+      total: 0,
+      daily: [{ date: '2026-10-12', visits: 0 }],
+    });
+  });
+
   it('associates only reads before real submissions in the same visit and deduplicates globally', async () => {
     const result = await service.overview(range);
     const a = result.content.pages!.find((row) => row.pagePath === articleA)!;
