@@ -20,7 +20,7 @@ const pages = [
     slug: 'rechuli-lu-changjia',
     Page: ManufacturerPage,
     metadata: manufacturerMetadata,
-    projectBoundary: '记录未公布实测能耗、产量或验收成果',
+    projectBoundary: '采购时核对原件与适用范围',
   },
   {
     slug: 'jiangsu-gongye-lu-changjia',
@@ -68,7 +68,7 @@ describe.each(pages)('restored Chinese manufacturer page: $slug', ({ slug, Page,
       '连续退洗线改造：核对现场能源与接口',
     ]) expect(html).not.toContain(withdrawn);
     expect(html).toContain('id="cases"');
-    expect(html).toContain('/zh/case/henan-annealing-solution-line');
+    expect(html).not.toMatch(/href="[^"]*\/case(?:\/|")/);
     expect(html).toContain(projectBoundary);
     for (const match of html.matchAll(/href="#([^"]+)"/g)) {
       expect(html).toContain(`id="${match[1]}"`);

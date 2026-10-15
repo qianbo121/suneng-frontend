@@ -17,6 +17,7 @@ import { buildLeadSourceSnapshot, trackLeadEvent } from '@/lib/api/lead-events';
 import { trackInquiryAttempt, trackInquiryError, trackInquiryRequestError } from '@/lib/api/inquiry-events';
 import { InquiryContactOptions } from '@/components/lead/InquiryContactOptions';
 import { Locale } from '@/types/site';
+import { InquiryPrivacyNotice } from '@/components/privacy/InquiryPrivacyNotice';
 import {
   handleSuccessDialogKeyDown,
   restoreSuccessDialogFocus,
@@ -602,7 +603,7 @@ export function ProductLeadForm({
             >
               {copy.privacy.summary}
             </button>
-            {showPrivacyNotice ? <p id={privacyNoticeId} className="mt-2 rounded-[4px] border border-[#e0e6ee] bg-[#f8fafc] p-3">{copy.privacy.notice}</p> : null}
+            {showPrivacyNotice ? <div id={privacyNoticeId} className="mt-2 rounded-[4px] border border-[#e0e6ee] bg-[#f8fafc] p-3 [overflow-wrap:anywhere]"><InquiryPrivacyNotice locale={locale} /></div> : null}
           </div>
 
           <div

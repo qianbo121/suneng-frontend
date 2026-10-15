@@ -38,7 +38,6 @@ describe('continuous heat-treatment line rendered page', () => {
       'fit',
       'process',
       'selection-table',
-      'experience',
       'checkpoints',
       'project-evidence',
       'faq',
@@ -69,7 +68,7 @@ describe('continuous heat-treatment line rendered page', () => {
       {
         title: '850 mm 连续退火钝化线退火固溶段',
         facts: ['480–750 mm', '1.6–4.0 mm', '1050–1150℃'],
-        source: 'href="/zh/case/henan-annealing-solution-line"',
+        source: '850 mm 连续退火钝化线退火固溶段',
       },
       {
         title: '托辊网带正火回火连续线',
@@ -145,9 +144,9 @@ describe('continuous heat-treatment line rendered page', () => {
       expect(text(checks)).toContain(phrase);
     expect(styles).toMatch(/\.cards \{[^}]*grid-template-columns: repeat\(3, minmax\(0, 1fr\)\)/);
   });
-  it('preserves the project anchor and directs readers to public cases', () => {
-    const experience = section('experience');
-    expect(experience).toContain('href="/zh/case"');
+  it('pauses the project entrance while retaining full process and supply descriptions', () => {
+    expect(html).not.toContain('href="/zh/case');
+    expect(html).not.toContain('href="#experience"');
     for (const slug of [
       'anonymous-tsingshan-1250-renovation',
       'jining-support-roller-heat-treatment-line',

@@ -1,0 +1,395 @@
+.section.section {
+  padding: 32px 0 36px;
+  overflow: visible;
+  background: #f5f7fb;
+  color: #10243e;
+}
+
+/* Match the existing shared-form selector without changing its other variants. */
+.section.section.section .inner.inner {
+  display: block;
+  box-sizing: border-box;
+  width: calc(100% - 80px);
+  max-width: 1280px;
+  min-width: 0;
+  margin-inline: auto;
+  padding: 26px 30px;
+  overflow: visible;
+  border: 1px solid #dbe4ef;
+  border-radius: 14px;
+  background: #fff;
+  box-shadow: 0 10px 28px rgb(16 36 62 / 3%);
+}
+
+.section.section .intro.intro {
+  padding-bottom: 20px;
+  border-bottom: 1px solid #dbe4ef;
+}
+
+.section.section .intro.intro h2 {
+  margin: 0;
+  color: #10243e;
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 38px;
+  letter-spacing: -0.035em;
+  text-wrap: balance;
+}
+
+.section.section .intro.intro > p {
+  max-width: none;
+  margin: 8px 0 0;
+  color: #5f7086;
+  font-size: 14px;
+  line-height: 24px;
+}
+
+.section.section .intro.intro > .eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 9px;
+  color: #2454d9;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 20px;
+  letter-spacing: normal;
+}
+
+.section .eyebrow::before {
+  content: '';
+  width: 20px;
+  height: 2px;
+  flex: 0 0 20px;
+  background: #2454d9;
+}
+
+.section.section .form.form {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) repeat(2, minmax(0, 1fr));
+  grid-template-areas:
+    'direction identity contact'
+    'problem problem problem'
+    'footnote footnote submit';
+  align-items: start;
+  width: 100%;
+  max-width: none;
+  min-width: 0;
+  gap: 18px 20px;
+  margin: 0;
+  padding: 22px 0 0;
+  overflow: visible;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  color: #10243e;
+}
+
+.section .hint {
+  display: none;
+}
+
+.section .form > .directionField,
+.section .form > .problemField,
+.section .contactFields > .identityField,
+.section .contactFields > .contactField {
+  display: grid;
+  min-width: 0;
+  gap: 8px;
+}
+
+.section .directionField {
+  grid-area: direction;
+}
+
+.section .identityField {
+  grid-area: identity;
+}
+
+.section .contactField {
+  grid-area: contact;
+}
+
+.section .form .contactFields {
+  display: contents;
+}
+
+.section .form :is(.directionField, .identityField, .contactField) > :is(label, span),
+.section .form .problemLabel {
+  color: #10243e;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 22px;
+}
+
+.section .form .required {
+  margin-left: 4px;
+  color: #b85c58;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.section .form > .problemField {
+  grid-area: problem;
+  grid-template-columns: max-content minmax(0, 1fr);
+  align-items: start;
+  column-gap: 14px;
+}
+
+.section .form .problemHelp {
+  align-self: center;
+  color: #5f7086;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 21px;
+}
+
+.section .form :is(input:not([type='hidden']), textarea),
+.section .directionField button[aria-haspopup='listbox'] {
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  min-height: 48px;
+  padding: 13px 14px;
+  border: 1px solid #cbd7e7;
+  border-radius: 7px;
+  background: #fafbfd;
+  color: #10243e;
+  font-size: 14px;
+  line-height: 22px;
+}
+
+.section .form input:not([type='hidden']),
+.section .directionField button[aria-haspopup='listbox'] {
+  height: 48px;
+  padding-block: 0;
+}
+
+.section .directionField button[aria-haspopup='listbox'] {
+  font-weight: 400;
+}
+
+.section .directionField button[aria-haspopup='listbox'][data-empty='true'] {
+  color: #8c9cb1;
+}
+
+.section .directionField button[aria-haspopup='listbox'] > svg {
+  width: 15px;
+  height: 15px;
+  flex-basis: 15px;
+  color: #61738e;
+}
+
+.section .directionField [role='listbox'] button {
+  font-size: 14px;
+}
+
+.section .form .problemField textarea {
+  grid-column: 1 / -1;
+  height: 82px;
+  min-height: 82px;
+  line-height: 24px;
+  resize: vertical;
+}
+
+.section .form :is(input, textarea)::placeholder {
+  color: #8c9cb1;
+  opacity: 1;
+}
+
+.section .form :is(input, textarea):focus-visible,
+.section .directionField button[aria-haspopup='listbox']:focus-visible,
+.section .directionField button[aria-haspopup='listbox'][data-open='true'] {
+  border-color: #2454d9;
+  outline: 0;
+  box-shadow: 0 0 0 3px rgb(36 84 217 / 13%);
+}
+
+.section .form :is(input, textarea)[aria-invalid='true'],
+.section .directionField button[aria-haspopup='listbox'][aria-invalid='true'] {
+  border-color: #b51d2a;
+}
+
+.section .form [id$='-error'] {
+  grid-column: 1 / -1;
+  color: #b51d2a;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 20px;
+}
+
+.section .form .submit {
+  grid-area: submit;
+  justify-self: end;
+  box-sizing: border-box;
+  width: 200px;
+  max-width: 100%;
+  min-height: 48px;
+  padding: 0 30px;
+  border: 0;
+  border-radius: 7px;
+  background: #2454d9;
+  color: #fff;
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 24px;
+}
+
+.section .form .submit:hover,
+.section .form .submit:focus-visible {
+  background: #1848bd;
+}
+
+.section .form .submit:focus-visible {
+  outline: 2px solid #70a5ff;
+  outline-offset: 3px;
+}
+
+.section .form .footnote {
+  grid-area: footnote;
+  align-self: center;
+  min-width: 0;
+  margin: 0 !important;
+  color: #7e8ca0;
+  font-size: 12px;
+  line-height: 20px;
+}
+
+.section .form .message,
+.section .form > :global([data-workpiece-summary]) {
+  grid-column: 1 / -1;
+  min-width: 0;
+  margin: 0;
+}
+
+.section .form .message {
+  grid-area: message;
+  font-size: 14px;
+  line-height: 22px;
+}
+
+.section .form > :global([data-workpiece-summary]) {
+  grid-area: workpiece;
+}
+
+.section.section .form.form:has(> .message) {
+  grid-template-areas:
+    'message message message'
+    'direction identity contact'
+    'problem problem problem'
+    'footnote footnote submit';
+}
+
+.section.section .form.form:has(> :global([data-workpiece-summary])) {
+  grid-template-areas:
+    'workpiece workpiece workpiece'
+    'direction identity contact'
+    'problem problem problem'
+    'footnote footnote submit';
+}
+
+.section.section .form.form:has(> :global([data-workpiece-summary])):has(> .message) {
+  grid-template-areas:
+    'workpiece workpiece workpiece'
+    'message message message'
+    'direction identity contact'
+    'problem problem problem'
+    'footnote footnote submit';
+}
+
+.section.section .success.success {
+  width: 100%;
+  max-width: none;
+  margin-top: 22px;
+  padding: 22px;
+  border-radius: 7px;
+  box-shadow: none;
+}
+
+@media (max-width: 720px) {
+  .section.section {
+    padding: 22px 0 24px;
+  }
+
+  .section.section.section .inner.inner {
+    width: calc(100% - 28px);
+    padding: 21px 20px;
+    border-radius: 11px;
+  }
+
+  .section.section .intro.intro {
+    padding-bottom: 19px;
+  }
+
+  .section.section .intro.intro h2 {
+    font-size: 24px;
+    line-height: 34px;
+  }
+
+  .section.section .intro.intro > .eyebrow {
+    font-size: 12px;
+    line-height: 19px;
+  }
+
+  .section.section .form.form {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas: 'direction' 'identity' 'contact' 'problem' 'submit' 'footnote';
+    gap: 17px;
+    padding-top: 19px;
+  }
+
+  .section .form > .problemField {
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: 7px;
+  }
+
+  .section .form .problemHelp {
+    font-size: 12px;
+  }
+
+  .section .form :is(input:not([type='hidden']), textarea),
+  .section .directionField button[aria-haspopup='listbox'],
+  .section .directionField [role='listbox'] button {
+    font-size: 16px;
+  }
+
+  .section .directionField button[aria-haspopup='listbox'] > span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .section .form .problemField textarea {
+    height: 108px;
+    min-height: 108px;
+  }
+
+  .section .form .submit {
+    justify-self: stretch;
+    width: 100%;
+    min-width: 0;
+  }
+
+  .section .form .footnote {
+    font-size: 11px;
+    text-align: center;
+  }
+
+  .section.section .form.form:has(> .message) {
+    grid-template-areas: 'message' 'direction' 'identity' 'contact' 'problem' 'submit' 'footnote';
+  }
+
+  .section.section .form.form:has(> :global([data-workpiece-summary])) {
+    grid-template-areas: 'workpiece' 'direction' 'identity' 'contact' 'problem' 'submit' 'footnote';
+  }
+
+  .section.section .form.form:has(> :global([data-workpiece-summary])):has(> .message) {
+    grid-template-areas: 'workpiece' 'message' 'direction' 'identity' 'contact' 'problem' 'submit' 'footnote';
+  }
+
+  .section.section .success.success {
+    margin-top: 19px;
+    padding: 18px;
+  }
+}
