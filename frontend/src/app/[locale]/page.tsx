@@ -1,4 +1,4 @@
-import dynamic from 'next/dynamic';
+import nextDynamic from 'next/dynamic';
 
 import { JsonLd } from '@/components/JsonLd';
 import { HomepageV2 } from '@/components/home/HomepageV2';
@@ -8,7 +8,7 @@ import { HOME_SEO } from '@/lib/seo/page-data';
 import { ENGLISH_STATIC_PAGE_METADATA } from '@/lib/seo/static-page-metadata-en';
 import { Locale } from '@/types/site';
 
-const HeroBanner = dynamic(() =>
+const HeroBanner = nextDynamic(() =>
   import('@/components/home/HeroBanner').then((module) => ({ default: module.HeroBanner })),
 );
 
@@ -41,7 +41,10 @@ const homeSeoCopy = {
   }
 >;
 
-export const revalidate = 3600;
+// The article timeout can produce a temporary fallback. Always render the
+// homepage per request so neither that fallback nor a build-time success fixes
+// its rendering mode. The explicit shared article data cache remains enabled.
+export const dynamic = 'force-dynamic';
 
 export async function generateMetadata({ params }: LocaleHomePageProps) {
   const { locale } = await params;
