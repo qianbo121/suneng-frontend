@@ -257,28 +257,7 @@ export function ManufacturerContent() {
                   </svg>
                 </a>
               </div>
-              <div className={'proof-item'}>
-                <span className={'evidence-label'}>{'公开项目'}</span>
-                <h3>{'河南连续退火固溶项目'}</h3>
-                <p>
-                  {
-                    '可查看不锈钢带材工艺段、分段冷却及上下游接口的公开记录。记录未公布实测能耗、产量或验收成果，适合作为项目范围的参考。'
-                  }
-                </p>
-                <a className={'text-link'} href={'https://www.jssngyl.cn/zh/case/henan-annealing-solution-line'}>
-                  {'查看项目条件与供货范围'}
-                  <svg aria-hidden={'true'} viewBox={'0 0 24 24'} width={'18'} height={'18'}>
-                    <path
-                      d={'M5 12h14M13 6l6 6-6 6'}
-                      fill={'none'}
-                      stroke={'currentColor'}
-                      strokeWidth={'1.8'}
-                      strokeLinecap={'round'}
-                      strokeLinejoin={'round'}
-                    ></path>
-                  </svg>
-                </a>
-              </div>
+
             </div>
           </div>
         </div>

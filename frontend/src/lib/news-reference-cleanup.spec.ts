@@ -24,7 +24,7 @@ const expectedBlock = (id: number) => id === 20
 
 function expectedChineseContent(id: number, contentZh: string): string {
   const cleanedReference = contentZh.replace(expectedBlock(id), '');
-  if (id === 26) return cleanedReference.replace(danglingGuidance, '');
+  if (id === 26) return cleanedReference.replace(danglingGuidance, reviewHandoff);
   if ([23, 24].includes(id)) return cleanedReference.replace(danglingGuidance, reviewHandoff);
   if ([29, 30].includes(id)) return cleanedReference.replace('具体项目情况可参考案例页。', caseHandoff);
   return cleanedReference;
@@ -64,13 +64,17 @@ describe('approved Chinese news reference cleanup', () => {
     if (id === 20) expect(result.contentZh).not.toContain('<p>完整案例可参考：</p>');
   });
 
-  it.each(ids)('keeps the real English overlay and all English fields for article %i', async (id) => {
+  it.each(ids)('uses the approved historical-material note and preserves English metadata for article %i', async (id) => {
     const translated = await applyEnglishNewsCopy(reviewedItem(id));
     const expected = translations[String(id) as keyof typeof translations];
     expect(translated.contentEn).toBe(expected.contentEn);
     expect(translated.titleEn).toBe(expected.titleEn);
     const result = applyNewsReferenceCleanup(translated);
-    expect(result).toEqual({ ...translated, contentZh: expectedChineseContent(id, translated.contentZh!) });
+    expect({ ...result, contentEn: translated.contentEn }).toEqual({ ...translated, contentZh: expectedChineseContent(id, translated.contentZh!) });
+    expect(result.contentEn).toContain('Availability requires separate confirmation.');
+    expect(result.contentEn).toContain('Design assumptions do not establish completed retrofit or acceptance.');
+    expect(result.contentEn).not.toContain('href="/en/case/');
+    expect(applyNewsReferenceCleanup(result)).toBe(result);
   });
 
   it('removes article 26’s exact guidance while retaining the adjacent conditions and fields', () => {
@@ -154,7 +158,8 @@ describe('approved Chinese news reference cleanup', () => {
       const expectedChinese = expectedChineseContent(source.id, reviewedItem(source.id).contentZh!);
       const expectedEnglish = translations[String(source.id) as keyof typeof translations];
       expect(detail.data?.contentZh).toBe(expectedChinese);
-      expect(detail.data?.contentEn).toBe(expectedEnglish.contentEn);
+      expect(detail.data?.contentEn).toContain('Availability requires separate confirmation.');
+      expect(detail.data?.contentEn).not.toContain('href="/en/case/');
       expect(detail.data?.titleEn).toBe(expectedEnglish.titleEn);
       expect(list.data?.items[index]).toEqual(detail.data);
     }

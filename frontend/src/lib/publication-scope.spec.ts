@@ -236,7 +236,8 @@ describe('launch publication scope', () => {
     expect(html).toContain('正文 项目参数 Guide');
     expect(html).not.toContain('/case/old');
     expect(html).not.toContain('/solutions/old');
-    expect(html).toContain(`href="/zh/case/${approved}"`);
+    expect(html).not.toContain(`href="/zh/case/${approved}"`);
+    expect(html).toContain("河南项目");
     expect(html).toContain('href="/zh/news/live"');
     expect(html).toContain('href="/zh/products"');
   });

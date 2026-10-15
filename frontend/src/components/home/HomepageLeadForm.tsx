@@ -19,6 +19,7 @@ import {
 } from '@/lib/api/homepage-requirements';
 import { buildLeadSourceSnapshot, trackLeadEvent } from '@/lib/api/lead-events';
 import { trackInquiryAttempt, trackInquiryError, trackInquiryRequestError } from '@/lib/api/inquiry-events';
+import { InquiryContactOptions } from '@/components/lead/InquiryContactOptions';
 import { getActiveWorkpieceContext } from '@/lib/workpiece-selection-context';
 import {
   clearActiveWorkpieceRouterDraft,
@@ -28,10 +29,10 @@ import {
 } from '@/lib/workpiece-router-draft-context';
 import { markStickyEngineerConverted } from '@/components/home/sticky-engineer';
 import { hasConfirmedSubmission } from '@/lib/fastener-line-inquiry';
-import { siteSettings } from '@/mock/siteSettings';
-import { InquiryContactOptions } from '@/components/lead/InquiryContactOptions';
+import { InquiryPrivacyNotice } from '@/components/privacy/InquiryPrivacyNotice';
 
 import styles from './HomepageV2.module.css';
+import compactStyles from './HomepageLeadFormCompact.module.css';
 
 const emptyValues: HomepageRequirementValues = {
   direction: '',
@@ -105,7 +106,10 @@ export function HomepageLeadForm({
   const initialResults = english ? [['Heat-treatment line', 'Process route and equipment scope'], ['Individual furnace', 'Furnace direction and key parameters'], ['Existing furnace', 'Repair, retrofit or replacement assessment']] : sourceInitialResults;
   const isEmbedded = layoutVariant === 'embedded';
   const isProductCenter = layoutVariant === 'productCenter';
+  const isCompactLayout = !isEmbedded && !compactIntro && String(layoutVariant) !== 'productCenter' && !english;
   const formRef = useRef<HTMLFormElement>(null);
+  const failureMessageRef = useRef<HTMLParagraphElement>(null);
+  const successPanelRef = useRef<HTMLDivElement>(null);
   const directionTriggerRef = useRef<HTMLButtonElement>(null);
   const directionSelectRef = useRef<HTMLDivElement>(null);
   const directionMenuRef = useRef<HTMLDivElement>(null);
@@ -129,6 +133,31 @@ export function HomepageLeadForm({
   const [activeDirectionIndex, setActiveDirectionIndex] = useState(0);
   const [workpieceDraft, setWorkpieceDraft] = useState<WorkpieceRouterDraftContext | null>(null);
   const [directionMenuLayout, setDirectionMenuLayout] = useState({ placement: 'below', maxHeight: 320 });
+
+  useEffect(() => {
+    if (!message && !submissionId) return;
+    if (!isCompactLayout || pageType !== '首页' || sectionId !== 'homepage-lead-form') return;
+    if (!window.matchMedia('(max-width: 720px)').matches) return;
+
+    const frame = requestAnimationFrame(() => {
+      const target = submissionId ? successPanelRef.current : failureMessageRef.current;
+      if (!target) return;
+      // Focus the result without letting the browser place it behind the fixed header.
+      target.focus({ preventScroll: true });
+      let headerBottom = 0;
+      document.querySelectorAll<HTMLElement>('.site-header > div').forEach((bar) => {
+        const bounds = bar.getBoundingClientRect();
+        if (getComputedStyle(bar).position === 'fixed' && bounds.width && bounds.height && bounds.top <= 1) {
+          headerBottom = Math.max(headerBottom, bounds.bottom);
+        }
+      });
+      window.scrollTo({
+        top: Math.max(0, window.scrollY + target.getBoundingClientRect().top - headerBottom - 16),
+        behavior: 'instant',
+      });
+    });
+    return () => cancelAnimationFrame(frame);
+  }, [isCompactLayout, message, pageType, sectionId, submissionId]);
 
   useEffect(() => {
     if (inquiryProduct || !document.getElementById('workpiece-router')) return;
@@ -209,18 +238,25 @@ export function HomepageLeadForm({
     const viewportBottom = viewportTop + (window.visualViewport?.height ?? window.innerHeight);
     let topLimit = viewportTop + 8;
     let bottomLimit = viewportBottom - 8;
-    document.querySelectorAll<HTMLElement>('.site-header > div').forEach((element) => {
-      const bounds = element.getBoundingClientRect();
-      if (getComputedStyle(element).position === 'fixed' && bounds.height && bounds.top <= viewportTop + 1) {
-        topLimit = Math.max(topLimit, bounds.bottom + 8);
-      }
-    });
-    document.querySelectorAll<HTMLElement>('[data-mobile-contact-bar], [data-sticky-engineer-dock][data-visible="true"]').forEach((element) => {
-      const bounds = element.getBoundingClientRect();
-      if (bounds.height && bounds.width && bounds.bottom <= viewportBottom + 1 && bounds.top > rect.top) {
-        bottomLimit = Math.min(bottomLimit, bounds.top - 8);
-      }
-    });
+    const modalScrollContainer = trigger.closest<HTMLElement>('[data-contact-form-scroll-container]');
+    if (modalScrollContainer) {
+      const bounds = modalScrollContainer.getBoundingClientRect();
+      topLimit = Math.max(topLimit, bounds.top + 8);
+      bottomLimit = Math.min(bottomLimit, bounds.bottom - 8);
+    } else {
+      document.querySelectorAll<HTMLElement>('.site-header > div').forEach((element) => {
+        const bounds = element.getBoundingClientRect();
+        if (getComputedStyle(element).position === 'fixed' && bounds.height && bounds.top <= viewportTop + 1) {
+          topLimit = Math.max(topLimit, bounds.bottom + 8);
+        }
+      });
+      document.querySelectorAll<HTMLElement>('[data-mobile-contact-bar], [data-sticky-engineer-dock][data-visible="true"]').forEach((element) => {
+        const bounds = element.getBoundingClientRect();
+        if (bounds.height && bounds.width && bounds.bottom <= viewportBottom + 1 && bounds.top > rect.top) {
+          bottomLimit = Math.min(bottomLimit, bounds.top - 8);
+        }
+      });
+    }
     const below = Math.max(0, bottomLimit - rect.bottom - 8);
     const above = Math.max(0, rect.top - topLimit - 8);
     const placement = below >= 320 || below >= above ? 'below' : 'above';
@@ -369,12 +405,42 @@ export function HomepageLeadForm({
     choice?.focus({ preventScroll: true });
   };
 
+  const problemField = (
+    <label
+      className={`${styles.field} ${isProductCenter ? styles.productCenterProblemField : ''} ${isCompactLayout ? compactStyles.problemField : ''}`}
+    >
+      <span className={isCompactLayout ? compactStyles.problemLabel : undefined}>{isCompactLayout ? <>需求或现有问题<span className={compactStyles.required} aria-hidden="true">*</span></> : isProductCenter ? t('需求描述', 'Project description') : t('2. 简要描述需求或问题', '2. Describe your project or issue')}</span>
+      {isCompactLayout ? (
+        <span className={compactStyles.problemHelp} id={`${sectionId}-problem-help`}>
+          工件与材料、工艺要求、目标产量，或现有设备遇到的问题，已知信息先填。
+        </span>
+      ) : null}
+      <textarea
+        name="problem"
+        aria-required={isCompactLayout || undefined}
+        value={values.problem}
+        onChange={(event) => updateValue('problem', event.target.value)}
+        placeholder={isCompactLayout ? '例如：想新建一条热处理线；需要选择工业炉；或现有设备希望维修、改造。' : english ? 'Workpiece, throughput, process requirements or current equipment issue' : problemPlaceholder}
+        autoComplete="off"
+        maxLength={8_000}
+        aria-describedby={[isCompactLayout ? `${sectionId}-problem-help` : '', invalidField === 'problem' ? 'problem-error' : ''].filter(Boolean).join(' ') || undefined}
+        aria-invalid={invalidField === 'problem' || undefined}
+      />
+      {invalidField === 'problem' ? (
+        <span id="problem-error" className={styles.fieldError} aria-live="polite">
+          {english ? 'Please describe your project requirements or issue.' : <>请填写有效的{fieldLabels.problem}。</>}
+        </span>
+      ) : null}
+    </label>
+  );
+
   return (
     <section
       id={sectionId}
       className={[
         styles.page,
         styles.formSection,
+        isCompactLayout ? compactStyles.section : '',
         layoutVariant === 'solution' ? styles.solutionFormSection : '',
         isEmbedded ? styles.embeddedFormSection : '',
         isProductCenter ? styles.productCenterFormSection : '',
@@ -387,8 +453,14 @@ export function HomepageLeadForm({
       data-contact-form
       lang={locale}
     >
-      <div className={styles.formInner}>
-        {!isEmbedded && !compactIntro ? (
+      <div className={`${styles.formInner} ${isCompactLayout ? compactStyles.inner : ''}`}>
+        {isCompactLayout ? (
+          <div className={`${styles.formIntro} ${compactStyles.intro}`}>
+            <p className={compactStyles.eyebrow}>设备选型 · 生产线方案 · 维修改造</p>
+            <h2 id="homepage-form-title">咨询设备与生产线方案</h2>
+            <p>说明工件、产量或现有设备问题，详细资料可以后续补充。</p>
+          </div>
+        ) : !isEmbedded && !compactIntro ? (
           isProductCenter ? (
             <div className={`${styles.formIntro} ${styles.productCenterFormIntro}`}>
               <h2 id="homepage-form-title">{t('把需求告诉我们', 'Tell us about your project')}</h2>
@@ -442,12 +514,10 @@ export function HomepageLeadForm({
           )
         ) : null}
 
-        {compactIntro && (sectionId === 'inquiry' || inquiryProduct) ? (
-          <InquiryContactOptions locale={locale} />
-        ) : null}
+        {compactIntro && (sectionId === 'inquiry' || inquiryProduct) ? <InquiryContactOptions locale={locale} /> : null}
 
         {submissionId ? (
-          <div className={styles.successPanel} role="status" aria-live="polite">
+          <div ref={successPanelRef} tabIndex={-1} className={`${styles.successPanel} ${isCompactLayout ? compactStyles.success : ''}`} role="status" aria-live="polite">
             <span className={styles.successIcon} aria-hidden="true">
               <HiCheck />
             </span>
@@ -485,11 +555,11 @@ export function HomepageLeadForm({
             method="post"
             id={`${sectionId}-fields`}
             ref={formRef}
-            className={`${styles.leadForm} ${isProductCenter ? styles.productCenterLeadForm : ''}`}
+            className={`${styles.leadForm} ${isProductCenter ? styles.productCenterLeadForm : ''} ${isCompactLayout ? compactStyles.form : ''}`}
             onSubmit={handleSubmit}
             noValidate
           >
-            {!isProductCenter ? (
+            {!isProductCenter && !isCompactLayout ? (
               <p className={styles.privacyNote}>{english ? 'Share the information available now; detailed documents can follow.' : inquiryHint}</p>
             ) : null}
             {workpieceDraft ? (
@@ -502,16 +572,16 @@ export function HomepageLeadForm({
               </div>
             ) : null}
             {message ? (
-              <p className={styles.formMessage} role="alert">
+              <p ref={failureMessageRef} tabIndex={-1} className={`${styles.formMessage} ${isCompactLayout ? compactStyles.message : ''}`} role="alert">
                 {message}
               </p>
             ) : null}
 
             <div
-              className={`${styles.field} ${isProductCenter ? styles.productCenterDirectionField : ''}`}
+              className={`${styles.field} ${isProductCenter ? styles.productCenterDirectionField : ''} ${isCompactLayout ? compactStyles.directionField : ''}`}
             >
               <label id="homepage-direction-label" htmlFor="homepage-direction-trigger">
-                {isProductCenter ? t('需求类型', 'Project type') : t('1. 您想咨询什么？', '1. What do you need?')}
+                {isCompactLayout ? <>咨询方向<span className={compactStyles.required} aria-hidden="true">*</span></> : isProductCenter ? t('需求类型', 'Project type') : t('1. 您想咨询什么？', '1. What do you need?')}
               </label>
               <div ref={directionSelectRef} className={styles.directionSelect}>
                 <input type="hidden" name="direction" value={values.direction} readOnly />
@@ -531,7 +601,7 @@ export function HomepageLeadForm({
                   onKeyDown={handleDirectionTriggerKeyDown}
                 >
                   <span>
-                    {directionOptions.find((option) => option.value === values.direction)?.label ??
+                    {isCompactLayout && !values.direction ? '请选择咨询方向' : directionOptions.find((option) => option.value === values.direction)?.label ??
                       t('请选择', 'Please select')}
                   </span>
                   <HiChevronDown aria-hidden="true" />
@@ -580,40 +650,23 @@ export function HomepageLeadForm({
               ) : null}
             </div>
 
-            <label
-              className={`${styles.field} ${isProductCenter ? styles.productCenterProblemField : ''}`}
-            >
-              <span>{isProductCenter ? t('需求描述', 'Project description') : t('2. 简要描述需求或问题', '2. Describe your project or issue')}</span>
-              <textarea
-                name="problem"
-                value={values.problem}
-                onChange={(event) => updateValue('problem', event.target.value)}
-                placeholder={english ? 'Workpiece, throughput, process requirements or current equipment issue' : problemPlaceholder}
-                autoComplete="off"
-                maxLength={8_000}
-                aria-describedby={invalidField === 'problem' ? 'problem-error' : undefined}
-                aria-invalid={invalidField === 'problem' || undefined}
-              />
-              {invalidField === 'problem' ? (
-                <span id="problem-error" className={styles.fieldError} aria-live="polite">
-                  {english ? 'Please describe your project requirements or issue.' : <>请填写有效的{fieldLabels.problem}。</>}
-                </span>
-              ) : null}
-            </label>
+
+            {!isCompactLayout ? problemField : null}
 
             <div
-              className={`${styles.contactFields} ${isProductCenter ? styles.productCenterContactFields : ''}`}
+              className={`${styles.contactFields} ${isProductCenter ? styles.productCenterContactFields : ''} ${isCompactLayout ? compactStyles.contactFields : ''}`}
             >
               <label
-                className={`${styles.field} ${isProductCenter ? styles.productCenterIdentityField : ''}`}
+                className={`${styles.field} ${isProductCenter ? styles.productCenterIdentityField : ''} ${isCompactLayout ? compactStyles.identityField : ''}`}
               >
-                <span>{isProductCenter ? t('公司 / 联系人', 'Company / contact person') : t('3. 公司 / 联系人', '3. Company / contact person')}</span>
+                <span>{isCompactLayout ? <>公司或联系人<span className={compactStyles.required} aria-hidden="true">*</span></> : isProductCenter ? t('公司 / 联系人', 'Company / contact person') : t('3. 公司 / 联系人', '3. Company / contact person')}</span>
                 <input
                   name="identity"
+                  aria-required={isCompactLayout || undefined}
                   type="text"
                   value={values.identity}
                   onChange={(event) => updateValue('identity', event.target.value)}
-                  placeholder={t('例如：江苏某公司 张工', 'Company / contact name')}
+                  placeholder={isCompactLayout ? '公司名称或您的称呼' : t('例如：江苏某公司 张工', 'Company / contact name')}
                   autoComplete="organization"
                   maxLength={180}
                   aria-describedby={invalidField === 'identity' ? 'identity-error' : undefined}
@@ -627,11 +680,12 @@ export function HomepageLeadForm({
               </label>
 
               <label
-                className={`${styles.field} ${isProductCenter ? styles.productCenterContactField : ''}`}
+                className={`${styles.field} ${isProductCenter ? styles.productCenterContactField : ''} ${isCompactLayout ? compactStyles.contactField : ''}`}
               >
-                <span>{isProductCenter ? t('联系方式', 'Contact details') : t('4. 联系方式（任选一种）', '4. Contact details (choose one)')}</span>
+                <span>{isCompactLayout ? <>联系方式<span className={compactStyles.required} aria-hidden="true">*</span></> : isProductCenter ? t('联系方式', 'Contact details') : t('4. 联系方式（任选一种）', '4. Contact details (choose one)')}</span>
                 <input
                   name="contact"
+                  aria-required={isCompactLayout || undefined}
                   type="text"
                   value={values.contact}
                   onChange={(event) => updateValue('contact', event.target.value)}
@@ -655,10 +709,13 @@ export function HomepageLeadForm({
               </label>
             </div>
 
-            <button type="submit" className={styles.submitButton} disabled={isSubmitting}>
-              {isSubmitting ? t('正在提交…', 'Sending…') : t('提交需求', 'Send project details')}
+
+            {isCompactLayout ? problemField : null}
+
+            <button type="submit" className={`${styles.submitButton} ${isCompactLayout ? compactStyles.submit : ''}`} disabled={isSubmitting}>
+              {isSubmitting ? t('正在提交…', 'Sending…') : isCompactLayout ? '提交咨询' : t('提交需求', 'Send project details')}
             </button>
-            {privacyNoticeEnabled ? <div className={styles.formFootnote}>
+            {privacyNoticeEnabled ? <div className={`${styles.formFootnote} ${isCompactLayout ? compactStyles.footnote : ''}`}>
               <p>
                 {t('您提交的信息仅用于本次需求沟通。', 'Your information is used only to discuss this project.')}{' '}
                 <button
@@ -672,16 +729,9 @@ export function HomepageLeadForm({
                 </button>
               </p>
               <div id={privacyNoticeId} className={styles.privacyDetails} hidden={!showPrivacyNotice}>
-                <p>
-                  {t(
-                    '您提交的姓名、联系方式、公司与项目需求仅用于回复询盘、评估设备方案及后续沟通。如需查询、更正或删除已提交信息，请联系 ',
-                    'The name, contact details, company information and project requirements you provide are used only to respond to your inquiry, evaluate a furnace solution and continue project communication. To request access, correction or deletion, contact ',
-                  )}
-                  <a href={`mailto:${siteSettings.email}`}>{siteSettings.email}</a>
-                  {t('。请勿提交与项目无关的敏感个人信息。', '. Do not submit unrelated sensitive personal information.')}
-                </p>
+                <InquiryPrivacyNotice locale={locale} />
               </div>
-            </div> : <p className={styles.formFootnote}>{t('您提交的信息仅用于本次需求沟通。', 'Your information is used only to discuss this project.')}</p>}
+            </div> : <p className={`${styles.formFootnote} ${isCompactLayout ? compactStyles.footnote : ''}`}>{t('您提交的信息仅用于本次需求沟通。', 'Your information is used only to discuss this project.')}</p>}
           </form>
         )}
       </div>

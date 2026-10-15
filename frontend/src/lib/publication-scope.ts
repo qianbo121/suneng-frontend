@@ -127,3 +127,12 @@ export function isWithdrawnTechnicalPath(href: string): boolean {
   }
   return isWithdrawnRequestPath(pathname);
 }
+
+/** Owner review: pause case entrances without changing already-public route access. */
+export function isHiddenCaseEntry(href: string): boolean {
+  try {
+    const url = new URL(href, 'https://www.jssngyl.cn');
+    if (!['www.jssngyl.cn', 'jssngyl.cn'].includes(url.hostname)) return false;
+    return /^\/(?:zh\/|en\/)?case(?:\/|$)/i.test(routablePathname(url.pathname));
+  } catch { return false; }
+}

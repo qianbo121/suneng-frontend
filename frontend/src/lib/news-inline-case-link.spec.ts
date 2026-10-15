@@ -31,14 +31,12 @@ describe('approved inline case reference in shuju-news-28', () => {
     ).toBe(false);
   });
 
-  it('renders one contextual link between the evidence and confidentiality paragraphs', () => {
+  it('retains contextual wording but pauses its case entrance', () => {
     const html = prepareNewsArticleHtml(revision.contentZh);
     const root = DOMPurify.sanitize(html, { RETURN_DOM: true }) as HTMLElement;
     const links = root.querySelectorAll(`a[href="${casePath}"]`);
-    expect(links).toHaveLength(1);
-    const paragraph = links[0].parentElement!;
-    expect(paragraph.tagName).toBe('P');
-    expect(links[0].textContent).toBe('河南850毫米退洗线的供货范围说明');
+    expect(links).toHaveLength(0);
+    const paragraph = Array.from(root.querySelectorAll('p')).find(p => p.textContent?.includes('可参照河南850毫米退洗线'))!;
     expect(paragraph.textContent).toBe(
       '可参照河南850毫米退洗线的供货范围说明，核对设备配套与整线责任。',
     );

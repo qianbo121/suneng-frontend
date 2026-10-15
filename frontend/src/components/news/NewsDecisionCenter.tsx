@@ -324,6 +324,7 @@ export function NewsDecisionCenter({
             <div className={styles.bottomCtaActions}>
               <QuoteModalButton
                 locale={locale}
+                formVariant="compact-news"
                 label={t('提交项目参数')}
                 title={t('提交工业炉项目参数')}
                 description={t('提供工件、产量、现有设备和场地信息，工程师会协助整理缺失参数。')}

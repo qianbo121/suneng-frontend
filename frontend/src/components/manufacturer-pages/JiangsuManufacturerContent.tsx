@@ -255,7 +255,7 @@ export function JiangsuManufacturerContent() {
                 <h3>{'企业资质与设备项目记录'}</h3>
                 <p>
                   {
-                    '可查看国家高新技术企业、质量管理体系认证及已公开设备项目。设备项目用于了解工艺和供货范围，不能代替旧炉改造的实测效果。'
+                    '可查看国家高新技术企业、质量管理体系认证等资质资料；这些资料不能代替旧炉改造的实测效果。'
                   }
                 </p>
                 <div className={'evidence-links'}>
@@ -272,19 +272,7 @@ export function JiangsuManufacturerContent() {
                       ></path>
                     </svg>
                   </a>
-                  <a className={'text-link'} href={'https://www.jssngyl.cn/zh/case/henan-annealing-solution-line'}>
-                    {'查看公开设备项目'}
-                    <svg aria-hidden={'true'} viewBox={'0 0 24 24'} width={'18'} height={'18'}>
-                      <path
-                        d={'M5 12h14M13 6l6 6-6 6'}
-                        fill={'none'}
-                        stroke={'currentColor'}
-                        strokeWidth={'1.8'}
-                        strokeLinecap={'round'}
-                        strokeLinejoin={'round'}
-                      ></path>
-                    </svg>
-                  </a>
+
                 </div>
               </div>
             </div>
