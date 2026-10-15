@@ -123,6 +123,157 @@ def independent_archive_check(version, local_report, verified_at, algorithm_sha)
             'serverNativeImageStillRequiresVerification':True}
 
 
+def command_output(argv):
+    """Use identical, untrimmed UTF-8 output for collection and verification."""
+    return subprocess.check_output(argv, stderr=subprocess.DEVNULL, timeout=60).decode('utf-8')
+
+
+def prepare_input(config_path, config_sha, tools_root, records_root, output,
+                  *, live=Path('/opt/website'), command=command_output):
+    """Observe recovery inputs only; never manufacture verification or acceptance."""
+    tools_root, records_root, output, live = map(Path, (tools_root, records_root, output, live))
+    stamps = []
+
+    def read(path, expected=None):
+        record, raw, stamp = full_read(path, expected, capture=True)
+        stamps.append((Path(path), stamp))
+        return json.loads(raw), record['sha256']
+
+    config, _ = read(config_path, config_sha)
+    need(set(config) == {'schemaVersion', 'sourceCommit', 'previousSourceCommit',
+                        'currentBatchRoot', 'previousBatchRoot', 'toolsPins'} and
+         config['schemaVersion'] == 1, 'exact-preparation-config-required')
+    sources = [config['sourceCommit'], config['previousSourceCommit']]
+    need(all(isinstance(v, str) and re.fullmatch(r'[0-9a-f]{40}', v) for v in sources)
+         and sources[0] != sources[1], 'distinct-current-previous-sources-required')
+    check_path(records_root, regular=False)
+    check_path(live, regular=False)
+    check_path(tools_root, regular=False)
+    need(tools_root == Path(__file__).resolve().parent, 'running-installed-tool-directory-required')
+    roots = [Path(config[k]) for k in ('currentBatchRoot', 'previousBatchRoot')]
+    for root in roots:
+        need(root.is_absolute() and root.is_relative_to(records_root), 'batch-outside-records-root')
+        check_path(root, regular=False)
+    need(roots[0] != roots[1], 'distinct-batch-roots-required')
+    need(output.is_absolute() and output.is_relative_to(roots[0]) and '..' not in output.parts,
+         'output-inside-current-batch-required')
+    check_path(output.parent, regular=False)
+    need(not output.exists() and not output.is_symlink(), 'existing-output-preserved')
+    pins = config['toolsPins']
+    required = {'verify_recovery_materials.py', 'preparation_guard.py', 'phase_runtime.py',
+                'release_retention.py', 'storage_policy.py', 'archive_identity.py', 'component_lifecycle.py'}
+    need(isinstance(pins, dict) and len(pins) >= 30 and required <= set(pins),
+         'complete-bound-tool-set-required')
+    for name, digest in pins.items():
+        relative = Path(name)
+        need(not relative.is_absolute() and '..' not in relative.parts and
+             isinstance(digest, str) and HASH.fullmatch(digest), 'safe-tool-pin-required')
+        _, _, stamp = full_read(tools_root / relative, digest)
+        stamps.append((tools_root / relative, stamp))
+    from preparation_guard import snapshot, compare, assert_no_hold, container_identity
+    import release_retention as retention
+
+    def all_containers():
+        ids = command(['docker', 'ps', '-aq']).split()
+        rows = json.loads(command(['docker', 'inspect', *ids])) if ids else []
+        need(set(ids) == set(command(['docker', 'ps', '-aq']).split()), 'container-inventory-changed')
+        result = {row['Name']: container_identity(row) for row in rows}
+        need(len(result) == len(rows), 'duplicate-container-name')
+        return result
+
+    with deployment_lock(need) as lock:
+        fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
+        extra = [live / '.env.production.private']
+        before = snapshot(live, command, extra)
+        assert_no_hold(before)
+        need(before['extraFiles'][str(extra[0])] is None, 'private-absence-required')
+        containers = all_containers()
+        need(all(containers.get(k) == v for k, v in before['containers'].items()),
+             'running-and-all-container-snapshot-mismatch')
+        current, current_sha = read(live / 'RELEASE_ARTIFACTS.json')
+        need(current['deploymentStatus'] == 'verified' and
+             current['frontendRelease']['sourceCommit'] == sources[0], 'current-source-mismatch')
+        operation_path, previous_path = map(Path, (current['releaseOperationReceipt'], current['previousReceipt']))
+        need(all(p.is_relative_to(roots[0]) for p in (operation_path, previous_path)),
+             'current-batch-receipt-path-required')
+        operation, operation_sha = read(operation_path)
+        previous, previous_sha = read(previous_path)
+        need(previous['frontendRelease']['sourceCommit'] == sources[1], 'previous-source-mismatch')
+        plan_path = Path(operation['retention']['plan'])
+        need(plan_path.is_relative_to(roots[0]), 'current-batch-plan-path-required')
+        plan, plan_sha = read(plan_path)
+        need(operation['kind'] == 'deploy' and operation['passed'] is True and operation['applied'] is True
+             and operation['components'] == plan['components'] == ['frontend'] and
+             plan['receiptSha256'] == current_sha and plan['previousReceiptSha256'] == previous_sha and
+             plan['operationReceipt'] == str(operation_path) and plan['previousReceipt'] == str(previous_path),
+             'actual-frontend-release-chain-required')
+        formal = {role: {'path': str(path), 'sha256': digest} for role, path, digest in (
+            ('current', live / 'RELEASE_ARTIFACTS.json', current_sha),
+            ('previous', previous_path, previous_sha), ('operation', operation_path, operation_sha),
+            ('retentionPlan', plan_path, plan_sha))}
+        images = sorted(retention.boundaries(current))
+        need(len(images) == 6, 'six-recovery-boundaries-required')
+        observed = {v['Id']: v for v in json.loads(command(['docker', 'image', 'inspect', *images]))}
+        need(set(observed) == set(images), 'all-protected-images-required')
+        history = {}
+        for component in ('backend', 'admin'):
+            history[component] = {}
+            for role, key in (('current', 'image'), ('previous', 'expectedCurrentImage')):
+                image = current[component + 'Release'][key]
+                row = observed[image]
+                history[component][role] = {'image': image,
+                    'sourceCommit': row['Config']['Labels']['org.opencontainers.image.revision'],
+                    'rootFsDiffIds': row['RootFS']['Layers']}
+        versions = []
+        for role, root, source in zip(('current', 'previous'), roots, sources):
+            candidate, _ = read(root / 'artifacts/frontend/candidate.json')
+            need(candidate['sourceCommit'] == source, 'candidate-source-mismatch')
+            archive = root / 'artifacts/frontend/frontend.tar.gz'
+            _, stamp = check_path(archive)
+            need(stamp[2] == candidate['archiveBytes'], 'archive-size-mismatch')
+            stamps.append((archive, stamp))
+            image = current['frontendRelease']['image' if role == 'current' else 'expectedCurrentImage']
+            versions.append({'role': role, 'sourceCommit': source, 'runtimeImage': image,
+                'rootFsDiffIds': candidate['rootFsDiffIds'], 'archiveSha256': candidate['archiveSha256'],
+                'archiveBytes': candidate['archiveBytes'], 'serverArchivePath': str(archive)})
+        report_path = roots[0] / 'browser/production-browser-report.json'
+        report, report_sha = read(report_path)
+        need(report['sourceCommit'] == sources[0] and report['passed'] is True and
+             report['phase'] == 'production', 'actual-production-browser-report-required')
+        files = []
+        for name in ('verified-images.override.yml', 'DEPLOY_COMMIT', '.env.production',
+                     'docker-compose.prod.yml', 'nginx.prod.conf.template'):
+            path = live / name
+            record, _, stamp = full_read(path)
+            stamps.append((path, stamp))
+            files.append({'path': str(path), 'sha256': record['sha256']})
+        value = {'schemaVersion': 1, 'kind': 'actual-post-apply-recovery-check-input',
+            'actualPostApplyOriginals': True, 'preparedAtUtc': now(), 'referenceSha256': report_sha,
+            'referenceKind': 'actual-current-production-browser-report', 'sourceCommit': sources[0],
+            'maintainedToolsSha256': {n: pins[n] for n in
+                ('storage_policy.py', 'release_retention.py', 'archive_identity.py')},
+            'toolsPins': pins, 'localFormalReportSha256': report_sha,
+            'localFormalReportPath': str(report_path), 'futureServerPassed': False,
+            'futureReleaseAccepted': False, 'baseline': {'snapshot': before,
+                'allContainerIdentities': containers}, 'formalRecords': formal,
+            'expectedCurrentImages': current['images'],
+            'sixNativeProtectedImages': [{'image': image} for image in images],
+            'protectedConfigurationFiles': files, 'frontendVersions': versions,
+            'historicalFourImagesExpected': history}
+        compare(before, snapshot(live, command, extra))
+        need(all_containers() == containers, 'all-container-state-changed')
+        for path, stamp in stamps:
+            need(check_path(path)[1] == stamp, 'input-or-tool-changed-during-collection')
+        # O_EXCL preserves every earlier observation, including failed attempts.
+        fd = os.open(output, os.O_WRONLY | os.O_CREAT | os.O_EXCL | os.O_NOFOLLOW, 0o600)
+        with os.fdopen(fd, 'w', encoding='utf-8') as stream:
+            json.dump(value, stream, ensure_ascii=False, indent=2)
+            stream.write('\n')
+        return {'prepared': True, 'sourceCommit': sources[0], 'path': str(output),
+                'sha256': hashlib.sha256(output.read_bytes()).hexdigest(),
+                'recoveryVerified': False, 'releaseAccepted': False, 'productionChanged': False}
+
+
 def main():
  global TOOLS_ROOT,TOOLS_SHA256
  parser=argparse.ArgumentParser()
@@ -130,7 +281,15 @@ def main():
  parser.add_argument('--input-sha256',required=True)
  parser.add_argument('--tools-root',type=Path,required=True)
  parser.add_argument('--records-root',type=Path,default=Path('/data/migration-rehearsals'))
+ parser.add_argument('--prepare',action='store_true',help='Collect fresh inputs; verification remains a separate invocation')
+ parser.add_argument('--output',type=Path)
  args=parser.parse_args();began=now();stamps=[]
+ if args.prepare:
+  need(args.output is not None, 'new-output-required')
+  need(args.records_root==Path('/data/migration-rehearsals'), 'actual-records-root-required')
+  print(json.dumps(prepare_input(args.input,args.input_sha256,args.tools_root,args.records_root,args.output)))
+  return
+ need(args.output is None, 'output-only-with-prepare')
  rec,raw,stamp=full_read(args.input,args.input_sha256,capture=True);stamps.append((args.input,stamp));input_record=rec;config=json.loads(raw)
  source_versions=config['frontendVersions']
  need([v['role'] for v in source_versions]==['current','previous'],'two-ordered-frontend-versions-required')
@@ -157,7 +316,7 @@ def main():
  need(isinstance(TOOLS_SHA256,dict) and len(TOOLS_SHA256)>=30 and all(HASH.fullmatch(h) for h in TOOLS_SHA256.values()),'complete-bound-tool-set-required')
  verified_installed_tools();sys.path.insert(0,str(TOOLS_ROOT))
  from preparation_guard import snapshot,assert_no_hold,compare,container_identity
- def command(argv):return subprocess.check_output(argv,text=True,stderr=subprocess.DEVNULL,timeout=60)
+ command=command_output
  def state():
    expected=config['baseline'];value=snapshot('/opt/website',command,[Path(p) for p in expected['snapshot']['extraFiles']]);assert_no_hold(value);compare(expected['snapshot'],value)
    ids=command(['docker','ps','-aq']).split();rows=json.loads(command(['docker','inspect',*ids])) if ids else []
