@@ -1177,14 +1177,11 @@
   }
   .page :global(.mobile-action) {
     display: flex;
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    z-index: 60;
+    /* Keep this action in document flow; the shared toolbar owns the fixed footer. */
+    position: static;
     border-top: 1px solid var(--line);
     background: #fff;
-    padding: 10px 20px calc(10px + env(safe-area-inset-bottom));
+    padding: 10px 20px;
     align-items: center;
     justify-content: space-between;
     gap: 20px;
