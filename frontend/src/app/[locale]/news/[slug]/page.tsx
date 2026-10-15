@@ -1,3 +1,4 @@
+import { Fragment } from 'react';
 import { getNewsSummary } from '@/lib/news-summary';
 import { getNewsSeoTitle } from '@/lib/news-seo-title';
 import Link from 'next/link';
@@ -236,113 +237,117 @@ export default async function NewsDetailPage({ params }: NewsDetailPageProps) {
       </div>
 
       <main className={styles.main}>
-        <article className={styles.article}>
-          <header className={styles.articleHeader}>
-            <h1 id="news-detail-title" className={styles.title}>
-              {title}
-            </h1>
-            <div className={styles.meta}>
-              <span className={styles.metaDate}>
-                {currentLocale === 'en' ? 'Published' : '发布于'}
-                <time dateTime={article.publishDate}>
-                  {formatNewsDisplayDate(article.publishDate)}
-                </time>
-              </span>
-              {updatedTime && (
+        {/* Keep late Flight children off the host container's hydration replay.
+            A keyed Fragment adds no HTML or loading fallback. React #35494. */}
+        <Fragment key="news-detail-content">
+          <article className={styles.article}>
+            <header className={styles.articleHeader}>
+              <h1 id="news-detail-title" className={styles.title}>
+                {title}
+              </h1>
+              <div className={styles.meta}>
                 <span className={styles.metaDate}>
-                  {currentLocale === 'en' ? 'Updated' : '更新于'}
-                  <time dateTime={updatedTime}>{formatNewsDisplayDate(updatedTime)}</time>
-                </span>
-              )}
-              {currentLocale === 'en' && article.englishSourceDate && (
-                <span>
-                  {article.englishSourceDate.label}:{' '}
-                  <time dateTime={article.englishSourceDate.date}>
-                    {formatNewsDisplayDate(article.englishSourceDate.date)}
+                  {currentLocale === 'en' ? 'Published' : '发布于'}
+                  <time dateTime={article.publishDate}>
+                    {formatNewsDisplayDate(article.publishDate)}
                   </time>
                 </span>
-              )}
-              <span>{getEngineeringTeamAuthorName(currentLocale)}</span>
+                {updatedTime && (
+                  <span className={styles.metaDate}>
+                    {currentLocale === 'en' ? 'Updated' : '更新于'}
+                    <time dateTime={updatedTime}>{formatNewsDisplayDate(updatedTime)}</time>
+                  </span>
+                )}
+                {currentLocale === 'en' && article.englishSourceDate && (
+                  <span>
+                    {article.englishSourceDate.label}:{' '}
+                    <time dateTime={article.englishSourceDate.date}>
+                      {formatNewsDisplayDate(article.englishSourceDate.date)}
+                    </time>
+                  </span>
+                )}
+                <span>{getEngineeringTeamAuthorName(currentLocale)}</span>
+              </div>
+            </header>
+
+            <NewsArticleToc
+              key={`${contentId}-mobile`}
+              contentId={contentId}
+              locale={currentLocale}
+              mobile
+            />
+            <div id={contentId} className={styles.bodyWrap} data-news-slug={slug}>
+              <NewsArticleContent html={html} />
             </div>
-          </header>
 
-          <NewsArticleToc
-            key={`${contentId}-mobile`}
-            contentId={contentId}
-            locale={currentLocale}
-            mobile
-          />
-          <div id={contentId} className={styles.bodyWrap} data-news-slug={slug}>
-            <NewsArticleContent html={html} />
-          </div>
-
-          <div className={styles.supporting}>
-            {relatedLinks.length ? (
-              <aside aria-labelledby="news-related-links-title" className={styles.related}>
-                <h2 id="news-related-links-title" className={styles.relatedTitle}>
-                  {currentLocale === 'en'
-                    ? 'Related equipment and project guidance'
-                    : '相关产品、方案与项目证据'}
-                </h2>
-                <div className={styles.relatedGrid}>
-                  {relatedLinks.map((link) => (
-                    <Link key={link.href} href={link.href} className={styles.relatedLink}>
-                      <h3 className={styles.relatedLinkTitle}>{link.title}</h3>
-                      <p className={styles.relatedLinkDescription}>{link.description}</p>
-                    </Link>
-                  ))}
-                </div>
-                <p className={styles.relatedInquiry}>
-                  <Link href={currentLocale === 'en' ? '/en/contact' : '/zh/inquiry'}>
+            <div className={styles.supporting}>
+              {relatedLinks.length ? (
+                <aside aria-labelledby="news-related-links-title" className={styles.related}>
+                  <h2 id="news-related-links-title" className={styles.relatedTitle}>
                     {currentLocale === 'en'
-                      ? 'Discuss your project: send workpiece, process and site requirements'
-                      : '咨询本项目：提交工件、工艺和现场条件'}
-                  </Link>
+                      ? 'Related equipment and project guidance'
+                      : '相关产品、方案与项目证据'}
+                  </h2>
+                  <div className={styles.relatedGrid}>
+                    {relatedLinks.map((link) => (
+                      <Link key={link.href} href={link.href} className={styles.relatedLink}>
+                        <h3 className={styles.relatedLinkTitle}>{link.title}</h3>
+                        <p className={styles.relatedLinkDescription}>{link.description}</p>
+                      </Link>
+                    ))}
+                  </div>
+                  <p className={styles.relatedInquiry}>
+                    <Link href={currentLocale === 'en' ? '/en/contact' : '/zh/inquiry'}>
+                      {currentLocale === 'en'
+                        ? 'Discuss your project: send workpiece, process and site requirements'
+                        : '咨询本项目：提交工件、工艺和现场条件'}
+                    </Link>
+                  </p>
+                </aside>
+              ) : null}
+            </div>
+          </article>
+          <aside
+            className={styles.sidebar}
+            aria-label={currentLocale === 'en' ? 'Article resources' : '文章辅助资料'}
+          >
+            <NewsArticleToc key={contentId} contentId={contentId} locale={currentLocale} />
+            <div className={styles.sidebarCards} data-news-sidebar-cards>
+              <NewsRelatedArticles items={relatedArticles} locale={currentLocale} />
+              <section className={styles.consultation} aria-labelledby="news-consultation-title">
+                <h2 id="news-consultation-title">
+                  {currentLocale === 'en' ? 'Need a technical proposal?' : '需要技术方案？'}
+                </h2>
+                <p>
+                  {currentLocale === 'en'
+                    ? 'Custom heat-treatment equipment and process solutions for different industries and workpieces.'
+                    : '我们为不同行业、不同工件提供定制化热处理设备与工艺解决方案。'}
                 </p>
-              </aside>
-            ) : null}
-          </div>
-        </article>
-        <aside
-          className={styles.sidebar}
-          aria-label={currentLocale === 'en' ? 'Article resources' : '文章辅助资料'}
-        >
-          <NewsArticleToc key={contentId} contentId={contentId} locale={currentLocale} />
-          <div className={styles.sidebarCards} data-news-sidebar-cards>
-            <NewsRelatedArticles items={relatedArticles} locale={currentLocale} />
-            <section className={styles.consultation} aria-labelledby="news-consultation-title">
-              <h2 id="news-consultation-title">
-                {currentLocale === 'en' ? 'Need a technical proposal?' : '需要技术方案？'}
-              </h2>
-              <p>
-                {currentLocale === 'en'
-                  ? 'Custom heat-treatment equipment and process solutions for different industries and workpieces.'
-                  : '我们为不同行业、不同工件提供定制化热处理设备与工艺解决方案。'}
-              </p>
-              <WechatContactButton
-                locale={currentLocale}
-                label={currentLocale === 'en' ? 'Contact via WeChat' : '微信联系'}
-                description={
-                  currentLocale === 'en'
-                    ? 'Send workpieces, process, throughput and site conditions for an initial assessment.'
-                    : undefined
-                }
-                className={styles.consultButton}
-                trackingContext={{ pageType: 'news', properties: { position: 'article_consultation' } }}
-              />
-              <PhoneContactLink
-                className={styles.phone}
-                trackingContext={{ pageType: 'news', properties: { position: 'article_consultation' } }}
-              >
-                <HiPhone aria-hidden="true" />
-                {currentLocale === 'en' ? siteSettings.salesPhone : '130-5298-6814'}
-              </PhoneContactLink>
-              <p className={styles.hours}>
-                {currentLocale === 'en' ? 'Weekdays 8:30–17:30 (China time)' : '工作日 8:30–17:30'}
-              </p>
-            </section>
-          </div>
-        </aside>
+                <WechatContactButton
+                  locale={currentLocale}
+                  label={currentLocale === 'en' ? 'Contact via WeChat' : '微信联系'}
+                  description={
+                    currentLocale === 'en'
+                      ? 'Send workpieces, process, throughput and site conditions for an initial assessment.'
+                      : undefined
+                  }
+                  className={styles.consultButton}
+                  trackingContext={{ pageType: 'news', properties: { position: 'article_consultation' } }}
+                />
+                <PhoneContactLink
+                  className={styles.phone}
+                  trackingContext={{ pageType: 'news', properties: { position: 'article_consultation' } }}
+                >
+                  <HiPhone aria-hidden="true" />
+                  {currentLocale === 'en' ? siteSettings.salesPhone : '130-5298-6814'}
+                </PhoneContactLink>
+                <p className={styles.hours}>
+                  {currentLocale === 'en' ? 'Weekdays 8:30–17:30 (China time)' : '工作日 8:30–17:30'}
+                </p>
+              </section>
+            </div>
+          </aside>
+        </Fragment>
       </main>
     </div>
   );
