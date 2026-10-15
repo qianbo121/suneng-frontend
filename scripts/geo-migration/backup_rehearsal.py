@@ -81,13 +81,32 @@ def batch_path(identifier):
 
 def state():
     # Never return environment variables in the public manifest.
-    records = json.loads(output(['docker', 'inspect', *PRODUCTION]))
-    return [{'name': d['Name'].lstrip('/'), 'image': d['Image'],
+    retired_image = retired_admin_image()
+    names = PRODUCTION
+    absent_admin = None
+    if retired_image is not None:
+        present = output(['docker', 'ps', '-a', '--filter', 'name=^/corp-site-admin$', '--format', '{{.Names}}']).splitlines()
+        if present not in ([], ['corp-site-admin']):
+            raise RuntimeError('Unexpected retired admin inventory')
+        if not present:
+            images = json.loads(output(['docker', 'image', 'inspect', retired_image]))
+            if len(images) != 1 or images[0].get('Id') != retired_image:
+                raise RuntimeError('Retired admin recovery image is unavailable')
+            names = [name for name in PRODUCTION if name != 'corp-site-admin']
+            # An explicit absence observation, never a fabricated running container.
+            absent_admin = {'name': 'corp-site-admin', 'image': retired_image,
+                            'container_present': False, 'retired_recovery_image_verified': True,
+                            'started_at': None, 'running': False, 'health': None,
+                            'revision': (images[0].get('Config', {}).get('Labels') or {}).get('org.opencontainers.image.revision'),
+                            'mounts': []}
+    records = json.loads(output(['docker', 'inspect', *names]))
+    observed = [{'name': d['Name'].lstrip('/'), 'image': d['Image'], 'container_present': True,
              'started_at': d['State']['StartedAt'], 'running': d['State']['Running'],
              'health': d['State'].get('Health', {}).get('Status'),
              'revision': (d['Config'].get('Labels') or {}).get('org.opencontainers.image.revision'),
              'mounts': [{'source': m['Source'], 'destination': m['Destination'], 'rw': m['RW']} for m in d['Mounts']]}
             for d in records]
+    return observed + ([absent_admin] if absent_admin is not None else [])
 
 
 def normalized_state(records):
@@ -119,6 +138,10 @@ def verify_production(records):
         admin = by_name['corp-site-admin']
         if admin['running'] or admin['image'] != retired_image:
             raise RuntimeError('Retired admin does not match its explicit receipt')
+        if admin.get('container_present') is False and (
+                admin.get('retired_recovery_image_verified') is not True or admin['mounts'] or
+                admin.get('started_at') is not None or admin.get('health') is not None):
+            raise RuntimeError('Absent retired admin requires a verified recovery image')
     expected = [('corp-site-postgres', '/data/postgres', '/var/lib/postgresql/data'),
                 ('corp-site-backend', '/data/uploads', '/app/uploads'),
                 ('corp-site-nginx', '/data/uploads', '/var/www/uploads')]

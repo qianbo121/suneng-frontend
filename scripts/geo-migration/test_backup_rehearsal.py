@@ -111,6 +111,40 @@ class BackupSafety(unittest.TestCase):
                 with self.subTest(stopped=name), self.assertRaises(RuntimeError):m.verify_production(changed)
         with patch.object(m, 'retired_admin_image', return_value=None), self.assertRaises(RuntimeError):m.verify_production(rows)
 
+    def test_state_records_removed_retired_admin_and_verifies_retained_image(self):
+        image = 'sha256:' + 'a'*64
+        rows = self.production_records()
+        raw = [{'Name': '/' + row['name'], 'Image': row['image'],
+                'State': {'StartedAt': '2026-10-15T00:00:00Z', 'Running': True},
+                'Config': {'Labels': {}}, 'Mounts': [
+                    {'Source': x['source'], 'Destination': x['destination'], 'RW': True}
+                    for x in row['mounts']]} for row in rows if row['name'] != 'corp-site-admin']
+        replies = ['', json.dumps([{'Id': image, 'Config': {'Labels': {}}}]), json.dumps(raw)]
+        with patch.object(m, 'retired_admin_image', return_value=image), patch.object(m, 'output', side_effect=replies) as command:
+            observed = m.state()
+            m.verify_production(observed)
+            self.assertNotIn('corp-site-admin', command.call_args_list[-1].args[0][2:])
+        admin = next(x for x in observed if x['name'] == 'corp-site-admin')
+        self.assertIs(admin['container_present'], False)
+        self.assertIs(admin['retired_recovery_image_verified'], True)
+        self.assertFalse(admin['running'])
+        changed = json.loads(json.dumps(observed))
+        next(x for x in changed if x['name'] == 'corp-site-admin')['container_present'] = True
+        self.assertFalse(m.same_state(observed, changed))
+        with patch.object(m, 'retired_admin_image', return_value=None), self.assertRaises(RuntimeError):
+            m.verify_production(observed)
+        for field, value in [('retired_recovery_image_verified', False), ('image', 'sha256:'+'b'*64)]:
+            changed = json.loads(json.dumps(observed))
+            next(x for x in changed if x['name'] == 'corp-site-admin')[field] = value
+            with patch.object(m, 'retired_admin_image', return_value=image), self.subTest(field=field), self.assertRaises(RuntimeError):
+                m.verify_production(changed)
+
+    def test_removed_retired_admin_without_recovery_image_is_rejected(self):
+        image = 'sha256:' + 'a'*64
+        for images in [[], [{'Id': 'sha256:'+'b'*64}]]:
+            with patch.object(m, 'retired_admin_image', return_value=image), patch.object(m, 'output', side_effect=['', json.dumps(images)]), self.subTest(images=images), self.assertRaises(RuntimeError):
+                m.state()
+
     def test_retirement_receipt_is_validated_and_symlink_refused(self):
         image = 'sha256:' + 'a'*64
         receipt = {'retiredComponents': {'admin': {'status': 'retired', 'retiredAt': '2026-10-12', 'image': image}}, 'adminRelease': {'image': image}, 'images': {}}
