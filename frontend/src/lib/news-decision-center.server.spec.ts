@@ -2,6 +2,8 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { unstable_cache } from 'next/cache';
 import { getAllNewsForDecisionCenter } from '@/lib/api/news';
 import { getNewsDecisionCenterData } from './news-decision-center.server';
+import { getHomepageNewsData } from './homepage-news.server';
+import * as newsMapping from './news';
 import type { NewsApiItem } from '@/types/news';
 
 vi.mock('server-only', () => ({}));
@@ -124,4 +126,33 @@ it('keeps English lists restricted to complete translations and uses English sea
   expect(result.data?.[0].title.en).toBe(translated.titleEn);
   expect(result.data?.[0].searchText).toContain('English-only search phrase');
   expect((await getNewsDecisionCenterData('zh')).data).toHaveLength(3);
+});
+
+
+it('lets the homepage deadline run while a large collection is still being prepared', async () => {
+  const items = Array.from({ length: 128 }, (_, index) => ({
+    ...article, id: 10000 + index, slug: `deadline-regression-${index}`,
+  }));
+  vi.mocked(getAllNewsForDecisionCenter).mockResolvedValue({ data: items, error: null });
+  const originalMap = newsMapping.mapNewsCard;
+  const mapping = vi.spyOn(newsMapping, 'mapNewsCard').mockImplementation((locale, item) => {
+    // Real elapsed CPU work models the synchronous rich-text parsing in a cold
+    // collection. Fake timers alone cannot expose a blocked event loop.
+    const until = performance.now() + 12;
+    while (performance.now() < until) { /* bounded synchronous card work */ }
+    return originalMap(locale, item);
+  });
+  const complete = getNewsDecisionCenterData('zh');
+  try {
+    await expect(getHomepageNewsData('zh')).resolves.toEqual({ data: null, error: '\u8d44\u6599\u6682\u65f6\u65e0\u6cd5\u52a0\u8f7d' });
+    expect(mapping.mock.calls.length).toBeGreaterThan(0);
+    expect(mapping.mock.calls.length).toBeLessThan(items.length);
+    const result = await complete;
+    expect(result.error).toBeNull();
+    expect(result.data?.filter(item => item.id >= 10000).map(item => item.id)).toEqual(items.map(item => item.id));
+    expect(getAllNewsForDecisionCenter).toHaveBeenCalledTimes(1);
+  } finally {
+    await complete;
+    mapping.mockRestore();
+  }
 });

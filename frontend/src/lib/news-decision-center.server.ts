@@ -1,5 +1,7 @@
 import 'server-only';
 
+import { setImmediate as yieldToEventLoop } from 'node:timers/promises';
+
 import { cache } from 'react';
 import { unstable_cache } from 'next/cache';
 import { getAllNewsForDecisionCenter } from '@/lib/api/news';
@@ -22,14 +24,19 @@ function prepareCards(locale: Locale): Promise<NewsListCardItem[]> {
     const { data, error } = await getAllNewsForDecisionCenter();
     if (error || !data) throw new Error(error || '资料暂时无法加载');
 
-    return filterCanonicalNewsItems(data)
-      .filter((item) => locale === 'zh' || hasPublishableEnglishNews(item))
-      .map((item) => {
-        const card = applyNewsListCopy(mapNewsCard(locale, item));
-        // Retain search text, summaries and counts without duplicating full bodies.
-        delete card.source;
-        return card;
-      });
+    const items = filterCanonicalNewsItems(data)
+      .filter((item) => locale === 'zh' || hasPublishableEnglishNews(item));
+    const cards: NewsListCardItem[] = [];
+    for (const item of items) {
+      const card = applyNewsListCopy(mapNewsCard(locale, item));
+      // Retain search text, summaries and counts without duplicating full bodies.
+      delete card.source;
+      cards.push(card);
+      // Rich-text parsing is synchronous. Let request deadlines and other I/O
+      // run between cards while this shared load continues to fill the cache.
+      await yieldToEventLoop();
+    }
+    return cards;
   })().finally(() => pendingCards.delete(locale));
 
   pendingCards.set(locale, request);
