@@ -68,3 +68,20 @@ test.describe('phone browser', () => {
     }
   });
 });
+
+for (const locale of ['zh', 'en']) {
+  test(`contact QR remains savable without an enlargement dialog (${locale})`, async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.goto(`/${locale}/contact`, { waitUntil: 'networkidle' });
+    const contact = page.locator('[data-about-subpage="contact"]');
+    const qr = contact.getByRole('img', { name: /微信咨询二维码|WeChat.*QR/i });
+    await expect(qr).toBeVisible();
+    await expect(qr).toHaveJSProperty('complete', true);
+    expect(await qr.evaluate((image) => (image as HTMLImageElement).naturalWidth)).toBeGreaterThan(0);
+    expect(await qr.evaluate((image) => image.closest('button,a,[role="button"]'))).toBeNull();
+    await qr.click();
+    await expect(page.getByRole('dialog')).toHaveCount(0);
+    await expect(contact).toContainText(locale === 'zh' ? '长按保存二维码' : 'press and hold to save');
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+  });
+}

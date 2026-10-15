@@ -9,7 +9,6 @@ import { TrackedContactLink } from '@/components/lead/TrackedContactLink';
 import { AboutSubpageHeader } from './AboutSubpageHeader';
 import { AboutSubpageJsonLd } from './AboutSubpageJsonLd';
 import { ContactMessageForm, ContactPhoneButton, CopyContactButton } from './ContactActions';
-import { OriginalImageLink } from './OriginalImageLink';
 import styles from './AboutSubpages.module.css';
 
 export function ContactZhContent({ locale = 'zh', inquiryProduct }: { locale?: Locale; inquiryProduct?: string }) {
@@ -39,7 +38,6 @@ export function ContactZhContent({ locale = 'zh', inquiryProduct }: { locale?: L
           </div>
           <div className={styles.wechat}>
             <h2>{t("微信咨询")}</h2>
-            <OriginalImageLink locale={locale} src={contact.wechatQr} alt={t("苏能工业炉微信二维码")} wechat>
               <Image
                 src={contact.wechatQr}
                 alt={t("苏能工业炉微信咨询二维码")}
@@ -48,8 +46,7 @@ export function ContactZhContent({ locale = 'zh', inquiryProduct }: { locale?: L
                 priority
                 sizes="200px"
               />
-            </OriginalImageLink>
-            <p>{t("扫码后可发送工件照片与需求。")}</p>
+            <p>{locale === 'en' ? 'Scan the code or press and hold to save it, then send workpiece photos and requirements.' : '扫码或长按保存二维码后，可发送工件照片与需求。'}</p>
           </div>
           <div className={styles.email}>
             <h2 className={styles.contactLabel}>{t("业务邮箱")}</h2>

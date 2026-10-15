@@ -124,6 +124,7 @@ let localStorageFallback: TrackingStorage;
 let natureTrackingInstalled = false;
 let natureTrackingCleanup: (() => void) | undefined;
 let dwellTimer: number | undefined;
+let lastPageViewSessionId: string | undefined;
 const PAGE_VIEW_RETRY_DELAYS_MS = [1000, 3000] as const;
 const pendingRetriedEvents = new Set<{ timer?: number; owner: Window; cancel: () => void }>();
 
@@ -204,6 +205,7 @@ function trackingStorage(name: 'sessionStorage' | 'localStorage') {
     natureTrackingInstalled = false;
     natureTrackingCleanup = undefined;
     dwellTimer = undefined;
+    lastPageViewSessionId = undefined;
     cancelEventRetries();
   }
   return name === 'sessionStorage' ? sessionStorageFallback : localStorageFallback;
@@ -649,7 +651,7 @@ export function tickDwell() {
 
   // 先建立/轮换会话再加秒数。否则第一个里程碑组装请求时才建会话，
   // 会把刚累计的停留数误当成上一个会话清掉。
-  getSessionId(trackingStorage('sessionStorage'));
+  resumePageViewIfNeeded();
 
   const activeSeconds = readDwellCounter(DWELL_SECONDS_KEY) + 1;
   writeDwellCounter(DWELL_SECONDS_KEY, activeSeconds);
@@ -724,7 +726,7 @@ function refreshVisitorNatureTracking() {
   if (storage.getItem(EFFECTIVE_INTERACTION_KEY) === '1') return;
   const onFirstInteraction = (event: Event) => {
     if (!event.isTrusted) return;
-    getSessionId(storage);
+    resumePageViewIfNeeded();
     if (storage.getItem(EFFECTIVE_INTERACTION_KEY) === '1' || effectiveInteractionInFlight) return;
     effectiveInteractionInFlight = true;
     const generation = dwellRequestGeneration;
@@ -807,10 +809,19 @@ function postPayloadWithRetry(payload: LeadEventPayload): Promise<boolean> {
   });
 }
 
+// A resumed visit needs its own page view even when the route has not changed.
+// Navigation still records its own view; marking synchronously prevents timer/click duplicates.
+function resumePageViewIfNeeded() {
+  const sessionId = getSessionId(trackingStorage('sessionStorage'));
+  if (lastPageViewSessionId && sessionId && sessionId !== lastPageViewSessionId) trackPageView();
+}
+
 export function trackPageView() {
   if (!canTrackActivity()) return;
   const safePath = sanitizeLeadPagePath(`${window.location.pathname}${window.location.search}`);
-  void postPayloadWithRetry(currentPayload('page_view'));
+  const payload = currentPayload('page_view');
+  lastPageViewSessionId = payload.sessionId;
+  void postPayloadWithRetry(payload);
   try {
     const stored = JSON.parse(
       trackingStorage('sessionStorage').getItem(SESSION_PAGE_PATHS_KEY) || '[]',
@@ -828,6 +839,7 @@ export function trackPageView() {
 
 export function trackLeadEvent(eventType: LeadEventType, extra?: LeadEventExtra) {
   if (!canTrackActivity()) return;
+  resumePageViewIfNeeded();
   void postLeadEvent(eventType, extra);
   if (HIGH_INTENT_EVENTS.has(eventType)) markEngagedSession(extra);
 }

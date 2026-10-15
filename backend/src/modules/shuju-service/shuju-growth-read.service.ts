@@ -84,6 +84,7 @@ type FunnelRow = {
   pageVisitors: bigint;
   pageViews: bigint;
   visitSessions: bigint;
+  visitDaily: Array<{ date: string; visits: number }>;
   engagedSessions: bigint;
   highIntentVisitors: bigint;
   formStartVisitors: bigint;
@@ -620,11 +621,25 @@ export class ShujuGrowthReadService {
             COALESCE(NULLIF("visitorId", ''), NULLIF("sessionId", ''), 'event:' || "id"::text) AS identity
           FROM "WebsiteLeadEvent"
           WHERE ${where}
+        ), visit_first_views AS (
+          -- 访问次数与趋势共用这一集合；入口证据不足不等于没有访问。
+          -- 只认真实的访问标识，缺失时仍保留浏览事实，但不推算访问次数。
+          SELECT "sessionId", MIN("createdAt") AS first_view_at
+          FROM scoped
+          WHERE "eventType" = 'page_view' AND NULLIF(BTRIM("sessionId"), '') IS NOT NULL
+          GROUP BY "sessionId"
+        ), visit_days AS (
+          SELECT
+            TO_CHAR(first_view_at AT TIME ZONE 'UTC' AT TIME ZONE 'Asia/Shanghai', 'YYYY-MM-DD') AS day,
+            COUNT(*)::bigint AS visits
+          FROM visit_first_views
+          GROUP BY day
         )
         SELECT
           COUNT(DISTINCT identity) FILTER (WHERE "eventType" = 'page_view')::bigint AS "pageVisitors",
           COUNT(*) FILTER (WHERE "eventType" = 'page_view')::bigint AS "pageViews",
-          COUNT(DISTINCT COALESCE(NULLIF("sessionId", ''), identity)) FILTER (WHERE "eventType" = 'page_view')::bigint AS "visitSessions",
+          (SELECT COUNT(*)::bigint FROM visit_first_views) AS "visitSessions",
+          COALESCE((SELECT JSONB_AGG(JSONB_BUILD_OBJECT('date', day, 'visits', visits) ORDER BY day) FROM visit_days), '[]'::jsonb) AS "visitDaily",
           COUNT(DISTINCT COALESCE(NULLIF("sessionId", ''), identity)) FILTER (WHERE "eventType" = 'engaged_session')::bigint AS "engagedSessions",
           COUNT(DISTINCT identity) FILTER (WHERE "eventType" IN ('phone_click','wechat_click','wechat_qr_view','quote_cta_click','email_click','form_start','form_step_complete','form_submit'))::bigint AS "highIntentVisitors",
           COUNT(DISTINCT identity) FILTER (WHERE "eventType" IN ('form_start','form_step_complete','form_submit'))::bigint AS "formStartVisitors",
@@ -680,6 +695,18 @@ export class ShujuGrowthReadService {
       `),
     ]);
 
+    const visitDays = new Map(
+      (funnelRows[0]?.visitDaily || []).map((row) => [row.date, row.visits]),
+    );
+    const visitDaily: Array<{ date: string; visits: number }> = [];
+    for (
+      let day = query.startDate.slice(0, 10);
+      day <= query.endDate.slice(0, 10);
+      day = addUtcDay(day, 1)
+    ) {
+      visitDaily.push({ date: day, visits: visitDays.get(day) || 0 });
+    }
+
     const { operating, operatingSources, operatingSourceDetails, ...content } =
       await readContentGrowth(this.prisma, {
         start,
@@ -696,6 +723,12 @@ export class ShujuGrowthReadService {
 
     return {
       content,
+      visitTrend: {
+        version: 1,
+        rule: 'first_matching_page_view_per_session_in_range',
+        total: count(funnelRows[0]?.visitSessions),
+        daily: visitDaily,
+      },
       operating: operating || {
         version: 1,
         contactVisitors: 0,

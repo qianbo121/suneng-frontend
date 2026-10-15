@@ -92,6 +92,64 @@ describe('reading collection recovery', () => {
     await settleRequests();
   }
 
+  it('records exactly one new page view when returning after 31 hidden minutes', async () => {
+    trackPageView();
+    await tick(20);
+    const first = postedBodies()[0];
+    Object.assign(document, { visibilityState: 'hidden' });
+    vi.setSystemTime(Date.now() + 31 * 60 * 1000);
+    await tick(5);
+    expect(postedBodies().filter((body) => body.eventType === 'page_view')).toHaveLength(1);
+    Object.assign(document, { visibilityState: 'visible' });
+    await tick(1);
+    const views = postedBodies().filter((body) => body.eventType === 'page_view');
+    expect(views).toHaveLength(2);
+    expect(views[1].sessionId).not.toBe(first.sessionId);
+    expect(views[1]).toMatchObject({ visitorId: first.visitorId, pagePath: '/zh' });
+    expect(postedBodies().filter((body) => body.sessionId === views[1].sessionId)).toHaveLength(1);
+    await tick(4);
+    expect(postedBodies().filter((body) => body.eventType === 'page_view')).toHaveLength(2);
+    expect(postedBodies().filter((body) => body.eventType === 'dwell_5s').at(-1)?.sessionId).toBe(views[1].sessionId);
+  });
+
+  it('does not add a page view for a short focus break or after explicit route tracking', async () => {
+    trackPageView();
+    const first = postedBodies()[0].sessionId;
+    vi.setSystemTime(Date.now() + 29 * 60 * 1000);
+    await tick(1);
+    expect(postedBodies().filter((body) => body.eventType === 'page_view')).toHaveLength(1);
+    expect(buildLeadSourceSnapshot().sessionId).toBe(first);
+    vi.setSystemTime(Date.now() + 31 * 60 * 1000);
+    window.location.pathname = '/zh/contact';
+    trackPageView();
+    await tick(5);
+    expect(postedBodies().filter((body) => body.eventType === 'page_view')).toHaveLength(2);
+  });
+
+  it('records the resumed view before a contact action and avoids a second timer view', async () => {
+    trackPageView();
+    vi.setSystemTime(Date.now() + 31 * 60 * 1000);
+    trackLeadEvent('phone_click');
+    await tick(5);
+    const bodies = postedBodies();
+    expect(bodies.filter((body) => body.eventType === 'page_view')).toHaveLength(2);
+    expect(bodies[1].eventType).toBe('page_view');
+    expect(bodies[2]).toMatchObject({ eventType: 'phone_click', sessionId: bodies[1].sessionId });
+  });
+
+  it('retries the resumed page view with the same receipt and no new visit', async () => {
+    trackPageView();
+    vi.setSystemTime(Date.now() + 31 * 60 * 1000);
+    vi.mocked(apiPost).mockRejectedValueOnce(new Error('Network temporarily unavailable'));
+    await tick(1);
+    const resumed = postedBodies().filter((body) => body.eventType === 'page_view')[1];
+    await vi.advanceTimersByTimeAsync(1000);
+    await tick(1);
+    const views = postedBodies().filter((body) => body.eventType === 'page_view');
+    expect(views).toHaveLength(3);
+    expect(views[2]).toEqual(resumed);
+  });
+
   it.each(['property', 'getItem', 'setItem'] as const)(
     'retains one visitor/session and records 20 seconds once when storage fails at %s',
     async (mode) => {
