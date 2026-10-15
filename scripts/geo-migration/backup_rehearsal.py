@@ -13,9 +13,13 @@ import os
 from pathlib import Path, PurePosixPath
 import re
 import subprocess
+import sys
 import tarfile
 import time
 from datetime import datetime, timezone
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "ops" / "releases"))
+from component_lifecycle import retired_admin
 
 ROOT = Path('/opt/website')
 UPLOADS = Path('/data/uploads')
@@ -94,15 +98,35 @@ def same_state(left, right):
     return normalized_state(left) == normalized_state(right)
 
 
+def retired_admin_image():
+    receipt_path = ROOT / 'RELEASE_ARTIFACTS.json'
+    if receipt_path.is_symlink():
+        raise ValueError('Release receipt must not be a symlink')
+    if not receipt_path.exists():
+        return None  # Legacy hosts still require every production service running.
+    receipt = json.loads(receipt_path.read_text())
+    if retired_admin(receipt):
+        return receipt['retiredComponents']['admin']['image']
+    return None
+
+
 def verify_production(records):
     by_name = {x['name']: x for x in records}
+    if len(records) != len(by_name) or set(by_name) != set(PRODUCTION):
+        raise RuntimeError('Production container inventory changed')
+    retired_image = retired_admin_image()
+    if retired_image is not None:
+        admin = by_name['corp-site-admin']
+        if admin['running'] or admin['image'] != retired_image:
+            raise RuntimeError('Retired admin does not match its explicit receipt')
     expected = [('corp-site-postgres', '/data/postgres', '/var/lib/postgresql/data'),
                 ('corp-site-backend', '/data/uploads', '/app/uploads'),
                 ('corp-site-nginx', '/data/uploads', '/var/www/uploads')]
     for name, source, destination in expected:
         if not any(x['source'] == source and x['destination'] == destination for x in by_name[name]['mounts']):
             raise RuntimeError('Production mount changed; re-inventory before backup')
-    if not all(x['running'] for x in records):
+    active = [x for x in records if not (retired_image and x['name'] == 'corp-site-admin')]
+    if not all(x['running'] for x in active):
         raise RuntimeError('A production container is not running')
 
 
