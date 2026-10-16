@@ -187,6 +187,7 @@ export default async function NewsDetailPage({ params }: NewsDetailPageProps) {
     const date = source?.date;
     return {
       ...item,
+      href: source?.href,
       image: source?.image,
       date,
       displayDate: date ? formatNewsDisplayDate(date) : undefined,

@@ -7,6 +7,7 @@ import styles from './NewsRelatedArticles.module.css';
 
 export type NewsRelatedArticle = {
   slug: string;
+  href?: string;
   title: string;
   image?: string;
   date?: string;
@@ -35,7 +36,7 @@ export function NewsRelatedArticles({
       </div>
       <div className={styles.list}>
         {items.map((item) => (
-          <Link href={`/${locale}/news/${item.slug}`} key={item.slug} className={styles.item}>
+          <Link href={item.href || `/${locale}/news/${item.slug}`} key={item.slug} className={styles.item}>
             {item.image && (
               <span className={styles.image}>
                 <NewsCardImage src={item.image} alt="" priority={false} sizes="100px" />

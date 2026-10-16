@@ -14,6 +14,12 @@ function column(alias: string, name: string) {
   return Prisma.raw(`"${alias}"."${name}"`);
 }
 
+/** Only the record's own explicit QA marker can override verified-form protection. */
+export function hasManualQaMarker(alias: string) {
+  return Prisma.sql`(COALESCE(${column(alias, 'properties')}->'manual_qa' = 'true'::jsonb, FALSE)
+    OR COALESCE(${column(alias, 'utmSource')} = 'qa_internal', FALSE))`;
+}
+
 function sessionProfiles(prefix: string) {
   // Only validated, publicly routable IPv4 /16 masks count as independent prefixes.
   // Exclude special-use /16s conservatively: the stored mask cannot distinguish
@@ -32,7 +38,8 @@ function sessionProfiles(prefix: string) {
         BOOL_OR("eventType" = 'form_submit' AND "submissionId" IS NOT NULL) AS verified_form,
         BOOL_OR("eventType" = 'automation_signal'
           OR COALESCE(properties->'automationDetected' = 'true'::jsonb, FALSE)) AS marked_automation,
-        BOOL_OR(COALESCE(properties->'manual_qa' = 'true'::jsonb, FALSE)) AS manual_qa,
+        BOOL_OR(COALESCE(properties->'manual_qa' = 'true'::jsonb, FALSE)
+          OR COALESCE("utmSource" = 'qa_internal', FALSE)) AS manual_qa,
         BOOL_OR(COALESCE(properties->'internal_traffic' = 'true'::jsonb, FALSE)) AS internal_traffic
       FROM ${prefix}_events GROUP BY "sessionId"
     ), ${prefix}_parsed_ips AS MATERIALIZED (
@@ -140,6 +147,7 @@ type CoverageEvent = {
   sessionId: string | null;
   eventType: string;
   userAgent: string | null;
+  utmSource: string | null;
   properties: Prisma.JsonValue;
 };
 
@@ -182,7 +190,7 @@ export async function readTrafficCoverageStart(
   let cursor: { createdAt: Date; id: number } | undefined;
   while (true) {
     const rows = await prisma.$queryRaw<CoverageEvent[]>(Prisma.sql`
-      SELECT id, "createdAt", "sessionId", "eventType", "userAgent", properties
+      SELECT id, "createdAt", "sessionId", "eventType", "userAgent", "utmSource", properties
       FROM "WebsiteLeadEvent"
       WHERE "eventType" = ANY(${eventTypes}::text[])
         AND ${indexedBot ? Prisma.sql`NOT "isBot"` : Prisma.sql`("userAgent" IS NULL OR "userAgent" !~* ${BOT_PATTERN})`}
@@ -210,7 +218,8 @@ export async function readTrafficCoverageStart(
         !excluded.has(row.sessionId || '') &&
         row.eventType !== 'automation_signal' &&
         properties?.automationDetected !== true &&
-        properties?.manual_qa !== true
+        properties?.manual_qa !== true &&
+        row.utmSource !== 'qa_internal'
       ) {
         return new Date(row.createdAt);
       }
@@ -235,12 +244,11 @@ export function excludedTraffic(alias: string, sessions: readonly string[], inde
   const bot = indexedBot
     ? column(alias, 'isBot')
     : Prisma.sql`COALESCE(${ua} ~* ${BOT_PATTERN}, FALSE)`;
-  return Prisma.sql`(${bot} OR ${excludedInternalTraffic(alias)} OR (
+  return Prisma.sql`(${bot} OR ${excludedInternalTraffic(alias)} OR ${hasManualQaMarker(alias)} OR (
     NOT (${event} = 'form_submit' AND ${submission} IS NOT NULL)
     AND (${hasAutomatedSession(alias, sessions)}
       OR ${event} = 'automation_signal'
-      OR COALESCE(${properties}->'automationDetected' = 'true'::jsonb, FALSE)
-      OR COALESCE(${properties}->'manual_qa' = 'true'::jsonb, FALSE))
+      OR COALESCE(${properties}->'automationDetected' = 'true'::jsonb, FALSE))
   ))`;
 }
 

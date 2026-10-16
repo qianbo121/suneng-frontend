@@ -5,6 +5,7 @@ import {
 } from '@/lib/news-decision-center';
 import type { NewsListCardItem } from '@/types/news';
 import type { Locale } from '@/types/site';
+import { getNewsListCardHref } from '@/lib/news-list-resources';
 
 export const HOME_ARTICLE_TOPICS = NEWS_DECISION_TOPICS.filter((topic) => topic.id !== 'all');
 export type HomeArticleTopic = Exclude<NewsDecisionTopicId, 'all'>;
@@ -35,7 +36,7 @@ export function mapNewsToHomeTopicArticles(
       summary: item.summary[locale],
       coverImage: item.image,
       publishDate: item.date,
-      href: `/${locale}/news/${item.slug}`,
+      href: getNewsListCardHref(item, locale),
       topic: getNewsDecisionTopic(item),
     }));
 }

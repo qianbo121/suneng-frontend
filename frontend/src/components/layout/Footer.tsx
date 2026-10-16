@@ -189,7 +189,7 @@ function QrBlock({
                   alt={joinImageAlt(locale, [buildBrandImageAlt(locale, 'short'), qr.label])}
                   width={desktop.qrSize}
                   height={desktop.qrSize}
-                  className="h-full w-full object-contain [image-rendering:pixelated]"
+                  className="box-border h-full w-full bg-white p-[12px] object-contain"
                 />
               )}
             </div>

@@ -329,6 +329,250 @@ integration('traffic exclusions against isolated PostgreSQL', () => {
     });
   });
 
+  it('treats a late qa_internal marker as session-wide QA across report dimensions', async () => {
+    await visit('tagged-qa', { deviceType: '移动端' }, publicPrefixes.slice(0, 1));
+    await event('phone_click', 'tagged-qa', morning + 21000, { deviceType: '移动端' });
+    await event('wechat_click', 'tagged-qa', morning + 22000, { deviceType: '移动端' });
+    // This later marker is outside the selected date, language, device and source.
+    await event('module_view', 'tagged-qa', end.getTime() + 1000, {
+      pagePath: '/en/about',
+      deviceType: 'PC',
+      sourceType: '外部链接',
+      utmSource: 'qa_internal',
+    });
+    await event('form_submit', 'tagged-qa', morning + 23000, {
+      deviceType: '移动端',
+      utmSource: 'qa_internal',
+      userAgent: null,
+      submissionId: '00000000-0000-4000-8000-000000000005',
+    });
+    // The same visitor in another session remains a recorded customer visit.
+    await visit(
+      'ordinary-after-qa',
+      { deviceType: '移动端', visitorId: 'visitor-tagged-qa' },
+      publicPrefixes.slice(0, 1),
+      morning + 60000,
+    );
+    await event('phone_click', 'ordinary-after-qa', morning + 85000, {
+      deviceType: '移动端',
+      visitorId: 'visitor-tagged-qa',
+    });
+    const before = (await client.query('SELECT * FROM pg_temp."WebsiteLeadEvent" ORDER BY id'))
+      .rows;
+    const result = await service.overview({
+      ...day,
+      site: 'zh',
+      device: '移动端',
+      sourceType: '直接访问',
+      pageType: '文章页',
+    });
+    expect(result.eventCounts.page_view).toEqual({ events: 1, visitors: 1, sessions: 1 });
+    expect(result.eventCounts.dwell_20s.events).toBe(1);
+    expect(result.eventCounts.phone_click.events).toBe(1);
+    expect(result.eventCounts.wechat_click?.events || 0).toBe(0);
+    expect(result.eventCounts.form_submit?.events || 0).toBe(0);
+    expect(result.content.entryVisits).toBe(1);
+    expect(result.content.submissions).toBe(0);
+    expect(result.operating.inquiries.raw).toBe(0);
+    expect(
+      result.content.pages!.filter((page) => page.entryVisits > 0).map((page) => page.pagePath),
+    ).toEqual(['/zh/news/ordinary-after-qa']);
+    expect(result.daily.filter((row) => row.eventType === 'page_view')).toEqual([
+      { date: '2026-10-08', eventType: 'page_view', events: 1, visitors: 1 },
+    ]);
+    expect(result.sources.map((row) => [row.sourceType, row.pageViews])).toEqual([['直接访问', 1]]);
+    expect(result.trafficReview).toMatchObject({
+      recorded: { sessions: 2, pageViews: 2 },
+      legacy: { sessions: 1, pageViews: 1 },
+      candidate: { sessions: 1, pageViews: 1 },
+      explicitExcluded: { sessions: 1, pageViews: 1 },
+      pendingReview: { sessions: 0 },
+      serverSubmissions: { recorded: 1, candidate: 0, legacy: 0 },
+    });
+    expect(result.trafficReview.reasons.find((row) => row.reason === 'manual_qa')?.sessions).toBe(
+      1,
+    );
+    expect(await readAutomatedSessions(prisma, start, end)).toEqual(['tagged-qa']);
+    expect(await readTrafficCoverageStart(prisma, ['page_view'])).toEqual(
+      new Date(morning + 60000),
+    );
+    expect(await readTrafficCoverageStart(prisma, ['page_view'], true)).toEqual(
+      new Date(morning + 60000),
+    );
+    expect(
+      (await client.query('SELECT * FROM pg_temp."WebsiteLeadEvent" ORDER BY id')).rows,
+    ).toEqual(before);
+  });
+
+  it('excludes only the qa_internal row when no usable session exists', async () => {
+    for (const [index, session] of [null, '', '   '].entries()) {
+      await event('page_view', session, morning + index * 1000, {
+        visitorId: 'no-session-qa-' + index,
+        utmSource: 'qa_internal',
+      });
+      await event('page_view', session, morning + 60000 + index * 1000, {
+        visitorId: 'no-session-ordinary-' + index,
+      });
+    }
+    await event('form_submit', null, morning + 20000, {
+      utmSource: 'qa_internal',
+      userAgent: null,
+      submissionId: '00000000-0000-4000-8000-000000000006',
+    });
+    const result = await service.overview(day);
+    expect(result.eventCounts.page_view.events).toBe(3);
+    expect(result.eventCounts.form_submit?.events || 0).toBe(0);
+    expect(result.trafficReview).toMatchObject({
+      recorded: { pageViews: 6 },
+      legacy: { pageViews: 3 },
+      candidate: { pageViews: 3 },
+      explicitExcluded: { pageViews: 3 },
+      serverSubmissions: { recorded: 1, candidate: 0, legacy: 0 },
+    });
+    expect(result.trafficReview.reasons.find((row) => row.reason === 'manual_qa')?.pageViews).toBe(
+      3,
+    );
+    expect(await readAutomatedSessions(prisma, start, end)).toEqual([]);
+    expect(await readTrafficCoverageStart(prisma, ['page_view'])).toEqual(
+      new Date(morning + 60000),
+    );
+    expect(await readTrafficCoverageStart(prisma, ['page_view'], true)).toEqual(
+      new Date(morning + 60000),
+    );
+    expect(
+      (await client.query('SELECT COUNT(*)::int AS count FROM pg_temp."WebsiteLeadEvent"')).rows[0]
+        .count,
+    ).toBe(7);
+  });
+
+  it.each([
+    ['qa_internal', { utmSource: 'qa_internal' }],
+    ['manual_qa', { properties: { manual_qa: true } }],
+  ] as const)(
+    'excludes self-marked %s forms while retaining other verified submissions',
+    async (_, marker) => {
+      await visit('mixed-forms', {}, publicPrefixes.slice(0, 1));
+      await visit(
+        'ordinary-forms',
+        { visitorId: 'visitor-mixed-forms' },
+        publicPrefixes.slice(0, 1),
+        morning + 60000,
+      );
+      const sessions = ['mixed-forms', null, 'mixed-forms', 'ordinary-forms', null];
+      const submissionIds: string[] = [];
+      for (const [index, session] of sessions.entries()) {
+        const submissionId = '00000000-0000-4000-8000-' + String(index + 1).padStart(12, '0');
+        submissionIds.push(submissionId);
+        await event('form_submit', session, morning + 85000 + index * 1000, {
+          userAgent: null,
+          visitorId: 'visitor-mixed-forms',
+          submissionId,
+          ...(index < 2 ? marker : {}),
+        });
+        await client.query(
+          'INSERT INTO pg_temp."CustomRequirement" (id, "submissionId") VALUES ($1, $2)',
+          [index + 1, submissionId],
+        );
+      }
+      const beforeEvents = (
+        await client.query('SELECT * FROM pg_temp."WebsiteLeadEvent" ORDER BY id')
+      ).rows;
+      const beforeRequirements = (
+        await client.query('SELECT * FROM pg_temp."CustomRequirement" ORDER BY id')
+      ).rows;
+      const result = await service.overview(day);
+      expect(result.eventCounts.form_submit.events).toBe(3);
+      expect(result.content.submissions).toBe(3);
+      expect(result.operating.inquiries.raw).toBe(3);
+      expect(result.trafficReview.serverSubmissions).toEqual({
+        recorded: 5,
+        candidate: 3,
+        legacy: 3,
+      });
+      expect(result.daily.filter((row) => row.eventType === 'form_submit')).toEqual([
+        { date: '2026-10-08', eventType: 'form_submit', events: 3, visitors: 1 },
+      ]);
+      expect(result.sources.reduce((sum, row) => sum + row.submissions, 0)).toBe(3);
+      const excluded = await readAutomatedSessions(prisma, start, end);
+      expect(excluded).toEqual(['mixed-forms']);
+      const plain = await prisma.$queryRaw<{ submissionId: string }[]>(Prisma.sql`
+      SELECT "submissionId" FROM "WebsiteLeadEvent" e
+      WHERE "eventType" = 'form_submit' AND ${allowedTraffic('e', excluded)} ORDER BY id
+    `);
+      const indexed = await prisma.$queryRaw<{ submissionId: string }[]>(Prisma.sql`
+      SELECT "submissionId" FROM "WebsiteLeadEvent" e
+      WHERE "eventType" = 'form_submit' AND ${allowedTraffic('e', excluded, true)} ORDER BY id
+    `);
+      expect(plain.map((row) => row.submissionId)).toEqual(submissionIds.slice(2));
+      expect(indexed).toEqual(plain);
+      expect(
+        (await client.query('SELECT * FROM pg_temp."WebsiteLeadEvent" ORDER BY id')).rows,
+      ).toEqual(beforeEvents);
+      expect(
+        (await client.query('SELECT * FROM pg_temp."CustomRequirement" ORDER BY id')).rows,
+      ).toEqual(beforeRequirements);
+    },
+  );
+
+  it('retains verified forms with absent, false or lookalike QA markers', async () => {
+    const markers = [
+      {},
+      { utmSource: 'QA_INTERNAL' },
+      { utmSource: 'qa_internal_campaign' },
+      { utmSource: ' qa_internal' },
+      { utmSource: 'qa_internal ' },
+      { properties: { manual_qa: false } },
+      { properties: { manual_qa: 'true' } },
+      { properties: { internal_traffic: true } },
+    ];
+    for (const [index, marker] of markers.entries()) {
+      await event('form_submit', null, morning + index * 1000, {
+        userAgent: null,
+        submissionId: '00000000-0000-4000-8000-' + String(index + 1).padStart(12, '0'),
+        ...marker,
+      });
+    }
+    const result = await service.overview(day);
+    expect(result.eventCounts.form_submit.events).toBe(markers.length);
+    expect(result.content.submissions).toBe(markers.length);
+    expect(result.operating.inquiries.raw).toBe(markers.length);
+    expect(result.trafficReview.serverSubmissions).toEqual({
+      recorded: markers.length,
+      candidate: markers.length,
+      legacy: markers.length,
+    });
+  });
+
+  it('requires the exact QA tag and does not exclude broad IP prefixes', async () => {
+    const sources = [null, 'QA_INTERNAL', 'qa_internal_campaign', ' qa_internal', 'qa_internal '];
+    const prefixes = [
+      '216.132.xxx.xxx',
+      '67.102.xxx.xxx',
+      '209.166.xxx.xxx',
+      '47.123.xxx.xxx',
+      '120.26.xxx.xxx',
+    ];
+    for (const [index, utmSource] of sources.entries()) {
+      await visit(
+        'ordinary-prefix-' + index,
+        { utmSource },
+        [prefixes[index]],
+        morning + index * 60000,
+      );
+    }
+    const result = await service.overview(day);
+    expect(result.eventCounts.page_view.events).toBe(5);
+    expect(result.eventCounts.dwell_20s.events).toBe(5);
+    expect(result.trafficReview).toMatchObject({
+      recorded: { sessions: 5, pageViews: 5 },
+      legacy: { sessions: 5, pageViews: 5 },
+      candidate: { sessions: 5, pageViews: 5 },
+      explicitExcluded: { sessions: 0, pageViews: 0 },
+      pendingReview: { sessions: 0 },
+    });
+    expect(await readAutomatedSessions(prisma, start, end)).toEqual([]);
+  });
+
   it('preserves quiet stable visitors, a small VPN switch and slow address changes', async () => {
     await visit('quiet', {}, publicPrefixes.slice(0, 1));
     await visit('two-network-vpn', {}, publicPrefixes.slice(0, 2));

@@ -324,11 +324,12 @@
   margin-bottom: 20px;
 }
 .wechat img {
+  box-sizing: border-box;
   object-fit: contain;
   width: 200px;
   height: 200px;
   background: white;
-  padding: 6px;
+  padding: 18px;
 }
 .wechat p {
   color: var(--subpage-muted);
