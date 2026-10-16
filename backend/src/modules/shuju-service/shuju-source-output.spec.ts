@@ -40,7 +40,11 @@ describe('operating source output', () => {
         },
       ];
     });
-    const service = new ShujuGrowthReadService({ $queryRaw: queryRaw } as unknown as PrismaService);
+    const service = new ShujuGrowthReadService({
+      $queryRaw: queryRaw,
+      $transaction: async (action: (transaction: unknown) => Promise<unknown>) =>
+        action({ $executeRaw: jest.fn().mockResolvedValue(0), $queryRaw: queryRaw }),
+    } as unknown as PrismaService);
     const result = await service.overview({
       startDate: '2026-10-09',
       endDate: '2026-10-09',

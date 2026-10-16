@@ -21,7 +21,7 @@ const emptyMetrics = (): Metrics => ({
  * Distinct visitors can occur in multiple session groups and must never be subtracted/summed.
  */
 export async function readTrafficReview(
-  prisma: PrismaService,
+  prisma: PrismaService | Prisma.TransactionClient,
   scopedWhere: Prisma.Sql,
   automatedSessions: readonly string[],
   startDay: string,
@@ -30,7 +30,7 @@ export async function readTrafficReview(
   const automated = automatedSessions.length
     ? Prisma.sql`COALESCE(s.sid = ANY(${automatedSessions}::text[]), FALSE)`
     : Prisma.sql`FALSE`;
-  const rows = await prisma.$queryRaw<ReviewRow[]>(Prisma.sql`
+  const query = Prisma.sql`
     WITH scoped AS MATERIALIZED (
       SELECT "eventType", "submissionId", "isBot",
         NULLIF(BTRIM("sessionId"), '') AS sid,
@@ -79,12 +79,12 @@ export async function readTrafficReview(
         BOOL_OR(strong_input) AS strong
       FROM classified WHERE explicit_reason IS NULL AND sid IS NOT NULL GROUP BY sid
     ), expanded AS (
-      SELECT 'recorded' AS bucket, "eventType", sid, vid FROM classified
-      UNION ALL SELECT 'legacy', "eventType", sid, vid FROM classified WHERE legacy_allowed
-      UNION ALL SELECT 'candidate', "eventType", sid, vid FROM classified WHERE explicit_reason IS NULL
-      UNION ALL SELECT category, "eventType", sid, vid FROM classified
-      UNION ALL SELECT explicit_reason, "eventType", sid, vid FROM classified WHERE explicit_reason IS NOT NULL
-      UNION ALL SELECT 'behavior_network_inference', "eventType", sid, vid FROM classified WHERE category = 'pendingReview'
+      SELECT 'recorded' AS bucket, c."eventType", c.sid, c.vid FROM classified c
+      UNION ALL SELECT 'legacy', c."eventType", c.sid, c.vid FROM classified c WHERE legacy_allowed
+      UNION ALL SELECT 'candidate', c."eventType", c.sid, c.vid FROM classified c WHERE explicit_reason IS NULL
+      UNION ALL SELECT category, c."eventType", c.sid, c.vid FROM classified c
+      UNION ALL SELECT explicit_reason, c."eventType", c.sid, c.vid FROM classified c WHERE explicit_reason IS NOT NULL
+      UNION ALL SELECT 'behavior_network_inference', c."eventType", c.sid, c.vid FROM classified c WHERE category = 'pendingReview'
     ), aggregates AS (
       SELECT bucket, JSONB_BUILD_OBJECT(
         'visitors', COUNT(DISTINCT vid) FILTER (WHERE "eventType" = 'page_view'),
@@ -109,7 +109,28 @@ export async function readTrafficReview(
         'candidate', (SELECT COUNT(DISTINCT "submissionId") FROM classified WHERE "eventType" = 'form_submit' AND explicit_reason IS NULL),
         'legacy', (SELECT COUNT(DISTINCT "submissionId") FROM classified WHERE "eventType" = 'form_submit' AND legacy_allowed)
       ) AS submissions
-  `);
+  `;
+  // This one-off aggregate spends more time compiling than executing on the
+  // production dataset. Keep the setting local to its read-only transaction.
+  const read = async (transaction: Prisma.TransactionClient) => {
+    await transaction.$executeRaw`SET LOCAL jit = off`;
+    return transaction.$queryRaw<ReviewRow[]>(query);
+  };
+  let rows: ReviewRow[];
+  if ('$transaction' in prisma) {
+    rows = await prisma.$transaction(async (transaction) => {
+      await transaction.$executeRaw`SET TRANSACTION READ ONLY`;
+      return read(transaction);
+    });
+  } else {
+    const state = await prisma.$queryRaw<{ readOnly: string }[]>`
+      SELECT current_setting('transaction_read_only') AS "readOnly"
+    `;
+    if (state[0]?.readOnly !== 'on') {
+      throw new Error('Traffic review requires an existing read-only transaction');
+    }
+    rows = await read(prisma);
+  }
   const row = rows[0];
   const metrics = (key: string) => row?.groups?.[key] || emptyMetrics();
   return {
