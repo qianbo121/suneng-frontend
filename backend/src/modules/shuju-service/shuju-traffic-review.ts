@@ -1,7 +1,7 @@
 import { Prisma } from '@prisma/client';
 
 import { PrismaService } from '@/prisma/prisma.service';
-import { allowedTraffic } from './shuju-traffic-filter';
+import { allowedTraffic, hasManualQaMarker } from './shuju-traffic-filter';
 
 type Metrics = { visitors: number; sessions: number; pageViews: number; dwell20Visitors: number };
 type ReviewRow = {
@@ -36,7 +36,7 @@ export async function readTrafficReview(
         NULLIF(BTRIM("sessionId"), '') AS sid,
         NULLIF(BTRIM("visitorId"), '') AS vid,
         "eventType" = 'automation_signal' OR COALESCE(properties->'automationDetected' = 'true'::jsonb, FALSE) AS automation,
-        properties->'manual_qa' = 'true'::jsonb AS qa,
+        ${hasManualQaMarker('WebsiteLeadEvent')} AS qa,
         properties->'internal_traffic' = 'true'::jsonb AS internal,
         "eventType" IN ('human_signal', 'effective_interaction')
           AND properties->'evidenceVersion' = '1'::jsonb
@@ -52,12 +52,13 @@ export async function readTrafficReview(
       SELECT e."sessionId" AS sid,
         BOOL_OR(e."isBot") AS bot,
         BOOL_OR(e."eventType" = 'automation_signal' OR COALESCE(e.properties->'automationDetected' = 'true'::jsonb, FALSE)) AS automation,
-        BOOL_OR(COALESCE(e.properties->'manual_qa' = 'true'::jsonb, FALSE)) AS qa,
+        BOOL_OR(${hasManualQaMarker('e')}) AS qa,
         BOOL_OR(COALESCE(e.properties->'internal_traffic' = 'true'::jsonb, FALSE)) AS internal
       FROM sessions JOIN "WebsiteLeadEvent" e ON e."sessionId" = sessions.sid
       GROUP BY e."sessionId"
     ), reasons AS MATERIALIZED (
       SELECT s.*, CASE
+        WHEN "eventType" = 'form_submit' AND s.qa THEN 'manual_qa'
         WHEN "eventType" = 'form_submit' AND "submissionId" IS NOT NULL THEN NULL
         WHEN COALESCE(l.bot, s."isBot") THEN 'known_bot_agent'
         WHEN COALESCE(l.automation, s.automation) THEN 'automation_marker'

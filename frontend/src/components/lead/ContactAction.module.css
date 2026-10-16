@@ -57,7 +57,7 @@
 .body { min-height: 0; overflow-y: auto; overscroll-behavior: contain; padding: 0 28px; }
 .description { margin: 0 0 19px; color: #65748a; font-size: 14px; line-height: 1.8; }
 .qrBox { display: flex; justify-content: center; margin-top: 20px; padding: 12px; border: 1px solid #dce4ef; border-radius: 9px; background: #f7f9fc; }
-.qr { width: 176px; height: 176px; object-fit: contain; background: #fff; }
+.qr { box-sizing: border-box; width: 176px; height: 176px; padding: 16px; object-fit: contain; background: #fff; }
 .valueBox { padding: 18px 19px; border: 1px solid #dce4ef; border-radius: 9px; background: #f7f9fc; }
 .valueLabel { margin-bottom: 8px; color: #65748a; font-size: 12px; line-height: 1.5; }
 .value { font-size: 24px; font-weight: 600; line-height: 1.35; overflow-wrap: anywhere; user-select: all; }

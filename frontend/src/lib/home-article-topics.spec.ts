@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import type { NewsListCardItem } from '@/types/news';
 import { filterAndSortNewsDecisionItems } from './news-decision-center';
+import { includeStandaloneNewsResources, PROCUREMENT_RESOURCE_HREF } from './news-list-resources';
 import {
   HOME_ARTICLE_TOPICS,
   mapNewsToHomeTopicArticles,
@@ -21,6 +22,14 @@ function card(id: number, listTopic?: NewsListCardItem['listTopic']): NewsListCa
 }
 
 describe('homepage resources by topic', () => {
+  it('keeps the actual destination of standalone resources in the procurement tab', () => {
+    const cards = includeStandaloneNewsResources([], 'zh');
+    const articles = selectHomeArticlesForTopic(mapNewsToHomeTopicArticles(cards, 'zh'), 'procurement');
+    expect(articles).toHaveLength(1);
+    expect(articles[0].href).toBe(PROCUREMENT_RESOURCE_HREF);
+    expect(articles[0].title).toBe(cards[0].title.zh);
+  });
+
   it('classifies explicit title questions ahead of incidental summary keywords', () => {
     const items = [
       ['固化炉温度均匀性怎么验收？', '采购前核对报价。', 'engineering'],
