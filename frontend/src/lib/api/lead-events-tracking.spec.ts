@@ -296,14 +296,15 @@ describe('有效交互信号', () => {
     fire('scroll', true);
     expect(postedEventTypes().filter((type) => type === 'effective_interaction')).toHaveLength(1);
     await settleRequests();
-    // 监听器已拆除，之后不再重复
-    expect([...listeners.values()].flat()).toHaveLength(0);
+    // 旧滚动监听已拆除，保留更强输入的独立监听。
+    expect(listeners.get('scroll')).toHaveLength(0);
+    expect(listeners.get('keydown')).toHaveLength(1);
     installVisitorNatureTracking();
     fire('click', true);
     expect(postedEventTypes().filter((type) => type === 'effective_interaction')).toHaveLength(1);
   });
 
-  it('不把鼠标移动和键盘输入当成有效交互', async () => {
+  it('不监听鼠标移动，单列键盘输入证据而不改旧交互口径', async () => {
     vi.stubGlobal('navigator', { webdriver: false });
     const listeners = windowWithListeners();
     const { installVisitorNatureTracking } = await import('@/lib/api/lead-events');
@@ -311,7 +312,7 @@ describe('有效交互信号', () => {
     installVisitorNatureTracking();
 
     expect(listeners.has('pointermove')).toBe(false);
-    expect(listeners.has('keydown')).toBe(false);
+    expect(listeners.has('keydown')).toBe(true);
     expect(listeners.has('scroll')).toBe(true);
     expect(listeners.has('click')).toBe(true);
   });
@@ -344,7 +345,8 @@ describe('有效交互信号', () => {
     fireScroll();
     await settleRequests();
     expect(postedEventTypes().filter((type) => type === 'effective_interaction')).toHaveLength(2);
-    expect([...listeners.values()].flat()).toHaveLength(0);
+    expect(listeners.get('scroll')).toHaveLength(0);
+    expect(listeners.get('keydown')).toHaveLength(1);
   });
 });
 

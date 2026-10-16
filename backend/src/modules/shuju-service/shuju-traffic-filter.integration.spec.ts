@@ -196,6 +196,127 @@ integration('traffic exclusions against isolated PostgreSQL', () => {
     expect(plain).toHaveLength(3);
   });
 
+  it('keeps inference pending only in comparison and preserves current totals', async () => {
+    await burst();
+    await event('page_view', 'known-bot', morning, { userAgent: 'HeadlessChrome' });
+    await event('page_view', 'qa', morning, {
+      properties: { manual_qa: true, internal_traffic: true },
+    });
+    await event('page_view', 'internal', morning, { properties: { internal_traffic: true } });
+    await visit('ordinary', { visitorId: 'visitor-seed-0' }, publicPrefixes.slice(0, 1));
+    await event('page_view', 'ordinary', morning + 1000, { visitorId: 'visitor-seed-0' });
+    const result = await service.overview(day);
+    expect(result.funnel.visitSessions).toBe(1);
+    expect(result.visitTrend.total).toBe(1);
+    expect(result.trafficReview).toMatchObject({
+      version: 1,
+      mode: 'parallel',
+      humanCountAvailable: false,
+      visitorGroupsOverlap: true,
+      recorded: { sessions: 14, pageViews: 15, visitors: 13 },
+      legacy: { sessions: 1, pageViews: 2 },
+      candidate: { sessions: 11, pageViews: 12, visitors: 10 },
+      explicitExcluded: { sessions: 3 },
+      pendingReview: { sessions: 10 },
+      unclassified: { sessions: 1 },
+    });
+    expect(result.trafficReview.reasons.find((row) => row.reason === 'manual_qa')?.sessions).toBe(
+      1,
+    );
+    expect(
+      result.trafficReview.reasons.find((row) => row.reason === 'internal_traffic')?.sessions,
+    ).toBe(1);
+    expect(result.trafficReview.candidate.visitors).toBeLessThan(
+      result.trafficReview.pendingReview.visitors + result.trafficReview.unclassified.visitors,
+    );
+    const mobile = await service.overview({ ...day, device: '移动端' });
+    expect(mobile.trafficReview.recorded.sessions).toBe(0);
+    expect(mobile.trafficReview.pendingReview.sessions).toBe(0);
+  });
+
+  it('labels evidence gaps without treating absent input, unknown network or scroll as a bot', async () => {
+    await visit(
+      'quiet',
+      {
+        properties: {
+          collectorVersion: '2',
+          serverEvidence: { version: 1, networkCategory: 'unknown' },
+        },
+      },
+      publicPrefixes.slice(0, 1),
+    );
+    await event('effective_interaction', 'quiet', morning + 21000, {
+      properties: { evidenceVersion: 1, interactionStrength: 'weak', interactionType: 'scroll' },
+    });
+    await event('dwell_20s', 'orphan', morning);
+    await event('page_view', null, morning, { visitorId: null });
+    await visit('input', {}, publicPrefixes.slice(0, 1));
+    await event('human_signal', 'input', morning + 21000, {
+      properties: { evidenceVersion: 1, interactionStrength: 'strong', interactionType: 'keydown' },
+    });
+    const result = await service.overview(day);
+    expect(result.trafficReview.explicitExcluded.sessions).toBe(0);
+    expect(result.trafficReview.pendingReview.sessions).toBe(0);
+    expect(result.trafficReview.evidenceGaps).toMatchObject({
+      pageViewsWithoutSession: 1,
+      pageViewsWithoutVisitor: 1,
+      candidateDwellSessionsWithoutPageViewInScope: 1,
+      candidateStrongInputSessions: 1,
+      candidateDwell20WithStrongInputSessions: 1,
+      candidatePageSessionsWithoutStrongInput: 1,
+      candidatePageSessionsWithNewCollector: 1,
+      candidatePageSessionsWithServerEvidence: 1,
+    });
+    expect(result.trafficReview.anomalyDays).toEqual([]);
+    const historical = await service.overview({ startDate: '2026-09-16', endDate: '2026-09-24' });
+    expect(historical.trafficReview.anomalyDays).toEqual([
+      {
+        date: '2026-09-16',
+        status: 'collection_anomaly',
+        completeness: 'uncertain',
+        comparisonEligible: false,
+      },
+      {
+        date: '2026-09-24',
+        status: 'collection_anomaly',
+        completeness: 'uncertain',
+        comparisonEligible: false,
+      },
+    ]);
+  });
+
+  it('uses lifecycle markers beyond dimension/range while protecting server submissions', async () => {
+    await visit('marked', { deviceType: '移动端' }, publicPrefixes.slice(0, 1));
+    await event('automation_signal', 'marked', morning - 24 * 3600000, {
+      pagePath: '/en',
+      deviceType: 'PC',
+    });
+    await event('form_submit', 'marked', morning + 22000, {
+      submissionId: '00000000-0000-4000-8000-000000000001',
+      deviceType: '移动端',
+      userAgent: null,
+    });
+    await event('form_submit', 'forged', morning + 23000, {
+      submissionId: null,
+      deviceType: '移动端',
+    });
+    const result = await service.overview({
+      ...day,
+      site: 'zh',
+      device: '移动端',
+      sourceType: '直接访问',
+      pageType: '文章页',
+    });
+    expect(result.trafficReview.explicitExcluded.sessions).toBe(1);
+    expect(result.trafficReview.pendingReview.sessions).toBe(0);
+    expect(result.trafficReview.candidate.sessions).toBe(0);
+    expect(result.trafficReview.serverSubmissions).toEqual({
+      recorded: 1,
+      candidate: 1,
+      legacy: 1,
+    });
+  });
+
   it('preserves quiet stable visitors, a small VPN switch and slow address changes', async () => {
     await visit('quiet', {}, publicPrefixes.slice(0, 1));
     await visit('two-network-vpn', {}, publicPrefixes.slice(0, 2));

@@ -92,6 +92,7 @@ const SESSION_PAGE_PATHS_KEY = 'suneng_session_page_paths';
 const SESSION_ID_KEY = 'suneng_session_id';
 const SESSION_LAST_SEEN_KEY = 'suneng_session_last_seen';
 const SESSION_SOURCE_KEY = 'suneng_session_traffic_source';
+const SESSION_PAGE_VIEW_KEY = 'suneng_session_page_view_started_v1';
 const MANUAL_QA_SESSION_KEY = 'suneng_manual_qa_session_v1';
 // Registration is explicit and local to this browser; website/admin login is not evidence.
 export const INTERNAL_TRAFFIC_BROWSER_KEY = 'suneng_internal_traffic_browser_v1';
@@ -109,13 +110,16 @@ let pendingDwellPayload:
   | { generation: number; milestone: number; payload: LeadEventPayload }
   | undefined;
 let engagedSessionInFlight = false;
-// 有效交互信号：只记录真实滑动或点击。最终的“有效访问”还需要
-// 同一次访问累计前台停留 20 秒，由服务端合并两个事实判定。
-// 使用新键，避免旧版的 pointermove 信号被误当成新口径。
+// 保留旧版“滑动或点击”的保护口径供并行比较。可信滚动也可能来自页面代码，
+// 新证据把它单列为弱信号；输入动作更强，但同样不能单独证明是真人。
 const EFFECTIVE_INTERACTION_KEY = 'suneng_effective_interaction_recorded_v1';
+const STRONG_INPUT_KEY = 'suneng_strong_input_recorded_v1';
 const AUTOMATION_SIGNAL_KEY = 'suneng_automation_signal_recorded_v1';
 let effectiveInteractionInFlight = false;
+let strongInputInFlight = false;
+let pendingStrongInputPayload: { generation: number; payload: LeadEventPayload } | undefined;
 let automationSignalInFlight = false;
+let lastTrackedPagePath: string | undefined;
 
 type TrackingStorage = Pick<Storage, 'getItem' | 'setItem' | 'removeItem'>;
 let trackingWindow: Window | undefined;
@@ -124,7 +128,6 @@ let localStorageFallback: TrackingStorage;
 let natureTrackingInstalled = false;
 let natureTrackingCleanup: (() => void) | undefined;
 let dwellTimer: number | undefined;
-let lastPageViewSessionId: string | undefined;
 const PAGE_VIEW_RETRY_DELAYS_MS = [1000, 3000] as const;
 const pendingRetriedEvents = new Set<{ timer?: number; owner: Window; cancel: () => void }>();
 
@@ -201,11 +204,13 @@ function trackingStorage(name: 'sessionStorage' | 'localStorage') {
     pendingDwellPayload = undefined;
     engagedSessionInFlight = false;
     effectiveInteractionInFlight = false;
+    strongInputInFlight = false;
+    pendingStrongInputPayload = undefined;
     automationSignalInFlight = false;
+    lastTrackedPagePath = undefined;
     natureTrackingInstalled = false;
     natureTrackingCleanup = undefined;
     dwellTimer = undefined;
-    lastPageViewSessionId = undefined;
     cancelEventRetries();
   }
   return name === 'sessionStorage' ? sessionStorageFallback : localStorageFallback;
@@ -288,6 +293,8 @@ function fallbackSession(now: number, requested: boolean) {
 function resetSessionState(storage: TrackingStorage) {
   storage.removeItem(ENGAGED_SESSION_KEY);
   storage.removeItem(EFFECTIVE_INTERACTION_KEY);
+  storage.removeItem(STRONG_INPUT_KEY);
+  storage.removeItem(SESSION_PAGE_VIEW_KEY);
   storage.removeItem(AUTOMATION_SIGNAL_KEY);
   storage.removeItem(SESSION_PAGE_PATHS_KEY);
   storage.removeItem(SESSION_SOURCE_KEY);
@@ -302,6 +309,8 @@ function resetSessionState(storage: TrackingStorage) {
   pendingDwellPayload = undefined;
   engagedSessionInFlight = false;
   effectiveInteractionInFlight = false;
+  strongInputInFlight = false;
+  pendingStrongInputPayload = undefined;
   automationSignalInFlight = false;
   cancelEventRetries();
 }
@@ -539,6 +548,28 @@ export function captureLeadEventProperties(
   })!;
 }
 
+function browserVersionDeclaration() {
+  if (typeof navigator === 'undefined') return undefined;
+  // Read only the browser's already available low-entropy declaration. Never request
+  // high-entropy values or combine device characteristics into a fingerprint.
+  const data = (
+    navigator as Navigator & {
+      userAgentData?: { brands?: Array<{ brand?: string; version?: string }> };
+    }
+  ).userAgentData;
+  if (!Array.isArray(data?.brands)) return undefined;
+  const brands = data.brands.slice(0, 4).flatMap(({ brand, version }) => {
+    if (typeof brand !== 'string' || typeof version !== 'string') return [];
+    const safeBrand = brand
+      .replace(/[^a-zA-Z0-9 ._-]/g, '')
+      .trim()
+      .slice(0, 40);
+    const major = version.match(/^\d{1,4}(?:\.|$)/)?.[0].replace('.', '');
+    return safeBrand && major ? [`${safeBrand}/${major}`] : [];
+  });
+  return brands.length ? brands.join('; ').slice(0, 255) : undefined;
+}
+
 function currentPayload(eventType: LeadEventType, extra: LeadEventExtra = {}) {
   const { properties, ...sourceExtra } = extra;
   const snapshot = buildLeadSourceSnapshot(sourceExtra);
@@ -547,15 +578,25 @@ function currentPayload(eventType: LeadEventType, extra: LeadEventExtra = {}) {
   const ordinary = Object.fromEntries(
     Object.entries(captured).filter(
       ([key]) =>
-        !['collectionId', 'automationDetected', 'manual_qa', 'internal_traffic'].includes(key.trim()),
+        ![
+          'collectionId',
+          'collectorVersion',
+          'browserBrands',
+          'automationDetected',
+          'manual_qa',
+          'internal_traffic',
+        ].includes(key.trim()),
     ),
   );
+  const browserBrands = browserVersionDeclaration();
   return {
     eventType,
     ...snapshot,
     properties: sanitizeEventProperties({
       // 系统属性优先占位，业务属性不能覆盖或挤掉它们。
       collectionId: newAnonymousId().slice(0, 120),
+      collectorVersion: '2',
+      ...(browserBrands ? { browserBrands } : {}),
       ...(typeof navigator !== 'undefined' && navigator.webdriver === true
         ? { automationDetected: true }
         : {}),
@@ -579,7 +620,13 @@ function postLeadPayload(payload: LeadEventPayload) {
 
 function postLeadEvent(eventType: LeadEventType, extra?: LeadEventExtra) {
   if (!canTrackActivity()) return Promise.resolve(false);
-  return postLeadPayload(currentPayload(eventType, extra));
+  const payload = currentPayload(eventType, extra);
+  // A contact can happen before the next dwell tick after returning to the page.
+  // Frozen asynchronous actions still belonging to an old visit do not create views.
+  if (payload.sessionId === trackingStorage('sessionStorage').getItem(SESSION_ID_KEY)) {
+    ensureResumedPageView();
+  }
+  return postLeadPayload(payload);
 }
 
 function canTrackActivity() {
@@ -645,13 +692,13 @@ function writeDwellCounter(key: string, value: number) {
 /** 每满一秒调一次。导出仅为可测，页面代码请用 startDwellTracking。 */
 export function tickDwell() {
   if (!canTrackActivity()) return;
-  // 只累计「页面可见且窗口有焦点」的秒数：无头浏览器默认拿不到焦点，
-  // 停留时长因此成为少数几个伪装成本很高的信号。
+  // 只累计页面可见且窗口有焦点的秒数。这个状态本身不是“真人”的证明。
   if (document.visibilityState !== 'visible' || !document.hasFocus()) return;
 
   // 先建立/轮换会话再加秒数。否则第一个里程碑组装请求时才建会话，
   // 会把刚累计的停留数误当成上一个会话清掉。
-  resumePageViewIfNeeded();
+  getSessionId(trackingStorage('sessionStorage'));
+  ensureResumedPageView();
 
   const activeSeconds = readDwellCounter(DWELL_SECONDS_KEY) + 1;
   writeDwellCounter(DWELL_SECONDS_KEY, activeSeconds);
@@ -706,12 +753,13 @@ export function startDwellTracking() {
 }
 
 const EFFECTIVE_INTERACTION_EVENTS = ['scroll', 'click'] as const;
+const STRONG_INPUT_EVENTS = ['click', 'pointerdown', 'touchstart', 'keydown'] as const;
 
 function refreshVisitorNatureTracking() {
   natureTrackingCleanup?.();
   natureTrackingCleanup = undefined;
   const storage = trackingStorage('sessionStorage');
-  // 自动化记录保留供服务端排除，不把合成操作当作真人交互。
+  // Explicit automation remains separately recorded; input evidence never overrides it.
   if (typeof navigator !== 'undefined' && navigator.webdriver === true) {
     if (storage.getItem(AUTOMATION_SIGNAL_KEY) === '1' || automationSignalInFlight) return;
     automationSignalInFlight = true;
@@ -723,29 +771,77 @@ function refreshVisitorNatureTracking() {
     });
     return;
   }
-  if (storage.getItem(EFFECTIVE_INTERACTION_KEY) === '1') return;
-  const onFirstInteraction = (event: Event) => {
-    if (!event.isTrusted) return;
-    resumePageViewIfNeeded();
-    if (storage.getItem(EFFECTIVE_INTERACTION_KEY) === '1' || effectiveInteractionInFlight) return;
-    effectiveInteractionInFlight = true;
-    const generation = dwellRequestGeneration;
-    void postLeadEvent('effective_interaction').then((accepted) => {
-      if (generation !== dwellRequestGeneration) return;
-      effectiveInteractionInFlight = false;
-      if (!accepted) return;
-      storage.setItem(EFFECTIVE_INTERACTION_KEY, '1');
-      natureTrackingCleanup?.();
-      natureTrackingCleanup = undefined;
-    });
-  };
   const listenerWindow = window;
-  for (const name of EFFECTIVE_INTERACTION_EVENTS) {
-    listenerWindow.addEventListener(name, onFirstInteraction, { capture: true, passive: true });
+  const listeners: Array<[string, EventListener]> = [];
+  if (storage.getItem(EFFECTIVE_INTERACTION_KEY) !== '1') {
+    for (const name of EFFECTIVE_INTERACTION_EVENTS) {
+      const listener = (event: Event) => {
+        if (!event.isTrusted) return;
+        getSessionId(storage);
+        ensureResumedPageView();
+        if (storage.getItem(EFFECTIVE_INTERACTION_KEY) === '1' || effectiveInteractionInFlight)
+          return;
+        effectiveInteractionInFlight = true;
+        const generation = dwellRequestGeneration;
+        void postLeadEvent('effective_interaction', {
+          properties: {
+            evidenceVersion: 1,
+            interactionType: name,
+            interactionStrength: name === 'scroll' ? 'weak' : 'strong',
+          },
+        }).then((accepted) => {
+          if (generation !== dwellRequestGeneration) return;
+          effectiveInteractionInFlight = false;
+          if (!accepted) return;
+          storage.setItem(EFFECTIVE_INTERACTION_KEY, '1');
+          if (natureTrackingInstalled) refreshVisitorNatureTracking();
+        });
+      };
+      listeners.push([name, listener]);
+    }
+  }
+  if (storage.getItem(STRONG_INPUT_KEY) !== '1') {
+    for (const name of STRONG_INPUT_EVENTS) {
+      const listener = (event: Event) => {
+        if (!event.isTrusted) return;
+        getSessionId(storage);
+        ensureResumedPageView();
+        if (storage.getItem(STRONG_INPUT_KEY) === '1' || strongInputInFlight) return;
+        strongInputInFlight = true;
+        const generation = dwellRequestGeneration;
+        // Only the action kind is retained, never key text, targets or coordinates.
+        // A lost response may already be persisted. Keep the first payload even
+        // after bounded retries expire, so a later input retries that same fact.
+        if (!pendingStrongInputPayload || pendingStrongInputPayload.generation !== generation) {
+          pendingStrongInputPayload = {
+            generation,
+            payload: currentPayload('human_signal', {
+              properties: {
+                evidenceVersion: 1,
+                interactionType: name,
+                interactionStrength: 'strong',
+              },
+            }),
+          };
+        }
+        void postPayloadWithRetry(pendingStrongInputPayload.payload).then((accepted) => {
+          if (generation !== dwellRequestGeneration) return;
+          strongInputInFlight = false;
+          if (!accepted) return;
+          pendingStrongInputPayload = undefined;
+          storage.setItem(STRONG_INPUT_KEY, '1');
+          if (natureTrackingInstalled) refreshVisitorNatureTracking();
+        });
+      };
+      listeners.push([name, listener]);
+    }
+  }
+  for (const [name, listener] of listeners) {
+    listenerWindow.addEventListener(name, listener, { capture: true, passive: true });
   }
   natureTrackingCleanup = () => {
-    for (const name of EFFECTIVE_INTERACTION_EVENTS) {
-      listenerWindow.removeEventListener(name, onFirstInteraction, true);
+    for (const [name, listener] of listeners) {
+      listenerWindow.removeEventListener(name, listener, true);
     }
   };
 }
@@ -809,18 +905,20 @@ function postPayloadWithRetry(payload: LeadEventPayload): Promise<boolean> {
   });
 }
 
-// A resumed visit needs its own page view even when the route has not changed.
-// Navigation still records its own view; marking synchronously prevents timer/click duplicates.
-function resumePageViewIfNeeded() {
-  const sessionId = getSessionId(trackingStorage('sessionStorage'));
-  if (lastPageViewSessionId && sessionId && sessionId !== lastPageViewSessionId) trackPageView();
-}
-
-export function trackPageView() {
-  if (!canTrackActivity()) return;
-  const safePath = sanitizeLeadPagePath(`${window.location.pathname}${window.location.search}`);
-  const payload = currentPayload('page_view');
-  lastPageViewSessionId = payload.sessionId;
+function recordPageView(resumed: boolean) {
+  const payload = currentPayload(
+    'page_view',
+    resumed
+      ? {
+          properties: { pageViewReason: 'session_resume' },
+        }
+      : undefined,
+  );
+  const safePath = payload.pagePath!;
+  lastTrackedPagePath = safePath;
+  // Mark dispatch, not receipt, so dwell/input racing with retries does not create
+  // a second logical page view. Every retry carries this same collection ID.
+  trackingStorage('sessionStorage').setItem(SESSION_PAGE_VIEW_KEY, payload.sessionId || '');
   void postPayloadWithRetry(payload);
   try {
     const stored = JSON.parse(
@@ -837,9 +935,28 @@ export function trackPageView() {
   }
 }
 
+function ensureResumedPageView() {
+  const storage = trackingStorage('sessionStorage');
+  const sessionId = storage.getItem(SESSION_ID_KEY);
+  const currentPath = sanitizeLeadPagePath(`${window.location.pathname}${window.location.search}`);
+  // A normal route change owns its own page view through WebsiteReadingTracker.
+  // Only fill the previously tracked, still-open page after a session rotation.
+  if (
+    lastTrackedPagePath !== currentPath ||
+    !sessionId ||
+    storage.getItem(SESSION_PAGE_VIEW_KEY) === sessionId
+  )
+    return;
+  recordPageView(true);
+}
+
+export function trackPageView() {
+  if (!canTrackActivity()) return;
+  recordPageView(false);
+}
+
 export function trackLeadEvent(eventType: LeadEventType, extra?: LeadEventExtra) {
   if (!canTrackActivity()) return;
-  resumePageViewIfNeeded();
   void postLeadEvent(eventType, extra);
   if (HIGH_INTENT_EVENTS.has(eventType)) markEngagedSession(extra);
 }
