@@ -82,6 +82,53 @@ describe('ShujuGrowthReadService', () => {
     expect(outsideQuery).not.toHaveBeenCalled();
   });
 
+  it('reuses an existing read-only transaction without trying to nest one', async () => {
+    const calls: string[] = [];
+    const queryRaw = jest.fn().mockImplementation(async (sql) => {
+      const statement = Array.isArray(sql) ? sql.join('') : sql.text;
+      if (statement.includes('transaction_read_only')) {
+        calls.push('verify read only');
+        return [{ readOnly: 'on' }];
+      }
+      calls.push('review');
+      return [];
+    });
+    const executeRaw = jest.fn().mockImplementation(async (sql: TemplateStringsArray) => {
+      calls.push(sql.join(''));
+      return 0;
+    });
+    const { Prisma } = jest.requireActual('@prisma/client');
+    const result = await readTrafficReview(
+      { $executeRaw: executeRaw, $queryRaw: queryRaw } as unknown as PrismaService,
+      Prisma.sql`TRUE`,
+      [],
+      '2026-10-08',
+      '2026-10-08',
+    );
+    expect(calls).toEqual(['verify read only', 'SET LOCAL jit = off', 'review']);
+    expect(result.mode).toBe('parallel');
+  });
+
+  it.each(['off', undefined])(
+    'rejects an existing transaction without read-only proof (%s)',
+    async (readOnly) => {
+      const queryRaw = jest.fn().mockResolvedValue(readOnly ? [{ readOnly }] : []);
+      const executeRaw = jest.fn();
+      const { Prisma } = jest.requireActual('@prisma/client');
+      await expect(
+        readTrafficReview(
+          { $executeRaw: executeRaw, $queryRaw: queryRaw } as unknown as PrismaService,
+          Prisma.sql`TRUE`,
+          [],
+          '2026-10-08',
+          '2026-10-08',
+        ),
+      ).rejects.toThrow('existing read-only transaction');
+      expect(queryRaw).toHaveBeenCalledTimes(1);
+      expect(executeRaw).not.toHaveBeenCalled();
+    },
+  );
+
   it('fills calendar days with a real zero instead of dropping them from the trend', () => {
     const result = fillDailyPageViewGaps(
       [
