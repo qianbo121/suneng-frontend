@@ -8,6 +8,15 @@ import {
   ShujuGrowthReadService,
 } from '@/modules/shuju-service/shuju-growth-read.service';
 import { PrismaService } from '@/prisma/prisma.service';
+import { readTrafficReview } from '@/modules/shuju-service/shuju-traffic-review';
+
+function readOnlyPrisma(queryRaw: jest.Mock) {
+  return {
+    $queryRaw: queryRaw,
+    $transaction: async (action: (transaction: unknown) => Promise<unknown>) =>
+      action({ $executeRaw: jest.fn().mockResolvedValue(0), $queryRaw: queryRaw }),
+  } as unknown as PrismaService;
+}
 
 /**
  * 按 SQL 内容路由返回值，而不是按调用次序。
@@ -44,6 +53,35 @@ function coverageRow(at: string, eventType = 'page_view') {
 }
 
 describe('ShujuGrowthReadService', () => {
+  it('keeps compilation settings inside one read-only transaction and uses its client', async () => {
+    const calls: string[] = [];
+    const queryRaw = jest.fn().mockImplementation(async () => {
+      calls.push('review');
+      return [];
+    });
+    const executeRaw = jest.fn().mockImplementation(async (sql: TemplateStringsArray) => {
+      calls.push(sql.join(''));
+      return 0;
+    });
+    const outsideQuery = jest.fn();
+    const transaction = jest
+      .fn()
+      .mockImplementation(async (action) =>
+        action({ $executeRaw: executeRaw, $queryRaw: queryRaw }),
+      );
+    const { Prisma } = jest.requireActual('@prisma/client');
+    await readTrafficReview(
+      { $transaction: transaction, $queryRaw: outsideQuery } as unknown as PrismaService,
+      Prisma.sql`TRUE`,
+      [],
+      '2026-10-08',
+      '2026-10-08',
+    );
+    expect(calls).toEqual(['SET TRANSACTION READ ONLY', 'SET LOCAL jit = off', 'review']);
+    expect(transaction).toHaveBeenCalledTimes(1);
+    expect(outsideQuery).not.toHaveBeenCalled();
+  });
+
   it('fills calendar days with a real zero instead of dropping them from the trend', () => {
     const result = fillDailyPageViewGaps(
       [
@@ -204,7 +242,7 @@ describe('ShujuGrowthReadService', () => {
         ],
       ],
     ]);
-    const service = new ShujuGrowthReadService({ $queryRaw: queryRaw } as unknown as PrismaService);
+    const service = new ShujuGrowthReadService(readOnlyPrisma(queryRaw));
 
     const result = await service.overview({ startDate: '2026-08-15', endDate: '2026-08-15' });
 
@@ -249,7 +287,7 @@ describe('ShujuGrowthReadService', () => {
   it('returns an empty comparable window when page-view tracking has not started', async () => {
     // 埋点还没开始：覆盖查询返回 null，其余一律空
     const queryRaw = routedQueryRaw([['SELECT id, "createdAt", "sessionId"', []]]);
-    const service = new ShujuGrowthReadService({ $queryRaw: queryRaw } as unknown as PrismaService);
+    const service = new ShujuGrowthReadService(readOnlyPrisma(queryRaw));
 
     const result = await service.overview({ startDate: '2026-08-15', endDate: '2026-08-15' });
 
@@ -281,7 +319,7 @@ describe('ShujuGrowthReadService', () => {
       }
       return Promise.resolve([]);
     });
-    const service = new ShujuGrowthReadService({ $queryRaw: queryRaw } as unknown as PrismaService);
+    const service = new ShujuGrowthReadService(readOnlyPrisma(queryRaw));
 
     const result = await service.overview({ startDate: '2026-08-01', endDate: '2026-08-07' });
 
@@ -297,7 +335,7 @@ describe('ShujuGrowthReadService', () => {
 
   it('excludes bot traffic from every metric and reports how much was excluded', async () => {
     const queryRaw = jest.fn().mockResolvedValue([]);
-    const service = new ShujuGrowthReadService({ $queryRaw: queryRaw } as unknown as PrismaService);
+    const service = new ShujuGrowthReadService(readOnlyPrisma(queryRaw));
 
     const result = await service.overview({ startDate: '2026-08-15', endDate: '2026-08-17' });
 
@@ -333,7 +371,7 @@ describe('ShujuGrowthReadService', () => {
 
   it('只把同次访问内的20秒和交互用于质量分组，不再过滤事实数据', async () => {
     const queryRaw = jest.fn().mockResolvedValue([]);
-    const service = new ShujuGrowthReadService({ $queryRaw: queryRaw } as unknown as PrismaService);
+    const service = new ShujuGrowthReadService(readOnlyPrisma(queryRaw));
 
     const result = await service.overview({ startDate: '2026-08-15', endDate: '2026-08-17' });
 
@@ -383,7 +421,7 @@ describe('ShujuGrowthReadService', () => {
         ],
       ],
     ]);
-    const service = new ShujuGrowthReadService({ $queryRaw: queryRaw } as unknown as PrismaService);
+    const service = new ShujuGrowthReadService(readOnlyPrisma(queryRaw));
 
     const result = await service.overview({ startDate: '2026-08-20', endDate: '2026-08-21' });
 
@@ -411,7 +449,7 @@ describe('ShujuGrowthReadService', () => {
 
   it('来源表只把能连回同来源访问的行为算作访客转化', async () => {
     const queryRaw = jest.fn().mockResolvedValue([]);
-    const service = new ShujuGrowthReadService({ $queryRaw: queryRaw } as unknown as PrismaService);
+    const service = new ShujuGrowthReadService(readOnlyPrisma(queryRaw));
 
     await service.overview({ startDate: '2026-08-15', endDate: '2026-08-17' });
 
@@ -435,7 +473,7 @@ describe('ShujuGrowthReadService', () => {
 
   it('页面排行只把能连回同一页面访问的行为算作访客转化', async () => {
     const queryRaw = jest.fn().mockResolvedValue([]);
-    const service = new ShujuGrowthReadService({ $queryRaw: queryRaw } as unknown as PrismaService);
+    const service = new ShujuGrowthReadService(readOnlyPrisma(queryRaw));
 
     await service.overview({ startDate: '2026-08-15', endDate: '2026-08-17' });
 
@@ -451,7 +489,7 @@ describe('ShujuGrowthReadService', () => {
 
   it('keeps the per-page funnel monotonic so the drill-down can show conversion', async () => {
     const queryRaw = jest.fn().mockResolvedValue([]);
-    const service = new ShujuGrowthReadService({ $queryRaw: queryRaw } as unknown as PrismaService);
+    const service = new ShujuGrowthReadService(readOnlyPrisma(queryRaw));
 
     await service.overview({ startDate: '2026-08-15', endDate: '2026-08-17' });
 
@@ -470,7 +508,7 @@ describe('ShujuGrowthReadService', () => {
 
   it('buckets days by real Shanghai time, not by misreading the UTC timestamp', async () => {
     const queryRaw = jest.fn().mockResolvedValue([]);
-    const service = new ShujuGrowthReadService({ $queryRaw: queryRaw } as unknown as PrismaService);
+    const service = new ShujuGrowthReadService(readOnlyPrisma(queryRaw));
 
     await service.overview({ startDate: '2026-08-15', endDate: '2026-08-17' });
 
@@ -493,7 +531,7 @@ describe('ShujuGrowthReadService', () => {
 
   it('reports when dwell tracking started, without shrinking the window for other metrics', async () => {
     const queryRaw = jest.fn().mockResolvedValue([]);
-    const service = new ShujuGrowthReadService({ $queryRaw: queryRaw } as unknown as PrismaService);
+    const service = new ShujuGrowthReadService(readOnlyPrisma(queryRaw));
 
     const result = await service.overview({ startDate: '2026-08-15', endDate: '2026-08-17' });
 
@@ -529,7 +567,7 @@ describe('ShujuGrowthReadService', () => {
       }
       return Promise.resolve([]);
     });
-    const service = new ShujuGrowthReadService({ $queryRaw: queryRaw } as unknown as PrismaService);
+    const service = new ShujuGrowthReadService(readOnlyPrisma(queryRaw));
 
     const result = await service.overview({ startDate: '2026-08-18', endDate: '2026-08-21' });
 
@@ -551,7 +589,7 @@ describe('ShujuGrowthReadService', () => {
 
   it('reports customer regions from the dwell-20-second cohort without applying the interaction quality gate', async () => {
     const queryRaw = jest.fn().mockResolvedValue([]);
-    const service = new ShujuGrowthReadService({ $queryRaw: queryRaw } as unknown as PrismaService);
+    const service = new ShujuGrowthReadService(readOnlyPrisma(queryRaw));
 
     const result = await service.overview({ startDate: '2026-08-15', endDate: '2026-08-17' });
 
@@ -586,7 +624,7 @@ describe('ShujuGrowthReadService', () => {
       }
       return Promise.resolve([]);
     });
-    const service = new ShujuGrowthReadService({ $queryRaw: queryRaw } as unknown as PrismaService);
+    const service = new ShujuGrowthReadService(readOnlyPrisma(queryRaw));
 
     const result = await service.overview({
       startDate: '2026-08-20',
@@ -607,7 +645,7 @@ describe('ShujuGrowthReadService', () => {
 
   it('derives exit pages from the last page view of each session, not a new event', async () => {
     const queryRaw = jest.fn().mockResolvedValue([]);
-    const service = new ShujuGrowthReadService({ $queryRaw: queryRaw } as unknown as PrismaService);
+    const service = new ShujuGrowthReadService(readOnlyPrisma(queryRaw));
 
     const result = await service.overview({ startDate: '2026-08-15', endDate: '2026-08-17' });
 
