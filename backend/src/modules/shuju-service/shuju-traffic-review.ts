@@ -21,7 +21,7 @@ const emptyMetrics = (): Metrics => ({
  * Distinct visitors can occur in multiple session groups and must never be subtracted/summed.
  */
 export async function readTrafficReview(
-  prisma: PrismaService,
+  prisma: PrismaService | Prisma.TransactionClient,
   scopedWhere: Prisma.Sql,
   automatedSessions: readonly string[],
   startDay: string,
@@ -105,11 +105,25 @@ export async function readTrafficReview(
   `;
   // This one-off aggregate spends more time compiling than executing on the
   // production dataset. Keep the setting local to its read-only transaction.
-  const rows = await prisma.$transaction(async (transaction) => {
-    await transaction.$executeRaw`SET TRANSACTION READ ONLY`;
+  const read = async (transaction: Prisma.TransactionClient) => {
     await transaction.$executeRaw`SET LOCAL jit = off`;
     return transaction.$queryRaw<ReviewRow[]>(query);
-  });
+  };
+  let rows: ReviewRow[];
+  if ('$transaction' in prisma) {
+    rows = await prisma.$transaction(async (transaction) => {
+      await transaction.$executeRaw`SET TRANSACTION READ ONLY`;
+      return read(transaction);
+    });
+  } else {
+    const state = await prisma.$queryRaw<{ readOnly: string }[]>`
+      SELECT current_setting('transaction_read_only') AS "readOnly"
+    `;
+    if (state[0]?.readOnly !== 'on') {
+      throw new Error('Traffic review requires an existing read-only transaction');
+    }
+    rows = await read(prisma);
+  }
   const row = rows[0];
   const metrics = (key: string) => row?.groups?.[key] || emptyMetrics();
   return {
