@@ -224,9 +224,20 @@ integration('content growth against PostgreSQL', () => {
         properties: { automationDetected: true },
       },
     );
+    const queryRaw = (sql: { text: string; values: unknown[] }) =>
+      client.query(sql.text, sql.values).then((result: { rows: unknown[] }) => result.rows);
     service = new ShujuGrowthReadService({
-      $queryRaw: (sql: { text: string; values: unknown[] }) =>
-        client.query(sql.text, sql.values).then((result: { rows: unknown[] }) => result.rows),
+      $queryRaw: queryRaw,
+      // Each case already owns a rollback-only transaction and writes only
+      // temporary fixture tables. Reuse it instead of starting a nested one.
+      $transaction: async (action: (transaction: unknown) => Promise<unknown>) =>
+        action({
+          $queryRaw: queryRaw,
+          $executeRaw: (sql: TemplateStringsArray) =>
+            sql.join('') === 'SET TRANSACTION READ ONLY'
+              ? Promise.resolve(0)
+              : client.query(sql.join('')),
+        }),
     } as unknown as PrismaService);
   }, 30000);
 

@@ -30,7 +30,7 @@ export async function readTrafficReview(
   const automated = automatedSessions.length
     ? Prisma.sql`COALESCE(s.sid = ANY(${automatedSessions}::text[]), FALSE)`
     : Prisma.sql`FALSE`;
-  const rows = await prisma.$queryRaw<ReviewRow[]>(Prisma.sql`
+  const query = Prisma.sql`
     WITH scoped AS MATERIALIZED (
       SELECT *, NULLIF(BTRIM("sessionId"), '') AS sid,
         NULLIF(BTRIM("visitorId"), '') AS vid,
@@ -102,7 +102,14 @@ export async function readTrafficReview(
         'candidate', (SELECT COUNT(DISTINCT "submissionId") FROM classified WHERE "eventType" = 'form_submit' AND explicit_reason IS NULL),
         'legacy', (SELECT COUNT(DISTINCT "submissionId") FROM classified WHERE "eventType" = 'form_submit' AND legacy_allowed)
       ) AS submissions
-  `);
+  `;
+  // This one-off aggregate spends more time compiling than executing on the
+  // production dataset. Keep the setting local to its read-only transaction.
+  const rows = await prisma.$transaction(async (transaction) => {
+    await transaction.$executeRaw`SET TRANSACTION READ ONLY`;
+    await transaction.$executeRaw`SET LOCAL jit = off`;
+    return transaction.$queryRaw<ReviewRow[]>(query);
+  });
   const row = rows[0];
   const metrics = (key: string) => row?.groups?.[key] || emptyMetrics();
   return {

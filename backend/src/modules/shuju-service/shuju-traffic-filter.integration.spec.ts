@@ -68,6 +68,18 @@ integration('traffic exclusions against isolated PostgreSQL', () => {
     await client.query('CREATE INDEX ON "WebsiteLeadEvent" ("sessionId", "createdAt")');
     await client.query('CREATE TEMP TABLE "CustomRequirement" (id integer, "submissionId" uuid)');
     prisma = {
+      $executeRaw: (sql: TemplateStringsArray) => client.query(sql.join('')),
+      $transaction: async (action: (transaction: PrismaService) => Promise<unknown>) => {
+        await client.query('BEGIN');
+        try {
+          const result = await action(prisma);
+          await client.query('COMMIT');
+          return result;
+        } catch (error) {
+          await client.query('ROLLBACK');
+          throw error;
+        }
+      },
       $queryRaw: (sql: { text: string; values: unknown[] }) =>
         client.query(sql.text, sql.values).then((result: { rows: unknown[] }) => result.rows),
     } as unknown as PrismaService;
