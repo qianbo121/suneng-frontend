@@ -15,7 +15,7 @@ export async function getHomepageNewsData(locale: Locale): Promise<NewsResult> {
   let result: NewsResult;
   try {
     result = await Promise.race([
-      Promise.resolve().then(() => getNewsDecisionCenterData(locale)).catch(() => unavailable),
+      Promise.resolve().then(() => getNewsDecisionCenterData(locale, true)).catch(() => unavailable),
       new Promise<NewsResult>((resolve) => {
         timeout = setTimeout(() => resolve(unavailable), HOMEPAGE_NEWS_WAIT_MS);
       }),

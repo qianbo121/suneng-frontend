@@ -1,3 +1,4 @@
+import { setTimeout as pauseForResponse } from 'node:timers/promises';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { unstable_cache } from 'next/cache';
 import { getAllNewsForDecisionCenter } from '@/lib/api/news';
@@ -7,6 +8,10 @@ import * as newsMapping from './news';
 import type { NewsApiItem } from '@/types/news';
 
 vi.mock('server-only', () => ({}));
+vi.mock('node:timers/promises', async () => {
+  const actual = await vi.importActual<typeof import('node:timers/promises')>('node:timers/promises');
+  return { ...actual, setTimeout: vi.fn(actual.setTimeout) };
+});
 vi.mock('react', async () => ({
   ...(await vi.importActual<typeof import('react')>('react')),
   cache: <T>(callback: T) => callback,
@@ -30,7 +35,10 @@ const article: NewsApiItem = {
   status: 'published',
 };
 
-beforeEach(() => vi.mocked(getAllNewsForDecisionCenter).mockReset());
+beforeEach(() => {
+  vi.mocked(getAllNewsForDecisionCenter).mockReset();
+  vi.mocked(pauseForResponse).mockClear();
+});
 
 describe('prepared news collection', () => {
   it('caches the prepared collection for five minutes while retaining search and sorting data', async () => {
@@ -155,4 +163,28 @@ it('lets the homepage deadline run while a large collection is still being prepa
     await complete;
     mapping.mockRestore();
   }
+});
+
+
+it('shares homepage and list preparation, then restores normal list scheduling', async () => {
+  vi.mocked(getAllNewsForDecisionCenter).mockResolvedValue({ data: [article], error: null });
+  const [home, list] = await Promise.all([
+    getNewsDecisionCenterData('zh', true),
+    getNewsDecisionCenterData('zh'),
+  ]);
+  expect(home).toEqual(list);
+  expect(getAllNewsForDecisionCenter).toHaveBeenCalledTimes(1);
+  expect(pauseForResponse).toHaveBeenCalled();
+
+  vi.mocked(pauseForResponse).mockClear();
+  expect((await getNewsDecisionCenterData('zh')).data).toEqual(list.data);
+  expect(pauseForResponse).not.toHaveBeenCalled();
+});
+
+it('does not leave ordinary list reads throttled after a failed homepage preparation', async () => {
+  vi.mocked(getAllNewsForDecisionCenter).mockRejectedValueOnce(new Error('offline'));
+  expect((await getNewsDecisionCenterData('zh', true)).data).toBeNull();
+  vi.mocked(getAllNewsForDecisionCenter).mockResolvedValue({ data: [article], error: null });
+  expect((await getNewsDecisionCenterData('zh')).data?.[0].id).toBe(article.id);
+  expect(pauseForResponse).not.toHaveBeenCalled();
 });
