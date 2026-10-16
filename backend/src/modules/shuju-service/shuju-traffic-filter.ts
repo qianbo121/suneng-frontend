@@ -160,11 +160,13 @@ function excludedInternalTraffic(alias: string) {
   const event = column(alias, 'eventType');
   const properties = column(alias, 'properties');
   const session = column(alias, 'sessionId');
+  // One uncorrelated membership set avoids a per-row subplan (and costly JIT plans).
+  // A NULL marker must never make an unrelated visit's membership result unknown.
   return Prisma.sql`(${event} = ANY(${[...INTERNAL_VISIT_EVENTS]}::text[]) AND (
     COALESCE(${properties}->'internal_traffic' = 'true'::jsonb, FALSE)
-    OR (NULLIF(BTRIM(${session}), '') IS NOT NULL AND EXISTS (
-      SELECT 1 FROM "WebsiteLeadEvent" internal_marker
-      WHERE internal_marker."sessionId" = ${session}
+    OR (NULLIF(BTRIM(${session}), '') IS NOT NULL AND ${session} IN (
+      SELECT internal_marker."sessionId" FROM "WebsiteLeadEvent" internal_marker
+      WHERE internal_marker."sessionId" IS NOT NULL
         AND COALESCE(internal_marker.properties->'internal_traffic' = 'true'::jsonb, FALSE)
     ))
   ))`;

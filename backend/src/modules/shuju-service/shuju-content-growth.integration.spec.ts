@@ -986,4 +986,29 @@ integration('content growth against PostgreSQL', () => {
     // Reads made after the successful submission in another visit never recreate attribution.
     expect(result.content.submissions).toBe(0);
   });
+  it.each([
+    { ...range },
+    {
+      ...automationRange,
+      site: 'zh' as const,
+      sourceType: 'AI引流' as const,
+      pageType: '文章页' as const,
+    },
+    { ...range, device: '移动端' as const },
+  ])('compact dashboard preserves every metric and page detail for %j', async (query) => {
+    const reviewedQuery = {
+      ...query,
+      inquiryReview: { version: 1 as const, validIds: [10], excludedIds: [11], pendingIds: [12] },
+    };
+    const { generatedAt: fullTime, segments, ...full } = await service.overview(reviewedQuery);
+    const { generatedAt: compactTime, ...compact } = await service.overview({
+      ...reviewedQuery,
+      responseProfile: 'dashboard',
+    });
+    expect(fullTime).toBeTruthy();
+    expect(compactTime).toBeTruthy();
+    expect(Array.isArray(segments)).toBe(true);
+    expect(compact).not.toHaveProperty('segments');
+    expect(compact).toEqual(full);
+  });
 });

@@ -41,6 +41,23 @@ describe('internal growth overview review contract', () => {
     expect(Buffer.byteLength(body, 'utf8')).toBeLessThan(100 * 1024);
   });
 
+  it('accepts only known transport profiles while retaining optional full compatibility', async () => {
+    for (const responseProfile of [undefined, 'full', 'dashboard']) {
+      const dto = plainToInstance(ShujuGrowthOverviewDto, {
+        startDate: '2026-09-16',
+        endDate: '2026-10-15',
+        responseProfile,
+      });
+      expect(await validate(dto, { whitelist: true, forbidNonWhitelisted: true })).toEqual([]);
+    }
+    const invalid = plainToInstance(ShujuGrowthOverviewDto, {
+      startDate: '2026-09-16',
+      endDate: '2026-10-15',
+      responseProfile: 'omit-visitors',
+    });
+    expect((await validate(invalid)).map((error) => error.property)).toContain('responseProfile');
+  });
+
   it.each([
     { ...review(), version: 2 },
     { ...review(), validIds: [0] },
