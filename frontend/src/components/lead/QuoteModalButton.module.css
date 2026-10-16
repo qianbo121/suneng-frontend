@@ -1,0 +1,66 @@
+.compactBody {
+  position: relative;
+}
+
+.compactCloseBar {
+  position: absolute;
+  top: 12px;
+  right: 16px;
+  z-index: 2;
+}
+
+.compactClose {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: #61738e;
+  transition: color 160ms ease, background-color 160ms ease;
+}
+
+.compactClose:hover,
+.compactClose:focus-visible {
+  background: #f0f5fc;
+  color: #2454d9;
+}
+
+.compactClose:focus-visible {
+  outline: 2px solid #70a5ff;
+  outline-offset: 2px;
+}
+
+/* Keep the existing compact form, removing only its page-sized outer card. */
+.compactContent :global(#news-inquiry-form) {
+  padding: 0;
+  background: #fff;
+}
+
+.compactContent :global(#news-inquiry-form) > div {
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  padding: 24px 28px;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.compactContent :global(#news-inquiry-form) > div > div:first-child > p:first-child {
+  padding-right: 44px;
+}
+
+@media (max-width: 720px) {
+  .compactCloseBar {
+    top: 8px;
+    right: 6px;
+  }
+
+  .compactContent :global(#news-inquiry-form) > div {
+    padding: 20px 18px;
+  }
+}

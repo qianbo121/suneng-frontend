@@ -1,5 +1,4 @@
 import Link from 'next/link';
-import { Suspense } from 'react';
 import { HiOutlineCursorArrowRays } from 'react-icons/hi2';
 
 import { HeatTreatmentToolCenter } from '@/components/home/HeatTreatmentToolCenter';
@@ -8,7 +7,7 @@ import { HomepageLeadForm } from '@/components/home/HomepageLeadForm';
 import { HomepageTaskCards } from '@/components/home/HomepageTaskCards';
 import { ProductTypesShowcase } from '@/components/home/ProductTypesShowcase';
 import { WorkpieceRouter } from '@/components/home/WorkpieceRouter';
-import { getNewsDecisionCenterData } from '@/lib/news-decision-center.server';
+import { getHomepageNewsData } from '@/lib/homepage-news.server';
 import { localizeHomeWorkpieces } from '@/lib/home-workpieces-localized';
 import { mapNewsToHomeTopicArticles, type HomeTopicArticle } from '@/lib/home-article-topics';
 import { newsUiText } from '@/lib/news-ui';
@@ -55,9 +54,9 @@ const taskPaths = [
 
 async function HomepageArticles({ locale }: { locale: 'zh' | 'en' }) {
   const english = locale === 'en';
+  const { data } = await getHomepageNewsData(locale);
   let articles: HomeTopicArticle[];
   try {
-    const { data } = await getNewsDecisionCenterData(locale);
     if (!data?.length) throw new Error('Articles unavailable');
     articles = mapNewsToHomeTopicArticles(data, locale);
   } catch {
@@ -72,19 +71,6 @@ async function HomepageArticles({ locale }: { locale: 'zh' | 'en' }) {
     );
   }
   return <HeatTreatmentToolCenter articles={articles} locale={locale} />;
-}
-
-function HomepageArticlesLoading({ locale }: { locale: 'zh' | 'en' }) {
-  return (
-    <section className={toolStyles.section} aria-busy="true" aria-label={newsUiText(locale, '工业炉选型与采购资料')}>
-      <div className={toolStyles.container}>
-        <header className={toolStyles.heading}>
-          <h2>{newsUiText(locale, '工业炉选型与采购资料')}</h2>
-        </header>
-        <div className="mt-6 min-h-80 rounded-lg bg-slate-100 p-6" aria-hidden="true" />
-      </div>
-    </section>
-  );
 }
 
 export function HomepageV2({ locale = 'zh' }: { locale?: 'zh' | 'en' }) {
@@ -121,9 +107,7 @@ export function HomepageV2({ locale = 'zh' }: { locale?: 'zh' | 'en' }) {
 
       <ProductTypesShowcase locale={locale} />
 
-      <Suspense fallback={<HomepageArticlesLoading locale={locale} />}>
-        <HomepageArticles locale={locale} />
-      </Suspense>
+      <HomepageArticles locale={locale} />
 
       <HomepageLeadForm locale={locale} privacyNoticeEnabled />
 

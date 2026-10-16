@@ -5,8 +5,10 @@ import { createPortal } from 'react-dom';
 import { HiOutlineXMark } from 'react-icons/hi2';
 
 import { ProductLeadForm } from '@/components/products/ProductLeadForm';
+import { HomepageLeadForm } from '@/components/home/HomepageLeadForm';
 import { trackLeadEvent } from '@/lib/api/lead-events';
 import { Locale } from '@/types/site';
+import styles from './QuoteModalButton.module.css';
 
 type QuoteModalButtonProps = {
   locale?: Locale;
@@ -15,6 +17,7 @@ type QuoteModalButtonProps = {
   title?: string;
   description?: string;
   submitLabel?: string;
+  formVariant?: 'detailed' | 'compact-news';
 };
 
 const quoteModalCopy = {
@@ -47,7 +50,9 @@ export function QuoteModalButton({
   title,
   description,
   submitLabel,
+  formVariant = 'detailed',
 }: QuoteModalButtonProps) {
+  const isCompactNews = locale === 'zh' && formVariant === 'compact-news';
   const copy = quoteModalCopy[locale];
   const resolvedLabel = label ?? copy.label;
   const resolvedTitle = title ?? copy.title;
@@ -59,7 +64,11 @@ export function QuoteModalButton({
   const closeRef = useRef<HTMLButtonElement>(null);
 
   const openModal = () => {
-    trackLeadEvent('quote_cta_click');
+    trackLeadEvent('quote_cta_click', isCompactNews ? {
+      pageType: '技术资料页',
+      productTag: '工业炉项目咨询',
+      properties: { source_module: 'news_center_inquiry_modal' },
+    } : undefined);
     setIsOpen(true);
   };
 
@@ -111,6 +120,21 @@ export function QuoteModalButton({
     };
   }, [isOpen]);
 
+  const closeControl = (
+    <div className={isCompactNews ? styles.compactCloseBar : 'flex shrink-0 justify-end border-b border-[#eef0f3] px-4 py-2'}>
+      <button
+        ref={closeRef}
+        type="button"
+        onClick={() => setIsOpen(false)}
+        className={isCompactNews ? styles.compactClose : 'flex h-11 w-11 items-center justify-center rounded-[4px] border border-[#dce3eb] bg-white text-[22px] leading-none text-[#364152] transition hover:border-[#c51624] hover:text-[#c51624]'}
+        aria-label={copy.closeLabel}
+        title={isCompactNews ? '关闭' : undefined}
+      >
+        <HiOutlineXMark className="h-5 w-5" aria-hidden="true" />
+      </button>
+    </div>
+  );
+
   return (
     <>
       <button
@@ -128,7 +152,7 @@ export function QuoteModalButton({
           className="fixed inset-0 z-[10000] flex items-center justify-center bg-[#101828]/72 px-4 py-6 backdrop-blur-sm"
           role="dialog"
           aria-modal="true"
-          aria-label={resolvedTitle}
+          aria-label={isCompactNews ? '咨询设备与生产线方案' : resolvedTitle}
           onClick={() => setIsOpen(false)}
         >
           <div
@@ -136,25 +160,30 @@ export function QuoteModalButton({
             className="relative flex max-h-[calc(100dvh-48px)] w-full max-w-[960px] flex-col overflow-hidden rounded-[8px] bg-white shadow-[0_28px_80px_rgba(16,24,40,0.32)]"
             onClick={(event) => event.stopPropagation()}
           >
-            <div className="flex shrink-0 justify-end border-b border-[#eef0f3] px-4 py-2">
-              <button
-                ref={closeRef}
-                type="button"
-                onClick={() => setIsOpen(false)}
-                className="flex h-11 w-11 items-center justify-center rounded-[4px] border border-[#dce3eb] bg-white text-[22px] leading-none text-[#364152] transition hover:border-[#c51624] hover:text-[#c51624]"
-                aria-label={copy.closeLabel}
-              >
-                <HiOutlineXMark className="h-5 w-5" aria-hidden="true" />
-              </button>
-            </div>
-            <div className="min-h-0 overflow-y-auto overscroll-contain p-4 sm:p-5 lg:p-6">
-              <ProductLeadForm
+            {!isCompactNews ? closeControl : null}
+            <div
+              className={`min-h-0 overflow-y-auto overscroll-contain ${isCompactNews ? styles.compactContent : 'p-4 sm:p-5 lg:p-6'}`}
+              data-contact-form-scroll-container={isCompactNews || undefined}
+            >
+              {isCompactNews ? (
+                <div className={styles.compactBody}>
+                  {closeControl}
+                  <HomepageLeadForm
+                    sectionId="news-inquiry-form"
+                    pageType="技术资料页"
+                    productTag="工业炉项目咨询"
+                    successProductTag="工业炉项目初步判断"
+                    sourceModule="news_center_inquiry_modal"
+                    privacyNoticeEnabled
+                  />
+                </div>
+              ) : <ProductLeadForm
                 locale={locale}
                 anchorId="quote-modal-form"
                 title={resolvedTitle}
                 description={resolvedDescription}
                 submitLabel={resolvedSubmitLabel}
-              />
+              />}
             </div>
           </div>
         </div>, document.body

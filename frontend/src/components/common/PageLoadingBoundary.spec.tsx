@@ -4,6 +4,8 @@ import { renderToPipeableStream } from 'react-dom/server';
 import { describe, expect, it, vi } from 'vitest';
 
 import { PageLoadingBoundary } from './PageLoadingBoundary';
+import { APPROVED_GUIDE_PATHS, APPROVED_PROCUREMENT_PATHS, isWithdrawnRequestPath } from '@/lib/publication-scope';
+import { PUBLIC_CASE_SLUGS, PUBLIC_ENGLISH_CASE_SLUGS } from '@/lib/cases/public-case-allowlist';
 
 const route = vi.hoisted(() => ({ pathname: '/zh/news' as string | null }));
 vi.mock('next/navigation', () => ({ usePathname: () => route.pathname }));
@@ -67,7 +69,7 @@ describe('plain news entry initial HTML', () => {
   });
 
   it('keeps an unrelated route protected by the shared boundary', async () => {
-    const html = await streamDelayedPage('/zh/about');
+    const html = await streamDelayedPage('/zh/products/animation-review');
     expect(html).toContain('Shared pending');
     expect(html).toMatch(/<div hidden\b/);
   });
@@ -77,5 +79,65 @@ describe('plain news entry initial HTML', () => {
     expect(html).toContain('<h1>Technical resources</h1>');
     expect(html).not.toMatch(/<div hidden\b/);
     expect(html).not.toContain('Shared pending');
+  });
+});
+
+describe('public page initial HTML with delayed data', () => {
+  const informationRoutes = ['products', 'about', 'contact', 'partner', 'strength', 'strength/honors'];
+  const serviceRoutes = [
+    'service',
+    'service/furnace-renovation-overhaul',
+    'service/installation-after-sales',
+    'service/furnace-relocation-restart',
+    'service/selection-retrofit-guide',
+  ];
+  const readableRoutes = [
+    ...['zh', 'en'].flatMap((locale) => [
+      `/${locale}`,
+      `/${locale}/products/detail/box-furnace`,
+      `/${locale}/products/detail/annealing-solution-line/`,
+      ...informationRoutes.map((path) => `/${locale}/${path}`),
+      ...serviceRoutes.map((path) => `/${locale}/${path}`),
+      `/${locale}/case`,
+    ]),
+    ...APPROVED_GUIDE_PATHS,
+    ...APPROVED_PROCUREMENT_PATHS,
+    ...[...PUBLIC_CASE_SLUGS].map((slug) => `/zh/case/${slug}`),
+    ...[...PUBLIC_ENGLISH_CASE_SLUGS].map((slug) => `/en/case/${slug}`),
+  ];
+
+  it.each(readableRoutes)('keeps the heading and body outside streamed hidden segments at %s', async (pathname) => {
+    const html = await streamDelayedPage(pathname);
+    expect(html).toContain('<h1>Technical resources</h1>');
+    expect(html).toContain('href="/zh/news/example"');
+    expect(html).not.toMatch(/<div hidden\b/);
+    expect(html).not.toContain('Shared pending');
+  });
+
+  it.each(['zh', 'en'].flatMap((locale) => [
+    `/${locale}/inquiry`,
+    `/${locale}/inquiry/`,
+    `/${locale}/products/detail/copper-wire-annealing-line/inquiry-checklist`,
+    `/${locale}/products/detail/box-furnace/inquiry`,
+    `/${locale}/service/unknown-service`,
+    `/${locale}/about/unknown-page`,
+    `/${locale}/strength/unknown-category`,
+  ]))('keeps inquiry tools and unlisted routes behind their existing boundary at %s', async (pathname) => {
+    const html = await streamDelayedPage(pathname);
+    expect(html).toContain('Shared pending');
+    expect(html).toMatch(/<div hidden\b/);
+  });
+
+  it.each([
+    ...[...APPROVED_GUIDE_PATHS].map((path) => path.replace('/zh/', '/en/')),
+    ...['zh', 'en'].flatMap((locale) => [
+      `/${locale}/case/anonymous-tsingshan-1250-renovation`,
+      `/${locale}/case/jining-support-roller-heat-treatment-line`,
+    ]),
+  ])('does not widen the existing publication scope at %s', async (pathname) => {
+    expect(isWithdrawnRequestPath(pathname)).toBe(true);
+    const html = await streamDelayedPage(pathname);
+    expect(html).toContain('Shared pending');
+    expect(html).toMatch(/<div hidden\b/);
   });
 });

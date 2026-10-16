@@ -1,5 +1,5 @@
 import { getReviewedManufacturerLinks } from './news-manufacturer-related';
-import { isWithdrawnTechnicalPath } from '@/lib/publication-scope';
+import { isWithdrawnTechnicalPath, isHiddenCaseEntry } from '@/lib/publication-scope';
 import type { NewsApiItem } from '@/types/news';
 
 export type NewsRelatedLink = {
@@ -214,7 +214,7 @@ export function getNewsRelatedLinks(
     ? unique([...articleLinks, ...fallbackLinks])
     : fallbackLinks;
   if (locale === 'zh') {
-    const links = subjectLinks.filter((link) => !isWithdrawnTechnicalPath(link.href)
+    const links = subjectLinks.filter((link) => !isWithdrawnTechnicalPath(link.href) && !isHiddenCaseEntry(link.href)
       && link.href !== `/${locale}/news/${item.slug}`);
     // Reserve the approved repair guide only for explicit Chinese repair topics.
     if (!/维修|大修|改造|换新/.test(item.titleZh) || isWithdrawnTechnicalPath(LINKS.repair.href)) {
@@ -233,6 +233,6 @@ export function getNewsRelatedLinks(
     const english = ENGLISH_LINKS[link.href];
     return english ? [{ ...link, ...english }] : [];
   }));
-  return localized.filter((link) => !isWithdrawnTechnicalPath(link.href)
+  return localized.filter((link) => !isWithdrawnTechnicalPath(link.href) && !isHiddenCaseEntry(link.href)
     && link.href !== `/${locale}/news/${item.slug}`);
 }

@@ -1,6 +1,6 @@
 import { corePageText, localizeCoreValue } from '@/lib/core-page-localization';
 import type { Locale } from '@/types/site';
-import { isWithdrawnTechnicalPath } from '@/lib/publication-scope';
+import { isWithdrawnTechnicalPath, isHiddenCaseEntry } from '@/lib/publication-scope';
 import type { ReactNode } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -62,6 +62,7 @@ export function IndustryFurnaceDetailPage({ slug, locale = 'zh' }: { slug: Indus
     ? [
         [t("网带炉产量怎样核算"), t("/zh/news/shuju-news-23")],
         [t("网带炉整线报价的九项边界"), t("/zh/news/shuju-news-22")],
+        [locale === 'en' ? 'Carburizing throughput: soak time and line limits' : '网带渗碳产量：保温时间与整线限制', `/${locale}/news/mesh-belt-carburizing-throughput-process-limits`],
         [t("调质网带整线产量：历史方案参考"), t("/zh/case/belt-quench-wash-temper-line-throughput-balance-proposal")],
         [t("网带退火带速与排料：历史方案参考"), t("/zh/case/roller-belt-speed-loading-throughput-proposal")],
       ]
@@ -455,7 +456,7 @@ export function IndustryFurnaceDetailPage({ slug, locale = 'zh' }: { slug: Indus
               <div className={styles.relatedArticles}>
                 <h3>{t("选型资料")}</h3>
                 <div>
-                  {evidenceLinks.filter(([, href]) => href !== '#related-case-evidence' && !isWithdrawnTechnicalPath(href)).map(([title, href], index) => (
+                  {evidenceLinks.filter(([, href]) => href !== '#related-case-evidence' && !isWithdrawnTechnicalPath(href) && !isHiddenCaseEntry(href)).map(([title, href], index) => (
                     <Link key={href} href={href}>
                       <span>{index + 1}</span>
                       <strong>{title}</strong>

@@ -1,6 +1,6 @@
 import type { Locale } from '@/types/site';
 import { getEnglishLineProcess } from '@/lib/production-line-content-en';
-import { isWithdrawnTechnicalPath, TECHNICAL_CONTENT_PUBLISHED } from '@/lib/publication-scope';
+import { isWithdrawnTechnicalPath, isHiddenCaseEntry, TECHNICAL_CONTENT_PUBLISHED } from '@/lib/publication-scope';
 import Link from 'next/link';
 import { HiArrowRight, HiChevronDown } from 'react-icons/hi2';
 
@@ -459,7 +459,7 @@ export function ProductionLineDetailPage({ content, locale = 'zh' }: { content: 
             ))}
           </div>
           <aside className={styles.related} aria-label={t('相关内容', 'Related resources')}>
-            {s.faq.relatedGroups.map((group) => ({ ...group, links: group.links.filter((item) => !isWithdrawnTechnicalPath(item.href ?? relatedHref(item.label, locale) ?? '')) })).filter((group) => group.links.length).map((group) => (
+            {s.faq.relatedGroups.map((group) => ({ ...group, links: group.links.filter((item) => !isWithdrawnTechnicalPath(item.href ?? relatedHref(item.label, locale) ?? '') && !isHiddenCaseEntry(item.href ?? relatedHref(item.label, locale) ?? '')) })).filter((group) => group.links.length).map((group) => (
               <div key={group.id}>
                 <h3>{group.title}</h3>
                 <ul>

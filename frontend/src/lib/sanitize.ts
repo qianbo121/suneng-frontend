@@ -1,4 +1,4 @@
-import { isWithdrawnTechnicalPath } from './publication-scope';
+import { isWithdrawnTechnicalPath, isHiddenCaseEntry } from './publication-scope';
 import DOMPurify from 'isomorphic-dompurify';
 import { newsImageNoteReplacements } from './news-image-notes';
 import { getReviewedNewsImageDescription } from './news-image-descriptions';
@@ -173,7 +173,7 @@ export function prepareNewsArticleHtml(
     }
   }
   for (const link of root.querySelectorAll('a[href]')) {
-    if (isWithdrawnTechnicalPath(link.getAttribute('href') ?? '')) link.replaceWith(...Array.from(link.childNodes));
+    if (isWithdrawnTechnicalPath(link.getAttribute('href') ?? '') || isHiddenCaseEntry(link.getAttribute('href') ?? '')) link.replaceWith(...Array.from(link.childNodes));
   }
   const coverPath = canonicalAssetPath(options.coverImage);
 
