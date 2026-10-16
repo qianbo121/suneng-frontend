@@ -44,6 +44,32 @@ function coverageRow(at: string, eventType = 'page_view') {
 }
 
 describe('ShujuGrowthReadService', () => {
+  it('does not execute unused segmentation for the opt-in dashboard profile', async () => {
+    const queryRaw = routedQueryRaw([]);
+    const service = new ShujuGrowthReadService({ $queryRaw: queryRaw } as unknown as PrismaService);
+    await service.overview({
+      startDate: '2026-09-16',
+      endDate: '2026-10-15',
+      responseProfile: 'dashboard',
+    });
+    expect(
+      queryRaw.mock.calls.some(([sql]) =>
+        (sql as { strings: string[] }).strings
+          .join('?')
+          .includes('GROUP BY day, "eventType", "pagePath"'),
+      ),
+    ).toBe(false);
+    queryRaw.mockClear();
+    await service.overview({ startDate: '2026-09-16', endDate: '2026-10-15' });
+    expect(
+      queryRaw.mock.calls.some(([sql]) =>
+        (sql as { strings: string[] }).strings
+          .join('?')
+          .includes('GROUP BY day, "eventType", "pagePath"'),
+      ),
+    ).toBe(true);
+  });
+
   it('fills calendar days with a real zero instead of dropping them from the trend', () => {
     const result = fillDailyPageViewGaps(
       [
@@ -228,7 +254,7 @@ describe('ShujuGrowthReadService', () => {
     expect(result.pages[0]).toEqual(
       expect.objectContaining({ pagePath: '/zh/products/detail/trolley-furnace', pageViews: 10 }),
     );
-    expect(result.segments[0]).toEqual(
+    expect(result.segments![0]).toEqual(
       expect.objectContaining({ sourceDetail: 'example.com', deviceType: 'PC', events: 10 }),
     );
     expect(JSON.stringify(result)).not.toMatch(/visitorId|sessionId|phone|email|requirement/);

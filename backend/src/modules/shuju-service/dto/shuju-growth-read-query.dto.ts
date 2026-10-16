@@ -1,6 +1,11 @@
 import { IsDateString, IsIn, IsOptional } from 'class-validator';
 
 export class ShujuGrowthReadQueryDto {
+  /** Opt-in compact transport; all business metrics keep their existing meaning. */
+  @IsOptional()
+  @IsIn(['full', 'dashboard'])
+  responseProfile?: 'full' | 'dashboard';
+
   @IsDateString()
   startDate!: string;
 

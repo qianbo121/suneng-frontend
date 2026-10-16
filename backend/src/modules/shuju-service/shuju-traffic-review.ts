@@ -32,8 +32,18 @@ export async function readTrafficReview(
     : Prisma.sql`FALSE`;
   const rows = await prisma.$queryRaw<ReviewRow[]>(Prisma.sql`
     WITH scoped AS MATERIALIZED (
-      SELECT *, NULLIF(BTRIM("sessionId"), '') AS sid,
+      SELECT "eventType", "submissionId", "isBot",
+        NULLIF(BTRIM("sessionId"), '') AS sid,
         NULLIF(BTRIM("visitorId"), '') AS vid,
+        "eventType" = 'automation_signal' OR COALESCE(properties->'automationDetected' = 'true'::jsonb, FALSE) AS automation,
+        properties->'manual_qa' = 'true'::jsonb AS qa,
+        properties->'internal_traffic' = 'true'::jsonb AS internal,
+        "eventType" IN ('human_signal', 'effective_interaction')
+          AND properties->'evidenceVersion' = '1'::jsonb
+          AND properties->>'interactionStrength' = 'strong'
+          AND properties->>'interactionType' IN ('click', 'pointerdown', 'touchstart', 'keydown') AS strong_input,
+        properties->>'collectorVersion' = '2' AS new_collector,
+        properties->'serverEvidence'->'version' = '1'::jsonb AS server_evidence,
         ${allowedTraffic('WebsiteLeadEvent', automatedSessions, true)} AS legacy_allowed
       FROM "WebsiteLeadEvent" WHERE ${scopedWhere}
     ), sessions AS MATERIALIZED (
@@ -50,9 +60,9 @@ export async function readTrafficReview(
       SELECT s.*, CASE
         WHEN "eventType" = 'form_submit' AND "submissionId" IS NOT NULL THEN NULL
         WHEN COALESCE(l.bot, s."isBot") THEN 'known_bot_agent'
-        WHEN COALESCE(l.automation, s."eventType" = 'automation_signal' OR COALESCE(s.properties->'automationDetected' = 'true'::jsonb, FALSE)) THEN 'automation_marker'
-        WHEN COALESCE(l.qa, s.properties->'manual_qa' = 'true'::jsonb, FALSE) THEN 'manual_qa'
-        WHEN COALESCE(l.internal, s.properties->'internal_traffic' = 'true'::jsonb, FALSE) THEN 'internal_traffic'
+        WHEN COALESCE(l.automation, s.automation) THEN 'automation_marker'
+        WHEN COALESCE(l.qa, s.qa, FALSE) THEN 'manual_qa'
+        WHEN COALESCE(l.internal, s.internal, FALSE) THEN 'internal_traffic'
         ELSE NULL END AS explicit_reason,
         ${automated} AS inferred_or_marked
       FROM scoped s LEFT JOIN lifecycle l USING (sid)
@@ -66,18 +76,15 @@ export async function readTrafficReview(
         BOOL_OR("eventType" = 'page_view') AS page,
         BOOL_OR("eventType" IN ('dwell_5s', 'dwell_20s', 'dwell_60s', 'dwell_180s')) AS dwell,
         BOOL_OR("eventType" = 'dwell_20s') AS dwell20,
-        BOOL_OR("eventType" IN ('human_signal', 'effective_interaction')
-          AND properties->'evidenceVersion' = '1'::jsonb
-          AND properties->>'interactionStrength' = 'strong'
-          AND properties->>'interactionType' IN ('click', 'pointerdown', 'touchstart', 'keydown')) AS strong
+        BOOL_OR(strong_input) AS strong
       FROM classified WHERE explicit_reason IS NULL AND sid IS NOT NULL GROUP BY sid
     ), expanded AS (
-      SELECT 'recorded' AS bucket, c.* FROM classified c
-      UNION ALL SELECT 'legacy', c.* FROM classified c WHERE legacy_allowed
-      UNION ALL SELECT 'candidate', c.* FROM classified c WHERE explicit_reason IS NULL
-      UNION ALL SELECT category, c.* FROM classified c
-      UNION ALL SELECT explicit_reason, c.* FROM classified c WHERE explicit_reason IS NOT NULL
-      UNION ALL SELECT 'behavior_network_inference', c.* FROM classified c WHERE category = 'pendingReview'
+      SELECT 'recorded' AS bucket, "eventType", sid, vid FROM classified
+      UNION ALL SELECT 'legacy', "eventType", sid, vid FROM classified WHERE legacy_allowed
+      UNION ALL SELECT 'candidate', "eventType", sid, vid FROM classified WHERE explicit_reason IS NULL
+      UNION ALL SELECT category, "eventType", sid, vid FROM classified
+      UNION ALL SELECT explicit_reason, "eventType", sid, vid FROM classified WHERE explicit_reason IS NOT NULL
+      UNION ALL SELECT 'behavior_network_inference', "eventType", sid, vid FROM classified WHERE category = 'pendingReview'
     ), aggregates AS (
       SELECT bucket, JSONB_BUILD_OBJECT(
         'visitors', COUNT(DISTINCT vid) FILTER (WHERE "eventType" = 'page_view'),
@@ -94,8 +101,8 @@ export async function readTrafficReview(
         'candidateStrongInputSessions', (SELECT COUNT(*) FROM candidate_sessions WHERE strong),
         'candidateDwell20WithStrongInputSessions', (SELECT COUNT(*) FROM candidate_sessions WHERE page AND dwell20 AND strong),
         'candidatePageSessionsWithoutStrongInput', (SELECT COUNT(*) FROM candidate_sessions WHERE page AND NOT strong),
-        'candidatePageSessionsWithNewCollector', (SELECT COUNT(DISTINCT sid) FROM classified WHERE explicit_reason IS NULL AND "eventType" = 'page_view' AND properties->>'collectorVersion' = '2'),
-        'candidatePageSessionsWithServerEvidence', (SELECT COUNT(DISTINCT sid) FROM classified WHERE explicit_reason IS NULL AND "eventType" = 'page_view' AND properties->'serverEvidence'->'version' = '1'::jsonb)
+        'candidatePageSessionsWithNewCollector', (SELECT COUNT(DISTINCT sid) FROM classified WHERE explicit_reason IS NULL AND "eventType" = 'page_view' AND new_collector),
+        'candidatePageSessionsWithServerEvidence', (SELECT COUNT(DISTINCT sid) FROM classified WHERE explicit_reason IS NULL AND "eventType" = 'page_view' AND server_evidence)
       ) AS gaps,
       JSONB_BUILD_OBJECT(
         'recorded', (SELECT COUNT(DISTINCT "submissionId") FROM classified WHERE "eventType" = 'form_submit'),

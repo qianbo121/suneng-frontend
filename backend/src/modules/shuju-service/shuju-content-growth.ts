@@ -206,6 +206,16 @@ export async function readContentGrowth(
       -- Reuse the normalised source already required by operating metrics.
       SELECT path, source_type, source_detail, COUNT(*) AS visits FROM entries
       GROUP BY path, 2, 3
+    ), page_daily_payloads AS (
+      -- Build each page's arrays once instead of rescanning all daily/source groups
+      -- for every ranked page. Ranking and visitor/visit attribution are unchanged.
+      SELECT path, JSONB_AGG(JSONB_BUILD_OBJECT('date', day, 'visits', visits) ORDER BY day) AS payload
+      FROM entry_daily GROUP BY path
+    ), page_source_payloads AS (
+      SELECT path, JSONB_AGG(JSONB_BUILD_OBJECT('sourceType', source_type,
+        'sourceDetail', source_detail, 'visits', visits)
+        ORDER BY visits DESC, source_type, source_detail) AS payload
+      FROM entry_sources GROUP BY path
     ), global_daily AS (
       SELECT day, SUM(visits) AS visits FROM entry_daily GROUP BY day
     ), global_sources AS (
@@ -282,12 +292,11 @@ export async function readContentGrowth(
         'directSubmissions', r.direct_submissions, 'entryVisits', r.entry_visits,
         'associatedSubmissions', r.associated, 'crossPageSubmissions', r.cross_page,
         'unlinkedDirectSubmissions', r.unlinked_direct, 'unidentifiedPageViews', r.unidentified_views,
-        'daily', COALESCE((SELECT JSONB_AGG(JSONB_BUILD_OBJECT('date', d.day, 'visits', d.visits) ORDER BY d.day)
-          FROM entry_daily d WHERE d.path = r.path), '[]'::jsonb),
-        'sources', COALESCE((SELECT JSONB_AGG(JSONB_BUILD_OBJECT('sourceType', s.source_type,
-          'sourceDetail', s.source_detail, 'visits', s.visits) ORDER BY s.visits DESC, s.source_type, s.source_detail)
-          FROM entry_sources s WHERE s.path = r.path), '[]'::jsonb)
-      ) ORDER BY r.entry_visits DESC, r.visitors DESC, r.path) FROM ranked r), '[]'::jsonb),
+        'daily', COALESCE(d.payload, '[]'::jsonb),
+        'sources', COALESCE(s.payload, '[]'::jsonb)
+      ) ORDER BY r.entry_visits DESC, r.visitors DESC, r.path)
+        FROM ranked r LEFT JOIN page_daily_payloads d ON d.path = r.path
+        LEFT JOIN page_source_payloads s ON s.path = r.path), '[]'::jsonb),
       'totalPages', (SELECT COUNT(*) FROM page_metrics),
       'entryVisits', (SELECT COUNT(*) FROM entries),
       'submissions', (SELECT COUNT(*) FROM scoped_submissions),

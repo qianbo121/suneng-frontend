@@ -596,7 +596,9 @@ export class ShujuGrowthReadService {
         ORDER BY "pageViews" DESC, visitors DESC
         LIMIT 200
       `),
-      this.prisma.$queryRaw<SegmentRow[]>(Prisma.sql`
+      query.responseProfile === 'dashboard'
+        ? Promise.resolve<SegmentRow[]>([])
+        : this.prisma.$queryRaw<SegmentRow[]>(Prisma.sql`
         SELECT
           TO_CHAR("createdAt" AT TIME ZONE 'UTC' AT TIME ZONE 'Asia/Shanghai', 'YYYY-MM-DD') AS day,
           "eventType",
@@ -902,20 +904,26 @@ export class ShujuGrowthReadService {
         stepCompletedVisitors: count(row.stepCompletedVisitors),
         submissionVisitors: count(row.submissionVisitors),
       })),
-      segments: segments.map((row) => ({
-        date: row.day,
-        eventType: row.eventType,
-        pagePath: row.pagePath,
-        pageTitle: row.pageTitle,
-        pageType: normalizedPageType(row.pageType),
-        productTag: row.productTag || '其他',
-        sourceType: row.sourceType || '无法识别',
-        sourceDetail: row.sourceDetail || null,
-        deviceType: row.deviceType || '无法识别',
-        events: count(row.events),
-        visitors: count(row.visitors),
-        sessions: count(row.sessions),
-      })),
+      // The dashboard never consumes this legacy multidimensional export.
+      // Default/full callers retain it; compact callers explicitly omit it.
+      ...(query.responseProfile === 'dashboard'
+        ? {}
+        : {
+            segments: segments.map((row) => ({
+              date: row.day,
+              eventType: row.eventType,
+              pagePath: row.pagePath,
+              pageTitle: row.pageTitle,
+              pageType: normalizedPageType(row.pageType),
+              productTag: row.productTag || '其他',
+              sourceType: row.sourceType || '无法识别',
+              sourceDetail: row.sourceDetail || null,
+              deviceType: row.deviceType || '无法识别',
+              events: count(row.events),
+              visitors: count(row.visitors),
+              sessions: count(row.sessions),
+            })),
+          }),
     };
   }
 }

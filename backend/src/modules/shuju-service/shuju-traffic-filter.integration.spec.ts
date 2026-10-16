@@ -564,6 +564,22 @@ integration('traffic exclusions against isolated PostgreSQL', () => {
     expect(result.content.entryVisits).toBe(2);
   });
 
+  it('does not let null or blank internal markers exclude unrelated visits', async () => {
+    for (const session of [null, '', ' ', ' padded ']) {
+      await event('module_view', session, start.getTime() - 1000, {
+        properties: { internal_traffic: true },
+      });
+    }
+    for (const session of [null, '', ' ', 'padded', ' padded ', 'ordinary']) {
+      await event('page_view', session, morning);
+    }
+    const rows = await prisma.$queryRaw<{ sessionId: string | null }[]>(Prisma.sql`
+      SELECT "sessionId" FROM "WebsiteLeadEvent" e
+      WHERE e."eventType" = 'page_view' AND ${allowedTraffic('e', [], true)} ORDER BY id
+    `);
+    expect(rows.map((row) => row.sessionId)).toEqual([null, '', ' ', 'padded', 'ordinary']);
+  });
+
   it('excludes explicit internal reading without dropping contact facts, real inquiries or raw audit rows', async () => {
     await visit('internal-browsing', {}, publicPrefixes.slice(0, 1));
     // The one explicit marker covers the same visit across dates/languages, never other visits.
