@@ -106,7 +106,7 @@ const heroPartnerLogos: HeroPartnerLogo[] = [
   },
   {
     name: '六和轻合金（苏州）有限公司',
-    nameEn: "Lioho Light Alloy (Suzhou)",
+    nameEn: "六和轻合金（苏州）有限公司",
     src: '/images/partners/homepage/11-liuhe-light-alloy.png',
     alt: '六和轻合金（苏州）有限公司',
     width: 427,

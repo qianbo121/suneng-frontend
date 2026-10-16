@@ -4,7 +4,7 @@ import styles from './quote.module.css';
 import { ReviewedFaqs } from '../ReviewedFaqs';
 import faqs from './quote-faqs.json';
 import { CopyQuoteChecklistButton } from '@/app/[locale]/articles/gongye-lu-baojia-canshu/CopyQuoteChecklistButton';
-import { ProductLeadForm } from '@/components/products/ProductLeadForm';
+import { HomepageLeadForm } from '@/components/home/HomepageLeadForm';
 import { FurnaceGuideTabs } from '../FurnaceGuideTabs';
 import checklist from './quote-checklist.json';
 
@@ -1034,9 +1034,15 @@ export function QuoteContent() {
         </div>
       </ReviewedDocument>
       <section id="contact" className={styles.contactSection}>
-        <ProductLeadForm
+        <HomepageLeadForm
           locale="zh"
-          anchorId="quote-requirements"
+          sectionId="quote-requirements"
+          pageType="报价资料页"
+          productTag="单台工业炉报价参数"
+          successProductTag="单台工业炉报价需求"
+          sourceModule="quote_requirements_form"
+          revealResult
+          privacyNoticeEnabled
           title="提交工业炉报价需求"
           description="资料不完整也可以先沟通，工程师会据此判断需要补充哪些参数。"
           submitLabel="提交报价需求"

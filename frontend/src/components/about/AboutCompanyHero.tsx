@@ -22,7 +22,11 @@ export function AboutCompanyHero({ className, locale = 'zh' }: { className?: str
             <p className={styles.kicker}>ABOUT SUNENG</p>
             <h1 id="manufacturer-title">{t("关于苏能工业炉")}</h1>
             <p className={styles.heroLead}>
-              {t("江苏苏能工业炉有限公司是工业炉设备制造商，生产基地位于江苏泰州，提供非标工业炉、热处理生产线及工业炉大修与改造服务。")}</p>
+              <strong className={styles.slogan}>
+                {locale === 'zh' ? <>工业炉单机、配套件与整线设备<span className={styles.sloganTail}>一体化解决方案商</span></> : t("工业炉单机、配套件与整线设备一体化解决方案商")}
+              </strong>
+              <span className={styles.companyIntro}>{t("江苏苏能工业炉有限公司成立于2006年，是工业炉设备制造商，生产基地位于江苏泰州。")}</span>
+            </p>
           </div>
 
           <div className={styles.actions} data-about-layout="hero-actions">

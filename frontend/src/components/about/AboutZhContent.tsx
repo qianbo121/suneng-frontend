@@ -136,6 +136,7 @@ const sourceCertificateCards = [
     title: '国家高新技术企业',
     summary: highTechCertificate.subtitle!,
     detail: `证书编号：${highTechCertificate.certificateNo}`,
+    additionalDetails: ['发证日期：2024 年 12 月 16 日'],
     image: highTechCertificate.image,
     alt: highTechCertificate.alt,
     linkLabel: '查看证书',
@@ -145,6 +146,7 @@ const sourceCertificateCards = [
     summary: '适用于工业电阻炉、燃气炉的设计与制造',
     detail: `证书编号：${isoCertificate.certificateNo}`,
     validUntil: isoCertificate.validUntil,
+    additionalDetails: ['发证机构：北京世标认证中心有限公司', '首次发证：2015 年 1 月 12 日'],
     image: isoCertificate.image,
     alt: isoCertificate.alt,
     linkLabel: '查看证书',
@@ -153,6 +155,10 @@ const sourceCertificateCards = [
     title: `${SUNENG_PATENT_CERTIFICATES.length} 项授权专利`,
     summary: '覆盖电阻炉、燃气热处理炉、固溶生产线等设备方向',
     detail: '点击查看专利证书代表图',
+    additionalDetails: [
+      '其中发明专利 3 项、实用新型专利 11 项',
+      '2020 年 7 月 3 日，《一种锻造炉》获发明专利授权。',
+    ],
     image: patentCertificate.image,
     alt: patentCertificate.alt,
     linkLabel: '查看专利证书',
@@ -200,19 +206,6 @@ const sourcePartnerLogos = [
   },
 ] as const;
 
-const sourceFaqJsonLd = {
-  '@context': 'https://schema.org',
-  '@type': 'FAQPage',
-  mainEntity: ABOUT_FAQS.map((item) => ({
-    '@type': 'Question',
-    name: item.question,
-    acceptedAnswer: {
-      '@type': 'Answer',
-      text: item.answer,
-    },
-  })),
-};
-
 export function AboutZhContent({ locale = 'zh' }: { locale?: Locale }) {
   const t = (text: string) => corePageText(text, locale);
   const workflowItems = localizeCoreValue(sourceWorkflowItems, locale);
@@ -220,7 +213,19 @@ export function AboutZhContent({ locale = 'zh' }: { locale?: Locale }) {
   const capabilityItems = localizeCoreValue(sourceCapabilityItems, locale);
   const certificateCards = localizeCoreValue(sourceCertificateCards, locale).map((card, index) => locale === 'en' && index === 2 ? { ...card, title: `${SUNENG_PATENT_CERTIFICATES.length} granted patents` } : card);
   const partnerLogos = localizeCoreValue(sourcePartnerLogos, locale);
-  const faqJsonLd = localizeCoreValue(sourceFaqJsonLd, locale);
+  const faqs = localizeCoreValue(ABOUT_FAQS, locale);
+  const faqJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map((item) => ({
+      '@type': 'Question',
+      name: item.question,
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: Array.isArray(item.answer) ? item.answer.join('\n') : item.answer,
+      },
+    })),
+  };
 
   return (
     <div lang={locale} className={styles.page}>
@@ -238,11 +243,6 @@ export function AboutZhContent({ locale = 'zh' }: { locale?: Locale }) {
       <AboutAnchorNav items={localizeCoreValue(ABOUT_ANCHORS, locale)} locale={locale} />
 
       <AboutCompanyHero locale={locale} className={styles.sectionAnchor} />
-      <div className={styles.container}>
-        <p className={styles.visitStrip} data-company-facts>
-          <span>{t("江苏苏能工业炉有限公司成立于 2006 年，注册资本 5080 万元，累计开展 1000+ 工业炉新建与改造项目；生产基地为公司自报约 14700㎡，位于")}{siteSettings.address[locale]}{t("。具体设备性能按项目工况确认。")}</span>
-        </p>
-      </div>
 
 
       <section
@@ -386,6 +386,7 @@ export function AboutZhContent({ locale = 'zh' }: { locale?: Locale }) {
                     loading="lazy"
                     sizes="112px"
                   />
+                  <span className={styles.partnerName}>{partner.name}</span>
                 </li>
               ))}
             </ul>
@@ -406,7 +407,7 @@ export function AboutZhContent({ locale = 'zh' }: { locale?: Locale }) {
             </div>
           </div>
 
-          <AboutFaq items={localizeCoreValue(ABOUT_FAQS, locale)} />
+          <AboutFaq items={faqs} />
 
           <div className={styles.faqContact}>
             <p>

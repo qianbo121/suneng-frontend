@@ -59,6 +59,20 @@
   text-wrap: pretty;
 }
 
+.slogan {
+  display: block;
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 32px;
+}
+
+.companyIntro {
+  display: block;
+  margin-top: 8px;
+  font-size: 16px;
+  line-height: 26px;
+}
+
 .video {
   grid-column: 4;
   grid-row: 2 / 4;
@@ -343,6 +357,20 @@
     margin-top: 18px;
     font-size: 16px;
     line-height: 28px;
+  }
+
+  .slogan {
+    font-size: 16px;
+    line-height: 26px;
+  }
+
+  .sloganTail {
+    display: block;
+  }
+
+  .companyIntro {
+    font-size: 14px;
+    line-height: 24px;
   }
 
   .actions {

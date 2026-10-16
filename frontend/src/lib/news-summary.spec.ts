@@ -40,3 +40,12 @@ describe('news summaries', () => {
     expect(getNewsSummary('zh', item)).toBe('选型正文。');
   });
 });
+
+it('stops after two complete summary sentences without parsing the remaining body', () => {
+  const parse = vi.spyOn(sanitizeHelpers, 'richTextToPlainText');
+  try {
+    const item = { ...article, summaryZh: '', contentZh: '<p>第一句。</p><p>第二句。</p>' + '<p>后续详细资料。</p>'.repeat(200) };
+    expect(getNewsSummary('zh', item)).toBe('第一句。 第二句。');
+    expect(parse.mock.calls.length).toBeLessThan(8);
+  } finally { parse.mockRestore(); }
+});

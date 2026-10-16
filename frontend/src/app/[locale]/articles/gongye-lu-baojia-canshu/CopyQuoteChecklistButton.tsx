@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 type CopyQuoteChecklistButtonProps = {
   text: string;
@@ -25,7 +25,18 @@ export function CopyQuoteChecklistButton({
   wrapperClassName = defaultWrapperClassName,
   messageClassName = defaultMessageClassName,
 }: CopyQuoteChecklistButtonProps) {
-  const [message, setMessage] = useState('');
+  const [feedback, setFeedback] = useState({ message: '', attempt: 0 });
+  const messageRef = useRef<HTMLParagraphElement>(null);
+  const setMessage = (message: string) => setFeedback((previous) => ({
+    message, attempt: previous.attempt + 1,
+  }));
+
+  useEffect(() => {
+    if (!feedback.message) return;
+    // The message's scroll margins reserve the sticky chapter bar and mobile
+    // contact toolbar. Repeated copies must also bring the result into view.
+    messageRef.current?.scrollIntoView({ block: 'nearest', inline: 'nearest', behavior: 'instant' });
+  }, [feedback]);
 
   const copyWithFallback = async () => {
     if (navigator.clipboard?.writeText) {
@@ -97,9 +108,9 @@ export function CopyQuoteChecklistButton({
       <button type="button" onClick={handleCopy} className={className ?? defaultButtonClassName}>
         {label}
       </button>
-      {message ? (
-        <p className={messageClassName} aria-live="polite">
-          {message}
+      {feedback.message ? (
+        <p ref={messageRef} className={messageClassName} role="status" aria-live="polite">
+          {feedback.message}
         </p>
       ) : null}
     </div>

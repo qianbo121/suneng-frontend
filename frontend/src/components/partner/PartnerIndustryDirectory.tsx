@@ -2,6 +2,7 @@
 
 import { useId, useState } from 'react';
 import { partnerText } from '@/lib/partner-copy';
+import { partnerSearchAliases } from '@/lib/partner-search-aliases';
 import type { Locale } from '@/types/site';
 import type { Partner } from './map-kit/PartnerMap';
 import { PARTNER_INDUSTRY_GROUPS, partnerIndustryGroup } from '@/lib/partner-industry-groups';
@@ -22,7 +23,7 @@ export function PartnerIndustryDirectory({ partners, locale = 'zh' }: { partners
     (partner) =>
       (group === '全部行业' || partnerIndustryGroup(partner.industry) === group) &&
       (!needle ||
-        normalize(`${partner.fullName} ${partner.shortName} ${partner.industry ?? ''} ${t(partner.industry ?? '')}`).includes(
+        normalize(`${partner.fullName} ${partner.shortName} ${partnerSearchAliases(partner.fullName)} ${partner.industry ?? ''} ${t(partner.industry ?? '')}`).includes(
           needle,
         )),
   );
