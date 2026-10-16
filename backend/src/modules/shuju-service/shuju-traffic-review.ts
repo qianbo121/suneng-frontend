@@ -32,7 +32,7 @@ export async function readTrafficReview(
     : Prisma.sql`FALSE`;
   const query = Prisma.sql`
     WITH scoped AS MATERIALIZED (
-      SELECT *, NULLIF(BTRIM("sessionId"), '') AS sid,
+      SELECT "eventType", "submissionId", "isBot", properties, NULLIF(BTRIM("sessionId"), '') AS sid,
         NULLIF(BTRIM("visitorId"), '') AS vid,
         ${allowedTraffic('WebsiteLeadEvent', automatedSessions, true)} AS legacy_allowed
       FROM "WebsiteLeadEvent" WHERE ${scopedWhere}
@@ -72,12 +72,12 @@ export async function readTrafficReview(
           AND properties->>'interactionType' IN ('click', 'pointerdown', 'touchstart', 'keydown')) AS strong
       FROM classified WHERE explicit_reason IS NULL AND sid IS NOT NULL GROUP BY sid
     ), expanded AS (
-      SELECT 'recorded' AS bucket, c.* FROM classified c
-      UNION ALL SELECT 'legacy', c.* FROM classified c WHERE legacy_allowed
-      UNION ALL SELECT 'candidate', c.* FROM classified c WHERE explicit_reason IS NULL
-      UNION ALL SELECT category, c.* FROM classified c
-      UNION ALL SELECT explicit_reason, c.* FROM classified c WHERE explicit_reason IS NOT NULL
-      UNION ALL SELECT 'behavior_network_inference', c.* FROM classified c WHERE category = 'pendingReview'
+      SELECT 'recorded' AS bucket, c."eventType", c.sid, c.vid FROM classified c
+      UNION ALL SELECT 'legacy', c."eventType", c.sid, c.vid FROM classified c WHERE legacy_allowed
+      UNION ALL SELECT 'candidate', c."eventType", c.sid, c.vid FROM classified c WHERE explicit_reason IS NULL
+      UNION ALL SELECT category, c."eventType", c.sid, c.vid FROM classified c
+      UNION ALL SELECT explicit_reason, c."eventType", c.sid, c.vid FROM classified c WHERE explicit_reason IS NOT NULL
+      UNION ALL SELECT 'behavior_network_inference', c."eventType", c.sid, c.vid FROM classified c WHERE category = 'pendingReview'
     ), aggregates AS (
       SELECT bucket, JSONB_BUILD_OBJECT(
         'visitors', COUNT(DISTINCT vid) FILTER (WHERE "eventType" = 'page_view'),
