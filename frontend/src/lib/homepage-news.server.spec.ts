@@ -31,7 +31,7 @@ describe('homepage article wait budget', () => {
   it.each(['zh', 'en'] as const)('keeps available %s data and the shared cache', async (locale) => {
     vi.mocked(getNewsDecisionCenterData).mockResolvedValue(success);
     await expect(getHomepageNewsData(locale)).resolves.toBe(success);
-    expect(getNewsDecisionCenterData).toHaveBeenCalledWith(locale);
+    expect(getNewsDecisionCenterData).toHaveBeenCalledWith(locale, true);
     expect(vi.getTimerCount()).toBe(0);
   });
 
