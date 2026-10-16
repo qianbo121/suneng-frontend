@@ -76,6 +76,41 @@ class VisualScopeTest(unittest.TestCase):
                 self.assertEqual(result.changed_paths, 1)
                 self.assertIn('unit tests and builds still run', result.reason)
 
+    def test_reviewed_statistics_bundle_skips_only_screenshots(self):
+        paths = (
+            'backend/src/modules/shuju-service/shuju-traffic-review.ts',
+            'backend/src/modules/shuju-service/shuju-traffic-filter.integration.spec.ts',
+            'backend/src/modules/shuju-service/shuju-growth-read.service.spec.ts',
+            'backend/src/modules/shuju-service/shuju-source-output.spec.ts',
+            'backend/src/modules/shuju-service/shuju-content-growth.integration.spec.ts',
+        )
+        for path in paths:
+            self.write(path, 'original statistics fixture\n')
+        base = self.commit('statistics fixtures')
+        for path in paths:
+            self.write(path, 'reviewed statistics correction\n')
+        head = self.commit('statistics correction and companion tests')
+        for event in ('pull_request', 'push'):
+            with self.subTest(event=event):
+                result = self.classified(head, base=base, event=event)
+                self.assertFalse(result.required)
+                self.assertEqual(result.changed_paths, len(paths))
+                self.assertIn('unit tests and builds still run', result.reason)
+
+    def test_statistics_mixed_with_ui_schema_or_unknown_backend_is_full(self):
+        for path in (
+            UI, 'pnpm-lock.yaml', 'backend/prisma/schema.prisma',
+            'backend/src/modules/shuju-service/shuju-service.controller.ts',
+            'backend/src/modules/shuju-service/unreviewed-report.ts',
+        ):
+            with self.subTest(path=path):
+                self.git('reset', '--hard', self.base)
+                self.git('clean', '-fd')
+                self.write('backend/src/modules/shuju-service/shuju-traffic-review.ts',
+                           'reviewed statistics correction\n')
+                self.write(path, 'additional change\n')
+                self.assertTrue(self.classified(self.commit('mixed statistics change')).required)
+
     def test_acceptance_tools_and_reviewed_logic_can_share_a_change(self):
         for path in scope.READ_ONLY_ACCEPTANCE_PATHS:
             self.write(path, 'read-only tool fixture\n')

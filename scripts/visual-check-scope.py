@@ -36,6 +36,11 @@ NON_RENDERING_PATHS = frozenset({
     'backend/src/modules/shuju-service/shuju-growth-read.service.ts',
     'backend/src/modules/shuju-service/shuju-growth-read.service.spec.ts',
     'backend/src/modules/shuju-service/shuju-growth-read-order.spec.ts',
+    # Corporate screenshot fixtures do not execute this statistics query.
+    # Backend checks and live statistics acceptance remain required.
+    'backend/src/modules/shuju-service/shuju-traffic-review.ts',
+    'backend/src/modules/shuju-service/shuju-source-output.spec.ts',
+    'backend/src/modules/shuju-service/shuju-content-growth.integration.spec.ts',
 })
 
 # These files only run read-only acceptance against a separately frozen source.
