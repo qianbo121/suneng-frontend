@@ -107,6 +107,7 @@ export async function readTrafficReview(
       ) AS gaps,
       JSONB_BUILD_OBJECT(
         'recorded', (SELECT COUNT(DISTINCT "submissionId") FROM classified WHERE "eventType" = 'form_submit'),
+        'manualQaExcluded', (SELECT COUNT(DISTINCT "submissionId") FROM classified WHERE "eventType" = 'form_submit' AND explicit_reason = 'manual_qa'),
         'candidate', (SELECT COUNT(DISTINCT "submissionId") FROM classified WHERE "eventType" = 'form_submit' AND explicit_reason IS NULL),
         'legacy', (SELECT COUNT(DISTINCT "submissionId") FROM classified WHERE "eventType" = 'form_submit' AND legacy_allowed)
       ) AS submissions
@@ -154,7 +155,12 @@ export async function readTrafficReview(
       'behavior_network_inference',
     ].map((reason) => ({ reason, ...metrics(reason) })),
     evidenceGaps: row?.gaps || {},
-    serverSubmissions: row?.submissions || { recorded: 0, candidate: 0, legacy: 0 },
+    serverSubmissions: row?.submissions || {
+      recorded: 0,
+      candidate: 0,
+      legacy: 0,
+      manualQaExcluded: 0,
+    },
     anomalyDays: ['2026-09-16', '2026-09-24']
       .filter((date) => date >= startDay && date <= endDay)
       .map((date) => ({
