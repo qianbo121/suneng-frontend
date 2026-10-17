@@ -24,6 +24,38 @@ describe('complete article search text', () => {
     expect(newsSearchText(html)).toBe(richTextToPlainText(html));
   });
 
+  it.each([
+    ['unclosed tag with whitespace', `<p${' '.repeat(6400)}<p>x</p>`],
+    ['unclosed attributes with whitespace', `<p a${' '.repeat(6400)}<b>`],
+    ['unclosed quote with repeated tag starts', `<p title="${'<p '.repeat(6400)}`],
+    ['valid long indentation', `before<p\n${' '.repeat(12800)}title="a > b">x</p>after`],
+    ['quoted opening brackets', '<p title="<p attr=\'value\'>">x</p><p>y</p>'],
+  ])('handles %s without stalling and preserves the established text', (_label, html) => {
+    const expected = richTextToPlainText(html);
+    const startedAt = performance.now();
+    const actual = newsSearchText(html);
+
+    expect(actual).toBe(expected);
+    // A wide regression bound: the reported 6400-space input took about 60s.
+    expect(performance.now() - startedAt).toBeLessThan(2000);
+  });
+
+  it.each([
+    ['<p a"b>中文</p><i c">尾', '中文 尾'],
+    ['<p title=x"y>保温</p><i z">完', '保温 完'],
+    ['<p ="><b>中</b><i =">尾', '中尾'],
+    ["<p a'b>中文</p><i c'>尾", '中文 尾'],
+    ["<p title=x'y>保温</p><i z'>完", '保温 完'],
+    ["<p ='><b>中</b><i ='>尾", '中尾'],
+    ['a<pre>\nb</pre>', 'ab'],
+    ['a<PRE>\r\nb</PRE>', 'ab'],
+    ['a<pre class="snippet">\nb</pre>', 'ab'],
+    ['a<pre>\n\nb</pre>', 'a b'],
+  ])('preserves body text and parsed whitespace for %s', (html, expected) => {
+    expect(richTextToPlainText(html)).toBe(expected);
+    expect(newsSearchText(html)).toBe(expected);
+  });
+
   it('preserves all searchable fields in saved bilingual article sources', () => {
     const fixture = (name: string) => JSON.parse(readFileSync(new URL(`../../tests/fixtures/${name}`, import.meta.url), 'utf8'));
     const samples = [
