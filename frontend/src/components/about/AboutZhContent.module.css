@@ -1001,6 +1001,16 @@
   object-fit: contain;
 }
 
+.partnerName {
+  display: block;
+  margin-top: 8px;
+  color: var(--about-text);
+  font-size: 12px;
+  line-height: 20px;
+  text-align: center;
+  overflow-wrap: anywhere;
+}
+
 .faqSection {
   background: #fff;
 }
@@ -1142,6 +1152,18 @@
   color: var(--about-text);
   font-size: 14px;
   line-height: 26px;
+}
+
+.companyFact {
+  overflow-wrap: anywhere;
+}
+
+.companyFact + .companyFact {
+  margin-top: 6px;
+}
+
+.companyFact strong {
+  font-weight: 500;
 }
 
 .inquirySection {

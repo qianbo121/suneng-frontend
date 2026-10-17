@@ -3,6 +3,7 @@
 import './partner-map.css';
 import Image from 'next/image';
 import { partnerText } from '@/lib/partner-copy';
+import { partnerSearchAliases } from '@/lib/partner-search-aliases';
 import type { Locale } from '@/types/site';
 
 import { useEffect, useId, useMemo, useRef, useState } from 'react';
@@ -155,7 +156,7 @@ export default function PartnerMap({
 
   const matches = (partner: Partner) =>
     !normalizedQuery ||
-    normalize(`${partner.fullName} ${partner.shortName} ${partner.industry ?? ''} ${t(partner.industry ?? '')}`).includes(
+    normalize(`${partner.fullName} ${partner.shortName} ${partnerSearchAliases(partner.fullName)} ${partner.industry ?? ''} ${t(partner.industry ?? '')}`).includes(
       normalizedQuery,
     );
 

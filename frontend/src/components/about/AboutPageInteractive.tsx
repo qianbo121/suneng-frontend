@@ -27,6 +27,7 @@ type CertificateCard = {
   summary: string;
   detail: string;
   validUntil?: string;
+  additionalDetails?: readonly string[];
   image: string;
   alt: string;
   linkLabel: string;
@@ -282,8 +283,9 @@ export function AboutCertificateGrid({ cards, locale = 'zh' }: { cards: Certific
               <p>{card.summary}</p>
               <span>{card.detail}</span>
               {card.validUntil ? (
-                <span className={styles.certificateValidity}>{t("有效期至：")}{card.validUntil}</span>
+                <span className={styles.certificateValidity}>{t("证书载明有效期至：")}{card.validUntil}</span>
               ) : null}
+              {card.additionalDetails?.map((detail) => <span key={detail}>{detail}</span>)}
               <button
                 type="button"
                 className={styles.certificateTextButton}
@@ -406,7 +408,14 @@ export function AboutFaq({ items }: { items: AboutFaqItem[] }) {
               className={styles.faqAnswer}
               hidden={!expanded}
             >
-              <p>{item.answer}</p>
+              {Array.isArray(item.answer) ? item.answer.map((line) => {
+                const separator = line.search(/[：:]/);
+                return (
+                  <p key={line} className={styles.companyFact}>
+                    {separator >= 0 ? <><strong>{line.slice(0, separator + 1)}</strong>{line.slice(separator + 1)}</> : line}
+                  </p>
+                );
+              }) : <p>{item.answer}</p>}
             </div>
           </div>
         );
