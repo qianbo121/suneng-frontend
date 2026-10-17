@@ -326,6 +326,7 @@ integration('traffic exclusions against isolated PostgreSQL', () => {
       recorded: 1,
       candidate: 1,
       legacy: 1,
+      manualQaExcluded: 0,
     });
   });
 
@@ -387,7 +388,7 @@ integration('traffic exclusions against isolated PostgreSQL', () => {
       candidate: { sessions: 1, pageViews: 1 },
       explicitExcluded: { sessions: 1, pageViews: 1 },
       pendingReview: { sessions: 0 },
-      serverSubmissions: { recorded: 1, candidate: 0, legacy: 0 },
+      serverSubmissions: { recorded: 1, candidate: 0, legacy: 0, manualQaExcluded: 1 },
     });
     expect(result.trafficReview.reasons.find((row) => row.reason === 'manual_qa')?.sessions).toBe(
       1,
@@ -427,7 +428,7 @@ integration('traffic exclusions against isolated PostgreSQL', () => {
       legacy: { pageViews: 3 },
       candidate: { pageViews: 3 },
       explicitExcluded: { pageViews: 3 },
-      serverSubmissions: { recorded: 1, candidate: 0, legacy: 0 },
+      serverSubmissions: { recorded: 1, candidate: 0, legacy: 0, manualQaExcluded: 1 },
     });
     expect(result.trafficReview.reasons.find((row) => row.reason === 'manual_qa')?.pageViews).toBe(
       3,
@@ -488,6 +489,7 @@ integration('traffic exclusions against isolated PostgreSQL', () => {
         recorded: 5,
         candidate: 3,
         legacy: 3,
+        manualQaExcluded: 2,
       });
       expect(result.daily.filter((row) => row.eventType === 'form_submit')).toEqual([
         { date: '2026-10-08', eventType: 'form_submit', events: 3, visitors: 1 },
@@ -540,6 +542,7 @@ integration('traffic exclusions against isolated PostgreSQL', () => {
       recorded: markers.length,
       candidate: markers.length,
       legacy: markers.length,
+      manualQaExcluded: 0,
     });
   });
 
