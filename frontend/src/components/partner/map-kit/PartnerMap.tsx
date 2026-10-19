@@ -335,7 +335,7 @@ export default function PartnerMap({
           <Heading className="suneng-map-title" id={`${uid}-title`}>
             {t(title)}
           </Heading>
-          <p className="suneng-map-description">{t("以下展示部分历年客户与合作单位，点击省份查看。")}</p>
+          <p className="suneng-map-description">{t("展示近年部分客户与合作单位，选择省份查看。")}</p>
         </div>
         <div className="suneng-map-search-wrap">
           <label className="suneng-map-search" htmlFor={`${uid}-search`}>
