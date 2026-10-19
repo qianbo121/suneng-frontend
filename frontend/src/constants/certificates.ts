@@ -4,6 +4,8 @@ export type CertificateItem = {
   title: string;
   subtitle?: string;
   certificateNo?: string;
+  issuer?: string;
+  initialIssuedDate?: string;
   patentNo?: string;
   announcementNo?: string;
   authorizedDate?: string;
@@ -48,6 +50,8 @@ export const SUNENG_ISO_CERTIFICATES: CertificateItem[] = [
     title: 'ISO 9001 质量管理体系认证',
     subtitle: '适用于工业电阻炉、燃气炉的设计、制造',
     certificateNo: '03824Q60289R3S',
+    issuer: '北京世标认证中心有限公司',
+    initialIssuedDate: '2015 年 1 月 12 日',
     validUntil: '2027 年 1 月 11 日',
     image: '/images/certificates/iso/iso-9001-quality-management.jpg',
     alt: '江苏苏能工业炉有限公司 ISO 9001 质量管理体系认证证书',
@@ -61,6 +65,8 @@ export const SUNENG_PATENT_CERTIFICATES: CertificateItem[] = [
     category: 'patent',
     title: '一种高精度温控电阻炉',
     subtitle: '实用新型专利证书',
+    patentNo: 'ZL 2022 2 2709511.3',
+    authorizedDate: '2023-03-21',
     image:
       '/images/certificates/patents/patent-01-high-precision-temperature-control-resistance-furnace.jpg',
     alt: '江苏苏能工业炉有限公司实用新型专利证书：一种高精度温控电阻炉',
@@ -72,6 +78,8 @@ export const SUNENG_PATENT_CERTIFICATES: CertificateItem[] = [
     category: 'patent',
     title: '一种高精度温控燃气热处理炉',
     subtitle: '实用新型专利证书',
+    patentNo: 'ZL 2023 2 2012213.3',
+    authorizedDate: '2024-02-06',
     image:
       '/images/certificates/patents/patent-02-high-precision-temperature-control-gas-heat-treatment-furnace.jpg',
     alt: '江苏苏能工业炉有限公司实用新型专利证书：一种高精度温控燃气热处理炉',
@@ -83,6 +91,8 @@ export const SUNENG_PATENT_CERTIFICATES: CertificateItem[] = [
     category: 'patent',
     title: '一种新型气电两用型网带式淬火炉',
     subtitle: '实用新型专利证书',
+    patentNo: 'ZL 2023 2 2444850.8',
+    authorizedDate: '2024-05-03',
     image: '/images/certificates/patents/patent-03-gas-electric-mesh-belt-quenching-furnace.jpg',
     alt: '江苏苏能工业炉有限公司实用新型专利证书：一种新型气电两用型网带式淬火炉',
     relatedProduct: '网带式淬火炉',
@@ -93,6 +103,8 @@ export const SUNENG_PATENT_CERTIFICATES: CertificateItem[] = [
     category: 'patent',
     title: '一种箱式电阻炉',
     subtitle: '实用新型专利证书',
+    patentNo: 'ZL 2023 2 2637862.2',
+    authorizedDate: '2024-04-16',
     image: '/images/certificates/patents/patent-04-box-type-resistance-furnace.jpg',
     alt: '江苏苏能工业炉有限公司实用新型专利证书：一种箱式电阻炉',
     relatedProduct: '箱式电阻炉',
@@ -103,6 +115,8 @@ export const SUNENG_PATENT_CERTIFICATES: CertificateItem[] = [
     category: 'patent',
     title: '一种不锈钢带连续固溶热处理生产线',
     subtitle: '发明专利证书',
+    patentNo: 'ZL 2024 1 0954737.0',
+    authorizedDate: '2024-11-12',
     image:
       '/images/certificates/patents/patent-05-stainless-steel-strip-continuous-solution-heat-treatment-line.jpg',
     alt: '江苏苏能工业炉有限公司发明专利证书：一种不锈钢带连续固溶热处理生产线',
@@ -114,6 +128,8 @@ export const SUNENG_PATENT_CERTIFICATES: CertificateItem[] = [
     category: 'patent',
     title: '一种燃气加热快速固溶铲齿炉',
     subtitle: '实用新型专利证书',
+    patentNo: 'ZL 2023 2 0962402.4',
+    authorizedDate: '2023-10-24',
     image:
       '/images/certificates/patents/patent-06-gas-heated-rapid-solution-aluminum-tooth-furnace.jpg',
     alt: '江苏苏能工业炉有限公司实用新型专利证书：一种燃气加热快速固溶铲齿炉',
@@ -125,6 +141,8 @@ export const SUNENG_PATENT_CERTIFICATES: CertificateItem[] = [
     category: 'patent',
     title: '一种箱式燃气气瓶固化炉',
     subtitle: '实用新型专利证书',
+    patentNo: 'ZL 2023 2 2460630.4',
+    authorizedDate: '2024-06-21',
     image: '/images/certificates/patents/patent-07-box-type-gas-cylinder-curing-furnace.jpg',
     alt: '江苏苏能工业炉有限公司实用新型专利证书：一种箱式燃气气瓶固化炉',
     relatedProduct: '固化炉',
@@ -135,6 +153,8 @@ export const SUNENG_PATENT_CERTIFICATES: CertificateItem[] = [
     category: 'patent',
     title: '一种链板式铝棒电加热炉',
     subtitle: '实用新型专利证书',
+    patentNo: 'ZL 2023 2 0962404.3',
+    authorizedDate: '2023-11-21',
     image:
       '/images/certificates/patents/patent-08-chain-plate-aluminum-rod-electric-heating-furnace.jpg',
     alt: '江苏苏能工业炉有限公司实用新型专利证书：一种链板式铝棒电加热炉',
@@ -146,6 +166,8 @@ export const SUNENG_PATENT_CERTIFICATES: CertificateItem[] = [
     category: 'patent',
     title: '一种高效熔化炉',
     subtitle: '实用新型专利证书',
+    patentNo: 'ZL 2023 2 2786412.X',
+    authorizedDate: '2024-05-24',
     image: '/images/certificates/patents/patent-09-high-efficiency-melting-furnace.jpg',
     alt: '江苏苏能工业炉有限公司实用新型专利证书：一种高效熔化炉',
     relatedProduct: '熔化炉',
@@ -156,6 +178,8 @@ export const SUNENG_PATENT_CERTIFICATES: CertificateItem[] = [
     category: 'patent',
     title: '退火炉置用炉辊面刮刀清理装置',
     subtitle: '发明专利证书',
+    patentNo: 'ZL 2024 1 1279031.5',
+    authorizedDate: '2024-12-31',
     image:
       '/images/certificates/patents/patent-10-annealing-furnace-roller-scraper-cleaning-device.jpg',
     alt: '江苏苏能工业炉有限公司发明专利证书：退火炉置用炉辊面刮刀清理装置',
@@ -167,6 +191,8 @@ export const SUNENG_PATENT_CERTIFICATES: CertificateItem[] = [
     category: 'patent',
     title: '一种锻造炉',
     subtitle: '发明专利证书',
+    patentNo: 'ZL 2019 1 0040506.8',
+    authorizedDate: '2020-07-03',
     image: '/images/certificates/patents/patent-11-forging-furnace.jpg',
     alt: '江苏苏能工业炉有限公司发明专利证书：一种锻造炉',
     relatedProduct: '锻造炉',
@@ -177,6 +203,8 @@ export const SUNENG_PATENT_CERTIFICATES: CertificateItem[] = [
     category: 'patent',
     title: '一种快速冷却的电阻炉',
     subtitle: '实用新型专利证书',
+    patentNo: 'ZL 2023 2 3064629.6',
+    authorizedDate: '2024-07-12',
     image: '/images/certificates/patents/patent-12-fast-cooling-resistance-furnace.jpg',
     alt: '江苏苏能工业炉有限公司实用新型专利证书：一种快速冷却的电阻炉',
     relatedProduct: '电阻炉',
@@ -187,6 +215,8 @@ export const SUNENG_PATENT_CERTIFICATES: CertificateItem[] = [
     category: 'patent',
     title: '一种保温效果好的电阻炉',
     subtitle: '实用新型专利证书',
+    patentNo: 'ZL 2023 2 2637826.6',
+    authorizedDate: '2024-04-16',
     image: '/images/certificates/patents/patent-13-thermal-insulation-resistance-furnace.jpg',
     alt: '江苏苏能工业炉有限公司实用新型专利证书：一种保温效果好的电阻炉',
     relatedProduct: '电阻炉',
@@ -197,6 +227,8 @@ export const SUNENG_PATENT_CERTIFICATES: CertificateItem[] = [
     category: 'patent',
     title: '一种高精度电热热风烘箱',
     subtitle: '实用新型专利证书',
+    patentNo: 'ZL 2022 2 2710288.4',
+    authorizedDate: '2023-03-21',
     image: '/images/certificates/patents/patent-14-high-precision-electric-hot-air-oven.jpg',
     alt: '江苏苏能工业炉有限公司实用新型专利证书：一种高精度电热热风烘箱',
     relatedProduct: '热风烘箱',

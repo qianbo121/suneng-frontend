@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { siteSettings } from '@/mock/siteSettings';
 
 import {
   getArticleJsonLd,
@@ -9,6 +10,11 @@ import {
 } from '@/lib/seo/jsonld';
 
 describe('SEO JSON-LD entities', () => {
+  it('uses the same English factory address as the visible contact page and footer', () => {
+    expect(getOrganizationJsonLd('en').address.streetAddress).toBe(siteSettings.address.en);
+    expect(getOrganizationJsonLd('zh').address.streetAddress).toBe('张甸蔡官工业区');
+  });
+
   it.each([
     ['zh', '江苏苏能工业炉工程技术团队'],
     ['en', 'Jiangsu Suneng Industrial Furnace Engineering Team'],

@@ -59,7 +59,7 @@ export function ContactZhContent({ locale = 'zh', inquiryProduct }: { locale?: L
           </div>
         </section>
         <p>
-          <Link className={styles.emailLink} href={`/${locale}/service/installation-after-sales#overseas-delivery`}>
+          <Link className={`${styles.textLink} ${styles.deliveryLink}`} href={`/${locale}/service/installation-after-sales#overseas-delivery`}>
             {locale === 'en' ? 'Planning an overseas project? View the delivery checklist.' : '规划海外项目？查看交付核对清单。'}
           </Link>
         </p>

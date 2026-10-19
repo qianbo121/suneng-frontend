@@ -10,7 +10,7 @@ export type AboutBoundaryItem = {
 
 export type AboutFaqItem = {
   question: string;
-  answer: string;
+  answer: string | string[];
 };
 
 export const ABOUT_ANCHORS: AboutAnchorItem[] = [
@@ -61,7 +61,7 @@ export const ABOUT_BOUNDARIES: AboutBoundaryItem[] = [
   },
   {
     title: '特殊工艺认证',
-    text: '涉及航空、国防或汽车主机厂的特殊工艺认证，需在商务沟通阶段单独确认。',
+    text: '现有企业资质不等同于特殊工艺认证；涉及航空、国防或汽车主机厂的认证要求，需在商务沟通阶段单独确认。',
   },
   {
     title: '资料不全的进口炉直接承诺',
@@ -108,5 +108,16 @@ export const ABOUT_FAQS: AboutFaqItem[] = [
     question: '能不能只买配套件？',
     answer:
       '可以根据实际需求评估控制系统、加热元件、测温系统、耐火保温材料、装出料机构、淬火冷却系统和循环风机等配套；燃烧器仅随整炉或整线配套供货。',
+  },
+  {
+    question: '公司的注册信息和生产地址是什么？',
+    answer: [
+      '公司全称：江苏苏能工业炉有限公司',
+      '成立日期：2006 年 12 月 22 日',
+      '注册资本：5080 万元',
+      '统一社会信用代码：91321204796529654Q',
+      '注册地址：泰州市姜堰区张甸镇工业集中区',
+      '生产地址：江苏省泰州市姜堰区张甸蔡官工业区',
+    ],
   },
 ];

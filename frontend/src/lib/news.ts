@@ -12,7 +12,8 @@ import { toAssetUrl } from '@/lib/api/client';
 import { compactText } from '@/lib/seo';
 import { absoluteUrl, buildMetadata } from '@/lib/seo/metadata';
 import { filterCanonicalNewsItems, hasPublishableEnglishNews } from '@/lib/news-routing';
-import { prepareNewsArticleHtml, richTextToPlainText } from '@/lib/sanitize';
+import { prepareNewsArticleHtml } from '@/lib/sanitize';
+import { newsSearchText } from '@/lib/news-search-text';
 import { getNewsSummary } from '@/lib/news-summary';
 import { localizeText } from '@/lib/utils';
 import { NewsApiItem, NewsListCardItem } from '@/types/news';
@@ -76,7 +77,7 @@ export function mapNewsCard(locale: Locale, item: NewsApiItem): NewsListCardItem
     item.category?.slug,
     item.slug,
   ]
-    .map((value) => richTextToPlainText(value))
+    .map((value) => newsSearchText(value))
     .filter(Boolean)
     .join(' ');
 

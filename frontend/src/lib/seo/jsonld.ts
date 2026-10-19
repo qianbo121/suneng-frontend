@@ -168,7 +168,7 @@ export function getOrganizationJsonLd(locale: Locale = 'zh') {
     },
     address: {
       '@type': 'PostalAddress',
-      streetAddress: isEnglish ? 'Cai Guan Industrial Zone, Zhangdian, Jiangyan District' : '张甸蔡官工业区',
+      streetAddress: isEnglish ? siteSettings.address.en : '张甸蔡官工业区',
       addressLocality: isEnglish ? 'Taizhou' : '姜堰区',
       addressRegion: isEnglish ? 'Jiangsu' : '江苏省泰州市',
       addressCountry: 'CN',
@@ -503,7 +503,7 @@ export function getContactPageJsonLd(path = '/contact', locale: 'zh' | 'en' = 'z
         ? 'Contact Us | Jiangsu Suneng Industrial Furnace Co., Ltd.'
         : '联系我们｜江苏苏能工业炉联系方式',
       description: isEnglish
-        ? 'Contact Jiangsu Suneng Industrial Furnace Co., Ltd. for industrial furnace equipment, heat treatment furnaces, energy-saving retrofit and overhaul services. Address: Cai Guan Industrial Zone, Zhangdian, Jiangyan District, Taizhou, Jiangsu. Phone / WeChat: +86-130-5298-6814.'
+        ? `Contact Jiangsu Suneng Industrial Furnace Co., Ltd. for industrial furnace equipment, heat treatment furnaces, energy-saving retrofit and overhaul services. Address: ${siteSettings.address.en}. Phone / WeChat: +86-130-5298-6814.`
         : '联系江苏苏能工业炉有限公司，咨询工业炉设备、热处理炉、节能改造与大修服务。地址：江苏省泰州市姜堰区张甸蔡官工业区，电话/微信：+86-130-5298-6814。',
       isPartOf: { '@id': `${SITE_URL}/#website` },
       about: { '@id': LOCAL_BUSINESS_ID },

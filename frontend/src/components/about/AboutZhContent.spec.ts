@@ -48,10 +48,11 @@ describe('中文关于苏能页', () => {
     ].forEach((image) => expect(pageSource).toContain(image));
   });
 
-  it('保持 8 个可见 FAQ 与结构化数据同源', () => {
-    expect(ABOUT_FAQS).toHaveLength(8);
-    expect(pageSource).toContain('mainEntity: ABOUT_FAQS.map');
-    expect(pageSource).toContain('<AboutFaq items={localizeCoreValue(ABOUT_FAQS, locale)} />');
+  it('保持 9 个可见 FAQ 与结构化数据同源', () => {
+    expect(ABOUT_FAQS).toHaveLength(9);
+    expect(pageSource).toContain('const faqs = localizeCoreValue(ABOUT_FAQS, locale)');
+    expect(pageSource).toContain('mainEntity: faqs.map');
+    expect(pageSource).toContain('<AboutFaq items={faqs} />');
     expect(localizeCoreValue(ABOUT_FAQS, 'zh')).toBe(ABOUT_FAQS);
   });
 
