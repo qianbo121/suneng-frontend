@@ -1,4 +1,5 @@
 import { translateLineValue } from '@/lib/production-line-content-en';
+import { NEWS_ATTRIBUTION } from '@/lib/news-attribution';
 import { homeSingleFurnaces } from '@/lib/home-product-types';
 import { continuousFurnaceCards, periodicFurnaceCards, productCenterProductionLines } from '@/lib/products-landing-data';
 import {
@@ -87,10 +88,8 @@ function schemaLanguage(locale: Locale) {
   return isEnglishLocale(locale) ? 'en-US' : 'zh-CN';
 }
 
-export function getEngineeringTeamAuthorName(locale: Locale = 'zh') {
-  return isEnglishLocale(locale)
-    ? 'Jiangsu Suneng Industrial Furnace Engineering Team'
-    : '江苏苏能工业炉工程技术团队';
+export function getEngineeringTeamAuthorName() {
+  return NEWS_ATTRIBUTION;
 }
 
 export function getTechnicalReviewerJsonLd(name: TechnicalReviewerName = '唐工') {
@@ -464,12 +463,15 @@ export function getArticleJsonLd(article: ArticleJsonLdInput, locale: Locale = '
     datePublished: article.datePublished,
     dateModified,
     author: article.author === 'engineering-team'
-      ? {
+      ? [{
           '@type': 'Organization',
           '@id': `${LOCAL_BUSINESS_URL}#engineering-team`,
-          name: getEngineeringTeamAuthorName(locale),
+          name: '苏能工业炉工程技术团队',
           parentOrganization: { '@id': LOCAL_BUSINESS_ID },
-        }
+        }, {
+          '@type': 'Person',
+          name: '唐荔',
+        }]
       : { '@id': LOCAL_BUSINESS_ID },
     reviewedBy: article.reviewerName
       ? getTechnicalReviewerJsonLd(article.reviewerName)

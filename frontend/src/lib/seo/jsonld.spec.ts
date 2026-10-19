@@ -16,8 +16,8 @@ describe('SEO JSON-LD entities', () => {
   });
 
   it.each([
-    ['zh', '江苏苏能工业炉工程技术团队'],
-    ['en', 'Jiangsu Suneng Industrial Furnace Engineering Team'],
+    ['zh', '苏能工业炉工程技术团队&唐荔'],
+    ['en', '苏能工业炉工程技术团队&唐荔'],
   ] as const)('matches the visible %s news author while keeping the company as publisher', (locale, name) => {
     const article = getArticleJsonLd({
       slug: 'team-authored-news',
@@ -28,13 +28,13 @@ describe('SEO JSON-LD entities', () => {
       author: 'engineering-team',
     }, locale);
 
-    expect(getEngineeringTeamAuthorName(locale)).toBe(name);
-    expect(article.author).toEqual({
+    expect(getEngineeringTeamAuthorName()).toBe(name);
+    expect(article.author).toEqual([{
       '@type': 'Organization',
       '@id': 'https://www.jssngyl.cn/#engineering-team',
-      name,
+      name: '苏能工业炉工程技术团队',
       parentOrganization: { '@id': 'https://www.jssngyl.cn/#organization' },
-    });
+    }, { '@type': 'Person', name: '唐荔' }]);
     expect(article.publisher).toEqual({ '@id': 'https://www.jssngyl.cn/#organization' });
   });
 
