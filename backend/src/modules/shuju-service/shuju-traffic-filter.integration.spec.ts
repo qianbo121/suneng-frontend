@@ -585,6 +585,37 @@ integration('traffic exclusions against isolated PostgreSQL', () => {
     expect((await service.overview(day)).funnel.pageVisitors).toBe(4);
   });
 
+  it('retains explicit lifecycle flags even when a session cannot enter IP inference', async () => {
+    // No page view, dwell or valid IP: these rows still carry explicit evidence.
+    await event('module_view', 'marker-only-qa', morning, {
+      properties: { manual_qa: true },
+      ipMasked: null,
+    });
+    await event('automation_signal', 'marker-only-auto', morning, { ipMasked: null });
+    await event('module_view', 'string-marker', morning, {
+      properties: { manual_qa: 'true', automationDetected: 'true' },
+      utmSource: 'qa_internal2',
+      ipMasked: null,
+    });
+    await event('form_submit', 'marker-only-qa', morning + 1000, {
+      submissionId: '00000000-0000-4000-8000-000000000041',
+      properties: null,
+      ipMasked: null,
+    });
+    expect((await readAutomatedSessions(prisma, start, end)).sort()).toEqual([
+      'marker-only-auto',
+      'marker-only-qa',
+    ]);
+    const result = await service.overview(day);
+    expect(result.eventCounts.form_submit.events).toBe(1);
+    expect(result.eventCounts.module_view.events).toBe(1);
+    expect(result.trafficReview.serverSubmissions).toMatchObject({
+      recorded: 1,
+      candidate: 1,
+      manualQaExcluded: 0,
+    });
+  });
+
   it('requires distinct seed visitors and a nearby burst, not many visits from one person', async () => {
     await burst(normalUa, morning, 10, 'one-visitor');
     await visit('candidate', {}, publicPrefixes.slice(0, 2));
