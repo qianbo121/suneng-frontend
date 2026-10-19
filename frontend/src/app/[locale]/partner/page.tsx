@@ -161,27 +161,13 @@ export default async function PartnerPage({ params }: PartnerPageProps) {
         <header className={styles.hero}>
           <div>
             <h1>{t("客户与合作单位")}</h1>
-            <p>{t("从客户与合作单位分布到行业应用，了解苏能的历年合作网络。")}</p>
+            <p>{t("累计 1000+ 工业炉项目案例。")}</p>
           </div>
-          <a className={styles.heroLink} href="#partner-industries">
-            {t("按行业查看单位")}
-            <svg
-              viewBox="0 0 20 20"
-              width="18"
-              height="18"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="1.7"
-              aria-hidden="true"
-            >
-              <path d="M10 3v14m-5-5 5 5 5-5" />
-            </svg>
-          </a>
         </header>
         <div className={styles.map}>
           <PartnerMap
             headingLevel={2}
-            title={t("历年客户与合作单位分布")}
+            title={t("近年合作分布")}
             locale={locale}
             assetBasePath="/partner-map"
             partners={partners}

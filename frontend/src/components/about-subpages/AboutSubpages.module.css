@@ -73,7 +73,9 @@
 }
 .sectionTitle {
   display: flex;
+  flex-wrap: wrap;
   gap: 20px;
+  row-gap: 0;
   align-items: baseline;
 }
 .sectionTitle span {
@@ -149,6 +151,20 @@
   color: var(--subpage-muted);
   margin-top: 8px;
   font-size: 14px;
+}
+.patentDetails {
+  margin-top: 8px;
+  color: var(--subpage-muted);
+  font-size: 13px;
+  line-height: 1.7;
+}
+.patentDetails div {
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: 8px;
+}
+.patentDetails dd {
+  overflow-wrap: anywhere;
 }
 .patent .textLink {
   margin-top: 2px;
@@ -353,6 +369,9 @@
   font-size: 27px;
   font-weight: 600;
   overflow-wrap: anywhere;
+}
+.deliveryLink {
+  white-space: normal;
 }
 .address {
   display: grid;

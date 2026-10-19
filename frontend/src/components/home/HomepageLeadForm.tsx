@@ -81,6 +81,10 @@ type HomepageLeadFormProps = {
   layoutVariant?: 'default' | 'solution' | 'embedded' | 'productCenter';
   privacyNoticeEnabled?: boolean;
   compactIntro?: boolean;
+  title?: string;
+  description?: string;
+  submitLabel?: string;
+  revealResult?: boolean;
 };
 
 export function HomepageLeadForm({
@@ -98,6 +102,10 @@ export function HomepageLeadForm({
   layoutVariant = 'default',
   privacyNoticeEnabled = false,
   compactIntro = false,
+  title,
+  description,
+  submitLabel,
+  revealResult = false,
 }: HomepageLeadFormProps = {}) {
   const english = locale === 'en';
   const t = (zh: string, en: string) => english ? en : zh;
@@ -136,8 +144,9 @@ export function HomepageLeadForm({
 
   useEffect(() => {
     if (!message && !submissionId) return;
-    if (!isCompactLayout || pageType !== '首页' || sectionId !== 'homepage-lead-form') return;
-    if (!window.matchMedia('(max-width: 720px)').matches) return;
+    const isHomepage = pageType === '首页' && sectionId === 'homepage-lead-form';
+    if (!isCompactLayout || (!revealResult && !isHomepage)) return;
+    if (!revealResult && !window.matchMedia('(max-width: 720px)').matches) return;
 
     const frame = requestAnimationFrame(() => {
       const target = submissionId ? successPanelRef.current : failureMessageRef.current;
@@ -151,13 +160,20 @@ export function HomepageLeadForm({
           headerBottom = Math.max(headerBottom, bounds.bottom);
         }
       });
+      if (revealResult) {
+        const chapterBar = document.querySelector<HTMLElement>('[aria-label="页面章节"]');
+        if (chapterBar) {
+          const bounds = chapterBar.getBoundingClientRect();
+          if (bounds.top >= 0 && bounds.top <= headerBottom + 1) headerBottom = Math.max(headerBottom, bounds.bottom);
+        }
+      }
       window.scrollTo({
         top: Math.max(0, window.scrollY + target.getBoundingClientRect().top - headerBottom - 16),
         behavior: 'instant',
       });
     });
     return () => cancelAnimationFrame(frame);
-  }, [isCompactLayout, message, pageType, sectionId, submissionId]);
+  }, [isCompactLayout, message, pageType, revealResult, sectionId, submissionId]);
 
   useEffect(() => {
     if (inquiryProduct || !document.getElementById('workpiece-router')) return;
@@ -457,8 +473,8 @@ export function HomepageLeadForm({
         {isCompactLayout ? (
           <div className={`${styles.formIntro} ${compactStyles.intro}`}>
             <p className={compactStyles.eyebrow}>设备选型 · 生产线方案 · 维修改造</p>
-            <h2 id="homepage-form-title">咨询设备与生产线方案</h2>
-            <p>说明工件、产量或现有设备问题，详细资料可以后续补充。</p>
+            <h2 id="homepage-form-title">{title ?? '咨询设备与生产线方案'}</h2>
+            <p>{description ?? '说明工件、产量或现有设备问题，详细资料可以后续补充。'}</p>
           </div>
         ) : !isEmbedded && !compactIntro ? (
           isProductCenter ? (
@@ -713,7 +729,7 @@ export function HomepageLeadForm({
             {isCompactLayout ? problemField : null}
 
             <button type="submit" className={`${styles.submitButton} ${isCompactLayout ? compactStyles.submit : ''}`} disabled={isSubmitting}>
-              {isSubmitting ? t('正在提交…', 'Sending…') : isCompactLayout ? '提交咨询' : t('提交需求', 'Send project details')}
+              {isSubmitting ? t('正在提交…', 'Sending…') : submitLabel ?? (isCompactLayout ? '提交咨询' : t('提交需求', 'Send project details'))}
             </button>
             {privacyNoticeEnabled ? <div className={`${styles.formFootnote} ${isCompactLayout ? compactStyles.footnote : ''}`}>
               <p>

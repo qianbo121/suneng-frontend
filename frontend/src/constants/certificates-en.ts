@@ -29,11 +29,15 @@ export function localizeCertificate(item: CertificateItem, locale: 'zh' | 'en'):
     '2024 年 12 月 16 日': '16 December 2024',
     '2027 年 1 月 11 日': '11 January 2027',
     '三年': '3 years',
+    '北京世标认证中心有限公司': 'World Standards For Certification Center Inc.',
+    '2015 年 1 月 12 日': '12 January 2015',
   };
 
   return {
     ...item,
     title,
+    issuer: item.issuer ? details[item.issuer] || item.issuer : undefined,
+    initialIssuedDate: item.initialIssuedDate ? details[item.initialIssuedDate] || item.initialIssuedDate : undefined,
     authorizedDate: item.authorizedDate ? details[item.authorizedDate] || item.authorizedDate : undefined,
     validUntil: item.validUntil ? details[item.validUntil] || item.validUntil : undefined,
     alt: `Jiangsu Suneng Industrial Furnace: ${title}`,

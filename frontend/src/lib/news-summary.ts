@@ -3,18 +3,26 @@ import type { NewsApiItem } from '@/types/news';
 import type { Locale } from '@/types/site';
 
 function cleanSummary(value?: string | null) {
-  return (value || '')
+  const parts = (value || '')
     .replace(/<h([1-6])\b[^>]*>[\s\S]*?<\/h\1>/gi, '\n')
     .replace(/<\/(?:p|div|h[1-6])>|<br\s*\/?>/gi, '\n')
-    .split(/\n+/)
-    .map((part) => richTextToPlainText(part).trim())
-    .filter((part) => part && !/^#{1,6}\s|^(?:画面|配图|图片|封面|示意图|本图|图示)[：:用为说明展示呈现]/.test(part))
-    .join(' ')
-    .match(/[^。！？]+[。！？]?/g)
-    ?.filter((sentence) => !/^(?:画面|配图|图片|封面|示意图|本图|图示)/.test(sentence.trim()))
-    .slice(0, 2)
-    .join('')
-    .trim() || '';
+    .split(/\n+/);
+  const cleaned: string[] = [];
+  const sentences = () => (cleaned.join(' ').match(/[^。！？]+[。！？]?/g) || [])
+    .filter((sentence) => !/^(?:画面|配图|图片|封面|示意图|本图|图示)/.test(sentence.trim()));
+  for (const part of parts) {
+    const text = richTextToPlainText(part).trim();
+    if (!text || /^#{1,6}\s|^(?:画面|配图|图片|封面|示意图|本图|图示)[：:用为说明展示呈现]/.test(text)) continue;
+    cleaned.push(text);
+
+    // Once both retained sentences are complete, later paragraphs cannot change
+    // this summary. Keep the full body available separately for list searches.
+    if (/[。！？]/.test(text)) {
+      const ready = sentences();
+      if (ready.length >= 2 && /[。！？]$/.test(ready[1])) return ready.slice(0, 2).join('').trim();
+    }
+  }
+  return sentences().slice(0, 2).join('').trim();
 }
 
 export function getNewsSummary(locale: Locale, item: NewsApiItem, preferSeo = false) {
