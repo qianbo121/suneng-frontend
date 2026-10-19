@@ -267,7 +267,7 @@ export default async function NewsDetailPage({ params }: NewsDetailPageProps) {
                     </time>
                   </span>
                 )}
-                <span>{getEngineeringTeamAuthorName(currentLocale)}</span>
+                <span translate="no">{getEngineeringTeamAuthorName()}</span>
               </div>
             </header>
 
