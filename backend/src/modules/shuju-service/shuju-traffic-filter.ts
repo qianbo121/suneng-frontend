@@ -20,6 +20,17 @@ export function hasManualQaMarker(alias: string) {
     OR COALESCE(${column(alias, 'utmSource')} = 'qa_internal', FALSE))`;
 }
 
+// Session classification needs these facts, not page titles, referrers or the full
+// properties payload. Project the same strict boolean tests before materialising.
+const SESSION_PROFILE_COLUMNS = Prisma.sql`
+  e.id, e."sessionId", e."createdAt", e."eventType", e."visitorId", e."userAgent", e."ipMasked",
+  e."submissionId",
+  (e."eventType" = 'automation_signal'
+    OR COALESCE(e.properties->'automationDetected' = 'true'::jsonb, FALSE)) AS marked_automation,
+  ${hasManualQaMarker('e')} AS manual_qa,
+  COALESCE(e.properties->'internal_traffic' = 'true'::jsonb, FALSE) AS internal_traffic
+`;
+
 function sessionProfiles(prefix: string) {
   // Only validated, publicly routable IPv4 /16 masks count as independent prefixes.
   // Exclude special-use /16s conservatively: the stored mask cannot distinguish
@@ -36,11 +47,9 @@ function sessionProfiles(prefix: string) {
         BOOL_OR("eventType" = 'dwell_20s') AS has_dwell20,
         BOOL_OR("eventType" IN ('human_signal', 'effective_interaction')) AS interactive,
         BOOL_OR("eventType" = 'form_submit' AND "submissionId" IS NOT NULL) AS verified_form,
-        BOOL_OR("eventType" = 'automation_signal'
-          OR COALESCE(properties->'automationDetected' = 'true'::jsonb, FALSE)) AS marked_automation,
-        BOOL_OR(COALESCE(properties->'manual_qa' = 'true'::jsonb, FALSE)
-          OR COALESCE("utmSource" = 'qa_internal', FALSE)) AS manual_qa,
-        BOOL_OR(COALESCE(properties->'internal_traffic' = 'true'::jsonb, FALSE)) AS internal_traffic
+        BOOL_OR(marked_automation) AS marked_automation,
+        BOOL_OR(manual_qa) AS manual_qa,
+        BOOL_OR(internal_traffic) AS internal_traffic
       FROM ${prefix}_events GROUP BY "sessionId"
     ), ${prefix}_parsed_ips AS MATERIALIZED (
       SELECT e."sessionId" AS session, e."createdAt",
@@ -51,6 +60,11 @@ function sessionProfiles(prefix: string) {
       FROM ${prefix}_events e JOIN ${prefix}_meta m ON m.session = e."sessionId"
       WHERE e."createdAt" >= m.first_page
         AND e."createdAt" < m.first_page + INTERVAL '60 seconds'
+        -- These sessions cannot satisfy eligibleProfile regardless of their IPs.
+        -- Keep their lifecycle flags in meta, but skip unused prefix parsing.
+        AND m.visitor IS NOT NULL AND m.has_dwell20 AND m.stable_ua
+        AND NOT m.interactive AND NOT m.verified_form
+        AND NOT m.marked_automation AND NOT m.manual_qa AND NOT m.internal_traffic
     ), ${prefix}_public_ips AS MATERIALIZED (
       SELECT session, CASE WHEN first BETWEEN 1 AND 223 AND second BETWEEN 0 AND 255
         AND first NOT IN (10, 127)
@@ -87,13 +101,18 @@ export async function classifySessionIds(prisma: PrismaService, candidates: Pris
   const rows = await prisma.$queryRaw<{ sessionId: string }[]>(Prisma.sql`
     WITH candidate_sessions AS MATERIALIZED (${candidates}),
     candidate_events AS MATERIALIZED (
-      SELECT e.* FROM candidate_sessions c
+      SELECT ${SESSION_PROFILE_COLUMNS} FROM candidate_sessions c
       JOIN "WebsiteLeadEvent" e ON e."sessionId" = c.session
     ), ${sessionProfiles('candidate')},
+    eligible_candidates AS MATERIALIZED (
+      -- Evaluate eligibility once, before matching nearby seeds. Otherwise a
+      -- nested-loop plan can recheck every lifecycle/UA for every seed.
+      SELECT * FROM candidate_profiles c WHERE ${eligibleProfile('c')} AND c.prefixes >= 2
+    ),
     windows AS (
       SELECT ua, first_page - INTERVAL '5 minutes' AS lo,
         first_page + INTERVAL '5 minutes' AS hi
-      FROM candidate_profiles c WHERE ${eligibleProfile('c')} AND c.prefixes >= 2
+      FROM eligible_candidates
     ), prior_windows AS (
       SELECT *, MAX(hi) OVER (PARTITION BY ua ORDER BY lo, hi
         ROWS BETWEEN UNBOUNDED PRECEDING AND 1 PRECEDING) AS prior_hi FROM windows
@@ -109,17 +128,16 @@ export async function classifySessionIds(prisma: PrismaService, candidates: Pris
         AND e."userAgent" = w.ua AND e."eventType" = 'page_view'
       WHERE NULLIF(BTRIM(e."sessionId"), '') IS NOT NULL
     ), seed_events AS MATERIALIZED (
-      SELECT e.* FROM seed_sessions s
+      SELECT ${SESSION_PROFILE_COLUMNS} FROM seed_sessions s
       JOIN "WebsiteLeadEvent" e ON e."sessionId" = s.session
     ), ${sessionProfiles('seed')},
     strong_seeds AS MATERIALIZED (
       SELECT * FROM seed_profiles s WHERE ${eligibleProfile('s')}
         AND s.prefixes >= 3 AND s.visitor IS NOT NULL
     ), anomalous_sessions AS (
-      SELECT c.session FROM candidate_profiles c JOIN strong_seeds s
+      SELECT c.session FROM eligible_candidates c JOIN strong_seeds s
         ON s.ua = c.ua AND s.first_page >= c.first_page - INTERVAL '5 minutes'
         AND s.first_page < c.first_page + INTERVAL '5 minutes'
-      WHERE ${eligibleProfile('c')} AND c.prefixes >= 2
       GROUP BY c.session HAVING COUNT(DISTINCT s.visitor) >= 10
     )
     SELECT session AS "sessionId" FROM candidate_profiles

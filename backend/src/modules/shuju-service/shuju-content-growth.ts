@@ -177,8 +177,10 @@ export async function readContentGrowth(
         AND (d."visitorId" IS NULL OR e."visitorId" IS NULL OR d."visitorId" = e."visitorId")
     ), entry_counts AS (
       SELECT e.path, COUNT(*) AS visits,
-        COUNT(DISTINCT e.identity) FILTER (WHERE q.id IS NOT NULL) AS dwell20_entry_visitors
-      FROM entries e LEFT JOIN qualified_entry_ids q ON q.id = e.id
+        -- Membership is sufficient; joining the materialised set can repeatedly
+        -- scan it for every entry when the planner underestimates its size.
+        COUNT(DISTINCT e.identity) FILTER (WHERE e.id IN (SELECT id FROM qualified_entry_ids)) AS dwell20_entry_visitors
+      FROM entries e
       GROUP BY e.path
     ), association_counts AS (
       SELECT a.path, COUNT(*) AS total,
