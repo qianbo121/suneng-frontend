@@ -2,6 +2,7 @@ import { apiPost } from '@/lib/api/client';
 import { classifyTrafficSource } from '@/lib/analytics/traffic-source';
 import { isLocalPreviewHostname } from '@/lib/analytics/local-preview';
 import { getBrowserStorage } from '@/lib/browser-storage';
+import { createCollectionOutbox } from '@/lib/analytics/collection-outbox';
 
 export type LeadEventType =
   | 'page_view'
@@ -78,6 +79,19 @@ type LeadEventPayload = LeadSourceSnapshot & {
   properties?: LeadEventProperties;
 };
 
+// These facts contain bounded attribution/evidence, never form contents.
+const RECOVERABLE_EVENTS = new Set<LeadEventType>([
+  'page_view',
+  'dwell_5s',
+  'dwell_20s',
+  'dwell_60s',
+  'dwell_180s',
+  'engaged_session',
+  'effective_interaction',
+  'human_signal',
+  'automation_signal',
+]);
+
 const HIGH_INTENT_EVENTS = new Set<LeadEventType>([
   'phone_click',
   'wechat_click',
@@ -87,6 +101,7 @@ const HIGH_INTENT_EVENTS = new Set<LeadEventType>([
   'cta_click',
 ]);
 
+const SESSION_FACT_PREFIX = 'suneng_session_fact_v1:';
 const ENGAGED_SESSION_KEY = 'suneng_engaged_session_recorded';
 const SESSION_PAGE_PATHS_KEY = 'suneng_session_page_paths';
 const SESSION_ID_KEY = 'suneng_session_id';
@@ -123,6 +138,7 @@ let lastTrackedPagePath: string | undefined;
 
 type TrackingStorage = Pick<Storage, 'getItem' | 'setItem' | 'removeItem'>;
 let trackingWindow: Window | undefined;
+let collectionOutbox: ReturnType<typeof createCollectionOutbox<LeadEventPayload>> | undefined;
 let sessionStorageFallback: TrackingStorage;
 let localStorageFallback: TrackingStorage;
 let natureTrackingInstalled = false;
@@ -196,6 +212,8 @@ function cancelEventRetries() {
 
 function trackingStorage(name: 'sessionStorage' | 'localStorage') {
   if (trackingWindow !== window) {
+    collectionOutbox?.dispose();
+    collectionOutbox = undefined;
     trackingWindow = window;
     sessionStorageFallback = createTrackingStorage('sessionStorage');
     localStorageFallback = createTrackingStorage('localStorage');
@@ -291,6 +309,7 @@ function fallbackSession(now: number, requested: boolean) {
 }
 
 function resetSessionState(storage: TrackingStorage) {
+  for (const type of RECOVERABLE_EVENTS) storage.removeItem(SESSION_FACT_PREFIX + type);
   storage.removeItem(ENGAGED_SESSION_KEY);
   storage.removeItem(EFFECTIVE_INTERACTION_KEY);
   storage.removeItem(STRONG_INPUT_KEY);
@@ -594,7 +613,12 @@ function currentPayload(eventType: LeadEventType, extra: LeadEventExtra = {}) {
     ...snapshot,
     properties: sanitizeEventProperties({
       // 系统属性优先占位，业务属性不能覆盖或挤掉它们。
-      collectionId: newAnonymousId().slice(0, 120),
+      // Session milestones describe one fact even if a page disappears between
+      // the server acknowledgement and writing the local success marker.
+      collectionId:
+        eventType !== 'page_view' && RECOVERABLE_EVENTS.has(eventType) && snapshot.sessionId
+          ? `${eventType}:${snapshot.sessionId}`.slice(0, 120)
+          : newAnonymousId().slice(0, 120),
       collectorVersion: '2',
       ...(browserBrands ? { browserBrands } : {}),
       ...(typeof navigator !== 'undefined' && navigator.webdriver === true
@@ -607,7 +631,7 @@ function currentPayload(eventType: LeadEventType, extra: LeadEventExtra = {}) {
   };
 }
 
-function postLeadPayload(payload: LeadEventPayload) {
+function sendLeadPayload(payload: LeadEventPayload) {
   return apiPost<unknown, LeadEventPayload>('/v1/lead-events', {
     body: payload,
     cache: 'no-store',
@@ -616,6 +640,114 @@ function postLeadPayload(payload: LeadEventPayload) {
     () => true,
     () => false,
   );
+}
+
+// Stored records are data, not fresh snapshots. Never reclassify an old QA/internal
+// visit, replace its identity, or attach the page/source from the recovery tab.
+function isRecoverablePayload(value: unknown): value is LeadEventPayload {
+  if (!value || typeof value !== 'object') return false;
+  const p = value as LeadEventPayload;
+  if (!RECOVERABLE_EVENTS.has(p.eventType) || !p.sessionId || !p.visitorId) return false;
+  if (
+    Object.entries(p).some(
+      ([key, value]) =>
+        key !== 'eventType' &&
+        key !== 'properties' &&
+        (!Object.prototype.hasOwnProperty.call(LEAD_SOURCE_LIMITS, key) ||
+          typeof value !== 'string' ||
+          value.length > LEAD_SOURCE_LIMITS[key as keyof LeadSourceSnapshot]),
+    )
+  )
+    return false;
+  const props = p.properties;
+  return Boolean(
+    props &&
+    typeof props.collectionId === 'string' &&
+    /^[A-Za-z0-9:_-]{1,120}$/.test(props.collectionId) &&
+    props.collectorVersion === '2' &&
+    typeof props.manual_qa === 'boolean' &&
+    typeof props.internal_traffic === 'boolean' &&
+    Object.entries(props).length <= 24 &&
+    Object.entries(props).every(
+      ([key, value]) =>
+        key.length <= 60 &&
+        (value === null ||
+          typeof value === 'boolean' ||
+          (typeof value === 'number' && Number.isFinite(value)) ||
+          (typeof value === 'string' && value.length <= 255)),
+    ),
+  );
+}
+
+function acceptedRecoveredPayload(payload: LeadEventPayload) {
+  const storage = trackingStorage('sessionStorage');
+  if (storage.getItem(SESSION_ID_KEY) !== payload.sessionId) return;
+  const milestone = DWELL_MILESTONES.findIndex((item) => item.event === payload.eventType);
+  if (milestone >= 0) {
+    writeDwellCounter(
+      DWELL_MILESTONE_KEY,
+      Math.max(readDwellCounter(DWELL_MILESTONE_KEY), milestone + 1),
+    );
+  }
+  const key = {
+    engaged_session: ENGAGED_SESSION_KEY,
+    effective_interaction: EFFECTIVE_INTERACTION_KEY,
+    human_signal: STRONG_INPUT_KEY,
+    automation_signal: AUTOMATION_SIGNAL_KEY,
+  }[
+    payload.eventType as
+      | 'engaged_session'
+      | 'effective_interaction'
+      | 'human_signal'
+      | 'automation_signal'
+  ];
+  if (key) storage.setItem(key, '1');
+}
+
+function getCollectionOutbox() {
+  trackingStorage('sessionStorage');
+  if (!collectionOutbox) {
+    const owner = window;
+    collectionOutbox = createCollectionOutbox<LeadEventPayload>({
+      owner,
+      storage: () => getBrowserStorage('localStorage'),
+      valid: isRecoverablePayload,
+      id: (payload) => payload.properties!.collectionId as string,
+      send: (payload) =>
+        sendLeadPayload(payload).then((accepted) => {
+          if (accepted && trackingWindow === owner && window === owner)
+            acceptedRecoveredPayload(payload);
+          return accepted;
+        }),
+    });
+  }
+  return collectionOutbox;
+}
+
+function postLeadPayload(payload: LeadEventPayload) {
+  if (!isRecoverablePayload(payload)) return sendLeadPayload(payload);
+  // Keep the first milestone fact for this visit even after its outbox entry has
+  // been acknowledged. A document can disappear before its success counter is
+  // stored; the next document must not create a replacement page attribution.
+  const storage = trackingStorage('sessionStorage');
+  if (payload.eventType !== 'page_view' && storage.getItem(SESSION_ID_KEY) === payload.sessionId) {
+    const key = SESSION_FACT_PREFIX + payload.eventType;
+    try {
+      const raw = storage.getItem(key);
+      const first: unknown = raw && JSON.parse(raw);
+      if (
+        isRecoverablePayload(first) &&
+        first.sessionId === payload.sessionId &&
+        first.eventType === payload.eventType &&
+        first.properties?.collectionId === payload.properties?.collectionId
+      )
+        payload = first;
+      else storage.setItem(key, JSON.stringify(payload));
+    } catch {
+      storage.setItem(key, JSON.stringify(payload));
+    }
+  }
+  return getCollectionOutbox().post(payload);
 }
 
 function postLeadEvent(eventType: LeadEventType, extra?: LeadEventExtra) {
@@ -733,7 +865,10 @@ function flushDwellMilestones() {
     dwellMilestoneInFlight = false;
     if (!accepted) return; // 下一秒保留原采集号重试，防止响应丢失导致重复写入。
     pendingDwellPayload = undefined;
-    writeDwellCounter(DWELL_MILESTONE_KEY, nextMilestone + 1);
+    writeDwellCounter(
+      DWELL_MILESTONE_KEY,
+      Math.max(readDwellCounter(DWELL_MILESTONE_KEY), nextMilestone + 1),
+    );
     // 页面卡顿后可能一次跨过多个刻度，成功后顺序补齐，保证数学上单调。
     flushDwellMilestones();
   });
@@ -860,7 +995,7 @@ export function installVisitorNatureTracking() {
   };
 }
 
-// 最多补报两次，所有尝试都使用原始页面、来源和访问标识，且过期后丢弃。
+// 当前页面快速补报两次；跨页/断网恢复由持久待发送队列继续，始终沿用原标识。
 function postPayloadWithRetry(payload: LeadEventPayload): Promise<boolean> {
   const storage = trackingStorage('sessionStorage');
   const generation = dwellRequestGeneration;
@@ -952,6 +1087,7 @@ function ensureResumedPageView() {
 
 export function trackPageView() {
   if (!canTrackActivity()) return;
+  getCollectionOutbox().start();
   recordPageView(false);
 }
 
