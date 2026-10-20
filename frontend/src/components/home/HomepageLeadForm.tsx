@@ -78,7 +78,7 @@ type HomepageLeadFormProps = {
   inquiryDirection?: string;
   problemPlaceholder?: string;
   inquiryHint?: string;
-  layoutVariant?: 'default' | 'solution' | 'embedded' | 'productCenter';
+  layoutVariant?: 'default' | 'solution' | 'embedded' | 'productCenter' | 'contact';
   privacyNoticeEnabled?: boolean;
   compactIntro?: boolean;
   title?: string;
@@ -112,7 +112,11 @@ export function HomepageLeadForm({
   const optionLabels = ['Please select', 'New heat-treatment line', 'Individual furnace: selection or new build', 'Existing furnace: repair, retrofit or replacement', 'After-sales or other support', 'Not sure — please help me assess'];
   const directionOptions = sourceDirectionOptions.map((option, index) => ({ ...option, label: english ? optionLabels[index] : option.label }));
   const initialResults = english ? [['Heat-treatment line', 'Process route and equipment scope'], ['Individual furnace', 'Furnace direction and key parameters'], ['Existing furnace', 'Repair, retrofit or replacement assessment']] : sourceInitialResults;
-  const isEmbedded = layoutVariant === 'embedded';
+  const isContactLayout = layoutVariant === 'contact';
+  const isEmbedded = layoutVariant === 'embedded' || isContactLayout;
+  const contactDirectionLabels = english
+    ? ['New production line', 'Individual furnace', 'Repair or retrofit', 'After-sales or other', 'Help me assess']
+    : ['生产线建设', '单台工业炉', '维修改造', '售后或其他', '协助判断'];
   const isProductCenter = layoutVariant === 'productCenter';
   const isCompactLayout = !isEmbedded && !compactIntro && String(layoutVariant) !== 'productCenter' && !english;
   const formRef = useRef<HTMLFormElement>(null);
@@ -224,7 +228,11 @@ export function HomepageLeadForm({
   const focusField = (field: HomepageRequirementField) => {
     requestAnimationFrame(() => {
       if (field === 'direction') {
-        directionTriggerRef.current?.focus();
+        if (isContactLayout) {
+          formRef.current?.querySelector<HTMLInputElement>('input[name="direction"]')?.focus();
+        } else {
+          directionTriggerRef.current?.focus();
+        }
         return;
       }
       const element = formRef.current?.elements.namedItem(field);
@@ -425,7 +433,7 @@ export function HomepageLeadForm({
     <label
       className={`${styles.field} ${isProductCenter ? styles.productCenterProblemField : ''} ${isCompactLayout ? compactStyles.problemField : ''}`}
     >
-      <span className={isCompactLayout ? compactStyles.problemLabel : undefined}>{isCompactLayout ? <>需求或现有问题<span className={compactStyles.required} aria-hidden="true">*</span></> : isProductCenter ? t('需求描述', 'Project description') : t('2. 简要描述需求或问题', '2. Describe your project or issue')}</span>
+      <span className={isCompactLayout ? compactStyles.problemLabel : undefined}>{isCompactLayout ? <>需求或现有问题<span className={compactStyles.required} aria-hidden="true">*</span></> : isContactLayout || isProductCenter ? t('需求描述', 'Project description') : t('2. 简要描述需求或问题', '2. Describe your project or issue')}</span>
       {isCompactLayout ? (
         <span className={compactStyles.problemHelp} id={`${sectionId}-problem-help`}>
           工件与材料、工艺要求、目标产量，或现有设备遇到的问题，已知信息先填。
@@ -433,7 +441,7 @@ export function HomepageLeadForm({
       ) : null}
       <textarea
         name="problem"
-        aria-required={isCompactLayout || undefined}
+        aria-required={isCompactLayout || isContactLayout || undefined}
         value={values.problem}
         onChange={(event) => updateValue('problem', event.target.value)}
         placeholder={isCompactLayout ? '例如：想新建一条热处理线；需要选择工业炉；或现有设备希望维修、改造。' : english ? 'Workpiece, throughput, process requirements or current equipment issue' : problemPlaceholder}
@@ -596,10 +604,26 @@ export function HomepageLeadForm({
             <div
               className={`${styles.field} ${isProductCenter ? styles.productCenterDirectionField : ''} ${isCompactLayout ? compactStyles.directionField : ''}`}
             >
-              <label id="homepage-direction-label" htmlFor="homepage-direction-trigger">
-                {isCompactLayout ? <>咨询方向<span className={compactStyles.required} aria-hidden="true">*</span></> : isProductCenter ? t('需求类型', 'Project type') : t('1. 您想咨询什么？', '1. What do you need?')}
+              <label id="homepage-direction-label" htmlFor={isContactLayout ? `${sectionId}-direction-0` : 'homepage-direction-trigger'}>
+                {isContactLayout ? t('咨询内容', 'Project type') : isCompactLayout ? <>咨询方向<span className={compactStyles.required} aria-hidden="true">*</span></> : isProductCenter ? t('需求类型', 'Project type') : t('1. 您想咨询什么？', '1. What do you need?')}
               </label>
-              <div ref={directionSelectRef} className={styles.directionSelect}>
+              {isContactLayout ? (
+                <div data-contact-directions role="radiogroup" aria-labelledby="homepage-direction-label" aria-required="true" aria-invalid={invalidField === 'direction' || undefined} aria-describedby={invalidField === 'direction' ? 'direction-error' : undefined}>
+                  {directionOptions.filter((option) => option.value).map((option, index) => (
+                    <label key={option.value}>
+                      <input
+                        id={`${sectionId}-direction-${index}`}
+                        type="radio"
+                        name="direction"
+                        value={option.value}
+                        checked={values.direction === option.value}
+                        onChange={() => updateValue('direction', option.value)}
+                      />
+                      <span>{contactDirectionLabels[index]}</span>
+                    </label>
+                  ))}
+                </div>
+              ) : <div ref={directionSelectRef} className={styles.directionSelect}>
                 <input type="hidden" name="direction" value={values.direction} readOnly />
                 <button
                   ref={directionTriggerRef}
@@ -658,7 +682,7 @@ export function HomepageLeadForm({
                     })}
                   </div>
                 ) : null}
-              </div>
+              </div>}
               {invalidField === 'direction' ? (
                 <span id="direction-error" className={styles.fieldError} aria-live="polite">
                   {t('请选择咨询方向。', 'Please select a project direction.')}
@@ -667,7 +691,7 @@ export function HomepageLeadForm({
             </div>
 
 
-            {!isCompactLayout ? problemField : null}
+            {!isCompactLayout && !isContactLayout ? problemField : null}
 
             <div
               className={`${styles.contactFields} ${isProductCenter ? styles.productCenterContactFields : ''} ${isCompactLayout ? compactStyles.contactFields : ''}`}
@@ -675,10 +699,10 @@ export function HomepageLeadForm({
               <label
                 className={`${styles.field} ${isProductCenter ? styles.productCenterIdentityField : ''} ${isCompactLayout ? compactStyles.identityField : ''}`}
               >
-                <span>{isCompactLayout ? <>公司或联系人<span className={compactStyles.required} aria-hidden="true">*</span></> : isProductCenter ? t('公司 / 联系人', 'Company / contact person') : t('3. 公司 / 联系人', '3. Company / contact person')}</span>
+                <span>{isCompactLayout ? <>公司或联系人<span className={compactStyles.required} aria-hidden="true">*</span></> : isContactLayout || isProductCenter ? t('公司 / 联系人', 'Company / contact person') : t('3. 公司 / 联系人', '3. Company / contact person')}</span>
                 <input
                   name="identity"
-                  aria-required={isCompactLayout || undefined}
+                  aria-required={isCompactLayout || isContactLayout || undefined}
                   type="text"
                   value={values.identity}
                   onChange={(event) => updateValue('identity', event.target.value)}
@@ -698,10 +722,10 @@ export function HomepageLeadForm({
               <label
                 className={`${styles.field} ${isProductCenter ? styles.productCenterContactField : ''} ${isCompactLayout ? compactStyles.contactField : ''}`}
               >
-                <span>{isCompactLayout ? <>联系方式<span className={compactStyles.required} aria-hidden="true">*</span></> : isProductCenter ? t('联系方式', 'Contact details') : t('4. 联系方式（任选一种）', '4. Contact details (choose one)')}</span>
+                <span>{isCompactLayout ? <>联系方式<span className={compactStyles.required} aria-hidden="true">*</span></> : isContactLayout || isProductCenter ? t('联系方式', 'Contact details') : t('4. 联系方式（任选一种）', '4. Contact details (choose one)')}</span>
                 <input
                   name="contact"
-                  aria-required={isCompactLayout || undefined}
+                  aria-required={isCompactLayout || isContactLayout || undefined}
                   type="text"
                   value={values.contact}
                   onChange={(event) => updateValue('contact', event.target.value)}
@@ -726,7 +750,7 @@ export function HomepageLeadForm({
             </div>
 
 
-            {isCompactLayout ? problemField : null}
+            {isCompactLayout || isContactLayout ? problemField : null}
 
             <button type="submit" className={`${styles.submitButton} ${isCompactLayout ? compactStyles.submit : ''}`} disabled={isSubmitting}>
               {isSubmitting ? t('正在提交…', 'Sending…') : submitLabel ?? (isCompactLayout ? '提交咨询' : t('提交需求', 'Send project details'))}

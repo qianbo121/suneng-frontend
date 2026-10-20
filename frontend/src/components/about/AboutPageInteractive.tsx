@@ -75,16 +75,33 @@ export function AboutAnchorNav({ items, locale = 'zh' }: { items: AboutAnchorIte
       threshold: [0, 0.01],
     });
 
+    // The target may arrive after the browser's initial fragment scroll in a
+    // streamed page. Reapply it after hydration, including history navigation.
+    const restoreFragment = () => {
+      let id: string;
+      try { id = decodeURIComponent(window.location.hash.slice(1)); }
+      catch { return; }
+      if (!id) return;
+      document.getElementById(id)?.scrollIntoView({ behavior: 'instant', block: 'start' });
+      scheduleUpdate();
+    };
+    const initialFragmentFrame = window.requestAnimationFrame(restoreFragment);
+
     sections.forEach((section) => observer.observe(section));
     window.addEventListener('scroll', scheduleUpdate, { passive: true });
     window.addEventListener('resize', scheduleUpdate);
+    window.addEventListener('hashchange', restoreFragment);
+    window.addEventListener('popstate', restoreFragment);
     updateActiveSection();
 
     return () => {
       observer.disconnect();
       window.removeEventListener('scroll', scheduleUpdate);
       window.removeEventListener('resize', scheduleUpdate);
+      window.removeEventListener('hashchange', restoreFragment);
+      window.removeEventListener('popstate', restoreFragment);
       window.cancelAnimationFrame(animationFrame);
+      window.cancelAnimationFrame(initialFragmentFrame);
     };
   }, [items]);
 

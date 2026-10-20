@@ -1,20 +1,17 @@
 import { corePageText, localizeCoreValue } from '@/lib/core-page-localization';
 import type { Locale } from '@/types/site';
 import Image from 'next/image';
-import Link from 'next/link';
-import { HiArrowUpRight, HiChevronDoubleRight } from 'react-icons/hi2';
+import { HiArrowUpRight } from 'react-icons/hi2';
 
 import { JsonLd } from '@/components/JsonLd';
 import { AboutCompanyHero } from '@/components/about/AboutCompanyHero';
 import {
   AboutAnchorNav,
   AboutBoundaryList,
-  AboutCertificateGrid,
   AboutFaq,
 } from '@/components/about/AboutPageInteractive';
 import { ABOUT_ANCHORS, ABOUT_BOUNDARIES, ABOUT_FAQS } from '@/components/about/about-page-data';
 import { WechatContactButton } from '@/components/lead/WechatContactButton';
-import { getButtonClass } from '@/components/ui/Button';
 import {
   SUNENG_ISO_CERTIFICATES,
   SUNENG_PATENT_CERTIFICATES,
@@ -23,8 +20,10 @@ import {
 import { getBreadcrumbJsonLd } from '@/lib/seo/jsonld';
 import { siteSettings } from '@/mock/siteSettings';
 
+import { CertificateGallerySections } from '@/components/strength/CertificateGallerySections';
+import { PartnerContent } from '@/components/partner/PartnerContent';
+import { ContactZhContent } from '@/components/about-subpages/ContactZhContent';
 import styles from './AboutZhContent.module.css';
-import homeToolStyles from '@/components/home/HeatTreatmentToolCenter.module.css';
 
 export const ABOUT_ZH_SEO = {
   title: '关于苏能工业炉｜公司简介、制造基地与企业资质',
@@ -121,98 +120,11 @@ const sourceCapabilityItems = [
   },
 ] as const;
 
-const highTechCertificate = SUNENG_QUALIFICATION_CERTIFICATES.find(
-  (item) => item.id === 'qualification-high-tech-enterprise',
-)!;
-const isoCertificate = SUNENG_ISO_CERTIFICATES.find((item) => item.id === 'iso-9001')!;
-const patentCertificate = SUNENG_PATENT_CERTIFICATES[0];
-const fullCertificateCount =
-  SUNENG_QUALIFICATION_CERTIFICATES.length +
-  SUNENG_ISO_CERTIFICATES.length +
-  SUNENG_PATENT_CERTIFICATES.length;
-
-const sourceCertificateCards = [
-  {
-    title: '国家高新技术企业',
-    summary: highTechCertificate.subtitle!,
-    detail: `证书编号：${highTechCertificate.certificateNo}`,
-    additionalDetails: ['发证日期：2024 年 12 月 16 日'],
-    image: highTechCertificate.image,
-    alt: highTechCertificate.alt,
-    linkLabel: '查看证书',
-  },
-  {
-    title: 'ISO 9001 质量管理体系',
-    summary: '适用于工业电阻炉、燃气炉的设计与制造',
-    detail: `证书编号：${isoCertificate.certificateNo}`,
-    validUntil: isoCertificate.validUntil,
-    additionalDetails: ['发证机构：北京世标认证中心有限公司', '首次发证：2015 年 1 月 12 日'],
-    image: isoCertificate.image,
-    alt: isoCertificate.alt,
-    linkLabel: '查看证书',
-  },
-  {
-    title: `${SUNENG_PATENT_CERTIFICATES.length} 项授权专利`,
-    summary: '覆盖电阻炉、燃气热处理炉、固溶生产线等设备方向',
-    detail: '点击查看专利证书代表图',
-    additionalDetails: [
-      '其中发明专利 3 项、实用新型专利 11 项',
-      '2020 年 7 月 3 日，《一种锻造炉》获发明专利授权。',
-    ],
-    image: patentCertificate.image,
-    alt: patentCertificate.alt,
-    linkLabel: '查看专利证书',
-  },
-] as const;
-
-
-
-const sourcePartnerLogos = [
-  {
-    name: '中国恩菲工程技术有限公司',
-    src: '/images/partners/homepage/01-enfi.png',
-    width: 316,
-    height: 160,
-  },
-  {
-    name: '中国联合工程有限公司',
-    src: '/images/partners/homepage/03-cuec.png',
-    width: 384,
-    height: 160,
-  },
-  {
-    name: '中集安瑞环科技股份有限公司',
-    src: '/images/partners/homepage/04-cimc-safeway.png',
-    width: 536,
-    height: 160,
-  },
-  {
-    name: '内蒙古北方重工业集团有限公司',
-    src: '/images/partners/homepage/06-nhi.png',
-    width: 368,
-    height: 160,
-  },
-  {
-    name: '江苏天工科技股份有限公司',
-    src: '/images/partners/homepage/07-tiangong-technology.png',
-    width: 482,
-    height: 160,
-  },
-  {
-    name: '六和轻合金（苏州）有限公司',
-    src: '/images/partners/homepage/11-liuhe-light-alloy.png',
-    width: 427,
-    height: 160,
-  },
-] as const;
-
-export function AboutZhContent({ locale = 'zh' }: { locale?: Locale }) {
+export function AboutZhContent({ locale = 'zh', inquiryProduct }: { locale?: Locale; inquiryProduct?: string }) {
   const t = (text: string) => corePageText(text, locale);
   const workflowItems = localizeCoreValue(sourceWorkflowItems, locale);
   const deliveryPhotos = localizeCoreValue(sourceDeliveryPhotos, locale);
   const capabilityItems = localizeCoreValue(sourceCapabilityItems, locale);
-  const certificateCards = localizeCoreValue(sourceCertificateCards, locale).map((card, index) => locale === 'en' && index === 2 ? { ...card, title: `${SUNENG_PATENT_CERTIFICATES.length} granted patents` } : card);
-  const partnerLogos = localizeCoreValue(sourcePartnerLogos, locale);
   const faqs = localizeCoreValue(ABOUT_FAQS, locale);
   const faqJsonLd = {
     '@context': 'https://schema.org',
@@ -333,68 +245,6 @@ export function AboutZhContent({ locale = 'zh' }: { locale?: Locale }) {
       </section>
 
       <section
-        id="qualifications"
-        className={`${styles.section} ${styles.sectionAnchor}`}
-        aria-labelledby="qualifications-title"
-      >
-        <div className={styles.container}>
-          <div className={styles.sectionHeading}>
-            <div>
-              <h2 id="qualifications-title">{t("企业资质与授权专利")}</h2>
-              <p>{t("集中展示当前可核验的企业资质、体系认证与已授权专利。")}</p>
-            </div>
-            <Link
-              href={t("/zh/strength/honors")}
-              className={homeToolStyles.allArticlesLink}
-            >
-              {t("查看全部")}<HiChevronDoubleRight aria-hidden="true" />
-            </Link>
-          </div>
-
-          <AboutCertificateGrid locale={locale} cards={[...certificateCards]} />
-          <p className={styles.srOnly}>
-            {t("完整资料共")}{fullCertificateCount} {t("张，包含企业资质、质量管理体系证书和授权专利。")}</p>
-        </div>
-      </section>
-
-      <section
-        id="projects"
-        className={`${styles.sectionMuted} ${styles.sectionAnchor}`}
-        aria-labelledby="projects-title"
-      >
-        <div className={styles.container}>
-          <h2 id="projects-title" className={styles.srOnly}>{t("项目合作")}</h2>
-
-          <div className={styles.partnerStrip} aria-label={t("部分合作单位")}>
-            <div className={styles.partnerIntro}>
-              <strong>{t("部分合作单位")}</strong>
-              <span>{t("不同项目的合作形式和供货范围可能不同")}</span>
-            </div>
-            <ul
-              className={styles.partnerLogos}
-              data-about-layout="partner-logos"
-              aria-label={t("合作单位标志")}
-            >
-              {partnerLogos.map((partner) => (
-                <li key={partner.src} className={styles.partnerLogo}>
-                  <Image
-                    src={partner.src}
-                    alt={partner.name}
-                    title={partner.name}
-                    width={partner.width}
-                    height={partner.height}
-                    loading="lazy"
-                    sizes="112px"
-                  />
-                  <span className={styles.partnerName}>{partner.name}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
-      </section>
-
-      <section
         id="faq"
         className={`${styles.faqSection} ${styles.sectionAnchor}`}
         aria-labelledby="faq-title"
@@ -421,18 +271,14 @@ export function AboutZhContent({ locale = 'zh' }: { locale?: Locale }) {
         </div>
       </section>
 
-      <section className={styles.inquirySection} aria-labelledby="inquiry-title">
-        <div className={`${styles.container} ${styles.contactPanel}`}>
-          <div>
-            <h2 id="inquiry-title">{t("发工况，获取初步方向与报价资料清单")}</h2>
-            <p className={styles.contactDescription}>
-              {t("提交工件、材质、温度、工艺曲线、装料方式、产能节拍和现场条件，技术人员可先做方向与配置边界判断。")}</p>
-          </div>
-          <WechatContactButton locale={locale} description={locale === 'en' ? 'Send workpieces, process, throughput and site conditions for an initial assessment.' : undefined}
-            label={t("提交工况资料")}
-            className={`${getButtonClass('primary', 'lg')} ${styles.primaryButton}`}
-          />
-        </div>
+      <section id="qualifications" className={styles.sectionAnchor} aria-label={locale === 'en' ? 'Qualifications & Honors' : '荣誉资质'}>
+        <CertificateGallerySections embedded locale={locale} qualifications={SUNENG_QUALIFICATION_CERTIFICATES} isoCertificates={SUNENG_ISO_CERTIFICATES} patents={SUNENG_PATENT_CERTIFICATES} />
+      </section>
+      <section id="projects" className={styles.sectionAnchor} aria-label={locale === 'en' ? 'Partners' : '合作单位'}>
+        <PartnerContent embedded locale={locale} />
+      </section>
+      <section id="contact" className={styles.sectionAnchor} aria-label={locale === 'en' ? 'Contact' : '联系我们'}>
+        <ContactZhContent embedded locale={locale} inquiryProduct={inquiryProduct} />
       </section>
     </div>
   );

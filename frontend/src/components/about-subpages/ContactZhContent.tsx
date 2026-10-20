@@ -3,26 +3,28 @@ import type { Locale } from '@/types/site';
 import Image from 'next/image';
 import Link from 'next/link';
 import { siteSettings } from '@/mock/siteSettings';
-import { Button } from '@/components/ui/Button';
 import { SUNENG_CONTACT } from '@/constants/contact';
 import { TrackedContactLink } from '@/components/lead/TrackedContactLink';
 import { AboutSubpageHeader } from './AboutSubpageHeader';
 import { AboutSubpageJsonLd } from './AboutSubpageJsonLd';
 import { ContactMessageForm, ContactPhoneButton, CopyContactButton } from './ContactActions';
+import { ContactDesignA } from './ContactDesignA';
+import { ContactFactoryMap } from './ContactFactoryMap';
 import styles from './AboutSubpages.module.css';
 
-export function ContactZhContent({ locale = 'zh', inquiryProduct }: { locale?: Locale; inquiryProduct?: string }) {
+export function ContactZhContent({ locale = 'zh', inquiryProduct, embedded = false }: { locale?: Locale; inquiryProduct?: string; embedded?: boolean }) {
+  if (locale === 'zh') return <ContactDesignA embedded={embedded} inquiryProduct={inquiryProduct} />;
   const t = (text: string) => corePageText(text, locale);
   const contact = locale === 'en' ? { ...SUNENG_CONTACT, company: siteSettings.companyName.en, phone: siteSettings.salesPhone, address: siteSettings.address.en } : SUNENG_CONTACT;
   return (
     <div lang={locale} className={styles.page} data-about-subpage="contact">
-      <AboutSubpageJsonLd locale={locale}
+      {!embedded && <AboutSubpageJsonLd locale={locale}
         title={t("联系我们")}
         description={t("设备咨询、项目沟通与来厂联系。")}
         path={t("/zh/contact")}
         type="ContactPage"
-      />
-      <AboutSubpageHeader locale={locale} plain title={t("联系我们")} description={t("设备咨询、项目沟通与来厂联系。")} />
+      />}
+      <AboutSubpageHeader embedded={embedded} locale={locale} plain title={t("联系我们")} description={t("设备咨询、项目沟通与来厂联系。")} />
       <div className={`${styles.container} ${styles.contactBody}`}>
         <section className={styles.contactPanel} aria-label={t("电话与微信咨询")}>
           <div className={styles.phone}>
@@ -71,16 +73,9 @@ export function ContactZhContent({ locale = 'zh', inquiryProduct }: { locale?: L
           </div>
           <div className={styles.actions}>
             <CopyContactButton locale={locale} label={t("复制地址")} value={contact.address} />
-            <Button
-              className={styles.actionButton}
-              href={contact.mapHref}
-              variant="secondary"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              {t("打开地图导航 ↗")}</Button>
           </div>
         </section>
+        <ContactFactoryMap locale={locale} />
         <ContactMessageForm key={inquiryProduct ?? 'general'} locale={locale} inquiryProduct={inquiryProduct} />
       </div>
     </div>

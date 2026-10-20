@@ -14,12 +14,10 @@ export type AboutFaqItem = {
 };
 
 export const ABOUT_ANCHORS: AboutAnchorItem[] = [
-  { id: 'manufacturer', label: '基本信息' },
-  { id: 'delivery', label: '制造交付' },
-  { id: 'scope', label: '能力边界' },
-  { id: 'qualifications', label: '资质成果' },
-  { id: 'projects', label: '项目合作' },
-  { id: 'faq', label: '常见问题' },
+  { id: 'manufacturer', label: '公司介绍' },
+  { id: 'qualifications', label: '荣誉资质' },
+  { id: 'projects', label: '合作单位' },
+  { id: 'contact', label: '联系我们' },
 ];
 
 export const ABOUT_BOUNDARIES: AboutBoundaryItem[] = [

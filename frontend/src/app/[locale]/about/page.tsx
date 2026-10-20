@@ -7,8 +7,10 @@ import { absoluteUrl, buildMetadata } from '@/lib/seo/metadata';
 import { SITE_NAME } from '@/lib/seo/config';
 import { ENGLISH_STATIC_PAGE_METADATA } from '@/lib/seo/static-page-metadata-en';
 import { Locale } from '@/types/site';
+import { resolveInquiryProduct } from '@/lib/inquiry-product';
 
 type AboutPageProps = {
+  searchParams?: Promise<{ product?: string | string[] }>;
   params: Promise<{
     locale: string;
   }>;
@@ -73,9 +75,10 @@ export async function generateMetadata({ params }: AboutPageProps): Promise<Meta
   });
 }
 
-export default async function AboutPage({ params }: AboutPageProps) {
+export default async function AboutPage({ params, searchParams }: AboutPageProps) {
   const { locale } = await params;
   const currentLocale = (locale === 'en' ? 'en' : 'zh') as Locale;
 
-  return <AboutZhContent locale={currentLocale} />;
+  const inquiryProduct = resolveInquiryProduct((await searchParams)?.product, currentLocale);
+  return <AboutZhContent locale={currentLocale} inquiryProduct={inquiryProduct} />;
 }

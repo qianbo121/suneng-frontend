@@ -1,6 +1,4 @@
-import { notFound, permanentRedirect } from 'next/navigation';
-import { SUNENG_ISO_CERTIFICATES, SUNENG_PATENT_CERTIFICATES, SUNENG_QUALIFICATION_CERTIFICATES } from '@/constants/certificates';
-import { CertificateGallerySections } from '@/components/strength/CertificateGallerySections';
+import { notFound, permanentRedirect, redirect } from 'next/navigation';
 import { buildMetadata } from '@/lib/seo/metadata';
 
 type StrengthCategoryPageProps = { params: Promise<{ locale: string; categorySlug: string }> };
@@ -14,7 +12,7 @@ export function generateStaticParams() {
 async function resolvePage(params: StrengthCategoryPageProps['params']) {
   const { locale, categorySlug } = await params;
   const currentLocale = locale === 'en' ? 'en' : 'zh';
-  if (categorySlug === 'certificates') permanentRedirect(`/${currentLocale}/strength/honors#management-systems`);
+  if (categorySlug === 'certificates') permanentRedirect(`/${currentLocale}/about#management-systems`);
   if (categorySlug !== 'honors') notFound();
   return currentLocale;
 }
@@ -38,5 +36,5 @@ export async function generateMetadata({ params }: StrengthCategoryPageProps) {
 
 export default async function StrengthCategoryPage({ params }: StrengthCategoryPageProps) {
   const locale = await resolvePage(params);
-  return <CertificateGallerySections locale={locale} qualifications={SUNENG_QUALIFICATION_CERTIFICATES} isoCertificates={SUNENG_ISO_CERTIFICATES} patents={SUNENG_PATENT_CERTIFICATES} />;
+  redirect(`/${locale}/about#qualifications`);
 }
