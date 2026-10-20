@@ -2134,14 +2134,20 @@
   scroll-margin-bottom: 110px;
   position: absolute;
   z-index: 45;
-  max-width: 320px;
-  min-width: 180px;
+  max-width: min(320px, calc(100vw - 32px));
+  min-width: min(180px, calc(100vw - 32px));
+  overflow-wrap: anywhere;
   padding: 12px;
   border: 1px solid #dce6f3;
   background: white;
   color: #183659;
   border-radius: 5px;
   font-size: 13px;
+}
+@media (max-width: 359px) {
+  .page :global(.hero-copy .copy-message) {
+    right: 0;
+  }
 }
 .page :global(.furnace-tabs button:focus-visible) {
   outline: 2px solid #3370ff;
