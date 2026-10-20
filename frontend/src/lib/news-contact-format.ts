@@ -149,6 +149,59 @@ function splitUnformattedCompositeFooters(root: HTMLElement) {
   return changed;
 }
 
+// Older footers put their credit before the contact block, sometimes sharing
+// a paragraph with the official homepage. Move only adjacent, known footer
+// lines; never cross an engineering paragraph or an unrelated link.
+function reorderPrecedingFooterMetadata(root: HTMLElement) {
+  let changed = 0;
+  for (const contact of Array.from(root.querySelectorAll('p'))) {
+    if (!contact.parentNode || contact.closest(EXCLUDED) || !isNormalizedFooter(contact)
+      || !pureContact(contact.textContent || '')) continue;
+    const preceding: { paragraph: HTMLElement; lines: { content: DocumentFragment; metadata: boolean }[] }[] = [];
+    let previous = contact.previousElementSibling;
+    while (previous?.tagName === 'P') {
+      const paragraph = previous as HTMLElement;
+      const { text, parts } = textIndex(paragraph);
+      const lines = Array.from(text.matchAll(/[^\n]+/g)).filter((line) => line[0].trim()).map((line) => {
+        const content = slice(paragraph, parts, line.index!, line.index! + line[0].length);
+        const metadata = isMetadataLine(line[0]);
+        const links = content.querySelectorAll('a[href]');
+        const label = line[0].trim().match(/^(?:官网|官方网站)\s*[:：]\s*(.+)$/);
+        const website = !!label && links.length === 1
+          && /^https:\/\/(?:www\.)?jssngyl\.cn\/?$/.test(links[0].getAttribute('href') || '')
+          && label[1].trim() === links[0].textContent?.trim();
+        return { content, metadata, known: metadata || website };
+      });
+      if (!lines.length || !lines.every((line) => line.known)) break;
+      preceding.unshift({ paragraph, lines });
+      previous = previous.previousElementSibling;
+    }
+    if (!preceding.some(({ lines }) => lines.some((line) => line.metadata))) continue;
+    const credits: HTMLElement[] = [];
+    for (const { paragraph, lines } of preceding) {
+      if (lines.length === 1) {
+        if (lines[0].metadata) credits.push(paragraph);
+        continue;
+      }
+      const fragment = root.ownerDocument.createDocumentFragment();
+      for (const [index, line] of lines.entries()) {
+        const part = root.ownerDocument.createElement('p');
+        // Keep identifiers once and retain shared visual attributes on each line.
+        for (const attribute of Array.from(paragraph.attributes)) {
+          if (index === 0 || attribute.name !== 'id') part.setAttribute(attribute.name, attribute.value);
+        }
+        part.append(line.content);
+        fragment.append(part);
+        if (line.metadata) credits.push(part);
+      }
+      paragraph.replaceWith(fragment);
+    }
+    contact.after(...credits);
+    changed += 1;
+  }
+  return changed;
+}
+
 function compactAdjacentFooterParagraphs(root: HTMLElement) {
   let changed = 0;
   for (const paragraph of Array.from(root.querySelectorAll('p'))) {
@@ -328,6 +381,7 @@ export function normalizeNewsContactFormat(root: HTMLElement) {
       changedBlocks += 1;
     }
   }
+  changedBlocks += reorderPrecedingFooterMetadata(root);
   changedBlocks += compactAdjacentFooterParagraphs(root);
   return { changedBlocks, unhandledBlocks };
 }
