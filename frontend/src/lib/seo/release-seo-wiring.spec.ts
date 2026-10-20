@@ -31,7 +31,7 @@ describe('search-related production wiring', () => {
     for (const legacy of ['/product/showproduct.php', '/product/product.php', '/news/shownews.php', '/news/news.php']) {
       const blocks = nginx.split(`location = ${legacy} {`).slice(1);
       expect(blocks).toHaveLength(3);
-      for (const block of blocks) expect(block.split('}')[0]).toContain('return 301');
+      for (const block of blocks) expect(block.split('\n    }')[0]).toContain('return 301');
     }
   });
 });

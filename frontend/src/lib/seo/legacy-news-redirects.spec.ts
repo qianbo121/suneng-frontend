@@ -53,9 +53,9 @@ function mapBody(variable: string) {
 
 function newsMap() {
   const entries = mapBody('legacy_news_path')[1].trim().split('\n').map((row) => {
-    const match = row.trim().match(/^(default|\d+)\s+(\/zh\/[a-z0-9/-]+);$/);
+    const match = row.trim().match(/^(default|\d+)\s+(""|\/zh\/[a-z0-9/-]+);$/);
     expect(match, 'Only exact decimal IDs and a single default are allowed: ' + row).not.toBeNull();
-    return [match![1], match![2]] as const;
+    return [match![1], match![2].replace(/^"|"$/g, '')] as const;
   });
   expect(new Set(entries.map(([id]) => id)).size).toBe(entries.length);
   return new Map(entries);
@@ -82,26 +82,38 @@ function publicBlock(serverName: string, listen: string) {
 function locationBody(block: string, path: string) {
   const matches = block.split('location = ' + path + ' {');
   expect(matches).toHaveLength(2);
-  return matches[1].split('}')[0].trim();
+  const body = matches[1];
+  let depth = 1;
+  let end = 0;
+  for (; end < body.length && depth; end++) {
+    if (body[end] === '{') depth++;
+    if (body[end] === '}') depth--;
+  }
+  expect(depth).toBe(0);
+  return body.slice(0, end - 1).replace(/\s+/g, ' ').trim();
 }
 
 describe('verified original-PHP news continuity', () => {
-  it('permits only the nine approved news IDs and the existing news default', () => {
-    expect([...newsMap().entries()].sort()).toEqual([['default', '/zh/news'], ...allApproved].sort());
+  it('permits only the nine approved news IDs and leaves unverified details unmapped', () => {
+    expect([...newsMap().entries()].sort()).toEqual([['default', ''], ...allApproved].sort());
   });
 
   it.each(allApproved)('news %s continues to its approved destination on every public origin', (id, path) => {
     expect(newsMap().get(id)).toBe(path);
     for (const [, serverName, listen] of origins) {
       const body = locationBody(publicBlock(serverName, listen), '/news/shownews.php');
-      expect(body).toBe('return 301 https://www.jssngyl.cn$legacy_news_path;');
+      expect(body).toBe('if ($legacy_news_path = "") { return 404; } return 301 https://www.jssngyl.cn$legacy_news_path;');
       expect(body).not.toMatch(/\$(args|arg_id|query_string|request_uri|is_args|legacy_product_path)\b/);
     }
   });
 
-  it.each(['', '24', '26', '36', '45', '150', '186', '999999', '038', '38x', '%33%38', '025', '37x', '%33%37', '043', '43x', '%34%33'])('unapproved or nonexact news ID %s stays at the news fallback', (id) => {
+  it.each(['', 'abc', '99999', '24', '26', '36', '45', '150', '186', '999999', '038', '38x', '%33%38', '025', '37x', '%33%37', '043', '43x', '%34%33'])('unapproved or nonexact news ID %s reaches the 404 guard', (id) => {
     expect(newsMap().has(id)).toBe(false);
-    expect(newsMap().get('default')).toBe('/zh/news');
+    expect(newsMap().get('default')).toBe('');
+    for (const [, serverName, listen] of origins) {
+      expect(locationBody(publicBlock(serverName, listen), '/news/shownews.php'))
+        .toBe('if ($legacy_news_path = "") { return 404; } return 301 https://www.jssngyl.cn$legacy_news_path;');
+    }
   });
 
   it.each(origins)('%s keeps news mapping isolated from directories, products and unknown PHP', (_label, serverName, listen) => {
@@ -110,18 +122,21 @@ describe('verified original-PHP news continuity', () => {
     for (const path of ['/news/index.php', '/news/news.php']) {
       expect(locationBody(block, path)).toBe('return 301 ' + prefix + '/zh/news;');
     }
-    expect(locationBody(block, '/product/showproduct.php')).toBe('return 301 https://www.jssngyl.cn$legacy_product_path;');
+    expect(locationBody(block, '/product/showproduct.php')).toBe('if ($legacy_product_path = "") { return 404; } return 301 https://www.jssngyl.cn$legacy_product_path;');
     for (const path of ['/product/product.php', '/product/index.php']) {
       expect(locationBody(block, path)).toBe('return 301 https://www.jssngyl.cn$legacy_product_category_path;');
     }
-    expect(block.match(/\$legacy_news_path\b/g)).toHaveLength(1);
+    expect(block.match(/\$legacy_news_path\b/g)).toHaveLength(2);
     const unknown = block.split('location ~ \\.php$ {').slice(1);
     expect(unknown).toHaveLength(1);
     expect(unknown[0].split('}')[0].trim()).toBe('return 404;');
   });
 
   it('preserves the pre-news 33-product map apart from the four later approved thermal-section entries', () => {
+    // Restore the historical fallback only for the immutable mapping-ledger digest.
+    // The current empty fallback and 404 guard are asserted separately above.
     let historicalMap = mapBody('legacy_product_path')[0]
+      .replace('    default "";', '    default /zh/products;')
       .replace(/^    19[3-6] \/zh\/products\/detail\/annealing-solution-line;\n/gm, '');
     for (const id of ["122", "124", "132", "136", "137", "138", "139", "140", "144", "145", "146", "148", "149", "151", "153", "155", "157", "174", "176", "178", "179", "180", "181", "182", "183", "184", "185", "205", "206", "207", "208", "209", "210", "211", "212", "213", "214", "215", "216", "217", "218", "219", "220", "221", "222", "223", "224", "225", "226", "227", "228", "241", "243", "244", "245"]) {
       historicalMap = historicalMap.replace(new RegExp('^    ' + id + ' \"[^\"]+\";\\n', 'gm'), '');

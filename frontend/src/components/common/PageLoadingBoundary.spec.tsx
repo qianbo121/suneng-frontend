@@ -96,6 +96,8 @@ describe('public page initial HTML with delayed data', () => {
       `/${locale}`,
       `/${locale}/products/detail/box-furnace`,
       `/${locale}/products/detail/annealing-solution-line/`,
+      `/${locale}/products/detail/copper-wire-annealing-line/inquiry-checklist`,
+      `/${locale}/products/detail/copper-wire-annealing-line/inquiry-checklist/`,
       ...informationRoutes.map((path) => `/${locale}/${path}`),
       ...serviceRoutes.map((path) => `/${locale}/${path}`),
       `/${locale}/case`,
@@ -117,12 +119,13 @@ describe('public page initial HTML with delayed data', () => {
   it.each(['zh', 'en'].flatMap((locale) => [
     `/${locale}/inquiry`,
     `/${locale}/inquiry/`,
-    `/${locale}/products/detail/copper-wire-annealing-line/inquiry-checklist`,
+    `/${locale}/products/detail/unknown-product/inquiry-checklist`,
+    `/${locale}/products/detail/copper-wire-annealing-line/inquiry-checklist/unknown-page`,
     `/${locale}/products/detail/box-furnace/inquiry`,
     `/${locale}/service/unknown-service`,
     `/${locale}/about/unknown-page`,
     `/${locale}/strength/unknown-category`,
-  ]))('keeps inquiry tools and unlisted routes behind their existing boundary at %s', async (pathname) => {
+  ]))('keeps ordinary inquiry tools and unlisted routes behind their existing boundary at %s', async (pathname) => {
     const html = await streamDelayedPage(pathname);
     expect(html).toContain('Shared pending');
     expect(html).toMatch(/<div hidden\b/);

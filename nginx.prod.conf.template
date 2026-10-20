@@ -58,9 +58,9 @@ http {
   }
 
   # Verified original-PHP product names from Common Crawl CC-MAIN-2025-47.
-  # Unknown IDs retain the existing catalog fallback. Apply only to showproduct.
+  # Only verified detail IDs redirect. Unmapped detail requests return 404.
   map $arg_id $legacy_product_path {
-    default /zh/products;
+    default "";
     123 /zh/products/detail/trolley-furnace;
     125 /zh/products/detail/trolley-furnace;
     141 /zh/products/detail/pit-furnace;
@@ -188,9 +188,9 @@ http {
   }
 
   # Verified old news: preserve equipment continuity and approved same-question replacements.
-  # Reviewed replacements do not restore unverified old text or specifications. Unknown news stays news.
+  # Reviewed replacements do not restore unverified old text or specifications. Unmapped detail requests return 404.
   map $arg_id $legacy_news_path {
-    default /zh/news;
+    default "";
     25 /zh/news/mesh-belt-furnace-oil-fume-treatment-checklist;
     37 /zh/news/mesh-belt-furnace-carbon-cleaning-review;
     38 /zh/products/detail/trolley-furnace;
@@ -498,6 +498,15 @@ http {
       return 301 https://www.jssngyl.cn/zh/contact;
     }
 
+    # Collapse the known legacy directory chain while preserving query parameters.
+    location = /about {
+      return 301 https://www.jssngyl.cn/zh/about$is_args$args;
+    }
+
+    location = /about/ {
+      return 301 https://www.jssngyl.cn/zh/about$is_args$args;
+    }
+
     location = /about/show.php {
       return 301 https://www.jssngyl.cn/zh/about;
     }
@@ -515,6 +524,9 @@ http {
     }
 
     location = /product/showproduct.php {
+      if ($legacy_product_path = "") {
+        return 404;
+      }
       return 301 https://www.jssngyl.cn$legacy_product_path;
     }
 
@@ -527,6 +539,9 @@ http {
     }
 
     location = /news/shownews.php {
+      if ($legacy_news_path = "") {
+        return 404;
+      }
       return 301 https://www.jssngyl.cn$legacy_news_path;
     }
 
@@ -585,6 +600,15 @@ http {
       return 301 https://www.jssngyl.cn/zh/contact;
     }
 
+    # Collapse the known legacy directory chain while preserving query parameters.
+    location = /about {
+      return 301 https://www.jssngyl.cn/zh/about$is_args$args;
+    }
+
+    location = /about/ {
+      return 301 https://www.jssngyl.cn/zh/about$is_args$args;
+    }
+
     location = /about/show.php {
       return 301 https://www.jssngyl.cn/zh/about;
     }
@@ -602,6 +626,9 @@ http {
     }
 
     location = /product/showproduct.php {
+      if ($legacy_product_path = "") {
+        return 404;
+      }
       return 301 https://www.jssngyl.cn$legacy_product_path;
     }
 
@@ -614,6 +641,9 @@ http {
     }
 
     location = /news/shownews.php {
+      if ($legacy_news_path = "") {
+        return 404;
+      }
       return 301 https://www.jssngyl.cn$legacy_news_path;
     }
 
@@ -954,6 +984,15 @@ http {
       return 301 /zh/contact;
     }
 
+    # Collapse the known legacy directory chain while preserving query parameters.
+    location = /about {
+      return 301 https://www.jssngyl.cn/zh/about$is_args$args;
+    }
+
+    location = /about/ {
+      return 301 https://www.jssngyl.cn/zh/about$is_args$args;
+    }
+
     location = /about/show.php {
       return 301 /zh/about;
     }
@@ -971,6 +1010,9 @@ http {
     }
 
     location = /product/showproduct.php {
+      if ($legacy_product_path = "") {
+        return 404;
+      }
       return 301 https://www.jssngyl.cn$legacy_product_path;
     }
 
@@ -983,6 +1025,9 @@ http {
     }
 
     location = /news/shownews.php {
+      if ($legacy_news_path = "") {
+        return 404;
+      }
       return 301 https://www.jssngyl.cn$legacy_news_path;
     }
 
