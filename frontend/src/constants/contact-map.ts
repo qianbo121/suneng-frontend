@@ -5,7 +5,7 @@ type FactoryMap = {
   provider: 'baidu' | 'google';
   href: string;
   label: string;
-  preview?: { kind: 'image' | 'iframe'; src: string; title: string };
+  preview?: { kind: 'image' | 'iframe'; src: string; mobileSrc?: string; title: string };
 };
 
 // Factory point separately verified on Baidu (BD-09); not Google coordinates.
@@ -29,7 +29,8 @@ export function getContactFactoryMap(locale: Locale): FactoryMap {
   return {
     provider: 'baidu', href: marker.href, label: '百度地图查看厂区',
     preview: {
-      kind: 'image', src: '/images/contact/factory-location.svg?v=2',
+      kind: 'image', src: '/images/contact/factory-location.svg?v=4',
+      mobileSrc: '/images/contact/factory-location-mobile.svg?v=4',
       title: '苏能厂区周边示意图：位于俞张线（205县道）西侧、三兴路交叉口以北，北侧为神龙电气、南侧为润程机械。点击打开百度地图查看准确位置。',
     },
   };

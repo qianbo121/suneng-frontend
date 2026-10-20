@@ -1,6 +1,7 @@
 .panel { min-width: 0; }
 .imageLink { display: flex; flex: 1; min-width: 0; background: #f0f4f7; }
 .imageLink .preview { object-fit: contain; }
+.picture { display: flex; flex: 1; min-width: 0; }
 .panel[data-map-provider='google'] { margin-bottom: 28px; }
 .preview {
   display: block;

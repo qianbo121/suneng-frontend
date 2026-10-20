@@ -13,7 +13,10 @@ export function ContactFactoryMap({ locale, showNavigationLink = true }: { local
         <iframe className={styles.preview} title={map.preview.title} src={map.preview.src} loading="eager" allowFullScreen referrerPolicy="strict-origin-when-cross-origin" />
       ) : map.preview?.kind === 'image' ? (
         <a className={styles.imageLink} href={map.href} target="_blank" rel="noopener noreferrer" aria-label={`${map.label}（新窗口打开）`}>
-          <Image className={styles.preview} src={map.preview.src} alt={map.preview.title} width={720} height={400} unoptimized priority />
+          <picture className={styles.picture}>
+            {map.preview.mobileSrc && <source media="(max-width: 767px)" srcSet={map.preview.mobileSrc} />}
+            <Image className={styles.preview} src={map.preview.src} alt={map.preview.title} width={744} height={400} unoptimized priority />
+          </picture>
         </a>
       ) : (
         <div className={styles.location}>

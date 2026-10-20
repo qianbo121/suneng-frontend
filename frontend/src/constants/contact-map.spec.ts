@@ -6,7 +6,7 @@ describe('contact map language routing', () => {
     const map = getContactFactoryMap('zh');
     expect(map.provider).toBe('baidu');
     expect(map.preview?.kind).toBe('image');
-    expect(map.preview?.src).toBe('/images/contact/factory-location.svg?v=2');
+    expect(map.preview?.src).toBe('/images/contact/factory-location.svg?v=4');
     expect(JSON.stringify(map)).not.toMatch(/google|amap|openstreetmap|baidu-factory-map|ak=/);
   });
 
