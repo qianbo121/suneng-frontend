@@ -21,8 +21,8 @@ describe('contact follow-up event receipt', () => {
         },
       });
       expect(validateSync(dto)).toEqual([]);
-      const execute = jest.fn().mockResolvedValue(1);
-      const service = new LeadEventService({ $executeRaw: execute } as unknown as PrismaService);
+      const execute = jest.fn().mockResolvedValue([{ id: 1 }]);
+      const service = new LeadEventService({ $queryRaw: execute } as unknown as PrismaService);
       await expect(
         service.createPublic(dto, { ip: '127.0.0.1', headers: {} } as Request),
       ).resolves.toEqual({ ok: true });
