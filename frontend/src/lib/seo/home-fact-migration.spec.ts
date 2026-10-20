@@ -11,9 +11,9 @@ describe('Home facts retained during migration', () => {
     expect(home).toContain('工业炉新建与改造项目');
     expect(home).toContain("value: '14700'");
     expect(englishHome).toContain('<HomeHero locale="en" />');
-    expect(home).toContain('New-build & retrofit projects');
-    expect(home).toContain("prefix: '≈'");
-    expect(home).toContain('Production site (company-reported)');
+    expect(home).toContain('Total new-build & retrofit projects');
+    expect(home).not.toContain("prefix: '≈'");
+    expect(home).toContain('Production site area (company-reported)');
     expect(profile).toContain("value: { zh: '1000+', en: '1000+' }");
     for (const source of [home, englishHome, profile]) {
       expect(source).not.toMatch(/(?:value:\s*150\b|['"]150\+['"]|label:\s*['"]Employees['"])/);

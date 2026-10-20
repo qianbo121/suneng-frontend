@@ -10,9 +10,26 @@ import {
 } from '@/lib/seo/jsonld';
 
 describe('SEO JSON-LD entities', () => {
-  it('uses the same English factory address as the visible contact page and footer', () => {
-    expect(getOrganizationJsonLd('en').address.streetAddress).toBe(siteSettings.address.en);
-    expect(getOrganizationJsonLd('zh').address.streetAddress).toBe('张甸蔡官工业区');
+  it('separates the English factory address into non-overlapping parts while preserving the visible address', () => {
+    const address = getOrganizationJsonLd('en').address;
+
+    expect(address).toEqual({
+      '@type': 'PostalAddress',
+      streetAddress: 'Caiguan Industrial Park, Zhangdian Town, Jiangyan District',
+      addressLocality: 'Taizhou',
+      addressRegion: 'Jiangsu',
+      addressCountry: 'CN',
+    });
+    expect(siteSettings.address.en).toBe(
+      [address.streetAddress, address.addressLocality, `${address.addressRegion} Province`, 'China'].join(', '),
+    );
+    expect(getOrganizationJsonLd('zh').address).toEqual({
+      '@type': 'PostalAddress',
+      streetAddress: '张甸蔡官工业区',
+      addressLocality: '姜堰区',
+      addressRegion: '江苏省泰州市',
+      addressCountry: 'CN',
+    });
   });
 
   it.each([

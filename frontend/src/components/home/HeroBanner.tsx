@@ -2,6 +2,7 @@
 
 import { motion } from 'framer-motion';
 import Image from 'next/image';
+import Link from 'next/link';
 
 import { Locale } from '@/types/site';
 
@@ -153,7 +154,7 @@ function HeroPartners({ locale }: HeroBannerProps) {
       <div className={styles.heading}>
         <span className={styles.headingAccent} aria-hidden="true" />
         <span>
-          <span className={styles.headingTitle}>{locale === 'en' ? 'Partners' : '合作伙伴'}</span>
+          <Link href={`/${locale}/partner`} className={styles.headingTitle}>{locale === 'en' ? 'Partners' : '合作伙伴'}</Link>
           <span className={styles.headingEyebrow}>Partners</span>
         </span>
       </div>

@@ -1,6 +1,7 @@
 'use client';
 
 import Image from 'next/image';
+import Link from 'next/link';
 import { useEffect, useState } from 'react';
 
 import styles from './HomeHero.module.css';
@@ -13,7 +14,7 @@ const heroSlides = [
     eyebrow: 'JIANGSU SUNENG INDUSTRIAL FURNACE CO LTD',
     title: '江苏苏能工业炉有限公司',
     description: '工业炉单机、配套件与整线设备一体化解决方案商',
-    certification: '江苏泰州 · 国家高新技术企业',
+    certification: '江苏泰州',
     showStats: true,
   },
   {
@@ -45,13 +46,13 @@ const companyStats = [
     value: '1000+',
     prefix: '',
     unit: '项',
-    label: '工业炉新建与改造项目',
+    label: '累计工业炉新建与改造项目',
   },
   {
     value: '14700',
     prefix: '',
     unit: 'm²',
-    label: '生产基地',
+    label: '生产基地面积',
   },
 ] as const;
 
@@ -61,13 +62,13 @@ export default function HomeHero({ locale = 'zh' }: { locale?: 'zh' | 'en' }) {
     ...slide,
     title: index === 0 ? 'Jiangsu Suneng Industrial Furnace Co., Ltd.' : 'Our Manufacturing Base',
     description: index === 0 ? 'Industrial furnaces, components and complete heat-treatment lines.' : 'Furnace fabrication, piping and electrical control integration under one roof.',
-    certification: index === 0 ? 'Taizhou, Jiangsu · National High-tech Enterprise' : 'Taizhou, Jiangsu · Manufacturing facility',
+    certification: index === 0 ? 'Taizhou, Jiangsu' : 'Taizhou, Jiangsu · Manufacturing facility',
   } : slide);
   const stats = english ? [
     { value: '2006', prefix: '', unit: '', label: 'Founded' },
     { value: '50.8', prefix: '', unit: 'M CNY', label: 'Registered capital' },
-    { value: '1000+', prefix: '', unit: '', label: 'New-build & retrofit projects' },
-    { value: '14700', prefix: '≈', unit: 'm²', label: 'Production site (company-reported)' },
+    { value: '1000+', prefix: '', unit: '', label: 'Total new-build & retrofit projects' },
+    { value: '14700', prefix: '', unit: 'm²', label: 'Production site area (company-reported)' },
   ] : companyStats;
   const [activeSlide, setActiveSlide] = useState(0);
   const [isPointerOver, setIsPointerOver] = useState(false);
@@ -144,7 +145,19 @@ export default function HomeHero({ locale = 'zh' }: { locale?: 'zh' | 'en' }) {
             </p>
             <div className={styles.title}>{slide.title}</div>
             <p className={styles.description}>{slide.description}</p>
-            <p className={styles.certification}>{slide.certification}</p>
+            <p className={styles.certification}>
+              {slide.certification}
+              {index === 0 ? <>
+                {' · '}
+                <Link
+                  href={`/${locale}/strength/honors`}
+                  className={styles.evidenceLink}
+                  tabIndex={index === activeSlide ? 0 : -1}
+                >
+                  {english ? 'National High-tech Enterprise' : '国家高新技术企业'}
+                </Link>
+              </> : null}
+            </p>
           </div>
         </div>
       ))}
