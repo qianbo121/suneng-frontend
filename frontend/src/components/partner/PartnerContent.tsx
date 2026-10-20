@@ -48,7 +48,12 @@ export function PartnerContent({ locale, embedded = false }: { locale: Locale; e
             partners={partners}
             provinces={provinces.map(
               (province): Province => ({
-                ...province,
+                // Keep unused source geometry out of the browser payload.
+                code: province.code,
+                name: province.name,
+                shortName: province.shortName,
+                path: province.path,
+                leader: province.leader,
                 ...(locale === 'en' ? ENGLISH_PROVINCES[province.code] : {}),
                 anchor: [province.anchor[0], province.anchor[1]],
                 label: [province.label[0], province.label[1]],

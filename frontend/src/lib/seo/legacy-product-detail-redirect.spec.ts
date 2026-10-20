@@ -26,6 +26,17 @@ describe('reviewed missing legacy product detail handoffs', () => {
     expect(patchDetailRedirects(candidate, manifest)).toBe(candidate);
   });
 
+  it('preserves the current empty fallback when reapplying reviewed detail mappings', () => {
+    expect(template).toContain('map $arg_id $legacy_product_path {\n    default "";');
+    expect(patchDetailRedirects(template, manifest)).toBe(template);
+    const emptyFallbackBase = base.replace('    default /zh/products;', '    default "";');
+    const candidate = patchDetailRedirects(emptyFallbackBase, manifest);
+    expect(candidate).toContain('map $arg_id $legacy_product_path {\n    default "";');
+    const added = manifest.routes.map(({ id, target }) => `    ${id} "${target}";\n`).join('');
+    expect(candidate.replace(added, '')).toBe(emptyFallbackBase);
+    expect(patchDetailRedirects(candidate, manifest)).toBe(candidate);
+  });
+
   it('refuses missing maps, duplicate IDs, foreign URLs, and conflicting existing targets', () => {
     expect(() => patchDetailRedirects(base.replace(productMap, ''), manifest)).toThrow();
     expect(() => patchDetailRedirects(base, { routes: [manifest.routes[0], manifest.routes[0]] })).toThrow();

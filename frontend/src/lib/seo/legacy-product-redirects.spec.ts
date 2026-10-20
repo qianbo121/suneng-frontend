@@ -141,7 +141,15 @@ function locationBody(block: string, legacy: string) {
   const marker = 'location = ' + legacy + ' {';
   const pieces = block.split(marker);
   expect(pieces).toHaveLength(2);
-  return pieces[1].split('}')[0].trim();
+  const body = pieces[1];
+  let depth = 1;
+  let end = 0;
+  for (; end < body.length && depth; end++) {
+    if (body[end] === '{') depth++;
+    if (body[end] === '}') depth--;
+  }
+  expect(depth).toBe(0);
+  return body.slice(0, end - 1).replace(/\s+/g, ' ').trim();
 }
 
 function productMap() {
@@ -149,7 +157,7 @@ function productMap() {
   expect(maps).toHaveLength(1);
   const rows = maps[0][1].split('\n').map((line) => line.trim()).filter(Boolean);
   const entries = rows.map((row) => {
-    const match = row.match(/^(default|\d+)\s+(\/[a-z0-9/-]+|"\/zh\/[a-z0-9/-]+#[a-z0-9-]+");$/);
+    const match = row.match(/^(default|\d+)\s+(""|\/[a-z0-9/-]+|"\/zh\/[a-z0-9/-]+#[a-z0-9-]+");$/);
     expect(match, 'Only exact decimal IDs and one default are permitted: ' + row).not.toBeNull();
     return [match![1], match![2].replace(/^"|"$/g, '')] as const;
   });
@@ -158,9 +166,9 @@ function productMap() {
 }
 
 describe('verified original-PHP product redirects', () => {
-  it('permits exactly the approved known IDs and preserves the existing catalog default', () => {
+  it('permits exactly the approved known IDs and leaves unverified details unmapped', () => {
     expect([...productMap().entries()].sort()).toEqual([
-      ['default', '/zh/products'],
+      ['default', ''],
       ...allVerifiedMappings,
     ].sort());
   });
@@ -169,7 +177,7 @@ describe('verified original-PHP product redirects', () => {
     expect(productMap().get(id)).toBe(target);
     for (const [, serverName, listen] of publicHosts) {
       const body = locationBody(publicBlock(serverName, listen), '/product/showproduct.php');
-      expect(body).toBe('return 301 https://www.jssngyl.cn$legacy_product_path;');
+      expect(body).toBe('if ($legacy_product_path = "") { return 404; } return 301 https://www.jssngyl.cn$legacy_product_path;');
       expect(body).not.toMatch(/\$(args|arg_id|query_string|request_uri|is_args)\b/);
     }
   });
@@ -178,7 +186,7 @@ describe('verified original-PHP product redirects', () => {
     expect(productMap().get(id)).toBe(target);
     for (const [, serverName, listen] of publicHosts) {
       expect(locationBody(publicBlock(serverName, listen), '/product/showproduct.php'))
-        .toBe('return 301 https://www.jssngyl.cn$legacy_product_path;');
+        .toBe('if ($legacy_product_path = "") { return 404; } return 301 https://www.jssngyl.cn$legacy_product_path;');
     }
     const row = mappingLedger.mappings.find((entry) => String(entry.oldId) === id)!;
     expect(row.oldTitle).toBe('设备制作车间');
@@ -197,7 +205,7 @@ describe('verified original-PHP product redirects', () => {
     expect(productMap().get(id)).toBe(target);
     for (const [, serverName, listen] of publicHosts) {
       expect(locationBody(publicBlock(serverName, listen), '/product/showproduct.php'))
-        .toBe('return 301 https://www.jssngyl.cn$legacy_product_path;');
+        .toBe('if ($legacy_product_path = "") { return 404; } return 301 https://www.jssngyl.cn$legacy_product_path;');
     }
     const row = mappingLedger.mappings.find((entry) => String(entry.oldId) === id)!;
     expect(row.oldTitle).toBe('不锈钢连续退火酸洗退火炉设备');
@@ -228,7 +236,7 @@ describe('verified original-PHP product redirects', () => {
     expect(row.publicationState).toBe('approved-candidate-awaiting-three-target-publication-and-edge-release');
     for (const [, serverName, listen] of publicHosts) {
       expect(locationBody(publicBlock(serverName, listen), '/product/showproduct.php'))
-        .toBe('return 301 https://www.jssngyl.cn$legacy_product_path;');
+        .toBe('if ($legacy_product_path = "") { return 404; } return 301 https://www.jssngyl.cn$legacy_product_path;');
     }
   });
 
@@ -266,6 +274,17 @@ describe('verified original-PHP product redirects', () => {
       baseline = baseline.replace(line, '');
     }
     baseline = baseline.replace('    43 /zh/news/annealing-furnace-metal-semiconductor-selection;\n', '');
+    // Compare the historical ledger independently of the later, separately tested
+    // exact /about redirects and rejection of unmapped detail requests.
+    baseline = baseline
+      .replaceAll('    # Collapse the known legacy directory chain while preserving query parameters.\n    location = /about {\n      return 301 https://www.jssngyl.cn/zh/about$is_args$args;\n    }\n\n    location = /about/ {\n      return 301 https://www.jssngyl.cn/zh/about$is_args$args;\n    }\n\n', '')
+      .replace('map $arg_id $legacy_product_path {\n    default "";', 'map $arg_id $legacy_product_path {\n    default /zh/products;')
+      .replace('map $arg_id $legacy_news_path {\n    default "";', 'map $arg_id $legacy_news_path {\n    default /zh/news;')
+      .replace('# Only verified detail IDs redirect. Unmapped detail requests return 404.', '# Unknown IDs retain the existing catalog fallback. Apply only to showproduct.')
+      .replace('# Reviewed replacements do not restore unverified old text or specifications. Unmapped detail requests return 404.', '# Reviewed replacements do not restore unverified old text or specifications. Unknown news stays news.');
+    for (const kind of ['product', 'news']) {
+      baseline = baseline.replaceAll('      if ($legacy_' + kind + '_path = "") {\n        return 404;\n      }\n', '');
+    }
     // Same redirect baseline, with the owner-approved legacy admin retirement applied.
     expect(createHash('sha256').update(baseline).digest('hex'))
       .toBe('b3fc26e3709201fccb4df654600b6fba27c2d38b2dbbc6e2afa90d2f2a6ebeae');
@@ -288,12 +307,16 @@ describe('verified original-PHP product redirects', () => {
     }
   });
 
-  it.each(['', '246', '999999', '1500', '0150', '%31%35%30', '1860', '0186', '%31%38%36', '1220', '0122', '%31%32%32', '2050', '0205', '%32%30%35', '1930', '0193', '%31%39%33'])(
-    'unverified or nonexact ID %s retains the catalog fallback',
+  it.each(['', 'abc', '99999', '246', '999999', '1500', '0150', '%31%35%30', '1860', '0186', '%31%38%36', '1220', '0122', '%31%32%32', '2050', '0205', '%32%30%35', '1930', '0193', '%31%39%33'])(
+    'unverified or nonexact ID %s reaches the 404 guard',
     (id) => {
       const map = productMap();
       expect(map.has(id)).toBe(false);
-      expect(map.get('default')).toBe('/zh/products');
+      expect(map.get('default')).toBe('');
+      for (const [, serverName, listen] of publicHosts) {
+        expect(locationBody(publicBlock(serverName, listen), '/product/showproduct.php'))
+          .toBe('if ($legacy_product_path = "") { return 404; } return 301 https://www.jssngyl.cn$legacy_product_path;');
+      }
     },
   );
 
@@ -314,10 +337,29 @@ describe('verified original-PHP product redirects', () => {
     for (const path of ['/product/product.php', '/product/index.php']) {
       expect(locationBody(block, path)).toBe('return 301 https://www.jssngyl.cn$legacy_product_category_path;');
     }
-    expect(locationBody(block, '/news/shownews.php')).toBe('return 301 https://www.jssngyl.cn$legacy_news_path;');
+    expect(locationBody(block, '/news/shownews.php')).toBe('if ($legacy_news_path = "") { return 404; } return 301 https://www.jssngyl.cn$legacy_news_path;');
     const unknown = block.split('location ~ \\.php$ {').slice(1);
     expect(unknown).toHaveLength(1);
     expect(unknown[0].split('}')[0].trim()).toBe('return 404;');
+  });
+
+  it('keeps the active fallback configuration on the same verified detail maps and 404 policy', () => {
+    const fallback = readFileSync(new URL('nginx.conf', root), 'utf8');
+    const blocks = serverBlocks(fallback);
+    expect(blocks).toHaveLength(2);
+    for (const kind of ['product', 'news']) {
+      const mapPattern = new RegExp('  map \\$arg_id \\$legacy_' + kind + '_path \\{\\n[\\s\\S]*?\\n  \\}\\n', 'g');
+      const maps = [...fallback.matchAll(mapPattern)];
+      const productionMaps = [...nginx.matchAll(mapPattern)];
+      expect(maps).toHaveLength(1);
+      expect(productionMaps).toHaveLength(1);
+      expect(maps[0][0]).toBe(productionMaps[0][0]);
+      const path = kind === 'product' ? '/product/showproduct.php' : '/news/shownews.php';
+      for (const block of blocks) {
+        const prefix = block.includes('server_name _;') ? '' : 'https://www.jssngyl.cn';
+        expect(locationBody(block, path)).toBe('if ($legacy_' + kind + '_path = "") { return 404; } return 301 ' + prefix + '$legacy_' + kind + '_path;');
+      }
+    }
   });
 
   it('substitutes only domain placeholders so the new Nginx variable survives both launch paths', () => {

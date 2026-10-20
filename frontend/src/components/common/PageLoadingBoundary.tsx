@@ -16,6 +16,10 @@ export function PageLoadingBoundary({ children, locale }: { children: ReactNode;
   // Product existence and publication remain the page's responsibility.
   const productDetail = /^\/(?:zh|en)\/products\/detail\/[^/]+$/.test(pagePath);
 
+  // These two public checklists must expose their text without running scripts.
+  // Other nested product tools keep their existing loading boundary.
+  const publicInquiryChecklist = /^\/(?:zh|en)\/products\/detail\/copper-wire-annealing-line\/inquiry-checklist$/.test(pagePath);
+
   // Batch 1.3: only approved procurement pages and existing service pages.
   // This does not reopen their withdrawn English editions or unknown routes.
   const procurementOrService = APPROVED_GUIDE_PATHS.has(pagePath)
@@ -31,10 +35,11 @@ export function PageLoadingBoundary({ children, locale }: { children: ReactNode;
   // Keep home pages, article bodies and ordinary list entry links readable.
   // Search/filter lists retain their own (list)/loading boundary; plain lists
   // may reach this layout through the internal news-prerendered rewrite.
-  // Inquiry pages and all other routes retain the shared boundary.
+  // Ordinary inquiry pages and all other routes retain the shared boundary.
   if (pathname && (
     /^\/(?:zh|en)\/?$/.test(pathname)
     || productDetail
+    || publicInquiryChecklist
     || procurementOrService
     || informationPage
     || publishedCase

@@ -17,12 +17,12 @@ export function patchDetailRedirects(source, manifest) {
   if (definitions.length !== maps.length) throw new Error('Unexpected product detail map format or source variable; review before patching');
   if (maps.length !== 1) throw new Error('Expected one existing production product detail map; never replace it with a generic fallback');
   const [, opening, body, closing] = maps[0];
-  if (!/^    default \/zh\/products;$/m.test(body)) throw new Error('Unexpected detail fallback; review before patching');
+  if (!/^    default (?:\/zh\/products|"");$/m.test(body)) throw new Error('Unexpected detail fallback; review before patching');
   const existing = new Map();
   let defaults = 0;
   for (const line of body.split('\n')) {
     if (!line.trim() || line.trimStart().startsWith('#')) continue;
-    if (/^[ \t]*default[ \t]+\/zh\/products;[ \t]*(?:#[^\n]*)?$/.test(line)) {
+    if (/^[ \t]*default[ \t]+(?:\/zh\/products|"");[ \t]*(?:#[^\n]*)?$/.test(line)) {
       defaults++;
       continue;
     }
