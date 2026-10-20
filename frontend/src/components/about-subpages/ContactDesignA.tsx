@@ -17,10 +17,7 @@ const factoryAddress = '江苏省泰州市姜堰区俞张线蔡官工业园区�
 
 export function ContactDesignA({ inquiryProduct, embedded = false }: { inquiryProduct?: string; embedded?: boolean }) {
   const contact = SUNENG_CONTACT;
-  const factoryMap = getContactFactoryMap('zh', {
-    browserKey: process.env.BAIDU_MAP_BROWSER_KEY,
-    point: process.env.BAIDU_FACTORY_BD09_POINT,
-  });
+  const factoryMap = getContactFactoryMap('zh');
   const Heading = embedded ? 'h2' : 'h1';
   return (
     <div lang="zh" className={styles.page} data-about-subpage="contact" data-contact-design="A">

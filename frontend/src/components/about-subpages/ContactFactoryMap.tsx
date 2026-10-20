@@ -6,17 +6,14 @@ import type { Locale } from '@/types/site';
 import styles from './ContactFactoryMap.module.css';
 
 export function ContactFactoryMap({ locale, showNavigationLink = true }: { locale: Locale; showNavigationLink?: boolean }) {
-  const map = getContactFactoryMap(locale, {
-    browserKey: process.env.BAIDU_MAP_BROWSER_KEY,
-    point: process.env.BAIDU_FACTORY_BD09_POINT,
-  });
+  const map = getContactFactoryMap(locale);
   return (
     <div className={styles.panel} data-map-provider={map.provider}>
       {map.preview?.kind === 'iframe' ? (
         <iframe className={styles.preview} title={map.preview.title} src={map.preview.src} loading="eager" allowFullScreen referrerPolicy="strict-origin-when-cross-origin" />
       ) : map.preview?.kind === 'image' ? (
-        <a href={map.href} target="_blank" rel="noopener noreferrer" aria-label={map.label}>
-          <Image className={styles.preview} src={map.preview.src} alt={map.preview.title} width={600} height={370} unoptimized priority />
+        <a className={styles.imageLink} href={map.href} target="_blank" rel="noopener noreferrer" aria-label={`${map.label}（新窗口打开）`}>
+          <Image className={styles.preview} src={map.preview.src} alt={map.preview.title} width={720} height={400} unoptimized priority />
         </a>
       ) : (
         <div className={styles.location}>
