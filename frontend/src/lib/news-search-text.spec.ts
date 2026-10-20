@@ -56,6 +56,20 @@ describe('complete article search text', () => {
     expect(newsSearchText(html)).toBe(expected);
   });
 
+  it.each([
+    ["\t<p ='\r\n='>=", ""],
+    [" <p ='='x/>x<br>x", ""],
+    ["\"<p ='=\"'/></p>>", "\""],
+    ["<br><p =\"=\"\tx中/>'", ""],
+    ["<p =\"=\">=\"", ""],
+    ["<p ='='a/>=</p>=\"", ""],
+    [">a<p =\"='=\"/>=\"", ">a"],
+    ["=</i>&amp;<p =\"\t=\"\r\n=文\t/>'", "=&"],
+  ])('does not index invisible text from malformed attributes: %s', (html, expected) => {
+    expect(richTextToPlainText(html)).toBe(expected);
+    expect(newsSearchText(html)).toBe(expected);
+  });
+
   it('preserves all searchable fields in saved bilingual article sources', () => {
     const fixture = (name: string) => JSON.parse(readFileSync(new URL(`../../tests/fixtures/${name}`, import.meta.url), 'utf8'));
     const samples = [

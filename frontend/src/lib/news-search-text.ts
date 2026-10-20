@@ -11,6 +11,23 @@ const textTags = new Set([
 ]);
 const spacedTag = /^(?:<br\s*\/?>|<\/(?:article|blockquote|div|h[1-6]|li|ol|p|section|td|th|tr|ul)>)$/i;
 
+// Validate attribute boundaries separately so malformed names such as ="="
+// stay on the HTML parser. Sticky tokens avoid scanning overlapping suffixes.
+function hasSimpleAttributes(source: string, nameLength: number, closing: boolean) {
+  const attribute = /\s+[^\s"'<>/=`]+(?:\s*=\s*(?:"[^"<>]*"|'[^'<>]*'|[^\s"'=<>`]+))?/y;
+  const end = /\s*\/?>/y;
+  let offset = nameLength + (closing ? 2 : 1);
+  while (offset < source.length) {
+    end.lastIndex = offset;
+    if (end.exec(source)?.[0] && end.lastIndex === source.length) return true;
+    if (closing) return false;
+    attribute.lastIndex = offset;
+    if (!attribute.exec(source)) return false;
+    offset = attribute.lastIndex;
+  }
+  return false;
+}
+
 export function newsSearchText(value?: string | null) {
   if (!value || !value.includes('<')) return richTextToPlainText(value);
   // Keep whitespace in one token and match only at the next opening bracket.
@@ -29,6 +46,7 @@ export function newsSearchText(value?: string | null) {
     const text = value.slice(offset, index);
     const tag = match[1].toLowerCase();
     const closing = match[0].startsWith('</');
+    if (!hasSimpleAttributes(match[0], match[1].length, closing)) return richTextToPlainText(value);
     if (text.includes('<') || !textTags.has(tag) || /&[#a-z0-9]*$/i.test(text)) return richTextToPlainText(value);
     if (tables.length && !cellDepth && text.trim()) return richTextToPlainText(value);
     if (['table', 'thead', 'tbody', 'tfoot', 'tr', 'td', 'th', 'caption'].includes(tag)) {
