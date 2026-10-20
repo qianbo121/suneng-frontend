@@ -77,7 +77,13 @@ export function PitFurnaceDetailPage({ locale = 'zh' }: { locale?: Locale }) {
   const structureSystems = localizeCoreValue(sourceStructureSystems, locale);
   const faqItems = localizeCoreValue(sourceFaqItems, locale);
   const relatedEquipment = localizeCoreValue(sourceRelatedEquipment, locale);
-  const relatedArticles = localizeCoreValue(sourceRelatedArticles, locale);
+  const relatedArticles: Array<readonly [string, string]> = [
+    [
+      locale === 'en' ? 'Pit furnace pricing: depth, load and atmosphere' : '井式炉报价：深度、装载与气氛',
+      `/${locale}/news/shuju-news-18`,
+    ],
+    ...localizeCoreValue(sourceRelatedArticles, locale),
+  ];
   const productDescription =
     t("井式炉用于长轴、辊轴、拉杆、套筒及吊篮装料工件的立式热处理。方案需结合有效加热区、装炉包络、温度等级、热源、冷却路径、起吊总质量和厂房条件确认。");
 

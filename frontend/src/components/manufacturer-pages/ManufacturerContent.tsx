@@ -234,6 +234,19 @@ export function ManufacturerContent() {
                     '基地位于姜堰区张甸蔡官工业区。可结合项目需求，了解炉体制造、装配、配套及交付内容。'
                   }
                 </p>
+                <a className={'text-link'} href={'/zh/news/heat-treatment-furnace-manufacturing-factory-audit'}>
+                  {'验厂时怎样核对热处理炉制造能力'}
+                  <svg aria-hidden={'true'} viewBox={'0 0 24 24'} width={'18'} height={'18'}>
+                    <path
+                      d={'M5 12h14M13 6l6 6-6 6'}
+                      fill={'none'}
+                      stroke={'currentColor'}
+                      strokeWidth={'1.8'}
+                      strokeLinecap={'round'}
+                      strokeLinejoin={'round'}
+                    ></path>
+                  </svg>
+                </a>
               </div>
               <div className={'proof-item'}>
                 <span className={'evidence-label'}>{'企业资质'}</span>
