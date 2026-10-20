@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { apiPost } from '@/lib/api/client';
 import {
@@ -15,6 +15,12 @@ import {
 } from '@/lib/api/lead-events';
 
 vi.mock('@/lib/api/client', () => ({ apiPost: vi.fn(() => Promise.resolve({})) }));
+beforeEach(() => vi.useFakeTimers());
+afterEach(async () => {
+  for (let i = 0; i < 32; i++) await Promise.resolve();
+  vi.clearAllTimers();
+  vi.useRealTimers();
+});
 
 function storageMock() {
   const values = new Map<string, string>();
@@ -45,6 +51,8 @@ describe('website reading events', () => {
       sessionStorage: storageMock(),
       localStorage: storageMock(),
       matchMedia: () => ({ matches: false }),
+      setTimeout,
+      clearTimeout,
     });
     vi.stubGlobal('document', { title: '台车炉', referrer: '' });
   });
@@ -244,6 +252,8 @@ describe('有效交互信号', () => {
       sessionStorage: storageMock(),
       localStorage: storageMock(),
       matchMedia: () => ({ matches: false }),
+      setTimeout,
+      clearTimeout,
       addEventListener: (name: string, fn: EventListener) => {
         listeners.set(name, [...(listeners.get(name) ?? []), fn]);
       },
@@ -259,7 +269,7 @@ describe('有效交互信号', () => {
   }
 
   async function settleRequests() {
-    for (let index = 0; index < 4; index += 1) await Promise.resolve();
+    for (let index = 0; index < 32; index += 1) await Promise.resolve();
   }
 
   it('marks an automated browser once and never listens for interaction', async () => {
@@ -367,6 +377,8 @@ describe('停留时长（进官网就计时，跨页面累计）', () => {
       sessionStorage: storageMock(),
       localStorage: storageMock(),
       matchMedia: () => ({ matches: false }),
+      setTimeout,
+      clearTimeout,
     });
     focusOn();
   });
@@ -374,7 +386,7 @@ describe('停留时长（进官网就计时，跨页面累计）', () => {
   async function tick(seconds: number) {
     for (let i = 0; i < seconds; i += 1) tickDwell();
     // 里程碑只在服务端接收成功后确认，等待微任务队列排空。
-    for (let i = 0; i < 6; i += 1) await Promise.resolve();
+    for (let i = 0; i < 32; i += 1) await Promise.resolve();
   }
 
   it('首页也计时——不再只认产品详情等重点页', async () => {
@@ -487,6 +499,8 @@ describe('manual QA visit classification', () => {
     vi.stubGlobal('window', {
       location: { pathname: '/zh', search: '?utm_source=baidu&utm_campaign=original', hostname: 'www.jssngyl.cn' },
       sessionStorage: storageMock(), localStorage: storageMock(), matchMedia: () => ({ matches: false }),
+      setTimeout,
+      clearTimeout,
     });
     vi.stubGlobal('document', { title: '工业炉', referrer: 'https://www.baidu.com/s?wd=工业炉' });
   });

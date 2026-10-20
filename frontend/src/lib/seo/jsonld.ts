@@ -167,7 +167,7 @@ export function getOrganizationJsonLd(locale: Locale = 'zh') {
     },
     address: {
       '@type': 'PostalAddress',
-      streetAddress: isEnglish ? siteSettings.address.en : '张甸蔡官工业区',
+      streetAddress: isEnglish ? 'Caiguan Industrial Park, Zhangdian Town, Jiangyan District' : '张甸蔡官工业区',
       addressLocality: isEnglish ? 'Taizhou' : '姜堰区',
       addressRegion: isEnglish ? 'Jiangsu' : '江苏省泰州市',
       addressCountry: 'CN',

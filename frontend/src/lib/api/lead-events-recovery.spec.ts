@@ -109,7 +109,11 @@ describe('reading collection recovery', () => {
     expect(postedBodies().filter((body) => body.sessionId === views[1].sessionId)).toHaveLength(1);
     await tick(4);
     expect(postedBodies().filter((body) => body.eventType === 'page_view')).toHaveLength(2);
-    expect(postedBodies().filter((body) => body.eventType === 'dwell_5s').at(-1)?.sessionId).toBe(views[1].sessionId);
+    expect(
+      postedBodies()
+        .filter((body) => body.eventType === 'dwell_5s')
+        .at(-1)?.sessionId,
+    ).toBe(views[1].sessionId);
   });
 
   it('does not add a page view for a short focus break or after explicit route tracking', async () => {
@@ -279,15 +283,16 @@ describe('reading collection recovery', () => {
     });
   });
 
-  it('stops after two retries and never creates an unlimited retry loop', async () => {
+  it('keeps bounded recovery after the two immediate retries', async () => {
     vi.mocked(apiPost).mockRejectedValue(new Error('Offline'));
     trackPageView();
     await vi.advanceTimersByTimeAsync(30_000);
-    expect(postedBodies()).toHaveLength(3);
-    expect(vi.getTimerCount()).toBe(0);
+    expect(postedBodies()).toHaveLength(4);
+    expect(vi.getTimerCount()).toBe(1);
+    expect(new Set(postedBodies().map((body) => body.properties?.collectionId)).size).toBe(1);
   });
 
-  it('drops an old retry after a new session starts', async () => {
+  it('recovers the original visit without assigning its event to a new session', async () => {
     vi.mocked(apiPost).mockRejectedValueOnce(new Error('Offline'));
     trackPageView();
     await settleRequests();
@@ -296,8 +301,13 @@ describe('reading collection recovery', () => {
     window.location.pathname = '/zh/contact';
     trackPageView();
     await vi.advanceTimersByTimeAsync(10_000);
-    expect(postedBodies().filter((body) => body.sessionId === original.sessionId)).toHaveLength(1);
-    expect(postedBodies().at(-1)?.sessionId).not.toBe(original.sessionId);
+    expect(postedBodies().filter((body) => body.sessionId === original.sessionId)).toEqual([
+      original,
+      original,
+    ]);
+    expect(postedBodies().find((body) => body.pagePath === '/zh/contact')?.sessionId).not.toBe(
+      original.sessionId,
+    );
   });
 
   it('reinstalls one interaction listener after the accepted session expires and cleans up on stop', async () => {
@@ -597,7 +607,14 @@ describe('reading collection recovery', () => {
     expect(postedBodies().filter((body) => body.eventType === 'automation_signal')).toHaveLength(3);
     expect(postedBodies().some((body) => body.eventType === 'page_view')).toBe(true);
     expect(postedBodies().some((body) => body.eventType === 'dwell_20s')).toBe(true);
-    expect([...listeners.values()].flat()).toHaveLength(0);
+    expect(
+      ['scroll', 'click', 'keydown', 'pointerdown', 'touchstart'].flatMap(
+        (name) => listeners.get(name) ?? [],
+      ),
+    ).toHaveLength(0);
+    expect(
+      ['online', 'pageshow', 'pagehide'].every((name) => listeners.get(name)?.length === 1),
+    ).toBe(true);
   });
 
   it('starts a new automation marker after timeout without recursive session rotation', async () => {

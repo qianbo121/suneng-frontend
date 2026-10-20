@@ -52,7 +52,7 @@ const POLICE_BEIAN_URL =
 
 const footerCopy = {
   zh: {
-    founded: '成立于 2006 年；公司生产基地占地约 14700 ㎡',
+    founded: '成立于 2006 年；公司生产基地占地 14700 ㎡',
     brandIntro: '专注热处理工业炉研发制造，提供设计、制造、安装与售后服务。',
     address: '江苏省泰州市姜堰区张甸蔡官工业区',
     wechat: '微信二维码',
@@ -66,7 +66,7 @@ const footerCopy = {
     policeBeian: '苏公网安备32120402001014号',
   },
   en: {
-    founded: 'Founded in 2006; company-reported approx. 14,700 ㎡ site',
+    founded: 'Founded in 2006; company-reported 14,700 ㎡ site',
     brandIntro:
       'Focused on industrial furnace R&D, manufacturing, installation and after-sales service.',
     address:
@@ -145,7 +145,7 @@ function BrandBlock({
       <div className="mt-[18px] flex flex-col gap-[10px]">
         <InfoRow>{locale === 'zh' ? <>
           <span className="block xl:inline">成立于 2006 年；</span>{' '}
-          <span className="block xl:inline">公司生产基地占地约 <span className="whitespace-nowrap">14700 ㎡</span></span>
+          <span className="block xl:inline">公司生产基地占地 <span className="whitespace-nowrap">14700 ㎡</span></span>
         </> : copy.founded}</InfoRow>
       </div>
     </div>
