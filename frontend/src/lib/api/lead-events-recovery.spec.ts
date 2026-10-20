@@ -551,11 +551,13 @@ describe('reading collection recovery', () => {
       properties: {
         ...Object.fromEntries(Array.from({ length: 30 }, (_, index) => [`detail${index}`, index])),
         collectorVersion: 'spoof',
+        collectorBuild: 'spoof',
         browserBrands: 'spoof',
       },
     });
     expect(postedBodies()[0].properties).toMatchObject({
       collectorVersion: '2',
+      collectorBuild: 'outbox-20261020-receipts',
       browserBrands: 'Chromium/144; Example Browser/145',
     });
     expect(Object.keys(postedBodies()[0].properties ?? {}).length).toBeLessThanOrEqual(24);

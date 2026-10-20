@@ -6,12 +6,12 @@ function requestFrom(ip: string) {
 }
 
 function serviceWith(executeRaw: jest.Mock) {
-  return new LeadEventService({ $executeRaw: executeRaw } as unknown as PrismaService);
+  return new LeadEventService({ $queryRaw: executeRaw } as unknown as PrismaService);
 }
 
 describe('lead event region', () => {
   it('resolves from the exact request ip but stores only the masked ip', async () => {
-    const executeRaw = jest.fn().mockResolvedValue(1);
+    const executeRaw = jest.fn().mockResolvedValue([{ id: 1 }]);
     await serviceWith(executeRaw).createPublic(
       { eventType: 'page_view' } as never,
       requestFrom('114.252.10.20'),
@@ -25,7 +25,7 @@ describe('lead event region', () => {
   });
 
   it('still writes the event when the ip carries no usable region', async () => {
-    const executeRaw = jest.fn().mockResolvedValue(1);
+    const executeRaw = jest.fn().mockResolvedValue([{ id: 1 }]);
     await serviceWith(executeRaw).createPublic(
       { eventType: 'page_view' } as never,
       requestFrom('10.0.0.5'),
@@ -35,7 +35,7 @@ describe('lead event region', () => {
   });
 
   it('never stores an identifiable ipv6 fragment', async () => {
-    const executeRaw = jest.fn().mockResolvedValue(1);
+    const executeRaw = jest.fn().mockResolvedValue([{ id: 1 }]);
     await serviceWith(executeRaw).createPublic(
       { eventType: 'page_view' } as never,
       requestFrom('240e:3a1:53a0:1200:8c2d:31ff:fe42:7788'),
@@ -46,7 +46,7 @@ describe('lead event region', () => {
   });
 
   it('rate limits obvious bulk event injection without blocking normal browsing', async () => {
-    const executeRaw = jest.fn().mockResolvedValue(1);
+    const executeRaw = jest.fn().mockResolvedValue([{ id: 1 }]);
     const service = serviceWith(executeRaw);
     const request = requestFrom('114.252.10.20');
     for (let index = 0; index < 240; index += 1) {

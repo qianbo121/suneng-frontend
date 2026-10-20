@@ -7,7 +7,12 @@ type Body = {
   visitorId: string;
   pagePath: string;
   sourceType: string;
-  properties: { collectionId: string; manual_qa: boolean; internal_traffic: boolean };
+  properties: {
+    collectionId: string;
+    manual_qa: boolean;
+    internal_traffic: boolean;
+    collectorBuild?: string;
+  };
 };
 function storageMock() {
   const map = new Map<string, string>();
@@ -120,6 +125,26 @@ describe('recovery across actual module/document lifetimes', () => {
     await vi.advanceTimersByTimeAsync(200);
     expect(rows('page_view')).toHaveLength(2);
     expect(rows('page_view').find((p) => p.pagePath === '/a')).toEqual(original);
+  });
+  it('replays an older collector packet without relabelling it as the current build', async () => {
+    const a = await documentAt('/a');
+    fail = true;
+    a.trackPageView();
+    await settle();
+    const original: Body = JSON.parse(JSON.stringify(attempts[0]));
+    delete original.properties.collectorBuild;
+    const key = 'suneng_collection_pending_v1:' + original.properties.collectionId;
+    const queued = JSON.parse(local.getItem(key)!);
+    queued.payload = original;
+    local.setItem(key, JSON.stringify(queued));
+    const b = await documentAt('/b');
+    fail = false;
+    b.trackPageView();
+    await vi.advanceTimersByTimeAsync(200);
+    expect(rows('page_view').find((p) => p.pagePath === '/a')).toEqual(original);
+    expect(rows('page_view').find((p) => p.pagePath === '/b')?.properties.collectorBuild).toBe(
+      'outbox-20261020-receipts',
+    );
   });
   it('recovers after tab closure without mixing old QA/internal classification into a new visit', async () => {
     local.setItem('suneng_internal_traffic_browser_v1', '1');

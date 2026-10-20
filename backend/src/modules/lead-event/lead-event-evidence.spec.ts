@@ -9,8 +9,8 @@ jest.mock('@/modules/lead-event/visitor-region', () => ({
 }));
 
 async function capture(properties: Record<string, unknown>, headers: Request['headers'] = {}) {
-  const execute = jest.fn().mockResolvedValue(1);
-  const service = new LeadEventService({ $executeRaw: execute } as unknown as PrismaService);
+  const execute = jest.fn().mockResolvedValue([{ id: 1 }]);
+  const service = new LeadEventService({ $queryRaw: execute } as unknown as PrismaService);
   await service.createPublic({ eventType: 'page_view', properties }, {
     ip: '10.0.0.2',
     headers,

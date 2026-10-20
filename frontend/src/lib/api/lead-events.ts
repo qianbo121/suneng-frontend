@@ -600,6 +600,7 @@ function currentPayload(eventType: LeadEventType, extra: LeadEventExtra = {}) {
         ![
           'collectionId',
           'collectorVersion',
+          'collectorBuild',
           'browserBrands',
           'automationDetected',
           'manual_qa',
@@ -620,6 +621,7 @@ function currentPayload(eventType: LeadEventType, extra: LeadEventExtra = {}) {
           ? `${eventType}:${snapshot.sessionId}`.slice(0, 120)
           : newAnonymousId().slice(0, 120),
       collectorVersion: '2',
+      collectorBuild: 'outbox-20261020-receipts',
       ...(browserBrands ? { browserBrands } : {}),
       ...(typeof navigator !== 'undefined' && navigator.webdriver === true
         ? { automationDetected: true }

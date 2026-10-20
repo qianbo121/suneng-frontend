@@ -1,4 +1,5 @@
 import { randomBytes } from 'node:crypto';
+import { Logger } from '@nestjs/common';
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { Prisma } from '@prisma/client';
@@ -15,7 +16,8 @@ jest.mock('@/modules/lead-event/visitor-region', () => ({
 
 // Opt-in loopback test. Both connections use a unique disposable schema, never
 // the developer's existing analytics table. It is dropped after the test run.
-const databaseUrl = process.env.LEAD_EVENT_TEST_DATABASE_URL;
+const databaseUrl =
+  process.env.LEAD_EVENT_TEST_DATABASE_URL || process.env.CONTENT_GROWTH_TEST_DATABASE_URL;
 const integration = databaseUrl ? describe : describe.skip;
 
 integration('lead event receipts against PostgreSQL', () => {
@@ -24,6 +26,8 @@ integration('lead event receipts against PostgreSQL', () => {
   let first: InstanceType<typeof Client>;
   let second: InstanceType<typeof Client>;
   let schemaCreated = false;
+  let receiptLog: jest.SpyInstance;
+  let failureLog: jest.SpyInstance;
   const request = {
     ip: '127.0.0.1',
     headers: { 'user-agent': 'Mozilla/5.0 receipt-test' },
@@ -58,8 +62,9 @@ integration('lead event receipts against PostgreSQL', () => {
       },
       $queryRaw: async (strings: TemplateStringsArray, ...values: unknown[]) => {
         const sql = Prisma.sql(strings, ...values);
+        if (/INSERT INTO/.test(sql.text) && hooks.beforeInsert) await hooks.beforeInsert();
         const pending = client.query(sql.text, sql.values);
-        if (hooks.lockStarted) hooks.lockStarted();
+        if (/pg_advisory_xact_lock/.test(sql.text) && hooks.lockStarted) hooks.lockStarted();
         return (await pending).rows;
       },
       $transaction: async (
@@ -111,7 +116,8 @@ integration('lead event receipts against PostgreSQL', () => {
       Json: 'jsonb',
     };
     const columns = [...model.matchAll(/^\s+(\w+)\s+(Int|String|DateTime|Json)\??\s/gm)].map(
-      (match) => `"${match[1]}" ${types[match[2]]}`,
+      (match) =>
+        match[1] === 'id' ? '"id" serial PRIMARY KEY' : `"${match[1]}" ${types[match[2]]}`,
     );
     await first.query(`CREATE TABLE "WebsiteLeadEvent" (${columns.join(',')})`);
     await first.query('CREATE INDEX ON "WebsiteLeadEvent" ("sessionId", "createdAt")');
@@ -119,7 +125,11 @@ integration('lead event receipts against PostgreSQL', () => {
 
   beforeEach(async () => {
     await first.query('TRUNCATE "WebsiteLeadEvent"');
+    receiptLog = jest.spyOn(Logger.prototype, 'log').mockImplementation(() => {});
+    failureLog = jest.spyOn(Logger.prototype, 'warn').mockImplementation(() => {});
   });
+
+  afterEach(() => jest.restoreAllMocks());
 
   afterAll(async () => {
     try {
@@ -139,6 +149,11 @@ integration('lead event receipts against PostgreSQL', () => {
     expect(await storedRows()).toEqual([
       expect.objectContaining({ pagePath: '/zh/news/original' }),
     ]);
+    const receipts = receiptLog.mock.calls.map(([raw]) => JSON.parse(raw));
+    expect(receipts.map((r) => r.outcome)).toEqual(['stored', 'duplicate']);
+    expect(receipts[1].recordId).toBe(receipts[0].recordId);
+    expect(receipts[1].collectionKey).toBe(receipts[0].collectionKey);
+    expect(receipts[1].receiptId).not.toBe(receipts[0].receiptId);
   });
 
   it('keeps one record when two independent transactions receive the same packet concurrently', async () => {
@@ -159,6 +174,9 @@ integration('lead event receipts against PostgreSQL', () => {
       ]),
     ).toEqual([{ ok: true }, { ok: true }]);
     expect(await storedRows()).toHaveLength(1);
+    const receipts = receiptLog.mock.calls.map(([raw]) => JSON.parse(raw));
+    expect(receipts.map((r) => r.outcome).sort()).toEqual(['duplicate', 'stored']);
+    expect(new Set(receipts.map((r) => r.recordId)).size).toBe(1);
   });
 
   it('keeps a separate visit or event type even when a collection identifier is reused', async () => {
@@ -221,7 +239,135 @@ integration('lead event receipts against PostgreSQL', () => {
       'temporary receipt failure',
     );
     expect(await storedRows()).toHaveLength(0);
+    expect(receiptLog).not.toHaveBeenCalled();
+    expect(JSON.parse(failureLog.mock.calls[0][0])).toMatchObject({ outcome: 'failed' });
     expect(await service.createPublic(packet(), request)).toEqual({ ok: true });
     expect(await storedRows()).toHaveLength(1);
+  });
+
+  it('logs only after commit and binds every accepted receipt to a retained record', async () => {
+    const database = adapter(first);
+    const transaction = database.$transaction.bind(database);
+    database.$transaction = (async (work: never, options: never) => {
+      const result = await transaction(work, options);
+      expect(receiptLog).not.toHaveBeenCalled();
+      return result;
+    }) as typeof database.$transaction;
+    await new LeadEventService(database).createPublic(
+      packet({
+        properties: { collectionId: 'receipt-001', collectorBuild: 'outbox-20261020-receipts' },
+      }),
+      request,
+    );
+    const receipt = JSON.parse(receiptLog.mock.calls[0][0]);
+    const persisted = await second.query('SELECT "id" FROM "WebsiteLeadEvent" WHERE "id"=$1', [
+      receipt.recordId,
+    ]);
+    expect(persisted.rows).toHaveLength(1);
+    expect(receipt).toMatchObject({
+      outcome: 'stored',
+      collectorBuild: 'outbox-20261020-receipts',
+    });
+    expect(JSON.stringify(receipt)).not.toMatch(
+      /receipt-session|receipt-visitor|receipt-001|original|127\\.0/,
+    );
+  });
+});
+
+describe('collection receipt privacy and commit boundary', () => {
+  let log: jest.SpyInstance;
+  let warn: jest.SpyInstance;
+  const request = {
+    ip: '127.0.0.1',
+    headers: { cookie: 'private-cookie', authorization: 'private-token' },
+  } as Request;
+  const packet = (properties: Record<string, unknown> = {}): CreateLeadEventDto => ({
+    eventType: 'page_view',
+    pagePath: '/zh/contact?phone=private-phone',
+    sessionId: 'private-session',
+    visitorId: 'private-visitor',
+    properties: { collectionId: 'private-collection', ...properties },
+  });
+  beforeEach(() => {
+    log = jest.spyOn(Logger.prototype, 'log').mockImplementation(() => {});
+    warn = jest.spyOn(Logger.prototype, 'warn').mockImplementation(() => {});
+  });
+  afterEach(() => jest.restoreAllMocks());
+
+  function database(inserted: boolean, commitFails = false) {
+    const query = jest.fn(async (strings: TemplateStringsArray) => {
+      const text = strings.join('?');
+      if (text.includes('pg_advisory_xact_lock')) return [{ locked: '' }];
+      if (text.includes('INSERT INTO')) return inserted ? [{ id: 41 }] : [];
+      return [{ id: 41 }];
+    });
+    return {
+      $queryRaw: query,
+      $transaction: async (work: (tx: unknown) => Promise<unknown>) => {
+        const result = await work({ $queryRaw: query });
+        expect(log).not.toHaveBeenCalled();
+        if (commitFails) throw new Error('private-database-error');
+        return result;
+      },
+    } as unknown as PrismaService;
+  }
+
+  it.each([true, false])(
+    'links insert=%p to the stored row without exposing payload or headers',
+    async (inserted) => {
+      const service = new LeadEventService(database(inserted));
+      expect(
+        await service.createPublic(packet({ collectorBuild: 'outbox-20261020-receipts' }), request),
+      ).toEqual({ ok: true });
+      const receipt = JSON.parse(log.mock.calls[0][0]);
+      expect(receipt).toMatchObject({
+        type: 'lead_event_receipt',
+        version: 1,
+        recordId: 41,
+        outcome: inserted ? 'stored' : 'duplicate',
+        collectorBuild: 'outbox-20261020-receipts',
+      });
+      expect(receipt.collectionKey).toMatch(/^[a-f0-9]{64}$/);
+      expect(JSON.stringify(receipt)).not.toMatch(/private|127\.0|phone|cookie|authorization/);
+    },
+  );
+
+  it('does not claim success after a commit failure, or expose the error details', async () => {
+    await expect(
+      new LeadEventService(database(true, true)).createPublic(packet(), request),
+    ).rejects.toThrow();
+    expect(log).not.toHaveBeenCalled();
+    expect(JSON.parse(warn.mock.calls[0][0])).toMatchObject({ outcome: 'failed', status: 500 });
+    expect(warn.mock.calls[0][0]).not.toContain('private');
+  });
+
+  it.each([undefined, 'private-value', 'outbox-20261019'])(
+    'keeps unverified collector marker %p unknown',
+    async (collectorBuild) => {
+      await new LeadEventService(database(true)).createPublic(packet({ collectorBuild }), request);
+      expect(JSON.parse(log.mock.calls[0][0]).collectorBuild).toBe('unknown');
+    },
+  );
+
+  it('keeps old clients without a collection identifier working and records the actual row', async () => {
+    await new LeadEventService(database(true)).createPublic(
+      packet({ collectionId: null }),
+      request,
+    );
+    expect(JSON.parse(log.mock.calls[0][0])).toMatchObject({
+      outcome: 'stored',
+      recordId: 41,
+      collectionKey: null,
+    });
+  });
+
+  it('records a rejection without a false storage receipt when throttled', async () => {
+    const service = new LeadEventService(database(true));
+    for (let i = 0; i < 240; i++) {
+      await service.createPublic(packet({ collectionId: null }), request);
+    }
+    await expect(service.createPublic(packet(), request)).rejects.toMatchObject({ status: 429 });
+    expect(log).toHaveBeenCalledTimes(240);
+    expect(JSON.parse(warn.mock.calls[0][0])).toMatchObject({ outcome: 'rejected', status: 429 });
   });
 });

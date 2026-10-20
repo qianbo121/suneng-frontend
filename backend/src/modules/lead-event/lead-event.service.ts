@@ -1,4 +1,5 @@
-import { Injectable } from '@nestjs/common';
+import { createHash, randomUUID } from 'node:crypto';
+import { HttpException, Injectable, Logger } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { Request } from 'express';
 
@@ -111,10 +112,31 @@ function cleanProperties(value: Record<string, unknown> | undefined, request: Re
 @Injectable()
 export class LeadEventService {
   private readonly eventThrottle = new Map<string, SpamThrottleState>();
+  private readonly logger = new Logger(LeadEventService.name);
 
   constructor(private readonly prisma: PrismaService) {}
 
   async createPublic(dto: CreateLeadEventDto, request: Request) {
+    const receiptId = randomUUID();
+    try {
+      return await this.persistPublic(dto, request, receiptId);
+    } catch (error) {
+      this.logger.warn(
+        JSON.stringify({
+          type: 'lead_event_receipt',
+          version: 1,
+          receiptId,
+          completedAt: new Date().toISOString(),
+          outcome:
+            error instanceof HttpException && error.getStatus() < 500 ? 'rejected' : 'failed',
+          status: error instanceof HttpException ? error.getStatus() : 500,
+        }),
+      );
+      throw error;
+    }
+  }
+
+  private async persistPublic(dto: CreateLeadEventDto, request: Request, receiptId: string) {
     // 行为事件会比询盘频繁，限流只拦明显的批量灌入；业务结果 form_submit
     // 已从公开白名单移除，不能再由浏览器伪造。
     ensureNotSpam(request.ip || 'anonymous', this.eventThrottle, {
@@ -146,7 +168,9 @@ export class LeadEventService {
               AND prior."properties" ->> 'collectionId' = ${collectionId}
           )`
         : Prisma.sql`TRUE`;
-    const insert = (database: Pick<PrismaService, '$executeRaw'>) => database.$executeRaw`
+    const insert = (database: Pick<PrismaService, '$queryRaw'>) => database.$queryRaw<
+      Array<{ id: number }>
+    >`
       INSERT INTO "WebsiteLeadEvent" (
         "eventType", "pageTitle", "pagePath", "pageType", "productTag",
         "sourceType", "sourceDetail", "searchKeyword", "deviceType", "landingPage",
@@ -178,25 +202,62 @@ export class LeadEventService {
         ${regionSource},
         ${properties}::jsonb
       WHERE ${duplicateGuard}
+      RETURNING "id"
     `;
+    let result: { outcome: 'stored' | 'duplicate'; recordId: number };
     if (collectionId && sessionId) {
       // Lock and insert are separate statements so a retry sees the preceding
       // transaction's committed row even when its HTTP response was lost.
       // No new persistent table or index is required; lookup uses sessionId.
-      await this.prisma.$transaction(
+      result = await this.prisma.$transaction(
         async (database) => {
           const key = JSON.stringify(['website-lead', sessionId, dto.eventType, collectionId]);
           await database.$queryRaw`
             SELECT pg_advisory_xact_lock(hashtextextended(${key}, 0))::text AS locked
           `;
-          await insert(database);
+          const rows = await insert(database);
+          if (rows.length) return { outcome: 'stored' as const, recordId: rows[0].id };
+          const prior = await database.$queryRaw<Array<{ id: number }>>`
+            SELECT "id" FROM "WebsiteLeadEvent"
+            WHERE "sessionId" = ${sessionId}
+              AND "eventType" = ${dto.eventType}
+              AND "properties" ->> 'collectionId' = ${collectionId}
+            ORDER BY "id" LIMIT 1
+          `;
+          if (!prior.length) throw new Error('Missing committed collection record');
+          return { outcome: 'duplicate' as const, recordId: prior[0].id };
         },
         { isolationLevel: Prisma.TransactionIsolationLevel.ReadCommitted },
       );
     } else {
       // Existing clients without a collection ID retain their original contract.
-      await insert(this.prisma);
+      const rows = await insert(this.prisma);
+      if (rows.length !== 1) throw new Error('Missing collection insert result');
+      result = { outcome: 'stored', recordId: rows[0].id };
     }
+    // Log only after the transaction has committed. A duplicate references the
+    // actual retained record; it does not count as a second saved event.
+    // Never log payloads, URLs, raw identifiers, IPs, headers or error messages.
+    this.logger.log(
+      JSON.stringify({
+        type: 'lead_event_receipt',
+        version: 1,
+        receiptId,
+        completedAt: new Date().toISOString(),
+        ...result,
+        eventType: dto.eventType,
+        collectionKey:
+          collectionId && sessionId
+            ? createHash('sha256')
+                .update(JSON.stringify(['website-lead', sessionId, dto.eventType, collectionId]))
+                .digest('hex')
+            : null,
+        collectorBuild:
+          savedProperties.collectorBuild === 'outbox-20261020-receipts'
+            ? 'outbox-20261020-receipts'
+            : 'unknown',
+      }),
+    );
     return { ok: true };
   }
 
