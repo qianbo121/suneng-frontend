@@ -868,7 +868,7 @@ class HealthScriptTest(unittest.TestCase):
     OPENED = {path: 200 for path in CASE_GROUP}
     LISTED = sitemap('/zh/news', '/en/news', *CASE_GROUP, alternates=['/zh/case'])
 
-    def run_script(self, contract, statuses, xml, sitemap_status=200):
+    def run_script(self, contract, statuses, xml, sitemap_status=200, redirects=None):
         """Returns (exit code, report, number of requests the stub received)."""
         requests = []
         live = self.LIVE
@@ -883,7 +883,7 @@ class HealthScriptTest(unittest.TestCase):
                 self.send_response(code)
                 if 300 <= code < 400:
                     # A redirect to a live page must not count as the page itself.
-                    self.send_header('Location', '/zh/news')
+                    self.send_header('Location', (redirects or {}).get(self.path, '/zh/news'))
                 self.end_headers()
                 self.wfile.write(body)
 
@@ -905,6 +905,24 @@ class HealthScriptTest(unittest.TestCase):
             server.server_close()
         report = json.loads(result.stdout) if result.stdout.strip() else {}
         return result.returncode, report, len(requests)
+
+    def test_approved_contact_redirect_requires_exact_target_and_direct_success(self):
+        for status in (307, 308):
+            code, report, _ = self.run_script(r.case_contract('open'), {**self.OPENED, '/en/contact': status},
+                                              self.LISTED, redirects={'/en/contact': '/en/about#contact'})
+            self.assertEqual((code, report['passed']), (0, True))
+            check = next(item for item in report['checks'] if item['path'] == '/en/contact')
+            self.assertEqual((check['status'], check['redirectTo'], check['targetStatus']),
+                             (status, '/en/about#contact', 200))
+        for target in ['/en/about', '/en/about#projects', '/en/about?x=1#contact', 'https://wrong.test/en/about#contact']:
+            with self.subTest(target=target):
+                self.assertNotEqual(self.run_script(r.case_contract('open'), {**self.OPENED, '/en/contact': 307},
+                                    self.LISTED, redirects={'/en/contact': target})[0], 0)
+        for target_status in (307, 404, 500):
+            with self.subTest(target_status=target_status):
+                self.assertNotEqual(self.run_script(r.case_contract('open'),
+                                    {**self.OPENED, '/en/contact': 307, '/en/about': target_status},
+                                    self.LISTED, redirects={'/en/contact': '/en/about#contact'})[0], 0)
 
     def test_open_release_passes_only_with_every_approved_case_listed_and_served(self):
         code, report, _ = self.run_script(r.case_contract('open'), self.OPENED, self.LISTED)
@@ -994,6 +1012,32 @@ class HealthScriptTest(unittest.TestCase):
         code, _, requests = self.run_script({**r.case_contract('open'), 'state': 'all'}, self.OPENED, self.LISTED)
         self.assertNotEqual(code, 0)
         self.assertEqual(requests, 0)
+
+
+class PublicContactRedirectTest(unittest.TestCase):
+    def check(self, status=307, target='https://example.test/en/about#contact', target_status=200):
+        fallback = site({**{path: 200 for path in CASE_GROUP}, '/en/about': target_status},
+                        sitemap('/zh/news', '/en/news', *CASE_GROUP))
+        def command(args, **kwargs):
+            if args[-1] == 'https://example.test/en/contact':
+                return f'{status}\n{target}' if '%{http_code}\n%{redirect_url}' in args else str(status)
+            return fallback(args, **kwargs)
+        with patch.object(r, 'run', side_effect=command):
+            return r.public_probe('https://example.test', r.case_contract('open'))
+
+    def test_legacy_direct_page_and_exact_contact_redirect_work(self):
+        self.check(status=200)
+        for status in (307, 308):
+            result = self.check(status=status)
+            self.assertIn({'path': '/en/contact', 'status': status, 'redirectTo': '/en/about#contact', 'targetStatus': 200}, result)
+
+    def test_unapproved_redirect_or_unavailable_target_is_rejected(self):
+        for options in [{'status': 302}, {'target': 'https://wrong.test/en/about#contact'},
+                        {'target': 'https://example.test/en/about#projects'},
+                        {'target': 'https://example.test/en/about'},
+                        {'target_status': 307}, {'target_status': 404}, {'target_status': 500}]:
+            with self.subTest(options=options), self.assertRaises(RuntimeError):
+                self.check(**options)
 
 
 class ShippedExamplesTest(unittest.TestCase):

@@ -15,6 +15,29 @@ for (const route of ['/en/products', '/en/contact', '/zh/contact']) {
     const errors: string[] = [];
     page.on('pageerror', (error) => errors.push(error.message));
     await page.goto(route, { waitUntil: 'networkidle' });
+    if (route === '/zh/contact') {
+      await expect(page).toHaveURL(/\/zh\/about#contact$/);
+      const form = page.locator('[data-contact-form]');
+      await expect(form.getByRole('radio')).toHaveCount(5);
+      await form.getByRole('button', { name: '提交需求', exact: true }).click();
+      await expect(form.getByRole('radio').first()).toBeFocused();
+      const selected = form.getByRole('radio', { name: '售后或其他', exact: true });
+      await selected.check();
+      await expect(selected).toBeChecked();
+      await selected.press('ArrowRight');
+      const help = form.getByRole('radio', { name: '协助判断', exact: true });
+      await expect(help).toBeChecked();
+      const before = await page.evaluate(() => scrollY);
+      await page.evaluate(() => scrollBy(0, -8));
+      await expect.poll(() => page.evaluate(() => scrollY)).not.toBe(before);
+      await expect(help).toBeChecked();
+      await selected.check();
+      await expect(selected).toBeChecked();
+      expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+      await page.screenshot({ path: info.outputPath('inline-contact-directions.png') });
+      expect(errors).toEqual([]);
+      return;
+    }
     if (route.endsWith('/contact')) {
       await page.locator('[aria-controls="contact-message-panel"]').click();
       await page.locator('#contact-inquiry-form button[type="submit"]').click();

@@ -9,5 +9,7 @@ export function getAboutSectionHref(locale: Locale, section: 'qualifications' | 
     else if (value !== undefined) query.set(key, value);
   }
   const search = query.toString();
-  return `/${locale}/about${search ? `?${search}` : ''}#${section}`;
+  const product = Array.isArray(params.product) ? params.product[0] : params.product;
+  const fragment = section === 'contact' && product ? 'contact-inquiry-form-fields' : section;
+  return `/${locale}/about${search ? `?${search}` : ''}#${fragment}`;
 }

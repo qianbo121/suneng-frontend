@@ -78,10 +78,24 @@ for (const locale of ['zh', 'en']) {
     await expect(qr).toBeVisible();
     await expect(qr).toHaveJSProperty('complete', true);
     expect(await qr.evaluate((image) => (image as HTMLImageElement).naturalWidth)).toBeGreaterThan(0);
-    expect(await qr.evaluate((image) => image.closest('button,a,[role="button"]'))).toBeNull();
-    await qr.click();
+    if (locale === 'zh') {
+      const original = contact.getByRole('link', { name: '查看微信二维码原图', exact: true });
+      await expect(original).toHaveAttribute('target', '_blank');
+      await expect(original).toHaveAttribute('href', /wechat.*\.png$/);
+      const popupPromise = page.waitForEvent('popup');
+      await original.click();
+      const popup = await popupPromise;
+      await popup.waitForLoadState('domcontentloaded');
+      await expect(popup.locator('img')).toHaveJSProperty('complete', true);
+      expect(await popup.locator('img').evaluate((image) => (image as HTMLImageElement).naturalWidth)).toBeGreaterThan(0);
+      await popup.close();
+      await expect(contact).toContainText('扫码添加微信');
+    } else {
+      expect(await qr.evaluate((image) => image.closest('button,a,[role="button"]'))).toBeNull();
+      await qr.click();
+      await expect(contact).toContainText('press and hold to save');
+    }
     await expect(page.getByRole('dialog')).toHaveCount(0);
-    await expect(contact).toContainText(locale === 'zh' ? '长按保存二维码' : 'press and hold to save');
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
   });
 }

@@ -7,8 +7,21 @@
   const status = async (path) => (await fetch(base + path, { redirect: 'manual', signal: AbortSignal.timeout(15000) })).status;
   const live = ['/zh','/en','/zh/news','/en/news','/zh/products','/en/products','/zh/about','/en/about','/zh/inquiry','/en/contact'];
   const fixedChecks = [];
-  for (const [path, expected] of [...live.map((p) => [p, 200]), ...contract.retired.map((p) => [p, 404])])
-    fixedChecks.push({ path, status: await status(path), expected });
+  for (const [path, expected] of [...live.map((p) => [p, 200]), ...contract.retired.map((p) => [p, 404])]) {
+    const response = await fetch(base + path, { redirect: 'manual', signal: AbortSignal.timeout(15000) });
+    const check = { path, status: response.status, expected };
+    // Only this approved legacy entry may redirect, to the exact same-origin
+    // contact section. Old releases serving the original 200 page remain valid.
+    if (path === '/en/contact' && [307, 308].includes(response.status)) {
+      const location = response.headers.get('location');
+      const target = '/en/about#contact';
+      if (location === target || location === base + target) {
+        check.redirectTo = target;
+        check.targetStatus = await status('/en/about');
+      }
+    }
+    fixedChecks.push(check);
+  }
   const statuses = {};
   const caseChecks = [];
   for (const path of contract.group) {
@@ -55,7 +68,7 @@
     && [...located, ...alternates].every(caseUrlPasses)
     && (contract.state !== 'open' || contract.group.every((path) => paths.has(path)))
     && [...guides.paths, ...procurement.paths].every((path) => statuses[path] !== 200 || paths.has(path));
-  const passed = fixedChecks.every((c) => c.status === c.expected) && casesPassed && guidesPassed && procurementPassed && sitemapPassed;
+  const passed = fixedChecks.every((c) => c.status === c.expected || (c.path === '/en/contact' && [307, 308].includes(c.status) && c.redirectTo === '/en/about#contact' && c.targetStatus === 200)) && casesPassed && guidesPassed && procurementPassed && sitemapPassed;
   console.log(JSON.stringify({ passed, checks: [...fixedChecks, ...caseChecks, ...guideChecks, ...procurementChecks], sitemapPassed, caseState: contract.state, notificationSent: false, inquirySubmitted: false }));
   process.exit(passed ? 0 : 1);
 })().catch(() => { console.error('Release route check failed; no response body or credentials logged.'); process.exit(1); });

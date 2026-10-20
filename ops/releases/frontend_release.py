@@ -375,6 +375,17 @@ def public_probe(base_url, contract):
     results, statuses = [], {}
     for path, expected in [*[(p, 200) for p in PUBLIC_LIVE], *[(p, 404) for p in contract['retired']]]:
         status = status_of(path)
+        if path == '/en/contact' and status in {'307', '308'}:
+            # Do not follow arbitrary redirects. Verify the exact same-origin
+            # section, then require its destination to serve a direct 200.
+            response = run(['curl', '--max-time', '25', '--silent', '--show-error', '--output',
+                            '/dev/null', '--write-out', '%{http_code}\n%{redirect_url}', base_url + path])
+            observed = response.split('\n')
+            target = '/en/about#contact'
+            if observed != [status, base_url + target] or status_of('/en/about') != '200':
+                raise RuntimeError('Public contact redirect check failed: ' + path)
+            results.append({'path': path, 'status': int(status), 'redirectTo': target, 'targetStatus': 200})
+            continue
         if status != str(expected):
             raise RuntimeError('Public route check failed: ' + path)
         results.append({'path': path, 'status': expected})
