@@ -1,8 +1,9 @@
 import { notFound, redirect } from 'next/navigation';
+import { getAboutSectionHref, type AboutSearchParams } from '@/lib/about-section-navigation';
 import { partnerText } from '@/lib/partner-copy';
 import { buildMetadata } from '@/lib/seo/metadata';
 
-type PartnerPageProps = { params: Promise<{ locale: string }> };
+type PartnerPageProps = { params: Promise<{ locale: string }>; searchParams: Promise<AboutSearchParams> };
 const description =
   '展示苏能工业炉部分历年客户与合作单位，按省份和行业查看名单，了解工业炉设备配套与合作范围。';
 export async function generateMetadata({ params }: PartnerPageProps) {
@@ -19,8 +20,8 @@ export async function generateMetadata({ params }: PartnerPageProps) {
     robots: { index: true, follow: true },
   };
 }
-export default async function PartnerPage({ params }: PartnerPageProps) {
+export default async function PartnerPage({ params, searchParams }: PartnerPageProps) {
   const { locale } = await params;
   if (locale !== 'zh' && locale !== 'en') notFound();
-  redirect(`/${locale}/about#projects`);
+  redirect(getAboutSectionHref(locale, 'projects', await searchParams));
 }

@@ -12,6 +12,20 @@ for (const width of [1440, 390]) {
   test.describe(`${width}px SEO entry navigation`, () => {
     test.use({ viewport: { width, height: width === 390 ? 844 : 1000 }, contextOptions: { reducedMotion: 'reduce' } });
 
+    test('legacy company entries preserve source markers and repeated query values', async ({ page }) => {
+      for (const locale of ['zh', 'en']) {
+        for (const [path, section] of [['partner', 'projects'], ['strength/honors', 'qualifications']]) {
+          await page.goto(`/${locale}/${path}?acquisition_qa=ACQUISITION_QA_REDIRECT_20261020&utm_source=legacy%20entry&tag=a&tag=b`);
+          await expect(page).toHaveURL(new RegExp(`/${locale}/about\\?.*#${section}$`));
+          const url = new URL(page.url());
+          expect(url.searchParams.get('acquisition_qa')).toBe('ACQUISITION_QA_REDIRECT_20261020');
+          expect(url.searchParams.get('utm_source')).toBe('legacy entry');
+          expect(url.searchParams.getAll('tag')).toEqual(['a', 'b']);
+          await expect(page.locator(`#${section}`)).toBeInViewport();
+        }
+      }
+    });
+
     test('home line link lands below the fixed header', async ({ page }) => {
       await page.goto('/en');
       await page.getByRole('link', { name: /Plan a heat-treatment line/ }).click();

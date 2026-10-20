@@ -1,7 +1,8 @@
 import { notFound, permanentRedirect, redirect } from 'next/navigation';
+import { getAboutSectionHref, type AboutSearchParams } from '@/lib/about-section-navigation';
 import { buildMetadata } from '@/lib/seo/metadata';
 
-type StrengthCategoryPageProps = { params: Promise<{ locale: string; categorySlug: string }> };
+type StrengthCategoryPageProps = { params: Promise<{ locale: string; categorySlug: string }>; searchParams: Promise<AboutSearchParams> };
 export const revalidate = 3600;
 export const dynamicParams = false;
 
@@ -34,7 +35,7 @@ export async function generateMetadata({ params }: StrengthCategoryPageProps) {
   });
 }
 
-export default async function StrengthCategoryPage({ params }: StrengthCategoryPageProps) {
+export default async function StrengthCategoryPage({ params, searchParams }: StrengthCategoryPageProps) {
   const locale = await resolvePage(params);
-  redirect(`/${locale}/about#qualifications`);
+  redirect(getAboutSectionHref(locale, 'qualifications', await searchParams));
 }
