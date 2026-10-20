@@ -35,6 +35,8 @@ const publicNewsSlugs = new Set([
   // CMS article verified publicly on 2026-10-10; reviewedNews covers copy overrides, not all published records.
   // https://www.jssngyl.cn/zh/news/custom-heat-treatment-furnace-chamber-process
   'custom-heat-treatment-furnace-chamber-process',
+  // Published CMS article verified on 2026-10-20; no reviewed-copy override is needed.
+  'heat-treatment-furnace-manufacturing-factory-audit',
 ]);
 
 describe.each(pages)('restored Chinese manufacturer page: $slug', ({ slug, Page, metadata, projectBoundary }) => {

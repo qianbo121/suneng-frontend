@@ -58,6 +58,14 @@ export function IndustryFurnaceDetailPage({ slug, locale = 'zh' }: { slug: Indus
     ? getCaseArticle('bearing-wire-trolley-annealing-proposal')
     : undefined;
   const englishTrolleyResources = getTrolleyProcurementResources(locale, slug);
+  const quotationArticles: Array<readonly [string, string]> = slug === 'box-furnace'
+    ? [[
+        locale === 'en' ? 'Box furnace pricing and quotation checklist' : '高温箱式炉报价：先确认哪些条件',
+        `/${locale}/news/shuju-news-19`,
+      ]]
+    : slug === 'trolley-furnace' && locale === 'zh'
+      ? [['台车炉报价需要提供哪些参数', '/zh/news/tai-che-lu-bao-jia-xu-yao-ti-gong-na-xie-can-shu']]
+      : [];
   const productEvidenceLinks: Array<readonly [string, string]> = slug === 'mesh-belt-furnace'
     ? [
         [t("网带炉产量怎样核算"), t("/zh/news/shuju-news-23")],
@@ -71,6 +79,7 @@ export function IndustryFurnaceDetailPage({ slug, locale = 'zh' }: { slug: Indus
       : [t("查看本设备相关方案与项目资料"), '#related-case-evidence']];
   const evidenceLinks: Array<readonly [string, string]> = [
     ...englishTrolleyResources,
+    ...quotationArticles,
     ...productEvidenceLinks,
     [t("企业资质与专利证书原件"), t("/zh/strength/honors")],
     ...localizeCoreValue(relatedArticles, locale),
