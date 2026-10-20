@@ -126,4 +126,27 @@ describe('Chinese article contact display', () => {
     expect(second.html).toBe(first.html);
     expect(second.report.changedBlocks).toBe(0);
   });
+  it('moves a legacy byline past the homepage below the contact block', () => {
+    const credit = '技术署名：苏能工业炉工程技术团队&amp;唐荔';
+    const website = '<p>官网：<a href="https://www.jssngyl.cn">https://www.jssngyl.cn</a></p>';
+    const prose = '<p>同样功率不能单独证明使用寿命。</p>';
+    const result = format(`${prose}<p id="credit" class="credit">${credit}</p>${website}<p>电话：${phone}<br>邮箱：${linkedEmail}</p>`);
+    expect(result.html).toBe(`${prose}${website}<p>电话：${phone}<br>邮箱：${linkedEmail}<br><span id="credit" class="credit">${credit}</span></p>`);
+    expect(format(result.html).html).toBe(result.html);
+    expect(format(result.html).report.changedBlocks).toBe(0);
+  });
+  it('separates a combined homepage/byline and keeps the credit directly below email', () => {
+    const result = format(`<p id="footer" class="credit">官网：<a href="https://www.jssngyl.cn" title="苏能官网">https://www.jssngyl.cn</a><br>技术署名：<strong>苏能工业炉工程技术团队&amp;唐荔</strong></p><p>电话：${phone}<br>邮箱：${linkedEmail}</p>`);
+    expect(result.html).toBe(`<p id="footer" class="credit">官网：<a href="https://www.jssngyl.cn" title="苏能官网">https://www.jssngyl.cn</a></p><p>电话：${phone}<br>邮箱：${linkedEmail}<br><span class="credit">技术署名：<strong>苏能工业炉工程技术团队&amp;唐荔</strong></span></p>`);
+    expect(result.root.querySelectorAll('#footer')).toHaveLength(1);
+    expect(format(result.html).html).toBe(result.html);
+    expect(format(result.html).report.changedBlocks).toBe(0);
+  });
+  it('does not move a preceding byline across technical prose or an unrelated link', () => {
+    for (const separator of ['<p>验收应按约定工况执行。</p>', '<p>官网：<a href="https://example.com">https://example.com</a></p>']) {
+      const input = `<p>技术署名：工程技术团队</p>${separator}<p>电话：${phone}<br>邮箱：${email}</p>`;
+      expect(format(input).html).toBe(input);
+    }
+  });
+
 });
