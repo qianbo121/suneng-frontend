@@ -1,8 +1,8 @@
 import { getIndexingRobots } from '@/lib/seo/metadata';
 import type { Metadata } from 'next';
 
-import { ContactZhContent } from '@/components/about-subpages/ContactZhContent';
-import { resolveInquiryProduct } from '@/lib/inquiry-product';
+import { redirect } from 'next/navigation';
+import { getAboutSectionHref, type AboutSearchParams } from '@/lib/about-section-navigation';
 import { SITE_NAME } from '@/lib/seo/config';
 import { absoluteUrl, buildMetadata } from '@/lib/seo/metadata';
 import { CONTACT_SEO } from '@/lib/seo/page-data';
@@ -10,7 +10,7 @@ import { ENGLISH_STATIC_PAGE_METADATA } from '@/lib/seo/static-page-metadata-en'
 import { Locale } from '@/types/site';
 
 type ContactPageProps = {
-  searchParams: Promise<{ product?: string | string[] }>;
+  searchParams: Promise<AboutSearchParams>;
   params: Promise<{
     locale: string;
   }>;
@@ -106,6 +106,5 @@ export async function generateMetadata({ params }: ContactPageProps): Promise<Me
 export default async function ContactPage({ params, searchParams }: ContactPageProps) {
   const { locale } = await params;
   const currentLocale = (locale === 'en' ? 'en' : 'zh') as Locale;
-  const inquiryProduct = resolveInquiryProduct((await searchParams).product, currentLocale);
-  return <ContactZhContent locale={currentLocale} inquiryProduct={inquiryProduct} />;
+  redirect(getAboutSectionHref(currentLocale, 'contact', await searchParams));
 }

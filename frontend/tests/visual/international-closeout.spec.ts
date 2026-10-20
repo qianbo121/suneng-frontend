@@ -20,10 +20,10 @@ for (const width of [1440, 390]) {
     page.on('pageerror', (error) => errors.push(error.message));
     const response = await page.goto('/en/partner');
     expect(response?.status()).toBe(200);
-    await expect(page).toHaveURL(/\/en\/partner$/);
+    await expect(page).toHaveURL(/\/en\/about#projects$/);
     await expect(page.getByRole('heading', { name: 'Customers & Partners', exact: true })).toBeVisible();
-    await expect(page.locator('link[rel=alternate][hreflang="en-US"]')).toHaveAttribute('href', /\/en\/partner$/);
-    await expect(page.locator('link[rel=canonical]')).toHaveAttribute('href', /\/en\/partner$/);
+    await expect(page.locator('link[rel=alternate][hreflang="en-US"]')).toHaveAttribute('href', /\/en\/about$/);
+    await expect(page.locator('link[rel=canonical]')).toHaveAttribute('href', /\/en\/about$/);
     const regions = page.locator('[data-about-subpage=partners]');
     const marker = page.locator('summary[data-province-code="320000"]');
     if (width < 600) await page.getByRole('combobox', { name: 'Region', exact: true }).selectOption('320000');
@@ -54,17 +54,14 @@ for (const width of [1440, 390]) {
     await expand.click();
     expect(await directory.locator('tbody tr:visible').count()).toBeGreaterThan(8);
     await directory.getByRole('button', { name: 'Show Less', exact: true }).click();
-    await page.locator('[data-partner-industries] summary').click();
-    await expect(page.locator('[data-partner-industries] article')).toHaveCount(6);
-    for (const href of await page.locator('[data-partner-industries] a').evaluateAll((links) => links.map((link) => link.getAttribute('href')))) {
-      expect(href).toMatch(/^\/en\/products\/detail\//);
-    }
+    // The approved combined page removes the former industry/CTA block.
+    await expect(page.locator('[data-partner-industries]')).toHaveCount(0);
     await noOverflow(page);
     await page.screenshot({ path: testInfo.outputPath(`partner-directory-${width}.png`) });
     const englishStructure = await regions.locator('h1,h2,[data-partner-industries] article').evaluateAll((elements) => elements.map((element) => element.tagName));
     if (width < 600) await page.getByRole('button', { name: 'Open navigation' }).click();
     await page.getByRole('link', { name: '中文', exact: true }).click();
-    await expect(page).toHaveURL(/\/zh\/partner$/);
+    await expect(page).toHaveURL(/\/zh\/about(?:#.*)?$/);
     await expect(page.getByRole('heading', { name: '客户与合作单位', exact: true })).toBeVisible();
     const chineseStructure = await regions.locator('h1,h2,[data-partner-industries] article').evaluateAll((elements) => elements.map((element) => element.tagName));
     expect(chineseStructure).toEqual(englishStructure);
@@ -90,7 +87,7 @@ for (const width of [1440, 390]) {
       await expect(page).toHaveURL(new RegExp(`/${locale}/news/.+`));
       await expect(page.locator('h1')).toBeVisible();
       await page.goto(`/${locale}/contact`);
-      await page.getByRole('link', { name: locale === 'en' ? 'Planning an overseas project? View the delivery checklist.' : '规划海外项目？查看交付核对清单。' }).click();
+      await page.getByRole('link', { name: locale === 'en' ? 'Planning an overseas project? View the delivery checklist.' : '查看交付核对清单' }).click();
       await expect(page).toHaveURL(new RegExp(`/${locale}/service/installation-after-sales#overseas-delivery$`));
       const delivery = page.locator('#overseas-delivery');
       await expect(delivery.getByRole('heading')).toBeVisible();
@@ -98,7 +95,7 @@ for (const width of [1440, 390]) {
       await noOverflow(page);
       await page.screenshot({ path: testInfo.outputPath(`delivery-${locale}-${width}.png`) });
       await delivery.getByRole('link').click();
-      await expect(page).toHaveURL(new RegExp(`/${locale}/contact$`));
+      await expect(page).toHaveURL(new RegExp(`/${locale}/about#contact$`));
     }
     expect(errors).toEqual([]);
   });
@@ -115,13 +112,16 @@ for (const width of [1440, 390]) {
           body: JSON.stringify(attempt === 1 ? { message: 'Controlled failure' } : { code: 0, data: attempt === 2 ? {} : { submissionId: `CONTROLLED-${locale}-${width}` }, message: '' }) });
       });
       await page.goto(`/${locale}/contact`);
-      await page.locator('[aria-controls="contact-message-panel"]').click();
+      if (locale === 'en') await page.locator('[aria-controls="contact-message-panel"]').click();
       const form = page.locator('#contact-inquiry-form form');
       await expect(form).toBeVisible();
       await form.locator('button[type=submit]').click();
       expect(payloads).toHaveLength(0);
-      await form.locator('#homepage-direction-trigger').click();
-      await page.getByRole('option', { name: locale === 'en' ? 'After-sales or other support' : '售后或其他', exact: true }).click();
+      if (locale === 'zh') await form.getByRole('radio', { name: '售后或其他', exact: true }).check();
+      else {
+        await form.locator('#homepage-direction-trigger').click();
+        await page.getByRole('option', { name: 'After-sales or other support', exact: true }).click();
+      }
       await form.locator('textarea[name=problem]').fill(`CONTROLLED TEST ${locale} ${width} — no external submission`);
       await form.locator('input[name=identity]').fill('Site Acceptance Test');
       await form.locator('input[name=contact]').fill('site-acceptance@example.invalid');

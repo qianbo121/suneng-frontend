@@ -8,27 +8,30 @@ export function AboutSubpageHeader({
   action,
   plain = false,
   locale = 'zh',
+  embedded = false,
 }: {
   title: string;
   description: string;
   action?: ReactNode;
   plain?: boolean;
   locale?: 'zh' | 'en';
+  embedded?: boolean;
 }) {
+  const Heading = embedded ? 'h2' : 'h1';
   return (
     <header className={`${styles.pageHeader} ${plain ? styles.plainHeader : ''}`}>
       <div className={styles.container}>
-        <div className={styles.breadcrumbRow}>
+        {!embedded && <div className={styles.breadcrumbRow}>
           <Breadcrumb
             locale={locale}
             currentLabel={title}
             tone="dark"
             items={[{ label: locale === 'en' ? 'About Suneng' : '关于苏能', href: `/${locale}/about` }, { label: title }]}
           />
-        </div>
+        </div>}
         <div className={styles.headingRow}>
           <div>
-            <h1>{title}</h1>
+            <Heading>{title}</Heading>
             <p>{description}</p>
           </div>
           {action}

@@ -19,14 +19,12 @@ const wechatButtonSource = readFileSync(
 );
 
 describe('中文关于苏能页', () => {
-  it('保留 6 个页内导航模块和单一 H1', () => {
+  it('合并为 4 个页内导航模块并保留单一 H1', () => {
     expect(ABOUT_ANCHORS.map((item) => item.id)).toEqual([
       'manufacturer',
-      'delivery',
-      'scope',
       'qualifications',
       'projects',
-      'faq',
+      'contact',
     ]);
     expect((pageSource + heroSource).match(/<h1(?:\s[^>]*)?>/g)).toHaveLength(1);
     expect(interactiveSource).toContain('IntersectionObserver');
@@ -58,7 +56,10 @@ describe('中文关于苏能页', () => {
 
   it("保留业务边界与产品入口并撤下旧方案入口", () => {
     expect(ABOUT_BOUNDARIES).toHaveLength(11);
-    expect(pageSource).toContain('/zh/strength/honors');
+    expect(heroSource).toContain('/zh/products');
+    expect(pageSource).toContain('<CertificateGallerySections embedded');
+    expect(pageSource).toContain('<PartnerContent embedded');
+    expect(pageSource).toContain('<ContactZhContent embedded');
     expect(pageSource).not.toMatch(/\/zh\/case\//);
   });
 
@@ -70,10 +71,9 @@ describe('中文关于苏能页', () => {
     expect(interactiveSource).toContain('aria-modal="true"');
   });
 
-  it('区分三处转化按钮并让移动端锚点跟随当前模块', () => {
+  it('保留咨询入口并让移动端锚点跟随当前模块', () => {
     expect(wechatButtonSource).toContain("label = '加企微，发工况初判'");
     expect(pageSource).toContain('label={t("联系业务顾问")}');
-    expect(pageSource).toContain('label={t("提交工况资料")}');
     expect(corePageText('联系业务顾问', 'zh')).toBe('联系业务顾问');
     expect(corePageText('提交工况资料', 'zh')).toBe('提交工况资料');
     expect(interactiveSource).toContain("window.matchMedia('(max-width: 767px)')");

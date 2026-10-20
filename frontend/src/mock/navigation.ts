@@ -60,28 +60,6 @@ const chineseNavigationItems: NavigationItem[] = [
     key: 'about',
     href: '/about',
     label: { zh: '关于苏能', en: 'About Suneng' },
-    children: [
-      {
-        key: 'about-company',
-        href: '/about',
-        label: { zh: '公司介绍', en: 'Company Profile' },
-      },
-      {
-        key: 'about-honors',
-        href: '/strength/honors',
-        label: { zh: '荣誉资质', en: 'Qualifications & Honors' },
-      },
-      {
-        key: 'about-partner',
-        href: '/partner',
-        label: { zh: '合作单位', en: 'Partners' },
-      },
-      {
-        key: 'about-contact',
-        href: '/contact',
-        label: { zh: '联系我们', en: 'Contact' },
-      },
-    ],
   },
 ];
 

@@ -31,7 +31,7 @@ for (const width of [1440, 390]) {
       for (const slug of ['shovel-furnace', 'walking-beam-furnace', 'elevator-hearth-furnace', 'gas-nitriding-furnace']) {
         await page.goto(`/en/products/detail/${slug}`, { waitUntil: 'domcontentloaded' });
         await page.getByRole('link', { name: 'Request selection advice', exact: true }).filter({ visible: true }).first().click();
-        await expect(page).toHaveURL(new RegExp(`/en/contact\\?product=${slug}#contact-inquiry-form-fields$`));
+        await expect(page).toHaveURL(new RegExp(`/en/about\\?product=${slug}#contact-inquiry-form-fields$`));
         const form = page.locator('#contact-inquiry-form-fields');
         await expect(form).toBeVisible();
         await expect.poll(() => form.evaluate(element => {

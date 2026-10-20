@@ -12,12 +12,14 @@ type CertificateGallerySectionsProps = {
   qualifications: CertificateItem[];
   isoCertificates: CertificateItem[];
   patents: CertificateItem[];
+  embedded?: boolean;
 };
 export function CertificateGallerySections({
   locale,
   qualifications,
   isoCertificates,
   patents,
+  embedded = false,
 }: CertificateGallerySectionsProps) {
   const english = locale === 'en';
   const inventionCount = patents.filter((item) => item.subtitle === '发明专利证书').length;
@@ -28,13 +30,13 @@ export function CertificateGallerySections({
     : '企业资质、管理体系与专利证书，集中查阅。';
   return (
     <div className={styles.page} data-about-subpage="honors">
-      <AboutSubpageJsonLd
+      {!embedded && <AboutSubpageJsonLd
         title={title}
         description={description}
         path={`/${locale}/strength/honors`}
         locale={locale}
-      />
-      <AboutSubpageHeader title={title} description={description} locale={locale} />
+      />}
+      <AboutSubpageHeader embedded={embedded} title={title} description={description} locale={locale} />
       <div className={styles.container}>
         <section
           className={styles.section}
@@ -60,7 +62,7 @@ export function CertificateGallerySections({
                     alt={item.alt}
                     width={400}
                     height={250}
-                    priority
+                    priority={!embedded}
                     sizes="(max-width: 767px) 90vw, 380px"
                   />
                 </OriginalImageLink>

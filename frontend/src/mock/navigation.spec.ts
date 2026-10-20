@@ -50,9 +50,11 @@ describe('localized primary navigation', () => {
     expect(getRouteLabelMap('en').get('/case')).toBe('Project Cases');
   });
 
-  it('links to the localized partner page', () => {
-    const partner = getLocalizedNavigation('en').find((item) => item.key === 'about')?.children?.find((item) => item.key === 'about-partner');
-    expect(partner).toMatchObject({ href: '/partner', labelText: 'Partners' });
-
+  it('opens the unified About page without a second four-page dropdown', () => {
+    for (const locale of ['zh', 'en'] as const) {
+      const about = getLocalizedNavigation(locale).find((item) => item.key === 'about');
+      expect(about?.href).toBe('/about');
+      expect(about?.children).toBeUndefined();
+    }
   });
 });
