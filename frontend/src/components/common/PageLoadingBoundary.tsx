@@ -35,11 +35,13 @@ export function PageLoadingBoundary({ children, locale }: { children: ReactNode;
   // Keep home pages, article bodies and ordinary list entry links readable.
   // Search/filter lists retain their own (list)/loading boundary; plain lists
   // may reach this layout through the internal news-prerendered rewrite.
-  // Ordinary inquiry pages and all other routes retain the shared boundary.
+  // The Chinese inquiry entry exposes its existing copy without scripts.
+  // Unpublished English inquiry and all other routes retain the shared boundary.
   if (pathname && (
     /^\/(?:zh|en)\/?$/.test(pathname)
     || productDetail
     || publicInquiryChecklist
+    || pagePath === '/zh/inquiry'
     || procurementOrService
     || informationPage
     || publishedCase
