@@ -56,10 +56,6 @@ export function DecisionContent() {
                     {'发布 '}
                     <time dateTime={'2026-06-13'}>{'2026-06-13'}</time>
                   </span>
-                  <span>
-                    {'更新 '}
-                    <time dateTime={'2026-07-30'}>{'2026-07-30'}</time>
-                  </span>
                 </div>
               </div>
               <figure className={'hero-photo'}>
@@ -528,7 +524,7 @@ export function DecisionContent() {
                   <summary>{'资料更新与来源'}</summary>
                   <p>
                     {
-                      '内容来自原页面与苏能项目资料；项目参数对应原页面证据记录 SN-CASE-P1-013、SN-CASE-P1-014、SN-CASE-P0-001。项目证据只能帮助识别系统和决策变量，不能替代现场检测、风险评估和正式技术方案。原页面发布于 2026-06-13，更新于 2026-07-30。'
+                      '内容来自原页面与苏能项目资料；项目参数对应原页面证据记录 SN-CASE-P1-013、SN-CASE-P1-014、SN-CASE-P0-001。项目证据只能帮助识别系统和决策变量，不能替代现场检测、风险评估和正式技术方案。原页面发布于 2026-06-13。'
                     }
                   </p>
                 </details>
