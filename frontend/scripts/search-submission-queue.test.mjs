@@ -495,7 +495,7 @@ test('missing receipt dates or omitted registry entries never discard held recor
   assert.deepEqual(state.baiduManualReconciliation.originalQueue.pending.baidu, urls);
 });
 
-test('unhandled manual export prioritizes Chinese articles without losing other URLs', () => {
+test('remaining non-commercial URLs keep Chinese news before other Chinese and English URLs', () => {
   const values = ['https://www.jssngyl.cn/en/news/english', 'https://www.jssngyl.cn/zh/service/help',
     'https://www.jssngyl.cn/zh/news/chinese'];
   const state = mergeBatches(emptyQueue(), [{ id: 'mixed-languages', urls: values }], values);
@@ -589,4 +589,74 @@ test('explicit release restores manual work without changing manual mode or maki
   assert.equal(requests, 0);
   assert.equal(state.pending.baidu.includes(urls[0]), true);
   assert.equal(state.baiduAttempted, 0);
+});
+
+
+test('eligible Baidu product and solution URLs lead each language tier without changing holds or IndexNow', () => {
+  const address = (path) => `https://www.jssngyl.cn${path}`;
+  const paths = ['/en/news/one', '/zh/service/help', '/en/products/detail/second',
+    '/zh/news/second', '/zh/products/detail/second', '/en/solutions/line',
+    '/zh/solutions/line', '/zh/products/detail/first', '/zh/news/first',
+    '/en/products/detail/first', '/zh/products-archive/one', '/en/contact'];
+  const values = paths.map(address);
+  const held = ['/zh/solutions/continuous-heat-treatment-line',
+    '/zh/solutions/jiangsu-gongye-lu-changjia', '/zh/solutions/rechuli-lu-changjia'].map(address);
+  for (const url of held) assert.ok(heldBaiduUrls.includes(url));
+  const batch = [held[0], ...values.slice(0, 5), held[1], ...values.slice(5), held[2], values[4]];
+  const state = mergeBatches(emptyQueue(), [{ id: 'priority-review', urls: batch }], batch);
+  const original = structuredClone(state);
+  const live = new Map(batch.map((url) => [url, '2026-10-21']));
+  const result = reconcileBaiduManualQueue(state, live);
+  const expected = [4, 6, 7, 2, 5, 9, 3, 8, 1, 10, 0, 11].map((i) => values[i]);
+  assert.deepEqual(result.unhandledUrls, expected);
+  assert.deepEqual([...state.pending.baidu].sort(), [...values].sort());
+  assert.deepEqual(state.pending.indexnow, original.pending.indexnow);
+  assert.deepEqual(state.baiduManualReconciliation.originalQueue, original);
+  assert.deepEqual(state.sources, original.sources);
+  for (const url of held) {
+    assert.equal(state.pending.baidu.includes(url), false);
+    const record = state.baiduManualReconciliation.records.find((entry) => entry.url === url);
+    assert.equal(record.needsReview, true);
+    assert.deepEqual(record.releaseHistory, []);
+    assert.equal(record.apiAcceptanceVerified, false);
+  }
+  const after = structuredClone(state);
+  reconcileBaiduManualQueue(state, live);
+  assert.deepEqual(state.pending, after.pending);
+  assert.deepEqual(state.baiduManualReconciliation.originalQueue, after.baiduManualReconciliation.originalQueue);
+  // Existing reconciliation updates its explanation on a later observation;
+  // the hold, receipt evidence and release history must remain unchanged.
+  const withoutReason = (records) => records.map(({ reason, ...record }) => record);
+  assert.deepEqual(withoutReason(state.baiduManualReconciliation.records), withoutReason(after.baiduManualReconciliation.records));
+});
+
+test('product priority respects the ten-attempt budget and retries failed URLs without changing IndexNow order', async () => {
+  const chinese = Array.from({ length: 11 }, (_, i) => `https://www.jssngyl.cn/zh/products/detail/test-${i}`);
+  const english = 'https://www.jssngyl.cn/en/products/detail/test';
+  const news = 'https://www.jssngyl.cn/zh/news/test';
+  const values = [news, english, ...chinese];
+  const live = new Map(values.map((url) => [url, '']));
+  let state = mergeBatches(emptyQueue(), [{ id: 'quota-priority', urls: values }], values);
+  reconcileBaiduManualQueue(state, live, reviewRegistry([]));
+  let indexNowSent;
+  const attempts = [];
+  const failing = options({ limit: 10, submit: {
+    indexnow: async (sent) => { indexNowSent = sent; return success(sent); },
+    baidu: async (sent) => { attempts.push(sent); return { ok: false }; },
+  } });
+  await drainQueue(state, failing);
+  assert.deepEqual(indexNowSent, values);
+  assert.deepEqual(attempts, [chinese.slice(0, 10)]);
+  assert.equal(state.baiduAttempted, 10);
+  assert.deepEqual(state.pending.baidu, [...chinese, english, news]);
+  state = JSON.parse(JSON.stringify(state));
+  reconcileBaiduManualQueue(state, live, reviewRegistry([]));
+  await drainQueue(state, failing);
+  assert.equal(attempts.length, 1); // Same-day reruns cannot spend another ten attempts.
+  await drainQueue(state, options({ day: '2026-09-09', limit: 10, submit: {
+    indexnow: success, baidu: async (sent) => { attempts.push(sent); return success(sent); },
+  } }));
+  assert.deepEqual(attempts[1], chinese.slice(0, 10));
+  assert.deepEqual(state.pending.baidu, [chinese[10], english, news]);
+  assert.equal(state.baiduAttempted, 10);
 });
