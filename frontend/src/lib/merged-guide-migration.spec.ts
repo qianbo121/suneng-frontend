@@ -26,7 +26,24 @@ describe('merged guide keeps the historical entrance connected to full content',
     expect(html).not.toMatch(/未登记公开署名|发布复核：|内容复核：/);
     expect(html).toContain('id="decision-table"');
     expect(html).toContain('id="partial"');
-    expect(html.replace(/<script\b[^>]*>[\s\S]*?<\/script>/g, '').replace(/<[^>]*>/g, '').length).toBeGreaterThan(3500);
+    // Visible dates are intentionally omitted. Guard the actual article sections
+    // and decision evidence instead of counting incidental header/footer text.
+    const sections = [...html.matchAll(/<section class="article-section" id="([^"]+)">([\s\S]*?)<\/section>/g)];
+    expect(sections.map((section) => section[1])).toEqual([
+      'criteria', 'comparison', 'projects', 'materials', 'process', 'faq',
+    ]);
+    const body = Object.fromEntries(sections.map((section) => [section[1], section[2]]));
+    for (const term of ['优先大修', '优先局部改造', '评估买新炉']) expect(body.criteria).toContain(term);
+    expect(body.comparison.match(/<tr>/g)).toHaveLength(10);
+    for (const term of ['台车式轴承钢丝球化退火炉新建方案', '超大型燃气台车退火炉改造', 'PC200–PC400 支重轮新建连续热处理线']) {
+      expect(body.projects).toContain(term);
+    }
+    expect(body.materials).toContain('资料不完整也可以先沟通，再确认是否需要现场勘查。');
+    for (const term of ['先诊断，再报价', '工程量清单可核对', '停产计划可执行', '验收条件写完整', '项目证据能对上', '停产周期、节能效果和验收指标，均需结合设备现状和具体方案确认。']) {
+      expect(body.process).toContain(term);
+    }
+    expect(body.faq).toContain('不能替代现场检测、风险评估和正式技术方案');
+    expect(body.faq).toContain('原页面发布于 2026-06-13。');
   });
   it('does not create an English equivalent for Chinese-only content', async () => {
     await expect(OldFurnaceGuide({ params: Promise.resolve({ locale: 'en' }) })).rejects.toMatchObject({ status: 404 });
