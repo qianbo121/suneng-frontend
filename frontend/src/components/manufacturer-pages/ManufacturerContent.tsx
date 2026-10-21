@@ -30,7 +30,7 @@ export function ManufacturerContent() {
               }
             </p>
             <p className={'hero-note'}>
-              {'成立于 2006 年 · 江苏泰州制造基地 · 制造、资质与项目资料可查'}
+              {'成立于 2006 年 · 江苏泰州制造基地 · 制造与资质资料可查'}
             </p>
             <div className={'actions'}>
               <a className={'button primary'} href={'/zh/inquiry'}>
@@ -150,7 +150,7 @@ export function ManufacturerContent() {
             </p>
             <nav aria-label={'核对依据'}>
               <a className={'text-link'} href={'#proof'}>
-                {'先看制造与项目资料'}
+                {'先看制造与资质资料'}
                 <svg aria-hidden={'true'} viewBox={'0 0 24 24'} width={'18'} height={'18'}>
                   <path
                     d={'M5 12h14M13 6l6 6-6 6'}
@@ -197,7 +197,7 @@ export function ManufacturerContent() {
         <span className="legacy-anchor" id={'cases'} aria-hidden="true" />
         <div className={'container'}>
           <div className={'section-head'}>
-            <h2>{'制造现场、企业资质与公开项目，都有资料可查'}</h2>
+            <h2>{'制造现场与企业资质，有资料可查'}</h2>
             <p>{'先了解苏能，再把对应资料与您的工件、工艺及供货要求对照。'}</p>
           </div>
           <div className={'proof'}>

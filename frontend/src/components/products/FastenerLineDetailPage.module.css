@@ -928,6 +928,28 @@
   margin-bottom: 32px !important;
   max-width: 1000px;
 }
+.resourceLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  max-width: 100%;
+  min-height: 44px;
+  color: var(--ft-brand);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+.resourceLink:hover {
+  text-decoration-thickness: 2px;
+}
+.resourceLink:focus-visible {
+  outline: 2px solid var(--ft-brand);
+  outline-offset: 4px;
+}
+.resourceLink svg {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
 .deliveryTextGrid {
   max-width: 1000px;
 }
