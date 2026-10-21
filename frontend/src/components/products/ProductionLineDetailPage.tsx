@@ -136,13 +136,11 @@ export function ProductionLineDetailPage({ content, locale = 'zh' }: { content: 
   const t = (zh: string, english: string) => en ? english : zh;
   const processData = en ? getEnglishLineProcess(content.pageId) : { model: productionLineProcessMaps[content.pageId], steps: getLineProcessSteps(content) };
   const s = content.sections;
-  const capacityResource = locale === 'zh'
-    ? content.pageId === 'annealing-solution-line'
-      ? { href: '/zh/news/shuju-news-27', label: '连续退火线速度：工艺窗口与整线瓶颈' }
-      : content.pageId === 'mesh-belt-carbonitriding-line'
-        ? { href: '/zh/news/mesh-belt-carburizing-throughput-process-limits', label: '网带连续渗碳产量：工艺时间与装载边界' }
-        : null
-    : null;
+  const capacityResource = content.pageId === 'annealing-solution-line'
+    ? { href: `/${locale}/news/shuju-news-27`, label: t('连续退火线速度：工艺窗口与整线瓶颈', 'Read how to assess stainless-steel annealing line speed') }
+    : content.pageId === 'mesh-belt-carbonitriding-line'
+      ? { href: `/${locale}/news/mesh-belt-carburizing-throughput-process-limits`, label: t('网带连续渗碳产量：工艺时间与装载边界', 'Read the process limits behind mesh-belt carburizing throughput') }
+      : null;
   const inquiryConditions = s.inquiry.form.fields
     .filter((field) => field.name !== 'contact_method')
     .map((field) => field.label)

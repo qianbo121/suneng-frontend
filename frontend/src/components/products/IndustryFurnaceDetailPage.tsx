@@ -77,8 +77,8 @@ export function IndustryFurnaceDetailPage({ slug, locale = 'zh' }: { slug: Indus
     : [bearingWireCase
       ? [bearingWireCase.title, `/zh/case/${bearingWireCase.slug}`]
       : [t("查看本设备相关方案与项目资料"), '#related-case-evidence']];
-  const workpieceArticles: Array<readonly [string, string]> = slug === 'roller-hearth-furnace' && locale === 'zh'
-    ? [['辊棒炉适用工件：支承、输送与连续节拍', '/zh/news/shuju-news-24']]
+  const workpieceArticles: Array<readonly [string, string]> = slug === 'roller-hearth-furnace'
+    ? [[locale === 'en' ? 'Read which workpieces suit a roller-hearth furnace' : '辊棒炉适用工件：支承、输送与连续节拍', `/${locale}/news/shuju-news-24`]]
     : [];
   const evidenceLinks: Array<readonly [string, string]> = [
     ...workpieceArticles,
