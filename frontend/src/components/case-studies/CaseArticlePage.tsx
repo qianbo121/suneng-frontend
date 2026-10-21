@@ -6,7 +6,7 @@ import { notFound } from 'next/navigation';
 import { JsonLd } from '@/components/JsonLd';
 import { NewsArticleContent } from '@/components/news/NewsArticleContent';
 import { absoluteUrl, buildMetadata } from '@/lib/seo/metadata';
-import { getBreadcrumbJsonLd, getOrganizationJsonLd } from '@/lib/seo/jsonld';
+import { getBreadcrumbJsonLd, getOrganizationJsonLd, getEngineeringTeamAuthorName, getEngineeringTeamAuthorsJsonLd } from '@/lib/seo/jsonld';
 import { getCaseArticle, getPublicCases } from '@/lib/cases/server';
 import { safeCaseReturn, type SearchParams } from '@/lib/cases/query';
 import { CASE_TYPE_LABELS } from '@/lib/cases/types';
@@ -59,6 +59,9 @@ export function CaseArticlePage({
   const buyerLinks = getCaseBuyerLinks(slug).filter((link) => !isWithdrawnTechnicalPath(link.href));
   const url = absoluteUrl(`/zh/case/${item.slug}`);
   const organization = getOrganizationJsonLd();
+  // The owner approved the existing materials byline for this case only.
+  const hasEngineeringAttribution = slug === 'henan-annealing-solution-line';
+  const authorName = hasEngineeringAttribution ? getEngineeringTeamAuthorName() : item.author;
   const related = getPublicCases().filter((record) => item.relatedCases?.includes(record.slug));
   const isSupportRoller = slug === 'jining-support-roller-heat-treatment-line';
   const hasCuratedResources = slug === 'henan-annealing-solution-line' || isSupportRoller;
@@ -95,9 +98,9 @@ export function CaseArticlePage({
                   {[...item.materials.slice(0, 1), ...item.process.slice(0, 2)].join(' · ')}
                 </p>
                 <h1>{item.title}</h1>
-                {(item.author || item.reviewer) && (
+                {(authorName || item.reviewer) && (
                   <p className="case-byline">
-                    {item.author && `作者：${item.author}`}
+                    {authorName && <>作者：<span translate="no">{authorName}</span></>}
                     {item.reviewer && `　复核：${item.reviewer}`}
                   </p>
                 )}
@@ -171,7 +174,9 @@ export function CaseArticlePage({
             mainEntityOfPage: url,
             inLanguage: 'zh-CN',
             publisher: { '@id': organization['@id'] },
-            ...(item.author ? { author: { '@type': 'Person', name: item.author } } : {}),
+            ...(hasEngineeringAttribution
+              ? { author: getEngineeringTeamAuthorsJsonLd() }
+              : item.author ? { author: { '@type': 'Person', name: item.author } } : {}),
             ...(item.datePublished ? { datePublished: item.datePublished } : {}),
             ...(item.dateModified ? { dateModified: item.dateModified } : {}),
             ...(item.cover ? { image: absoluteUrl(item.cover.src) } : {}),
