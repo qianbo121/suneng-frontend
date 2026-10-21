@@ -45,6 +45,16 @@ const articleJsonLd = (html: string) =>
   JSON.parse(html.match(/<script[^>]+id="case-article-jsonld"[^>]*>(.*?)<\/script>/s)![1]);
 
 describe('complete English case integration', () => {
+  it('keeps the owner-approved Chinese byline unchanged on the English case', () => {
+    const html = renderArticle(approvedSlug);
+    expect(html).toContain('Author: <span lang="zh-CN" translate="no">苏能工业炉工程技术团队&amp;唐荔</span>');
+    const [article] = articleJsonLd(html);
+    expect(article.author).toEqual([
+      { '@type': 'Organization', '@id': 'https://www.jssngyl.cn/#engineering-team', name: '苏能工业炉工程技术团队', parentOrganization: { '@id': 'https://www.jssngyl.cn/#organization' } },
+      { '@type': 'Person', name: '唐荔' },
+    ]);
+    expect(article.publisher).toEqual({ '@id': 'https://www.jssngyl.cn/#organization' });
+  });
   it("keeps translated sources registered and publishes only owner-approved English pages", () => {
     expect(englishSlugs).toHaveLength(148);
     expect(sorted(getEnglishCases().map((item) => item.slug))).toEqual(sorted(PUBLIC_ENGLISH_CASE_SLUGS));

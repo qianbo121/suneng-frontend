@@ -9,7 +9,7 @@ import { getEnglishCase, getEnglishCases, getEnglishCaseResults, englishCaseHref
 import { hasCaseSearch, parseCaseQuery, type SearchParams } from '@/lib/cases/query';
 import type { CaseQuery } from '@/lib/cases/types';
 import { absoluteUrl, buildMetadata } from '@/lib/seo/metadata';
-import { getBreadcrumbJsonLd, getOrganizationJsonLd } from '@/lib/seo/jsonld';
+import { getBreadcrumbJsonLd, getOrganizationJsonLd, getEngineeringTeamAuthorName, getEngineeringTeamAuthorsJsonLd } from '@/lib/seo/jsonld';
 import { CaseToc } from './CaseToc';
 import { CaseCoverCaption } from './CaseCoverCaption';
 import { CaseProductConnections } from './CaseEvidenceLinks';
@@ -48,6 +48,7 @@ export function EnglishCaseArticle({ slug, searchParams }: { slug: string; searc
   const item = getEnglishCase(slug);
   if (!item) notFound();
   const back = backLink(searchParams.returnTo);
+  const hasEngineeringAttribution = slug === 'henan-annealing-solution-line';
   const url = absoluteUrl(`/en/case/${slug}`);
   const related = getEnglishCases().filter((record) => item.relatedCases.includes(record.slug));
   const buyerLinks = getEnglishCaseBuyerLinks(slug).filter((link) => !isWithdrawnTechnicalPath(link.href));
@@ -61,6 +62,7 @@ export function EnglishCaseArticle({ slug, searchParams }: { slug: string; searc
         <article className="case-article">
           <header className="case-article-header">
             <p className="case-article-kind">{labels[item.contentType]}</p><h1>{item.title}</h1>
+            {hasEngineeringAttribution && <p className="case-byline">Author: <span lang="zh-CN" translate="no">{getEngineeringTeamAuthorName()}</span></p>}
             <div className="case-article-dates">
               {item.sourceDate && <span>Source date: <time dateTime={item.sourceDate}>{formatDate(item.sourceDate)}</time></span>}
               {item.dateModified && <span>Source updated: <time dateTime={item.dateModified}>{formatDate(item.dateModified)}</time></span>}
@@ -87,7 +89,7 @@ export function EnglishCaseArticle({ slug, searchParams }: { slug: string; searc
       </section>
     </div>
     <JsonLd id="case-article-jsonld" data={[
-      { '@context': 'https://schema.org', '@type': 'Article', '@id': `${url}#article`, headline: item.title, description: item.summary, url, mainEntityOfPage: url, inLanguage: 'en-US', publisher: { '@id': getOrganizationJsonLd()['@id'] }, ...(item.dateModified ? { dateModified: item.dateModified } : {}), ...(item.cover ? { image: absoluteUrl(item.cover.src) } : {}) },
+      { '@context': 'https://schema.org', '@type': 'Article', '@id': `${url}#article`, headline: item.title, description: item.summary, url, mainEntityOfPage: url, inLanguage: 'en-US', ...(hasEngineeringAttribution ? { author: getEngineeringTeamAuthorsJsonLd() } : {}), publisher: { '@id': getOrganizationJsonLd()['@id'] }, ...(item.dateModified ? { dateModified: item.dateModified } : {}), ...(item.cover ? { image: absoluteUrl(item.cover.src) } : {}) },
       getBreadcrumbJsonLd([{ name: 'Home', url: '/en' }, { name: 'Case studies', url: '/en/case' }, { name: item.title, url }]),
     ]} />
   </div>;

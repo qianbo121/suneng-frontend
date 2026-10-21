@@ -41,6 +41,18 @@ function expectPublishedBody(rendered: string, original: string, slug: string) {
 }
 
 describe('case resources preserve the published content', () => {
+  it('renders the approved materials byline and its two coauthors on the Henan case', () => {
+    const html = renderToStaticMarkup(createElement(CaseArticlePage, {
+      slug: 'henan-annealing-solution-line', searchParams: {},
+    }));
+    expect(html).toContain('作者：<span translate="no">苏能工业炉工程技术团队&amp;唐荔</span>');
+    const [article] = JSON.parse(html.match(/<script[^>]+id="case-article-jsonld"[^>]*>(.*?)<\/script>/s)![1]);
+    expect(article.author).toEqual([
+      { '@type': 'Organization', '@id': 'https://www.jssngyl.cn/#engineering-team', name: '苏能工业炉工程技术团队', parentOrganization: { '@id': 'https://www.jssngyl.cn/#organization' } },
+      { '@type': 'Person', name: '唐荔' },
+    ]);
+    expect(article.publisher).toEqual({ '@id': 'https://www.jssngyl.cn/#organization' });
+  });
   it('renders registered covers in the reading header with their reader-facing caption', () => {
     for (const item of getPublicCases()) {
       const html = renderToStaticMarkup(
