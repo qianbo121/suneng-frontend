@@ -7,6 +7,7 @@ import type { MetadataRoute } from 'next';
 
 import { publicPathExists } from '@/lib/seo/config';
 import { absoluteUrl } from '@/lib/seo/metadata';
+import { getVerifiedSitemapLastModified } from '@/lib/seo/verified-sitemap-revisions';
 import { getAllNewsForDecisionCenter } from '@/lib/api/news';
 import { getNewsContentModifiedTime } from '@/lib/news-dates';
 import { approvedProcurementPages } from '@/lib/approved-procurement-pages';
@@ -26,7 +27,6 @@ import {
   OLD_HEAT_TREATMENT_FURNACE_REPAIR_OR_REPLACE_SEO,
   PRODUCT_DETAIL_SEO,
   TEMPERATURE_UNIFORMITY_REMEDIATION_SEO,
-  CONTINUOUS_HEAT_TREATMENT_LINE_SEO,
 } from '@/lib/seo/page-data';
 import { Locale } from '@/types/site';
 
@@ -98,7 +98,7 @@ function safeLastModified(value?: string | Date) {
 
 function route(url: string, options: Omit<SitemapEntry, 'url'>): SitemapEntry {
   const { lastModified, ...rest } = options;
-  const validDate = safeLastModified(lastModified);
+  const validDate = getVerifiedSitemapLastModified(url) ?? safeLastModified(lastModified);
   return {
     url: absoluteUrl(url),
     ...rest,
@@ -241,7 +241,6 @@ function collectStaticRoutes(): MetadataRoute.Sitemap {
       path: '/solutions/continuous-heat-treatment-line',
       changeFrequency: 'monthly',
       priority: 0.86,
-      lastModified: CONTINUOUS_HEAT_TREATMENT_LINE_SEO.modifiedTime,
     },
   ];
 

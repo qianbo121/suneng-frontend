@@ -1,5 +1,7 @@
 import { describe, expect, it, vi } from 'vitest';
 import revisedArticles from '@/lib/news-reviewed-copy.json';
+import verifiedRevisions from '@/lib/seo/verified-sitemap-revisions.json';
+import { resolveSitemap } from 'next/dist/build/webpack/loaders/metadata/resolve-route-data';
 
 vi.mock('next/cache', () => ({ unstable_cache: (fn: unknown) => fn }));
 vi.mock('server-only', () => ({}));
@@ -108,15 +110,15 @@ const DEEP_CRAWL_TARGETS = [
 
 describe('sitemap freshness signals', () => {
   it('keeps a verified Chinese product date out of the independently maintained English page', async () => {
-    const productSeo = PRODUCT_DETAIL_SEO['box-furnace'];
+    const productSeo = PRODUCT_DETAIL_SEO['mesh-belt-furnace'];
     const previous = productSeo.modifiedTime;
     try {
       productSeo.modifiedTime = '2026-01-02T03:04:05+08:00';
       const entries = new Map((await buildSitemap()).map((entry) => [entry.url, entry]));
-      expect(entries.get(`${site}/zh/products/detail/box-furnace`)?.lastModified).toEqual(
+      expect(entries.get(`${site}/zh/products/detail/mesh-belt-furnace`)?.lastModified).toEqual(
         new Date(productSeo.modifiedTime),
       );
-      expect(entries.get(`${site}/en/products/detail/box-furnace`)?.lastModified).toBeUndefined();
+      expect(entries.get(`${site}/en/products/detail/mesh-belt-furnace`)?.lastModified).toBeUndefined();
     } finally {
       if (previous === undefined) delete productSeo.modifiedTime;
       else productSeo.modifiedTime = previous;
@@ -124,14 +126,14 @@ describe('sitemap freshness signals', () => {
   });
 
   it.each(['not-a-date', '2999-01-01'])('omits invalid or future product and guide dates: %s', async (date) => {
-    const productSeo = PRODUCT_DETAIL_SEO['box-furnace'];
+    const productSeo = PRODUCT_DETAIL_SEO['mesh-belt-furnace'];
     const previousProductDate = productSeo.modifiedTime;
     const previousGuideDate = FURNACE_RENOVATION_OVERHAUL_SEO.modifiedTime;
     try {
       productSeo.modifiedTime = date;
       FURNACE_RENOVATION_OVERHAUL_SEO.modifiedTime = date;
       const entries = new Map((await buildSitemap()).map((entry) => [entry.url, entry]));
-      for (const path of ['/zh/products/detail/box-furnace', '/zh/service/furnace-renovation-overhaul']) {
+      for (const path of ['/zh/products/detail/mesh-belt-furnace', '/zh/service/furnace-renovation-overhaul']) {
         expect(entries.has(site + path)).toBe(true);
         expect(entries.get(site + path)).not.toHaveProperty('lastModified');
       }
@@ -148,8 +150,8 @@ describe('sitemap freshness signals', () => {
     for (const path of [
       '/zh',
       '/zh/about',
-      '/zh/products/detail/trolley-furnace',
-      '/zh/products/detail/box-furnace',
+      '/zh/products/detail/mesh-belt-furnace',
+      '/zh/products/detail/copper-wire-annealing-line',
     ]) {
       expect(byUrl.has('https://www.jssngyl.cn' + path)).toBe(true);
       expect(byUrl.get('https://www.jssngyl.cn' + path)?.lastModified).toBeUndefined();
@@ -159,7 +161,7 @@ describe('sitemap freshness signals', () => {
     ).toEqual(new Date(FURNACE_RENOVATION_OVERHAUL_SEO.modifiedTime));
     expect(
       byUrl.get('https://www.jssngyl.cn/zh/solutions/continuous-heat-treatment-line')?.lastModified,
-    ).toEqual(new Date('2026-09-29T17:36:50+08:00'));
+    ).toBe('2026-10-21');
     expect(
       entries
         .filter((entry) => /\/(articles|solutions)(\/|$)/.test(new URL(entry.url).pathname))
@@ -169,7 +171,7 @@ describe('sitemap freshness signals', () => {
     expect(casePathUrls(entries.map((entry) => entry.url))).toEqual(APPROVED_CASE_URLS);
   });
 
-  it('fails when one shared hard-coded date covers 3 or more pages', async () => {
+  it('rejects shared dates without exact page-level evidence, including a simulated mass refresh', async () => {
     const entries = await buildSitemap();
     const pageSpecificUrls = new Set([
       ...[...APPROVED_GUIDE_PATHS].map((path) => site + path),
@@ -182,23 +184,63 @@ describe('sitemap freshness signals', () => {
       'https://www.jssngyl.cn/zh/case/henan-annealing-solution-line',
       'https://www.jssngyl.cn/zh/products/detail/trolley-furnace',
     ]);
-    const sharedDates = new Map<string, string[]>();
+    const sharedDateRegressions = (items: typeof entries) => {
+      const sharedDates = new Map<string, string[]>();
+      for (const entry of items) {
+        const evidence = (verifiedRevisions as Record<string, { modifiedOn: string }>)[new URL(entry.url).pathname];
+        if (
+          !entry.lastModified ||
+          (evidence && entry.lastModified === evidence.modifiedOn) ||
+          pageSpecificUrls.has(entry.url) ||
+          entry.url.includes('/zh/news/')
+        ) {
+          continue;
+        }
 
-    for (const entry of entries) {
-      if (
-        !entry.lastModified ||
-        pageSpecificUrls.has(entry.url) ||
-        entry.url.includes('/zh/news/')
-      ) {
-        continue;
+        const timestamp = new Date(entry.lastModified).toISOString();
+        sharedDates.set(timestamp, [...(sharedDates.get(timestamp) ?? []), entry.url]);
       }
+      return [...sharedDates.entries()].filter(([, urls]) => urls.length >= 3);
+    };
 
-      const timestamp = new Date(entry.lastModified).toISOString();
-      sharedDates.set(timestamp, [...(sharedDates.get(timestamp) ?? []), entry.url]);
+    expect(sharedDateRegressions(entries)).toEqual([]);
+    const massRefreshPaths = new Set([
+      '/en/products/detail/box-furnace',
+      '/en/products/detail/pit-furnace',
+      '/zh/products/detail/box-furnace',
+    ]);
+    const massRefresh = entries.map((entry) => massRefreshPaths.has(new URL(entry.url).pathname)
+      ? { ...entry, lastModified: '2026-10-19' } : entry);
+    expect(sharedDateRegressions(massRefresh)).toHaveLength(1);
+  });
+
+  it('emits all twelve independently verified dates with day precision and no English inheritance', async () => {
+    const entries = new Map((await buildSitemap()).map((entry) => [new URL(entry.url).pathname, entry]));
+    const xml = resolveSitemap([...entries.values()]);
+    for (const [path, revision] of Object.entries(verifiedRevisions)) {
+      expect(entries.has(path), path).toBe(true);
+      expect(entries.get(path)?.lastModified, path).toBe(revision.modifiedOn);
+      const block = xml.split('<url>').find((part) => part.includes(`<loc>${site}${path}</loc>`));
+      expect(block, path).toContain(`<lastmod>${revision.modifiedOn}</lastmod>`);
     }
+    for (const path of ['/en/products/detail/trolley-furnace', '/en/products/detail/annealing-solution-line',
+      '/en/products/detail/fastener-quench-temper-line', '/en/products/detail/mesh-belt-carbonitriding-line',
+      '/en/products/detail/roller-hearth-furnace']) {
+      expect(entries.has(path), path).toBe(true);
+      expect(entries.get(path)?.lastModified, path).toBeUndefined();
+    }
+  });
 
-    const regressions = [...sharedDates.entries()].filter(([, urls]) => urls.length >= 3);
-    expect(regressions).toEqual([]);
+  it('does not refresh recorded dates when built again on a later day', async () => {
+    vi.useFakeTimers();
+    try {
+      vi.setSystemTime(new Date('2026-10-22T12:00:00Z'));
+      const first = await buildSitemap();
+      vi.setSystemTime(new Date('2026-11-05T12:00:00Z'));
+      expect(await buildSitemap()).toEqual(first);
+    } finally {
+      vi.useRealTimers();
+    }
   });
 
   it('keeps live deep-crawl targets while excluding retired technical paths', async () => {

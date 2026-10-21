@@ -385,8 +385,7 @@ export const CONTINUOUS_HEAT_TREATMENT_LINE_SEO = {
   ogImage: '/images/products/annealing-solution-line/gallery/line-01.jpg',
   ogType: 'website',
   canonicalUrl: 'https://www.jssngyl.cn/zh/solutions/continuous-heat-treatment-line',
-  // d4b108d8e restored this guide and revised its project evidence on 2026-09-29.
-  modifiedTime: '2026-09-29T17:36:50+08:00',
+  // Sitemap dates are maintained per locale in verified-sitemap-revisions.json.
 };
 
 export const TSINGSHAN_1250_CASE_SEO = {
