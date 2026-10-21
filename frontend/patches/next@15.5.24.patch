@@ -1,0 +1,24 @@
+--- a/dist/server/image-optimizer.js
++++ b/dist/server/image-optimizer.js
+@@ -915,6 +915,9 @@
+             socket: _req.socket,
+             maximumResponseBody
+         });
++        // A canceled visitor must not cancel the shared local image read.
++        // Keep the requester socket on mocked.req for internal routing.
++        mocked.res.socket = null;
+         await handleRequest(mocked.req, mocked.res, _url.default.parse(href, true));
+         await mocked.res.hasStreamed;
+         if (!mocked.res.statusCode) {
+--- a/dist/esm/server/image-optimizer.js
++++ b/dist/esm/server/image-optimizer.js
+@@ -799,6 +799,9 @@
+             socket: _req.socket,
+             maximumResponseBody
+         });
++        // A canceled visitor must not cancel the shared local image read.
++        // Keep the requester socket on mocked.req for internal routing.
++        mocked.res.socket = null;
+         await handleRequest(mocked.req, mocked.res, nodeUrl.parse(href, true));
+         await mocked.res.hasStreamed;
+         if (!mocked.res.statusCode) {
