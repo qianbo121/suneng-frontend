@@ -95,7 +95,10 @@ function manualRegistry() {
 
 function priority(url) {
   const path = new URL(url).pathname;
-  return path.startsWith('/zh/news/') ? 0 : path.startsWith('/zh/') ? 1 : 2;
+  // Rank only eligible Baidu URLs; Array.sort preserves arrival order within a tier.
+  if (path.startsWith('/zh/products/') || path.startsWith('/zh/solutions/')) return 0;
+  if (path.startsWith('/en/products/') || path.startsWith('/en/solutions/')) return 1;
+  return path.startsWith('/zh/news/') ? 2 : path.startsWith('/zh/') ? 3 : 4;
 }
 
 // A human report, a batch UI receipt and an API response are different evidence.
