@@ -50,8 +50,9 @@ describe('the two owner-approved Chinese procurement pages', () => {
     );
     expect([...body.querySelectorAll('section[id]')].map((node) => node.id)).toEqual(anchors);
     if (id === 'equipment') {
-      expect(doc.querySelector('time')?.textContent).toBe('2026-10-10');
-      expect(doc.querySelector('time')?.getAttribute('datetime')).toBe(approvedProcurementPages.equipment.bodyUpdatedAt);
+      expect(doc.querySelector('[data-body-updated-at]')?.getAttribute('data-body-updated-at')).toBe(approvedProcurementPages.equipment.bodyUpdatedAt);
+      expect(doc.querySelector('header time')).toBeNull();
+      expect(doc.querySelector('header')?.textContent).not.toContain('正文更新');
       expect(doc.querySelector('header')?.textContent).toContain('发布单位：江苏苏能工业炉有限公司');
       const references = doc.querySelector('section[aria-labelledby="procurement-equipment-body-references"]');
       expect([...references!.querySelectorAll('a')].map((node) => node.getAttribute('href'))).toEqual([

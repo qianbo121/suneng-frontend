@@ -77,8 +77,8 @@ describe('source-bound English news', () => {
     expect(result.englishSourceDate).toEqual({ label: 'Source reviewed', date: '2026-02-01' });
     expect(result.englishCoverImage).toBe('/images/news/english-cover.png');
     expect(result.coverImage).toBe(fixture.coverImage);
-    expect(getNewsContentModifiedTime(result, 'en')).toBe(result.englishContentUpdatedAt);
-    expect(getNewsContentModifiedTime(result, 'zh')).toBe(fixture.contentUpdatedAt);
+    expect(getNewsContentModifiedTime(result, 'en')).toBe('2026-10-19T13:53:16Z');
+    expect(getNewsContentModifiedTime(result, 'zh')).toBe('2026-10-19T13:53:16Z');
   });
   it.each([
     { id: 99002 },

@@ -15,7 +15,8 @@ describe('approved overhaul revision', () => {
     const result = await applyEnglishNewsCopy(reviewed);
     expect(result.contentEn).toBe(translations['22'].contentEn);
     expect(result.titleEn).toBe(translations['22'].titleEn);
-    expect(getNewsContentModifiedTime(result, 'en')).toBe(translations['22'].translatedAt);
+    expect(result.englishContentUpdatedAt).toBe(translations['22'].translatedAt);
+    expect(getNewsContentModifiedTime(result, 'en')).toBe('2026-10-19T13:53:16Z');
     for (const key of ['slug', 'publishDate', 'coverImage', 'id'] as const) {
       expect(result[key]).toBe(original[key]);
     }
