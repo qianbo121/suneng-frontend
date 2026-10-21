@@ -1,0 +1,50 @@
+{
+  "/zh/products/detail/box-furnace": {
+    "modifiedOn": "2026-10-20",
+    "sourceCommit": "e6dbe0a5df9b9d44cf91e8812ea44c951121ba11"
+  },
+  "/zh/products/detail/pit-furnace": {
+    "modifiedOn": "2026-10-20",
+    "sourceCommit": "e6dbe0a5df9b9d44cf91e8812ea44c951121ba11"
+  },
+  "/en/products/detail/box-furnace": {
+    "modifiedOn": "2026-10-20",
+    "sourceCommit": "e6dbe0a5df9b9d44cf91e8812ea44c951121ba11"
+  },
+  "/en/products/detail/pit-furnace": {
+    "modifiedOn": "2026-10-20",
+    "sourceCommit": "e6dbe0a5df9b9d44cf91e8812ea44c951121ba11"
+  },
+  "/zh/products/detail/trolley-furnace": {
+    "modifiedOn": "2026-10-20",
+    "sourceCommit": "e6dbe0a5df9b9d44cf91e8812ea44c951121ba11"
+  },
+  "/zh/solutions/jiangsu-gongye-lu-changjia": {
+    "modifiedOn": "2026-10-15",
+    "sourceCommit": "b1e4b3759f0da4062948578f93ec2f7952e98577"
+  },
+  "/zh/products/detail/annealing-solution-line": {
+    "modifiedOn": "2026-10-21",
+    "sourceCommit": "002699af38ec989816262d95bfcdbef37459a711"
+  },
+  "/zh/products/detail/fastener-quench-temper-line": {
+    "modifiedOn": "2026-10-21",
+    "sourceCommit": "002699af38ec989816262d95bfcdbef37459a711"
+  },
+  "/zh/products/detail/mesh-belt-carbonitriding-line": {
+    "modifiedOn": "2026-10-21",
+    "sourceCommit": "002699af38ec989816262d95bfcdbef37459a711"
+  },
+  "/zh/products/detail/roller-hearth-furnace": {
+    "modifiedOn": "2026-10-21",
+    "sourceCommit": "002699af38ec989816262d95bfcdbef37459a711"
+  },
+  "/zh/solutions/continuous-heat-treatment-line": {
+    "modifiedOn": "2026-10-21",
+    "sourceCommit": "002699af38ec989816262d95bfcdbef37459a711"
+  },
+  "/zh/solutions/rechuli-lu-changjia": {
+    "modifiedOn": "2026-10-21",
+    "sourceCommit": "002699af38ec989816262d95bfcdbef37459a711"
+  }
+}
