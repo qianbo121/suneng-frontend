@@ -136,6 +136,13 @@ export function ProductionLineDetailPage({ content, locale = 'zh' }: { content: 
   const t = (zh: string, english: string) => en ? english : zh;
   const processData = en ? getEnglishLineProcess(content.pageId) : { model: productionLineProcessMaps[content.pageId], steps: getLineProcessSteps(content) };
   const s = content.sections;
+  const capacityResource = locale === 'zh'
+    ? content.pageId === 'annealing-solution-line'
+      ? { href: '/zh/news/shuju-news-27', label: '连续退火线速度：工艺窗口与整线瓶颈' }
+      : content.pageId === 'mesh-belt-carbonitriding-line'
+        ? { href: '/zh/news/mesh-belt-carburizing-throughput-process-limits', label: '网带连续渗碳产量：工艺时间与装载边界' }
+        : null
+    : null;
   const inquiryConditions = s.inquiry.form.fields
     .filter((field) => field.name !== 'contact_method')
     .map((field) => field.label)
@@ -345,7 +352,17 @@ export function ProductionLineDetailPage({ content, locale = 'zh' }: { content: 
         <div className={styles.container}>
           <Heading title={s['site-conditions'].title} />
           {s['site-conditions'].capacity && (
-            <p className={styles.capacityText}>{s['site-conditions'].capacity}</p>
+            <p className={styles.capacityText}>
+              {s['site-conditions'].capacity}
+              {capacityResource && (
+                <>
+                  <br />
+                  <Link href={capacityResource.href} className={styles.resourceLink}>
+                    {capacityResource.label} <HiArrowRight aria-hidden="true" />
+                  </Link>
+                </>
+              )}
+            </p>
           )}
           <div
             className={s['site-conditions'].imageAssetId ? styles.siteGrid : styles.siteTextGrid}
@@ -438,7 +455,17 @@ export function ProductionLineDetailPage({ content, locale = 'zh' }: { content: 
               </li>
             ))}
           </ol>
-          <p className={styles.note}>{s.acceptance.note}</p>
+          <p className={styles.note}>
+            {s.acceptance.note}
+            {locale === 'zh' && content.pageId === 'fastener-quench-temper-line' && (
+              <>
+                <br />
+                <Link href="/zh/news/bolt-mesh-belt-quench-temper-capability" className={styles.resourceLink}>
+                  螺栓网带调质线：同类工况能力怎么核验 <HiArrowRight aria-hidden="true" />
+                </Link>
+              </>
+            )}
+          </p>
         </div>
       </section>
 
