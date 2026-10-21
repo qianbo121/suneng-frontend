@@ -212,12 +212,12 @@ describe('continuous heat-treatment line rendered page', () => {
     expect(text(details[7][2])).toContain('必要烘炉、调试及负载验证');
     expect(text(details[7][2])).toContain('不能用总交期直接代替停产天数');
   });
-  it('renders six real resources covering capacity, acceptance and the three restored decisions', () => {
+  it('renders eight real resources covering the existing decisions, furnace comparison and inquiry inputs', () => {
     const resources = section('resources');
     const cards = [...resources.matchAll(/<article\b[^>]*>([\s\S]*?)<\/article>/g)].map(
       (match) => match[0],
     );
-    expect(cards).toHaveLength(6);
+    expect(cards).toHaveLength(8);
     const expectedResources = [
       ['生产线产能怎么估算', '/zh/news/shuju-news-36', '阅读整线产能回算方法'],
       ['哪些配置影响设备报价', '/zh/articles/gongye-lu-baojia-canshu', '阅读报价参数清单'],
@@ -225,6 +225,8 @@ describe('continuous heat-treatment line rendered page', () => {
       ['旧线改造还是换新', '/zh/articles/laojiu-rechuli-lu-daxiu-haishi-maixin', '阅读旧炉修、改、换判断'],
       ['控制系统怎么选与升级', '/zh/solutions/rechuli-lu-kongzhi-xitong-shengji', '阅读控制系统升级核对方法'],
       ['项目周期与停产窗口怎么安排', '/zh/solutions/rechuli-lu-gaizao-fengxian-zhouqi', '阅读改造风险与周期说明'],
+      ['连续线还是周期炉', '/zh/news/shuju-news-30', '阅读连续线与周期炉比较'],
+      ['整线询价准备哪些资料', '/zh/news/shuju-news-29', '阅读整线询价 11 组输入'],
     ];
     for (const [title, href, label] of expectedResources) {
       const matchingCards = cards.filter((card) => card.includes(`href="${href}"`));

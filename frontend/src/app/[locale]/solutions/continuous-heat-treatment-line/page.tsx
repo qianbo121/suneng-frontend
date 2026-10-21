@@ -383,6 +383,18 @@ export default async function ContinuousHeatTreatmentLinePage({ params }: PagePr
             href: '/zh/solutions/rechuli-lu-gaizao-fengxian-zhouqi',
             label: '阅读改造风险与周期说明',
           },
+          {
+            title: '连续线还是周期炉',
+            description: '先比较工艺与生产组织，再判断适合的设备方向。',
+            href: '/zh/news/shuju-news-30',
+            label: '阅读连续线与周期炉比较',
+          },
+          {
+            title: '整线询价准备哪些资料',
+            description: '按11组输入准备工况、供货与验收资料。',
+            href: '/zh/news/shuju-news-29',
+            label: '阅读整线询价 11 组输入',
+          },
         ]}
       />
       <HomepageLeadForm
