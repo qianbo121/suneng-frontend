@@ -325,7 +325,7 @@ export default async function NewsDetailPage({ params }: NewsDetailPageProps) {
                   {currentLocale === 'en' ? siteSettings.salesPhone : '130-5298-6814'}
                 </PhoneContactLink>
                 <p className={styles.hours}>
-                  {currentLocale === 'en' ? 'Weekdays 8:30–17:30 (China time)' : '工作日 8:30–17:30'}
+                  {currentLocale === 'en' ? 'Daily, 8:00–21:00 (China time)' : '每天 8:00–21:00'}
                 </p>
               </section>
             </div>
