@@ -92,6 +92,8 @@ describe('public page initial HTML with delayed data', () => {
     'service/selection-retrofit-guide',
   ];
   const readableRoutes = [
+    '/zh/inquiry',
+    '/zh/inquiry/',
     ...['zh', 'en'].flatMap((locale) => [
       `/${locale}`,
       `/${locale}/products/detail/box-furnace`,
@@ -116,16 +118,15 @@ describe('public page initial HTML with delayed data', () => {
     expect(html).not.toContain('Shared pending');
   });
 
-  it.each(['zh', 'en'].flatMap((locale) => [
-    `/${locale}/inquiry`,
-    `/${locale}/inquiry/`,
+  it.each(['/en/inquiry', '/en/inquiry/', ...['zh', 'en'].flatMap((locale) => [
+    `/${locale}/inquiry/unknown-page`,
     `/${locale}/products/detail/unknown-product/inquiry-checklist`,
     `/${locale}/products/detail/copper-wire-annealing-line/inquiry-checklist/unknown-page`,
     `/${locale}/products/detail/box-furnace/inquiry`,
     `/${locale}/service/unknown-service`,
     `/${locale}/about/unknown-page`,
     `/${locale}/strength/unknown-category`,
-  ]))('keeps ordinary inquiry tools and unlisted routes behind their existing boundary at %s', async (pathname) => {
+  ])])('keeps unpublished inquiry and unlisted routes behind their existing boundary at %s', async (pathname) => {
     const html = await streamDelayedPage(pathname);
     expect(html).toContain('Shared pending');
     expect(html).toMatch(/<div hidden\b/);

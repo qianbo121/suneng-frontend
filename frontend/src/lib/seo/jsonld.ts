@@ -92,6 +92,19 @@ export function getEngineeringTeamAuthorName() {
   return NEWS_ATTRIBUTION;
 }
 
+/** Keep approved case and news coauthors aligned without changing source records. */
+export function getEngineeringTeamAuthorsJsonLd() {
+  return [{
+    '@type': 'Organization',
+    '@id': `${LOCAL_BUSINESS_URL}#engineering-team`,
+    name: '苏能工业炉工程技术团队',
+    parentOrganization: { '@id': LOCAL_BUSINESS_ID },
+  }, {
+    '@type': 'Person',
+    name: '唐荔',
+  }];
+}
+
 export function getTechnicalReviewerJsonLd(name: TechnicalReviewerName = '唐工') {
   return {
     '@type': 'Person',
@@ -463,15 +476,7 @@ export function getArticleJsonLd(article: ArticleJsonLdInput, locale: Locale = '
     datePublished: article.datePublished,
     dateModified,
     author: article.author === 'engineering-team'
-      ? [{
-          '@type': 'Organization',
-          '@id': `${LOCAL_BUSINESS_URL}#engineering-team`,
-          name: '苏能工业炉工程技术团队',
-          parentOrganization: { '@id': LOCAL_BUSINESS_ID },
-        }, {
-          '@type': 'Person',
-          name: '唐荔',
-        }]
+      ? getEngineeringTeamAuthorsJsonLd()
       : { '@id': LOCAL_BUSINESS_ID },
     reviewedBy: article.reviewerName
       ? getTechnicalReviewerJsonLd(article.reviewerName)

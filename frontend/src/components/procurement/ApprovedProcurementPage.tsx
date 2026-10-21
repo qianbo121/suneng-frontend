@@ -15,11 +15,6 @@ import procurementStyles from './ApprovedProcurementPage.module.css';
 export function ApprovedProcurementPage({ id }: { id: ApprovedProcurementPageId }) {
   const page = approvedProcurementPages[id];
   const details = id === 'equipment' ? approvedProcurementPages.equipment : undefined;
-  const bodyUpdatedDate = details
-    ? new Intl.DateTimeFormat('sv-SE', {
-      timeZone: 'Asia/Shanghai', year: 'numeric', month: '2-digit', day: '2-digit',
-    }).format(new Date(details.bodyUpdatedAt))
-    : undefined;
   const contentId = `procurement-${id}-body`;
   const pageJsonLd = [
     {
@@ -57,7 +52,7 @@ export function ApprovedProcurementPage({ id }: { id: ApprovedProcurementPageId 
             <h1 id="news-detail-title" className={styles.title}>{page.heading}</h1>
             {details ? (
               <div className={`${styles.meta} ${procurementStyles.meta}`}>
-                <div>采购评估资料 · 正文更新：<time dateTime={details.bodyUpdatedAt}>{bodyUpdatedDate}</time>（北京时间）</div>
+                <div data-body-updated-at={details.bodyUpdatedAt}>采购评估资料</div>
                 <div>发布单位：{details.publisherName}</div>
               </div>
             ) : <div className={styles.meta}>采购评估资料</div>}
