@@ -156,10 +156,6 @@ export default async function NewsDetailPage({ params }: NewsDetailPageProps) {
   const detailLabel = currentLocale === 'en' ? 'Article' : '正文';
   const contentId = `news-body-${article.id}`;
   const modifiedTime = getNewsContentModifiedTime(article, currentLocale);
-  const updatedTime =
-    modifiedTime && new Date(modifiedTime).getTime() > new Date(article.publishDate).getTime()
-      ? modifiedTime
-      : undefined;
   const relatedLinks = getNewsRelatedLinks(article, currentLocale);
   // Read the complete published collection so relevant older articles are eligible.
   const newsListResult = await getNewsDecisionCenterData(currentLocale);
@@ -253,20 +249,6 @@ export default async function NewsDetailPage({ params }: NewsDetailPageProps) {
                     {formatNewsDisplayDate(article.publishDate)}
                   </time>
                 </span>
-                {updatedTime && (
-                  <span className={styles.metaDate}>
-                    {currentLocale === 'en' ? 'Updated' : '更新于'}
-                    <time dateTime={updatedTime}>{formatNewsDisplayDate(updatedTime)}</time>
-                  </span>
-                )}
-                {currentLocale === 'en' && article.englishSourceDate && (
-                  <span>
-                    {article.englishSourceDate.label}:{' '}
-                    <time dateTime={article.englishSourceDate.date}>
-                      {formatNewsDisplayDate(article.englishSourceDate.date)}
-                    </time>
-                  </span>
-                )}
                 <span translate="no">{getEngineeringTeamAuthorName()}</span>
               </div>
             </header>

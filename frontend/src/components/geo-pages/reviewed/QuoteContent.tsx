@@ -69,10 +69,6 @@ export function QuoteContent() {
                     {'发布 '}
                     <time dateTime={'2026-06-12'}>{'2026-06-12'}</time>
                   </span>
-                  <span>
-                    {'更新 '}
-                    <time dateTime={'2026-07-31'}>{'2026-07-31'}</time>
-                  </span>
                 </div>
               </div>
               <figure className={'hero-photo'}>
@@ -843,7 +839,7 @@ export function QuoteContent() {
                   <summary>{'资料来源与适用边界'}</summary>
                   <p>
                     {
-                      '资料与项目参数沿用原页面，来源为苏能项目资料，对应记录 SN-CASE-P1-014、SN-CASE-P0-006、SN-CASE-P0-004。项目参数用于说明报价变量，不是通用标准配置。正式报价应以双方确认后的技术方案、配置清单、交付边界和合同条款为准。原页面发布于 2026-06-12，更新于 2026-07-31。'
+                      '资料与项目参数沿用原页面，来源为苏能项目资料，对应记录 SN-CASE-P1-014、SN-CASE-P0-006、SN-CASE-P0-004。项目参数用于说明报价变量，不是通用标准配置。正式报价应以双方确认后的技术方案、配置清单、交付边界和合同条款为准。原页面发布于 2026-06-12。'
                     }
                   </p>
                 </details>

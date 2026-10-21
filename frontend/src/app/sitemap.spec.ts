@@ -19,7 +19,7 @@ vi.mock('@/lib/api/news', () => ({
         titleEn: 'Translated news',
         contentEn: '<p>Complete English.</p>',
         publishDate: '2026-06-01T00:00:00Z',
-        englishContentUpdatedAt: '2026-09-01T12:00:00Z',
+        englishContentUpdatedAt: '2026-10-20T12:00:00Z',
         status: 'published',
         isPublished: true,
       },
@@ -222,7 +222,7 @@ describe('sitemap freshness signals', () => {
       ),
     ).toBe(false);
     expect(byUrl.get('https://www.jssngyl.cn/zh/news/canonical-news')?.lastModified).toEqual(
-      new Date('2026-07-01T00:00:00.000Z'),
+      new Date('2026-10-19T13:53:16Z'),
     );
   });
 });
@@ -261,8 +261,8 @@ it('emits reciprocal English news addresses only for complete translations with 
   const zh = entries.find((entry) => entry.url.endsWith('/zh/news/translated-news'));
   expect(en).toBeDefined();
   expect(en?.alternates).toEqual(zh?.alternates);
-  expect(en?.lastModified).toEqual(new Date('2026-09-01T12:00:00Z'));
-  expect(zh?.lastModified).toEqual(new Date('2026-06-01T00:00:00Z'));
+  expect(en?.lastModified).toEqual(new Date('2026-10-20T12:00:00Z'));
+  expect(zh?.lastModified).toEqual(new Date('2026-10-19T13:53:16Z'));
 });
 
 it('lists only approved cases and guides without pagination or withdrawn alternates', async () => {
