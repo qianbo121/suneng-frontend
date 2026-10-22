@@ -379,3 +379,26 @@ it('includes both approved Chinese procurement pages without English alternates 
     expect(entries.some((entry) => new URL(entry.url).pathname === pathname.replace('/zh/', '/en/'))).toBe(false);
   }
 });
+
+
+it('omits redirect-only company routes and their alternates while keeping both about pages', async () => {
+  const entries = await buildSitemap();
+  const redirectUrls = ['zh', 'en'].flatMap((locale) =>
+    ['/partner', '/strength/honors', '/contact'].map((path) => `${site}/${locale}${path}`),
+  );
+  for (const entry of entries) {
+    expect(redirectUrls).not.toContain(entry.url);
+    for (const alternate of Object.values(entry.alternates?.languages ?? {})) {
+      expect(redirectUrls).not.toContain(alternate);
+    }
+  }
+  for (const locale of ['zh', 'en']) {
+    const about = entries.filter((entry) => entry.url === `${site}/${locale}/about`);
+    expect(about).toHaveLength(1);
+    expect(about[0].alternates?.languages).toEqual({
+      'zh-CN': `${site}/zh/about`,
+      'en-US': `${site}/en/about`,
+      'x-default': `${site}/zh/about`,
+    });
+  }
+});

@@ -54,11 +54,12 @@ describe('sitemap migration supplementary checks', () => {
     } finally { vi.useRealTimers(); }
   });
 
-  it('includes the real English qualifications and copper-wire inquiry checklist once', async () => {
+  it('includes the canonical English about page and copper-wire inquiry checklist once', async () => {
     const entries = await buildSitemap();
-    for (const suffix of ['/en/strength/honors', '/zh/products/detail/copper-wire-annealing-line/inquiry-checklist']) {
+    for (const suffix of ['/en/about', '/zh/products/detail/copper-wire-annealing-line/inquiry-checklist']) {
       expect(entries.filter((entry) => entry.url === `https://www.jssngyl.cn${suffix}`)).toHaveLength(1);
     }
+    expect(entries.some((entry) => entry.url.endsWith('/en/strength/honors'))).toBe(false);
     expect(entries.some((entry) => entry.url.endsWith('/en/strength/certificates'))).toBe(false);
     // Case detail pages appear only after owner approval.
     expect(entries.filter((entry) => entry.url.includes('/case/')).map((entry) => entry.url).sort()).toEqual([

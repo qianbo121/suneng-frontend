@@ -43,9 +43,6 @@ const englishStaticPaths = new Set([
   '/service/selection-retrofit-guide',
   '/news',
   '/about',
-  '/contact',
-  '/strength/honors',
-  '/partner',
 ]);
 
 type SitemapEntry = MetadataRoute.Sitemap[number];
@@ -133,14 +130,13 @@ function collectStaticRoutes(): MetadataRoute.Sitemap {
     { path: '/case', changeFrequency: 'monthly', priority: 0.76 },
     { path: '/news', changeFrequency: 'weekly', priority: 0.7 },
     { path: '/inquiry', changeFrequency: 'monthly', priority: 0.55 },
+    // Partner, honors and contact routes redirect to sections of /about.
+    // Keep only the canonical page in the sitemap; legacy redirects remain available.
     {
       path: '/about',
       changeFrequency: 'monthly',
       priority: 0.6,
     },
-    { path: '/partner', changeFrequency: 'monthly', priority: 0.65 },
-    { path: '/strength/honors', changeFrequency: 'monthly', priority: 0.55 },
-    { path: '/contact', changeFrequency: 'monthly', priority: 0.7 },
   ];
 
   for (const item of staticPaths) {
