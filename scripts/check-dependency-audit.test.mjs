@@ -21,6 +21,53 @@ test('accepts a clean completed audit while still requiring installed patch veri
   assert.equal(assessAudit(data, { ...options, auditExitCode: 0 }).passed, true);
   assert.throws(() => assessAudit(data, { ...options, auditExitCode: 0, patchVerified: false }));
 });
+function nonblockingReport(severities) {
+  const data = report();
+  data.advisories = {};
+  data.metadata.vulnerabilities.high = 0;
+  for (const [index, severity] of severities.entries()) {
+    data.advisories[index] = { module_name: 'fixture', severity };
+    data.metadata.vulnerabilities[severity] += 1;
+  }
+  return data;
+}
+
+test('accepts pnpm 9 JSON exit 1 only with verified low/moderate findings', () => {
+  for (const severities of [['low'], ['moderate'], ['low', 'moderate']]) {
+    const result = assessAudit(nonblockingReport(severities), options);
+    assert.equal(result.passed, true);
+    assert.equal(result.auditReportedHighOrCritical, false);
+    assert.deepEqual(result.locallyFixedFindings, []);
+  }
+});
+test('still accepts a successful audit with nonblocking findings', () => {
+  assert.equal(assessAudit(nonblockingReport(['moderate']), { ...options, auditExitCode: 0 }).passed, true);
+});
+test('rejects failed audits without only low/moderate findings', () => {
+  for (const severities of [[], ['info'], ['info', 'low']]) {
+    assert.throws(() => assessAudit(nonblockingReport(severities), options));
+  }
+});
+test('requires exact advisory and metadata counts for every severity', () => {
+  for (const level of ['info', 'low', 'moderate', 'high', 'critical']) {
+    const hiddenCount = nonblockingReport(['moderate']);
+    hiddenCount.metadata.vulnerabilities[level] += 1;
+    assert.throws(() => assessAudit(hiddenCount, options));
+    const hiddenAdvisory = nonblockingReport(['moderate']);
+    hiddenAdvisory.advisories[1] = { severity: level };
+    assert.throws(() => assessAudit(hiddenAdvisory, options));
+  }
+});
+test('nonblocking reports still reject process errors, malformed reports and unverified patches', () => {
+  const data = nonblockingReport(['moderate']);
+  for (const auditExitCode of [2, null, undefined]) {
+    assert.throws(() => assessAudit(data, { ...options, auditExitCode }));
+  }
+  assert.throws(() => assessAudit(data, { ...options, patchVerified: false }));
+  assert.throws(() => assessAudit({ ...data, error: { code: 'registry-failure' } }, options));
+  assert.throws(() => assessAudit({ ...data, advisories: null }, options));
+  assert.throws(() => assessAudit({ ...data, advisories: { 0: { severity: 'unknown' } } }, options));
+});
 test('other moderate findings retain the original high audit threshold', () => {
   const data = report(); data.advisories[2] = { severity: 'moderate' };
   data.metadata.vulnerabilities.moderate = 1;
