@@ -3,7 +3,7 @@ on:
   workflow_dispatch:
     inputs:
       source_commit:
-        description: Full current main commit after CI and review
+        description: Frozen full main commit after CI and review; later commits stay in the next batch
         required: true
         type: string
       components:
@@ -57,14 +57,16 @@ jobs:
     steps:
       - uses: actions/checkout@v7
         with:
-          fetch-depth: 2
+          fetch-depth: 0
       - name: Require exact reviewed main source
         env:
           SOURCE_COMMIT: ${{ inputs.source_commit }}
           GH_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
-          [[ "$SOURCE_COMMIT" =~ ^[0-9a-f]{40}$ ]]
+          [[ "$SOURCE_COMMIT" =~ ^[0-9a-f]{40}$ ]] || exit 1
+          git merge-base --is-ancestor "$SOURCE_COMMIT" origin/main
+          git checkout --detach "$SOURCE_COMMIT"
           test "$(git rev-parse HEAD)" = "$SOURCE_COMMIT"
           passed="$(gh run list --workflow 'CI Quality Gate' --branch main --commit "$SOURCE_COMMIT" --event push --status success --limit 1 --json headSha --jq '.[0].headSha')"
           test "$passed" = "$SOURCE_COMMIT"
