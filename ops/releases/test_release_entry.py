@@ -88,6 +88,77 @@ class EntryTest(unittest.TestCase):
         self.assertEqual(e.status()['steps']['candidate']['attempts'][-1]['status'], 'succeeded')
         self.assertFalse(e.status()['releaseAccepted'])
 
+    def test_unrelated_evidence_append_keeps_running_inputs_and_succeeds(self):
+        f=self.fixture
+        roles=('productionReport', 'interactionReport', 'recoveryInput', 'recoveryReport')
+        added={name:f.config['inputs'].pop(name) for name in roles}
+        e=f.save(); original=copy.deepcopy(e.config)
+        verify=entry.archive_identity.verify_archive
+        def append_evidence(*args, **kwargs):
+            f.config['inputs'].update(added);f.save()
+            return verify(*args, **kwargs)
+        with patch.object(entry.archive_identity, 'verify_archive', side_effect=append_evidence):
+            result=e.run('archive')
+        snapshot=result['configSnapshot']
+        self.assertEqual(release_contract.read_bound(f.root/snapshot['path'], snapshot['sha256']), original)
+        self.assertNotEqual(f.open().config, original)
+        self.assertEqual(e.status()['steps']['archive']['attempts'][-1]['status'], 'succeeded')
+
+    def test_running_release_or_step_config_changes_still_fail(self):
+        changes={
+            'source': lambda c:c.update(sourceCommit='f'*40),
+            'module': lambda c:c.update(components=['backend']),
+            'destination': lambda c:c.update(live='/different-live'),
+            'archive': lambda c:c['inputs']['archive'].update(sha256='f'*64),
+            'plan': lambda c:c['inputs']['plan'].update(sha256='f'*64),
+        }
+        verify=entry.archive_identity.verify_archive
+        for name, change in changes.items():
+            with self.subTest(name=name):
+                root=self.fixture.root/name;root.mkdir();f=EntryFixture(root);e=f.open()
+                def replace_config(*args, **kwargs):
+                    change(f.config);f.config_file.write_text(json.dumps(f.config))
+                    return verify(*args, **kwargs)
+                with patch.object(entry.archive_identity, 'verify_archive', side_effect=replace_config):
+                    with self.assertRaises(release_contract.ContractError):e.run('archive')
+                self.assertEqual(e.status()['steps']['archive']['attempts'][-1]['status'], 'failed')
+                self.assertFalse(list(e.stage_directory('archive').glob('attempt-*/result.json')))
+
+    def test_running_input_file_change_still_fails(self):
+        f=self.fixture;e=f.open();verify=entry.archive_identity.verify_archive
+        def change_input(*args, **kwargs):
+            result=verify(*args, **kwargs)
+            (f.root/'candidate.json').write_text('{}')
+            return result
+        with patch.object(entry.archive_identity, 'verify_archive', side_effect=change_input):
+            with self.assertRaisesRegex(release_contract.ContractError, 'digest-mismatch'):
+                e.run('archive')
+        self.assertEqual(e.status()['steps']['archive']['attempts'][-1]['status'], 'failed')
+
+    def test_running_snapshot_change_still_fails(self):
+        f=self.fixture;e=f.open();verify=entry.archive_identity.verify_archive
+        def change_snapshot(*args, **kwargs):
+            result=verify(*args, **kwargs)
+            snapshot=next(e.stage_directory('archive').glob('attempt-*/entry-config.json'))
+            snapshot.write_text('{}')
+            return result
+        with patch.object(entry.archive_identity, 'verify_archive', side_effect=change_snapshot):
+            with self.assertRaisesRegex(release_contract.ContractError, 'digest-mismatch'):
+                e.run('archive')
+        self.assertFalse(list(e.stage_directory('archive').glob('attempt-*/result.json')))
+
+    def test_running_step_report_replacement_still_fails(self):
+        f=self.fixture;e=f.open();e.run('archive');browser=e._browser
+        def replace_report(phase):
+            result=browser(phase)
+            f.config['inputs']['candidateReport']=f.config['inputs']['productionReport']
+            f.save()
+            return result
+        with patch.object(e, '_browser', side_effect=replace_report):
+            with self.assertRaisesRegex(release_contract.ContractError, 'config-changed-during-step'):
+                e.run('candidate')
+        self.assertEqual(e.status()['steps']['candidate']['attempts'][-1]['status'], 'failed')
+
     def test_missing_recovery_input_fails_before_creating_state(self):
         f=self.fixture;v=json.loads((f.root/'recovery-input.json').read_text());v.pop('baseline')
         f.write('recoveryInput','recovery-input.json',v);e=f.save()
@@ -117,11 +188,15 @@ class EntryTest(unittest.TestCase):
             with self.assertRaises(TimeoutError):e.run('preflight')
         state=e.status()['steps']['preflight'];self.assertEqual(state['attempts'][-1]['status'],'failed')
         self.assertEqual(state['attempts'][-1]['failureCategory'],'timeout')
+        original_snapshot=next(e.stage_directory('preflight').glob('attempt-*/entry-config.json'))
+        original_bytes=original_snapshot.read_bytes()
         with patch('frontend_release.main',side_effect=native_success):
             with self.assertRaises(phase_runtime.ResumeRefused):e.run('preflight')
             e.run('preflight',resume=True)
         state=e.status()['steps']['preflight'];self.assertEqual(len(state['attempts']),2)
         self.assertTrue(list(e.stage_directory('preflight').glob('attempt-*/native-output.json')))
+        self.assertEqual(len(list(e.stage_directory('preflight').glob('attempt-*/entry-config.json'))),2)
+        self.assertEqual(original_snapshot.read_bytes(),original_bytes)
 
     def test_apply_cannot_replay_after_success_failure_or_interruption(self):
         e=self.start_candidate()

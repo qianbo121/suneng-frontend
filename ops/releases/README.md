@@ -26,6 +26,8 @@
 
 同一批次的来源、模块、程序包、计划、清单与服务器运行选项固定后不可变。证据更新保留旧步骤记录并重新核验受影响部分，不覆盖失败。服务器阶段在服务器执行，本地浏览器阶段在验收电脑执行；沿用现有受核对的传输方法同步批次材料及追加记录，配置摘要按各自实际文件核对。
 
+统一入口会在每次尝试的现有记录目录中保存一份固定的 `entry-config.json`，结果绑定该文件的路径和摘要。其他步骤向共享配置追加无关验收结果，不使正在运行的步骤失效；结束时仍核对本步骤输入文件、固定清单、批次来源、模块、程序包、计划及运行选项，相关内容变化则失败。检查续跑保留前次清单和失败记录，正式切换仍禁止重复执行。`check` 和 `status` 继续只读，不创建清单或步骤目录。
+
 ```sh
 python3 ops/releases/release_entry.py --config /private/release/entry-config.json --config-sha256 ACTUAL_SHA256 check --step archive
 python3 ops/releases/release_entry.py --config /private/release/entry-config.json --config-sha256 ACTUAL_SHA256 run --step archive

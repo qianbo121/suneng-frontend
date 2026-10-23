@@ -197,6 +197,10 @@ class Entry:
         return contract.moment(state['attempts'][-1]['endedAt'])
 
     def execute(self, step, attempt):
+        # Keep the exact inputs for this attempt alongside its existing receipts.
+        # Other stages may append evidence to the shared config while this runs.
+        snapshot = attempt/'entry-config.json'
+        snapshot_sha = release_candidate.create(snapshot, self.config)
         if step == 'archive':
             result = archive_identity.verify_archive(self.path('candidate'), self.path('archive'),
                 candidate_sha256=self.descriptor('candidate')['sha256'], expected_source_commit=self.source)
@@ -283,10 +287,16 @@ class Entry:
             reports = self._browser('candidate') + self._browser('production')
             result = release_browser.pack(self.root, reports, attempt/'browser-evidence.tar.gz')
         self.checked(step)
+        contract.read_bound(snapshot, snapshot_sha)
+        current = Entry(self.config_path, guard.digest(self.config_path))
+        contract.need(current.root == self.root and
+                      current.stage_identity(step) == self.stage_identity(step),
+                      'config-changed-during-step')
         result.update(step=step, sourceCommit=self.source, releaseAccepted=False,
-                      productionChanged=step == 'apply', notificationsSent=False)
+                      productionChanged=step == 'apply', notificationsSent=False,
+                      configSnapshot={'path': str(snapshot.relative_to(self.root)),
+                                      'sha256': snapshot_sha})
         release_candidate.create(attempt/'result.json', result)
-        contract.need(guard.digest(self.config_path) == self.config_sha, 'config-changed-during-step')
         return result
 
     def run(self, step, *, resume=False, apply=False):
