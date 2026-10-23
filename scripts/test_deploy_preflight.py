@@ -103,18 +103,53 @@ class DeploymentPreflightTest(unittest.TestCase):
         for marker in ("verified-images.override.yml", "RELEASE_ARTIFACTS.json", ".DO_NOT_DEPLOY", "DEPLOYMENT_IN_PROGRESS.json"):
             self.assertIn("--exclude='" + marker + "'", sync)
 
-    def test_direct_deploy_blocks_pins_before_git_or_docker(self):
-        # Execute only the real pre-pull guards, stopping before the function
-        # definition. No git, Docker, production env or network is involved.
-        guards = (ROOT / "deploy.sh").read_text().split("\npull_latest() {", 1)[0]
-        for marker in ("verified-images.override.yml", "RELEASE_ARTIFACTS.json", "DEPLOYMENT_IN_PROGRESS.json", ".DO_NOT_DEPLOY"):
-            with self.subTest(marker=marker), tempfile.TemporaryDirectory() as tmp:
-                (Path(tmp) / marker).write_text("protected\n")
-                code = "flock() { return 0; }\n" + guards
-                result = subprocess.run(["bash", "-c", code], cwd=tmp, capture_output=True,
-                                        text=True, env={**os.environ, "DEPLOY_LOCK_HELD": "1"})
-                self.assertEqual(result.returncode, 64, result.stderr)
-                self.assertIn(marker, result.stdout)
+    def test_retired_deploy_stops_before_external_operations(self):
+        # No external tools are available. The retired entry must still stop
+        # before taking a lock or inspecting production configuration.
+        markers = (None, "verified-images.override.yml", "RELEASE_ARTIFACTS.json",
+                   "DEPLOYMENT_IN_PROGRESS.json", ".DO_NOT_DEPLOY")
+        for marker in markers:
+            for dangling in (False, True) if marker else (False,):
+                with self.subTest(marker=marker, dangling=dangling), tempfile.TemporaryDirectory() as tmp:
+                    site = Path(tmp)
+                    if marker:
+                        if dangling:
+                            (site / marker).symlink_to(site / "missing-marker-target")
+                        else:
+                            (site / marker).write_text("protected\n")
+                    (site / ".env.production").write_text("TEST_ONLY=true\n")
+                    lock = site / "deploy.lock"
+                    result = subprocess.run(
+                        ["/bin/bash", str(ROOT / "deploy.sh")], cwd=site,
+                        capture_output=True, text=True, timeout=5,
+                        env={**os.environ, "PATH": "/nonexistent",
+                             "DEPLOY_LOCK_HELD": "0", "DEPLOY_LOCK_FILE": str(lock),
+                             "DEPLOY_SKIP_PULL": "1", "DEPLOY_SKIP_BUILD": "1"},
+                    )
+                    self.assertEqual(result.returncode, 64, result.stderr)
+                    self.assertIn("旧整站发布入口已停用", result.stderr)
+                    self.assertFalse(lock.exists())
+                    self.assertEqual((site / ".env.production").read_text(), "TEST_ONLY=true\n")
+                    if marker:
+                        if dangling:
+                            self.assertTrue((site / marker).is_symlink())
+                        else:
+                            self.assertEqual((site / marker).read_text(), "protected\n")
+
+
+    def test_legacy_alias_reaches_the_retired_entry(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            lock = Path(tmp) / "deploy.lock"
+            result = subprocess.run(
+                ["/bin/bash", str(ROOT / "scripts/deploy-prod.sh")], cwd=tmp,
+                capture_output=True, text=True, timeout=5,
+                env={**os.environ, "PATH": "/usr/bin:/bin",
+                     "DEPLOY_LOCK_HELD": "0", "DEPLOY_LOCK_FILE": str(lock)},
+            )
+            self.assertEqual(result.returncode, 64, result.stderr)
+            self.assertIn("旧整站发布入口已停用", result.stderr)
+            self.assertFalse(lock.exists())
+
 
 
 if __name__ == "__main__":

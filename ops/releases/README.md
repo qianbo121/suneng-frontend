@@ -26,6 +26,8 @@
 
 同一批次的来源、模块、程序包、计划、清单与服务器运行选项固定后不可变。证据更新保留旧步骤记录并重新核验受影响部分，不覆盖失败。服务器阶段在服务器执行，本地浏览器阶段在验收电脑执行；沿用现有受核对的传输方法同步批次材料及追加记录，配置摘要按各自实际文件核对。
 
+统一入口会在每次尝试的现有记录目录中保存一份固定的 `entry-config.json`，结果绑定该文件的路径和摘要。其他步骤向共享配置追加无关验收结果，不使正在运行的步骤失效；结束时仍核对本步骤输入文件、固定清单、批次来源、模块、程序包、计划及运行选项，相关内容变化则失败。检查续跑保留前次清单和失败记录，正式切换仍禁止重复执行。`check` 和 `status` 继续只读，不创建清单或步骤目录。
+
 ```sh
 python3 ops/releases/release_entry.py --config /private/release/entry-config.json --config-sha256 ACTUAL_SHA256 check --step archive
 python3 ops/releases/release_entry.py --config /private/release/entry-config.json --config-sha256 ACTUAL_SHA256 run --step archive
@@ -77,9 +79,9 @@ RELEASE_TEST_PACKAGE_JSON=/absolute/clean/source/frontend/package.json node --te
 
 新入口的服务器切换和跨机器交接，须在用户后续授权的工具安装及实际发版中验证；本地自测不等于服务器已安装或新版流程已生效。
 
-旧 `Build And Deploy` 已取消 main 推送触发，全部任务在代码中固定停用，仓库开关继续关闭。旧一键脚本仅提示正确入口后退出；当前生产版本的固定镜像标记也继续阻止历史整站路径。不要删除标记后恢复服务器构建。容量不足时不再自动清理这台共享服务器。
+旧 `Build And Deploy` 已取消 main 推送触发，全部任务在代码中固定停用，仓库开关继续关闭。旧一键脚本和 `deploy.sh` 均只提示正确入口后退出；`deploy.sh` 在拿锁、网络调用、构建或服务操作前停止，兼容命令 `scripts/deploy-prod.sh` 同样进入该停止保护。当前生产版本的固定镜像标记继续保留，不得移除停止保护或删除标记后恢复服务器构建。容量不足时不再自动清理这台共享服务器。
 
-统一发版窗口先记录本批来源提交、任务、模块和负责人，其他窗口只负责迭代和相关检查；任务不会因同属项目而自动加入批次。`prepare-release.yml`（`Prepare Selected Website Release`）默认只准备前台，可明确选择业务后台、管理后台及组合，完整选择规则见下表。准备完成不等于已发布。
+统一发版窗口先记录本批来源提交、任务、模块和负责人，其他窗口只负责迭代和相关检查；任务不会因同属项目而自动加入批次。`prepare-release.yml`（`Prepare Selected Website Release`）默认只准备前台，可明确选择业务后台、管理后台及组合，完整选择规则见下表。准备完成不等于已发布。冻结来源允许使用已进入主线历史、且该提交自身通过主线质量检查的完整提交；准备时明确切到该来源，后续主线提交留到下一批，不改变本批已确认版本。
 
 | 修改内容 | 候选选择 | 实际发布方式 |
 | --- | --- | --- |

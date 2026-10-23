@@ -1,6 +1,10 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+# Retired before locks, network calls, builds or service changes.
+printf '%s\n' '旧整站发布入口已停用。请由统一发版窗口使用分模块发布流程，详见 ops/releases/README.md。' >&2
+exit 64
+
 COMPOSE_FILE="docker-compose.prod.yml"
 ENV_FILE=".env.production"
 DEPLOY_BRANCH="${DEPLOY_BRANCH:-main}"

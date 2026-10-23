@@ -160,5 +160,79 @@ class ComponentSelectionTests(unittest.TestCase):
         self.assertEqual(result.stdout, '')
 
 
+class FrozenSourceTests(unittest.TestCase):
+    """Replay the actual guard against a disposable local Git history; no network/build."""
+    def setUp(self):
+        self.tmp = tempfile.TemporaryDirectory(); self.addCleanup(self.tmp.cleanup)
+        self.root = Path(self.tmp.name)
+        self.repo = self.root / 'repo'; self.repo.mkdir()
+        self.git('init', '-q')
+        self.git('config', 'user.name', 'Release fixture')
+        self.git('config', 'user.email', 'fixture@example.invalid')
+        scope = self.repo / 'frontend/src/lib/publication-scope.ts'
+        scope.parent.mkdir(parents=True)
+        scope.write_text('export const TECHNICAL_CONTENT_PUBLISHED = false;\n')
+        self.old = self.commit('frozen')
+        self.new = self.commit('next-batch')
+        self.git('update-ref', 'refs/remotes/origin/main', self.new)
+        self.git('checkout', '--detach', self.old)
+        self.side = self.commit('unmerged')
+        self.git('checkout', '--detach', self.new)
+        self.bin = self.root / 'bin'; self.bin.mkdir()
+        for name, body in {
+            'gh': '#!/bin/sh\nprintf "%s\\n" "$FIXTURE_CI_SOURCE"\n',
+            'df': '#!/bin/sh\nprintf "Filesystem Blocks Used Available Capacity Mounted\\nfixture 30000000 0 30000000 0%% /\\n"\n',
+        }.items():
+            tool = self.bin / name; tool.write_text(body); tool.chmod(0o755)
+        self.workflow = WORKFLOW.read_text()
+        self.script = run_step(self.workflow, 'Require exact reviewed main source')
+
+    def git(self, *args):
+        return subprocess.run(['git', *args], cwd=self.repo, check=True,
+                              capture_output=True, text=True).stdout.strip()
+
+    def commit(self, value):
+        (self.repo / 'version').write_text(value)
+        self.git('add', '.')
+        self.git('-c', 'core.hooksPath=/dev/null', '-c', 'commit.gpgsign=false', 'commit', '-qm', value)
+        return self.git('rev-parse', 'HEAD')
+
+    def check_source(self, source, passed=None):
+        env = dict(os.environ, PATH=str(self.bin)+os.pathsep+os.environ['PATH'],
+                   SOURCE_COMMIT=source, FIXTURE_CI_SOURCE=source if passed is None else passed,
+                   COMPONENT='frontend', GITHUB_ENV=str(self.root / 'github-env'))
+        return subprocess.run(['bash', '-c', self.script], cwd=self.repo, env=env,
+                              capture_output=True, text=True, timeout=10)
+
+    def test_frozen_ci_passed_source_survives_newer_main_commits(self):
+        self.assertIn('fetch-depth: 0', self.workflow)
+        result = self.check_source(self.old)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertEqual(self.git('rev-parse', 'HEAD'), self.old)
+        self.assertEqual((self.repo / 'version').read_text(), 'frozen')
+        self.assertIn('SOURCE_COMMIT='+self.old, (self.root / 'github-env').read_text())
+
+    def test_current_main_source_still_works(self):
+        result = self.check_source(self.new)
+        self.assertEqual(result.returncode, 0, result.stderr)
+
+    def test_unmerged_source_is_rejected_before_checkout(self):
+        self.assertNotEqual(self.check_source(self.side).returncode, 0)
+        self.assertEqual(self.git('rev-parse', 'HEAD'), self.new)
+        self.assertFalse((self.root / 'github-env').exists())
+
+    def test_missing_or_different_ci_result_cannot_prepare(self):
+        for passed in ('', self.new):
+            with self.subTest(passed=passed):
+                self.assertNotEqual(self.check_source(self.old, passed).returncode, 0)
+                self.assertFalse((self.root / 'github-env').exists())
+
+    def test_invalid_source_is_rejected(self):
+        for source in ('main', self.old[:12], 'a'*40+'; exit 0'):
+            with self.subTest(source=source):
+                self.assertNotEqual(self.check_source(source).returncode, 0)
+                self.assertEqual(self.git('rev-parse', 'HEAD'), self.new)
+
+
 if __name__ == '__main__':
     unittest.main()

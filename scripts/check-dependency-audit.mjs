@@ -33,12 +33,19 @@ export function assessAudit(report, { auditExitCode, patchVerified, now = new Da
   if (entries.some((entry) => !isObject(entry) || !severityLevels.includes(entry.severity))) {
     throw new Error('Invalid dependency audit advisory');
   }
-  const blocking = entries.filter((entry) => ['high', 'critical'].includes(entry.severity));
-  if ((blocking.length === 0) !== (counts.high + counts.critical === 0)) {
+  const observedCounts = Object.fromEntries(severityLevels.map((level) => [level, 0]));
+  for (const entry of entries) observedCounts[entry.severity] += 1;
+  if (severityLevels.some((level) => observedCounts[level] !== counts[level])) {
     throw new Error('Audit advisories and severity totals disagree');
   }
+  const blocking = entries.filter((entry) => ['high', 'critical'].includes(entry.severity));
   if (blocking.length === 0) {
-    if (auditExitCode !== 0) throw new Error('Audit failed without a supported blocking finding');
+    // pnpm 9 JSON reports exit 1 before applying --audit-level; accept only
+    // complete, consistent reports that actually contain low/moderate findings.
+    const onlyLowerSeverityFindings = counts.info === 0 && counts.low + counts.moderate > 0;
+    if (auditExitCode === 1 && !onlyLowerSeverityFindings) {
+      throw new Error('Audit failed without supported low/moderate findings');
+    }
     return { passed: true, auditReportedHighOrCritical: false, locallyFixedFindings: [] };
   }
   if (auditExitCode !== 1) throw new Error('Audit unexpectedly accepted a blocking finding');
