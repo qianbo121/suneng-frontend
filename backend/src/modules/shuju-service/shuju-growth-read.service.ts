@@ -264,9 +264,8 @@ export class ShujuGrowthReadService {
   async overview(query: ShujuGrowthOverviewDto) {
     validateInquiryReview(query.inquiryReview);
     const { start, endExclusive, days } = dateRange(query);
-    const automatedSessions = await readAutomatedSessions(this.prisma, start, endExclusive);
-    const NOT_BOT = allowedTraffic('WebsiteLeadEvent', automatedSessions, true);
-    const [trackingStartAt, dwellStartAt] = await Promise.all([
+    const [automatedSessions, trackingStartAt, dwellStartAt] = await Promise.all([
+      readAutomatedSessions(this.prisma, start, endExclusive),
       readTrafficCoverageStart(this.prisma, ['page_view'], true),
       readTrafficCoverageStart(
         this.prisma,
@@ -274,6 +273,7 @@ export class ShujuGrowthReadService {
         true,
       ),
     ]);
+    const NOT_BOT = allowedTraffic('WebsiteLeadEvent', automatedSessions, true);
     const hasTrackingStart = Boolean(trackingStartAt && !Number.isNaN(trackingStartAt.getTime()));
     const trackingAvailableInRange = Boolean(
       hasTrackingStart && trackingStartAt!.getTime() < endExclusive.getTime(),
@@ -710,8 +710,9 @@ export class ShujuGrowthReadService {
       visitDaily.push({ date: day, visits: visitDays.get(day) || 0 });
     }
 
-    const { operating, operatingSources, operatingSourceDetails, ...content } =
-      await readContentGrowth(this.prisma, {
+    // Independent summaries share the same scope; at most two downstream reads here.
+    const [contentResult, trafficReview] = await Promise.all([
+      readContentGrowth(this.prisma, {
         start,
         end: endExclusive,
         dimensionWhere: contentDimensionFilters.length
@@ -722,15 +723,16 @@ export class ShujuGrowthReadService {
         sourceType: NORMALIZED_SOURCE_TYPE,
         sourceDetail: NORMALIZED_SOURCE_DETAIL,
         inquiryReview: query.inquiryReview,
-      });
-
-    const trafficReview = await readTrafficReview(
-      this.prisma,
-      Prisma.join([...filters, VERIFIED_EVENT], ' AND '),
-      automatedSessions,
-      query.startDate.slice(0, 10),
-      query.endDate.slice(0, 10),
-    );
+      }),
+      readTrafficReview(
+        this.prisma,
+        Prisma.join([...filters, VERIFIED_EVENT], ' AND '),
+        automatedSessions,
+        query.startDate.slice(0, 10),
+        query.endDate.slice(0, 10),
+      ),
+    ]);
+    const { operating, operatingSources, operatingSourceDetails, ...content } = contentResult;
 
     return {
       content,

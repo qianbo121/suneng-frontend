@@ -26,7 +26,8 @@ function nonblockingReport(severities) {
   data.advisories = {};
   data.metadata.vulnerabilities.high = 0;
   for (const [index, severity] of severities.entries()) {
-    data.advisories[index] = { module_name: 'fixture', severity };
+    data.advisories[index] = { module_name: 'fixture', severity,
+      findings: [{ version: '1.0.0', paths: ['fixture@1.0.0'] }] };
     data.metadata.vulnerabilities[severity] += 1;
   }
   return data;
@@ -48,7 +49,7 @@ test('rejects failed audits without only low/moderate findings', () => {
     assert.throws(() => assessAudit(nonblockingReport(severities), options));
   }
 });
-test('requires exact advisory and metadata counts for every severity', () => {
+test('requires exact affected-version and metadata counts for every severity', () => {
   for (const level of ['info', 'low', 'moderate', 'high', 'critical']) {
     const hiddenCount = nonblockingReport(['moderate']);
     hiddenCount.metadata.vulnerabilities[level] += 1;
@@ -69,9 +70,35 @@ test('nonblocking reports still reject process errors, malformed reports and unv
   assert.throws(() => assessAudit({ ...data, advisories: { 0: { severity: 'unknown' } } }, options));
 });
 test('other moderate findings retain the original high audit threshold', () => {
-  const data = report(); data.advisories[2] = { severity: 'moderate' };
+  const data = report(); data.advisories[2] = { severity: 'moderate',
+    findings: [{ version: '1.0.0', paths: ['fixture@1.0.0'] }] };
   data.metadata.vulnerabilities.moderate = 1;
   assert.equal(assessAudit(data, options).passed, true);
+});
+test('counts each affected version once and does not count dependency paths', () => {
+  const data = nonblockingReport(['moderate']);
+  data.advisories[0].findings.push({ version: '2.0.0', paths: ['a>fixture@2.0.0', 'b>fixture@2.0.0'] });
+  data.metadata.vulnerabilities.moderate = 2;
+  assert.equal(assessAudit(data, options).passed, true);
+  for (const wrongCount of [1, 3]) {
+    data.metadata.vulnerabilities.moderate = wrongCount;
+    assert.throws(() => assessAudit(data, options), /totals disagree/);
+  }
+});
+test('rejects missing, malformed and duplicate version findings even at lower severity', () => {
+  for (const findings of [undefined, [], [{}], [{ version: '1', paths: [] }],
+    [{ version: '1', paths: [''] }], [{ version: '', paths: ['fixture@1'] }],
+    [{ version: '1', paths: ['fixture@1'] }, { version: '1', paths: ['other>fixture@1'] }]]) {
+    const data = nonblockingReport(['moderate']);
+    data.advisories[0].findings = findings;
+    assert.throws(() => assessAudit(data, options), /Invalid dependency audit findings/);
+  }
+});
+test('multiple affected versions cannot hide an additional high finding', () => {
+  const data = nonblockingReport(['high']);
+  data.advisories[0].findings.push({ version: '2.0.0', paths: ['fixture@2.0.0'] });
+  data.metadata.vulnerabilities.high = 2;
+  assert.throws(() => assessAudit(data, options), /Additional high\/critical/);
 });
 for (const [label, modify] of [
   ['different advisory', (d) => { d.advisories[1].url = 'https://github.com/advisories/GHSA-other'; }],

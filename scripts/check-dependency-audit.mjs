@@ -33,8 +33,18 @@ export function assessAudit(report, { auditExitCode, patchVerified, now = new Da
   if (entries.some((entry) => !isObject(entry) || !severityLevels.includes(entry.severity))) {
     throw new Error('Invalid dependency audit advisory');
   }
+  // The pinned pnpm 9 report counts affected installed versions, including
+  // multiple findings for the same advisory. Dependency paths are not counts.
+  if (entries.some((entry) => !Array.isArray(entry.findings) || entry.findings.length === 0
+      || entry.findings.some((finding) => !isObject(finding)
+        || typeof finding.version !== 'string' || !finding.version.trim()
+        || !Array.isArray(finding.paths) || finding.paths.length === 0
+        || finding.paths.some((path) => typeof path !== 'string' || !path.trim()))
+      || new Set(entry.findings.map((finding) => finding.version)).size !== entry.findings.length)) {
+    throw new Error('Invalid dependency audit findings');
+  }
   const observedCounts = Object.fromEntries(severityLevels.map((level) => [level, 0]));
-  for (const entry of entries) observedCounts[entry.severity] += 1;
+  for (const entry of entries) observedCounts[entry.severity] += entry.findings.length;
   if (severityLevels.some((level) => observedCounts[level] !== counts[level])) {
     throw new Error('Audit advisories and severity totals disagree');
   }
