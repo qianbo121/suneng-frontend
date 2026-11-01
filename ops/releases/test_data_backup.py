@@ -2,6 +2,7 @@ import copy
 from pathlib import Path
 import tempfile
 import unittest
+from types import SimpleNamespace
 from unittest.mock import patch
 import data_backup as d
 
@@ -35,5 +36,26 @@ class DataBackupSafety(unittest.TestCase):
             usage.return_value.free = 0
             with self.assertRaises(RuntimeError): d.capture(ID)
             mkdir.assert_not_called()
+
+    def test_waits_for_same_postmaster_twice(self):
+        replies = [
+            SimpleNamespace(returncode=0, stdout=''),
+            SimpleNamespace(returncode=0, stdout='first\n'),
+            SimpleNamespace(returncode=0, stdout=''),
+            SimpleNamespace(returncode=0, stdout='second\n'),
+            SimpleNamespace(returncode=0, stdout=''),
+            SimpleNamespace(returncode=0, stdout='second\n'),
+        ]
+        with patch.object(d.subprocess, 'run', side_effect=replies) as run, patch.object(d.time, 'sleep') as sleep:
+            self.assertEqual(d.wait_for_stable_database('drill', attempts=3), 'second')
+        self.assertEqual(run.call_count, 6)
+        self.assertEqual(sleep.call_count, 2)
+
+    def test_unstable_database_never_passes(self):
+        not_ready = SimpleNamespace(returncode=1, stdout='')
+        with patch.object(d.subprocess, 'run', return_value=not_ready), patch.object(d.time, 'sleep') as sleep:
+            with self.assertRaisesRegex(RuntimeError, 'stably ready'):
+                d.wait_for_stable_database('drill', attempts=2)
+        self.assertEqual(sleep.call_count, 2)
 
 if __name__ == '__main__': unittest.main()

@@ -54,6 +54,30 @@ def validate_data_manifest(manifest, identifier):
         raise ValueError('Unexpected data archive membership')
 
 
+def wait_for_stable_database(name, attempts=60):
+    """Wait until the final PostgreSQL server, not the init server, is ready."""
+    previous_start = None
+    for _ in range(attempts):
+        ready = subprocess.run(
+            ['docker', 'exec', name, 'pg_isready', '-U', 'corporate', '-d', 'corporate_site'],
+            stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
+        )
+        if ready.returncode == 0:
+            started = subprocess.run(
+                ['docker', 'exec', name, 'psql', '-XqAt', '-U', 'corporate', '-d', 'corporate_site',
+                 '-c', 'SELECT pg_postmaster_start_time();'],
+                stdout=subprocess.PIPE, stderr=subprocess.DEVNULL, text=True,
+            )
+            current_start = started.stdout.strip() if started.returncode == 0 else ''
+            if current_start and current_start == previous_start:
+                return current_start
+            previous_start = current_start or None
+        else:
+            previous_start = None
+        time.sleep(1)
+    raise RuntimeError('Isolated database did not become stably ready')
+
+
 def restore(identifier):
     destination = b.batch_path(identifier)
     manifest = json.loads((destination / 'data-manifest.json').read_text())
@@ -80,13 +104,7 @@ def restore(identifier):
         try:
             b.run(b.drill_container_args(image, identifier, database_dir), stdout=subprocess.PIPE)
             started = True
-            for _ in range(60):
-                probe = subprocess.run(['docker', 'exec', name, 'pg_isready', '-U', 'corporate', '-d', 'corporate_site'], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-                if probe.returncode == 0:
-                    break
-                time.sleep(1)
-            else:
-                raise RuntimeError('Isolated database did not become ready')
+            wait_for_stable_database(name)
             with (destination / 'database.dump').open('rb') as stream:
                 b.run(['docker', 'exec', '-i', name, 'pg_restore', '--exit-on-error', '--no-owner', '--no-privileges', '-U', 'corporate', '-d', 'corporate_site'], stdin=stream, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
             query = lambda sql: b.output(['docker', 'exec', name, 'psql', '-XqAt', '-v', 'ON_ERROR_STOP=1', '-U', 'corporate', '-d', 'corporate_site', '-c', sql])
