@@ -1,0 +1,12 @@
+{
+  "production_access": false,
+  "name": "codex-geo-timeout-test-20261101",
+  "image": "postgres:16-alpine",
+  "results": {},
+  "container_id": "c4e48e525f5216a1060d8671886580abbc06ec63d097dab5175e263de72697f1",
+  "endpoint": "127.0.0.1:60831",
+  "baseline_under_host_timezone_exit_code": 1,
+  "test_process_timezone": "UTC",
+  "test_exit_code": 0,
+  "test_container_removed": true
+}

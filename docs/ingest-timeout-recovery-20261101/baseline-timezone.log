@@ -1,0 +1,35 @@
+
+(node:34753) DeprecationWarning: Calling client.query() when the client is already executing a query is deprecated and will be removed in pg@9.0. Use async/await or an external async flow control mechanism instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+FAIL src/modules/shuju-service/shuju-content-growth.integration.spec.ts
+  ● content growth against PostgreSQL › visit trend counts a cross-midnight visit once on the first matching date after every filter
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 1
+
+      Array [
+        Object {
+    -     "date": "2026-10-12",
+    +     "date": "2026-10-11",
+          "visits": 1,
+        },
+      ]
+
+      323 |     ]) {
+      324 |       const filtered = await service.overview({ ...selectedRange, ...filter });
+    > 325 |       expect(filtered.visitTrend.daily.filter((row) => row.visits > 0)).toEqual([
+          |                                                                         ^
+      326 |         { date: '2026-10-12', visits: 1 },
+      327 |       ]);
+      328 |       expect(filtered.visitTrend.total).toBe(1);
+
+      at Object.<anonymous> (modules/shuju-service/shuju-content-growth.integration.spec.ts:325:73)
+
+Test Suites: 1 failed, 1 total
+Tests:       1 failed, 21 skipped, 22 total
+Snapshots:   0 total
+Time:        1.979 s
+Ran all test suites within paths "src/modules/shuju-service/shuju-content-growth.integration.spec.ts".
+Test results written to: ../../独立站-采集超时修复-20261101/docs/ingest-timeout-recovery-20261101/baseline-timezone-results.json
