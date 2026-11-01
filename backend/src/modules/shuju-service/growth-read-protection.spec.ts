@@ -149,24 +149,64 @@ describe('growth read admission and shared-pool protection', () => {
       endDate: '2026-10-31',
       inquiryReview: { validIds: [1] },
     };
-    const a = protection.overview(scope, () => hold.promise);
+    const a = protection.overview(scope, async () => `${await hold.promise}:original`);
     const b = protection.overview(
       { ...scope, inquiryReview: { validIds: [2] } },
-      () => hold.promise,
+      async () => `${await hold.promise}:review`,
+    );
+    const c = protection.overview(
+      { ...scope, responseProfile: 'dashboard' },
+      async () => `${await hold.promise}:profile`,
+    );
+    const d = protection.overview(
+      { ...scope, startDate: '2026-10-30' },
+      async () => `${await hold.promise}:date`,
     );
     expect(a).not.toBe(b);
-    await expect(
-      protection.overview({ ...scope, responseProfile: 'dashboard' }, () =>
-        Promise.resolve('wrong'),
-      ),
-    ).rejects.toBeInstanceOf(ServiceUnavailableException);
+    expect(new Set([a, b, c, d]).size).toBe(4);
     hold.resolve('ok');
-    await Promise.all([a, b]);
+    expect(await Promise.all([a, b, c, d])).toEqual([
+      'ok:original',
+      'ok:review',
+      'ok:profile',
+      'ok:date',
+    ]);
     expect(
       await protection.overview({ ...scope, startDate: '2026-10-30' }, () =>
         Promise.resolve('fresh'),
       ),
     ).toBe('fresh');
+  });
+
+  it('accepts a third distinct report while all reads still share the bounded queue', async () => {
+    const protection = new GrowthReadProtection();
+    const hold = deferred<void>();
+    let active = 0,
+      peak = 0;
+    const raw = {
+      $queryRaw: jest.fn(async (report: number) => {
+        active++;
+        peak = Math.max(peak, active);
+        try {
+          await hold.promise;
+          return report;
+        } finally {
+          active--;
+        }
+      }),
+    };
+    const database = protection.database(raw);
+    const reports = [1, 2, 3].map((report) =>
+      protection.overview({ report }, () =>
+        Promise.all(Array.from({ length: 16 }, () => database.$queryRaw(report))),
+      ),
+    );
+    await tick();
+    expect(raw.$queryRaw).toHaveBeenCalledTimes(2);
+    hold.resolve();
+    expect(await Promise.all(reports)).toEqual([1, 2, 3].map((report) => Array(16).fill(report)));
+    expect(raw.$queryRaw).toHaveBeenCalledTimes(48);
+    expect(peak).toBe(2);
   });
 
   it('propagates an overview failure and permits a later fresh retry', async () => {

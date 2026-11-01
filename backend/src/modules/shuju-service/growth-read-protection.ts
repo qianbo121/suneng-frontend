@@ -26,9 +26,8 @@ export class GrowthReadProtection {
     const key = requestKey(query);
     const pending = this.overviews.get(key);
     if (pending) return pending as Promise<T>;
-    if (this.overviews.size >= 2) {
-      return Promise.reject(new ServiceUnavailableException('统计查询繁忙，请稍后重试'));
-    }
+    // Distinct reports share the bounded database queue below; do not add a
+    // second admission limit that rejects a third otherwise valid report.
     // Coalesce only currently running, identical requests. Never reuse a stale
     // result after an inquiry review or return zero metrics when a read fails.
     const result = Promise.resolve()
