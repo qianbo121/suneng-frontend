@@ -141,6 +141,14 @@ describe('growth read admission and shared-pool protection', () => {
     ).toBe(10);
   });
 
+  it('starts an overview immediately so independent summaries keep their existing concurrency', async () => {
+    const protection = new GrowthReadProtection();
+    const work = jest.fn().mockResolvedValue('started');
+    const running = protection.overview({ report: 1 }, work);
+    expect(work).toHaveBeenCalledTimes(1);
+    await expect(running).resolves.toBe('started');
+  });
+
   it('keeps different inquiry decisions, dates and response profiles separate', async () => {
     const protection = new GrowthReadProtection(),
       hold = deferred<string>();

@@ -30,9 +30,15 @@ export class GrowthReadProtection {
     // second admission limit that rejects a third otherwise valid report.
     // Coalesce only currently running, identical requests. Never reuse a stale
     // result after an inquiry review or return zero metrics when a read fails.
-    const result = Promise.resolve()
-      .then(read)
-      .finally(() => this.overviews.delete(key));
+    let started: Promise<T>;
+    try {
+      // Preserve the existing overview behaviour: independent summaries start
+      // during the current call instead of being deferred to a later microtask.
+      started = Promise.resolve(read());
+    } catch (error) {
+      started = Promise.reject(error);
+    }
+    const result = started.finally(() => this.overviews.delete(key));
     this.overviews.set(key, result);
     return result;
   }
