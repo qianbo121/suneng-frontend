@@ -130,6 +130,9 @@ class ComponentSelectionTests(unittest.TestCase):
 
     def test_admin_candidate_identity_remains_import_compatible(self):
         metadata = run_step(self.workflow, 'Record immutable artifact identity')
+        self.assertIn("docker history --human=false --no-trunc --format '{{.Size}}'", metadata)
+        self.assertIn("!/^[0-9]+$/ { exit 2 }", metadata)
+        self.assertIn("int(os.environ['IMAGE_EXPANDED_BYTES'])", metadata)
         source = metadata.split("python3 - <<'PY'\n", 1)[1].split('\nPY', 1)[0]
         with tempfile.TemporaryDirectory() as directory:
             folder = Path(directory) / 'release-admin'
@@ -140,7 +143,7 @@ class ComponentSelectionTests(unittest.TestCase):
             }]))
             env = dict(os.environ, RUNNER_TEMP=directory, COMPONENT='admin',
                        SOURCE_COMMIT='a' * 40, IMAGE_TAG='suneng-verified-admin:' + 'a' * 40,
-                       SEGMENTED_ARCHIVE='false')
+                       SEGMENTED_ARCHIVE='false', IMAGE_EXPANDED_BYTES='550381025')
             result = subprocess.run(['python3', '-c', source], cwd=ROOT, env=env,
                                     capture_output=True, text=True, timeout=10)
             self.assertEqual(result.returncode, 0, result.stderr)
@@ -149,11 +152,42 @@ class ComponentSelectionTests(unittest.TestCase):
             self.assertEqual(receipt['status'], 'candidate-not-deployed')
             self.assertEqual(receipt['sourceCommit'], 'a' * 40)
             self.assertEqual(receipt['buildImageId'], 'sha256:' + 'b' * 64)
+            self.assertEqual(receipt['imageBytes'], 550381025)
             self.assertEqual(len(receipt['archiveSha256']), 64)
             self.assertTrue(receipt['serverCanaryRequired'])
             self.assertTrue(receipt['browserAcceptanceRequired'])
             self.assertNotIn('approvedGuides', receipt)
             self.assertFalse((folder / 'image.json').exists())
+
+    def test_candidate_records_exact_uncompressed_history_bytes(self):
+        metadata = run_step(self.workflow, 'Record immutable artifact identity')
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            docker = root / 'docker'
+            docker.write_text(
+                '#!/usr/bin/env python3\n'
+                'import json, os, sys\n'
+                'if sys.argv[1] == "save":\n'
+                '    sys.stdout.buffer.write(b"fixture-image")\n'
+                'elif sys.argv[1:3] == ["image", "inspect"]:\n'
+                '    print(json.dumps([{"Id": "sha256:" + "b" * 64, '
+                '"RootFS": {"Layers": ["sha256:" + "c" * 64]}, "Size": 12}]))\n'
+                'elif sys.argv[1] == "history":\n'
+                '    print(os.environ["FIXTURE_HISTORY"])\n'
+                'else:\n'
+                '    raise SystemExit(9)\n'
+            )
+            docker.chmod(0o755)
+            env = dict(os.environ, PATH=str(root) + os.pathsep + os.environ['PATH'],
+                       RUNNER_TEMP=directory, COMPONENT='backend', SOURCE_COMMIT='a' * 40,
+                       IMAGE_TAG='suneng-verified-backend:' + 'a' * 40,
+                       SEGMENTED_ARCHIVE='false', FIXTURE_HISTORY='0\n400497664\n149883361')
+            result = subprocess.run(['bash', '-c', metadata], cwd=ROOT, env=env,
+                                    capture_output=True, text=True, timeout=10)
+            self.assertEqual(result.returncode, 0, result.stderr)
+            receipt = json.loads((root / 'release-backend/candidate.json').read_text())
+            self.assertEqual(receipt['imageBytes'], 550381025)
+            self.assertNotEqual(receipt['imageBytes'], 12)
 
     def test_unvalidated_component_cannot_build(self):
         result = self.build_component('frontend+backend')

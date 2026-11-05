@@ -122,6 +122,15 @@ jobs:
             docker save "$IMAGE_TAG" | gzip > "$RUNNER_TEMP/release-$COMPONENT/$COMPONENT.tar.gz"
           fi
           docker image inspect "$IMAGE_TAG" > "$RUNNER_TEMP/release-$COMPONENT/image.json"
+          IMAGE_EXPANDED_BYTES="$({
+            docker history --human=false --no-trunc --format '{{.Size}}' "$IMAGE_TAG" |
+              awk 'BEGIN { total = 0; count = 0 }
+                   !/^[0-9]+$/ { exit 2 }
+                   { total += $1; count += 1 }
+                   END { if (count == 0 || total <= 0) exit 3; printf "%.0f\n", total }'
+          })"
+          [[ "$IMAGE_EXPANDED_BYTES" =~ ^[1-9][0-9]*$ ]]
+          export IMAGE_EXPANDED_BYTES
           python3 - <<'PY'
           import hashlib, json, os, pathlib, sys
           sys.path.insert(0, "ops/releases")
@@ -136,7 +145,8 @@ jobs:
           receipt = {'schemaVersion': 1, 'component': os.environ['COMPONENT'], 'status': 'candidate-not-deployed',
                      'sourceIdentity': 'git-commit', 'sourceCommit': os.environ['SOURCE_COMMIT'],
                      'imageTag': os.environ['IMAGE_TAG'], 'buildImageId': image['Id'],
-                     'rootFsDiffIds': image['RootFS']['Layers'], 'imageBytes': image['Size'],
+                     'rootFsDiffIds': image['RootFS']['Layers'],
+                     'imageBytes': int(os.environ['IMAGE_EXPANDED_BYTES']),
                      'archiveBytes': archive.stat().st_size, 'archiveSha256': digest.hexdigest(),
                      **({'archiveFormat': 'gzip-segments-v1',
                          'archiveSegments': json.loads((root / 'archive-segments.json').read_text())}
