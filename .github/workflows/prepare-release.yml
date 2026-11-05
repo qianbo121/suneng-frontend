@@ -105,7 +105,7 @@ jobs:
               ;;
             *) echo 'Unexpected release component.' >&2; exit 1 ;;
           esac
-          docker build --platform linux/amd64 -f "$dockerfile" "$@" \
+          docker build --provenance=false --platform linux/amd64 -f "$dockerfile" "$@" \
             --label "org.opencontainers.image.revision=$SOURCE_COMMIT" \
             --tag "$IMAGE_TAG" .
       - name: Record immutable artifact identity
