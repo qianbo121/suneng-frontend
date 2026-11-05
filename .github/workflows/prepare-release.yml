@@ -132,7 +132,7 @@ jobs:
           [[ "$IMAGE_EXPANDED_BYTES" =~ ^[1-9][0-9]*$ ]]
           export IMAGE_EXPANDED_BYTES
           python3 - <<'PY'
-          import hashlib, json, os, pathlib, sys
+          import hashlib, json, os, pathlib, re, sys, tarfile
           sys.path.insert(0, "ops/releases")
           from procurement_approval import procurement_candidate_fields
           root = pathlib.Path(os.environ['RUNNER_TEMP']) / ('release-' + os.environ['COMPONENT'])
@@ -141,10 +141,23 @@ jobs:
           with archive.open('rb') as stream:
               for block in iter(lambda: stream.read(8 * 1024 * 1024), b''):
                   digest.update(block)
+          with tarfile.open(archive, mode='r:gz') as saved:
+              member = saved.getmember('manifest.json')
+              if not member.isfile() or member.size > 2 * 1024 * 1024:
+                  raise SystemExit('invalid Docker manifest metadata')
+              with saved.extractfile(member) as stream:
+                  docker_manifest = json.load(stream)
+          if not isinstance(docker_manifest, list) or len(docker_manifest) != 1:
+              raise SystemExit('exactly one Docker image is required')
+          config_path = docker_manifest[0].get('Config', '')
+          config_match = re.fullmatch(r'blobs/sha256/([0-9a-f]{64})', config_path)
+          if config_match is None:
+              raise SystemExit('portable Docker config digest is required')
+          build_image_id = 'sha256:' + config_match.group(1)
           image = json.loads((root / 'image.json').read_text())[0]
           receipt = {'schemaVersion': 1, 'component': os.environ['COMPONENT'], 'status': 'candidate-not-deployed',
                      'sourceIdentity': 'git-commit', 'sourceCommit': os.environ['SOURCE_COMMIT'],
-                     'imageTag': os.environ['IMAGE_TAG'], 'buildImageId': image['Id'],
+                     'imageTag': os.environ['IMAGE_TAG'], 'buildImageId': build_image_id,
                      'rootFsDiffIds': image['RootFS']['Layers'],
                      'imageBytes': int(os.environ['IMAGE_EXPANDED_BYTES']),
                      'archiveBytes': archive.stat().st_size, 'archiveSha256': digest.hexdigest(),

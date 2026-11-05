@@ -1,10 +1,12 @@
 #!/usr/bin/env python3
 """Check real workflow selection and build commands without building images."""
 import json
+import io
 import os
 from pathlib import Path
 import re
 import subprocess
+import tarfile
 import tempfile
 import unittest
 
@@ -133,13 +135,21 @@ class ComponentSelectionTests(unittest.TestCase):
         self.assertIn("docker history --human=false --no-trunc --format '{{.Size}}'", metadata)
         self.assertIn("!/^[0-9]+$/ { exit 2 }", metadata)
         self.assertIn("int(os.environ['IMAGE_EXPANDED_BYTES'])", metadata)
+        self.assertIn("build_image_id = 'sha256:' + config_match.group(1)", metadata)
         source = metadata.split("python3 - <<'PY'\n", 1)[1].split('\nPY', 1)[0]
         with tempfile.TemporaryDirectory() as directory:
             folder = Path(directory) / 'release-admin'
             folder.mkdir()
-            (folder / 'admin.tar.gz').write_bytes(b'fixture-only')
+            manifest = json.dumps([{
+                'Config': 'blobs/sha256/' + 'b' * 64,
+                'RepoTags': ['suneng-verified-admin:' + 'a' * 40],
+                'Layers': [],
+            }]).encode()
+            with tarfile.open(folder / 'admin.tar.gz', mode='w:gz') as saved:
+                member = tarfile.TarInfo('manifest.json'); member.size = len(manifest)
+                saved.addfile(member, io.BytesIO(manifest))
             (folder / 'image.json').write_text(json.dumps([{
-                'Id': 'sha256:' + 'b' * 64, 'RootFS': {'Layers': ['sha256:' + 'c' * 64]}, 'Size': 12,
+                'Id': 'sha256:' + 'd' * 64, 'RootFS': {'Layers': ['sha256:' + 'c' * 64]}, 'Size': 12,
             }]))
             env = dict(os.environ, RUNNER_TEMP=directory, COMPONENT='admin',
                        SOURCE_COMMIT='a' * 40, IMAGE_TAG='suneng-verified-admin:' + 'a' * 40,
@@ -166,11 +176,17 @@ class ComponentSelectionTests(unittest.TestCase):
             docker = root / 'docker'
             docker.write_text(
                 '#!/usr/bin/env python3\n'
-                'import json, os, sys\n'
+                'import io, json, os, sys, tarfile\n'
                 'if sys.argv[1] == "save":\n'
-                '    sys.stdout.buffer.write(b"fixture-image")\n'
+                '    manifest = json.dumps([{"Config": "blobs/sha256/" + "b" * 64, '
+                '"RepoTags": [os.environ["IMAGE_TAG"]], "Layers": []}]).encode()\n'
+                '    output = io.BytesIO()\n'
+                '    with tarfile.open(fileobj=output, mode="w") as saved:\n'
+                '        member = tarfile.TarInfo("manifest.json"); member.size = len(manifest)\n'
+                '        saved.addfile(member, io.BytesIO(manifest))\n'
+                '    sys.stdout.buffer.write(output.getvalue())\n'
                 'elif sys.argv[1:3] == ["image", "inspect"]:\n'
-                '    print(json.dumps([{"Id": "sha256:" + "b" * 64, '
+                '    print(json.dumps([{"Id": "sha256:" + "d" * 64, '
                 '"RootFS": {"Layers": ["sha256:" + "c" * 64]}, "Size": 12}]))\n'
                 'elif sys.argv[1] == "history":\n'
                 '    print(os.environ["FIXTURE_HISTORY"])\n'
@@ -188,6 +204,8 @@ class ComponentSelectionTests(unittest.TestCase):
             receipt = json.loads((root / 'release-backend/candidate.json').read_text())
             self.assertEqual(receipt['imageBytes'], 550381025)
             self.assertNotEqual(receipt['imageBytes'], 12)
+            self.assertEqual(receipt['buildImageId'], 'sha256:' + 'b' * 64)
+            self.assertNotEqual(receipt['buildImageId'], 'sha256:' + 'd' * 64)
 
     def test_unvalidated_component_cannot_build(self):
         result = self.build_component('frontend+backend')
