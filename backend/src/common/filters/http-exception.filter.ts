@@ -12,21 +12,12 @@ import {
   PrismaClientKnownRequestError,
   PrismaClientValidationError,
 } from '@prisma/client/runtime/library';
+import { databaseFailure } from '@/common/utils/database-failure';
 
 // A request the database could not serve is not a client mistake: these mean the
 // database is unreachable, still starting, out of connections or timing out. They
 // must answer 503 and always be logged, or a failing database silently looks like
 // a stream of bad requests.
-const DATABASE_UNAVAILABLE_CODES = new Set([
-  'P1000', // authentication failed
-  'P1001', // cannot reach database server
-  'P1002', // database server timeout
-  'P1008', // operation timed out
-  'P1017', // server closed the connection
-  'P2024', // timed out fetching a connection from the pool
-  'P2028', // transaction API error
-  'P2034', // write conflict / deadlock, safe to retry
-]);
 
 @Catch()
 export class HttpExceptionFilter implements ExceptionFilter {
@@ -55,7 +46,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
       } else if (exception.code === 'P2025') {
         status = HttpStatus.NOT_FOUND;
         message = 'Record not found';
-      } else if (DATABASE_UNAVAILABLE_CODES.has(exception.code)) {
+      } else if (databaseFailure(exception)?.status === HttpStatus.SERVICE_UNAVAILABLE) {
         status = HttpStatus.SERVICE_UNAVAILABLE;
         message = 'Service temporarily unavailable';
       } else {

@@ -3,6 +3,7 @@ import { Logger } from '@nestjs/common';
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { Prisma } from '@prisma/client';
+import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 import { Request } from 'express';
 
 import { CreateLeadEventDto } from '@/modules/lead-event/dto/create-lead-event.dto';
@@ -339,6 +340,79 @@ describe('collection receipt privacy and commit boundary', () => {
     expect(log).not.toHaveBeenCalled();
     expect(JSON.parse(warn.mock.calls[0][0])).toMatchObject({ outcome: 'failed', status: 500 });
     expect(warn.mock.calls[0][0]).not.toContain('private');
+  });
+
+  it.each(['P2024', 'P2028', 'P1001', 'P2034'])(
+    'links a %s failure to a successful retry using the same private-safe fingerprint',
+    async (code) => {
+      const error = new PrismaClientKnownRequestError('private-db-connection-string', {
+        code,
+        clientVersion: '6.19.3',
+      });
+      const db = database(true);
+      const original = db.$transaction;
+      db.$transaction = jest.fn().mockRejectedValueOnce(error).mockImplementation(original);
+      const service = new LeadEventService(db);
+      const payload = packet({ collectorBuild: 'outbox-20261020-receipts' });
+      await expect(service.createPublic(payload, request)).rejects.toBe(error);
+      const failure = JSON.parse(warn.mock.calls[0][0]);
+      expect(failure).toMatchObject({
+        outcome: 'failed',
+        status: 503,
+        failureCode: code,
+        retryable: true,
+        eventType: 'page_view',
+      });
+      expect(failure.collectionKey).toMatch(/^[a-f0-9]{64}$/);
+      expect(log).not.toHaveBeenCalled();
+      await service.createPublic(payload, request);
+      const success = JSON.parse(log.mock.calls[0][0]);
+      expect(success).toMatchObject({
+        collectionKey: failure.collectionKey,
+        outcome: 'stored',
+        recordId: 41,
+      });
+      expect(success.receiptId).not.toBe(failure.receiptId);
+      expect(JSON.stringify([failure, success])).not.toMatch(
+        /private|127\.0|phone|cookie|authorization/,
+      );
+    },
+  );
+
+  it('links an acknowledgement/commit failure to a deduplicated later retry', async () => {
+    await expect(
+      new LeadEventService(database(true, true)).createPublic(packet(), request),
+    ).rejects.toThrow();
+    const failure = JSON.parse(warn.mock.calls[0][0]);
+    await new LeadEventService(database(false)).createPublic(packet(), request);
+    expect(JSON.parse(log.mock.calls[0][0])).toMatchObject({
+      outcome: 'duplicate',
+      recordId: 41,
+      collectionKey: failure.collectionKey,
+    });
+  });
+
+  it.each([null, 'invalid id', 123])(
+    'does not invent retry identity for invalid collection ID %p',
+    async (collectionId) => {
+      const failing = database(true);
+      failing.$queryRaw = jest.fn().mockRejectedValue(new Error('private-database-error'));
+      await expect(
+        new LeadEventService(failing).createPublic(packet({ collectionId }), request),
+      ).rejects.toThrow();
+      expect(JSON.parse(warn.mock.calls[0][0]).collectionKey).toBeNull();
+    },
+  );
+
+  it('uses the same property limit for failed and successful receipts', async () => {
+    const properties = Object.fromEntries(Array.from({ length: 24 }, (_, i) => [`p${i}`, i]));
+    const payload = { ...packet(), properties: { ...properties, collectionId: 'discarded-id' } };
+    const failing = database(true);
+    failing.$queryRaw = jest.fn().mockRejectedValue(new Error('private-database-error'));
+    await expect(new LeadEventService(failing).createPublic(payload, request)).rejects.toThrow();
+    await new LeadEventService(database(true)).createPublic(payload, request);
+    expect(JSON.parse(warn.mock.calls[0][0]).collectionKey).toBeNull();
+    expect(JSON.parse(log.mock.calls[0][0]).collectionKey).toBeNull();
   });
 
   it.each([undefined, 'private-value', 'outbox-20261019'])(

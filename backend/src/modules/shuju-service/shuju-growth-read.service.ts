@@ -6,6 +6,7 @@ import { ShujuGrowthOverviewDto, validateInquiryReview } from './dto/shuju-growt
 import { OperatingSource, readContentGrowth } from '@/modules/shuju-service/shuju-content-growth';
 import { PrismaService } from '@/prisma/prisma.service';
 import { readTrafficReview } from './shuju-traffic-review';
+import { GrowthReadProtection } from './growth-read-protection';
 import {
   allowedTraffic,
   readAutomatedSessions,
@@ -259,10 +260,20 @@ function dateRange(query: ShujuGrowthReadQueryDto) {
 
 @Injectable()
 export class ShujuGrowthReadService {
-  constructor(private readonly prisma: PrismaService) {}
+  private readonly reads = new GrowthReadProtection();
+  private readonly prisma: PrismaService;
+
+  constructor(prisma: PrismaService) {
+    this.prisma = this.reads.database(prisma);
+  }
 
   async overview(query: ShujuGrowthOverviewDto) {
     validateInquiryReview(query.inquiryReview);
+    dateRange(query);
+    return this.reads.overview(query, () => this.readOverview(query));
+  }
+
+  private async readOverview(query: ShujuGrowthOverviewDto) {
     const { start, endExclusive, days } = dateRange(query);
     const [automatedSessions, trackingStartAt, dwellStartAt] = await Promise.all([
       readAutomatedSessions(this.prisma, start, endExclusive),

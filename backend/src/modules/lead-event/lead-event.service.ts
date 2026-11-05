@@ -10,6 +10,7 @@ import {
 import { LeadEventListQueryDto } from '@/modules/lead-event/dto/lead-event-list-query.dto';
 import { PrismaService } from '@/prisma/prisma.service';
 import { ensureNotSpam, SpamThrottleState } from '@/common/utils/spam-throttle';
+import { databaseFailure } from '@/common/utils/database-failure';
 
 function clean(value?: string | null, maxLength = 255) {
   const text = value?.trim();
@@ -109,6 +110,32 @@ function cleanProperties(value: Record<string, unknown> | undefined, request: Re
   });
 }
 
+function collectionReceiptContext(dto: CreateLeadEventDto, request: Request) {
+  // Use exactly the same sanitisation as persistence, including the 24-property
+  // limit. A discarded or invalid identifier must not produce a misleading key.
+  const properties = JSON.parse(cleanProperties(dto.properties, request));
+  const candidate = properties.collectionId;
+  const collectionId =
+    typeof candidate === 'string' && /^[A-Za-z0-9][A-Za-z0-9._:-]{0,119}$/.test(candidate)
+      ? candidate
+      : null;
+  const sessionId = clean(dto.sessionId, 120);
+  const eventType = LEAD_EVENT_TYPES.includes(dto.eventType) ? dto.eventType : null;
+  return {
+    eventType,
+    collectionKey:
+      collectionId && sessionId && eventType
+        ? createHash('sha256')
+            .update(JSON.stringify(['website-lead', sessionId, eventType, collectionId]))
+            .digest('hex')
+        : null,
+    collectorBuild:
+      properties.collectorBuild === 'outbox-20261020-receipts'
+        ? 'outbox-20261020-receipts'
+        : 'unknown',
+  };
+}
+
 @Injectable()
 export class LeadEventService {
   private readonly eventThrottle = new Map<string, SpamThrottleState>();
@@ -118,25 +145,39 @@ export class LeadEventService {
 
   async createPublic(dto: CreateLeadEventDto, request: Request) {
     const receiptId = randomUUID();
+    const context = collectionReceiptContext(dto, request);
+    const startedAt = Date.now();
     try {
-      return await this.persistPublic(dto, request, receiptId);
+      return await this.persistPublic(dto, request, receiptId, context, startedAt);
     } catch (error) {
+      const database = databaseFailure(error);
+      const status = error instanceof HttpException ? error.getStatus() : (database?.status ?? 500);
       this.logger.warn(
         JSON.stringify({
           type: 'lead_event_receipt',
           version: 1,
           receiptId,
           completedAt: new Date().toISOString(),
-          outcome:
-            error instanceof HttpException && error.getStatus() < 500 ? 'rejected' : 'failed',
-          status: error instanceof HttpException ? error.getStatus() : 500,
+          ...context,
+          outcome: status < 500 ? 'rejected' : 'failed',
+          status,
+          failureCode:
+            database?.code ?? (error instanceof HttpException ? 'HTTP_REJECTION' : 'UNEXPECTED'),
+          retryable: database?.retryable ?? status >= 500,
+          durationMs: Math.max(0, Date.now() - startedAt),
         }),
       );
       throw error;
     }
   }
 
-  private async persistPublic(dto: CreateLeadEventDto, request: Request, receiptId: string) {
+  private async persistPublic(
+    dto: CreateLeadEventDto,
+    request: Request,
+    receiptId: string,
+    context: ReturnType<typeof collectionReceiptContext>,
+    startedAt: number,
+  ) {
     // 行为事件会比询盘频繁，限流只拦明显的批量灌入；业务结果 form_submit
     // 已从公开白名单移除，不能再由浏览器伪造。
     ensureNotSpam(request.ip || 'anonymous', this.eventThrottle, {
@@ -245,17 +286,8 @@ export class LeadEventService {
         receiptId,
         completedAt: new Date().toISOString(),
         ...result,
-        eventType: dto.eventType,
-        collectionKey:
-          collectionId && sessionId
-            ? createHash('sha256')
-                .update(JSON.stringify(['website-lead', sessionId, dto.eventType, collectionId]))
-                .digest('hex')
-            : null,
-        collectorBuild:
-          savedProperties.collectorBuild === 'outbox-20261020-receipts'
-            ? 'outbox-20261020-receipts'
-            : 'unknown',
+        ...context,
+        durationMs: Math.max(0, Date.now() - startedAt),
       }),
     );
     return { ok: true };
