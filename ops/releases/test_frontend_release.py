@@ -1,5 +1,6 @@
 import copy
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
+import io
 import importlib.util
 import json
 import os
@@ -10,6 +11,7 @@ import subprocess
 import sys
 import tempfile
 import threading
+import tarfile
 import unittest
 from unittest.mock import patch
 
@@ -1481,10 +1483,18 @@ class SeparateProcurementReleaseTest(unittest.TestCase):
             source = '\n'.join(line[10:] for line in source.splitlines())
             with self.subTest(workflow=workflow, component=component), tempfile.TemporaryDirectory() as tmp:
                 folder = Path(tmp) / ('release-' + component if component else 'frontend-candidate');folder.mkdir()
-                (folder / ((component or 'frontend') + '.tar.gz')).write_bytes(b'fixture-not-an-image')
+                archive = folder / ((component or 'frontend') + '.tar.gz')
+                if workflow == 'prepare-release.yml':
+                    manifest = json.dumps([{'Config': 'blobs/sha256/' + NEW[7:],
+                                            'RepoTags': ['fixture'], 'Layers': []}]).encode()
+                    with tarfile.open(archive, mode='w:gz') as saved:
+                        member = tarfile.TarInfo('manifest.json');member.size = len(manifest)
+                        saved.addfile(member, io.BytesIO(manifest))
+                else:
+                    archive.write_bytes(b'fixture-not-an-image')
                 (folder / 'image.json').write_text(json.dumps([{'Id': NEW, 'RootFS': {'Layers': []}, 'Size': 10}]))
                 env = {**os.environ, 'RUNNER_TEMP': tmp, 'SOURCE_COMMIT': 'e'*40, 'IMAGE_TAG': 'fixture',
-                       'SEGMENTED_ARCHIVE': 'false'}
+                       'SEGMENTED_ARCHIVE': 'false', 'IMAGE_EXPANDED_BYTES': '10'}
                 if component: env['COMPONENT'] = component
                 result = subprocess.run([sys.executable, '-c', source], cwd=root, env=env, capture_output=True, text=True, timeout=15)
                 self.assertEqual(result.returncode, 0, result.stderr)
