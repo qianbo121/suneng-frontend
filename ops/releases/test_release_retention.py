@@ -106,6 +106,58 @@ class RetentionTest(unittest.TestCase):
         data.update(values)
         r.write_json(self.acceptance, data)
 
+    def retire_admin(self):
+        path = self.live / 'RELEASE_ARTIFACTS.json'
+        receipt = json.loads(path.read_text())
+        image = receipt['images'].pop('admin')
+        receipt['retiredComponents'] = {'admin': {
+            'status': 'retired', 'image': image, 'retiredAt': '2026-10-13T05:07:18+00:00'}}
+        r.write_json(path, receipt)
+        plan = json.loads(self.plan.read_text())
+        plan['receiptSha256'] = r.digest(path.read_bytes())
+        r.write_json(self.plan, plan)
+        self.change_acceptance(images=receipt['images'])
+        self.engine.rows = [row for row in self.engine.rows if row['name'] != '/corp-site-admin']
+        return receipt
+
+    def test_retired_admin_preview_uses_archived_identity_without_fake_current(self):
+        receipt = self.retire_admin()
+        before = (self.live / 'RELEASE_ARTIFACTS.json').read_bytes()
+        result = self.finalizer.execute()
+        self.assertEqual(set(result['protected']), {ident(n) for n in [2, 3, 4, 5, 6, 7]})
+        self.assertEqual([t['image'] for t in result['targets']], [ident(1)])
+        self.assertNotIn('admin', receipt['images'])
+        self.assertEqual((self.live / 'RELEASE_ARTIFACTS.json').read_bytes(), before)
+        self.assertEqual(self.engine.removed, [])
+
+    def test_retirement_does_not_relax_any_recovery_image_or_active_service(self):
+        self.retire_admin()
+        for n in [2, 3, 4, 5, 6, 7]:
+            with self.subTest(missing_image=n):
+                image = self.engine.records.pop(ident(n))
+                with self.assertRaisesRegex(RuntimeError, 'current or rollback image is missing'):
+                    self.finalizer.execute()
+                self.engine.records[ident(n)] = image
+        for row in self.engine.rows:
+            with self.subTest(unhealthy=row['name']):
+                row['health'] = 'unhealthy'
+                with self.assertRaisesRegex(RuntimeError, 'healthy release receipt'):
+                    self.finalizer.execute()
+                row['health'] = 'healthy'
+        self.assertEqual(self.engine.removed, [])
+
+    def test_retired_component_cannot_be_selected_by_a_stale_plan(self):
+        self.retire_admin()
+        plan = json.loads(self.plan.read_text())
+        plan['components'] = ['admin']
+        r.write_json(self.plan, plan)
+        operation = self.audit / 'result.json'
+        r.write_json(operation, {'passed': True, 'applied': True, 'kind': 'deploy', 'components': ['admin']})
+        self.change_acceptance(operationReceiptSha256=r.digest(operation.read_bytes()))
+        with self.assertRaisesRegex(ValueError, 'retired component'):
+            self.finalizer.execute()
+        self.assertEqual(self.engine.removed, [])
+
     def test_preview_never_deletes_and_apply_keeps_two_versions_and_other_systems(self):
         before = set(self.engine.records)
         plan = self.finalizer.execute()
