@@ -285,9 +285,10 @@ describe('verified original-PHP product redirects', () => {
     for (const kind of ['product', 'news']) {
       baseline = baseline.replaceAll('      if ($legacy_' + kind + '_path = "") {\n        return 404;\n      }\n', '');
     }
-    // Same redirect baseline, with the owner-approved legacy admin retirement applied.
+    // Same redirect baseline, with the owner-approved legacy admin retirement
+    // and factory dynamic upstream recovery applied; redirect rules are unchanged.
     expect(createHash('sha256').update(baseline).digest('hex'))
-      .toBe('b3fc26e3709201fccb4df654600b6fba27c2d38b2dbbc6e2afa90d2f2a6ebeae');
+      .toBe('a3d70f408802001940c2be1985b5a9d2f5f99a071a6ba7694f31d48d16f0f05d');
     expect(approvedUiProcurementMappings).toHaveLength(55);
     expect(new Set(approvedUiProcurementMappings.map(([, path]) => new URL('https://www.jssngyl.cn' + path).hash)).size).toBe(9);
   });

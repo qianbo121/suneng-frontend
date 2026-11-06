@@ -34,7 +34,7 @@ def main():
         # Keep the real virtual hosts, locations, maps and limits. Only replace
         # upstream addresses/certificates with inert, local test fixtures.
         config = args.config.read_text().replace('${DOMAIN}', 'www.audit.test').replace('${ADMIN_DOMAIN}', 'admin.audit.test').replace('$DOMAIN', 'www.audit.test')
-        config = re.sub(r'(server\s+)(frontend:3000|backend:3001|admin:80|chengwen-web:8080|shuju:18321)(\s+resolve)?;', r'\g<1>127.0.0.1:8081;', config)
+        config = re.sub(r'(server\s+)(frontend:3000|backend:3001|admin:80|chengwen-web:8080|shuju:18321|furnace-api:18080|furnace-web:80)(\s+resolve)?;', r'\g<1>127.0.0.1:8081;', config)
         config = config.replace('http://furnace-api:18080', 'http://127.0.0.1:8081')
         config = config.replace('http://furnace-web:80', 'http://127.0.0.1:8081')
         config = config.replace('worker_processes auto;', 'worker_processes 1;')
