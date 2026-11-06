@@ -103,8 +103,17 @@ describe('ShujuGrowthReadService', () => {
       '2026-10-08',
       '2026-10-08',
     );
-    expect(calls).toEqual(['SET TRANSACTION READ ONLY', 'SET LOCAL jit = off', 'review']);
+    expect(calls).toEqual([
+      'SET TRANSACTION READ ONLY',
+      'SET LOCAL jit = off',
+      "SET LOCAL statement_timeout = '10000ms'",
+      'review',
+    ]);
     expect(transaction).toHaveBeenCalledTimes(1);
+    expect(transaction).toHaveBeenCalledWith(expect.any(Function), {
+      maxWait: 2000,
+      timeout: 12000,
+    });
     expect(outsideQuery).not.toHaveBeenCalled();
   });
 
@@ -131,7 +140,12 @@ describe('ShujuGrowthReadService', () => {
       '2026-10-08',
       '2026-10-08',
     );
-    expect(calls).toEqual(['verify read only', 'SET LOCAL jit = off', 'review']);
+    expect(calls).toEqual([
+      'verify read only',
+      'SET LOCAL jit = off',
+      "SET LOCAL statement_timeout = '10000ms'",
+      'review',
+    ]);
     expect(result.mode).toBe('parallel');
   });
 

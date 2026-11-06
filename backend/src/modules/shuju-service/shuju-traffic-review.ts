@@ -30,6 +30,32 @@ export async function readTrafficReview(
   const automated = automatedSessions.length
     ? Prisma.sql`COALESCE(s.sid = ANY(${automatedSessions}::text[]), FALSE)`
     : Prisma.sql`FALSE`;
+  // Aggregate each bucket directly. Expanding every event into several rows
+  // forced a large external sort and repeatedly spilled the same scope to disk.
+  const buckets = [
+    ['recorded', Prisma.sql`TRUE`],
+    ['legacy', Prisma.sql`legacy_allowed`],
+    ['candidate', Prisma.sql`explicit_reason IS NULL`],
+    ...['explicitExcluded', 'pendingReview', 'unclassified'].map(
+      (category) => [category, Prisma.sql`category = ${category}`] as const,
+    ),
+    ...['known_bot_agent', 'automation_marker', 'manual_qa', 'internal_traffic'].map(
+      (reason) => [reason, Prisma.sql`explicit_reason = ${reason}`] as const,
+    ),
+    ['behavior_network_inference', Prisma.sql`category = 'pendingReview'`],
+  ] as const;
+  const groups = Prisma.join(
+    buckets.map(
+      ([name, condition]) => Prisma.sql`
+    ${name}::text, JSONB_BUILD_OBJECT(
+      'visitors', COUNT(DISTINCT vid) FILTER (WHERE "eventType" = 'page_view' AND (${condition})),
+      'sessions', COUNT(DISTINCT sid) FILTER (WHERE "eventType" = 'page_view' AND (${condition})),
+      'pageViews', COUNT(*) FILTER (WHERE "eventType" = 'page_view' AND (${condition})),
+      'dwell20Visitors', COUNT(DISTINCT vid) FILTER (WHERE "eventType" = 'dwell_20s' AND (${condition}))
+    )
+  `,
+    ),
+  );
   const query = Prisma.sql`
     WITH scoped AS MATERIALIZED (
       SELECT "eventType", "submissionId", "isBot",
@@ -79,22 +105,10 @@ export async function readTrafficReview(
         BOOL_OR("eventType" = 'dwell_20s') AS dwell20,
         BOOL_OR(strong_input) AS strong
       FROM classified WHERE explicit_reason IS NULL AND sid IS NOT NULL GROUP BY sid
-    ), expanded AS (
-      SELECT 'recorded' AS bucket, c."eventType", c.sid, c.vid FROM classified c
-      UNION ALL SELECT 'legacy', c."eventType", c.sid, c.vid FROM classified c WHERE legacy_allowed
-      UNION ALL SELECT 'candidate', c."eventType", c.sid, c.vid FROM classified c WHERE explicit_reason IS NULL
-      UNION ALL SELECT category, c."eventType", c.sid, c.vid FROM classified c
-      UNION ALL SELECT explicit_reason, c."eventType", c.sid, c.vid FROM classified c WHERE explicit_reason IS NOT NULL
-      UNION ALL SELECT 'behavior_network_inference', c."eventType", c.sid, c.vid FROM classified c WHERE category = 'pendingReview'
     ), aggregates AS (
-      SELECT bucket, JSONB_BUILD_OBJECT(
-        'visitors', COUNT(DISTINCT vid) FILTER (WHERE "eventType" = 'page_view'),
-        'sessions', COUNT(DISTINCT sid) FILTER (WHERE "eventType" = 'page_view'),
-        'pageViews', COUNT(*) FILTER (WHERE "eventType" = 'page_view'),
-        'dwell20Visitors', COUNT(DISTINCT vid) FILTER (WHERE "eventType" = 'dwell_20s')
-      ) AS metrics FROM expanded GROUP BY bucket
+      SELECT JSONB_BUILD_OBJECT(${groups}) AS groups FROM classified
     )
-    SELECT (SELECT JSONB_OBJECT_AGG(bucket, metrics) FROM aggregates) AS groups,
+    SELECT (SELECT groups FROM aggregates) AS groups,
       JSONB_BUILD_OBJECT(
         'pageViewsWithoutSession', (SELECT COUNT(*) FROM classified WHERE "eventType" = 'page_view' AND sid IS NULL),
         'pageViewsWithoutVisitor', (SELECT COUNT(*) FROM classified WHERE "eventType" = 'page_view' AND vid IS NULL),
@@ -116,14 +130,20 @@ export async function readTrafficReview(
   // production dataset. Keep the setting local to its read-only transaction.
   const read = async (transaction: Prisma.TransactionClient) => {
     await transaction.$executeRaw`SET LOCAL jit = off`;
+    await transaction.$executeRaw`SET LOCAL statement_timeout = '10000ms'`;
     return transaction.$queryRaw<ReviewRow[]>(query);
   };
   let rows: ReviewRow[];
   if ('$transaction' in prisma) {
-    rows = await prisma.$transaction(async (transaction) => {
-      await transaction.$executeRaw`SET TRANSACTION READ ONLY`;
-      return read(transaction);
-    });
+    rows = await prisma.$transaction(
+      async (transaction) => {
+        await transaction.$executeRaw`SET TRANSACTION READ ONLY`;
+        return read(transaction);
+      },
+      // Prisma's default 5s expired during legitimate report reads. Let the
+      // database cancel expensive work first, with time left to return its error.
+      { maxWait: 2000, timeout: 12000 },
+    );
   } else {
     const state = await prisma.$queryRaw<{ readOnly: string }[]>`
       SELECT current_setting('transaction_read_only') AS "readOnly"
