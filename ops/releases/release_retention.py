@@ -193,6 +193,8 @@ class Finalizer:
             raise ValueError('Only a successfully applied deployment can be finalized')
         acceptance_bytes = read_file(self.acceptance_path, self.root)
         validate_acceptance(json.loads(acceptance_bytes), plan, receipt, operation_bytes, self.root)
+        if not set(plan['components']) <= set(active_components(receipt)):
+            raise ValueError('A retired component cannot be selected for release finalization')
         protected = boundaries(receipt)
         images, containers = self.docker.images(), self.docker.containers()
         if not protected <= images.keys():
