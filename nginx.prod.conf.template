@@ -261,6 +261,20 @@ http {
   limit_req_zone $binary_remote_addr zone=shuju_login:10m rate=5r/m;
   resolver 127.0.0.11 valid=10s ipv6=off;
 
+  # Factory containers may receive a new address after stop/start as well as
+  # recreation. Resolve Docker DNS continuously instead of keeping the address
+  # from the last gateway reload. Keep the API trailing slash below: /api/ is
+  # removed before forwarding to the application.
+  upstream factory_api_upstream {
+    zone factory_api_upstream 64k;
+    server furnace-api:18080 resolve;
+  }
+
+  upstream factory_web_upstream {
+    zone factory_web_upstream 64k;
+    server furnace-web:80 resolve;
+  }
+
   upstream frontend_upstream {
     server frontend:3000;
   }
@@ -414,7 +428,7 @@ http {
     add_header X-Content-Type-Options "nosniff" always;
 
     location /api/ {
-      proxy_pass http://furnace-api:18080/;
+      proxy_pass http://factory_api_upstream/;
       proxy_http_version 1.1;
       proxy_set_header Host $host;
       proxy_set_header X-Real-IP $remote_addr;
@@ -423,7 +437,7 @@ http {
     }
 
     location / {
-      proxy_pass http://furnace-web:80;
+      proxy_pass http://factory_web_upstream;
       proxy_http_version 1.1;
       proxy_set_header Host $host;
       proxy_set_header X-Real-IP $remote_addr;
