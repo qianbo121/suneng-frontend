@@ -502,7 +502,7 @@ const detail: Partial<StaticProductDetail> = {
         title: 'Contact Us',
         description:
           'Submit box (chamber) furnace parameters, consult on a solution, or arrange further technical discussion.',
-        href: '/zh/contact',
+        href: '/zh/about#contact',
       },
     ],
   };

@@ -71,7 +71,7 @@ export const detail: StaticProductDetail = {
       description:
         '把材料牌号、带材宽度、厚度范围、最大卷重、退火或固溶温度、运行速度、冷却方式、表面质量要求、张力控制和现场布局发给苏能，技术人员可先判断炉膛长度、温区配置、冷却段、收放卷系统和控制方案。',
       submitLabel: '提交需求',
-      contactHref: '/zh/contact',
+      contactHref: '/zh/about#contact',
       contactLabel: '联系苏能工业炉',
       phone: siteSettings.salesPhone,
       email: siteSettings.email,
@@ -167,7 +167,7 @@ export const geoEnhancement: ProductGeoEnhancement = {
       {
         title: '联系我们',
         description: '提交退火固溶生产线参数、咨询方案或预约进一步技术沟通。',
-        href: '/zh/contact',
+        href: '/zh/about#contact',
       },
     ],
   };

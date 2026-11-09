@@ -62,6 +62,6 @@ describe('unprefixed public route governance', () => {
   it('preserves the query-free target of the existing certificates alias', async () => {
     const response = await middleware(new NextRequest('https://www.jssngyl.cn/zh/strength/certificates?private_note=fixture-only'));
     expect(response.status).toBe(308);
-    expect(response.headers.get('Location')).toBe('https://www.jssngyl.cn/zh/strength/honors#management-systems');
+    expect(response.headers.get('Location')).toBe('https://www.jssngyl.cn/zh/about#management-systems');
   });
 });

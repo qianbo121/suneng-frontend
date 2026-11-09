@@ -385,7 +385,7 @@ const detail: Partial<StaticProductDetail> = {
         title: 'Contact us',
         description:
           'Submit your annealing and solution-treatment line parameters, request a proposal or schedule further technical discussion.',
-        href: '/zh/contact',
+        href: '/zh/about#contact',
       },
     ],
     parameterNote:

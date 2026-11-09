@@ -9,7 +9,7 @@ const translatedServiceNews = new Set([
 
 export function serviceHref(path: string, locale: Locale) {
   if (locale !== 'en') return path;
-  if (path === '/zh/inquiry') return '/en/contact';
+  if (path === '/zh/inquiry') return '/en/about#contact';
   // Unverified news must still retain its actual Chinese destination.
   if (path.startsWith('/zh/news/')) {
     const pathname = path.split(/[?#]/, 1)[0].replace(/\/$/, '');

@@ -150,7 +150,7 @@ export default function HomeHero({ locale = 'zh' }: { locale?: 'zh' | 'en' }) {
               {index === 0 ? <>
                 {' · '}
                 <Link
-                  href={`/${locale}/strength/honors`}
+                  href={`/${locale}/about#qualifications`}
                   className={styles.evidenceLink}
                   tabIndex={index === activeSlide ? 0 : -1}
                 >

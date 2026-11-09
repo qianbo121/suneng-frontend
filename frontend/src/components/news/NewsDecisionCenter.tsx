@@ -91,7 +91,7 @@ export function NewsDecisionCenter({
       href: checklist
         ? `/${locale}/news/${checklist.slug}`
         : locale === 'en'
-          ? '/en/contact'
+          ? '/en/about#contact'
           : '/zh/articles/gongye-lu-baojia-canshu#param-table',
     },
     {
@@ -306,7 +306,7 @@ export function NewsDecisionCenter({
                   {t('参数还没整理齐？')}
                 </h2>
                 <p className={styles.sidebarCtaText}>{t('可先发工件、产能或现有设备照片。')}</p>
-                <Link className={styles.sidebarCtaButton} href={`/${locale}/contact`}>
+                <Link className={styles.sidebarCtaButton} href={`/${locale}/about#contact`}>
                   {t('联系苏能工程师')}
                 </Link>
               </section>
@@ -331,7 +331,7 @@ export function NewsDecisionCenter({
                 submitLabel={t('提交项目参数')}
                 className={styles.primaryButton}
               />
-              <Link className={styles.contactButton} href={`/${locale}/contact`}>
+              <Link className={styles.contactButton} href={`/${locale}/about#contact`}>
                 {t('联系苏能工程师')}
               </Link>
             </div>

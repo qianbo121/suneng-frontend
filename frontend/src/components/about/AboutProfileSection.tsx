@@ -176,7 +176,7 @@ export function AboutProfileSection({
             <p key={`${item}-${index}`}>{item}</p>
           ))}
           {locale === 'zh' && <p data-delivery-boundary>整线交付指合同约定的工业炉及配套设备设计、制造、集成与调试配合，不包含土建、环保总包或工程总承包；涉及专项资质的工作，由具备相应资质的单位承担。</p>}
-          {locale === 'en' && <p><Link href="/en/strength/honors" className="font-semibold text-primary underline underline-offset-4">View qualification and patent originals</Link></p>}
+          {locale === 'en' && <p><Link href="/en/about#qualifications" className="font-semibold text-primary underline underline-offset-4">View qualification and patent originals</Link></p>}
 
         </div>
 

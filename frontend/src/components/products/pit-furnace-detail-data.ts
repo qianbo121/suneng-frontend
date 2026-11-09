@@ -260,7 +260,7 @@ export const relatedEquipment = [
 
 export const relatedArticles = [
   ['查看井式炉相关方案与项目资料', '#related-case-evidence'],
-  ['企业资质与专利证书原件', '/zh/strength/honors'],
+  ['企业资质与专利证书原件', '/zh/about#qualifications'],
   ['工业炉报价需要哪些参数', '/zh/articles/gongye-lu-baojia-canshu'],
   ['热处理炉厂家选择时应核对哪些能力边界', '/zh/solutions/rechuli-lu-changjia'],
   ['旧井式炉维修、节能改造或控制系统升级', '/zh/service/furnace-renovation-overhaul'],

@@ -81,7 +81,7 @@ export const detail: StaticProductDetail = {
       description:
         '把工件材质、尺寸、重量、产能节拍、最高温度、热处理工艺、辊道承载方式、上下料条件和现场空间发给苏能，技术人员可先判断辊底炉结构、温区配置、输送系统和控制方案。',
       submitLabel: '提交需求',
-      contactHref: '/zh/contact',
+      contactHref: '/zh/about#contact',
       contactLabel: '联系苏能工业炉',
       phone: siteSettings.salesPhone,
       email: siteSettings.email,
@@ -177,7 +177,7 @@ export const geoEnhancement: ProductGeoEnhancement = {
       {
         title: '联系我们',
         description: '提交辊底炉参数、咨询方案或预约进一步技术沟通。',
-        href: '/zh/contact',
+        href: '/zh/about#contact',
       },
     ],
   };

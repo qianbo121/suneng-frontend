@@ -259,7 +259,7 @@ export function JiangsuManufacturerContent() {
                   }
                 </p>
                 <div className={'evidence-links'}>
-                  <a className={'text-link'} href={'/zh/strength/honors'}>
+                  <a className={'text-link'} href={'/zh/about#qualifications'}>
                     {'查看企业资质'}
                     <svg aria-hidden={'true'} viewBox={'0 0 24 24'} width={'18'} height={'18'}>
                       <path

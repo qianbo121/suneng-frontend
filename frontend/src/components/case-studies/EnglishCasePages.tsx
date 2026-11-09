@@ -84,7 +84,7 @@ export function EnglishCaseArticle({ slug, searchParams }: { slug: string; searc
       <section className="case-english-resources" aria-labelledby="english-related"><h2 id="english-related">Continue your selection</h2>
         {related.map((record) => <p key={record.id}><a href={`/en/case/${record.slug}`}>{record.title}</a></p>)}
         <p><a href="/en/products">Explore industrial furnaces and heat-treatment lines</a></p>
-        <p><a href="/en/contact">Discuss your workpiece, process and supply requirements</a></p>
+        <p><a href="/en/about#contact">Discuss your workpiece, process and supply requirements</a></p>
         <p><a href={back}>← Back to case studies</a></p>
       </section>
     </div>

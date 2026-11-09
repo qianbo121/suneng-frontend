@@ -1,4 +1,4 @@
-import { notFound, permanentRedirect, redirect } from 'next/navigation';
+import { notFound, permanentRedirect } from 'next/navigation';
 import { getAboutSectionHref, type AboutSearchParams } from '@/lib/about-section-navigation';
 import { buildMetadata } from '@/lib/seo/metadata';
 
@@ -37,5 +37,5 @@ export async function generateMetadata({ params }: StrengthCategoryPageProps) {
 
 export default async function StrengthCategoryPage({ params, searchParams }: StrengthCategoryPageProps) {
   const locale = await resolvePage(params);
-  redirect(getAboutSectionHref(locale, 'qualifications', await searchParams));
+  permanentRedirect(getAboutSectionHref(locale, 'qualifications', await searchParams));
 }

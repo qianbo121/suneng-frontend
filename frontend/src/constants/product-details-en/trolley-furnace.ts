@@ -483,7 +483,7 @@ const detail: Partial<StaticProductDetail> = {
         title: 'Contact Us',
         description:
           'Submit bogie-hearth furnace parameters, consult on a solution, or arrange further technical discussion.',
-        href: '/zh/contact',
+        href: '/zh/about#contact',
       },
     ],
   };

@@ -367,7 +367,7 @@ const detail: Partial<StaticProductDetail> = {
         title: 'Contact us',
         description:
           'Submit your rotary-hearth furnace parameters, discuss a solution, or arrange further technical communication.',
-        href: '/zh/contact',
+        href: '/zh/about#contact',
       },
     ],
     parameterNote:

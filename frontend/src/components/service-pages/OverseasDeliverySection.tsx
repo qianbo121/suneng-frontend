@@ -42,7 +42,7 @@ export function OverseasDeliverySection({ locale }: { locale: Locale }) {
       <p className={styles.note}>
         {en ? 'This checklist does not confirm approval in any country, local service coverage or a fixed response time. Availability, compliance and delivery commitments require project-specific written confirmation.' : '本清单不代表已取得任何国家准入、设有当地服务点或承诺固定响应时间。项目可承接范围、合规与交付承诺须书面确认。'}
       </p>
-      <Link className={styles.textLink} href={`/${locale}/contact`}>
+      <Link className={styles.textLink} href={`/${locale}/about#contact`}>
         {en ? 'Discuss Destination & Delivery Requirements' : '沟通目的地与交付要求'}
       </Link>
     </ServiceSection>

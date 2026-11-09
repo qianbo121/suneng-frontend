@@ -14,7 +14,7 @@ function currentInquiryForm() {
 // Otherwise it stays on the same local site and in the reader's language.
 export function InquiryLink({ locale = 'zh', onClick, ...props }: InquiryLinkProps) {
   const pathname = usePathname();
-  const fallback = locale === 'en' ? '/en/contact#contact-inquiry-form' : '/zh/inquiry#project-inquiry-form';
+  const fallback = locale === 'en' ? '/en/about#contact-inquiry-form' : '/zh/inquiry#project-inquiry-form';
   const [href, setHref] = useState(fallback);
 
   useEffect(() => {

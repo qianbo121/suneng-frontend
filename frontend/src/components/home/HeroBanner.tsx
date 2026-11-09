@@ -154,7 +154,7 @@ function HeroPartners({ locale }: HeroBannerProps) {
       <div className={styles.heading}>
         <span className={styles.headingAccent} aria-hidden="true" />
         <span>
-          <Link href={`/${locale}/partner`} className={styles.headingTitle}>{locale === 'en' ? 'Partners' : '合作伙伴'}</Link>
+          <Link href={`/${locale}/about#projects`} className={styles.headingTitle}>{locale === 'en' ? 'Partners' : '合作伙伴'}</Link>
           <span className={styles.headingEyebrow}>Partners</span>
         </span>
       </div>

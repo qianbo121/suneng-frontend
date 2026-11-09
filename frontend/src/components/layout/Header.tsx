@@ -470,7 +470,7 @@ export function Header({ locale, localeSwitchReload = false }: HeaderProps) {
                 {currentLocale === 'en' ? 'Call us' : '电话咨询'}
               </PhoneContactLink>
               </div>
-              <Link href={`/${currentLocale}/contact`} onClick={() => setMobileOpen(false)} className="mt-1 flex min-h-[40px] items-center justify-center text-[13px] text-[#5f697b] underline decoration-[#cfd8e5] underline-offset-4">
+              <Link href={`/${currentLocale}/about#contact`} onClick={() => setMobileOpen(false)} className="mt-1 flex min-h-[40px] items-center justify-center text-[13px] text-[#5f697b] underline decoration-[#cfd8e5] underline-offset-4">
                 {currentLocale === 'en' ? 'More contact options' : '查看全部联系方式'}
               </Link>
             </div>

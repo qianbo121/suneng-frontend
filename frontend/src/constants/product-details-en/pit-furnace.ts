@@ -365,7 +365,7 @@ const detail: Partial<StaticProductDetail> = {
         title: 'Contact Us',
         description:
           'Submit your pit furnace parameters, discuss a solution, or schedule further technical consultation.',
-        href: '/zh/contact',
+        href: '/zh/about#contact',
       },
     ],
     parameterNote:

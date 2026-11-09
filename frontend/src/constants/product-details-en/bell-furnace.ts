@@ -346,7 +346,7 @@ const detail: Partial<StaticProductDetail> = {
         title: 'Contact Us',
         description:
           'Submit your bell-type furnace parameters, discuss a solution or arrange further technical consultation.',
-        href: '/zh/contact',
+        href: '/zh/about#contact',
       },
     ],
     parameterNote:
