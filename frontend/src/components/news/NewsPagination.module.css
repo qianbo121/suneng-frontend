@@ -18,6 +18,11 @@
   gap: 8px;
 }
 
+.navigation,
+.pageNumbers {
+  flex-wrap: wrap;
+}
+
 .pagination .link {
   display: inline-flex;
   min-width: 40px;

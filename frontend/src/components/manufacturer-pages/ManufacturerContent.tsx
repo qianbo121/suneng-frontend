@@ -256,7 +256,7 @@ export function ManufacturerContent() {
                     '国家高新技术企业、ISO 9001 质量管理体系认证资料可查。现有质量体系证书有效期至 2027 年 1 月 11 日，采购时核对原件与适用范围。'
                   }
                 </p>
-                <a className={'text-link'} href={'/zh/strength/honors'}>
+                <a className={'text-link'} href={'/zh/about#qualifications'}>
                   {'查看证书原件与专利资料'}
                   <svg aria-hidden={'true'} viewBox={'0 0 24 24'} width={'18'} height={'18'}>
                     <path

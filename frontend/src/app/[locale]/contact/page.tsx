@@ -1,7 +1,7 @@
 import { getIndexingRobots } from '@/lib/seo/metadata';
 import type { Metadata } from 'next';
 
-import { redirect } from 'next/navigation';
+import { permanentRedirect } from 'next/navigation';
 import { getAboutSectionHref, type AboutSearchParams } from '@/lib/about-section-navigation';
 import { SITE_NAME } from '@/lib/seo/config';
 import { absoluteUrl, buildMetadata } from '@/lib/seo/metadata';
@@ -106,5 +106,5 @@ export async function generateMetadata({ params }: ContactPageProps): Promise<Me
 export default async function ContactPage({ params, searchParams }: ContactPageProps) {
   const { locale } = await params;
   const currentLocale = (locale === 'en' ? 'en' : 'zh') as Locale;
-  redirect(getAboutSectionHref(currentLocale, 'contact', await searchParams));
+  permanentRedirect(getAboutSectionHref(currentLocale, 'contact', await searchParams));
 }

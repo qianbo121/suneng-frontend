@@ -81,7 +81,7 @@ export const detail: StaticProductDetail = {
       description:
         '把工件材质、尺寸、单件重量、产能节拍、炉底直径、最高温度、热处理工艺、进出料方式和现场空间发给苏能，技术人员可先判断转底炉结构、温区配置、炉底旋转机构和控制方案。',
       submitLabel: '提交需求',
-      contactHref: '/zh/contact',
+      contactHref: '/zh/about#contact',
       contactLabel: '联系苏能工业炉',
       phone: siteSettings.salesPhone,
       email: siteSettings.email,
@@ -177,7 +177,7 @@ export const geoEnhancement: ProductGeoEnhancement = {
       {
         title: '联系我们',
         description: '提交转底炉参数、咨询方案或预约进一步技术沟通。',
-        href: '/zh/contact',
+        href: '/zh/about#contact',
       },
     ],
   };

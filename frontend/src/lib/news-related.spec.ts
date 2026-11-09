@@ -78,7 +78,7 @@ describe('news subject and language boundaries', () => {
     const links = getNewsRelatedLinks({ titleZh: '旧热处理炉维修改造怎么安排？', summaryZh: '', contentZh: '' }, 'en');
     expect(links.map(x => x.href)).toContain('/en/service/furnace-renovation-overhaul');
     expect(getNewsRelatedLinks({ titleZh: '工业炉报价前准备哪些工况？', summaryZh: '', contentZh: '' }, 'en')
-      .map(x => x.href)).toContain('/en/contact');
+      .map(x => x.href)).toContain('/en/about#contact');
     expect(links.some(x => x.href.startsWith('/en/solutions/'))).toBe(false);
     expect(new Set(links.map(x => x.href)).size).toBe(links.length);
   });

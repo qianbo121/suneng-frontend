@@ -69,7 +69,7 @@ describe('news pagination rendered behaviour', () => {
       );
     });
 
-    it(`disables last/next and keeps five numbered links on the last ${locale} page`, () => {
+    it(`disables last/next and keeps every numbered link on the last ${locale} page`, () => {
       const html = render(locale, 12);
       for (const label of [labels.next, labels.last]) {
         expect(html).toMatch(new RegExp(`<span[^>]*aria-disabled="true"[^>]*>${label}</span>`));
@@ -79,7 +79,7 @@ describe('news pagination rendered behaviour', () => {
         links(html)
           .filter((link) => /^\d+$/.test(link.text))
           .map((link) => Number(link.text)),
-      ).toEqual([8, 9, 10, 11, 12]);
+      ).toEqual(Array.from({ length: 12 }, (_, i) => i + 1));
       expect(html.match(/aria-current="page"/g)).toHaveLength(1);
       expect(html).toMatch(/<a\b[^>]*aria-current="page"[^>]*>12<\/a>/);
       expect(links(html).some((link) => link.text === labels.first)).toBe(true);
@@ -104,5 +104,18 @@ describe('news pagination rendered behaviour', () => {
   it('hides pagination when there is only one page', () => {
     expect(render('zh', 1, 1)).toBe('');
     expect(render('en', 1, 1)).toBe('');
+  });
+
+  it.each([['zh', 12], ['en', 8]] as const)('makes every current %s archive page reachable from page one without scripts', (locale, pageCount) => {
+    const numbered = links(render(locale, 1, pageCount)).filter((link) => /^\d+$/.test(link.text));
+    expect(numbered.map((link) => Number(link.text))).toEqual(Array.from({ length: pageCount }, (_, i) => i + 1));
+    for (const link of numbered) expect(link.href).toBe(pageHref(locale, Number(link.text)));
+  });
+
+  it('retains a bounded window and direct first/last links for a much larger archive', () => {
+    const renderedLinks = links(render('en', 50, 100));
+    expect(renderedLinks.filter((link) => /^\d+$/.test(link.text)).map((link) => Number(link.text))).toEqual([48, 49, 50, 51, 52]);
+    expect(renderedLinks.find((link) => link.text === 'First')?.href).toBe(pageHref('en', 1));
+    expect(renderedLinks.find((link) => link.text === 'Last')?.href).toBe(pageHref('en', 100));
   });
 });

@@ -23,8 +23,11 @@ export function NewsPagination({
   if (pageCount <= 1) return null;
 
   const english = locale === 'en';
-  const firstPage = Math.max(1, Math.min(page - 2, pageCount - 4));
-  const pages = Array.from({ length: Math.min(5, pageCount) }, (_, index) => firstPage + index);
+  // A small archive can expose every page directly, so older articles do not
+  // require walking through several pagination windows first.
+  const visiblePages = pageCount <= 12 ? pageCount : 5;
+  const firstPage = Math.max(1, Math.min(page - 2, pageCount - visiblePages + 1));
+  const pages = Array.from({ length: visiblePages }, (_, index) => firstPage + index);
   const step = (label: string, target: number, disabled: boolean, edge = false) =>
     disabled ? (
       <span aria-disabled="true" className={`${styles.link} ${styles.disabled}`}>

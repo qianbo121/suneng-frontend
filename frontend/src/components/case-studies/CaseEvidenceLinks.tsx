@@ -33,7 +33,7 @@ export function EntryCaseEvidence({ entryPath, locale }: { entryPath: string; lo
       : (en ? 'No directly matching public project record is currently available for this equipment. Send the material, required process, loading pattern and site conditions to confirm the scope.' : '当前公开资料中暂无与本设备直接匹配的项目记录。可提供材料、目标工艺、装料方式与现场条件，先确认设备和配套范围。')}</p>
     {cards(featured)}
     {remaining.length > 0 && <details className={styles.more}><summary><span className={styles.moreClosed}>{en ? `View all related records (${items.length})` : `查看全部相关资料（${items.length}篇）`}</span><span className={styles.moreOpen}>{en ? 'Show fewer records' : '收起更多资料'}</span><span aria-hidden="true">{' >>'}</span></summary>{cards(remaining)}</details>}
-    {!items.length && <a href={`/${locale}/contact`}>{en ? 'Discuss your application' : '提交工况，确认适用条件'}</a>}
+    {!items.length && <a href={`/${locale}/about#contact`}>{en ? 'Discuss your application' : '提交工况，确认适用条件'}</a>}
   </section>;
 }
 

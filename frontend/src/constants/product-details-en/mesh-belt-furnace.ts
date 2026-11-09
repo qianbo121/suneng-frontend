@@ -534,7 +534,7 @@ const detail: Partial<StaticProductDetail> = {
         title: 'Contact Us',
         description:
           'Submit your mesh-belt furnace parameters, request a proposal or schedule further technical discussion.',
-        href: '/zh/contact',
+        href: '/zh/about#contact',
       },
     ],
   };

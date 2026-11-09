@@ -6,6 +6,7 @@ import { marked } from 'marked';
 import { repairNewsPresentation } from './news-presentation-repairs';
 import { normalizeNewsAttribution } from './news-attribution';
 import { normalizeNewsContactFormat } from './news-contact-format';
+import { resolveMergedAboutLink } from './about-section-navigation';
 
 function escapeHtml(value: string) {
   return value
@@ -174,6 +175,12 @@ export function prepareNewsArticleHtml(
     }
   }
   for (const link of root.querySelectorAll('a[href]')) {
+    const href = link.getAttribute('href') ?? '';
+    const destination = resolveMergedAboutLink(href);
+    if (destination !== href) {
+      link.setAttribute('href', destination);
+      if (link.textContent?.trim() === href) link.textContent = `https://www.jssngyl.cn${destination}`;
+    }
     if (isWithdrawnTechnicalPath(link.getAttribute('href') ?? '') || isHiddenCaseEntry(link.getAttribute('href') ?? '')) link.replaceWith(...Array.from(link.childNodes));
   }
   const coverPath = canonicalAssetPath(options.coverImage);

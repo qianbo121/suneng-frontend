@@ -30,7 +30,7 @@ const CARDS = {
     kind: '指南',
     title: '企业资质与专利原件',
     description: '核对已公开证书和专利，不把证书替代具体项目能力。',
-    href: '/zh/strength/honors',
+    href: '/zh/about#qualifications',
   },
   quote: {
     kind: '指南',

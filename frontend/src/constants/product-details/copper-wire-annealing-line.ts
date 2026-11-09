@@ -81,7 +81,7 @@ export const detail: StaticProductDetail = {
       description:
         '把线材材质、线径范围、运行速度、退火温度、产能要求、放线收线方式、张力控制、保护气氛和现场条件发给苏能，技术人员可先判断炉体长度、加热分区、冷却方式、收放线系统和控制方案。',
       submitLabel: '提交需求',
-      contactHref: '/zh/contact',
+      contactHref: '/zh/about#contact',
       contactLabel: '联系苏能工业炉',
       phone: siteSettings.salesPhone,
       email: siteSettings.email,
@@ -177,7 +177,7 @@ export const geoEnhancement: ProductGeoEnhancement = {
       {
         title: '联系我们',
         description: '提交铜丝退火线参数、咨询方案或预约进一步技术沟通。',
-        href: '/zh/contact',
+        href: '/zh/about#contact',
       },
     ],
   };

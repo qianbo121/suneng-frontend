@@ -8,11 +8,11 @@ describe('reviewed manufacturer article links', () => {
     expect(chinese.map((link) => link.href)).toEqual([
       '/zh/products/detail/trolley-furnace',
       '/zh/solutions/rechuli-lu-changjia',
-      '/zh/strength/honors',
+      '/zh/about#qualifications',
       '/zh/articles/gongye-lu-baojia-canshu',
     ]);
     expect(
-      getNewsRelatedLinks(item, 'en').some((link) => link.href.includes('/strength/honors')),
+      getNewsRelatedLinks(item, 'en').some((link) => link.href.includes('#qualifications')),
     ).toBe(false);
     const unrelated = {
       titleZh: '普通采购注意事项',

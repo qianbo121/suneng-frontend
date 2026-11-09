@@ -280,7 +280,7 @@ export default async function NewsDetailPage({ params }: NewsDetailPageProps) {
                     ))}
                   </div>
                   <p className={styles.relatedInquiry}>
-                    <Link href={currentLocale === 'en' ? '/en/contact' : '/zh/inquiry'}>
+                    <Link href={currentLocale === 'en' ? '/en/about#contact' : '/zh/inquiry'}>
                       {currentLocale === 'en'
                         ? 'Discuss your project: send workpiece, process and site requirements'
                         : '咨询本项目：提交工件、工艺和现场条件'}

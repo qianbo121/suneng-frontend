@@ -1,4 +1,4 @@
-import { notFound, redirect } from 'next/navigation';
+import { notFound, permanentRedirect } from 'next/navigation';
 import { getAboutSectionHref, type AboutSearchParams } from '@/lib/about-section-navigation';
 import { partnerText } from '@/lib/partner-copy';
 import { buildMetadata } from '@/lib/seo/metadata';
@@ -23,5 +23,5 @@ export async function generateMetadata({ params }: PartnerPageProps) {
 export default async function PartnerPage({ params, searchParams }: PartnerPageProps) {
   const { locale } = await params;
   if (locale !== 'zh' && locale !== 'en') notFound();
-  redirect(getAboutSectionHref(locale, 'projects', await searchParams));
+  permanentRedirect(getAboutSectionHref(locale, 'projects', await searchParams));
 }

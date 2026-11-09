@@ -40,6 +40,27 @@ afterEach(() => { vi.useRealTimers(); vi.unstubAllEnvs(); vi.unstubAllGlobals();
 
 describe.each(['zh', 'en'])('%s fixed route HTTP outcomes', (locale) => {
   it.each([
+    ['/contact', 'contact'],
+    ['/partner', 'projects'],
+    ['/strength/honors', 'qualifications'],
+  ])('redirects the merged %s page directly and preserves repeated query values', async (path, section) => {
+    const response = await run(`/${locale}${path}?utm_source=article&tag=a&tag=b`);
+    expect(response.status).toBe(308);
+    const target = new URL(response.headers.get('Location')!);
+    expect(target.pathname).toBe(`/${locale}/about`);
+    expect(target.hash).toBe(`#${section}`);
+    expect(target.searchParams.get('utm_source')).toBe('article');
+    expect(target.searchParams.getAll('tag')).toEqual(['a', 'b']);
+    expect(fetcher).not.toHaveBeenCalled();
+  });
+
+  it('keeps the selected product when the old contact address points to the inquiry fields', async () => {
+    const response = await run(`/${locale}/contact?product=box-furnace`);
+    expect(response.status).toBe(308);
+    expect(response.headers.get('Location')).toBe(`https://www.jssngyl.cn/${locale}/about?product=box-furnace#contact-inquiry-form-fields`);
+  });
+
+  it.each([
     '/strength/no-such-category',
     '/products/detail/no-such-product/inquiry-checklist',
     '/products/detail/mesh-belt-furnace/inquiry-checklist',
@@ -52,7 +73,7 @@ describe.each(['zh', 'en'])('%s fixed route HTTP outcomes', (locale) => {
     expect(fetcher).not.toHaveBeenCalled();
   });
 
-  it.each(['/strength/honors', '/products/detail/copper-wire-annealing-line/inquiry-checklist'])
+  it.each(['/products/detail/copper-wire-annealing-line/inquiry-checklist'])
     ('preserves the valid %s page', async (path) => {
       const response = await run(`/${locale}${path}`);
       expect(response.headers.get('x-middleware-next')).toBe('1');
@@ -60,8 +81,8 @@ describe.each(['zh', 'en'])('%s fixed route HTTP outcomes', (locale) => {
     });
 
   it.each([
-    ['/strength', '/strength/honors'],
-    ['/strength/certificates', '/strength/honors#management-systems'],
+    ['/strength', '/about#qualifications'],
+    ['/strength/certificates', '/about#management-systems'],
     ['/strength/technical-team', '/about'],
   ])('permanently redirects %s to its existing destination', async (path, destination) => {
     const response = await run(`/${locale}${path}?source=old`);

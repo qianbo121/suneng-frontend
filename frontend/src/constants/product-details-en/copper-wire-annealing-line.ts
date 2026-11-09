@@ -375,7 +375,7 @@ const detail: Partial<StaticProductDetail> = {
         title: 'Contact Us',
         description:
           'Submit your copper wire annealing line parameters, discuss a solution, or schedule further technical communication.',
-        href: '/zh/contact',
+        href: '/zh/about#contact',
       },
     ],
     parameterNote:

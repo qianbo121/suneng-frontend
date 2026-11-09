@@ -85,7 +85,7 @@ export function IndustryFurnaceDetailPage({ slug, locale = 'zh' }: { slug: Indus
     ...englishTrolleyResources,
     ...quotationArticles,
     ...productEvidenceLinks,
-    [t("企业资质与专利证书原件"), t("/zh/strength/honors")],
+    [t("企业资质与专利证书原件"), t("/zh/about#qualifications")],
     ...localizeCoreValue(relatedArticles, locale),
   ];
   const sourceModule = `${slug.replaceAll('-', '_')}_detail_form`;

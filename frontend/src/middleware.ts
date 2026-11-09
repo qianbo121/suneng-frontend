@@ -4,6 +4,7 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
 import { NEWS_PAGE_SIZE } from '@/constants/news';
+import { getLegacyAboutSectionHref } from '@/lib/about-section-navigation';
 import { isLocalizedPublicPath, PUBLIC_PAGE_CACHE_CONTROL, routing } from '@/i18n/routing';
 import { PUBLIC_CASE_SLUGS, PUBLIC_ENGLISH_CASE_SLUGS } from '@/lib/cases/public-case-allowlist';
 import { CASE_PAGE_SIZE } from '@/lib/cases/types';
@@ -27,7 +28,7 @@ function permanentRedirect(request: NextRequest, pathname: string) {
 function withdrawnContentHtml(locale: 'zh' | 'en') {
   const en = locale === 'en';
   const title = en ? 'This page is currently unavailable' : '该资料暂未公开';
-  return `<!doctype html><html lang="${en ? 'en' : 'zh-CN'}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${title} | Suneng</title><style>body{margin:0;font:18px/1.7 system-ui,sans-serif;color:#142d4e;background:#f6f8fb}main{max-width:720px;margin:10vh auto;padding:32px}h1{font-size:32px}a{color:#145ca8;display:inline-block;margin:12px 24px 12px 0;padding:8px 0}a:focus-visible{outline:2px solid;outline-offset:4px}</style></head><body><main><h1>${title}</h1><p>${en ? 'You can browse our news, equipment or contact our team.' : '您可以继续查看新闻、设备产品，或联系我们。'}</p><a href="/${locale}/news">${en ? 'Browse news' : '查看新闻'}</a><a href="/${locale}/products">${en ? 'Browse products' : '查看产品'}</a><a href="/${locale}/contact">${en ? 'Contact us' : '联系我们'}</a></main></body></html>`;
+  return `<!doctype html><html lang="${en ? 'en' : 'zh-CN'}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${title} | Suneng</title><style>body{margin:0;font:18px/1.7 system-ui,sans-serif;color:#142d4e;background:#f6f8fb}main{max-width:720px;margin:10vh auto;padding:32px}h1{font-size:32px}a{color:#145ca8;display:inline-block;margin:12px 24px 12px 0;padding:8px 0}a:focus-visible{outline:2px solid;outline-offset:4px}</style></head><body><main><h1>${title}</h1><p>${en ? 'You can browse our news, equipment or contact our team.' : '您可以继续查看新闻、设备产品，或联系我们。'}</p><a href="/${locale}/news">${en ? 'Browse news' : '查看新闻'}</a><a href="/${locale}/products">${en ? 'Browse products' : '查看产品'}</a><a href="/${locale}/about#contact">${en ? 'Contact us' : '联系我们'}</a></main></body></html>`;
 }
 
 // The prerendered list route is only reachable through the next.config rewrite.
@@ -99,7 +100,7 @@ function isZhOnlyEnglishPath(pathname: string) {
 function missingProductHtml(locale: 'zh' | 'en') {
   const en = locale === 'en';
   const title = en ? 'This equipment page does not exist' : '该设备页面不存在';
-  return `<!doctype html><html lang="${en ? 'en' : 'zh-CN'}"><head><meta charset="utf-8"><meta name="robots" content="noindex"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${title} | Suneng</title><style>body{margin:0;font:18px/1.7 system-ui,sans-serif;color:#142d4e;background:#f6f8fb}main{max-width:720px;margin:10vh auto;padding:32px}h1{font-size:32px}a{color:#145ca8;display:inline-block;margin:12px 24px 12px 0;padding:8px 0}a:focus-visible{outline:2px solid;outline-offset:4px}</style></head><body><main><h1>${title}</h1><p>${en ? 'Browse our equipment, or tell us the working conditions and we will advise.' : '您可以查看全部设备，或把工况发给我们做初步判断。'}</p><a href="/${locale}/products">${en ? 'Browse products' : '查看设备'}</a><a href="/${locale}/contact">${en ? 'Contact us' : '联系我们'}</a></main></body></html>`;
+  return `<!doctype html><html lang="${en ? 'en' : 'zh-CN'}"><head><meta charset="utf-8"><meta name="robots" content="noindex"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${title} | Suneng</title><style>body{margin:0;font:18px/1.7 system-ui,sans-serif;color:#142d4e;background:#f6f8fb}main{max-width:720px;margin:10vh auto;padding:32px}h1{font-size:32px}a{color:#145ca8;display:inline-block;margin:12px 24px 12px 0;padding:8px 0}a:focus-visible{outline:2px solid;outline-offset:4px}</style></head><body><main><h1>${title}</h1><p>${en ? 'Browse our equipment, or tell us the working conditions and we will advise.' : '您可以查看全部设备，或把工况发给我们做初步判断。'}</p><a href="/${locale}/products">${en ? 'Browse products' : '查看设备'}</a><a href="/${locale}/about#contact">${en ? 'Contact us' : '联系我们'}</a></main></body></html>`;
 }
 
 function missingProductResponse(pathname: string) {
@@ -147,6 +148,8 @@ export default async function middleware(request: NextRequest) {
   // These are fixed route-governance outcomes, so return real HTTP redirects
   // before Next renders a static shell. A page-level notFound/redirect can be
   // encoded in the React stream while the outer response remains 200.
+  const legacyAboutHref = getLegacyAboutSectionHref(pathname, request.nextUrl.searchParams);
+  if (legacyAboutHref) return NextResponse.redirect(new URL(legacyAboutHref, request.url), 308);
   const fixedRoute = getFixedPublicRouteStatus(pathname);
   if (fixedRoute?.redirectPath) {
     const response = permanentRedirect(request, fixedRoute.redirectPath);

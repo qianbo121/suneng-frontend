@@ -71,7 +71,7 @@ export function getCaseConnections(caseId: string, locale: Locale) {
     if (!href && locale === 'en' && path.startsWith('/products/detail/') && getHeatTreatmentLine(path.split('/').at(-1)!)) {
       scope = 'interface';
       if (path.endsWith('/cylinder-curing-line')) {
-        href = '/en/contact';
+        href = '/en/about#contact';
         name = 'Discuss resin-curing fixtures, handling and exhaust requirements';
         note = [note, 'The dedicated curing-line page is currently available in Chinese. Confirm the resin-curing process and interfaces separately; metal annealing or quenching examples are not substitutes.'].filter(Boolean).join(' ');
       } else {

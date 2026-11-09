@@ -83,7 +83,7 @@ export const detail: StaticProductDetail = {
       description:
         '把工件材质、尺寸、单件重量、铺料厚度、每小时产能、网带宽度、热处理工艺、冷却方式、上下料方式和现场条件发给苏能，技术人员可先判断网带宽度、托辊结构、炉膛长度、温区配置和控制方案。',
       submitLabel: '提交需求',
-      contactHref: '/zh/contact',
+      contactHref: '/zh/about#contact',
       contactLabel: '联系苏能工业炉',
       phone: siteSettings.salesPhone,
       email: siteSettings.email,
@@ -179,7 +179,7 @@ export const geoEnhancement: ProductGeoEnhancement = {
       {
         title: '联系我们',
         description: '提交托辊型网带炉参数、咨询方案或预约进一步技术沟通。',
-        href: '/zh/contact',
+        href: '/zh/about#contact',
       },
     ],
   };

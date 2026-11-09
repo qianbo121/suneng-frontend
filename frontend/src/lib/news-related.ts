@@ -181,7 +181,7 @@ function getChineseNewsRelatedLinks(
 
 // English destinations are explicit and only point to existing public pages.
 const ENGLISH_LINKS: Record<string, Omit<NewsRelatedLink, 'kind'>> = {
-  [LINKS.quote.href]: { title: 'Prepare a furnace enquiry', description: 'Send workpiece, process, loading, utilities and acceptance requirements.', href: '/en/contact' },
+  [LINKS.quote.href]: { title: 'Prepare a furnace enquiry', description: 'Send workpiece, process, loading, utilities and acceptance requirements.', href: '/en/about#contact' },
   [LINKS.repair.href]: { title: 'Furnace renovation and overhaul', description: 'Define the shutdown window, responsibilities and applicable acceptance checks.', href: '/en/service/furnace-renovation-overhaul' },
   [LINKS.renovation.href]: { title: 'Furnace renovation and overhaul', description: 'Define the shutdown window, responsibilities and applicable acceptance checks.', href: '/en/service/furnace-renovation-overhaul' },
   [LINKS.risk.href]: { title: 'Furnace renovation and overhaul', description: 'Define the shutdown window, responsibilities and applicable acceptance checks.', href: '/en/service/furnace-renovation-overhaul' },

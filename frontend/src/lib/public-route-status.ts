@@ -9,9 +9,9 @@ export function getFixedPublicRouteStatus(pathname: string) {
   } catch {
     return null;
   }
-  if (path === '/strength') return { redirectPath: `/${locale}/strength/honors` };
+  if (path === '/strength') return { redirectPath: `/${locale}/about`, hash: '#qualifications' };
   if (path === '/strength/certificates')
-    return { redirectPath: `/${locale}/strength/honors`, hash: '#management-systems' };
+    return { redirectPath: `/${locale}/about`, hash: '#management-systems' };
   if (path === '/strength/technical-team') return { redirectPath: `/${locale}/about` };
   return null;
 }

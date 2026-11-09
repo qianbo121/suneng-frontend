@@ -78,7 +78,7 @@ export const detail: StaticProductDetail = {
       description:
         '把工件形态、装炉量、炉罩尺寸、炉台尺寸、最高温度、热处理工艺、气氛要求和现场条件发给苏能，技术人员可先判断罩式炉结构、密封方式、气氛系统和控制方案。',
       submitLabel: '提交需求',
-      contactHref: '/zh/contact',
+      contactHref: '/zh/about#contact',
       contactLabel: '联系苏能工业炉',
       phone: siteSettings.salesPhone,
       email: siteSettings.email,
@@ -174,7 +174,7 @@ export const geoEnhancement: ProductGeoEnhancement = {
       {
         title: '联系我们',
         description: '提交罩式炉参数、咨询方案或预约进一步技术沟通。',
-        href: '/zh/contact',
+        href: '/zh/about#contact',
       },
     ],
   };
