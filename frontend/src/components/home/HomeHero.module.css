@@ -1,907 +1,203 @@
 .hero {
-  --panel-slant: 46px;
-  --panel-gap: 9px;
-  --panel-height: clamp(100px, 6.3vw, 124px);
   position: relative;
-  height: clamp(590px, calc(100vh - 180px), 900px);
-  height: clamp(590px, calc(100svh - 180px), 900px);
-  min-height: 590px;
-  overflow: hidden;
-  isolation: isolate;
-  background: #dce9f7;
-}
-
-.heroImage {
-  z-index: -2;
-  object-fit: cover;
-  object-position: center center;
-  filter: saturate(1.08) contrast(1.07) brightness(1.01);
-}
-
-.heroMedia {
-  position: absolute;
-  z-index: -2;
-  inset: 0;
-  opacity: 0;
-  pointer-events: none;
-  transform: scale(1.015);
-  transform-origin: center;
-  transition:
-    opacity 900ms cubic-bezier(0.4, 0, 0.2, 1),
-    transform 1200ms cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-.heroMediaActive {
-  opacity: 1;
-  transform: scale(1);
-}
-
-.heroMedia .heroImage {
-  z-index: 0;
-}
-
-.blueOverlay {
-  position: absolute;
-  z-index: -1;
-  inset: 0;
-  pointer-events: none;
-  background: linear-gradient(
-    90deg,
-    rgba(0, 105, 255, 0.86) 0%,
-    rgba(0, 103, 248, 0.62) 14%,
-    rgba(0, 100, 242, 0.34) 32%,
-    rgba(0, 105, 245, 0.14) 51%,
-    rgba(0, 108, 246, 0.04) 63%,
-    rgba(0, 108, 246, 0) 70%
-  );
-}
-
-.heroContainer {
-  position: relative;
-  z-index: 1;
-  width: calc(100% - 160px);
-  max-width: 1840px;
-  height: 100%;
-  margin: 0 auto;
-}
-
-.heroCopyLayer {
-  position: absolute;
-  inset: 0;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 200ms ease;
-}
-
-.heroCopyLayerActive {
-  opacity: 1;
-  animation: hero-copy-enter 550ms cubic-bezier(0.22, 1, 0.36, 1) 220ms both;
-}
-
-@keyframes hero-copy-enter {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.heroCopy {
-  max-width: 940px;
-  padding-top: clamp(48px, 6.5vh, 72px);
-  color: #fff;
-}
-
-.englishCopy {
-  max-width: 1160px;
-}
-
-.eyebrow {
-  max-width: 800px;
-  margin: 0 0 14px;
-  color: rgba(255, 255, 255, 0.94);
-  font-size: clamp(13px, 0.82vw, 16px);
-  font-weight: 500;
-  line-height: 1.5;
-  letter-spacing: 0.23em;
-  text-shadow: 0 2px 14px rgba(0, 52, 133, 0.18);
-}
-
-.title {
-  margin: 0;
-  color: #fff;
-  font-size: clamp(48px, 3.25vw, 64px);
-  font-weight: 700;
-  line-height: 1.14;
-  letter-spacing: 0.025em;
-  text-shadow: 0 3px 22px rgba(0, 50, 125, 0.22);
-}
-
-.englishTitle {
-  max-width: 1120px;
-  font-size: clamp(38px, 2.75vw, 52px);
-  letter-spacing: 0;
-  text-wrap: balance;
-}
-
-.description {
-  max-width: 860px;
-  margin: 16px 0 0;
-  color: rgba(255, 255, 255, 0.96);
-  font-size: clamp(19px, 1.25vw, 25px);
-  font-weight: 400;
-  line-height: 1.55;
-  text-shadow: 0 2px 16px rgba(0, 46, 112, 0.2);
-}
-
-.englishDescription {
-  max-width: 1000px;
-  font-size: clamp(18px, 1.12vw, 22px);
-}
-
-.certification {
-  margin: 10px 0 0;
-  color: rgba(255, 255, 255, 0.9);
-  font-size: clamp(15px, 1vw, 18px);
-  font-weight: 400;
-  line-height: 1.6;
-  text-shadow: 0 2px 14px rgba(0, 46, 112, 0.18);
-}
-
-.stats {
-  position: absolute;
-  bottom: clamp(32px, 5vh, 52px);
-  left: 50%;
-  z-index: 2;
-  display: flex;
-  align-items: flex-end;
-  width: calc(100% - 128px);
-  max-width: 1760px;
-  height: calc(var(--panel-height) + 20px);
-  transform: translateX(-50%);
-  filter: drop-shadow(0 14px 22px rgba(5, 42, 83, 0.13));
-}
-
-.statCard {
-  --panel-rise: 0px;
-  position: relative;
-  flex: 1 1 0;
-  min-width: 0;
-  height: calc(var(--panel-height) + var(--panel-rise));
-  overflow: hidden;
-  clip-path: polygon(var(--panel-slant) 0, 100% 0, calc(100% - var(--panel-slant)) 100%, 0 100%);
-  background: linear-gradient(112deg, #fff 0%, #fdfdfd 66%, #f4f4f4 100%);
-}
-
-.statCard:not(:first-child) {
-  margin-left: calc((var(--panel-slant) * -1) + var(--panel-gap));
-}
-
-@media (min-width: 1025px) {
-  .stats {
-    transform: translate(-50%, 12px);
-  }
-  .statCard:nth-child(2) {
-    --panel-rise: 5px;
-  }
-  .statCard:nth-child(3) {
-    --panel-rise: 10px;
-  }
-  .statCard:nth-child(4) {
-    --panel-rise: 15px;
-  }
-}
-
-@media (min-width: 1025px) and (max-width: 1279px) {
-  .stats {
-    bottom: calc(40px + env(safe-area-inset-bottom));
-  }
-}
-
-@media (min-width: 1280px) {
-  .stats {
-    right: 112px;
-    left: 64px;
-    width: auto;
-    max-width: 1744px;
-    transform: translateY(12px);
-  }
-}
-
-@media (min-width: 1921px) {
-  .stats {
-    right: auto;
-    left: 50%;
-    width: 1744px;
-    transform: translate(-50%, 12px);
-  }
-}
-
-.statCard::before {
-  position: absolute;
-  top: 0;
-  right: 0;
-  left: var(--panel-slant);
-  z-index: 2;
-  height: 4px;
-  background: linear-gradient(90deg, #2167ea 0%, #0759e6 100%);
-  content: '';
-}
-
-.statCard:not(:first-child)::after {
-  position: absolute;
-  top: 0;
-  left: 0;
-  z-index: 3;
-  width: calc(var(--panel-slant) + 3px);
-  height: 100%;
-  background: rgba(21, 31, 42, 0.8);
-  clip-path: polygon(calc(100% - 3px) 0, 100% 0, 3px 100%, 0 100%);
-  content: '';
-}
-
-.statContent {
-  position: relative;
-  z-index: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: center;
-  height: 100%;
-  padding: 14px 24px 12px calc(var(--panel-slant) + 28px);
-}
-
-.statValue {
-  display: flex;
-  align-items: baseline;
-  min-width: 0;
-  margin: 0;
-  color: #0c47c7;
-  font-size: clamp(46px, 3.2vw, 64px);
-  font-weight: 700;
-  line-height: 1;
-  letter-spacing: -0.025em;
-  white-space: nowrap;
-  font-variant-numeric: tabular-nums;
-}
-
-.animatedNumber {
-  display: inline-block;
-  text-align: left;
-  font-variant-numeric: tabular-nums;
-}
-
-.statUnit {
-  margin-left: 8px;
-  color: #151515;
-  font-size: clamp(18px, 1.18vw, 24px);
-  font-weight: 500;
-  letter-spacing: 0;
-}
-
-.statLabel {
-  margin: 8px 0 0;
-  color: #101010;
-  font-size: clamp(17px, 1.08vw, 22px);
-  font-weight: 500;
-  line-height: 1.35;
-  letter-spacing: 0.02em;
-}
-
-.englishStatLabel {
-  letter-spacing: 0;
-}
-
-@media (max-width: 1200px) {
-  .hero {
-    --panel-slant: 42px;
-  }
-  .heroContainer,
-  .stats {
-    width: calc(100% - 72px);
-  }
-  .statContent {
-    padding-right: 18px;
-    padding-left: calc(var(--panel-slant) + 22px);
-  }
-}
-
-@media (max-width: 1024px) {
-  .hero {
-    --panel-slant: 34px;
-    height: auto;
-    min-height: 780px;
-  }
-  .heroContainer {
-    width: calc(100% - 48px);
-  }
-  .heroCopy {
-    padding-top: 72px;
-  }
-  .title {
-    font-size: 44px;
-  }
-  .englishTitle {
-    max-width: 780px;
-    font-size: 38px;
-  }
-  .description {
-    max-width: 720px;
-    font-size: 19px;
-  }
-  .stats {
-    bottom: calc(72px + env(safe-area-inset-bottom));
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 10px;
-    width: calc(100% - 48px);
-    height: auto;
-    filter: drop-shadow(0 10px 18px rgba(5, 42, 83, 0.12));
-  }
-  .statCard {
-    height: 128px;
-  }
-  .statCard:not(:first-child) {
-    margin-left: 0;
-  }
-  .statCard:not(:first-child)::after {
-    display: none;
-  }
-  .statContent {
-    padding: 18px 24px 16px calc(var(--panel-slant) + 20px);
-  }
-  .statValue {
-    font-size: 38px;
-  }
-  .statLabel {
-    margin-top: 10px;
-    font-size: 16px;
-  }
-  .englishStats .statLabel {
-    max-width: 150px;
-    line-height: 1.25;
-  }
-}
-
-@media (max-width: 640px) {
-  .hero {
-    --panel-slant: 24px;
-    min-height: 760px;
-  }
-  .heroImage {
-    object-position: 56% bottom;
-  }
-  .heroContainer {
-    width: calc(100% - 32px);
-  }
-  .heroCopy {
-    padding-top: 58px;
-  }
-  .eyebrow {
-    max-width: 320px;
-    margin-bottom: 14px;
-    font-size: 11px;
-    letter-spacing: 0.13em;
-  }
-  .title {
-    font-size: clamp(27px, 8.2vw, 32px);
-    line-height: 1.2;
-    text-wrap: balance;
-  }
-  .englishTitle {
-    max-width: 350px;
-    font-size: clamp(27px, 7.8vw, 31px);
-  }
-  .description {
-    margin-top: 16px;
-    font-size: 16px;
-  }
-  .englishDescription {
-    max-width: 350px;
-    font-size: 15px;
-    line-height: 1.45;
-  }
-  .certification {
-    margin-top: 10px;
-    font-size: 14px;
-  }
-  .stats {
-    gap: 8px;
-    width: calc(100% - 24px);
-  }
-  .statCard {
-    height: 106px;
-  }
-  .statContent {
-    padding: 15px 16px 14px calc(var(--panel-slant) + 12px);
-  }
-  .statValue {
-    font-size: 30px;
-  }
-  .englishStats .statValue {
-    font-size: clamp(23px, 6.4vw, 26px);
-  }
-  .englishStats .statCard {
-    height: 120px;
-  }
-  .englishStats .statUnit {
-    margin-left: 3px;
-    font-size: 12px;
-  }
-  .statUnit {
-    margin-left: 5px;
-    font-size: 15px;
-  }
-  .statLabel {
-    margin-top: 8px;
-    font-size: 14px;
-  }
-  .englishStats .statLabel {
-    max-width: 130px;
-    font-size: 13px;
-  }
-}
-
-/* Chinese homepage final hero. Scoped so the English homepage keeps its current design. */
-.chineseHero {
-  height: max(600px, calc(100svh - 174px));
-  min-height: 600px;
-  background: #0b4eb5;
-}
-
-.chineseHero .heroImage {
-  object-position: 50% 55%;
-  filter: none;
-}
-
-.chineseHero .manufacturingImage {
-  object-position: 50% 50%;
-}
-
-.chineseHero .blueOverlay {
-  background: linear-gradient(
-    180deg,
-    rgba(0, 91, 224, 0.84) 0%,
-    rgba(0, 91, 224, 0.7) 22%,
-    rgba(0, 83, 207, 0.48) 40%,
-    rgba(0, 75, 190, 0.15) 55%,
-    rgba(0, 70, 180, 0.025) 66%,
-    rgba(0, 70, 180, 0) 74%,
-    rgba(0, 70, 180, 0) 100%
-  );
-}
-
-.chineseHero .heroContainer {
   width: 100%;
-  max-width: none;
+  color: white;
+  background: #023369;
 }
 
-.chineseHero .heroCopy {
-  position: absolute;
-  top: 65px;
-  left: 50%;
-  width: min(92%, 1040px);
-  max-width: none;
-  padding: 0;
-  text-align: center;
-  transform: translateX(-50%);
+.scene picture,
+.scene img {
+  display: block;
+  width: 100%;
+  height: auto;
 }
 
-.chineseHero .eyebrow {
-  max-width: none;
-  margin: 0;
-  font-size: 17px;
-  font-weight: 500;
-  line-height: 24px;
-  letter-spacing: 0.2em;
-  text-shadow: 0 2px 14px rgba(0, 45, 116, 0.18);
+.sitePhoto {
+  display: none;
 }
 
-.chineseHero .title {
-  margin-top: 8px;
-  font-size: 48px;
-  line-height: 60px;
-  letter-spacing: 0.015em;
-  text-shadow: 0 3px 18px rgba(0, 45, 116, 0.2);
-}
-
-.chineseHero .description {
-  max-width: none;
-  margin-top: 24px;
-  font-size: 20px;
-  line-height: 32px;
-  text-wrap: balance;
-  text-shadow: 0 2px 14px rgba(0, 45, 116, 0.18);
-}
-
-.chineseHero .certification {
-  margin-top: 16px;
-  color: rgba(255, 255, 255, 0.98);
-  font-size: 19px;
-  font-weight: 500;
-  line-height: 30px;
-  text-shadow: 0 2px 14px rgba(0, 36, 96, 0.28);
-}
-
-.evidenceLink {
-  display: inline-block;
-  color: inherit;
-  text-underline-offset: 4px;
-}
-
-.heroCopyLayerActive .evidenceLink {
-  pointer-events: auto;
-}
-
-.evidenceLink:hover {
-  text-decoration: underline;
-}
-
-.evidenceLink:focus-visible {
-  outline: 2px solid currentColor;
-  outline-offset: 4px;
-}
-
-.carouselControls {
-  position: absolute;
-  right: auto;
-  bottom: max(1px, env(safe-area-inset-bottom));
-  left: 50%;
-  z-index: 4;
-  display: flex;
-  flex-direction: row;
-  gap: 0;
-  align-items: center;
-  padding: 2px;
-  transform: translateX(-50%);
-}
-
-.carouselDotButton {
-  display: grid;
-  width: 44px;
-  height: 44px;
-  padding: 0;
-  color: #fff;
-  background: transparent;
-  border: 0;
-  border-radius: 50%;
-  cursor: pointer;
-  place-items: center;
-  touch-action: manipulation;
-}
-
-.carouselDotButton:hover {
-  background: rgba(0, 39, 104, 0.2);
-}
-
-.carouselDotButton:focus-visible {
-  outline: 2px solid #fff;
-  outline-offset: 2px;
-}
-
-.carouselDot {
-  width: 6px;
-  height: 6px;
-  background: rgba(255, 255, 255, 0.58);
-  border-radius: 50%;
-  transition:
-    width 180ms ease,
-    height 180ms ease,
-    background-color 180ms ease;
-}
-
-.carouselDotButtonActive .carouselDot {
-  width: 9px;
-  height: 9px;
-  background: #fff;
-}
-
-.chineseStats {
-  position: absolute;
-  top: auto;
-  bottom: 30px;
-  left: 50%;
-  z-index: 2;
+.facts {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
   align-items: center;
-  width: min(76%, 1180px);
-  height: 90px;
-  min-height: 90px;
-  overflow: hidden;
-  background: rgba(0, 54, 143, 0.62);
-  backdrop-filter: blur(2px);
-  border-radius: 0;
-  transform: translateX(-50%);
-  transition:
-    opacity 450ms ease,
-    transform 450ms cubic-bezier(0.22, 1, 0.36, 1);
+  background: #023369;
 }
 
-.chineseStatsHidden {
-  opacity: 0;
-  pointer-events: none;
-  transform: translate(-50%, 10px);
-}
-
-.chineseStatItem {
-  position: relative;
-  min-width: 0;
-  height: 100%;
-}
-
-.chineseStatItem:not(:first-child)::before {
-  position: absolute;
-  top: 20%;
-  left: 0;
-  width: 1px;
-  height: 60%;
-  background: linear-gradient(
-    180deg,
-    rgba(255, 255, 255, 0),
-    rgba(255, 255, 255, 0.42) 34%,
-    rgba(255, 255, 255, 0.42) 66%,
-    rgba(255, 255, 255, 0)
-  );
-  content: '';
-}
-
-.chineseStatItem .statContent {
+.facts > div {
+  display: flex;
+  flex-direction: column-reverse;
   align-items: center;
-  padding: 6px 14px;
-  text-align: center;
-}
-
-.chineseStatItem .statValue {
   justify-content: center;
-  color: #fff;
-  font-size: 38px;
-  line-height: 44px;
-  letter-spacing: -0.03em;
-}
-
-.chineseStatItem .statNumber {
-  display: inline-block;
   text-align: center;
-  font-variant-numeric: tabular-nums;
 }
 
-.chineseStatItem .statPrefix {
-  margin-right: 3px;
-  font-size: 0.48em;
+.facts > div + div {
+  border-left: 1px solid #829bb4;
+}
+
+.facts dd {
   font-weight: 650;
-  letter-spacing: 0;
+  line-height: 1.12;
 }
 
-.chineseStatItem .statUnit {
-  margin-left: 6px;
-  color: rgba(255, 255, 255, 0.94);
-  font-size: 15px;
-  line-height: 22px;
+.facts dt {
+  margin-top: 0.3em;
+  line-height: 1.2;
 }
 
-.chineseStatItem .statLabel {
-  margin-top: 2px;
-  color: rgba(255, 255, 255, 0.96);
-  font-size: 14px;
-  line-height: 22px;
-  letter-spacing: 0;
-}
+@media (min-width: 701px) {
+  .scene img {
+    aspect-ratio: 1942 / 809;
+  }
 
-@media (min-width: 900px) {
-  .chineseHero .title {
+  /* The supplied Chinese artwork already contains the heading and facts. */
+  .hero:lang(zh) :is(.intro, .facts) {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    overflow: hidden;
+    clip-path: inset(50%);
     white-space: nowrap;
   }
-}
 
-@media (min-width: 900px) and (max-width: 1199px) {
-  .chineseHero .heroCopy {
-    top: 59px;
-    width: 96%;
+  /* Cover the printed Chinese copy while retaining both photographs and the diagonal. */
+  .hero:lang(en)::before {
+    position: absolute;
+    inset: 0 auto auto 0;
+    width: 54.65%;
+    height: 36%;
+    background: linear-gradient(#023369 0%, #003369 33%, #01366e 58%, #02478b 81%, #0857a3 90%, #2577c8);
+    clip-path: polygon(0 0, 100% 0, 80.5% 100%, 0 100%);
+    mask-image: linear-gradient(black 94%, transparent);
+    content: '';
   }
 
-  .chineseStats {
-    top: auto;
-    bottom: 30px;
-    width: 82%;
-    height: 90px;
-    min-height: 90px;
+  .hero:lang(en) .intro {
+    position: absolute;
+    top: 4.5%;
+    left: 4.3%;
+    width: 43%;
   }
 
-  .chineseStatItem .statContent {
-    padding-right: 10px;
-    padding-left: 10px;
-  }
-}
-
-@media (max-width: 899px) {
-  .chineseHero {
-    height: max(640px, calc(100svh - 174px));
-    min-height: 640px;
+  .location {
+    font-size: 1.05vw;
+    font-weight: 550;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
   }
 
-  .chineseHero .heroImage {
-    object-position: 44% 55%;
-  }
-
-  .chineseHero .manufacturingImage {
-    object-position: 50% 50%;
-  }
-
-  .chineseHero .heroCopy {
-    top: 47px;
-    width: calc(100% - 40px);
-  }
-
-  .chineseHero .eyebrow {
-    font-size: 15px;
-    line-height: 22px;
-    letter-spacing: 0.15em;
-  }
-
-  .chineseHero .title {
-    margin-top: 8px;
-    font-size: 48px;
-    line-height: 60px;
-  }
-
-  .chineseHero .description {
-    margin-top: 24px;
-    font-size: 20px;
-    line-height: 32px;
-  }
-
-  .chineseHero .certification {
-    margin-top: 16px;
-    font-size: 18px;
-    line-height: 28px;
-  }
-
-  .chineseStats {
-    top: auto;
-    bottom: 30px;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    width: calc(100% - 72px);
-    height: 180px;
-    min-height: 180px;
-  }
-
-  .chineseStatItem {
-    min-height: 90px;
-  }
-
-  .chineseStatItem:nth-child(3)::before {
-    content: none;
-  }
-
-  .chineseStatItem .statContent {
-    padding: 7px 8px;
-  }
-
-  .chineseStatItem .statUnit {
-    margin-left: 5px;
-    font-size: 14px;
-    line-height: 20px;
-  }
-
-  .chineseStatItem .statLabel {
-    margin-top: 4px;
-    font-size: 13px;
-    line-height: 20px;
-  }
-}
-
-@media (max-width: 640px) {
-  .chineseHero {
-    height: max(660px, calc(100svh - 162px));
-    min-height: 660px;
-  }
-
-  .chineseHero .heroImage {
-    object-position: 42% 55%;
-  }
-
-  .chineseHero .manufacturingImage {
-    object-position: 50% 50%;
-  }
-
-  .chineseHero .heroCopy {
-    top: 43px;
-    width: calc(100% - 28px);
-  }
-
-  .chineseHero .eyebrow {
-    font-size: 12px;
-    line-height: 20px;
-    letter-spacing: 0.12em;
-  }
-
-  .chineseHero .title {
-    font-size: 34px;
-    line-height: 46px;
+  .intro h1 {
+    margin-block: 0.17em;
+    font-size: 2.56vw;
+    font-weight: 700;
+    line-height: 1.04;
     text-wrap: balance;
   }
 
-  .chineseHero .titleLine {
+  .offering {
+    max-width: 48ch;
+    font-size: 1.22vw;
+    line-height: 1.28;
+  }
+
+  .credential {
+    margin-top: 0.4em;
+    font-size: 1.03vw;
+  }
+
+  .hero:lang(en) .facts {
+    position: absolute;
+    inset: auto 0 0;
+    height: 16.75%;
+  }
+
+  .facts dd {
+    font-size: 2.58vw;
+  }
+
+  .facts dt {
+    font-size: 1.2vw;
+  }
+}
+
+@media (max-width: 700px) {
+  .intro {
+    padding: 20px;
+  }
+
+  .location {
+    color: #ccdeef;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .intro h1 {
+    margin-block: 0.25em;
+    font-size: clamp(25px, 6.1vw, 34px);
+    font-weight: 700;
+    line-height: 1.12;
+    text-wrap: balance;
+  }
+
+  .offering {
+    font-size: 15px;
+    line-height: 1.4;
+  }
+
+  .credential {
+    margin-top: 0.6em;
+    color: #dbe8f4;
+    font-size: 13px;
+  }
+
+  .scene {
+    position: relative;
+  }
+
+  .scene img {
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    object-position: center 70%;
+  }
+
+  .sitePhoto {
+    position: absolute;
+    bottom: 5%;
+    left: 3%;
     display: block;
-    white-space: nowrap;
+    width: 34%;
+    aspect-ratio: 2;
+    overflow: hidden;
+    border: 1px solid #d8e6f1;
+    background: url('/images/home/suneng-panorama-site-mobile-20261110.webp') center / cover;
   }
 
-  .chineseHero .description {
-    margin-top: 16px;
-    font-size: 19px;
-    line-height: 30px;
+  .sitePhoto figcaption {
+    padding: 3px 5px;
+    background: rgb(2 47 91 / 86%);
+    font-size: 11px;
+    font-weight: 600;
+    line-height: 1.2;
   }
 
-  .chineseHero .certification {
-    margin-top: 16px;
-    font-size: 18px;
-    line-height: 28px;
+  .facts {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px 0;
+    padding: 14px 8px;
   }
 
-  .chineseStats {
-    top: auto;
-    bottom: 30px;
-    width: calc(100% - 56px);
-    height: 184px;
-    min-height: 184px;
+  .facts > div:nth-child(3) {
+    border-left: 0;
   }
 
-  .chineseStatItem {
-    min-height: 92px;
+  .facts dd {
+    font-size: clamp(20px, 4.7vw, 25px);
   }
 
-  .chineseStatItem .statValue {
-    font-size: 29px;
-    line-height: 36px;
-  }
-
-  .chineseStatItem .statUnit {
-    margin-left: 4px;
+  .facts dt {
     font-size: 12px;
-    line-height: 18px;
   }
-
-  .chineseStatItem .statLabel {
-    margin-top: 2px;
-    font-size: 12px;
-    line-height: 18px;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .heroMedia,
-  .carouselDot,
-  .chineseStats {
-    transition: none;
-  }
-
-  .heroCopyLayerActive {
-    animation: none;
-  }
-}
-
-/* Keep English copy readable over the bright sky in the factory photograph. */
-.englishHero .blueOverlay {
-  background: linear-gradient(180deg, rgba(4, 26, 57, 0.82) 0%, rgba(4, 26, 57, 0.72) 45%, rgba(4, 26, 57, 0.16) 78%, rgba(4, 26, 57, 0.12) 100%);
-}
-
-/* English uses the same hero, with room for longer company and metric labels. */
-.localizedHero .title {
-  max-width: 100%;
-  font-size: clamp(30px, 3.5vw, 58px);
-  line-height: 1.12;
-  white-space: normal;
-  text-wrap: balance;
-}
-.localizedHero .description { max-width: 820px; }
-.localizedHero .statLabel { line-height: 1.35; text-wrap: balance; }
-@media (max-width: 600px) {
-  .localizedHero .title { font-size: 30px; }
-  .localizedHero .statLabel { font-size: 12px; }
-  .localizedHero .statUnit { font-size: 13px; }
 }
