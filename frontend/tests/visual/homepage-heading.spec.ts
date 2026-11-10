@@ -1,44 +1,52 @@
 import { expect, test } from '@playwright/test';
 
 for (const locale of ['zh', 'en'] as const) {
-  for (const width of [1440, 390]) {
-    test(`${locale} homepage keeps its primary heading when the carousel changes at ${width}px`, async ({ page }, info) => {
-      test.setTimeout(120_000);
-      await page.setViewportSize({ width, height: width === 1440 ? 1000 : 844 });
-      await page.emulateMedia({ reducedMotion: 'reduce' });
-      await page.route('**/*', route => ['GET', 'HEAD', 'OPTIONS'].includes(route.request().method()) ? route.continue() : route.abort());
+  for (const width of [1920, 390]) {
+    test(`${locale} homepage shows one complete banner at ${width}px`, async ({ page }, info) => {
+      await page.setViewportSize({ width, height: width === 1920 ? 1080 : 844 });
       const errors: string[] = [];
       page.on('pageerror', error => errors.push(error.message));
-      // The server-rendered buttons are visible before their deferred scripts
-      // are ready. Exercise the real handler only after the document loads.
       await page.goto(`/${locale}`, { waitUntil: 'load' });
-      const title = locale === 'zh' ? '江苏苏能工业炉有限公司' : 'Jiangsu Suneng Industrial Furnace Co., Ltd.';
-      const secondTitle = locale === 'zh' ? '自主制造基地' : 'Our Manufacturing Base';
-      const firstButton = page.getByRole('button', { name: locale === 'zh' ? `查看第 1 张：${title}` : `Slide 1: ${title}`, exact: true });
-      const secondButton = page.getByRole('button', { name: locale === 'zh' ? `查看第 2 张：${secondTitle}` : `Slide 2: ${secondTitle}`, exact: true });
-      await expect(firstButton).toBeVisible();
-      await firstButton.click();
+
       const heading = page.getByRole('heading', { level: 1 });
+      const title = locale === 'zh' ? '江苏苏能工业炉有限公司' : 'Jiangsu Suneng Industrial Furnace Co., Ltd.';
       await expect(heading).toHaveCount(1);
       await expect(heading).toHaveText(title);
-      // Keyboard activation also has to retain a document heading outside
-      // whichever visual copy layer the carousel hides from assistive tools.
-      await secondButton.focus();
-      await page.keyboard.press('Enter');
-      await expect(secondButton).toHaveAttribute('aria-current', 'true');
-      await expect(page.locator('h1')).toHaveCount(1);
-      await expect(heading).toHaveText(title);
-      expect(await heading.evaluate(n => Boolean(n.closest('[aria-hidden="true"]')))).toBe(false);
-      const carousel = page.locator('section[aria-roledescription]');
-      await expect.poll(() => carousel.evaluate(section => {
-        const layers = Array.from(section.children).filter(n => n.querySelector('p'));
-        return layers.every(n => getComputedStyle(n).opacity === (n.getAttribute('aria-hidden') === 'true' ? '0' : '1'));
-      })).toBe(true);
+      const hero = page.getByRole('region', { name: title, exact: true });
+      await expect(hero.getByRole('button')).toHaveCount(0);
+      const images = hero.getByRole('img');
+      await expect(images).toHaveCount(1);
+      await images.evaluateAll(nodes => Promise.all(nodes.map(node => (node as HTMLImageElement).decode())));
+      const imageSource = await images.evaluate((image: HTMLImageElement) => decodeURIComponent(image.currentSrc));
+      expect(imageSource).toContain(width === 1920 ? 'suneng-manufacturing-panorama-' : 'suneng-panorama-line-mobile-');
+      const box = await hero.boundingBox();
+      expect(box?.width).toBe(width);
+      if (locale === 'zh') {
+        await expect(hero.getByText(/国家高新技术企业/)).toHaveCount(1);
+        await expect(hero.getByRole('definition')).toHaveText(['2006 年', '5080 万元', '1000+ 项', '14700 m²']);
+      } else {
+        await expect(heading).toBeVisible();
+        await expect(hero.getByText('National High-tech Enterprise', { exact: true })).toBeVisible();
+        if (width === 390) await expect(hero.getByText('Suneng manufacturing site')).toBeVisible();
+        await expect(hero.getByRole('definition')).toHaveText(['2006', '50.8 million', '1,000+', '14,700 m²']);
+      }
       expect(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth)).toBe(false);
-      await page.screenshot({ path: info.outputPath(`${locale}-home-${width}-slide2.png`) });
-      await firstButton.click();
-      await expect(firstButton).toHaveAttribute('aria-current', 'true');
-      await expect(heading).toHaveText(title);
+      const partners = page.locator('.hero-banner > :last-child');
+      await expect(partners.getByTestId('homepage-partner-track')).toBeVisible();
+      const partnerBox = await partners.boundingBox();
+      if (!box || !partnerBox) throw new Error('Expected both the banner and partners strip to be visible');
+      expect(box.y + box.height).toBeCloseTo(partnerBox.y, 0);
+      if (width === 1920) {
+        expect(box.height).toBeCloseTo(width / 2.4, 0);
+      } else {
+        expect(box.height).toBeGreaterThan(width);
+      }
+      await page.screenshot({
+        path: info.outputPath(`${locale}-home-${width}.png`),
+        style: 'nextjs-portal { display: none !important; }',
+      });
+
+      await expect(hero.getByRole('link', { name: /国家高新技术企业|National High-tech Enterprise/ })).toHaveCount(0);
       expect(errors).toEqual([]);
     });
   }
