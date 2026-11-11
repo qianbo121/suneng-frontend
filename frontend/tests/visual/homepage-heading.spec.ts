@@ -19,7 +19,7 @@ for (const locale of ['zh', 'en'] as const) {
       await expect(images).toHaveCount(1);
       await images.evaluateAll(nodes => Promise.all(nodes.map(node => (node as HTMLImageElement).decode())));
       const imageSource = await images.evaluate((image: HTMLImageElement) => decodeURIComponent(image.currentSrc));
-      expect(imageSource).toContain(width === 1920 ? 'suneng-manufacturing-panorama-' : 'suneng-panorama-line-mobile-');
+      expect(imageSource).toContain(width === 1920 ? 'suneng-manufacturing-panorama-factory-' : 'suneng-panorama-line-mobile-');
       const box = await hero.boundingBox();
       expect(box?.width).toBe(width);
       if (locale === 'zh') {
