@@ -46,45 +46,61 @@ function NewsListItem({
   const meta = getNewsDecisionDisplayMeta(item, locale);
   const displayDate = item.listDisplayDate ?? formatNewsDisplayDate(item.date);
 
+  const href = getNewsListCardHref(item, locale);
+  const isCase = href === `/${locale}/case/${item.slug}`;
+  const content = (
+    <>
+      <div className={styles.articleImage}>
+        <NewsCardImage
+          src={item.image}
+          alt={locale === 'en' ? item.title.en : `${item.title.zh}封面图`}
+          priority={priority}
+          sizes={
+            featured
+              ? '(max-width: 700px) calc(100vw - 56px), 288px'
+              : '(max-width: 700px) 96px, 176px'
+          }
+        />
+      </div>
+
+      <div className={styles.articleBody}>
+        <h3 className={styles.articleTitle}>
+          {isCase ? <Link className={styles.caseTitleLink} href={href}>{item.title[locale]}</Link> : item.title[locale]}
+        </h3>
+        <div className={styles.articleTags}>
+          {featured ? (
+            <span className={styles.recommendLabel}>
+              {locale === 'en' ? 'Recommended' : '推荐阅读'}
+            </span>
+          ) : null}
+          {isCase ? (
+            <Link className={`${styles.articleTag} ${styles.caseIndexLink}`} href={`/${locale}/case`}>
+              {locale === 'en' ? 'Project Case' : '项目案例'}
+            </Link>
+          ) : <span className={styles.articleTag}>{meta.topicLabel}</span>}
+          <span className={styles.articleTag}>{meta.furnaceLabel}</span>
+          {displayDate ? (
+            <time className={styles.articleDate} dateTime={displayDate}>
+              {displayDate}
+            </time>
+          ) : null}
+        </div>
+        <p className={styles.articleSummary}>{item.summary[locale]}</p>
+      </div>
+    </>
+  );
+
   return (
     <article
       className={`${styles.articleCard} ${featured ? styles.featuredCard : ''}`}
       data-news-id={item.id}
       data-featured={featured}
     >
-      <Link href={getNewsListCardHref(item, locale)} className={styles.articleLink}>
-        <div className={styles.articleImage}>
-          <NewsCardImage
-            src={item.image}
-            alt={locale === 'en' ? item.title.en : `${item.title.zh}封面图`}
-            priority={priority}
-            sizes={
-              featured
-                ? '(max-width: 700px) calc(100vw - 56px), 288px'
-                : '(max-width: 700px) 96px, 176px'
-            }
-          />
-        </div>
-
-        <div className={styles.articleBody}>
-          <h3 className={styles.articleTitle}>{item.title[locale]}</h3>
-          <div className={styles.articleTags}>
-            {featured ? (
-              <span className={styles.recommendLabel}>
-                {locale === 'en' ? 'Recommended' : '推荐阅读'}
-              </span>
-            ) : null}
-            <span className={styles.articleTag}>{meta.topicLabel}</span>
-            <span className={styles.articleTag}>{meta.furnaceLabel}</span>
-            {displayDate ? (
-              <time className={styles.articleDate} dateTime={displayDate}>
-                {displayDate}
-              </time>
-            ) : null}
-          </div>
-          <p className={styles.articleSummary}>{item.summary[locale]}</p>
-        </div>
-      </Link>
+      {isCase ? (
+        <div className={`${styles.articleLink} ${styles.caseRow}`}>{content}</div>
+      ) : (
+        <Link href={href} className={styles.articleLink}>{content}</Link>
+      )}
     </article>
   );
 }

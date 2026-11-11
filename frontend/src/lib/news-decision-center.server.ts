@@ -7,6 +7,7 @@ import { unstable_cache } from 'next/cache';
 import { getAllNewsForDecisionCenter } from '@/lib/api/news';
 import { mapNewsCard } from '@/lib/news';
 import { applyNewsListCopy } from '@/lib/news-list-copy';
+import { getNewsCaseResource } from '@/lib/news-case-resource.server';
 import { includeStandaloneNewsResources } from '@/lib/news-list-resources';
 import { filterCanonicalNewsItems, hasPublishableEnglishNews } from '@/lib/news-routing';
 import type { Locale } from '@/types/site';
@@ -61,15 +62,24 @@ const getCachedCards = unstable_cache(
 
 // All list pages share this complete collection. A failed refresh throws inside
 // the data cache, retaining the last successful collection instead of partial data.
-export const getNewsDecisionCenterCards = cache(async (locale: Locale) =>
+const getArticleCards = cache(async (locale: Locale) =>
   includeStandaloneNewsResources(await getCachedCards(locale), locale),
+);
+
+function includeProjectCase(articles: NewsListCardItem[], locale: Locale) {
+  const projectCase = getNewsCaseResource(locale);
+  return projectCase ? [...articles, projectCase] : articles;
+}
+
+export const getNewsDecisionCenterCards = cache(async (locale: Locale) =>
+  includeProjectCase(await getArticleCards(locale), locale),
 );
 
 // Metadata and page rendering share one read in the same request as well.
 export const getNewsDecisionCenterData = cache(async (locale: Locale, forHomepage = false) => {
   if (forHomepage) homepageReaders.set(locale, (homepageReaders.get(locale) ?? 0) + 1);
   try {
-    return { data: await getNewsDecisionCenterCards(locale), error: null };
+    return { data: await getArticleCards(locale), error: null };
   } catch {
     // Failed/partial loads throw inside the cache, so a later request can retry.
     return { data: null, error: '资料暂时无法加载' };
@@ -82,4 +92,10 @@ export const getNewsDecisionCenterData = cache(async (locale: Locale, forHomepag
       else homepageReaders.delete(locale);
     }
   }
+});
+
+// Search/filter pages use the same collection as the numbered resource pages.
+export const getNewsResourceListData = cache(async (locale: Locale) => {
+  const result = await getNewsDecisionCenterData(locale);
+  return result.data ? { data: includeProjectCase(result.data, locale), error: null } : result;
 });

@@ -2,7 +2,9 @@ import { setTimeout as pauseForResponse } from 'node:timers/promises';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { unstable_cache } from 'next/cache';
 import { getAllNewsForDecisionCenter } from '@/lib/api/news';
-import { getNewsDecisionCenterData } from './news-decision-center.server';
+import { getNewsDecisionCenterCards, getNewsDecisionCenterData, getNewsResourceListData } from './news-decision-center.server';
+import * as englishCases from './cases/english';
+import { getNewsListView, parseNewsListState, toNewsListLiteCards } from './news-list-client';
 import { getHomepageNewsData } from './homepage-news.server';
 import * as newsMapping from './news';
 import type { NewsApiItem } from '@/types/news';
@@ -187,4 +189,28 @@ it('does not leave ordinary list reads throttled after a failed homepage prepara
   vi.mocked(getAllNewsForDecisionCenter).mockResolvedValue({ data: [article], error: null });
   expect((await getNewsDecisionCenterData('zh')).data?.[0].id).toBe(article.id);
   expect(pauseForResponse).not.toHaveBeenCalled();
+});
+
+it.each(['zh', 'en'] as const)('keeps the localized public case in plain and filtered %s lists', async (locale) => {
+  vi.mocked(getAllNewsForDecisionCenter).mockResolvedValue({ data: [article], error: null });
+  const cards = await getNewsDecisionCenterCards(locale);
+  const href = `/${locale}/case/henan-annealing-solution-line`;
+  const matches = cards.filter((card) => card.href === href);
+  expect(matches).toHaveLength(1);
+  expect(matches[0].date).toBe('2026-09-18T01:00:00+08:00');
+  expect((await getNewsResourceListData(locale)).data).toEqual(cards);
+  const filtered = getNewsListView(toNewsListLiteCards(cards, locale), parseNewsListState('furnace=line'), 10);
+  expect(filtered.items.map((item) => item.href)).toContain(href);
+  expect((await getNewsDecisionCenterData(locale)).data?.some((item) => item.href === href)).toBe(false);
+});
+
+it('omits the English case if the public reader withdraws the translation', async () => {
+  vi.mocked(getAllNewsForDecisionCenter).mockResolvedValue({ data: [], error: null });
+  const unavailable = vi.spyOn(englishCases, 'getEnglishCase').mockReturnValue(undefined);
+  try {
+    expect(await getNewsDecisionCenterCards('en')).toEqual([]);
+    expect((await getNewsResourceListData('en')).data).toEqual([]);
+  } finally {
+    unavailable.mockRestore();
+  }
 });

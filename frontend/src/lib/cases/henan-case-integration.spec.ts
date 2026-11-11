@@ -80,6 +80,7 @@ describe('Henan case reviewed artifact handoff', () => {
     const text = `${body}\n${JSON.stringify(meta)}`;
     expect(text).not.toMatch(/localhost|127\.0\.0\.1|\/Users\/|sourceReview|artifactHashes|1100万元|1033万元|QZB170726|武汉乾冶|乾冶众联/);
     for (const link of dom(body).querySelectorAll('a')) expect(link.getAttribute('href')).toMatch(/^(#|\/zh\/|https:\/\/www\.outokumpu\.com\/)/);
-    expect(meta.cover.src).toBe('/images/products/annealing-solution-line/remaining-batch-v1/03-workpiece-8b1942ed56b3.png');
+    expect(meta.cover.src).toMatch(/^\/images\/case-covers\/.+\.webp$/);
+    expect(fs.existsSync(path.join(process.cwd(), 'public', meta.cover.src))).toBe(true);
   });
 });

@@ -267,6 +267,22 @@
   padding: 24px 0;
   touch-action: manipulation;
 }
+.caseRow {
+  position: relative;
+}
+.caseTitleLink::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+}
+.caseIndexLink {
+  position: relative;
+  z-index: 1;
+  color: var(--news-blue);
+}
+.caseIndexLink:hover {
+  text-decoration: underline;
+}
 .articleImage {
   position: relative;
   width: 100%;
