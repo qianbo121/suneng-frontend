@@ -2,7 +2,7 @@ import { notFound } from 'next/navigation';
 
 import { getNewsListPageCount, NewsListRoute } from '@/components/news/NewsListRoute';
 import { NEWS_PAGE_SIZE } from '@/constants/news';
-import { getNewsDecisionCenterData } from '@/lib/news-decision-center.server';
+import { getNewsResourceListData } from '@/lib/news-decision-center.server';
 import {
   normalizeNewsDecisionTopic,
   normalizeNewsFurnaceFilter,
@@ -42,7 +42,7 @@ export async function generateMetadata({ params, searchParams }: NewsPageProps) 
   const currentPage = normalizeNewsPage(page);
   const hasActiveFilters = Boolean(q?.trim() || topic || furnace || sort);
   if (!hasActiveFilters && currentPage > 1) {
-    const { data } = await getNewsDecisionCenterData(currentLocale);
+    const { data } = await getNewsResourceListData(currentLocale);
     if (data && currentPage > Math.max(1, Math.ceil(data.length / NEWS_PAGE_SIZE))) {
       notFound();
     }
@@ -57,7 +57,7 @@ export default async function NewsPage({ params, searchParams }: NewsPageProps) 
   const currentLocale = (locale === 'en' ? 'en' : 'zh') as Locale;
   const currentPage = normalizeNewsPage(page);
 
-  const { data, error } = await getNewsDecisionCenterData(currentLocale);
+  const { data, error } = await getNewsResourceListData(currentLocale);
   const sourceItems = data || [];
   const sort = normalizeNewsSort(sortParam);
   const query = q?.trim() || '';
