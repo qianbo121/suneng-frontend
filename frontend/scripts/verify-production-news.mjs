@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
 import { spawn } from 'node:child_process';
 import { createRequire } from 'node:module';
 import { fileURLToPath } from 'node:url';
@@ -42,23 +43,35 @@ try {
     NODE_ENV: 'production', API_BASE_URL_INTERNAL: `http://127.0.0.1:${apiPort}/api`,
   });
   await ready(`http://127.0.0.1:${port}/zh`, server);
+  const projectCase = JSON.parse(readFileSync(new URL('../content/cases/henan-annealing-solution.json', import.meta.url), 'utf8'));
   for (const locale of ['zh', 'en']) {
     const expected = fixtureItems
       .filter(item => locale === 'zh' || (item.titleEn?.trim() && item.contentEn?.replace(/<[^>]+>/g, '').trim()))
+      .concat({ id: -2, publishDate: projectCase.datePublished })
       .sort((a, b) => Date.parse(b.publishDate) - Date.parse(a.publishDate) || a.id - b.id);
+    if (locale === 'zh') expected.push({ id: -1, publishDate: null });
     const pageCount = Math.ceil(expected.length / 10);
     for (const pass of ['cold', 'warm']) {
       const ids = [];
       for (let page = 1; page <= pageCount; page++) {
         const path = `/${locale}/news${page === 1 ? '' : `?page=${page}`}`;
         const { response, body } = await get(path, 200);
-        const cards = [...body.matchAll(/<article\b[^>]*data-news-id="(\d+)"[^>]*>([\s\S]*?)<\/article>/g)];
+        const cards = [...body.matchAll(/<article\b[^>]*data-news-id="(-?\d+)"[^>]*>([\s\S]*?)<\/article>/g)];
         const expectedPage = expected.slice((page - 1) * 10, page * 10);
         assert.deepEqual(cards.map(card => Number(card[1])), expectedPage.map(item => item.id), `${pass} ${path} must render every article in publication order`);
         assert.match(response.headers.get('cache-control') || '', /no-store/, `${path} must not retain an independent page snapshot`);
         for (const [index, card] of cards.entries()) {
-          const publicationDate = new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Shanghai', year: 'numeric', month: '2-digit', day: '2-digit' }).format(new Date(expectedPage[index].publishDate));
-          assert.match(card[2], new RegExp(`<time[^>]*dateTime="${publicationDate}"`), `${path} must display its publication date`);
+          const item = expectedPage[index];
+          if (item.publishDate) {
+            const publicationDate = new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Shanghai', year: 'numeric', month: '2-digit', day: '2-digit' }).format(new Date(item.publishDate));
+            assert.match(card[2], new RegExp(`<time[^>]*dateTime="${publicationDate}"`), `${path} must display its publication date`);
+          } else {
+            assert.doesNotMatch(card[2], /<time\b/, `${path} must not invent a procurement resource date`);
+          }
+          if (item.id === -2) {
+            assert.ok(card[2].includes(`href="/${locale}/case/${projectCase.slug}"`));
+            assert.ok(card[2].includes(`href="/${locale}/case"`));
+          }
           ids.push(Number(card[1]));
         }
       }
