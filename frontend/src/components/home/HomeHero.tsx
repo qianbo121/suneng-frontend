@@ -48,7 +48,11 @@ export default function HomeHero({ locale = 'zh' }: { locale?: Locale }) {
       </div>
       <div className={styles.scene}>
         <picture>
-          <source media="(min-width: 701px)" srcSet="/images/home/suneng-manufacturing-panorama-scene.webp" />
+          <source
+            media="(min-width: 701px)"
+            sizes="100vw"
+            srcSet="/images/home/suneng-manufacturing-panorama-factory-1920.webp 1920w, /images/home/suneng-manufacturing-panorama-factory-3840.webp 3840w"
+          />
           <Image
             src="/images/home/suneng-panorama-line-mobile-20261110.webp"
             alt={copy.workshopAlt}
