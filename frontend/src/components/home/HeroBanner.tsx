@@ -149,7 +149,7 @@ function HeroPartners({ locale }: HeroBannerProps) {
       initial={false}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.72, ease: heroMotionEase, delay: 0.52 }}
-      className={`${styles.panel} mx-auto w-[calc(100%-28px)] max-w-[1550px] md:w-[calc(100%-40px)] lg:w-[calc(100%-162px)]`}
+      className={styles.panel}
     >
       <div className={styles.heading}>
         <span className={styles.headingAccent} aria-hidden="true" />
