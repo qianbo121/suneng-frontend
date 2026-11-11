@@ -1,5 +1,6 @@
 import copy from './news-list-copy.json';
 import { richTextToPlainText } from '@/lib/sanitize';
+import type { Locale } from '@/types/site';
 import type { NewsListCardItem } from '@/types/news';
 import type { NewsDecisionTopicId, NewsFurnaceFilterId } from '@/lib/news-decision-center';
 
@@ -25,7 +26,7 @@ export function cleanNewsListSummary(value: string) {
 
 // Editorial presentation only: never alters source bodies, canonical identifiers,
 // dates or counts. An edited source automatically falls back to its current CMS copy.
-export function applyNewsListCopy(item: NewsListCardItem): NewsListCardItem {
+export function applyNewsListCopy(item: NewsListCardItem, locale: Locale = 'zh'): NewsListCardItem {
   const entry = (copy as Record<string, ListCopy>)[String(item.id)];
   const matches =
     entry?.sourceTitle === item.title.zh && entry.sourceDate === (item.updatedAt || item.date);
@@ -43,7 +44,7 @@ export function applyNewsListCopy(item: NewsListCardItem): NewsListCardItem {
     ...item,
     title: { ...item.title, zh: entry.title },
     summary: { ...item.summary, zh: entry.summary },
-    image: entry.image || item.image,
+    image: (locale === 'zh' && entry.image) || item.image,
     listTopic: entry.topic,
     listFurnaces: entry.furnaces,
     listEquipmentLabel: entry.equipmentLabel,

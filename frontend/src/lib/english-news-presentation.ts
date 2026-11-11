@@ -18,11 +18,35 @@ const diagrams: Record<string, { original: string; replacement: string; obsolete
   },
 };
 
-export function getReviewedEnglishNewsCover(slug?: string | null): string | undefined {
+const resourceCovers: Record<string, { original: string; english: string }> = {
+  'heat-treatment-furnace-loading-rack-fixture-selection': {
+    original: '/uploads/2026/09/1790148564337-7736bf9c-4ef0-45c4-9c85-a21cf6e652e2.webp',
+    english: '/images/news/resources-en/93-cover.webp',
+  },
+  'multi-product-heat-treatment-furnace-changeover-boundaries': {
+    original: '/uploads/2026/09/1790148509758-002217f2-b2bc-4a57-9059-47fc3da72956.webp',
+    english: '/images/news/resources-en/92-cover.webp',
+  },
+  'quench-tank-batch-interval-thermal-balance': {
+    original: '/uploads/2026/09/1789552830430-67618376-9e39-4deb-8558-2687d386f19e.webp',
+    english: '/images/news/resources-en/90-cover.webp',
+  },
+  'steel-annealing-500-tonnes-two-bogie-hearth-furnaces-capacity': {
+    original: '/uploads/2026/09/1789532562869-5180aebb-f93b-4bde-a9c8-a237de863e0a.webp',
+    english: '/images/news/resources-en/89-cover.webp',
+  },
+};
+
+export function getReviewedEnglishNewsCover(
+  slug?: string | null,
+  sourceImage?: string | null,
+): string | undefined {
   if (slug === 'atmosphere-furnace-pressure-fluctuation-process-or-equipment') {
     return diagrams[slug].replacement.replace(/\.svg$/, '.png');
   }
-  return undefined;
+  const cover = slug ? resourceCovers[slug] : undefined;
+  const path = sourceImage?.replace(/^https?:\/\/(?:www\.)?jssngyl\.cn(?=\/)/i, '');
+  return cover && path === cover.original ? cover.english : undefined;
 }
 
 export function localizeEnglishNewsPresentation(html: string, slug?: string | null): string {
@@ -36,6 +60,15 @@ export function localizeEnglishNewsPresentation(html: string, slug?: string | nu
     (_match, opening: string, attrs: string, label: string, closing: string) =>
       `${opening}/en/partner${attrs}${label.replace(/\s*\(Chinese\)/g, '')}${closing}`,
   );
+  if (slug === 'quench-tank-batch-interval-thermal-balance') {
+    const original = '/uploads/2026/09/1789552831265-f309bfde-a481-477f-b4b9-792115297dc3.webp';
+    for (const prefix of ['https://www.jssngyl.cn', 'https://jssngyl.cn', '']) {
+      result = result.replaceAll(prefix + original, '/images/news/resources-en/90-body.webp');
+    }
+    result = result.replace(/<img\b[^>]*>/gi, (tag) =>
+      tag.includes('/images/news/resources-en/90-body.webp') ? tag.replace(/\s(?:width|height)=["'][^"']*["']/gi, '') : tag,
+    );
+  }
   const diagram = slug ? diagrams[slug] : undefined;
   if (diagram && result.includes(diagram.original)) {
     // Replace only the reviewed illustration, including any link to its original.

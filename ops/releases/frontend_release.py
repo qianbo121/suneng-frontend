@@ -22,7 +22,7 @@ from component_lifecycle import active_components, retired_admin
 from storage_policy import working_space
 from frontend_html import frontend_html_probe
 from acquisition_continuity import acquisition_continuity_probe
-from procurement_approval import APPROVED_PATHS as APPROVED_PROCUREMENT_PATHS, APPROVAL_SHA256 as PROCUREMENT_APPROVAL_SHA256, CURRENT_APPROVAL_SHA256 as CURRENT_PROCUREMENT_APPROVAL_SHA256, SCOPE_FIELD, normalize_procurement, resolve_approval_sha
+from procurement_approval import BILINGUAL_SCOPE_SHA256, ENGLISH_EQUIPMENT_PATH, APPROVED_PATHS as APPROVED_PROCUREMENT_PATHS, APPROVAL_SHA256 as PROCUREMENT_APPROVAL_SHA256, CURRENT_APPROVAL_SHA256 as CURRENT_PROCUREMENT_APPROVAL_SHA256, SCOPE_FIELD, normalize_procurement, resolve_approval_sha
 from approved_procurement_continuity import approved_procurement_probe
 
 IMAGE = re.compile(r'^sha256:[0-9a-f]{64}$')
@@ -231,11 +231,13 @@ def case_contract(state, cases=None, *, encoded=True, withdrawn=None, guides=Non
         raise ValueError('Unknown guide publication state')
     retired = [path for path in retired if path not in guides]
     retired += [path for path in sorted(set(APPROVED_GUIDES + (withdrawn_guides or []))) if path not in guides and path not in retired]
-    procurement = normalize_procurement([] if procurement is None else procurement)
+    procurement = [] if procurement is None else procurement
+    procurement = normalize_procurement(procurement, BILINGUAL_SCOPE_SHA256 if ENGLISH_EQUIPMENT_PATH in procurement else None)
     if procurement_state not in ('open', 'either'):
         raise ValueError('Unknown separate procurement publication state')
     retired += [p for p in APPROVED_PROCUREMENT_PATHS if p not in procurement and p not in retired]
-    retired += [p.replace('/zh/', '/en/', 1) for p in APPROVED_PROCUREMENT_PATHS]
+    retired += [p.replace('/zh/', '/en/', 1) for p in APPROVED_PROCUREMENT_PATHS
+                if p.replace('/zh/', '/en/', 1) not in procurement]
     return {'state': state, 'group': group, 'retired': retired + drafts + extra,
             'guides': {'state': guide_state, 'paths': guides},
             'procurement': {'state': procurement_state, 'paths': procurement}}

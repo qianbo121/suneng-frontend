@@ -34,7 +34,9 @@ describe('standalone procurement resource in the normal news list', () => {
     expect(news).toHaveLength(11);
     expect(cards).toHaveLength(12);
     expect(includeStandaloneNewsResources(cards, 'zh')).toHaveLength(12);
-    expect(includeStandaloneNewsResources(news, 'en')).toBe(news);
+    const english = includeStandaloneNewsResources(news, 'en').at(-1)!;
+    expect(english.title.en).toContain('furnace procurement');
+    expect(getNewsListCardHref(english, 'en')).toBe(PROCUREMENT_RESOURCE_HREF.replace('/zh/', '/en/'));
     expect(resource.date).toBe('');
     expect(resource.updatedAt).toBeUndefined();
     expect(resource.viewCount).toBeUndefined();

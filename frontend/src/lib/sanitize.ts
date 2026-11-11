@@ -297,7 +297,7 @@ export function prepareNewsArticleHtml(
 
   repairNewsPresentation(root, options.articleSlug, options.locale);
   if (options.locale === 'zh') normalizeNewsContactFormat(root);
-  normalizeNewsAttribution(root);
+  normalizeNewsAttribution(root, options.locale);
   return DOMPurify.sanitize(root.innerHTML);
 }
 

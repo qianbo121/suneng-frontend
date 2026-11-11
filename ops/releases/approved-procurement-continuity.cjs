@@ -190,7 +190,7 @@ function inspectApprovedPage(html, page, headers) {
 async function checkApprovedProcurement({baseUrl, pages}) {
   const parsed = new URL(baseUrl);
   if (!['http:', 'https:'].includes(parsed.protocol) || parsed.username || parsed.password || parsed.pathname !== '/' || parsed.search || parsed.hash) throw new Error('Invalid approved check origin');
-  const exact = ['/zh/articles/special-industrial-furnace-procurement-assessment', '/zh/service/industrial-furnace-parts-purchasing'];
+  const exact = ['/zh/articles/special-industrial-furnace-procurement-assessment', '/zh/service/industrial-furnace-parts-purchasing', '/en/articles/special-industrial-furnace-procurement-assessment'];
   if (!Array.isArray(pages) || new Set(pages.map(p => p.path)).size !== pages.length || pages.some(p => !exact.includes(p.path))) throw new Error('Unapproved procurement scope');
   const sitemap = pages.length ? await getResponse(baseUrl + '/sitemap.xml', 20000) : null;
   const xml = (sitemap?.body ?? '').replace(/<!--[\s\S]*?-->/g, '');

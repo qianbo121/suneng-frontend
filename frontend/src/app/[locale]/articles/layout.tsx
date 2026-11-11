@@ -9,7 +9,7 @@ export default async function Layout({
   params: Promise<{ locale: string }>;
 }) {
   const { locale } = await params;
-  if (!hasPublishedGuides(locale, 'articles')) notFound();
+  if (locale !== 'en' && !hasPublishedGuides(locale, 'articles')) notFound();
   // Each leaf page still enforces its own approval, even without middleware.
   return children;
 }

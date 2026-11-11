@@ -9,7 +9,10 @@ export const APPROVED_PROCUREMENT_PATHS: ReadonlySet<string> = new Set([
   '/zh/articles/special-industrial-furnace-procurement-assessment',
   '/zh/service/industrial-furnace-parts-purchasing',
 ]);
+export const ENGLISH_EQUIPMENT_PROCUREMENT_PATH = '/en/articles/special-industrial-furnace-procurement-assessment';
+
 export function isPublishedProcurementPage(locale: string, chinesePath: string): boolean {
+  if (locale === 'en') return chinesePath === ENGLISH_EQUIPMENT_PROCUREMENT_PATH.replace('/en/', '/zh/');
   return locale === 'zh' && APPROVED_PROCUREMENT_PATHS.has(chinesePath);
 }
 function isApprovedChinesePath(path: string): boolean {
@@ -104,6 +107,7 @@ function isWithdrawnSegments(segments: string[]): boolean {
  */
 export function isWithdrawnRequestPath(pathname: string): boolean {
   const canonical = routablePathname(pathname).replace(/\/+$/, '');
+  if (canonical === ENGLISH_EQUIPMENT_PROCUREMENT_PATH) return pathname.replace(/\/+$/, '') !== canonical;
   if (
     isApprovedChinesePath(canonical) &&
     !isApprovedChinesePath(pathname.replace(/\/+$/, ''))

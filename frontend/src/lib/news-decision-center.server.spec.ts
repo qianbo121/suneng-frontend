@@ -115,7 +115,7 @@ describe('prepared news collection', () => {
       getNewsDecisionCenterData('en'),
     ]);
     expect(zh.data).toHaveLength(2);
-    expect(en.data).toHaveLength(0);
+    expect(en.data?.map((item) => item.id)).toEqual([-1]);
   });
 });
 
@@ -132,7 +132,7 @@ it('keeps English lists restricted to complete translations and uses English sea
     error: null,
   });
   const result = await getNewsDecisionCenterData('en');
-  expect(result.data).toHaveLength(1);
+  expect(result.data?.map((item) => item.id)).toEqual([translated.id, -1]);
   expect(result.data?.[0].title.en).toBe(translated.titleEn);
   expect(result.data?.[0].searchText).toContain('English-only search phrase');
   expect((await getNewsDecisionCenterData('zh')).data).toHaveLength(3);
@@ -208,8 +208,8 @@ it('omits the English case if the public reader withdraws the translation', asyn
   vi.mocked(getAllNewsForDecisionCenter).mockResolvedValue({ data: [], error: null });
   const unavailable = vi.spyOn(englishCases, 'getEnglishCase').mockReturnValue(undefined);
   try {
-    expect(await getNewsDecisionCenterCards('en')).toEqual([]);
-    expect((await getNewsResourceListData('en')).data).toEqual([]);
+    expect((await getNewsDecisionCenterCards('en')).map(item => item.id)).toEqual([-1]);
+    expect((await getNewsResourceListData('en')).data?.map(item => item.id)).toEqual([-1]);
   } finally {
     unavailable.mockRestore();
   }

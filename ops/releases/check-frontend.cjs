@@ -41,7 +41,7 @@
   }
   const guidesPassed = guideChecks.every((check) => guideAllowed.includes(check.status));
   const procurement = contract.procurement || {state: 'open', paths: []};
-  const exactProcurement = ['/zh/articles/special-industrial-furnace-procurement-assessment', '/zh/service/industrial-furnace-parts-purchasing'];
+  const exactProcurement = ['/zh/articles/special-industrial-furnace-procurement-assessment', '/zh/service/industrial-furnace-parts-purchasing', '/en/articles/special-industrial-furnace-procurement-assessment'];
   if (!Array.isArray(procurement.paths) || procurement.paths.some(p => !exactProcurement.includes(p)) || new Set(procurement.paths).size !== procurement.paths.length) throw new Error('unapproved procurement scope');
   if (!['open', 'either'].includes(procurement.state)) throw new Error('unknown procurement state');
   const procurementAllowed = procurement.state === 'open' ? [200] : procurement.state === 'either' ? [200, 404] : [];

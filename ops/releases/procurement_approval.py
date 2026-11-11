@@ -14,6 +14,9 @@ APPROVED_PATHS = [
     '/zh/articles/special-industrial-furnace-procurement-assessment',
     '/zh/service/industrial-furnace-parts-purchasing',
 ]
+ENGLISH_EQUIPMENT_PATH = '/en/articles/special-industrial-furnace-procurement-assessment'
+BILINGUAL_SCOPE_FILE = Path(__file__).with_name('procurement-bilingual-scope-20261111.json')
+BILINGUAL_SCOPE_SHA256 = '30e5467979d38d062dca2582d4c5e7f675705cef91e1f2f2aff4c4d707a4fbc1'
 SCOPE_FIELD = 'independentlyApprovedProcurementPages'
 
 
@@ -21,13 +24,24 @@ def resolve_approval_sha(approval_sha=None):
     # Historical receipts before the hash field described the original bodies.
     if approval_sha is None:
         return APPROVAL_SHA256
-    if not isinstance(approval_sha, str) or approval_sha not in (APPROVAL_SHA256, CURRENT_APPROVAL_SHA256):
+    if not isinstance(approval_sha, str) or approval_sha not in (APPROVAL_SHA256, CURRENT_APPROVAL_SHA256, BILINGUAL_SCOPE_SHA256):
         raise ValueError('Separate procurement approval provenance does not match')
     return approval_sha
 
 
 def approval_document(approval_sha=APPROVAL_SHA256):
     selected = resolve_approval_sha(approval_sha)
+    if selected == BILINGUAL_SCOPE_SHA256:
+        raw = BILINGUAL_SCOPE_FILE.read_bytes()
+        if hashlib.sha256(raw).hexdigest() != selected:
+            raise ValueError('Bilingual procurement scope changed')
+        addition = json.loads(raw)
+        if (addition['previousApprovalSha256'] != CURRENT_APPROVAL_SHA256
+                or addition['page']['path'] != ENGLISH_EQUIPMENT_PATH):
+            raise ValueError('Unexpected English procurement scope')
+        document = approval_document(CURRENT_APPROVAL_SHA256)
+        document['pages'].append(addition['page'])
+        return document
     raw = (APPROVAL_FILE if selected == APPROVAL_SHA256 else CURRENT_APPROVAL_FILE).read_bytes()
     if hashlib.sha256(raw).hexdigest() != selected:
         raise ValueError('Separate procurement approval record changed')
@@ -45,17 +59,17 @@ def approval_document(approval_sha=APPROVAL_SHA256):
 
 
 def normalize_procurement(value, approval_sha=None, *, require_approval=False):
-    if (not isinstance(value, list) or any(not isinstance(p, str) or p not in APPROVED_PATHS for p in value)
+    selected = resolve_approval_sha(approval_sha)
+    allowed = [page['path'] for page in approval_document(selected)['pages']]
+    if (not isinstance(value, list) or any(not isinstance(p, str) or p not in allowed for p in value)
             or len(value) != len(set(value))):
         raise ValueError('Only the exact separately approved Chinese procurement paths may be released')
-    selected = resolve_approval_sha(approval_sha)
     if value and require_approval and approval_sha is None:
         raise ValueError('A procurement candidate requires its exact approval record hash')
-    approval_document(selected)
     return sorted(value)
 
 
-def procurement_candidate_fields(project_root, approval_sha=CURRENT_APPROVAL_SHA256):
+def procurement_candidate_fields(project_root, approval_sha=BILINGUAL_SCOPE_SHA256):
     """Prepare scope only after checking source parity; actual candidate GETs remain mandatory."""
     root = Path(project_root)
     source = (root / 'frontend/src/lib/approved-procurement-pages.ts').read_text()
@@ -77,4 +91,14 @@ def procurement_candidate_fields(project_root, approval_sha=CURRENT_APPROVAL_SHA
         route = root / 'frontend/src/app/[locale]' / actual['path'].split('/zh/', 1)[1] / 'page.tsx'
         if not route.is_file() or 'isPublishedProcurementPage' not in route.read_text():
             raise ValueError('Source lacks the approved locale-gated procurement leaf route')
-    return {SCOPE_FIELD: list(APPROVED_PATHS), 'procurementApprovalSha256': selected}
+    paths = list(APPROVED_PATHS)
+    if selected == BILINGUAL_SCOPE_SHA256:
+        english = json.loads((root / 'frontend/src/lib/equipment-procurement-en.json').read_text())
+        expected = approval_document(selected)['pages'][-1]
+        if (english['path'] != expected['path'] or english['heading'] != expected['h1']
+                or english['parentPath'] != expected['entryPath']
+                or hashlib.sha256(english['html'].encode()).hexdigest() != expected['approvedBodySha256']
+                or re.findall(r'<section id="([^"]+)"', english['html']) != expected['anchors']):
+            raise ValueError('English equipment procurement copy differs from the bilingual scope')
+        paths.append(ENGLISH_EQUIPMENT_PATH)
+    return {SCOPE_FIELD: paths, 'procurementApprovalSha256': selected}

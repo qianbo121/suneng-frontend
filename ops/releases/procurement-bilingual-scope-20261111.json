@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "scopeRequest": "立即处理，要求全部中英双语",
+  "deploymentAuthorized": false,
+  "previousApprovalSha256": "c13cd276d54fbf4a42ae17f03d9d46f78dedf114e49d04aeb04b8e767a9d1934",
+  "page": {
+    "path": "/en/articles/special-industrial-furnace-procurement-assessment",
+    "h1": "Special-purpose industrial furnace procurement",
+    "bodyId": "procurement-equipment-body",
+    "approvedBodySha256": "68038b295618d54356f8369f95f4b9aa47609fdf9288ef35ce3555a1eb95d47b",
+    "contentStreamSha256": "a55b62dd0aefe85ab5bb8b62f8e20456d34c4bf92471b0c6f82ef4e80db39ff0",
+    "anchors": [
+      "room-gas-forging-regenerative-assessment",
+      "solution-nitriding-atmosphere-assessment",
+      "large-bell-assessment",
+      "oven-preheat-curing-assessment",
+      "spheroidizing-assessment",
+      "gas-furnace-assessment",
+      "electric-resistance-furnace-assessment",
+      "drying-furnace-assessment",
+      "stainless-annealing-pickling-assessment"
+    ],
+    "entryPath": "/en/products"
+  }
+}
