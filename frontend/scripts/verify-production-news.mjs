@@ -49,7 +49,7 @@ try {
       .filter(item => locale === 'zh' || (item.titleEn?.trim() && item.contentEn?.replace(/<[^>]+>/g, '').trim()))
       .concat({ id: -2, publishDate: projectCase.datePublished })
       .sort((a, b) => Date.parse(b.publishDate) - Date.parse(a.publishDate) || a.id - b.id);
-    if (locale === 'zh') expected.push({ id: -1, publishDate: null });
+    expected.push({ id: -1, publishDate: null });
     const pageCount = Math.ceil(expected.length / 10);
     for (const pass of ['cold', 'warm']) {
       const ids = [];
@@ -67,6 +67,10 @@ try {
             assert.match(card[2], new RegExp(`<time[^>]*dateTime="${publicationDate}"`), `${path} must display its publication date`);
           } else {
             assert.doesNotMatch(card[2], /<time\b/, `${path} must not invent a procurement resource date`);
+          }
+          if (item.id === -1) {
+            assert.ok(card[2].includes(`href="/${locale}/articles/special-industrial-furnace-procurement-assessment"`),
+              `${path} must link the procurement card to its own language version`);
           }
           if (item.id === -2) {
             assert.ok(card[2].includes(`href="/${locale}/case/${projectCase.slug}"`));
