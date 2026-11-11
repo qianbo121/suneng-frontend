@@ -34,6 +34,10 @@ for (const locale of ['zh', 'en'] as const) {
       expect(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth)).toBe(false);
       const partners = page.locator('.hero-banner > :last-child');
       await expect(partners.getByTestId('homepage-partner-track')).toBeVisible();
+      const accentBox = await partners.locator('span[aria-hidden="true"]').first().boundingBox();
+      const taskTitleBox = await page.locator('#task-paths h2').boundingBox();
+      if (!accentBox || !taskTitleBox) throw new Error('Expected partner accent and task heading');
+      expect(accentBox.x).toBeCloseTo(taskTitleBox.x, 1);
       const partnerBox = await partners.boundingBox();
       if (!box || !partnerBox) throw new Error('Expected both the banner and partners strip to be visible');
       expect(box.y + box.height).toBeCloseTo(partnerBox.y, 0);
