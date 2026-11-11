@@ -3,7 +3,8 @@ import { expect, test } from '@playwright/test';
 for (const locale of ['zh', 'en'] as const) {
   for (const width of [1920, 390]) {
     test(`${locale} homepage shows one complete banner at ${width}px`, async ({ page }, info) => {
-      await page.setViewportSize({ width, height: width === 1920 ? 1080 : 844 });
+      const height = width === 1920 ? 930 : 844;
+      await page.setViewportSize({ width, height });
       const errors: string[] = [];
       page.on('pageerror', error => errors.push(error.message));
       await page.goto(`/${locale}`, { waitUntil: 'load' });
@@ -36,11 +37,9 @@ for (const locale of ['zh', 'en'] as const) {
       const partnerBox = await partners.boundingBox();
       if (!box || !partnerBox) throw new Error('Expected both the banner and partners strip to be visible');
       expect(box.y + box.height).toBeCloseTo(partnerBox.y, 0);
-      if (width === 1920) {
-        expect(box.height).toBeCloseTo(width / 2.4, 0);
-      } else {
-        expect(box.height).toBeGreaterThan(width);
-      }
+      const toolbar = page.locator('[data-contact-toolbar]');
+      const toolbarBox = width === 390 ? await toolbar.boundingBox() : null;
+      expect(partnerBox.y + partnerBox.height).toBeLessThanOrEqual(toolbarBox?.y ?? height);
       await page.screenshot({
         path: info.outputPath(`${locale}-home-${width}.png`),
         style: 'nextjs-portal { display: none !important; }',
@@ -51,3 +50,34 @@ for (const locale of ['zh', 'en'] as const) {
     });
   }
 }
+
+test('all four facts count once without shifting their units or partners', async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 720 });
+  await page.emulateMedia({ reducedMotion: 'no-preference' });
+  const start = new Date('2026-01-01T12:00:00Z');
+  await page.clock.install({ time: start });
+  await page.clock.pauseAt(new Date(start.getTime() + 1000));
+  await page.goto('/zh');
+
+  const facts = page.locator('section[aria-labelledby="hero-title"] dd');
+  const digits = facts.locator('[data-final] > span');
+  const partners = page.locator('.hero-banner > :last-child');
+  const unitPositions = () => facts.locator(':scope > span:last-child').evaluateAll(
+    units => units.map(unit => unit.getBoundingClientRect().x),
+  );
+  await expect(digits).toHaveText(['0', '0', '0', '0']);
+  const initialPositions = await unitPositions();
+  const initialPartners = await partners.boundingBox();
+  await page.clock.runFor(450);
+  const targets = [2006, 5080, 1000, 14700];
+  const intermediate = (await digits.allTextContents()).map(Number);
+  expect(intermediate.every((value, i) => value > 0 && value < targets[i])).toBe(true);
+  expect(await unitPositions()).toEqual(initialPositions);
+  await page.clock.runFor(650);
+  await expect(digits).toHaveText(targets.map(String));
+  expect(await unitPositions()).toEqual(initialPositions);
+  expect(await partners.boundingBox()).toEqual(initialPartners);
+  await page.evaluate(() => { window.scrollBy(0, innerHeight); window.scrollTo(0, 0); });
+  await page.clock.runFor(250);
+  await expect(digits).toHaveText(targets.map(String));
+});
