@@ -45,8 +45,18 @@ class ProcurementApprovalVersionTest(unittest.TestCase):
         self.assertFalse(new['approvalSource']['deploymentAuthorized'])
         self.assertEqual(len(r.APPROVED_GUIDES), 11)
 
+    def test_bilingual_candidate_adds_only_the_english_resource(self):
+        fields = approval.procurement_candidate_fields(ROOT)
+        english = approval.ENGLISH_EQUIPMENT_PATH
+        self.assertEqual(fields[approval.SCOPE_FIELD], PATHS + [english])
+        self.assertEqual(fields['procurementApprovalSha256'], approval.BILINGUAL_SCOPE_SHA256)
+        with self.assertRaises(ValueError):
+            approval.normalize_procurement([english], NEW_APPROVAL)
+        self.assertNotIn(english, r.case_contract('open', procurement=PATHS + [english])['retired'])
+        self.assertIn(english, r.case_contract('open', procurement=PATHS)['retired'])
+
     def test_new_source_requires_exact_new_approval_and_defaults_to_it(self):
-        self.assertEqual(approval.procurement_candidate_fields(ROOT), {
+        self.assertEqual(approval.procurement_candidate_fields(ROOT, NEW_APPROVAL), {
             approval.SCOPE_FIELD: PATHS, 'procurementApprovalSha256': NEW_APPROVAL,
         })
         with self.assertRaisesRegex(ValueError, 'source body or anchor'):

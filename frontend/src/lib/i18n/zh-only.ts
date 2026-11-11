@@ -12,7 +12,6 @@ export const ZH_ONLY_PATHS = new Set<string>([
   '/inquiry',
   '/articles/gongye-lu-baojia-canshu',
   '/articles/laojiu-rechuli-lu-daxiu-haishi-maixin',
-  '/articles/special-industrial-furnace-procurement-assessment',
   '/service/industrial-furnace-parts-purchasing',
 ]);
 

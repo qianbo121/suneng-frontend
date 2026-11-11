@@ -9,6 +9,7 @@ import { publicPathExists } from '@/lib/seo/config';
 import { absoluteUrl } from '@/lib/seo/metadata';
 import { getVerifiedSitemapLastModified } from '@/lib/seo/verified-sitemap-revisions';
 import { getAllNewsForDecisionCenter } from '@/lib/api/news';
+import { getReviewedEnglishNewsCover } from '@/lib/english-news-presentation';
 import { getNewsContentModifiedTime } from '@/lib/news-dates';
 import { approvedProcurementPages } from '@/lib/approved-procurement-pages';
 import { filterCanonicalNewsItems, hasPublishableEnglishNews } from '@/lib/news-routing';
@@ -241,6 +242,7 @@ function collectStaticRoutes(): MetadataRoute.Sitemap {
   ];
 
   const englishGuidePaths = new Set([
+    '/articles/special-industrial-furnace-procurement-assessment',
     '/products/detail/copper-wire-annealing-line/inquiry-checklist',
     '/service/furnace-renovation-overhaul',
     ...englishSolutions.map((item) => `/solutions/${item.slug}`),
@@ -324,7 +326,7 @@ async function collectNewsRoutes(): Promise<MetadataRoute.Sitemap> {
     const locales = hasPublishableEnglishNews(article) ? sitemapLocales : zhOnlyLocales;
     return locales.map((locale) => {
       const coverImage =
-        (locale === 'en' && article.englishCoverImage) || article.coverImage;
+        (locale === 'en' && (article.englishCoverImage || getReviewedEnglishNewsCover(article.slug, article.coverImage))) || article.coverImage;
       return route(localizedPath(locale, `/news/${article.slug}`), {
         lastModified: safeLastModified(getNewsContentModifiedTime(article, locale)),
         changeFrequency: 'monthly',

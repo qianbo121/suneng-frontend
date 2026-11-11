@@ -1468,15 +1468,15 @@ class SeparateProcurementReleaseTest(unittest.TestCase):
                              'frontend/src/app/[locale]/articles/special-industrial-furnace-procurement-assessment/page.tsx',
                              'frontend/src/app/[locale]/service/industrial-furnace-parts-purchasing/page.tsx']:
                 output = fake_root / relative;output.parent.mkdir(parents=True, exist_ok=True);output.write_bytes((root / relative).read_bytes())
-            self.assertEqual(approval.procurement_candidate_fields(fake_root)[r.SCOPE_FIELD], self.PATHS)
+            self.assertEqual(approval.procurement_candidate_fields(fake_root, approval.CURRENT_APPROVAL_SHA256)[r.SCOPE_FIELD], self.PATHS)
             body_file = fake_root / 'frontend/src/lib/approved-procurement-pages.ts'
             body_file.write_text(body_file.read_text().replace('苏能接受工业炉配件的独立采购需求', '未经批准的新内容', 1))
-            with self.assertRaises(ValueError): approval.procurement_candidate_fields(fake_root)
+            with self.assertRaises(ValueError): approval.procurement_candidate_fields(fake_root, approval.CURRENT_APPROVAL_SHA256)
 
     def test_source_and_both_actual_prepare_metadata_blocks_carry_exact_scope(self):
         from procurement_approval import procurement_candidate_fields
         root = Path(__file__).resolve().parents[2]
-        self.assertEqual(procurement_candidate_fields(root)[r.SCOPE_FIELD], self.PATHS)
+        self.assertEqual(procurement_candidate_fields(root)[r.SCOPE_FIELD], self.PATHS + [r.ENGLISH_EQUIPMENT_PATH])
         for workflow, component in [('prepare-frontend.yml', None), ('prepare-release.yml', 'frontend'), ('prepare-release.yml', 'backend')]:
             text = (root / '.github/workflows' / workflow).read_text()
             source = text.split("          python3 - <<'PY'\n", 1)[1].split('\n          PY', 1)[0]
@@ -1501,8 +1501,8 @@ class SeparateProcurementReleaseTest(unittest.TestCase):
                 actual = json.loads((folder / 'candidate.json').read_text())
                 if component != 'backend':
                     self.assertEqual(actual['approvedGuides'], r.APPROVED_GUIDES)
-                    self.assertEqual(actual[r.SCOPE_FIELD], self.PATHS)
-                    self.assertEqual(actual['procurementApprovalSha256'], r.CURRENT_PROCUREMENT_APPROVAL_SHA256)
+                    self.assertEqual(actual[r.SCOPE_FIELD], self.PATHS + [r.ENGLISH_EQUIPMENT_PATH])
+                    self.assertEqual(actual['procurementApprovalSha256'], r.BILINGUAL_SCOPE_SHA256)
                 else:
                     self.assertNotIn(r.SCOPE_FIELD, actual)
                     self.assertNotIn('approvedGuides', actual)

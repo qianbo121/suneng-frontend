@@ -1,7 +1,10 @@
 export const NEWS_ATTRIBUTION = '苏能工业炉工程技术团队&唐荔';
 
 /** Update bylines only; preserve surrounding prose, links and inline markup. */
-export function normalizeNewsAttribution(root: HTMLElement) {
+export function normalizeNewsAttribution(root: HTMLElement, locale?: string) {
+  const byline = locale === 'en'
+    ? `${NEWS_ATTRIBUTION} (Suneng Industrial Furnace Engineering Team & Tang Li)`
+    : NEWS_ATTRIBUTION;
   const excluded = 'table, pre, code, figure, figcaption, h1, h2, h3, h4, h5, h6';
   const blocks = 'p, div, section, article, li, blockquote';
   const runs: Node[][] = [];
@@ -35,7 +38,7 @@ export function normalizeNewsAttribution(root: HTMLElement) {
     const pattern = /(?:^|\n)\s*(?:(?:(?:资料|技术)署名|Technical (?:author|attribution|credit))\s*[:：]\s*([^\n]+?)|((?:江苏)?苏能工业炉工程技术团队(?:\s*[&＆]\s*唐荔)?|Jiangsu Suneng Industrial Furnace Engineering Team))\s*(?=$|\n)|本文由((?:江苏)?苏能工业炉工程技术团队)整理/gi;
     for (const match of Array.from(text.matchAll(pattern)).reverse()) {
       const name = match[1] ?? match[2] ?? match[3];
-      if (name === NEWS_ATTRIBUTION) continue;
+      if (name === byline) continue;
       const start = match.index! + match[0].indexOf(name);
       const end = start + name.length;
       let inserted = false;
@@ -43,7 +46,7 @@ export function normalizeNewsAttribution(root: HTMLElement) {
         if (part.end <= start || part.start >= end) continue;
         const value = part.node.textContent ?? '';
         part.node.textContent = value.slice(0, Math.max(0, start - part.start))
-          + (inserted ? '' : NEWS_ATTRIBUTION)
+          + (inserted ? '' : byline)
           + value.slice(Math.min(value.length, end - part.start));
         inserted = true;
       }

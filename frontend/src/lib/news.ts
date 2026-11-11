@@ -46,7 +46,7 @@ export function resolveNewsImage(
   options?: { preferFallback?: boolean; locale?: Locale },
 ) {
   const image = normalizeNewsImageSource(
-    (options?.locale === 'en' && (item?.englishCoverImage || getReviewedEnglishNewsCover(item?.slug))) ||
+    (options?.locale === 'en' && (item?.englishCoverImage || getReviewedEnglishNewsCover(item?.slug, item?.coverImage))) ||
       item?.coverImage ||
       item?.ogImage,
   );

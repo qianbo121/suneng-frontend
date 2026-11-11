@@ -112,21 +112,22 @@ describe('the two owner-approved Chinese procurement pages', () => {
     expect(webpage).not.toHaveProperty('reviewedBy');
   });
 
-  it.each(approvedCases)('%s has a self canonical, Chinese-only metadata and no invented news date', async (id, route) => {
+  it.each(approvedCases)('%s has a self canonical, localised metadata and no invented news date', async (id, route) => {
     const page = approvedProcurementPages[id];
     const metadata = await route.generateMetadata({ params: Promise.resolve({ locale: 'zh' }) });
     expect(metadata.alternates?.canonical).toBe('https://www.jssngyl.cn' + page.path);
     expect(metadata.alternates?.languages).toEqual({
       'zh-CN': 'https://www.jssngyl.cn' + page.path,
+      ...(id === 'equipment' ? { en: 'https://www.jssngyl.cn' + page.path.replace('/zh/', '/en/') } : {}),
       'x-default': 'https://www.jssngyl.cn' + page.path,
     });
     expect(metadata.openGraph).toMatchObject({ type: 'website' });
     expect(metadata.openGraph).not.toHaveProperty('publishedTime');
     expect(metadata.openGraph).not.toHaveProperty('modifiedTime');
-    expect(route.generateStaticParams()).toEqual([{ locale: 'zh' }]);
+    expect(route.generateStaticParams()).toEqual(id === 'equipment' ? [{ locale: 'zh' }, { locale: 'en' }] : [{ locale: 'zh' }]);
     const html = renderToStaticMarkup(await route.default({ params: Promise.resolve({ locale: 'zh' }) }));
     expect(documentOf(html).querySelector('h1')?.textContent).toBe(page.heading);
-    for (const locale of ['en', 'fr']) {
+    for (const locale of id === 'equipment' ? ['fr'] : ['en', 'fr']) {
       const props = { params: Promise.resolve({ locale }) };
       await expect(route.default(props)).rejects.toMatchObject({ withdrawn: true });
       await expect(route.generateMetadata(props)).rejects.toMatchObject({ withdrawn: true });
@@ -138,14 +139,15 @@ describe('the two owner-approved Chinese procurement pages', () => {
     expect(APPROVED_PROCUREMENT_PATHS.size).toBe(2);
     for (const page of Object.values(approvedProcurementPages)) {
       expect(isPublishedProcurementPage('zh', page.path)).toBe(true);
-      expect(isPublishedProcurementPage('en', page.path)).toBe(false);
+      const hasEnglish = page.path === approvedProcurementPages.equipment.path;
+      expect(isPublishedProcurementPage('en', page.path)).toBe(hasEnglish);
       expect(isWithdrawnRequestPath(page.path)).toBe(false);
-      expect(isZhOnlyPath(page.path)).toBe(true);
-      expect(localizeOrHideHref(page.path, 'en')).toBeNull();
+      expect(isZhOnlyPath(page.path)).toBe(!hasEnglish);
+      expect(localizeOrHideHref(page.path, 'en')).toBe(hasEnglish ? page.path.replace('/zh/', '/en/') : null);
       expect(localizeOrHideHref(page.path, 'zh')).toBe(page.path);
     }
     const equipment = approvedProcurementPages.equipment.path;
-    expect(isWithdrawnRequestPath(equipment.replace('/zh/', '/en/'))).toBe(true);
+    expect(isWithdrawnRequestPath(equipment.replace('/zh/', '/en/'))).toBe(false);
     expect(isWithdrawnRequestPath(equipment.replace('special-', '%73pecial-'))).toBe(true);
     expect(isWithdrawnRequestPath(equipment + '/unapproved')).toBe(true);
     expect(isWithdrawnRequestPath('/zh/articles/unapproved-parts-page')).toBe(true);
@@ -163,7 +165,7 @@ describe('only the two approved entry placements change', () => {
       ['专项工业炉采购评估', approvedProcurementPages.equipment.path],
     ]);
     const english = documentOf(renderToStaticMarkup(createElement(ChineseProductsLanding, { locale: 'en' })));
-    expect(english.querySelector('a[href="' + approvedProcurementPages.equipment.path + '"]')).toBeNull();
+    expect(english.querySelector('a[href="' + approvedProcurementPages.equipment.path.replace('/zh/', '/en/') + '"]')).not.toBeNull();
   });
 
   it('inserts the exact parts paragraph between the existing installation Hero and pathbar', () => {

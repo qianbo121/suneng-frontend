@@ -63,7 +63,7 @@ import buildSitemap from '@/app/sitemap';
 import { approvedProcurementPages } from '@/lib/approved-procurement-pages';
 
 import { FURNACE_RENOVATION_OVERHAUL_SEO, PRODUCT_DETAIL_SEO } from '@/lib/seo/page-data';
-import { APPROVED_GUIDE_PATHS, APPROVED_PROCUREMENT_PATHS, isWithdrawnTechnicalPath } from '@/lib/publication-scope';
+import { APPROVED_GUIDE_PATHS, APPROVED_PROCUREMENT_PATHS, ENGLISH_EQUIPMENT_PROCUREMENT_PATH, isWithdrawnTechnicalPath } from '@/lib/publication-scope';
 import { REVIEWED_PUBLIC_CASES } from '@/lib/cases/public-case-allowlist';
 
 const site = 'https://www.jssngyl.cn';
@@ -167,7 +167,7 @@ describe('sitemap freshness signals', () => {
         .filter((entry) => /\/(articles|solutions)(\/|$)/.test(new URL(entry.url).pathname))
         .map((entry) => new URL(entry.url).pathname)
         .sort(),
-    ).toEqual([...APPROVED_GUIDE_PATHS, ...APPROVED_PROCUREMENT_PATHS].filter((path) => /\/(articles|solutions)\//.test(path)).sort());
+    ).toEqual([...APPROVED_GUIDE_PATHS, ...APPROVED_PROCUREMENT_PATHS, ENGLISH_EQUIPMENT_PROCUREMENT_PATH].filter((path) => /\/(articles|solutions)\//.test(path)).sort());
     expect(casePathUrls(entries.map((entry) => entry.url))).toEqual(APPROVED_CASE_URLS);
   });
 
@@ -315,7 +315,7 @@ it('lists only approved cases and guides without pagination or withdrawn alterna
       .filter((x) => /\/articles(\/|\?|$)/.test(x.url))
       .map((x) => new URL(x.url).pathname)
       .sort(),
-  ).toEqual([...APPROVED_GUIDE_PATHS, ...APPROVED_PROCUREMENT_PATHS].filter((path) => path.includes('/articles/')).sort());
+  ).toEqual([...APPROVED_GUIDE_PATHS, ...APPROVED_PROCUREMENT_PATHS, ENGLISH_EQUIPMENT_PROCUREMENT_PATH].filter((path) => path.includes('/articles/')).sort());
   expect(entries.some((x) => /\/case\?/.test(x.url))).toBe(false);
   expect(casePathUrls(entries.map((x) => x.url))).toEqual(APPROVED_CASE_URLS);
   for (const entry of entries)
@@ -362,12 +362,14 @@ it('includes reciprocal language links for the eight completed English productio
   }
 });
 
-it('includes both approved Chinese procurement pages without English alternates or invented dates', async () => {
+it('includes the bilingual equipment guide and the Chinese parts guide with their approved dates', async () => {
   const entries = await buildSitemap();
   for (const pathname of APPROVED_PROCUREMENT_PATHS) {
     const matching = entries.filter((entry) => new URL(entry.url).pathname === pathname);
+    const bilingual = pathname === approvedProcurementPages.equipment.path;
     expect(matching).toHaveLength(1);
     expect(matching[0].alternates?.languages).toEqual({
+      ...(bilingual ? { 'en-US': site + ENGLISH_EQUIPMENT_PROCUREMENT_PATH } : {}),
       'zh-CN': 'https://www.jssngyl.cn' + pathname,
       'x-default': 'https://www.jssngyl.cn' + pathname,
     });
@@ -376,7 +378,7 @@ it('includes both approved Chinese procurement pages without English alternates 
         ? new Date(approvedProcurementPages.equipment.publishedModifiedAt)
         : undefined,
     );
-    expect(entries.some((entry) => new URL(entry.url).pathname === pathname.replace('/zh/', '/en/'))).toBe(false);
+    expect(entries.some((entry) => new URL(entry.url).pathname === pathname.replace('/zh/', '/en/'))).toBe(bilingual);
   }
 });
 

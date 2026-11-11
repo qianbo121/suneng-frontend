@@ -47,7 +47,7 @@ function SectionHeading({
 export function ChineseProductsLanding({ locale = 'zh' }: { locale?: Locale }) {
   const en = locale === 'en';
   const availablePurchaseReferences = en
-    ? []
+    ? [['Special-purpose industrial furnace procurement', '/en/articles/special-industrial-furnace-procurement-assessment']]
     : purchaseReferences.filter(([, href]) => !isWithdrawnTechnicalPath(href));
   const t = (zh: string, english: string) => en ? english : zh;
   return (
@@ -122,8 +122,8 @@ export function ChineseProductsLanding({ locale = 'zh' }: { locale?: Locale }) {
           <div className={styles.container}>
             <SectionHeading
               id="purchase-reference-title"
-              title="选型与采购参考"
-              description="先明确设备选型方向，再核对厂家能力与项目所在地的配套条件。"
+              title={t("选型与采购参考", "Selection and purchasing guides")}
+              description={t("先明确设备选型方向，再核对厂家能力与项目所在地的配套条件。", "Check the workpiece, loading arrangement and site requirements before comparing quotations.")}
             />
             <div className={styles.referenceGrid}>
               {availablePurchaseReferences.map(([label, href]) => (

@@ -11,13 +11,13 @@ const procurementResource: NewsListCardItem = {
   image: '/images/home/suneng-factory-hero-1600.webp',
   title: {
     zh: '专项工业炉采购评估：室式退火、燃气、气氛、球化与烘箱',
-    en: '',
+    en: 'Special-purpose industrial furnace procurement: annealing, gas firing, controlled atmospheres, spheroidizing and ovens',
   },
   summary: {
     zh: '室式退火、燃气热处理、可控气氛、球化退火和工业烘箱等设备，先核对工件、工艺、装载及现场条件，再确定设备结构、配置和报价范围。',
-    en: '',
+    en: 'Check the workpiece, process, loading and site conditions before specifying the furnace, its equipment and the scope of the quotation.',
   },
-  category: { zh: '报价采购', en: '' },
+  category: { zh: '报价采购', en: 'Purchasing' },
   // The standalone page has no public publication date or readership count.
   date: '',
   listTopic: 'procurement',
@@ -32,10 +32,10 @@ export function includeStandaloneNewsResources(
   items: NewsListCardItem[],
   locale: Locale,
 ): NewsListCardItem[] {
-  if (locale !== 'zh' || items.some((item) => item.slug === PROCUREMENT_RESOURCE_SLUG)) {
+  if (items.some((item) => item.slug === PROCUREMENT_RESOURCE_SLUG)) {
     return items;
   }
-  return [...items, procurementResource];
+  return [...items, { ...procurementResource, href: `/${locale}/articles/${PROCUREMENT_RESOURCE_SLUG}` }];
 }
 
 export function getNewsListCardHref(item: NewsListCardItem, locale: Locale) {

@@ -30,7 +30,7 @@ function prepareCards(locale: Locale): Promise<NewsListCardItem[]> {
       .filter((item) => locale === 'zh' || hasPublishableEnglishNews(item));
     const cards: NewsListCardItem[] = [];
     for (const item of items) {
-      const card = applyNewsListCopy(mapNewsCard(locale, item));
+      const card = applyNewsListCopy(mapNewsCard(locale, item), locale);
       // Retain search text, summaries and counts without duplicating full bodies.
       delete card.source;
       cards.push(card);
@@ -54,7 +54,7 @@ function prepareCards(locale: Locale): Promise<NewsListCardItem[]> {
 const getCachedCards = unstable_cache(
   prepareCards,
   [
-    'news-decision-center-cards-bilingual-v6-content-review-20260912',
+    'news-decision-center-cards-bilingual-v7-20261111',
     process.env.API_BASE_URL_INTERNAL || process.env.NEXT_PUBLIC_API_URL || '',
   ],
   { revalidate: 300 },

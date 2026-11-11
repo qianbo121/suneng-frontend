@@ -1,5 +1,5 @@
 import { renderToStaticMarkup } from 'react-dom/server';
-import { APPROVED_GUIDE_PATHS, APPROVED_PROCUREMENT_PATHS, isWithdrawnTechnicalPath } from '@/lib/publication-scope';
+import { APPROVED_GUIDE_PATHS, APPROVED_PROCUREMENT_PATHS, ENGLISH_EQUIPMENT_PROCUREMENT_PATH, isWithdrawnTechnicalPath } from '@/lib/publication-scope';
 import fs from 'node:fs';
 import path from 'node:path';
 import { describe, expect, it, vi } from 'vitest';
@@ -44,11 +44,12 @@ describe('unapproved sections render nothing, even without the middleware', () =
       const page = await import(path.join(app, file));
       const props = { params: Promise.resolve({ locale }), children: 'reviewed-child' };
       const route = `/zh/${file.replace(/\/(page|layout)\.tsx$/, '')}`;
-      if (locale === 'zh' && ['articles/layout.tsx', 'solutions/layout.tsx'].includes(file)) {
+      if (file === 'articles/layout.tsx' || (locale === 'zh' && file === 'solutions/layout.tsx')) {
         expect(await page.default(props)).toBe('reviewed-child');
         return;
       }
-      if (locale === 'zh' && (APPROVED_GUIDE_PATHS.has(route) || APPROVED_PROCUREMENT_PATHS.has(route))) {
+      const englishEquipment = locale === 'en' && route.replace('/zh/', '/en/') === ENGLISH_EQUIPMENT_PROCUREMENT_PATH;
+      if (englishEquipment || (locale === 'zh' && (APPROVED_GUIDE_PATHS.has(route) || APPROVED_PROCUREMENT_PATHS.has(route)))) {
         const html = renderToStaticMarkup(await page.default(props));
         expect(html).toContain(file.endsWith('/layout.tsx') ? 'reviewed-child' : '<h1');
         for (const [, href] of html.matchAll(/href="([^"]+)"/g))

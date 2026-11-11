@@ -388,6 +388,8 @@ python3 ops/releases/release_storage_status.py \
 
 原 `approved-guides.json` 的 11 页保持不变。`approved-procurement-pages.json` 单独记录 2026-10-05 用户已批准的两个中文采购页面、批准证据摘要、完整正文指纹和 9 个旧入口锚点。`procurement_approval.py` 将地址、批准记录摘要及源页面正文核对；不能在清单中临时加入第三页、英文页、变形地址或伪批准对象。
 
+2026-11-11 双语资料改动在同一采购清单中为专项工业炉采购评估增加英文页。新增记录为 `procurement-bilingual-scope-20261111.json`，安装本版发布工具时一起复制；旧收据仍按其当时的两页范围核对与回退。英文页同时从资料中心和英文产品中心进入，发布检查从产品中心核验入口。资料范围确认与实际部署授权分别记录。
+
 两个正式准备入口（前台专用及统一发布的前台分支）都会携带 `independentlyApprovedProcurementPages` 和 `procurementApprovalSha256`；统一发布的后端候选不受影响。候选清单只表示批准范围，不能证明候选已支持页面。发布工具另外在候选和切换后的公网用只读请求检查两页的 200、完整正文指纹、唯一标题及规范地址、索引许可、联系条、9 个唯一锚点、地图与入口链接；任一失败拒绝切换或恢复原版本。此检查不点击电话、微信或提交询盘，也不证明客户恢复。
 
 成功收据持久保存独立采购范围；旧 4edd 批次收据已有的精确两页列表可以作为历史基线，但候选必须带批准记录摘要并通过实际检查。旧候选清单缺省为空，不会自动重新开放两页；回退按旧版本实际范围检查，关闭页和英文页仍需 404。安装标准发布工具时，还须同目录复制 `procurement_approval.py`、`approved-procurement-pages.json`、`approved_procurement_continuity.py`、`approved-procurement-continuity.cjs`。

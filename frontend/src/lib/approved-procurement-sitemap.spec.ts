@@ -14,7 +14,7 @@ import buildSitemap from '@/app/sitemap';
 import { approvedProcurementPages } from './approved-procurement-pages';
 
 describe('equipment procurement sitemap revision', () => {
-  it('follows the public revision source without dating parts or creating an English page', async () => {
+  it('follows the public revision source while keeping the parts guide Chinese-only', async () => {
     const page = approvedProcurementPages.equipment as unknown as {
       publishedModifiedAt: string;
     };
@@ -30,7 +30,8 @@ describe('equipment procurement sitemap revision', () => {
         new Date(historicalRevision),
       );
       expect(entries.get(site + approvedProcurementPages.parts.path)?.lastModified).toBeUndefined();
-      expect(entries.has(site + approvedProcurementPages.equipment.path.replace('/zh/', '/en/'))).toBe(false);
+      expect(entries.has(site + approvedProcurementPages.equipment.path.replace('/zh/', '/en/'))).toBe(true);
+      expect(entries.has(site + approvedProcurementPages.parts.path.replace('/zh/', '/en/'))).toBe(false);
     } finally {
       page.publishedModifiedAt = originalRevision;
     }
