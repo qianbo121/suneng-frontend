@@ -48,9 +48,11 @@ export const SITE_LOGO_IMAGE = firstExistingPublicPath([
   '/images/brand/sn-logo-header-cropped.png',
 ]);
 
+export const FACTORY_EXTERIOR_IMAGE = '/images/home/suneng-factory-hero-1600.webp';
+
 export const DEFAULT_OG_IMAGE = firstExistingPublicPath([
   '/images/og/suneng-og.jpg',
-  '/images/home/suneng-factory-hero-1600.webp',
+  FACTORY_EXTERIOR_IMAGE,
   SITE_LOGO_IMAGE,
   '/images/home/hero-industrial-furnace-banner-hd.png',
   '/images/home/hero-industrial-factory-daylight-banner.png',

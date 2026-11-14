@@ -12,6 +12,7 @@ import { Header } from '@/components/layout/Header';
 import { BaiduAnalytics } from '@/components/seo/BaiduAnalytics';
 import { routing } from '@/i18n/routing';
 import { getOrganizationJsonLd, getWebsiteJsonLd } from '@/lib/seo/jsonld';
+import { getSharingDefaults } from '@/lib/seo/metadata';
 import type { Locale } from '@/types/site';
 
 type LocaleLayoutProps = {
@@ -23,6 +24,12 @@ type LocaleLayoutProps = {
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
+}
+
+export async function generateMetadata({ params }: Pick<LocaleLayoutProps, 'params'>) {
+  const { locale } = await params;
+  if (!hasLocale(routing.locales, locale)) notFound();
+  return getSharingDefaults(locale);
 }
 
 export default async function LocaleLayout({ children, params }: LocaleLayoutProps) {

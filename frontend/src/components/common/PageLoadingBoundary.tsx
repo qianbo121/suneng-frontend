@@ -20,6 +20,9 @@ export function PageLoadingBoundary({ children, locale }: { children: ReactNode;
   // Other nested product tools keep their existing loading boundary.
   const publicInquiryChecklist = /^\/(?:zh|en)\/products\/detail\/copper-wire-annealing-line\/inquiry-checklist$/.test(pagePath);
 
+  // The CQI-9 support page also exposes its full copy without scripts.
+  const cqi9EquipmentSupport = /^\/(?:zh|en)\/products\/detail\/fastener-quench-temper-line\/cqi-9$/.test(pagePath);
+
   // Batch 1.3: only approved procurement pages and existing service pages.
   // This does not reopen their withdrawn English editions or unknown routes.
   const procurementOrService = APPROVED_GUIDE_PATHS.has(pagePath)
@@ -42,6 +45,7 @@ export function PageLoadingBoundary({ children, locale }: { children: ReactNode;
     /^\/(?:zh|en)\/?$/.test(pathname)
     || productDetail
     || publicInquiryChecklist
+    || cqi9EquipmentSupport
     || pagePath === '/zh/inquiry'
     || procurementOrService
     || informationPage

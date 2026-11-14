@@ -20,6 +20,24 @@ function titleText(metadata: Metadata) {
 }
 
 describe('SEO metadata generation', () => {
+  it.each([
+    ['zh', '江苏苏能工业炉有限公司官网', '苏能工业炉厂区外景'],
+    ['en', 'Suneng Industrial Furnace', 'Exterior view of the Suneng Industrial Furnace factory'],
+  ])('localizes sharing tags for the factory exterior on %s pages', (locale, siteName, alt) => {
+    const image = 'https://www.jssngyl.cn/images/home/suneng-factory-hero-1600.webp';
+    const metadata = buildMetadata({ title: 'CQI-9', description: 'CQI-9', path: `/${locale}/products`, image });
+    expect(metadata.openGraph).toMatchObject({ siteName, images: [{ url: image, alt }] });
+    expect(metadata.twitter).toMatchObject({ images: [{ url: image, alt }] });
+  });
+
+  it('keeps the factory caption off custom product images', () => {
+    const image = '/images/products/pit-furnace/pit-furnace-main.png';
+    const metadata = buildMetadata({ title: 'Pit furnace', description: 'Product details', path: '/en/products', image });
+    const images = [{ url: `https://www.jssngyl.cn${image}` }];
+    expect(metadata.openGraph?.images).toEqual(images);
+    expect(metadata.twitter?.images).toEqual(images);
+  });
+
   it('keeps news list metadata localized after migrating to buildMetadata', async () => {
     const metadata = await createNewsListMetadata('zh');
 

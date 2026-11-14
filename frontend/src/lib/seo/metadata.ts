@@ -1,5 +1,7 @@
 import type { Metadata } from 'next';
 import { getReviewedPageCopy } from './reviewed-page-copy';
+import { getSiteName } from '@/lib/seo';
+import type { Locale } from '@/types/site';
 
 import {
   BING_SITE_VERIFICATION,
@@ -7,6 +9,7 @@ import {
   DEFAULT_DESCRIPTION,
   DEFAULT_OG_IMAGE,
   DEFAULT_TITLE,
+  FACTORY_EXTERIOR_IMAGE,
   SITE_360_VERIFICATION,
   SITE_NAME,
   SITE_URL,
@@ -93,11 +96,16 @@ type BuildMetadataOptions = {
   other?: Record<string, string>;
 };
 
-function buildImageMetadata(image?: string) {
+export function getSharingDefaults(locale: Locale, image?: string) {
   const imagePath = image || DEFAULT_OG_IMAGE;
-  if (!imagePath) return undefined;
-
-  return absoluteUrl(imagePath);
+  const url = imagePath ? absoluteUrl(imagePath) : undefined;
+  const isFactoryExterior = url === absoluteUrl(FACTORY_EXTERIOR_IMAGE);
+  const factoryAlt = locale === 'en' ? 'Exterior view of the Suneng Industrial Furnace factory' : '苏能工业炉厂区外景';
+  const images = url ? [{ url, ...(isFactoryExterior ? { alt: factoryAlt } : {}) }] : undefined;
+  return {
+    openGraph: { type: 'website' as const, siteName: locale === 'en' ? getSiteName(locale) : SITE_NAME, images },
+    twitter: { card: 'summary_large_image' as const, images },
+  };
 }
 
 function hasEntries(value?: Record<string, string>) {
@@ -128,21 +136,17 @@ export function buildMetadata(options: BuildMetadataOptions): Metadata {
     buildDescription(options.description),
   );
   const canonical = absoluteUrl(options.path);
-  const image = buildImageMetadata(options.image);
+  const sharing = getSharingDefaults(metadataLocale, options.image);
   const type = options.type || 'website';
   const openGraph: Record<string, unknown> = {
+    ...sharing.openGraph,
     title,
     description,
     url: canonical,
-    siteName: SITE_NAME,
     locale: resolveOpenGraphLocale(options.locale, options.path),
     type,
     ...(options.alternateLocales ? { alternateLocale: [...new Set(Object.keys(options.alternateLocales).filter((key) => key !== 'x-default').map((key) => OPEN_GRAPH_LOCALE_MAP[key]).filter((value) => value && value !== resolveOpenGraphLocale(options.locale, options.path)))] } : {}),
   };
-
-  if (image) {
-    openGraph.images = [{ url: image }];
-  }
 
   if (type === 'article' && options.publishedTime) {
     openGraph.publishedTime = options.publishedTime;
@@ -170,10 +174,9 @@ export function buildMetadata(options: BuildMetadataOptions): Metadata {
     },
     openGraph: openGraph as Metadata['openGraph'],
     twitter: {
-      card: 'summary_large_image',
+      ...sharing.twitter,
       title,
       description,
-      ...(image ? { images: [image] } : {}),
     },
     robots: getIndexingRobots(),
     ...(hasEntries(options.other) ? { other: options.other } : {}),
