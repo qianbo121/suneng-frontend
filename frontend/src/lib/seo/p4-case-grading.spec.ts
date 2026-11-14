@@ -56,7 +56,9 @@ describe('case publication boundaries after article migration', () => {
 // label in a source file or in JSON cannot satisfy the publication gate.
 describe('visible case classification, results and review', () => {
   it("keeps unapproved sources archived and refuses their public article pages", () => {
-    expect(getPublicCases().map((item) => item.slug)).toEqual(['henan-annealing-solution-line']);
+    expect(getPublicCases().map((item) => item.slug)).toEqual([
+      'fastener-mesh-belt-quenching-carburizing', 'henan-annealing-solution-line',
+    ]);
     for(const name of ['jining-support-roller','continuous-line-renovation']) {
       const item=JSON.parse(read(name+'.json'));
       expect(item.publicationStatus).toBe('draft');
