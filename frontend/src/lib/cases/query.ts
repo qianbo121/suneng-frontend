@@ -84,10 +84,18 @@ export function caseEquipmentCategory(value: string): string {
   return Object.entries(equipmentAliases).find(([, aliases]) => aliases.includes(value))?.[0] ?? value;
 }
 
-function matchesEquipment(values: string[], selected: string) {
-  // Old bookmarked, specific filters retain their original exact meaning.
-  return values.includes(selected) || values.some((value) => caseEquipmentCategory(value) === selected);
+const workpieceGroups: Record<string, string> = {
+  不锈钢带材: '板带卷材',
+  紧固件: '紧固批量件',
+  螺丝钉: '紧固批量件',
+};
+
+export function caseFilterCategory(key: (typeof CASE_FILTER_KEYS)[number], value: string) {
+  if (key === 'equipment') return caseEquipmentCategory(value);
+  if (key === 'workpiece') return workpieceGroups[value] ?? value;
+  return value;
 }
+
 export function filterCases<T extends CaseMeta & { searchText: string }>(
   records: T[],
   query: CaseQuery,
@@ -107,9 +115,9 @@ export function filterCases<T extends CaseMeta & { searchText: string }>(
       (item) =>
         (item.publicationStatus === 'published' || (process.env.NODE_ENV === 'development' && LOCAL_REVIEW_CASE_SLUGS.has(item.slug))) &&
         (!query.type || item.contentType === query.type) &&
-        CASE_FILTER_KEYS.every((key) => !query[key] || (key === 'equipment'
-          ? matchesEquipment(item[key], query[key])
-          : item[key].includes(query[key]))) &&
+        CASE_FILTER_KEYS.every((key) => !query[key] || item[key].some(
+          (value) => value === query[key] || caseFilterCategory(key, value) === query[key],
+        )) &&
         terms.every((term) => normalize(item.searchText).includes(term)),
     )
     .sort((a, b) => {
@@ -135,6 +143,8 @@ export function toCaseCard(item: CaseMeta): CaseCardData {
     slug: item.slug,
     title: item.title,
     listTitle: item.listTitle,
+    workpiece: [...new Set(item.workpiece.map((value) => caseFilterCategory('workpiece', value)))],
+    equipment: [...new Set(item.equipment.map(caseEquipmentCategory))],
     summary: item.listSummary || item.summary,
     contentType: item.contentType,
     projectYear: item.projectYear,

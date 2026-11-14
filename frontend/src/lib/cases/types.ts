@@ -48,6 +48,8 @@ export type CaseCardData = Pick<
   | 'slug'
   | 'title'
   | 'listTitle'
+  | 'workpiece'
+  | 'equipment'
   | 'summary'
   | 'contentType'
   | 'projectYear'

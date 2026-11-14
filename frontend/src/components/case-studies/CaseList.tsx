@@ -37,22 +37,17 @@ export function CaseList({ initial, query }: { initial: CasePageResult; query: C
 
   return (
     <>
-      <div className="case-results-top">
-        <h2 id="case-results-heading">全部案例</h2>
-        <nav className="case-c4-sort" aria-label="案例排序">
-          <a
-            href={caseListHref(query, { sort: 'relevance', page: 1, from: 1 })}
-            aria-current={query.sort === 'relevance' ? 'page' : undefined}
-          >
-            推荐阅读
-          </a>
-          <a
-            href={caseListHref(query, { sort: 'updated', page: 1, from: 1 })}
-            aria-current={query.sort === 'updated' ? 'page' : undefined}
-          >
-            最近更新
-          </a>
-        </nav>
+      <div className="catalog-results-top">
+        <h2 id="case-results-heading">{query.workpiece || (query.equipment || query.q || query.process || query.type || query.need ? '匹配案例' : '全部案例')}<small>{result.total} 项</small></h2>
+        <details className="catalog-sort">
+          <summary>{query.sort === 'updated' ? '最近更新' : query.sort === 'year' ? '项目年份' : '推荐排序'}</summary>
+          <nav aria-label="案例排序">
+            {([['relevance', '推荐排序'], ['updated', '最近更新'], ['year', '项目年份']] as const).map(([sort, label]) => (
+              <a key={sort} href={caseListHref(query, { sort, page: 1, from: 1 })}
+                aria-current={query.sort === sort ? 'page' : undefined}>{label}</a>
+            ))}
+          </nav>
+        </details>
       </div>
       <div className="case-records">
         {result.items.map((item, index) => (
@@ -91,6 +86,10 @@ function CaseCard({
 }) {
   const href = `/zh/case/${item.slug}?returnTo=${encodeURIComponent(returnTo)}`;
   const title = item.listTitle || item.title;
+  const divider = title.indexOf('：');
+  const subject = divider > 0 ? title.slice(0, divider) : title;
+  const subtitle = divider > 0 ? title.slice(divider + 1) : '';
+  const category = [item.workpiece[0], item.equipment[0]].filter(Boolean).join('　/　');
   const titleId = `case-title-${item.id}`;
   const pointerStart = useRef<{ x: number; y: number } | null>(null);
   function openCase(event: MouseEvent<HTMLAnchorElement>) {
@@ -138,33 +137,21 @@ function CaseCard({
                 height={280}
                 priority={priority}
                 draggable={false}
-                sizes="(max-width: 767px) 88px, 180px"
-                style={{ objectFit: item.cover.fit ?? 'contain' }}
+                sizes="(max-width: 700px) 96px, 210px"
+                style={{ objectFit: item.cover.fit ?? 'cover' }}
               />
             </div>
           </figure>
         )}
         <div className="case-record-copy">
-          <h3 id={titleId}>{title}</h3>
+          {category && <p className="catalog-category">{category}</p>}
+          <h3 id={titleId}>{subject}{subtitle && <span>{subtitle}</span>}</h3>
           {/* The server prepares list summaries; see getCaseResults. */}
           <p className="case-record-summary">{item.summary}</p>
         </div>
       </a>
     </article>
   );
-}
-
-export function CaseSelectSubmit() {
-  useEffect(() => {
-    const form = document.getElementById('case-search-form') as HTMLFormElement | null;
-    const submit = (event: Event) => {
-      if (event.target instanceof HTMLSelectElement && event.target.form === form)
-        form?.requestSubmit();
-    };
-    document.addEventListener('change', submit);
-    return () => document.removeEventListener('change', submit);
-  }, []);
-  return null;
 }
 
 export function CaseBackLink({ href }: { href: string }) {

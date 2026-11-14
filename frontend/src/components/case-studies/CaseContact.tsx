@@ -56,9 +56,9 @@ export function CaseContactBand({ detail = false, caseId }: { detail?: boolean; 
       </div>
       <div className="case-band-actions">
         <CaseContact position="bottom" caseId={caseId} />
-        <Link className="case-button case-button-outline" href="/zh/products">
+        {detail && <Link className="case-button case-button-outline" href="/zh/products">
           查看产品中心
-        </Link>
+        </Link>}
       </div>
     </section>
   );
