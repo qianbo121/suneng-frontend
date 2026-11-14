@@ -1,4 +1,7 @@
 import { getReviewedManufacturerLinks } from './news-manufacturer-related';
+import DOMPurify from 'isomorphic-dompurify';
+import { FASTENER_CASE_PATH, FASTENER_CASE_TITLE } from './cases/fastener-case-entry';
+import { canLinkFastenerCase } from './news-fastener-case-link';
 import { isWithdrawnTechnicalPath, isHiddenCaseEntry } from '@/lib/publication-scope';
 import type { NewsApiItem } from '@/types/news';
 
@@ -202,8 +205,9 @@ const ENGLISH_LINKS: Record<string, Omit<NewsRelatedLink, 'kind'>> = {
 };
 
 export function getNewsRelatedLinks(
-  item: Pick<NewsApiItem, 'titleZh' | 'summaryZh' | 'contentZh'> & Partial<Pick<NewsApiItem, 'slug'>>,
+  item: Pick<NewsApiItem, 'titleZh' | 'summaryZh' | 'contentZh' | 'status' | 'isPublished'> & Partial<Pick<NewsApiItem, 'slug'>>,
   locale: 'zh' | 'en' = 'zh',
+  renderedBody = item.contentZh,
 ): NewsRelatedLink[] {
   const articleLinks = locale === 'zh' && item.slug
     && Object.prototype.hasOwnProperty.call(ARTICLE_PRODUCT_LINKS, item.slug)
@@ -216,6 +220,20 @@ export function getNewsRelatedLinks(
   if (locale === 'zh') {
     const links = subjectLinks.filter((link) => !isWithdrawnTechnicalPath(link.href) && !isHiddenCaseEntry(link.href)
       && link.href !== `/${locale}/news/${item.slug}`);
+    // Edited copy keeps a separate case reference even when the reviewed inline paragraph no longer applies.
+    if (canLinkFastenerCase(item) && renderedBody) {
+      const body = DOMPurify.sanitize(renderedBody, { RETURN_DOM: true }) as HTMLElement;
+      const articleUrl = `https://www.jssngyl.cn/zh/news/${item.slug}`;
+      const hasCaseLink = Array.from(body.querySelectorAll('a[href]')).some(anchor => {
+        const url = URL.parse(anchor.getAttribute('href') ?? '', articleUrl);
+        return url && ['https://www.jssngyl.cn', 'https://jssngyl.cn'].includes(url.origin)
+          && url.pathname.replace(/\/$/, '') === FASTENER_CASE_PATH;
+      });
+      if (!hasCaseLink) links.unshift({
+        kind: '案例', title: FASTENER_CASE_TITLE, href: FASTENER_CASE_PATH,
+        description: '查看同一台网带炉在淬火和渗碳两种工艺下的协议处理量。',
+      });
+    }
     // Reserve the approved repair guide only for explicit Chinese repair topics.
     if (!/维修|大修|改造|换新/.test(item.titleZh) || isWithdrawnTechnicalPath(LINKS.repair.href)) {
       return links;

@@ -13,27 +13,32 @@ export function BeltAgreementTable({ fasteners = false }: { fasteners?: boolean 
   const rows = fasteners ? data.rows.filter(row => row.fastenerScope) : data.rows;
   return (
     <section className={styles.section} id="agreement-capacity">
-      <h2>{fasteners ? '紧固件调质配置与处理量' : '网带炉技术协议的配置及处理量'}</h2>
+      <h2>{fasteners ? '紧固件调质配置与处理量' : '网带炉协议与方案的配置及处理量'}</h2>
       <p>{fasteners
         ? '选调质线时，请先核对处理量对应哪道工序。淬火炉的数据只覆盖淬火段，整线数据包含后续回火。'
         : '下表列出各配置的工艺和处理量。以件/年计的产量按协议原单位列示。'}</p>
-      <div className={styles.scroll} role="region" aria-label="协议配置参数表" tabIndex={0}>
+      <div className={styles.scroll} role="region" aria-label="配置与处理量参数表" tabIndex={0}>
         <table>
-          <caption>{fasteners ? '网带炉配置与对应工艺的协议参数' : '技术协议中的配置与处理量'}</caption>
+          <caption>{fasteners ? '网带炉配置与对应工艺的协议参数' : '技术协议或设计方案中的配置与处理量'}</caption>
           <thead><tr>{data.headers.map(header => <th key={header} scope="col">{header}</th>)}</tr></thead>
           <tbody>{rows.map(row => {
             const name = row.model ?? row.selectionCode;
             return (
               <tr key={name} id={row.anchor} className={styles.configRow}>
-                <th scope="row"><span className={styles.modelName}>{name}</span>
-                  {!fasteners && name === model && showCase && <Link className={styles.modelCaseLink} href={FASTENER_CASE_PATH} prefetch={false}>
-                    <span>查看这款炉的<span className={styles.linkSubject}>紧固件项目</span></span><FiArrowRight aria-hidden="true" />
-                  </Link>}
+                <th scope="row">
+                  {!fasteners && name === model && showCase ? (
+                    <Link className={`${styles.modelName} ${styles.modelCaseLink}`} href={FASTENER_CASE_PATH}
+                      aria-label={`查看 ${name} 紧固件项目案例`} prefetch={false}>
+                      {name}<span aria-hidden="true" className={styles.caseChevron}>›</span>
+                    </Link>
+                  ) : <span className={styles.modelName}>{name}</span>}
                   {row.selectionCode && <small className={styles.codeLabel}>选型代号</small>}
                 </th>
                 <td>{row.size}</td><td>{row.power}</td>
                 <td>{(fasteners && row.fastenerProcess) || row.process}</td>
-                <td>{fasteners ? <><span className={styles.capacityScope}>{row.fastenerScope}</span>{' '}<strong>{row.fastenerCapacity ?? row.capacity}</strong></> : row.capacity}</td>
+                <td>{fasteners ? <><span className={styles.capacityScope}>{row.fastenerScope}</span>{' '}<strong>{row.fastenerCapacity ?? row.capacity}</strong></> : row.capacity}
+                  {row.showBasisWithCapacity && <small className={styles.codeLabel}>{row.basis}</small>}
+                </td>
               </tr>
             );
           })}</tbody>
@@ -92,7 +97,7 @@ export function CarburisingAgreement() {
   return (
     <section className={styles.section} id="surface-carburising">
       <h2>网带炉渗碳协议处理量</h2>
-      <p>{data.carburising}</p>
+      <p>{fastenerCaseVisible() ? <Link href={FASTENER_CASE_PATH} prefetch={false}>{model}</Link> : model}{' '}{data.carburisingDescription}</p>
     </section>
   );
 }

@@ -156,7 +156,7 @@ export default async function NewsDetailPage({ params }: NewsDetailPageProps) {
   const detailLabel = currentLocale === 'en' ? 'Article' : '正文';
   const contentId = `news-body-${article.id}`;
   const modifiedTime = getNewsContentModifiedTime(article, currentLocale);
-  const relatedLinks = getNewsRelatedLinks(article, currentLocale);
+  const relatedLinks = getNewsRelatedLinks(article, currentLocale, html);
   // Read the complete published collection so relevant older articles are eligible.
   const newsListResult = await getNewsDecisionCenterData(currentLocale);
   const recommendationCandidates =

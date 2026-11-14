@@ -48,15 +48,16 @@ export type CaseCardData = Pick<
   | 'slug'
   | 'title'
   | 'listTitle'
+  | 'workpiece'
+  | 'equipment'
   | 'summary'
   | 'contentType'
   | 'projectYear'
   | 'facts'
   | 'participation'
   | 'sourceSummary'
-  | 'cover'
   | 'coverTitle'
->;
+> & { cover?: Pick<NonNullable<CaseMeta['cover']>, 'src' | 'alt' | 'fit'> };
 export type CaseQuery = Record<CaseFilterKey, string> & {
   q: string;
   type: '' | CaseContentType;

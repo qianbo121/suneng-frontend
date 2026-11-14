@@ -100,6 +100,15 @@ export const productionLinePages: ProductionLineContent[] = [
   ...pages.slice(5),
 ].map((page) => ({
   ...page,
+  sections: {
+    ...page.sections,
+    overview: {
+      ...page.sections.overview,
+      gallery: page.sections.overview.gallery.map(item => item.fullAssetId === 'hero-line'
+        ? { ...item, label: page.sections.overview.title, alt: page.sections.overview.title }
+        : item),
+    },
+  },
   images: {
     ...page.images,
     'hero-line': productionLineHeroImages[page.pageId as keyof typeof productionLineHeroImages],

@@ -1,7 +1,39 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
+import * as fastenerCase from './cases/fastener-case-entry';
 
 import { getNewsRelatedLinks } from '@/lib/news-related';
 import { isWithdrawnTechnicalPath } from '@/lib/publication-scope';
+
+describe('case entrance after the carburizing article is edited', () => {
+  const item = {
+    slug: 'mesh-belt-carburizing-throughput-process-limits', titleZh: '网带炉连续渗碳的产量边界',
+    status: 'published' as const, isPublished: true, contentZh: '<p>改过的段落。</p>',
+  };
+  const path = fastenerCase.FASTENER_CASE_PATH;
+  const caseLinks = (links: ReturnType<typeof getNewsRelatedLinks>) => links.filter(link => link.href === path);
+
+  it('shows the related case once when the rendered body has no working link to it', () => {
+    for (const html of [item.contentZh, `<p>${path}</p>`, `<a href="https://other.example${path}">外部链接</a>`]) {
+      expect(caseLinks(getNewsRelatedLinks(item, 'zh', html))).toHaveLength(1);
+    }
+  });
+
+  it.each([path, `https://www.jssngyl.cn${path}#faq`, `https://jssngyl.cn${path}/?from=news`])(
+    'leaves the existing body link as the only entrance: %s', href => {
+      expect(caseLinks(getNewsRelatedLinks(item, 'zh', `<p><a href="${href}">案例</a></p>`))).toHaveLength(0);
+    },
+  );
+
+  it('keeps the fallback scoped to the public Chinese article and a visible case', () => {
+    expect(caseLinks(getNewsRelatedLinks(item, 'en'))).toHaveLength(0);
+    expect(caseLinks(getNewsRelatedLinks({ ...item, slug: 'other-article' }))).toHaveLength(0);
+    expect(caseLinks(getNewsRelatedLinks({ ...item, status: 'draft' }))).toHaveLength(0);
+    expect(caseLinks(getNewsRelatedLinks({ ...item, isPublished: false }))).toHaveLength(0);
+    const hidden = vi.spyOn(fastenerCase, 'fastenerCaseVisible').mockReturnValue(false);
+    try { expect(caseLinks(getNewsRelatedLinks(item))).toHaveLength(0); }
+    finally { hidden.mockRestore(); }
+  });
+});
 
 describe('news thematic internal links', () => {
   it.each([

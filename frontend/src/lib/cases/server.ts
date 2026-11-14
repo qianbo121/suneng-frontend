@@ -6,7 +6,7 @@ import { prepareCaseBody } from './content';
 import { caseListPresentation } from './list-tags';
 import { PUBLIC_CASE_SLUGS } from './public-case-allowlist';
 import { LOCAL_REVIEW_CASE_SLUGS } from './fastener-case-entry';
-import { caseEquipmentCategory, filterCases, paginateCases, toCaseCard } from './query';
+import { caseFilterCategory, filterCases, paginateCases, toCaseCard } from './query';
 import { CASE_FILTER_KEYS, type CaseMeta, type CaseQuery } from './types';
 
 const contentDirectory = path.join(process.cwd(), 'content/cases');
@@ -172,15 +172,19 @@ export function getCaseResults(query: CaseQuery) {
     .map((card) => ({ ...card, summary: caseListPresentation(card).summary }));
   return paginateCases(cards, query);
 }
-export function getCaseOptions() {
-  const records = getPublicCases();
-  return Object.fromEntries(
-    CASE_FILTER_KEYS.map((key) => [
-      key,
-      [...new Set(records.flatMap((item) => item[key].map((value) =>
-        key === 'equipment' ? caseEquipmentCategory(value) : value)))].sort((a, b) =>
-        a.localeCompare(b, 'zh-CN'),
-      ),
-    ]),
-  ) as Record<(typeof CASE_FILTER_KEYS)[number], string[]>;
+export function getCaseFilterOptions(query: CaseQuery, key: (typeof CASE_FILTER_KEYS)[number]) {
+  // Ignore the current facet when counting alternatives, retain every other filter.
+  const candidates = filterCases(getPublicCases(), { ...query, [key]: '' });
+  const counts = new Map<string, number>();
+  for (const item of candidates) {
+    const values = new Set(item[key].map((value) => caseFilterCategory(key, value)));
+    if (query[key] && item[key].includes(query[key])) values.add(query[key]);
+    for (const value of values) counts.set(value, (counts.get(value) ?? 0) + 1);
+  }
+  if (query[key] && !counts.has(query[key])) counts.set(query[key], 0);
+  return [
+    { value: '', count: candidates.length },
+    ...[...counts].sort(([a], [b]) => a.localeCompare(b, 'zh-CN'))
+      .map(([value, count]) => ({ value, count })),
+  ];
 }

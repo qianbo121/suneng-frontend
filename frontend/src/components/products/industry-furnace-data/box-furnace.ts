@@ -94,7 +94,7 @@ export const boxFurnacePageConfig: FurnacePageConfig = {
     {
       title: '强制循环箱式炉',
       image: '/images/products/box-furnace/detail/10-circulation-workshop-20260915.webp',
-      alt: '强制循环箱式炉厂房场景示意，展示侧壁风机入口、外置驱动与炉内导流板',
+      alt: '强制循环箱式炉，带侧壁风机入口、外置驱动与炉内导流板',
       eyebrow: '循环与导流',
       text: '是否配置循环风机和导流结构，应由温度、装炉和工艺目标共同决定。',
       suitable: '需要加强炉内对流换热的中低温工况',

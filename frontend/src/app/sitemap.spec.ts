@@ -110,15 +110,15 @@ const DEEP_CRAWL_TARGETS = [
 
 describe('sitemap freshness signals', () => {
   it('keeps a verified Chinese product date out of the independently maintained English page', async () => {
-    const productSeo = PRODUCT_DETAIL_SEO['mesh-belt-furnace'];
+    const productSeo = PRODUCT_DETAIL_SEO['pusher-furnace'];
     const previous = productSeo.modifiedTime;
     try {
       productSeo.modifiedTime = '2026-01-02T03:04:05+08:00';
       const entries = new Map((await buildSitemap()).map((entry) => [entry.url, entry]));
-      expect(entries.get(`${site}/zh/products/detail/mesh-belt-furnace`)?.lastModified).toEqual(
+      expect(entries.get(`${site}/zh/products/detail/pusher-furnace`)?.lastModified).toEqual(
         new Date(productSeo.modifiedTime),
       );
-      expect(entries.get(`${site}/en/products/detail/mesh-belt-furnace`)?.lastModified).toBeUndefined();
+      expect(entries.get(`${site}/en/products/detail/pusher-furnace`)?.lastModified).toBeUndefined();
     } finally {
       if (previous === undefined) delete productSeo.modifiedTime;
       else productSeo.modifiedTime = previous;
@@ -126,14 +126,14 @@ describe('sitemap freshness signals', () => {
   });
 
   it.each(['not-a-date', '2999-01-01'])('omits invalid or future product and guide dates: %s', async (date) => {
-    const productSeo = PRODUCT_DETAIL_SEO['mesh-belt-furnace'];
+    const productSeo = PRODUCT_DETAIL_SEO['pusher-furnace'];
     const previousProductDate = productSeo.modifiedTime;
     const previousGuideDate = FURNACE_RENOVATION_OVERHAUL_SEO.modifiedTime;
     try {
       productSeo.modifiedTime = date;
       FURNACE_RENOVATION_OVERHAUL_SEO.modifiedTime = date;
       const entries = new Map((await buildSitemap()).map((entry) => [entry.url, entry]));
-      for (const path of ['/zh/products/detail/mesh-belt-furnace', '/zh/service/furnace-renovation-overhaul']) {
+      for (const path of ['/zh/products/detail/pusher-furnace', '/zh/service/furnace-renovation-overhaul']) {
         expect(entries.has(site + path)).toBe(true);
         expect(entries.get(site + path)).not.toHaveProperty('lastModified');
       }
@@ -150,7 +150,7 @@ describe('sitemap freshness signals', () => {
     for (const path of [
       '/zh',
       '/zh/about',
-      '/zh/products/detail/mesh-belt-furnace',
+      '/zh/products/detail/pusher-furnace',
       '/zh/products/detail/copper-wire-annealing-line',
     ]) {
       expect(byUrl.has('https://www.jssngyl.cn' + path)).toBe(true);
@@ -214,7 +214,7 @@ describe('sitemap freshness signals', () => {
     expect(sharedDateRegressions(massRefresh)).toHaveLength(1);
   });
 
-  it('emits all twelve independently verified dates with day precision and no English inheritance', async () => {
+  it('emits the independently verified dates with day precision and no English inheritance', async () => {
     const entries = new Map((await buildSitemap()).map((entry) => [new URL(entry.url).pathname, entry]));
     const xml = resolveSitemap([...entries.values()]);
     for (const [path, revision] of Object.entries(verifiedRevisions)) {
@@ -234,9 +234,9 @@ describe('sitemap freshness signals', () => {
   it('does not refresh recorded dates when built again on a later day', async () => {
     vi.useFakeTimers();
     try {
-      vi.setSystemTime(new Date('2026-10-22T12:00:00Z'));
+      vi.setSystemTime(new Date('2026-11-15T12:00:00Z'));
       const first = await buildSitemap();
-      vi.setSystemTime(new Date('2026-11-05T12:00:00Z'));
+      vi.setSystemTime(new Date('2026-11-16T12:00:00Z'));
       expect(await buildSitemap()).toEqual(first);
     } finally {
       vi.useRealTimers();

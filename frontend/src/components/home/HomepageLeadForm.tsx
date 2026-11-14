@@ -477,7 +477,7 @@ export function HomepageLeadForm({
       data-contact-form
       lang={locale}
     >
-      <div className={`${styles.formInner} ${isCompactLayout ? compactStyles.inner : ''}`}>
+      <div data-contact-form-inner className={`${styles.formInner} ${isCompactLayout ? compactStyles.inner : ''}`}>
         {isCompactLayout ? (
           <div className={`${styles.formIntro} ${compactStyles.intro}`}>
             <p className={compactStyles.eyebrow}>设备选型 · 生产线方案 · 维修改造</p>

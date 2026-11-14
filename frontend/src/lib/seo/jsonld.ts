@@ -62,7 +62,7 @@ export type BaiduCambrianInput = {
 };
 
 const LOCAL_BUSINESS_URL = 'https://www.jssngyl.cn/';
-const LOCAL_BUSINESS_ID = `${LOCAL_BUSINESS_URL}#organization`;
+export const LOCAL_BUSINESS_ID = `${LOCAL_BUSINESS_URL}#organization`;
 const TECHNICAL_REVIEWER_IDS: Record<TechnicalReviewerName, string> = {
   唐工: `${LOCAL_BUSINESS_URL}#technical-reviewer-tang`,
   王工: `${LOCAL_BUSINESS_URL}#technical-reviewer-wang`,
