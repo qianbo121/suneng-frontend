@@ -35,7 +35,7 @@ describe('SEO metadata generation', () => {
     const metadata = buildMetadata({ title: 'Pit furnace', description: 'Product details', path: '/en/products', image });
     const images = [{ url: `https://www.jssngyl.cn${image}` }];
     expect(metadata.openGraph?.images).toEqual(images);
-    expect(metadata.twitter?.images).toEqual(images);
+    expect(metadata.twitter?.images).toEqual([images[0].url]);
   });
 
   it('keeps news list metadata localized after migrating to buildMetadata', async () => {

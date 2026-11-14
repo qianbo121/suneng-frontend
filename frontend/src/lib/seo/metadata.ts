@@ -104,7 +104,7 @@ export function getSharingDefaults(locale: Locale, image?: string) {
   const images = url ? [{ url, ...(isFactoryExterior ? { alt: factoryAlt } : {}) }] : undefined;
   return {
     openGraph: { type: 'website' as const, siteName: locale === 'en' ? getSiteName(locale) : SITE_NAME, images },
-    twitter: { card: 'summary_large_image' as const, images },
+    twitter: { card: 'summary_large_image' as const, images: url && !isFactoryExterior ? [url] : images },
   };
 }
 
