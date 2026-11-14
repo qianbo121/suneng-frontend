@@ -39,6 +39,8 @@
 .cards dl { display:grid; grid-template-columns:max-content 1fr; gap:7px 12px; align-items:start; }
 .cards dt { padding:0 9px; border-radius:8px; color:#154aa0; font-weight:650; }
 .cards dd { line-height:1.55; }
+.related { display:flex; flex-wrap:wrap; align-items:baseline; gap:6px 20px; margin-top:24px; }
+.related a { color:var(--blue); text-decoration:underline; text-underline-offset:.2em; }
 .faqIntro { display:flex; align-items:center; justify-content:space-between; gap:12px; }
 .faqIntro p,.source { color:#47576b; font-size:.91em; }
 .faqIntro button,.faqRow button { display:flex; align-items:center; gap:7px; min-height:44px; }

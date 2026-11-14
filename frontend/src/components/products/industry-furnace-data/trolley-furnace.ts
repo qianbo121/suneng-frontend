@@ -11,8 +11,8 @@ export const trolleyFurnacePageConfig: FurnacePageConfig = {
   gallery: [
     {
       src: detailImage('trolley-furnace', 'main'),
-      alt: '台车式电阻炉、升降炉门与承载台车配置示意',
-      caption: '台车炉全景示意',
+      alt: '台车式电阻炉，配升降炉门与承载台车',
+      caption: '台车式电阻炉全景',
     },
     {
       src: detailImage('trolley-furnace', 'loading'),
@@ -26,8 +26,8 @@ export const trolleyFurnacePageConfig: FurnacePageConfig = {
     },
     {
       src: detailImage('trolley-furnace', 'control'),
-      alt: '台车炉控制柜与记录界面示意，屏幕不代表实际温度记录',
-      caption: '控制柜与界面示意',
+      alt: '台车炉控制柜与记录界面，屏幕不代表实际温度记录',
+      caption: '台车炉控制柜',
     },
   ],
   tags: ['大型重件', '台车整体进出', '周期式生产', '轨道基础需校核'],
@@ -88,7 +88,7 @@ export const trolleyFurnacePageConfig: FurnacePageConfig = {
     {
       title: '台车式电阻炉',
       image: detailImage('trolley-furnace', 'main'),
-      alt: '台车式电阻炉与承载台车配置示意',
+      alt: '台车式电阻炉与承载台车',
       eyebrow: '分区电阻加热',
       text: '适合供电条件明确、需要分区控温和记录的周期式任务。',
       suitable: '大型重件退火、回火、正火或去应力方向评估',
@@ -99,7 +99,7 @@ export const trolleyFurnacePageConfig: FurnacePageConfig = {
     {
       title: '台车式燃气炉',
       image: detailImage('trolley-furnace', 'gas'),
-      alt: '台车式燃气炉、燃烧管路与排烟系统配置示意',
+      alt: '燃气台车炉及其燃烧管路与排烟系统',
       eyebrow: '燃烧与排烟系统',
       text: '需把供气、燃烧、排烟、换热和安全联锁整体确认。',
       suitable: '厂房燃气和排烟条件明确的大型工件任务',
@@ -110,7 +110,7 @@ export const trolleyFurnacePageConfig: FurnacePageConfig = {
     {
       title: '强制循环台车炉',
       image: '/images/products/trolley-furnace/detail/10-circulation-workshop-20260915.webp',
-      alt: '强制循环台车炉厂房场景示意，展示顶部驱动装置、炉顶回风口与轨道台车',
+      alt: '强制循环台车炉，带顶部驱动装置、炉顶回风口与轨道台车',
       eyebrow: '循环与导流',
       text: '循环风机、导流和装炉间隙需按工艺温度与阻力校核。',
       suitable: '需要加强对流换热的中低温大型装载',
@@ -121,7 +121,7 @@ export const trolleyFurnacePageConfig: FurnacePageConfig = {
     {
       title: '台车炉更新与改造评估',
       image: detailImage('trolley-furnace', 'processLine'),
-      alt: '冷态台车炉、退出台车与轨道的改造前现场评估示意',
+      alt: '冷态台车炉、退出炉膛的台车与轨道',
       eyebrow: '新炉 / 大修 / 改造',
       text: '需先核对旧炉壳体、轨道、基础、控制与停产窗口。',
       suitable: '旧炉性能下降、能源或控制系统需要升级的现场',

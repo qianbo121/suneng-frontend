@@ -3,9 +3,13 @@ import { FASTENER_CASE_PATH, fastenerCaseVisible } from './cases/fastener-case-e
 
 const sourceDigest = 'd4ab145fab7dc4353341fcfb61aa7bee6574a6ad18212bea74f2a594f4ae9863';
 const insertionPoint = '<h2>先把两道约束放在一起</h2>';
+export function canLinkFastenerCase(item: Partial<Pick<NewsApiItem, 'slug' | 'status' | 'isPublished'>>) {
+  return item.slug === 'mesh-belt-carburizing-throughput-process-limits'
+    && item.status === 'published' && item.isPublished !== false && fastenerCaseVisible();
+}
+
 export async function addFastenerCaseLink(item: NewsApiItem): Promise<NewsApiItem> {
-  if (!fastenerCaseVisible() || item.slug !== 'mesh-belt-carburizing-throughput-process-limits'
-    || item.status !== 'published' || item.isPublished === false || !item.contentZh) return item;
+  if (!canLinkFastenerCase(item) || !item.contentZh) return item;
   const digest = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(item.contentZh));
   const hex = Array.from(new Uint8Array(digest), b => b.toString(16).padStart(2, '0')).join('');
   if (hex !== sourceDigest || !item.contentZh.includes(insertionPoint)) return item;

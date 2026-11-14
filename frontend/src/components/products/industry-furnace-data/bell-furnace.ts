@@ -12,8 +12,8 @@ export const bellFurnacePageConfig: FurnacePageConfig = {
     {
       src: '/images/products/bell-furnace/detail/01-main-scene-v3.webp',
       unoptimized: true,
-      alt: '深筒加热罩吊起于金属内罩和固定炉台上方的罩式炉配置示意',
-      caption: '罩式炉配置示意',
+      alt: '罩式炉，加热罩吊起于金属内罩和固定炉台上方',
+      caption: '罩式炉与固定炉台',
     },
     {
       src: detailImage('bell-furnace', 'loading'),
@@ -90,7 +90,7 @@ export const bellFurnacePageConfig: FurnacePageConfig = {
     {
       title: '空气气氛罩式炉',
       image: '/images/products/bell-furnace/detail/08-air-atmosphere-20260915.webp',
-      alt: '空气气氛罩式炉配置示意，固定炉台上的环件直接由加热罩覆盖',
+      alt: '空气气氛罩式炉，加热罩直接覆盖固定炉台上的环件',
       eyebrow: '常规批次热处理',
       text: '适合不需要专用保护气氛的堆垛或料框装载任务。',
       suitable: '盘卷、环件或料框装载的常规热处理',
@@ -101,7 +101,7 @@ export const bellFurnacePageConfig: FurnacePageConfig = {
     {
       title: '保护气氛罩式炉',
       image: '/images/products/bell-furnace/detail/01-main-scene-v3.webp',
-      alt: '保护气氛罩式炉配置示意，金属内罩位于固定炉台与提升的加热罩之间',
+      alt: '保护气氛罩式炉，金属内罩位于固定炉台与提起的加热罩之间',
       eyebrow: '内罩、密封与置换',
       text: '需按气氛成分、表面质量和安全要求配置完整系统。',
       suitable: '对氧化、脱碳或表面状态有控制要求的材料',
@@ -112,7 +112,7 @@ export const bellFurnacePageConfig: FurnacePageConfig = {
     {
       title: '强制循环罩式炉',
       image: '/images/products/bell-furnace/detail/11-circulation-workshop-20260915.webp',
-      alt: '罩式炉循环装置检修场景示意，展示炉台风机、下置电机及旁置内罩与加热罩',
+      alt: '罩式炉循环装置，炉台风机和下置电机旁放置内罩与加热罩',
       eyebrow: '循环与导流',
       text: '风机、导流和堆垛通道需按工况与温度等级校核。',
       suitable: '需要加强堆垛间对流换热的工况',

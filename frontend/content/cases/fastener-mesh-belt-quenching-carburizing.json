@@ -6,6 +6,7 @@
   "body": "fastener-mesh-belt-quenching-carburizing.md",
   "contentType": "experience",
   "publicationStatus": "published",
+  "datePublished": "2026-11-14T22:53:00+08:00",
   "projectStatus": "contracted",
   "workpiece": [
     "紧固件",
@@ -48,8 +49,8 @@
   ],
   "cover": {
     "src": "/images/cases/fastener-mesh-belt/line-panorama.webp",
-    "alt": "托辊网带炉热处理生产线整线效果图",
-    "caption": "整线效果图，非项目现场照片",
+    "alt": "托辊网带炉热处理生产线",
+    "caption": "托辊网带炉热处理生产线",
     "fit": "cover"
   }
 }
