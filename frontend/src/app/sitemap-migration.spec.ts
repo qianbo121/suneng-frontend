@@ -64,6 +64,7 @@ describe('sitemap migration supplementary checks', () => {
     // Case detail pages appear only after owner approval.
     expect(entries.filter((entry) => entry.url.includes('/case/')).map((entry) => entry.url).sort()).toEqual([
       'https://www.jssngyl.cn/en/case/henan-annealing-solution-line',
+      'https://www.jssngyl.cn/zh/case/fastener-mesh-belt-quenching-carburizing',
       'https://www.jssngyl.cn/zh/case/henan-annealing-solution-line',
     ]);
   });

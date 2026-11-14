@@ -1,3 +1,4 @@
+import { LOCAL_REVIEW_CASE_SLUGS } from './fastener-case-entry';
 import {
   CASE_FILTER_KEYS,
   CASE_PAGE_SIZE,
@@ -104,7 +105,7 @@ export function filterCases<T extends CaseMeta & { searchText: string }>(
   return records
     .filter(
       (item) =>
-        item.publicationStatus === 'published' &&
+        (item.publicationStatus === 'published' || (process.env.NODE_ENV === 'development' && LOCAL_REVIEW_CASE_SLUGS.has(item.slug))) &&
         (!query.type || item.contentType === query.type) &&
         CASE_FILTER_KEYS.every((key) => !query[key] || (key === 'equipment'
           ? matchesEquipment(item[key], query[key])

@@ -33,7 +33,7 @@ PROTECTED = ['postgres', 'backend', 'admin', 'nginx']
 SCOPE = 'news-products-services-company-reviewed-cases'
 # Owner-approved public case pages. Must match frontend/src/lib/cases/public-case-allowlist.ts.
 APPROVED_CASES = {
-    'zh': ['henan-annealing-solution-line'],
+    'zh': ['henan-annealing-solution-line', 'fastener-mesh-belt-quenching-carburizing'],
     'en': ['henan-annealing-solution-line'],
 }
 NO_CASES = {'zh': [], 'en': []}

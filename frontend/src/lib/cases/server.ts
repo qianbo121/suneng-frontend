@@ -5,6 +5,7 @@ import { cache } from 'react';
 import { prepareCaseBody } from './content';
 import { caseListPresentation } from './list-tags';
 import { PUBLIC_CASE_SLUGS } from './public-case-allowlist';
+import { LOCAL_REVIEW_CASE_SLUGS } from './fastener-case-entry';
 import { caseEquipmentCategory, filterCases, paginateCases, toCaseCard } from './query';
 import { CASE_FILTER_KEYS, type CaseMeta, type CaseQuery } from './types';
 
@@ -15,6 +16,7 @@ export function readCaseDirectory(
   directory: string,
   readBody = (filename: string) => prepareCaseBody(fs.readFileSync(filename, 'utf8')),
   approved?: ReadonlySet<string>,
+  localReview: ReadonlySet<string> = new Set(),
 ) {
   const ids = new Set<string>();
   const slugs = new Set<string>();
@@ -24,10 +26,11 @@ export function readCaseDirectory(
     .sort()
     .flatMap((file) => {
       const raw = JSON.parse(fs.readFileSync(path.join(directory, file), 'utf8')) as CaseMeta;
-      // Drafts are rejected before their body is read, rendered, indexed or serialized.
-      if (raw.publicationStatus !== 'published') return [];
+      // A specific draft may be reviewed locally; production always rejects drafts.
+      const reviewing = process.env.NODE_ENV === 'development' && localReview.has(raw.slug);
+      if (raw.publicationStatus !== 'published' && !reviewing) return [];
       // A published file is still private until the owner has approved its slug.
-      if (approved && !approved.has(raw.slug)) return [];
+      if (approved && !approved.has(raw.slug) && !reviewing) return [];
       if (
         !slugPattern.test(raw.slug) ||
         !raw.id ||
@@ -58,7 +61,7 @@ export function readCaseDirectory(
         summary: raw.summary,
         body: raw.body,
         contentType: raw.contentType,
-        publicationStatus: 'published',
+        publicationStatus: raw.publicationStatus,
         projectStatus: raw.projectStatus,
         workpiece: raw.workpiece,
         materials: raw.materials,
@@ -127,7 +130,7 @@ export function readCaseDirectory(
 // Re-read metadata and Markdown on every dev request so edits and withdrawals
 // take effect immediately. Only reuse the sanitized strings/TOC for an unchanged
 // body; never retain DOM nodes or accumulate previous versions of a file.
-export function createCaseDirectoryReader(directory: string, approved?: ReadonlySet<string>) {
+export function createCaseDirectoryReader(directory: string, approved?: ReadonlySet<string>, localReview: ReadonlySet<string> = new Set()) {
   const bodies = new Map<string, { markdown: string; body: ReturnType<typeof prepareCaseBody> }>();
   return () => {
     const used = new Set<string>();
@@ -139,7 +142,7 @@ export function createCaseDirectoryReader(directory: string, approved?: Readonly
       const body = prepareCaseBody(markdown);
       bodies.set(filename, { markdown, body });
       return body;
-    }, approved);
+    }, approved, localReview);
     for (const filename of bodies.keys()) {
       if (!used.has(filename)) bodies.delete(filename);
     }
@@ -147,7 +150,7 @@ export function createCaseDirectoryReader(directory: string, approved?: Readonly
   };
 }
 
-const readDevelopmentCases = createCaseDirectoryReader(contentDirectory, PUBLIC_CASE_SLUGS);
+const readDevelopmentCases = createCaseDirectoryReader(contentDirectory, PUBLIC_CASE_SLUGS, LOCAL_REVIEW_CASE_SLUGS);
 // Published case files are bundled into each immutable release. React cache()
 // deduplicates a render, but does not share the parsed corpus between requests.
 // Keep the sanitized strings once per production process; a new deployment

@@ -1,3 +1,4 @@
+import { LOCAL_REVIEW_CASE_SLUGS, FASTENER_CASE_PATH, fastenerCaseVisible } from './cases/fastener-case-entry';
 import approvedGuidePaths from '../../../ops/releases/approved-guides.json';
 import { PUBLIC_CASE_SLUGS, PUBLIC_ENGLISH_CASE_SLUGS } from '@/lib/cases/public-case-allowlist';
 
@@ -90,6 +91,7 @@ function isWithdrawnSegments(segments: string[]): boolean {
       locale === 'zh' && rest.length === 1 && isApprovedChinesePath(`/zh/${section}/${rest[0]}`);
     return !TECHNICAL_CONTENT_PUBLISHED && !approved;
   }
+  if (process.env.NODE_ENV === 'development' && locale === 'zh' && rest.length === 1 && LOCAL_REVIEW_CASE_SLUGS.has(rest[0])) return false;
   const approved = locale === 'en' ? PUBLIC_ENGLISH_CASE_SLUGS : PUBLIC_CASE_SLUGS;
   if (rest.length === 0) return approved.size === 0;
   return rest.length > 1 || !approved.has(rest[0]);
@@ -137,6 +139,7 @@ export function isHiddenCaseEntry(href: string): boolean {
   try {
     const url = new URL(href, 'https://www.jssngyl.cn');
     if (!['www.jssngyl.cn', 'jssngyl.cn'].includes(url.hostname)) return false;
+    if (routablePathname(url.pathname) === FASTENER_CASE_PATH && fastenerCaseVisible()) return false;
     return /^\/(?:zh\/|en\/)?case(?:\/|$)/i.test(routablePathname(url.pathname));
   } catch { return false; }
 }

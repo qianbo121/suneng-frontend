@@ -10,6 +10,7 @@ import { Breadcrumb } from '@/components/layout/Breadcrumb';
 import { HomepageLeadForm } from '@/components/home/HomepageLeadForm';
 import { getStaticProductBySlug } from '@/constants/static-products';
 import type { LineTable, ProductionLineContent } from '@/lib/production-line-types';
+import { FastenerAgreement, CarburisingAgreement } from './MeshBeltAgreement';
 import { ProductionLineHeroDiagram } from './ProductionLineFlow';
 import { ProductionLineProcess } from './ProductionLineProcess';
 import { getLineProcessSteps, productionLineProcessMaps } from '@/lib/production-line-process-map';
@@ -136,6 +137,11 @@ export function ProductionLineDetailPage({ content, locale = 'zh' }: { content: 
   const t = (zh: string, english: string) => en ? english : zh;
   const processData = en ? getEnglishLineProcess(content.pageId) : { model: productionLineProcessMaps[content.pageId], steps: getLineProcessSteps(content) };
   const s = content.sections;
+  const showFastenerAgreement = !en && content.pageId === 'fastener-quench-temper-line';
+  const sectionNavigation = content.sectionNavigation.filter(item => TECHNICAL_CONTENT_PUBLISHED || item.href !== '#project');
+  if (showFastenerAgreement) {
+    sectionNavigation.unshift({ label: '协议参数', href: '#agreement-capacity' }, { label: '设备特点', href: '#equipment-features' });
+  }
   const capacityResource = content.pageId === 'annealing-solution-line'
     ? { href: `/${locale}/news/shuju-news-27`, label: t('连续退火线速度：工艺窗口与整线瓶颈', 'Read how to assess stainless-steel annealing line speed') }
     : content.pageId === 'mesh-belt-carbonitriding-line'
@@ -251,9 +257,16 @@ export function ProductionLineDetailPage({ content, locale = 'zh' }: { content: 
         </div>
       </section>
 
-      <ProductionLineAnchorNav locale={locale} items={content.sectionNavigation.filter((item) => TECHNICAL_CONTENT_PUBLISHED || item.href !== '#project')} />
+      <ProductionLineAnchorNav locale={locale} items={sectionNavigation} />
 
-      <section id="workpieces" className={`${styles.section} ${styles.soft}`}>
+      {showFastenerAgreement && (
+        <div className={styles.container}><FastenerAgreement /></div>
+      )}
+      {locale === 'zh' && content.pageId === 'mesh-belt-carbonitriding-line' && (
+        <div className={styles.container}><CarburisingAgreement /></div>
+      )}
+
+      <section id="workpieces" className={styles.section}>
         <div className={styles.container}>
           <Heading title={s.workpieces.title} subtitle={s.workpieces.subtitle} />
           <div className={styles.workpieceGrid} data-count={s.workpieces.cards.length}>
@@ -315,7 +328,7 @@ export function ProductionLineDetailPage({ content, locale = 'zh' }: { content: 
         </section>
       )}
 
-      <section id="configuration" className={`${styles.section} ${styles.soft}`}>
+      <section id="configuration" className={styles.section}>
         <div className={styles.container}>
           <Heading title={s.configuration.title} subtitle={s.configuration.subtitle} />
           <ComparisonTable locale={locale} data={s.configuration.table} id="configuration-table" />
@@ -403,7 +416,7 @@ export function ProductionLineDetailPage({ content, locale = 'zh' }: { content: 
         </section>
       )}
 
-      <section id="delivery-scope" className={`${styles.section} ${styles.soft}`}>
+      <section id="delivery-scope" className={styles.section}>
         <div className={styles.container}>
           <Heading title={s['delivery-scope'].title} subtitle={s['delivery-scope'].subtitle} />
           <div
@@ -467,7 +480,7 @@ export function ProductionLineDetailPage({ content, locale = 'zh' }: { content: 
         </div>
       </section>
 
-      <section id="faq" className={`${styles.section} ${styles.soft}`}>
+      <section id="faq" className={styles.section}>
         <div className={`${styles.container} ${styles.faqGrid}`}>
           <Heading title={s.faq.title} subtitle={s.faq.subtitle} />
           <div className={styles.faqList}>

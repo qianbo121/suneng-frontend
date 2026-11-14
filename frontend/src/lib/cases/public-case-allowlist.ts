@@ -22,6 +22,14 @@ export type ReviewedPublicCase = {
 
 export const REVIEWED_PUBLIC_CASES: readonly ReviewedPublicCase[] = [
   {
+    id: 'fastener-mesh-belt-quenching-carburizing',
+    slug: 'fastener-mesh-belt-quenching-carburizing',
+    batch: 2,
+    english: false,
+    approvedBy: 'site-owner',
+    approvedAt: '2026-11-14',
+  },
+  {
     id: 'henan-annealing-solution',
     slug: 'henan-annealing-solution-line',
     batch: 1,

@@ -1,7 +1,7 @@
 .page {
   --pit-blue: #3370ff;
   --pit-deep: #12345a;
-  --pit-warm: #f7f7f4;
+  --lead-form-section-bg: var(--color-surface);
   --pit-panel: #f3f5f7;
   --pit-border: #dfe5eb;
   --pit-accent: #3370ff;
@@ -21,7 +21,7 @@
 
 .breadcrumbBar {
   border-bottom: 1px solid #edf0f3;
-  background: #fafbfc;
+  background: var(--color-surface);
 }
 
 .breadcrumbBar .container {
@@ -347,9 +347,15 @@
   color: var(--pit-blue);
 }
 
+.agreementBand {
+  display: flow-root;
+  padding-top: 10px;
+  background: #fff;
+}
+
 .contentArea {
   padding-block: 10px 0;
-  background: var(--pit-warm);
+  background: var(--color-surface);
 }
 
 .page :global(#inquiry) {
