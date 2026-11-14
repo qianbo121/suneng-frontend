@@ -41,15 +41,10 @@
 .cards dd { line-height:1.55; }
 .related { display:flex; flex-wrap:wrap; align-items:baseline; gap:6px 20px; margin-top:24px; }
 .related a { color:var(--blue); text-decoration:underline; text-underline-offset:.2em; }
-.faqIntro { display:flex; align-items:center; justify-content:space-between; gap:12px; }
-.faqIntro p,.source { color:#47576b; font-size:.91em; }
-.faqIntro button,.faqRow button { display:flex; align-items:center; gap:7px; min-height:44px; }
-.faqIntro button { white-space:nowrap; color:var(--blue); font-weight:650; }
+.faqIntro,.source { color:#47576b; font-size:.91em; }
 .faqRow { border-top:1px solid var(--edge); }
 .faqRow:last-child { border-bottom:1px solid var(--edge); }
-.faqRow button { width:100%; padding:10px 12px; text-align:left; justify-content:space-between; }
-.faqRow svg,.faqIntro svg { flex:none; color:var(--blue); }
-.page button[aria-expanded=true] svg { transform:rotate(180deg); }
+.faqRow h3 { padding:10px 12px; }
 .faqRow p { padding:0 12px 14px; }
 .page :is(button,a):focus-visible { outline:3px solid #1475ed; outline-offset:3px; }
 .source { margin:18px 0 30px; }
@@ -75,7 +70,6 @@
   .features>div { padding:12px 0; }
   .features>div+div { border:0; border-top:1px solid var(--edge); }
   .cards { gap:10px; }
-  .faqIntro { align-items:start; flex-wrap:wrap; gap:0; }
-  .faqRow button { padding:10px 2px; }
+  .faqRow h3 { padding:10px 2px; }
   .cta { flex-wrap:wrap; gap:12px; }
 }
