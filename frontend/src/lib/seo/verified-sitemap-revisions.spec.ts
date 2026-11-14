@@ -6,6 +6,7 @@ import { getVerifiedSitemapLastModified, verifiedSitemapDay } from './verified-s
 // e6dbe0a5: six resource links accepted on 2026-10-20 (P30 superseded below).
 // b1e4b375: P29's own verified content change on 2026-10-15.
 // 002699af: six pages accepted after the 2026-10-21 07:33:05–07:34:05 UTC release.
+// fd81a5de: four product pages accepted on 2026-11-14, including two revised October entries.
 // Detailed receipts remain in the local frozen post-release review packet.
 const acceptedGroups = [
   { date: '2026-10-20', source: 'e6dbe0a5df9b9d44cf91e8812ea44c951121ba11', paths: [
@@ -17,9 +18,12 @@ const acceptedGroups = [
     '/zh/solutions/jiangsu-gongye-lu-changjia',
   ] },
   { date: '2026-10-21', source: '002699af38ec989816262d95bfcdbef37459a711', paths: [
-    '/zh/products/detail/annealing-solution-line', '/zh/products/detail/fastener-quench-temper-line',
-    '/zh/products/detail/mesh-belt-carbonitriding-line', '/zh/products/detail/roller-hearth-furnace',
+    '/zh/products/detail/annealing-solution-line', '/zh/products/detail/roller-hearth-furnace',
     '/zh/solutions/continuous-heat-treatment-line', '/zh/solutions/rechuli-lu-changjia',
+  ] },
+  { date: '2026-11-14', source: 'fd81a5de7d8a60af137f472263e1fec4f161cc3d', paths: [
+    '/zh/products/detail/mesh-belt-furnace', '/en/products/detail/mesh-belt-furnace',
+    '/zh/products/detail/fastener-quench-temper-line', '/zh/products/detail/mesh-belt-carbonitriding-line',
   ] },
 ];
 const now = new Date('2026-10-22T12:00:00Z');
@@ -29,9 +33,9 @@ describe('verified sitemap revision evidence', () => {
     const accepted = Object.fromEntries(acceptedGroups.flatMap((group) => group.paths.map((path) =>
       [path, { modifiedOn: group.date, sourceCommit: group.source }])));
     expect(revisions).toEqual(accepted);
-    expect(Object.keys(revisions)).toHaveLength(12);
+    expect(Object.keys(revisions)).toHaveLength(14);
     for (const [path, revision] of Object.entries(accepted)) {
-      expect(getVerifiedSitemapLastModified(path, now)).toBe(revision.modifiedOn);
+      expect(getVerifiedSitemapLastModified(path, new Date('2026-11-15T00:00:00Z'))).toBe(revision.modifiedOn);
     }
   });
 

@@ -1,11 +1,12 @@
 import { absoluteUrl, buildMetadata, getIndexingRobots } from '@/lib/seo/metadata';
-import { COMPANY_NAME } from '@/lib/seo/config';
+import { LOCAL_BUSINESS_ID } from '@/lib/seo/jsonld';
 
 export type CaseSearchContent = {
   title: string;
   description: string;
   path: string;
   locale: 'zh' | 'en';
+  datePublished: string;
   image: string;
   imageAlt: string;
   languages: Record<string, string>;
@@ -35,8 +36,8 @@ export function caseSearchJsonLd(data: CaseSearchContent) {
         headline: data.title, description: data.description, inLanguage: language,
         mainEntityOfPage: { '@type': 'WebPage', '@id': url },
         image: { '@type': 'ImageObject', url: absoluteUrl(data.image), caption: data.imageAlt },
-        publisher: { '@type': 'Organization', name: COMPANY_NAME, url: absoluteUrl('/') },
-        // Project year/source date do not establish a publication date or author.
+        datePublished: data.datePublished,
+        publisher: { '@id': LOCAL_BUSINESS_ID },
       },
       {
         '@type': 'BreadcrumbList', '@id': `${url}#breadcrumb`,

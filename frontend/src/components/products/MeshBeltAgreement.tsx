@@ -92,7 +92,7 @@ export function CarburisingAgreement() {
   return (
     <section className={styles.section} id="surface-carburising">
       <h2>网带炉渗碳协议处理量</h2>
-      <p>{data.carburising}</p>
+      <p>{fastenerCaseVisible() ? <Link href={FASTENER_CASE_PATH} prefetch={false}>{model}</Link> : model}{' '}{data.carburisingDescription}</p>
     </section>
   );
 }

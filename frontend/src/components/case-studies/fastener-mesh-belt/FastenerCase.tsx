@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import Link from 'next/link';
 import { FiArrowRight, FiBarChart2, FiBox, FiSettings, FiShield, FiUsers } from 'react-icons/fi';
 import { WechatContactButton } from '@/components/lead/WechatContactButton';
 import { LineFlow } from './LineFlow';
@@ -50,6 +51,12 @@ export function FastenerCase() {
         <section><h2><FiBox aria-hidden />协议供货范围</h2><p>淬火炉、带提升机的油槽、清洗机、回火炉和控制系统。</p></section>
         <section><h2><FiShield aria-hidden />验收办法</h2><dl><dt>出厂前</dt><dd>检查网带传动、冷态测试控制系统。</dd><dt>买方现场</dt><dd>终验收约定产量为 150～300 公斤/小时。淬火炉在 800℃ 时测三点，同一温区炉温偏差要求在 ±5℃ 以内。</dd></dl></section>
       </div>
+      <nav className={s.related} aria-label="相关设备与资料">
+        <strong>相关设备与资料</strong>
+        <Link href="/zh/products/detail/mesh-belt-furnace#agreement-capacity">网带炉技术协议参数表</Link>
+        <Link href="/zh/products/detail/fastener-quench-temper-line">紧固件调质生产线</Link>
+        <Link href="/zh/news/mesh-belt-carburizing-throughput-process-limits">网带炉连续渗碳的产量边界怎么算？</Link>
+      </nav>
       <Faq />
       <p className={s.source}>设备配置与产量依据双方签订的技术协议，工件信息由苏能项目人员补充。</p>
       <aside className={s.cta}><h2>提交工件参数，核算产量与炉型</h2><WechatContactButton label="获取方案" className={s.action} icon={<FiArrowRight aria-hidden />} /></aside>
