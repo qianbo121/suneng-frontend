@@ -324,7 +324,7 @@
   font-weight: 700;
   font-variant-numeric: tabular-nums;
 }
-.detailHeading h4 {
+.detailHeading h3 {
   margin: 0;
   font-size: 24px;
   font-weight: 700;
@@ -597,7 +597,7 @@
   .detailHeading > span:first-child {
     font-size: 44px;
   }
-  .detailHeading h4 {
+  .detailHeading h3 {
     font-size: 28px;
   }
   .explorer .detailDescription {
@@ -652,7 +652,7 @@
   .detailHeading > span:first-child {
     font-size: 32px;
   }
-  .detailHeading h4 {
+  .detailHeading h3 {
     font-size: 22px;
   }
 }
@@ -670,7 +670,7 @@
     gap: 16px;
     padding: 16px;
   }
-  .detailHeading h4 {
+  .detailHeading h3 {
     font-size: 24px;
   }
   .sequence {
@@ -740,7 +740,7 @@
   .detailHeading > span:first-child {
     font-size: 40px;
   }
-  .detailHeading h4 {
+  .detailHeading h3 {
     font-size: 22px;
   }
   .detailHeading::before {

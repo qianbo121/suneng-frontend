@@ -118,7 +118,7 @@ describe('the two owner-approved Chinese procurement pages', () => {
     expect(metadata.alternates?.canonical).toBe('https://www.jssngyl.cn' + page.path);
     expect(metadata.alternates?.languages).toEqual({
       'zh-CN': 'https://www.jssngyl.cn' + page.path,
-      ...(id === 'equipment' ? { en: 'https://www.jssngyl.cn' + page.path.replace('/zh/', '/en/') } : {}),
+      ...(id === 'equipment' ? { 'en-US': 'https://www.jssngyl.cn' + page.path.replace('/zh/', '/en/') } : {}),
       'x-default': 'https://www.jssngyl.cn' + page.path,
     });
     expect(metadata.openGraph).toMatchObject({ type: 'website' });

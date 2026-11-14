@@ -132,8 +132,20 @@ describe('prepareNewsArticleHtml', () => {
     expect(out).toContain('<h2>苏能四包三清约定法</h2>');
     expect(out).toContain('<h3>第一包：备件包</h3>');
     expect(out).toContain('<h2>合同附件怎样核对</h2>');
-    expect(out).toContain('<h4>备件包</h4>');
+    expect(out).toContain('<h3>备件包</h3>');
     expect(richTextToPlainText(out)).toBe(richTextToPlainText(input));
+  });
+
+  it('repairs explicit attachment headings only in the reviewed spare-parts section', () => {
+    const input = '<h2>合同附件怎样核对</h2><h4 id="spares"><strong>备件包</strong></h4><p>正文不变。</p><h4>资料包</h4><h2>其他部分</h2><h3>子项</h3><h4>服务包</h4>';
+    const out = prepareNewsArticleHtml(input, { articleSlug: 'shuju-news-34', locale: 'zh' });
+    expect(out).toContain('<h3 id="spares"><strong>备件包</strong></h3>');
+    expect(out).toContain('<h3>资料包</h3>');
+    expect(out).toContain('<h4>服务包</h4>');
+    expect(richTextToPlainText(out)).toBe(richTextToPlainText(input));
+    for (const options of [{ articleSlug: 'another-article', locale: 'zh' }, { articleSlug: 'shuju-news-34', locale: 'en' }]) {
+      expect(prepareNewsArticleHtml(input, options)).toContain('<h4 id="spares">');
+    }
   });
 });
 

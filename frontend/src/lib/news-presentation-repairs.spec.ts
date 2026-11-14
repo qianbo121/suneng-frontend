@@ -24,11 +24,14 @@ const item = {
   contentUpdatedAt: revision.reviewedAt,
 } as NewsApiItem;
 const parse = (html: string) => DOMPurify.sanitize(html, { RETURN_DOM: true }) as HTMLElement;
+// Compare the article-specific formatting against the same general article
+// processing (including localized home links), without applying its own repair.
+const baselineOptions = { locale: 'zh', articleSlug: 'other-article' };
 
 describe('format-only repair of the automation article', () => {
   it('promotes exactly the four original labels without changing visible text or source data', () => {
     const beforeItem = JSON.stringify(item);
-    const before = parse(prepareNewsArticleHtml(item.contentZh, { locale: 'zh' }));
+    const before = parse(prepareNewsArticleHtml(item.contentZh, baselineOptions));
     const after = parse(normalizeNewsHtml('zh', item));
     expect(
       Array.from(after.querySelectorAll('h2.news-section-heading'), (h) => h.textContent),
@@ -39,12 +42,13 @@ describe('format-only repair of the automation article', () => {
   });
 
   it('describes only the verified diagram and retains its source plus all links', () => {
-    const before = parse(prepareNewsArticleHtml(item.contentZh, { locale: 'zh' }));
+    const before = parse(prepareNewsArticleHtml(item.contentZh, baselineOptions));
     const after = parse(normalizeNewsHtml('zh', item));
     const attrs = (root: HTMLElement, selector: string, name: string) =>
       Array.from(root.querySelectorAll(selector), (el) => el.getAttribute(name));
     expect(attrs(after, 'img', 'src')).toEqual(attrs(before, 'img', 'src'));
     expect(attrs(after, 'a', 'href')).toEqual(attrs(before, 'a', 'href'));
+    expect(after.querySelector('a[href="/zh"]')?.textContent).toBe('https://www.jssngyl.cn/zh');
     expect(after.querySelector('img[alt="20260829-162120.jpg"]')).toBeNull();
     expect(after.querySelectorAll('img')[1].getAttribute('alt')).toContain(
       '动作、联锁、记录、接口四层',
@@ -54,7 +58,7 @@ describe('format-only repair of the automation article', () => {
 
   it('leaves another article and a later changed image description alone', () => {
     expect(normalizeNewsHtml('zh', { ...item, slug: 'other-article' })).toBe(
-      prepareNewsArticleHtml(item.contentZh, { locale: 'zh' }),
+      prepareNewsArticleHtml(item.contentZh, baselineOptions),
     );
     const changed = {
       ...item,

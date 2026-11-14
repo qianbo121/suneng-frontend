@@ -78,7 +78,7 @@ function getNewsHeadingTag(text: string) {
   }
 
   if (/^(备件包|资料包|服务包|培训包|质保起算|控制权限|故障闭环)$/.test(text)) {
-    return 'h4';
+    return 'h3';
   }
 
   return null;
@@ -168,6 +168,27 @@ export function prepareNewsArticleHtml(
   const root = DOMPurify.sanitize(sanitized, { RETURN_DOM: true }) as HTMLElement;
   const document = root.ownerDocument;
   if (!document) return sanitized;
+
+  // The reviewed spare-parts article already contains explicit headings, so it
+  // bypasses the break-delimited label promotion below. Its seven attachment
+  // labels are direct children of an h2 section, not fourth-level subsections.
+  // Fix presentation here to preserve the source used by translation guards.
+  if (options.locale === 'zh' && options.articleSlug === 'shuju-news-34') {
+    let inAttachments = false;
+    for (const heading of Array.from(root.querySelectorAll('h2, h4'))) {
+      const text = heading.textContent?.trim() || '';
+      if (heading.tagName === 'H2') {
+        inAttachments = text === '合同附件怎样核对';
+      } else if (inAttachments && /^(备件包|资料包|服务包|培训包|质保起算|控制权限|故障闭环)$/.test(text)) {
+        const childHeading = document.createElement('h3');
+        for (const attribute of Array.from(heading.attributes)) {
+          childHeading.setAttribute(attribute.name, attribute.value);
+        }
+        childHeading.append(...Array.from(heading.childNodes));
+        heading.replaceWith(childHeading);
+      }
+    }
+  }
   if (options.locale === 'zh') {
     for (const image of root.querySelectorAll('img')) {
       const description = getReviewedNewsImageDescription(image.getAttribute('src'), image.getAttribute('alt'));
@@ -176,7 +197,11 @@ export function prepareNewsArticleHtml(
   }
   for (const link of root.querySelectorAll('a[href]')) {
     const href = link.getAttribute('href') ?? '';
-    const destination = resolveMergedAboutLink(href);
+    // Only article homepage references follow the article language. Preserve
+    // deep links, fragments, queries and all external source references.
+    const articleHome = options.articleSlug && (options.locale === 'zh' || options.locale === 'en')
+      && ['/', 'https://www.jssngyl.cn', 'https://www.jssngyl.cn/'].includes(href);
+    const destination = articleHome ? `/${options.locale}` : resolveMergedAboutLink(href);
     if (destination !== href) {
       link.setAttribute('href', destination);
       if (link.textContent?.trim() === href) link.textContent = `https://www.jssngyl.cn${destination}`;

@@ -5,7 +5,7 @@ import { usePathname } from 'next/navigation';
 
 import { LoadingFeedback } from '@/components/common/LoadingFeedback';
 import { PUBLIC_CASE_SLUGS, PUBLIC_ENGLISH_CASE_SLUGS } from '@/lib/cases/public-case-allowlist';
-import { APPROVED_GUIDE_PATHS, APPROVED_PROCUREMENT_PATHS } from '@/lib/publication-scope';
+import { APPROVED_GUIDE_PATHS, APPROVED_PROCUREMENT_PATHS, ENGLISH_EQUIPMENT_PROCUREMENT_PATH } from '@/lib/publication-scope';
 import type { Locale } from '@/types/site';
 
 export function PageLoadingBoundary({ children, locale }: { children: ReactNode; locale: Locale }) {
@@ -24,6 +24,7 @@ export function PageLoadingBoundary({ children, locale }: { children: ReactNode;
   // This does not reopen their withdrawn English editions or unknown routes.
   const procurementOrService = APPROVED_GUIDE_PATHS.has(pagePath)
     || APPROVED_PROCUREMENT_PATHS.has(pagePath)
+    || pagePath === ENGLISH_EQUIPMENT_PROCUREMENT_PATH
     || /^\/(?:zh|en)\/service(?:\/(?:furnace-renovation-overhaul|installation-after-sales|furnace-relocation-restart|selection-retrofit-guide))?$/.test(pagePath);
 
   // Batch 1.4: exact information pages and owner-approved case routes.

@@ -392,7 +392,7 @@ export function ProductionLineProcess({ pageId, image, process, model, steps, lo
         <div key={current.id} className={styles.detailCopy}>
           <div className={styles.detailHeading}>
             <span>{number(selected)}</span>
-            <h4>{shortTitle(current.title)}</h4>
+            <h3>{shortTitle(current.title)}</h3>
             {current.optional && <span className={styles.optional}>{t('按需配置', 'Optional')}</span>}
             <span className={styles.detailReference}>
               {activeZone ? t('对应上图高亮区域', 'Highlighted area above') : t('图外工序或交接', 'Off-image step or handover')}
