@@ -38,6 +38,7 @@ const englishStaticPaths = new Set([
   '/',
   '/solutions',
   '/products',
+  '/products/detail/fastener-quench-temper-line/cqi-9',
   '/service',
   '/service/installation-after-sales',
   '/service/furnace-relocation-restart',
@@ -123,6 +124,13 @@ function collectStaticRoutes(): MetadataRoute.Sitemap {
       priority: 1,
     },
     { path: '/products', changeFrequency: 'weekly', priority: 0.9 },
+    {
+      path: '/products/detail/fastener-quench-temper-line/cqi-9',
+      changeFrequency: 'monthly',
+      priority: 0.65,
+      lastModified: '2026-11-14T11:24:12Z',
+      lastModifiedLocales: sitemapLocales,
+    },
     { path: '/solutions', changeFrequency: 'monthly', priority: 0.84 },
     { path: '/service', changeFrequency: 'monthly', priority: 0.75 },
     { path: '/service/selection-retrofit-guide', changeFrequency: 'monthly', priority: 0.7 },
@@ -177,12 +185,6 @@ function collectStaticRoutes(): MetadataRoute.Sitemap {
       path: '/products/detail/copper-wire-annealing-line/inquiry-checklist',
       changeFrequency: 'monthly',
       priority: 0.65,
-    },
-    {
-      path: '/products/detail/fastener-quench-temper-line/cqi-9',
-      changeFrequency: 'monthly',
-      priority: 0.65,
-      // Record a verified revision when the bilingual page is approved for release.
     },
     {
       path: '/service/furnace-renovation-overhaul',
@@ -250,7 +252,6 @@ function collectStaticRoutes(): MetadataRoute.Sitemap {
   const englishGuidePaths = new Set([
     '/articles/special-industrial-furnace-procurement-assessment',
     '/products/detail/copper-wire-annealing-line/inquiry-checklist',
-    '/products/detail/fastener-quench-temper-line/cqi-9',
     '/service/furnace-renovation-overhaul',
     ...englishSolutions.map((item) => `/solutions/${item.slug}`),
   ]);
