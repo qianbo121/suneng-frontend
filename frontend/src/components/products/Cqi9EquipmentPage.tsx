@@ -1,5 +1,4 @@
 import Link from 'next/link';
-import { HiChevronDown } from 'react-icons/hi2';
 import { Breadcrumb } from '@/components/layout/Breadcrumb';
 import copy from '@/lib/cqi-9-page-content.json';
 import styles from './Cqi9EquipmentPage.module.css';
@@ -74,13 +73,13 @@ export function Cqi9EquipmentPage({ locale }: { locale: 'zh' | 'en' }) {
       <p>{referenced(c.scope)}</p>
     </section>
     <section id="equipment" className={`${styles.container} ${styles.section}`} aria-labelledby="equipment-title">
-      <div className={styles.sectionHeading}><span className={styles.number}>01</span><h2 id="equipment-title">{heading(c.table_heading)}</h2></div>
+      <h2 id="equipment-title" className={styles.sectionHeading}>{heading(c.table_heading)}</h2>
       <p className={styles.intro}>{c.table_intro}</p>
       <table className={styles.table}>
         <caption className={styles.srOnly}>{c.table_heading}</caption>
         <thead><tr>{c.headers.map(h => <th key={h} scope="col">{h}</th>)}</tr></thead>
-        <tbody>{equipmentRows.map(({ name, question, equipment, buyer }, i) => <tr key={name}>
-          <th scope="row"><span className={styles.rowNumber} aria-hidden="true">{String(i + 1).padStart(2, '0')}</span><strong>{name}</strong><span className={styles.rowHint}>{question}</span></th>
+        <tbody>{equipmentRows.map(({ name, question, equipment, buyer }) => <tr key={name}>
+          <th scope="row"><strong>{name}</strong><span className={styles.rowHint}>{question}</span></th>
           <td><span className={styles.mobileLabel} aria-hidden="true">{c.headers[1]}</span>{equipment}</td>
           <td><span className={styles.mobileLabel} aria-hidden="true">{c.headers[2]}</span>{buyer}</td>
         </tr>)}</tbody>
@@ -88,17 +87,26 @@ export function Cqi9EquipmentPage({ locale }: { locale: 'zh' | 'en' }) {
     </section>
     <section id="acceptance" className={styles.acceptance} aria-labelledby="acceptance-title">
       <div className={`${styles.container} ${styles.acceptanceGrid}`}>
-        <div className={styles.sectionHeading}><span className={styles.number}>02</span><h2 id="acceptance-title">{heading(c.accept_heading)}</h2></div>
+        <h2 id="acceptance-title" className={styles.sectionHeading}>{heading(c.accept_heading)}</h2>
         <div><p className={styles.criterion}>{c.accept}</p><p>{referenced(c.accept_limit)}</p></div>
       </div>
     </section>
     <section id="purchase" className={`${styles.container} ${styles.section}`} aria-labelledby="purchase-title">
-      <div className={styles.sectionHeading}><span className={styles.number}>03</span><h2 id="purchase-title">{heading(c.purchase_heading)}</h2></div>
-      <div className={styles.purchaseGrid}>{c.purchase.map(([title, text], i) => <div key={title} className={styles.purchaseItem}><span className={styles.purchaseNumber} aria-hidden="true">{String(i + 1).padStart(2, '0')}</span><h3>{title}</h3><p>{text}</p></div>)}</div>
+      <h2 id="purchase-title" className={styles.sectionHeading}>{heading(c.purchase_heading)}</h2>
+      <div className={styles.purchaseGrid}>{c.purchase.map(([title, text]) => <div key={title} className={styles.purchaseItem}><h3>{title}</h3><p>{text}</p></div>)}</div>
     </section>
-    <section id="questions" className={`${styles.container} ${styles.faq}`} aria-labelledby="questions-title">
-      <div className={styles.sectionHeading}><span className={styles.number}>04</span><h2 id="questions-title">{c.faq_heading}</h2></div>
-      <div>{c.faq.map(([question, answer], i) => <details key={question} open={i === 0}><summary><h3>{!en && i === 1 ? heading(question) : question}</h3><HiChevronDown aria-hidden="true" /></summary><p>{answer}</p></details>)}</div>
+    <section id="questions" className={styles.faq} aria-labelledby="questions-title">
+      <div className={styles.container}>
+        <h2 id="questions-title">{c.faq_heading}</h2>
+        <div className={styles.faqGrid}>
+          {c.faq.map(([question, answer]) => (
+            <div key={question} className={styles.faqCard}>
+              <h3>{question === c.faq[1][0] ? heading(question) : question}</h3>
+              <p>{answer}</p>
+            </div>
+          ))}
+        </div>
+      </div>
     </section>
     <section id="consultation" className={styles.consultation} aria-labelledby="consultation-title">
       <div className={`${styles.container} ${styles.consultationGrid}`}>

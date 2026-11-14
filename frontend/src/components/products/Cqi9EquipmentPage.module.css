@@ -6,8 +6,8 @@
 .page h3 { font-size:19px; line-height:1.5; }
 .page p { color:var(--cqi-muted); }
 .page svg { width:20px; height:20px; flex-shrink:0; }
-.page a,.page summary { touch-action:manipulation; }
-.page :is(a,summary):focus-visible { outline:2px solid var(--cqi-brand); outline-offset:5px; }
+.page a { touch-action:manipulation; }
+.page a:focus-visible { outline:2px solid var(--cqi-brand); outline-offset:5px; }
 .page section[id],.references li { scroll-margin-top:100px; }
 .container { width:var(--site-page-width,calc(100% - 80px)); max-width:var(--site-page-max,1280px); margin-inline:auto; }
 .preview { background:#edf3ff; color:#365681; padding:6px 24px; text-align:center; font-size:12px; letter-spacing:.04em; }
@@ -46,8 +46,7 @@
 .scope { display:grid; grid-template-columns:.78fr 1.6fr; gap:64px; padding-block:48px; border-bottom:1px solid var(--cqi-line); }
 .scope h2 { font-size:24px; }
 .section { padding-block:56px; }
-.sectionHeading { display:flex; align-items:flex-start; gap:16px; margin-bottom:24px; }
-.number { color:var(--cqi-brand); font-size:13px; font-weight:700; line-height:1; padding-top:14px; flex-shrink:0; }
+.page .sectionHeading { margin-bottom:24px; }
 .intro { max-width:1050px; margin-bottom:28px!important; }
 .table { width:100%; border-collapse:separate; border-spacing:0; border:1px solid var(--cqi-line); border-radius:8px; overflow:hidden; table-layout:fixed; }
 .table th,.table td { text-align:left; vertical-align:top; padding:24px; border-bottom:1px solid var(--cqi-line); line-height:1.8; }
@@ -58,7 +57,6 @@
 .table td { color:var(--cqi-muted); }
 .table td:nth-child(2),.table thead th:nth-child(2) { background:#f0f5ff; color:var(--cqi-ink); }
 .table tr:last-child>* { border-bottom:0; }
-.rowNumber { display:block; color:var(--cqi-brand); font-size:12px; font-weight:600; margin-bottom:4px; }
 .table strong { display:block; font-size:17px; font-weight:600; }
 .rowHint { display:block; color:var(--cqi-muted); font-weight:400; font-size:14px; margin-top:6px; }
 .mobileLabel { display:none; }
@@ -68,17 +66,14 @@
 .citation { color:var(--cqi-brand); font-size:.8em; text-decoration:underline; padding-inline:2px; }
 .purchaseGrid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:32px; }
 .purchaseItem { border-top:2px solid var(--cqi-line); padding-top:24px; }
-.purchaseNumber { color:var(--cqi-brand); font-size:13px; font-weight:700; }
-.purchaseItem h3 { margin-block:12px!important; }
-.faq { display:grid; grid-template-columns:.85fr 1.5fr; gap:64px; padding-block:16px 64px; }
-.faq details { border-bottom:1px solid var(--cqi-line); }
-.faq details:first-child { border-top:1px solid var(--cqi-line); }
-.faq summary { display:flex; align-items:center; justify-content:space-between; cursor:pointer; gap:20px; padding-block:22px; list-style:none; }
-.faq summary::-webkit-details-marker { display:none; }
-.faq summary h3 { font-size:18px; }
-.faq summary svg { color:var(--cqi-brand); transition:transform .15s; }
-.faq details[open] summary svg { transform:rotate(180deg); }
-.faq details>p { padding-bottom:24px; }
+.page .purchaseItem h3 { margin-bottom:12px; }
+.faq { background:#f1f5fa; padding-block:30px 38px; }
+.faq h2 { font-size:32px; line-height:1.38; letter-spacing:-.025em; margin-bottom:22px; }
+.faqGrid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:16px; }
+.faqCard { background:#fff; border:1px solid #d6e0eb; border-radius:8px; padding:21px 25px 22px; }
+.faqCard h3 { position:relative; padding-inline-start:15px; line-height:1.45; font-weight:650; text-wrap:wrap; }
+.faqCard h3::before { content:''; position:absolute; inset-inline-start:0; top:.22em; width:3px; height:.88em; border-radius:2px; background:var(--cqi-brand); }
+.faqCard p { margin-top:11px; line-height:1.78; }
 .consultation { background:#102a53; padding-block:48px; }
 .consultationGrid { display:grid; grid-template-columns:1.6fr 1fr; gap:72px; align-items:center; }
 .consultation h2 { color:#fff; font-size:28px; }
@@ -101,7 +96,7 @@
   .page:lang(en) .hero h1 { font-size:clamp(36px,2.75vw,40px); }
   .page:lang(en) .heroBody>p { font-size:16px; line-height:1.75; }
 }
-@media(max-width:900px) { .hero,.scope,.acceptanceGrid,.faq,.consultationGrid { grid-template-columns:1fr; gap:24px; } .hero h1 { max-width:850px; } .purchaseGrid { gap:24px; } .table th,.table td { padding:18px; } .faq { padding-top:0; } .contactActions { margin-top:8px; } }
+@media(max-width:900px) { .hero,.scope,.acceptanceGrid,.consultationGrid { grid-template-columns:1fr; gap:24px; } .hero h1 { max-width:850px; } .purchaseGrid { gap:24px; } .table th,.table td { padding:18px; } .contactActions { margin-top:8px; } }
 @media(max-width:639px) {
   .container { width:calc(100% - 40px); }
   .preview { font-size:11px; padding-inline:12px; }
@@ -124,14 +119,12 @@
   .page h2 { font-size:24px; }
   .scope { padding-block:32px; gap:16px; }
   .section { padding-block:36px; }
-  .sectionHeading { gap:10px; margin-bottom:20px; }
-  .number { padding-top:11px; }
+  .page .sectionHeading { margin-bottom:20px; }
   .table,.table tbody { display:block; border:0; border-radius:0; overflow:visible; }
   .table thead { position:absolute; width:1px; height:1px; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); }
   .table tr { display:block; border:1px solid var(--cqi-line); border-radius:8px; margin-bottom:16px; overflow:hidden; }
   .table th,.table td,.table th:first-child { display:block; width:100%; padding:18px; border:0; }
   .table th { background:#f7f9fc; }
-  .table .rowNumber { float:right; margin-left:12px; }
   .table .rowHint { margin-top:2px; }
   .mobileLabel { display:block; font-size:12px; font-weight:600; line-height:1.6; margin-bottom:8px; color:#375b8f; }
   .acceptance { padding-block:32px; }
@@ -139,10 +132,12 @@
   .criterion { font-size:21px; }
   .purchaseGrid { grid-template-columns:1fr; gap:24px; }
   .purchaseItem { padding-top:16px; }
-  .purchaseItem h3 { margin-block:6px 10px!important; }
-  .faq { padding-bottom:36px; gap:4px; }
-  .faq summary { padding-block:18px; gap:12px; }
-  .faq summary h3 { font-size:17px; }
+  .page .purchaseItem h3 { margin-bottom:10px; }
+  .faq { padding-block:26px 32px; }
+  .faq h2 { font-size:24px; margin-bottom:16px; }
+  .faqGrid { grid-template-columns:1fr; gap:12px; }
+  .faqCard { padding:16px 18px; }
+  .faqCard h3 { font-size:17px; }
   .consultation { padding-block:32px; }
   .consultation h2 { font-size:24px; }
   .contactActions { align-items:stretch; }
