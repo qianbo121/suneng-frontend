@@ -2,8 +2,8 @@ import type { Metadata } from 'next';
 import { ReactNode } from 'react';
 
 import '@/app/globals.css';
-import { DEFAULT_DESCRIPTION, DEFAULT_OG_IMAGE, DEFAULT_TITLE, SITE_NAME, SITE_URL } from '@/lib/seo/config';
-import { getVerificationMetadata } from '@/lib/seo/metadata';
+import { DEFAULT_DESCRIPTION, DEFAULT_TITLE, SITE_URL } from '@/lib/seo/config';
+import { getSharingDefaults, getVerificationMetadata } from '@/lib/seo/metadata';
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -12,15 +12,7 @@ export const metadata: Metadata = {
     template: '%s｜苏能工业炉',
   },
   description: DEFAULT_DESCRIPTION,
-  openGraph: {
-    siteName: SITE_NAME,
-    type: 'website',
-    ...(DEFAULT_OG_IMAGE ? { images: [{ url: DEFAULT_OG_IMAGE }] } : {}),
-  },
-  twitter: {
-    card: 'summary_large_image',
-    ...(DEFAULT_OG_IMAGE ? { images: [DEFAULT_OG_IMAGE] } : {}),
-  },
+  ...getSharingDefaults('zh'),
   icons: {
     icon: [
       { url: '/favicon-32x32.png', sizes: '32x32', type: 'image/png' },

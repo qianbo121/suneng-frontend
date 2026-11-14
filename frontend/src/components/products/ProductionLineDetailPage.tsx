@@ -468,6 +468,14 @@ export function ProductionLineDetailPage({ content, locale = 'zh' }: { content: 
           </ol>
           <p className={styles.note}>
             {s.acceptance.note}
+            {content.pageId === 'fastener-quench-temper-line' && (
+              <>
+                <br />
+                <Link href={`/${locale}/products/detail/fastener-quench-temper-line/cqi-9`} className={styles.resourceLink}>
+                  {t('CQI-9 设备配合与采购核对', 'CQI-9 equipment support and purchasing checks')} <HiArrowRight aria-hidden="true" />
+                </Link>
+              </>
+            )}
             {locale === 'zh' && content.pageId === 'fastener-quench-temper-line' && (
               <>
                 <br />

@@ -1,0 +1,228 @@
+{
+  "zh": {
+    "title": "CQI-9 审核：苏能网带调质线能配合哪些设备项目？",
+    "subtitle": "汽车紧固件热处理",
+    "lead": "采购面向汽车紧固件的网带调质线时，需要把设备配置、运行记录和买方的审核准备一起确认。苏能的一份紧固件项目技术协议，约定了分区控温、温度记录查询与输出、炉内气氛控制、异常报警、淬火槽监控，以及操作资料和培训。下面按这些约定，说明采购时应怎样核对设备与双方分工。",
+    "primary": "咨询设备与记录配置",
+    "secondary": "查看紧固件调质生产线",
+    "scope_heading": "先把设备交付和买方的工作分清楚",
+    "scope": "CQI-9 是面向汽车行业热处理过程及其管理的评估要求，实施热处理的企业需要结合自身生产开展自评。[1] 设备功能、生产记录和审核准备需要相互衔接；买到一套设备，本身不能证明已经完成审核。",
+    "table_heading": "设备能交付什么，买方还要落实什么",
+    "table_intro": "以下以苏能与一家紧固件企业签订的技术协议为例。设备栏均为该项目协议约定的配置与交付内容，不代表所有生产线的统一标配；其他项目以双方确认的技术协议为准。第一栏和第三栏用于采购前核对分工，不是 CQI-9 全部条款清单。",
+    "headers": [
+      "审核前要核对什么",
+      "苏能设备交付（该项目协议约定）",
+      "买方（热处理实施方）需要落实什么"
+    ],
+    "rows": [
+      [
+        "分区控温\n淬火、回火各怎样控制温度",
+        "该项目协议约定，淬火炉分三个区控温，回火炉分四个区控温。",
+        "明确工件对应的工艺温度和运行要求；核对各区设置，并落实生产中的检查与记录。"
+      ],
+      [
+        "温度记录\n能保存、查询和输出哪些内容",
+        "该项目协议约定，控制系统保存温度记录，支持按时段查询温度参数，并输出工艺执行数据和图表。",
+        "确认记录内容、保存期限、备份与输出方式；明确温度记录怎样对应到生产批次。"
+      ],
+      [
+        "炉内气氛控制\n配置哪些检测与控制装置",
+        "该项目协议约定配置氧探头和碳控仪，用于炉内气氛控制，可采用自动或手动方式。",
+        "按材料和工艺明确气氛控制要求；需要保存或输出的气氛数据另列清单，与厂家逐项确认。"
+      ],
+      [
+        "异常报警\n设备能提示哪些异常",
+        "该项目协议约定，淬火炉控温装置设有超温、低温声光报警，以及测温元件断路报警。",
+        "明确异常发生后的人员职责、生产批次核查和处置记录；如需查询历史报警，采购时单独确认。"
+      ],
+      [
+        "淬火槽监控\n槽温、搅拌和液位怎样配合",
+        "该项目协议约定，淬火槽连续测量工作区域温度，配置淬火油搅拌装置，并设有低液位控制与报警。",
+        "明确本工艺的介质、温度、液位和搅拌要求，以及日常检查安排；历史记录需求单独确认。"
+      ],
+      [
+        "资料与培训\n随设备交付哪些资料",
+        "该项目协议约定交付设备使用说明书、电气原理图及重要仪表操作手册，并对买方操作、维修人员进行技术培训和示范操作。",
+        "安排人员参加培训、保管设备资料，并建立现场操作与维护文件；所需校准资料另列交付清单。"
+      ]
+    ],
+    "accept_heading": "炉温验收要把测量条件一起写清楚",
+    "accept": "该项目技术协议约定：淬火炉在 800℃ 时测三点，同一温区炉温偏差要求在 ±5℃ 以内。",
+    "accept_limit": "以上是双方约定的设备验收条件，不是现场实测结果，也不能据此认定完成了 CQI-9 要求的炉温均匀性测试。与审核相关的仪表校准、温度测量系统检查及炉温均匀性测试，应按适用版本和客户要求另行确认测试安排、执行方与报告交付。[2]",
+    "purchase_heading": "买之前，把三件事写进技术协议",
+    "purchase": [
+      [
+        "配置范围",
+        "明确哪些是新线的供货内容，哪些需要另行配置，哪些由买方或第三方承担。把控温、记录、报警、淬火槽和资料分别列清，避免只用一句“配合审核”概括整套供货。"
+      ],
+      [
+        "记录交付",
+        "确认记录哪些参数、保存多久、怎样查询和输出，以及如何对应生产批次。让厂家说明相应功能和交付方式；有曲线不等于已经建立完整的批次追溯。"
+      ],
+      [
+        "测试与文件",
+        "把设备验收、校准与测试安排分别列明，明确谁实施、谁提供报告、买方怎样接收。设备使用手册、质量合格证明和仪表校准资料是不同文件，不能互相替代。"
+      ]
+    ],
+    "faq_heading": "采购前常见问题",
+    "faq": [
+      [
+        "这页能证明苏能的设备可以直接完成 CQI-9 审核吗？",
+        "不能。这里说明的是一个项目技术协议中的设备配置与交付范围。买方还需要落实适用的工艺管理、生产记录、校准与测试等工作，再按自身实际开展评估。"
+      ],
+      [
+        "表格里的功能，每条苏能网带调质线都有吗？",
+        "这张表对应一个项目，不是统一标配清单。新项目要结合工件、工艺、记录要求和供货范围逐项确认，并写进技术协议。"
+      ],
+      [
+        "有报警，就能导出全部历史报警吗？",
+        "报警提示、历史保存和记录输出是不同功能。本页引用的条款说明了报警功能，没有据此承诺历史报警查询、导出或保存期限；如有需求，应在采购时单独确认。"
+      ],
+      [
+        "仪表手册能当作校准证明吗？",
+        "不能。手册说明仪表的使用和操作；校准资料用于记录相应校准工作及结果。需要哪些校准资料、由谁出具、是否随设备交付，应另列清单确认。"
+      ]
+    ],
+    "cta_heading": "把客户的审核要求和工件资料一起发来",
+    "cta": "准备采购网带调质线时，可先提供工件名称、材料、规格、目标产量，以及客户采用的 CQI-9 版本和补充要求。已有记录格式、校准或测试清单的，也请一并提供，便于讨论设备配置、记录功能与双方分工。暂时没有完整资料，可以先说明已知需求。",
+    "cta_button": "咨询设备与记录配置",
+    "phone": "咨询电话：+86-130-5298-6814",
+    "email": "邮箱：997518512@qq.com",
+    "related_heading": "继续了解设备方案",
+    "links": [
+      [
+        "紧固件调质生产线",
+        "https://www.jssngyl.cn/zh/products/detail/fastener-quench-temper-line"
+      ],
+      [
+        "网带炉产品页",
+        "https://www.jssngyl.cn/zh/products/detail/mesh-belt-furnace"
+      ]
+    ],
+    "refs_heading": "参考资料",
+    "refs": [
+      [
+        "[1] AIAG：CQI-9 热处理系统评估官方介绍",
+        "https://www.aiag.org/training-and-resources/manuals/details/CQI-9"
+      ],
+      [
+        "[2] AIAG：CQI-9 第四版发布说明",
+        "https://blog.aiag.org/version-4-of-the-cqi-9-special-process-heat-treat-system-assessment-is-now-available-at-the-aiag-store"
+      ]
+    ],
+    "closing_note": "具体审核按买方适用的版本、客户要求及生产实际执行。"
+  },
+  "en": {
+    "title": "CQI-9 Assessment: What Equipment Support Can a Suneng Mesh-Belt Quench-and-Temper Line Provide?",
+    "subtitle": "Heat treatment for automotive fasteners",
+    "lead": "When purchasing a mesh-belt quench-and-temper line for automotive fasteners, review the equipment configuration, operating records and the buyer’s assessment preparations together. A Suneng technical agreement for a fastener project specifies zoned temperature control, temperature-record retrieval and output, furnace atmosphere control, alarms, quench-tank monitoring, and operating documentation and training. The agreed scope provides a practical basis for discussing equipment and responsibilities before purchase.",
+    "primary": "Discuss equipment and recording requirements",
+    "secondary": "View the fastener quench-and-temper line",
+    "scope_heading": "Separate equipment delivery from the buyer’s responsibilities",
+    "scope": "CQI-9 addresses heat-treatment processes and their management in the automotive industry. The organization performing heat treatment assesses its own operations.[1] Equipment functions, production records and assessment preparations need to work together; purchasing equipment alone does not demonstrate that an assessment has been completed.",
+    "table_heading": "Equipment deliverables and the buyer’s responsibilities",
+    "table_intro": "The example below is based on a technical agreement between Suneng and a fastener manufacturer. The equipment column describes this project’s agreed configuration and deliverables, not a standard specification for every line. Other projects are governed by their own technical agreements. The first and third columns help define responsibilities before purchase; they are not a complete CQI-9 requirements checklist.",
+    "headers": [
+      "What to check before assessment",
+      "Suneng equipment (as agreed for this project)",
+      "What the buyer performing heat treatment needs to arrange"
+    ],
+    "rows": [
+      [
+        "Zoned temperature control\nHow the hardening and tempering furnaces are controlled",
+        "This project’s agreement specifies three temperature-control zones in the hardening furnace and four in the tempering furnace.",
+        "Define process temperatures and operating requirements for the parts; check zone settings and establish production checks and records."
+      ],
+      [
+        "Temperature records\nWhat can be stored, retrieved and output",
+        "This project’s agreement specifies temperature-record storage, retrieval of temperature parameters by time period, and output of process execution data and charts.",
+        "Agree the recorded parameters, retention period, backup and output methods, and how temperature records will be linked to production batches."
+      ],
+      [
+        "Furnace atmosphere control\nWhich sensing and control devices are included",
+        "This project’s agreement specifies an oxygen probe and carbon-potential controller for furnace atmosphere control, with automatic or manual operation.",
+        "Define atmosphere-control needs for the material and process. List any atmosphere data that must be stored or output and confirm each item with the supplier."
+      ],
+      [
+        "Alarms\nWhich abnormal conditions are signalled",
+        "This project’s agreement specifies audible and visual high- and low-temperature alarms and a thermocouple-break alarm for the hardening furnace.",
+        "Define personnel responsibilities, batch review and disposition records for abnormal conditions. Confirm any alarm-history retrieval requirement separately."
+      ],
+      [
+        "Quench-tank monitoring\nTemperature, agitation and liquid level",
+        "This project’s agreement specifies continuous temperature measurement in the tank’s working area, quench-oil agitation, and low-level control and alarm functions.",
+        "Define the medium, temperature, liquid-level and agitation requirements for the process, along with routine checks. Confirm historical-record requirements separately."
+      ],
+      [
+        "Documentation and training\nWhat is delivered with the equipment",
+        "This project’s agreement specifies an equipment manual, electrical schematics and operating manuals for key instruments, plus technical training and operating demonstrations for the buyer’s operators and maintenance staff.",
+        "Arrange staff participation, retain equipment documents and establish site operating and maintenance instructions. List required calibration documents separately."
+      ]
+    ],
+    "accept_heading": "State the measurement conditions with the acceptance criterion",
+    "accept": "This project’s technical agreement specifies three measurement points in the hardening furnace at 800°C, with a temperature deviation within ±5°C in the same temperature zone.",
+    "accept_limit": "These are agreed equipment acceptance conditions, not measured site results. They do not establish that the temperature uniformity testing required for CQI-9 has been completed. Assessment-related instrument calibration, temperature-measurement system checks and temperature uniformity testing require separate confirmation of the test arrangements, responsible parties and report deliverables under the applicable edition and customer requirements.[2]",
+    "purchase_heading": "Put three items in the technical agreement before purchase",
+    "purchase": [
+      [
+        "Configuration and scope",
+        "Identify what is included in the supply scope for your line, what requires an additional configuration, and what the buyer or a third party will provide. List controls, recording, alarms, the quench tank and documentation separately, rather than relying on a general statement of assessment support."
+      ],
+      [
+        "Record deliverables",
+        "Agree which parameters are recorded, how long records are kept, how they are retrieved and output, and how they relate to production batches. Ask the supplier to explain the functions and delivery method. A trend chart alone does not establish complete batch traceability."
+      ],
+      [
+        "Testing and documents",
+        "List equipment acceptance, calibration and testing arrangements separately, including who performs the work, who supplies reports and how the buyer receives them. Equipment manuals, quality-conformity documents and instrument calibration documents serve different purposes and are not interchangeable."
+      ]
+    ],
+    "faq_heading": "Questions before purchase",
+    "faq": [
+      [
+        "Does this page demonstrate that Suneng equipment alone can complete a CQI-9 assessment?",
+        "No. It describes the equipment configuration and delivery scope in one project’s technical agreement. The buyer still needs to implement applicable process management, production records, calibration and testing, and assess its actual operations."
+      ],
+      [
+        "Does every Suneng mesh-belt quench-and-temper line include these functions?",
+        "The table describes one project, not a universal standard configuration. For a new project, confirm each item against the parts, process, recording requirements and supply scope, and include it in the technical agreement."
+      ],
+      [
+        "Does an alarm function include export of all past alarms?",
+        "Alarm indication, historical storage and record output are separate functions. The cited project provisions specify alarms; they do not establish alarm-history retrieval, export or retention periods. Confirm these requirements separately before purchase."
+      ],
+      [
+        "Can an instrument manual be used as calibration evidence?",
+        "No. A manual explains instrument use and operation; calibration documentation records the relevant calibration work and results. Separately agree which documents are required, who issues them and whether they are included in the equipment delivery."
+      ]
+    ],
+    "cta_heading": "Share the customer’s assessment requirements with the part information",
+    "cta": "For a proposed mesh-belt quench-and-temper line, start with the part type, material, dimensions and target throughput, together with the CQI-9 edition and supplementary requirements specified by your customer. Include any required record formats, calibration documents or test lists so that equipment, recording functions and responsibilities can be discussed. If the information is incomplete, start with the requirements you already know.",
+    "cta_button": "Discuss equipment and recording requirements",
+    "phone": "Phone: +86-130-5298-6814",
+    "email": "Email: 997518512@qq.com",
+    "related_heading": "Explore the equipment options",
+    "links": [
+      [
+        "Fastener quench-and-temper line",
+        "https://www.jssngyl.cn/en/products/detail/fastener-quench-temper-line"
+      ],
+      [
+        "Mesh-belt furnace",
+        "https://www.jssngyl.cn/en/products/detail/mesh-belt-furnace"
+      ]
+    ],
+    "refs_heading": "References",
+    "refs": [
+      [
+        "[1] AIAG: Official overview of the CQI-9 Heat Treat System Assessment",
+        "https://www.aiag.org/training-and-resources/manuals/details/CQI-9"
+      ],
+      [
+        "[2] AIAG: Fourth-edition release announcement",
+        "https://blog.aiag.org/version-4-of-the-cqi-9-special-process-heat-treat-system-assessment-is-now-available-at-the-aiag-store"
+      ]
+    ],
+    "closing_note": "Apply the edition relevant to the buyer, customer requirements and actual production conditions."
+  }
+}
