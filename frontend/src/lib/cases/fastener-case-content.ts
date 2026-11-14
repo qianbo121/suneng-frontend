@@ -5,4 +5,3 @@ export const FASTENER_CASE_QUESTIONS = [
 ];
 
 export const FASTENER_CASE_DESCRIPTION = 'RCWT-160/105-9/6 网带炉项目的淬火、渗碳协议约定产量及设备配置。实际产量随工件、装料和工艺变化。';
-export const FASTENER_CASE_IMAGE_ALT = '托辊网带炉热处理生产线整线效果图：上料台、淬火炉、油槽与提升机、清洗机、回火炉、出料';

@@ -141,7 +141,7 @@ export function toCaseCard(item: CaseMeta): CaseCardData {
     facts: item.facts.slice(0, 3),
     participation: item.participation,
     sourceSummary: item.sourceSummary,
-    cover: item.cover,
+    cover: item.cover && { src: item.cover.src, alt: item.cover.alt, fit: item.cover.fit },
     coverTitle: item.coverTitle,
   };
 }
