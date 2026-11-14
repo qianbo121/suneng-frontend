@@ -13,13 +13,13 @@ export function BeltAgreementTable({ fasteners = false }: { fasteners?: boolean 
   const rows = fasteners ? data.rows.filter(row => row.fastenerScope) : data.rows;
   return (
     <section className={styles.section} id="agreement-capacity">
-      <h2>{fasteners ? '紧固件调质配置与处理量' : '网带炉技术协议的配置及处理量'}</h2>
+      <h2>{fasteners ? '紧固件调质配置与处理量' : '网带炉协议与方案的配置及处理量'}</h2>
       <p>{fasteners
         ? '选调质线时，请先核对处理量对应哪道工序。淬火炉的数据只覆盖淬火段，整线数据包含后续回火。'
         : '下表列出各配置的工艺和处理量。以件/年计的产量按协议原单位列示。'}</p>
-      <div className={styles.scroll} role="region" aria-label="协议配置参数表" tabIndex={0}>
+      <div className={styles.scroll} role="region" aria-label="配置与处理量参数表" tabIndex={0}>
         <table>
-          <caption>{fasteners ? '网带炉配置与对应工艺的协议参数' : '技术协议中的配置与处理量'}</caption>
+          <caption>{fasteners ? '网带炉配置与对应工艺的协议参数' : '技术协议或设计方案中的配置与处理量'}</caption>
           <thead><tr>{data.headers.map(header => <th key={header} scope="col">{header}</th>)}</tr></thead>
           <tbody>{rows.map(row => {
             const name = row.model ?? row.selectionCode;
@@ -36,7 +36,9 @@ export function BeltAgreementTable({ fasteners = false }: { fasteners?: boolean 
                 </th>
                 <td>{row.size}</td><td>{row.power}</td>
                 <td>{(fasteners && row.fastenerProcess) || row.process}</td>
-                <td>{fasteners ? <><span className={styles.capacityScope}>{row.fastenerScope}</span>{' '}<strong>{row.fastenerCapacity ?? row.capacity}</strong></> : row.capacity}</td>
+                <td>{fasteners ? <><span className={styles.capacityScope}>{row.fastenerScope}</span>{' '}<strong>{row.fastenerCapacity ?? row.capacity}</strong></> : row.capacity}
+                  {row.showBasisWithCapacity && <small className={styles.codeLabel}>{row.basis}</small>}
+                </td>
               </tr>
             );
           })}</tbody>
