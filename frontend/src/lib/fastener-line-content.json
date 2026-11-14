@@ -76,8 +76,8 @@
       "gallery": [
         {
           "id": "whole-line",
-          "label": "整线外观",
-          "alt": "紧固件调质生产线整线外观示意，钢灰色设备与黄色检修栏杆",
+          "label": "紧固件调质生产线",
+          "alt": "紧固件调质生产线，配黄色检修栏杆",
           "thumbnailAssetId": "gallery-whole-line",
           "fullAssetId": "gallery-whole-line",
           "fullSrc": "/images/products/fastener-quench-temper-line/reviewed-20260909/gallery-whole-line-37c00d7dd08c.png",
@@ -86,7 +86,7 @@
         {
           "id": "heating-section",
           "label": "加热段",
-          "alt": "紧固件调质生产线加热设备与检修平台示意",
+          "alt": "紧固件调质线加热炉与检修平台",
           "thumbnailAssetId": "gallery-heating",
           "fullAssetId": "gallery-heating",
           "fullSrc": "/images/products/fastener-quench-temper-line/reviewed-20260909/gallery-heating-a0c86b3afbfb.png",
@@ -104,7 +104,7 @@
         {
           "id": "control-cabinet",
           "label": "控制系统",
-          "alt": "热处理生产线控制柜示意",
+          "alt": "紧固件调质生产线控制柜",
           "thumbnailAssetId": "gallery-controls",
           "fullAssetId": "gallery-controls",
           "fullSrc": "/images/products/fastener-quench-temper-line/reviewed-20260909/gallery-controls-99cbd9fe1181.png",
@@ -207,14 +207,14 @@
           "id": "continuous",
           "title": "连续式网带方案",
           "description": "偏向稳定批量组织。",
-          "imageAlt": "连续式网带调质生产线设备组合示意",
+          "imageAlt": "连续式网带调质生产线",
           "imageAssetId": "comparison-continuous"
         },
         {
           "id": "batch",
           "title": "周期式炉组方案",
           "description": "偏向分批生产组织。",
-          "imageAlt": "周期式加热炉、淬火设备与配套转运的炉组方案示意",
+          "imageAlt": "周期式调质炉组，配淬火槽、回火炉与桥式转运装置",
           "imageAssetId": "comparison-batch"
         }
       ],
@@ -354,7 +354,7 @@
       "headingLevel": 2,
       "title": "配置参考与交付内容",
       "subtitle": "明确设备组成、配套系统与现场接口。",
-      "imageAlt": "热处理设备及承载在辊道转运台上的紧固件料筐示意",
+      "imageAlt": "紧固件热处理炉、辊道转运台与料筐",
       "contentTitle": "围绕热处理主线，明确设备与接口",
       "items": [
         {
@@ -582,21 +582,21 @@
     "hero-line": {
       "width": 1672,
       "height": 941,
-      "alt": "厂房内紧固件调质生产线整体配置示意",
+      "alt": "紧固件调质生产线",
       "src": "/images/products/fastener-quench-temper-line/reviewed-20260909/hero-line-044caea2c108.png",
       "optimized": true
     },
     "gallery-whole-line": {
       "width": 1672,
       "height": 941,
-      "alt": "紧固件调质线整线外观示意",
+      "alt": "紧固件调质生产线，配黄色检修栏杆",
       "src": "/images/products/fastener-quench-temper-line/reviewed-20260909/gallery-whole-line-37c00d7dd08c.png",
       "optimized": true
     },
     "gallery-heating": {
       "width": 1672,
       "height": 941,
-      "alt": "紧固件调质线加热段配置示意",
+      "alt": "紧固件调质线加热炉与检修平台",
       "src": "/images/products/fastener-quench-temper-line/reviewed-20260909/gallery-heating-a0c86b3afbfb.png",
       "optimized": true
     },
@@ -610,7 +610,7 @@
     "gallery-controls": {
       "width": 1672,
       "height": 941,
-      "alt": "控制柜及界面示意，屏幕不是实际过程记录",
+      "alt": "紧固件调质生产线控制柜及操作界面，屏幕不是实际过程记录",
       "src": "/images/products/fastener-quench-temper-line/reviewed-20260909/gallery-controls-99cbd9fe1181.png",
       "optimized": true
     },
@@ -645,14 +645,14 @@
     "comparison-continuous": {
       "width": 1672,
       "height": 941,
-      "alt": "连续式网带热处理生产线配置示意",
+      "alt": "连续式网带调质生产线",
       "src": "/images/products/fastener-quench-temper-line/reviewed-20260909/comparison-continuous-dca7fcad87f8.png",
       "optimized": true
     },
     "comparison-batch": {
       "width": 1672,
       "height": 941,
-      "alt": "周期式加热炉、淬火槽、回火炉及覆盖交接工位的桥式转运配置示意",
+      "alt": "周期式调质炉组，配淬火槽、回火炉与桥式转运装置",
       "src": "/images/products/fastener-quench-temper-line/reviewed-20260909/comparison-batch-6ba913731155.png",
       "optimized": true
     },
@@ -666,7 +666,7 @@
     "delivery-configuration": {
       "width": 1672,
       "height": 941,
-      "alt": "料筐转运及热处理设备配套示意",
+      "alt": "紧固件热处理炉、辊道转运台与料筐",
       "src": "/images/products/fastener-quench-temper-line/reviewed-20260909/delivery-configuration-8e06df9af139.png",
       "optimized": true
     }

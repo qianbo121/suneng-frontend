@@ -75,8 +75,8 @@ export function AdditionalFurnaceDetailPage({
     {
       src: structure.sceneImage ?? `/images/products/${furnace.id}/detail-v2-20260910/01-scene.webp`,
       unoptimized: true,
-      alt: en ? `${name} representative workshop arrangement` : `${name}设备及装卸空间场景示意`,
-      caption: en ? 'Equipment scene · illustration' : '设备场景示意',
+      alt: en ? `${name} and its loading area` : `${name}及装卸区`,
+      caption: name,
     },
     {
       src: structureImage,

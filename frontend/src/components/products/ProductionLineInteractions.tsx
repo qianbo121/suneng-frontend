@@ -44,7 +44,7 @@ export function ProductionLineGallery({
       ? null
       : previewIndex === -1
         ? {
-            label: locale === 'en' ? 'Complete line' : '整线主图',
+            label: images['hero-line'].alt,
             alt: images['hero-line'].alt,
             fullAssetId: 'hero-line',
             thumbnailAssetId: 'hero-line',
@@ -146,7 +146,7 @@ export function ProductionLineGallery({
               original
               className={styles.nativePreview}
             />
-            <p>{locale === 'en' ? (preview.fullAssetId ? 'Equipment reference image' : 'Detail reference image') : (preview.fullAssetId ? '设备参考图' : '细节参考图')}</p>
+            {preview.alt !== preview.label && <p>{preview.alt}</p>}
           </div>
         )}
       </dialog>
