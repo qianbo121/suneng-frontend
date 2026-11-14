@@ -17,7 +17,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const current = locale === 'en' ? englishPage : page;
   return buildMetadata({
     title: current.title, description: current.description, path: current.path, locale: locale === 'en' ? 'en' : 'zh',
-    alternateLocales: { 'zh-CN': page.path, en: englishPage.path, 'x-default': page.path },
+    alternateLocales: { 'zh-CN': page.path, 'en-US': englishPage.path, 'x-default': page.path },
   });
 }
 

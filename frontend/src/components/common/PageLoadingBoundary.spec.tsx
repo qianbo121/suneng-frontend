@@ -4,7 +4,7 @@ import { renderToPipeableStream } from 'react-dom/server';
 import { describe, expect, it, vi } from 'vitest';
 
 import { PageLoadingBoundary } from './PageLoadingBoundary';
-import { APPROVED_GUIDE_PATHS, APPROVED_PROCUREMENT_PATHS, isWithdrawnRequestPath } from '@/lib/publication-scope';
+import { APPROVED_GUIDE_PATHS, APPROVED_PROCUREMENT_PATHS, ENGLISH_EQUIPMENT_PROCUREMENT_PATH, isWithdrawnRequestPath } from '@/lib/publication-scope';
 import { PUBLIC_CASE_SLUGS, PUBLIC_ENGLISH_CASE_SLUGS } from '@/lib/cases/public-case-allowlist';
 
 const route = vi.hoisted(() => ({ pathname: '/zh/news' as string | null }));
@@ -92,6 +92,8 @@ describe('public page initial HTML with delayed data', () => {
     'service/selection-retrofit-guide',
   ];
   const readableRoutes = [
+    ENGLISH_EQUIPMENT_PROCUREMENT_PATH,
+    `${ENGLISH_EQUIPMENT_PROCUREMENT_PATH}/`,
     '/zh/inquiry',
     '/zh/inquiry/',
     ...['zh', 'en'].flatMap((locale) => [
@@ -119,6 +121,7 @@ describe('public page initial HTML with delayed data', () => {
   });
 
   it.each(['/en/inquiry', '/en/inquiry/', ...['zh', 'en'].flatMap((locale) => [
+    `/${locale}/articles/special-industrial-furnace-procurement-assessment/unknown-page`,
     `/${locale}/inquiry/unknown-page`,
     `/${locale}/products/detail/unknown-product/inquiry-checklist`,
     `/${locale}/products/detail/copper-wire-annealing-line/inquiry-checklist/unknown-page`,
