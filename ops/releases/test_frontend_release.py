@@ -25,7 +25,8 @@ MANIFEST = {'schemaVersion': 1, 'image': NEW, 'expectedCurrentImage': OLD, 'publ
             'sourceIdentity': 'git-commit', 'sourceCommit': 'e' * 40, 'archiveSha256': 'f' * 64}
 GOOD = {'passed': True, 'sitemapPassed': True, 'checks': [], 'caseState': 'open'}
 HENAN = 'henan-annealing-solution-line'
-CASE_GROUP = ['/zh/case', f'/zh/case/{HENAN}', '/en/case', f'/en/case/{HENAN}']
+FASTENER = 'fastener-mesh-belt-quenching-carburizing'
+CASE_GROUP = ['/zh/case', f'/zh/case/{FASTENER}', f'/zh/case/{HENAN}', '/en/case', f'/en/case/{HENAN}']
 OTHER = 'sha256:' + '7' * 64
 LEGACY = sorted(r.LEGACY_ENCODING_IMAGES)[0]
 LEGACY_ROLLBACK = {**MANIFEST, 'image': LEGACY, 'caseState': 'closed', 'approvedCases': r.NO_CASES,
@@ -379,15 +380,15 @@ class ContractTest(MockAcquisitionChecks, unittest.TestCase):
             r.public_probe('https://example.test', lenient)
 
     def test_lenient_contract_accepts_an_earlier_or_later_batch(self):
-        batch1 = r.APPROVED_CASES
-        batch2 = {'zh': [HENAN, 'batch-two'], 'en': [HENAN]}
+        batch1 = {'zh': [HENAN], 'en': [HENAN]}
+        batch2 = r.APPROVED_CASES
         lenient = r.case_contract('either', r.merge_cases(r.normalize_cases(batch1), r.normalize_cases(batch2)), encoded=False)
-        second = ['/zh/case', f'/zh/case/{HENAN}', '/zh/case/batch-two', '/en/case', f'/en/case/{HENAN}']
-        for paths in [CASE_GROUP, second, []]:
+        first = ['/zh/case', f'/zh/case/{HENAN}', '/en/case', f'/en/case/{HENAN}']
+        for paths in [first, CASE_GROUP, []]:
             with self.subTest(paths=paths), patch.object(r, 'run', side_effect=site({p: 200 for p in paths}, sitemap('/zh/news', '/en/news', *paths))):
                 r.public_probe('https://example.test', lenient)
         # Rolling back to batch 1 checks that image against its own list.
-        with patch.object(r, 'run', side_effect=site({p: 200 for p in CASE_GROUP}, sitemap('/zh/news', '/en/news', *CASE_GROUP))):
+        with patch.object(r, 'run', side_effect=site({p: 200 for p in first}, sitemap('/zh/news', '/en/news', *first))):
             r.public_probe('https://example.test', r.case_contract('open', batch1, withdrawn=batch2))
 
     def test_withdrawn_pages_must_disappear_from_the_new_image(self):

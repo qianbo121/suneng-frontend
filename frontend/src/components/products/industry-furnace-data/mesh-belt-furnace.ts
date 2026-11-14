@@ -1,6 +1,12 @@
 import type { FurnacePageConfig } from './types';
 import { commonStandards, cutawayCallout, detailImage } from './shared';
 
+const heroInfo: FurnacePageConfig['heroInfo'] = [
+  ['协议配置宽度', '400–1,200 mm'],
+  ['协议配置加热段', '3,200–13,800 mm'],
+  ['标准额定温度范围', '150–1,200 ℃'],
+];
+
 export const meshBeltFurnacePageConfig: FurnacePageConfig = {
   slug: 'mesh-belt-furnace',
   name: '网带炉',
@@ -31,20 +37,10 @@ export const meshBeltFurnacePageConfig: FurnacePageConfig = {
     },
   ],
   tags: ['小型零件', '网带连续输送', '多温区控制', '产能需实物铺料校核'],
-  heroInfo: [
-    ['现有项目有效宽度', '180–400 mm'],
-    ['现有项目有效高度', '50–100 mm'],
-    ['现有项目加热段长度', '2,100–5,600 mm'],
-    ['标准额定温度范围', '150–1,200 ℃'],
-  ],
-  productProperties: [
-    { name: '现有项目有效宽度', value: '180–400 mm' },
-    { name: '现有项目有效高度', value: '50–100 mm' },
-    { name: '现有项目加热段长度', value: '2,100–5,600 mm' },
-    { name: '标准额定温度范围', value: '150–1,200 ℃' },
-  ],
+  heroInfo,
+  productProperties: heroInfo.map(([name, value]) => ({ name, value })),
   heroNotice:
-    '150–1,200 ℃是 GB/T 10067.41-2013 的标准适用范围，不是苏能所有网带炉的连续工作温度承诺。具体温度需结合网带材质、气氛、载荷及使用寿命核定；尺寸来自现有项目资料，产能按铺料和工艺时间校核。',
+    '150–1,200 ℃是 GB/T 10067.41-2013 的标准适用范围，不是苏能所有网带炉的连续工作温度承诺。具体温度需结合网带材质、气氛、载荷及使用寿命核定。尺寸见下方协议参数表，产能按铺料和工艺时间校核。',
   workpieces: [
     {
       status: '通常适合评估',

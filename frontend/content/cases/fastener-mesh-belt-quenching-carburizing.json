@@ -1,0 +1,55 @@
+{
+  "id": "fastener-mesh-belt-quenching-carburizing",
+  "slug": "fastener-mesh-belt-quenching-carburizing",
+  "title": "紧固件网带炉项目：淬火与渗碳各约定多少产量？",
+  "summary": "RCWT-160/105-9/6 的技术协议分别约定：淬火炉淬火300 kg/h、渗碳150 kg/h，回火炉约300 kg/h。实际产量随工件、装料和工艺条件变化。",
+  "body": "fastener-mesh-belt-quenching-carburizing.md",
+  "contentType": "experience",
+  "publicationStatus": "published",
+  "projectStatus": "contracted",
+  "workpiece": [
+    "紧固件",
+    "螺丝钉"
+  ],
+  "materials": [],
+  "process": [
+    "淬火",
+    "渗碳",
+    "回火"
+  ],
+  "equipment": [
+    "网带炉"
+  ],
+  "need": [
+    "产量核对"
+  ],
+  "tags": [
+    "RCWT-160/105-9/6",
+    "协议约定产量"
+  ],
+  "projectYear": 2025,
+  "sourceDate": "2025-09-02",
+  "sourceSummary": "双方签订的技术协议；工件信息由苏能项目人员补充。",
+  "facts": [
+    {
+      "label": "协议淬火产量",
+      "value": "300",
+      "unit": "kg/h",
+      "condition": "淬火炉；实际随工件、装料和工艺变化",
+      "attribute": "协议约定"
+    },
+    {
+      "label": "协议渗碳产量",
+      "value": "150",
+      "unit": "kg/h",
+      "condition": "同一台淬火炉；协议未注明对应渗层深度",
+      "attribute": "协议约定"
+    }
+  ],
+  "cover": {
+    "src": "/images/cases/fastener-mesh-belt/line-panorama.webp",
+    "alt": "托辊网带炉热处理生产线整线效果图",
+    "caption": "整线效果图，非项目现场照片",
+    "fit": "cover"
+  }
+}

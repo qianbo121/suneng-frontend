@@ -7,6 +7,8 @@ import Link from 'next/link';
 import { HiArrowRight } from 'react-icons/hi2';
 
 import { JsonLd } from '@/components/JsonLd';
+import { MeshBeltRelated } from './MeshBeltRelated';
+import { BeltAgreementTable, BeltFeatureOverview } from './MeshBeltAgreement';
 import { BuyerSelectionGuide } from './BuyerSelectionGuide';
 import { productBuyerGuide } from '@/lib/buyer-selection-guides';
 import { getTrolleyProcurementResources } from '@/lib/trolley-procurement-resources';
@@ -53,6 +55,10 @@ function Panel({ children, className = '' }: { children: ReactNode; className?: 
 
 export function IndustryFurnaceDetailPage({ slug, locale = 'zh' }: { slug: IndustryFurnaceSlug; locale?: Locale }) {
   const t = (text: string) => corePageText(text, locale);
+  const showMeshBeltAgreement = locale === 'zh' && slug === 'mesh-belt-furnace';
+  const navItems = showMeshBeltAgreement
+    ? [sectionNav[0], ['agreement-capacity', '协议参数'] as const, ['equipment-features', '设备特点'] as const, ...sectionNav.slice(1)]
+    : localizeCoreValue(sectionNav, locale);
   const config = localizeCoreValue(industryFurnacePageConfigs[slug], locale);
   const bearingWireCase = slug === 'trolley-furnace'
     ? getCaseArticle('bearing-wire-trolley-annealing-proposal')
@@ -88,6 +94,7 @@ export function IndustryFurnaceDetailPage({ slug, locale = 'zh' }: { slug: Indus
     [t("企业资质与专利证书原件"), t("/zh/about#qualifications")],
     ...localizeCoreValue(relatedArticles, locale),
   ];
+  const visibleResources = evidenceLinks.filter(([, href]) => href !== '#related-case-evidence' && !isWithdrawnTechnicalPath(href) && !isHiddenCaseEntry(href));
   const sourceModule = `${slug.replaceAll('-', '_')}_detail_form`;
 
   return (
@@ -177,11 +184,17 @@ export function IndustryFurnaceDetailPage({ slug, locale = 'zh' }: { slug: Indus
         </section>
       </div>
 
-      <FurnaceSectionNav items={localizeCoreValue(sectionNav, locale)} label={locale === 'en' ? `${config.name} sections` : `${config.name}详情页章节导航`} />
+      <FurnaceSectionNav items={navItems} label={locale === 'en' ? `${config.name} sections` : `${config.name}详情页章节导航`} />
 
+      {showMeshBeltAgreement && (
+        <div className={styles.agreementBand}>
+          <div className={styles.container}><BeltAgreementTable /></div>
+        </div>
+      )}
       <div className={styles.contentArea}>
         <div className={styles.container}>
           {productBuyerGuide[slug] && <BuyerSelectionGuide locale={locale} guideKey={productBuyerGuide[slug]} />}
+          {showMeshBeltAgreement && <BeltFeatureOverview className={styles.section} />}
           <section id="workpieces" className={styles.section}>
             <SectionHeader
               title={t("适用工件与需排除的工况")}
@@ -439,47 +452,51 @@ export function IndustryFurnaceDetailPage({ slug, locale = 'zh' }: { slug: Indus
             <PitFurnaceFaq items={config.faqs} idPrefix={slug} />
           </section>
 
-          <section id="related" className={`${styles.section} ${styles.relatedSection}${englishTrolleyResources.length ? ' lg:!pr-24' : ''}`}>
-            <SectionHeader
-              title={t("相关设备与选型资料")}
-              description={t("先比较装料或输送方向，再带着完整工况进入技术沟通。")}
-            />
-            <div className={styles.relatedLayout}>
-              <div className={styles.relatedEquipment}>
-                <h3>{t("相关设备")}</h3>
-                <div>
-                  {config.related.map((item) => (
-                    <article key={item.title}>
-                      <Link href={item.href} aria-label={locale === 'en' ? `View ${item.title}` : `查看${item.title}详情`}>
-                        <div className={styles.relatedImage}>
-                          <Image
-                            src={item.image}
-                            alt={item.alt}
-                            fill
-                            sizes="(max-width: 640px) 100vw, (max-width: 1100px) 33vw, 280px"
-                          />
-                        </div>
+          {showMeshBeltAgreement ? (
+            <MeshBeltRelated equipment={config.related} resources={visibleResources} />
+          ) : (
+            <section id="related" className={`${styles.section} ${styles.relatedSection}${englishTrolleyResources.length ? ' lg:!pr-24' : ''}`}>
+              <SectionHeader
+                title={t("相关设备与选型资料")}
+                description={t("先比较装料或输送方向，再带着完整工况进入技术沟通。")}
+              />
+              <div className={styles.relatedLayout}>
+                <div className={styles.relatedEquipment}>
+                  <h3>{t("相关设备")}</h3>
+                  <div>
+                    {config.related.map((item) => (
+                      <article key={item.title}>
+                        <Link href={item.href} aria-label={locale === 'en' ? `View ${item.title}` : `查看${item.title}详情`}>
+                          <div className={styles.relatedImage}>
+                            <Image
+                              src={item.image}
+                              alt={item.alt}
+                              fill
+                              sizes="(max-width: 640px) 100vw, (max-width: 1100px) 33vw, 280px"
+                            />
+                          </div>
+                        </Link>
+                        <h4>{item.title}</h4>
+                        <p>{item.text}</p>
+                      </article>
+                    ))}
+                  </div>
+                </div>
+                <div className={styles.relatedArticles}>
+                  <h3>{t("选型资料")}</h3>
+                  <div>
+                    {visibleResources.map(([title, href], index) => (
+                      <Link key={href} href={href}>
+                        <span>{index + 1}</span>
+                        <strong>{title}</strong>
+                        <HiArrowRight aria-hidden="true" />
                       </Link>
-                      <h4>{item.title}</h4>
-                      <p>{item.text}</p>
-                    </article>
-                  ))}
+                    ))}
+                  </div>
                 </div>
               </div>
-              <div className={styles.relatedArticles}>
-                <h3>{t("选型资料")}</h3>
-                <div>
-                  {evidenceLinks.filter(([, href]) => href !== '#related-case-evidence' && !isWithdrawnTechnicalPath(href) && !isHiddenCaseEntry(href)).map(([title, href], index) => (
-                    <Link key={href} href={href}>
-                      <span>{index + 1}</span>
-                      <strong>{title}</strong>
-                      <HiArrowRight aria-hidden="true" />
-                    </Link>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </section>
+            </section>
+          )}
 
           <HomepageLeadForm locale={locale}
             sectionId="inquiry"

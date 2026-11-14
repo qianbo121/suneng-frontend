@@ -1,0 +1,32 @@
+.group + .group { margin-top: 18px; }
+.group h3 { color: var(--pit-deep); font-size: 16px; margin: 0 0 9px; line-height: 1.45; }
+.cards, .resources { list-style: none; margin: 0; padding: 0; display: grid; }
+.cards { grid-template-columns: repeat(auto-fit, minmax(min(100%, 265px), 1fr)); gap: 12px; }
+.card { height: 100%; display: grid; grid-template-columns: clamp(88px, 8.5vw, 126px) minmax(0, 1fr) 15px; gap: 12px; align-items: center; border: 1px solid var(--pit-border); border-radius: 5px; overflow: hidden; padding-right: 12px; }
+.photo { position: relative; align-self: stretch; min-height: 88px; }
+.photo img { object-fit: cover; }
+.copy { padding-block: 8px; min-width: 0; }
+.copy strong { font-size: 16px; color: #213b53; }
+.copy > span { display: block; margin-top: 3px; font-size: 14px; color: #536779; line-height: 1.5; }
+.group svg { width: 16px; height: 16px; color: #466986; }
+.resources { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 32px; }
+.resources:has(> li:only-child) { grid-template-columns: 1fr; }
+.resources a { display: grid; grid-template-columns: 24px minmax(0,1fr) 18px; align-items: center; gap: 8px; min-height: 44px; height: 100%; padding: 8px 3px; border-bottom: 1px solid var(--pit-border); overflow-wrap: anywhere; }
+.resources li:nth-child(-n+2) a { border-top: 1px solid var(--pit-border); }
+.resources a > span { font-size: 12px; color: #3567a1; font-variant-numeric: tabular-nums; font-weight: 650; }
+.resources strong { font-size: 15px; line-height: 1.45; font-weight: 550; }
+.group a:hover { background: #f4f8fb; color: #12539b; }
+.group a:focus-visible, .more summary:focus-visible { outline: 2px solid #2763bb; outline-offset: -2px; }
+.more { margin-top: 8px; }
+.more summary { width: fit-content; min-height: 44px; line-height: 44px; cursor: pointer; color: #215684; font-size: 14px; }
+@media (max-width: 740px) {
+  .cards, .resources { grid-template-columns: 1fr; }
+  .cards { gap: 6px; }
+  .card { grid-template-columns: 88px minmax(0, 1fr) 15px; gap: 10px; padding-right: 9px; }
+  .photo { min-height: 66px; }
+  .copy > span { font-size: 13px; line-height: 1.45; }
+  .copy strong { font-size: 15px; }
+  .resources li:nth-child(2) a { border-top: 0; }
+  .resources a { gap: 6px; grid-template-columns: 21px minmax(0, 1fr) 15px; }
+  .resources strong { font-size: 14px; }
+}

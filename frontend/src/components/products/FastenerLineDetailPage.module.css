@@ -3,6 +3,7 @@
   --ft-text: #0c2044;
   --ft-muted: #506783;
   --ft-soft: #f2f7fb;
+  --lead-form-section-bg: var(--color-surface);
   --ft-border: #dce5ef;
   --ft-header-height: 80px;
   --ft-nav-height: 64px;
@@ -278,9 +279,6 @@
 }
 .section {
   padding-block: var(--site-section-inset);
-}
-.soft {
-  background: var(--ft-soft);
 }
 .heading {
   margin-bottom: var(--site-heading-gap);
