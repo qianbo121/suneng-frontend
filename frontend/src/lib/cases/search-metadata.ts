@@ -18,6 +18,7 @@ export function caseSearchMetadata(data: CaseSearchContent, published = false) {
     ...buildMetadata({
       title: data.title, description: data.description, path: data.path,
       locale: data.locale, image: data.image, type: 'article',
+      publishedTime: published ? data.datePublished : undefined,
       alternateLocales: data.languages,
     }),
     // Search metadata is not permission to publish a reviewed draft.

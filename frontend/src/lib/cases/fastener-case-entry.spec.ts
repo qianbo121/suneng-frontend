@@ -26,6 +26,10 @@ describe('approved Chinese fastener case', () => {
     const json = html.match(/<script[^>]*id="case-search-jsonld"[^>]*>(.*?)<\/script>/s);
     const article = JSON.parse(json![1])['@graph'].find((node: { '@type': string }) => node['@type'] === 'Article');
     expect(article.datePublished).toBe('2026-11-14T22:53:00+08:00');
+    const { caseSearchMetadata } = await import('./search-metadata');
+    const { fastenerCaseSearchContent } = await import('./fastener-case-search');
+    expect(caseSearchMetadata(fastenerCaseSearchContent, true).openGraph).toHaveProperty('publishedTime', article.datePublished);
+    expect(caseSearchMetadata(fastenerCaseSearchContent, false).openGraph).not.toHaveProperty('publishedTime');
     expect(article.publisher).toEqual({ '@id': 'https://www.jssngyl.cn/#organization' });
     const paragraph = () => renderToStaticMarkup(createElement(CarburisingAgreement));
     expect(paragraph()).toContain(`href="${entry.FASTENER_CASE_PATH}">RCWT-160/105-9/6</a>`);
