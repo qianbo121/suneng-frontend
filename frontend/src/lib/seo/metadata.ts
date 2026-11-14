@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { getReviewedPageCopy } from './reviewed-page-copy';
 
 import {
   BING_SITE_VERIFICATION,
@@ -121,8 +122,11 @@ export function getIndexingRobots() {
 
 export function buildMetadata(options: BuildMetadataOptions): Metadata {
   const metadataLocale = resolveMetadataLocale(options.locale, options.path);
-  const title = buildPageTitle(options.title, metadataLocale);
-  const description = buildDescription(options.description);
+  const { title, description } = getReviewedPageCopy(
+    options.path,
+    buildPageTitle(options.title, metadataLocale),
+    buildDescription(options.description),
+  );
   const canonical = absoluteUrl(options.path);
   const image = buildImageMetadata(options.image);
   const type = options.type || 'website';

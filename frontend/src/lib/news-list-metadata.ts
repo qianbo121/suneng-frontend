@@ -3,6 +3,7 @@ import type { Metadata } from 'next';
 import { NEWS_LIST_HERO_IMAGE } from '@/constants/news';
 import { getNewsListCanonicalPath, getNewsListPageTitle } from '@/lib/news-pagination';
 import { buildMetadata, buildPageTitle } from '@/lib/seo/metadata';
+import { getReviewedPageCopy } from '@/lib/seo/reviewed-page-copy';
 import { NEWS_SEO } from '@/lib/seo/page-data';
 import type { Locale } from '@/types/site';
 
@@ -71,10 +72,15 @@ export function buildNewsListMetadata(
 // The browser updates document.title itself when it switches list pages.
 export function getNewsListDocumentTitles(locale: Locale, pageCount: number) {
   const { title } = NEWS_LIST_SEO[locale];
+  const reviewedTitle = (page: number) => getReviewedPageCopy(
+    getNewsListCanonicalPath(locale, page),
+    buildPageTitle(getNewsListPageTitle(title, locale, page), locale),
+    '',
+  ).title;
   return {
-    filteredTitle: buildPageTitle(title, locale),
+    filteredTitle: reviewedTitle(1),
     pageTitles: Array.from({ length: pageCount }, (_, index) =>
-      buildPageTitle(getNewsListPageTitle(title, locale, index + 1), locale),
+      reviewedTitle(index + 1),
     ),
   };
 }

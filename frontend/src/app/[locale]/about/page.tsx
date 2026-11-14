@@ -4,6 +4,7 @@ import { localizeCoreValue } from '@/lib/core-page-localization';
 
 import { ABOUT_ZH_SEO, AboutZhContent } from '@/components/about/AboutZhContent';
 import { absoluteUrl, buildMetadata } from '@/lib/seo/metadata';
+import { getReviewedPageCopy } from '@/lib/seo/reviewed-page-copy';
 import { SITE_NAME } from '@/lib/seo/config';
 import { ENGLISH_STATIC_PAGE_METADATA } from '@/lib/seo/static-page-metadata-en';
 import { Locale } from '@/types/site';
@@ -26,12 +27,13 @@ export async function generateMetadata({ params }: AboutPageProps): Promise<Meta
   if (currentLocale === 'zh') {
     const canonical = absoluteUrl('/zh/about');
     const image = absoluteUrl('/images/about/about_img_hero_factory_01.png');
+    const { description } = getReviewedPageCopy('/zh/about', ABOUT_ZH_SEO.title, ABOUT_ZH_SEO.description);
 
     return {
       title: {
         absolute: ABOUT_ZH_SEO.title,
       },
-      description: ABOUT_ZH_SEO.description,
+      description,
       alternates: {
         canonical,
         languages: {
@@ -42,7 +44,7 @@ export async function generateMetadata({ params }: AboutPageProps): Promise<Meta
       },
       openGraph: {
         title: ABOUT_ZH_SEO.ogTitle,
-        description: ABOUT_ZH_SEO.ogDescription,
+        description,
         type: 'website',
         url: canonical,
         siteName: SITE_NAME,
@@ -52,7 +54,7 @@ export async function generateMetadata({ params }: AboutPageProps): Promise<Meta
       twitter: {
         card: 'summary_large_image',
         title: ABOUT_ZH_SEO.ogTitle,
-        description: ABOUT_ZH_SEO.ogDescription,
+        description,
         images: [image],
       },
       robots: getIndexingRobots(),

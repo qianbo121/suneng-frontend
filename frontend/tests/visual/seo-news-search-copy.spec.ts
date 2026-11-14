@@ -20,7 +20,7 @@ test('reviewed search snippets stay concise without replacing the article headli
   for (const slug of reviewed) {
     expect((await page.goto(`/en/news/${slug}`, { waitUntil: 'networkidle' }))?.status()).toBe(200);
     await expect(page.locator('#news-detail-title')).toBeVisible();
-    await expect(page).toHaveTitle(/Suneng$/);
+    await expect(page).toHaveTitle(/ \| Suneng Industrial Furnace$/);
     const title = await page.title();
     const description = await page.locator('meta[name="description"]').getAttribute('content');
     const headline = await page.locator('#news-detail-title').innerText();

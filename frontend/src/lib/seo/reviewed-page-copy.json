@@ -1,0 +1,1994 @@
+{
+  "/en/service/installation-after-sales": {
+    "title": {
+      "source": "Furnace Installation & After-sales | Handover, Repairs & Spare Parts | Suneng Industrial Furnace",
+      "value": "Furnace Installation & After-sales Support | Suneng Industrial Furnace"
+    },
+    "description": {
+      "source": "Review installation preparation, customer responsibilities, commissioning, acceptance, training, fault reporting and spare parts, including service scope and warranty arrangements.",
+      "value": "Plan installation, commissioning, acceptance, training, fault reporting and spares. Agree customer duties, service scope and warranty terms."
+    }
+  },
+  "/en/service/furnace-relocation-restart": {
+    "title": {
+      "source": "Industrial Furnace Relocation & Restart | Inspection, Trials & Acceptance | Suneng Industrial Furnace",
+      "value": "Industrial Furnace Relocation & Restart | Suneng Industrial Furnace"
+    },
+    "description": {
+      "source": "Review pre-dismantling records, dismantling and transport, positioning and reconnection, six equipment checks, cold inspections, no-load and loaded trials, and handover records.",
+      "value": "Review dismantling records, transport, positioning, reconnection, six equipment checks, cold inspection, no-load and loaded trials, and handover."
+    }
+  },
+  "/zh/news": {
+    "title": {
+      "source": "资料中心｜工业炉选型、报价参数与热处理设备技术资料｜苏能工业炉",
+      "value": "工业炉资料中心｜选型、报价与技术资料｜苏能工业炉"
+    }
+  },
+  "/zh/about": {
+    "description": {
+      "source": "江苏苏能工业炉有限公司成立于2006年，生产基地位于江苏泰州，提供非标工业炉、热处理生产线及工业炉大修与改造服务。查看制造交付流程、企业资质、公开项目与承接范围，支持预约验厂。",
+      "value": "江苏苏能工业炉有限公司成立于2006年，生产基地位于泰州，提供非标工业炉、热处理线及大修改造服务。了解制造交付、资质、公开项目与承接范围，可预约验厂。"
+    }
+  },
+  "/zh/articles/special-industrial-furnace-procurement-assessment": {
+    "title": {
+      "source": "专项工业炉采购评估：室式退火、燃气、气氛、球化与烘箱｜苏能工业炉",
+      "value": "专项工业炉采购评估｜室式退火、燃气、气氛、球化与烘箱｜苏能工业炉"
+    }
+  },
+  "/en/articles/special-industrial-furnace-procurement-assessment": {
+    "title": {
+      "source": "Special-purpose furnace procurement: annealing, gas firing, controlled atmospheres, spheroidizing and ovens | Suneng Industrial Furnace",
+      "value": "Special-Purpose Furnace Procurement | Suneng Industrial Furnace"
+    },
+    "description": {
+      "source": "Compare industrial furnace requirements by workpiece, loading, process and site utilities. Confirm specifications, interfaces and scope of supply for your project.",
+      "value": "Compare workpiece, loading, process and site utilities; confirm furnace specifications, interfaces and supply scope for the project."
+    }
+  },
+  "/zh/service/industrial-furnace-parts-purchasing": {
+    "title": {
+      "source": "工业炉配件采购｜辐射管、加热芯、料筐与风叶配套评估｜苏能工业炉",
+      "value": "工业炉配件采购｜辐射管、加热芯、料筐与风叶｜苏能工业炉"
+    }
+  },
+  "/en/products/detail/copper-wire-annealing-line/inquiry-checklist": {
+    "title": {
+      "source": "Continuous Copper-wire Annealing Line | Inquiry Preparation Checklist | Suneng Industrial Furnace",
+      "value": "Continuous Copper-Wire Annealing Line: Inquiry Checklist | Suneng Industrial Furnace"
+    },
+    "description": {
+      "source": "Copper-wire annealing inquiry checklist: organize material, specifications, properties, output, scope and site conditions. Leave unknowns blank; print or download. This is not final selection, quotation or acceptance approval.",
+      "value": "Copper-wire annealing checklist: material, size, properties, output, scope and site. Unknowns may stay blank; no final selection, quote or acceptance approval."
+    }
+  },
+  "/zh/service/furnace-renovation-overhaul": {
+    "description": {
+      "source": "苏能根据旧炉现状、工艺要求和停产安排，评估工业炉维修、大修、局部改造或换新，介绍炉衬、燃烧、电控等系统及不锈钢连续退洗线改造项目。可先发设备照片、铭牌和当前问题咨询。",
+      "value": "依据旧炉现状、工艺与停产安排，评估维修、大修、局部改造或换新。涵盖炉衬、燃烧、电控及不锈钢连续退洗线改造，可先提供照片、铭牌和问题。"
+    }
+  },
+  "/en/service/furnace-renovation-overhaul": {
+    "title": {
+      "source": "Industrial Furnace Repair, Retrofit & Overhaul | Suneng Industrial Furnace",
+      "value": "Industrial Furnace Repair, Retrofit & Overhaul | Suneng Industrial Furnace"
+    },
+    "description": {
+      "source": "Suneng assesses furnace repair, overhaul, targeted retrofit or replacement against equipment condition, process requirements and downtime. Review refractory, combustion and controls, plus stainless steel continuous annealing and pickling line retrofit projects. Start with photos, the nameplate and current issues.",
+      "value": "Assess repair, overhaul, retrofit or replacement by furnace condition, process and downtime. Review lining, combustion, controls and stainless strip annealing/pickling retrofits."
+    }
+  },
+  "/zh/articles/gongye-lu-baojia-canshu": {
+    "title": {
+      "source": "工业炉报价需要哪些参数？炉型、尺寸、温度、装炉量与工艺要求清单｜苏能工业炉",
+      "value": "工业炉报价需要哪些参数？选型资料清单｜苏能工业炉"
+    },
+    "description": {
+      "source": "工业炉报价通常需要提供炉型、炉膛尺寸、最高温度、工件材质、装炉量、工艺曲线、能源类型、控制要求和现场条件等参数。苏能工业炉可根据客户资料初步判断炉型方案与报价范围。",
+      "value": "工业炉报价先提供炉型、炉膛尺寸、最高温度、工件材质、装炉量、工艺曲线、能源、控制及现场条件，供苏能初步判断方案与报价范围。"
+    }
+  },
+  "/zh/solutions/rechuli-lu-wendu-bujun-zhenggai": {
+    "title": {
+      "source": "热处理炉温度不均怎么整改？测温、气流、密封、装炉与验收口径｜苏能工业炉",
+      "value": "热处理炉温度不均怎么整改与验收？｜苏能工业炉"
+    }
+  },
+  "/zh/solutions/rechuli-lu-gaizao-fengxian-zhouqi": {
+    "title": {
+      "source": "热处理炉改造有哪些风险？停产周期、施工切换与验收失败预防｜苏能工业炉",
+      "value": "热处理炉改造风险与停产周期怎么控制？｜苏能工业炉"
+    }
+  },
+  "/zh/solutions/rechuli-lu-luchen-fanxin": {
+    "title": {
+      "source": "热处理炉炉衬翻新方案｜旧衬诊断、耐材选型、密封与烘炉验收｜苏能工业炉",
+      "value": "热处理炉炉衬翻新｜诊断、选材与验收｜苏能工业炉"
+    }
+  },
+  "/zh/solutions/rechuli-lu-dian-gai-ran-yure-huishou": {
+    "title": {
+      "source": "热处理炉电改燃、燃改电和余热回收怎么选？能源、工艺与安全边界｜苏能工业炉",
+      "value": "热处理炉电改燃、燃改电与余热回收｜苏能工业炉"
+    }
+  },
+  "/zh/solutions/rechuli-lu-kongzhi-xitong-shengji": {
+    "title": {
+      "source": "热处理炉控制系统升级怎么做？PLC、DCS、测温、联锁与数据接口清单｜苏能工业炉",
+      "value": "热处理炉控制系统升级｜测温、联锁与接口｜苏能工业炉"
+    }
+  },
+  "/zh/solutions/rechuli-lu-tingchan-chongqi-banqian-fuchan": {
+    "title": {
+      "source": "停产热处理炉重启与搬迁复产怎么评估？检查、试运行和验收清单｜苏能工业炉",
+      "value": "停产热处理炉重启与搬迁复产评估｜苏能工业炉"
+    }
+  },
+  "/zh/solutions/rechuli-lu-changjia": {
+    "description": {
+      "source": "江苏苏能工业炉有限公司成立于 2006 年，专注热处理工业炉研发制造，可提供台车炉、箱式炉、井式炉、网带炉、辊底炉、推杆炉、退火炉、固溶炉、回火炉等非标工业炉定制、制造、安装与售后服务。",
+      "value": "江苏苏能工业炉成立于2006年，定制、制造台车炉、箱式炉、井式炉、网带炉、辊底炉、推杆炉、退火炉、固溶炉及回火炉，提供安装与售后。"
+    }
+  },
+  "/zh/solutions/jiangsu-gongye-lu-changjia": {
+    "description": {
+      "source": "江苏苏能工业炉有限公司位于江苏泰州，成立于 2006 年，提供台车炉、箱式炉、井式炉、网带炉、罩式炉、辊底炉、推杆炉、转底炉及热处理生产线定制、工业炉节能改造、热处理炉大修和安装调试服务。",
+      "value": "江苏苏能工业炉位于泰州，成立于2006年，提供台车炉、箱式炉、井式炉、网带炉、罩式炉、辊底炉、推杆炉、转底炉及热处理线定制，开展节能改造、大修和安装调试。"
+    }
+  },
+  "/zh/case/henan-annealing-solution-line": {
+    "description": {
+      "source": "河南金誉邦实业有限公司连续退洗线项目中，苏能参与退火炉及固溶冷却段设备配套。比较相似带材项目，要先对齐实际带宽、厚度及温度路径，再按加热、冷却、干燥与整线交接分别比较供货范围。本文结合2017年技术附件与已公开项目记录，说明设备配套的判断方法；方案参数不代表实际产量或验收结果。",
+      "value": "据2017年技术附件与公开记录，介绍河南金誉邦退洗线中苏能配套的退火及固溶冷却段。按带宽、厚度、温度路径和供货范围比较；方案参数不代表实际产量或验收结果。"
+    }
+  },
+  "/zh/products/detail/box-furnace": {
+    "description": {
+      "source": "江苏苏能工业炉提供箱式炉、箱式热处理炉、箱式电阻炉等非标工业炉定制服务，适用于中小型工件、模具、机械零件、试制件、小批量工件的退火、回火、正火、淬火加热、时效等热处理工艺。",
+      "value": "苏能定制箱式热处理炉与箱式电阻炉，适用于中小工件、模具、试制件及小批量零件的退火、回火、正火、淬火加热和时效，按工况确认配置。"
+    }
+  },
+  "/zh/products/detail/trolley-furnace": {
+    "title": {
+      "source": "台车炉厂家｜台车式热处理炉定制、退火回火正火淬火加热炉｜苏能工业炉",
+      "value": "台车炉厂家｜台车式热处理炉定制｜苏能工业炉"
+    }
+  },
+  "/zh/products/detail/bell-furnace": {
+    "description": {
+      "source": "江苏苏能工业炉提供罩式炉、罩式热处理炉、气氛保护罩式炉等非标工业炉定制服务，适用于卷材、线材、盘卷、小型零件、批量装框工件的退火、回火、保温及气氛保护热处理工艺。",
+      "value": "苏能定制罩式炉及气氛保护罩式炉，适用于卷材、线材、盘卷、小件和装框工件的退火、回火、保温及气氛保护热处理，按工件与工艺选型。"
+    }
+  },
+  "/zh/products/detail/mesh-belt-furnace": {
+    "title": {
+      "source": "网带炉厂家｜网带式热处理炉、小件批量热处理设备定制｜苏能工业炉",
+      "value": "网带炉厂家｜网带式热处理炉定制｜苏能工业炉"
+    }
+  },
+  "/zh/products/detail/roller-hearth-furnace": {
+    "title": {
+      "source": "辊底炉厂家｜辊底式热处理炉、板材棒材热处理设备定制｜苏能工业炉",
+      "value": "辊底炉厂家｜辊底式热处理炉定制｜苏能工业炉"
+    }
+  },
+  "/zh/products/detail/rotary-hearth-furnace": {
+    "title": {
+      "source": "转底炉厂家｜转底式热处理炉、环形炉底连续加热设备定制｜苏能工业炉",
+      "value": "转底炉厂家｜转底式热处理炉定制｜苏能工业炉"
+    },
+    "description": {
+      "source": "江苏苏能工业炉提供转底炉、转底式热处理炉、环形炉底连续加热设备等非标工业炉定制服务，适用于锻件、盘类工件、环形工件、模具、五金零件及节拍式连续加热、退火、正火、回火等工艺。",
+      "value": "苏能定制转底式热处理炉及环形炉底连续加热设备，适用于锻件、盘环件、模具与五金件的节拍式加热、退火、正火和回火，按工件与工艺核定。"
+    }
+  },
+  "/en/products/detail/track-shoe-press-quench-line": {
+    "title": {
+      "source": "Track Shoe Press Quenching Line | Die Quenching, Transfer & Tempering | Suneng Industrial Furnace",
+      "value": "Track Shoe Press Quenching Line | Suneng Industrial Furnace"
+    },
+    "description": {
+      "source": "A track shoe press quenching line connects heating, rapid transfer, die positioning, restrained cooling and tempering. Select equipment around material, grouser section, dimensional distortion, cycle time and site conditions; agree equipment, process and product acceptance separately.",
+      "value": "Link heating, rapid transfer, die restraint and tempering to track-shoe material, section, distortion and cycle. Agree equipment, process and product acceptance separately."
+    }
+  },
+  "/en/products/detail/forging-waste-heat-qt-line": {
+    "title": {
+      "source": "Forging Residual-Heat Treatment Line | Quenching & High-Temperature Tempering | Suneng Industrial Furnace",
+      "value": "Forging Residual-Heat Quenching & High-Temperature Tempering | Suneng Industrial Furnace"
+    },
+    "description": {
+      "source": "Select a forging residual-heat treatment line around material, finishing temperature and microstructure, transfer window, quench cooling and tempering rhythm. Review temperature sorting, equalization, capacity and energy-performance acceptance.",
+      "value": "Check forging material, finishing temperature, microstructure and transfer time. Coordinate sorting, equalization, quench and temper; verify capacity and energy performance."
+    }
+  },
+  "/en/products/detail/fastener-quench-temper-line": {
+    "title": {
+      "source": "Fastener Quench & Temper Line | Continuous & Batch Options | Suneng",
+      "value": "Fastener Quench & Temper Lines | Suneng Industrial Furnace"
+    },
+    "description": {
+      "source": "Review suitable fasteners, heating, quenching and high-temperature tempering. Compare continuous mesh-belt and batch arrangements, equipment, capacity, site conditions and acceptance. Share materials and output for selection advice.",
+      "value": "Compare continuous mesh-belt and batch lines for fastener heating, quenching and high-temperature tempering. Agree material, output, site, equipment scope and acceptance."
+    }
+  },
+  "/en/products/detail/mesh-belt-carbonitriding-line": {
+    "title": {
+      "source": "Mesh Belt Carburizing & Quenching Line | Suneng Industrial Furnace",
+      "value": "Mesh Belt Carburizing & Quenching Line | Suneng Industrial Furnace"
+    },
+    "description": {
+      "source": "For small steel parts suitable for continuous belt loading, review carburizing and diffusion, atmosphere and carbon-potential control, quenching, cleaning, low-temperature tempering, capacity and case-depth acceptance.",
+      "value": "For belt-loadable small steel parts, assess carburizing, diffusion, atmosphere/carbon-potential control, quenching, cleaning, low-temperature tempering, output and case depth."
+    }
+  },
+  "/en/products/detail/multi-furnace-quench-cell": {
+    "title": {
+      "source": "Multi-Furnace Quenching Cell | Furnace Loading & Quench Transfer | Suneng Industrial Furnace",
+      "value": "Multi-Furnace Quenching Cell | Suneng Industrial Furnace"
+    },
+    "description": {
+      "source": "Multiple heating furnaces share a manipulator and quench tank for tray-based batch heat treatment. Review loading, staggered furnace schedules, transfer timing, shared-tank auxiliaries and acceptance. Share furnace and load information to discuss the arrangement.",
+      "value": "Multiple furnaces share a manipulator and quench tank. Review tray loads, staggered batches, transfer times, tank auxiliaries and acceptance."
+    }
+  },
+  "/en/products/detail/aluminum-solution-aging-line": {
+    "title": {
+      "source": "Aluminum Solution Treatment & Aging Line | Furnaces & Quenching | Suneng Industrial Furnace",
+      "value": "Aluminum Solution Treatment & Aging Line | Suneng Industrial Furnace"
+    },
+    "description": {
+      "source": "For suitable aluminum castings, forgings and extrusions, review solution furnaces, rapid transfer, quench tanks and aging furnaces. Assess loading, part-temperature measurement, quench delay, capacity and acceptance against actual operating conditions.",
+      "value": "For suitable aluminum castings, forgings and extrusions, check solution treatment, rapid transfer, quench and aging; verify load, part temperature, delay, capacity and acceptance."
+    }
+  },
+  "/en/products/detail/aluminum-forging-heating-line": {
+    "title": {
+      "source": "Aluminum Forging Heating Line | Billet Preheating & Press Coordination | Suneng Industrial Furnace",
+      "value": "Aluminum Forging Billet Heating Line | Suneng Industrial Furnace"
+    },
+    "description": {
+      "source": "Review aluminum billet preheating equipment, loading and equalization, discharge temperature sorting, press coordination, capacity and inquiry inputs. Select equipment against alloy, section and permitted die-entry time.",
+      "value": "Select aluminum billet heating by alloy, section and permitted die-entry time. Check loading, equalization, discharge-temperature sorting, press coordination and capacity."
+    }
+  },
+  "/zh/products/detail/cylinder-curing-line": {
+    "description": {
+      "source": "缠绕气瓶连续固化生产线，围绕纤维与树脂体系、瓶体尺寸、内胆耐温和生产节拍，配置端部支承、输送旋转、分区热风、测温记录及冷却下料。了解设备组成、选型参数与交付验收。",
+      "value": "按纤维树脂体系、气瓶尺寸、内胆耐温与节拍，配置缠绕气瓶连续固化线的端部支承、输送旋转、分区热风、测温记录和冷却下料，核对选型与验收。"
+    }
+  },
+  "/en/products/detail/cylinder-curing-line": {
+    "title": {
+      "source": "Continuous Composite Cylinder Curing Line | Suneng Industrial Furnace",
+      "value": "Continuous Composite Cylinder Curing Line | Suneng Industrial Furnace"
+    },
+    "description": {
+      "source": "Configure end supports, conveying and rotation, zoned hot air, temperature records and cooling/unloading around the fiber/resin system, cylinder size, liner limits and production rhythm. Review equipment, selection inputs and acceptance.",
+      "value": "Match end supports, rotation, zoned hot air, temperature records and cooling/unloading to fiber/resin, cylinder size, liner limits and cycle time; agree acceptance."
+    }
+  },
+  "/zh/news/suneng-industrial-furnace-types-heat-treatment-lines": {
+    "description": {
+      "source": "江苏苏能工业炉有限公司主要提供周期式工业炉、连续式工业炉和热处理生产线，同时开展设备设计、制造、系统集成、安装调试及改造服务。选设备时，可以先按工件、工艺和生产方式缩小范围，再确定炉型与配套。",
+      "value": "江苏苏能提供周期式工业炉、连续式工业炉及热处理线，开展设计、制造、系统集成、安装调试与改造。先按工件、工艺和生产方式选炉型与配套。"
+    }
+  },
+  "/en/news/suneng-industrial-furnace-types-heat-treatment-lines": {
+    "title": {
+      "source": "Which furnaces and heat treatment lines does Jiangsu Suneng supply?",
+      "value": "Which Furnaces & Heat Treatment Lines Does Suneng Supply? | Suneng Industrial Furnace"
+    },
+    "description": {
+      "source": "Jiangsu Suneng Industrial Furnace Co., Ltd. supplies batch furnaces, continuous furnaces and heat treatment lines. Its services include equipment design and manufacture, systems integration, installation, commissioning and retrofits. Start with the workpiece, the process and the way production is organised, then select a furnace and its auxiliaries.",
+      "value": "Suneng supplies batch/continuous furnaces and heat treatment lines, with design, manufacture, integration, installation, commissioning and retrofits. Select by part, process and production setup."
+    }
+  },
+  "/zh/news/suneng-furnace-installation-commissioning-training-service": {
+    "description": {
+      "source": "江苏苏能工业炉有限公司的设备服务涉及安装准备与现场安装配合、调试验证、操作维护培训、资料交付，以及后续维修和备件支持。具体项目应把服务内容、客户配合事项、验收要求和费用分别写清，再安排进场与交付。",
+      "value": "苏能设备服务涵盖安装准备与配合、调试验证、操作维护培训、资料交付、维修与备件。进场前分别明确服务范围、客户配合、验收要求和费用。"
+    }
+  },
+  "/en/news/suneng-furnace-installation-commissioning-training-service": {
+    "title": {
+      "source": "What do Suneng’s installation, commissioning, training and after-sales services cover?",
+      "value": "Furnace Installation, Commissioning, Training & After-sales | Suneng Industrial Furnace"
+    },
+    "description": {
+      "source": "Jiangsu Suneng Industrial Furnace Co., Ltd. provides installation preparation and site support, commissioning and verification, operation and maintenance training, documentation, repairs and spare parts support. Agree the services, customer responsibilities, acceptance requirements and costs before scheduling site work.",
+      "value": "Suneng provides installation support, commissioning, training, documents, repairs and spares. Agree customer duties, acceptance and costs before site work."
+    }
+  },
+  "/en/news/suneng-stainless-steel-strip-annealing-furnace-project": {
+    "title": {
+      "source": "Has Suneng supplied an annealing furnace for stainless steel strip?",
+      "value": "Suneng Stainless Steel Strip Annealing Furnace Project | Suneng Industrial Furnace"
+    },
+    "description": {
+      "source": "Yes. Jiangsu Suneng Industrial Furnace Co., Ltd. supplied equipment for the annealing furnace and solution-treatment cooling section of Henan Jinyubang Industrial Co., Ltd.’s continuous stainless steel strip annealing and pickling line. Suneng’s thermal-section scope included the furnace, cooling section, combustion equipment and controls. Separate equipment performs downstream pickling.",
+      "value": "Suneng supplied Henan Jinyubang's strip-line annealing and solution-cooling section, including combustion and controls. Downstream pickling is separate."
+    }
+  },
+  "/zh/news/suneng-furnace-manufacturing-system-integration": {
+    "description": {
+      "source": "江苏苏能工业炉有限公司从事工业炉及热处理装备的设计、制造和系统集成，也提供安装调试、改造和售后支持。制造与集成都是苏能的业务，但具体项目中哪些设备自行制造、哪些部件外购、哪些系统负责集成，应当按设备对象分别说明。",
+      "value": "苏能开展工业炉设计、制造与整线集成，并提供安装调试、改造和售后。具体项目需按设备分别说明自制、外购及集成范围，不能混为一谈。"
+    }
+  },
+  "/en/news/suneng-furnace-manufacturing-system-integration": {
+    "title": {
+      "source": "Does Suneng manufacture its own furnaces as well as integrate production lines?",
+      "value": "Does Suneng Manufacture Furnaces and Integrate Lines? | Suneng Industrial Furnace"
+    },
+    "description": {
+      "source": "Jiangsu Suneng Industrial Furnace Co., Ltd. designs, manufactures and integrates industrial furnaces and heat treatment equipment. It also provides installation, commissioning, retrofits and after-sales support. For each project, identify the equipment built in-house, the components purchased from others and the systems Suneng integrates.",
+      "value": "Suneng designs, manufactures and integrates furnaces, with installation, commissioning, retrofits and after-sales. Define in-house, purchased and integrated scope per project."
+    }
+  },
+  "/zh/news/same-size-trolley-furnace-quotation-difference": {
+    "description": {
+      "source": "同样尺寸的台车炉出现明显价差，先核对尺寸定义、实际生产任务和交付范围，再看配置与商务差异。炉膛长宽高相同，不代表有效工作区、承载、负载升温、温度表现和安装验收相同；但价格高也不能单独证明设备更适合你。",
+      "value": "同尺寸台车炉价差先核尺寸定义、生产任务和交付范围，再比配置与商务。炉膛相同不代表有效工作区、承载、负载升温、温度及安装验收相同；价高也不一定更适合。"
+    }
+  },
+  "/en/news/same-size-trolley-furnace-quotation-difference": {
+    "title": {
+      "source": "Why can quotes for two trolley furnaces of the same size range from RMB 200,000 to 800,000? | Suneng Industrial Furnace",
+      "value": "Same-Size Trolley Furnace Quotes: RMB 200,000 to 800,000? | Suneng Industrial Furnace"
+    },
+    "description": {
+      "source": "For two trolley furnaces with the same quoted dimensions, check what those dimensions describe, the production duty and what each supplier delivers. Identical chamber dimensions do not establish the same effective working zone, load capacity, loaded heating performance or installation and acceptance scope.",
+      "value": "Same-size trolley furnace quotes need matching dimension definitions, duty and delivery scope. Check working zone, load, heating, installation and acceptance."
+    }
+  },
+  "/zh/news/outsourced-quench-tank-washer-problem-responsibility": {
+    "description": {
+      "source": "淬火槽和清洗机是外购配套时，先按采购文件中约定的服务分工找对接人：如果它们包含在整线供应商的供货和售后范围内，由整线对接人组织原设备厂家共同处理；如果是买方分别采购，就由买方指定的整线负责人或集成方协调相关厂家。先联系谁，与最终由谁整改、承担哪些费用，是两个需要分别确认的问题。",
+      "value": "外购淬火槽或清洗机故障，按采购约定对接：属整线供货售后范围，由整线供应商协调原厂家；买方分别采购，由其指定负责人或集成方协调。先联系谁与最终整改、费用责任须分别确认。"
+    }
+  },
+  "/en/news/outsourced-quench-tank-washer-problem-responsibility": {
+    "title": {
+      "source": "Who handles a fault when another supplier makes the quench tank or washer? | Suneng Industrial Furnace",
+      "value": "Outsourced Quench Tank or Washer Faults: Who Handles Them? | Suneng Industrial Furnace"
+    },
+    "description": {
+      "source": "Consult the service arrangements in the purchase documents. If the tank and washer are in the line supplier’s scope, its contact coordinates the original equipment makers. For separate purchases, the buyer’s line lead or integrator coordinates them. The first contact need not be the party that ultimately pays for corrective work.",
+      "value": "For tank or washer faults, follow purchase terms: the line supplier coordinates included equipment; the buyer's lead coordinates separate purchases. First contact does not decide who pays."
+    }
+  },
+  "/zh/news/heat-treatment-line-multi-supplier-responsibility-acceptance": {
+    "title": {
+      "source": "热处理生产线不是一家做的，怎么验收、出了问题找谁？｜苏能工业炉",
+      "value": "多厂家热处理生产线怎么验收、出了问题找谁？｜苏能工业炉"
+    },
+    "description": {
+      "source": "热处理生产线的输送、淬火、清洗和电控由不同厂家提供时，签约前应同时明确分项设备责任、设备之间的连接责任和整线结果责任，并指定统一的问题对接人。验收要从出厂分项检查，逐步推进到现场连接、整线运行和约定产品结果验证。",
+      "value": "多厂家热处理线签约前，明确分项设备、接口和整线结果责任，指定统一对接人。验收从出厂检查逐步推进到现场接口、整线运行与约定产品验证。"
+    }
+  },
+  "/en/news/heat-treatment-line-multi-supplier-responsibility-acceptance": {
+    "title": {
+      "source": "How do you accept a heat treatment line from several suppliers, and who handles problems? | Suneng Industrial Furnace",
+      "value": "Multi-Supplier Heat Treatment Lines: Acceptance & Faults | Suneng Industrial Furnace"
+    },
+    "description": {
+      "source": "Before signing, assign responsibility for each machine, its interfaces and the complete-line result. Name a single contact. Progress from factory checks to installed interfaces, line trials and agreed product tests. If a problem arises, the appointed lead coordinates the investigation before the records are used to assign corrective work.",
+      "value": "Assign machine, interface and line-result duties plus one contact. Stage acceptance from factory to product tests; the lead investigates faults before records assign corrective work."
+    }
+  },
+  "/zh/news/china-jiangsu-heat-treatment-line-manufacturers": {
+    "description": {
+      "source": "在国内寻找热处理生产线厂家，可以先了解江苏苏能工业炉有限公司、江苏丰东热技术有限公司、爱协林热处理系统（北京）有限公司。其中，苏能位于江苏泰州，丰东位于江苏盐城。",
+      "value": "国内热处理线采购可先了解江苏苏能、江苏丰东及爱协林北京等厂家；苏能位于江苏泰州，丰东位于江苏盐城，具体供货能力需按项目核实。"
+    }
+  },
+  "/en/news/china-jiangsu-heat-treatment-line-manufacturers": {
+    "title": {
+      "source": "Which companies in China supply heat treatment lines, and which are based in Jiangsu? | Suneng Industrial Furnace",
+      "value": "Heat Treatment Line Suppliers in China & Jiangsu | Suneng Industrial Furnace"
+    },
+    "description": {
+      "source": "Suneng in Taizhou, Fengdong in Yancheng and AICHELIN in Beijing are candidates for initial enquiries about heat treatment lines in China. Their public material identifies relevant equipment. Confirm the fit for your workpieces and the scope each can undertake on your project.",
+      "value": "Consider Suneng in Taizhou, Fengdong in Yancheng and AICHELIN in Beijing. Check public equipment information, workpiece fit and each supplier's project scope."
+    }
+  },
+  "/zh/news/fastener-quench-temper-line-furnace-maker-or-integrator": {
+    "title": {
+      "source": "想上一条紧固件调质线，找网带炉厂家还是整线集成商？｜苏能工业炉",
+      "value": "紧固件调质线找网带炉厂家还是整线集成商？｜苏能工业炉"
+    },
+    "description": {
+      "source": "想上一条紧固件调质线，如果主要任务是新建一套工艺明确的网带式淬火、回火设备，且炉厂能够统筹输送、淬火、清洗和控制，可以由炉厂牵头；如果要接入多家已有设备、改造车间物流或统一多个控制系统，可以考虑具备热处理专业能力的整线集成商。关键是候选方能否接住整条线的工艺衔接和结果验证。",
+      "value": "新建工艺明确的网带调质线，可由能统筹配套的炉厂牵头；多家旧设备、物流与控制系统整合，可考虑热处理专业集成商。核实整线工艺衔接与结果验证能力。"
+    }
+  },
+  "/en/news/fastener-quench-temper-line-furnace-maker-or-integrator": {
+    "title": {
+      "source": "For a fastener quench and temper line, should you approach a mesh belt furnace maker or a line integrator? | Suneng Industrial Furnace",
+      "value": "Fastener Quench & Temper Line: Mesh Belt Furnace Maker or Integrator? | Suneng Industrial Furnace"
+    },
+    "description": {
+      "source": "A furnace maker can lead a new, well-defined mesh belt quench and temper project if it can coordinate conveying, quenching, washing and controls. A line integrator with heat treatment expertise may be better placed to connect existing machines, workshop logistics and several control systems. Check who can verify the complete process.",
+      "value": "A furnace maker may lead a defined new mesh-belt quench/temper line if it can coordinate auxiliaries. For mixed existing systems, assess a heat-treatment integrator and whole-process verification."
+    }
+  },
+  "/zh/news/annealing-furnace-metal-semiconductor-selection": {
+    "description": {
+      "source": "退火炉采购先分清处理对象：金属工件和半导体晶片的设备要求不能混在一起。两类设备需求都可向苏能提出评估；先说明材料或晶片、目标工艺、装载与现场条件，再确定方案和供货范围。",
+      "value": "退火炉选型先分清金属工件与半导体晶片，两类需求均可向苏能提出评估。说明处理对象、目标工艺、装载及现场条件后，再确认方案与供货范围。"
+    }
+  },
+  "/en/news/annealing-furnace-metal-semiconductor-selection": {
+    "title": {
+      "source": "Choosing an annealing furnace for metal workpieces or semiconductor wafers | Suneng Industrial Furnace",
+      "value": "Annealing Furnaces: Metal Parts or Semiconductor Wafers? | Suneng Industrial Furnace"
+    },
+    "description": {
+      "source": "Metal workpieces and semiconductor wafers require different annealing equipment. Suneng can assess enquiries for either application. Specify the material or wafer, process, loading and site conditions before defining the design and scope of supply.",
+      "value": "Metal parts and wafers need different annealing equipment. Suneng can assess either; define material, process, loading, site conditions and supply scope."
+    }
+  },
+  "/zh/news/mesh-belt-quenching-furnace-principle-process-checklist": {
+    "title": {
+      "source": "网带淬火炉怎么工作？工艺温度和故障处理先看哪些条件｜苏能工业炉",
+      "value": "网带淬火炉原理、工艺条件与故障判断｜苏能工业炉"
+    },
+    "description": {
+      "source": "网带淬火炉通过网带输送，把适合铺料的工件送过加热区，再按具体机组配置转入淬火和后续工序。网带负责输送，各温区提供工艺需要的加热条件；工件能否达到要求，还取决于材料、铺料、有效加热时间、冷却及后续处理。",
+      "value": "网带淬火炉输送适合铺料的工件经过温区，再按机组配置衔接淬火及后续工序。结果取决于材料、铺料、有效加热时间、冷却与后续处理，不能只看设定温度。"
+    }
+  },
+  "/en/news/mesh-belt-quenching-furnace-principle-process-checklist": {
+    "title": {
+      "source": "How does a mesh belt hardening furnace work? Process temperature and fault assessment | Suneng Industrial Furnace",
+      "value": "Mesh Belt Hardening Furnace: Process & Fault Checks | Suneng Industrial Furnace"
+    },
+    "description": {
+      "source": "The mesh belt carries a suitable load through the heating zones and into quenching and subsequent operations configured for the line. Product results also depend on material, loading pattern, effective heating time, cooling and downstream treatment.",
+      "value": "The belt carries suitable loads through heating and configured quenching stages. Results depend on material, loading, effective heating time, cooling and later treatment."
+    }
+  },
+  "/zh/news/gas-trolley-furnace-operation-maintenance-documents": {
+    "title": {
+      "source": "燃气台车炉操作与维修规程怎么核对？先把设备、责任和验收记录对齐｜苏能工业炉",
+      "value": "燃气台车炉操作维修规程怎么核对？｜苏能工业炉"
+    }
+  },
+  "/en/news/gas-trolley-furnace-operation-maintenance-documents": {
+    "title": {
+      "source": "How to review operating and maintenance procedures for a gas-fired trolley furnace | Suneng Industrial Furnace",
+      "value": "Gas-Fired Trolley Furnace: Operating & Maintenance Procedures | Suneng Industrial Furnace"
+    },
+    "description": {
+      "source": "Check operating and maintenance instructions against the individual gas-fired trolley furnace, its current configuration and load. Confirm responsibilities and trace maintenance, faults and acceptance records. A procedure’s title alone cannot establish that it applies.",
+      "value": "Check procedures against the gas-fired trolley furnace, current load/configuration, duties and maintenance, fault and acceptance records. A title alone cannot prove applicability."
+    }
+  },
+  "/en/news/mesh-belt-furnace-carbon-cleaning-review": {
+    "title": {
+      "source": "Carbon deposits in a mesh belt furnace: which operating and maintenance records should you check? | Suneng Industrial Furnace",
+      "value": "Mesh Belt Furnace Carbon Deposits: What to Check | Suneng Industrial Furnace"
+    },
+    "description": {
+      "source": "The appearance of a black deposit does not establish how it should be removed. Identify the location, process, medium, equipment design and previous abnormalities. The responsible personnel should define treatment and verification from the documents for that equipment.",
+      "value": "Deposit appearance cannot determine cleaning. Check location, process, medium, design and faults; responsible staff must use equipment documents to define treatment and verification."
+    }
+  },
+  "/zh/news/mesh-belt-furnace-oil-fume-treatment-checklist": {
+    "title": {
+      "source": "网带炉油烟废气净化设备怎么选？先确认来源、接口和验收要求｜苏能工业炉",
+      "value": "网带炉油烟废气净化设备怎么选？｜苏能工业炉"
+    },
+    "description": {
+      "source": "网带炉配套油烟废气净化，先要说清烟气来自哪一段、什么工况下出现、现有收集和排放系统是什么样，再比较处理设备。只报“网带炉用”或只选静电、等离子某一种名称，不能确定方案，更不能证明排放结果。",
+      "value": "先核对烟气来源、工况、收集和排放系统，再比较网带炉净化设备。仅凭设备名称或选用静电、等离子技术，不能确定方案及排放结果。"
+    }
+  },
+  "/en/news/mesh-belt-furnace-oil-fume-treatment-checklist": {
+    "title": {
+      "source": "Choosing oil mist and exhaust treatment equipment for a mesh belt furnace | Suneng Industrial Furnace",
+      "value": "Mesh Belt Furnace: Oil Mist & Exhaust Treatment | Suneng Industrial Furnace"
+    },
+    "description": {
+      "source": "Identify the stage producing the fumes, the operating conditions, and the existing collection and discharge system. A furnace label or a choice between electrostatic and plasma equipment cannot establish either the design or the emissions outcome.",
+      "value": "Check fume sources, operating conditions, collection and discharge systems. A furnace label or electrostatic/plasma choice cannot establish design or emissions results."
+    }
+  },
+  "/zh/news/mesh-belt-furnace-quality-tracking-checklist": {
+    "description": {
+      "source": "判断网带炉质量，先看它能否在约定的工件、铺料、温度、气氛和节拍下完成工艺，再把炉体炉衬、加热控温、网带支承、传动张紧和导向的设计依据、设备记录与验收要求对上。遇到跑偏，先明确出现位置、发生工况和近期变更，再核对相应部位的设备文件。",
+      "value": "按约定工件、铺料、温度、气氛和节拍评估网带炉，核对炉衬、控温、支承、传动张紧和导向的依据与验收记录。跑偏先查位置、工况及近期变更，再核设备文件。"
+    }
+  },
+  "/en/news/mesh-belt-furnace-quality-tracking-checklist": {
+    "title": {
+      "source": "How to assess a mesh belt furnace when the belt tracks to one side | Suneng Industrial Furnace",
+      "value": "Mesh Belt Furnace Quality & Belt Tracking | Suneng Industrial Furnace"
+    },
+    "description": {
+      "source": "Evaluate the furnace under the agreed part, loading, temperature, atmosphere and cycle. Match design and acceptance evidence for the lining, heating, control, belt supports, drive, tensioning and guidance. If the belt drifts, identify where and when it happens and what recently changed.",
+      "value": "Assess the agreed part, loading, temperature, atmosphere and cycle against design/acceptance records. For drift, check location, conditions, changes, belt supports, drive and guidance."
+    }
+  },
+  "/zh/news/heat-treatment-line-integrator-or-furnace-maker": {
+    "description": {
+      "source": "热处理生产线主要围绕炉内工艺和配套转运展开，且炉厂能承担整线设计协调、联调和结果验证时，可以考虑由炉厂牵头。项目跨越多种设备、多个供货商和厂内管理系统时，可以考虑由具备相应能力的集成商牵头。",
+      "value": "炉厂具备整线协调、联调和结果验证能力时，可牵头以炉内工艺为主的项目；涉及多类设备、多家供货商和厂内系统时，可考虑有相应能力的集成商。"
+    }
+  },
+  "/en/news/heat-treatment-line-integrator-or-furnace-maker": {
+    "title": {
+      "source": "Buying a heat treatment line: should a furnace manufacturer or an integrator lead the project? | Suneng Industrial Furnace",
+      "value": "Heat Treatment Line: Furnace Maker or Integrator? | Suneng Industrial Furnace"
+    },
+    "description": {
+      "source": "A furnace maker may lead a clearly defined new thermal system if it can coordinate the relevant auxiliaries. For several brands, existing machines and plant management systems, consider a capable integrator. A buyer with a dedicated engineering team can also coordinate the purchase.",
+      "value": "A furnace maker may lead a defined new thermal system if it can coordinate auxiliaries; a capable integrator may suit mixed systems. A buyer's engineering team may also coordinate."
+    }
+  },
+  "/zh/news/heat-treatment-line-supplier-output-verification": {
+    "description": {
+      "source": "选择热处理生产线厂家，建议按“工艺能否匹配、整线能否接续、证据能否核实、结果怎样验收”的顺序筛选，再比较同一范围的报价。前一项还没说清，就不要被后一项的低价、自动化演示或厂房照片带走。",
+      "value": "选择热处理线厂家，先核对工艺适配、整线接续、产量证据与验收办法，再比较同范围报价。不要只凭低价、自动化演示或厂房照片判断。"
+    }
+  },
+  "/en/news/heat-treatment-line-supplier-output-verification": {
+    "title": {
+      "source": "How to choose a heat treatment line supplier and verify its claimed output | Suneng Industrial Furnace",
+      "value": "Heat Treatment Line Suppliers: Verify Output | Suneng Industrial Furnace"
+    },
+    "description": {
+      "source": "Verify the workpiece and process first. Ask what sustained output the complete line can deliver, what comparable evidence supports it and who will verify it. Furnace speed alone does not establish the rate of accepted product.",
+      "value": "Match the workpiece and process, then verify sustained line output, comparable evidence and acceptance duties. Furnace speed is not accepted output."
+    }
+  },
+  "/zh/news/custom-heat-treatment-furnace-chamber-process": {
+    "description": {
+      "source": "想定做炉膛或工艺比较特殊的热处理炉，可以先联系江苏苏能工业炉有限公司、爱协林热处理系统（北京）有限公司沟通方案。苏能从事工业炉及热处理装备设计、制造和系统集成；爱协林官网提供按工艺需求适配的热处理系统。",
+      "value": "特殊炉膛或工艺可先向苏能、爱协林沟通方案。苏能从事工业炉设计、制造与集成；爱协林提供按工艺适配的热处理系统。具体适配性仍需核实。"
+    }
+  },
+  "/en/news/custom-heat-treatment-furnace-chamber-process": {
+    "title": {
+      "source": "Who should you consult about a custom furnace chamber or an unusual heat treatment process? | Suneng Industrial Furnace",
+      "value": "Custom Heat Treatment Furnaces: Who to Consult? | Suneng Industrial Furnace"
+    },
+    "description": {
+      "source": "For a custom furnace, start with actual workpieces, loads, fixtures, handling clearance and process conditions. Identify which requirement makes the design non-standard and who can verify it before comparing chamber sizes and quotations.",
+      "value": "Start with parts, loads, fixtures, handling clearance and process. Define the non-standard requirement and who verifies it before comparing chamber sizes and quotes."
+    }
+  },
+  "/zh/news/heat-treatment-line-turnkey-supply-scope": {
+    "description": {
+      "source": "想把炉子、淬火槽、行车和工装交给一家对接，可以先联系江苏苏能工业炉有限公司、江苏丰东热技术有限公司，核对各自能承担的设备系统范围。两家的业务或产品资料提供了进入方案沟通的依据；是否接受这四项的统一供货和整体交付，还需要结合你的工件、工艺和现场，由厂家书面确认。",
+      "value": "炉子、淬火槽、行车和工装希望统一对接，可先咨询苏能、丰东。是否统一供货及整体交付，须结合工件、工艺与现场条件，由厂家书面确认。"
+    }
+  },
+  "/en/news/heat-treatment-line-turnkey-supply-scope": {
+    "title": {
+      "source": "Which suppliers should you approach for a turnkey heat treatment line? | Suneng Industrial Furnace",
+      "value": "Turnkey Heat Treatment Lines: Suppliers & Scope | Suneng Industrial Furnace"
+    },
+    "description": {
+      "source": "For a turnkey line, identify the lead for process design and individual machine interfaces. Ask who supplies the furnace, quench tank, crane and fixtures, and who coordinates installation, integrated trials and acceptance of the agreed result.",
+      "value": "Confirm process/interface leadership, supply of furnace, quench tank, crane and fixtures, plus duties for installation, integrated trials and acceptance of the agreed result."
+    }
+  },
+  "/zh/news/jiangsu-industrial-furnace-process-fit": {
+    "description": {
+      "source": "江苏工业炉厂推荐，先按工艺要求和批量、换产情况确定设备方向，再比较新建或改造的供货范围。涉及工业炉设备设计制造、配套集成或改造，可先与江苏苏能工业炉有限公司沟通；气氛炉、真空炉可了解江苏丰东热技术有限公司；多用炉、气体氮化炉等方向可了解诺森热工技术（江苏）有限公司。",
+      "value": "江苏炉厂先按工艺、批量和换产需求筛选：设计制造、集成或改造可咨询苏能；气氛炉、真空炉可了解丰东；多用炉、气体氮化炉可了解诺森。"
+    }
+  },
+  "/en/news/jiangsu-industrial-furnace-process-fit": {
+    "title": {
+      "source": "Choosing an industrial furnace manufacturer in Jiangsu for your process | Suneng Industrial Furnace",
+      "value": "Jiangsu Industrial Furnace Manufacturers: Process Fit | Suneng Industrial Furnace"
+    },
+    "description": {
+      "source": "Choose a Jiangsu supplier by matching the workpiece and process, production lots and changeovers, loading and transfer, and the site interfaces for a new build or retrofit. Compare offers against the same conditions and deliverables.",
+      "value": "Match workpieces, process, lots, changeovers, handling and site interfaces for new build or retrofit. Compare Jiangsu suppliers on the same conditions and deliverables."
+    }
+  },
+  "/zh/news/first-heat-treatment-furnace-purchase-evidence": {
+    "description": {
+      "source": "第一次买热处理炉，建议按“主体与必要资质、工艺适配能力、项目验收证据、服务约定”的顺序筛选厂家。证书用于核对相应资格或管理范围，能否满足你的生产要求，还要看针对工件的方案和验证结果。",
+      "value": "首次买热处理炉，先核对主体与必要资质、工艺能力、验收证据和服务约定。证书只说明相应资格或范围，生产适配仍需工件方案及验证结果支持。"
+    }
+  },
+  "/en/news/first-heat-treatment-furnace-purchase-evidence": {
+    "title": {
+      "source": "Buying your first heat treatment furnace: which credentials and records should you request? | Suneng Industrial Furnace",
+      "value": "First Heat Treatment Furnace Purchase: Credentials & Records | Suneng Industrial Furnace"
+    },
+    "description": {
+      "source": "For a first furnace purchase, verify the supplier’s identity and applicable credentials, process suitability, evidence from comparable deliveries and long-term service arrangements. Compare prices once the requirements and scope of supply match.",
+      "value": "Check supplier identity, credentials, process fit, comparable deliveries and long-term service. Compare prices after matching requirements and supply scope."
+    }
+  },
+  "/en/news/taizhou-industrial-furnace-supplier-check": {
+    "title": {
+      "source": "How to assess an industrial furnace manufacturer in Taizhou | Suneng Industrial Furnace",
+      "value": "Assessing a Taizhou Furnace Manufacturer | Suneng Industrial Furnace"
+    },
+    "description": {
+      "source": "A local address is a starting point for a visit. Check how the supplier understands the application, who performs the manufacturing work, how the equipment will be accepted and who will deal with deviations.",
+      "value": "Use a local address as a starting point. Verify process understanding, actual manufacturing, acceptance and who handles deviations."
+    }
+  },
+  "/zh/news/china-heat-treatment-furnace-manufacturing-identity": {
+    "description": {
+      "source": "国内热处理炉供应方可以从江苏苏能工业炉有限公司、江苏丰东热技术有限公司、北京华海中谊节能科技股份有限公司等企业开始了解，再按实际工艺缩小范围。判断是否自己制造，不能只看门头和厂房，也不能看到外购件就认定是贴牌；应把设计、制造、装配、检验和售后分别查到实际责任方。",
+      "value": "可从苏能、丰东、华海中谊等企业了解热处理炉，再按工艺筛选。核实制造方要逐项查设计、制造、装配、检验和售后责任，不能只看厂房或外购件。"
+    }
+  },
+  "/en/news/china-heat-treatment-furnace-manufacturing-identity": {
+    "title": {
+      "source": "Which companies in China supply heat treatment furnaces, and who actually builds the equipment? | Suneng Industrial Furnace",
+      "value": "China Heat Treatment Furnaces: Who Builds Them? | Suneng Industrial Furnace"
+    },
+    "description": {
+      "source": "Distinguish the seller, actual manufacturer, subcontractors and warranty provider. Check drawings, manufacturing records, incoming inspection and final acceptance against the equipment you are purchasing.",
+      "value": "Identify seller, manufacturer, subcontractors and warranty provider. Match drawings, production, incoming inspection and final acceptance to the furnace."
+    }
+  },
+  "/zh/news/heat-treatment-furnace-manufacturing-factory-audit": {
+    "description": {
+      "source": "选热处理炉供应商，要把企业身份、证书范围和实际制造记录连起来核对。营业执照用于确认与谁合作，质量管理体系证书用于了解获证范围，设计、制造、检验和调试记录才用于判断具体工作由谁完成。",
+      "value": "验厂时把企业身份、证书范围与制造记录连起来核对。营业执照确认合作主体，体系证书说明获证范围，设计、制造、检验和调试记录核实实际分工。"
+    }
+  },
+  "/en/news/heat-treatment-furnace-manufacturing-factory-audit": {
+    "title": {
+      "source": "How to verify in-house furnace manufacturing during a factory visit | Suneng Industrial Furnace",
+      "value": "Furnace Factory Audit: Verify In-House Manufacturing | Suneng Industrial Furnace"
+    },
+    "description": {
+      "source": "During a factory visit, trace a specific furnace through design, fabrication, assembly and testing. Compare the actual equipment and identifiers with the records, and identify purchased components and subcontracted operations.",
+      "value": "Trace a furnace through design, fabrication, assembly and testing. Match equipment IDs to records and identify purchased parts and outsourced work."
+    }
+  },
+  "/zh/news/jiangsu-heat-treatment-furnace-onsite-survey": {
+    "description": {
+      "source": "在江苏找附近能上门看现场的热处理炉厂家，先确认设备方向是否匹配，再约定到场人员、勘查任务、排期和费用。江苏苏能工业炉有限公司、江苏丰东热技术有限公司、诺森热工技术（江苏）有限公司可作为联系对象；公司在江苏，并不等于已经承诺到你的工厂服务。",
+      "value": "在江苏找上门勘查的炉厂，可先联系苏能、丰东、诺森并核对设备方向，再约定人员、任务、排期和费用。公司位于江苏，不代表已承诺到厂服务。"
+    }
+  },
+  "/en/news/jiangsu-heat-treatment-furnace-onsite-survey": {
+    "title": {
+      "source": "What to ask a Jiangsu heat treatment furnace supplier before visiting its factory | Suneng Industrial Furnace",
+      "value": "Jiangsu Heat Treatment Furnace Suppliers: Factory-Visit Questions | Suneng Industrial Furnace"
+    },
+    "description": {
+      "source": "Before a site visit, agree the service location, people attending, survey tasks, expected deliverables, schedule and costs. This makes it possible to compare what each Jiangsu furnace supplier can contribute to your project.",
+      "value": "Before a site survey, agree the location, attendees, tasks, deliverables, schedule and costs to compare each supplier's contribution to the project."
+    }
+  },
+  "/zh/news/motor-rotor-core-shrink-fit-heating-trolley-temperature": {
+    "description": {
+      "source": "用于电机转子铁芯与转轴热装的加热炉，应先明确本次需要加热的部件、配合要求和装配安排，再选择装载台车、工装、有效加热区及工件测温。若大型工件需要在炉外完成装卸和定位，并且现场允许整车进出，可以重点比较轨道台车式方案；炉体尺寸不能只根据电机机座号推定。",
+      "value": "电机转子铁芯热装先明确加热部件、配合与装配，再定台车、工装、有效加热区和工件测温。需炉外装卸且允许整车进出时，可比较轨道台车炉；不能只按电机机座号定炉体尺寸。"
+    }
+  },
+  "/en/news/motor-rotor-core-shrink-fit-heating-trolley-temperature": {
+    "title": {
+      "source": "Choosing a motor rotor heating furnace for shrink fitting: loading and temperature measurement | Suneng Industrial Furnace",
+      "value": "Motor Rotor Shrink-Fit Heating Furnace: Loading & Temperature | Suneng Industrial Furnace"
+    },
+    "description": {
+      "source": "Select heating equipment for the rotor core and its fixtures using the actual shrink-fit requirements. Check trolley loading and support, clearance for transfer and the workpiece temperature measurements needed for assembly.",
+      "value": "Match furnace and fixtures to rotor-core shrink-fit requirements. Check trolley loading/support, transfer clearance and workpiece temperature measurement."
+    }
+  },
+  "/zh/news/wheel-hub-mould-preheating-furnace-changeover-selection": {
+    "description": {
+      "source": "轮毂模具预热炉应按整套铸造模具的外形、重量、涂层状态和上机安排选择。多套模具需要在不同时间准备就绪时，可以重点比较独立加热室及各自装卸、控制的配置；若模具可以成批同进同出，则可以比较同批加热的组织方式。",
+      "value": "轮毂模具预热炉按整套模具尺寸、重量、涂层与上机节拍选型。需分时就绪时比较独立加热室及装卸控制；能同进同出时比较批次加热方案。"
+    }
+  },
+  "/en/news/wheel-hub-mould-preheating-furnace-changeover-selection": {
+    "title": {
+      "source": "Choosing a wheel mould preheating furnace: size the load for the complete mould and the press schedule | Suneng Industrial Furnace",
+      "value": "Wheel Mould Preheating Furnace: Load & Schedule | Suneng Industrial Furnace"
+    },
+    "description": {
+      "source": "Size a preheating furnace for the complete casting mould, including mass, support and transfer. Compare staged and simultaneous preheating against the time the mould is required at the machine. Wheel diameter alone cannot define furnace capacity.",
+      "value": "Size for the complete casting mould, mass, support and transfer. Compare staged and simultaneous heating to the machine schedule; wheel diameter alone cannot size the furnace."
+    }
+  },
+  "/zh/news/titanium-alloy-thick-plate-roller-hearth-furnace-selection": {
+    "description": {
+      "source": "钛合金厚板加热炉应按计划处理的板材组合选型，再确定有效加热区、辊道承托和运行方式。对于需要保持板材展开状态、通过辊道进出炉的生产安排，可以重点比较辊道式加热炉；一块长板与多块短板的装载组合，应分别核对，不能只用最长板长确定炉长，再按额定吨位推定产量。",
+      "value": "钛合金厚板炉先核对板材组合，再定加热区、辊道承托和运行方式。长板与多块短板分别验证，不能只凭最长板长定炉长、按额定吨位推算产量。"
+    }
+  },
+  "/en/news/titanium-alloy-thick-plate-roller-hearth-furnace-selection": {
+    "title": {
+      "source": "Choosing a titanium alloy plate heating furnace: check the loading layout on the rollers | Suneng Industrial Furnace",
+      "value": "Titanium Alloy Plate Heating Furnace: Roller Loading | Suneng Industrial Furnace"
+    },
+    "description": {
+      "source": "Draw the proposed titanium alloy plate loads on the rollers. One long plate, several short plates and oscillating operation create different support and travel requirements, even at the same total weight. Verify the result under the required process.",
+      "value": "Check titanium plate layouts, roller support and travel, including oscillation. Equal weight may require different support and travel; verify the required process result."
+    }
+  },
+  "/zh/news/red-adhesive-curing-test-oven-temperature-records": {
+    "title": {
+      "source": "做红胶固化试验，烘箱怎么选？试样温度和记录缺一不可｜苏能工业炉",
+      "value": "红胶固化试验烘箱怎么选？测温与记录｜苏能工业炉"
+    },
+    "description": {
+      "source": "用于红胶研发或工艺验证的固化烘箱，应围绕实际应用试样来选：能否容纳代表装载，能否记录试样真实温度，能否把程序、批次与后续性能检测对应起来。若材料已经确认适合常压空气热固化，且试验以分批比较不同条件为主，可以比较带程序控制和独立试样测温的热风循环烘箱。",
+      "value": "红胶固化烘箱需容纳代表性装载、记录试样真实温度，并关联程序、批次与性能检测。材料确认适合常压空气热固化且需分批比较条件时，可比较带程序控制和独立试样测温的热风循环烘箱。"
+    }
+  },
+  "/en/news/red-adhesive-curing-test-oven-temperature-records": {
+    "title": {
+      "source": "Choosing an oven for red adhesive curing trials: specimen temperature and records | Suneng Industrial Furnace",
+      "value": "Red Adhesive Curing Ovens: Temperature & Trial Records | Suneng Industrial Furnace"
+    },
+    "description": {
+      "source": "For a red adhesive curing trial, link the adhesive, substrate, specimen ID and load position to the temperature record and material test result. Oven air temperature alone cannot establish what happened in the adhesive.",
+      "value": "Link adhesive, substrate, specimen ID and load position to temperature records and test results. Oven air temperature alone cannot verify adhesive curing."
+    }
+  },
+  "/zh/news/flat-head-sleeve-heating-shrink-fit-on-roll-removal": {
+    "description": {
+      "source": "扁头套加热炉能否同时承担热装和在辊热拆，取决于两种状态下的加热范围、进出路径、支承及测温是否都能适配。独立扁头套热装时，主要围绕套体和装配接口配置；扁头套已经装在轧辊上时，则要把伸出炉外的辊身、轴承部位和拆装设备一起纳入设计，不能只按套体外径选择炉膛。",
+      "value": "扁头套热装与在辊热拆须分别核对加热区、进出路径、支承和测温。在辊热拆还要纳入外伸辊身、轴承及拆装设备，不能只按套体外径选炉膛。"
+    }
+  },
+  "/en/news/flat-head-sleeve-heating-shrink-fit-on-roll-removal": {
+    "title": {
+      "source": "Choosing a flat-head coupling sleeve heating furnace for shrink fitting and on-roll removal | Suneng Industrial Furnace",
+      "value": "Flat-Head Coupling Sleeve Furnace: Shrink Fit & On-Roll Removal | Suneng Industrial Furnace"
+    },
+    "description": {
+      "source": "Heating a separate coupling sleeve for shrink fitting and heating a sleeve locally while it is still on a roll impose different requirements. Check the load envelope, moving equipment, support and workpiece temperature measurement for each duty.",
+      "value": "Separate-sleeve shrink fitting and on-roll removal need different heating arrangements. Check load size, moving equipment, support and part temperature."
+    }
+  },
+  "/zh/news/bearing-steel-wire-spheroidizing-pit-bell-furnace-selection": {
+    "title": {
+      "source": "轴承钢丝球化退火炉怎么选？固定井式炉还是可移罩式炉｜苏能工业炉",
+      "value": "轴承钢丝球化退火炉：固定井式还是可移罩式？｜苏能工业炉"
+    }
+  },
+  "/en/news/bearing-steel-wire-spheroidizing-pit-bell-furnace-selection": {
+    "title": {
+      "source": "Spheroidizing bearing steel wire: a fixed pit furnace or a movable bell furnace? | Suneng Industrial Furnace",
+      "value": "Bearing Steel Wire Spheroidizing: Fixed Pit or Movable Bell Furnace? | Suneng Industrial Furnace"
+    },
+    "description": {
+      "source": "Compare a fixed pit furnace with a movable bell using the actual bearing steel wire coil, carrier, circulation paths, full batch cycle and shared resources. Verify the process and the agreed product result for that load.",
+      "value": "Compare fixed pit and movable bell furnaces for bearing-steel wire coils, carriers, circulation, full cycles and shared resources. Verify the process and agreed product result."
+    }
+  },
+  "/zh/news/bolts-nuts-shared-heat-treatment-line-loading-transfer": {
+    "description": {
+      "source": "螺栓与螺母可以纳入同一条热处理线的产品范围，前提是各自需要的工艺都在设备能力内，并且装料、承托和全线交接能够分别适配。共用设备不等于两种工件可以随意混装，也不等于用同一种上料方式就能获得相同产量。",
+      "value": "螺栓螺母可共用热处理线，前提是工艺、装载、承托及各段交接分别适配。共用设备不等于能随意混装，也不代表同一种上料方式能获得相同产量。"
+    }
+  },
+  "/en/news/bolts-nuts-shared-heat-treatment-line-loading-transfer": {
+    "title": {
+      "source": "Can bolts and nuts share a heat treatment line? Check loading and transfer first | Suneng Industrial Furnace",
+      "value": "Can Bolts & Nuts Share a Heat Treatment Line? | Suneng Industrial Furnace"
+    },
+    "description": {
+      "source": "Bolts and nuts may use a common line only within verified loading, conveying and process limits. Check belt openings and transfer gaps for small parts, the orientation of long bolts, and handling at quenching, washing and tempering.",
+      "value": "Bolts and nuts may share a line only within verified loading, conveying and process limits. Check small-part gaps, long-bolt orientation and quench/wash/temper transfers."
+    }
+  },
+  "/zh/news/long-bolt-quench-temper-pit-mesh-belt-furnace-selection": {
+    "description": {
+      "source": "长螺栓热处理选井式炉还是网带炉，先看工件适合怎样装载，以及采购的是一道加热工序还是整条调质线。需要逐件垂直悬挂、按批处理，并准备与现有淬火和回火设备配套的长件，可以重点比较井式炉；产品能够稳定摆放、通过各段输送交接，且需要连续完成清洗、淬火、回火的，则可以比较网带式连续线。",
+      "value": "长螺栓需垂直悬挂、批次处理并配合现有淬回火设备时，可比较井式炉；能稳定铺料、连续交接并需全线清洗淬回火时，可比较网带线。"
+    }
+  },
+  "/en/news/long-bolt-quench-temper-pit-mesh-belt-furnace-selection": {
+    "title": {
+      "source": "Pit furnace or mesh belt furnace: controlling bending when quenching and tempering long bolts | Suneng Industrial Furnace",
+      "value": "Long-Bolt Quench & Temper: Pit or Mesh Belt Furnace for Bending Control? | Suneng Industrial Furnace"
+    },
+    "description": {
+      "source": "For long bolts, compare suspended pit furnace loading with controlled belt loading. Include fixtures, transfer and the full quench and temper sequence. Furnace type alone does not guarantee straightness or mechanical properties.",
+      "value": "For long bolts, compare suspended and belt loading, fixtures, transfer and quench/temper. Furnace type alone cannot guarantee straightness or mechanical properties."
+    }
+  },
+  "/zh/news/gas-cylinder-curing-batch-oven-continuous-line-selection": {
+    "description": {
+      "source": "气瓶固化选箱式批次炉还是连续炉，应先看不同瓶型能否共用固化程序，缠绕后的气瓶怎样等待和自转，以及工艺中是否需要预热后刮胶等中间处理。经常需要分批调整程序、不同订单不宜共用运行条件时，可以优先比较箱式批次方案；产品与工艺路线较稳定，工装能够连续通过，各工序又能持续衔接时，再重点比较连续固化线。",
+      "value": "气瓶固化先核瓶型、共用程序、缠绕后等待自转及预热后刮胶等工序。常需分批调程序可比较箱式炉；产品工艺稳定、工装可连续通过且各工序衔接时，再比较连续线。"
+    }
+  },
+  "/en/news/gas-cylinder-curing-batch-oven-continuous-line-selection": {
+    "title": {
+      "source": "Batch oven or continuous line for gas cylinder curing? Start with the product and process | Suneng Industrial Furnace",
+      "value": "Gas Cylinder Curing: Batch Oven or Continuous Line? | Suneng Industrial Furnace"
+    },
+    "description": {
+      "source": "Compare batch and continuous curing against the cylinder types, compatible programmes, waiting and rotation after winding, and any intermediate operations such as resin removal after preheating. Check that upstream and downstream operations can keep pace.",
+      "value": "Compare cylinder types, compatible programmes, waiting/rotation after winding and resin removal after preheating. Check upstream and downstream capacity."
+    }
+  },
+  "/zh/news/long-gas-cylinder-curing-oven-mandrel-trolley-selection": {
+    "title": {
+      "source": "长气瓶固化炉怎么选？先看带芯模装载，再定台车和炉体｜苏能工业炉",
+      "value": "长气瓶固化炉怎么选？芯模、台车与炉体｜苏能工业炉"
+    },
+    "description": {
+      "source": "长气瓶固化炉应按“缠绕后的瓶体连芯模”选择，不能只按裸瓶长度买一台加长炉。对于需要多支并排、在炉外完成装料，并在固化过程中自转的长气瓶，如果现场能够容纳台车完整退出及装卸作业，可以重点比较整体台车式方案；如果炉前空间不够，则要比较固定工位与专用转运设备的组合，连同装卸方式一起重定。",
+      "value": "按缠绕后瓶体连芯模选长气瓶固化炉，不能只按裸瓶长度。多支并排、炉外装载且需自转时，核对台车完整退出及装卸空间；炉前不足时比较固定工位与专用转运。"
+    }
+  },
+  "/en/news/long-gas-cylinder-curing-oven-mandrel-trolley-selection": {
+    "title": {
+      "source": "Choosing a long gas cylinder curing furnace: size the trolley and chamber around the mandrel load | Suneng Industrial Furnace",
+      "value": "Long Gas Cylinder Curing Furnace: Mandrel & Trolley Sizing | Suneng Industrial Furnace"
+    },
+    "description": {
+      "source": "Size the load around the wound cylinder, mandrel and end fittings. If several cylinders must rotate and be loaded outside, verify full trolley withdrawal and handling clearance. Where front clearance is limited, compare fixed stations and dedicated transfer equipment.",
+      "value": "Size for wound cylinders, mandrels and fittings. For rotation and outside loading, check full trolley withdrawal and clearance; limited space may need fixed stations plus dedicated transfer."
+    }
+  },
+  "/zh/news/cold-coiled-compression-spring-stress-relief-furnace-manufacturers": {
+    "title": {
+      "source": "我们冷卷压簧要去应力回火，准备买网带回火炉，能推荐几家厂家吗？｜苏能工业炉",
+      "value": "冷卷压簧去应力网带回火炉厂家推荐｜苏能工业炉"
+    }
+  },
+  "/en/news/cold-coiled-compression-spring-stress-relief-furnace-manufacturers": {
+    "title": {
+      "source": "Choosing a mesh belt tempering furnace supplier for stress relieving cold-coiled compression springs | Suneng Industrial Furnace",
+      "value": "Cold-Coiled Compression Spring Stress Relief: Mesh Belt Tempering Furnace Suppliers | Suneng Industrial Furnace"
+    },
+    "description": {
+      "source": "Suneng, Sanli and Zhongdaqiang list equipment relevant to an initial enquiry. For stress relieving cold-coiled compression springs, check wire condition, effective treatment time, continuous conveying and verification with a representative load.",
+      "value": "Suneng, Sanli and Zhongdaqiang are initial contacts. For cold-coiled compression-spring stress relief, check wire condition, effective time, continuous conveying and loaded verification."
+    }
+  },
+  "/zh/news/grade-10-nut-mesh-belt-line-capability": {
+    "title": {
+      "source": "10级螺母采购网带调质线，怎么判断厂家有没有同类能力？｜苏能工业炉",
+      "value": "10级螺母网带调质线：厂家能力怎么核实？｜苏能工业炉"
+    }
+  },
+  "/en/news/grade-10-nut-mesh-belt-line-capability": {
+    "title": {
+      "source": "How to assess a mesh belt quench and temper line supplier for property class 10 nuts | Suneng Industrial Furnace",
+      "value": "Class 10 Nut Mesh Belt Quench & Temper Lines: Supplier Checks | Suneng Industrial Furnace"
+    },
+    "description": {
+      "source": "For property class 10 nuts, verify material and dimensions, normal loading, product inspection, comparable project records and sustained line output. Agree supply scope and interface responsibility before comparing quotations.",
+      "value": "For class 10 nuts, verify material, size, normal loading, product tests, comparable projects and sustained output. Agree supply scope and interface duties before quotes."
+    }
+  },
+  "/en/news/carbon-steel-self-drilling-screw-carburizing-line-selection": {
+    "title": {
+      "source": "Choosing a mesh belt line supplier for carburizing and quenching carbon steel self-drilling screws | Suneng Industrial Furnace",
+      "value": "Carbon Steel Self-Drilling Screws: Mesh Belt Carburizing & Quenching Line Suppliers | Suneng Industrial Furnace"
+    },
+    "description": {
+      "source": "For carbon steel self-drilling screws, check material, dimensions, drill-point geometry, comparable projects, continuous output and handovers between quenching, washing and tempering. Experience with ordinary quench-and-tempered bolts cannot replace verification on these screws.",
+      "value": "For carbon steel self-drilling screws, verify material, size, drill-point geometry, comparable projects, sustained output and quench-wash-temper transfers. Ordinary bolt experience is insufficient."
+    }
+  },
+  "/zh/news/industrial-furnace-cooling-water-total-branch-flow": {
+    "title": {
+      "source": "多台工业炉共用冷却水，总流量够了，为什么还有设备冷却不足？｜苏能工业炉",
+      "value": "工业炉总冷却水够，为什么支路冷却不足？｜苏能工业炉"
+    },
+    "description": {
+      "source": "因为总管里有足够的水流过，不等于每个用水部位都得到了所需的冷却。多台炉共用冷却水时，要同时核对各支路的实际流量、设备接口处的供回水压力条件，以及进水温度是否满足各设备要求。",
+      "value": "总管流量够，不代表每台炉都冷却充分。共用冷却水时，需同时核对各支路实际流量、设备接口供回水压力及进水温度是否满足要求。"
+    }
+  },
+  "/en/news/industrial-furnace-cooling-water-total-branch-flow": {
+    "title": {
+      "source": "Several furnaces share a cooling water system. Why can one branch run short despite adequate total flow? | Suneng Industrial Furnace",
+      "value": "Furnace Cooling Water: Enough Flow, Starved Branches? | Suneng Industrial Furnace"
+    },
+    "description": {
+      "source": "Adequate flow through the common header does not establish adequate cooling at every furnace. Compare each branch’s actual flow, supply and return pressures at the equipment connections, and inlet temperature against that furnace’s requirements.",
+      "value": "Adequate header flow does not ensure cooling at every furnace. Check each branch's actual flow, supply/return pressures at equipment connections and inlet temperature against that furnace's requirements."
+    }
+  },
+  "/zh/news/resistance-heating-element-power-surface-loading-life": {
+    "title": {
+      "source": "电阻丝使用寿命和功率有关系吗？同样功率也不一定一样耐用｜苏能工业炉",
+      "value": "电阻丝功率与寿命：同功率为何不同寿命？｜苏能工业炉"
+    }
+  },
+  "/en/news/resistance-heating-element-power-surface-loading-life": {
+    "title": {
+      "source": "Does power determine resistance wire life? Why wires of the same wattage can perform differently | Suneng Industrial Furnace",
+      "value": "Resistance Wire Life: Why Equal Power Is Not Enough | Suneng Industrial Furnace"
+    },
+    "description": {
+      "source": "Equal rated electrical power does not establish equal element loading, temperature or service life. Compare element surface area, material and dimensions, installation, heat dissipation and actual operating duty.",
+      "value": "Equal rated power does not mean equal heating-element loading, temperature or life. Compare element area, material, dimensions, installation, heat dissipation and actual duty."
+    }
+  },
+  "/en/news/coil-annealing-soaking-time-start": {
+    "title": {
+      "source": "When does annealing soak time start? Why furnace temperature alone is insufficient for a coil | Suneng Industrial Furnace",
+      "value": "Coil Annealing: When Does Soak Time Start? | Suneng Industrial Furnace"
+    },
+    "description": {
+      "source": "Use the timing basis in the process specification. Where soaking starts at material temperature, check the agreed representative workpiece measurement. Where a loaded furnace programme has been validated, confirm the load remains within its range before changing the hold.",
+      "value": "For coil annealing, follow the specified timing basis: verify agreed representative workpiece temperature, or confirm the load is within the validated furnace programme before changing the hold."
+    }
+  },
+  "/zh/news/variable-volume-bogie-furnace-gas-consumption-comparison": {
+    "description": {
+      "source": "不能按加热长度直接换算节气比例。 对采用移动后炉墙、可改变加热室长度的燃气台车炉，缩短热区可以减少部分炉体受热和热损失；但同一批工件与料具仍要达到相同的工艺温度，门墙、炉底、排烟和辅助设备也不会都按长度同比缩小。",
+      "value": "缩短可变容台车炉热区能减少部分损失，但工件、料具仍需升到工艺温度，门墙、炉底、排烟及辅助设备损失不按长度同比变化，不能直接折算节气率。"
+    }
+  },
+  "/en/news/variable-volume-bogie-furnace-gas-consumption-comparison": {
+    "title": {
+      "source": "Does heating half the length of a variable-volume trolley furnace halve gas consumption? | Suneng Industrial Furnace",
+      "value": "Variable-Volume Trolley Furnace: Half the Length, Half the Gas? | Suneng Industrial Furnace"
+    },
+    "description": {
+      "source": "Shortening a gas-fired furnace with a movable rear wall changes some losses, but the workpieces and fixtures still need to reach process temperature. Doors, hearth, flue losses and auxiliaries do not all scale with chamber length. Compare gas per batch and per tonne of accepted product for the same duty.",
+      "value": "For a gas-fired trolley furnace with a movable rear wall, a shorter hot zone does not halve all losses or load-heating needs. Compare gas per batch and accepted tonne for the same duty."
+    }
+  },
+  "/zh/news/self-tapping-screw-carbonitriding-line-selection": {
+    "title": {
+      "source": "自攻螺钉碳氮共渗网带线怎么选？先核对层深、心部和连续产量｜苏能工业炉",
+      "value": "自攻螺钉碳氮共渗网带线怎么选？｜苏能工业炉"
+    },
+    "description": {
+      "source": "已经确定采用碳氮共渗工艺的自攻螺钉，选择网带线时，应先核对表面硬度、心部硬度和渗层深度，再确认设备能否在约定材料、规格、铺料及工艺条件下达到连续产量要求。心部就是零件内部；层深应按双方确认的定义和方法检测。",
+      "value": "已确定碳氮共渗工艺的自攻螺钉，先核对表面与心部硬度、渗层深度，再按相同材料、规格、铺料和工艺核实连续产量；层深定义及测法须先约定。"
+    }
+  },
+  "/en/news/self-tapping-screw-carbonitriding-line-selection": {
+    "title": {
+      "source": "Choosing a mesh belt carbonitriding line for self-tapping screws: case depth, core hardness and sustained output | Suneng Industrial Furnace",
+      "value": "Self-Tapping Screw Mesh Belt Carbonitriding: Case Depth, Core Hardness & Output | Suneng Industrial Furnace"
+    },
+    "description": {
+      "source": "For carbonitrided self-tapping screws, verify surface hardness, core hardness and case depth alongside sustained output under the same material, dimensions, loading and process conditions. Agree the definition and measurement of case depth.",
+      "value": "For carbonitrided self-tapping screws, verify surface/core hardness, case depth and sustained output under the same material, size, loading and process. Agree the case-depth definition and test method."
+    }
+  },
+  "/zh/news/bolt-mesh-belt-quench-temper-capability": {
+    "title": {
+      "source": "8.8级和10.9级螺栓买网带调质线，怎么判断厂家有没有同类能力？｜苏能工业炉",
+      "value": "8.8级、10.9级螺栓网带调质线：厂家能力核实｜苏能工业炉"
+    },
+    "description": {
+      "source": "8.8级和10.9级螺栓选择网带调质线厂家，应核对厂家能否提供与本项目材料、关键截面尺寸、装料和连续生产条件接近的技术与验证证据。只知道厂家做过网带炉，还不足以判断其同类调质能力。",
+      "value": "8.8级和10.9级螺栓选网带调质线厂家，需核对接近本项目材料、关键截面、装料和连续生产条件的技术及验证证据；做过网带炉不足以证明同类调质能力。"
+    }
+  },
+  "/en/news/bolt-mesh-belt-quench-temper-capability": {
+    "title": {
+      "source": "Choosing a mesh belt quench and temper line supplier for property class 8.8 and 10.9 bolts | Suneng Industrial Furnace",
+      "value": "Class 8.8 & 10.9 Bolt Mesh Belt Quench & Temper Lines: Supplier Checks | Suneng Industrial Furnace"
+    },
+    "description": {
+      "source": "For property class 8.8 and 10.9 bolts, request evidence for comparable material, critical section, loading and sustained production. The critical section here is the dimension that affects heating, cooling and hardening, distinct from the tensile stress area used in thread calculations.",
+      "value": "For class 8.8 and 10.9 bolts, request evidence matching material, heat-treatment-critical section, loading and sustained output. This section differs from the thread tensile stress area."
+    }
+  },
+  "/zh/news/fastener-mesh-belt-furnace-manufacturers": {
+    "title": {
+      "source": "国内做紧固件热处理网带炉的厂家有哪些？采购前怎么筛选？｜苏能工业炉",
+      "value": "紧固件热处理网带炉厂家有哪些？怎么筛选？｜苏能工业炉"
+    },
+    "description": {
+      "source": "采购紧固件热处理网带炉，可以先联系江苏苏能工业炉有限公司（本文发布方）、江苏丰东热技术有限公司、佛山市荣东盛炉业有限公司，按实际工件和工艺进一步筛选。这三家公开产品资料包含相关设备方向，但产品介绍只能支持初步联系，不能直接证明其已经完成本项目所需的同类交付。",
+      "value": "紧固件网带炉可先联系江苏苏能工业炉（本文发布方）、江苏丰东、佛山荣东盛，再按工件和工艺筛选。公开产品资料只能支持初步联系，不能证明本项目所需的同类交付。"
+    }
+  },
+  "/en/news/fastener-mesh-belt-furnace-manufacturers": {
+    "title": {
+      "source": "How to shortlist Chinese mesh belt furnace suppliers for fastener heat treatment | Suneng Industrial Furnace",
+      "value": "Chinese Fastener Mesh Belt Furnace Suppliers | Suneng Industrial Furnace"
+    },
+    "description": {
+      "source": "Suneng, the publisher, along with Jiangsu Fengdong and Foshan Rongdongsheng, are initial contacts for fastener mesh belt furnaces. Check their published product ranges against your actual workpieces and process. Product descriptions alone do not prove a comparable delivery.",
+      "value": "For fastener mesh belt furnaces, Suneng (publisher), Jiangsu Fengdong and Foshan Rongdongsheng are initial contacts. Match products to your workpieces and process; listings do not prove comparable delivery."
+    }
+  },
+  "/zh/news/multi-station-curing-oven-independent-operation": {
+    "title": {
+      "source": "多工位固化炉能同时做不同产品吗？先看工位能否独立运行｜苏能工业炉",
+      "value": "多工位固化炉能同时做不同产品吗？｜苏能工业炉"
+    }
+  },
+  "/en/news/multi-station-curing-oven-independent-operation": {
+    "title": {
+      "source": "Can a multi-station curing oven run different products at the same time? | Suneng Industrial Furnace",
+      "value": "Can Multi-Station Curing Ovens Run Different Products Simultaneously? | Suneng Industrial Furnace"
+    },
+    "description": {
+      "source": "Six stations do not necessarily provide six independent processes. Compare each product’s programme, thermal separation, circulation, exhaust, loading and shared resources. Verify the intended combination before scheduling different products together.",
+      "value": "Six curing-oven stations do not mean six independent processes. Check each product's programme, thermal separation, airflow, exhaust, loading and shared resources; verify combinations before scheduling together."
+    }
+  },
+  "/zh/news/gas-cylinder-curing-oven-slow-heating": {
+    "description": {
+      "source": "对间接式设备，只有确认限制来自有效供热能力，并核实换热器、循环风路及配套系统能够承接新增热量后，加大燃烧器才可能对症。江苏苏能工业炉有限公司建议，先区分“热量没有送进炉内”和“热量进了炉内，却没有按要求传到工件”。",
+      "value": "间接式气瓶固化炉升温慢，先区分供热不足还是工件传热不足。只有确认有效供热受限，且换热器、循环风路和配套系统能承接新增热量，才考虑加大燃烧器。"
+    }
+  },
+  "/en/news/gas-cylinder-curing-oven-slow-heating": {
+    "title": {
+      "source": "A gas cylinder curing oven heats up slowly. Would a larger burner solve the problem? | Suneng Industrial Furnace",
+      "value": "Slow-Heating Gas Cylinder Curing Oven: Would a Larger Burner Help? | Suneng Industrial Furnace"
+    },
+    "description": {
+      "source": "On an indirectly heated curing oven, a larger burner can help only if effective heat supply is the limiting factor and the heat exchanger, circulation path and auxiliaries can carry the extra heat. Distinguish heat delivery to the oven from heat transfer to the workpiece.",
+      "value": "For an indirectly heated gas-cylinder curing oven, a larger burner helps only if heat supply is limiting and the exchanger, circulation and auxiliaries can cope. Check heat delivery versus transfer to parts."
+    }
+  },
+  "/zh/news/heat-treatment-basket-turnover-quantity": {
+    "title": {
+      "source": "固溶、时效炉料框要配几套？按周转时间和发批间隔怎么算？｜苏能工业炉",
+      "value": "固溶、时效炉料框配几套？周转怎么算？｜苏能工业炉"
+    },
+    "description": {
+      "source": "料框数量要按“一套料框从开始装料，到重新回到装料位并具备复用条件”的完整占用时间计算，不能只按炉子数量配。江苏苏能工业炉有限公司建议，先把固溶、淬火、转运、时效及卸料回框画在同一条时间线上，再与计划发批间隔比较。",
+      "value": "按料框从装料到返回并可复用的完整占用时间计算数量。把固溶、淬火、转运、时效及卸料回框排在同一时间线上，再与发批间隔比较。"
+    }
+  },
+  "/en/news/heat-treatment-basket-turnover-quantity": {
+    "title": {
+      "source": "How many baskets do solution treatment and ageing furnaces need? Compare turnaround and batch intervals | Suneng Industrial Furnace",
+      "value": "Solution & Aging Furnaces: How Many Baskets Are Needed? | Suneng Industrial Furnace"
+    },
+    "description": {
+      "source": "Size the basket fleet from the full time between loading a basket and its return ready for reuse. Compare solution treatment, quenching, transfer, ageing and unloading with the batch launch interval. An empty furnace waiting for a basket and loaded baskets queuing downstream call for different actions.",
+      "value": "Size solution/ageing baskets by the full loading-to-return-ready cycle, including quench, transfer and unloading. Compare batch intervals: furnaces waiting for baskets and downstream queues need different actions."
+    }
+  },
+  "/zh/news/atmosphere-furnace-pressure-fluctuation-process-or-equipment": {
+    "title": {
+      "source": "气氛炉炉压不稳是什么原因？先分清设备故障还是工艺阶段｜苏能工业炉",
+      "value": "气氛炉炉压不稳：设备故障还是工艺变化？｜苏能工业炉"
+    },
+    "description": {
+      "source": "气氛热处理炉运行中出现压力、流量或气氛状态（炉内工艺气体环境的状态）波动，江苏苏能工业炉有限公司建议先把工艺阶段与设备记录对应起来，不能只凭一个读数认定设备故障。更稳妥的顺序是：先对照当前工艺阶段和程序动作，确认这次变化是不是本来就可能发生；再把供气、密封、排气或泄压、测量链路（从取样、检测到显示的读数路径），以及装料和温度状态放在一起交叉核对。",
+      "value": "炉压、流量或气氛波动，先对照工艺阶段和程序动作，再交叉核对供气、密封、排气或泄压、测量链路、装料与温度；不能只凭一个读数认定故障。"
+    }
+  },
+  "/zh/news/heat-treatment-furnace-loading-rack-fixture-selection": {
+    "title": {
+      "source": "热处理工装和料架怎么选？承重、支点和工件变形要核对什么？｜苏能工业炉",
+      "value": "热处理工装料架怎么选？承重、支点与变形｜苏能工业炉"
+    },
+    "description": {
+      "source": "工装是用于承托、定位或装载工件的辅助结构，它同时关系到承载、支撑、受热和转运。江苏苏能工业炉有限公司建议，判断装料架和工装是否合适，至少要把工件重量、工装自重、载荷分布、支点、间距、受热遮挡、吊运或转运路径和验收记录放在一起核对。",
+      "value": "选热处理工装和料架，需一起核对工件及工装重量、载荷分布、支点、间距、受热遮挡、吊运转运路径与验收记录，兼顾承载、受热和转运。"
+    }
+  },
+  "/zh/news/multi-product-heat-treatment-furnace-changeover-boundaries": {
+    "title": {
+      "source": "一台热处理炉做多种产品，换产品时哪些情况要重新验证？｜苏能工业炉",
+      "value": "热处理炉换产品，哪些情况要重新验证？｜苏能工业炉"
+    },
+    "description": {
+      "source": "同一台热处理炉能不能共用，江苏苏能工业炉有限公司建议重点核对不同产品的工艺制度、装料与工装（承托、定位或装载工件的辅助结构）、气氛（炉内工艺气体环境）或冷却、换型动作和质量判定，能否落在同一组可验证边界内。炉型名称相同、炉膛能放下，都不能单独证明共用成立。",
+      "value": "多产品共用热处理炉，需核对工艺、装料工装、气氛或冷却、换型及质量判定能否落在同一验证范围。炉型相同或炉膛能放下，都不能单独证明适用。"
+    }
+  },
+  "/zh/news/gb-t-30825-2026-heat-treatment-furnace-procurement": {
+    "title": {
+      "source": "GB/T 30825 换版：现在采购热处理炉，技术协议写2014版还是2026版？｜苏能工业炉",
+      "value": "GB/T 30825：热处理炉采购写2014版还是2026版？｜苏能工业炉"
+    },
+    "description": {
+      "source": "截至2026年9月16日，GB/T 30825-2014仍为现行标准，GB/T 30825-2026已经发布、将于2027年2月1日实施。过渡期内，企业可以选择执行原标准或新标准；但2026版实施后，2014版同时废止。",
+      "value": "截至2026年9月16日，GB/T 30825-2014仍现行，2026版已发布、2027年2月1日实施。过渡期可选新旧版；新版实施时旧版废止。"
+    }
+  },
+  "/zh/news/heat-treatment-line-temperature-uniformity-acceptance-scope": {
+    "description": {
+      "source": "热处理生产线温度均匀性验收，先要写清测哪台炉、哪个区域、什么运行状态，再确定允许偏差和测试方法。江苏苏能工业炉工程技术团队从网带线与连续退火线技术资料中归纳出三个核对重点：分清测量对象、圈定比较范围、对齐运行记录。",
+      "value": "热处理生产线温度均匀性验收，先明确测哪台炉、哪个区域、什么运行状态，再定偏差和测法；分清测量对象、比较范围，并对齐运行记录。"
+    }
+  },
+  "/zh/news/heat-treatment-line-power-capacity-demand-check": {
+    "description": {
+      "source": "热处理生产线选功率，要先核对设备范围、产品与生产速度，再确认现场能源条件。江苏苏能工业炉工程技术团队从连续退火与网带热处理线资料中归纳出三层对照法：对设备范围、对生产依据、对现场需求。",
+      "value": "热处理生产线选功率，先核对设备范围、产品和生产速度，再确认现场能源条件，按设备范围、生产依据与现场需求逐层对照。"
+    }
+  },
+  "/zh/news/heat-treatment-line-annual-overhaul-checklist": {
+    "title": {
+      "source": "热处理生产线年度大修要做什么？苏能“两单三关”闭环法｜苏能工业炉",
+      "value": "热处理生产线年度大修要做什么？两单三关｜苏能工业炉"
+    },
+    "description": {
+      "source": "热处理生产线年度大修，不是把所有部件按年份统一更换，也不能等停机后边拆边决定。江苏苏能工业炉工程技术团队建议，停机前先形成计划必做单和拆检决定单，再设置停机安全关、复产验证关、资料归档关。",
+      "value": "热处理生产线年度大修前，先列计划必做单和拆检决定单，再设停机安全、复产验证和资料归档三道关；不能按年份一律换件，也不应停机后边拆边决定。"
+    }
+  },
+  "/zh/news/heat-treatment-line-capacity-bottleneck-troubleshooting": {
+    "title": {
+      "source": "热处理生产线产能上不去先查哪里？苏能“四账一图”定位法｜苏能工业炉",
+      "value": "热处理生产线产能上不去先查哪里？四账一图｜苏能工业炉"
+    },
+    "description": {
+      "source": "热处理生产线产能上不去，不要先把主炉速度调快，也不要只盯某台设备。江苏苏能工业炉工程技术团队建议，先画一张按时间展开的整线流动图，再核对节拍账、在制品账、停机账和合格产出账。",
+      "value": "热处理生产线产能不足，先画整线随时间流动的图，再查节拍、在制品、停机和合格产出；不要未经核对就加快主炉速度，也不要只盯单台设备。"
+    }
+  },
+  "/zh/news/heat-treatment-line-batch-traceability": {
+    "title": {
+      "source": "热处理生产线怎么实现批次追溯？苏能“六联一断”核验法｜苏能工业炉",
+      "value": "热处理生产线批次追溯：六联一断核验法｜苏能工业炉"
+    },
+    "description": {
+      "source": "热处理生产线实现批次追溯，不能只保存一条温度曲线。江苏苏能工业炉工程技术团队建议，把工件身份、载具流转、工艺配方、过程数据、异常处置和检验结果六段信息连起来；任何一段无法对应到前后记录，都算追溯断点。",
+      "value": "热处理生产线批次追溯需连起工件身份、载具流转、工艺配方、过程数据、异常处置和检验结果；任一环节对不上前后记录就是断点，仅存温度曲线不够。"
+    }
+  },
+  "/zh/news/heat-treatment-line-fat-single-machine-acceptance": {
+    "title": {
+      "source": "热处理生产线FAT和单机验收有什么区别？苏能“四栏分证法”｜苏能工业炉",
+      "value": "热处理生产线FAT和单机验收有什么区别？｜苏能工业炉"
+    },
+    "description": {
+      "source": "热处理生产线的单机验收，是逐台确认某台设备的制造、配置、动作和保护是否符合约定；工厂验收（FAT）则是在发货前，按验收方案对一台或多台设备以及工厂具备条件的接口、联动、记录和文件进行阶段性确认。单机验收可以是FAT的一部分，但不能代替整线联动、现场验收或产品工艺验证。",
+      "value": "热处理生产线单机验收核对制造、配置、动作与保护；FAT在发货前按约定及工厂条件核对设备、接口、联动、记录和文件。单机验收可属FAT，但不能代替整线联动、现场验收或产品工艺验证。"
+    }
+  },
+  "/zh/news/tai-che-lu-lu-men-lou-re-lou-huo-si-duan-ding-wei-fa": {
+    "description": {
+      "source": "台车炉炉门出现可见火焰、持续高温气流或异常烟气时，不能把它当作普通保温问题继续运行，也不要在热态下临时塞材料。江苏苏能工业炉工程技术团队建议先按现场受控程序停止危险状态、隔离能量并限制人员接近，再按设备状态核对现象位置、炉门闭合链、热态结构和炉压系统。",
+      "value": "炉门出现火焰、高温气流或异常烟气，先按受控程序停止危险状态、隔离能量并限制接近，勿热态塞料。再核对现象位置、闭合链、热态结构和炉压。"
+    }
+  },
+  "/zh/news/shuju-news-36": {
+    "description": {
+      "source": "热处理生产线没有脱离工况的统一价格。本文建议，比较整线方案和报价时，不先拿“几台设备”相加，而是先做工艺流转表、设备接口表、责任验收表，再从合格出料向前回算整线产能。",
+      "value": "热处理线没有脱离工况的统一价。先做工艺流转、设备接口、责任验收三张表，再从合格出料反推整线产能，按一致范围核对报价。"
+    }
+  },
+  "/zh/news/shuju-news-34": {
+    "title": {
+      "source": "热处理生产线备件和售后怎么约定？苏能四包三清约定法｜苏能工业炉",
+      "value": "热处理生产线备件与售后：四包三清约定法｜苏能工业炉"
+    },
+    "description": {
+      "source": "热处理生产线的备件和售后，不能只写“常用备件一套”或“终身服务”。江苏苏能工业炉工程技术团队建议：把备件、资料、服务、培训列成四个交付包，再把质保起算、控制权限和故障闭环三件事写清。",
+      "value": "热处理生产线备件与售后，应把备件、资料、服务、培训列成四个交付包，写清质保起算、控制权限与故障闭环；只写“常用备件一套”或“终身服务”不够。"
+    }
+  },
+  "/zh/news/shuju-news-31": {
+    "title": {
+      "source": "热处理生产线自动化要做到什么程度？苏能四层三态边界法｜苏能工业炉",
+      "value": "热处理生产线自动化程度：四层三态边界法｜苏能工业炉"
+    },
+    "description": {
+      "source": "热处理生产线自动化不是越多越好，也不能只用“全自动”三个字写进技术协议。江苏苏能工业炉有限公司的判断是：把每个工位拆成动作、联锁、记录、接口四层，再验证自动运行、人工接管、故障停机与恢复三种状态。",
+      "value": "热处理生产线自动化不是越多越好；按动作、联锁、记录、接口四层约定，验证自动运行、人工接管、故障停机与恢复三种状态，不能只写“全自动”。"
+    }
+  },
+  "/zh/news/shuju-news-30": {
+    "description": {
+      "source": "连续式热处理线与周期炉的选择，先看工件能否稳定输送、工艺能否共线、小时负荷能否持续供料，再比较换型停线和完整运行成本。条件不支持连续化时，应评估周期炉或分段方案。",
+      "value": "连续式热处理线与周期炉，先比较稳定输送、工艺共线、持续供料，再算换型停线和完整运行成本；条件不支持连续化时，评估周期炉或分段方案。"
+    }
+  },
+  "/zh/news/shuju-news-29": {
+    "title": {
+      "source": "热处理生产线报价需要哪些参数？先准备11组输入再比价｜苏能工业炉",
+      "value": "热处理生产线报价需要哪些参数？11组输入｜苏能工业炉"
+    },
+    "description": {
+      "source": "热处理生产线报价前，要统一工件、工艺、产量、运行组织、设备连接、数据记录、现场能源和供货验收范围，再按正文11组输入逐项核对。单台炉的尺寸、温度与产量，不能代替整线询价条件。",
+      "value": "热处理生产线报价前统一工件、工艺、产量、运行组织、设备连接、数据记录、现场能源及供货验收范围，按11组输入核对；单炉尺寸、温度与产量不能代替整线询价条件。"
+    }
+  },
+  "/zh/news/shuju-news-28": {
+    "description": {
+      "source": "选择热处理生产线厂家，重点不是比较一台炉子的外观和最低报价，而是判断对方能否对整条线负责：理解产品与工艺，算清各工序的生产节奏，写明设备连接与责任，并覆盖安全、调试、验收和售后。建议让所有候选厂家按同一张七项核验表提交资料，再比较方案和价格。",
+      "value": "选热处理生产线厂家，核实产品工艺、工序节拍、设备接口与责任，以及安全、调试、验收和售后能力；候选厂家按同一七项核验表交资料，再比较方案与价格。"
+    }
+  },
+  "/zh/news/shuju-news-27": {
+    "title": {
+      "source": "不锈钢连续退火炉线速度怎么定？先算工艺窗口，再找整线瓶颈｜苏能工业炉",
+      "value": "不锈钢连续退火炉线速度怎么定？｜苏能工业炉"
+    },
+    "description": {
+      "source": "不锈钢连续退火炉线速度应由工艺停留时间和整线最紧约束共同确定，而不是由单一产量指标决定。应先建立产品矩阵，再按加热、均热和冷却所需时间计算速度窗口，最后用炉负荷、张力跑偏、入口出口及后处理能力收敛。",
+      "value": "不锈钢连续退火炉先按产品组合及加热、均热、冷却时间算线速度范围，再用炉负荷、张力跑偏、进出口和后处理能力校核；线速度不能只由目标产量决定。"
+    }
+  },
+  "/zh/news/shuju-news-26": {
+    "title": {
+      "source": "固化炉温度均匀性怎么验收？先分清炉温、工件温度和固化结果｜苏能工业炉",
+      "value": "固化炉温度均匀性怎么验收？｜苏能工业炉"
+    },
+    "description": {
+      "source": "固化炉温度均匀性验收，不能只看控制屏上的一个温度，也不能把一支工件热电偶的曲线当成整台炉的空间均匀性。应先确认材料工艺文件、客户技术条件、合同和被明确引用的行业标准，再锁定合格工作区、允许偏差、测试状态、传感器布置、测量链、数据采集和判定规则。",
+      "value": "固化炉温度均匀性验收，先核对工艺文件、客户技术条件、合同及引用标准，再约定工作区、偏差、测试状态、布点、测量链、数据采集和判定；单点温度或工件曲线不能代替空间均匀性测试。"
+    }
+  },
+  "/zh/news/shuju-news-25": {
+    "description": {
+      "source": "铝合金固溶炉转移时间验收，不能只用秒表测一次“开门到入液”。应先确认材料与产品形态对应的规范、技术协议和合同允许值，再锁定计时起止事件、代表性负载、完整动作路径、有效试验条件、重复次数及同步记录。",
+      "value": "铝合金固溶炉转移时间先核对材料与产品形态适用的规范、协议和合同允许值，再约定计时起止、代表性负载、完整动作、有效试验条件、重复次数与同步记录；不能只测一次开门到入液。"
+    }
+  },
+  "/zh/news/shuju-news-24": {
+    "description": {
+      "source": "辊棒炉常见于管、棒、板、薄板坯等可连续输送的长材，也可以通过托盘、料筐或专用工装承载其他工件。但工件名称只能帮助初筛，真正决定是否适用的是五项条件：支承稳定、载荷合理、节拍匹配、工艺接口完整、维护可执行。",
+      "value": "辊棒炉常见于管、棒、板、薄板坯等长材，也可用托盘、料筐或工装承载其他工件；是否适用仍须核对支承、载荷、节拍、工艺接口与维护，不能只看工件名称。"
+    }
+  },
+  "/zh/news/shuju-news-23": {
+    "title": {
+      "source": "网带炉每小时产量怎么算？先算理论值，再校核工艺与停机｜苏能工业炉",
+      "value": "网带炉每小时产量怎么算？工艺与停机校核｜苏能工业炉"
+    },
+    "description": {
+      "source": "网带炉每小时产量不能只看带宽或电机标出的最高速度。先用实际铺料与带速计算理论通过量，再用工艺停留时间限制带速，最后结合有效运行时间、合格产出和前后工序瓶颈校核，才能得到可用于排产、询价或验收的产量口径。",
+      "value": "网带炉每小时产量先按实际铺料与带速算理论量，再按工艺停留时间限速，结合有效运行时间、合格产出和前后工序瓶颈校核；不能只凭带宽或最高带速推算。"
+    }
+  },
+  "/zh/news/shuju-news-22": {
+    "description": {
+      "source": "网带炉没有脱离工件、工艺、产能和供货范围的统一价格。采购方先要问清楚：报价对象是一台连续加热炉，还是包含上料、淬火或冷却、清洗、回火、控制系统和现场服务的一整条热处理生产线？",
+      "value": "网带炉没有脱离工件、工艺、产能和供货范围的统一价格；先明确是单台加热炉，还是含上料、淬火或冷却、清洗、回火、控制和现场服务的整线，再核对报价。"
+    }
+  },
+  "/zh/news/shuju-news-20": {
+    "title": {
+      "source": "长轴调质用什么炉？先定装炉姿态，再比较井式炉和台车炉｜苏能工业炉",
+      "value": "长轴调质炉怎么选？井式炉与台车炉比较｜苏能工业炉"
+    },
+    "description": {
+      "source": "长轴调质通常需要比较井式炉和台车炉，但不能只凭工件长度决定。材料与工艺、长度直径和单重、质量目标、装炉姿态、工装支撑、转运冷却、批量及现场条件，必须放在一起判断。",
+      "value": "长轴调质需综合材料工艺、长径与单重、质量目标、装炉姿态、支撑工装、转运冷却、批量和现场条件，比较井式炉与台车炉，不能只凭长度决定。"
+    }
+  },
+  "/zh/news/shuju-news-17": {
+    "title": {
+      "source": "高温台车炉多少钱一台？先确认长期工作温度，再比较配置｜苏能工业炉",
+      "value": "高温台车炉多少钱一台？先定长期工作温度｜苏能工业炉"
+    }
+  },
+  "/zh/news/shuju-news-15": {
+    "title": {
+      "source": "工业炉报价单与技术方案不一致怎么办？先停比价，再做六步核对｜苏能工业炉",
+      "value": "工业炉报价与方案不一致怎么办？六步核对｜苏能工业炉"
+    },
+    "description": {
+      "source": "工业炉报价单与技术方案出现型号、数量、版本或范围不一致时，不宜继续只比总价。更稳妥的处理方式，是先暂停比较，把两份文件放在同一采购任务下，按文件身份、版本日期、型号数量、技术边界、交付商务和澄清冻结六步建立差异清单；只有形成同一冻结基线，后续的技术评审和商务比较才有意义。",
+      "value": "工业炉报价单与技术方案不一致，先暂停比价，按文件身份、版本日期、型号数量、技术范围、交付商务及澄清冻结六步列差异；形成同一冻结版本和范围后再比较。"
+    }
+  },
+  "/zh/news/shuju-news-13": {
+    "title": {
+      "source": "大型齿轮调质炉怎么选尺寸？先冻结六个边界，再定设备尺寸｜苏能工业炉",
+      "value": "大型齿轮调质炉尺寸怎么选？六项条件｜苏能工业炉"
+    },
+    "description": {
+      "source": "大型齿轮调质炉的尺寸，不能按“最大工件外径或高度再加一个固定余量”来确定。更稳妥的顺序是：先冻结工件包络和装炉任务，再把工装占用、必要热循环空间、有效工作区以及装卸与现场动作纳入同一张布置图，最后确定设备几何尺寸。",
+      "value": "大型齿轮调质炉先明确工件轮廓与装炉任务，把工装占用、必要热循环空间、有效工作区及装卸现场动作放进同一布置图，再定炉尺寸；不能按外径或高度加固定余量。"
+    }
+  },
+  "/zh/news/shuju-news-12": {
+    "title": {
+      "source": "齿轮调质炉温均匀性怎么验收？先分清设备、工件和产品三层｜苏能工业炉",
+      "value": "齿轮调质炉温均匀性：设备、工件与产品｜苏能工业炉"
+    },
+    "description": {
+      "source": "齿轮调质炉温均匀性验收，首先要分清三个对象：设备炉温均匀性、工件温度过程、产品硬度/组织/变形结果。设备测试合格，不能直接等同于工件各处温度一致；工件测温符合约定，也不能替代最终产品检验。",
+      "value": "齿轮调质炉验收需分清炉温均匀性、工件温度过程和产品硬度、组织、变形结果；设备测试合格不等于工件各处同温，工件测温合格也不能代替产品检验。"
+    }
+  },
+  "/zh/news/shuju-news-11": {
+    "description": {
+      "source": "大型齿轮调质台车炉报价，不能只报一个齿轮外径、炉膛尺寸或装载重量。更稳妥的做法，是先把工件包络、装炉任务、调质曲线、淬火转移、能源条件、控制追溯、验收边界和现场供货八项输入放到同一份询价资料中。",
+      "value": "大型齿轮调质台车炉询价，先提供工件轮廓、装炉任务、调质曲线、淬火转移、能源、追溯、验收与现场供货八项输入，不能只报外径、炉膛或装载量。"
+    }
+  },
+  "/zh/news/shuju-news-10": {
+    "description": {
+      "source": "看台车炉技术参数，不能只比数字大小或配置数量。先核对有效工作区、装载能力、温度与曲线、温度均匀性、升温能力、功率与能耗、控制与记录、动作与联锁八项内容，再标明每个参数属于采购输入、设计目标、合同保证还是实测结果。",
+      "value": "台车炉参数先看有效工作区、装载、温度曲线、温度均匀性、升温、功率能耗、控制记录及动作联锁八项，再标明属于采购输入、设计目标、合同保证还是实测。"
+    }
+  },
+  "/zh/news/shuju-news-8": {
+    "title": {
+      "source": "台车炉能耗高低由什么决定？先算每吨产品，不只算每小时｜苏能工业炉",
+      "value": "台车炉能耗怎么算？按每吨合格产品核对｜苏能工业炉"
+    },
+    "description": {
+      "source": "判断台车炉能耗高低，先不要只看装机功率或某一个小时的用能。更有采购和生产意义的口径，是把同一统计周期内的能源记录，对应到同周期的合格产出，再核对工件、工装、装载率、工艺曲线、开门排气、班次和异常状态是否一致。",
+      "value": "台车炉能耗需把同一周期能源记录对应到合格产出，再核对工件、工装、装载率、工艺曲线、开门排气、班次和异常状态是否一致；不能只比装机功率或每小时用能。"
+    }
+  },
+  "/zh/news/dian-jia-re-tai-che-lu-he-ran-qi-tai-che-lu-zen-me-xuan-xian-bi-jiao-7-xiang-tiao-jian": {
+    "description": {
+      "source": "电加热台车炉与燃气台车炉应按同一工件、工艺、装载和生产节拍，比较能源、控制、安全、维护和全周期成本。电阻热源无燃烧烟气，不代表工艺无需排气；只比电价和气价不能完成选择。",
+      "value": "电加热与燃气台车炉按相同工件、工艺、装载和节拍，比较能源、控制、安全、维护与全周期成本；电阻加热无燃烧烟气不代表工艺无需排气，不能只比电价和气价。"
+    }
+  },
+  "/en/news/dian-jia-re-tai-che-lu-he-ran-qi-tai-che-lu-zen-me-xuan-xian-bi-jiao-7-xiang-tiao-jian": {
+    "title": {
+      "source": "Electric or Gas-fired Trolley Furnace? Compare Seven Conditions First | Suneng Industrial Furnace",
+      "value": "Electric or Gas Trolley Furnace? Seven Selection Checks | Suneng Industrial Furnace"
+    }
+  },
+  "/zh/news/gong-ye-lu-ji-shu-xie-yi-ying-xie-qing-na-xie-nei-rong-8-lei-tiao-kuan-yu-3-ge-yan-shou-bian-jie": {
+    "title": {
+      "source": "工业炉技术协议应写清哪些内容？8类条款与3个验收边界｜苏能工业炉",
+      "value": "工业炉技术协议：8类条款与3个验收边界｜苏能工业炉"
+    },
+    "description": {
+      "source": "工业炉技术协议应覆盖工况、设备性能、供货、公用工程接口、控制安全、验收、交付资料和变更服务八类条款。另须分清目标与实测、工厂与现场验收、炉膛与有效工作区三组边界。",
+      "value": "工业炉技术协议覆盖工况、性能、供货、公用工程接口、控制安全、验收、资料和变更服务八类；分清目标与实测、工厂与现场验收、炉膛与有效工作区三组边界。"
+    }
+  },
+  "/zh/news/ya-li-rong-qi-han-hou-re-chu-li-wei-shen-me-cai-yong-ke-bian-rong-tai-che-lu-zhen-shi-fang-an-de-5-ge-she-ji-pan-duan": {
+    "description": {
+      "source": "核对压力容器可变容台车炉方案，应把后炉墙与有效加热区、燃烧分区、密封、炉温与工件测温、分档验证列成五项。苏能这份历史方案记载了三档有效加热区及对应设备配置，能据此提出核对问题；配置记录本身不能证明固定节能率，也不能替代新项目的控制和验收方案。",
+      "value": "压力容器可变容台车炉方案需核对后墙与加热区、燃烧分区、密封、炉温与工件测温、分档验证。历史三档配置可供核对，不能证明固定节能率或替代新项目控制与验收方案。"
+    }
+  },
+  "/zh/news/tui-tu-ji-dao-pian-cui-huo-wei-shen-me-cai-yong-gun-bang-shi-lu-yi-tao-zhen-shi-fang-an-de-5-ge-she-ji-pan-duan": {
+    "description": {
+      "source": "核对推土机刀片辊棒式淬火炉方案，可以把输送、加热分区、循环与测温、出料接口、供货与验收分成五项逐一比较。苏能这份历史方案分别记载了相关配置和接口；采购方应把这些内容与本项目的工件、工艺及压淬设备对应起来，不能只凭最高温度或功率完成选型。",
+      "value": "推土机刀片辊棒淬火炉核对输送、加热分区、循环测温、出料接口及供货验收。历史方案须对照本项目工件、工艺和压淬设备，不能只按温度或功率选型。"
+    }
+  },
+  "/zh/news/tai-che-lu-chang-jia-zen-me-xuan-xian-he-yan-zhe-5-lei-neng-li-zheng-ju": {
+    "description": {
+      "source": "筛选台车炉厂家，应核对同类工况、设计、制造交付、验收和售后五类证据。把资料对应到本项目范围与条件，再决定是否进入技术和报价比较；任何单一证书或案例都不足以代替核验。",
+      "value": "台车炉厂家按同类工况、设计、制造交付、验收和售后五类证据筛选。资料须对应本项目范围与条件，单一证书或案例不能代替核验。"
+    }
+  },
+  "/en/news/tai-che-lu-yan-shou-biao-zhun-zhu-yao-kan-shen-me": {
+    "title": {
+      "source": "What Should Trolley Furnace Acceptance Cover? | Suneng Industrial Furnace",
+      "value": "Trolley Furnace Acceptance: Seven Checks | Suneng Industrial Furnace"
+    }
+  },
+  "/en/news/jiang-su-gong-ye-lu-gai-zao-chang-jia-tui-jian-xian-cha-xian-zhuang-zai-tan-fang-an-he-xiao-guo": {
+    "title": {
+      "source": "Choosing a Furnace Retrofit Supplier in Jiangsu: Establish Condition and a Baseline First | Suneng Industrial Furnace",
+      "value": "Jiangsu Furnace Retrofits: Condition & Baseline First | Suneng Industrial Furnace"
+    }
+  },
+  "/zh/news/jiang-su-re-chu-li-lu-chang-jia-na-jia-hao-xian-ba-liu-xiang-neng-li-fang-dao-tong-yi-zhang-biao-li-bi-jiao": {
+    "title": {
+      "source": "江苏热处理炉厂家哪家好？先把六项能力放到同一张表里比较｜苏能工业炉",
+      "value": "江苏热处理炉厂家哪家好？六项能力比较｜苏能工业炉"
+    },
+    "description": {
+      "source": "江苏热处理炉厂家没有脱离项目条件的统一“最好”。对采购方更有效的判断是：厂家能否理解材料与工艺，完成热工与结构设计，把温场、气氛、控制和安全变成可验收条款，并对制造、工厂验收（FAT）、现场验收（SAT）和售后承担清楚的责任。",
+      "value": "江苏热处理炉厂家应按项目比较材料工艺、热工结构、温场气氛、控制安全能力，并明确制造、工厂与现场验收及售后责任；不能脱离工况评“最好”。"
+    }
+  },
+  "/zh/news/jiang-su-gong-ye-lu-chang-jia-na-jia-hao-yong-5-ceng-neng-li-pan-duan-bu-kan-kong-fan-pai-ming": {
+    "title": {
+      "source": "江苏工业炉厂家哪家好？用5层能力判断，不看空泛排名｜苏能工业炉",
+      "value": "江苏工业炉厂家哪家好？五层能力判断｜苏能工业炉"
+    }
+  },
+  "/zh/news/jiang-su-gong-ye-lu-chang-jia-tui-jian-an-xiang-mu-lei-xing-shai-xuan-de-5-jia-dai-biao-xing-yang-ben": {
+    "title": {
+      "source": "江苏工业炉厂家推荐：按项目类型筛选的5家代表性样本｜苏能工业炉",
+      "value": "江苏工业炉厂家推荐：按项目筛选的5家样本｜苏能工业炉"
+    }
+  },
+  "/zh/news/tai-che-lu-bao-jia-xu-yao-ti-gong-na-xie-can-shu": {
+    "description": {
+      "source": "台车炉报价需核对工件、装炉、工艺、产能、能源、控制、验收和现场八类信息。资料不全时可先沟通，但初步报价应注明假设、包含项和待确认项，不能把炉膛尺寸当成完整报价依据。",
+      "value": "台车炉报价需工件、装炉、工艺、产能、能源、控制、验收和现场八类资料。初步报价应注明假设、包含项及待确认项，炉膛尺寸不是完整依据。"
+    }
+  },
+  "/zh/news/jiang-su-gong-ye-lu-gai-zao-chang-jia-zen-me-xuan-an-gai-zao-lei-xing-dui-ying-kao-cha-bu-tong-neng-li": {
+    "title": {
+      "source": "江苏工业炉改造厂家怎么选？按改造类型，对应考察不同能力｜苏能工业炉",
+      "value": "江苏工业炉改造厂家：按任务核对能力｜苏能工业炉"
+    },
+    "description": {
+      "source": "选择工业炉改造厂家，先确定任务是故障维修、整炉大修、炉衬或加热更新、控制升级、节能改造，还是搬迁复产。让候选方按实际系统说明检查依据、工作范围、保留部分和验证方式，再比较其是否能够承担本项目；不同任务需要的能力不能只用“能修炉子”概括。",
+      "value": "选江苏工业炉改造厂家，先确定维修、大修、炉衬或加热更新、控制升级、节能或搬迁复产任务，再核对检查依据、工作范围、保留项与验证方式；不能只凭“能修炉子”选定。"
+    }
+  },
+  "/en/news/jiang-su-gong-ye-lu-gai-zao-chang-jia-zen-me-xuan-an-gai-zao-lei-xing-dui-ying-kao-cha-bu-tong-neng-li": {
+    "title": {
+      "source": "Choosing an Industrial Furnace Retrofit Supplier in Jiangsu by Type of Work | Suneng Industrial Furnace",
+      "value": "Jiangsu Furnace Retrofit Suppliers: Match the Work | Suneng Industrial Furnace"
+    }
+  },
+  "/zh/news/jiang-su-re-chu-li-lu-chang-jia-na-jia-hao-xian-kan-dong-ni-de-gong-yi-zai-xuan-dui-chang-jia": {
+    "title": {
+      "source": "江苏热处理炉厂家哪家好？先看懂你的工艺，再选对厂家｜苏能工业炉",
+      "value": "江苏热处理炉厂家哪家好？先核对工艺适配｜苏能工业炉"
+    }
+  },
+  "/en/news/jiang-su-re-chu-li-lu-chang-jia-na-jia-hao-xian-kan-dong-ni-de-gong-yi-zai-xuan-dui-chang-jia": {
+    "title": {
+      "source": "Choosing a Heat Treatment Furnace Manufacturer in Jiangsu: Start with Your Process | Suneng Industrial Furnace",
+      "value": "Jiangsu Heat Treatment Furnace Manufacturers: Process Fit | Suneng Industrial Furnace"
+    }
+  },
+  "/zh/news/jiang-su-gong-ye-lu-chang-jia-na-jia-hao-5-lei-chang-jia-neng-li-dui-bi-yu-xuan-ze-biao-zhun": {
+    "description": {
+      "source": "选择江苏工业炉厂家，先按新炉制造、整线配套、维修或改造任务建立候选名单，再核对工件工艺、供货接口和验收责任。地理位置可以作为服务安排的一个条件，但能否提供相符的设计与交付资料，才是进入技术和报价比较的依据。",
+      "value": "按新炉制造、整线、维修或改造任务筛选江苏工业炉厂家，再核对工件工艺、供货接口与验收责任；地理位置仅是服务条件之一，技术比价仍需相符的设计与交付资料。"
+    }
+  },
+  "/zh/news/she-bei-ban-qian-ting-chan-chong-qi-er-shou-lu-zai-zhi-zao-gong-ye-lu-te-shu-chang-jing-gai-zao-zen-me-chu-li": {
+    "title": {
+      "source": "设备搬迁、停产重启、二手炉再制造：工业炉特殊场景改造怎么处理？｜苏能工业炉",
+      "value": "工业炉搬迁、停产重启与二手炉再制造｜苏能工业炉"
+    },
+    "description": {
+      "source": "工业炉搬迁、停产重启和二手炉再制造，先查当前设备状态，再确认旧资料与新现场是否一致。搬迁重点核对新旧接口，停产重启重点核对停用期间的变化，二手设备还要查使用和维修历史；只有把保留、修复、更换及复产验证范围写清，才能比较方案与投入。",
+      "value": "工业炉搬迁、停产重启或二手炉再制造，先查现状及旧资料与新现场是否一致；分别核对接口、停用变化、使用维修史，写清保留、修复、更换及复产验证范围后再比较投入。"
+    }
+  },
+  "/en/news/she-bei-ban-qian-ting-chan-chong-qi-er-shou-lu-zai-zhi-zao-gong-ye-lu-te-shu-chang-jing-gai-zao-zen-me-chu-li": {
+    "title": {
+      "source": "Relocating, Restarting or Remanufacturing an Industrial Furnace: How to Assess Special Retrofit Projects | Suneng Industrial Furnace",
+      "value": "Furnace Relocation, Restart & Remanufacture | Suneng Industrial Furnace"
+    }
+  },
+  "/zh/news/gong-ye-lu-jie-neng-gai-zao-zen-me-zuo-cong-lu-chen-bao-wen-kong-zhi-xi-tong-dao-yan-qi-yu-re-hui-shou": {
+    "title": {
+      "source": "工业炉节能改造怎么做？从炉衬保温、控制系统到烟气余热回收｜苏能工业炉",
+      "value": "工业炉节能改造：保温、控制与烟气余热回收｜苏能工业炉"
+    },
+    "description": {
+      "source": "工业炉节能改造应先用运行和能源记录确定损失所在，再选择炉衬、密封、加热燃烧、控制或余热利用措施。先核对工件和产量是否变化，再看保温、生产及停机状态下的消耗；没有对应证据时，不宜把能耗升高直接归因于某个部件。",
+      "value": "工业炉节能改造先用运行与能源记录定位损失，核对工件、产量及保温、生产、停机消耗，再选炉衬、密封、加热燃烧、控制或余热措施；无对应证据不宜直接归因某个部件。"
+    }
+  },
+  "/en/news/gong-ye-lu-jie-neng-gai-zao-zen-me-zuo-cong-lu-chen-bao-wen-kong-zhi-xi-tong-dao-yan-qi-yu-re-hui-shou": {
+    "title": {
+      "source": "Industrial Furnace Energy Retrofits: Insulation, Controls and Flue-Gas Heat Recovery | Suneng Industrial Furnace",
+      "value": "Industrial Furnace Energy Retrofit: Insulation, Controls & Flue-Gas Heat Recovery | Suneng Industrial Furnace"
+    }
+  },
+  "/zh/news/re-chu-li-lu-gai-zao-qian-xu-yao-zhun-bei-na-xie-zi-liao-yi-fen-gei-chang-jia-gou-tong-de-ping-gu-qing-dan": {
+    "title": {
+      "source": "热处理炉改造前需要准备哪些资料？一份给厂家沟通的评估清单｜苏能工业炉",
+      "value": "热处理炉改造前要哪些资料？评估清单｜苏能工业炉"
+    },
+    "description": {
+      "source": "热处理炉改造前，可以先提交设备铭牌和照片、工件工艺、现有问题、运行能源记录、现场布置及停产窗口。资料用来判断原设备状态、可保留范围和复产条件；缺少的项目如实列出，先安排补查，不必为了初次询价填写未经确认的数据。",
+      "value": "热处理炉改造前提供铭牌照片、工件工艺、问题、运行能源记录、现场布置和停产窗口，用于判断现状、可保留范围与复产条件；缺项如实列出补查，勿填未经确认的数据。"
+    }
+  },
+  "/en/news/re-chu-li-lu-gai-zao-qian-xu-yao-zhun-bei-na-xie-zi-liao-yi-fen-gei-chang-jia-gou-tong-de-ping-gu-qing-dan": {
+    "title": {
+      "source": "What Information Is Needed Before a Heat Treatment Furnace Retrofit? An Assessment Checklist | Suneng Industrial Furnace",
+      "value": "Heat Treatment Furnace Retrofit: Information Checklist | Suneng Industrial Furnace"
+    }
+  },
+  "/zh/news/re-chu-li-lu-jie-neng-gai-zao-duo-shao-qian-fei-yong-gou-cheng-yu-suan-ying-xiang-yin-su-he-xun-jia-qian-zhun-bei": {
+    "title": {
+      "source": "热处理炉节能改造多少钱？费用构成、预算影响因素和询价前准备｜苏能工业炉",
+      "value": "热处理炉节能改造多少钱？预算与询价准备｜苏能工业炉"
+    }
+  },
+  "/en/news/re-chu-li-lu-jie-neng-gai-zao-duo-shao-qian-fei-yong-gou-cheng-yu-suan-ying-xiang-yin-su-he-xun-jia-qian-zhun-bei": {
+    "title": {
+      "source": "How Much Does a Heat Treatment Furnace Energy Retrofit Cost? Scope, Budget and Enquiry Inputs | Suneng Industrial Furnace",
+      "value": "Heat Treatment Furnace Energy Retrofit Costs: Scope & Budget | Suneng Industrial Furnace"
+    }
+  },
+  "/zh/news/gong-ye-lu-gai-zao-yan-shou-kan-na-xie-zhi-biao-cong-wen-du-jun-yun-xing-neng-hao-dao-kong-zhi-xi-tong-wen-ding-xing": {
+    "title": {
+      "source": "工业炉改造验收看哪些指标？从温度均匀性、能耗到控制系统稳定性｜苏能工业炉",
+      "value": "工业炉改造验收：温度均匀性、能耗与控制｜苏能工业炉"
+    },
+    "description": {
+      "source": "工业炉改造验收，不能只看能升温、能运行。应按约定工况逐项核对炉体密封、温度与测量、控制记录、机械动作、安全联锁和负载运行；涉及节能，还要统一能源计量与合格产出口径。",
+      "value": "工业炉改造验收按约定工况核对密封、温度测量、控制记录、机械动作、安全联锁和负载运行；节能验收还需统一能源计量与合格产出口径，不能只看能升温运行。"
+    }
+  },
+  "/en/news/gong-ye-lu-gai-zao-yan-shou-kan-na-xie-zhi-biao-cong-wen-du-jun-yun-xing-neng-hao-dao-kong-zhi-xi-tong-wen-ding-xing": {
+    "title": {
+      "source": "Industrial Furnace Retrofit Acceptance: Temperature Uniformity, Energy and Controls | Suneng Industrial Furnace",
+      "value": "Industrial Furnace Retrofit Acceptance: Temperature Uniformity, Energy & Controls | Suneng Industrial Furnace"
+    }
+  },
+  "/zh/news/re-chu-li-lu-da-xiu-chang-jia-zen-me-xuan-cong-lu-ti-jie-gou-kong-wen-xi-tong-dao-shou-hou-neng-li-de-pan-duan-biao-zhun": {
+    "title": {
+      "source": "热处理炉大修厂家怎么选？从炉体结构、控温系统到售后能力的判断标准｜苏能工业炉",
+      "value": "热处理炉大修厂家：结构、控温与售后｜苏能工业炉"
+    },
+    "description": {
+      "source": "选择热处理炉大修厂家，应核对现场诊断、保留与更换范围、控制记录、负载验证及售后责任。只证明开机正常，还不能证明原问题已经解决；应要求按同一修复范围提交方案与验收依据。",
+      "value": "选热处理炉大修厂家，核对诊断、保留更换范围、控制记录、负载验证和售后责任；按同一修复范围比较方案与验收依据，开机正常不等于原问题已解决。"
+    }
+  },
+  "/en/news/re-chu-li-lu-da-xiu-chang-jia-zen-me-xuan-cong-lu-ti-jie-gou-kong-wen-xi-tong-dao-shou-hou-neng-li-de-pan-duan-biao-zhun": {
+    "title": {
+      "source": "Choosing a Heat Treatment Furnace Overhaul Supplier: Structure, Controls and Service | Suneng Industrial Furnace",
+      "value": "Heat Treatment Furnace Overhaul Suppliers: Structure, Controls & Service | Suneng Industrial Furnace"
+    }
+  },
+  "/zh/news/gong-ye-lu-jie-neng-gai-zao-zen-me-zuo-cong-ran-shao-xi-tong-lu-chen-fan-xin-dao-kong-zhi-xi-tong-sheng-ji": {
+    "title": {
+      "source": "工业炉节能改造怎么做？从燃烧系统、炉衬翻新到控制系统升级｜苏能工业炉",
+      "value": "工业炉节能改造：燃烧、炉衬与控制升级｜苏能工业炉"
+    },
+    "description": {
+      "source": "工业炉节能改造是否值得做，要先确认原设备能否继续满足工件、工艺与安全要求，再比较改造和换新的完整投入。需要保留什么、更新什么、现场怎样接入、何时能完成复产验证，应放在同一范围内核算；设备用了多久或某项报价高低，都不能单独决定。",
+      "value": "工业炉节能改造先确认旧炉能否继续满足工件、工艺和安全要求，再按相同范围比较改造与换新投入，明确保留更新、现场接入及复产验证；不能只看炉龄或单项价格。"
+    }
+  },
+  "/en/news/gong-ye-lu-jie-neng-gai-zao-zen-me-zuo-cong-ran-shao-xi-tong-lu-chen-fan-xin-dao-kong-zhi-xi-tong-sheng-ji": {
+    "title": {
+      "source": "Industrial Furnace Energy Retrofits: Combustion, Relining and Control Upgrades | Suneng Industrial Furnace",
+      "value": "Industrial Furnace Energy Retrofits: Combustion, Relining & Controls | Suneng Industrial Furnace"
+    }
+  },
+  "/en": {
+    "title": {
+      "source": "Industrial Furnace Manufacturer | Suneng",
+      "value": "Industrial Furnace Manufacturer | Suneng Industrial Furnace"
+    }
+  },
+  "/en/case/henan-annealing-solution-line": {
+    "title": {
+      "source": "850 mm Strip Annealing Supply Scope | Suneng",
+      "value": "850 mm Strip Annealing Supply Scope | Suneng Industrial Furnace"
+    }
+  },
+  "/en/news": {
+    "title": {
+      "source": "Industrial Furnace Resources | Suneng",
+      "value": "Industrial Furnace Resources | Suneng Industrial Furnace"
+    }
+  },
+  "/en/news/atmosphere-furnace-pressure-fluctuation-process-or-equipment": {
+    "title": {
+      "source": "Atmosphere Furnace Pressure Fluctuations | Suneng",
+      "value": "Atmosphere Furnace Pressure Fluctuations | Suneng Industrial Furnace"
+    }
+  },
+  "/en/news/da-xing-chi-lun-tiao-zhi-yong-shen-me-lu-xian-kan-zhi-jing-dan-chong-he-zhuan-yun": {
+    "title": {
+      "source": "Large Gear Heat Treatment: Furnace Selection | Suneng",
+      "value": "Large Gear Heat Treatment: Furnace Selection | Suneng Industrial Furnace"
+    }
+  },
+  "/en/news/gb-t-30825-2026-heat-treatment-furnace-procurement": {
+    "title": {
+      "source": "GB/T 30825: 2014 or 2026 in Furnace Agreements? | Suneng",
+      "value": "GB/T 30825: 2014 or 2026 in Furnace Agreements? | Suneng Industrial Furnace"
+    }
+  },
+  "/en/news/gong-ye-lu-ji-shu-xie-yi-ying-xie-qing-na-xie-nei-rong-8-lei-tiao-kuan-yu-3-ge-yan-shou-bian-jie": {
+    "title": {
+      "source": "Industrial Furnace Technical Agreements | Suneng",
+      "value": "Industrial Furnace Technical Agreements | Suneng Industrial Furnace"
+    }
+  },
+  "/en/news/heat-treatment-furnace-loading-rack-fixture-selection": {
+    "title": {
+      "source": "Heat Treatment Fixtures & Loading Racks | Suneng",
+      "value": "Heat Treatment Fixtures & Loading Racks | Suneng Industrial Furnace"
+    }
+  },
+  "/en/news/heat-treatment-line-annual-overhaul-checklist": {
+    "title": {
+      "source": "Annual Heat Treatment Line Overhaul Checklist | Suneng",
+      "value": "Annual Heat Treatment Line Overhaul Checklist | Suneng Industrial Furnace"
+    }
+  },
+  "/en/news/heat-treatment-line-batch-traceability": {
+    "title": {
+      "source": "Heat Treatment Line Batch Traceability | Suneng",
+      "value": "Heat Treatment Line Batch Traceability | Suneng Industrial Furnace"
+    }
+  },
+  "/en/news/heat-treatment-line-capacity-bottleneck-troubleshooting": {
+    "title": {
+      "source": "Heat Treatment Line Output: Finding Bottlenecks | Suneng",
+      "value": "Heat Treatment Line Output: Finding Bottlenecks | Suneng Industrial Furnace"
+    }
+  },
+  "/en/news/heat-treatment-line-fat-single-machine-acceptance": {
+    "title": {
+      "source": "Heat Treatment Line FAT vs Machine Acceptance | Suneng",
+      "value": "Heat Treatment Line FAT vs Machine Acceptance | Suneng Industrial Furnace"
+    }
+  },
+  "/en/news/heat-treatment-line-power-capacity-demand-check": {
+    "title": {
+      "source": "Heat Treatment Line Power & Utility Demand | Suneng",
+      "value": "Heat Treatment Line Power & Utility Demand | Suneng Industrial Furnace"
+    }
+  },
+  "/en/news/heat-treatment-line-sat-continuous-run-duration": {
+    "title": {
+      "source": "Heat Treatment Line Site Acceptance Duration | Suneng",
+      "value": "Heat Treatment Line Site Acceptance Duration | Suneng Industrial Furnace"
+    }
+  },
+  "/en/news/heat-treatment-line-temperature-uniformity-acceptance-scope": {
+    "title": {
+      "source": "Heat Treatment Line Uniformity Acceptance | Suneng",
+      "value": "Heat Treatment Line Uniformity Acceptance | Suneng Industrial Furnace"
+    }
+  },
+  "/en/news/jiang-su-gong-ye-lu-chang-jia-na-jia-hao-5-lei-chang-jia-neng-li-dui-bi-yu-xuan-ze-biao-zhun": {
+    "title": {
+      "source": "Jiangsu Furnace Suppliers: Five Provider Types | Suneng",
+      "value": "Jiangsu Furnace Suppliers: Five Provider Types | Suneng Industrial Furnace"
+    }
+  },
+  "/en/news/jiang-su-gong-ye-lu-chang-jia-na-jia-hao-yong-5-ceng-neng-li-pan-duan-bu-kan-kong-fan-pai-ming": {
+    "title": {
+      "source": "Jiangsu Furnace Manufacturers: Five Checks | Suneng",
+      "value": "Jiangsu Furnace Manufacturers: Five Checks | Suneng Industrial Furnace"
+    }
+  },
+  "/en/news/jiang-su-gong-ye-lu-chang-jia-tui-jian-an-xiang-mu-lei-xing-shai-xuan-de-5-jia-dai-biao-xing-yang-ben": {
+    "title": {
+      "source": "Five Jiangsu Furnace Manufacturer Examples | Suneng",
+      "value": "Five Jiangsu Furnace Manufacturer Examples | Suneng Industrial Furnace"
+    }
+  },
+  "/en/news/jiang-su-re-chu-li-lu-chang-jia-na-jia-hao-xian-ba-liu-xiang-neng-li-fang-dao-tong-yi-zhang-biao-li-bi-jiao": {
+    "title": {
+      "source": "Jiangsu Furnace Suppliers: Six Capabilities | Suneng",
+      "value": "Jiangsu Furnace Suppliers: Six Capabilities | Suneng Industrial Furnace"
+    }
+  },
+  "/en/news/jiang-su-re-chu-li-lu-chang-jia-tui-jian-xian-kan-gong-yi-he-gong-jian-zai-kan-chang-jia": {
+    "title": {
+      "source": "Jiangsu Heat Treatment Furnace Shortlists | Suneng",
+      "value": "Jiangsu Heat Treatment Furnace Shortlists | Suneng Industrial Furnace"
+    }
+  },
+  "/en/news/jiu-tai-che-lu-gai-zao-hai-shi-huan-xin-xian-suan-zhe-4-bi-zhang": {
+    "title": {
+      "source": "Retrofit or Replace an Old Trolley Furnace? | Suneng",
+      "value": "Retrofit or Replace an Old Trolley Furnace? | Suneng Industrial Furnace"
+    }
+  },
+  "/en/news/lao-jiu-re-chu-li-lu-shi-da-xiu-hao-hai-shi-zhi-jie-mai-xin-de-pan-duan-biao-zhun-he-gai-zao-fang-an-zen-me-xuan": {
+    "title": {
+      "source": "Repair, Retrofit or Replace a Furnace? | Suneng",
+      "value": "Repair, Retrofit or Replace a Furnace? | Suneng Industrial Furnace"
+    }
+  },
+  "/en/news/mesh-belt-carburizing-throughput-process-limits": {
+    "title": {
+      "source": "Mesh-Belt Carburizing Throughput Limits | Suneng",
+      "value": "Mesh-Belt Carburizing Throughput Limits | Suneng Industrial Furnace"
+    }
+  },
+  "/en/news/multi-product-heat-treatment-furnace-changeover-boundaries": {
+    "title": {
+      "source": "Heat Treatment Furnace Changeover Limits | Suneng",
+      "value": "Heat Treatment Furnace Changeover Limits | Suneng Industrial Furnace"
+    }
+  },
+  "/en/news/quench-tank-batch-interval-thermal-balance": {
+    "title": {
+      "source": "Quench Tank Recovery & Batch Heat Balance | Suneng",
+      "value": "Quench Tank Recovery & Batch Heat Balance | Suneng Industrial Furnace"
+    }
+  },
+  "/en/news/shuju-news-10": {
+    "title": {
+      "source": "Trolley Furnace Specifications: Eight Checks | Suneng",
+      "value": "Trolley Furnace Specifications: Eight Checks | Suneng Industrial Furnace"
+    }
+  },
+  "/en/news/shuju-news-11": {
+    "title": {
+      "source": "Large Gear Heat Treatment Furnace Quotations | Suneng",
+      "value": "Large Gear Heat Treatment Furnace Quotations | Suneng Industrial Furnace"
+    }
+  },
+  "/en/news/shuju-news-12": {
+    "title": {
+      "source": "Gear Heat Treatment Uniformity Acceptance | Suneng",
+      "value": "Gear Heat Treatment Uniformity Acceptance | Suneng Industrial Furnace"
+    }
+  },
+  "/en/news/shuju-news-13": {
+    "title": {
+      "source": "Sizing a Large Gear Heat Treatment Furnace | Suneng",
+      "value": "Sizing a Large Gear Heat Treatment Furnace | Suneng Industrial Furnace"
+    }
+  },
+  "/en/news/shuju-news-14": {
+    "title": {
+      "source": "Furnace Quotes Without Technical Proposals | Suneng",
+      "value": "Furnace Quotes Without Technical Proposals | Suneng Industrial Furnace"
+    }
+  },
+  "/en/news/shuju-news-15": {
+    "title": {
+      "source": "Furnace Quote vs Proposal: Resolving Conflicts | Suneng",
+      "value": "Furnace Quote vs Proposal: Resolving Conflicts | Suneng Industrial Furnace"
+    }
+  },
+  "/en/news/shuju-news-16": {
+    "title": {
+      "source": "Trolley Furnace Pre-start Operating Checks | Suneng",
+      "value": "Trolley Furnace Pre-start Operating Checks | Suneng Industrial Furnace"
+    }
+  },
+  "/en/news/shuju-news-17": {
+    "title": {
+      "source": "High-temperature Trolley Furnace Costs | Suneng",
+      "value": "High-temperature Trolley Furnace Costs | Suneng Industrial Furnace"
+    }
+  },
+  "/en/news/shuju-news-18": {
+    "title": {
+      "source": "Pit Furnace Costs: Loading & Atmosphere | Suneng",
+      "value": "Pit Furnace Costs: Loading & Atmosphere | Suneng Industrial Furnace"
+    }
+  },
+  "/en/news/shuju-news-19": {
+    "title": {
+      "source": "High-temperature Box Furnace Costs | Suneng",
+      "value": "High-temperature Box Furnace Costs | Suneng Industrial Furnace"
+    }
+  },
+  "/en/news/shuju-news-20": {
+    "title": {
+      "source": "Long-shaft Heat Treatment: Pit vs Trolley | Suneng",
+      "value": "Long-shaft Heat Treatment: Pit vs Trolley | Suneng Industrial Furnace"
+    }
+  },
+  "/en/news/shuju-news-22": {
+    "title": {
+      "source": "Mesh Belt Furnace Line Costs: Nine Checks | Suneng",
+      "value": "Mesh Belt Furnace Line Costs: Nine Checks | Suneng Industrial Furnace"
+    }
+  },
+  "/en/news/shuju-news-23": {
+    "title": {
+      "source": "Calculating Mesh Belt Furnace Hourly Output | Suneng",
+      "value": "Calculating Mesh Belt Furnace Hourly Output | Suneng Industrial Furnace"
+    }
+  },
+  "/en/news/shuju-news-24": {
+    "title": {
+      "source": "Roller Hearth Furnaces: Suitable Workpieces | Suneng",
+      "value": "Roller Hearth Furnaces: Suitable Workpieces | Suneng Industrial Furnace"
+    }
+  },
+  "/en/news/shuju-news-25": {
+    "title": {
+      "source": "Aluminium Solution Furnace Transfer Acceptance | Suneng",
+      "value": "Aluminium Solution Furnace Transfer Acceptance | Suneng Industrial Furnace"
+    }
+  },
+  "/en/news/shuju-news-26": {
+    "title": {
+      "source": "Curing Oven Temperature Uniformity Acceptance | Suneng",
+      "value": "Curing Oven Temperature Uniformity Acceptance | Suneng Industrial Furnace"
+    }
+  },
+  "/en/news/shuju-news-27": {
+    "title": {
+      "source": "Stainless-steel Annealing Line Speed | Suneng",
+      "value": "Stainless-steel Annealing Line Speed | Suneng Industrial Furnace"
+    }
+  },
+  "/en/news/shuju-news-28": {
+    "title": {
+      "source": "Choosing a Heat Treatment Line Supplier | Suneng",
+      "value": "Choosing a Heat Treatment Line Supplier | Suneng Industrial Furnace"
+    }
+  },
+  "/en/news/shuju-news-29": {
+    "title": {
+      "source": "Heat Treatment Line Quotation Inputs | Suneng",
+      "value": "Heat Treatment Line Quotation Inputs | Suneng Industrial Furnace"
+    }
+  },
+  "/en/news/shuju-news-30": {
+    "title": {
+      "source": "Continuous Heat Treatment vs Batch Furnaces | Suneng",
+      "value": "Continuous Heat Treatment vs Batch Furnaces | Suneng Industrial Furnace"
+    }
+  },
+  "/en/news/shuju-news-31": {
+    "title": {
+      "source": "Heat Treatment Line Automation Scope | Suneng",
+      "value": "Heat Treatment Line Automation Scope | Suneng Industrial Furnace"
+    }
+  },
+  "/en/news/shuju-news-34": {
+    "title": {
+      "source": "Heat Treatment Line Spares & After-sales | Suneng",
+      "value": "Heat Treatment Line Spares & After-sales | Suneng Industrial Furnace"
+    }
+  },
+  "/en/news/shuju-news-35": {
+    "title": {
+      "source": "Industrial Furnace Supplier Shortlists | Suneng",
+      "value": "Industrial Furnace Supplier Shortlists | Suneng Industrial Furnace"
+    }
+  },
+  "/en/news/shuju-news-36": {
+    "title": {
+      "source": "Heat Treatment Line Cost & Capacity Checks | Suneng",
+      "value": "Heat Treatment Line Cost & Capacity Checks | Suneng Industrial Furnace"
+    }
+  },
+  "/en/news/shuju-news-8": {
+    "title": {
+      "source": "Trolley Furnace Energy Use per Tonne | Suneng",
+      "value": "Trolley Furnace Energy Use per Tonne | Suneng Industrial Furnace"
+    }
+  },
+  "/en/news/shuju-news-9": {
+    "title": {
+      "source": "Trolley Furnace Power Selection | Suneng",
+      "value": "Trolley Furnace Power Selection | Suneng Industrial Furnace"
+    }
+  },
+  "/en/news/steel-annealing-500-tonnes-two-bogie-hearth-furnaces-capacity": {
+    "title": {
+      "source": "500 t/Month Steel Annealing: Capacity Checks | Suneng",
+      "value": "500 t/Month Steel Annealing: Capacity Checks | Suneng Industrial Furnace"
+    }
+  },
+  "/en/news/tai-che-lu-bao-jia-dan-zen-me-kan-yong-9-xiang-cai-gou-he-dui-fang-fa-dui-qi-bian-jie": {
+    "title": {
+      "source": "Trolley Furnace Quotations: Nine Checks | Suneng",
+      "value": "Trolley Furnace Quotations: Nine Checks | Suneng Industrial Furnace"
+    }
+  },
+  "/en/news/tai-che-lu-bao-jia-xu-yao-ti-gong-na-xie-can-shu": {
+    "title": {
+      "source": "Trolley Furnace Quotation Parameters | Suneng",
+      "value": "Trolley Furnace Quotation Parameters | Suneng Industrial Furnace"
+    }
+  },
+  "/en/news/tai-che-lu-chang-jia-zen-me-xuan-xian-he-yan-zhe-5-lei-neng-li-zheng-ju": {
+    "title": {
+      "source": "Choosing a Trolley Furnace Manufacturer | Suneng",
+      "value": "Choosing a Trolley Furnace Manufacturer | Suneng Industrial Furnace"
+    }
+  },
+  "/en/news/tai-che-lu-lu-men-lou-huo-zen-me-chu-li-xian-fen-qing-mi-feng-ya-jin-hai-shi-lu-ya": {
+    "title": {
+      "source": "Trolley Furnace Door Leaks: Causes & Checks | Suneng",
+      "value": "Trolley Furnace Door Leaks: Causes & Checks | Suneng Industrial Furnace"
+    }
+  },
+  "/en/news/tai-che-lu-lu-men-lou-re-lou-huo-si-duan-ding-wei-fa": {
+    "title": {
+      "source": "Trolley Furnace Door Leaks: Four-stage Checks | Suneng",
+      "value": "Trolley Furnace Door Leaks: Four-stage Checks | Suneng Industrial Furnace"
+    }
+  },
+  "/en/news/tai-che-lu-sheng-wen-man-shi-shen-me-yuan-yin-xian-an-8-ceng-shun-xu-pai-cha": {
+    "title": {
+      "source": "Trolley Furnace Heating Slowly: Fault Checks | Suneng",
+      "value": "Trolley Furnace Heating Slowly: Fault Checks | Suneng Industrial Furnace"
+    }
+  },
+  "/en/news/tai-che-lu-shi-shen-me-zhu-yao-yong-lai-chu-li-shen-me-gong-jian": {
+    "title": {
+      "source": "Trolley Furnaces: Uses & Suitable Workpieces | Suneng",
+      "value": "Trolley Furnaces: Uses & Suitable Workpieces | Suneng Industrial Furnace"
+    }
+  },
+  "/en/news/tai-che-lu-wen-du-jun-yun-xing-zen-me-ce-xian-suo-ding-7-ge-ce-shi-tiao-jian": {
+    "title": {
+      "source": "Testing Trolley Furnace Temperature Uniformity | Suneng",
+      "value": "Testing Trolley Furnace Temperature Uniformity | Suneng Industrial Furnace"
+    }
+  },
+  "/en/news/tui-tu-ji-dao-pian-cui-huo-wei-shen-me-cai-yong-gun-bang-shi-lu-yi-tao-zhen-shi-fang-an-de-5-ge-she-ji-pan-duan": {
+    "title": {
+      "source": "Blade Roller-hearth Quenching: Proposal Checks | Suneng",
+      "value": "Blade Roller-hearth Quenching: Proposal Checks | Suneng Industrial Furnace"
+    }
+  },
+  "/en/news/ya-li-rong-qi-han-hou-re-chu-li-wei-shen-me-cai-yong-ke-bian-rong-tai-che-lu-zhen-shi-fang-an-de-5-ge-she-ji-pan-duan": {
+    "title": {
+      "source": "Variable-volume Trolley Furnace Proposal | Suneng",
+      "value": "Variable-volume Trolley Furnace Proposal | Suneng Industrial Furnace"
+    }
+  },
+  "/en/products": {
+    "title": {
+      "source": "Industrial Furnaces & Heat-Treatment Lines | Suneng",
+      "value": "Industrial Furnaces & Heat-Treatment Lines | Suneng Industrial Furnace"
+    }
+  },
+  "/en/products/detail/annealing-solution-line": {
+    "title": {
+      "source": "Annealing & Solution-Treatment Line | Suneng",
+      "value": "Annealing & Solution-Treatment Line | Suneng Industrial Furnace"
+    }
+  },
+  "/en/products/detail/bell-furnace": {
+    "title": {
+      "source": "Bell-Type Furnace | Suneng",
+      "value": "Bell-Type Furnace | Suneng Industrial Furnace"
+    }
+  },
+  "/en/products/detail/box-furnace": {
+    "title": {
+      "source": "Box Heat-Treatment Furnace | Suneng",
+      "value": "Box Heat-Treatment Furnace | Suneng Industrial Furnace"
+    }
+  },
+  "/en/products/detail/copper-wire-annealing-line": {
+    "title": {
+      "source": "Copper Wire Annealing Line | Suneng",
+      "value": "Copper Wire Annealing Line | Suneng Industrial Furnace"
+    }
+  },
+  "/en/products/detail/mesh-belt-furnace": {
+    "title": {
+      "source": "Continuous Mesh-Belt Furnace | Suneng",
+      "value": "Continuous Mesh-Belt Furnace | Suneng Industrial Furnace"
+    }
+  },
+  "/en/products/detail/pit-furnace": {
+    "title": {
+      "source": "Pit Heat-Treatment Furnace | Suneng",
+      "value": "Pit Heat-Treatment Furnace | Suneng Industrial Furnace"
+    }
+  },
+  "/en/products/detail/pusher-furnace": {
+    "title": {
+      "source": "Pusher Heat-Treatment Furnace | Suneng",
+      "value": "Pusher Heat-Treatment Furnace | Suneng Industrial Furnace"
+    }
+  },
+  "/en/products/detail/roller-hearth-furnace": {
+    "title": {
+      "source": "Roller-Hearth Furnace | Suneng",
+      "value": "Roller-Hearth Furnace | Suneng Industrial Furnace"
+    }
+  },
+  "/en/products/detail/roller-mesh-belt-line": {
+    "title": {
+      "source": "Mesh-Belt Annealing & Tempering Line | Suneng",
+      "value": "Mesh-Belt Annealing & Tempering Line | Suneng Industrial Furnace"
+    }
+  },
+  "/en/products/detail/rotary-hearth-furnace": {
+    "title": {
+      "source": "Rotary-Hearth Furnace | Suneng",
+      "value": "Rotary-Hearth Furnace | Suneng Industrial Furnace"
+    }
+  },
+  "/en/products/detail/trolley-furnace": {
+    "title": {
+      "source": "Bogie-Hearth Furnace | Suneng",
+      "value": "Bogie-Hearth Furnace | Suneng Industrial Furnace"
+    }
+  },
+  "/en/service": {
+    "title": {
+      "source": "Industrial Furnace Service & Maintenance | Suneng",
+      "value": "Industrial Furnace Service & Maintenance | Suneng Industrial Furnace"
+    }
+  },
+  "/en/service/selection-retrofit-guide": {
+    "title": {
+      "source": "Furnace Selection & Retrofit Guide | Suneng",
+      "value": "Furnace Selection & Retrofit Guide | Suneng Industrial Furnace"
+    }
+  }
+}

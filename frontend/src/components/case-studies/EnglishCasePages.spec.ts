@@ -72,7 +72,7 @@ describe('complete English case integration', () => {
         expect(html, `${item.slug} #${id}`).toContain(`id="${id}"`);
     }
   });
-  it('preserves the full visible headline and body while shortening search and social titles', () => {
+  it('preserves the full visible headline, body and concise search topic with the full brand', () => {
     for (const item of getEnglishCases()) {
       const html = renderToStaticMarkup(createElement(EnglishCaseArticle, { slug: item.slug, searchParams: {} }));
       expect(html, item.slug).toContain(item.html);
@@ -82,7 +82,9 @@ describe('complete English case integration', () => {
       const meta = englishCaseMetadata(item.slug);
       const seoTitle = (meta.title as { absolute: string }).absolute;
       expect(seoTitle).toContain(item.seoTitle || item.title);
-      expect(seoTitle.length).toBeLessThanOrEqual(60);
+      // Keep the topic concise without abbreviating the agreed full brand.
+      expect(seoTitle).toMatch(/ \| Suneng Industrial Furnace$/);
+      expect(seoTitle.replace(/ \| Suneng Industrial Furnace$/, '').length).toBeLessThanOrEqual(60);
       expect(meta.description!.length).toBeLessThanOrEqual(160);
       expect(meta.description).toContain('not verified output or acceptance results');
       expect(meta.openGraph?.title).toBe(seoTitle);
