@@ -70,6 +70,9 @@
   margin-inline: auto;
   min-width: 0;
 }
+.page :global(#inquiry) > [data-contact-form-inner] {
+  width: var(--site-page-width);
+}
 .breadcrumbBar {
   padding: 20px 0;
   border-top: 1px solid var(--ft-border);

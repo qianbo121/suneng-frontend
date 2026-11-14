@@ -25,10 +25,13 @@ export function BeltAgreementTable({ fasteners = false }: { fasteners?: boolean 
             const name = row.model ?? row.selectionCode;
             return (
               <tr key={name} id={row.anchor} className={styles.configRow}>
-                <th scope="row"><span className={styles.modelName}>{name}</span>
-                  {!fasteners && name === model && showCase && <Link className={styles.modelCaseLink} href={FASTENER_CASE_PATH} prefetch={false}>
-                    <span>查看这款炉的<span className={styles.linkSubject}>紧固件项目</span></span><FiArrowRight aria-hidden="true" />
-                  </Link>}
+                <th scope="row">
+                  {!fasteners && name === model && showCase ? (
+                    <Link className={`${styles.modelName} ${styles.modelCaseLink}`} href={FASTENER_CASE_PATH}
+                      aria-label={`查看 ${name} 紧固件项目案例`} prefetch={false}>
+                      {name}<span aria-hidden="true" className={styles.caseChevron}>›</span>
+                    </Link>
+                  ) : <span className={styles.modelName}>{name}</span>}
                   {row.selectionCode && <small className={styles.codeLabel}>选型代号</small>}
                 </th>
                 <td>{row.size}</td><td>{row.power}</td>
