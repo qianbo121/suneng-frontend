@@ -1,6 +1,8 @@
 import DOMPurify from 'isomorphic-dompurify';
 import { describe, expect, it, vi } from 'vitest';
 import { normalizeNewsHtml } from './news';
+import { applyEnglishNewsCopy } from './english-news';
+import reviewedCopy from './news-reviewed-copy.json';
 import { prepareNewsArticleHtml } from './sanitize';
 import type { NewsApiItem } from '@/types/news';
 
@@ -21,6 +23,27 @@ describe('article official homepage links', () => {
     expect(links[0].getAttribute('rel')).toBe(originalLink.getAttribute('rel'));
     expect(parse(output).textContent).toContain('正文保持。');
     expect(normalizeNewsHtml(locale, { ...article, contentZh: output, contentEn: output })).toBe(output);
+  });
+
+  it('keeps the pressure-vessel article homepage direct and its English edition available', async () => {
+    const copy = reviewedCopy['42'];
+    const item = {
+      id: 42, slug: copy.slug, status: 'published', isPublished: true,
+      titleZh: copy.titleZh, seoTitleZh: copy.titleZh, summaryZh: copy.summaryZh,
+      contentZh: copy.contentZh, seoDescriptionZh: copy.seoDescriptionZh,
+    } as NewsApiItem;
+    const article = await applyEnglishNewsCopy(item);
+    expect(article.contentEn).toBeTruthy();
+    for (const locale of ['zh', 'en'] as const) {
+      const body = parse(normalizeNewsHtml(locale, article));
+      expect(body.querySelector(`a[href="/${locale}"]`)).not.toBeNull();
+      for (const link of body.querySelectorAll('a[href]')) {
+        const url = new URL(link.getAttribute('href')!, `https://www.jssngyl.cn/${locale}/news/${copy.slug}`);
+        const isRoot = ['jssngyl.cn', 'www.jssngyl.cn'].includes(url.host) &&
+          url.pathname === '/' && !url.search && !url.hash;
+        expect(isRoot, link.outerHTML).toBe(false);
+      }
+    }
   });
 
   it('preserves external sources, deep links, explicit languages, fragments and query targets', () => {
