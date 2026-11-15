@@ -31,7 +31,7 @@ vi.mock('@/lib/buyer-selection-guides', async (original) => {
 vi.mock('@/lib/cases/server', async (original) => {
   const actual = await original<typeof import('@/lib/cases/server')>();
   const record = () => {
-    const source = actual.getCaseArticle('henan-annealing-solution-line');
+    const source = actual.getCaseArticle('stainless-strip-annealing-supply-scope');
     if (!source) throw new Error('approved source case missing');
     return {
       ...source,

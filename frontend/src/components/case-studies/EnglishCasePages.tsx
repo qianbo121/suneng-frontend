@@ -48,13 +48,15 @@ export function EnglishCaseArticle({ slug, searchParams }: { slug: string; searc
   const item = getEnglishCase(slug);
   if (!item) notFound();
   const back = backLink(searchParams.returnTo);
-  const hasEngineeringAttribution = slug === 'henan-annealing-solution-line';
+  const hasEngineeringAttribution = slug === 'stainless-strip-annealing-supply-scope';
   const url = absoluteUrl(`/en/case/${slug}`);
   const related = getEnglishCases().filter((record) => item.relatedCases.includes(record.slug));
   const buyerLinks = getEnglishCaseBuyerLinks(slug).filter((link) => !isWithdrawnTechnicalPath(link.href));
   // Only list sections that CaseProductConnections actually renders.
   const hasConnections = TECHNICAL_CONTENT_PUBLISHED && getCaseConnections(item.id, 'en').length > 0;
   const toc = [...item.toc, ...(buyerLinks.length ? [{ id: 'case-buyer-selection', title: 'Compare selection and supporting requirements' }] : []), ...(hasConnections ? [{ id: 'case-product-connections', title: 'Equipment and engineering entries' }] : [])];
+  const isStripCase = slug === 'stainless-strip-annealing-supply-scope';
+  const contents = <CaseToc items={toc} caseId={item.id} showContact={false} locale="en" />;
   return <div className="case-page case-detail-page case-english" lang="en">
     <div className="case-container">
       <nav className="case-breadcrumb" aria-label="Breadcrumb"><a href="/en">Home</a><span>/</span><a href={back}>Case studies</a><span>/</span><span aria-current="page">{item.title}</span></nav>
@@ -69,7 +71,8 @@ export function EnglishCaseArticle({ slug, searchParams }: { slug: string; searc
               <span>Source: Jiangsu Suneng Industrial Furnace Co., Ltd.</span>
             </div>
           </header>
-          {item.cover && <figure className="case-article-cover"><div className="case-article-image"><Image src={item.cover.src} alt={item.cover.alt} fill sizes="(min-width: 1024px) 900px, 100vw" style={{ objectFit: item.cover.fit || 'contain' }} priority /></div><CaseCoverCaption caption={item.cover.caption} /></figure>}
+          {item.cover && <figure className="case-article-cover"><div className="case-article-image"><Image src={item.cover.src} alt={item.cover.alt} fill sizes={isStripCase ? '(max-width: 421px) calc(100vw - 32px), (max-width: 699px) 390px, (max-width: 1176px) 36vw, 390px' : '(min-width: 1024px) 900px, 100vw'} style={{ objectFit: item.cover.fit || 'contain' }} priority /></div><CaseCoverCaption caption={item.cover.caption} /></figure>}
+          {isStripCase && contents}
           <aside aria-label="Evidence scope" className="case-article-source">
             <p>Record type: {labels[item.contentType]}</p>
             <p>{item.contentType === 'proposal' ? 'This historical technical proposal records design or agreed conditions. It does not establish delivery, actual output or acceptance results.' : 'This project experience record does not establish undisclosed performance, economic benefits or acceptance results.'}</p>
@@ -79,7 +82,7 @@ export function EnglishCaseArticle({ slug, searchParams }: { slug: string; searc
             <CaseProductConnections caseId={item.id} locale="en" />
           </div>
         </article>
-        <CaseToc items={toc} caseId={item.id} showContact={false} locale="en" />
+        {!isStripCase && contents}
       </div>
       <section className="case-english-resources" aria-labelledby="english-related"><h2 id="english-related">Continue your selection</h2>
         {related.map((record) => <p key={record.id}><a href={`/en/case/${record.slug}`}>{record.title}</a></p>)}

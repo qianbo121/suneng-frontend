@@ -35,7 +35,7 @@ describe('English counterparts follow source authority', () => {
     expect(records).toHaveLength(1);
     expect(records[0]).toMatchObject({ id: source.id, slug: source.slug, title: copy.title, sourceDate: source.sourceDate, dateModified: source.dateModified, contentType: 'proposal', projectStatus: 'proposal', cover: { src: source.cover.src, fit: source.cover.fit } });
     expect(records[0].datePublished).toBeUndefined();
-    expect(records[0].html).toContain('Project parameters; scroll horizontally');
+    expect(records[0].html).toContain('Project parameters (scroll horizontally if needed)');
     expect(records[0].html).not.toContain('<script>');
     expect(JSON.stringify(records)).not.toContain('do-not-expose');
     expect(records[0].searchText).toContain('fixture inclusion was not specified');

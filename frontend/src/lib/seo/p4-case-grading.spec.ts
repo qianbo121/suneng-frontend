@@ -28,7 +28,7 @@ describe('case publication boundaries after article migration', () => {
     for (const [name, classification] of [
       ['jining-support-roller', 'proposal'],
       ['continuous-line-renovation', 'proposal'],
-      ['henan-annealing-solution', 'experience'],
+      ['stainless-strip-annealing-supply-scope', 'experience'],
     ]) {
       const body = read(`${name}.md`);
       const meta = JSON.parse(read(`${name}.json`));
@@ -41,7 +41,7 @@ describe('case publication boundaries after article migration', () => {
     }
     expect(read('jining-support-roller.md')).toContain('不是实际验收产能');
     expect(read('jining-support-roller.md')).toContain('两种回火值需要统一采用依据');
-    expect(read('henan-annealing-solution.md')).toContain('实际能耗、产量、成材率、表面质量与验收结果');
+    expect(read('stainless-strip-annealing-supply-scope.md')).toContain('实际能耗、产量、成材率、表面质量与验收结果');
   });
   it('retains the bounded retrofit record and verification requirements', () => {
     const body = read('continuous-line-renovation.md');
@@ -65,7 +65,7 @@ describe('visible case classification, results and review', () => {
     }
   });
   it("renders the owner-approved Henan experience with its visible classification boundary", () => {
-    const item=JSON.parse(read('henan-annealing-solution.json'));
+    const item=JSON.parse(read('stainless-strip-annealing-supply-scope.json'));
     expect(item.publicationStatus).toBe('published');
     const html=renderToStaticMarkup(createElement(CaseArticlePage,{slug:item.slug,searchParams:{}}));
     expect(html).toContain(item.title);

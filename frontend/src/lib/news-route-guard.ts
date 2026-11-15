@@ -66,7 +66,7 @@ export async function getNewsRouteResolution(
       if (item.titleEn?.trim() && item.contentEn?.replace(/<[^>]+>/g, '').trim())
         return available;
       const entry = (
-        englishIndex as Record<string, { slug: string; rawSourceFingerprint: string }>
+        englishIndex as Record<string, { slug: string; rawSourceFingerprint: string; previousSourceFingerprint?: string }>
       )[String(item.id)];
       if (!entry || item.slug !== entry.slug) return { availability: 'missing' };
       const source = JSON.stringify([
@@ -83,7 +83,10 @@ export async function getNewsRouteResolution(
       const fingerprint = Array.from(new Uint8Array(digest), (byte) =>
         byte.toString(16).padStart(2, '0'),
       ).join('');
-      return fingerprint === entry.rawSourceFingerprint ? available : { availability: 'missing' };
+      // A reviewed CMS migration can reach replicas before or after the frontend release.
+      return fingerprint === entry.rawSourceFingerprint || fingerprint === entry.previousSourceFingerprint
+        ? available
+        : { availability: 'missing' };
     }
     return { availability: 'unknown' };
   } catch {

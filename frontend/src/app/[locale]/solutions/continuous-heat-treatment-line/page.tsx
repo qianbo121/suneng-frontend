@@ -63,7 +63,7 @@ const publishedProjectEvidence: ProjectEvidence[] = [
     factId: 'SN-CASE-P0-006',
     title: '850 mm 连续退火钝化线退火固溶段',
     text: '850 mm 为名义机组规格，实际带宽 480–750 mm、厚度 1.6–4.0 mm；带钢退火温度 1050–1150℃，炉体约 130 m，设计 TV 约 190 m·mm/min。',
-    href: '/zh/case/henan-annealing-solution-line',
+    href: '/zh/case/stainless-strip-annealing-supply-scope',
   },
   {
     factId: 'SN-CASE-P0-002',

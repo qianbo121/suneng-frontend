@@ -1,12 +1,12 @@
-For Henan Jinyubang Industrial Co., Ltd.'s continuous annealing and pickling line, Suneng participated in equipment supply for the annealing furnace and solution-treatment cooling section. Compare similar strip projects by first matching actual width, thickness and temperature progression, then reviewing heating, cooling, drying and whole-line interfaces separately. Drawing on the 2017 technical annex and published project records, this page explains that assessment. Proposal parameters are not actual output or acceptance results.
+Suneng supplied equipment for the annealing furnace and solution-treatment cooling section of a customer's continuous stainless steel strip annealing and pickling line. Compare similar strip projects by first matching actual width, thickness and temperature progression, then reviewing heating, cooling, drying and whole-line interfaces separately. Drawing on the project technical annex and project records, this page explains that assessment. Proposal parameters are not actual output or acceptance results.
 
 ## Compare actual strip, not only the “850 mm line” designation
 
-The technical annex calls the project an “850 mm hot-rolled stainless-steel continuous annealing and passivation line” and specifies continuous annealing and solution treatment of stainless-steel strip. Existing project information uses “continuous annealing and pickling line”, retained here. This discussion is limited to the annealing furnace and solution-treatment cooling/drying equipment. It does not include pickling, passivation or other whole-line equipment in Suneng's supply scope.
+The project technical annex specifies continuous annealing and solution treatment of stainless steel strip. This page uses the term “continuous annealing and pickling line”. This discussion is limited to the annealing furnace and solution-treatment cooling/drying equipment. It does not include pickling, passivation or other whole-line equipment in Suneng's supply scope.
 
 850 mm is the nominal line size. The design material range is 200/300-series stainless steel, 480–750 mm wide and 1.6–4.0 mm thick. Compare the new project's grades, usual sizes and maximum width/thickness first. If within that range, proceed to temperature and speed comparisons. If outside, reassess effective passages, supports and heat-treatment capability rather than reusing the nominal size. The difference between nominal size and actual strip width cannot be assumed to be tracking or edge allowance.
 
-| Parameter | Condition in the 2017 technical annex |
+| Parameter | Condition in the project technical annex |
 | --- | --- |
 | Nominal line size | 850 mm; not actual strip width |
 | Proposed strip width | 480–750 mm; 200/300-series stainless steel |
@@ -17,7 +17,7 @@ The technical annex calls the project an “850 mm hot-rolled stainless-steel co
 | Separately listed solution-cooling and drying section | Approximately 45 m overall, including combined cooling, squeeze drying and hot-air drying |
 | Speed calculation | TV = strip speed (m/min) × thickness (mm); design TV approximately 190 m·mm/min, distinct from acceptance and maximum-speed bases |
 
-Parameter source: “Design Basis” and “Process Overview” in the Technical Annex for Annealing Furnace and Solution-Section Equipment of an 850 mm Hot-Rolled Stainless-Steel Continuous Annealing and Passivation Line, dated 26 July 2017. These values compare this project's proposed conditions; they are not capability guarantees for a new project.
+Parameter source: “Design Basis” and “Process Overview” in the project technical annex. These values compare this project's proposed conditions; they are not capability guarantees for a new project.
 
 ## Connect heating, cooling and drying into one temperature progression
 
@@ -53,6 +53,6 @@ Initial review has two steps: establish comparability of material and temperatur
 
 ## Sources
 
-Parameters and proposed configurations come from the Technical Annex for Annealing Furnace and Solution-Section Equipment of an 850 mm Hot-Rolled Stainless-Steel Continuous Annealing and Passivation Line, dated 26 July 2017, particularly Design Basis, Process Overview, Solution Section, Utilities, Equipment Supply Scope and Supply Responsibility Allocation. Project participation follows Suneng's published Henan Jinyubang annealing/solution-section record. Original documents are not available for public download. Public scope covers the customer, project parameters, equipment composition and supply experience. Actual energy consumption, output, yield, surface quality and acceptance results are outside this page's public scope; no numerical performance conclusions are made.
+Parameters and proposed configurations come from the project technical annex, particularly Design Basis, Process Overview, Solution Section, Utilities, Equipment Supply Scope and Supply Responsibility Allocation. Project participation follows Suneng's project record for the annealing and solution-treatment section. Original documents are not available for public download. Public scope covers project parameters, equipment composition and supply experience. Actual energy consumption, output, yield, surface quality and acceptance results are outside this page's public scope; no numerical performance conclusions are made.
 
 [Contact us on WeChat for a preliminary assessment](#case-consultation-title). Start with strip specifications, process requirements and any existing responsibility table.

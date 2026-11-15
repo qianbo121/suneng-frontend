@@ -26,7 +26,7 @@ describe('reviewed product and case connections', () => {
           expect(approvedIds.has(item.id), `${product} ${locale} ${item.id}`).toBe(true);
     }
     for (const locale of ['zh','en'] as const)
-      expect(getEntryCases('/products/detail/annealing-solution-line',locale).map((item) => item.id)).toEqual(['henan-annealing-solution']);
+      expect(getEntryCases('/products/detail/annealing-solution-line',locale).map((item) => item.id)).toEqual(['stainless-strip-annealing-supply-scope']);
   });
   it("omits withdrawn recommendation sections in both languages", () => {
     for(const locale of ['zh','en'] as const) {

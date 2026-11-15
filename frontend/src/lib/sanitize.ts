@@ -206,7 +206,10 @@ export function prepareNewsArticleHtml(
       link.setAttribute('href', destination);
       if (link.textContent?.trim() === href) link.textContent = `https://www.jssngyl.cn${destination}`;
     }
-    if (isWithdrawnTechnicalPath(link.getAttribute('href') ?? '') || isHiddenCaseEntry(link.getAttribute('href') ?? '')) link.replaceWith(...Array.from(link.childNodes));
+    const sourcePath = options.articleSlug && options.locale ? `/${options.locale}/news/${options.articleSlug}` : undefined;
+    if (isWithdrawnTechnicalPath(destination) || isHiddenCaseEntry(destination, sourcePath)) {
+      link.replaceWith(...Array.from(link.childNodes));
+    }
   }
   const coverPath = canonicalAssetPath(options.coverImage);
 

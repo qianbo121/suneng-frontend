@@ -444,7 +444,7 @@ export function ProductionLineDetailPage({ content, locale = 'zh' }: { content: 
             <ComparisonTable locale={locale} data={content.projectReference.table} id="project-reference-table" />
             <p className={styles.note}>{content.projectReference.note}</p>
             <Link href={content.projectReference.href} className={styles.secondaryButton}>
-              {t('查看河南项目公开记录', 'View the public Henan project record')} <HiArrowRight aria-hidden="true" />
+              {t('查看带材项目记录', 'View the strip project record')} <HiArrowRight aria-hidden="true" />
             </Link>
           </div>
         </section>
@@ -549,7 +549,13 @@ export function ProductionLineDetailPage({ content, locale = 'zh' }: { content: 
             ))}
           </div>
           <aside className={styles.related} aria-label={t('相关内容', 'Related resources')}>
-            {s.faq.relatedGroups.map((group) => ({ ...group, links: group.links.filter((item) => !isWithdrawnTechnicalPath(item.href ?? relatedHref(item.label, locale) ?? '') && !isHiddenCaseEntry(item.href ?? relatedHref(item.label, locale) ?? '')) })).filter((group) => group.links.length).map((group) => (
+            {s.faq.relatedGroups.map((group) => ({
+              ...group,
+              links: group.links.filter((item) => {
+                const href = item.href ?? relatedHref(item.label, locale) ?? '';
+                return !isWithdrawnTechnicalPath(href) && !isHiddenCaseEntry(href, `/${locale}/products/detail/${content.pageId}`);
+              }),
+            })).filter((group) => group.links.length).map((group) => (
               <div key={group.id}>
                 <h3>{group.title}</h3>
                 <ul>

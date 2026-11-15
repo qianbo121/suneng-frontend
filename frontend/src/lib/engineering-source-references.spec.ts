@@ -35,10 +35,10 @@ describe('reviewed engineering source references', () => {
 
   it('keeps the Henan translation matched after removing the unverified emergency capacity', () => {
     const root = path.join(process.cwd(), 'content');
-    const metadata = readFileSync(path.join(root, 'cases/henan-annealing-solution.json'));
-    const body = readFileSync(path.join(root, 'cases/henan-annealing-solution.md'));
-    const enMeta = JSON.parse(readFileSync(path.join(root, 'cases-en/henan-annealing-solution.json'), 'utf8'));
-    const enBody = readFileSync(path.join(root, 'cases-en/henan-annealing-solution.md'), 'utf8');
+    const metadata = readFileSync(path.join(root, 'cases/stainless-strip-annealing-supply-scope.json'));
+    const body = readFileSync(path.join(root, 'cases/stainless-strip-annealing-supply-scope.md'));
+    const enMeta = JSON.parse(readFileSync(path.join(root, 'cases-en/stainless-strip-annealing-supply-scope.json'), 'utf8'));
+    const enBody = readFileSync(path.join(root, 'cases-en/stainless-strip-annealing-supply-scope.md'), 'utf8');
     expect(createHash('sha256').update(metadata).update('\0').update(body).digest('hex')).toBe(enMeta.sourceFingerprint);
     expect(body.toString()).not.toMatch(/55\s*kW/);
     expect(enBody).not.toMatch(/55\s*kW/);

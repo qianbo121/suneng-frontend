@@ -285,6 +285,17 @@ describe('verified original-PHP product redirects', () => {
     for (const kind of ['product', 'news']) {
       baseline = baseline.replaceAll('      if ($legacy_' + kind + '_path = "") {\n        return 404;\n      }\n', '');
     }
+    const stripIllustrationRedirect = [
+      '    location = /uploads/2026/11/1794381450589-c85dc4aa-bfb0-4711-913f-8acce61b6a44.webp {',
+      '      return 308 /images/news/resources-zh/140-body.webp$is_args$args;',
+      '    }',
+      '',
+      '',
+    ].join('\n');
+    for (const config of [nginx, readFileSync(new URL('nginx.conf', root), 'utf8')]) {
+      expect(config.split(stripIllustrationRedirect)).toHaveLength(2);
+    }
+    baseline = baseline.replace(stripIllustrationRedirect, '');
     // Same redirect baseline, with the owner-approved legacy admin retirement
     // and factory dynamic upstream recovery applied; redirect rules are unchanged.
     expect(createHash('sha256').update(baseline).digest('hex'))

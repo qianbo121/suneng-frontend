@@ -55,7 +55,7 @@ export const GEO_EVIDENCE_LINKS: GeoEvidenceLink[] = [
   },
   {
     title: '连续退火固溶生产线案例',
-    href: '/zh/case/henan-annealing-solution-line',
+    href: '/zh/case/stainless-strip-annealing-supply-scope',
   },
   {
     title: '热处理炉厂家能力说明',

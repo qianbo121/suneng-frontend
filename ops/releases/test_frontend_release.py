@@ -24,7 +24,7 @@ RECEIPT = {'images': {'frontend': OLD, 'backend': 'sha256:' + 'c' * 64, 'admin':
 MANIFEST = {'schemaVersion': 1, 'image': NEW, 'expectedCurrentImage': OLD, 'publicationScope': r.SCOPE,
             'sourceIdentity': 'git-commit', 'sourceCommit': 'e' * 40, 'archiveSha256': 'f' * 64}
 GOOD = {'passed': True, 'sitemapPassed': True, 'checks': [], 'caseState': 'open'}
-HENAN = 'henan-annealing-solution-line'
+HENAN = 'stainless-strip-annealing-supply-scope'
 FASTENER = 'fastener-mesh-belt-quenching-carburizing'
 CASE_GROUP = [
     path for locale in ('zh', 'en')
@@ -1087,7 +1087,7 @@ class ShippedExamplesTest(unittest.TestCase):
 
 class ReviewedGuideReleaseTest(unittest.TestCase):
     def test_rejects_unapproved_or_english_guides(self):
-        for paths in [["/en/solutions/example"], ["/zh/solutions"], ["/zh/case/henan-annealing-solution-line"], "all"]:
+        for paths in [["/en/solutions/example"], ["/zh/solutions"], ["/zh/case/stainless-strip-annealing-supply-scope"], "all"]:
             with self.subTest(paths=paths), self.assertRaises(ValueError):
                 r.validate_manifest({**MANIFEST, 'approvedGuides': paths})
 

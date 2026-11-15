@@ -53,7 +53,7 @@ const LINKS = {
     kind: '案例',
     title: '连续退火固溶生产线案例',
     description: '查看已公开的项目边界、设计参数和交付口径。',
-    href: '/zh/case/henan-annealing-solution-line',
+    href: '/zh/case/stainless-strip-annealing-supply-scope',
   },
   trolley: {
     kind: '产品',
@@ -195,7 +195,7 @@ const ENGLISH_LINKS: Record<string, Omit<NewsRelatedLink, 'kind'>> = {
   [LINKS.pit.href]: { title: 'Pit furnace', description: 'Check workpiece length, effective depth, lifting and measurement conditions.', href: '/en/products/detail/pit-furnace' },
   [LINKS.roller.href]: { title: 'Roller-hearth furnace', description: 'Check workpiece support, transfer cycle and upstream/downstream interfaces.', href: '/en/products/detail/roller-hearth-furnace' },
   [LINKS.uniformity.href]: { title: 'Furnace assessment and renovation', description: 'Compare measurement, loading, heat transfer and applicable repeat-test evidence.', href: '/en/service/furnace-renovation-overhaul' },
-  [LINKS.lineCase.href]: { title: 'Annealing and solution treatment project', description: 'Review the published project scope, design parameters and delivery boundaries.', href: '/en/case/henan-annealing-solution-line' },
+  [LINKS.lineCase.href]: { title: 'Annealing and solution treatment project', description: 'Review the published project scope, design parameters and delivery boundaries.', href: '/en/case/stainless-strip-annealing-supply-scope' },
   [LINKS.meshBeltOutput.href]: { title: 'Calculate mesh belt furnace hourly output', description: 'Check theoretical loading and belt speed against process time, bottlenecks and downtime.', href: '/en/news/shuju-news-23' },
   [LINKS.meshBeltCarburizing.href]: { title: 'Mesh belt carburizing throughput limits', description: 'Check carburizing time and effective length separately from quench-and-temper throughput.', href: '/en/news/mesh-belt-carburizing-throughput-process-limits' },
   [LINKS.meshBeltQuotation.href]: { title: 'Nine mesh belt quotation boundaries', description: 'Compare quotations using the same workpiece, process, auxiliaries and supply scope.', href: '/en/news/shuju-news-22' },

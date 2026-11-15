@@ -60,11 +60,11 @@ export function CaseArticlePage({
   const url = absoluteUrl(`/zh/case/${item.slug}`);
   const organization = getOrganizationJsonLd();
   // The owner approved the existing materials byline for this case only.
-  const hasEngineeringAttribution = slug === 'henan-annealing-solution-line';
+  const hasEngineeringAttribution = slug === 'stainless-strip-annealing-supply-scope';
   const authorName = hasEngineeringAttribution ? getEngineeringTeamAuthorName() : item.author;
   const related = getPublicCases().filter((record) => item.relatedCases?.includes(record.slug));
   const isSupportRoller = slug === 'jining-support-roller-heat-treatment-line';
-  const hasCuratedResources = slug === 'henan-annealing-solution-line' || isSupportRoller;
+  const hasCuratedResources = slug === 'stainless-strip-annealing-supply-scope' || isSupportRoller;
   const resourcesId = hasCuratedResources ? ANNEALING_RESOURCES_ID : CASE_RESOURCES_ID;
   // Move the existing lead into the reading header without rewriting its content.
   const lead = item.html.match(/^(\s*<p>[\s\S]*?<\/p>)([\s\S]*)$/);
@@ -118,7 +118,9 @@ export function CaseArticlePage({
                       alt={item.cover.alt}
                       fill
                       priority
-                      sizes="(max-width: 767px) 88px, 200px"
+                      sizes={slug === 'stainless-strip-annealing-supply-scope'
+                        ? '(max-width: 421px) calc(100vw - 32px), (max-width: 699px) 390px, (max-width: 1176px) 36vw, 390px'
+                        : '(max-width: 767px) 88px, 200px'}
                       style={{ objectFit: item.cover.fit || 'contain' }}
                     />
                   </div>

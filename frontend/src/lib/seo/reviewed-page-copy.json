@@ -137,10 +137,10 @@
       "value": "江苏苏能工业炉位于泰州，成立于2006年，提供台车炉、箱式炉、井式炉、网带炉、罩式炉、辊底炉、推杆炉、转底炉及热处理线定制，开展节能改造、大修和安装调试。"
     }
   },
-  "/zh/case/henan-annealing-solution-line": {
+  "/zh/case/stainless-strip-annealing-supply-scope": {
     "description": {
-      "source": "河南金誉邦实业有限公司连续退洗线项目中，苏能参与退火炉及固溶冷却段设备配套。比较相似带材项目，要先对齐实际带宽、厚度及温度路径，再按加热、冷却、干燥与整线交接分别比较供货范围。本文结合2017年技术附件与已公开项目记录，说明设备配套的判断方法；方案参数不代表实际产量或验收结果。",
-      "value": "据2017年技术附件与公开记录，介绍河南金誉邦退洗线中苏能配套的退火及固溶冷却段。按带宽、厚度、温度路径和供货范围比较；方案参数不代表实际产量或验收结果。"
+      "source": "在一家企业的不锈钢带连续退洗线项目中，苏能为退火炉和固溶冷却段配套设备。比较相似带材项目，要先对齐实际带宽、厚度及温度路径，再按加热、冷却、干燥与整线交接分别比较供货范围。本文结合该项目技术附件与项目记录，说明设备配套的判断方法；方案参数不代表实际产量或验收结果。",
+      "value": "据该项目技术附件与项目记录，介绍不锈钢带退洗线中苏能配套的退火及固溶冷却段。按带宽、厚度、温度路径和供货范围比较；方案参数不代表实际产量或验收结果。"
     }
   },
   "/zh/products/detail/box-furnace": {
@@ -307,8 +307,8 @@
       "value": "Suneng Stainless Steel Strip Annealing Furnace Project | Suneng Industrial Furnace"
     },
     "description": {
-      "source": "Yes. Jiangsu Suneng Industrial Furnace Co., Ltd. supplied equipment for the annealing furnace and solution-treatment cooling section of Henan Jinyubang Industrial Co., Ltd.’s continuous stainless steel strip annealing and pickling line. Suneng’s thermal-section scope included the furnace, cooling section, combustion equipment and controls. Separate equipment performs downstream pickling.",
-      "value": "Suneng supplied Henan Jinyubang's strip-line annealing and solution-cooling section, including combustion and controls. Downstream pickling is separate."
+      "source": "Yes. Jiangsu Suneng Industrial Furnace Co., Ltd. supplied equipment for the annealing furnace and solution-treatment cooling section of a customer’s continuous stainless steel strip annealing and pickling line. Suneng’s thermal-section scope included the furnace, cooling section, combustion equipment and controls. Separate equipment performs downstream pickling.",
+      "value": "Suneng supplied the strip-line annealing and solution-cooling section, including combustion and controls. Downstream pickling is separate."
     }
   },
   "/zh/news/suneng-furnace-manufacturing-system-integration": {
@@ -1541,7 +1541,7 @@
       "value": "Industrial Furnace Manufacturer | Suneng Industrial Furnace"
     }
   },
-  "/en/case/henan-annealing-solution-line": {
+  "/en/case/stainless-strip-annealing-supply-scope": {
     "title": {
       "source": "850 mm Strip Annealing Supply Scope | Suneng",
       "value": "850 mm Strip Annealing Supply Scope | Suneng Industrial Furnace"

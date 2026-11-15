@@ -14,7 +14,7 @@ const productionManifest = JSON.parse(await fs.readFile(new URL('./site-readabil
 const contactContract = productionManifest.contentContracts['/zh/contact'];
 const caseContract = productionManifest.contentContracts['/zh/case'];
 const shortContactBody = '<h1>联系我们</h1><p>设备咨询、项目沟通与来厂联系。</p><h2>江苏苏能工业炉有限公司</h2><a href="tel:+8613052986814">130-5298-6814</a><h2>微信咨询</h2><h2>业务邮箱</h2><a href="mailto:997518512@qq.com">997518512@qq.com</a><h2>到厂地址</h2>';
-const shortCaseBody = '<h1>项目案例</h1><p>按工件、炉型和工艺，查找相似项目。</p><article><h2>850毫米不锈钢退洗线：退火固溶段的供货范围</h2><a href="/zh/case/henan-annealing-solution-line?returnTo=%2Fzh%2Fcase">查看项目</a></article>';
+const shortCaseBody = '<h1>项目案例</h1><p>按工件、炉型和工艺，查找相似项目。</p><article><h2>850毫米不锈钢退洗线：退火固溶段的供货范围</h2><a href="/zh/case/stainless-strip-annealing-supply-scope?returnTo=%2Fzh%2Fcase">查看项目</a></article>';
 
 test('reads literal visible main; navigation and serialized script do not count', () => {
   assert.equal(inspectHtml(good()).classification, 'readable');
@@ -93,7 +93,7 @@ test('case index requires the actual visible approved card and same-site detail 
   const variants = [
     shortCaseBody.replace(/<article>[\s\S]*?<\/article>/, ''),
     shortCaseBody.replace('<article>', '<article hidden>'),
-    shortCaseBody.replace('/zh/case/henan-annealing-solution-line?returnTo=%2Fzh%2Fcase', 'https://elsewhere.test/zh/case/henan-annealing-solution-line'),
+    shortCaseBody.replace('/zh/case/stainless-strip-annealing-supply-scope?returnTo=%2Fzh%2Fcase', 'https://elsewhere.test/zh/case/stainless-strip-annealing-supply-scope'),
     shortCaseBody.replace(/<a[^>]*>[\s\S]*?<\/a>/, ''),
   ];
   for (const variant of variants) assert.equal(inspectHtml(`<main>${variant}</main><footer>${shortCaseBody}</footer>`, options).classification, 'partial');

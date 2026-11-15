@@ -447,8 +447,8 @@
         },
         {
           "id": "faq-7",
-          "question": "河南项目的参数可以直接用来选型吗？",
-          "answer": "河南项目参数属于特定牌号、规格和设备分工，不能当作所有项目的通用能力。新项目仍应依据带宽、厚度、温度路径、表面与产能要求重新核算。",
+          "question": "该项目的参数可以直接用来选型吗？",
+          "answer": "该项目参数属于特定牌号、规格和设备分工，不能当作所有项目的通用能力。新项目仍应依据带宽、厚度、温度路径、表面与产能要求重新核算。",
           "defaultOpen": false
         },
         {
@@ -489,8 +489,8 @@
           "title": "已有项目资料",
           "links": [
             {
-              "label": "河南带材项目公开记录",
-              "href": "/zh/case/henan-annealing-solution-line"
+              "label": "不锈钢带项目公开记录",
+              "href": "/zh/case/stainless-strip-annealing-supply-scope"
             }
           ]
         }
@@ -533,10 +533,10 @@
     }
   },
   "projectReference": {
-    "title": "河南带材项目：公开参数与供货边界",
-    "description": "河南金誉邦实业有限公司连续退洗线退火固溶段设备项目。保留已公开的特定项目参数，不作为其他项目的通用能力。",
+    "title": "不锈钢带项目：公开参数与供货边界",
+    "description": "一家企业的不锈钢带连续退洗线退火固溶段配套项目。保留已公开的特定项目参数，不作为其他项目的通用能力。",
     "table": {
-      "caption": "河南带材项目公开参考参数",
+      "caption": "不锈钢带项目公开参考参数",
       "columns": [
         {
           "key": "item",
@@ -581,6 +581,6 @@
       ]
     },
     "note": "未公开能耗、产量、成材率、表面结果及验收结果；本项目具体设备和接口仍须单独确认。",
-    "href": "/zh/case/henan-annealing-solution-line"
+    "href": "/zh/case/stainless-strip-annealing-supply-scope"
   }
 }

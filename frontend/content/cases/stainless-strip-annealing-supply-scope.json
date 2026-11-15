@@ -1,7 +1,7 @@
 {
-  "id": "henan-annealing-solution",
-  "slug": "henan-annealing-solution-line",
-  "summary": "河南金誉邦实业有限公司连续退洗线项目中，苏能参与退火炉及固溶冷却段设备配套。比较相似带材项目，要先对齐实际带宽、厚度及温度路径，再按加热、冷却、干燥与整线交接分别比较供货范围。本文结合2017年技术附件与已公开项目记录，说明设备配套的判断方法；方案参数不代表实际产量或验收结果。",
+  "id": "stainless-strip-annealing-supply-scope",
+  "slug": "stainless-strip-annealing-supply-scope",
+  "summary": "在一家企业的不锈钢带连续退洗线项目中，苏能为退火炉和固溶冷却段配套设备。比较相似带材项目，要先对齐实际带宽、厚度及温度路径，再按加热、冷却、干燥与整线交接分别比较供货范围。本文结合该项目技术附件与项目记录，说明设备配套的判断方法；方案参数不代表实际产量或验收结果。",
   "workpiece": [
     "不锈钢带材"
   ],
@@ -23,7 +23,6 @@
     "850mm",
     "连续退洗线"
   ],
-  "publicCustomerName": "河南金誉邦实业有限公司",
   "facts": [
     {
       "label": "方案带宽",
@@ -48,9 +47,9 @@
     }
   ],
   "participation": "苏能参与退火炉及固溶冷却段设备配套；具体工作与现场接口按对应文件分项核对。",
-  "sourceSummary": "2017年7月26日退火炉及固溶段设备技术附件（设计依据、工艺概述及供货分交）；苏能已公开的河南金誉邦项目记录。",
+  "sourceSummary": "该项目技术附件（设计依据、工艺概述及供货分交）及苏能项目记录。",
   "datePublished": "2026-09-18T01:00:00+08:00",
-  "dateModified": "2026-10-09T16:52:39+08:00",
+  "dateModified": "2026-11-15T03:19:11Z",
   "relatedLinks": [
     {
       "title": "连续退火固溶生产线",
@@ -58,18 +57,17 @@
     }
   ],
   "title": "850毫米不锈钢退洗线：退火固溶段的供货范围",
-  "body": "henan-annealing-solution.md",
+  "body": "stainless-strip-annealing-supply-scope.md",
   "contentType": "experience",
   "publicationStatus": "published",
   "projectStatus": "experience",
   "coverTitle": "带材\n退火固溶",
   "cover": {
-    "src": "/images/case-covers/henan-strip-annealing-850.webp",
+    "src": "/images/case-covers/stainless-strip-annealing-850.webp",
     "alt": "不锈钢带卷、连续退火炉及冷却段示意图",
     "caption": "参考图，非项目现场照片",
     "fit": "contain"
   },
-  "sourceDate": "2017-07-26",
   "projectYear": 2017,
   "listTitle": "850毫米不锈钢退洗线：退火固溶段的供货范围"
 }

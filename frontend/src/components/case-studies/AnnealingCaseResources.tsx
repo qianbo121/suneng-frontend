@@ -174,7 +174,7 @@ export function AnnealingCaseResources({
         <div className={styles.context}>
           <p>
             {context ??
-              `${isSupportRoller ? '济宁五创支重轮热处理生产线' : '河南金誉邦连续退洗线'} · 项目经验`}
+              `${isSupportRoller ? '济宁五创支重轮热处理生产线' : '不锈钢带连续退洗线'} · 项目经验`}
           </p>
           <a href={backHref}>
             返回项目案例 <span aria-hidden="true">&gt;&gt;</span>

@@ -37,17 +37,17 @@ describe('withdrawn content routing', () => {
     ['/zh/%5Csolutions', 'zh'],
     ['/en/%3F/%252e%252e/solutions', 'en'],
     // A case page must be named exactly: Next reads each of these as another slug.
-    ['/zh/case/jining-support-roller-heat-treatment-line%2F%2e%2e%2Fhenan-annealing-solution-line', 'zh'],
-    ['/zh/case/%2e%2e%2Fcase%2Fhenan-annealing-solution-line', 'zh'],
-    ['/en/case/x%2F%252e%252e%2Fhenan-annealing-solution-line', 'en'],
+    ['/zh/case/jining-support-roller-heat-treatment-line%2F%2e%2e%2Fstainless-strip-annealing-supply-scope', 'zh'],
+    ['/zh/case/%2e%2e%2Fcase%2Fstainless-strip-annealing-supply-scope', 'zh'],
+    ['/en/case/x%2F%252e%252e%2Fstainless-strip-annealing-supply-scope', 'en'],
     ['/zh/case/%2568enan-annealing-solution-line', 'zh'],
-    ['/zh/case/henan-annealing-solution-line%09', 'zh'],
-    ['/zh/case/henan-annealing-solution-line%20', 'zh'],
-    ['/zh/case/henan-annealing-solution-line%1F', 'zh'],
-    ['/zh/case/henan-annealing-solution-line%2F', 'zh'],
-    ['/zh/case/henan-annealing-solution-line%0A', 'zh'],
-    ['/en/case/%5Chenan-annealing-solution-line', 'en'],
-    ['/zh/case/%2Fhenan-annealing-solution-line', 'zh'],
+    ['/zh/case/stainless-strip-annealing-supply-scope%09', 'zh'],
+    ['/zh/case/stainless-strip-annealing-supply-scope%20', 'zh'],
+    ['/zh/case/stainless-strip-annealing-supply-scope%1F', 'zh'],
+    ['/zh/case/stainless-strip-annealing-supply-scope%2F', 'zh'],
+    ['/zh/case/stainless-strip-annealing-supply-scope%0A', 'zh'],
+    ['/en/case/%5Cstainless-strip-annealing-supply-scope', 'en'],
+    ['/zh/case/%2Fstainless-strip-annealing-supply-scope', 'zh'],
     ['/zh/case/foo.bar', 'zh'],
     ['/en/case/jining-support-roller-heat-treatment-line.', 'en'],
   ])('refuses %s with a real 404 in the reader language', async (address, locale) => {
@@ -97,7 +97,7 @@ describe('withdrawn content routing', () => {
   it('checks public detail routes with dots without intercepting assets', () => {
     const matches = (address: string) =>
       unstable_doesMiddlewareMatch({ config, url: new URL(address, 'https://www.jssngyl.cn').href });
-    for (const address of ['/zh', '/zh/case', '/zh/case/foo.bar', '/en/case/henan-annealing-solution-line.', '/zh/solutions/x',
+    for (const address of ['/zh', '/zh/case', '/zh/case/foo.bar', '/en/case/stainless-strip-annealing-supply-scope.', '/zh/solutions/x',
       '/zh/news/abc.def', '/en/news/whatever.html', '/zh/news/whatever.php',
       '/zh/products/detail/missing.html', '/en/products/detail/missing.aspx'])
       expect(matches(address), address).toBe(true);
@@ -110,11 +110,11 @@ describe('withdrawn content routing', () => {
     '/zh/products',
     '/zh/case',
     '/zh/case/',
-    '/zh/case/henan-annealing-solution-line',
-    '/zh/%63ase/henan-annealing-solution-line',
+    '/zh/case/stainless-strip-annealing-supply-scope',
+    '/zh/%63ase/stainless-strip-annealing-supply-scope',
     '/en/case',
-    '/en/case/henan-annealing-solution-line',
-    '/en/case/henan-annealing-solution-line?returnTo=%2Fen%2Fcase',
+    '/en/case/stainless-strip-annealing-supply-scope',
+    '/en/case/stainless-strip-annealing-supply-scope?returnTo=%2Fen%2Fcase',
   ])('keeps %s reachable', async (address) => {
     const response = await run(address);
     expect(response.status, address).not.toBe(404);
@@ -140,7 +140,7 @@ describe('Chinese-only pages under /en', () => {
     '/en/products/detail/cylinder-curing-line',
     '/en/products/detail/copper-wire-annealing-line/inquiry-checklist',
     '/en/service/installation-after-sales',
-    '/en/case/henan-annealing-solution-line',
+    '/en/case/stainless-strip-annealing-supply-scope',
     '/en/contact',
   ])('leaves %s reachable', async (address) => {
     const response = await run(address);

@@ -38,7 +38,7 @@ import englishSlugs from '@/lib/cases/english-slugs.json';
 import { PUBLIC_CASE_SLUGS, PUBLIC_ENGLISH_CASE_SLUGS } from '@/lib/cases/public-case-allowlist';
 
 const sorted = (values: Iterable<string>) => [...values].sort();
-const approvedSlug = 'henan-annealing-solution-line';
+const approvedSlug = 'stainless-strip-annealing-supply-scope';
 const renderArticle = (slug: string) =>
   renderToStaticMarkup(createElement(EnglishCaseArticle, { slug, searchParams: {} }));
 const articleJsonLd = (html: string) =>
@@ -103,7 +103,7 @@ describe('complete English case integration', () => {
   it("searches only approved English records and links no withdrawn buyer guides", () => {
     const found = getEnglishCaseResults(parseCaseQuery({ q: 'furnace' })).items.map((item) => item.slug);
     expect(found.every((slug) => PUBLIC_ENGLISH_CASE_SLUGS.has(slug))).toBe(true);
-    expect(found).toContain('henan-annealing-solution-line');
+    expect(found).toContain('stainless-strip-annealing-supply-scope');
     expect(getPublicCases().filter(item=>getCaseBuyerLinks(item.slug).length)).toEqual([]);
   });
   it('dates the English page in China time and presents no publication date of its own', () => {

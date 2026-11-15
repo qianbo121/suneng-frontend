@@ -117,6 +117,12 @@ const nextConfig = {
   },
   async redirects() {
     return [
+      { source: '/case/henan-annealing-solution-line', destination: '/zh/case/stainless-strip-annealing-supply-scope', permanent: true },
+      { source: '/:locale(zh|en)/case/henan-annealing-solution-line', destination: '/:locale/case/stainless-strip-annealing-supply-scope', permanent: true },
+      { source: '/images/about/cases/10-case-henan-annealing-solution-line.jpg', destination: '/images/about/cases/stainless-strip-annealing-line.jpg', permanent: true },
+      { source: '/images/case-covers/henan-strip-annealing-850.webp', destination: '/images/case-covers/stainless-strip-annealing-850.webp', permanent: true },
+      { source: '/uploads/2026/11/1794381450589-c85dc4aa-bfb0-4711-913f-8acce61b6a44.webp', destination: '/images/news/resources-zh/140-body.webp', permanent: true },
+      { source: '/images/news/resources-en/140-body.webp', destination: '/images/news/resources-en/140-strip-supply.webp', permanent: true },
       { source: '/zh/about/profile', destination: '/zh/about', permanent: true },
       { source: '/zh/about/suneng-profile', destination: '/zh/about', permanent: true },
       { source: '/zh/about/chairman', destination: '/zh/about', permanent: true },

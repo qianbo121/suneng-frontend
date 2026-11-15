@@ -8,7 +8,7 @@ import { prepareNewsArticleHtml } from './sanitize';
 import type { NewsApiItem } from '@/types/news';
 
 const revision = revisions['73'];
-const casePath = '/zh/case/henan-annealing-solution-line';
+const casePath = '/zh/case/stainless-strip-annealing-supply-scope';
 
 describe('approved inline case reference in shuju-news-28', () => {
   it('exposes all seven existing section labels as headings without changing their wording', () => {
@@ -31,14 +31,14 @@ describe('approved inline case reference in shuju-news-28', () => {
     ).toBe(false);
   });
 
-  it('retains contextual wording but pauses its case entrance', () => {
-    const html = prepareNewsArticleHtml(revision.contentZh);
+  it('keeps the reviewed case entrance in its owning article', () => {
+    const html = prepareNewsArticleHtml(revision.contentZh, { locale: 'zh', articleSlug: revision.slug });
     const root = DOMPurify.sanitize(html, { RETURN_DOM: true }) as HTMLElement;
     const links = root.querySelectorAll(`a[href="${casePath}"]`);
-    expect(links).toHaveLength(0);
-    const paragraph = Array.from(root.querySelectorAll('p')).find(p => p.textContent?.includes('可参照河南850毫米退洗线'))!;
+    expect(links).toHaveLength(1);
+    const paragraph = Array.from(root.querySelectorAll('p')).find(p => p.textContent?.includes('可参照850毫米退洗线'))!;
     expect(paragraph.textContent).toBe(
-      '可参照河南850毫米退洗线的供货范围说明，核对设备配套与整线责任。',
+      '可参照850毫米退洗线的供货范围说明，核对设备配套与整线责任。',
     );
     expect(paragraph.previousElementSibling?.textContent).toContain('以及培训和备件清单。');
     expect(paragraph.nextElementSibling?.textContent).toMatch(/^如果客户名称和项目参数不能公开/);

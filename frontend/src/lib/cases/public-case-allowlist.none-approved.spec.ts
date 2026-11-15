@@ -19,7 +19,7 @@ import { parseCaseQuery } from './query';
 
 describe('no approved cases', () => {
   it('hides published source files from every loader and search', () => {
-    const henan = JSON.parse(fs.readFileSync(path.join(process.cwd(), 'content/cases/henan-annealing-solution.json'), 'utf8'));
+    const henan = JSON.parse(fs.readFileSync(path.join(process.cwd(), 'content/cases/stainless-strip-annealing-supply-scope.json'), 'utf8'));
     expect(henan.publicationStatus).toBe('published');
     expect(getPublicCases()).toEqual([]);
     expect(getEnglishCases()).toEqual([]);

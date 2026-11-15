@@ -6,7 +6,7 @@ import type { NewsListCardItem } from '@/types/news';
 import type { Locale } from '@/types/site';
 
 export function getNewsCaseResource(locale: Locale): NewsListCardItem | undefined {
-  const slug = 'henan-annealing-solution-line';
+  const slug = 'stainless-strip-annealing-supply-scope';
   const item = locale === 'en' ? getEnglishCase(slug) : getCaseArticle(slug);
   if (!item?.cover) return;
 

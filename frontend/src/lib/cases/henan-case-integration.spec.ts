@@ -6,7 +6,7 @@ import { prepareCaseBody } from './content';
 
 // A focused handoff check for the reviewed article, not an engineering approval.
 
-const website = path.join(process.cwd(), 'content/cases/henan-annealing-solution');
+const website = path.join(process.cwd(), 'content/cases/stainless-strip-annealing-supply-scope');
 const read = (file: string) => fs.readFileSync(file, 'utf8');
 
 const dom = (markdown: string) => DOMPurify.sanitize(prepareCaseBody(markdown).html, { RETURN_DOM_FRAGMENT: true });
@@ -42,7 +42,7 @@ describe('Henan case reviewed artifact handoff', () => {
   });
 
   it("carries the same approved edits in the English copy", () => {
-    const english = path.join(process.cwd(), 'content/cases-en/henan-annealing-solution');
+    const english = path.join(process.cwd(), 'content/cases-en/stainless-strip-annealing-supply-scope');
     const copy = JSON.parse(read(english + '.json'));
     const body = read(english + '.md');
     expect(body).not.toMatch(/Existing quotations|historical prices|electrical-scope wording/);
@@ -52,9 +52,19 @@ describe('Henan case reviewed artifact handoff', () => {
     expect(`${body}\n${JSON.stringify(copy)}`).not.toMatch(/localhost|127\.0\.0\.1|\/Users\/|QZB170726|Qianye|Xuchang|RMB|yuan/i);
   });
 
+  it('publishes only neutral customer references in both languages', () => {
+    for (const directory of ['cases', 'cases-en']) {
+      const source = path.join(process.cwd(), 'content', directory, 'stainless-strip-annealing-supply-scope');
+      expect(read(source + '.json') + read(source + '.md')).not.toMatch(
+        /金誉邦|河南|Jinyubang|Henan|2017-07-26|26 July 2017|2017年7月26日/i,
+      );
+    }
+    expect(JSON.parse(read(website + '.json')).publicCustomerName).toBeUndefined();
+  });
+
   it("does not expose private delivery records through the archived website metadata", () => {
     const web=JSON.parse(read(website+'.json'));
-    expect(web.slug).toBe('henan-annealing-solution-line');
+    expect(web.slug).toBe('stainless-strip-annealing-supply-scope');
     for(const field of ['sourceReview','artifactHashes','technicalReviewer','publication'])expect(web[field]).toBeUndefined();
   });
 
@@ -62,7 +72,7 @@ describe('Henan case reviewed artifact handoff', () => {
     const body = read(`${website}.md`);
     assertTable(body);
     const table = dom(body).querySelector('table')!;
-    expect([...table.querySelectorAll('thead th')].map((c) => c.textContent?.trim())).toEqual(['参数', '2017年技术附件中的条件']);
+    expect([...table.querySelectorAll('thead th')].map((c) => c.textContent?.trim())).toEqual(['参数', '该项目技术附件中的条件']);
     expect(table.querySelectorAll('tbody tr')).toHaveLength(8);
     expect(dom(body).textContent).not.toContain('**');
     expect(dom(body).querySelectorAll('h1')).toHaveLength(0);

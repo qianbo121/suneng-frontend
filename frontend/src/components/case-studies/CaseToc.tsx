@@ -62,7 +62,8 @@ export function CaseToc({
         <h2>{locale === 'en' ? 'On this page' : '本文目录'}</h2>
         {links}
       </nav>
-      <details className="case-toc-mobile">
+      {/* The browser may already have toggled this disclosure before hydration. */}
+      <details className="case-toc-mobile" suppressHydrationWarning>
         <summary>{locale === 'en' ? 'On this page' : '本文目录'}</summary>
         <nav aria-label={locale === 'en' ? 'On this page' : '本文目录'}>{links}</nav>
       </details>

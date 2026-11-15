@@ -57,7 +57,7 @@ export function prepareCaseBody(markdown: string, locale: 'zh' | 'en' = 'zh') {
     wrapper.className = 'case-table-scroll';
     wrapper.tabIndex = 0;
     wrapper.setAttribute('role', 'region');
-    wrapper.setAttribute('aria-label', locale === 'en' ? 'Project parameters; scroll horizontally' : '项目参数表，可横向滚动');
+    wrapper.setAttribute('aria-label', locale === 'en' ? 'Project parameters (scroll horizontally if needed)' : '项目参数表（内容超出时可横向滚动）');
     table.replaceWith(wrapper);
     wrapper.appendChild(table);
     table.querySelectorAll('thead th').forEach((cell) => cell.setAttribute('scope', 'col'));

@@ -26,7 +26,7 @@ vi.mock('next/navigation', () => ({
 }));
 
 const curated = new Set([
-  'henan-annealing-solution-line',
+  'stainless-strip-annealing-supply-scope',
   'jining-support-roller-heat-treatment-line',
 ]);
 
@@ -43,7 +43,7 @@ function expectPublishedBody(rendered: string, original: string, slug: string) {
 describe('case resources preserve the published content', () => {
   it('renders the approved materials byline and its two coauthors on the Henan case', () => {
     const html = renderToStaticMarkup(createElement(CaseArticlePage, {
-      slug: 'henan-annealing-solution-line', searchParams: {},
+      slug: 'stainless-strip-annealing-supply-scope', searchParams: {},
     }));
     expect(html).toContain('作者：<span translate="no">苏能工业炉工程技术团队&amp;唐荔</span>');
     const [article] = JSON.parse(html.match(/<script[^>]+id="case-article-jsonld"[^>]*>(.*?)<\/script>/s)![1]);
@@ -83,7 +83,7 @@ describe('case resources preserve the published content', () => {
   });
 
   it("keeps the approved Henan page free of links to withdrawn guides and solutions", () => {
-    const html = renderToStaticMarkup(createElement(CaseArticlePage, { slug: 'henan-annealing-solution-line', searchParams: {} }));
+    const html = renderToStaticMarkup(createElement(CaseArticlePage, { slug: 'stainless-strip-annealing-supply-scope', searchParams: {} }));
     expect(html).toContain('<figcaption>参考图，非项目现场照片</figcaption>');
     for (const [, href] of html.matchAll(/href="([^"]+)"/g)) expect(isWithdrawnTechnicalPath(href), href).toBe(false);
     expect(html).toContain('href="/zh/products/detail/annealing-solution-line"');

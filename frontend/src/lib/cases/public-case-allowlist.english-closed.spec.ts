@@ -3,12 +3,12 @@ import { describe, expect, it, vi } from 'vitest';
 // Chinese page approved, English copy not yet approved.
 vi.mock('./public-case-allowlist', () => {
   const REVIEWED_PUBLIC_CASES = [{
-    id: 'henan-annealing-solution', slug: 'henan-annealing-solution-line', batch: 1,
+    id: 'stainless-strip-annealing-supply-scope', slug: 'stainless-strip-annealing-supply-scope', batch: 1,
     english: false, approvedBy: 'site-owner', approvedAt: '2026-09-17',
   }];
   return {
     REVIEWED_PUBLIC_CASES,
-    PUBLIC_CASE_SLUGS: new Set(['henan-annealing-solution-line']),
+    PUBLIC_CASE_SLUGS: new Set(['stainless-strip-annealing-supply-scope']),
     PUBLIC_ENGLISH_CASE_SLUGS: new Set<string>(),
   };
 });
@@ -31,7 +31,7 @@ import { getEnglishCases } from './english';
 import buildSitemap from '@/app/sitemap';
 import CasePage, { generateMetadata } from '@/app/[locale]/case/page';
 
-const henan = 'henan-annealing-solution-line';
+const henan = 'stainless-strip-annealing-supply-scope';
 const props = (locale: string) => ({ params: Promise.resolve({ locale }), searchParams: Promise.resolve({}) });
 
 describe('a case approved in Chinese only', () => {

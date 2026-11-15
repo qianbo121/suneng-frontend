@@ -39,7 +39,7 @@ describe('reviewed page search copy', () => {
   });
 
   it('keeps proposal parameters distinct from production and acceptance results', () => {
-    const description = copy['/zh/case/henan-annealing-solution-line'].description!.value;
+    const description = copy['/zh/case/stainless-strip-annealing-supply-scope'].description!.value;
     expect(description).toContain('方案参数不代表实际产量或验收结果');
   });
 
