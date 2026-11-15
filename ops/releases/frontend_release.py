@@ -262,7 +262,15 @@ def case_contract(state, cases=None, *, encoded=True, withdrawn=None, guides=Non
     retired += [p for p in APPROVED_PROCUREMENT_PATHS if p not in procurement and p not in retired]
     retired += [p.replace('/zh/', '/en/', 1) for p in APPROVED_PROCUREMENT_PATHS
                 if p.replace('/zh/', '/en/', 1) not in procurement]
-    return {'state': state, 'group': group, 'retired': retired + drafts + extra,
+    redirects = {}
+    for locale in ('zh', 'en'):
+        old = f'/{locale}/case/henan-annealing-solution-line'
+        new = f'/{locale}/case/stainless-strip-annealing-supply-scope'
+        if new in group and ((state == 'open' and old in drafts) or
+                             (state == 'either' and old in group)):
+            redirects[old] = new
+    return {'state': state, 'group': group, 'caseRedirects': redirects,
+            'retired': retired + [path for path in drafts if path not in redirects] + extra,
             'guides': {'state': guide_state, 'paths': guides},
             'procurement': {'state': procurement_state, 'paths': procurement}}
 
@@ -271,6 +279,8 @@ def case_group_failure(statuses, contract):
     """Return the first case path that breaks the contract, or None."""
     allowed = {'open': {200}, 'closed': {404}, 'either': {200, 404}}[contract['state']]
     for path in contract['group']:
+        if contract['state'] == 'either' and path in contract.get('caseRedirects', {}) and statuses.get(path) == 308:
+            continue  # public_probe separately verifies its exact location and direct destination.
         if statuses.get(path) not in allowed:
             return path
     # A case page is never public while its locale's hub is withdrawn.
@@ -418,6 +428,14 @@ def public_probe(base_url, contract):
     for path in contract['group']:
         status = status_of(path)
         statuses[path] = int(status) if status.isdigit() else 0
+    for old, new in contract.get('caseRedirects', {}).items():
+        if contract['state'] == 'either' and statuses[new] == 404 and statuses[old] in (200, 404):
+            continue  # The prior image can still serve the original case.
+        observed = run(['curl', '--max-time', '25', '--silent', '--show-error', '--output',
+                        '/dev/null', '--write-out', '%{http_code}\n%{redirect_url}', base_url + old]).splitlines()
+        if observed != ['308', base_url + new] or statuses[new] != 200:
+            raise RuntimeError('Public case redirect check failed: ' + old)
+        results.append({'path': old, 'status': 308, 'redirectTo': new, 'targetStatus': statuses[new]})
     failed = case_group_failure(statuses, contract)
     if failed:
         raise RuntimeError('Public case route check failed: ' + failed)
