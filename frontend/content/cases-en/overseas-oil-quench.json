@@ -1,0 +1,129 @@
+{
+  "id": "overseas-oil-quench",
+  "slug": "overseas-oil-quench",
+  "title": "Does the specified output cover the whole protective-atmosphere oil quench and temper line?",
+  "summary": "Under the agreement, Suneng is to design and manufacture the line for an overseas buyer. It specifies the equipment, utility connections and acceptance checks.",
+  "body": "overseas-oil-quench.md",
+  "coverAlt": "Oil quench and temper line: feeder, quenching furnace, oil quench tank, oil-draining conveyor, washer, tempering furnace and final cooling tank.",
+  "coverCaption": "Oil quench and temper line: feeder, quenching furnace, oil quench tank, oil-draining conveyor, washer, tempering furnace and final cooling tank.",
+  "translationStatus": "complete",
+  "sourceFingerprint": "e862e3c2dcb49cfb1e3b170ad0cd0c77d1f197d8c8f2955bcf08ac10494a064f",
+  "seoTitle": "Protective-atmosphere oil quench and temper line output",
+  "seoDescription": "The agreement lists approximately 300 kg/h for oil quenching, washing and tempering together. Adding the furnace ratings would count the same parts twice.",
+  "presentation": {
+    "view": {
+      "animated": true,
+      "top": 0,
+      "height": 278.846154,
+      "cameras": [
+        [
+          55,
+          150,
+          128
+        ],
+        [
+          190,
+          135,
+          265
+        ],
+        [
+          403,
+          156,
+          246
+        ],
+        [
+          540,
+          169,
+          116
+        ],
+        [
+          625,
+          137,
+          150
+        ],
+        [
+          800,
+          137,
+          280
+        ],
+        [
+          959,
+          171,
+          120
+        ]
+      ]
+    },
+    "status": "Signed technical agreement",
+    "metrics": [
+      [
+        "Oil quench and temper line",
+        "approximately 300",
+        "kg/h"
+      ]
+    ],
+    "note": "The agreement specifies approximately 300 kg/h for oil quenching, washing and tempering together. Actual throughput depends on the parts and how they are loaded.",
+    "work": [
+      "Parts: small and medium-sized metal components.",
+      "Process conditions: a protective atmosphere.",
+      "Capacity basis: weight processed per hour by the complete line."
+    ],
+    "features": [
+      [
+        "Which equipment does the rate cover?",
+        "It covers the complete line. The capacities of successive stages are not added together."
+      ],
+      [
+        "How is the oil circulated?",
+        "Jets are arranged in sections along the tank bottom. The circulation pump sits above ground for maintenance."
+      ],
+      [
+        "How are temperature deviations signalled?",
+        "The temperature controller gives audible and visual alarms for high and low temperatures."
+      ]
+    ],
+    "flow": [
+      "Feeder",
+      "Quenching furnace",
+      "Oil quench tank",
+      "Oil-draining conveyor",
+      "Washer",
+      "Tempering furnace",
+      "Final cooling tank"
+    ],
+    "params": [
+      [
+        "Main furnace belt width",
+        "500 mm"
+      ],
+      [
+        "Heated length",
+        "4700 mm"
+      ],
+      [
+        "Main furnace heating power",
+        "130 kW"
+      ]
+    ],
+    "supplier": "Design, manufacture, transport to a port in China, machine-side wiring, installation guidance, commissioning and training.",
+    "buyer": "Unload, lift and handle equipment. Provide primary wiring from the transformer low-voltage cabinet to the equipment control cabinet, atmosphere main valves, external exhaust, drains and water supply. Bring utilities to the designated points and build foundations, embedded tracks, cable trenches, maintenance pits and external control-room facilities.",
+    "scope": "Feeder, quenching furnace, oil quench tank, oil-draining conveyor, washer, tempering furnace and controls. The agreement’s process flow also lists a post-tempering cooling tank.",
+    "pre": "Before shipment, preliminary acceptance takes place at Suneng’s factory against the technical requirements (excluding tests).",
+    "site": "Check that the equipment runs without failure for 24 consecutive hours and that the process operates normally.",
+    "faq": [
+      [
+        "Should the outputs of the quenching and tempering furnaces be added together?",
+        "The agreement specifies approximately 300 kg/h for the complete protective-atmosphere oil quench and temper line. Parts pass through oil quenching, washing and tempering in sequence, so the two furnace outputs cannot be added together."
+      ],
+      [
+        "Does the agreement identify a particular component?",
+        "The agreement identifies small and medium-sized metal components without naming a particular part."
+      ],
+      [
+        "What follows oil quenching?",
+        "Oil draining, washing and tempering precede final cooling."
+      ]
+    ],
+    "source": "Equipment and capacity figures come from the signed technical agreement for this line.",
+    "faqIntro": "Questions about capacity, workpieces and acceptance."
+  }
+}

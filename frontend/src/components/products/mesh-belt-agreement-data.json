@@ -15,7 +15,8 @@
       "capacity": "淬火炉约 150 kg/h；回火炉150 kg/h",
       "basis": "2024 技术协议",
       "fastenerScope": "淬火炉",
-      "fastenerCapacity": "约 150 kg/h"
+      "fastenerCapacity": "约 150 kg/h",
+      "caseSlug": "roller-belt-stage-output"
     },
     {
       "model": "RCWT-90/80-9/6",
@@ -25,7 +26,8 @@
       "capacity": "淬火炉约 150 kg/h；回火炉约 150 kg/h",
       "basis": "2020 技术协议",
       "fastenerScope": "淬火炉",
-      "fastenerCapacity": "约 150 kg/h"
+      "fastenerCapacity": "约 150 kg/h",
+      "caseSlug": "roller-belt-cooling-water-supply"
     },
     {
       "model": "RCWT-160/105-9/6",
@@ -36,7 +38,8 @@
       "basis": "2025 技术协议",
       "fastenerScope": "淬火炉",
       "fastenerProcess": "淬火",
-      "fastenerCapacity": "300 kg/h"
+      "fastenerCapacity": "300 kg/h",
+      "caseSlug": "fastener-mesh-belt-quenching-carburizing"
     },
     {
       "selectionCode": "QT-500/4700",
@@ -45,7 +48,8 @@
       "process": "油淬+回火整线",
       "capacity": "约 300 kg/h",
       "basis": "2026 海外技术协议",
-      "fastenerScope": "油淬＋回火整线"
+      "fastenerScope": "油淬＋回火整线",
+      "caseSlug": "overseas-oil-quench"
     },
     {
       "selectionCode": "AT-500/4700",
@@ -54,7 +58,8 @@
       "process": "硝盐等温淬火整线",
       "capacity": "约 300 kg/h",
       "basis": "2026 海外技术协议",
-      "anchor": "salt-austemper-config"
+      "anchor": "salt-austemper-config",
+      "caseSlug": "overseas-austemper"
     },
     {
       "selectionCode": "QT-1000/12000",
@@ -63,7 +68,8 @@
       "process": "淬火调质",
       "capacity": "最大约 1500 kg/h",
       "basis": "2021 技术协议",
-      "fastenerScope": "淬火调质规格上限"
+      "fastenerScope": "淬火调质规格上限",
+      "caseSlug": "standard-parts-capacity"
     },
     {
       "selectionCode": "QT-1200/13800",
@@ -71,7 +77,8 @@
       "power": "—",
       "process": "曲轴淬火+回火",
       "capacity": "最大约 100 万件/年",
-      "basis": "2024 技术协议"
+      "basis": "2024 技术协议",
+      "caseSlug": "crankshaft-annual-output"
     },
     {
       "selectionCode": "BQ-1000/10000",
@@ -80,7 +87,8 @@
       "process": "光亮淬火+回火",
       "capacity": "光亮淬火约 1000 公斤/小时（设计参考值）",
       "basis": "2026 年设计方案",
-      "showBasisWithCapacity": true
+      "showBasisWithCapacity": true,
+      "caseSlug": "bright-quench-design"
     }
   ],
   "note": "以上数值来自技术协议或设计方案，实际处理量随工件尺寸、单重、装载和工艺变化。",

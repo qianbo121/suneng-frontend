@@ -18,7 +18,7 @@ describe('case list pagination boundary', () => {
   // An unbounded ?page= used to answer 200 with "index, follow" and a self
   // canonical, which mints one distinct thin page per number.
   it.each([
-    ['/zh/case?page=2', 'zh'],
+    ['/zh/case?page=3', 'zh'],
     ['/zh/case?page=50', 'zh'],
     ['/zh/case?page=999999', 'zh'],
     ['/en/case?page=7', 'en'],
@@ -39,7 +39,7 @@ describe('case list pagination boundary', () => {
     },
   );
 
-  it.each(['/zh/case', '/en/case', '/zh/case?page=1', '/zh/case/'])(
+  it.each(['/zh/case', '/en/case', '/zh/case?page=1', '/zh/case?page=2', '/en/case?page=2', '/zh/case/'])(
     'lets the real list page %s through',
     async (path) => {
       const response = await run(path);

@@ -1,3 +1,6 @@
+import projectProducts from '@/lib/cases/agreement/product-cases.json';
+import { getPublicCases } from '@/lib/cases/server';
+import { getEnglishCases } from '@/lib/cases/english';
 import { TECHNICAL_CONTENT_PUBLISHED } from '@/lib/publication-scope';
 import Image from 'next/image';
 import { CASE_EVIDENCE_ID, getCaseConnections, getEntryCases, splitEntryCases } from '@/lib/cases/product-relations';
@@ -5,11 +8,24 @@ import type { Locale } from '@/types/site';
 import styles from './CaseEvidenceLinks.module.css';
 
 export function EntryCaseEvidence({ entryPath, locale }: { entryPath: string; locale: Locale }) {
-  if (!TECHNICAL_CONTENT_PUBLISHED) return null;
+  const product = entryPath.match(/^\/products\/detail\/([a-z0-9-]+)$/)?.[1];
+  const slugs = product ? Object.entries(projectProducts).filter(([, products]) => products.includes(product)).map(([slug]) => slug) : [];
+  let projectLinks = null;
+  if (slugs.length) {
+    const records = locale === 'en' ? getEnglishCases() : getPublicCases();
+    const matches = slugs.flatMap(slug => records.find(record => record.slug === slug) ?? []);
+    if (matches.length) projectLinks = <section className={styles.section} id="related-project-cases" aria-labelledby="related-project-cases-title" data-agreement-links>
+      <h2 id="related-project-cases-title">{locale === 'en' ? 'Related project records' : '相关项目案例'}</h2>
+      <ul className={styles.projectLinks}>{matches.map(item => <li key={item.slug}>
+        <a href={`/${locale}/case/${item.slug}`}>{item.title}</a>
+      </li>)}</ul>
+    </section>;
+  }
+  if (!TECHNICAL_CONTENT_PUBLISHED) return projectLinks;
   const en = locale === 'en';
   const items = getEntryCases(entryPath, locale);
   const { featured, remaining } = splitEntryCases(items);
-  if (!items.length && !entryPath.startsWith('/products/detail/')) return null;
+  if (!items.length && (projectLinks || !entryPath.startsWith('/products/detail/'))) return projectLinks;
   const cards = (records: typeof items) => <div className={styles.grid}>{records.map((item) => (
     <article className={styles.card} key={item.id} data-related-case={item.id}>
       <a className={styles.imageLink} href={item.href} aria-label={item.title} tabIndex={-1}>
@@ -26,7 +42,7 @@ export function EntryCaseEvidence({ entryPath, locale }: { entryPath: string; lo
       </div>
     </article>
   ))}</div>;
-  return <section className={styles.section} id={CASE_EVIDENCE_ID} aria-labelledby={`${CASE_EVIDENCE_ID}-title`} data-entry-case-evidence={entryPath}>
+  return <>{projectLinks}<section className={styles.section} id={CASE_EVIDENCE_ID} aria-labelledby={`${CASE_EVIDENCE_ID}-title`} data-entry-case-evidence={entryPath}>
     <h2 id={`${CASE_EVIDENCE_ID}-title`}>{en ? 'Related proposals and project records' : '相关方案与项目资料'}</h2>
     <p className={styles.intro}>{items.length
       ? (en ? 'Find related records by workpiece, configuration and site conditions.' : '从工件、配置和现场条件，查找相关方案。')
@@ -34,7 +50,7 @@ export function EntryCaseEvidence({ entryPath, locale }: { entryPath: string; lo
     {cards(featured)}
     {remaining.length > 0 && <details className={styles.more}><summary><span className={styles.moreClosed}>{en ? `View all related records (${items.length})` : `查看全部相关资料（${items.length}篇）`}</span><span className={styles.moreOpen}>{en ? 'Show fewer records' : '收起更多资料'}</span><span aria-hidden="true">{' >>'}</span></summary>{cards(remaining)}</details>}
     {!items.length && <a href={`/${locale}/about#contact`}>{en ? 'Discuss your application' : '提交工况，确认适用条件'}</a>}
-  </section>;
+  </section></>;
 }
 
 export function CaseProductConnections({ caseId, locale }: { caseId: string; locale: Locale }) {

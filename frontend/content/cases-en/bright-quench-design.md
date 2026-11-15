@@ -1,0 +1,1 @@
+Suneng prepared a design proposal for a bright quench and temper line for small and medium-sized metal components. The buyer is to confirm the proposed throughput in writing for its parts and operating conditions.

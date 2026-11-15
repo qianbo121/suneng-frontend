@@ -1,0 +1,124 @@
+{
+  "id": "steering-forgings",
+  "slug": "steering-forgings",
+  "title": "Mesh belt line for steering-arm forgings: how can one furnace serve hardening and normalizing?",
+  "summary": "The available technical agreement describes a roller-supported mesh belt line for steering-arm forgings. The first furnace provides heating for either normalizing or quenching.",
+  "body": "steering-forgings.md",
+  "coverAlt": "Quench and temper route for forgings: loading table, shared quenching and normalizing furnace, quench tank, lift and blow-dry stage, tempering furnace, cooling tank and a second lift and blow-dry stage for collection.",
+  "coverCaption": "Quench and temper route for forgings: loading table, shared quenching and normalizing furnace, quench tank, lift and blow-dry stage, tempering furnace, cooling tank and a second lift and blow-dry stage for collection.",
+  "translationStatus": "complete",
+  "sourceFingerprint": "0348b43580fdfb8bd1367ce63579b86c0c3f79d7563fc73e55b8c423982221a2",
+  "seoTitle": "Steering-arm forgings: which processes share a furnace?",
+  "seoDescription": "One furnace heats forgings for normalizing or quenching. On the quench and temper route, the forgings then pass through a quench tank and tempering furnace.",
+  "presentation": {
+    "view": {
+      "animated": true,
+      "top": 0,
+      "height": 278.846154,
+      "cameras": [
+        [
+          74,
+          175,
+          149
+        ],
+        [
+          236,
+          150,
+          267
+        ],
+        [
+          420,
+          180,
+          145
+        ],
+        [
+          495,
+          125,
+          149
+        ],
+        [
+          654,
+          152,
+          222
+        ],
+        [
+          789,
+          178,
+          133
+        ],
+        [
+          899,
+          138,
+          208
+        ]
+      ]
+    },
+    "status": "Technical agreement text (source copy without both parties’ seals)",
+    "model": "RCWT-400/260-9/6",
+    "figureHeading": "Output in the available agreement",
+    "processCaption": "The animation shows the quench and temper route. After quenching, the forgings enter the tempering furnace. The first furnace can also be used for normalizing.",
+    "metrics": [
+      [
+        "Final acceptance · Specified throughput",
+        "approximately 1000",
+        "kg/h"
+      ]
+    ],
+    "note": "The figure comes from the available technical agreement. Actual throughput depends on the parts, loading and process conditions.",
+    "work": [
+      "Parts: forgings such as steering idler arms and pitman arms.",
+      "Treatment: quenching and tempering after forging, or normalizing the forgings.",
+      "Capacity basis: weight per hour, dependent on the forgings, the way they are loaded and the process requirements."
+    ],
+    "features": [
+      [
+        "Are two front-end heating furnaces needed?",
+        "The text assigns heating for both normalizing and quenching to the same roller-supported mesh belt furnace."
+      ],
+      [
+        "How do parts leave the cooling tank?",
+        "An elevator lifts the parts out and a fan above the belt blows them dry."
+      ],
+      [
+        "Who leads process commissioning?",
+        "The text assigns process commissioning to the buyer, with assistance from the supplier."
+      ]
+    ],
+    "flow": [
+      "Loading table",
+      "Quenching and normalizing furnace",
+      "Quench tank",
+      "Lift and blow dry",
+      "Tempering furnace",
+      "Cooling tank",
+      "Lift, blow dry and collect"
+    ],
+    "params": [
+      [
+        "Effective width of the first furnace",
+        "850 mm"
+      ]
+    ],
+    "supplier": "The text assigns transport, installation in position, secondary wiring, equipment commissioning, and operator and maintenance training to Suneng. Suneng assists with process commissioning.",
+    "buyer": "The text assigns unloading, plant-to-cabinet wiring, embedded connections, external utility lines and materials, pits and pit steps, the cooling water basin or cooling tower, commissioning media and acceptance parts to the buyer.",
+    "scope": "Roller-supported mesh belt quenching and normalizing furnace, quench tank, liquid storage tank, roller-supported mesh belt tempering furnace and discharge cooling equipment.",
+    "pre": "Both parties check the mesh belt, chain, controls and safety guards at the supplier's plant.",
+    "site": "The available agreement lists approximately 1000 kg/h for final acceptance. The quenching furnace is checked at three points at 800 °C. The temperature deviation within the same zone must be within ±5 °C.",
+    "faq": [
+      [
+        "Was this rate measured on site?",
+        "No. The available agreement lists approximately 1000 kg/h as a final acceptance condition for the steering-arm forging line. It states the rate to be checked at site acceptance."
+      ],
+      [
+        "Do normalizing and quenching and tempering follow the same downstream path?",
+        "They share the first furnace. The quench tank and subsequent tempering route described in the text are for quenching and tempering."
+      ],
+      [
+        "Who provides the cooling water source?",
+        "The buyer provides the cooling water basin or cooling tower."
+      ]
+    ],
+    "source": "The equipment configuration and figures come from a copy of the technical agreement that does not bear both parties’ seals.",
+    "faqIntro": "Questions about the source figures, part conditions and acceptance."
+  }
+}

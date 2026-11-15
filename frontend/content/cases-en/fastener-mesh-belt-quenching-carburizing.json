@@ -1,0 +1,98 @@
+{
+  "id": "fastener-mesh-belt-quenching-carburizing",
+  "slug": "fastener-mesh-belt-quenching-carburizing",
+  "title": "Mesh belt furnace for fasteners: what rates are specified for quenching and carburizing?",
+  "summary": "In 2025, Jiangsu Suneng Industrial Furnace Co., Ltd. and a fastener manufacturer signed a technical agreement for Suneng to design and build a mesh belt heat treatment line.",
+  "body": "fastener-mesh-belt-quenching-carburizing.md",
+  "coverAlt": "Roller-supported mesh belt line from the loading table through the quenching furnace, oil tank and elevator, washer and tempering furnace to discharge.",
+  "coverCaption": "",
+  "translationStatus": "complete",
+  "sourceFingerprint": "6db31a01fb62ee044e707260d6d9c552d7ee96a7a63475733a8218b5a815d8b1",
+  "seoTitle": "Fastener mesh belt furnace: quench vs. carburizing rates",
+  "seoDescription": "The agreement lists quenching at 300 kg/h and carburizing at 150 kg/h in the same furnace. Tempering is rated at approximately 300 kg/h.",
+  "presentation": {
+    "status": "Signed technical agreement",
+    "model": "RCWT-160/105-9/6",
+    "metrics": [
+      [
+        "Quenching furnace · Quenching",
+        "300",
+        "kg/h"
+      ],
+      [
+        "Quenching furnace · Carburizing",
+        "150",
+        "kg/h"
+      ],
+      [
+        "Tempering furnace · Tempering",
+        "approximately 300",
+        "kg/h"
+      ]
+    ],
+    "note": "These figures are specified in the project technical agreement. Actual throughput depends on the parts, loading and process conditions.",
+    "work": [
+      "Parts: the line handles screws in both the quenching and carburizing processes.",
+      "Material and dimensions: the customer did not provide the material or individual part dimensions. Throughput is specified by weight.",
+      "Case depth: the agreement does not state the case depth corresponding to 150 kg/h."
+    ],
+    "features": [
+      [
+        "One furnace, two processes",
+        "The same furnace can quench or carburize screws. In this project the screws spend longer in the furnace during carburizing."
+      ],
+      [
+        "How are small screws kept on the belt?",
+        "The quenching furnace belt has a close double-herringbone weave to reduce snagging. Folded edges help keep screws from slipping off either side."
+      ],
+      [
+        "How are furnace temperatures recorded?",
+        "The quenching furnace has 3 control zones and the tempering furnace has 4. Temperature records can be retrieved for a selected period."
+      ]
+    ],
+    "flow": [
+      "Loading",
+      "Heating",
+      "Oil quenching",
+      "Lifting",
+      "Washing and drying",
+      "Tempering",
+      "Collection"
+    ],
+    "params": [
+      [
+        "Overall length",
+        "approximately 25 m"
+      ],
+      [
+        "Total power",
+        "approximately 300 kW"
+      ],
+      [
+        "Effective belt width",
+        "500 mm"
+      ]
+    ],
+    "supplier": "Suneng designs and manufactures the line, installs the equipment in position and trains operators. Suneng wires the control cabinet to the mesh belt furnace equipment.",
+    "buyer": "The buyer unloads the equipment and provides the cooling water system, incoming power wiring to the control cabinet, plant utility lines, equipment pits and the cables from the cabinet to the furnace equipment. The buyer leads process commissioning with assistance from Suneng.",
+    "scope": "Quenching furnace, oil tank with elevator, washer, tempering furnace and control system.",
+    "pre": "Check the mesh belt drive and test the control system under cold conditions.",
+    "site": "The agreed throughput range for final acceptance is 150–300 kg/h. The quenching furnace is checked at three points at 800 °C. Temperature deviation within the same zone must be within ±5 °C.",
+    "faq": [
+      [
+        "Were these rates measured on site?",
+        "No. The technical agreement lists 300 kg/h for quenching and 150 kg/h for carburizing in the same furnace. Project personnel confirmed the parts were screws for both processes. The downstream tempering furnace is listed separately at approximately 300 kg/h. Actual throughput depends on the parts, loading and process conditions."
+      ],
+      [
+        "Why does the same furnace have rates of 300 kg/h for quenching screws and 150 kg/h for carburizing them?",
+        "Project personnel explained that carburizing these screws requires a longer furnace residence time, so the agreed weight processed per hour is lower. The agreement does not state the case depth corresponding to 150 kg/h."
+      ],
+      [
+        "What material and size were specified for the screws?",
+        "Project personnel confirmed that screws were used for both processes and throughput was calculated by weight. The customer did not provide the material or individual part dimensions."
+      ]
+    ],
+    "source": "Equipment and throughput are taken from the signed technical agreement. Suneng project personnel supplied the additional information about the screws.",
+    "faqIntro": "Questions about the agreed throughput, screw specifications and acceptance."
+  }
+}

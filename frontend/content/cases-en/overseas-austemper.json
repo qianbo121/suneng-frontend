@@ -1,0 +1,105 @@
+{
+  "id": "overseas-austemper",
+  "slug": "overseas-austemper",
+  "title": "Nitrate salt austempering line with a 500 mm belt: what throughput does the agreement specify?",
+  "summary": "Suneng and an overseas buyer agreed on approximately 300 kg/h for a nitrate salt austempering line for small and medium-sized metal parts. The quenching furnace has a 500 mm belt.",
+  "body": "overseas-austemper.md",
+  "coverAlt": "Nitrate salt austempering line: quenching furnace, nitrate salt bath and washer.",
+  "coverCaption": "Nitrate salt austempering line: quenching furnace, nitrate salt bath and washer.",
+  "translationStatus": "complete",
+  "sourceFingerprint": "93704466c641050bcb83922a2e66a31de75364ac0745a7b668f45e6fbc26f498",
+  "seoTitle": "500 mm nitrate salt austempering: what is line output?",
+  "seoDescription": "The agreement lists approximately 300 kg/h for the full line: quenching furnace, nitrate salt bath and washer. The 500 mm figure is the furnace belt width.",
+  "presentation": {
+    "view": {
+      "animated": true,
+      "top": 0,
+      "height": 278.846154,
+      "cameras": [
+        [
+          285.095,
+          116.984,
+          350.953
+        ],
+        [
+          602.253,
+          171.577,
+          315.425
+        ],
+        [
+          847.487,
+          118.718,
+          176.776
+        ]
+      ]
+    },
+    "status": "Signed technical agreement",
+    "metrics": [
+      [
+        "Nitrate salt austempering line",
+        "approximately 300",
+        "kg/h"
+      ]
+    ],
+    "note": "The specified throughput of approximately 300 kg/h covers the quenching furnace, nitrate salt bath and washer. Actual output depends on the parts, loading and process conditions.",
+    "work": [
+      "Parts: small and medium-sized metal components.",
+      "Process conditions: a protective atmosphere.",
+      "Capacity basis: weight processed per hour by the complete line."
+    ],
+    "features": [
+      [
+        "How is the bath temperature controlled?",
+        "The nitrate salt bath has separately controlled heating zones."
+      ],
+      [
+        "How is salt exchanged?",
+        "An auxiliary bath is provided for exchanging the salt."
+      ],
+      [
+        "Where does the capacity figure apply?",
+        "The agreement specifies output for the austempering line as a whole."
+      ]
+    ],
+    "flow": [
+      "Quenching furnace",
+      "Austempering nitrate salt bath",
+      "Washer"
+    ],
+    "params": [
+      [
+        "Main furnace belt width",
+        "500 mm"
+      ],
+      [
+        "Heated length",
+        "4700 mm"
+      ],
+      [
+        "Main furnace heating power",
+        "130 kW"
+      ]
+    ],
+    "supplier": "Design, manufacture, transport to a port in China, machine-side wiring, installation guidance, commissioning and training.",
+    "buyer": "Unload, lift and handle equipment. Provide primary wiring from the transformer low-voltage cabinet to the equipment control cabinet, atmosphere main valves, external exhaust, drains and water supply. Bring utilities to the designated points and build foundations, embedded parts, cable trenches, maintenance pits and external control-room facilities.",
+    "scope": "Quenching furnace, nitrate salt bath, washer and controls.",
+    "pre": "Before shipment, preliminary acceptance takes place at Suneng’s factory against the technical requirements (excluding tests).",
+    "site": "Check that the equipment runs without failure for 24 consecutive hours and that the process operates normally.",
+    "faq": [
+      [
+        "What throughput does the agreement specify for the 500 mm mesh belt nitrate salt austempering line?",
+        "The agreement specifies approximately 300 kg/h for the complete nitrate salt austempering line with a 500 mm belt in the quenching furnace. This covers the parts passing through the furnace, salt bath and washer."
+      ],
+      [
+        "Does the agreement identify a particular component?",
+        "The agreement identifies small and medium-sized metal components without naming a particular part."
+      ],
+      [
+        "How are the parts cleaned after the salt bath?",
+        "The lift conveyor transfers the parts to the washer. Fan-shaped nozzles spray the parts, then air jets blow off the remaining water."
+      ]
+    ],
+    "source": "Equipment and capacity figures come from the signed technical agreement for this line.",
+    "faqIntro": "Questions about capacity, workpieces and acceptance."
+  }
+}

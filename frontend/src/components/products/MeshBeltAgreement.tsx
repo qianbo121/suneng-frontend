@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { FiArrowRight } from 'react-icons/fi';
-import { FASTENER_CASE_PATH, fastenerCaseVisible } from '@/lib/cases/fastener-case-entry';
+import { FASTENER_CASE_PATH, FASTENER_CASE_SLUG, fastenerCaseVisible } from '@/lib/cases/fastener-case-entry';
+import { PUBLIC_CASE_SLUGS } from '@/lib/cases/public-case-allowlist';
 import data from './mesh-belt-agreement-data.json';
 import styles from './MeshBeltAgreement.module.css';
 
@@ -26,9 +27,9 @@ export function BeltAgreementTable({ fasteners = false }: { fasteners?: boolean 
             return (
               <tr key={name} id={row.anchor} className={styles.configRow}>
                 <th scope="row">
-                  {!fasteners && name === model && showCase ? (
-                    <Link className={`${styles.modelName} ${styles.modelCaseLink}`} href={FASTENER_CASE_PATH}
-                      aria-label={`查看 ${name} 紧固件项目案例`} prefetch={false}>
+                  {PUBLIC_CASE_SLUGS.has(row.caseSlug) && (row.caseSlug !== FASTENER_CASE_SLUG || showCase) ? (
+                    <Link className={`${styles.modelName} ${styles.modelCaseLink}`} href={`/zh/case/${row.caseSlug}`}
+                      aria-label={`查看 ${name} 项目案例`} prefetch={false}>
                       {name}<span aria-hidden="true" className={styles.caseChevron}>›</span>
                     </Link>
                   ) : <span className={styles.modelName}>{name}</span>}

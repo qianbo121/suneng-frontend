@@ -33,8 +33,32 @@ PROTECTED = ['postgres', 'backend', 'admin', 'nginx']
 SCOPE = 'news-products-services-company-reviewed-cases'
 # Owner-approved public case pages. Must match frontend/src/lib/cases/public-case-allowlist.ts.
 APPROVED_CASES = {
-    'zh': ['henan-annealing-solution-line', 'fastener-mesh-belt-quenching-carburizing'],
-    'en': ['henan-annealing-solution-line'],
+    'zh': [
+        'bright-quench-design',
+        'crankshaft-annual-output',
+        'cylinder-liner-solution-aging',
+        'fastener-mesh-belt-quenching-carburizing',
+        'henan-annealing-solution-line',
+        'overseas-austemper',
+        'overseas-oil-quench',
+        'roller-belt-cooling-water-supply',
+        'roller-belt-stage-output',
+        'standard-parts-capacity',
+        'steering-forgings',
+    ],
+    'en': [
+        'bright-quench-design',
+        'crankshaft-annual-output',
+        'cylinder-liner-solution-aging',
+        'fastener-mesh-belt-quenching-carburizing',
+        'henan-annealing-solution-line',
+        'overseas-austemper',
+        'overseas-oil-quench',
+        'roller-belt-cooling-water-supply',
+        'roller-belt-stage-output',
+        'standard-parts-capacity',
+        'steering-forgings',
+    ],
 }
 NO_CASES = {'zh': [], 'en': []}
 APPROVED_GUIDES = json.loads(Path(__file__).with_name('approved-guides.json').read_text())

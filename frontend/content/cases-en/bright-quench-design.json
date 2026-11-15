@@ -1,0 +1,136 @@
+{
+  "id": "bright-quench-design",
+  "slug": "bright-quench-design",
+  "title": "Bright quenching on a mesh belt: which part data determine the design throughput?",
+  "summary": "Suneng prepared a design proposal for a bright quench and temper line for small and medium-sized metal components. The buyer is to confirm the proposed throughput in writing for its parts and operating conditions.",
+  "body": "bright-quench-design.md",
+  "coverAlt": "Bright-quench line with a loading platform, roller-supported quenching furnace, oil tank, elevating oil-draining conveyor, elevating washer, tempering furnace, cooling water tank and outfeed.",
+  "coverCaption": "Bright-quench line with a loading platform, roller-supported quenching furnace, oil tank, elevating oil-draining conveyor, elevating washer, tempering furnace, cooling water tank and outfeed.",
+  "translationStatus": "complete",
+  "sourceFingerprint": "d3f4772ceeb64b58644466c43dd7cfcf863c611792b76656be7a7e3ff9f69102",
+  "seoTitle": "Bright quench line: what sets design throughput?",
+  "seoDescription": "The design proposal uses approximately 1000 kg/h as a reference. The buyer confirms representative parts, bed depth and the process curve in writing.",
+  "presentation": {
+    "view": {
+      "animated": true,
+      "top": 0,
+      "height": 278.846154,
+      "cameras": [
+        [
+          74,
+          159,
+          154
+        ],
+        [
+          246,
+          146,
+          258
+        ],
+        [
+          400,
+          170,
+          123
+        ],
+        [
+          500,
+          158,
+          125
+        ],
+        [
+          603,
+          139,
+          150
+        ],
+        [
+          705,
+          145,
+          171
+        ],
+        [
+          834,
+          174,
+          143
+        ],
+        [
+          948,
+          154,
+          116
+        ]
+      ]
+    },
+    "status": "Design proposal",
+    "figureHeading": "Design reference throughput",
+    "metrics": [
+      [
+        "Bright quenching · Design reference",
+        "approximately 1000",
+        "kg/h"
+      ]
+    ],
+    "note": "The figure is a reference value from the design proposal. Actual throughput depends on the parts, loading and process conditions.",
+    "work": [
+      "Parts: small and medium-sized metal components.",
+      "Confirmation: the buyer confirms in writing the representative part types, unit weight, bed depth, material and process curve.",
+      "Capacity basis: weight processed per hour is the design reference for bright quenching."
+    ],
+    "features": [
+      [
+        "How should the design reference be used?",
+        "Check it against part size, bed depth and treatment time."
+      ],
+      [
+        "Under which conditions is temperature checked?",
+        "The proposal distinguishes multi-point measurements in the empty furnace at steady state from loaded testing. Measurement positions under load require separate confirmation."
+      ],
+      [
+        "Where is the electrical handover point?",
+        "The buyer provides the incoming power supply. The supplier wires the control cabinet to the furnace."
+      ]
+    ],
+    "flow": [
+      "Loading platform",
+      "Roller-supported mesh belt quenching furnace",
+      "Quench oil tank",
+      "Elevating oil-draining conveyor",
+      "Elevating washer",
+      "Tempering furnace",
+      "Cooling water tank",
+      "Outfeed"
+    ],
+    "params": [
+      [
+        "Main furnace belt width",
+        "1000 mm"
+      ],
+      [
+        "Heated length",
+        "10000 mm"
+      ],
+      [
+        "Main furnace heating power",
+        "approximately 500 kW"
+      ]
+    ],
+    "supplier": "Under the proposal, Suneng designs, manufactures and supplies the equipment, wires the controls to the equipment, guides installation, commissions the equipment, assists with process commissioning and trains staff on site.",
+    "buyer": "The proposal assigns the foundations, pits, utility trenches, covers, platforms, unloading, lifting, positioning and assembly to the buyer. The buyer provides incoming wiring, water, power, gas, protective gas and wastewater connections and accessories, main isolation valves, external smoke exhaust, drainage and water supply facilities, trial parts, atmosphere media, quench oil and cleaning agent.",
+    "scope": "The proposal covers the loading platform, roller-supported mesh belt quenching furnace, oil quench tank with elevator, elevating oil-draining conveyor, elevating washer, roller-supported mesh belt tempering furnace and post-temper cooling water tank with elevator. It also covers the protective atmosphere, exhaust and electrical control systems.",
+    "pre": "The proposal calls for a review against the technical requirements at the manufacturer's plant, excluding tests.",
+    "site": "The proposal calls for continuous no-load and loaded trial runs. Temperatures are checked at multiple points in the empty quenching furnace at steady state and in the empty tempering furnace at steady state at 400–650 °C. In both furnaces, the temperature variation across a given cross-section must be within ±5 °C. Throughput is outside the proposed acceptance tests.",
+    "faq": [
+      [
+        "Was the throughput measured on site?",
+        "No. The bright-quench proposal gives approximately 1000 kg/h as a design reference. The buyer must confirm the representative parts, bed depth and process curve in writing for the throughput calculation."
+      ],
+      [
+        "What information should accompany an enquiry?",
+        "Provide representative parts, material, unit weight, bed depth and the process curve."
+      ],
+      [
+        "Who positions the equipment?",
+        "Under the proposal the buyer arranges unloading, mobile crane handling, transport on site and assembly in position. Suneng provides installation guidance."
+      ]
+    ],
+    "source": "The equipment and figures come from the project design proposal. The figures are design reference values.",
+    "faqIntro": "Questions about the design figures, part conditions and acceptance."
+  }
+}

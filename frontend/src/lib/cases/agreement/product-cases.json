@@ -1,0 +1,35 @@
+{
+  "crankshaft-annual-output": [
+    "mesh-belt-furnace"
+  ],
+  "overseas-oil-quench": [
+    "mesh-belt-furnace"
+  ],
+  "overseas-austemper": [
+    "mesh-belt-furnace"
+  ],
+  "standard-parts-capacity": [
+    "mesh-belt-furnace",
+    "fastener-quench-temper-line"
+  ],
+  "steering-forgings": [
+    "mesh-belt-furnace"
+  ],
+  "bright-quench-design": [
+    "mesh-belt-furnace"
+  ],
+  "cylinder-liner-solution-aging": [
+    "aluminum-solution-aging-line"
+  ],
+  "fastener-mesh-belt-quenching-carburizing": [
+    "mesh-belt-furnace",
+    "fastener-quench-temper-line",
+    "mesh-belt-carbonitriding-line"
+  ],
+  "roller-belt-cooling-water-supply": [
+    "mesh-belt-furnace"
+  ],
+  "roller-belt-stage-output": [
+    "mesh-belt-furnace"
+  ]
+}

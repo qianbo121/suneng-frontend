@@ -26,7 +26,10 @@ MANIFEST = {'schemaVersion': 1, 'image': NEW, 'expectedCurrentImage': OLD, 'publ
 GOOD = {'passed': True, 'sitemapPassed': True, 'checks': [], 'caseState': 'open'}
 HENAN = 'henan-annealing-solution-line'
 FASTENER = 'fastener-mesh-belt-quenching-carburizing'
-CASE_GROUP = ['/zh/case', f'/zh/case/{FASTENER}', f'/zh/case/{HENAN}', '/en/case', f'/en/case/{HENAN}']
+CASE_GROUP = [
+    path for locale in ('zh', 'en')
+    for path in [f'/{locale}/case', *(f'/{locale}/case/{slug}' for slug in sorted(r.APPROVED_CASES[locale]))]
+]
 OTHER = 'sha256:' + '7' * 64
 LEGACY = sorted(r.LEGACY_ENCODING_IMAGES)[0]
 LEGACY_ROLLBACK = {**MANIFEST, 'image': LEGACY, 'caseState': 'closed', 'approvedCases': r.NO_CASES,

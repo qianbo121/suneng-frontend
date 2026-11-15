@@ -11,16 +11,17 @@ const poster = assets + '/xray-line.webp?v=3';
 
 // Horizontal centre and magnification share the coordinate system of the exported film.
 const stations = [
-  { name: '上料', image: 'stage-infeed.webp', center: 143, zoom: 3.3, note: '螺丝钉由上料台送上网带。' },
-  { name: '加热', image: 'stage-heating.webp', center: 471, zoom: 2.9, note: '工件在网带上穿过淬火炉的加热段。' },
-  { name: '油淬', image: 'stage-quench.webp?v=2', center: 840, zoom: 4.1, note: '工件从炉口落下，进入油面以下。' },
-  { name: '提升', image: 'stage-lift.webp?v=2', center: 990, zoom: 3.5, note: '倾斜的提升带从油槽中托起工件。' },
-  { name: '清洗烘干', image: 'stage-wash-dry.webp', center: 1236, zoom: 3.5, note: '工件经清洗后进入烘干段。' },
-  { name: '回火', image: 'stage-temper.webp', center: 1630, zoom: 2.9, note: '网带将工件送过回火炉。' },
-  { name: '收料', image: 'stage-outfeed.webp', center: 1956, zoom: 3.4, note: '工件沿出料斜槽滑下，落入料框。' },
+  { name: '上料', englishName: 'Loading', englishNote: 'Screws move from the loading table onto the mesh belt.', image: 'stage-infeed.webp', center: 143, zoom: 3.3, note: '螺丝钉由上料台送上网带。' },
+  { name: '加热', englishName: 'Heating', englishNote: 'The belt carries the parts through the heating section of the quenching furnace.', image: 'stage-heating.webp', center: 471, zoom: 2.9, note: '工件在网带上穿过淬火炉的加热段。' },
+  { name: '油淬', englishName: 'Oil quenching', englishNote: 'Parts drop from the furnace outlet below the oil surface.', image: 'stage-quench.webp?v=2', center: 840, zoom: 4.1, note: '工件从炉口落下，进入油面以下。' },
+  { name: '提升', englishName: 'Lifting', englishNote: 'An inclined belt lifts the parts out of the oil tank.', image: 'stage-lift.webp?v=2', center: 990, zoom: 3.5, note: '倾斜的提升带从油槽中托起工件。' },
+  { name: '清洗烘干', englishName: 'Washing and drying', englishNote: 'After washing, the parts enter the drying section.', image: 'stage-wash-dry.webp', center: 1236, zoom: 3.5, note: '工件经清洗后进入烘干段。' },
+  { name: '回火', englishName: 'Tempering', englishNote: 'The mesh belt carries the parts through the tempering furnace.', image: 'stage-temper.webp', center: 1630, zoom: 2.9, note: '网带将工件送过回火炉。' },
+  { name: '收料', englishName: 'Collection', englishNote: 'Parts slide down the discharge chute into the collection basket.', image: 'stage-outfeed.webp', center: 1956, zoom: 3.4, note: '工件沿出料斜槽滑下，落入料框。' },
 ];
 
-export function LineFlow() {
+export function LineFlow({english = false}: {english?: boolean} = {}) {
+  const label = (zh: string, en: string) => english ? en : zh;
   const video = useRef<HTMLVideoElement>(null);
   const [selected, setSelected] = useState<number | null>(null);
   const [running, setRunning] = useState(false);
@@ -89,23 +90,23 @@ export function LineFlow() {
     <div className={s.player}>
       <div className={s.controls}>
         {focus && <button type="button" onClick={() => setSelected(null)}>
-          <FiMaximize aria-hidden />查看整线
+          <FiMaximize aria-hidden />{label('查看整线', 'View full line')}
         </button>}
         <button type="button" onClick={togglePlayback}>
           {running && !failed ? <FiPause aria-hidden /> : <FiPlay aria-hidden />}
-          {failed ? '重试播放' : running ? '暂停动画' : '播放动画'}
+          {failed ? label('重试播放', 'Retry playback') : running ? label('暂停动画', 'Pause animation') : label('播放动画', 'Play animation')}
         </button>
       </div>
       <div id="xray-view" className={s.viewport} data-detail={Boolean(focus)}>
       <video ref={video} className={s.film} src={animation} poster={poster} loop muted playsInline preload="none" width={2080} height={580}
-        aria-label="网带炉黑底工艺透视动画，展示螺丝钉从上料、加热、油淬、提升、清洗烘干、回火到收料的过程"
+        aria-label={label('网带炉黑底工艺透视动画，展示螺丝钉从上料、加热、油淬、提升、清洗烘干、回火到收料的过程', 'Mesh belt line animation showing screw loading, heating, oil quenching, lifting, washing and drying, tempering and collection')}
         onError={() => setFailed(true)}
         style={{ width: filmWidth + '%', left, transform: focus ? 'translateY(-54%)' : 'translateY(-52%)' }} />
       </div>
     </div>
-    <p className={s.status} role="status">{failed ? '动画暂时无法播放。' : focus && focus.name + ' · ' + focus.note}</p>
+    <p className={s.status} role="status">{failed ? label('动画暂时无法播放。', 'Animation unavailable.') : focus && label(focus.name, focus.englishName) + ' · ' + label(focus.note, focus.englishNote)}</p>
     <div className={s.tray}>
-      <p id="stage-cards-label" className={s.instruction}><FiGrid aria-hidden />点选下方工序卡片，查看局部动画</p>
+      <p id="stage-cards-label" className={s.instruction}><FiGrid aria-hidden />{label('点选下方工序卡片，查看局部动画', 'Select a process stage to see it in detail.')}</p>
       <div className={s.cards} role="group" aria-labelledby="stage-cards-label">
         {stations.map((stage, i) => <button type="button" key={stage.name} className={s.card}
           aria-controls="xray-view" aria-pressed={selected === i} onClick={() => showStage(i)}>
@@ -113,7 +114,7 @@ export function LineFlow() {
             <Image src={assets + '/' + stage.image} width={450} height={195} unoptimized alt="" />
             <span className={s.magnifier}><FiZoomIn aria-hidden /></span>
           </span>
-          <span className={s.caption}>{stage.name}{selected === i ? <FiCheck aria-hidden /> : <FiChevronRight aria-hidden />}</span>
+          <span className={s.caption}>{label(stage.name, stage.englishName)}{selected === i ? <FiCheck aria-hidden /> : <FiChevronRight aria-hidden />}</span>
         </button>)}
       </div>
     </div>

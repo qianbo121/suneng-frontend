@@ -1,0 +1,135 @@
+{
+  "id": "roller-belt-cooling-water-supply",
+  "slug": "roller-belt-cooling-water-supply",
+  "title": "Roller-supported mesh belt furnace: who supplies the cooling water system?",
+  "summary": "Suneng and the buyer specified a protective-atmosphere mesh belt quench and temper line. The outdoor cooling water system and the plant's make-up water pipe are separate items.",
+  "body": "roller-belt-cooling-water-supply.md",
+  "coverAlt": "Roller-supported mesh belt line with a loading table, quenching furnace, oil tank, elevator, washing and drying section, tempering furnace and collection point.",
+  "coverCaption": "Roller-supported mesh belt line with a loading table, quenching furnace, oil tank, elevator, washing and drying section, tempering furnace and collection point.",
+  "translationStatus": "complete",
+  "sourceFingerprint": "87fe60f49546d1da9c4d35a2bb4c043a5ea32a4ccc68862b4c2d06997e67e91d",
+  "seoTitle": "Mesh belt furnace: who supplies the cooling system?",
+  "seoDescription": "Suneng supplies the outdoor cooling tower, circulation pump and buffer tank. The buyer provides the plant’s make-up water pipe.",
+  "presentation": {
+    "view": {
+      "animated": true,
+      "top": 0,
+      "height": 278.846154,
+      "cameras": [
+        [
+          53,
+          195,
+          129
+        ],
+        [
+          202,
+          174,
+          258
+        ],
+        [
+          392,
+          211,
+          180
+        ],
+        [
+          453,
+          154,
+          148
+        ],
+        [
+          596,
+          176,
+          204
+        ],
+        [
+          811,
+          177,
+          255
+        ],
+        [
+          954,
+          200,
+          108
+        ]
+      ]
+    },
+    "status": "Signed technical agreement",
+    "model": "RCWT-90/80-9/6",
+    "metrics": [
+      [
+        "Quenching furnace · Quenching",
+        "approximately 150",
+        "kg/h"
+      ],
+      [
+        "Tempering furnace · Tempering",
+        "approximately 150",
+        "kg/h"
+      ]
+    ],
+    "note": "The agreement specifies approximately 150 kg/h for quenching and approximately 150 kg/h for tempering, both by weight of parts. Actual rates depend on the parts and loading.",
+    "work": [
+      "Parts: the agreement does not identify the parts.",
+      "Material and dimensions: no material grade or individual part dimensions are given.",
+      "Output basis: weight processed per hour. A parts-per-hour rate cannot be calculated from weight alone."
+    ],
+    "features": [
+      [
+        "How is belt tension reduced?",
+        "Upper and lower rollers support and drive the belt in sync, reducing tension during high-temperature conveying."
+      ],
+      [
+        "How do parts leave the oil tank?",
+        "An elevator lifts the parts clear of the oil. Side plates help keep them from falling back into the tank."
+      ],
+      [
+        "Who connects the cooling system?",
+        "Suneng supplies the outdoor system, including a closed-circuit cooling tower, circulation pump and buffer tank. The buyer provides the plant-side make-up water pipe."
+      ]
+    ],
+    "flow": [
+      "Loading table",
+      "Quenching furnace",
+      "Quench oil tank",
+      "Elevator",
+      "Washing and drying",
+      "Tempering furnace",
+      "Collection"
+    ],
+    "params": [
+      [
+        "Effective belt width in the main furnace",
+        "400 mm"
+      ],
+      [
+        "Heated length",
+        "3200 mm"
+      ],
+      [
+        "Main furnace heating power",
+        "90 kW"
+      ]
+    ],
+    "supplier": "Suneng designs, manufactures, transports and installs the equipment, wires the controls to the equipment, sends personnel for commissioning and trains operators and maintenance staff.",
+    "buyer": "The buyer handles unloading, wiring from the plant supply to the control cabinet, embedded utility connections, external piping and installation materials, and the external make-up water pipe. The buyer provides utilities and parts for commissioning and acceptance, assists with positioning and installation, and leads process commissioning.",
+    "scope": "Roller-supported mesh belt quenching furnace, oil quench tank with elevator, washer, tempering furnace, control system and outdoor cooling water system.",
+    "pre": "At the buyer's request, both parties check cold operation of the mesh belt, drive chain and control system at the manufacturer's plant.",
+    "site": "The agreed output for final acceptance is approximately 150 kg/h. At 800 °C, the quenching furnace is checked at three points. Temperature deviation within the same zone must be within ±5 °C.",
+    "faq": [
+      [
+        "What rates are specified for the line with outdoor water cooling?",
+        "The agreement lists approximately 150 kg/h for the quenching furnace and approximately 150 kg/h for the tempering furnace. Both figures are by weight. Converting them to a part count requires the weight of one part."
+      ],
+      [
+        "Can I add the two furnace capacities?",
+        "No. The figures describe successive stages of one line. The furnaces do not operate as two parallel lines."
+      ],
+      [
+        "Can I request a quote in parts per hour?",
+        "Provide a representative part and its unit weight. The agreement specifies throughput by weight and gives no hourly piece count."
+      ]
+    ],
+    "source": "Equipment, throughput and acceptance conditions are taken from the technical agreement signed by both parties.",
+    "faqIntro": "Questions about agreed output, part specifications and acceptance."
+  }
+}

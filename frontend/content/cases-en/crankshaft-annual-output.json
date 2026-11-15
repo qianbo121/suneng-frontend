@@ -1,0 +1,125 @@
+{
+  "id": "crankshaft-annual-output",
+  "slug": "crankshaft-annual-output",
+  "title": "Mesh belt line for crankshafts: why is throughput specified in parts per year?",
+  "summary": "The technical agreement specifies a mesh belt line for quenching and tempering crankshafts. Capacity is expressed as the number of parts processed per year.",
+  "body": "crankshaft-annual-output.md",
+  "coverAlt": "Crankshaft line with infeed, roller-supported quenching furnace, quench tank with heat exchanger, elevator, hot-air tempering furnace, spray cooling chamber and outfeed.",
+  "coverCaption": "Crankshaft line with infeed, roller-supported quenching furnace, quench tank with heat exchanger, elevator, hot-air tempering furnace, spray cooling chamber and outfeed.",
+  "translationStatus": "complete",
+  "sourceFingerprint": "91e6569acb56bea367625077640d7034fc2a8959cce695c75f6e5fb0c4fb6851",
+  "seoTitle": "Crankshaft heat treatment: why count parts per year?",
+  "seoDescription": "The agreement lists up to approximately 1,000,000 crankshafts per year. Converting to kg/h requires the weight of one crankshaft and annual operating hours.",
+  "presentation": {
+    "view": {
+      "animated": true,
+      "top": 0,
+      "height": 278.846154,
+      "cameras": [
+        [
+          49,
+          161,
+          130
+        ],
+        [
+          224,
+          134,
+          304
+        ],
+        [
+          427,
+          182,
+          172
+        ],
+        [
+          520,
+          128,
+          194
+        ],
+        [
+          705,
+          131,
+          277
+        ],
+        [
+          869,
+          149,
+          142
+        ],
+        [
+          955,
+          165,
+          103
+        ]
+      ]
+    },
+    "status": "Signed technical agreement",
+    "metrics": [
+      [
+        "Quench and temper · Annual count",
+        "up to approximately 1,000,000",
+        "parts/year"
+      ]
+    ],
+    "note": "The agreement lists up to approximately 1,000,000 parts/year for quenching and tempering crankshafts. Converting this to weight per hour requires the annual operating hours and the weight of one part.",
+    "work": [
+      "Parts: crankshafts.",
+      "Treatment: quenching followed by tempering.",
+      "Capacity basis: parts per year. Capacity varies with part dimensions and material requirements."
+    ],
+    "features": [
+      [
+        "Which unit should I use in a comparison?",
+        "Compare annual piece counts for the stated part conditions. Annual piece count alone does not establish hourly throughput by weight."
+      ],
+      [
+        "How is conveying adjusted?",
+        "A variable-frequency drive controls belt speed, and the furnace infeed height is adjustable."
+      ],
+      [
+        "How are parts cooled after tempering?",
+        "The line includes a spray cooling chamber after the tempering furnace. Check the cooling method when reviewing the equipment configuration."
+      ]
+    ],
+    "flow": [
+      "Infeed",
+      "Roller-supported mesh belt quenching furnace",
+      "Quench tank with heat exchanger",
+      "Elevator",
+      "Hot-air tempering furnace",
+      "Spray cooling chamber",
+      "Outfeed"
+    ],
+    "params": [
+      [
+        "Main furnace belt width",
+        "1200 mm"
+      ],
+      [
+        "Heated length",
+        "13800 mm"
+      ]
+    ],
+    "supplier": "Suneng transports, installs and commissions the equipment, trains operating and maintenance staff, and supplies foundation drawings and cables between the control cabinet and the furnace.",
+    "buyer": "The buyer provides plant drawings, builds the foundations, positions the equipment and connects the main power supply, cooling tower piping and utility mains. It supplies covers for cable trenches and furnace pits, electricity, cooling water and piping, compressed air, fuel gas, quenching medium, purge gas, parts, firefighting equipment and facilities for trial operation.",
+    "scope": "Roller-supported mesh belt quenching furnace, quench tank with heat exchanger, lifting and slag-removal equipment, hot-air tempering furnace, spray cooling chamber, electrical control cabinet and distributed controls with a touchscreen.",
+    "pre": "The agreement does not specify a separate factory pre-acceptance procedure.",
+    "site": "Following no-load and loaded trials, the equipment is checked against the agreed list. Chamber temperature uniformity in the uniform-temperature zones of both furnaces must be within ±5 °C.",
+    "faq": [
+      [
+        "Is the annual crankshaft throughput based on an on-site production count?",
+        "No. The technical agreement specifies up to approximately 1,000,000 parts/year for quenching and tempering crankshafts. Actual annual output depends on the parts and operating conditions."
+      ],
+      [
+        "Can the annual count be divided equally among individual machines?",
+        "The agreement lists an annual count for crankshafts and gives no individual machine rates from which to allocate it. Confirm individual machine capacity separately."
+      ],
+      [
+        "Who prepares for trial operation?",
+        "The buyer supplies site utilities, quenching medium, parts and trial facilities. Suneng assists with process commissioning."
+      ]
+    ],
+    "source": "Equipment, parts and acceptance conditions are taken from the technical agreement signed by both parties.",
+    "faqIntro": "Questions about agreed output, part specifications and acceptance."
+  }
+}
