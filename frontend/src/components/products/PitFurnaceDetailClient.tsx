@@ -134,55 +134,37 @@ export function PitResourceTabs({ label, equipmentLabel, resourcesLabel, equipme
   resources: ReactNode;
 }) {
   const id = useId();
-  const [selected, setSelected] = useState(0);
-  const tabs = [equipmentLabel, resourcesLabel];
+  const labels = [equipmentLabel, resourcesLabel];
 
-  function navigate(event: KeyboardEvent<HTMLButtonElement>, index: number) {
-    let next: number;
-    switch (event.key) {
-      case 'ArrowRight':
-      case 'ArrowLeft':
-        next = 1 - index;
-        break;
-      case 'Home':
-        next = 0;
-        break;
-      case 'End':
-        next = 1;
-        break;
-      default:
-        return;
-    }
+  function jumpToEnd(event: KeyboardEvent<HTMLInputElement>) {
+    if (event.key !== 'Home' && event.key !== 'End') return;
     event.preventDefault();
-    setSelected(next);
-    document.getElementById(`${id}-tab-${next}`)?.focus();
+    const target = document.getElementById(`${id}-choice-${event.key === 'Home' ? 0 : 1}`);
+    if (target instanceof HTMLInputElement) {
+      target.focus();
+      target.click();
+    }
   }
 
   return (
-    <>
-      <div role="tablist" aria-label={label} className={styles.resourceTabs}>
-        {tabs.map((title, index) => (
-          <button
-            key={index}
-            type="button"
-            role="tab"
-            id={`${id}-tab-${index}`}
-            aria-controls={`${id}-panel-${index}`}
-            aria-selected={selected === index}
-            tabIndex={selected === index ? 0 : -1}
-            onClick={() => setSelected(index)}
-            onKeyDown={event => navigate(event, index)}
-          >
-            {title}
-          </button>
+    <div className={styles.resourceSwitch}>
+      <div className={styles.resourceTabs} role="radiogroup" aria-label={label}>
+        {labels.map((title, index) => (
+          <label key={index}>
+            <input type="radio" name={id} id={`${id}-choice-${index}`}
+              aria-controls={`${id}-panel-${index}`} defaultChecked={index === 0}
+              onKeyDown={jumpToEnd} />
+            <span id={`${id}-label-${index}`}>{title}</span>
+          </label>
         ))}
       </div>
       {[equipment, resources].map((content, index) => (
-        <div key={index} role="tabpanel" id={`${id}-panel-${index}`} aria-labelledby={`${id}-tab-${index}`}
-          hidden={selected !== index} tabIndex={index === 0 ? 0 : undefined}>
+        <div key={index} id={`${id}-panel-${index}`} role="region"
+          className={index === 0 ? styles.equipmentPanel : styles.resourcesPanel}
+          aria-labelledby={`${id}-label-${index}`}>
           {content}
         </div>
       ))}
-    </>
+    </div>
   );
 }
