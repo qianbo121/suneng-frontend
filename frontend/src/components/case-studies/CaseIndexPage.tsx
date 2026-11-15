@@ -41,7 +41,7 @@ export function CaseIndexPage({ query }: { query: CaseQuery }) {
           <form className="catalog-search" action="/zh/case" method="get" role="search">
             {([...CASE_FILTER_KEYS, 'type', 'sort'] as const).map((key) => {
               const value = query[key];
-              return value && value !== 'relevance' ? <input key={key} type="hidden" name={key} value={value} /> : null;
+              return value && !(key === 'sort' && value === 'published') ? <input key={key} type="hidden" name={key} value={value} /> : null;
             })}
             <button type="submit" aria-label="搜索案例"><HiOutlineMagnifyingGlass aria-hidden="true" /></button>
             <input type="search" name="q" defaultValue={query.q} aria-label="搜索项目案例" placeholder="搜索工件、炉型或工艺" />
@@ -53,12 +53,12 @@ export function CaseIndexPage({ query }: { query: CaseQuery }) {
           <h2>按工件查找</h2>
           {choices('workpiece')}
           <div className="catalog-sections">
-            <details open={Boolean(query.equipment)}>
-              <summary>炉型</summary>{choices('equipment')}
-            </details>
-            <details open={Boolean(query.process)}>
-              <summary>处理工艺</summary>{choices('process')}
-            </details>
+            <section>
+              <h3>炉型</h3>{choices('equipment')}
+            </section>
+            <section>
+              <h3>处理工艺</h3>{choices('process')}
+            </section>
             <details className="catalog-extra" open={Boolean(query.need || query.type)}>
               <summary aria-label="更多筛选" title="更多筛选"><HiOutlineAdjustmentsHorizontal aria-hidden="true" /></summary>
               <h3>项目需求</h3>{choices('need')}

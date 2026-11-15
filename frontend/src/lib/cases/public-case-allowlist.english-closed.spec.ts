@@ -45,10 +45,8 @@ describe('a case approved in Chinese only', () => {
   });
 
   it('names the case hub only for Chinese readers and never switches them to a missing English page', () => {
-    // Neither menu lists the hub now, so the locale gate is read where it still
-    // shows: the breadcrumb names the hub in Chinese and must not in English.
-    for (const locale of ['zh', 'en'] as const)
-      expect(getLocalizedNavigation(locale).some((item) => item.key === 'cases')).toBe(false);
+    expect(getLocalizedNavigation('zh').some((item) => item.key === 'cases')).toBe(true);
+    expect(getLocalizedNavigation('en').some((item) => item.key === 'cases')).toBe(false);
     expect(getRouteLabelMap('zh').get('/case')).toBe('项目案例');
     expect(getRouteLabelMap('en').has('/case')).toBe(false);
     expect(isZhOnlyPath('/zh/case')).toBe(true);

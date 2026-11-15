@@ -16,6 +16,7 @@ import { FurnaceCutawayDiagram } from './FurnaceCutawayDiagram';
 import {
   PitFurnaceFaq,
   PitFurnaceGallery,
+  PitResourceTabs,
 } from './PitFurnaceDetailClient';
 import styles from './PitFurnaceDetailPage.module.css';
 
@@ -84,6 +85,9 @@ export function PitFurnaceDetailPage({ locale = 'zh' }: { locale?: Locale }) {
     ],
     ...localizeCoreValue(sourceRelatedArticles, locale),
   ];
+  const visibleArticles = relatedArticles.filter(([, href]) =>
+    href !== '#related-case-evidence' && !isWithdrawnTechnicalPath(href),
+  );
   const productDescription =
     t("井式炉用于长轴、辊轴、拉杆、套筒及吊篮装料工件的立式热处理。方案需结合有效加热区、装炉包络、温度等级、热源、冷却路径、起吊总质量和厂房条件确认。");
 
@@ -453,43 +457,37 @@ export function PitFurnaceDetailPage({ locale = 'zh' }: { locale?: Locale }) {
           </section>
 
           <section id="related" className={`${styles.section} ${styles.relatedSection}`}>
-            <SectionHeader
-              title={t("相关设备与选型资料")}
-              description={t("先比较方案方向，再带着完整工况进入技术沟通。")}
-            />
-            <div className={styles.relatedLayout}>
-              <div className={styles.relatedEquipment}>
-                <h3>{t("相关设备")}</h3>
-                <div>
+            <SectionHeader title={t("相关设备与选型资料")} />
+            <PitResourceTabs
+              label={t("相关设备与选型资料")}
+              equipmentLabel={`${t("相关设备")} (${relatedEquipment.length})`}
+              resourcesLabel={`${t("选型资料")} (${visibleArticles.length})`}
+              equipment={
+                <div className={styles.tabEquipment}>
                   {relatedEquipment.map(([title, image, alt, text]) => (
                     <article key={title} data-pit-related-equipment={title}>
-                      <div className={styles.relatedImage}>
-                        <Image
-                          src={image}
-                          alt={alt}
-                          fill
-                          sizes="(max-width: 640px) 100vw, (max-width: 1100px) 33vw, 280px"
-                        />
+                      <div className={styles.tabPhoto}>
+                        <Image src={image} alt={alt} fill sizes="(max-width: 640px) 95px, (max-width: 1280px) 33vw, 400px" />
                       </div>
-                      <h4>{title}</h4>
-                      <p>{text}</p>
+                      <div>
+                        <h3>{title}</h3>
+                        <p>{text}</p>
+                      </div>
                     </article>
                   ))}
                 </div>
-              </div>
-              <div className={styles.relatedArticles}>
-                <h3>{t("选型资料")}</h3>
-                <div>
-                  {relatedArticles.filter(([, href]) => href !== '#related-case-evidence' && !isWithdrawnTechnicalPath(href)).map(([title, href], index) => (
+              }
+              resources={
+                <div className={styles.tabResources}>
+                  {visibleArticles.map(([title, href]) => (
                     <Link key={href} href={href}>
-                      <span>{index + 1}</span>
-                      <strong>{title}</strong>
+                      {title}
                       <HiArrowRight aria-hidden="true" />
                     </Link>
                   ))}
                 </div>
-              </div>
-            </div>
+              }
+            />
           </section>
 
           <HomepageLeadForm locale={locale}

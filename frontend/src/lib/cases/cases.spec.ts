@@ -167,10 +167,22 @@ describe('case publishing and browsing contract', () => {
     expect(parseCaseQuery({ page: '-2', from: 'Infinity', sort: 'unknown' })).toMatchObject({
       page: 1,
       from: 1,
-      sort: 'relevance',
+      sort: 'published',
     });
     expect(hasCaseSearch(parseCaseQuery({ page: '2' }))).toBe(false);
     expect(hasCaseSearch(parseCaseQuery({ process: '淬火' }))).toBe(true);
+  });
+
+  it('puts newer publications first regardless of subsequent edits and puts undated cases last', () => {
+    const cases = [
+      { ...fixture(0), datePublished: '2026-11-01T08:00:00+08:00', dateModified: '2026-11-02' },
+      { ...fixture(1), datePublished: '2026-11-01T01:00:00Z' },
+      fixture(2),
+    ];
+    const query = parseCaseQuery({});
+    expect(filterCases(cases, query).map(item => item.id)).toEqual(['fixture-1', 'fixture-0', 'fixture-2']);
+    expect(caseListHref(query)).toBe('/zh/case');
+    expect(caseListHref(query, { sort: 'relevance' })).toBe('/zh/case?sort=relevance');
   });
 
   it('uses AND filters, public body search and deterministic sorting', () => {

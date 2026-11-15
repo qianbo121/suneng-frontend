@@ -9,17 +9,18 @@ describe('localized primary navigation', () => {
       'home',
       'products',
       'engineering',
+      'cases',
       'resources',
       'about',
     ]);
     expect(getLocalizedNavigation('zh').every((item) => !item.href.includes('#'))).toBe(true);
   });
 
-  // A single approved case cannot carry a top-level menu. The page stays
-  // published, so its breadcrumb still needs the hub's name in both languages.
-  it('leaves the case hub out of both menus while it keeps its breadcrumb name', () => {
-    for (const locale of ['zh', 'en'] as const)
-      expect(getLocalizedNavigation(locale).filter((item) => item.key === 'cases')).toEqual([]);
+  it('links each menu to the case index under its breadcrumb name', () => {
+    for (const locale of ['zh', 'en'] as const) {
+      const item = getLocalizedNavigation(locale).find((entry) => entry.key === 'cases');
+      expect(item).toMatchObject({ href: '/case', labelText: getRouteLabelMap(locale).get('/case') });
+    }
     expect(getRouteLabelMap('zh').get('/case')).toBe('项目案例');
     expect(getRouteLabelMap('en').get('/case')).toBe('Project Cases');
   });
@@ -45,7 +46,7 @@ describe('localized primary navigation', () => {
     }));
     expect(shape('en')).toEqual(shape('zh'));
     expect(getLocalizedNavigation('en').map((item) => item.labelText)).toEqual([
-      'Home', 'Furnaces & Lines', 'Retrofit & Services', 'Technical Resources', 'About Suneng',
+      'Home', 'Furnaces & Lines', 'Retrofit & Services', 'Project Cases', 'Technical Resources', 'About Suneng',
     ]);
     expect(getRouteLabelMap('en').get('/case')).toBe('Project Cases');
   });

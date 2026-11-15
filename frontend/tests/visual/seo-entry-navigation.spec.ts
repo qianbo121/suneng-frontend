@@ -1,4 +1,5 @@
 import { expect, test } from '@playwright/test';
+import { additionalFurnaces } from '../../src/lib/additional-furnaces';
 
 test.beforeEach(async ({ page }) => {
   await page.route('**/*', async route => {
@@ -40,21 +41,54 @@ for (const width of [1440, 390]) {
       await expect(page.locator('[data-production-line-card]').first()).toBeVisible();
     });
 
-    test('four furnace inquiry links open the visible prefilled contact form', async ({ page }) => {
-      test.setTimeout(120_000);
-      for (const slug of ['shovel-furnace', 'walking-beam-furnace', 'elevator-hearth-furnace', 'gas-nitriding-furnace']) {
-        await page.goto(`/en/products/detail/${slug}`, { waitUntil: 'domcontentloaded' });
-        await page.getByRole('link', { name: 'Request selection advice', exact: true }).filter({ visible: true }).first().click();
-        await expect(page).toHaveURL(new RegExp(`/en/about\\?product=${slug}#contact-inquiry-form-fields$`));
-        const form = page.locator('#contact-inquiry-form-fields');
-        await expect(form).toBeVisible();
-        await expect.poll(() => form.evaluate(element => {
-          const rect = element.getBoundingClientRect();
-          const header = document.querySelector('header')?.getBoundingClientRect();
-          return scrollY > 0 && rect.top >= (header?.bottom ?? 0) && rect.top < innerHeight;
-        })).toBe(true);
-        await expect(form.locator('textarea')).not.toHaveValue('');
-      }
-    });
+    for (const locale of ['zh', 'en'] as const) {
+      test(`four furnace inquiry forms stay on the ${locale} product page`, async ({ page }) => {
+        test.setTimeout(120_000);
+        const en = locale === 'en';
+        for (const furnace of additionalFurnaces) {
+          const path = `/${locale}/products/detail/${furnace.id}`;
+          const name = en ? furnace.nameEn : furnace.name;
+          await page.goto(path, { waitUntil: 'domcontentloaded' });
+          await expect(page.locator('#selection-inputs li')).toHaveText(
+            en ? [...furnace.inputsEn] : [...furnace.inputs],
+          );
+          const section = page.locator('#inquiry');
+          const entry = page.getByRole('link', {
+            name: en ? 'Request selection advice' : '提交工况，获取选型建议',
+            exact: true,
+          }).filter({ visible: true });
+          await entry.click();
+          await expect(page).toHaveURL(`${path}#inquiry`);
+          await expect.poll(() => section.evaluate(element => {
+            const top = element.getBoundingClientRect().top;
+            const navBottom = document.querySelector('nav[aria-label$="page sections"], nav[aria-label$="章节导航"]')?.getBoundingClientRect().bottom ?? 0;
+            return top >= navBottom - 1 && top < innerHeight;
+          })).toBe(true);
+          const form = section.locator('form');
+          await expect(form.locator('textarea')).toHaveValue(en ? `Equipment: ${name}.\n` : `咨询设备：${name}。\n`);
+          await expect(form.locator('input[name="direction"]')).toHaveValue('单体工业炉新建');
+          await expect(page.locator('nav a[href="#inquiry"]')).toHaveCount(1);
+
+          if (furnace.id === 'gas-nitriding-furnace') {
+            await test.info().attach('inquiry', { body: await section.screenshot(), contentType: 'image/png' });
+            const submit = form.getByRole('button', { name: en ? 'Send project details' : '提交咨询' });
+            await submit.click();
+            await expect(form.locator('[name="identity"]')).toBeFocused();
+            await form.locator('[name="identity"]').fill('Local QA');
+            await form.locator('[name="contact"]').fill('qa@example.com');
+            await form.locator('textarea').fill(`${name} selection test`);
+            await page.route('**/v2/custom-requirements', route =>
+              route.fulfill({ json: { code: 0, message: 'local-test-only', data: { submissionId: 'LOCAL-QA' } } }),
+            );
+            const request = page.waitForRequest(req => req.url().endsWith('/v2/custom-requirements') && req.method() === 'POST');
+            await submit.click();
+            expect((await request).postDataJSON()).toMatchObject({
+              locale, productTag: name, requirement: `${name} selection test`,
+            });
+            await expect(section.getByRole('status')).toContainText('LOCAL-QA');
+          }
+        }
+      });
+    }
   });
 }

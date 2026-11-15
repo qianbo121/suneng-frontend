@@ -61,7 +61,7 @@ export type CaseCardData = Pick<
 export type CaseQuery = Record<CaseFilterKey, string> & {
   q: string;
   type: '' | CaseContentType;
-  sort: 'updated' | 'relevance' | 'year';
+  sort: 'published' | 'updated' | 'relevance' | 'year';
   page: number;
   from: number;
 };

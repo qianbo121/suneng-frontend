@@ -44,12 +44,6 @@ const chineseNavigationItems: NavigationItem[] = [
     key: 'cases',
     href: '/case',
     label: { zh: '项目案例', en: 'Project Cases' },
-    // One approved case cannot carry a top-level menu: a visitor who opens
-    // "Project Cases" and finds a single entry reads it as a single project.
-    // The page, its sitemap entry and the evidence links from product pages
-    // stay. Put it back once six to eight delivered, owner-approved cases are
-    // published (see REVIEWED_PUBLIC_CASES).
-    hiddenFromMenu: true,
   },
   {
     key: 'resources',

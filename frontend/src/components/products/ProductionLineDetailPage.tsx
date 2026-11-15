@@ -83,6 +83,40 @@ function Heading({
   );
 }
 
+function StripLineAcceptance({ acceptance, locale }: {
+  acceptance: ProductionLineContent['sections']['acceptance'];
+  locale: Locale;
+}) {
+  return (
+    <div className={styles.stripAcceptance}>
+      <div className={styles.acceptanceChecks}>
+        <h3>{locale === 'en' ? 'Acceptance checks' : '验收项目'}</h3>
+        <dl>
+          {acceptance.columns.map((column) => (
+            <div key={column.id}>
+              <dt>{column.title}</dt>
+              <dd>{column.description}</dd>
+            </div>
+          ))}
+        </dl>
+        <p className={styles.acceptanceFootnote}>{acceptance.productNote}</p>
+      </div>
+      <div className={styles.deliverySteps}>
+        <h3>{locale === 'en' ? 'Delivery stages' : '交付流程'}</h3>
+        <ol>
+          {acceptance.stages.map((stage) => (
+            <li key={stage.id}>
+              <span aria-hidden="true">{stage.order}</span>
+              {stage.label}
+            </li>
+          ))}
+        </ol>
+        <p className={styles.acceptanceFootnote}>{acceptance.note}</p>
+      </div>
+    </div>
+  );
+}
+
 function ComparisonTable({ data, id, locale = 'zh' }: { data: LineTable; id: string; locale?: Locale }) {
   return (
     <>
@@ -447,44 +481,54 @@ export function ProductionLineDetailPage({ content, locale = 'zh' }: { content: 
 
       <section id="acceptance" className={styles.section}>
         <div className={styles.container}>
-          <Heading title={s.acceptance.title} subtitle={s.acceptance.subtitle} />
-          <div className={styles.acceptanceGrid}>
-            {s.acceptance.columns.map((column) => (
-              <article key={column.id}>
-                <h3>{column.title}</h3>
-                <p>{column.description}</p>
-              </article>
-            ))}
-          </div>
-          <p className={styles.note}>{s.acceptance.productNote}</p>
-          <ol className={styles.timeline}>
-            {s.acceptance.stages.map((stage) => (
-              <li key={stage.id}>
-                <span className={styles.stepNumber}>{stage.order}</span>
-                <span>{stage.label}</span>
-                <HiArrowRight aria-hidden="true" />
-              </li>
-            ))}
-          </ol>
-          <p className={styles.note}>
-            {s.acceptance.note}
-            {content.pageId === 'fastener-quench-temper-line' && (
-              <>
-                <br />
-                <Link href={`/${locale}/products/detail/fastener-quench-temper-line/cqi-9`} className={styles.resourceLink}>
-                  {t('CQI-9 设备配合与采购核对', 'CQI-9 equipment support and purchasing checks')} <HiArrowRight aria-hidden="true" />
-                </Link>
-              </>
-            )}
-            {locale === 'zh' && content.pageId === 'fastener-quench-temper-line' && (
-              <>
-                <br />
-                <Link href="/zh/news/bolt-mesh-belt-quench-temper-capability" className={styles.resourceLink}>
-                  螺栓网带调质线：同类工况能力怎么核验 <HiArrowRight aria-hidden="true" />
-                </Link>
-              </>
-            )}
-          </p>
+          <Heading
+            title={s.acceptance.title}
+            subtitle={s.acceptance.subtitle}
+            splitTitle={!en && content.pageId === 'annealing-solution-line'}
+          />
+          {content.pageId === 'annealing-solution-line' ? (
+            <StripLineAcceptance acceptance={s.acceptance} locale={locale} />
+          ) : (
+            <>
+              <div className={styles.acceptanceGrid}>
+                {s.acceptance.columns.map((column) => (
+                  <article key={column.id}>
+                    <h3>{column.title}</h3>
+                    <p>{column.description}</p>
+                  </article>
+                ))}
+              </div>
+              <p className={styles.note}>{s.acceptance.productNote}</p>
+              <ol className={styles.timeline}>
+                {s.acceptance.stages.map((stage) => (
+                  <li key={stage.id}>
+                    <span className={styles.stepNumber}>{stage.order}</span>
+                    <span>{stage.label}</span>
+                    <HiArrowRight aria-hidden="true" />
+                  </li>
+                ))}
+              </ol>
+              <p className={styles.note}>
+                {s.acceptance.note}
+                {content.pageId === 'fastener-quench-temper-line' && (
+                  <>
+                    <br />
+                    <Link href={`/${locale}/products/detail/fastener-quench-temper-line/cqi-9`} className={styles.resourceLink}>
+                      {t('CQI-9 设备配合与采购核对', 'CQI-9 equipment support and purchasing checks')} <HiArrowRight aria-hidden="true" />
+                    </Link>
+                  </>
+                )}
+                {locale === 'zh' && content.pageId === 'fastener-quench-temper-line' && (
+                  <>
+                    <br />
+                    <Link href="/zh/news/bolt-mesh-belt-quench-temper-capability" className={styles.resourceLink}>
+                      螺栓网带调质线：同类工况能力怎么核验 <HiArrowRight aria-hidden="true" />
+                    </Link>
+                  </>
+                )}
+              </p>
+            </>
+          )}
         </div>
       </section>
 

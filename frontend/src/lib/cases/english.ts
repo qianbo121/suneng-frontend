@@ -3,6 +3,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { createHash } from 'node:crypto';
 import { cache } from 'react';
+import { newestPublishedFirst } from './query';
 import { prepareCaseBody } from './content';
 import { PUBLIC_ENGLISH_CASE_SLUGS } from './public-case-allowlist';
 import type { CaseMeta, CaseQuery } from './types';
@@ -94,7 +95,7 @@ export function englishCaseHref(query: CaseQuery, page = query.page) {
   const params = new URLSearchParams();
   if (query.q) params.set('q', query.q);
   if (query.type) params.set('type', query.type);
-  if (query.sort !== 'relevance') params.set('sort', query.sort);
+  if (query.sort !== 'published') params.set('sort', query.sort);
   if (page > 1) params.set('page', String(page));
   return `/en/case${params.size ? `?${params}` : ''}`;
 }
@@ -103,6 +104,7 @@ export function getEnglishCaseResults(query: CaseQuery) {
   const records = getEnglishCases().filter((item) =>
     (!query.type || item.contentType === query.type) && terms.every((term) => item.searchText.includes(term)),
   ).sort((a, b) => {
+    if (query.sort === 'published') return newestPublishedFirst(a, b);
     if (query.sort === 'year') return (b.projectYear ?? 0) - (a.projectYear ?? 0) || a.id.localeCompare(b.id);
     if (query.sort === 'relevance' && terms.length) {
       const score = (title: string) => terms.filter((term) => title.toLowerCase().includes(term)).length;

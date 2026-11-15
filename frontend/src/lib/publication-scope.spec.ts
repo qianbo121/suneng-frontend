@@ -205,15 +205,14 @@ describe('launch publication scope', () => {
     expect(readEnglishCases(root, undefined, new Set())).toEqual([]);
   });
 
-  it('keeps every menu destination published, with the case hub left out of the menus', () => {
+  it('keeps every menu destination published, including the case index', () => {
     for (const locale of ['zh', 'en'] as const) {
       const entries = getLocalizedNavigation(locale);
-      // The case hub stays published but is not a menu entry while a single
-      // approved case cannot carry one; see hiddenFromMenu in mock/navigation.
       expect(entries.map((item) => item.href)).toEqual([
         '/',
         '/products',
         '/service',
+        '/case',
         '/news',
         '/about',
       ]);
