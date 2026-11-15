@@ -5,8 +5,8 @@ import { isZhOnlyPath, localizeOrHideHref } from './zh-only';
 describe('case language availability', () => {
   it('links English readers only to approved English case pages', () => {
     expect(isZhOnlyPath('/zh/case')).toBe(false);
-    expect(isZhOnlyPath('/zh/case/henan-annealing-solution-line')).toBe(false);
-    expect(localizeOrHideHref('/zh/case/henan-annealing-solution-line', 'en')).toBe('/en/case/henan-annealing-solution-line');
+    expect(isZhOnlyPath('/zh/case/stainless-strip-annealing-supply-scope')).toBe(false);
+    expect(localizeOrHideHref('/zh/case/stainless-strip-annealing-supply-scope', 'en')).toBe('/en/case/stainless-strip-annealing-supply-scope');
     // Translated but unapproved pages stay hidden.
     expect(isZhOnlyPath('/zh/case/rt4-75-6-trolley-furnace-proposal')).toBe(true);
     expect(localizeOrHideHref('/zh/case/rt4-75-6-trolley-furnace-proposal', 'en')).toBeNull();

@@ -8,7 +8,7 @@ import { buildNewsListMetadata, getNewsListDocumentTitles } from '../news-list-m
 
 describe('English search copy', () => {
   it('uses concise case metadata while retaining the full heading and evidence conditions', () => {
-    const slug = 'henan-annealing-solution-line';
+    const slug = 'stainless-strip-annealing-supply-scope';
     const item = getEnglishCase(slug)!;
     const metadata = englishCaseMetadata(slug);
     expect(item.title).toContain('annealing and pickling line');

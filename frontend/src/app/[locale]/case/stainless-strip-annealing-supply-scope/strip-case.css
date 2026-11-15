@@ -1,0 +1,176 @@
+.strip-case .case-detail-page {
+  --strip-columns: minmax(0, 1.7fr) minmax(0, 1fr);
+  --strip-gap: clamp(24px, 2.5vw, 36px);
+}
+
+.strip-case .case-detail-page .case-container {
+  width: min(1080px, var(--site-page-width));
+}
+
+.strip-case .case-detail-page .case-article-layout {
+  display: block;
+}
+
+.strip-case .case-reading .case-article-header,
+.strip-case .case-english .case-article {
+  display: grid;
+  grid-template-columns: var(--strip-columns);
+  column-gap: var(--strip-gap);
+  align-items: center;
+}
+
+.strip-case .case-reading .case-article-header {
+  padding-bottom: 20px;
+  margin-bottom: 24px;
+  border-bottom: 1px solid #dce4ed;
+}
+
+.strip-case .case-english .case-article-header {
+  padding: 0;
+  margin: 0;
+  border: 0;
+}
+
+.strip-case .case-detail-page .case-article-header h1 {
+  margin: 0 0 14px;
+  font-size: clamp(29px, 2.6vw, 36px);
+  line-height: 1.25;
+  text-wrap: balance;
+}
+
+.strip-case .case-reading .case-c4-article-meta,
+.strip-case .case-english .case-article-kind {
+  margin: 0 0 10px;
+  color: #305e97;
+  font-size: 14px;
+}
+
+.strip-case .case-reading .case-reading-heading {
+  display: block;
+}
+
+.strip-case .case-reading .case-byline {
+  margin: 0 0 8px;
+}
+
+.strip-case .case-detail-page .case-article-cover {
+  display: block;
+  width: 100%;
+  margin: 0;
+  grid-area: auto;
+  mix-blend-mode: normal;
+}
+
+.strip-case .case-detail-page .case-article-image {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.strip-case .case-detail-page .case-article-image img {
+  mix-blend-mode: normal;
+}
+
+.strip-case .case-detail-page .case-article-cover figcaption {
+  margin: 6px 0 0;
+  text-align: right;
+  line-height: 1.5;
+}
+
+.strip-case .case-detail-page .case-article-body,
+.strip-case .case-english .case-article-source,
+.strip-case .case-english .case-toc {
+  grid-column: 1 / -1;
+  width: 100%;
+  min-width: 0;
+}
+
+/* Keep the existing English section links within the reading column. */
+.strip-case .case-english .case-toc {
+  position: static;
+  order: 0;
+  margin-block: 28px 0;
+  padding: 0;
+  max-height: none;
+  overflow: visible;
+  border: 0;
+  border-block: 1px solid #dce4ed;
+  border-radius: 0;
+  background: transparent;
+}
+
+.strip-case .case-english .case-toc-desktop { display: none; }
+.strip-case .case-english .case-toc-mobile { display: block; }
+.strip-case .case-english .case-toc summary {
+  padding: 12px 0;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.strip-case .case-english .case-article-source {
+  margin-block: 16px 0;
+  padding: 0;
+  border: 0;
+}
+
+.strip-case .case-english .case-article-body {
+  margin-top: 18px;
+}
+
+/* The root already reserves space for the sticky site header. */
+.strip-case .case-english .case-article-body .news-article h2[id] {
+  scroll-margin-top: 20px;
+}
+
+@media (min-width: 1024px) {
+  .strip-case .case-reading-intro p {
+    text-wrap: balance;
+  }
+}
+
+@media (max-width: 699px) {
+  .strip-case .case-reading .case-article-header,
+  .strip-case .case-english .case-article {
+    display: block;
+  }
+
+  .strip-case .case-detail-page .case-article-header h1 {
+    font-size: clamp(26px, 5.5vw, 34px);
+    line-height: 1.32;
+  }
+
+  .strip-case .case-detail-page .case-breadcrumb {
+    margin-bottom: 18px;
+  }
+
+  .strip-case .case-detail-page .case-article-cover {
+    width: min(100%, 390px);
+    margin: 18px auto 0;
+  }
+
+  .strip-case .case-reading .case-article-header {
+    padding-bottom: 18px;
+    margin-bottom: 22px;
+  }
+
+  .strip-case .case-detail-page .case-article-body table {
+    width: 100%;
+    min-width: 0;
+    table-layout: fixed;
+  }
+
+  .strip-case .case-detail-page .case-article-body th:first-child {
+    width: 32%;
+  }
+
+  .strip-case .case-detail-page .case-article-body :is(th, td) {
+    overflow-wrap: anywhere;
+    white-space: normal;
+  }
+
+  .strip-case .case-english .case-toc {
+    margin-top: 18px;
+  }
+}

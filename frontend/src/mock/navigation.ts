@@ -116,7 +116,7 @@ export function getRouteLabelMap(locale: Locale) {
       '/articles/laojiu-rechuli-lu-daxiu-haishi-maixin': '改造还是换新判断',
       '/articles/gongye-lu-baojia-canshu': '工业炉报价参数清单',
       // Only approved case pages belong here: this table ships to every visitor.
-      '/case/henan-annealing-solution-line': '连续退火固溶生产线',
+      '/case/stainless-strip-annealing-supply-scope': '连续退火固溶生产线',
       '/partner': '合作关系',
       '/contact': '联系方式',
     };

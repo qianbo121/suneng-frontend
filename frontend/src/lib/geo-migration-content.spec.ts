@@ -8,7 +8,7 @@ const readContent = (path: string) => fs.readFileSync(fileURLToPath(new URL(path
 describe('migration content at its maintained source', () => {
   it('preserves the original case fact boundaries after moving prose into Markdown', () => {
     const jining = readContent('../../content/cases/jining-support-roller.md');
-    const henan = readContent('../../content/cases/henan-annealing-solution.md');
+    const henan = readContent('../../content/cases/stainless-strip-annealing-supply-scope.md');
     for (const fact of ['最大设计处理能力', '方案折算约 30 件/h', '不是实际验收产能']) expect(jining).toContain(fact);
     for (const fact of ['带宽 480–750 mm、厚度 1.6–4.0 mm', '1300℃，不是带钢目标温度', '设计 TV 约 190 m·mm/min']) expect(henan).toContain(fact);
   });

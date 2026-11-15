@@ -194,7 +194,7 @@ it('does not leave ordinary list reads throttled after a failed homepage prepara
 it.each(['zh', 'en'] as const)('keeps the localized public case in plain and filtered %s lists', async (locale) => {
   vi.mocked(getAllNewsForDecisionCenter).mockResolvedValue({ data: [article], error: null });
   const cards = await getNewsDecisionCenterCards(locale);
-  const href = `/${locale}/case/henan-annealing-solution-line`;
+  const href = `/${locale}/case/stainless-strip-annealing-supply-scope`;
   const matches = cards.filter((card) => card.href === href);
   expect(matches).toHaveLength(1);
   expect(matches[0].date).toBe('2026-09-18T01:00:00+08:00');

@@ -193,7 +193,7 @@ try {
   await expect(page.getByRole('dialog')).toHaveCount(0);
   record('桌面目录定位、高亮、企微弹窗与关闭');
   await expect(page.locator('.case-contact-band a')).toHaveAttribute('href', '/zh/products');
-  for (const slug of ['jining-support-roller-heat-treatment-line', 'henan-annealing-solution-line', 'anonymous-tsingshan-1250-renovation', 'rt4-75-6-trolley-furnace-proposal']) {
+  for (const slug of ['jining-support-roller-heat-treatment-line', 'stainless-strip-annealing-supply-scope', 'anonymous-tsingshan-1250-renovation', 'rt4-75-6-trolley-furnace-proposal']) {
     const response = await page.request.get(origin + '/zh/case/' + slug);
     expect(response.status()).toBe(200);
     const document = new JSDOM(await response.text()).window.document;

@@ -14,7 +14,7 @@ const jiningSource = readSource(
   '../../../content/cases/jining-support-roller.md',
 );
 const henanSource = readSource(
-  '../../../content/cases/henan-annealing-solution.md',
+  '../../../content/cases/stainless-strip-annealing-supply-scope.md',
 );
 // Check the exported product content, including all per-furnace modules.
 const productSource = JSON.stringify(STATIC_PRODUCTS);

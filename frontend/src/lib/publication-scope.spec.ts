@@ -18,7 +18,7 @@ import { readEnglishCases } from './cases/english';
 import { PUBLIC_CASE_SLUGS, PUBLIC_ENGLISH_CASE_SLUGS } from './cases/public-case-allowlist';
 import { prepareNewsArticleHtml } from './sanitize';
 
-const approved = 'henan-annealing-solution-line';
+const approved = 'stainless-strip-annealing-supply-scope';
 
 describe('launch publication scope', () => {
   it('opens exactly the eleven approved Chinese guides and keeps other editions and lookalikes closed', () => {
@@ -230,13 +230,13 @@ describe('launch publication scope', () => {
 
   it('preserves news text and live links while removing withdrawn inline links', () => {
     const html = prepareNewsArticleHtml(
-      `<p>正文 <a href="/zh/case/old">项目参数</a> <a href="https://www.jssngyl.cn/en/solutions/old">Guide</a> <a href="/zh/case/${approved}">河南项目</a> <a href="/zh/news/live">新闻</a> <a href="/zh/products">产品</a></p>`,
+      `<p>正文 <a href="/zh/case/old">项目参数</a> <a href="https://www.jssngyl.cn/en/solutions/old">Guide</a> <a href="/zh/case/${approved}">该项目</a> <a href="/zh/news/live">新闻</a> <a href="/zh/products">产品</a></p>`,
     );
     expect(html).toContain('正文 项目参数 Guide');
     expect(html).not.toContain('/case/old');
     expect(html).not.toContain('/solutions/old');
     expect(html).not.toContain(`href="/zh/case/${approved}"`);
-    expect(html).toContain("河南项目");
+    expect(html).toContain("该项目");
     expect(html).toContain('href="/zh/news/live"');
     expect(html).toContain('href="/zh/products"');
   });

@@ -43,7 +43,7 @@ try {
     NODE_ENV: 'production', API_BASE_URL_INTERNAL: `http://127.0.0.1:${apiPort}/api`,
   });
   await ready(`http://127.0.0.1:${port}/zh`, server);
-  const projectCase = JSON.parse(readFileSync(new URL('../content/cases/henan-annealing-solution.json', import.meta.url), 'utf8'));
+  const projectCase = JSON.parse(readFileSync(new URL('../content/cases/stainless-strip-annealing-supply-scope.json', import.meta.url), 'utf8'));
   for (const locale of ['zh', 'en']) {
     const expected = fixtureItems
       .filter(item => locale === 'zh' || (item.titleEn?.trim() && item.contentEn?.replace(/<[^>]+>/g, '').trim()))

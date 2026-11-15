@@ -89,7 +89,7 @@ const DEEP_CRAWL_TARGETS = [
   '/zh/solutions/rechuli-lu-tingchan-chongqi-banqian-fuchan',
   '/zh/solutions/rechuli-lu-wendu-bujun-zhenggai',
   '/zh/case/anonymous-tsingshan-1250-renovation',
-  '/zh/case/henan-annealing-solution-line',
+  '/zh/case/stainless-strip-annealing-supply-scope',
   '/zh/case/jining-support-roller-heat-treatment-line',
   '/zh/products/detail/annealing-solution-line',
   '/zh/products/detail/bell-furnace',
@@ -181,7 +181,7 @@ describe('sitemap freshness signals', () => {
       'https://www.jssngyl.cn/zh/solutions/continuous-heat-treatment-line',
       'https://www.jssngyl.cn/zh/case/anonymous-tsingshan-1250-renovation',
       'https://www.jssngyl.cn/zh/case/jining-support-roller-heat-treatment-line',
-      'https://www.jssngyl.cn/zh/case/henan-annealing-solution-line',
+      'https://www.jssngyl.cn/zh/case/stainless-strip-annealing-supply-scope',
       'https://www.jssngyl.cn/zh/products/detail/trolley-furnace',
     ]);
     const sharedDateRegressions = (items: typeof entries) => {

@@ -41,8 +41,8 @@ export const REVIEWED_PUBLIC_CASES: readonly ReviewedPublicCase[] = [
     approvedAt: '2026-11-14',
   },
   {
-    id: 'henan-annealing-solution',
-    slug: 'henan-annealing-solution-line',
+    id: 'stainless-strip-annealing-supply-scope',
+    slug: 'stainless-strip-annealing-supply-scope',
     batch: 1,
     english: true,
     approvedBy: 'site-owner',

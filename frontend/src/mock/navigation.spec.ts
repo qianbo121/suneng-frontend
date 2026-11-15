@@ -30,7 +30,7 @@ describe('localized primary navigation', () => {
     expect(labels.get('/products')).toBe('产品中心');
     expect(labels.get('/solutions')).toBe('解决方案');
     expect(labels.get('/service')).toBe('改造与工程服务');
-    expect(labels.get('/case/henan-annealing-solution-line')).toBe('连续退火固溶生产线');
+    expect(labels.get('/case/stainless-strip-annealing-supply-scope')).toBe('连续退火固溶生产线');
   });
 
   it('names no unapproved case page in the shared label table', () => {
