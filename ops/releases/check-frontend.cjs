@@ -29,7 +29,18 @@
     caseChecks.push({ path, status: statuses[path], expected: allowed.join('|') });
   }
   const hub = (path) => path.split('/').slice(0, 3).join('/');
-  const casesPassed = contract.group.every((path) => allowed.includes(statuses[path]))
+  const aliases = contract.caseRedirects || {};
+  let redirectsPassed = true;
+  for (const [old, target] of Object.entries(aliases)) {
+    if (contract.state === 'either' && statuses[target] === 404 && [200, 404].includes(statuses[old])) continue;
+    const res = await fetch(base + old, { redirect: 'manual', signal: AbortSignal.timeout(15000) });
+    const location = res.headers.get('location');
+    const ok = res.status === 308 && [target, base + target].includes(location) && statuses[target] === 200;
+    if (!ok) redirectsPassed = false;
+    caseChecks.push({path: old, status: res.status, expected: 308, redirectTo: location, targetStatus: statuses[target], passed: ok});
+  }
+  const casesPassed = redirectsPassed && contract.group.every((path) =>
+    allowed.includes(statuses[path]) || (contract.state === 'either' && Object.hasOwn(aliases, path) && statuses[path] === 308))
     // A case page is never public while its locale's hub is withdrawn.
     && contract.group.every((path) => path === hub(path) || statuses[path] !== 200 || statuses[hub(path)] === 200);
   const guides = contract.guides || {state: 'open', paths: []};

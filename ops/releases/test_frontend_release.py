@@ -912,6 +912,53 @@ class HealthScriptTest(unittest.TestCase):
         report = json.loads(result.stdout) if result.stdout.strip() else {}
         return result.returncode, report, len(requests)
 
+    def test_renamed_case_in_both_gate_checks(self):
+        old_slug = 'henan-annealing-solution-line'
+        new_slug = 'stainless-strip-annealing-supply-scope'
+        previous = {lang: [old_slug] for lang in ('zh', 'en')}
+        current = {lang: [new_slug] for lang in ('zh', 'en')}
+        strict = r.case_contract('open', current, withdrawn=previous)
+        transitional = r.case_contract('either', r.merge_cases(previous, current), encoded=False)
+        aliases = {f'/{lang}/case/{old_slug}': f'/{lang}/case/{new_slug}' for lang in current}
+        self.assertEqual(strict['caseRedirects'], aliases)
+        self.assertEqual(transitional['caseRedirects'], aliases)
+        self.assertTrue(set(strict['retired']).isdisjoint(aliases))
+        self.assertFalse(r.case_contract('closed', r.NO_CASES, withdrawn=previous)['caseRedirects'])
+
+        def check(contract, statuses, redirects, listed, passed):
+            xml = sitemap('/zh/news', '/en/news', *listed)
+            code, report, _ = self.run_script(contract, statuses, xml, redirects=redirects)
+            self.assertEqual((code, report['passed']), (0 if passed else 1, passed))
+            def request(args):
+                path = args[-1].removeprefix('https://example.test')
+                if '--write-out' in args and '%{redirect_url}' in args[args.index('--write-out') + 1]:
+                    location = redirects.get(path, '/zh/news')
+                    dest = location if location.startswith('https:') else 'https://example.test' + location
+                    return str(statuses.get(path, 404)) + '\n' + dest
+                return site(statuses, xml)(args)
+            with patch.object(r, 'run', side_effect=request):
+                if passed:
+                    r.public_probe('https://example.test', contract)
+                else:
+                    with self.assertRaises(RuntimeError):
+                        r.public_probe('https://example.test', contract)
+
+        new_statuses = {path: 200 for path in strict['group']}
+        new_statuses.update({path: 308 for path in aliases})
+        zh, en = aliases
+        for mode in [strict, transitional]:
+            with self.subTest(state=mode['state']):
+                check(mode, new_statuses, aliases, strict['group'], True)
+                check(mode, new_statuses, {**aliases, zh: aliases[en]}, strict['group'], False)
+                check(mode, new_statuses, {**aliases, zh: 'https://wrong.test'+aliases[zh]}, strict['group'], False)
+                check(mode, {**new_statuses, zh: 200}, aliases, strict['group'], False)
+                check(mode, {**new_statuses, aliases[zh]: 404}, aliases, strict['group'], False)
+                check(mode, new_statuses, aliases, [*strict['group'], zh], False)
+        old_paths = ['/zh/case', '/en/case', *aliases]
+        check(transitional, {p: 200 for p in old_paths}, {}, old_paths, True)
+        check(strict, {p: 200 for p in old_paths}, {}, old_paths, False)
+        check(strict, {**new_statuses, strict['retired'][0]: 308}, aliases, strict['group'], False)
+
     def test_approved_contact_redirect_requires_exact_target_and_direct_success(self):
         for status in (307, 308):
             code, report, _ = self.run_script(r.case_contract('open'), {**self.OPENED, '/en/contact': status},
