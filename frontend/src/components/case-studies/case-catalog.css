@@ -51,11 +51,11 @@
 .catalog-sections > details > summary, .catalog-sort summary {
   display: flex; align-items: center; justify-content: space-between; min-height: 34px; gap: 12px; font-size: 14px; color: var(--case-muted);
 }
-.catalog-sections > details:not(.catalog-extra) > summary::after, .catalog-sort summary::after {
+.catalog-sort summary::after {
   content: ''; width: 6px; height: 6px; border: solid currentColor;
   border-width: 0 1px 1px 0; transform: rotate(45deg); margin: -3px 2px 0;
 }
-.catalog-sections > details[open]:not(.catalog-extra) > summary::after, .catalog-sort[open] summary::after { transform: rotate(225deg); margin-top: 3px; }
+.catalog-sort[open] summary::after { transform: rotate(225deg); margin-top: 3px; }
 .catalog-sections > details[open] > summary { color: var(--case-ink); font-weight: 650; }
 .catalog-choices { padding-bottom: 8px; }
 .catalog-choices a { font-size: 14px; padding: 8px 2px; }
@@ -98,8 +98,7 @@
   .catalog-extra > summary { top: 6px; right: 10px; }
   .catalog-workpieces { display: flex; gap: 3px; flex-wrap: wrap; }
   .catalog-workpieces a { padding: 8px; font-size: 14px; }
-  .catalog-sections { display: flex; flex-wrap: wrap; gap: 0 14px; margin: 8px 4px 0; padding-top: 4px; }
-  .catalog-sections > details[open] { width: 100%; }
+  .catalog-sections { margin: 8px 4px 0; padding-top: 4px; }
   .catalog-sections summary { min-height: 36px; }
   .catalog-results-top h2 { font-size: 21px; }
   .case-catalog .case-record-content { grid-template-columns: 96px minmax(0,1fr); gap: 10px; padding: 16px 0; }

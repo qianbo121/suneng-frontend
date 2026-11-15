@@ -3,6 +3,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { JsonLd } from '@/components/JsonLd';
 import { getFaqJsonLd, getProductDetailJsonLd } from '@/lib/seo/jsonld';
+import { HomepageLeadForm } from '@/components/home/HomepageLeadForm';
 import { Breadcrumb } from '@/components/layout/Breadcrumb';
 import { Button } from '@/components/ui/Button';
 import { InquiryContactOptions } from '@/components/lead/InquiryContactOptions';
@@ -60,9 +61,6 @@ export function AdditionalFurnaceDetailPage({
   const copy = additionalFurnaceDetailContent[furnace.id];
   const structure = additionalFurnaceStructures[furnace.id];
   const selection = additionalFurnaceSelection[furnace.id][locale];
-  const inquiryHref = en
-    ? `/en/about?product=${furnace.id}#contact-inquiry-form-fields`
-    : `/zh/inquiry?product=${furnace.id}#project-inquiry-form-fields`;
   const inquiryLabel = en ? 'Request selection advice' : '提交工况，获取选型建议';
   const structureImage = structure.image ?? `/images/products/${furnace.id}/detail-v2-20260910/02-cutaway.webp`;
   const structureCallouts = structure.parts.map((part) => ({
@@ -148,7 +146,7 @@ export function AdditionalFurnaceDetailPage({
             <h1>{copy.title[locale]}</h1>
             <div className={shared.mobileHeroAction}>
               <Button
-                href={inquiryHref}
+                href="#inquiry"
                 className={`${shared.primaryButton} ${styles.primaryAction}`}
               >
                 {inquiryLabel}
@@ -172,7 +170,7 @@ export function AdditionalFurnaceDetailPage({
             </div>
             <div className={shared.heroActions}>
               <Button
-                href={inquiryHref}
+                href="#inquiry"
                 className={`${shared.primaryButton} ${styles.primaryAction} ${styles.desktopInquiry}`}
               >
                 {inquiryLabel}
@@ -425,7 +423,7 @@ export function AdditionalFurnaceDetailPage({
             )}
           </Section>
           <Section
-            id="inquiry"
+            id="selection-inputs"
             title={
               en ? 'Prepare these four inputs for a selection review' : '准备这四项，进入选型沟通'
             }
@@ -440,13 +438,16 @@ export function AdditionalFurnaceDetailPage({
                 <InquiryContactOptions trackingPosition="product_selection_contact" />
               </div>
             ) : null}
-            <Button
-              href={inquiryHref}
-              className={`${shared.primaryButton} ${styles.primaryAction}`}
-            >
-              {en ? 'Submit requirements' : '提交需求，确认适用方案'}
-            </Button>
           </Section>
+          <HomepageLeadForm
+            locale={locale}
+            sectionId="inquiry"
+            inquiryProduct={name}
+            pageType={en ? `${name} detail page` : `${name}详情页`}
+            productTag={name}
+            successProductTag={name}
+            sourceModule={`${furnace.id.replaceAll('-', '_')}_detail_form`}
+          />
         </div>
       </div>
     </PageContainer>

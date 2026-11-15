@@ -16,6 +16,7 @@ export function parseCaseQuery(input: SearchParams | URLSearchParams): CaseQuery
   const number = (key: string, fallback: number) =>
     /^\d{1,6}$/.test(get(key)) ? Math.max(1, Number(get(key))) : fallback;
   const page = number('page', 1);
+  const sort = get('sort');
   return {
     q: get('q'),
     workpiece: get('workpiece'),
@@ -24,7 +25,7 @@ export function parseCaseQuery(input: SearchParams | URLSearchParams): CaseQuery
     need: get('need'),
     type:
       get('type') === 'proposal' ? 'proposal' : get('type') === 'experience' ? 'experience' : '',
-    sort: get('sort') === 'updated' ? 'updated' : get('sort') === 'year' ? 'year' : 'relevance',
+    sort: sort === 'updated' || sort === 'year' || sort === 'relevance' ? sort : 'published',
     page,
     from: Math.min(page, number('from', page)),
   };
@@ -35,7 +36,7 @@ export function caseListHref(query: CaseQuery, changes: Partial<CaseQuery> = {})
   const params = new URLSearchParams();
   for (const key of ['q', ...CASE_FILTER_KEYS, 'type'] as const)
     if (state[key]) params.set(key, state[key]);
-  if (state.sort !== 'relevance') params.set('sort', state.sort);
+  if (state.sort !== 'published') params.set('sort', state.sort);
   if (state.page > 1) params.set('page', String(state.page));
   if (state.from < state.page) params.set('from', String(state.from));
   return `/zh/case${params.size ? `?${params}` : ''}`;
@@ -57,7 +58,7 @@ export function hasCaseSearch(query: CaseQuery) {
     query.q ||
     query.type ||
     CASE_FILTER_KEYS.some((key) => query[key]) ||
-    query.sort !== 'relevance' ||
+    query.sort !== 'published' ||
     query.from < query.page,
   );
 }
@@ -96,6 +97,12 @@ export function caseFilterCategory(key: (typeof CASE_FILTER_KEYS)[number], value
   return value;
 }
 
+export function newestPublishedFirst(a: Pick<CaseMeta, 'datePublished' | 'id'>, b: Pick<CaseMeta, 'datePublished' | 'id'>) {
+  const timeA = a.datePublished ? Date.parse(a.datePublished) : -Infinity;
+  const timeB = b.datePublished ? Date.parse(b.datePublished) : -Infinity;
+  return timeB - timeA || a.id.localeCompare(b.id);
+}
+
 export function filterCases<T extends CaseMeta & { searchText: string }>(
   records: T[],
   query: CaseQuery,
@@ -121,6 +128,7 @@ export function filterCases<T extends CaseMeta & { searchText: string }>(
         terms.every((term) => normalize(item.searchText).includes(term)),
     )
     .sort((a, b) => {
+      if (query.sort === 'published') return newestPublishedFirst(a, b);
       if (query.sort === 'relevance' && terms.length) {
         const difference = score(b) - score(a);
         if (difference) return difference;

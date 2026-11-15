@@ -107,7 +107,7 @@ export function EnglishCaseIndex({ query }: { query: CaseQuery }) {
       <form action="/en/case" method="get" className="case-search-panel case-english-search" aria-label="Search case studies">
         <label>Search by title, workpiece or furnace<input type="search" name="q" defaultValue={query.q} placeholder="e.g. bogie-hearth furnace" /></label>
         {showTypeFilter && <label>Record type<select name="type" defaultValue={query.type}><option value="">All records</option><option value="proposal">Historical proposals</option><option value="experience">Project experience</option></select></label>}
-        <label>Sort by<select name="sort" defaultValue={query.sort}><option value="relevance">Relevance</option><option value="updated">Source update</option><option value="year">Project year</option></select></label>
+        <label>Sort by<select name="sort" defaultValue={query.sort}><option value="published">Publication date</option><option value="relevance">Relevance</option><option value="updated">Source update</option><option value="year">Project year</option></select></label>
         <button className="case-button case-button-primary" type="submit">Search</button><a href="/en/case">Reset</a>
       </form>
     </div></header>

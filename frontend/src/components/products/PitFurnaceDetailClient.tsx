@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import { useState } from 'react';
+import { useId, useState, type KeyboardEvent, type ReactNode } from 'react';
 import { HiChevronDown } from 'react-icons/hi2';
 
 import styles from './PitFurnaceDetailPage.module.css';
@@ -123,5 +123,66 @@ export function PitFurnaceFaq({
         );
       })}
     </div>
+  );
+}
+
+export function PitResourceTabs({ label, equipmentLabel, resourcesLabel, equipment, resources }: {
+  label: string;
+  equipmentLabel: string;
+  resourcesLabel: string;
+  equipment: ReactNode;
+  resources: ReactNode;
+}) {
+  const id = useId();
+  const [selected, setSelected] = useState(0);
+  const tabs = [equipmentLabel, resourcesLabel];
+
+  function navigate(event: KeyboardEvent<HTMLButtonElement>, index: number) {
+    let next: number;
+    switch (event.key) {
+      case 'ArrowRight':
+      case 'ArrowLeft':
+        next = 1 - index;
+        break;
+      case 'Home':
+        next = 0;
+        break;
+      case 'End':
+        next = 1;
+        break;
+      default:
+        return;
+    }
+    event.preventDefault();
+    setSelected(next);
+    document.getElementById(`${id}-tab-${next}`)?.focus();
+  }
+
+  return (
+    <>
+      <div role="tablist" aria-label={label} className={styles.resourceTabs}>
+        {tabs.map((title, index) => (
+          <button
+            key={index}
+            type="button"
+            role="tab"
+            id={`${id}-tab-${index}`}
+            aria-controls={`${id}-panel-${index}`}
+            aria-selected={selected === index}
+            tabIndex={selected === index ? 0 : -1}
+            onClick={() => setSelected(index)}
+            onKeyDown={event => navigate(event, index)}
+          >
+            {title}
+          </button>
+        ))}
+      </div>
+      {[equipment, resources].map((content, index) => (
+        <div key={index} role="tabpanel" id={`${id}-panel-${index}`} aria-labelledby={`${id}-tab-${index}`}
+          hidden={selected !== index} tabIndex={index === 0 ? 0 : undefined}>
+          {content}
+        </div>
+      ))}
+    </>
   );
 }

@@ -30,7 +30,9 @@ describe('case index filters', () => {
 
   it('keeps bookmarked and empty filters visible and clearable', () => {
     const html = render({ type: 'proposal', equipment: '旧炉型' });
-    expect(html).toContain('<details open=""><summary>炉型</summary>');
+    expect(html).toContain('<h3>炉型</h3>');
+    expect(html).toContain('<h3>处理工艺</h3>');
+    expect(html).toContain('<summary>发布时间</summary>');
     expect(html).toContain('<span>旧炉型</span><small>0</small>');
     expect(html).toContain('重置筛选');
     expect(html).toContain('aria-label="内容类型"');

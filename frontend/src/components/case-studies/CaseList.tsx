@@ -9,6 +9,13 @@ import { caseListHref } from '@/lib/cases/query';
 import { type CaseCardData, type CasePageResult, type CaseQuery } from '@/lib/cases/types';
 import { trackLeadEvent } from '@/lib/api/lead-events';
 
+const sortLabels = {
+  published: '发布时间',
+  relevance: '推荐排序',
+  updated: '最近更新',
+  year: '项目年份',
+} satisfies Record<CaseQuery['sort'], string>;
+
 const scrollKey = (url: string) => `case-scroll:${url}`;
 function saveScroll(url: string) {
   try {
@@ -40,11 +47,11 @@ export function CaseList({ initial, query }: { initial: CasePageResult; query: C
       <div className="catalog-results-top">
         <h2 id="case-results-heading">{query.workpiece || (query.equipment || query.q || query.process || query.type || query.need ? '匹配案例' : '全部案例')}<small>{result.total} 项</small></h2>
         <details className="catalog-sort">
-          <summary>{query.sort === 'updated' ? '最近更新' : query.sort === 'year' ? '项目年份' : '推荐排序'}</summary>
+          <summary>{sortLabels[query.sort]}</summary>
           <nav aria-label="案例排序">
-            {([['relevance', '推荐排序'], ['updated', '最近更新'], ['year', '项目年份']] as const).map(([sort, label]) => (
+            {(Object.keys(sortLabels) as CaseQuery['sort'][]).map((sort) => (
               <a key={sort} href={caseListHref(query, { sort, page: 1, from: 1 })}
-                aria-current={query.sort === sort ? 'page' : undefined}>{label}</a>
+                aria-current={query.sort === sort ? 'page' : undefined}>{sortLabels[sort]}</a>
             ))}
           </nav>
         </details>

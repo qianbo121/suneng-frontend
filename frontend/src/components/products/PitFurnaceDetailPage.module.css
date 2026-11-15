@@ -1305,6 +1305,112 @@
   line-height: 1.6;
 }
 
+.resourceTabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+  border-bottom: 1px solid var(--pit-border);
+}
+
+.resourceTabs button {
+  min-height: 44px;
+  padding: 8px 12px;
+  border-bottom: 3px solid transparent;
+  color: var(--pit-copy);
+  font-weight: 600;
+}
+
+.resourceTabs button[aria-selected="true"] {
+  border-color: var(--pit-blue);
+  color: var(--pit-blue);
+}
+
+.resourceTabs button:focus-visible,
+.tabResources a:focus-visible {
+  outline: 2px solid var(--pit-blue);
+  outline-offset: 2px;
+}
+
+.tabEquipment,
+.tabResources {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.tabPhoto {
+  position: relative;
+  height: clamp(110px, 15vw, 160px);
+  margin-bottom: 8px;
+  overflow: hidden;
+  border-radius: 4px;
+}
+
+.tabPhoto img {
+  object-fit: cover;
+}
+
+.tabEquipment h3 {
+  font-size: 16px;
+  font-weight: 650;
+  color: var(--pit-ink);
+}
+
+.tabEquipment p {
+  margin-top: 4px;
+  color: var(--pit-copy);
+  font-size: 14px;
+  line-height: 1.55;
+}
+
+.tabResources {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0 24px;
+}
+
+.tabResources a {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 44px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--pit-border);
+  color: var(--pit-ink);
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+.tabResources a:hover {
+  color: var(--pit-blue);
+  text-decoration: underline;
+}
+
+.tabResources svg {
+  flex: none;
+  width: 16px;
+  height: 16px;
+  color: var(--pit-blue);
+}
+
+@media (max-width: 640px) {
+  .tabEquipment, .tabResources {
+    grid-template-columns: 1fr;
+  }
+
+  .tabEquipment article {
+    display: grid;
+    grid-template-columns: 95px minmax(0, 1fr);
+    align-items: center;
+    gap: 12px;
+  }
+
+  .tabPhoto {
+    height: 68px;
+    margin: 0;
+  }
+}
+
 .relatedLayout {
   display: grid;
   grid-template-columns: minmax(0, 1.6fr) minmax(310px, 0.8fr);
