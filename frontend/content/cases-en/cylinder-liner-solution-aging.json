@@ -1,0 +1,137 @@
+{
+  "id": "cylinder-liner-solution-aging",
+  "slug": "cylinder-liner-solution-aging",
+  "title": "Aluminum liners for high-pressure composite cylinders: does the furnace load include the basket?",
+  "summary": "The agreement specifies a solution heat treatment and aging line for aluminum liners used in high-pressure composite-wrapped cylinders. A basket transfers the liners between the solution furnace, quench water tank and aging furnace.",
+  "body": "cylinder-liner-solution-aging.md",
+  "coverAlt": "Aluminum liner line showing basket loading, transfer trolley, solution furnace, quench water tank, lifting transfer platform, aging furnace and unloading.",
+  "coverCaption": "Aluminum liner line showing basket loading, transfer trolley, solution furnace, quench water tank, lifting transfer platform, aging furnace and unloading.",
+  "translationStatus": "complete",
+  "sourceFingerprint": "8fc55edab902c7024c3a8b518785f91812d9ecca12934f9d5ea8483cc9d0672e",
+  "seoTitle": "Aluminum liner furnace: does the load include the basket?",
+  "seoDescription": "The solution furnace load is ≤1600 kg per batch under the agreement. Only the aluminum cylinder liners count toward the load. The basket is excluded.",
+  "presentation": {
+    "view": {
+      "animated": true,
+      "top": 0,
+      "height": 278.846154,
+      "cameras": [
+        [
+          129.799,
+          242.23,
+          128.885
+        ],
+        [
+          212.066,
+          244.059,
+          228.519
+        ],
+        [
+          322.669,
+          120.658,
+          374.771
+        ],
+        [
+          305.302,
+          244.059,
+          155.393
+        ],
+        [
+          493.601,
+          216.636,
+          202.011
+        ],
+        [
+          670.018,
+          202.925,
+          258.684
+        ],
+        [
+          568.556,
+          238.574,
+          292.505
+        ]
+      ],
+      "stageSeconds": [
+        0.55,
+        2.05,
+        8,
+        9.65,
+        15.85,
+        19.35,
+        22.3
+      ]
+    },
+    "status": "Signed technical agreement",
+    "model": "GRL-720-6 (solution furnace)",
+    "figureHeading": "Agreed load per batch",
+    "processCaption": "The animation follows a basket into one of the aging furnaces. The buyer's process curve determines actual heating and holding times.",
+    "metrics": [
+      [
+        "Rated load · Basket excluded",
+        "≤1600",
+        "kg/batch"
+      ]
+    ],
+    "note": "The technical agreement specifies the weight of liners per furnace load. Hourly throughput is a separate measure.",
+    "work": [
+      "Parts: aluminum liners for high-pressure composite-wrapped cylinders.",
+      "Material and sizes: heat-treatable aluminum alloys. The buyer confirms the grades and list of sizes.",
+      "Load basis: rated weight per batch, excluding the basket."
+    ],
+    "features": [
+      [
+        "Can maximum liner size and maximum load be used together?",
+        "Maximum dimensions, maximum piece count and rated load are independent limits. They cannot be combined."
+      ],
+      [
+        "How is quench transfer time measured?",
+        "Use a fully loaded basket of liners of the specified test size. Timing starts when the basket begins to descend after the furnace door opens and ends when the entire basket is submerged."
+      ],
+      [
+        "Where is furnace temperature measured?",
+        "Calibrated thermocouples are placed in the effective working zone. Once the empty furnace is holding at steady state, each reading is compared with the setpoint."
+      ]
+    ],
+    "flow": [
+      "Load basket",
+      "Transfer trolley",
+      "Solution furnace",
+      "Quench water tank",
+      "Lifting transfer platform",
+      "Aging furnace",
+      "Unload"
+    ],
+    "params": [
+      [
+        "Solution furnace uniformity",
+        "Within ±4 °C"
+      ],
+      [
+        "Aging furnace uniformity",
+        "Within ±5 °C"
+      ]
+    ],
+    "supplier": "Suneng handles unloading, installation within its supply scope, rail leveling, pipe and cable connections, commissioning of individual machines and the integrated line, empty-furnace tests, guidance during loaded trials, and training. It runs the exhaust duct to the column at the edge of the building.",
+    "buyer": "The buyer provides lifting equipment and assists with unloading. It handles civil works, pits, trenches, embedded items and secondary grouting, plant gas pressure regulation and metering, alarms and shutoff, compressed air and filtration, water supply, incoming cable trays and grounding. It also provides exhaust ducting beyond the building-edge column and exhaust treatment, ventilation, fire protection, lighting, the overhead crane, loading and unloading mechanisms, test parts, basket loading, process curves, utilities and personnel. The buyer handles network and production management system integration and process validation.",
+    "scope": "Solution furnace, quench water tank and cooler, lifting mechanism, aging furnace equipment, lifting transfer platform, horizontal transfer trolley, baskets and controls.",
+    "pre": "Components that can be assembled are checked against the scope of supply. Fans, drives, doors and lifting mechanisms are operated individually without load at the manufacturer's plant.",
+    "site": "Nine calibrated thermocouples are placed in the effective working zone. Each empty furnace is heated to its selected test temperature and readings are taken after it stabilizes. Each reading must be within ±4 °C of the solution furnace setpoint or ±5 °C of the aging furnace setpoint, as applicable. Acceptance also includes timing the quench transfer, running loaded trials to the buyer's process curve and checking the liners’ mechanical properties.",
+    "faq": [
+      [
+        "Does the figure show hourly throughput measured on site?",
+        "No. The agreement specifies ≤1600 kg per batch for the solution furnace. It counts only the aluminum liners and excludes the basket. This figure alone cannot be converted to hourly throughput."
+      ],
+      [
+        "Who specifies alloy grades and basket loading?",
+        "The buyer provides the list of sizes and the basket loading arrangement for both parties to confirm during design."
+      ],
+      [
+        "Who supplies the parts for the loaded trial?",
+        "The buyer provides the parts, basket loading, utilities, process curve and operators. Suneng provides on-site guidance."
+      ]
+    ],
+    "source": "Equipment, parts and acceptance conditions are taken from the technical agreement signed by both parties.",
+    "faqIntro": "Questions about the load rating, part conditions and acceptance."
+  }
+}

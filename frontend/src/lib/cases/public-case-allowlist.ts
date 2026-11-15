@@ -21,11 +21,22 @@ export type ReviewedPublicCase = {
 };
 
 export const REVIEWED_PUBLIC_CASES: readonly ReviewedPublicCase[] = [
+  ...[
+    'bright-quench-design',
+    'crankshaft-annual-output',
+    'cylinder-liner-solution-aging',
+    'overseas-austemper',
+    'overseas-oil-quench',
+    'roller-belt-cooling-water-supply',
+    'roller-belt-stage-output',
+    'standard-parts-capacity',
+    'steering-forgings',
+  ].map(slug => ({ id: slug, slug, batch: 3, english: true, approvedBy: 'site-owner', approvedAt: '2026-11-14' })),
   {
     id: 'fastener-mesh-belt-quenching-carburizing',
     slug: 'fastener-mesh-belt-quenching-carburizing',
     batch: 2,
-    english: false,
+    english: true,
     approvedBy: 'site-owner',
     approvedAt: '2026-11-14',
   },

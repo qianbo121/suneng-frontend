@@ -1,0 +1,136 @@
+{
+  "id": "standard-parts-capacity",
+  "slug": "standard-parts-capacity",
+  "title": "Mesh belt line for standard parts: what maximum throughput does the equipment specification give?",
+  "summary": "Suneng and the buyer specified a mesh belt quench and temper line for standard parts, hardware components and U-bolts.",
+  "body": "standard-parts-capacity.md",
+  "coverAlt": "Standard-parts line from infeed through a roller-supported mesh belt quenching furnace, quench tank with a gently sloping mesh belt elevator, oil-draining conveyor, washer, hot-air tempering furnace and cooling tank to outfeed.",
+  "coverCaption": "Standard-parts line from infeed through a roller-supported mesh belt quenching furnace, quench tank with a gently sloping mesh belt elevator, oil-draining conveyor, washer, hot-air tempering furnace and cooling tank to outfeed.",
+  "translationStatus": "complete",
+  "sourceFingerprint": "e766546f2ebd8d839ed76addc9a6491f06b6a6881130be5880432c42095a9bf8",
+  "seoTitle": "U-bolt and standard parts furnace: what is its limit?",
+  "seoDescription": "The equipment specification lists up to approximately 1500 kg/h for quenching and tempering. Output varies with part size, material and treatment requirements.",
+  "presentation": {
+    "view": {
+      "animated": true,
+      "top": 0,
+      "height": 278.846154,
+      "cameras": [
+        [
+          69,
+          176,
+          132
+        ],
+        [
+          275,
+          145,
+          296
+        ],
+        [
+          470,
+          178,
+          175
+        ],
+        [
+          573,
+          181,
+          115
+        ],
+        [
+          636,
+          156,
+          105
+        ],
+        [
+          729,
+          144,
+          200
+        ],
+        [
+          866,
+          177,
+          147
+        ],
+        [
+          951,
+          179,
+          113
+        ]
+      ]
+    },
+    "status": "Signed technical agreement",
+    "figureHeading": "Equipment capacity limit",
+    "metrics": [
+      [
+        "Quench and temper · Equipment limit",
+        "up to approximately 1500",
+        "kg/h"
+      ]
+    ],
+    "note": "The equipment specification gives up to approximately 1500 kg/h for quenching and tempering. This is an upper limit. Actual throughput depends on part dimensions, material and heat treatment requirements.",
+    "work": [
+      "Parts: standard parts, hardware components and U-bolts.",
+      "Output conditions: throughput varies with part dimensions, material and heat treatment requirements.",
+      "Rating basis: the upper limit for quenching and tempering is specified by weight per hour."
+    ],
+    "features": [
+      [
+        "How should I use the maximum rate?",
+        "It is the equipment limit for quenching and tempering. Check part dimensions and material requirements when selecting the line."
+      ],
+      [
+        "How is the main furnace heated?",
+        "The front section uses gas and the rear section uses electric heating."
+      ],
+      [
+        "Who connects the cooling water?",
+        "The equipment list includes a closed-circuit cooling tower. The buyer supplies the piping from the tower to the equipment."
+      ]
+    ],
+    "flow": [
+      "Infeed table",
+      "Roller-supported mesh belt quenching furnace",
+      "Quench tank",
+      "Oil-draining conveyor",
+      "Post-quench washer",
+      "Hot-air tempering furnace",
+      "Cooling tank",
+      "Outfeed table"
+    ],
+    "params": [
+      [
+        "Main furnace belt width",
+        "1000 mm"
+      ],
+      [
+        "Heated length",
+        "12000 mm"
+      ],
+      [
+        "Main furnace heating power",
+        "gas: approximately 400 kW + electric: approximately 310 kW"
+      ]
+    ],
+    "supplier": "Suneng transports, installs and commissions the equipment and trains operating and maintenance staff. It supplies foundation drawings and the cables between the control cabinet and the furnace.",
+    "buyer": "The buyer provides plant drawings, builds the foundations and positions the equipment. It connects the main supply to the controls, pipes the cooling tower to the equipment and connects utility mains. It supplies utilities, chemical reagents, quenching medium, methanol, nitrogen, parts, firefighting equipment and facilities for trial operation.",
+    "scope": "Main furnace, quench tank with heat exchanger, oil-draining conveyor, post-quench washer, hot-air tempering furnace, cooling tank, electrical controls, methanol storage vessel and closed-circuit cooling tower.",
+    "pre": "The agreement does not specify a separate factory pre-acceptance procedure.",
+    "site": "After no-load and loaded trial runs, both parties check equipment, piping, electrical systems, instruments and protective devices. Quenching furnace chamber temperature uniformity must be within ±6 °C.",
+    "faq": [
+      [
+        "Can the line continuously process standard parts at the equipment limit?",
+        "Not necessarily. The equipment specification gives up to approximately 1500 kg/h. Throughput varies with part dimensions, material and heat treatment requirements. Use this figure as an upper limit when evaluating your own parts."
+      ],
+      [
+        "Does the heating power cover the complete line?",
+        "The table lists the gas and electric heating power of the main furnace. The complete line must be assessed separately when sizing the electrical supply."
+      ],
+      [
+        "Does the buyer provide the process media?",
+        "Yes. The buyer provides the quenching medium, methanol, nitrogen and parts for trial operation."
+      ]
+    ],
+    "source": "Equipment, parts and acceptance conditions are taken from the technical agreement signed by both parties.",
+    "faqIntro": "Questions about agreed output, part specifications and acceptance."
+  }
+}

@@ -1,0 +1,1 @@
+The agreement specifies a solution heat treatment and aging line for aluminum liners used in high-pressure composite-wrapped cylinders. A basket transfers the liners between the solution furnace, quench water tank and aging furnace.

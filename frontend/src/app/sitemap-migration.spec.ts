@@ -1,3 +1,4 @@
+import { PUBLIC_CASE_SLUGS, PUBLIC_ENGLISH_CASE_SLUGS } from '@/lib/cases/public-case-allowlist';
 import { describe, expect, it, vi } from 'vitest';
 
 vi.mock('next/cache', () => ({ unstable_cache: (fn: unknown) => fn }));
@@ -65,10 +66,9 @@ describe('sitemap migration supplementary checks', () => {
     expect(entries.find(entry => entry.url.endsWith('/zh/case/fastener-mesh-belt-quenching-carburizing'))?.lastModified)
       .toEqual(new Date('2026-11-14T22:53:00+08:00'));
     expect(entries.filter((entry) => entry.url.includes('/case/')).map((entry) => entry.url).sort()).toEqual([
-      'https://www.jssngyl.cn/en/case/henan-annealing-solution-line',
-      'https://www.jssngyl.cn/zh/case/fastener-mesh-belt-quenching-carburizing',
-      'https://www.jssngyl.cn/zh/case/henan-annealing-solution-line',
-    ]);
+      ...Array.from(PUBLIC_ENGLISH_CASE_SLUGS, slug => 'https://www.jssngyl.cn/en/case/' + slug),
+      ...Array.from(PUBLIC_CASE_SLUGS, slug => 'https://www.jssngyl.cn/zh/case/' + slug),
+    ].sort());
   });
 
 });

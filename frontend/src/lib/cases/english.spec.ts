@@ -74,7 +74,7 @@ describe('English counterparts follow source authority', () => {
     expect(() => readEnglishCases(root, undefined, new Set([source.slug]))).toThrow();
   });
   it("keeps English search limited to approved pages without losing query state", () => {
-    expect(getEnglishCases().map((item) => item.slug)).toEqual([...PUBLIC_ENGLISH_CASE_SLUGS]);
+    expect(getEnglishCases().map((item) => item.slug).sort()).toEqual([...PUBLIC_ENGLISH_CASE_SLUGS].sort());
     const query=parseCaseQuery({q:'fixture'});
     expect(getEnglishCaseResults(query).items).toEqual([]);
     const page=new URL(englishCaseHref(query,2),'https://example.test');

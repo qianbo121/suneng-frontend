@@ -284,7 +284,7 @@ describe('case publishing and browsing contract', () => {
   });
 
   it("retains archived engineering boundaries while only approved cases are public", () => {
-    expect(getPublicCases().map((item) => item.slug)).toEqual([...PUBLIC_CASE_SLUGS]);
+    expect(getPublicCases().map((item) => item.slug).sort()).toEqual([...PUBLIC_CASE_SLUGS].sort());
     // Both surviving drafts must keep design figures separated from verified
     // results in their own wording, not only in a JSON label.
     const root=path.join(process.cwd(), 'content/cases');

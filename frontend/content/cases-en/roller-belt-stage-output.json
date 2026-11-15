@@ -1,0 +1,135 @@
+{
+  "id": "roller-belt-stage-output",
+  "slug": "roller-belt-stage-output",
+  "title": "Roller-supported mesh belt furnace: how should quenching and tempering output be checked?",
+  "summary": "Suneng and the buyer specified a protective-atmosphere mesh belt quench and temper line. The agreement lists throughput separately for each furnace.",
+  "body": "roller-belt-stage-output.md",
+  "coverAlt": "Roller-supported mesh belt line with a loading table, quenching furnace, oil tank, elevator, washing and drying section, tempering furnace and collection point.",
+  "coverCaption": "Roller-supported mesh belt line with a loading table, quenching furnace, oil tank, elevator, washing and drying section, tempering furnace and collection point.",
+  "translationStatus": "complete",
+  "sourceFingerprint": "1608f1c1bceaabd898424f4172bbcb77387659b7e5469e152bfd16717fbac699",
+  "seoTitle": "Mesh belt furnace: how do quench and temper rates compare?",
+  "seoDescription": "The agreement lists quenching at approximately 150 kg/h and tempering at 150 kg/h. The same parts pass through both furnaces, so the rates cannot be added.",
+  "presentation": {
+    "view": {
+      "animated": true,
+      "top": 0,
+      "height": 278.846154,
+      "cameras": [
+        [
+          75,
+          157,
+          130
+        ],
+        [
+          222,
+          141,
+          248
+        ],
+        [
+          393,
+          175,
+          145
+        ],
+        [
+          464,
+          128,
+          155
+        ],
+        [
+          599,
+          136,
+          170
+        ],
+        [
+          788,
+          137,
+          254
+        ],
+        [
+          936,
+          159,
+          125
+        ]
+      ]
+    },
+    "status": "Signed technical agreement",
+    "model": "RCWT-75/60",
+    "metrics": [
+      [
+        "Quenching furnace · Quenching",
+        "approximately 150",
+        "kg/h"
+      ],
+      [
+        "Tempering furnace · Tempering",
+        "150",
+        "kg/h"
+      ]
+    ],
+    "note": "The agreement lists approximately 150 kg/h for the quenching furnace and 150 kg/h for the tempering furnace. The parts pass through both in sequence, so the rates cannot be added.",
+    "work": [
+      "Parts: the agreement does not identify the parts.",
+      "Material and dimensions: no material grade or individual part dimensions are given.",
+      "Output basis: weight processed per hour. A parts-per-hour rate cannot be calculated from weight alone."
+    ],
+    "features": [
+      [
+        "How is belt tension reduced?",
+        "Upper and lower rollers support and drive the belt in sync, reducing tension during high-temperature conveying."
+      ],
+      [
+        "How do parts leave the oil tank?",
+        "An elevator lifts the parts clear of the oil. Side plates help keep them from falling back into the tank."
+      ],
+      [
+        "How are conveying faults reported?",
+        "The belt drive has an alarm for abnormal operation."
+      ]
+    ],
+    "flow": [
+      "Loading table",
+      "Quenching furnace",
+      "Quench oil tank",
+      "Elevator",
+      "Washing and drying",
+      "Tempering furnace",
+      "Collection"
+    ],
+    "params": [
+      [
+        "Effective belt width in the main furnace",
+        "400 mm"
+      ],
+      [
+        "Heated length",
+        "3200 mm"
+      ],
+      [
+        "Main furnace heating power",
+        "75 kW"
+      ]
+    ],
+    "supplier": "Suneng designs, manufactures, transports and installs the line and provides guidance on furnace dry-out during hot acceptance testing.",
+    "buyer": "The buyer unloads the equipment and handles the incoming electrical work. The existing cooling water basin and circulation pump are to be reused.",
+    "scope": "Roller-supported mesh belt quenching furnace, oil quench tank with elevator, washer, tempering furnace and control system.",
+    "pre": "Both parties check cold operation of the mesh belt, drive chain and control system at the manufacturer's plant.",
+    "site": "The agreed output for final acceptance is approximately 150 kg/h. At 800 °C, the quenching furnace is checked at three points. Temperature deviation within the same zone must be within ±5 °C.",
+    "faq": [
+      [
+        "Are both furnace ratings approximate?",
+        "The technical agreement lists approximately 150 kg/h for the quenching furnace and 150 kg/h for the tempering furnace. Only the quenching furnace specification uses “approximately”. Both are agreed figures. Actual throughput depends on the parts, loading and process conditions."
+      ],
+      [
+        "How should I compare the two stages?",
+        "Check each furnace separately against its specification: approximately 150 kg/h for quenching and 150 kg/h for tempering. Parts pass through the stages in sequence, so adding the figures would double-count the load."
+      ],
+      [
+        "Can I request a quote in parts per hour?",
+        "Provide a representative part and its unit weight. The agreement specifies throughput by weight and gives no hourly piece count."
+      ]
+    ],
+    "source": "Equipment, throughput and acceptance conditions are taken from the technical agreement signed by both parties.",
+    "faqIntro": "Questions about agreed output, part specifications and acceptance."
+  }
+}

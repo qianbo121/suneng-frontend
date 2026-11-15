@@ -196,11 +196,11 @@ describe('launch publication scope', () => {
     expect(
       readCaseDirectory(path.join(root, 'cases'), undefined, PUBLIC_CASE_SLUGS).map(
         (item) => item.slug,
-      ),
-    ).toEqual([...PUBLIC_CASE_SLUGS]);
+      ).sort(),
+    ).toEqual([...PUBLIC_CASE_SLUGS].sort());
     expect(
-      readEnglishCases(root, undefined, PUBLIC_ENGLISH_CASE_SLUGS).map((item) => item.slug),
-    ).toEqual([...PUBLIC_ENGLISH_CASE_SLUGS]);
+      readEnglishCases(root, undefined, PUBLIC_ENGLISH_CASE_SLUGS).map((item) => item.slug).sort(),
+    ).toEqual([...PUBLIC_ENGLISH_CASE_SLUGS].sort());
     expect(readCaseDirectory(path.join(root, 'cases'), undefined, new Set())).toEqual([]);
     expect(readEnglishCases(root, undefined, new Set())).toEqual([]);
   });

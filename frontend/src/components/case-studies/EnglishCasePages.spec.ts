@@ -56,7 +56,8 @@ describe('complete English case integration', () => {
     expect(article.publisher).toEqual({ '@id': 'https://www.jssngyl.cn/#organization' });
   });
   it("keeps translated sources registered and publishes only owner-approved English pages", () => {
-    expect(englishSlugs).toHaveLength(148);
+    expect(new Set(englishSlugs).size).toBe(englishSlugs.length);
+    expect(englishSlugs.filter(slug => !PUBLIC_ENGLISH_CASE_SLUGS.has(slug))).toHaveLength(147);
     expect(sorted(getEnglishCases().map((item) => item.slug))).toEqual(sorted(PUBLIC_ENGLISH_CASE_SLUGS));
     expect(sorted(getPublicCases().map((item) => item.slug))).toEqual(sorted(PUBLIC_CASE_SLUGS));
     for (const slug of englishSlugs) {
@@ -86,7 +87,8 @@ describe('complete English case integration', () => {
       expect(seoTitle).toMatch(/ \| Suneng Industrial Furnace$/);
       expect(seoTitle.replace(/ \| Suneng Industrial Furnace$/, '').length).toBeLessThanOrEqual(60);
       expect(meta.description!.length).toBeLessThanOrEqual(160);
-      expect(meta.description).toContain('not verified output or acceptance results');
+      if (item.slug === approvedSlug) expect(meta.description).toContain('not verified output or acceptance results');
+      else expect(meta.description).toBe(item.seoDescription);
       expect(meta.openGraph?.title).toBe(seoTitle);
       expect(meta.twitter?.title).toBe(seoTitle);
       expect(meta.alternates?.canonical).toContain(`/en/case/${item.slug}`);

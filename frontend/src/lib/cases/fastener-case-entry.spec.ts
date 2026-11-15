@@ -72,7 +72,7 @@ describe('approved Chinese fastener case', () => {
     expect(getCaseResults(parseCaseQuery({ q: 'RCWT-160/105' })).items.filter(c => c.slug === entry.FASTENER_CASE_SLUG)).toHaveLength(1);
     expect(isHiddenCaseEntry(entry.FASTENER_CASE_PATH)).toBe(false);
     expect(isWithdrawnTechnicalPath(entry.FASTENER_CASE_PATH)).toBe(false);
-    expect(isWithdrawnTechnicalPath(entry.FASTENER_CASE_PATH.replace('/zh/', '/en/'))).toBe(true);
+    expect(isWithdrawnTechnicalPath(entry.FASTENER_CASE_PATH.replace('/zh/', '/en/'))).toBe(false);
     expect(isWithdrawnTechnicalPath('/zh/case/fastener-quench-carburising')).toBe(true);
   });
 });

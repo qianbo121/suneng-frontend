@@ -44,3 +44,8 @@
 }
 
 .section.connections { width: 100%; max-width: none; }
+
+.projectLinks { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: var(--site-grid-gap); list-style: none; margin: 0; padding: 0; }
+.projectLinks li { border-top: 1px solid #e2e8f0; }
+.projectLinks a { display: flex; align-items: center; min-height: 44px; padding: 12px 0; font-size: 16px; line-height: 1.6; }
+@media (max-width: 800px) { .projectLinks { grid-template-columns: 1fr; } }
