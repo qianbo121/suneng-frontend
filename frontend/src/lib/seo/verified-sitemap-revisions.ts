@@ -1,6 +1,6 @@
 import revisions from './verified-sitemap-revisions.json';
 
-type Revision = { modifiedOn: string; sourceCommit: string };
+type Revision = { publishedOn?: string; modifiedOn: string; sourceCommit: string };
 const byPath: Record<string, Revision> = revisions;
 
 /** Preserve day-level release evidence without inventing a midnight timestamp. */
@@ -13,9 +13,18 @@ export function verifiedSitemapDay(value: string, now = new Date()): string | un
 }
 
 /** Exact locale paths only: a Chinese revision never supplies an English date. */
-export function getVerifiedSitemapLastModified(path: string, now = new Date()) {
+function verifiedRevision(path: string, field: 'publishedOn' | 'modifiedOn', now: Date) {
   if (!Object.hasOwn(byPath, path)) return undefined;
   const revision = byPath[path];
   if (!/^[a-f0-9]{40}$/.test(revision.sourceCommit)) return undefined;
-  return verifiedSitemapDay(revision.modifiedOn, now);
+  const day = revision[field];
+  return day ? verifiedSitemapDay(day, now) : undefined;
+}
+
+export function getVerifiedSitemapLastModified(path: string, now = new Date()) {
+  return verifiedRevision(path, 'modifiedOn', now);
+}
+
+export function getVerifiedPublicationDay(path: string, now = new Date()) {
+  return verifiedRevision(path, 'publishedOn', now);
 }

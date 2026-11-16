@@ -64,7 +64,7 @@ describe('sitemap migration supplementary checks', () => {
     expect(entries.some((entry) => entry.url.endsWith('/en/strength/certificates'))).toBe(false);
     // Case detail pages appear only after owner approval.
     expect(entries.find(entry => entry.url.endsWith('/zh/case/fastener-mesh-belt-quenching-carburizing'))?.lastModified)
-      .toEqual(new Date('2026-11-14T22:53:00+08:00'));
+      .toBe('2026-11-15');
     expect(entries.filter((entry) => entry.url.includes('/case/')).map((entry) => entry.url).sort()).toEqual([
       ...Array.from(PUBLIC_ENGLISH_CASE_SLUGS, slug => 'https://www.jssngyl.cn/en/case/' + slug),
       ...Array.from(PUBLIC_CASE_SLUGS, slug => 'https://www.jssngyl.cn/zh/case/' + slug),

@@ -4,16 +4,16 @@
     "sourceCommit": "e6dbe0a5df9b9d44cf91e8812ea44c951121ba11"
   },
   "/zh/products/detail/pit-furnace": {
-    "modifiedOn": "2026-10-20",
-    "sourceCommit": "e6dbe0a5df9b9d44cf91e8812ea44c951121ba11"
+    "modifiedOn": "2026-11-15",
+    "sourceCommit": "5248fac668a2d8445d430b3c99f58c86b958fe93"
   },
   "/en/products/detail/box-furnace": {
     "modifiedOn": "2026-10-20",
     "sourceCommit": "e6dbe0a5df9b9d44cf91e8812ea44c951121ba11"
   },
   "/en/products/detail/pit-furnace": {
-    "modifiedOn": "2026-10-20",
-    "sourceCommit": "e6dbe0a5df9b9d44cf91e8812ea44c951121ba11"
+    "modifiedOn": "2026-11-15",
+    "sourceCommit": "5248fac668a2d8445d430b3c99f58c86b958fe93"
   },
   "/zh/products/detail/trolley-furnace": {
     "modifiedOn": "2026-10-20",
@@ -24,8 +24,8 @@
     "sourceCommit": "b1e4b3759f0da4062948578f93ec2f7952e98577"
   },
   "/zh/products/detail/annealing-solution-line": {
-    "modifiedOn": "2026-10-21",
-    "sourceCommit": "002699af38ec989816262d95bfcdbef37459a711"
+    "modifiedOn": "2026-11-15",
+    "sourceCommit": "f74a70e6ecbaa56893869d76d82d1f89aa7154d4"
   },
   "/zh/products/detail/fastener-quench-temper-line": {
     "modifiedOn": "2026-11-14",
@@ -54,5 +54,108 @@
   "/en/products/detail/mesh-belt-furnace": {
     "modifiedOn": "2026-11-14",
     "sourceCommit": "fd81a5de7d8a60af137f472263e1fec4f161cc3d"
+  },
+  "/zh/case/crankshaft-annual-output": {
+    "modifiedOn": "2026-11-15",
+    "sourceCommit": "184f6c49c0591029d3050abdbfcdf63b401c3262",
+    "publishedOn": "2026-11-15"
+  },
+  "/zh/case/overseas-oil-quench": {
+    "modifiedOn": "2026-11-15",
+    "sourceCommit": "184f6c49c0591029d3050abdbfcdf63b401c3262",
+    "publishedOn": "2026-11-15"
+  },
+  "/zh/case/overseas-austemper": {
+    "modifiedOn": "2026-11-15",
+    "sourceCommit": "184f6c49c0591029d3050abdbfcdf63b401c3262",
+    "publishedOn": "2026-11-15"
+  },
+  "/zh/case/standard-parts-capacity": {
+    "modifiedOn": "2026-11-15",
+    "sourceCommit": "184f6c49c0591029d3050abdbfcdf63b401c3262",
+    "publishedOn": "2026-11-15"
+  },
+  "/zh/case/steering-forgings": {
+    "modifiedOn": "2026-11-15",
+    "sourceCommit": "184f6c49c0591029d3050abdbfcdf63b401c3262",
+    "publishedOn": "2026-11-15"
+  },
+  "/zh/case/bright-quench-design": {
+    "modifiedOn": "2026-11-15",
+    "sourceCommit": "184f6c49c0591029d3050abdbfcdf63b401c3262",
+    "publishedOn": "2026-11-15"
+  },
+  "/zh/case/cylinder-liner-solution-aging": {
+    "modifiedOn": "2026-11-15",
+    "sourceCommit": "184f6c49c0591029d3050abdbfcdf63b401c3262",
+    "publishedOn": "2026-11-15"
+  },
+  "/zh/case/fastener-mesh-belt-quenching-carburizing": {
+    "modifiedOn": "2026-11-15",
+    "sourceCommit": "184f6c49c0591029d3050abdbfcdf63b401c3262"
+  },
+  "/zh/case/roller-belt-cooling-water-supply": {
+    "modifiedOn": "2026-11-15",
+    "sourceCommit": "184f6c49c0591029d3050abdbfcdf63b401c3262",
+    "publishedOn": "2026-11-15"
+  },
+  "/zh/case/roller-belt-stage-output": {
+    "modifiedOn": "2026-11-15",
+    "sourceCommit": "184f6c49c0591029d3050abdbfcdf63b401c3262",
+    "publishedOn": "2026-11-15"
+  },
+  "/en/products/detail/annealing-solution-line": {
+    "modifiedOn": "2026-11-15",
+    "sourceCommit": "f74a70e6ecbaa56893869d76d82d1f89aa7154d4"
+  },
+  "/en/case/crankshaft-annual-output": {
+    "modifiedOn": "2026-11-15",
+    "sourceCommit": "184f6c49c0591029d3050abdbfcdf63b401c3262",
+    "publishedOn": "2026-11-15"
+  },
+  "/en/case/overseas-oil-quench": {
+    "modifiedOn": "2026-11-15",
+    "sourceCommit": "184f6c49c0591029d3050abdbfcdf63b401c3262",
+    "publishedOn": "2026-11-15"
+  },
+  "/en/case/overseas-austemper": {
+    "modifiedOn": "2026-11-15",
+    "sourceCommit": "184f6c49c0591029d3050abdbfcdf63b401c3262",
+    "publishedOn": "2026-11-15"
+  },
+  "/en/case/standard-parts-capacity": {
+    "modifiedOn": "2026-11-15",
+    "sourceCommit": "184f6c49c0591029d3050abdbfcdf63b401c3262",
+    "publishedOn": "2026-11-15"
+  },
+  "/en/case/steering-forgings": {
+    "modifiedOn": "2026-11-15",
+    "sourceCommit": "184f6c49c0591029d3050abdbfcdf63b401c3262",
+    "publishedOn": "2026-11-15"
+  },
+  "/en/case/bright-quench-design": {
+    "modifiedOn": "2026-11-15",
+    "sourceCommit": "184f6c49c0591029d3050abdbfcdf63b401c3262",
+    "publishedOn": "2026-11-15"
+  },
+  "/en/case/cylinder-liner-solution-aging": {
+    "modifiedOn": "2026-11-15",
+    "sourceCommit": "184f6c49c0591029d3050abdbfcdf63b401c3262",
+    "publishedOn": "2026-11-15"
+  },
+  "/en/case/fastener-mesh-belt-quenching-carburizing": {
+    "modifiedOn": "2026-11-15",
+    "sourceCommit": "184f6c49c0591029d3050abdbfcdf63b401c3262",
+    "publishedOn": "2026-11-15"
+  },
+  "/en/case/roller-belt-cooling-water-supply": {
+    "modifiedOn": "2026-11-15",
+    "sourceCommit": "184f6c49c0591029d3050abdbfcdf63b401c3262",
+    "publishedOn": "2026-11-15"
+  },
+  "/en/case/roller-belt-stage-output": {
+    "modifiedOn": "2026-11-15",
+    "sourceCommit": "184f6c49c0591029d3050abdbfcdf63b401c3262",
+    "publishedOn": "2026-11-15"
   }
 }

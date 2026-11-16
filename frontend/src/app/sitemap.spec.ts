@@ -223,7 +223,7 @@ describe('sitemap freshness signals', () => {
       const block = xml.split('<url>').find((part) => part.includes(`<loc>${site}${path}</loc>`));
       expect(block, path).toContain(`<lastmod>${revision.modifiedOn}</lastmod>`);
     }
-    for (const path of ['/en/products/detail/trolley-furnace', '/en/products/detail/annealing-solution-line',
+    for (const path of ['/en/products/detail/trolley-furnace',
       '/en/products/detail/fastener-quench-temper-line', '/en/products/detail/mesh-belt-carbonitriding-line',
       '/en/products/detail/roller-hearth-furnace']) {
       expect(entries.has(path), path).toBe(true);

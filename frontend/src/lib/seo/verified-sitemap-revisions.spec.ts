@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import revisions from './verified-sitemap-revisions.json';
-import { getVerifiedSitemapLastModified, verifiedSitemapDay } from './verified-sitemap-revisions';
+import { getVerifiedPublicationDay, getVerifiedSitemapLastModified, verifiedSitemapDay } from './verified-sitemap-revisions';
 
 // Independently reviewed release evidence, not build/commit timestamps:
 // e6dbe0a5: six resource links accepted on 2026-10-20 (P30 superseded below).
@@ -11,20 +11,30 @@ import { getVerifiedSitemapLastModified, verifiedSitemapDay } from './verified-s
 const acceptedGroups = [
   { date: '2026-10-20', source: 'e6dbe0a5df9b9d44cf91e8812ea44c951121ba11', paths: [
     '/zh/products/detail/box-furnace', '/en/products/detail/box-furnace',
-    '/zh/products/detail/pit-furnace', '/en/products/detail/pit-furnace',
     '/zh/products/detail/trolley-furnace',
   ] },
   { date: '2026-10-15', source: 'b1e4b3759f0da4062948578f93ec2f7952e98577', paths: [
     '/zh/solutions/jiangsu-gongye-lu-changjia',
   ] },
   { date: '2026-10-21', source: '002699af38ec989816262d95bfcdbef37459a711', paths: [
-    '/zh/products/detail/annealing-solution-line', '/zh/products/detail/roller-hearth-furnace',
+    '/zh/products/detail/roller-hearth-furnace',
     '/zh/solutions/continuous-heat-treatment-line', '/zh/solutions/rechuli-lu-changjia',
   ] },
   { date: '2026-11-14', source: 'fd81a5de7d8a60af137f472263e1fec4f161cc3d', paths: [
     '/zh/products/detail/mesh-belt-furnace', '/en/products/detail/mesh-belt-furnace',
     '/zh/products/detail/fastener-quench-temper-line', '/zh/products/detail/mesh-belt-carbonitriding-line',
   ] },
+  { date: '2026-11-15', source: '5248fac668a2d8445d430b3c99f58c86b958fe93', paths: [
+    '/zh/products/detail/pit-furnace', '/en/products/detail/pit-furnace',
+  ] },
+  { date: '2026-11-15', source: 'f74a70e6ecbaa56893869d76d82d1f89aa7154d4', paths: [
+    '/zh/products/detail/annealing-solution-line', '/en/products/detail/annealing-solution-line',
+  ] },
+];
+const releasedCases = [
+  'bright-quench-design', 'crankshaft-annual-output', 'cylinder-liner-solution-aging',
+  'fastener-mesh-belt-quenching-carburizing', 'overseas-austemper', 'overseas-oil-quench',
+  'roller-belt-cooling-water-supply', 'roller-belt-stage-output', 'standard-parts-capacity', 'steering-forgings',
 ];
 const now = new Date('2026-10-22T12:00:00Z');
 
@@ -32,8 +42,16 @@ describe('verified sitemap revision evidence', () => {
   it('allows only the reviewed page, language, day and source combinations', () => {
     const accepted = Object.fromEntries(acceptedGroups.flatMap((group) => group.paths.map((path) =>
       [path, { modifiedOn: group.date, sourceCommit: group.source }])));
+    for (const slug of releasedCases) {
+      for (const locale of ['zh', 'en']) {
+        const path = `/${locale}/case/${slug}`;
+        const firstPublished = path !== '/zh/case/fastener-mesh-belt-quenching-carburizing';
+        accepted[path] = { modifiedOn: '2026-11-15', sourceCommit: '184f6c49c0591029d3050abdbfcdf63b401c3262',
+          ...(firstPublished ? { publishedOn: '2026-11-15' } : {}) };
+        expect(getVerifiedPublicationDay(path, new Date('2026-11-15T12:00:00Z'))).toBe(firstPublished ? '2026-11-15' : undefined);
+      }
+    }
     expect(revisions).toEqual(accepted);
-    expect(Object.keys(revisions)).toHaveLength(14);
     for (const [path, revision] of Object.entries(accepted)) {
       expect(getVerifiedSitemapLastModified(path, new Date('2026-11-15T00:00:00Z'))).toBe(revision.modifiedOn);
     }
