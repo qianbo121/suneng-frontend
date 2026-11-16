@@ -95,7 +95,7 @@
         {
           "id": "quench-transfer",
           "label": "淬火输送剖视",
-          "alt": "淬火槽内输送、液面上方的驱动与提升出料衔接剖视示意",
+          "alt": "淬火槽内输送、液面上方的驱动与提升出料衔接剖视图",
           "thumbnailAssetId": "gallery-quench-transfer",
           "fullAssetId": "gallery-quench-transfer",
           "fullSrc": "/images/products/fastener-quench-temper-line/reviewed-20260909/gallery-quench-transfer-8e39aef32edf.png",
@@ -135,21 +135,21 @@
           "id": "workpiece-material",
           "title": "工件与材料",
           "description": "材料牌号、尺寸与目标性能",
-          "imageAlt": "钢制螺栓与螺母工件示意",
+          "imageAlt": "钢制螺栓与螺母工件",
           "imageAssetId": "workpiece-fasteners"
         },
         {
           "id": "continuous-loading",
           "title": "连续式铺料",
           "description": "关注料层、输送与工件状态",
-          "imageAlt": "紧固件在网带上的连续式铺料示意",
+          "imageAlt": "紧固件在网带上的连续式铺料",
           "imageAssetId": "loading-mesh-belt"
         },
         {
           "id": "batch-loading",
           "title": "周期式装筐",
           "description": "关注装筐方式、装炉量与批次",
-          "imageAlt": "紧固件采用金属料筐装载的示意",
+          "imageAlt": "紧固件采用金属料筐装载",
           "imageAssetId": "loading-basket"
         }
       ]
@@ -160,7 +160,7 @@
       "headingLevel": 2,
       "title": "从进料到出料，看懂整线组成",
       "subtitle": "以含清洗干燥的连续式网带调质线为例，查看工序与设备的衔接。",
-      "imageAlt": "含淬火输送剖视、清洗干燥和回火设备的连续式网带调质线配置示意",
+      "imageAlt": "含淬火输送剖视、清洗干燥和回火设备的连续式网带调质线配置",
       "stages": [
         {
           "id": "feeding",
@@ -193,7 +193,7 @@
           "description": "对接收料与后续工序"
         }
       ],
-      "note": "前清洗、淬火后清洗及干燥，按工件状态与工艺需要配置。图中蓝色仅示意淬火介质，不表示限定为水。",
+      "note": "前清洗、淬火后清洗及干燥，按工件状态与工艺需要配置。图中蓝色代表淬火介质，不限定为水。",
       "imageAssetId": "process-whole-line"
     },
     "comparison": {
@@ -326,7 +326,7 @@
       "type": "image-and-requirements",
       "headingLevel": 2,
       "title": "产能与现场条件，一起算清楚",
-      "imageAlt": "热处理生产线及料筐、搬运和检修空间的厂房布局示意",
+      "imageAlt": "热处理生产线及料筐、搬运和检修空间的厂房布局",
       "imageCaption": "布局随设备组合与现场条件调整。",
       "requirements": [
         {
@@ -603,7 +603,7 @@
     "gallery-quench-transfer": {
       "width": 1672,
       "height": 941,
-      "alt": "淬火槽内输送、液面上方的驱动与提升出料衔接剖视示意",
+      "alt": "淬火槽内输送、液面上方的驱动与提升出料衔接剖视图",
       "src": "/images/products/fastener-quench-temper-line/reviewed-20260909/gallery-quench-transfer-8e39aef32edf.png",
       "optimized": true
     },
@@ -617,28 +617,28 @@
     "workpiece-fasteners": {
       "width": 1672,
       "height": 941,
-      "alt": "螺栓与螺母等钢制紧固件示意",
+      "alt": "螺栓与螺母等钢制紧固件",
       "src": "/images/products/fastener-quench-temper-line/reviewed-20260909/workpiece-fasteners-8054264b1610.png",
       "optimized": true
     },
     "loading-mesh-belt": {
       "width": 1672,
       "height": 941,
-      "alt": "紧固件在网带上的铺料状态示意",
+      "alt": "紧固件在网带上的铺料状态",
       "src": "/images/products/fastener-quench-temper-line/reviewed-20260909/loading-mesh-belt-f5d05c60a289.png",
       "optimized": true
     },
     "loading-basket": {
       "width": 1672,
       "height": 941,
-      "alt": "紧固件在金属料筐中的装载示意",
+      "alt": "紧固件在金属料筐中的装载",
       "src": "/images/products/fastener-quench-temper-line/reviewed-20260909/loading-basket-c0cb42d12e6e.png",
       "optimized": true
     },
     "process-whole-line": {
       "width": 2172,
       "height": 724,
-      "alt": "含淬火输送剖视、清洗干燥和回火设备的连续式网带调质线配置示意",
+      "alt": "含淬火输送剖视、清洗干燥和回火设备的连续式网带调质线配置",
       "src": "/images/products/fastener-quench-temper-line/reviewed-20260909/process-whole-line-d3dae29a6cb7.png",
       "optimized": true
     },
@@ -659,7 +659,7 @@
     "site-layout": {
       "width": 1672,
       "height": 941,
-      "alt": "热处理设备、装载区与维护通道布局示意",
+      "alt": "热处理设备、装载区与维护通道布局",
       "src": "/images/products/fastener-quench-temper-line/reviewed-20260909/site-layout-c238af78f59e.png",
       "optimized": true
     },

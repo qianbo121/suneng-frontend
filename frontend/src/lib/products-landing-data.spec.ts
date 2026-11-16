@@ -23,7 +23,7 @@ describe('Chinese product-center landing data', () => {
       expect(card.detailStatus).toBe('published');
       expect(card.href).toBe(`/zh/products/detail/${line!.slug}`);
       expect(card.title).toBe(line!.cardTitle);
-      expect(card.imageLabel).toBe('设备场景示意');
+      expect(card.imageLabel).toBe('设备场景');
       expect(card.temperatureNote).toBeTruthy();
       expect(card.applicable).toBeTruthy();
       expect(card.process).toBeTruthy();

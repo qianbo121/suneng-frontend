@@ -176,7 +176,7 @@
           "Cool & unload",
           "Verify quality"
         ],
-        "note": "Pre-cleaning depends on incoming condition. Choose quench medium, cleaning and transfer intervals from material, geometry and product requirements; the equipment illustration does not prescribe water quenching."
+        "note": "Pre-cleaning depends on incoming condition. Choose quench medium, cleaning and transfer intervals from material, geometry and product requirements; the equipment diagram does not prescribe water quenching."
       }
     ],
     "selection": [
@@ -246,7 +246,7 @@
           "Low-temperature temper",
           "Cool & inspect"
         ],
-        "note": "The illustrated arrangement uses enclosed oil quenching as a reference. Confirm medium, transfer, cleaning and tempering against the workpiece requirements."
+        "note": "This arrangement uses enclosed oil quenching as a reference. Confirm medium, transfer, cleaning and tempering against the workpiece requirements."
       },
       {
         "title": "Carbonitriding option",
@@ -314,7 +314,7 @@
     ],
     "limits": [
       "This is a coordinated cell, not a route in which each batch passes through every furnace in sequence.",
-      "The number of furnaces and the cell layout require project-specific assessment; an illustration does not define the supplied configuration.",
+      "The number of furnaces and the cell layout require project-specific assessment; a diagram does not define the supplied configuration.",
       "Adding furnace capacity does not resolve a bottleneck in the shared transfer system, quench tank or tempering equipment."
     ],
     "process": [

@@ -131,7 +131,7 @@ export function TrackPlateLineCard({
               <strong>{product.steps[stage]}</strong>
               <span>{stages[stage]}</span>
             </p>
-            <span className={styles.note}>电加热与喷淋方案示意 · 节拍已压缩</span>
+            <span className={styles.note}>电加热与喷淋方案图 · 节拍已压缩</span>
           </div>
         )}
         <button

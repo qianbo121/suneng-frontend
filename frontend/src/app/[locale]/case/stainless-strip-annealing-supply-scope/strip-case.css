@@ -174,3 +174,20 @@
     margin-top: 18px;
   }
 }
+
+/* Match the reading scale of the production-line cases while retaining the article layout. */
+.strip-case .case-detail-page .case-article-header h1 { font-size: 40px; line-height: 1.25; }
+.strip-case .case-detail-page .case-reading-intro p,
+.strip-case .case-detail-page .case-article-body .news-article :is(p, li) {
+  font-size: 16px; line-height: 28px; color: #596777;
+}
+.strip-case .case-detail-page .case-article-body .news-article h2 { font-size: 28px; line-height: 1.4; }
+.strip-case .case-detail-page .case-article-body .news-article h3 { font-size: 18px; line-height: 1.4; color: #172235; }
+.strip-case .case-detail-page .case-article-body .news-article :is(th, td) { font-size: 15px; line-height: 24px; }
+@media (min-width: 721px) and (max-width: 1279px) {
+  .strip-case .case-detail-page .case-article-header h1 { font-size: 32px; }
+}
+@media (max-width: 720px) {
+  .strip-case .case-detail-page .case-article-header h1 { font-size: 30px; line-height: 1.3; }
+  .strip-case .case-detail-page .case-article-body .news-article h2 { font-size: 24px; }
+}

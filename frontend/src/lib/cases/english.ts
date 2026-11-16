@@ -1,4 +1,5 @@
 import 'server-only';
+import { caseCatalogCover } from './catalog-entry';
 import fs from 'node:fs';
 import path from 'node:path';
 import { createHash } from 'node:crypto';
@@ -115,5 +116,9 @@ export function getEnglishCaseResults(query: CaseQuery) {
     }
     return (b.dateModified ?? '').localeCompare(a.dateModified ?? '') || a.id.localeCompare(b.id);
   });
-  return { items: records.slice((query.page - 1) * CASE_PAGE_SIZE, query.page * CASE_PAGE_SIZE), total: records.length, totalPages: Math.ceil(records.length / CASE_PAGE_SIZE) };
+  const items = records.slice((query.page - 1) * CASE_PAGE_SIZE, query.page * CASE_PAGE_SIZE).map((record) => {
+    const cover = caseCatalogCover(record.slug, 'en');
+    return cover ? { ...record, cover } : record;
+  });
+  return { items, total: records.length, totalPages: Math.ceil(records.length / CASE_PAGE_SIZE) };
 }

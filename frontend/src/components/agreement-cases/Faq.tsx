@@ -1,17 +1,16 @@
 import { MeasuredText } from './MeasuredText';
-import s from './page.module.css';
+import cards from '@/components/products/Cqi9EquipmentPage.module.css';
+import styles from './Faq.module.css';
 
-export function Faq({questions, en, intro, classNames = s}: {
-  questions: string[][]; en: boolean; intro: string; classNames?: Record<string, string>;
-}) {
-  return <section className={classNames.section} aria-labelledby="case-faq">
+export function Faq({ questions, en, intro }: { questions: string[][]; en: boolean; intro: string }) {
+  return <section className={`${cards.faq} ${styles.section}`} aria-labelledby="case-faq">
     <h2 id="case-faq">{en ? 'Common questions' : '常见问题'}</h2>
-    <p className={classNames.faqIntro}>{intro}</p>
-    <div id="case-answers">
-      {questions.map(([question, answer], i) => (
-        <div className={classNames.faqRow} key={question}>
+    <p className={styles.intro}>{intro}</p>
+    <div id="case-answers" className={`${cards.faqGrid} ${styles.grid}`}>
+      {questions.map(([question, answer], index) => (
+        <div key={question} className={cards.faqCard}>
           <h3><MeasuredText text={question} /></h3>
-          <p id={'answer-' + i}><MeasuredText text={answer} /></p>
+          <p id={`answer-${index}`}><MeasuredText text={answer} /></p>
         </div>
       ))}
     </div>

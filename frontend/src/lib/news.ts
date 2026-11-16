@@ -1,4 +1,5 @@
 import { cache } from 'react';
+import { reviewedNewsImage } from './news-display-revisions';
 import {
   getReviewedEnglishNewsCover,
   localizeEnglishNewsPresentation,
@@ -55,7 +56,7 @@ export function resolveNewsImage(
     return NEWS_FALLBACK_IMAGE;
   }
 
-  return image;
+  return reviewedNewsImage(image);
 }
 
 export function mapNewsCard(locale: Locale, item: NewsApiItem): NewsListCardItem {

@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="490" height="358" viewBox="180 2 540 394" role="img" aria-labelledby="title desc">
 <title id="title">苏能工业炉厂区周边位置</title>
-<desc id="desc">原创位置示意图：苏能位于俞张线（205县道）西侧、三兴路路口以北，神龙电气以南、润程机械以北。准确位置和路线请打开百度地图。</desc>
+<desc id="desc">原创位置图：苏能位于俞张线（205县道）西侧、三兴路路口以北，神龙电气以南、润程机械以北。准确位置和路线请打开百度地图。</desc>
 <!-- Original schematic. Road names and landmark relationships follow the user's confirmed Amap screenshot. Not a surveyed map, not to scale; no third-party map imagery. -->
 <defs>
   <filter id="label-shadow" x="-15%" y="-30%" width="130%" height="170%"><feDropShadow dx="0" dy="3" stdDeviation="5" flood-color="#344760" flood-opacity=".10"/></filter>
@@ -62,7 +62,7 @@
 </g>
 <g transform="translate(671 28)" fill="#95a2ac"><path d="M0 0L-5 15 0 11 5 15Z"/><text y="29" text-anchor="middle" font-family="Arial,sans-serif" font-size="10">N</text></g>
 <g font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="12" fill="#8d9aa5">
- <text x="220" y="366">位置示意 · 非比例绘制</text>
+ <text x="220" y="366">位置 · 非比例绘制</text>
  <text x="680" y="366" text-anchor="end">点击查看百度地图 ↗</text>
 </g>
 </svg>

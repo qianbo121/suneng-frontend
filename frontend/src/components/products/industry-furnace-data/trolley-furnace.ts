@@ -16,13 +16,13 @@ export const trolleyFurnacePageConfig: FurnacePageConfig = {
     },
     {
       src: detailImage('trolley-furnace', 'loading'),
-      alt: '环形工件放置在台车耐火垫块上的装载状态示意',
-      caption: '台车装载状态示意',
+      alt: '环形工件放置在台车耐火垫块上的装载状态',
+      caption: '台车装载状态',
     },
     {
       src: detailImage('trolley-furnace', 'lining'),
-      alt: '台车炉炉衬、侧墙加热元件与承载台面示意',
-      caption: '炉衬与元件示意',
+      alt: '台车炉炉衬、侧墙加热元件与承载台面',
+      caption: '炉衬与元件',
     },
     {
       src: detailImage('trolley-furnace', 'control'),
@@ -172,7 +172,7 @@ export const trolleyFurnacePageConfig: FurnacePageConfig = {
   ],
   structureImage: {
     src: detailImage('trolley-furnace', 'cutaway'),
-    alt: '台车炉炉体、升降炉门、炉衬、加热元件、承载台车、运行轨道与控制柜结构剖切示意',
+    alt: '台车炉炉体、升降炉门、炉衬、加热元件、承载台车、运行轨道与控制柜结构剖切图',
     caption: '台车炉结构示例 · 具体配置随装载、热源、厂房和生产组织变化',
   },
   structureCallouts: [

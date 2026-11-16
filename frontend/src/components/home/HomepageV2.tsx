@@ -109,7 +109,7 @@ export function HomepageV2({ locale = 'zh' }: { locale?: 'zh' | 'en' }) {
 
       <HomepageArticles locale={locale} />
 
-      <HomepageLeadForm locale={locale} privacyNoticeEnabled />
+      <HomepageLeadForm pageFormWidth="wide" locale={locale} privacyNoticeEnabled />
 
     </div>
   );

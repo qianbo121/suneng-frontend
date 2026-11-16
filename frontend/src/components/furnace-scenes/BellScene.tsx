@@ -8,7 +8,7 @@ export function BellScene() {
         className={styles.scene}
         preserveAspectRatio="xMidYMid meet"
         role="img"
-        aria-label="罩式炉工作示意动画"
+        aria-label="罩式炉工作动画"
       >
         <defs>
           <linearGradient id="bgBellCard" x1="0" y1="0" x2="1" y2="1">

@@ -1,3 +1,4 @@
+import { reviewedNewsImage } from '@/lib/news-display-revisions';
 import { isWithdrawnTechnicalPath } from '@/lib/publication-scope';
 import { getEnglishCases } from '@/lib/cases/english';
 import { englishSolutions } from '@/lib/english-solutions';
@@ -337,8 +338,9 @@ async function collectNewsRoutes(): Promise<MetadataRoute.Sitemap> {
   return items.flatMap((article) => {
     const locales = hasPublishableEnglishNews(article) ? sitemapLocales : zhOnlyLocales;
     return locales.map((locale) => {
-      const coverImage =
+      const sourceCover =
         (locale === 'en' && (article.englishCoverImage || getReviewedEnglishNewsCover(article.slug, article.coverImage))) || article.coverImage;
+      const coverImage = sourceCover && reviewedNewsImage(sourceCover);
       return route(localizedPath(locale, `/news/${article.slug}`), {
         lastModified: safeLastModified(getNewsContentModifiedTime(article, locale)),
         changeFrequency: 'monthly',

@@ -1,14 +1,14 @@
 {
   "id": "roller-belt-cooling-water-supply",
   "slug": "roller-belt-cooling-water-supply",
-  "title": "Roller-supported mesh belt furnace: who supplies the cooling water system?",
+  "title": "Roller-supported mesh belt quench and temper line with a closed-circuit cooling tower from Suneng",
   "summary": "Suneng and the buyer specified a protective-atmosphere mesh belt quench and temper line. The outdoor cooling water system and the plant's make-up water pipe are separate items.",
   "body": "roller-belt-cooling-water-supply.md",
   "coverAlt": "Roller-supported mesh belt line with a loading table, quenching furnace, oil tank, elevator, washing and drying section, tempering furnace and collection point.",
   "coverCaption": "Roller-supported mesh belt line with a loading table, quenching furnace, oil tank, elevator, washing and drying section, tempering furnace and collection point.",
   "translationStatus": "complete",
-  "sourceFingerprint": "87fe60f49546d1da9c4d35a2bb4c043a5ea32a4ccc68862b4c2d06997e67e91d",
-  "seoTitle": "Mesh belt furnace: who supplies the cooling system?",
+  "sourceFingerprint": "79021623a363bc9384db6b80c38350cd6950bd201050fd0effbce0eff1875ac5",
+  "seoTitle": "Roller-supported belt line: closed-circuit cooling tower",
   "seoDescription": "Suneng supplies the outdoor cooling tower, circulation pump and buffer tank. The buyer provides the plant’s make-up water pipe.",
   "presentation": {
     "view": {
@@ -83,7 +83,7 @@
         "An elevator lifts the parts clear of the oil. Side plates help keep them from falling back into the tank."
       ],
       [
-        "Who connects the cooling system?",
+        "Who supplies the cooling tower and the make-up water pipe?",
         "Suneng supplies the outdoor system, including a closed-circuit cooling tower, circulation pump and buffer tank. The buyer provides the plant-side make-up water pipe."
       ]
     ],

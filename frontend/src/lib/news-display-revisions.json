@@ -1,0 +1,449 @@
+{
+  "images": {
+    "/uploads/2026/08/1786322498700-634eed36-b5e3-4799-9527-348058a176b2.webp": "/images/news/reviewed-20261116/1786322498700-634eed36-b5e3-4799-9527-348058a176b2.webp",
+    "/uploads/2026/08/1786322526567-e5a6dbc9-07d1-450d-b92b-575686b395dc.webp": "/images/news/reviewed-20261116/1786322526567-e5a6dbc9-07d1-450d-b92b-575686b395dc.webp",
+    "/uploads/2026/08/1786324074111-874f0a9b-7af9-4b18-9be3-d85bad71491e.webp": "/images/news/reviewed-20261116/1786324074111-874f0a9b-7af9-4b18-9be3-d85bad71491e.webp",
+    "/uploads/2026/08/1786324077265-523436e3-f345-4938-b5a9-873518c879c4.webp": "/images/news/reviewed-20261116/1786324077265-523436e3-f345-4938-b5a9-873518c879c4.webp",
+    "/uploads/2026/09/1788513324908-aa08cb31-d8c0-46d2-9eb1-dfa389cc97c8.webp": "/images/news/reviewed-20261116/1788513324908-aa08cb31-d8c0-46d2-9eb1-dfa389cc97c8.webp",
+    "/uploads/2026/09/1789525263795-f9830571-5a8e-46b3-9f78-62b5d82f5cb1.webp": "/images/news/reviewed-20261116/1789525263795-f9830571-5a8e-46b3-9f78-62b5d82f5cb1.webp",
+    "/uploads/2026/09/1789532563159-a546da3a-ab32-4373-bc2c-672fdf1577c3.webp": "/images/news/reviewed-20261116/1789532563159-a546da3a-ab32-4373-bc2c-672fdf1577c3.webp",
+    "/uploads/2026/09/1790148510342-edd62829-8796-47aa-b3af-3aeb49b1b08d.webp": "/images/news/reviewed-20261116/1790148510342-edd62829-8796-47aa-b3af-3aeb49b1b08d.webp",
+    "/uploads/2026/09/1790149369676-c3722071-50ea-46f9-b44d-378de3848595.webp": "/images/news/reviewed-20261116/1790149369676-c3722071-50ea-46f9-b44d-378de3848595.webp",
+    "/uploads/2026/09/1790170261032-fe87946f-41fd-456f-b052-4cffd5ed5e59.webp": "/images/news/reviewed-20261116/1790170261032-fe87946f-41fd-456f-b052-4cffd5ed5e59.webp",
+    "/uploads/2026/09/1790586314500-2c4ab2f9-b97a-4ba3-a398-4dff8014384b.webp": "/images/news/reviewed-20261116/1790586314500-2c4ab2f9-b97a-4ba3-a398-4dff8014384b.webp",
+    "/uploads/2026/09/1790586315025-e2ed37f8-19b3-4ac1-ace4-45b53bfcb58d.webp": "/images/news/reviewed-20261116/1790586315025-e2ed37f8-19b3-4ac1-ace4-45b53bfcb58d.webp",
+    "/uploads/2026/09/1790586356552-81eb8f26-6ebc-4702-b0e0-a9dabec83dec.webp": "/images/news/reviewed-20261116/1790586356552-81eb8f26-6ebc-4702-b0e0-a9dabec83dec.webp",
+    "/uploads/2026/09/1790586438778-bf3772e1-7106-4d8f-b019-5f30e741d7be.webp": "/images/news/reviewed-20261116/1790586438778-bf3772e1-7106-4d8f-b019-5f30e741d7be.webp",
+    "/uploads/2026/09/1790586439298-f0bb7e71-0e39-40aa-8483-dbc600336611.webp": "/images/news/reviewed-20261116/1790586439298-f0bb7e71-0e39-40aa-8483-dbc600336611.webp",
+    "/uploads/2026/09/1790657676558-604a53b4-a0c2-49aa-8a6e-f7df7ad234cf.webp": "/images/news/reviewed-20261116/1790657676558-604a53b4-a0c2-49aa-8a6e-f7df7ad234cf.webp",
+    "/uploads/2026/09/1790657739293-2b2ace9d-2253-471f-886c-81317a9cfbe8.webp": "/images/news/reviewed-20261116/1790657739293-2b2ace9d-2253-471f-886c-81317a9cfbe8.webp",
+    "/uploads/2026/09/1790657739763-3e0a90da-2b76-42ce-b808-965564317188.webp": "/images/news/reviewed-20261116/1790657739763-3e0a90da-2b76-42ce-b808-965564317188.webp",
+    "/uploads/2026/09/1790657820570-e12224b5-b678-47c0-a9fc-3f018b11a75a.webp": "/images/news/reviewed-20261116/1790657820570-e12224b5-b678-47c0-a9fc-3f018b11a75a.webp",
+    "/uploads/2026/09/1790657820954-e015c6cb-46c9-49bf-aa56-24c7b6daba6e.webp": "/images/news/reviewed-20261116/1790657820954-e015c6cb-46c9-49bf-aa56-24c7b6daba6e.webp",
+    "/uploads/2026/09/1790657868923-284c23c7-b556-4ad4-afa1-417f33a9366e.webp": "/images/news/reviewed-20261116/1790657868923-284c23c7-b556-4ad4-afa1-417f33a9366e.webp",
+    "/uploads/2026/09/1790660606520-32d60bc6-6ce8-4a98-b1da-214046c65ff6.webp": "/images/news/reviewed-20261116/1790660606520-32d60bc6-6ce8-4a98-b1da-214046c65ff6.webp",
+    "/uploads/2026/09/1790660606972-57e1ccca-df8f-487f-8c7b-3440ccde9483.webp": "/images/news/reviewed-20261116/1790660606972-57e1ccca-df8f-487f-8c7b-3440ccde9483.webp",
+    "/uploads/2026/09/1790660657825-d6590250-877f-4f7e-a29d-c1457081f1ba.webp": "/images/news/reviewed-20261116/1790660657825-d6590250-877f-4f7e-a29d-c1457081f1ba.webp",
+    "/uploads/2026/09/1790660688280-9a61c55f-358a-42f0-9161-d2c07b3915b1.webp": "/images/news/reviewed-20261116/1790660688280-9a61c55f-358a-42f0-9161-d2c07b3915b1.webp",
+    "/uploads/2026/09/1790660734044-c3b638e0-e4ac-4def-900b-6dc32fad27da.webp": "/images/news/reviewed-20261116/1790660734044-c3b638e0-e4ac-4def-900b-6dc32fad27da.webp",
+    "/uploads/2026/09/1790660734432-a9b31188-2faf-447d-9090-a2ee75c0146d.webp": "/images/news/reviewed-20261116/1790660734432-a9b31188-2faf-447d-9090-a2ee75c0146d.webp",
+    "/uploads/2026/09/1790660791220-3002915a-6dc8-476d-a10a-39c5f28e3bad.webp": "/images/news/reviewed-20261116/1790660791220-3002915a-6dc8-476d-a10a-39c5f28e3bad.webp",
+    "/uploads/2026/09/1790660986046-b9465df9-35c5-4ffc-9ac5-abcfd7c71c73.webp": "/images/news/reviewed-20261116/1790660986046-b9465df9-35c5-4ffc-9ac5-abcfd7c71c73.webp",
+    "/uploads/2026/10/1790952996862-ac969167-10b2-462d-8457-aa7742f9e84f.webp": "/images/news/reviewed-20261116/1790952996862-ac969167-10b2-462d-8457-aa7742f9e84f.webp",
+    "/uploads/2026/10/1790953047279-72699e73-89eb-4a0a-910c-b1c5ed07d986.webp": "/images/news/reviewed-20261116/1790953047279-72699e73-89eb-4a0a-910c-b1c5ed07d986.webp",
+    "/uploads/2026/10/1790953191205-fb8ff335-f8d0-462d-91b5-fe0f197d5bb0.webp": "/images/news/reviewed-20261116/1790953191205-fb8ff335-f8d0-462d-91b5-fe0f197d5bb0.webp",
+    "/uploads/2026/10/1790953245502-08ba6503-29aa-4527-85f3-b8c9a604e97b.webp": "/images/news/reviewed-20261116/1790953245502-08ba6503-29aa-4527-85f3-b8c9a604e97b.webp",
+    "/uploads/2026/10/1790953327831-be4c8ecf-fbc7-475b-8e38-338d3ff822a4.webp": "/images/news/reviewed-20261116/1790953327831-be4c8ecf-fbc7-475b-8e38-338d3ff822a4.webp",
+    "/uploads/2026/10/1790953386549-0eb4dce9-9c61-4aca-9691-7d11aff738fc.webp": "/images/news/reviewed-20261116/1790953386549-0eb4dce9-9c61-4aca-9691-7d11aff738fc.webp",
+    "/uploads/2026/10/1790953430392-25e29fba-90f5-4a0b-9edc-4755ca2fec9c.webp": "/images/news/reviewed-20261116/1790953430392-25e29fba-90f5-4a0b-9edc-4755ca2fec9c.webp",
+    "/uploads/2026/10/1790953470502-a941d542-8cec-448c-859f-94a038106bf4.webp": "/images/news/reviewed-20261116/1790953470502-a941d542-8cec-448c-859f-94a038106bf4.webp",
+    "/uploads/2026/10/1790953515066-f0c5ec5e-56b5-4c57-b713-ec4d55b11d52.webp": "/images/news/reviewed-20261116/1790953515066-f0c5ec5e-56b5-4c57-b713-ec4d55b11d52.webp",
+    "/uploads/2026/10/1790953566271-e9fa6c8f-e8be-4810-9ed9-e7684f0618fd.webp": "/images/news/reviewed-20261116/1790953566271-e9fa6c8f-e8be-4810-9ed9-e7684f0618fd.webp",
+    "/uploads/2026/10/1791782104810-3d6d3410-df08-4f55-8f10-5f09fbfc7cdc.webp": "/images/news/reviewed-20261116/1791782104810-3d6d3410-df08-4f55-8f10-5f09fbfc7cdc.webp",
+    "/uploads/2026/10/1791782177329-6b447014-7906-4b27-8564-ac10e5a14853.webp": "/images/news/reviewed-20261116/1791782177329-6b447014-7906-4b27-8564-ac10e5a14853.webp",
+    "/uploads/2026/10/1791782212287-c4075f94-f234-4289-b203-029e3cd7325f.webp": "/images/news/reviewed-20261116/1791782212287-c4075f94-f234-4289-b203-029e3cd7325f.webp",
+    "/uploads/2026/10/1791782280083-b5cc2ec6-8854-46cc-9575-3614784754b4.webp": "/images/news/reviewed-20261116/1791782280083-b5cc2ec6-8854-46cc-9575-3614784754b4.webp",
+    "/uploads/2026/11/1794381450027-1bf18bf9-5a9c-4097-b5ae-6d82a16aa195.webp": "/images/news/reviewed-20261116/1794381450027-1bf18bf9-5a9c-4097-b5ae-6d82a16aa195.webp"
+  },
+  "alt": {
+    "/images/news/en-final-20260912/img-004.webp": {
+      "Illustration accompanying How to Select Heat Treatment Line Power: Separate Heating Capacity from Complete-line Demand": "Separate heating duty, installed power and utility capacity"
+    },
+    "/images/news/en-final-20260912/img-006.webp": {
+      "Illustration accompanying What Should an Annual Heat Treatment Line Overhaul Include? Suneng’s Two Lists and Three Gates": "Maintenance scope, verification items and three release gates"
+    },
+    "/images/news/en-final-20260912/img-008.webp": {
+      "Illustration accompanying Where to Look First When Heat Treatment Line Output Falls Short: Four Logs and a Time-flow Diagram": "Loading-to-discharge sequence with cycle, work-in-process and downtime records"
+    },
+    "/images/news/en-final-20260912/img-010.webp": {
+      "Illustration accompanying How Can a Heat Treatment Line Trace Each Batch? Suneng’s Six Links and One Break Check": "Chain of material identity, furnace zone, recipe, process data, alarms and inspection"
+    },
+    "/images/news/en-final-20260912/img-012.webp": {
+      "Illustration accompanying How Long Should a Heat Treatment Line Run During Site Acceptance? Suneng’s Five-column Timing Method": "Timing table for the start, zero point, effective duration, interruption and end evidence"
+    },
+    "/images/news/en-final-20260912/img-014.webp": {
+      "Illustration accompanying Heat Treatment Line FAT vs Individual-machine Acceptance: Suneng’s Four-column Evidence Method": "Factory acceptance table comparing object, conditions, evidence and scope"
+    },
+    "/images/news/en-final-20260912/img-016.webp": {
+      "Illustration accompanying Heat or Flame Leaking Around a Trolley Furnace Door? Suneng’s Four-stage Fault-location Method": "Furnace fault checks by location, closure chain, thermal structure and pressure"
+    },
+    "/images/news/en-final-20260912/img-018.webp": {
+      "Illustration accompanying How Much Does a Heat Treatment Line Cost? Suneng’s Three Tables and Backward Capacity Check": "Process flow, equipment interfaces and acceptance responsibility tables"
+    },
+    "/images/news/en-final-20260912/img-020.webp": {
+      "Illustration accompanying Which Industrial Furnace Suppliers Should You Shortlist? Suneng’s Five Supplier Types and Three Evidence Checks": "Five supplier types alongside input, interface and acceptance evidence"
+    },
+    "/images/news/en-final-20260912/img-022.webp": {
+      "Illustration accompanying Agreeing Spares and After-sales Support for a Heat Treatment Line: Four Packages and Three Clear Responsibilities": "Spare parts, documentation, service and training with three handover responsibilities"
+    },
+    "/images/news/en-final-20260912/img-023.webp": {
+      "Illustration accompanying How Much Automation Does a Heat Treatment Line Need? Suneng’s Four Layers and Three Operating States": "Control layers and machine operating states on a treatment line"
+    },
+    "/images/news/en-final-20260912/img-024.webp": {
+      "Illustration accompanying How Much Automation Does a Heat Treatment Line Need? Suneng’s Four Layers and Three Operating States": "Control layers and the normal, manual and fault states of the line"
+    },
+    "/images/news/en-final-20260912/img-026.webp": {
+      "Illustration accompanying Continuous Heat Treatment Line or Batch Furnace? Suneng’s Three Gates and Two Cost Reviews": "Workpiece compatibility, furnace occupancy and production cost checks"
+    },
+    "/images/news/en-final-20260912/img-028.webp": {
+      "Illustration accompanying What Information Is Needed to Quote a Heat Treatment Line? Prepare Eleven Input Groups": "Seven groups of workpiece and site information for a furnace quotation"
+    },
+    "/images/news/en-final-20260912/img-029.webp": {
+      "Illustration accompanying Choosing a Heat Treatment Line Supplier: Suneng’s Seven Checks for Complete-line Responsibilities": "Supplier checks for a heat treatment line with quenching and tempering"
+    },
+    "/images/news/en-final-20260912/img-030.webp": {
+      "Illustration accompanying Choosing a Heat Treatment Line Supplier: Suneng’s Seven Checks for Complete-line Responsibilities": "Seven checks for production-line scope, safety, utilities and acceptance"
+    },
+    "/images/news/en-final-20260912/img-031.webp": {
+      "Illustration accompanying Setting Stainless-steel Continuous Annealing Line Speed: Find the Process Window and the Line Bottleneck": "Steel strip moving through successive heating and cooling zones"
+    },
+    "/images/news/en-final-20260912/img-032.webp": {
+      "Illustration accompanying Setting Stainless-steel Continuous Annealing Line Speed: Find the Process Window and the Line Bottleneck": "Strip dimensions, process window, speed and equipment checks"
+    },
+    "/images/news/en-final-20260912/img-033.webp": {
+      "Illustration accompanying Curing Oven Temperature Uniformity Acceptance: Separate Air Temperature, Workpiece Temperature and Cure Results": "Curing oven acceptance covering air, workpiece and cure temperature"
+    },
+    "/images/news/en-final-20260912/img-034.webp": {
+      "Illustration accompanying Curing Oven Temperature Uniformity Acceptance: Separate Air Temperature, Workpiece Temperature and Cure Results": "Temperature checks for oven air, the workpiece and the cure cycle"
+    },
+    "/images/news/en-final-20260912/img-035.webp": {
+      "Illustration accompanying How Should Aluminium Solution Furnace Transfer Time Be Accepted? Define the Start and Finish Events": "Aluminum part transfer from the solution furnace to the quench tank"
+    },
+    "/images/news/en-final-20260912/img-036.webp": {
+      "Illustration accompanying How Should Aluminium Solution Furnace Transfer Time Be Accepted? Define the Start and Finish Events": "Start and finish events in a solution-treatment transfer cycle"
+    },
+    "/images/news/en-final-20260912/img-037.webp": {
+      "Illustration accompanying Which Workpieces Suit a Roller Hearth Furnace? Check Support, Conveying and the Continuous Cycle": "Roller hearth furnace with workpieces resting on the rollers"
+    },
+    "/images/news/en-final-20260912/img-038.webp": {
+      "Illustration accompanying Which Workpieces Suit a Roller Hearth Furnace? Check Support, Conveying and the Continuous Cycle": "Workpiece support, conveyance and cycle checks for a roller hearth furnace"
+    },
+    "/images/news/en-final-20260912/img-039.webp": {
+      "Illustration accompanying How Is Mesh Belt Furnace Hourly Output Calculated? Check Process Time and Downtime After the Theoretical Rate": "Mesh-belt furnace with workpieces moving through the heated section"
+    },
+    "/images/news/en-final-20260912/img-040.webp": {
+      "Illustration accompanying How Is Mesh Belt Furnace Hourly Output Calculated? Check Process Time and Downtime After the Theoretical Rate": "Belt width, loading, process time and downtime checks for hourly output"
+    },
+    "/images/news/en-final-20260912/img-041.webp": {
+      "Illustration accompanying How Much Does a Mesh Belt Furnace Line Cost? Confirm Nine Quotation Boundaries": "Comparison of a furnace-only quotation and a complete production-line quotation"
+    },
+    "/images/news/en-final-20260912/img-042.webp": {
+      "Illustration accompanying Jiangsu Suneng Industrial Furnace Co., Ltd. — Company Introduction": "Suneng factory buildings and main entrance"
+    },
+    "/images/news/en-final-20260912/img-043.webp": {
+      "Illustration accompanying Which Furnace Suits Long-shaft Quenching and Tempering? Compare Pit and Trolley Loading": "Vertical and horizontal loading arrangements for long shafts"
+    },
+    "/images/news/en-final-20260912/img-044.webp": {
+      "Illustration accompanying Which Furnace Suits Long-shaft Quenching and Tempering? Compare Pit and Trolley Loading": "Comparison of pit and trolley loading for long-shaft quenching and tempering"
+    },
+    "/images/news/en-final-20260912/img-045.webp": {
+      "Illustration accompanying How Much Does a High-temperature Box Furnace Cost? Freeze Eight Enquiry Conditions": "Box furnace next to its quotation conditions"
+    },
+    "/images/news/en-final-20260912/img-046.webp": {
+      "Illustration accompanying How Much Does a High-temperature Box Furnace Cost? Freeze Eight Enquiry Conditions": "Eight quotation inputs including workspace, temperature, atmosphere and acceptance"
+    },
+    "/images/news/en-final-20260912/img-047.webp": {
+      "Illustration accompanying How Much Does a Pit Furnace Cost? Confirm Depth, Loading and Atmosphere": "Pit furnace with top loading and a separate cost breakdown"
+    },
+    "/images/news/en-final-20260912/img-048.webp": {
+      "Illustration accompanying How Much Does a Pit Furnace Cost? Confirm Depth, Loading and Atmosphere": "Chamber dimensions, working depth, loading and atmosphere for a pit furnace"
+    },
+    "/images/news/en-final-20260912/img-050.webp": {
+      "Illustration accompanying How Much Does a High-temperature Trolley Furnace Cost? Define Sustained Operating Temperature First": "Furnace design and loading conditions used in a trolley furnace quotation"
+    },
+    "/images/news/en-final-20260912/img-051.webp": {
+      "Illustration accompanying Trolley Furnace Operating Procedures: Six Checks Before Starting": "Pre-start checks for authorization, equipment, safety systems and records"
+    },
+    "/images/news/en-final-20260912/img-053.webp": {
+      "Illustration accompanying When a Furnace Quotation Conflicts with the Technical Proposal: Six Checks Before Comparing Prices": "Comparison of a quotation and a technical proposal across five purchase conditions"
+    },
+    "/images/news/en-final-20260912/img-055.webp": {
+      "Illustration accompanying Can Furnace Suppliers Be Compared from a Quotation Without a Technical Proposal?": "Four checks on complete scope, traceability, comparability and verifiability"
+    },
+    "/images/news/en-final-20260912/img-057.webp": {
+      "Illustration accompanying Sizing a Large Gear Heat Treatment Furnace: Freeze Six Boundaries Before Dimensions": "Gear dimensions, fixture space, load envelope and forklift access"
+    },
+    "/images/news/en-final-20260912/img-059.webp": {
+      "Illustration accompanying Temperature Uniformity Acceptance for Gear Quenching and Tempering: Separate Equipment, Workpiece and Product": "Furnace, workpiece and inspection temperatures for gear heat treatment"
+    },
+    "/images/news/en-final-20260912/img-060.webp": {
+      "Illustration accompanying Quoting a Trolley Furnace for Large Gear Quenching and Tempering: Specify the Workpiece First": "Large gear and trolley furnace with the workpiece dimensions called out"
+    },
+    "/images/news/en-final-20260912/img-061.webp": {
+      "Illustration accompanying Quoting a Trolley Furnace for Large Gear Quenching and Tempering: Specify the Workpiece First": "Workpiece dimensions, load and power requirements used to quote a gear furnace"
+    },
+    "/images/news/en-final-20260912/img-062.webp": {
+      "Illustration accompanying How to Read Trolley Furnace Specifications: Eight Parameters and Four Evidence States": "Trolley furnace specifications alongside comparable forms of evidence"
+    },
+    "/images/news/en-final-20260912/img-063.webp": {
+      "Illustration accompanying How to Read Trolley Furnace Specifications: Eight Parameters and Four Evidence States": "Eight parameters and four evidence states for a trolley furnace"
+    },
+    "/images/news/en-final-20260912/img-064.webp": {
+      "Illustration accompanying How Should Trolley Furnace Power Be Selected? Higher Power Does Not Mean Lower Energy Use": "Trolley furnace with separate heating requirements and energy-use indicators"
+    },
+    "/images/news/en-final-20260912/img-065.webp": {
+      "Illustration accompanying How Should Trolley Furnace Power Be Selected? Higher Power Does Not Mean Lower Energy Use": "Process needs, heat loss, power supply and operating checks for furnace power"
+    },
+    "/images/news/en-final-20260912/img-067.webp": {
+      "Illustration accompanying What Determines Trolley Furnace Energy Consumption? Compare Energy per Tonne, Not Only per Hour": "Energy boundary, consumption, output and operating-condition comparisons"
+    },
+    "/images/news/en-final-20260912/img-069.webp": {
+      "Illustration accompanying Which Furnace Suits Large Gear Quenching and Tempering? Start with Diameter, Weight and Transfer": "Gear diameter, mass and transfer time used to select a quenching furnace"
+    },
+    "/images/news/en-final-20260912/img-071.webp": {
+      "Illustration accompanying Heat or Flames Leaking at a Trolley Furnace Door? Check Seals, Compression and Furnace Pressure": "Door seal, compression, insulation and furnace-pressure leakage checks"
+    },
+    "/images/news/en-final-20260912/img-072.webp": {
+      "Illustration accompanying How to Read a Trolley Furnace Quotation: Nine Procurement Checks": "Cost, delivery, acceptance and service items in a trolley furnace quotation"
+    },
+    "/images/news/en-final-20260912/img-074.webp": {
+      "Illustration accompanying How Is Trolley Furnace Temperature Uniformity Tested? Define Seven Conditions First": "Temperature measurement points in the heated chamber of a trolley furnace"
+    },
+    "/images/news/en-final-20260912/img-076.webp": {
+      "Illustration accompanying How Is Trolley Furnace Temperature Uniformity Tested? Define Seven Conditions First": "Checklist for interpreting a loaded-furnace temperature uniformity test"
+    },
+    "/images/news/en-final-20260912/img-077.webp": {
+      "Illustration accompanying Electric or Gas-fired Trolley Furnace? Compare Seven Conditions First": "Electric and gas-fired trolley furnace comparison"
+    },
+    "/images/news/en-final-20260912/img-079.webp": {
+      "Illustration accompanying Why Is a Trolley Furnace Heating Slowly? Check Eight Layers in Order": "Heating curve showing actual temperature lagging behind target temperature"
+    },
+    "/images/news/en-final-20260912/img-081.webp": {
+      "Illustration accompanying What Belongs in an Industrial Furnace Technical Agreement? Eight Clause Groups and Three Acceptance Boundaries": "Performance, acceptance, scope and warranty items in a furnace technical agreement"
+    },
+    "/images/news/en-final-20260912/img-084.webp": {
+      "Illustration accompanying Five Checks for a Variable-volume Trolley Furnace Proposal for Pressure Vessels": "Variable-volume trolley furnace zones and five specification checks"
+    },
+    "/images/news/en-final-20260912/img-086.webp": {
+      "Illustration accompanying Five Checks for a Bulldozer Blade Roller-hearth Quenching Furnace Proposal": "Five checks on roller-hearth furnace design and operation"
+    },
+    "/images/news/en-final-20260912/img-087.webp": {
+      "Illustration accompanying Retrofit or Replace an Old Trolley Furnace? Compare These Four Cost and Capability Areas": "Capacity, process, quality and operating costs for a furnace retrofit or replacement"
+    },
+    "/images/news/en-final-20260912/img-090.webp": {
+      "Illustration accompanying Choosing a Trolley Furnace Manufacturer: Five Types of Capability Evidence": "Manufacturing, design, processing, delivery and after-sales evidence for a furnace supplier"
+    },
+    "/images/news/resources-zh/140-body.webp": {
+      "该项目热处理段供货范围示意，非项目实拍": "该项目热处理段供货范围"
+    },
+    "/uploads/2026/08/1786322498700-634eed36-b5e3-4799-9527-348058a176b2.webp": {
+      "新闻正文图片": "新闻正文图片"
+    },
+    "/uploads/2026/08/1786322526567-e5a6dbc9-07d1-450d-b92b-575686b395dc.webp": {
+      "新闻正文图片": "新闻正文图片"
+    },
+    "/uploads/2026/08/1786324074111-874f0a9b-7af9-4b18-9be3-d85bad71491e.webp": {
+      "新闻正文图片": "新闻正文图片"
+    },
+    "/uploads/2026/09/1788513324908-aa08cb31-d8c0-46d2-9eb1-dfa389cc97c8.webp": {
+      "苏能五栏计时法": "苏能五栏计时法"
+    },
+    "/uploads/2026/09/1790232530892-8529ca2b-e03b-47ff-9323-02ab71b4eb23.webp": {
+      "工艺与工件适配、同类项目证据、整线责任及总投入应依次核对；公开产品介绍不能单独证明项目交付能力。 概念示意，非项目实拍。": "工艺与工件适配、同类项目证据、整线责任及总投入应依次核对；公开产品介绍不能单独证明项目交付能力。"
+    }
+  },
+  "copy": {
+    "atmosphere-furnace-pressure-fluctuation-process-or-equipment": {
+      "zh": {
+        "资料核对示意：以可比工艺阶段和可靠记录为前提，与程序动作同步不等于已经证明正常；图示不替代设备与项目文件规定的现场安全处置。": "资料核对：以可比工艺阶段和可靠记录为前提，与程序动作同步不等于已经证明正常；图示不替代设备与项目文件规定的现场安全处置。"
+      }
+    },
+    "bearing-steel-wire-spheroidizing-pit-bell-furnace-selection": {
+      "zh": {
+        "固定炉位与可移加热罩。概念示意，不按比例；仅说明选型关系，不代表实际设备结构、项目实拍或操作方法。": "固定炉位与可移加热罩。图中尺寸不按比例；仅说明选型关系，不代表实际设备结构、项目实拍或操作方法。",
+        "轴承钢丝球化退火选型关系示意": "轴承钢丝球化退火选型关系图"
+      }
+    },
+    "bolt-mesh-belt-quench-temper-capability": {
+      "zh": {
+        "厂家供货范围、实际螺栓材料和规格、连续生产条件与同批产品检测结果，应能逐项对应。 概念示意，非项目实拍。": "厂家供货范围、实际螺栓材料和规格、连续生产条件与同批产品检测结果，应能逐项对应。"
+      }
+    },
+    "bolts-nuts-shared-heat-treatment-line-loading-transfer": {
+      "zh": {
+        "这类确认适合在设备设计阶段形成装载与交接示意，并通过代表工件试验验证。文章不提供现场改网带、拆导向或调整淬火装置的操作方法。": "这类确认适合在设备设计阶段形成装载与交接图，并通过代表工件试验验证。文章不提供现场改网带、拆导向或调整淬火装置的操作方法。",
+        "共用设备，分别适配。概念示意，不按比例；仅说明选型关系，不代表实际设备结构、项目实拍或操作方法。": "共用设备，分别适配。图中尺寸不按比例；仅说明选型关系，不代表实际设备结构、项目实拍或操作方法。",
+        "螺栓螺母共线选型关系示意": "螺栓螺母共线选型关系图"
+      }
+    },
+    "carbon-steel-self-drilling-screw-carburizing-line-selection": {
+      "zh": {
+        "碳钢自钻螺钉采购核对示意": "碳钢自钻螺钉采购核对"
+      }
+    },
+    "cold-coiled-compression-spring-stress-relief-furnace-manufacturers": {
+      "zh": {
+        "冷卷压簧采购核对示意": "冷卷压簧采购核对"
+      }
+    },
+    "custom-heat-treatment-furnace-chamber-process": {
+      "zh": {
+        "工作区示意用于说明工件、工装与装卸通道的关系，不是具体炉型的设计图或推荐尺寸。": "工作区布置图用于说明工件、工装与装卸通道的关系，不是具体炉型的设计图或推荐尺寸。"
+      }
+    },
+    "fastener-mesh-belt-furnace-manufacturers": {
+      "zh": {
+        "工艺与工件适配、同类项目证据、整线责任及总投入应依次核对；公开产品介绍不能单独证明项目交付能力。 概念示意，非项目实拍。": "工艺与工件适配、同类项目证据、整线责任及总投入应依次核对；公开产品介绍不能单独证明项目交付能力。"
+      }
+    },
+    "flat-head-sleeve-heating-shrink-fit-on-roll-removal": {
+      "zh": {
+        "两种工况，分别核对接口。概念示意，不按比例；仅说明选型关系，不代表实际设备结构、项目实拍或操作方法。": "两种工况，分别核对接口。图中尺寸不按比例；仅说明选型关系，不代表实际设备结构、项目实拍或操作方法。",
+        "扁头套加热炉选型关系示意": "扁头套加热炉选型关系图"
+      }
+    },
+    "gas-cylinder-curing-batch-oven-continuous-line-selection": {
+      "zh": {
+        "气瓶固化组织怎么选。概念示意，不按比例；仅说明选型关系，不代表实际设备结构、项目实拍或操作方法。": "气瓶固化组织怎么选。图中尺寸不按比例；仅说明选型关系，不代表实际设备结构、项目实拍或操作方法。",
+        "气瓶固化生产线选型关系示意": "气瓶固化生产线选型关系图"
+      }
+    },
+    "gas-cylinder-curing-oven-slow-heating": {
+      "zh": {
+        "间接加热固化设备外观概念示意，非项目实拍；具体换热结构、风路和配置以实际设备资料为准。": "间接加热固化设备外观；具体换热结构、风路和配置以实际设备资料为准。"
+      }
+    },
+    "grade-10-nut-mesh-belt-line-capability": {
+      "zh": {
+        "10级螺母采购核对示意": "10级螺母采购核对"
+      }
+    },
+    "heat-treatment-basket-turnover-quantity": {
+      "zh": {
+        "料框占用与回框的概念示意，非项目实拍；图中数量和箭头不代表实际工艺顺序，配置数量仍须按完整占用时间核算。": "料框占用与回框；图中数量和箭头不代表实际工艺顺序，配置数量仍须按完整占用时间核算。"
+      }
+    },
+    "heat-treatment-furnace-manufacturing-factory-audit": {
+      "zh": {
+        "制造身份要将图纸、实物和过程记录对应到实际承担方；示意不证明任何企业的自产比例。": "制造身份要将图纸、实物和过程记录对应到实际承担方；本图不证明任何企业的自产比例。"
+      }
+    },
+    "heat-treatment-line-annual-overhaul-checklist": {
+      "en": {
+        "The illustration explains planning with scope adjustment after inspection; it does not represent a specific customer project.": ""
+      }
+    },
+    "heat-treatment-line-capacity-bottleneck-troubleshooting": {
+      "en": {
+        "The illustration groups flow and the four logs; bottlenecks can move along the line.": "The diagram groups flow and the four logs; bottlenecks can move along the line."
+      }
+    },
+    "heat-treatment-line-temperature-uniformity-acceptance-scope": {
+      "zh": {
+        "第一次沟通，只需先提供生产线类型、温度要求所在页，以及一张现有曲线或测点示意。江苏苏能工业炉有限公司可据此协助梳理测量对象、比较范围和待补记录，再讨论具体测试安排。": "第一次沟通，只需先提供生产线类型、温度要求所在页，以及一张现有曲线或测点布置图。江苏苏能工业炉有限公司可据此协助梳理测量对象、比较范围和待补记录，再讨论具体测试安排。"
+      }
+    },
+    "heat-treatment-line-turnkey-supply-scope": {
+      "zh": {
+        "统一对接需要逐项约定设备供货和接口责任；示意不代表任何厂家已承诺四项全包。": "统一对接需要逐项约定设备供货和接口责任；图片不代表任何厂家已承诺四项全包。"
+      }
+    },
+    "jiangsu-heat-treatment-furnace-onsite-survey": {
+      "zh": {
+        "上门前约清服务地点、人员、任务、结果和时间费用；示意不代表厂家已接受预约。": "上门前约清服务地点、人员、任务、结果和时间费用；图片不代表厂家已接受预约。"
+      }
+    },
+    "long-bolt-quench-temper-pit-mesh-belt-furnace-selection": {
+      "zh": {
+        "先分装载，再分工序。概念示意，不按比例；仅说明选型关系，不代表实际设备结构、项目实拍或操作方法。": "先分装载，再分工序。图中尺寸不按比例；仅说明选型关系，不代表实际设备结构、项目实拍或操作方法。",
+        "长螺栓调质选型关系示意": "长螺栓调质选型关系图"
+      }
+    },
+    "long-gas-cylinder-curing-oven-mandrel-trolley-selection": {
+      "zh": {
+        "带芯模装载怎么判断。概念示意，不按比例；仅说明选型关系，不代表实际设备结构、项目实拍或操作方法。": "带芯模装载怎么判断。图中尺寸不按比例；仅说明选型关系，不代表实际设备结构、项目实拍或操作方法。",
+        "长气瓶固化炉选型关系示意": "长气瓶固化炉选型关系图"
+      }
+    },
+    "mesh-belt-carburizing-throughput-process-limits": {
+      "zh": {
+        "假设这条示意线的渗碳与扩散区段边界已经确认、互不重复，前段升温已满足要求，两个阶段使用同一带速。所需时间仅作为本题给定条件。": "假设这条生产线的渗碳与扩散区段边界已经确认、互不重复，前段升温已满足要求，两个阶段使用同一带速。所需时间仅作为本题给定条件。",
+        "连续输送与工艺时间的概念示意": "连续输送与工艺时间关系图"
+      },
+      "en": {
+        "Conceptual illustration of continuous conveying and process time": "Continuous conveying and process time"
+      }
+    },
+    "mesh-belt-furnace-quality-tracking-checklist": {
+      "zh": {
+        "异常位置对应哪些真实部件，不能只按通用示意图判断": "异常位置对应哪些真实部件，不能只按通用图判断"
+      }
+    },
+    "motor-rotor-core-shrink-fit-heating-trolley-temperature": {
+      "zh": {
+        "从装配要求倒推加热配置。概念示意，不按比例；仅说明选型关系，不代表实际设备结构、项目实拍或操作方法。": "从装配要求倒推加热配置。图中尺寸不按比例；仅说明选型关系，不代表实际设备结构、项目实拍或操作方法。",
+        "电机转子加热炉选型关系示意": "电机转子加热炉选型关系图"
+      }
+    },
+    "multi-product-heat-treatment-furnace-changeover-boundaries": {
+      "zh": {
+        "换型管理框架示意。局部变化的前提是设备负荷和基本流程未越界；具体验证深度由工艺风险、产品要求和双方文件确定。": "换型管理框架。局部变化的前提是设备负荷和基本流程未越界；具体验证深度由工艺风险、产品要求和双方文件确定。"
+      }
+    },
+    "multi-station-curing-oven-independent-operation": {
+      "zh": {
+        "多工位与公共配套关系的概念示意，非项目实拍；工位数量和独立面板不证明可同时运行不同工艺。": "多工位与公共配套关系；工位数量和独立面板不证明可同时运行不同工艺。"
+      }
+    },
+    "red-adhesive-curing-test-oven-temperature-records": {
+      "zh": {
+        "试样记录怎样对应试验结果。概念示意，不按比例；仅说明选型关系，不代表实际设备结构、项目实拍或操作方法。": "试样记录怎样对应试验结果。图中尺寸不按比例；仅说明选型关系，不代表实际设备结构、项目实拍或操作方法。",
+        "红胶固化试验选型关系示意": "红胶固化试验选型关系图"
+      }
+    },
+    "self-tapping-screw-carbonitriding-line-selection": {
+      "zh": {
+        "表面硬度、心部硬度、渗层深度及连续产量，应在约定材料、规格、铺料与工艺条件下同时满足要求。示意只表达核对关系，不规定具体检测方法或试样形式。": "表面硬度、心部硬度、渗层深度及连续产量，应在约定材料、规格、铺料与工艺条件下同时满足要求。图中只说明核对关系，不规定具体检测方法或试样形式。",
+        "不规定具体检测方法或试样形式。 概念示意，非项目实拍。": "不规定具体检测方法或试样形式。"
+      }
+    },
+    "shuju-news-28": {
+      "zh": {
+        "图片说明：苏能七项整线责任核验表，方法示意图，非具体客户项目。": "",
+        "苏能七项整线责任核验表，方法示意图，非具体客户项目。": "",
+        "图片说明：整线责任核验方法示意图，非具体客户项目。": "",
+        "整线责任核验方法示意图，非具体客户项目。": ""
+      }
+    },
+    "shuju-news-29": {
+      "en": {
+        "The illustration presents an enquiry method, not information from a specific customer project.": ""
+      }
+    },
+    "shuju-news-34": {
+      "en": {
+        "The illustration groups spares, documents, service and training; it represents the agreement method, not a specific customer project.": ""
+      }
+    },
+    "shuju-news-36": {
+      "en": {
+        "The illustration combines a line, three scope tables and a backward calculation to explain a pricing method; it does not identify a customer project.": ""
+      }
+    },
+    "suneng-stainless-steel-strip-annealing-furnace-project": {
+      "zh": {
+        "该项目热处理段供货范围示意，非项目实拍": "该项目热处理段供货范围"
+      },
+      "en": {
+        "Thermal-section supply scope for the strip annealing project. Design illustration, not a site photograph.": "Thermal-section supply scope for the strip annealing project."
+      }
+    },
+    "tai-che-lu-lu-men-lou-re-lou-huo-si-duan-ding-wei-fa": {
+      "en": {
+        "The illustration shows engineering relationships between sealing, hot structure and pressure control; it does not depict a specific customer project.": ""
+      }
+    },
+    "titanium-alloy-thick-plate-roller-hearth-furnace-selection": {
+      "zh": {
+        "装载组合决定核对重点。概念示意，不按比例；仅说明选型关系，不代表实际设备结构、项目实拍或操作方法。": "装载组合决定核对重点。图中尺寸不按比例；仅说明选型关系，不代表实际设备结构、项目实拍或操作方法。",
+        "钛合金厚板加热炉选型关系示意": "钛合金厚板加热炉选型关系图"
+      }
+    },
+    "wheel-hub-mould-preheating-furnace-changeover-selection": {
+      "zh": {
+        "按整套模具与上机安排选型。概念示意，不按比例；仅说明选型关系，不代表实际设备结构、项目实拍或操作方法。": "按整套模具与上机安排选型。图中尺寸不按比例；仅说明选型关系，不代表实际设备结构、项目实拍或操作方法。",
+        "轮毂模具预热炉选型关系示意": "轮毂模具预热炉选型关系图"
+      }
+    }
+  }
+}

@@ -92,7 +92,7 @@ export function SelectionGuidePage({ heroImage, locale = 'zh' }: { heroImage: st
         <div className={`${shared.heroMedia} ${styles.heroMedia}`}>
           <Image
             src={heroImage}
-            alt={t("工业炉技术人员核对工件与图纸的场景示意")}
+            alt={t("工业炉技术人员核对工件与图纸")}
             fill
             priority
             sizes="(max-width: 767px) 100vw, 70vw"

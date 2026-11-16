@@ -89,7 +89,7 @@ export function ApprovedProcurementPage({ id, locale = 'zh' }: { id: ApprovedPro
               <PhoneContactLink className={styles.phone} trackingContext={trackingContext}>
                 <HiPhone aria-hidden="true" />{english ? '+86 130 5298 6814' : '130-5298-6814'}
               </PhoneContactLink>
-              <p className={styles.hours}>{english ? 'Weekdays, 8:30–17:30 (China time)' : '工作日 8:30–17:30'}</p>
+              <p className={styles.hours}>{english ? 'Daily, 8:00–21:00 (China time)' : '每天 8:00–21:00'}</p>
             </section>
           </div>
         </aside>

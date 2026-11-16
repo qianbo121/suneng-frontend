@@ -151,7 +151,7 @@ export function EnergyContent() {
               </ul>
               <figure className={'recovery-diagram'} aria-labelledby={'recovery-title'}>
                 <div className={'recovery-heading'}>
-                  <span className={'recovery-eyebrow'}>{'余热利用 · 判断示意'}</span>
+                  <span className={'recovery-eyebrow'}>{'余热利用 · 判断'}</span>
                   <h3 id={'recovery-title'}>{'有余热，还要有稳定的利用去向'}</h3>
                   <p>{'把热源、回收设备和利用端放在一起核对，再判断是否值得实施。'}</p>
                 </div>
@@ -239,7 +239,7 @@ export function EnergyContent() {
                 </div>
                 <figcaption>
                   {
-                    '概念示意：箭头表示评估关系，不是管道连接图。具体介质、回路及保护措施按项目确认。'
+                    '箭头表示评估关系，不是管道连接图。具体介质、回路及保护措施按项目确认。'
                   }
                 </figcaption>
               </figure>

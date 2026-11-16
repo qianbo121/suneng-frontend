@@ -11,12 +11,12 @@ describe('English search copy', () => {
     const slug = 'stainless-strip-annealing-supply-scope';
     const item = getEnglishCase(slug)!;
     const metadata = englishCaseMetadata(slug);
-    expect(item.title).toContain('annealing and pickling line');
+    expect(item.title).toBe('Stainless steel strip annealing: Suneng supplied the furnace and cooling equipment');
     expect(item.summary).toContain('not actual output or acceptance results');
-    expect(metadata.title).toEqual({ absolute: '850 mm Strip Annealing Supply Scope | Suneng Industrial Furnace' });
+    expect(metadata.title).toEqual({ absolute: 'Furnace and cooling equipment for stainless strip annealing | Suneng Industrial Furnace' });
     expect(metadata.description).toBe(item.seoDescription);
     expect(metadata.description).toContain('not verified output or acceptance results');
-    expect(metadata.openGraph).toMatchObject({ title: '850 mm Strip Annealing Supply Scope | Suneng Industrial Furnace', description: item.seoDescription });
+    expect(metadata.openGraph).toMatchObject({ title: 'Furnace and cooling equipment for stainless strip annealing | Suneng Industrial Furnace', description: item.seoDescription });
     expect(metadata.alternates?.languages).toHaveProperty('zh-CN');
     expect(() => englishCaseMetadata('not-approved')).toThrow('NEXT_NOT_FOUND');
   });

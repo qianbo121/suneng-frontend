@@ -1,3 +1,4 @@
+import { applyNewsDisplayRevisions } from './news-display-revisions';
 import { isWithdrawnTechnicalPath, isHiddenCaseEntry } from './publication-scope';
 import DOMPurify from 'isomorphic-dompurify';
 import { newsImageNoteReplacements } from './news-image-notes';
@@ -168,6 +169,7 @@ export function prepareNewsArticleHtml(
   const root = DOMPurify.sanitize(sanitized, { RETURN_DOM: true }) as HTMLElement;
   const document = root.ownerDocument;
   if (!document) return sanitized;
+  applyNewsDisplayRevisions(root, options.articleSlug, options.locale);
 
   // The reviewed spare-parts article already contains explicit headings, so it
   // bypasses the break-delimited label promotion below. Its seven attachment

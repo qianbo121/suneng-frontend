@@ -83,7 +83,7 @@ function CutawayImage({
         <div className={styles.cutawayImageStatus} role="status" aria-live="polite">
           <span>{status === 'error'
             ? locale === 'en' ? 'The diagram did not load. Retry or view the original below.' : '结构图暂未加载，可重试或查看下方原图。'
-            : locale === 'en' ? 'Loading structural diagram…' : '结构示意图加载中…'}</span>
+            : locale === 'en' ? 'Loading structural diagram…' : '结构图加载中…'}</span>
           {status === 'error' && (
             <button type="button" onClick={() => {
               setStatus('loading');

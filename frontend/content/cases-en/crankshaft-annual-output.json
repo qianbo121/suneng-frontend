@@ -1,14 +1,14 @@
 {
   "id": "crankshaft-annual-output",
   "slug": "crankshaft-annual-output",
-  "title": "Mesh belt line for crankshafts: why is throughput specified in parts per year?",
+  "title": "Mesh belt line for quenching and tempering crankshafts",
   "summary": "The technical agreement specifies a mesh belt line for quenching and tempering crankshafts. Capacity is expressed as the number of parts processed per year.",
   "body": "crankshaft-annual-output.md",
   "coverAlt": "Crankshaft line with infeed, roller-supported quenching furnace, quench tank with heat exchanger, elevator, hot-air tempering furnace, spray cooling chamber and outfeed.",
   "coverCaption": "Crankshaft line with infeed, roller-supported quenching furnace, quench tank with heat exchanger, elevator, hot-air tempering furnace, spray cooling chamber and outfeed.",
   "translationStatus": "complete",
-  "sourceFingerprint": "91e6569acb56bea367625077640d7034fc2a8959cce695c75f6e5fb0c4fb6851",
-  "seoTitle": "Crankshaft heat treatment: why count parts per year?",
+  "sourceFingerprint": "7e1748e52f57cadfcfa110f77460d89f0a6cbe7f519ba79faf629489031c4b76",
+  "seoTitle": "Mesh belt line for quenching and tempering crankshafts",
   "seoDescription": "The agreement lists up to approximately 1,000,000 crankshafts per year. Converting to kg/h requires the weight of one crankshaft and annual operating hours.",
   "presentation": {
     "view": {

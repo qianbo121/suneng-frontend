@@ -37,12 +37,12 @@ export const additionalFurnaceStructures: Record<string, FurnaceStructure> = {
     sceneImage: '/images/products/shovel-furnace/detail-pit-style-20260910/01-scene.webp',
     image: '/images/products/shovel-furnace/detail-pit-style-v2-20260910/02-cutaway.webp',
     alt: c(
-      '叉车炉剖视示意：炉衬层、加热元件、固定支承与独立轨道取料机',
+      '叉车炉剖视图：炉衬层、加热元件、固定支承与独立轨道取料机',
       'Fork-handling furnace cutaway showing lining, heating elements, fixed supports and a separate rail handler',
     ),
     parts: [
       part('lining', c('炉体与炉衬', 'Shell and lining'), c('剖切位置展示外壳、隔热层与热面，材料和厚度按工艺确定。', 'The section shows shell, insulation and hot face; materials and thickness follow the process.'), 'rightTop', 80, 36),
-      part('heating', c('电热元件与支架', 'Elements and holders'), c('图示为电加热布置，元件与陶瓷支承按温度、装载和检修条件设计。', 'The illustration shows electric heating; elements and ceramic holders depend on temperature, loading and maintenance.'), 'rightMiddle', 69, 34),
+      part('heating', c('电热元件与支架', 'Elements and holders'), c('图示为电加热布置，元件与陶瓷支承按温度、装载和检修条件设计。', 'The diagram shows electric heating; elements and ceramic holders depend on temperature, loading and maintenance.'), 'rightMiddle', 69, 34),
       part('door', c('升降炉门', 'Lifting door'), c('炉门净开口、提升行程与隔热密封需和取料动作配合。', 'Coordinate the clear opening, door travel, insulation and sealing with the handling motion.'), 'leftTop', 49, 14),
       part('supports', c('炉内固定支承', 'Fixed hearth supports'), c('支承承担热态工件载荷，并在支点之间留出铲齿进入空间。', 'Supports carry the hot load while preserving fork access between support points.'), 'rightBottom', 57, 46),
       part('forks', c('铲齿与承托', 'Forks and load support'), c('结合底部净空、重心、铲齿间距和热态变形核对托取条件。', 'Check pickup against underside clearance, centre of gravity, fork spacing and hot deformation.'), 'leftMiddle', 37, 42),
@@ -59,14 +59,14 @@ export const additionalFurnaceStructures: Record<string, FurnaceStructure> = {
   'walking-beam-furnace': {
     sceneImage: '/images/products/walking-beam-furnace/detail-pit-style-v2-20260910/01-scene.webp',
     image: '/images/products/walking-beam-furnace/detail-pit-style-20260910/02-cutaway.webp',
-    caption: c('内部结构剖视示意 · 浅灰活动梁通过穿槽支柱连接下方移动架，与深灰固定支承分开；图示电加热配置。', 'Internal cutaway · Light moving beams connect through hearth slots to the carriage below, separately from the dark fixed supports. Electric heating illustrated.'),
+    caption: c('内部结构剖视图 · 浅灰活动梁通过穿槽支柱连接下方移动架，与深灰固定支承分开；图示电加热配置。', 'Internal cutaway · Light moving beams connect through hearth slots to the carriage below, separately from the dark fixed supports. Electric heating shown.'),
     alt: c(
-      '步进炉纵向剖视示意：固定梁与活动梁分开支承，活动支柱穿过炉底长槽连接下方滚轮移动架',
+      '步进炉纵向剖视图：固定梁与活动梁分开支承，活动支柱穿过炉底长槽连接下方滚轮移动架',
       'Walking-beam furnace cutaway showing separate fixed and moving supports, with moving posts passing through hearth slots to the roller carriage below',
     ),
     parts: [
       part('lining', c('炉体与隔热层', 'Shell and insulation'), c('炉墙、炉顶和炉底共同围成加热空间，剖面展示隔热层次。', 'Walls, roof and hearth enclose the heated space; the section reveals the insulation layers.'), 'leftTop', 46, 19),
-      part('heating', c('电热元件示例', 'Electric heating example'), c('本图采用电加热示例，热源与温区布置按实际工艺确定。', 'Electric heating is illustrated; the heat source and zone arrangement follow the actual process.'), 'leftMiddle', 35, 31),
+      part('heating', c('电热元件示例', 'Electric heating example'), c('本图采用电加热示例，热源与温区布置按实际工艺确定。', 'Electric heating is shown; the heat source and zone arrangement follow the actual process.'), 'leftMiddle', 35, 31),
       part('fixed-beams', c('固定梁', 'Fixed beams'), c('图中深灰支承为固定梁，在活动梁下降后承接工件，支承间距按工件形态校核。', 'The dark supports are fixed beams that receive the load as the moving beams lower; spacing follows workpiece geometry.'), 'leftBottom', 35, 41),
       part('moving-beams', c('活动梁', 'Moving beams'), c('图中浅灰支承为活动梁，由下方机构带动，依次抬起、前移、下降和返回，与固定梁交替承托。', 'The light supports are moving beams driven from below to lift, advance, lower and return, alternating support with the fixed beams.'), 'rightMiddle', 61, 43),
       part('workpiece', c('工件与支承位置', 'Load and support points'), c('工件需跨梁稳定放置，接触位置和允许支承痕迹应先确认。', 'Loads must rest stably across the beams; agree contact points and permissible support marks.'), 'rightTop', 66, 40),
@@ -83,9 +83,9 @@ export const additionalFurnaceStructures: Record<string, FurnaceStructure> = {
   'elevator-hearth-furnace': {
     sceneImage: '/images/products/elevator-hearth-furnace/detail-pit-style-20260910/01-scene.webp',
     image: '/images/products/elevator-hearth-furnace/detail-pit-style-20260910/02-cutaway.webp',
-    caption: c('内部结构剖视示意 · 前侧剖开以展示底部开口，承料炉台由下方升入并闭合；图示电加热配置。', 'Internal cutaway · The front is sectioned to expose the bottom opening; the hearth rises from below to close it. Electric heating illustrated.'),
+    caption: c('内部结构剖视图 · 前侧剖开以展示底部开口，承料炉台由下方升入并闭合；图示电加热配置。', 'Internal cutaway · The front is sectioned to expose the bottom opening; the hearth rises from below to close it. Electric heating shown.'),
     alt: c(
-      '炉底升降式炉剖视示意：固定上炉体、内部炉衬与电热元件、下降炉台和升降导向',
+      '炉底升降式炉剖视图：固定上炉体、内部炉衬与电热元件、下降炉台和升降导向',
       'Bottom-loading furnace cutaway showing the fixed upper chamber, internal lining and electric elements, lowered hearth and lift guides',
     ),
     parts: [
@@ -107,14 +107,14 @@ export const additionalFurnaceStructures: Record<string, FurnaceStructure> = {
   'gas-nitriding-furnace': {
     sceneImage: '/images/products/gas-nitriding-furnace/detail-pit-style-20260910/01-scene.webp',
     image: '/images/products/gas-nitriding-furnace/detail-pit-style-20260910/02-cutaway.webp',
-    caption: c('内部结构剖视示意 · 导流筒下端留出回流空间，外层炉罐底部保持封闭；电热元件位于罐外。', 'Internal cutaway · Clearance below the guide cylinder provides a return path; the outer retort bottom stays closed and the heaters are outside.'),
+    caption: c('内部结构剖视图 · 导流筒下端留出回流空间，外层炉罐底部保持封闭；电热元件位于罐外。', 'Internal cutaway · Clearance below the guide cylinder provides a return path; the outer retort bottom stays closed and the heaters are outside.'),
     alt: c(
-      '气体氮化炉剖视示意：密封炉罐、罐外电热元件、罐内风机、透孔料框底托及导流筒下方回流空间',
+      '气体氮化炉剖视图：密封炉罐、罐外电热元件、罐内风机、透孔料框底托及导流筒下方回流空间',
       'Gas nitriding furnace cutaway showing a sealed retort, external heaters, internal fan, perforated basket support and a return passage below the guide cylinder',
     ),
     parts: [
       part('lining', c('外壳与炉衬', 'Shell and lining'), c('外壳与隔热层形成加热炉体，和内部密封炉罐分别确认材料与检验范围。', 'The shell and insulation form the heating enclosure; specify these separately from the sealed inner retort.'), 'leftMiddle', 36, 36),
-      part('heating', c('炉罐外电热元件', 'Heaters outside retort'), c('图示电热元件位于炉罐外侧，通过炉罐向工艺空间传热。', 'The illustrated electric elements heat the process space through the retort from outside.'), 'leftBottom', 37.5, 45),
+      part('heating', c('炉罐外电热元件', 'Heaters outside retort'), c('图示电热元件位于炉罐外侧，通过炉罐向工艺空间传热。', 'This electric elements heat the process space through the retort from outside.'), 'leftBottom', 37.5, 45),
       part('retort', c('密封炉罐', 'Sealed retort'), c('金属炉罐上口与炉盖相接，侧壁和封闭底部将工艺气氛与罐外加热空间分隔。', 'The metal retort joins the lid at its upper rim; its wall and closed bottom separate the process atmosphere from the external heating space.'), 'rightMiddle', 56, 40),
       part('lid', c('炉盖与密封', 'Lid and seal'), c('炉罐上口与炉盖锁紧密封；风机轴穿过炉盖的位置也需密封，具体结构与检测按工况确认。', 'The lid clamps and seals to the retort rim; the fan shaft penetration also requires a seal, with design and inspection defined for the duty.'), 'leftTop', 39.5, 21),
       part('basket', c('料框与底部回流', 'Basket and lower return path'), c('料框采用透孔底托，导流筒下沿与炉罐底部留出连通空间，使筒内与外侧环隙接通；装载时需保持通道畅通。', 'The basket has a perforated support. Clearance beneath the guide cylinder connects its inner space to the outer annular gap; loading must keep this passage open.'), 'rightBottom', 54, 54),

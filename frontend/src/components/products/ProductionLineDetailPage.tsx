@@ -599,10 +599,10 @@ export function ProductionLineDetailPage({ content, locale = 'zh' }: { content: 
 
     <div className={styles.page}>
       <HomepageLeadForm
+        pageFormWidth="standard"
         key={content.pageId}
         sectionId="inquiry"
         locale={locale}
-        eyebrow={`${s.overview.title} · ${t('方案咨询', 'Project consultation')}`}
         pageType="热处理生产线产品页"
         productTag={s.overview.title}
         successProductTag={s.overview.title}

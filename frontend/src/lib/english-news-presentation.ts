@@ -1,8 +1,9 @@
 // Presentation corrections for already-published English text. Chinese content
 // and independently reviewed publication eligibility are unchanged.
-const diagrams: Record<string, { original: string; replacement: string; obsoleteNote: string }> = {
+const diagrams: Record<string, { original: string; revised?: string; replacement: string; obsoleteNote: string }> = {
   'atmosphere-furnace-pressure-fluctuation-process-or-equipment': {
     original: '/uploads/2026/09/1790149369676-c3722071-50ea-46f9-b44d-378de3848595.webp',
+    revised: '/images/news/reviewed-20261116/1790149369676-c3722071-50ea-46f9-b44d-378de3848595.webp',
     replacement: '/images/news/english/atmosphere-pressure-review.svg',
     obsoleteNote: ' Diagram labels are in Chinese; the checking logic is explained above in English.',
   },
@@ -13,6 +14,7 @@ const diagrams: Record<string, { original: string; replacement: string; obsolete
   },
   'multi-product-heat-treatment-furnace-changeover-boundaries': {
     original: '/uploads/2026/09/1790148510342-edd62829-8796-47aa-b3af-3aeb49b1b08d.webp',
+    revised: '/images/news/reviewed-20261116/1790148510342-edd62829-8796-47aa-b3af-3aeb49b1b08d.webp',
     replacement: '/images/news/english/product-changeover-review.svg',
     obsoleteNote: ' Diagram labels are in Chinese; the three levels are explained above in English.',
   },
@@ -70,10 +72,13 @@ export function localizeEnglishNewsPresentation(html: string, slug?: string | nu
     );
   }
   const diagram = slug ? diagrams[slug] : undefined;
-  if (diagram && result.includes(diagram.original)) {
+  const diagramPath = diagram && [diagram.original, diagram.revised].find(
+    (candidate): candidate is string => !!candidate && result.includes(candidate),
+  );
+  if (diagram && diagramPath) {
     // Replace only the reviewed illustration, including any link to its original.
     for (const prefix of ['https://www.jssngyl.cn', 'https://jssngyl.cn', '']) {
-      result = result.replaceAll(prefix + diagram.original, diagram.replacement);
+      result = result.replaceAll(prefix + diagramPath, diagram.replacement);
     }
     result = result.replace(/<img\b[^>]*>/gi, (tag) => {
       if (!tag.includes(diagram.replacement)) return tag;

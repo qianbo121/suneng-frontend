@@ -150,6 +150,7 @@ export function ChineseProductsLanding({ locale = 'zh' }: { locale?: Locale }) {
 
       <div className={styles.inquirySection}>
         <HomepageLeadForm
+          pageFormWidth="standard"
           locale={locale}
           pageType="产品中心"
           productTag="热处理生产线与工业炉"

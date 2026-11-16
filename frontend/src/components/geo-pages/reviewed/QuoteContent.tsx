@@ -76,7 +76,7 @@ export function QuoteContent() {
                   src={'/images/reviewed-guides/quote/quote-workpieces-v2.png'}
                   width={1536}
                   height={1024}
-                  alt={'工业炉询价资料示意：工件、量具与技术图纸'}
+                  alt={'工业炉询价资料：工件、量具与技术图纸'}
                   sizes="(max-width: 767px) 100vw, 50vw"
                   priority
                 />

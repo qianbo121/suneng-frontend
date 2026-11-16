@@ -1,4 +1,5 @@
 import 'server-only';
+import { caseCatalogCover } from './catalog-entry';
 import fs from 'node:fs';
 import path from 'node:path';
 import { cache } from 'react';
@@ -169,7 +170,11 @@ export function getCaseResults(query: CaseQuery) {
   // List wording is prepared here so case-specific rules never ship to the browser.
   const cards = filterCases(getPublicCases(), query)
     .map(toCaseCard)
-    .map((card) => ({ ...card, summary: caseListPresentation(card).summary }));
+    .map((card) => ({
+      ...card,
+      cover: caseCatalogCover(card.slug, 'zh') ?? card.cover,
+      summary: caseListPresentation(card).summary,
+    }));
   return paginateCases(cards, query);
 }
 export function getCaseFilterOptions(query: CaseQuery, key: (typeof CASE_FILTER_KEYS)[number]) {

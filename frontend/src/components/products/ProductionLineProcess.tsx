@@ -403,7 +403,7 @@ export function ProductionLineProcess({ pageId, image, process, model, steps, lo
             {activeZone ? `${t('对应设备：', 'Equipment: ')}${activeZone.label}` : t('图外工序或交接环节', 'Off-image operation or handover')}
           </p>
         </div>
-        <div className={styles.sequence} aria-label={t('本步处理动作示意', 'Actions for this step')}>
+        <div className={styles.sequence} aria-label={t('本步处理动作', 'Actions for this step')}>
           <div className={styles.action}>
             <span className={styles.actionIcon}>
               <HiOutlineArrowLeftOnRectangle className={styles.entryIcon} aria-hidden="true" />

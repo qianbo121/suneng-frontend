@@ -1,7 +1,7 @@
 import type { CSSProperties } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { FiArrowRight, FiBarChart2, FiBox, FiSettings, FiShield, FiUsers } from 'react-icons/fi';
+import { FiArrowRight, FiBarChart2, FiBox, FiShield, FiUsers } from 'react-icons/fi';
 import { Breadcrumb } from '@/components/layout/Breadcrumb';
 import { WechatContactButton } from '@/components/lead/WechatContactButton';
 import type { AgreementCase } from '@/lib/cases/agreement/reader';
@@ -83,11 +83,9 @@ export function AgreementPage({ data }: { data: AgreementCase }) {
             <Breadcrumb locale={data.locale} tone="light" className={styles.category} items={[{ label: label('项目案例', 'Case studies') }]} />
             <CaseTitle title={data.title} english={english} />
             <p className={styles.summary}>{data.summary}</p>
-            <p className={styles.model}>
-              <FiSettings aria-hidden />
-              {data.model && <span>{label('设备型号：', 'Model: ')} {data.model}</span>}
-              <span className={data.model ? styles.projectState : undefined}>{data.status}</span>
-            </p>
+            {data.slug === 'fastener-mesh-belt-quenching-carburizing' && (
+              <p className={styles.projectState}>{data.status}</p>
+            )}
           </div>
         </div>
       </header>

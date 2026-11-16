@@ -71,7 +71,7 @@ for (const width of [1440, 390]) {
 
           if (furnace.id === 'gas-nitriding-furnace') {
             await test.info().attach('inquiry', { body: await section.screenshot(), contentType: 'image/png' });
-            const submit = form.getByRole('button', { name: en ? 'Send project details' : '提交咨询' });
+            const submit = form.getByRole('button', { name: en ? 'Send inquiry' : '提交咨询' });
             await submit.click();
             await expect(form.locator('[name="identity"]')).toBeFocused();
             await form.locator('[name="identity"]').fill('Local QA');

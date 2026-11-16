@@ -83,8 +83,12 @@ describe('format-only repair of the automation article', () => {
     expect(translated.contentEn).toBe(translations['76'].contentEn);
     expect(translated.publishDate).toBe(item.publishDate);
     expect(translated.englishContentUpdatedAt).toBe(translations['76'].translatedAt);
-    expect(normalizeNewsHtml('en', translated)).toBe(
-      prepareNewsArticleHtml(translated.contentEn, { stackSimpleTables: true }),
-    );
+    const source = parse(prepareNewsArticleHtml(translated.contentEn, { stackSimpleTables: true }));
+    const before = source.querySelectorAll('img');
+    expect(before).toHaveLength(2);
+    for (const image of before) expect(image.getAttribute('alt')).toMatch(/^Illustration accompanying /);
+    before[0].setAttribute('alt', 'Control layers and machine operating states on a treatment line');
+    before[1].setAttribute('alt', 'Control layers and the normal, manual and fault states of the line');
+    expect(parse(normalizeNewsHtml('en', translated)).innerHTML).toBe(source.innerHTML);
   });
 });

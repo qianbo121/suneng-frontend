@@ -28,6 +28,18 @@ function saveScroll(url: string) {
 export function CaseList({ initial, query }: { initial: CasePageResult; query: CaseQuery }) {
   const result = initial;
   const listHref = caseListHref(query, { page: result.page, from: result.from });
+  const sortRef = useRef<HTMLDetailsElement>(null);
+  useEffect(() => {
+    function closeSortOnOutsidePress(event: PointerEvent) {
+      const menu = sortRef.current;
+      if (menu?.open && event.target instanceof Node && !menu.contains(event.target)) {
+        menu.open = false;
+      }
+    }
+    document.addEventListener('pointerdown', closeSortOnOutsidePress, true);
+    return () => document.removeEventListener('pointerdown', closeSortOnOutsidePress, true);
+  }, []);
+
   useEffect(() => {
     try {
       const saved = sessionStorage.getItem(scrollKey(listHref));
@@ -46,7 +58,7 @@ export function CaseList({ initial, query }: { initial: CasePageResult; query: C
     <>
       <div className="catalog-results-top">
         <h2 id="case-results-heading">{query.workpiece || (query.equipment || query.q || query.process || query.type || query.need ? '匹配案例' : '全部案例')}<small>{result.total} 项</small></h2>
-        <details className="catalog-sort">
+        <details className="catalog-sort" ref={sortRef}>
           <summary>{sortLabels[query.sort]}</summary>
           <nav aria-label="案例排序">
             {(Object.keys(sortLabels) as CaseQuery['sort'][]).map((sort) => (

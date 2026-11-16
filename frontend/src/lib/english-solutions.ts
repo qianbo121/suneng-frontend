@@ -64,7 +64,7 @@ export const englishSolutions: EnglishSolution[] = [
     slug: 'rechuli-lu-wendu-bujun-zhenggai',
     title: 'Correcting Furnace Temperature Non-uniformity',
     summary: 'Establish comparable test conditions, locate the cause and verify the correction under the agreed load.',
-    image: repairImage, imageAlt: 'Illustration of engineers reviewing an industrial furnace project',
+    image: repairImage, imageAlt: 'Engineers reviewing an industrial furnace project',
     answer: 'Do not begin by adjusting the controller alone. First fix the test conditions, then check measurement circuits, heating zones, circulation and flow guides, door seals, the lining and loading pattern. Verify the correction using comparable project conditions and retain the original measurement records.',
     sections: [
       { title: 'Make the measurements comparable', items: [
@@ -94,7 +94,7 @@ export const englishSolutions: EnglishSolution[] = [
     slug: 'rechuli-lu-kongzhi-xitong-shengji',
     title: 'Heat Treatment Furnace Control System Upgrades',
     summary: 'Review measurement, actuators, interlocks, software and data interfaces before choosing what to retain or replace.',
-    image: repairImage, imageAlt: 'Illustration of engineers reviewing an industrial furnace project',
+    image: repairImage, imageAlt: 'Engineers reviewing an industrial furnace project',
     answer: 'Restore the drawings, input/output list, programs, parameters and software versions first. Check measurement circuits, actuators and safety interlocks, then choose a partial upgrade or a new architecture according to control complexity, data interfaces and maintenance capability. Validate the change through cold, hot and loaded tests.',
     sections: [
       { title: 'Look beyond the controller', items: [
@@ -126,7 +126,7 @@ export const englishSolutions: EnglishSolution[] = [
     slug: 'rechuli-lu-luchen-fanxin',
     title: 'Furnace Lining Repair and Relining',
     summary: 'Inspect the hot face, shell, anchors and interfaces before deciding between local repair and wider relining.',
-    image: repairImage, imageAlt: 'Illustration of engineers reviewing an industrial furnace project',
+    image: repairImage, imageAlt: 'Engineers reviewing an industrial furnace project',
     answer: 'Do not decide the repair scope from furnace age or visible damage alone. Local repair may be appropriate where damage is isolated, the cold face is unaffected, surrounding anchors remain sound and the old and new lining can be joined reliably. Roof sagging, abnormal shell temperatures or through-cracks call for wider inspection. Final scope depends on the shutdown inspection.',
     sections: [
       { title: 'Check the support system as well as the surface', items: [
@@ -157,7 +157,7 @@ export const englishSolutions: EnglishSolution[] = [
     slug: 'rechuli-lu-tingchan-chongqi-banqian-fuchan',
     title: 'Furnace Restart and Relocation Planning',
     summary: 'Establish the equipment condition, complete corrective work and define the conditions for cold, hot and loaded verification.',
-    image: repairImage, imageAlt: 'Illustration of engineers reviewing an industrial furnace project',
+    image: repairImage, imageAlt: 'Engineers reviewing an industrial furnace project',
     answer: 'First establish why the furnace stopped, what records remain and its present condition. Inspect the structure, lining, energy supply, electrics, temperature measurement, interlocks and mechanical systems. Define cold, hot and loaded checks, their prerequisites and any required test media in the project verification plan. The equipment documents and repair scope determine whether no-load heating is suitable and the order of testing. Meet the prerequisites for each test before starting it; a successful start does not prove readiness for stable production.',
     sections: [
       { title: 'Establish the condition before energizing or firing', items: [
@@ -188,7 +188,7 @@ export const englishSolutions: EnglishSolution[] = [
     slug: 'rechuli-lu-dian-gai-ran-yure-huishou',
     title: 'Furnace Energy Conversion and Waste Heat Recovery',
     summary: 'Compare energy options under the same production conditions and check whether recovered heat has a practical use.',
-    image: repairImage, imageAlt: 'Illustration of engineers reviewing an industrial furnace project',
+    image: repairImage, imageAlt: 'Engineers reviewing an industrial furnace project',
     answer: 'Start with a measured heat and energy balance for the existing process. Compare electric and fuel heating using the same workpiece, load, process curve and operating hours, then include utility upgrades, exhaust systems, safety, maintenance and downtime. Waste heat recovery also needs a usable heat demand that matches the available heat in temperature and timing.',
     sections: [
       { title: 'Establish a comparable energy baseline', items: [
@@ -221,7 +221,7 @@ export const englishSolutions: EnglishSolution[] = [
     slug: 'rechuli-lu-gaizao-fengxian-zhouqi',
     title: 'Furnace Retrofit Risks and Project Scheduling',
     summary: 'Separate the overall project schedule from the production shutdown and resolve uncertain interfaces before work starts.',
-    image: repairImage, imageAlt: 'Illustration of engineers reviewing an industrial furnace project',
+    image: repairImage, imageAlt: 'Engineers reviewing an industrial furnace project',
     answer: 'Establish the old furnace condition and the scope of work before committing to a shutdown date. Plan diagnosis, design, procurement and prefabrication separately from removal, installation, dry-out, commissioning and loaded acceptance. Hidden damage, unclear interfaces and unavailable test conditions can all extend the production interruption.',
     sections: [
       { title: 'Resolve the main uncertainties early', items: [

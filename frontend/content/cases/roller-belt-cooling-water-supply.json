@@ -1,7 +1,7 @@
 {
   "id": "roller-belt-cooling-water-supply",
   "slug": "roller-belt-cooling-water-supply",
-  "title": "托辊网带炉：冷却水由谁配套？",
+  "title": "托辊网带淬火回火线：苏能配套闭式冷却塔",
   "summary": "苏能与买方约定配置一条保护气氛网带淬火回火生产线。本项目把室外水冷却系统和买方厂房的补水管分开列项。",
   "body": "roller-belt-cooling-water-supply.md",
   "contentType": "experience",
@@ -111,7 +111,7 @@
         "提升机把工件送出油面，两侧挡板减少工件落回油槽的情况。"
       ],
       [
-        "冷却系统怎样接入？",
+        "冷却塔和补水管分别由谁配套？",
         "苏能供室外水冷却系统，含闭式冷却塔、循环水泵和过渡储水箱。买方准备厂房侧的外部补水管。"
       ]
     ],

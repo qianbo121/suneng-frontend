@@ -1,0 +1,101 @@
+{
+  "fastener-mesh-belt-quenching-carburizing": {
+    "src": "/images/workpieces/fasteners-batch/workpiece-self-drilling-screws.webp",
+    "zh": {
+      "alt": "螺丝钉"
+    },
+    "en": {
+      "alt": "Screws"
+    }
+  },
+  "stainless-strip-annealing-supply-scope": {
+    "src": "/images/cases/list/strip.webp",
+    "zh": {
+      "alt": "不锈钢带卷"
+    },
+    "en": {
+      "alt": "Stainless steel strip coil"
+    }
+  },
+  "bright-quench-design": {
+    "src": "/images/cases/fastener-mesh-belt/stage-heating.webp",
+    "zh": {
+      "alt": "网带炉加热段"
+    },
+    "en": {
+      "alt": "Mesh-belt furnace heating section"
+    }
+  },
+  "crankshaft-annual-output": {
+    "src": "/images/workpieces/shafts-gears/workpiece-crankshaft.webp",
+    "zh": {
+      "alt": "曲轴"
+    },
+    "en": {
+      "alt": "Crankshaft"
+    }
+  },
+  "standard-parts-capacity": {
+    "src": "/images/cases/list/ubolt.webp",
+    "zh": {
+      "alt": "U 型螺栓"
+    },
+    "en": {
+      "alt": "U-bolt"
+    }
+  },
+  "cylinder-liner-solution-aging": {
+    "src": "/images/cases/list/liner.webp",
+    "zh": {
+      "alt": "高压气瓶铝内胆"
+    },
+    "en": {
+      "alt": "Bare aluminum liner for a high-pressure cylinder"
+    }
+  },
+  "steering-forgings": {
+    "src": "/images/cases/list/arm.webp",
+    "zh": {
+      "alt": "转向摇臂锻件"
+    },
+    "en": {
+      "alt": "Forged steering pitman arm"
+    }
+  },
+  "roller-belt-cooling-water-supply": {
+    "src": "/images/cases/list/water.webp",
+    "zh": {
+      "alt": "闭式冷却塔与循环水泵"
+    },
+    "en": {
+      "alt": "Closed-circuit cooling tower and circulating pump"
+    }
+  },
+  "roller-belt-stage-output": {
+    "src": "/images/cases/list/roller-line.webp",
+    "zh": {
+      "alt": "托辊网带生产线"
+    },
+    "en": {
+      "alt": "Roller-supported mesh-belt line"
+    }
+  },
+  "overseas-oil-quench": {
+    "src": "/images/cases/list/oil.webp",
+    "zh": {
+      "alt": "淬火油槽与提升机"
+    },
+    "en": {
+      "alt": "Oil quench tank and lift conveyor"
+    }
+  },
+  "overseas-austemper": {
+    "src": "/images/cases/list/salt.webp",
+    "zh": {
+      "alt": "等温淬火硝盐槽和出料段"
+    },
+    "en": {
+      "alt": "Austempering salt bath and discharge section"
+    }
+  }
+}

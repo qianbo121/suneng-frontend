@@ -173,10 +173,6 @@
   "批量稳定小件可比较连续输送。": "Compare continuous conveying for steady batches of small parts.",
   "台车炉｜大型重型工件周期式热处理": "Bogie-hearth (Trolley) Furnace | Batch Heat Treatment of Large Heavy Parts",
   "面向大型铸锻件、焊接结构件、模具和重型机械件，先按工件外形、支承位置、装炉总质量、台车行程与基础条件判断方案，再确定有效加热区、台车结构和热源。": "For large castings, forgings, weldments, dies and heavy mechanical parts. Check shape, support points, total load, bogie travel and foundations before defining the effective heating zone, bogie structure and heat source.",
-  "环形工件放置在台车耐火垫块上的装载状态示意": "Ring-shaped parts supported on refractory blocks on the bogie",
-  "台车装载状态示意": "Bogie loading concept",
-  "台车炉炉衬、侧墙加热元件与承载台面示意": "Bogie-furnace lining, sidewall heating elements and load-bearing deck",
-  "炉衬与元件示意": "Lining and heating-element concept",
   "大型重件": "Large heavy parts",
   "台车整体进出": "Entire bogie moves in and out",
   "轨道基础需校核": "Rails and foundations require checks",
@@ -258,7 +254,6 @@
   "供电或燃气、排烟、冷却水、压缩空气和接口": "Power or gas, flue exhaust, cooling water, compressed air and interfaces",
   "台车式电阻炉技术与试验": "Bogie-hearth resistance-furnace technical requirements and testing",
   "GB/T 10067.48-2014（仅适用于台车式电阻炉）": "GB/T 10067.48-2014 (bogie-hearth resistance furnaces only)",
-  "台车炉炉体、升降炉门、炉衬、加热元件、承载台车、运行轨道与控制柜结构剖切示意": "Cutaway concept of bogie-furnace body, lifting door, lining, heaters, bogie, rails and control cabinet",
   "台车炉结构示例 · 具体配置随装载、热源、厂房和生产组织变化": "Bogie-furnace structure example; configuration varies with loading, heat source, building and production arrangement",
   "承载台车": "Load-carrying bogie",
   "运行轨道": "Travel rails",
@@ -1160,7 +1155,6 @@
   "安全与燃烧器参考": "Safety and burner references",
   "GB/T 19839-2025（仅作燃烧器参考）": "GB/T 19839-2025 (burner reference only)",
   "井式炉关键结构与报价前确认项": "Pit-furnace structures and pre-quotation checks",
-  "剖切示意用于建立结构语言，最终布置仍以工件、工艺、载荷和现场条件为准。": "The cutaway explains structural components. Final layout depends on workpieces, process, load and site.",
   "先比较方案方向，再带着完整工况进入技术沟通。": "Compare design directions first, then discuss the complete operating conditions.",
   "井式炉详情页": "Pit-furnace detail page",
   "井式炉工况": "Pit-furnace operating conditions",
@@ -1417,5 +1411,10 @@
   "罩式炉与固定炉台": "Bell furnace and fixed base",
   "空气气氛罩式炉，加热罩直接覆盖固定炉台上的环件": "Air-atmosphere bell furnace with the heating hood covering rings on a fixed base",
   "保护气氛罩式炉，金属内罩位于固定炉台与提起的加热罩之间": "Protective-atmosphere bell furnace with an inner cover between the fixed base and the raised heating hood",
-  "罩式炉循环装置，炉台风机和下置电机旁放置内罩与加热罩": "Bell-furnace circulation equipment with a base fan, lower motor and both hoods set to one side"
+  "罩式炉循环装置，炉台风机和下置电机旁放置内罩与加热罩": "Bell-furnace circulation equipment with a base fan, lower motor and both hoods set to one side",
+  "环形工件放置在台车耐火垫块上的装载状态": "Ring-shaped parts supported on refractory blocks on the bogie",
+  "台车装载状态": "Bogie loading concept",
+  "台车炉炉衬、侧墙加热元件与承载台面": "Bogie-furnace lining, sidewall heating elements and load-bearing deck",
+  "台车炉炉体、升降炉门、炉衬、加热元件、承载台车、运行轨道与控制柜结构剖切图": "Cutaway concept of bogie-furnace body, lifting door, lining, heaters, bogie, rails and control cabinet",
+  "剖切图展示设备内部结构，最终布置仍以工件、工艺、载荷和现场条件为准。": "The cutaway explains structural components. Final layout depends on workpieces, process, load and site."
 }

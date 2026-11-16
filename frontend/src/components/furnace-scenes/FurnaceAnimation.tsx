@@ -117,7 +117,7 @@ export function FurnaceAnimation({
       canvas.setAttribute('aria-label', kind === 'nitriding'
         ? locale === 'en'
           ? `${label}: sealed retort internals and gas circulation`
-          : `${label}：密封炉罐内部结构与气流示意`
+          : `${label}：密封炉罐内部结构与气流`
         : label);
       root.append(canvas);
       setState('loading');
@@ -188,7 +188,7 @@ export function FurnaceAnimation({
       ) : null}
       {kind === 'nitriding' && state === 'ready' ? (
         <p className={styles.sceneCaption}>
-          <strong>{locale === 'en' ? 'Internal arrangement' : '内部结构示意'}</strong>
+          <strong>{locale === 'en' ? 'Internal arrangement' : '内部结构图'}</strong>
           <span>{locale === 'en' ? 'Sealed retort · Gas circulation' : '炉罐密封 · 气体循环'}</span>
         </p>
       ) : null}

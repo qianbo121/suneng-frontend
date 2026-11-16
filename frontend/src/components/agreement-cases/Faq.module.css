@@ -1,0 +1,19 @@
+.section {
+  --cqi-brand: #3370ff;
+  color: #0c2044;
+  margin-top: 32px;
+  box-shadow: 0 0 0 100vmax #f1f5fa;
+  clip-path: inset(0 -100vmax);
+}
+.section > h2[id] { margin: 0; color: inherit; font-size: 32px; line-height: 1.38; letter-spacing: -.025em; }
+.section .intro { margin: 6px 0 18px; color: #506783; font-size: 14px; line-height: 22px; }
+.section .grid h3 { margin: 0; color: inherit; font-size: 19px; font-weight: 650; }
+.section .grid p { margin-bottom: 0; max-width: 80ch; font-size: 16px; color: #506783; }
+@media (min-width: 640px) {
+  .grid > :first-child:nth-last-child(odd) { grid-column: 1 / -1; }
+}
+@media (max-width: 639px) {
+  .section { margin-top: 24px; }
+  .section > h2[id] { font-size: 24px; }
+  .section .grid h3 { font-size: 17px; }
+}

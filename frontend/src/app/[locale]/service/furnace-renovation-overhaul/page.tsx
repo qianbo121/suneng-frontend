@@ -76,7 +76,7 @@ export default async function FurnaceRenovationPage({ params }: PageProps) {
         text={locale === 'zh' ? reviewedCopy.lead : t("苏能根据旧炉现状、工艺要求和停产安排，初步判断适合维修、大修、局部改造，还是换新。")}
         note={locale === 'zh' ? undefined : t("先发设备照片和目前的问题，沟通处理方式。")}
         image="/images/services/furnace-renovation/hero-mechanical-repair-20260911.jpg"
-        alt={t("工业炉维修场景示意：技术人员使用工具检修停机炉的炉门机械机构")}
+        alt={t("工业炉维修场景：技术人员使用工具检修停机炉的炉门机械机构")}
         tags={[t("热处理炉大修"), t("节能改造"), t("控制系统升级")]}
       />
       {locale === 'zh' ? <RenovationReviewedContent /> : (<>

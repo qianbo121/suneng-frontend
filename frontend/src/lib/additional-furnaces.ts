@@ -10,7 +10,7 @@ export const additionalFurnaces = [
     description: '铲齿取件 · 快速转运',
     descriptionEn: 'Batch heating with fork handling and coordinated transfer.',
     image: '/images/home/product-center/additional-20260909/shovel-furnace.webp',
-    imageAlt: '箱式加热炉与独立轨道铲齿取料机结构示意',
+    imageAlt: '箱式加热炉与独立轨道铲齿取料机结构图',
     href: '/zh/products/detail/shovel-furnace',
     group: 'periodic',
     workpiece: '适合铲齿承托的铸锻件',
@@ -52,7 +52,7 @@ export const additionalFurnaces = [
     description: '梁式步进 · 节拍加热',
     descriptionEn: 'Indexed heating with alternating fixed and moving beams.',
     image: '/images/home/product-center/additional-20260909/walking-beam-furnace.webp',
-    imageAlt: '固定梁与活动梁交替承载的步进梁炉结构示意',
+    imageAlt: '固定梁与活动梁交替承载的步进梁炉结构图',
     href: '/zh/products/detail/walking-beam-furnace',
     group: 'continuous',
     workpiece: '适合梁式支承的坯料、杆件',
@@ -66,9 +66,9 @@ export const additionalFurnaces = [
     principleEn:
       'Moving beams lift, advance, lower and return. The workpieces advance with the beams, then rest on the fixed beams while the moving beams return underneath.',
     boundary:
-      '本页示意为步进梁式。支承形式、步距、温区与出料节拍按工件确认；不能把步进梁输送等同于推杆滑移或辊道输送。',
+      '图中为步进梁式。支承形式、步距、温区与出料节拍按工件确认；不能把步进梁输送等同于推杆滑移或辊道输送。',
     boundaryEn:
-      'This illustration shows a walking-beam arrangement. Supports, pitch, heating zones and discharge cadence depend on the load; beam transport differs from pushing or roller conveying.',
+      'This diagram shows a walking-beam arrangement. Supports, pitch, heating zones and discharge cadence depend on the load; beam transport differs from pushing or roller conveying.',
     steps: ['固定梁承载', '活动梁抬升前移', '下降交接', '活动梁返回'],
     stepsEn: [
       'Rest on fixed beams',
@@ -99,7 +99,7 @@ export const additionalFurnaces = [
     description: '炉底升降 · 周期式处理',
     descriptionEn: 'Batch heat treatment with an elevating loading hearth.',
     image: '/images/home/product-center/additional-20260909/elevator-hearth-furnace.webp',
-    imageAlt: '固定上炉体与底部升降炉台的底升式炉结构示意',
+    imageAlt: '固定上炉体与底部升降炉台的底升式炉结构图',
     href: '/zh/products/detail/elevator-hearth-furnace',
     group: 'periodic',
     workpiece: '适合炉台承载的工件、料框',
@@ -107,7 +107,7 @@ export const additionalFurnaces = [
     summary:
       '本页展示炉底升降型结构：工件在下方炉台装卸，炉台升入固定上炉体，完成密封后进行批次加热。',
     summaryEn:
-      'The illustrated lift-bottom arrangement loads at the lower hearth, which rises into a fixed upper chamber and seals for batch heating.',
+      'This lift-bottom arrangement loads at the lower hearth, which rises into a fixed upper chamber and seals for batch heating.',
     principle:
       '降下炉台并装料，确认工件与炉口的间隙后将炉台升起；到位密封后加热，按工艺完成冷却或转运准备，再降下炉台出料。',
     principleEn:
@@ -141,7 +141,7 @@ export const additionalFurnaces = [
     description: '钢件表面氮化 · 周期式处理',
     descriptionEn: 'Batch gas nitriding for suitable steel components.',
     image: '/images/home/product-center/additional-20260909/gas-nitriding-furnace.webp',
-    imageAlt: '带锁紧密封盖、循环风机和气路的井式气体氮化炉结构示意',
+    imageAlt: '带锁紧密封盖、循环风机和气路的井式气体氮化炉结构图',
     href: '/zh/products/detail/gas-nitriding-furnace',
     group: 'periodic',
     workpiece: '适合氮化的轴、齿轮、模具',

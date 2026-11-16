@@ -169,6 +169,9 @@ const acceptedGroups = [
     '/zh/news/shuju-news-25',
     '/zh/news/shuju-news-26',
   ] },
+  { date: '2026-11-16', source: '0cd59d5187759b74af43e299ecb14e741f483783', paths: [
+    '/en/products/detail/elevator-hearth-furnace',
+  ] },
 ];
 const releasedCases = [
   'bright-quench-design', 'crankshaft-annual-output', 'cylinder-liner-solution-aging',
