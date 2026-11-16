@@ -33,7 +33,6 @@ export function BeltAgreementTable({ fasteners = false }: { fasteners?: boolean 
                       {name}<span aria-hidden="true" className={styles.caseChevron}>›</span>
                     </Link>
                   ) : <span className={styles.modelName}>{name}</span>}
-                  {row.selectionCode && <small className={styles.codeLabel}>选型代号</small>}
                 </th>
                 <td>{row.size}</td><td>{row.power}</td>
                 <td>{(fasteners && row.fastenerProcess) || row.process}</td>
@@ -50,7 +49,7 @@ export function BeltAgreementTable({ fasteners = false }: { fasteners?: boolean 
         <span>紧固件网带炉项目：同一台炉淬火、渗碳各约定多少产量？</span><FiArrowRight aria-hidden="true" />
       </Link>}
       <p className={styles.note}>RCWT 三款型号列的是有效宽度，其余配置列的是网带宽度。</p>
-      <p className={styles.note}>选型代号按工艺、网带宽度和加热段长度编写，供询价时指明配置。正式型号以技术协议为准。</p>
+      <p className={styles.note}>除 RCWT 型号外，表中编号用于询价时指明工艺、网带宽度和加热段长度。正式型号以技术协议为准。</p>
       {!fasteners && <p className={styles.note}>油淬回火线和硝盐等温淬火线是两条独立生产线。曲轴线按年件数列示，该指标对应的设备台数尚未核定。</p>}
       {fasteners && <p>{model} 的协议列明，同一台炉子做渗碳150 kg/h，见<Link href="/zh/products/detail/mesh-belt-carbonitriding-line#surface-carburising">网带式渗碳淬火生产线</Link>。</p>}
       {fasteners && <p>需要硝盐等温淬火时，可查看<Link href={`${overviewUrl}#salt-austemper-config`}>等温淬火线的独立配置</Link>。</p>}
@@ -98,7 +97,7 @@ export function CarburisingAgreement() {
   return (
     <section className={styles.section} id="surface-carburising">
       <h2>网带炉渗碳协议处理量</h2>
-      <p>{fastenerCaseVisible() ? <Link href={FASTENER_CASE_PATH} prefetch={false}>{model}</Link> : model}{' '}{data.carburisingDescription}</p>
+      <p>{fastenerCaseVisible() ? <Link className={styles.modelCaseLink} href={FASTENER_CASE_PATH} prefetch={false}>{model}</Link> : model}{' '}{data.carburisingDescription}</p>
     </section>
   );
 }

@@ -33,11 +33,10 @@
   color: #175a85;
   font-weight: 600;
   line-height: 1.55;
-  text-decoration-color: #94b3c8;
-  text-decoration-thickness: 1px;
+  text-decoration: none;
 }
 .caseChevron { display: inline-block; margin-inline-start: 5px; font-size: .87em; }
-.section a.modelCaseLink:hover { text-decoration-color: currentColor; }
+.section a.modelCaseLink:hover { color: #123d60; }
 .projectEntry svg { flex: 0 0 auto; width: 1rem; height: 1rem; }
 .section a.projectEntry {
   display: flex; align-items: center; justify-content: space-between; gap: .75rem;
