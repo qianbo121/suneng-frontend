@@ -234,9 +234,10 @@ describe('sitemap freshness signals', () => {
   it('does not refresh recorded dates when built again on a later day', async () => {
     vi.useFakeTimers();
     try {
-      vi.setSystemTime(new Date('2026-11-15T12:00:00Z'));
+      const latestRevision = Math.max(...Object.values(verifiedRevisions).map(({ modifiedOn }) => Date.parse(modifiedOn)));
+      vi.setSystemTime(latestRevision);
       const first = await buildSitemap();
-      vi.setSystemTime(new Date('2026-11-16T12:00:00Z'));
+      vi.setSystemTime(latestRevision + 24 * 60 * 60 * 1000);
       expect(await buildSitemap()).toEqual(first);
     } finally {
       vi.useRealTimers();

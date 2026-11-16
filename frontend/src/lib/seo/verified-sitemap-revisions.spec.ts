@@ -29,6 +29,10 @@ const acceptedGroups = [
   ] },
   { date: '2026-11-15', source: 'f74a70e6ecbaa56893869d76d82d1f89aa7154d4', paths: [
     '/zh/products/detail/annealing-solution-line', '/en/products/detail/annealing-solution-line',
+    '/en/case', '/en/case/stainless-strip-annealing-supply-scope',
+  ] },
+  { date: '2026-11-16', source: '9cb72d65e3e6710926c4430d426f67f163a13643', paths: [
+    '/zh/case',
   ] },
 ];
 const releasedCases = [
@@ -53,7 +57,7 @@ describe('verified sitemap revision evidence', () => {
     }
     expect(revisions).toEqual(accepted);
     for (const [path, revision] of Object.entries(accepted)) {
-      expect(getVerifiedSitemapLastModified(path, new Date('2026-11-15T00:00:00Z'))).toBe(revision.modifiedOn);
+      expect(getVerifiedSitemapLastModified(path, new Date(revision.modifiedOn))).toBe(revision.modifiedOn);
     }
   });
 
