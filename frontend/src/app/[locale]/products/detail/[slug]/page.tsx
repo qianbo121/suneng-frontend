@@ -30,7 +30,8 @@ import { IndustryFurnaceDetailPage } from '@/components/products/IndustryFurnace
 import { PitFurnaceDetailPage } from '@/components/products/PitFurnaceDetailPage';
 import { corePageText, localizeCoreValue } from '@/lib/core-page-localization';
 import { industryFurnacePageConfigs, isIndustryFurnaceSlug } from '@/components/products/industry-furnace-detail-data';
-import { ProductLeadForm, ProductQuoteScrollButton } from '@/components/products/ProductLeadForm';
+import { HomepageLeadForm } from '@/components/home/HomepageLeadForm';
+import { ProductQuoteScrollButton } from '@/components/products/ProductLeadForm';
 import { getProductDetailEn, pickDetail } from '@/constants/static-products-en';
 import {
   getStaticProductBySlug,
@@ -309,10 +310,6 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
   const parameterLinkHref = detail.parameterLink
     ? localizeOrHideHref(detail.parameterLink.href, currentLocale)
     : null;
-  const leadFormContactHref = detail.leadForm?.contactHref
-    ? (localizeOrHideHref(detail.leadForm.contactHref, currentLocale) ??
-      detail.leadForm.contactHref)
-    : undefined;
   const scopedRelatedLinks = (detail.relatedLinks ?? [])
     .filter((item) => item.href.includes('/products/detail/'))
     .slice(0, 2)
@@ -1021,17 +1018,16 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
           </section>
         ) : null}
 
-        {/* H. 两步项目工况表单：第一步校验项目概况与联系方式，第二步可跳过。 */}
-        <ProductLeadForm
+        <HomepageLeadForm
+          pageFormWidth="contained"
+          sectionId="product-lead-form"
           locale={currentLocale}
-          leadBullets={currentLocale === 'zh' ? detail.leadBullets : undefined}
-          title={currentLocale === 'zh' ? detail.leadForm?.title : undefined}
-          description={currentLocale === 'zh' ? detail.leadForm?.description : undefined}
-          submitLabel={currentLocale === 'zh' ? detail.leadForm?.submitLabel : undefined}
-          contactHref={leadFormContactHref}
-          contactLabel={currentLocale === 'zh' ? detail.leadForm?.contactLabel : undefined}
-          phone={detail.leadForm?.phone}
-          email={detail.leadForm?.email}
+          pageType={currentLocale === 'zh' ? '产品详情页' : 'Product detail page'}
+          inquiryProduct={detail.title}
+          inquiryDirection={isProductionLine ? '新建热处理生产线' : '单体工业炉新建'}
+          productTag={detail.title}
+          successProductTag={detail.title}
+          sourceModule="product_lead_form"
         />
       </div>
     </div>

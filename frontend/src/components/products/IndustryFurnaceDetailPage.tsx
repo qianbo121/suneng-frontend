@@ -498,7 +498,7 @@ export function IndustryFurnaceDetailPage({ slug, locale = 'zh' }: { slug: Indus
             </section>
           )}
 
-          <HomepageLeadForm locale={locale}
+          <HomepageLeadForm pageFormWidth="contained" locale={locale}
             sectionId="inquiry"
             pageType={locale === 'en' ? `${config.name} detail page` : `${config.name}详情页`}
             productTag={config.name}

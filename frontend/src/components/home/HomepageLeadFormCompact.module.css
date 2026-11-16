@@ -393,3 +393,65 @@
     padding: 18px;
   }
 }
+
+/* Full-width sections follow the adjacent content. Nested forms already have its gutters. */
+[data-page-form-width='wide'].section { --page-form-width: var(--site-wide-width); }
+[data-page-form-width='standard'].section { --page-form-width: var(--site-page-width); }
+[data-page-form-width='contained'].section { --page-form-width: 100%; }
+
+.section.section[data-page-form-width] .inner.inner {
+  width: var(--page-form-width);
+  max-width: none;
+}
+
+@media (min-width: 721px) {
+  .section[data-page-form-width] .inner.inner.inner {
+    padding: 30px 32px 26px;
+  }
+
+  .section[data-page-form-width] .form.form {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .section[data-page-form-width] .form .problemField textarea {
+    height: 88px;
+    min-height: 88px;
+  }
+
+  .section[data-page-form-width] .form .submit {
+    width: auto;
+    min-width: 168px;
+  }
+}
+
+.section[data-page-form-width] .form > .problemField {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+@media (min-width: 721px) {
+  .section[data-page-form-width] .intro.intro > p {
+    margin-top: 6px;
+    font-size: 15px;
+    color: #53657c;
+  }
+
+  .section[data-page-form-width] .form :is(input:not([type='hidden']), button[aria-haspopup='listbox'], button[type='submit']) {
+    height: 46px;
+    min-height: 46px;
+  }
+
+  .section[data-page-form-width] .form .footnote {
+    font-size: 13px;
+  }
+}
+
+/* Keep fields clear of the 72px contact toolbar and its 24px right inset. */
+@media (min-width: 1280px) {
+  .section[data-page-form-width] .inner.inner.inner {
+    padding-inline-end: clamp(32px, calc(104px - (100vw - var(--site-page-max)) / 2), 60px);
+  }
+
+  .section[data-page-form-width='wide'] .inner.inner.inner {
+    padding-inline-end: clamp(32px, calc(104px - (100vw - var(--site-wide-max)) / 2), 60px);
+  }
+}

@@ -439,6 +439,7 @@ export function AdditionalFurnaceDetailPage({
             ) : null}
           </Section>
           <HomepageLeadForm
+            pageFormWidth="contained"
             locale={locale}
             sectionId="inquiry"
             inquiryProduct={name}

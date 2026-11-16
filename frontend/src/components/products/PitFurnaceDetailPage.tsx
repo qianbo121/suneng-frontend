@@ -490,7 +490,7 @@ export function PitFurnaceDetailPage({ locale = 'zh' }: { locale?: Locale }) {
             />
           </section>
 
-          <HomepageLeadForm locale={locale}
+          <HomepageLeadForm pageFormWidth="contained" locale={locale}
             sectionId="inquiry"
             pageType={t("井式炉详情页")}
             productTag={t("井式炉")}
