@@ -27,8 +27,8 @@ export function englishCaseMetadata(slug: string) {
   return buildMetadata({
     title: item.seoTitle || item.title, description: item.seoDescription || item.summary,
     path: `/en/case/${slug}`, locale: 'en',
-    // The source publication date predates this English page, so it is not presented as its own.
-    type: 'article', image: item.cover?.src, modifiedTime: item.dateModified,
+    // Only use a verified publication date from the English record.
+    type: 'article', image: item.cover?.src, publishedTime: item.englishDatePublished, modifiedTime: item.dateModified,
     alternateLocales: { 'zh-CN': `/zh/case/${slug}`, 'en-US': `/en/case/${slug}`, 'x-default': `/zh/case/${slug}` },
   });
 }
@@ -92,7 +92,7 @@ export function EnglishCaseArticle({ slug, searchParams }: { slug: string; searc
       </section>
     </div>
     <JsonLd id="case-article-jsonld" data={[
-      { '@context': 'https://schema.org', '@type': 'Article', '@id': `${url}#article`, headline: item.title, description: item.summary, url, mainEntityOfPage: url, inLanguage: 'en-US', ...(hasEngineeringAttribution ? { author: getEngineeringTeamAuthorsJsonLd() } : {}), publisher: { '@id': getOrganizationJsonLd()['@id'] }, ...(item.dateModified ? { dateModified: item.dateModified } : {}), ...(item.cover ? { image: absoluteUrl(item.cover.src) } : {}) },
+      { '@context': 'https://schema.org', '@type': 'Article', '@id': `${url}#article`, headline: item.title, description: item.summary, url, mainEntityOfPage: url, inLanguage: 'en-US', ...(hasEngineeringAttribution ? { author: getEngineeringTeamAuthorsJsonLd('en') } : {}), publisher: { '@id': getOrganizationJsonLd()['@id'] }, ...(item.englishDatePublished ? { datePublished: item.englishDatePublished } : {}), ...(item.dateModified ? { dateModified: item.dateModified } : {}), ...(item.cover ? { image: absoluteUrl(item.cover.src) } : {}) },
       getBreadcrumbJsonLd([{ name: 'Home', url: '/en' }, { name: 'Case studies', url: '/en/case' }, { name: item.title, url }]),
     ]} />
   </div>;

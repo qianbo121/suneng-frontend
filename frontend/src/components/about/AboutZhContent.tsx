@@ -26,11 +26,11 @@ import { ContactZhContent } from '@/components/about-subpages/ContactZhContent';
 import styles from './AboutZhContent.module.css';
 
 export const ABOUT_ZH_SEO = {
-  title: '关于苏能工业炉｜公司简介、制造基地与企业资质',
+  title: '关于我们｜公司简介、制造基地与企业资质｜苏能工业炉',
   description:
     '江苏苏能工业炉有限公司成立于2006年，生产基地位于江苏泰州，提供非标工业炉、热处理生产线及工业炉大修与改造服务。查看制造交付流程、企业资质、公开项目与承接范围，支持预约验厂。',
   keywords: '苏能工业炉,江苏苏能工业炉有限公司,非标工业炉,热处理生产线,工业炉改造',
-  ogTitle: '关于苏能工业炉｜公司简介、制造基地与企业资质',
+  ogTitle: '关于我们｜公司简介、制造基地与企业资质｜苏能工业炉',
   ogDescription:
     '江苏苏能工业炉有限公司成立于2006年，生产基地位于江苏泰州，提供非标工业炉、热处理生产线及工业炉大修与改造服务。查看制造交付流程、企业资质、公开项目与承接范围，支持预约验厂。',
 } as const;

@@ -5,7 +5,7 @@ export const ENGLISH_STATIC_PAGE_METADATA = {
       'Suneng designs and manufactures custom heat-treatment furnaces, continuous production lines, and energy-saving retrofit systems in Taizhou, Jiangsu, China.',
   },
   about: {
-    title: 'About Suneng | Industrial Furnace Manufacturer',
+    title: 'About Us: Industrial Furnace Manufacturer',
     description:
       'Founded in 2006 in Taizhou, Jiangsu, Suneng designs and manufactures custom industrial furnaces and heat-treatment lines from a 14,700 m² production site.',
   },

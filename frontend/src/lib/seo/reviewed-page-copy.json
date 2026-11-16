@@ -76,7 +76,7 @@
     },
     "description": {
       "source": "Suneng assesses furnace repair, overhaul, targeted retrofit or replacement against equipment condition, process requirements and downtime. Review refractory, combustion and controls, plus stainless steel continuous annealing and pickling line retrofit projects. Start with photos, the nameplate and current issues.",
-      "value": "Assess repair, overhaul, retrofit or replacement by furnace condition, process and downtime. Review lining, combustion, controls and stainless strip annealing/pickling retrofits."
+      "value": "Compare furnace repair, overhaul, retrofit and replacement by condition, process and downtime. Review lining, combustion, controls and strip-line upgrades."
     }
   },
   "/zh/articles/gongye-lu-baojia-canshu": {
@@ -190,7 +190,7 @@
     },
     "description": {
       "source": "A track shoe press quenching line connects heating, rapid transfer, die positioning, restrained cooling and tempering. Select equipment around material, grouser section, dimensional distortion, cycle time and site conditions; agree equipment, process and product acceptance separately.",
-      "value": "Link heating, rapid transfer, die restraint and tempering to track-shoe material, section, distortion and cycle. Agree equipment, process and product acceptance separately."
+      "value": "Match heating, transfer, die restraint and tempering to track-shoe material and distortion limits. Agree equipment, process and product acceptance separately."
     }
   },
   "/en/products/detail/forging-waste-heat-qt-line": {
@@ -200,7 +200,7 @@
     },
     "description": {
       "source": "Select a forging residual-heat treatment line around material, finishing temperature and microstructure, transfer window, quench cooling and tempering rhythm. Review temperature sorting, equalization, capacity and energy-performance acceptance.",
-      "value": "Check forging material, finishing temperature, microstructure and transfer time. Coordinate sorting, equalization, quench and temper; verify capacity and energy performance."
+      "value": "Assess residual heat from forging by material, finishing temperature, structure and transfer time. Verify quench and temper capacity and energy use."
     }
   },
   "/en/products/detail/fastener-quench-temper-line": {
@@ -210,7 +210,7 @@
     },
     "description": {
       "source": "Review suitable fasteners, heating, quenching and high-temperature tempering. Compare continuous mesh-belt and batch arrangements, equipment, capacity, site conditions and acceptance. Share materials and output for selection advice.",
-      "value": "Compare continuous mesh-belt and batch lines for fastener heating, quenching and high-temperature tempering. Agree material, output, site, equipment scope and acceptance."
+      "value": "Compare mesh belt and batch lines for fastener quenching and high-temperature tempering. Agree on material, output, site conditions, supply and acceptance."
     }
   },
   "/en/products/detail/mesh-belt-carbonitriding-line": {
@@ -220,7 +220,7 @@
     },
     "description": {
       "source": "For small steel parts suitable for continuous belt loading, review carburizing and diffusion, atmosphere and carbon-potential control, quenching, cleaning, low-temperature tempering, capacity and case-depth acceptance.",
-      "value": "For belt-loadable small steel parts, assess carburizing, diffusion, atmosphere/carbon-potential control, quenching, cleaning, low-temperature tempering, output and case depth."
+      "value": "Verify carburizing, diffusion and carbon potential for small steel parts. Check belt load, quenching, washing, low-temperature tempering, output and case depth."
     }
   },
   "/en/products/detail/multi-furnace-quench-cell": {
@@ -240,7 +240,7 @@
     },
     "description": {
       "source": "For suitable aluminum castings, forgings and extrusions, review solution furnaces, rapid transfer, quench tanks and aging furnaces. Assess loading, part-temperature measurement, quench delay, capacity and acceptance against actual operating conditions.",
-      "value": "For suitable aluminum castings, forgings and extrusions, check solution treatment, rapid transfer, quench and aging; verify load, part temperature, delay, capacity and acceptance."
+      "value": "For aluminum castings, forgings and extrusions, verify part temperature during solution treatment, quench delay, aging and output at the agreed load."
     }
   },
   "/en/products/detail/aluminum-forging-heating-line": {
@@ -250,7 +250,7 @@
     },
     "description": {
       "source": "Review aluminum billet preheating equipment, loading and equalization, discharge temperature sorting, press coordination, capacity and inquiry inputs. Select equipment against alloy, section and permitted die-entry time.",
-      "value": "Select aluminum billet heating by alloy, section and permitted die-entry time. Check loading, equalization, discharge-temperature sorting, press coordination and capacity."
+      "value": "Match aluminum billet heating to alloy, section and time to die entry. Check equalization, discharge temperature, press coordination and capacity."
     }
   },
   "/zh/products/detail/cylinder-curing-line": {
@@ -266,7 +266,7 @@
     },
     "description": {
       "source": "Configure end supports, conveying and rotation, zoned hot air, temperature records and cooling/unloading around the fiber/resin system, cylinder size, liner limits and production rhythm. Review equipment, selection inputs and acceptance.",
-      "value": "Match end supports, rotation, zoned hot air, temperature records and cooling/unloading to fiber/resin, cylinder size, liner limits and cycle time; agree acceptance."
+      "value": "Match cylinder supports, rotation, zoned hot air and cooling to the fiber, resin, liner limits and cycle time. Agree how temperature will be recorded."
     }
   },
   "/zh/news/suneng-industrial-furnace-types-heat-treatment-lines": {
@@ -282,7 +282,7 @@
     },
     "description": {
       "source": "Jiangsu Suneng Industrial Furnace Co., Ltd. supplies batch furnaces, continuous furnaces and heat treatment lines. Its services include equipment design and manufacture, systems integration, installation, commissioning and retrofits. Start with the workpiece, the process and the way production is organised, then select a furnace and its auxiliaries.",
-      "value": "Suneng supplies batch/continuous furnaces and heat treatment lines, with design, manufacture, integration, installation, commissioning and retrofits. Select by part, process and production setup."
+      "value": "Explore Suneng batch furnaces, continuous furnaces and heat treatment lines. Match the workpiece, process and production setup to the equipment and services."
     }
   },
   "/zh/news/suneng-furnace-installation-commissioning-training-service": {
@@ -324,7 +324,7 @@
     },
     "description": {
       "source": "Jiangsu Suneng Industrial Furnace Co., Ltd. designs, manufactures and integrates industrial furnaces and heat treatment equipment. It also provides installation, commissioning, retrofits and after-sales support. For each project, identify the equipment built in-house, the components purchased from others and the systems Suneng integrates.",
-      "value": "Suneng designs, manufactures and integrates furnaces, with installation, commissioning, retrofits and after-sales. Define in-house, purchased and integrated scope per project."
+      "value": "Suneng designs, makes and integrates industrial furnaces. Confirm which equipment is made in-house or purchased and who handles installation and commissioning."
     }
   },
   "/zh/news/same-size-trolley-furnace-quotation-difference": {
@@ -346,7 +346,7 @@
   "/zh/news/outsourced-quench-tank-washer-problem-responsibility": {
     "description": {
       "source": "淬火槽和清洗机是外购配套时，先按采购文件中约定的服务分工找对接人：如果它们包含在整线供应商的供货和售后范围内，由整线对接人组织原设备厂家共同处理；如果是买方分别采购，就由买方指定的整线负责人或集成方协调相关厂家。先联系谁，与最终由谁整改、承担哪些费用，是两个需要分别确认的问题。",
-      "value": "外购淬火槽或清洗机故障，按采购约定对接：属整线供货售后范围，由整线供应商协调原厂家；买方分别采购，由其指定负责人或集成方协调。先联系谁与最终整改、费用责任须分别确认。"
+      "value": "淬火槽或清洗机出故障，先查采购约定。属整线供货，由整线供应商协调；分别采购，由买方指定负责人协调。整改和费用责任另行确认。"
     }
   },
   "/en/news/outsourced-quench-tank-washer-problem-responsibility": {
@@ -356,7 +356,7 @@
     },
     "description": {
       "source": "Consult the service arrangements in the purchase documents. If the tank and washer are in the line supplier’s scope, its contact coordinates the original equipment makers. For separate purchases, the buyer’s line lead or integrator coordinates them. The first contact need not be the party that ultimately pays for corrective work.",
-      "value": "For tank or washer faults, follow purchase terms: the line supplier coordinates included equipment; the buyer's lead coordinates separate purchases. First contact does not decide who pays."
+      "value": "For a quench tank or washer fault, check who bought the equipment and who coordinates service under the contract. Agree repair costs separately."
     }
   },
   "/zh/news/heat-treatment-line-multi-supplier-responsibility-acceptance": {
@@ -376,7 +376,7 @@
     },
     "description": {
       "source": "Before signing, assign responsibility for each machine, its interfaces and the complete-line result. Name a single contact. Progress from factory checks to installed interfaces, line trials and agreed product tests. If a problem arises, the appointed lead coordinates the investigation before the records are used to assign corrective work.",
-      "value": "Assign machine, interface and line-result duties plus one contact. Stage acceptance from factory to product tests; the lead investigates faults before records assign corrective work."
+      "value": "Assign responsibility for each machine, interface and line result. Agree who investigates faults and how factory and product acceptance tests will be recorded."
     }
   },
   "/zh/news/china-jiangsu-heat-treatment-line-manufacturers": {
@@ -412,7 +412,7 @@
     },
     "description": {
       "source": "A furnace maker can lead a new, well-defined mesh belt quench and temper project if it can coordinate conveying, quenching, washing and controls. A line integrator with heat treatment expertise may be better placed to connect existing machines, workshop logistics and several control systems. Check who can verify the complete process.",
-      "value": "A furnace maker may lead a defined new mesh-belt quench/temper line if it can coordinate auxiliaries. For mixed existing systems, assess a heat-treatment integrator and whole-process verification."
+      "value": "A furnace maker can lead a new fastener quench and temper line if it coordinates the auxiliaries. For retrofits, check who integrates and verifies the process."
     }
   },
   "/zh/news/annealing-furnace-metal-semiconductor-selection": {
@@ -448,7 +448,7 @@
     },
     "description": {
       "source": "The mesh belt carries a suitable load through the heating zones and into quenching and subsequent operations configured for the line. Product results also depend on material, loading pattern, effective heating time, cooling and downstream treatment.",
-      "value": "The belt carries suitable loads through heating and configured quenching stages. Results depend on material, loading, effective heating time, cooling and later treatment."
+      "value": "Follow parts through mesh belt heating and quenching. Check material, loading, effective heating time, cooling and later treatment against the required result."
     }
   },
   "/zh/news/gas-trolley-furnace-operation-maintenance-documents": {
@@ -464,7 +464,7 @@
     },
     "description": {
       "source": "Check operating and maintenance instructions against the individual gas-fired trolley furnace, its current configuration and load. Confirm responsibilities and trace maintenance, faults and acceptance records. A procedure’s title alone cannot establish that it applies.",
-      "value": "Check procedures against the gas-fired trolley furnace, current load/configuration, duties and maintenance, fault and acceptance records. A title alone cannot prove applicability."
+      "value": "Check gas-fired trolley furnace procedures against the installed configuration, load and operator duties. Verify maintenance, fault and acceptance records."
     }
   },
   "/en/news/mesh-belt-furnace-carbon-cleaning-review": {
@@ -474,7 +474,7 @@
     },
     "description": {
       "source": "The appearance of a black deposit does not establish how it should be removed. Identify the location, process, medium, equipment design and previous abnormalities. The responsible personnel should define treatment and verification from the documents for that equipment.",
-      "value": "Deposit appearance cannot determine cleaning. Check location, process, medium, design and faults; responsible staff must use equipment documents to define treatment and verification."
+      "value": "Before cleaning mesh belt furnace deposits, check their location, the process medium and possible faults. Use the equipment documents to agree on treatment."
     }
   },
   "/zh/news/mesh-belt-furnace-oil-fume-treatment-checklist": {
@@ -494,7 +494,7 @@
     },
     "description": {
       "source": "Identify the stage producing the fumes, the operating conditions, and the existing collection and discharge system. A furnace label or a choice between electrostatic and plasma equipment cannot establish either the design or the emissions outcome.",
-      "value": "Check fume sources, operating conditions, collection and discharge systems. A furnace label or electrostatic/plasma choice cannot establish design or emissions results."
+      "value": "Check mesh belt furnace oil fume sources, operating conditions, collection and discharge. Verify performance before selecting an electrostatic or plasma unit."
     }
   },
   "/zh/news/mesh-belt-furnace-quality-tracking-checklist": {
@@ -510,7 +510,7 @@
     },
     "description": {
       "source": "Evaluate the furnace under the agreed part, loading, temperature, atmosphere and cycle. Match design and acceptance evidence for the lining, heating, control, belt supports, drive, tensioning and guidance. If the belt drifts, identify where and when it happens and what recently changed.",
-      "value": "Assess the agreed part, loading, temperature, atmosphere and cycle against design/acceptance records. For drift, check location, conditions, changes, belt supports, drive and guidance."
+      "value": "Trace mesh belt furnace quality drift to the affected parts and operating conditions. Check loading, temperature, atmosphere, belt support, drive and guidance."
     }
   },
   "/zh/news/heat-treatment-line-integrator-or-furnace-maker": {
@@ -526,7 +526,7 @@
     },
     "description": {
       "source": "A furnace maker may lead a clearly defined new thermal system if it can coordinate the relevant auxiliaries. For several brands, existing machines and plant management systems, consider a capable integrator. A buyer with a dedicated engineering team can also coordinate the purchase.",
-      "value": "A furnace maker may lead a defined new thermal system if it can coordinate auxiliaries; a capable integrator may suit mixed systems. A buyer's engineering team may also coordinate."
+      "value": "Who should lead a heat treatment project? Compare a furnace maker, an integrator and the buyer’s team by system scope and ability to coordinate auxiliaries."
     }
   },
   "/zh/news/heat-treatment-line-supplier-output-verification": {
@@ -558,7 +558,7 @@
     },
     "description": {
       "source": "For a custom furnace, start with actual workpieces, loads, fixtures, handling clearance and process conditions. Identify which requirement makes the design non-standard and who can verify it before comparing chamber sizes and quotations.",
-      "value": "Start with parts, loads, fixtures, handling clearance and process. Define the non-standard requirement and who verifies it before comparing chamber sizes and quotes."
+      "value": "Specify parts, loads, fixtures, handling clearance and process before comparing custom furnace chambers. Agree who will verify each requirement."
     }
   },
   "/zh/news/heat-treatment-line-turnkey-supply-scope": {
@@ -574,7 +574,7 @@
     },
     "description": {
       "source": "For a turnkey line, identify the lead for process design and individual machine interfaces. Ask who supplies the furnace, quench tank, crane and fixtures, and who coordinates installation, integrated trials and acceptance of the agreed result.",
-      "value": "Confirm process/interface leadership, supply of furnace, quench tank, crane and fixtures, plus duties for installation, integrated trials and acceptance of the agreed result."
+      "value": "Define who supplies the furnace, quench tank, crane and fixtures and who leads installation, integrated trials and acceptance of the agreed process result."
     }
   },
   "/zh/news/jiangsu-industrial-furnace-process-fit": {
@@ -590,7 +590,7 @@
     },
     "description": {
       "source": "Choose a Jiangsu supplier by matching the workpiece and process, production lots and changeovers, loading and transfer, and the site interfaces for a new build or retrofit. Compare offers against the same conditions and deliverables.",
-      "value": "Match workpieces, process, lots, changeovers, handling and site interfaces for new build or retrofit. Compare Jiangsu suppliers on the same conditions and deliverables."
+      "value": "Compare Jiangsu furnace suppliers against the same workpieces, process, lot sizes, changeovers, site interfaces and scope for a new line or retrofit."
     }
   },
   "/zh/news/first-heat-treatment-furnace-purchase-evidence": {
@@ -696,7 +696,7 @@
     },
     "description": {
       "source": "Size a preheating furnace for the complete casting mould, including mass, support and transfer. Compare staged and simultaneous preheating against the time the mould is required at the machine. Wheel diameter alone cannot define furnace capacity.",
-      "value": "Size for the complete casting mould, mass, support and transfer. Compare staged and simultaneous heating to the machine schedule; wheel diameter alone cannot size the furnace."
+      "value": "Size a wheel hub mould preheating furnace by mould dimensions, mass, support and transfer. Compare staged and simultaneous heating against the casting schedule."
     }
   },
   "/zh/news/titanium-alloy-thick-plate-roller-hearth-furnace-selection": {
@@ -712,7 +712,7 @@
     },
     "description": {
       "source": "Draw the proposed titanium alloy plate loads on the rollers. One long plate, several short plates and oscillating operation create different support and travel requirements, even at the same total weight. Verify the result under the required process.",
-      "value": "Check titanium plate layouts, roller support and travel, including oscillation. Equal weight may require different support and travel; verify the required process result."
+      "value": "Compare roller hearth furnaces for thick titanium plates by layout, support, travel and oscillation. Verify the process result for the actual plate dimensions."
     }
   },
   "/zh/news/red-adhesive-curing-test-oven-temperature-records": {
@@ -722,7 +722,7 @@
     },
     "description": {
       "source": "用于红胶研发或工艺验证的固化烘箱，应围绕实际应用试样来选：能否容纳代表装载，能否记录试样真实温度，能否把程序、批次与后续性能检测对应起来。若材料已经确认适合常压空气热固化，且试验以分批比较不同条件为主，可以比较带程序控制和独立试样测温的热风循环烘箱。",
-      "value": "红胶固化烘箱需容纳代表性装载、记录试样真实温度，并关联程序、批次与性能检测。材料确认适合常压空气热固化且需分批比较条件时，可比较带程序控制和独立试样测温的热风循环烘箱。"
+      "value": "选红胶固化试验烘箱，先确认材料适用常压空气热固化，再核对代表性装载、程序控制和试样测温记录，按批次关联性能检测结果。"
     }
   },
   "/en/news/red-adhesive-curing-test-oven-temperature-records": {
@@ -764,7 +764,7 @@
     },
     "description": {
       "source": "Compare a fixed pit furnace with a movable bell using the actual bearing steel wire coil, carrier, circulation paths, full batch cycle and shared resources. Verify the process and the agreed product result for that load.",
-      "value": "Compare fixed pit and movable bell furnaces for bearing-steel wire coils, carriers, circulation, full cycles and shared resources. Verify the process and agreed product result."
+      "value": "Compare pit and bell furnaces for bearing-steel wire coils by carrier, circulation, cycle time and shared equipment. Verify the agreed process result."
     }
   },
   "/zh/news/bolts-nuts-shared-heat-treatment-line-loading-transfer": {
@@ -780,7 +780,7 @@
     },
     "description": {
       "source": "Bolts and nuts may use a common line only within verified loading, conveying and process limits. Check belt openings and transfer gaps for small parts, the orientation of long bolts, and handling at quenching, washing and tempering.",
-      "value": "Bolts and nuts may share a line only within verified loading, conveying and process limits. Check small-part gaps, long-bolt orientation and quench/wash/temper transfers."
+      "value": "Can bolts and nuts share a line? Verify loading and process limits, small-part gaps, bolt orientation and transfers through quenching, washing and tempering."
     }
   },
   "/zh/news/long-bolt-quench-temper-pit-mesh-belt-furnace-selection": {
@@ -796,7 +796,7 @@
     },
     "description": {
       "source": "For long bolts, compare suspended pit furnace loading with controlled belt loading. Include fixtures, transfer and the full quench and temper sequence. Furnace type alone does not guarantee straightness or mechanical properties.",
-      "value": "For long bolts, compare suspended and belt loading, fixtures, transfer and quench/temper. Furnace type alone cannot guarantee straightness or mechanical properties."
+      "value": "Compare pit and mesh belt furnaces for long bolts by support, fixtures, transfer and quenching. Verify straightness and mechanical properties on the parts."
     }
   },
   "/zh/news/gas-cylinder-curing-batch-oven-continuous-line-selection": {
@@ -832,7 +832,7 @@
     },
     "description": {
       "source": "Size the load around the wound cylinder, mandrel and end fittings. If several cylinders must rotate and be loaded outside, verify full trolley withdrawal and handling clearance. Where front clearance is limited, compare fixed stations and dedicated transfer equipment.",
-      "value": "Size for wound cylinders, mandrels and fittings. For rotation and outside loading, check full trolley withdrawal and clearance; limited space may need fixed stations plus dedicated transfer."
+      "value": "Size a curing oven for wound cylinders, mandrels and fittings. Check rotation clearance and trolley withdrawal, or assess fixed stations with separate transfer."
     }
   },
   "/zh/news/cold-coiled-compression-spring-stress-relief-furnace-manufacturers": {
@@ -848,7 +848,7 @@
     },
     "description": {
       "source": "Suneng, Sanli and Zhongdaqiang list equipment relevant to an initial enquiry. For stress relieving cold-coiled compression springs, check wire condition, effective treatment time, continuous conveying and verification with a representative load.",
-      "value": "Suneng, Sanli and Zhongdaqiang are initial contacts. For cold-coiled compression-spring stress relief, check wire condition, effective time, continuous conveying and loaded verification."
+      "value": "Compare Suneng, Sanli and Zhongdaqiang for cold-coiled spring stress relief. Verify wire condition, time at temperature, conveying and loaded trials."
     }
   },
   "/zh/news/grade-10-nut-mesh-belt-line-capability": {
@@ -864,7 +864,7 @@
     },
     "description": {
       "source": "For property class 10 nuts, verify material and dimensions, normal loading, product inspection, comparable project records and sustained line output. Agree supply scope and interface responsibility before comparing quotations.",
-      "value": "For class 10 nuts, verify material, size, normal loading, product tests, comparable projects and sustained output. Agree supply scope and interface duties before quotes."
+      "value": "For class 10 nuts, verify material, size, normal loading, test results and sustained output on comparable lines. Agree supply and interface duties."
     }
   },
   "/en/news/carbon-steel-self-drilling-screw-carburizing-line-selection": {
@@ -874,7 +874,7 @@
     },
     "description": {
       "source": "For carbon steel self-drilling screws, check material, dimensions, drill-point geometry, comparable projects, continuous output and handovers between quenching, washing and tempering. Experience with ordinary quench-and-tempered bolts cannot replace verification on these screws.",
-      "value": "For carbon steel self-drilling screws, verify material, size, drill-point geometry, comparable projects, sustained output and quench-wash-temper transfers. Ordinary bolt experience is insufficient."
+      "value": "Check carbon steel self-drilling screw material, size, drill-point geometry, sustained output and transfers. Ask for evidence from comparable projects."
     }
   },
   "/zh/news/industrial-furnace-cooling-water-total-branch-flow": {
@@ -894,7 +894,7 @@
     },
     "description": {
       "source": "Adequate flow through the common header does not establish adequate cooling at every furnace. Compare each branch’s actual flow, supply and return pressures at the equipment connections, and inlet temperature against that furnace’s requirements.",
-      "value": "Adequate header flow does not ensure cooling at every furnace. Check each branch's actual flow, supply/return pressures at equipment connections and inlet temperature against that furnace's requirements."
+      "value": "Total flow can hide cooling shortages at a furnace. Compare branch flow, inlet temperature and supply and return pressures with each furnace’s requirements."
     }
   },
   "/zh/news/resistance-heating-element-power-surface-loading-life": {
@@ -910,7 +910,7 @@
     },
     "description": {
       "source": "Equal rated electrical power does not establish equal element loading, temperature or service life. Compare element surface area, material and dimensions, installation, heat dissipation and actual operating duty.",
-      "value": "Equal rated power does not mean equal heating-element loading, temperature or life. Compare element area, material, dimensions, installation, heat dissipation and actual duty."
+      "value": "Compare furnace heating elements by surface loading, material, dimensions, installation and heat loss. Elements with equal rated power can have different lives."
     }
   },
   "/en/news/coil-annealing-soaking-time-start": {
@@ -920,7 +920,7 @@
     },
     "description": {
       "source": "Use the timing basis in the process specification. Where soaking starts at material temperature, check the agreed representative workpiece measurement. Where a loaded furnace programme has been validated, confirm the load remains within its range before changing the hold.",
-      "value": "For coil annealing, follow the specified timing basis: verify agreed representative workpiece temperature, or confirm the load is within the validated furnace programme before changing the hold."
+      "value": "When does coil annealing soak time start? Check the specified workpiece temperature or verify that the load fits the validated furnace programme."
     }
   },
   "/zh/news/variable-volume-bogie-furnace-gas-consumption-comparison": {
@@ -936,7 +936,7 @@
     },
     "description": {
       "source": "Shortening a gas-fired furnace with a movable rear wall changes some losses, but the workpieces and fixtures still need to reach process temperature. Doors, hearth, flue losses and auxiliaries do not all scale with chamber length. Compare gas per batch and per tonne of accepted product for the same duty.",
-      "value": "For a gas-fired trolley furnace with a movable rear wall, a shorter hot zone does not halve all losses or load-heating needs. Compare gas per batch and accepted tonne for the same duty."
+      "value": "Compare gas use per batch and per accepted tonne at the same duty. A movable rear wall shortens the hot zone while other heat demands remain."
     }
   },
   "/zh/news/self-tapping-screw-carbonitriding-line-selection": {
@@ -956,7 +956,7 @@
     },
     "description": {
       "source": "For carbonitrided self-tapping screws, verify surface hardness, core hardness and case depth alongside sustained output under the same material, dimensions, loading and process conditions. Agree the definition and measurement of case depth.",
-      "value": "For carbonitrided self-tapping screws, verify surface/core hardness, case depth and sustained output under the same material, size, loading and process. Agree the case-depth definition and test method."
+      "value": "For carbonitrided self-tapping screws, compare surface and core hardness, case depth and sustained output for the same material, size, loading and process."
     }
   },
   "/zh/news/bolt-mesh-belt-quench-temper-capability": {
@@ -976,7 +976,7 @@
     },
     "description": {
       "source": "For property class 8.8 and 10.9 bolts, request evidence for comparable material, critical section, loading and sustained production. The critical section here is the dimension that affects heating, cooling and hardening, distinct from the tensile stress area used in thread calculations.",
-      "value": "For class 8.8 and 10.9 bolts, request evidence matching material, heat-treatment-critical section, loading and sustained output. This section differs from the thread tensile stress area."
+      "value": "Check sustained output for class 8.8 and 10.9 bolts by material, loading and the section size that governs hardening. Use thread stress area for tensile design."
     }
   },
   "/zh/news/fastener-mesh-belt-furnace-manufacturers": {
@@ -996,7 +996,7 @@
     },
     "description": {
       "source": "Suneng, the publisher, along with Jiangsu Fengdong and Foshan Rongdongsheng, are initial contacts for fastener mesh belt furnaces. Check their published product ranges against your actual workpieces and process. Product descriptions alone do not prove a comparable delivery.",
-      "value": "For fastener mesh belt furnaces, Suneng (publisher), Jiangsu Fengdong and Foshan Rongdongsheng are initial contacts. Match products to your workpieces and process; listings do not prove comparable delivery."
+      "value": "Compare Suneng (publisher), Jiangsu Fengdong and Foshan Rongdongsheng for fastener mesh belt furnaces. Ask for projects matching your parts and process."
     }
   },
   "/zh/news/multi-station-curing-oven-independent-operation": {
@@ -1012,7 +1012,7 @@
     },
     "description": {
       "source": "Six stations do not necessarily provide six independent processes. Compare each product’s programme, thermal separation, circulation, exhaust, loading and shared resources. Verify the intended combination before scheduling different products together.",
-      "value": "Six curing-oven stations do not mean six independent processes. Check each product's programme, thermal separation, airflow, exhaust, loading and shared resources; verify combinations before scheduling together."
+      "value": "Can six curing stations run independently? Verify product programmes, thermal separation, airflow, exhaust and shared resources before scheduling mixed loads."
     }
   },
   "/zh/news/gas-cylinder-curing-oven-slow-heating": {
@@ -1028,7 +1028,7 @@
     },
     "description": {
       "source": "On an indirectly heated curing oven, a larger burner can help only if effective heat supply is the limiting factor and the heat exchanger, circulation path and auxiliaries can carry the extra heat. Distinguish heat delivery to the oven from heat transfer to the workpiece.",
-      "value": "For an indirectly heated gas-cylinder curing oven, a larger burner helps only if heat supply is limiting and the exchanger, circulation and auxiliaries can cope. Check heat delivery versus transfer to parts."
+      "value": "Trace slow gas-cylinder curing to heat supply or transfer to the parts. Check the burner, heat exchanger and circulation before increasing burner capacity."
     }
   },
   "/zh/news/heat-treatment-basket-turnover-quantity": {
@@ -1048,7 +1048,7 @@
     },
     "description": {
       "source": "Size the basket fleet from the full time between loading a basket and its return ready for reuse. Compare solution treatment, quenching, transfer, ageing and unloading with the batch launch interval. An empty furnace waiting for a basket and loaded baskets queuing downstream call for different actions.",
-      "value": "Size solution/ageing baskets by the full loading-to-return-ready cycle, including quench, transfer and unloading. Compare batch intervals: furnaces waiting for baskets and downstream queues need different actions."
+      "value": "Size solution and aging baskets by the full load-to-return cycle. Compare batch intervals with quench, transfer and unloading times to locate the bottleneck."
     }
   },
   "/zh/news/atmosphere-furnace-pressure-fluctuation-process-or-equipment": {
@@ -1140,7 +1140,7 @@
     },
     "description": {
       "source": "热处理生产线的单机验收，是逐台确认某台设备的制造、配置、动作和保护是否符合约定；工厂验收（FAT）则是在发货前，按验收方案对一台或多台设备以及工厂具备条件的接口、联动、记录和文件进行阶段性确认。单机验收可以是FAT的一部分，但不能代替整线联动、现场验收或产品工艺验证。",
-      "value": "热处理生产线单机验收核对制造、配置、动作与保护；FAT在发货前按约定及工厂条件核对设备、接口、联动、记录和文件。单机验收可属FAT，但不能代替整线联动、现场验收或产品工艺验证。"
+      "value": "单机验收查配置、动作与保护；出厂验收（FAT）按约定检查接口、联动和记录。单机合格后，仍要验证整线联动、现场运行和产品工艺。"
     }
   },
   "/zh/news/tai-che-lu-lu-men-lou-re-lou-huo-si-duan-ding-wei-fa": {
@@ -1214,13 +1214,13 @@
     },
     "description": {
       "source": "固化炉温度均匀性验收，不能只看控制屏上的一个温度，也不能把一支工件热电偶的曲线当成整台炉的空间均匀性。应先确认材料工艺文件、客户技术条件、合同和被明确引用的行业标准，再锁定合格工作区、允许偏差、测试状态、传感器布置、测量链、数据采集和判定规则。",
-      "value": "固化炉温度均匀性验收，先核对工艺文件、客户技术条件、合同及引用标准，再约定工作区、偏差、测试状态、布点、测量链、数据采集和判定；单点温度或工件曲线不能代替空间均匀性测试。"
+      "value": "固化炉温度均匀性验收要约定工作区、允许偏差、测试状态、布点和测量方法。单点温度和工件温度曲线都不能代替空间均匀性测试。"
     }
   },
   "/zh/news/shuju-news-25": {
     "description": {
       "source": "铝合金固溶炉转移时间验收，不能只用秒表测一次“开门到入液”。应先确认材料与产品形态对应的规范、技术协议和合同允许值，再锁定计时起止事件、代表性负载、完整动作路径、有效试验条件、重复次数及同步记录。",
-      "value": "铝合金固溶炉转移时间先核对材料与产品形态适用的规范、协议和合同允许值，再约定计时起止、代表性负载、完整动作、有效试验条件、重复次数与同步记录；不能只测一次开门到入液。"
+      "value": "铝合金固溶炉的转移时间以适用规范、技术协议和合同为准。验收前约定计时起止、代表性负载、完整动作和重复次数，保留同步记录。"
     }
   },
   "/zh/news/shuju-news-24": {

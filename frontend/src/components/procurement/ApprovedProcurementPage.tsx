@@ -51,7 +51,7 @@ export function ApprovedProcurementPage({ id, locale = 'zh' }: { id: ApprovedPro
         <Breadcrumb locale={locale} currentLabel={page.heading} tone="dark"
           items={[{ label: page.parentLabel, href: page.parentPath }, { label: page.heading }]} />
       </div>
-      <main className={styles.main}>
+      <div className={styles.main}>
         <article className={styles.article}>
           <header className={styles.articleHeader}>
             <h1 id="news-detail-title" className={styles.title}>{page.heading}</h1>
@@ -93,7 +93,7 @@ export function ApprovedProcurementPage({ id, locale = 'zh' }: { id: ApprovedPro
             </section>
           </div>
         </aside>
-      </main>
+      </div>
       <JsonLd id={`procurement-${id}-page-jsonld`} data={pageJsonLd} />
     </div>
   );

@@ -233,7 +233,7 @@ export default async function NewsDetailPage({ params }: NewsDetailPageProps) {
         />
       </div>
 
-      <main className={styles.main}>
+      <div className={styles.main}>
         {/* Keep late Flight children off the host container's hydration replay.
             A keyed Fragment adds no HTML or loading fallback. React #35494. */}
         <Fragment key="news-detail-content">
@@ -331,7 +331,7 @@ export default async function NewsDetailPage({ params }: NewsDetailPageProps) {
             </div>
           </aside>
         </Fragment>
-      </main>
+      </div>
     </div>
   );
 }

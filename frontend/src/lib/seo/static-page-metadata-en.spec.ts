@@ -25,7 +25,9 @@ describe('English static page metadata', () => {
     const metadata = await generate({ params: Promise.resolve({ locale: 'en' }) });
     const copy = ENGLISH_STATIC_PAGE_METADATA[kind];
     const reviewed = getReviewedPageCopy(`/en/${kind}`, copy.title, copy.description);
-    expect(metadata.title).toEqual({ absolute: reviewed.title });
+    const expected = kind === 'about' ? 'About Us: Industrial Furnace Manufacturer | Suneng Industrial Furnace' : reviewed.title;
+    expect(metadata.title).toEqual({ absolute: expected });
+    expect(metadata.openGraph?.title).toBe(expected);
     expect(metadata.description).toBe(copy.description);
     expect(metadata.openGraph?.description).toBe(copy.description);
     expect(metadata.alternates?.canonical).toBe(`https://www.jssngyl.cn/en/${kind}`);

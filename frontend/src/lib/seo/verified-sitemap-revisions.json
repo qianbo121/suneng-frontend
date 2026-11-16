@@ -8,8 +8,8 @@
     "sourceCommit": "f74a70e6ecbaa56893869d76d82d1f89aa7154d4"
   },
   "/en/case/stainless-strip-annealing-supply-scope": {
-    "modifiedOn": "2026-11-15",
-    "sourceCommit": "f74a70e6ecbaa56893869d76d82d1f89aa7154d4"
+    "modifiedOn": "2026-11-16",
+    "sourceCommit": "e2a686f5662f1c9bc959b3fe7d9d1537c60df993"
   },
   "/zh/products/detail/box-furnace": {
     "modifiedOn": "2026-10-20",
@@ -169,5 +169,395 @@
     "modifiedOn": "2026-11-15",
     "sourceCommit": "184f6c49c0591029d3050abdbfcdf63b401c3262",
     "publishedOn": "2026-11-15"
+  },
+  "/en": {
+    "modifiedOn": "2026-11-14",
+    "sourceCommit": "3c5838eef3ec4025b5e31937803a616d2d8890e8"
+  },
+  "/en/about": {
+    "modifiedOn": "2026-11-16",
+    "sourceCommit": "e2a686f5662f1c9bc959b3fe7d9d1537c60df993"
+  },
+  "/en/articles/special-industrial-furnace-procurement-assessment": {
+    "modifiedOn": "2026-11-14",
+    "sourceCommit": "3c5838eef3ec4025b5e31937803a616d2d8890e8"
+  },
+  "/en/news": {
+    "modifiedOn": "2026-11-15",
+    "sourceCommit": "f74a70e6ecbaa56893869d76d82d1f89aa7154d4",
+    "releaseCommit": "5248fac668a2d8445d430b3c99f58c86b958fe93"
+  },
+  "/en/products": {
+    "modifiedOn": "2026-11-14",
+    "sourceCommit": "3c5838eef3ec4025b5e31937803a616d2d8890e8"
+  },
+  "/en/products/detail/aluminum-forging-heating-line": {
+    "modifiedOn": "2026-11-16",
+    "sourceCommit": "e2a686f5662f1c9bc959b3fe7d9d1537c60df993"
+  },
+  "/en/products/detail/aluminum-solution-aging-line": {
+    "modifiedOn": "2026-11-16",
+    "sourceCommit": "e2a686f5662f1c9bc959b3fe7d9d1537c60df993"
+  },
+  "/en/products/detail/bell-furnace": {
+    "modifiedOn": "2026-11-14",
+    "sourceCommit": "209445979f8cd14db400a14775f6bf433769b0fa"
+  },
+  "/en/products/detail/copper-wire-annealing-line": {
+    "modifiedOn": "2026-11-14",
+    "sourceCommit": "209445979f8cd14db400a14775f6bf433769b0fa"
+  },
+  "/en/products/detail/copper-wire-annealing-line/inquiry-checklist": {
+    "modifiedOn": "2026-11-14",
+    "sourceCommit": "3c5838eef3ec4025b5e31937803a616d2d8890e8"
+  },
+  "/en/products/detail/cylinder-curing-line": {
+    "modifiedOn": "2026-11-16",
+    "sourceCommit": "e2a686f5662f1c9bc959b3fe7d9d1537c60df993"
+  },
+  "/en/products/detail/elevator-hearth-furnace": {
+    "modifiedOn": "2026-11-15",
+    "sourceCommit": "f16e01b4cf7661e94717606ba8def638349a8083"
+  },
+  "/en/products/detail/fastener-quench-temper-line": {
+    "modifiedOn": "2026-11-16",
+    "sourceCommit": "e2a686f5662f1c9bc959b3fe7d9d1537c60df993"
+  },
+  "/en/products/detail/forging-waste-heat-qt-line": {
+    "modifiedOn": "2026-11-16",
+    "sourceCommit": "e2a686f5662f1c9bc959b3fe7d9d1537c60df993"
+  },
+  "/en/products/detail/gas-nitriding-furnace": {
+    "modifiedOn": "2026-11-15",
+    "sourceCommit": "f16e01b4cf7661e94717606ba8def638349a8083"
+  },
+  "/en/products/detail/mesh-belt-carbonitriding-line": {
+    "modifiedOn": "2026-11-16",
+    "sourceCommit": "e2a686f5662f1c9bc959b3fe7d9d1537c60df993"
+  },
+  "/en/products/detail/multi-furnace-quench-cell": {
+    "modifiedOn": "2026-11-14",
+    "sourceCommit": "209445979f8cd14db400a14775f6bf433769b0fa"
+  },
+  "/en/products/detail/pusher-furnace": {
+    "modifiedOn": "2026-11-14",
+    "sourceCommit": "3c5838eef3ec4025b5e31937803a616d2d8890e8"
+  },
+  "/en/products/detail/roller-hearth-furnace": {
+    "modifiedOn": "2026-11-14",
+    "sourceCommit": "3c5838eef3ec4025b5e31937803a616d2d8890e8"
+  },
+  "/en/products/detail/roller-mesh-belt-line": {
+    "modifiedOn": "2026-11-14",
+    "sourceCommit": "209445979f8cd14db400a14775f6bf433769b0fa"
+  },
+  "/en/products/detail/rotary-hearth-furnace": {
+    "modifiedOn": "2026-11-14",
+    "sourceCommit": "3c5838eef3ec4025b5e31937803a616d2d8890e8"
+  },
+  "/en/products/detail/shovel-furnace": {
+    "modifiedOn": "2026-11-15",
+    "sourceCommit": "f16e01b4cf7661e94717606ba8def638349a8083"
+  },
+  "/en/products/detail/track-shoe-press-quench-line": {
+    "modifiedOn": "2026-11-16",
+    "sourceCommit": "e2a686f5662f1c9bc959b3fe7d9d1537c60df993"
+  },
+  "/en/products/detail/trolley-furnace": {
+    "modifiedOn": "2026-11-14",
+    "sourceCommit": "209445979f8cd14db400a14775f6bf433769b0fa"
+  },
+  "/en/products/detail/walking-beam-furnace": {
+    "modifiedOn": "2026-11-15",
+    "sourceCommit": "f16e01b4cf7661e94717606ba8def638349a8083"
+  },
+  "/en/service": {
+    "modifiedOn": "2026-11-14",
+    "sourceCommit": "3c5838eef3ec4025b5e31937803a616d2d8890e8"
+  },
+  "/en/service/furnace-relocation-restart": {
+    "modifiedOn": "2026-11-14",
+    "sourceCommit": "3c5838eef3ec4025b5e31937803a616d2d8890e8"
+  },
+  "/en/service/furnace-renovation-overhaul": {
+    "modifiedOn": "2026-11-16",
+    "sourceCommit": "e2a686f5662f1c9bc959b3fe7d9d1537c60df993"
+  },
+  "/en/service/installation-after-sales": {
+    "modifiedOn": "2026-11-14",
+    "sourceCommit": "3c5838eef3ec4025b5e31937803a616d2d8890e8"
+  },
+  "/en/service/selection-retrofit-guide": {
+    "modifiedOn": "2026-11-14",
+    "sourceCommit": "3c5838eef3ec4025b5e31937803a616d2d8890e8"
+  },
+  "/zh": {
+    "modifiedOn": "2026-11-11",
+    "sourceCommit": "f06596865b4ea9ceda18e8e708f61d373479adb2"
+  },
+  "/zh/about": {
+    "modifiedOn": "2026-11-16",
+    "sourceCommit": "e2a686f5662f1c9bc959b3fe7d9d1537c60df993"
+  },
+  "/zh/inquiry": {
+    "modifiedOn": "2026-10-15",
+    "sourceCommit": "b1e4b3759f0da4062948578f93ec2f7952e98577"
+  },
+  "/zh/news": {
+    "modifiedOn": "2026-11-15",
+    "sourceCommit": "f74a70e6ecbaa56893869d76d82d1f89aa7154d4",
+    "releaseCommit": "5248fac668a2d8445d430b3c99f58c86b958fe93"
+  },
+  "/zh/products": {
+    "modifiedOn": "2026-10-05",
+    "sourceCommit": "4edd89718a89b396f6e064dea24310f6b494b845"
+  },
+  "/zh/products/detail/aluminum-forging-heating-line": {
+    "modifiedOn": "2026-11-14",
+    "sourceCommit": "209445979f8cd14db400a14775f6bf433769b0fa"
+  },
+  "/zh/products/detail/aluminum-solution-aging-line": {
+    "modifiedOn": "2026-11-15",
+    "sourceCommit": "184f6c49c0591029d3050abdbfcdf63b401c3262"
+  },
+  "/zh/products/detail/bell-furnace": {
+    "modifiedOn": "2026-11-14",
+    "sourceCommit": "209445979f8cd14db400a14775f6bf433769b0fa"
+  },
+  "/zh/products/detail/copper-wire-annealing-line": {
+    "modifiedOn": "2026-11-14",
+    "sourceCommit": "209445979f8cd14db400a14775f6bf433769b0fa"
+  },
+  "/zh/products/detail/copper-wire-annealing-line/inquiry-checklist": {
+    "modifiedOn": "2026-10-10",
+    "sourceCommit": "6b8de877ff9e00546b55db36f0ebf46e0c4d24da",
+    "releaseCommit": "c57999806f09290c34e49d88d3ebcb96b9d643a6"
+  },
+  "/zh/products/detail/cylinder-curing-line": {
+    "modifiedOn": "2026-11-14",
+    "sourceCommit": "209445979f8cd14db400a14775f6bf433769b0fa"
+  },
+  "/zh/products/detail/elevator-hearth-furnace": {
+    "modifiedOn": "2026-11-15",
+    "sourceCommit": "f16e01b4cf7661e94717606ba8def638349a8083"
+  },
+  "/zh/products/detail/forging-waste-heat-qt-line": {
+    "modifiedOn": "2026-11-14",
+    "sourceCommit": "209445979f8cd14db400a14775f6bf433769b0fa"
+  },
+  "/zh/products/detail/gas-nitriding-furnace": {
+    "modifiedOn": "2026-11-15",
+    "sourceCommit": "f16e01b4cf7661e94717606ba8def638349a8083"
+  },
+  "/zh/products/detail/multi-furnace-quench-cell": {
+    "modifiedOn": "2026-11-14",
+    "sourceCommit": "209445979f8cd14db400a14775f6bf433769b0fa"
+  },
+  "/zh/products/detail/pusher-furnace": {
+    "modifiedOn": "2026-11-09",
+    "sourceCommit": "1e73ae4cb4e2fc244452f9d208eda8d3de9539ff"
+  },
+  "/zh/products/detail/roller-mesh-belt-line": {
+    "modifiedOn": "2026-11-14",
+    "sourceCommit": "209445979f8cd14db400a14775f6bf433769b0fa"
+  },
+  "/zh/products/detail/rotary-hearth-furnace": {
+    "modifiedOn": "2026-11-14",
+    "sourceCommit": "3c5838eef3ec4025b5e31937803a616d2d8890e8"
+  },
+  "/zh/products/detail/shovel-furnace": {
+    "modifiedOn": "2026-11-15",
+    "sourceCommit": "f16e01b4cf7661e94717606ba8def638349a8083"
+  },
+  "/zh/products/detail/track-shoe-press-quench-line": {
+    "modifiedOn": "2026-11-14",
+    "sourceCommit": "209445979f8cd14db400a14775f6bf433769b0fa"
+  },
+  "/zh/products/detail/walking-beam-furnace": {
+    "modifiedOn": "2026-11-15",
+    "sourceCommit": "f16e01b4cf7661e94717606ba8def638349a8083"
+  },
+  "/zh/service": {
+    "modifiedOn": "2026-10-09",
+    "sourceCommit": "882bbc72ecdd682e18febb67e764ff6fb50c3131",
+    "releaseCommit": "3b95c32bd364c6c35505468d6d922b0749ddeaaf"
+  },
+  "/zh/service/furnace-relocation-restart": {
+    "modifiedOn": "2026-09-25",
+    "sourceCommit": "0c0593a81ff4168dccdb9689129ec8ddc7a0af40",
+    "releaseCommit": "f0c49b68069cedb8d76c25e07b498835bcd0bdb8"
+  },
+  "/zh/service/industrial-furnace-parts-purchasing": {
+    "modifiedOn": "2026-11-14",
+    "sourceCommit": "3c5838eef3ec4025b5e31937803a616d2d8890e8"
+  },
+  "/zh/service/installation-after-sales": {
+    "modifiedOn": "2026-11-09",
+    "sourceCommit": "1e73ae4cb4e2fc244452f9d208eda8d3de9539ff"
+  },
+  "/zh/service/selection-retrofit-guide": {
+    "modifiedOn": "2026-09-25",
+    "sourceCommit": "0c0593a81ff4168dccdb9689129ec8ddc7a0af40",
+    "releaseCommit": "f0c49b68069cedb8d76c25e07b498835bcd0bdb8"
+  },
+  "/en/news/bearing-steel-wire-spheroidizing-pit-bell-furnace-selection": {
+    "modifiedOn": "2026-11-16",
+    "sourceCommit": "e2a686f5662f1c9bc959b3fe7d9d1537c60df993"
+  },
+  "/en/news/bolt-mesh-belt-quench-temper-capability": {
+    "modifiedOn": "2026-11-16",
+    "sourceCommit": "e2a686f5662f1c9bc959b3fe7d9d1537c60df993"
+  },
+  "/en/news/bolts-nuts-shared-heat-treatment-line-loading-transfer": {
+    "modifiedOn": "2026-11-16",
+    "sourceCommit": "e2a686f5662f1c9bc959b3fe7d9d1537c60df993"
+  },
+  "/en/news/carbon-steel-self-drilling-screw-carburizing-line-selection": {
+    "modifiedOn": "2026-11-16",
+    "sourceCommit": "e2a686f5662f1c9bc959b3fe7d9d1537c60df993"
+  },
+  "/en/news/coil-annealing-soaking-time-start": {
+    "modifiedOn": "2026-11-16",
+    "sourceCommit": "e2a686f5662f1c9bc959b3fe7d9d1537c60df993"
+  },
+  "/en/news/cold-coiled-compression-spring-stress-relief-furnace-manufacturers": {
+    "modifiedOn": "2026-11-16",
+    "sourceCommit": "e2a686f5662f1c9bc959b3fe7d9d1537c60df993"
+  },
+  "/en/news/custom-heat-treatment-furnace-chamber-process": {
+    "modifiedOn": "2026-11-16",
+    "sourceCommit": "e2a686f5662f1c9bc959b3fe7d9d1537c60df993"
+  },
+  "/en/news/fastener-mesh-belt-furnace-manufacturers": {
+    "modifiedOn": "2026-11-16",
+    "sourceCommit": "e2a686f5662f1c9bc959b3fe7d9d1537c60df993"
+  },
+  "/en/news/fastener-quench-temper-line-furnace-maker-or-integrator": {
+    "modifiedOn": "2026-11-16",
+    "sourceCommit": "e2a686f5662f1c9bc959b3fe7d9d1537c60df993"
+  },
+  "/en/news/gas-cylinder-curing-oven-slow-heating": {
+    "modifiedOn": "2026-11-16",
+    "sourceCommit": "e2a686f5662f1c9bc959b3fe7d9d1537c60df993"
+  },
+  "/en/news/gas-trolley-furnace-operation-maintenance-documents": {
+    "modifiedOn": "2026-11-16",
+    "sourceCommit": "e2a686f5662f1c9bc959b3fe7d9d1537c60df993"
+  },
+  "/en/news/grade-10-nut-mesh-belt-line-capability": {
+    "modifiedOn": "2026-11-16",
+    "sourceCommit": "e2a686f5662f1c9bc959b3fe7d9d1537c60df993"
+  },
+  "/en/news/heat-treatment-basket-turnover-quantity": {
+    "modifiedOn": "2026-11-16",
+    "sourceCommit": "e2a686f5662f1c9bc959b3fe7d9d1537c60df993"
+  },
+  "/en/news/heat-treatment-line-integrator-or-furnace-maker": {
+    "modifiedOn": "2026-11-16",
+    "sourceCommit": "e2a686f5662f1c9bc959b3fe7d9d1537c60df993"
+  },
+  "/en/news/heat-treatment-line-multi-supplier-responsibility-acceptance": {
+    "modifiedOn": "2026-11-16",
+    "sourceCommit": "e2a686f5662f1c9bc959b3fe7d9d1537c60df993"
+  },
+  "/en/news/heat-treatment-line-turnkey-supply-scope": {
+    "modifiedOn": "2026-11-16",
+    "sourceCommit": "e2a686f5662f1c9bc959b3fe7d9d1537c60df993"
+  },
+  "/en/news/industrial-furnace-cooling-water-total-branch-flow": {
+    "modifiedOn": "2026-11-16",
+    "sourceCommit": "e2a686f5662f1c9bc959b3fe7d9d1537c60df993"
+  },
+  "/en/news/jiangsu-industrial-furnace-process-fit": {
+    "modifiedOn": "2026-11-16",
+    "sourceCommit": "e2a686f5662f1c9bc959b3fe7d9d1537c60df993"
+  },
+  "/en/news/long-bolt-quench-temper-pit-mesh-belt-furnace-selection": {
+    "modifiedOn": "2026-11-16",
+    "sourceCommit": "e2a686f5662f1c9bc959b3fe7d9d1537c60df993"
+  },
+  "/en/news/long-gas-cylinder-curing-oven-mandrel-trolley-selection": {
+    "modifiedOn": "2026-11-16",
+    "sourceCommit": "e2a686f5662f1c9bc959b3fe7d9d1537c60df993"
+  },
+  "/en/news/mesh-belt-furnace-carbon-cleaning-review": {
+    "modifiedOn": "2026-11-16",
+    "sourceCommit": "e2a686f5662f1c9bc959b3fe7d9d1537c60df993"
+  },
+  "/en/news/mesh-belt-furnace-oil-fume-treatment-checklist": {
+    "modifiedOn": "2026-11-16",
+    "sourceCommit": "e2a686f5662f1c9bc959b3fe7d9d1537c60df993"
+  },
+  "/en/news/mesh-belt-furnace-quality-tracking-checklist": {
+    "modifiedOn": "2026-11-16",
+    "sourceCommit": "e2a686f5662f1c9bc959b3fe7d9d1537c60df993"
+  },
+  "/en/news/mesh-belt-quenching-furnace-principle-process-checklist": {
+    "modifiedOn": "2026-11-16",
+    "sourceCommit": "e2a686f5662f1c9bc959b3fe7d9d1537c60df993"
+  },
+  "/en/news/multi-station-curing-oven-independent-operation": {
+    "modifiedOn": "2026-11-16",
+    "sourceCommit": "e2a686f5662f1c9bc959b3fe7d9d1537c60df993"
+  },
+  "/en/news/outsourced-quench-tank-washer-problem-responsibility": {
+    "modifiedOn": "2026-11-16",
+    "sourceCommit": "e2a686f5662f1c9bc959b3fe7d9d1537c60df993"
+  },
+  "/en/news/resistance-heating-element-power-surface-loading-life": {
+    "modifiedOn": "2026-11-16",
+    "sourceCommit": "e2a686f5662f1c9bc959b3fe7d9d1537c60df993"
+  },
+  "/en/news/self-tapping-screw-carbonitriding-line-selection": {
+    "modifiedOn": "2026-11-16",
+    "sourceCommit": "e2a686f5662f1c9bc959b3fe7d9d1537c60df993"
+  },
+  "/en/news/shuju-news-21": {
+    "modifiedOn": "2026-11-16",
+    "sourceCommit": "e2a686f5662f1c9bc959b3fe7d9d1537c60df993"
+  },
+  "/en/news/suneng-furnace-manufacturing-system-integration": {
+    "modifiedOn": "2026-11-16",
+    "sourceCommit": "e2a686f5662f1c9bc959b3fe7d9d1537c60df993"
+  },
+  "/en/news/suneng-industrial-furnace-types-heat-treatment-lines": {
+    "modifiedOn": "2026-11-16",
+    "sourceCommit": "e2a686f5662f1c9bc959b3fe7d9d1537c60df993"
+  },
+  "/en/news/titanium-alloy-thick-plate-roller-hearth-furnace-selection": {
+    "modifiedOn": "2026-11-16",
+    "sourceCommit": "e2a686f5662f1c9bc959b3fe7d9d1537c60df993"
+  },
+  "/en/news/variable-volume-bogie-furnace-gas-consumption-comparison": {
+    "modifiedOn": "2026-11-16",
+    "sourceCommit": "e2a686f5662f1c9bc959b3fe7d9d1537c60df993"
+  },
+  "/en/news/wheel-hub-mould-preheating-furnace-changeover-selection": {
+    "modifiedOn": "2026-11-16",
+    "sourceCommit": "e2a686f5662f1c9bc959b3fe7d9d1537c60df993"
+  },
+  "/en/products/detail/fastener-quench-temper-line/cqi-9": {
+    "modifiedOn": "2026-11-16",
+    "sourceCommit": "e2a686f5662f1c9bc959b3fe7d9d1537c60df993"
+  },
+  "/zh/news/heat-treatment-line-fat-single-machine-acceptance": {
+    "modifiedOn": "2026-11-16",
+    "sourceCommit": "e2a686f5662f1c9bc959b3fe7d9d1537c60df993"
+  },
+  "/zh/news/outsourced-quench-tank-washer-problem-responsibility": {
+    "modifiedOn": "2026-11-16",
+    "sourceCommit": "e2a686f5662f1c9bc959b3fe7d9d1537c60df993"
+  },
+  "/zh/news/red-adhesive-curing-test-oven-temperature-records": {
+    "modifiedOn": "2026-11-16",
+    "sourceCommit": "e2a686f5662f1c9bc959b3fe7d9d1537c60df993"
+  },
+  "/zh/news/shuju-news-25": {
+    "modifiedOn": "2026-11-16",
+    "sourceCommit": "e2a686f5662f1c9bc959b3fe7d9d1537c60df993"
+  },
+  "/zh/news/shuju-news-26": {
+    "modifiedOn": "2026-11-16",
+    "sourceCommit": "e2a686f5662f1c9bc959b3fe7d9d1537c60df993"
   }
 }

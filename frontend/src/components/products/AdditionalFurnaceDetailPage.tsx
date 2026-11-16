@@ -98,9 +98,8 @@ export function AdditionalFurnaceDetailPage({
     return product ? [product] : [];
   });
 
-  const PageContainer = en ? 'div' : 'main';
   return (
-    <PageContainer
+    <div
       className={`${shared.page} ${styles.page}`}
       data-locale={locale}
       data-furnace-detail-page
@@ -450,6 +449,6 @@ export function AdditionalFurnaceDetailPage({
           />
         </div>
       </div>
-    </PageContainer>
+    </div>
   );
 }

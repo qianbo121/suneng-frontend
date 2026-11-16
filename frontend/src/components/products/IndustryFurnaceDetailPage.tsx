@@ -98,7 +98,7 @@ export function IndustryFurnaceDetailPage({ slug, locale = 'zh' }: { slug: Indus
   const sourceModule = `${slug.replaceAll('-', '_')}_detail_form`;
 
   return (
-    <main lang={locale} className={styles.page} data-industry-furnace-page={slug} data-furnace-detail-page>
+    <div lang={locale} className={styles.page} data-industry-furnace-page={slug} data-furnace-detail-page>
       <JsonLd
         id={`product-jsonld-${slug}-dedicated`}
         data={getProductDetailJsonLd(
@@ -507,6 +507,6 @@ export function IndustryFurnaceDetailPage({ slug, locale = 'zh' }: { slug: Indus
           />
         </div>
       </div>
-    </main>
+    </div>
   );
 }

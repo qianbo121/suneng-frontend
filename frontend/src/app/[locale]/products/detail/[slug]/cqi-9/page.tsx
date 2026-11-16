@@ -16,7 +16,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const path = '/products/detail/fastener-quench-temper-line/cqi-9';
   return {
     ...buildMetadata({
-      title: locale === 'zh' ? 'CQI-9 审核设备配合｜网带调质线配置与记录' : 'CQI-9 Equipment Support | Mesh-Belt Quench & Temper Lines | Suneng',
+      title: locale === 'zh' ? 'CQI-9 审核设备配合｜网带调质线配置与记录' : 'CQI-9 Equipment Support | Mesh-Belt Quench & Temper Lines | Suneng Industrial Furnace',
       description: locale === 'zh'
         ? '准备 CQI-9 审核时，采购网带调质线要核对什么？以苏能一份紧固件项目协议为例，查看分区控温、温度记录等设备配置，以及验收条件和买方职责。'
         : 'Preparing for a CQI-9 assessment? See the mesh-belt line controls, temperature records, acceptance terms and buyer duties in a Suneng fastener project.',

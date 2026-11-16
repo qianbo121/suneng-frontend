@@ -52,7 +52,7 @@ export default async function InquiryPage({ params, searchParams }: PageProps) {
   const inquiryProduct = resolveInquiryProduct((await searchParams).product, 'zh');
 
   return (
-    <main className="bg-[#f6f8fb] text-[#172033]">
+    <div className="bg-[#f6f8fb] text-[#172033]">
       <JsonLd id="inquiry-page-jsonld" data={[
         getWebPageJsonLd({ path: pagePath, name: '提交工业炉项目情况', description: '提交新建、选型、改造与维修需求，资料不全也可先说明项目方向、主要问题和联系方式。' }),
         getBreadcrumbJsonLd([{ name: '首页', url: '/zh' }, { name: '提交项目情况', url: pagePath }]),
@@ -115,6 +115,6 @@ export default async function InquiryPage({ params, searchParams }: PageProps) {
         successProductTag="项目初步判断"
         sourceModule="project_inquiry_page"
       />
-    </main>
+    </div>
   );
 }
