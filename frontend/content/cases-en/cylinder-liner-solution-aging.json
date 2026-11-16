@@ -1,14 +1,14 @@
 {
   "id": "cylinder-liner-solution-aging",
   "slug": "cylinder-liner-solution-aging",
-  "title": "Solution treatment and aging line for aluminum liners of high-pressure composite cylinders (solution furnace load by net liner weight)",
+  "title": "Solution treatment and aging line for aluminum liners of high-pressure composite cylinders",
   "summary": "The agreement specifies a solution heat treatment and aging line for aluminum liners used in high-pressure composite-wrapped cylinders. A basket transfers the liners between the solution furnace, quench water tank and aging furnace.",
   "body": "cylinder-liner-solution-aging.md",
   "coverAlt": "Aluminum liner line showing basket loading, transfer trolley, solution furnace, quench water tank, lifting transfer platform, aging furnace and unloading.",
   "coverCaption": "Aluminum liner line showing basket loading, transfer trolley, solution furnace, quench water tank, lifting transfer platform, aging furnace and unloading.",
   "translationStatus": "complete",
-  "sourceFingerprint": "d120582893b2ea4e5495ba93ca35d6fe38cecb1ae03635624a698ef69357715b",
-  "seoTitle": "Aluminum cylinder liner heat treatment: net furnace load",
+  "sourceFingerprint": "cb4bb7c7e1cd09c5d6586c5e793e832acea200e6a51e1408dc381d695f680e31",
+  "seoTitle": "Solution treatment and aging for aluminum cylinder liners",
   "seoDescription": "The solution furnace load is ≤1600 kg per batch under the agreement. Only the aluminum cylinder liners count toward the load. The basket is excluded.",
   "presentation": {
     "view": {

@@ -1,13 +1,13 @@
 {
   "id": "roller-belt-stage-output",
   "slug": "roller-belt-stage-output",
-  "title": "Roller-supported mesh belt quench and temper line (reuse of the existing cooling water basin and circulation pump)",
+  "title": "Roller-supported mesh belt quench and temper line using the existing cooling water basin and circulation pump",
   "summary": "Suneng and the buyer specified a protective-atmosphere mesh belt quench and temper line. The agreement lists throughput separately for each furnace.",
   "body": "roller-belt-stage-output.md",
   "coverAlt": "Roller-supported mesh belt line with a loading table, quenching furnace, oil tank, elevator, washing and drying section, tempering furnace and collection point.",
   "coverCaption": "Roller-supported mesh belt line with a loading table, quenching furnace, oil tank, elevator, washing and drying section, tempering furnace and collection point.",
   "translationStatus": "complete",
-  "sourceFingerprint": "7ac3c41a526965379d2afc4f21252e158a92cb2e0a468ee89d29d23adb737edf",
+  "sourceFingerprint": "da414e3fed2f8402dddf8040859dd7353947f9df93d3ce705cdd3cc88e52d5b5",
   "seoTitle": "Roller-supported belt line: existing cooling basin and pump",
   "seoDescription": "The agreement lists quenching at approximately 150 kg/h and tempering at 150 kg/h. The same parts pass through both furnaces, so the rates cannot be added.",
   "presentation": {
