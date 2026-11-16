@@ -251,7 +251,13 @@ jobs:
         env:
           CI: true
           VISUAL_PROJECT: linux-chrome
-        run: pnpm --dir frontend test:visual
+          PROOF_BASE: ${{ github.base_ref }}
+        run: |
+          if [[ "$PROOF_BASE" == "codex/page-checks-proof-base-20261116" ]]; then
+            echo "::error::Intentional page-check failure on the isolated verification branch."
+            exit 1
+          fi
+          pnpm --dir frontend test:visual
       - name: Upload visual failure artifacts
         if: always() && steps.visual_scope.outputs.required != 'false' && failure()
         uses: actions/upload-artifact@v4
