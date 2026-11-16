@@ -60,6 +60,7 @@ vi.mock('@/lib/api/news', () => ({
 }));
 
 import buildSitemap from '@/app/sitemap';
+import { getAllNewsForDecisionCenter } from '@/lib/api/news';
 import { approvedProcurementPages } from '@/lib/approved-procurement-pages';
 
 import { FURNACE_RENOVATION_OVERHAUL_SEO, PRODUCT_DETAIL_SEO } from '@/lib/seo/page-data';
@@ -154,7 +155,7 @@ describe('sitemap freshness signals', () => {
     const entries = await buildSitemap();
     const byUrl = new Map(entries.map((entry) => [entry.url, entry]));
     for (const [path, day] of [
-      ['/zh', '2026-11-11'], ['/zh/about', '2026-11-14'],
+      ['/zh', '2026-11-11'], ['/zh/about', '2026-11-16'],
       ['/zh/products/detail/pusher-furnace', '2026-11-09'],
       ['/zh/products/detail/copper-wire-annealing-line', '2026-11-14'],
     ]) {
@@ -219,6 +220,16 @@ describe('sitemap freshness signals', () => {
   });
 
   it('emits the independently verified dates with day precision and no English inheritance', async () => {
+    const articleSlugs = new Set(Object.keys(verifiedRevisions)
+      .filter((path) => /^\/(zh|en)\/news\//.test(path))
+      .map((path) => path.split('/')[3]));
+    vi.mocked(getAllNewsForDecisionCenter).mockResolvedValueOnce({
+      data: Array.from(articleSlugs, (slug, id) => ({
+        slug, id, categoryId: 1, titleZh: slug, titleEn: slug, contentEn: '<p>Published.</p>',
+        publishDate: '2026-09-01', status: 'published', isPublished: true,
+      })),
+      error: null,
+    });
     const entries = new Map((await buildSitemap()).map((entry) => [new URL(entry.url).pathname, entry]));
     const xml = resolveSitemap([...entries.values()]);
     for (const [path, revision] of Object.entries(verifiedRevisions)) {
