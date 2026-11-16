@@ -97,7 +97,11 @@ function safeLastModified(value?: string | Date) {
 
 function route(url: string, options: Omit<SitemapEntry, 'url'>): SitemapEntry {
   const { lastModified, ...rest } = options;
-  const validDate = getVerifiedSitemapLastModified(url) ?? safeLastModified(lastModified);
+  const verifiedDay = getVerifiedSitemapLastModified(url);
+  const contentDate = safeLastModified(lastModified);
+  const validDate = contentDate && (!verifiedDay || contentDate.toISOString().slice(0, 10) > verifiedDay)
+    ? contentDate
+    : verifiedDay;
   return {
     url: absoluteUrl(url),
     ...rest,

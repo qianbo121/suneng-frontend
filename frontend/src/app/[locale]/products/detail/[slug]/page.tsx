@@ -330,9 +330,8 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
     return <IndustryFurnaceDetailPage slug={product.slug} locale={currentLocale} />;
   }
 
-  const PageContainer = currentLocale === 'en' ? 'div' : 'main';
   return (
-    <PageContainer className="bg-white text-[#202020]">
+    <div className="bg-white text-[#202020]">
       <JsonLd
         id={`product-jsonld-${product.slug}`}
         data={getProductDetailJsonLd(
@@ -1035,6 +1034,6 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
           email={detail.leadForm?.email}
         />
       </div>
-    </PageContainer>
+    </div>
   );
 }

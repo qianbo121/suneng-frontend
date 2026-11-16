@@ -50,6 +50,18 @@ describe('reviewed page search copy', () => {
     expect(copy['/en/products/detail/multi-furnace-quench-cell'].description!.value).toContain('share a manipulator and quench tank');
   });
 
+  it.each([
+    ['/en/products/detail/aluminum-solution-aging-line', ['solution treatment', 'quench delay', 'aging']],
+    ['/en/products/detail/mesh-belt-carbonitriding-line', ['carburizing', 'low-temperature tempering', 'case depth']],
+    ['/en/news/self-tapping-screw-carbonitriding-line-selection', ['carbonitrided', 'same material, size, loading and process']],
+    ['/en/news/fastener-quench-temper-line-furnace-maker-or-integrator', ['furnace maker can lead', 'retrofits']],
+    ['/en/news/bolt-mesh-belt-quench-temper-capability', ['section size that governs hardening', 'thread stress area', 'tensile design']],
+  ] as const)('keeps the engineering distinction in the shortened description for %s', (path, phrases) => {
+    const description = copy[path].description!.value.toLowerCase();
+    expect(description.length).toBeLessThanOrEqual(160);
+    for (const phrase of phrases) expect(description).toContain(phrase);
+  });
+
   it('only replaces the exact reviewed route and source field', () => {
     const path = '/zh/articles/special-industrial-furnace-procurement-assessment';
     const revision = revisions[path];

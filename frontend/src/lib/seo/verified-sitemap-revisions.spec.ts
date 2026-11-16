@@ -33,6 +33,88 @@ const acceptedGroups = [
   ] },
   { date: '2026-11-16', source: '9cb72d65e3e6710926c4430d426f67f163a13643', paths: [
     '/zh/case',
+    '/en/products/detail/fastener-quench-temper-line',
+  ] },
+  { date: '2026-09-25', source: '0c0593a81ff4168dccdb9689129ec8ddc7a0af40', release: 'f0c49b68069cedb8d76c25e07b498835bcd0bdb8', paths: [
+    '/zh/service/furnace-relocation-restart',
+    '/zh/service/selection-retrofit-guide',
+  ] },
+  { date: '2026-10-05', source: '4edd89718a89b396f6e064dea24310f6b494b845', paths: [
+    '/zh/products',
+  ] },
+  { date: '2026-10-09', source: '882bbc72ecdd682e18febb67e764ff6fb50c3131', release: '3b95c32bd364c6c35505468d6d922b0749ddeaaf', paths: [
+    '/zh/service',
+  ] },
+  { date: '2026-10-10', source: '6b8de877ff9e00546b55db36f0ebf46e0c4d24da', release: 'c57999806f09290c34e49d88d3ebcb96b9d643a6', paths: [
+    '/zh/products/detail/copper-wire-annealing-line/inquiry-checklist',
+  ] },
+  { date: '2026-10-15', source: 'b1e4b3759f0da4062948578f93ec2f7952e98577', paths: [
+    '/zh/inquiry',
+  ] },
+  { date: '2026-10-20', source: '509ca1e4f5de4624a884567d9b7aacc0fe7291d5', release: '1fadaac1f47d3e7dbeda9030d2fd1dbeaeb0d09c', paths: [
+    '/en/about',
+  ] },
+  { date: '2026-11-09', source: '1e73ae4cb4e2fc244452f9d208eda8d3de9539ff', paths: [
+    '/zh/products/detail/pusher-furnace',
+    '/zh/service/installation-after-sales',
+  ] },
+  { date: '2026-11-11', source: 'f06596865b4ea9ceda18e8e708f61d373479adb2', paths: [
+    '/zh',
+  ] },
+  { date: '2026-11-14', source: '209445979f8cd14db400a14775f6bf433769b0fa', paths: [
+    '/en/products/detail/aluminum-forging-heating-line',
+    '/en/products/detail/bell-furnace',
+    '/en/products/detail/copper-wire-annealing-line',
+    '/en/products/detail/cylinder-curing-line',
+    '/en/products/detail/forging-waste-heat-qt-line',
+    '/en/products/detail/multi-furnace-quench-cell',
+    '/en/products/detail/roller-mesh-belt-line',
+    '/en/products/detail/track-shoe-press-quench-line',
+    '/en/products/detail/trolley-furnace',
+    '/zh/products/detail/aluminum-forging-heating-line',
+    '/zh/products/detail/bell-furnace',
+    '/zh/products/detail/copper-wire-annealing-line',
+    '/zh/products/detail/cylinder-curing-line',
+    '/zh/products/detail/forging-waste-heat-qt-line',
+    '/zh/products/detail/multi-furnace-quench-cell',
+    '/zh/products/detail/roller-mesh-belt-line',
+    '/zh/products/detail/track-shoe-press-quench-line',
+  ] },
+  { date: '2026-11-14', source: '3c5838eef3ec4025b5e31937803a616d2d8890e8', paths: [
+    '/en',
+    '/en/articles/special-industrial-furnace-procurement-assessment',
+    '/en/products',
+    '/en/products/detail/copper-wire-annealing-line/inquiry-checklist',
+    '/en/products/detail/pusher-furnace',
+    '/en/products/detail/roller-hearth-furnace',
+    '/en/products/detail/rotary-hearth-furnace',
+    '/en/service',
+    '/en/service/furnace-relocation-restart',
+    '/en/service/furnace-renovation-overhaul',
+    '/en/service/installation-after-sales',
+    '/en/service/selection-retrofit-guide',
+    '/zh/about',
+    '/zh/products/detail/rotary-hearth-furnace',
+    '/zh/service/industrial-furnace-parts-purchasing',
+  ] },
+  { date: '2026-11-15', source: '184f6c49c0591029d3050abdbfcdf63b401c3262', paths: [
+    '/en/products/detail/aluminum-solution-aging-line',
+    '/en/products/detail/mesh-belt-carbonitriding-line',
+    '/zh/products/detail/aluminum-solution-aging-line',
+  ] },
+  { date: '2026-11-15', source: 'f74a70e6ecbaa56893869d76d82d1f89aa7154d4', release: '5248fac668a2d8445d430b3c99f58c86b958fe93', paths: [
+    '/en/news',
+    '/zh/news',
+  ] },
+  { date: '2026-11-15', source: 'f16e01b4cf7661e94717606ba8def638349a8083', paths: [
+    '/en/products/detail/elevator-hearth-furnace',
+    '/en/products/detail/gas-nitriding-furnace',
+    '/en/products/detail/shovel-furnace',
+    '/en/products/detail/walking-beam-furnace',
+    '/zh/products/detail/elevator-hearth-furnace',
+    '/zh/products/detail/gas-nitriding-furnace',
+    '/zh/products/detail/shovel-furnace',
+    '/zh/products/detail/walking-beam-furnace',
   ] },
 ];
 const releasedCases = [
@@ -45,7 +127,7 @@ const now = new Date('2026-10-22T12:00:00Z');
 describe('verified sitemap revision evidence', () => {
   it('allows only the reviewed page, language, day and source combinations', () => {
     const accepted = Object.fromEntries(acceptedGroups.flatMap((group) => group.paths.map((path) =>
-      [path, { modifiedOn: group.date, sourceCommit: group.source }])));
+      [path, { modifiedOn: group.date, sourceCommit: group.source, ...(group.release ? { releaseCommit: group.release } : {}) }])));
     for (const slug of releasedCases) {
       for (const locale of ['zh', 'en']) {
         const path = `/${locale}/case/${slug}`;

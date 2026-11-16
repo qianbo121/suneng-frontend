@@ -87,7 +87,7 @@ export function GeoAuthorityGuidePage({
   reviewerName,
 }: GeoAuthorityGuideProps) {
   return (
-    <main className="bg-white">
+    <div className="bg-white">
       <section className="bg-[radial-gradient(circle_at_82%_20%,rgba(64,139,255,0.22),transparent_30%),linear-gradient(125deg,#071a35,#0c2f62)] text-white">
         <div className="mx-auto max-w-[1180px] px-5 pb-16 pt-5 lg:px-8 lg:pb-20">
           <Breadcrumb
@@ -231,6 +231,6 @@ export function GeoAuthorityGuidePage({
       </section>
 
       <GeoReviewNote modifiedDate={modifiedDate} sourceNote={sourceNote} reviewerName={reviewerName} />
-    </main>
+    </div>
   );
 }

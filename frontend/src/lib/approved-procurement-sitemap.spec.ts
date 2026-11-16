@@ -29,7 +29,7 @@ describe('equipment procurement sitemap revision', () => {
       expect(entries.get(site + approvedProcurementPages.equipment.path)?.lastModified).toEqual(
         new Date(historicalRevision),
       );
-      expect(entries.get(site + approvedProcurementPages.parts.path)?.lastModified).toBeUndefined();
+      expect(entries.get(site + approvedProcurementPages.parts.path)?.lastModified).toBe('2026-11-14');
       expect(entries.has(site + approvedProcurementPages.equipment.path.replace('/zh/', '/en/'))).toBe(true);
       expect(entries.has(site + approvedProcurementPages.parts.path.replace('/zh/', '/en/'))).toBe(false);
     } finally {

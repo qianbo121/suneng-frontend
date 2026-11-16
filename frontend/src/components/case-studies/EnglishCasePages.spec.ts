@@ -50,8 +50,8 @@ describe('complete English case integration', () => {
     expect(html).toContain('Author: <span lang="zh-CN" translate="no">苏能工业炉工程技术团队&amp;唐荔</span>');
     const [article] = articleJsonLd(html);
     expect(article.author).toEqual([
-      { '@type': 'Organization', '@id': 'https://www.jssngyl.cn/#engineering-team', name: '苏能工业炉工程技术团队', parentOrganization: { '@id': 'https://www.jssngyl.cn/#organization' } },
-      { '@type': 'Person', name: '唐荔' },
+      { '@type': 'Organization', '@id': 'https://www.jssngyl.cn/#engineering-team', name: 'Suneng Industrial Furnace Engineering Team', parentOrganization: { '@id': 'https://www.jssngyl.cn/#organization' } },
+      { '@type': 'Person', name: 'Tang Li' },
     ]);
     expect(article.publisher).toEqual({ '@id': 'https://www.jssngyl.cn/#organization' });
   });
@@ -106,7 +106,7 @@ describe('complete English case integration', () => {
     expect(found).toContain('stainless-strip-annealing-supply-scope');
     expect(getPublicCases().filter(item=>getCaseBuyerLinks(item.slug).length)).toEqual([]);
   });
-  it('dates the English page in China time and presents no publication date of its own', () => {
+  it('dates the English page in China time and uses the verified English publication date independently of source dates', () => {
     // Just after midnight in China is still the previous day in UTC.
     overrides.dates = {
       sourceDate: '2017-07-26T00:30:00+08:00',
@@ -120,10 +120,10 @@ describe('complete English case integration', () => {
       expect(html).not.toMatch(/Published:/);
       expect(html).not.toContain('24 July 2026');
       const [article] = articleJsonLd(html);
-      expect(article).not.toHaveProperty('datePublished');
+      expect(article.datePublished).toBe('2026-09-18T01:00:00+08:00');
       expect(article.dateModified).toBe('2026-09-17T01:00:00+08:00');
       const meta = englishCaseMetadata(approvedSlug);
-      expect(meta.openGraph).not.toHaveProperty('publishedTime');
+      expect(meta.openGraph).toHaveProperty('publishedTime', '2026-09-18T01:00:00+08:00');
       expect(meta.openGraph).toHaveProperty('modifiedTime', '2026-09-17T01:00:00+08:00');
     } finally {
       overrides.dates = undefined;

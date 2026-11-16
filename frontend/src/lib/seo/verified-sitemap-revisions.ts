@@ -1,6 +1,12 @@
 import revisions from './verified-sitemap-revisions.json';
 
-type Revision = { publishedOn?: string; modifiedOn: string; sourceCommit: string };
+type Revision = {
+  publishedOn?: string;
+  modifiedOn: string;
+  // The page change and its first public release may come from different commits.
+  sourceCommit: string;
+  releaseCommit?: string;
+};
 const byPath: Record<string, Revision> = revisions;
 
 /** Preserve day-level release evidence without inventing a midnight timestamp. */

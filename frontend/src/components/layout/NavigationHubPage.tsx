@@ -56,7 +56,7 @@ export function NavigationHubPage({
   secondaryLabel = '查看产品中心',
 }: NavigationHubPageProps) {
   return (
-    <main className="bg-[#f6f8fb] text-[#172033]">
+    <div className="bg-[#f6f8fb] text-[#172033]">
       <PageBanner
         locale="zh"
         title={title}
@@ -199,6 +199,6 @@ export function NavigationHubPage({
           </div>
         </div>
       </section>
-    </main>
+    </div>
   );
 }

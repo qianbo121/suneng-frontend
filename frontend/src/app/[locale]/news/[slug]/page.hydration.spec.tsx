@@ -4,6 +4,7 @@ import { Fragment, isValidElement, type ReactElement, type ReactNode } from 'rea
 import { expect, it, vi } from 'vitest';
 import type { NewsApiItem } from '@/types/news';
 import NewsDetailPage from './page';
+import styles from './NewsDetailPage.module.css';
 import { getNewsDetailPageData } from '@/lib/news';
 
 vi.mock('server-only', () => ({}));
@@ -32,7 +33,7 @@ type Element = ReactElement<{ children?: ReactNode; className?: string }>;
 function findMain(node: ReactNode): Element | undefined {
   if (Array.isArray(node)) return node.map(findMain).find(Boolean);
   if (!isValidElement<{ children?: ReactNode; className?: string }>(node)) return;
-  if (node.type === 'main') return node;
+  if (node.type === 'div' && node.props.className === styles.main) return node;
   return findMain(node.props.children);
 }
 
@@ -42,9 +43,9 @@ it.each(['zh', 'en'])('preserves the %s article DOM when its sidebar resolves du
   const main = findMain(page);
   expect(main).toBeDefined();
   const container = document.createElement('div');
-  container.innerHTML = '<main><article>Article fixture</article><aside>Sidebar fixture</aside></main>';
+  container.innerHTML = '<div><article>Article fixture</article><aside>Sidebar fixture</aside></div>';
   document.body.append(container);
-  const originalMain = container.querySelector('main');
+  const originalMain = container.firstElementChild;
   const originalArticle = container.querySelector('article');
   const errors: unknown[] = [];
   const side = runtime.createElement('aside', { key: 'sidebar-fixture' }, 'Sidebar fixture');
@@ -82,15 +83,15 @@ it.each(['zh', 'en'])('preserves the %s article DOM when its sidebar resolves du
   try {
     runtime.startTransition(() => {
       root = hydrateRoot(container, runtime.createElement(runtime.Fragment, null,
-        runtime.createElement('main', null, delayedChildren(main!.props.children)),
+        runtime.createElement('div', null, delayedChildren(main!.props.children)),
         runtime.createElement(CommitProbe)), { onRecoverableError: (error) => errors.push(error) });
     });
     await vi.waitFor(() => expect(committed).toBe(true));
     expect(read).toBe(true);
     expect(errors).toEqual([]);
-    expect(container.querySelector('main')).toBe(originalMain);
+    expect(container.firstElementChild).toBe(originalMain);
     expect(container.querySelector('article')).toBe(originalArticle);
-    expect(container.innerHTML).toBe('<main><article>Article fixture</article><aside>Sidebar fixture</aside></main>');
+    expect(container.innerHTML).toBe('<div><article>Article fixture</article><aside>Sidebar fixture</aside></div>');
   } finally {
     root?.unmount(); container.remove();
   }

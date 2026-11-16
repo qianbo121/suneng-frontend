@@ -8,7 +8,7 @@ export const metadata = { title: '生产线动画审核预览', robots: { index:
 export default function ProductionLineAnimationReview() {
   if (process.env.NODE_ENV !== 'development') notFound();
   return (
-    <main className={`home-page-scope ${styles.page}`}>
+    <div className={`home-page-scope ${styles.page}`}>
       <section className={styles.section}>
         <div className={styles.container}>
           <h1 className="mb-3 text-2xl font-semibold">生产线动画审核预览</h1>
@@ -18,6 +18,6 @@ export default function ProductionLineAnimationReview() {
           <ProductCenterLineCarousel items={productCenterProductionLines} previewAll />
         </div>
       </section>
-    </main>
+    </div>
   );
 }

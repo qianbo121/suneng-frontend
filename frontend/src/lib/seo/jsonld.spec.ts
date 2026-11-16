@@ -49,9 +49,9 @@ describe('SEO JSON-LD entities', () => {
     expect(article.author).toEqual([{
       '@type': 'Organization',
       '@id': 'https://www.jssngyl.cn/#engineering-team',
-      name: '苏能工业炉工程技术团队',
+      name: locale === 'en' ? 'Suneng Industrial Furnace Engineering Team' : '苏能工业炉工程技术团队',
       parentOrganization: { '@id': 'https://www.jssngyl.cn/#organization' },
-    }, { '@type': 'Person', name: '唐荔' }]);
+    }, { '@type': 'Person', name: locale === 'en' ? 'Tang Li' : '唐荔' }]);
     expect(article.publisher).toEqual({ '@id': 'https://www.jssngyl.cn/#organization' });
   });
 

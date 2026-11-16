@@ -113,13 +113,16 @@ describe('sitemap freshness signals', () => {
     const productSeo = PRODUCT_DETAIL_SEO['pusher-furnace'];
     const previous = productSeo.modifiedTime;
     try {
-      productSeo.modifiedTime = '2026-01-02T03:04:05+08:00';
+      vi.useFakeTimers();
+      vi.setSystemTime(new Date('2026-11-19T00:00:00Z'));
+      productSeo.modifiedTime = '2026-11-18T12:34:56Z';
       const entries = new Map((await buildSitemap()).map((entry) => [entry.url, entry]));
       expect(entries.get(`${site}/zh/products/detail/pusher-furnace`)?.lastModified).toEqual(
         new Date(productSeo.modifiedTime),
       );
-      expect(entries.get(`${site}/en/products/detail/pusher-furnace`)?.lastModified).toBeUndefined();
+      expect(entries.get(`${site}/en/products/detail/pusher-furnace`)?.lastModified).toBe('2026-11-14');
     } finally {
+      vi.useRealTimers();
       if (previous === undefined) delete productSeo.modifiedTime;
       else productSeo.modifiedTime = previous;
     }
@@ -130,6 +133,8 @@ describe('sitemap freshness signals', () => {
     const previousProductDate = productSeo.modifiedTime;
     const previousGuideDate = FURNACE_RENOVATION_OVERHAUL_SEO.modifiedTime;
     try {
+      vi.useFakeTimers();
+      vi.setSystemTime(new Date('2026-06-01T00:00:00Z'));
       productSeo.modifiedTime = date;
       FURNACE_RENOVATION_OVERHAUL_SEO.modifiedTime = date;
       const entries = new Map((await buildSitemap()).map((entry) => [entry.url, entry]));
@@ -138,6 +143,7 @@ describe('sitemap freshness signals', () => {
         expect(entries.get(site + path)).not.toHaveProperty('lastModified');
       }
     } finally {
+      vi.useRealTimers();
       if (previousProductDate === undefined) delete productSeo.modifiedTime;
       else productSeo.modifiedTime = previousProductDate;
       FURNACE_RENOVATION_OVERHAUL_SEO.modifiedTime = previousGuideDate;
@@ -147,14 +153,12 @@ describe('sitemap freshness signals', () => {
   it('retains real modification dates for live pages and omits withdrawn guides', async () => {
     const entries = await buildSitemap();
     const byUrl = new Map(entries.map((entry) => [entry.url, entry]));
-    for (const path of [
-      '/zh',
-      '/zh/about',
-      '/zh/products/detail/pusher-furnace',
-      '/zh/products/detail/copper-wire-annealing-line',
+    for (const [path, day] of [
+      ['/zh', '2026-11-11'], ['/zh/about', '2026-11-14'],
+      ['/zh/products/detail/pusher-furnace', '2026-11-09'],
+      ['/zh/products/detail/copper-wire-annealing-line', '2026-11-14'],
     ]) {
-      expect(byUrl.has('https://www.jssngyl.cn' + path)).toBe(true);
-      expect(byUrl.get('https://www.jssngyl.cn' + path)?.lastModified).toBeUndefined();
+      expect(byUrl.get(site + path)?.lastModified, path).toBe(day);
     }
     expect(
       byUrl.get('https://www.jssngyl.cn/zh/service/furnace-renovation-overhaul')?.lastModified,
@@ -223,12 +227,8 @@ describe('sitemap freshness signals', () => {
       const block = xml.split('<url>').find((part) => part.includes(`<loc>${site}${path}</loc>`));
       expect(block, path).toContain(`<lastmod>${revision.modifiedOn}</lastmod>`);
     }
-    for (const path of ['/en/products/detail/trolley-furnace',
-      '/en/products/detail/fastener-quench-temper-line', '/en/products/detail/mesh-belt-carbonitriding-line',
-      '/en/products/detail/roller-hearth-furnace']) {
-      expect(entries.has(path), path).toBe(true);
-      expect(entries.get(path)?.lastModified, path).toBeUndefined();
-    }
+    expect(entries.get('/zh/products/detail/pusher-furnace')?.lastModified).toBe('2026-11-09');
+    expect(entries.get('/en/products/detail/pusher-furnace')?.lastModified).toBe('2026-11-14');
   });
 
   it('does not refresh recorded dates when built again on a later day', async () => {
@@ -377,7 +377,7 @@ it('includes the bilingual equipment guide and the Chinese parts guide with thei
     expect(matching[0].lastModified).toEqual(
       pathname === approvedProcurementPages.equipment.path
         ? new Date(approvedProcurementPages.equipment.publishedModifiedAt)
-        : undefined,
+        : '2026-11-14',
     );
     expect(entries.some((entry) => new URL(entry.url).pathname === pathname.replace('/zh/', '/en/'))).toBe(bilingual);
   }

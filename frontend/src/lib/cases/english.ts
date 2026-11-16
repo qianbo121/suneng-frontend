@@ -13,6 +13,7 @@ type EnglishCopy = {
   id: string; slug: string; number: number; title: string; summary: string;
   seoTitle?: string; seoDescription?: string;
   body: string; sourceFingerprint: string; translationStatus: 'complete';
+  datePublished?: string;
   translatedAt: string; coverAlt: string; coverCaption: string;
 };
 export function caseSourceFingerprint(metadata: string, markdown: string) {
@@ -58,6 +59,7 @@ export function readEnglishCases(
       seoDescription: copy.seoDescription?.trim() || undefined,
       contentType: source.contentType, projectStatus: source.projectStatus,
       projectYear: source.projectYear, sourceDate: source.sourceDate,
+      englishDatePublished: copy.datePublished,
       datePublished: source.datePublished, dateModified: source.dateModified,
       cover: source.cover ? { src: source.cover.src, fit: source.cover.fit, alt: copy.coverAlt, caption: copy.coverCaption } : undefined,
       relatedCases: source.relatedCases ?? [],

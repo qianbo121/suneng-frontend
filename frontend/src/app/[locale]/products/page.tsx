@@ -65,12 +65,12 @@ export default async function ProductsPage({ params }: ProductsPageProps) {
   const currentLocale = (locale === 'en' ? 'en' : 'zh') as Locale;
 
   return (
-    <main className="bg-white text-[#202020]">
+    <div className="bg-white text-[#202020]">
       <JsonLd
         id={`product-collection-jsonld-${currentLocale}`}
         data={getProductCollectionJsonLd(`/${currentLocale}/products`, currentLocale)}
       />
       <ChineseProductsLanding locale={currentLocale} />
-    </main>
+    </div>
   );
 }
