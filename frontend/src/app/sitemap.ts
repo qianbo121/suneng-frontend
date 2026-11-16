@@ -372,9 +372,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...collectStaticRoutes(),
     ...caseRoutes,
     ...englishCases.map((item) => route(`/en/case/${item.slug}`, {
-      // These records retain Chinese source dates. Neither a source publication
-      // date nor a translation-completion date records publication of this
-      // English page. Omit freshness until its own publication is recorded.
+      // route() uses the verified English release date when one is recorded.
       changeFrequency: 'monthly', priority: 0.72,
       alternates: routeAlternates(`/case/${item.slug}`, sitemapLocales),
     })),

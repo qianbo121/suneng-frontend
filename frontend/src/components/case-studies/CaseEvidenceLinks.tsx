@@ -1,3 +1,4 @@
+import beltConfigurations from '@/components/products/mesh-belt-agreement-data.json';
 import projectProducts from '@/lib/cases/agreement/product-cases.json';
 import { getPublicCases } from '@/lib/cases/server';
 import { getEnglishCases } from '@/lib/cases/english';
@@ -10,6 +11,13 @@ import styles from './CaseEvidenceLinks.module.css';
 export function EntryCaseEvidence({ entryPath, locale }: { entryPath: string; locale: Locale }) {
   const product = entryPath.match(/^\/products\/detail\/([a-z0-9-]+)$/)?.[1];
   const slugs = product ? Object.entries(projectProducts).filter(([, products]) => products.includes(product)).map(([slug]) => slug) : [];
+  // The Chinese configuration table links each fastener model to its case.
+  // Offer those same destinations through the published English case records.
+  if (locale === 'en' && product === 'fastener-quench-temper-line') {
+    for (const row of beltConfigurations.rows) {
+      if (row.fastenerScope && !slugs.includes(row.caseSlug)) slugs.push(row.caseSlug);
+    }
+  }
   let projectLinks = null;
   if (slugs.length) {
     const records = locale === 'en' ? getEnglishCases() : getPublicCases();

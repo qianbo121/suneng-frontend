@@ -50,7 +50,7 @@ export function CaseList({ initial, query }: { initial: CasePageResult; query: C
           <summary>{sortLabels[query.sort]}</summary>
           <nav aria-label="案例排序">
             {(Object.keys(sortLabels) as CaseQuery['sort'][]).map((sort) => (
-              <a key={sort} href={caseListHref(query, { sort, page: 1, from: 1 })}
+              <a key={sort} rel="nofollow" href={caseListHref(query, { sort, page: 1, from: 1 })}
                 aria-current={query.sort === sort ? 'page' : undefined}>{sortLabels[sort]}</a>
             ))}
           </nav>

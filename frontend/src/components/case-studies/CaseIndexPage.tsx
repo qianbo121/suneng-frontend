@@ -22,7 +22,7 @@ export function CaseIndexPage({ query }: { query: CaseQuery }) {
     return (
       <nav className={key === 'workpiece' ? 'catalog-workpieces' : 'catalog-choices'} aria-label={allLabels[key]}>
         {getCaseFilterOptions(query, key).map(({ value, count }) => (
-          <a key={value} href={caseListHref(query, { [key]: value, page: 1, from: 1 })}
+          <a key={value} rel="nofollow" href={caseListHref(query, { [key]: value, page: 1, from: 1 })}
             aria-current={query[key] === value ? 'page' : undefined}>
             <span>{value || allLabels[key]}</span><small>{count}</small>
           </a>
@@ -65,7 +65,7 @@ export function CaseIndexPage({ query }: { query: CaseQuery }) {
               {(types.size > 1 || query.type) && <nav className="catalog-choices" aria-label="内容类型">
                 <h3>内容类型</h3>
                 {(['', ...new Set([...types, ...(query.type ? [query.type] : [])])] as CaseQuery['type'][]).map((type) => (
-                  <a key={type} href={caseListHref(query, { type, page: 1, from: 1 })}
+                  <a key={type} rel="nofollow" href={caseListHref(query, { type, page: 1, from: 1 })}
                     aria-current={type === query.type ? 'page' : undefined}>{type ? CASE_TYPE_LABELS[type] : '全部内容'}</a>
                 ))}
               </nav>}

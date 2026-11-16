@@ -1,4 +1,5 @@
 import { absoluteUrl, buildMetadata, getIndexingRobots } from '@/lib/seo/metadata';
+import { siteSettings } from '@/mock/siteSettings';
 import { LOCAL_BUSINESS_ID } from '@/lib/seo/jsonld';
 
 export type CaseSearchContent = {
@@ -40,6 +41,7 @@ export function caseSearchJsonLd(data: CaseSearchContent) {
         headline: data.title, description: data.description, inLanguage: language,
         mainEntityOfPage: { '@type': 'WebPage', '@id': url },
         image: { '@type': 'ImageObject', url: absoluteUrl(data.image), caption: data.imageAlt },
+        author: { '@type': 'Organization', '@id': LOCAL_BUSINESS_ID, name: siteSettings.companyName[data.locale] },
         publisher: { '@id': LOCAL_BUSINESS_ID },
         ...(data.datePublished && { datePublished: data.datePublished }),
         ...(data.dateModified && { dateModified: data.dateModified }),
