@@ -298,8 +298,9 @@ describe('verified original-PHP product redirects', () => {
     baseline = baseline.replace(stripIllustrationRedirect, '');
     // Same redirect baseline, with the owner-approved legacy admin retirement
     // and factory dynamic upstream recovery applied; redirect rules are unchanged.
+    // The snapshot includes the approved Baidu list logging directives.
     expect(createHash('sha256').update(baseline).digest('hex'))
-      .toBe('a3d70f408802001940c2be1985b5a9d2f5f99a071a6ba7694f31d48d16f0f05d');
+      .toBe('39da1bdc6c9d1fa87598b9c95c864d70bffde1c85d79d4136f658d56537255eb');
     expect(approvedUiProcurementMappings).toHaveLength(55);
     expect(new Set(approvedUiProcurementMappings.map(([, path]) => new URL('https://www.jssngyl.cn' + path).hash)).size).toBe(9);
   });
