@@ -38,6 +38,7 @@ jobs:
           set -euo pipefail
           python3 scripts/test_deploy_preflight.py
           python3 scripts/test_visual_check_scope.py
+          python3 scripts/test_visual_result_reuse.py
           python3 scripts/test_remote_frontend_acceptance.py
           python3 scripts/test_backup_sh.py
           python3 ops/releases/test_backup_gate.py
@@ -90,8 +91,13 @@ jobs:
     name: Website visual regression
     runs-on: ubuntu-latest
     timeout-minutes: 30
+    permissions:
+      contents: read
+      pull-requests: read
+      actions: read
     outputs:
       required: ${{ steps.visual_scope.outputs.required }}
+      reused: ${{ steps.reuse.outputs.reused }}
       outcome: ${{ steps.visual_run.outcome }}
     steps:
       - uses: actions/checkout@v7
@@ -119,15 +125,6 @@ jobs:
           python3 scripts/visual-check-scope.py \
             --base "$VISUAL_BASE_SHA" --head "$VISUAL_HEAD_SHA" --event "$VISUAL_EVENT_NAME" \
             --github-output "$GITHUB_OUTPUT" --summary "$GITHUB_STEP_SUMMARY"
-      - uses: actions/setup-node@v7
-        if: steps.visual_scope.outputs.required != 'false'
-        with:
-          node-version: 22.23.1
-      - uses: pnpm/action-setup@v6
-        if: steps.visual_scope.outputs.required != 'false'
-      - name: Install
-        if: steps.visual_scope.outputs.required != 'false'
-        run: pnpm install --frozen-lockfile
       - name: Install deterministic CJK font
         if: steps.visual_scope.outputs.required != 'false'
         # runner 默认镜像 azure.archive.ubuntu.com 会整段无响应，apt 随后静默挂死：
@@ -164,13 +161,32 @@ jobs:
             sleep 10
           done
           fc-cache -f
+      - name: Verify pre-merge page result
+        id: reuse
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main' && steps.visual_scope.outputs.required == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if ! timeout 90s python3 -I scripts/visual-result-reuse.py; then
+            echo 'reused=false' >> "$GITHUB_OUTPUT"
+            echo 'Page check evidence unavailable; running the full suite.' >> "$GITHUB_STEP_SUMMARY"
+          fi
+      - uses: actions/setup-node@v7
+        if: steps.visual_scope.outputs.required != 'false' && steps.reuse.outputs.reused != 'true'
+        with:
+          node-version: 22.23.1
+      - uses: pnpm/action-setup@v6
+        if: steps.visual_scope.outputs.required != 'false' && steps.reuse.outputs.reused != 'true'
+      - name: Install
+        if: steps.visual_scope.outputs.required != 'false' && steps.reuse.outputs.reused != 'true'
+        run: pnpm install --frozen-lockfile
       - name: Install visual test browser
-        if: steps.visual_scope.outputs.required != 'false'
+        if: steps.visual_scope.outputs.required != 'false' && steps.reuse.outputs.reused != 'true'
         timeout-minutes: 10
         run: pnpm --dir frontend exec playwright install --with-deps chromium
       - name: Visual regression
         id: visual_run
-        if: steps.visual_scope.outputs.required != 'false'
+        if: steps.visual_scope.outputs.required != 'false' && steps.reuse.outputs.reused != 'true'
         env:
           CI: true
           VISUAL_PROJECT: linux-chrome
@@ -197,12 +213,14 @@ jobs:
         env:
           JOB_RESULT: ${{ needs.visual_pages.result }}
           REQUIRED: ${{ needs.visual_pages.outputs.required }}
+          REUSED: ${{ needs.visual_pages.outputs.reused }}
           OUTCOME: ${{ needs.visual_pages.outputs.outcome }}
         run: |
           set -euo pipefail
-          case "$JOB_RESULT:$REQUIRED:$OUTCOME" in
-            success:true:success) echo "Page checks passed." ;;
-            success:false:skipped) echo "The scope check explicitly skipped pages." ;;
+          case "$JOB_RESULT:$REQUIRED:$OUTCOME:$REUSED" in
+            success:true:success:|success:true:success:false) echo "Page checks passed." ;;
+            success:true:skipped:true) echo "Verified the pre-merge page check." ;;
+            success:false:skipped:) echo "The scope check explicitly skipped pages." ;;
             *) echo "::error::Invalid page check result (job=$JOB_RESULT, required=$REQUIRED, outcome=$OUTCOME)."; exit 1 ;;
           esac
 
