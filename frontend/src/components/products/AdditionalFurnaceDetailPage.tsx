@@ -80,7 +80,7 @@ export function AdditionalFurnaceDetailPage({
       src: structureImage,
       unoptimized: true,
       alt: structure.alt[locale],
-      caption: en ? 'Internal cutaway · illustration' : '内部结构剖视示意',
+      caption: en ? 'Internal cutaway' : '内部结构剖视图',
     },
   ];
   const sectionNav = [
@@ -316,8 +316,8 @@ export function AdditionalFurnaceDetailPage({
             }
             description={
               en
-                ? 'Use the illustration to discuss equipment interfaces. Final details follow the agreed design.'
-                : '结构示意用于沟通设备组成，实际位置、尺寸和配套范围按项目设计确认。'
+                ? 'Use the diagram to discuss equipment interfaces. Final details follow the agreed design.'
+                : '结构图用于沟通设备组成，实际位置、尺寸和配套范围按项目设计确认。'
             }
           >
             <div className={shared.structureFeature}>
@@ -326,8 +326,8 @@ export function AdditionalFurnaceDetailPage({
                 image={{
                   ...gallery[1],
                   caption: structure.caption?.[locale] ?? (en
-                    ? 'Internal cutaway · Electric heating illustrated; the final arrangement follows the agreed duty.'
-                    : '内部结构剖视示意 · 图示电加热配置，实际方案按工况确认。'),
+                    ? 'Internal cutaway · Electric heating shown; the final arrangement follows the agreed duty.'
+                    : '内部结构剖视图 · 图示电加热配置，实际方案按工况确认。'),
                 }}
                 callouts={structureCallouts}
               />

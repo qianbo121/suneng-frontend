@@ -15,7 +15,7 @@ export function RollerScene() {
         className={styles.scene}
         preserveAspectRatio="xMidYMid meet"
         role="img"
-        aria-label="辊底炉工作示意动画"
+        aria-label="辊底炉工作动画"
       >
         <defs>
           <linearGradient id="bgRollerCard" x1="0" y1="0" x2="1" y2="1">

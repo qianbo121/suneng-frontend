@@ -415,7 +415,7 @@ export function PitFurnaceDetailPage({ locale = 'zh' }: { locale?: Locale }) {
           <section id="structure" className={styles.section}>
             <SectionHeader
               title={t("井式炉关键结构与报价前确认项")}
-              description={t("剖切示意用于建立结构语言，最终布置仍以工件、工艺、载荷和现场条件为准。")}
+              description={t("剖切图展示设备内部结构，最终布置仍以工件、工艺、载荷和现场条件为准。")}
             />
             <div className={styles.structureFeature}>
               <PitCutawayDiagram locale={locale} />

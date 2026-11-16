@@ -97,7 +97,7 @@ const sections: NavigationHubSection[] = [
         description: '围绕加热、冷却或淬火、输送、控制和数据记录，评估整线组合与接口边界。',
         href: '/zh/solutions/continuous-heat-treatment-line',
         image: '/images/products/annealing-solution-line/gallery/line-01.jpg',
-        imageAlt: '连续热处理生产线设备参考图',
+        imageAlt: '连续热处理生产线设备图',
       },
       {
         label: '供应商能力',

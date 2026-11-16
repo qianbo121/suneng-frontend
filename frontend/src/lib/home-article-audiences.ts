@@ -117,7 +117,7 @@ function getHomeArticleSummary(item: NewsApiItem) {
     return reviewed.summary;
   }
   const candidates = [item.summaryZh, item.seoDescriptionZh].map((value) => value?.trim() || '');
-  return candidates.find((value) => value && !/^(?:画面|配图|图片|封面|示意图|本图|图示)/.test(value)) || item.titleZh;
+  return candidates.find((value) => value && !/^(?:画面|配图|图片|封面|图|本图|图示)/.test(value)) || item.titleZh;
 }
 
 export function mapNewsToHomeAudienceArticles(items: NewsApiItem[]): HomeAudienceArticle[] {

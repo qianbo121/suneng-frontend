@@ -1,6 +1,6 @@
 export const productionLineAnimationConfig: Record<string, { note: string; stages: string[] }> = {
   'track-shoe-press-quench-line': {
-    note: '电加热与喷淋方案示意 · 节拍已压缩',
+    note: '电加热与喷淋方案图 · 节拍已压缩',
     stages: [
       '履带板有序进入输送辊道',
       '工件在炉内加热',

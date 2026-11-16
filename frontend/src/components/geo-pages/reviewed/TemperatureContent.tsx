@@ -79,7 +79,7 @@ export function TemperatureContent() {
                   sizes="(max-width: 767px) 100vw, 50vw"
                   priority
                 />
-                <figcaption>{'多点测温准备示意：核对布点、记录仪与测试条件'}</figcaption>
+                <figcaption>{'多点测温准备：核对布点、记录仪与测试条件'}</figcaption>
               </figure>
             </div>
           </div>

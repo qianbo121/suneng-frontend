@@ -31,7 +31,7 @@ export function getContactFactoryMap(locale: Locale): FactoryMap {
     preview: {
       kind: 'image', src: '/images/contact/factory-location.svg?v=4',
       mobileSrc: '/images/contact/factory-location-mobile.svg?v=4',
-      title: '苏能厂区周边示意图：位于俞张线（205县道）西侧、三兴路交叉口以北，北侧为神龙电气、南侧为润程机械。点击打开百度地图查看准确位置。',
+      title: '苏能厂区周边位置图：位于俞张线（205县道）西侧、三兴路交叉口以北，北侧为神龙电气、南侧为润程机械。点击打开百度地图查看准确位置。',
     },
   };
 }

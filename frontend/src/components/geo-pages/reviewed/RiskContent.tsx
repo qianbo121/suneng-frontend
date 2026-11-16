@@ -79,7 +79,7 @@ export function RiskContent() {
                   sizes="(max-width: 767px) 100vw, 50vw"
                   priority
                 />
-                <figcaption>{'改造评估示意：对照现场接口、图纸与施工计划'}</figcaption>
+                <figcaption>{'改造评估：对照现场接口、图纸与施工计划'}</figcaption>
               </figure>
             </div>
           </div>

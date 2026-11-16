@@ -36,7 +36,7 @@ describe('Henan case reviewed artifact handoff', () => {
     expect(body).not.toContain('现存报价');
     for (const provision of ['火焰检测', '熄火保护', '快速切断阀', '氮气吹扫', '防爆膜', '应急电源', '不属于含氢保护气氛的光亮退火'])
       expect(body).toContain(provision);
-    expect(web.cover.caption).toBe('参考图，非项目现场照片');
+    expect(web.cover.caption).toBe('');
     expect(web.relatedLinks.map((link: { href: string }) => link.href)).toEqual(['/zh/products/detail/annealing-solution-line']);
     expect(body).not.toMatch(/历史价格|电气范围口径/);
   });
@@ -48,7 +48,7 @@ describe('Henan case reviewed artifact handoff', () => {
     expect(body).not.toMatch(/Existing quotations|historical prices|electrical-scope wording/);
     for (const provision of ['flame detection', 'flame-failure protection', 'quick-shut-off', 'purged with nitrogen', 'rupture disc', 'emergency power supply', 'not bright annealing under a hydrogen-bearing protective atmosphere', 'acid-fume treatment'])
       expect(body).toContain(provision);
-    expect(copy.coverCaption).toBe('Reference image, not a project-site photo.');
+    expect(copy.coverCaption).toBe('');
     expect(`${body}\n${JSON.stringify(copy)}`).not.toMatch(/localhost|127\.0\.0\.1|\/Users\/|QZB170726|Qianye|Xuchang|RMB|yuan/i);
   });
 

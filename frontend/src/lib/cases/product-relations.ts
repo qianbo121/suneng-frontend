@@ -109,7 +109,7 @@ export function getEntryCases(entryPath: string, locale: Locale) {
     ].includes(name));
     const cover = item.cover ?? (genericMetal ? {
       src: '/images/workpieces/case-cards-20260912/white/generic-metal-components.png',
-      alt: locale === 'en' ? 'Generic metal-component category illustration, not project workpieces.' : '通用金属机件类别示意，非项目实物',
+      alt: locale === 'en' ? 'Metal component categories' : '金属机件类别',
       caption: '', fit: 'contain' as const,
     } : undefined);
     // The card uses a white-background copy; the article's original cover stays unchanged.

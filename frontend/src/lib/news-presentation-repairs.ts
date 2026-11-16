@@ -23,7 +23,7 @@ export function repairNewsPresentation(root: HTMLElement, slug?: string, locale?
       if (url.origin !== 'https://www.jssngyl.cn' || url.pathname !== diagramPath) continue;
       image.setAttribute(
         'alt',
-        '热处理生产线自动化核验示意：动作、联锁、记录、接口四层，对照正常自动运行、授权人工接管、故障停机与恢复三种状态',
+        '热处理生产线自动化核验：动作、联锁、记录、接口四层，对照正常自动运行、授权人工接管、故障停机与恢复三种状态',
       );
     } catch {
       // An invalid or changed image is not evidence for reusing this description.

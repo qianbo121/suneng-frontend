@@ -66,10 +66,13 @@ describe('case resources preserve the published content', () => {
       const figure = html.split('class="case-article-cover"')[1].split('</figure>')[0];
       expect(figure, item.slug).toContain(`alt="${item.cover.alt}"`);
       expect(figure, item.slug).toContain(`object-fit:${item.cover.fit || 'contain'}`);
-      // An approved cover must say what it is, in reader-facing words rather than a production note.
-      expect(item.cover.caption, item.slug).toBeTruthy();
-      expect(INTERNAL_CAPTION_NOTE.test(item.cover.caption ?? ''), item.slug).toBe(false);
-      expect(figure, item.slug).toContain(`<figcaption>${item.cover.caption}</figcaption>`);
+      expect(item.cover.alt.trim(), item.slug).toBeTruthy();
+      if (item.cover.caption) {
+        expect(INTERNAL_CAPTION_NOTE.test(item.cover.caption), item.slug).toBe(false);
+        expect(figure, item.slug).toContain(`<figcaption>${item.cover.caption}</figcaption>`);
+      } else {
+        expect(figure, item.slug).not.toContain('<figcaption');
+      }
       expect(html.indexOf('class="case-article-header"'), item.slug).toBeLessThan(
         html.indexOf('class="case-article-cover"'),
       );
@@ -84,7 +87,8 @@ describe('case resources preserve the published content', () => {
 
   it("keeps the approved Henan page free of links to withdrawn guides and solutions", () => {
     const html = renderToStaticMarkup(createElement(CaseArticlePage, { slug: 'stainless-strip-annealing-supply-scope', searchParams: {} }));
-    expect(html).toContain('<figcaption>参考图，非项目现场照片</figcaption>');
+    expect(html).toContain('不锈钢带卷、连续退火炉及冷却段');
+    expect(html).not.toContain('非项目现场照片');
     for (const [, href] of html.matchAll(/href="([^"]+)"/g)) expect(isWithdrawnTechnicalPath(href), href).toBe(false);
     expect(html).toContain('href="/zh/products/detail/annealing-solution-line"');
     expect(html).toContain('href="/zh/articles/gongye-lu-baojia-canshu"');

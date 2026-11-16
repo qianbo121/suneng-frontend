@@ -8,7 +8,7 @@ export function TemperingScene() {
         className={styles.scene}
         preserveAspectRatio="xMidYMid meet"
         role="img"
-        aria-label="回火炉工作示意动画"
+        aria-label="回火炉工作动画"
       >
         <defs>
           <linearGradient id="bgTemperCard" x1="0" y1="0" x2="1" y2="1">

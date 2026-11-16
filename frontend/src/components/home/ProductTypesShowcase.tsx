@@ -324,7 +324,7 @@ export function ProductTypesShowcase({ locale = 'zh' }: { locale?: 'zh' | 'en' }
         </div>
 
         <p className={styles.homeLineNote}>
-          {t('设备与典型流程示意，具体工艺及配置按材料、产品要求和供货范围确认。', 'Equipment and process illustrations. Final configuration depends on the material, product requirements and agreed scope of supply.')}
+          {t('设备与典型流程图，具体工艺及配置按材料、产品要求和供货范围确认。', 'Equipment and process flow. Final configuration depends on the material, product requirements and agreed scope of supply.')}
         </p>
 
         <div className={styles.furnaceGrid} role="group" aria-label={t('单炉产品类型', 'Individual furnace types')}>

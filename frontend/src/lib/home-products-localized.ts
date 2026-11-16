@@ -111,14 +111,14 @@ export const homeLineMotionCopyEn: Record<string, { stages: readonly string[]; n
   },
   'roller-mesh-belt-line': {
     stages: ['Parts are spread on the mesh belt', 'Parts enter the heating zone', 'Parts pass through the soaking zone', 'Controlled cooling after heat treatment', 'Finished parts leave the belt', 'Inspect parts to the agreed requirements'],
-    note: 'Process illustration; parameters depend on material and requirements.',
+    note: 'Process diagram; parameters depend on material and requirements.',
   },
   'copper-wire-annealing-line': {
     stages: ['Wire feeds from the payoff reel', 'Guides maintain the wire path', 'Wire passes through the annealing section', 'Wire cools under protection', 'Drying is provided where required', 'Annealed wire winds onto the take-up reel'],
-    note: 'Process illustration; atmosphere and cooling depend on wire specifications.',
+    note: 'Process diagram; atmosphere and cooling depend on wire specifications.',
   },
   'annealing-solution-line': {
     stages: ['Strip feeds from the uncoiler', 'Prepare the strip for heating', 'Strip enters the heating section', 'Strip passes through the soaking section', 'Controlled cooling follows the hot zone', 'Treated strip is recoiled'],
-    note: 'Process illustration; annealing and solution treatment use distinct recipes.',
+    note: 'Process diagram; annealing and solution treatment use distinct recipes.',
   },
 };

@@ -5,7 +5,7 @@ import styles from './FastenerLineDetailPage.module.css';
 export function ProductionLineHeroDiagram({ content }: { content: ProductionLineContent }) {
   return (
     <figure className={`${styles.gallery} ${styles.heroDiagram}`}>
-      <span>工艺关系示意</span>
+      <span>工艺关系图</span>
       <h2>{content.sections.process.title}</h2>
       <ol>
         {(content.sections.process.routes?.[0]?.steps ?? []).map((step) => (
@@ -22,7 +22,7 @@ export function ProductionLineFlow({ content }: { content: ProductionLineContent
   return (
     <div className={styles.routeStack}>
       {process.mode === 'cell' && (
-        <figure className={styles.cellDiagram} aria-label="炉组与共享资源关系示意">
+        <figure className={styles.cellDiagram} aria-label="炉组与共享资源关系图">
           <div>
             加热炉组<span>各炉出料时间窗</span>
           </div>
@@ -34,7 +34,7 @@ export function ProductionLineFlow({ content }: { content: ProductionLineContent
           <div>
             淬火资源与后续工位<span>占用、释放与交接</span>
           </div>
-          <figcaption>共享资源关系示意，不代表设备数量、空间位置或施工布置。</figcaption>
+          <figcaption>共享资源关系图，不代表设备数量、空间位置或施工布置。</figcaption>
         </figure>
       )}
       {process.routes?.map((route) => (

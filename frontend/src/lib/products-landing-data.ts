@@ -285,7 +285,7 @@ export const productCenterProductionLines = [
     accentSteps: flow.accentSteps,
     image: heroImage.src,
     imageAlt: heroImage.alt,
-    imageLabel: '设备场景示意',
+    imageLabel: '设备场景',
     temperatureNote: '温度按工艺确认',
     href: `/zh/products/detail/${line.slug}`,
     detailStatus: 'published' as const,
@@ -366,7 +366,7 @@ function buildFurnaceCard(slug: string) {
       description: addition.summary,
       fieldLabel: addition.group === 'continuous' ? ('输送方式' as const) : ('装炉方式' as const),
       fieldValue: addition.handling,
-      imageLabel: '设备结构示意',
+      imageLabel: '设备结构图',
     };
   const product = getProductCategory(slug);
   const furnace = homeSingleFurnaces.find((item) => item.id === slug);
