@@ -1,7 +1,7 @@
 {
   "id": "cylinder-liner-solution-aging",
   "slug": "cylinder-liner-solution-aging",
-  "title": "高压缠绕瓶铝内胆：每炉装载量包含料框吗？",
+  "title": "高压缠绕瓶铝内胆固溶时效线（固溶炉按内胆净重计装载量）",
   "summary": "协议约定一条用于高压缠绕瓶铝内胆的固溶时效生产线，料框在固溶炉、水槽和时效炉之间转运。",
   "body": "cylinder-liner-solution-aging.md",
   "contentType": "experience",

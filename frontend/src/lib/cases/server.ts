@@ -1,5 +1,5 @@
 import 'server-only';
-import { caseCatalogEntry } from './catalog-entry';
+import { caseCatalogCover } from './catalog-entry';
 import fs from 'node:fs';
 import path from 'node:path';
 import { cache } from 'react';
@@ -85,7 +85,7 @@ export function readCaseDirectory(
         participation: raw.participation,
         sourceSummary: raw.sourceSummary,
         coverTitle: raw.coverTitle,
-        listTitle: caseCatalogEntry(raw.slug, 'zh')?.title ?? raw.listTitle,
+        listTitle: raw.listTitle,
         listSummary: raw.listSummary,
         cover: raw.cover
           ? {
@@ -172,7 +172,7 @@ export function getCaseResults(query: CaseQuery) {
     .map(toCaseCard)
     .map((card) => ({
       ...card,
-      cover: caseCatalogEntry(card.slug, 'zh')?.cover ?? card.cover,
+      cover: caseCatalogCover(card.slug, 'zh') ?? card.cover,
       summary: caseListPresentation(card).summary,
     }));
   return paginateCases(cards, query);

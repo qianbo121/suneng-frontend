@@ -1,14 +1,14 @@
 {
   "id": "overseas-oil-quench",
   "slug": "overseas-oil-quench",
-  "title": "Does the specified output cover the whole protective-atmosphere oil quench and temper line?",
+  "title": "Overseas protective-atmosphere oil quench and temper line (500 mm main furnace belt)",
   "summary": "Under the agreement, Suneng is to design and manufacture the line for an overseas buyer. It specifies the equipment, utility connections and acceptance checks.",
   "body": "overseas-oil-quench.md",
   "coverAlt": "Oil quench and temper line: feeder, quenching furnace, oil quench tank, oil-draining conveyor, washer, tempering furnace and final cooling tank.",
   "coverCaption": "Oil quench and temper line: feeder, quenching furnace, oil quench tank, oil-draining conveyor, washer, tempering furnace and final cooling tank.",
   "translationStatus": "complete",
-  "sourceFingerprint": "e862e3c2dcb49cfb1e3b170ad0cd0c77d1f197d8c8f2955bcf08ac10494a064f",
-  "seoTitle": "Protective-atmosphere oil quench and temper line output",
+  "sourceFingerprint": "c09ce75f146f08757566a2d9f7b2fd3fd3b27557fc7c875b6e6d0938a27ac144",
+  "seoTitle": "500 mm belt line for protective-atmosphere oil quenching",
   "seoDescription": "The agreement lists approximately 300 kg/h for oil quenching, washing and tempering together. Adding the furnace ratings would count the same parts twice.",
   "presentation": {
     "view": {

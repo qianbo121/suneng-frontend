@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { FiArrowRight } from 'react-icons/fi';
-import { FASTENER_CASE_PATH, FASTENER_CASE_SLUG, fastenerCaseVisible } from '@/lib/cases/fastener-case-entry';
+import { FASTENER_CASE_PATH, FASTENER_CASE_SLUG, FASTENER_CASE_TITLE, fastenerCaseVisible } from '@/lib/cases/fastener-case-entry';
 import { PUBLIC_CASE_SLUGS } from '@/lib/cases/public-case-allowlist';
 import data from './mesh-belt-agreement-data.json';
 import styles from './MeshBeltAgreement.module.css';
@@ -46,7 +46,7 @@ export function BeltAgreementTable({ fasteners = false }: { fasteners?: boolean 
       </div>
       <p className={styles.note}>{data.note}</p>
       {fasteners && showCase && <Link href={FASTENER_CASE_PATH} prefetch={false} className={styles.projectEntry}>
-        <span>紧固件网带炉项目：同一台炉淬火、渗碳各约定多少产量？</span><FiArrowRight aria-hidden="true" />
+        <span>{FASTENER_CASE_TITLE}</span><FiArrowRight aria-hidden="true" />
       </Link>}
       <p className={styles.note}>RCWT 三款型号列的是有效宽度，其余配置列的是网带宽度。</p>
       <p className={styles.note}>除 RCWT 型号外，表中编号用于询价时指明工艺、网带宽度和加热段长度。正式型号以技术协议为准。</p>

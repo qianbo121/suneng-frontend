@@ -23,8 +23,8 @@ export function FastenerCase() {
       <Image className={s.panorama} src={assets + '/line-panorama.webp'} alt={fastenerCaseSearchContent.imageAlt} fill sizes="(max-width: 720px) 100vw, 64vw" priority />
       <div className={`site-page-container ${s.heroInner}`}><div className={s.copy}>
         <Breadcrumb locale="zh" tone="light" className={s.category}
-          items={[{ label: '项目案例', href: '/zh/case' }]} currentLabel="紧固件网带炉项目" />
-        <h1>紧固件网带炉项目：<br />淬火与渗碳各约定多少产量？</h1>
+          items={[{ label: '项目案例', href: '/zh/case' }]} currentLabel={fastenerCaseSearchContent.title} />
+        <h1>{fastenerCaseSearchContent.title}</h1>
         <p className={s.summary}>2025 年，江苏苏能工业炉有限公司与一家紧固件企业签订技术协议，约定由苏能设计、制造一条网带炉热处理生产线。</p>
         <p className={s.projectState}>已签技术协议</p>
       </div></div>

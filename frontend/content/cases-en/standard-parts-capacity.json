@@ -1,14 +1,14 @@
 {
   "id": "standard-parts-capacity",
   "slug": "standard-parts-capacity",
-  "title": "Mesh belt line for standard parts: what maximum throughput does the equipment specification give?",
+  "title": "Mesh belt quench and temper line for standard parts and U-bolts (gas heating in the front of the main furnace and electric heating in the rear)",
   "summary": "Suneng and the buyer specified a mesh belt quench and temper line for standard parts, hardware components and U-bolts.",
   "body": "standard-parts-capacity.md",
   "coverAlt": "Standard-parts line from infeed through a roller-supported mesh belt quenching furnace, quench tank with a gently sloping mesh belt elevator, oil-draining conveyor, washer, hot-air tempering furnace and cooling tank to outfeed.",
   "coverCaption": "Standard-parts line from infeed through a roller-supported mesh belt quenching furnace, quench tank with a gently sloping mesh belt elevator, oil-draining conveyor, washer, hot-air tempering furnace and cooling tank to outfeed.",
   "translationStatus": "complete",
-  "sourceFingerprint": "e766546f2ebd8d839ed76addc9a6491f06b6a6881130be5880432c42095a9bf8",
-  "seoTitle": "U-bolt and standard parts furnace: what is its limit?",
+  "sourceFingerprint": "d3ea12d355e8c125962a81418ad297530985d8daa021e57730ad28720d0b606c",
+  "seoTitle": "Mesh belt line for U-bolts: gas and electric heating zones",
   "seoDescription": "The equipment specification lists up to approximately 1500 kg/h for quenching and tempering. Output varies with part size, material and treatment requirements.",
   "presentation": {
     "view": {

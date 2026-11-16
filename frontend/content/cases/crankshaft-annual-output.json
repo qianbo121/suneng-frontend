@@ -1,7 +1,7 @@
 {
   "id": "crankshaft-annual-output",
   "slug": "crankshaft-annual-output",
-  "title": "曲轴网带调质线：为什么按年件数核对产量？",
+  "title": "曲轴网带调质线（协议按全年处理件数约定产能）",
   "summary": "技术协议约定一条用于曲轴淬火、回火的网带调质生产线，生产能力以全年处理件数列示。",
   "body": "crankshaft-annual-output.md",
   "contentType": "experience",

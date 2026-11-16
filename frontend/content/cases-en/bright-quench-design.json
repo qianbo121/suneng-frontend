@@ -1,14 +1,14 @@
 {
   "id": "bright-quench-design",
   "slug": "bright-quench-design",
-  "title": "Bright quenching on a mesh belt: which part data determine the design throughput?",
+  "title": "Mesh belt line design for bright quenching and tempering of small and medium-sized parts",
   "summary": "Suneng prepared a design proposal for a bright quench and temper line for small and medium-sized metal components. The buyer is to confirm the proposed throughput in writing for its parts and operating conditions.",
   "body": "bright-quench-design.md",
   "coverAlt": "Bright-quench line with a loading platform, roller-supported quenching furnace, oil tank, elevating oil-draining conveyor, elevating washer, tempering furnace, cooling water tank and outfeed.",
   "coverCaption": "Bright-quench line with a loading platform, roller-supported quenching furnace, oil tank, elevating oil-draining conveyor, elevating washer, tempering furnace, cooling water tank and outfeed.",
   "translationStatus": "complete",
-  "sourceFingerprint": "d3f4772ceeb64b58644466c43dd7cfcf863c611792b76656be7a7e3ff9f69102",
-  "seoTitle": "Bright quench line: what sets design throughput?",
+  "sourceFingerprint": "e982ad0d581ef451802ad755740bc0346060f74eac2b2c47dfa804e9d0c23a83",
+  "seoTitle": "Mesh belt line design for bright quenching and tempering",
   "seoDescription": "The design proposal uses approximately 1000 kg/h as a reference. The buyer confirms representative parts, bed depth and the process curve in writing.",
   "presentation": {
     "view": {

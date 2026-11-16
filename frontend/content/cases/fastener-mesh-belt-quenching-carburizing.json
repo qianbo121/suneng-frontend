@@ -1,7 +1,7 @@
 {
   "id": "fastener-mesh-belt-quenching-carburizing",
   "slug": "fastener-mesh-belt-quenching-carburizing",
-  "title": "紧固件网带炉项目：淬火与渗碳各约定多少产量？",
+  "title": "螺丝钉网带炉（同一台炉分别用于淬火和渗碳）",
   "summary": "RCWT-160/105-9/6 的技术协议分别约定：淬火炉淬火300 kg/h、渗碳150 kg/h，回火炉约300 kg/h。实际产量随工件、装料和工艺条件变化。",
   "body": "fastener-mesh-belt-quenching-carburizing.md",
   "contentType": "experience",

@@ -1,5 +1,5 @@
 import 'server-only';
-import { caseCatalogEntry } from './catalog-entry';
+import { caseCatalogCover } from './catalog-entry';
 import fs from 'node:fs';
 import path from 'node:path';
 import { createHash } from 'node:crypto';
@@ -65,7 +65,7 @@ export function readEnglishCases(
       cover: source.cover ? { src: source.cover.src, fit: source.cover.fit, alt: copy.coverAlt, caption: copy.coverCaption } : undefined,
       relatedCases: source.relatedCases ?? [],
       html: body.html, toc: body.toc,
-      searchText: `${copy.title} ${caseCatalogEntry(source.slug, 'en')?.title ?? ''} ${copy.summary} ${body.plainText}`.normalize('NFKC').toLowerCase(),
+      searchText: `${copy.title} ${copy.summary} ${body.plainText}`.normalize('NFKC').toLowerCase(),
     }];
   });
 }
@@ -117,8 +117,8 @@ export function getEnglishCaseResults(query: CaseQuery) {
     return (b.dateModified ?? '').localeCompare(a.dateModified ?? '') || a.id.localeCompare(b.id);
   });
   const items = records.slice((query.page - 1) * CASE_PAGE_SIZE, query.page * CASE_PAGE_SIZE).map((record) => {
-    const entry = caseCatalogEntry(record.slug, 'en');
-    return entry ? { ...record, title: entry.title, cover: entry.cover } : record;
+    const cover = caseCatalogCover(record.slug, 'en');
+    return cover ? { ...record, cover } : record;
   });
   return { items, total: records.length, totalPages: Math.ceil(records.length / CASE_PAGE_SIZE) };
 }

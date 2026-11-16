@@ -1,14 +1,14 @@
 {
   "id": "steering-forgings",
   "slug": "steering-forgings",
-  "title": "Mesh belt line for steering-arm forgings: how can one furnace serve hardening and normalizing?",
+  "title": "Mesh belt line for forged steering arms (one heating furnace for quenching and normalizing)",
   "summary": "The available technical agreement describes a roller-supported mesh belt line for steering-arm forgings. The first furnace provides heating for either normalizing or quenching.",
   "body": "steering-forgings.md",
   "coverAlt": "Quench and temper route for forgings: loading table, shared quenching and normalizing furnace, quench tank, lift and blow-dry stage, tempering furnace, cooling tank and a second lift and blow-dry stage for collection.",
   "coverCaption": "Quench and temper route for forgings: loading table, shared quenching and normalizing furnace, quench tank, lift and blow-dry stage, tempering furnace, cooling tank and a second lift and blow-dry stage for collection.",
   "translationStatus": "complete",
-  "sourceFingerprint": "0348b43580fdfb8bd1367ce63579b86c0c3f79d7563fc73e55b8c423982221a2",
-  "seoTitle": "Steering-arm forgings: which processes share a furnace?",
+  "sourceFingerprint": "355636de3f400af5747505d7844a70ae19a18928b6d1d94949e01a911b61bbf9",
+  "seoTitle": "Steering-arm forgings: shared furnace for two processes",
   "seoDescription": "One furnace heats forgings for normalizing or quenching. On the quench and temper route, the forgings then pass through a quench tank and tempering furnace.",
   "presentation": {
     "view": {
