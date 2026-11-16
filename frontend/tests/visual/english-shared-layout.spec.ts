@@ -64,7 +64,7 @@ test('English inquiry keeps its selection, keyboard focus and validation usable'
   await page.keyboard.press('Escape');
   await expect(trigger).toBeFocused();
   await expect(form.getByRole('listbox')).toHaveCount(0);
-  await form.getByRole('button', { name: 'Send project details' }).click();
+  await form.getByRole('button', { name: 'Send inquiry' }).click();
   await expect(form.locator('[aria-invalid=true]').first()).toBeFocused();
   await expect(form.locator('[role=status], [aria-live=polite]').filter({ hasText: /Please/ }).first()).toBeVisible();
 });
