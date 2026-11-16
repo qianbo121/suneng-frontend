@@ -1,4 +1,16 @@
 {
+  "/zh/case": {
+    "modifiedOn": "2026-11-16",
+    "sourceCommit": "9cb72d65e3e6710926c4430d426f67f163a13643"
+  },
+  "/en/case": {
+    "modifiedOn": "2026-11-15",
+    "sourceCommit": "f74a70e6ecbaa56893869d76d82d1f89aa7154d4"
+  },
+  "/en/case/stainless-strip-annealing-supply-scope": {
+    "modifiedOn": "2026-11-15",
+    "sourceCommit": "f74a70e6ecbaa56893869d76d82d1f89aa7154d4"
+  },
   "/zh/products/detail/box-furnace": {
     "modifiedOn": "2026-10-20",
     "sourceCommit": "e6dbe0a5df9b9d44cf91e8812ea44c951121ba11"
