@@ -29,6 +29,7 @@
 .category { display:inline-flex; color:white; line-height:1.65; }
 .copy h1 { color:white; font-size:clamp(23px,2.5vw,33px); line-height:1.3; margin:12px 0; text-wrap:balance; }
 .summary { max-width:94%; line-height:1.6; }
+.projectState { margin-top:17px; font-size:.89em; }
 .content { position:relative; padding-bottom:32px; }
 .capacity,.workpiece,.cards section { background:linear-gradient(120deg,#fff,#f4f8fd); border:1px solid var(--edge); border-radius:13px; box-shadow:0 2px 8px #11356b0d; }
 .capacity { position:relative; margin-top:-43px; text-align:center; padding:22px 0 14px; }

@@ -83,6 +83,9 @@ export function AgreementPage({ data }: { data: AgreementCase }) {
             <Breadcrumb locale={data.locale} tone="light" className={styles.category} items={[{ label: label('项目案例', 'Case studies') }]} />
             <CaseTitle title={data.title} english={english} />
             <p className={styles.summary}>{data.summary}</p>
+            {data.slug === 'fastener-mesh-belt-quenching-carburizing' && (
+              <p className={styles.projectState}>{data.status}</p>
+            )}
           </div>
         </div>
       </header>
