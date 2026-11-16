@@ -52,6 +52,18 @@ http {
     ~*bingbot "bingbot";
   }
 
+  # Log original list URLs separately so the existing path-based analytics stay comparable.
+  # The user-agent selects candidates; verify crawler identity before counting visits.
+  map "$crawler_family:$request_method:$uri" $log_baidu_public_list {
+    default 0;
+    ~^baidu_spider:(GET|HEAD):/(zh|en)/(news|case)/?$ 1;
+  }
+
+  log_format baidu_public_list_json escape=json
+    '{"time":"$time_iso8601","request_id":"$request_id","host":"$host",'
+    '"remote_addr":"$remote_addr","method":"$request_method","request_uri":"$request_uri",'
+    '"status":$status,"user_agent":"$http_user_agent"}';
+
   map $http_x_suneng_monitoring_probe $monitoring_probe {
     default "";
     ~*^crawler-verification$ "crawler_verification";
@@ -679,6 +691,7 @@ http {
     http2 on;
     server_name ${DOMAIN};
     access_log /var/log/nginx/www.access.json analytics_json;
+    access_log /var/log/nginx/baidu-public-list.access.json baidu_public_list_json if=$log_baidu_public_list;
 
     # ESA origin ranges verified in the site console on 2026-09-30.
     # Scope trust to the public website; never trust arbitrary forwarded headers.
