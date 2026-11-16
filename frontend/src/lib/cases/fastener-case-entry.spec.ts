@@ -10,7 +10,7 @@ vi.mock('react', async original => ({ ...(await original<typeof import('react')>
 afterEach(() => { vi.unstubAllEnvs(); vi.resetModules(); });
 
 describe('approved Chinese fastener case', () => {
-  it('uses the same cover description on the detail and list pages and only sends card image fields', async () => {
+  it('describes the line on the detail page and the screws pictured in the list', async () => {
     const { FastenerCase } = await import('@/components/case-studies/fastener-mesh-belt/FastenerCase');
     const { FASTENER_CASE_SLUG } = await import('./fastener-case-entry');
     const { getCaseResults } = await import('./server');
@@ -20,7 +20,10 @@ describe('approved Chinese fastener case', () => {
     expect(html).toContain(`alt="${label}"`);
     expect(html).toContain(`"caption":"${label}"`);
     const cards = getCaseResults(parseCaseQuery({})).items;
-    expect(cards.find(card => card.slug === FASTENER_CASE_SLUG)?.cover?.alt).toBe(label);
+    expect(cards.find(card => card.slug === FASTENER_CASE_SLUG)?.cover).toMatchObject({
+      src: '/images/workpieces/fasteners-batch/workpiece-self-drilling-screws.webp',
+      alt: '螺丝钉',
+    });
     for (const card of cards) {
       if (card.cover) expect(card.cover).not.toHaveProperty('caption');
     }

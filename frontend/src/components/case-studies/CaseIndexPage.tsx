@@ -99,7 +99,7 @@ export function CaseIndexPage({ query }: { query: CaseQuery }) {
                   '@type': 'ListItem',
                   position: index + 1,
                   url: absoluteUrl(`/zh/case/${item.slug}`),
-                  name: item.title,
+                  name: item.listTitle || item.title,
                 })),
               },
             }]),

@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import { FiArrowRight, FiBarChart2, FiBox, FiSettings, FiShield, FiUsers } from 'react-icons/fi';
+import { FiArrowRight, FiBarChart2, FiBox, FiShield, FiUsers } from 'react-icons/fi';
 import { WechatContactButton } from '@/components/lead/WechatContactButton';
 import { LineFlow } from './LineFlow';
 import { Faq } from './Faq';
@@ -26,10 +26,7 @@ export function FastenerCase() {
           items={[{ label: '项目案例', href: '/zh/case' }]} currentLabel="紧固件网带炉项目" />
         <h1>紧固件网带炉项目：<br />淬火与渗碳各约定多少产量？</h1>
         <p className={s.summary}>2025 年，江苏苏能工业炉有限公司与一家紧固件企业签订技术协议，约定由苏能设计、制造一条网带炉热处理生产线。</p>
-        <p className={s.model}>
-          <span><FiSettings aria-hidden />设备型号： RCWT-160/105-9/6</span>
-          <span className={s.projectState}>已签技术协议</span>
-        </p>
+        <p className={s.projectState}>已签技术协议</p>
       </div></div>
     </header>
     <div className={`site-page-container ${s.content}`}>

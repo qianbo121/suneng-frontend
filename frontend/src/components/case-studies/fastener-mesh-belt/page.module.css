@@ -1,3 +1,12 @@
+.source { composes: note from "../../agreement-cases/ProjectTypography.module.css"; }
+.capacity { composes: figures from "../../agreement-cases/ProjectTypography.module.css"; }
+.workpiece { composes: conditions from "../../agreement-cases/ProjectTypography.module.css"; }
+.features { composes: features from "../../agreement-cases/ProjectTypography.module.css"; }
+.cards { composes: cards from "../../agreement-cases/ProjectTypography.module.css"; }
+.section { composes: section from "../../agreement-cases/ProjectTypography.module.css"; }
+.hero { composes: hero from "../../agreement-cases/ProjectTypography.module.css"; }
+.copy { composes: copy from "../../agreement-cases/ProjectTypography.module.css"; }
+.page { composes: project from "../../agreement-cases/ProjectTypography.module.css"; }
 .page { --blue:#064bd3; --navy:#082957; --edge:#d3e1f1; color:#182b43; background:white; font-size:clamp(15px,1.22vw,18px); line-height:1.65; }
 .page h1,.page h2,.page h3,.page b,.page th { font-weight:700; }
 .page h2 { color:var(--navy); font-size:clamp(21px,1.8vw,28px); line-height:1.4; }
@@ -9,9 +18,7 @@
 .category { display:flex; width:fit-content; max-width:100%; border-radius:20px; background:#1856a1; padding:2px 14px; font-size:.84em; font-weight:600; }
 .copy h1 { color:white; font-size:clamp(23px,2.5vw,33px); line-height:1.3; margin:12px 0; text-wrap:balance; }
 .summary { max-width:94%; line-height:1.6; }
-.model { display:flex; align-items:center; flex-wrap:wrap; gap:8px 12px; font-size:.91em; margin-top:17px; }
-.model > span { display:inline-flex; align-items:center; gap:8px; }
-.projectState { font-size:.89em; }
+.projectState { margin-top:17px; font-size:.89em; }
 .content { position:relative; padding-bottom:32px; }
 .capacity,.workpiece,.cards section { background:linear-gradient(120deg,#fff,#f4f8fd); border:1px solid var(--edge); border-radius:13px; box-shadow:0 2px 8px #11356b0d; }
 .capacity { position:relative; margin-top:-43px; text-align:center; padding:22px 0 14px; }
@@ -43,11 +50,11 @@
 .cards dd { line-height:1.55; }
 .related { display:flex; flex-wrap:wrap; align-items:baseline; gap:6px 20px; margin-top:24px; }
 .related a { color:var(--blue); text-decoration:underline; text-underline-offset:.2em; }
-.faqIntro,.source { color:#47576b; font-size:.91em; }
-.faqRow { border-top:1px solid var(--edge); }
-.faqRow:last-child { border-bottom:1px solid var(--edge); }
-.faqRow h3 { padding:10px 12px; }
-.faqRow p { padding:0 12px 14px; }
+.source { color:#47576b; font-size:.91em; }
+
+
+
+
 .page :is(button,a):focus-visible { outline:3px solid #1475ed; outline-offset:3px; }
 .source { margin:18px 0 30px; }
 .cta { display:flex; justify-content:space-between; align-items:center; gap:20px; padding:18px clamp(18px,2.8vw,38px); border-radius:12px; background:linear-gradient(120deg,#07316c 55%,#064fac 72%,#06306b); }
@@ -61,7 +68,6 @@
   .hero .panorama { position:relative!important; width:100%!important; height:clamp(164px,44vw,280px)!important; object-position:52% center; }
   .copy,.summary { max-width:none; }
   .copy h1 { margin:10px 0; font-size:clamp(23px,5.8vw,32px); }
-  .model { margin-top:10px; }
   .capacity { margin-top:-15px; padding:14px 0 10px; }
   .capacity dt { font-size:.82em; }
   .capacity dd { font-size:clamp(23px,6.8vw,31px); }
@@ -72,6 +78,6 @@
   .features>div { padding:12px 0; }
   .features>div+div { border:0; border-top:1px solid var(--edge); }
   .cards { gap:10px; }
-  .faqRow h3 { padding:10px 2px; }
+
   .cta { flex-wrap:wrap; gap:12px; }
 }

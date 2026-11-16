@@ -1,3 +1,17 @@
+.conditionsList { composes: conditions from "./ProjectTypography.module.css"; }
+.flowCaption { composes: note from "./ProjectTypography.module.css"; }
+.figureNote { composes: note from "./ProjectTypography.module.css"; }
+.figureSide { composes: figures from "./ProjectTypography.module.css"; }
+.overview { composes: overview from "./ProjectTypography.module.css"; }
+.source { composes: note from "./ProjectTypography.module.css"; }
+.capacity { composes: figures from "./ProjectTypography.module.css"; }
+.workpiece { composes: conditions from "./ProjectTypography.module.css"; }
+.features { composes: features from "./ProjectTypography.module.css"; }
+.cards { composes: cards from "./ProjectTypography.module.css"; }
+.section { composes: section from "./ProjectTypography.module.css"; }
+.hero { composes: hero from "./ProjectTypography.module.css"; }
+.copy { composes: copy from "./ProjectTypography.module.css"; }
+.page { composes: project from "./ProjectTypography.module.css"; }
 .page { --blue:#064bd3; --navy:#082957; --edge:#d3e1f1; color:#182b43; background:white; font-size:clamp(15px,1.22vw,18px); line-height:1.65; }
 .page h1,.page h2,.page h3,.page b,.page th { font-weight:700; }
 .page h2 { color:var(--navy); font-size:clamp(21px,1.8vw,28px); line-height:1.4; }
@@ -15,7 +29,6 @@
 .category { display:inline-flex; color:white; line-height:1.65; }
 .copy h1 { color:white; font-size:clamp(23px,2.5vw,33px); line-height:1.3; margin:12px 0; text-wrap:balance; }
 .summary { max-width:94%; line-height:1.6; }
-.model { display:flex; align-items:center; gap:8px; font-size:.91em; margin-top:17px; }
 .content { position:relative; padding-bottom:32px; }
 .capacity,.workpiece,.cards section { background:linear-gradient(120deg,#fff,#f4f8fd); border:1px solid var(--edge); border-radius:13px; box-shadow:0 2px 8px #11356b0d; }
 .capacity { position:relative; margin-top:-43px; text-align:center; padding:22px 0 14px; }
@@ -45,11 +58,10 @@
 .cards dl { display:grid; grid-template-columns:max-content 1fr; gap:7px 12px; align-items:start; }
 .cards dt { padding:0 9px; border-radius:8px; color:#154aa0; font-weight:650; }
 .cards dd { line-height:1.55; }
-.faqIntro,.source { color:#47576b; font-size:.91em; }
-.faqIntro { margin-bottom:10px; }
-.faqRow { padding:10px 12px 14px; border-top:1px solid var(--edge); }
-.faqRow:last-child { border-bottom:1px solid var(--edge); }
-.faqRow h3 { margin:0 0 6px; font-size:inherit; }
+.source { color:#47576b; font-size:.91em; }
+
+
+
 .page :is(button,a,summary):focus-visible { outline:3px solid #1475ed; outline-offset:3px; }
 .source { margin:18px 0 30px; }
 .cta { display:flex; justify-content:space-between; align-items:center; gap:20px; padding:18px clamp(18px,2.8vw,38px); border-radius:12px; background:linear-gradient(120deg,#07316c 55%,#064fac 72%,#06306b); }
@@ -63,7 +75,6 @@
   .hero .panorama { position:relative!important; width:100%!important; height:clamp(164px,44vw,280px)!important; object-position:52% center; }
   .copy,.summary { max-width:none; }
   .copy h1 { margin:10px 0; font-size:clamp(23px,5.8vw,32px); }
-  .model { margin-top:10px; }
   .capacity { margin-top:-15px; padding:14px 0 10px; }
   .capacity dt { font-size:.82em; }
   .capacity dd { font-size:clamp(23px,6.8vw,31px); }
@@ -74,15 +85,12 @@
   .features>div { padding:12px 0; }
   .features>div+div { border:0; border-top:1px solid var(--edge); }
   .cards { gap:10px; }
-  .faqRow { padding-inline:2px; }
+
   .cta { flex-wrap:wrap; gap:12px; }
 }
 
 .word { display:inline-block; }
 .section[id] { scroll-margin-top:96px; }
-.model { flex-wrap:wrap; }
-.model svg { flex:none; }
-.projectState { font-size:.89em; }
 
 .hero[data-compact-figures] .heroInner { padding-bottom:52px; }
 
@@ -103,6 +111,13 @@
 .figureSide,.conditionsSide { min-width:0; padding:16px 22px 15px; }
 .figureSide {
   background:linear-gradient(115deg,#eff6ff,#f8fbff);
+}
+@media (min-width:721px) {
+  .figureSide { display:flex; flex-direction:column; }
+  .figureSide h2 { order:-1; }
+  /* Share the spare height around the figures, with a modest offset on tall bilingual cards. */
+  .figureSide::before,.figureSide::after { content:''; flex:1 1 0; }
+  .figureSide::before { max-height:22px; }
 }
 .conditionsSide { border-left:1px solid var(--edge); }
 .overview h2 {

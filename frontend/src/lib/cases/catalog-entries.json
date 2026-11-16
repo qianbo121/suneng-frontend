@@ -1,0 +1,123 @@
+{
+  "fastener-mesh-belt-quenching-carburizing": {
+    "src": "/images/workpieces/fasteners-batch/workpiece-self-drilling-screws.webp",
+    "zh": {
+      "title": "螺丝钉淬火和渗碳，为什么同一台炉的产量不同？",
+      "alt": "螺丝钉"
+    },
+    "en": {
+      "title": "Screw heat treatment: why do quenching and carburizing have different hourly capacities?",
+      "alt": "Screws"
+    }
+  },
+  "stainless-strip-annealing-supply-scope": {
+    "src": "/images/cases/list/strip.webp",
+    "zh": {
+      "title": "不锈钢带退火，苏能供到哪一段？",
+      "alt": "不锈钢带卷"
+    },
+    "en": {
+      "title": "Stainless strip annealing: which sections does Suneng supply?",
+      "alt": "Stainless steel strip coil"
+    }
+  },
+  "bright-quench-design": {
+    "src": "/images/cases/fastener-mesh-belt/stage-heating.webp",
+    "zh": {
+      "title": "光亮淬火线估算产量，要先给哪些工件数据？",
+      "alt": "网带炉加热段"
+    },
+    "en": {
+      "title": "What part data do you need to estimate bright-quenching capacity?",
+      "alt": "Mesh-belt furnace heating section"
+    }
+  },
+  "crankshaft-annual-output": {
+    "src": "/images/workpieces/shafts-gears/workpiece-crankshaft.webp",
+    "zh": {
+      "title": "曲轴淬火回火线，产能按年件数约定",
+      "alt": "曲轴"
+    },
+    "en": {
+      "title": "Crankshaft quenching and tempering: capacity in parts per year",
+      "alt": "Crankshaft"
+    }
+  },
+  "standard-parts-capacity": {
+    "src": "/images/cases/list/ubolt.webp",
+    "zh": {
+      "title": "U 型螺栓等标准件调质，最大处理量怎么用？",
+      "alt": "U 型螺栓"
+    },
+    "en": {
+      "title": "U-bolts and other standard parts: how to use the maximum line capacity",
+      "alt": "U-bolt"
+    }
+  },
+  "cylinder-liner-solution-aging": {
+    "src": "/images/cases/list/liner.webp",
+    "zh": {
+      "title": "高压气瓶铝内胆固溶时效，每炉装载量含料框吗？",
+      "alt": "高压气瓶铝内胆"
+    },
+    "en": {
+      "title": "Aluminum cylinder liners: does the batch load include the basket?",
+      "alt": "Bare aluminum liner for a high-pressure cylinder"
+    }
+  },
+  "steering-forgings": {
+    "src": "/images/cases/list/arm.webp",
+    "zh": {
+      "title": "转向臂锻件调质与正火，怎样共用加热炉？",
+      "alt": "转向摇臂锻件"
+    },
+    "en": {
+      "title": "How do forged steering arms use one furnace for normalizing and quench heating?",
+      "alt": "Forged steering pitman arm"
+    }
+  },
+  "roller-belt-cooling-water-supply": {
+    "src": "/images/cases/list/water.webp",
+    "zh": {
+      "title": "托辊网带炉的冷却塔和补水管，分别由谁配套？",
+      "alt": "闭式冷却塔与循环水泵"
+    },
+    "en": {
+      "title": "Who supplies the cooling tower and the make-up water pipe for a roller-supported belt furnace?",
+      "alt": "Closed-circuit cooling tower and circulating pump"
+    }
+  },
+  "roller-belt-stage-output": {
+    "src": "/images/cases/list/roller-line.webp",
+    "zh": {
+      "title": "托辊网带炉的淬火段和回火段，产量为什么分开列？",
+      "alt": "托辊网带生产线"
+    },
+    "en": {
+      "title": "Why are quenching and tempering capacities listed separately on a roller-supported belt line?",
+      "alt": "Roller-supported mesh-belt line"
+    }
+  },
+  "overseas-oil-quench": {
+    "src": "/images/cases/list/oil.webp",
+    "zh": {
+      "title": "油淬回火线，约定的每小时处理量包含哪些工序？",
+      "alt": "淬火油槽与提升机"
+    },
+    "en": {
+      "title": "Oil quenching and tempering: which stages does the agreed hourly capacity cover?",
+      "alt": "Oil quench tank and lift conveyor"
+    }
+  },
+  "overseas-austemper": {
+    "src": "/images/cases/list/salt.webp",
+    "zh": {
+      "title": "硝盐等温淬火线，约定的处理量覆盖哪几段？",
+      "alt": "等温淬火硝盐槽和出料段"
+    },
+    "en": {
+      "title": "Salt-bath austempering: which stages does the agreed capacity cover?",
+      "alt": "Austempering salt bath and discharge section"
+    }
+  }
+}

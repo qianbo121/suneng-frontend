@@ -33,6 +33,14 @@
   border: 1px solid var(--catalog-border);
   border-radius: 6px;
 }
+@media (width > 700px) {
+  .catalog-rail {
+    position: sticky;
+    top: var(--header-height);
+    max-height: calc(100dvh - var(--header-height) - 12px);
+    overflow-y: auto;
+  }
+}
 .catalog-rail h2 { margin: 0 9px 15px; font-size: 18px; font-weight: 650; }
 .catalog-rail h3 { padding: 6px 0; font-size: 14px; font-weight: 650; }
 .catalog-workpieces a, .catalog-choices a {
@@ -74,14 +82,35 @@
 .catalog-sort [aria-current=page] { background: #e4edfa; color: var(--case-blue); }
 .case-catalog .case-record-content { display: grid; grid-template-columns: 210px minmax(0,1fr); gap: 22px; align-items: center; padding: 20px 0; }
 .case-catalog .case-record[data-has-cover=false] .case-record-content { grid-template-columns: minmax(0,1fr); }
-.case-catalog .case-record-image { aspect-ratio: 210 / 138; border-radius: 5px; overflow: hidden; background: #f4f7fb; }
+.case-catalog .case-record-image { aspect-ratio: 210 / 138; border-radius: 5px; overflow: hidden; }
 .case-catalog .case-record:last-child { border-bottom: 0; }
 .catalog-category { font-size: 13px; font-weight: 650; color: var(--case-blue); margin: 0 0 6px; }
 .case-catalog .case-record h3 { font-size: 25px; line-height: 1.4; }
 .case-catalog .case-record h3 span { display: block; font-size: 17px; font-weight: 500; margin-top: 2px; }
 .case-catalog .case-record-summary { font-size: 14px; color: var(--case-muted); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 .case-catalog .case-pagination:empty { display: none; }
-.case-catalog .case-contact-band { margin: 16px 0 0; border-radius: 2px; border-left: 3px solid #215aca; background: #eef4fa; padding: 22px 29px; }
+.case-catalog .case-contact-band {
+  margin: 0;
+  padding: 20px 0;
+  border-top: 1px solid var(--catalog-border);
+  border-radius: 0;
+  background: white;
+}
+.case-catalog .case-contact-band .case-button {
+  min-height: 40px;
+  padding: 8px 18px;
+  border: 1px solid #83a3c6;
+  border-radius: 5px;
+  background: white;
+  color: var(--case-blue);
+  box-shadow: none;
+  font-size: 15px;
+}
+.case-catalog .case-contact-band .case-button:hover,
+.case-catalog .case-contact-band .case-button:focus-visible {
+  border-color: var(--case-blue);
+  background: #f2f6fc;
+}
 .case-catalog .case-contact-band h2 { font-size: 20px; }
 .case-catalog .case-contact-band p { font-size: 14px; }
 @media (max-width: 950px) {
@@ -108,5 +137,5 @@
   .case-catalog .case-record h3 span { font-size: 14px; }
   .catalog-category { font-size: 12px; margin-bottom: 3px; }
   .case-catalog .case-record-summary { font-size: 13px; }
-  .case-catalog .case-contact-band { padding: 16px; }
+  .case-catalog .case-contact-band .case-button { min-height: 44px; }
 }
