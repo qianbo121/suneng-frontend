@@ -163,6 +163,7 @@ export function isHiddenCaseEntry(href: string, sourcePath?: string): boolean {
     const article = sourcePath?.match(/^\/(zh|en)\/news\/([^/]+)$/);
     const caseSlug = url.pathname.match(/^\/(zh|en)\/case\/([^/]+)$/);
     if (article && caseSlug && article[1] === caseSlug[1] &&
+        Object.hasOwn(articleCaseReferences, article[2]) &&
         articleCaseReferences[article[2]]?.includes(caseSlug[2]) &&
         !isWithdrawnRequestPath(url.pathname)) return false;
     if (source && stripCaseSources.has(source[2]) &&

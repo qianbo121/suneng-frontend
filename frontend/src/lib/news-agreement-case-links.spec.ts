@@ -64,6 +64,7 @@ describe('approved bilingual article case references', () => {
     for (const [slug, caseSlug] of references) {
       const source = `/en/news/${slug}`;
       expect(isHiddenCaseEntry(`/en/case/${caseSlug}`, '/en/news/other-article')).toBe(true);
+      expect(isHiddenCaseEntry(`/en/case/${caseSlug}`, '/en/news/constructor')).toBe(true);
       expect(isHiddenCaseEntry('/en/case/unpublished-project', source)).toBe(true);
       expect(isHiddenCaseEntry('/en/case/stainless-strip-annealing-supply-scope', source)).toBe(true);
       expect(isHiddenCaseEntry(`/en/case/${caseSlug}`, `/zh/news/${slug}`)).toBe(true);
