@@ -17,6 +17,7 @@ describe('approved Chinese fastener case', () => {
     const { parseCaseQuery } = await import('./query');
     const label = '托辊网带炉热处理生产线：上料台、淬火炉、油槽与提升机、清洗机、回火炉、出料';
     const html = renderToStaticMarkup(createElement(FastenerCase));
+    expect(html).toContain('<h1>紧固件（螺丝钉）淬火和渗碳共用一台网带炉</h1>');
     expect(html).toContain(`alt="${label}"`);
     expect(html).toContain(`"caption":"${label}"`);
     const cards = getCaseResults(parseCaseQuery({})).items;

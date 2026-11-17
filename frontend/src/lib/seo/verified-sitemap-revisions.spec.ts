@@ -169,7 +169,7 @@ const acceptedGroups = [
     '/zh/news/shuju-news-25',
     '/zh/news/shuju-news-26',
   ] },
-  { date: '2026-11-16', source: '0cd59d5187759b74af43e299ecb14e741f483783', paths: [
+  { date: '2026-11-17', source: '0cd59d5187759b74af43e299ecb14e741f483783', release: '2436b77aed98c0e7701dd53b47c69aaf019e8b00', paths: [
     '/en/products/detail/elevator-hearth-furnace',
   ] },
 ];
@@ -188,10 +188,15 @@ describe('verified sitemap revision evidence', () => {
       for (const locale of ['zh', 'en']) {
         const path = `/${locale}/case/${slug}`;
         const firstPublished = path !== '/zh/case/fastener-mesh-belt-quenching-carburizing';
-        accepted[path] = { modifiedOn: '2026-11-15', sourceCommit: '184f6c49c0591029d3050abdbfcdf63b401c3262',
+        accepted[path] = { modifiedOn: '2026-11-17', sourceCommit: '2436b77aed98c0e7701dd53b47c69aaf019e8b00',
           ...(firstPublished ? { publishedOn: '2026-11-15' } : {}) };
         expect(getVerifiedPublicationDay(path, new Date('2026-11-15T12:00:00Z'))).toBe(firstPublished ? '2026-11-15' : undefined);
       }
+    }
+    for (const locale of ['zh', 'en']) {
+      accepted[`/${locale}/case/stainless-strip-annealing-supply-scope`] = {
+        modifiedOn: '2026-11-17', sourceCommit: '2436b77aed98c0e7701dd53b47c69aaf019e8b00',
+      };
     }
     expect(revisions).toEqual(accepted);
     for (const [path, revision] of Object.entries(accepted)) {
