@@ -140,12 +140,32 @@ const stripCaseSources = new Set([
   '/news/shuju-news-28',
 ]);
 
+// Case references included in the owner's approved bilingual article batch.
+const articleCaseReferences: Record<string, readonly string[]> = {
+  'mesh-belt-screw-quenching-carburizing-output': ['fastener-mesh-belt-quenching-carburizing'],
+  'mesh-belt-line-cooling-tower-pump-supply': ['roller-belt-cooling-water-supply', 'roller-belt-stage-output'],
+  '500mm-mesh-belt-austempering-hourly-output': ['overseas-austemper'],
+  'mesh-belt-quenching-tempering-output-addition': ['roller-belt-stage-output'],
+  'oil-quench-temper-300kg-whole-line-output': ['overseas-oil-quench'],
+  'mesh-belt-u-bolt-maximum-output-specification': ['standard-parts-capacity'],
+  'crankshaft-annual-pieces-hourly-throughput': ['crankshaft-annual-output'],
+  'bright-quenching-one-tonne-hour-selection-inputs': ['bright-quench-design'],
+  'steering-forging-shared-normalizing-quenching-furnace': ['steering-forgings'],
+  'aluminum-liner-solution-furnace-basket-weight': ['cylinder-liner-solution-aging'],
+};
+
 /** Limit case entrances to the reviewed sources while keeping public case URLs accessible. */
 export function isHiddenCaseEntry(href: string, sourcePath?: string): boolean {
   try {
     const url = new URL(href, 'https://www.jssngyl.cn');
     if (!['www.jssngyl.cn', 'jssngyl.cn'].includes(url.hostname)) return false;
     const source = sourcePath?.match(/^\/(zh|en)(\/.*)$/);
+    const article = sourcePath?.match(/^\/(zh|en)\/news\/([^/]+)$/);
+    const caseSlug = url.pathname.match(/^\/(zh|en)\/case\/([^/]+)$/);
+    if (article && caseSlug && article[1] === caseSlug[1] &&
+        Object.hasOwn(articleCaseReferences, article[2]) &&
+        articleCaseReferences[article[2]]?.includes(caseSlug[2]) &&
+        !isWithdrawnRequestPath(url.pathname)) return false;
     if (source && stripCaseSources.has(source[2]) &&
         url.pathname === `/${source[1]}/case/stainless-strip-annealing-supply-scope` &&
         !isWithdrawnRequestPath(url.pathname)) return false;
