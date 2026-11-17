@@ -3,7 +3,7 @@
 'use client';
 
 import Image from 'next/image';
-import { useEffect, useRef, type MouseEvent } from 'react';
+import { useEffect, useRef, type ReactNode, type MouseEvent } from 'react';
 import { ListPagination } from '@/components/ui/ListPagination';
 import { caseListHref } from '@/lib/cases/query';
 import { type CaseCardData, type CasePageResult, type CaseQuery } from '@/lib/cases/types';
@@ -25,7 +25,7 @@ function saveScroll(url: string) {
   }
 }
 
-export function CaseList({ initial, query }: { initial: CasePageResult; query: CaseQuery }) {
+export function CaseList({ initial, query, selected }: { initial: CasePageResult; query: CaseQuery; selected?: ReactNode }) {
   const result = initial;
   const listHref = caseListHref(query, { page: result.page, from: result.from });
   const sortRef = useRef<HTMLDetailsElement>(null);
@@ -57,7 +57,7 @@ export function CaseList({ initial, query }: { initial: CasePageResult; query: C
   return (
     <>
       <div className="catalog-results-top">
-        <h2 id="case-results-heading">{query.workpiece || (query.equipment || query.q || query.process || query.type || query.need ? '匹配案例' : '全部案例')}<small>{result.total} 项</small></h2>
+        <h2 id="case-results-heading">{query.workpiece || query.equipment || query.q || query.process || query.type || query.need ? '匹配案例' : '全部案例'}<small>{result.total} 项</small></h2>
         <details className="catalog-sort" ref={sortRef}>
           <summary>{sortLabels[query.sort]}</summary>
           <nav aria-label="案例排序">
@@ -68,6 +68,7 @@ export function CaseList({ initial, query }: { initial: CasePageResult; query: C
           </nav>
         </details>
       </div>
+      {selected}
       <div className="case-records">
         {result.items.map((item, index) => (
           <CaseCard key={item.id} item={item} returnTo={listHref} priority={index === 0} />

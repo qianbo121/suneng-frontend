@@ -4,10 +4,11 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { createHash } from 'node:crypto';
 import { cache } from 'react';
-import { newestPublishedFirst } from './query';
+import { countCaseFacet, matchesCaseFacets } from './facets';
+import { caseListHref, newestPublishedFirst } from './query';
 import { prepareCaseBody } from './content';
 import { PUBLIC_ENGLISH_CASE_SLUGS } from './public-case-allowlist';
-import type { CaseMeta, CaseQuery } from './types';
+import type { CaseFilterKey, CaseMeta, CaseQuery } from './types';
 import { CASE_PAGE_SIZE } from './types';
 
 type EnglishCopy = {
@@ -58,6 +59,7 @@ export function readEnglishCases(
       id: source.id, slug: source.slug, title: copy.title, summary: copy.summary,
       seoTitle: copy.seoTitle?.trim() || undefined,
       seoDescription: copy.seoDescription?.trim() || undefined,
+      workpiece: source.workpiece ?? [], equipment: source.equipment ?? [], process: source.process ?? [], need: source.need ?? [],
       contentType: source.contentType, projectStatus: source.projectStatus,
       projectYear: source.projectYear, sourceDate: source.sourceDate,
       englishDatePublished: copy.datePublished,
@@ -95,18 +97,20 @@ export function getEnglishCase(slug: string) {
   return getEnglishCases().find((item) => item.slug === slug);
 }
 export function englishCaseHref(query: CaseQuery, page = query.page) {
-  const params = new URLSearchParams();
-  if (query.q) params.set('q', query.q);
-  if (query.type) params.set('type', query.type);
-  if (query.sort !== 'published') params.set('sort', query.sort);
-  if (page > 1) params.set('page', String(page));
-  return `/en/case${params.size ? `?${params}` : ''}`;
+  return caseListHref(query, { page, from: page }).replace('/zh/case', '/en/case');
+}
+function filterEnglishCases(query: CaseQuery) {
+  const terms = query.q.normalize('NFKC').toLowerCase().split(/\s+/).filter(Boolean);
+  return getEnglishCases().filter((item) =>
+    matchesCaseFacets(item, query) && (!query.type || item.contentType === query.type) && terms.every((term) => item.searchText.includes(term)),
+  );
+}
+export function getEnglishCaseFilterOptions(query: CaseQuery, key: CaseFilterKey) {
+  return countCaseFacet(filterEnglishCases({ ...query, [key]: '' }), key, query[key]);
 }
 export function getEnglishCaseResults(query: CaseQuery) {
   const terms = query.q.normalize('NFKC').toLowerCase().split(/\s+/).filter(Boolean);
-  const records = getEnglishCases().filter((item) =>
-    (!query.type || item.contentType === query.type) && terms.every((term) => item.searchText.includes(term)),
-  ).sort((a, b) => {
+  const records = filterEnglishCases(query).sort((a, b) => {
     if (query.sort === 'published') return newestPublishedFirst(a, b);
     if (query.sort === 'year') return (b.projectYear ?? 0) - (a.projectYear ?? 0) || a.id.localeCompare(b.id);
     if (query.sort === 'relevance' && terms.length) {

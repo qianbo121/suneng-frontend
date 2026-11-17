@@ -7,7 +7,8 @@ import { prepareCaseBody } from './content';
 import { caseListPresentation } from './list-tags';
 import { PUBLIC_CASE_SLUGS } from './public-case-allowlist';
 import { LOCAL_REVIEW_CASE_SLUGS } from './fastener-case-entry';
-import { caseFilterCategory, filterCases, paginateCases, toCaseCard } from './query';
+import { countCaseFacet } from './facets';
+import { filterCases, paginateCases, toCaseCard } from './query';
 import { CASE_FILTER_KEYS, type CaseMeta, type CaseQuery } from './types';
 
 const contentDirectory = path.join(process.cwd(), 'content/cases');
@@ -180,16 +181,5 @@ export function getCaseResults(query: CaseQuery) {
 export function getCaseFilterOptions(query: CaseQuery, key: (typeof CASE_FILTER_KEYS)[number]) {
   // Ignore the current facet when counting alternatives, retain every other filter.
   const candidates = filterCases(getPublicCases(), { ...query, [key]: '' });
-  const counts = new Map<string, number>();
-  for (const item of candidates) {
-    const values = new Set(item[key].map((value) => caseFilterCategory(key, value)));
-    if (query[key] && item[key].includes(query[key])) values.add(query[key]);
-    for (const value of values) counts.set(value, (counts.get(value) ?? 0) + 1);
-  }
-  if (query[key] && !counts.has(query[key])) counts.set(query[key], 0);
-  return [
-    { value: '', count: candidates.length },
-    ...[...counts].sort(([a], [b]) => a.localeCompare(b, 'zh-CN'))
-      .map(([value, count]) => ({ value, count })),
-  ];
+  return countCaseFacet(candidates, key, query[key]);
 }
