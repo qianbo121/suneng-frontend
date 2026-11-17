@@ -15,6 +15,7 @@ describe('English search copy', () => {
     expect(item.summary).toContain('not actual output or acceptance results');
     expect(metadata.title).toEqual({ absolute: 'Furnace and cooling equipment for stainless strip annealing | Suneng Industrial Furnace' });
     expect(metadata.description).toBe(item.seoDescription);
+    expect(metadata.openGraph).toMatchObject({ publishedTime: '2026-09-18T01:00:00+08:00', modifiedTime: '2026-11-17' });
     expect(metadata.description).toContain('not verified output or acceptance results');
     expect(metadata.openGraph).toMatchObject({ title: 'Furnace and cooling equipment for stainless strip annealing | Suneng Industrial Furnace', description: item.seoDescription });
     expect(metadata.alternates?.languages).toHaveProperty('zh-CN');
