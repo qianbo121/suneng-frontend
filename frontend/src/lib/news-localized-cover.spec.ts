@@ -1,5 +1,6 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { resolveNewsImage } from './news';
+import articleCovers from './news-bilingual-article-covers.json';
 
 // The resolver is pure; React's server cache is supplied by Next outside this unit test.
 vi.mock('react', async (importOriginal) => ({
@@ -9,6 +10,13 @@ vi.mock('react', async (importOriginal) => ({
 
 describe('localized news cover', () => {
   afterEach(() => vi.unstubAllEnvs());
+
+  it.each(Object.entries(articleCovers))('uses the matching English article cover for %s', (slug, images) => {
+    const article = { slug, coverImage: images.original };
+    expect(resolveNewsImage(article, { locale: 'zh' })).toBe(images.original);
+    expect(resolveNewsImage(article, { locale: 'en' })).toBe(images.english);
+    expect(resolveNewsImage({ ...article, coverImage: '/uploads/revised.webp' }, { locale: 'en' })).toBe('/uploads/revised.webp');
+  });
 
   it('keeps the original Chinese cover and selects the independent English image only for English', () => {
     vi.stubEnv('API_BASE_URL_INTERNAL', 'http://localhost:3001/api');

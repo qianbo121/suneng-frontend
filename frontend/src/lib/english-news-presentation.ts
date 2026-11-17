@@ -1,3 +1,5 @@
+import articleCovers from './news-bilingual-article-covers.json';
+
 // Presentation corrections for already-published English text. Chinese content
 // and independently reviewed publication eligibility are unchanged.
 const diagrams: Record<string, { original: string; revised?: string; replacement: string; obsoleteNote: string }> = {
@@ -21,6 +23,7 @@ const diagrams: Record<string, { original: string; revised?: string; replacement
 };
 
 const resourceCovers: Record<string, { original: string; english: string }> = {
+  ...articleCovers,
   'heat-treatment-furnace-loading-rack-fixture-selection': {
     original: '/uploads/2026/09/1790148564337-7736bf9c-4ef0-45c4-9c85-a21cf6e652e2.webp',
     english: '/images/news/resources-en/93-cover.webp',
