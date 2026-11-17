@@ -3,7 +3,7 @@ import type { WorkpieceRouterPublicCatalog } from './workpiece-router-public';
 
 type WorkpieceCopy = { name: string; judgement: string; examples: Array<{ condition: string; direction: string; boundary: string }> };
 const copy: Record<string, WorkpieceCopy> = englishCopy;
-const categoryNames: Record<string, string> = {
+export const homeWorkpieceCategoryNamesEn: Record<string, string> = {
   'welded-structures': 'Welded structures', 'gas-cylinders': 'Gas cylinders',
   'heavy-cast-forged': 'Heavy castings & forgings', 'shafts-gears': 'Shafts & gears',
   'engineering-wheels': 'Heavy equipment wheels', 'plate-strip-coil': 'Plate, strip & coil',
@@ -17,7 +17,7 @@ export function localizeHomeWorkpieces(catalog: WorkpieceRouterPublicCatalog): W
     ...catalog,
     publicDirectionExamplesEnabled: false,
     categories: catalog.categories.map((category) => ({
-      ...category, label: categoryNames[category.id], name: categoryNames[category.id],
+      ...category, label: homeWorkpieceCategoryNamesEn[category.id], name: homeWorkpieceCategoryNamesEn[category.id],
       cards: category.cards.map((card) => ({
         ...card, name: copy[card.id].name, alt: copy[card.id].name, judgement: copy[card.id].judgement,
       })),
