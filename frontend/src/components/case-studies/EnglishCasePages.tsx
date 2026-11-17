@@ -5,11 +5,12 @@ import { notFound } from 'next/navigation';
 import { JsonLd } from '@/components/JsonLd';
 import { NewsArticleContent } from '@/components/news/NewsArticleContent';
 import { ListPagination } from '@/components/ui/ListPagination';
-import { getEnglishCase, getEnglishCases, getEnglishCaseResults, englishCaseHref } from '@/lib/cases/english';
+import { getEnglishCase, getEnglishCases, getEnglishCaseResults, getEnglishCaseFilterOptions, englishCaseHref } from '@/lib/cases/english';
 import { hasCaseSearch, parseCaseQuery, type SearchParams } from '@/lib/cases/query';
 import type { CaseQuery } from '@/lib/cases/types';
 import { absoluteUrl, buildMetadata } from '@/lib/seo/metadata';
 import { getBreadcrumbJsonLd, getOrganizationJsonLd, getEngineeringTeamAuthorName, getEngineeringTeamAuthorsJsonLd } from '@/lib/seo/jsonld';
+import { CaseFilterRail, CaseMobileFilter, ActiveCaseFilters } from './CaseCatalogFilters';
 import { CaseToc } from './CaseToc';
 import { CaseCoverCaption } from './CaseCoverCaption';
 import { CaseProductConnections } from './CaseEvidenceLinks';
@@ -101,21 +102,31 @@ export function EnglishCaseArticle({ slug, searchParams }: { slug: string; searc
 export function EnglishCaseIndex({ query }: { query: CaseQuery }) {
   const result = getEnglishCaseResults(query);
   const returnTo = englishCaseHref(query);
+  const filters = { query, locale: 'en' as const, options: {
+    workpiece: getEnglishCaseFilterOptions(query, 'workpiece'), equipment: getEnglishCaseFilterOptions(query, 'equipment'),
+    process: getEnglishCaseFilterOptions(query, 'process'),
+  } };
   // Offer the type filter only when it can narrow the public records.
   const showTypeFilter = new Set(getEnglishCases().map((item) => item.contentType)).size > 1 || Boolean(query.type);
   return <div className="case-page case-index-page case-english" lang="en">
     <header className="case-list-hero"><div className="case-container">
       <nav className="case-breadcrumb" aria-label="Breadcrumb"><a href="/en">Home</a><span>/</span><span aria-current="page">Case studies</span></nav>
       <div className="case-page-heading"><h1>Case studies</h1><p className="case-hero-description">Find comparable workpieces, furnace arrangements and renovation requirements. Review the conditions, equipment scope and evidence behind each record.</p></div>
+      <div className="catalog-tools catalog-tools-en">
       <form action="/en/case" method="get" className="case-search-panel case-english-search" aria-label="Search case studies">
+        {(['workpiece', 'equipment', 'process', 'need'] as const).map(key =>
+          query[key] && <input type="hidden" name={key} value={query[key]} key={key} />)}
         <label>Search by title, workpiece or furnace<input type="search" name="q" defaultValue={query.q} placeholder="e.g. bogie-hearth furnace" /></label>
         {showTypeFilter && <label>Record type<select name="type" defaultValue={query.type}><option value="">All records</option><option value="proposal">Historical proposals</option><option value="experience">Project experience</option></select></label>}
         <label>Sort by<select name="sort" defaultValue={query.sort}><option value="published">Publication date</option><option value="relevance">Relevance</option><option value="updated">Source update</option><option value="year">Project year</option></select></label>
         <button className="case-button case-button-primary" type="submit">Search</button><a href="/en/case">Reset</a>
       </form>
+      <CaseMobileFilter {...filters} />
+      </div>
     </div></header>
-    <div className="case-container case-list-content"><section className="case-results" aria-labelledby="case-results-heading">
+    <div className="case-container catalog-layout catalog-layout-en"><CaseFilterRail {...filters} /><section className="case-results" aria-labelledby="case-results-heading">
       <div className="case-results-top"><h2 id="case-results-heading">Project records</h2><p>{result.total} {result.total === 1 ? 'record' : 'records'} found</p></div>
+      <ActiveCaseFilters query={query} locale="en" />
       <div className="case-records">{result.items.map((item, index) => <article className="case-record" key={item.id} data-case-id={item.id}>
         <a className="case-record-content" href={`/en/case/${item.slug}?returnTo=${encodeURIComponent(returnTo)}`}>
           <figure className="case-record-cover"><div className="case-record-image">{item.cover ? <Image src={item.cover.src} alt={item.cover.alt} width={480} height={280} priority={index === 0} sizes="(max-width: 767px) calc(100vw - 36px), (max-width: 999px) 200px, (max-width: 1279px) 240px, 280px" style={{ objectFit: item.cover.fit ?? 'contain' }} /> : <div className="case-text-cover"><span>{item.title}</span><strong>{labels[item.contentType]}</strong></div>}</div></figure>

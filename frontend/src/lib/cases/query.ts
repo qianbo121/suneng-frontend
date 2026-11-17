@@ -1,3 +1,4 @@
+import { caseEquipmentCategory, caseFilterCategory, homeWorkpieceCategories, matchesCaseFacets } from './facets';
 import { LOCAL_REVIEW_CASE_SLUGS } from './fastener-case-entry';
 import {
   CASE_FILTER_KEYS,
@@ -66,37 +67,6 @@ export function hasCaseSearch(query: CaseQuery) {
 const normalize = (text: string) =>
   text.normalize('NFKC').toLocaleLowerCase('zh-CN').replace(/\s+/g, ' ');
 
-// Only explicit equipment aliases are grouped. Mixed arrangements such as
-// 台车式罩式炉 and 台车式旋转固化炉 retain their own labels for selection.
-const equipmentAliases: Record<string, readonly string[]> = {
-  台车炉: [
-    '可变容台车式燃气炉', '可变容燃气台车炉', '台车式加热炉', '台车式回火炉',
-    '台车式时效炉', '台车式淬火炉', '台车式热处理炉', '台车式热风循环电阻炉',
-    '台车式燃气加热炉', '台车式燃气热处理炉', '台车式燃气预热炉', '台车式电阻炉',
-    '台车式铝合金退火炉', '热风循环台车式电阻炉', '燃气台车式热处理炉',
-    '燃气台车式焙烧炉', '燃气台车炉', '高温台车式电阻炉',
-  ],
-  井式炉: ['井式回火炉', '井式气氛保护炉', '井式燃气炉', '井式球化退火炉',
-    '井式电阻炉', '氮气保护井式回火炉', '预抽真空氮气保护井式炉'],
-  箱式炉: ['箱式电阻炉', '箱式空气循环加热炉', '高温箱式电阻炉'],
-  辊底炉: ['辊棒式加热炉', '辊棒式燃气加热炉', '辊道式电阻炉'],
-};
-export function caseEquipmentCategory(value: string): string {
-  return Object.entries(equipmentAliases).find(([, aliases]) => aliases.includes(value))?.[0] ?? value;
-}
-
-const workpieceGroups: Record<string, string> = {
-  不锈钢带材: '板带卷材',
-  紧固件: '紧固批量件',
-  螺丝钉: '紧固批量件',
-};
-
-export function caseFilterCategory(key: (typeof CASE_FILTER_KEYS)[number], value: string) {
-  if (key === 'equipment') return caseEquipmentCategory(value);
-  if (key === 'workpiece') return workpieceGroups[value] ?? value;
-  return value;
-}
-
 export function newestPublishedFirst(a: Pick<CaseMeta, 'datePublished' | 'id'>, b: Pick<CaseMeta, 'datePublished' | 'id'>) {
   const timeA = a.datePublished ? Date.parse(a.datePublished) : -Infinity;
   const timeB = b.datePublished ? Date.parse(b.datePublished) : -Infinity;
@@ -122,9 +92,7 @@ export function filterCases<T extends CaseMeta & { searchText: string }>(
       (item) =>
         (item.publicationStatus === 'published' || (process.env.NODE_ENV === 'development' && LOCAL_REVIEW_CASE_SLUGS.has(item.slug))) &&
         (!query.type || item.contentType === query.type) &&
-        CASE_FILTER_KEYS.every((key) => !query[key] || item[key].some(
-          (value) => value === query[key] || caseFilterCategory(key, value) === query[key],
-        )) &&
+        matchesCaseFacets(item, query) &&
         terms.every((term) => normalize(item.searchText).includes(term)),
     )
     .sort((a, b) => {
@@ -151,7 +119,9 @@ export function toCaseCard(item: CaseMeta): CaseCardData {
     slug: item.slug,
     title: item.title,
     listTitle: item.listTitle,
-    workpiece: [...new Set(item.workpiece.map((value) => caseFilterCategory('workpiece', value)))],
+    workpiece: [...new Set(item.workpiece.map((value) => caseFilterCategory('workpiece', value)))].sort(
+      (a, b) => Number(homeWorkpieceCategories.some((c) => c.label === b)) - Number(homeWorkpieceCategories.some((c) => c.label === a)),
+    ),
     equipment: [...new Set(item.equipment.map(caseEquipmentCategory))],
     summary: item.listSummary || item.summary,
     contentType: item.contentType,

@@ -146,6 +146,15 @@ describe('complete English case integration', () => {
       overrides.buyerLinks = undefined;
     }
   });
+  it('filters English records by homepage group and process and preserves the return link', () => {
+    const query = parseCaseQuery({ workpiece: '紧固批量件', process: '渗碳' });
+    expect(getEnglishCaseResults(query).items.map(item => item.slug)).toEqual(['fastener-mesh-belt-quenching-carburizing']);
+    const html = renderToStaticMarkup(createElement(EnglishCaseIndex, { query }));
+    expect(html).toContain('Fasteners &amp; small parts');
+    expect(html).toContain('Remove filter: Carburizing');
+    expect(html).toContain('returnTo=' + encodeURIComponent('/en/case?' + new URLSearchParams({workpiece: '紧固批量件', process: '渗碳'})));
+  });
+
   it('offers the record type filter only when it can narrow the public records', () => {
     const types = new Set(getEnglishCases().map((item) => item.contentType));
     const html = renderToStaticMarkup(createElement(EnglishCaseIndex, { query: parseCaseQuery({}) }));
