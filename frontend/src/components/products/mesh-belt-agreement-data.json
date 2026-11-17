@@ -34,7 +34,7 @@
       "size": "500×4700 mm",
       "power": "160 kW",
       "process": "淬火／渗碳",
-      "capacity": "淬火300 kg/h；渗碳150 kg/h（同一台炉）",
+      "capacity": "淬火300 kg/h；渗碳150 kg/h",
       "basis": "2025 技术协议",
       "fastenerScope": "淬火炉",
       "fastenerProcess": "淬火",
@@ -85,9 +85,8 @@
       "size": "1000×10000 mm",
       "power": "约500 kW",
       "process": "光亮淬火+回火",
-      "capacity": "光亮淬火约 1000 公斤/小时（设计参考值）",
+      "capacity": "光亮淬火约 1000 公斤/小时",
       "basis": "2026 年设计方案",
-      "showBasisWithCapacity": true,
       "caseSlug": "bright-quench-design"
     }
   ],
