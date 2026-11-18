@@ -27,7 +27,7 @@ MANIFEST = {'schemaVersion': 1, 'image': NEW, 'expectedCurrentImage': OLD, 'publ
 GOOD = {'passed': True, 'sitemapPassed': True, 'checks': [], 'caseState': 'open'}
 
 
-def handoff_boundary(live, audit, compose, env, command, healthy, verify, *, target_image):
+def handoff_boundary(live, audit, compose, env, command, healthy, verify, *, target_image, retain=False):
     """Source-provenance fixtures isolate the separately tested handoff engine."""
     command(compose + ['up', '-d', '--no-deps', '--no-build', '--pull', 'never', 'frontend'], env=env)
     healthy('corp-site-frontend')
@@ -1824,6 +1824,23 @@ class SeparateProcurementHttpTest(unittest.TestCase):
 
 class FrontendRecoverySourceTest(unittest.TestCase):
     OLD_SOURCE = '1' * 40
+    def test_failed_recovery_records_configured_copy_separately_from_named_image(self):
+        from unittest.mock import Mock
+        with tempfile.TemporaryDirectory() as tmp:
+            fixture = ContractTest(); release = fixture.fixture(tmp)
+            observed = {'configuredUpstream':'retained-copy','configuredImage':NEW,
+                        'copyRetained':True,'trafficRequiresVerification':True}
+            release.frontend_handoff = Mock(created=True, restored=False)
+            release.frontend_handoff.observation.return_value = observed
+            fixture.perform(release, failure='restored-check')
+            receipt = json.loads(release.receipt_path.read_text())
+            result = json.loads((release.audit/'result.json').read_text())
+            self.assertEqual(receipt['images']['frontend'], OLD)
+            self.assertEqual(receipt['frontendHandoff'], observed)
+            self.assertEqual(result['frontendHandoff'], observed)
+            self.assertEqual(receipt['deploymentStatus'],'recovery-required')
+            self.assertTrue(release.pending_path.exists())
+
     def fixture(self, tmp, previous=None):
         receipt = copy.deepcopy(RECEIPT)
         receipt['frontendRelease'] = ({'sourceIdentity': 'git-commit', 'sourceCommit': self.OLD_SOURCE,
@@ -1840,6 +1857,38 @@ class FrontendRecoverySourceTest(unittest.TestCase):
         self.assertEqual(release.env, original_env)
         calls = [c for c in command.call_args_list if c.args[0][0:2] == ['docker', 'compose']]
         return calls
+
+    def test_outer_public_failure_reuses_retained_bridge_and_finishes_after_recovery(self):
+        from unittest.mock import Mock
+        with tempfile.TemporaryDirectory() as tmp:
+            release = self.fixture(tmp)
+            state = {'image':OLD, 'events':[]}
+            bridge = Mock(created=True)
+            def restore():
+                state['events'].append('reuse-bridge'); state['image'] = OLD
+            def finish():
+                state['events'].append('finish'); bridge.created = False
+            bridge.restore.side_effect = restore; bridge.finish.side_effect = finish
+            def handoff(*args, **kwargs):
+                self.assertTrue(kwargs['retain']); state['image'] = NEW
+                state['events'].append('start-one-bridge'); return bridge
+            def inspect(names):
+                return [row for row in rows(state['image']) if row['Name'][11:] in names]
+            def public(*args):
+                self.assertTrue(bridge.created)
+                state['events'].append('public-'+state['image'])
+                if state['image'] == NEW: raise RuntimeError('public check fails after memory drops')
+                return []
+            with patch.object(r,'working_space',return_value={'passed':True}), \
+                 patch.object(r,'inspect',side_effect=inspect), patch.object(r,'run',side_effect=lambda args,**kw:image_inspect(args) if args[:3]==['docker','image','inspect'] else ''), \
+                 patch.object(r,'wait_healthy'),patch.object(r,'probe',return_value=GOOD),patch.object(r,'public_probe',side_effect=public), \
+                 patch.object(r.subprocess,'run'), patch.object(r,'acquisition_continuity_probe',return_value={'passed':True,'pagesChecked':11}), \
+                 patch.object(frontend_handoff,'replace',side_effect=handoff) as start:
+                with self.assertRaises(RuntimeError):release.execute(apply=True)
+            start.assert_called_once(); bridge.restore.assert_called_once(); bridge.finish.assert_called_once()
+            self.assertEqual(state['events'], ['start-one-bridge','public-'+NEW,'reuse-bridge','public-'+OLD,'finish'])
+            self.assertFalse(release.pending_path.exists())
+            self.assertTrue(json.loads((release.audit/'result.json').read_text())['previousFrontendRestoredAndVerified'])
 
     def test_normal_frontend_deploy_keeps_new_source_environment(self):
         with tempfile.TemporaryDirectory() as tmp:

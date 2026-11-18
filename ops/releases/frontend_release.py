@@ -564,17 +564,35 @@ class Release:
         for service in self.components:
             compose_env = recovery_envs.get(service, self.env)
             if service == 'frontend':
+                retained = getattr(self, 'frontend_handoff', None)
+                if override is not None and retained is not None and (retained.created or retained.restored):
+                    # Reuse the already-running bridge. Starting another copy
+                    # here could reject recovery after memory drops slightly.
+                    retained.restore()
+                    continue
                 from frontend_handoff import replace
                 contract = self.lenient_contract if override is not None else self.target_contract
-                replace(self.live, self.audit, self.compose(override), compose_env, run, wait_healthy,
-                        lambda container, previous: probe(container, self.script,
-                            self.lenient_contract if previous else contract),
-                        target_image=self.receipt['images']['frontend'] if override is not None else self.target['frontend'])
+                try:
+                    self.frontend_handoff = replace(self.live, self.audit, self.compose(override), compose_env, run, wait_healthy,
+                            lambda container, previous: probe(container, self.script,
+                                self.lenient_contract if previous else contract),
+                            target_image=self.receipt['images']['frontend'] if override is not None else self.target['frontend'],
+                            retain=True)
+                except Exception as error:
+                    self.frontend_handoff = getattr(error, 'frontend_handoff', None)
+                    raise
             else:
                 run(self.compose(override) + ['up', '-d', '--no-deps', '--no-build', '--pull', 'never', service], env=compose_env)
                 wait_healthy('corp-site-' + service)
         run(['docker', 'exec', 'corp-site-nginx', 'nginx', '-t'])
         run(['docker', 'exec', 'corp-site-nginx', 'nginx', '-s', 'reload'])
+
+    FRONTEND_CONTINUITY_VERSION = 2
+
+    def finish_frontend_handoff(self):
+        retained = getattr(self, 'frontend_handoff', None)
+        if retained is not None and retained.created:
+            retained.finish()
 
     def backend_check(self, migrate=False, running=False):
         if self.backend_only and migrate:
@@ -807,6 +825,7 @@ class Release:
                 marker.write_text(self.manifest['sourceCommit'] + '\n')
                 marker.replace(self.live / 'DEPLOY_COMMIT')
             self.check_phase_protection('after-commit', receipt)
+            self.finish_frontend_handoff()
             self.pending_path.unlink()
             result['applied'] = True
         except Exception as error:
@@ -841,6 +860,7 @@ class Release:
                 elif (self.live / 'DEPLOY_COMMIT').exists():
                     (self.live / 'DEPLOY_COMMIT').unlink()
                 self.check_phase_protection('after-recovery', self.receipt)
+                self.finish_frontend_handoff()
                 self.pending_path.unlink()
                 result['previousFrontendRestoredAndVerified'] = True
                 if self.backend_only:
@@ -849,6 +869,9 @@ class Release:
                     result['previousAdminRestoredAndVerified'] = True
             except Exception:
                 # Leave an explicit pending marker and accurate image identity, never a false success.
+                retained = getattr(self, 'frontend_handoff', None)
+                if retained is not None:
+                    result['frontendHandoff'] = retained.observation()
                 guard = getattr(self, 'phase_guard', None)
                 if guard is not None and not guard.owns_pending():
                     # Unknown marker ownership also forbids overwriting another operation's metadata.
@@ -867,6 +890,8 @@ class Release:
                 observed = {row['Name'].removeprefix('/corp-site-'): row['Image'] for row in inspect(self.active_components)}
                 failed = copy.deepcopy(self.receipt)
                 failed.update({'images': observed, 'deploymentStatus': 'recovery-required', 'releaseOperationReceipt': str(self.audit / 'result.json')})
+                if 'frontendHandoff' in result:
+                    failed['frontendHandoff'] = result['frontendHandoff']
                 # Describe the cases of the frontend that is actually running.
                 if observed.get('frontend') != self.receipt['images']['frontend']:
                     if observed.get('frontend') == self.target['frontend']:

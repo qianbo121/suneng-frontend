@@ -51,6 +51,23 @@ def relative(value):
     return guard.relative(value)
 
 
+def handoff_tools():
+    """Reject mixed/old modules before the maintained entry can apply a release."""
+    import frontend_handoff
+    import frontend_release
+    root = Path(__file__).resolve().parent
+    contract.need(frontend_handoff.CONTINUITY_VERSION == 2 and
+                  getattr(frontend_release.Release, 'FRONTEND_CONTINUITY_VERSION', None) == 2,
+                  'frontend-continuity-tools-required')
+    result = {}
+    for module in (frontend_handoff, frontend_release):
+        path = Path(module.__file__).resolve()
+        contract.need(path.parent == root, 'frontend-tools-directory-mismatch')
+        result[path.name] = guard.digest(path)
+    result['release_entry.py'] = guard.digest(root/'release_entry.py')
+    return {'directory': str(root), 'sha256': result}
+
+
 class Entry:
     def __init__(self, config, expected):
         self.config_path, self.config_sha = Path(config).absolute(), expected
@@ -246,6 +263,7 @@ class Entry:
                 result = {'passed': True, 'collectorSha256': method_sha, 'browserAcceptanceComplete': False,
                           'actualCapturesRoot': str(self.root/'browser'/phase)}
         elif step in ('preflight', 'apply'):
+            tools = handoff_tools()
             import frontend_release
             # Revalidate the bound candidate captures immediately before native operation.
             self._browser('candidate')
@@ -272,7 +290,8 @@ class Entry:
             native = json.loads(output.getvalue())
             contract.normalize_step_result('verification', native)
             contract.need(native.get('applied') is (step == 'apply'), 'native-apply-result-mismatch')
-            result = {'passed': True, 'nativeGateUsed': True, 'applied': step == 'apply'}
+            result = {'passed': True, 'nativeGateUsed': True, 'applied': step == 'apply',
+                      'frontendContinuityTools': tools}
         elif step == 'recovery-input':
             result = {'passed': True, **contract.check_recovery_input(self.read('recoveryInput'), self.source)}
         elif step == 'recovery':
