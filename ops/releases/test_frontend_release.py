@@ -1824,6 +1824,44 @@ class SeparateProcurementHttpTest(unittest.TestCase):
 
 class FrontendRecoverySourceTest(unittest.TestCase):
     OLD_SOURCE = '1' * 40
+    def test_emergency_named_routing_keeps_failure_receipt_and_blocks_replay(self):
+        from unittest.mock import Mock
+        with tempfile.TemporaryDirectory() as tmp:
+            release = self.fixture(tmp)
+            state = {'image': OLD}
+            observed = {'configuredUpstream': 'corp-site-frontend', 'configuredImage': NEW,
+                        'configuredContainerRunning': True, 'canonicalRoutingRecovered': True,
+                        'copyRetained': True, 'previousRestored': False, 'trafficRequiresVerification': True}
+            bridge = Mock(created=True, restored=False)
+            bridge.observation.return_value = observed
+            bridge.restore.side_effect = RuntimeError('Frontend traffic recovered; manual reconciliation required')
+            def handoff(*args, **kwargs):
+                state['image'] = NEW
+                error = RuntimeError('Serving copy unavailable; manual reconciliation required')
+                error.frontend_handoff = bridge
+                raise error
+            def inspect(names):
+                return [row for row in rows(state['image']) if row['Name'][11:] in names]
+            with patch.object(r, 'working_space', return_value={'passed': True}), \
+                 patch.object(r, 'inspect', side_effect=inspect), \
+                 patch.object(r, 'run', side_effect=lambda args, **kw: image_inspect(args) if args[:3] == ['docker', 'image', 'inspect'] else ''), \
+                 patch.object(r, 'wait_healthy'), patch.object(r, 'probe', return_value=GOOD), \
+                 patch.object(r.subprocess, 'run'), \
+                 patch.object(r, 'acquisition_continuity_probe', return_value={'passed': True, 'pagesChecked': 11}), \
+                 patch.object(frontend_handoff, 'replace', side_effect=handoff) as start:
+                with self.assertRaisesRegex(RuntimeError, 'Release failed'): release.execute(apply=True)
+            start.assert_called_once()
+            bridge.restore.assert_called_once()
+            bridge.finish.assert_not_called()
+            receipt = json.loads(release.receipt_path.read_text())
+            result = json.loads((release.audit / 'result.json').read_text())
+            self.assertEqual(receipt['images']['frontend'], NEW)
+            self.assertEqual(receipt['frontendHandoff'], observed)
+            self.assertEqual(receipt['deploymentStatus'], 'recovery-required')
+            self.assertFalse(result['applied'])
+            self.assertFalse(result['previousFrontendRestoredAndVerified'])
+            self.assertTrue(release.pending_path.exists())
+
     def test_failed_recovery_records_configured_copy_separately_from_named_image(self):
         from unittest.mock import Mock
         with tempfile.TemporaryDirectory() as tmp:
