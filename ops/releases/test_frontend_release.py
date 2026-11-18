@@ -14,6 +14,7 @@ import threading
 import tarfile
 import unittest
 from unittest.mock import patch
+import frontend_handoff
 
 spec = importlib.util.spec_from_file_location('release', Path(__file__).with_name('frontend_release.py'))
 r = importlib.util.module_from_spec(spec)
@@ -24,6 +25,13 @@ RECEIPT = {'images': {'frontend': OLD, 'backend': 'sha256:' + 'c' * 64, 'admin':
 MANIFEST = {'schemaVersion': 1, 'image': NEW, 'expectedCurrentImage': OLD, 'publicationScope': r.SCOPE,
             'sourceIdentity': 'git-commit', 'sourceCommit': 'e' * 40, 'archiveSha256': 'f' * 64}
 GOOD = {'passed': True, 'sitemapPassed': True, 'checks': [], 'caseState': 'open'}
+
+
+def handoff_boundary(live, audit, compose, env, command, healthy, verify, *, target_image):
+    """Source-provenance fixtures isolate the separately tested handoff engine."""
+    command(compose + ['up', '-d', '--no-deps', '--no-build', '--pull', 'never', 'frontend'], env=env)
+    healthy('corp-site-frontend')
+
 HENAN = 'stainless-strip-annealing-supply-scope'
 FASTENER = 'fastener-mesh-belt-quenching-carburizing'
 CASE_GROUP = [
@@ -599,6 +607,21 @@ class ContractTest(MockAcquisitionChecks, unittest.TestCase):
                 result = release.execute(apply=False)
             self.assertFalse(result['applied'])
             self.assertEqual(len([args for args in calls if 'run' in args]), 1)
+
+    def test_safely_refused_handoff_does_not_recreate_the_preserved_frontend(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            release = self.fixture(tmp)
+            original = release.receipt_path.read_bytes()
+            with patch.object(r, 'inspect', side_effect=lambda names: [x for x in rows(OLD) if x['Name'].removeprefix('/corp-site-') in names]), \
+                 patch.object(r, 'run', side_effect=canary_docker), patch.object(r, 'wait_healthy'), \
+                 patch.object(r, 'probe', return_value=GOOD), patch.object(r, 'public_probe', return_value=[]), \
+                 patch.object(r.subprocess, 'run'), \
+                 patch.object(release, 'replace_frontend', side_effect=frontend_handoff.HandoffRestored('old frontend retained')) as replace:
+                with self.assertRaises(RuntimeError): release.execute(apply=True, kind='rollback')
+            replace.assert_called_once_with()
+            self.assertEqual(json.loads(release.receipt_path.read_bytes()), json.loads(original))
+            self.assertFalse(release.pending_path.exists())
+            self.assertTrue(json.loads((release.audit/'result.json').read_text())['previousFrontendRestoredAndVerified'])
 
     def test_dangling_pending_marker_blocks_before_docker(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -1811,7 +1834,8 @@ class FrontendRecoverySourceTest(unittest.TestCase):
 
     def call_replace(self, release, override=None):
         original_env = dict(release.env)
-        with patch.object(r, 'run', return_value='') as command, patch.object(r, 'wait_healthy'):
+        with patch.object(r, 'run', return_value='') as command, patch.object(r, 'wait_healthy'), \
+             patch.object(frontend_handoff, 'replace', side_effect=handoff_boundary):
             release.replace_frontend(override)
         self.assertEqual(release.env, original_env)
         calls = [c for c in command.call_args_list if c.args[0][0:2] == ['docker', 'compose']]
@@ -1969,7 +1993,8 @@ class FrontendRecoverySourceTest(unittest.TestCase):
             with patch.object(r, 'working_space', return_value={'passed': True}), patch.object(r, 'inspect', side_effect=inspect), \
                  patch.object(r, 'run', side_effect=command), patch.object(r, 'wait_healthy'), \
                  patch.object(r, 'probe', return_value=GOOD), patch.object(r, 'public_probe', side_effect=public), \
-                 patch.object(r.subprocess, 'run'), patch.object(r, 'acquisition_continuity_probe', return_value={'passed': True, 'pagesChecked': 11}):
+                 patch.object(r.subprocess, 'run'), patch.object(r, 'acquisition_continuity_probe', return_value={'passed': True, 'pagesChecked': 11}), \
+                 patch.object(frontend_handoff, 'replace', side_effect=handoff_boundary):
                 with self.assertRaises(RuntimeError): release.execute(apply=True)
             self.assertEqual(state['switches'], [(NEW, MANIFEST['sourceCommit']), (OLD, self.OLD_SOURCE)])
             self.assertEqual((state['image'], state['source']), (OLD, self.OLD_SOURCE))
