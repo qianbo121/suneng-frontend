@@ -165,6 +165,29 @@ function productMap() {
   return new Map(entries);
 }
 
+const guideEntry = '/articles/laojiu-rechuli-lu-daxiu-haishi-maixin';
+const catalogTarget = 'https://www.jssngyl.cn/zh/products';
+const newPublicEntries = [
+  [guideEntry, 'https://www.jssngyl.cn/zh' + guideEntry],
+  ['/product/809.html', '"https://www.jssngyl.cn/zh/articles/special-industrial-furnace-procurement-assessment#stainless-annealing-pickling-assessment"'],
+  ['/product', catalogTarget],
+] as const;
+
+describe('public legacy entry redirects', () => {
+  const fallback = readFileSync(new URL('nginx.conf', root), 'utf8');
+  const expectedHosts = publicHosts.map(([, name]) => name);
+
+  it.each([...newPublicEntries, ['/product/', catalogTarget] as const])('sends %s directly to its destination on the official site', (path, target) => {
+    for (const [config, names] of [[nginx, expectedHosts], [fallback, ['jssngyl.cn www.jssngyl.cn']]] as const) {
+      const blocks = serverBlocks(config).filter((block) => block.includes('location = ' + path + ' {'));
+      expect(blocks.map((block) => block.match(/server_name ([^;]+);/)?.[1]).sort()).toEqual([...names].sort());
+      for (const block of blocks) {
+        expect(locationBody(block, path)).toBe('return 301 ' + target + ';');
+      }
+    }
+  });
+});
+
 describe('verified original-PHP product redirects', () => {
   it('permits exactly the approved known IDs and leaves unverified details unmapped', () => {
     expect([...productMap().entries()].sort()).toEqual([
@@ -259,9 +282,15 @@ describe('verified original-PHP product redirects', () => {
       const block = publicBlock(serverName, listen);
       const prefix = listen === '443 ssl' && serverName === '${DOMAIN}' ? '' : 'https://www.jssngyl.cn';
       const restored = block
+        .replace('return 301 "' + prefix + '/zh/about#contact";', 'return 301 ' + prefix + '/zh/contact;')
         .replaceAll('return 301 https://www.jssngyl.cn$legacy_product_category_path;', 'return 301 ' + prefix + '/zh/products;')
         .replace(/^[ \t]*location = \/product\/ \{\n[ \t]*return 301 https:\/\/www\.jssngyl\.cn\/zh\/products;\n[ \t]*\}\n\n/gm, '');
       baseline = baseline.replace(block, restored);
+    }
+    // Exclude only the three exact entries covered by the public entry contract above.
+    for (const [path, target] of newPublicEntries) {
+      const entry = `    location = ${path} {\n      return 301 ${target};\n    }\n\n`;
+      baseline = baseline.replaceAll(entry, '');
     }
     for (const [id, target] of continuedMappings) {
       const line = '    ' + id + ' "' + target + '";\n';
@@ -337,8 +366,8 @@ describe('verified original-PHP product redirects', () => {
   it.each(publicHosts)('%s keeps other historical routes and unknown-PHP rejection', (_label, serverName, listen) => {
     const block = publicBlock(serverName, listen);
     const prefix = listen === '443 ssl' && serverName === '${DOMAIN}' ? '' : 'https://www.jssngyl.cn';
+    expect(locationBody(block, '/contact/show.php')).toBe('return 301 "' + prefix + '/zh/about#contact";');
     for (const [legacy, target] of [
-      ['/contact/show.php', '/zh/contact'],
       ['/about/show.php', '/zh/about'],
       ['/news/index.php', '/zh/news'],
       ['/index.php', '/zh'],

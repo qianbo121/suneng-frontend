@@ -3,6 +3,7 @@ import type { Locale } from '@/types/site';
 export type AboutSearchParams = Record<string, string | string[] | undefined>;
 
 export function getLegacyAboutSectionHref(pathname: string, searchParams: URLSearchParams) {
+  if (pathname === '/contact' || pathname === '/contact/') pathname = '/zh/contact';
   const match = /^\/(zh|en)\/(contact|partner|strength\/honors)\/?$/.exec(pathname);
   if (!match) return null;
   const params: AboutSearchParams = {};

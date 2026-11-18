@@ -548,7 +548,7 @@ http {
 
     # Exact historical entry pages keep their equivalent destination.
     location = /contact/show.php {
-      return 301 https://www.jssngyl.cn/zh/contact;
+      return 301 "https://www.jssngyl.cn/zh/about#contact";
     }
 
     # Collapse the known legacy directory chain while preserving query parameters.
@@ -581,6 +581,18 @@ http {
         return 404;
       }
       return 301 https://www.jssngyl.cn$legacy_product_path;
+    }
+
+    location = /articles/laojiu-rechuli-lu-daxiu-haishi-maixin {
+      return 301 https://www.jssngyl.cn/zh/articles/laojiu-rechuli-lu-daxiu-haishi-maixin;
+    }
+
+    location = /product/809.html {
+      return 301 "https://www.jssngyl.cn/zh/articles/special-industrial-furnace-procurement-assessment#stainless-annealing-pickling-assessment";
+    }
+
+    location = /product {
+      return 301 https://www.jssngyl.cn/zh/products;
     }
 
     location = /product/ {
@@ -651,7 +663,7 @@ http {
 
     # Exact historical entry pages keep their equivalent destination.
     location = /contact/show.php {
-      return 301 https://www.jssngyl.cn/zh/contact;
+      return 301 "https://www.jssngyl.cn/zh/about#contact";
     }
 
     # Collapse the known legacy directory chain while preserving query parameters.
@@ -684,6 +696,18 @@ http {
         return 404;
       }
       return 301 https://www.jssngyl.cn$legacy_product_path;
+    }
+
+    location = /articles/laojiu-rechuli-lu-daxiu-haishi-maixin {
+      return 301 https://www.jssngyl.cn/zh/articles/laojiu-rechuli-lu-daxiu-haishi-maixin;
+    }
+
+    location = /product/809.html {
+      return 301 "https://www.jssngyl.cn/zh/articles/special-industrial-furnace-procurement-assessment#stainless-annealing-pickling-assessment";
+    }
+
+    location = /product {
+      return 301 https://www.jssngyl.cn/zh/products;
     }
 
     location = /product/ {
@@ -1037,7 +1061,7 @@ http {
 
     # Exact historical entry pages keep their equivalent destination.
     location = /contact/show.php {
-      return 301 /zh/contact;
+      return 301 "/zh/about#contact";
     }
 
     # Collapse the known legacy directory chain while preserving query parameters.
@@ -1070,6 +1094,18 @@ http {
         return 404;
       }
       return 301 https://www.jssngyl.cn$legacy_product_path;
+    }
+
+    location = /articles/laojiu-rechuli-lu-daxiu-haishi-maixin {
+      return 301 https://www.jssngyl.cn/zh/articles/laojiu-rechuli-lu-daxiu-haishi-maixin;
+    }
+
+    location = /product/809.html {
+      return 301 "https://www.jssngyl.cn/zh/articles/special-industrial-furnace-procurement-assessment#stainless-annealing-pickling-assessment";
+    }
+
+    location = /product {
+      return 301 https://www.jssngyl.cn/zh/products;
     }
 
     location = /product/ {
