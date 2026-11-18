@@ -43,6 +43,8 @@ class SimulatedHandoff(Handoff):
             raise RuntimeError('cannot confirm recovery drain')
 
     def health(self, container):
+        if container == self.name:
+            return
         self.events.append('health-' + self.canonical)
         if self.canonical == 'new' and self.fault in ('health', 'recovery'):
             raise RuntimeError('new service unhealthy')
@@ -53,12 +55,76 @@ class SimulatedHandoff(Handoff):
 
     def note(self, stage): self.events.append(stage)
 
+    def check_copy(self, allow_restart=False):
+        if not allow_restart and self.canonical == 'new' and self.fault == 'copy-crash':
+            raise RuntimeError('Serving copy stopped or restarted during handoff')
+
     def remove_copy(self):
         if self.serving != 'canonical': raise AssertionError('removed serving copy')
         self.created = False; self.events.append('remove')
 
 
 class HandoffTests(unittest.TestCase):
+    def test_public_failure_reuses_copy_without_new_memory_admission(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            h = SimulatedHandoff(Path(tmp))
+            h.replace(retain=True)
+            self.assertTrue(h.created)
+            self.assertNotIn('remove', h.events)
+            with patch.object(h, 'prepare', side_effect=AssertionError('second copy')), \
+                 patch.object(h, 'replacement_headroom', side_effect=AssertionError('memory fell')):
+                h.restore()
+                self.assertTrue(h.created)  # kept until outer recovery checks
+                h.finish()
+            self.assertEqual((h.canonical, h.serving, h.created), ('old','canonical',False))
+            self.assertEqual(h.events.count('prepare'), 1)
+
+    def test_copy_failure_is_not_silently_reported_as_success(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            h = SimulatedHandoff(Path(tmp), 'copy-crash')
+            with self.assertRaises(HandoffRestored): h.replace(retain=True)
+            self.assertEqual((h.canonical, h.created), ('old',False))
+
+    def test_copy_restart_is_detected_even_after_it_becomes_healthy(self):
+        h = Handoff('/unused','/unused',[],{},Mock(),Mock(),Mock())
+        h.copy_id = 'owned'; h.copy_restarts = 0
+        with patch.object(h,'inspect',return_value={'Id':'owned','RestartCount':1,'State':{'Running':True}}):
+            with self.assertRaisesRegex(RuntimeError,'restarted'): h.check_copy()
+
+    def test_replacement_credits_resident_anon_not_reclaimable_file_cache(self):
+        mib = 1024**2
+        for stats, accepted in [('anon 262144000\nfile 400000000\n', True),
+                                ('anon 104857600\nfile 400000000\n', False),
+                                ('total_rss 262144000\ncache 400000000\n', True),
+                                ('file 800000000\n', False), ('anon invalid\n', False)]:
+            with self.subTest(stats=stats):
+                h = Handoff('/unused','/unused',[],{},Mock(return_value=stats),Mock(),Mock())
+                row = {'HostConfig':{'Memory':768*mib}, 'State':{'Running':True}}
+                with patch.object(h,'inspect',return_value=row), \
+                     patch('frontend_handoff.Path.read_text',return_value='MemAvailable: 819200 kB\n'):
+                    if accepted: h.replacement_headroom()
+                    else:
+                        with self.assertRaisesRegex(RuntimeError,'Insufficient memory'): h.replacement_headroom()
+
+    def test_no_memory_credit_for_stopped_current_service(self):
+        h = Handoff('/unused','/unused',[],{},Mock(),Mock(),Mock())
+        row = {'HostConfig':{'Memory':768*1024**2}, 'State':{'Running':False}}
+        with patch.object(h,'inspect',return_value=row), \
+             patch('frontend_handoff.Path.read_text',return_value='MemAvailable: 819200 kB\n'):
+            with self.assertRaisesRegex(RuntimeError,'Insufficient memory'): h.replacement_headroom()
+        h.run.assert_not_called()
+
+    def test_recovery_evidence_separates_named_service_from_configured_copy(self):
+        h = Handoff('/unused','/unused',[],{},Mock(),Mock(),Mock())
+        h.created = True; h.original_active = CONFIG
+        h.bridge_active = redirect_frontend(CONFIG,h.name)
+        with patch.object(h,'read_active',return_value=h.bridge_active), \
+             patch.object(h,'inspect',return_value={'Image':'new-image','Id':'copy-id','State':{'Running':True}}):
+            report = h.observation()
+        self.assertEqual(report['configuredUpstream'],h.name)
+        self.assertEqual(report['configuredImage'],'new-image')
+        self.assertTrue(report['trafficRequiresVerification'])
+
     def test_success_keeps_copy_until_named_service_ready_and_old_workers_drained(self):
         with tempfile.TemporaryDirectory() as tmp:
             h = SimulatedHandoff(Path(tmp)); h.replace()

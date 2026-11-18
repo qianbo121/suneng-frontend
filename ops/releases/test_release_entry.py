@@ -14,9 +14,27 @@ import phase_runtime
 import release_contract
 import release_entry as entry
 import run_browser_checks
+import frontend_handoff
+import frontend_release
 import test_archive_identity as archives
 import test_release_browser as browsers
 from test_release_contract import recovery_input, recovery_report
+
+
+class HandoffToolTests(unittest.TestCase):
+    def test_current_tool_identity_is_recorded(self):
+        observed = entry.handoff_tools()
+        self.assertEqual(set(observed['sha256']), {'frontend_handoff.py','frontend_release.py','preparation_guard.py','release_entry.py'})
+        self.assertEqual(observed['directory'], str(Path(entry.__file__).resolve().parent))
+
+    def test_old_or_mixed_handoff_modules_are_rejected(self):
+        import preparation_guard
+        with patch.object(preparation_guard.PreparationGuard,'FRONTEND_CONTINUITY_VERSION',1), self.assertRaises(Exception):
+            entry.handoff_tools()
+        with patch.object(frontend_release.Release,'FRONTEND_CONTINUITY_VERSION',1), self.assertRaises(Exception):
+            entry.handoff_tools()
+        with patch.object(frontend_handoff,'__file__','/different-tools/frontend_handoff.py'), self.assertRaises(Exception):
+            entry.handoff_tools()
 
 
 class EntryFixture:

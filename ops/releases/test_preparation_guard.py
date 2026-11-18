@@ -16,6 +16,42 @@ def container(name='/corp-site-frontend'):
 
 
 class PreparationGuardTest(unittest.TestCase):
+    def retained_fixture(self, tmp):
+        release, path, state, command = self.fixture(tmp)
+        release.pending_path = release.live/'DEPLOYMENT_IN_PROGRESS.json'
+        operation = guard.PreparationGuard(path, release, command);operation.begin()
+        pending = {'owned':True};release.pending_path.write_text(json.dumps(pending))
+        operation.check('switch-start', expected_pending=pending)
+        name='suneng-frontend-handoff-123456789abc';row=container('/'+name)
+        release.frontend_handoff=SimpleNamespace(name=name,created=True,directory=release.audit/name,
+            copy_id=row['Id'],target_image=row['Image'],copy_observation=copy.deepcopy(row))
+        state['rows'].append(row)
+        return release, operation, state
+
+    def test_retained_bridge_is_allowed_during_checks_but_must_be_gone_at_finish(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            release, operation, state = self.retained_fixture(tmp)
+            operation.check('after-switch')
+            operation.check('after-recovery')
+            operation.check_failure()
+            with self.assertRaises(guard.ProtectionChanged):operation.check('finished')
+            state['rows'].pop();release.frontend_handoff.created=False
+            operation.check('finished')
+
+    def test_retained_bridge_never_hides_foreign_identity_configuration_or_inventory(self):
+        for fault in ('id','image','config','unhealthy','another-copy','other-service','wrong-audit','marker'):
+            with self.subTest(fault=fault),tempfile.TemporaryDirectory() as tmp:
+                release,operation,state=self.retained_fixture(tmp);row=state['rows'][-1]
+                if fault=='id':row['Id']='foreign'
+                elif fault=='image':row['Image']='foreign'
+                elif fault=='config':row['HostConfig']['Memory']=123
+                elif fault=='unhealthy':row['State']['Health']['Status']='unhealthy'
+                elif fault=='another-copy':state['rows'].append(container('/suneng-frontend-handoff-another'))
+                elif fault=='other-service':state['rows'][1]['Image']='foreign'
+                elif fault=='wrong-audit':release.frontend_handoff.directory=release.live/'foreign'
+                elif fault=='marker':release.pending_path.write_text('{"other":true}')
+                with self.assertRaises(guard.ProtectionChanged):operation.check('after-switch')
+
     def fixture(self, tmp):
         live, audit = Path(tmp).resolve() / 'live', Path(tmp).resolve() / 'audit'
         live.mkdir()

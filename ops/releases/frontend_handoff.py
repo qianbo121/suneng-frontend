@@ -16,6 +16,7 @@ import uuid
 UPSTREAM = re.compile(rb'(upstream\s+frontend_upstream\s*\{\s*server\s+)frontend:3000(;\s*\})')
 ACTIVE = '/etc/nginx/nginx.conf'
 BOUND = '/etc/nginx/nginx.conf.template'
+CONTINUITY_VERSION = 2
 
 
 class HandoffRestored(RuntimeError):
@@ -43,6 +44,8 @@ class Handoff:
         self.touched = False
         self.canonical_attempted = False
         self.copy_id = None
+        self.restored = False
+        self.copy_restarts = None
 
     def read_active(self):
         return base64.b64decode(self.run(['docker', 'exec', self.proxy, 'base64', ACTIVE]))
@@ -148,11 +151,13 @@ class Handoff:
         self.created = True
         copy = self.inspect(self.name)
         self.copy_id = copy['Id']
+        self.copy_restarts = copy.get('RestartCount', 0)
         if copy['Image'] != self.target_image:
             raise RuntimeError('Serving copy image does not match the selected candidate')
         self.run(['docker', 'update', '--restart=always', self.name])
         self.healthy(self.name)
         self.verify(self.name, False)
+        self.copy_observation = self.inspect(self.name)
         self.note('copy-ready')
 
     def remove_copy(self):
@@ -164,45 +169,101 @@ class Handoff:
             self.note('copy-removed')
 
     def replacement_headroom(self):
-        # Candidate startup can consume much more memory than the old image.
-        # Recheck while the old service is still untouched, reserving a whole
-        # named frontend plus host headroom without crediting the old process.
+        # Compose replaces, rather than adds, the named frontend. Credit only
+        # its resident anonymous memory, never file cache already accounted for
+        # by MemAvailable. Unknown usage receives no credit.
         limit = self.inspect(self.name)['HostConfig'].get('Memory', 0)
+        current = self.inspect(self.frontend)
+        old_limit = current['HostConfig'].get('Memory', 0)
+        released = 0
+        if current['State']['Running']:
+            try:
+                stats = dict(line.split() for line in self.run(
+                    ['docker', 'exec', self.frontend, 'cat', '/sys/fs/cgroup/memory.stat']).splitlines())
+                released = max(0, min(int(stats.get('anon', stats.get('total_rss', '0'))), old_limit))
+            except (RuntimeError, ValueError, KeyError):
+                pass
         memory = dict(line.split(':', 1) for line in Path('/proc/meminfo').read_text().splitlines())
-        if limit <= 0 or int(memory['MemAvailable'].split()[0]) * 1024 < limit + 256 * 1024**2:
+        if limit <= 0 or old_limit <= 0 or int(memory['MemAvailable'].split()[0]) * 1024 + released < max(limit, old_limit) + 256 * 1024**2:
             raise RuntimeError('Insufficient memory for frontend replacement')
 
-    def replace(self):
+    def check_copy(self, allow_restart=False):
+        row = self.inspect(self.name)
+        if (row['Id'] != self.copy_id or (not allow_restart and row.get('RestartCount', 0) != self.copy_restarts)
+                or (self.target_image and row['Image'] != self.target_image)
+                or not row['State']['Running']):
+            raise RuntimeError('Serving copy stopped or restarted during handoff')
+        self.healthy(self.name)
+
+    def finish(self):
+        # Keep the already-started bridge until the outer release's public
+        # checks complete. Recovery then never needs a second copy or admission.
+        if not self.restored:
+            self.check_copy()
+        self.remove_copy()
+
+    def observation(self):
+        result = {'auditDirectory': str(self.directory), 'copyName': self.name,
+                  'copyRetained': self.created, 'previousRestored': self.restored,
+                  'trafficRequiresVerification': True}
+        try:
+            active = self.read_active()
+            route = (self.name if active == self.bridge_active else
+                     self.frontend if active == self.original_active else None)
+            result['configuredUpstream'] = route or 'unknown'
+            if route:
+                row = self.inspect(route)
+                result.update(configuredImage=row['Image'], configuredContainerId=row['Id'],
+                              configuredContainerRunning=row['State']['Running'])
+        except Exception:
+            result['configuredUpstream'] = 'unknown'
+        return result
+
+    def restore(self):
+        if self.restored:
+            return
+        if self.touched:
+            if self.canonical_attempted:
+                self.check_copy(allow_restart=True)
+                self.activate(self.bridge_template, self.bridge_active, 'copy-serving-recovery')
+                self.run(self.previous_compose + ['up', '-d', '--no-deps', '--no-build', '--pull', 'never', 'frontend'], env=self.previous_env)
+                self.healthy(self.frontend)
+                self.verify(self.frontend, True)
+            self.activate(self.original_template, self.original_active, 'previous-restored')
+        self.restored = True
+
+    def replace(self, retain=False):
         try:
             self.prepare()
             self.replacement_headroom()
             # Existing requests finish on the old process before Compose is
             # allowed to stop it. New requests already use the healthy copy.
             self.activate(self.bridge_template, self.bridge_active, 'copy-serving')
+            self.check_copy()
+            self.replacement_headroom()
             self.canonical_attempted = True
             self.run(self.compose + ['up', '-d', '--no-deps', '--no-build', '--pull', 'never', 'frontend'], env=self.env)
             self.healthy(self.frontend)
             self.verify(self.frontend, False)
             self.note('new-frontend-ready')
+            self.check_copy()
             self.activate(self.original_template, self.original_active, 'canonical-serving')
-            self.remove_copy()
+            if not retain:
+                self.finish()
         except Exception as error:
             # Failed candidates never strand the proxy on the stopped named
             # service. If restoration itself fails, retain the serving copy
             # and recovery evidence; the outer release hold blocks replay.
-            if self.touched:
-                if self.canonical_attempted:
-                    # A late failure may occur after some workers have already
-                    # switched to the new named service. Move them back before
-                    # recreating that service during recovery.
-                    self.activate(self.bridge_template, self.bridge_active, 'copy-serving-recovery')
-                    self.run(self.previous_compose + ['up', '-d', '--no-deps', '--no-build', '--pull', 'never', 'frontend'], env=self.previous_env)
-                    self.healthy(self.frontend)
-                    self.verify(self.frontend, True)
-                self.activate(self.original_template, self.original_active, 'previous-restored')
+            self.restore()
             self.remove_copy()
             raise HandoffRestored('Handoff stopped; previous frontend preserved or restored') from error
 
 
-def replace(live, audit, compose, env, command, healthy, verify, *, target_image):
-    Handoff(live, audit, compose, env, command, healthy, verify, target_image=target_image).replace()
+def replace(live, audit, compose, env, command, healthy, verify, *, target_image, retain=False):
+    handoff = Handoff(live, audit, compose, env, command, healthy, verify, target_image=target_image)
+    try:
+        handoff.replace(retain=retain)
+    except Exception as error:
+        error.frontend_handoff = handoff
+        raise
+    return handoff
