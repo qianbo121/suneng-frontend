@@ -37,6 +37,8 @@ coding/
 frontend/.next
 frontend/.next-*
 frontend/node_modules
+/frontend/public/images/infographics/*-768w.webp
+/frontend/public/images/infographics/*-1086w.webp
 backend/node_modules
 backend/dist
 admin/node_modules
