@@ -8,7 +8,7 @@ import { getAllNewsForDecisionCenter } from '@/lib/api/news';
 import { mapNewsCard } from '@/lib/news';
 import { applyNewsListCopy } from '@/lib/news-list-copy';
 import { getNewsCaseResource } from '@/lib/news-case-resource.server';
-import { includeStandaloneNewsResources } from '@/lib/news-list-resources';
+import { includeInfographicNewsResources, includeStandaloneNewsResources } from '@/lib/news-list-resources';
 import { filterCanonicalNewsItems, hasPublishableEnglishNews } from '@/lib/news-routing';
 import type { Locale } from '@/types/site';
 import type { NewsListCardItem } from '@/types/news';
@@ -66,13 +66,14 @@ const getArticleCards = cache(async (locale: Locale) =>
   includeStandaloneNewsResources(await getCachedCards(locale), locale),
 );
 
-function includeProjectCase(articles: NewsListCardItem[], locale: Locale) {
+function includeListResources(articles: NewsListCardItem[], locale: Locale) {
+  const cards = includeInfographicNewsResources(articles, locale);
   const projectCase = getNewsCaseResource(locale);
-  return projectCase ? [...articles, projectCase] : articles;
+  return projectCase ? [...cards, projectCase] : cards;
 }
 
 export const getNewsDecisionCenterCards = cache(async (locale: Locale) =>
-  includeProjectCase(await getArticleCards(locale), locale),
+  includeListResources(await getArticleCards(locale), locale),
 );
 
 // Metadata and page rendering share one read in the same request as well.
@@ -97,5 +98,5 @@ export const getNewsDecisionCenterData = cache(async (locale: Locale, forHomepag
 // Search/filter pages use the same collection as the numbered resource pages.
 export const getNewsResourceListData = cache(async (locale: Locale) => {
   const result = await getNewsDecisionCenterData(locale);
-  return result.data ? { data: includeProjectCase(result.data, locale), error: null } : result;
+  return result.data ? { data: includeListResources(result.data, locale), error: null } : result;
 });

@@ -10,6 +10,7 @@ import type { NewsListCardItem } from '@/types/news';
 import { infographicResources } from '@/lib/infographics';
 import {
   getNewsListCardHref,
+  includeInfographicNewsResources,
   includeStandaloneNewsResources,
   PROCUREMENT_RESOURCE_HREF,
   PROCUREMENT_RESOURCE_SLUG,
@@ -33,12 +34,14 @@ const news = Array.from(
 
 describe('standalone procurement resource in the normal news list', () => {
   it('adds independent Chinese resources without altering articles or fabricating dates and views', () => {
-    const cards = includeStandaloneNewsResources(news, 'zh');
+    const articles = includeStandaloneNewsResources(news, 'zh');
+    const cards = includeInfographicNewsResources(articles, 'zh');
     const resource = cards.find((item) => item.slug === PROCUREMENT_RESOURCE_SLUG)!;
     expect(news).toHaveLength(11);
+    expect(articles).toHaveLength(news.length + 1);
     expect(cards).toHaveLength(news.length + 1 + infographicResources.length);
-    expect(includeStandaloneNewsResources(cards, 'zh')).toHaveLength(cards.length);
-    const english = includeStandaloneNewsResources(news, 'en');
+    expect(includeInfographicNewsResources(cards, 'zh')).toHaveLength(cards.length);
+    const english = includeInfographicNewsResources(includeStandaloneNewsResources(news, 'en'), 'en');
     expect(english).toHaveLength(news.length + 1);
     expect(english.at(-1)!.title.en).toContain('furnace procurement');
     expect(getNewsListCardHref(english.at(-1)!, 'en')).toBe(PROCUREMENT_RESOURCE_HREF.replace('/zh/', '/en/'));

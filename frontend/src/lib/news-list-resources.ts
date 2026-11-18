@@ -33,11 +33,17 @@ export function includeStandaloneNewsResources(
   items: NewsListCardItem[],
   locale: Locale,
 ): NewsListCardItem[] {
-  const standalone = [
-    { ...procurementResource, href: `/${locale}/articles/${PROCUREMENT_RESOURCE_SLUG}` },
-    ...(locale === 'zh' ? getInfographicCards() : []),
-  ];
-  return [...items, ...standalone.filter((resource) => !items.some((item) => item.slug === resource.slug))];
+  if (items.some((item) => item.slug === PROCUREMENT_RESOURCE_SLUG)) return items;
+  return [...items, { ...procurementResource, href: `/${locale}/articles/${PROCUREMENT_RESOURCE_SLUG}` }];
+}
+
+export function includeInfographicNewsResources(
+  items: NewsListCardItem[],
+  locale: Locale,
+): NewsListCardItem[] {
+  if (locale !== 'zh') return items;
+  const slugs = new Set(items.map((item) => item.slug));
+  return [...items, ...getInfographicCards().filter((resource) => !slugs.has(resource.slug))];
 }
 
 export function getNewsListCardHref(item: NewsListCardItem, locale: Locale) {

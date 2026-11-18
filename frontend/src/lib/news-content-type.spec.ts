@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { buildNewsDecisionHref, filterAndSortNewsDecisionItems } from './news-decision-center';
 import { getInfographicCards } from './infographics';
 import { normalizeNewsContentFormat } from './news-content-type';
-import { includeStandaloneNewsResources } from './news-list-resources';
+import { includeInfographicNewsResources, includeStandaloneNewsResources } from './news-list-resources';
 import {
   getNewsListView,
   hasNewsListFilters,
@@ -12,7 +12,7 @@ import {
 } from './news-list-client';
 
 describe('independent infographic resources', () => {
-  const cards = includeStandaloneNewsResources([], 'zh');
+  const cards = includeInfographicNewsResources(includeStandaloneNewsResources([], 'zh'), 'zh');
 
   it('keeps article and infographic results separate in both server and hydrated lists', () => {
     for (const source of [cards, toNewsListLiteCards(cards, 'zh')]) {
@@ -58,7 +58,7 @@ describe('independent infographic resources', () => {
       filterAndSortNewsDecisionItems(cards, { ...matching, topic: 'procurement' }),
     ).toHaveLength(0);
     expect(
-      includeStandaloneNewsResources(getInfographicCards(), 'zh').filter(
+      includeInfographicNewsResources(getInfographicCards(), 'zh').filter(
         (item) => item.contentType === 'infographic',
       ),
     ).toHaveLength(10);
