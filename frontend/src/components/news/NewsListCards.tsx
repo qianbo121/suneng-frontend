@@ -1,3 +1,4 @@
+import type { NewsContentFormat } from '@/lib/news-content-type';
 import Link from 'next/link';
 import { NewsPagination } from '@/components/news/NewsPagination';
 import { NEWS_PAGE_SIZE } from '@/constants/news';
@@ -7,7 +8,6 @@ import { getNewsListCardHref } from '@/lib/news-list-resources';
 import {
   buildNewsDecisionHref,
   getNewsDecisionDisplayMeta,
-  isFeaturedNewsPage,
   type NewsSort,
   type NewsDecisionTopicId,
   type NewsFurnaceFilterId,
@@ -16,6 +16,7 @@ import { NewsListCardItem } from '@/types/news';
 import { Locale } from '@/types/site';
 
 import { NewsCardImage } from './NewsCardImage';
+import { ResourceDetailLink, ResourceListRestore } from './ResourceListNavigation';
 import styles from './NewsDecisionCenter.module.css';
 import { DEFAULT_NEWS_SORT } from '@/lib/news-decision-center';
 
@@ -29,6 +30,7 @@ type NewsListCardsProps = {
   topic?: NewsDecisionTopicId;
   furnace?: NewsFurnaceFilterId;
   sort?: NewsSort;
+  format?: NewsContentFormat;
   prefetchPages?: boolean;
 };
 
@@ -36,43 +38,34 @@ function NewsListItem({
   locale,
   item,
   priority,
-  featured,
+  returnTo,
 }: {
   locale: Locale;
   item: NewsListCardItem;
   priority: boolean;
-  featured: boolean;
+  returnTo: string;
 }) {
   const meta = getNewsDecisionDisplayMeta(item, locale);
   const displayDate = item.listDisplayDate ?? formatNewsDisplayDate(item.date);
+  const isInfographic = item.contentType === 'infographic';
 
   const href = getNewsListCardHref(item, locale);
   const isCase = href === `/${locale}/case/${item.slug}`;
   const content = (
     <>
-      <div className={styles.articleImage}>
-        <NewsCardImage
-          src={item.image}
-          alt={locale === 'en' ? item.title.en : `${item.title.zh}封面图`}
-          priority={priority}
-          sizes={
-            featured
-              ? '(max-width: 700px) calc(100vw - 56px), 288px'
-              : '(max-width: 700px) 96px, 176px'
-          }
-        />
-      </div>
-
+      {!isInfographic && (
+        <div className={styles.articleImage}>
+          <NewsCardImage
+            src={item.image}
+            alt={locale === 'en' ? item.title.en : `${item.title.zh}封面图`}
+            priority={priority}
+            sizes="(max-width: 700px) 112px, 176px"
+            naturalRatio
+          />
+        </div>
+      )}
       <div className={styles.articleBody}>
-        <h3 className={styles.articleTitle}>
-          {isCase ? <Link className={styles.caseTitleLink} href={href}>{item.title[locale]}</Link> : item.title[locale]}
-        </h3>
         <div className={styles.articleTags}>
-          {featured ? (
-            <span className={styles.recommendLabel}>
-              {locale === 'en' ? 'Recommended' : '推荐阅读'}
-            </span>
-          ) : null}
           {isCase ? (
             <Link className={`${styles.articleTag} ${styles.caseIndexLink}`} href={`/${locale}/case`}>
               {locale === 'en' ? 'Project Case' : '项目案例'}
@@ -80,11 +73,12 @@ function NewsListItem({
           ) : <span className={styles.articleTag}>{meta.topicLabel}</span>}
           <span className={styles.articleTag}>{meta.furnaceLabel}</span>
           {displayDate ? (
-            <time className={styles.articleDate} dateTime={displayDate}>
-              {displayDate}
-            </time>
+            <time className={styles.articleDate} dateTime={displayDate}>{displayDate}</time>
           ) : null}
         </div>
+        <h3 className={styles.articleTitle}>
+          {isCase ? <Link className={styles.caseTitleLink} href={href}>{item.title[locale]}</Link> : item.title[locale]}
+        </h3>
         <p className={styles.articleSummary}>{item.summary[locale]}</p>
       </div>
     </>
@@ -92,14 +86,21 @@ function NewsListItem({
 
   return (
     <article
-      className={`${styles.articleCard} ${featured ? styles.featuredCard : ''}`}
+      className={styles.articleCard}
       data-news-id={item.id}
-      data-featured={featured}
+      data-featured={false}
+      data-content-type={item.contentType ?? 'article'}
     >
       {isCase ? (
         <div className={`${styles.articleLink} ${styles.caseRow}`}>{content}</div>
       ) : (
-        <Link href={href} className={styles.articleLink}>{content}</Link>
+        <ResourceDetailLink
+          href={href}
+          returnTo={returnTo}
+          className={`${styles.articleLink} ${isInfographic ? styles.textOnlyLink : ''}`}
+        >
+          {content}
+        </ResourceDetailLink>
       )}
     </article>
   );
@@ -115,6 +116,7 @@ export function NewsListCards({
   topic = 'all',
   furnace = 'all',
   sort = DEFAULT_NEWS_SORT,
+  format = 'article',
   prefetchPages,
 }: NewsListCardsProps) {
   const normalized = items.slice(0, pageSize);
@@ -125,12 +127,14 @@ export function NewsListCards({
       topic,
       furnace,
       sort,
+      format,
       page: nextPage,
     });
 
   if (normalized.length === 0) {
     return (
       <div className={styles.emptyState}>
+        <ResourceListRestore href={href(page)} />
         <h3>{locale === 'en' ? 'No resources found' : '没有找到匹配资料'}</h3>
         <p>{locale === 'en' ? 'Try another search or filter.' : '请调整搜索词或筛选条件。'}</p>
         <Link href={`/${locale}/news`}>{locale === 'en' ? 'Reset filters' : '清除筛选'}</Link>
@@ -140,6 +144,7 @@ export function NewsListCards({
 
   return (
     <div>
+      <ResourceListRestore href={href(page)} />
       <div className={styles.articleList}>
         {normalized.map((item, index) => (
           <NewsListItem
@@ -147,7 +152,7 @@ export function NewsListCards({
             locale={locale}
             item={item}
             priority={index === 0}
-            featured={!item.href && index === 0 && isFeaturedNewsPage({ query, topic, furnace, sort, page })}
+            returnTo={href(page)}
           />
         ))}
       </div>

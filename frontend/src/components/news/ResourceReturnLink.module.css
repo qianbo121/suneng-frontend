@@ -1,0 +1,41 @@
+.back {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 44px;
+  color: #245bce;
+  font-size: 14px;
+  line-height: 24px;
+  font-weight: 500;
+  touch-action: manipulation;
+}
+.back svg {
+  width: 16px;
+  height: 16px;
+}
+.back:hover,
+.plain:hover,
+.breadcrumb a:hover {
+  color: #1949ae;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+.back:focus-visible,
+.plain:focus-visible,
+.breadcrumb a:focus-visible {
+  outline: 2px solid #245bce;
+  outline-offset: 4px;
+}
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  font-size: 13px;
+  line-height: 22px;
+  color: #64748b;
+}
+.plain {
+  color: inherit;
+  touch-action: manipulation;
+}

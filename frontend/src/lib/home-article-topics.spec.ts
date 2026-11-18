@@ -1,7 +1,11 @@
 import { describe, expect, it } from 'vitest';
 import type { NewsListCardItem } from '@/types/news';
 import { filterAndSortNewsDecisionItems } from './news-decision-center';
-import { includeStandaloneNewsResources, PROCUREMENT_RESOURCE_HREF } from './news-list-resources';
+import {
+  includeInfographicNewsResources,
+  includeStandaloneNewsResources,
+  PROCUREMENT_RESOURCE_HREF,
+} from './news-list-resources';
 import {
   HOME_ARTICLE_TOPICS,
   mapNewsToHomeTopicArticles,
@@ -22,6 +26,21 @@ function card(id: number, listTopic?: NewsListCardItem['listTopic']): NewsListCa
 }
 
 describe('homepage resources by topic', () => {
+  it('excludes infographics from every homepage tab without changing the resource-center data', () => {
+    const articles = includeStandaloneNewsResources([card(11, 'selection'), card(12, 'quality')], 'zh');
+    const cards = includeInfographicNewsResources(articles, 'zh');
+    const infographicIds = cards.filter((item) => item.contentType === 'infographic').map((item) => item.id);
+    expect(infographicIds.length).toBeGreaterThan(0);
+
+    const home = mapNewsToHomeTopicArticles(cards, 'zh');
+    expect(home).toHaveLength(3);
+    expect(home.map((article) => article.id)).toEqual(expect.arrayContaining([11, 12, -1]));
+    for (const topic of HOME_ARTICLE_TOPICS) {
+      expect(selectHomeArticlesForTopic(home, topic.id).some((article) => infographicIds.includes(article.id))).toBe(false);
+    }
+    expect(cards.filter((item) => item.contentType === 'infographic').map((item) => item.id)).toEqual(infographicIds);
+  });
+
   it('keeps the actual destination of standalone resources in the procurement tab', () => {
     const cards = includeStandaloneNewsResources([], 'zh');
     const articles = selectHomeArticlesForTopic(mapNewsToHomeTopicArticles(cards, 'zh'), 'procurement');

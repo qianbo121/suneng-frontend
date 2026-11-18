@@ -129,8 +129,9 @@ export function HeatTreatmentToolCenter({ articles, locale = 'zh' }: HeatTreatme
                   <Image
                     src={featured.coverImage}
                     alt={featured.title}
-                    fill
-                    sizes="(max-width: 760px) calc(100vw - 56px), (max-width: 1024px) calc(100vw - 80px), 700px"
+                    width={640}
+                    height={360}
+                    sizes="(max-width: 760px) calc(100vw - 56px), (max-width: 1024px) calc(100vw - 80px), 640px"
                     className={styles.articleImage}
                   />
                 </div>
@@ -153,8 +154,9 @@ export function HeatTreatmentToolCenter({ articles, locale = 'zh' }: HeatTreatme
                     <Image
                       src={article.coverImage}
                       alt={article.title}
-                      fill
-                      sizes="(max-width: 760px) calc(100vw - 56px), (max-width: 1024px) 40vw, 250px"
+                      width={220}
+                      height={124}
+                      sizes="(max-width: 760px) 96px, (max-width: 1024px) 40vw, 220px"
                       className={styles.articleImage}
                     />
                   </div>

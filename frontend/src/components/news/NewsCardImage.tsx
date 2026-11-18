@@ -15,19 +15,24 @@ type NewsCardImageProps = {
   alt: string;
   priority: boolean;
   sizes: string;
+  naturalRatio?: boolean;
 };
 
-export function NewsCardImage({ src, alt, priority, sizes }: NewsCardImageProps) {
+export function NewsCardImage({ src, alt, priority, sizes, naturalRatio = false }: NewsCardImageProps) {
   const [currentSrc, setCurrentSrc] = useState(src || NEWS_FALLBACK_IMAGE);
 
   return (
     <Image
       src={currentSrc}
       alt={alt}
-      fill
+      fill={naturalRatio ? undefined : true}
+      width={naturalRatio ? 176 : undefined}
+      height={naturalRatio ? 99 : undefined}
       priority={priority}
       sizes={sizes}
-      style={currentSrc === reviewedPressureCover ? { objectFit: 'contain' } : undefined}
+      style={naturalRatio
+        ? { display: 'block', width: '100%', height: 'auto' }
+        : currentSrc === reviewedPressureCover ? { objectFit: 'contain' } : undefined}
       onError={() => {
         if (currentSrc !== NEWS_FALLBACK_IMAGE) {
           setCurrentSrc(NEWS_FALLBACK_IMAGE);

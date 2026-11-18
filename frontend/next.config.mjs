@@ -10,7 +10,7 @@ const distDir = process.env.NEXT_DIST_DIR || (process.env.NODE_ENV === 'developm
 // public URL. That route renders from one cached complete collection, without
 // independent page HTML caches. Search and filter URLs use the on-demand route.
 // Middleware blocks direct access to the internal path.
-const newsListFilterParams = ['q', 'topic', 'furnace', 'sort'].map((key) => ({ type: 'query', key }));
+const newsListFilterParams = ['q', 'topic', 'furnace', 'sort', 'format'].map((key) => ({ type: 'query', key }));
 export const newsListPrerenderRewrites = [
   {
     source: '/:locale(zh|en)/news',

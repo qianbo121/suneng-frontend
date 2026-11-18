@@ -69,21 +69,20 @@ for (const width of [1440, 390]) {
     expect(errors).toEqual([]);
   });
 
-  test(`resource recommendations and overseas delivery at ${width}`, async ({ page }, testInfo) => {
+  test(`resource list and overseas delivery at ${width}`, async ({ page }, testInfo) => {
     await page.setViewportSize({ width, height: 1000 });
     await preventExternalWrites(page);
     const errors: string[] = [];
     page.on('pageerror', (error) => errors.push(error.message));
     for (const locale of ['en', 'zh']) {
       await page.goto(`/${locale}/news`);
-      const recommendations = page.locator('[data-priority-news]');
-      await expect(recommendations.getByRole('link')).toHaveCount(7);
-      const hrefs = await recommendations.getByRole('link').evaluateAll((links) => links.map((link) => link.getAttribute('href')));
-      expect(hrefs.every((href) => href?.startsWith(`/${locale}/news/`))).toBe(true);
-      await recommendations.scrollIntoViewIfNeeded();
+      const resources = page.locator('[data-news-id]');
+      await expect(resources).toHaveCount(10);
+      const article = resources.locator(`a[href^="/${locale}/news/"]`).first();
+      await article.scrollIntoViewIfNeeded();
       await noOverflow(page);
       await page.screenshot({ path: testInfo.outputPath(`resources-${locale}-${width}.png`) });
-      await recommendations.getByRole('link').first().click();
+      await article.click();
       await expect(page).toHaveURL(new RegExp(`/${locale}/news/.+`));
       await expect(page.locator('h1')).toBeVisible();
       await page.goto(`/${locale}/contact`);

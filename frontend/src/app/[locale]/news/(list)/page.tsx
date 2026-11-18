@@ -1,4 +1,5 @@
 import { notFound } from 'next/navigation';
+import { normalizeNewsContentFormat } from '@/lib/news-content-type';
 
 import { getNewsListPageCount, NewsListRoute } from '@/components/news/NewsListRoute';
 import { NEWS_PAGE_SIZE } from '@/constants/news';
@@ -25,6 +26,7 @@ type NewsPageProps = {
     q?: string;
     topic?: string;
     furnace?: string;
+    format?: string;
   }>;
 };
 
@@ -36,14 +38,14 @@ function validatePageNumber(page: string | undefined) {
 
 export async function generateMetadata({ params, searchParams }: NewsPageProps) {
   const { locale } = await params;
-  const { page, q, topic, furnace, sort } = await searchParams;
+  const { page, q, topic, furnace, sort, format } = await searchParams;
   validatePageNumber(page);
   const currentLocale = (locale === 'en' ? 'en' : 'zh') as Locale;
   const currentPage = normalizeNewsPage(page);
-  const hasActiveFilters = Boolean(q?.trim() || topic || furnace || sort);
+  const hasActiveFilters = Boolean(q?.trim() || topic || furnace || sort || format);
   if (!hasActiveFilters && currentPage > 1) {
     const { data } = await getNewsResourceListData(currentLocale);
-    if (data && currentPage > Math.max(1, Math.ceil(data.length / NEWS_PAGE_SIZE))) {
+    if (data && currentPage > Math.max(1, Math.ceil(data.filter((item) => item.contentType !== 'infographic').length / NEWS_PAGE_SIZE))) {
       notFound();
     }
   }
@@ -52,7 +54,7 @@ export async function generateMetadata({ params, searchParams }: NewsPageProps) 
 
 export default async function NewsPage({ params, searchParams }: NewsPageProps) {
   const { locale } = await params;
-  const { page, q, topic: topicParam, furnace: furnaceParam, sort: sortParam } = await searchParams;
+  const { page, q, topic: topicParam, furnace: furnaceParam, sort: sortParam, format: formatParam } = await searchParams;
   validatePageNumber(page);
   const currentLocale = (locale === 'en' ? 'en' : 'zh') as Locale;
   const currentPage = normalizeNewsPage(page);
@@ -63,8 +65,8 @@ export default async function NewsPage({ params, searchParams }: NewsPageProps) 
   const query = q?.trim() || '';
   const topic = normalizeNewsDecisionTopic(topicParam);
   const furnace = normalizeNewsFurnaceFilter(furnaceParam);
-  const hasActiveFilters = Boolean(query || topicParam || furnaceParam || sortParam);
-  if (data && !hasActiveFilters && currentPage > getNewsListPageCount(sourceItems.length)) {
+  const hasActiveFilters = Boolean(query || topicParam || furnaceParam || sortParam || formatParam);
+  if (data && !hasActiveFilters && currentPage > getNewsListPageCount(sourceItems.filter((item) => item.contentType !== 'infographic').length)) {
     notFound();
   }
 
@@ -78,6 +80,7 @@ export default async function NewsPage({ params, searchParams }: NewsPageProps) 
       topic={topic}
       furnace={furnace}
       sort={sort}
+      format={normalizeNewsContentFormat(formatParam, currentLocale)}
     />
   );
 }

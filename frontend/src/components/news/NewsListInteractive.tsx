@@ -1,8 +1,8 @@
 'use client';
 
 import Link from 'next/link';
-import { useSearchParams } from 'next/navigation';
-import { HiChevronDown } from 'react-icons/hi2';
+import { NEWS_CONTENT_FORMATS, type NewsContentFormat } from '@/lib/news-content-type';
+import { useRouter, useSearchParams } from 'next/navigation';
 import {
   createContext,
   Suspense,
@@ -18,6 +18,7 @@ import {
 } from 'react';
 
 import { NewsListCards } from '@/components/news/NewsListCards';
+import { NewsFilterSelect } from '@/components/news/NewsFilterSelect';
 import {
   buildNewsDecisionHref,
   NEWS_DECISION_TOPICS,
@@ -41,6 +42,7 @@ type NewsListContextValue = {
   state: NewsListState;
   view: ReturnType<typeof getNewsListView>;
   pageSize: number;
+  navigate: (next: NewsListState) => void;
 };
 
 const NewsListContext = createContext<NewsListContextValue | null>(null);
@@ -106,9 +108,9 @@ export function NewsListScope({
 
   const sync = useCallback(() => {
     if (window.location.pathname !== listPath) return;
-    const next = parseNewsListState(window.location.search);
+    const next = parseNewsListState(window.location.search, locale);
     setState((current) => (isSameNewsListState(current, next) ? current : next));
-  }, [listPath]);
+  }, [listPath, locale]);
 
   // Follow the address bar on back/forward, and when the router renders this
   // page again, for example after the reader returns from an article.
@@ -142,6 +144,14 @@ export function NewsListScope({
     if (target === 'focus-heading') heading.focus({ preventScroll: true });
   }, [view]);
 
+  const navigate = (next: NewsListState) => {
+    const href = buildNewsDecisionHref(listPath, next);
+    if (`${window.location.pathname}${window.location.search}` !== href) {
+      window.history.pushState(null, '', href);
+    }
+    setState((current) => (isSameNewsListState(current, next) ? current : next));
+  };
+
   const handleClickCapture = (event: MouseEvent<HTMLDivElement>) => {
     if (
       event.defaultPrevented ||
@@ -172,7 +182,7 @@ export function NewsListScope({
 
     // Stops next/link as well: it skips navigation for prevented clicks.
     event.preventDefault();
-    const next = parseNewsListState(url.searchParams);
+    const next = parseNewsListState(url.searchParams, locale);
     const href = buildNewsDecisionHref(listPath, next);
     if (`${window.location.pathname}${window.location.search}` !== href) {
       window.history.pushState(null, '', href);
@@ -185,7 +195,7 @@ export function NewsListScope({
   };
 
   return (
-    <NewsListContext.Provider value={{ locale, state, view, pageSize }}>
+    <NewsListContext.Provider value={{ locale, state, view, pageSize, navigate }}>
       <Suspense fallback={null}>
         <SearchParamsChange onChange={sync} />
       </Suspense>
@@ -196,40 +206,43 @@ export function NewsListScope({
   );
 }
 
-export function NewsFilterPanel({ locale, topic, furnace, loading, children }: {
+export function NewsFilterPanel({
+  loading,
+  children,
+}: {
   locale: Locale;
   topic: NewsListState['topic'];
   furnace: NewsListState['furnace'];
   loading?: boolean;
   children: ReactNode;
 }) {
-  const liveState = useNewsListState();
-  const [expanded, setExpanded] = useState(false);
-  const activeTopic = liveState?.topic ?? topic;
-  const activeFurnace = liveState?.furnace ?? furnace;
-  const t = (text: string) => newsUiText(locale, text);
-  const summary = `${t(NEWS_DECISION_TOPICS.find((item) => item.id === activeTopic)?.label || '')} · ${t(NEWS_FURNACE_FILTERS.find((item) => item.id === activeFurnace)?.label || '')}`;
-
-  return <div className={styles.filterPanel} inert={loading || undefined}>
-    <button type="button" className={styles.filterToggle} aria-expanded={expanded} aria-controls="news-filter-options" onClick={() => setExpanded((current) => !current)}>
-      <span>
-        <strong>{locale === 'en' ? 'Filter resources' : '筛选资料'}</strong>
-        <span className={styles.filterSummary}>{summary}</span>
-      </span>
-      <HiChevronDown aria-hidden="true" className={expanded ? styles.filterChevronOpen : styles.filterChevron} />
-    </button>
-    <div id="news-filter-options" className={styles.filterOptions} data-expanded={expanded}>
+  return (
+    <div className={styles.filterPanel} inert={loading || undefined}>
       {children}
     </div>
-  </div>;
+  );
 }
 
-export function NewsResultsSummary({ locale, total, page, pageSize }: { locale: Locale; total: number; page: number; pageSize: number }) {
+export function NewsResultsSummary({
+  locale,
+  total,
+  page,
+  pageSize,
+}: {
+  locale: Locale;
+  total: number;
+  page: number;
+  pageSize: number;
+}) {
   const pageCount = Math.max(1, Math.ceil(total / pageSize));
   const currentPage = Math.min(Math.max(1, page), pageCount);
-  return <p className={styles.resultsSummary} role="status" aria-live="polite">
-    {locale === 'en' ? `${total} resources · Page ${currentPage} of ${pageCount}` : `共 ${total} 篇资料 · 第 ${currentPage} / ${pageCount} 页`}
-  </p>;
+  return (
+    <p className={styles.resultsSummary} role="status" aria-live="polite">
+      {locale === 'en'
+        ? `${total} resources · Page ${currentPage} of ${pageCount}`
+        : `共 ${total} 篇资料 · 第 ${currentPage} / ${pageCount} 页`}
+    </p>
+  );
 }
 
 export function NewsListFilterControls() {
@@ -252,22 +265,6 @@ export function NewsListFilterControls() {
           </Link>
         ))}
       </nav>
-      <section className={styles.furnaceInner} aria-label={t('设备类型筛选')}>
-        <span className={styles.furnaceLabel}>{t('设备类型')}</span>
-        <div className={styles.furnaceLinks}>
-          {NEWS_FURNACE_FILTERS.map((item) => (
-            <Link
-              key={item.id}
-              prefetch={false}
-              href={buildNewsDecisionHref(base, { ...state, page: 1, furnace: item.id })}
-              className={`${styles.furnaceLink} ${item.id === state.furnace ? styles.furnaceLinkActive : ''}`}
-              aria-current={item.id === state.furnace ? 'page' : undefined}
-            >
-              {t(item.label)}
-            </Link>
-          ))}
-        </div>
-      </section>
     </>
   );
 }
@@ -275,7 +272,6 @@ export function NewsListFilterControls() {
 export function NewsListHeading() {
   const { locale, state, view, pageSize } = useNewsList();
   const t = (text: string) => newsUiText(locale, text);
-  const base = `/${locale}/news`;
 
   return (
     <>
@@ -283,27 +279,68 @@ export function NewsListHeading() {
         <h2 id="news-list-title" className={styles.listTitle} tabIndex={-1}>
           {t(NEWS_DECISION_TOPICS.find((item) => item.id === state.topic)?.label || '')}
         </h2>
-        <NewsResultsSummary locale={locale} total={view.total} page={view.page} pageSize={pageSize} />
+        <NewsResultsSummary
+          locale={locale}
+          total={view.total}
+          page={view.page}
+          pageSize={pageSize}
+        />
       </div>
-      <nav className={styles.sortNav} aria-label={t('文章排序')}>
-        {(
-          [
-            { id: 'recommended', label: t('推荐阅读') },
-            { id: 'updated', label: t('最新发布') },
-          ] as const
-        ).map((item) => (
-          <Link
-            prefetch={false}
-            key={item.id}
-            href={buildNewsDecisionHref(base, { ...state, page: 1, sort: item.id })}
-            aria-current={state.sort === item.id ? 'page' : undefined}
-            className={`${styles.sortLink} ${state.sort === item.id ? styles.sortActive : ''}`}
-          >
-            {t(item.label)}
-          </Link>
-        ))}
-      </nav>
+      <NewsListToolbar locale={locale} query="" {...state} />
     </>
+  );
+}
+
+export function NewsListToolbar({
+  locale,
+  query,
+  topic,
+  furnace,
+  sort,
+  format = 'article',
+  disabled = false,
+}: {
+  locale: Locale;
+  query: string;
+  topic: NewsListState['topic'];
+  furnace: NewsListState['furnace'];
+  sort: NewsListState['sort'];
+  format?: NewsContentFormat;
+  disabled?: boolean;
+}) {
+  const live = useContext(NewsListContext);
+  const router = useRouter();
+  const current = live?.state ?? { topic, furnace, sort, format, page: 1 };
+  const t = (text: string) => newsUiText(locale, text);
+  const change = (patch: Partial<Pick<NewsListState, 'furnace' | 'sort'>>) => {
+    const next = { ...current, ...patch, page: 1 };
+    if (live) live.navigate(next);
+    else router.push(buildNewsDecisionHref(`/${locale}/news`, { ...next, query }));
+  };
+
+  return (
+    <div className={styles.listControls}>
+      <NewsFilterSelect
+        name="furnace"
+        label={t('设备类型')}
+        value={current.furnace}
+        disabled={disabled}
+        options={NEWS_FURNACE_FILTERS.map((item) => ({ value: item.id, label: t(item.label) }))}
+        onChange={(value) => change({ furnace: value as NewsListState['furnace'] })}
+      />
+      <NewsFilterSelect
+        name="sort"
+        label={t('文章排序')}
+        value={current.sort}
+        disabled={disabled}
+        align="end"
+        options={[
+          { value: 'updated', label: t('最新发布') },
+          { value: 'recommended', label: t('推荐阅读') },
+        ]}
+        onChange={(value) => change({ sort: value as NewsListState['sort'] })}
+      />
+    </div>
   );
 }
 
@@ -321,7 +358,54 @@ export function NewsListResults() {
       topic={state.topic}
       furnace={state.furnace}
       sort={state.sort}
+      format={state.format}
       prefetchPages={false}
     />
+  );
+}
+
+export function NewsContentTabs({
+  locale,
+  query,
+  topic,
+  furnace,
+  sort,
+  format = 'article',
+  disabled = false,
+}: {
+  locale: Locale;
+  query: string;
+  topic: NewsListState['topic'];
+  furnace: NewsListState['furnace'];
+  sort: NewsListState['sort'];
+  format?: NewsContentFormat;
+  disabled?: boolean;
+}) {
+  const live = useContext(NewsListContext);
+  if (locale !== 'zh') return null;
+  const current = live?.state ?? { topic, furnace, sort, format };
+  return (
+    <nav
+      className={styles.formatTabs}
+      aria-label="内容类型"
+      inert={disabled || undefined}
+    >
+      {NEWS_CONTENT_FORMATS.map((item) => (
+        <Link
+          key={item.id}
+          prefetch={false}
+          href={buildNewsDecisionHref(`/${locale}/news`, {
+            ...current,
+            query,
+            page: 1,
+            format: item.id,
+          })}
+          className={`${styles.formatTab} ${(current.format ?? 'article') === item.id ? styles.formatTabActive : ''}`}
+          aria-current={(current.format ?? 'article') === item.id ? 'page' : undefined}
+        >
+          {item[locale]}
+        </Link>
+      ))}
+    </nav>
   );
 }

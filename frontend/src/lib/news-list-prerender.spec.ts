@@ -64,6 +64,8 @@ describe('prerendered news list rewrites', () => {
     for (const search of [
       'q=%E5%8F%B0%E8%BD%A6%E7%82%89',
       'topic=selection',
+      'format=infographic',
+      'format=article&page=2',
       'furnace=pit&page=2',
       'sort=updated',
       'sort=recommended',

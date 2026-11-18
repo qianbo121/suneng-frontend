@@ -1,6 +1,7 @@
 import type { Locale } from '@/types/site';
 import { newsUiText } from '@/lib/news-ui';
 import type { NewsListCardItem } from '@/types/news';
+import { normalizeNewsContentFormat } from '@/lib/news-content-type';
 
 export const NEWS_DECISION_TOPICS = [
   { id: 'all', label: '全部资料' },
@@ -82,6 +83,7 @@ export function normalizeNewsSort(value?: string): NewsSort {
 }
 
 export type NewsDecisionFilters = {
+  format?: string;
   sort?: string;
   query?: string;
   topic?: string;
@@ -229,6 +231,7 @@ export function filterAndSortNewsDecisionItems(
   const query = filters.query?.trim().toLowerCase() || '';
 
   const sorted = items
+    .filter((item) => (item.contentType ?? 'article') === normalizeNewsContentFormat(filters.format))
     .filter((item) => !query || searchableText(item).includes(query))
     .filter((item) => topic === 'all' || getNewsDecisionTopic(item) === topic)
     .filter((item) => furnace === 'all' || getNewsFurnaceFilters(item).includes(furnace))
@@ -289,6 +292,8 @@ export function buildNewsDecisionHref(
   if (query) params.set('q', query);
   if (topic !== 'all') params.set('topic', topic);
   if (furnace !== 'all') params.set('furnace', furnace);
+  const format = normalizeNewsContentFormat(filters.format);
+  if (format === 'infographic') params.set('format', format);
   if ((filters.page ?? 1) > 1) params.set('page', String(filters.page));
 
   const suffix = params.toString();

@@ -78,10 +78,8 @@ for (const width of [1440, 390]) {
     });
     await page.goto('/en/news', { waitUntil: 'networkidle' });
     await expect(page.locator('[data-news-id]').first()).toBeVisible();
-    if (width === 390) {
-      await page.getByRole('button', { name: /^Filter resources/ }).click();
-    }
-    await page.getByRole('link', { name: 'Equipment Selection', exact: true }).click();
+    await page.getByRole('navigation', { name: 'Resource topics' })
+      .getByRole('link', { name: 'Equipment Selection', exact: true }).click();
     await expect(page).toHaveURL(/topic=selection/);
     await expect(page.locator('[data-news-id]').first()).toBeVisible();
     await page.getByRole('searchbox').fill('annealing');
@@ -95,5 +93,28 @@ for (const width of [1440, 390]) {
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
     expect(analytics).toEqual([]);
     expect(errors).toEqual([]);
+  });
+
+  test(`Chinese infographics open and return to the selected list at ${width}px`, async ({ page }) => {
+    await page.setViewportSize({ width, height: width === 390 ? 844 : 1000 });
+    await page.goto('/zh/news');
+    await page.getByRole('navigation', { name: '内容类型' })
+      .getByRole('link', { name: '图文资料', exact: true }).click();
+    await expect(page).toHaveURL(/format=infographic/);
+
+    const entries = page.locator('a[href^="/zh/infographics/"]');
+    await expect(entries).toHaveCount(10);
+    await entries.first().click();
+    await expect(page).toHaveURL(/\/zh\/infographics\/mesh-belt-500-screws/);
+    await expect(page.getByRole('heading', { level: 1 })).toContainText('螺丝钉');
+    const poster = page.locator('main figure img');
+    await poster.scrollIntoViewIfNeeded();
+    await expect.poll(() => poster.evaluate((image: HTMLImageElement) => image.naturalWidth)).toBeGreaterThan(0);
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+
+    await page.getByRole('navigation', { name: '面包屑' })
+      .getByRole('link', { name: '技术资料', exact: true }).click();
+    await expect(page).toHaveURL(/\/zh\/news\?format=infographic$/);
+    await expect(entries).toHaveCount(10);
   });
 }

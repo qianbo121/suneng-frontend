@@ -1,18 +1,19 @@
 import Link from 'next/link';
-import { HiOutlineChevronRight, HiOutlineDocumentText } from 'react-icons/hi2';
+import { HiOutlineDocumentText } from 'react-icons/hi2';
 import styles from './NewsChecklists.module.css';
 
 type Props = {
   title: string;
-  previewLabel: string;
   tools: Array<{ title: string; href: string }>;
   className?: string;
 };
 
-export function NewsChecklists({ title, previewLabel, tools, className = '' }: Props) {
+export function NewsChecklists({ title, tools, className = '' }: Props) {
   return (
     <section className={`${styles.module} ${className}`} aria-labelledby="news-tools-title">
-      <h2 id="news-tools-title" className={styles.moduleTitle}>{title}</h2>
+      <h2 id="news-tools-title" className={styles.moduleTitle}>
+        {title}
+      </h2>
       <div className={styles.rows}>
         {tools.map((tool) => (
           <Link key={tool.title} className={styles.row} href={tool.href}>
@@ -21,9 +22,7 @@ export function NewsChecklists({ title, previewLabel, tools, className = '' }: P
             </span>
             <div className={styles.copy}>
               <h3>{tool.title}</h3>
-              <span className={styles.preview}>{previewLabel}</span>
             </div>
-            <HiOutlineChevronRight className={styles.chevron} aria-hidden="true" />
           </Link>
         ))}
       </div>
