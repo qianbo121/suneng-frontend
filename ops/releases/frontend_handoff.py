@@ -46,6 +46,7 @@ class Handoff:
         self.copy_id = None
         self.restored = False
         self.copy_restarts = None
+        self.canonical_routing_recovered = False
 
     def read_active(self):
         return base64.b64decode(self.run(['docker', 'exec', self.proxy, 'base64', ACTIVE]))
@@ -116,6 +117,7 @@ class Handoff:
     def prepare(self):
         self.directory.mkdir(mode=0o700)
         row = self.inspect(self.frontend)
+        self.previous_image = row['Image']
         proxy = self.inspect(self.proxy)
         self.proxy_id = proxy['Id']
         # Recovery must also work when the named current frontend has crashed.
@@ -205,6 +207,7 @@ class Handoff:
     def observation(self):
         result = {'auditDirectory': str(self.directory), 'copyName': self.name,
                   'copyRetained': self.created, 'previousRestored': self.restored,
+                  'canonicalRoutingRecovered': self.canonical_routing_recovered,
                   'trafficRequiresVerification': True}
         try:
             active = self.read_active()
@@ -219,12 +222,40 @@ class Handoff:
             result['configuredUpstream'] = 'unknown'
         return result
 
+    def recover_canonical_routing(self):
+        # Restore availability without replacing a service or declaring that
+        # the old version was restored. The outer release keeps its failure hold.
+        row = self.inspect(self.frontend)
+        previous = row['Image'] == self.previous_image
+        expected_source = (self.previous_env if previous else self.env).get('DEPLOY_COMMIT')
+        if (row['Image'] not in (self.previous_image, self.target_image)
+                or not row['State']['Running']
+                or (row.get('Config', {}).get('Labels') or {}).get('org.opencontainers.image.revision') != expected_source):
+            raise RuntimeError('Cannot recover routing to an unverified frontend identity')
+        self.healthy(self.frontend)
+        self.verify(self.frontend, previous)
+        observed = self.inspect(self.frontend)
+        if (any(observed.get(key) != row.get(key) for key in ('Id', 'Image', 'RestartCount', 'Config', 'HostConfig'))
+                or observed['State'].get('StartedAt') != row['State'].get('StartedAt')
+                or not observed['State']['Running']
+                or any(observed['State'].get(key) for key in ('Paused', 'Restarting', 'Dead'))
+                or (observed['State'].get('Health') or {}).get('Status') != 'healthy'):
+            raise RuntimeError('Frontend changed while verifying emergency routing')
+        self.activate(self.original_template, self.original_active, 'canonical-serving-recovery-required')
+        self.canonical_routing_recovered = True
+
     def restore(self):
         if self.restored:
             return
+        if self.canonical_routing_recovered:
+            raise RuntimeError('Frontend traffic recovered; manual reconciliation required')
         if self.touched:
             if self.canonical_attempted:
-                self.check_copy(allow_restart=True)
+                try:
+                    self.check_copy(allow_restart=True)
+                except Exception as error:
+                    self.recover_canonical_routing()
+                    raise RuntimeError('Serving copy unavailable; frontend traffic recovered; manual reconciliation required') from error
                 self.activate(self.bridge_template, self.bridge_active, 'copy-serving-recovery')
                 self.run(self.previous_compose + ['up', '-d', '--no-deps', '--no-build', '--pull', 'never', 'frontend'], env=self.previous_env)
                 self.healthy(self.frontend)

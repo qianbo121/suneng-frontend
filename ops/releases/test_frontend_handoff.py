@@ -1,3 +1,4 @@
+import copy
 import tempfile
 from pathlib import Path
 import unittest
@@ -62,6 +63,113 @@ class SimulatedHandoff(Handoff):
     def remove_copy(self):
         if self.serving != 'canonical': raise AssertionError('removed serving copy')
         self.created = False; self.events.append('remove')
+
+
+class EmergencyRoutingTests(unittest.TestCase):
+    def fixture(self, root, previous=False):
+        old, new = 'sha256:' + 'a' * 64, 'sha256:' + 'b' * 64
+        h = Handoff(root, root, [], {'DEPLOY_COMMIT': 'new-source'}, Mock(), Mock(), Mock(), target_image=new)
+        h.previous_image = old
+        h.previous_env = {'DEPLOY_COMMIT': 'old-source'}
+        h.created = h.touched = h.canonical_attempted = True
+        h.original_template = h.original_active = CONFIG
+        h.bridge_template = h.bridge_active = redirect_frontend(CONFIG, h.name)
+        h.check_copy = Mock(side_effect=RuntimeError('copy stopped'))
+        row = {'Id': 'named-id', 'Image': old if previous else new, 'RestartCount': 0,
+               'Config': {'Labels': {'org.opencontainers.image.revision': 'old-source' if previous else 'new-source'}},
+               'State': {'Running': True, 'StartedAt': 'same-start', 'Health': {'Status': 'healthy'}}}
+        h.inspect = Mock(return_value=row)
+        h.activate = Mock()
+        return h, row
+
+    def test_unavailable_copy_restores_routing_but_never_claims_rollback_success(self):
+        for previous in (False, True):
+            for error in ('copy stopped', 'copy no longer exists'):
+                with self.subTest(previous=previous, error=error), tempfile.TemporaryDirectory() as tmp:
+                    h, row = self.fixture(tmp, previous)
+                    h.check_copy.side_effect = RuntimeError(error)
+                    with self.assertRaisesRegex(RuntimeError, 'manual reconciliation required'):
+                        h.restore()
+                    h.healthy.assert_called_once_with(h.frontend)
+                    h.verify.assert_called_once_with(h.frontend, previous)
+                    h.activate.assert_called_once_with(CONFIG, CONFIG, 'canonical-serving-recovery-required')
+                    h.run.assert_not_called()
+                    self.assertTrue(h.created)
+                    self.assertTrue(h.canonical_routing_recovered)
+                    self.assertFalse(h.restored)
+                    with patch.object(h, 'read_active', return_value=CONFIG):
+                        report = h.observation()
+                    self.assertEqual(report['configuredUpstream'], h.frontend)
+                    self.assertTrue(report['configuredContainerRunning'])
+                    self.assertTrue(report['canonicalRoutingRecovered'])
+                    self.assertTrue(report['trafficRequiresVerification'])
+                    # The outer recovery attempt cannot recreate the healthy
+                    # service, delete the copy, or repeat the emergency reload.
+                    with self.assertRaisesRegex(RuntimeError, 'manual reconciliation required'):
+                        h.restore()
+                    self.assertEqual(h.activate.call_count, 1)
+                    h.run.assert_not_called()
+
+    def test_unknown_image_source_or_stopped_frontend_never_receives_traffic(self):
+        for fault in ('image', 'source', 'stopped'):
+            with self.subTest(fault=fault), tempfile.TemporaryDirectory() as tmp:
+                h, row = self.fixture(tmp)
+                if fault == 'image': row['Image'] = 'sha256:' + 'c' * 64
+                if fault == 'source': row['Config']['Labels']['org.opencontainers.image.revision'] = 'foreign'
+                if fault == 'stopped': row['State']['Running'] = False
+                with self.assertRaisesRegex(RuntimeError, 'unverified frontend identity'): h.restore()
+                h.activate.assert_not_called()
+                h.verify.assert_not_called()
+
+    def test_health_or_page_failure_never_routes_to_broken_named_service(self):
+        for check in ('healthy', 'verify'):
+            with self.subTest(check=check), tempfile.TemporaryDirectory() as tmp:
+                h, row = self.fixture(tmp)
+                getattr(h, check).side_effect = RuntimeError('not usable')
+                with self.assertRaisesRegex(RuntimeError, 'not usable'): h.restore()
+                h.activate.assert_not_called()
+                self.assertFalse(h.canonical_routing_recovered)
+
+    def test_service_changes_during_verification_refuse_emergency_switch(self):
+        for fault in ('id', 'image', 'restart', 'started', 'source', 'limit', 'stopped', 'paused', 'unhealthy'):
+            with self.subTest(fault=fault), tempfile.TemporaryDirectory() as tmp:
+                h, row = self.fixture(tmp)
+                after = copy.deepcopy(row)
+                if fault == 'id': after['Id'] = 'replacement'
+                if fault == 'image': after['Image'] = 'foreign-image'
+                if fault == 'restart': after['RestartCount'] = 1
+                if fault == 'started': after['State']['StartedAt'] = 'new-start'
+                if fault == 'source': after['Config']['Labels']['org.opencontainers.image.revision'] = 'foreign'
+                if fault == 'limit': after['HostConfig'] = {'Memory': 1}
+                if fault == 'stopped': after['State']['Running'] = False
+                if fault == 'paused': after['State']['Paused'] = True
+                if fault == 'unhealthy': after['State']['Health']['Status'] = 'unhealthy'
+                h.inspect.side_effect = [row, after]
+                with self.assertRaisesRegex(RuntimeError, 'changed while verifying'): h.restore()
+                h.activate.assert_not_called()
+
+    def test_routine_health_log_update_does_not_block_emergency_routing(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            h, row = self.fixture(tmp)
+            after = copy.deepcopy(row)
+            after['State']['Health']['Log'] = [{'End': 'next-poll', 'ExitCode': 0}]
+            h.inspect.side_effect = [row, after]
+            with self.assertRaisesRegex(RuntimeError, 'manual reconciliation required'): h.restore()
+            self.assertTrue(h.canonical_routing_recovered)
+
+    def test_emergency_routing_still_rejects_foreign_proxy_configuration(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            h, row = self.fixture(tmp)
+            h.activate = Handoff.activate.__get__(h)
+            h.proxy_id = 'proxy-id'
+            h.expected_active = h.expected_template = h.bridge_active
+            h.template.write_bytes(h.bridge_template)
+            h.inspect.side_effect = [row, row, {'Id': h.proxy_id, 'State': {'Running': True}}]
+            with patch.object(h, 'read_active', return_value=b'foreign config'):
+                with self.assertRaisesRegex(RuntimeError, 'outside this handoff'): h.restore()
+            self.assertEqual(h.template.read_bytes(), h.bridge_template)
+            h.run.assert_not_called()
+            self.assertFalse(h.canonical_routing_recovered)
 
 
 class HandoffTests(unittest.TestCase):
