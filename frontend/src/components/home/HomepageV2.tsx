@@ -1,7 +1,7 @@
-import Link from 'next/link';
 import { HiOutlineCursorArrowRays } from 'react-icons/hi2';
 
 import { HeatTreatmentToolCenter } from '@/components/home/HeatTreatmentToolCenter';
+import { HomepageResourcesRecovery } from '@/components/home/HomepageResourcesRecovery';
 import { HomePurchaseGuides } from '@/components/home/HomePurchaseGuides';
 import { HomepageLeadForm } from '@/components/home/HomepageLeadForm';
 import { HomepageTaskCards } from '@/components/home/HomepageTaskCards';
@@ -10,11 +10,9 @@ import { WorkpieceRouter } from '@/components/home/WorkpieceRouter';
 import { getHomepageNewsData } from '@/lib/homepage-news.server';
 import { localizeHomeWorkpieces } from '@/lib/home-workpieces-localized';
 import { mapNewsToHomeTopicArticles, type HomeTopicArticle } from '@/lib/home-article-topics';
-import { newsUiText } from '@/lib/news-ui';
 import { getWorkpieceRouterPublicCatalog } from '@/lib/workpiece-router-public.server';
 
 import styles from './HomepageV2.module.css';
-import toolStyles from './HeatTreatmentToolCenter.module.css';
 
 const taskPaths = [
   {
@@ -53,22 +51,13 @@ const taskPaths = [
 ] as const;
 
 async function HomepageArticles({ locale }: { locale: 'zh' | 'en' }) {
-  const english = locale === 'en';
   const { data } = await getHomepageNewsData(locale);
   let articles: HomeTopicArticle[];
   try {
     if (!data?.length) throw new Error('Articles unavailable');
     articles = mapNewsToHomeTopicArticles(data, locale);
   } catch {
-    return (
-      <section className={toolStyles.section}>
-        <div className={toolStyles.container}>
-          <h2>{newsUiText(locale, '工业炉选型与采购资料')}</h2>
-          <p>{english ? 'Resources are temporarily unavailable. Please try again later.' : '资料暂时无法加载，请稍后重试。'}</p>
-          <Link href={`/${locale}/news`}>{english ? 'Browse technical resources' : '查看技术资料'}</Link>
-        </div>
-      </section>
-    );
+    return <HomepageResourcesRecovery locale={locale} />;
   }
   return <HeatTreatmentToolCenter articles={articles} locale={locale} />;
 }
