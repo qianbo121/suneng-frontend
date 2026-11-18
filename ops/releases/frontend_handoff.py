@@ -157,6 +157,7 @@ class Handoff:
         self.run(['docker', 'update', '--restart=always', self.name])
         self.healthy(self.name)
         self.verify(self.name, False)
+        self.copy_observation = self.inspect(self.name)
         self.note('copy-ready')
 
     def remove_copy(self):

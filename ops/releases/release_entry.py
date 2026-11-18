@@ -55,12 +55,14 @@ def handoff_tools():
     """Reject mixed/old modules before the maintained entry can apply a release."""
     import frontend_handoff
     import frontend_release
+    import preparation_guard
     root = Path(__file__).resolve().parent
     contract.need(frontend_handoff.CONTINUITY_VERSION == 2 and
-                  getattr(frontend_release.Release, 'FRONTEND_CONTINUITY_VERSION', None) == 2,
+                  getattr(frontend_release.Release, 'FRONTEND_CONTINUITY_VERSION', None) == 2 and
+                  getattr(preparation_guard.PreparationGuard, 'FRONTEND_CONTINUITY_VERSION', None) == 2,
                   'frontend-continuity-tools-required')
     result = {}
-    for module in (frontend_handoff, frontend_release):
+    for module in (frontend_handoff, frontend_release, preparation_guard):
         path = Path(module.__file__).resolve()
         contract.need(path.parent == root, 'frontend-tools-directory-mismatch')
         result[path.name] = guard.digest(path)

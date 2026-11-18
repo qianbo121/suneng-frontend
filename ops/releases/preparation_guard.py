@@ -114,6 +114,8 @@ def capture(path, live, manifest, command, extra_files=()):
 
 
 class PreparationGuard:
+    FRONTEND_CONTINUITY_VERSION = 2
+
     def __init__(self, baseline_path, release, command):
         self.baseline_path, self.release, self.command = Path(baseline_path), release, command
         file_identity(self.baseline_path)
@@ -125,10 +127,28 @@ class PreparationGuard:
         self.pending_identity = None
         self.committed_receipt = None
 
-    def current(self):
+    def without_owned_handoff(self, value):
+        handoff = getattr(self.release, 'frontend_handoff', None)
+        if handoff is None or not handoff.created:
+            return value
+        # Permit exactly this transaction's healthy, unchanged serving copy.
+        # Never filter by a name prefix, Compose project, or arbitrary label.
+        name = '/' + handoff.name
+        expected = container_identity(handoff.copy_observation)
+        if (not self.owns_pending() or name in self.before['containers']
+                or handoff.directory.resolve() != (self.release.audit/handoff.name).resolve()
+                or expected['id'] != handoff.copy_id or expected['image'] != handoff.target_image
+                or value['containers'].get(name) != expected):
+            raise ProtectionChanged('Serving copy identity changed or is not owned by this release')
+        value = copy.deepcopy(value)
+        del value['containers'][name]
+        return value
+
+    def current(self, allow_handoff=False):
         if file_identity(self.baseline_path) != self.baseline_file:
             raise ProtectionChanged('Frozen preparation evidence changed')
-        return snapshot(self.release.live, self.command, self.record['snapshot']['extraFiles'])
+        value = snapshot(self.release.live, self.command, self.record['snapshot']['extraFiles'])
+        return self.without_owned_handoff(value) if allow_handoff else value
 
     def begin(self):
         self.before = self.current()
@@ -144,7 +164,7 @@ class PreparationGuard:
             if not self.owns_pending():
                 raise ProtectionChanged('Deployment recovery ownership changed')
             return
-        current = self.current()
+        current = self.current(allow_handoff=stage in {'after-switch','after-commit','after-recovery'})
         if stage in {'preflight', 'before-switch'}:
             assert_no_hold(current)
             compare(self.before, current)
@@ -193,6 +213,8 @@ class PreparationGuard:
         # The trusted in-memory baseline still permits a live-state check when
         # the frozen file itself is the reason the phase failed.
         current = snapshot(self.release.live, self.command, self.record['snapshot']['extraFiles'])
+        if self.pending_identity is not None:
+            current = self.without_owned_handoff(current)
         if self.pending_identity is None:
             # Even an --apply invocation may fail before switching anything.
             assert_no_hold(current)
