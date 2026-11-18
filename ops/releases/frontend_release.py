@@ -563,8 +563,16 @@ class Release:
                 raise RuntimeError('Recovery image or provenance cannot be verified') from error
         for service in self.components:
             compose_env = recovery_envs.get(service, self.env)
-            run(self.compose(override) + ['up', '-d', '--no-deps', '--no-build', '--pull', 'never', service], env=compose_env)
-            wait_healthy('corp-site-' + service)
+            if service == 'frontend':
+                from frontend_handoff import replace
+                contract = self.lenient_contract if override is not None else self.target_contract
+                replace(self.live, self.audit, self.compose(override), compose_env, run, wait_healthy,
+                        lambda container, previous: probe(container, self.script,
+                            self.lenient_contract if previous else contract),
+                        target_image=self.receipt['images']['frontend'] if override is not None else self.target['frontend'])
+            else:
+                run(self.compose(override) + ['up', '-d', '--no-deps', '--no-build', '--pull', 'never', service], env=compose_env)
+                wait_healthy('corp-site-' + service)
         run(['docker', 'exec', 'corp-site-nginx', 'nginx', '-t'])
         run(['docker', 'exec', 'corp-site-nginx', 'nginx', '-s', 'reload'])
 
@@ -805,7 +813,11 @@ class Release:
             result.update({'passed': False, 'failureType': type(error).__name__})
             try:
                 self.check_phase_protection('before-recovery')
-                self.replace_frontend(self.audit / 'previous.override.json')
+                # A failed handoff already preserves/restores the previous
+                # frontend. Recreating it again can turn a safe capacity or
+                # readiness refusal into an unnecessary second switch.
+                if self.components != ['frontend'] or not getattr(error, 'frontend_preserved', False):
+                    self.replace_frontend(self.audit / 'previous.override.json')
                 if any(row['Image'] != self.receipt['images'][row['Name'].removeprefix('/corp-site-')] for row in inspect(self.components)):
                     raise RuntimeError('Recovery did not restore the previous image')
                 if self.backend_only:
