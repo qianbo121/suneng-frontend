@@ -60,6 +60,7 @@ function buildLocaleSwitchPath(
   nextLocale: 'zh' | 'en',
   currentLocale: 'zh' | 'en',
 ) {
+  if (currentLocale === 'zh' && nextLocale === 'en' && pathname.startsWith('/zh/infographics/')) return '/en/news';
   // Switching to English from a Chinese-only page (no /en counterpart) lands on
   // the English home instead of a 404. The source of truth is ZH_ONLY_PATHS.
   if (currentLocale === 'zh' && nextLocale === 'en' && isZhOnlyPath(pathname)) {
@@ -80,6 +81,7 @@ function buildLocaleSwitchPath(
 }
 
 function isActiveNavItem(pathname: string, href: string) {
+  if (/^\/(zh|en)\/infographics\//.test(pathname)) return href === `/${pathname.split('/')[1]}/news`;
   if (pathname === '/zh/solutions/continuous-heat-treatment-line') return href === '/zh/products';
   if (pathname === href) {
     return true;

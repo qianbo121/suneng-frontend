@@ -1,5 +1,6 @@
 import type { NewsListCardItem } from '@/types/news';
 import type { Locale } from '@/types/site';
+import { getInfographicCards } from '@/lib/infographics';
 
 export const PROCUREMENT_RESOURCE_SLUG = 'special-industrial-furnace-procurement-assessment';
 export const PROCUREMENT_RESOURCE_HREF = `/zh/articles/${PROCUREMENT_RESOURCE_SLUG}`;
@@ -32,10 +33,11 @@ export function includeStandaloneNewsResources(
   items: NewsListCardItem[],
   locale: Locale,
 ): NewsListCardItem[] {
-  if (items.some((item) => item.slug === PROCUREMENT_RESOURCE_SLUG)) {
-    return items;
-  }
-  return [...items, { ...procurementResource, href: `/${locale}/articles/${PROCUREMENT_RESOURCE_SLUG}` }];
+  const standalone = [
+    { ...procurementResource, href: `/${locale}/articles/${PROCUREMENT_RESOURCE_SLUG}` },
+    ...(locale === 'zh' ? getInfographicCards() : []),
+  ];
+  return [...items, ...standalone.filter((resource) => !items.some((item) => item.slug === resource.slug))];
 }
 
 export function getNewsListCardHref(item: NewsListCardItem, locale: Locale) {

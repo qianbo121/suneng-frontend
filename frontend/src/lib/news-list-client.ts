@@ -14,19 +14,23 @@ import { normalizeNewsPage } from '@/lib/news-pagination';
 import type { NewsListCardItem } from '@/types/news';
 import type { Locale } from '@/types/site';
 import { DEFAULT_NEWS_SORT } from '@/lib/news-decision-center';
+import { normalizeNewsContentFormat, type NewsContentFormat } from '@/lib/news-content-type';
 
 // Everything the browser needs to switch topic, equipment, sort and page
 // without asking the server again. Search stays on the server.
 export type NewsListState = {
+  format?: NewsContentFormat;
   topic: NewsDecisionTopicId;
   furnace: NewsFurnaceFilterId;
   sort: NewsSort;
   page: number;
 };
 
-export function parseNewsListState(search: string | URLSearchParams): NewsListState {
+export function parseNewsListState(search: string | URLSearchParams, locale: Locale = 'zh'): NewsListState {
   const params = typeof search === 'string' ? new URLSearchParams(search) : search;
+  const format = normalizeNewsContentFormat(params.get('format'), locale);
   return {
+    ...(format !== 'article' ? { format } : {}),
     topic: normalizeNewsDecisionTopic(params.get('topic') ?? undefined),
     furnace: normalizeNewsFurnaceFilter(params.get('furnace') ?? undefined),
     sort: normalizeNewsSort(params.get('sort') ?? undefined),
@@ -37,6 +41,7 @@ export function parseNewsListState(search: string | URLSearchParams): NewsListSt
 export function isSameNewsListState(left: NewsListState, right: NewsListState) {
   return (
     left.topic === right.topic &&
+    (left.format ?? 'article') === (right.format ?? 'article') &&
     left.furnace === right.furnace &&
     left.sort === right.sort &&
     left.page === right.page
@@ -44,7 +49,7 @@ export function isSameNewsListState(left: NewsListState, right: NewsListState) {
 }
 
 export function hasNewsListFilters(state: NewsListState) {
-  return state.topic !== 'all' || state.furnace !== 'all' || state.sort !== DEFAULT_NEWS_SORT;
+  return state.format === 'infographic' || state.topic !== 'all' || state.furnace !== 'all' || state.sort !== DEFAULT_NEWS_SORT;
 }
 
 // Mirrors the server page: an out-of-range page shows the last page.
@@ -64,6 +69,7 @@ export function toNewsListLiteCards(items: NewsListCardItem[], locale: Locale): 
     const views = item.viewCount ?? item.source?.viewCount;
     return {
       id: item.id,
+      ...(item.contentType ? { contentType: item.contentType } : {}),
       slug: item.slug,
       ...(item.href ? { href: item.href } : {}),
       ...(item.listRecommendedPosition !== undefined

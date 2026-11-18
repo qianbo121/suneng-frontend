@@ -11,6 +11,7 @@ import type { Locale } from '@/types/site';
 export function PageLoadingBoundary({ children, locale }: { children: ReactNode; locale: Locale }) {
   const pathname = usePathname();
   const pagePath = pathname?.replace(/\/+$/, '') ?? '';
+  const infographicDetail = /^\/(?:zh|en)\/infographics\/[^/]+$/.test(pagePath);
 
   // Batch 1.2: match the product page itself, never nested inquiry tools.
   // Product existence and publication remain the page's responsibility.
@@ -55,5 +56,9 @@ export function PageLoadingBoundary({ children, locale }: { children: ReactNode;
     || /^\/(?:zh|en)\/news-prerendered\/[1-9]\d*\/?$/.test(pathname)
   )) return children;
 
-  return <Suspense fallback={<LoadingFeedback locale={locale} />}>{children}</Suspense>;
+  return (
+    <Suspense fallback={<LoadingFeedback locale={locale} variant={infographicDetail ? 'article-skeleton' : undefined} />}>
+      {children}
+    </Suspense>
+  );
 }

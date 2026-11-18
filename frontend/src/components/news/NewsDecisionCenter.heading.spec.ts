@@ -8,6 +8,8 @@ vi.mock('@/components/news/NewsListInteractive', () => ({
   NewsFilterPanel: ({ children }: { children: React.ReactNode }) => children,
   NewsResultsSummary: () => null,
   NewsListHeading: () => null,
+  NewsListToolbar: () => null,
+  NewsContentTabs: () => null,
   NewsListResults: () => null,
   NewsListScope: ({ children }: { children?: unknown }) => children ?? null,
 }));

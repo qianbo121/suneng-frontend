@@ -10,7 +10,7 @@ import { PUBLIC_CASE_SLUGS, PUBLIC_ENGLISH_CASE_SLUGS } from '@/lib/cases/public
 const route = vi.hoisted(() => ({ pathname: '/zh/news' as string | null }));
 vi.mock('next/navigation', () => ({ usePathname: () => route.pathname }));
 vi.mock('@/components/common/LoadingFeedback', () => ({
-  LoadingFeedback: () => createElement('div', null, 'Shared pending'),
+  LoadingFeedback: ({ variant }: { variant?: string }) => createElement('div', { 'data-loading-variant': variant }, 'Shared pending'),
 }));
 
 // Exercise streamed HTML with delayed page data: a parent Suspense boundary
@@ -80,6 +80,15 @@ describe('plain news entry initial HTML', () => {
     expect(html).not.toMatch(/<div hidden\b/);
     expect(html).not.toContain('Shared pending');
   });
+
+  it.each(['/zh/infographics/mesh-belt-500-screws', '/zh/infographics/mesh-belt-u-bolt-rated-capacity/'])(
+    'uses the shared article skeleton while infographic content is pending at %s', async (pathname) => {
+      const html = await streamDelayedPage(pathname);
+      expect(html).toContain('data-loading-variant="article-skeleton"');
+      expect(html).toContain('Shared pending');
+      expect(html).toContain('<h1>Technical resources</h1>');
+    },
+  );
 });
 
 describe('public page initial HTML with delayed data', () => {

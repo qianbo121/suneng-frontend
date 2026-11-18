@@ -6,7 +6,7 @@ import { notFound, permanentRedirect } from 'next/navigation';
 import { HiPhone } from 'react-icons/hi2';
 
 import { JsonLd } from '@/components/JsonLd';
-import { Breadcrumb } from '@/components/layout/Breadcrumb';
+import { ResourceDetailBreadcrumb } from '@/components/news/ResourceReturnLink';
 import { PhoneContactLink } from '@/components/lead/PhoneContactLink';
 import { WechatContactButton } from '@/components/lead/WechatContactButton';
 import { NewsArticleContent } from '@/components/news/NewsArticleContent';
@@ -153,7 +153,6 @@ export default async function NewsDetailPage({ params }: NewsDetailPageProps) {
   });
   const html = normalizeNewsHtml(currentLocale, article, { coverImage: image });
   const newsLabel = NEWS_LABEL[currentLocale];
-  const detailLabel = currentLocale === 'en' ? 'Article' : '正文';
   const contentId = `news-body-${article.id}`;
   const modifiedTime = getNewsContentModifiedTime(article, currentLocale);
   const relatedLinks = getNewsRelatedLinks(article, currentLocale, html);
@@ -219,18 +218,7 @@ export default async function NewsDetailPage({ params }: NewsDetailPageProps) {
       />
 
       <div className={styles.breadcrumb}>
-        <Breadcrumb
-          locale={currentLocale}
-          currentLabel={detailLabel}
-          tone="dark"
-          items={[
-            {
-              label: currentLocale === 'en' ? newsLabel : '技术资料',
-              href: `/${currentLocale}/news`,
-            },
-            { label: detailLabel },
-          ]}
-        />
+        <ResourceDetailBreadcrumb locale={currentLocale} contentType="article" />
       </div>
 
       <div className={styles.main}>

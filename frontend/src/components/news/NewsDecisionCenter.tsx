@@ -1,9 +1,9 @@
+import type { NewsContentFormat } from '@/lib/news-content-type';
 import { isWithdrawnTechnicalPath } from '@/lib/publication-scope';
 import { LoadingFeedback } from '@/components/common/LoadingFeedback';
 import type { Locale } from '@/types/site';
 import { newsUiText } from '@/lib/news-ui';
 import Link from 'next/link';
-import { getPriorityNews } from '@/lib/priority-news';
 import { NewsChecklists } from '@/components/news/NewsChecklists';
 import { QuoteModalButton } from '@/components/lead/QuoteModalButton';
 import { NewsSearchForm } from '@/components/news/NewsSearchForm';
@@ -15,12 +15,12 @@ import {
   NewsListScope,
   NewsFilterPanel,
   NewsResultsSummary,
+  NewsListToolbar,
+  NewsContentTabs,
 } from '@/components/news/NewsListInteractive';
 import {
   buildNewsDecisionHref,
-  NEWS_CENTER_FAQS,
   NEWS_DECISION_TOPICS,
-  NEWS_FURNACE_FILTERS,
   type NewsDecisionTopicId,
   type NewsFurnaceFilterId,
   type NewsSort,
@@ -39,6 +39,7 @@ type Props = {
   topic: NewsDecisionTopicId;
   furnace: NewsFurnaceFilterId;
   sort: NewsSort;
+  format?: NewsContentFormat;
   error?: string | null;
   loading?: boolean;
   // Lightweight cards for switching topic, equipment, sort and page in the
@@ -60,25 +61,15 @@ export function NewsDecisionCenter({
   topic,
   furnace,
   sort,
+  format = 'article',
   error,
   loading = false,
   interactive,
 }: Props) {
   const t = (text: string) => newsUiText(locale, text);
   const BASE = `/${locale}/news`;
-  const filters = { query, topic, furnace, sort };
-  const articleHref = (id: number, fallback: string) => {
-    const item = sourceItems.find((a) => a.id === id);
-    return item ? `/${locale}/news/${item.slug}` : locale === 'en' ? '/en/service' : isWithdrawnTechnicalPath(fallback) ? '/zh/products' : fallback;
-  };
-  const faqLinks = [
-    articleHref(74, '/zh/articles/gongye-lu-baojia-canshu'),
-    articleHref(75, '/zh/solutions/continuous-heat-treatment-line'),
-    articleHref(73, '/zh/solutions/continuous-heat-treatment-line#checkpoints'),
-    articleHref(21, '/zh/service/furnace-renovation-overhaul'),
-  ];
+  const filters = { query, topic, furnace, sort, format };
   const checklist = sourceItems.find((a) => a.id === 67);
-  const priorityNews = getPriorityNews(sourceItems);
   const tools = [
     {
       title: locale === 'en' ? 'Overseas Delivery Checklist' : '海外交付核对清单',
@@ -105,7 +96,10 @@ export function NewsDecisionCenter({
   ];
   const live = interactive && !loading && !error && !query ? interactive : null;
   const scopeClassName = `${styles.scope} news-center-scope`;
-  const visibleTools = tools.filter((item) => !isWithdrawnTechnicalPath(item.href) && (checklist || item.title !== t('工业炉报价参数清单')));
+  const visibleTools = tools.filter(
+    (item) =>
+      !isWithdrawnTechnicalPath(item.href) && (checklist || item.title !== t('工业炉报价参数清单')),
+  );
   const content = (
     <>
       <header className={styles.pageHead}>
@@ -130,88 +124,81 @@ export function NewsDecisionCenter({
             </div>
             <NewsSearchForm locale={locale} {...filters} disabled={loading} />
           </div>
-          <NewsFilterPanel locale={locale} topic={topic} furnace={furnace} loading={loading}>
-            {live ? (
-              <NewsListFilterControls />
-            ) : (
-              <>
-                <nav className={styles.topicNav} aria-label={t('内容分类')}>
-                  {NEWS_DECISION_TOPICS.map((item) => (
-                    <Link
-                      key={item.id}
-                      prefetch={false}
-                      href={buildNewsDecisionHref(BASE, { ...filters, topic: item.id })}
-                      className={`${styles.topicLink} ${!loading && item.id === topic ? styles.topicLinkActive : ''}`}
-                      aria-current={!loading && item.id === topic ? 'page' : undefined}
-                    >
-                      {t(item.label)}
-                    </Link>
-                  ))}
-                </nav>
-                <section className={styles.furnaceInner} aria-label={t('设备类型筛选')}>
-                  <span className={styles.furnaceLabel}>{t('设备类型')}</span>
-                  <div className={styles.furnaceLinks}>
-                    {NEWS_FURNACE_FILTERS.map((item) => (
-                      <Link
-                        key={item.id}
-                        prefetch={false}
-                        href={buildNewsDecisionHref(BASE, { ...filters, furnace: item.id })}
-                        className={`${styles.furnaceLink} ${!loading && item.id === furnace ? styles.furnaceLinkActive : ''}`}
-                        aria-current={!loading && item.id === furnace ? 'page' : undefined}
-                      >
-                        {t(item.label)}
-                      </Link>
-                    ))}
-                  </div>
-                </section>
-              </>
-            )}
-          </NewsFilterPanel>
         </div>
       </header>
       <div className={styles.mainArea}>
         <div className={styles.container}>
           <div className={styles.contentGrid}>
+            <aside className={styles.listSidebar}>
+              <p className={styles.sidebarLabel}>
+                {locale === 'en' ? 'Browse by question' : '按问题找资料'}
+              </p>
+              <NewsFilterPanel locale={locale} topic={topic} furnace={furnace} loading={loading}>
+                {live ? (
+                  <NewsListFilterControls />
+                ) : (
+                  <>
+                    <nav className={styles.topicNav} aria-label={t('内容分类')}>
+                      {NEWS_DECISION_TOPICS.map((item) => (
+                        <Link
+                          key={item.id}
+                          prefetch={false}
+                          href={buildNewsDecisionHref(BASE, { ...filters, topic: item.id })}
+                          className={`${styles.topicLink} ${!loading && item.id === topic ? styles.topicLinkActive : ''}`}
+                          aria-current={!loading && item.id === topic ? 'page' : undefined}
+                        >
+                          {t(item.label)}
+                        </Link>
+                      ))}
+                    </nav>
+                  </>
+                )}
+              </NewsFilterPanel>
+              {visibleTools.length > 0 && (
+                <div className={styles.sidebarTools} inert={loading || undefined}>
+                  <NewsChecklists title={t('常用清单')} tools={visibleTools} />
+                </div>
+              )}
+              <div className={styles.sidebarHelp}>
+                <p>{locale === 'en' ? 'Need help choosing a resource?' : '不确定该看哪类资料？'}</p>
+                <Link href={`/${locale}/contact`}>{t('联系苏能工程师')}</Link>
+              </div>
+            </aside>
             <section
               className={styles.listColumn}
               aria-labelledby="news-list-title"
               aria-busy={loading}
             >
+              <NewsContentTabs locale={locale} {...filters} disabled={loading} />
               <div className={styles.listHeader}>
                 {live ? (
                   <NewsListHeading />
                 ) : (
                   <>
                     <div className={styles.headingCopy}>
-                    <h2 id="news-list-title" className={styles.listTitle}>
-                      {loading
-                        ? t('资料列表')
-                        : t(NEWS_DECISION_TOPICS.find((item) => item.id === topic)?.label || '')}
-                    </h2>
-                    {!loading && !error ? <NewsResultsSummary locale={locale} total={total} page={page} pageSize={pageSize} /> : null}
+                      <h2 id="news-list-title" className={styles.listTitle}>
+                        {loading
+                          ? t('资料列表')
+                          : t(NEWS_DECISION_TOPICS.find((item) => item.id === topic)?.label || '')}
+                      </h2>
+                      {!loading && !error ? (
+                        <NewsResultsSummary
+                          locale={locale}
+                          total={total}
+                          page={page}
+                          pageSize={pageSize}
+                        />
+                      ) : null}
                     </div>
-                    <nav
-                      className={styles.sortNav}
-                      aria-label={t('文章排序')}
-                      inert={loading || undefined}
-                    >
-                      {(
-                        [
-                          { id: 'recommended', label: t('推荐阅读') },
-                          { id: 'updated', label: t('最新发布') },
-                        ] as const
-                      ).map((item) => (
-                        <Link
-                          prefetch={false}
-                          key={item.id}
-                          href={buildNewsDecisionHref(BASE, { ...filters, sort: item.id })}
-                          aria-current={!loading && sort === item.id ? 'page' : undefined}
-                          className={`${styles.sortLink} ${!loading && sort === item.id ? styles.sortActive : ''}`}
-                        >
-                          {t(item.label)}
-                        </Link>
-                      ))}
-                    </nav>
+                    <NewsListToolbar
+                      locale={locale}
+                      query={query}
+                      topic={topic}
+                      furnace={furnace}
+                      sort={sort}
+                      format={format}
+                      disabled={loading}
+                    />
                   </>
                 )}
               </div>
@@ -257,60 +244,6 @@ export function NewsDecisionCenter({
                 />
               )}
             </section>
-            <aside
-              className={styles.sidebar}
-              aria-label={t('资料工具与常见问题')}
-              inert={loading || undefined}
-            >
-              {visibleTools.length > 0 && (
-                <NewsChecklists
-                  className={styles.sideModule}
-                  title={t('常用清单')}
-                  previewLabel={locale === 'en' ? 'View Checklist' : '预览清单'}
-                  tools={visibleTools}
-                />
-              )}
-              {!loading && !error && priorityNews.length > 0 && (
-                <section className={styles.sideModule} aria-labelledby="priority-news-title" data-priority-news>
-                  <h2 id="priority-news-title" className={styles.moduleTitle}>
-                    {locale === 'en' ? 'Equipment & Production Guides' : '设备与生产管理精选'}
-                  </h2>
-                  <div className={styles.faqList}>
-                    {priorityNews.map((item) => (
-                      <article key={item.slug} className={styles.faqItem}>
-                        <h3 className={styles.faqQuestion}>
-                          <Link href={`/${locale}/news/${item.slug}`}>{item.title[locale]}</Link>
-                        </h3>
-                      </article>
-                    ))}
-                  </div>
-                </section>
-              )}
-              <section className={styles.sideModule} aria-labelledby="news-faq-title">
-                <h2 id="news-faq-title" className={styles.moduleTitle}>
-                  {t('常见问题')}
-                </h2>
-                <div className={styles.faqList}>
-                  {NEWS_CENTER_FAQS.map((item, i) => (
-                    <article key={t(item.question)} className={styles.faqItem}>
-                      <h3 className={styles.faqQuestion}>
-                        <Link href={faqLinks[i]}>{t(item.question)}</Link>
-                      </h3>
-                      <p className={styles.faqAnswer}>{t(item.answer)}</p>
-                    </article>
-                  ))}
-                </div>
-              </section>
-              <section className={styles.sidebarCta} aria-labelledby="news-side-cta-title">
-                <h2 id="news-side-cta-title" className={styles.sidebarCtaTitle}>
-                  {t('参数还没整理齐？')}
-                </h2>
-                <p className={styles.sidebarCtaText}>{t('可先发工件、产能或现有设备照片。')}</p>
-                <Link className={styles.sidebarCtaButton} href={`/${locale}/about#contact`}>
-                  {t('联系苏能工程师')}
-                </Link>
-              </section>
-            </aside>
           </div>
           <section className={styles.bottomCta} aria-labelledby="news-bottom-cta-title">
             <div>
@@ -347,7 +280,7 @@ export function NewsDecisionCenter({
     <NewsListScope
       locale={locale}
       cards={live.cards}
-      initialState={{ topic, furnace, sort, page }}
+      initialState={{ topic, furnace, sort, page, format }}
       pageSize={pageSize}
       pageTitles={live.pageTitles}
       filteredTitle={live.filteredTitle}

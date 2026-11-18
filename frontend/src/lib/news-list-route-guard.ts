@@ -15,7 +15,7 @@ export async function getNewsListStatus(
   }
   // Filtered/search results already clamp the requested page. Preserve that
   // behavior, and avoid a collection read for the always-valid first list page.
-  if (Number(page) === 1 || ['q', 'topic', 'furnace', 'sort'].some(key => {
+  if (Number(page) === 1 || ['q', 'topic', 'furnace', 'sort', 'format'].some(key => {
     const value = url.searchParams.get(key);
     return key === 'q' ? Boolean(value?.trim()) : Boolean(value);
   })) return null;

@@ -164,7 +164,7 @@ export default async function middleware(request: NextRequest) {
   const listStatus = await getNewsListStatus(request.nextUrl, async (locale) => {
     const { getNewsDecisionCenterCards } = await import('@/lib/news-decision-center.server');
     const cards = await getNewsDecisionCenterCards(locale);
-    return Math.max(1, Math.ceil(cards.length / NEWS_PAGE_SIZE));
+    return Math.max(1, Math.ceil(cards.filter((item) => item.contentType !== 'infographic').length / NEWS_PAGE_SIZE));
   });
   if (listStatus) {
     return new NextResponse(newsListStatusHtml(pathname.startsWith('/en/') ? 'en' : 'zh', listStatus), {

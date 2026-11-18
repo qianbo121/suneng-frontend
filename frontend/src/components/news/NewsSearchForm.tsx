@@ -1,5 +1,6 @@
 'use client';
 
+import type { NewsContentFormat } from '@/lib/news-content-type';
 import { useEffect, useState } from 'react';
 import type { Locale } from '@/types/site';
 import { useRouter } from 'next/navigation';
@@ -20,6 +21,7 @@ export function NewsSearchForm({
   topic,
   furnace,
   sort,
+  format = 'article',
   disabled = false,
 }: {
   locale?: Locale;
@@ -27,12 +29,13 @@ export function NewsSearchForm({
   topic: NewsDecisionTopicId;
   furnace: NewsFurnaceFilterId;
   sort: NewsSort;
+  format?: NewsContentFormat;
   disabled?: boolean;
 }) {
   const router = useRouter();
   // Inside the interactive list the filters can change without a new page.
   const live = useNewsListState();
-  const current = live ?? { topic, furnace, sort };
+  const current = live ?? { topic, furnace, sort, format };
   const [value, setValue] = useState(query);
   useEffect(() => setValue(query), [query]);
   useEffect(() => {
@@ -58,6 +61,7 @@ export function NewsSearchForm({
             topic: current.topic,
             furnace: current.furnace,
             sort: current.sort,
+            format: current.format,
           }),
         );
       }}
@@ -72,26 +76,24 @@ export function NewsSearchForm({
           className={styles.searchInput}
           name="q"
           type="search"
-          aria-describedby="news-center-search-hint"
+          autoComplete="off"
           disabled={disabled}
           value={value}
           onChange={(event) => setValue(event.target.value)}
           placeholder={locale === 'en' ? 'Search resources' : '搜索设备、工艺或问题'}
         />
       </div>
-      {current.topic !== 'all' && <input type="hidden" name="topic" value={current.topic} />}
-      {current.furnace !== 'all' && (
-        <input type="hidden" name="furnace" value={current.furnace} />
+      {current.format === 'infographic' && (
+        <input type="hidden" name="format" value={current.format} />
       )}
-      {current.sort !== DEFAULT_NEWS_SORT && <input type="hidden" name="sort" value={current.sort} />}
+      {current.topic !== 'all' && <input type="hidden" name="topic" value={current.topic} />}
+      {current.furnace !== 'all' && <input type="hidden" name="furnace" value={current.furnace} />}
+      {current.sort !== DEFAULT_NEWS_SORT && (
+        <input type="hidden" name="sort" value={current.sort} />
+      )}
       <button className={styles.searchButton} type="submit" disabled={disabled}>
         {locale === 'en' ? 'Search' : '搜索'}
       </button>
-      <p id="news-center-search-hint" className={styles.searchHint}>
-        {locale === 'en'
-          ? 'Try: trolley furnace pricing or annealing'
-          : '例如：台车炉报价、退火工艺'}
-      </p>
     </form>
   );
 }

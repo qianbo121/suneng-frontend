@@ -1,9 +1,9 @@
+import type { NewsContentFormat } from '@/lib/news-content-type';
 import { JsonLd } from '@/components/JsonLd';
 import { NewsDecisionCenter } from '@/components/news/NewsDecisionCenter';
 import { NEWS_PAGE_SIZE } from '@/constants/news';
 import {
   filterAndSortNewsDecisionItems,
-  NEWS_CENTER_FAQS,
   type NewsDecisionTopicId,
   type NewsFurnaceFilterId,
   type NewsSort,
@@ -11,7 +11,6 @@ import {
 import { toNewsListLiteCards } from '@/lib/news-list-client';
 import { getNewsListCardHref } from '@/lib/news-list-resources';
 import { getNewsListDocumentTitles } from '@/lib/news-list-metadata';
-import { newsUiText } from '@/lib/news-ui';
 import { cleanObject, getBreadcrumbJsonLd } from '@/lib/seo/jsonld';
 import { absoluteUrl } from '@/lib/seo/metadata';
 import type { NewsListCardItem } from '@/types/news';
@@ -30,6 +29,7 @@ type NewsListRouteProps = {
   topic: NewsDecisionTopicId;
   furnace: NewsFurnaceFilterId;
   sort: NewsSort;
+  format?: NewsContentFormat;
 };
 
 // Body of /{locale}/news for both the on-demand route (search and filters)
@@ -43,8 +43,15 @@ export function NewsListRoute({
   topic,
   furnace,
   sort,
+  format = 'article',
 }: NewsListRouteProps) {
-  const filteredItems = filterAndSortNewsDecisionItems(sourceItems, { query, topic, furnace, sort });
+  const filteredItems = filterAndSortNewsDecisionItems(sourceItems, {
+    query,
+    topic,
+    furnace,
+    sort,
+    format,
+  });
   const currentPage = Math.min(page, getNewsListPageCount(filteredItems.length));
   const start = (currentPage - 1) * NEWS_PAGE_SIZE;
   const newsItems = filteredItems.slice(start, start + NEWS_PAGE_SIZE);
@@ -71,18 +78,6 @@ export function NewsListRoute({
         url: absoluteUrl(getNewsListCardHref(item, locale)),
       })),
     },
-    {
-      '@context': 'https://schema.org',
-      '@type': 'FAQPage',
-      mainEntity: NEWS_CENTER_FAQS.map((item) => ({
-        '@type': 'Question',
-        name: newsUiText(locale, item.question),
-        acceptedAnswer: {
-          '@type': 'Answer',
-          text: newsUiText(locale, item.answer),
-        },
-      })),
-    },
   ]);
 
   return (
@@ -93,6 +88,7 @@ export function NewsListRoute({
         items={newsItems}
         sourceItems={sourceItems}
         sort={sort}
+        format={format}
         error={error}
         page={currentPage}
         total={total}

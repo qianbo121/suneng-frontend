@@ -72,6 +72,7 @@ export type NewsPrevNextApiData = {
 };
 
 export type NewsListCardItem = {
+  contentType?: import('@/lib/news-content-type').NewsContentType;
   // Standalone resources retain their existing public article URL.
   href?: string;
   listRecommendedPosition?: number;

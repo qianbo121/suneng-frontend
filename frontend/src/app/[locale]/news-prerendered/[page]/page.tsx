@@ -30,7 +30,7 @@ async function resolvePage(params: PrerenderedNewsListProps['params']) {
   const currentPage = Number(page);
   if (currentPage > NEWS_LIST_PRERENDER_MAX_PAGE) notFound();
   const cards = await getNewsDecisionCenterCards(locale);
-  if (currentPage > getNewsListPageCount(cards.length)) notFound();
+  if (currentPage > getNewsListPageCount(cards.filter((item) => item.contentType !== 'infographic').length)) notFound();
   return { locale, currentPage, cards };
 }
 

@@ -2,6 +2,7 @@ import { NavigationLink as Link } from '@/components/layout/NavigationLink';
 import { HiArrowRight } from 'react-icons/hi2';
 
 import { NewsCardImage } from '@/components/news/NewsCardImage';
+import { ResourceReadingLink } from '@/components/news/ResourceReturnLink';
 import type { Locale } from '@/types/site';
 import styles from './NewsRelatedArticles.module.css';
 
@@ -36,7 +37,12 @@ export function NewsRelatedArticles({
       </div>
       <div className={styles.list}>
         {items.map((item) => (
-          <Link href={item.href || `/${locale}/news/${item.slug}`} key={item.slug} className={styles.item}>
+          <ResourceReadingLink
+            locale={locale}
+            href={item.href || `/${locale}/news/${item.slug}`}
+            key={item.slug}
+            className={styles.item}
+          >
             {item.image && (
               <span className={styles.image}>
                 <NewsCardImage src={item.image} alt="" priority={false} sizes="100px" />
@@ -46,7 +52,7 @@ export function NewsRelatedArticles({
               <span className={styles.title}>{item.title}</span>
               {item.date && <time dateTime={item.date}>{item.displayDate}</time>}
             </span>
-          </Link>
+          </ResourceReadingLink>
         ))}
       </div>
     </section>
