@@ -29,6 +29,9 @@ class SimulatedHandoff(Handoff):
         if self.serving != 'copy': raise AssertionError('stopped a serving canonical')
         self.canonical = 'old' if args[0] == 'restore' else 'new'
 
+    def replacement_headroom(self):
+        if self.fault == 'memory-after-start': raise RuntimeError('memory consumed by candidate')
+
     def activate(self, template, active, label):
         self.touched = True; self.events.append(label)
         self.serving = 'copy' if active == self.bridge_active else 'canonical'
@@ -68,6 +71,13 @@ class HandoffTests(unittest.TestCase):
             h = SimulatedHandoff(Path(tmp), 'copy')
             with self.assertRaises(HandoffRestored): h.replace()
             self.assertNotIn('compose', h.events)
+            self.assertEqual((h.canonical, h.created), ('old',False))
+
+    def test_memory_consumed_by_candidate_stops_before_routing_or_replacement(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            h = SimulatedHandoff(Path(tmp), 'memory-after-start')
+            with self.assertRaises(HandoffRestored):h.replace()
+            self.assertNotIn('compose', h.events);self.assertNotIn('copy-serving', h.events)
             self.assertEqual((h.canonical, h.created), ('old',False))
 
     def test_undrained_old_workers_prevent_canonical_replacement(self):

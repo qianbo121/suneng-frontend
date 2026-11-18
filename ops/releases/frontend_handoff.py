@@ -163,9 +163,19 @@ class Handoff:
             self.created = False
             self.note('copy-removed')
 
+    def replacement_headroom(self):
+        # Candidate startup can consume much more memory than the old image.
+        # Recheck while the old service is still untouched, reserving a whole
+        # named frontend plus host headroom without crediting the old process.
+        limit = self.inspect(self.name)['HostConfig'].get('Memory', 0)
+        memory = dict(line.split(':', 1) for line in Path('/proc/meminfo').read_text().splitlines())
+        if limit <= 0 or int(memory['MemAvailable'].split()[0]) * 1024 < limit + 256 * 1024**2:
+            raise RuntimeError('Insufficient memory for frontend replacement')
+
     def replace(self):
         try:
             self.prepare()
+            self.replacement_headroom()
             # Existing requests finish on the old process before Compose is
             # allowed to stop it. New requests already use the healthy copy.
             self.activate(self.bridge_template, self.bridge_active, 'copy-serving')
