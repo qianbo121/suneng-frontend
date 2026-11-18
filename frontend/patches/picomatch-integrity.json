@@ -1,0 +1,47 @@
+{
+  "advisory": "GHSA-fc5q-39xc-vjpf",
+  "upstreamAdvisory": "https://github.com/advisories/GHSA-fc5q-39xc-vjpf",
+  "patchOrigin": "Project-maintained guard for unbounded wildcards inside repeated extglobs; no official fixed release available at review",
+  "reviewedAt": "2026-11-17",
+  "versions": {
+    "2.3.2": {
+      "patchPath": "frontend/patches/picomatch@2.3.2.patch",
+      "patchSha256": "2b22a66c881b75434a8612b970f12384afbbd27a873a7d27e21edfe31f74ea06",
+      "runtimeSha256": {
+        "index.js": "5695ff5dfcd5a338a40630bd506056f2950bcb08fe1cc068519cbbfe60add480",
+        "package.json": "63264d817e856a4bff57d4304f2b38d2964a4f6df520eb169e7bcdb619f13e9a",
+        "lib/constants.js": "980225ab847a88a784f6d315557b8434f7742b2551ce20e354455c61b938c0a5",
+        "lib/parse.js": "45935c9f3d41abf8372592c4c1ea614384c72414a716351c59988b6e81208db8",
+        "lib/picomatch.js": "2cb169cbe17d356036c5f62a377318b85e30817877e59797842aec9d8b15f54b",
+        "lib/scan.js": "227fcc994a477ea95c5a0435d32783566334c6bd0dcc4a103029735ad8c9c535",
+        "lib/utils.js": "809fc29cf35ab0aa76b99cad29182f62c0ae598902481d10f9868eaef71981ee"
+      }
+    },
+    "4.0.4": {
+      "patchPath": "frontend/patches/picomatch@4.0.4.patch",
+      "patchSha256": "2b22a66c881b75434a8612b970f12384afbbd27a873a7d27e21edfe31f74ea06",
+      "runtimeSha256": {
+        "index.js": "02ae26406508e28f9ba0865be16cf77f0b33de6c4d4d49c212c4176df1d5625a",
+        "package.json": "b8deb10b4e1f7cc2fe8236a70995f4c6b5ec3ecf93f02f2b6427a8600d2c1d20",
+        "lib/constants.js": "c28f952d2758261fe5428a121add485cc25b03e0193633f649de903dc0e5e222",
+        "lib/parse.js": "cfdd5a9398256efd5a8f6bd34fcb0087c96d1454f3488b922f48a731456954b9",
+        "lib/picomatch.js": "bbe9824eae8210954eac016e1fa1ac6174093557f30a72e91621d74a6c25e170",
+        "lib/scan.js": "227fcc994a477ea95c5a0435d32783566334c6bd0dcc4a103029735ad8c9c535",
+        "lib/utils.js": "f04604f70cd1a3f6ace80b84766468674ff38b4bb83818d2ef1d81fc6355f935"
+      }
+    },
+    "4.0.5": {
+      "patchPath": "frontend/patches/picomatch@4.0.5.patch",
+      "patchSha256": "b86b345ef57a8ad056b5e3af7487de34dcfd8b38a5485e4eab83e09749499ea1",
+      "runtimeSha256": {
+        "index.js": "02ae26406508e28f9ba0865be16cf77f0b33de6c4d4d49c212c4176df1d5625a",
+        "package.json": "fb7766f5f9c724e13e075760a95d16f87cdb327143d153a913135fde267ec615",
+        "lib/constants.js": "c28f952d2758261fe5428a121add485cc25b03e0193633f649de903dc0e5e222",
+        "lib/parse.js": "1c769e46b658ea42d5a07fee6709471a7dbbd8c4960e6ebba513aaa1b1f24122",
+        "lib/picomatch.js": "fdd249d7ffff853f3bb1c77eafc8baa1a437bea85a94c35877b83c6a40d9ca94",
+        "lib/scan.js": "227fcc994a477ea95c5a0435d32783566334c6bd0dcc4a103029735ad8c9c535",
+        "lib/utils.js": "f04604f70cd1a3f6ace80b84766468674ff38b4bb83818d2ef1d81fc6355f935"
+      }
+    }
+  }
+}

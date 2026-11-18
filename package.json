@@ -31,7 +31,10 @@
     },
     "patchedDependencies": {
       "braces@3.0.3": "frontend/patches/braces@3.0.3.patch",
-      "next@15.5.28": "frontend/patches/next@15.5.28.patch"
+      "next@15.5.28": "frontend/patches/next@15.5.28.patch",
+      "picomatch@2.3.2": "frontend/patches/picomatch@2.3.2.patch",
+      "picomatch@4.0.4": "frontend/patches/picomatch@4.0.4.patch",
+      "picomatch@4.0.5": "frontend/patches/picomatch@4.0.5.patch"
     }
   },
   "scripts": {

@@ -1,0 +1,55 @@
+--- a/lib/parse.js
++++ b/lib/parse.js
+@@ -280,6 +280,43 @@
+   return depth;
+ };
+ 
++// A wildcard inside +(...) or *(...) creates nested unbounded repeats even
++// when the body contains only one branch. Match the existing risky-pattern
++// fallback, while preserving escaped stars, quoted literals and character sets.
++const hasUnboundedWildcard = body => {
++  let escaped = false;
++  let quoted = false;
++  let bracket = 0;
++
++  for (let index = 0; index < body.length; index++) {
++    const ch = body[index];
++    if (escaped) {
++      escaped = false;
++      continue;
++    }
++    if (ch === '\\') {
++      escaped = true;
++      continue;
++    }
++    if (ch === '"') {
++      quoted = !quoted;
++      continue;
++    }
++    if (quoted) continue;
++    if (ch === '[') {
++      bracket++;
++      continue;
++    }
++    if (ch === ']' && bracket > 0) {
++      bracket--;
++      continue;
++    }
++    // Nested star extglobs have their own recursion/flattening protection.
++    if (bracket === 0 && ch === '*' && body[index + 1] !== '(') return true;
++  }
++  return false;
++};
++
+ const analyzeRepeatedExtglob = (body, options) => {
+   if (options.maxExtglobRecursion === false) {
+     return { risky: false };
+@@ -312,6 +349,8 @@
+       return { risky: true };
+     }
+   }
++
++  if (hasUnboundedWildcard(body)) return { risky: true };
+ 
+   return { risky: false };
+ };

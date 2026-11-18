@@ -128,3 +128,28 @@ test('rejects an unverified or expired local patch', () => {
 test('rejects unexpected audit process outcomes', () => {
   for (const auditExitCode of [0, 2, null]) assert.throws(() => assessAudit(report(), { ...options, auditExitCode }));
 });
+
+test('picomatch findings require exact installed fixes and expire independently of braces', async () => {
+  const { PICOMATCH_FIX } = await import('./check-dependency-audit.mjs');
+  const data = { advisories: { 1: { module_name: 'picomatch', severity: 'high',
+    url: PICOMATCH_FIX.url, github_advisory_id: PICOMATCH_FIX.advisory,
+    findings: PICOMATCH_FIX.versions.map(version => ({ version, paths: [`frontend>picomatch@${version}`] })) } },
+    metadata: { vulnerabilities: { info: 0, low: 0, moderate: 0, high: 3, critical: 0 } } };
+  const current = { ...options, picomatchVerified: true, now: new Date('2026-11-17T18:00:00Z') };
+  assert.equal(assessAudit(data, current).locallyFixedFindings.length, 3);
+  assert.throws(() => assessAudit(data, { ...current, picomatchVerified: false }));
+  assert.throws(() => assessAudit(data, { ...current, now: new Date(PICOMATCH_FIX.expiresAt) }));
+  for (const mutate of [
+    d => { d.advisories[1].findings[0].version = '4.0.7'; },
+    d => { d.advisories[1].findings[0].paths.push('backend>other@2.3.2'); },
+    d => { d.advisories[1].url += '-other'; },
+    d => { d.advisories[1].github_advisory_id = 'GHSA-other'; },
+    d => { d.advisories[1].severity = 'critical'; d.metadata.vulnerabilities.critical = 3; d.metadata.vulnerabilities.high = 0; },
+  ]) {
+    const changed = structuredClone(data); mutate(changed);
+    assert.throws(() => assessAudit(changed, current));
+  }
+  const mixed = structuredClone(data);
+  mixed.advisories[2] = report().advisories[1]; mixed.metadata.vulnerabilities.high++;
+  assert.throws(() => assessAudit(mixed, current), /expired/);
+});
