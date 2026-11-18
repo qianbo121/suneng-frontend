@@ -69,6 +69,32 @@ http {
     ~*^crawler-verification$ "crawler_verification";
   }
 
+  # Observe old news details without changing routing or path-based visit counts.
+  # Keep only the article identifier, never the full query string, cookies or body.
+  map "$request_method:$uri" $log_legacy_news_detail {
+    default 0;
+    ~^(GET|HEAD):/news/shownews\.php$ 1;
+  }
+
+  map $args $legacy_news_id_present {
+    default 0;
+    ~*(^|&)id= 1;
+  }
+
+  map $arg_id $legacy_news_article_id {
+    default "[redacted]";
+    "" "";
+    "~^[A-Za-z0-9%._~-]{0,64}$" $arg_id;
+  }
+
+  log_format legacy_news_detail_json escape=json
+    '{"time":"$time_iso8601","request_id":"$request_id","scheme":"$scheme","host":"$host",'
+    '"remote_addr":"$remote_addr","method":"$request_method","path":"$uri",'
+    '"id_present":$legacy_news_id_present,"article_id":"$legacy_news_article_id",'
+    '"status":$status,"mapped_path":"$legacy_news_path","location":"$sent_http_location",'
+    '"crawler_family":"$crawler_family","monitoring_probe":"$monitoring_probe",'
+    '"user_agent":"$http_user_agent"}';
+
   # Verified original-PHP product names from Common Crawl CC-MAIN-2025-47.
   # Only verified detail IDs redirect. Unmapped detail requests return 404.
   map $arg_id $legacy_product_path {
@@ -500,6 +526,7 @@ http {
     listen 80;
     server_name jssngyl.cn ${DOMAIN};
     access_log /var/log/nginx/redirect.access.json analytics_json;
+    access_log /var/log/nginx/legacy-news-detail.access.json legacy_news_detail_json if=$log_legacy_news_detail;
 
     # 兼容旧版智能工厂工时二维码，保留令牌路径并切到正确子域名。
     location ^~ /h5/work-scan/ {
@@ -603,6 +630,7 @@ http {
     http2 on;
     server_name jssngyl.cn;
     access_log /var/log/nginx/redirect.access.json analytics_json;
+    access_log /var/log/nginx/legacy-news-detail.access.json legacy_news_detail_json if=$log_legacy_news_detail;
 
     ssl_certificate /etc/nginx/certs/fullchain.pem;
     ssl_certificate_key /etc/nginx/certs/privkey.pem;
@@ -692,6 +720,7 @@ http {
     server_name ${DOMAIN};
     access_log /var/log/nginx/www.access.json analytics_json;
     access_log /var/log/nginx/baidu-public-list.access.json baidu_public_list_json if=$log_baidu_public_list;
+    access_log /var/log/nginx/legacy-news-detail.access.json legacy_news_detail_json if=$log_legacy_news_detail;
 
     # ESA origin ranges verified in the site console on 2026-09-30.
     # Scope trust to the public website; never trust arbitrary forwarded headers.
