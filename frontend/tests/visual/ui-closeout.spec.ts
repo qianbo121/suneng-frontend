@@ -110,6 +110,7 @@ for (const width of [1440, 390]) {
     const poster = page.locator('main figure img');
     await poster.scrollIntoViewIfNeeded();
     await expect.poll(() => poster.evaluate((image: HTMLImageElement) => image.naturalWidth)).toBeGreaterThan(0);
+    await expect.poll(() => poster.evaluate((image: HTMLImageElement) => image.currentSrc)).toMatch(/-\d+w\.webp$/);
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
 
     await page.getByRole('navigation', { name: '面包屑' })

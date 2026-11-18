@@ -44,7 +44,7 @@ export default defineConfig({
         url: `http://127.0.0.1:${newsPort}/health`,
         reuseExistingServer: false,
       }, {
-        command: `API_BASE_URL_INTERNAL=http://127.0.0.1:${newsPort}/api NEXT_PUBLIC_API_URL=/api NEXT_PUBLIC_API_BASE_URL=/api NEXT_DIST_DIR=.next-visual pnpm exec next dev -H 127.0.0.1 -p ${port}`,
+        command: `pnpm images:infographics && API_BASE_URL_INTERNAL=http://127.0.0.1:${newsPort}/api NEXT_PUBLIC_API_URL=/api NEXT_PUBLIC_API_BASE_URL=/api NEXT_DIST_DIR=.next-visual pnpm exec next dev -H 127.0.0.1 -p ${port}`,
         url: baseURL,
         reuseExistingServer: !process.env.CI,
         timeout: 120_000,
