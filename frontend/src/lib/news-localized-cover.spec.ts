@@ -15,6 +15,11 @@ describe('localized news cover', () => {
     const article = { slug, coverImage: images.original };
     expect(resolveNewsImage(article, { locale: 'zh' })).toBe(images.original);
     expect(resolveNewsImage(article, { locale: 'en' })).toBe(images.english);
+    // Uploaded assets are served by the public proxy, not the Next server's
+    // local filesystem. Relative /uploads URLs fail inside the image optimizer.
+    const englishUrl = new URL(images.english);
+    expect(englishUrl.origin).toBe('https://www.jssngyl.cn');
+    expect(englishUrl.pathname).toMatch(/^\/uploads\/2026\/11\/.+\.webp$/);
     expect(resolveNewsImage({ ...article, coverImage: '/uploads/revised.webp' }, { locale: 'en' })).toBe('/uploads/revised.webp');
   });
 
