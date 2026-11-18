@@ -1,4 +1,5 @@
 import type { NewsListCardItem } from '@/types/news';
+import imageVariants from './infographic-image-variants.json';
 import {
   NEWS_DECISION_TOPICS,
   type NewsDecisionTopicId,
@@ -565,6 +566,12 @@ export const infographicResources: InfographicResource[] = [
 
 export function getInfographic(slug: string) {
   return infographicResources.find((item) => item.slug === slug);
+}
+
+export function getInfographicImageSrcSet(image: InfographicResource['image']) {
+  // Ship the two display sizes beside the original so no resizing is needed on first view.
+  const base = image.replace(/\.png$/, '');
+  return imageVariants.map(({ width }) => `${base}-${width}w.webp ${width}w`).join(', ');
 }
 
 export function getInfographicTopicLabel(resource: InfographicResource) {

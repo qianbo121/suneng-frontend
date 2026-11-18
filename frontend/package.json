@@ -3,9 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "NEXT_DIST_DIR=.next-dev next dev",
+    "dev": "pnpm images:infographics && NEXT_DIST_DIR=.next-dev next dev",
     "prebuild": "node ../scripts/validate-workpiece-router.mjs",
-    "build": "next build",
+    "build": "pnpm images:infographics && next build",
+    "images:infographics": "node scripts/optimize-infographic-images.mjs",
     "start": "next start",
     "seo:submit": "node scripts/submit-search-engines.mjs",
     "seo:submit:dry": "node scripts/submit-search-engines.mjs --dry-run",

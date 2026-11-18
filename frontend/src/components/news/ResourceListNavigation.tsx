@@ -26,7 +26,6 @@ export function ResourceDetailLink({
       className={className}
       onClick={() => saveResourceListPosition(returnTo)}
       onAuxClick={() => saveResourceListPosition(returnTo)}
-      onNavigate={() => window.scrollTo({ top: 0, behavior: 'instant' })}
     >
       {children}
     </Link>

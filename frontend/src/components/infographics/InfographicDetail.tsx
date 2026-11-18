@@ -1,9 +1,18 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import { getInfographicTopicLabel, type InfographicResource } from '@/lib/infographics';
+import {
+  getInfographicImageSrcSet,
+  getInfographicTopicLabel,
+  type InfographicResource,
+} from '@/lib/infographics';
 import { ResourceDetailBreadcrumb } from '@/components/news/ResourceReturnLink';
 import { InfographicToc } from './InfographicToc';
 import styles from './InfographicDetail.module.css';
+
+// Match the frame padding and the sidebar breakpoints in InfographicDetail.module.css.
+const graphicSizes =
+  '(max-width: 399px) calc(100vw - 50px), (max-width: 700px) calc(100vw - 58px), ' +
+  '(max-width: 767px) calc(100vw - 302px), (max-width: 1045px) calc(100vw - 326px), 720px';
 
 export function InfographicDetail({ resource }: { resource: InfographicResource }) {
   const topicLabel = getInfographicTopicLabel(resource);
@@ -41,14 +50,22 @@ export function InfographicDetail({ resource }: { resource: InfographicResource 
             </div>
             <figure>
               <div className={styles.imageFrame}>
-                <Image
-                  src={resource.image}
-                  alt={resource.imageAlt}
-                  width={1086}
-                  height={1448}
-                  priority
-                  unoptimized
-                />
+                <picture>
+                  <source
+                    type="image/webp"
+                    srcSet={getInfographicImageSrcSet(resource.image)}
+                    sizes={graphicSizes}
+                  />
+                  <Image
+                    src={resource.image}
+                    alt={resource.imageAlt}
+                    width={1086}
+                    height={1448}
+                    loading="eager"
+                    fetchPriority="high"
+                    unoptimized
+                  />
+                </picture>
               </div>
             </figure>
           </section>
