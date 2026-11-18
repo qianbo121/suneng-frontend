@@ -27,22 +27,11 @@ describe('unprefixed public route governance', () => {
     '/news?page=2',
     '/news?page=2&topic=heat-treatment&sort=latest',
     '/products?utm_source=baidu&utm_medium=organic&utm_campaign=procurement',
+    '/contact?from=search&q=mesh%20belt',
   ])('retains pagination, filters and acquisition parameters in %s', async (path) => {
     const response = await middleware(new NextRequest(`https://www.jssngyl.cn${path}`));
     expect(response.status).toBe(308);
     expect(response.headers.get('Location')).toBe(`https://www.jssngyl.cn/zh${path}`);
-  });
-
-  it.each([
-    ['/contact', '/zh/about#contact'],
-    ['/contact/', '/zh/about#contact'],
-    ['/contact?from=search&q=mesh%20belt', '/zh/about?from=search&q=mesh+belt#contact'],
-    ['/contact?product=box-furnace&tag=a&tag=b', '/zh/about?product=box-furnace&tag=a&tag=b#contact-inquiry-form-fields'],
-  ])('sends %s straight to the corresponding contact section', async (path, target) => {
-    const origin = 'https://www.jssngyl.cn';
-    const response = await middleware(new NextRequest(origin + path));
-    expect(response.status).toBe(308);
-    expect(response.headers.get('Location')).toBe(origin + target);
   });
 
   it('preserves unrelated fixed permanent redirects', () => {

@@ -177,6 +177,16 @@ describe('public legacy entry redirects', () => {
   const fallback = readFileSync(new URL('nginx.conf', root), 'utf8');
   const expectedHosts = publicHosts.map(([, name]) => name);
 
+  it('passes the unprefixed contact entry to the existing contact handler with the original query', () => {
+    for (const config of [nginx, fallback]) {
+      const handlers = serverBlocks(config).filter((block) => block.includes('location = /contact {'));
+      expect(handlers).toHaveLength(1);
+      for (const path of ['/contact', '/contact/']) {
+        expect(locationBody(handlers[0], path)).toBe('rewrite ^ /zh/contact last;');
+      }
+    }
+  });
+
   it.each([...newPublicEntries, ['/product/', catalogTarget] as const])('sends %s directly to its destination on the official site', (path, target) => {
     for (const [config, names] of [[nginx, expectedHosts], [fallback, ['jssngyl.cn www.jssngyl.cn']]] as const) {
       const blocks = serverBlocks(config).filter((block) => block.includes('location = ' + path + ' {'));
@@ -306,6 +316,7 @@ describe('verified original-PHP product redirects', () => {
     // Compare the historical ledger independently of the later, separately tested
     // exact /about redirects and rejection of unmapped detail requests.
     baseline = baseline
+      .replace('    # Reuse the frontend\'s locale-aware contact redirect without a client-side hop.\n    location = /contact {\n      rewrite ^ /zh/contact last;\n    }\n\n    location = /contact/ {\n      rewrite ^ /zh/contact last;\n    }\n\n', '')
       .replaceAll('    # Collapse the known legacy directory chain while preserving query parameters.\n    location = /about {\n      return 301 https://www.jssngyl.cn/zh/about$is_args$args;\n    }\n\n    location = /about/ {\n      return 301 https://www.jssngyl.cn/zh/about$is_args$args;\n    }\n\n', '')
       .replace('map $arg_id $legacy_product_path {\n    default "";', 'map $arg_id $legacy_product_path {\n    default /zh/products;')
       .replace('map $arg_id $legacy_news_path {\n    default "";', 'map $arg_id $legacy_news_path {\n    default /zh/news;')

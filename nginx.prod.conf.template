@@ -1060,6 +1060,15 @@ http {
     }
 
     # Exact historical entry pages keep their equivalent destination.
+    # Reuse the frontend's locale-aware contact redirect without a client-side hop.
+    location = /contact {
+      rewrite ^ /zh/contact last;
+    }
+
+    location = /contact/ {
+      rewrite ^ /zh/contact last;
+    }
+
     location = /contact/show.php {
       return 301 "/zh/about#contact";
     }
