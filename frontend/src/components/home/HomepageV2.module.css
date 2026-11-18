@@ -48,6 +48,12 @@
   margin-inline: auto;
 }
 
+@media (min-width: 1280px) {
+  .page > .formSection:global([data-page-form-width='wide']) {
+    --page-form-width: min(var(--site-wide-width), calc(100% - 224px));
+  }
+}
+
 .section {
   padding-block: var(--home-section-space, 48px);
 }

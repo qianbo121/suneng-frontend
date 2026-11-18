@@ -10,6 +10,12 @@
   margin-inline: auto;
 }
 
+@media (min-width: 1280px) {
+  .container {
+    width: min(var(--site-wide-width), calc(100% - 224px));
+  }
+}
+
 .heading {
   display: flex;
   align-items: center;
@@ -73,6 +79,38 @@
 .allArticlesLink:focus-visible {
   outline: 2px solid var(--home-blue, #0c4dcc);
   outline-offset: 3px;
+}
+
+.recoveryStatus {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding-block: 24px 12px;
+  color: var(--home-copy, #516176);
+}
+
+.recoverySpinner {
+  width: 20px;
+  height: 20px;
+  flex: none;
+  animation: resource-loading 1s linear infinite;
+}
+
+.recoveryActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 24px;
+}
+
+.recoveryActions button {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+}
+
+@keyframes resource-loading {
+  to { transform: rotate(360deg); }
 }
 
 .audienceTabs {
@@ -525,6 +563,10 @@
   }
 
   .articleGrid {
+    animation: none;
+  }
+
+  .recoverySpinner {
     animation: none;
   }
 }
