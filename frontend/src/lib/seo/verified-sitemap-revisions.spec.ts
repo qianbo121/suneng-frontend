@@ -179,7 +179,7 @@ const acceptedGroups = [
     '/zh/products/detail/multi-furnace-quench-cell',
     '/zh/about',
   ] },
-  { date: '2026-11-19', source: '24d65bbad4536f349e3dfde556fbad72d937f22e', paths: [
+  { date: '2026-11-19', source: '835a996b94205ef1b405e88ba280ade014cb9ff7', paths: [
     '/zh/products/detail/shovel-furnace',
   ] },
 ];
