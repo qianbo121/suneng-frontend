@@ -328,7 +328,7 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
   }
 
   return (
-    <div className="bg-white text-[#202020]">
+    <div className="bg-white text-[#202020]" data-furnace-detail-page>
       <JsonLd
         id={`product-jsonld-${product.slug}`}
         data={getProductDetailJsonLd(
