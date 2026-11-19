@@ -1,0 +1,16 @@
+@media screen and (min-width: 1280px) {
+  .englishToolbarClearance :global(.site-footer__contact) {
+    /* Existing 40px edge + 72px inset clears the 72px rail by 16px. */
+    padding-inline-end: 72px;
+  }
+
+  .englishToolbarClearance .legalContent {
+    padding-inline-end: 112px;
+    flex-wrap: wrap;
+    row-gap: 8px;
+  }
+
+  .englishToolbarClearance .legalContent > * {
+    flex-shrink: 0;
+  }
+}

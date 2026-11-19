@@ -1,5 +1,23 @@
 import { expect, test } from '@playwright/test';
 
+test('English desktop logo stays inside its link and clear of Home at 1280px', async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 900 });
+  await page.goto('/en/products/detail/fastener-quench-temper-line');
+  const header = page.locator('.site-header__desktop-bar');
+  const brand = header.locator('.site-header__desktop-logo-link');
+  const logo = brand.locator('img');
+  const home = header.getByRole('link', { name: 'Home', exact: true });
+  await expect(logo).toBeVisible();
+  await expect(home).toBeVisible();
+  await page.evaluate(() => document.fonts.ready);
+
+  const logoRight = await logo.evaluate(image => image.getBoundingClientRect().right);
+  const brandRight = await brand.evaluate(link => link.getBoundingClientRect().right);
+  const homeLeft = await home.evaluate(link => link.getBoundingClientRect().left);
+  expect(logoRight).toBeLessThanOrEqual(brandRight + 0.5);
+  expect(logoRight).toBeLessThan(homeLeft);
+});
+
 for (const width of [1440, 1280, 390]) {
   for (const route of ['/en', '/en/products', '/en/service/furnace-renovation-overhaul']) {
     test(`${route} keeps English text inside its containers at ${width}px`, async ({ page }, testInfo) => {
