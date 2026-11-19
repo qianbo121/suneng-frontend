@@ -1,4 +1,5 @@
 import { additionalFurnaces, getAdditionalFurnace } from '@/lib/additional-furnaces';
+import { shovelHeroImage, shovelSearchSummary } from '@/lib/shovel-furnace-configurations';
 import { AdditionalFurnaceDetailPage } from '@/components/products/AdditionalFurnaceDetailPage';
 import type { Metadata } from 'next';
 import Image from 'next/image';
@@ -129,10 +130,11 @@ export async function generateMetadata({ params }: ProductDetailPageProps): Prom
   const { locale, slug } = await params;
   const currentLocale = (locale === 'en' ? 'en' : 'zh') as Locale;
   const addition = getAdditionalFurnace(slug);
+  const isChineseShovelFurnace = currentLocale === 'zh' && slug === 'shovel-furnace';
   if (addition) return buildMetadata({
-    title: currentLocale === 'zh' ? `${addition.name}｜结构与选型` : addition.nameEn,
-    description: currentLocale === 'zh' ? addition.summary : addition.summaryEn,
-    path: `/${currentLocale}/products/detail/${slug}`, pageKey: 'product-detail', image: addition.image,
+    title: isChineseShovelFurnace ? '叉车炉厂家｜长棒料淬火与管件固溶' : (currentLocale === 'zh' ? `${addition.name}｜结构与选型` : addition.nameEn),
+    description: isChineseShovelFurnace ? shovelSearchSummary : currentLocale === 'zh' ? addition.summary : addition.summaryEn,
+    path: `/${currentLocale}/products/detail/${slug}`, pageKey: 'product-detail', image: isChineseShovelFurnace ? shovelHeroImage : addition.image,
     alternateLocales: {
       'zh-CN': `/zh/products/detail/${slug}`,
       'en-US': `/en/products/detail/${slug}`,

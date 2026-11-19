@@ -602,6 +602,9 @@ export function ProductionLineDetailPage({ content, locale = 'zh' }: { content: 
             ))}
           </div>
           <aside className={styles.related} aria-label={t('相关内容', 'Related resources')}>
+            {!en && content.pageId === 'multi-furnace-quench-cell' && (
+              <div><h3>多炉装卸</h3><Link href="/zh/products/detail/shovel-furnace#shared-car">查看铜线退火多炉共用叉料车配置<HiArrowRight aria-hidden="true" /></Link></div>
+            )}
             {s.faq.relatedGroups.map((group) => ({
               ...group,
               links: group.links.filter((item) => {

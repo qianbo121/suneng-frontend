@@ -52,6 +52,40 @@
   margin-top: 14px;
 }
 
+.agreementTable {
+  width: 100%;
+  border-collapse: collapse;
+  color: var(--pit-copy);
+  font-size: 15px;
+  line-height: 1.65;
+  text-align: left;
+}
+
+.agreementTable th, .agreementTable td {
+  padding: 12px 14px;
+  border: 1px solid #d8e1e9;
+  vertical-align: top;
+}
+
+.agreementTable thead { background: #edf3f8; }
+.agreementTable th { color: var(--pit-ink); font-weight: 650; }
+.agreementTable thead th:nth-child(1) { width: 14%; }
+.agreementTable thead th:nth-child(2) { width: 26%; }
+.agreementTable thead th:nth-child(3) { width: 15%; }
+.agreementTable thead th:nth-child(4) { width: 24%; }
+.agreementTable strong { color: var(--pit-ink); }
+.agreementTable tr[id] { scroll-margin-top: calc(var(--header-height, 88px) + 66px); }
+
+@media (max-width: 760px) {
+  .agreementTable, .agreementTable tbody, .agreementTable tbody tr { display: block; }
+  .agreementTable thead { position: absolute; clip-path: inset(50%); width: 1px; height: 1px; overflow: hidden; }
+  .agreementTable tbody tr { margin-bottom: 12px; border: 1px solid #d8e1e9; }
+  .agreementTable tbody th { display: block; background: #edf3f8; }
+  .agreementTable tbody th, .agreementTable td { border: 0; padding: 9px 12px; }
+  .agreementTable td { display: block; border-top: 1px solid #d8e1e9; }
+  .agreementTable td::before { content: attr(data-label); display: block; font-weight: 650; color: var(--pit-ink); }
+}
+
 .configuration {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -144,6 +178,47 @@
 
 .anchorTarget {
   scroll-margin-top: calc(var(--header-height, 88px) + 66px);
+}
+
+.transferDiagram {
+  width: 100%;
+  max-width: 680px;
+  margin: 20px 0;
+}
+
+.transferDiagram img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 1px solid var(--pit-border);
+  border-radius: 5px;
+}
+
+.transferDiagram figcaption {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 4px 16px;
+  padding-top: 6px;
+  color: var(--pit-copy);
+  font-size: 14px;
+}
+
+.transferDiagram a {
+  padding-block: 4px;
+  color: var(--pit-blue);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.transferDiagram a:hover {
+  color: var(--pit-ink);
+}
+
+.transferDiagram a:focus-visible {
+  outline: 2px solid var(--pit-blue);
+  outline-offset: 2px;
 }
 
 .subheading {

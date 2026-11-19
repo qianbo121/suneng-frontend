@@ -10,7 +10,8 @@ import { InquiryContactOptions } from '@/components/lead/InquiryContactOptions';
 import { getStaticProductBySlug } from '@/constants/static-products';
 import type { additionalFurnaces } from '@/lib/additional-furnaces';
 import { additionalFurnaceSelection } from '@/lib/additional-furnace-selection';
-import { additionalFurnaceDetailContent } from '@/lib/additional-furnace-detail-content';
+import { additionalFurnaceDetailContent, shovelPriorityWorkpieces } from '@/lib/additional-furnace-detail-content';
+import { shovelConfigurations, shovelDiagram, shovelHeroImage, shovelLoadingImage, shovelSearchSummary } from '@/lib/shovel-furnace-configurations';
 import { additionalFurnaceStructures } from '@/lib/additional-furnace-structure';
 import type { Locale } from '@/types/site';
 import { FurnaceCutawayDiagram } from './FurnaceCutawayDiagram';
@@ -57,12 +58,23 @@ export function AdditionalFurnaceDetailPage({
   locale: Locale;
 }) {
   const en = locale === 'en';
+  const showShovelConfigurations = furnace.id === 'shovel-furnace' && locale === 'zh';
   const name = en ? furnace.nameEn : furnace.name;
   const copy = additionalFurnaceDetailContent[furnace.id];
+  const workpieces = [
+    ...(showShovelConfigurations ? shovelPriorityWorkpieces : []),
+    ...copy.workpieces.map((item) => ({ title: item.title[locale], text: item.text[locale], caution: item.caution })),
+  ];
   const structure = additionalFurnaceStructures[furnace.id];
   const selection = additionalFurnaceSelection[furnace.id][locale];
   const inquiryLabel = en ? 'Request selection advice' : '提交工况，获取选型建议';
   const structureImage = structure.image ?? `/images/products/${furnace.id}/detail-v2-20260910/02-cutaway.webp`;
+  const cutaway = {
+    src: structureImage,
+    unoptimized: true,
+    alt: structure.alt[locale],
+    caption: en ? 'Internal cutaway' : '内部结构剖视图',
+  };
   const structureCallouts = structure.parts.map((part) => ({
     target: part.target,
     label: part.title[locale],
@@ -71,20 +83,21 @@ export function AdditionalFurnaceDetailPage({
   }));
   const gallery = [
     {
-      src: structure.sceneImage ?? `/images/products/${furnace.id}/detail-v2-20260910/01-scene.webp`,
+      src: showShovelConfigurations ? shovelHeroImage : structure.sceneImage ?? `/images/products/${furnace.id}/detail-v2-20260910/01-scene.webp`,
       unoptimized: true,
-      alt: en ? `${name} and its loading area` : `${name}及装卸区`,
-      caption: name,
+      alt: showShovelConfigurations ? '炉前水槽两侧的轨道通向炉口，叉料车在水槽上方托住一批长棒料。' : en ? `${name} and its loading area` : `${name}及装卸区`,
+      caption: showShovelConfigurations ? '叉车炉全景' : name,
     },
-    {
-      src: structureImage,
+    showShovelConfigurations ? {
+      src: shovelLoadingImage,
       unoptimized: true,
-      alt: structure.alt[locale],
-      caption: en ? 'Internal cutaway' : '内部结构剖视图',
-    },
+      alt: '铲齿在炉前水槽上方托住成束长棒料，后方可见炉口与炉内垫块。',
+      caption: '铲齿托料',
+    } : cutaway,
   ];
   const sectionNav = [
     ['overview', en ? 'Overview' : '产品概述'],
+    ...(showShovelConfigurations ? [['agreement-configurations', '协议配置']] : []),
     ['workpieces', en ? 'Workpieces' : '适用工件'],
     ['selection', en ? 'Configuration' : '方案维度'],
     ['boundaries', en ? 'Operating limits' : '能力边界'],
@@ -109,9 +122,18 @@ export function AdditionalFurnaceDetailPage({
         ...getProductDetailJsonLd({
           slug: furnace.id,
           name: copy.title[locale],
-          description: copy.description[locale],
+          description: showShovelConfigurations ? shovelSearchSummary : copy.description[locale],
           path: `/${locale}/products/detail/${furnace.id}`,
           image: gallery.map((item) => item.src),
+          additionalProperties: showShovelConfigurations ? shovelConfigurations.flatMap((row) => [
+            { name: `${row.process} · 加热配置`, value: `${row.equipment}${row.temperature}` },
+            { name: `${row.process} · 每炉装载`, value: row.load },
+            ...(row.transfer ? [
+              { name: `${row.process} · 协议约定的出炉至入水时间`, value: row.transfer },
+              { name: `${row.process} · 苏能计时口径`, value: row.timing },
+            ] : []),
+            { name: `${row.process} · 装卸与供货`, value: row.handling },
+          ]) : undefined,
         }, locale),
         getFaqJsonLd(copy.faqs.map((item) => ({
           question: item.question[locale],
@@ -175,11 +197,11 @@ export function AdditionalFurnaceDetailPage({
                 {inquiryLabel}
               </Button>
               <Button
-                href="#selection"
+                href={showShovelConfigurations ? '#agreement-configurations' : '#selection'}
                 variant="secondary"
                 className={`${shared.secondaryButton} ${styles.secondaryAction}`}
               >
-                {en ? 'View typical configuration' : '查看典型配置'}
+                {showShovelConfigurations ? '查看协议配置' : en ? 'View typical configuration' : '查看典型配置'}
               </Button>
             </div>
             <p className={shared.heroNotice}>
@@ -206,6 +228,29 @@ export function AdditionalFurnaceDetailPage({
       </nav>
       <div className={shared.contentArea}>
         <div className={shared.container}>
+          {showShovelConfigurations && (
+            <Section id="agreement-configurations" title="叉车炉协议配置"
+              description="两台快速入水炉分别约定了装载和入水时间。多炉共用叉料车的退火配置，选型时还要核对各室出料能否错开。">
+              <table className={styles.agreementTable} aria-label="各工件的加热配置、装载、转移与供货分工">
+                <thead><tr>
+                  <th scope="col">工件与工艺</th><th scope="col">炉体配置</th><th scope="col">每炉装载</th>
+                  <th scope="col">转移与计时</th><th scope="col">装卸与供货</th>
+                </tr></thead>
+                <tbody>{shovelConfigurations.map((row) => (
+                  <tr key={row.anchor} id={row.anchor}>
+                    <th scope="row">{row.process}</th>
+                    <td data-label="炉体配置">{row.equipment}<br />{row.temperature}</td>
+                    <td data-label="每炉装载">{row.load}</td>
+                    <td data-label="转移与计时">{row.transfer && <><strong>协议约定 {row.transfer}。</strong><br />苏能计时口径：</>}{row.timing}</td>
+                    <td data-label="装卸与供货">{row.handling}</td>
+                  </tr>
+                ))}</tbody>
+              </table>
+              <p className={styles.related}><a href="#principle">查看铲齿取料与整批入水过程</a></p>
+              <p className={styles.related}>铜线卷退火由叉料车在炉室和装卸台之间转运。多台炉还要共用淬火槽时，可对照
+                <Link href="/zh/products/detail/multi-furnace-quench-cell">多炉共用操作机淬火单元</Link>的工位和出料安排。</p>
+            </Section>
+          )}
           <Section
             id="workpieces"
             title={en ? 'Suitable workpieces and conditions to exclude' : '适用工件与需排除的工况'}
@@ -216,8 +261,8 @@ export function AdditionalFurnaceDetailPage({
             }
           >
             <div className={shared.workpieceCards}>
-              {copy.workpieces.map((item) => (
-                <article key={item.title.zh}>
+              {workpieces.map((item) => (
+                <article key={item.title}>
                   <span className={item.caution ? shared.statusCaution : shared.statusPositive}>
                     {item.caution
                       ? en
@@ -227,8 +272,8 @@ export function AdditionalFurnaceDetailPage({
                         ? 'Assess suitability'
                         : '可进入方案评估'}
                   </span>
-                  <h3>{item.title[locale]}</h3>
-                  <p>{item.text[locale]}</p>
+                  <h3>{item.title}</h3>
+                  <p>{item.text}</p>
                 </article>
               ))}
             </div>
@@ -324,7 +369,7 @@ export function AdditionalFurnaceDetailPage({
               <FurnaceCutawayDiagram
                 furnaceName={name}
                 image={{
-                  ...gallery[1],
+                  ...cutaway,
                   caption: structure.caption?.[locale] ?? (en
                     ? 'Internal cutaway · Electric heating shown; the final arrangement follows the agreed duty.'
                     : '内部结构剖视图 · 图示电加热配置，实际方案按工况确认。'),
@@ -364,6 +409,15 @@ export function AdditionalFurnaceDetailPage({
                 {en ? 'How the equipment works' : '设备如何工作'}
               </h3>
               <p>{en ? furnace.principleEn : furnace.principle}</p>
+              {showShovelConfigurations && (
+                <figure className={styles.transferDiagram}>
+                  <Image src={shovelDiagram} alt="俯视图中，6 根铲齿从每排 7 个垫块的间隙伸入。侧视图中，铲齿托着整批棒料退出炉口，再下降至全部浸没。" width={1500} height={1125} unoptimized />
+                  <figcaption>
+                    长棒料淬火的取料与入水过程
+                    <a href={shovelDiagram} target="_blank" rel="noreferrer" aria-label="查看取料与入水过程大图（新窗口）">查看大图</a>
+                  </figcaption>
+                </figure>
+              )}
               <ol className={styles.steps}>
                 {(en ? furnace.stepsEn : furnace.steps).map((step, i) => (
                   <li key={step}>
@@ -411,6 +465,7 @@ export function AdditionalFurnaceDetailPage({
                 </Link>
               ))}
             </div>
+            {showShovelConfigurations && <p className={styles.related}><Link href="/zh/about#patent-06-gas-heated-rapid-solution-aluminum-tooth-furnace">查看燃气加热快速固溶铲齿炉专利</Link></p>}
             {!en ? (
               <p className={styles.related}>
                 <Link href="/zh/service/installation-after-sales">了解安装与售后配合</Link>

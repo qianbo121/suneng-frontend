@@ -1,6 +1,7 @@
 import type { StaticProductDetail, ProductGeoEnhancement } from '../static-product-types';
 import { buildGeoSections, imagesBySlug } from './shared';
 import { siteSettings } from '@/mock/siteSettings';
+import { copperCoilFurnace, copperCoilHeating, copperCoilLoadArea, copperCoilSharing, copperCoilWorkingRange } from '@/lib/shovel-furnace-configurations';
 
 export const detail: StaticProductDetail = {
     series: '箱式炉系列',
@@ -134,7 +135,7 @@ export const detail: StaticProductDetail = {
       { title: '能源装备', text: '可用于部分中小型装备零件、配套件的退火、回火或去应力处理。' },
     ],
     scenarioCards: [
-      { title: '项目方案配置：铜合金线材室式电加热退火炉', text: '一套系统配置 4 个炉室，额定温度 700℃、使用温度 550–700℃，每室 200 kW、系统含辅助设备总功率不超过约 860 kW；装料有效区 Φ1710×1600 mm，采用氮气保护、顶部循环风机、S7-1200 PLC 和每室 2 区 PID。' },
+      { title: '项目方案配置：铜合金线材室式电加热退火炉', text: `${copperCoilSharing}，${copperCoilHeating}。额定温度 ${copperCoilFurnace.ratedC}℃，使用温度 ${copperCoilWorkingRange}，含辅助设备的系统总功率不超过约 860 kW。装料有效区 ${copperCoilLoadArea}，每炉最大 ${copperCoilFurnace.loadWithRackT} 吨，含料架。采用氮气保护、顶部循环风机和 S7-1200 PLC。` },
       { title: '中小型机械件回火', text: '围绕回火温度、装炉量、保温时间和记录要求确定炉膛、加热和控制配置。' },
       { title: '模具去应力处理', text: '重点确认模具尺寸、支撑方式、升降温曲线和温度均匀性要求。' },
       { title: '试制件热处理', text: '适合小批量材料验证或工艺摸索，需明确温度区间、记录方式和换产需求。' },
