@@ -24,6 +24,19 @@ export function reviewedNewsImage(value: string) {
 // to use the original, reviewed Chinese and English source.
 export function applyNewsDisplayRevisions(root: HTMLElement, slug?: string, locale?: string) {
   if (!slug || !locale) return;
+  if (locale === 'zh' && slug === 'gas-cylinder-curing-batch-oven-continuous-line-selection') {
+    const href = '/zh/products/detail/cylinder-curing-line#workpieces';
+    if (!root.querySelector(`a[href="${href}"]`)) {
+      const paragraph = root.ownerDocument.createElement('p');
+      const link = root.ownerDocument.createElement('a');
+      link.setAttribute('href', href);
+      link.textContent = '缠绕气瓶连续固化生产线适用哪些瓶型？';
+      paragraph.append(link);
+      const introduction = root.querySelector('p');
+      if (introduction) introduction.after(paragraph);
+      else root.prepend(paragraph);
+    }
+  }
   const terms = Object.entries(copy[slug]?.[locale] ?? {});
   function revise(text: string) {
     for (const [original, replacement] of terms) text = text.replaceAll(original, replacement);

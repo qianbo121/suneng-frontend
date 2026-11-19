@@ -318,6 +318,11 @@ export function ProductionLineDetailPage({ content, locale = 'zh' }: { content: 
             ))}
           </div>
           {s.workpieces.note && <p className={styles.note}>{s.workpieces.note}</p>}
+          {!en && content.pageId === 'cylinder-curing-line' && (
+            <Link href="/zh/news/gas-cylinder-curing-batch-oven-continuous-line-selection" className={styles.resourceLink}>
+              气瓶固化怎么选箱式炉或连续线？ <HiArrowRight aria-hidden="true" />
+            </Link>
+          )}
         </div>
       </section>
 
