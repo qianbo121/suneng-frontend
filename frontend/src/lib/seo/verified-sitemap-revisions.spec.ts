@@ -173,12 +173,14 @@ const acceptedGroups = [
     '/en/products/detail/elevator-hearth-furnace',
   ] },
   { date: '2026-11-19', source: '86a1664dc2ad2f98c1b968709fe2ca970385dd2a', paths: [
-    '/zh/products/detail/shovel-furnace',
     '/zh/products/detail/box-furnace',
     '/en/products/detail/box-furnace',
     '/zh/products/detail/trolley-furnace',
     '/zh/products/detail/multi-furnace-quench-cell',
     '/zh/about',
+  ] },
+  { date: '2026-11-19', source: '24d65bbad4536f349e3dfde556fbad72d937f22e', paths: [
+    '/zh/products/detail/shovel-furnace',
   ] },
 ];
 const releasedCases = [
