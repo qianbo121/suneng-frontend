@@ -143,10 +143,14 @@ jobs:
           # noble runner 走 /etc/apt/apt-mirrors.txt 这个镜像列表，
           # sources.list 里根本没有 azure 那个域名——只改 sources.list 是打空拳
           # （2026-08-19 实测：改完仍从 azure 拉 61MB 字体包，卡到 timeout 退 124）。
+          # 2026-11-19：官方源 HTTP 连接失败使字体和浏览器依赖安装连续超时。
+          # 仍取同一官方仓库和同一包，改用 HTTPS；不改变字体、浏览器或验收门槛。
           if [ -f /etc/apt/apt-mirrors.txt ]; then
-            echo 'http://archive.ubuntu.com/ubuntu/' | sudo tee /etc/apt/apt-mirrors.txt >/dev/null
+            echo 'https://archive.ubuntu.com/ubuntu/' | sudo tee /etc/apt/apt-mirrors.txt >/dev/null
           fi
-          sudo sed -i 's|http://azure.archive.ubuntu.com/ubuntu|http://archive.ubuntu.com/ubuntu|g' \
+          sudo sed -i \
+            -e 's|http://azure.archive.ubuntu.com/ubuntu|https://archive.ubuntu.com/ubuntu|g' \
+            -e 's|http://archive.ubuntu.com/ubuntu|https://archive.ubuntu.com/ubuntu|g' \
             /etc/apt/sources.list /etc/apt/sources.list.d/*.sources 2>/dev/null || true
           for i in 1 2 3; do
             sudo timeout 120 apt-get update -qq && break
