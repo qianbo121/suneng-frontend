@@ -159,13 +159,25 @@ jobs:
           done
           # 三次都失败也继续往下走：索引陈旧仍可能装得上，
           # 真装不上会在下一条 install 上明确报错，不会被悄悄放过。
-          # 字体包 61MB，官方源可能不快；给足时间并重试，最后一次失败才算真失败。
-          for i in 1 2 3; do
-            sudo timeout 300 apt-get install -y --no-install-recommends fonts-noto-cjk && break
-            [ "$i" = 3 ] && { echo "字体安装三次均失败。"; exit 1; }
-            echo "apt-get install 第 $i 次失败，重试"
-            sleep 10
-          done
+          # The font identity stays pinned to the authenticated apt metadata.
+          # If apt's HTTPS transport fails, download that exact official package,
+          # verify its SHA256, then install it. Any missing evidence fails closed.
+          if ! sudo timeout 300 apt-get install -y --no-install-recommends fonts-noto-cjk; then
+            font_version=$(apt-cache policy fonts-noto-cjk | awk '/Candidate:/ {print $2; exit}') || exit 1
+            test -n "$font_version" && test "$font_version" != '(none)' || exit 1
+            font_metadata=$(apt-cache show "fonts-noto-cjk=$font_version") || exit 1
+            font_filename=$(printf '%s\n' "$font_metadata" | awk '/^Filename:/ {print $2; exit}') || exit 1
+            font_sha256=$(printf '%s\n' "$font_metadata" | awk '/^SHA256:/ {print $2; exit}') || exit 1
+            [[ "$font_filename" =~ ^pool/main/f/fonts-noto-cjk/fonts-noto-cjk_[A-Za-z0-9.+~_%-]+_all\.deb$ ]] || exit 1
+            [[ "$font_sha256" =~ ^[0-9a-f]{64}$ ]] || exit 1
+            font_package="$RUNNER_TEMP/verified-fonts-noto-cjk.deb"
+            curl --fail --show-error --location --proto '=https' --proto-redir '=https' \
+              --connect-timeout 20 --max-time 180 --retry 2 --retry-delay 5 \
+              "https://archive.ubuntu.com/ubuntu/$font_filename" --output "$font_package" || exit 1
+            printf '%s  %s\n' "$font_sha256" "$font_package" | sha256sum -c - || exit 1
+            sudo dpkg --install "$font_package" || exit 1
+            test "$(dpkg-query --show --showformat='${Version}' fonts-noto-cjk)" = "$font_version" || exit 1
+          fi
           fc-cache -f
       - name: Verify pre-merge page result
         id: reuse
