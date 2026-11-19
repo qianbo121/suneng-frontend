@@ -17,6 +17,13 @@
   width: var(--site-page-width);
   margin-inline: auto;
 }
+
+@media screen and (min-width: 1280px) {
+  .container {
+    /* Match product pages: 24px edge + 72px contact rail + 16px clearance. */
+    width: min(var(--site-page-width), calc(100% - 224px));
+  }
+}
 .breadcrumb {
   margin-bottom: 44px;
 }

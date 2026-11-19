@@ -10,6 +10,7 @@ import { siteSettings } from '@/mock/siteSettings';
 import { Locale } from '@/types/site';
 
 import { FooterDouyinCode } from './FooterDouyinCode';
+import styles from './Footer.module.css';
 
 type FooterProps = {
   locale: string;
@@ -254,7 +255,7 @@ export function Footer({ locale }: FooterProps) {
 
   return (
     <footer
-      className="site-footer relative overflow-hidden text-[var(--footer-text-color)]"
+      className={`site-footer relative overflow-hidden text-[var(--footer-text-color)] ${currentLocale === 'en' ? styles.englishToolbarClearance : ''}`}
       style={varStyle({
         backgroundColor: colors.background,
         '--footer-text-color': colors.text,
@@ -305,7 +306,7 @@ export function Footer({ locale }: FooterProps) {
       {/* 底部备案条：版权与备案独立放置，桌面左右对齐，移动端居中堆叠。 */}
       <div className="site-footer__legal relative before:absolute before:inset-x-0 before:top-0 before:h-px before:scale-y-50 before:bg-[var(--footer-divider-color)]">
         <div
-          className={`${FOOTER_TOKENS.fontClass} mx-auto flex w-full flex-col items-center justify-center gap-2 px-6 text-center text-[var(--home-font-label-size,13px)] leading-[var(--home-font-label-line,20px)] text-[var(--footer-muted-color)] xl:flex-row xl:gap-[26px] lg:px-10`}
+          className={`${FOOTER_TOKENS.fontClass} ${styles.legalContent} mx-auto flex w-full flex-col items-center justify-center gap-2 px-6 text-center text-[var(--home-font-label-size,13px)] leading-[var(--home-font-label-line,20px)] text-[var(--footer-muted-color)] xl:flex-row xl:gap-[26px] lg:px-10`}
           style={{
             maxWidth: px(desktop.containerWidth),
             paddingTop: desktop.bottomPaddingY,

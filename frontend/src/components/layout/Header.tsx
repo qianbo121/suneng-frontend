@@ -280,7 +280,7 @@ export function Header({ locale, localeSwitchReload = false }: HeaderProps) {
                     width={275}
                     height={48}
                     priority
-                    className="max-w-none object-contain object-left object-center"
+                    className={`object-contain object-left object-center ${currentLocale === 'en' ? 'max-w-full' : 'max-w-none'}`}
                     style={{ width: '275px', height: 'auto' }}
                   />
                 </Link>
