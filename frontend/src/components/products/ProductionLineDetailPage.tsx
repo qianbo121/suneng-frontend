@@ -171,6 +171,7 @@ export function ProductionLineDetailPage({ content, locale = 'zh' }: { content: 
   const t = (zh: string, english: string) => en ? english : zh;
   const processData = en ? getEnglishLineProcess(content.pageId) : { model: productionLineProcessMaps[content.pageId], steps: getLineProcessSteps(content) };
   const s = content.sections;
+  const englishFastenerLine = en && content.pageId === 'fastener-quench-temper-line';
   const showFastenerAgreement = !en && content.pageId === 'fastener-quench-temper-line';
   const sectionNavigation = content.sectionNavigation.filter(item => TECHNICAL_CONTENT_PUBLISHED || item.href !== '#project');
   if (showFastenerAgreement) {
@@ -371,6 +372,25 @@ export function ProductionLineDetailPage({ content, locale = 'zh' }: { content: 
         <div className={styles.container}>
           <Heading title={s.configuration.title} subtitle={s.configuration.subtitle} />
           <ComparisonTable locale={locale} data={s.configuration.table} id="configuration-table" />
+          {englishFastenerLine && (
+            <div className={styles.configurationInputs}>
+              <h3>Mesh belt throughput in Suneng’s technical agreements</h3>
+              <dl className={styles.requirements}>
+                <div>
+                  <dt><Link href="/en/case/roller-belt-stage-output" className={styles.resourceLink}>400 mm effective belt width</Link></dt>
+                  <dd>With a 3,200 mm heated length, the agreement lists approximately 150 kg/h for quenching and 150 kg/h for tempering. The same parts pass through both furnaces in sequence. Adding the two rates would count each part twice.</dd>
+                </div>
+                <div>
+                  <dt><Link href="/en/case/overseas-oil-quench" className={styles.resourceLink}>500 mm belt, overseas oil-quench line</Link></dt>
+                  <dd>The agreement specifies approximately 300 kg/h for oil quenching, washing and tempering together. It covers small and medium-sized metal parts under a protective atmosphere, with a 4,700 mm heated length.</dd>
+                </div>
+                <div>
+                  <dt><Link href="/en/case/standard-parts-capacity" className={styles.resourceLink}>1,000 mm belt, U-bolts and standard parts</Link></dt>
+                  <dd>With a 12,000 mm heated length, the equipment specification sets an upper limit of approximately 1,500 kg/h for quenching and tempering. To quote sustained output for your bolts, Suneng needs the steel grade, part dimensions and weight, belt loading and required heat treatment.</dd>
+                </div>
+              </dl>
+            </div>
+          )}
           {s.configuration.inputs && (
             <div className={styles.configurationInputs}>
               <h3>{t('选型沟通要确认的工况', 'Operating conditions to confirm')}</h3>
@@ -478,7 +498,30 @@ export function ProductionLineDetailPage({ content, locale = 'zh' }: { content: 
                   </div>
                 ))}
               </dl>
-              <p className={styles.note}>{s['delivery-scope'].note}</p>
+              {englishFastenerLine ? (
+                <div className={styles.configurationInputs}>
+                  <h3>Who does what at an overseas plant?</h3>
+                  <dl className={styles.scopeList}>
+                    <div>
+                      <dt>Suneng’s scope</dt>
+                      <dd>For the 500 mm overseas line, Suneng agreed to supply the feeder, quenching furnace, quench oil tank, oil-draining rack, washer, tempering furnace and electrical control system. The agreed process flow also shows a post-tempering cooling tank. Suneng’s scope included transport to a Chinese port, machine-side wiring, installation guidance, commissioning and operator training.</dd>
+                    </div>
+                    <div>
+                      <dt>Buyer’s scope</dt>
+                      <dd>The buyer was responsible for unloading and lifting the equipment, wiring from the transformer’s low-voltage cabinet to the equipment control cabinet, and the main valves on the protective-atmosphere gas supply. The buyer also provided water, drainage and exhaust connections, foundations, embedded tracks, cable trenches, maintenance pits and facilities outside the control room.</dd>
+                    </div>
+                    <div>
+                      <dt>Your quotation</dt>
+                      <dd>Give Suneng the destination, site voltage and frequency, and a representative production load. Agree in writing which work will be supported remotely or on site, who provides labour and pays travel costs, and how factory checks and site trials will be accepted.</dd>
+                    </div>
+                  </dl>
+                  <Link href="/en/service/installation-after-sales#overseas-delivery" className={styles.resourceLink}>
+                    Overseas installation and delivery checklist <HiArrowRight aria-hidden="true" />
+                  </Link>
+                </div>
+              ) : (
+                <p className={styles.note}>{s['delivery-scope'].note}</p>
+              )}
             </div>
           </div>
         </div>
