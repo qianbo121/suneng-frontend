@@ -327,6 +327,14 @@
 }
 
 @media (max-width: 640px) {
+  .page[data-additional-furnace-page='shovel-furnace'][data-locale='zh'] [data-furnace-cutaway-marker] circle {
+    r: 2.9px;
+  }
+
+  .page[data-additional-furnace-page='shovel-furnace'][data-locale='zh'] [data-furnace-cutaway-marker] text {
+    font-size: 3.7px;
+  }
+
   .boundaryGrid,
   .relatedEquipment {
     grid-template-columns: 1fr;

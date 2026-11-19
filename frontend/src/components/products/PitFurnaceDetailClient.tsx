@@ -22,10 +22,12 @@ export function PitFurnaceGallery({
   images,
   galleryLabel = '井式炉图片选择',
   imageButtonPrefix = '查看图片',
+  linkThumbnails = false,
 }: {
   images: PitFurnaceGalleryImage[];
   galleryLabel?: string;
   imageButtonPrefix?: string;
+  linkThumbnails?: boolean;
 }) {
   const [activeIndex, setActiveIndex] = useState(0);
   const activeImage = images[activeIndex] ?? images[0];
@@ -50,27 +52,43 @@ export function PitFurnaceGallery({
       </figure>
 
       <div className={styles.galleryThumbs} aria-label={galleryLabel}>
-        {images.map((image, index) => (
-          <button
-            key={image.src}
-            type="button"
-            aria-label={`${imageButtonPrefix}：${image.caption}`}
-            aria-pressed={activeIndex === index}
-            data-pit-gallery-thumb={index + 1}
-            data-furnace-gallery-thumb={index + 1}
-            className={`${styles.galleryThumb} ${activeIndex === index ? styles.galleryThumbActive : ''}`}
-            onClick={() => setActiveIndex(index)}
-          >
+        {images.map((image, index) => {
+          const selected = activeIndex === index;
+          const attributes = {
+            'aria-label': `${imageButtonPrefix}：${image.caption}`,
+            'data-pit-gallery-thumb': index + 1,
+            'data-furnace-gallery-thumb': index + 1,
+            className: `${styles.galleryThumb} ${selected ? styles.galleryThumbActive : ''}`,
+          };
+          const thumbnail = (
             <Image
               src={image.src}
               unoptimized={image.unoptimized}
-              alt=""
+              alt={linkThumbnails ? image.alt : ''}
               fill
               sizes="(min-width: 1024px) 160px, 24vw"
               className={styles.galleryThumbImage}
             />
-          </button>
-        ))}
+          );
+          if (linkThumbnails) {
+            return (
+              <a key={image.src} href={image.src} {...attributes} aria-current={selected || undefined}
+                onClick={(event) => {
+                  if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+                  event.preventDefault();
+                  setActiveIndex(index);
+                }}>
+                {thumbnail}
+              </a>
+            );
+          }
+          return (
+            <button key={image.src} type="button" {...attributes} aria-pressed={selected}
+              onClick={() => setActiveIndex(index)}>
+              {thumbnail}
+            </button>
+          );
+        })}
       </div>
     </div>
   );
@@ -79,11 +97,32 @@ export function PitFurnaceGallery({
 export function PitFurnaceFaq({
   items,
   idPrefix = 'pit-furnace',
+  nativeDisclosure = false,
 }: {
   items: PitFurnaceFaqItem[];
   idPrefix?: string;
+  nativeDisclosure?: boolean;
 }) {
   const [openIndex, setOpenIndex] = useState(0);
+
+  if (nativeDisclosure) {
+    return (
+      <div className={styles.faqList}>
+        {items.map((item, index) => (
+          <details key={item.question} className={styles.faqItem} name={idPrefix} open={index === 0}>
+            <summary className={styles.faqSummary}>
+              <h3 className={styles.faqButton}>
+                <span className={styles.faqNumber} aria-hidden="true">{index + 1}</span>
+                <span>{item.question}</span>
+                <HiChevronDown aria-hidden="true" className={styles.faqChevron} />
+              </h3>
+            </summary>
+            <p className={styles.faqAnswer}>{item.answer}</p>
+          </details>
+        ))}
+      </div>
+    );
+  }
 
   return (
     <div className={styles.faqList}>

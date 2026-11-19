@@ -85,7 +85,7 @@ export const additionalFurnaceDetailContent: Record<string, DetailContent> = {
         ],
       },
       {
-        title: c('取料机构', 'Handler'),
+        title: c('轨道叉料车', 'Handler'),
         items: [
           c('铲齿长度与间距', 'Fork length and spacing'),
           c('起升与行走行程', 'Lift and travel'),
@@ -104,7 +104,7 @@ export const additionalFurnaceDetailContent: Record<string, DetailContent> = {
         title: c('动作配合', 'Coordination'),
         items: [
           c('炉门位置确认', 'Door-position confirmation'),
-          c('取料机联锁', 'Handler interlocks'),
+          c('叉料车联锁', 'Handler interlocks'),
           c('人员与设备隔离', 'Personnel separation'),
         ],
       },
@@ -150,12 +150,12 @@ export const additionalFurnaceDetailContent: Record<string, DetailContent> = {
       [
         c('炉门与净开口', 'Door and clear opening'),
         c(
-          '核对炉门提升位置、炉口净空、门框密封及取料机进入条件。',
+          '核对炉门提升位置、炉口净空、门框密封及叉料车进入条件。',
           'Check the lifted door position, clear opening, frame sealing and handler access.',
         ),
       ],
       [
-        c('铲齿与轨道取料机', 'Forks and rail handler'),
+        c('铲齿与轨道叉料车', 'Forks and rail handler'),
         c(
           '按工件重心和支点核对铲齿、起升机构、行走轨道及定位。',
           'Assess forks, lift, rails and positioning against the load centre of gravity and support points.',
@@ -173,7 +173,7 @@ export const additionalFurnaceDetailContent: Record<string, DetailContent> = {
       {
         question: c('叉车炉和台车炉怎么区分？', 'How does it differ from a trolley furnace?'),
         answer: c(
-          '本页叉车炉由独立取料机托起工件并进出固定炉膛；台车炉由承料台车带着工件进出。选择时重点比较工件支承、装卸路线和工艺转移要求。',
+          '叉车炉的炉膛固定，轨道叉料车用铲齿托起工件，沿轨道装炉、出炉。台车炉由承料台车带着工件进出炉膛。选择时重点比较工件支承、装卸路线和工艺转移要求。',
           'Here, a separate handler lifts the load into and out of a fixed chamber. A trolley furnace carries the load on its moving hearth. Compare support, loading routes and transfer requirements.',
         ),
       },

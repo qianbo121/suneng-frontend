@@ -309,6 +309,17 @@ it('includes all four additional furnaces in both languages with reciprocal addr
   }
 });
 
+it('lists the reviewed gallery for the Chinese fork furnace and the existing English image', async () => {
+  const entries = await buildSitemap();
+  const images = (locale: string) => entries.find((entry) =>
+    entry.url.endsWith(`/${locale}/products/detail/shovel-furnace`))?.images?.map((url) => new URL(url).pathname);
+  expect(images('zh')).toEqual([
+    '/images/products/shovel-furnace/fork-quench-series/01-overview.webp',
+    '/images/products/shovel-furnace/fork-quench-series/02-loading.webp',
+  ]);
+  expect(images('en')).toEqual(['/images/home/product-center/additional-20260909/shovel-furnace.webp']);
+});
+
 it('emits reciprocal English news addresses only for complete translations with the English edit date', async () => {
   const entries = await buildSitemap();
   const en = entries.find((entry) => entry.url.endsWith('/en/news/translated-news'));

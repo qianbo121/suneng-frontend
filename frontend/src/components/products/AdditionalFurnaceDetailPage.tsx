@@ -13,9 +13,10 @@ import { additionalFurnaceSelection } from '@/lib/additional-furnace-selection';
 import { additionalFurnaceDetailContent, shovelPriorityWorkpieces } from '@/lib/additional-furnace-detail-content';
 import {
   shovelConfigurations, shovelDiagram, shovelEquipmentFeatures, shovelHeroImage,
-  shovelLoadingImage, shovelSearchSummary, shovelSupplyNotes, shovelTableColumns,
+  shovelLoadingImage, shovelPagePath, shovelSearchSummary, shovelSupplyNotes, shovelTableColumns,
 } from '@/lib/shovel-furnace-configurations';
-import { additionalFurnaceStructures } from '@/lib/additional-furnace-structure';
+import { getVerifiedSitemapLastModified } from '@/lib/seo/verified-sitemap-revisions';
+import { additionalFurnaceStructures, shovelQuenchCutaway } from '@/lib/additional-furnace-structure';
 import type { Locale } from '@/types/site';
 import { FurnaceCutawayDiagram } from './FurnaceCutawayDiagram';
 import { PitFurnaceFaq, PitFurnaceGallery } from './PitFurnaceDetailClient';
@@ -73,17 +74,20 @@ export function AdditionalFurnaceDetailPage({
   const inquiryLabel = en ? 'Request selection advice' : '提交工况，获取选型建议';
   const structureImage = structure.image ?? `/images/products/${furnace.id}/detail-v2-20260910/02-cutaway.webp`;
   const cutaway = {
-    src: structureImage,
+    src: showShovelConfigurations ? shovelQuenchCutaway.image : structureImage,
     unoptimized: true,
     alt: structure.alt[locale],
     caption: en ? 'Internal cutaway' : '内部结构剖视图',
   };
-  const structureCallouts = structure.parts.map((part) => ({
-    target: part.target,
-    label: part.title[locale],
-    position: part.position,
-    line: { ...calloutLineOrigins[part.position], x2: part.x, y2: part.y },
-  }));
+  const structureCallouts = structure.parts.map((part) => {
+    const point = (showShovelConfigurations && shovelQuenchCutaway.points.get(part.target)) || part;
+    return {
+      target: part.target,
+      label: part.title[locale],
+      position: part.position,
+      line: { ...calloutLineOrigins[part.position], x2: point.x, y2: point.y },
+    };
+  });
   const gallery = [
     {
       src: showShovelConfigurations ? shovelHeroImage : structure.sceneImage ?? `/images/products/${furnace.id}/detail-v2-20260910/01-scene.webp`,
@@ -125,6 +129,8 @@ export function AdditionalFurnaceDetailPage({
         ...getProductDetailJsonLd({
           slug: furnace.id,
           name: copy.title[locale],
+          breadcrumbName: showShovelConfigurations ? name : undefined,
+          dateModified: showShovelConfigurations ? getVerifiedSitemapLastModified(shovelPagePath) : undefined,
           description: showShovelConfigurations ? shovelSearchSummary : copy.description[locale],
           path: `/${locale}/products/detail/${furnace.id}`,
           image: gallery.map((item) => item.src),
@@ -159,6 +165,7 @@ export function AdditionalFurnaceDetailPage({
         <section id="overview" className={`${shared.heroSection} ${styles.overview}`}>
           <PitFurnaceGallery
             images={gallery}
+            linkThumbnails={showShovelConfigurations}
             galleryLabel={en ? `${name} image selection` : `${name}图片选择`}
             imageButtonPrefix={en ? 'View image' : '查看图片'}
           />
@@ -394,9 +401,11 @@ export function AdditionalFurnaceDetailPage({
             <div className={shared.structureFeature}>
               <FurnaceCutawayDiagram
                 furnaceName={name}
+                markerLabels={showShovelConfigurations}
+                showLoadingStatus={!showShovelConfigurations}
                 image={{
                   ...cutaway,
-                  caption: structure.caption?.[locale] ?? (en
+                  caption: showShovelConfigurations ? shovelQuenchCutaway.caption : structure.caption?.[locale] ?? (en
                     ? 'Internal cutaway · Electric heating shown; the final arrangement follows the agreed duty.'
                     : '内部结构剖视图 · 图示电加热配置，实际方案按工况确认。'),
                 }}
@@ -459,6 +468,7 @@ export function AdditionalFurnaceDetailPage({
             title={en ? 'Questions from purchasing and engineering teams' : '采购与技术常问的问题'}
           >
             <PitFurnaceFaq
+              nativeDisclosure={showShovelConfigurations}
               idPrefix={`additional-${furnace.id}-${locale}`}
               items={copy.faqs.map((item) => ({
                 question: item.question[locale],

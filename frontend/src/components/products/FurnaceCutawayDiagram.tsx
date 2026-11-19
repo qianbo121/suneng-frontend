@@ -37,6 +37,7 @@ type FurnaceCutawayDiagramProps = {
   callouts: readonly FurnaceCutawayCallout[];
   pitCompatibility?: boolean;
   markerLabels?: boolean;
+  showLoadingStatus?: boolean;
 };
 
 const positionClasses: Record<FurnaceCutawayLabelPosition, string> = {
@@ -53,11 +54,13 @@ function CutawayImage({
   furnaceName,
   locale,
   pitCompatibility = false,
+  showLoadingStatus,
 }: {
   image: FurnaceCutawayDiagramProps['image'];
   furnaceName: string;
   locale: 'zh' | 'en';
   pitCompatibility?: boolean;
+  showLoadingStatus: boolean;
 }) {
   const [attempt, setAttempt] = useState(0);
   const [status, setStatus] = useState<'loading' | 'ready' | 'error'>('loading');
@@ -79,7 +82,7 @@ function CutawayImage({
         onLoad={() => setStatus('ready')}
         onError={() => setStatus('error')}
       />
-      {status !== 'ready' && (
+      {(status === 'error' || (status === 'loading' && showLoadingStatus)) && (
         <div className={styles.cutawayImageStatus} role="status" aria-live="polite">
           <span>{status === 'error'
             ? locale === 'en' ? 'The diagram did not load. Retry or view the original below.' : '结构图暂未加载，可重试或查看下方原图。'
@@ -117,12 +120,13 @@ export function FurnaceCutawayDiagram({
   callouts,
   pitCompatibility = false,
   markerLabels = false,
+  showLoadingStatus = true,
 }: FurnaceCutawayDiagramProps) {
   if (markerLabels) {
     return (
       <figure className={styles.cutawayFigure}>
         <div className={styles.cutawayMarkerStage} data-furnace-cutaway-stage={furnaceName}>
-          <CutawayImage image={image} furnaceName={furnaceName} locale={locale} />
+          <CutawayImage image={image} furnaceName={furnaceName} locale={locale} showLoadingStatus={showLoadingStatus} />
           <svg
             className={styles.cutawayMarkerOverlay}
             viewBox="0 0 100 75"
@@ -177,7 +181,7 @@ export function FurnaceCutawayDiagram({
         {...(pitCompatibility ? { 'data-pit-cutaway-stage': true } : {})}
       >
         <div className={styles.cutawayImageFrame}>
-          <CutawayImage image={image} furnaceName={furnaceName} locale={locale} pitCompatibility={pitCompatibility} />
+          <CutawayImage image={image} furnaceName={furnaceName} locale={locale} pitCompatibility={pitCompatibility} showLoadingStatus={showLoadingStatus} />
         </div>
 
         <svg
