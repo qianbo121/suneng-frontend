@@ -11,7 +11,10 @@ import { getStaticProductBySlug } from '@/constants/static-products';
 import type { additionalFurnaces } from '@/lib/additional-furnaces';
 import { additionalFurnaceSelection } from '@/lib/additional-furnace-selection';
 import { additionalFurnaceDetailContent, shovelPriorityWorkpieces } from '@/lib/additional-furnace-detail-content';
-import { shovelConfigurations, shovelDiagram, shovelHeroImage, shovelLoadingImage, shovelSearchSummary } from '@/lib/shovel-furnace-configurations';
+import {
+  shovelConfigurations, shovelDiagram, shovelEquipmentFeatures, shovelHeroImage,
+  shovelLoadingImage, shovelSearchSummary, shovelSupplyNotes, shovelTableColumns,
+} from '@/lib/shovel-furnace-configurations';
 import { additionalFurnaceStructures } from '@/lib/additional-furnace-structure';
 import type { Locale } from '@/types/site';
 import { FurnaceCutawayDiagram } from './FurnaceCutawayDiagram';
@@ -97,7 +100,7 @@ export function AdditionalFurnaceDetailPage({
   ];
   const sectionNav = [
     ['overview', en ? 'Overview' : '产品概述'],
-    ...(showShovelConfigurations ? [['agreement-configurations', '协议配置']] : []),
+    ...(showShovelConfigurations ? [['agreement-configurations', '协议配置'], ['equipment-features', '设备特点']] : []),
     ['workpieces', en ? 'Workpieces' : '适用工件'],
     ['selection', en ? 'Configuration' : '方案维度'],
     ['boundaries', en ? 'Operating limits' : '能力边界'],
@@ -126,13 +129,12 @@ export function AdditionalFurnaceDetailPage({
           path: `/${locale}/products/detail/${furnace.id}`,
           image: gallery.map((item) => item.src),
           additionalProperties: showShovelConfigurations ? shovelConfigurations.flatMap((row) => [
-            { name: `${row.process} · 加热配置`, value: `${row.equipment}${row.temperature}` },
-            { name: `${row.process} · 每炉装载`, value: row.load },
-            ...(row.transfer ? [
-              { name: `${row.process} · 协议约定的出炉至入水时间`, value: row.transfer },
-              { name: `${row.process} · 苏能计时口径`, value: row.timing },
-            ] : []),
-            { name: `${row.process} · 装卸与供货`, value: row.handling },
+            ...shovelTableColumns.filter(({ key }) => row[key]).map(({ key, label }) => ({
+              name: `${row.model} · ${label}`, value: row[key],
+            })),
+            { name: `${row.model} · 尺寸、装载与温度说明`, value: row.conditions },
+            ...(row.timing ? [{ name: `${row.model} · 苏能计时口径`, value: row.timing }] : []),
+            { name: `${row.model} · 供货分工`, value: row.supply },
           ]) : undefined,
         }, locale),
         getFaqJsonLd(copy.faqs.map((item) => ({
@@ -229,27 +231,51 @@ export function AdditionalFurnaceDetailPage({
       <div className={shared.contentArea}>
         <div className={shared.container}>
           {showShovelConfigurations && (
-            <Section id="agreement-configurations" title="叉车炉协议配置"
-              description="两台快速入水炉分别约定了装载和入水时间。多炉共用叉料车的退火配置，选型时还要核对各室出料能否错开。">
-              <table className={styles.agreementTable} aria-label="各工件的加热配置、装载、转移与供货分工">
-                <thead><tr>
-                  <th scope="col">工件与工艺</th><th scope="col">炉体配置</th><th scope="col">每炉装载</th>
-                  <th scope="col">转移与计时</th><th scope="col">装卸与供货</th>
-                </tr></thead>
-                <tbody>{shovelConfigurations.map((row) => (
-                  <tr key={row.anchor} id={row.anchor}>
-                    <th scope="row">{row.process}</th>
-                    <td data-label="炉体配置">{row.equipment}<br />{row.temperature}</td>
-                    <td data-label="每炉装载">{row.load}</td>
-                    <td data-label="转移与计时">{row.transfer && <><strong>协议约定 {row.transfer}。</strong><br />苏能计时口径：</>}{row.timing}</td>
-                    <td data-label="装卸与供货">{row.handling}</td>
-                  </tr>
-                ))}</tbody>
-              </table>
-              <p className={styles.related}><a href="#principle">查看铲齿取料与整批入水过程</a></p>
-              <p className={styles.related}>铜线卷退火由叉料车在炉室和装卸台之间转运。多台炉还要共用淬火槽时，可对照
-                <Link href="/zh/products/detail/multi-furnace-quench-cell">多炉共用操作机淬火单元</Link>的工位和出料安排。</p>
-            </Section>
+            <>
+              <Section id="agreement-configurations" title="叉车炉协议配置"
+                description="下表列出三套配置的协议参数。两台快速入水炉分别列出出炉至入水时间，铜线退火配置按单室列出功率、温区和装载。">
+                <table className={styles.agreementTable} aria-label="叉车炉各型号与配置的协议参数">
+                  <thead><tr>
+                    <th scope="col">型号 / 配置名称</th>
+                    {shovelTableColumns.map(({ key, label }) => <th key={key} scope="col">{label}</th>)}
+                  </tr></thead>
+                  <tbody>{shovelConfigurations.map((row) => (
+                    <tr key={row.anchor} id={row.anchor}>
+                      <th scope="row">{row.model}</th>
+                      {shovelTableColumns.map(({ key, label }) => (
+                        <td key={key} data-label={label}>{row[key] || '不适用'}</td>
+                      ))}
+                    </tr>
+                  ))}</tbody>
+                </table>
+                <div className={styles.agreementNotes}>
+                  <h3>尺寸、装载与温度</h3>
+                  {shovelConfigurations.map((row) => (
+                    <p key={row.anchor}><strong>{row.model}</strong>　{row.conditions}</p>
+                  ))}
+                  <h3>苏能计时口径</h3>
+                  {shovelConfigurations.filter((row) => row.timing).map((row) => (
+                    <p key={row.anchor}><strong>{row.model}</strong>　{row.timing}</p>
+                  ))}
+                  <h3>供货分工</h3>
+                  {shovelSupplyNotes.map(({ label, text }) => (
+                    <p key={label}><strong>{label}</strong>　{text}</p>
+                  ))}
+                </div>
+                <p className={styles.related}><a href="#principle">查看铲齿取料与整批入水过程</a></p>
+                <p className={styles.agreementLink}>多台炉共用淬火槽时，可查看<Link href="/zh/products/detail/multi-furnace-quench-cell">多炉共用操作机淬火单元</Link>的工位和出料安排。</p>
+              </Section>
+              <Section id="equipment-features" title="设备特点">
+                {shovelEquipmentFeatures.map((group) => (
+                  <div key={group.title} className={styles.featureGroup}>
+                    <h3>{group.title}</h3>
+                    <dl>{group.items.map(({ name, text }) => (
+                      <div key={name}><dt>{name}</dt><dd>{text}</dd></div>
+                    ))}</dl>
+                  </div>
+                ))}
+              </Section>
+            </>
           )}
           <Section
             id="workpieces"
