@@ -62,6 +62,14 @@
   margin-inline: auto;
 }
 
+@media (min-width: 1280px) {
+  main:has(> [data-heat-treatment-line], > [data-furnace-detail-page], > [data-pit-furnace-page]) {
+    /* Each side leaves 24px for the edge, 72px for the contact bar and a 16px gap. */
+    --product-detail-clear-width: calc(100% - 224px);
+    --site-page-width: min(var(--site-page-max), var(--product-detail-clear-width));
+  }
+}
+
 .site-section {
   padding-block: var(--site-section-inset);
 }

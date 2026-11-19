@@ -541,7 +541,7 @@
     );
   }
   .section .content {
-    width: calc(100% - 64px);
+    width: var(--product-detail-clear-width, calc(100% - 64px));
     max-width: 1440px;
   }
   .explorer[data-process-explorer='track-shoe-press-quench-line'] {
