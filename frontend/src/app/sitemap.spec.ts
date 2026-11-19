@@ -155,7 +155,7 @@ describe('sitemap freshness signals', () => {
     const entries = await buildSitemap();
     const byUrl = new Map(entries.map((entry) => [entry.url, entry]));
     for (const [path, day] of [
-      ['/zh', '2026-11-11'], ['/zh/about', '2026-11-16'],
+      ['/zh', '2026-11-11'], ['/zh/about', '2026-11-19'],
       ['/zh/products/detail/pusher-furnace', '2026-11-09'],
       ['/zh/products/detail/copper-wire-annealing-line', '2026-11-14'],
     ]) {
