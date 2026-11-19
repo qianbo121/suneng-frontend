@@ -11,6 +11,7 @@ import { MeshBeltRelated } from './MeshBeltRelated';
 import { BeltAgreementTable, BeltFeatureOverview } from './MeshBeltAgreement';
 import { BuyerSelectionGuide } from './BuyerSelectionGuide';
 import { productBuyerGuide } from '@/lib/buyer-selection-guides';
+import { bearingRingGuides } from '@/lib/bearing-ring-guides';
 import { getTrolleyProcurementResources } from '@/lib/trolley-procurement-resources';
 import { getCaseArticle } from '@/lib/cases/server';
 import { HomepageLeadForm } from '@/components/home/HomepageLeadForm';
@@ -56,6 +57,8 @@ function Panel({ children, className = '' }: { children: ReactNode; className?: 
 export function IndustryFurnaceDetailPage({ slug, locale = 'zh' }: { slug: IndustryFurnaceSlug; locale?: Locale }) {
   const t = (text: string) => corePageText(text, locale);
   const showMeshBeltAgreement = locale === 'zh' && slug === 'mesh-belt-furnace';
+  const ringGuide = locale === 'zh' && (slug === 'roller-hearth-furnace' || slug === 'mesh-belt-furnace')
+    ? bearingRingGuides[slug] : undefined;
   const navItems = showMeshBeltAgreement
     ? [sectionNav[0], ['agreement-capacity', '协议参数'] as const, ['equipment-features', '设备特点'] as const, ...sectionNav.slice(1)]
     : localizeCoreValue(sectionNav, locale);
@@ -236,6 +239,26 @@ export function IndustryFurnaceDetailPage({ slug, locale = 'zh' }: { slug: Indus
             </Panel>
             <p className={styles.warningBar}>{config.workpieceWarning}</p>
           </section>
+
+          {ringGuide && (
+            <section id="bearing-ring-loading" className={styles.section}>
+              <SectionHeader title={ringGuide.title} description={ringGuide.intro} />
+              <div className={styles.workpieceCards}>
+                {ringGuide.checks.map(([title, ...paragraphs]) => (
+                  <article key={title}>
+                    <h3>{title}</h3>
+                    {paragraphs.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
+                  </article>
+                ))}
+              </div>
+              <div className="mt-4 flex flex-wrap gap-x-5 gap-y-2 font-medium text-blue-800 underline underline-offset-4">
+                <Link href={ringGuide.href}>{ringGuide.linkText}</Link>
+                {slug === 'mesh-belt-furnace' && (
+                  <Link href="/zh/case/overseas-austemper">查看苏能等温淬火线协议约定的工件和产量</Link>
+                )}
+              </div>
+            </section>
+          )}
 
           <section id="selection" className={styles.section}>
             <SectionHeader
