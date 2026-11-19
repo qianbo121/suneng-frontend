@@ -364,6 +364,11 @@ export function ProductionLineDetailPage({ content, locale = 'zh' }: { content: 
               ))}
             </div>
             <ComparisonTable locale={locale} data={s.comparison.table} id="scheme-table" />
+            {!en && content.pageId === 'fastener-quench-temper-line' && (
+              <Link className={styles.resourceLink} href="/zh/news/bolt-mesh-belt-quench-temper-capability#bolt-furnace-selection">
+                10.9 级螺栓对脱碳和力学性能要求严，网带炉和多用炉怎么选？ <HiArrowRight aria-hidden="true" />
+              </Link>
+            )}
           </div>
         </section>
       )}
