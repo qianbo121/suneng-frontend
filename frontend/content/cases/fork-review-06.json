@@ -1,0 +1,51 @@
+{
+  "id": "fork-review-06",
+  "slug": "fork-copper-coil-annealing-proposal",
+  "title": "铜合金线卷退火叉车炉，每炉含架限重 7.5 吨",
+  "summary": "苏能为铜合金线卷退火编制的叉车炉方案规定，线卷连同料架每炉最多装 7.5 吨。炉膛有效尺寸为长 2.4 米、宽 2.5 米、高 1.8 米。每炉能装几卷，还要看空架重量、单卷重量和料架上的位置。",
+  "body": "fork-copper-coil-annealing-proposal.md",
+  "publicationStatus": "published",
+  "contentType": "proposal",
+  "projectStatus": "proposal",
+  "workpiece": [
+    "铜合金线卷"
+  ],
+  "materials": [],
+  "process": [
+    "退火"
+  ],
+  "equipment": [
+    "叉车炉"
+  ],
+  "need": [],
+  "tags": [
+    "叉料车",
+    "铜合金线卷",
+    "退火"
+  ],
+  "facts": [
+    {
+      "label": "方案最大装载 · 含料架",
+      "value": "7.5",
+      "unit": "吨/炉"
+    },
+    {
+      "label": "方案升温时间",
+      "value": "3",
+      "unit": "小时"
+    },
+    {
+      "label": "方案保温时间",
+      "value": "5",
+      "unit": "小时"
+    }
+  ],
+  "sourceSummary": "资料依据　2023 年室式电加热退火炉技术方案第二至四节。对照设备见 2020 年室式炉采购合同及苏能对装载组成的说明。",
+  "cover": {
+    "src": "/fork-case-review/workpieces/upright-copper-alloy-wire-coil.webp",
+    "alt": "直立的铜合金线卷",
+    "fit": "contain"
+  },
+  "listTitle": "铜线卷退火，含架限重 7.5 吨",
+  "listSummary": "方案规定每炉含架限重 7.5 吨。先扣空架重量，再看实际卷径和料架能排几卷。"
+}

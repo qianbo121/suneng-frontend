@@ -1,0 +1,52 @@
+{
+  "id": "fork-review-02",
+  "slug": "fork-pipe-flange-solution-treatment",
+  "title": "不锈钢管件与法兰固溶，整筐 7 吨、50 秒内入水",
+  "summary": "苏能这台电加热叉车炉用于不锈钢管件和法兰固溶，加热功率 420 千瓦。工件连筐共 7 吨，保温后由叉料车整筐送入水槽，从工件开始外移到全部浸没要求不超过 50 秒。",
+  "body": "fork-pipe-flange-solution-treatment.md",
+  "publicationStatus": "published",
+  "contentType": "experience",
+  "projectStatus": "contracted",
+  "workpiece": [
+    "管件",
+    "法兰"
+  ],
+  "materials": [],
+  "process": [
+    "固溶"
+  ],
+  "equipment": [
+    "叉车炉"
+  ],
+  "need": [],
+  "tags": [
+    "叉料车",
+    "管件、法兰",
+    "固溶"
+  ],
+  "facts": [
+    {
+      "label": "工件与料筐合重",
+      "value": "7",
+      "unit": "吨"
+    },
+    {
+      "label": "加热功率",
+      "value": "420",
+      "unit": "千瓦"
+    },
+    {
+      "label": "整筐出炉至入水",
+      "value": "≤50",
+      "unit": "秒"
+    }
+  ],
+  "sourceSummary": "资料依据　2017 年快速固溶箱式电阻炉购销合同及技术协议。装载重量和转移计时按苏能公开产品资料的说明。",
+  "cover": {
+    "src": "/fork-case-review/workpieces/pipe-elbows-and-flanges.webp",
+    "alt": "不锈钢弯头与法兰",
+    "fit": "contain"
+  },
+  "listTitle": "管件整筐固溶，50 秒内入水",
+  "listSummary": "420 千瓦箱式电阻炉加热管件和法兰。工件连筐共 7 吨，整筐出炉到全部浸没要求不超过 50 秒。"
+}

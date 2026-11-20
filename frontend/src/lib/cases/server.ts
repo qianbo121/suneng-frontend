@@ -1,4 +1,5 @@
 import 'server-only';
+import { chineseCaseIntro } from './chinese-intros';
 import { caseCatalogCover } from './catalog-entry';
 import fs from 'node:fs';
 import path from 'node:path';
@@ -16,7 +17,8 @@ const slugPattern = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 
 export function readCaseDirectory(
   directory: string,
-  readBody = (filename: string) => prepareCaseBody(fs.readFileSync(filename, 'utf8')),
+  readBody = (filename: string, sectionTitles?: Readonly<Record<string, string>>) =>
+    prepareCaseBody(fs.readFileSync(filename, 'utf8'), 'zh', sectionTitles),
   approved?: ReadonlySet<string>,
   localReview: ReadonlySet<string> = new Set(),
 ) {
@@ -56,11 +58,13 @@ export function readCaseDirectory(
       for (const date of [raw.sourceDate, raw.datePublished, raw.dateModified])
         if (date && !Number.isFinite(Date.parse(date))) throw new Error(`案例日期无效：${file}`);
       // Explicit public field projection: arbitrary internal properties never reach the search or client.
+      const intro = chineseCaseIntro(raw.slug);
+      const cover = caseCatalogCover(raw.slug, 'zh', raw.cover);
       const meta: CaseMeta = {
         id: raw.id,
         slug: raw.slug,
-        title: raw.title,
-        summary: raw.summary,
+        title: intro?.title ?? raw.title,
+        summary: intro?.summary ?? raw.summary,
         body: raw.body,
         contentType: raw.contentType,
         publicationStatus: raw.publicationStatus,
@@ -86,14 +90,14 @@ export function readCaseDirectory(
         participation: raw.participation,
         sourceSummary: raw.sourceSummary,
         coverTitle: raw.coverTitle,
-        listTitle: raw.listTitle,
-        listSummary: raw.listSummary,
-        cover: raw.cover
+        listTitle: intro?.listTitle ?? raw.listTitle,
+        listSummary: intro?.listSummary ?? raw.listSummary,
+        cover: cover
           ? {
-              src: raw.cover.src,
-              alt: raw.cover.alt,
-              caption: raw.cover.caption,
-              fit: raw.cover.fit,
+              src: cover.src,
+              alt: cover.alt,
+              caption: raw.cover?.src === cover.src ? raw.cover.caption : '',
+              fit: cover.fit,
             }
           : undefined,
         author: raw.author,
@@ -103,13 +107,16 @@ export function readCaseDirectory(
           ?.filter(({ href }) => /^\/zh\//.test(href))
           .map(({ title, href }) => ({ title, href })),
       };
-      const body = readBody(path.join(directory, meta.body));
+      const body = readBody(path.join(directory, meta.body), intro?.sectionTitles);
       const searchText = [
+        raw.title,
+        raw.summary,
         meta.title,
         meta.listTitle,
         meta.summary,
         meta.listSummary,
         meta.publicCustomerName,
+        intro?.sourceLabel,
         ...meta.workpiece,
         ...meta.materials,
         ...meta.process,
@@ -133,16 +140,16 @@ export function readCaseDirectory(
 // take effect immediately. Only reuse the sanitized strings/TOC for an unchanged
 // body; never retain DOM nodes or accumulate previous versions of a file.
 export function createCaseDirectoryReader(directory: string, approved?: ReadonlySet<string>, localReview: ReadonlySet<string> = new Set()) {
-  const bodies = new Map<string, { markdown: string; body: ReturnType<typeof prepareCaseBody> }>();
+  const bodies = new Map<string, { markdown: string; sectionTitles?: Readonly<Record<string, string>>; body: ReturnType<typeof prepareCaseBody> }>();
   return () => {
     const used = new Set<string>();
-    const records = readCaseDirectory(directory, (filename) => {
+    const records = readCaseDirectory(directory, (filename, sectionTitles) => {
       used.add(filename);
       const markdown = fs.readFileSync(filename, 'utf8');
       const previous = bodies.get(filename);
-      if (previous?.markdown === markdown) return previous.body;
-      const body = prepareCaseBody(markdown);
-      bodies.set(filename, { markdown, body });
+      if (previous?.markdown === markdown && previous.sectionTitles === sectionTitles) return previous.body;
+      const body = prepareCaseBody(markdown, 'zh', sectionTitles);
+      bodies.set(filename, { markdown, sectionTitles, body });
       return body;
     }, approved, localReview);
     for (const filename of bodies.keys()) {
@@ -173,7 +180,7 @@ export function getCaseResults(query: CaseQuery) {
     .map(toCaseCard)
     .map((card) => ({
       ...card,
-      cover: caseCatalogCover(card.slug, 'zh') ?? card.cover,
+      listStatus: chineseCaseIntro(card.slug)?.sourceLabel,
       summary: caseListPresentation(card).summary,
     }));
   return paginateCases(cards, query);

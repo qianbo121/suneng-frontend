@@ -41,11 +41,11 @@ function expectPublishedBody(rendered: string, original: string, slug: string) {
 }
 
 describe('case resources preserve the published content', () => {
-  it('renders the approved materials byline and its two coauthors on the Henan case', () => {
+  it('retains both coauthors in the steel strip article metadata without a visible byline', () => {
     const html = renderToStaticMarkup(createElement(CaseArticlePage, {
       slug: 'stainless-strip-annealing-supply-scope', searchParams: {},
     }));
-    expect(html).toContain('作者：<span translate="no">苏能工业炉工程技术团队&amp;唐荔</span>');
+    expect(html).not.toContain('class="case-byline"');
     const [article] = JSON.parse(html.match(/<script[^>]+id="case-article-jsonld"[^>]*>(.*?)<\/script>/s)![1]);
     expect(article.author).toEqual([
       { '@type': 'Organization', '@id': 'https://www.jssngyl.cn/#engineering-team', name: '苏能工业炉工程技术团队', parentOrganization: { '@id': 'https://www.jssngyl.cn/#organization' } },
@@ -77,7 +77,13 @@ describe('case resources preserve the published content', () => {
         html.indexOf('class="case-article-cover"'),
       );
       expect(html, item.slug).not.toContain('class="case-article-dates"');
-      expectPublishedBody(html, item.html, item.slug);
+      if (item.slug === 'stainless-strip-annealing-supply-scope') {
+        const lead = renderToStaticMarkup(createElement('p', null, item.summary));
+        expect(html).toContain(`<div class="case-reading-intro">${lead}</div>`);
+        expectPublishedBody(html, item.html.replace(/^\s*<p>[\s\S]*?<\/p>/, ''), item.slug);
+      } else {
+        expectPublishedBody(html, item.html, item.slug);
+      }
     }
   });
 
@@ -87,7 +93,7 @@ describe('case resources preserve the published content', () => {
 
   it("keeps the approved Henan page free of links to withdrawn guides and solutions", () => {
     const html = renderToStaticMarkup(createElement(CaseArticlePage, { slug: 'stainless-strip-annealing-supply-scope', searchParams: {} }));
-    expect(html).toContain('不锈钢带卷、连续退火炉及冷却段');
+    expect(html).toContain('alt="不锈钢带卷"');
     expect(html).not.toContain('非项目现场照片');
     for (const [, href] of html.matchAll(/href="([^"]+)"/g)) expect(isWithdrawnTechnicalPath(href), href).toBe(false);
     expect(html).toContain('href="/zh/products/detail/annealing-solution-line"');

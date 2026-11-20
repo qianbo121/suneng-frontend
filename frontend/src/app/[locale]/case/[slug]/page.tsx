@@ -7,7 +7,9 @@ import { readAgreement } from '@/lib/cases/agreement/reader';
 import { agreementSearchContent } from '@/lib/cases/agreement/search';
 import { AgreementPage } from '@/components/agreement-cases/AgreementPage';
 import { caseSearchMetadata } from '@/lib/cases/search-metadata';
-import type { SearchParams } from '@/lib/cases/query';
+import { safeCaseReturn, type SearchParams } from '@/lib/cases/query';
+import { ForkReview } from '@/components/fork-case-review/ForkReview';
+import { isForkReview } from '@/components/fork-case-review/review-source';
 
 type Props = {
   params: Promise<{ locale: string; slug: string }>;
@@ -21,6 +23,7 @@ export function generateStaticParams() {
 }
 export async function generateMetadata({ params }: Props) {
   const { locale, slug } = await params;
+  if (isForkReview(locale, slug)) return caseArticleMetadata(slug);
   const agreement = readAgreement(locale, slug);
   if (agreement) return caseSearchMetadata(agreementSearchContent(agreement), true);
   if (locale === 'en') return englishCaseMetadata(slug);
@@ -29,6 +32,10 @@ export async function generateMetadata({ params }: Props) {
 }
 export default async function Page({ params, searchParams }: Props) {
   const { locale, slug } = await params;
+  if (isForkReview(locale, slug)) {
+    const returnHref = safeCaseReturn((await searchParams).returnTo);
+    return <ForkReview key={slug} slug={slug} returnHref={returnHref} />;
+  }
   const agreement = readAgreement(locale, slug);
   if (agreement) return <AgreementPage data={agreement} />;
   if (locale === 'en') return <EnglishCaseArticle slug={slug} searchParams={await searchParams} />;

@@ -8,9 +8,9 @@ import s from './page.module.css';
 import { Breadcrumb } from '@/components/layout/Breadcrumb';
 import { JsonLd } from '@/components/JsonLd';
 import { caseSearchJsonLd } from '@/lib/cases/search-metadata';
+import { CaseSourceLine } from '@/components/case-studies/CaseSourceLine';
 import { fastenerCaseSearchContent } from '@/lib/cases/fastener-case-search';
 
-const assets = '/images/cases/fastener-mesh-belt';
 const features = [
   ['一台炉，两种工艺', '同一台炉可分别用于螺丝钉淬火和渗碳。本项目渗碳时，工件在炉内停留更久。'],
   ['小螺丝钉怎样防卡、防滑落？', '淬火炉网带采用双人字形紧密编织，减少工件卡挂。网带两侧做了折边，防止工件从两边滑落。'],
@@ -18,15 +18,15 @@ const features = [
 ];
 
 export function FastenerCase() {
-  return <article className={s.page}>
-    <header className={s.hero}>
-      <Image className={s.panorama} src={assets + '/line-panorama.webp'} alt={fastenerCaseSearchContent.imageAlt} fill sizes="(max-width: 720px) 100vw, 64vw" priority />
+  return <article data-project-case="" className={s.page}>
+    <header className={s.hero} data-cover="workpiece">
+      <Image className={s.panorama} src={fastenerCaseSearchContent.image} alt={fastenerCaseSearchContent.imageAlt} fill sizes="(max-width: 720px) 100vw, 56vw" priority />
       <div className={`site-page-container ${s.heroInner}`}><div className={s.copy}>
         <Breadcrumb locale="zh" tone="light" className={s.category}
-          items={[{ label: '项目案例', href: '/zh/case' }]} currentLabel={fastenerCaseSearchContent.title} />
+          items={[{ label: '项目案例', href: '/zh/case' }]} currentLabel="紧固件网带炉" />
         <h1>{fastenerCaseSearchContent.title}</h1>
-        <p className={s.summary}>2025 年，江苏苏能工业炉有限公司与一家紧固件企业签订技术协议，约定由苏能设计、制造一条网带炉热处理生产线。</p>
-        <p className={s.projectState}>已签技术协议</p>
+        <p className={s.summary}>{fastenerCaseSearchContent.description}</p>
+        <CaseSourceLine slug="fastener-mesh-belt-quenching-carburizing" className={s.projectState} />
       </div></div>
     </header>
     <div className={`site-page-container ${s.content}`}>

@@ -62,7 +62,7 @@ const nextConfig = {
   output: 'standalone',
   outputFileTracingRoot: path.join(__dirname, '..'),
   outputFileTracingIncludes: {
-    '/*': ['./content/cases/**/*', './content/cases-en/**/*'],
+    '/*': ['./content/cases/**/*', './content/cases-en/**/*', './content/fork-review/*.json'],
   },
   images: {
     dangerouslyAllowSVG: true,

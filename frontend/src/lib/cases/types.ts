@@ -57,7 +57,7 @@ export type CaseCardData = Pick<
   | 'participation'
   | 'sourceSummary'
   | 'coverTitle'
-> & { cover?: Pick<NonNullable<CaseMeta['cover']>, 'src' | 'alt' | 'fit'> };
+> & { listStatus?: string; cover?: Pick<NonNullable<CaseMeta['cover']>, 'src' | 'alt' | 'fit'> };
 export type CaseQuery = Record<CaseFilterKey, string> & {
   q: string;
   type: '' | CaseContentType;

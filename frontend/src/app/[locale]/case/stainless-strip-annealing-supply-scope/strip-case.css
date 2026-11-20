@@ -49,6 +49,13 @@
   display: block;
 }
 
+.strip-case .case-source-line {
+  margin-top: 17px;
+  color: #52667b;
+  font-size: 15px;
+  line-height: 1.6;
+}
+
 .strip-case .case-reading .case-byline {
   margin: 0 0 8px;
 }

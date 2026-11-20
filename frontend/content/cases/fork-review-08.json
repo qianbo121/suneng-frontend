@@ -1,0 +1,51 @@
+{
+  "id": "fork-review-08",
+  "slug": "fork-gas-fired-pipe-solution-furnace",
+  "title": "不锈钢管件燃气固溶炉，叉料车整批送入水槽",
+  "summary": "苏能这台不锈钢管件燃气固溶叉车炉用轨道式叉料车将管件连同料具整批送入水槽。本项目的固溶水槽由买方自备，料盘也由买方准备。",
+  "body": "fork-gas-fired-pipe-solution-furnace.md",
+  "publicationStatus": "published",
+  "contentType": "experience",
+  "projectStatus": "contracted",
+  "workpiece": [
+    "不锈钢管件"
+  ],
+  "materials": [],
+  "process": [
+    "固溶"
+  ],
+  "equipment": [
+    "叉车炉"
+  ],
+  "need": [],
+  "tags": [
+    "叉料车",
+    "不锈钢管件",
+    "固溶"
+  ],
+  "facts": [
+    {
+      "label": "额定使用温度",
+      "value": "1200",
+      "unit": "℃"
+    },
+    {
+      "label": "最高温度",
+      "value": "1250",
+      "unit": "℃"
+    },
+    {
+      "label": "燃气烧嘴",
+      "value": "8",
+      "unit": "套"
+    }
+  ],
+  "sourceSummary": "资料依据　2018 年箱式（燃气）快速固溶炉购销合同及配套技术资料。水槽分工见技术协议“项目设备内容”表，炉膛有效尺寸、装载量、温控及烧嘴配置见“主要技术参数”表。料盘供方另据苏能工程核对记录。",
+  "cover": {
+    "src": "/fork-case-review/workpieces/stainless-steel-pipe-fittings.webp",
+    "alt": "成批不锈钢管件",
+    "fit": "contain"
+  },
+  "listSummary": "炉内额定装载每炉 8 吨，不含工装垫铁。苏能供轨道式叉料车，本项目由买方准备水槽和料盘。",
+  "listTitle": "管件燃气固溶，叉料车整批入水"
+}

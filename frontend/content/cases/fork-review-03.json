@@ -1,0 +1,51 @@
+{
+  "id": "fork-review-03",
+  "slug": "fork-copper-wire-four-chamber-annealing",
+  "title": "铜合金线卷退火，四个炉室共用一台叉料车",
+  "summary": "苏能这套铜合金线卷退火叉车炉用一台叉料车给四个炉室装卸。四个炉室独立控温，装料台和卸料台各一台，每炉线卷连架最多 5.5 吨。",
+  "body": "fork-copper-wire-four-chamber-annealing.md",
+  "publicationStatus": "published",
+  "contentType": "experience",
+  "projectStatus": "contracted",
+  "workpiece": [
+    "铜合金线卷"
+  ],
+  "materials": [],
+  "process": [
+    "退火"
+  ],
+  "equipment": [
+    "叉车炉"
+  ],
+  "need": [],
+  "tags": [
+    "叉料车",
+    "铜合金线卷",
+    "退火"
+  ],
+  "facts": [
+    {
+      "label": "独立炉室",
+      "value": "4",
+      "unit": "个"
+    },
+    {
+      "label": "单室加热功率",
+      "value": "200",
+      "unit": "千瓦/室"
+    },
+    {
+      "label": "线卷与料架合重",
+      "value": "5.5",
+      "unit": "吨/炉"
+    }
+  ],
+  "sourceSummary": "资料依据　2020 年室式电加热退火炉采购合同及技术条款。装载重量按苏能公开产品资料的说明。",
+  "cover": {
+    "src": "/fork-case-review/workpieces/copper-alloy-wire-coil.webp",
+    "alt": "平放的铜合金线卷",
+    "fit": "contain"
+  },
+  "listTitle": "铜线卷四室退火，共用一台叉料车",
+  "listSummary": "一台叉料车往返装料台、四个炉室和卸料台。每室独立控温，每炉线卷和料架合计最多 5.5 吨。"
+}

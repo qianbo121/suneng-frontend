@@ -34,6 +34,14 @@ SCOPE = 'news-products-services-company-reviewed-cases'
 # Owner-approved public case pages. Must match frontend/src/lib/cases/public-case-allowlist.ts.
 APPROVED_CASES = {
     'zh': [
+        'fork-long-bar-batch-quench',
+        'fork-pipe-flange-solution-treatment',
+        'fork-copper-wire-four-chamber-annealing',
+        'fork-gas-pipe-fittings-trial-scope',
+        'fork-gas-furnaces-enclosed-cooling-boxes',
+        'fork-copper-coil-annealing-proposal',
+        'fork-alloy-bar-quenching-proposal',
+        'fork-gas-fired-pipe-solution-furnace',
         'bright-quench-design',
         'crankshaft-annual-output',
         'cylinder-liner-solution-aging',

@@ -1,0 +1,51 @@
+{
+  "id": "fork-review-04",
+  "slug": "fork-gas-pipe-fittings-trial-scope",
+  "title": "管件燃气固溶炉，安装后用买方管件试产 5 炉",
+  "summary": "苏能这台燃气固溶叉车炉安装调试后，协议要求用买方准备的不锈钢管件试生产 5 炉。买方还备料盘、吊具和垫铁，带料验收时核对温度曲线、燃气耗量和工件温差。",
+  "body": "fork-gas-pipe-fittings-trial-scope.md",
+  "publicationStatus": "published",
+  "contentType": "experience",
+  "projectStatus": "experience",
+  "workpiece": [
+    "不锈钢管件"
+  ],
+  "materials": [],
+  "process": [
+    "固溶"
+  ],
+  "equipment": [
+    "叉车炉"
+  ],
+  "need": [],
+  "tags": [
+    "叉料车",
+    "不锈钢管件",
+    "固溶"
+  ],
+  "facts": [
+    {
+      "label": "协议试生产炉数",
+      "value": "5",
+      "unit": "炉"
+    },
+    {
+      "label": "炉内装载",
+      "value": "1",
+      "unit": "吨/炉"
+    },
+    {
+      "label": "叉料车一次最大承载要求",
+      "value": "≥2",
+      "unit": "吨"
+    }
+  ],
+  "sourceSummary": "资料依据　2011 年箱式（燃气）快速固溶炉技术协议文件，第八节供货范围及预验收、安装、调试、培训与验收条款。",
+  "cover": {
+    "src": "/fork-case-review/workpieces/stainless-steel-elbow.webp",
+    "alt": "不锈钢管件弯头",
+    "fit": "contain"
+  },
+  "listTitle": "管件固溶炉安装后试产 5 炉",
+  "listSummary": "安装调试后，用买方准备的管件试生产 5 炉。买方还准备料盘、吊具和垫铁。"
+}

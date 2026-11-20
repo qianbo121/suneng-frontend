@@ -1,0 +1,51 @@
+{
+  "id": "fork-review-01",
+  "slug": "fork-long-bar-batch-quench",
+  "title": "长棒料叉车炉淬火，沿 6 米工作宽度横放棒料",
+  "summary": "苏能这台叉车炉沿炉门有 6 米工作宽度，长棒平行于炉门横放。叉料车从炉底支点之间托起整批棒料。按 5 吨工件核定，从工件开始移出炉膛到全部浸没，协议要求不超过 30 秒。",
+  "body": "fork-long-bar-batch-quench.md",
+  "publicationStatus": "published",
+  "contentType": "experience",
+  "projectStatus": "contracted",
+  "workpiece": [
+    "长棒料"
+  ],
+  "materials": [],
+  "process": [
+    "淬火"
+  ],
+  "equipment": [
+    "叉车炉"
+  ],
+  "need": [],
+  "tags": [
+    "叉料车",
+    "长棒料",
+    "淬火"
+  ],
+  "facts": [
+    {
+      "label": "炉内工作宽度",
+      "value": "6",
+      "unit": "米"
+    },
+    {
+      "label": "计时工件重量",
+      "value": "5",
+      "unit": "吨"
+    },
+    {
+      "label": "出炉至整批浸没",
+      "value": "≤30",
+      "unit": "秒"
+    }
+  ],
+  "sourceSummary": "资料依据　2023 年长棒料高温箱式铲齿炉合同及技术协议。装载重量和转移计时按苏能公开产品资料的说明。",
+  "cover": {
+    "src": "/fork-case-review/workpieces/long-round-bars.webp",
+    "alt": "平行横放的长圆棒料",
+    "fit": "contain"
+  },
+  "listTitle": "长棒料叉车炉，沿炉门横向装料",
+  "listSummary": "棒料沿 6 米工作宽度横放，叉料车一次托出整批。5 吨工件从开始出炉到全部浸没，要求不超过 30 秒。"
+}
