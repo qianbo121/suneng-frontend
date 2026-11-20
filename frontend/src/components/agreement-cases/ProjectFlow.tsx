@@ -4,8 +4,12 @@ import { useEffect, useId, useRef, useState, type CSSProperties } from 'react';
 import { FiCheck, FiChevronRight, FiGrid, FiMaximize, FiPause, FiPlay, FiZoomIn } from 'react-icons/fi';
 import type { ProjectView } from '@/lib/cases/agreement/reader';
 import s from './LineFlow.module.css';
+import { TrackedFilm, type TrackedProject } from './TrackedFilm';
 
-type Props = { steps: string[]; view: ProjectView; image: string; film?: string; english: boolean };
+type Props = { steps: string[]; english: boolean } & (
+  { view: ProjectView; image: string; film?: string; tracked?: never } |
+  { tracked: TrackedProject; view?: never; image?: never; film?: never }
+);
 
 // All cameras and the workpiece path are registered to the project's own full-line illustration.
 function detailFrame([x, y, width]: ProjectView['cameras'][number], ratio: number, sceneHeight: number) {
@@ -15,13 +19,15 @@ function detailFrame([x, y, width]: ProjectView['cameras'][number], ratio: numbe
   return [left, top, width, height];
 }
 
-export function ProjectFlow({ steps, view, image, film, english }: Props) {
+export function ProjectFlow({ steps, view, image, film, tracked, english }: Props) {
   const id = 'process-' + useId().replace(/[^a-zA-Z0-9_-]/g, '');
   const viewer = useRef<HTMLDivElement>(null);
   const video = useRef<HTMLVideoElement>(null);
   const [failed, setFailed] = useState(false);
-  const [selected, setSelected] = useState<number | null>(null);
+  const [selection, setSelection] = useState<{ index: number | null; moving: boolean }>({ index: null, moving: false });
+  const selected = selection.index;
   const [running, setRunning] = useState(false);
+  const [ready, setReady] = useState(false);
   const [visible, setVisible] = useState(false);
   const label = (zh: string, en: string) => english ? en : zh;
 
@@ -29,6 +35,7 @@ export function ProjectFlow({ steps, view, image, film, english }: Props) {
     const preference = matchMedia('(prefers-reduced-motion: reduce)');
     const updatePreference = () => setRunning(!preference.matches);
     updatePreference();
+    setReady(true);
     preference.addEventListener('change', updatePreference);
     let onscreen = false;
     const updateVisibility = () => setVisible(onscreen && !document.hidden);
@@ -66,8 +73,8 @@ export function ProjectFlow({ steps, view, image, film, english }: Props) {
   }
 
   function selectStage(index: number) {
-    setSelected(index);
-    const time = view.stageSeconds?.[index];
+    setSelection({ index, moving: running });
+    const time = view?.stageSeconds?.[index];
     if (time !== undefined && video.current) {
       // Batch stations run one after the other. Show the matching operation even when paused.
       if (video.current.readyState === 0) video.current.preload = 'metadata';
@@ -80,22 +87,23 @@ export function ProjectFlow({ steps, view, image, film, english }: Props) {
   }
 
   const sceneHeight = film ? 1000 * 580 / 2080 : 400;
-  const frame = selected === null ? [0, view.top, 1000, view.height] : detailFrame(view.cameras[selected], 2.5, sceneHeight);
+  const frame = view && selected !== null ? detailFrame(view.cameras[selected], 2.5, sceneHeight) : [0, view?.top ?? 0, 1000, view?.height ?? sceneHeight];
   const [left, top, width, height] = frame;
   const playing = running && !failed;
   const title = selected === null ? label('整线工艺流转', 'Full-line process flow') : steps[selected];
   return <div className={s.panel}>
     <div className={s.player}>
       <div className={s.controls}>
-        {selected !== null && <button type="button" onClick={() => setSelected(null)}>
+        {selected !== null && <button type="button" onClick={() => setSelection({ index: null, moving: running })}>
           <FiMaximize aria-hidden />{label('查看整线', 'View full line')}
         </button>}
-        <button type="button" onClick={togglePlayback}>
+        <button type="button" onClick={togglePlayback} disabled={!ready} aria-pressed={playing}>
           {playing ? <FiPause aria-hidden /> : <FiPlay aria-hidden />}
           {failed ? label('重试播放', 'Retry playback') : playing ? label('暂停动画', 'Pause animation') : label('播放动画', 'Play animation')}
         </button>
       </div>
       <div id={id} ref={viewer} className={s.viewport} data-detail={selected !== null}>
+        {tracked && <TrackedFilm project={tracked} player={video} selection={selection} title={title} onError={() => setFailed(true)} />}
         {film && <div className={s.filmCrop} style={{
           width: `min(100cqw, ${100 * width / height}cqh)`,
           aspectRatio: `${width}/${height}`,
@@ -104,7 +112,7 @@ export function ProjectFlow({ steps, view, image, film, english }: Props) {
             aria-label={title} onError={() => setFailed(true)} width={2080} height={580}
             style={{ width: (100000 / width) + '%', left: (-100 * left / width) + '%', top: (-100 * top / height) + '%' }} />
         </div>}
-        {!film && <svg className={s.processPicture} viewBox={frame.join(' ')} role="img" aria-label={title}>
+        {view && !film && <svg className={s.processPicture} viewBox={frame.join(' ')} role="img" aria-label={title}>
           <defs>
             <radialGradient id={id+'-ground'}><stop stopColor="#123447" /><stop offset="1" stopColor="#020e18" /></radialGradient>
             <filter id={id+'-steel'} colorInterpolationFilters="sRGB">
@@ -128,19 +136,20 @@ export function ProjectFlow({ steps, view, image, film, english }: Props) {
         </svg>}
       </div>
     </div>
-    <p className={s.status} role="status">{failed ? label('动画暂时无法播放。', 'Animation could not be loaded.') : selected !== null && steps[selected]}</p>
+    <p className={s.status} role="status">{failed ? label('动画暂时无法播放。', 'Animation could not be loaded.') : selected !== null && (tracked ? steps[selected] + ' · ' + tracked.stages[selected].note : steps[selected])}</p>
     <div className={s.tray}>
       <p className={s.instruction} id={id+'-label'}><FiGrid aria-hidden />
         {label('点选下方工序卡片，查看局部动画', 'Select a process card to view its animation')}
       </p>
-      <div className={s.cards} role="group" aria-labelledby={id+'-label'}
+      <div className={s.cards} data-stages={steps.length} role="group" aria-labelledby={id+'-label'}
         style={{ '--stages': steps.length } as CSSProperties}>
-        {steps.map((step, i) => <button key={step} type="button" className={s.card} aria-controls={id}
+        {steps.map((step, i) => <button key={step} type="button" className={s.card} disabled={!ready} aria-controls={id}
           aria-pressed={selected === i} onClick={() => selectStage(i)}>
           <span className={s.thumb}>
-            <svg viewBox={detailFrame(view.cameras[i], 450/195, sceneHeight).join(' ')} aria-hidden="true">
+            {tracked && <img src={tracked.stages[i].thumb} alt="" width={540} height={234} />}
+            {view && <svg viewBox={detailFrame(view.cameras[i], 450/195, sceneHeight).join(' ')} aria-hidden="true">
               {film ? <image href={film + '.webp'} width="1000" height={sceneHeight} /> : <use href={'#'+id+'-machine'} />}
-            </svg>
+            </svg>}
             <span className={s.magnifier}><FiZoomIn aria-hidden /></span>
           </span>
           <span className={s.caption}>{step}{selected === i ? <FiCheck aria-hidden /> : <FiChevronRight aria-hidden />}</span>

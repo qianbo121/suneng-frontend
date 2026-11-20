@@ -1,0 +1,51 @@
+{
+  "id": "fork-review-07",
+  "slug": "fork-alloy-bar-quenching-proposal",
+  "title": "合金钢棒料淬火叉车炉，每炉设计装载 8–10 吨",
+  "summary": "苏能为合金钢棒料淬火编制的叉车炉方案，按每炉装入 8–10 吨棒料设计，工装垫块另计。适用钢种为 30CrMo、42CrMo、40Cr。按月产 650 吨合格棒料的目标测算，每月 26 天、每天 3 炉、合格率 95% 时，每炉约需装入 8.77 吨棒料。",
+  "body": "fork-alloy-bar-quenching-proposal.md",
+  "publicationStatus": "published",
+  "contentType": "proposal",
+  "projectStatus": "proposal",
+  "workpiece": [
+    "合金钢棒料"
+  ],
+  "materials": [],
+  "process": [
+    "淬火"
+  ],
+  "equipment": [
+    "叉车炉"
+  ],
+  "need": [],
+  "tags": [
+    "叉料车",
+    "合金钢棒料",
+    "淬火"
+  ],
+  "facts": [
+    {
+      "label": "单炉设计装载 · 不含工装垫块",
+      "value": "8–10",
+      "unit": "吨/炉"
+    },
+    {
+      "label": "设计月产目标",
+      "value": "650",
+      "unit": "吨/月"
+    },
+    {
+      "label": "每日计划工时",
+      "value": "20",
+      "unit": "小时/天"
+    }
+  ],
+  "sourceSummary": "资料依据　2025 年高温箱式铲齿炉（RX4-650-12Q）技术方案第一、二、四节。26 天、每天 3 炉和 95 % 合格产出率均为本文排产假设。",
+  "cover": {
+    "src": "/fork-case-review/workpieces/bundled-slender-alloy-bars.webp",
+    "alt": "用钢带扎成一捆的细长合金钢圆棒",
+    "fit": "contain"
+  },
+  "listTitle": "棒料淬火，每炉设计装载 8–10 吨",
+  "listSummary": "方案按每炉装入 8–10 吨棒料设计，工装垫块另计。月产 650 吨是排产目标。"
+}

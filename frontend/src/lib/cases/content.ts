@@ -13,7 +13,11 @@ const internalSourceHeadings = new Set([
 ]);
 
 /** All case Markdown is rendered on the server and sanitized before entering HTML. */
-export function prepareCaseBody(markdown: string, locale: 'zh' | 'en' = 'zh') {
+export function prepareCaseBody(
+  markdown: string,
+  locale: 'zh' | 'en' = 'zh',
+  sectionTitles?: Readonly<Record<string, string>>,
+) {
   const root = DOMPurify.sanitize(marked.parse(markdown, { async: false, gfm: true }), {
     RETURN_DOM: true,
     FORBID_TAGS: ['script', 'style', 'iframe', 'form', 'input', 'button', 'video', 'audio'],
@@ -50,6 +54,11 @@ export function prepareCaseBody(markdown: string, locale: 'zh' | 'en' = 'zh') {
     while (used.has(id)) id = `${base}-${suffix++}`;
     used.add(id);
     heading.id = id;
+    // Keep existing inbound section links when the visible heading is edited.
+    if (sectionTitles && Object.hasOwn(sectionTitles, id)) {
+      heading.textContent = sectionTitles[id];
+      return { id, title: sectionTitles[id] };
+    }
     return { id, title };
   });
   root.querySelectorAll('table').forEach((table) => {

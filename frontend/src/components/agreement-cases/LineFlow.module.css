@@ -79,7 +79,7 @@
   .magnifier { width: 18px; height: 18px; font-size: 12px; }
 }
 @media (max-width:600px) {
-  .cards:lang(en) { grid-template-columns:repeat(2,minmax(0,1fr)); }
+  .cards:lang(en), .cards[data-stages="4"] { grid-template-columns:repeat(2,minmax(0,1fr)); }
 }
 @media (max-width:360px) {
   .cards { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -104,3 +104,4 @@
 .viewport:has(.filmCrop) { container-type:size; background:#020e18; }
 .filmCrop { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); overflow:hidden; }
 .filmCrop video { position:absolute; display:block; height:auto; max-width:none; }
+.trackedFilm { position:absolute; inset:0 auto auto 0; display:block; width:100%; height:100%; max-width:none; object-fit:contain; }

@@ -96,7 +96,14 @@ export function filterCases<T extends CaseMeta & { searchText: string }>(
         terms.every((term) => normalize(item.searchText).includes(term)),
     )
     .sort((a, b) => {
-      if (query.sort === 'published') return newestPublishedFirst(a, b);
+      if (query.sort === 'published') {
+        if (process.env.NODE_ENV === 'development') {
+          // Show unpublished review records together without assigning a publication date.
+          const first = Number(b.publicationStatus === 'draft') - Number(a.publicationStatus === 'draft');
+          if (first) return first;
+        }
+        return newestPublishedFirst(a, b);
+      }
       if (query.sort === 'relevance' && terms.length) {
         const difference = score(b) - score(a);
         if (difference) return difference;

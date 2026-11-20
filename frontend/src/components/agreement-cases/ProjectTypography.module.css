@@ -11,6 +11,23 @@ article.project {
 .project .hero h1 { font: inherit; font-weight: 700; font-size: var(--case-title); line-height: 1.25; margin-block: 12px 14px; }
 .project .hero p { font-size: 16px; line-height: 28px; }
 .project .hero nav { font-size: 14px; }
+.project .hero[data-cover="workpiece"] > img {
+  object-fit: contain;
+  object-position: center;
+  background: white;
+  box-sizing: border-box;
+  padding: 8px 0 16px;
+}
+.project .hero[data-cover="text"] { background: linear-gradient(110deg, #083c83, #062955); }
+.project .hero[data-cover="text"]::after { display: none; }
+.project .hero[data-cover="text"] .copy { max-width: 800px; }
+@media (min-width: 721px) {
+  .project .hero[data-cover="workpiece"] { background: white; }
+  .project .hero[data-cover="workpiece"] > img { width: 54%!important; padding-bottom: 44px; }
+}
+@media (min-width: 721px) and (max-width: 1279px) {
+  .project .hero[data-cover="workpiece"] > img { width: 40%!important; }
+}
 .project h2 { font-size: var(--case-section); line-height: 1.4; }
 .project .section { margin-top: 32px; }
 .project .section > h2, .project .cards h2 { margin-bottom: 14px; }

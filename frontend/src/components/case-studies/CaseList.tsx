@@ -164,7 +164,9 @@ function CaseCard({
           </figure>
         )}
         <div className="case-record-copy">
-          {category && <p className="catalog-category">{category}</p>}
+          {(category || item.listStatus) && <p className="catalog-category">
+            {category}{item.listStatus && <small>{item.listStatus}</small>}
+          </p>}
           <h3 id={titleId}>{subject}{subtitle && <span>{subtitle}</span>}</h3>
           {/* The server prepares list summaries; see getCaseResults. */}
           <p className="case-record-summary">{item.summary}</p>

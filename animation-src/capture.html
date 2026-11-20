@@ -1,0 +1,13 @@
+<!doctype html><meta charset="utf-8"><style>*{margin:0}body{background:#07141e}canvas{display:block}</style><canvas></canvas>
+<script type="module">
+import * as T from '/animations/furnaces/v3/three.module.min.js';
+import {buildFilm} from './line.js';
+const canvas=document.querySelector('canvas'), args=new URLSearchParams(location.search);
+const renderer=new T.WebGLRenderer({canvas,antialias:true,alpha:false,preserveDrawingBuffer:true,powerPreference:'high-performance'});
+renderer.setSize(+args.get('w')||1680,+args.get('h')||472,false);
+renderer.shadowMap.enabled=true;renderer.shadowMap.type=T.PCFSoftShadowMap;
+renderer.outputColorSpace=T.SRGBColorSpace;renderer.toneMapping=T.ACESFilmicToneMapping;renderer.toneMappingExposure=1.14;
+const draw=buildFilm(renderer,args.get('id'));
+window.renderFrame=(t,quality=.89)=>{const meta=draw(t);return {image:canvas.toDataURL('image/jpeg',quality).split(',')[1],...meta};};
+window.renderFrame(0);window.ready=true;
+</script>

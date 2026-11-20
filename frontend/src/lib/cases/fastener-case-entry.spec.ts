@@ -10,12 +10,12 @@ vi.mock('react', async original => ({ ...(await original<typeof import('react')>
 afterEach(() => { vi.unstubAllEnvs(); vi.resetModules(); });
 
 describe('approved Chinese fastener case', () => {
-  it('describes the line on the detail page and the screws pictured in the list', async () => {
+  it('uses the screw workpiece cover on the detail page and in the list', async () => {
     const { FastenerCase } = await import('@/components/case-studies/fastener-mesh-belt/FastenerCase');
     const { FASTENER_CASE_SLUG } = await import('./fastener-case-entry');
     const { getCaseResults } = await import('./server');
     const { parseCaseQuery } = await import('./query');
-    const label = '托辊网带炉热处理生产线：上料台、淬火炉、油槽与提升机、清洗机、回火炉、出料';
+    const label = '螺丝钉';
     const html = renderToStaticMarkup(createElement(FastenerCase));
     expect(html).toContain('<h1>紧固件（螺丝钉）淬火和渗碳共用一台网带炉</h1>');
     expect(html).toContain(`alt="${label}"`);

@@ -11,7 +11,7 @@ export type CaseSearchContent = {
   dateModified?: string;
   path: string;
   locale: 'zh' | 'en';
-  image: string;
+  image?: string;
   imageAlt: string;
   languages: Record<string, string>;
   questions: readonly (readonly string[])[];
@@ -40,7 +40,7 @@ export function caseSearchJsonLd(data: CaseSearchContent) {
         '@type': 'Article', '@id': `${url}#article`, url,
         headline: data.title, description: data.description, inLanguage: language,
         mainEntityOfPage: { '@type': 'WebPage', '@id': url },
-        image: { '@type': 'ImageObject', url: absoluteUrl(data.image), caption: data.imageAlt },
+        ...(data.image && { image: { '@type': 'ImageObject', url: absoluteUrl(data.image), caption: data.imageAlt } }),
         author: { '@type': 'Organization', '@id': LOCAL_BUSINESS_ID, name: siteSettings.companyName[data.locale] },
         publisher: { '@id': LOCAL_BUSINESS_ID },
         ...(data.datePublished && { datePublished: data.datePublished }),

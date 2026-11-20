@@ -22,6 +22,16 @@ export type ReviewedPublicCase = {
 
 export const REVIEWED_PUBLIC_CASES: readonly ReviewedPublicCase[] = [
   ...[
+    { id: 'fork-review-01', slug: 'fork-long-bar-batch-quench' },
+    { id: 'fork-review-02', slug: 'fork-pipe-flange-solution-treatment' },
+    { id: 'fork-review-03', slug: 'fork-copper-wire-four-chamber-annealing' },
+    { id: 'fork-review-04', slug: 'fork-gas-pipe-fittings-trial-scope' },
+    { id: 'fork-review-05', slug: 'fork-gas-furnaces-enclosed-cooling-boxes' },
+    { id: 'fork-review-06', slug: 'fork-copper-coil-annealing-proposal' },
+    { id: 'fork-review-07', slug: 'fork-alloy-bar-quenching-proposal' },
+    { id: 'fork-review-08', slug: 'fork-gas-fired-pipe-solution-furnace' },
+  ].map(item => ({ ...item, batch: 4, english: false, approvedBy: 'site-owner', approvedAt: '2026-11-20' })),
+  ...[
     'bright-quench-design',
     'crankshaft-annual-output',
     'cylinder-liner-solution-aging',

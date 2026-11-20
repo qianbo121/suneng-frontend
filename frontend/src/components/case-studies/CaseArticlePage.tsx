@@ -6,7 +6,8 @@ import { notFound } from 'next/navigation';
 import { JsonLd } from '@/components/JsonLd';
 import { NewsArticleContent } from '@/components/news/NewsArticleContent';
 import { absoluteUrl, buildMetadata } from '@/lib/seo/metadata';
-import { getBreadcrumbJsonLd, getOrganizationJsonLd, getEngineeringTeamAuthorName, getEngineeringTeamAuthorsJsonLd } from '@/lib/seo/jsonld';
+import { getBreadcrumbJsonLd, getOrganizationJsonLd, getEngineeringTeamAuthorsJsonLd } from '@/lib/seo/jsonld';
+import { CaseSourceLine } from '@/components/case-studies/CaseSourceLine';
 import { getCaseArticle, getPublicCases } from '@/lib/cases/server';
 import { safeCaseReturn, type SearchParams } from '@/lib/cases/query';
 import { CASE_TYPE_LABELS } from '@/lib/cases/types';
@@ -59,9 +60,7 @@ export function CaseArticlePage({
   const buyerLinks = getCaseBuyerLinks(slug).filter((link) => !isWithdrawnTechnicalPath(link.href));
   const url = absoluteUrl(`/zh/case/${item.slug}`);
   const organization = getOrganizationJsonLd();
-  // The owner approved the existing materials byline for this case only.
   const hasEngineeringAttribution = slug === 'stainless-strip-annealing-supply-scope';
-  const authorName = hasEngineeringAttribution ? getEngineeringTeamAuthorName() : item.author;
   const related = getPublicCases().filter((record) => item.relatedCases?.includes(record.slug));
   const isSupportRoller = slug === 'jining-support-roller-heat-treatment-line';
   const hasCuratedResources = slug === 'stainless-strip-annealing-supply-scope' || isSupportRoller;
@@ -98,17 +97,20 @@ export function CaseArticlePage({
                   {[...item.materials.slice(0, 1), ...item.process.slice(0, 2)].join(' · ')}
                 </p>
                 <h1>{item.title}</h1>
-                {(authorName || item.reviewer) && (
+                {!hasEngineeringAttribution && (item.author || item.reviewer) && (
                   <p className="case-byline">
-                    {authorName && <>作者：<span translate="no">{authorName}</span></>}
+                    {item.author && <>作者：<span translate="no">{item.author}</span></>}
                     {item.reviewer && `　复核：${item.reviewer}`}
                   </p>
                 )}
-                {introHtml && (
+                {hasEngineeringAttribution ? (
+                  <div className="case-reading-intro"><p>{item.summary}</p></div>
+                ) : introHtml && (
                   <div className="case-reading-intro">
                     <NewsArticleContent html={introHtml} />
                   </div>
                 )}
+                <CaseSourceLine slug={slug} className="case-source-line" />
               </div>
               {item.cover && (
                 <figure className="case-article-cover">
@@ -129,6 +131,7 @@ export function CaseArticlePage({
               )}
             </header>
             <div className="case-article-body" id="case-article-content">
+              {hasEngineeringAttribution && <p>方案参数不代表实际产量或验收结果。</p>}
               <NewsArticleContent html={bodyHtml} />
               {buyerLinks.length > 0 && (
                 <section

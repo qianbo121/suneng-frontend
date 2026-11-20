@@ -1,0 +1,52 @@
+{
+  "id": "fork-review-05",
+  "slug": "fork-gas-furnaces-enclosed-cooling-boxes",
+  "title": "燃气叉车炉配封闭冷却箱，两炉两箱共用一台叉料车",
+  "summary": "苏能这条燃气叉车炉生产线有两台加热炉、两台封闭冷却箱。一台叉料车把每炉工件整批送进一个空箱。苏能随线供 5 套耐热钢料盘，每套 2 件，已计入报价。",
+  "body": "fork-gas-furnaces-enclosed-cooling-boxes.md",
+  "publicationStatus": "published",
+  "contentType": "experience",
+  "projectStatus": "experience",
+  "workpiece": [
+    "成批金属工件"
+  ],
+  "materials": [],
+  "process": [
+    "加热",
+    "冷却"
+  ],
+  "equipment": [
+    "叉车炉"
+  ],
+  "need": [],
+  "tags": [
+    "叉料车",
+    "成批金属工件",
+    "加热、冷却"
+  ],
+  "facts": [
+    {
+      "label": "燃气加热炉",
+      "value": "2",
+      "unit": "台"
+    },
+    {
+      "label": "封闭冷却箱",
+      "value": "2",
+      "unit": "台"
+    },
+    {
+      "label": "共用进出料叉料车",
+      "value": "1",
+      "unit": "台"
+    }
+  ],
+  "sourceSummary": "资料依据　2020 年燃气加热炉生产线技术协议，单炉参数取自协议第 4 页，试产条件取自验收条款。料盘数量、供方和报价以苏能工程核对记录为依据。",
+  "cover": {
+    "src": "/fork-case-review/workpieces/stacked-metal-billets.webp",
+    "alt": "白底上分两层叠放的金属方坯，端面可见切割纹",
+    "fit": "contain"
+  },
+  "listTitle": "两炉两箱共用一台叉料车",
+  "listSummary": "一台叉料车衔接两台加热炉和两台封闭冷却箱。苏能随线供 5 套耐热钢料盘，每套 2 件。"
+}

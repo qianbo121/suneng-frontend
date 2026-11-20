@@ -24,7 +24,7 @@ describe('case index filters', () => {
     const options = getCaseFilterOptions(query, 'workpiece');
     expect(options[0]).toEqual({ value: '', count: matches.length });
     expect(getCaseFilterOptions(parseCaseQuery({}), 'workpiece')).toEqual([
-      {value: '', count: 11}, {value: '气瓶', count: 1}, {value: '轴杆齿轮', count: 1},
+      {value: '', count: 19}, {value: '气瓶', count: 1}, {value: '轴杆齿轮', count: 1},
       {value: '板带卷材', count: 1}, {value: '紧固批量件', count: 2},
     ]);
     const result = getCaseResults(parseCaseQuery({ workpiece: '紧固批量件' }));
