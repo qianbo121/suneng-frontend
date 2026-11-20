@@ -131,6 +131,7 @@ export function CaseArticlePage({
               )}
             </header>
             <div className="case-article-body" id="case-article-content">
+              {hasEngineeringAttribution && <p>方案参数不代表实际产量或验收结果。</p>}
               <NewsArticleContent html={bodyHtml} />
               {buyerLinks.length > 0 && (
                 <section
