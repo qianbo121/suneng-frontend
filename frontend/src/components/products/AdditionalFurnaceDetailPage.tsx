@@ -20,6 +20,7 @@ import { additionalFurnaceStructures, shovelQuenchCutaway } from '@/lib/addition
 import type { Locale } from '@/types/site';
 import { FurnaceCutawayDiagram } from './FurnaceCutawayDiagram';
 import { PitFurnaceFaq, PitFurnaceGallery } from './PitFurnaceDetailClient';
+import { RestoreInquiryFragment } from './RestoreInquiryFragment';
 import shared from './PitFurnaceDetailPage.module.css';
 import styles from './AdditionalFurnaceDetailPage.module.css';
 
@@ -125,6 +126,7 @@ export function AdditionalFurnaceDetailPage({
       data-furnace-detail-page
       data-additional-furnace-page={furnace.id}
     >
+      <RestoreInquiryFragment />
       <JsonLd data={[
         ...getProductDetailJsonLd({
           slug: furnace.id,
