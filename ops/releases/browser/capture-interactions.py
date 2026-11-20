@@ -159,10 +159,23 @@ try:
         run(['press','Enter'],'search-enter')
         search_form_submitted = True
         run(['wait','--fn',"location.pathname==='/en/news' && new URLSearchParams(location.search).get('q')==='trolley' && document.querySelector('[aria-labelledby=\"news-list-title\"]')?.getAttribute('aria-busy')!=='true' && document.querySelector('[aria-labelledby=\"news-list-title\"] a[href^=\"/en/news/\"]')!==null"],'search-results-ready')
-        result=capture('search-results',"const links=Array.from(document.querySelectorAll('[aria-labelledby=\"news-list-title\"] a[href]')).filter(a=>pathOf(a).startsWith('/en/news/')&&shown(a)); observed.results=links.map(a=>({path:pathOf(a),text:norm(a.innerText),heading:norm(a.querySelector('h3')?.innerText),rect:rect(a)})); assertions.queryMatches=new URLSearchParams(location.search).get('q')==='trolley'; assertions.resultsRendered=links.length>0; assertions.inputRetained=document.querySelector('#news-center-search')?.value==='trolley';")
+        result=capture('search-results', """
+          const links = Array.from(document.querySelectorAll('[aria-labelledby="news-list-title"] a[href]'))
+            .filter(a => pathOf(a).startsWith('/en/news/') && shown(a));
+          observed.results = links.map(a => ({
+            path: pathOf(a),
+            linkSelector: 'a[href=' + CSS.escape(a.getAttribute('href')) + ']',
+            text: norm(a.innerText),
+            heading: norm(a.querySelector('h3')?.innerText),
+            rect: rect(a)
+          }));
+          assertions.queryMatches = new URLSearchParams(location.search).get('q') === 'trolley';
+          assertions.resultsRendered = links.length > 0;
+          assertions.inputRetained = document.querySelector('#news-center-search')?.value === 'trolley';
+        """)
         first=result['observed']['results'][0]
         target=first['path']
-        selector='[aria-labelledby="news-list-title"] a[href="'+target+'"]'
+        selector='[aria-labelledby="news-list-title"] '+first['linkSelector']
         if args.viewport=='mobile':
             title_selector=selector+' h3'
             run(['scrollintoview',title_selector],'search-detail-heading-scroll')
