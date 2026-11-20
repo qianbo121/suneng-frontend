@@ -5,7 +5,7 @@ import { JsonLd } from '@/components/JsonLd';
 import { getFaqJsonLd, getProductDetailJsonLd } from '@/lib/seo/jsonld';
 import { HomepageLeadForm } from '@/components/home/HomepageLeadForm';
 import { Breadcrumb } from '@/components/layout/Breadcrumb';
-import { Button } from '@/components/ui/Button';
+import { Button, getButtonClass } from '@/components/ui/Button';
 import { InquiryContactOptions } from '@/components/lead/InquiryContactOptions';
 import { getStaticProductBySlug } from '@/constants/static-products';
 import type { additionalFurnaces } from '@/lib/additional-furnaces';
@@ -175,12 +175,12 @@ export function AdditionalFurnaceDetailPage({
             </p>
             <h1>{copy.title[locale]}</h1>
             <div className={shared.mobileHeroAction}>
-              <Button
+              <a
                 href="#inquiry"
-                className={`${shared.primaryButton} ${styles.primaryAction}`}
+                className={`${getButtonClass('primary', 'md')} ${shared.primaryButton} ${styles.primaryAction}`}
               >
                 {inquiryLabel}
-              </Button>
+              </a>
             </div>
             <p className={shared.heroDescription}>{copy.description[locale]}</p>
             <div className={shared.tagList}>
@@ -199,12 +199,12 @@ export function AdditionalFurnaceDetailPage({
               ))}
             </div>
             <div className={shared.heroActions}>
-              <Button
+              <a
                 href="#inquiry"
-                className={`${shared.primaryButton} ${styles.primaryAction} ${styles.desktopInquiry}`}
+                className={`${getButtonClass('primary', 'md')} ${shared.primaryButton} ${styles.primaryAction} ${styles.desktopInquiry}`}
               >
                 {inquiryLabel}
-              </Button>
+              </a>
               <Button
                 href={showShovelConfigurations ? '#agreement-configurations' : '#selection'}
                 variant="secondary"
