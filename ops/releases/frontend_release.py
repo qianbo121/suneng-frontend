@@ -599,14 +599,22 @@ class Release:
             raise RuntimeError('Backend-only releases cannot apply migrations')
         script = Path(__file__).with_name('check-backend.cjs').read_text()
         if running:
-            strict = ['-e', 'RELEASE_NO_MIGRATIONS=1', '-e', 'RELEASE_APPLY_INDEX=0'] if self.backend_only else []
-            command = ['docker', 'exec', *strict, 'corp-site-backend', 'node', '-e', script]
+            container = 'corp-site-backend'
+            strict = []
+            if self.backend_only:
+                container, image = run(['docker', 'inspect', '--format', '{{.Id}} {{.Image}}', container]).split()
+                if not DIGEST.fullmatch(container) or not IMAGE.fullmatch(image):
+                    raise RuntimeError('Could not identify running backend')
+                strict = ['-e', 'RELEASE_NO_MIGRATIONS=1', '-e', 'RELEASE_APPLY_INDEX=0',
+                          '-e', 'RELEASE_VERIFIED_BACKEND_IMAGE=' + image]
+            command = ['docker', 'exec', *strict, container, 'node', '-e', script]
         else:
             # Run only a bounded read/check command. Never start the inquiry notification worker twice.
             command = self.compose() + ['run', '--rm', '--no-deps', '--pull', 'never',
                        '-e', 'RELEASE_APPLY_INDEX=' + ('1' if migrate else '0'),
                        '-e', 'RELEASE_NO_MIGRATIONS=' + ('1' if self.backend_only else '0'),
                        '-e', 'RELEASE_BACKUP_VERIFIED=' + ('1' if migrate and self.migration_backup_verified else '0'),
+                       '-e', 'RELEASE_VERIFIED_BACKEND_IMAGE=' + self.target['backend'],
                        '--entrypoint', 'node', 'backend', '-e', script]
         report = json.loads(run(command, env=self.env, timeout=180))
         if self.backend_only and report.get('pendingMigrationCount') != 0:
