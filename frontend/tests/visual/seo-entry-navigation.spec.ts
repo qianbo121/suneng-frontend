@@ -41,6 +41,40 @@ for (const width of [1440, 390]) {
       await expect(page.locator('[data-production-line-card]').first()).toBeVisible();
     });
 
+    test('an early inquiry click keeps the form link through startup and history navigation', async ({ page }) => {
+      const path = '/zh/products/detail/shovel-furnace?source=selection';
+      // Hold the locale layout chunk while the server-rendered link is usable.
+      const layoutChunk = (url: URL) =>
+        /\/app\/\[locale\]\/layout(?:-[a-z0-9]+)?\.js$/.test(decodeURIComponent(url.pathname));
+      let releaseLayout!: () => void;
+      const held = new Promise<void>(resolve => { releaseLayout = resolve; });
+      const requested = page.waitForRequest(request => layoutChunk(new URL(request.url())));
+      await page.route(layoutChunk, async route => {
+        await held;
+        await route.continue();
+      });
+      try {
+        await page.goto(path, { waitUntil: 'commit' });
+        await requested;
+        await page.waitForFunction(() => Boolean(Reflect.get(window, 'next')?.router));
+        await page.getByRole('link', { name: '提交工况，获取选型建议', exact: true }).filter({ visible: true }).click();
+        await expect(page.locator('#inquiry')).toBeInViewport();
+      } finally {
+        releaseLayout();
+      }
+      // Wait for the router to write the startup history entry before asserting its URL.
+      await page.waitForFunction(() => window.history.state?.__NA === true);
+      await expect(page).toHaveURL(path + '#inquiry');
+      await expect(page.locator('#inquiry')).toBeInViewport();
+      await page.goBack();
+      await expect(page).toHaveURL(path);
+      await page.goForward();
+      await expect(page).toHaveURL(path + '#inquiry');
+      await page.reload();
+      await expect(page.locator('#inquiry')).toBeInViewport();
+      await expect(page).toHaveURL(path + '#inquiry');
+    });
+
     for (const locale of ['zh', 'en'] as const) {
       test(`four furnace inquiry forms stay on the ${locale} product page`, async ({ page }) => {
         test.setTimeout(120_000);
