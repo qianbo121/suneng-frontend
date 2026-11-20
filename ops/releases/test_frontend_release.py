@@ -1479,10 +1479,18 @@ class BackendOnlyReleaseTest(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             release = self.fixture(tmp)
             good = {'passed': True, 'pendingMigrationCount': 0, 'aggregateAvailable': True}
-            with patch.object(r, 'run', return_value=json.dumps(good)) as command:
+            def respond(args, **kwargs):
+                if args[:2] == ['docker', 'inspect']:
+                    return 'a' * 64 + ' ' + release.receipt['images']['backend']
+                return json.dumps(good)
+            with patch.object(r, 'run', side_effect=respond) as command:
                 for running in [False, True]:
                     release.backend_check(running=running)
                     args = command.call_args.args[0]
+                    expected = release.receipt['images']['backend'] if running else release.target['backend']
+                    self.assertIn('RELEASE_VERIFIED_BACKEND_IMAGE=' + expected, args)
+                    if running:
+                        self.assertIn('a' * 64, args)
                     self.assertIn('RELEASE_NO_MIGRATIONS=1', args)
                     self.assertIn('RELEASE_APPLY_INDEX=0', args)
                 command.reset_mock()

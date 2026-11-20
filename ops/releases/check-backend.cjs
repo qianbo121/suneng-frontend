@@ -18,15 +18,29 @@ const ALLOWED_PENDING = new Map([
   const root = 'backend/prisma/migrations';
   const migrations = fs.readdirSync(root).filter(n => fs.existsSync(path.join(root, n, 'migration.sql')));
   const applied = await prisma.$queryRawUnsafe('SELECT migration_name, checksum, finished_at, rolled_back_at FROM "_prisma_migrations"');
+  const noMigrations = process.env.RELEASE_NO_MIGRATIONS === '1';
+  // This exact rollback image predates the reviewed, data-only article update.
+  const stripHistory = '20261115032000_anonymize_strip_case_news';
+  const oldStripImage = 'sha256:b0f6e603202af4c948607bffca2dd14fb4bdfe79fa55cd0e570158864a475eb7';
+  let verifiedHistoricalDataChange = false;
   for (const row of applied) {
     if (row.rolled_back_at) continue;
-    if (!row.finished_at || !migrations.includes(row.migration_name)) throw new Error('Migration history requires reconciliation');
+    if (!row.finished_at) throw new Error('Migration history requires reconciliation');
+    if (!migrations.includes(row.migration_name)) {
+      if (noMigrations && process.env.RELEASE_APPLY_INDEX === '0' &&
+          process.env.RELEASE_VERIFIED_BACKEND_IMAGE === oldStripImage &&
+          row.migration_name === stripHistory && !verifiedHistoricalDataChange &&
+          row.checksum === 'ea9f2575463878f1b5f4e51f5442bbfe92ecc7a3547da7d2b1caac4df9983478') {
+        verifiedHistoricalDataChange = true;
+        continue;
+      }
+      throw new Error('Migration history requires reconciliation');
+    }
     const digest = crypto.createHash('sha256').update(fs.readFileSync(path.join(root, row.migration_name, 'migration.sql'))).digest('hex');
     if (digest !== row.checksum) throw new Error('Applied migration differs from reviewed source');
   }
   const done = new Set(applied.filter(x => x.finished_at && !x.rolled_back_at).map(x => x.migration_name));
   const pending = migrations.filter(x => !done.has(x));
-  const noMigrations = process.env.RELEASE_NO_MIGRATIONS === '1';
   if (noMigrations && pending.length) throw new Error('Backend-only release requires zero pending migrations');
   for (const name of pending) {
     const reviewed = ALLOWED_PENDING.get(name);
@@ -67,5 +81,5 @@ const ALLOWED_PENDING = new Map([
   const contactLimitsMatch = ['name', 'phone'].every(name => contactColumns.some(column =>
     column.column_name === name && column.character_maximum_length === (name === 'name' ? 180 : 254)));
   if (!contactLimitsMatch) throw new Error('Inquiry storage does not match the accepted form limits');
-  console.log(JSON.stringify({passed:true,contactLimitsMatch,pendingMigrationCount:pending.length,indexPresent:index.some(x=>x.indisvalid),botColumnStored,aggregateAvailable:true,aggregateCheckMs:Date.now()-began,dataRestored:false,notificationsSent:false}));
+  console.log(JSON.stringify({passed:true,contactLimitsMatch,verifiedHistoricalDataChange,pendingMigrationCount:pending.length,indexPresent:index.some(x=>x.indisvalid),botColumnStored,aggregateAvailable:true,aggregateCheckMs:Date.now()-began,dataRestored:false,notificationsSent:false}));
 })().catch(() => { console.error('Backend release check failed; no customer data is printed.');process.exitCode=1; }).finally(()=>prisma.$disconnect());
