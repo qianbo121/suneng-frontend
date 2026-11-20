@@ -1,5 +1,7 @@
 // Selection copy grounded in the source notes listed in docs/four-furnace-content-20260910/.
 // Project-specific dimensions, cycle times and acceptance limits are deliberately not catalog ratings.
+import { barLoad, copperCoilSharing, fittingLoad, shovelTransferLimits } from './shovel-furnace-configurations';
+
 type Copy = { zh: string; en: string };
 const c = (zh: string, en: string): Copy => ({ zh, en });
 type Pair = [Copy, Copy];
@@ -16,33 +18,38 @@ type DetailContent = {
   related: string[];
 };
 
+export const shovelPriorityWorkpieces: { title: string; text: string; caution?: boolean }[] = [
+  { title: '长棒料整批淬火', text: '长棒料横放在炉内垫块上。选型时要核对支点间距、整批重量，以及铲齿能否从垫块间伸入并托起整批棒料。' },
+  { title: '不锈钢管件、法兰整筐固溶', text: '管件和法兰随耐热钢料筐一起出炉入水。选型时按工件与料筐的合计重量核对叉料车承载，并约定整筐浸没的计时终点。' },
+];
+
 export const additionalFurnaceDetailContent: Record<string, DetailContent> = {
   'shovel-furnace': {
     title: c(
-      '叉车炉｜铸锻件加热与转运',
+      '叉车炉｜长棒料淬火与管件固溶',
       'Fork-Handling Furnace | Batch Heating and Load Transfer',
     ),
     description: c(
-      '面向可由铲齿稳定承托的铸锻件和批次热处理任务，先核对工件底部空间、重心与出炉路线，再确定加热炉、取料机及后续工位的配合方式。',
+      '叉车炉也称铲齿炉，专用叉料车可将长棒料或整筐不锈钢管件、法兰送入炉前水槽。选快速淬火炉时，先核对整批载荷和入水时间。铜合金线材卷退火时，一台叉料车可为多个炉室装卸。',
       'For castings, forgings and batch loads that can be supported by forks. Confirm clearance beneath the load, centre of gravity and the unloading route before coordinating the chamber, handler and downstream stations.',
     ),
     tags: [
-      c('铸锻件', 'Castings and forgings'),
+      c('成批装卸', 'Castings and forgings'),
       c('铲齿承托', 'Fork-supported loads'),
       c('周期式加热', 'Batch heating'),
       c('转运需工况校核', 'Transfer assessment'),
     ],
     heroInfo: [
       [
-        c('工件条件', 'Workpiece'),
-        c('尺寸、重量与重心', 'Dimensions, weight and centre of gravity'),
+        c('长棒料淬火协议', 'Workpiece'),
+        c(`${barLoad}，入水 ${shovelTransferLimits.bars}`, 'Dimensions, weight and centre of gravity'),
       ],
       [
-        c('承托条件', 'Support'),
-        c('底部净空与支承间距', 'Underside clearance and support spacing'),
+        c('管件、法兰固溶协议', 'Support'),
+        c(`${fittingLoad}，入水 ${shovelTransferLimits.fittings}`, 'Underside clearance and support spacing'),
       ],
-      [c('工作温度', 'Temperature'), c('按材料与工艺确定', 'Defined by material and process')],
-      [c('转运条件', 'Transfer'), c('炉门、行程与后续工位', 'Door, travel and downstream station')],
+      [c('快速入水配套', 'Temperature'), c('上述两台的水槽均由买方自备', 'Defined by material and process')],
+      [c('多炉装卸', 'Transfer'), c(`铜线退火，${copperCoilSharing}`, 'Door, travel and downstream station')],
     ],
     workpieces: [
       {
@@ -78,7 +85,7 @@ export const additionalFurnaceDetailContent: Record<string, DetailContent> = {
         ],
       },
       {
-        title: c('取料机构', 'Handler'),
+        title: c('轨道叉料车', 'Handler'),
         items: [
           c('铲齿长度与间距', 'Fork length and spacing'),
           c('起升与行走行程', 'Lift and travel'),
@@ -97,7 +104,7 @@ export const additionalFurnaceDetailContent: Record<string, DetailContent> = {
         title: c('动作配合', 'Coordination'),
         items: [
           c('炉门位置确认', 'Door-position confirmation'),
-          c('取料机联锁', 'Handler interlocks'),
+          c('叉料车联锁', 'Handler interlocks'),
           c('人员与设备隔离', 'Personnel separation'),
         ],
       },
@@ -143,12 +150,12 @@ export const additionalFurnaceDetailContent: Record<string, DetailContent> = {
       [
         c('炉门与净开口', 'Door and clear opening'),
         c(
-          '核对炉门提升位置、炉口净空、门框密封及取料机进入条件。',
+          '核对炉门提升位置、炉口净空、门框密封及叉料车进入条件。',
           'Check the lifted door position, clear opening, frame sealing and handler access.',
         ),
       ],
       [
-        c('铲齿与轨道取料机', 'Forks and rail handler'),
+        c('铲齿与轨道叉料车', 'Forks and rail handler'),
         c(
           '按工件重心和支点核对铲齿、起升机构、行走轨道及定位。',
           'Assess forks, lift, rails and positioning against the load centre of gravity and support points.',
@@ -166,14 +173,14 @@ export const additionalFurnaceDetailContent: Record<string, DetailContent> = {
       {
         question: c('叉车炉和台车炉怎么区分？', 'How does it differ from a trolley furnace?'),
         answer: c(
-          '本页叉车炉由独立取料机托起工件并进出固定炉膛；台车炉由承料台车带着工件进出。选择时重点比较工件支承、装卸路线和工艺转移要求。',
+          '叉车炉的炉膛固定，轨道叉料车用铲齿托起工件，沿轨道装炉、出炉。台车炉由承料台车带着工件进出炉膛。选择时重点比较工件支承、装卸路线和工艺转移要求。',
           'Here, a separate handler lifts the load into and out of a fixed chamber. A trolley furnace carries the load on its moving hearth. Compare support, loading routes and transfer requirements.',
         ),
       },
       {
         question: c('是否默认包含淬火槽？', 'Is a quench tank included as standard?'),
         answer: c(
-          '需要按材料和工艺确认。加热炉、取料机、冷却或淬火设备的供货范围分别列清，不能从叉车炉名称推定整套设备已经包含。',
+          '表中长棒料淬火和不锈钢管件固溶两项，水槽和耐热钢料筐均由买方自备。新项目询价时，逐项列明炉体、取料车、料具、水槽、轨道与基础由谁提供，并核对炉口至水槽的距离和高差。',
           'That depends on the material and process. Specify the chamber, handler and cooling or quench equipment separately.',
         ),
       },

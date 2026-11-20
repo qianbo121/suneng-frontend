@@ -32,21 +32,35 @@ const part = (
 
 // Coordinates use the shared diagram's 100 × 75 view box. Each point is checked
 // against the selected cutaway image, rather than inferred from a product name.
+export const shovelQuenchCutaway = {
+  image: '/images/products/shovel-furnace/fork-quench-series/03-cutaway.webp',
+  caption: '长棒料淬火配置。炉口左侧剖开处可见炉衬与电热带，炉前叉料车托住整捆棒料。',
+  // Marker locations on the Chinese front view, in a 100 × 75 frame.
+  points: new Map([
+    ['lining', { x: 37, y: 16 }],
+    ['heating', { x: 35.5, y: 24.5 }],
+    ['door', { x: 62, y: 18 }],
+    ['supports', { x: 50, y: 34 }],
+    ['forks', { x: 61, y: 44.5 }],
+    ['handler', { x: 83.5, y: 58 }],
+  ]),
+};
+
 export const additionalFurnaceStructures: Record<string, FurnaceStructure> = {
   'shovel-furnace': {
     sceneImage: '/images/products/shovel-furnace/detail-pit-style-20260910/01-scene.webp',
     image: '/images/products/shovel-furnace/detail-pit-style-v2-20260910/02-cutaway.webp',
     alt: c(
-      '叉车炉剖视图：炉衬层、加热元件、固定支承与独立轨道取料机',
+      '叉车炉正面剖视，炉口露出隔热炉衬和电热带，6 根铲齿对准每排 7 个垫块之间的空隙，叉料车沿炉前水槽两侧的轨道进退。',
       'Fork-handling furnace cutaway showing lining, heating elements, fixed supports and a separate rail handler',
     ),
     parts: [
       part('lining', c('炉体与炉衬', 'Shell and lining'), c('剖切位置展示外壳、隔热层与热面，材料和厚度按工艺确定。', 'The section shows shell, insulation and hot face; materials and thickness follow the process.'), 'rightTop', 80, 36),
-      part('heating', c('电热元件与支架', 'Elements and holders'), c('图示为电加热布置，元件与陶瓷支承按温度、装载和检修条件设计。', 'The diagram shows electric heating; elements and ceramic holders depend on temperature, loading and maintenance.'), 'rightMiddle', 69, 34),
+      part('heating', c('电热带与支架', 'Elements and holders'), c('图示为电加热布置，元件与陶瓷支承按温度、装载和检修条件设计。', 'The diagram shows electric heating; elements and ceramic holders depend on temperature, loading and maintenance.'), 'rightMiddle', 69, 34),
       part('door', c('升降炉门', 'Lifting door'), c('炉门净开口、提升行程与隔热密封需和取料动作配合。', 'Coordinate the clear opening, door travel, insulation and sealing with the handling motion.'), 'leftTop', 49, 14),
-      part('supports', c('炉内固定支承', 'Fixed hearth supports'), c('支承承担热态工件载荷，并在支点之间留出铲齿进入空间。', 'Supports carry the hot load while preserving fork access between support points.'), 'rightBottom', 57, 46),
-      part('forks', c('铲齿与承托', 'Forks and load support'), c('结合底部净空、重心、铲齿间距和热态变形核对托取条件。', 'Check pickup against underside clearance, centre of gravity, fork spacing and hot deformation.'), 'leftMiddle', 37, 42),
-      part('handler', c('轨道取料机', 'Rail-mounted handler'), c('独立取料机负责起升与行走，轨道定位和炉门联锁按项目确认。', 'The separate handler provides lift and travel; rail alignment and door interlocks are project-specific.'), 'leftBottom', 21, 59),
+      part('supports', c('炉内垫块', 'Fixed hearth supports'), c('每排 7 个垫块支承工件，块间留出 6 个供铲齿伸入的空隙。', 'Supports carry the hot load while preserving fork access between support points.'), 'rightBottom', 57, 46),
+      part('forks', c('铲齿托料', 'Forks and load support'), c('6 根铲齿从垫块之间伸入，托起整批棒料后退出炉口。', 'Check pickup against underside clearance, centre of gravity, fork spacing and hot deformation.'), 'leftMiddle', 37, 42),
+      part('handler', c('轨道叉料车与炉前水槽', 'Rail-mounted handler'), c('叉料车沿炉前水槽两侧的轨道进退，载料退出后，铲齿在水槽上方下降，直至整批棒料浸没。', 'The separate handler provides lift and travel; rail alignment and door interlocks are project-specific.'), 'leftBottom', 21, 59),
     ],
     parameters: [
       [c('工件与料具包络', 'Load and fixture envelope'), c('提供尺寸、重量、重心和热态支点。', 'Provide dimensions, weight, centre of gravity and hot support points.')],

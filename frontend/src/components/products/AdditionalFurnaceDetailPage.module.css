@@ -52,6 +52,73 @@
   margin-top: 14px;
 }
 
+.agreementTable {
+  width: 100%;
+  border-collapse: collapse;
+  color: var(--pit-copy);
+  font-size: 15px;
+  line-height: 1.65;
+  text-align: left;
+}
+
+.agreementTable th, .agreementTable td {
+  padding: 10px 12px;
+  border: 1px solid #d8e1e9;
+  vertical-align: middle;
+}
+
+.agreementTable thead { background: #edf3f8; }
+.agreementTable thead th { text-wrap: balance; }
+.agreementTable thead th:nth-child(5) { white-space: nowrap; }
+.agreementTable th { color: var(--pit-ink); font-weight: 650; }
+.agreementTable tbody th { white-space: nowrap; }
+.agreementTable td { font-variant-numeric: tabular-nums; }
+.agreementTable td:nth-child(3) { white-space: nowrap; }
+.agreementTable :is(th, td):nth-child(n+4) { text-align: right; }
+.agreementTable tr[id] { scroll-margin-top: calc(var(--header-height, 88px) + 66px); }
+.agreementTable tr:target { background: #edf3f8; }
+
+@media (min-width: 901px) {
+  .agreementTable td:nth-child(7) { white-space: nowrap; }
+}
+
+.agreementNotes h3, .featureGroup h3 {
+  color: var(--pit-deep);
+  font-weight: 650;
+}
+
+.agreementNotes h3 { margin: 18px 0 4px; font-size: 16px; }
+.agreementNotes p { margin: 4px 0; color: var(--pit-copy); font-size: 15px; line-height: 1.7; }
+.agreementNotes p strong { color: var(--pit-ink); font-weight: 600; }
+.agreementLink a { color: var(--pit-blue); text-decoration: underline; text-underline-offset: 4px; }
+.featureGroup + .featureGroup { margin-top: 28px; }
+.featureGroup h3 { margin: 0 0 12px; font-size: 19px; }
+.featureGroup dl { margin: 0; }
+.featureGroup dl > div {
+  display: grid;
+  grid-template-columns: minmax(9rem, 18%) 1fr;
+  gap: 16px;
+  padding: 12px 0;
+  border-top: 1px solid var(--pit-border);
+}
+.featureGroup dt { color: var(--pit-ink); font-weight: 650; }
+.featureGroup dd { margin: 0; color: var(--pit-copy); line-height: 1.75; }
+
+@media (max-width: 900px) {
+  .agreementTable, .agreementTable tbody, .agreementTable tbody tr { display: block; }
+  .agreementTable thead { position: absolute; clip-path: inset(50%); width: 1px; height: 1px; overflow: hidden; }
+  .agreementTable tbody tr { margin-bottom: 12px; border: 1px solid #d8e1e9; }
+  .agreementTable tbody th { display: block; background: #edf3f8; }
+  .agreementTable tbody th, .agreementTable td { border: 0; padding: 8px 12px; }
+  .agreementTable td { display: grid; grid-template-columns: 48% 1fr; gap: 8px; text-align: right; border-top: 1px solid #d8e1e9; }
+  .agreementTable td:nth-child(3) { white-space: normal; }
+  .agreementTable td::before { content: attr(data-label); text-align: left; color: var(--pit-copy); }
+}
+
+@media (max-width: 640px) {
+  .featureGroup dl > div { grid-template-columns: 1fr; gap: 3px; }
+}
+
 .configuration {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -146,6 +213,47 @@
   scroll-margin-top: calc(var(--header-height, 88px) + 66px);
 }
 
+.transferDiagram {
+  width: 100%;
+  max-width: 680px;
+  margin: 20px 0;
+}
+
+.transferDiagram img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 1px solid var(--pit-border);
+  border-radius: 5px;
+}
+
+.transferDiagram figcaption {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 4px 16px;
+  padding-top: 6px;
+  color: var(--pit-copy);
+  font-size: 14px;
+}
+
+.transferDiagram a {
+  padding-block: 4px;
+  color: var(--pit-blue);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.transferDiagram a:hover {
+  color: var(--pit-ink);
+}
+
+.transferDiagram a:focus-visible {
+  outline: 2px solid var(--pit-blue);
+  outline-offset: 2px;
+}
+
 .subheading {
   margin: 26px 0 16px;
   color: var(--pit-deep);
@@ -219,6 +327,14 @@
 }
 
 @media (max-width: 640px) {
+  .page[data-additional-furnace-page='shovel-furnace'][data-locale='zh'] [data-furnace-cutaway-marker] circle {
+    r: 2.9px;
+  }
+
+  .page[data-additional-furnace-page='shovel-furnace'][data-locale='zh'] [data-furnace-cutaway-marker] text {
+    font-size: 3.7px;
+  }
+
   .boundaryGrid,
   .relatedEquipment {
     grid-template-columns: 1fr;

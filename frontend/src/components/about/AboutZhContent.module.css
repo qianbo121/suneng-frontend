@@ -1759,7 +1759,8 @@
 /* Unified About page: four section links remain below the site header. */
 .page :global(#company-qualifications),
 .page :global(#management-systems),
-.page :global(#patents) { scroll-margin-top: 148px; }
+.page :global(#patents),
+.page [data-patent-id][id] { scroll-margin-top: 148px; }
 @media (max-width: 767px) {
   .anchorLink { flex: 1 0 auto; padding-inline: 8px; }
   .anchorLink::after { left: 8px; right: 8px; }

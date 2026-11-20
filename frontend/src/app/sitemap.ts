@@ -17,6 +17,7 @@ import { filterCanonicalNewsItems, hasPublishableEnglishNews } from '@/lib/news-
 import { STATIC_PRODUCTS } from '@/constants/static-products';
 import { heatTreatmentLines } from '@/lib/heat-treatment-lines';
 import { getEnglishProductionLine } from '@/lib/english-production-lines';
+import { shovelHeroImage, shovelLoadingImage } from '@/lib/shovel-furnace-configurations';
 import { additionalFurnaces } from '@/lib/additional-furnaces';
 import {
   FURNACE_ENERGY_CONVERSION_HEAT_RECOVERY_SEO,
@@ -311,7 +312,9 @@ function collectProductRoutes(): MetadataRoute.Sitemap {
       route(localizedPath(locale, `/products/detail/${furnace.id}`), {
         changeFrequency: 'monthly',
         priority: 0.8,
-        images: publicPathExists(furnace.image) ? [absoluteUrl(furnace.image)] : undefined,
+        images: locale === 'zh' && furnace.id === 'shovel-furnace'
+          ? [shovelHeroImage, shovelLoadingImage].filter(publicPathExists).map((path) => absoluteUrl(path))
+          : publicPathExists(furnace.image) ? [absoluteUrl(furnace.image)] : undefined,
         alternates: routeAlternates(`/products/detail/${furnace.id}`, sitemapLocales),
       }),
     ),

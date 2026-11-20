@@ -22,6 +22,7 @@ import { getFaqJsonLd, getProductDetailJsonLd } from '@/lib/seo/jsonld';
 import { FurnaceCutawayDiagram } from './FurnaceCutawayDiagram';
 import { ProductHeroDetails } from './ProductHeroDetails';
 import { FurnaceSectionNav } from './FurnaceSectionNav';
+import { copperCoilHeating, copperCoilLoadArea, copperCoilSharing, shovelPagePath } from '@/lib/shovel-furnace-configurations';
 import { PitFurnaceFaq, PitFurnaceGallery } from './PitFurnaceDetailClient';
 import styles from './PitFurnaceDetailPage.module.css';
 import {
@@ -90,6 +91,7 @@ export function IndustryFurnaceDetailPage({ slug, locale = 'zh' }: { slug: Indus
     ? [[locale === 'en' ? 'Read which workpieces suit a roller-hearth furnace' : '辊棒炉适用工件：支承、输送与连续节拍', `/${locale}/news/shuju-news-24`]]
     : [];
   const evidenceLinks: Array<readonly [string, string]> = [
+    ...(locale === 'zh' && slug === 'trolley-furnace' ? [['叉车炉与台车炉的装卸方式比较', `${shovelPagePath}#faq`] as const] : []),
     ...workpieceArticles,
     ...englishTrolleyResources,
     ...quotationArticles,
@@ -198,6 +200,13 @@ export function IndustryFurnaceDetailPage({ slug, locale = 'zh' }: { slug: Indus
         <div className={styles.container}>
           {productBuyerGuide[slug] && <BuyerSelectionGuide locale={locale} guideKey={productBuyerGuide[slug]} />}
           {showMeshBeltAgreement && <BeltFeatureOverview className={styles.section} />}
+          {locale === 'zh' && slug === 'box-furnace' && (
+            <section className={styles.section} id="shared-loading">
+              <SectionHeader title="铜合金线材卷退火如何共用叉料车" />
+              <p>{copperCoilSharing}。装料有效区 {copperCoilLoadArea}，{copperCoilHeating}。
+                <Link className="font-semibold text-primary underline underline-offset-4" href={`${shovelPagePath}#shared-car`}>查看叉车炉的多炉装卸与供货分工</Link>。</p>
+            </section>
+          )}
           <section id="workpieces" className={styles.section}>
             <SectionHeader
               title={t("适用工件与需排除的工况")}

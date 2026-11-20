@@ -172,6 +172,16 @@ const acceptedGroups = [
   { date: '2026-11-17', source: '0cd59d5187759b74af43e299ecb14e741f483783', release: '2436b77aed98c0e7701dd53b47c69aaf019e8b00', paths: [
     '/en/products/detail/elevator-hearth-furnace',
   ] },
+  { date: '2026-11-19', source: '86a1664dc2ad2f98c1b968709fe2ca970385dd2a', paths: [
+    '/zh/products/detail/box-furnace',
+    '/en/products/detail/box-furnace',
+    '/zh/products/detail/trolley-furnace',
+    '/zh/products/detail/multi-furnace-quench-cell',
+    '/zh/about',
+  ] },
+  { date: '2026-11-19', source: '835a996b94205ef1b405e88ba280ade014cb9ff7', paths: [
+    '/zh/products/detail/shovel-furnace',
+  ] },
 ];
 const releasedCases = [
   'bright-quench-design', 'crankshaft-annual-output', 'cylinder-liner-solution-aging',

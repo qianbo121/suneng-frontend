@@ -132,6 +132,18 @@ describe('SEO JSON-LD entities', () => {
     expect(serialized).not.toContain('88540315');
   });
 
+  it('uses the visible breadcrumb label while retaining the full product and page names', () => {
+    const name = '叉车炉｜长棒料淬火与管件固溶';
+    const graph = getProductDetailJsonLd({
+      slug: 'shovel-furnace', name, breadcrumbName: '叉车炉', description: '长棒料淬火配置',
+    });
+    expect(graph).toMatchObject([
+      { '@type': 'Product', name },
+      { '@type': 'WebPage', name },
+      { '@type': 'BreadcrumbList', itemListElement: [{}, {}, { name: '叉车炉' }] },
+    ]);
+  });
+
   it('adds the real technical reviewer only to content explicitly marked as reviewed', () => {
     const article = getArticleJsonLd({
       slug: 'reviewed-sample',

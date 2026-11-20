@@ -1,4 +1,6 @@
 import Image from 'next/image';
+import Link from 'next/link';
+import { shovelPagePath } from '@/lib/shovel-furnace-configurations';
 import { localizeCertificate } from '@/constants/certificates-en';
 import type { CertificateItem } from '@/constants/certificates';
 import type { Locale } from '@/types/site';
@@ -94,7 +96,7 @@ export function CertificateGallerySections({
           </div>
           <div className={styles.patents}>
             {patents.map((item) => localizeCertificate(item, locale)).map((item) => (
-              <article key={item.id} className={styles.patent} data-patent-id={item.id}>
+              <article key={item.id} id={item.id} className={styles.patent} data-patent-id={item.id}>
                 <OriginalImageLink
                   locale={locale}
                   src={item.original || item.image}
@@ -118,6 +120,8 @@ export function CertificateGallerySections({
                   >
                     {english ? 'View Original' : '查看原件'}
                   </OriginalImageLink>
+                  {!english && item.id === 'patent-06-gas-heated-rapid-solution-aluminum-tooth-furnace' &&
+                    <Link className={`${styles.textLink} ml-3`} href={shovelPagePath}>查看叉车炉配置</Link>}
                 </div>
               </article>
             ))}

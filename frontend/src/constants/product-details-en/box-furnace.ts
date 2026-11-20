@@ -1,5 +1,6 @@
 import type { StaticProductDetail } from '@/constants/static-products';
 import { imagesBySlug } from '@/constants/static-products';
+import { copperCoilFurnace as coil } from '@/lib/shovel-furnace-configurations';
 
 const detail: Partial<StaticProductDetail> = {
     series: 'Box (Chamber) Furnace Series',
@@ -374,7 +375,7 @@ const detail: Partial<StaticProductDetail> = {
     scenarioCards: [
       {
         title: 'Authorized Project: Chamber Electric Annealing Furnaces for Copper-Alloy Wire',
-        text: 'One copper-processing project used four furnace bodies, each rated at about 200 kW, with a 700°C rated temperature, an operating range of about 550–700°C, an effective charge envelope of about Φ1710 × 1600 mm, and PLC control.',
+        text: `The configuration has ${coil.chambers} chambers, each rated at ${coil.powerPerChamberKw} kW, with a rated temperature of ${coil.ratedC}°C, an operating range of ${coil.minC}–${coil.maxC}°C, an effective charge envelope of Φ${coil.diameterMm} × ${coil.heightMm} mm, and ${coil.zonesPerChamber} temperature zone per chamber.`,
       },
       {
         title: 'Tempering of Small to Medium Mechanical Parts',

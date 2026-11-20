@@ -12,24 +12,24 @@
     "sourceCommit": "2436b77aed98c0e7701dd53b47c69aaf019e8b00"
   },
   "/zh/products/detail/box-furnace": {
-    "modifiedOn": "2026-10-20",
-    "sourceCommit": "e6dbe0a5df9b9d44cf91e8812ea44c951121ba11"
+    "modifiedOn": "2026-11-19",
+    "sourceCommit": "86a1664dc2ad2f98c1b968709fe2ca970385dd2a"
   },
   "/zh/products/detail/pit-furnace": {
     "modifiedOn": "2026-11-15",
     "sourceCommit": "5248fac668a2d8445d430b3c99f58c86b958fe93"
   },
   "/en/products/detail/box-furnace": {
-    "modifiedOn": "2026-10-20",
-    "sourceCommit": "e6dbe0a5df9b9d44cf91e8812ea44c951121ba11"
+    "modifiedOn": "2026-11-19",
+    "sourceCommit": "86a1664dc2ad2f98c1b968709fe2ca970385dd2a"
   },
   "/en/products/detail/pit-furnace": {
     "modifiedOn": "2026-11-15",
     "sourceCommit": "5248fac668a2d8445d430b3c99f58c86b958fe93"
   },
   "/zh/products/detail/trolley-furnace": {
-    "modifiedOn": "2026-10-20",
-    "sourceCommit": "e6dbe0a5df9b9d44cf91e8812ea44c951121ba11"
+    "modifiedOn": "2026-11-19",
+    "sourceCommit": "86a1664dc2ad2f98c1b968709fe2ca970385dd2a"
   },
   "/zh/solutions/jiangsu-gongye-lu-changjia": {
     "modifiedOn": "2026-10-15",
@@ -297,8 +297,8 @@
     "sourceCommit": "f06596865b4ea9ceda18e8e708f61d373479adb2"
   },
   "/zh/about": {
-    "modifiedOn": "2026-11-16",
-    "sourceCommit": "e2a686f5662f1c9bc959b3fe7d9d1537c60df993"
+    "modifiedOn": "2026-11-19",
+    "sourceCommit": "86a1664dc2ad2f98c1b968709fe2ca970385dd2a"
   },
   "/zh/inquiry": {
     "modifiedOn": "2026-10-15",
@@ -351,8 +351,8 @@
     "sourceCommit": "f16e01b4cf7661e94717606ba8def638349a8083"
   },
   "/zh/products/detail/multi-furnace-quench-cell": {
-    "modifiedOn": "2026-11-14",
-    "sourceCommit": "209445979f8cd14db400a14775f6bf433769b0fa"
+    "modifiedOn": "2026-11-19",
+    "sourceCommit": "86a1664dc2ad2f98c1b968709fe2ca970385dd2a"
   },
   "/zh/products/detail/pusher-furnace": {
     "modifiedOn": "2026-11-09",
@@ -367,8 +367,8 @@
     "sourceCommit": "3c5838eef3ec4025b5e31937803a616d2d8890e8"
   },
   "/zh/products/detail/shovel-furnace": {
-    "modifiedOn": "2026-11-15",
-    "sourceCommit": "f16e01b4cf7661e94717606ba8def638349a8083"
+    "modifiedOn": "2026-11-19",
+    "sourceCommit": "835a996b94205ef1b405e88ba280ade014cb9ff7"
   },
   "/zh/products/detail/track-shoe-press-quench-line": {
     "modifiedOn": "2026-11-14",

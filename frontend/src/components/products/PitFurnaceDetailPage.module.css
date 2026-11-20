@@ -1121,6 +1121,21 @@
   transition: transform 180ms ease;
 }
 
+.faqSummary {
+  display: block;
+  cursor: pointer;
+}
+
+.faqSummary::-webkit-details-marker {
+  display: none;
+}
+
+.faqSummary:focus-visible {
+  outline: 2px solid var(--pit-blue, #285bd6);
+  outline-offset: -2px;
+}
+
+.faqItem[open] .faqChevron,
 .faqChevronOpen {
   transform: rotate(180deg);
 }

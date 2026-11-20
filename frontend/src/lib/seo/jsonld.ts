@@ -20,6 +20,7 @@ export type ProductDetailJsonLdInput = {
   slug: string;
   name: string;
   path?: string;
+  breadcrumbName?: string;
   alternateName?: string[];
   description: string;
   image?: string | string[];
@@ -456,7 +457,7 @@ export function getProductDetailJsonLd(product: ProductDetailJsonLdInput, locale
     getBreadcrumbJsonLd([
       { name: isEnglish ? 'Home' : '首页', url: isEnglish ? '/en' : '/zh' },
       { name: isEnglish ? 'Product Center' : '产品中心', url: product.path?.split('/detail/')[0] || '/products' },
-      { name: product.name, url: product.path || `/products/detail/${product.slug}` },
+      { name: product.breadcrumbName ?? product.name, url: product.path || `/products/detail/${product.slug}` },
     ]),
   ]);
 }
