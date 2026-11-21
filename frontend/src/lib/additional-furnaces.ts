@@ -7,7 +7,7 @@ export const additionalFurnaces = [
     englishName: 'FORK-HANDLING FURNACE',
     nameEn: 'Fork-Handling Furnace',
     name: '叉车炉',
-    description: '铲齿取件 · 快速转运',
+    description: '叉车炉又称铲齿炉，快速淬火配置也称叉车式快速淬火炉。铲齿取件，快速转运。',
     descriptionEn: 'Batch heating with fork handling and coordinated transfer.',
     image: '/images/home/product-center/additional-20260909/shovel-furnace.webp',
     imageAlt: '箱式加热炉与独立轨道铲齿取料机结构图',

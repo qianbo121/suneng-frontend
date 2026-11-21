@@ -182,6 +182,9 @@ const acceptedGroups = [
   { date: '2026-11-19', source: '835a996b94205ef1b405e88ba280ade014cb9ff7', paths: [
     '/zh/products/detail/shovel-furnace',
   ] },
+  { date: '2026-11-21', source: '6afbee81b901e6a051214ae96835e876254cd0df', paths: [
+    '/zh', '/zh/products', '/zh/products/detail/shovel-furnace',
+  ] },
 ];
 const releasedCases = [
   'bright-quench-design', 'crankshaft-annual-output', 'cylinder-liner-solution-aging',

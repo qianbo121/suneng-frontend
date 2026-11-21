@@ -293,8 +293,8 @@
     "sourceCommit": "3c5838eef3ec4025b5e31937803a616d2d8890e8"
   },
   "/zh": {
-    "modifiedOn": "2026-11-11",
-    "sourceCommit": "f06596865b4ea9ceda18e8e708f61d373479adb2"
+    "modifiedOn": "2026-11-21",
+    "sourceCommit": "6afbee81b901e6a051214ae96835e876254cd0df"
   },
   "/zh/about": {
     "modifiedOn": "2026-11-19",
@@ -310,8 +310,8 @@
     "releaseCommit": "5248fac668a2d8445d430b3c99f58c86b958fe93"
   },
   "/zh/products": {
-    "modifiedOn": "2026-10-05",
-    "sourceCommit": "4edd89718a89b396f6e064dea24310f6b494b845"
+    "modifiedOn": "2026-11-21",
+    "sourceCommit": "6afbee81b901e6a051214ae96835e876254cd0df"
   },
   "/zh/products/detail/aluminum-forging-heating-line": {
     "modifiedOn": "2026-11-14",
@@ -367,8 +367,8 @@
     "sourceCommit": "3c5838eef3ec4025b5e31937803a616d2d8890e8"
   },
   "/zh/products/detail/shovel-furnace": {
-    "modifiedOn": "2026-11-19",
-    "sourceCommit": "835a996b94205ef1b405e88ba280ade014cb9ff7"
+    "modifiedOn": "2026-11-21",
+    "sourceCommit": "6afbee81b901e6a051214ae96835e876254cd0df"
   },
   "/zh/products/detail/track-shoe-press-quench-line": {
     "modifiedOn": "2026-11-14",

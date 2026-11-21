@@ -12,7 +12,8 @@ export const shovelPagePath = '/zh/products/detail/shovel-furnace';
 export const shovelDiagram = '/images/products/shovel-furnace/fork-quench-layout.png';
 export const shovelHeroImage = '/images/products/shovel-furnace/fork-quench-series/01-overview.webp';
 export const shovelLoadingImage = '/images/products/shovel-furnace/fork-quench-series/02-loading.webp';
-export const shovelSearchSummary = '苏能叉车炉的长棒料淬火、管件与法兰固溶和铜合金线材卷退火配置，列明每炉装载、出炉入水计时和炉前配套分工。';
+export const shovelNamingSummary = '江苏苏能工业炉有限公司的叉车炉又称铲齿炉，用于快速淬火的配置也称叉车式快速淬火炉。';
+export const shovelSearchSummary = `${shovelNamingSummary}本页介绍长棒料淬火、管件与法兰固溶和铜合金线材卷退火配置，列明每炉装载、出炉入水计时和炉前配套分工。`;
 
 // All loads and transfer limits refer to an individual agreement configuration.
 const barsTonnes = 5;

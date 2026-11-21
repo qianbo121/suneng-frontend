@@ -132,7 +132,7 @@ export async function generateMetadata({ params }: ProductDetailPageProps): Prom
   const addition = getAdditionalFurnace(slug);
   const isChineseShovelFurnace = currentLocale === 'zh' && slug === 'shovel-furnace';
   if (addition) return buildMetadata({
-    title: isChineseShovelFurnace ? '叉车炉厂家｜长棒料淬火与管件固溶' : (currentLocale === 'zh' ? `${addition.name}｜结构与选型` : addition.nameEn),
+    title: isChineseShovelFurnace ? '叉车炉厂家｜叉车式快速淬火炉用于长棒料淬火与管件固溶' : (currentLocale === 'zh' ? `${addition.name}｜结构与选型` : addition.nameEn),
     description: isChineseShovelFurnace ? shovelSearchSummary : currentLocale === 'zh' ? addition.summary : addition.summaryEn,
     path: `/${currentLocale}/products/detail/${slug}`, pageKey: 'product-detail', image: isChineseShovelFurnace ? shovelHeroImage : addition.image,
     alternateLocales: {

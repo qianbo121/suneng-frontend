@@ -13,7 +13,7 @@ import { additionalFurnaceSelection } from '@/lib/additional-furnace-selection';
 import { additionalFurnaceDetailContent, shovelPriorityWorkpieces } from '@/lib/additional-furnace-detail-content';
 import {
   shovelConfigurations, shovelDiagram, shovelEquipmentFeatures, shovelHeroImage,
-  shovelLoadingImage, shovelPagePath, shovelSearchSummary, shovelSupplyNotes, shovelTableColumns,
+  shovelLoadingImage, shovelNamingSummary, shovelPagePath, shovelSearchSummary, shovelSupplyNotes, shovelTableColumns,
 } from '@/lib/shovel-furnace-configurations';
 import { getVerifiedSitemapLastModified } from '@/lib/seo/verified-sitemap-revisions';
 import { additionalFurnaceStructures, shovelQuenchCutaway } from '@/lib/additional-furnace-structure';
@@ -66,6 +66,16 @@ export function AdditionalFurnaceDetailPage({
   const showShovelConfigurations = furnace.id === 'shovel-furnace' && locale === 'zh';
   const name = en ? furnace.nameEn : furnace.name;
   const copy = additionalFurnaceDetailContent[furnace.id];
+  const faqs = copy.faqs.map((item) => ({
+    question: item.question[locale],
+    answer: item.answer[locale],
+  }));
+  if (showShovelConfigurations) {
+    faqs.push({
+      question: '叉车炉、铲齿炉、叉车式快速淬火炉是什么关系？',
+      answer: `${shovelNamingSummary}铜合金线材卷退火配置用于退火，不属于快速淬火配置。`,
+    });
+  }
   const workpieces = [
     ...(showShovelConfigurations ? shovelPriorityWorkpieces : []),
     ...copy.workpieces.map((item) => ({ title: item.title[locale], text: item.text[locale], caution: item.caution })),
@@ -132,6 +142,7 @@ export function AdditionalFurnaceDetailPage({
           slug: furnace.id,
           name: copy.title[locale],
           breadcrumbName: showShovelConfigurations ? name : undefined,
+          alternateName: showShovelConfigurations ? ['铲齿炉', '叉车式快速淬火炉'] : undefined,
           dateModified: showShovelConfigurations ? getVerifiedSitemapLastModified(shovelPagePath) : undefined,
           description: showShovelConfigurations ? shovelSearchSummary : copy.description[locale],
           path: `/${locale}/products/detail/${furnace.id}`,
@@ -145,10 +156,7 @@ export function AdditionalFurnaceDetailPage({
             { name: `${row.model} · 供货分工`, value: row.supply },
           ]) : undefined,
         }, locale),
-        getFaqJsonLd(copy.faqs.map((item) => ({
-          question: item.question[locale],
-          answer: item.answer[locale],
-        }))),
+        getFaqJsonLd(faqs),
       ]} />
       <div className={shared.breadcrumbBar}>
         <div className={shared.container}>
@@ -472,10 +480,7 @@ export function AdditionalFurnaceDetailPage({
             <PitFurnaceFaq
               nativeDisclosure={showShovelConfigurations}
               idPrefix={`additional-${furnace.id}-${locale}`}
-              items={copy.faqs.map((item) => ({
-                question: item.question[locale],
-                answer: item.answer[locale],
-              }))}
+              items={faqs}
             />
           </Section>
           <Section
