@@ -1,6 +1,6 @@
 // Selection copy grounded in the source notes listed in docs/four-furnace-content-20260910/.
 // Project-specific dimensions, cycle times and acceptance limits are deliberately not catalog ratings.
-import { barLoad, copperCoilSharing, fittingLoad, shovelTransferLimits } from './shovel-furnace-configurations';
+import { barLoad, copperCoilSharing, fittingLoad, shovelNamingSummary, shovelTransferLimits } from './shovel-furnace-configurations';
 
 type Copy = { zh: string; en: string };
 const c = (zh: string, en: string): Copy => ({ zh, en });
@@ -30,7 +30,7 @@ export const additionalFurnaceDetailContent: Record<string, DetailContent> = {
       'Fork-Handling Furnace | Batch Heating and Load Transfer',
     ),
     description: c(
-      '叉车炉也称铲齿炉，专用叉料车可将长棒料或整筐不锈钢管件、法兰送入炉前水槽。选快速淬火炉时，先核对整批载荷和入水时间。铜合金线材卷退火时，一台叉料车可为多个炉室装卸。',
+      `${shovelNamingSummary}专用叉料车可将长棒料或整筐不锈钢管件、法兰送入炉前水槽。选快速淬火炉时，先核对整批载荷和入水时间。铜合金线材卷退火时，一台叉料车可为多个炉室装卸。`,
       'For castings, forgings and batch loads that can be supported by forks. Confirm clearance beneath the load, centre of gravity and the unloading route before coordinating the chamber, handler and downstream stations.',
     ),
     tags: [
