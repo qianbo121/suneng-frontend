@@ -1,4 +1,5 @@
 import type { NewsListCardItem } from '@/types/news';
+import { forkFurnaceInfographics } from './fork-furnace-infographics';
 import imageVariants from './infographic-image-variants.json';
 import {
   NEWS_DECISION_TOPICS,
@@ -27,6 +28,7 @@ export type InfographicResource = {
 // Supplied ten-poster package. Keep explicit IDs and the first resource URL;
 // transcribe the supplied content without inventing dates or English editions.
 export const infographicResources: InfographicResource[] = [
+  ...forkFurnaceInfographics,
   {
     slug: 'mesh-belt-500-screws',
     topic: 'quality',
@@ -591,6 +593,7 @@ export function getInfographicCards(): NewsListCardItem[] {
     date: '',
     listTopic: item.topic,
     listFurnaces: item.furnaces,
+    listEquipmentLabel: item.equipmentLabel === '叉车炉' ? item.equipmentLabel : undefined,
     searchText: [
       item.title,
       item.summary,
