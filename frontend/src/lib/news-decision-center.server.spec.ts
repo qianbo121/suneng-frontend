@@ -199,7 +199,7 @@ it.each(['zh', 'en'] as const)('keeps the localized public case in plain and fil
   expect(matches).toHaveLength(1);
   expect(matches[0].date).toBe('2026-09-18T01:00:00+08:00');
   expect((await getNewsResourceListData(locale)).data).toEqual(cards);
-  expect(cards.filter((card) => card.contentType === 'infographic')).toHaveLength(locale === 'zh' ? 10 : 0);
+  expect(cards.filter((card) => card.contentType === 'infographic')).toHaveLength(locale === 'zh' ? 18 : 0);
   const filtered = getNewsListView(toNewsListLiteCards(cards, locale), parseNewsListState('furnace=line'), 10);
   expect(filtered.items.map((item) => item.href)).toContain(href);
   const { data: articles } = await getNewsDecisionCenterData(locale);

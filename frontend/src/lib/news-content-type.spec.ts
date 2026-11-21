@@ -18,12 +18,15 @@ describe('independent infographic resources', () => {
     for (const source of [cards, toNewsListLiteCards(cards, 'zh')]) {
       const graphics = getNewsListView(source, parseNewsListState('format=infographic'), 10);
       const articles = getNewsListView(source, parseNewsListState('format=article'), 10);
-      expect(graphics.total).toBe(10);
+      expect(graphics.total).toBe(18);
       expect(graphics.items).toHaveLength(10);
       expect(graphics.items.every((item) => item.contentType === 'infographic')).toBe(true);
       expect(articles.items.every((item) => item.contentType !== 'infographic')).toBe(true);
       expect(graphics.total + articles.total).toBe(cards.length);
-      expect(graphics.items[0].href).toBe('/zh/infographics/mesh-belt-500-screws');
+      expect(graphics.items[0].href).toBe('/zh/infographics/fork-long-bars-quench-transfer-time');
+      const nextPage = getNewsListView(source, parseNewsListState('format=infographic&page=2'), 10);
+      expect(nextPage.items).toHaveLength(8);
+      expect(new Set([...graphics.items, ...nextPage.items].map((item) => item.slug)).size).toBe(18);
       expect(graphics.items[0].date).toBe('');
     }
   });
@@ -61,7 +64,7 @@ describe('independent infographic resources', () => {
       includeInfographicNewsResources(getInfographicCards(), 'zh').filter(
         (item) => item.contentType === 'infographic',
       ),
-    ).toHaveLength(10);
+    ).toHaveLength(18);
   });
 
   it('keeps the imported supply and solid-solution topics out of unrelated equipment results', () => {

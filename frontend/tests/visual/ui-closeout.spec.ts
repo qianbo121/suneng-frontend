@@ -104,9 +104,12 @@ for (const width of [1440, 390]) {
 
     const entries = page.locator('a[href^="/zh/infographics/"]');
     await expect(entries).toHaveCount(10);
-    await entries.first().click();
-    await expect(page).toHaveURL(/\/zh\/infographics\/mesh-belt-500-screws/);
-    await expect(page.getByRole('heading', { level: 1 })).toContainText('螺丝钉');
+    const firstEntry = entries.first();
+    const targetUrl = await firstEntry.evaluate((link: HTMLAnchorElement) => link.href);
+    const title = await firstEntry.getByRole('heading', { level: 3 }).innerText();
+    await firstEntry.click();
+    await expect(page).toHaveURL(targetUrl);
+    await expect(page.getByRole('heading', { level: 1 })).toHaveText(title);
     const poster = page.locator('main figure img');
     await poster.scrollIntoViewIfNeeded();
     await expect.poll(() => poster.evaluate((image: HTMLImageElement) => image.naturalWidth)).toBeGreaterThan(0);
