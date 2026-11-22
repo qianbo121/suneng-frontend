@@ -46,27 +46,27 @@
     ]
   ],
   "flowTitle": "安装调试与五炉试产流程",
-  "filmId": "04",
+  "filmId": "04-depth",
   "stages": [
     {
       "title": "准备工装",
       "note": "买方备妥料盘、吊具、垫铁及试件。",
-      "thumb": "/fork-case-review/films/04/stage-1.webp"
+      "thumb": "/fork-case-review/films/04-depth/stage-1.webp"
     },
     {
       "title": "空炉调试",
       "note": "制造厂预验收后，在现场安装并进行空炉调试。",
-      "thumb": "/fork-case-review/films/04/stage-2.webp"
+      "thumb": "/fork-case-review/films/04-depth/stage-2.webp"
     },
     {
       "title": "负载调试",
       "note": "用约定的工件和承料工装做负载升温调试。",
-      "thumb": "/fork-case-review/films/04/stage-3.webp"
+      "thumb": "/fork-case-review/films/04-depth/stage-3.webp"
     },
     {
       "title": "五炉试产",
       "note": "现场完成空炉和负载调试后，用买方的管件试生产 5 炉。",
-      "thumb": "/fork-case-review/films/04/stage-4.webp"
+      "thumb": "/fork-case-review/films/04-depth/stage-4.webp"
     }
   ],
   "cards": [

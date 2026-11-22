@@ -33,27 +33,27 @@
     ]
   ],
   "flowTitle": "项目配置与工艺流程",
-  "filmId": "01",
+  "filmId": "01-depth",
   "stages": [
     {
       "title": "横向装炉",
       "note": "长棒沿炉门方向横摆在支点上，装料工作宽度为 6 米。",
-      "thumb": "/fork-case-review/films/01/stage-1.webp"
+      "thumb": "/fork-case-review/films/01-depth/stage-1.webp"
     },
     {
       "title": "叉齿托料",
       "note": "叉齿从支点间伸入，整批向上托起。",
-      "thumb": "/fork-case-review/films/01/stage-2.webp"
+      "thumb": "/fork-case-review/films/01-depth/stage-2.webp"
     },
     {
       "title": "整批出炉",
       "note": "炉门开到位后，从工件开始外移时起表。",
-      "thumb": "/fork-case-review/films/01/stage-3.webp"
+      "thumb": "/fork-case-review/films/01-depth/stage-3.webp"
     },
     {
       "title": "全部浸没",
       "note": "保持横摆，最后一根棒料全部浸没时停表。",
-      "thumb": "/fork-case-review/films/01/stage-4.webp"
+      "thumb": "/fork-case-review/films/01-depth/stage-4.webp"
     }
   ],
   "cards": [
