@@ -33,27 +33,27 @@
     ]
   ],
   "flowTitle": "项目配置与工艺流程",
-  "filmId": "03",
+  "filmId": "03-depth",
   "stages": [
     {
       "title": "装料台备卷",
       "note": "买方备好随料料架，线卷整架在装料台待装。",
-      "thumb": "/fork-case-review/films/03/stage-1.webp"
+      "thumb": "/fork-case-review/films/03-depth/stage-1.webp"
     },
     {
       "title": "叉料车送料",
       "note": "同一台叉料车把料架送至指定炉室。",
-      "thumb": "/fork-case-review/films/03/stage-2.webp"
+      "thumb": "/fork-case-review/films/03-depth/stage-2.webp"
     },
     {
       "title": "分室退火",
       "note": "四个炉室各设一个温区，按炉室进行加热和保温。",
-      "thumb": "/fork-case-review/films/03/stage-3.webp"
+      "thumb": "/fork-case-review/films/03-depth/stage-3.webp"
     },
     {
       "title": "卸料台接卷",
       "note": "叉料车从炉室取出料架，转运至独立的卸料台。",
-      "thumb": "/fork-case-review/films/03/stage-4.webp"
+      "thumb": "/fork-case-review/films/03-depth/stage-4.webp"
     }
   ],
   "cards": [

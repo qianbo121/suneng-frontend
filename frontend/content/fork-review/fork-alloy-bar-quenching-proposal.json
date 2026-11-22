@@ -46,27 +46,27 @@
     ]
   ],
   "flowTitle": "棒料装炉与淬火流程",
-  "filmId": "07",
+  "filmId": "07-depth",
   "stages": [
     {
       "title": "配棒装炉",
       "note": "按规格组合与装炉图核对本炉净重。",
-      "thumb": "/fork-case-review/films/07/stage-1.webp"
+      "thumb": "/fork-case-review/films/07-depth/stage-1.webp"
     },
     {
       "title": "加热保温",
       "note": "按各牌号与规格的工艺安排占炉时间。",
-      "thumb": "/fork-case-review/films/07/stage-2.webp"
+      "thumb": "/fork-case-review/films/07-depth/stage-2.webp"
     },
     {
       "title": "出炉入水",
       "note": "方案的约 45 秒指这一段转移。",
-      "thumb": "/fork-case-review/films/07/stage-3.webp"
+      "thumb": "/fork-case-review/films/07-depth/stage-3.webp"
     },
     {
       "title": "检验计产",
       "note": "按炉号核对装载净重与检验合格重量，再汇总月产。",
-      "thumb": "/fork-case-review/films/07/stage-4.webp"
+      "thumb": "/fork-case-review/films/07-depth/stage-4.webp"
     }
   ],
   "cards": [

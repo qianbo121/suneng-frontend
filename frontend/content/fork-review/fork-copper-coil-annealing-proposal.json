@@ -46,27 +46,27 @@
     ]
   ],
   "flowTitle": "线卷装架与退火流程",
-  "filmId": "06",
+  "filmId": "06-depth",
   "stages": [
     {
       "title": "称架称卷",
       "note": "分别称量料架与各卷净重。",
-      "thumb": "/fork-case-review/films/06/stage-1.webp"
+      "thumb": "/fork-case-review/films/06-depth/stage-1.webp"
     },
     {
       "title": "按图排卷",
       "note": "在确认的有效装料范围内逐卷核对位置。",
-      "thumb": "/fork-case-review/films/06/stage-2.webp"
+      "thumb": "/fork-case-review/films/06-depth/stage-2.webp"
     },
     {
       "title": "整架退火",
       "note": "叉料车送料入炉，按方案升温并保温。",
-      "thumb": "/fork-case-review/films/06/stage-3.webp"
+      "thumb": "/fork-case-review/films/06-depth/stage-3.webp"
     },
     {
       "title": "核算净装量",
       "note": "算例按 6 卷、每卷 0.8 吨计，铜料净重为 4.8 吨。",
-      "thumb": "/fork-case-review/films/06/stage-4.webp"
+      "thumb": "/fork-case-review/films/06-depth/stage-4.webp"
     }
   ],
   "cards": [

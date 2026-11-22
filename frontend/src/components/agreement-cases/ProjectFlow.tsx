@@ -3,7 +3,8 @@
 import { useEffect, useId, useRef, useState, type CSSProperties } from 'react';
 import { FiCheck, FiChevronRight, FiGrid, FiMaximize, FiPause, FiPlay, FiZoomIn } from 'react-icons/fi';
 import type { ProjectView } from '@/lib/cases/agreement/reader';
-import s from './LineFlow.module.css';
+import projectStyles from './LineFlow.module.css';
+import meshBeltStyles from '../case-studies/fastener-mesh-belt/LineFlow.module.css';
 import { TrackedFilm, type TrackedProject } from './TrackedFilm';
 
 type Props = { steps: string[]; english: boolean } & (
@@ -20,10 +21,12 @@ function detailFrame([x, y, width]: ProjectView['cameras'][number], ratio: numbe
 }
 
 export function ProjectFlow({ steps, view, image, film, tracked, english }: Props) {
+  const s = tracked?.track.referenceFraming ? meshBeltStyles : projectStyles;
   const id = 'process-' + useId().replace(/[^a-zA-Z0-9_-]/g, '');
   const viewer = useRef<HTMLDivElement>(null);
   const video = useRef<HTMLVideoElement>(null);
   const [failed, setFailed] = useState(false);
+  const [buffering, setBuffering] = useState(false);
   const [selection, setSelection] = useState<{ index: number | null; moving: boolean }>({ index: null, moving: false });
   const selected = selection.index;
   const [running, setRunning] = useState(false);
@@ -80,7 +83,7 @@ export function ProjectFlow({ steps, view, image, film, tracked, english }: Prop
       if (video.current.readyState === 0) video.current.preload = 'metadata';
       video.current.currentTime = time;
     }
-    requestAnimationFrame(() => {
+    if (!tracked) requestAnimationFrame(() => {
       if (viewer.current && viewer.current.getBoundingClientRect().top < 85)
         viewer.current.scrollIntoView({ block: 'start', behavior: 'instant' });
     });
@@ -91,19 +94,23 @@ export function ProjectFlow({ steps, view, image, film, tracked, english }: Prop
   const [left, top, width, height] = frame;
   const playing = running && !failed;
   const title = selected === null ? label('整线工艺流转', 'Full-line process flow') : steps[selected];
-  return <div className={s.panel}>
+  const status = failed ? label('动画暂时无法播放。', 'Animation could not be loaded.')
+    : tracked && buffering ? label('动画加载中…', 'Loading animation…')
+    : selected !== null ? (tracked ? steps[selected] + ' · ' + tracked.stages[selected].note : steps[selected])
+    : tracked ? title : '';
+  return <div className={s.panel + (tracked ? ' ' + projectStyles.fixedPanel : '')}>
     <div className={s.player}>
       <div className={s.controls}>
         {selected !== null && <button type="button" onClick={() => setSelection({ index: null, moving: running })}>
-          <FiMaximize aria-hidden />{label('查看整线', 'View full line')}
+          {tracked ? <FiGrid aria-hidden /> : <FiMaximize aria-hidden />}{label('查看整线', 'View full line')}
         </button>}
         <button type="button" onClick={togglePlayback} disabled={!ready} aria-pressed={playing}>
           {playing ? <FiPause aria-hidden /> : <FiPlay aria-hidden />}
           {failed ? label('重试播放', 'Retry playback') : playing ? label('暂停动画', 'Pause animation') : label('播放动画', 'Play animation')}
         </button>
       </div>
-      <div id={id} ref={viewer} className={s.viewport} data-detail={selected !== null}>
-        {tracked && <TrackedFilm project={tracked} player={video} selection={selection} title={title} onError={() => setFailed(true)} />}
+      <div id={id} ref={viewer} className={s.viewport + (tracked ? ' ' + projectStyles.fixedViewport : '')} data-detail={selected !== null} data-composed-shots={tracked?.track.composedShots || undefined} aria-busy={tracked ? buffering : undefined}>
+        {tracked && <TrackedFilm project={tracked} player={video} selection={selection} title={title} onError={() => setFailed(true)} onBuffering={setBuffering} />}
         {film && <div className={s.filmCrop} style={{
           width: `min(100cqw, ${100 * width / height}cqh)`,
           aspectRatio: `${width}/${height}`,
@@ -136,12 +143,17 @@ export function ProjectFlow({ steps, view, image, film, tracked, english }: Prop
         </svg>}
       </div>
     </div>
-    <p className={s.status} role="status">{failed ? label('动画暂时无法播放。', 'Animation could not be loaded.') : selected !== null && (tracked ? steps[selected] + ' · ' + tracked.stages[selected].note : steps[selected])}</p>
+    <p className={s.status + (tracked ? ' ' + projectStyles.fixedStatus : '')} role="status">
+      {tracked ? <>
+        {tracked.stages.map((stage, i) => <span key={i} className={projectStyles.statusSizer} aria-hidden="true">{stage.title + ' · ' + stage.note}</span>)}
+        <span className={projectStyles.activeStatus}>{status}</span>
+      </> : status}
+    </p>
     <div className={s.tray}>
       <p className={s.instruction} id={id+'-label'}><FiGrid aria-hidden />
         {label('点选下方工序卡片，查看局部动画', 'Select a process card to view its animation')}
       </p>
-      <div className={s.cards} data-stages={steps.length} role="group" aria-labelledby={id+'-label'}
+      <div className={tracked?.track.referenceFraming ? s.cards + ' ' + projectStyles.batchCards : s.cards} data-stages={steps.length} role="group" aria-labelledby={id+'-label'}
         style={{ '--stages': steps.length } as CSSProperties}>
         {steps.map((step, i) => <button key={step} type="button" className={s.card} disabled={!ready} aria-controls={id}
           aria-pressed={selected === i} onClick={() => selectStage(i)}>

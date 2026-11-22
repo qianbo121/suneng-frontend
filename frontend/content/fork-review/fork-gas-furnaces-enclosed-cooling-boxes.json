@@ -33,27 +33,27 @@
     ]
   ],
   "flowTitle": "项目配置与工艺流程",
-  "filmId": "05",
+  "filmId": "05-depth",
   "stages": [
     {
       "title": "炉内加热",
       "note": "两台燃气加热炉用于成批加热。",
-      "thumb": "/fork-case-review/films/05/stage-1.webp"
+      "thumb": "/fork-case-review/films/05-depth/stage-1.webp"
     },
     {
       "title": "分配箱位",
       "note": "一台叉料车在加热炉和两台冷却箱之间转运炉料。",
-      "thumb": "/fork-case-review/films/05/stage-2.webp"
+      "thumb": "/fork-case-review/films/05-depth/stage-2.webp"
     },
     {
       "title": "封闭冷却",
       "note": "转入选定的冷却箱后，该批炉料独立占用箱位。",
-      "thumb": "/fork-case-review/films/05/stage-3.webp"
+      "thumb": "/fork-case-review/films/05-depth/stage-3.webp"
     },
     {
       "title": "冷却后出箱",
       "note": "炉料移出后，冷却箱可接收下一批。",
-      "thumb": "/fork-case-review/films/05/stage-4.webp"
+      "thumb": "/fork-case-review/films/05-depth/stage-4.webp"
     }
   ],
   "cards": [

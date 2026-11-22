@@ -33,27 +33,27 @@
     ]
   ],
   "flowTitle": "项目配置与工艺流程",
-  "filmId": "08",
+  "filmId": "08-depth",
   "stages": [
     {
       "title": "随盘装料",
       "note": "不锈钢管件以料盘为载体成批进炉。",
-      "thumb": "/fork-case-review/films/08/stage-1.webp"
+      "thumb": "/fork-case-review/films/08-depth/stage-1.webp"
     },
     {
       "title": "天然气加热",
       "note": "炉体配套天然气、供风和燃烧系统，按工艺加热保温。",
-      "thumb": "/fork-case-review/films/08/stage-2.webp"
+      "thumb": "/fork-case-review/films/08-depth/stage-2.webp"
     },
     {
       "title": "叉料车出炉",
       "note": "叉料车托住管件和料具，一起移出炉膛。",
-      "thumb": "/fork-case-review/films/08/stage-3.webp"
+      "thumb": "/fork-case-review/films/08-depth/stage-3.webp"
     },
     {
       "title": "整批入水",
       "note": "工件和料具一同下降，进入买方自备的固溶水槽。",
-      "thumb": "/fork-case-review/films/08/stage-4.webp"
+      "thumb": "/fork-case-review/films/08-depth/stage-4.webp"
     }
   ],
   "cards": [

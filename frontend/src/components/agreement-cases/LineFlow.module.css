@@ -105,3 +105,25 @@
 .filmCrop { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); overflow:hidden; }
 .filmCrop video { position:absolute; display:block; height:auto; max-width:none; }
 .trackedFilm { position:absolute; inset:0 auto auto 0; display:block; width:100%; height:100%; max-width:none; object-fit:contain; }
+
+/* Process selection changes the camera, not the page layout or card positions. */
+.fixedPanel .fixedViewport[data-detail] { aspect-ratio: 4.2; }
+.fixedPanel .fixedStatus { display: grid; margin: 0; line-height: 1.75; }
+.statusSizer, .activeStatus { grid-area: 1 / 1; }
+.statusSizer { visibility: hidden; pointer-events: none; }
+@media (max-width: 600px) {
+  .fixedPanel .fixedViewport[data-detail] { aspect-ratio: 2.1; }
+}
+
+.viewport[data-composed-shots=true] { aspect-ratio: 2.4; }
+@media (max-width: 600px) {
+  .viewport[data-composed-shots=true][data-detail=true] { aspect-ratio: 2.1; }
+}
+
+/* The preview uses the mesh-belt player skin. Only the number of batch operations differs. */
+@media (min-width: 901px) {
+  .batchCards[data-stages="4"] { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
+@media (max-width: 600px) {
+  .batchCards[data-stages="4"] { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
