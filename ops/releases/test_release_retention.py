@@ -45,6 +45,29 @@ class Engine:
         del self.records[image_id]
 
 
+class RecordedVersionTest(unittest.TestCase):
+    def test_previous_admin_version_can_be_older_than_128_receipts(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory).resolve()
+            receipt = {'deploymentStatus': 'verified', 'images': {'admin': ident(1)},
+                       'adminRelease': metadata(1, 0)}
+            for index in range(128):
+                path = root / f'receipt-{index}.json'
+                path.write_text(json.dumps(receipt))
+                receipt = {'previousReceipt': str(path)}
+            self.assertEqual(r.recorded_version('admin', ident(1), receipt, root), source(1))
+            self.assertIsNone(r.recorded_version('admin', ident(2), receipt, root))
+
+    def test_cycle_with_no_verified_match_terminates(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory).resolve()
+            path = root / 'cycle.json'
+            receipt = {'previousReceipt': str(path), 'deploymentStatus': 'pending',
+                       'images': {'admin': ident(1)}, 'adminRelease': metadata(1, 0)}
+            path.write_text(json.dumps(receipt))
+            self.assertIsNone(r.recorded_version('admin', ident(1), receipt, root))
+
+
 class RetentionTest(unittest.TestCase):
     def setUp(self):
         self.tmp = tempfile.TemporaryDirectory()

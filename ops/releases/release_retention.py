@@ -115,7 +115,7 @@ def boundaries(receipt):
 def recorded_version(component, image_id, receipt, records_root):
     """Use accepted history, never image dates/tags alone, to establish ownership."""
     seen = set()
-    for _ in range(128):
+    while True:
         meta = receipt.get(component + 'Release', {})
         if (receipt.get('deploymentStatus') == 'verified'
                 and receipt.get('images', {}).get(component) == image_id
@@ -128,7 +128,6 @@ def recorded_version(component, image_id, receipt, records_root):
             return None
         seen.add(previous)
         receipt = json.loads(read_file(previous, records_root))
-    raise ValueError('Release history exceeds the retention traversal limit')
 
 
 def owned_image(image, component, source):
