@@ -65,6 +65,7 @@ export class ShujuNewsPublishService {
     }
     if (
       dto.coverImage?.includes('/media/news/') ||
+      dto.englishCoverImage?.includes('/media/news/') ||
       dto.contentZh.includes('/media/news/') ||
       dto.contentEn?.includes('/media/news/')
     ) {
@@ -160,6 +161,7 @@ export class ShujuNewsPublishService {
           ...(english ??
             (sourceChanged
               ? {
+                  englishCoverImage: null,
                   titleEn: null,
                   summaryEn: null,
                   contentEn: null,
@@ -221,6 +223,7 @@ export class ShujuNewsPublishService {
       dto.seoTitleEn,
       dto.seoDescriptionEn,
       dto.seoKeywordsEn,
+      dto.englishCoverImage,
     ];
     if (fields.every((value) => value === undefined || value === null)) return undefined;
     const contentEn = DOMPurify.sanitize(dto.contentEn ?? '');
@@ -238,6 +241,8 @@ export class ShujuNewsPublishService {
       seoTitleEn: dto.seoTitleEn?.trim() || dto.titleEn.trim(),
       seoDescriptionEn: dto.seoDescriptionEn?.trim() || dto.summaryEn.trim(),
       seoKeywordsEn: dto.seoKeywordsEn?.trim() || '',
+      // Omission preserves existing covers and the hash of previously accepted jobs.
+      ...(dto.englishCoverImage ? { englishCoverImage: dto.englishCoverImage } : {}),
     };
   }
 

@@ -78,6 +78,12 @@ export class ShujuNewsPublishDto {
   @MaxLength(500)
   coverImage?: string;
 
+  @IsOptional()
+  @IsString()
+  @IsUrl({ require_protocol: true, protocols: ['http', 'https'] })
+  @MaxLength(500)
+  englishCoverImage?: string;
+
   @IsString()
   @IsNotEmpty()
   @MaxLength(180)

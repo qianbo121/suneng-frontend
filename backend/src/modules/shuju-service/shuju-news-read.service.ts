@@ -38,6 +38,7 @@ export class ShujuNewsReadService {
           titleEn: true,
           summaryZh: true,
           coverImage: true,
+          englishCoverImage: true,
           publishDate: true,
           slug: true,
           isPublished: true,

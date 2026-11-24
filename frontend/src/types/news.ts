@@ -32,7 +32,7 @@ export type NewsApiItem = {
   contentUpdatedAt?: string | null;
   englishContentUpdatedAt?: string | null;
   englishSourceDate?: { label: 'Source reviewed' | 'Source updated'; date: string };
-  englishCoverImage?: string;
+  englishCoverImage?: string | null;
   viewCount?: number;
   slug: string;
   isPublished?: boolean;
