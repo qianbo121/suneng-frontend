@@ -1,4 +1,5 @@
 import { expect, test } from '@playwright/test';
+import { getInfographic, getInfographicPages } from '../../src/lib/infographics';
 
 for (const width of [1440, 390]) {
   test(`products keep positioned images and working animations at ${width}px`, async ({ page }, info) => {
@@ -110,10 +111,20 @@ for (const width of [1440, 390]) {
     await firstEntry.click();
     await expect(page).toHaveURL(targetUrl);
     await expect(page.getByRole('heading', { level: 1 })).toHaveText(title);
-    const poster = page.locator('main figure img');
-    await poster.scrollIntoViewIfNeeded();
-    await expect.poll(() => poster.evaluate((image: HTMLImageElement) => image.naturalWidth)).toBeGreaterThan(0);
-    await expect.poll(() => poster.evaluate((image: HTMLImageElement) => image.currentSrc)).toMatch(/-\d+w\.webp$/);
+    const slug = new URL(targetUrl).pathname.split('/').pop()!;
+    const resource = getInfographic(slug, 'zh');
+    if (!resource) throw new Error('Missing Chinese infographic: ' + slug);
+    const expectedPages = getInfographicPages(resource);
+    const posters = page.locator('main figure img');
+    await expect(posters).toHaveCount(expectedPages.length);
+    for (const [index, expected] of expectedPages.entries()) {
+      const poster = posters.nth(index);
+      await poster.scrollIntoViewIfNeeded();
+      await expect.poll(() => poster.evaluate((image: HTMLImageElement) => image.naturalWidth)).toBeGreaterThan(0);
+      const displayPath = await poster.evaluate((image: HTMLImageElement) => new URL(image.currentSrc).pathname);
+      expect(displayPath).toMatch(/-\d+w\.webp$/);
+      expect(displayPath.replace(/-\d+w\.webp$/, '.png')).toBe(expected.image);
+    }
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
 
     await page.getByRole('navigation', { name: '面包屑' })
