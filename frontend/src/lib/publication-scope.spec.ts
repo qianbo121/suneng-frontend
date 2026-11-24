@@ -21,13 +21,14 @@ import { prepareNewsArticleHtml } from './sanitize';
 const approved = 'stainless-strip-annealing-supply-scope';
 
 describe('launch publication scope', () => {
-  it('opens exactly the eleven approved Chinese guides and keeps other editions and lookalikes closed', () => {
+  it('opens exactly the eleven approved guides in both languages and keeps lookalikes closed', () => {
     expect(APPROVED_GUIDE_PATHS.size).toBe(11);
     for (const path of APPROVED_GUIDE_PATHS) {
       expect(isWithdrawnRequestPath(path)).toBe(false);
       expect(isWithdrawnTechnicalPath(path + '?from=service')).toBe(false);
+      expect(isWithdrawnRequestPath(path.replace('/zh/', '/en/'))).toBe(false);
       for (const other of [
-        path.replace('/zh/', '/en/'),
+        path.replace('/zh/', '/en/').replace('/articles/', '/%61rticles/').replace('/solutions/', '/%73olutions/'),
         path + '/extra',
         path + '-copy',
         path.replace('/zh/', '/'),

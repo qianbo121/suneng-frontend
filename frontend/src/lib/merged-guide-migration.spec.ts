@@ -45,8 +45,9 @@ describe('merged guide keeps the historical entrance connected to full content',
     expect(body.faq).toContain('不能替代现场检测、风险评估和正式技术方案');
     expect(body.faq).toContain('原页面发布于 2026-06-13。');
   });
-  it('does not create an English equivalent for Chinese-only content', async () => {
-    await expect(OldFurnaceGuide({ params: Promise.resolve({ locale: 'en' }) })).rejects.toMatchObject({ status: 404 });
+  it('opens the authorized English equivalent while other locales remain withdrawn', async () => {
+    await expect(OldFurnaceGuide({ params: Promise.resolve({ locale: 'en' }) })).resolves.toBeDefined();
+    await expect(OldFurnaceGuide({ params: Promise.resolve({ locale: 'fr' }) })).rejects.toMatchObject({ status: 404 });
   });
   it('applies the actual published source and keeps all four authority links in its public body', async () => {
     const source = sourceArticles.find((article) => article.id === 21)! as NewsApiItem;

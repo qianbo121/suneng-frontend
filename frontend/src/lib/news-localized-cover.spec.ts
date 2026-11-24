@@ -1,3 +1,5 @@
+import { existsSync } from 'node:fs';
+import path from 'node:path';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { resolveNewsImage } from './news';
 import articleCovers from './news-bilingual-article-covers.json';
@@ -17,9 +19,14 @@ describe('localized news cover', () => {
     expect(resolveNewsImage(article, { locale: 'en' })).toBe(images.english);
     // Uploaded assets are served by the public proxy, not the Next server's
     // local filesystem. Relative /uploads URLs fail inside the image optimizer.
-    const englishUrl = new URL(images.english);
-    expect(englishUrl.origin).toBe('https://www.jssngyl.cn');
-    expect(englishUrl.pathname).toMatch(/^\/uploads\/2026\/11\/.+\.webp$/);
+    if (images.english.startsWith('/images/news/fork-en/')) {
+      expect(images.english).toMatch(/^\/images\/news\/fork-en\/(?:15[3-9]|160)-cover\.webp$/);
+      expect(existsSync(path.join(process.cwd(), 'public', images.english))).toBe(true);
+    } else {
+      const englishUrl = new URL(images.english);
+      expect(englishUrl.origin).toBe('https://www.jssngyl.cn');
+      expect(englishUrl.pathname).toMatch(/^\/uploads\/2026\/11\/.+\.webp$/);
+    }
     expect(resolveNewsImage({ ...article, coverImage: '/uploads/revised.webp' }, { locale: 'en' })).toBe('/uploads/revised.webp');
   });
 

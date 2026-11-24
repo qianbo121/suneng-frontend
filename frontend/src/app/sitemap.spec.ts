@@ -173,7 +173,7 @@ describe('sitemap freshness signals', () => {
         .filter((entry) => /\/(articles|solutions)(\/|$)/.test(new URL(entry.url).pathname))
         .map((entry) => new URL(entry.url).pathname)
         .sort(),
-    ).toEqual([...APPROVED_GUIDE_PATHS, ...APPROVED_PROCUREMENT_PATHS, ENGLISH_EQUIPMENT_PROCUREMENT_PATH].filter((path) => /\/(articles|solutions)\//.test(path)).sort());
+    ).toEqual([...APPROVED_GUIDE_PATHS, ...[...APPROVED_GUIDE_PATHS].map(path => path.replace('/zh/', '/en/')), ...APPROVED_PROCUREMENT_PATHS, ENGLISH_EQUIPMENT_PROCUREMENT_PATH].filter((path) => /\/(articles|solutions)\//.test(path)).sort());
     expect(casePathUrls(entries.map((entry) => entry.url))).toEqual(APPROVED_CASE_URLS);
   });
 
@@ -339,7 +339,7 @@ it('lists only approved cases and guides without pagination or withdrawn alterna
       .filter((x) => /\/articles(\/|\?|$)/.test(x.url))
       .map((x) => new URL(x.url).pathname)
       .sort(),
-  ).toEqual([...APPROVED_GUIDE_PATHS, ...APPROVED_PROCUREMENT_PATHS, ENGLISH_EQUIPMENT_PROCUREMENT_PATH].filter((path) => path.includes('/articles/')).sort());
+  ).toEqual([...APPROVED_GUIDE_PATHS, ...[...APPROVED_GUIDE_PATHS].map(path => path.replace('/zh/', '/en/')), ...APPROVED_PROCUREMENT_PATHS, ENGLISH_EQUIPMENT_PROCUREMENT_PATH].filter((path) => path.includes('/articles/')).sort());
   expect(entries.some((x) => /\/case\?/.test(x.url))).toBe(false);
   expect(casePathUrls(entries.map((x) => x.url))).toEqual(APPROVED_CASE_URLS);
   for (const entry of entries)
@@ -390,10 +390,9 @@ it('includes the bilingual equipment guide and the Chinese parts guide with thei
   const entries = await buildSitemap();
   for (const pathname of APPROVED_PROCUREMENT_PATHS) {
     const matching = entries.filter((entry) => new URL(entry.url).pathname === pathname);
-    const bilingual = pathname === approvedProcurementPages.equipment.path;
     expect(matching).toHaveLength(1);
     expect(matching[0].alternates?.languages).toEqual({
-      ...(bilingual ? { 'en-US': site + ENGLISH_EQUIPMENT_PROCUREMENT_PATH } : {}),
+      'en-US': site + pathname.replace('/zh/', '/en/'),
       'zh-CN': 'https://www.jssngyl.cn' + pathname,
       'x-default': 'https://www.jssngyl.cn' + pathname,
     });
@@ -402,7 +401,7 @@ it('includes the bilingual equipment guide and the Chinese parts guide with thei
         ? new Date(approvedProcurementPages.equipment.publishedModifiedAt)
         : '2026-11-14',
     );
-    expect(entries.some((entry) => new URL(entry.url).pathname === pathname.replace('/zh/', '/en/'))).toBe(bilingual);
+    expect(entries.some((entry) => new URL(entry.url).pathname === pathname.replace('/zh/', '/en/'))).toBe(true);
   }
 });
 

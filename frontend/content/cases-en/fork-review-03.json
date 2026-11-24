@@ -1,0 +1,190 @@
+{
+  "id": "fork-review-03",
+  "slug": "fork-copper-wire-four-chamber-annealing",
+  "number": 3,
+  "title": "Four copper-alloy wire annealing chambers served by one fork charging car",
+  "summary": "One car loads and unloads Suneng’s four independently controlled annealing chambers. There is one loading and one unloading station. The maximum charge per chamber is 5.5 tonnes including coils and rack.",
+  "seoTitle": "Four copper-wire annealing chambers with one charging car",
+  "seoDescription": "Four 200 kW chambers share one fork car. See rack loading, transfer and unloading duties for a gross load of 5.5 tonnes including the rack.",
+  "body": "fork-review-03.md",
+  "translatedAt": "2026-11-24",
+  "translationStatus": "complete",
+  "sourceFingerprint": "b1d1c4522544c38a2ee7fa1ac0a6d404e26466fd7b03f08bdc6ab6a653eb6aa1",
+  "coverAlt": "Copper-alloy wire coils laid flat",
+  "coverCaption": "Copper-alloy wire coils",
+  "reviewSourceFingerprint": "bab8a32189a145114fb780be43c08bdbad36988c06de93cdb3534c92c228f58b",
+  "forkReview": {
+    "image": "/fork-case-review/workpieces/copper-alloy-wire-coil.webp",
+    "imageAlt": "Copper-alloy wire coils laid flat",
+    "category": "Copper-alloy wire coils",
+    "metrics": [
+      [
+        "Independent furnace chambers",
+        "4",
+        "chambers"
+      ],
+      [
+        "Heating power per chamber",
+        "200",
+        "kW/chamber"
+      ],
+      [
+        "Coils and rack combined",
+        "5.5",
+        "t/batch"
+      ]
+    ],
+    "note": "Each chamber has one temperature zone. A shared fork car connects the separate loading and unloading stations outside the chambers.",
+    "work": [],
+    "featuresTitle": "Project features",
+    "features": [
+      [
+        "Four independently controlled chambers",
+        "The rack enters the designated chamber. Each chamber has its own heating zone. While one is being loaded or unloaded, the others can continue heating or soaking."
+      ],
+      [
+        "One car, separate stations",
+        "Incoming coils wait at the loading station. Annealed coils go to the unloading station. The contract lists one car for the four chambers and both stations."
+      ]
+    ],
+    "flowTitle": "Equipment arrangement and process sequence",
+    "filmId": "03-depth",
+    "stages": [
+      {
+        "title": "Prepare coils at the loading station",
+        "note": "The buyer provides the rack. The loaded rack waits at the loading station.",
+        "thumb": "/fork-case-review/films/03-depth/stage-1.webp"
+      },
+      {
+        "title": "Transfer the rack",
+        "note": "The shared fork car takes the rack to the designated chamber.",
+        "thumb": "/fork-case-review/films/03-depth/stage-2.webp"
+      },
+      {
+        "title": "Anneal in separate chambers",
+        "note": "Each of the four chambers has one zone for heating and soaking.",
+        "thumb": "/fork-case-review/films/03-depth/stage-3.webp"
+      },
+      {
+        "title": "Receive the rack at the unloading station",
+        "note": "The fork car retrieves the rack and moves it to the separate unloading station.",
+        "thumb": "/fork-case-review/films/03-depth/stage-4.webp"
+      }
+    ],
+    "cards": [
+      {
+        "title": "Equipment specifications",
+        "paragraphs": [],
+        "definitions": [],
+        "table": {
+          "head": [
+            "Item",
+            "Project specification"
+          ],
+          "rows": [
+            [
+              "Equipment listed in the contract",
+              "Four-chamber electric annealing furnace"
+            ],
+            [
+              "Effective load dimensions in the contract",
+              "1,700 mm diameter × 1,600 mm high"
+            ],
+            [
+              "Heating power and zoning",
+              "200 kW per chamber, one zone per chamber"
+            ],
+            [
+              "Rated temperature / working range",
+              "700 ℃ / 550–700 ℃"
+            ],
+            [
+              "Working-zone temperature variation during soaking",
+              "Within ±5 °C"
+            ],
+            [
+              "Batch load",
+              "5.5 tonnes including copper-alloy wire coils and rack"
+            ],
+            [
+              "Handling equipment",
+              "1 fork car, 1 loading station and 1 unloading station"
+            ]
+          ],
+          "rowHeaders": true
+        }
+      },
+      {
+        "title": "Supply responsibilities",
+        "paragraphs": [],
+        "definitions": [
+          [
+            "Suneng",
+            "Designs, manufactures, installs and commissions the system. The contract includes a nine-point temperature instrument for checking differences within the working zone."
+          ],
+          [
+            "Buyer",
+            "Supplies the racks that enter with the coils and loads them under the supplier’s guidance during commissioning."
+          ]
+        ]
+      },
+      {
+        "title": "Scope of supply",
+        "paragraphs": [
+          "Each chamber has its own hot-air circulation system and temperature control. One car travels between the loading station, chambers and unloading station."
+        ],
+        "definitions": []
+      },
+      {
+        "title": "Acceptance procedure",
+        "paragraphs": [],
+        "definitions": [
+          [
+            "Empty and loaded commissioning",
+            "The contract separates the empty functional check from the loaded test with workpieces and racks."
+          ],
+          [
+            "Trial production period",
+            "The contract specifies 30 consecutive days of normal operation. Both parties then conduct acceptance under its technical and acceptance terms."
+          ]
+        ]
+      }
+    ],
+    "figure": {
+      "src": "/images/news/fork-en/case-03-diagram.webp",
+      "alt": "Four chambers share one charging car",
+      "caption": "Put the coils on the buyer’s rack. The charging car takes the loaded rack to a chamber. Each chamber has 200 kW of heating. All four share the same car. The car retrieves the annealed rack. Plan transfers against availability of the separate unloading station."
+    },
+    "related": [
+      [
+        "Fork-handling furnace specifications",
+        "/en/products/detail/shovel-furnace"
+      ],
+      [
+        "Can four wire annealing chambers share a single fork car?",
+        "/en/news/copper-wire-annealing-four-chambers-one-charging-car"
+      ]
+    ],
+    "faqIntro": "Power per chamber, gross charge including racks and the four-chamber handling route.",
+    "faq": [
+      [
+        "Does 200 kW per chamber mean 200 kW for the whole system?",
+        "200 kW is the heating power of one chamber. There are four chambers, each with one zone."
+      ],
+      [
+        "Does the 5.5-tonne batch include the rack?",
+        "Yes. Deduct the actual rack weight from the combined coil-and-rack weight to obtain the net copper charge."
+      ],
+      [
+        "Is there a car for each chamber?",
+        "One car serves all four. It takes a rack from the loading station to the designated chamber and moves the annealed batch to the unloading station."
+      ]
+    ],
+    "source": "Reference: 2020 purchase contract and technical terms for the electrically heated chamber annealing furnace. The load definition follows Suneng’s product information.",
+    "ctaTitle": "Send workpiece details to check the furnace configuration",
+    "title": "Four copper-alloy wire annealing chambers served by one fork charging car",
+    "summary": "One car loads and unloads Suneng’s four independently controlled annealing chambers. There is one loading and one unloading station. The maximum charge per chamber is 5.5 tonnes including coils and rack.",
+    "listTitle": "Four annealing chambers sharing one car",
+    "listSummary": "One car serves the loading station, four chambers and the unloading station. Each chamber is controlled independently. The charge limit is 5.5 tonnes including the rack."
+  }
+}

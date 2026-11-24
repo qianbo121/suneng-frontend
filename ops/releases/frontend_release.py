@@ -22,7 +22,7 @@ from component_lifecycle import active_components, retired_admin
 from storage_policy import working_space
 from frontend_html import frontend_html_probe
 from acquisition_continuity import acquisition_continuity_probe
-from procurement_approval import BILINGUAL_SCOPE_SHA256, ENGLISH_EQUIPMENT_PATH, APPROVED_PATHS as APPROVED_PROCUREMENT_PATHS, APPROVAL_SHA256 as PROCUREMENT_APPROVAL_SHA256, CURRENT_APPROVAL_SHA256 as CURRENT_PROCUREMENT_APPROVAL_SHA256, SCOPE_FIELD, normalize_procurement, resolve_approval_sha
+from procurement_approval import BILINGUAL_SCOPE_SHA256, PARTS_SCOPE_SHA256, ENGLISH_PARTS_PATH, ENGLISH_EQUIPMENT_PATH, APPROVED_PATHS as APPROVED_PROCUREMENT_PATHS, APPROVAL_SHA256 as PROCUREMENT_APPROVAL_SHA256, CURRENT_APPROVAL_SHA256 as CURRENT_PROCUREMENT_APPROVAL_SHA256, SCOPE_FIELD, normalize_procurement, resolve_approval_sha
 from approved_procurement_continuity import approved_procurement_probe
 
 IMAGE = re.compile(r'^sha256:[0-9a-f]{64}$')
@@ -55,6 +55,14 @@ APPROVED_CASES = {
         'steering-forgings',
     ],
     'en': [
+        'fork-alloy-bar-quenching-proposal',
+        'fork-copper-coil-annealing-proposal',
+        'fork-copper-wire-four-chamber-annealing',
+        'fork-gas-fired-pipe-solution-furnace',
+        'fork-gas-furnaces-enclosed-cooling-boxes',
+        'fork-gas-pipe-fittings-trial-scope',
+        'fork-long-bar-batch-quench',
+        'fork-pipe-flange-solution-treatment',
         'bright-quench-design',
         'crankshaft-annual-output',
         'cylinder-liner-solution-aging',
@@ -70,6 +78,8 @@ APPROVED_CASES = {
 }
 NO_CASES = {'zh': [], 'en': []}
 APPROVED_GUIDES = json.loads(Path(__file__).with_name('approved-guides.json').read_text())
+APPROVED_ENGLISH_GUIDES = json.loads(Path(__file__).with_name('approved-guides-en.json').read_text())
+ALL_APPROVED_GUIDES = APPROVED_GUIDES + APPROVED_ENGLISH_GUIDES
 # Representative unapproved drafts; they must stay private in every release state.
 # A frontend test checks that each is still a draft. Replace one when it is approved.
 DRAFT_CASE_PATHS = [
@@ -215,8 +225,8 @@ def normalize_cases(value):
 
 
 def normalize_guides(value):
-    if not isinstance(value, list) or not all(isinstance(path, str) and path in APPROVED_GUIDES for path in value):
-        raise ValueError('Only explicitly approved Chinese guide paths may be released')
+    if not isinstance(value, list) or not all(isinstance(path, str) and path in ALL_APPROVED_GUIDES for path in value):
+        raise ValueError('Only explicitly approved guide paths may be released')
     return sorted(set(value))
 
 
@@ -262,9 +272,12 @@ def case_contract(state, cases=None, *, encoded=True, withdrawn=None, guides=Non
     if guide_state not in ('open', 'either'):
         raise ValueError('Unknown guide publication state')
     retired = [path for path in retired if path not in guides]
-    retired += [path for path in sorted(set(APPROVED_GUIDES + (withdrawn_guides or []))) if path not in guides and path not in retired]
+    retired += [path for path in sorted(set(ALL_APPROVED_GUIDES + (withdrawn_guides or []))) if path not in guides and path not in retired]
     procurement = [] if procurement is None else procurement
-    procurement = normalize_procurement(procurement, BILINGUAL_SCOPE_SHA256 if ENGLISH_EQUIPMENT_PATH in procurement else None)
+    approval = BILINGUAL_SCOPE_SHA256 if ENGLISH_EQUIPMENT_PATH in procurement else None
+    if ENGLISH_PARTS_PATH in procurement:
+        approval = PARTS_SCOPE_SHA256
+    procurement = normalize_procurement(procurement, approval)
     if procurement_state not in ('open', 'either'):
         raise ValueError('Unknown separate procurement publication state')
     retired += [p for p in APPROVED_PROCUREMENT_PATHS if p not in procurement and p not in retired]

@@ -33,7 +33,7 @@ export function englishCaseMetadata(slug: string) {
     alternateLocales: { 'zh-CN': `/zh/case/${slug}`, 'en-US': `/en/case/${slug}`, 'x-default': `/zh/case/${slug}` },
   });
 }
-function backLink(value: SearchParams['returnTo']) {
+export function englishCaseReturn(value: SearchParams['returnTo']) {
   if (typeof value !== 'string' || value.length > 1800) return '/en/case';
   try {
     const url = new URL(value, 'https://case.local');
@@ -48,7 +48,7 @@ const formatDate = (value: string) => new Intl.DateTimeFormat('en-GB', {
 export function EnglishCaseArticle({ slug, searchParams }: { slug: string; searchParams: SearchParams }) {
   const item = getEnglishCase(slug);
   if (!item) notFound();
-  const back = backLink(searchParams.returnTo);
+  const back = englishCaseReturn(searchParams.returnTo);
   const hasEngineeringAttribution = slug === 'stainless-strip-annealing-supply-scope';
   const url = absoluteUrl(`/en/case/${slug}`);
   const related = getEnglishCases().filter((record) => item.relatedCases.includes(record.slug));

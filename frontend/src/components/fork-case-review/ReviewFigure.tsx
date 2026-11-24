@@ -4,16 +4,16 @@ import { useRef, useState } from 'react';
 import { FiArrowUpRight, FiX, FiZoomIn, FiZoomOut } from 'react-icons/fi';
 import './figure-viewer.css';
 
-export function ReviewFigure({ figure }: { figure: { src: string; alt: string; caption: string } }) {
+export function ReviewFigure({ figure, english = false }: { english?: boolean; figure: { src: string; alt: string; caption: string } }) {
   const opener = useRef<HTMLButtonElement>(null);
   const dialog = useRef<HTMLDialogElement>(null);
   const [enlarged, setEnlarged] = useState(false);
   return <div className="fork-review-figure">
     <figure className="fork-figure-row">
-      <button type="button" ref={opener} data-open="figure" aria-haspopup="dialog" aria-label={'查看技术图，' + figure.alt}
+      <button type="button" ref={opener} data-open="figure" aria-haspopup="dialog" aria-label={(english ? 'Open diagram: ' : '查看技术图，') + figure.alt}
         onClick={() => dialog.current?.showModal()}>
         <img src={figure.src} alt="" loading="lazy" />
-        <span>查看技术图 <FiArrowUpRight aria-hidden /></span>
+        <span>{english ? 'View diagram' : '查看技术图'} <FiArrowUpRight aria-hidden /></span>
       </button>
       <figcaption><strong>{figure.alt}</strong><p>{figure.caption}</p></figcaption>
     </figure>
@@ -29,14 +29,14 @@ export function ReviewFigure({ figure }: { figure: { src: string; alt: string; c
       <div className="fork-figure-toolbar">
         <h2 id="fork-figure-title">{figure.alt}</h2>
         <button type="button" aria-pressed={enlarged} onClick={() => setEnlarged(!enlarged)}>
-          {enlarged ? <FiZoomOut /> : <FiZoomIn />}{enlarged ? '适应屏幕' : '放大'}
+          {enlarged ? <FiZoomOut /> : <FiZoomIn />}{enlarged ? (english ? 'Fit to screen' : '适应屏幕') : (english ? 'Zoom in' : '放大')}
         </button>
-        <button type="button" aria-label="关闭技术图" onClick={() => dialog.current?.close()}><FiX /></button>
+        <button type="button" aria-label={english ? "Close diagram" : "关闭技术图"} onClick={() => dialog.current?.close()}><FiX /></button>
       </div>
-      <div className="fork-figure-surface" data-enlarged={enlarged} tabIndex={enlarged ? 0 : -1} aria-label="技术图">
+      <div className="fork-figure-surface" data-enlarged={enlarged} tabIndex={enlarged ? 0 : -1} aria-label={english ? "Technical diagram" : "技术图"}>
         <img src={figure.src} alt={figure.alt} />
       </div>
-      <a className="fork-original" href={figure.src} target="_blank" rel="noopener noreferrer">查看原图（新窗口）</a>
+      <a className="fork-original" href={figure.src} target="_blank" rel="noopener noreferrer">{english ? 'Open original in a new window' : '查看原图（新窗口）'}</a>
     </dialog>
   </div>;
 }

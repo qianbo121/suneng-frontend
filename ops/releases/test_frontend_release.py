@@ -1156,10 +1156,26 @@ class ShippedExamplesTest(unittest.TestCase):
 
 
 class ReviewedGuideReleaseTest(unittest.TestCase):
-    def test_rejects_unapproved_or_english_guides(self):
+    def test_rejects_unapproved_guides_or_hubs(self):
         for paths in [["/en/solutions/example"], ["/zh/solutions"], ["/zh/case/stainless-strip-annealing-supply-scope"], "all"]:
             with self.subTest(paths=paths), self.assertRaises(ValueError):
                 r.validate_manifest({**MANIFEST, 'approvedGuides': paths})
+
+    def test_bilingual_leaves_are_exact_and_old_receipt_still_closes_english(self):
+        english = set(r.APPROVED_ENGLISH_GUIDES)
+        self.assertEqual(english, {p.replace('/zh/', '/en/', 1) for p in r.APPROVED_GUIDES})
+        self.assertEqual(len(english), 11)
+        published = r.case_contract('open', guides=r.ALL_APPROVED_GUIDES)
+        old = r.case_contract('open', guides=r.APPROVED_GUIDES, withdrawn_guides=r.ALL_APPROVED_GUIDES)
+        for hub in ('/en/articles', '/en/solutions', '/zh/articles', '/zh/solutions'):
+            self.assertIn(hub, published['retired'])
+        self.assertTrue(english.isdisjoint(published['retired']))
+        self.assertTrue(english <= set(old['retired']))
+        self.assertTrue(english.isdisjoint(old['guides']['paths']))
+        statuses = {p: 200 for p in published['group'] + published['guides']['paths']}
+        urls = list(statuses) + ['/zh/news', '/en/news']
+        self.assertTrue(r.sitemap_passes(urls, urls, statuses, published))
+        self.assertFalse(r.sitemap_passes(urls, urls, statuses, old))
 
     def test_exact_guides_are_required_and_listed_while_other_guides_stay_private(self):
         contract = r.case_contract('open', guides=r.APPROVED_GUIDES)
@@ -1558,7 +1574,7 @@ class SeparateProcurementReleaseTest(unittest.TestCase):
     def test_source_and_both_actual_prepare_metadata_blocks_carry_exact_scope(self):
         from procurement_approval import procurement_candidate_fields
         root = Path(__file__).resolve().parents[2]
-        self.assertEqual(procurement_candidate_fields(root)[r.SCOPE_FIELD], self.PATHS + [r.ENGLISH_EQUIPMENT_PATH])
+        self.assertEqual(procurement_candidate_fields(root)[r.SCOPE_FIELD], self.PATHS + [r.ENGLISH_EQUIPMENT_PATH, r.ENGLISH_PARTS_PATH])
         for workflow, component in [('prepare-frontend.yml', None), ('prepare-release.yml', 'frontend'), ('prepare-release.yml', 'backend')]:
             text = (root / '.github/workflows' / workflow).read_text()
             source = text.split("          python3 - <<'PY'\n", 1)[1].split('\n          PY', 1)[0]
@@ -1582,9 +1598,9 @@ class SeparateProcurementReleaseTest(unittest.TestCase):
                 self.assertEqual(result.returncode, 0, result.stderr)
                 actual = json.loads((folder / 'candidate.json').read_text())
                 if component != 'backend':
-                    self.assertEqual(actual['approvedGuides'], r.APPROVED_GUIDES)
-                    self.assertEqual(actual[r.SCOPE_FIELD], self.PATHS + [r.ENGLISH_EQUIPMENT_PATH])
-                    self.assertEqual(actual['procurementApprovalSha256'], r.BILINGUAL_SCOPE_SHA256)
+                    self.assertEqual(actual['approvedGuides'], r.ALL_APPROVED_GUIDES)
+                    self.assertEqual(actual[r.SCOPE_FIELD], self.PATHS + [r.ENGLISH_EQUIPMENT_PATH, r.ENGLISH_PARTS_PATH])
+                    self.assertEqual(actual['procurementApprovalSha256'], r.PARTS_SCOPE_SHA256)
                 else:
                     self.assertNotIn(r.SCOPE_FIELD, actual)
                     self.assertNotIn('approvedGuides', actual)

@@ -1,3 +1,4 @@
+import englishParts from '@/lib/parts-procurement-en.json';
 import englishEquipment from '@/lib/equipment-procurement-en.json';
 import type { Locale } from '@/types/site';
 import { HiPhone } from 'react-icons/hi2';
@@ -15,9 +16,9 @@ import styles from '@/app/[locale]/news/[slug]/NewsDetailPage.module.css';
 import procurementStyles from './ApprovedProcurementPage.module.css';
 
 export function ApprovedProcurementPage({ id, locale = 'zh' }: { id: ApprovedProcurementPageId; locale?: Locale }) {
-  const english = id === 'equipment' && locale === 'en';
+  const english = locale === 'en';
   const equipment = english ? englishEquipment : approvedProcurementPages.equipment;
-  const page = id === 'equipment' ? equipment : approvedProcurementPages.parts;
+  const page = id === 'equipment' ? equipment : english ? englishParts : approvedProcurementPages.parts;
   const details = id === 'equipment' ? equipment : undefined;
   const resourceLabel = english ? 'Procurement guide' : '采购评估资料';
   const contentId = `procurement-${id}-body`;

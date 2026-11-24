@@ -1,0 +1,186 @@
+{
+  "id": "fork-review-01",
+  "slug": "fork-long-bar-batch-quench",
+  "number": 1,
+  "title": "Long-bar quenching across a 6 m working width",
+  "summary": "Suneng’s fork-handling furnace carries long bars parallel to the furnace door. A charging car lifts the complete batch between the hearth supports. The agreement permits no more than 30 seconds from first outward movement to full immersion with 5 tonnes of workpieces.",
+  "seoTitle": "Long bars: fork handling and a 30-second quench transfer",
+  "seoDescription": "The 2023 agreement times a 5-tonne load from its first outward movement to full immersion. See the 6 m working width and 30-second limit.",
+  "body": "fork-review-01.md",
+  "translatedAt": "2026-11-24",
+  "translationStatus": "complete",
+  "sourceFingerprint": "10f7f6cf6c884bf92b7ec79c791d3f7890eb36e7bc8b01bd68245268741b0dfc",
+  "coverAlt": "Parallel round bars laid across the furnace",
+  "coverCaption": "Long bars",
+  "reviewSourceFingerprint": "04fb3faa8db870f748ddcd5433134bba931542ab4a77d90375c6d60f82c065bb",
+  "forkReview": {
+    "image": "/fork-case-review/workpieces/long-round-bars.webp",
+    "imageAlt": "Parallel round bars laid across the furnace",
+    "category": "Long bars",
+    "metrics": [
+      [
+        "Working width",
+        "6",
+        "m"
+      ],
+      [
+        "Workpiece weight for the timed transfer",
+        "5",
+        "t"
+      ],
+      [
+        "Withdrawal to full immersion",
+        "≤30",
+        "s"
+      ]
+    ],
+    "note": "The bars run parallel to the door. The working width also includes clearance at both ends.",
+    "work": [],
+    "featuresTitle": "Project features",
+    "features": [
+      [
+        "A wide doorway for transverse loading",
+        "The bars rest across the supports parallel to the door along the 6 m working width. The forks enter between the supports and lift the batch together."
+      ],
+      [
+        "Quenching the entire batch outside the furnace",
+        "After the door opens, the rail-mounted car lifts the bars out, moves them to the tank and lowers them. The bars retain their transverse orientation."
+      ]
+    ],
+    "flowTitle": "Equipment arrangement and process sequence",
+    "filmId": "01-depth",
+    "stages": [
+      {
+        "title": "Charge across the door",
+        "note": "Lay the long bars on the supports parallel to the door across the 6 m working width.",
+        "thumb": "/fork-case-review/films/01-depth/stage-1.webp"
+      },
+      {
+        "title": "Lift on the forks",
+        "note": "Insert the forks between the supports and lift the complete batch.",
+        "thumb": "/fork-case-review/films/01-depth/stage-2.webp"
+      },
+      {
+        "title": "Withdraw the batch",
+        "note": "Once the door is fully open, start timing at the first outward movement.",
+        "thumb": "/fork-case-review/films/01-depth/stage-3.webp"
+      },
+      {
+        "title": "Fully immerse the bars",
+        "note": "Keep the transverse arrangement. Stop timing when the last bar is fully submerged.",
+        "thumb": "/fork-case-review/films/01-depth/stage-4.webp"
+      }
+    ],
+    "cards": [
+      {
+        "title": "Equipment specifications",
+        "paragraphs": [],
+        "definitions": [],
+        "table": {
+          "head": [
+            "Item",
+            "Project specification"
+          ],
+          "rows": [
+            [
+              "Model",
+              "RX4-850-12 high-temperature chamber furnace with fork handling"
+            ],
+            [
+              "Heating and control zones",
+              "Resistance heating, 850 kW, 4 zones"
+            ],
+            [
+              "Maximum operating temperature",
+              "1200 ℃"
+            ],
+            [
+              "Furnace temperature uniformity during soaking",
+              "±8 ℃"
+            ],
+            [
+              "Working zone (length × width × height)",
+              "1.3 × 6 × 0.6 m"
+            ],
+            [
+              "Load and transfer",
+              "5 tonnes of workpieces excluding support blocks. Maximum withdrawal-to-immersion time: 30 seconds."
+            ]
+          ],
+          "rowHeaders": true
+        }
+      },
+      {
+        "title": "Supply responsibilities",
+        "paragraphs": [],
+        "definitions": [
+          [
+            "Suneng",
+            "Provides foundation construction information, installs and commissions the equipment, and trains operators."
+          ],
+          [
+            "Buyer",
+            "Supplies the water-quench tank and heat-resistant steel basket, prepares the installation site to the foundation drawing and assists with water, electricity, gas and lifting equipment."
+          ]
+        ]
+      },
+      {
+        "title": "Scope of supply",
+        "paragraphs": [
+          "Suneng supplies the resistance-heated chamber furnace, door and lift, rail-mounted fork car and electrical controls. The furnace heats in zones. The car lifts and transfers the entire batch."
+        ],
+        "definitions": []
+      },
+      {
+        "title": "Acceptance procedure",
+        "paragraphs": [],
+        "definitions": [
+          [
+            "Factory inspection before dispatch",
+            "After manufacture, the agreement calls for the buyer to inspect assembly quality, safety items and associated equipment at the factory."
+          ],
+          [
+            "Loaded commissioning on site",
+            "Cold commissioning precedes heating under load. The acceptance criterion is compliance with the contract’s technical requirements."
+          ]
+        ]
+      }
+    ],
+    "figure": {
+      "src": "/images/news/fork-en/case-01-diagram.webp",
+      "alt": "Transverse loading and batch immersion",
+      "caption": "Lay the bars parallel to the furnace door. With the door fully open, start when the batch first moves out. The last bar is fully submerged. Agreement: a maximum of 30 s for 5 tonnes of workpieces."
+    },
+    "related": [
+      [
+        "Fork-handling furnace specifications",
+        "/en/products/detail/shovel-furnace"
+      ],
+      [
+        "When does quench-transfer timing start and stop for long bars?",
+        "/en/news/long-bar-fork-furnace-quench-transfer-time"
+      ]
+    ],
+    "faqIntro": "Working width, timing full immersion and responsibility for the tank.",
+    "faq": [
+      [
+        "Is 6 m the chamber depth or the width along the door?",
+        "It is the working width along the door. The working depth is 1.3 m and the working height is 0.6 m. The bars lie across the width."
+      ],
+      [
+        "What do the 5 tonnes and 30 seconds refer to?",
+        "The 5 tonnes is workpiece weight excluding the support blocks. With the door fully open, time from first outward movement until the complete batch is submerged."
+      ],
+      [
+        "Who supplies the quench tank and handling equipment?",
+        "The buyer supplies the tank. Suneng supplies the rail-mounted fork car. The interfaces include the tank opening, track and clearance for lowering the forks."
+      ]
+    ],
+    "source": "Reference: 2023 contract and technical agreement for the high-temperature chamber furnace for long bars. Load and timing definitions follow Suneng’s published product information.",
+    "ctaTitle": "Send workpiece details to check the furnace configuration",
+    "title": "Long-bar quenching across a 6 m working width",
+    "summary": "Suneng’s fork-handling furnace carries long bars parallel to the furnace door. A charging car lifts the complete batch between the hearth supports. The agreement permits no more than 30 seconds from first outward movement to full immersion with 5 tonnes of workpieces.",
+    "listTitle": "Charging long bars across the furnace doorway",
+    "listSummary": "Bars lie across 6 m of working width. The fork car lifts them together. A 5-tonne load must be fully submerged within 30 seconds of starting to move out."
+  }
+}

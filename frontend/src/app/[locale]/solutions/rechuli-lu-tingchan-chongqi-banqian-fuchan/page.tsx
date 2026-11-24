@@ -63,7 +63,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   return buildMetadata({
     locale: 'zh',
     path: pagePath,
-    alternateLocales: { 'zh-CN': pagePath, 'x-default': pagePath },
+    alternateLocales: { 'zh-CN': pagePath, 'en-US': pagePath.replace('/zh/', '/en/'), 'x-default': pagePath },
     title: seo.title,
     description: seo.description,
     keywords: seo.keywords,

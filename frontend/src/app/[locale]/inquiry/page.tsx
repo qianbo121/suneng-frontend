@@ -15,7 +15,8 @@ type PageProps = {
   searchParams: Promise<{ product?: string | string[] }>;
 };
 
-const pagePath = '/zh/inquiry';
+const zhPath = '/zh/inquiry';
+const alternates = { 'zh-CN': zhPath, 'en-US': '/en/inquiry', 'x-default': zhPath };
 const heroImage = '/images/contact/contact-hero.png';
 
 const preparationItems = [
@@ -27,35 +28,40 @@ const preparationItems = [
 export const dynamicParams = false;
 
 export function generateStaticParams() {
-  return [{ locale: 'zh' }];
+  return [{ locale: 'zh' }, { locale: 'en' }];
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { locale } = await params;
-  if (locale !== 'zh') notFound();
+  if (locale !== 'zh' && locale !== 'en') notFound();
+  const en = locale === 'en';
+  const pagePath = `/${locale}/inquiry`;
 
   return buildMetadata({
-    title: '提交工业炉项目情况｜新建、选型、改造与维修咨询',
+    locale,
+    title: en ? 'Discuss an industrial furnace project with Suneng' : '提交工业炉项目情况｜新建、选型、改造与维修咨询',
     description:
-      '提交热处理生产线、工业炉选型、老旧工业炉改造或维修项目情况。资料不全也可先说明方向、主要问题和联系方式。',
+      en ? 'Send your workpiece, throughput or service requirements for an industrial furnace or heat-treatment line. Preliminary inquiries are welcome.' : '提交热处理生产线、工业炉选型、老旧工业炉改造或维修项目情况。资料不全也可先说明方向、主要问题和联系方式。',
     path: pagePath,
     pageKey: 'contact',
-    keywords: ['工业炉项目咨询', '热处理炉选型咨询', '工业炉改造咨询', '热处理生产线咨询'],
+    keywords: en ? ['industrial furnace inquiry', 'heat treatment equipment selection', 'furnace retrofit'] : ['工业炉项目咨询', '热处理炉选型咨询', '工业炉改造咨询', '热处理生产线咨询'],
     image: heroImage,
-    alternateLocales: { 'zh-CN': pagePath, 'x-default': pagePath },
+    alternateLocales: alternates,
   });
 }
 
 export default async function InquiryPage({ params, searchParams }: PageProps) {
   const { locale } = await params;
-  if (locale !== 'zh') notFound();
-  const inquiryProduct = resolveInquiryProduct((await searchParams).product, 'zh');
+  if (locale !== 'zh' && locale !== 'en') notFound();
+  const en = locale === 'en';
+  const pagePath = `/${locale}/inquiry`;
+  const inquiryProduct = resolveInquiryProduct((await searchParams).product, locale);
 
   return (
     <div className="bg-[#f6f8fb] text-[#172033]">
       <JsonLd id="inquiry-page-jsonld" data={[
-        getWebPageJsonLd({ path: pagePath, name: '提交工业炉项目情况', description: '提交新建、选型、改造与维修需求，资料不全也可先说明项目方向、主要问题和联系方式。' }),
-        getBreadcrumbJsonLd([{ name: '首页', url: '/zh' }, { name: '提交项目情况', url: pagePath }]),
+        getWebPageJsonLd({ path: pagePath, locale, name: en ? 'Project inquiry' : '提交工业炉项目情况', description: en ? 'Discuss equipment selection, new lines, repairs and retrofits.' : '提交新建、选型、改造与维修需求，资料不全也可先说明项目方向、主要问题和联系方式。' }),
+        getBreadcrumbJsonLd([{ name: en ? 'Home' : '首页', url: `/${locale}` }, { name: en ? 'Project inquiry' : '提交项目情况', url: pagePath }]),
       ]} />
       <section aria-labelledby="inquiry-title" className="relative flex min-h-[156px] items-center overflow-hidden bg-[#0f2238] text-white md:min-h-[198px] lg:min-h-[285px]">
         <Image src={heroImage} alt="" fill priority sizes="100vw" className="object-cover object-center" />
@@ -65,25 +71,25 @@ export default async function InquiryPage({ params, searchParams }: PageProps) {
           className="site-page-container relative py-5 md:py-7"
           style={{ fontFamily: '-apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif' }}
         >
-          <nav aria-label="面包屑导航" className="flex gap-3 text-[14px] font-normal leading-[22px] [@media(max-width:600px)]:text-[12px]">
-            <Link href="/zh" className="text-white hover:underline">首页</Link>
+          <nav aria-label={en ? "Breadcrumb" : "面包屑导航"} className="flex gap-3 text-[14px] font-normal leading-[22px] [@media(max-width:600px)]:text-[12px]">
+            <Link href={`/${locale}`} className="text-white hover:underline">{en ? 'Home' : '首页'}</Link>
             <span aria-hidden="true">/</span>
-            <span aria-current="page">提交项目情况</span>
+            <span aria-current="page">{en ? 'Project inquiry' : '提交项目情况'}</span>
           </nav>
           <h1 id="inquiry-title" className="mb-2 mt-[18px] text-[44px] font-semibold leading-[56px] tracking-normal [@media(max-width:600px)]:mt-[10px] [@media(max-width:600px)]:text-[28px] [@media(max-width:600px)]:leading-[38px]">
-            提交项目情况
+            {en ? 'Discuss your project' : '提交项目情况'}
           </h1>
           <p className="text-[18px] font-normal leading-[28px] text-white [@media(max-width:600px)]:text-[15px] [@media(max-width:600px)]:leading-[25px]">
-            热处理生产线、工业炉选型、改造与维修项目咨询
+            {en ? 'Heat-treatment lines, furnace selection, retrofits and repairs' : '热处理生产线、工业炉选型、改造与维修项目咨询'}
           </p>
         </div>
       </section>
 
       <section className="site-page-container pt-5">
         <details className="rounded-[6px] border border-[#dfe5ed] bg-white">
-          <summary className="cursor-pointer px-5 py-3 text-[15px] font-medium leading-[24px] text-brand-primary">填写提示：资料不全也可以先沟通</summary>
+          <summary className="cursor-pointer px-5 py-3 text-[15px] font-medium leading-[24px] text-brand-primary">{en ? 'What to include in a preliminary inquiry' : '填写提示：资料不全也可以先沟通'}</summary>
         <div className="grid gap-4 px-5 pb-5 md:grid-cols-3">
-          {preparationItems.map((item, index) => (
+          {(en ? ['New production line, individual furnace or service for an existing installation', 'Your workpiece, throughput, process requirement or equipment fault', 'Your company or contact name and a telephone number, WeChat account or email address'] : preparationItems).map((item, index) => (
             <div
               key={item}
               className="flex min-w-0 gap-4 rounded-[6px] border border-[#dfe5ed] bg-white p-5 shadow-[0_8px_24px_rgba(15,35,75,0.04)]"
@@ -93,7 +99,7 @@ export default async function InquiryPage({ params, searchParams }: PageProps) {
               </span>
               <div className="min-w-0">
                 <p className="text-[12px] font-semibold tracking-[0.14em] text-brand-primary">
-                  第 {index + 1} 项
+                  {en ? `Item ${index + 1}` : `第 ${index + 1} 项`}
                 </p>
                 <p className="mt-2 text-[15px] leading-[1.75] text-[#4f5c70]">{item}</p>
               </div>
@@ -104,14 +110,15 @@ export default async function InquiryPage({ params, searchParams }: PageProps) {
       </section>
 
       <HomepageLeadForm
+        locale={locale}
         privacyNoticeEnabled
         compactIntro
         key={inquiryProduct || 'general'}
         inquiryProduct={inquiryProduct}
         sectionId="project-inquiry-form"
-        eyebrow="项目情况"
+        eyebrow={en ? 'Project details' : '项目情况'}
         pageType="独立询盘页"
-        productTag={inquiryProduct || '热处理生产线与工业炉项目'}
+        productTag={inquiryProduct || (en ? 'Heat-treatment equipment project' : '热处理生产线与工业炉项目')}
         successProductTag="项目初步判断"
         sourceModule="project_inquiry_page"
       />

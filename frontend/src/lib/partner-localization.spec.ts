@@ -22,9 +22,9 @@ describe('public partner localization', () => {
     expect(new Set(Object.values(ENGLISH_PROVINCES).map((item) => item.shortName)).size).toBe(provinces.length);
     for (const province of provinces) expect(ENGLISH_PROVINCES[province.code].name).toMatch(/^[A-Za-z ]+$/);
   });
-  it('allows both partner routes and keeps Chinese-only inquiry behavior', () => {
+  it('allows both partner routes and links to the English inquiry page', () => {
     expect(isZhOnlyPath('/en/partner')).toBe(false);
     expect(localizeOrHideHref('/zh/partner', 'en')).toBe('/en/partner');
-    expect(localizeOrHideHref('/inquiry', 'en')).toBeNull();
+    expect(localizeOrHideHref('/inquiry', 'en')).toBe('/en/inquiry');
   });
 });

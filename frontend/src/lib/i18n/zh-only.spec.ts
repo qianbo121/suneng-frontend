@@ -24,11 +24,11 @@ describe('case language availability', () => {
   });
 });
 
-describe('owner-approved Chinese guides', () => {
-  it.each([...APPROVED_GUIDE_PATHS])('keeps %s Chinese-only and resolves unprefixed Chinese links', (path) => {
-    expect(isZhOnlyPath(path)).toBe(true);
-    expect(isZhOnlyPath(path.replace('/zh/', '/en/'))).toBe(true);
-    expect(localizeOrHideHref(path, 'en')).toBeNull();
+describe('approved bilingual guides', () => {
+  it.each([...APPROVED_GUIDE_PATHS])('opens the English counterpart of %s and resolves unprefixed Chinese links', (path) => {
+    expect(isZhOnlyPath(path)).toBe(false);
+    expect(isZhOnlyPath(path.replace('/zh/', '/en/'))).toBe(false);
+    expect(localizeOrHideHref(path, 'en')).toBe(path.replace('/zh/', '/en/'));
     expect(localizeOrHideHref(path.replace('/zh/', '/'), 'zh')).toBe(path);
   });
 });

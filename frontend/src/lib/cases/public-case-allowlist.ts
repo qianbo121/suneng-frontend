@@ -18,6 +18,7 @@ export type ReviewedPublicCase = {
   english: boolean;
   approvedBy: string;
   approvedAt: string;
+  englishApprovedAt?: string;
 };
 
 export const REVIEWED_PUBLIC_CASES: readonly ReviewedPublicCase[] = [
@@ -30,7 +31,7 @@ export const REVIEWED_PUBLIC_CASES: readonly ReviewedPublicCase[] = [
     { id: 'fork-review-06', slug: 'fork-copper-coil-annealing-proposal' },
     { id: 'fork-review-07', slug: 'fork-alloy-bar-quenching-proposal' },
     { id: 'fork-review-08', slug: 'fork-gas-fired-pipe-solution-furnace' },
-  ].map(item => ({ ...item, batch: 4, english: false, approvedBy: 'site-owner', approvedAt: '2026-11-20' })),
+  ].map(item => ({ ...item, batch: 4, english: true, englishApprovedAt: '2026-11-24', approvedBy: 'site-owner', approvedAt: '2026-11-20' })),
   ...[
     'bright-quench-design',
     'crankshaft-annual-output',

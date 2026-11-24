@@ -121,19 +121,19 @@ describe('withdrawn content routing', () => {
   });
 });
 
-describe('Chinese-only pages under /en', () => {
+describe('English inquiry and existing public pages', () => {
   it.each([
-    '/en/inquiry',
     '/EN/inquiry',
     '/en/inqui%72y',
     '/en/inquiry/',
-  ])('answers %s with a real 404, not a 200 shell', async (address) => {
+  ])('redirects %s to the canonical English inquiry page', async (address) => {
     const response = await run(address);
-    expect(response?.status).toBe(404);
-    expect(response?.headers.get('X-Robots-Tag')).toBe('noindex');
+    expect(response.status).toBe(308);
+    expect(new URL(response.headers.get('location')!).pathname).toBe('/en/inquiry');
   });
 
   it.each([
+    '/en/inquiry',
     '/zh/inquiry',
     '/en/products/detail/shovel-furnace',
     '/en/products/detail/track-shoe-press-quench-line',

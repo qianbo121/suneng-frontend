@@ -1,0 +1,41 @@
+{
+  "schemaVersion": 1,
+  "scopeRequest": "立即补全",
+  "previousApprovalSha256": "30e5467979d38d062dca2582d4c5e7f675705cef91e1f2f2aff4c4d707a4fbc1",
+  "page": {
+    "path": "/en/service/industrial-furnace-parts-purchasing",
+    "h1": "Industrial furnace replacement parts and equipment compatibility",
+    "bodyId": "procurement-parts-body",
+    "approvedBodySha256": "3df8c66deaa6f935b5495019c999968ab53a2622e9ddfec164631256572bcd85",
+    "anchors": [
+      "parts-heating",
+      "parts-baskets-welded",
+      "parts-fans-shafts",
+      "parts-cover-motor-guide",
+      "parts-mesh-belt",
+      "parts-trays-baskets",
+      "parts-gas-radiant",
+      "parts-brand-fit",
+      "parts-pusher-column-beam",
+      "parts-guide-chain",
+      "parts-heat-resistant-identity"
+    ],
+    "headingAnchors": [
+      "procurement-parts-body-section-1",
+      "procurement-parts-body-section-2",
+      "procurement-parts-body-section-3",
+      "procurement-parts-body-section-4",
+      "procurement-parts-body-section-5",
+      "procurement-parts-body-section-6",
+      "procurement-parts-body-section-7",
+      "procurement-parts-body-section-8",
+      "procurement-parts-body-section-9",
+      "procurement-parts-body-section-10",
+      "procurement-parts-body-section-11",
+      "procurement-parts-body-section-12"
+    ],
+    "parentPath": "/en/service",
+    "entryPath": "/en/service/installation-after-sales",
+    "contentStreamSha256": "1611b5e98a4c366805d2c6d1091d5eaf3e04f57419ee6a81487d3e12ad004715"
+  }
+}

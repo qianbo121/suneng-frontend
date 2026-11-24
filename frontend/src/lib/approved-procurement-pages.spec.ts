@@ -118,16 +118,16 @@ describe('the two owner-approved Chinese procurement pages', () => {
     expect(metadata.alternates?.canonical).toBe('https://www.jssngyl.cn' + page.path);
     expect(metadata.alternates?.languages).toEqual({
       'zh-CN': 'https://www.jssngyl.cn' + page.path,
-      ...(id === 'equipment' ? { 'en-US': 'https://www.jssngyl.cn' + page.path.replace('/zh/', '/en/') } : {}),
+      'en-US': 'https://www.jssngyl.cn' + page.path.replace('/zh/', '/en/'),
       'x-default': 'https://www.jssngyl.cn' + page.path,
     });
     expect(metadata.openGraph).toMatchObject({ type: 'website' });
     expect(metadata.openGraph).not.toHaveProperty('publishedTime');
     expect(metadata.openGraph).not.toHaveProperty('modifiedTime');
-    expect(route.generateStaticParams()).toEqual(id === 'equipment' ? [{ locale: 'zh' }, { locale: 'en' }] : [{ locale: 'zh' }]);
+    expect(route.generateStaticParams()).toEqual([{ locale: 'zh' }, { locale: 'en' }]);
     const html = renderToStaticMarkup(await route.default({ params: Promise.resolve({ locale: 'zh' }) }));
     expect(documentOf(html).querySelector('h1')?.textContent).toBe(page.heading);
-    for (const locale of id === 'equipment' ? ['fr'] : ['en', 'fr']) {
+    for (const locale of ['fr']) {
       const props = { params: Promise.resolve({ locale }) };
       await expect(route.default(props)).rejects.toMatchObject({ withdrawn: true });
       await expect(route.generateMetadata(props)).rejects.toMatchObject({ withdrawn: true });
@@ -139,11 +139,10 @@ describe('the two owner-approved Chinese procurement pages', () => {
     expect(APPROVED_PROCUREMENT_PATHS.size).toBe(2);
     for (const page of Object.values(approvedProcurementPages)) {
       expect(isPublishedProcurementPage('zh', page.path)).toBe(true);
-      const hasEnglish = page.path === approvedProcurementPages.equipment.path;
-      expect(isPublishedProcurementPage('en', page.path)).toBe(hasEnglish);
+      expect(isPublishedProcurementPage('en', page.path)).toBe(true);
       expect(isWithdrawnRequestPath(page.path)).toBe(false);
-      expect(isZhOnlyPath(page.path)).toBe(!hasEnglish);
-      expect(localizeOrHideHref(page.path, 'en')).toBe(hasEnglish ? page.path.replace('/zh/', '/en/') : null);
+      expect(isZhOnlyPath(page.path)).toBe(false);
+      expect(localizeOrHideHref(page.path, 'en')).toBe(page.path.replace('/zh/', '/en/'));
       expect(localizeOrHideHref(page.path, 'zh')).toBe(page.path);
     }
     const equipment = approvedProcurementPages.equipment.path;
@@ -177,8 +176,9 @@ describe('only the two approved entry placements change', () => {
     expect(entry.previousElementSibling?.getAttribute('aria-labelledby')).toBe('service-title');
     expect(entry.nextElementSibling?.querySelector('nav[aria-label="面包屑"]')).not.toBeNull();
     expect(doc.querySelectorAll('h1')).toHaveLength(1);
+    const english = documentOf(renderToStaticMarkup(createElement(ServiceHero, { kind: 'installation', locale: 'en' })));
+    expect(english.querySelector('[data-parts-purchase-entry] a')?.getAttribute('href')).toBe('/en/service/industrial-furnace-parts-purchasing');
     for (const props of [
-      { kind: 'installation', locale: 'en' },
       { kind: 'overview', locale: 'zh' },
       { kind: 'relocation', locale: 'zh' },
     ] as const) {

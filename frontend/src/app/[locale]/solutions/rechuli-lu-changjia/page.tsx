@@ -1,3 +1,4 @@
+import { EnglishSolutionPage, englishSolutionMetadata } from '@/components/engineering/EnglishSolutionsPage';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { isPublishedGuide } from '@/lib/publication-scope';
@@ -33,6 +34,7 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { locale } = await params;
   if (!isPublishedGuide(locale, pagePath)) notFound();
+  if (locale === 'en') return englishSolutionMetadata('rechuli-lu-changjia');
 
   return buildMetadata({
     title: HEAT_TREATMENT_FURNACE_MANUFACTURER_SEO.title,
@@ -42,13 +44,14 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     keywords: HEAT_TREATMENT_FURNACE_MANUFACTURER_SEO.keywords,
     image: HEAT_TREATMENT_FURNACE_MANUFACTURER_SEO.ogImage,
     type: 'website',
-    alternateLocales: { 'zh-CN': pagePath, 'x-default': pagePath },
+    alternateLocales: { 'zh-CN': pagePath, 'en-US': pagePath.replace('/zh/', '/en/'), 'x-default': pagePath },
   });
 }
 
 export default async function HeatTreatmentFurnaceManufacturerPage({ params }: PageProps) {
   const { locale } = await params;
   if (!isPublishedGuide(locale, pagePath)) notFound();
+  if (locale === 'en') return <EnglishSolutionPage slug="rechuli-lu-changjia" />;
   return (
     <>
       <ManufacturerContent />

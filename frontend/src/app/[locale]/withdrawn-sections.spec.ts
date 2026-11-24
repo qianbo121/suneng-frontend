@@ -44,12 +44,12 @@ describe('unapproved sections render nothing, even without the middleware', () =
       const page = await import(path.join(app, file));
       const props = { params: Promise.resolve({ locale }), children: 'reviewed-child' };
       const route = `/zh/${file.replace(/\/(page|layout)\.tsx$/, '')}`;
-      if (file === 'articles/layout.tsx' || (locale === 'zh' && file === 'solutions/layout.tsx')) {
+      if (file === 'articles/layout.tsx' || file === 'solutions/layout.tsx') {
         expect(await page.default(props)).toBe('reviewed-child');
         return;
       }
       const englishEquipment = locale === 'en' && route.replace('/zh/', '/en/') === ENGLISH_EQUIPMENT_PROCUREMENT_PATH;
-      if (englishEquipment || (locale === 'zh' && (APPROVED_GUIDE_PATHS.has(route) || APPROVED_PROCUREMENT_PATHS.has(route)))) {
+      if (englishEquipment || APPROVED_GUIDE_PATHS.has(route) || (locale === 'zh' && APPROVED_PROCUREMENT_PATHS.has(route))) {
         const html = renderToStaticMarkup(await page.default(props));
         expect(html).toContain(file.endsWith('/layout.tsx') ? 'reviewed-child' : '<h1');
         for (const [, href] of html.matchAll(/href="([^"]+)"/g))

@@ -1,3 +1,4 @@
+import englishFaqs from '@/components/geo-pages/reviewed/decision-faqs-en.json';
 import { isPublishedGuide } from '@/lib/publication-scope';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
@@ -16,6 +17,9 @@ type PageProps = {
 
 const pagePath = '/zh/articles/laojiu-rechuli-lu-daxiu-haishi-maixin';
 
+const enPath = pagePath.replace('/zh/', '/en/');
+const englishTitle = "Should you overhaul, retrofit or replace an ageing heat-treatment furnace?";
+const englishDescription = "Compare structural condition, process fit, downtime, repair scope and replacement cost with three examples from furnace design and retrofit projects.";
 const servicePath = '/zh/service/furnace-renovation-overhaul';
 
 export const dynamicParams = false;
@@ -40,12 +44,16 @@ const pageJsonLd = cleanObject([
 ]);
 
 export function generateStaticParams() {
-  return [{ locale: 'zh' }];
+  return [{ locale: 'zh' }, { locale: 'en' }];
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { locale } = await params;
   if (!isPublishedGuide(locale, pagePath)) notFound();
+  if (locale === 'en') return buildMetadata({
+    locale, title: englishTitle, description: englishDescription, path: enPath, type: 'article',
+    image: OLD_HEAT_TREATMENT_FURNACE_REPAIR_OR_REPLACE_SEO.ogImage, alternateLocales: { 'zh-CN': pagePath, 'en-US': enPath, 'x-default': pagePath },
+  });
 
   if (locale !== 'zh') {
     notFound();
@@ -63,6 +71,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     modifiedTime: OLD_HEAT_TREATMENT_FURNACE_REPAIR_OR_REPLACE_SEO.modifiedTime,
     alternateLocales: {
       'zh-CN': pagePath,
+      'en-US': enPath,
       'x-default': pagePath,
     },
   });
@@ -71,6 +80,14 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 export default async function OldHeatTreatmentFurnaceDecisionPage({ params }: PageProps) {
   const { locale } = await params;
   if (!isPublishedGuide(locale, pagePath)) notFound();
+  if (locale === 'en') return <>
+    <JsonLd id="english-guide" data={[
+      getArticleJsonLd({slug: 'laojiu-rechuli-lu-daxiu-haishi-maixin', path: enPath, headline: englishTitle, description: englishDescription, image: OLD_HEAT_TREATMENT_FURNACE_REPAIR_OR_REPLACE_SEO.ogImage, datePublished: OLD_HEAT_TREATMENT_FURNACE_REPAIR_OR_REPLACE_SEO.publishedTime}, 'en'),
+      getBreadcrumbJsonLd([{ name: 'Home', url: '/en' }, { name: 'Service and support', url: '/en/service' }, { name: englishTitle, url: enPath }]),
+      getFaqJsonLd(englishFaqs),
+    ]} />
+    <DecisionContent locale="en" />
+  </>;
   if (locale !== 'zh') {
     notFound();
   }

@@ -45,14 +45,16 @@ describe('restored Chinese production-line entry', () => {
     expect(html).not.toContain('3 条 1250 mm 连续退洗线节能改造');
   });
 
-  it('does not expose or advertise the still-withdrawn English counterpart', async () => {
-    expect(isZhOnlyPath(pagePath)).toBe(true);
-    expect(localizeOrHideHref(pagePath, 'en')).toBeNull();
+  it('advertises and serves the English counterpart', async () => {
+    const englishPath = pagePath.replace('/zh/', '/en/');
+    expect(isZhOnlyPath(pagePath)).toBe(false);
+    expect(localizeOrHideHref(pagePath, 'en')).toBe(englishPath);
     const metadata = await generateMetadata(props('zh'));
-    expect(metadata.alternates?.languages).not.toHaveProperty('en-US');
-    expect(metadata.alternates?.canonical).toBe(`https://www.jssngyl.cn${pagePath}`);
-    await expect(Page(props('en'))).rejects.toThrow('404');
-    await expect(generateMetadata(props('en'))).rejects.toThrow('404');
-    await expect(RelatedCaseLayout({ ...props('en'), children: null })).rejects.toThrow('404');
+    expect(metadata.alternates?.languages?.['en-US']).toBe('https://www.jssngyl.cn' + englishPath);
+    expect(metadata.alternates?.canonical).toBe('https://www.jssngyl.cn' + pagePath);
+    await expect(Page(props('en'))).resolves.toBeDefined();
+    const englishMetadata = await generateMetadata(props('en'));
+    expect(englishMetadata.alternates?.canonical).toBe('https://www.jssngyl.cn' + englishPath);
+    await expect(RelatedCaseLayout({ ...props('en'), children: null })).resolves.toBeDefined();
   });
 });

@@ -76,6 +76,7 @@ jobs:
           python3 - <<'PY'
           import hashlib, json, os, pathlib, sys
           sys.path.insert(0, "ops/releases")
+          from frontend_release import ALL_APPROVED_GUIDES
           from procurement_approval import procurement_candidate_fields
           root = pathlib.Path(os.environ['RUNNER_TEMP']) / 'frontend-candidate'
           archive = root / 'frontend.tar.gz'
@@ -94,7 +95,7 @@ jobs:
                         if os.environ['SEGMENTED_ARCHIVE'] == 'true' else {}),
                      'publicationScope': 'news-products-services-company-reviewed-cases',
                      'htmlCachePolicy': 'no-store',
-                     'approvedGuides': json.loads(pathlib.Path('ops/releases/approved-guides.json').read_text()),
+                     'approvedGuides': ALL_APPROVED_GUIDES,
                      **procurement_candidate_fields(pathlib.Path('.')),
                      'serverCanaryRequired': True, 'browserAcceptanceRequired': True}
           (root / 'candidate.json').write_text(json.dumps(receipt, indent=2) + '\n')

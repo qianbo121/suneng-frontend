@@ -131,7 +131,7 @@ describe('complete English case integration', () => {
   });
   it('drops withdrawn buyer guides from the English page and its contents list', () => {
     const withdrawn = [
-      { href: '/en/solutions/continuous-heat-treatment-line#guide', label: 'Withdrawn solution guide', text: 'Withdrawn.' },
+      { href: '/en/solutions/unapproved-line#guide', label: 'Withdrawn solution guide', text: 'Withdrawn.' },
       { href: '/en/%61rticles/gongye-lu-baojia-canshu', label: 'Encoded withdrawn guide', text: 'Encoded.' },
     ];
     try {
