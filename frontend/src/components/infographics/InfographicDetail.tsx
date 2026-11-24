@@ -1,7 +1,9 @@
 import Image from 'next/image';
 import Link from 'next/link';
+import { WechatContactButton } from '@/components/lead/WechatContactButton';
 import {
   getInfographicImageSrcSet,
+  getInfographicPages,
   getInfographicTopicLabel,
   type InfographicResource,
 } from '@/lib/infographics';
@@ -16,6 +18,7 @@ const graphicSizes =
 
 export function InfographicDetail({ resource }: { resource: InfographicResource }) {
   const topicLabel = getInfographicTopicLabel(resource);
+  const pages = getInfographicPages(resource);
   return (
     <div className={styles.page}>
       <div className={styles.breadcrumbs}>
@@ -29,14 +32,18 @@ export function InfographicDetail({ resource }: { resource: InfographicResource 
           <div className={`${styles.sideBlock} ${styles.related}`}>
             <p className={styles.sideLabel}>相关主题</p>
             <Link
-              href={`/zh/news?format=infographic&${resource.furnaces.length ? `furnace=${resource.furnaces[0]}` : `q=${encodeURIComponent(resource.equipmentLabel)}`}`}
+              href={`/zh/news?format=infographic&${resource.furnaces.length && resource.equipmentLabel !== '叉车炉' ? `furnace=${resource.furnaces[0]}` : `q=${encodeURIComponent(resource.equipmentLabel)}`}`}
             >
               {resource.equipmentLabel}
             </Link>
             <Link href={`/zh/news?format=infographic&topic=${resource.topic}`}>{topicLabel}</Link>
           </div>
           <div className={styles.help}>
-            有具体工况需要核对？<Link href="/zh/contact">联系苏能工程师</Link>
+            有具体工况需要核对？
+            <WechatContactButton
+              label="联系苏能工程师"
+              trackingContext={{ properties: { position: 'infographic_sidebar', contact_purpose: 'sales' } }}
+            />
           </div>
         </aside>
         <article className={styles.article}>
@@ -48,26 +55,28 @@ export function InfographicDetail({ resource }: { resource: InfographicResource 
             <div className={styles.sectionHeading}>
               <h2>完整图解</h2>
             </div>
-            <figure>
-              <div className={styles.imageFrame}>
-                <picture>
-                  <source
-                    type="image/webp"
-                    srcSet={getInfographicImageSrcSet(resource.image)}
-                    sizes={graphicSizes}
-                  />
-                  <Image
-                    src={resource.image}
-                    alt={resource.imageAlt}
-                    width={1086}
-                    height={1448}
-                    loading="eager"
-                    fetchPriority="high"
-                    unoptimized
-                  />
-                </picture>
-              </div>
-            </figure>
+            {pages.map((page, index) => (
+              <figure key={page.image}>
+                <div className={styles.imageFrame}>
+                  <picture>
+                    <source
+                      type="image/webp"
+                      srcSet={getInfographicImageSrcSet(page.image)}
+                      sizes={graphicSizes}
+                    />
+                    <Image
+                      src={page.image}
+                      alt={page.imageAlt}
+                      width={page.width}
+                      height={page.height}
+                      loading={index === 0 ? 'eager' : 'lazy'}
+                      fetchPriority={index === 0 ? 'high' : 'auto'}
+                      unoptimized
+                    />
+                  </picture>
+                </div>
+              </figure>
+            ))}
           </section>
           <section id="keypoints">
             <div className={styles.sectionHeading}>
@@ -109,6 +118,12 @@ export function InfographicDetail({ resource }: { resource: InfographicResource 
               {resource.paragraphs.map((paragraph) => (
                 <p key={paragraph}>{paragraph}</p>
               ))}
+              {resource.sourceUrl && (
+                <p>
+                  <a href={resource.sourceUrl}>{resource.sourceNote}</a>
+                </p>
+              )}
+              {resource.tags && <p>{resource.tags.map((tag) => `#${tag}`).join(' ')}</p>}
             </div>
           </section>
           <section id="conditions">
@@ -122,9 +137,11 @@ export function InfographicDetail({ resource }: { resource: InfographicResource 
             </ul>
           </section>
           <div className={styles.articleBottom}>
-            <Link className={styles.inquiry} href="/zh/contact">
-              咨询项目工况
-            </Link>
+            <WechatContactButton
+              label="咨询项目工况"
+              className={styles.inquiry}
+              trackingContext={{ properties: { position: 'infographic_footer', contact_purpose: 'sales' } }}
+            />
           </div>
         </article>
       </div>

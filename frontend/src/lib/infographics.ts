@@ -17,9 +17,13 @@ export type InfographicResource = {
   furnaces: NewsFurnaceFilterId[];
   image: string;
   imageAlt: string;
+  imageSize?: { width: number; height: number };
+  additionalPages?: { image: string; imageAlt: string; width: number; height: number }[];
   caption: string;
   paragraphs: string[];
   sourceNote: string;
+  sourceUrl?: string;
+  tags?: string[];
   rows: { label: string; value: string; condition: string }[];
   flows: { title: string; text: string }[];
   conditions: string[];
@@ -568,6 +572,17 @@ export const infographicResources: InfographicResource[] = [
 
 export function getInfographic(slug: string) {
   return infographicResources.find((item) => item.slug === slug);
+}
+
+export function getInfographicPages(resource: InfographicResource) {
+  return [
+    {
+      image: resource.image,
+      imageAlt: resource.imageAlt,
+      ...(resource.imageSize ?? { width: 1086, height: 1448 }),
+    },
+    ...(resource.additionalPages ?? []),
+  ];
 }
 
 export function getInfographicImageSrcSet(image: InfographicResource['image']) {

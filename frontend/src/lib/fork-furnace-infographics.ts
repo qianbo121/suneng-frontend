@@ -2,6 +2,69 @@ import type { InfographicResource } from './infographics';
 
 export const forkFurnaceInfographics: InfographicResource[] = [
   {
+    id: -1009,
+    slug: 'bucket-teeth-liners-furnace-selection',
+    title: '高锰钢斗齿衬板水韧，选叉车炉还是台车炉？',
+    summary:
+      '高锰钢斗齿和衬板做水韧处理，选叉车炉还是台车炉，先看工件能不能整筐叉取、能不能翻落。一筐斗齿或一件衬板需要保持姿态，先谈叉车炉＋专用叉料车＋炉前水槽；允许翻落的斗齿，可以比较台车炉＋翻转装置＋淬火槽；衬板怕碰伤或变形，要让厂家另画托架转运方案。',
+    topic: 'selection',
+    equipmentLabel: '叉车炉',
+    furnaces: ['trolley'],
+    image: '/images/infographics/bucket-teeth-liners-furnace-selection-01.png',
+    imageAlt: '图一，牌号与入水条件、叉车炉与台车炉路线、长棒料和管件两套配置（01–03）',
+    imageSize: { width: 1524, height: 2094 },
+    additionalPages: [
+      {
+        image: '/images/infographics/bucket-teeth-liners-furnace-selection-02.png',
+        imageAlt: '图二，入水计时起止点、水槽配水与水温、报价范围和苏能服务（04–07）',
+        width: 1524,
+        height: 2094,
+      },
+    ],
+    caption: '设备画面非项目实拍。',
+    paragraphs: [
+      '江苏苏能工业炉有限公司位于泰州姜堰，两条路线都能按工件设计。苏能的叉车炉又称铲齿炉，用于快速淬火的配置也叫叉车式快速淬火炉。苏能有两套已有配置可作起点：长棒料每炉5吨（仅工件），协议转移时间≤30秒；管件、法兰每炉7吨（工件和料筐合计），≤50秒。两套都从工件开始外移，计到整批完全浸没。询斗齿、衬板时，选装料方式接近的一套，再按自己的图纸核算，具体以本次技术协议为准。',
+      '按 GB/T 5680—2023，铸件应均匀加热、保温后快速入水，入水后水温不应超过50℃。ZG90Mn14Mo 在厚度小于45 mm且含碳量低于0.8%时，可不经热处理直接供货；其他牌号的水韧处理温度不低于1040℃。',
+      '水槽按每炉入水的铸件重量核算，热料筐、吊具另计。河南省铸锻工业协会的工艺汇编按铸件重量的8–10倍配水，例如5吨铸件约配40–50吨水。连续生产还要核对下一炉入水前，水温能否降回要求。',
+      '询价时，先让厂家按你最重的一炉料画出路线：工件怎么出炉、由谁承托、在哪里算完全入水。再让各家按同一批工件、同一计时起止点、同一水槽条件报价，分开写清炉体及温控、取料转运、水槽及循环冷却、安装调试和带料验收由谁负责。',
+    ],
+    sourceNote:
+      '本文整理自江苏苏能工业炉官网文章《高锰钢斗齿和衬板做水韧处理，怎么选炉、找厂家？》',
+    sourceUrl:
+      'https://www.jssngyl.cn/zh/news/high-manganese-steel-bucket-teeth-liners-water-toughening-furnace',
+    tags: [
+      '高锰钢水韧处理',
+      '斗齿热处理',
+      '衬板热处理',
+      '叉车炉',
+      '铲齿炉',
+      '台车炉',
+      '工业炉选型',
+    ],
+    rows: [
+      {
+        label: '需要保持工件姿态',
+        value: '叉车炉＋专用叉料车＋炉前水槽',
+        condition: '整筐能叉取，转运时有可靠承托',
+      },
+      {
+        label: '斗齿允许翻落',
+        value: '台车炉＋翻转装置＋淬火槽',
+        condition: '先核实工件能承受翻落',
+      },
+      {
+        label: '衬板怕碰伤或变形',
+        value: '由厂家另画托架转运方案',
+        condition: '按衬板图纸确认承托位置',
+      },
+    ],
+    flows: [],
+    conditions: [
+      '30秒和50秒分别对应长棒料、管件及法兰两套已有配置。斗齿和衬板需按本次工件图纸重新核算。',
+      '比较报价时，统一每炉载荷、计时起止点和水槽条件，并写清供货与验收范围。',
+    ],
+  },
+  {
     id: -1008,
     slug: 'fork-long-bars-quench-transfer-time',
     title: '长棒料叉车炉30秒入水从哪计时？',

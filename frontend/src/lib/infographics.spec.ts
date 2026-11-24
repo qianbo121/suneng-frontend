@@ -5,6 +5,7 @@ import {
   getInfographic,
   getInfographicCards,
   getInfographicImageSrcSet,
+  getInfographicPages,
   infographicResources,
 } from './infographics';
 
@@ -34,17 +35,17 @@ describe('ten supplied infographic resources', () => {
     ).toBe(true);
   });
 
-  it('ships every original poster at its actual 1086 × 1448 size', () => {
-    for (const item of infographicResources) {
+  it('declares the actual dimensions of each original poster', () => {
+    for (const item of infographicResources.flatMap(getInfographicPages)) {
       const png = readFileSync(resolve(process.cwd(), 'public', item.image.slice(1)));
       expect(png.subarray(0, 8).toString('hex')).toBe('89504e470d0a1a0a');
-      expect(png.readUInt32BE(16)).toBe(1086);
-      expect(png.readUInt32BE(20)).toBe(1448);
+      expect(png.readUInt32BE(16)).toBe(item.width);
+      expect(png.readUInt32BE(20)).toBe(item.height);
     }
   });
 
   it('uses the generated display paths for every poster', () => {
-    for (const item of infographicResources) {
+    for (const item of infographicResources.flatMap(getInfographicPages)) {
       const base = item.image.slice(0, -'.png'.length);
       expect(getInfographicImageSrcSet(item.image)).toBe(
         `${base}-768w.webp 768w, ${base}-1086w.webp 1086w`,
