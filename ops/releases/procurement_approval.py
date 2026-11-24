@@ -17,6 +17,9 @@ APPROVED_PATHS = [
 ENGLISH_EQUIPMENT_PATH = '/en/articles/special-industrial-furnace-procurement-assessment'
 BILINGUAL_SCOPE_FILE = Path(__file__).with_name('procurement-bilingual-scope-20261111.json')
 BILINGUAL_SCOPE_SHA256 = '30e5467979d38d062dca2582d4c5e7f675705cef91e1f2f2aff4c4d707a4fbc1'
+ENGLISH_PARTS_PATH = '/en/service/industrial-furnace-parts-purchasing'
+PARTS_SCOPE_FILE = Path(__file__).with_name('procurement-parts-bilingual-scope-20261124.json')
+PARTS_SCOPE_SHA256 = 'adb3430218f9e445cc1d68f7f7dea7e840cfb7f1e2cc38d32b4077400d5310dd'
 SCOPE_FIELD = 'independentlyApprovedProcurementPages'
 
 
@@ -24,22 +27,25 @@ def resolve_approval_sha(approval_sha=None):
     # Historical receipts before the hash field described the original bodies.
     if approval_sha is None:
         return APPROVAL_SHA256
-    if not isinstance(approval_sha, str) or approval_sha not in (APPROVAL_SHA256, CURRENT_APPROVAL_SHA256, BILINGUAL_SCOPE_SHA256):
+    if not isinstance(approval_sha, str) or approval_sha not in (APPROVAL_SHA256, CURRENT_APPROVAL_SHA256, BILINGUAL_SCOPE_SHA256, PARTS_SCOPE_SHA256):
         raise ValueError('Separate procurement approval provenance does not match')
     return approval_sha
 
 
 def approval_document(approval_sha=APPROVAL_SHA256):
     selected = resolve_approval_sha(approval_sha)
-    if selected == BILINGUAL_SCOPE_SHA256:
-        raw = BILINGUAL_SCOPE_FILE.read_bytes()
+    if selected in (BILINGUAL_SCOPE_SHA256, PARTS_SCOPE_SHA256):
+        if selected == PARTS_SCOPE_SHA256:
+            file, previous, path = PARTS_SCOPE_FILE, BILINGUAL_SCOPE_SHA256, ENGLISH_PARTS_PATH
+        else:
+            file, previous, path = BILINGUAL_SCOPE_FILE, CURRENT_APPROVAL_SHA256, ENGLISH_EQUIPMENT_PATH
+        raw = file.read_bytes()
         if hashlib.sha256(raw).hexdigest() != selected:
             raise ValueError('Bilingual procurement scope changed')
         addition = json.loads(raw)
-        if (addition['previousApprovalSha256'] != CURRENT_APPROVAL_SHA256
-                or addition['page']['path'] != ENGLISH_EQUIPMENT_PATH):
+        if addition.get('previousApprovalSha256') != previous or addition['page']['path'] != path:
             raise ValueError('Unexpected English procurement scope')
-        document = approval_document(CURRENT_APPROVAL_SHA256)
+        document = approval_document(previous)
         document['pages'].append(addition['page'])
         return document
     raw = (APPROVAL_FILE if selected == APPROVAL_SHA256 else CURRENT_APPROVAL_FILE).read_bytes()
@@ -63,13 +69,13 @@ def normalize_procurement(value, approval_sha=None, *, require_approval=False):
     allowed = [page['path'] for page in approval_document(selected)['pages']]
     if (not isinstance(value, list) or any(not isinstance(p, str) or p not in allowed for p in value)
             or len(value) != len(set(value))):
-        raise ValueError('Only the exact separately approved Chinese procurement paths may be released')
+        raise ValueError('Only the exact separately approved procurement paths may be released')
     if value and require_approval and approval_sha is None:
         raise ValueError('A procurement candidate requires its exact approval record hash')
     return sorted(value)
 
 
-def procurement_candidate_fields(project_root, approval_sha=BILINGUAL_SCOPE_SHA256):
+def procurement_candidate_fields(project_root, approval_sha=PARTS_SCOPE_SHA256):
     """Prepare scope only after checking source parity; actual candidate GETs remain mandatory."""
     root = Path(project_root)
     source = (root / 'frontend/src/lib/approved-procurement-pages.ts').read_text()
@@ -92,13 +98,18 @@ def procurement_candidate_fields(project_root, approval_sha=BILINGUAL_SCOPE_SHA2
         if not route.is_file() or 'isPublishedProcurementPage' not in route.read_text():
             raise ValueError('Source lacks the approved locale-gated procurement leaf route')
     paths = list(APPROVED_PATHS)
-    if selected == BILINGUAL_SCOPE_SHA256:
-        english = json.loads((root / 'frontend/src/lib/equipment-procurement-en.json').read_text())
-        expected = approval_document(selected)['pages'][-1]
+    for expected in approval_document(selected)['pages'][len(APPROVED_PATHS):]:
+        parts = expected['path'] == ENGLISH_PARTS_PATH
+        name = 'parts-procurement-en.json' if parts else 'equipment-procurement-en.json'
+        english = json.loads((root / 'frontend/src/lib' / name).read_text())
         if (english['path'] != expected['path'] or english['heading'] != expected['h1']
-                or english['parentPath'] != expected['entryPath']
+                or english['parentPath'] != expected.get('parentPath', expected['entryPath'])
                 or hashlib.sha256(english['html'].encode()).hexdigest() != expected['approvedBodySha256']
                 or re.findall(r'<section id="([^"]+)"', english['html']) != expected['anchors']):
-            raise ValueError('English equipment procurement copy differs from the bilingual scope')
-        paths.append(ENGLISH_EQUIPMENT_PATH)
+            raise ValueError('English procurement copy differs from the bilingual scope')
+        if parts:
+            heading_ids = [f"{expected['bodyId']}-section-{i + 1}" for i in range(english['html'].count('<h2>'))]
+            if heading_ids != expected['headingAnchors']:
+                raise ValueError('English parts heading anchors differ from the bilingual scope')
+        paths.append(expected['path'])
     return {SCOPE_FIELD: paths, 'procurementApprovalSha256': selected}

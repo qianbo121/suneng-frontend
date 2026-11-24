@@ -1,0 +1,186 @@
+{
+  "id": "fork-review-02",
+  "slug": "fork-pipe-flange-solution-treatment",
+  "number": 2,
+  "title": "Solution treatment of stainless fittings and flanges: 7 tonnes including the basket, immersed within 50 seconds",
+  "summary": "This 420 kW electric fork-handling furnace solution-treats stainless fittings and flanges. After soaking, the car transfers a 7-tonne loaded basket to the tank. The specified time from first outward movement to complete immersion is at most 50 seconds.",
+  "seoTitle": "Quenching a 7-tonne basket of pipe fittings and flanges",
+  "seoDescription": "The agreement includes basket weight in its 7-tonne limit. See the 420 kW furnace and the 50-second transfer criterion for full immersion.",
+  "body": "fork-review-02.md",
+  "translatedAt": "2026-11-24",
+  "translationStatus": "complete",
+  "sourceFingerprint": "fc19be5b6d9c732c7e3ead19b048d2b95d6b773e2366e7bc829cfab9f42a30e8",
+  "coverAlt": "Stainless steel elbows and flanges",
+  "coverCaption": "Pipe fittings and flanges",
+  "reviewSourceFingerprint": "3e4351274201d0fa87c2cc4e15af5a9f37f9a8d8f52712191c9b7d98a49ef8cc",
+  "forkReview": {
+    "image": "/fork-case-review/workpieces/pipe-elbows-and-flanges.webp",
+    "imageAlt": "Stainless steel elbows and flanges",
+    "category": "Pipe fittings and flanges",
+    "metrics": [
+      [
+        "Combined workpiece and basket weight",
+        "7",
+        "t"
+      ],
+      [
+        "Heating power",
+        "420",
+        "kW"
+      ],
+      [
+        "Basket withdrawal to immersion",
+        "≤50",
+        "s"
+      ]
+    ],
+    "note": "The 7 tonnes includes the heat-resistant basket and excludes support blocks. Subtract the empty basket weight to obtain net fitting weight.",
+    "work": [],
+    "featuresTitle": "Project features",
+    "features": [
+      [
+        "The basket carries the entire batch",
+        "Load the fittings or flanges into a heat-resistant steel basket and heat them together. All protruding elbows and stacked flanges must remain within the working envelope."
+      ],
+      [
+        "The car transfers the loaded basket",
+        "The forks support the basket underneath. After soaking, withdraw it, align it with the tank and lower it. Time from the first outward movement until the last part is fully immersed."
+      ]
+    ],
+    "flowTitle": "Equipment arrangement and process sequence",
+    "filmId": "02-depth",
+    "stages": [
+      {
+        "title": "Load the basket",
+        "note": "The basket and its contents weigh 7 tonnes in total.",
+        "thumb": "/fork-case-review/films/02-depth/stage-1.webp"
+      },
+      {
+        "title": "Charge the basket",
+        "note": "The basket enters the working zone, which has two heating zones.",
+        "thumb": "/fork-case-review/films/02-depth/stage-2.webp"
+      },
+      {
+        "title": "Withdraw the basket",
+        "note": "Support the basket underneath. Start timing when the fittings begin to move out.",
+        "thumb": "/fork-case-review/films/02-depth/stage-3.webp"
+      },
+      {
+        "title": "Immerse the batch",
+        "note": "Stop the clock when the last workpiece is fully under water.",
+        "thumb": "/fork-case-review/films/02-depth/stage-4.webp"
+      }
+    ],
+    "cards": [
+      {
+        "title": "Equipment specifications",
+        "paragraphs": [],
+        "definitions": [],
+        "table": {
+          "head": [
+            "Item",
+            "Project specification"
+          ],
+          "rows": [
+            [
+              "Model",
+              "RX4-420-11 rapid solution-treatment resistance chamber furnace"
+            ],
+            [
+              "Heating and control zones",
+              "Resistance heating, 420 kW, 2 zones"
+            ],
+            [
+              "Maximum operating temperature",
+              "1150 ℃"
+            ],
+            [
+              "Furnace temperature uniformity during soaking",
+              "±10 ℃"
+            ],
+            [
+              "Working zone (length × width × height)",
+              "1.8 × 1.8 × 1.2 m"
+            ],
+            [
+              "Full-basket transfer requirement",
+              "7 tonnes including basket and parts. Maximum withdrawal-to-immersion time: 50 seconds."
+            ]
+          ],
+          "rowHeaders": true
+        }
+      },
+      {
+        "title": "Supply responsibilities",
+        "paragraphs": [],
+        "definitions": [
+          [
+            "Suneng",
+            "Supplies the furnace, fork car, drives and controls and carries out installation and commissioning."
+          ],
+          [
+            "Buyer",
+            "Supplies the heat-resistant basket and solution-treatment water tank and prepares the site using the foundation information."
+          ]
+        ]
+      },
+      {
+        "title": "Scope of supply",
+        "paragraphs": [
+          "Suneng supplies the resistance-heated solution furnace, door lift, fork charging car and controls. The buyer’s basket carries the same load across the hearth supports, forks and water tank."
+        ],
+        "definitions": []
+      },
+      {
+        "title": "Acceptance procedure",
+        "paragraphs": [],
+        "definitions": [
+          [
+            "Inspection at the manufacturer’s works",
+            "After manufacture, both parties check fabrication, assembly, safety and associated equipment under the agreement."
+          ],
+          [
+            "Heating under load on site",
+            "Once the empty-furnace test is satisfactory, proceed to heat under load. Acceptance requires meeting the main contract specifications."
+          ]
+        ]
+      }
+    ],
+    "figure": {
+      "src": "/images/news/fork-en/case-02-diagram.webp",
+      "alt": "Working envelope, load and transfer",
+      "caption": "1.8 × 1.8 × 1.2 m available for the loaded basket. The stated load includes the parts and the basket. Time from first outward movement until the last workpiece is submerged."
+    },
+    "related": [
+      [
+        "Fork-handling furnace specifications",
+        "/en/products/detail/shovel-furnace"
+      ],
+      [
+        "Can a fork-handling furnace quench a full basket of stainless fittings and flanges?",
+        "/en/news/stainless-pipe-fittings-flanges-solution-furnace-water-quench"
+      ]
+    ],
+    "faqIntro": "Loaded basket weight, maximum stacking height and responsibilities for the equipment.",
+    "faq": [
+      [
+        "Can it hold 7 net tonnes of pipe fittings?",
+        "The 7 tonnes includes the basket. Deduct its empty weight to obtain the net weight of fittings."
+      ],
+      [
+        "How high can the basket be loaded?",
+        "The working height is 1.2 m, with a length and width of 1.8 m each. Include stacked flanges and protruding elbows when measuring the loaded basket."
+      ],
+      [
+        "Does the same party supply the furnace, basket and tank?",
+        "Suneng supplies the solution furnace and fork charging car. The buyer supplies the heat-resistant basket and water tank."
+      ]
+    ],
+    "source": "Reference: 2017 purchase contract and technical agreement for the rapid solution-treatment resistance chamber furnace. The load and transfer interval follow Suneng’s published product information.",
+    "ctaTitle": "Send workpiece details to check the furnace configuration",
+    "title": "Solution treatment of stainless fittings and flanges: 7 tonnes including the basket, immersed within 50 seconds",
+    "summary": "This 420 kW electric fork-handling furnace solution-treats stainless fittings and flanges. After soaking, the car transfers a 7-tonne loaded basket to the tank. The specified time from first outward movement to complete immersion is at most 50 seconds.",
+    "listTitle": "Solution treatment with full-basket immersion within 50 seconds",
+    "listSummary": "A 420 kW resistance furnace heats fittings and flanges. The parts and basket together weigh 7 tonnes. The whole batch must be submerged within 50 seconds of starting withdrawal."
+  }
+}

@@ -1,0 +1,38 @@
+[
+  {
+    "question": "Can I request a quote if I only know the workpiece dimensions?",
+    "answer": "Yes, for a preliminary review. Include the material, dimensions, weight, process, throughput and maximum temperature so an engineer can assess car-bottom, box, pit, mesh-belt or other designs."
+  },
+  {
+    "question": "Why do car-bottom furnace prices differ?",
+    "answer": "Chamber size, charge weight, temperature class, lining, car capacity, door, heating method and controls all affect cost. Compare the actual configuration."
+  },
+  {
+    "question": "How long does an industrial furnace quote take?",
+    "answer": "With sufficient information Suneng can assess the design direction and price range. Complex lines, retrofits or uncertain site conditions may need further engineering or a survey. A firm price follows the agreed design, equipment list and delivery scope."
+  },
+  {
+    "question": "Can you quote without drawings?",
+    "answer": "Photos, dimensions, workpieces and process data can support an initial assessment. Complex projects may require site measurements, drawings or further discussion."
+  },
+  {
+    "question": "How does pricing a retrofit differ from pricing a new furnace?",
+    "answer": "New equipment is priced from the design and configuration. For retrofits also consider the original condition, removal work, lining damage, existing controls interfaces, site access and shutdown time."
+  },
+  {
+    "question": "Can we have an indicative price?",
+    "answer": "An initial range is possible. A firm price requires the furnace type, dimensions, operating temperatures, loading, process, controls and delivery boundaries."
+  },
+  {
+    "question": "What should an energy-efficiency retrofit quotation cover?",
+    "answer": "Separate diagnosis and design, shell and lining, heating or combustion, drives, controls and interlocks, removal and transport, installation, commissioning, tests and documents. Assign foundations, lifting, utilities, third-party tests, buyer-supplied components and shutdown support."
+  },
+  {
+    "question": "How much does an energy-efficiency retrofit cost?",
+    "answer": "Estimate a range after confirming condition, scope, chamber, temperatures, workpieces, throughput, heat source, controls, site and downtime. A firm price follows the technical proposal, quantities and scope."
+  },
+  {
+    "question": "How should we budget an old-furnace retrofit?",
+    "answer": "Itemize diagnosis, design, removal, shell and lining, heating or combustion, drives, controls and interlocks, commissioning, testing, third-party work and shutdown support. Keep concealed damage and unverified site quantities open for inspection."
+  }
+]

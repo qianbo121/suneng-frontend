@@ -1,0 +1,166 @@
+{
+  "id": "fork-review-04",
+  "slug": "fork-gas-pipe-fittings-trial-scope",
+  "number": 4,
+  "title": "Gas-fired solution treatment of pipe fittings: five trial batches with the buyer’s parts",
+  "summary": "After installation and commissioning, the agreement calls for five trial batches using the buyer’s stainless fittings. The buyer also supplies trays, lifting gear and blocks. Loaded acceptance checks the temperature curve, gas consumption and workpiece temperature variation.",
+  "seoTitle": "Gas-fired solution furnace: who supplies the trial parts?",
+  "seoDescription": "The 2011 document assigns trays, fixtures and trial fittings to the buyer. See empty and loaded commissioning and the five trial batches.",
+  "body": "fork-review-04.md",
+  "translatedAt": "2026-11-24",
+  "translationStatus": "complete",
+  "sourceFingerprint": "e86c2f4e5055ff074fa25275c7aa74ff9ae87ddb8d55a71c15223030213f240d",
+  "coverAlt": "Stainless steel pipe elbow",
+  "coverCaption": "Stainless steel fittings",
+  "reviewSourceFingerprint": "8fbe715535d78078382758d6ca7b715ff9a2bd8b5d9b472b8ff892ab49751223",
+  "forkReview": {
+    "image": "/fork-case-review/workpieces/stainless-steel-elbow.webp",
+    "imageAlt": "Stainless steel pipe elbow",
+    "category": "Stainless steel fittings",
+    "metrics": [
+      [
+        "Trial batches required by the agreement",
+        "5",
+        "batches"
+      ],
+      [
+        "Furnace charge",
+        "1",
+        "t/batch"
+      ],
+      [
+        "Minimum required maximum load per lift",
+        "≥2",
+        "t"
+      ]
+    ],
+    "note": "The 1-tonne furnace load excludes support blocks. The car rating assumes a uniformly distributed load including fixtures.",
+    "work": [
+      [
+        "Main equipment",
+        "Furnace, fork car and electrical controls. The agreement calls the car a fork-handling mechanism."
+      ],
+      [
+        "Items prepared by the buyer",
+        "Trays, lifting fixtures, blocks, trial fittings, raw materials and consumables."
+      ]
+    ],
+    "featuresTitle": "Load conditions for the five trials",
+    "features": [
+      [
+        "Weigh the furnace load and the transport load separately",
+        "Allow 1 tonne of fittings per furnace batch. For the car, weigh the fittings and accompanying fixtures together."
+      ],
+      [
+        "Prepare each batch",
+        "Check each batch’s fitting sizes, piece count, tray tare weight and arrival date."
+      ],
+      [
+        "Keep one record per trial batch",
+        "Record the temperature curve, gas consumption and soaking temperatures against each batch number."
+      ]
+    ],
+    "flowTitle": "Installation, commissioning and five trial batches",
+    "filmId": "04-depth",
+    "stages": [
+      {
+        "title": "Prepare the fixtures",
+        "note": "The buyer prepares trays, lifting gear, support blocks and trial pieces.",
+        "thumb": "/fork-case-review/films/04-depth/stage-1.webp"
+      },
+      {
+        "title": "Empty commissioning",
+        "note": "After the factory inspection, install the equipment and run it empty at the buyer’s site.",
+        "thumb": "/fork-case-review/films/04-depth/stage-2.webp"
+      },
+      {
+        "title": "Loaded commissioning",
+        "note": "Check heat-up under load using the agreed workpieces and fixtures.",
+        "thumb": "/fork-case-review/films/04-depth/stage-3.webp"
+      },
+      {
+        "title": "Run five trial batches",
+        "note": "After empty and loaded commissioning, run five batches of the buyer’s fittings on site.",
+        "thumb": "/fork-case-review/films/04-depth/stage-4.webp"
+      }
+    ],
+    "cards": [
+      {
+        "title": "Division of supply and load conditions",
+        "paragraphs": [
+          "The furnace rating refers to the fittings. The car rating refers to fittings and fixtures together."
+        ],
+        "definitions": [
+          [
+            "Supplier’s scope",
+            "Furnace, fork car, furnace-side natural-gas piping and valves, combustion-air supply, exhaust ducting including an 18 m stack, combustion system, electrical controls and equipment documents."
+          ]
+        ],
+        "table": {
+          "head": [
+            "Agreement item",
+            "Application to trial production"
+          ],
+          "rows": [
+            [
+              "Furnace charge",
+              "1 tonne per batch excluding support blocks. Prepare each batch of fittings to the agreed loading pattern."
+            ],
+            [
+              "Carrying capacity of the fork car",
+              "With a uniformly distributed load including fixtures, the maximum capacity per lift must be at least 2 tonnes. Weigh the fittings and fixtures together for transfer."
+            ],
+            [
+              "Trial materials",
+              "The buyer supplies the workpieces, raw materials and consumables. Confirm the size, count, tray tare and delivery time for each batch."
+            ]
+          ],
+          "rowHeaders": false
+        }
+      },
+      {
+        "title": "What does loaded acceptance involve?",
+        "paragraphs": [
+          "Start with factory inspection, then site installation, no-load commissioning and loaded heat-up. Fittings heat on a tray or in a basket and travel to the water with the fixtures. Acceptance requires five trial batches and compliance with the performance criteria: process curve, gas use, furnace uniformity during soaking and workpiece temperature variation."
+        ],
+        "definitions": []
+      }
+    ],
+    "figure": {
+      "src": "/images/news/fork-en/case-04-diagram.webp",
+      "alt": "2011 agreement: supply and trial duties",
+      "caption": "Furnace and agreed equipment systems; complete the specified inspection and commissioning. Prepare trays, lifting gear, support blocks and trial fittings. Run empty, then under load, then process five trial batches on site. The specified charge is 1 tonne per batch."
+    },
+    "related": [
+      [
+        "Fork-handling furnace specifications",
+        "/en/products/detail/shovel-furnace"
+      ],
+      [
+        "Who provides the trays, fixtures and trial workpieces?",
+        "/en/news/fork-furnace-loading-trays-trial-workpiece-supply"
+      ]
+    ],
+    "faqIntro": "Workpieces, fixtures and acceptance criteria for the five trial batches.",
+    "faq": [
+      [
+        "Whose fittings are used after commissioning?",
+        "Use the buyer’s stainless fittings. The buyer also supplies trays, lifting gear, blocks, raw materials and consumables for the trial."
+      ],
+      [
+        "Which furnace-side systems are included?",
+        "Along with the furnace and car, the supplier provides gas piping and valves, combustion air, exhaust ducting with an 18 m stack, combustion equipment, controls and equipment documents."
+      ],
+      [
+        "How many trials are required and what is checked?",
+        "Five trial batches of the buyer’s fittings. Check the process temperature curve, natural-gas consumption, furnace uniformity during soaking and temperature differences within the workpiece load."
+      ]
+    ],
+    "source": "Reference: 2011 technical agreement for the gas-fired rapid solution-treatment chamber furnace, section 8 (scope) and the terms for factory inspection, installation, commissioning, training and acceptance.",
+    "ctaTitle": "Send workpiece details to check the furnace configuration",
+    "title": "Gas-fired solution treatment of pipe fittings: five trial batches with the buyer’s parts",
+    "summary": "After installation and commissioning, the agreement calls for five trial batches using the buyer’s stainless fittings. The buyer also supplies trays, lifting gear and blocks. Loaded acceptance checks the temperature curve, gas consumption and workpiece temperature variation.",
+    "listTitle": "Five trial batches after installation of a pipe-fitting solution furnace",
+    "listSummary": "Following commissioning, the parties run five batches of the buyer’s pipe fittings. The buyer supplies the trays, lifting gear and support blocks."
+  }
+}

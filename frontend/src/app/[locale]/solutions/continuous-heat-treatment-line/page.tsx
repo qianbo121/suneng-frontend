@@ -1,3 +1,4 @@
+import { EnglishSolutionPage, englishSolutionMetadata } from '@/components/engineering/EnglishSolutionsPage';
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
@@ -145,12 +146,13 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { locale } = await params;
   if (!isPublishedGuide(locale, pagePath)) notFound();
+  if (locale === 'en') return englishSolutionMetadata('continuous-heat-treatment-line');
   const metadata = buildMetadata({
     title: '连续热处理生产线解决方案｜选型与项目经验',
     description,
     path: pagePath,
     image: '/images/products/annealing-solution-line/gallery/line-01.jpg',
-    alternateLocales: { 'zh-CN': pagePath, 'x-default': pagePath },
+    alternateLocales: { 'zh-CN': pagePath, 'en-US': pagePath.replace('/zh/', '/en/'), 'x-default': pagePath },
   });
   if (process.env.NODE_ENV === 'development' || process.env.SITE_NOINDEX === 'true') {
     metadata.robots = { index: false, follow: false };
@@ -160,6 +162,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 export default async function ContinuousHeatTreatmentLinePage({ params }: PageProps) {
   const { locale } = await params;
   if (!isPublishedGuide(locale, pagePath)) notFound();
+  if (locale === 'en') return <EnglishSolutionPage slug="continuous-heat-treatment-line" />;
   return (
     <div className={styles.page} data-engineering-page="line">
       <AnchorNav

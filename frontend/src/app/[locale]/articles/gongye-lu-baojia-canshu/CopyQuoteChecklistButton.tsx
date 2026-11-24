@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from 'react';
 type CopyQuoteChecklistButtonProps = {
   text: string;
   label?: string;
+  english?: boolean;
   className?: string;
   wrapperClassName?: string;
   messageClassName?: string;
@@ -20,7 +21,7 @@ const defaultMessageClassName =
 
 export function CopyQuoteChecklistButton({
   text,
-  label = defaultLabel,
+  label, english = false,
   className,
   wrapperClassName = defaultWrapperClassName,
   messageClassName = defaultMessageClassName,
@@ -94,19 +95,20 @@ export function CopyQuoteChecklistButton({
     return copiedFromRange;
   };
 
+  const failureMessage = english ? 'Select the checklist and copy it manually.' : '复制失败，请手动选中清单内容复制。';
   const handleCopy = async () => {
     try {
       const copied = await copyWithFallback();
-      setMessage(copied ? successMessage : '复制失败，请手动选中清单内容复制。');
+      setMessage(copied ? (english ? 'Checklist copied.' : successMessage) : failureMessage);
     } catch {
-      setMessage('复制失败，请手动选中清单内容复制。');
+      setMessage(failureMessage);
     }
   };
 
   return (
     <div className={wrapperClassName}>
       <button type="button" onClick={handleCopy} className={className ?? defaultButtonClassName}>
-        {label}
+        {label ?? (english ? 'Copy checklist' : defaultLabel)}
       </button>
       {feedback.message ? (
         <p ref={messageRef} className={messageClassName} role="status" aria-live="polite">

@@ -36,6 +36,7 @@ import { Locale } from '@/types/site';
 const sitemapLocales: Locale[] = ['zh', 'en'];
 const zhOnlyLocales: Locale[] = ['zh'];
 const englishStaticPaths = new Set([
+  '/inquiry',
   '/case',
   '/',
   '/solutions',
@@ -256,6 +257,9 @@ function collectStaticRoutes(): MetadataRoute.Sitemap {
   ];
 
   const englishGuidePaths = new Set([
+    '/articles/gongye-lu-baojia-canshu',
+    '/articles/laojiu-rechuli-lu-daxiu-haishi-maixin',
+    '/service/industrial-furnace-parts-purchasing',
     '/articles/special-industrial-furnace-procurement-assessment',
     '/products/detail/copper-wire-annealing-line/inquiry-checklist',
     '/service/furnace-renovation-overhaul',

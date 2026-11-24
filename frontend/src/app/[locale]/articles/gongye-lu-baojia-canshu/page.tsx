@@ -1,3 +1,4 @@
+import englishFaqs from '@/components/geo-pages/reviewed/quote-faqs-en.json';
 import { isPublishedGuide } from '@/lib/publication-scope';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
@@ -16,6 +17,9 @@ type PageProps = {
 
 const pagePath = '/zh/articles/gongye-lu-baojia-canshu';
 
+const enPath = pagePath.replace('/zh/', '/en/');
+const englishTitle = "What information do you need for an industrial furnace quotation?";
+const englishDescription = "Prepare workpiece, loading, temperature, process and site data. Compare furnace types, check the scope of supply and copy the 17-item inquiry checklist.";
 const servicePath = '/zh/service';
 
 export const dynamicParams = false;
@@ -39,12 +43,16 @@ const articleJsonLd = getArticleJsonLd({
 });
 
 export function generateStaticParams() {
-  return [{ locale: 'zh' }];
+  return [{ locale: 'zh' }, { locale: 'en' }];
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { locale } = await params;
   if (!isPublishedGuide(locale, pagePath)) notFound();
+  if (locale === 'en') return buildMetadata({
+    locale, title: englishTitle, description: englishDescription, path: enPath, type: 'article',
+    image: INDUSTRIAL_FURNACE_QUOTE_PARAMS_SEO.ogImage, alternateLocales: { 'zh-CN': pagePath, 'en-US': enPath, 'x-default': pagePath },
+  });
 
   if (locale !== 'zh') {
     notFound();
@@ -62,6 +70,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     modifiedTime: INDUSTRIAL_FURNACE_QUOTE_PARAMS_SEO.modifiedTime,
     alternateLocales: {
       'zh-CN': pagePath,
+      'en-US': enPath,
       'x-default': pagePath,
     },
   });
@@ -70,6 +79,14 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 export default async function IndustrialFurnaceQuoteParamsPage({ params }: PageProps) {
   const { locale } = await params;
   if (!isPublishedGuide(locale, pagePath)) notFound();
+  if (locale === 'en') return <>
+    <JsonLd id="english-guide" data={[
+      getArticleJsonLd({slug: 'gongye-lu-baojia-canshu', path: enPath, headline: englishTitle, description: englishDescription, image: INDUSTRIAL_FURNACE_QUOTE_PARAMS_SEO.ogImage, datePublished: INDUSTRIAL_FURNACE_QUOTE_PARAMS_SEO.publishedTime}, 'en'),
+      getBreadcrumbJsonLd([{ name: 'Home', url: '/en' }, { name: 'Service and support', url: '/en/service' }, { name: englishTitle, url: enPath }]),
+      getFaqJsonLd(englishFaqs),
+    ]} />
+    <QuoteContent locale="en" />
+  </>;
   if (locale !== 'zh') {
     notFound();
   }

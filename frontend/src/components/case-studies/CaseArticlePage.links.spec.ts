@@ -40,7 +40,7 @@ vi.mock('@/lib/cases/server', async (original) => {
       relatedCases: [],
       relatedLinks: [
         { title: '已批准的连续线方案', href: '/zh/solutions/continuous-heat-treatment-line' },
-        { title: '未批准的英文方案', href: '/en/solutions/continuous-heat-treatment-line' },
+        { title: '未批准的英文方案', href: '/en/solutions/unapproved-line' },
         { title: '已撤回的方案目录', href: '/zh/solutions' },
         { title: '编码后的撤回文章', href: '/zh/%61rticles/gongye-lu-baojia-canshu' },
         { title: '未批准的案例', href: '/zh/case/jining-support-roller-heat-treatment-line' },
@@ -71,7 +71,7 @@ describe('case pages hide withdrawn destinations', () => {
 
   it('shows only live buyer guides and omits the section when none remain', () => {
     const withdrawn = [
-      { href: '/en/solutions/rechuli-lu-changjia#guide', label: '未批准的英文选型指南', text: '撤回。' },
+      { href: '/en/solutions/unapproved-guide#guide', label: '未批准的英文选型指南', text: '撤回。' },
       { href: '/zh/%73olutions/rechuli-lu-changjia#guide', label: '已撤回的编码选型入口', text: '撤回。' },
       { href: '/zh/case/jining-support-roller-heat-treatment-line', label: '未批准的案例', text: '撤回。' },
       { href: '/zh/%61rticles/gongye-lu-baojia-canshu', label: '编码后的撤回文章', text: '撤回。' },

@@ -45,8 +45,25 @@ class ProcurementApprovalVersionTest(unittest.TestCase):
         self.assertFalse(new['approvalSource']['deploymentAuthorized'])
         self.assertEqual(len(r.APPROVED_GUIDES), 11)
 
+    def test_parts_approval_preserves_old_recovery_and_exact_new_paths(self):
+        latest = approval.approval_document(approval.PARTS_SCOPE_SHA256)
+        prior = approval.approval_document(approval.BILINGUAL_SCOPE_SHA256)
+        self.assertEqual(latest['pages'][:-1], prior['pages'])
+        parts = latest['pages'][-1]
+        self.assertEqual(parts['path'], approval.ENGLISH_PARTS_PATH)
+        self.assertEqual(len(parts['headingAnchors']), 12)
+        self.assertEqual(len(parts['anchors']), 11)
+        with self.assertRaises(ValueError):
+            approval.normalize_procurement([parts['path']], approval.BILINGUAL_SCOPE_SHA256)
+        current = approval.procurement_candidate_fields(ROOT)
+        self.assertEqual(current[approval.SCOPE_FIELD], PATHS + [approval.ENGLISH_EQUIPMENT_PATH, parts['path']])
+        self.assertEqual(current['procurementApprovalSha256'], approval.PARTS_SCOPE_SHA256)
+        restored = r.case_contract('open', procurement=PATHS + [approval.ENGLISH_EQUIPMENT_PATH])
+        self.assertIn(parts['path'], restored['retired'])
+        self.assertNotIn(parts['path'], r.case_contract('open', procurement=current[approval.SCOPE_FIELD])['retired'])
+
     def test_bilingual_candidate_adds_only_the_english_resource(self):
-        fields = approval.procurement_candidate_fields(ROOT)
+        fields = approval.procurement_candidate_fields(ROOT, approval.BILINGUAL_SCOPE_SHA256)
         english = approval.ENGLISH_EQUIPMENT_PATH
         self.assertEqual(fields[approval.SCOPE_FIELD], PATHS + [english])
         self.assertEqual(fields['procurementApprovalSha256'], approval.BILINGUAL_SCOPE_SHA256)

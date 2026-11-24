@@ -178,7 +178,7 @@ function inspectApprovedPage(html, page, headers) {
     h1: headings.length === 1 && textContent(headings[0]).trim() === page.h1,
     indexable: !blocked.length && !/\b(noindex|none)\b/i.test(headers['x-robots-tag'] ?? ''),
     body: contentStreamSha256 === page.contentStreamSha256,
-    anchors: page.anchors.every(id => {
+    anchors: [...page.anchors, ...(page.headingAnchors || [])].every(id => {
       const matches = all(n => n.attrs?.id === id);
       return matches.length === 1 && !hidden(matches[0]) && bodies.length === 1 && descendants(bodies[0], n => n === matches[0]).length === 1;
     }),
@@ -190,7 +190,7 @@ function inspectApprovedPage(html, page, headers) {
 async function checkApprovedProcurement({baseUrl, pages}) {
   const parsed = new URL(baseUrl);
   if (!['http:', 'https:'].includes(parsed.protocol) || parsed.username || parsed.password || parsed.pathname !== '/' || parsed.search || parsed.hash) throw new Error('Invalid approved check origin');
-  const exact = ['/zh/articles/special-industrial-furnace-procurement-assessment', '/zh/service/industrial-furnace-parts-purchasing', '/en/articles/special-industrial-furnace-procurement-assessment'];
+  const exact = ['/zh/articles/special-industrial-furnace-procurement-assessment', '/zh/service/industrial-furnace-parts-purchasing', '/en/articles/special-industrial-furnace-procurement-assessment', '/en/service/industrial-furnace-parts-purchasing'];
   if (!Array.isArray(pages) || new Set(pages.map(p => p.path)).size !== pages.length || pages.some(p => !exact.includes(p.path))) throw new Error('Unapproved procurement scope');
   const sitemap = pages.length ? await getResponse(baseUrl + '/sitemap.xml', 20000) : null;
   const xml = (sitemap?.body ?? '').replace(/<!--[\s\S]*?-->/g, '');

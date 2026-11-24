@@ -27,6 +27,44 @@ export const englishSolutions: EnglishSolution[] = [
     imageAlt: 'Reference equipment for a continuous strip annealing and solution treatment line',
     answer: 'Start with the material, workpiece dimensions, required treatment and target output. Then coordinate loading, heating and holding, cooling or quenching, downstream treatment and controls. Capacity must be checked against the actual workpiece, loading pattern, process time and upstream and downstream equipment.',
     sections: [
+      {
+        "title": "What the original line proposals specified",
+        "intro": "Each set of figures belongs to the source project. Confirm the working zone, workpiece, loading and acceptance conditions independently.",
+        "items": [
+          {
+            "title": "2017 and 2026 roller-supported normalizing and tempering lines",
+            "text": "The 2017 normalizing and tempering widths were 800 and 1000 mm. The 2026 design used 1000 and 1200 mm respectively. In both, 950°C and 650°C are furnace-section ratings."
+          },
+          {
+            "title": "Two roller-supported quench and temper designs",
+            "text": "The 2020 RCWT-360/220-9/6 had 850/1000 mm working widths and 30–250 mm/min quench-belt speed. The 2026 RCWT-250/200-9/6 used 800/1000 mm and 50–300 mm/min in both furnaces. The 950/650°C figures are unit ratings rather than part temperatures."
+          },
+          {
+            "title": "Controlled-atmosphere belt line, May 2026",
+            "text": "The RCWT-75/45-9/6 quench and temper zones were 400 × 3200 and 400 × 5600 mm. With a 0.4 m belt, 0.25 m/min and an assumed loading of 25 kg/m², the design reference is 150 kg/h. Change the part or loading and the result changes."
+          },
+          {
+            "title": "Carburizing line, August 2018",
+            "text": "The 9300 × 1000 × 100 mm usable heating section was rated at 300 kW and up to 950°C. The power covers that section alone. Actual daily output depends on loading, belt speed and runtime."
+          },
+          {
+            "title": "Hot-rolled strip annealing and pickling",
+            "text": "The 850 mm (2021) and 1250 mm (2024) proposals both specified one preheat section, four heating sections and eight combustion-control zones. A 700–1200°C process range and cooling below 80°C were project requirements."
+          },
+          {
+            "title": "Gas-fired heating line, August 2020",
+            "text": "Two furnaces each had a 2500 × 1600 × 800 mm working zone and four 250 kW-class low-NOx burners. Approximately 1000 kW per furnace is combustion input. Air preheat to 200–300°C was a design target; NOx is subject to site testing."
+          },
+          {
+            "title": "Twin-strip annealing agreement, August 2022",
+            "text": "The furnace section was about 110 m, including about 25.6 m preheating and 84.4 m heating and soaking. With water cooling, squeezing, drying and transitions the process section was about 125.4 m. Compare the same boundaries when planning floor space."
+          },
+          {
+            "title": "850 mm strip annealing and passivation line",
+            "text": "850 mm was the nominal line size. The source design covered strip 480–750 mm wide and 1.6–4.0 mm thick at 1050–1150°C. The furnace body was about 130 m, with a design thickness–speed product of about 190 m·mm/min."
+          }
+        ]
+      },
       { title: 'Is a continuous line the right starting point?', items: [
         { title: 'Stable workpieces and sustained output', text: 'A continuous line is worth evaluating when the product mix and process route are relatively stable and production is sustained.' },
         { title: 'Frequent process changes', text: 'For varied products, small batches or frequent recipe changes, compare batch furnaces as well. Loading constraints and available floor space also affect the choice.' },
@@ -129,6 +167,20 @@ export const englishSolutions: EnglishSolution[] = [
     image: repairImage, imageAlt: 'Engineers reviewing an industrial furnace project',
     answer: 'Do not decide the repair scope from furnace age or visible damage alone. Local repair may be appropriate where damage is isolated, the cold face is unaffected, surrounding anchors remain sound and the old and new lining can be joined reliably. Roof sagging, abnormal shell temperatures or through-cracks call for wider inspection. Final scope depends on the shutdown inspection.',
     sections: [
+      {
+        "title": "Reading a lining specification",
+        "intro": "Check the material data and the stated measurement conditions before applying a project figure elsewhere.",
+        "items": [
+          {
+            "title": "Burner surrounds and the door opening",
+            "text": "A 2018 proposal specified grade 1140 fibre and at least 40% compression for local repairs in those areas. Confirm the material grade, compression reference and installation direction. The grade number is not a service temperature."
+          },
+          {
+            "title": "Shell temperature versus temperature rise",
+            "text": "The same proposal stated ambient temperature plus 40°C and separately specified steady operation at 800°C and exclusions for thermal bridges. A 40 K rise over ambient differs from an absolute surface limit of 40°C. Agree measuring points, conditions and exclusions before acceptance."
+          }
+        ]
+      },
       { title: 'Check the support system as well as the surface', items: [
         { title: 'Sagging, bulging or displacement', text: 'Inspect suspension, anchors and backing insulation. Covering the visible hot face alone can leave supporting defects unresolved.' },
         { title: 'Abnormal cold-face temperature', text: 'After checking seal leakage, investigate through-cracks, thermal bridges and missing insulation. Record where and under what operating conditions the temperatures were measured.' },

@@ -75,10 +75,10 @@ describe('English counterparts follow source authority', () => {
   });
   it("keeps English search limited to approved pages without losing query state", () => {
     expect(getEnglishCases().map((item) => item.slug).sort()).toEqual([...PUBLIC_ENGLISH_CASE_SLUGS].sort());
-    const query=parseCaseQuery({q:'fixture'});
+    const query=parseCaseQuery({q:'unpublished-fixture-example'});
     expect(getEnglishCaseResults(query).items).toEqual([]);
     const page=new URL(englishCaseHref(query,2),'https://example.test');
-    expect(page.searchParams.get('q')).toBe('fixture');
+    expect(page.searchParams.get('q')).toBe('unpublished-fixture-example');
     expect(page.searchParams.get('page')).toBe('2');
   });
 });

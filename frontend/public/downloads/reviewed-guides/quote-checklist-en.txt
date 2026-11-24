@@ -1,0 +1,19 @@
+Fill in the available fields and contact Suneng using the website inquiry form, phone, WeChat or email.
+
+- Equipment type:
+- Workpiece material:
+- Workpiece dimensions:
+- Weight per piece:
+- Batch load or hourly throughput:
+- Maximum temperature:
+- Usual operating temperature:
+- Heat-treatment process:
+- Heating, soaking and cooling schedule:
+- Temperature uniformity:
+- Heating method:
+- Controls:
+- Site conditions:
+- Target delivery:
+- New furnace, retrofit or overhaul:
+- Current problem:
+- Available photos or drawings:

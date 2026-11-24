@@ -8,12 +8,7 @@ import type { Locale } from '@/types/site';
  * are locale-agnostic (no /zh or /en prefix). Keep in sync with the zh-only
  * entries in app/sitemap.ts.
  */
-export const ZH_ONLY_PATHS = new Set<string>([
-  '/inquiry',
-  '/articles/gongye-lu-baojia-canshu',
-  '/articles/laojiu-rechuli-lu-daxiu-haishi-maixin',
-  '/service/industrial-furnace-parts-purchasing',
-]);
+export const ZH_ONLY_PATHS = new Set<string>();
 
 function stripLocale(path: string): string {
   const stripped = path.replace(/^\/(zh|en)(?=\/|$)/, '');
@@ -26,7 +21,7 @@ export function isZhOnlyPath(path: string): boolean {
   // English case pages exist only for owner-approved English copies; the server
   // also checks source publication and fingerprints before serving any body.
   if (pathname === '/case') return PUBLIC_ENGLISH_CASE_SLUGS.size === 0;
-  return isPublishedGuide('zh', `/zh${pathname}`) || ZH_ONLY_PATHS.has(pathname) || (pathname.startsWith('/case/') && !PUBLIC_ENGLISH_CASE_SLUGS.has(pathname.slice('/case/'.length)));
+  return (isPublishedGuide('zh', `/zh${pathname}`) && !isPublishedGuide('en', `/zh${pathname}`)) || ZH_ONLY_PATHS.has(pathname) || (pathname.startsWith('/case/') && !PUBLIC_ENGLISH_CASE_SLUGS.has(pathname.slice('/case/'.length)));
 }
 
 /**

@@ -1,0 +1,161 @@
+{
+  "id": "fork-review-07",
+  "slug": "fork-alloy-bar-quenching-proposal",
+  "number": 7,
+  "title": "Fork-handling furnace for alloy-bar quenching: proposed charge of 8–10 tonnes per batch",
+  "summary": "Suneng’s proposal for 30CrMo, 42CrMo and 40Cr alloy bars specifies 8–10 tonnes of bars per batch, excluding support blocks. For a target of 650 accepted tonnes per month, an illustrative schedule of 26 days, 3 batches per day and 95% accepted yield requires approximately 8.77 tonnes of bars per batch.",
+  "seoTitle": "Alloy-bar quenching: checking a monthly output target",
+  "seoDescription": "The 2025 proposal compares an 8–10 tonne net charge with a monthly target of 650 tonnes. Check working days, batches and accepted yield.",
+  "body": "fork-review-07.md",
+  "translatedAt": "2026-11-24",
+  "translationStatus": "complete",
+  "sourceFingerprint": "a3ff591477724db3dee0a4b53fcb1cd907ba16d0abd209f5840c0e26e7287f45",
+  "coverAlt": "Slender alloy-steel round bars bundled with steel straps",
+  "coverCaption": "Alloy-steel bars",
+  "reviewSourceFingerprint": "dcbc68815d60b778a2e6c2d3c2cd1d834162fffbcee5d754868fb053ac1f09bf",
+  "forkReview": {
+    "image": "/fork-case-review/workpieces/bundled-slender-alloy-bars.webp",
+    "imageAlt": "Slender alloy-steel round bars bundled with steel straps",
+    "category": "Alloy-steel bars",
+    "metrics": [
+      [
+        "Design charge excluding support blocks",
+        "8–10",
+        "t/batch"
+      ],
+      [
+        "Monthly design target",
+        "650",
+        "t/month"
+      ],
+      [
+        "Planned working hours",
+        "20",
+        "h/day"
+      ]
+    ],
+    "note": "For an accepted-output target, use the achievable number of batches and accepted yield by weight.",
+    "work": [
+      [
+        "Workpiece grades",
+        "30CrMo, 42CrMo and 40Cr alloy-steel bars."
+      ],
+      [
+        "Illustrative schedule",
+        "26 days at 3 batches per day gives 78 batches per month. Each must deliver about 8.33 tonnes of accepted bars."
+      ]
+    ],
+    "featuresTitle": "Charge weight and production schedule",
+    "features": [
+      [
+        "Calculate the feasible monthly batch count",
+        "Include actual production days, planned hours and the cycle required for each bar size in the schedule."
+      ],
+      [
+        "Count accepted net weight for delivery",
+        "At an assumed 95% accepted yield by weight, this schedule requires a net charge of approximately 8.77 tonnes per batch."
+      ],
+      [
+        "Transfer is one part of a batch cycle",
+        "The proposal allows about 45 seconds from furnace to water. Loading, heating, soaking and waiting also consume furnace time."
+      ]
+    ],
+    "flowTitle": "Bar loading and quenching sequence",
+    "filmId": "07-depth",
+    "stages": [
+      {
+        "title": "Arrange and charge the bars",
+        "note": "Check the net charge against the mix of sizes and the loading drawing.",
+        "thumb": "/fork-case-review/films/07-depth/stage-1.webp"
+      },
+      {
+        "title": "Heat and soak",
+        "note": "Schedule furnace occupancy for the grade and size of each batch.",
+        "thumb": "/fork-case-review/films/07-depth/stage-2.webp"
+      },
+      {
+        "title": "Transfer to the water",
+        "note": "The proposed 45 seconds applies to this transfer.",
+        "thumb": "/fork-case-review/films/07-depth/stage-3.webp"
+      },
+      {
+        "title": "Inspect and count output",
+        "note": "Match net charge and accepted weight by batch number, then total the month.",
+        "thumb": "/fork-case-review/films/07-depth/stage-4.webp"
+      }
+    ],
+    "cards": [
+      {
+        "title": "Worked monthly and batch calculation",
+        "paragraphs": [
+          "Assume 26 production days, 3 batches per day and an example accepted yield of 95%."
+        ],
+        "definitions": [],
+        "table": {
+          "head": [
+            "Example with 26 days at 3 batches per day",
+            "Result by weight"
+          ],
+          "rows": [
+            [
+              "Scheduled monthly batch count",
+              "26 × 3 = 78 batches. Average accepted weight must be 650 ÷ 78 ≈ 8.33 tonnes per batch."
+            ],
+            [
+              "At an assumed 95% accepted yield",
+              "Net charge needed per batch is approximately 650 ÷ 78 ÷ 95% ≈ 8.77 tonnes."
+            ],
+            [
+              "If each batch carries only 8 tonnes",
+              "Even with full acceptance, 78 batches deliver 624 tonnes, leaving a shortfall of 26 tonnes."
+            ]
+          ],
+          "rowHeaders": false
+        }
+      },
+      {
+        "title": "How do actual records verify monthly output?",
+        "paragraphs": [
+          "Use a loading drawing for the main size to check the calculated charge. Schedule batches against the monthly mix. Match net charge, full cycle time and accepted weight under each batch number before summing the month. This distinguishes a low charge from too few cycles or lower-than-planned accepted yield."
+        ],
+        "definitions": []
+      }
+    ],
+    "figure": {
+      "src": "/images/news/fork-en/case-07-diagram.webp",
+      "alt": "Monthly target and accepted net weight",
+      "caption": "Design target. Example schedule: 26 days × 3 batches per day = 78 batches. 650 tonnes divided by 78 batches. At an assumed 95% accepted yield by weight, 8.33 / 0.95 ≈ 8.77 tonnes per batch."
+    },
+    "related": [
+      [
+        "Fork-handling furnace specifications",
+        "/en/products/detail/shovel-furnace"
+      ],
+      [
+        "How much must each batch carry to deliver 650 tonnes of bars per month?",
+        "/en/news/alloy-steel-bar-quenching-monthly-output-batch-load"
+      ]
+    ],
+    "faqIntro": "The target, accepted batch weight and time available for three batches per day.",
+    "faq": [
+      [
+        "Is 650 tonnes a design target or recorded monthly output?",
+        "It is the proposal’s target. Actual accepted output requires charge weights, complete cycle records and inspections for each batch."
+      ],
+      [
+        "At 26 days and 3 batches per day, what accepted weight does each batch need?",
+        "There are 78 batches. Dividing 650 tonnes by 78 gives about 8.33 tonnes of accepted bars per batch."
+      ],
+      [
+        "Can three batches fit into a 20-hour day?",
+        "The single furnace would have an average of 6 hours 40 minutes for each batch, including loading, heating, soaking, discharge and waits. The proposed 45 seconds refers only to transfer to the tank."
+      ]
+    ],
+    "source": "Reference: 2025 proposal for the RX4-650-12Q high-temperature chamber furnace, sections 1, 2 and 4. The 26 days, 3 batches per day and 95% yield are scheduling assumptions.",
+    "ctaTitle": "Send workpiece details to check the furnace configuration",
+    "title": "Fork-handling furnace for alloy-bar quenching: proposed charge of 8–10 tonnes per batch",
+    "summary": "Suneng’s proposal for 30CrMo, 42CrMo and 40Cr alloy bars specifies 8–10 tonnes of bars per batch, excluding support blocks. For a target of 650 accepted tonnes per month, an illustrative schedule of 26 days, 3 batches per day and 95% accepted yield requires approximately 8.77 tonnes of bars per batch.",
+    "listTitle": "Alloy-bar quenching with a proposed 8–10 tonne charge",
+    "listSummary": "The proposal specifies 8–10 tonnes of bars per batch excluding support blocks. The 650 tonnes per month is a scheduling target."
+  }
+}

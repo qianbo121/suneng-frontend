@@ -1,4 +1,4 @@
-import { EnglishCaseArticle, englishCaseMetadata } from '@/components/case-studies/EnglishCasePages';
+import { EnglishCaseArticle, englishCaseMetadata, englishCaseReturn } from '@/components/case-studies/EnglishCasePages';
 import { notFound } from 'next/navigation';
 import { CaseArticlePage, caseArticleMetadata } from '@/components/case-studies/CaseArticlePage';
 import { getPublicCases } from '@/lib/cases/server';
@@ -23,7 +23,7 @@ export function generateStaticParams() {
 }
 export async function generateMetadata({ params }: Props) {
   const { locale, slug } = await params;
-  if (isForkReview(locale, slug)) return caseArticleMetadata(slug);
+  if (isForkReview(locale, slug)) return locale === 'en' ? englishCaseMetadata(slug) : caseArticleMetadata(slug);
   const agreement = readAgreement(locale, slug);
   if (agreement) return caseSearchMetadata(agreementSearchContent(agreement), true);
   if (locale === 'en') return englishCaseMetadata(slug);
@@ -33,8 +33,9 @@ export async function generateMetadata({ params }: Props) {
 export default async function Page({ params, searchParams }: Props) {
   const { locale, slug } = await params;
   if (isForkReview(locale, slug)) {
-    const returnHref = safeCaseReturn((await searchParams).returnTo);
-    return <ForkReview key={slug} slug={slug} returnHref={returnHref} />;
+    const target = (await searchParams).returnTo;
+    const returnHref = locale === 'en' ? englishCaseReturn(target) : safeCaseReturn(target);
+    return <ForkReview key={slug} slug={slug} locale={locale === 'en' ? 'en' : 'zh'} returnHref={returnHref} />;
   }
   const agreement = readAgreement(locale, slug);
   if (agreement) return <AgreementPage data={agreement} />;

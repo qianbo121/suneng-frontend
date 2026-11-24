@@ -43,7 +43,7 @@ describe.each(pages)('restored Chinese manufacturer page: $slug', ({ slug, Page,
   const pagePath = `/zh/solutions/${slug}`;
   const params = (locale: string) => ({ params: Promise.resolve({ locale }) });
 
-  it('serves the approved Chinese page with its own canonical and no English edition', async () => {
+  it('serves the approved Chinese page with its own canonical and a linked English edition', async () => {
     const html = renderToStaticMarkup(await Page(params('zh')));
     expect(html.match(/<h1\b/g)).toHaveLength(1);
     expect(html).toContain('江苏泰州');
@@ -53,11 +53,12 @@ describe.each(pages)('restored Chinese manufacturer page: $slug', ({ slug, Page,
       canonical: `https://www.jssngyl.cn${pagePath}`,
       languages: {
         'zh-CN': `https://www.jssngyl.cn${pagePath}`,
+        'en-US': 'https://www.jssngyl.cn' + pagePath.replace('/zh/', '/en/'),
         'x-default': `https://www.jssngyl.cn${pagePath}`,
       },
     });
-    await expect(Page(params('en'))).rejects.toThrow('404');
-    await expect(metadata(params('en'))).rejects.toThrow('404');
+    await expect(Page(params('en'))).resolves.toBeDefined();
+    expect((await metadata(params('en'))).alternates?.canonical).toBe('https://www.jssngyl.cn' + pagePath.replace('/zh/', '/en/'));
   });
 
   it('omits withdrawn project text and links, and has no empty case section', async () => {

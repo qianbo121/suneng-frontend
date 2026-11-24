@@ -4,7 +4,7 @@ import { useRef, useState, type KeyboardEvent, type ReactNode } from 'react';
 
 type FurnaceTab = { id: string; label: string; content: ReactNode };
 
-export function FurnaceGuideTabs({ items }: { items: FurnaceTab[] }) {
+export function FurnaceGuideTabs({ items, english = false }: { english?: boolean; items: FurnaceTab[] }) {
   const [active, setActive] = useState(0);
   const buttons = useRef<Array<HTMLButtonElement | null>>([]);
   const onKeyDown = (event: KeyboardEvent<HTMLButtonElement>, index: number) => {
@@ -21,7 +21,7 @@ export function FurnaceGuideTabs({ items }: { items: FurnaceTab[] }) {
 
   return (
     <>
-      <div className="furnace-tabs" role="tablist" aria-label="按炉型查看参数">
+      <div className="furnace-tabs" role="tablist" aria-label={english ? "Parameters by furnace type" : "按炉型查看参数"}>
         {items.map((item, index) => (
           <button
             key={item.id}

@@ -145,7 +145,7 @@ describe('public page initial HTML with delayed data', () => {
   });
 
   it.each([
-    ...[...APPROVED_GUIDE_PATHS].map((path) => path.replace('/zh/', '/en/')),
+    ...[...APPROVED_GUIDE_PATHS].map((path) => path.replace('/zh/', '/en/') + '/unapproved'),
     ...['zh', 'en'].flatMap((locale) => [
       `/${locale}/case/anonymous-tsingshan-1250-renovation`,
       `/${locale}/case/jining-support-roller-heat-treatment-line`,

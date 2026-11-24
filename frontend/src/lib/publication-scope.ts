@@ -12,18 +12,36 @@ export const APPROVED_PROCUREMENT_PATHS: ReadonlySet<string> = new Set([
 ]);
 export const ENGLISH_EQUIPMENT_PROCUREMENT_PATH = '/en/articles/special-industrial-furnace-procurement-assessment';
 
+const englishGuidePaths = new Set<string>([
+  '/zh/solutions/rechuli-lu-wendu-bujun-zhenggai',
+  '/zh/solutions/rechuli-lu-luchen-fanxin',
+  '/zh/solutions/rechuli-lu-dian-gai-ran-yure-huishou',
+  '/zh/solutions/rechuli-lu-kongzhi-xitong-shengji',
+  '/zh/solutions/rechuli-lu-tingchan-chongqi-banqian-fuchan',
+  '/zh/solutions/rechuli-lu-gaizao-fengxian-zhouqi',
+  '/zh/articles/laojiu-rechuli-lu-daxiu-haishi-maixin',
+  '/zh/articles/gongye-lu-baojia-canshu',
+  '/zh/solutions/continuous-heat-treatment-line',
+  '/zh/solutions/jiangsu-gongye-lu-changjia',
+  '/zh/solutions/rechuli-lu-changjia',
+]);
+const englishProcurementPaths = new Set([
+  '/zh/articles/special-industrial-furnace-procurement-assessment',
+  '/zh/service/industrial-furnace-parts-purchasing',
+]);
+
 export function isPublishedProcurementPage(locale: string, chinesePath: string): boolean {
-  if (locale === 'en') return chinesePath === ENGLISH_EQUIPMENT_PROCUREMENT_PATH.replace('/en/', '/zh/');
+  if (locale === 'en') return englishProcurementPaths.has(chinesePath);
   return locale === 'zh' && APPROVED_PROCUREMENT_PATHS.has(chinesePath);
 }
 function isApprovedChinesePath(path: string): boolean {
   return APPROVED_GUIDE_PATHS.has(path) || APPROVED_PROCUREMENT_PATHS.has(path);
 }
 export function isPublishedGuide(locale: string, chinesePath: string): boolean {
-  return locale === 'zh' && APPROVED_GUIDE_PATHS.has(chinesePath);
+  return locale === 'en' ? englishGuidePaths.has(chinesePath) : locale === 'zh' && APPROVED_GUIDE_PATHS.has(chinesePath);
 }
 export function hasPublishedGuides(locale: string, section: 'articles' | 'solutions'): boolean {
-  return locale === 'zh' && approvedGuidePaths.some((path) => path.startsWith(`/zh/${section}/`));
+  return approvedGuidePaths.some((path) => path.startsWith(`/zh/${section}/`) && isPublishedGuide(locale, path));
 }
 
 const SITE_HOSTS = ['www.jssngyl.cn', 'jssngyl.cn', 'localhost', '127.0.0.1'];
@@ -109,7 +127,12 @@ function isWithdrawnSegments(segments: string[]): boolean {
  */
 export function isWithdrawnRequestPath(pathname: string): boolean {
   const canonical = routablePathname(pathname).replace(/\/+$/, '');
-  if (canonical === ENGLISH_EQUIPMENT_PROCUREMENT_PATH) return pathname.replace(/\/+$/, '') !== canonical;
+  if (canonical.startsWith('/en/')) {
+    const zhPath = '/zh/' + canonical.slice(4);
+    if (englishGuidePaths.has(zhPath) || englishProcurementPaths.has(zhPath)) {
+      return pathname.replace(/\/+$/, '') !== canonical;
+    }
+  }
   if (
     isApprovedChinesePath(canonical) &&
     !isApprovedChinesePath(pathname.replace(/\/+$/, ''))

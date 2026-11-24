@@ -29,17 +29,18 @@ function DetailCard({ card }: { card: ReviewCard }) {
   </section>;
 }
 
-export async function ForkReview({ slug, returnHref }: { slug: string; returnHref: string }) {
-  const data = getReviewSource(slug);
+export async function ForkReview({ slug, returnHref, locale = 'zh' }: { slug: string; returnHref: string; locale?: 'zh' | 'en' }) {
+  const data = getReviewSource(slug, locale);
+  const english = locale === 'en';
   const related = await Promise.all(data.related.map(async ([name, href]) => {
-    if (href.startsWith('/zh/news/')) {
+    if (href.startsWith(`/${locale}/news/`)) {
       const { article } = await getNewsDetailPageData(href.slice('/zh/news/'.length));
       if (!article) return null;
     }
     return <a key={href} href={href}>{name}</a>;
   }));
-  const hero = { ...data, locale: 'zh', heroAlt: data.imageAlt };
-  const figures = { locale: 'zh', metrics: data.metrics, note: data.note, work: data.work.map(([k, v]) => k + '：' + v) };
+  const hero = { ...data, locale, heroAlt: data.imageAlt };
+  const figures = { locale, metrics: data.metrics, note: data.note, work: data.work.map(([k, v]) => k + (english ? ': ' : '：') + v) };
   return <article data-project-case="" className={styles.page} data-agreement={slug}>
     <CaseHero data={hero} image={data.image} category={data.category} returnHref={returnHref} />
     <div className={'site-page-container ' + styles.content}>
@@ -47,17 +48,17 @@ export async function ForkReview({ slug, returnHref }: { slug: string; returnHre
       <ProjectFeatures title={data.featuresTitle} features={data.features} />
       <section className={styles.section} id="process-flow">
         <h2>{data.flowTitle}</h2>
-        <ProjectFlow tracked={data.tracked} steps={data.stages.map(step => step.title)} english={false} />
+        <ProjectFlow tracked={data.tracked} steps={data.stages.map(step => step.title)} english={english} />
       </section>
       <div className={styles.cards}>{data.cards.map(card => <DetailCard key={card.title} card={card} />)}</div>
-      <ReviewFigure figure={data.figure} />
-      <nav className={mesh.related} aria-label="相关设备与资料">
-        <strong>相关设备与资料</strong>
+      <ReviewFigure figure={data.figure} english={english} />
+      <nav className={mesh.related} aria-label={english ? 'Related equipment and resources' : '相关设备与资料'}>
+        <strong>{english ? 'Related equipment and resources' : '相关设备与资料'}</strong>
         {related}
       </nav>
-      <Faq questions={data.faq} en={false} intro={data.faqIntro} />
+      <Faq questions={data.faq} en={english} intro={data.faqIntro} />
       <p className={styles.source}>{data.source}</p>
-      <CaseContact title={data.ctaTitle} />
+      <CaseContact english={english} title={data.ctaTitle} />
     </div>
   </article>;
 }

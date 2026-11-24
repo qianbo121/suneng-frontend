@@ -14,6 +14,7 @@ import { CASE_PAGE_SIZE } from './types';
 type EnglishCopy = {
   id: string; slug: string; number: number; title: string; summary: string;
   seoTitle?: string; seoDescription?: string;
+  reviewSourceFingerprint?: string;
   body: string; sourceFingerprint: string; translationStatus: 'complete';
   datePublished?: string;
   translatedAt: string; coverAlt: string; coverCaption: string;
@@ -49,6 +50,10 @@ export function readEnglishCases(
     if (!/^[a-z0-9-]+\.md$/.test(source.body) || copy.body !== `${source.id}.md`) return [];
     const markdown = fs.readFileSync(path.join(sourceDir, source.body), 'utf8');
     if (copy.sourceFingerprint !== caseSourceFingerprint(raw, markdown)) return [];
+    if (source.id.startsWith('fork-review-')) {
+      const reviewPath = path.join(root, 'fork-review', source.slug + '.json');
+      if (!fs.existsSync(reviewPath) || createHash('sha256').update(fs.readFileSync(reviewPath)).digest('hex') !== copy.reviewSourceFingerprint) return [];
+    }
     const bodyPath = path.join(englishDir, copy.body);
     if (!fs.existsSync(bodyPath)) return [];
     if (seen.has(copy.slug)) throw new Error(`Duplicate English case: ${copy.slug}`);

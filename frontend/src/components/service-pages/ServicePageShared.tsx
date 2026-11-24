@@ -100,12 +100,12 @@ export function ServiceHero({ kind, locale = 'zh' }: { kind: ServicePageKind; lo
           </div>
         </div>
       </section>
-      {kind === 'installation' && locale === 'zh' && (
+      {kind === 'installation' && (
         <section className={styles.section} data-parts-purchase-entry>
           <div className={styles.container}>
             <p>
-              工业炉配件可独立采购，也可评估其他厂家设备配套。{' '}
-              <Link href="/zh/service/industrial-furnace-parts-purchasing">查看配件采购范围</Link>
+              {locale === 'en' ? 'Order individual furnace parts or ask about compatibility with equipment built by another manufacturer.' : '工业炉配件可独立采购，也可评估其他厂家设备配套。'}{' '}
+              <Link href={`/${locale}/service/industrial-furnace-parts-purchasing`}>{locale === 'en' ? 'See the furnace parts purchasing guide' : '查看配件采购范围'}</Link>
             </p>
           </div>
         </section>

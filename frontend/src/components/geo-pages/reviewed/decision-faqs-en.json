@@ -1,0 +1,34 @@
+[
+  {
+    "question": "Is an old heat-treatment furnace worth overhauling?",
+    "answer": "Check structural safety, lining, controls, heating and the current process. A sound structure and unchanged process can justify repair or a targeted retrofit. Severe distortion or hazards warrant evaluating replacement."
+  },
+  {
+    "question": "How does overhaul differ from an energy-efficiency retrofit?",
+    "answer": "An overhaul restores components such as lining, doors, heating, drives and controls. An efficiency retrofit addresses consumption, insulation, combustion, controls and operation. A project can combine both."
+  },
+  {
+    "question": "When should we reconsider routine repairs?",
+    "answer": "If the structure is deformed or unsafe, the chamber no longer fits the workpiece, process requirements have changed substantially or retrofit cost approaches replacement, assess a full overhaul or a new furnace."
+  },
+  {
+    "question": "Can we assess a retrofit without drawings?",
+    "answer": "Photos, chamber measurements, workpiece information, faults and site conditions can support an initial assessment. Complex cases may need measurement, dismantling for inspection or further engineering."
+  },
+  {
+    "question": "How much downtime does a furnace overhaul need?",
+    "answer": "It depends on scope, condition, spare parts, site readiness and commissioning. Local lining repairs, a controls upgrade and a full overhaul have different schedules. Agree the site programme together."
+  },
+  {
+    "question": "What if retrofit costs approach the price of new equipment?",
+    "answer": "Compare remaining service life, energy, process fit, downtime and maintenance. If the old furnace no longer suits the new process, evaluate replacement separately."
+  },
+  {
+    "question": "Can a retrofit achieve new-furnace performance?",
+    "answer": "Assess each target against the original structure, lining, heating, controls and operating conditions. The proposal and acceptance terms must define each improvement and how it is measured."
+  },
+  {
+    "question": "What should we prepare for an assessment?",
+    "answer": "Gather furnace type, chamber dimensions, maximum temperature, workpieces, batch load, fault description, equipment and controls photos, energy data, drawings and shutdown window. Start with the available records and an engineer can advise on a survey."
+  }
+]

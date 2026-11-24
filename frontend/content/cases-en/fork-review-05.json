@@ -1,0 +1,190 @@
+{
+  "id": "fork-review-05",
+  "slug": "fork-gas-furnaces-enclosed-cooling-boxes",
+  "number": 5,
+  "title": "Two gas-fired furnaces and two enclosed cooling boxes share one fork charging car",
+  "summary": "One car moves each batch from a Suneng gas-fired furnace to a free cooling box. The line has two furnaces and two enclosed boxes. The quoted supply includes five sets of heat-resistant trays with two pieces per set.",
+  "seoTitle": "Two gas furnaces and two enclosed cooling boxes",
+  "seoDescription": "The 2020 line uses one fork car between two furnaces and two enclosed cooling boxes. Check tray supply, sequencing and transfer responsibilities.",
+  "body": "fork-review-05.md",
+  "translatedAt": "2026-11-24",
+  "translationStatus": "complete",
+  "sourceFingerprint": "25c5a8ddbe008f2d2bbeefebce6e76c5aae337a22d94940e34ab0b6541259265",
+  "coverAlt": "Metal billets stacked in two layers, with cut marks visible on the ends",
+  "coverCaption": "Batches of metal workpieces",
+  "reviewSourceFingerprint": "1ebc6e58ba346d8b6a44a5ede2c077743db68c2990311f0ad0f5cf6b5a6e8c09",
+  "forkReview": {
+    "image": "/fork-case-review/workpieces/stacked-metal-billets.webp",
+    "imageAlt": "Metal billets stacked in two layers, with cut marks visible on the ends",
+    "category": "Batches of metal workpieces",
+    "metrics": [
+      [
+        "Gas-fired heating furnaces",
+        "2",
+        "units"
+      ],
+      [
+        "Enclosed cooling boxes",
+        "2",
+        "units"
+      ],
+      [
+        "Shared fork charging car",
+        "1",
+        "units"
+      ]
+    ],
+    "note": "The equipment quantities come from the technical agreement for the line.",
+    "work": [],
+    "featuresTitle": "Project features",
+    "features": [
+      [
+        "Heating and cooling occupy separate stations",
+        "The car moves a batch from the furnace to a free cooling box. While it cools, the furnace can receive another batch."
+      ],
+      [
+        "One car serves the line",
+        "The two furnaces and two boxes share one car. Schedule a free box and time for the transfer before discharging the next batch."
+      ]
+    ],
+    "flowTitle": "Equipment arrangement and process sequence",
+    "filmId": "05-depth",
+    "stages": [
+      {
+        "title": "Heat the batch",
+        "note": "Two gas-fired furnaces provide batch heating.",
+        "thumb": "/fork-case-review/films/05-depth/stage-1.webp"
+      },
+      {
+        "title": "Assign a cooling box",
+        "note": "One car transfers loads between the furnaces and the two cooling boxes.",
+        "thumb": "/fork-case-review/films/05-depth/stage-2.webp"
+      },
+      {
+        "title": "Cool in the enclosed box",
+        "note": "Each batch occupies its assigned box for the duration of cooling.",
+        "thumb": "/fork-case-review/films/05-depth/stage-3.webp"
+      },
+      {
+        "title": "Unload after cooling",
+        "note": "Once the batch leaves, the box can receive the next charge.",
+        "thumb": "/fork-case-review/films/05-depth/stage-4.webp"
+      }
+    ],
+    "cards": [
+      {
+        "title": "Equipment specifications",
+        "paragraphs": [],
+        "definitions": [],
+        "table": {
+          "head": [
+            "Item",
+            "Project specification"
+          ],
+          "rows": [
+            [
+              "Line configuration",
+              "Gas-fired heating furnaces with enclosed cooling boxes"
+            ],
+            [
+              "Heating stations",
+              "2 gas-fired heating furnaces"
+            ],
+            [
+              "Cooling stations",
+              "2 enclosed cooling boxes"
+            ],
+            [
+              "Charging and unloading equipment",
+              "1 fork car shared between heating and cooling stations"
+            ],
+            [
+              "Working dimensions per furnace",
+              "2.5 m long × 1.6 m wide × 0.8 m high"
+            ],
+            [
+              "Control zones and burners per furnace",
+              "2 temperature zones and 4 gas burners rated at 250 kW each"
+            ],
+            [
+              "Heat-resistant steel trays",
+              "5 sets with 2 pieces each, supplied by Suneng and included in the quotation"
+            ]
+          ],
+          "rowHeaders": true
+        }
+      },
+      {
+        "title": "Supply responsibilities",
+        "paragraphs": [],
+        "definitions": [
+          [
+            "Suneng",
+            "Supplies furnaces, cooling boxes, the fork car and five sets of trays. Assists with loaded commissioning and performance checks."
+          ],
+          [
+            "Buyer",
+            "Provides trial billets, utilities and consumables. Both parties agree the quantity, quality and dimensions of the trial charge."
+          ]
+        ]
+      },
+      {
+        "title": "Scope of supply",
+        "paragraphs": [
+          "Suneng supplies two gas-fired furnaces, two enclosed cooling boxes and one charging car. The quotation includes five sets of heat-resistant steel trays with two pieces in each set."
+        ],
+        "definitions": []
+      },
+      {
+        "title": "Acceptance procedure",
+        "paragraphs": [],
+        "definitions": [
+          [
+            "Agree the trial charge first",
+            "Both parties specify the trial charge. The buyer supplies the agreed material."
+          ],
+          [
+            "Two trial batches",
+            "The agreement requires two trial batches and compliance with the performance criteria. The number refers to batches tested."
+          ]
+        ]
+      }
+    ],
+    "figure": {
+      "src": "/images/news/fork-en/case-05-diagram.webp",
+      "alt": "Two gas furnaces and two cooling boxes",
+      "caption": "Heat the batches before transfer to enclosed cooling. The same car transfers batches between both furnaces and both boxes. A box can take the next batch after the cooled batch is removed."
+    },
+    "related": [
+      [
+        "Fork-handling furnace specifications",
+        "/en/products/detail/shovel-furnace"
+      ],
+      [
+        "Are two cooling boxes enough for two fork-handling furnaces?",
+        "/en/news/fork-furnaces-two-cooling-boxes-scheduling"
+      ]
+    ],
+    "faqIntro": "Shared handling, the interval between batches and trial conditions.",
+    "faq": [
+      [
+        "How many fork cars and trays serve the two furnaces?",
+        "One car and five sets of heat-resistant steel trays. Each set comprises two pieces. The trays are included in Suneng’s quoted supply."
+      ],
+      [
+        "Can the hourly intake be calculated from the number of boxes?",
+        "Two boxes provide two cooling positions. Intake intervals also depend on cooling occupancy and loading and unloading time. See the related scheduling article for an example."
+      ],
+      [
+        "Who provides the billets and how many batches are tested?",
+        "The buyer provides billets, utilities and consumables. Both parties agree the charge, run two trial batches and check the specified performance."
+      ]
+    ],
+    "source": "Reference: 2020 gas-fired production-line technical agreement. Furnace parameters are on p. 4; trial conditions are in the acceptance terms. Suneng’s engineering records confirm the tray quantities, supplier and inclusion in the quotation.",
+    "ctaTitle": "Send workpiece details to check the furnace configuration",
+    "title": "Two gas-fired furnaces and two enclosed cooling boxes share one fork charging car",
+    "summary": "One car moves each batch from a Suneng gas-fired furnace to a free cooling box. The line has two furnaces and two enclosed boxes. The quoted supply includes five sets of heat-resistant trays with two pieces per set.",
+    "listTitle": "Two furnaces and two boxes served by one car",
+    "listSummary": "One car connects the two heating furnaces and two enclosed cooling boxes. Suneng supplies five sets of heat-resistant steel trays with two pieces per set."
+  }
+}

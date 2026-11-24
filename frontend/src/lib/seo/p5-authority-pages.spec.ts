@@ -228,17 +228,17 @@ describe('P5 authority topic pages', () => {
     }
   });
 
-  it('keeps the approved guides Chinese-only while preserving the translated case index', () => {
+  it('opens the approved English guides while preserving the translated case index', () => {
     expect(isZhOnlyPath('/en/case/unregistered-case')).toBe(true);
 
-    expect(isZhOnlyPath('/en/solutions/rechuli-lu-wendu-bujun-zhenggai')).toBe(true);
-    expect(isZhOnlyPath('/en/solutions/rechuli-lu-gaizao-fengxian-zhouqi')).toBe(true);
-    expect(isZhOnlyPath('/en/solutions/rechuli-lu-luchen-fanxin')).toBe(true);
-    expect(isZhOnlyPath('/en/solutions/rechuli-lu-dian-gai-ran-yure-huishou')).toBe(true);
-    expect(isZhOnlyPath('/en/solutions/rechuli-lu-changjia')).toBe(true);
-    expect(isZhOnlyPath('/en/solutions/jiangsu-gongye-lu-changjia')).toBe(true);
+    expect(isZhOnlyPath('/en/solutions/rechuli-lu-wendu-bujun-zhenggai')).toBe(false);
+    expect(isZhOnlyPath('/en/solutions/rechuli-lu-gaizao-fengxian-zhouqi')).toBe(false);
+    expect(isZhOnlyPath('/en/solutions/rechuli-lu-luchen-fanxin')).toBe(false);
+    expect(isZhOnlyPath('/en/solutions/rechuli-lu-dian-gai-ran-yure-huishou')).toBe(false);
+    expect(isZhOnlyPath('/en/solutions/rechuli-lu-changjia')).toBe(false);
+    expect(isZhOnlyPath('/en/solutions/jiangsu-gongye-lu-changjia')).toBe(false);
     expect(isZhOnlyPath('/en/case')).toBe(false);
-    expect(isZhOnlyPath('/en/solutions/rechuli-lu-kongzhi-xitong-shengji')).toBe(true);
-    expect(isZhOnlyPath('/en/solutions/rechuli-lu-tingchan-chongqi-banqian-fuchan')).toBe(true);
+    expect(isZhOnlyPath('/en/solutions/rechuli-lu-kongzhi-xitong-shengji')).toBe(false);
+    expect(isZhOnlyPath('/en/solutions/rechuli-lu-tingchan-chongqi-banqian-fuchan')).toBe(false);
   });
 });

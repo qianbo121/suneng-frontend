@@ -126,6 +126,11 @@ function isMissingCaseListPage(pathname: string, searchParams: URLSearchParams) 
 export default async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
   if (isRefusedPath(pathname)) return withdrawnResponse(pathname);
+  if (pathname !== '/en/inquiry' && routablePathname(pathname).replace(/\/+$/, '').toLowerCase() === '/en/inquiry') {
+    const canonical = new URL(request.url);
+    canonical.pathname = '/en/inquiry';
+    return NextResponse.redirect(canonical, 308);
+  }
   if (isZhOnlyEnglishPath(pathname)) return withdrawnResponse('/en');
   if (isUnknownProductDetailPath(routablePathname(pathname)) || isUnknownProductDetailPath(pathname)) {
     return missingProductResponse(pathname);

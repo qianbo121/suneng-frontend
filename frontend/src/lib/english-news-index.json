@@ -483,5 +483,37 @@
   "95": {
     "slug": "heat-treatment-basket-turnover-quantity",
     "rawSourceFingerprint": "1a73326abb71dbcaf048272072ab9a2ba816e12b483431e2486ac33685f2fab1"
+  },
+  "153": {
+    "slug": "long-bar-fork-furnace-quench-transfer-time",
+    "rawSourceFingerprint": "4624ddecf48b41b0d775bdde6900e547cb01a62dc3c6dcbd9da17ac2b8f662d6"
+  },
+  "154": {
+    "slug": "stainless-pipe-fittings-flanges-solution-furnace-water-quench",
+    "rawSourceFingerprint": "8f1d895e752d50b0022df7f1c15bfc09e15d14f21e85af9f2595a425003babd4"
+  },
+  "155": {
+    "slug": "copper-wire-annealing-four-chambers-one-charging-car",
+    "rawSourceFingerprint": "9e7c8a1d5552eb51548d90b47dcaa68af01929f7a98b5b65343297149209280b"
+  },
+  "156": {
+    "slug": "fork-furnace-loading-trays-trial-workpiece-supply",
+    "rawSourceFingerprint": "072b2dafc9baaf8a669c88cfd6890e3f17fa5d3b6ffc2d33833a941d72639921"
+  },
+  "157": {
+    "slug": "fork-furnaces-two-cooling-boxes-scheduling",
+    "rawSourceFingerprint": "343b3f690726e566049f4dfe7eb501ecb06d57a9779c7b6e57c6c7be57fb1fd0"
+  },
+  "158": {
+    "slug": "copper-alloy-wire-coil-annealing-furnace-net-load",
+    "rawSourceFingerprint": "94052bfbd52f9cd5a88a1dee1500559d2de1c982cd0d7b3f317088cc53803f61"
+  },
+  "159": {
+    "slug": "alloy-steel-bar-quenching-monthly-output-batch-load",
+    "rawSourceFingerprint": "c15928e3185c3eea23b49e423b3392726632b3d8f0d8cb2888bbdd431c3b4337"
+  },
+  "160": {
+    "slug": "gas-solution-furnace-stainless-pipe-gas-consumption-per-tonne",
+    "rawSourceFingerprint": "46c6d7638e9d96ef41ddd1ab0548e08a7a7a5beb8f2e5f4907aa6b1fac6d7b5d"
   }
 }
