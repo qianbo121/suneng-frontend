@@ -1,5 +1,8 @@
 import type { NewsListCardItem } from '@/types/news';
 import { forkFurnaceInfographics } from './fork-furnace-infographics';
+import type { Locale } from '@/types/site';
+import { newsUiText } from './news-ui';
+import { bucketTeethInfographicEn } from './bucket-teeth-infographic.en';
 import imageVariants from './infographic-image-variants.json';
 import {
   NEWS_DECISION_TOPICS,
@@ -17,9 +20,13 @@ export type InfographicResource = {
   furnaces: NewsFurnaceFilterId[];
   image: string;
   imageAlt: string;
+  imageSize?: { width: number; height: number };
+  additionalPages?: { image: string; imageAlt: string; width: number; height: number }[];
   caption: string;
   paragraphs: string[];
   sourceNote: string;
+  sourceUrl?: string;
+  tags?: string[];
   rows: { label: string; value: string; condition: string }[];
   flows: { title: string; text: string }[];
   conditions: string[];
@@ -566,8 +573,20 @@ export const infographicResources: InfographicResource[] = [
   },
 ];
 
-export function getInfographic(slug: string) {
+export function getInfographic(slug: string, locale: Locale = 'zh') {
+  if (locale === 'en') return slug === bucketTeethInfographicEn.slug ? bucketTeethInfographicEn : undefined;
   return infographicResources.find((item) => item.slug === slug);
+}
+
+export function getInfographicPages(resource: InfographicResource) {
+  return [
+    {
+      image: resource.image,
+      imageAlt: resource.imageAlt,
+      ...(resource.imageSize ?? { width: 1086, height: 1448 }),
+    },
+    ...(resource.additionalPages ?? []),
+  ];
 }
 
 export function getInfographicImageSrcSet(image: InfographicResource['image']) {
@@ -576,24 +595,25 @@ export function getInfographicImageSrcSet(image: InfographicResource['image']) {
   return imageVariants.map(({ width }) => `${base}-${width}w.webp ${width}w`).join(', ');
 }
 
-export function getInfographicTopicLabel(resource: InfographicResource) {
-  return NEWS_DECISION_TOPICS.find((topic) => topic.id === resource.topic)?.label ?? '技术资料';
+export function getInfographicTopicLabel(resource: InfographicResource, locale: Locale = 'zh') {
+  return newsUiText(locale, NEWS_DECISION_TOPICS.find((topic) => topic.id === resource.topic)?.label ?? '技术资料');
 }
 
-export function getInfographicCards(): NewsListCardItem[] {
-  return infographicResources.map((item) => ({
+export function getInfographicCards(locale: Locale = 'zh'): NewsListCardItem[] {
+  const resources = locale === 'en' ? [bucketTeethInfographicEn] : infographicResources;
+  return resources.map((item) => ({
     id: item.id,
     slug: item.slug,
-    href: `/zh/infographics/${item.slug}`,
+    href: `/${locale}/infographics/${item.slug}`,
     contentType: 'infographic',
-    title: { zh: item.title, en: '' },
-    summary: { zh: item.summary, en: '' },
-    category: { zh: getInfographicTopicLabel(item), en: '' },
+    title: { zh: '', en: '', [locale]: item.title },
+    summary: { zh: '', en: '', [locale]: item.summary },
+    category: { zh: '', en: '', [locale]: getInfographicTopicLabel(item, locale) },
     image: item.image,
     date: '',
     listTopic: item.topic,
     listFurnaces: item.furnaces,
-    listEquipmentLabel: item.equipmentLabel === '叉车炉' ? item.equipmentLabel : undefined,
+    listEquipmentLabel: locale === 'en' || item.equipmentLabel === '叉车炉' ? item.equipmentLabel : undefined,
     searchText: [
       item.title,
       item.summary,

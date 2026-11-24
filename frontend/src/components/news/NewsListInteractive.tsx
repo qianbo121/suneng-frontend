@@ -239,7 +239,7 @@ export function NewsResultsSummary({
   return (
     <p className={styles.resultsSummary} role="status" aria-live="polite">
       {locale === 'en'
-        ? `${total} resources · Page ${currentPage} of ${pageCount}`
+        ? `${total} ${total === 1 ? 'resource' : 'resources'} · Page ${currentPage} of ${pageCount}`
         : `共 ${total} 篇资料 · 第 ${currentPage} / ${pageCount} 页`}
     </p>
   );
@@ -382,12 +382,11 @@ export function NewsContentTabs({
   disabled?: boolean;
 }) {
   const live = useContext(NewsListContext);
-  if (locale !== 'zh') return null;
   const current = live?.state ?? { topic, furnace, sort, format };
   return (
     <nav
       className={styles.formatTabs}
-      aria-label="内容类型"
+      aria-label={locale === 'en' ? 'Content type' : '内容类型'}
       inert={disabled || undefined}
     >
       {NEWS_CONTENT_FORMATS.map((item) => (

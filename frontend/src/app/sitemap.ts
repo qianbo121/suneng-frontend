@@ -1,3 +1,4 @@
+import { BUCKET_TEETH_INFOGRAPHIC_SLUG } from '@/lib/news-content-type';
 import { reviewedNewsImage } from '@/lib/news-display-revisions';
 import { isWithdrawnTechnicalPath } from '@/lib/publication-scope';
 import { getEnglishCases } from '@/lib/cases/english';
@@ -35,7 +36,9 @@ import { Locale } from '@/types/site';
 
 const sitemapLocales: Locale[] = ['zh', 'en'];
 const zhOnlyLocales: Locale[] = ['zh'];
+const bilingualInfographicPath = `/infographics/${BUCKET_TEETH_INFOGRAPHIC_SLUG}`;
 const englishStaticPaths = new Set([
+  bilingualInfographicPath,
   '/inquiry',
   '/case',
   '/',
@@ -130,6 +133,7 @@ function collectStaticRoutes(): MetadataRoute.Sitemap {
       changeFrequency: 'weekly',
       priority: 1,
     },
+    { path: bilingualInfographicPath, changeFrequency: 'monthly', priority: 0.6 },
     { path: '/products', changeFrequency: 'weekly', priority: 0.9 },
     {
       path: '/products/detail/fastener-quench-temper-line/cqi-9',

@@ -87,7 +87,7 @@ export function toNewsListLiteCards(items: NewsListCardItem[], locale: Locale): 
       ...(typeof views === 'number' ? { viewCount: views } : {}),
       listTopic: getNewsDecisionTopic(item),
       listFurnaces: getNewsFurnaceFilters(item),
-      ...(locale === 'zh' && item.listEquipmentLabel
+      ...((locale === 'zh' || item.contentType === 'infographic') && item.listEquipmentLabel
         ? { listEquipmentLabel: item.listEquipmentLabel }
         : {}),
       listDisplayDate: formatNewsDisplayDate(item.date),
