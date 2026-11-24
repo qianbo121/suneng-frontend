@@ -96,17 +96,27 @@ describe('ShujuNewsPublishService', () => {
 
   it('saves both languages on one news record with matching English search fields', async () => {
     const { service, tx } = harness();
-    const payload = { ...dto(), ...english };
+    const payload = {
+      ...dto(),
+      ...english,
+      coverImage: 'https://www.jssngyl.cn/uploads/zh.webp',
+      englishCoverImage: 'https://www.jssngyl.cn/uploads/en.webp',
+    };
     await service.publish(payload, 'bilingual');
     expect(tx.news.create).toHaveBeenCalledTimes(1);
     expect(tx.news.create).toHaveBeenCalledWith({
       data: expect.objectContaining({
         ...english,
+        coverImage: payload.coverImage,
+        englishCoverImage: payload.englishCoverImage,
         seoTitleEn: english.titleEn,
         seoDescriptionEn: english.summaryEn,
       }),
     });
     await service.publish(payload, 'bilingual-replay');
+    await expect(
+      service.publish({ ...payload, englishCoverImage: payload.coverImage }, 'changed-cover'),
+    ).rejects.toBeInstanceOf(ConflictException);
     expect(tx.news.create).toHaveBeenCalledTimes(1);
     await expect(
       service.publish({ ...payload, contentEn: '<p>Different English.</p>' }, 'changed-en'),
@@ -115,6 +125,8 @@ describe('ShujuNewsPublishService', () => {
 
   it.each([
     { titleEn: english.titleEn },
+    { englishCoverImage: 'https://www.jssngyl.cn/uploads/en.webp' },
+    { ...english, englishCoverImage: 'https://example.org/media/news/private.png' },
     { ...english, contentEn: '<p> </p>' },
     { ...english, contentEn: '<img src="/media/news/private.png">' },
     { ...english, contentEn: '<p>We are ISO 14001 certified.</p>' },

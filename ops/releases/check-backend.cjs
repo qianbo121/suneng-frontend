@@ -9,7 +9,11 @@ const prisma = new PrismaClient();
 // Migrations this release may apply, each pinned to the reviewed source it was checked as.
 // A pending migration that is not listed here, or whose file no longer hashes to the pinned
 // value, stops the release. Add an entry only for a migration that has been reviewed.
+const coverMigration = '20261124160000_news_english_cover';
+const coverChecksum = '1eb9663d88ed920115e3ddbdaf06d4c6b66fcabfc7c3e77edc78460bed4b113c';
+const previousCoverImage = 'sha256:d084c98b4dc2cdb0e883e1c26d80fc95c3f4d90404b3282c5f0760e4625f842d';
 const ALLOWED_PENDING = new Map([
+  [coverMigration, coverChecksum],
   ['20260929160000_align_minimal_inquiry_contact_limits', '4d75527f320fd6fff0baffdb07a2fd7e5815c8bf027e43254ce5f82523d4f9ff'],
   ['20260915103000_content_growth_session_index', '93b3973b671f12b3ed17dc5c91e9162b06b63e278f7d3f2af01fed6156b8aa88'],
   ['20260918160000_website_lead_event_is_bot', '2ed71856eddb253f4f96f42daad5dc76b901e6c4984a446615d8c12df6fc7b2d'],
@@ -23,10 +27,17 @@ const ALLOWED_PENDING = new Map([
   const stripHistory = '20261115032000_anonymize_strip_case_news';
   const oldStripImage = 'sha256:b0f6e603202af4c948607bffca2dd14fb4bdfe79fa55cd0e570158864a475eb7';
   let verifiedHistoricalDataChange = false;
+  let verifiedPreviousCoverSchema = false;
   for (const row of applied) {
     if (row.rolled_back_at) continue;
     if (!row.finished_at) throw new Error('Migration history requires reconciliation');
     if (!migrations.includes(row.migration_name)) {
+      if (noMigrations && process.env.RELEASE_APPLY_INDEX === '0' &&
+          process.env.RELEASE_VERIFIED_BACKEND_IMAGE === previousCoverImage &&
+          row.migration_name === coverMigration && row.checksum === coverChecksum && !verifiedPreviousCoverSchema) {
+        verifiedPreviousCoverSchema = true;
+        continue;
+      }
       if (noMigrations && process.env.RELEASE_APPLY_INDEX === '0' &&
           process.env.RELEASE_VERIFIED_BACKEND_IMAGE === oldStripImage &&
           row.migration_name === stripHistory && !verifiedHistoricalDataChange &&
@@ -60,6 +71,13 @@ const ALLOWED_PENDING = new Map([
     if (process.env.RELEASE_BACKUP_VERIFIED !== '1') throw new Error('Verified backup required before migration');
     cp.execFileSync(process.execPath, ['backend/node_modules/prisma/build/index.js','migrate','deploy','--schema','backend/prisma/schema.prisma'], {timeout:60000, stdio:'pipe'});
   }
+  if (migrations.includes(coverMigration) || verifiedPreviousCoverSchema) {
+    const columns = await prisma.$queryRawUnsafe(`SELECT data_type, character_maximum_length, is_nullable, column_default
+      FROM information_schema.columns WHERE table_schema = current_schema() AND table_name = 'News' AND column_name = 'englishCoverImage'`);
+    const column = columns[0];
+    if (columns.length !== 1 || column.data_type !== 'character varying' || column.character_maximum_length !== 500 ||
+        column.is_nullable !== 'YES' || column.column_default !== null) throw new Error('English cover storage differs from reviewed schema');
+  }
   const end = new Date().toISOString().slice(0,10);
   const start = new Date(Date.now()-7*86400000).toISOString().slice(0,10);
   const began = Date.now();
@@ -81,5 +99,5 @@ const ALLOWED_PENDING = new Map([
   const contactLimitsMatch = ['name', 'phone'].every(name => contactColumns.some(column =>
     column.column_name === name && column.character_maximum_length === (name === 'name' ? 180 : 254)));
   if (!contactLimitsMatch) throw new Error('Inquiry storage does not match the accepted form limits');
-  console.log(JSON.stringify({passed:true,contactLimitsMatch,verifiedHistoricalDataChange,pendingMigrationCount:pending.length,indexPresent:index.some(x=>x.indisvalid),botColumnStored,aggregateAvailable:true,aggregateCheckMs:Date.now()-began,dataRestored:false,notificationsSent:false}));
+  console.log(JSON.stringify({passed:true,contactLimitsMatch,verifiedHistoricalDataChange,verifiedPreviousCoverSchema,pendingMigrationCount:pending.length,indexPresent:index.some(x=>x.indisvalid),botColumnStored,aggregateAvailable:true,aggregateCheckMs:Date.now()-began,dataRestored:false,notificationsSent:false}));
 })().catch(() => { console.error('Backend release check failed; no customer data is printed.');process.exitCode=1; }).finally(()=>prisma.$disconnect());

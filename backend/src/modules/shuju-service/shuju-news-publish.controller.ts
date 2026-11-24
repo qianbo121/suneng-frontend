@@ -41,7 +41,7 @@ export class ShujuNewsPublishController {
   @Get('publish-capabilities')
   @ApiOperation({ summary: 'Check bilingual publishing support before uploading or publishing' })
   capabilities() {
-    return { englishNews: true, version: 1 };
+    return { englishNews: true, englishNewsCover: true, version: 1 };
   }
 
   @Post('media')

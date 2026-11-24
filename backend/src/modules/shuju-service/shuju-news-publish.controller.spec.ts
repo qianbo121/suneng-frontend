@@ -23,7 +23,11 @@ describe('bilingual publication capability preflight', () => {
       'publish-capabilities',
     );
     expect(Reflect.getMetadata(METHOD_METADATA, controller.capabilities)).toBe(RequestMethod.GET);
-    expect(controller.capabilities()).toEqual({ englishNews: true, version: 1 });
+    expect(controller.capabilities()).toEqual({
+      englishNews: true,
+      englishNewsCover: true,
+      version: 1,
+    });
     for (const operation of Object.values(service)) expect(operation).not.toHaveBeenCalled();
   });
 });

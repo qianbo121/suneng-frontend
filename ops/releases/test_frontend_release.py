@@ -797,6 +797,7 @@ class UnifiedReleaseTest(MockAcquisitionChecks, unittest.TestCase):
                         with self.assertRaises(RuntimeError): release.execute(True)
                         self.assertEqual(state, RECEIPT['images'])
                         self.assertFalse((release.audit / 'retention-pending.json').exists())
+                        self.assertIn(unittest.mock.call(running=True, recovery=True), check.call_args_list)
                     else:
                         self.assertTrue(release.execute(True)['applied'])
                         self.assertEqual(state, release.target)
