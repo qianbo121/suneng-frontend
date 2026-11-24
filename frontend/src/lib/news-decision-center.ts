@@ -261,7 +261,7 @@ export function getNewsDecisionDisplayMeta(item: NewsListCardItem, locale: Local
   const topicLabel =
     NEWS_DECISION_TOPICS.find((topic) => topic.id === topicId)?.label || '工艺质量';
   const furnaceLabel =
-    (locale === 'zh' ? item.listEquipmentLabel : '') ||
+    (locale === 'zh' || item.contentType === 'infographic' ? item.listEquipmentLabel : '') ||
     getNewsFurnaceFilters(item)
       .map((id) => newsUiText(locale, NEWS_FURNACE_FILTERS.find((f) => f.id === id)?.label || ''))
       .filter(Boolean)

@@ -41,9 +41,8 @@ export function includeInfographicNewsResources(
   items: NewsListCardItem[],
   locale: Locale,
 ): NewsListCardItem[] {
-  if (locale !== 'zh') return items;
   const slugs = new Set(items.map((item) => item.slug));
-  return [...items, ...getInfographicCards().filter((resource) => !slugs.has(resource.slug))];
+  return [...items, ...getInfographicCards(locale).filter((resource) => !slugs.has(resource.slug))];
 }
 
 export function getNewsListCardHref(item: NewsListCardItem, locale: Locale) {

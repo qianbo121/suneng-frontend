@@ -199,7 +199,7 @@ it.each(['zh', 'en'] as const)('keeps the localized public case in plain and fil
   expect(matches).toHaveLength(1);
   expect(matches[0].date).toBe('2026-09-18T01:00:00+08:00');
   expect((await getNewsResourceListData(locale)).data).toEqual(cards);
-  expect(cards.filter((card) => card.contentType === 'infographic')).toHaveLength(locale === 'zh' ? 18 : 0);
+  expect(cards.filter((card) => card.contentType === 'infographic')).toHaveLength(locale === 'zh' ? 19 : 1);
   const filtered = getNewsListView(toNewsListLiteCards(cards, locale), parseNewsListState('furnace=line'), 10);
   expect(filtered.items.map((item) => item.href)).toContain(href);
   const { data: articles } = await getNewsDecisionCenterData(locale);
@@ -211,8 +211,8 @@ it('omits the English case if the public reader withdraws the translation', asyn
   vi.mocked(getAllNewsForDecisionCenter).mockResolvedValue({ data: [], error: null });
   const unavailable = vi.spyOn(englishCases, 'getEnglishCase').mockReturnValue(undefined);
   try {
-    expect((await getNewsDecisionCenterCards('en')).map(item => item.id)).toEqual([-1]);
-    expect((await getNewsResourceListData('en')).data?.map(item => item.id)).toEqual([-1]);
+    expect((await getNewsDecisionCenterCards('en')).map(item => item.id)).toEqual([-1, -1009]);
+    expect((await getNewsResourceListData('en')).data?.map(item => item.id)).toEqual([-1, -1009]);
   } finally {
     unavailable.mockRestore();
   }

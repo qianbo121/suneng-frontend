@@ -1,3 +1,4 @@
+import type { Locale } from '@/types/site';
 import Image from 'next/image';
 import Link from 'next/link';
 import { WechatContactButton } from '@/components/lead/WechatContactButton';
@@ -16,32 +17,34 @@ const graphicSizes =
   '(max-width: 399px) calc(100vw - 50px), (max-width: 700px) calc(100vw - 58px), ' +
   '(max-width: 767px) calc(100vw - 302px), (max-width: 1045px) calc(100vw - 326px), 720px';
 
-export function InfographicDetail({ resource }: { resource: InfographicResource }) {
-  const topicLabel = getInfographicTopicLabel(resource);
+export function InfographicDetail({ resource, locale = 'zh' }: { resource: InfographicResource; locale?: Locale }) {
+  const en = locale === 'en';
+  const topicLabel = getInfographicTopicLabel(resource, locale);
   const pages = getInfographicPages(resource);
   return (
     <div className={styles.page}>
       <div className={styles.breadcrumbs}>
-        <ResourceDetailBreadcrumb contentType="infographic" />
+        <ResourceDetailBreadcrumb locale={locale} contentType="infographic" />
       </div>
       <div className={styles.layout}>
         <aside className={styles.side}>
           <div className={styles.sideBlock}>
-            <InfographicToc />
+            <InfographicToc locale={locale} />
           </div>
           <div className={`${styles.sideBlock} ${styles.related}`}>
-            <p className={styles.sideLabel}>相关主题</p>
+            <p className={styles.sideLabel}>{en ? 'Related topics' : '相关主题'}</p>
             <Link
-              href={`/zh/news?format=infographic&${resource.furnaces.length && resource.equipmentLabel !== '叉车炉' ? `furnace=${resource.furnaces[0]}` : `q=${encodeURIComponent(resource.equipmentLabel)}`}`}
+              href={`/${locale}/news?format=infographic&${resource.furnaces.length && resource.equipmentLabel !== '叉车炉' ? `furnace=${resource.furnaces[0]}` : `q=${encodeURIComponent(resource.equipmentLabel)}`}`}
             >
               {resource.equipmentLabel}
             </Link>
-            <Link href={`/zh/news?format=infographic&topic=${resource.topic}`}>{topicLabel}</Link>
+            <Link href={`/${locale}/news?format=infographic&topic=${resource.topic}`}>{topicLabel}</Link>
           </div>
           <div className={styles.help}>
-            有具体工况需要核对？
+            {en ? 'Have a load or process to discuss?' : '有具体工况需要核对？'}
             <WechatContactButton
-              label="联系苏能工程师"
+              locale={locale}
+              label={en ? 'Contact a Suneng engineer' : '联系苏能工程师'}
               trackingContext={{ properties: { position: 'infographic_sidebar', contact_purpose: 'sales' } }}
             />
           </div>
@@ -53,7 +56,7 @@ export function InfographicDetail({ resource }: { resource: InfographicResource 
           </section>
           <section id="graphic">
             <div className={styles.sectionHeading}>
-              <h2>完整图解</h2>
+              <h2>{en ? 'Illustrated guide' : '完整图解'}</h2>
             </div>
             {pages.map((page, index) => (
               <figure key={page.image}>
@@ -80,18 +83,18 @@ export function InfographicDetail({ resource }: { resource: InfographicResource 
           </section>
           <section id="keypoints">
             <div className={styles.sectionHeading}>
-              <h2>图中文字要点</h2>
+              <h2>{en ? 'Equipment selection details' : '图中文字要点'}</h2>
             </div>
             <p className={styles.note}>
-              以下内容按图片及配套文案整理，保留原资料的项目范围和未注明事项。
+              {en ? 'The figures below apply to the loads and handling arrangements shown.' : '以下内容按图片及配套文案整理，保留原资料的项目范围和未注明事项。'}
             </p>
             <table>
-              <caption className="sr-only">图中设备参数、处理量及适用限定</caption>
+              <caption className="sr-only">{en ? 'Equipment, handling options and application limits' : '图中设备参数、处理量及适用限定'}</caption>
               <thead>
                 <tr>
-                  <th scope="col">信息项目</th>
-                  <th scope="col">图中内容</th>
-                  <th scope="col">图中限定</th>
+                  <th scope="col">{en ? 'Requirement' : '信息项目'}</th>
+                  <th scope="col">{en ? 'Equipment or action' : '图中内容'}</th>
+                  <th scope="col">{en ? 'What to check' : '图中限定'}</th>
                 </tr>
               </thead>
               <tbody>
@@ -128,7 +131,7 @@ export function InfographicDetail({ resource }: { resource: InfographicResource 
           </section>
           <section id="conditions">
             <div className={styles.sectionHeading}>
-              <h2>适用说明</h2>
+              <h2>{en ? 'Application notes' : '适用说明'}</h2>
             </div>
             <ul className={styles.conditions}>
               {resource.conditions.map((text) => (
@@ -138,7 +141,8 @@ export function InfographicDetail({ resource }: { resource: InfographicResource 
           </section>
           <div className={styles.articleBottom}>
             <WechatContactButton
-              label="咨询项目工况"
+              locale={locale}
+              label={en ? 'Discuss your project' : '咨询项目工况'}
               className={styles.inquiry}
               trackingContext={{ properties: { position: 'infographic_footer', contact_purpose: 'sales' } }}
             />

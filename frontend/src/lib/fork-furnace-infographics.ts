@@ -1,9 +1,11 @@
 import type { InfographicResource } from './infographics';
 
+import { BUCKET_TEETH_INFOGRAPHIC_SLUG } from './news-content-type';
+
 export const forkFurnaceInfographics: InfographicResource[] = [
   {
     id: -1009,
-    slug: 'bucket-teeth-liners-furnace-selection',
+    slug: BUCKET_TEETH_INFOGRAPHIC_SLUG,
     title: '高锰钢斗齿衬板水韧，选叉车炉还是台车炉？',
     summary:
       '高锰钢斗齿和衬板做水韧处理，选叉车炉还是台车炉，先看工件能不能整筐叉取、能不能翻落。一筐斗齿或一件衬板需要保持姿态，先谈叉车炉＋专用叉料车＋炉前水槽；允许翻落的斗齿，可以比较台车炉＋翻转装置＋淬火槽；衬板怕碰伤或变形，要让厂家另画托架转运方案。',

@@ -1,16 +1,17 @@
 'use client';
 
+import type { Locale } from '@/types/site';
 import { useEffect, useState } from 'react';
 import styles from './InfographicDetail.module.css';
 
 const sections = [
-  ['intro', '图文导读'],
-  ['graphic', '完整图解'],
-  ['keypoints', '图中文字要点'],
-  ['conditions', '适用说明'],
+  ['intro', '图文导读', 'Overview'],
+  ['graphic', '完整图解', 'Illustrated guide'],
+  ['keypoints', '图中文字要点', 'Equipment selection details'],
+  ['conditions', '适用说明', 'Application notes'],
 ] as const;
 
-export function InfographicToc() {
+export function InfographicToc({ locale = 'zh' }: { locale?: Locale }) {
   const [active, setActive] = useState<string>('intro');
   useEffect(() => {
     let frame = 0;
@@ -39,8 +40,8 @@ export function InfographicToc() {
     };
   }, []);
   return (
-    <nav className={styles.toc} aria-label="本页目录">
-      {sections.map(([id, title]) => (
+    <nav className={styles.toc} aria-label={locale === 'en' ? 'On this page' : '本页目录'}>
+      {sections.map(([id, zh, en]) => (
         <a
           key={id}
           href={`#${id}`}
@@ -59,7 +60,7 @@ export function InfographicToc() {
           className={active === id ? styles.current : undefined}
           aria-current={active === id ? 'location' : undefined}
         >
-          {title}
+          {locale === 'en' ? en : zh}
         </a>
       ))}
     </nav>

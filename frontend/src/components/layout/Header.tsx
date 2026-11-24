@@ -15,6 +15,7 @@ import {
   HiLanguage,
 } from 'react-icons/hi2';
 
+import { BUCKET_TEETH_INFOGRAPHIC_SLUG } from '@/lib/news-content-type';
 import { isZhOnlyPath } from '@/lib/i18n/zh-only';
 import { buildBrandImageAlt } from '@/lib/seo';
 import { getLocalizedNavigation } from '@/mock/navigation';
@@ -60,7 +61,10 @@ function buildLocaleSwitchPath(
   nextLocale: 'zh' | 'en',
   currentLocale: 'zh' | 'en',
 ) {
-  if (currentLocale === 'zh' && nextLocale === 'en' && pathname.startsWith('/zh/infographics/')) return '/en/news';
+  if (currentLocale === 'zh' && nextLocale === 'en' && pathname.startsWith('/zh/infographics/')) {
+    return pathname === `/zh/infographics/${BUCKET_TEETH_INFOGRAPHIC_SLUG}`
+      ? `/en/infographics/${BUCKET_TEETH_INFOGRAPHIC_SLUG}` : '/en/news';
+  }
   // Switching to English from a Chinese-only page (no /en counterpart) lands on
   // the English home instead of a 404. The source of truth is ZH_ONLY_PATHS.
   if (currentLocale === 'zh' && nextLocale === 'en' && isZhOnlyPath(pathname)) {

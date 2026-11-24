@@ -39,10 +39,16 @@ describe('independent infographic resources', () => {
     }
   });
 
-  it('keeps English lists on articles when a Chinese infographic query is shared', () => {
-    expect(normalizeNewsContentFormat('infographic', 'en')).toBe('article');
-    expect(parseNewsListState('format=infographic&topic=quality', 'en'))
-      .toEqual(parseNewsListState('topic=quality', 'en'));
+  it('shows the one translated infographic in both English list renderings', () => {
+    expect(normalizeNewsContentFormat('infographic', 'en')).toBe('infographic');
+    const cards = includeInfographicNewsResources(includeStandaloneNewsResources([], 'en'), 'en');
+    for (const source of [cards, toNewsListLiteCards(cards, 'en')]) {
+      const view = getNewsListView(source, parseNewsListState('format=infographic', 'en'), 10);
+      expect(view.items.map((item) => item.href)).toEqual(['/en/infographics/bucket-teeth-liners-furnace-selection']);
+      expect(view.items[0].title.en).toContain('bucket teeth');
+      expect(view.items[0].image).toMatch(/01-en\.png$/);
+      expect(getNewsListView(source, parseNewsListState('', 'en'), 10).items.every(item => item.contentType !== 'infographic')).toBe(true);
+    }
   });
 
   it('combines image-text search with topic, equipment and content format', () => {

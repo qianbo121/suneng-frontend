@@ -42,10 +42,10 @@ describe('standalone procurement resource in the normal news list', () => {
     expect(cards).toHaveLength(news.length + 1 + infographicResources.length);
     expect(includeInfographicNewsResources(cards, 'zh')).toHaveLength(cards.length);
     const english = includeInfographicNewsResources(includeStandaloneNewsResources(news, 'en'), 'en');
-    expect(english).toHaveLength(news.length + 1);
-    expect(english.at(-1)!.title.en).toContain('furnace procurement');
-    expect(getNewsListCardHref(english.at(-1)!, 'en')).toBe(PROCUREMENT_RESOURCE_HREF.replace('/zh/', '/en/'));
-    expect(english.some((item) => item.contentType === 'infographic')).toBe(false);
+    expect(english).toHaveLength(news.length + 2);
+    expect(english.find((item) => item.slug === PROCUREMENT_RESOURCE_SLUG)!.title.en).toContain('furnace procurement');
+    expect(getNewsListCardHref(english.find((item) => item.slug === PROCUREMENT_RESOURCE_SLUG)!, 'en')).toBe(PROCUREMENT_RESOURCE_HREF.replace('/zh/', '/en/'));
+    expect(english.filter((item) => item.contentType === 'infographic').map((item) => item.slug)).toEqual(['bucket-teeth-liners-furnace-selection']);
     expect(resource.date).toBe('');
     expect(resource.updatedAt).toBeUndefined();
     expect(resource.viewCount).toBeUndefined();
