@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """Persist a reviewed release-retention preflight, then explicitly finalize it.
 
-This wrapper does not publish, create acceptance, schedule cleanup, delete files,
-or prune Docker. The existing Finalizer remains the only image-removal engine.
+The existing Finalizer handles images. A separately bound package inventory can
+optionally run after a successful closeout and after the deployment lock is released.
 """
 import argparse
 import copy
@@ -299,13 +299,32 @@ def main():
     parser.add_argument('--output-dir', type=Path, required=True)
     parser.add_argument('--apply', action='store_true')
     parser.add_argument('--reviewed-preflight', type=Path)
+    parser.add_argument('--package-inventory', type=Path)
+    parser.add_argument('--package-inventory-sha256')
     args = parser.parse_args()
+    if bool(args.package_inventory) != bool(args.package_inventory_sha256):
+        parser.error('A package inventory requires its independent approved digest')
     os.umask(0o077)
     try:
         with open('/var/lock/corp-site-deploy.lock', 'a') as lock:
             fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
             result = Closeout(args.plan, args.acceptance, args.records_root).run(
                 args.output_dir, args.apply, args.reviewed_preflight)
+        if args.package_inventory and result.get('passed'):
+            from contextlib import redirect_stdout
+            from retire_packages import run_inventory
+            receipt = args.output_dir / 'package-retirement.jsonl'
+            with receipt.open('x', buffering=1) as log:
+                try:
+                    with redirect_stdout(log):
+                        packages = run_inventory(args.package_inventory, args.package_inventory_sha256, args.apply)
+                    log.write(json.dumps(packages) + '\n')
+                    result['packages'] = {'passed': True, 'receipt': str(receipt)}
+                except Exception as error:
+                    log.write(json.dumps({'passed': False, 'reason': str(error)}) + '\n')
+                    result['packages'] = {'passed': False, 'receipt': str(receipt)}
+                    print(json.dumps(result))
+                    return 1
         print(json.dumps(result))
     except Exception as error:
         print(json.dumps({'passed': False, 'failureType': type(error).__name__}))

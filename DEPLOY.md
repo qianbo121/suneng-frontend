@@ -115,3 +115,63 @@ docker compose --env-file .env.production -f docker-compose.prod.yml logs nginx 
 - `/data/uploads` 是否可写
 - 上传文件是否超过 `UPLOAD_MAX_FILE_SIZE_MB`
 - Nginx `client_max_body_size` 是否满足当前上传需求
+
+### 官网前台包增量传输
+
+统一发版窗口在容量预检通过后，使用本批正式候选清单、独立记录的清单摘要和正式前台归档。传输前在服务器建立本批专用的空暂存目录。已有上版完整包时，指定它所在的目录作为比对来源。缺少比对来源时省略 `--basis` 做首次完整传输。回退版本仍使用原批次保管的完整包。
+
+```sh
+python3 ops/releases/transfer_frontend.py \
+  --host "$DEPLOY_HOST" --archive "$OFFICIAL_DIR/frontend.tar.gz" \
+  --candidate "$OFFICIAL_DIR/candidate.json" --candidate-sha256 "$APPROVED_CANDIDATE_SHA256" \
+  --basis "$PREVIOUS_ARCHIVE_DIR" --destination "$NEW_STAGING_DIR"
+```
+
+记录新传字节、复用字节和本批完整包摘要。接收端回读通过后，继续既有的镜像导入、上线及回退验收。两端需要 rsync；暂存区与上一版目录分开。
+
+统一发版入口在已审核配置中指定 `frontendHistory` 为共享保管目录，即可在正式包校验通过时自动登记。也可用以下命令直接保管。新批次把下载及解包目录设为一次性暂存区，长期只保管各批清单和共用分段。相同图片所在的分段仅存一份，每个版本单独保留正式清单。旧版未分段整包继续按原样保管。首次保管需要容纳完整包和新分段的临时空间。
+
+```sh
+python3 ops/releases/frontend_history.py keep --store "$HISTORY" --candidate "$OFFICIAL_DIR/candidate.json" --candidate-sha256 "$APPROVED_CANDIDATE_SHA256" --archive "$OFFICIAL_DIR/frontend.tar.gz"
+python3 ops/releases/frontend_history.py restore --store "$HISTORY" --candidate-sha256 "$APPROVED_CANDIDATE_SHA256" --output "$EMPTY_DIR/frontend.tar.gz"
+```
+
+### 旧发版包按空间移存
+
+`ops/releases/retire_packages.py` 在共享服务器按实际空余字节选择较早的已验收完整包。只接受官网历史批次的正式前台包和数炬正式源码发布包。受审清单采用第一版格式，记录采集时间、独立归档目录、本轮目标可用字节数，以及每件的准确路径、版本、整包摘要和独立副本路径。官网还要提供已审核的候选清单摘要。执行时取两套发版锁，保护各自的当前和上一个版本，并逐字节验证独立副本。达到本轮所需余量即停止。正式发版收尾或日常维护使用同一命令，未挂载独立存储时原件继续保留。
+
+```sh
+python3 ops/releases/retire_packages.py --inventory "$INVENTORY" --inventory-sha256 "$APPROVED_INVENTORY_SHA256"
+```
+
+核准同一批清单后添加 `--apply` 执行并保留标准输出作为回执。程序只处理已覆盖的发布包，其余源文件和业务数据不在清单内。
+
+统一发版收尾入口也接受 `--package-inventory` 和 `--package-inventory-sha256`。原有收尾成功、释放发版锁之后，按本轮审核清单自动复核容量并处理旧包，独立写入 `package-retirement.jsonl`。预检阶段只出计划，执行阶段重新回读两份文件及当前恢复边界。
+
+清单字段示意
+
+```json
+{
+  "schemaVersion": 1,
+  "collectedAt": "2026-11-25T08:00:00Z",
+  "archiveRoot": "/mnt/verified-archive",
+  "targetFreeBytes": 12868227246,
+  "packages": []
+}
+```
+
+每一项使用 `path`、`sourceCommit`、`sha256`、`archiveCopy`。官网前台包额外使用 `candidateSha256`。示例数字仅表示格式，实际值取当批容量预算。
+
+### 只含变化内容的交付包
+
+前后两版均有分段清单时，用 `frontend_history.py bundle` 按接收端已有的上一版生成交付包。同一图片的分段留在双方共享目录内，包里只有新版本清单和缺少的分段。首次发版先保管完整候选包作为基线。接收端把变化包与已有分段拼回正式镜像，在正常导入前检验全部内容及镜像身份。缺少旧分段会中止，可重新保管对应的已验证基线再接收。
+
+```sh
+python3 ops/releases/frontend_history.py bundle --store "$HISTORY" --candidate-sha256 "$APPROVED_CANDIDATE_SHA256" --basis-sha256 "$RECEIVER_PREVIOUS_CANDIDATE_SHA256" --output "$OUT/changes.zip"
+python3 ops/releases/frontend_history.py receive --store "$RECEIVER_HISTORY" --candidate-sha256 "$APPROVED_CANDIDATE_SHA256" --bundle "$INCOMING/changes.zip" --output "$NEW_STAGING_DIR/frontend.tar.gz"
+```
+
+
+### 同盘发版登记
+
+先将本批核对过的 ops/releases/storage_reservations.py 安装在服务器同名位置，再使用差量传输入口。正式包接收进程按完整包为暂存区登记；保管新分段和从差量包还原完整包，也会在所在磁盘登记。官网实际切换、收尾和失败回退期间由正式入口持有发布预留。各步骤结束后自动撤销本步骤的登记。异常退出后，数炬和官网根据主机启动标识及进程身份识别失效记录。正式导入使用 storage_policy.py check-import-after-transfer 的 --load-reviewed-frontend 开关，参数沿用同一候选清单、外部摘要、完整包、镜像盘和暂存目录。它先登记镜像展开所需空间，在登记内复核容量和正式包身份，再调用原 Docker 镜像导入。省略开关时只检查。
