@@ -962,6 +962,17 @@ class Release:
         return result
 
 
+def publication_reservation(live, kind, apply, home=Path('/opt/shuju')):
+    from contextlib import nullcontext
+    from storage_reservations import reserve
+    from storage_policy import DEPLOY_RESERVE, ROLLBACK_RESERVE
+    if not apply or not home.is_dir() or live.stat().st_dev != Path('/').stat().st_dev:
+        return nullcontext()
+    # Images are already staged. This is the native switch/rollback working space.
+    amount = DEPLOY_RESERVE if kind == 'deploy' else ROLLBACK_RESERVE
+    return reserve(home / 'shared/other-system-reservations.json', amount)
+
+
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--manifest', type=Path)
@@ -1006,29 +1017,30 @@ def main(argv=None):
         webhook = read_webhook(args.failure_webhook_file)
     with open('/var/lock/corp-site-deploy.lock', 'a') as lock:
         fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
-        if args.capture_preparation_baseline:
-            from preparation_guard import capture
-            print(json.dumps(capture(args.capture_preparation_baseline, args.live, manifest, run, args.protect_file)))
-            return
-        audit = args.audit_root / (datetime.datetime.now().strftime('%Y%m%d-%H%M%S-') + uuid.uuid4().hex[:8])
-        audit.mkdir(parents=True)
-        script = Path(__file__).with_name('check-frontend.cjs').read_text()
-        release = Release(args.live, audit, manifest, script)
-        if args.phase_directory:
-            from phase_runtime import run_phase
-            def action(attempt):
-                if args.preparation_baseline:
-                    from preparation_guard import execute_prepared
-                    return execute_with_notice(release, args.apply, args.kind, webhook,
-                                               lambda: execute_prepared(release, args.apply, args.kind, args.preparation_baseline, run))
-                return execute_with_notice(release, args.apply, args.kind, webhook)
-            identity = {'manifest': manifest, 'kind': args.kind, 'live': str(args.live.resolve()),
-                        'preparationBaselineSha256': hashlib.sha256(args.preparation_baseline.read_bytes()).hexdigest() if args.preparation_baseline else None}
-            result = run_phase(args.phase_directory, 'apply' if args.apply else 'preflight', action,
-                               identity=identity, resume=args.resume)
-        else:
-            result = execute_with_notice(release, args.apply, args.kind, webhook)
-        print(json.dumps(result))
+        with publication_reservation(args.live, args.kind, args.apply):
+            if args.capture_preparation_baseline:
+                from preparation_guard import capture
+                print(json.dumps(capture(args.capture_preparation_baseline, args.live, manifest, run, args.protect_file)))
+                return
+            audit = args.audit_root / (datetime.datetime.now().strftime('%Y%m%d-%H%M%S-') + uuid.uuid4().hex[:8])
+            audit.mkdir(parents=True)
+            script = Path(__file__).with_name('check-frontend.cjs').read_text()
+            release = Release(args.live, audit, manifest, script)
+            if args.phase_directory:
+                from phase_runtime import run_phase
+                def action(attempt):
+                    if args.preparation_baseline:
+                        from preparation_guard import execute_prepared
+                        return execute_with_notice(release, args.apply, args.kind, webhook,
+                                                   lambda: execute_prepared(release, args.apply, args.kind, args.preparation_baseline, run))
+                    return execute_with_notice(release, args.apply, args.kind, webhook)
+                identity = {'manifest': manifest, 'kind': args.kind, 'live': str(args.live.resolve()),
+                            'preparationBaselineSha256': hashlib.sha256(args.preparation_baseline.read_bytes()).hexdigest() if args.preparation_baseline else None}
+                result = run_phase(args.phase_directory, 'apply' if args.apply else 'preflight', action,
+                                   identity=identity, resume=args.resume)
+            else:
+                result = execute_with_notice(release, args.apply, args.kind, webhook)
+            print(json.dumps(result))
 
 
 def execute_with_notice(release, apply, kind, webhook=None, action=None):

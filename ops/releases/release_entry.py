@@ -75,7 +75,7 @@ class Entry:
         self.config_path, self.config_sha = Path(config).absolute(), expected
         self.config = contract.read_bound(self.config_path, expected)
         contract.need(set(self.config) <= {'schemaVersion', 'root', 'sourceCommit', 'components', 'inputs',
-                      'captureBudget', 'live', 'auditRoot', 'failureWebhookFile'}, 'unknown-entry-options')
+                      'captureBudget', 'live', 'auditRoot', 'failureWebhookFile', 'frontendHistory'}, 'unknown-entry-options')
         contract.required(self.config, ('schemaVersion', 'root', 'sourceCommit', 'inputs'))
         contract.need(type(self.config['schemaVersion']) is int and self.config['schemaVersion'] == 1,
                       'entry-version-required')
@@ -225,6 +225,10 @@ class Entry:
                 candidate_sha256=self.descriptor('candidate')['sha256'], expected_source_commit=self.source)
             contract.need(result['imageIdentity']['ociRuntimeManifestDigest'] == self.image,
                           'verified-runtime-image-disagrees-with-plan')
+            if 'frontendHistory' in self.config:
+                from frontend_history import keep
+                result['sharedHistory'] = keep(directory(self.config['frontendHistory']),
+                    self.path('candidate'), self.path('archive'), self.descriptor('candidate')['sha256'])
         elif step in ('candidate', 'production'):
             reports = self._browser(step)
             result = {'passed': True, 'sourceCommit': self.source, 'phase': step,

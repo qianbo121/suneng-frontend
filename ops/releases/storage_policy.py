@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Capacity gate and evidence-based retention plan. Never deletes or deploys."""
+"""Capacity checks, a verified image intake, and evidence-based retention planning."""
 import argparse
 from datetime import datetime, timezone
 import hashlib
@@ -9,6 +9,7 @@ from pathlib import Path
 import re
 import shutil
 import stat
+import sys
 
 GIB = 1024**3
 DEPLOY_RESERVE = 5 * GIB
@@ -44,10 +45,46 @@ def positive_bytes(value, name):
     return value
 
 
+def other_system_space(path):
+    """Reserve the next Shuju night plus announced work on this specific device."""
+    home = Path('/opt/shuju')
+    if not os.path.exists(home):
+        return 0
+    backup = home/'backups'
+    device = Path(path).stat().st_dev
+    extra = 0
+    pending = home / 'shared' / 'other-system-reservations.json'
+    if pending.exists() and Path('/').stat().st_dev == device:
+        from storage_reservations import total
+        extra = total(pending, exclude='website')
+    if backup.stat().st_dev != device:
+        return extra
+    for entry in sorted(backup.glob('shuju-*.sqlite3.manifest.json'), reverse=True):
+        manifest = json.loads(entry.read_bytes())
+        name = entry.name.removesuffix('.manifest.json')
+        if manifest.get('backup_status') != 'complete' or manifest.get('integrity_check') != 'ok':
+            continue
+        db = backup/name
+        if manifest.get('database_file') != name or not db.is_file():
+            continue
+        size = max(db.stat().st_size, (home/'data'/'shuju.sqlite3').stat().st_size)
+        companions = [entry]
+        for section, key in [('uploads', 'archive_file'), ('crawlers', 'file'), ('inquiry_sync_state', 'file')]:
+            side = manifest.get(section) or {}
+            if side.get('included') is False:
+                continue
+            filename = side[key]
+            if Path(filename).name != filename or not filename.startswith(name + '.'):
+                raise ValueError('Backup companion name does not match its manifest')
+            companions.append(backup / filename)
+        return size + sum(p.stat().st_size for p in companions) + extra
+    raise ValueError('Cannot measure the next shared-disk backup')
+
+
 def working_space(path, kind='deploy'):
     if kind not in {'deploy', 'rollback'}:
         raise ValueError('Unknown release kind')
-    required = ROLLBACK_RESERVE if kind == 'rollback' else DEPLOY_RESERVE
+    required = ROLLBACK_RESERVE if kind == 'rollback' else DEPLOY_RESERVE + other_system_space(path)
     available = shutil.disk_usage(path).free
     result = {'availableBytes': available, 'requiredBytes': required,
               'kind': kind, 'passed': available >= required}
@@ -78,6 +115,8 @@ def import_space(candidates, store, staging):
         row['requiredBytes'] += added
     filesystems = []
     for row in required.values():
+        row['otherSystemBytes'] = other_system_space(row['path'])
+        row['requiredBytes'] += row['otherSystemBytes']
         available = shutil.disk_usage(row['path']).free
         filesystems.append({**row, 'availableBytes': available,
                             'passed': available >= row['requiredBytes']})
@@ -266,6 +305,38 @@ def retention_plan(evidence):
             'objects': rows, 'candidateCount': sum(r['classification'] == 'candidate' for r in rows)}
 
 
+def load_frontend_with_reservation(candidate_path, digest, archive, store, staging):
+    from contextlib import nullcontext
+    import subprocess
+    from archive_identity import verify_archive
+    from storage_reservations import reserve
+
+    _, raw = _verified_file(candidate_path, digest, capture=True)
+    candidate = json.loads(raw)
+    if candidate.get('component', 'frontend') != 'frontend':
+        raise ValueError('此入口仅导入已审核的官网前台包')
+    amount = 2 * positive_bytes(candidate.get('imageBytes'), 'imageBytes') + DEPLOY_RESERVE
+    shared = Path('/opt/shuju/shared')
+    reservation = nullcontext()
+    if shared.is_dir() and shared.stat().st_dev == store.stat().st_dev:
+        reservation = reserve(shared / 'other-system-reservations.json', amount)
+    with reservation:
+        archive = _safe_absolute_path(archive)
+        with os.fdopen(os.open(archive, os.O_RDONLY | os.O_NOFOLLOW), 'rb') as stream:
+            opened = _file_identity(os.fstat(stream.fileno()))
+            report = staged_import_space(candidate_path, digest, archive, store, staging)
+            if not report['passed']:
+                return report
+            proof = verify_archive(raw, archive, candidate_sha256=digest)
+            if not proof['passed'] or _file_identity(archive.stat()) != opened:
+                raise ValueError('候选包在导入前未通过核验')
+            subprocess.run(['docker', 'image', 'load'], stdin=stream, stdout=sys.stderr, check=True)
+            if _file_identity(os.fstat(stream.fileno())) != opened:
+                raise ValueError('导入期间候选文件发生变化，请核验镜像身份')
+        report['imageLoaded'] = True
+        return report
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     sub = parser.add_subparsers(dest='command', required=True)
@@ -274,6 +345,8 @@ def main():
     space.add_argument('--image-store', type=Path, default=Path('/var/lib/containerd'))
     space.add_argument('--staging', type=Path, default=Path('/data/migration-rehearsals'))
     staged = sub.add_parser('check-import-after-transfer')
+    staged.add_argument('--load-reviewed-frontend', action='store_true',
+                        help='Load the verified frontend image while holding its shared disk reservation')
     staged.add_argument('--candidate', type=Path, action='append', required=True)
     staged.add_argument('--candidate-sha256', required=True)
     staged.add_argument('--archive', type=Path, required=True)
@@ -287,8 +360,8 @@ def main():
     elif args.command == 'check-import-after-transfer':
         if len(args.candidate) != 1:
             raise ValueError('Only one staged candidate is supported; use check-import or check separately')
-        result = staged_import_space(args.candidate[0], args.candidate_sha256, args.archive,
-                                     args.image_store, args.staging)
+        action = load_frontend_with_reservation if args.load_reviewed_frontend else staged_import_space
+        result = action(args.candidate[0], args.candidate_sha256, args.archive, args.image_store, args.staging)
     else:
         result = retention_plan(json.loads(args.evidence.read_text()))
     print(json.dumps(result, ensure_ascii=False, indent=2))

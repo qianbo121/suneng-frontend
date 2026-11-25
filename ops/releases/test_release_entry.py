@@ -96,6 +96,31 @@ class EntryTest(unittest.TestCase):
             e.run('preflight'); e.run('apply', apply=True)
             self.assertEqual(action.call_count, 2)
 
+    def test_archive_phase_can_keep_verified_shared_history(self):
+        import archive_transfer
+        import frontend_history
+        import gzip
+
+        fixture = self.fixture
+        archive = fixture.archive
+        segmented = fixture.root / 'segmented.tar.gz'
+        with gzip.open(archive.archive, 'rb') as original:
+            index = archive_transfer.pack_stream(original, segmented)
+        segmented.replace(archive.archive)
+        archive.value.update(archiveBytes=archive.archive.stat().st_size,
+                             archiveSha256=archive_transfer.sha256(archive.archive),
+                             archiveSegments=index)
+        archive.save_candidate()
+        fixture.bind('candidate', 'candidate.json')
+        fixture.bind('archive', 'frontend.tar.gz')
+        store = fixture.root / 'history'
+        store.mkdir()
+        fixture.config['frontendHistory'] = str(store)
+        fixture.save().run('archive')
+        restored = fixture.root / 'restored.tar.gz'
+        frontend_history.restore(store, archive.candidate_sha, restored)
+        self.assertEqual(archive_transfer.sha256(restored), archive.value['archiveSha256'])
+
     def test_check_and_status_are_read_only_and_default_frontend(self):
         f=self.fixture;f.config.pop('components');e=f.save()
         self.assertTrue(e.checked('candidate')['inputComplete'])

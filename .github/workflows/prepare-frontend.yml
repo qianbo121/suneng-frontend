@@ -7,10 +7,10 @@ on:
         required: true
         type: string
       segmented_archive:
-        description: Opt in to segmented gzip; requires the new archive transport verifier
+        description: Segment frontend artifacts for verified, incremental transfer
         required: false
         type: boolean
-        default: false
+        default: true
 permissions:
   contents: read
   actions: read
