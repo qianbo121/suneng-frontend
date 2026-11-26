@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { FiBarChart2, FiBox, FiShield, FiUsers } from 'react-icons/fi';
 import type { AgreementCase } from '@/lib/cases/agreement/reader';
 import { MeasuredText } from './MeasuredText';
@@ -36,6 +37,9 @@ export function AgreementPage({ data }: { data: AgreementCase }) {
           <section>
             <h2><FiBarChart2 aria-hidden />{label('设备参数', 'Equipment specifications')}</h2>
             <table><tbody>{data.params.map(([name, value]) => <tr key={name}><th scope="row">{name}</th><td>{value}</td></tr>)}</tbody></table>
+            {data.locale === 'zh' && data.slug === 'cylinder-liner-solution-aging' && (
+              <p>设备介绍：<Link className={styles.equipmentLink} href="/zh/products/detail/aluminum-solution-aging-line">铝合金固溶时效生产线</Link></p>
+            )}
           </section>
           <section>
             <h2><FiUsers aria-hidden />{label('供货分工', 'Responsibilities')}</h2>

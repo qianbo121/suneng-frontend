@@ -54,6 +54,7 @@
 .cards h2 { display:flex; align-items:center; gap:10px; font-size:1.22em; }
 .cards svg { color:var(--blue); }
 .cards table { width:100%; font-size:.96em; border-collapse:collapse; }
+.equipmentLink { color:var(--blue); text-decoration:underline; text-underline-offset:.18em; }
 .cards td,.cards th { padding:3px 12px; border:1px solid var(--edge); text-align:left; }
 .cards th,.cards dt { background:#ebf3fc; }
 .cards dl { display:grid; grid-template-columns:max-content 1fr; gap:7px 12px; align-items:start; }
