@@ -256,7 +256,13 @@ class Entry:
                     contract.need(guard.digest(copy) == method_sha, 'different-collector-already-present')
                 else:
                     with copy.open('xb') as stream: stream.write(guard.read(method))
-                args = ['node', str(method), '--root='+str(self.root), '--phase='+phase,
+                helpers = method.parent/'browser'
+                protected = helpers/'notification-guard.py'
+                helper_copy = copy.parent/'notification-guard.cjs'
+                contract.need(helper_copy.is_file() and guard.digest(helper_copy) == guard.digest(helpers/helper_copy.name),
+                              'notification-guard-source-mismatch')
+                args = ['python3', str(protected), '--evidence', str(attempt/'notification-refusals.jsonl'),
+                        '--', 'node', str(method), '--root='+str(self.root), '--phase='+phase,
                         '--plan-sha256='+self.descriptor('plan')['sha256'],
                         '--identity-before='+str(self.path(role)),
                         '--identity-sha256='+self.descriptor(role)['sha256'], '--method-sha256='+method_sha,

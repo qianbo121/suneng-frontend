@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 """Real interactive checks in a session distinct from the 20 read-only base cases."""
 import argparse
+import os
+import shutil
 import datetime
 import hashlib
 import json
@@ -34,6 +36,15 @@ def expected_headings_for(frozen):
     headings.update(overrides)
     return headings
 
+def require_notification_guard():
+    control = os.environ.get('SUNENG_QA_NOTIFICATION_GUARD')
+    executable = shutil.which('agent-browser')
+    guard = pathlib.Path(__file__).with_name('notification-guard.py')
+    if not control or not executable or not guard.is_file() or not os.path.samefile(executable, guard):
+        raise RuntimeError('Release browser notification protection is missing; stopped before navigation')
+
+
+require_notification_guard()
 parser = argparse.ArgumentParser()
 parser.add_argument('--phase', choices=['candidate', 'production'], required=True)
 parser.add_argument('--plan', required=True)

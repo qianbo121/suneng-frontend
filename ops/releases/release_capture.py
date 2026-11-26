@@ -7,7 +7,7 @@ import browser_capture_guard as guard
 import release_browser
 
 COLLECTORS = ('capture-contract-case.py', 'assemble-browser-report.py', 'observe-base.js',
-              'sanitize-evidence.py', 'capture-interactions.py', 'assemble-interactions-report.py')
+              'sanitize-evidence.py', 'notification-guard.py', 'notification-guard.cjs', 'capture-interactions.py', 'assemble-interactions-report.py')
 DATA = ('browserContract.json', 'browser-assertion-spec.json', 'acceptance-plan.json',
         'browser-identity-and-evidence-contract.json')
 
@@ -53,7 +53,7 @@ def prepare(root, plan_sha, inputs, inputs_sha):
         if not target.exists():
             with target.open('xb') as stream:
                 stream.write(raw)
-            target.chmod(0o600)
+            target.chmod(0o700 if name == 'notification-guard.py' else 0o600)
     return {'prepared': True, 'sourceCommit': plan['sourceCommit'],
             'filesSha256': {name: guard.digest(destination/name) for name in content},
             'browserAccepted': False, 'productionChanged': False}

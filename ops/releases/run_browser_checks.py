@@ -49,10 +49,13 @@ def run(root, config, identity, plan, output, budget):
                   (phase == 'production' and url.scheme == 'https' and url.hostname == 'www.jssngyl.cn'),
                   'capture-origin-required')
     sources = {name: guard.digest(workspace/'frontend'/name) for name in TEST_FILES}
-    args = ['pnpm', '--dir', 'frontend', 'exec', 'playwright', 'test',
-            '--config=playwright.visual.config.ts', *TEST_FILES, '--workers=1', '--retries=0',
+    guard_dir = Path(__file__).with_name('browser')
+    protected_config = guard_dir / 'guarded-visual.config.cjs'
+    args = ['python3', str(guard_dir / 'notification-guard.py'), '--evidence',
+            str(output / 'notification-refusals.jsonl'), '--', 'pnpm', '--dir', 'frontend', 'exec', 'playwright', 'test',
+            '--config='+str(protected_config), *TEST_FILES, '--workers=1', '--retries=0',
             '--timeout='+str(budget), '--reporter=json', '--output='+str(output/'artifacts')]
-    env = dict(os.environ, VISUAL_BASE_URL=identity['baseUrl'], PLAYWRIGHT_BROWSER_CHANNEL='chrome')
+    env = dict(os.environ, SUNENG_QA_FRONTEND=str(workspace/'frontend'), VISUAL_BASE_URL=identity['baseUrl'], PLAYWRIGHT_BROWSER_CHANNEL='chrome')
     with (output/'stdout.json').open('xb') as stdout, (output/'stderr.log').open('xb') as stderr:
         result = subprocess.run(args, cwd=workspace, env=env, stdout=stdout, stderr=stderr,
                                 timeout=(budget*12//1000)+120)
