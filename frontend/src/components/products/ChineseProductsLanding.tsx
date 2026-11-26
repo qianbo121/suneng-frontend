@@ -9,7 +9,7 @@ import { HomepageLeadForm } from '@/components/home/HomepageLeadForm';
 import {
   continuousFurnaceCards,
   periodicFurnaceCards,
-  productCenterProductionLines,
+  getProductListProductionLines,
 } from '@/lib/products-landing-data';
 
 import styles from './ChineseProductsLanding.module.css';
@@ -46,6 +46,7 @@ function SectionHeading({
 
 export function ChineseProductsLanding({ locale = 'zh' }: { locale?: Locale }) {
   const en = locale === 'en';
+  const productionLines = getProductListProductionLines(locale);
   const availablePurchaseReferences = en
     ? [['Special-purpose industrial furnace procurement', '/en/articles/special-industrial-furnace-procurement-assessment']]
     : purchaseReferences.filter(([, href]) => !isWithdrawnTechnicalPath(href));
@@ -83,7 +84,7 @@ export function ChineseProductsLanding({ locale = 'zh' }: { locale?: Locale }) {
 
       <section className={styles.section} aria-labelledby="production-line-title">
         <div className={styles.container}>
-          <ProductCenterLineCarousel items={en ? translateLineValue(productCenterProductionLines) : productCenterProductionLines} locale={locale} />
+          <ProductCenterLineCarousel items={en ? translateLineValue(productionLines) : productionLines} locale={locale} />
         </div>
       </section>
 

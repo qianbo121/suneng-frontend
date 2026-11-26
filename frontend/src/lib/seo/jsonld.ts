@@ -1,7 +1,7 @@
 import { translateLineValue } from '@/lib/production-line-content-en';
 import { NEWS_ATTRIBUTION } from '@/lib/news-attribution';
 import { homeSingleFurnaces } from '@/lib/home-product-types';
-import { continuousFurnaceCards, periodicFurnaceCards, productCenterProductionLines } from '@/lib/products-landing-data';
+import { continuousFurnaceCards, periodicFurnaceCards, getProductListProductionLines } from '@/lib/products-landing-data';
 import {
   ALTERNATE_NAMES,
   BAIDU_APP_ID,
@@ -352,7 +352,7 @@ export function getProductCollectionJsonLd(path = '/products', locale: Locale = 
   const isEnglish = isEnglishLocale(locale);
   const pageUrl = absoluteUrl(path);
   const products = [
-    ...productCenterProductionLines.map((product) => ({
+    ...getProductListProductionLines(locale).map((product) => ({
       slug: product.id,
       name: isEnglish ? translateLineValue(product.name) : product.name,
     })),

@@ -292,6 +292,19 @@ export const productCenterProductionLines = [
   };
 });
 
+// Keep the trial local to the Chinese product index. Other consumers use the original order.
+export function getProductListProductionLines(locale: 'zh' | 'en') {
+  if (locale === 'en') return productCenterProductionLines;
+
+  const lines = [...productCenterProductionLines];
+  const belt = lines.findIndex((line) => line.id === 'roller-mesh-belt-line');
+  const forging = lines.findIndex((line) => line.id === 'aluminum-forging-heating-line');
+  if (belt >= 0 && forging >= 0) {
+    [lines[belt], lines[forging]] = [lines[forging], lines[belt]];
+  }
+  return lines;
+}
+
 const furnaceCopyBySlug: Record<string, FurnaceCardCopy> = {
   'box-furnace': {
     workpiece: '模具、机械零件等',
