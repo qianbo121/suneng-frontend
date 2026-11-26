@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test';
+import { expect, test } from './fixtures/release-test';
 
 for (const locale of ['zh', 'en'] as const) {
   for (const width of [1920, 390]) {

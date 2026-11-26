@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test';
+import { expect, test } from './fixtures/release-test';
 
 test('desktop contacts share a dialog and copy the selected contact', async ({ page, context }) => {
   await context.grantPermissions(['clipboard-read', 'clipboard-write']);

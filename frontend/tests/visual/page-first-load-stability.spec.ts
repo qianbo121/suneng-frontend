@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test';
+import { expect, test } from './fixtures/release-test';
 
 // Run against a production preview via VISUAL_BASE_URL. Each attempt starts a
 // fresh browser context, since a warm reload can miss first-load hydration errors.

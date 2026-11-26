@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test';
+import { expect, test } from './fixtures/release-test';
 
 for (const locale of ['zh', 'en'] as const) {
   test(`${locale} mobile line controls remain usable above the persistent contact toolbar`, async ({ page }, testInfo) => {

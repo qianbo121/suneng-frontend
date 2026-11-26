@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test';
+import { expect, test } from './fixtures/release-test';
 
 test('mobile inquiry direction options remain visible above the form', async ({ page }, info) => {
   await page.setViewportSize({ width: 390, height: 844 });

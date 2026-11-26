@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test';
+import { expect, test } from './fixtures/release-test';
 
 // The local preview reads the public upstream; browser checks must not write to it.
 test.beforeEach(async ({ page }) => {

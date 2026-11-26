@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test';
+import { expect, test } from './fixtures/release-test';
 
 test('partner consultation reaches published contact information', async ({ page }) => {
   await page.goto('/zh/partner', { waitUntil: 'domcontentloaded' });
