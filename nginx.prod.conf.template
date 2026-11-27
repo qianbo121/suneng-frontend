@@ -346,10 +346,7 @@ http {
   limit_req_zone $binary_remote_addr zone=shuju_login:10m rate=5r/m;
   resolver 127.0.0.11 valid=10s ipv6=off;
 
-  # Factory containers may receive a new address after stop/start as well as
-  # recreation. Resolve Docker DNS continuously instead of keeping the address
-  # from the last gateway reload. Keep the API trailing slash below: /api/ is
-  # removed before forwarding to the application.
+  # Factory services resolve their current Docker addresses after every restart.
   upstream factory_api_upstream {
     zone factory_api_upstream 64k;
     server furnace-api:18080 resolve;
@@ -806,6 +803,13 @@ http {
     listen 443 ssl;
     http2 on;
     server_name ${DOMAIN};
+
+    # ACME validation can arrive over HTTPS after the edge redirects HTTP.
+    location ^~ /.well-known/acme-challenge/ {
+      root /var/www/certbot;
+      default_type text/plain;
+      try_files $uri =404;
+    }
     access_log /var/log/nginx/www.access.json analytics_json_site;
     access_log /var/log/nginx/baidu-public-list.access.json baidu_public_list_json if=$log_baidu_public_list;
     access_log /var/log/nginx/legacy-news-detail.access.json legacy_news_detail_json if=$log_legacy_news_detail;
@@ -1223,6 +1227,12 @@ http {
     location = /sogousiteverification.txt {
       root /var/www/certbot;
       default_type text/plain;
+      try_files $uri =404;
+    }
+
+    location = /ByteDanceVerify.html {
+      root /var/www/certbot;
+      default_type text/html;
       try_files $uri =404;
     }
 
