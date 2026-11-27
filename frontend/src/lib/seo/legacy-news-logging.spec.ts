@@ -10,9 +10,9 @@ describe('old news request evidence', () => {
     expect(config.split(dedicated)).toHaveLength(4);
     for (const host of ['jssngyl.cn ${DOMAIN}', 'jssngyl.cn']) {
       expect(config).toContain('    server_name ' + host + ';\n'
-        + '    access_log /var/log/nginx/redirect.access.json analytics_json;\n' + dedicated);
+        + '    access_log /var/log/nginx/redirect.access.json analytics_json_site;\n' + dedicated);
     }
-    expect(config).toContain('    access_log /var/log/nginx/www.access.json analytics_json;\n'
+    expect(config).toContain('    access_log /var/log/nginx/www.access.json analytics_json_site;\n'
       + '    access_log /var/log/nginx/baidu-public-list.access.json baidu_public_list_json if=$log_baidu_public_list;\n'
       + dedicated);
   });
