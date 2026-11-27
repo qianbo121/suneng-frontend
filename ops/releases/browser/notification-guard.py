@@ -30,6 +30,15 @@ def flags(config):
             '--host-resolver-rules=MAP ' + HOST + ' ~NOTFOUND', '--disable-quic']
 
 
+def visual_flags(config):
+    # Playwright's original headless shell does not run proxy auto-config.
+    # Resolve only the guarded destination and its two canaries to this sink.
+    endpoint = urllib.parse.urlsplit(config['local']).netloc
+    names = (HOST, '*.' + HOST, config['probeHost'], config['denyProbe'])
+    rules = ', '.join('MAP ' + name + ' ' + endpoint for name in names)
+    return ['--no-proxy-server', '--host-resolver-rules=' + rules, '--disable-quic']
+
+
 def health(config):
     # The control endpoint is always local and must never use a system proxy.
     direct = urllib.request.build_opener(urllib.request.ProxyHandler({}))
@@ -62,8 +71,16 @@ class Sink(http.server.BaseHTTPRequestHandler):
     def do_GET(self):
         config = self.server.config
         target = urllib.parse.urlsplit(self.path)
-        if target.hostname == config['probeHost'] and target.path == '/probe':
-            self.reply(200, config['nonce'])
+        # A proxy request has an absolute target. The shell connects directly
+        # to loopback and retains the original hostname in its Host header.
+        host = (target.hostname or self.headers.get('Host', '').split(':', 1)[0]).lower().rstrip('.')
+        if host == config['probeHost']:
+            if target.path == '/probe':
+                self.reply(200, config['nonce'])
+            else:
+                self.deny(host)
+        elif host == config['denyProbe'] or host == HOST or host.endswith('.' + HOST):
+            self.deny(host)
         elif self.path == '/health':
             self.reply(200, config['nonce'])
         elif self.path == '/rules.pac':
@@ -166,6 +183,7 @@ def run(evidence, command):
                           binary=os.path.realpath(binary) if binary else None)
             control = Path(private)/'control.json'
             config['launchArgs'] = flags(config)
+            config['visualLaunchArgs'] = visual_flags(config)
             control.write_text(json.dumps(config))
             wrapper = Path(private)/'agent-browser'
             wrapper.symlink_to(Path(__file__).resolve())

@@ -16,7 +16,9 @@ module.exports = async () => {
     }
   }
   const {chromium} = createRequire(path.join(frontend, 'package.json'))('@playwright/test');
-  const browser = await guard.launch(chromium,{headless:true,channel:process.env.PLAYWRIGHT_BROWSER_CHANNEL || 'chromium'});
+  const config = guard.config();
+  await guard.checkService(config);
+  const browser = await chromium.launch({headless:true,channel:process.env.PLAYWRIGHT_BROWSER_CHANNEL,args:config.visualLaunchArgs});
   try {
     const context = await guard.newContext(browser);
     await context.close();

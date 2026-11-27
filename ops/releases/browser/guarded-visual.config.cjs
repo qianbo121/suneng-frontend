@@ -14,5 +14,5 @@ module.exports = {...original, testDir:path.resolve(frontend,original.testDir),
     ? [name,{...opts,outputFolder:path.resolve(frontend,opts.outputFolder)}] : (opts?[name,opts]:[name])),
   globalSetup:require.resolve('./guarded-visual-setup.cjs'),
   webServer:original.webServer?.map(server=>({...server,cwd:frontend})),
-  use:{...original.use,channel:process.env.PLAYWRIGHT_BROWSER_CHANNEL || 'chromium',reuseContext:false,serviceWorkers:'block',
-       launchOptions:{...original.use.launchOptions,args:[...(original.use.launchOptions?.args || []),...config.launchArgs]}}};
+  use:{...original.use,reuseContext:false,serviceWorkers:'block',
+       launchOptions:{...original.use.launchOptions,args:[...(original.use.launchOptions?.args || []),...config.visualLaunchArgs]}}};
