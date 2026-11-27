@@ -33,6 +33,53 @@ http {
     '"referer":"$http_referer",'
     '"user_agent":"$http_user_agent"}';
 
+  # Only retain recognized, bounded public query values. Mixed/unknown queries are redacted in full.
+  map $request_uri $site_log_request_uri {
+    default "$uri?[redacted]";
+    "~^[^?]*$" $request_uri;
+    "~^[^?]*[?](?:_rsc=[A-Za-z0-9_-]{1,20}|(?:id|class1|class2|class3|page|pageSize)=[0-9]{1,8}|lang=(?:cn|zh|en)|format=(?:news|infographic|article))(?:&(?:_rsc=[A-Za-z0-9_-]{1,20}|(?:id|class1|class2|class3|page|pageSize)=[0-9]{1,8}|lang=(?:cn|zh|en)|format=(?:news|infographic|article))){0,7}$" $request_uri;
+  }
+
+  map $http_next_router_state_tree $site_log_state_tree_present {
+    "" 0;
+    default 1;
+  }
+
+  log_format analytics_json_site escape=json
+    '{"time":"$time_iso8601",'
+    '"request_id":"$request_id",'
+    '"host":"$host",'
+    '"server_name":"$server_name",'
+    '"remote_addr":"$remote_addr",'
+    '"method":"$request_method",'
+    '"uri":"$uri",'
+    '"protocol":"$server_protocol",'
+    '"status":$status,'
+    '"request_length":$request_length,'
+    '"body_bytes_sent":$body_bytes_sent,'
+    '"request_time":$request_time,'
+    '"upstream_status":"$upstream_status",'
+    '"upstream_response_time":"$upstream_response_time",'
+    '"cache_status":"$upstream_cache_status",'
+    '"crawler_family":"$crawler_family",'
+    '"monitoring_probe":"$monitoring_probe",'
+    '"lead_event":"$lead_event",'
+    '"referer":"$http_referer",'
+    '"user_agent":"$http_user_agent",'
+    '"request_uri":"$site_log_request_uri",'
+    '"http_accept_encoding":"$http_accept_encoding",'
+    '"http_rsc":"$http_rsc",'
+    '"http_next_router_prefetch":"$http_next_router_prefetch",'
+    '"http_next_router_segment_prefetch":"$http_next_router_segment_prefetch",'
+    '"next_router_state_tree_present":$site_log_state_tree_present,'
+    '"http_sec_purpose":"$http_sec_purpose",'
+    '"http_purpose":"$http_purpose",'
+    '"http_if_none_match":"$http_if_none_match",'
+    '"http_if_modified_since":"$http_if_modified_since",'
+    '"sent_http_content_type":"$sent_http_content_type",'
+    '"sent_http_content_encoding":"$sent_http_content_encoding",'
+    '"bytes_sent":$bytes_sent}';
+
   map $http_user_agent $crawler_family {
     default "";
     ~*OAI-SearchBot "openai_oai_searchbot";
@@ -299,10 +346,7 @@ http {
   limit_req_zone $binary_remote_addr zone=shuju_login:10m rate=5r/m;
   resolver 127.0.0.11 valid=10s ipv6=off;
 
-  # Factory containers may receive a new address after stop/start as well as
-  # recreation. Resolve Docker DNS continuously instead of keeping the address
-  # from the last gateway reload. Keep the API trailing slash below: /api/ is
-  # removed before forwarding to the application.
+  # Factory services resolve their current Docker addresses after every restart.
   upstream factory_api_upstream {
     zone factory_api_upstream 64k;
     server furnace-api:18080 resolve;
@@ -542,7 +586,7 @@ http {
   server {
     listen 80;
     server_name jssngyl.cn ${DOMAIN};
-    access_log /var/log/nginx/redirect.access.json analytics_json;
+    access_log /var/log/nginx/redirect.access.json analytics_json_site;
     access_log /var/log/nginx/legacy-news-detail.access.json legacy_news_detail_json if=$log_legacy_news_detail;
 
     # 兼容旧版智能工厂工时二维码，保留令牌路径并切到正确子域名。
@@ -658,7 +702,7 @@ http {
     listen 443 ssl;
     http2 on;
     server_name jssngyl.cn;
-    access_log /var/log/nginx/redirect.access.json analytics_json;
+    access_log /var/log/nginx/redirect.access.json analytics_json_site;
     access_log /var/log/nginx/legacy-news-detail.access.json legacy_news_detail_json if=$log_legacy_news_detail;
 
     ssl_certificate /etc/nginx/certs/fullchain.pem;
@@ -759,7 +803,14 @@ http {
     listen 443 ssl;
     http2 on;
     server_name ${DOMAIN};
-    access_log /var/log/nginx/www.access.json analytics_json;
+
+    # ACME validation can arrive over HTTPS after the edge redirects HTTP.
+    location ^~ /.well-known/acme-challenge/ {
+      root /var/www/certbot;
+      default_type text/plain;
+      try_files $uri =404;
+    }
+    access_log /var/log/nginx/www.access.json analytics_json_site;
     access_log /var/log/nginx/baidu-public-list.access.json baidu_public_list_json if=$log_baidu_public_list;
     access_log /var/log/nginx/legacy-news-detail.access.json legacy_news_detail_json if=$log_legacy_news_detail;
 
@@ -1176,6 +1227,12 @@ http {
     location = /sogousiteverification.txt {
       root /var/www/certbot;
       default_type text/plain;
+      try_files $uri =404;
+    }
+
+    location = /ByteDanceVerify.html {
+      root /var/www/certbot;
+      default_type text/html;
       try_files $uri =404;
     }
 
