@@ -208,7 +208,10 @@ jobs:
         env:
           CI: true
           VISUAL_PROJECT: linux-chrome
-        run: pnpm --dir frontend test:visual
+        run: |
+          export SUNENG_QA_FRONTEND="$GITHUB_WORKSPACE/frontend"
+          python3 ops/releases/browser/notification-guard.py --evidence "$RUNNER_TEMP/visual-notification-refusals.jsonl" -- \
+            pnpm --dir frontend test:visual --config="$GITHUB_WORKSPACE/ops/releases/browser/guarded-visual.config.cjs"
       - name: Upload visual failure artifacts
         if: always() && steps.visual_scope.outputs.required != 'false' && failure()
         uses: actions/upload-artifact@v4

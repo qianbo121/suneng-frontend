@@ -67,7 +67,7 @@ for identity_path, identity in [(before_path, before), (after_path, after)]:
     raw_path = artifact_root / identity['rawIdentityFile']
     assert json.loads(raw_path.read_text()) == identity['container']
     bind(raw_path)
-collector_names = ['capture-contract-case.py', 'observe-base.js', 'assemble-browser-report.py', 'sanitize-evidence.py']
+collector_names = ['capture-contract-case.py', 'observe-base.js', 'assemble-browser-report.py', 'sanitize-evidence.py', 'notification-guard.py', 'notification-guard.cjs']
 for name in collector_names + ['browserContract.json', 'browser-assertion-spec.json',
                                'browser-identity-and-evidence-contract.json']:
     bind(out / name)

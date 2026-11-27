@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test';
+import { expect, test } from './fixtures/release-test';
 
 for (const width of [1280, 1440]) {
   test(`English footer and bilingual checklist stay clear of the toolbar at ${width}px`, async ({ page }, testInfo) => {

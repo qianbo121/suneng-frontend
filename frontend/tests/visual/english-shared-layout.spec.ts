@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test';
+import { expect, test } from './fixtures/release-test';
 
 test('English desktop logo stays inside its link and clear of Home at 1280px', async ({ page }) => {
   await page.setViewportSize({ width: 1280, height: 900 });

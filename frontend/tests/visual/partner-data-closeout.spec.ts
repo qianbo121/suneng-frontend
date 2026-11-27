@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test';
+import { expect, test } from './fixtures/release-test';
 import { getPartnerMapData } from '../../src/lib/partner-map-data';
 
 const partners = getPartnerMapData();

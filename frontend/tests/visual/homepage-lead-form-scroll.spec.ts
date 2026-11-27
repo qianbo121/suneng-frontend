@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test';
+import { expect, test } from './fixtures/release-test';
 
 type MenuEvent = { type: string; atUtc: string; scrollY: number; listbox: boolean };
 type AuditWindow = Window & { __leadMenuAudit?: MenuEvent[] };

@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 """Read-only, exact-plan one-case collector. Never fills or submits any form."""
 import argparse
+import os
+import shutil
 import datetime
 import hashlib
 import json
@@ -14,6 +16,15 @@ _SANITIZER_SPEC = importlib.util.spec_from_file_location('sanitize_evidence', _S
 _SANITIZER = importlib.util.module_from_spec(_SANITIZER_SPEC)
 _SANITIZER_SPEC.loader.exec_module(_SANITIZER)
 
+def require_notification_guard():
+    control = os.environ.get('SUNENG_QA_NOTIFICATION_GUARD')
+    executable = shutil.which('agent-browser')
+    guard = pathlib.Path(__file__).with_name('notification-guard.py')
+    if not control or not executable or not guard.is_file() or not os.path.samefile(executable, guard):
+        raise RuntimeError('Release browser notification protection is missing; stopped before navigation')
+
+
+require_notification_guard()
 parser = argparse.ArgumentParser()
 parser.add_argument('--phase', choices=['candidate', 'production'], required=True)
 parser.add_argument('--plan', required=True)

@@ -1,4 +1,4 @@
-import { expect, test, type Locator } from '@playwright/test';
+import { expect, test, type Locator } from './fixtures/release-test';
 
 async function expectClearOfToolbar(content: Locator, toolbar: Locator) {
   await expect(content).toBeVisible();

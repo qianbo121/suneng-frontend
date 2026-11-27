@@ -1,4 +1,4 @@
-import { expect, test, type Page } from '@playwright/test';
+import { expect, test, type Page } from './fixtures/release-test';
 
 // Browser form checks deliberately intercept every mutation: the preview uses production upstream.
 async function preventExternalWrites(page: Page) {

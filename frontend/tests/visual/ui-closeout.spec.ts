@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test';
+import { expect, test } from './fixtures/release-test';
 import { getInfographic, getInfographicPages } from '../../src/lib/infographics';
 
 for (const width of [1440, 390]) {

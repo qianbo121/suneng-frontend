@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test';
+import { expect, test } from './fixtures/release-test';
 import { additionalFurnaces } from '../../src/lib/additional-furnaces';
 
 test.beforeEach(async ({ page }) => {

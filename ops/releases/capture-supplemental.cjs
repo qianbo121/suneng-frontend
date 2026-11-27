@@ -1,5 +1,7 @@
 /* Actual owned-browser acceptance. Real mouse/keyboard input; no lead submission. */
 const fs = require('fs');
+const notificationGuard = require(fs.existsSync(require('path').join(__dirname,'notification-guard.cjs'))
+  ? './notification-guard.cjs' : './browser/notification-guard.cjs');
 const path = require('path');
 const crypto = require('crypto');
 const assert = require('assert/strict');
@@ -241,13 +243,13 @@ const cases = {
 async function productHero(route,locale,view,anchor=false){await goto(route,view);const details=page.locator('main details').first();check('hero-conditions-default',await details.evaluate(e=>e.open)===(view.width===1440));const hero=page.locator('#overview');const quote=hero.locator('[data-product-scroll-variant="hero"]:visible');check('one-visible-hero-quote',await quote.count()===1,await quote.allTextContents());await snap('hero-initial');if(view.width===390){await click(details.locator('summary'),'conditions-expand');check('conditions-open',await details.evaluate(e=>e.open));await snap('conditions-expanded');}if(anchor){const links=page.locator('main nav a[href^="#"]');check('existing-section-links',await links.count()>0);const link=links.first();const href=await link.getAttribute('href');await click(link,'actual-section-anchor');const heading=page.locator(href);await page.waitForURL(u=>u.hash===href);await expect.poll(async()=>{const r=await heading.boundingBox(),h=await siteHeaderBox();return !!r&&r.y>=h.y+h.height-2&&r.y<view.height;}).toBe(true);await settle();const r=await heading.boundingBox(),h=await siteHeaderBox();check('section-below-header',r.y>=h.y+h.height-2,{section:r,header:h});await snap('section-anchor');}await click(quote.first(),'existing-hero-quote');await expect(page.locator(form)).toHaveCount(1);await settle();check('quote-reaches-existing-form',new URL(page.url()).hash==='#inquiry',page.url());check('quote-keeps-locale',new URL(page.url()).pathname.startsWith('/'+locale));await snap('quote-form');}
 
 await (async()=>{
-  const browser=await chromium.launch({channel:'chrome',headless:true});
+  const browser=await notificationGuard.launch(chromium,{channel:'chrome',headless:true});
   let failed=0;
   try {
     for(const id of (cli['--cases']||Object.keys(cases).join(',')).split(',')){
       assert(cases[id],id);out=path.join(root,'browser',phase,plan.sourceCommit.slice(0,12),'supplemental',id,'attempt-'+(cli['--attempt']||'1'));freshOutput(out);
       const startedAtUtc=new Date().toISOString();log=[];checks=[];seq=0;const errors=[],consoleMessages=[],failedRequests=[];
-      context=await browser.newContext({viewport:mobile});page=await context.newPage();page.setDefaultTimeout(15000);
+      context=await notificationGuard.newContext(browser,{viewport:mobile});page=await context.newPage();page.setDefaultTimeout(15000);
       page.on('pageerror',e=>errors.push(String(e)));page.on('console',m=>consoleMessages.push({type:m.type(),message:m.text()}));
       page.on('requestfailed',r=>{let u;try{u=new URL(r.url())}catch{}failedRequests.push({host:u?.hostname,path:u?.pathname,error:r.failure()?.errorText});});
       await context.addInitScript(()=>{window.__releaseSafety={submits:0,submitClicks:0,preventedContactDefaults:[],events:[]};document.addEventListener('submit',e=>{window.__releaseSafety.submits++;e.preventDefault();e.stopImmediatePropagation()},true);document.addEventListener('click',e=>{const b=e.target.closest('button,input,a');if(b?.matches('button[type=submit],input[type=submit]')){window.__releaseSafety.submitClicks++;e.preventDefault();e.stopImmediatePropagation()}if(b?.matches('a')&&/^(tel:|mailto:|weixin:)/i.test(b.getAttribute('href')||'')){e.preventDefault();window.__releaseSafety.preventedContactDefaults.push({scheme:b.getAttribute('href').split(':')[0],prevented:e.defaultPrevented,trusted:e.isTrusted})}},true);for(const type of ['click','wheel','keydown'])document.addEventListener(type,e=>window.__releaseSafety.events.push({type,trusted:e.isTrusted,key:e.key,x:e.clientX,y:e.clientY,deltaX:e.deltaX,deltaY:e.deltaY,insideMenu:!!e.target.closest('[role=listbox]'),text:e.target.closest('button,a,[role=option]')?.textContent.trim().slice(0,120)}),true);});
